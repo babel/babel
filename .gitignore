@@ -41,6 +41,7 @@ package-lock.json
 /packages/babel-runtime-corejs3/helpers/*.js
 /packages/babel-runtime-corejs3/helpers/esm/*.js
 /packages/babel-runtime-corejs3/core-js/**/*.js
+/packages/babel-runtime-corejs3/core-js-stable/**/*.js
 
 /packages/babel-register/test/.babel
 /packages/babel-cli/test/tmp

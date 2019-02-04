@@ -19,8 +19,9 @@ writeHelpers("@babel/runtime");
 writeCoreJS2("@babel/runtime-corejs2");
 writeHelpers("@babel/runtime-corejs2", { corejs: 2 });
 
-writeCoreJS3("@babel/runtime-corejs3");
-writeHelpers("@babel/runtime-corejs3", { corejs: 3 });
+writeCoreJS3("@babel/runtime-corejs3", { proposals: false });
+writeCoreJS3("@babel/runtime-corejs3", { proposals: true });
+writeHelpers("@babel/runtime-corejs3", { corejs: 3, proposals: true });
 
 function writeCoreJS2(runtimeName) {
   const pkgDirname = getRuntimeRoot(runtimeName);
@@ -47,40 +48,45 @@ function writeCoreJS2(runtimeName) {
     });
   });
 
-  paths.forEach(function(corePath) {
+  paths.forEach(function(corejsPath) {
     outputFile(
-      path.join(pkgDirname, "core-js", `${corePath}.js`),
-      `module.exports = require("core-js/library/fn/${corePath}");`
+      path.join(pkgDirname, "core-js", `${corejsPath}.js`),
+      `module.exports = require("core-js/library/fn/${corejsPath}");`
     );
   });
 }
 
-function writeCoreJS3(runtimeName) {
+function writeCoreJS3(runtimeName, { proposals }) {
   const pkgDirname = getRuntimeRoot(runtimeName);
 
-  const paths = ["is-iterable", "get-iterator", "get-iterator-method"];
+  const paths = proposals
+    ? ["is-iterable", "get-iterator", "get-iterator-method"]
+    : [];
 
   Object.keys(corejs3Definitions.builtins).forEach(key => {
-    const path = corejs3Definitions.builtins[key].path;
-    paths.push(path);
+    const builtin = corejs3Definitions.builtins[key];
+    if (builtin.stable || proposals) paths.push(builtin.path);
   });
 
   Object.keys(corejs3Definitions.methods).forEach(key => {
     const props = corejs3Definitions.methods[key];
     Object.keys(props).forEach(key2 => {
-      paths.push(props[key2].path);
+      const builtin = props[key2];
+      if (builtin.stable || proposals) paths.push(builtin.path);
     });
   });
 
   Object.keys(corejs3Definitions.instanceMethods).forEach(key => {
-    const path = corejs3Definitions.instanceMethods[key].path;
-    paths.push(`instance/${path}`);
+    const builtin = corejs3Definitions.instanceMethods[key];
+    if (builtin.stable || proposals) paths.push(`instance/${builtin.path}`);
   });
 
-  paths.forEach(function(corePath) {
+  const runtimeRoot = proposals ? "core-js" : "core-js-stable";
+  const corejsRoot = proposals ? "features" : "stable";
+  paths.forEach(function(corejsPath) {
     outputFile(
-      path.join(pkgDirname, "core-js", `${corePath}.js`),
-      `module.exports = require("core-js-pure/features/${corePath}");`
+      path.join(pkgDirname, runtimeRoot, `${corejsPath}.js`),
+      `module.exports = require("core-js-pure/${corejsRoot}/${corejsPath}");`
     );
   });
 }

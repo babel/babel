@@ -40,6 +40,7 @@ export default declare((api, options, dirname) => {
     useESModules = false,
     version: runtimeVersion = "7.0.0-beta.0",
     absoluteRuntime = false,
+    proposals = false,
   } = options;
 
   if (typeof useRuntimeRegenerator !== "boolean") {
@@ -77,6 +78,10 @@ export default declare((api, options, dirname) => {
     return Object.prototype.hasOwnProperty.call(obj, key);
   }
 
+  function hasMapping(methods, name) {
+    return has(methods, name) && (proposals || methods[name].stable);
+  }
+
   if (has(options, "useBuiltIns")) {
     if (options.useBuiltIns) {
       throw new Error(
@@ -111,6 +116,11 @@ export default declare((api, options, dirname) => {
         "'absoluteRuntime' option.",
     );
   }
+  if (proposals && (!corejsVersion || corejsVersion < 3)) {
+    throw new Error(
+      "The 'proposals' option supported only from @babel/runtime-corejs3",
+    );
+  }
 
   const esModules =
     useESModules === "auto" ? api.caller(supportsStaticESM) : useESModules;
@@ -124,6 +134,8 @@ export default declare((api, options, dirname) => {
     : injectCoreJS2
     ? "@babel/runtime-corejs2"
     : "@babel/runtime";
+
+  const corejsRoot = injectCoreJS3 && !proposals ? "core-js-stable" : "core-js";
 
   const definitions = (injectCoreJS2
     ? getCoreJS2Definitions
@@ -220,13 +232,13 @@ export default declare((api, options, dirname) => {
         if (!injectCoreJS) return;
 
         if (t.isMemberExpression(parent)) return;
-        if (!has(definitions.builtins, name)) return;
+        if (!hasMapping(definitions.builtins, name)) return;
         if (scope.getBindingIdentifier(name)) return;
 
         // transform Symbol(), new Promise
         path.replaceWith(
           this.addDefaultImport(
-            `${modulePath}/core-js/${definitions.builtins[name].path}`,
+            `${modulePath}/${corejsRoot}/${definitions.builtins[name].path}`,
             name,
           ),
         );
@@ -248,7 +260,7 @@ export default declare((api, options, dirname) => {
           (!has(definitions.methods, object.name) ||
             !has(definitions.methods[object.name], property.name))
         ) {
-          if (has(definitions.instanceMethods, property.name)) {
+          if (hasMapping(definitions.instanceMethods, property.name)) {
             let context1, context2;
             if (object.type === "Identifier") {
               context1 = context2 = object;
@@ -259,7 +271,7 @@ export default declare((api, options, dirname) => {
             node.callee = t.memberExpression(
               t.callExpression(
                 this.addDefaultImport(
-                  `${moduleName}/core-js/instance/${
+                  `${moduleName}/${corejsRoot}/instance/${
                     definitions.instanceMethods[property.name].path
                   }`,
                   `${property.name}InstanceProperty`,
@@ -337,16 +349,13 @@ export default declare((api, options, dirname) => {
           }
 
           // transform method = array.includes
-          if (
-            !has(definitions.methods, object.name) ||
-            !has(definitions.methods[object.name], property.name)
-          ) {
+          if (!has(definitions.methods, object.name)) {
             if (injectCoreJS2) return;
-            if (has(definitions.instanceMethods, property.name)) {
+            if (hasMapping(definitions.instanceMethods, property.name)) {
               path.replaceWith(
                 t.callExpression(
                   this.addDefaultImport(
-                    `${moduleName}/core-js/instance/${
+                    `${moduleName}/${corejsRoot}/instance/${
                       definitions.instanceMethods[property.name].path
                     }`,
                     `${property.name}InstanceProperty`,
@@ -360,12 +369,14 @@ export default declare((api, options, dirname) => {
 
           const methods = definitions.methods[object.name];
 
+          if (!hasMapping(methods, property.name)) return;
+
           // doesn't reference the global
           if (path.scope.getBindingIdentifier(object.name)) return;
 
           path.replaceWith(
             this.addDefaultImport(
-              `${modulePath}/core-js/${methods[property.name].path}`,
+              `${modulePath}/${corejsRoot}/${methods[property.name].path}`,
               `${object.name}$${property.name}`,
             ),
           );
@@ -379,13 +390,15 @@ export default declare((api, options, dirname) => {
           const { object } = node;
           const { name } = object;
 
-          if (!has(definitions.builtins, name)) return;
+          if (!hasMapping(definitions.builtins, name)) return;
           if (path.scope.getBindingIdentifier(name)) return;
 
           path.replaceWith(
             t.memberExpression(
               this.addDefaultImport(
-                `${modulePath}/core-js/${definitions.builtins[name].path}`,
+                `${modulePath}/${corejsRoot}/${
+                  definitions.builtins[name].path
+                }`,
                 name,
               ),
               node.property,
