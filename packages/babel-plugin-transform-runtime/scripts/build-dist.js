@@ -72,6 +72,11 @@ function writeCoreJS3(runtimeName) {
     });
   });
 
+  Object.keys(corejs3Definitions.instanceMethods).forEach(key => {
+    const path = corejs3Definitions.instanceMethods[key];
+    paths.push(`instance/${path}`);
+  });
+
   paths.forEach(function(corePath) {
     outputFile(
       path.join(pkgDirname, "core-js", `${corePath}.js`),
