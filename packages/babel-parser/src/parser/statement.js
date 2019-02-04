@@ -969,9 +969,13 @@ export default class StatementParser extends ExpressionParser {
     const oldInAsync = this.state.inAsync;
     const oldInGenerator = this.state.inGenerator;
     const oldInClassProperty = this.state.inClassProperty;
+    const oldYieldPos = this.state.yieldPos;
+    const oldAwaitPos = this.state.awaitPos;
     this.state.inFunction = true;
     this.state.inMethod = false;
     this.state.inClassProperty = false;
+    this.state.yieldPos = 0;
+    this.state.awaitPos = 0;
 
     this.initFunction(node, isAsync);
 
@@ -1021,6 +1025,8 @@ export default class StatementParser extends ExpressionParser {
     this.state.inAsync = oldInAsync;
     this.state.inGenerator = oldInGenerator;
     this.state.inClassProperty = oldInClassProperty;
+    this.state.yieldPos = oldYieldPos;
+    this.state.awaitPos = oldAwaitPos;
 
     return node;
   }
@@ -1037,6 +1043,7 @@ export default class StatementParser extends ExpressionParser {
     );
 
     this.state.inParameters = oldInParameters;
+    this.checkYieldAwaitInDefaultParams();
   }
 
   // Parse a class declaration or literal (depending on the

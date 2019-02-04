@@ -597,9 +597,11 @@ export default class ExpressionParser extends LValParser {
       return this.finishNode(node, "MemberExpression");
     } else if (!noCalls && this.match(tt.parenL)) {
       const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-      const oldYOAIPAP = this.state.yieldOrAwaitInPossibleArrowParameters;
+      const oldYieldPos = this.state.yieldPos;
+      const oldAwaitPos = this.state.awaitPos;
       this.state.maybeInArrowParameters = true;
-      this.state.yieldOrAwaitInPossibleArrowParameters = null;
+      this.state.yieldPos = 0;
+      this.state.awaitPos = 0;
 
       const possibleAsync = this.atPossibleAsync(base);
       this.next();
@@ -630,14 +632,16 @@ export default class ExpressionParser extends LValParser {
           this.startNodeAt(startPos, startLoc),
           node,
         );
-        this.state.yieldOrAwaitInPossibleArrowParameters = oldYOAIPAP;
+        this.checkYieldAwaitInDefaultParams();
+        this.state.yieldPos = oldYieldPos;
+        this.state.awaitPos = oldAwaitPos;
       } else {
         this.toReferencedListDeep(node.arguments);
 
         // We keep the old value if it isn't null, for cases like
         //   (x = async(yield)) => {}
-        this.state.yieldOrAwaitInPossibleArrowParameters =
-          this.state.yieldOrAwaitInPossibleArrowParameters || oldYOAIPAP;
+        this.state.yieldPos = oldYieldPos || this.state.yieldPos;
+        this.state.awaitPos = oldAwaitPos || this.state.awaitPos;
       }
 
       this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
@@ -873,25 +877,19 @@ export default class ExpressionParser extends LValParser {
           this.match(tt.name) &&
           !this.canInsertSemicolon()
         ) {
-          const oldYOAIPAP = this.state.yieldOrAwaitInPossibleArrowParameters;
           const oldInAsync = this.state.inAsync;
-          this.state.yieldOrAwaitInPossibleArrowParameters = null;
           this.state.inAsync = true;
           const params = [this.parseIdentifier()];
           this.expect(tt.arrow);
           // let foo = async bar => {};
           this.parseArrowExpression(node, params, true);
-          this.state.yieldOrAwaitInPossibleArrowParameters = oldYOAIPAP;
           this.state.inAsync = oldInAsync;
           return node;
         }
 
         if (canBeArrow && this.match(tt.arrow) && !this.canInsertSemicolon()) {
           this.next();
-          const oldYOAIPAP = this.state.yieldOrAwaitInPossibleArrowParameters;
-          this.state.yieldOrAwaitInPossibleArrowParameters = null;
-          this.parseArrowExpression(node, [id]);
-          this.state.yieldOrAwaitInPossibleArrowParameters = oldYOAIPAP;
+          this.parseArrowExpression(node, [id], false);
           return node;
         }
 
@@ -1172,9 +1170,11 @@ export default class ExpressionParser extends LValParser {
     this.expect(tt.parenL);
 
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    const oldYOAIPAP = this.state.yieldOrAwaitInPossibleArrowParameters;
+    const oldYieldPos = this.state.yieldPos;
+    const oldAwaitPos = this.state.awaitPos;
     this.state.maybeInArrowParameters = true;
-    this.state.yieldOrAwaitInPossibleArrowParameters = null;
+    this.state.yieldPos = 0;
+    this.state.awaitPos = 0;
 
     const innerStartPos = this.state.start;
     const innerStartLoc = this.state.startLoc;
@@ -1235,21 +1235,23 @@ export default class ExpressionParser extends LValParser {
       this.shouldParseArrow() &&
       (arrowNode = this.parseArrow(arrowNode))
     ) {
+      this.checkYieldAwaitInDefaultParams();
+      this.state.yieldPos = oldYieldPos;
+      this.state.awaitPos = oldAwaitPos;
       for (const param of exprList) {
         if (param.extra && param.extra.parenthesized) {
           this.unexpected(param.extra.parenStart);
         }
       }
 
-      this.parseArrowExpression(arrowNode, exprList);
-      this.state.yieldOrAwaitInPossibleArrowParameters = oldYOAIPAP;
+      this.parseArrowExpression(arrowNode, exprList, false);
       return arrowNode;
     }
 
     // We keep the old value if it isn't null, for cases like
     //   (x = (yield)) => {}
-    this.state.yieldOrAwaitInPossibleArrowParameters =
-      this.state.yieldOrAwaitInPossibleArrowParameters || oldYOAIPAP;
+    this.state.yieldPos = oldYieldPos || this.state.yieldPos;
+    this.state.awaitPos = oldAwaitPos || this.state.awaitPos;
 
     if (!exprList.length) {
       this.unexpected(this.state.lastTokStart);
@@ -1717,21 +1719,28 @@ export default class ExpressionParser extends LValParser {
     const oldInMethod = this.state.inMethod;
     const oldInAsync = this.state.inAsync;
     const oldInGenerator = this.state.inGenerator;
+    const oldYieldPos = this.state.yieldPos;
+    const oldAwaitPos = this.state.awaitPos;
     this.state.inFunction = true;
     this.state.inMethod = node.kind || true;
     this.state.inAsync = isAsync;
     this.state.inGenerator = isGenerator;
+    this.state.yieldPos = 0;
+    this.state.awaitPos = 0;
 
     this.initFunction(node, isAsync);
     node.generator = !!isGenerator;
     const allowModifiers = isConstructor; // For TypeScript parameter properties
     this.parseFunctionParams((node: any), allowModifiers);
+    this.checkYieldAwaitInDefaultParams();
     this.parseFunctionBodyAndFinish(node, type);
 
     this.state.inFunction = oldInFunc;
     this.state.inMethod = oldInMethod;
     this.state.inAsync = oldInAsync;
     this.state.inGenerator = oldInGenerator;
+    this.state.yieldPos = oldYieldPos;
+    this.state.awaitPos = oldAwaitPos;
 
     return node;
   }
@@ -1741,44 +1750,33 @@ export default class ExpressionParser extends LValParser {
   // assignable list.
   parseArrowExpression(
     node: N.ArrowFunctionExpression,
-    params?: ?(N.Expression[]),
-    isAsync?: boolean = false,
+    params: ?(N.Expression[]),
+    isAsync: boolean,
   ): N.ArrowFunctionExpression {
-    // if we got there, it's no more "yield in possible arrow parameters";
-    // it's just "yield in arrow parameters"
-    const yOAIPAP = this.state.yieldOrAwaitInPossibleArrowParameters;
-    if (yOAIPAP) {
-      if (yOAIPAP.type === "YieldExpression") {
-        this.raise(
-          yOAIPAP.start,
-          "yield is not allowed in the parameters of an arrow function" +
-            " inside a generator",
-        );
-      } else {
-        this.raise(
-          yOAIPAP.start,
-          "await is not allowed in the parameters of an arrow function" +
-            " inside an async function",
-        );
-      }
-    }
+    this.initFunction(node, isAsync);
 
     const oldInFunc = this.state.inFunction;
-    this.state.inFunction = true;
-    this.initFunction(node, isAsync);
-    if (params) this.setArrowFunctionParameters(node, params);
-
     const oldInAsync = this.state.inAsync;
     const oldInGenerator = this.state.inGenerator;
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
+    const oldYieldPos = this.state.yieldPos;
+    const oldAwaitPos = this.state.awaitPos;
+    this.state.inFunction = true;
     this.state.inAsync = isAsync;
     this.state.inGenerator = false;
     this.state.maybeInArrowParameters = false;
+    this.state.yieldPos = 0;
+    this.state.awaitPos = 0;
+
+    if (params) this.setArrowFunctionParameters(node, params);
     this.parseFunctionBody(node, true);
+
     this.state.inAsync = oldInAsync;
     this.state.inGenerator = oldInGenerator;
     this.state.inFunction = oldInFunc;
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
+    this.state.yieldPos = oldYieldPos;
+    this.state.awaitPos = oldAwaitPos;
 
     return this.finishNode(node, "ArrowFunctionExpression");
   }
@@ -2034,16 +2032,10 @@ export default class ExpressionParser extends LValParser {
   // Parses await expression inside async function.
 
   parseAwait(): N.AwaitExpression {
-    const node = this.startNode();
-
-    if (
-      this.state.maybeInArrowParameters &&
-      // We only set yieldOrAwaitInPossibleArrowParameters if we haven't already
-      // found a possible invalid AwaitExpression.
-      !this.state.yieldOrAwaitInPossibleArrowParameters
-    ) {
-      this.state.yieldOrAwaitInPossibleArrowParameters = node;
+    if (!this.state.awaitPos) {
+      this.state.awaitPos = this.state.start;
     }
+    const node = this.startNode();
 
     this.next();
 
@@ -2067,18 +2059,13 @@ export default class ExpressionParser extends LValParser {
   // Parses yield expression inside generator.
 
   parseYield(noIn?: ?boolean): N.YieldExpression {
+    if (!this.state.yieldPos) {
+      this.state.yieldPos = this.state.start;
+    }
     const node = this.startNode();
 
     if (this.state.inParameters) {
       this.raise(node.start, "yield is not allowed in generator parameters");
-    }
-    if (
-      this.state.maybeInArrowParameters &&
-      // We only set yieldOrAwaitInPossibleArrowParameters if we haven't already
-      // found a possible invalid YieldExpression.
-      !this.state.yieldOrAwaitInPossibleArrowParameters
-    ) {
-      this.state.yieldOrAwaitInPossibleArrowParameters = node;
     }
 
     this.next();
