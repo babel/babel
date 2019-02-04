@@ -3283,7 +3283,9 @@ export function isScopable(node: Object, opts?: Object): boolean {
     "ClassDeclaration" === nodeType ||
     "ClassExpression" === nodeType ||
     "ForOfStatement" === nodeType ||
-    "ClassMethod" === nodeType
+    "ClassMethod" === nodeType ||
+    "ClassPrivateProperty" === nodeType ||
+    "ClassPrivateMethod" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;

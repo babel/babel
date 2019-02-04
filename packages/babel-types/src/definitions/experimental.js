@@ -146,7 +146,7 @@ defineType("OptionalCallExpression", {
 defineType("ClassPrivateProperty", {
   visitor: ["key", "value"],
   builder: ["key", "value"],
-  aliases: ["Property", "Private"],
+  aliases: ["Scopable", "Property", "Private"],
   fields: {
     key: {
       validate: assertNodeType("PrivateName"),
@@ -168,7 +168,7 @@ defineType("ClassPrivateMethod", {
     "returnType",
     "typeParameters",
   ],
-  aliases: ["Method", "Private", "Function"],
+  aliases: ["Scopable", "Method", "Private", "Function"],
   fields: {
     ...classMethodOrDeclareMethodCommon,
     key: {
