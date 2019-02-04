@@ -1,5 +1,6 @@
 .DS_Store
 /node_modules
+/.github/actions/*/node_modules
 /packages/*/node_modules
 /packages/*/LICENSE
 !/packages/babel-parser/LICENSE
@@ -15,6 +16,7 @@ coverage
 dist
 /.package.json
 package-lock.json
+!/.github/actions/*/package-lock.json
 
 /packages/babel-runtime/helpers/*.js
 !/packages/babel-runtime/helpers/toArray.js
