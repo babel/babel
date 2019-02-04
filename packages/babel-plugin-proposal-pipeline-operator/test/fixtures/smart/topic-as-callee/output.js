@@ -1,3 +1,3 @@
-var _topic2, _ref;
+var _ref, _v;
 
-_ref = (_topic2 = v, _topic2.method), f(_ref);
+_ref = (_v = v, _v.method()), f(_ref);
