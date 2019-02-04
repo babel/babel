@@ -1,7 +1,1 @@
-var indexOf = require("core-js-pure/features/array/virtual/index-of");
-var ArrayPrototype = Array.prototype;
-
-module.exports = function (it) {
-  var own = it.indexOf;
-  return it === ArrayPrototype || (it instanceof Array && own === ArrayPrototype.indexOf) ? indexOf : own;
-};
+module.exports = require("core-js-pure/features/instance/index-of");

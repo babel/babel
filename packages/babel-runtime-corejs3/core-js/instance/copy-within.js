@@ -1,7 +1,1 @@
-var copyWithin = require("core-js-pure/features/array/virtual/copy-within");
-var ArrayPrototype = Array.prototype;
-
-module.exports = function (it) {
-  var own = it.copyWithin;
-  return it === ArrayPrototype || (it instanceof Array && own === ArrayPrototype.copyWithin) ? copyWithin : own;
-};
+module.exports = require("core-js-pure/features/instance/copy-within");
