@@ -36,14 +36,14 @@ function writeCoreJS2(runtimeName) {
   ];
 
   Object.keys(corejs2Definitions.builtins).forEach(key => {
-    const path = corejs2Definitions.builtins[key];
+    const path = corejs2Definitions.builtins[key].path;
     paths.push(path);
   });
 
   Object.keys(corejs2Definitions.methods).forEach(key => {
     const props = corejs2Definitions.methods[key];
     Object.keys(props).forEach(key2 => {
-      paths.push(props[key2]);
+      paths.push(props[key2].path);
     });
   });
 
@@ -61,19 +61,19 @@ function writeCoreJS3(runtimeName) {
   const paths = ["is-iterable", "get-iterator", "get-iterator-method"];
 
   Object.keys(corejs3Definitions.builtins).forEach(key => {
-    const path = corejs3Definitions.builtins[key];
+    const path = corejs3Definitions.builtins[key].path;
     paths.push(path);
   });
 
   Object.keys(corejs3Definitions.methods).forEach(key => {
     const props = corejs3Definitions.methods[key];
     Object.keys(props).forEach(key2 => {
-      paths.push(props[key2]);
+      paths.push(props[key2].path);
     });
   });
 
   Object.keys(corejs3Definitions.instanceMethods).forEach(key => {
-    const path = corejs3Definitions.instanceMethods[key];
+    const path = corejs3Definitions.instanceMethods[key].path;
     paths.push(`instance/${path}`);
   });
 

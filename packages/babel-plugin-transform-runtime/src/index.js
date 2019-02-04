@@ -226,7 +226,7 @@ export default declare((api, options, dirname) => {
         // transform Symbol(), new Promise
         path.replaceWith(
           this.addDefaultImport(
-            `${modulePath}/core-js/${definitions.builtins[name]}`,
+            `${modulePath}/core-js/${definitions.builtins[name].path}`,
             name,
           ),
         );
@@ -260,7 +260,7 @@ export default declare((api, options, dirname) => {
               t.callExpression(
                 this.addDefaultImport(
                   `${moduleName}/core-js/instance/${
-                    definitions.instanceMethods[property.name]
+                    definitions.instanceMethods[property.name].path
                   }`,
                   `${property.name}InstanceProperty`,
                 ),
@@ -347,7 +347,7 @@ export default declare((api, options, dirname) => {
                 t.callExpression(
                   this.addDefaultImport(
                     `${moduleName}/core-js/instance/${
-                      definitions.instanceMethods[property.name]
+                      definitions.instanceMethods[property.name].path
                     }`,
                     `${property.name}InstanceProperty`,
                   ),
@@ -365,7 +365,7 @@ export default declare((api, options, dirname) => {
 
           path.replaceWith(
             this.addDefaultImport(
-              `${modulePath}/core-js/${methods[property.name]}`,
+              `${modulePath}/core-js/${methods[property.name].path}`,
               `${object.name}$${property.name}`,
             ),
           );
@@ -385,7 +385,7 @@ export default declare((api, options, dirname) => {
           path.replaceWith(
             t.memberExpression(
               this.addDefaultImport(
-                `${modulePath}/core-js/${definitions.builtins[name]}`,
+                `${modulePath}/core-js/${definitions.builtins[name].path}`,
                 name,
               ),
               node.property,
