@@ -1,4 +1,4 @@
-var _includesInstanceProperty = require("@babel/runtime-corejs3/core-js/instance/includes");
+var _includesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/includes");
 
 var _context, _context2, _context3;
 

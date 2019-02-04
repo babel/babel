@@ -1,43 +1,35 @@
-var _setTimeout = require("@babel/runtime-corejs3/core-js/set-timeout");
+var _setTimeout = require("@babel/runtime-corejs3/core-js-stable/set-timeout");
 
-var _setInterval = require("@babel/runtime-corejs3/core-js/set-interval");
+var _setInterval = require("@babel/runtime-corejs3/core-js-stable/set-interval");
 
-var _setImmediate = require("@babel/runtime-corejs3/core-js/set-immediate");
+var _setImmediate = require("@babel/runtime-corejs3/core-js-stable/set-immediate");
 
-var _queueMicrotask = require("@babel/runtime-corejs3/core-js/queue-microtask");
+var _queueMicrotask = require("@babel/runtime-corejs3/core-js-stable/queue-microtask");
 
-var _parseInt = require("@babel/runtime-corejs3/core-js/parse-int");
+var _parseInt = require("@babel/runtime-corejs3/core-js-stable/parse-int");
 
-var _parseFloat = require("@babel/runtime-corejs3/core-js/parse-float");
+var _parseFloat = require("@babel/runtime-corejs3/core-js-stable/parse-float");
 
-var _globalThis = require("@babel/runtime-corejs3/core-js/global-this");
+var _clearImmediate = require("@babel/runtime-corejs3/core-js-stable/clear-immediate");
 
-var _compositeSymbol = require("@babel/runtime-corejs3/core-js/composite-symbol");
+var _WeakSet = require("@babel/runtime-corejs3/core-js-stable/weak-set");
 
-var _compositeKey = require("@babel/runtime-corejs3/core-js/composite-key");
+var _WeakMap = require("@babel/runtime-corejs3/core-js-stable/weak-map");
 
-var _clearImmediate = require("@babel/runtime-corejs3/core-js/clear-immediate");
+var _URLSearchParams = require("@babel/runtime-corejs3/core-js-stable/url-search-params");
 
-var _WeakSet = require("@babel/runtime-corejs3/core-js/weak-set");
+var _URL = require("@babel/runtime-corejs3/core-js-stable/url");
 
-var _WeakMap = require("@babel/runtime-corejs3/core-js/weak-map");
+var _Symbol = require("@babel/runtime-corejs3/core-js-stable/symbol");
 
-var _URLSearchParams = require("@babel/runtime-corejs3/core-js/url-search-params");
+var _Set = require("@babel/runtime-corejs3/core-js-stable/set");
 
-var _URL = require("@babel/runtime-corejs3/core-js/url");
+var _Promise = require("@babel/runtime-corejs3/core-js-stable/promise");
 
-var _Symbol = require("@babel/runtime-corejs3/core-js/symbol");
-
-var _Set = require("@babel/runtime-corejs3/core-js/set");
-
-var _Promise = require("@babel/runtime-corejs3/core-js/promise");
-
-var _Observable = require("@babel/runtime-corejs3/core-js/observable");
-
-var _Map = require("@babel/runtime-corejs3/core-js/map");
+var _Map = require("@babel/runtime-corejs3/core-js-stable/map");
 
 _Map;
-_Observable;
+Observable;
 _Promise;
 _Set;
 _Symbol;
@@ -46,9 +38,9 @@ _URLSearchParams;
 _WeakMap;
 _WeakSet;
 _clearImmediate;
-_compositeKey;
-_compositeSymbol;
-_globalThis;
+compositeKey;
+compositeSymbol;
+globalThis;
 _parseFloat;
 _parseInt;
 _queueMicrotask;
