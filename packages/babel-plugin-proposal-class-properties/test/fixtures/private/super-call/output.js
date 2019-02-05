@@ -29,7 +29,7 @@ function (_A) {
     babelHelpers.classCallCheck(this, B);
     _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(B).call(this, ...args));
 
-    _foo.set(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this)), {
+    _foo.set(babelHelpers.assertThisInitialized(_this), {
       writable: true,
       value: babelHelpers.get(babelHelpers.getPrototypeOf(B.prototype), "foo", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this))
     });
