@@ -95,12 +95,6 @@ function supportsStaticESM(caller) {
 export default declare((api, opts) => {
   api.assertVersion(7);
 
-  if (opts.useBuiltIns && opts.corejs === undefined) {
-    console.log(
-      "\nWith `useBuiltIns` option, required direct setting of `corejs` option\n",
-    );
-  }
-
   const {
     configPath,
     debug,
@@ -206,7 +200,7 @@ export default declare((api, opts) => {
     const polyfillTargets = getBuiltInTargets(targets);
 
     const polyfills = filterItems(
-      corejs === 2
+      corejs.major === 2
         ? shippedProposals
           ? corejs2Polyfills
           : corejs2PolyfillsWithoutProposals
@@ -216,22 +210,24 @@ export default declare((api, opts) => {
       include.builtIns,
       exclude.builtIns,
       polyfillTargets,
-      corejs === 2
+      corejs.major === 2
         ? getCoreJS2PlatformSpecificDefaultFor(polyfillTargets)
         : null,
       null,
     );
 
     const pluginOptions = {
+      useBuiltIns,
       debug,
       polyfills,
       regenerator,
       polyfillTargets,
-      allBuiltInsList: corejs === 2 ? corejs2Polyfills : corejs3Polyfills,
+      allBuiltInsList: corejs.major === 2 ? corejs2Polyfills : corejs3Polyfills,
+      corejs,
     };
 
     if (useBuiltIns === "usage") {
-      if (corejs === 2) {
+      if (corejs.major === 2) {
         plugins.push([addCoreJS2UsagePlugin, pluginOptions]);
       } else {
         plugins.push([addCoreJS3UsagePlugin, pluginOptions]);
@@ -240,7 +236,7 @@ export default declare((api, opts) => {
         plugins.push([addRegeneratorUsagePlugin, pluginOptions]);
       }
     } else {
-      if (corejs === 2) {
+      if (corejs.major === 2) {
         plugins.push([replaceCoreJS2EntryPlugin, pluginOptions]);
       } else {
         plugins.push([replaceCoreJS3EntryPlugin, pluginOptions]);

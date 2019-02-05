@@ -1,5 +1,4 @@
-//@flow
-
+import { coerce } from "semver";
 import invariant from "invariant";
 import corejs2Polyfills from "../data/corejs2-built-ins.json";
 import { defaultWebIncludes } from "./defaults";
@@ -9,9 +8,8 @@ import { isBrowsersQueryValid } from "./targets-parser";
 import { getValues, findSuggestion } from "./utils";
 import pluginsList from "../data/plugins.json";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
-import type { Targets, Options, ModuleOption, BuiltInsOption } from "./types";
 
-const validateTopLevelOptions = (options: Options) => {
+const validateTopLevelOptions = options => {
   for (const option in options) {
     if (!TopLevelOptions[option]) {
       const validOptions = getValues(TopLevelOptions);
@@ -23,20 +21,25 @@ const validateTopLevelOptions = (options: Options) => {
   }
 };
 
-const validIncludesAndExcludesWithCoreJS2 = new Set([
+const allPluginsList = [
   ...Object.keys(pluginsList),
   ...Object.keys(moduleTransformations).map(m => moduleTransformations[m]),
+];
+
+const validIncludesAndExcludesWithoutCoreJS = new Set(allPluginsList);
+
+const validIncludesAndExcludesWithCoreJS2 = new Set([
+  ...allPluginsList,
   ...Object.keys(corejs2Polyfills),
   ...defaultWebIncludes,
 ]);
 
 const validIncludesAndExcludesWithCoreJS3 = new Set([
-  ...Object.keys(pluginsList),
-  ...Object.keys(moduleTransformations).map(m => moduleTransformations[m]),
+  ...allPluginsList,
   ...Object.keys(corejs3Polyfills),
 ]);
 
-const pluginToRegExp = (plugin: any): ?RegExp => {
+const pluginToRegExp = plugin => {
   if (plugin instanceof RegExp) return plugin;
   try {
     return new RegExp(`^${normalizePluginName(plugin)}$`);
@@ -45,20 +48,18 @@ const pluginToRegExp = (plugin: any): ?RegExp => {
   }
 };
 
-const selectPlugins = (regexp: ?RegExp, corejs: number): Array<string> =>
+const selectPlugins = (regexp, corejs) =>
   Array.from(
-    corejs == 2
-      ? validIncludesAndExcludesWithCoreJS2
-      : validIncludesAndExcludesWithCoreJS3,
+    corejs
+      ? corejs == 2
+        ? validIncludesAndExcludesWithCoreJS2
+        : validIncludesAndExcludesWithCoreJS3
+      : validIncludesAndExcludesWithoutCoreJS,
   ).filter(item => regexp instanceof RegExp && regexp.test(item));
 
 const flatten = array => [].concat(...array);
 
-const expandIncludesAndExcludes = (
-  plugins: Array<string | RegExp> = [],
-  type: string,
-  corejs: number,
-): Array<string> => {
+const expandIncludesAndExcludes = (plugins = [], type, corejs) => {
   if (plugins.length === 0) return [];
 
   const selectedPlugins = plugins.map(plugin =>
@@ -79,13 +80,10 @@ const expandIncludesAndExcludes = (
   return flatten(selectedPlugins);
 };
 
-export const normalizePluginName = (plugin: string): string =>
+export const normalizePluginName = plugin =>
   plugin.replace(/^(@babel\/|babel-)(plugin-)?/, "");
 
-export const checkDuplicateIncludeExcludes = (
-  include: Array<string> = [],
-  exclude: Array<string> = [],
-): void => {
+export const checkDuplicateIncludeExcludes = (include = [], exclude = []) => {
   const duplicates = include.filter(opt => exclude.indexOf(opt) >= 0);
 
   invariant(
@@ -97,7 +95,7 @@ export const checkDuplicateIncludeExcludes = (
   );
 };
 
-const normalizeTargets = (targets: any): Targets => {
+const normalizeTargets = targets => {
   // TODO: Allow to use only query or strings as a targets from next breaking change.
   if (isBrowsersQueryValid(targets)) {
     return { browsers: targets };
@@ -107,9 +105,7 @@ const normalizeTargets = (targets: any): Targets => {
   };
 };
 
-export const validateConfigPathOption = (
-  configPath: string = process.cwd(),
-) => {
+export const validateConfigPathOption = (configPath = process.cwd()) => {
   invariant(
     typeof configPath === "string",
     `Invalid Option: The configPath option '${configPath}' is invalid, only strings are allowed.`,
@@ -117,11 +113,7 @@ export const validateConfigPathOption = (
   return configPath;
 };
 
-export const validateBoolOption = (
-  name: string,
-  value: ?boolean,
-  defaultValue: boolean,
-) => {
+export const validateBoolOption = (name, value, defaultValue) => {
   if (typeof value === "undefined") {
     value = defaultValue;
   }
@@ -133,18 +125,14 @@ export const validateBoolOption = (
   return value;
 };
 
-export const validateIgnoreBrowserslistConfig = (
-  ignoreBrowserslistConfig: boolean,
-) =>
+export const validateIgnoreBrowserslistConfig = ignoreBrowserslistConfig =>
   validateBoolOption(
     TopLevelOptions.ignoreBrowserslistConfig,
     ignoreBrowserslistConfig,
     false,
   );
 
-export const validateModulesOption = (
-  modulesOpt: ModuleOption = ModulesOption.auto,
-) => {
+export const validateModulesOption = (modulesOpt = ModulesOption.auto) => {
   invariant(
     ModulesOption[modulesOpt] ||
       ModulesOption[modulesOpt] === ModulesOption.false,
@@ -158,9 +146,7 @@ export const validateModulesOption = (
   return modulesOpt;
 };
 
-export const validateUseBuiltInsOption = (
-  builtInsOpt: BuiltInsOption = false,
-): BuiltInsOption => {
+export const validateUseBuiltInsOption = (builtInsOpt = false) => {
   invariant(
     UseBuiltInsOption[builtInsOpt] ||
       UseBuiltInsOption[builtInsOpt] === UseBuiltInsOption.false,
@@ -173,20 +159,32 @@ export const validateUseBuiltInsOption = (
   return builtInsOpt;
 };
 
-export default function normalizeOptions(opts: Options) {
+export default function normalizeOptions(opts) {
   validateTopLevelOptions(opts);
 
-  const corejs = opts.corejs && String(opts.corejs) === "3" ? 3 : 2;
+  let corejs: any = null;
+  if (opts.useBuiltIns && opts.corejs === undefined) {
+    corejs = coerce("2");
+    console.log(
+      "\nWith `useBuiltIns` option, required direct setting of `corejs` option\n",
+    );
+  } else if (["string", "number"].includes(typeof opts.corejs)) {
+    corejs = coerce(String(opts.corejs));
+  }
+
+  if (opts.useBuiltIns && (!corejs || corejs.major < 2 || corejs.major > 3)) {
+    throw new RangeError("Supported only core-js@2 and core-js@3.");
+  }
 
   const include = expandIncludesAndExcludes(
     opts.include,
     TopLevelOptions.include,
-    corejs,
+    corejs && corejs.major,
   );
   const exclude = expandIncludesAndExcludes(
     opts.exclude,
     TopLevelOptions.exclude,
-    corejs,
+    corejs && corejs.major,
   );
 
   checkDuplicateIncludeExcludes(include, exclude);

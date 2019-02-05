@@ -1,7 +1,10 @@
 import { logEntryPolyfills } from "../../debug";
 import { createImport, isPolyfillSource, isRequire } from "../../utils";
+import getModulesListForTargetCoreJSVersion from "./get-modules-list-for-target-core-js-version";
 
-export default function({ types: t }) {
+export default function({ types: t }, { corejs }) {
+  const available = getModulesListForTargetCoreJSVersion(corejs);
+
   function replaceWithPolyfillImports(path, polyfills, regenerator) {
     if (regenerator) {
       createImport(path, "regenerator-runtime");
@@ -9,8 +12,8 @@ export default function({ types: t }) {
 
     const items = Array.isArray(polyfills) ? new Set(polyfills) : polyfills;
 
-    for (const p of Array.from(items).reverse()) {
-      createImport(path, p);
+    for (const module of Array.from(items).reverse()) {
+      if (available.has(module)) createImport(path, module);
     }
 
     path.remove();

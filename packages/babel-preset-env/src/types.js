@@ -26,7 +26,7 @@ export type Options = {
   spec: boolean,
   targets: Targets,
   useBuiltIns: BuiltInsOption,
-  corejs: number | string,
+  corejs: any,
 };
 
 // Babel
