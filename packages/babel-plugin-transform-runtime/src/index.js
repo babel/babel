@@ -82,6 +82,13 @@ export default declare((api, options, dirname) => {
     return has(methods, name) && (proposals || methods[name].stable);
   }
 
+  function hasStaticMapping(object, method) {
+    return (
+      has(definitions.methods, object) &&
+      hasMapping(definitions.methods[object], method)
+    );
+  }
+
   if (has(options, "useBuiltIns")) {
     if (options.useBuiltIns) {
       throw new Error(
@@ -255,11 +262,7 @@ export default declare((api, options, dirname) => {
         const { object, property } = callee;
 
         // transform array.includes()
-        if (
-          !injectCoreJS2 &&
-          (!has(definitions.methods, object.name) ||
-            !has(definitions.methods[object.name], property.name))
-        ) {
+        if (!injectCoreJS2 && !hasStaticMapping(object.name, property.name)) {
           if (hasMapping(definitions.instanceMethods, property.name)) {
             let context1, context2;
             if (object.type === "Identifier") {
@@ -348,10 +351,16 @@ export default declare((api, options, dirname) => {
             return;
           }
 
-          // transform method = array.includes
-          if (!has(definitions.methods, object.name)) {
-            if (injectCoreJS2) return;
-            if (hasMapping(definitions.instanceMethods, property.name)) {
+          // doesn't reference the global
+          if (
+            path.scope.getBindingIdentifier(object.name) ||
+            !hasStaticMapping(object.name, property.name)
+          ) {
+            // transform method = array.includes
+            if (
+              !injectCoreJS2 &&
+              hasMapping(definitions.instanceMethods, property.name)
+            ) {
               path.replaceWith(
                 t.callExpression(
                   this.addDefaultImport(
@@ -367,16 +376,11 @@ export default declare((api, options, dirname) => {
             return;
           }
 
-          const methods = definitions.methods[object.name];
-
-          if (!hasMapping(methods, property.name)) return;
-
-          // doesn't reference the global
-          if (path.scope.getBindingIdentifier(object.name)) return;
-
           path.replaceWith(
             this.addDefaultImport(
-              `${modulePath}/${corejsRoot}/${methods[property.name].path}`,
+              `${modulePath}/${corejsRoot}/${
+                definitions.methods[object.name][property.name].path
+              }`,
               `${object.name}$${property.name}`,
             ),
           );

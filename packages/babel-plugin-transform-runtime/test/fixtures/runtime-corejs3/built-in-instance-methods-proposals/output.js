@@ -246,4 +246,6 @@ _trimStartInstanceProperty(object).call(object, arg);
 
 _valuesInstanceProperty(object).call(object, arg);
 
+_bindInstanceProperty(Function);
+
 object.something(arg);
