@@ -82,4 +82,7 @@ object.trimLeft(arg);
 object.trimRight(arg);
 object.trimStart(arg);
 object.values(arg);
+
+Function.bind
+
 object.something(arg);
