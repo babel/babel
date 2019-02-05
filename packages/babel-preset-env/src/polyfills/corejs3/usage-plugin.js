@@ -1,6 +1,7 @@
 import { definitions } from "./built-in-definitions";
 import { logUsagePolyfills } from "../../debug";
 import { createImport, isPolyfillSource, isRequire } from "../../utils";
+import getModulesListForTargetCoreJSVersion from "./get-modules-list-for-target-core-js-version";
 
 function has(obj, key) {
   return Object.prototype.hasOwnProperty.call(obj, key);
@@ -11,9 +12,11 @@ function getType(target) {
   return typeof target;
 }
 
-export default function({ types: t }) {
+export default function({ types: t }, { corejs }) {
+  const available = getModulesListForTargetCoreJSVersion(corejs);
+
   function addImport(path, builtIn, builtIns) {
-    if (builtIn && !builtIns.has(builtIn)) {
+    if (builtIn && !builtIns.has(builtIn) && available.has(builtIn)) {
       builtIns.add(builtIn);
       createImport(path, builtIn);
     }
