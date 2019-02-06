@@ -1849,7 +1849,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.finishNode(typeCastNode, "TSTypeCastExpression");
       }
 
-      return node;
+      return this.finishNode(node, node.type);
     }
 
     parseExportDeclaration(node: N.ExportNamedDeclaration): ?N.Declaration {
