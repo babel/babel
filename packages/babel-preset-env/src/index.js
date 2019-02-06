@@ -109,6 +109,7 @@ export default declare((api, opts) => {
     targets: optionsTargets,
     useBuiltIns,
     corejs,
+    proposals,
   } = normalizeOptions(opts);
   // TODO: remove this in next major
   let hasUglifyTarget = false;
@@ -204,6 +205,8 @@ export default declare((api, opts) => {
         ? shippedProposals
           ? corejs2Polyfills
           : corejs2PolyfillsWithoutProposals
+        : proposals // || useBuiltIns === "entry"
+        ? corejs3Polyfills
         : shippedProposals
         ? corejs3PolyfillsWithShippedProposals
         : corejs3PolyfillsWithoutProposals,

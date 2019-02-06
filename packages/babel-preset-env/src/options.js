@@ -1,5 +1,6 @@
 export const TopLevelOptions = {
   configPath: "configPath",
+  corejs: "corejs",
   debug: "debug",
   exclude: "exclude",
   forceAllTransforms: "forceAllTransforms",
@@ -7,11 +8,11 @@ export const TopLevelOptions = {
   include: "include",
   loose: "loose",
   modules: "modules",
+  proposals: "proposals",
   shippedProposals: "shippedProposals",
   spec: "spec",
   targets: "targets",
   useBuiltIns: "useBuiltIns",
-  corejs: "corejs",
 };
 
 export const ModulesOption = {

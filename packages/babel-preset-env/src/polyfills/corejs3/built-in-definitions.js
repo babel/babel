@@ -4,7 +4,7 @@ const ArrayNatureIterators = [
   "web.dom-collections.iterator",
 ];
 
-const CommonIterators = ["es.string.iterator"].concat(ArrayNatureIterators);
+const CommonIterators = ["es.string.iterator", ...ArrayNatureIterators];
 
 const TypedArrayDependencies = [
   "es.array.iterator",
@@ -46,7 +46,69 @@ const PromiseDependencies = [
   "es.promise",
 ];
 
-const URLSearchParamsDependencies = ["web.url"].concat(CommonIterators);
+const PromiseDependenciesWithIterators = [
+  ...PromiseDependencies,
+  ...CommonIterators,
+];
+
+const SymbolDependencies = [
+  "es.symbol.description",
+  "es.object.to-string",
+  "es.symbol",
+];
+
+const MapDependencies = [
+  "esnext.map.delete-all",
+  "esnext.map.every",
+  "esnext.map.filter",
+  "esnext.map.find",
+  "esnext.map.find-key",
+  "esnext.map.includes",
+  "esnext.map.key-of",
+  "esnext.map.map-keys",
+  "esnext.map.map-values",
+  "esnext.map.merge",
+  "esnext.map.reduce",
+  "esnext.map.some",
+  "es.map",
+  ...CommonIterators,
+];
+
+const SetDependencies = [
+  "esnext.set.add-all",
+  "esnext.set.delete-all",
+  "esnext.set.every",
+  "esnext.set.difference",
+  "esnext.set.filter",
+  "esnext.set.find",
+  "esnext.set.intersection",
+  "esnext.set.is-disjoint-from",
+  "esnext.set.is-subset-of",
+  "esnext.set.is-superset-of",
+  "esnext.set.join",
+  "esnext.set.map",
+  "esnext.set.reduce",
+  "esnext.set.some",
+  "esnext.set.symmetric-difference",
+  "esnext.set.union",
+  "es.set",
+  ...CommonIterators,
+];
+
+const WeakMapDependencies = [
+  "esnext.weak-map.delete-all",
+  "es.weak-map",
+  ...CommonIterators,
+];
+
+const WeakSetDependencies = [
+  "esnext.weak-set.add-all",
+  "esnext.weak-set.delete-all",
+  "es.weak-set",
+  ...CommonIterators,
+];
+
+const URLSearchParamsDependencies = ["web.url", ...CommonIterators];
 
 // TODO: this is the opposite of built-in-features so maybe generate one from the other?
 export const definitions = {
@@ -58,32 +120,38 @@ export const definitions = {
     ],
     DataView: ["es.object.to-string", "es.data-view", "es.array-buffer.slice"],
     Date: ["es.date.to-string"],
-    Float32Array: ["es.typed-array.float32-array"].concat(
-      TypedArrayDependencies,
-    ),
-    Float64Array: ["es.typed-array.float64-array"].concat(
-      TypedArrayDependencies,
-    ),
-    Int8Array: ["es.typed-array.int8-array"].concat(TypedArrayDependencies),
-    Int16Array: ["es.typed-array.int16-array"].concat(TypedArrayDependencies),
-    Int32Array: ["es.typed-array.int32-array"].concat(TypedArrayDependencies),
-    Uint8Array: ["es.typed-array.uint8-array"].concat(TypedArrayDependencies),
-    Uint8ClampedArray: ["es.typed-array.uint8-clamped-array"].concat(
-      TypedArrayDependencies,
-    ),
-    Uint16Array: ["es.typed-array.uint16-array"].concat(TypedArrayDependencies),
-    Uint32Array: ["es.typed-array.uint32-array"].concat(TypedArrayDependencies),
-    Map: ["es.map"].concat(CommonIterators),
+    Float32Array: ["es.typed-array.float32-array", ...TypedArrayDependencies],
+    Float64Array: ["es.typed-array.float64-array", ...TypedArrayDependencies],
+    Int8Array: ["es.typed-array.int8-array", ...TypedArrayDependencies],
+    Int16Array: ["es.typed-array.int16-array", ...TypedArrayDependencies],
+    Int32Array: ["es.typed-array.int32-array", ...TypedArrayDependencies],
+    Uint8Array: ["es.typed-array.uint8-array", ...TypedArrayDependencies],
+    Uint8ClampedArray: [
+      "es.typed-array.uint8-clamped-array",
+      ...TypedArrayDependencies,
+    ],
+    Uint16Array: ["es.typed-array.uint16-array", ...TypedArrayDependencies],
+    Uint32Array: ["es.typed-array.uint32-array", ...TypedArrayDependencies],
+    Map: MapDependencies,
     Number: ["es.number.constructor"],
+    Observable: [
+      "esnext.observable",
+      "esnext.symbol.observable",
+      "es.object.to-string",
+      ...CommonIterators,
+    ],
     Promise: PromiseDependencies,
     RegExp: ["es.regexp.to-string", "es.regexp.exec", "es.regexp.constructor"],
-    Set: ["es.set"].concat(CommonIterators),
-    Symbol: ["es.symbol.description", "es.object.to-string", "es.symbol"],
-    URL: ["web.url"].concat(URLSearchParamsDependencies),
+    Set: SetDependencies,
+    Symbol: SymbolDependencies,
+    URL: ["web.url", ...URLSearchParamsDependencies],
     URLSearchParams: URLSearchParamsDependencies,
-    WeakMap: ["es.weak-map"].concat(CommonIterators),
-    WeakSet: ["es.weak-set"].concat(CommonIterators),
+    WeakMap: WeakMapDependencies,
+    WeakSet: WeakSetDependencies,
     clearImmediate: ["web.immediate"],
+    compositeKey: ["esnext.composite-key"],
+    compositeSymbol: ["esnext.composite-symbol", ...SymbolDependencies],
+    globalThis: ["esnext.global-this"],
     parseFloat: ["es.parse-float"],
     parseInt: ["es.parse-int"],
     queueMicrotask: ["web.queue-microtask"],
@@ -93,12 +161,14 @@ export const definitions = {
   },
 
   instanceMethods: {
+    at: ["esnext.string.at"],
     anchor: ["es.string.anchor"],
     big: ["es.string.big"],
     bind: ["es.function.bind"],
     blink: ["es.string.blink"],
     bold: ["es.string.bold"],
     codePointAt: ["es.string.code-point-at"],
+    codePoints: ["esnext.string.code-points"],
     concat: ["es.array.concat"],
     copyWithin: ["es.array.copy-within"],
     description: ["es.symbol.description", "es.symbol"],
@@ -123,9 +193,12 @@ export const definitions = {
     italic: ["es.string.italics"],
     join: ["es.array.join"],
     keys: ArrayNatureIterators,
+    lastIndex: ["esnext.array.last-index"],
     lastIndexOf: ["es.array.last-index-of"],
+    lastItem: ["esnext.array.last-item"],
     link: ["es.string.link"],
     match: ["es.string.match"],
+    matchAll: ["esnext.string.match-all"],
     map: ["es.array.map"],
     name: ["es.function.name"],
     padEnd: ["es.string.pad-end"],
@@ -134,6 +207,7 @@ export const definitions = {
     reduceRight: ["es.array.reduce-right"],
     repeat: ["es.string.repeat"],
     replace: ["es.string.replace"],
+    replaceAll: ["esnext.string.replace-all"],
     reverse: ["es.string.reverse"],
     search: ["es.string.search"],
     slice: ["es.array.slice"],
@@ -203,23 +277,36 @@ export const definitions = {
     },
 
     Math: {
+      DEG_PER_RAD: "esnext.math.deg-per-rad",
+      RAD_PER_DEG: "esnext.math.rad-per-deg",
       acosh: "es.math.acosh",
       asinh: "es.math.asinh",
       atanh: "es.math.atanh",
       cbrt: "es.math.cbrt",
+      clamp: "esnext.math.clamp",
       clz32: "es.math.clz32",
       cosh: "es.math.cosh",
+      degrees: "esnext.math.degrees",
       expm1: "es.math.expm1",
       fround: "es.math.fround",
+      fscale: "esnext.math.fscale",
       hypot: "es.math.hypot",
+      iaddh: "esnext.math.iaddh",
       imul: "es.math.imul",
+      imulh: "esnext.math.imulh",
+      isubh: "esnext.math.isubh",
       log1p: "es.math.log1p",
       log10: "es.math.log10",
       log2: "es.math.log2",
+      radians: "esnext.math.radians",
+      scale: "esnext.math.scale",
+      seededPRNG: "esnext.math.seeded-prng",
       sign: "es.math.sign",
+      signbit: "esnext.math.signbit",
       sinh: "es.math.sinh",
       tanh: "es.math.tanh",
       trunc: "es.math.trunc",
+      umulh: "esnext.math.umulh",
     },
 
     String: {
@@ -231,6 +318,7 @@ export const definitions = {
       EPSILON: "es.number.epsilon",
       MIN_SAFE_INTEGER: "es.number.min-safe-integer",
       MAX_SAFE_INTEGER: "es.number.max-safe-integer",
+      fromString: "esnext.number.from-string",
       isFinite: "es.number.is-finite",
       isInteger: "es.number.is-integer",
       isSafeInteger: "es.number.is-safe-integer",
@@ -239,21 +327,58 @@ export const definitions = {
       parseInt: "es.number.parse-int",
     },
 
+    Map: {
+      from: ["esnext.map.from", ...MapDependencies],
+      groupBy: ["esnext.map.group-by", ...MapDependencies],
+      keyBy: ["esnext.map.key-by", ...MapDependencies],
+      of: ["esnext.map.of", ...MapDependencies],
+    },
+
+    Set: {
+      from: ["esnext.set.from", ...SetDependencies],
+      of: ["esnext.set.of", ...SetDependencies],
+    },
+
+    WeakMap: {
+      from: ["esnext.weak-map.from", ...WeakMapDependencies],
+      of: ["esnext.weak-map.of", ...WeakMapDependencies],
+    },
+
+    WeakSet: {
+      from: ["esnext.weak-set.from", ...WeakSetDependencies],
+      of: ["esnext.weak-set.of", ...WeakSetDependencies],
+    },
+
     Promise: {
-      all: CommonIterators,
-      race: CommonIterators,
+      all: PromiseDependenciesWithIterators,
+      allSettled: [
+        "esnext.promise.all-settled",
+        ...PromiseDependenciesWithIterators,
+      ],
+      any: ["esnext.promise.any", ...PromiseDependenciesWithIterators],
+      race: PromiseDependenciesWithIterators,
+      try: ["esnext.promise.try", ...PromiseDependenciesWithIterators],
     },
 
     Reflect: {
       apply: "es.reflect.apply",
       construct: "es.reflect.construct",
+      defineMetadata: "esnext.reflect.define-metadata",
       defineProperty: "es.reflect.define-property",
+      deleteMetadata: "esnext.reflect.delete-metadata",
       deleteProperty: "es.reflect.delete-property",
       get: "es.reflect.get",
+      getMetadata: "esnext.reflect.get-metadata",
+      getMetadataKeys: "esnext.reflect.get-metadata-keys",
+      getOwnMetadata: "esnext.reflect.get-own-metadata",
+      getOwnMetadataKeys: "esnext.reflect.get-own-metadata-keys",
       getOwnPropertyDescriptor: "es.reflect.get-own-property-descriptor",
       getPrototypeOf: "es.reflect.get-prototype-of",
       has: "es.reflect.has",
+      hasMetadata: "esnext.reflect.has-metadata",
+      hasOwnMetadata: "esnext.reflect.has-own-metadata",
       isExtensible: "es.reflect.is-extensible",
+      metadata: "esnext.reflect.metadata",
       ownKeys: "es.reflect.own-keys",
       preventExtensions: "es.reflect.prevent-extensions",
       set: "es.reflect.set",
@@ -262,10 +387,13 @@ export const definitions = {
 
     Symbol: {
       asyncIterator: "es.symbol.async-iterator",
+      dispose: "esnext.symbol.dispose",
       hasInstance: ["es.function.has-instance", "es.symbol.has-instance"],
       isConcatSpreadable: ["es.array.concat", "es.symbol.is-concat-spreadable"],
-      iterator: CommonIterators.concat("es.symbol.iterator"),
+      iterator: [...CommonIterators, "es.symbol.iterator"],
       match: ["es.string.match", "es.symbol.match"],
+      observable: "esnext.symbol.observable",
+      patternMatch: "esnext.symbol.pattern-match",
       replace: ["es.string.replace", "es.symbol.replace"],
       search: ["es.string.search", "es.symbol.search"],
       species: ["es.array.species", "es.symbol.species"],

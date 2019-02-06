@@ -50,7 +50,7 @@ Using polyfills with `usage` option:
   es.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
   web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
   web.queue-microtask { "chrome":"52", "firefox":"50", "ie":"11" }
-  es.string.trim-start { "chrome":"52", "firefox":"50", "ie":"11" }
+  esnext.global-this { "chrome":"52", "firefox":"50", "ie":"11" }
 
 [<CWD>/src/in2.js] Added following core-js polyfills:
   es.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }

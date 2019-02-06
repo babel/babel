@@ -5,6 +5,7 @@
       {
         "useBuiltIns": "usage",
         "corejs": 3,
+        "proposals": true,
         "modules": false
       }
     ]

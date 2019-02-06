@@ -2,6 +2,6 @@ const foo = new Promise((resolve) => {
   resolve(new Map());
 });
 
-queueMicrotask(() => '  ab  '.trimStart());
+queueMicrotask(() => globalThis);
 
 Observable.from(10);

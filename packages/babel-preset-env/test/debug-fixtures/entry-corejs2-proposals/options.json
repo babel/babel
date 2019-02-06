@@ -1,0 +1,10 @@
+{
+  "presets": [
+    ["../../lib", {
+      "debug": true,
+      "proposals": true,
+      "useBuiltIns": "entry",
+      "corejs": 2
+    }]
+  ]
+}
