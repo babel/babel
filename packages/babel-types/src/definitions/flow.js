@@ -72,7 +72,7 @@ defineType("ClassImplements", {
   },
 });
 
-defineInterfaceishType("DeclareClass", "TypeParameterInstantiation");
+defineInterfaceishType("DeclareClass");
 
 defineType("DeclareFunction", {
   visitor: ["id"],
