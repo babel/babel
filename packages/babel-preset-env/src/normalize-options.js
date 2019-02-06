@@ -189,8 +189,22 @@ export default function normalizeOptions(opts) {
 
   checkDuplicateIncludeExcludes(include, exclude);
 
+  const proposals = validateBoolOption(
+    TopLevelOptions.proposals,
+    opts.proposals,
+    false,
+  );
+
+  const shippedProposals =
+    validateBoolOption(
+      TopLevelOptions.shippedProposals,
+      opts.shippedProposals,
+      false,
+    ) || proposals;
+
   return {
     configPath: validateConfigPathOption(opts.configPath),
+    corejs,
     debug: validateBoolOption(TopLevelOptions.debug, opts.debug, false),
     include,
     exclude,
@@ -204,14 +218,10 @@ export default function normalizeOptions(opts) {
     ),
     loose: validateBoolOption(TopLevelOptions.loose, opts.loose, false),
     modules: validateModulesOption(opts.modules),
-    shippedProposals: validateBoolOption(
-      TopLevelOptions.shippedProposals,
-      opts.shippedProposals,
-      false,
-    ),
+    proposals,
+    shippedProposals,
     spec: validateBoolOption(TopLevelOptions.spec, opts.spec, false),
     targets: normalizeTargets(opts.targets),
     useBuiltIns: validateUseBuiltInsOption(opts.useBuiltIns),
-    corejs,
   };
 }

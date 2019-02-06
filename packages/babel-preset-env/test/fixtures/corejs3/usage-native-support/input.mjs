@@ -23,3 +23,11 @@ var asdf = 'copyWithin';
 i[asdf]; // computed with identifier
 j[`copyWithin`]; // computed with template
 var { [asdf]: _a } = k; // computed
+
+const foo = new Promise((resolve) => {
+  resolve(new Map());
+});
+
+queueMicrotask(() => globalThis);
+
+Observable.from(10);

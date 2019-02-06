@@ -1,0 +1,35 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "71"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  syntax-async-generators { "chrome":"71" }
+  syntax-object-rest-spread { "chrome":"71" }
+  syntax-json-strings { "chrome":"71" }
+  syntax-optional-catch-binding { "chrome":"71" }
+
+Using polyfills with `usage` option:
+
+[<CWD>/src/in.js] Added following core-js polyfills:
+  esnext.map.delete-all { "chrome":"71" }
+  esnext.map.every { "chrome":"71" }
+  esnext.map.filter { "chrome":"71" }
+  esnext.map.find { "chrome":"71" }
+  esnext.map.find-key { "chrome":"71" }
+  esnext.map.includes { "chrome":"71" }
+  esnext.map.key-of { "chrome":"71" }
+  esnext.map.map-keys { "chrome":"71" }
+  esnext.map.map-values { "chrome":"71" }
+  esnext.map.merge { "chrome":"71" }
+  esnext.map.reduce { "chrome":"71" }
+  esnext.map.some { "chrome":"71" }
+  esnext.observable { "chrome":"71" }
+  esnext.symbol.observable { "chrome":"71" }
+
+[<CWD>/src/in2.js] Based on your code and targets, core-js polyfills were not added.
+Successfully compiled 2 files with Babel.
