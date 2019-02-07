@@ -127,7 +127,7 @@ function transformFile(file: File, pluginPasses: PluginPasses): void {
   }
 }
 
-function isThenable(val: mixed): boolean {
+function isThenable(val: Promise<*>): boolean {
   return (
     !!val &&
     (typeof val === "object" || typeof val === "function") &&
