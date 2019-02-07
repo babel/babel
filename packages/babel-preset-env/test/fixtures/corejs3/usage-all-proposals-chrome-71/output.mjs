@@ -1,5 +1,6 @@
 import "core-js/modules/esnext.symbol.observable";
 import "core-js/modules/esnext.observable";
+import "core-js/modules/esnext.map.update";
 import "core-js/modules/esnext.map.some";
 import "core-js/modules/esnext.map.reduce";
 import "core-js/modules/esnext.map.merge";

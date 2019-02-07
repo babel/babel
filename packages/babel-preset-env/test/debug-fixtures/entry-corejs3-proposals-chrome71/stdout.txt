@@ -39,6 +39,7 @@ Using polyfills with `entry` option:
   esnext.map.merge { "chrome":"71" }
   esnext.map.reduce { "chrome":"71" }
   esnext.map.some { "chrome":"71" }
+  esnext.map.update { "chrome":"71" }
   esnext.math.clamp { "chrome":"71" }
   esnext.math.deg-per-rad { "chrome":"71" }
   esnext.math.degrees { "chrome":"71" }
