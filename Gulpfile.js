@@ -17,8 +17,7 @@ const source = require("vinyl-source-stream");
 const buffer = require("vinyl-buffer");
 const rollupBabel = require("rollup-plugin-babel");
 const rollupNodeResolve = require("rollup-plugin-node-resolve");
-const registerStandalonePackageTask = require("./scripts/gulp-tasks")
-  .registerStandalonePackageTask;
+const { registerStandalonePackageTask } = require("./scripts/gulp-tasks");
 
 const sources = ["codemods", "packages"];
 
@@ -138,7 +137,7 @@ registerStandalonePackageTask(
   "babel",
   "Babel",
   path.join(__dirname, "packages"),
-  require("./packages/babel-core/package.json").version
+  require("./packages/babel-standalone/package.json").version
 );
 
 const presetEnvWebpackPlugins = [
@@ -167,6 +166,6 @@ registerStandalonePackageTask(
   "babel-preset-env",
   "babelPresetEnv",
   path.join(__dirname, "packages"),
-  require("./packages/babel-preset-env/package.json").version,
+  require("./packages/babel-preset-env-standalone/package.json").version,
   presetEnvWebpackPlugins
 );
