@@ -130,8 +130,12 @@ prepublish:
 	make prepublish-build
 	make test
 
+new-version:
+	./node_modules/.bin/lerna version --force-publish="@babel/runtime,@babel/runtime-corejs2,@babel/standalone,@babel/preset-env-standalone"
+
+# NOTE: Run make new-version fisrt
 publish: prepublish
-	./node_modules/.bin/lerna publish --force-publish="@babel/runtime,@babel/runtime-corejs2,@babel/standalone,@babel/preset-env-standalone" --require-scripts
+	./node_modules/.bin/lerna publish from-git --require-scripts
 	make clean
 
 bootstrap: clean-all
