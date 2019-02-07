@@ -28,6 +28,7 @@ Using polyfills with `usage` option:
   esnext.map.merge { "chrome":"71" }
   esnext.map.reduce { "chrome":"71" }
   esnext.map.some { "chrome":"71" }
+  esnext.map.update { "chrome":"71" }
   esnext.observable { "chrome":"71" }
   esnext.symbol.observable { "chrome":"71" }
 

@@ -70,6 +70,7 @@ const MapDependencies = [
   "esnext.map.merge",
   "esnext.map.reduce",
   "esnext.map.some",
+  "esnext.map.update",
   "es.map",
   ...CommonIterators,
 ];

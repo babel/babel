@@ -13,6 +13,7 @@ import "core-js/modules/web.dom-collections.iterator";
 import "core-js/modules/es.array.iterator";
 import "core-js/modules/es.object.to-string";
 import "core-js/modules/es.map";
+import "core-js/modules/esnext.map.update";
 import "core-js/modules/esnext.map.some";
 import "core-js/modules/esnext.map.reduce";
 import "core-js/modules/esnext.map.merge";

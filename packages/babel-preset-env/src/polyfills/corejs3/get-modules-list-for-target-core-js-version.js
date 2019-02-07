@@ -223,6 +223,7 @@ const modulesByVersions = {
     "esnext.map.merge",
     "esnext.map.reduce",
     "esnext.map.some",
+    "esnext.map.update",
     "esnext.math.clamp",
     "esnext.math.deg-per-rad",
     "esnext.math.degrees",

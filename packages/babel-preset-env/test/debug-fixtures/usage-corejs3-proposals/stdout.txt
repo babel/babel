@@ -57,6 +57,7 @@ Using polyfills with `usage` option:
   esnext.map.merge { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.map.reduce { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.map.some { "chrome":"52", "firefox":"50", "ie":"11" }
+  esnext.map.update { "chrome":"52", "firefox":"50", "ie":"11" }
   es.map { "firefox":"50", "ie":"11" }
   es.string.iterator { "ie":"11" }
   es.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
