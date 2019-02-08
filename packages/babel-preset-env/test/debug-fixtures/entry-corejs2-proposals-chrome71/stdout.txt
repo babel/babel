@@ -15,7 +15,7 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+[<CWD>/src/in.js] Replaced @babel/polyfill entries with the following polyfills:
   web.timers { "chrome":"71" }
   web.immediate { "chrome":"71" }
   web.dom.iterable { "chrome":"71" }

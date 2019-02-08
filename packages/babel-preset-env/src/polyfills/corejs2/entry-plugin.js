@@ -1,5 +1,5 @@
 import { logEntryPolyfills } from "../../debug";
-import { createImport, isPolyfillSource, isRequire } from "../../utils";
+import { createImport, isPolyfillSource, isPolyfillRequire } from "../../utils";
 
 export default function({ types: t }) {
   function replaceWithPolyfillImports(path, polyfills, regenerator) {
@@ -33,7 +33,9 @@ export default function({ types: t }) {
     },
     Program(path, state) {
       path.get("body").forEach(bodyPath => {
-        if (isRequire(t, bodyPath)) {
+        if (isPolyfillRequire(t, bodyPath)) {
+          this.importPolyfillIncluded = true;
+
           replaceWithPolyfillImports(
             bodyPath,
             state.opts.polyfills,
@@ -56,6 +58,7 @@ export default function({ types: t }) {
 
       if (debug) {
         logEntryPolyfills(
+          "@babel/polyfill",
           this.importPolyfillIncluded,
           polyfills,
           this.file.opts.filename,

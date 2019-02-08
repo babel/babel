@@ -35,7 +35,7 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+[<CWD>/src/in.js] Replaced core-js entries with the following polyfills:
   es.symbol { "electron":"0.36" }
   es.symbol.async-iterator { "electron":"0.36" }
   es.symbol.description { "electron":"0.36" }

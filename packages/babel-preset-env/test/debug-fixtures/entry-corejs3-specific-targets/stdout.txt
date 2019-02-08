@@ -45,7 +45,7 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+[<CWD>/src/in.js] Replaced core-js entries with the following polyfills:
   es.symbol { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.symbol.async-iterator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.symbol.description { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }

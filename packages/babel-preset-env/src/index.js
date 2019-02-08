@@ -205,7 +205,7 @@ export default declare((api, opts) => {
         ? shippedProposals
           ? corejs2Polyfills
           : corejs2PolyfillsWithoutProposals
-        : proposals // || useBuiltIns === "entry"
+        : proposals || useBuiltIns === "entry"
         ? corejs3Polyfills
         : shippedProposals
         ? corejs3PolyfillsWithShippedProposals

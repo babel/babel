@@ -1,6 +1,6 @@
 import { definitions } from "./built-in-definitions";
 import { logUsagePolyfills } from "../../debug";
-import { createImport, isPolyfillSource, isRequire } from "../../utils";
+import { createImport, isPolyfillSource, isPolyfillRequire } from "../../utils";
 import getModulesListForTargetCoreJSVersion from "./get-modules-list-for-target-core-js-version";
 
 function has(obj, key) {
@@ -66,7 +66,7 @@ export default function({ types: t }, { corejs }) {
     Program: {
       enter(path) {
         path.get("body").forEach(bodyPath => {
-          if (isRequire(t, bodyPath)) {
+          if (isPolyfillRequire(t, bodyPath)) {
             console.warn(
               `
   When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
