@@ -144,16 +144,26 @@ export default class StatementParser extends ExpressionParser {
         return this.parseDoStatement(node);
       case tt._for:
         return this.parseForStatement(node);
-      case tt._function:
+      case tt._function: {
         if (this.lookahead().type === tt.dot) break;
-        if (context && (this.state.strict || context !== "label")) {
+        if (
+          context &&
+          (this.state.strict || (context !== "if" && context !== "label"))
+        ) {
           this.raise(
             this.state.start,
             "Function declaration not allowed in this context",
           );
         }
-        return this.parseFunctionStatement(node);
+        const result = this.parseFunctionStatement(node);
 
+        // TODO: Remove this once we have proper scope tracking in place.
+        if (context && result.generator) {
+          this.unexpected(node.start);
+        }
+
+        return result;
+      }
       case tt._class:
         if (context) this.unexpected();
         return this.parseClass(node, true);
@@ -740,10 +750,6 @@ export default class StatementParser extends ExpressionParser {
           : context
         : "label",
     );
-
-    if (node.body.type === "FunctionDeclaration" && node.body.generator) {
-      this.raise(node.body.start, "Invalid labeled declaration");
-    }
 
     this.state.labels.pop();
     node.label = expr;
