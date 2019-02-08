@@ -76,7 +76,7 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(node, "InterpreterDirective");
   }
 
-  isLet(declaration?: boolean): boolean {
+  isLet(context: ?string): boolean {
     if (!this.isContextual("let")) {
       return false;
     }
@@ -85,20 +85,16 @@ export default class StatementParser extends ExpressionParser {
     // $FlowIgnore
     const next = this.state.pos + skip[0].length;
     const nextCh = this.state.input.charCodeAt(next);
-    if (
-      (nextCh === charCodes.leftCurlyBrace &&
-        !lineBreak.test(this.state.input.slice(this.state.end, next))) ||
-      nextCh === charCodes.leftSquareBracket
-    ) {
-      return true;
-    }
+    // For ambiguous cases, determine if a LexicalDeclaration (or only a
+    // Statement) is allowed here. If context is not empty then only a Statement
+    // is allowed. However, `let [` is an explicit negative lookahead for
+    // ExpressionStatement, so special-case it first.
+    if (nextCh === charCodes.leftSquareBracket) return true;
+    if (context) return false;
+
+    if (nextCh === charCodes.leftCurlyBrace) return true;
+
     if (isIdentifierStart(nextCh)) {
-      if (
-        !declaration &&
-        lineBreak.test(this.state.input.slice(this.state.end, next))
-      ) {
-        return false;
-      }
       let pos = next + 1;
       while (isIdentifierChar(this.state.input.charCodeAt(pos))) {
         ++pos;
@@ -116,19 +112,19 @@ export default class StatementParser extends ExpressionParser {
   // `if (foo) /blah/.exec(foo)`, where looking at the previous token
   // does not help.
 
-  parseStatement(declaration: boolean, topLevel?: boolean): N.Statement {
+  parseStatement(context: ?string, topLevel?: boolean): N.Statement {
     if (this.match(tt.at)) {
       this.parseDecorators(true);
     }
-    return this.parseStatementContent(declaration, topLevel);
+    return this.parseStatementContent(context, topLevel);
   }
 
-  parseStatementContent(declaration: boolean, topLevel: ?boolean): N.Statement {
+  parseStatementContent(context: ?string, topLevel: ?boolean): N.Statement {
     let starttype = this.state.type;
     const node = this.startNode();
     let kind;
 
-    if (this.isLet(declaration)) {
+    if (this.isLet(context)) {
       starttype = tt._var;
       kind = "let";
     }
@@ -150,7 +146,7 @@ export default class StatementParser extends ExpressionParser {
         return this.parseForStatement(node);
       case tt._function:
         if (this.lookahead().type === tt.dot) break;
-        if (!declaration) {
+        if (context && (this.state.strict || context !== "label")) {
           this.raise(
             this.state.start,
             "Function declaration not allowed in this context",
@@ -159,7 +155,7 @@ export default class StatementParser extends ExpressionParser {
         return this.parseFunctionStatement(node);
 
       case tt._class:
-        if (!declaration) this.unexpected();
+        if (context) this.unexpected();
         return this.parseClass(node, true);
 
       case tt._if:
@@ -176,7 +172,7 @@ export default class StatementParser extends ExpressionParser {
       case tt._const:
       case tt._var:
         kind = kind || this.state.value;
-        if (!declaration && kind !== "var") this.unexpected();
+        if (context && kind !== "var") this.unexpected();
         return this.parseVarStatement(node, kind);
 
       case tt._while:
@@ -237,7 +233,7 @@ export default class StatementParser extends ExpressionParser {
           const state = this.state.clone();
           this.next();
           if (this.match(tt._function) && !this.canInsertSemicolon()) {
-            if (!declaration) {
+            if (context) {
               this.raise(
                 this.state.lastTokStart,
                 "Function declaration not allowed in this context",
@@ -264,7 +260,7 @@ export default class StatementParser extends ExpressionParser {
       expr.type === "Identifier" &&
       this.eat(tt.colon)
     ) {
-      return this.parseLabeledStatement(node, maybeName, expr, declaration);
+      return this.parseLabeledStatement(node, maybeName, expr, context);
     } else {
       return this.parseExpressionStatement(node, expr);
     }
@@ -430,7 +426,7 @@ export default class StatementParser extends ExpressionParser {
       // outside of the loop body.
       this.withTopicForbiddingContext(() =>
         // Parse the loop body's body.
-        this.parseStatement(false),
+        this.parseStatement("do"),
       );
 
     this.state.labels.pop();
@@ -526,8 +522,8 @@ export default class StatementParser extends ExpressionParser {
   parseIfStatement(node: N.IfStatement): N.IfStatement {
     this.next();
     node.test = this.parseParenExpression();
-    node.consequent = this.parseStatement(false);
-    node.alternate = this.eat(tt._else) ? this.parseStatement(false) : null;
+    node.consequent = this.parseStatement("if");
+    node.alternate = this.eat(tt._else) ? this.parseStatement("if") : null;
     return this.finishNode(node, "IfStatement");
   }
 
@@ -583,7 +579,7 @@ export default class StatementParser extends ExpressionParser {
         this.expect(tt.colon);
       } else {
         if (cur) {
-          cur.consequent.push(this.parseStatement(true));
+          cur.consequent.push(this.parseStatement(null));
         } else {
           this.unexpected();
         }
@@ -672,7 +668,7 @@ export default class StatementParser extends ExpressionParser {
       // They are permitted in test expressions, outside of the loop body.
       this.withTopicForbiddingContext(() =>
         // Parse loop body.
-        this.parseStatement(false),
+        this.parseStatement("while"),
       );
 
     this.state.labels.pop();
@@ -694,7 +690,7 @@ export default class StatementParser extends ExpressionParser {
       // part of the outer context, outside of the function body.
       this.withTopicForbiddingContext(() =>
         // Parse the statement body.
-        this.parseStatement(false),
+        this.parseStatement("with"),
       );
 
     return this.finishNode(node, "WithStatement");
@@ -709,7 +705,7 @@ export default class StatementParser extends ExpressionParser {
     node: N.LabeledStatement,
     maybeName: string,
     expr: N.Identifier,
-    declaration: boolean,
+    context: ?string,
   ): N.LabeledStatement {
     for (const label of this.state.labels) {
       if (label.name === maybeName) {
@@ -737,14 +733,15 @@ export default class StatementParser extends ExpressionParser {
       kind: kind,
       statementStart: this.state.start,
     });
-    node.body = this.parseStatement(declaration);
+    node.body = this.parseStatement(
+      context
+        ? context.indexOf("label") === -1
+          ? context + "label"
+          : context
+        : "label",
+    );
 
-    if (
-      node.body.type === "ClassDeclaration" ||
-      (node.body.type === "VariableDeclaration" && node.body.kind !== "var") ||
-      (node.body.type === "FunctionDeclaration" &&
-        (this.state.strict || node.body.generator || node.body.async))
-    ) {
+    if (node.body.type === "FunctionDeclaration" && node.body.generator) {
       this.raise(node.body.start, "Invalid labeled declaration");
     }
 
@@ -813,7 +810,7 @@ export default class StatementParser extends ExpressionParser {
         octalPosition = this.state.octalPosition;
       }
 
-      const stmt = this.parseStatement(true, topLevel);
+      const stmt = this.parseStatement(null, topLevel);
 
       if (directives && !parsedNonDirective && this.isValidDirective(stmt)) {
         const directive = this.stmtToDirective(stmt);
@@ -861,7 +858,7 @@ export default class StatementParser extends ExpressionParser {
       // outside of the loop body.
       this.withTopicForbiddingContext(() =>
         // Parse the loop body.
-        this.parseStatement(false),
+        this.parseStatement("for"),
       );
 
     this.state.labels.pop();
@@ -896,7 +893,7 @@ export default class StatementParser extends ExpressionParser {
       // They are permitted in test expressions, outside of the loop body.
       this.withTopicForbiddingContext(() =>
         // Parse loop body.
-        this.parseStatement(false),
+        this.parseStatement("for"),
       );
 
     this.state.labels.pop();
@@ -1700,7 +1697,7 @@ export default class StatementParser extends ExpressionParser {
 
   // eslint-disable-next-line no-unused-vars
   parseExportDeclaration(node: N.ExportNamedDeclaration): ?N.Declaration {
-    return this.parseStatement(true);
+    return this.parseStatement(null);
   }
 
   isExportDefaultSpecifier(): boolean {
