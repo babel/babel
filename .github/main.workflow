@@ -10,14 +10,16 @@ action "Trigger GitHub release" {
   # When GitHub Actions will support the "release" event for public
   # repositories, we won't need these checks anymore.
   needs = [
-    "Is version tag",
+    "Is version commit",
     "On master branch",
   ]
 }
 
-action "Is version tag" {
-  uses = "actions/bin/filter@master"
-  args = "tag v*"
+action "Is version commit" {
+  uses = "./.github/actions/filter-commit-message"
+  # This regex is run using "grep -P".
+  # The (-\\S+) part is for 7.0.0-beta.1 releases.
+  args = "^v(\\d+\\.)*\\d+(-\\S+)?$"
 }
 
 action "On master branch" {
