@@ -124,6 +124,8 @@ prepublish-build:
 	rm -rf packages/babel-runtime-corejs2/core-js
 	BABEL_ENV=production make build-dist
 	make clone-license
+	# move flow typings to build
+	cp packages/babel-parser/typings/babel-parser.js.flow packages/babel-parser/lib/index.js.flow
 
 prepublish:
 	git pull --rebase

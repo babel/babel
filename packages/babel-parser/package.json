@@ -22,8 +22,7 @@
   "files": [
     "bin",
     "lib",
-    "typings",
-    "index.js.flow"
+    "typings"
   ],
   "engines": {
     "node": ">=6.0.0"
