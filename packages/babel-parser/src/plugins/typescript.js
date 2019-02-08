@@ -1699,10 +1699,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.parseExportDefaultExpression();
     }
 
-    parseStatementContent(
-      declaration: boolean,
-      topLevel: ?boolean,
-    ): N.Statement {
+    parseStatementContent(context: ?string, topLevel: ?boolean): N.Statement {
       if (this.state.type === tt._const) {
         const ahead = this.lookahead();
         if (ahead.type === tt.name && ahead.value === "enum") {
@@ -1712,7 +1709,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.tsParseEnumDeclaration(node, /* isConst */ true);
         }
       }
-      return super.parseStatementContent(declaration, topLevel);
+      return super.parseStatementContent(context, topLevel);
     }
 
     parseAccessModifier(): ?N.Accessibility {

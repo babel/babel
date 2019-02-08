@@ -1566,7 +1566,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // interfaces
-    parseStatement(declaration: boolean, topLevel?: boolean): N.Statement {
+    parseStatement(context: ?string, topLevel?: boolean): N.Statement {
       // strict mode handling of `interface` since it's a reserved word
       if (
         this.state.strict &&
@@ -1577,7 +1577,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.next();
         return this.flowParseInterface(node);
       } else {
-        const stmt = super.parseStatement(declaration, topLevel);
+        const stmt = super.parseStatement(context, topLevel);
         // We will parse a flow pragma in any comment before the first statement.
         if (this.flowPragma === undefined && !this.isValidDirective(stmt)) {
           this.flowPragma = null;
