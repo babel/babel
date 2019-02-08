@@ -26,5 +26,5 @@ import "core-js/modules/web.queue-microtask";
 import "core-js/modules/web.url";
 import "core-js/modules/web.url.to-json";
 import "core-js/modules/web.url-search-params";
-import "regenerator-runtime/runtime";
+import 'regenerator-runtime/runtime';
 var a = 1;

@@ -1,1 +1,2 @@
-import '@babel/polyfill';
+import 'core-js/proposals';
+import 'regenerator-runtime/runtime';

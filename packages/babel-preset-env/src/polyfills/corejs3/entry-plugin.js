@@ -1,47 +1,32 @@
 import { logEntryPolyfills } from "../../debug";
-import { createImport, isPolyfillSource, isRequire } from "../../utils";
+import { createImport, isCoreJSSource, isCoreJSRequire } from "../../utils";
 import getModulesListForTargetCoreJSVersion from "./get-modules-list-for-target-core-js-version";
 
-export default function({ types: t }, { corejs }) {
+export default function({ types: t }, { corejs, polyfills }) {
   const available = getModulesListForTargetCoreJSVersion(corejs);
 
-  function replaceWithPolyfillImports(path, polyfills, regenerator) {
-    if (regenerator) {
-      createImport(path, "regenerator-runtime");
-    }
-
-    const items = Array.isArray(polyfills) ? new Set(polyfills) : polyfills;
-
-    for (const module of Array.from(items).reverse()) {
-      if (available.has(module)) createImport(path, module);
-    }
-
-    path.remove();
-  }
-
   const isPolyfillImport = {
-    ImportDeclaration(path, state) {
-      if (
-        path.node.specifiers.length === 0 &&
-        isPolyfillSource(path.node.source.value)
-      ) {
-        this.importPolyfillIncluded = true;
-
-        replaceWithPolyfillImports(
-          path,
-          state.opts.polyfills,
-          state.opts.regenerator,
-        );
+    ImportDeclaration(path) {
+      if (path.node.specifiers.length === 0) {
+        const filter = isCoreJSSource(path.node.source.value);
+        if (filter) {
+          this.importPolyfillIncluded = true;
+          this.polyfillsList.push(
+            ...Array.from(polyfills).filter(it => filter.test(it)),
+          );
+          path.remove();
+        }
       }
     },
-    Program(path, state) {
+    Program(path) {
       path.get("body").forEach(bodyPath => {
-        if (isRequire(t, bodyPath)) {
-          replaceWithPolyfillImports(
-            bodyPath,
-            state.opts.polyfills,
-            state.opts.regenerator,
+        const filter = isCoreJSRequire(t, bodyPath);
+        if (filter) {
+          this.importPolyfillIncluded = true;
+          this.polyfillsList.push(
+            ...Array.from(polyfills).filter(it => filter.test(it)),
           );
+          bodyPath.remove();
         }
       });
     },
@@ -53,14 +38,20 @@ export default function({ types: t }, { corejs }) {
     pre() {
       this.numPolyfillImports = 0;
       this.importPolyfillIncluded = false;
+      this.polyfillsList = [];
     },
-    post() {
-      const { debug, polyfillTargets, allBuiltInsList, polyfills } = this.opts;
+    post({ path }) {
+      const { debug, polyfillTargets, allBuiltInsList } = this.opts;
+
+      for (const module of Array.from(new Set(this.polyfillsList)).reverse()) {
+        if (available.has(module)) createImport(path, module);
+      }
 
       if (debug) {
         logEntryPolyfills(
+          "core-js",
           this.importPolyfillIncluded,
-          polyfills,
+          new Set(this.polyfillsList),
           this.file.opts.filename,
           polyfillTargets,
           allBuiltInsList,

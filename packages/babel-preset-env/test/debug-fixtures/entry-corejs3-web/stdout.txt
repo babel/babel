@@ -1,0 +1,50 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{}
+
+Using modules transform: auto
+
+Using plugins:
+  transform-template-literals {}
+  transform-literals {}
+  transform-function-name {}
+  transform-arrow-functions {}
+  transform-block-scoped-functions {}
+  transform-classes {}
+  transform-object-super {}
+  transform-shorthand-properties {}
+  transform-duplicate-keys {}
+  transform-computed-properties {}
+  transform-for-of {}
+  transform-sticky-regex {}
+  transform-dotall-regex {}
+  transform-unicode-regex {}
+  transform-spread {}
+  transform-parameters {}
+  transform-destructuring {}
+  transform-block-scoping {}
+  transform-typeof-symbol {}
+  transform-new-target {}
+  transform-regenerator {}
+  transform-exponentiation-operator {}
+  transform-async-to-generator {}
+  proposal-async-generator-functions {}
+  proposal-object-rest-spread {}
+  proposal-unicode-property-regex {}
+  proposal-json-strings {}
+  proposal-optional-catch-binding {}
+  transform-named-capturing-groups-regex {}
+
+Using polyfills with `entry` option:
+
+[<CWD>/src/in.js] Replaced core-js entries with the following polyfills:
+  web.dom-collections.for-each {}
+  web.dom-collections.iterator {}
+  web.immediate {}
+  web.queue-microtask {}
+  web.timers {}
+  web.url {}
+  web.url.to-json {}
+  web.url-search-params {}
+Successfully compiled 1 file with Babel.

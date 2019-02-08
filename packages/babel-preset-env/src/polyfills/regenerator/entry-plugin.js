@@ -1,11 +1,11 @@
-import { isPolyfillSource, isRequire } from "../../utils";
+import { isRegeneratorSource, isRegeneratorRequire } from "../../utils";
 
 export default function({ types: t }) {
   const visitor = {
     ImportDeclaration(path) {
       if (
         path.node.specifiers.length === 0 &&
-        isPolyfillSource(path.node.source.value)
+        isRegeneratorSource(path.node.source.value)
       ) {
         this.regeneratorImportExcluded = true;
         path.remove();
@@ -13,9 +13,9 @@ export default function({ types: t }) {
     },
     Program(path) {
       path.get("body").forEach(bodyPath => {
-        if (isRequire(t, bodyPath)) {
+        if (isRegeneratorRequire(t, bodyPath)) {
           this.regeneratorImportExcluded = true;
-          path.remove();
+          bodyPath.remove();
         }
       });
     },

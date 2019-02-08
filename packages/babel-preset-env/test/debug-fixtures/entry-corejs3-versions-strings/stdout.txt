@@ -42,7 +42,7 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+[<CWD>/src/in.js] Replaced core-js entries with the following polyfills:
   es.symbol { "ie":"10" }
   es.symbol.async-iterator { "chrome":"54", "ie":"10", "node":"6.10" }
   es.symbol.description { "chrome":"54", "ie":"10", "node":"6.10" }

@@ -41,6 +41,7 @@ export const logPluginOrPolyfill = (item, targetVersions, list) => {
 };
 
 export const logEntryPolyfills = (
+  polyfillName,
   importPolyfillIncluded,
   polyfills,
   filename,
@@ -48,7 +49,7 @@ export const logEntryPolyfills = (
   allBuiltInsList,
 ) => {
   if (!importPolyfillIncluded) {
-    console.log(`\n[${filename}] \`import '@babel/polyfill'\` was not found.`);
+    console.log(`\n[${filename}] Import of ${polyfillName} was not found.`);
     return;
   }
   if (!polyfills.size) {
@@ -59,7 +60,7 @@ export const logEntryPolyfills = (
   }
 
   console.log(
-    `\n[${filename}] Replaced \`@babel/polyfill\` with the following polyfill${wordEnds(
+    `\n[${filename}] Replaced ${polyfillName} entries with the following polyfill${wordEnds(
       polyfills.size,
     )}:`,
   );
