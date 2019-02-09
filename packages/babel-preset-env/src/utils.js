@@ -1,9 +1,12 @@
 import invariant from "invariant";
 import semver from "semver";
+import coreJSEntries from "core-js-compat/entries";
 import levenshtein from "js-levenshtein";
 import { addSideEffect } from "@babel/helper-module-imports";
 import unreleasedLabels from "../data/unreleased-labels";
 import { semverMin } from "./targets-parser";
+
+const has = Object.prototype.hasOwnProperty;
 
 const versionRegExp = /^(\d+|\d+.\d+)$/;
 
@@ -108,21 +111,7 @@ export function isPolyfillSource(source) {
 }
 
 export function isCoreJSSource(source) {
-  switch (source) {
-    case "core-js":
-    case "core-js/features":
-      return /./;
-    case "core-js/stable":
-      return /^(es|web)\./;
-    case "core-js/es":
-      return /^es\./;
-    case "core-js/proposals":
-    case "core-js/stage":
-      return /^esnext\./;
-    case "core-js/web":
-      return /^web\./;
-  }
-  return false;
+  return has.call(coreJSEntries, source) && new Set(coreJSEntries[source]);
 }
 
 export function isRegeneratorSource(source) {

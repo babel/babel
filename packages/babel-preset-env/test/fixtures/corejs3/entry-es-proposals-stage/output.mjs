@@ -279,4 +279,7 @@ import "core-js/modules/esnext.weak-set.add-all";
 import "core-js/modules/esnext.weak-set.delete-all";
 import "core-js/modules/esnext.weak-set.from";
 import "core-js/modules/esnext.weak-set.of";
+import "core-js/modules/web.url";
+import "core-js/modules/web.url.to-json";
+import "core-js/modules/web.url-search-params";
 import 'regenerator-runtime/runtime';
