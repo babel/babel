@@ -116,7 +116,6 @@ export function isCoreJSSource(source) {
       return /^(es|web)\./;
     case "core-js/es":
       return /^es\./;
-    case "core-js/esnext":
     case "core-js/proposals":
     case "core-js/stage":
       return /^esnext\./;
