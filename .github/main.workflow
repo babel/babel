@@ -19,7 +19,7 @@ action "Is version commit" {
   uses = "./.github/actions/filter-commit-message"
   # This regex is run using "grep -P".
   # The (-\\S+) part is for 7.0.0-beta.1 releases.
-  args = "^v(\\d+\\.)*\\d+(-\\S+)?$"
+  args = "^v(\\d+\\.){2}\\d+(-\\S+)?$"
 }
 
 action "On master branch" {
