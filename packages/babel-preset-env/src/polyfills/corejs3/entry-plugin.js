@@ -12,7 +12,7 @@ export default function({ types: t }, { corejs, polyfills }) {
         if (filter) {
           this.importPolyfillIncluded = true;
           this.polyfillsList.push(
-            ...Array.from(polyfills).filter(it => filter.test(it)),
+            ...Array.from(polyfills).filter(it => filter.has(it)),
           );
           path.remove();
         }
@@ -24,7 +24,7 @@ export default function({ types: t }, { corejs, polyfills }) {
         if (filter) {
           this.importPolyfillIncluded = true;
           this.polyfillsList.push(
-            ...Array.from(polyfills).filter(it => filter.test(it)),
+            ...Array.from(polyfills).filter(it => filter.has(it)),
           );
           bodyPath.remove();
         }

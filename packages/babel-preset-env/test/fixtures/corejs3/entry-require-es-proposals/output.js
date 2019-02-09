@@ -202,4 +202,10 @@ require("core-js/modules/esnext.weak-set.from");
 
 require("core-js/modules/esnext.weak-set.of");
 
+require("core-js/modules/web.url");
+
+require("core-js/modules/web.url.to-json");
+
+require("core-js/modules/web.url-search-params");
+
 1 ** 2;
