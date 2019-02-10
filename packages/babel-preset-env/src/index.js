@@ -12,7 +12,6 @@ import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options.js";
 import pluginList from "../data/plugins.json";
 import {
-  builtIns as proposalBuiltIns,
   corejs3ShippedProposalsList,
   features as proposalPlugins,
   pluginSyntaxMap,
@@ -27,11 +26,6 @@ import getTargets from "./targets-parser";
 import availablePlugins from "./available-plugins";
 import { filterStageFromList, prettifyTargets } from "./utils";
 import { declare } from "@babel/helper-plugin-utils";
-
-const corejs2PolyfillsWithoutProposals = filterStageFromList(
-  corejs2Polyfills,
-  proposalBuiltIns,
-);
 
 const pluginListWithoutProposals = filterStageFromList(
   pluginList,
@@ -202,9 +196,7 @@ export default declare((api, opts) => {
 
     const polyfills = filterItems(
       corejs.major === 2
-        ? shippedProposals
-          ? corejs2Polyfills
-          : corejs2PolyfillsWithoutProposals
+        ? corejs2Polyfills
         : proposals || useBuiltIns === "entry"
         ? corejs3Polyfills
         : shippedProposals

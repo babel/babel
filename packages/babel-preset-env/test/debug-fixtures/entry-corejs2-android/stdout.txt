@@ -45,6 +45,7 @@ Using polyfills with `entry` option:
   es6.array.fill { "android":"4" }
   es6.array.find { "android":"4" }
   es6.array.find-index { "android":"4" }
+  es7.array.flat-map { "android":"4" }
   es6.array.from { "android":"4" }
   es7.array.includes { "android":"4" }
   es6.array.iterator { "android":"4" }
@@ -136,6 +137,8 @@ Using polyfills with `entry` option:
   es6.string.raw { "android":"4" }
   es6.string.repeat { "android":"4" }
   es6.string.starts-with { "android":"4" }
+  es7.string.trim-left { "android":"4" }
+  es7.string.trim-right { "android":"4" }
   es6.typed.array-buffer { "android":"4" }
   es6.typed.int8-array { "android":"4" }
   es6.typed.uint8-array { "android":"4" }

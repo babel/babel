@@ -46,6 +46,7 @@ const es = {
   },
   "es6.array.find": "Array.prototype methods / Array.prototype.find",
   "es6.array.find-index": "Array.prototype methods / Array.prototype.findIndex",
+  "es7.array.flat-map": "Array.prototype.{flat, flatMap} / Array.prototype.flatMap",
   "es6.array.for-each": "Array methods / Array.prototype.forEach",
   "es6.array.from": "Array static methods / Array.from",
   "es7.array.includes": "Array.prototype.includes",
@@ -290,6 +291,8 @@ const es = {
   "es6.string.sub": "String.prototype HTML methods",
   "es6.string.sup": "String.prototype HTML methods",
   "es6.string.trim": "String properties and methods / String.prototype.trim",
+  "es7.string.trim-left": "string trimming / String.prototype.trimStart",
+  "es7.string.trim-right": "string trimming / String.prototype.trimEnd",
 
   "es6.typed.array-buffer": "typed arrays / ArrayBuffer[Symbol.species]",
   "es6.typed.data-view": "typed arrays / DataView",

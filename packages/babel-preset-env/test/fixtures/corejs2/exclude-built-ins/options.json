@@ -10,8 +10,7 @@
         "useBuiltIns": "entry",
         "corejs": 2,
         "exclude": [
-          "es6.string.repeat",
-          "es6.reflect.set-prototype-of",
+          "es7.array.flat-map",
           "web.timers",
           "web.immediate",
           "web.dom.iterable"

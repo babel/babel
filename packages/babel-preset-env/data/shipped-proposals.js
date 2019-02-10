@@ -1,10 +1,6 @@
 // These mappings represent the builtin/feature proposals that have been
 // shipped by browsers, and are enabled by the `shippedProposals` option.
 
-const builtIns = {
-  "es7.array.flat-map": "Array.prototype.{flat, flatMap} / Array.prototype.flatMap"
-};
-
 const corejs3ShippedProposalsList = [
   "esnext.global-this",
   "esnext.string.match-all",
@@ -20,4 +16,4 @@ const pluginSyntaxMap = new Map([
   ["proposal-json-strings", "syntax-json-strings"],
 ]);
 
-module.exports = { builtIns, corejs3ShippedProposalsList, features, pluginSyntaxMap };
+module.exports = { corejs3ShippedProposalsList, features, pluginSyntaxMap };

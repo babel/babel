@@ -1,3 +1,5 @@
+require("core-js/modules/es7.array.flat-map");
+
 require("core-js/modules/es6.array.sort");
 
 require("core-js/modules/es7.object.define-getter");
@@ -15,6 +17,10 @@ require("core-js/modules/es7.symbol.async-iterator");
 require("core-js/modules/es7.string.pad-start");
 
 require("core-js/modules/es7.string.pad-end");
+
+require("core-js/modules/es7.string.trim-left");
+
+require("core-js/modules/es7.string.trim-right");
 
 require("core-js/modules/web.timers");
 
