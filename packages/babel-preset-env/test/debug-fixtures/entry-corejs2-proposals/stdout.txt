@@ -45,6 +45,7 @@ Using polyfills with `entry` option:
   es6.array.filter {}
   es6.array.find {}
   es6.array.find-index {}
+  es7.array.flat-map {}
   es6.array.for-each {}
   es6.array.from {}
   es7.array.includes {}
@@ -167,6 +168,8 @@ Using polyfills with `entry` option:
   es6.string.sub {}
   es6.string.sup {}
   es6.string.trim {}
+  es7.string.trim-left {}
+  es7.string.trim-right {}
   es6.typed.array-buffer {}
   es6.typed.data-view {}
   es6.typed.int8-array {}
@@ -180,7 +183,6 @@ Using polyfills with `entry` option:
   es6.typed.float64-array {}
   es6.weak-map {}
   es6.weak-set {}
-  es7.array.flat-map {}
   web.timers {}
   web.immediate {}
   web.dom.iterable {}

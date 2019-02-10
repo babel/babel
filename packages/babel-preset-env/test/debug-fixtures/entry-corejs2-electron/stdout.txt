@@ -38,6 +38,7 @@ Using polyfills with `entry` option:
 [<CWD>/src/in.js] Replaced @babel/polyfill entries with the following polyfills:
   es6.array.every { "electron":"0.36" }
   es6.array.filter { "electron":"0.36" }
+  es7.array.flat-map { "electron":"0.36" }
   es6.array.for-each { "electron":"0.36" }
   es6.array.from { "electron":"0.36" }
   es6.array.index-of { "electron":"0.36" }
@@ -109,6 +110,8 @@ Using polyfills with `entry` option:
   es6.string.sub { "electron":"0.36" }
   es6.string.sup { "electron":"0.36" }
   es6.string.trim { "electron":"0.36" }
+  es7.string.trim-left { "electron":"0.36" }
+  es7.string.trim-right { "electron":"0.36" }
   es6.typed.array-buffer { "electron":"0.36" }
   es6.typed.data-view { "electron":"0.36" }
   es6.typed.int8-array { "electron":"0.36" }

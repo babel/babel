@@ -1,3 +1,4 @@
+import "core-js/modules/es7.array.flat-map";
 import "core-js/modules/es6.array.from";
 import "core-js/modules/es6.array.sort";
 import "core-js/modules/es6.array.species";
@@ -38,6 +39,8 @@ import "core-js/modules/es6.symbol";
 import "core-js/modules/es7.symbol.async-iterator";
 import "core-js/modules/es7.string.pad-start";
 import "core-js/modules/es7.string.pad-end";
+import "core-js/modules/es7.string.trim-left";
+import "core-js/modules/es7.string.trim-right";
 import "core-js/modules/es6.typed.array-buffer";
 import "core-js/modules/es6.typed.int8-array";
 import "core-js/modules/es6.typed.uint8-array";

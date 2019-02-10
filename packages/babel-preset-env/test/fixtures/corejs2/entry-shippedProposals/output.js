@@ -10,6 +10,8 @@ require("core-js/modules/es6.array.find");
 
 require("core-js/modules/es6.array.find-index");
 
+require("core-js/modules/es7.array.flat-map");
+
 require("core-js/modules/es6.array.for-each");
 
 require("core-js/modules/es6.array.from");
@@ -254,6 +256,10 @@ require("core-js/modules/es6.string.sup");
 
 require("core-js/modules/es6.string.trim");
 
+require("core-js/modules/es7.string.trim-left");
+
+require("core-js/modules/es7.string.trim-right");
+
 require("core-js/modules/es6.typed.array-buffer");
 
 require("core-js/modules/es6.typed.data-view");
@@ -279,8 +285,6 @@ require("core-js/modules/es6.typed.float64-array");
 require("core-js/modules/es6.weak-map");
 
 require("core-js/modules/es6.weak-set");
-
-require("core-js/modules/es7.array.flat-map");
 
 require("core-js/modules/web.timers");
 

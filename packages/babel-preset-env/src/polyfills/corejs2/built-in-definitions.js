@@ -51,6 +51,7 @@ export const definitions = {
     findIndex: ["es6.array.find-index"],
     fixed: ["es6.string.fixed"],
     flags: ["es6.regexp.flags"],
+    flatMap: ["es7.array.flat-map"],
     fontcolor: ["es6.string.fontcolor"],
     fontsize: ["es6.string.fontsize"],
     forEach: ["es6.array.for-each", "web.dom.iterable"],
@@ -87,6 +88,10 @@ export const definitions = {
       "es6.regexp.to-string",
     ],
     trim: ["es6.string.trim"],
+    trimEnd: ["es7.string.trim-right"],
+    trimLeft: ["es7.string.trim-left"],
+    trimRight: ["es7.string.trim-right"],
+    trimStart: ["es7.string.trim-left"],
     values: ArrayNatureIterators,
   },
 
