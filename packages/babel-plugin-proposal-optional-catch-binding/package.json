@@ -16,7 +16,7 @@
     "@babel/plugin-syntax-optional-catch-binding": "^7.2.0"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^7.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.0",

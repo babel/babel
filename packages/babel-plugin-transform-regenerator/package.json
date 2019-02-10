@@ -14,7 +14,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^7.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
