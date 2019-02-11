@@ -331,8 +331,8 @@ export function _guessExecutionStatusRelativeTo(
   }
 
   if (
-    isExecutionUncertainInList(paths.this, commonIndex.this) ||
-    isExecutionUncertainInList(paths.target, commonIndex.target)
+    isExecutionUncertainInList(paths.this, commonIndex.this - 1) ||
+    isExecutionUncertainInList(paths.target, commonIndex.target - 1)
   ) {
     return "unknown";
   }
