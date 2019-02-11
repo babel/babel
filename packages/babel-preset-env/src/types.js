@@ -15,6 +15,7 @@ export type BuiltInsOption = $Values<typeof UseBuiltInsOption>;
 
 export type Options = {
   configPath: string,
+  corejs: any,
   debug: boolean,
   exclude: Array<string | RegExp>,
   forceAllTransforms: boolean,
@@ -22,11 +23,11 @@ export type Options = {
   include: Array<string | RegExp>,
   loose: boolean,
   modules: ModuleOption,
+  proposals: boolean,
   shippedProposals: boolean,
   spec: boolean,
   targets: Targets,
   useBuiltIns: BuiltInsOption,
-  corejs: any,
 };
 
 // Babel

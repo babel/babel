@@ -98,7 +98,7 @@ export default declare((api, options, dirname) => {
     } else {
       throw new Error(
         "The 'useBuiltIns' option has been removed. Use the 'corejs'" +
-          "option to polyfill with CoreJS via @babel/runtime.",
+          "option to polyfill with `core-js` via @babel/runtime.",
       );
     }
   }
@@ -111,7 +111,7 @@ export default declare((api, options, dirname) => {
     } else {
       throw new Error(
         "The 'polyfill' option has been removed. Use the 'corejs'" +
-          "option to polyfill with CoreJS via @babel/runtime.",
+          "option to polyfill with `core-js` via @babel/runtime.",
       );
     }
   }
@@ -225,7 +225,7 @@ export default declare((api, options, dirname) => {
         const { node, parent, scope } = path;
         const { name } = node;
 
-        // transform regeneratorRuntime
+        // transform `regeneratorRuntime`
         if (name === "regeneratorRuntime" && useRuntimeRegenerator) {
           path.replaceWith(
             this.addDefaultImport(
@@ -242,7 +242,7 @@ export default declare((api, options, dirname) => {
         if (!hasMapping(definitions.builtins, name)) return;
         if (scope.getBindingIdentifier(name)) return;
 
-        // transform Symbol(), new Promise
+        // transform global built-ins like `Symbol()`, `new Promise`
         path.replaceWith(
           this.addDefaultImport(
             `${modulePath}/${corejsRoot}/${definitions.builtins[name].path}`,
@@ -261,8 +261,8 @@ export default declare((api, options, dirname) => {
 
         const { object, property } = callee;
 
-        // transform array.includes()
-        if (!injectCoreJS2 && !hasStaticMapping(object.name, property.name)) {
+        // transform calling instance methods like `something.includes()`
+        if (injectCoreJS3 && !hasStaticMapping(object.name, property.name)) {
           if (hasMapping(definitions.instanceMethods, property.name)) {
             let context1, context2;
             if (object.type === "Identifier") {
@@ -294,6 +294,7 @@ export default declare((api, options, dirname) => {
           return;
         }
 
+        // transform `something[Symbol.iterator]()` to calling `getIterator(something)` helper
         path.replaceWith(
           t.callExpression(
             this.addDefaultImport(
@@ -305,7 +306,7 @@ export default declare((api, options, dirname) => {
         );
       },
 
-      // transform Symbol.iterator in arr -> isIterable(arr)
+      // transform `Symbol.iterator in something` to calling `isIterable(something)` helper
       BinaryExpression(path) {
         if (!injectCoreJS) return;
 
@@ -323,7 +324,7 @@ export default declare((api, options, dirname) => {
         );
       },
 
-      // transform Array.from
+      // transform static built-ins methods like `Array.from`
       MemberExpression: {
         enter(path) {
           if (!injectCoreJS) return;
@@ -336,7 +337,7 @@ export default declare((api, options, dirname) => {
 
           if (node.computed) {
             if (injectCoreJS2) return;
-            // object[Symbol.iterator] -> getIteratorMethod(object)
+            // transform `something[Symbol.iterator]` to calling `getIteratorMethod(something)` helper
             if (path.get("property").matchesPattern("Symbol.iterator")) {
               path.replaceWith(
                 t.callExpression(
@@ -356,9 +357,9 @@ export default declare((api, options, dirname) => {
             path.scope.getBindingIdentifier(object.name) ||
             !hasStaticMapping(object.name, property.name)
           ) {
-            // transform method = array.includes
+            // transform getting of instance methods like `method = something.includes`
             if (
-              !injectCoreJS2 &&
+              injectCoreJS3 &&
               hasMapping(definitions.instanceMethods, property.name)
             ) {
               path.replaceWith(
