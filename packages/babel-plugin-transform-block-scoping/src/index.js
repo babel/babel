@@ -16,7 +16,7 @@ export default declare((api, opts) => {
     throw new Error(`.throwIfClosureRequired must be a boolean, or undefined`);
   }
   if (typeof tdzEnabled !== "boolean") {
-    throw new Error(`.throwIfClosureRequired must be a boolean, or undefined`);
+    throw new Error(`.tdz must be a boolean, or undefined`);
   }
 
   return {
@@ -33,11 +33,13 @@ export default declare((api, opts) => {
 
           for (let i = 0; i < node.declarations.length; i++) {
             const decl = node.declarations[i];
-            if (decl.init) {
-              const assign = t.assignmentExpression("=", decl.id, decl.init);
-              assign._ignoreBlockScopingTDZ = true;
-              nodes.push(t.expressionStatement(assign));
-            }
+            const assign = t.assignmentExpression(
+              "=",
+              decl.id,
+              decl.init || scope.buildUndefinedNode(),
+            );
+            assign._ignoreBlockScopingTDZ = true;
+            nodes.push(t.expressionStatement(assign));
             decl.init = this.addHelper("temporalUndefined");
           }
 
@@ -181,6 +183,8 @@ const letReferenceBlockVisitor = traverse.visitors.merge([
       // simply rename the variables.
       if (state.loopDepth > 0) {
         path.traverse(letReferenceFunctionVisitor, state);
+      } else {
+        path.traverse(tdzVisitor, state);
       }
       return path.skip();
     },

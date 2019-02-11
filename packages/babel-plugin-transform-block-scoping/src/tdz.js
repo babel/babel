@@ -4,9 +4,9 @@ function getTDZStatus(refPath, bindingPath) {
   const executionStatus = bindingPath._guessExecutionStatusRelativeTo(refPath);
 
   if (executionStatus === "before") {
-    return "inside";
-  } else if (executionStatus === "after") {
     return "outside";
+  } else if (executionStatus === "after") {
+    return "inside";
   } else {
     return "maybe";
   }
@@ -41,7 +41,7 @@ export const visitor = {
     if (bindingPath.isFunctionDeclaration()) return;
 
     const status = getTDZStatus(path, bindingPath);
-    if (status === "inside") return;
+    if (status === "outside") return;
 
     if (status === "maybe") {
       const assert = buildTDZAssert(node, state);
@@ -57,7 +57,7 @@ export const visitor = {
       } else {
         path.replaceWith(assert);
       }
-    } else if (status === "outside") {
+    } else if (status === "inside") {
       path.replaceWith(template.ast`${state.addHelper("tdz")}("${node.name}")`);
     }
   },
