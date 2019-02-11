@@ -1,19 +1,64 @@
-import { definitions } from "./built-in-definitions";
+import corejs3Polyfills from "core-js-compat/data";
+import corejs3ShippedProposalsList from "./shipped-proposals";
+import { filterItems } from "../../env-filter";
+import {
+  CommonIterators,
+  PromiseDependencies,
+  definitions,
+} from "./built-in-definitions";
 import { logUsagePolyfills } from "../../debug";
-import { createImport, isPolyfillSource, isPolyfillRequire } from "../../utils";
-import getModulesListForTargetCoreJSVersion from "./get-modules-list-for-target-core-js-version";
+import {
+  createImport,
+  has,
+  isPolyfillSource,
+  isPolyfillRequire,
+} from "../../utils";
+import getModulesListForTargetVersion from "./get-modules-list-for-target-version";
 
-function has(obj, key) {
-  return Object.prototype.hasOwnProperty.call(obj, key);
-}
+const corejs3PolyfillsWithoutProposals = Object.keys(corejs3Polyfills)
+  .filter(name => !name.startsWith("esnext."))
+  .reduce((memo, key) => {
+    memo[key] = corejs3Polyfills[key];
+    return memo;
+  }, {});
+
+const corejs3PolyfillsWithShippedProposals = corejs3ShippedProposalsList.reduce(
+  (memo, key) => {
+    memo[key] = corejs3Polyfills[key];
+    return memo;
+  },
+  { ...corejs3PolyfillsWithoutProposals },
+);
 
 function getType(target) {
   if (Array.isArray(target)) return "array";
   return typeof target;
 }
 
-export default function({ types: t }, { corejs }) {
-  const available = getModulesListForTargetCoreJSVersion(corejs);
+export default function(
+  { types: t },
+  {
+    corejs,
+    include,
+    exclude,
+    polyfillTargets,
+    proposals,
+    shippedProposals,
+    debug,
+  },
+) {
+  const polyfills = filterItems(
+    proposals
+      ? corejs3Polyfills
+      : shippedProposals
+      ? corejs3PolyfillsWithShippedProposals
+      : corejs3PolyfillsWithoutProposals,
+    include,
+    exclude,
+    polyfillTargets,
+  );
+
+  const available = getModulesListForTargetVersion(corejs);
 
   function addImport(path, builtIn, builtIns) {
     if (builtIn && !builtIns.has(builtIn) && available.has(builtIn)) {
@@ -22,20 +67,11 @@ export default function({ types: t }, { corejs }) {
     }
   }
 
-  function addCommonIterators(path, polyfills, builtIns) {
-    addUnsupported(
-      path,
-      polyfills,
-      [
-        "es.array.iterator",
-        "es.string.iterator",
-        "web.dom-collections.iterator",
-      ],
-      builtIns,
-    );
+  function addCommonIterators(path, builtIns) {
+    addUnsupported(path, CommonIterators, builtIns);
   }
 
-  function addUnsupported(path, polyfills, builtIn, builtIns) {
+  function addUnsupported(path, builtIn, builtIns) {
     if (Array.isArray(builtIn)) {
       for (const mod of builtIn) {
         if (polyfills.has(mod)) {
@@ -80,7 +116,7 @@ export default function({ types: t }, { corejs }) {
 
     // Symbol()
     // new Promise
-    ReferencedIdentifier(path, state) {
+    ReferencedIdentifier(path) {
       const { node, parent, scope } = path;
 
       if (t.isMemberExpression(parent)) return;
@@ -88,31 +124,31 @@ export default function({ types: t }, { corejs }) {
       if (scope.getBindingIdentifier(node.name)) return;
 
       const builtIn = definitions.builtins[node.name];
-      addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
+      addUnsupported(path, builtIn, this.builtIns);
     },
 
     // for-of loop
-    ForOfStatement(path, state) {
-      addCommonIterators(path, state.opts.polyfills, this.builtIns);
+    ForOfStatement(path) {
+      addCommonIterators(path, this.builtIns);
     },
 
     // spread
-    ArrayExpression(path, state) {
+    ArrayExpression(path) {
       if (path.node.elements.some(el => el.type === "SpreadElement")) {
-        addCommonIterators(path, state.opts.polyfills, this.builtIns);
+        addCommonIterators(path, this.builtIns);
       }
     },
 
     // yield*
-    YieldExpression(path, state) {
+    YieldExpression(path) {
       if (!path.node.delegate) return;
 
-      addCommonIterators(path, state.opts.polyfills, this.builtIns);
+      addCommonIterators(path, this.builtIns);
     },
 
     // Array.from
     MemberExpression: {
-      enter(path, state) {
+      enter(path) {
         if (!path.isReferenced()) return;
 
         const { node } = path;
@@ -145,22 +181,21 @@ export default function({ types: t }, { corejs }) {
           const staticMethods = definitions.staticMethods[evaluatedPropType];
           if (has(staticMethods, propName)) {
             const builtIn = staticMethods[propName];
-            addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
+            addUnsupported(path, builtIn, this.builtIns);
           }
         }
 
         if (has(definitions.instanceMethods, propName)) {
-          //warnOnInstanceMethod(state, getObjectString(node));
           let builtIn = definitions.instanceMethods[propName];
           if (instanceType) {
             builtIn = builtIn.filter(item => item.includes(instanceType));
           }
-          addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
+          addUnsupported(path, builtIn, this.builtIns);
         }
       },
 
       // Symbol.match
-      exit(path, state) {
+      exit(path) {
         if (!path.isReferenced()) return;
 
         const { node } = path;
@@ -170,78 +205,71 @@ export default function({ types: t }, { corejs }) {
         if (path.scope.getBindingIdentifier(obj.name)) return;
 
         const builtIn = definitions.builtins[obj.name];
-        addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
+        addUnsupported(path, builtIn, this.builtIns);
       },
     },
 
     // var { repeat, startsWith } = String
-    VariableDeclarator(path, state) {
+    VariableDeclarator(path) {
       const { node } = path;
 
       // destructuring
       if (node.id.type === "ArrayPattern") {
-        addCommonIterators(path, state.opts.polyfills, this.builtIns);
+        addCommonIterators(path, this.builtIns);
       }
 
       if (!path.isReferenced()) return;
 
-      const obj = node.init;
+      const { init } = node;
 
       if (!t.isObjectPattern(node.id)) return;
-      if (!t.isReferenced(obj, node)) return;
+      if (!t.isReferenced(init, node)) return;
 
       // doesn't reference the global
-      if (obj && path.scope.getBindingIdentifier(obj.name)) return;
+      if (init && path.scope.getBindingIdentifier(init.name)) return;
 
-      for (let prop of node.id.properties) {
-        prop = prop.key;
+      for (const { key } of node.id.properties) {
         if (
           !node.computed &&
-          t.isIdentifier(prop) &&
-          has(definitions.instanceMethods, prop.name)
+          t.isIdentifier(key) &&
+          has(definitions.instanceMethods, key.name)
         ) {
-          const builtIn = definitions.instanceMethods[prop.name];
-          addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
+          const builtIn = definitions.instanceMethods[key.name];
+          addUnsupported(path, builtIn, this.builtIns);
         }
       }
     },
 
     // destructuring
-    AssignmentExpression(path, state) {
+    AssignmentExpression(path) {
       if (path.node.left.type === "ArrayPattern") {
-        addCommonIterators(path, state.opts.polyfills, this.builtIns);
+        addCommonIterators(path, this.builtIns);
       }
     },
     // destructuring
-    CatchClause(path, state) {
+    CatchClause(path) {
       const { node } = path;
       if (node.param && node.param.type === "ArrayPattern") {
-        addCommonIterators(path, state.opts.polyfills, this.builtIns);
+        addCommonIterators(path, this.builtIns);
       }
     },
     // destructuring
-    ForXStatement(path, state) {
+    ForXStatement(path) {
       if (path.node.left.type === "ArrayPattern") {
-        addCommonIterators(path, state.opts.polyfills, this.builtIns);
+        addCommonIterators(path, this.builtIns);
       }
     },
 
-    Function(path, state) {
+    Function(path) {
       const { node } = path;
-      const { polyfills } = state.opts;
 
       // destructuring
       if (node.params.some(param => param.type === "ArrayPattern")) {
-        addCommonIterators(path, polyfills, this.builtIns);
+        addCommonIterators(path, this.builtIns);
       }
 
       if (node.async) {
-        addUnsupported(
-          path,
-          polyfills,
-          ["es.promise.finally", "es.promise"],
-          this.builtIns,
-        );
+        addUnsupported(path, PromiseDependencies, this.builtIns);
       }
     },
   };
@@ -252,14 +280,12 @@ export default function({ types: t }, { corejs }) {
       this.builtIns = new Set();
     },
     post() {
-      const { debug, polyfillTargets, allBuiltInsList } = this.opts;
-
       if (debug) {
         logUsagePolyfills(
           this.builtIns,
           this.file.opts.filename,
           polyfillTargets,
-          allBuiltInsList,
+          corejs3Polyfills,
         );
       }
     },

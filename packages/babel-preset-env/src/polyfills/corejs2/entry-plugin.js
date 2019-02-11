@@ -1,8 +1,22 @@
+import corejs2Polyfills from "../../../data/corejs2-built-ins.json";
+import getPlatformSpecificDefaultFor from "./get-platform-specific-default";
+import { filterItems } from "../../env-filter";
 import { logEntryPolyfills } from "../../debug";
 import { createImport, isPolyfillSource, isPolyfillRequire } from "../../utils";
 
-export default function({ types: t }) {
-  function replaceWithPolyfillImports(path, polyfills, regenerator) {
+export default function(
+  { types: t },
+  { include, exclude, polyfillTargets, regenerator, debug },
+) {
+  const polyfills = filterItems(
+    corejs2Polyfills,
+    include,
+    exclude,
+    polyfillTargets,
+    getPlatformSpecificDefaultFor(polyfillTargets),
+  );
+
+  function replaceWithPolyfillImports(path) {
     if (regenerator) {
       createImport(path, "regenerator-runtime");
     }
@@ -17,30 +31,22 @@ export default function({ types: t }) {
   }
 
   const isPolyfillImport = {
-    ImportDeclaration(path, state) {
+    ImportDeclaration(path) {
       if (
         path.node.specifiers.length === 0 &&
         isPolyfillSource(path.node.source.value)
       ) {
         this.importPolyfillIncluded = true;
 
-        replaceWithPolyfillImports(
-          path,
-          state.opts.polyfills,
-          state.opts.regenerator,
-        );
+        replaceWithPolyfillImports(path);
       }
     },
-    Program(path, state) {
+    Program(path) {
       path.get("body").forEach(bodyPath => {
         if (isPolyfillRequire(t, bodyPath)) {
           this.importPolyfillIncluded = true;
 
-          replaceWithPolyfillImports(
-            bodyPath,
-            state.opts.polyfills,
-            state.opts.regenerator,
-          );
+          replaceWithPolyfillImports(bodyPath);
         }
       });
     },
@@ -54,8 +60,6 @@ export default function({ types: t }) {
       this.importPolyfillIncluded = false;
     },
     post() {
-      const { debug, polyfillTargets, allBuiltInsList, polyfills } = this.opts;
-
       if (debug) {
         logEntryPolyfills(
           "@babel/polyfill",
@@ -63,7 +67,7 @@ export default function({ types: t }) {
           polyfills,
           this.file.opts.filename,
           polyfillTargets,
-          allBuiltInsList,
+          corejs2Polyfills,
         );
       }
     },

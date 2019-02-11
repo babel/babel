@@ -1,17 +1,32 @@
+import corejs2Polyfills from "../../../data/corejs2-built-ins.json";
+import getPlatformSpecificDefaultFor from "./get-platform-specific-default";
+import { filterItems } from "../../env-filter";
 import { definitions } from "./built-in-definitions";
 import { logUsagePolyfills } from "../../debug";
-import { createImport, isPolyfillSource, isPolyfillRequire } from "../../utils";
-
-function has(obj, key) {
-  return Object.prototype.hasOwnProperty.call(obj, key);
-}
+import {
+  createImport,
+  has,
+  isPolyfillSource,
+  isPolyfillRequire,
+} from "../../utils";
 
 function getType(target) {
   if (Array.isArray(target)) return "array";
   return typeof target;
 }
 
-export default function({ types: t }) {
+export default function(
+  { types: t },
+  { include, exclude, polyfillTargets, debug },
+) {
+  const polyfills = filterItems(
+    corejs2Polyfills,
+    include,
+    exclude,
+    polyfillTargets,
+    getPlatformSpecificDefaultFor(polyfillTargets),
+  );
+
   function addImport(path, builtIn, builtIns) {
     if (builtIn && !builtIns.has(builtIn)) {
       builtIns.add(builtIn);
@@ -19,7 +34,7 @@ export default function({ types: t }) {
     }
   }
 
-  function addUnsupported(path, polyfills, builtIn, builtIns) {
+  function addUnsupported(path, builtIn, builtIns) {
     if (Array.isArray(builtIn)) {
       for (const i of builtIn) {
         if (polyfills.has(i)) {
@@ -64,7 +79,7 @@ export default function({ types: t }) {
 
     // Symbol()
     // new Promise
-    ReferencedIdentifier(path, state) {
+    ReferencedIdentifier(path) {
       const { node, parent, scope } = path;
 
       if (t.isMemberExpression(parent)) return;
@@ -72,7 +87,7 @@ export default function({ types: t }) {
       if (scope.getBindingIdentifier(node.name)) return;
 
       const builtIn = definitions.builtins[node.name];
-      addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
+      addUnsupported(path, builtIn, this.builtIns);
     },
 
     // arr[Symbol.iterator]()
@@ -107,7 +122,7 @@ export default function({ types: t }) {
 
     // Array.from
     MemberExpression: {
-      enter(path, state) {
+      enter(path) {
         if (!path.isReferenced()) return;
 
         const { node } = path;
@@ -140,7 +155,7 @@ export default function({ types: t }) {
           const staticMethods = definitions.staticMethods[evaluatedPropType];
           if (has(staticMethods, propName)) {
             const builtIn = staticMethods[propName];
-            addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
+            addUnsupported(path, builtIn, this.builtIns);
           }
         }
 
@@ -149,12 +164,12 @@ export default function({ types: t }) {
           if (instanceType) {
             builtIn = builtIn.filter(item => item.includes(instanceType));
           }
-          addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
+          addUnsupported(path, builtIn, this.builtIns);
         }
       },
 
       // Symbol.match
-      exit(path, state) {
+      exit(path) {
         if (!path.isReferenced()) return;
 
         const { node } = path;
@@ -164,32 +179,31 @@ export default function({ types: t }) {
         if (path.scope.getBindingIdentifier(obj.name)) return;
 
         const builtIn = definitions.builtins[obj.name];
-        addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
+        addUnsupported(path, builtIn, this.builtIns);
       },
     },
 
     // var { repeat, startsWith } = String
-    VariableDeclarator(path, state) {
+    VariableDeclarator(path) {
       if (!path.isReferenced()) return;
 
       const { node } = path;
-      const obj = node.init;
+      const { init } = node;
 
       if (!t.isObjectPattern(node.id)) return;
-      if (!t.isReferenced(obj, node)) return;
+      if (!t.isReferenced(init, node)) return;
 
       // doesn't reference the global
-      if (obj && path.scope.getBindingIdentifier(obj.name)) return;
+      if (init && path.scope.getBindingIdentifier(init.name)) return;
 
-      for (let prop of node.id.properties) {
-        prop = prop.key;
+      for (const { key } of node.id.properties) {
         if (
           !node.computed &&
-          t.isIdentifier(prop) &&
-          has(definitions.instanceMethods, prop.name)
+          t.isIdentifier(key) &&
+          has(definitions.instanceMethods, key.name)
         ) {
-          const builtIn = definitions.instanceMethods[prop.name];
-          addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
+          const builtIn = definitions.instanceMethods[key.name];
+          addUnsupported(path, builtIn, this.builtIns);
         }
       }
     },
@@ -201,14 +215,12 @@ export default function({ types: t }) {
       this.builtIns = new Set();
     },
     post() {
-      const { debug, polyfillTargets, allBuiltInsList } = this.opts;
-
       if (debug) {
         logUsagePolyfills(
           this.builtIns,
           this.file.opts.filename,
           polyfillTargets,
-          allBuiltInsList,
+          corejs2Polyfills,
         );
       }
     },

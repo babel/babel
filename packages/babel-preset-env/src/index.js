@@ -1,27 +1,20 @@
 //@flow
 
-import corejs2Polyfills from "../data/corejs2-built-ins.json";
-import corejs3Polyfills from "core-js-compat/data";
 import { logPluginOrPolyfill } from "./debug";
-import {
-  getCoreJS2PlatformSpecificDefaultFor,
-  getOptionSpecificExcludesFor,
-} from "./defaults";
+import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
 import { filterItems } from "./env-filter";
 import moduleTransformations from "./module-transformations";
-import normalizeOptions from "./normalize-options.js";
+import normalizeOptions from "./normalize-options";
 import pluginList from "../data/plugins.json";
-import {
-  corejs3ShippedProposalsList,
-  features as proposalPlugins,
-  pluginSyntaxMap,
-} from "../data/shipped-proposals.js";
+import { proposalPlugins, pluginSyntaxMap } from "../data/shipped-proposals";
+
 import addCoreJS2UsagePlugin from "./polyfills/corejs2/usage-plugin";
 import addCoreJS3UsagePlugin from "./polyfills/corejs3/usage-plugin";
 import addRegeneratorUsagePlugin from "./polyfills/regenerator/usage-plugin";
 import replaceCoreJS2EntryPlugin from "./polyfills/corejs2/entry-plugin";
 import replaceCoreJS3EntryPlugin from "./polyfills/corejs3/entry-plugin";
 import removeRegeneratorEntryPlugin from "./polyfills/regenerator/entry-plugin";
+
 import getTargets from "./targets-parser";
 import availablePlugins from "./available-plugins";
 import { filterStageFromList, prettifyTargets } from "./utils";
@@ -30,21 +23,6 @@ import { declare } from "@babel/helper-plugin-utils";
 const pluginListWithoutProposals = filterStageFromList(
   pluginList,
   proposalPlugins,
-);
-
-const corejs3PolyfillsWithoutProposals = Object.keys(corejs3Polyfills)
-  .filter(name => !name.startsWith("esnext."))
-  .reduce((memo, key) => {
-    memo[key] = corejs3Polyfills[key];
-    return memo;
-  }, {});
-
-const corejs3PolyfillsWithShippedProposals = corejs3ShippedProposalsList.reduce(
-  (memo, key) => {
-    memo[key] = corejs3Polyfills[key];
-    return memo;
-  },
-  { ...corejs3PolyfillsWithoutProposals },
 );
 
 const getPlugin = (pluginName: string) => {
@@ -170,8 +148,6 @@ export default declare((api, opts) => {
     ]),
   );
 
-  const regenerator = transformations.has("transform-regenerator");
-
   if (debug) {
     console.log("@babel/preset-env: `DEBUG` option");
     console.log("\nUsing targets:");
@@ -192,33 +168,19 @@ export default declare((api, opts) => {
   }
 
   if (useBuiltIns === "usage" || useBuiltIns === "entry") {
+    const regenerator = transformations.has("transform-regenerator");
+
     const polyfillTargets = getBuiltInTargets(targets);
 
-    const polyfills = filterItems(
-      corejs.major === 2
-        ? corejs2Polyfills
-        : proposals || useBuiltIns === "entry"
-        ? corejs3Polyfills
-        : shippedProposals
-        ? corejs3PolyfillsWithShippedProposals
-        : corejs3PolyfillsWithoutProposals,
-      include.builtIns,
-      exclude.builtIns,
-      polyfillTargets,
-      corejs.major === 2
-        ? getCoreJS2PlatformSpecificDefaultFor(polyfillTargets)
-        : null,
-      null,
-    );
-
     const pluginOptions = {
-      useBuiltIns,
-      debug,
-      polyfills,
-      regenerator,
-      polyfillTargets,
-      allBuiltInsList: corejs.major === 2 ? corejs2Polyfills : corejs3Polyfills,
       corejs,
+      polyfillTargets,
+      include: include.builtIns,
+      exclude: exclude.builtIns,
+      proposals,
+      shippedProposals,
+      regenerator,
+      debug,
     };
 
     if (useBuiltIns === "usage") {

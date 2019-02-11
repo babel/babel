@@ -1,11 +1,10 @@
 "use strict";
 
-const defaults = require("../lib/defaults.js");
+const getOptionSpecificExcludesFor = require("../lib/get-option-specific-excludes")
+  .default;
 
-const {
-  getCoreJS2PlatformSpecificDefaultFor,
-  getOptionSpecificExcludesFor,
-} = defaults;
+const getCoreJS2PlatformSpecificDefaultFor = require("../lib/polyfills/corejs2/get-platform-specific-default")
+  .default;
 
 describe("defaults", () => {
   describe("getCoreJS2PlatformSpecificDefaultFor", () => {

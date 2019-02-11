@@ -1,7 +1,7 @@
 import { coerce } from "semver";
 import invariant from "invariant";
 import corejs2Polyfills from "../data/corejs2-built-ins.json";
-import { defaultWebIncludes } from "./defaults";
+import { defaultWebIncludes } from "./polyfills/corejs2/get-platform-specific-default";
 import corejs3Polyfills from "core-js-compat/data";
 import moduleTransformations from "./module-transformations";
 import { isBrowsersQueryValid } from "./targets-parser";
