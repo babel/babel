@@ -112,6 +112,10 @@ export function isPolyfillSource(source) {
   return source === "@babel/polyfill" || source === "core-js";
 }
 
+export function isBabelPolyfillSource(source) {
+  return source === "@babel/polyfill" || source === "babel-polyfill";
+}
+
 export function isCoreJSSource(source) {
   return has(coreJSEntries, source) && new Set(coreJSEntries[source]);
 }
@@ -147,6 +151,13 @@ export function isPolyfillRequire(t, path) {
   return (
     isRequire(t, path) &&
     isPolyfillSource(path.node.expression.arguments[0].value)
+  );
+}
+
+export function isBabelPolyfillRequire(t, path) {
+  return (
+    isRequire(t, path) &&
+    isBabelPolyfillSource(path.node.expression.arguments[0].value)
   );
 }
 
