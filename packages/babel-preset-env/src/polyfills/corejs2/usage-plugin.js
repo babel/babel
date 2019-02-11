@@ -10,6 +10,10 @@ import {
   isPolyfillRequire,
 } from "../../utils";
 
+const NO_DIRECT_POLYFILL_IMPORT = `
+  When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
+  Please remove the \`import '@babel/polyfill'\` call or use \`useBuiltIns: 'entry'\` instead.`;
+
 function getType(target) {
   if (Array.isArray(target)) return "array";
   return typeof target;
@@ -33,11 +37,7 @@ export default function(
         path.node.specifiers.length === 0 &&
         isPolyfillSource(path.node.source.value)
       ) {
-        console.warn(
-          `
-  When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
-  Please remove the \`import '@babel/polyfill'\` call or use \`useBuiltIns: 'entry'\` instead.`,
-        );
+        console.warn(NO_DIRECT_POLYFILL_IMPORT);
         path.remove();
       }
     },
@@ -45,11 +45,7 @@ export default function(
       enter(path) {
         path.get("body").forEach(bodyPath => {
           if (isPolyfillRequire(t, bodyPath)) {
-            console.warn(
-              `
-  When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
-  Please remove the \`require('@babel/polyfill')\` call or use \`useBuiltIns: 'entry'\` instead.`,
-            );
+            console.warn(NO_DIRECT_POLYFILL_IMPORT);
             bodyPath.remove();
           }
         });

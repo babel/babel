@@ -15,6 +15,10 @@ import {
 } from "../../utils";
 import getModulesListForTargetVersion from "./get-modules-list-for-target-version";
 
+const NO_DIRECT_POLYFILL_IMPORT = `
+  When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
+  Please remove the direct import of \`core-js\` or use \`useBuiltIns: 'entry'\` instead.`;
+
 const corejs3PolyfillsWithoutProposals = Object.keys(corejs3Polyfills)
   .filter(name => !name.startsWith("esnext."))
   .reduce((memo, key) => {
@@ -66,11 +70,7 @@ export default function(
         path.node.specifiers.length === 0 &&
         isPolyfillSource(path.node.source.value)
       ) {
-        console.warn(
-          `
-  When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
-  Please remove the \`import '@babel/polyfill'\` call or use \`useBuiltIns: 'entry'\` instead.`,
-        );
+        console.warn(NO_DIRECT_POLYFILL_IMPORT);
         path.remove();
       }
     },
@@ -78,11 +78,7 @@ export default function(
       enter(path) {
         path.get("body").forEach(bodyPath => {
           if (isPolyfillRequire(t, bodyPath)) {
-            console.warn(
-              `
-  When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
-  Please remove the \`require('@babel/polyfill')\` call or use \`useBuiltIns: 'entry'\` instead.`,
-            );
+            console.warn(NO_DIRECT_POLYFILL_IMPORT);
             bodyPath.remove();
           }
         });
