@@ -1,5 +1,7 @@
-function f() {
+expect(() => {
+  function f() {
     x;
-}
-let x;
-f();
+  }
+  let x;
+  f();
+}).not.toThrow();
