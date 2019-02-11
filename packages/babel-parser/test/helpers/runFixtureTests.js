@@ -1,6 +1,45 @@
 import { multiple as getFixtures } from "@babel/helper-fixtures";
+import { codeFrameColumns } from "@babel/code-frame";
 import fs from "fs";
 import path from "path";
+
+const rootPath = path.join(__dirname, "../../../..");
+
+class FixtureError extends Error {
+  constructor(previousError, fixturePath, code) {
+    super(previousError.message);
+    const messageLines = (previousError.message.match(/\n/g) || []).length + 1;
+
+    let fixtureStackFrame = "";
+    if (previousError.loc) {
+      fixtureStackFrame =
+        codeFrameColumns(
+          code,
+          {
+            start: {
+              line: previousError.loc.line,
+              column: previousError.loc.column + 1,
+            },
+          },
+          { highlightCode: true },
+        ) +
+        "\n" +
+        `at fixture (${fixturePath}:${previousError.loc.line}:${previousError
+          .loc.column + 1})\n`;
+    }
+
+    this.stack =
+      previousError.constructor.name +
+      ": " +
+      previousError.message +
+      "\n" +
+      fixtureStackFrame +
+      previousError.stack
+        .split("\n")
+        .slice(messageLines)
+        .join("\n");
+  }
+}
 
 export function runFixtureTests(fixturesPath, parseFunction) {
   const fixtures = getFixtures(fixturesPath);
@@ -26,9 +65,11 @@ export function runFixtureTests(fixturesPath, parseFunction) {
               }
             }
 
-            err.message =
-              name + "/" + task.actual.filename + ": " + err.message;
-            throw err;
+            const fixturePath = `${path.relative(
+              rootPath,
+              fixturesPath,
+            )}/${name}/${task.actual.filename}`;
+            throw new FixtureError(err, fixturePath, task.actual.code);
           }
         });
       });
@@ -53,9 +94,11 @@ export function runThrowTestsWithEstree(fixturesPath, parseFunction) {
           try {
             runTest(task, parseFunction);
           } catch (err) {
-            err.message =
-              name + "/" + task.actual.filename + ": " + err.message;
-            throw err;
+            const fixturePath = `${path.relative(
+              rootPath,
+              fixturesPath,
+            )}/${name}/${task.actual.filename}`;
+            throw new FixtureError(err, fixturePath, task.actual.code);
           }
         });
       });
