@@ -27,27 +27,6 @@ export default function(
     getPlatformSpecificDefaultFor(polyfillTargets),
   );
 
-  function addImport(path, builtIn, builtIns) {
-    if (builtIn && !builtIns.has(builtIn)) {
-      builtIns.add(builtIn);
-      createImport(path, builtIn);
-    }
-  }
-
-  function addUnsupported(path, builtIn, builtIns) {
-    if (Array.isArray(builtIn)) {
-      for (const i of builtIn) {
-        if (polyfills.has(i)) {
-          addImport(path, i, builtIns);
-        }
-      }
-    } else {
-      if (polyfills.has(builtIn)) {
-        addImport(path, builtIn, builtIns);
-      }
-    }
-  }
-
   const addAndRemovePolyfillImports = {
     ImportDeclaration(path) {
       if (
@@ -87,7 +66,7 @@ export default function(
       if (scope.getBindingIdentifier(node.name)) return;
 
       const builtIn = definitions.builtins[node.name];
-      addUnsupported(path, builtIn, this.builtIns);
+      this.addUnsupported(builtIn);
     },
 
     // arr[Symbol.iterator]()
@@ -102,7 +81,7 @@ export default function(
         return;
       }
 
-      addImport(path, "web.dom.iterable", this.builtIns);
+      this.addImport("web.dom.iterable");
     },
 
     // Symbol.iterator in arr
@@ -110,14 +89,14 @@ export default function(
       if (path.node.operator !== "in") return;
       if (!path.get("left").matchesPattern("Symbol.iterator")) return;
 
-      addImport(path, "web.dom.iterable", this.builtIns);
+      this.addImport("web.dom.iterable");
     },
 
     // yield*
     YieldExpression(path) {
       if (!path.node.delegate) return;
 
-      addImport(path, "web.dom.iterable", this.builtIns);
+      this.addImport("web.dom.iterable");
     },
 
     // Array.from
@@ -155,7 +134,7 @@ export default function(
           const staticMethods = definitions.staticMethods[evaluatedPropType];
           if (has(staticMethods, propName)) {
             const builtIn = staticMethods[propName];
-            addUnsupported(path, builtIn, this.builtIns);
+            this.addUnsupported(builtIn);
           }
         }
 
@@ -164,7 +143,7 @@ export default function(
           if (instanceType) {
             builtIn = builtIn.filter(item => item.includes(instanceType));
           }
-          addUnsupported(path, builtIn, this.builtIns);
+          this.addUnsupported(builtIn);
         }
       },
 
@@ -179,7 +158,7 @@ export default function(
         if (path.scope.getBindingIdentifier(obj.name)) return;
 
         const builtIn = definitions.builtins[obj.name];
-        addUnsupported(path, builtIn, this.builtIns);
+        this.addUnsupported(builtIn);
       },
     },
 
@@ -203,7 +182,7 @@ export default function(
           has(definitions.instanceMethods, key.name)
         ) {
           const builtIn = definitions.instanceMethods[key.name];
-          addUnsupported(path, builtIn, this.builtIns);
+          this.addUnsupported(builtIn);
         }
       }
     },
@@ -211,8 +190,24 @@ export default function(
 
   return {
     name: "corejs2-usage",
-    pre() {
+    pre({ path }) {
       this.builtIns = new Set();
+
+      this.addImport = function(builtIn) {
+        if (builtIn && !this.builtIns.has(builtIn)) {
+          this.builtIns.add(builtIn);
+          createImport(path, builtIn);
+        }
+      };
+
+      this.addUnsupported = function(builtIn) {
+        const list = Array.isArray(builtIn) ? builtIn : [builtIn];
+        for (const mod of list) {
+          if (polyfills.has(mod)) {
+            this.addImport(mod);
+          }
+        }
+      };
     },
     post() {
       if (debug) {

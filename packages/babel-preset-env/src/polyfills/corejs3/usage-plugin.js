@@ -60,31 +60,6 @@ export default function(
 
   const available = getModulesListForTargetVersion(corejs);
 
-  function addImport(path, builtIn, builtIns) {
-    if (builtIn && !builtIns.has(builtIn) && available.has(builtIn)) {
-      builtIns.add(builtIn);
-      createImport(path, builtIn);
-    }
-  }
-
-  function addCommonIterators(path, builtIns) {
-    addUnsupported(path, CommonIterators, builtIns);
-  }
-
-  function addUnsupported(path, builtIn, builtIns) {
-    if (Array.isArray(builtIn)) {
-      for (const mod of builtIn) {
-        if (polyfills.has(mod)) {
-          addImport(path, mod, builtIns);
-        }
-      }
-    } else {
-      if (polyfills.has(builtIn)) {
-        addImport(path, builtIn, builtIns);
-      }
-    }
-  }
-
   const addAndRemovePolyfillImports = {
     ImportDeclaration(path) {
       if (
@@ -124,18 +99,18 @@ export default function(
       if (scope.getBindingIdentifier(node.name)) return;
 
       const builtIn = definitions.builtins[node.name];
-      addUnsupported(path, builtIn, this.builtIns);
+      this.addUnsupported(builtIn);
     },
 
     // for-of loop
-    ForOfStatement(path) {
-      addCommonIterators(path, this.builtIns);
+    ForOfStatement() {
+      this.addUnsupported(CommonIterators);
     },
 
     // spread
     ArrayExpression(path) {
       if (path.node.elements.some(el => el.type === "SpreadElement")) {
-        addCommonIterators(path, this.builtIns);
+        this.addUnsupported(CommonIterators);
       }
     },
 
@@ -143,7 +118,7 @@ export default function(
     YieldExpression(path) {
       if (!path.node.delegate) return;
 
-      addCommonIterators(path, this.builtIns);
+      this.addUnsupported(CommonIterators);
     },
 
     // Array.from
@@ -152,24 +127,23 @@ export default function(
         if (!path.isReferenced()) return;
 
         const { node } = path;
-        const obj = node.object;
-        const prop = node.property;
+        const { object, property } = node;
 
-        if (!t.isReferenced(obj, node)) return;
+        if (!t.isReferenced(object, node)) return;
         let instanceType;
-        let evaluatedPropType = obj.name;
-        let propName = prop.name;
+        let evaluatedPropType = object.name;
+        let propertyName = property.name;
         if (node.computed) {
-          if (t.isStringLiteral(prop)) {
-            propName = prop.value;
+          if (t.isStringLiteral(property)) {
+            propertyName = property.value;
           } else {
             const res = path.get("property").evaluate();
             if (res.confident && res.value) {
-              propName = res.value;
+              propertyName = res.value;
             }
           }
         }
-        if (path.scope.getBindingIdentifier(obj.name)) {
+        if (path.scope.getBindingIdentifier(object.name)) {
           const result = path.get("object").evaluate();
           if (result.value) {
             instanceType = getType(result.value);
@@ -179,18 +153,18 @@ export default function(
         }
         if (has(definitions.staticMethods, evaluatedPropType)) {
           const staticMethods = definitions.staticMethods[evaluatedPropType];
-          if (has(staticMethods, propName)) {
-            const builtIn = staticMethods[propName];
-            addUnsupported(path, builtIn, this.builtIns);
+          if (has(staticMethods, propertyName)) {
+            const builtIn = staticMethods[propertyName];
+            this.addUnsupported(builtIn);
           }
         }
 
-        if (has(definitions.instanceMethods, propName)) {
-          let builtIn = definitions.instanceMethods[propName];
+        if (has(definitions.instanceMethods, propertyName)) {
+          let builtIn = definitions.instanceMethods[propertyName];
           if (instanceType) {
             builtIn = builtIn.filter(item => item.includes(instanceType));
           }
-          addUnsupported(path, builtIn, this.builtIns);
+          this.addUnsupported(builtIn);
         }
       },
 
@@ -198,14 +172,13 @@ export default function(
       exit(path) {
         if (!path.isReferenced()) return;
 
-        const { node } = path;
-        const obj = node.object;
+        const { name } = path.node.object;
 
-        if (!has(definitions.builtins, obj.name)) return;
-        if (path.scope.getBindingIdentifier(obj.name)) return;
+        if (!has(definitions.builtins, name)) return;
+        if (path.scope.getBindingIdentifier(name)) return;
 
-        const builtIn = definitions.builtins[obj.name];
-        addUnsupported(path, builtIn, this.builtIns);
+        const builtIn = definitions.builtins[name];
+        this.addUnsupported(builtIn);
       },
     },
 
@@ -213,29 +186,29 @@ export default function(
     VariableDeclarator(path) {
       const { node } = path;
 
+      const { id, init } = node;
+
       // destructuring
-      if (node.id.type === "ArrayPattern") {
-        addCommonIterators(path, this.builtIns);
+      if (id.type === "ArrayPattern") {
+        this.addUnsupported(CommonIterators);
       }
 
       if (!path.isReferenced()) return;
 
-      const { init } = node;
-
-      if (!t.isObjectPattern(node.id)) return;
+      if (!t.isObjectPattern(id)) return;
       if (!t.isReferenced(init, node)) return;
 
       // doesn't reference the global
       if (init && path.scope.getBindingIdentifier(init.name)) return;
 
-      for (const { key } of node.id.properties) {
+      for (const { key } of id.properties) {
         if (
           !node.computed &&
           t.isIdentifier(key) &&
           has(definitions.instanceMethods, key.name)
         ) {
           const builtIn = definitions.instanceMethods[key.name];
-          addUnsupported(path, builtIn, this.builtIns);
+          this.addUnsupported(builtIn);
         }
       }
     },
@@ -243,20 +216,20 @@ export default function(
     // destructuring
     AssignmentExpression(path) {
       if (path.node.left.type === "ArrayPattern") {
-        addCommonIterators(path, this.builtIns);
+        this.addUnsupported(CommonIterators);
       }
     },
     // destructuring
     CatchClause(path) {
-      const { node } = path;
-      if (node.param && node.param.type === "ArrayPattern") {
-        addCommonIterators(path, this.builtIns);
+      const { param } = path.node;
+      if (param && param.type === "ArrayPattern") {
+        this.addUnsupported(CommonIterators);
       }
     },
     // destructuring
     ForXStatement(path) {
       if (path.node.left.type === "ArrayPattern") {
-        addCommonIterators(path, this.builtIns);
+        this.addUnsupported(CommonIterators);
       }
     },
 
@@ -265,19 +238,35 @@ export default function(
 
       // destructuring
       if (node.params.some(param => param.type === "ArrayPattern")) {
-        addCommonIterators(path, this.builtIns);
+        this.addUnsupported(CommonIterators);
       }
 
       if (node.async) {
-        addUnsupported(path, PromiseDependencies, this.builtIns);
+        this.addUnsupported(PromiseDependencies);
       }
     },
   };
 
   return {
     name: "corejs3-usage",
-    pre() {
+    pre({ path }) {
       this.builtIns = new Set();
+
+      this.addImport = function(builtIn) {
+        if (builtIn && !this.builtIns.has(builtIn) && available.has(builtIn)) {
+          this.builtIns.add(builtIn);
+          createImport(path, builtIn);
+        }
+      };
+
+      this.addUnsupported = function(builtIn) {
+        const list = Array.isArray(builtIn) ? builtIn : [builtIn];
+        for (const mod of list) {
+          if (polyfills.has(mod)) {
+            this.addImport(mod);
+          }
+        }
+      };
     },
     post() {
       if (debug) {
