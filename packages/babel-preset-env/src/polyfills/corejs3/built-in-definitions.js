@@ -1,10 +1,16 @@
 const ArrayNatureIterators = [
-  "es.object.to-string",
   "es.array.iterator",
   "web.dom-collections.iterator",
 ];
 
-const CommonIterators = ["es.string.iterator", ...ArrayNatureIterators];
+export const CommonIterators = ["es.string.iterator", ...ArrayNatureIterators];
+
+const ArrayNatureIteratorsWithTag = [
+  "es.object.to-string",
+  ...ArrayNatureIterators,
+];
+
+const CommonIteratorsWithTag = ["es.object.to-string", ...CommonIterators];
 
 const TypedArrayDependencies = [
   "es.array.iterator",
@@ -40,7 +46,7 @@ const TypedArrayStaticMethods = {
   of: "es.typed-array.of",
 };
 
-const PromiseDependencies = [
+export const PromiseDependencies = [
   "es.object.to-string",
   "es.promise.finally",
   "es.promise",
@@ -72,7 +78,7 @@ const MapDependencies = [
   "esnext.map.some",
   "esnext.map.update",
   "es.map",
-  ...CommonIterators,
+  ...CommonIteratorsWithTag,
 ];
 
 const SetDependencies = [
@@ -93,23 +99,23 @@ const SetDependencies = [
   "esnext.set.symmetric-difference",
   "esnext.set.union",
   "es.set",
-  ...CommonIterators,
+  ...CommonIteratorsWithTag,
 ];
 
 const WeakMapDependencies = [
   "esnext.weak-map.delete-all",
   "es.weak-map",
-  ...CommonIterators,
+  ...CommonIteratorsWithTag,
 ];
 
 const WeakSetDependencies = [
   "esnext.weak-set.add-all",
   "esnext.weak-set.delete-all",
   "es.weak-set",
-  ...CommonIterators,
+  ...CommonIteratorsWithTag,
 ];
 
-const URLSearchParamsDependencies = ["web.url", ...CommonIterators];
+const URLSearchParamsDependencies = ["web.url", ...CommonIteratorsWithTag];
 
 // TODO: this is the opposite of built-in-features so maybe generate one from the other?
 export const definitions = {
@@ -139,7 +145,7 @@ export const definitions = {
       "esnext.observable",
       "esnext.symbol.observable",
       "es.object.to-string",
-      ...CommonIterators,
+      ...CommonIteratorsWithTag,
     ],
     Promise: PromiseDependencies,
     RegExp: ["es.regexp.to-string", "es.regexp.exec", "es.regexp.constructor"],
@@ -174,7 +180,7 @@ export const definitions = {
     copyWithin: ["es.array.copy-within"],
     description: ["es.symbol.description", "es.symbol"],
     endsWith: ["es.string.ends-with"],
-    entries: ArrayNatureIterators,
+    entries: ArrayNatureIteratorsWithTag,
     every: ["es.array.every"],
     exec: ["es.regexp.exec"],
     fill: ["es.array.fill"],
@@ -193,7 +199,7 @@ export const definitions = {
     indexOf: ["es.array.index-of"],
     italic: ["es.string.italics"],
     join: ["es.array.join"],
-    keys: ArrayNatureIterators,
+    keys: ArrayNatureIteratorsWithTag,
     lastIndex: ["esnext.array.last-index"],
     lastIndexOf: ["es.array.last-index-of"],
     lastItem: ["esnext.array.last-item"],
@@ -235,7 +241,7 @@ export const definitions = {
     trimLeft: ["es.string.trim-start"],
     trimRight: ["es.string.trim-end"],
     trimStart: ["es.string.trim-start"],
-    values: ArrayNatureIterators,
+    values: ArrayNatureIteratorsWithTag,
     __defineGetter__: ["es.object.define-getter"],
     __defineSetter__: ["es.object.define-setter"],
     __lookupGetter__: ["es.object.lookup-getter"],
@@ -391,7 +397,7 @@ export const definitions = {
       dispose: "esnext.symbol.dispose",
       hasInstance: ["es.function.has-instance", "es.symbol.has-instance"],
       isConcatSpreadable: ["es.array.concat", "es.symbol.is-concat-spreadable"],
-      iterator: [...CommonIterators, "es.symbol.iterator"],
+      iterator: [...CommonIteratorsWithTag, "es.symbol.iterator"],
       match: ["es.string.match", "es.symbol.match"],
       observable: "esnext.symbol.observable",
       patternMatch: "esnext.symbol.pattern-match",

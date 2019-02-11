@@ -1,9 +1,18 @@
+import corejs3Polyfills from "core-js-compat/data";
+import { filterItems } from "../../env-filter";
 import { logEntryPolyfills } from "../../debug";
 import { createImport, isCoreJSSource, isCoreJSRequire } from "../../utils";
-import getModulesListForTargetCoreJSVersion from "./get-modules-list-for-target-core-js-version";
+import getModulesListForTargetVersion from "./get-modules-list-for-target-version";
 
-export default function({ types: t }, { corejs, polyfills }) {
-  const available = getModulesListForTargetCoreJSVersion(corejs);
+export default function(
+  { types: t },
+  { corejs, include, exclude, polyfillTargets, debug },
+) {
+  const polyfills = Array.from(
+    filterItems(corejs3Polyfills, include, exclude, polyfillTargets),
+  );
+
+  const available = getModulesListForTargetVersion(corejs);
 
   const isPolyfillImport = {
     ImportDeclaration(path) {
@@ -11,9 +20,7 @@ export default function({ types: t }, { corejs, polyfills }) {
         const filter = isCoreJSSource(path.node.source.value);
         if (filter) {
           this.importPolyfillIncluded = true;
-          this.polyfillsList.push(
-            ...Array.from(polyfills).filter(it => filter.has(it)),
-          );
+          this.polyfillsList.push(...polyfills.filter(it => filter.has(it)));
           path.remove();
         }
       }
@@ -23,9 +30,7 @@ export default function({ types: t }, { corejs, polyfills }) {
         const filter = isCoreJSRequire(t, bodyPath);
         if (filter) {
           this.importPolyfillIncluded = true;
-          this.polyfillsList.push(
-            ...Array.from(polyfills).filter(it => filter.has(it)),
-          );
+          this.polyfillsList.push(...polyfills.filter(it => filter.has(it)));
           bodyPath.remove();
         }
       });
@@ -36,13 +41,10 @@ export default function({ types: t }, { corejs, polyfills }) {
     name: "corejs3-entry",
     visitor: isPolyfillImport,
     pre() {
-      this.numPolyfillImports = 0;
       this.importPolyfillIncluded = false;
       this.polyfillsList = [];
     },
     post({ path }) {
-      const { debug, polyfillTargets, allBuiltInsList } = this.opts;
-
       for (const module of Array.from(new Set(this.polyfillsList)).reverse()) {
         if (available.has(module)) createImport(path, module);
       }
@@ -54,7 +56,7 @@ export default function({ types: t }, { corejs, polyfills }) {
           new Set(this.polyfillsList),
           this.file.opts.filename,
           polyfillTargets,
-          allBuiltInsList,
+          corejs3Polyfills,
         );
       }
     },

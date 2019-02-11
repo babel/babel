@@ -1,12 +1,7 @@
-// These mappings represent the builtin/feature proposals that have been
+// These mappings represent the syntax proposals that have been
 // shipped by browsers, and are enabled by the `shippedProposals` option.
 
-const corejs3ShippedProposalsList = [
-  "esnext.global-this",
-  "esnext.string.match-all",
-];
-
-const features = {};
+const proposalPlugins = {};
 
 const pluginSyntaxMap = new Map([
   ["proposal-async-generator-functions", "syntax-async-generators"],
@@ -16,4 +11,4 @@ const pluginSyntaxMap = new Map([
   ["proposal-json-strings", "syntax-json-strings"],
 ]);
 
-module.exports = { corejs3ShippedProposalsList, features, pluginSyntaxMap };
+module.exports = { proposalPlugins, pluginSyntaxMap };

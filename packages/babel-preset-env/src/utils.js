@@ -6,7 +6,9 @@ import { addSideEffect } from "@babel/helper-module-imports";
 import unreleasedLabels from "../data/unreleased-labels";
 import { semverMin } from "./targets-parser";
 
-const has = Object.prototype.hasOwnProperty;
+export function has(obj, key) {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+}
 
 const versionRegExp = /^(\d+|\d+.\d+)$/;
 
@@ -111,7 +113,7 @@ export function isPolyfillSource(source) {
 }
 
 export function isCoreJSSource(source) {
-  return has.call(coreJSEntries, source) && new Set(coreJSEntries[source]);
+  return has(coreJSEntries, source) && new Set(coreJSEntries[source]);
 }
 
 export function isRegeneratorSource(source) {
