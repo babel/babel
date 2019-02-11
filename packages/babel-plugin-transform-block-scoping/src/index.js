@@ -756,7 +756,7 @@ class BlockScoping {
       closurify: false,
       loopDepth: 0,
       tdzEnabled: this.tdzEnabled,
-      addHelper: name => this.addHelper(name),
+      addHelper: name => this.state.addHelper(name),
     };
 
     if (isInLoop(this.blockPath)) {

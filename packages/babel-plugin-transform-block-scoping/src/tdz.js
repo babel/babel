@@ -1,4 +1,4 @@
-import { types as t } from "@babel/core";
+import { types as t, template } from "@babel/core";
 
 function getTDZStatus(refPath, bindingPath) {
   const executionStatus = bindingPath._guessExecutionStatusRelativeTo(refPath);
@@ -58,18 +58,7 @@ export const visitor = {
         path.replaceWith(assert);
       }
     } else if (status === "outside") {
-      path.replaceWith(
-        t.throwStatement(
-          t.inherits(
-            t.newExpression(t.identifier("ReferenceError"), [
-              t.stringLiteral(
-                `${node.name} is not defined - temporal dead zone`,
-              ),
-            ]),
-            node,
-          ),
-        ),
-      );
+      path.replaceWith(template.ast`${state.addHelper("tdz")}("${node.name}")`);
     }
   },
 
@@ -87,14 +76,14 @@ export const visitor = {
         const id = ids[name];
 
         if (isReference(id, path.scope, state)) {
-          nodes.push(buildTDZAssert(id, state));
+          nodes.push(id);
         }
       }
 
       if (nodes.length) {
         node._ignoreBlockScopingTDZ = true;
         nodes.push(node);
-        path.replaceWithMultiple(nodes.map(t.expressionStatement));
+        path.replaceWithMultiple(nodes.map(n => t.expressionStatement(n)));
       }
     },
   },
