@@ -125,7 +125,7 @@ export default declare((api, options, dirname) => {
   }
   if (proposals && (!corejsVersion || corejsVersion < 3)) {
     throw new Error(
-      "The 'proposals' option supported only from @babel/runtime-corejs3",
+      "The 'proposals' option is only supported when using 'corejs: 3'",
     );
   }
 
