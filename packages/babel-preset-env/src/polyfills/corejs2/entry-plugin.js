@@ -1,8 +1,8 @@
 import corejs2Polyfills from "../../../data/corejs2-built-ins.json";
 import getPlatformSpecificDefaultFor from "./get-platform-specific-default";
-import { filterItems } from "../../env-filter";
-import { logEntryPolyfills } from "../../debug";
+import filterItems from "../../filter-items";
 import { createImport, isPolyfillSource, isPolyfillRequire } from "../../utils";
+import { logEntryPolyfills } from "../../debug";
 
 export default function(
   { types: t },

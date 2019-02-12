@@ -2,7 +2,7 @@
 
 import { logPluginOrPolyfill } from "./debug";
 import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
-import { filterItems } from "./env-filter";
+import filterItems from "./filter-items";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options";
 import pluginList from "../data/plugins.json";

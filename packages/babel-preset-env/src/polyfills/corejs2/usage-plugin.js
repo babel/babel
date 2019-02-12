@@ -1,12 +1,11 @@
 import corejs2Polyfills from "../../../data/corejs2-built-ins.json";
 import getPlatformSpecificDefaultFor from "./get-platform-specific-default";
-import { filterItems } from "../../env-filter";
+import filterItems from "../../filter-items";
 import {
   BuiltIns,
   StaticProperties,
   InstanceProperties,
 } from "./built-in-definitions";
-import { logUsagePolyfills } from "../../debug";
 import {
   createImport,
   getType,
@@ -14,6 +13,7 @@ import {
   isPolyfillSource,
   isPolyfillRequire,
 } from "../../utils";
+import { logUsagePolyfills } from "../../debug";
 
 const NO_DIRECT_POLYFILL_IMPORT = `
   When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
@@ -65,8 +65,8 @@ export default function(
       if (!has(BuiltIns, name)) return;
       if (scope.getBindingIdentifier(name)) return;
 
-      const builtIn = BuiltIns[name];
-      this.addUnsupported(builtIn);
+      const BuiltInDependencies = BuiltIns[name];
+      this.addUnsupported(BuiltInDependencies);
     },
 
     // arr[Symbol.iterator]()
@@ -110,16 +110,16 @@ export default function(
         if (!t.isReferenced(object, node)) return;
 
         let evaluatedPropType = object.name;
-        let propName = property.name;
+        let propertyName = property.name;
         let instanceType;
 
         if (node.computed) {
           if (t.isStringLiteral(property)) {
-            propName = property.value;
+            propertyName = property.value;
           } else {
             const res = path.get("property").evaluate();
             if (res.confident && res.value) {
-              propName = res.value;
+              propertyName = res.value;
             }
           }
         }
@@ -134,19 +134,21 @@ export default function(
         }
 
         if (has(StaticProperties, evaluatedPropType)) {
-          const properties = StaticProperties[evaluatedPropType];
-          if (has(properties, propName)) {
-            const builtIn = properties[propName];
-            this.addUnsupported(builtIn);
+          const BuiltInProperties = StaticProperties[evaluatedPropType];
+          if (has(BuiltInProperties, propertyName)) {
+            const StaticPropertyDependencies = BuiltInProperties[propertyName];
+            this.addUnsupported(StaticPropertyDependencies);
           }
         }
 
-        if (has(InstanceProperties, propName)) {
-          let builtIn = InstanceProperties[propName];
+        if (has(InstanceProperties, propertyName)) {
+          let InstancePropertyDependencies = InstanceProperties[propertyName];
           if (instanceType) {
-            builtIn = builtIn.filter(item => item.includes(instanceType));
+            InstancePropertyDependencies = InstancePropertyDependencies.filter(
+              module => module.includes(instanceType),
+            );
           }
-          this.addUnsupported(builtIn);
+          this.addUnsupported(InstancePropertyDependencies);
         }
       },
 
@@ -159,8 +161,8 @@ export default function(
         if (!has(BuiltIns, name)) return;
         if (path.scope.getBindingIdentifier(name)) return;
 
-        const builtIn = BuiltIns[name];
-        this.addUnsupported(builtIn);
+        const BuiltInDependencies = BuiltIns[name];
+        this.addUnsupported(BuiltInDependencies);
       },
     },
 
@@ -183,8 +185,8 @@ export default function(
           t.isIdentifier(key) &&
           has(InstanceProperties, key.name)
         ) {
-          const builtIn = InstanceProperties[key.name];
-          this.addUnsupported(builtIn);
+          const InstancePropertyDependencies = InstanceProperties[key.name];
+          this.addUnsupported(InstancePropertyDependencies);
         }
       }
     },
@@ -196,15 +198,15 @@ export default function(
       this.polyfillsSet = new Set();
 
       this.addImport = function(builtIn) {
-        if (builtIn && !this.polyfillsSet.has(builtIn)) {
+        if (!this.polyfillsSet.has(builtIn)) {
           this.polyfillsSet.add(builtIn);
           createImport(path, builtIn);
         }
       };
 
       this.addUnsupported = function(builtIn) {
-        const list = Array.isArray(builtIn) ? builtIn : [builtIn];
-        for (const module of list) {
+        const modules = Array.isArray(builtIn) ? builtIn : [builtIn];
+        for (const module of modules) {
           if (polyfills.has(module)) {
             this.addImport(module);
           }
