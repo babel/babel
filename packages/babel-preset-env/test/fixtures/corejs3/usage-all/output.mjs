@@ -2,6 +2,7 @@ import "core-js/modules/web.queue-microtask";
 import "core-js/modules/es.symbol.iterator";
 import "core-js/modules/es.symbol";
 import "core-js/modules/es.symbol.description";
+import "core-js/modules/es.regexp.exec";
 import "core-js/modules/es.symbol.match";
 import "core-js/modules/es.string.match";
 import "core-js/modules/es.promise";

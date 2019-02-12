@@ -10,6 +10,8 @@ require("core-js/modules/es.symbol");
 
 require("core-js/modules/es.symbol.description");
 
+require("core-js/modules/es.regexp.exec");
+
 require("core-js/modules/es.symbol.match");
 
 require("core-js/modules/es.string.match");

@@ -1,5 +1,6 @@
 import "core-js/modules/es.string.split";
 import "core-js/modules/es.string.replace";
+import "core-js/modules/es.regexp.exec";
 import "core-js/modules/es.string.search";
 import "core-js/modules/es.array.copy-within";
 import "core-js/modules/es.string.ends-with";
