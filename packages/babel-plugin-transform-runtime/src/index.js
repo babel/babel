@@ -266,7 +266,8 @@ export default declare((api, options, dirname) => {
           if (hasMapping(definitions.instanceMethods, property.name)) {
             let context1, context2;
             if (object.type === "Identifier") {
-              context1 = context2 = object;
+              context1 = object;
+              context2 = t.cloneNode(object);
             } else {
               context1 = path.scope.generateDeclaredUidIdentifier("context");
               context2 = t.assignmentExpression("=", context1, object);
