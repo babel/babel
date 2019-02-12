@@ -10,6 +10,14 @@ import {
 } from "../util/identifier";
 import { lineBreak, skipWhiteSpace } from "../util/whitespace";
 import * as charCodes from "charcodes";
+import {
+  BIND_SIMPLE_CATCH,
+  BIND_LEXICAL,
+  BIND_VAR,
+  BIND_FUNCTION,
+  functionFlags,
+  SCOPE_SIMPLE_CATCH,
+} from "../util/scopeflags";
 
 // Reused empty array added for node fields that are always empty.
 
@@ -17,6 +25,10 @@ const empty = [];
 
 const loopLabel = { kind: "loop" },
   switchLabel = { kind: "switch" };
+
+const FUNC_STATEMENT = 1,
+  FUNC_HANGING_STATEMENT = 2,
+  FUNC_NULLABLE_ID = 4;
 
 export default class StatementParser extends ExpressionParser {
   // ### Statement parsing
@@ -144,7 +156,7 @@ export default class StatementParser extends ExpressionParser {
         return this.parseDoStatement(node);
       case tt._for:
         return this.parseForStatement(node);
-      case tt._function: {
+      case tt._function:
         if (this.lookahead().type === tt.dot) break;
         if (
           context &&
@@ -155,15 +167,8 @@ export default class StatementParser extends ExpressionParser {
             "Function declaration not allowed in this context",
           );
         }
-        const result = this.parseFunctionStatement(node);
+        return this.parseFunctionStatement(node, false, !context);
 
-        // TODO: Remove this once we have proper scope tracking in place.
-        if (context && result.generator) {
-          this.unexpected(node.start);
-        }
-
-        return result;
-      }
       case tt._class:
         if (context) this.unexpected();
         return this.parseClass(node, true);
@@ -237,24 +242,19 @@ export default class StatementParser extends ExpressionParser {
 
         return result;
       }
-      case tt.name:
-        if (this.isContextual("async")) {
-          // peek ahead and see if next token is a function
-          const state = this.state.clone();
-          this.next();
-          if (this.match(tt._function) && !this.canInsertSemicolon()) {
-            if (context) {
-              this.raise(
-                this.state.lastTokStart,
-                "Function declaration not allowed in this context",
-              );
-            }
-            this.next();
-            return this.parseFunction(node, true, false, true);
-          } else {
-            this.state = state;
+
+      default: {
+        if (this.isAsyncFunction()) {
+          if (context) {
+            this.unexpected(
+              null,
+              "Function declaration not allowed in this context",
+            );
           }
+          this.next();
+          return this.parseFunctionStatement(node, true, !context);
         }
+      }
     }
 
     // If the statement does not start with a statement keyword or a
@@ -461,12 +461,13 @@ export default class StatementParser extends ExpressionParser {
 
     let awaitAt = -1;
     if (
-      (this.state.inAsync ||
-        (!this.state.inFunction && this.options.allowAwaitOutsideFunction)) &&
+      (this.inAsync ||
+        (!this.inFunction && this.options.allowAwaitOutsideFunction)) &&
       this.eatContextual("await")
     ) {
       awaitAt = this.state.lastTokStart;
     }
+    this.enterScope(0);
     this.expect(tt.parenL);
 
     if (this.match(tt.semi)) {
@@ -524,9 +525,18 @@ export default class StatementParser extends ExpressionParser {
     return this.parseFor(node, init);
   }
 
-  parseFunctionStatement(node: N.FunctionDeclaration): N.FunctionDeclaration {
+  parseFunctionStatement(
+    node: N.FunctionDeclaration,
+    isAsync?: boolean,
+    declarationPosition?: boolean,
+  ): N.FunctionDeclaration {
     this.next();
-    return this.parseFunction(node, true);
+    return this.parseFunction(
+      node,
+      FUNC_STATEMENT | (declarationPosition ? 0 : FUNC_HANGING_STATEMENT),
+      false,
+      isAsync,
+    );
   }
 
   parseIfStatement(node: N.IfStatement): N.IfStatement {
@@ -538,7 +548,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseReturnStatement(node: N.ReturnStatement): N.ReturnStatement {
-    if (!this.state.inFunction && !this.options.allowReturnOutsideFunction) {
+    if (!this.inFunction && !this.options.allowReturnOutsideFunction) {
       this.raise(this.state.start, "'return' outside of function");
     }
 
@@ -564,6 +574,7 @@ export default class StatementParser extends ExpressionParser {
     const cases = (node.cases = []);
     this.expect(tt.braceL);
     this.state.labels.push(switchLabel);
+    this.enterScope(0);
 
     // Statements under must be grouped (by label) in SwitchCase
     // nodes. `cur` is used to keep the node that we are currently
@@ -595,6 +606,7 @@ export default class StatementParser extends ExpressionParser {
         }
       }
     }
+    this.exitScope();
     if (cur) this.finishNode(cur, "SwitchCase");
     this.next(); // Closing brace
     this.state.labels.pop();
@@ -627,11 +639,19 @@ export default class StatementParser extends ExpressionParser {
       if (this.match(tt.parenL)) {
         this.expect(tt.parenL);
         clause.param = this.parseBindingAtom();
+        const simple = clause.param.type === "Identifier";
         const clashes: any = Object.create(null);
-        this.checkLVal(clause.param, true, clashes, "catch clause");
+        this.enterScope(simple ? SCOPE_SIMPLE_CATCH : 0);
+        this.checkLVal(
+          clause.param,
+          simple ? BIND_SIMPLE_CATCH : BIND_LEXICAL,
+          clashes,
+          "catch clause",
+        );
         this.expect(tt.parenR);
       } else {
         clause.param = null;
+        this.enterScope(0);
       }
 
       clause.body =
@@ -641,8 +661,9 @@ export default class StatementParser extends ExpressionParser {
         // outside of the function body.
         this.withTopicForbiddingContext(() =>
           // Parse the catch clause's body.
-          this.parseBlock(false),
+          this.parseBlock(false, false),
         );
+      this.exitScope();
 
       node.handler = this.finishNode(clause, "CatchClause");
     }
@@ -769,10 +790,19 @@ export default class StatementParser extends ExpressionParser {
   // strict"` declarations when `allowStrict` is true (used for
   // function bodies).
 
-  parseBlock(allowDirectives?: boolean): N.BlockStatement {
+  parseBlock(
+    allowDirectives?: boolean = false,
+    createNewLexicalScope?: boolean = true,
+  ): N.BlockStatement {
     const node = this.startNode();
     this.expect(tt.braceL);
+    if (createNewLexicalScope) {
+      this.enterScope(0);
+    }
     this.parseBlockBody(node, allowDirectives, false, tt.braceR);
+    if (createNewLexicalScope) {
+      this.exitScope();
+    }
     return this.finishNode(node, "BlockStatement");
   }
 
@@ -858,6 +888,7 @@ export default class StatementParser extends ExpressionParser {
     node.update = this.match(tt.parenR) ? null : this.parseExpression();
     this.expect(tt.parenR);
 
+    this.exitScope();
     node.body =
       // For the smartPipelines plugin: Disable topic references from outer
       // contexts within the loop body. They are permitted in test expressions,
@@ -893,6 +924,7 @@ export default class StatementParser extends ExpressionParser {
     node.right = this.parseExpression();
     this.expect(tt.parenR);
 
+    this.exitScope();
     node.body =
       // For the smartPipelines plugin:
       // Disable topic references from outer contexts within the loop body.
@@ -954,7 +986,12 @@ export default class StatementParser extends ExpressionParser {
       this.unexpected(null, "let is disallowed as a lexically bound name");
     }
     decl.id = this.parseBindingAtom();
-    this.checkLVal(decl.id, true, undefined, "variable declaration");
+    this.checkLVal(
+      decl.id,
+      kind === "var" ? BIND_VAR : BIND_LEXICAL,
+      undefined,
+      "variable declaration",
+    );
   }
 
   // Parse a function declaration or literal (depending on the
@@ -962,51 +999,45 @@ export default class StatementParser extends ExpressionParser {
 
   parseFunction<T: N.NormalFunction>(
     node: T,
-    isStatement: boolean,
+    statement: number,
     allowExpressionBody?: boolean = false,
     isAsync?: boolean = false,
-    optionalId?: boolean = false,
   ): T {
-    const oldInFunc = this.state.inFunction;
-    const oldInMethod = this.state.inMethod;
-    const oldInAsync = this.state.inAsync;
-    const oldInGenerator = this.state.inGenerator;
-    const oldInClassProperty = this.state.inClassProperty;
-    const oldYieldPos = this.state.yieldPos;
-    const oldAwaitPos = this.state.awaitPos;
-    this.state.inFunction = true;
-    this.state.inMethod = false;
-    this.state.inClassProperty = false;
-    this.state.yieldPos = 0;
-    this.state.awaitPos = 0;
+    const isStatement = statement & FUNC_STATEMENT;
+    const isHangingStatement = statement & FUNC_HANGING_STATEMENT;
 
     this.initFunction(node, isAsync);
 
-    node.generator = this.eat(tt.star);
-
-    if (isStatement && !optionalId && !this.match(tt.name)) {
+    if (this.match(tt.star) && isHangingStatement) {
       this.unexpected();
     }
+    node.generator = this.eat(tt.star);
 
-    // When parsing function expression, the binding identifier is parsed
-    // according to the rules inside the function.
-    // e.g. (function* yield() {}) is invalid because "yield" is disallowed in
-    // generators.
-    // This isn't the case with function declarations: function* yield() {} is
-    // valid because yield is parsed as if it was outside the generator.
-    // Therefore, this.state.inGenerator is set before or after parsing the
-    // function id according to the "isStatement" parameter.
-    // The same applies to await & async functions.
-    if (!isStatement) {
-      this.state.inAsync = isAsync;
-      this.state.inGenerator = node.generator;
-    }
-    if (this.match(tt.name)) {
-      node.id = this.parseIdentifier();
-    }
     if (isStatement) {
-      this.state.inAsync = isAsync;
-      this.state.inGenerator = node.generator;
+      node.id =
+        statement & FUNC_NULLABLE_ID && !this.match(tt.name)
+          ? null
+          : this.parseIdentifier();
+      if (node.id && !isHangingStatement) {
+        this.checkLVal(
+          node.id,
+          this.inModule && !this.inFunction ? BIND_LEXICAL : BIND_FUNCTION,
+          null,
+          "function name",
+        );
+      }
+    }
+
+    const oldInClassProperty = this.state.inClassProperty;
+    const oldYieldPos = this.state.yieldPos;
+    const oldAwaitPos = this.state.awaitPos;
+    this.state.inClassProperty = false;
+    this.state.yieldPos = 0;
+    this.state.awaitPos = 0;
+    this.enterScope(functionFlags(node.async, node.generator));
+
+    if (!isStatement) {
+      node.id = this.match(tt.name) ? this.parseIdentifier() : null;
     }
 
     this.parseFunctionParams(node);
@@ -1023,10 +1054,6 @@ export default class StatementParser extends ExpressionParser {
       );
     });
 
-    this.state.inFunction = oldInFunc;
-    this.state.inMethod = oldInMethod;
-    this.state.inAsync = oldInAsync;
-    this.state.inGenerator = oldInGenerator;
     this.state.inClassProperty = oldInClassProperty;
     this.state.yieldPos = oldYieldPos;
     this.state.awaitPos = oldAwaitPos;
@@ -1099,10 +1126,11 @@ export default class StatementParser extends ExpressionParser {
     const state = { hadConstructor: false };
     let decorators: N.Decorator[] = [];
     const classBody: N.ClassBody = this.startNode();
-
     classBody.body = [];
 
     this.expect(tt.braceL);
+
+    const constructorAllowsSuper = node.superClass !== null;
 
     // For the smartPipelines plugin: Disable topic references from outer
     // contexts within the class body. They are permitted in test expressions,
@@ -1133,7 +1161,7 @@ export default class StatementParser extends ExpressionParser {
           decorators = [];
         }
 
-        this.parseClassMember(classBody, member, state);
+        this.parseClassMember(classBody, member, state, constructorAllowsSuper);
 
         if (
           member.kind === "constructor" &&
@@ -1164,6 +1192,7 @@ export default class StatementParser extends ExpressionParser {
     classBody: N.ClassBody,
     member: N.ClassMember,
     state: { hadConstructor: boolean },
+    constructorAllowsSuper: boolean,
   ): void {
     let isStatic = false;
     const containsEsc = this.state.containsEsc;
@@ -1185,6 +1214,7 @@ export default class StatementParser extends ExpressionParser {
           false,
           false,
           /* isConstructor */ false,
+          false,
         );
         return;
       } else if (this.isClassProperty()) {
@@ -1204,7 +1234,13 @@ export default class StatementParser extends ExpressionParser {
       isStatic = true;
     }
 
-    this.parseClassMemberWithIsStatic(classBody, member, state, isStatic);
+    this.parseClassMemberWithIsStatic(
+      classBody,
+      member,
+      state,
+      isStatic,
+      constructorAllowsSuper,
+    );
   }
 
   parseClassMemberWithIsStatic(
@@ -1212,6 +1248,7 @@ export default class StatementParser extends ExpressionParser {
     member: N.ClassMember,
     state: { hadConstructor: boolean },
     isStatic: boolean,
+    constructorAllowsSuper: boolean,
   ) {
     const publicMethod: $FlowSubtype<N.ClassMethod> = member;
     const privateMethod: $FlowSubtype<N.ClassPrivateMethod> = member;
@@ -1244,6 +1281,7 @@ export default class StatementParser extends ExpressionParser {
         true,
         false,
         /* isConstructor */ false,
+        false,
       );
 
       return;
@@ -1266,7 +1304,7 @@ export default class StatementParser extends ExpressionParser {
 
       // a normal method
       const isConstructor = this.isNonstaticConstructor(publicMethod);
-
+      let allowsDirectSuper = false;
       if (isConstructor) {
         publicMethod.kind = "constructor";
 
@@ -1282,6 +1320,7 @@ export default class StatementParser extends ExpressionParser {
           this.raise(key.start, "Duplicate constructor in the same class");
         }
         state.hadConstructor = true;
+        allowsDirectSuper = constructorAllowsSuper;
       }
 
       this.pushClassMethod(
@@ -1290,6 +1329,7 @@ export default class StatementParser extends ExpressionParser {
         false,
         false,
         isConstructor,
+        allowsDirectSuper,
       );
     } else if (this.isClassProperty()) {
       if (isPrivate) {
@@ -1327,6 +1367,7 @@ export default class StatementParser extends ExpressionParser {
           isGenerator,
           true,
           /* isConstructor */ false,
+          false,
         );
       }
     } else if (
@@ -1356,6 +1397,7 @@ export default class StatementParser extends ExpressionParser {
           false,
           false,
           /* isConstructor */ false,
+          false,
         );
       }
 
@@ -1422,6 +1464,7 @@ export default class StatementParser extends ExpressionParser {
     isGenerator: boolean,
     isAsync: boolean,
     isConstructor: boolean,
+    allowsDirectSuper: boolean,
   ): void {
     classBody.body.push(
       this.parseMethod(
@@ -1429,6 +1472,7 @@ export default class StatementParser extends ExpressionParser {
         isGenerator,
         isAsync,
         isConstructor,
+        allowsDirectSuper,
         "ClassMethod",
       ),
     );
@@ -1447,6 +1491,7 @@ export default class StatementParser extends ExpressionParser {
         isGenerator,
         isAsync,
         /* isConstructor */ false,
+        false,
         "ClassPrivateMethod",
       ),
     );
@@ -1466,13 +1511,10 @@ export default class StatementParser extends ExpressionParser {
   parseClassPrivateProperty(
     node: N.ClassPrivateProperty,
   ): N.ClassPrivateProperty {
-    const oldInMethod = this.state.inMethod;
-    this.state.inMethod = false;
     this.state.inClassProperty = true;
     node.value = this.eat(tt.eq) ? this.parseMaybeAssign() : null;
     this.semicolon();
     this.state.inClassProperty = false;
-    this.state.inMethod = oldInMethod;
     return this.finishNode(node, "ClassPrivateProperty");
   }
 
@@ -1481,8 +1523,6 @@ export default class StatementParser extends ExpressionParser {
       this.expectPlugin("classProperties");
     }
 
-    const oldInMethod = this.state.inMethod;
-    this.state.inMethod = false;
     this.state.inClassProperty = true;
 
     if (this.match(tt.eq)) {
@@ -1494,7 +1534,6 @@ export default class StatementParser extends ExpressionParser {
     }
     this.semicolon();
     this.state.inClassProperty = false;
-    this.state.inMethod = oldInMethod;
 
     return this.finishNode(node, "ClassProperty");
   }
@@ -1666,13 +1705,18 @@ export default class StatementParser extends ExpressionParser {
 
     const isAsync = this.isAsyncFunction();
 
-    if (this.eat(tt._function) || isAsync) {
+    if (this.match(tt._function) || isAsync) {
+      this.next();
       if (isAsync) {
-        this.eatContextual("async");
-        this.expect(tt._function);
+        this.next();
       }
 
-      return this.parseFunction(expr, true, false, isAsync, true);
+      return this.parseFunction(
+        expr,
+        FUNC_STATEMENT | FUNC_NULLABLE_ID,
+        false,
+        isAsync,
+      );
     } else if (this.match(tt._class)) {
       return this.parseClass(expr, true, true);
     } else if (this.match(tt.at)) {
@@ -1927,7 +1971,12 @@ export default class StatementParser extends ExpressionParser {
     contextDescription: string,
   ): void {
     specifier.local = this.parseIdentifier();
-    this.checkLVal(specifier.local, true, undefined, contextDescription);
+    this.checkLVal(
+      specifier.local,
+      BIND_LEXICAL,
+      undefined,
+      contextDescription,
+    );
     node.specifiers.push(this.finishNode(specifier, type));
   }
 
@@ -2000,7 +2049,12 @@ export default class StatementParser extends ExpressionParser {
       );
       specifier.local = specifier.imported.__clone();
     }
-    this.checkLVal(specifier.local, true, undefined, "import specifier");
+    this.checkLVal(
+      specifier.local,
+      BIND_LEXICAL,
+      undefined,
+      "import specifier",
+    );
     node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
   }
 }

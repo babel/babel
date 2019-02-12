@@ -9,6 +9,7 @@ import type State from "../tokenizer/state";
 import { types as tc } from "../tokenizer/context";
 import * as charCodes from "charcodes";
 import { isIteratorStart } from "../util/identifier";
+import { type BindingTypes, BIND_NONE, BIND_LEXICAL } from "../util/scopeflags";
 
 const reservedTypes = [
   "any",
@@ -1761,7 +1762,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               "arrow function parameters",
             );
             // Use super's method to force the parameters to be checked
-            super.checkFunctionNameAndParams(node, true);
+            super.checkParams(node, false, true);
           } else {
             arrows.push(node);
           }
@@ -1995,14 +1996,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkLVal(
       expr: N.Expression,
-      isBinding: ?boolean,
+      bindingType: ?BindingTypes = BIND_NONE,
       checkClashes: ?{ [key: string]: boolean },
       contextDescription: string,
     ): void {
       if (expr.type !== "TypeCastExpression") {
         return super.checkLVal(
           expr,
-          isBinding,
+          bindingType,
           checkClashes,
           contextDescription,
         );
@@ -2047,6 +2048,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isGenerator: boolean,
       isAsync: boolean,
       isConstructor: boolean,
+      allowsDirectSuper: boolean,
     ): void {
       if ((method: $FlowFixMe).variance) {
         this.unexpected((method: $FlowFixMe).variance.start);
@@ -2064,6 +2066,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isGenerator,
         isAsync,
         isConstructor,
+        allowsDirectSuper,
       );
     }
 
@@ -2217,7 +2220,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         ? this.flowParseRestrictedIdentifier(true)
         : this.parseIdentifier();
 
-      this.checkLVal(specifier.local, true, undefined, contextDescription);
+      this.checkLVal(
+        specifier.local,
+        BIND_LEXICAL,
+        undefined,
+        contextDescription,
+      );
       node.specifiers.push(this.finishNode(specifier, type));
     }
 
@@ -2327,12 +2335,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         );
       }
 
-      this.checkLVal(specifier.local, true, undefined, "import specifier");
+      this.checkLVal(
+        specifier.local,
+        BIND_LEXICAL,
+        undefined,
+        "import specifier",
+      );
       node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
     }
 
     // parse function type parameters - function foo<T>() {}
-    parseFunctionParams(node: N.Function): void {
+    parseFunctionParams(node: N.Function, allowModifiers?: boolean): void {
       // $FlowFixMe
       const kind = node.kind;
       if (kind !== "get" && kind !== "set" && this.isRelational("<")) {
@@ -2340,7 +2353,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           /* allowDefault */ false,
         );
       }
-      super.parseFunctionParams(node);
+      super.parseFunctionParams(node, allowModifiers);
     }
 
     // parse flow type annotations on variable declarator heads - let foo: string = bar
@@ -2519,8 +2532,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    checkFunctionNameAndParams(
+    checkParams(
       node: N.Function,
+      allowDuplicates: boolean,
       isArrowFunction: ?boolean,
     ): void {
       if (
@@ -2530,7 +2544,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return;
       }
 
-      return super.checkFunctionNameAndParams(node, isArrowFunction);
+      return super.checkParams(node, allowDuplicates, isArrowFunction);
     }
 
     parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {

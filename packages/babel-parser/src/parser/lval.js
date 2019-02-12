@@ -16,6 +16,7 @@ import type {
 import type { Pos, Position } from "../util/location";
 import { isStrictBindReservedWord } from "../util/identifier";
 import { NodeUtils } from "./node";
+import { type BindingTypes, BIND_NONE, BIND_OUTSIDE } from "../util/scopeflags";
 
 export default class LValParser extends NodeUtils {
   // Forward-declaration: defined in expression.js
@@ -262,9 +263,7 @@ export default class LValParser extends NodeUtils {
         elts.push(this.parseAssignableListItemTypes(this.parseRest()));
         this.checkCommaAfterRest(
           close,
-          this.state.inFunction && this.state.inParameters
-            ? "parameter"
-            : "element",
+          this.inFunction && this.state.inParameters ? "parameter" : "element",
         );
         this.expect(close);
         break;
@@ -325,7 +324,7 @@ export default class LValParser extends NodeUtils {
 
   checkLVal(
     expr: Expression,
-    isBinding: ?boolean,
+    bindingType: ?BindingTypes = BIND_NONE,
     checkClashes: ?{ [key: string]: boolean },
     contextDescription: string,
   ): void {
@@ -337,7 +336,7 @@ export default class LValParser extends NodeUtils {
         ) {
           this.raise(
             expr.start,
-            `${isBinding ? "Binding" : "Assigning to"} '${
+            `${bindingType ? "Binding" : "Assigning to"} '${
               expr.name
             }' in strict mode`,
           );
@@ -358,15 +357,19 @@ export default class LValParser extends NodeUtils {
           const key = `_${expr.name}`;
 
           if (checkClashes[key]) {
-            this.raise(expr.start, "Argument name clash in strict mode");
+            this.raise(expr.start, "Argument name clash");
           } else {
             checkClashes[key] = true;
+          }
+
+          if (bindingType !== BIND_NONE && bindingType !== BIND_OUTSIDE) {
+            this.declareName(expr.name, bindingType, expr.start);
           }
         }
         break;
 
       case "MemberExpression":
-        if (isBinding) this.raise(expr.start, "Binding member expression");
+        if (bindingType) this.raise(expr.start, "Binding member expression");
         break;
 
       case "ObjectPattern":
@@ -374,7 +377,7 @@ export default class LValParser extends NodeUtils {
           if (prop.type === "ObjectProperty") prop = prop.value;
           this.checkLVal(
             prop,
-            isBinding,
+            bindingType,
             checkClashes,
             "object destructuring pattern",
           );
@@ -386,7 +389,7 @@ export default class LValParser extends NodeUtils {
           if (elem) {
             this.checkLVal(
               elem,
-              isBinding,
+              bindingType,
               checkClashes,
               "array destructuring pattern",
             );
@@ -397,19 +400,24 @@ export default class LValParser extends NodeUtils {
       case "AssignmentPattern":
         this.checkLVal(
           expr.left,
-          isBinding,
+          bindingType,
           checkClashes,
           "assignment pattern",
         );
         break;
 
       case "RestElement":
-        this.checkLVal(expr.argument, isBinding, checkClashes, "rest element");
+        this.checkLVal(
+          expr.argument,
+          bindingType,
+          checkClashes,
+          "rest element",
+        );
         break;
 
       default: {
         const message =
-          (isBinding
+          (bindingType
             ? /* istanbul ignore next */ "Binding invalid"
             : "Invalid") +
           " left-hand side" +

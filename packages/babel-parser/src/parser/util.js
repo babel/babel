@@ -3,7 +3,9 @@
 import { types as tt, type TokenType } from "../tokenizer/types";
 import Tokenizer from "../tokenizer";
 import type { Node } from "../types";
-import { lineBreak } from "../util/whitespace";
+import { lineBreak, skipWhiteSpace } from "../util/whitespace";
+
+const literal = /^(?:'((?:\\.|[^'])*?)'|"((?:\\.|[^"])*?)"|;)/;
 
 // ## Parser utilities
 
@@ -164,5 +166,19 @@ export default class UtilParser extends Tokenizer {
         "Await cannot be used as name inside an async function",
       );
     }
+  }
+
+  strictDirective(start: number): boolean {
+    for (;;) {
+      skipWhiteSpace.lastIndex = start;
+      // $FlowIgnore
+      start += skipWhiteSpace.exec(this.state.input)[0].length;
+      const match = literal.exec(this.state.input.slice(start));
+      if (!match) break;
+      if ((match[1] || match[2]) === "use strict") return true;
+      start += match[0].length;
+    }
+
+    return false;
   }
 }

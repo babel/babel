@@ -5,6 +5,7 @@ import type { File, JSXOpeningElement } from "../types";
 import type { PluginList } from "../plugin-utils";
 import { getOptions } from "../options";
 import StatementParser from "./statement";
+import { SCOPE_TOP } from "../util/scopeflags";
 
 export type PluginsMap = Map<string, { [string]: any }>;
 
@@ -25,6 +26,7 @@ export default class Parser extends StatementParser {
   }
 
   parse(): File {
+    this.enterScope(SCOPE_TOP);
     const file = this.startNode();
     const program = this.startNode();
     this.nextToken();
