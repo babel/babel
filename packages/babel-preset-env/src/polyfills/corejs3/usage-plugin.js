@@ -4,11 +4,14 @@ import { filterItems } from "../../env-filter";
 import {
   CommonIterators,
   PromiseDependencies,
-  definitions,
+  BuiltIns,
+  StaticProperties,
+  InstanceProperties,
 } from "./built-in-definitions";
 import { logUsagePolyfills } from "../../debug";
 import {
   createImport,
+  getType,
   has,
   isPolyfillSource,
   isPolyfillRequire,
@@ -33,11 +36,6 @@ const corejs3PolyfillsWithShippedProposals = corejs3ShippedProposalsList.reduce(
   },
   { ...corejs3PolyfillsWithoutProposals },
 );
-
-function getType(target) {
-  if (Array.isArray(target)) return "array";
-  return typeof target;
-}
 
 export default function(
   { types: t },
@@ -88,13 +86,17 @@ export default function(
     // Symbol()
     // new Promise
     ReferencedIdentifier(path) {
-      const { node, parent, scope } = path;
+      const {
+        node: { name },
+        parent,
+        scope,
+      } = path;
 
       if (t.isMemberExpression(parent)) return;
-      if (!has(definitions.builtins, node.name)) return;
-      if (scope.getBindingIdentifier(node.name)) return;
+      if (!has(BuiltIns, name)) return;
+      if (scope.getBindingIdentifier(name)) return;
 
-      const builtIn = definitions.builtins[node.name];
+      const builtIn = BuiltIns[name];
       this.addUnsupported(builtIn);
     },
 
@@ -126,9 +128,11 @@ export default function(
         const { object, property } = node;
 
         if (!t.isReferenced(object, node)) return;
-        let instanceType;
+
         let evaluatedPropType = object.name;
         let propertyName = property.name;
+        let instanceType;
+
         if (node.computed) {
           if (t.isStringLiteral(property)) {
             propertyName = property.value;
@@ -139,6 +143,7 @@ export default function(
             }
           }
         }
+
         if (path.scope.getBindingIdentifier(object.name)) {
           const result = path.get("object").evaluate();
           if (result.value) {
@@ -147,16 +152,17 @@ export default function(
             evaluatedPropType = result.deopt.node.name;
           }
         }
-        if (has(definitions.staticMethods, evaluatedPropType)) {
-          const staticMethods = definitions.staticMethods[evaluatedPropType];
-          if (has(staticMethods, propertyName)) {
-            const builtIn = staticMethods[propertyName];
+
+        if (has(StaticProperties, evaluatedPropType)) {
+          const properties = StaticProperties[evaluatedPropType];
+          if (has(properties, propertyName)) {
+            const builtIn = properties[propertyName];
             this.addUnsupported(builtIn);
           }
         }
 
-        if (has(definitions.instanceMethods, propertyName)) {
-          let builtIn = definitions.instanceMethods[propertyName];
+        if (has(InstanceProperties, propertyName)) {
+          let builtIn = InstanceProperties[propertyName];
           if (instanceType) {
             builtIn = builtIn.filter(item => item.includes(instanceType));
           }
@@ -170,10 +176,10 @@ export default function(
 
         const { name } = path.node.object;
 
-        if (!has(definitions.builtins, name)) return;
+        if (!has(BuiltIns, name)) return;
         if (path.scope.getBindingIdentifier(name)) return;
 
-        const builtIn = definitions.builtins[name];
+        const builtIn = BuiltIns[name];
         this.addUnsupported(builtIn);
       },
     },
@@ -190,10 +196,8 @@ export default function(
       }
 
       if (!path.isReferenced()) return;
-
       if (!t.isObjectPattern(id)) return;
       if (!t.isReferenced(init, node)) return;
-
       // doesn't reference the global
       if (init && path.scope.getBindingIdentifier(init.name)) return;
 
@@ -201,9 +205,9 @@ export default function(
         if (
           !node.computed &&
           t.isIdentifier(key) &&
-          has(definitions.instanceMethods, key.name)
+          has(InstanceProperties, key.name)
         ) {
-          const builtIn = definitions.instanceMethods[key.name];
+          const builtIn = InstanceProperties[key.name];
           this.addUnsupported(builtIn);
         }
       }
@@ -215,6 +219,7 @@ export default function(
         this.addUnsupported(CommonIterators);
       }
     },
+
     // destructuring
     CatchClause(path) {
       const { param } = path.node;
@@ -222,6 +227,7 @@ export default function(
         this.addUnsupported(CommonIterators);
       }
     },
+
     // destructuring
     ForXStatement(path) {
       if (path.node.left.type === "ArrayPattern") {
@@ -246,20 +252,18 @@ export default function(
   return {
     name: "corejs3-usage",
     pre({ path }) {
-      this.builtIns = new Set();
-
-      this.addImport = function(builtIn) {
-        if (builtIn && !this.builtIns.has(builtIn) && available.has(builtIn)) {
-          this.builtIns.add(builtIn);
-          createImport(path, builtIn);
-        }
-      };
+      this.polyfillsSet = new Set();
 
       this.addUnsupported = function(builtIn) {
         const list = Array.isArray(builtIn) ? builtIn : [builtIn];
-        for (const mod of list) {
-          if (polyfills.has(mod)) {
-            this.addImport(mod);
+        for (const module of list) {
+          if (
+            !this.polyfillsSet.has(module) &&
+            polyfills.has(module) &&
+            available.has(module)
+          ) {
+            this.polyfillsSet.add(module);
+            createImport(path, module);
           }
         }
       };
@@ -267,7 +271,7 @@ export default function(
     post() {
       if (debug) {
         logUsagePolyfills(
-          this.builtIns,
+          this.polyfillsSet,
           this.file.opts.filename,
           polyfillTargets,
           corejs3Polyfills,

@@ -61,6 +61,8 @@ Using polyfills with `entry` option:
   es.array.from { "electron":"0.36" }
   es.array.concat { "electron":"0.36" }
   es.array.filter { "electron":"0.36" }
+  es.array.flat { "electron":"0.36" }
+  es.array.flat-map { "electron":"0.36" }
   es.array.includes { "electron":"0.36" }
   es.array.index-of { "electron":"0.36" }
   es.array.last-index-of { "electron":"0.36" }
@@ -69,11 +71,9 @@ Using polyfills with `entry` option:
   es.array.sort { "electron":"0.36" }
   es.array.splice { "electron":"0.36" }
   es.array.species { "electron":"0.36" }
-  es.array.iterator { "electron":"0.36" }
-  es.array.flat { "electron":"0.36" }
-  es.array.flat-map { "electron":"0.36" }
   es.array.unscopables.flat { "electron":"0.36" }
   es.array.unscopables.flat-map { "electron":"0.36" }
+  es.array.iterator { "electron":"0.36" }
   es.string.ends-with { "electron":"0.36" }
   es.string.includes { "electron":"0.36" }
   es.string.match { "electron":"0.36" }

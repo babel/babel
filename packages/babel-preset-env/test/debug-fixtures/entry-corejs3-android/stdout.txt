@@ -90,6 +90,8 @@ Using polyfills with `entry` option:
   es.array.filter { "android":"4" }
   es.array.find { "android":"4" }
   es.array.find-index { "android":"4" }
+  es.array.flat { "android":"4" }
+  es.array.flat-map { "android":"4" }
   es.array.for-each { "android":"4" }
   es.array.includes { "android":"4" }
   es.array.index-of { "android":"4" }
@@ -104,11 +106,9 @@ Using polyfills with `entry` option:
   es.array.sort { "android":"4" }
   es.array.splice { "android":"4" }
   es.array.species { "android":"4" }
-  es.array.iterator { "android":"4" }
-  es.array.flat { "android":"4" }
-  es.array.flat-map { "android":"4" }
   es.array.unscopables.flat { "android":"4" }
   es.array.unscopables.flat-map { "android":"4" }
+  es.array.iterator { "android":"4" }
   es.string.from-code-point { "android":"4" }
   es.string.raw { "android":"4" }
   es.string.code-point-at { "android":"4" }

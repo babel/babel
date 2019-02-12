@@ -310,7 +310,6 @@ export default declare((api, options, dirname) => {
       // transform `Symbol.iterator in something` to calling `isIterable(something)` helper
       BinaryExpression(path) {
         if (!injectCoreJS) return;
-
         if (path.node.operator !== "in") return;
         if (!path.get("left").matchesPattern("Symbol.iterator")) return;
 

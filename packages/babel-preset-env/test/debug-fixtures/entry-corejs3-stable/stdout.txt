@@ -91,6 +91,8 @@ Using polyfills with `entry` option:
   es.array.filter {}
   es.array.find {}
   es.array.find-index {}
+  es.array.flat {}
+  es.array.flat-map {}
   es.array.for-each {}
   es.array.includes {}
   es.array.index-of {}
@@ -105,11 +107,9 @@ Using polyfills with `entry` option:
   es.array.sort {}
   es.array.splice {}
   es.array.species {}
-  es.array.iterator {}
-  es.array.flat {}
-  es.array.flat-map {}
   es.array.unscopables.flat {}
   es.array.unscopables.flat-map {}
+  es.array.iterator {}
   es.string.from-code-point {}
   es.string.raw {}
   es.string.code-point-at {}

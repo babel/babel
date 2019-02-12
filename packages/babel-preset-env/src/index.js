@@ -204,7 +204,5 @@ export default declare((api, opts) => {
     }
   }
 
-  return {
-    plugins,
-  };
+  return { plugins };
 });

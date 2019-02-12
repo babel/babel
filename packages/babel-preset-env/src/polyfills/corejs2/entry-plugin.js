@@ -16,37 +16,19 @@ export default function(
     getPlatformSpecificDefaultFor(polyfillTargets),
   );
 
-  function replaceWithPolyfillImports(path) {
-    if (regenerator) {
-      createImport(path, "regenerator-runtime");
-    }
-
-    const items = Array.isArray(polyfills) ? new Set(polyfills) : polyfills;
-
-    for (const p of Array.from(items).reverse()) {
-      createImport(path, p);
-    }
-
-    path.remove();
-  }
-
   const isPolyfillImport = {
     ImportDeclaration(path) {
       if (
         path.node.specifiers.length === 0 &&
         isPolyfillSource(path.node.source.value)
       ) {
-        this.importPolyfillIncluded = true;
-
-        replaceWithPolyfillImports(path);
+        this.replaceBySeparateModulesImport(path);
       }
     },
     Program(path) {
       path.get("body").forEach(bodyPath => {
         if (isPolyfillRequire(t, bodyPath)) {
-          this.importPolyfillIncluded = true;
-
-          replaceWithPolyfillImports(bodyPath);
+          this.replaceBySeparateModulesImport(bodyPath);
         }
       });
     },
@@ -56,8 +38,23 @@ export default function(
     name: "corejs2-entry",
     visitor: isPolyfillImport,
     pre() {
-      this.numPolyfillImports = 0;
       this.importPolyfillIncluded = false;
+
+      this.replaceBySeparateModulesImport = function(path) {
+        this.importPolyfillIncluded = true;
+
+        if (regenerator) {
+          createImport(path, "regenerator-runtime");
+        }
+
+        const modules = Array.from(polyfills).reverse();
+
+        for (const module of modules) {
+          createImport(path, module);
+        }
+
+        path.remove();
+      };
     },
     post() {
       if (debug) {

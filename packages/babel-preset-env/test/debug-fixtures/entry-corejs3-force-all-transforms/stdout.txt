@@ -48,12 +48,12 @@ Using polyfills with `entry` option:
   es.object.define-setter { "chrome":"55" }
   es.object.lookup-getter { "chrome":"55" }
   es.object.lookup-setter { "chrome":"55" }
-  es.array.sort { "chrome":"55" }
-  es.array.iterator { "chrome":"55" }
   es.array.flat { "chrome":"55" }
   es.array.flat-map { "chrome":"55" }
+  es.array.sort { "chrome":"55" }
   es.array.unscopables.flat { "chrome":"55" }
   es.array.unscopables.flat-map { "chrome":"55" }
+  es.array.iterator { "chrome":"55" }
   es.string.pad-end { "chrome":"55" }
   es.string.pad-start { "chrome":"55" }
   es.string.replace { "chrome":"55" }
