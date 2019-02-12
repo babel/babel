@@ -40,7 +40,7 @@ export function isPluginRequired(supportedEnvironments, plugin) {
   return isRequiredForEnvironments.length > 0;
 }
 
-export function filterItems(
+export default function(
   list,
   includes,
   excludes,

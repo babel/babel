@@ -1,6 +1,7 @@
 import corejs3Polyfills from "core-js-compat/data";
 import corejs3ShippedProposalsList from "./shipped-proposals";
-import { filterItems } from "../../env-filter";
+import getModulesListForTargetVersion from "./get-modules-list-for-target-version";
+import filterItems from "../../filter-items";
 import {
   CommonIterators,
   PromiseDependencies,
@@ -8,7 +9,6 @@ import {
   StaticProperties,
   InstanceProperties,
 } from "./built-in-definitions";
-import { logUsagePolyfills } from "../../debug";
 import {
   createImport,
   getType,
@@ -16,7 +16,7 @@ import {
   isPolyfillSource,
   isPolyfillRequire,
 } from "../../utils";
-import getModulesListForTargetVersion from "./get-modules-list-for-target-version";
+import { logUsagePolyfills } from "../../debug";
 
 const NO_DIRECT_POLYFILL_IMPORT = `
   When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
@@ -96,8 +96,8 @@ export default function(
       if (!has(BuiltIns, name)) return;
       if (scope.getBindingIdentifier(name)) return;
 
-      const builtIn = BuiltIns[name];
-      this.addUnsupported(builtIn);
+      const BuiltInDependencies = BuiltIns[name];
+      this.addUnsupported(BuiltInDependencies);
     },
 
     // for-of loop
@@ -154,19 +154,21 @@ export default function(
         }
 
         if (has(StaticProperties, evaluatedPropType)) {
-          const properties = StaticProperties[evaluatedPropType];
-          if (has(properties, propertyName)) {
-            const builtIn = properties[propertyName];
-            this.addUnsupported(builtIn);
+          const BuiltInProperties = StaticProperties[evaluatedPropType];
+          if (has(BuiltInProperties, propertyName)) {
+            const StaticPropertyDependencies = BuiltInProperties[propertyName];
+            this.addUnsupported(StaticPropertyDependencies);
           }
         }
 
         if (has(InstanceProperties, propertyName)) {
-          let builtIn = InstanceProperties[propertyName];
+          let InstancePropertyDependencies = InstanceProperties[propertyName];
           if (instanceType) {
-            builtIn = builtIn.filter(item => item.includes(instanceType));
+            InstancePropertyDependencies = InstancePropertyDependencies.filter(
+              module => module.includes(instanceType),
+            );
           }
-          this.addUnsupported(builtIn);
+          this.addUnsupported(InstancePropertyDependencies);
         }
       },
 
@@ -179,8 +181,8 @@ export default function(
         if (!has(BuiltIns, name)) return;
         if (path.scope.getBindingIdentifier(name)) return;
 
-        const builtIn = BuiltIns[name];
-        this.addUnsupported(builtIn);
+        const BuiltInDependencies = BuiltIns[name];
+        this.addUnsupported(BuiltInDependencies);
       },
     },
 
@@ -207,8 +209,8 @@ export default function(
           t.isIdentifier(key) &&
           has(InstanceProperties, key.name)
         ) {
-          const builtIn = InstanceProperties[key.name];
-          this.addUnsupported(builtIn);
+          const InstancePropertyDependencies = InstanceProperties[key.name];
+          this.addUnsupported(InstancePropertyDependencies);
         }
       }
     },
@@ -255,8 +257,8 @@ export default function(
       this.polyfillsSet = new Set();
 
       this.addUnsupported = function(builtIn) {
-        const list = Array.isArray(builtIn) ? builtIn : [builtIn];
-        for (const module of list) {
+        const modules = Array.isArray(builtIn) ? builtIn : [builtIn];
+        for (const module of modules) {
           if (
             !this.polyfillsSet.has(module) &&
             polyfills.has(module) &&

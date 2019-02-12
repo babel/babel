@@ -1,6 +1,6 @@
 import corejs3Polyfills from "core-js-compat/data";
-import { filterItems } from "../../env-filter";
-import { logEntryPolyfills } from "../../debug";
+import getModulesListForTargetVersion from "./get-modules-list-for-target-version";
+import filterItems from "../../filter-items";
 import {
   createImport,
   isCoreJSSource,
@@ -8,7 +8,7 @@ import {
   isBabelPolyfillSource,
   isBabelPolyfillRequire,
 } from "../../utils";
-import getModulesListForTargetVersion from "./get-modules-list-for-target-version";
+import { logEntryPolyfills } from "../../debug";
 
 const BABEL_POLYFILL_DEPRECATION = `
   \`@babel/polyfill\` is deprecated. Please, use required parts of \`core-js\`
