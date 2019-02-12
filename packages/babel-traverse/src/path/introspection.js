@@ -361,6 +361,12 @@ export function _guessExecutionStatusRelativeTo(
   return keyPosition.target > keyPosition.this ? "before" : "after";
 }
 
+// Used to avoid infinite recursion in cases like
+//   function f() { if (false) f(); }
+//   f();
+// It also works with indirect recursion.
+const executionOrderCheckedNodes = new WeakSet();
+
 export function _guessExecutionStatusRelativeToDifferentFunctions(
   target: NodePath,
 ): RelativeExecutionStatus {
@@ -392,7 +398,13 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
       return "unknown";
     }
 
+    // Prevent infinte loops in recursive functions
+    if (executionOrderCheckedNodes.has(path.node)) continue;
+    executionOrderCheckedNodes.add(path.node);
+
     const status = this._guessExecutionStatusRelativeTo(path);
+
+    executionOrderCheckedNodes.delete(path.node);
 
     if (allStatus && allStatus !== status) {
       return "unknown";
