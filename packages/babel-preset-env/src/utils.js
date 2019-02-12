@@ -10,6 +10,11 @@ export function has(obj, key) {
   return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
+export function getType(target) {
+  if (Array.isArray(target)) return "array";
+  return typeof target;
+}
+
 const versionRegExp = /^(\d+|\d+.\d+)$/;
 
 // Convert version to a semver value.
@@ -117,7 +122,7 @@ export function isBabelPolyfillSource(source) {
 }
 
 export function isCoreJSSource(source) {
-  return has(coreJSEntries, source) && new Set(coreJSEntries[source]);
+  return has(coreJSEntries, source) && coreJSEntries[source];
 }
 
 export function isRegeneratorSource(source) {

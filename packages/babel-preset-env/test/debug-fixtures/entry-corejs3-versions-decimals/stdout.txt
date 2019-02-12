@@ -98,6 +98,8 @@ Using polyfills with `entry` option:
   es.array.filter { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.find { "ie":"10" }
   es.array.find-index { "ie":"10" }
+  es.array.flat { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.flat-map { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.includes { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.index-of { "electron":"0.36", "node":"6.1" }
   es.array.join { "ie":"10" }
@@ -107,11 +109,9 @@ Using polyfills with `entry` option:
   es.array.sort { "chrome":"54", "electron":"0.36", "node":"6.1" }
   es.array.splice { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.species { "electron":"0.36", "ie":"10", "node":"6.1" }
-  es.array.iterator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  es.array.flat { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  es.array.flat-map { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.unscopables.flat { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.unscopables.flat-map { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.iterator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es.string.from-code-point { "ie":"10" }
   es.string.raw { "ie":"10" }
   es.string.code-point-at { "ie":"10" }

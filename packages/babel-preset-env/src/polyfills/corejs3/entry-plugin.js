@@ -18,8 +18,11 @@ export default function(
   { types: t },
   { corejs, include, exclude, polyfillTargets, debug },
 ) {
-  const polyfills = Array.from(
-    filterItems(corejs3Polyfills, include, exclude, polyfillTargets),
+  const polyfills = filterItems(
+    corejs3Polyfills,
+    include,
+    exclude,
+    polyfillTargets,
   );
 
   const available = getModulesListForTargetVersion(corejs);
@@ -31,11 +34,9 @@ export default function(
         if (isBabelPolyfillSource(module)) {
           console.warn(BABEL_POLYFILL_DEPRECATION);
         } else {
-          const filter = isCoreJSSource(module);
-          if (filter) {
-            this.importPolyfillIncluded = true;
-            this.polyfillsList.push(...polyfills.filter(it => filter.has(it)));
-            path.remove();
+          const modules = isCoreJSSource(module);
+          if (modules) {
+            this.replaceBySeparateModulesImport(path, modules);
           }
         }
       }
@@ -45,11 +46,9 @@ export default function(
         if (isBabelPolyfillRequire(t, bodyPath)) {
           console.warn(BABEL_POLYFILL_DEPRECATION);
         } else {
-          const filter = isCoreJSRequire(t, bodyPath);
-          if (filter) {
-            this.importPolyfillIncluded = true;
-            this.polyfillsList.push(...polyfills.filter(it => filter.has(it)));
-            bodyPath.remove();
+          const modules = isCoreJSRequire(t, bodyPath);
+          if (modules) {
+            this.replaceBySeparateModulesImport(bodyPath, modules);
           }
         }
       });
@@ -61,18 +60,30 @@ export default function(
     visitor: isPolyfillImport,
     pre() {
       this.importPolyfillIncluded = false;
-      this.polyfillsList = [];
+      this.polyfillsSet = new Set();
+
+      this.replaceBySeparateModulesImport = function(path, modules) {
+        this.importPolyfillIncluded = true;
+        for (const module of modules) {
+          if (polyfills.has(module) && available.has(module)) {
+            this.polyfillsSet.add(module);
+          }
+        }
+        path.remove();
+      };
     },
     post({ path }) {
-      for (const module of Array.from(new Set(this.polyfillsList)).reverse()) {
-        if (available.has(module)) createImport(path, module);
+      const modules = Array.from(this.polyfillsSet).reverse();
+
+      for (const module of modules) {
+        createImport(path, module);
       }
 
       if (debug) {
         logEntryPolyfills(
           "core-js",
           this.importPolyfillIncluded,
-          new Set(this.polyfillsList),
+          this.polyfillsSet,
           this.file.opts.filename,
           polyfillTargets,
           corejs3Polyfills,
