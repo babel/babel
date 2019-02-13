@@ -213,6 +213,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isConstructor,
         allowsDirectSuper,
         "MethodDefinition",
+        true,
       );
       if (method.typeParameters) {
         // $FlowIgnore
@@ -270,6 +271,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isConstructor: boolean,
       allowDirectSuper: boolean,
       type: string,
+      inClassScope: boolean = false,
     ): T {
       let funcNode = this.startNode();
       funcNode.kind = node.kind; // provide kind, so super method correctly sets state
@@ -280,6 +282,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isConstructor,
         allowDirectSuper,
         "FunctionExpression",
+        inClassScope,
       );
       delete funcNode.kind;
       // $FlowIgnore

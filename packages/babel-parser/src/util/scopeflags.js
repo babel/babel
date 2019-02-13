@@ -10,6 +10,7 @@ export const SCOPE_TOP =          0b000000001,
              SCOPE_SIMPLE_CATCH = 0b000100000,
              SCOPE_SUPER =        0b001000000,
              SCOPE_DIRECT_SUPER = 0b010000000,
+             SCOPE_CLASS        = 0b100000000,
              SCOPE_VAR = SCOPE_TOP | SCOPE_FUNCTION;
 
 export type ScopeFlags =
@@ -21,7 +22,8 @@ export type ScopeFlags =
   | typeof SCOPE_ARROW
   | typeof SCOPE_SIMPLE_CATCH
   | typeof SCOPE_SUPER
-  | typeof SCOPE_DIRECT_SUPER;
+  | typeof SCOPE_DIRECT_SUPER
+  | typeof SCOPE_CLASS;
 
 export function functionFlags(isAsync: boolean, isGenerator: boolean) {
   return (

@@ -16,7 +16,9 @@ import {
   BIND_VAR,
   BIND_FUNCTION,
   functionFlags,
+  SCOPE_CLASS,
   SCOPE_SIMPLE_CATCH,
+  SCOPE_SUPER,
 } from "../util/scopeflags";
 
 // Reused empty array added for node fields that are always empty.
@@ -1474,6 +1476,7 @@ export default class StatementParser extends ExpressionParser {
         isConstructor,
         allowsDirectSuper,
         "ClassMethod",
+        true,
       ),
     );
   }
@@ -1493,6 +1496,7 @@ export default class StatementParser extends ExpressionParser {
         /* isConstructor */ false,
         false,
         "ClassPrivateMethod",
+        true,
       ),
     );
   }
@@ -1512,9 +1516,15 @@ export default class StatementParser extends ExpressionParser {
     node: N.ClassPrivateProperty,
   ): N.ClassPrivateProperty {
     this.state.inClassProperty = true;
+
+    this.enterScope(SCOPE_CLASS | SCOPE_SUPER);
+
     node.value = this.eat(tt.eq) ? this.parseMaybeAssign() : null;
     this.semicolon();
     this.state.inClassProperty = false;
+
+    this.exitScope();
+
     return this.finishNode(node, "ClassPrivateProperty");
   }
 
@@ -1525,6 +1535,8 @@ export default class StatementParser extends ExpressionParser {
 
     this.state.inClassProperty = true;
 
+    this.enterScope(SCOPE_CLASS | SCOPE_SUPER);
+
     if (this.match(tt.eq)) {
       this.expectPlugin("classProperties");
       this.next();
@@ -1534,6 +1546,8 @@ export default class StatementParser extends ExpressionParser {
     }
     this.semicolon();
     this.state.inClassProperty = false;
+
+    this.exitScope();
 
     return this.finishNode(node, "ClassProperty");
   }

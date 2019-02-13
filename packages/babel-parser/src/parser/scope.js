@@ -14,6 +14,7 @@ import {
   BIND_FUNCTION,
   type ScopeFlags,
   type BindingTypes,
+  SCOPE_CLASS,
 } from "../util/scopeflags";
 
 // Start an AST node, attaching a start offset.
@@ -111,7 +112,10 @@ export default class ScopeParser extends UtilParser {
   currentThisScope(): Scope {
     for (let i = this.scopeStack.length - 1; ; i--) {
       const scope = this.scopeStack[i];
-      if (scope.flags & SCOPE_VAR && !(scope.flags & SCOPE_ARROW)) {
+      if (
+        (scope.flags & SCOPE_VAR || scope.flags & SCOPE_CLASS) &&
+        !(scope.flags & SCOPE_ARROW)
+      ) {
         return scope;
       }
     }

@@ -34,6 +34,7 @@ import {
   BIND_VAR,
   functionFlags,
   SCOPE_ARROW,
+  SCOPE_CLASS,
   SCOPE_DIRECT_SUPER,
   SCOPE_SUPER,
   SCOPE_TOP,
@@ -1721,6 +1722,7 @@ export default class ExpressionParser extends LValParser {
     isConstructor: boolean,
     allowDirectSuper: boolean,
     type: string,
+    inClassScope: boolean = false,
   ): T {
     const oldYieldPos = this.state.yieldPos;
     const oldAwaitPos = this.state.awaitPos;
@@ -1733,6 +1735,7 @@ export default class ExpressionParser extends LValParser {
     this.enterScope(
       functionFlags(isAsync, node.generator) |
         SCOPE_SUPER |
+        (inClassScope ? SCOPE_CLASS : 0) |
         (allowDirectSuper ? SCOPE_DIRECT_SUPER : 0),
     );
     this.parseFunctionParams((node: any), allowModifiers);
