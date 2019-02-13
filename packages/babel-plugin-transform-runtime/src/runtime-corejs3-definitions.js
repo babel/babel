@@ -1,6 +1,6 @@
 export default () => {
   return {
-    builtins: {
+    BuiltIns: {
       Map: { stable: true, path: "map" },
       Observable: { stable: false, path: "observable" },
       Promise: { stable: true, path: "promise" },
@@ -22,7 +22,7 @@ export default () => {
       setTimeout: { stable: true, path: "set-timeout" },
     },
 
-    methods: {
+    StaticProperties: {
       Array: {
         from: { stable: true, path: "array/from" },
         isArray: { stable: true, path: "array/is-array" },
@@ -179,7 +179,7 @@ export default () => {
       },
     },
 
-    instanceMethods: {
+    InstanceProperties: {
       at: { stable: false, path: "at" },
       bind: { stable: true, path: "bind" },
       codePointAt: { stable: true, path: "code-point-at" },

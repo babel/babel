@@ -84,8 +84,8 @@ export default declare((api, options, dirname) => {
 
   function hasStaticMapping(object, method) {
     return (
-      has(definitions.methods, object) &&
-      hasMapping(definitions.methods[object], method)
+      has(StaticProperties, object) &&
+      hasMapping(StaticProperties[object], method)
     );
   }
 
@@ -144,7 +144,7 @@ export default declare((api, options, dirname) => {
 
   const corejsRoot = injectCoreJS3 && !proposals ? "core-js-stable" : "core-js";
 
-  const definitions = (injectCoreJS2
+  const { BuiltIns, StaticProperties, InstanceProperties } = (injectCoreJS2
     ? getCoreJS2Definitions
     : getCoreJS3Definitions)(runtimeVersion);
 
@@ -239,13 +239,13 @@ export default declare((api, options, dirname) => {
         if (!injectCoreJS) return;
 
         if (t.isMemberExpression(parent)) return;
-        if (!hasMapping(definitions.builtins, name)) return;
+        if (!hasMapping(BuiltIns, name)) return;
         if (scope.getBindingIdentifier(name)) return;
 
         // transform global built-ins like `Symbol()`, `new Promise`
         path.replaceWith(
           this.addDefaultImport(
-            `${modulePath}/${corejsRoot}/${definitions.builtins[name].path}`,
+            `${modulePath}/${corejsRoot}/${BuiltIns[name].path}`,
             name,
           ),
         );
@@ -260,10 +260,11 @@ export default declare((api, options, dirname) => {
         if (!t.isMemberExpression(callee)) return;
 
         const { object, property } = callee;
+        const propertyName = property.name;
 
         // transform calling instance methods like `something.includes()`
-        if (injectCoreJS3 && !hasStaticMapping(object.name, property.name)) {
-          if (hasMapping(definitions.instanceMethods, property.name)) {
+        if (injectCoreJS3 && !hasStaticMapping(object.name, propertyName)) {
+          if (hasMapping(InstanceProperties, propertyName)) {
             let context1, context2;
             if (object.type === "Identifier") {
               context1 = object;
@@ -276,9 +277,9 @@ export default declare((api, options, dirname) => {
               t.callExpression(
                 this.addDefaultImport(
                   `${moduleName}/${corejsRoot}/instance/${
-                    definitions.instanceMethods[property.name].path
+                    InstanceProperties[propertyName].path
                   }`,
-                  `${property.name}InstanceProperty`,
+                  `${propertyName}InstanceProperty`,
                 ),
                 [context2],
               ),
@@ -352,23 +353,22 @@ export default declare((api, options, dirname) => {
             return;
           }
 
+          const objectName = object.name;
+          const propertyName = property.name;
           // doesn't reference the global
           if (
-            path.scope.getBindingIdentifier(object.name) ||
-            !hasStaticMapping(object.name, property.name)
+            path.scope.getBindingIdentifier(objectName) ||
+            !hasStaticMapping(objectName, propertyName)
           ) {
             // transform getting of instance methods like `method = something.includes`
-            if (
-              injectCoreJS3 &&
-              hasMapping(definitions.instanceMethods, property.name)
-            ) {
+            if (injectCoreJS3 && hasMapping(InstanceProperties, propertyName)) {
               path.replaceWith(
                 t.callExpression(
                   this.addDefaultImport(
                     `${moduleName}/${corejsRoot}/instance/${
-                      definitions.instanceMethods[property.name].path
+                      InstanceProperties[propertyName].path
                     }`,
-                    `${property.name}InstanceProperty`,
+                    `${propertyName}InstanceProperty`,
                   ),
                   [object],
                 ),
@@ -380,9 +380,9 @@ export default declare((api, options, dirname) => {
           path.replaceWith(
             this.addDefaultImport(
               `${modulePath}/${corejsRoot}/${
-                definitions.methods[object.name][property.name].path
+                StaticProperties[objectName][propertyName].path
               }`,
-              `${object.name}$${property.name}`,
+              `${objectName}$${propertyName}`,
             ),
           );
         },
@@ -395,15 +395,13 @@ export default declare((api, options, dirname) => {
           const { object } = node;
           const { name } = object;
 
-          if (!hasMapping(definitions.builtins, name)) return;
+          if (!hasMapping(BuiltIns, name)) return;
           if (path.scope.getBindingIdentifier(name)) return;
 
           path.replaceWith(
             t.memberExpression(
               this.addDefaultImport(
-                `${modulePath}/${corejsRoot}/${
-                  definitions.builtins[name].path
-                }`,
+                `${modulePath}/${corejsRoot}/${BuiltIns[name].path}`,
                 name,
               ),
               node.property,
