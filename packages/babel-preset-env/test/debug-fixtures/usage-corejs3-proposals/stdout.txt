@@ -43,8 +43,12 @@ Using polyfills with `usage` option:
 
 [<CWD>/src/in.js] Added following core-js polyfills:
   es.object.to-string { "firefox":"50", "ie":"11" }
-  es.promise.finally { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.string.iterator { "ie":"11" }
   es.promise { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.promise.finally { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.map { "firefox":"50", "ie":"11" }
+  esnext.global-this { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.map.delete-all { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.map.every { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.map.filter { "chrome":"52", "firefox":"50", "ie":"11" }
@@ -58,18 +62,14 @@ Using polyfills with `usage` option:
   esnext.map.reduce { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.map.some { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.map.update { "chrome":"52", "firefox":"50", "ie":"11" }
-  es.map { "firefox":"50", "ie":"11" }
-  es.string.iterator { "ie":"11" }
-  es.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
-  web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
-  web.queue-microtask { "chrome":"52", "firefox":"50", "ie":"11" }
-  esnext.global-this { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.observable { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.symbol.observable { "chrome":"52", "firefox":"50", "ie":"11" }
+  web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
+  web.queue-microtask { "chrome":"52", "firefox":"50", "ie":"11" }
 
 [<CWD>/src/in2.js] Added following core-js polyfills:
-  es.string.iterator { "ie":"11" }
   es.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.string.iterator { "ie":"11" }
   web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
 
 [<CWD>/src/in2.js] Based on your code and targets, added regenerator-runtime.

@@ -2,6 +2,7 @@ import corejs3Polyfills from "core-js-compat/data";
 import getModulesListForTargetVersion from "./get-modules-list-for-target-version";
 import filterItems from "../../filter-items";
 import {
+  intersection,
   createImport,
   isCoreJSSource,
   isCoreJSRequire,
@@ -64,18 +65,19 @@ export default function(
 
       this.replaceBySeparateModulesImport = function(path, modules) {
         this.importPolyfillIncluded = true;
+
         for (const module of modules) {
-          if (polyfills.has(module) && available.has(module)) {
-            this.polyfillsSet.add(module);
-          }
+          this.polyfillsSet.add(module);
         }
+
         path.remove();
       };
     },
     post({ path }) {
-      const modules = Array.from(this.polyfillsSet).reverse();
+      const filtered = intersection(polyfills, this.polyfillsSet, available);
+      const reversed = Array.from(filtered).reverse();
 
-      for (const module of modules) {
+      for (const module of reversed) {
         createImport(path, module);
       }
 
@@ -83,7 +85,7 @@ export default function(
         logEntryPolyfills(
           "core-js",
           this.importPolyfillIncluded,
-          this.polyfillsSet,
+          filtered,
           this.file.opts.filename,
           polyfillTargets,
           corejs3Polyfills,

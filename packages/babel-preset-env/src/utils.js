@@ -43,6 +43,14 @@ export function getValues(object) {
   return Object.keys(object).map(key => object[key]);
 }
 
+export function intersection(first, second, third) {
+  const result = new Set();
+  for (const el of first) {
+    if (second.has(el) && third.has(el)) result.add(el);
+  }
+  return result;
+}
+
 export function findSuggestion(options, option) {
   let levenshteinValue = Infinity;
   return options.reduce((suggestion, validOption) => {

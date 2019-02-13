@@ -14,6 +14,7 @@ import {
   createImport,
   getType,
   has,
+  intersection,
   isPolyfillSource,
   isPolyfillRequire,
 } from "../../utils";
@@ -86,13 +87,7 @@ export default function(
 
     // Symbol()
     // new Promise
-    ReferencedIdentifier(path) {
-      const {
-        node: { name },
-        parent,
-        scope,
-      } = path;
-
+    ReferencedIdentifier({ node: { name }, parent, scope }) {
       if (t.isMemberExpression(parent)) return;
       if (!has(BuiltIns, name)) return;
       if (scope.getBindingIdentifier(name)) return;
@@ -229,8 +224,7 @@ export default function(
     },
 
     // destructuring
-    CatchClause(path) {
-      const { param } = path.node;
+    CatchClause({ node: { param } }) {
       if (param && param.type === "ArrayPattern") {
         this.addUnsupported(CommonIterators);
       }
@@ -243,9 +237,7 @@ export default function(
       }
     },
 
-    Function(path) {
-      const { node } = path;
-
+    Function({ node }) {
       // destructuring
       if (node.params.some(param => param.type === "ArrayPattern")) {
         this.addUnsupported(CommonIterators);
@@ -259,27 +251,28 @@ export default function(
 
   return {
     name: "corejs3-usage",
-    pre({ path }) {
+    pre() {
       this.polyfillsSet = new Set();
 
       this.addUnsupported = function(builtIn) {
         const modules = Array.isArray(builtIn) ? builtIn : [builtIn];
+
         for (const module of modules) {
-          if (
-            !this.polyfillsSet.has(module) &&
-            polyfills.has(module) &&
-            available.has(module)
-          ) {
-            this.polyfillsSet.add(module);
-            createImport(path, module);
-          }
+          this.polyfillsSet.add(module);
         }
       };
     },
-    post() {
+    post({ path }) {
+      const filtered = intersection(polyfills, this.polyfillsSet, available);
+      const reversed = Array.from(filtered).reverse();
+
+      for (const module of reversed) {
+        createImport(path, module);
+      }
+
       if (debug) {
         logUsagePolyfills(
-          this.polyfillsSet,
+          filtered,
           this.file.opts.filename,
           polyfillTargets,
           corejs3Polyfills,

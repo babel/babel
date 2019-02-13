@@ -19,25 +19,14 @@ Using polyfills with `entry` option:
   es.object.from-entries { "chrome":"71" }
   es.array.unscopables.flat { "chrome":"71" }
   es.array.unscopables.flat-map { "chrome":"71" }
-  esnext.reflect.define-metadata { "chrome":"71" }
-  esnext.reflect.delete-metadata { "chrome":"71" }
-  esnext.reflect.get-metadata { "chrome":"71" }
-  esnext.reflect.get-metadata-keys { "chrome":"71" }
-  esnext.reflect.get-own-metadata { "chrome":"71" }
-  esnext.reflect.get-own-metadata-keys { "chrome":"71" }
-  esnext.reflect.has-metadata { "chrome":"71" }
-  esnext.reflect.has-own-metadata { "chrome":"71" }
-  esnext.reflect.metadata { "chrome":"71" }
-  esnext.promise.any { "chrome":"71" }
-  esnext.math.iaddh { "chrome":"71" }
-  esnext.math.isubh { "chrome":"71" }
-  esnext.math.imulh { "chrome":"71" }
-  esnext.math.umulh { "chrome":"71" }
-  esnext.string.at { "chrome":"71" }
   esnext.array.last-index { "chrome":"71" }
   esnext.array.last-item { "chrome":"71" }
+  esnext.composite-key { "chrome":"71" }
+  esnext.composite-symbol { "chrome":"71" }
+  esnext.map.from { "chrome":"71" }
   esnext.map.group-by { "chrome":"71" }
   esnext.map.key-by { "chrome":"71" }
+  esnext.map.of { "chrome":"71" }
   esnext.map.delete-all { "chrome":"71" }
   esnext.map.every { "chrome":"71" }
   esnext.map.filter { "chrome":"71" }
@@ -51,54 +40,65 @@ Using polyfills with `entry` option:
   esnext.map.reduce { "chrome":"71" }
   esnext.map.some { "chrome":"71" }
   esnext.map.update { "chrome":"71" }
-  esnext.set.add-all { "chrome":"71" }
-  esnext.set.delete-all { "chrome":"71" }
-  esnext.set.every { "chrome":"71" }
-  esnext.set.filter { "chrome":"71" }
-  esnext.set.find { "chrome":"71" }
-  esnext.set.join { "chrome":"71" }
-  esnext.set.map { "chrome":"71" }
-  esnext.set.reduce { "chrome":"71" }
-  esnext.set.some { "chrome":"71" }
-  esnext.weak-map.delete-all { "chrome":"71" }
-  esnext.weak-set.add-all { "chrome":"71" }
-  esnext.weak-set.delete-all { "chrome":"71" }
-  esnext.map.from { "chrome":"71" }
-  esnext.map.of { "chrome":"71" }
-  esnext.set.from { "chrome":"71" }
-  esnext.set.of { "chrome":"71" }
-  esnext.weak-map.from { "chrome":"71" }
-  esnext.weak-map.of { "chrome":"71" }
-  esnext.weak-set.from { "chrome":"71" }
-  esnext.weak-set.of { "chrome":"71" }
   esnext.math.clamp { "chrome":"71" }
   esnext.math.deg-per-rad { "chrome":"71" }
   esnext.math.degrees { "chrome":"71" }
   esnext.math.fscale { "chrome":"71" }
+  esnext.math.iaddh { "chrome":"71" }
+  esnext.math.isubh { "chrome":"71" }
+  esnext.math.imulh { "chrome":"71" }
+  esnext.math.seeded-prng { "chrome":"71" }
   esnext.math.rad-per-deg { "chrome":"71" }
   esnext.math.radians { "chrome":"71" }
   esnext.math.scale { "chrome":"71" }
   esnext.math.signbit { "chrome":"71" }
+  esnext.math.umulh { "chrome":"71" }
   esnext.number.from-string { "chrome":"71" }
   esnext.observable { "chrome":"71" }
-  esnext.symbol.observable { "chrome":"71" }
-  esnext.symbol.pattern-match { "chrome":"71" }
+  esnext.promise.all-settled { "chrome":"71" }
+  esnext.promise.any { "chrome":"71" }
   esnext.promise.try { "chrome":"71" }
-  esnext.composite-key { "chrome":"71" }
-  esnext.composite-symbol { "chrome":"71" }
-  esnext.math.seeded-prng { "chrome":"71" }
-  esnext.string.code-points { "chrome":"71" }
-  esnext.string.replace-all { "chrome":"71" }
-  esnext.symbol.dispose { "chrome":"71" }
+  esnext.reflect.define-metadata { "chrome":"71" }
+  esnext.reflect.delete-metadata { "chrome":"71" }
+  esnext.reflect.get-metadata { "chrome":"71" }
+  esnext.reflect.get-metadata-keys { "chrome":"71" }
+  esnext.reflect.get-own-metadata { "chrome":"71" }
+  esnext.reflect.get-own-metadata-keys { "chrome":"71" }
+  esnext.reflect.has-metadata { "chrome":"71" }
+  esnext.reflect.has-own-metadata { "chrome":"71" }
+  esnext.reflect.metadata { "chrome":"71" }
+  esnext.set.from { "chrome":"71" }
+  esnext.set.of { "chrome":"71" }
+  esnext.set.add-all { "chrome":"71" }
+  esnext.set.delete-all { "chrome":"71" }
+  esnext.set.every { "chrome":"71" }
   esnext.set.difference { "chrome":"71" }
+  esnext.set.filter { "chrome":"71" }
+  esnext.set.find { "chrome":"71" }
   esnext.set.intersection { "chrome":"71" }
   esnext.set.is-disjoint-from { "chrome":"71" }
   esnext.set.is-subset-of { "chrome":"71" }
   esnext.set.is-superset-of { "chrome":"71" }
-  esnext.set.union { "chrome":"71" }
+  esnext.set.join { "chrome":"71" }
+  esnext.set.map { "chrome":"71" }
+  esnext.set.reduce { "chrome":"71" }
+  esnext.set.some { "chrome":"71" }
   esnext.set.symmetric-difference { "chrome":"71" }
-  esnext.promise.all-settled { "chrome":"71" }
+  esnext.set.union { "chrome":"71" }
+  esnext.string.at { "chrome":"71" }
+  esnext.string.code-points { "chrome":"71" }
   esnext.string.match-all { "chrome":"71" }
+  esnext.string.replace-all { "chrome":"71" }
+  esnext.symbol.dispose { "chrome":"71" }
+  esnext.symbol.observable { "chrome":"71" }
+  esnext.symbol.pattern-match { "chrome":"71" }
+  esnext.weak-map.from { "chrome":"71" }
+  esnext.weak-map.of { "chrome":"71" }
+  esnext.weak-map.delete-all { "chrome":"71" }
+  esnext.weak-set.add-all { "chrome":"71" }
+  esnext.weak-set.delete-all { "chrome":"71" }
+  esnext.weak-set.from { "chrome":"71" }
+  esnext.weak-set.of { "chrome":"71" }
 
 [<CWD>/src/in.js] Based on your targets, regenerator-runtime import excluded.
 Successfully compiled 1 file with Babel.

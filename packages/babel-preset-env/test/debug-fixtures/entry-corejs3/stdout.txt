@@ -89,8 +89,6 @@ Using polyfills with `entry` option:
   es.array.filter { "ie":"10", "node":"6" }
   es.array.find { "ie":"10" }
   es.array.find-index { "ie":"10" }
-  es.array.flat { "chrome":"54", "ie":"10", "node":"6" }
-  es.array.flat-map { "chrome":"54", "ie":"10", "node":"6" }
   es.array.includes { "ie":"10", "node":"6" }
   es.array.index-of { "node":"6" }
   es.array.join { "ie":"10" }
@@ -100,9 +98,11 @@ Using polyfills with `entry` option:
   es.array.sort { "chrome":"54", "node":"6" }
   es.array.splice { "ie":"10", "node":"6" }
   es.array.species { "ie":"10", "node":"6" }
+  es.array.iterator { "chrome":"54", "ie":"10", "node":"6" }
+  es.array.flat { "chrome":"54", "ie":"10", "node":"6" }
+  es.array.flat-map { "chrome":"54", "ie":"10", "node":"6" }
   es.array.unscopables.flat { "chrome":"54", "ie":"10", "node":"6" }
   es.array.unscopables.flat-map { "chrome":"54", "ie":"10", "node":"6" }
-  es.array.iterator { "chrome":"54", "ie":"10", "node":"6" }
   es.string.from-code-point { "ie":"10" }
   es.string.raw { "ie":"10" }
   es.string.code-point-at { "ie":"10" }
