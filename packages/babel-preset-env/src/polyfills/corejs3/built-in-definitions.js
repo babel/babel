@@ -423,3 +423,12 @@ export const StaticProperties = {
   Float32Array: TypedArrayStaticMethods,
   Float64Array: TypedArrayStaticMethods,
 };
+
+export const CommonInstanceDependencies = new Set([
+  "es.object.to-string",
+  "es.object.define-getter",
+  "es.object.define-setter",
+  "es.object.lookup-getter",
+  "es.object.lookup-setter",
+  "es.regexp.exec",
+]);

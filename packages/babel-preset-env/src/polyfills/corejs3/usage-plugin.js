@@ -3,11 +3,12 @@ import corejs3ShippedProposalsList from "./shipped-proposals";
 import getModulesListForTargetVersion from "./get-modules-list-for-target-version";
 import filterItems from "../../filter-items";
 import {
-  CommonIterators,
-  PromiseDependencies,
   BuiltIns,
   StaticProperties,
   InstanceProperties,
+  CommonIterators,
+  CommonInstanceDependencies,
+  PromiseDependencies,
 } from "./built-in-definitions";
 import {
   createImport,
@@ -144,9 +145,12 @@ export default function(
           }
         }
 
-        if (path.scope.getBindingIdentifier(object.name)) {
+        if (
+          object.type !== "Identifier" ||
+          path.scope.getBindingIdentifier(object.name)
+        ) {
           const result = path.get("object").evaluate();
-          if (result.value) {
+          if (result.value !== undefined) {
             instanceType = getType(result.value);
           } else if (result.deopt && result.deopt.isIdentifier()) {
             evaluatedPropType = result.deopt.node.name;
@@ -165,7 +169,9 @@ export default function(
           let InstancePropertyDependencies = InstanceProperties[propertyName];
           if (instanceType) {
             InstancePropertyDependencies = InstancePropertyDependencies.filter(
-              module => module.includes(instanceType),
+              module =>
+                module.includes(instanceType) ||
+                CommonInstanceDependencies.has(module),
             );
           }
           this.addUnsupported(InstancePropertyDependencies);

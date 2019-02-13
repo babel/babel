@@ -11,8 +11,10 @@ export function has(obj, key) {
 }
 
 export function getType(target) {
-  if (Array.isArray(target)) return "array";
-  return typeof target;
+  return Object.prototype.toString
+    .call(target)
+    .slice(8, -1)
+    .toLowerCase();
 }
 
 const versionRegExp = /^(\d+|\d+.\d+)$/;
