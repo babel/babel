@@ -36,13 +36,13 @@ function writeCoreJS2(runtimeName) {
     "symbol/async-iterator",
   ];
 
-  Object.keys(corejs2Definitions.builtins).forEach(key => {
-    const path = corejs2Definitions.builtins[key].path;
+  Object.keys(corejs2Definitions.BuiltIns).forEach(key => {
+    const path = corejs2Definitions.BuiltIns[key].path;
     paths.push(path);
   });
 
-  Object.keys(corejs2Definitions.methods).forEach(key => {
-    const props = corejs2Definitions.methods[key];
+  Object.keys(corejs2Definitions.StaticProperties).forEach(key => {
+    const props = corejs2Definitions.StaticProperties[key];
     Object.keys(props).forEach(key2 => {
       paths.push(props[key2].path);
     });
@@ -63,21 +63,21 @@ function writeCoreJS3(runtimeName, { proposals }) {
     ? ["is-iterable", "get-iterator", "get-iterator-method"]
     : [];
 
-  Object.keys(corejs3Definitions.builtins).forEach(key => {
-    const builtin = corejs3Definitions.builtins[key];
+  Object.keys(corejs3Definitions.BuiltIns).forEach(key => {
+    const builtin = corejs3Definitions.BuiltIns[key];
     if (builtin.stable || proposals) paths.push(builtin.path);
   });
 
-  Object.keys(corejs3Definitions.methods).forEach(key => {
-    const props = corejs3Definitions.methods[key];
+  Object.keys(corejs3Definitions.StaticProperties).forEach(key => {
+    const props = corejs3Definitions.StaticProperties[key];
     Object.keys(props).forEach(key2 => {
       const builtin = props[key2];
       if (builtin.stable || proposals) paths.push(builtin.path);
     });
   });
 
-  Object.keys(corejs3Definitions.instanceMethods).forEach(key => {
-    const builtin = corejs3Definitions.instanceMethods[key];
+  Object.keys(corejs3Definitions.InstanceProperties).forEach(key => {
+    const builtin = corejs3Definitions.InstanceProperties[key];
     if (builtin.stable || proposals) paths.push(`instance/${builtin.path}`);
   });
 

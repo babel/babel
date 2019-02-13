@@ -6,7 +6,7 @@ export default runtimeVersion => {
   const includeMathModule = hasMinVersion("7.0.1", runtimeVersion);
 
   return {
-    builtins: {
+    BuiltIns: {
       Symbol: { stable: true, path: "symbol" },
       Promise: { stable: true, path: "promise" },
       Map: { stable: true, path: "map" },
@@ -19,7 +19,7 @@ export default runtimeVersion => {
       parseInt: { stable: true, path: "parse-int" },
     },
 
-    methods: {
+    StaticProperties: {
       Array: {
         from: { stable: true, path: "array/from" },
         isArray: { stable: true, path: "array/is-array" },
