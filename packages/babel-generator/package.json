@@ -16,7 +16,7 @@
   "dependencies": {
     "@babel/types": "^7.3.2",
     "jsesc": "^2.5.1",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.11",
     "source-map": "^0.5.0",
     "trim-right": "^1.0.1"
   },
