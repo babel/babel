@@ -1,36 +1,36 @@
 "use strict";
 
-require("core-js/modules/esnext.global-this");
-
-require("core-js/modules/web.queue-microtask");
-
-require("core-js/modules/es.symbol.iterator");
-
 require("core-js/modules/es.symbol");
 
 require("core-js/modules/es.symbol.description");
 
-require("core-js/modules/es.regexp.exec");
+require("core-js/modules/es.symbol.iterator");
 
 require("core-js/modules/es.symbol.match");
 
+require("core-js/modules/es.object.to-string");
+
+require("core-js/modules/es.array.from");
+
+require("core-js/modules/es.array.iterator");
+
 require("core-js/modules/es.string.match");
+
+require("core-js/modules/es.string.iterator");
+
+require("core-js/modules/es.regexp.exec");
 
 require("core-js/modules/es.promise");
 
 require("core-js/modules/es.promise.finally");
 
-require("core-js/modules/web.dom-collections.iterator");
-
-require("core-js/modules/es.array.iterator");
-
-require("core-js/modules/es.object.to-string");
-
 require("core-js/modules/es.map");
 
-require("core-js/modules/es.string.iterator");
+require("core-js/modules/web.dom-collections.iterator");
 
-require("core-js/modules/es.array.from");
+require("core-js/modules/web.queue-microtask");
+
+require("core-js/modules/esnext.global-this");
 
 Array.from; // static method
 

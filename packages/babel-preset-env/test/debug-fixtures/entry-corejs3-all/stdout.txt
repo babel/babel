@@ -91,8 +91,6 @@ Using polyfills with `entry` option:
   es.array.filter {}
   es.array.find {}
   es.array.find-index {}
-  es.array.flat {}
-  es.array.flat-map {}
   es.array.for-each {}
   es.array.includes {}
   es.array.index-of {}
@@ -107,9 +105,11 @@ Using polyfills with `entry` option:
   es.array.sort {}
   es.array.splice {}
   es.array.species {}
+  es.array.iterator {}
+  es.array.flat {}
+  es.array.flat-map {}
   es.array.unscopables.flat {}
   es.array.unscopables.flat-map {}
-  es.array.iterator {}
   es.string.from-code-point {}
   es.string.raw {}
   es.string.code-point-at {}
@@ -239,28 +239,15 @@ Using polyfills with `entry` option:
   es.reflect.prevent-extensions {}
   es.reflect.set {}
   es.reflect.set-prototype-of {}
-  esnext.reflect.define-metadata {}
-  esnext.reflect.delete-metadata {}
-  esnext.reflect.get-metadata {}
-  esnext.reflect.get-metadata-keys {}
-  esnext.reflect.get-own-metadata {}
-  esnext.reflect.get-own-metadata-keys {}
-  esnext.reflect.has-metadata {}
-  esnext.reflect.has-own-metadata {}
-  esnext.reflect.metadata {}
-  esnext.promise.any {}
-  esnext.math.iaddh {}
-  esnext.math.isubh {}
-  esnext.math.imulh {}
-  esnext.math.umulh {}
-  esnext.string.at {}
-  web.url {}
-  web.url.to-json {}
-  web.url-search-params {}
   esnext.array.last-index {}
   esnext.array.last-item {}
+  esnext.composite-key {}
+  esnext.composite-symbol {}
+  esnext.global-this {}
+  esnext.map.from {}
   esnext.map.group-by {}
   esnext.map.key-by {}
+  esnext.map.of {}
   esnext.map.delete-all {}
   esnext.map.every {}
   esnext.map.filter {}
@@ -274,58 +261,71 @@ Using polyfills with `entry` option:
   esnext.map.reduce {}
   esnext.map.some {}
   esnext.map.update {}
-  esnext.set.add-all {}
-  esnext.set.delete-all {}
-  esnext.set.every {}
-  esnext.set.filter {}
-  esnext.set.find {}
-  esnext.set.join {}
-  esnext.set.map {}
-  esnext.set.reduce {}
-  esnext.set.some {}
-  esnext.weak-map.delete-all {}
-  esnext.weak-set.add-all {}
-  esnext.weak-set.delete-all {}
-  esnext.map.from {}
-  esnext.map.of {}
-  esnext.set.from {}
-  esnext.set.of {}
-  esnext.weak-map.from {}
-  esnext.weak-map.of {}
-  esnext.weak-set.from {}
-  esnext.weak-set.of {}
   esnext.math.clamp {}
   esnext.math.deg-per-rad {}
   esnext.math.degrees {}
   esnext.math.fscale {}
+  esnext.math.iaddh {}
+  esnext.math.isubh {}
+  esnext.math.imulh {}
+  esnext.math.seeded-prng {}
   esnext.math.rad-per-deg {}
   esnext.math.radians {}
   esnext.math.scale {}
   esnext.math.signbit {}
+  esnext.math.umulh {}
   esnext.number.from-string {}
   esnext.observable {}
-  esnext.symbol.observable {}
-  esnext.symbol.pattern-match {}
+  esnext.promise.all-settled {}
+  esnext.promise.any {}
   esnext.promise.try {}
-  esnext.composite-key {}
-  esnext.composite-symbol {}
-  esnext.math.seeded-prng {}
-  esnext.string.code-points {}
-  esnext.string.replace-all {}
-  esnext.symbol.dispose {}
+  esnext.reflect.define-metadata {}
+  esnext.reflect.delete-metadata {}
+  esnext.reflect.get-metadata {}
+  esnext.reflect.get-metadata-keys {}
+  esnext.reflect.get-own-metadata {}
+  esnext.reflect.get-own-metadata-keys {}
+  esnext.reflect.has-metadata {}
+  esnext.reflect.has-own-metadata {}
+  esnext.reflect.metadata {}
+  esnext.set.from {}
+  esnext.set.of {}
+  esnext.set.add-all {}
+  esnext.set.delete-all {}
+  esnext.set.every {}
   esnext.set.difference {}
+  esnext.set.filter {}
+  esnext.set.find {}
   esnext.set.intersection {}
   esnext.set.is-disjoint-from {}
   esnext.set.is-subset-of {}
   esnext.set.is-superset-of {}
-  esnext.set.union {}
+  esnext.set.join {}
+  esnext.set.map {}
+  esnext.set.reduce {}
+  esnext.set.some {}
   esnext.set.symmetric-difference {}
-  esnext.promise.all-settled {}
-  esnext.global-this {}
+  esnext.set.union {}
+  esnext.string.at {}
+  esnext.string.code-points {}
   esnext.string.match-all {}
+  esnext.string.replace-all {}
+  esnext.symbol.dispose {}
+  esnext.symbol.observable {}
+  esnext.symbol.pattern-match {}
+  esnext.weak-map.from {}
+  esnext.weak-map.of {}
+  esnext.weak-map.delete-all {}
+  esnext.weak-set.add-all {}
+  esnext.weak-set.delete-all {}
+  esnext.weak-set.from {}
+  esnext.weak-set.of {}
   web.dom-collections.for-each {}
   web.dom-collections.iterator {}
   web.immediate {}
   web.queue-microtask {}
   web.timers {}
+  web.url {}
+  web.url.to-json {}
+  web.url-search-params {}
 Successfully compiled 1 file with Babel.

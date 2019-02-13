@@ -1,18 +1,18 @@
-import "core-js/modules/web.queue-microtask";
-import "core-js/modules/es.symbol.iterator";
 import "core-js/modules/es.symbol";
 import "core-js/modules/es.symbol.description";
-import "core-js/modules/es.regexp.exec";
+import "core-js/modules/es.symbol.iterator";
 import "core-js/modules/es.symbol.match";
+import "core-js/modules/es.object.to-string";
+import "core-js/modules/es.array.from";
+import "core-js/modules/es.array.iterator";
 import "core-js/modules/es.string.match";
+import "core-js/modules/es.string.iterator";
+import "core-js/modules/es.regexp.exec";
 import "core-js/modules/es.promise";
 import "core-js/modules/es.promise.finally";
-import "core-js/modules/web.dom-collections.iterator";
-import "core-js/modules/es.array.iterator";
-import "core-js/modules/es.object.to-string";
 import "core-js/modules/es.map";
-import "core-js/modules/es.string.iterator";
-import "core-js/modules/es.array.from";
+import "core-js/modules/web.dom-collections.iterator";
+import "core-js/modules/web.queue-microtask";
 Array.from; // static method
 
 Map; // built-in

@@ -13,9 +13,6 @@ const ArrayNatureIteratorsWithTag = [
 const CommonIteratorsWithTag = ["es.object.to-string", ...CommonIterators];
 
 const TypedArrayDependencies = [
-  "es.array.iterator",
-  "es.array-buffer.slice",
-  "es.object.to-string",
   "es.typed-array.copy-within",
   "es.typed-array.every",
   "es.typed-array.fill",
@@ -39,6 +36,9 @@ const TypedArrayDependencies = [
   "es.typed-array.subarray",
   "es.typed-array.to-locale-string",
   "es.typed-array.to-string",
+  "es.object.to-string",
+  "es.array.iterator",
+  "es.array-buffer.slice",
 ];
 
 const TypedArrayStaticMethods = {
@@ -47,9 +47,9 @@ const TypedArrayStaticMethods = {
 };
 
 export const PromiseDependencies = [
-  "es.object.to-string",
-  "es.promise.finally",
   "es.promise",
+  "es.promise.finally",
+  "es.object.to-string",
 ];
 
 const PromiseDependenciesWithIterators = [
@@ -58,12 +58,13 @@ const PromiseDependenciesWithIterators = [
 ];
 
 const SymbolDependencies = [
+  "es.symbol",
   "es.symbol.description",
   "es.object.to-string",
-  "es.symbol",
 ];
 
 const MapDependencies = [
+  "es.map",
   "esnext.map.delete-all",
   "esnext.map.every",
   "esnext.map.filter",
@@ -77,11 +78,11 @@ const MapDependencies = [
   "esnext.map.reduce",
   "esnext.map.some",
   "esnext.map.update",
-  "es.map",
   ...CommonIteratorsWithTag,
 ];
 
 const SetDependencies = [
+  "es.set",
   "esnext.set.add-all",
   "esnext.set.delete-all",
   "esnext.set.every",
@@ -98,20 +99,19 @@ const SetDependencies = [
   "esnext.set.some",
   "esnext.set.symmetric-difference",
   "esnext.set.union",
-  "es.set",
   ...CommonIteratorsWithTag,
 ];
 
 const WeakMapDependencies = [
-  "esnext.weak-map.delete-all",
   "es.weak-map",
+  "esnext.weak-map.delete-all",
   ...CommonIteratorsWithTag,
 ];
 
 const WeakSetDependencies = [
+  "es.weak-set",
   "esnext.weak-set.add-all",
   "esnext.weak-set.delete-all",
-  "es.weak-set",
   ...CommonIteratorsWithTag,
 ];
 
@@ -119,11 +119,11 @@ const URLSearchParamsDependencies = ["web.url", ...CommonIteratorsWithTag];
 
 export const BuiltIns = {
   ArrayBuffer: [
-    "es.object.to-string",
     "es.array-buffer.constructor",
     "es.array-buffer.slice",
+    "es.object.to-string",
   ],
-  DataView: ["es.object.to-string", "es.data-view", "es.array-buffer.slice"],
+  DataView: ["es.data-view", "es.array-buffer.slice", "es.object.to-string"],
   Date: ["es.date.to-string"],
   Float32Array: ["es.typed-array.float32-array", ...TypedArrayDependencies],
   Float64Array: ["es.typed-array.float64-array", ...TypedArrayDependencies],
@@ -146,7 +146,7 @@ export const BuiltIns = {
     ...CommonIteratorsWithTag,
   ],
   Promise: PromiseDependencies,
-  RegExp: ["es.regexp.to-string", "es.regexp.exec", "es.regexp.constructor"],
+  RegExp: ["es.regexp.constructor", "es.regexp.exec", "es.regexp.to-string"],
   Set: SetDependencies,
   Symbol: SymbolDependencies,
   URL: ["web.url", ...URLSearchParamsDependencies],
@@ -176,7 +176,7 @@ export const InstanceProperties = {
   codePoints: ["esnext.string.code-points"],
   concat: ["es.array.concat"],
   copyWithin: ["es.array.copy-within"],
-  description: ["es.symbol.description", "es.symbol"],
+  description: ["es.symbol", "es.symbol.description"],
   endsWith: ["es.string.ends-with"],
   entries: ArrayNatureIteratorsWithTag,
   every: ["es.array.every"],
@@ -188,12 +188,12 @@ export const InstanceProperties = {
   findIndex: ["es.array.find-index"],
   fixed: ["es.string.fixed"],
   flags: ["es.regexp.flags"],
-  flat: ["es.array.unscopables.flat", "es.array.flat"],
-  flatMap: ["es.array.unscopables.flat-map", "es.array.flat-map"],
+  flat: ["es.array.flat", "es.array.unscopables.flat"],
+  flatMap: ["es.array.flat-map", "es.array.unscopables.flat-map"],
   fontcolor: ["es.string.fontcolor"],
   fontsize: ["es.string.fontsize"],
   forEach: ["es.array.for-each", "web.dom-collections.for-each"],
-  includes: ["es.string.includes", "es.array.includes"],
+  includes: ["es.array.includes", "es.string.includes"],
   indexOf: ["es.array.index-of"],
   italic: ["es.string.italics"],
   join: ["es.array.join"],
@@ -227,9 +227,9 @@ export const InstanceProperties = {
   sup: ["es.string.sup"],
   toFixed: ["es.number.to-fixed"],
   toISOString: ["es.date.to-iso-string"],
-  toJSON: ["web.url.to-json", "es.date.to-json"],
+  toJSON: ["es.date.to-json", "web.url.to-json"],
   toPrecision: ["es.number.to-precision"],
-  toString: ["es.object.to-string", "es.date.to-string", "es.regexp.to-string"],
+  toString: ["es.object.to-string", "es.regexp.to-string", "es.date.to-string"],
   trim: ["es.string.trim"],
   trimEnd: ["es.string.trim-end"],
   trimLeft: ["es.string.trim-start"],
@@ -245,8 +245,8 @@ export const InstanceProperties = {
 export const StaticProperties = {
   Array: {
     from: ["es.array.from", "es.string.iterator"],
-    isArray: "es.array.is-array",
-    of: "es.array.of",
+    isArray: ["es.array.is-array"],
+    of: ["es.array.of"],
   },
 
   Date: {
@@ -387,26 +387,26 @@ export const StaticProperties = {
   },
 
   Symbol: {
-    asyncIterator: "es.symbol.async-iterator",
-    dispose: "esnext.symbol.dispose",
-    hasInstance: ["es.function.has-instance", "es.symbol.has-instance"],
-    isConcatSpreadable: ["es.array.concat", "es.symbol.is-concat-spreadable"],
-    iterator: [...CommonIteratorsWithTag, "es.symbol.iterator"],
-    match: ["es.string.match", "es.symbol.match"],
-    observable: "esnext.symbol.observable",
-    patternMatch: "esnext.symbol.pattern-match",
-    replace: ["es.string.replace", "es.symbol.replace"],
-    search: ["es.string.search", "es.symbol.search"],
-    species: ["es.array.species", "es.symbol.species"],
-    split: ["es.string.split", "es.symbol.split"],
-    toPrimitive: ["es.date.to-primitive", "es.symbol.to-primitive"],
+    asyncIterator: ["es.symbol.async-iterator"],
+    dispose: ["esnext.symbol.dispose"],
+    hasInstance: ["es.symbol.has-instance", "es.function.has-instance"],
+    isConcatSpreadable: ["es.symbol.is-concat-spreadable", "es.array.concat"],
+    iterator: ["es.symbol.iterator", ...CommonIteratorsWithTag],
+    match: ["es.symbol.match", "es.string.match"],
+    observable: ["esnext.symbol.observable"],
+    patternMatch: ["esnext.symbol.pattern-match"],
+    replace: ["es.symbol.replace", "es.string.replace"],
+    search: ["es.symbol.search", "es.string.search"],
+    species: ["es.symbol.species", "es.array.species"],
+    split: ["es.symbol.split", "es.string.split"],
+    toPrimitive: ["es.symbol.to-primitive", "es.date.to-primitive"],
     toStringTag: [
-      "es.json.to-string-tag",
-      "es.math.to-string-tag",
-      "es.object.to-string",
       "es.symbol.to-string-tag",
+      "es.object.to-string",
+      "es.math.to-string-tag",
+      "es.json.to-string-tag",
     ],
-    unscopables: "es.symbol.unscopables",
+    unscopables: ["es.symbol.unscopables"],
   },
 
   ArrayBuffer: {

@@ -12,17 +12,17 @@ require("core-js/modules/es.object.lookup-getter");
 
 require("core-js/modules/es.object.lookup-setter");
 
+require("core-js/modules/es.array.sort");
+
+require("core-js/modules/es.array.iterator");
+
 require("core-js/modules/es.array.flat");
 
 require("core-js/modules/es.array.flat-map");
 
-require("core-js/modules/es.array.sort");
-
 require("core-js/modules/es.array.unscopables.flat");
 
 require("core-js/modules/es.array.unscopables.flat-map");
-
-require("core-js/modules/es.array.iterator");
 
 require("core-js/modules/es.string.pad-end");
 
