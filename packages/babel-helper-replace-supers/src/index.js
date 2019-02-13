@@ -51,13 +51,7 @@ export const environmentVisitor = {
     path.skip();
   },
 
-  Method(path) {
-    skipAllButComputedKey(path);
-  },
-
-  "ClassProperty|ClassPrivateProperty"(path) {
-    // If the property is computed, we need to visit everything.
-    if (path.node.static) return;
+  "Method|ClassProperty|ClassPrivateProperty"(path) {
     skipAllButComputedKey(path);
   },
 };
