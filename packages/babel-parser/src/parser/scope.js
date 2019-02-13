@@ -93,7 +93,8 @@ export default class ScopeParser extends UtilParser {
       this.raise(pos, `Identifier '${name}' has already been declared`);
     }
   }
-  currentScope() {
+
+  currentScope(): Scope {
     return this.scopeStack[this.scopeStack.length - 1];
   }
 

@@ -361,10 +361,9 @@ export default class LValParser extends NodeUtils {
           } else {
             checkClashes[key] = true;
           }
-
-          if (bindingType !== BIND_NONE && bindingType !== BIND_OUTSIDE) {
-            this.declareName(expr.name, bindingType, expr.start);
-          }
+        }
+        if (bindingType !== BIND_NONE && bindingType !== BIND_OUTSIDE) {
+          this.declareName(expr.name, bindingType, expr.start);
         }
         break;
 
