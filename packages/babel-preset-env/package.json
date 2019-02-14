@@ -67,6 +67,7 @@
     "@babel/core": "^7.3.4",
     "@babel/helper-fixtures": "^7.2.0",
     "@babel/helper-plugin-test-runner": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "caniuse-db": "1.0.30000938",
     "compat-table": "kangax/compat-table#6d012ba020fa7415e8a2d29e87924bab79b128a3",
     "electron-to-chromium": "1.3.113"
