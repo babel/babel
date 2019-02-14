@@ -44,6 +44,7 @@ module.exports = function(token, tt, source) {
     type === tt.bang ||
     type === tt.tilde ||
     type === tt.doubleColon ||
+    type === tt.hash ||
     type.isAssign
   ) {
     token.type = "Punctuator";

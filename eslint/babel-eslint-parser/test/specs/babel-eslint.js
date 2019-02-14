@@ -267,6 +267,17 @@ describe("babylon-to-espree", () => {
     assert.strictEqual(babylonAST.tokens[1].type, "Punctuator");
   });
 
+  // Espree doesn't support the private fields yet
+  it("hash (token)", () => {
+    const code = "class A { #x }";
+    const babylonAST = babelEslint.parseForESLint(code, {
+      eslintVisitorKeys: true,
+      eslintScopeManager: true,
+    }).ast;
+    assert.strictEqual(babylonAST.tokens[3].type, "Punctuator");
+    assert.strictEqual(babylonAST.tokens[3].value, "#");
+  });
+
   it.skip("empty program with line comment", () => {
     parseAndAssertSame("// single comment");
   });
