@@ -6,7 +6,8 @@ export default (_, opts = {}) => {
   const {
     loose = false,
     useBuiltIns = false,
-    decoratorsLegacy = false,
+    decoratorsVersion,
+    decoratorsLegacy,
     decoratorsBeforeExport,
     pipelineProposal = "minimal",
   } = opts;
@@ -18,6 +19,7 @@ export default (_, opts = {}) => {
         {
           loose,
           useBuiltIns,
+          decoratorsVersion,
           decoratorsLegacy,
           decoratorsBeforeExport,
           pipelineProposal,

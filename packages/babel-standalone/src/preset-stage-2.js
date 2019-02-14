@@ -10,7 +10,8 @@ export default (_, opts = {}) => {
   const {
     loose = false,
     useBuiltIns = false,
-    decoratorsLegacy = false,
+    decoratorsVersion,
+    decoratorsLegacy,
     decoratorsBeforeExport,
   } = opts;
 
@@ -19,7 +20,11 @@ export default (_, opts = {}) => {
     plugins: [
       [
         transformDecorators,
-        { legacy: decoratorsLegacy, decoratorsBeforeExport },
+        {
+          version: decoratorsVersion,
+          legacy: decoratorsLegacy,
+          decoratorsBeforeExport,
+        },
       ],
       transformFunctionSent,
       transformExportNamespaceFrom,
