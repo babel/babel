@@ -47,6 +47,7 @@ export type ParseError<ErrorDetails> = SyntaxError &
 export type ParseErrorConstructor<ErrorDetails> = (
   loc: Position,
   details: ErrorDetails,
+  filename: string | undefined,
 ) => ParseError<ErrorDetails>;
 
 type ToMessage<ErrorDetails> = (self: ErrorDetails) => string;
@@ -91,7 +92,11 @@ function toParseErrorConstructor<ErrorDetails extends object>({
     }
   }
 
-  return function constructor(loc: Position, details: ErrorDetails) {
+  return function constructor(
+    loc: Position,
+    details: ErrorDetails,
+    filename: string | undefined,
+  ) {
     const error: ParseError<ErrorDetails> = new SyntaxError() as any;
 
     error.code = code as ParseErrorCode;
@@ -110,10 +115,11 @@ function toParseErrorConstructor<ErrorDetails extends object>({
     };
     defineHidden(error, "clone", function clone(overrides: Overrides = {}) {
       const { line, column, index } = overrides.loc ?? loc;
-      return constructor(new Position(line, column, index), {
-        ...details,
-        ...overrides.details,
-      });
+      return constructor(
+        new Position(line, column, index),
+        { ...details, ...overrides.details },
+        filename,
+      );
     });
 
     defineHidden(error, "details", details);
@@ -121,7 +127,11 @@ function toParseErrorConstructor<ErrorDetails extends object>({
     Object.defineProperty(error, "message", {
       configurable: true,
       get(this: ParseError<ErrorDetails>): string {
-        const message = `${toMessage(details)} (${loc.line}:${loc.column})`;
+        let pos = `${this.loc.line}:${this.loc.column}`;
+        if (process.env.BABEL_8_BREAKING) {
+          if (filename) pos = `${filename}:${pos}`;
+        }
+        const message = `${toMessage(this.details)} (${pos})`;
         this.message = message;
         return message;
       },
