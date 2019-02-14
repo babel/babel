@@ -266,7 +266,7 @@ export default declare((api, options, dirname) => {
         if (injectCoreJS3 && !hasStaticMapping(object.name, propertyName)) {
           if (hasMapping(InstanceProperties, propertyName)) {
             let context1, context2;
-            if (object.type === "Identifier") {
+            if (t.isIdentifier(object)) {
               context1 = object;
               context2 = t.cloneNode(object);
             } else {

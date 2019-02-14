@@ -74,6 +74,7 @@ export default function(
         path.remove();
       }
     },
+
     Program: {
       enter(path) {
         path.get("body").forEach(bodyPath => {
@@ -102,17 +103,17 @@ export default function(
     },
 
     // spread
-    ArrayExpression(path) {
-      if (path.node.elements.some(el => el.type === "SpreadElement")) {
+    ArrayExpression({ node }) {
+      if (node.elements.some(el => t.isSpreadElement(el))) {
         this.addUnsupported(CommonIterators);
       }
     },
 
     // yield*
-    YieldExpression(path) {
-      if (!path.node.delegate) return;
-
-      this.addUnsupported(CommonIterators);
+    YieldExpression({ node }) {
+      if (node.delegate) {
+        this.addUnsupported(CommonIterators);
+      }
     },
 
     // Array.from
@@ -133,15 +134,15 @@ export default function(
           if (t.isStringLiteral(property)) {
             propertyName = property.value;
           } else {
-            const res = path.get("property").evaluate();
-            if (res.confident && res.value) {
-              propertyName = res.value;
+            const result = path.get("property").evaluate();
+            if (result.confident && result.value) {
+              propertyName = result.value;
             }
           }
         }
 
         if (
-          object.type !== "Identifier" ||
+          !t.isIdentifier(object) ||
           path.scope.getBindingIdentifier(object.name)
         ) {
           const result = path.get("object").evaluate();
@@ -194,7 +195,7 @@ export default function(
       const { id, init } = node;
 
       // destructuring
-      if (id.type === "ArrayPattern") {
+      if (t.isArrayPattern(id)) {
         this.addUnsupported(CommonIterators);
       }
 
@@ -217,29 +218,29 @@ export default function(
     },
 
     // destructuring
-    AssignmentExpression(path) {
-      if (path.node.left.type === "ArrayPattern") {
+    AssignmentExpression({ node }) {
+      if (t.isArrayPattern(node.left)) {
         this.addUnsupported(CommonIterators);
       }
     },
 
     // destructuring
-    CatchClause({ node: { param } }) {
-      if (param && param.type === "ArrayPattern") {
+    CatchClause({ node }) {
+      if (t.isArrayPattern(node.param)) {
         this.addUnsupported(CommonIterators);
       }
     },
 
     // destructuring
-    ForXStatement(path) {
-      if (path.node.left.type === "ArrayPattern") {
+    ForXStatement({ node }) {
+      if (t.isArrayPattern(node.left)) {
         this.addUnsupported(CommonIterators);
       }
     },
 
     Function({ node }) {
       // destructuring
-      if (node.params.some(param => param.type === "ArrayPattern")) {
+      if (node.params.some(param => t.isArrayPattern(param))) {
         this.addUnsupported(CommonIterators);
       }
 

@@ -41,6 +41,7 @@ export default function(
         path.remove();
       }
     },
+
     Program: {
       enter(path) {
         path.get("body").forEach(bodyPath => {
@@ -54,13 +55,7 @@ export default function(
 
     // Symbol()
     // new Promise
-    ReferencedIdentifier(path) {
-      const {
-        node: { name },
-        parent,
-        scope,
-      } = path;
-
+    ReferencedIdentifier({ node: { name }, parent, scope }) {
       if (t.isMemberExpression(parent)) return;
       if (!has(BuiltIns, name)) return;
       if (scope.getBindingIdentifier(name)) return;
@@ -75,6 +70,7 @@ export default function(
       if (path.node.arguments.length) return;
 
       const callee = path.node.callee;
+
       if (!t.isMemberExpression(callee)) return;
       if (!callee.computed) return;
       if (!path.get("callee.property").matchesPattern("Symbol.iterator")) {
@@ -94,9 +90,9 @@ export default function(
 
     // yield*
     YieldExpression(path) {
-      if (!path.node.delegate) return;
-
-      this.addImport("web.dom.iterable");
+      if (path.node.delegate) {
+        this.addImport("web.dom.iterable");
+      }
     },
 
     // Array.from
@@ -117,9 +113,9 @@ export default function(
           if (t.isStringLiteral(property)) {
             propertyName = property.value;
           } else {
-            const res = path.get("property").evaluate();
-            if (res.confident && res.value) {
-              propertyName = res.value;
+            const result = path.get("property").evaluate();
+            if (result.confident && result.value) {
+              propertyName = result.value;
             }
           }
         }
