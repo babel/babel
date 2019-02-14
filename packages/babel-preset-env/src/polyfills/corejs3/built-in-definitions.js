@@ -156,6 +156,7 @@ export const BuiltIns = {
   clearImmediate: ["web.immediate"],
   compositeKey: ["esnext.composite-key"],
   compositeSymbol: ["esnext.composite-symbol", ...SymbolDependencies],
+  fetch: PromiseDependencies,
   globalThis: ["esnext.global-this"],
   parseFloat: ["es.parse-float"],
   parseInt: ["es.parse-int"],
