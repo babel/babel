@@ -86,6 +86,12 @@ export default function(
       },
     },
 
+    CallExpression({ node }) {
+      if (t.isImport(node.callee)) {
+        this.addUnsupported(PromiseDependencies);
+      }
+    },
+
     // Symbol()
     // new Promise
     ReferencedIdentifier({ node: { name }, parent, scope }) {
