@@ -19,6 +19,8 @@ const OTHER_PLUGIN_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?![^/]*babel-plugin(?:-|\/|$
 const OTHER_PRESET_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?![^/]*babel-preset(?:-|\/|$)|[^/]+\/)/;
 const OTHER_ORG_DEFAULT_RE = /^(@(?!babel$)[^/]+)$/;
 
+const nodePaths = process.env("NODE_PATH").split(":");
+
 export function resolvePlugin(name: string, dirname: string): string | null {
   return resolveStandardizedName("plugin", name, dirname);
 }
@@ -96,14 +98,17 @@ function resolveStandardizedName(
   const standardizedName = standardizeName(type, name);
 
   try {
-    return resolve.sync(standardizedName, { basedir: dirname });
+    return resolve.sync(standardizedName, {
+      basedir: dirname,
+      paths: nodePaths
+    });
   } catch (e) {
     if (e.code !== "MODULE_NOT_FOUND") throw e;
 
     if (standardizedName !== name) {
       let resolvedOriginal = false;
       try {
-        resolve.sync(name, { basedir: dirname });
+        resolve.sync(name, { basedir: dirname, paths: nodePaths });
         resolvedOriginal = true;
       } catch (e2) {}
 
@@ -116,6 +121,7 @@ function resolveStandardizedName(
     try {
       resolve.sync(standardizeName(type, "@babel/" + name), {
         basedir: dirname,
+        paths: nodePaths
       });
       resolvedBabel = true;
     } catch (e2) {}
@@ -127,7 +133,10 @@ function resolveStandardizedName(
     let resolvedOppositeType = false;
     const oppositeType = type === "preset" ? "plugin" : "preset";
     try {
-      resolve.sync(standardizeName(oppositeType, name), { basedir: dirname });
+      resolve.sync(standardizeName(oppositeType, name), {
+        basedir: dirname,
+        paths: nodePaths
+      });
       resolvedOppositeType = true;
     } catch (e2) {}
 
