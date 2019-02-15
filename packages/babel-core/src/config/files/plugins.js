@@ -6,6 +6,7 @@
 
 import buildDebug from "debug";
 import resolve from "resolve";
+import os from "os";
 import path from "path";
 
 const debug = buildDebug("babel:config:loading:files:plugins");
@@ -21,15 +22,8 @@ const OTHER_ORG_DEFAULT_RE = /^(@(?!babel$)[^/]+)$/;
 
 const nodePaths =
   typeof process.env.NODE_PATH !== "undefined"
-    ? process.env.NODE_PATH.split(
-      os
-        .type()
-        .toLowerCase()
-        .indexOf("win") === 0
-          ? ";"
-          : ":"
-      )
-      : [];
+    ? process.env.NODE_PATH.split(path.delimiter)
+    : [];
 
 export function resolvePlugin(name: string, dirname: string): string | null {
   return resolveStandardizedName("plugin", name, dirname);
