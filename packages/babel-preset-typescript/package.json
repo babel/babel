@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0",
-    "@babel/plugin-transform-typescript": "^7.1.0"
+    "@babel/plugin-transform-typescript": "^7.3.2"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
