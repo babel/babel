@@ -113,7 +113,7 @@ export default declare((api, options) => {
 
       if (arg.isObjectPattern() || arg.isArrayPattern()) {
         const exprs = [path.node];
-        for (const name in arg.getBindingIdentifiers()) {
+        for (const name of Object.keys(arg.getBindingIdentifiers())) {
           if (this.scope.getBinding(name) !== path.scope.getBinding(name)) {
             return;
           }
@@ -266,7 +266,7 @@ export default declare((api, options) => {
             } else if (path.isImportDeclaration()) {
               const source = path.node.source.value;
               pushModule(source, "imports", path.node.specifiers);
-              for (const name in path.getBindingIdentifiers()) {
+              for (const name of Object.keys(path.getBindingIdentifiers())) {
                 path.scope.removeBinding(name);
                 variableIds.push(t.identifier(name));
               }
@@ -320,7 +320,9 @@ export default declare((api, options) => {
                   addExportName(name, name);
                   path.insertAfter([buildExportCall(name, t.identifier(name))]);
                 } else {
-                  for (const name in declar.getBindingIdentifiers()) {
+                  for (const name of Object.keys(
+                    declar.getBindingIdentifiers(),
+                  )) {
                     addExportName(name, name);
                   }
                 }

@@ -46,7 +46,7 @@ export default function isNodesEquivalent(a: any, b: any): boolean {
       typeof a[field] === "object" &&
       (!visitorKeys || !visitorKeys.includes(field))
     ) {
-      for (const key in a[field]) {
+      for (const key of Object.keys(a[field])) {
         if (a[field][key] !== b[field][key]) {
           return false;
         }

@@ -302,7 +302,7 @@ export default declare((api, opts) => {
 
         const specifiers = [];
 
-        for (const name in path.getOuterBindingIdentifiers(path)) {
+        for (const name of Object.keys(path.getOuterBindingIdentifiers(path))) {
           specifiers.push(
             t.exportSpecifier(t.identifier(name), t.identifier(name)),
           );

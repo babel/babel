@@ -195,12 +195,12 @@ function misMatch(exp, act) {
       return ppJSON(exp) + " !== " + ppJSON(act);
     }
   } else {
-    for (const prop in exp) {
+    for (const prop of Object.keys(exp)) {
       const mis = misMatch(exp[prop], act[prop]);
       if (mis) return addPath(mis, prop);
     }
 
-    for (const prop in act) {
+    for (const prop of Object.keys(act)) {
       if (typeof act[prop] === "function") {
         continue;
       }
