@@ -1559,6 +1559,9 @@ export default class StatementParser extends ExpressionParser {
   ): void {
     if (this.match(tt.name)) {
       node.id = this.parseIdentifier();
+      if (isStatement) {
+        this.checkLVal(node.id, BIND_LEXICAL, undefined, "class name");
+      }
     } else {
       if (optionalId || !isStatement) {
         node.id = null;
