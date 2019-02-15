@@ -19,11 +19,17 @@ const OTHER_PLUGIN_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?![^/]*babel-plugin(?:-|\/|$
 const OTHER_PRESET_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?![^/]*babel-preset(?:-|\/|$)|[^/]+\/)/;
 const OTHER_ORG_DEFAULT_RE = /^(@(?!babel$)[^/]+)$/;
 
-const nodePaths = typeof process.env.NODE_PATH !== "undefined"
-  ? process.env.NODE_PATH.split(
-    os.type().toLowerCase().indexOf("win") === 0 ? ";" : ":"
-  )
-  : [];
+const nodePaths =
+  typeof process.env.NODE_PATH !== "undefined"
+    ? process.env.NODE_PATH.split(
+      os
+        .type()
+        .toLowerCase()
+        .indexOf("win") === 0
+          ? ";"
+          : ":"
+      )
+      : [];
 
 export function resolvePlugin(name: string, dirname: string): string | null {
   return resolveStandardizedName("plugin", name, dirname);
