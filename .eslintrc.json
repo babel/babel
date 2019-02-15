@@ -13,7 +13,8 @@
       "files": ["packages/*/src/**/*.js", "codemods/*/src/**/*.js"],
       "rules": {
         "@babel/development/no-undefined-identifier": "error",
-        "@babel/development/no-deprecated-clone": "error"
+        "@babel/development/no-deprecated-clone": "error",
+        "guard-for-in": "error"
       }
     },
     {
