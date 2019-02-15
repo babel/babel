@@ -121,75 +121,62 @@ export default function(
     },
 
     // Array.from
-    MemberExpression: {
-      enter(path) {
-        if (!path.isReferenced()) return;
+    MemberExpression(path) {
+      const { node, scope } = path;
+      const { object, property } = node;
+      let { name } = object;
+      const bindingIdentifier = scope.getBindingIdentifier(name);
 
-        const { node } = path;
-        const { object, property } = node;
-
-        if (!t.isReferenced(object, node)) return;
-
-        let evaluatedPropType = object.name;
-        let propertyName = property.name;
-        let instanceType;
-
-        if (node.computed) {
-          if (t.isStringLiteral(property)) {
-            propertyName = property.value;
-          } else {
-            const result = path.get("property").evaluate();
-            if (result.confident && result.value) {
-              propertyName = result.value;
-            }
-          }
-        }
-
-        if (
-          !t.isIdentifier(object) ||
-          path.scope.getBindingIdentifier(object.name)
-        ) {
-          const result = path.get("object").evaluate();
-          if (result.value !== undefined) {
-            instanceType = getType(result.value);
-          } else if (result.deopt && result.deopt.isIdentifier()) {
-            evaluatedPropType = result.deopt.node.name;
-          }
-        }
-
-        if (has(StaticProperties, evaluatedPropType)) {
-          const BuiltInProperties = StaticProperties[evaluatedPropType];
-          if (has(BuiltInProperties, propertyName)) {
-            const StaticPropertyDependencies = BuiltInProperties[propertyName];
-            this.addUnsupported(StaticPropertyDependencies);
-          }
-        }
-
-        if (has(InstanceProperties, propertyName)) {
-          let InstancePropertyDependencies = InstanceProperties[propertyName];
-          if (instanceType) {
-            InstancePropertyDependencies = InstancePropertyDependencies.filter(
-              module =>
-                module.includes(instanceType) ||
-                CommonInstanceDependencies.has(module),
-            );
-          }
-          this.addUnsupported(InstancePropertyDependencies);
-        }
-      },
-
-      // Symbol.match
-      exit(path) {
-        if (!path.isReferenced()) return;
-
-        const { name } = path.node.object;
-
-        if (!has(BuiltIns, name)) return;
-        if (path.scope.getBindingIdentifier(name)) return;
-
+      if (has(BuiltIns, name) && !bindingIdentifier) {
         const BuiltInDependencies = BuiltIns[name];
         this.addUnsupported(BuiltInDependencies);
-      },
+      }
+
+      const BuiltInDependencies = BuiltIns[name];
+      this.addUnsupported(BuiltInDependencies);
+
+      let propertyName = property.name;
+      let instanceType;
+
+      if (node.computed) {
+        if (t.isStringLiteral(property)) {
+          propertyName = property.value;
+        } else {
+          const result = path.get("property").evaluate();
+          if (result.confident && result.value) {
+            propertyName = result.value;
+          }
+        }
+      }
+
+      if (!t.isIdentifier(object) || bindingIdentifier) {
+        const result = path.get("object").evaluate();
+        if (result.value !== undefined) {
+          instanceType = getType(result.value);
+        } else if (result.deopt && result.deopt.isIdentifier()) {
+          name = result.deopt.node.name;
+        }
+      }
+
+      if (has(StaticProperties, name)) {
+        const BuiltInProperties = StaticProperties[name];
+        if (has(BuiltInProperties, propertyName)) {
+          const StaticPropertyDependencies = BuiltInProperties[propertyName];
+          this.addUnsupported(StaticPropertyDependencies);
+        }
+      }
+
+      if (has(InstanceProperties, propertyName)) {
+        let InstancePropertyDependencies = InstanceProperties[propertyName];
+        if (instanceType) {
+          InstancePropertyDependencies = InstancePropertyDependencies.filter(
+            module =>
+              module.includes(instanceType) ||
+              CommonInstanceDependencies.has(module),
+          );
+        }
+        this.addUnsupported(InstancePropertyDependencies);
+      }
     },
 
     // var { repeat, startsWith } = String
@@ -205,7 +192,6 @@ export default function(
 
       if (!path.isReferenced()) return;
       if (!t.isObjectPattern(id)) return;
-      if (!t.isReferenced(init, node)) return;
       // doesn't reference the global
       if (init && path.scope.getBindingIdentifier(init.name)) return;
 

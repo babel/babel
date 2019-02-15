@@ -96,12 +96,8 @@ export default function(
     // Array.from
     MemberExpression: {
       enter(path) {
-        if (!path.isReferenced()) return;
-
         const { node } = path;
         const { object, property } = node;
-
-        if (!t.isReferenced(object, node)) return;
 
         let evaluatedPropType = object.name;
         let propertyName = property.name;
@@ -148,8 +144,6 @@ export default function(
 
       // Symbol.match
       exit(path) {
-        if (!path.isReferenced()) return;
-
         const { name } = path.node.object;
 
         if (!has(BuiltIns, name)) return;
@@ -162,13 +156,10 @@ export default function(
 
     // var { repeat, startsWith } = String
     VariableDeclarator(path) {
-      if (!path.isReferenced()) return;
-
       const { node } = path;
       const { id, init } = node;
 
       if (!t.isObjectPattern(id)) return;
-      if (!t.isReferenced(init, node)) return;
 
       // doesn't reference the global
       if (init && path.scope.getBindingIdentifier(init.name)) return;
