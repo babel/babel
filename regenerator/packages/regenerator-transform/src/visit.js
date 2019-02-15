@@ -90,8 +90,14 @@ exports.getVisitor = ({ types: t }) => ({
       // declarations with equivalent assignment expressions.
       let vars = hoist(path);
 
-      let didRenameArguments = renameArguments(path, () => t.clone(argsId));
-      if (didRenameArguments) {
+      let context = {
+        usesThis: false,
+        usesArguments: false,
+        getArgsId: () => t.clone(argsId),
+      };
+      path.traverse(argumentsThisVisitor, context);
+
+      if (context.usesArguments) {
         vars = vars || t.variableDeclaration("var", []);
         const argumentIdentifier = t.identifier("arguments");
         // we need to do this as otherwise arguments in arrow functions gets hoisted
@@ -108,16 +114,22 @@ exports.getVisitor = ({ types: t }) => ({
         outerBody.push(vars);
       }
 
-      let wrapArgs = [
-        emitter.getContextFunction(innerFnId),
+      let wrapArgs = [emitter.getContextFunction(innerFnId)];
+      let tryLocsList = emitter.getTryLocsList();
+
+      if (node.generator) {
+        wrapArgs.push(outerFnExpr);
+      } else if (context.usesThis || tryLocsList) {
         // Async functions that are not generators don't care about the
         // outer function because they don't need it to be marked and don't
         // inherit from its .prototype.
-        node.generator ? outerFnExpr : t.nullLiteral(),
-        t.thisExpression()
-      ];
-
-      let tryLocsList = emitter.getTryLocsList();
+        wrapArgs.push(t.nullLiteral());
+      }
+      if (context.usesThis) {
+        wrapArgs.push(t.thisExpression());
+      } else if (tryLocsList) {
+        wrapArgs.push(t.nullLiteral());
+      }
       if (tryLocsList) {
         wrapArgs.push(tryLocsList);
       }
@@ -243,22 +255,7 @@ function getMarkedFunctionId(funPath) {
   return t.clone(markedId);
 }
 
-function renameArguments(funcPath, getArgsId) {
-  let state = {
-    didRenameArguments: false,
-    getArgsId: getArgsId
-  };
-
-  funcPath.traverse(argumentsVisitor, state);
-
-  // If the traversal replaced any arguments references, then we need to
-  // alias the outer function's arguments binding (be it the implicit
-  // arguments object or some other parameter or variable) to the variable
-  // named by argsId.
-  return state.didRenameArguments;
-}
-
-let argumentsVisitor = {
+let argumentsThisVisitor = {
   "FunctionExpression|FunctionDeclaration": function(path) {
     path.skip();
   },
@@ -266,8 +263,12 @@ let argumentsVisitor = {
   Identifier: function(path, state) {
     if (path.node.name === "arguments" && util.isReference(path)) {
       util.replaceWithOrRemove(path, state.getArgsId());
-      state.didRenameArguments = true;
+      state.usesArguments = true;
     }
+  },
+
+  ThisExpression: function(path, state) {
+    state.usesThis = true;
   }
 };
 

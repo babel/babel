@@ -1711,6 +1711,44 @@ describe("the arguments object", function() {
   });
 });
 
+describe("the this object", function () {
+  it("should default to undefined (strict)", function () {
+    function *gen() {
+      "use strict";
+
+      yield this;
+      return this;
+    }
+
+    var it = gen();
+    assert.strictEqual(it.next().value, undefined);
+    assert.strictEqual(it.next().value, undefined);
+  });
+
+  it("should respect .call's this", function () {
+    function *gen() {
+      yield this;
+      return this;
+    }
+
+    var self = {};
+    var it = gen.call(self);
+    assert.strictEqual(it.next().value, self);
+    assert.strictEqual(it.next().value, self);
+  });
+
+  it("shouldn't capture this when not needed", function () {
+    // https://github.com/babel/babel/issues/4056
+
+    function *gen() {
+      return 0;
+    }
+
+    var source = String(gen);
+    assert.strictEqual(source.indexOf("this"), -1);
+  });
+});
+
 describe("directive strings", function () {
   function *strict() {
     "use strict";

@@ -251,6 +251,44 @@ describe("async functions and await expressions", function() {
       }).catch(done);
     });
   });
+
+  describe("the this object", function () {
+    it("should default to undefined (strict)", function (done) {
+      async function f() {
+        "use strict";
+  
+        return this;
+      }
+  
+      f().then(function(value) {
+        assert.strictEqual(value, undefined);
+        done();
+      }).catch(done);
+    });
+  
+    it("should respect .call's this", function (done) {
+      async function f() {
+        return this;
+      }
+  
+      var self = {};
+      f.call(self).then(function(value) {
+        assert.strictEqual(value, self);
+        done();
+      }).catch(done);
+    });
+  
+    it("shouldn't capture this when not needed", function () {
+      // https://github.com/babel/babel/issues/4056
+  
+      async function f() {
+        return 0;
+      }
+  
+      var source = String(f);
+      assert.strictEqual(source.indexOf("this"), -1);
+    });
+  });
 });
 
 describe("async generator functions", function() {
