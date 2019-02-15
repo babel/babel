@@ -384,6 +384,48 @@ describe("programmatic generation", function() {
   [key: any]: number
 }`);
   });
+
+  describe("directives", function() {
+    it("preserves escapes", function() {
+      const directive = t.directive(
+        t.directiveLiteral(String.raw`us\x65 strict`),
+      );
+      const output = generate(directive).code;
+
+      expect(output).toBe(String.raw`"us\x65 strict";`);
+    });
+
+    it("preserves escapes in minified output", function() {
+      // https://github.com/babel/babel/issues/4767
+
+      const directive = t.directive(t.directiveLiteral(String.raw`foo\n\t\r`));
+      const output = generate(directive, { minified: true }).code;
+
+      expect(output).toBe(String.raw`"foo\n\t\r";`);
+    });
+
+    it("unescaped single quote", function() {
+      const directive = t.directive(t.directiveLiteral(String.raw`'\'\"`));
+      const output = generate(directive).code;
+
+      expect(output).toBe(String.raw`"'\'\"";`);
+    });
+
+    it("unescaped double quote", function() {
+      const directive = t.directive(t.directiveLiteral(String.raw`"\'\"`));
+      const output = generate(directive).code;
+
+      expect(output).toBe(String.raw`'"\'\"';`);
+    });
+
+    it("unescaped single and double quotes together throw", function() {
+      const directive = t.directive(t.directiveLiteral(String.raw`'"`));
+
+      expect(() => {
+        generate(directive);
+      }).toThrow();
+    });
+  });
 });
 
 describe("CodeGenerator", function() {
