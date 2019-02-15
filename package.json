@@ -30,6 +30,7 @@
     "chalk": "^2.3.2",
     "charcodes": "^0.2.0",
     "derequire": "^2.0.2",
+    "duplicate-package-checker-webpack-plugin": "^2.1.0",
     "enhanced-resolve": "^3.0.0",
     "eslint": "^5.12.1",
     "eslint-config-babel": "^8.0.2",

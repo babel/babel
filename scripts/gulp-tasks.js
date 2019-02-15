@@ -17,9 +17,9 @@ const chalk = require("chalk");
 const through = require("through2");
 const fancyLog = require("fancy-log");
 const rename = require("gulp-rename");
-const RootMostResolvePlugin = require("webpack-dependency-suite")
-  .RootMostResolvePlugin;
 const webpack = require("webpack");
+const { RootMostResolvePlugin } = require("webpack-dependency-suite");
+const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin");
 const webpackStream = require("webpack-stream");
 const uglify = require("gulp-uglify");
 
@@ -62,6 +62,7 @@ function webpackBuild(opts) {
       libraryTarget: "umd",
     },
     plugins: [
+      new DuplicatePackageCheckerPlugin(),
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": '"production"',
         "process.env": JSON.stringify({ NODE_ENV: "production" }),
@@ -92,8 +93,11 @@ function webpackBuild(opts) {
   return webpackStream(config, webpack);
   // To write JSON for debugging:
   /*return webpackStream(config, webpack, (err, stats) => {
-    require('fancy-log')(stats.toString({colors: true}));
-    require('fs').writeFileSync('webpack-debug.json', JSON.stringify(stats.toJson()));
+    require("fancy-log")(stats.toString({ colors: true }));
+    require("fs").writeFileSync(
+      "webpack-debug.json",
+      JSON.stringify(stats.toJson())
+    );
   });*/
 }
 
