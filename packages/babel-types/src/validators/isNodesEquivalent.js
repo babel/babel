@@ -25,6 +25,11 @@ export default function isNodesEquivalent(a: any, b: any): boolean {
     if (typeof a[field] !== typeof b[field]) {
       return false;
     }
+    if (a[field] == null && b[field] == null) {
+      continue;
+    } else if (a[field] == null || b[field] == null) {
+      return false;
+    }
 
     if (Array.isArray(a[field])) {
       if (!Array.isArray(b[field])) {
