@@ -62,7 +62,11 @@ function webpackBuild(opts) {
       libraryTarget: "umd",
     },
     plugins: [
-      new DuplicatePackageCheckerPlugin(),
+      new DuplicatePackageCheckerPlugin({
+        exclude(instance) {
+          return instance.name === "semver";
+        },
+      }),
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": '"production"',
         "process.env": JSON.stringify({ NODE_ENV: "production" }),
