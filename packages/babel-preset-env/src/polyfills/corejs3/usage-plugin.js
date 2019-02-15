@@ -75,15 +75,13 @@ export default function(
       }
     },
 
-    Program: {
-      enter(path) {
-        path.get("body").forEach(bodyPath => {
-          if (isPolyfillRequire(t, bodyPath)) {
-            console.warn(NO_DIRECT_POLYFILL_IMPORT);
-            bodyPath.remove();
-          }
-        });
-      },
+    Program(path) {
+      path.get("body").forEach(bodyPath => {
+        if (isPolyfillRequire(t, bodyPath)) {
+          console.warn(NO_DIRECT_POLYFILL_IMPORT);
+          bodyPath.remove();
+        }
+      });
     },
 
     CallExpression({ node }) {
