@@ -40,14 +40,14 @@ and split it with `/`:
 
 Find the corresponding module on [`core-js@2`](https://github.com/zloirock/core-js/tree/v2/modules):
 
-`es.object.values.js`
+`es7.object.values.js`
 
 Find required ES version in [`corejs2-built-in-features.js`](https://github.com/babel/babel/blob/master/packages/babel-preset-env/data/corejs2-built-in-features.js) and add the new feature:
 
 ```js
 const es = {
   //...
-  "es6.object.values": "Object static methods / Object.values"
+  "es7.object.values": "Object static methods / Object.values"
 }
 ```
 
