@@ -20,7 +20,7 @@ const OTHER_PRESET_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?![^/]*babel-preset(?:-|\/|$
 const OTHER_ORG_DEFAULT_RE = /^(@(?!babel$)[^/]+)$/;
 
 const nodePaths =
-  typeof process.env.NODE_PATH !== "undefined"
+  typeof process.env.NODE_PATH !== "undefined" && process.env.NODE_PATH !== null
     ? process.env.NODE_PATH.split(path.delimiter)
     : [];
 
