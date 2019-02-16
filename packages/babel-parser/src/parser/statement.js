@@ -1021,9 +1021,17 @@ export default class StatementParser extends ExpressionParser {
           ? null
           : this.parseIdentifier();
       if (node.id && !isHangingStatement) {
+        // If it is a regular function declaration in sloppy mode, then it is
+        // subject to Annex B semantics (BIND_FUNCTION). Otherwise, the binding
+        // mode depends on properties of the current scope (see
+        // treatFunctionsAsVar).
         this.checkLVal(
           node.id,
-          this.inModule && !this.inFunction ? BIND_LEXICAL : BIND_FUNCTION,
+          this.state.strict || node.generator || node.async
+            ? this.treatFunctionsAsVar
+              ? BIND_VAR
+              : BIND_LEXICAL
+            : BIND_FUNCTION,
           null,
           "function name",
         );

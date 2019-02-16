@@ -1,0 +1,4 @@
+{
+  "sourceType": "module",
+  "throws": "Identifier 'foo' has already been declared (1:29)"
+}

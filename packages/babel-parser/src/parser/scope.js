@@ -8,6 +8,7 @@ import {
   SCOPE_GENERATOR,
   SCOPE_SIMPLE_CATCH,
   SCOPE_SUPER,
+  SCOPE_TOP,
   SCOPE_VAR,
   BIND_SIMPLE_CATCH,
   BIND_LEXICAL,
@@ -24,6 +25,8 @@ class Scope {
   var: string[] = [];
   // A list of lexically-declared names in the current lexical scope
   lexical: string[] = [];
+  // A list of lexically-declared FunctionDeclaration names in the current lexical scope
+  functions: string[] = [];
 
   constructor(flags: ScopeFlags) {
     this.flags = flags;
@@ -53,6 +56,9 @@ export default class ScopeParser extends UtilParser {
   get inNonArrowFunction() {
     return (this.currentThisScope().flags & SCOPE_FUNCTION) > 0;
   }
+  get treatFunctionsAsVar() {
+    return this.treatFunctionsAsVarInScope(this.currentScope());
+  }
 
   enterScope(flags: ScopeFlags) {
     this.scopeStack.push(new Scope(flags));
@@ -62,26 +68,46 @@ export default class ScopeParser extends UtilParser {
     this.scopeStack.pop();
   }
 
+  // The spec says:
+  // > At the top level of a function, or script, function declarations are
+  // > treated like var declarations rather than like lexical declarations.
+  treatFunctionsAsVarInScope(scope: Scope): boolean {
+    return !!(
+      scope.flags & SCOPE_FUNCTION ||
+      (!this.inModule && scope.flags & SCOPE_TOP)
+    );
+  }
+
   declareName(name: string, bindingType: ?BindingTypes, pos: number) {
     let redeclared = false;
     if (bindingType === BIND_LEXICAL) {
       const scope = this.currentScope();
       redeclared =
-        scope.lexical.indexOf(name) > -1 || scope.var.indexOf(name) > -1;
+        scope.lexical.indexOf(name) > -1 ||
+        scope.functions.indexOf(name) > -1 ||
+        scope.var.indexOf(name) > -1;
       scope.lexical.push(name);
     } else if (bindingType === BIND_SIMPLE_CATCH) {
       const scope = this.currentScope();
       scope.lexical.push(name);
     } else if (bindingType === BIND_FUNCTION) {
       const scope = this.currentScope();
-      redeclared = scope.lexical.indexOf(name) > -1;
-      scope.var.push(name);
+      if (this.treatFunctionsAsVar) {
+        redeclared = scope.lexical.indexOf(name) > -1;
+      } else {
+        redeclared =
+          scope.lexical.indexOf(name) > -1 || scope.var.indexOf(name) > -1;
+      }
+      scope.functions.push(name);
     } else {
       for (let i = this.scopeStack.length - 1; i >= 0; --i) {
         const scope = this.scopeStack[i];
         if (
-          scope.lexical.indexOf(name) > -1 &&
-          !(scope.flags & SCOPE_SIMPLE_CATCH && scope.lexical[0] === name)
+          (scope.lexical.indexOf(name) > -1 &&
+            !(scope.flags & SCOPE_SIMPLE_CATCH) &&
+            scope.lexical[0] === name) ||
+          (!this.treatFunctionsAsVarInScope(scope) &&
+            scope.functions.indexOf(name) > -1)
         ) {
           redeclared = true;
           break;
