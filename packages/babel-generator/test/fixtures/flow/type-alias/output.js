@@ -7,6 +7,6 @@ type union = {
 } | {
   type: "B"
 };
-type overloads = (x: string) => number & (x: number) => string;
+type overloads = ((x: string) => number) & ((x: number) => string);
 type func = (string) => string;
 type D = X.Y<Z>;

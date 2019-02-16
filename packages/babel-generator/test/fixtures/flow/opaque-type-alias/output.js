@@ -7,4 +7,4 @@ opaque type union = {
 } | {
   type: "B"
 };
-opaque type overloads = (x: string) => number & (x: number) => string;
+opaque type overloads = ((x: string) => number) & ((x: number) => string);
