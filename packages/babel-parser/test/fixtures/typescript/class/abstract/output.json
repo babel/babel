@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 250,
+  "end": 254,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 250,
+    "end": 254,
     "loc": {
       "start": {
         "line": 1,
@@ -32,7 +32,7 @@
       {
         "type": "ClassDeclaration",
         "start": 0,
-        "end": 19,
+        "end": 20,
         "loc": {
           "start": {
             "line": 1,
@@ -40,14 +40,14 @@
           },
           "end": {
             "line": 1,
-            "column": 19
+            "column": 20
           }
         },
         "abstract": true,
         "id": {
           "type": "Identifier",
           "start": 15,
-          "end": 16,
+          "end": 17,
           "loc": {
             "start": {
               "line": 1,
@@ -55,25 +55,25 @@
             },
             "end": {
               "line": 1,
-              "column": 16
+              "column": 17
             },
-            "identifierName": "C"
+            "identifierName": "C1"
           },
-          "name": "C"
+          "name": "C1"
         },
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start": 17,
-          "end": 19,
+          "start": 18,
+          "end": 20,
           "loc": {
             "start": {
               "line": 1,
-              "column": 17
+              "column": 18
             },
             "end": {
               "line": 1,
-              "column": 19
+              "column": 20
             }
           },
           "body": []
@@ -81,8 +81,8 @@
       },
       {
         "type": "ClassDeclaration",
-        "start": 20,
-        "end": 47,
+        "start": 21,
+        "end": 49,
         "loc": {
           "start": {
             "line": 2,
@@ -90,14 +90,14 @@
           },
           "end": {
             "line": 2,
-            "column": 27
+            "column": 28
           }
         },
         "abstract": true,
         "id": {
           "type": "Identifier",
-          "start": 43,
-          "end": 44,
+          "start": 44,
+          "end": 46,
           "loc": {
             "start": {
               "line": 2,
@@ -105,25 +105,25 @@
             },
             "end": {
               "line": 2,
-              "column": 24
+              "column": 25
             },
-            "identifierName": "C"
+            "identifierName": "C2"
           },
-          "name": "C"
+          "name": "C2"
         },
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start": 45,
-          "end": 47,
+          "start": 47,
+          "end": 49,
           "loc": {
             "start": {
               "line": 2,
-              "column": 25
+              "column": 26
             },
             "end": {
               "line": 2,
-              "column": 27
+              "column": 28
             }
           },
           "body": []
@@ -132,8 +132,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 48,
-        "end": 74,
+        "start": 50,
+        "end": 77,
         "loc": {
           "start": {
             "line": 3,
@@ -141,15 +141,15 @@
           },
           "end": {
             "line": 3,
-            "column": 26
+            "column": 27
           }
         },
         "specifiers": [],
         "source": null,
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 55,
-          "end": 74,
+          "start": 57,
+          "end": 77,
           "loc": {
             "start": {
               "line": 3,
@@ -157,14 +157,14 @@
             },
             "end": {
               "line": 3,
-              "column": 26
+              "column": 27
             }
           },
           "abstract": true,
           "id": {
             "type": "Identifier",
-            "start": 70,
-            "end": 71,
+            "start": 72,
+            "end": 74,
             "loc": {
               "start": {
                 "line": 3,
@@ -172,25 +172,25 @@
               },
               "end": {
                 "line": 3,
-                "column": 23
+                "column": 24
               },
-              "identifierName": "C"
+              "identifierName": "C3"
             },
-            "name": "C"
+            "name": "C3"
           },
           "superClass": null,
           "body": {
             "type": "ClassBody",
-            "start": 72,
-            "end": 74,
+            "start": 75,
+            "end": 77,
             "loc": {
               "start": {
                 "line": 3,
-                "column": 24
+                "column": 25
               },
               "end": {
                 "line": 3,
-                "column": 26
+                "column": 27
               }
             },
             "body": []
@@ -200,8 +200,8 @@
           {
             "type": "CommentLine",
             "value": " `export abstract class {}` is not valid TypeScript.",
-            "start": 75,
-            "end": 129,
+            "start": 78,
+            "end": 132,
             "loc": {
               "start": {
                 "line": 4,
@@ -217,8 +217,8 @@
       },
       {
         "type": "ExportDefaultDeclaration",
-        "start": 130,
-        "end": 163,
+        "start": 133,
+        "end": 166,
         "loc": {
           "start": {
             "line": 5,
@@ -231,8 +231,8 @@
         },
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 145,
-          "end": 163,
+          "start": 148,
+          "end": 166,
           "loc": {
             "start": {
               "line": 5,
@@ -247,8 +247,8 @@
           "superClass": null,
           "body": {
             "type": "ClassBody",
-            "start": 160,
-            "end": 163,
+            "start": 163,
+            "end": 166,
             "loc": {
               "start": {
                 "line": 5,
@@ -267,8 +267,8 @@
           {
             "type": "CommentLine",
             "value": " `export abstract class {}` is not valid TypeScript.",
-            "start": 75,
-            "end": 129,
+            "start": 78,
+            "end": 132,
             "loc": {
               "start": {
                 "line": 4,
@@ -284,8 +284,8 @@
       },
       {
         "type": "ExportDefaultDeclaration",
-        "start": 164,
-        "end": 199,
+        "start": 167,
+        "end": 203,
         "loc": {
           "start": {
             "line": 6,
@@ -293,13 +293,13 @@
           },
           "end": {
             "line": 6,
-            "column": 35
+            "column": 36
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 179,
-          "end": 199,
+          "start": 182,
+          "end": 203,
           "loc": {
             "start": {
               "line": 6,
@@ -307,13 +307,13 @@
             },
             "end": {
               "line": 6,
-              "column": 35
+              "column": 36
             }
           },
           "id": {
             "type": "Identifier",
-            "start": 194,
-            "end": 195,
+            "start": 197,
+            "end": 199,
             "loc": {
               "start": {
                 "line": 6,
@@ -321,25 +321,25 @@
               },
               "end": {
                 "line": 6,
-                "column": 31
+                "column": 32
               },
-              "identifierName": "C"
+              "identifierName": "C4"
             },
-            "name": "C"
+            "name": "C4"
           },
           "superClass": null,
           "body": {
             "type": "ClassBody",
-            "start": 196,
-            "end": 199,
+            "start": 200,
+            "end": 203,
             "loc": {
               "start": {
                 "line": 6,
-                "column": 32
+                "column": 33
               },
               "end": {
                 "line": 6,
-                "column": 35
+                "column": 36
               }
             },
             "body": []
@@ -350,8 +350,8 @@
           {
             "type": "CommentLine",
             "value": " `abstract class` is not valid as an expression.",
-            "start": 200,
-            "end": 250,
+            "start": 204,
+            "end": 254,
             "loc": {
               "start": {
                 "line": 7,
@@ -372,8 +372,8 @@
     {
       "type": "CommentLine",
       "value": " `export abstract class {}` is not valid TypeScript.",
-      "start": 75,
-      "end": 129,
+      "start": 78,
+      "end": 132,
       "loc": {
         "start": {
           "line": 4,
@@ -388,8 +388,8 @@
     {
       "type": "CommentLine",
       "value": " `abstract class` is not valid as an expression.",
-      "start": 200,
-      "end": 250,
+      "start": 204,
+      "end": 254,
       "loc": {
         "start": {
           "line": 7,

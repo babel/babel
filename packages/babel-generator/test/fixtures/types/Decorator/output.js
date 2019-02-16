@@ -33,14 +33,14 @@ class Foo {
 }
 
 export default @foo
-class Foo {
+class Foo2 {
   bar() {
     class Baz {}
   }
 
 }
 export @foo
-class Foo {
+class Foo3 {
   bar() {
     class Baz {}
   }
