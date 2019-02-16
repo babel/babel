@@ -426,6 +426,17 @@ describe("programmatic generation", function() {
       }).toThrow();
     });
   });
+
+  it("typescript generate parantheses if necessary", function() {
+    const typeStatement = t.TSArrayType(
+      t.TSUnionType([
+        t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+        t.TSNullKeyword(),
+      ]),
+    );
+    const output = generate(typeStatement).code;
+    expect(output).toBe("((number & boolean) | null)[]");
+  });
 });
 
 describe("CodeGenerator", function() {

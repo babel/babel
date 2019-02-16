@@ -231,7 +231,7 @@ export function tsPrintBraced(members, node) {
 }
 
 export function TSArrayType(node) {
-  this.print(node.elementType);
+  this.print(node.elementType, node);
   this.token("[]");
 }
 

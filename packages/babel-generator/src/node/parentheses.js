@@ -127,6 +127,17 @@ export function TSTypeAssertion() {
   return true;
 }
 
+export function TSUnionType(node: Object, parent: Object): boolean {
+  return (
+    t.isTSArrayType(parent) ||
+    t.isTSNullKeyword(parent) ||
+    t.isTSIntersectionType(parent) ||
+    t.isTSUnionType(parent)
+  );
+}
+
+export { TSUnionType as TSIntersectionType };
+
 export function BinaryExpression(node: Object, parent: Object): boolean {
   // let i = (1 in []);
   // for ((1 in []);;);
