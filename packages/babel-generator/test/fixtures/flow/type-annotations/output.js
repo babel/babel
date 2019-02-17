@@ -180,7 +180,7 @@ class Array {
 
 }
 
-var x: () => number | () => string = fn;
+var x: () => number | (() => string) = fn;
 var x: typeof Y = Y;
 var x: typeof Y | number = Y;
 var {

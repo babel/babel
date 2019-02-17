@@ -35,7 +35,16 @@ export function NullableTypeAnnotation(node: Object, parent: Object): boolean {
   return t.isArrayTypeAnnotation(parent);
 }
 
-export { NullableTypeAnnotation as FunctionTypeAnnotation };
+export function FunctionTypeAnnotation(node: Object, parent: Object): boolean {
+  return (
+    // (() => A) | (() => B)
+    t.isUnionTypeAnnotation(parent) ||
+    // (() => A) & (() => B)
+    t.isIntersectionTypeAnnotation(parent) ||
+    // (() => A)[]
+    t.isArrayTypeAnnotation(parent)
+  );
+}
 
 export function UpdateExpression(node: Object, parent: Object): boolean {
   return (
