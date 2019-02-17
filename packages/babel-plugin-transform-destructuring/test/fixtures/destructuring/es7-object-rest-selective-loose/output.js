@@ -19,6 +19,5 @@ y = _o.y;
 z = babelHelpers.objectWithoutProperties(_o, ["x", "y"]);
 
 var _useState = useState(),
-    _useState2 = babelHelpers.slicedToArray(_useState, 2),
-    state = _useState2[0],
-    dispatch = _useState2[1];
+    state = _useState[0],
+    dispatch = _useState[1];
