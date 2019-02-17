@@ -239,10 +239,9 @@ export default declare((api, options) => {
           );
         }
 
-        const isLoose =
-          (this.selectiveLoose &&
-            checkNameMatchesSelectiveLoose(objRef.name, this.selectiveLoose)) ||
-          loose;
+        const isLoose = this.selectiveLoose
+          ? checkNameMatchesSelectiveLoose(objRef.name, this.selectiveLoose)
+          : loose;
         value = t.callExpression(
           this.addHelper(`objectWithoutProperties${isLoose ? "Loose" : ""}`),
           [t.cloneNode(objRef), keyExpression],

@@ -1,6 +1,6 @@
 {
   "plugins": [
-    ["transform-destructuring", { "selectiveLoose": ["z", "useState"] }],
+    ["transform-destructuring", { "loose": true, "selectiveLoose": ["z", "useState"] }],
     "proposal-object-rest-spread",
     ["external-helpers", { "helperVersion": "7.1.5" }]
   ]
