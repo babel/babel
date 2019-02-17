@@ -130,9 +130,10 @@ export function TSTypeAssertion() {
 export function TSUnionType(node: Object, parent: Object): boolean {
   return (
     t.isTSArrayType(parent) ||
-    t.isTSNullKeyword(parent) ||
+    t.isTSOptionalType(parent) ||
     t.isTSIntersectionType(parent) ||
-    t.isTSUnionType(parent)
+    t.isTSUnionType(parent) ||
+    t.isTSRestType(parent)
   );
 }
 

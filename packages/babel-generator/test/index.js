@@ -427,15 +427,38 @@ describe("programmatic generation", function() {
     });
   });
 
-  it("typescript generate parantheses if necessary", function() {
-    const typeStatement = t.TSArrayType(
-      t.TSUnionType([
+  describe("typescript generate parantheses if necessary", function() {
+    it("wraps around union for array", () => {
+      const typeStatement = t.TSArrayType(
+        t.TSUnionType([
+          t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+          t.TSNullKeyword(),
+        ]),
+      );
+      const output = generate(typeStatement).code;
+      expect(output).toBe("((number & boolean) | null)[]");
+    });
+    it("wraps around intersection for array", () => {
+      const typeStatement = t.TSArrayType(
         t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
-        t.TSNullKeyword(),
-      ]),
-    );
-    const output = generate(typeStatement).code;
-    expect(output).toBe("((number & boolean) | null)[]");
+      );
+      const output = generate(typeStatement).code;
+      expect(output).toBe("(number & boolean)[]");
+    });
+    it("wraps around rest", () => {
+      const typeStatement = t.tsRestType(
+        t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+      );
+      const output = generate(typeStatement).code;
+      expect(output).toBe("...(number & boolean)");
+    });
+    it("wraps around optional type", () => {
+      const typeStatement = t.tsOptionalType(
+        t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+      );
+      const output = generate(typeStatement).code;
+      expect(output).toBe("(number & boolean)?");
+    });
   });
 });
 
