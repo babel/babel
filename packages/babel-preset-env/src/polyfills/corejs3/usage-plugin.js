@@ -65,6 +65,7 @@ export default function(
   const available = getModulesListForTargetVersion(corejs);
 
   const addAndRemovePolyfillImports = {
+    // import 'babel-polyfill'
     ImportDeclaration(path) {
       if (
         path.node.specifiers.length === 0 &&
@@ -75,6 +76,7 @@ export default function(
       }
     },
 
+    // require('babel-polyfill')
     Program(path) {
       path.get("body").forEach(bodyPath => {
         if (isPolyfillRequire(t, bodyPath)) {
@@ -84,21 +86,11 @@ export default function(
       });
     },
 
+    // import('something').then(...)
     CallExpression({ node }) {
       if (t.isImport(node.callee)) {
         this.addUnsupported(PromiseDependencies);
       }
-    },
-
-    // Symbol()
-    // new Promise
-    ReferencedIdentifier({ node: { name }, parent, scope }) {
-      if (t.isMemberExpression(parent)) return;
-      if (!has(BuiltIns, name)) return;
-      if (scope.getBindingIdentifier(name)) return;
-
-      const BuiltInDependencies = BuiltIns[name];
-      this.addUnsupported(BuiltInDependencies);
     },
 
     // for-of loop
@@ -106,11 +98,44 @@ export default function(
       this.addUnsupported(CommonIterators);
     },
 
-    // spread
-    ArrayExpression({ node }) {
-      if (node.elements.some(el => t.isSpreadElement(el))) {
-        this.addUnsupported(CommonIterators);
+    ArrayPattern() {
+      // const [a, b] = c
+      this.addUnsupported(CommonIterators);
+    },
+
+    ObjectPattern({ node, parent, scope }) {
+      let canBeStatic, builtIn, right;
+      if (t.isVariableDeclarator(parent)) {
+        right = parent.init;
+      } else if (t.isAssignmentExpression(parent)) {
+        right = parent.right;
       }
+      if (right) {
+        builtIn = right.name;
+        canBeStatic =
+          has(StaticProperties, builtIn) &&
+          !scope.getBindingIdentifier(builtIn);
+      }
+
+      for (const { key } of node.properties) {
+        const name = t.isIdentifier(key)
+          ? key.name
+          : t.isStringLiteral(key)
+          ? key.value
+          : null;
+        if (name) {
+          (canBeStatic &&
+            // const { keys, values } = Object
+            this.addStaticPropertyDependencies(builtIn, name)) ||
+            // const { keys, values } = [1, 2, 3]
+            this.addInstancePropertyDependencies(name);
+        }
+      }
+    },
+
+    // [...spread]
+    SpreadElement() {
+      this.addUnsupported(CommonIterators);
     },
 
     // yield*
@@ -120,21 +145,18 @@ export default function(
       }
     },
 
-    // Array.from
+    // Symbol(), new Promise
+    ReferencedIdentifier({ node: { name }, scope }) {
+      if (scope.getBindingIdentifier(name)) return;
+
+      this.addBuiltInDependencies(name);
+    },
+
     MemberExpression(path) {
       const { node, scope } = path;
       const { object, property } = node;
       let { name } = object;
       const bindingIdentifier = scope.getBindingIdentifier(name);
-
-      if (has(BuiltIns, name) && !bindingIdentifier) {
-        const BuiltInDependencies = BuiltIns[name];
-        this.addUnsupported(BuiltInDependencies);
-      }
-
-      const BuiltInDependencies = BuiltIns[name];
-      this.addUnsupported(BuiltInDependencies);
-
       let propertyName = property.name;
       let instanceType;
 
@@ -158,82 +180,14 @@ export default function(
         }
       }
 
-      if (has(StaticProperties, name)) {
-        const BuiltInProperties = StaticProperties[name];
-        if (has(BuiltInProperties, propertyName)) {
-          const StaticPropertyDependencies = BuiltInProperties[propertyName];
-          this.addUnsupported(StaticPropertyDependencies);
-        }
-      }
-
-      if (has(InstanceProperties, propertyName)) {
-        let InstancePropertyDependencies = InstanceProperties[propertyName];
-        if (instanceType) {
-          InstancePropertyDependencies = InstancePropertyDependencies.filter(
-            module =>
-              module.includes(instanceType) ||
-              CommonInstanceDependencies.has(module),
-          );
-        }
-        this.addUnsupported(InstancePropertyDependencies);
-      }
-    },
-
-    // var { repeat, startsWith } = String
-    VariableDeclarator(path) {
-      const { node } = path;
-
-      const { id, init } = node;
-
-      // destructuring
-      if (t.isArrayPattern(id)) {
-        this.addUnsupported(CommonIterators);
-      }
-
-      if (!path.isReferenced()) return;
-      if (!t.isObjectPattern(id)) return;
-      // doesn't reference the global
-      if (init && path.scope.getBindingIdentifier(init.name)) return;
-
-      for (const { key } of id.properties) {
-        if (
-          !node.computed &&
-          t.isIdentifier(key) &&
-          has(InstanceProperties, key.name)
-        ) {
-          const InstancePropertyDependencies = InstanceProperties[key.name];
-          this.addUnsupported(InstancePropertyDependencies);
-        }
-      }
-    },
-
-    // destructuring
-    AssignmentExpression({ node }) {
-      if (t.isArrayPattern(node.left)) {
-        this.addUnsupported(CommonIterators);
-      }
-    },
-
-    // destructuring
-    CatchClause({ node }) {
-      if (t.isArrayPattern(node.param)) {
-        this.addUnsupported(CommonIterators);
-      }
-    },
-
-    // destructuring
-    ForXStatement({ node }) {
-      if (t.isArrayPattern(node.left)) {
-        this.addUnsupported(CommonIterators);
-      }
+      // Array.from
+      this.addStaticPropertyDependencies(name, propertyName) ||
+        // string.includes
+        this.addInstancePropertyDependencies(propertyName, instanceType);
     },
 
     Function({ node }) {
-      // destructuring
-      if (node.params.some(param => t.isArrayPattern(param))) {
-        this.addUnsupported(CommonIterators);
-      }
-
+      // (async function () { }).finally(...)
       if (node.async) {
         this.addUnsupported(PromiseDependencies);
       }
@@ -247,10 +201,37 @@ export default function(
 
       this.addUnsupported = function(builtIn) {
         const modules = Array.isArray(builtIn) ? builtIn : [builtIn];
-
         for (const module of modules) {
           this.polyfillsSet.add(module);
         }
+        return true;
+      };
+
+      this.addBuiltInDependencies = function(builtIn) {
+        if (!has(BuiltIns, builtIn)) return false;
+        const BuiltInDependencies = BuiltIns[builtIn];
+        return this.addUnsupported(BuiltInDependencies);
+      };
+
+      this.addStaticPropertyDependencies = function(builtIn, property) {
+        if (!has(StaticProperties, builtIn)) return false;
+        const BuiltInProperties = StaticProperties[builtIn];
+        if (!has(BuiltInProperties, property)) return false;
+        const StaticPropertyDependencies = BuiltInProperties[property];
+        return this.addUnsupported(StaticPropertyDependencies);
+      };
+
+      this.addInstancePropertyDependencies = function(property, instanceType) {
+        if (!has(InstanceProperties, property)) return false;
+        let InstancePropertyDependencies = InstanceProperties[property];
+        if (instanceType) {
+          InstancePropertyDependencies = InstancePropertyDependencies.filter(
+            module =>
+              module.includes(instanceType) ||
+              CommonInstanceDependencies.has(module),
+          );
+        }
+        return this.addUnsupported(InstancePropertyDependencies);
       };
     },
     post({ path }) {
