@@ -6,9 +6,7 @@ import { addSideEffect } from "@babel/helper-module-imports";
 import unreleasedLabels from "../data/unreleased-labels";
 import { semverMin } from "./targets-parser";
 
-export function has(obj, key) {
-  return Object.prototype.hasOwnProperty.call(obj, key);
-}
+export const has = Function.call.bind(Object.prototype.hasOwnProperty);
 
 export function getType(target) {
   return Object.prototype.toString

@@ -64,6 +64,34 @@ export default function(
 
   const available = getModulesListForTargetVersion(corejs);
 
+  function resolveKey(path) {
+    const { node, parent, scope } = path;
+    if (path.isStringLiteral()) return node.value;
+    const { name } = node;
+    if (!parent.computed) return name;
+    if (!path.isIdentifier() || scope.getBindingIdentifier(name)) {
+      const { value } = path.evaluate();
+      if (typeof value === "string") return value;
+    }
+  }
+
+  function resolveSource(path) {
+    const { node, scope } = path;
+    let builtIn, instanceType;
+    if (node) {
+      builtIn = node.name;
+      if (!path.isIdentifier() || scope.getBindingIdentifier(builtIn)) {
+        const { deopt, value } = path.evaluate();
+        if (value !== undefined) {
+          instanceType = getType(value);
+        } else if (deopt && deopt.isIdentifier()) {
+          builtIn = deopt.node.name;
+        }
+      }
+    }
+    return { builtIn, instanceType };
+  }
+
   const addAndRemovePolyfillImports = {
     // import 'babel-polyfill'
     ImportDeclaration(path) {
@@ -93,48 +121,17 @@ export default function(
       }
     },
 
+    Function({ node }) {
+      // (async function () { }).finally(...)
+      if (node.async) {
+        this.addUnsupported(PromiseDependencies);
+      }
+    },
+
     // for-of loop
-    ForOfStatement() {
-      this.addUnsupported(CommonIterators);
-    },
-
-    ArrayPattern() {
-      // const [a, b] = c
-      this.addUnsupported(CommonIterators);
-    },
-
-    ObjectPattern({ node, parent, scope }) {
-      let canBeStatic, builtIn, right;
-      if (t.isVariableDeclarator(parent)) {
-        right = parent.init;
-      } else if (t.isAssignmentExpression(parent)) {
-        right = parent.right;
-      }
-      if (right) {
-        builtIn = right.name;
-        canBeStatic =
-          has(StaticProperties, builtIn) &&
-          !scope.getBindingIdentifier(builtIn);
-      }
-
-      for (const { key } of node.properties) {
-        const name = t.isIdentifier(key)
-          ? key.name
-          : t.isStringLiteral(key)
-          ? key.value
-          : null;
-        if (name) {
-          (canBeStatic &&
-            // const { keys, values } = Object
-            this.addStaticPropertyDependencies(builtIn, name)) ||
-            // const { keys, values } = [1, 2, 3]
-            this.addInstancePropertyDependencies(name);
-        }
-      }
-    },
-
+    // const [a, b] = c
     // [...spread]
-    SpreadElement() {
+    "ForOfStatement|ArrayPattern|SpreadElement"() {
       this.addUnsupported(CommonIterators);
     },
 
@@ -153,43 +150,35 @@ export default function(
     },
 
     MemberExpression(path) {
-      const { node, scope } = path;
-      const { object, property } = node;
-      let { name } = object;
-      const bindingIdentifier = scope.getBindingIdentifier(name);
-      let propertyName = property.name;
-      let instanceType;
-
-      if (node.computed) {
-        if (t.isStringLiteral(property)) {
-          propertyName = property.value;
-        } else {
-          const result = path.get("property").evaluate();
-          if (result.confident && result.value) {
-            propertyName = result.value;
-          }
-        }
-      }
-
-      if (!t.isIdentifier(object) || bindingIdentifier) {
-        const result = path.get("object").evaluate();
-        if (result.value !== undefined) {
-          instanceType = getType(result.value);
-        } else if (result.deopt && result.deopt.isIdentifier()) {
-          name = result.deopt.node.name;
-        }
-      }
+      const { builtIn, instanceType } = resolveSource(path.get("object"));
+      const key = resolveKey(path.get("property"));
 
       // Array.from
-      this.addStaticPropertyDependencies(name, propertyName) ||
+      this.addStaticPropertyDependencies(builtIn, key) ||
         // string.includes
-        this.addInstancePropertyDependencies(propertyName, instanceType);
+        this.addInstancePropertyDependencies(key, instanceType);
     },
 
-    Function({ node }) {
-      // (async function () { }).finally(...)
-      if (node.async) {
-        this.addUnsupported(PromiseDependencies);
+    ObjectPattern(path) {
+      const { parent, parentPath } = path;
+      let rightPath, builtIn, instanceType;
+
+      if (t.isVariableDeclarator(parent)) {
+        rightPath = parentPath.get("init");
+      } else if (t.isAssignmentExpression(parent)) {
+        rightPath = parentPath.get("right");
+      }
+
+      if (rightPath) {
+        ({ builtIn, instanceType } = resolveSource(rightPath));
+      }
+
+      for (const property of path.get("properties")) {
+        const key = resolveKey(property.get("key"));
+        // const { keys, values } = Object
+        this.addStaticPropertyDependencies(builtIn, key) ||
+          // const { keys, values } = [1, 2, 3]
+          this.addInstancePropertyDependencies(key, instanceType);
       }
     },
   };
