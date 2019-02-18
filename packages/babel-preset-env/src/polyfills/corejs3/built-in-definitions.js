@@ -433,3 +433,10 @@ export const CommonInstanceDependencies = new Set([
   "es.object.lookup-setter",
   "es.regexp.exec",
 ]);
+
+export const PossibleGlobalObjects = new Set([
+  "global",
+  "globalThis",
+  "self",
+  "window",
+]);

@@ -9,6 +9,7 @@ import {
   CommonIterators,
   CommonInstanceDependencies,
   PromiseDependencies,
+  PossibleGlobalObjects,
 } from "./built-in-definitions";
 import {
   createImport,
@@ -203,6 +204,9 @@ export default function(
       };
 
       this.addStaticPropertyDependencies = function(builtIn, property) {
+        if (PossibleGlobalObjects.has(builtIn)) {
+          return this.addBuiltInDependencies(property);
+        }
         if (!has(StaticProperties, builtIn)) return false;
         const BuiltInProperties = StaticProperties[builtIn];
         if (!has(BuiltInProperties, property)) return false;
