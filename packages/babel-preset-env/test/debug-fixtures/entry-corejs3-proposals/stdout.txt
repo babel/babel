@@ -44,20 +44,20 @@ Using polyfills with `entry` option:
   esnext.composite-key {}
   esnext.composite-symbol {}
   esnext.global-this {}
-  esnext.map.from {}
-  esnext.map.group-by {}
-  esnext.map.key-by {}
-  esnext.map.of {}
   esnext.map.delete-all {}
   esnext.map.every {}
   esnext.map.filter {}
   esnext.map.find {}
   esnext.map.find-key {}
+  esnext.map.from {}
+  esnext.map.group-by {}
   esnext.map.includes {}
+  esnext.map.key-by {}
   esnext.map.key-of {}
   esnext.map.map-keys {}
   esnext.map.map-values {}
   esnext.map.merge {}
+  esnext.map.of {}
   esnext.map.reduce {}
   esnext.map.some {}
   esnext.map.update {}
@@ -66,12 +66,12 @@ Using polyfills with `entry` option:
   esnext.math.degrees {}
   esnext.math.fscale {}
   esnext.math.iaddh {}
-  esnext.math.isubh {}
   esnext.math.imulh {}
-  esnext.math.seeded-prng {}
+  esnext.math.isubh {}
   esnext.math.rad-per-deg {}
   esnext.math.radians {}
   esnext.math.scale {}
+  esnext.math.seeded-prng {}
   esnext.math.signbit {}
   esnext.math.umulh {}
   esnext.number.from-string {}
@@ -88,20 +88,20 @@ Using polyfills with `entry` option:
   esnext.reflect.has-metadata {}
   esnext.reflect.has-own-metadata {}
   esnext.reflect.metadata {}
-  esnext.set.from {}
-  esnext.set.of {}
   esnext.set.add-all {}
   esnext.set.delete-all {}
-  esnext.set.every {}
   esnext.set.difference {}
+  esnext.set.every {}
   esnext.set.filter {}
   esnext.set.find {}
+  esnext.set.from {}
   esnext.set.intersection {}
   esnext.set.is-disjoint-from {}
   esnext.set.is-subset-of {}
   esnext.set.is-superset-of {}
   esnext.set.join {}
   esnext.set.map {}
+  esnext.set.of {}
   esnext.set.reduce {}
   esnext.set.some {}
   esnext.set.symmetric-difference {}
@@ -113,9 +113,9 @@ Using polyfills with `entry` option:
   esnext.symbol.dispose {}
   esnext.symbol.observable {}
   esnext.symbol.pattern-match {}
+  esnext.weak-map.delete-all {}
   esnext.weak-map.from {}
   esnext.weak-map.of {}
-  esnext.weak-map.delete-all {}
   esnext.weak-set.add-all {}
   esnext.weak-set.delete-all {}
   esnext.weak-set.from {}

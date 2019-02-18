@@ -42,12 +42,12 @@ Using plugins:
 Using polyfills with `usage` option:
 
 [<CWD>/src/in.js] Added following core-js polyfills:
-  es.object.to-string { "firefox":"50", "ie":"11" }
   es.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
-  es.string.iterator { "ie":"11" }
+  es.map { "firefox":"50", "ie":"11" }
+  es.object.to-string { "firefox":"50", "ie":"11" }
   es.promise { "chrome":"52", "firefox":"50", "ie":"11" }
   es.promise.finally { "chrome":"52", "firefox":"50", "ie":"11" }
-  es.map { "firefox":"50", "ie":"11" }
+  es.string.iterator { "ie":"11" }
   esnext.global-this { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.map.delete-all { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.map.every { "chrome":"52", "firefox":"50", "ie":"11" }
