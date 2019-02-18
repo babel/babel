@@ -1,8 +1,7 @@
-import "core-js/modules/es.object.to-string";
 import "core-js/modules/es.array.iterator";
 import "core-js/modules/es.array-buffer.slice";
+import "core-js/modules/es.object.to-string";
 import "core-js/modules/es.typed-array.int8-array";
-import "core-js/modules/es.typed-array.of";
 import "core-js/modules/es.typed-array.copy-within";
 import "core-js/modules/es.typed-array.every";
 import "core-js/modules/es.typed-array.fill";
@@ -16,6 +15,7 @@ import "core-js/modules/es.typed-array.iterator";
 import "core-js/modules/es.typed-array.join";
 import "core-js/modules/es.typed-array.last-index-of";
 import "core-js/modules/es.typed-array.map";
+import "core-js/modules/es.typed-array.of";
 import "core-js/modules/es.typed-array.reduce";
 import "core-js/modules/es.typed-array.reduce-right";
 import "core-js/modules/es.typed-array.reverse";

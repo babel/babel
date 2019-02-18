@@ -40,10 +40,14 @@ Using polyfills with `entry` option:
 
 [<CWD>/src/in.js] Replaced core-js entries with the following polyfills:
   es.symbol {}
+  es.json.to-string-tag {}
+  es.math.to-string-tag {}
   es.object.assign {}
   es.object.create {}
-  es.object.define-property {}
+  es.object.define-getter {}
   es.object.define-properties {}
+  es.object.define-property {}
+  es.object.define-setter {}
   es.object.entries {}
   es.object.freeze {}
   es.object.from-entries {}
@@ -56,17 +60,13 @@ Using polyfills with `entry` option:
   es.object.is-frozen {}
   es.object.is-sealed {}
   es.object.keys {}
+  es.object.lookup-getter {}
+  es.object.lookup-setter {}
   es.object.prevent-extensions {}
   es.object.seal {}
   es.object.set-prototype-of {}
-  es.object.values {}
   es.object.to-string {}
-  es.object.define-getter {}
-  es.object.define-setter {}
-  es.object.lookup-getter {}
-  es.object.lookup-setter {}
-  es.math.to-string-tag {}
-  es.json.to-string-tag {}
+  es.object.values {}
   es.reflect.apply {}
   es.reflect.construct {}
   es.reflect.define-property {}

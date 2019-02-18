@@ -41,27 +41,27 @@ Using plugins:
 Using polyfills with `entry` option:
 
 [<CWD>/src/in.js] Replaced core-js entries with the following polyfills:
-  es.symbol.async-iterator { "chrome":"55" }
   es.symbol.description { "chrome":"55" }
-  es.object.from-entries { "chrome":"55" }
-  es.object.define-getter { "chrome":"55" }
-  es.object.define-setter { "chrome":"55" }
-  es.object.lookup-getter { "chrome":"55" }
-  es.object.lookup-setter { "chrome":"55" }
-  es.array.sort { "chrome":"55" }
-  es.array.iterator { "chrome":"55" }
+  es.symbol.async-iterator { "chrome":"55" }
   es.array.flat { "chrome":"55" }
   es.array.flat-map { "chrome":"55" }
+  es.array.iterator { "chrome":"55" }
+  es.array.sort { "chrome":"55" }
   es.array.unscopables.flat { "chrome":"55" }
   es.array.unscopables.flat-map { "chrome":"55" }
+  es.object.define-getter { "chrome":"55" }
+  es.object.define-setter { "chrome":"55" }
+  es.object.from-entries { "chrome":"55" }
+  es.object.lookup-getter { "chrome":"55" }
+  es.object.lookup-setter { "chrome":"55" }
+  es.promise { "chrome":"55" }
+  es.promise.finally { "chrome":"55" }
   es.string.pad-end { "chrome":"55" }
   es.string.pad-start { "chrome":"55" }
   es.string.replace { "chrome":"55" }
   es.string.trim { "chrome":"55" }
-  es.string.trim-start { "chrome":"55" }
   es.string.trim-end { "chrome":"55" }
-  es.promise { "chrome":"55" }
-  es.promise.finally { "chrome":"55" }
+  es.string.trim-start { "chrome":"55" }
   web.dom-collections.for-each { "chrome":"55" }
   web.dom-collections.iterator { "chrome":"55" }
   web.immediate { "chrome":"55" }

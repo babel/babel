@@ -1,28 +1,32 @@
-require("core-js/modules/es.symbol.async-iterator");
-
 require("core-js/modules/es.symbol.description");
 
-require("core-js/modules/es.object.from-entries");
-
-require("core-js/modules/es.object.define-getter");
-
-require("core-js/modules/es.object.define-setter");
-
-require("core-js/modules/es.object.lookup-getter");
-
-require("core-js/modules/es.object.lookup-setter");
-
-require("core-js/modules/es.array.sort");
-
-require("core-js/modules/es.array.iterator");
+require("core-js/modules/es.symbol.async-iterator");
 
 require("core-js/modules/es.array.flat");
 
 require("core-js/modules/es.array.flat-map");
 
+require("core-js/modules/es.array.iterator");
+
+require("core-js/modules/es.array.sort");
+
 require("core-js/modules/es.array.unscopables.flat");
 
 require("core-js/modules/es.array.unscopables.flat-map");
+
+require("core-js/modules/es.object.define-getter");
+
+require("core-js/modules/es.object.define-setter");
+
+require("core-js/modules/es.object.from-entries");
+
+require("core-js/modules/es.object.lookup-getter");
+
+require("core-js/modules/es.object.lookup-setter");
+
+require("core-js/modules/es.promise");
+
+require("core-js/modules/es.promise.finally");
 
 require("core-js/modules/es.string.pad-end");
 
@@ -32,13 +36,9 @@ require("core-js/modules/es.string.replace");
 
 require("core-js/modules/es.string.trim");
 
-require("core-js/modules/es.string.trim-start");
-
 require("core-js/modules/es.string.trim-end");
 
-require("core-js/modules/es.promise");
-
-require("core-js/modules/es.promise.finally");
+require("core-js/modules/es.string.trim-start");
 
 require("core-js/modules/esnext.array.last-index");
 
@@ -50,14 +50,6 @@ require("core-js/modules/esnext.composite-symbol");
 
 require("core-js/modules/esnext.global-this");
 
-require("core-js/modules/esnext.map.from");
-
-require("core-js/modules/esnext.map.group-by");
-
-require("core-js/modules/esnext.map.key-by");
-
-require("core-js/modules/esnext.map.of");
-
 require("core-js/modules/esnext.map.delete-all");
 
 require("core-js/modules/esnext.map.every");
@@ -68,7 +60,13 @@ require("core-js/modules/esnext.map.find");
 
 require("core-js/modules/esnext.map.find-key");
 
+require("core-js/modules/esnext.map.from");
+
+require("core-js/modules/esnext.map.group-by");
+
 require("core-js/modules/esnext.map.includes");
+
+require("core-js/modules/esnext.map.key-by");
 
 require("core-js/modules/esnext.map.key-of");
 
@@ -77,6 +75,8 @@ require("core-js/modules/esnext.map.map-keys");
 require("core-js/modules/esnext.map.map-values");
 
 require("core-js/modules/esnext.map.merge");
+
+require("core-js/modules/esnext.map.of");
 
 require("core-js/modules/esnext.map.reduce");
 
@@ -94,17 +94,17 @@ require("core-js/modules/esnext.math.fscale");
 
 require("core-js/modules/esnext.math.iaddh");
 
-require("core-js/modules/esnext.math.isubh");
-
 require("core-js/modules/esnext.math.imulh");
 
-require("core-js/modules/esnext.math.seeded-prng");
+require("core-js/modules/esnext.math.isubh");
 
 require("core-js/modules/esnext.math.rad-per-deg");
 
 require("core-js/modules/esnext.math.radians");
 
 require("core-js/modules/esnext.math.scale");
+
+require("core-js/modules/esnext.math.seeded-prng");
 
 require("core-js/modules/esnext.math.signbit");
 
@@ -138,21 +138,19 @@ require("core-js/modules/esnext.reflect.has-own-metadata");
 
 require("core-js/modules/esnext.reflect.metadata");
 
-require("core-js/modules/esnext.set.from");
-
-require("core-js/modules/esnext.set.of");
-
 require("core-js/modules/esnext.set.add-all");
 
 require("core-js/modules/esnext.set.delete-all");
 
-require("core-js/modules/esnext.set.every");
-
 require("core-js/modules/esnext.set.difference");
+
+require("core-js/modules/esnext.set.every");
 
 require("core-js/modules/esnext.set.filter");
 
 require("core-js/modules/esnext.set.find");
+
+require("core-js/modules/esnext.set.from");
 
 require("core-js/modules/esnext.set.intersection");
 
@@ -165,6 +163,8 @@ require("core-js/modules/esnext.set.is-superset-of");
 require("core-js/modules/esnext.set.join");
 
 require("core-js/modules/esnext.set.map");
+
+require("core-js/modules/esnext.set.of");
 
 require("core-js/modules/esnext.set.reduce");
 
@@ -188,11 +188,11 @@ require("core-js/modules/esnext.symbol.observable");
 
 require("core-js/modules/esnext.symbol.pattern-match");
 
+require("core-js/modules/esnext.weak-map.delete-all");
+
 require("core-js/modules/esnext.weak-map.from");
 
 require("core-js/modules/esnext.weak-map.of");
-
-require("core-js/modules/esnext.weak-map.delete-all");
 
 require("core-js/modules/esnext.weak-set.add-all");
 

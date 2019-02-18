@@ -1,5 +1,5 @@
 import corejs3Polyfills from "core-js-compat/data";
-import getModulesListForTargetVersion from "./get-modules-list-for-target-version";
+import getModulesListForTargetVersion from "core-js-compat/get-modules-list-for-target-version";
 import filterItems from "../../filter-items";
 import {
   intersection,
@@ -26,7 +26,7 @@ export default function(
     polyfillTargets,
   );
 
-  const available = getModulesListForTargetVersion(corejs);
+  const available = new Set(getModulesListForTargetVersion(corejs.version));
 
   const isPolyfillImport = {
     ImportDeclaration(path) {

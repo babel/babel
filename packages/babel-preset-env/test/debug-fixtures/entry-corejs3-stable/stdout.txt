@@ -40,8 +40,8 @@ Using polyfills with `entry` option:
 
 [<CWD>/src/in.js] Replaced core-js entries with the following polyfills:
   es.symbol {}
-  es.symbol.async-iterator {}
   es.symbol.description {}
+  es.symbol.async-iterator {}
   es.symbol.has-instance {}
   es.symbol.is-concat-spreadable {}
   es.symbol.iterator {}
@@ -53,37 +53,6 @@ Using polyfills with `entry` option:
   es.symbol.to-primitive {}
   es.symbol.to-string-tag {}
   es.symbol.unscopables {}
-  es.object.assign {}
-  es.object.create {}
-  es.object.define-property {}
-  es.object.define-properties {}
-  es.object.entries {}
-  es.object.freeze {}
-  es.object.from-entries {}
-  es.object.get-own-property-descriptor {}
-  es.object.get-own-property-descriptors {}
-  es.object.get-own-property-names {}
-  es.object.get-prototype-of {}
-  es.object.is {}
-  es.object.is-extensible {}
-  es.object.is-frozen {}
-  es.object.is-sealed {}
-  es.object.keys {}
-  es.object.prevent-extensions {}
-  es.object.seal {}
-  es.object.set-prototype-of {}
-  es.object.values {}
-  es.object.to-string {}
-  es.object.define-getter {}
-  es.object.define-setter {}
-  es.object.lookup-getter {}
-  es.object.lookup-setter {}
-  es.function.bind {}
-  es.function.name {}
-  es.function.has-instance {}
-  es.array.from {}
-  es.array.is-array {}
-  es.array.of {}
   es.array.concat {}
   es.array.copy-within {}
   es.array.every {}
@@ -91,73 +60,42 @@ Using polyfills with `entry` option:
   es.array.filter {}
   es.array.find {}
   es.array.find-index {}
+  es.array.flat {}
+  es.array.flat-map {}
   es.array.for-each {}
+  es.array.from {}
   es.array.includes {}
   es.array.index-of {}
+  es.array.is-array {}
+  es.array.iterator {}
   es.array.join {}
   es.array.last-index-of {}
   es.array.map {}
+  es.array.of {}
   es.array.reduce {}
   es.array.reduce-right {}
   es.array.reverse {}
   es.array.slice {}
   es.array.some {}
   es.array.sort {}
-  es.array.splice {}
   es.array.species {}
-  es.array.iterator {}
-  es.array.flat {}
-  es.array.flat-map {}
+  es.array.splice {}
   es.array.unscopables.flat {}
   es.array.unscopables.flat-map {}
-  es.string.from-code-point {}
-  es.string.raw {}
-  es.string.code-point-at {}
-  es.string.ends-with {}
-  es.string.includes {}
-  es.string.match {}
-  es.string.pad-end {}
-  es.string.pad-start {}
-  es.string.repeat {}
-  es.string.replace {}
-  es.string.search {}
-  es.string.split {}
-  es.string.starts-with {}
-  es.string.trim {}
-  es.string.trim-start {}
-  es.string.trim-end {}
-  es.string.iterator {}
-  es.string.anchor {}
-  es.string.big {}
-  es.string.blink {}
-  es.string.bold {}
-  es.string.fixed {}
-  es.string.fontcolor {}
-  es.string.fontsize {}
-  es.string.italics {}
-  es.string.link {}
-  es.string.small {}
-  es.string.strike {}
-  es.string.sub {}
-  es.string.sup {}
-  es.regexp.constructor {}
-  es.regexp.exec {}
-  es.regexp.flags {}
-  es.regexp.to-string {}
-  es.parse-int {}
-  es.parse-float {}
-  es.number.constructor {}
-  es.number.epsilon {}
-  es.number.is-finite {}
-  es.number.is-integer {}
-  es.number.is-nan {}
-  es.number.is-safe-integer {}
-  es.number.max-safe-integer {}
-  es.number.min-safe-integer {}
-  es.number.parse-float {}
-  es.number.parse-int {}
-  es.number.to-fixed {}
-  es.number.to-precision {}
+  es.array-buffer.constructor {}
+  es.array-buffer.is-view {}
+  es.array-buffer.slice {}
+  es.data-view {}
+  es.date.now {}
+  es.date.to-iso-string {}
+  es.date.to-json {}
+  es.date.to-primitive {}
+  es.date.to-string {}
+  es.function.bind {}
+  es.function.has-instance {}
+  es.function.name {}
+  es.json.to-string-tag {}
+  es.map {}
   es.math.acosh {}
   es.math.asinh {}
   es.math.atanh {}
@@ -176,56 +114,47 @@ Using polyfills with `entry` option:
   es.math.tanh {}
   es.math.to-string-tag {}
   es.math.trunc {}
-  es.date.now {}
-  es.date.to-json {}
-  es.date.to-iso-string {}
-  es.date.to-string {}
-  es.date.to-primitive {}
-  es.json.to-string-tag {}
+  es.number.constructor {}
+  es.number.epsilon {}
+  es.number.is-finite {}
+  es.number.is-integer {}
+  es.number.is-nan {}
+  es.number.is-safe-integer {}
+  es.number.max-safe-integer {}
+  es.number.min-safe-integer {}
+  es.number.parse-float {}
+  es.number.parse-int {}
+  es.number.to-fixed {}
+  es.number.to-precision {}
+  es.object.assign {}
+  es.object.create {}
+  es.object.define-getter {}
+  es.object.define-properties {}
+  es.object.define-property {}
+  es.object.define-setter {}
+  es.object.entries {}
+  es.object.freeze {}
+  es.object.from-entries {}
+  es.object.get-own-property-descriptor {}
+  es.object.get-own-property-descriptors {}
+  es.object.get-own-property-names {}
+  es.object.get-prototype-of {}
+  es.object.is {}
+  es.object.is-extensible {}
+  es.object.is-frozen {}
+  es.object.is-sealed {}
+  es.object.keys {}
+  es.object.lookup-getter {}
+  es.object.lookup-setter {}
+  es.object.prevent-extensions {}
+  es.object.seal {}
+  es.object.set-prototype-of {}
+  es.object.to-string {}
+  es.object.values {}
+  es.parse-float {}
+  es.parse-int {}
   es.promise {}
   es.promise.finally {}
-  es.map {}
-  es.set {}
-  es.weak-map {}
-  es.weak-set {}
-  es.array-buffer.constructor {}
-  es.array-buffer.is-view {}
-  es.array-buffer.slice {}
-  es.data-view {}
-  es.typed-array.int8-array {}
-  es.typed-array.uint8-array {}
-  es.typed-array.uint8-clamped-array {}
-  es.typed-array.int16-array {}
-  es.typed-array.uint16-array {}
-  es.typed-array.int32-array {}
-  es.typed-array.uint32-array {}
-  es.typed-array.float32-array {}
-  es.typed-array.float64-array {}
-  es.typed-array.from {}
-  es.typed-array.of {}
-  es.typed-array.copy-within {}
-  es.typed-array.every {}
-  es.typed-array.fill {}
-  es.typed-array.filter {}
-  es.typed-array.find {}
-  es.typed-array.find-index {}
-  es.typed-array.for-each {}
-  es.typed-array.includes {}
-  es.typed-array.index-of {}
-  es.typed-array.iterator {}
-  es.typed-array.join {}
-  es.typed-array.last-index-of {}
-  es.typed-array.map {}
-  es.typed-array.reduce {}
-  es.typed-array.reduce-right {}
-  es.typed-array.reverse {}
-  es.typed-array.set {}
-  es.typed-array.slice {}
-  es.typed-array.some {}
-  es.typed-array.sort {}
-  es.typed-array.subarray {}
-  es.typed-array.to-locale-string {}
-  es.typed-array.to-string {}
   es.reflect.apply {}
   es.reflect.construct {}
   es.reflect.define-property {}
@@ -239,6 +168,77 @@ Using polyfills with `entry` option:
   es.reflect.prevent-extensions {}
   es.reflect.set {}
   es.reflect.set-prototype-of {}
+  es.regexp.constructor {}
+  es.regexp.exec {}
+  es.regexp.flags {}
+  es.regexp.to-string {}
+  es.set {}
+  es.string.code-point-at {}
+  es.string.ends-with {}
+  es.string.from-code-point {}
+  es.string.includes {}
+  es.string.iterator {}
+  es.string.match {}
+  es.string.pad-end {}
+  es.string.pad-start {}
+  es.string.raw {}
+  es.string.repeat {}
+  es.string.replace {}
+  es.string.search {}
+  es.string.split {}
+  es.string.starts-with {}
+  es.string.trim {}
+  es.string.trim-end {}
+  es.string.trim-start {}
+  es.string.anchor {}
+  es.string.big {}
+  es.string.blink {}
+  es.string.bold {}
+  es.string.fixed {}
+  es.string.fontcolor {}
+  es.string.fontsize {}
+  es.string.italics {}
+  es.string.link {}
+  es.string.small {}
+  es.string.strike {}
+  es.string.sub {}
+  es.string.sup {}
+  es.typed-array.float32-array {}
+  es.typed-array.float64-array {}
+  es.typed-array.int8-array {}
+  es.typed-array.int16-array {}
+  es.typed-array.int32-array {}
+  es.typed-array.uint8-array {}
+  es.typed-array.uint8-clamped-array {}
+  es.typed-array.uint16-array {}
+  es.typed-array.uint32-array {}
+  es.typed-array.copy-within {}
+  es.typed-array.every {}
+  es.typed-array.fill {}
+  es.typed-array.filter {}
+  es.typed-array.find {}
+  es.typed-array.find-index {}
+  es.typed-array.for-each {}
+  es.typed-array.from {}
+  es.typed-array.includes {}
+  es.typed-array.index-of {}
+  es.typed-array.iterator {}
+  es.typed-array.join {}
+  es.typed-array.last-index-of {}
+  es.typed-array.map {}
+  es.typed-array.of {}
+  es.typed-array.reduce {}
+  es.typed-array.reduce-right {}
+  es.typed-array.reverse {}
+  es.typed-array.set {}
+  es.typed-array.slice {}
+  es.typed-array.some {}
+  es.typed-array.sort {}
+  es.typed-array.subarray {}
+  es.typed-array.to-locale-string {}
+  es.typed-array.to-string {}
+  es.weak-map {}
+  es.weak-set {}
   web.dom-collections.for-each {}
   web.dom-collections.iterator {}
   web.immediate {}
