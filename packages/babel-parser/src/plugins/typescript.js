@@ -703,7 +703,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return type;
     }
 
-    tsParseTypeOperator(operator: "keyof" | "unique"): N.TsTypeOperator {
+    tsParseTypeOperator(
+      operator: "keyof" | "unique" | "readonly",
+    ): N.TsTypeOperator {
       const node: N.TsTypeOperator = this.startNode();
       this.expectContextual(operator);
       node.operator = operator;
@@ -721,7 +723,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTypeOperatorOrHigher(): N.TsType {
-      const operator = ["keyof", "unique"].find(kw => this.isContextual(kw));
+      const operator = ["keyof", "unique", "readonly"].find(kw =>
+        this.isContextual(kw),
+      );
       return operator
         ? this.tsParseTypeOperator(operator)
         : this.isContextual("infer")

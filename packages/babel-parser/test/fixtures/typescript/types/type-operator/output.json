@@ -1,29 +1,29 @@
 {
   "type": "File",
   "start": 0,
-  "end": 37,
+  "end": 63,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 2,
-      "column": 21
+      "line": 3,
+      "column": 25
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 37,
+    "end": 63,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 2,
-        "column": 21
+        "line": 3,
+        "column": 25
       }
     },
     "sourceType": "module",
@@ -229,6 +229,118 @@
                       "end": {
                         "line": 2,
                         "column": 20
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start": 38,
+        "end": 63,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 25
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 42,
+            "end": 62,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 4
+              },
+              "end": {
+                "line": 3,
+                "column": 24
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 42,
+              "end": 62,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 4
+                },
+                "end": {
+                  "line": 3,
+                  "column": 24
+                },
+                "identifierName": "z"
+              },
+              "name": "z",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start": 43,
+                "end": 62,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 24
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSTypeOperator",
+                  "start": 45,
+                  "end": 62,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 24
+                    }
+                  },
+                  "operator": "readonly",
+                  "typeAnnotation": {
+                    "type": "TSArrayType",
+                    "start": 54,
+                    "end": 62,
+                    "loc": {
+                      "start": {
+                        "line": 3,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 3,
+                        "column": 24
+                      }
+                    },
+                    "elementType": {
+                      "type": "TSNumberKeyword",
+                      "start": 54,
+                      "end": 60,
+                      "loc": {
+                        "start": {
+                          "line": 3,
+                          "column": 16
+                        },
+                        "end": {
+                          "line": 3,
+                          "column": 22
+                        }
                       }
                     }
                   }
