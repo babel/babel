@@ -29,7 +29,7 @@ function getIdentifierPath(code) {
 }
 
 function createNode(node) {
-  const ast = t.file(t.program([node]));
+  const ast = t.file(t.program(Array.isArray(node) ? node : [node]));
 
   // This puts the path into the cache internally
   // We afterwards traverse ast, as we need to start traversing
@@ -287,7 +287,7 @@ describe("scope", () => {
             t.identifier("e"),
             t.blockStatement([
               t.variableDeclaration(kind, [
-                t.variableDeclarator(t.identifier("e")),
+                t.variableDeclarator(t.identifier("e"), t.stringLiteral("1")),
               ]),
             ]),
           ),
@@ -305,6 +305,49 @@ describe("scope", () => {
         const ast = createTryCatch("var");
 
         expect(getPath(ast).node).toMatchSnapshot();
+      });
+    });
+
+    describe("global", () => {
+      ["let", "const"].forEach(name => {
+        describe(name, () => {
+          it("class", () => {
+            const ast = [
+              t.variableDeclaration(name, [
+                t.variableDeclarator(t.identifier("foo")),
+              ]),
+              t.classDeclaration(t.identifier("foo"), null, t.classBody([])),
+            ];
+
+            expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
+          });
+          it("function", () => {
+            const ast = [
+              t.variableDeclaration(name, [
+                t.variableDeclarator(t.identifier("foo")),
+              ]),
+              t.functionDeclaration(
+                t.identifier("foo"),
+                [],
+                t.blockStatement([]),
+              ),
+            ];
+
+            expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
+          });
+          it("var", () => {
+            const ast = [
+              t.variableDeclaration(name, [
+                t.variableDeclarator(t.identifier("foo")),
+              ]),
+              t.variableDeclaration("var", [
+                t.variableDeclarator(t.identifier("foo")),
+              ]),
+            ];
+
+            expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
+          });
+        });
       });
     });
   });

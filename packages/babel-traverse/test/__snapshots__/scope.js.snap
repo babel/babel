@@ -24,7 +24,10 @@ Object {
                     "name": "e",
                     "type": "Identifier",
                   },
-                  "init": null,
+                  "init": Object {
+                    "type": "StringLiteral",
+                    "value": "1",
+                  },
                   "type": "VariableDeclarator",
                 },
               ],
@@ -50,3 +53,15 @@ Object {
   "type": "Program",
 }
 `;
+
+exports[`scope duplicate bindings global const class 1`] = `"Duplicate declaration \\"foo\\""`;
+
+exports[`scope duplicate bindings global const function 1`] = `"Duplicate declaration \\"foo\\""`;
+
+exports[`scope duplicate bindings global const var 1`] = `"Duplicate declaration \\"foo\\""`;
+
+exports[`scope duplicate bindings global let class 1`] = `"Duplicate declaration \\"foo\\""`;
+
+exports[`scope duplicate bindings global let function 1`] = `"Duplicate declaration \\"foo\\""`;
+
+exports[`scope duplicate bindings global let var 1`] = `"Duplicate declaration \\"foo\\""`;
