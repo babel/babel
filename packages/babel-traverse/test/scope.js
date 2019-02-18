@@ -304,7 +304,26 @@ describe("scope", () => {
       it("var", () => {
         const ast = createTryCatch("var");
 
-        expect(getPath(ast).node).toMatchSnapshot();
+        expect(() => getPath(ast)).not.toThrow();
+      });
+    });
+
+    ["let", "const"].forEach(name => {
+      it(`${name} and function in sub scope`, () => {
+        const ast = [
+          t.variableDeclaration(name, [
+            t.variableDeclarator(t.identifier("foo")),
+          ]),
+          t.blockStatement([
+            t.functionDeclaration(
+              t.identifier("foo"),
+              [],
+              t.blockStatement([]),
+            ),
+          ]),
+        ];
+
+        expect(() => getPath(ast)).not.toThrow();
       });
     });
 
