@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`scope duplicate bindings catch const 1`] = `"Duplicate declaration \\"e\\""`;
+
+exports[`scope duplicate bindings catch let 1`] = `"Duplicate declaration \\"e\\""`;
+
+exports[`scope duplicate bindings catch var 1`] = `
+Object {
+  "body": Array [
+    Object {
+      "block": Object {
+        "body": Array [],
+        "directives": Array [],
+        "type": "BlockStatement",
+      },
+      "finalizer": null,
+      "handler": Object {
+        "body": Object {
+          "body": Array [
+            Object {
+              "declarations": Array [
+                Object {
+                  "id": Object {
+                    "name": "e",
+                    "type": "Identifier",
+                  },
+                  "init": null,
+                  "type": "VariableDeclarator",
+                },
+              ],
+              "kind": "var",
+              "type": "VariableDeclaration",
+            },
+          ],
+          "directives": Array [],
+          "type": "BlockStatement",
+        },
+        "param": Object {
+          "name": "e",
+          "type": "Identifier",
+        },
+        "type": "CatchClause",
+      },
+      "type": "TryStatement",
+    },
+  ],
+  "directives": Array [],
+  "interpreter": null,
+  "sourceType": "script",
+  "type": "Program",
+}
+`;
