@@ -65,12 +65,13 @@ export default function(
 
   const available = new Set(getModulesListForTargetVersion(corejs.version));
 
-  function resolveKey(path) {
+  function resolveKey(path, computed) {
     const { node, parent, scope } = path;
     if (path.isStringLiteral()) return node.value;
     const { name } = node;
-    if (!parent.computed) return name;
-    if (!path.isIdentifier() || scope.getBindingIdentifier(name)) {
+    const isIdentifier = path.isIdentifier();
+    if (isIdentifier && !(computed || parent.computed)) return name;
+    if (!isIdentifier || scope.getBindingIdentifier(name)) {
       const { value } = path.evaluate();
       if (typeof value === "string") return value;
     }
@@ -94,7 +95,7 @@ export default function(
   }
 
   const addAndRemovePolyfillImports = {
-    // import 'babel-polyfill'
+    // import 'core-js'
     ImportDeclaration(path) {
       if (
         path.node.specifiers.length === 0 &&
@@ -105,7 +106,7 @@ export default function(
       }
     },
 
-    // require('babel-polyfill')
+    // require('core-js')
     Program(path) {
       path.get("body").forEach(bodyPath => {
         if (isPolyfillRequire(t, bodyPath)) {
@@ -129,9 +130,7 @@ export default function(
       }
     },
 
-    // for-of loop
-    // const [a, b] = c
-    // [...spread]
+    // for-of, [a, b] = c, [...spread]
     "ForOfStatement|ArrayPattern|SpreadElement"() {
       this.addUnsupported(CommonIterators);
     },
@@ -154,10 +153,9 @@ export default function(
       const { builtIn, instanceType } = resolveSource(path.get("object"));
       const key = resolveKey(path.get("property"));
 
-      // Array.from
-      this.addStaticPropertyDependencies(builtIn, key) ||
-        // string.includes
-        this.addInstancePropertyDependencies(key, instanceType);
+      // Object.entries
+      // [1, 2, 3].entries
+      this.addPropertyDependencies(builtIn, key, instanceType);
     },
 
     ObjectPattern(path) {
@@ -177,10 +175,20 @@ export default function(
       for (const property of path.get("properties")) {
         const key = resolveKey(property.get("key"));
         // const { keys, values } = Object
-        this.addStaticPropertyDependencies(builtIn, key) ||
-          // const { keys, values } = [1, 2, 3]
-          this.addInstancePropertyDependencies(key, instanceType);
+        // const { keys, values } = [1, 2, 3]
+        this.addPropertyDependencies(builtIn, key, instanceType);
       }
+    },
+
+    BinaryExpression(path) {
+      if (path.node.operator !== "in") return;
+
+      const { builtIn, instanceType } = resolveSource(path.get("right"));
+      const key = resolveKey(path.get("left"), true);
+
+      // 'entries' in Object
+      // 'entries' in [1, 2, 3]
+      this.addPropertyDependencies(builtIn, key, instanceType);
     },
   };
 
@@ -203,25 +211,22 @@ export default function(
         return this.addUnsupported(BuiltInDependencies);
       };
 
-      this.addStaticPropertyDependencies = function(builtIn, property) {
+      this.addPropertyDependencies = function(builtIn, property, instanceType) {
         if (PossibleGlobalObjects.has(builtIn)) {
           return this.addBuiltInDependencies(property);
         }
-        if (!has(StaticProperties, builtIn)) return false;
-        const BuiltInProperties = StaticProperties[builtIn];
-        if (!has(BuiltInProperties, property)) return false;
-        const StaticPropertyDependencies = BuiltInProperties[property];
-        return this.addUnsupported(StaticPropertyDependencies);
-      };
-
-      this.addInstancePropertyDependencies = function(property, instanceType) {
+        if (has(StaticProperties, builtIn)) {
+          const BuiltInProperties = StaticProperties[builtIn];
+          if (has(BuiltInProperties, property)) {
+            const StaticPropertyDependencies = BuiltInProperties[property];
+            return this.addUnsupported(StaticPropertyDependencies);
+          }
+        }
         if (!has(InstanceProperties, property)) return false;
         let InstancePropertyDependencies = InstanceProperties[property];
         if (instanceType) {
           InstancePropertyDependencies = InstancePropertyDependencies.filter(
-            module =>
-              module.includes(instanceType) ||
-              CommonInstanceDependencies.has(module),
+            m => m.includes(instanceType) || CommonInstanceDependencies.has(m),
           );
         }
         return this.addUnsupported(InstancePropertyDependencies);
