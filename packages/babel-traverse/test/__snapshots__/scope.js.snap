@@ -4,14 +4,22 @@ exports[`scope duplicate bindings catch const 1`] = `"Duplicate declaration \\"e
 
 exports[`scope duplicate bindings catch let 1`] = `"Duplicate declaration \\"e\\""`;
 
-exports[`scope duplicate bindings global const class 1`] = `"Duplicate declaration \\"foo\\""`;
+exports[`scope duplicate bindings global class/function 1`] = `"Duplicate declaration \\"foo\\""`;
 
-exports[`scope duplicate bindings global const function 1`] = `"Duplicate declaration \\"foo\\""`;
+exports[`scope duplicate bindings global const/class 1`] = `"Duplicate declaration \\"foo\\""`;
 
-exports[`scope duplicate bindings global const var 1`] = `"Duplicate declaration \\"foo\\""`;
+exports[`scope duplicate bindings global const/const 1`] = `"Duplicate declaration \\"foo\\""`;
 
-exports[`scope duplicate bindings global let class 1`] = `"Duplicate declaration \\"foo\\""`;
+exports[`scope duplicate bindings global const/function 1`] = `"Duplicate declaration \\"foo\\""`;
 
-exports[`scope duplicate bindings global let function 1`] = `"Duplicate declaration \\"foo\\""`;
+exports[`scope duplicate bindings global const/let 1`] = `"Duplicate declaration \\"foo\\""`;
 
-exports[`scope duplicate bindings global let var 1`] = `"Duplicate declaration \\"foo\\""`;
+exports[`scope duplicate bindings global const/var 1`] = `"Duplicate declaration \\"foo\\""`;
+
+exports[`scope duplicate bindings global let/class 1`] = `"Duplicate declaration \\"foo\\""`;
+
+exports[`scope duplicate bindings global let/function 1`] = `"Duplicate declaration \\"foo\\""`;
+
+exports[`scope duplicate bindings global let/let 1`] = `"Duplicate declaration \\"foo\\""`;
+
+exports[`scope duplicate bindings global let/var 1`] = `"Duplicate declaration \\"foo\\""`;

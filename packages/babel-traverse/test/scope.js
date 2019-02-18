@@ -328,46 +328,79 @@ describe("scope", () => {
     });
 
     describe("global", () => {
-      ["let", "const"].forEach(name => {
-        describe(name, () => {
-          it("class", () => {
-            const ast = [
-              t.variableDeclaration(name, [
-                t.variableDeclarator(t.identifier("foo")),
-              ]),
-              t.classDeclaration(t.identifier("foo"), null, t.classBody([])),
-            ];
+      // node1, node2, success
+      // every line will run 2 tests `node1;node2;` and `node2;node1;`
+      // unless node1 === node2
+      const cases = [
+        ["const", "let", false],
 
-            expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
-          });
-          it("function", () => {
-            const ast = [
-              t.variableDeclaration(name, [
-                t.variableDeclarator(t.identifier("foo")),
-              ]),
-              t.functionDeclaration(
-                t.identifier("foo"),
-                [],
-                t.blockStatement([]),
-              ),
-            ];
+        ["const", "const", false],
+        ["const", "function", false],
+        ["const", "class", false],
+        ["const", "var", false],
 
-            expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
-          });
-          it("var", () => {
-            const ast = [
-              t.variableDeclaration(name, [
-                t.variableDeclarator(t.identifier("foo")),
-              ]),
-              t.variableDeclaration("var", [
-                t.variableDeclarator(t.identifier("foo")),
-              ]),
-            ];
+        ["let", "let", false],
+        ["let", "class", false],
+        ["let", "function", false],
+        ["let", "var", false],
 
+        //["var", "class", true],
+        ["var", "function", true],
+        ["var", "var", true],
+
+        ["class", "function", false],
+      ];
+
+      const createNode = function(kind) {
+        switch (kind) {
+          case "let":
+          case "const":
+          case "var":
+            return t.variableDeclaration(kind, [
+              t.variableDeclarator(t.identifier("foo")),
+            ]);
+          case "class":
+            return t.classDeclaration(
+              t.identifier("foo"),
+              null,
+              t.classBody([]),
+            );
+          case "function":
+            return t.functionDeclaration(
+              t.identifier("foo"),
+              [],
+              t.blockStatement([]),
+            );
+        }
+      };
+
+      const createAST = function(kind1, kind2) {
+        return [createNode(kind1), createNode(kind2)];
+      };
+
+      for (const [kind1, kind2, success] of cases) {
+        it(`${kind1}/${kind2}`, () => {
+          const ast = createAST(kind1, kind2);
+
+          if (success) {
+            expect(() => getPath(ast)).not.toThrow();
+          } else {
             expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
-          });
+          }
         });
-      });
+
+        /*if (kind1 !== kind2) {
+          it(`${kind2}/${kind1}`, () => {
+            const ast = createAST(kind2, kind1);
+
+            if (success) {
+              expect(() => getPath(ast)).not.toThrow();
+            } else {
+              expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
+            }
+          });
+        }*/
+      }
     });
   });
 });
