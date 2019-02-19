@@ -321,12 +321,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSTypeParameterDeclaration");
     }
 
-    tsTryNextParseConstantContext(): N.TsType {
+    tsTryNextParseConstantContext(): ?N.TsTypeReference {
       if (this.lookahead().type === tt._const) {
         this.next();
         return this.tsParseTypeReference();
       }
-      return this.tsNextThenParseType();
+      return null;
     }
 
     // Note: In TypeScript implementation we must provide `yieldContext` and `awaitContext`,
@@ -945,7 +945,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseTypeAssertion(): N.TsTypeAssertion {
       const node: N.TsTypeAssertion = this.startNode();
-      node.typeAnnotation = this.tsTryNextParseConstantContext();
+      const _const = this.tsTryNextParseConstantContext();
+      node.typeAnnotation = _const ? _const : this.tsNextThenParseType();
       this.expectRelational(">");
       node.expression = this.parseMaybeUnary();
       return this.finishNode(node, "TSTypeAssertion");
@@ -1610,7 +1611,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           leftStartLoc,
         );
         node.expression = left;
-        node.typeAnnotation = this.tsTryNextParseConstantContext();
+        const _const = this.tsTryNextParseConstantContext();
+        node.typeAnnotation = _const ? _const : this.tsNextThenParseType();
         this.finishNode(node, "TSAsExpression");
         return this.parseExprOp(
           node,
