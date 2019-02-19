@@ -321,6 +321,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSTypeParameterDeclaration");
     }
 
+    tsTryNextParseConstantContext(): N.TsType {
+      if (this.lookahead().type === tt._const) {
+        this.next();
+        return this.tsParseTypeReference();
+      }
+      return this.tsNextThenParseType();
+    }
+
     // Note: In TypeScript implementation we must provide `yieldContext` and `awaitContext`,
     // but here it's always false, because this is only used for types.
     tsFillSignature(
@@ -937,10 +945,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseTypeAssertion(): N.TsTypeAssertion {
       const node: N.TsTypeAssertion = this.startNode();
-      this.next(); // <
-      // Not actually necessary to set state.inType because we never reach here if JSX plugin is enabled,
-      // but need `tsInType` to satisfy the assertion in `tsParseType`.
-      node.typeAnnotation = this.tsInType(() => this.tsParseType());
+      node.typeAnnotation = this.tsTryNextParseConstantContext();
       this.expectRelational(">");
       node.expression = this.parseMaybeUnary();
       return this.finishNode(node, "TSTypeAssertion");
@@ -1605,7 +1610,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           leftStartLoc,
         );
         node.expression = left;
-        node.typeAnnotation = this.tsNextThenParseType();
+        node.typeAnnotation = this.tsTryNextParseConstantContext();
         this.finishNode(node, "TSAsExpression");
         return this.parseExprOp(
           node,

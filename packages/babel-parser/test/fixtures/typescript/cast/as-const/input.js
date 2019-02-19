@@ -3,20 +3,10 @@ let v2 = `abc` as const;
 let v3 = 10 as const;
 let v4 = -10 as const;
 let v5 = +10 as const;
-let v6 = 10n as const;
-let v7 = -10n as const;
+let v6 = 10 as const;
+let v7 = -10 as const;
 let v8 = true as const;
 let v9 = false as const;
-
-let c1 = 'abc' as const;
-let c2 = `abc` as const;
-let c3 = 10 as const;
-let c4 = -10 as const;
-let c5 = +10 as const;
-let c6 = 10n as const;
-let c7 = -10n as const;
-let c8 = true as const;
-let c9 = false as const;
 
 let a1 = [] as const;
 let a2 = [1, 2, 3] as const;
