@@ -150,56 +150,52 @@ export default function(
     },
 
     MemberExpression(path) {
-      const { builtIn, instanceType } = resolveSource(path.get("object"));
+      const source = resolveSource(path.get("object"));
       const key = resolveKey(path.get("property"));
 
       // Object.entries
       // [1, 2, 3].entries
-      this.addPropertyDependencies(builtIn, key, instanceType);
+      this.addPropertyDependencies(source, key);
     },
 
     ObjectPattern(path) {
       const { parentPath, parent, key } = path;
-      let rightPath, builtIn, instanceType;
+      let source;
 
       // const { keys, values } = Object
       if (parentPath.isVariableDeclarator()) {
-        rightPath = parentPath.get("init");
+        source = resolveSource(parentPath.get("init"));
         // ({ keys, values } = Object)
       } else if (parentPath.isAssignmentExpression()) {
-        rightPath = parentPath.get("right");
+        source = resolveSource(parentPath.get("right"));
         // !function ({ keys, values }) {...} (Object)
         // resolution does not work after properties transform :-(
       } else if (parentPath.isFunctionExpression()) {
         const grand = parentPath.parentPath;
         if (grand.isCallExpression() || grand.isNewExpression()) {
           if (grand.node.callee === parent) {
-            rightPath = grand.get("arguments")[key];
+            source = resolveSource(grand.get("arguments")[key]);
           }
         }
-      }
-
-      if (rightPath) {
-        ({ builtIn, instanceType } = resolveSource(rightPath));
       }
 
       for (const property of path.get("properties")) {
         const key = resolveKey(property.get("key"));
         // const { keys, values } = Object
         // const { keys, values } = [1, 2, 3]
-        this.addPropertyDependencies(builtIn, key, instanceType);
+        this.addPropertyDependencies(source, key);
       }
     },
 
     BinaryExpression(path) {
       if (path.node.operator !== "in") return;
 
-      const { builtIn, instanceType } = resolveSource(path.get("right"));
+      const source = resolveSource(path.get("right"));
       const key = resolveKey(path.get("left"), true);
 
       // 'entries' in Object
       // 'entries' in [1, 2, 3]
-      this.addPropertyDependencies(builtIn, key, instanceType);
+      this.addPropertyDependencies(source, key);
     },
   };
 
@@ -222,19 +218,20 @@ export default function(
         return this.addUnsupported(BuiltInDependencies);
       };
 
-      this.addPropertyDependencies = function(builtIn, property, instanceType) {
+      this.addPropertyDependencies = function(source = {}, key) {
+        const { builtIn, instanceType } = source;
         if (PossibleGlobalObjects.has(builtIn)) {
-          return this.addBuiltInDependencies(property);
+          return this.addBuiltInDependencies(key);
         }
         if (has(StaticProperties, builtIn)) {
           const BuiltInProperties = StaticProperties[builtIn];
-          if (has(BuiltInProperties, property)) {
-            const StaticPropertyDependencies = BuiltInProperties[property];
+          if (has(BuiltInProperties, key)) {
+            const StaticPropertyDependencies = BuiltInProperties[key];
             return this.addUnsupported(StaticPropertyDependencies);
           }
         }
-        if (!has(InstanceProperties, property)) return false;
-        let InstancePropertyDependencies = InstanceProperties[property];
+        if (!has(InstanceProperties, key)) return false;
+        let InstancePropertyDependencies = InstanceProperties[key];
         if (instanceType) {
           InstancePropertyDependencies = InstancePropertyDependencies.filter(
             m => m.includes(instanceType) || CommonInstanceDependencies.has(m),
