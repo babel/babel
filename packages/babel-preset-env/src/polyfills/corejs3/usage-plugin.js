@@ -116,8 +116,8 @@ export default function(
       });
     },
 
-    // import('something').then(...)
     CallExpression({ node }) {
+      // import('something').then(...)
       if (t.isImport(node.callee)) {
         this.addUnsupported(PromiseDependencies);
       }
@@ -159,13 +159,24 @@ export default function(
     },
 
     ObjectPattern(path) {
-      const { parent, parentPath } = path;
+      const { parentPath, parent, key } = path;
       let rightPath, builtIn, instanceType;
 
-      if (t.isVariableDeclarator(parent)) {
+      // const { keys, values } = Object
+      if (parentPath.isVariableDeclarator()) {
         rightPath = parentPath.get("init");
-      } else if (t.isAssignmentExpression(parent)) {
+        // ({ keys, values } = Object)
+      } else if (parentPath.isAssignmentExpression()) {
         rightPath = parentPath.get("right");
+        // !function ({ keys, values }) {...} (Object)
+        // resolution does not work after properties transform :-(
+      } else if (parentPath.isFunctionExpression()) {
+        const grand = parentPath.parentPath;
+        if (grand.isCallExpression() || grand.isNewExpression()) {
+          if (grand.node.callee === parent) {
+            rightPath = grand.get("arguments")[key];
+          }
+        }
       }
 
       if (rightPath) {
