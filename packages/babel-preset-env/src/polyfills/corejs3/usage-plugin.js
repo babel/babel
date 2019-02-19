@@ -209,19 +209,19 @@ export default function(
         for (const module of modules) {
           this.polyfillsSet.add(module);
         }
-        return true;
       };
 
       this.addBuiltInDependencies = function(builtIn) {
-        if (!has(BuiltIns, builtIn)) return false;
-        const BuiltInDependencies = BuiltIns[builtIn];
-        return this.addUnsupported(BuiltInDependencies);
+        if (has(BuiltIns, builtIn)) {
+          const BuiltInDependencies = BuiltIns[builtIn];
+          this.addUnsupported(BuiltInDependencies);
+        }
       };
 
       this.addPropertyDependencies = function(source = {}, key) {
         const { builtIn, instanceType } = source;
         if (PossibleGlobalObjects.has(builtIn)) {
-          return this.addBuiltInDependencies(key);
+          this.addBuiltInDependencies(key);
         }
         if (has(StaticProperties, builtIn)) {
           const BuiltInProperties = StaticProperties[builtIn];
@@ -230,14 +230,14 @@ export default function(
             return this.addUnsupported(StaticPropertyDependencies);
           }
         }
-        if (!has(InstanceProperties, key)) return false;
+        if (!has(InstanceProperties, key)) return;
         let InstancePropertyDependencies = InstanceProperties[key];
         if (instanceType) {
           InstancePropertyDependencies = InstancePropertyDependencies.filter(
             m => m.includes(instanceType) || CommonInstanceDependencies.has(m),
           );
         }
-        return this.addUnsupported(InstancePropertyDependencies);
+        this.addUnsupported(InstancePropertyDependencies);
       };
     },
     post({ path }) {
