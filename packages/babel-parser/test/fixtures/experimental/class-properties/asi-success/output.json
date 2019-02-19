@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 52,
+  "end": 53,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 52,
+    "end": 53,
     "loc": {
       "start": {
         "line": 1,
@@ -152,7 +152,7 @@
       {
         "type": "ClassDeclaration",
         "start": 23,
-        "end": 52,
+        "end": 53,
         "loc": {
           "start": {
             "line": 6,
@@ -166,7 +166,7 @@
         "id": {
           "type": "Identifier",
           "start": 29,
-          "end": 32,
+          "end": 33,
           "loc": {
             "start": {
               "line": 6,
@@ -174,21 +174,21 @@
             },
             "end": {
               "line": 6,
-              "column": 9
+              "column": 10
             },
-            "identifierName": "Foo"
+            "identifierName": "Foo2"
           },
-          "name": "Foo"
+          "name": "Foo2"
         },
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start": 33,
-          "end": 52,
+          "start": 34,
+          "end": 53,
           "loc": {
             "start": {
               "line": 6,
-              "column": 10
+              "column": 11
             },
             "end": {
               "line": 9,
@@ -198,8 +198,8 @@
           "body": [
             {
               "type": "ClassProperty",
-              "start": 37,
-              "end": 38,
+              "start": 38,
+              "end": 39,
               "loc": {
                 "start": {
                   "line": 7,
@@ -213,8 +213,8 @@
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 37,
-                "end": 38,
+                "start": 38,
+                "end": 39,
                 "loc": {
                   "start": {
                     "line": 7,
@@ -233,8 +233,8 @@
             },
             {
               "type": "ClassMethod",
-              "start": 41,
-              "end": 50,
+              "start": 42,
+              "end": 51,
               "loc": {
                 "start": {
                   "line": 8,
@@ -249,8 +249,8 @@
               "computed": true,
               "key": {
                 "type": "Identifier",
-                "start": 42,
-                "end": 43,
+                "start": 43,
+                "end": 44,
                 "loc": {
                   "start": {
                     "line": 8,
@@ -271,8 +271,8 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 48,
-                "end": 50,
+                "start": 49,
+                "end": 51,
                 "loc": {
                   "start": {
                     "line": 8,

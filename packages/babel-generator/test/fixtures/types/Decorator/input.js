@@ -31,14 +31,14 @@ class Foo {
 }
 
 @foo
-export default class Foo {
+export default class Foo2 {
   bar() {
     class Baz {}
   }
 }
 
 @foo
-export class Foo {
+export class Foo3 {
   bar() {
     class Baz {}
   }

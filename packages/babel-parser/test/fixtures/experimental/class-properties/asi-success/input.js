@@ -3,7 +3,7 @@ class Foo {
   y
 }
 
-class Foo {
+class Foo2 {
   p
   [m] () {}
 }

@@ -1,23 +1,23 @@
-function foo(bar = "bar") {}
+function foo1(bar = "bar") {}
 
-function foo(bar = "bar", ...items) {}
+function foo2(bar = "bar", ...items) {}
 
-function foo(...items) {}
+function foo3(...items) {}
 
-function* foo() {}
+function* foo4() {}
 
-function foo() {}
+function foo5() {}
 
-async function foo() {}
+async function foo6() {}
 
-var foo = function* foo() {};
+var foo7 = function* foo7() {};
 
-var foo = function foo() {};
+var foo8 = function foo8() {};
 
-var foo = async function foo() {};
+var foo9 = async function foo9() {};
 
-var foo = function* () {};
+var foo10 = function* () {};
 
-var foo = function () {};
+var foo11 = function () {};
 
-var foo = async function () {};
+var foo12 = async function () {};
