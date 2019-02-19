@@ -104,8 +104,7 @@
                   "column": 30
                 }
               },
-              "expectedNode": "Identifier",
-              "key": {
+              "name": {
                 "type": "Identifier",
                 "start": 24,
                 "end": 28,
@@ -121,7 +120,8 @@
                   "identifierName": "STAR"
                 },
                 "name": "STAR"
-              }
+              },
+              "expectedNode": "Identifier"
             }
           }
         ],

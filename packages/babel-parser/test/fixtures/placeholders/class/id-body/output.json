@@ -57,8 +57,7 @@
               "column": 12
             }
           },
-          "expectedNode": "Identifier",
-          "key": {
+          "name": {
             "type": "Identifier",
             "start": 8,
             "end": 10,
@@ -74,7 +73,8 @@
               "identifierName": "ID"
             },
             "name": "ID"
-          }
+          },
+          "expectedNode": "Identifier"
         },
         "superClass": null,
         "body": {
@@ -91,8 +91,7 @@
               "column": 21
             }
           },
-          "expectedNode": "ClassBody",
-          "key": {
+          "name": {
             "type": "Identifier",
             "start": 15,
             "end": 19,
@@ -108,7 +107,8 @@
               "identifierName": "BODY"
             },
             "name": "BODY"
-          }
+          },
+          "expectedNode": "ClassBody"
         }
       }
     ],

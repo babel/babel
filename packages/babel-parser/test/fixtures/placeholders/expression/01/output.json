@@ -71,8 +71,7 @@
                 "column": 7
               }
             },
-            "expectedNode": "Expression",
-            "key": {
+            "name": {
               "type": "Identifier",
               "start": 2,
               "end": 5,
@@ -88,7 +87,8 @@
                 "identifierName": "FOO"
               },
               "name": "FOO"
-            }
+            },
+            "expectedNode": "Expression"
           },
           "operator": "+",
           "right": {
@@ -119,8 +119,7 @@
                   "column": 17
                 }
               },
-              "expectedNode": "Expression",
-              "key": {
+              "name": {
                 "type": "Identifier",
                 "start": 12,
                 "end": 15,
@@ -136,7 +135,8 @@
                   "identifierName": "BAR"
                 },
                 "name": "BAR"
-              }
+              },
+              "expectedNode": "Expression"
             },
             "arguments": [
               {
@@ -153,8 +153,7 @@
                     "column": 25
                   }
                 },
-                "expectedNode": "Expression",
-                "key": {
+                "name": {
                   "type": "Identifier",
                   "start": 20,
                   "end": 23,
@@ -170,7 +169,8 @@
                     "identifierName": "BAZ"
                   },
                   "name": "BAZ"
-                }
+                },
+                "expectedNode": "Expression"
               }
             ]
           }

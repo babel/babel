@@ -43,6 +43,23 @@
             "column": 7
           }
         },
+        "name": {
+          "type": "Identifier",
+          "start": 2,
+          "end": 5,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 2
+            },
+            "end": {
+              "line": 1,
+              "column": 5
+            },
+            "identifierName": "FOO"
+          },
+          "name": "FOO"
+        },
         "expectedNode": "Statement"
       },
       {
@@ -58,6 +75,23 @@
             "line": 2,
             "column": 7
           }
+        },
+        "name": {
+          "type": "Identifier",
+          "start": 10,
+          "end": 13,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 2
+            },
+            "end": {
+              "line": 2,
+              "column": 5
+            },
+            "identifierName": "BAR"
+          },
+          "name": "BAR"
         },
         "expectedNode": "Statement"
       }

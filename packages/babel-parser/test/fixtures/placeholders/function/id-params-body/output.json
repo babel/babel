@@ -57,8 +57,7 @@
               "column": 15
             }
           },
-          "expectedNode": "Identifier",
-          "key": {
+          "name": {
             "type": "Identifier",
             "start": 11,
             "end": 13,
@@ -74,7 +73,8 @@
               "identifierName": "ID"
             },
             "name": "ID"
-          }
+          },
+          "expectedNode": "Identifier"
         },
         "generator": false,
         "async": false,
@@ -93,8 +93,7 @@
                 "column": 25
               }
             },
-            "expectedNode": "Pattern",
-            "key": {
+            "name": {
               "type": "Identifier",
               "start": 18,
               "end": 23,
@@ -110,7 +109,8 @@
                 "identifierName": "PARAM"
               },
               "name": "PARAM"
-            }
+            },
+            "expectedNode": "Pattern"
           },
           {
             "type": "Placeholder",
@@ -126,8 +126,7 @@
                 "column": 36
               }
             },
-            "expectedNode": "Pattern",
-            "key": {
+            "name": {
               "type": "Identifier",
               "start": 29,
               "end": 34,
@@ -143,7 +142,8 @@
                 "identifierName": "PARAM"
               },
               "name": "PARAM"
-            }
+            },
+            "expectedNode": "Pattern"
           }
         ],
         "body": {
@@ -160,8 +160,7 @@
               "column": 46
             }
           },
-          "expectedNode": "BlockStatement",
-          "key": {
+          "name": {
             "type": "Identifier",
             "start": 40,
             "end": 44,
@@ -177,7 +176,8 @@
               "identifierName": "BODY"
             },
             "name": "BODY"
-          }
+          },
+          "expectedNode": "BlockStatement"
         }
       }
     ],

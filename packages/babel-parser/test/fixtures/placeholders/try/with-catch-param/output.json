@@ -88,8 +88,7 @@
                 "column": 23
               }
             },
-            "expectedNode": "Pattern",
-            "key": {
+            "name": {
               "type": "Identifier",
               "start": 16,
               "end": 21,
@@ -105,7 +104,8 @@
                 "identifierName": "PARAM"
               },
               "name": "PARAM"
-            }
+            },
+            "expectedNode": "Pattern"
           },
           "body": {
             "type": "Placeholder",
@@ -121,8 +121,7 @@
                 "column": 34
               }
             },
-            "expectedNode": "BlockStatement",
-            "key": {
+            "name": {
               "type": "Identifier",
               "start": 27,
               "end": 32,
@@ -138,7 +137,8 @@
                 "identifierName": "CATCH"
               },
               "name": "CATCH"
-            }
+            },
+            "expectedNode": "BlockStatement"
           }
         },
         "guardedHandlers": [],

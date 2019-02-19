@@ -108,8 +108,7 @@
               "column": 29
             }
           },
-          "expectedNode": "StringLiteral",
-          "key": {
+          "name": {
             "type": "Identifier",
             "start": 23,
             "end": 27,
@@ -125,7 +124,8 @@
               "identifierName": "FILE"
             },
             "name": "FILE"
-          }
+          },
+          "expectedNode": "StringLiteral"
         },
         "declaration": null
       }

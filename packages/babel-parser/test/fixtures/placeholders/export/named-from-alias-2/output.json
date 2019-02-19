@@ -89,8 +89,7 @@
                   "column": 26
                 }
               },
-              "expectedNode": "Identifier",
-              "key": {
+              "name": {
                 "type": "Identifier",
                 "start": 19,
                 "end": 24,
@@ -106,7 +105,8 @@
                   "identifierName": "ALIAS"
                 },
                 "name": "ALIAS"
-              }
+              },
+              "expectedNode": "Identifier"
             }
           }
         ],

@@ -57,8 +57,7 @@
               "column": 15
             }
           },
-          "expectedNode": "Identifier",
-          "key": {
+          "name": {
             "type": "Identifier",
             "start": 11,
             "end": 13,
@@ -74,7 +73,8 @@
               "identifierName": "ID"
             },
             "name": "ID"
-          }
+          },
+          "expectedNode": "Identifier"
         },
         "generator": false,
         "async": false,

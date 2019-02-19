@@ -72,8 +72,7 @@
                   "column": 17
                 }
               },
-              "expectedNode": "Identifier",
-              "key": {
+              "name": {
                 "type": "Identifier",
                 "start": 11,
                 "end": 15,
@@ -89,7 +88,8 @@
                   "identifierName": "NAME"
                 },
                 "name": "NAME"
-              }
+              },
+              "expectedNode": "Identifier"
             },
             "exported": {
               "type": "Placeholder",
@@ -105,8 +105,7 @@
                   "column": 17
                 }
               },
-              "expectedNode": "Identifier",
-              "key": {
+              "name": {
                 "type": "Identifier",
                 "start": 11,
                 "end": 15,
@@ -122,7 +121,8 @@
                   "identifierName": "NAME"
                 },
                 "name": "NAME"
-              }
+              },
+              "expectedNode": "Identifier"
             }
           }
         ],
@@ -140,8 +140,7 @@
               "column": 33
             }
           },
-          "expectedNode": "StringLiteral",
-          "key": {
+          "name": {
             "type": "Identifier",
             "start": 27,
             "end": 31,
@@ -157,7 +156,8 @@
               "identifierName": "FILE"
             },
             "name": "FILE"
-          }
+          },
+          "expectedNode": "StringLiteral"
         },
         "declaration": null
       }

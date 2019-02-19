@@ -74,8 +74,7 @@
               "column": 26
             }
           },
-          "expectedNode": "Expression",
-          "key": {
+          "name": {
             "type": "Identifier",
             "start": 19,
             "end": 24,
@@ -91,7 +90,8 @@
               "identifierName": "SUPER"
             },
             "name": "SUPER"
-          }
+          },
+          "expectedNode": "Expression"
         },
         "body": {
           "type": "ClassBody",

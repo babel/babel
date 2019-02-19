@@ -88,8 +88,7 @@
                   "column": 19
                 }
               },
-              "expectedNode": "ClassBody",
-              "key": {
+              "name": {
                 "type": "Identifier",
                 "start": 13,
                 "end": 17,
@@ -105,7 +104,8 @@
                   "identifierName": "BODY"
                 },
                 "name": "BODY"
-              }
+              },
+              "expectedNode": "ClassBody"
             }
           }
         }

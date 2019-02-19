@@ -72,8 +72,7 @@
                   "column": 18
                 }
               },
-              "expectedNode": "Identifier",
-              "key": {
+              "name": {
                 "type": "Identifier",
                 "start": 9,
                 "end": 16,
@@ -89,7 +88,8 @@
                   "identifierName": "DEFAULT"
                 },
                 "name": "DEFAULT"
-              }
+              },
+              "expectedNode": "Identifier"
             }
           }
         ],
@@ -107,8 +107,7 @@
               "column": 32
             }
           },
-          "expectedNode": "StringLiteral",
-          "key": {
+          "name": {
             "type": "Identifier",
             "start": 26,
             "end": 30,
@@ -124,7 +123,8 @@
               "identifierName": "FILE"
             },
             "name": "FILE"
-          }
+          },
+          "expectedNode": "StringLiteral"
         }
       }
     ],

@@ -72,8 +72,7 @@
                   "column": 18
                 }
               },
-              "expectedNode": "Identifier",
-              "key": {
+              "name": {
                 "type": "Identifier",
                 "start": 9,
                 "end": 16,
@@ -89,7 +88,8 @@
                   "identifierName": "DEFAULT"
                 },
                 "name": "DEFAULT"
-              }
+              },
+              "expectedNode": "Identifier"
             }
           },
           {
@@ -120,8 +120,7 @@
                   "column": 33
                 }
               },
-              "expectedNode": "Identifier",
-              "key": {
+              "name": {
                 "type": "Identifier",
                 "start": 27,
                 "end": 31,
@@ -137,7 +136,8 @@
                   "identifierName": "STAR"
                 },
                 "name": "STAR"
-              }
+              },
+              "expectedNode": "Identifier"
             }
           }
         ],

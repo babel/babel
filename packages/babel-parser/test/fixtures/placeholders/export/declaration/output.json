@@ -59,8 +59,7 @@
               "column": 15
             }
           },
-          "expectedNode": "Declaration",
-          "key": {
+          "name": {
             "type": "Identifier",
             "start": 9,
             "end": 13,
@@ -76,7 +75,8 @@
               "identifierName": "DECL"
             },
             "name": "DECL"
-          }
+          },
+          "expectedNode": "Declaration"
         }
       },
       {

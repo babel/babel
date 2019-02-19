@@ -75,8 +75,7 @@
                   "column": 10
                 }
               },
-              "expectedNode": "Pattern",
-              "key": {
+              "name": {
                 "type": "Identifier",
                 "start": 3,
                 "end": 8,
@@ -92,7 +91,8 @@
                   "identifierName": "PARAM"
                 },
                 "name": "PARAM"
-              }
+              },
+              "expectedNode": "Pattern"
             }
           ],
           "body": {
@@ -109,8 +109,7 @@
                 "column": 23
               }
             },
-            "expectedNode": "Expression",
-            "key": {
+            "name": {
               "type": "Identifier",
               "start": 17,
               "end": 21,
@@ -126,7 +125,8 @@
                 "identifierName": "BODY"
               },
               "name": "BODY"
-            }
+            },
+            "expectedNode": "Expression"
           }
         }
       }

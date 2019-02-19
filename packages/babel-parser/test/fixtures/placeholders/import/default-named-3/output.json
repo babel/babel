@@ -72,8 +72,7 @@
                   "column": 18
                 }
               },
-              "expectedNode": "Identifier",
-              "key": {
+              "name": {
                 "type": "Identifier",
                 "start": 9,
                 "end": 16,
@@ -89,7 +88,8 @@
                   "identifierName": "DEFAULT"
                 },
                 "name": "DEFAULT"
-              }
+              },
+              "expectedNode": "Identifier"
             }
           },
           {
@@ -120,8 +120,7 @@
                   "column": 31
                 }
               },
-              "expectedNode": "Identifier",
-              "key": {
+              "name": {
                 "type": "Identifier",
                 "start": 24,
                 "end": 29,
@@ -137,7 +136,8 @@
                   "identifierName": "NAMED"
                 },
                 "name": "NAMED"
-              }
+              },
+              "expectedNode": "Identifier"
             },
             "local": {
               "type": "Placeholder",
@@ -153,8 +153,7 @@
                   "column": 31
                 }
               },
-              "expectedNode": "Identifier",
-              "key": {
+              "name": {
                 "type": "Identifier",
                 "start": 24,
                 "end": 29,
@@ -170,7 +169,8 @@
                   "identifierName": "NAMED"
                 },
                 "name": "NAMED"
-              }
+              },
+              "expectedNode": "Identifier"
             }
           }
         ],

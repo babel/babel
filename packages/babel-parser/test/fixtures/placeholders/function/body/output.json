@@ -77,8 +77,7 @@
               "column": 21
             }
           },
-          "expectedNode": "BlockStatement",
-          "key": {
+          "name": {
             "type": "Identifier",
             "start": 15,
             "end": 19,
@@ -94,7 +93,8 @@
               "identifierName": "BODY"
             },
             "name": "BODY"
-          }
+          },
+          "expectedNode": "BlockStatement"
         }
       }
     ],

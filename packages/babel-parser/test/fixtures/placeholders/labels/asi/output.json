@@ -122,6 +122,23 @@
                     "column": 12
                   }
                 },
+                "name": {
+                  "type": "Identifier",
+                  "start": 30,
+                  "end": 35,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 9
+                    },
+                    "identifierName": "LABEL"
+                  },
+                  "name": "LABEL"
+                },
                 "expectedNode": "Statement"
               }
             ],

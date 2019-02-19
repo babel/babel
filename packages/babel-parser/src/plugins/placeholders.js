@@ -59,7 +59,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         // We can't use this.parseIdentifier because
         // we don't want nested placeholders.
-        node.key = super.parseIdentifier(/* liberal */ true);
+        node.name = super.parseIdentifier(/* liberal */ true);
 
         this.assertNoSpace("Unexpected space in placeholder.");
         this.expect(tt.placeholder);
@@ -174,6 +174,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       this.semicolon();
+
+      node.name = expr.name;
       return this.finishPlaceholder(node, "Statement");
     }
 

@@ -57,7 +57,7 @@
               "column": 7
             }
           },
-          "key": {
+          "name": {
             "type": "Identifier",
             "start": 2,
             "end": 5,

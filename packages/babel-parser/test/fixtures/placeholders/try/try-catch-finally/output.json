@@ -57,8 +57,7 @@
               "column": 11
             }
           },
-          "expectedNode": "BlockStatement",
-          "key": {
+          "name": {
             "type": "Identifier",
             "start": 6,
             "end": 9,
@@ -74,7 +73,8 @@
               "identifierName": "TRY"
             },
             "name": "TRY"
-          }
+          },
+          "expectedNode": "BlockStatement"
         },
         "handler": {
           "type": "CatchClause",
@@ -105,8 +105,7 @@
                 "column": 27
               }
             },
-            "expectedNode": "BlockStatement",
-            "key": {
+            "name": {
               "type": "Identifier",
               "start": 20,
               "end": 25,
@@ -122,7 +121,8 @@
                 "identifierName": "CATCH"
               },
               "name": "CATCH"
-            }
+            },
+            "expectedNode": "BlockStatement"
           }
         },
         "guardedHandlers": [],
@@ -140,8 +140,7 @@
               "column": 47
             }
           },
-          "expectedNode": "BlockStatement",
-          "key": {
+          "name": {
             "type": "Identifier",
             "start": 38,
             "end": 45,
@@ -157,7 +156,8 @@
               "identifierName": "FINALLY"
             },
             "name": "FINALLY"
-          }
+          },
+          "expectedNode": "BlockStatement"
         }
       }
     ],

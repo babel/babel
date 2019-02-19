@@ -104,8 +104,7 @@
                   "column": 28
                 }
               },
-              "expectedNode": "Identifier",
-              "key": {
+              "name": {
                 "type": "Identifier",
                 "start": 21,
                 "end": 26,
@@ -121,7 +120,8 @@
                   "identifierName": "NAMED"
                 },
                 "name": "NAMED"
-              }
+              },
+              "expectedNode": "Identifier"
             },
             "local": {
               "type": "Placeholder",
@@ -137,8 +137,7 @@
                   "column": 28
                 }
               },
-              "expectedNode": "Identifier",
-              "key": {
+              "name": {
                 "type": "Identifier",
                 "start": 21,
                 "end": 26,
@@ -154,7 +153,8 @@
                   "identifierName": "NAMED"
                 },
                 "name": "NAMED"
-              }
+              },
+              "expectedNode": "Identifier"
             }
           }
         ],
