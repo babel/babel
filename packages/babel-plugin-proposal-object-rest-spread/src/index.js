@@ -31,8 +31,8 @@ export default declare((api, opts) => {
       Expression(path) {
         const parentType = path.parent.type;
         if (
-          (parentType == "AssignmentPattern" && path.key === "right") ||
-          (parentType == "ObjectProperty" &&
+          (parentType === "AssignmentPattern" && path.key === "right") ||
+          (parentType === "ObjectProperty" &&
             path.parent.computed &&
             path.key === "key")
         ) {

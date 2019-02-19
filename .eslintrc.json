@@ -32,7 +32,8 @@
       "files": ["packages/babel-plugin-*/src/index.js"],
       "excludedFiles": ["packages/babel-plugin-transform-regenerator/**/*.js"],
       "rules": {
-        "@babel/development/plugin-name": "error"
+        "@babel/development/plugin-name": "error",
+        "eqeqeq": ["error", "always", { "null": "ignore" }]
       }
     }
   ]

@@ -199,7 +199,7 @@ export default declare((api, options) => {
 
       ReferencedIdentifier(path, state) {
         if (
-          path.node.name == "__moduleName" &&
+          path.node.name === "__moduleName" &&
           !path.scope.hasBinding("__moduleName")
         ) {
           path.replaceWith(
