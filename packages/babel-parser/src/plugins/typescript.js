@@ -329,6 +329,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return null;
     }
 
+    tsCheckLiteralForConstantContext(node: N.Node) {
+      switch (node.type) {
+        case "StringLiteral":
+        case "TemplateLiteral":
+        case "NumericLiteral":
+        case "BooleanLiteral":
+        case "ObjectExpression":
+        case "ArrayExpression":
+          return;
+        case "UnaryExpression":
+          return this.tsCheckLiteralForConstantContext(node.argument);
+        default:
+          throw this.unexpected(node.start);
+      }
+    }
+
     // Note: In TypeScript implementation we must provide `yieldContext` and `awaitContext`,
     // but here it's always false, because this is only used for types.
     tsFillSignature(
@@ -949,6 +965,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.typeAnnotation = _const ? _const : this.tsNextThenParseType();
       this.expectRelational(">");
       node.expression = this.parseMaybeUnary();
+      if (_const) {
+        this.tsCheckLiteralForConstantContext(node.expression);
+      }
       return this.finishNode(node, "TSTypeAssertion");
     }
 
@@ -1612,7 +1631,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         );
         node.expression = left;
         const _const = this.tsTryNextParseConstantContext();
-        node.typeAnnotation = _const ? _const : this.tsNextThenParseType();
+        if (_const) {
+          this.tsCheckLiteralForConstantContext(node.expression);
+          node.typeAnnotation = _const;
+        } else {
+          node.typeAnnotation = this.tsNextThenParseType();
+        }
         this.finishNode(node, "TSAsExpression");
         return this.parseExprOp(
           node,
