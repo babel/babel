@@ -1,5 +1,5 @@
 // @flow
-import * as babelPlugins from "./plugins";
+import * as babelPlugins from "./generated/plugins";
 
 export default (_: any, opts: Object): Object => {
   let loose = false;
@@ -37,15 +37,15 @@ export default (_: any, opts: Object): Object => {
       babelPlugins.transformTypeofSymbol,
       babelPlugins.transformInstanceof,
       (modules === "commonjs" || modules === "cjs") && [
-        babelPlugins.transformModulesCommonJS,
+        babelPlugins.transformModulesCommonjs,
         optsLoose,
       ],
       modules === "systemjs" && [
-        babelPlugins.transformModulesSystemJS,
+        babelPlugins.transformModulesSystemjs,
         optsLoose,
       ],
-      modules === "amd" && [babelPlugins.transformModulesAMD, optsLoose],
-      modules === "umd" && [babelPlugins.transformModulesUMD, optsLoose],
+      modules === "amd" && [babelPlugins.transformModulesAmd, optsLoose],
+      modules === "umd" && [babelPlugins.transformModulesUmd, optsLoose],
       [
         babelPlugins.transformRegenerator,
         { async: false, asyncGenerators: false },
