@@ -492,6 +492,7 @@ suites.forEach(function(testSuite) {
               strictMode: false,
               sourceType: "module",
               sourceMaps: !!task.sourceMap,
+              ...task.options.parserOpts,
             });
             const options = {
               sourceFileName: path.relative(__dirname, actual.loc),

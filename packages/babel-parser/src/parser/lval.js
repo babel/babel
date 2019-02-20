@@ -92,6 +92,14 @@ export default class LValParser extends NodeUtils {
           }
           break;
 
+        case "ParenthesizedExpression":
+          node.expression = this.toAssignable(
+            node.expression,
+            isBinding,
+            contextDescription,
+          );
+          break;
+
         case "MemberExpression":
           if (!isBinding) break;
 
@@ -405,6 +413,15 @@ export default class LValParser extends NodeUtils {
 
       case "RestElement":
         this.checkLVal(expr.argument, isBinding, checkClashes, "rest element");
+        break;
+
+      case "ParenthesizedExpression":
+        this.checkLVal(
+          expr.expression,
+          isBinding,
+          checkClashes,
+          "parenthesized expression",
+        );
         break;
 
       default: {
