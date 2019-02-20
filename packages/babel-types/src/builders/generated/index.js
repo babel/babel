@@ -596,6 +596,10 @@ export function ParenthesizedExpression(...args: Array<any>): Object {
   return builder("ParenthesizedExpression", ...args);
 }
 export { ParenthesizedExpression as parenthesizedExpression };
+export function ArgumentPlaceholder(...args: Array<any>): Object {
+  return builder("ArgumentPlaceholder", ...args);
+}
+export { ArgumentPlaceholder as argumentPlaceholder };
 export function AwaitExpression(...args: Array<any>): Object {
   return builder("AwaitExpression", ...args);
 }

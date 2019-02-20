@@ -2072,6 +2072,20 @@ export function isParenthesizedExpression(
 
   return false;
 }
+export function isArgumentPlaceholder(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "ArgumentPlaceholder") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isAwaitExpression(node: Object, opts?: Object): boolean {
   if (!node) return false;
 
