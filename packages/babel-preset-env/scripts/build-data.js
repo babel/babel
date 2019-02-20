@@ -132,6 +132,7 @@ const environments = [
   "android",
   "ios",
   "phantom",
+  "samsung",
 ];
 
 const compatibilityTests = flattenDeep(
