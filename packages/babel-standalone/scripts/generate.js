@@ -1,3 +1,4 @@
+// @flow
 const pluginConfig = require("./pluginConfig.json");
 const path = require("path");
 const chalk = require("chalk");
@@ -13,7 +14,7 @@ let imports = "";
 let list = "";
 let allList = "";
 
-for (const plugin of pluginConfig.all) {
+for (const plugin of pluginConfig) {
   const camelPlugin = camelCase(plugin);
   imports += `import ${camelPlugin} from "@babel/plugin-${plugin}";`;
   list += `${camelPlugin},`;
