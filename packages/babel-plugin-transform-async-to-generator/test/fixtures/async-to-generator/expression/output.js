@@ -1,6 +1,4 @@
-var foo =
-/*#__PURE__*/
-function () {
+var foo = /*#__PURE__*/ function () {
   var _ref = babelHelpers.asyncToGenerator(function* () {
     var wat = yield bar();
   });
@@ -10,9 +8,7 @@ function () {
   };
 }();
 
-var foo2 =
-/*#__PURE__*/
-function () {
+var foo2 = /*#__PURE__*/ function () {
   var _ref2 = babelHelpers.asyncToGenerator(function* () {
     var wat = yield bar();
   });
@@ -21,9 +17,7 @@ function () {
     return _ref2.apply(this, arguments);
   };
 }(),
-    bar =
-/*#__PURE__*/
-function () {
+    bar = /*#__PURE__*/ function () {
   var _ref3 = babelHelpers.asyncToGenerator(function* () {
     var wat = yield foo();
   });

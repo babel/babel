@@ -4,9 +4,7 @@ let A = function A() {
   console.log('a');
 };
 
-let B =
-/*#__PURE__*/
-function () {
+let B = /*#__PURE__*/ function () {
   "use strict";
 
   function B() {}

@@ -10,9 +10,7 @@ var Hello = function Hello() {
   };
 };
 
-var Outer =
-/*#__PURE__*/
-function (_Hello) {
+var Outer = /*#__PURE__*/ function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
 
   function Outer() {

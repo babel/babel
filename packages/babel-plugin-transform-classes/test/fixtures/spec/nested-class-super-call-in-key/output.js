@@ -10,9 +10,7 @@ var Hello = function Hello() {
   };
 };
 
-var Outer =
-/*#__PURE__*/
-function (_Hello) {
+var Outer = /*#__PURE__*/ function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
 
   function Outer() {
@@ -22,9 +20,7 @@ function (_Hello) {
 
     babelHelpers.classCallCheck(this, Outer);
 
-    var Inner =
-    /*#__PURE__*/
-    function () {
+    var Inner = /*#__PURE__*/ function () {
       function Inner() {
         babelHelpers.classCallCheck(this, Inner);
       }

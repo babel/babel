@@ -12,8 +12,7 @@ function _g() {
       () => this;
     }
 
-    /*#__PURE__*/
-    babelHelpers.asyncToGenerator(function* () {
+    /*#__PURE__*/ babelHelpers.asyncToGenerator(function* () {
       _this;
       yield 1;
     });

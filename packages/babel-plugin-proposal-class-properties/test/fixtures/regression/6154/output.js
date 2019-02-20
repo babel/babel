@@ -25,9 +25,7 @@ var Test = function Test() {
 
   _classCallCheck(this, Test);
 
-  var Other =
-  /*#__PURE__*/
-  function (_Test) {
+  var Other = /*#__PURE__*/ function (_Test) {
     _inherits(Other, _Test);
 
     function Other() {

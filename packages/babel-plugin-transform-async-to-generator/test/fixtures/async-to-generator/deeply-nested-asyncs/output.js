@@ -11,13 +11,9 @@ function _s() {
       args[_key - 1] = arguments[_key];
     }
 
-    let t =
-    /*#__PURE__*/
-    function () {
+    let t = /*#__PURE__*/ function () {
       var _ref = babelHelpers.asyncToGenerator(function* (y, a) {
-        let r =
-        /*#__PURE__*/
-        function () {
+        let r = /*#__PURE__*/ function () {
           var _ref2 = babelHelpers.asyncToGenerator(function* (z, b) {
             yield z;
 

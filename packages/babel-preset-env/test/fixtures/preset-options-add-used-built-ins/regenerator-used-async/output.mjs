@@ -10,9 +10,7 @@ function a() {
 }
 
 function _a() {
-  _a = _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee() {
+  _a = _asyncToGenerator(/*#__PURE__*/ regeneratorRuntime.mark(function _callee() {
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {

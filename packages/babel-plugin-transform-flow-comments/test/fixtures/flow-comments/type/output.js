@@ -1,5 +1,3 @@
-function foo(x
-/*: number*/
-)
+function foo(x/*: number*/ )
 /*: string*/
 {}

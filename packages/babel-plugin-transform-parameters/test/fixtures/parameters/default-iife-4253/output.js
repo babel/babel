@@ -1,6 +1,4 @@
-var Ref =
-/*#__PURE__*/
-function () {
+var Ref = /*#__PURE__*/ function () {
   "use strict";
 
   function Ref() {

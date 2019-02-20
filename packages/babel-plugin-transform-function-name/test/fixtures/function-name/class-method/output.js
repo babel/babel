@@ -1,6 +1,4 @@
-let Foo =
-/*#__PURE__*/
-function () {
+let Foo = /*#__PURE__*/ function () {
   "use strict";
 
   function Foo() {

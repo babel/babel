@@ -26,9 +26,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 let value = 1;
 
-let Base =
-/*#__PURE__*/
-function () {
+let Base = /*#__PURE__*/ function () {
   function Base() {
     _classCallCheck(this, Base);
   }
@@ -43,9 +41,7 @@ function () {
   return Base;
 }();
 
-let Obj =
-/*#__PURE__*/
-function (_Base) {
+let Obj = /*#__PURE__*/ function (_Base) {
   _inherits(Obj, _Base);
 
   function Obj() {

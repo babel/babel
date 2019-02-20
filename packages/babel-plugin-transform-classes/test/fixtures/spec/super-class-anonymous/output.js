@@ -1,6 +1,4 @@
-var TestEmpty =
-/*#__PURE__*/
-function (_ref) {
+var TestEmpty = /*#__PURE__*/ function (_ref) {
   "use strict";
 
   babelHelpers.inherits(TestEmpty, _ref);
@@ -11,9 +9,7 @@ function (_ref) {
   }
 
   return TestEmpty;
-}(
-/*#__PURE__*/
-function () {
+}(/*#__PURE__*/ function () {
   "use strict";
 
   function _class() {
@@ -23,9 +19,7 @@ function () {
   return _class;
 }());
 
-var TestConstructorOnly =
-/*#__PURE__*/
-function (_ref2) {
+var TestConstructorOnly = /*#__PURE__*/ function (_ref2) {
   "use strict";
 
   babelHelpers.inherits(TestConstructorOnly, _ref2);
@@ -36,9 +30,7 @@ function (_ref2) {
   }
 
   return TestConstructorOnly;
-}(
-/*#__PURE__*/
-function () {
+}(/*#__PURE__*/ function () {
   "use strict";
 
   function _class2() {
@@ -48,9 +40,7 @@ function () {
   return _class2;
 }());
 
-var TestMethodOnly =
-/*#__PURE__*/
-function (_ref3) {
+var TestMethodOnly = /*#__PURE__*/ function (_ref3) {
   "use strict";
 
   babelHelpers.inherits(TestMethodOnly, _ref3);
@@ -61,9 +51,7 @@ function (_ref3) {
   }
 
   return TestMethodOnly;
-}(
-/*#__PURE__*/
-function () {
+}(/*#__PURE__*/ function () {
   "use strict";
 
   function _class3() {
@@ -77,9 +65,7 @@ function () {
   return _class3;
 }());
 
-var TestConstructorAndMethod =
-/*#__PURE__*/
-function (_ref4) {
+var TestConstructorAndMethod = /*#__PURE__*/ function (_ref4) {
   "use strict";
 
   babelHelpers.inherits(TestConstructorAndMethod, _ref4);
@@ -90,9 +76,7 @@ function (_ref4) {
   }
 
   return TestConstructorAndMethod;
-}(
-/*#__PURE__*/
-function () {
+}(/*#__PURE__*/ function () {
   "use strict";
 
   function _class4() {
@@ -106,9 +90,7 @@ function () {
   return _class4;
 }());
 
-var TestMultipleMethods =
-/*#__PURE__*/
-function (_ref5) {
+var TestMultipleMethods = /*#__PURE__*/ function (_ref5) {
   "use strict";
 
   babelHelpers.inherits(TestMultipleMethods, _ref5);
@@ -119,9 +101,7 @@ function (_ref5) {
   }
 
   return TestMultipleMethods;
-}(
-/*#__PURE__*/
-function () {
+}(/*#__PURE__*/ function () {
   "use strict";
 
   function _class5() {

@@ -26,9 +26,7 @@ let Base = function Base() {
 
 Base.prototype.test = 1;
 
-let Obj =
-/*#__PURE__*/
-function (_Base) {
+let Obj = /*#__PURE__*/ function (_Base) {
   _inherits(Obj, _Base);
 
   function Obj() {

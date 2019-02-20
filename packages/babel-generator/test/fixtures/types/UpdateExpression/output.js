@@ -1,4 +1,4 @@
 ++i;
 i++;
 (foo++).test();
-obj.foo /*comment*/++;
+obj.foo/*comment*/ ++;

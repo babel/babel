@@ -4,9 +4,7 @@ var A = function A() {
   babelHelpers.classCallCheck(this, A);
 };
 
-var B =
-/*#__PURE__*/
-function (_A) {
+var B = /*#__PURE__*/ function (_A) {
   "use strict";
 
   babelHelpers.inherits(B, _A);

@@ -30,9 +30,7 @@ let Base = function Base() {
 
 let value = 2;
 
-let Obj =
-/*#__PURE__*/
-function (_Base) {
+let Obj = /*#__PURE__*/ function (_Base) {
   _inherits(Obj, _Base);
 
   function Obj() {

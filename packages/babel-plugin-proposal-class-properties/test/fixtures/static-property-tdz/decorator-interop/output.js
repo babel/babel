@@ -14,9 +14,7 @@ function _initializerWarningHelper(descriptor, context) { throw new Error('Decor
 
 function dec() {}
 
-let A = (_class = (_temp = (_Symbol$search = Symbol.search,
-/*#__PURE__*/
-function () {
+let A = (_class = (_temp = (_Symbol$search = Symbol.search, /*#__PURE__*/ function () {
   "use strict";
 
   function A() {

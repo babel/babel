@@ -1,6 +1,4 @@
-var Point =
-/*#__PURE__*/
-function () {
+var Point = /*#__PURE__*/ function () {
   "use strict";
 
   function Point(_x2 = 0, _y2 = 0) {

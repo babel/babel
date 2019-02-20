@@ -4,9 +4,7 @@ let Array = function Array() {
   babelHelpers.classCallCheck(this, Array);
 };
 
-let List =
-/*#__PURE__*/
-function (_Array) {
+let List = /*#__PURE__*/ function (_Array) {
   "use strict";
 
   babelHelpers.inherits(List, _Array);

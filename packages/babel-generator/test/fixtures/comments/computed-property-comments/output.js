@@ -8,11 +8,9 @@ var test = {
    * Inside bracket init
    */
   "b"]: "2",
-  ["c"
-  /*
-   * After bracket key
-   */
-  ]: "3",
+  ["c"/*
+       * After bracket key
+       */ ]: "3",
   // Before bracket, line comment
   ["d"]: "4",
   [// Inside bracket, line comment

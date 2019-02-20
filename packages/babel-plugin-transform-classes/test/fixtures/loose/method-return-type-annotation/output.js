@@ -1,7 +1,5 @@
 // @flow
-var C =
-/*#__PURE__*/
-function () {
+var C = /*#__PURE__*/ function () {
   "use strict";
 
   function C() {}

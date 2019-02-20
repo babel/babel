@@ -1,9 +1,7 @@
 function withContext(ComposedComponent) {
   var _class, _temp;
 
-  return _temp = _class =
-  /*#__PURE__*/
-  function (_Component) {
+  return _temp = _class = /*#__PURE__*/ function (_Component) {
     "use strict";
 
     babelHelpers.inherits(WithContext, _Component);

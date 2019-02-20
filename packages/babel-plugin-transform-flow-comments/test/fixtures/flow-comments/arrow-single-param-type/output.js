@@ -1,3 +1,1 @@
-const x = (foo
-/*: string*/
-) => {};
+const x = (foo/*: string*/ ) => {};

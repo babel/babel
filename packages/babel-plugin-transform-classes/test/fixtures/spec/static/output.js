@@ -1,6 +1,4 @@
-var A =
-/*#__PURE__*/
-function () {
+var A = /*#__PURE__*/ function () {
   "use strict";
 
   function A() {

@@ -15,9 +15,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var Foo =
-/*#__PURE__*/
-function () {
+var Foo = /*#__PURE__*/ function () {
   function Foo() {
     _classCallCheck(this, Foo);
   }
@@ -25,9 +23,7 @@ function () {
   _createClass(Foo, [{
     key: "bar",
     value: function () {
-      var _bar = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee() {
+      var _bar = _asyncToGenerator(/*#__PURE__*/ regeneratorRuntime.mark(function _callee() {
         var baz;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -61,9 +57,7 @@ function foo() {
 }
 
 function _foo() {
-  _foo = _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee3() {
+  _foo = _asyncToGenerator(/*#__PURE__*/ regeneratorRuntime.mark(function _callee3() {
     var bar, _bar2;
 
     return regeneratorRuntime.wrap(function _callee3$(_context3) {
@@ -71,9 +65,7 @@ function _foo() {
         switch (_context3.prev = _context3.next) {
           case 0:
             _bar2 = function _ref2() {
-              _bar2 = _asyncToGenerator(
-              /*#__PURE__*/
-              regeneratorRuntime.mark(function _callee2() {
+              _bar2 = _asyncToGenerator(/*#__PURE__*/ regeneratorRuntime.mark(function _callee2() {
                 var baz;
                 return regeneratorRuntime.wrap(function _callee2$(_context2) {
                   while (1) {

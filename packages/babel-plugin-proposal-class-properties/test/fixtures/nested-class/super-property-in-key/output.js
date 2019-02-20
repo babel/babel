@@ -1,8 +1,6 @@
 "use strict";
 
-let Hello =
-/*#__PURE__*/
-function () {
+let Hello = /*#__PURE__*/ function () {
   function Hello() {
     babelHelpers.classCallCheck(this, Hello);
   }
@@ -16,9 +14,7 @@ function () {
   return Hello;
 }();
 
-let Outer =
-/*#__PURE__*/
-function (_Hello) {
+let Outer = /*#__PURE__*/ function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
 
   function Outer() {

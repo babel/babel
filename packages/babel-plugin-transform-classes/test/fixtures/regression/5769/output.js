@@ -1,6 +1,4 @@
-var Point =
-/*#__PURE__*/
-function () {
+var Point = /*#__PURE__*/ function () {
   "use strict";
 
   function Point() {
@@ -16,9 +14,7 @@ function () {
   return Point;
 }();
 
-var ColorPoint =
-/*#__PURE__*/
-function (_Point) {
+var ColorPoint = /*#__PURE__*/ function (_Point) {
   "use strict";
 
   babelHelpers.inherits(ColorPoint, _Point);

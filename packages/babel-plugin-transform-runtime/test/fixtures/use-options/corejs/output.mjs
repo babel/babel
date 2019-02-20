@@ -3,9 +3,7 @@ import _possibleConstructorReturn from "@babel/runtime-corejs2/helpers/possibleC
 import _getPrototypeOf from "@babel/runtime-corejs2/helpers/getPrototypeOf";
 import _inherits from "@babel/runtime-corejs2/helpers/inherits";
 
-let Foo =
-/*#__PURE__*/
-function (_Bar) {
+let Foo = /*#__PURE__*/ function (_Bar) {
   _inherits(Foo, _Bar);
 
   function Foo() {

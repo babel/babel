@@ -1,16 +1,12 @@
 // @flow
-var C =
-/*#__PURE__*/
-function () {
+var C = /*#__PURE__*/ function () {
   "use strict";
 
   function C() {}
 
   var _proto = C.prototype;
 
-  _proto.m = function m(x
-  /*: number*/
-  )
+  _proto.m = function m(x/*: number*/ )
   /*: string*/
   {
     return 'a';

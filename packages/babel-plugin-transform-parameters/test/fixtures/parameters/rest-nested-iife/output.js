@@ -1,8 +1,6 @@
 function broken(x) {
   if (true) {
-    var Foo =
-    /*#__PURE__*/
-    function (_Bar) {
+    var Foo = /*#__PURE__*/ function (_Bar) {
       "use strict";
 
       babelHelpers.inherits(Foo, _Bar);

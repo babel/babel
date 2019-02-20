@@ -9,9 +9,7 @@ this.HTMLElement = function () {
 
 var constructor;
 
-var CustomElement =
-/*#__PURE__*/
-function (_HTMLElement) {
+var CustomElement = /*#__PURE__*/ function (_HTMLElement) {
   "use strict";
 
   babelHelpers.inherits(CustomElement, _HTMLElement);

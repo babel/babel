@@ -1,9 +1,7 @@
 export default (param => {
   var _class, _temp;
 
-  return _temp = _class =
-  /*#__PURE__*/
-  function () {
+  return _temp = _class = /*#__PURE__*/ function () {
     function App() {
       babelHelpers.classCallCheck(this, App);
     }

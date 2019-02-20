@@ -10,9 +10,7 @@ Object.defineProperty(Base.prototype, 'test', {
   configurable: true
 });
 
-let Obj =
-/*#__PURE__*/
-function (_Base) {
+let Obj = /*#__PURE__*/ function (_Base) {
   _inheritsLoose(Obj, _Base);
 
   function Obj() {

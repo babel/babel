@@ -1,7 +1,5 @@
 // @flow
-var C =
-/*#__PURE__*/
-function () {
+var C = /*#__PURE__*/ function () {
   "use strict";
 
   function C() {
@@ -10,9 +8,7 @@ function () {
 
   babelHelpers.createClass(C, [{
     key: "m",
-    value: function m(x
-    /*: number*/
-    )
+    value: function m(x/*: number*/ )
     /*: string*/
     {
       return 'a';

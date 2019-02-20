@@ -1,8 +1,6 @@
 var _this = this;
 
-babelHelpers.asyncToGenerator(
-/*#__PURE__*/
-regeneratorRuntime.mark(function _callee() {
+babelHelpers.asyncToGenerator(/*#__PURE__*/ regeneratorRuntime.mark(function _callee() {
   return regeneratorRuntime.wrap(function _callee$(_context) {
     while (1) switch (_context.prev = _context.next) {
       case 0:
@@ -15,9 +13,7 @@ regeneratorRuntime.mark(function _callee() {
     }
   }, _callee, this);
 }))();
-babelHelpers.asyncToGenerator(
-/*#__PURE__*/
-regeneratorRuntime.mark(function _callee2() {
+babelHelpers.asyncToGenerator(/*#__PURE__*/ regeneratorRuntime.mark(function _callee2() {
   return regeneratorRuntime.wrap(function _callee2$(_context2) {
     while (1) switch (_context2.prev = _context2.next) {
       case 0:
@@ -32,11 +28,8 @@ regeneratorRuntime.mark(function _callee2() {
   }, _callee2, this);
 })).bind(this)();
 
-/*#__PURE__*/
-(function () {
-  var _notIIFE = babelHelpers.asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee3() {
+/*#__PURE__*/ (function () {
+  var _notIIFE = babelHelpers.asyncToGenerator(/*#__PURE__*/ regeneratorRuntime.mark(function _callee3() {
     return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
@@ -57,10 +50,7 @@ regeneratorRuntime.mark(function _callee2() {
   return notIIFE;
 })();
 
-/*#__PURE__*/
-babelHelpers.asyncToGenerator(
-/*#__PURE__*/
-regeneratorRuntime.mark(function _callee4() {
+/*#__PURE__*/ babelHelpers.asyncToGenerator(/*#__PURE__*/ regeneratorRuntime.mark(function _callee4() {
   return regeneratorRuntime.wrap(function _callee4$(_context4) {
     while (1) switch (_context4.prev = _context4.next) {
       case 0:

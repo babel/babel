@@ -9,9 +9,7 @@ var b = function b() {
   babelHelpers.classCallCheck(this, b);
 };
 
-var a1 =
-/*#__PURE__*/
-function (_b) {
+var a1 = /*#__PURE__*/ function (_b) {
   babelHelpers.inherits(a1, _b);
 
   function a1() {
@@ -30,9 +28,7 @@ function (_b) {
   return a1;
 }(b);
 
-var a2 =
-/*#__PURE__*/
-function (_b2) {
+var a2 = /*#__PURE__*/ function (_b2) {
   babelHelpers.inherits(a2, _b2);
 
   function a2() {

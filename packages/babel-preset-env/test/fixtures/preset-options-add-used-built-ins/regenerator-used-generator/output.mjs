@@ -1,8 +1,6 @@
 import "regenerator-runtime/runtime";
 
-var _marked =
-/*#__PURE__*/
-regeneratorRuntime.mark(a);
+var _marked = /*#__PURE__*/ regeneratorRuntime.mark(a);
 
 function a() {
   return regeneratorRuntime.wrap(function a$(_context) {
