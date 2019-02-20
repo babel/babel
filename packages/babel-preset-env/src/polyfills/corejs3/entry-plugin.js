@@ -1,22 +1,30 @@
 import corejs3Polyfills from "core-js-compat/data";
+import corejsEntries from "core-js-compat/entries";
 import getModulesListForTargetVersion from "core-js-compat/get-modules-list-for-target-version";
 import filterItems from "../../filter-items";
 import {
+  has,
   intersection,
   createImport,
-  isCoreJSSource,
-  isCoreJSRequire,
-  isBabelPolyfillSource,
-  isBabelPolyfillRequire,
+  getImportSource,
+  getRequireSource,
 } from "../../utils";
 import { logEntryPolyfills } from "../../debug";
+
+function isBabelPolyfillSource(source) {
+  return source === "@babel/polyfill" || source === "babel-polyfill";
+}
+
+function isCoreJSSource(source) {
+  return has(corejsEntries, source) && corejsEntries[source];
+}
 
 const BABEL_POLYFILL_DEPRECATION = `
   \`@babel/polyfill\` is deprecated. Please, use required parts of \`core-js\`
   and \`regenerator-runtime/runtime\` separately`;
 
 export default function(
-  { types: t },
+  _,
   { corejs, include, exclude, polyfillTargets, debug },
 ) {
   const polyfills = filterItems(
@@ -30,24 +38,25 @@ export default function(
 
   const isPolyfillImport = {
     ImportDeclaration(path) {
-      if (path.node.specifiers.length === 0) {
-        const module = path.node.source.value;
-        if (isBabelPolyfillSource(module)) {
-          console.warn(BABEL_POLYFILL_DEPRECATION);
-        } else {
-          const modules = isCoreJSSource(module);
-          if (modules) {
-            this.replaceBySeparateModulesImport(path, modules);
-          }
+      const source = getImportSource(path);
+      if (!source) return;
+      if (isBabelPolyfillSource(source)) {
+        console.warn(BABEL_POLYFILL_DEPRECATION);
+      } else {
+        const modules = isCoreJSSource(source);
+        if (modules) {
+          this.replaceBySeparateModulesImport(path, modules);
         }
       }
     },
     Program(path) {
       path.get("body").forEach(bodyPath => {
-        if (isBabelPolyfillRequire(t, bodyPath)) {
+        const source = getRequireSource(bodyPath);
+        if (!source) return;
+        if (isBabelPolyfillSource(source)) {
           console.warn(BABEL_POLYFILL_DEPRECATION);
         } else {
-          const modules = isCoreJSRequire(t, bodyPath);
+          const modules = isCoreJSSource(source);
           if (modules) {
             this.replaceBySeparateModulesImport(bodyPath, modules);
           }
@@ -60,12 +69,9 @@ export default function(
     name: "corejs3-entry",
     visitor: isPolyfillImport,
     pre() {
-      this.importPolyfillIncluded = false;
       this.polyfillsSet = new Set();
 
       this.replaceBySeparateModulesImport = function(path, modules) {
-        this.importPolyfillIncluded = true;
-
         for (const module of modules) {
           this.polyfillsSet.add(module);
         }
@@ -84,7 +90,7 @@ export default function(
       if (debug) {
         logEntryPolyfills(
           "core-js",
-          this.importPolyfillIncluded,
+          this.polyfillsSet.size,
           filtered,
           this.file.opts.filename,
           polyfillTargets,

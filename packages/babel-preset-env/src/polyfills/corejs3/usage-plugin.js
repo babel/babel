@@ -17,7 +17,8 @@ import {
   has,
   intersection,
   isPolyfillSource,
-  isPolyfillRequire,
+  getImportSource,
+  getRequireSource,
 } from "../../utils";
 import { logUsagePolyfills } from "../../debug";
 
@@ -97,10 +98,7 @@ export default function(
   const addAndRemovePolyfillImports = {
     // import 'core-js'
     ImportDeclaration(path) {
-      if (
-        path.node.specifiers.length === 0 &&
-        isPolyfillSource(path.node.source.value)
-      ) {
+      if (isPolyfillSource(getImportSource(path))) {
         console.warn(NO_DIRECT_POLYFILL_IMPORT);
         path.remove();
       }
@@ -109,7 +107,7 @@ export default function(
     // require('core-js')
     Program(path) {
       path.get("body").forEach(bodyPath => {
-        if (isPolyfillRequire(t, bodyPath)) {
+        if (isPolyfillSource(getRequireSource(bodyPath))) {
           console.warn(NO_DIRECT_POLYFILL_IMPORT);
           bodyPath.remove();
         }
