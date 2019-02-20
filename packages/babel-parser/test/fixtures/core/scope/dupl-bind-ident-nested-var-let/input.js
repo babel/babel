@@ -1,4 +1,4 @@
 {
-  let a;
-  { var a; }
+  var a;
+  { let a; }
 }
