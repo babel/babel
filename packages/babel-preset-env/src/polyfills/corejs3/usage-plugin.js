@@ -220,8 +220,7 @@ export default function(
         const { builtIn, instanceType } = source;
         if (PossibleGlobalObjects.has(builtIn)) {
           this.addBuiltInDependencies(key);
-        }
-        if (has(StaticProperties, builtIn)) {
+        } else if (has(StaticProperties, builtIn)) {
           const BuiltInProperties = StaticProperties[builtIn];
           if (has(BuiltInProperties, key)) {
             const StaticPropertyDependencies = BuiltInProperties[key];

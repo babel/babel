@@ -122,7 +122,7 @@ export function filterStageFromList(list, stageList) {
 }
 
 export function getImportSource({ node }) {
-  return node.specifiers.length === 0 && node.source.value;
+  if (node.specifiers.length === 0) return node.source.value;
 }
 
 export function getRequireSource({ node }) {
