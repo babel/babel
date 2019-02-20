@@ -54,6 +54,7 @@ const browserNameMap = {
   node: "node",
   opera: "opera",
   safari: "safari",
+  samsung: "samsung",
 };
 
 export const isBrowsersQueryValid = (
