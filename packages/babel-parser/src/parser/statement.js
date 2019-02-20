@@ -642,12 +642,11 @@ export default class StatementParser extends ExpressionParser {
         this.expect(tt.parenL);
         clause.param = this.parseBindingAtom();
         const simple = clause.param.type === "Identifier";
-        const clashes: any = Object.create(null);
         this.enterScope(simple ? SCOPE_SIMPLE_CATCH : 0);
         this.checkLVal(
           clause.param,
           simple ? BIND_SIMPLE_CATCH : BIND_LEXICAL,
-          clashes,
+          null,
           "catch clause",
         );
         this.expect(tt.parenR);
