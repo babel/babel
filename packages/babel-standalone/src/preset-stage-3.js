@@ -1,5 +1,5 @@
 // @flow
-import * as babelPlugins from "./plugins";
+import * as babelPlugins from "./generated/plugins";
 
 export default (_: any, opts: Object) => {
   let loose = false;
@@ -12,8 +12,8 @@ export default (_: any, opts: Object) => {
     plugins: [
       babelPlugins.syntaxDynamicImport,
       babelPlugins.syntaxImportMeta,
-      [babelPlugins.transformClassProperties, { loose }],
-      babelPlugins.transformJsonStrings,
+      [babelPlugins.proposalClassProperties, { loose }],
+      babelPlugins.proposalJsonStrings,
       [babelPlugins.proposalPrivateMethods, { loose }],
     ],
   };

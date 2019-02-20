@@ -1,6 +1,6 @@
 // @flow
 import presetStage3 from "./preset-stage-3";
-import * as babelPlugins from "./plugins";
+import * as babelPlugins from "./generated/plugins";
 
 export default (_: any, opts: Object = {}) => {
   const {
@@ -14,13 +14,13 @@ export default (_: any, opts: Object = {}) => {
     presets: [[presetStage3, { loose, useBuiltIns }]],
     plugins: [
       [
-        babelPlugins.transformDecorators,
+        babelPlugins.proposalDecorators,
         { legacy: decoratorsLegacy, decoratorsBeforeExport },
       ],
-      babelPlugins.transformFunctionSent,
-      babelPlugins.transformExportNamespaceFrom,
-      babelPlugins.transformNumericSeparator,
-      babelPlugins.transformThrowExpressions,
+      babelPlugins.proposalFunctionSent,
+      babelPlugins.proposalExportNamespaceFrom,
+      babelPlugins.proposalNumericSeparator,
+      babelPlugins.proposalThrowExpressions,
     ],
   };
 };

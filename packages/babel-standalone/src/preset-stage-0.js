@@ -1,6 +1,6 @@
 // @flow
 import presetStage1 from "./preset-stage-1";
-import { transformFunctionBind } from "./plugins";
+import { proposalFunctionBind } from "./generated/plugins";
 
 export default (_: any, opts: Object = {}) => {
   const {
@@ -24,6 +24,6 @@ export default (_: any, opts: Object = {}) => {
         },
       ],
     ],
-    plugins: [transformFunctionBind],
+    plugins: [proposalFunctionBind],
   };
 };
