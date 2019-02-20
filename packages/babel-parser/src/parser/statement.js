@@ -1705,7 +1705,7 @@ export default class StatementParser extends ExpressionParser {
     return false;
   }
 
-  isAsyncFunction() {
+  isAsyncFunction(): boolean {
     if (!this.isContextual("async")) return false;
 
     const { input, pos, length } = this.state;
