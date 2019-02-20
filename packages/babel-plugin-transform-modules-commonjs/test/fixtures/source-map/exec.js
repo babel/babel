@@ -23,6 +23,7 @@ var tests = [
 
 tests.forEach(function (code) {
   var res = transform(code, {
+    configFile: false,
     sourceMap: true,
     plugins: opts.plugins
   });

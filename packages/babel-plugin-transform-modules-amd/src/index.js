@@ -7,6 +7,7 @@ import {
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
   wrapInterop,
+  rewriteDynamicImport,
 } from "@babel/helper-module-transforms";
 import { template, types as t } from "@babel/core";
 
@@ -15,6 +16,24 @@ const buildWrapper = template(`
   })
 `);
 
+const buildAnonymousWrapper = template(`
+  define(["require"], function(REQUIRE) {
+  })
+`);
+
+function injectWrapper(path, wrapper) {
+  const { body, directives } = path.node;
+  path.node.directives = [];
+  path.node.body = [];
+  const amdWrapper = path.pushContainer("body", wrapper)[0];
+  const amdFactory = amdWrapper
+    .get("expression.arguments")
+    .filter(arg => arg.isFunctionExpression())[0]
+    .get("body");
+  amdFactory.pushContainer("directives", directives);
+  amdFactory.pushContainer("body", body);
+}
+
 export default declare((api, options) => {
   api.assertVersion(7);
 
@@ -22,10 +41,48 @@ export default declare((api, options) => {
   return {
     name: "transform-modules-amd",
 
+    pre() {
+      this.file.set("@babel/plugin-transform-modules-*", "amd");
+    },
+
     visitor: {
+      CallExpression(path, state) {
+        if (!this.file.has("@babel/plugin-proposal-dynamic-import")) return;
+        if (!path.get("callee").isImport()) return;
+
+        if (!state.requireId) {
+          state.requireId = path.scope.generateUidIdentifier("require");
+        }
+
+        rewriteDynamicImport(
+          path,
+          (source, resolve) =>
+            template.expression.ast`${state.requireId}(
+              [${source}],
+              imported => ${resolve(t.identifier("imported"))}
+            )`,
+          { noInterop },
+        );
+      },
+
       Program: {
-        exit(path) {
-          if (!isModule(path)) return;
+        exit(path, { requireId }) {
+          if (!isModule(path)) {
+            if (requireId) {
+              injectWrapper(
+                path,
+                buildAnonymousWrapper({ REQUIRE: requireId }),
+              );
+            }
+            return;
+          }
+
+          const amdArgs = [];
+          const importNames = [];
+          if (requireId) {
+            amdArgs.push(t.stringLiteral("require"));
+            importNames.push(requireId);
+          }
 
           let moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);
@@ -40,9 +97,6 @@ export default declare((api, options) => {
               noInterop,
             },
           );
-
-          const amdArgs = [];
-          const importNames = [];
 
           if (hasExports(meta)) {
             amdArgs.push(t.stringLiteral("exports"));
@@ -81,23 +135,15 @@ export default declare((api, options) => {
           ensureStatementsHoisted(headers);
           path.unshiftContainer("body", headers);
 
-          const { body, directives } = path.node;
-          path.node.directives = [];
-          path.node.body = [];
-          const amdWrapper = path.pushContainer("body", [
+          injectWrapper(
+            path,
             buildWrapper({
               MODULE_NAME: moduleName,
 
               AMD_ARGUMENTS: t.arrayExpression(amdArgs),
               IMPORT_NAMES: importNames,
             }),
-          ])[0];
-          const amdFactory = amdWrapper
-            .get("expression.arguments")
-            .filter(arg => arg.isFunctionExpression())[0]
-            .get("body");
-          amdFactory.pushContainer("directives", directives);
-          amdFactory.pushContainer("body", body);
+          );
         },
       },
     },

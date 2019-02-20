@@ -14,6 +14,8 @@ import normalizeAndLoadModuleMetadata, {
 
 export { hasExports, isSideEffectImport, isModule };
 
+export { rewriteDynamicImport } from "./dynamic-import";
+
 /**
  * Perform all of the generic ES6 module rewriting needed to handle initial
  * module processing. This function will rewrite the majority of the given

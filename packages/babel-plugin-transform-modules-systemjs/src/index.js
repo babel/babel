@@ -21,6 +21,12 @@ const buildExportAll = template(`
   }
 `);
 
+const MISSING_PLUGIN_WARNING = `\
+WARNING: Dynamic import() transformation must be enabled using the
+         @babel/plugin-proposal-dynamic-import plugin. As of Babel 8,
+         without that plugin it won't be transformed.
+`;
+
 function constructExportCall(
   path,
   exportIdent,
@@ -96,8 +102,6 @@ function constructExportCall(
   return statements;
 }
 
-const TYPE_IMPORT = "Import";
-
 export default declare((api, options) => {
   api.assertVersion(7);
 
@@ -168,9 +172,17 @@ export default declare((api, options) => {
   return {
     name: "transform-modules-systemjs",
 
+    pre() {
+      this.file.set("@babel/plugin-transform-modules-*", "systemjs");
+    },
+
     visitor: {
       CallExpression(path, state) {
-        if (path.node.callee.type === TYPE_IMPORT) {
+        if (t.isImport(path.node.callee)) {
+          if (!this.file.has("@babel/plugin-proposal-dynamic-import")) {
+            console.warn(MISSING_PLUGIN_WARNING);
+          }
+
           path.replaceWith(
             t.callExpression(
               t.memberExpression(

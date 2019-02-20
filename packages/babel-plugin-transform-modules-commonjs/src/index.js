@@ -6,6 +6,7 @@ import {
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
   wrapInterop,
+  rewriteDynamicImport,
 } from "@babel/helper-module-transforms";
 import simplifyAccess from "@babel/helper-simple-access";
 import { template, types as t } from "@babel/core";
@@ -55,6 +56,9 @@ export default declare((api, options) => {
         "Babel config for this file.");
     })()
   `;
+
+  const getRequire = source =>
+    t.callExpression(t.identifier("require"), [source]);
 
   const moduleExportsVisitor = {
     ReferencedIdentifier(path) {
@@ -118,7 +122,27 @@ export default declare((api, options) => {
   return {
     name: "transform-modules-commonjs",
 
+    pre() {
+      this.file.set("@babel/plugin-transform-modules-*", "commonjs");
+    },
+
     visitor: {
+      CallExpression(path) {
+        if (!this.file.has("@babel/plugin-proposal-dynamic-import")) return;
+        if (!path.get("callee").isImport()) return;
+
+        let { scope } = path;
+        do {
+          scope.rename("require");
+        } while ((scope = scope.parent));
+
+        rewriteDynamicImport(
+          path,
+          (source, resolve) => resolve(getRequire(source)),
+          { noInterop },
+        );
+      },
+
       Program: {
         exit(path, state) {
           if (!isModule(path)) return;
@@ -163,9 +187,7 @@ export default declare((api, options) => {
           );
 
           for (const [source, metadata] of meta.source) {
-            const loadExpr = t.callExpression(t.identifier("require"), [
-              t.stringLiteral(source),
-            ]);
+            const loadExpr = getRequire(t.stringLiteral(source));
 
             let header;
             if (isSideEffectImport(metadata)) {
