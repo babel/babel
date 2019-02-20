@@ -473,17 +473,17 @@ export default class Printer {
   }
 
   _printTrailingComments(node) {
-    this._printComments(this._getComments(false, node));
+    this._printComments(this._getComments(false, node), node);
   }
 
   _printLeadingComments(node) {
-    this._printComments(this._getComments(true, node));
+    this._printComments(this._getComments(true, node), node);
   }
 
   printInnerComments(node, indent = true) {
     if (!node.innerComments || !node.innerComments.length) return;
     if (indent) this.indent();
-    this._printComments(node.innerComments);
+    this._printComments(node.innerComments, node);
     if (indent) this.dedent();
   }
 
@@ -532,7 +532,7 @@ export default class Printer {
     );
   }
 
-  _printComment(comment) {
+  _printComment(comment, node) {
     if (!this.format.shouldPrintComment(comment.value)) return;
 
     // Some plugins use this to mark comments as removed using the AST-root 'comments' property,
@@ -549,14 +549,20 @@ export default class Printer {
 
     const isBlockComment = comment.type === "CommentBlock";
 
-    // Always add a newline before a block comment
-    this.newline(
-      this._buf.hasContent() && !this._noLineTerminator && isBlockComment
-        ? 1
-        : 0,
-    );
+    const addNewlinesAroundBlockComment =
+      isBlockComment &&
+      (!t.isExpression(node) || this.endsWith("[") || this.endsWith("{"));
+    if (
+      this._buf.hasContent() &&
+      !this._noLineTerminator &&
+      addNewlinesAroundBlockComment
+    ) {
+      this.newline();
+    }
 
-    if (!this.endsWith("[") && !this.endsWith("{")) this.space();
+    if (!isBlockComment && !this.endsWith("[") && !this.endsWith("{")) {
+      this.space();
+    }
 
     let val =
       !isBlockComment && !this._noLineTerminator
@@ -580,19 +586,29 @@ export default class Printer {
     // Avoid creating //* comments
     if (this.endsWith("/")) this._space();
 
+    if (isBlockComment && !addNewlinesAroundBlockComment) {
+      // Do not insert parens and newline!
+      this._parenPushNewlineState = null;
+    }
+
     this.withSource("start", comment.loc, () => {
       this._append(val);
     });
 
-    // Always add a newline after a block comment
-    this.newline(isBlockComment && !this._noLineTerminator ? 1 : 0);
+    if (isBlockComment) {
+      if (addNewlinesAroundBlockComment) {
+        this.newline();
+      } else {
+        this.space();
+      }
+    }
   }
 
-  _printComments(comments?: Array<Object>) {
+  _printComments(comments?: Array<Object>, node?) {
     if (!comments || !comments.length) return;
 
     for (const comment of comments) {
-      this._printComment(comment);
+      this._printComment(comment, node);
     }
   }
 }
