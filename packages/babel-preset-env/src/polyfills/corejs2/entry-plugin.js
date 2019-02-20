@@ -1,11 +1,16 @@
 import corejs2Polyfills from "../../../data/corejs2-built-ins.json";
 import getPlatformSpecificDefaultFor from "./get-platform-specific-default";
 import filterItems from "../../filter-items";
-import { createImport, isPolyfillSource, isPolyfillRequire } from "../../utils";
+import {
+  createImport,
+  isPolyfillSource,
+  getImportSource,
+  getRequireSource,
+} from "../../utils";
 import { logEntryPolyfills } from "../../debug";
 
 export default function(
-  { types: t },
+  _,
   { include, exclude, polyfillTargets, regenerator, debug },
 ) {
   const polyfills = filterItems(
@@ -18,16 +23,13 @@ export default function(
 
   const isPolyfillImport = {
     ImportDeclaration(path) {
-      if (
-        path.node.specifiers.length === 0 &&
-        isPolyfillSource(path.node.source.value)
-      ) {
+      if (isPolyfillSource(getImportSource(path))) {
         this.replaceBySeparateModulesImport(path);
       }
     },
     Program(path) {
       path.get("body").forEach(bodyPath => {
-        if (isPolyfillRequire(t, bodyPath)) {
+        if (isPolyfillSource(getRequireSource(bodyPath))) {
           this.replaceBySeparateModulesImport(bodyPath);
         }
       });

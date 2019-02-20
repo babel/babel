@@ -1,19 +1,20 @@
-import { isRegeneratorSource, isRegeneratorRequire } from "../../utils";
+import { getImportSource, getRequireSource } from "../../utils";
 
-export default function({ types: t }) {
+function isRegeneratorSource(source) {
+  return source === "regenerator-runtime/runtime";
+}
+
+export default function() {
   const visitor = {
     ImportDeclaration(path) {
-      if (
-        path.node.specifiers.length === 0 &&
-        isRegeneratorSource(path.node.source.value)
-      ) {
+      if (isRegeneratorSource(getImportSource(path))) {
         this.regeneratorImportExcluded = true;
         path.remove();
       }
     },
     Program(path) {
       path.get("body").forEach(bodyPath => {
-        if (isRegeneratorRequire(t, bodyPath)) {
+        if (isRegeneratorSource(getRequireSource(bodyPath))) {
           this.regeneratorImportExcluded = true;
           bodyPath.remove();
         }

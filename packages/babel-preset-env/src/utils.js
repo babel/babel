@@ -1,6 +1,6 @@
+import * as t from "@babel/types";
 import invariant from "invariant";
 import semver from "semver";
-import coreJSEntries from "core-js-compat/entries";
 import levenshtein from "js-levenshtein";
 import { addSideEffect } from "@babel/helper-module-imports";
 import unreleasedLabels from "../data/unreleased-labels";
@@ -121,20 +121,24 @@ export function filterStageFromList(list, stageList) {
   }, {});
 }
 
+export function getImportSource({ node }) {
+  return node.specifiers.length === 0 && node.source.value;
+}
+
+export function getRequireSource({ node }) {
+  if (!t.isExpressionStatement(node)) return;
+  const { expression } = node;
+  const isRequire =
+    t.isCallExpression(expression) &&
+    t.isIdentifier(expression.callee) &&
+    expression.callee.name === "require" &&
+    expression.arguments.length === 1 &&
+    t.isStringLiteral(expression.arguments[0]);
+  if (isRequire) return expression.arguments[0].value;
+}
+
 export function isPolyfillSource(source) {
   return source === "@babel/polyfill" || source === "core-js";
-}
-
-export function isBabelPolyfillSource(source) {
-  return source === "@babel/polyfill" || source === "babel-polyfill";
-}
-
-export function isCoreJSSource(source) {
-  return has(coreJSEntries, source) && coreJSEntries[source];
-}
-
-export function isRegeneratorSource(source) {
-  return source === "regenerator-runtime/runtime";
 }
 
 const modulePathMap = {
@@ -147,43 +151,4 @@ export function getModulePath(mod) {
 
 export function createImport(path, mod) {
   return addSideEffect(path, getModulePath(mod));
-}
-
-export function isRequire(t, path) {
-  return (
-    t.isExpressionStatement(path.node) &&
-    t.isCallExpression(path.node.expression) &&
-    t.isIdentifier(path.node.expression.callee) &&
-    path.node.expression.callee.name === "require" &&
-    path.node.expression.arguments.length === 1 &&
-    t.isStringLiteral(path.node.expression.arguments[0])
-  );
-}
-
-export function isPolyfillRequire(t, path) {
-  return (
-    isRequire(t, path) &&
-    isPolyfillSource(path.node.expression.arguments[0].value)
-  );
-}
-
-export function isBabelPolyfillRequire(t, path) {
-  return (
-    isRequire(t, path) &&
-    isBabelPolyfillSource(path.node.expression.arguments[0].value)
-  );
-}
-
-export function isCoreJSRequire(t, path) {
-  return (
-    isRequire(t, path) &&
-    isCoreJSSource(path.node.expression.arguments[0].value)
-  );
-}
-
-export function isRegeneratorRequire(t, path) {
-  return (
-    isRequire(t, path) &&
-    isRegeneratorSource(path.node.expression.arguments[0].value)
-  );
 }
