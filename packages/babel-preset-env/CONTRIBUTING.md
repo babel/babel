@@ -57,8 +57,6 @@ If you wan to transform a new built-in by `useBuiltIns: 'usage'`, add mapping to
 
 Just update the version of [`core-js-compat`](https://github.com/zloirock/core-js/tree/master/packages/core-js-compat) in dependencies.
 
-If it's updating to a new minor `core-js@3` version, add new modules from this version to [this file](https://github.com/babel/babel/blob/master/packages/babel-preset-env/polyfills/corejs2/get-modules-list-for-target-version.js).
-
 If you wan to transform a new built-in by `useBuiltIns: 'usage'`, add mapping to related [`core-js`](https://github.com/zloirock/core-js/tree/master/packages/core-js/modules) modules to [this file](https://github.com/babel/babel/blob/master/packages/babel-preset-env/polyfills/corejs3/built-in-definitions.js).
 
 If you want to mark a new proposal as shipped, add it to [this list](https://github.com/babel/babel/blob/master/packages/babel-preset-env/polyfills/corejs3/shipped-proposals.js).
