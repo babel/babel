@@ -20,7 +20,7 @@ function test(fn) {
               return _context.stop();
           }
         }
-      }, _callee, this);
+      }, _callee);
     }))
   );
 }

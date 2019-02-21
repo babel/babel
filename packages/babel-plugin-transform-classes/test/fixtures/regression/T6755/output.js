@@ -29,7 +29,7 @@ function () {
               return _context.stop();
           }
         }
-      }, _callee, this);
+      }, _callee);
     }));
 
     function test1() {
@@ -54,7 +54,7 @@ function () {
             return _context2.stop();
         }
       }
-    }, test2, this);
+    }, test2);
   });
   return Example;
 }();
