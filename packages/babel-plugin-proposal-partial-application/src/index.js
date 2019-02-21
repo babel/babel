@@ -15,91 +15,52 @@ export default declare(api => {
     return node.arguments.some(arg => t.isArgumentPlaceholder(arg));
   }
 
-  /**
-   * Unwrap the arguments of a CallExpression, and creates
-   * assignmentExpression from them and returns them as an array.
-   * @param {Object} node CallExpression node
-   * @returns {Array<AssignmentExpression>}
-   */
   function unwrapArguments(node, scope) {
-    let newNode;
-    let argId;
-    return node.arguments.reduce((acc, arg) => {
-      if (!t.isArgumentPlaceholder(arg) && !t.isNumericLiteral(arg)) {
-        argId = scope.generateUidIdentifier("_param");
-        scope.push({ id: argId });
-        if (t.isSpreadElement(arg)) {
-          newNode = t.assignmentExpression(
-            "=",
-            t.cloneNode(argId),
-            t.arrayExpression([arg]),
+    const init = [];
+    for (let i = 0; i < node.arguments.length; i++) {
+      if (
+        !t.isArgumentPlaceholder(node.arguments[i]) &&
+        !t.isImmutable(node.arguments[i])
+      ) {
+        const id = scope.generateUidIdentifierBasedOnNode(
+          node.arguments[i],
+          "param",
+        );
+        scope.push({ id });
+        if (t.isSpreadElement(node.arguments[i])) {
+          init.push(
+            t.assignmentExpression(
+              "=",
+              t.cloneNode(id),
+              t.arrayExpression([t.spreadElement(node.arguments[i].argument)]),
+            ),
           );
+          node.arguments[i].argument = t.cloneNode(id);
         } else {
-          newNode = t.assignmentExpression("=", t.cloneNode(argId), arg);
+          init.push(
+            t.assignmentExpression("=", t.cloneNode(id), node.arguments[i]),
+          );
+          node.arguments[i] = t.cloneNode(id);
         }
-        acc.push(newNode);
       }
-      return acc;
-    }, []);
+    }
+    return init;
   }
 
-  /**
-   * Unwraps all of the arguments in a CallExpression
-   * and replaces ArgumentPlaceholder type with Identifier
-   * and gives them a unique name.
-   * @param {Object} node
-   * @param {Object} scope
-   * @returns {Array<Expression>} the arguments
-   */
-  function unwrapAllArguments(node, scope) {
-    const clone = t.cloneNode(node);
+  function replacePlaceholders(node, scope) {
+    const placeholders = [];
+    const args = [];
 
-    return clone.arguments.map(arg => {
+    node.arguments.forEach(arg => {
       if (t.isArgumentPlaceholder(arg)) {
-        return Object.assign({}, arg, {
-          type: "Identifier",
-          name: scope.generateUid("_argPlaceholder"),
-        });
-      }
-      return arg;
-    });
-  }
-
-  /**
-   * It replaces the values of non-placeholder args in allArgs
-   * @param {Array<Node>} nonPlaceholderArgs that has no placeholder in them
-   * @param {Array<Node>} args
-   */
-  function mapNonPlaceholderToLVal(nonPlaceholderArgs, allArgsList) {
-    allArgsList.forEach(arg => {
-      nonPlaceholderArgs.forEach(pArg => {
-        if (
-          t.isSpreadElement(arg) &&
-          !t.isIdentifier(pArg.right) &&
-          pArg.right.elements[0].argument.name === arg.argument.name
-        ) {
-          arg.argument.name = pArg.left.name;
-        } else if (!t.isNumericLiteral(arg) && pArg.right.name === arg.name) {
-          arg.name = pArg.left.name;
-        }
-      });
-    });
-    return allArgsList;
-  }
-
-  /**
-   * Takes the full list of arguments and extracts placeholders from it
-   * @param {Array<Argument>} allArgsList full list of arguments
-   * @returns {Array<ArgumentPlaceholder>} cloneList
-   */
-  function placeholderLVal(allArgsList) {
-    const cloneList = [];
-    allArgsList.forEach(item => {
-      if (item.name && item.name.includes("_argPlaceholder")) {
-        cloneList.push(item);
+        const id = scope.generateUid("_argPlaceholder");
+        placeholders.push(t.identifier(id));
+        args.push(t.cloneNode(t.identifier(id)));
+      } else {
+        args.push(arg);
       }
     });
-    return cloneList;
+    return [placeholders, args];
   }
 
   return {
@@ -116,10 +77,8 @@ export default declare(api => {
           node.callee,
         );
 
-        const nonPlaceholderArgs = unwrapArguments(node, scope);
-        const allArgs = unwrapAllArguments(node, scope);
-        const finalArgs = mapNonPlaceholderToLVal(nonPlaceholderArgs, allArgs);
-        const placeholderVals = placeholderLVal(allArgs);
+        const argsInitializers = unwrapArguments(node, scope);
+        const [placeholdersParams, args] = replacePlaceholders(node, scope);
 
         scope.push({ id: functionLVal });
 
@@ -144,10 +103,10 @@ export default declare(api => {
                 false,
               ),
             ),
-            ...nonPlaceholderArgs,
+            ...argsInitializers,
             t.functionExpression(
               node.callee.property,
-              placeholderVals,
+              placeholdersParams,
               t.blockStatement(
                 [
                   t.returnStatement(
@@ -158,7 +117,7 @@ export default declare(api => {
                         false,
                         false,
                       ),
-                      [receiverLVal, ...finalArgs],
+                      [receiverLVal, ...args],
                     ),
                   ),
                 ],
@@ -172,12 +131,12 @@ export default declare(api => {
         } else {
           const finalExpression = t.sequenceExpression([
             t.assignmentExpression("=", t.cloneNode(functionLVal), node.callee),
-            ...nonPlaceholderArgs,
+            ...argsInitializers,
             t.functionExpression(
               node.callee,
-              placeholderVals,
+              placeholdersParams,
               t.blockStatement(
-                [t.returnStatement(t.callExpression(functionLVal, finalArgs))],
+                [t.returnStatement(t.callExpression(functionLVal, args))],
                 [],
               ),
               false,
