@@ -11,6 +11,6 @@ var o = {
         case "end":
           return _context.stop();
       }
-    }, _callee, this);
+    }, _callee);
   })
 };

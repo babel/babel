@@ -21,7 +21,7 @@ function _a() {
             return _context.stop();
         }
       }
-    }, _callee, this);
+    }, _callee);
   }));
   return _a.apply(this, arguments);
 }

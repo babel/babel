@@ -11,7 +11,7 @@ regeneratorRuntime.mark(function _callee() {
       case "end":
         return _context.stop();
     }
-  }, _callee, this);
+  }, _callee);
 }))();
 babelHelpers.asyncToGenerator(
 /*#__PURE__*/
@@ -26,7 +26,7 @@ regeneratorRuntime.mark(function _callee2() {
       case "end":
         return _context2.stop();
     }
-  }, _callee2, this);
+  }, _callee2);
 }))();
 
 /*#__PURE__*/
@@ -44,7 +44,7 @@ regeneratorRuntime.mark(function _callee2() {
         case "end":
           return _context3.stop();
       }
-    }, _callee3, this);
+    }, _callee3);
   }));
 
   function notIIFE() {
@@ -68,5 +68,5 @@ regeneratorRuntime.mark(function _callee4() {
       case "end":
         return _context4.stop();
     }
-  }, _callee4, this);
+  }, _callee4);
 }));
