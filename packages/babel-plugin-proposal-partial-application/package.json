@@ -1,7 +1,7 @@
 {
   "name": "@babel/plugin-proposal-partial-application",
   "version": "7.2.0",
-  "description": "Transform pipeline operator into call expressions",
+  "description": "Introduces a new ? token in an argument list which allows for partially applying an argument list to a call expression",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-partial-application",
   "license": "MIT",
   "publishConfig": {

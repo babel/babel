@@ -1,6 +1,6 @@
 # @babel/plugin-proposal-partial-application
 
->  Introduces a new syntax using the ? token in an argument list which allows you to partially apply an argument list to a call expression by acting as a placeholder for an argument.
+>  Introduces a new ? token in an argument list which allows for partially applying an argument list to a call expression.
 
 See our website [@babel/plugin-proposal-partial-application](https://babeljs.io/docs/en/next/babel-plugin-proposal-partial-application.html) for more information.
 
