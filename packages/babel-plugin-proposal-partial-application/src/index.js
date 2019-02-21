@@ -55,7 +55,7 @@ export default declare(api => {
       if (t.isArgumentPlaceholder(arg)) {
         const id = scope.generateUid("_argPlaceholder");
         placeholders.push(t.identifier(id));
-        args.push(t.cloneNode(t.identifier(id)));
+        args.push(t.identifier(id));
       } else {
         args.push(arg);
       }
