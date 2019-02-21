@@ -27,5 +27,5 @@ function _callee() {
           return _context.stop();
       }
     }
-  }, _marked, this);
+  }, _marked);
 }

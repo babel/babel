@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    ["external-helpers", { "helperVersion": "7.1000.0" }],
+    ["proposal-private-methods", { "loose": true }],
+    ["proposal-class-properties", { "loose": true }]
+  ]
+}

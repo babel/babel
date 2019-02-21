@@ -342,17 +342,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseBindingListForSignature(): $ReadOnlyArray<
-      N.Identifier | N.RestElement | N.ObjectPattern,
+      N.Identifier | N.RestElement | N.ObjectPattern | N.ArrayPattern,
     > {
       return this.parseBindingList(tt.parenR).map(pattern => {
         if (
           pattern.type !== "Identifier" &&
           pattern.type !== "RestElement" &&
-          pattern.type !== "ObjectPattern"
+          pattern.type !== "ObjectPattern" &&
+          pattern.type !== "ArrayPattern"
         ) {
           throw this.unexpected(
             pattern.start,
-            `Name in a signature must be an Identifier or ObjectPattern, instead got ${
+            `Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got ${
               pattern.type
             }`,
           );
@@ -787,6 +788,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (this.match(tt.braceL)) {
             ++braceStackCounter;
           } else if (this.match(tt.braceR)) {
+            --braceStackCounter;
+          }
+          this.next();
+        }
+        return true;
+      }
+
+      if (this.match(tt.bracketL)) {
+        let braceStackCounter = 1;
+        this.next();
+
+        while (braceStackCounter > 0) {
+          if (this.match(tt.bracketL)) {
+            ++braceStackCounter;
+          } else if (this.match(tt.bracketR)) {
             --braceStackCounter;
           }
           this.next();
@@ -1683,10 +1699,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.parseExportDefaultExpression();
     }
 
-    parseStatementContent(
-      declaration: boolean,
-      topLevel: ?boolean,
-    ): N.Statement {
+    parseStatementContent(context: ?string, topLevel: ?boolean): N.Statement {
       if (this.state.type === tt._const) {
         const ahead = this.lookahead();
         if (ahead.type === tt.name && ahead.value === "enum") {
@@ -1696,7 +1709,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.tsParseEnumDeclaration(node, /* isConst */ true);
         }
       }
-      return super.parseStatementContent(declaration, topLevel);
+      return super.parseStatementContent(context, topLevel);
     }
 
     parseAccessModifier(): ?N.Accessibility {
@@ -1849,7 +1862,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.finishNode(typeCastNode, "TSTypeCastExpression");
       }
 
-      return node;
+      return this.finishNode(node, node.type);
     }
 
     parseExportDeclaration(node: N.ExportNamedDeclaration): ?N.Declaration {

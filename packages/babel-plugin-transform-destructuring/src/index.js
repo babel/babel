@@ -449,8 +449,14 @@ export default declare((api, options) => {
 
           path.ensureBlock();
 
+          if (node.body.body.length === 0 && path.isCompletionRecord()) {
+            node.body.body.unshift(
+              t.expressionStatement(scope.buildUndefinedNode()),
+            );
+          }
+
           node.body.body.unshift(
-            t.variableDeclaration("var", [t.variableDeclarator(left, temp)]),
+            t.expressionStatement(t.assignmentExpression("=", left, temp)),
           );
 
           return;

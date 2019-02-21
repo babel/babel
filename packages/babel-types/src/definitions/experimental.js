@@ -170,7 +170,14 @@ defineType("ClassPrivateMethod", {
     "returnType",
     "typeParameters",
   ],
-  aliases: ["Method", "Private", "Function"],
+  aliases: [
+    "Function",
+    "Scopable",
+    "BlockParent",
+    "FunctionParent",
+    "Method",
+    "Private",
+  ],
   fields: {
     ...classMethodOrDeclareMethodCommon,
     key: {

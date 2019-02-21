@@ -1,6 +1,9 @@
 {
-  "throws": "await is not supported inside pipeline expressions yet",
   "plugins": [
     ["proposal-pipeline-operator", { "proposal": "smart" }]
-  ]
+  ],
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  },
+  "minNodeVersion": "8.0.0"
 }

@@ -106,4 +106,22 @@ export type ParserPlugin =
     'optionalCatchBinding' |
     'throwExpressions' |
     'pipelineOperator' |
-    'nullishCoalescingOperator';
+    'nullishCoalescingOperator' |
+    ParserPluginWithOptions;
+
+export type ParserPluginWithOptions =
+    ['decorators', DecoratorsPluginOptions] |
+    ['pipelineOperator', PipelineOperatorPluginOptions] |
+    ['flow', FlowPluginOptions];
+
+export interface DecoratorsPluginOptions {
+    decoratorsBeforeExport?: boolean;
+}
+
+export interface PipelineOperatorPluginOptions {
+    proposal: 'minimal' | 'smart';
+}
+
+export interface FlowPluginOptions {
+    all?: boolean;
+}

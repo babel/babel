@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 26,
+  "end": 28,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 2,
-      "column": 13
+      "column": 14
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 26,
+    "end": 28,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 2,
-        "column": 13
+        "column": 14
       }
     },
     "sourceType": "module",
@@ -32,7 +32,7 @@
       {
         "type": "VariableDeclaration",
         "start": 0,
-        "end": 12,
+        "end": 13,
         "loc": {
           "start": {
             "line": 1,
@@ -40,14 +40,14 @@
           },
           "end": {
             "line": 1,
-            "column": 12
+            "column": 13
           }
         },
         "declarations": [
           {
             "type": "VariableDeclarator",
             "start": 4,
-            "end": 11,
+            "end": 12,
             "loc": {
               "start": {
                 "line": 1,
@@ -55,13 +55,13 @@
               },
               "end": {
                 "line": 1,
-                "column": 11
+                "column": 12
               }
             },
             "id": {
               "type": "Identifier",
               "start": 4,
-              "end": 11,
+              "end": 12,
               "loc": {
                 "start": {
                   "line": 1,
@@ -69,51 +69,51 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 11
+                  "column": 12
                 },
-                "identifierName": "x"
+                "identifierName": "x1"
               },
-              "name": "x",
+              "name": "x1",
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
-                "start": 5,
-                "end": 11,
+                "start": 6,
+                "end": 12,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 5
+                    "column": 6
                   },
                   "end": {
                     "line": 1,
-                    "column": 11
+                    "column": 12
                   }
                 },
                 "typeAnnotation": {
                   "type": "TSLiteralType",
-                  "start": 7,
-                  "end": 11,
+                  "start": 8,
+                  "end": 12,
                   "loc": {
                     "start": {
                       "line": 1,
-                      "column": 7
+                      "column": 8
                     },
                     "end": {
                       "line": 1,
-                      "column": 11
+                      "column": 12
                     }
                   },
                   "literal": {
                     "type": "BooleanLiteral",
-                    "start": 7,
-                    "end": 11,
+                    "start": 8,
+                    "end": 12,
                     "loc": {
                       "start": {
                         "line": 1,
-                        "column": 7
+                        "column": 8
                       },
                       "end": {
                         "line": 1,
-                        "column": 11
+                        "column": 12
                       }
                     },
                     "value": true
@@ -128,8 +128,8 @@
       },
       {
         "type": "VariableDeclaration",
-        "start": 13,
-        "end": 26,
+        "start": 14,
+        "end": 28,
         "loc": {
           "start": {
             "line": 2,
@@ -137,14 +137,14 @@
           },
           "end": {
             "line": 2,
-            "column": 13
+            "column": 14
           }
         },
         "declarations": [
           {
             "type": "VariableDeclarator",
-            "start": 17,
-            "end": 25,
+            "start": 18,
+            "end": 27,
             "loc": {
               "start": {
                 "line": 2,
@@ -152,13 +152,13 @@
               },
               "end": {
                 "line": 2,
-                "column": 12
+                "column": 13
               }
             },
             "id": {
               "type": "Identifier",
-              "start": 17,
-              "end": 25,
+              "start": 18,
+              "end": 27,
               "loc": {
                 "start": {
                   "line": 2,
@@ -166,51 +166,51 @@
                 },
                 "end": {
                   "line": 2,
-                  "column": 12
+                  "column": 13
                 },
-                "identifierName": "x"
+                "identifierName": "x2"
               },
-              "name": "x",
+              "name": "x2",
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
-                "start": 18,
-                "end": 25,
+                "start": 20,
+                "end": 27,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 5
+                    "column": 6
                   },
                   "end": {
                     "line": 2,
-                    "column": 12
+                    "column": 13
                   }
                 },
                 "typeAnnotation": {
                   "type": "TSLiteralType",
-                  "start": 20,
-                  "end": 25,
+                  "start": 22,
+                  "end": 27,
                   "loc": {
                     "start": {
                       "line": 2,
-                      "column": 7
+                      "column": 8
                     },
                     "end": {
                       "line": 2,
-                      "column": 12
+                      "column": 13
                     }
                   },
                   "literal": {
                     "type": "BooleanLiteral",
-                    "start": 20,
-                    "end": 25,
+                    "start": 22,
+                    "end": 27,
                     "loc": {
                       "start": {
                         "line": 2,
-                        "column": 7
+                        "column": 8
                       },
                       "end": {
                         "line": 2,
-                        "column": 12
+                        "column": 13
                       }
                     },
                     "value": false

@@ -1,66 +1,66 @@
-function foo(numVal) {}
+function foo1(numVal) {}
 
-function foo(numVal) {}
+function foo2(numVal) {}
 
-function foo(numVal, strVal) {}
+function foo3(numVal, strVal) {}
 
-function foo(numVal, untypedVal) {}
+function foo4(numVal, untypedVal) {}
 
-function foo(untypedVal, numVal) {}
+function foo5(untypedVal, numVal) {}
 
-function foo(nullableNum) {}
+function foo6(nullableNum) {}
 
-function foo(callback) {}
+function foo7(callback) {}
 
-function foo(callback) {}
+function foo8(callback) {}
 
-function foo(callback) {}
+function foo9(callback) {}
 
-function foo(callback) {}
+function foo10(callback) {}
 
-function foo(callback) {}
+function foo11(callback) {}
 
-function foo() {}
+function foo12() {}
 
-function foo() {}
+function foo13() {}
 
-function foo() {}
+function foo14() {}
 
-function foo() {}
+function foo15() {}
 
-function foo() {}
+function foo16() {}
 
-function foo() {}
+function foo17() {}
 
-function foo() {}
+function foo18() {}
 
-a = function () {};
+a1 = function () {};
 
-a = {
+a2 = {
   set fooProp(value) {}
 
 };
-a = {
+a3 = {
   set fooProp(value) {}
 
 };
-a = {
+a4 = {
   get fooProp() {}
 
 };
-a = {
+a5 = {
   id(x) {}
 
 };
-a = {
+a6 = {
   *id(x) {}
 
 };
-a = {
+a7 = {
   async id(x) {}
 
 };
-a = {
+a8 = {
   123(x) {}
 
 };
@@ -82,22 +82,22 @@ class Foo3 {
 
 var numVal;
 var numVal = otherNumVal;
-var a;
-var a;
-var a;
-var a;
-var a;
-var a;
-var a;
-var a;
-var a;
-var a;
-var a;
-var a;
-var a;
-var a = [1, 2, 3];
-a = class Foo {};
-a = class Foo extends Bar {};
+var a1;
+var a2;
+var a3;
+var a4;
+var a5;
+var a6;
+var a7;
+var a8;
+var a9;
+var a10;
+var a11;
+var a12;
+var a13;
+var a14 = [1, 2, 3];
+a13 = class Foo {};
+a14 = class Foo extends Bar {};
 
 class Foo4 {}
 
@@ -117,7 +117,7 @@ class Foo8 {
 
 }
 
-function foo(requiredParam, optParam) {}
+function foo19(requiredParam, optParam) {}
 
 class Foo9 {}
 
@@ -128,50 +128,49 @@ class Foo11 {
   #prop2;
 }
 
-var x = 4;
+var x1 = 4;
 
 class Array {
   concat(items) {}
 
 }
 
-var x = fn;
-var x = Y;
-var x = Y;
+var x2 = fn;
+var x3 = Y;
+var x4 = Y;
 var {
-  x
+  x5
 } = {
-  x: "hello"
+  x5: "hello"
 };
 var {
-  x
+  x6
 } = {
-  x: "hello"
+  x6: "hello"
 };
-var [x] = ["hello"];
+var [x7] = ["hello"];
 
-function foo({
+function foo20({
   x
 }) {}
 
-function foo([x]) {}
+function foo21([x]) {}
 
-function foo(...rest) {}
+function foo22(...rest) {}
 
 (function (...rest) {});
 
 (...rest) => rest;
 
-var a;
-var a;
-var a;
-var a;
-var a;
-var a;
-var identity;
-var identity;
+var a15;
+var a16;
+var a17;
+var a18;
+var a19;
+var a20;
+var identity1;
+var identity2;
 import type from "foo";
-import type2, { foo3 } from "bar";
 import { V1 } from "foo";
 import { V4 } from "foo";
 import 'foo';

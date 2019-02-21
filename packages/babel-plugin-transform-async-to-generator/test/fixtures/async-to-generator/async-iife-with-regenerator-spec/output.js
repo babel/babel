@@ -13,7 +13,7 @@ regeneratorRuntime.mark(function _callee() {
       case "end":
         return _context.stop();
     }
-  }, _callee, this);
+  }, _callee);
 }))();
 babelHelpers.asyncToGenerator(
 /*#__PURE__*/
@@ -47,7 +47,7 @@ regeneratorRuntime.mark(function _callee2() {
         case "end":
           return _context3.stop();
       }
-    }, _callee3, this);
+    }, _callee3);
   }));
 
   function notIIFE() {

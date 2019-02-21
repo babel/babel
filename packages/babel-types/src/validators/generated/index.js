@@ -3297,7 +3297,8 @@ export function isScopable(node: Object, opts?: Object): boolean {
     "ClassDeclaration" === nodeType ||
     "ClassExpression" === nodeType ||
     "ForOfStatement" === nodeType ||
-    "ClassMethod" === nodeType
+    "ClassMethod" === nodeType ||
+    "ClassPrivateMethod" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3327,7 +3328,8 @@ export function isBlockParent(node: Object, opts?: Object): boolean {
     "WhileStatement" === nodeType ||
     "ArrowFunctionExpression" === nodeType ||
     "ForOfStatement" === nodeType ||
-    "ClassMethod" === nodeType
+    "ClassMethod" === nodeType ||
+    "ClassPrivateMethod" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3605,7 +3607,8 @@ export function isFunctionParent(node: Object, opts?: Object): boolean {
     "FunctionExpression" === nodeType ||
     "ObjectMethod" === nodeType ||
     "ArrowFunctionExpression" === nodeType ||
-    "ClassMethod" === nodeType
+    "ClassMethod" === nodeType ||
+    "ClassPrivateMethod" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;

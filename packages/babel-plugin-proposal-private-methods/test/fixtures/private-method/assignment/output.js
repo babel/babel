@@ -1,12 +1,11 @@
-var Foo = function Foo() {
-  "use strict";
+class Foo {
+  constructor() {
+    _privateMethod.add(this);
 
-  babelHelpers.classCallCheck(this, Foo);
+    this.publicField = babelHelpers.classPrivateMethodGet(this, _privateMethod, _privateMethod2).call(this);
+  }
 
-  _privateMethod.add(this);
-
-  this.publicField = babelHelpers.classPrivateMethodGet(this, _privateMethod, _privateMethod2).call(this);
-};
+}
 
 var _privateMethod = new WeakSet();
 

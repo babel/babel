@@ -102,13 +102,9 @@ export default class State {
   // where @foo belongs to the outer class and @bar to the inner
   decoratorStack: Array<Array<N.Decorator>> = [[]];
 
-  // The first yield or await expression inside parenthesized expressions
-  // and arrow function parameters. It is used to disallow yield and await in
-  // arrow function parameters.
-  yieldOrAwaitInPossibleArrowParameters:
-    | N.YieldExpression
-    | N.AwaitExpression
-    | null = null;
+  // Positions to delayed-check that yield/await does not exist in default parameters.
+  yieldPos: number = 0;
+  awaitPos: number = 0;
 
   // Token store.
   tokens: Array<Token | N.Comment> = [];

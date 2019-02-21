@@ -1,18 +1,17 @@
-var Cl = function Cl() {
-  "use strict";
+class Cl {
+  constructor() {
+    _getSet.set(this, {
+      get: _get_getSet,
+      set: _set_getSet
+    });
 
-  babelHelpers.classCallCheck(this, Cl);
+    _privateField.set(this, {
+      writable: true,
+      value: 0
+    });
+  }
 
-  _getSet.set(this, {
-    get: _get_getSet,
-    set: _set_getSet
-  });
-
-  _privateField.set(this, {
-    writable: true,
-    value: 0
-  });
-};
+}
 
 var _privateField = new WeakMap();
 
