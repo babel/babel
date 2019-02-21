@@ -1,4 +1,4 @@
-var _ref, _, _ref2;
+var _ref, _ref2, _;
 
 var inc = x => x + 1;
 

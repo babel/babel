@@ -9,5 +9,5 @@ _regeneratorRuntime.mark(function _callee() {
       case "end":
         return _context.stop();
     }
-  }, _callee, this);
+  }, _callee);
 });

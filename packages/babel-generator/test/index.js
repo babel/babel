@@ -384,6 +384,82 @@ describe("programmatic generation", function() {
   [key: any]: number
 }`);
   });
+
+  describe("directives", function() {
+    it("preserves escapes", function() {
+      const directive = t.directive(
+        t.directiveLiteral(String.raw`us\x65 strict`),
+      );
+      const output = generate(directive).code;
+
+      expect(output).toBe(String.raw`"us\x65 strict";`);
+    });
+
+    it("preserves escapes in minified output", function() {
+      // https://github.com/babel/babel/issues/4767
+
+      const directive = t.directive(t.directiveLiteral(String.raw`foo\n\t\r`));
+      const output = generate(directive, { minified: true }).code;
+
+      expect(output).toBe(String.raw`"foo\n\t\r";`);
+    });
+
+    it("unescaped single quote", function() {
+      const directive = t.directive(t.directiveLiteral(String.raw`'\'\"`));
+      const output = generate(directive).code;
+
+      expect(output).toBe(String.raw`"'\'\"";`);
+    });
+
+    it("unescaped double quote", function() {
+      const directive = t.directive(t.directiveLiteral(String.raw`"\'\"`));
+      const output = generate(directive).code;
+
+      expect(output).toBe(String.raw`'"\'\"';`);
+    });
+
+    it("unescaped single and double quotes together throw", function() {
+      const directive = t.directive(t.directiveLiteral(String.raw`'"`));
+
+      expect(() => {
+        generate(directive);
+      }).toThrow();
+    });
+  });
+
+  describe("typescript generate parantheses if necessary", function() {
+    it("wraps around union for array", () => {
+      const typeStatement = t.TSArrayType(
+        t.TSUnionType([
+          t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+          t.TSNullKeyword(),
+        ]),
+      );
+      const output = generate(typeStatement).code;
+      expect(output).toBe("((number & boolean) | null)[]");
+    });
+    it("wraps around intersection for array", () => {
+      const typeStatement = t.TSArrayType(
+        t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+      );
+      const output = generate(typeStatement).code;
+      expect(output).toBe("(number & boolean)[]");
+    });
+    it("wraps around rest", () => {
+      const typeStatement = t.tsRestType(
+        t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+      );
+      const output = generate(typeStatement).code;
+      expect(output).toBe("...(number & boolean)");
+    });
+    it("wraps around optional type", () => {
+      const typeStatement = t.tsOptionalType(
+        t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+      );
+      const output = generate(typeStatement).code;
+      expect(output).toBe("(number & boolean)?");
+    });
+  });
 });
 
 describe("CodeGenerator", function() {

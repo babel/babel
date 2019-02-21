@@ -3,4 +3,4 @@ var func = /*#__PURE__*/regeneratorRuntime.mark(function _callee() {var actual;r
         method().
         method2();case 2:
 
-        actual = true;case 3:case "end":return _context.stop();}}, _callee, this);});
+        actual = true;case 3:case "end":return _context.stop();}}, _callee);});

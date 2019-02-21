@@ -1,10 +1,5 @@
-var Cl =
-/*#__PURE__*/
-function () {
-  "use strict";
-
-  function Cl() {
-    babelHelpers.classCallCheck(this, Cl);
+class Cl {
+  constructor() {
     Object.defineProperty(this, _privateFieldValue, {
       get: _get_privateFieldValue,
       set: _set_privateFieldValue
@@ -16,19 +11,15 @@ function () {
     this.publicField = "not secret string";
   }
 
-  babelHelpers.createClass(Cl, [{
-    key: "publicGetPrivateField",
-    value: function publicGetPrivateField() {
-      return babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue];
-    }
-  }, {
-    key: "publicSetPrivateField",
-    value: function publicSetPrivateField(newValue) {
-      babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue] = newValue;
-    }
-  }]);
-  return Cl;
-}();
+  publicGetPrivateField() {
+    return babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue];
+  }
+
+  publicSetPrivateField(newValue) {
+    babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue] = newValue;
+  }
+
+}
 
 var _privateField = babelHelpers.classPrivateFieldLooseKey("privateField");
 

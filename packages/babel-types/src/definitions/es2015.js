@@ -322,6 +322,11 @@ defineType("ImportDeclaration", {
     source: {
       validate: assertNodeType("StringLiteral"),
     },
+    importKind: {
+      // Handle Flowtype's extension "import {typeof foo} from"
+      validate: assertOneOf("type", "typeof", "value"),
+      optional: true,
+    },
   },
 });
 
@@ -357,7 +362,8 @@ defineType("ImportSpecifier", {
     },
     importKind: {
       // Handle Flowtype's extension "import {typeof foo} from"
-      validate: assertOneOf(null, "type", "typeof"),
+      validate: assertOneOf("type", "typeof"),
+      optional: true,
     },
   },
 });

@@ -1,10 +1,5 @@
-var Cl =
-/*#__PURE__*/
-function () {
-  "use strict";
-
-  function Cl() {
-    babelHelpers.classCallCheck(this, Cl);
+class Cl {
+  constructor() {
     Object.defineProperty(this, _method, {
       value: _method2
     });
@@ -15,14 +10,11 @@ function () {
     });
   }
 
-  babelHelpers.createClass(Cl, [{
-    key: "getPriv",
-    value: function getPriv() {
-      return babelHelpers.classPrivateFieldLooseBase(this, _priv)[_priv];
-    }
-  }]);
-  return Cl;
-}();
+  getPriv() {
+    return babelHelpers.classPrivateFieldLooseBase(this, _priv)[_priv];
+  }
+
+}
 
 var _priv = babelHelpers.classPrivateFieldLooseKey("priv");
 

@@ -1,16 +1,16 @@
-var Cl = function Cl() {
-  "use strict";
+class Cl {
+  constructor() {
+    Object.defineProperty(this, _privateFieldValue, {
+      set: _set_privateFieldValue
+    });
+    Object.defineProperty(this, _privateField, {
+      writable: true,
+      value: 0
+    });
+    this.publicField = babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue];
+  }
 
-  babelHelpers.classCallCheck(this, Cl);
-  Object.defineProperty(this, _privateFieldValue, {
-    set: _set_privateFieldValue
-  });
-  Object.defineProperty(this, _privateField, {
-    writable: true,
-    value: 0
-  });
-  this.publicField = babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue];
-};
+}
 
 var _privateField = babelHelpers.classPrivateFieldLooseKey("privateField");
 

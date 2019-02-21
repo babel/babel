@@ -293,7 +293,14 @@ export const functionCommon = {
   params: {
     validate: chain(
       assertValueType("array"),
-      assertEach(assertNodeType("LVal")),
+      assertEach(
+        assertNodeType(
+          "Identifier",
+          "Pattern",
+          "RestElement",
+          "TSParameterProperty",
+        ),
+      ),
     ),
   },
   generator: {

@@ -15,5 +15,5 @@ function fn() {
           return _context.stop();
       }
     }
-  }, _marked, this);
+  }, _marked);
 }

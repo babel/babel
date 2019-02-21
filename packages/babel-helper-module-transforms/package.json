@@ -16,6 +16,6 @@
     "@babel/helper-split-export-declaration": "^7.0.0",
     "@babel/template": "^7.2.2",
     "@babel/types": "^7.2.2",
-    "lodash": "^4.17.10"
+    "lodash": "^4.17.11"
   }
 }

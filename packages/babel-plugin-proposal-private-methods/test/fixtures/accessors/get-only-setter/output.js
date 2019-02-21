@@ -1,19 +1,18 @@
-var Cl = function Cl() {
-  "use strict";
+class Cl {
+  constructor() {
+    _privateFieldValue.set(this, {
+      set: _set_privateFieldValue
+    });
 
-  babelHelpers.classCallCheck(this, Cl);
+    _privateField.set(this, {
+      writable: true,
+      value: 0
+    });
 
-  _privateFieldValue.set(this, {
-    set: _set_privateFieldValue
-  });
+    this.publicField = babelHelpers.classPrivateFieldGet(this, _privateFieldValue);
+  }
 
-  _privateField.set(this, {
-    writable: true,
-    value: 0
-  });
-
-  this.publicField = babelHelpers.classPrivateFieldGet(this, _privateFieldValue);
-};
+}
 
 var _privateField = new WeakMap();
 

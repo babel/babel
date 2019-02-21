@@ -18,7 +18,7 @@ export function giveWord() {
       case "end":
         return _context.stop();
     }
-  }, _marked, this);
+  }, _marked);
 }
 foo;
 bar;

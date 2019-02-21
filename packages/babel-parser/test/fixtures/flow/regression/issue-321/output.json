@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 117,
+  "end": 118,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 2,
-      "column": 59
+      "column": 60
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 117,
+    "end": 118,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 2,
-        "column": 59
+        "column": 60
       }
     },
     "sourceType": "module",
@@ -317,7 +317,7 @@
       {
         "type": "VariableDeclaration",
         "start": 58,
-        "end": 117,
+        "end": 118,
         "loc": {
           "start": {
             "line": 2,
@@ -325,14 +325,14 @@
           },
           "end": {
             "line": 2,
-            "column": 59
+            "column": 60
           }
         },
         "declarations": [
           {
             "type": "VariableDeclarator",
             "start": 64,
-            "end": 116,
+            "end": 117,
             "loc": {
               "start": {
                 "line": 2,
@@ -340,13 +340,13 @@
               },
               "end": {
                 "line": 2,
-                "column": 58
+                "column": 59
               }
             },
             "id": {
               "type": "Identifier",
               "start": 64,
-              "end": 96,
+              "end": 97,
               "loc": {
                 "start": {
                   "line": 2,
@@ -354,83 +354,83 @@
                 },
                 "end": {
                   "line": 2,
-                  "column": 38
+                  "column": 39
                 },
-                "identifierName": "fn"
+                "identifierName": "fn2"
               },
-              "name": "fn",
+              "name": "fn2",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
-                "start": 66,
-                "end": 96,
+                "start": 67,
+                "end": 97,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 8
+                    "column": 9
                   },
                   "end": {
                     "line": 2,
-                    "column": 38
+                    "column": 39
                   }
                 },
                 "typeAnnotation": {
                   "type": "FunctionTypeAnnotation",
-                  "start": 68,
-                  "end": 96,
+                  "start": 69,
+                  "end": 97,
                   "loc": {
                     "start": {
                       "line": 2,
-                      "column": 10
+                      "column": 11
                     },
                     "end": {
                       "line": 2,
-                      "column": 38
+                      "column": 39
                     }
                   },
                   "params": [
                     {
                       "type": "FunctionTypeParam",
-                      "start": 70,
-                      "end": 77,
+                      "start": 71,
+                      "end": 78,
                       "loc": {
                         "start": {
                           "line": 2,
-                          "column": 12
+                          "column": 13
                         },
                         "end": {
                           "line": 2,
-                          "column": 19
+                          "column": 20
                         }
                       },
                       "name": null,
                       "optional": false,
                       "typeAnnotation": {
                         "type": "GenericTypeAnnotation",
-                        "start": 70,
-                        "end": 76,
+                        "start": 71,
+                        "end": 77,
                         "loc": {
                           "start": {
                             "line": 2,
-                            "column": 12
+                            "column": 13
                           },
                           "end": {
                             "line": 2,
-                            "column": 18
+                            "column": 19
                           }
                         },
                         "typeParameters": null,
                         "id": {
                           "type": "Identifier",
-                          "start": 70,
-                          "end": 76,
+                          "start": 71,
+                          "end": 77,
                           "loc": {
                             "start": {
                               "line": 2,
-                              "column": 12
+                              "column": 13
                             },
                             "end": {
                               "line": 2,
-                              "column": 18
+                              "column": 19
                             },
                             "identifierName": "Object"
                           },
@@ -440,61 +440,61 @@
                     },
                     {
                       "type": "FunctionTypeParam",
-                      "start": 78,
-                      "end": 85,
+                      "start": 79,
+                      "end": 86,
                       "loc": {
                         "start": {
                           "line": 2,
-                          "column": 20
+                          "column": 21
                         },
                         "end": {
                           "line": 2,
-                          "column": 27
+                          "column": 28
                         }
                       },
                       "name": null,
                       "optional": false,
                       "typeAnnotation": {
                         "type": "NullableTypeAnnotation",
-                        "start": 78,
-                        "end": 85,
+                        "start": 79,
+                        "end": 86,
                         "loc": {
                           "start": {
                             "line": 2,
-                            "column": 20
+                            "column": 21
                           },
                           "end": {
                             "line": 2,
-                            "column": 27
+                            "column": 28
                           }
                         },
                         "typeAnnotation": {
                           "type": "GenericTypeAnnotation",
-                          "start": 79,
-                          "end": 85,
+                          "start": 80,
+                          "end": 86,
                           "loc": {
                             "start": {
                               "line": 2,
-                              "column": 21
+                              "column": 22
                             },
                             "end": {
                               "line": 2,
-                              "column": 27
+                              "column": 28
                             }
                           },
                           "typeParameters": null,
                           "id": {
                             "type": "Identifier",
-                            "start": 79,
-                            "end": 85,
+                            "start": 80,
+                            "end": 86,
                             "loc": {
                               "start": {
                                 "line": 2,
-                                "column": 21
+                                "column": 22
                               },
                               "end": {
                                 "line": 2,
-                                "column": 27
+                                "column": 28
                               },
                               "identifierName": "Object"
                             },
@@ -507,16 +507,16 @@
                   "rest": null,
                   "returnType": {
                     "type": "VoidTypeAnnotation",
-                    "start": 92,
-                    "end": 96,
+                    "start": 93,
+                    "end": 97,
                     "loc": {
                       "start": {
                         "line": 2,
-                        "column": 34
+                        "column": 35
                       },
                       "end": {
                         "line": 2,
-                        "column": 38
+                        "column": 39
                       }
                     }
                   },
@@ -526,16 +526,16 @@
             },
             "init": {
               "type": "ArrowFunctionExpression",
-              "start": 99,
-              "end": 116,
+              "start": 100,
+              "end": 117,
               "loc": {
                 "start": {
                   "line": 2,
-                  "column": 41
+                  "column": 42
                 },
                 "end": {
                   "line": 2,
-                  "column": 58
+                  "column": 59
                 }
               },
               "id": null,
@@ -544,16 +544,16 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 101,
-                  "end": 103,
+                  "start": 102,
+                  "end": 104,
                   "loc": {
                     "start": {
                       "line": 2,
-                      "column": 43
+                      "column": 44
                     },
                     "end": {
                       "line": 2,
-                      "column": 45
+                      "column": 46
                     },
                     "identifierName": "o1"
                   },
@@ -561,16 +561,16 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 105,
-                  "end": 107,
+                  "start": 106,
+                  "end": 108,
                   "loc": {
                     "start": {
                       "line": 2,
-                      "column": 47
+                      "column": 48
                     },
                     "end": {
                       "line": 2,
-                      "column": 49
+                      "column": 50
                     },
                     "identifierName": "o2"
                   },
@@ -579,16 +579,16 @@
               ],
               "body": {
                 "type": "Identifier",
-                "start": 114,
-                "end": 116,
+                "start": 115,
+                "end": 117,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 56
+                    "column": 57
                   },
                   "end": {
                     "line": 2,
-                    "column": 58
+                    "column": 59
                   },
                   "identifierName": "o1"
                 },

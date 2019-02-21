@@ -1,10 +1,10 @@
-function foo() {
+function foo1() {
   return ( // foobar
     "bar"
   );
 }
 
-function foo() {
+function foo2() {
   return (
     // foobar
     "bar"

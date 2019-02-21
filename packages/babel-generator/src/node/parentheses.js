@@ -35,7 +35,16 @@ export function NullableTypeAnnotation(node: Object, parent: Object): boolean {
   return t.isArrayTypeAnnotation(parent);
 }
 
-export { NullableTypeAnnotation as FunctionTypeAnnotation };
+export function FunctionTypeAnnotation(node: Object, parent: Object): boolean {
+  return (
+    // (() => A) | (() => B)
+    t.isUnionTypeAnnotation(parent) ||
+    // (() => A) & (() => B)
+    t.isIntersectionTypeAnnotation(parent) ||
+    // (() => A)[]
+    t.isArrayTypeAnnotation(parent)
+  );
+}
 
 export function UpdateExpression(node: Object, parent: Object): boolean {
   return (
@@ -126,6 +135,18 @@ export function TSAsExpression() {
 export function TSTypeAssertion() {
   return true;
 }
+
+export function TSUnionType(node: Object, parent: Object): boolean {
+  return (
+    t.isTSArrayType(parent) ||
+    t.isTSOptionalType(parent) ||
+    t.isTSIntersectionType(parent) ||
+    t.isTSUnionType(parent) ||
+    t.isTSRestType(parent)
+  );
+}
+
+export { TSUnionType as TSIntersectionType };
 
 export function BinaryExpression(node: Object, parent: Object): boolean {
   // let i = (1 in []);

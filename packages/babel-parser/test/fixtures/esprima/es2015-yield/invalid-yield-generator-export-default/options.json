@@ -1,4 +1,4 @@
 {
   "sourceType": "module",
-  "throws": "yield is a reserved word in strict mode (1:25)"
+  "throws": "Unexpected reserved word 'yield' (1:25)"
 }

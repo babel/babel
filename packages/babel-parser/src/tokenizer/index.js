@@ -1213,6 +1213,8 @@ export default class Tokenizer extends LocationParser {
       case charCodes.lineFeed:
         this.state.lineStart = this.state.pos;
         ++this.state.curLine;
+      case charCodes.lineSeparator:
+      case charCodes.paragraphSeparator:
         return "";
       default:
         if (ch >= charCodes.digit0 && ch <= charCodes.digit7) {
@@ -1242,6 +1244,7 @@ export default class Tokenizer extends LocationParser {
           this.state.pos += octalStr.length - 1;
           return String.fromCharCode(octal);
         }
+
         return String.fromCharCode(ch);
     }
   }

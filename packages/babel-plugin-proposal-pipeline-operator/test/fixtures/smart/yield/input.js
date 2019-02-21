@@ -1,5 +1,5 @@
-function *myGenerator() {
-  return v
-  |> (yield #)
-  |> g;
+function *myGenerator(n) {
+  return n
+    |> (yield #)
+    |> Math.abs;
 }

@@ -1158,12 +1158,15 @@ A specifier in an import or export declaration.
 ```js
 interface ImportDeclaration <: ModuleDeclaration {
   type: "ImportDeclaration";
+  importKind: null | "type" | "typeof" | "value";
   specifiers: [ ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier ];
   source: Literal;
 }
 ```
 
 An import declaration, e.g., `import foo from "mod";`.
+
+> importKind is only set when `flow` plugin enabled in babel-parser
 
 ### ImportSpecifier
 
