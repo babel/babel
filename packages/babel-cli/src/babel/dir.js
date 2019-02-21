@@ -135,6 +135,7 @@ export default async function({ cliOptions, babelOptions }) {
 
     filenames.forEach(function(filenameOrDir) {
       const watcher = chokidar.watch(filenameOrDir, {
+        ignored: babelOptions.ignore,
         persistent: true,
         ignoreInitial: true,
         awaitWriteFinish: {
