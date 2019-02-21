@@ -11,6 +11,7 @@ import {
   functionFlags,
   BIND_NONE,
   SCOPE_ARROW,
+  SCOPE_OTHER,
 } from "../util/scopeflags";
 
 type TsModifier =
@@ -1076,7 +1077,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseModuleBlock(): N.TsModuleBlock {
       const node: N.TsModuleBlock = this.startNode();
-      this.enterScope(0);
+      this.scope.enter(SCOPE_OTHER);
 
       this.expect(tt.braceL);
       // Inside of a module block is considered "top-level", meaning it can have imports and exports.
@@ -1086,7 +1087,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         /* topLevel */ true,
         /* end */ tt.braceR,
       );
-      this.exitScope();
+      this.scope.exit();
       return this.finishNode(node, "TSModuleBlock");
     }
 
@@ -1379,7 +1380,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return undefined;
       }
 
-      this.enterScope(functionFlags(true, false) | SCOPE_ARROW);
+      this.scope.enter(functionFlags(true, false) | SCOPE_ARROW);
 
       res.id = null;
       res.generator = false;

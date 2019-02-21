@@ -263,7 +263,9 @@ export default class LValParser extends NodeUtils {
         elts.push(this.parseAssignableListItemTypes(this.parseRest()));
         this.checkCommaAfterRest(
           close,
-          this.inFunction && this.state.inParameters ? "parameter" : "element",
+          this.scope.inFunction && this.state.inParameters
+            ? "parameter"
+            : "element",
         );
         this.expect(close);
         break;
@@ -336,7 +338,7 @@ export default class LValParser extends NodeUtils {
         ) {
           this.raise(
             expr.start,
-            `${bindingType ? "Binding" : "Assigning to"} '${
+            `${bindingType === BIND_NONE ? "Assigning to" : "Binding"} '${
               expr.name
             }' in strict mode`,
           );
@@ -363,12 +365,14 @@ export default class LValParser extends NodeUtils {
           }
         }
         if (bindingType !== BIND_NONE && bindingType !== BIND_OUTSIDE) {
-          this.declareName(expr.name, bindingType, expr.start);
+          this.scope.declareName(expr.name, bindingType, expr.start);
         }
         break;
 
       case "MemberExpression":
-        if (bindingType) this.raise(expr.start, "Binding member expression");
+        if (bindingType !== BIND_NONE) {
+          this.raise(expr.start, "Binding member expression");
+        }
         break;
 
       case "ObjectPattern":
@@ -416,9 +420,9 @@ export default class LValParser extends NodeUtils {
 
       default: {
         const message =
-          (bindingType
-            ? /* istanbul ignore next */ "Binding invalid"
-            : "Invalid") +
+          (bindingType === BIND_NONE
+            ? "Invalid"
+            : /* istanbul ignore next */ "Binding invalid") +
           " left-hand side" +
           (contextDescription
             ? " in " + contextDescription

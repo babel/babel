@@ -2,19 +2,21 @@
 
 // Each scope gets a bitset that may contain these flags
 // prettier-ignore
-export const SCOPE_TOP =          0b000000001,
-             SCOPE_FUNCTION =     0b000000010,
-             SCOPE_ASYNC =        0b000000100,
-             SCOPE_GENERATOR =    0b000001000,
-             SCOPE_ARROW =        0b000010000,
+export const SCOPE_OTHER        = 0b000000000,
+             SCOPE_PROGRAM      = 0b000000001,
+             SCOPE_FUNCTION     = 0b000000010,
+             SCOPE_ASYNC        = 0b000000100,
+             SCOPE_GENERATOR    = 0b000001000,
+             SCOPE_ARROW        = 0b000010000,
              SCOPE_SIMPLE_CATCH = 0b000100000,
-             SCOPE_SUPER =        0b001000000,
+             SCOPE_SUPER        = 0b001000000,
              SCOPE_DIRECT_SUPER = 0b010000000,
              SCOPE_CLASS        = 0b100000000,
-             SCOPE_VAR = SCOPE_TOP | SCOPE_FUNCTION;
+             SCOPE_VAR = SCOPE_PROGRAM | SCOPE_FUNCTION;
 
 export type ScopeFlags =
-  | typeof SCOPE_TOP
+  | typeof SCOPE_OTHER
+  | typeof SCOPE_PROGRAM
   | typeof SCOPE_FUNCTION
   | typeof SCOPE_VAR
   | typeof SCOPE_ASYNC

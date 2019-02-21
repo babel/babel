@@ -60,7 +60,7 @@ tt.name.updateContext = function(prevType) {
   if (prevType !== tt.dot) {
     if (
       (this.state.value === "of" && !this.state.exprAllowed) ||
-      (this.state.value === "yield" && this.inGenerator)
+      (this.state.value === "yield" && this.scope.inGenerator)
     ) {
       allowed = true;
     }

@@ -1,7 +1,7 @@
 // @flow
 
 import type Parser from "./index";
-import ScopeParser from "./scope";
+import UtilParser from "./util";
 import { SourceLocation, type Position } from "../util/location";
 import type { Comment, Node as NodeType, NodeBase } from "../types";
 
@@ -48,7 +48,7 @@ class Node implements NodeBase {
   }
 }
 
-export class NodeUtils extends ScopeParser {
+export class NodeUtils extends UtilParser {
   startNode<T: NodeType>(): T {
     // $FlowIgnore
     return new Node(this, this.state.start, this.state.startLoc);

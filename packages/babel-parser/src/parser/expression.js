@@ -37,7 +37,7 @@ import {
   SCOPE_CLASS,
   SCOPE_DIRECT_SUPER,
   SCOPE_SUPER,
-  SCOPE_TOP,
+  SCOPE_PROGRAM,
 } from "../util/scopeflags";
 
 export default class ExpressionParser extends LValParser {
@@ -54,7 +54,7 @@ export default class ExpressionParser extends LValParser {
   +parseDecorators: (allowExport?: boolean) => void;
   +parseFunction: <T: N.NormalFunction>(
     node: T,
-    statement: number,
+    statement?: number,
     allowExpressionBody?: boolean,
     isAsync?: boolean,
   ) => T;
@@ -86,7 +86,7 @@ export default class ExpressionParser extends LValParser {
 
   // Convenience method to parse an Expression only
   getExpression(): N.Expression {
-    this.enterScope(SCOPE_TOP);
+    this.scope.enter(SCOPE_PROGRAM);
     this.nextToken();
     const expr = this.parseExpression();
     if (!this.match(tt.eof)) {
@@ -141,7 +141,7 @@ export default class ExpressionParser extends LValParser {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     if (this.isContextual("yield")) {
-      if (this.inGenerator) {
+      if (this.scope.inGenerator) {
         let left = this.parseYield(noIn);
         if (afterLeftParse) {
           left = afterLeftParse.call(this, left, startPos, startLoc);
@@ -349,7 +349,7 @@ export default class ExpressionParser extends LValParser {
           if (
             this.match(tt.name) &&
             this.state.value === "await" &&
-            this.inAsync
+            this.scope.inAsync
           ) {
             throw this.raise(
               this.state.start,
@@ -434,8 +434,8 @@ export default class ExpressionParser extends LValParser {
   parseMaybeUnary(refShorthandDefaultPos: ?Pos): N.Expression {
     if (
       this.isContextual("await") &&
-      (this.inAsync ||
-        (!this.inFunction && this.options.allowAwaitOutsideFunction))
+      (this.scope.inAsync ||
+        (!this.scope.inFunction && this.options.allowAwaitOutsideFunction))
     ) {
       return this.parseAwait();
     } else if (this.state.type.prefix) {
@@ -819,7 +819,7 @@ export default class ExpressionParser extends LValParser {
 
     switch (this.state.type) {
       case tt._super:
-        if (!this.allowSuper && !this.options.allowSuperOutsideMethod) {
+        if (!this.scope.allowSuper && !this.options.allowSuperOutsideMethod) {
           this.raise(
             this.state.start,
             "super is only allowed in object methods and classes",
@@ -830,7 +830,7 @@ export default class ExpressionParser extends LValParser {
         this.next();
         if (
           this.match(tt.parenL) &&
-          !this.allowDirectSuper &&
+          !this.scope.allowDirectSuper &&
           !this.options.allowSuperOutsideMethod
         ) {
           this.raise(
@@ -881,7 +881,7 @@ export default class ExpressionParser extends LValParser {
           !this.canInsertSemicolon()
         ) {
           this.next();
-          return this.parseFunction(node, 0, false, true);
+          return this.parseFunction(node, undefined, false, true);
         } else if (
           canBeArrow &&
           id.name === "async" &&
@@ -1073,10 +1073,10 @@ export default class ExpressionParser extends LValParser {
     this.next();
     meta = this.createIdentifier(meta, "function");
 
-    if (this.inGenerator && this.eat(tt.dot)) {
+    if (this.scope.inGenerator && this.eat(tt.dot)) {
       return this.parseMetaProperty(node, meta, "sent");
     }
-    return this.parseFunction(node, 0);
+    return this.parseFunction(node);
   }
 
   parseMetaProperty(
@@ -1732,7 +1732,7 @@ export default class ExpressionParser extends LValParser {
     this.initFunction(node, isAsync);
     node.generator = !!isGenerator;
     const allowModifiers = isConstructor; // For TypeScript parameter properties
-    this.enterScope(
+    this.scope.enter(
       functionFlags(isAsync, node.generator) |
         SCOPE_SUPER |
         (inClassScope ? SCOPE_CLASS : 0) |
@@ -1756,7 +1756,7 @@ export default class ExpressionParser extends LValParser {
     params: ?(N.Expression[]),
     isAsync: boolean,
   ): N.ArrowFunctionExpression {
-    this.enterScope(functionFlags(isAsync, false) | SCOPE_ARROW);
+    this.scope.enter(functionFlags(isAsync, false) | SCOPE_ARROW);
     this.initFunction(node, isAsync);
 
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
@@ -1860,7 +1860,7 @@ export default class ExpressionParser extends LValParser {
       node.body = this.parseBlock(true, false);
       this.state.labels = oldLabels;
     }
-    this.exitScope();
+    this.scope.exit();
 
     this.state.inParameters = oldInParameters;
     // Ensure the function name isn't a forbidden identifier in strict mode, e.g. 'eval'
@@ -2014,14 +2014,14 @@ export default class ExpressionParser extends LValParser {
     checkKeywords: boolean,
     isBinding: boolean,
   ): void {
-    if (this.inGenerator && word === "yield") {
+    if (this.scope.inGenerator && word === "yield") {
       this.raise(
         startLoc,
         "Can not use 'yield' as identifier inside a generator",
       );
     }
 
-    if (this.inAsync && word === "await") {
+    if (this.scope.inAsync && word === "await") {
       this.raise(
         startLoc,
         "Can not use 'await' as identifier inside an async function",
@@ -2045,7 +2045,7 @@ export default class ExpressionParser extends LValParser {
       : isStrictReservedWord;
 
     if (reservedTest(word, this.inModule)) {
-      if (!this.inAsync && word === "await") {
+      if (!this.scope.inAsync && word === "await") {
         this.raise(
           startLoc,
           "Can not use keyword 'await' outside an async function",

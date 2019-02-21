@@ -17,6 +17,7 @@ import {
   BIND_FUNCTION,
   functionFlags,
   SCOPE_CLASS,
+  SCOPE_OTHER,
   SCOPE_SIMPLE_CATCH,
   SCOPE_SUPER,
 } from "../util/scopeflags";
@@ -28,9 +29,10 @@ const empty = [];
 const loopLabel = { kind: "loop" },
   switchLabel = { kind: "switch" };
 
-const FUNC_STATEMENT = 1,
-  FUNC_HANGING_STATEMENT = 2,
-  FUNC_NULLABLE_ID = 4;
+const FUNC_NO_FLAGS = 0b000,
+  FUNC_STATEMENT = 0b001,
+  FUNC_HANGING_STATEMENT = 0b010,
+  FUNC_NULLABLE_ID = 0b100;
 
 export default class StatementParser extends ExpressionParser {
   // ### Statement parsing
@@ -463,13 +465,13 @@ export default class StatementParser extends ExpressionParser {
 
     let awaitAt = -1;
     if (
-      (this.inAsync ||
-        (!this.inFunction && this.options.allowAwaitOutsideFunction)) &&
+      (this.scope.inAsync ||
+        (!this.scope.inFunction && this.options.allowAwaitOutsideFunction)) &&
       this.eatContextual("await")
     ) {
       awaitAt = this.state.lastTokStart;
     }
-    this.enterScope(0);
+    this.scope.enter(SCOPE_OTHER);
     this.expect(tt.parenL);
 
     if (this.match(tt.semi)) {
@@ -550,7 +552,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseReturnStatement(node: N.ReturnStatement): N.ReturnStatement {
-    if (!this.inFunction && !this.options.allowReturnOutsideFunction) {
+    if (!this.scope.inFunction && !this.options.allowReturnOutsideFunction) {
       this.raise(this.state.start, "'return' outside of function");
     }
 
@@ -576,7 +578,7 @@ export default class StatementParser extends ExpressionParser {
     const cases = (node.cases = []);
     this.expect(tt.braceL);
     this.state.labels.push(switchLabel);
-    this.enterScope(0);
+    this.scope.enter(SCOPE_OTHER);
 
     // Statements under must be grouped (by label) in SwitchCase
     // nodes. `cur` is used to keep the node that we are currently
@@ -608,7 +610,7 @@ export default class StatementParser extends ExpressionParser {
         }
       }
     }
-    this.exitScope();
+    this.scope.exit();
     if (cur) this.finishNode(cur, "SwitchCase");
     this.next(); // Closing brace
     this.state.labels.pop();
@@ -642,7 +644,7 @@ export default class StatementParser extends ExpressionParser {
         this.expect(tt.parenL);
         clause.param = this.parseBindingAtom();
         const simple = clause.param.type === "Identifier";
-        this.enterScope(simple ? SCOPE_SIMPLE_CATCH : 0);
+        this.scope.enter(simple ? SCOPE_SIMPLE_CATCH : 0);
         this.checkLVal(
           clause.param,
           simple ? BIND_SIMPLE_CATCH : BIND_LEXICAL,
@@ -652,7 +654,7 @@ export default class StatementParser extends ExpressionParser {
         this.expect(tt.parenR);
       } else {
         clause.param = null;
-        this.enterScope(0);
+        this.scope.enter(SCOPE_OTHER);
       }
 
       clause.body =
@@ -664,7 +666,7 @@ export default class StatementParser extends ExpressionParser {
           // Parse the catch clause's body.
           this.parseBlock(false, false),
         );
-      this.exitScope();
+      this.scope.exit();
 
       node.handler = this.finishNode(clause, "CatchClause");
     }
@@ -798,11 +800,11 @@ export default class StatementParser extends ExpressionParser {
     const node = this.startNode();
     this.expect(tt.braceL);
     if (createNewLexicalScope) {
-      this.enterScope(0);
+      this.scope.enter(SCOPE_OTHER);
     }
     this.parseBlockBody(node, allowDirectives, false, tt.braceR);
     if (createNewLexicalScope) {
-      this.exitScope();
+      this.scope.exit();
     }
     return this.finishNode(node, "BlockStatement");
   }
@@ -889,7 +891,7 @@ export default class StatementParser extends ExpressionParser {
     node.update = this.match(tt.parenR) ? null : this.parseExpression();
     this.expect(tt.parenR);
 
-    this.exitScope();
+    this.scope.exit();
     node.body =
       // For the smartPipelines plugin: Disable topic references from outer
       // contexts within the loop body. They are permitted in test expressions,
@@ -925,7 +927,7 @@ export default class StatementParser extends ExpressionParser {
     node.right = this.parseExpression();
     this.expect(tt.parenR);
 
-    this.exitScope();
+    this.scope.exit();
     node.body =
       // For the smartPipelines plugin:
       // Disable topic references from outer contexts within the loop body.
@@ -1000,7 +1002,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseFunction<T: N.NormalFunction>(
     node: T,
-    statement: number,
+    statement?: number = FUNC_NO_FLAGS,
     allowExpressionBody?: boolean = false,
     isAsync?: boolean = false,
   ): T {
@@ -1027,7 +1029,7 @@ export default class StatementParser extends ExpressionParser {
         this.checkLVal(
           node.id,
           this.state.strict || node.generator || node.async
-            ? this.treatFunctionsAsVar
+            ? this.scope.treatFunctionsAsVar
               ? BIND_VAR
               : BIND_LEXICAL
             : BIND_FUNCTION,
@@ -1043,7 +1045,7 @@ export default class StatementParser extends ExpressionParser {
     this.state.inClassProperty = false;
     this.state.yieldPos = 0;
     this.state.awaitPos = 0;
-    this.enterScope(functionFlags(node.async, node.generator));
+    this.scope.enter(functionFlags(node.async, node.generator));
 
     if (!isStatement) {
       node.id = this.match(tt.name) ? this.parseIdentifier() : null;
@@ -1524,13 +1526,13 @@ export default class StatementParser extends ExpressionParser {
   ): N.ClassPrivateProperty {
     this.state.inClassProperty = true;
 
-    this.enterScope(SCOPE_CLASS | SCOPE_SUPER);
+    this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
 
     node.value = this.eat(tt.eq) ? this.parseMaybeAssign() : null;
     this.semicolon();
     this.state.inClassProperty = false;
 
-    this.exitScope();
+    this.scope.exit();
 
     return this.finishNode(node, "ClassPrivateProperty");
   }
@@ -1542,7 +1544,7 @@ export default class StatementParser extends ExpressionParser {
 
     this.state.inClassProperty = true;
 
-    this.enterScope(SCOPE_CLASS | SCOPE_SUPER);
+    this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
 
     if (this.match(tt.eq)) {
       this.expectPlugin("classProperties");
@@ -1554,7 +1556,7 @@ export default class StatementParser extends ExpressionParser {
     this.semicolon();
     this.state.inClassProperty = false;
 
-    this.exitScope();
+    this.scope.exit();
 
     return this.finishNode(node, "ClassProperty");
   }

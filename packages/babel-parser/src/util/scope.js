@@ -1,5 +1,4 @@
 // @flow
-import UtilParser from "./util";
 import {
   SCOPE_ARROW,
   SCOPE_ASYNC,
@@ -8,7 +7,7 @@ import {
   SCOPE_GENERATOR,
   SCOPE_SIMPLE_CATCH,
   SCOPE_SUPER,
-  SCOPE_TOP,
+  SCOPE_PROGRAM,
   SCOPE_VAR,
   BIND_SIMPLE_CATCH,
   BIND_LEXICAL,
@@ -16,7 +15,7 @@ import {
   type ScopeFlags,
   type BindingTypes,
   SCOPE_CLASS,
-} from "../util/scopeflags";
+} from "./scopeflags";
 
 // Start an AST node, attaching a start offset.
 class Scope {
@@ -33,10 +32,19 @@ class Scope {
   }
 }
 
+type raiseFunction = (number, string) => void;
+
 // The functions in this module keep track of declared variables in the
 // current scope in order to detect duplicate variable names.
-export default class ScopeParser extends UtilParser {
+export default class ScopeHandler {
   scopeStack: Array<Scope> = [];
+  raise: raiseFunction;
+  inModule: boolean;
+
+  constructor(raise: raiseFunction, inModule: boolean) {
+    this.raise = raise;
+    this.inModule = inModule;
+  }
 
   get inFunction() {
     return (this.currentVarScope().flags & SCOPE_FUNCTION) > 0;
@@ -60,11 +68,11 @@ export default class ScopeParser extends UtilParser {
     return this.treatFunctionsAsVarInScope(this.currentScope());
   }
 
-  enterScope(flags: ScopeFlags) {
+  enter(flags: ScopeFlags) {
     this.scopeStack.push(new Scope(flags));
   }
 
-  exitScope() {
+  exit() {
     this.scopeStack.pop();
   }
 
@@ -74,7 +82,7 @@ export default class ScopeParser extends UtilParser {
   treatFunctionsAsVarInScope(scope: Scope): boolean {
     return !!(
       scope.flags & SCOPE_FUNCTION ||
-      (!this.inModule && scope.flags & SCOPE_TOP)
+      (!this.inModule && scope.flags & SCOPE_PROGRAM)
     );
   }
 
