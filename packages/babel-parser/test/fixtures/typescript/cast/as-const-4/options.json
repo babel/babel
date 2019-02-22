@@ -3,5 +3,5 @@
   "plugins": [
     "typescript"
   ],
-  "throws": "Unexpected token (1:8)"
+  "throws": "Only literal values are allowed in constant contexts (1:8)"
 }

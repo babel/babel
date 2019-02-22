@@ -335,13 +335,27 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "TemplateLiteral":
         case "NumericLiteral":
         case "BooleanLiteral":
+        case "SpreadElement":
+        case "ObjectMethod":
         case "ObjectExpression":
-        case "ArrayExpression":
           return;
+        case "ArrayExpression":
+          return (node: N.ArrayExpression).elements.forEach(element => {
+            if (element) {
+              this.tsCheckLiteralForConstantContext(element);
+            }
+          });
+        case "ObjectProperty":
+          return this.tsCheckLiteralForConstantContext(
+            (node: N.ObjectProperty).value,
+          );
         case "UnaryExpression":
           return this.tsCheckLiteralForConstantContext(node.argument);
         default:
-          throw this.unexpected(node.start);
+          this.raise(
+            node.start,
+            "Only literal values are allowed in constant contexts",
+          );
       }
     }
 
@@ -962,7 +976,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseTypeAssertion(): N.TsTypeAssertion {
       const node: N.TsTypeAssertion = this.startNode();
       const _const = this.tsTryNextParseConstantContext();
-      node.typeAnnotation = _const ? _const : this.tsNextThenParseType();
+      node.typeAnnotation = _const || this.tsNextThenParseType();
       this.expectRelational(">");
       node.expression = this.parseMaybeUnary();
       if (_const) {
