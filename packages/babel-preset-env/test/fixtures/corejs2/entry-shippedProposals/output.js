@@ -357,7 +357,7 @@ function _agf() {
             return _context.stop();
         }
       }
-    }, _callee, this);
+    }, _callee);
   }));
   return _agf.apply(this, arguments);
 }
