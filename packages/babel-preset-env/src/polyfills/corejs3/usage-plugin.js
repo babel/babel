@@ -42,7 +42,7 @@ const corejs3PolyfillsWithShippedProposals = corejs3ShippedProposalsList.reduce(
 );
 
 export default function(
-  { types: t },
+  _,
   {
     corejs,
     include,
@@ -114,11 +114,9 @@ export default function(
       });
     },
 
-    CallExpression({ node }) {
-      // import('something').then(...)
-      if (t.isImport(node.callee)) {
-        this.addUnsupported(PromiseDependencies);
-      }
+    // import('something').then(...)
+    Import() {
+      this.addUnsupported(PromiseDependencies);
     },
 
     Function({ node }) {
