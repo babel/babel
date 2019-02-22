@@ -529,7 +529,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     flowParseTypeAlias(node: N.FlowTypeAlias): N.FlowTypeAlias {
       node.id = this.flowParseRestrictedIdentifier();
-      this.checkLVal(node.id, BIND_LEXICAL, undefined, "type alias");
+      this.scope.declareName(node.id.name, BIND_LEXICAL, node.id.start);
 
       if (this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -549,7 +549,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.FlowOpaqueType {
       this.expectContextual("type");
       node.id = this.flowParseRestrictedIdentifier(/*liberal*/ true);
-      this.checkLVal(node.id, BIND_LEXICAL, undefined, "opaque type alias");
+      this.scope.declareName(node.id.name, BIND_LEXICAL, node.id.start);
 
       if (this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
