@@ -9,7 +9,12 @@ import type State from "../tokenizer/state";
 import { types as tc } from "../tokenizer/context";
 import * as charCodes from "charcodes";
 import { isIteratorStart } from "../util/identifier";
-import { type BindingTypes, BIND_NONE, BIND_LEXICAL } from "../util/scopeflags";
+import {
+  type BindingTypes,
+  BIND_NONE,
+  BIND_LEXICAL,
+  SCOPE_OTHER,
+} from "../util/scopeflags";
 
 const reservedTypes = [
   "any",
@@ -258,6 +263,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     flowParseDeclareModule(node: N.FlowDeclareModule): N.FlowDeclareModule {
       this.next();
 
+      this.scope.enter(SCOPE_OTHER);
+
       if (this.match(tt.string)) {
         node.id = this.parseExprAtom();
       } else {
@@ -291,6 +298,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         body.push(bodyNode);
       }
+
+      this.scope.exit();
+
       this.expect(tt.braceR);
 
       this.finishNode(bodyNode, "BlockStatement");
@@ -519,6 +529,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     flowParseTypeAlias(node: N.FlowTypeAlias): N.FlowTypeAlias {
       node.id = this.flowParseRestrictedIdentifier();
+      this.checkLVal(node.id, BIND_LEXICAL, undefined, "type alias");
 
       if (this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -538,6 +549,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.FlowOpaqueType {
       this.expectContextual("type");
       node.id = this.flowParseRestrictedIdentifier(/*liberal*/ true);
+      this.checkLVal(node.id, BIND_LEXICAL, undefined, "opaque type alias");
 
       if (this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
