@@ -11,7 +11,7 @@ function addIsHelper(type, aliasKeys, deprecated) {
       " === nodeType";
   }
 
-  return `export function is${type}(node: Object, opts?: Object): boolean {
+  return `export function is${type}(node: ?Object, opts?: Object): boolean {
     ${deprecated || ""}
     if (!node) return false;
 
