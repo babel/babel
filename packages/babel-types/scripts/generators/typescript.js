@@ -106,7 +106,7 @@ for (const type in t.NODE_FIELDS) {
 for (let i = 0; i < t.TYPES.length; i++) {
   let decl = `export function is${
     t.TYPES[i]
-  }(node: object, opts?: object | null): `;
+  }(node: object | null | undefined, opts?: object | null): `;
 
   if (t.NODE_FIELDS[t.TYPES[i]]) {
     decl += `node is ${t.TYPES[i]};`;

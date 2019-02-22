@@ -105,7 +105,7 @@ for (const type in t.NODE_FIELDS) {
 for (let i = 0; i < t.TYPES.length; i++) {
   let decl = `declare function is${
     t.TYPES[i]
-  }(node: Object, opts?: ?Object): boolean`;
+  }(node: ?Object, opts?: ?Object): boolean`;
 
   if (t.NODE_FIELDS[t.TYPES[i]]) {
     decl += ` %checks (node instanceof ${NODE_PREFIX}${t.TYPES[i]})`;
