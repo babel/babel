@@ -87,6 +87,9 @@ export default class State {
     maxTopicIndex: null,
   };
 
+  // For the F# plugin
+  soloAwait: boolean = false;
+
   // Check whether we are in a (nested) class or not.
   classLevel: number = 0;
 

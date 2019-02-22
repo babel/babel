@@ -410,7 +410,9 @@ export default class ExpressionParser extends LValParser {
               );
             });
           case "fsharp":
-            return this.parseFSharpPipelineBody(op, prec, noIn);
+            return this.withSoloAwaitPermittingContext(() => {
+              return this.parseFSharpPipelineBody(op, prec, noIn);
+            });
         }
       // falls through
 
@@ -2074,7 +2076,9 @@ export default class ExpressionParser extends LValParser {
       );
     }
 
-    node.argument = this.parseMaybeUnary();
+    if (!this.state.soloAwait) {
+      node.argument = this.parseMaybeUnary();
+    }
     return this.finishNode(node, "AwaitExpression");
   }
 
@@ -2261,6 +2265,17 @@ export default class ExpressionParser extends LValParser {
       return callback();
     } finally {
       this.state.topicContext = outerContextTopicState;
+    }
+  }
+
+  withSoloAwaitPermittingContext<T>(callback: () => T): T {
+    const outerContextSoloAwaitState = this.state.soloAwait;
+    this.state.soloAwait = true;
+
+    try {
+      return callback();
+    } finally {
+      this.state.soloAwait = outerContextSoloAwaitState;
     }
   }
 
