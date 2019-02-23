@@ -19,7 +19,6 @@ export type Options = {
   strictMode: ?boolean,
   ranges: boolean,
   tokens: boolean,
-  createParenthesizedExpressions: boolean,
 };
 
 export const defaultOptions: Options = {
@@ -56,9 +55,6 @@ export const defaultOptions: Options = {
   ranges: false,
   // Adds all parsed tokens to a `tokens` property on the `File` node
   tokens: false,
-  // Whether to create ParenthesizedExpression AST nodes (if false
-  // the parser sets extra.parenthesized on the expression nodes instead).
-  createParenthesizedExpressions: false,
 };
 
 // Interpret and default an options object

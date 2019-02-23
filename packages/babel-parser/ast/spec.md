@@ -78,7 +78,6 @@ These are the core @babel/parser (babylon) AST node types.
   - [CallExpression](#callexpression)
   - [NewExpression](#newexpression)
   - [SequenceExpression](#sequenceexpression)
-  - [ParenthesizedExpression](#parenthesizedexpression)
   - [DoExpression](#doexpression)
 - [Template Literals](#template-literals)
   - [TemplateLiteral](#templateliteral)
@@ -936,17 +935,6 @@ interface SequenceExpression <: Expression {
 ```
 
 A sequence expression, i.e., a comma-separated sequence of expressions.
-
-## ParenthesizedExpression
-
-```js
-interface ParenthesizedExpression <: Expression {
-    type "ParenthesizedExpression";
-    expression: Expression;
-}
-```
-
-An expression wrapped by parentheses.
 
 ## DoExpression
 

@@ -426,13 +426,6 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(node, "DebuggerStatement");
   }
 
-  parseHeaderExpression(): N.Expression {
-    this.expect(tt.parenL);
-    const val = this.parseExpression();
-    this.expect(tt.parenR);
-    return val;
-  }
-
   parseDoStatement(node: N.DoWhileStatement): N.DoWhileStatement {
     this.next();
     this.state.labels.push(loopLabel);
@@ -449,7 +442,7 @@ export default class StatementParser extends ExpressionParser {
     this.state.labels.pop();
 
     this.expect(tt._while);
-    node.test = this.parseHeaderExpression();
+    node.test = this.parseParenExpression();
     this.eat(tt.semi);
     return this.finishNode(node, "DoWhileStatement");
   }
@@ -538,7 +531,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseIfStatement(node: N.IfStatement): N.IfStatement {
     this.next();
-    node.test = this.parseHeaderExpression();
+    node.test = this.parseParenExpression();
     node.consequent = this.parseStatement("if");
     node.alternate = this.eat(tt._else) ? this.parseStatement("if") : null;
     return this.finishNode(node, "IfStatement");
@@ -567,7 +560,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseSwitchStatement(node: N.SwitchStatement): N.SwitchStatement {
     this.next();
-    node.discriminant = this.parseHeaderExpression();
+    node.discriminant = this.parseParenExpression();
     const cases = (node.cases = []);
     this.expect(tt.braceL);
     this.state.labels.push(switchLabel);
@@ -676,7 +669,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseWhileStatement(node: N.WhileStatement): N.WhileStatement {
     this.next();
-    node.test = this.parseHeaderExpression();
+    node.test = this.parseParenExpression();
     this.state.labels.push(loopLabel);
 
     node.body =
@@ -698,7 +691,7 @@ export default class StatementParser extends ExpressionParser {
       this.raise(this.state.start, "'with' in strict mode");
     }
     this.next();
-    node.object = this.parseHeaderExpression();
+    node.object = this.parseParenExpression();
 
     node.body =
       // For the smartPipelines plugin:
