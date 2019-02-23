@@ -162,14 +162,19 @@ export default class StatementParser extends ExpressionParser {
         return this.parseForStatement(node);
       case tt._function:
         if (this.lookahead().type === tt.dot) break;
-        if (
-          context &&
-          (this.state.strict || (context !== "if" && context !== "label"))
-        ) {
-          this.raise(
-            this.state.start,
-            "Function declaration not allowed in this context",
-          );
+        if (context) {
+          if (this.state.strict) {
+            this.raise(
+              this.state.start,
+              "In strict mode code, functions can only be declared at top level or inside a block",
+            );
+          } else if (context !== "if" && context !== "label") {
+            this.raise(
+              this.state.start,
+              "In non-strict mode code, functions can only be declared at top level, " +
+                "inside a block, or as the body of an if statement",
+            );
+          }
         }
         return this.parseFunctionStatement(node, false, !context);
 
@@ -191,7 +196,12 @@ export default class StatementParser extends ExpressionParser {
       case tt._const:
       case tt._var:
         kind = kind || this.state.value;
-        if (context && kind !== "var") this.unexpected();
+        if (context && kind !== "var") {
+          this.unexpected(
+            this.state.start,
+            "Lexical declaration cannot appear in a single-statement context",
+          );
+        }
         return this.parseVarStatement(node, kind);
 
       case tt._while:
@@ -252,7 +262,7 @@ export default class StatementParser extends ExpressionParser {
           if (context) {
             this.unexpected(
               null,
-              "Function declaration not allowed in this context",
+              "Async functions can only be declared at the top level or inside a block",
             );
           }
           this.next();
@@ -1012,7 +1022,10 @@ export default class StatementParser extends ExpressionParser {
     this.initFunction(node, isAsync);
 
     if (this.match(tt.star) && isHangingStatement) {
-      this.unexpected();
+      this.unexpected(
+        this.state.start,
+        "Generators can only be declared at the top level or inside a block",
+      );
     }
     node.generator = this.eat(tt.star);
 
