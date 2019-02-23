@@ -430,7 +430,19 @@ function buildPublicFieldInitSpec(ref, prop, state) {
   );
 }
 
-function buildPrivateMethodDeclaration(prop, privateNamesMap) {
+function buildPrivateStaticMethodInitLoose(ref, prop, state, privateNamesMap) {
+  const { id, methodId } = privateNamesMap.get(prop.node.key.id.name);
+  return template.statement.ast`
+    Object.defineProperty(${ref}, ${id}, {
+      // configurable is false by default
+      // enumerable is false by default
+      // writable is false by default
+      value: ${methodId.name}
+    });
+  `;
+}
+
+function buildPrivateMethodDeclaration(prop, privateNamesMap, loose = false) {
   const privateName = privateNamesMap.get(prop.node.key.id.name);
   const {
     id,
@@ -470,7 +482,7 @@ function buildPrivateMethodDeclaration(prop, privateNamesMap) {
       t.variableDeclarator(setId, methodValue),
     ]);
   }
-  if (isStatic) {
+  if (isStatic && !loose) {
     return t.variableDeclaration("var", [
       t.variableDeclarator(
         id,
@@ -599,6 +611,20 @@ export function buildFieldsInitNodes(
       case isStatic && isPrivate && isMethod && !loose:
         needsClassRef = true;
         staticNodes.push(buildPrivateMethodDeclaration(prop, privateNamesMap));
+        break;
+      case isStatic && isPrivate && isMethod && loose:
+        needsClassRef = true;
+        staticNodes.push(
+          buildPrivateMethodDeclaration(prop, privateNamesMap, loose),
+        );
+        staticNodes.push(
+          buildPrivateStaticMethodInitLoose(
+            t.cloneNode(ref),
+            prop,
+            state,
+            privateNamesMap,
+          ),
+        );
         break;
       case isInstance && isPublic && isField && loose:
         instanceNodes.push(buildPublicFieldInitLoose(t.thisExpression(), prop));
