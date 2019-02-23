@@ -551,6 +551,23 @@ export function isSequenceExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
+export function isParenthesizedExpression(
+  node: ?Object,
+  opts?: Object,
+): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "ParenthesizedExpression") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isSwitchCase(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -2076,23 +2093,6 @@ export function isNoop(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isParenthesizedExpression(
-  node: ?Object,
-  opts?: Object,
-): boolean {
-  if (!node) return false;
-
-  const nodeType = node.type;
-  if (nodeType === "ParenthesizedExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
 export function isArgumentPlaceholder(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -3256,6 +3256,7 @@ export function isExpression(node: ?Object, opts?: Object): boolean {
     "NewExpression" === nodeType ||
     "ObjectExpression" === nodeType ||
     "SequenceExpression" === nodeType ||
+    "ParenthesizedExpression" === nodeType ||
     "ThisExpression" === nodeType ||
     "UnaryExpression" === nodeType ||
     "UpdateExpression" === nodeType ||
@@ -3269,7 +3270,6 @@ export function isExpression(node: ?Object, opts?: Object): boolean {
     "TypeCastExpression" === nodeType ||
     "JSXElement" === nodeType ||
     "JSXFragment" === nodeType ||
-    "ParenthesizedExpression" === nodeType ||
     "AwaitExpression" === nodeType ||
     "BindExpression" === nodeType ||
     "OptionalMemberExpression" === nodeType ||
@@ -3559,8 +3559,8 @@ export function isExpressionWrapper(node: ?Object, opts?: Object): boolean {
   if (
     nodeType === "ExpressionWrapper" ||
     "ExpressionStatement" === nodeType ||
-    "TypeCastExpression" === nodeType ||
-    "ParenthesizedExpression" === nodeType
+    "ParenthesizedExpression" === nodeType ||
+    "TypeCastExpression" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;

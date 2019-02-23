@@ -40,6 +40,12 @@ import {
   SCOPE_PROGRAM,
 } from "../util/scopeflags";
 
+const unwrapParenthesizedExpression = node => {
+  return node.type === "ParenthesizedExpression"
+    ? unwrapParenthesizedExpression(node.expression)
+    : node;
+};
+
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
   +parseBlock: (
@@ -204,16 +210,22 @@ export default class ExpressionParser extends LValParser {
 
       this.checkLVal(left, undefined, undefined, "assignment expression");
 
+      const maybePattern = unwrapParenthesizedExpression(left);
+
       let patternErrorMsg;
-      if (left.type === "ObjectPattern") {
+      if (maybePattern.type === "ObjectPattern") {
         patternErrorMsg = "`({a}) = 0` use `({a} = 0)`";
-      } else if (left.type === "ArrayPattern") {
+      } else if (maybePattern.type === "ArrayPattern") {
         patternErrorMsg = "`([a]) = 0` use `([a] = 0)`";
       }
 
-      if (patternErrorMsg && left.extra && left.extra.parenthesized) {
+      if (
+        patternErrorMsg &&
+        ((left.extra && left.extra.parenthesized) ||
+          left.type === "ParenthesizedExpression")
+      ) {
         this.raise(
-          left.start,
+          maybePattern.start,
           `You're trying to assign to a parenthesized expression, eg. instead of ${patternErrorMsg}`,
         );
       }
@@ -326,7 +338,8 @@ export default class ExpressionParser extends LValParser {
         if (
           operator === "**" &&
           left.type === "UnaryExpression" &&
-          !(left.extra && left.extra.parenthesized)
+          (this.options.createParenthesizedExpressions ||
+            !(left.extra && left.extra.parenthesized))
         ) {
           this.raise(
             left.argument.start,
@@ -1156,13 +1169,6 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, type);
   }
 
-  parseParenExpression(): N.Expression {
-    this.expect(tt.parenL);
-    const val = this.parseExpression();
-    this.expect(tt.parenR);
-    return val;
-  }
-
   parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
@@ -1273,10 +1279,16 @@ export default class ExpressionParser extends LValParser {
       val = exprList[0];
     }
 
-    this.addExtra(val, "parenthesized", true);
-    this.addExtra(val, "parenStart", startPos);
+    if (!this.options.createParenthesizedExpressions) {
+      this.addExtra(val, "parenthesized", true);
+      this.addExtra(val, "parenStart", startPos);
+      return val;
+    }
 
-    return val;
+    const parenExpression = this.startNodeAt(startPos, startLoc);
+    parenExpression.expression = val;
+    this.finishNode(parenExpression, "ParenthesizedExpression");
+    return parenExpression;
   }
 
   shouldParseArrow(): boolean {

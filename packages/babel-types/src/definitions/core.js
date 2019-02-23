@@ -736,6 +736,16 @@ defineType("SequenceExpression", {
   aliases: ["Expression"],
 });
 
+defineType("ParenthesizedExpression", {
+  visitor: ["expression"],
+  aliases: ["Expression", "ExpressionWrapper"],
+  fields: {
+    expression: {
+      validate: assertNodeType("Expression"),
+    },
+  },
+});
+
 defineType("SwitchCase", {
   visitor: ["test", "consequent"],
   fields: {
