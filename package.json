@@ -81,6 +81,10 @@
   "lint-staged": {
     "*.js": [
       "eslint --format=codeframe"
+    ],
+    "*.{js,mjs,ts,tsx,json,yml}": [
+      "prettier --write",
+      "git add"
     ]
   },
   "husky": {
