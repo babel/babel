@@ -5,7 +5,7 @@ import Tokenizer from "../tokenizer";
 import type { Node } from "../types";
 import { lineBreak, skipWhiteSpace } from "../util/whitespace";
 
-const literal = /^(?:'((?:\\.|[^'])*?)'|"((?:\\.|[^"])*?)"|;)/;
+const literal = /^(?:;|('|")((?:\\?.)*?)\1)/;
 
 // ## Parser utilities
 
@@ -175,7 +175,7 @@ export default class UtilParser extends Tokenizer {
       start += skipWhiteSpace.exec(this.state.input)[0].length;
       const match = literal.exec(this.state.input.slice(start));
       if (!match) break;
-      if ((match[1] || match[2]) === "use strict") return true;
+      if (match[2] === "use strict") return true;
       start += match[0].length;
     }
 
