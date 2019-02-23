@@ -53,9 +53,9 @@ function extractElementDescriptor(/* this: File, */ classRef, superRef, path) {
 
   if (path.isPrivate()) {
     throw path.buildCodeFrameError(
-      `Private ${
+      Private ${
         isMethod ? "methods" : "fields"
-      } in decorated classes are not supported yet.`,
+      } in decorated classes are not supported yet.,
     );
   }
 
@@ -131,7 +131,7 @@ export function buildDecoratedClass(ref, path, elements, file) {
     elements.map(extractElementDescriptor.bind(file, node.id, superId)),
   );
 
-  let replacement = template.expression.ast`
+  let replacement = template.expression.ast
     ${addDecorateHelper(file)}(
       ${classDecorators || t.nullLiteral()},
       function (${initializeId}, ${superClass ? superId : null}) {
@@ -140,7 +140,7 @@ export function buildDecoratedClass(ref, path, elements, file) {
       },
       ${superClass}
     )
-  `;
+  ;
   let classPathDesc = "arguments.1.body.body.0";
 
   if (!isStrict) {

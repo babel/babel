@@ -44,18 +44,18 @@ export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
     const { id, static: isStatic, method: isMethod, getId, setId } = value;
     if (loose) {
       initNodes.push(
-        template.statement.ast`
+        template.statement.ast
           var ${id} = ${state.addHelper("classPrivateFieldLooseKey")}("${name}")
-        `,
+        ,
       );
     } else if (isMethod && !isStatic) {
       if (getId || setId) {
-        initNodes.push(template.statement.ast`var ${id} = new WeakMap();`);
+        initNodes.push(template.statement.ast var ${id} = new WeakMap(););
       } else {
-        initNodes.push(template.statement.ast`var ${id} = new WeakSet();`);
+        initNodes.push(template.statement.ast var ${id} = new WeakSet(););
       }
     } else if (!isStatic) {
-      initNodes.push(template.statement.ast`var ${id} = new WeakMap();`);
+      initNodes.push(template.statement.ast var ${id} = new WeakMap(););
     }
   }
 
@@ -212,7 +212,7 @@ const privateNameHandlerLoose = {
     const { name } = member.node.property.id;
 
     member.replaceWith(
-      template.expression`BASE(REF, PROP)[PROP]`({
+      template.expression BASE(REF, PROP)[PROP]({
         BASE: file.addHelper("classPrivateFieldLooseBase"),
         REF: object,
         PROP: privateNamesMap.get(name).id,
@@ -250,40 +250,40 @@ function buildPrivateFieldInitLoose(ref, prop, privateNamesMap) {
   const { id } = privateNamesMap.get(prop.node.key.id.name);
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
-  return template.statement.ast`
+  return template.statement.ast
     Object.defineProperty(${ref}, ${id}, {
       // configurable is false by default
       // enumerable is false by default
       writable: true,
       value: ${value}
     });
-  `;
+  ;
 }
 
 function buildPrivateInstanceFieldInitSpec(ref, prop, privateNamesMap) {
   const { id } = privateNamesMap.get(prop.node.key.id.name);
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
-  return template.statement.ast`${id}.set(${ref}, {
+  return template.statement.ast${id}.set(${ref}, {
     // configurable is always false for private elements
     // enumerable is always false for private elements
     writable: true,
     value: ${value},
-  })`;
+  });
 }
 
 function buildPrivateStaticFieldInitSpec(prop, privateNamesMap) {
   const { id } = privateNamesMap.get(prop.node.key.id.name);
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
-  return template.statement.ast`
+  return template.statement.ast
     var ${id} = {
       // configurable is false by default
       // enumerable is false by default
       writable: true,
       value: ${value}
     };
-  `;
+  ;
 }
 
 function buildPrivateMethodInitLoose(ref, prop, privateNamesMap) {
@@ -292,14 +292,14 @@ function buildPrivateMethodInitLoose(ref, prop, privateNamesMap) {
   if (initAdded) return;
 
   if (methodId) {
-    return template.statement.ast`
+    return template.statement.ast
         Object.defineProperty(${ref}, ${id}, {
           // configurable is false by default
           // enumerable is false by default
           // writable is false by default
           value: ${methodId.name}
         });
-      `;
+      ;
   }
 
   if (getId || setId) {
@@ -309,7 +309,7 @@ function buildPrivateMethodInitLoose(ref, prop, privateNamesMap) {
     });
 
     if (getId && setId) {
-      return template.statement.ast`
+      return template.statement.ast
         Object.defineProperty(${ref}, ${id}, {
           // configurable is false by default
           // enumerable is false by default
@@ -317,25 +317,25 @@ function buildPrivateMethodInitLoose(ref, prop, privateNamesMap) {
           get: ${getId.name},
           set: ${setId.name}
         });
-      `;
+      ;
     } else if (getId && !setId) {
-      return template.statement.ast`
+      return template.statement.ast
         Object.defineProperty(${ref}, ${id}, {
           // configurable is false by default
           // enumerable is false by default
           // writable is false by default
           get: ${getId.name}
         });
-      `;
+      ;
     } else if (!getId && setId) {
-      return template.statement.ast`
+      return template.statement.ast
         Object.defineProperty(${ref}, ${id}, {
           // configurable is false by default
           // enumerable is false by default
           // writable is false by default
           set: ${setId.name}
         });
-      `;
+      ;
     }
   }
 }
@@ -352,27 +352,27 @@ function buildPrivateInstanceMethodInitSpec(ref, prop, privateNamesMap) {
     });
 
     if (getId && setId) {
-      return template.statement.ast`
+      return template.statement.ast
         ${id}.set(${ref}, {
           get: ${getId.name},
           set: ${setId.name}
         });
-      `;
+      ;
     } else if (getId && !setId) {
-      return template.statement.ast`
+      return template.statement.ast
         ${id}.set(${ref}, {
           get: ${getId.name}
         });
-      `;
+      ;
     } else if (!getId && setId) {
-      return template.statement.ast`
+      return template.statement.ast
         ${id}.set(${ref}, {
           set: ${setId.name}
         });
-      `;
+      ;
     }
   }
-  return template.statement.ast`${id}.add(${ref})`;
+  return template.statement.ast${id}.add(${ref});
 }
 
 function buildPublicFieldInitLoose(ref, prop) {

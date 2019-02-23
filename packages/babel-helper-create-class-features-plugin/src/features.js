@@ -44,19 +44,19 @@ export function verifyUsedFeatures(path, file) {
       throw path.buildCodeFrameError(
         "Decorators are not enabled." +
           "\nIf you are using " +
-          '["@babel/plugin-proposal-decorators", { "legacy": true }], ' +
-          'make sure it comes *before* "@babel/plugin-proposal-class-properties" ' +
+          ["@babel/plugin-proposal-decorators", { "legacy": true }],  +
+          'make sure it comes *before* "@babel/plugin-proposal-class-properties"''  +
           "and enable loose mode, like so:\n" +
-          '\t["@babel/plugin-proposal-decorators", { "legacy": true }]\n' +
-          '\t["@babel/plugin-proposal-class-properties", { "loose": true }]',
+          \t["@babel/plugin-proposal-decorators", { "legacy": true }]\n +
+          \t["@babel/plugin-proposal-class-properties", { "loose": true }],
       );
     }
 
     if (path.isPrivate()) {
       throw path.buildCodeFrameError(
-        `Private ${
+        Private ${
           path.isClassMethod() ? "methods" : "fields"
-        } in decorated classes are not supported yet.`,
+        } in decorated classes are not supported yet.,
       );
     }
   }
