@@ -1,0 +1,4 @@
+{
+  "createParenthesizedExpressions": true,
+  "throws": "Illegal expression. Wrap left hand side or entire exponentiation in parentheses. (1:1)"
+}

@@ -162,6 +162,12 @@ export function assertSequenceExpression(
 ): void {
   assert("SequenceExpression", node, opts);
 }
+export function assertParenthesizedExpression(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("ParenthesizedExpression", node, opts);
+}
 export function assertSwitchCase(node: Object, opts?: Object = {}): void {
   assert("SwitchCase", node, opts);
 }
@@ -653,12 +659,6 @@ export function assertJSXClosingFragment(
 }
 export function assertNoop(node: Object, opts?: Object = {}): void {
   assert("Noop", node, opts);
-}
-export function assertParenthesizedExpression(
-  node: Object,
-  opts?: Object = {},
-): void {
-  assert("ParenthesizedExpression", node, opts);
 }
 export function assertAwaitExpression(node: Object, opts?: Object = {}): void {
   assert("AwaitExpression", node, opts);
