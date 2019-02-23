@@ -566,11 +566,6 @@ export type SequenceExpression = NodeBase & {
   expressions: $ReadOnlyArray<Expression>,
 };
 
-export type ParenthesizedExpression = NodeBase & {
-  type: "ParenthesizedExpression",
-  expression: Expression,
-};
-
 // Pipelines
 
 export type PipelineBody = NodeBase & {

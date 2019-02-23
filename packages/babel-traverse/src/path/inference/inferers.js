@@ -102,10 +102,6 @@ export function SequenceExpression() {
     .getTypeAnnotation();
 }
 
-export function ParenthesizedExpression() {
-  return this.get("expression").getTypeAnnotation();
-}
-
 export function AssignmentExpression() {
   return this.get("right").getTypeAnnotation();
 }
