@@ -86,7 +86,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         !this.match(tt.parenR) &&
         !this.match(tt.colon) &&
         !this.match(tt.eq) &&
-        !this.match(tt.question)
+        !this.match(tt.question) &&
+        !this.match(tt.bang)
       );
     }
 
