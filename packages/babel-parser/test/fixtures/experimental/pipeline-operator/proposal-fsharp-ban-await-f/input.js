@@ -1,3 +1,3 @@
 async function test () {
-  return x |> await;
+  return x |> await f;
 }
