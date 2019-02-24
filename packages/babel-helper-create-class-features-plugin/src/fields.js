@@ -141,19 +141,18 @@ const privateNameHandlerSpec = {
       setId,
     } = privateNamesMap.get(name);
 
-    if (isStatic && !isMethod) {
-      return t.callExpression(
-        file.addHelper("classStaticPrivateFieldSpecGet"),
-        [this.receiver(member), t.cloneNode(classRef), t.cloneNode(id)],
-      );
-    }
-    if (isStatic && isMethod) {
-      return t.callExpression(file.addHelper("classStaticPrivateMethodGet"), [
+    if (isStatic) {
+      const helperName = isMethod
+        ? "classStaticPrivateMethodGet"
+        : "classStaticPrivateFieldSpecGet";
+
+      return t.callExpression(file.addHelper(helperName), [
         this.receiver(member),
         t.cloneNode(classRef),
         t.cloneNode(id),
       ]);
     }
+
     if (isMethod) {
       if (getId || setId) {
         return t.callExpression(file.addHelper("classPrivateFieldGet"), [
@@ -184,19 +183,11 @@ const privateNameHandlerSpec = {
     } = privateNamesMap.get(name);
 
     if (isStatic) {
-      if (!isMethod) {
-        return t.callExpression(
-          file.addHelper("classStaticPrivateFieldSpecSet"),
-          [
-            this.receiver(member),
-            t.cloneNode(classRef),
-            t.cloneNode(id),
-            value,
-          ],
-        );
-      }
+      const helperName = isMethod
+        ? "classStaticPrivateMethodSet"
+        : "classStaticPrivateFieldSpecSet";
 
-      return t.callExpression(file.addHelper("classStaticPrivateMethodSet"), [
+      return t.callExpression(file.addHelper(helperName), [
         this.receiver(member),
         t.cloneNode(classRef),
         t.cloneNode(id),
@@ -221,12 +212,6 @@ const privateNameHandlerSpec = {
   },
 
   call(member, args) {
-    const { privateNamesMap } = this;
-    const { name } = member.node.property.id;
-    const { static: isStatic, method: isMethod } = privateNamesMap.get(name);
-    if (isStatic && isMethod) {
-      return this.get(member);
-    }
     // The first access (the get) should do the memo assignment.
     this.memoise(member, 1);
 

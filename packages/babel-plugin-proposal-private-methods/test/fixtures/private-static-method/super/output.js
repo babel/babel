@@ -7,7 +7,7 @@ class Base {
 
 class Sub extends Base {
   static check() {
-    babelHelpers.classStaticPrivateMethodGet(Sub, Sub, _subStaticPrivateMethod);
+    babelHelpers.classStaticPrivateMethodGet(Sub, Sub, _subStaticPrivateMethod).call(Sub);
   }
 
 }

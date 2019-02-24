@@ -1109,7 +1109,7 @@ helpers.classStaticPrivateMethodGet = helper("7.3.2")`
     if (receiver !== classConstructor) {
       throw new TypeError("Private static access of wrong provenance");
     }
-    return descriptor.call(classConstructor);
+    return descriptor;
   }
 `;
 

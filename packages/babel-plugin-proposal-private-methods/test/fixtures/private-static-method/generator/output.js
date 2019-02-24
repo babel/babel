@@ -1,6 +1,6 @@
 class Cl {
   test() {
-    return babelHelpers.classStaticPrivateMethodGet(Cl, Cl, _foo);
+    return babelHelpers.classStaticPrivateMethodGet(Cl, Cl, _foo).call(Cl);
   }
 
 }
