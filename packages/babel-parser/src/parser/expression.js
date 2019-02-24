@@ -2312,10 +2312,7 @@ export default class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
 
     const node = this.startNode();
-
-    if (this.lookahead().type === tt.arrow) {
-      this.state.potentialArrowAt = this.state.start;
-    }
+    this.state.potentialArrowAt = this.state.start;
 
     node.body = this.parseExprOp(
       this.parseMaybeUnary(),
