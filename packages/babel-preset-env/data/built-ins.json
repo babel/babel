@@ -17,7 +17,7 @@
     "safari": "3.1",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -40,7 +40,7 @@
     "safari": "3.1",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -73,7 +73,7 @@
     "safari": "3.1",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -106,7 +106,7 @@
     "safari": "3.1",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -119,7 +119,7 @@
     "safari": "4",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -142,7 +142,7 @@
     "safari": "3.1",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -155,7 +155,7 @@
     "safari": "3.1",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -178,7 +178,7 @@
     "safari": "4",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -191,7 +191,7 @@
     "safari": "4",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -204,7 +204,7 @@
     "safari": "3.1",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -215,10 +215,10 @@
     "edge": "12",
     "firefox": "5",
     "safari": "10.1",
-    "node": "10.0",
+    "node": "10",
     "ie": "9",
     "ios": "10.3",
-    "electron": "3"
+    "electron": "3.1"
   },
   "es6.array.species": {
     "chrome": "51",
@@ -238,7 +238,7 @@
     "safari": "4",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -251,7 +251,7 @@
     "safari": "4",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -264,7 +264,7 @@
     "safari": "10",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "10",
     "electron": "1.1"
   },
@@ -286,7 +286,7 @@
     "safari": "3.1",
     "node": "0.12",
     "ie": "10",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -299,9 +299,10 @@
     "safari": "5.1",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "7",
-    "phantom": "2"
+    "phantom": "2",
+    "electron": "5"
   },
   "es6.function.has-instance": {
     "chrome": "51",
@@ -320,7 +321,7 @@
     "firefox": "2",
     "safari": "4",
     "node": "0.12",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -624,7 +625,7 @@
     "safari": "4",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -637,7 +638,7 @@
     "node": "8.10",
     "ios": "9",
     "opera": "49",
-    "electron": "3"
+    "electron": "3.1"
   },
   "es7.object.define-setter": {
     "chrome": "62",
@@ -647,7 +648,7 @@
     "node": "8.10",
     "ios": "9",
     "opera": "49",
-    "electron": "3"
+    "electron": "3.1"
   },
   "es6.object.define-property": {
     "chrome": "5",
@@ -657,7 +658,7 @@
     "safari": "5.1",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -670,7 +671,7 @@
     "safari": "4",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -742,7 +743,7 @@
     "node": "8.10",
     "ios": "9",
     "opera": "49",
-    "electron": "3"
+    "electron": "3.1"
   },
   "es7.object.lookup-setter": {
     "chrome": "62",
@@ -751,7 +752,7 @@
     "node": "8.10",
     "ios": "9",
     "opera": "49",
-    "electron": "3"
+    "electron": "3.1"
   },
   "es6.object.prevent-extensions": {
     "chrome": "44",
@@ -859,10 +860,10 @@
     "edge": "18",
     "firefox": "58",
     "safari": "11.1",
-    "node": "10.0",
+    "node": "10",
     "ios": "11.3",
     "opera": "50",
-    "electron": "3"
+    "electron": "3.1"
   },
   "es6.reflect.apply": {
     "chrome": "49",
@@ -1080,10 +1081,10 @@
     "chrome": "63",
     "firefox": "57",
     "safari": "12",
-    "node": "10.0",
+    "node": "10",
     "ios": "12",
     "opera": "50",
-    "electron": "3"
+    "electron": "3.1"
   },
   "es6.string.anchor": {
     "chrome": "5",
@@ -1091,7 +1092,7 @@
     "firefox": "17",
     "safari": "6",
     "node": "0.12",
-    "android": "4.0",
+    "android": "4",
     "ios": "7",
     "phantom": "2",
     "electron": "1.1"
@@ -1102,7 +1103,7 @@
     "firefox": "17",
     "safari": "6",
     "node": "0.12",
-    "android": "4.0",
+    "android": "4",
     "ios": "7",
     "phantom": "2",
     "electron": "1.1"
@@ -1113,7 +1114,7 @@
     "firefox": "17",
     "safari": "6",
     "node": "0.12",
-    "android": "4.0",
+    "android": "4",
     "ios": "7",
     "phantom": "2",
     "electron": "1.1"
@@ -1124,7 +1125,7 @@
     "firefox": "17",
     "safari": "6",
     "node": "0.12",
-    "android": "4.0",
+    "android": "4",
     "ios": "7",
     "phantom": "2",
     "electron": "1.1"
@@ -1155,7 +1156,7 @@
     "firefox": "17",
     "safari": "6",
     "node": "0.12",
-    "android": "4.0",
+    "android": "4",
     "ios": "7",
     "phantom": "2",
     "electron": "1.1"
@@ -1166,7 +1167,7 @@
     "firefox": "17",
     "safari": "6",
     "node": "0.12",
-    "android": "4.0",
+    "android": "4",
     "ios": "7",
     "phantom": "2",
     "electron": "1.1"
@@ -1177,7 +1178,7 @@
     "firefox": "17",
     "safari": "6",
     "node": "0.12",
-    "android": "4.0",
+    "android": "4",
     "ios": "7",
     "phantom": "2",
     "electron": "1.1"
@@ -1208,7 +1209,7 @@
     "firefox": "17",
     "safari": "6",
     "node": "0.12",
-    "android": "4.0",
+    "android": "4",
     "ios": "7",
     "phantom": "2",
     "electron": "1.1"
@@ -1229,7 +1230,7 @@
     "firefox": "17",
     "safari": "6",
     "node": "0.12",
-    "android": "4.0",
+    "android": "4",
     "ios": "7",
     "phantom": "2",
     "electron": "1.1"
@@ -1280,7 +1281,7 @@
     "firefox": "17",
     "safari": "6",
     "node": "0.12",
-    "android": "4.0",
+    "android": "4",
     "ios": "7",
     "phantom": "2",
     "electron": "1.1"
@@ -1301,7 +1302,7 @@
     "firefox": "17",
     "safari": "6",
     "node": "0.12",
-    "android": "4.0",
+    "android": "4",
     "ios": "7",
     "phantom": "2",
     "electron": "1.1"
@@ -1312,7 +1313,7 @@
     "firefox": "17",
     "safari": "6",
     "node": "0.12",
-    "android": "4.0",
+    "android": "4",
     "ios": "7",
     "phantom": "2",
     "electron": "1.1"
@@ -1323,7 +1324,7 @@
     "firefox": "17",
     "safari": "6",
     "node": "0.12",
-    "android": "4.0",
+    "android": "4",
     "ios": "7",
     "phantom": "2",
     "electron": "1.1"
@@ -1336,7 +1337,7 @@
     "safari": "4",
     "node": "0.10",
     "ie": "9",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -1359,7 +1360,7 @@
     "safari": "5.1",
     "node": "0.12",
     "ie": "10",
-    "android": "4.0",
+    "android": "4",
     "ios": "6",
     "phantom": "2",
     "electron": "1.1"
@@ -1478,7 +1479,7 @@
     "chrome": "69",
     "firefox": "62",
     "safari": "12",
-    "node": "11.0",
+    "node": "11",
     "ios": "12",
     "opera": "56",
     "electron": "4"

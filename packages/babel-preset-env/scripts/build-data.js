@@ -254,7 +254,14 @@ const generateData = (environments, features) => {
       const version = getLowestImplementedVersion(options, env);
 
       if (version !== null) {
-        plugin[env] = version.toString();
+        const versionString = version.toString();
+
+        // NOTE(bng): A number of environments in compat-table changed to
+        // include a trailing zero (node10 -> node10_0), so for now stripping
+        // it to be consistent
+        plugin[env] = versionString.endsWith(".0")
+          ? versionString.slice(0, -2)
+          : versionString;
       }
     });
 
