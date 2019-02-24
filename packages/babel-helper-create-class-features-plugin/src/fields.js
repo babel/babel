@@ -1,5 +1,7 @@
 import { template, traverse, types as t } from "@babel/core";
-import { environmentVisitor } from "@babel/helper-replace-supers";
+import ReplaceSupers, {
+  environmentVisitor,
+} from "@babel/helper-replace-supers";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 
@@ -445,8 +447,39 @@ function buildPrivateInstanceMethodDeclaration(prop, privateNamesMap) {
   ]);
 }
 
+const thisContextVisitor = traverse.visitors.merge([
+  {
+    ThisExpression(path, state) {
+      state.needsClassRef = true;
+      path.replaceWith(t.cloneNode(state.classRef));
+    },
+  },
+  environmentVisitor,
+]);
+
+function replaceThisContext(path, ref, superRef, file, loose) {
+  const state = { classRef: ref, needsClassRef: false };
+
+  const replacer = new ReplaceSupers({
+    methodPath: path,
+    isLoose: loose,
+    superRef,
+    file,
+    getObjectRef() {
+      state.needsClassRef = true;
+      return ref;
+    },
+  });
+  replacer.isStatic = true;
+  replacer.replace();
+
+  path.traverse(thisContextVisitor, state);
+  return state.needsClassRef;
+}
+
 export function buildFieldsInitNodes(
   ref,
+  superRef,
   props,
   privateNamesMap,
   state,
@@ -463,6 +496,11 @@ export function buildFieldsInitNodes(
     const isPublic = !isPrivate;
     const isField = prop.isProperty();
     const isMethod = !isField;
+
+    if (isStatic && isField) {
+      const replaced = replaceThisContext(prop, ref, superRef, state, loose);
+      needsClassRef = needsClassRef || replaced;
+    }
 
     switch (true) {
       case isStatic && isPrivate && isField && loose:
