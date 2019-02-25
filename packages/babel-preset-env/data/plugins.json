@@ -3,9 +3,7 @@
     "chrome": "41",
     "edge": "13",
     "firefox": "34",
-    "safari": "9",
     "node": "4",
-    "ios": "9",
     "opera": "28",
     "electron": "0.24"
   },
