@@ -1,6 +1,6 @@
 type FBID = number;
 type Foo<T> = Bar<T>
-export type Foo = number;
+export type Foo1 = number;
 
 type union =
  | {type: "A"}

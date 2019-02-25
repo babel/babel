@@ -19,22 +19,6 @@ function buildConstructor(classRef, constructorBody, node) {
   return func;
 }
 
-const verifyConstructorVisitor = traverse.visitors.merge([
-  environmentVisitor,
-  {
-    Super(path, state) {
-      if (state.isDerived) return;
-
-      const { node, parentPath } = path;
-      if (parentPath.isCallExpression({ callee: node })) {
-        throw path.buildCodeFrameError(
-          "super() is only allowed in a derived constructor",
-        );
-      }
-    },
-  },
-]);
-
 export default function transformClass(
   path: NodePath,
   file: any,
@@ -179,13 +163,6 @@ export default function transformClass(
 
       if (t.isClassMethod(node)) {
         const isConstructor = node.kind === "constructor";
-
-        if (isConstructor) {
-          path.traverse(verifyConstructorVisitor, {
-            isDerived: classState.isDerived,
-            file: classState.file,
-          });
-        }
 
         const replaceSupers = new ReplaceSupers({
           methodPath: path,
