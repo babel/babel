@@ -1023,7 +1023,7 @@ export default class StatementParser extends ExpressionParser {
   ): T {
     const isStatement = statement & FUNC_STATEMENT;
     const isHangingStatement = statement & FUNC_HANGING_STATEMENT;
-    const requireId = isStatement && !(statement & FUNC_NULLABLE_ID);
+    const requireId = !!isStatement && !(statement & FUNC_NULLABLE_ID);
 
     this.initFunction(node, isAsync);
 
@@ -1088,7 +1088,7 @@ export default class StatementParser extends ExpressionParser {
     return node;
   }
 
-  parseFunctionId(requireId: boolean): ?N.Identifier {
+  parseFunctionId(requireId?: boolean): ?N.Identifier {
     return requireId || this.match(tt.name) ? this.parseIdentifier() : null;
   }
 
