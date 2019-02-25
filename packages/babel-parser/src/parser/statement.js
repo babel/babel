@@ -1023,6 +1023,7 @@ export default class StatementParser extends ExpressionParser {
   ): T {
     const isStatement = statement & FUNC_STATEMENT;
     const isHangingStatement = statement & FUNC_HANGING_STATEMENT;
+    const requireId = isStatement && !(statement & FUNC_NULLABLE_ID);
 
     this.initFunction(node, isAsync);
 
@@ -1035,7 +1036,7 @@ export default class StatementParser extends ExpressionParser {
     node.generator = this.eat(tt.star);
 
     if (isStatement) {
-      node.id = this.parseFunctionId(isStatement, isHangingStatement);
+      node.id = this.parseFunctionId(requireId);
       if (node.id && !isHangingStatement) {
         // If it is a regular function declaration in sloppy mode, then it is
         // subject to Annex B semantics (BIND_FUNCTION). Otherwise, the binding
@@ -1087,14 +1088,8 @@ export default class StatementParser extends ExpressionParser {
     return node;
   }
 
-  parseFunctionId(isStatement?: boolean, optionalId?: boolean): ?N.Identifier {
-    if (this.match(tt.name)) {
-      return this.parseIdentifier();
-    }
-    if (isStatement && !optionalId) {
-      this.unexpected();
-    }
-    return null;
+  parseFunctionId(requireId: boolean): ?N.Identifier {
+    return requireId || this.match(tt.name) ? this.parseIdentifier() : null;
   }
 
   parseFunctionParams(node: N.Function, allowModifiers?: boolean): void {
@@ -1129,7 +1124,7 @@ export default class StatementParser extends ExpressionParser {
 
     this.parseClassId(node, isStatement, optionalId);
     this.parseClassSuper(node);
-    node.body = this.parseClassBody();
+    node.body = this.parseClassBody(!!node.superClass);
 
     this.state.strict = oldStrict;
 
@@ -1156,7 +1151,7 @@ export default class StatementParser extends ExpressionParser {
     );
   }
 
-  parseClassBody(): N.ClassBody {
+  parseClassBody(constructorAllowsSuper): N.ClassBody {
     this.state.classLevel++;
 
     const state = { hadConstructor: false };
@@ -1165,8 +1160,6 @@ export default class StatementParser extends ExpressionParser {
     classBody.body = [];
 
     this.expect(tt.braceL);
-
-    const constructorAllowsSuper = node.superClass !== null;
 
     // For the smartPipelines plugin: Disable topic references from outer
     // contexts within the class body. They are permitted in test expressions,
