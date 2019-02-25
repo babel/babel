@@ -5,7 +5,7 @@ import Tokenizer from "../tokenizer";
 import type { Node } from "../types";
 import { lineBreak, skipWhiteSpace } from "../util/whitespace";
 
-const literal = /^(?:;|('|")((?:\\?.)*?)\1)/;
+const literal = /^('|")((?:\\?.)*?)\1/;
 
 // ## Parser utilities
 
@@ -170,6 +170,7 @@ export default class UtilParser extends Tokenizer {
 
   strictDirective(start: number): boolean {
     for (;;) {
+      // Try to find string literal.
       skipWhiteSpace.lastIndex = start;
       // $FlowIgnore
       start += skipWhiteSpace.exec(this.state.input)[0].length;
@@ -177,6 +178,14 @@ export default class UtilParser extends Tokenizer {
       if (!match) break;
       if (match[2] === "use strict") return true;
       start += match[0].length;
+
+      // Skip semicolon, if any.
+      skipWhiteSpace.lastIndex = start;
+      // $FlowIgnore
+      start += skipWhiteSpace.exec(this.state.input)[0].length;
+      if (this.state.input[start] === ";") {
+        start++;
+      }
     }
 
     return false;
