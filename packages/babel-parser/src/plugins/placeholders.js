@@ -223,7 +223,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       this.parseClassSuper(node);
-      node.body = this.parsePlaceholder("ClassBody") || this.parseClassBody(!!node.superClass);
+      node.body =
+        this.parsePlaceholder("ClassBody") ||
+        this.parseClassBody(!!node.superClass);
       return this.finishNode(node, type);
     }
 
