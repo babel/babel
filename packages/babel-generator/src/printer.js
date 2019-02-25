@@ -337,8 +337,8 @@ export default class Printer {
       this.format.concise = true;
     }
 
-    const printMethod = this[node.type];
-    if (!printMethod) {
+    const isNodeTypeKnown = this[node.type];
+    if (!isNodeTypeKnown) {
       throw new ReferenceError(
         `unknown node of type ${JSON.stringify(
           node.type,
