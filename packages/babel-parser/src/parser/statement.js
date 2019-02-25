@@ -1151,7 +1151,7 @@ export default class StatementParser extends ExpressionParser {
     );
   }
 
-  parseClassBody(constructorAllowsSuper): N.ClassBody {
+  parseClassBody(constructorAllowsSuper: boolean): N.ClassBody {
     this.state.classLevel++;
 
     const state = { hadConstructor: false };
