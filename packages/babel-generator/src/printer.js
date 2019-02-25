@@ -337,8 +337,9 @@ export default class Printer {
       this.format.concise = true;
     }
 
-    const isNodeTypeKnown = this[node.type];
-    if (!isNodeTypeKnown) {
+    const printMethod = this[node.type];
+    
+    if (!printMethod) {
       throw new ReferenceError(
         `unknown node of type ${JSON.stringify(
           node.type,
@@ -367,7 +368,7 @@ export default class Printer {
 
     const loc = t.isProgram(node) || t.isFile(node) ? null : node.loc;
     this.withSource("start", loc, () => {
-      this[node.type](node, parent);
+      printMethod(node, parent);
     });
 
     this._printTrailingComments(node);
