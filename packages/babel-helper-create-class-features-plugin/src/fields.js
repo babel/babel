@@ -24,7 +24,7 @@ export function buildPrivateNamesMap(props) {
         update.getId = prop.scope.generateUidIdentifier(`get_${name}`);
       } else if (prop.node.kind === "set") {
         update.setId = prop.scope.generateUidIdentifier(`set_${name}`);
-      } else if (prop.node.kind === "method" && isMethod) {
+      } else if (prop.node.kind === "method") {
         update.methodId = prop.scope.generateUidIdentifier(name);
       }
       privateNamesMap.set(name, update);
