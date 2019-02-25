@@ -901,7 +901,6 @@ export default class StatementParser extends ExpressionParser {
     node.update = this.match(tt.parenR) ? null : this.parseExpression();
     this.expect(tt.parenR);
 
-    this.scope.exit();
     node.body =
       // For the smartPipelines plugin: Disable topic references from outer
       // contexts within the loop body. They are permitted in test expressions,
@@ -911,6 +910,7 @@ export default class StatementParser extends ExpressionParser {
         this.parseStatement("for"),
       );
 
+    this.scope.exit();
     this.state.labels.pop();
 
     return this.finishNode(node, "ForStatement");
@@ -937,7 +937,6 @@ export default class StatementParser extends ExpressionParser {
     node.right = this.parseExpression();
     this.expect(tt.parenR);
 
-    this.scope.exit();
     node.body =
       // For the smartPipelines plugin:
       // Disable topic references from outer contexts within the loop body.
@@ -947,6 +946,7 @@ export default class StatementParser extends ExpressionParser {
         this.parseStatement("for"),
       );
 
+    this.scope.exit();
     this.state.labels.pop();
 
     return this.finishNode(node, type);
