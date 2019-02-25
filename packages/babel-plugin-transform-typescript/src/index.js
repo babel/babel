@@ -25,6 +25,7 @@ const PARSED_PARAMS = new WeakSet();
 export default declare((api, { jsxPragma = "React" }) => {
   api.assertVersion(7);
 
+  const defaultPragma = jsxPragma;
   const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
 
   return {
@@ -42,14 +43,18 @@ export default declare((api, { jsxPragma = "React" }) => {
 
         const { file } = state;
 
+        let filePragma;
         if (file.ast.comments) {
           for (const comment of (file.ast.comments: Array<Object>)) {
             const jsxMatches = JSX_ANNOTATION_REGEX.exec(comment.value);
             if (jsxMatches) {
-              jsxPragma = jsxMatches[1];
+              filePragma = jsxMatches[1];
             }
           }
         }
+
+        // revert back to default pragma to support files with different types
+        jsxPragma = filePragma ? filePragma : defaultPragma;
 
         // remove type imports
         for (const stmt of path.get("body")) {
