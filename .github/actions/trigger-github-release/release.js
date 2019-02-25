@@ -17,7 +17,7 @@ getStdin()
     owner: repoOwner,
     repo: repoName,
     tag_name: tag,
-    body: changelog,
+    body: "FAKE CHANGELOG",
   }))
   .catch(err => {
     console.error(err);

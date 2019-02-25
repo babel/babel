@@ -126,7 +126,7 @@ prepublish-build:
 	make clone-license
 
 prepublish:
-	git pull --rebase
+	make bootstrap-only
 	make prepublish-build
 	make test
 
@@ -138,9 +138,11 @@ publish: prepublish
 	./node_modules/.bin/lerna publish from-git --require-scripts
 	make clean
 
-bootstrap: clean-all
+bootstrap-only: clean-all
 	yarn --ignore-engines
 	./node_modules/.bin/lerna bootstrap -- --ignore-engines
+
+bootstrap: bootstrap-only
 	make build
 	cd packages/babel-plugin-transform-runtime; \
 	node scripts/build-dist.js
