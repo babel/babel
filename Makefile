@@ -126,11 +126,12 @@ prepublish-build:
 	make clone-license
 
 prepublish:
-	git pull --rebase
+	make bootstrap-only
 	make prepublish-build
 	make test
 
 new-version:
+	git pull --rebase
 	./node_modules/.bin/lerna version --force-publish="@babel/runtime,@babel/runtime-corejs2,@babel/standalone,@babel/preset-env-standalone"
 
 # NOTE: Run make new-version first
@@ -138,9 +139,11 @@ publish: prepublish
 	./node_modules/.bin/lerna publish from-git --require-scripts
 	make clean
 
-bootstrap: clean-all
+bootstrap-only: clean-all
 	yarn --ignore-engines
 	./node_modules/.bin/lerna bootstrap -- --ignore-engines
+
+bootstrap: bootstrap-only
 	make build
 	cd packages/babel-plugin-transform-runtime; \
 	node scripts/build-dist.js

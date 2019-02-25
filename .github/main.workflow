@@ -1,6 +1,6 @@
 workflow "Release" {
   on = "push"
-  resolves = ["Trigger GitHub release"]
+  resolves = ["Trigger GitHub release", "Publish to npm"]
 }
 
 action "Trigger GitHub release" {
@@ -12,8 +12,28 @@ action "Trigger GitHub release" {
     COMMIT_AUTHOR_EMAIL = "babel@hopeinsource.com"
   }
 
-  # When GitHub Actions will support the "release" event for public
-  # repositories, we won't need these checks anymore.
+  needs = ["Create release tag"]
+}
+
+action "Publish to npm" {
+  uses = "docker://node:10"
+  secrets = ["NPM_TOKEN"]
+
+  runs = "make"
+  args = "publish"
+
+  env = {
+    CI = "true"
+  }
+
+  needs = ["Create release tag"]
+}
+
+# When GitHub Actions will support the "release" event for public
+# repositories, we won't need this checks anymore.
+action "Create release tag" {
+  uses ="./.github/actions/create-release-tag"
+
   needs = [
     "Is version commit",
     "On master branch",
