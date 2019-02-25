@@ -7,6 +7,11 @@ action "Trigger GitHub release" {
   uses = "./.github/actions/trigger-github-release/"
   secrets = ["GITHUB_TOKEN"]
 
+  env = {
+    COMMIT_AUTHOR_NAME  = "Babel Bot"
+    COMMIT_AUTHOR_EMAIL = "babel@hopeinsource.com"
+  }
+
   # When GitHub Actions will support the "release" event for public
   # repositories, we won't need these checks anymore.
   needs = [
