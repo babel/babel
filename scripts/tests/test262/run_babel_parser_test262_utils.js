@@ -43,6 +43,7 @@ const ignoredFeatures = [
   "for-of",
   "generators",
   "globalThis",
+  "hashbang",
   "Int8Array",
   "Int32Array",
   "Intl.ListFormat",
