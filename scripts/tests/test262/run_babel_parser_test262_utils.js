@@ -210,7 +210,8 @@ exports.updateWhitelist = function(filename, summary) {
       .concat(summary.disallowed.failure)
       .map(function(test) {
         return test.id;
-      });
+      })
+      .concat(summary.unrecognized);
     const toAdd = summary.disallowed.falsePositive
       .concat(summary.disallowed.falseNegative)
       .map(function(test) {
