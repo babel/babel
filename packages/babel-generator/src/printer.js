@@ -338,7 +338,6 @@ export default class Printer {
     }
 
     const printMethod = this[node.type];
-    
     if (!printMethod) {
       throw new ReferenceError(
         `unknown node of type ${JSON.stringify(
