@@ -36,6 +36,7 @@ function webpackBuild(opts) {
   }
 
   const config = {
+    mode: "none",
     module: {
       rules: [
         {
@@ -77,7 +78,6 @@ function webpackBuild(opts) {
         /..\/..\/package/,
         "../../../../src/babel-package-shim"
       ),*/
-      new webpack.optimize.ModuleConcatenationPlugin(),
     ].concat(plugins),
     resolve: {
       plugins: [

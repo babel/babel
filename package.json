@@ -30,8 +30,7 @@
     "chalk": "^2.3.2",
     "charcodes": "^0.2.0",
     "derequire": "^2.0.2",
-    "duplicate-package-checker-webpack-plugin": "^2.1.0",
-    "enhanced-resolve": "^3.0.0",
+    "duplicate-package-checker-webpack-plugin": "^3.0.0",
     "eslint": "^5.12.1",
     "eslint-config-babel": "^8.0.2",
     "eslint-plugin-flowtype": "^3.2.1",
@@ -66,9 +65,9 @@
     "through2": "^2.0.0",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
-    "webpack": "^3.4.1",
-    "webpack-dependency-suite": "^2.4.4",
-    "webpack-stream": "^4.0.0"
+    "webpack": "^4.29.5",
+    "webpack-dependency-suite": "^2.4.5",
+    "webpack-stream": "^5.2.1"
   },
   "resolutions": {
     "@lerna/**/@lerna/collect-updates": "https://github.com/nicolo-ribaudo/lerna.git#babel-collect-updates"
