@@ -121,6 +121,40 @@ describe("validators", function() {
 
       expect(t.isReferenced(node, parent)).toBe(true);
     });
+
+    it("returns true if node id a value of ObjectProperty of an expression", function() {
+      const node = t.identifier("a");
+      const parent = t.objectProperty(t.identifier("key"), node);
+      const grandparent = t.objectExpression([parent]);
+
+      expect(t.isReferenced(node, parent, grandparent)).toBe(true);
+    });
+
+    it("returns false if node id a value of ObjectProperty of a pattern", function() {
+      const node = t.identifier("a");
+      const parent = t.objectProperty(t.identifier("key"), node);
+      const grandparent = t.objectPattern([parent]);
+
+      expect(t.isReferenced(node, parent, grandparent)).toBe(false);
+    });
+  });
+
+  describe("isBinding", function() {
+    it("returns false if node id a value of ObjectProperty of an expression", function() {
+      const node = t.identifier("a");
+      const parent = t.objectProperty(t.identifier("key"), node);
+      const grandparent = t.objectExpression([parent]);
+
+      expect(t.isBinding(node, parent, grandparent)).toBe(false);
+    });
+
+    it("returns true if node id a value of ObjectProperty of a pattern", function() {
+      const node = t.identifier("a");
+      const parent = t.objectProperty(t.identifier("key"), node);
+      const grandparent = t.objectPattern([parent]);
+
+      expect(t.isBinding(node, parent, grandparent)).toBe(true);
+    });
   });
 
   describe("isType", function() {

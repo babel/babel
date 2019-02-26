@@ -4,7 +4,8 @@ import * as t from "@babel/types";
 
 export const ReferencedIdentifier = {
   types: ["Identifier", "JSXIdentifier"],
-  checkPath({ node, parent }: NodePath, opts?: Object): boolean {
+  checkPath(path: NodePath, opts?: Object): boolean {
+    const { node, parent } = path;
     if (!t.isIdentifier(node, opts) && !t.isJSXMemberExpression(parent, opts)) {
       if (t.isJSXIdentifier(node, opts)) {
         if (react.isCompatTag(node.name)) return false;
@@ -15,7 +16,7 @@ export const ReferencedIdentifier = {
     }
 
     // check if node is referenced
-    return t.isReferenced(node, parent);
+    return t.isReferenced(node, parent, path.parentPath.parent);
   },
 };
 
@@ -28,8 +29,10 @@ export const ReferencedMemberExpression = {
 
 export const BindingIdentifier = {
   types: ["Identifier"],
-  checkPath({ node, parent }: NodePath): boolean {
-    return t.isIdentifier(node) && t.isBinding(node, parent);
+  checkPath(path: NodePath): boolean {
+    const { node, parent } = path;
+    const grandparent = path.parentPath.parent;
+    return t.isIdentifier(node) && t.isBinding(node, parent, grandparent);
   },
 };
 
