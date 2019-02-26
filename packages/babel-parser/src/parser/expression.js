@@ -411,7 +411,7 @@ export default class ExpressionParser extends LValParser {
             });
           case "fsharp":
             return this.withSoloAwaitPermittingContext(() => {
-              return this.parseFSharpPipelineBody(op, prec, noIn);
+              return this.parseFSharpPipelineBody(prec, noIn);
             });
         }
       // falls through
@@ -2303,11 +2303,7 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "PipelineHead");
   }
 
-  parseFSharpPipelineBody(
-    op: TokenType,
-    prec: number,
-    noIn: ?boolean,
-  ): N.Expression {
+  parseFSharpPipelineBody(prec: number, noIn: ?boolean): N.Expression {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
 
@@ -2318,7 +2314,7 @@ export default class ExpressionParser extends LValParser {
       this.parseMaybeUnary(),
       startPos,
       startLoc,
-      op.rightAssociative ? prec - 1 : prec,
+      prec,
       noIn,
     );
 
