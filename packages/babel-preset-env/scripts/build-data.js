@@ -203,7 +203,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
     const reportedVersions = Object.keys(test)
       .filter(t => t.startsWith(env))
       .map(t => {
-        const version = t.replace("_", ".").replace(env, "");
+        const version = t.replace(/_/g, ".").replace(env, "");
         return {
           version,
           semver: semver.coerce(version) || version,

@@ -432,7 +432,7 @@
     "firefox": "23",
     "safari": "7",
     "node": "0.12",
-    "android": "4.4_3",
+    "android": "4.4",
     "ios": "7",
     "opera": "17",
     "electron": "0.2"
