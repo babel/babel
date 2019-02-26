@@ -78,7 +78,6 @@ function webpackBuild(opts) {
         "process.env": JSON.stringify({ NODE_ENV: "production" }),
         VERSION: JSON.stringify(version),
       }),
-      new webpack.optimize.AggressiveMergingPlugin(),
       /*new webpack.NormalModuleReplacementPlugin(
         /..\/..\/package/,
         "../../../../src/babel-package-shim"
