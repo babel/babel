@@ -20,7 +20,7 @@
     "@babel/preset-env": "^7.3.4",
     "@babel/preset-flow": "^7.0.0",
     "@babel/register": "^7.0.0",
-    "@babel/runtime": "^7.3.1",
+    "@babel/runtime": "^7.3.4",
     "babel-eslint": "^11.0.0-beta.0",
     "babel-jest": "^24.0.0",
     "babel-loader": "^8.0.5",

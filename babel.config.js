@@ -115,9 +115,11 @@ module.exports = function(api) {
           "packages/babel-runtime",
           /[\\/]node_modules[\\/](?:@babel\/runtime|babel-runtime|core-js)[\\/]/,
         ],
-        plugins: [includeRuntime ? "@babel/transform-runtime" : null].filter(
-          Boolean
-        ),
+        plugins: [
+          includeRuntime
+            ? ["@babel/transform-runtime", { version: "7.3.4" }]
+            : null,
+        ].filter(Boolean),
       },
     ].filter(Boolean),
   };
