@@ -338,8 +338,8 @@ export default class ExpressionParser extends LValParser {
           this.checkPipelineAtInfixOperator(left, leftStartPos);
 
           if (
-            this.getPluginOption("pipelineOperator", "proposal") === "fsharp" &&
-            !wasInPipeline
+            !wasInPipeline &&
+            this.getPluginOption("pipelineOperator", "proposal") === "fsharp"
           ) {
             node.left = this.makePipelineHead(left);
           }
