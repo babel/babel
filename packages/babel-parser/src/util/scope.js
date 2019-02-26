@@ -16,6 +16,7 @@ import {
   type BindingTypes,
   SCOPE_CLASS,
 } from "./scopeflags";
+import * as N from "../types";
 
 // Start an AST node, attaching a start offset.
 class Scope {
@@ -40,6 +41,7 @@ export default class ScopeHandler {
   scopeStack: Array<Scope> = [];
   raise: raiseFunction;
   inModule: boolean;
+  undefinedExports: Map<string, number> = new Map();
 
   constructor(raise: raiseFunction, inModule: boolean) {
     this.raise = raise;
@@ -95,6 +97,9 @@ export default class ScopeHandler {
         scope.functions.indexOf(name) > -1 ||
         scope.var.indexOf(name) > -1;
       scope.lexical.push(name);
+      if (this.inModule && scope.flags & SCOPE_PROGRAM) {
+        this.undefinedExports.delete(name);
+      }
     } else if (bindingType === BIND_SIMPLE_CATCH) {
       const scope = this.currentScope();
       scope.lexical.push(name);
@@ -122,11 +127,25 @@ export default class ScopeHandler {
         }
         scope.var.push(name);
 
+        if (this.inModule && scope.flags & SCOPE_PROGRAM) {
+          this.undefinedExports.delete(name);
+        }
+
         if (scope.flags & SCOPE_VAR) break;
       }
     }
     if (redeclared) {
       this.raise(pos, `Identifier '${name}' has already been declared`);
+    }
+  }
+
+  checkLocalExport(id: N.Identifier) {
+    // scope.functions must be empty as Module code is always strict.
+    if (
+      this.scopeStack[0].lexical.indexOf(id.name) === -1 &&
+      this.scopeStack[0].var.indexOf(id.name) === -1
+    ) {
+      this.undefinedExports.set(id.name, id.start);
     }
   }
 

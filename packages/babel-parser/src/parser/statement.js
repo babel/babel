@@ -49,6 +49,14 @@ export default class StatementParser extends ExpressionParser {
 
     this.parseBlockBody(program, true, true, tt.eof);
 
+    if (this.inModule && this.scope.undefinedExports.size > 0) {
+      for (const [name] of Array.from(this.scope.undefinedExports)) {
+        const pos = this.scope.undefinedExports.get(name);
+        // $FlowIssue
+        this.raise(pos, `Export '${name}' is not defined`);
+      }
+    }
+
     file.program = this.finishNode(program, "Program");
     file.comments = this.state.comments;
 
@@ -1634,7 +1642,7 @@ export default class StatementParser extends ExpressionParser {
     }
 
     if (isFromRequired || hasSpecifiers || hasDeclaration) {
-      this.checkExport(node, true);
+      this.checkExport(node, true, false, !!node.source);
       return this.finishNode(node, "ExportNamedDeclaration");
     }
 
@@ -1849,8 +1857,9 @@ export default class StatementParser extends ExpressionParser {
 
   checkExport(
     node: N.ExportNamedDeclaration,
-    checkNames: ?boolean,
+    checkNames?: boolean,
     isDefault?: boolean,
+    isFrom?: boolean,
   ): void {
     if (checkNames) {
       // Check for duplicate exports
@@ -1861,6 +1870,11 @@ export default class StatementParser extends ExpressionParser {
         // Named exports
         for (const specifier of node.specifiers) {
           this.checkDuplicateExports(specifier, specifier.exported.name);
+          // check if export is defined
+          // $FlowIgnore
+          if (!isFrom && specifier.local) {
+            this.scope.checkLocalExport(specifier.local);
+          }
         }
       } else if (node.declaration) {
         // Exported declarations

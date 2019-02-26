@@ -831,6 +831,7 @@ export type ExportNamedDeclaration = NodeBase & {
 export type ExportSpecifier = NodeBase & {
   type: "ExportSpecifier",
   exported: Identifier,
+  local: Identifier,
 };
 
 export type ExportDefaultSpecifier = NodeBase & {
