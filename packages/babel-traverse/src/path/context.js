@@ -169,7 +169,7 @@ export function _resyncKey() {
       }
     }
   } else {
-    for (const key in this.container) {
+    for (const key of Object.keys(this.container)) {
       if (this.container[key] === this.node) {
         return this.setKey(key);
       }

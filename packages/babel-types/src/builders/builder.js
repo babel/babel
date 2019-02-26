@@ -28,7 +28,7 @@ export default function builder(type: string, ...args: Array<any>): Object {
     i++;
   });
 
-  for (const key in node) {
+  for (const key of Object.keys(node)) {
     validate(node, key, node[key]);
   }
 
