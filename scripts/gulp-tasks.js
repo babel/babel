@@ -20,6 +20,9 @@ const rename = require("gulp-rename");
 const webpack = require("webpack");
 const { RootMostResolvePlugin } = require("webpack-dependency-suite");
 const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin");
+const {
+  ReplaceFilenameRegexpWebpackPlugin,
+} = require("./replace-filename-regexp-webpack-plugin");
 const webpackStream = require("webpack-stream");
 const uglify = require("gulp-uglify");
 
@@ -59,6 +62,11 @@ function webpackBuild(opts) {
       library: opts.library,
       libraryTarget: "umd",
     },
+    optimization: {
+      concatenateModules: true,
+      usedExports: true,
+      sideEffects: true,
+    },
     plugins: [
       new DuplicatePackageCheckerPlugin({
         exclude(instance) {
@@ -70,6 +78,7 @@ function webpackBuild(opts) {
         "process.env": JSON.stringify({ NODE_ENV: "production" }),
         VERSION: JSON.stringify(version),
       }),
+      new webpack.optimize.AggressiveMergingPlugin(),
       /*new webpack.NormalModuleReplacementPlugin(
         /..\/..\/package/,
         "../../../../src/babel-package-shim"
@@ -77,6 +86,12 @@ function webpackBuild(opts) {
     ].concat(plugins),
     resolve: {
       plugins: [
+        // Use files in src instead of lib, so that they still have
+        // es modules and webpack can try to merge them
+        new ReplaceFilenameRegexpWebpackPlugin(
+          /([\\/]packages[\\/]babel-[^\\/]+[\\/])lib([\\/])/,
+          "$1src$2"
+        ),
         // Dedupe packages that are used across multiple plugins.
         // This replaces DedupePlugin from Webpack 1.x
         new RootMostResolvePlugin(__dirname, true),

@@ -30,7 +30,9 @@
   },
   "browser": {
     "./lib/config/files/index.js": "./lib/config/files/index-browser.js",
-    "./lib/transform-file.js": "./lib/transform-file-browser.js"
+    "./lib/transform-file.js": "./lib/transform-file-browser.js",
+    "./src/config/files/index.js": "./src/config/files/index-browser.js",
+    "./src/transform-file.js": "./src/transform-file-browser.js"
   },
   "dependencies": {
     "@babel/code-frame": "^7.0.0",

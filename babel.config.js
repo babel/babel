@@ -110,6 +110,13 @@ module.exports = function(api) {
         sourceType: "unambiguous",
       },
       {
+        test: [
+          "packages/babel-runtime/helpers/esm",
+          "node_modules/@babel/runtime/helpers/esm",
+        ],
+        sourceType: "module",
+      },
+      {
         // The runtime transform shouldn't process its own runtime or core-js.
         exclude: [
           "packages/babel-runtime",
@@ -117,7 +124,10 @@ module.exports = function(api) {
         ],
         plugins: [
           includeRuntime
-            ? ["@babel/transform-runtime", { version: "7.3.4" }]
+            ? [
+                "@babel/transform-runtime",
+                { version: "7.3.4", useESModules: !convertESM },
+              ]
             : null,
         ].filter(Boolean),
       },
