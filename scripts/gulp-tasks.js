@@ -25,14 +25,11 @@ const uglify = require("gulp-uglify");
 
 function webpackBuild(opts) {
   const plugins = opts.plugins || [];
-  let babelVersion = require("../packages/babel-core/package.json").version;
-  let version = opts.version || babelVersion;
+  let version = opts.version;
   // If this build is part of a pull request, include the pull request number in
   // the version number.
   if (process.env.CIRCLE_PR_NUMBER) {
-    const prVersion = "+pr." + process.env.CIRCLE_PR_NUMBER;
-    babelVersion += prVersion;
-    version += prVersion;
+    version += "+pr." + process.env.CIRCLE_PR_NUMBER;
   }
 
   const config = {
@@ -71,7 +68,6 @@ function webpackBuild(opts) {
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": '"production"',
         "process.env": JSON.stringify({ NODE_ENV: "production" }),
-        BABEL_VERSION: JSON.stringify(babelVersion),
         VERSION: JSON.stringify(version),
       }),
       /*new webpack.NormalModuleReplacementPlugin(
