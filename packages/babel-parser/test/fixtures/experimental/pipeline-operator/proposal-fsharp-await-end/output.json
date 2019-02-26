@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 52,
+  "end": 47,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 52,
+    "end": 47,
     "loc": {
       "start": {
         "line": 1,
@@ -32,7 +32,7 @@
       {
         "type": "FunctionDeclaration",
         "start": 0,
-        "end": 52,
+        "end": 47,
         "loc": {
           "start": {
             "line": 1,
@@ -66,7 +66,7 @@
         "body": {
           "type": "BlockStatement",
           "start": 23,
-          "end": 52,
+          "end": 47,
           "loc": {
             "start": {
               "line": 1,
@@ -81,7 +81,7 @@
             {
               "type": "ReturnStatement",
               "start": 27,
-              "end": 50,
+              "end": 45,
               "loc": {
                 "start": {
                   "line": 2,
@@ -89,13 +89,13 @@
                 },
                 "end": {
                   "line": 2,
-                  "column": 25
+                  "column": 20
                 }
               },
               "argument": {
                 "type": "BinaryExpression",
                 "start": 34,
-                "end": 49,
+                "end": 44,
                 "loc": {
                   "start": {
                     "line": 2,
@@ -103,13 +103,13 @@
                   },
                   "end": {
                     "line": 2,
-                    "column": 24
+                    "column": 19
                   }
                 },
                 "left": {
-                  "type": "BinaryExpression",
+                  "type": "PipelineHead",
                   "start": 34,
-                  "end": 44,
+                  "end": 35,
                   "loc": {
                     "start": {
                       "line": 2,
@@ -117,11 +117,11 @@
                     },
                     "end": {
                       "line": 2,
-                      "column": 19
+                      "column": 10
                     }
                   },
-                  "left": {
-                    "type": "PipelineHead",
+                  "head": {
+                    "type": "Identifier",
                     "start": 34,
                     "end": 35,
                     "loc": {
@@ -132,29 +132,29 @@
                       "end": {
                         "line": 2,
                         "column": 10
-                      }
-                    },
-                    "head": {
-                      "type": "Identifier",
-                      "start": 34,
-                      "end": 35,
-                      "loc": {
-                        "start": {
-                          "line": 2,
-                          "column": 9
-                        },
-                        "end": {
-                          "line": 2,
-                          "column": 10
-                        },
-                        "identifierName": "x"
                       },
-                      "name": "x"
+                      "identifierName": "x"
+                    },
+                    "name": "x"
+                  }
+                },
+                "operator": "|>",
+                "right": {
+                  "type": "PipelineBody",
+                  "start": 39,
+                  "end": 44,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 19
                     }
                   },
-                  "operator": "|>",
-                  "right": {
-                    "type": "PipelineBody",
+                  "body": {
+                    "type": "AwaitExpression",
                     "start": 39,
                     "end": 44,
                     "loc": {
@@ -166,55 +166,7 @@
                         "line": 2,
                         "column": 19
                       }
-                    },
-                    "body": {
-                      "type": "AwaitExpression",
-                      "start": 39,
-                      "end": 44,
-                      "loc": {
-                        "start": {
-                          "line": 2,
-                          "column": 14
-                        },
-                        "end": {
-                          "line": 2,
-                          "column": 19
-                        }
-                      }
                     }
-                  }
-                },
-                "operator": "|>",
-                "right": {
-                  "type": "PipelineBody",
-                  "start": 48,
-                  "end": 49,
-                  "loc": {
-                    "start": {
-                      "line": 2,
-                      "column": 23
-                    },
-                    "end": {
-                      "line": 2,
-                      "column": 24
-                    }
-                  },
-                  "body": {
-                    "type": "Identifier",
-                    "start": 48,
-                    "end": 49,
-                    "loc": {
-                      "start": {
-                        "line": 2,
-                        "column": 23
-                      },
-                      "end": {
-                        "line": 2,
-                        "column": 24
-                      },
-                      "identifierName": "f"
-                    },
-                    "name": "f"
                   }
                 }
               }
