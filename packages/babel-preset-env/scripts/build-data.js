@@ -217,16 +217,26 @@ const getLowestImplementedVersion = ({ features }, env) => {
           unreleasedLabelForEnv === version.version ||
           !isNaN(parseFloat(version.version))
       )
-      // Sort in asc order, with unreleasedLabelForEnv coming last.
+      // Sort in desc order, with unreleasedLabelForEnv coming last.
       .sort(({ semver: av }, { semver: bv }) => {
-        if (av === unreleasedLabelForEnv) return 1;
-        if (bv === unreleasedLabelForEnv) return -1;
-        if (semver.gt(av, bv)) return 1;
-        if (semver.gt(bv, av)) return -1;
+        if (av === unreleasedLabelForEnv) return -1;
+        if (bv === unreleasedLabelForEnv) return 1;
+        if (semver.gt(av, bv)) return -1;
+        if (semver.gt(bv, av)) return 1;
         return 0;
       });
 
-    return reportedVersions.find(version => version.implements);
+    // Find the lowest version such that all lower versions implement it.
+    // Eg, given { chrome70: true, chrome60: false, chrome50: true }, the
+    // lowest version is chrome70, not chrome50.
+    let lowest = null;
+    for (const version of reportedVersions) {
+      if (!version.implements) {
+        break;
+      }
+      lowest = version;
+    }
+    return lowest;
   });
 
   const envFiltered = envTests.filter(t => t);
