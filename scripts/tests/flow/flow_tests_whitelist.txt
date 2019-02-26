@@ -35,3 +35,6 @@ numbers/underscored_float_whole.js
 numbers/underscored_hex.js
 numbers/underscored_number.js
 numbers/underscored_oct.js
+ES6/modules/migrated_0020.js
+export_import_reserved_words/migrated_0003.js
+export_statements/export_trailing_comma.js
