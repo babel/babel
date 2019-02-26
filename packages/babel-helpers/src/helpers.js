@@ -1105,11 +1105,11 @@ helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
 `;
 
 helpers.classStaticPrivateMethodGet = helper("7.3.2")`
-  export default function _classStaticPrivateMethodGet(receiver, classConstructor, descriptor) {
+  export default function _classStaticPrivateMethodGet(receiver, classConstructor, method) {
     if (receiver !== classConstructor) {
       throw new TypeError("Private static access of wrong provenance");
     }
-    return descriptor;
+    return method;
   }
 `;
 
