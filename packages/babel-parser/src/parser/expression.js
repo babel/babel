@@ -881,7 +881,7 @@ export default class ExpressionParser extends LValParser {
           !this.canInsertSemicolon()
         ) {
           this.next();
-          return this.parseFunction(node, undefined, false, true);
+          return this.parseFunction(node, undefined, true);
         } else if (
           canBeArrow &&
           id.name === "async" &&
@@ -1804,10 +1804,9 @@ export default class ExpressionParser extends LValParser {
   parseFunctionBodyAndFinish(
     node: N.BodilessFunctionOrMethodBase,
     type: string,
-    allowExpressionBody?: boolean,
   ): void {
     // $FlowIgnore (node is not bodiless if we get here)
-    this.parseFunctionBody(node, allowExpressionBody);
+    this.parseFunctionBody(node);
     this.finishNode(node, type);
   }
 

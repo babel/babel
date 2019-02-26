@@ -548,7 +548,6 @@ export default class StatementParser extends ExpressionParser {
     return this.parseFunction(
       node,
       FUNC_STATEMENT | (declarationPosition ? 0 : FUNC_HANGING_STATEMENT),
-      false,
       isAsync,
     );
   }
@@ -1013,7 +1012,6 @@ export default class StatementParser extends ExpressionParser {
   parseFunction<T: N.NormalFunction>(
     node: T,
     statement?: number = FUNC_NO_FLAGS,
-    allowExpressionBody?: boolean = false,
     isAsync?: boolean = false,
   ): T {
     const isStatement = statement & FUNC_STATEMENT;
@@ -1074,7 +1072,6 @@ export default class StatementParser extends ExpressionParser {
       this.parseFunctionBodyAndFinish(
         node,
         isStatement ? "FunctionDeclaration" : "FunctionExpression",
-        allowExpressionBody,
       );
     });
 
@@ -1753,7 +1750,6 @@ export default class StatementParser extends ExpressionParser {
       return this.parseFunction(
         expr,
         FUNC_STATEMENT | FUNC_NULLABLE_ID,
-        false,
         isAsync,
       );
     } else if (this.match(tt._class)) {
