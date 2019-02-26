@@ -193,27 +193,40 @@ const getLowestImplementedVersion = ({ features }, env) => {
     //
     // NOTE: when/if compat-table adds a babel7 key, we'll want to update this
     if (!test.babel6corejs2 && isBuiltIn) {
-      return "-1";
+      return {
+        version: "0.0.0",
+        semver: "0.0.0",
+        implements: true,
+      };
     }
 
-    return (
-      Object.keys(test)
-        .filter(t => t.startsWith(env))
-        // Babel assumes strict mode
-        .filter(
-          test => tests[i].res[test] === true || tests[i].res[test] === "strict"
-        )
-        // normalize some keys and get version from full string.
-        .map(test => {
-          return test.replace("_", ".").replace(env, "");
-        })
-        // version must be label from the unreleasedLabels (like tp) or number.
-        .filter(
-          version =>
-            unreleasedLabelForEnv === version || !isNaN(parseFloat(version))
-        )
-        .shift()
-    );
+    const reportedVersions = Object.keys(test)
+      .filter(t => t.startsWith(env))
+      .map(t => {
+        const version = t.replace("_", ".").replace(env, "");
+        return {
+          version,
+          semver: semver.coerce(version) || version,
+          // Babel assumes strict mode
+          implements: tests[i].res[t] === true || tests[i].res[t] === "strict",
+        };
+      })
+      // version must be label from the unreleasedLabels (like tp) or number.
+      .filter(
+        version =>
+          unreleasedLabelForEnv === version.version ||
+          !isNaN(parseFloat(version.version))
+      )
+      // Sort in asc order, with unreleasedLabelForEnv coming last.
+      .sort(({ semver: av }, { semver: bv }) => {
+        if (av === unreleasedLabelForEnv) return 1;
+        if (bv === unreleasedLabelForEnv) return -1;
+        if (semver.gt(av, bv)) return 1;
+        if (semver.gt(bv, av)) return -1;
+        return 0;
+      });
+
+    return reportedVersions.find(version => version.implements);
   });
 
   const envFiltered = envTests.filter(t => t);
@@ -229,15 +242,16 @@ const getLowestImplementedVersion = ({ features }, env) => {
     return null;
   }
 
-  return envTests
-    .map(str => str.replace(env, ""))
-    .reduce((a, b) => {
-      if (a === unreleasedLabelForEnv || b === unreleasedLabelForEnv) {
-        return unreleasedLabelForEnv;
-      }
+  return envFiltered.reduce((a, b) => {
+    if (
+      a.semver === unreleasedLabelForEnv ||
+      b.semver === unreleasedLabelForEnv
+    ) {
+      return unreleasedLabelForEnv;
+    }
 
-      return semver.lt(semver.coerce(a), semver.coerce(b)) ? b : a;
-    });
+    return semver.lt(a.semver, b.semver) ? b : a;
+  });
 };
 
 const generateData = (environments, features) => {
@@ -254,7 +268,7 @@ const generateData = (environments, features) => {
       const version = getLowestImplementedVersion(options, env);
 
       if (version !== null) {
-        const versionString = version.toString();
+        const versionString = version.version;
 
         // NOTE(bng): A number of environments in compat-table changed to
         // include a trailing zero (node10 -> node10_0), so for now stripping
