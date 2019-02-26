@@ -6,13 +6,7 @@ import { types as ct } from "../tokenizer/context";
 import * as N from "../types";
 import type { Pos, Position } from "../util/location";
 import Parser from "../parser";
-import {
-  type BindingTypes,
-  functionFlags,
-  BIND_NONE,
-  SCOPE_ARROW,
-  SCOPE_OTHER,
-} from "../util/scopeflags";
+import { type BindingTypes, BIND_NONE, SCOPE_OTHER } from "../util/scopeflags";
 
 type TsModifier =
   | "readonly"
@@ -1381,14 +1375,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return undefined;
       }
 
-      this.scope.enter(functionFlags(true, false) | SCOPE_ARROW);
-
-      res.id = null;
-      res.generator = false;
-      res.expression = true; // May be set again by parseFunctionBody.
-      res.async = true;
-      this.parseFunctionBody(res, true);
-      return this.finishNode(res, "ArrowFunctionExpression");
+      return this.parseArrowExpression(
+        res,
+        /* params are already set */ null,
+        /* async */ true,
+      );
     }
 
     tsParseTypeArguments(): N.TsTypeParameterInstantiation {
