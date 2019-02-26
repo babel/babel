@@ -1,7 +1,7 @@
 opaque type ID = string;
 opaque type Foo<T> = Bar<T>;
 opaque type Maybe<T> = _Maybe<T, *>;
-export opaque type Foo = number;
+export opaque type Foo2 = number;
 
 opaque type union =
  | {type: "A"}

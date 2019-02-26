@@ -13,5 +13,5 @@ function a() {
           return _context.stop();
       }
     }
-  }, _marked, this);
+  }, _marked);
 }

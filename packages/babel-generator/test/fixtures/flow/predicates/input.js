@@ -12,6 +12,6 @@ function is_string(x): boolean %checks {
 
 var f = (x: mixed): %checks => typeof x === "string";
 
-const foo = (x: mixed): boolean %checks => typeof x === "string";
+const foo2 = (x: mixed): boolean %checks => typeof x === "string";
 
 (x): %checks => x !== null;

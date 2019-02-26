@@ -1,29 +1,29 @@
 {
   "type": "File",
   "start": 0,
-  "end": 469,
+  "end": 450,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 14,
-      "column": 37
+      "line": 13,
+      "column": 38
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 469,
+    "end": 450,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 14,
-        "column": 37
+        "line": 13,
+        "column": 38
       }
     },
     "sourceType": "module",
@@ -32,7 +32,7 @@
       {
         "type": "ImportDeclaration",
         "start": 0,
-        "end": 27,
+        "end": 28,
         "loc": {
           "start": {
             "line": 1,
@@ -40,14 +40,14 @@
           },
           "end": {
             "line": 1,
-            "column": 27
+            "column": 28
           }
         },
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
             "start": 12,
-            "end": 15,
+            "end": 16,
             "loc": {
               "start": {
                 "line": 1,
@@ -55,13 +55,13 @@
               },
               "end": {
                 "line": 1,
-                "column": 15
+                "column": 16
               }
             },
             "local": {
               "type": "Identifier",
               "start": 12,
-              "end": 15,
+              "end": 16,
               "loc": {
                 "start": {
                   "line": 1,
@@ -69,27 +69,27 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 15
+                  "column": 16
                 },
-                "identifierName": "Def"
+                "identifierName": "Def1"
               },
-              "name": "Def"
+              "name": "Def1"
             }
           }
         ],
         "importKind": "type",
         "source": {
           "type": "StringLiteral",
-          "start": 21,
-          "end": 26,
+          "start": 22,
+          "end": 27,
           "loc": {
             "start": {
               "line": 1,
-              "column": 21
+              "column": 22
             },
             "end": {
               "line": 1,
-              "column": 26
+              "column": 27
             }
           },
           "extra": {
@@ -101,8 +101,8 @@
       },
       {
         "type": "ImportDeclaration",
-        "start": 28,
-        "end": 59,
+        "start": 29,
+        "end": 61,
         "loc": {
           "start": {
             "line": 2,
@@ -110,14 +110,14 @@
           },
           "end": {
             "line": 2,
-            "column": 31
+            "column": 32
           }
         },
         "specifiers": [
           {
             "type": "ImportSpecifier",
-            "start": 41,
-            "end": 46,
+            "start": 42,
+            "end": 48,
             "loc": {
               "start": {
                 "line": 2,
@@ -125,13 +125,13 @@
               },
               "end": {
                 "line": 2,
-                "column": 18
+                "column": 19
               }
             },
             "imported": {
               "type": "Identifier",
-              "start": 41,
-              "end": 46,
+              "start": 42,
+              "end": 48,
               "loc": {
                 "start": {
                   "line": 2,
@@ -139,17 +139,17 @@
                 },
                 "end": {
                   "line": 2,
-                  "column": 18
+                  "column": 19
                 },
-                "identifierName": "named"
+                "identifierName": "named1"
               },
-              "name": "named"
+              "name": "named1"
             },
             "importKind": null,
             "local": {
               "type": "Identifier",
-              "start": 41,
-              "end": 46,
+              "start": 42,
+              "end": 48,
               "loc": {
                 "start": {
                   "line": 2,
@@ -157,27 +157,27 @@
                 },
                 "end": {
                   "line": 2,
-                  "column": 18
+                  "column": 19
                 },
-                "identifierName": "named"
+                "identifierName": "named1"
               },
-              "name": "named"
+              "name": "named1"
             }
           }
         ],
         "importKind": "type",
         "source": {
           "type": "StringLiteral",
-          "start": 53,
-          "end": 58,
+          "start": 55,
+          "end": 60,
           "loc": {
             "start": {
               "line": 2,
-              "column": 25
+              "column": 26
             },
             "end": {
               "line": 2,
-              "column": 30
+              "column": 31
             }
           },
           "extra": {
@@ -189,8 +189,8 @@
       },
       {
         "type": "ImportDeclaration",
-        "start": 60,
-        "end": 96,
+        "start": 62,
+        "end": 100,
         "loc": {
           "start": {
             "line": 3,
@@ -198,14 +198,14 @@
           },
           "end": {
             "line": 3,
-            "column": 36
+            "column": 38
           }
         },
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
-            "start": 72,
-            "end": 75,
+            "start": 74,
+            "end": 78,
             "loc": {
               "start": {
                 "line": 3,
@@ -213,13 +213,13 @@
               },
               "end": {
                 "line": 3,
-                "column": 15
+                "column": 16
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 72,
-              "end": 75,
+              "start": 74,
+              "end": 78,
               "loc": {
                 "start": {
                   "line": 3,
@@ -227,373 +227,373 @@
                 },
                 "end": {
                   "line": 3,
-                  "column": 15
+                  "column": 16
                 },
-                "identifierName": "Def"
+                "identifierName": "Def2"
               },
-              "name": "Def"
+              "name": "Def2"
             }
           },
           {
             "type": "ImportSpecifier",
-            "start": 78,
-            "end": 83,
+            "start": 81,
+            "end": 87,
             "loc": {
               "start": {
                 "line": 3,
-                "column": 18
-              },
-              "end": {
-                "line": 3,
-                "column": 23
-              }
-            },
-            "imported": {
-              "type": "Identifier",
-              "start": 78,
-              "end": 83,
-              "loc": {
-                "start": {
-                  "line": 3,
-                  "column": 18
-                },
-                "end": {
-                  "line": 3,
-                  "column": 23
-                },
-                "identifierName": "named"
-              },
-              "name": "named"
-            },
-            "importKind": null,
-            "local": {
-              "type": "Identifier",
-              "start": 78,
-              "end": 83,
-              "loc": {
-                "start": {
-                  "line": 3,
-                  "column": 18
-                },
-                "end": {
-                  "line": 3,
-                  "column": 23
-                },
-                "identifierName": "named"
-              },
-              "name": "named"
-            }
-          }
-        ],
-        "importKind": "type",
-        "source": {
-          "type": "StringLiteral",
-          "start": 90,
-          "end": 95,
-          "loc": {
-            "start": {
-              "line": 3,
-              "column": 30
-            },
-            "end": {
-              "line": 3,
-              "column": 35
-            }
-          },
-          "extra": {
-            "rawValue": "foo",
-            "raw": "\"foo\""
-          },
-          "value": "foo"
-        }
-      },
-      {
-        "type": "ImportDeclaration",
-        "start": 97,
-        "end": 127,
-        "loc": {
-          "start": {
-            "line": 4,
-            "column": 0
-          },
-          "end": {
-            "line": 4,
-            "column": 30
-          }
-        },
-        "specifiers": [
-          {
-            "type": "ImportDefaultSpecifier",
-            "start": 109,
-            "end": 115,
-            "loc": {
-              "start": {
-                "line": 4,
-                "column": 12
-              },
-              "end": {
-                "line": 4,
-                "column": 18
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 109,
-              "end": 115,
-              "loc": {
-                "start": {
-                  "line": 4,
-                  "column": 12
-                },
-                "end": {
-                  "line": 4,
-                  "column": 18
-                },
-                "identifierName": "switch"
-              },
-              "name": "switch"
-            }
-          }
-        ],
-        "importKind": "type",
-        "source": {
-          "type": "StringLiteral",
-          "start": 121,
-          "end": 126,
-          "loc": {
-            "start": {
-              "line": 4,
-              "column": 24
-            },
-            "end": {
-              "line": 4,
-              "column": 29
-            }
-          },
-          "extra": {
-            "rawValue": "foo",
-            "raw": "\"foo\""
-          },
-          "value": "foo"
-        }
-      },
-      {
-        "type": "ImportDeclaration",
-        "start": 128,
-        "end": 162,
-        "loc": {
-          "start": {
-            "line": 5,
-            "column": 0
-          },
-          "end": {
-            "line": 5,
-            "column": 34
-          }
-        },
-        "specifiers": [
-          {
-            "type": "ImportSpecifier",
-            "start": 142,
-            "end": 148,
-            "loc": {
-              "start": {
-                "line": 5,
-                "column": 14
-              },
-              "end": {
-                "line": 5,
-                "column": 20
-              }
-            },
-            "imported": {
-              "type": "Identifier",
-              "start": 142,
-              "end": 148,
-              "loc": {
-                "start": {
-                  "line": 5,
-                  "column": 14
-                },
-                "end": {
-                  "line": 5,
-                  "column": 20
-                },
-                "identifierName": "switch"
-              },
-              "name": "switch"
-            },
-            "importKind": null,
-            "local": {
-              "type": "Identifier",
-              "start": 142,
-              "end": 148,
-              "loc": {
-                "start": {
-                  "line": 5,
-                  "column": 14
-                },
-                "end": {
-                  "line": 5,
-                  "column": 20
-                },
-                "identifierName": "switch"
-              },
-              "name": "switch"
-            }
-          }
-        ],
-        "importKind": "type",
-        "source": {
-          "type": "StringLiteral",
-          "start": 156,
-          "end": 161,
-          "loc": {
-            "start": {
-              "line": 5,
-              "column": 28
-            },
-            "end": {
-              "line": 5,
-              "column": 33
-            }
-          },
-          "extra": {
-            "rawValue": "foo",
-            "raw": "\"foo\""
-          },
-          "value": "foo"
-        }
-      },
-      {
-        "type": "ImportDeclaration",
-        "start": 163,
-        "end": 199,
-        "loc": {
-          "start": {
-            "line": 6,
-            "column": 0
-          },
-          "end": {
-            "line": 6,
-            "column": 36
-          }
-        },
-        "specifiers": [
-          {
-            "type": "ImportSpecifier",
-            "start": 177,
-            "end": 180,
-            "loc": {
-              "start": {
-                "line": 6,
-                "column": 14
-              },
-              "end": {
-                "line": 6,
-                "column": 17
-              }
-            },
-            "imported": {
-              "type": "Identifier",
-              "start": 177,
-              "end": 180,
-              "loc": {
-                "start": {
-                  "line": 6,
-                  "column": 14
-                },
-                "end": {
-                  "line": 6,
-                  "column": 17
-                },
-                "identifierName": "foo"
-              },
-              "name": "foo"
-            },
-            "importKind": null,
-            "local": {
-              "type": "Identifier",
-              "start": 177,
-              "end": 180,
-              "loc": {
-                "start": {
-                  "line": 6,
-                  "column": 14
-                },
-                "end": {
-                  "line": 6,
-                  "column": 17
-                },
-                "identifierName": "foo"
-              },
-              "name": "foo"
-            }
-          },
-          {
-            "type": "ImportSpecifier",
-            "start": 182,
-            "end": 185,
-            "loc": {
-              "start": {
-                "line": 6,
                 "column": 19
               },
               "end": {
-                "line": 6,
-                "column": 22
+                "line": 3,
+                "column": 25
               }
             },
             "imported": {
               "type": "Identifier",
-              "start": 182,
-              "end": 185,
+              "start": 81,
+              "end": 87,
               "loc": {
                 "start": {
-                  "line": 6,
+                  "line": 3,
                   "column": 19
                 },
                 "end": {
-                  "line": 6,
-                  "column": 22
+                  "line": 3,
+                  "column": 25
                 },
-                "identifierName": "bar"
+                "identifierName": "named2"
               },
-              "name": "bar"
+              "name": "named2"
             },
             "importKind": null,
             "local": {
               "type": "Identifier",
-              "start": 182,
-              "end": 185,
+              "start": 81,
+              "end": 87,
               "loc": {
                 "start": {
-                  "line": 6,
+                  "line": 3,
                   "column": 19
                 },
                 "end": {
-                  "line": 6,
-                  "column": 22
+                  "line": 3,
+                  "column": 25
                 },
-                "identifierName": "bar"
+                "identifierName": "named2"
               },
-              "name": "bar"
+              "name": "named2"
             }
           }
         ],
         "importKind": "type",
         "source": {
           "type": "StringLiteral",
-          "start": 193,
-          "end": 198,
+          "start": 94,
+          "end": 99,
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 32
+            },
+            "end": {
+              "line": 3,
+              "column": 37
+            }
+          },
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 101,
+        "end": 132,
+        "loc": {
+          "start": {
+            "line": 4,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 31
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start": 113,
+            "end": 120,
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 12
+              },
+              "end": {
+                "line": 4,
+                "column": 19
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 113,
+              "end": 120,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 12
+                },
+                "end": {
+                  "line": 4,
+                  "column": 19
+                },
+                "identifierName": "switch1"
+              },
+              "name": "switch1"
+            }
+          }
+        ],
+        "importKind": "type",
+        "source": {
+          "type": "StringLiteral",
+          "start": 126,
+          "end": 131,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 25
+            },
+            "end": {
+              "line": 4,
+              "column": 30
+            }
+          },
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 133,
+        "end": 168,
+        "loc": {
+          "start": {
+            "line": 5,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 35
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start": 147,
+            "end": 154,
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 14
+              },
+              "end": {
+                "line": 5,
+                "column": 21
+              }
+            },
+            "imported": {
+              "type": "Identifier",
+              "start": 147,
+              "end": 154,
+              "loc": {
+                "start": {
+                  "line": 5,
+                  "column": 14
+                },
+                "end": {
+                  "line": 5,
+                  "column": 21
+                },
+                "identifierName": "switch2"
+              },
+              "name": "switch2"
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start": 147,
+              "end": 154,
+              "loc": {
+                "start": {
+                  "line": 5,
+                  "column": 14
+                },
+                "end": {
+                  "line": 5,
+                  "column": 21
+                },
+                "identifierName": "switch2"
+              },
+              "name": "switch2"
+            }
+          }
+        ],
+        "importKind": "type",
+        "source": {
+          "type": "StringLiteral",
+          "start": 162,
+          "end": 167,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 29
+            },
+            "end": {
+              "line": 5,
+              "column": 34
+            }
+          },
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 169,
+        "end": 207,
+        "loc": {
+          "start": {
+            "line": 6,
+            "column": 0
+          },
+          "end": {
+            "line": 6,
+            "column": 38
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start": 183,
+            "end": 187,
+            "loc": {
+              "start": {
+                "line": 6,
+                "column": 14
+              },
+              "end": {
+                "line": 6,
+                "column": 18
+              }
+            },
+            "imported": {
+              "type": "Identifier",
+              "start": 183,
+              "end": 187,
+              "loc": {
+                "start": {
+                  "line": 6,
+                  "column": 14
+                },
+                "end": {
+                  "line": 6,
+                  "column": 18
+                },
+                "identifierName": "foo1"
+              },
+              "name": "foo1"
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start": 183,
+              "end": 187,
+              "loc": {
+                "start": {
+                  "line": 6,
+                  "column": 14
+                },
+                "end": {
+                  "line": 6,
+                  "column": 18
+                },
+                "identifierName": "foo1"
+              },
+              "name": "foo1"
+            }
+          },
+          {
+            "type": "ImportSpecifier",
+            "start": 189,
+            "end": 193,
+            "loc": {
+              "start": {
+                "line": 6,
+                "column": 20
+              },
+              "end": {
+                "line": 6,
+                "column": 24
+              }
+            },
+            "imported": {
+              "type": "Identifier",
+              "start": 189,
+              "end": 193,
+              "loc": {
+                "start": {
+                  "line": 6,
+                  "column": 20
+                },
+                "end": {
+                  "line": 6,
+                  "column": 24
+                },
+                "identifierName": "bar1"
+              },
+              "name": "bar1"
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start": 189,
+              "end": 193,
+              "loc": {
+                "start": {
+                  "line": 6,
+                  "column": 20
+                },
+                "end": {
+                  "line": 6,
+                  "column": 24
+                },
+                "identifierName": "bar1"
+              },
+              "name": "bar1"
+            }
+          }
+        ],
+        "importKind": "type",
+        "source": {
+          "type": "StringLiteral",
+          "start": 201,
+          "end": 206,
           "loc": {
             "start": {
               "line": 6,
-              "column": 30
+              "column": 32
             },
             "end": {
               "line": 6,
-              "column": 35
+              "column": 37
             }
           },
           "extra": {
@@ -605,8 +605,8 @@
       },
       {
         "type": "ImportDeclaration",
-        "start": 200,
-        "end": 223,
+        "start": 208,
+        "end": 231,
         "loc": {
           "start": {
             "line": 7,
@@ -620,8 +620,8 @@
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
-            "start": 207,
-            "end": 211,
+            "start": 215,
+            "end": 219,
             "loc": {
               "start": {
                 "line": 7,
@@ -634,8 +634,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 207,
-              "end": 211,
+              "start": 215,
+              "end": 219,
               "loc": {
                 "start": {
                   "line": 7,
@@ -654,8 +654,8 @@
         "importKind": "value",
         "source": {
           "type": "StringLiteral",
-          "start": 217,
-          "end": 222,
+          "start": 225,
+          "end": 230,
           "loc": {
             "start": {
               "line": 7,
@@ -675,8 +675,8 @@
       },
       {
         "type": "ImportDeclaration",
-        "start": 224,
-        "end": 256,
+        "start": 232,
+        "end": 262,
         "loc": {
           "start": {
             "line": 8,
@@ -684,106 +684,56 @@
           },
           "end": {
             "line": 8,
-            "column": 32
+            "column": 30
           }
         },
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
-            "start": 231,
-            "end": 235,
+            "start": 246,
+            "end": 250,
             "loc": {
               "start": {
                 "line": 8,
-                "column": 7
-              },
-              "end": {
-                "line": 8,
-                "column": 11
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 231,
-              "end": 235,
-              "loc": {
-                "start": {
-                  "line": 8,
-                  "column": 7
-                },
-                "end": {
-                  "line": 8,
-                  "column": 11
-                },
-                "identifierName": "type"
-              },
-              "name": "type"
-            }
-          },
-          {
-            "type": "ImportSpecifier",
-            "start": 239,
-            "end": 242,
-            "loc": {
-              "start": {
-                "line": 8,
-                "column": 15
+                "column": 14
               },
               "end": {
                 "line": 8,
                 "column": 18
               }
             },
-            "imported": {
-              "type": "Identifier",
-              "start": 239,
-              "end": 242,
-              "loc": {
-                "start": {
-                  "line": 8,
-                  "column": 15
-                },
-                "end": {
-                  "line": 8,
-                  "column": 18
-                },
-                "identifierName": "foo"
-              },
-              "name": "foo"
-            },
-            "importKind": null,
             "local": {
               "type": "Identifier",
-              "start": 239,
-              "end": 242,
+              "start": 246,
+              "end": 250,
               "loc": {
                 "start": {
                   "line": 8,
-                  "column": 15
+                  "column": 14
                 },
                 "end": {
                   "line": 8,
                   "column": 18
                 },
-                "identifierName": "foo"
+                "identifierName": "foo3"
               },
-              "name": "foo"
+              "name": "foo3"
             }
           }
         ],
-        "importKind": "value",
+        "importKind": "typeof",
         "source": {
           "type": "StringLiteral",
-          "start": 250,
-          "end": 255,
+          "start": 256,
+          "end": 261,
           "loc": {
             "start": {
               "line": 8,
-              "column": 26
+              "column": 24
             },
             "end": {
               "line": 8,
-              "column": 31
+              "column": 29
             }
           },
           "extra": {
@@ -795,8 +745,8 @@
       },
       {
         "type": "ImportDeclaration",
-        "start": 257,
-        "end": 286,
+        "start": 263,
+        "end": 296,
         "loc": {
           "start": {
             "line": 9,
@@ -804,371 +754,55 @@
           },
           "end": {
             "line": 9,
-            "column": 29
-          }
-        },
-        "specifiers": [
-          {
-            "type": "ImportDefaultSpecifier",
-            "start": 271,
-            "end": 274,
-            "loc": {
-              "start": {
-                "line": 9,
-                "column": 14
-              },
-              "end": {
-                "line": 9,
-                "column": 17
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 271,
-              "end": 274,
-              "loc": {
-                "start": {
-                  "line": 9,
-                  "column": 14
-                },
-                "end": {
-                  "line": 9,
-                  "column": 17
-                },
-                "identifierName": "foo"
-              },
-              "name": "foo"
-            }
-          }
-        ],
-        "importKind": "typeof",
-        "source": {
-          "type": "StringLiteral",
-          "start": 280,
-          "end": 285,
-          "loc": {
-            "start": {
-              "line": 9,
-              "column": 23
-            },
-            "end": {
-              "line": 9,
-              "column": 28
-            }
-          },
-          "extra": {
-            "rawValue": "bar",
-            "raw": "\"bar\""
-          },
-          "value": "bar"
-        }
-      },
-      {
-        "type": "ImportDeclaration",
-        "start": 287,
-        "end": 319,
-        "loc": {
-          "start": {
-            "line": 10,
-            "column": 0
-          },
-          "end": {
-            "line": 10,
-            "column": 32
-          }
-        },
-        "specifiers": [
-          {
-            "type": "ImportDefaultSpecifier",
-            "start": 301,
-            "end": 307,
-            "loc": {
-              "start": {
-                "line": 10,
-                "column": 14
-              },
-              "end": {
-                "line": 10,
-                "column": 20
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 301,
-              "end": 307,
-              "loc": {
-                "start": {
-                  "line": 10,
-                  "column": 14
-                },
-                "end": {
-                  "line": 10,
-                  "column": 20
-                },
-                "identifierName": "switch"
-              },
-              "name": "switch"
-            }
-          }
-        ],
-        "importKind": "typeof",
-        "source": {
-          "type": "StringLiteral",
-          "start": 313,
-          "end": 318,
-          "loc": {
-            "start": {
-              "line": 10,
-              "column": 26
-            },
-            "end": {
-              "line": 10,
-              "column": 31
-            }
-          },
-          "extra": {
-            "rawValue": "foo",
-            "raw": "\"foo\""
-          },
-          "value": "foo"
-        }
-      },
-      {
-        "type": "ImportDeclaration",
-        "start": 320,
-        "end": 356,
-        "loc": {
-          "start": {
-            "line": 11,
-            "column": 0
-          },
-          "end": {
-            "line": 11,
-            "column": 36
-          }
-        },
-        "specifiers": [
-          {
-            "type": "ImportSpecifier",
-            "start": 336,
-            "end": 342,
-            "loc": {
-              "start": {
-                "line": 11,
-                "column": 16
-              },
-              "end": {
-                "line": 11,
-                "column": 22
-              }
-            },
-            "imported": {
-              "type": "Identifier",
-              "start": 336,
-              "end": 342,
-              "loc": {
-                "start": {
-                  "line": 11,
-                  "column": 16
-                },
-                "end": {
-                  "line": 11,
-                  "column": 22
-                },
-                "identifierName": "switch"
-              },
-              "name": "switch"
-            },
-            "importKind": null,
-            "local": {
-              "type": "Identifier",
-              "start": 336,
-              "end": 342,
-              "loc": {
-                "start": {
-                  "line": 11,
-                  "column": 16
-                },
-                "end": {
-                  "line": 11,
-                  "column": 22
-                },
-                "identifierName": "switch"
-              },
-              "name": "switch"
-            }
-          }
-        ],
-        "importKind": "typeof",
-        "source": {
-          "type": "StringLiteral",
-          "start": 350,
-          "end": 355,
-          "loc": {
-            "start": {
-              "line": 11,
-              "column": 30
-            },
-            "end": {
-              "line": 11,
-              "column": 35
-            }
-          },
-          "extra": {
-            "rawValue": "foo",
-            "raw": "\"foo\""
-          },
-          "value": "foo"
-        }
-      },
-      {
-        "type": "ImportDeclaration",
-        "start": 357,
-        "end": 397,
-        "loc": {
-          "start": {
-            "line": 12,
-            "column": 0
-          },
-          "end": {
-            "line": 12,
-            "column": 40
-          }
-        },
-        "specifiers": [
-          {
-            "type": "ImportSpecifier",
-            "start": 373,
-            "end": 383,
-            "loc": {
-              "start": {
-                "line": 12,
-                "column": 16
-              },
-              "end": {
-                "line": 12,
-                "column": 26
-              }
-            },
-            "imported": {
-              "type": "Identifier",
-              "start": 373,
-              "end": 376,
-              "loc": {
-                "start": {
-                  "line": 12,
-                  "column": 16
-                },
-                "end": {
-                  "line": 12,
-                  "column": 19
-                },
-                "identifierName": "foo"
-              },
-              "name": "foo"
-            },
-            "importKind": null,
-            "local": {
-              "type": "Identifier",
-              "start": 380,
-              "end": 383,
-              "loc": {
-                "start": {
-                  "line": 12,
-                  "column": 23
-                },
-                "end": {
-                  "line": 12,
-                  "column": 26
-                },
-                "identifierName": "bar"
-              },
-              "name": "bar"
-            }
-          }
-        ],
-        "importKind": "typeof",
-        "source": {
-          "type": "StringLiteral",
-          "start": 391,
-          "end": 396,
-          "loc": {
-            "start": {
-              "line": 12,
-              "column": 34
-            },
-            "end": {
-              "line": 12,
-              "column": 39
-            }
-          },
-          "extra": {
-            "rawValue": "baz",
-            "raw": "\"baz\""
-          },
-          "value": "baz"
-        }
-      },
-      {
-        "type": "ImportDeclaration",
-        "start": 398,
-        "end": 431,
-        "loc": {
-          "start": {
-            "line": 13,
-            "column": 0
-          },
-          "end": {
-            "line": 13,
             "column": 33
           }
         },
         "specifiers": [
           {
-            "type": "ImportNamespaceSpecifier",
-            "start": 412,
-            "end": 419,
+            "type": "ImportDefaultSpecifier",
+            "start": 277,
+            "end": 284,
             "loc": {
               "start": {
-                "line": 13,
+                "line": 9,
                 "column": 14
               },
               "end": {
-                "line": 13,
+                "line": 9,
                 "column": 21
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 417,
-              "end": 419,
+              "start": 277,
+              "end": 284,
               "loc": {
                 "start": {
-                  "line": 13,
-                  "column": 19
+                  "line": 9,
+                  "column": 14
                 },
                 "end": {
-                  "line": 13,
+                  "line": 9,
                   "column": 21
                 },
-                "identifierName": "ns"
+                "identifierName": "switch4"
               },
-              "name": "ns"
+              "name": "switch4"
             }
           }
         ],
         "importKind": "typeof",
         "source": {
           "type": "StringLiteral",
-          "start": 425,
-          "end": 430,
+          "start": 290,
+          "end": 295,
           "loc": {
             "start": {
-              "line": 13,
+              "line": 9,
               "column": 27
             },
             "end": {
-              "line": 13,
+              "line": 9,
               "column": 32
             }
           },
@@ -1181,65 +815,311 @@
       },
       {
         "type": "ImportDeclaration",
-        "start": 432,
-        "end": 469,
+        "start": 297,
+        "end": 334,
         "loc": {
           "start": {
-            "line": 14,
+            "line": 10,
             "column": 0
           },
           "end": {
-            "line": 14,
+            "line": 10,
             "column": 37
           }
         },
         "specifiers": [
           {
-            "type": "ImportNamespaceSpecifier",
-            "start": 446,
-            "end": 457,
+            "type": "ImportSpecifier",
+            "start": 313,
+            "end": 320,
             "loc": {
               "start": {
-                "line": 14,
-                "column": 14
+                "line": 10,
+                "column": 16
               },
               "end": {
-                "line": 14,
-                "column": 25
+                "line": 10,
+                "column": 23
               }
             },
-            "local": {
+            "imported": {
               "type": "Identifier",
-              "start": 451,
-              "end": 457,
+              "start": 313,
+              "end": 320,
               "loc": {
                 "start": {
-                  "line": 14,
-                  "column": 19
+                  "line": 10,
+                  "column": 16
                 },
                 "end": {
-                  "line": 14,
-                  "column": 25
+                  "line": 10,
+                  "column": 23
                 },
-                "identifierName": "switch"
+                "identifierName": "switch5"
               },
-              "name": "switch"
+              "name": "switch5"
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start": 313,
+              "end": 320,
+              "loc": {
+                "start": {
+                  "line": 10,
+                  "column": 16
+                },
+                "end": {
+                  "line": 10,
+                  "column": 23
+                },
+                "identifierName": "switch5"
+              },
+              "name": "switch5"
             }
           }
         ],
         "importKind": "typeof",
         "source": {
           "type": "StringLiteral",
-          "start": 463,
-          "end": 468,
+          "start": 328,
+          "end": 333,
           "loc": {
             "start": {
-              "line": 14,
+              "line": 10,
               "column": 31
             },
             "end": {
-              "line": 14,
+              "line": 10,
               "column": 36
+            }
+          },
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 335,
+        "end": 376,
+        "loc": {
+          "start": {
+            "line": 11,
+            "column": 0
+          },
+          "end": {
+            "line": 11,
+            "column": 41
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start": 351,
+            "end": 362,
+            "loc": {
+              "start": {
+                "line": 11,
+                "column": 16
+              },
+              "end": {
+                "line": 11,
+                "column": 27
+              }
+            },
+            "imported": {
+              "type": "Identifier",
+              "start": 351,
+              "end": 354,
+              "loc": {
+                "start": {
+                  "line": 11,
+                  "column": 16
+                },
+                "end": {
+                  "line": 11,
+                  "column": 19
+                },
+                "identifierName": "foo"
+              },
+              "name": "foo"
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start": 358,
+              "end": 362,
+              "loc": {
+                "start": {
+                  "line": 11,
+                  "column": 23
+                },
+                "end": {
+                  "line": 11,
+                  "column": 27
+                },
+                "identifierName": "bar6"
+              },
+              "name": "bar6"
+            }
+          }
+        ],
+        "importKind": "typeof",
+        "source": {
+          "type": "StringLiteral",
+          "start": 370,
+          "end": 375,
+          "loc": {
+            "start": {
+              "line": 11,
+              "column": 35
+            },
+            "end": {
+              "line": 11,
+              "column": 40
+            }
+          },
+          "extra": {
+            "rawValue": "baz",
+            "raw": "\"baz\""
+          },
+          "value": "baz"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 377,
+        "end": 411,
+        "loc": {
+          "start": {
+            "line": 12,
+            "column": 0
+          },
+          "end": {
+            "line": 12,
+            "column": 34
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start": 391,
+            "end": 399,
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 14
+              },
+              "end": {
+                "line": 12,
+                "column": 22
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 396,
+              "end": 399,
+              "loc": {
+                "start": {
+                  "line": 12,
+                  "column": 19
+                },
+                "end": {
+                  "line": 12,
+                  "column": 22
+                },
+                "identifierName": "ns7"
+              },
+              "name": "ns7"
+            }
+          }
+        ],
+        "importKind": "typeof",
+        "source": {
+          "type": "StringLiteral",
+          "start": 405,
+          "end": 410,
+          "loc": {
+            "start": {
+              "line": 12,
+              "column": 28
+            },
+            "end": {
+              "line": 12,
+              "column": 33
+            }
+          },
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 412,
+        "end": 450,
+        "loc": {
+          "start": {
+            "line": 13,
+            "column": 0
+          },
+          "end": {
+            "line": 13,
+            "column": 38
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start": 426,
+            "end": 438,
+            "loc": {
+              "start": {
+                "line": 13,
+                "column": 14
+              },
+              "end": {
+                "line": 13,
+                "column": 26
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 431,
+              "end": 438,
+              "loc": {
+                "start": {
+                  "line": 13,
+                  "column": 19
+                },
+                "end": {
+                  "line": 13,
+                  "column": 26
+                },
+                "identifierName": "switch8"
+              },
+              "name": "switch8"
+            }
+          }
+        ],
+        "importKind": "typeof",
+        "source": {
+          "type": "StringLiteral",
+          "start": 444,
+          "end": 449,
+          "loc": {
+            "start": {
+              "line": 13,
+              "column": 32
+            },
+            "end": {
+              "line": 13,
+              "column": 37
             }
           },
           "extra": {

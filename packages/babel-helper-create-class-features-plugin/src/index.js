@@ -159,6 +159,7 @@ export function createClassFeaturePlugin({
           keysNodes = extractComputedKeys(ref, path, computedPaths, this.file);
           ({ staticNodes, instanceNodes, wrapClass } = buildFieldsInitNodes(
             ref,
+            path.node.superClass,
             props,
             privateNamesMap,
             state,

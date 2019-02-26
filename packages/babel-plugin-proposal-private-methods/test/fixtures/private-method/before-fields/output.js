@@ -1,11 +1,5 @@
-var Cl =
-/*#__PURE__*/
-function () {
-  "use strict";
-
-  function Cl() {
-    babelHelpers.classCallCheck(this, Cl);
-
+class Cl {
+  constructor() {
     _method.add(this);
 
     babelHelpers.defineProperty(this, "prop", babelHelpers.classPrivateMethodGet(this, _method, _method2).call(this, 1));
@@ -16,14 +10,11 @@ function () {
     });
   }
 
-  babelHelpers.createClass(Cl, [{
-    key: "getPriv",
-    value: function getPriv() {
-      return babelHelpers.classPrivateFieldGet(this, _priv);
-    }
-  }]);
-  return Cl;
-}();
+  getPriv() {
+    return babelHelpers.classPrivateFieldGet(this, _priv);
+  }
+
+}
 
 var _priv = new WeakMap();
 

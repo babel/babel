@@ -15,6 +15,238 @@ See [CHANGELOG - v4](/.github/CHANGELOG-v4.md), [CHANGELOG - v5](/.github/CHANGE
 See [CHANGELOG - 6to5](/.github/CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0.0-beta.29 version changelog.
 
+<!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
+<!-- insert-new-changelog-here -->
+
+## v7.3.4 (2019-02-25)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#9572](https://github.com/babel/babel/pull/9572) Fix TypeScript parsers missing token check (#9571) ([@elevatebart](https://github.com/elevatebart))
+  * [#9521](https://github.com/babel/babel/pull/9521) Also check AssignmentPatterns for duplicate export name ([@danez](https://github.com/danez))
+* `babel-helper-create-class-features-plugin`, `babel-helper-replace-supers`, `babel-plugin-proposal-class-properties`, `babel-traverse`
+  * [#9508](https://github.com/babel/babel/pull/9508) Use correct "this" in static fields ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-preset-env`
+  * [#9566](https://github.com/babel/babel/pull/9566) Closes [#9465](https://github.com/babel/babel/issues/9465) ([@zloirock](https://github.com/zloirock))
+* `babel-types`
+  * [#9539](https://github.com/babel/babel/pull/9539) babel-types is* type checks accept null | undefiend as value TS type ([@ian-craig](https://github.com/ian-craig))
+* `babel-plugin-transform-block-scoping`, `babel-traverse`
+  * [#9532](https://github.com/babel/babel/pull/9532) Migrate some duplicate binding tests to traverse ([@danez](https://github.com/danez))
+* `babel-generator`
+  * [#9524](https://github.com/babel/babel/pull/9524) Fix typescript generator params ([@tanhauhau](https://github.com/tanhauhau))
+  * [#9523](https://github.com/babel/babel/pull/9523) Fix flow babel-generator function parantheses ([@tanhauhau](https://github.com/tanhauhau))
+
+#### :house: Internal
+* Other
+  * [#9561](https://github.com/babel/babel/pull/9561) Update CHANGELOG.md using the "Trigger GitHub release" action ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-proposal-object-rest-spread`, `babel-plugin-transform-modules-systemjs`
+  * [#9541](https://github.com/babel/babel/pull/9541) Enable eqeqeq rule in eslint ([@danez](https://github.com/danez))
+* `babel-generator`, `babel-parser`, `babel-plugin-transform-flow-strip-types`, `babel-traverse`
+  * [#9522](https://github.com/babel/babel/pull/9522) Make tests spec compliant by avoiding duplicate declarations in input files ([@danez](https://github.com/danez))
+* `babel-plugin-transform-proto-to-assign`
+  * [#9533](https://github.com/babel/babel/pull/9533) Add import/no-extraneous-dependencies to ESLint ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+## v7.3.3 (2019-02-15)
+
+#### :eyeglasses: Spec Compliancy
+* `babel-generator`
+  * [#9501](https://github.com/babel/babel/pull/9501) Correctly output escapes in directives ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#9477](https://github.com/babel/babel/pull/9477) Fix regression with let ([@danez](https://github.com/danez))
+  * [#9431](https://github.com/babel/babel/pull/9431) Typescript function destructured params ([@mhcgrq](https://github.com/mhcgrq))
+  * [#9463](https://github.com/babel/babel/pull/9463) Fix range for TypeScript optional parameter in arrow function ([@existentialism](https://github.com/existentialism))
+
+#### :nail_care: Polish
+* `babel-plugin-proposal-class-properties`, `babel-plugin-transform-classes`, `babel-plugin-transform-parameters`
+  * [#9458](https://github.com/babel/babel/pull/9458) Fix duplicated assertThisInitialized calls in constructors ([@rubennorte](https://github.com/rubennorte))
+
+#### :house: Internal
+* Other
+  * [#9517](https://github.com/babel/babel/pull/9517) Add duplicate-package-checker-webpack-plugin ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#9469](https://github.com/babel/babel/pull/9469) Exclude generate @babel/types files from coverage report ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#9491](https://github.com/babel/babel/pull/9491) Better error output in parser tests ([@danez](https://github.com/danez))
+## v7.3.2 (2019-02-04)
+
+Various spec compliancy fixes and better support for smart pipelines and private methods.
+
+Thanks @gverni, @naffiq, @spondbob and @dstaley for their first PRs!
+
+#### :eyeglasses: Spec Compliancy
+* `babel-parser`
+  * [#9403](https://github.com/babel/babel/pull/9403) Fix line continuation with Unicode line terminators. ([@danez](https://github.com/danez))
+  * [#9400](https://github.com/babel/babel/pull/9400) Make yield a contextual keyword. ([@danez](https://github.com/danez))
+  * [#9398](https://github.com/babel/babel/pull/9398) Correctly fail for invalid yield in for. ([@danez](https://github.com/danez))
+  * [#9375](https://github.com/babel/babel/pull/9375) Make let a contextual keyword. ([@danez](https://github.com/danez))
+
+#### :rocket: New Feature
+* `babel-plugin-proposal-pipeline-operator`
+  * [#9401](https://github.com/babel/babel/pull/9401) Support for await and yield in pipelines. ([@thiagoarrais](https://github.com/thiagoarrais))
+
+#### :bug: Bug Fix
+* `babel-plugin-proposal-private-methods`, `babel-types`
+  * [#9453](https://github.com/babel/babel/pull/9453) Fix duplicate definition error in private class methods. ([@gverni](https://github.com/gverni))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-private-methods`
+  * [#9423](https://github.com/babel/babel/pull/9423) Transform private async and generator functions. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-proposal-object-rest-spread`, `babel-plugin-transform-destructuring`
+  * [#9414](https://github.com/babel/babel/pull/9414) Destructuring: Create assignments from ForX non-declaration patterns. ([@motiz88](https://github.com/motiz88))
+* `babel-plugin-transform-typescript`
+  * [#9095](https://github.com/babel/babel/pull/9095) Retain JSX pragma if defined as a comment. ([@dstaley](https://github.com/dstaley))
+* `babel-parser`
+  * [#9406](https://github.com/babel/babel/pull/9406) Fix location/range on TypeScript ExportNamedDeclarations. ([@existentialism](https://github.com/existentialism))
+  * [#9371](https://github.com/babel/babel/pull/9371) Allow toplevel await with option and correctly mark await keyword as unexpected. ([@danez](https://github.com/danez))
+* `babel-plugin-transform-typescript`, `babel-types`
+  * [#8738](https://github.com/babel/babel/pull/8738) Fix typescript side effects. ([@yuri-karadzhov](https://github.com/yuri-karadzhov))
+* `babel-generator`, `babel-types`
+  * [#9396](https://github.com/babel/babel/pull/9396) Fix support for Flow's QualifiedTypeIdentifier. ([@existentialism](https://github.com/existentialism))
+
+#### :nail_care: Polish
+* `babel-parser`
+  * [#9405](https://github.com/babel/babel/pull/9405) Simplify await and yield tracking in params. ([@danez](https://github.com/danez))
+* `babel-parser`, `babel-preset-typescript`
+  * [#9402](https://github.com/babel/babel/pull/9402) Unify reserved word checking and update error messages. ([@danez](https://github.com/danez))
+
+## v7.3.1 (2019-01-22)
+
+This release fixes some regressions introduced in v7.3.0
+
+#### :bug: Bug Fix
+* `babel-helpers`, `babel-plugin-proposal-object-rest-spread`, `babel-preset-env`
+  * [#9379](https://github.com/babel/babel/pull/9379) Revert "Differentiate object spread and non-spread properties (#9341)". ([@danez](https://github.com/danez))
+* `babel-parser`
+  * [#9377](https://github.com/babel/babel/pull/9377) fix new keyword broken by recent refactoring. ([@danez](https://github.com/danez))
+
+## v7.3.0 (2019-01-21)
+
+Thanks to @jamesgeorge007 and @armano2 for their first PR!
+
+#### :eyeglasses: Spec Compliancy
+* `babel-parser`
+  * [#9314](https://github.com/babel/babel/pull/9314) Disallow async functions as loop body. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#9315](https://github.com/babel/babel/pull/9315) Parse class heritage as strict mode code. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#9313](https://github.com/babel/babel/pull/9313) Disallow `new import(x)` and `import(x,)`. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#9311](https://github.com/babel/babel/pull/9311) Disallow trailing comma after rest. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :rocket: New Feature
+* `babel-helper-create-class-features-plugin`, `babel-helpers`, `babel-plugin-proposal-private-methods`
+  * [#9101](https://github.com/babel/babel/pull/9101) Private Class Methods Stage 3: Private Accessors. ([@tim-mc](https://github.com/tim-mc))
+* `babel-plugin-proposal-pipeline-operator`, `babel-plugin-syntax-pipeline-operator`
+  * [#9179](https://github.com/babel/babel/pull/9179) Transform for the smart pipeline operator proposal. ([@thiagoarrais](https://github.com/thiagoarrais))
+* `babel-preset-env-standalone`, `babel-preset-env`
+  * [#9345](https://github.com/babel/babel/pull/9345) Add support for transform-named-capturing-groups-regex in preset-env. ([@existentialism](https://github.com/existentialism))
+* `babel-helpers`, `babel-plugin-transform-named-capturing-groups-regex`
+  * [#7105](https://github.com/babel/babel/pull/7105) Add @babel/plugin-transform-named-capturing-groups-regex. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-preset-env`
+  * [#9323](https://github.com/babel/babel/pull/9323) Add support for proposal-json-strings in preset-env. ([@existentialism](https://github.com/existentialism))
+* `babel-generator`, `babel-types`
+  * [#9309](https://github.com/babel/babel/pull/9309) Add emit and builder for TSImportType. ([@hzoo](https://github.com/hzoo))
+* `babel-parser`
+  * [#9302](https://github.com/babel/babel/pull/9302) @babel/parser(ts): Add parsing of type import. ([@armano2](https://github.com/armano2))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#9336](https://github.com/babel/babel/pull/9336) Disallow usage of invalid keyword after export abstract statement in Typescript. ([@armano2](https://github.com/armano2))
+  * [#9328](https://github.com/babel/babel/pull/9328) Fix handling newline with TypeScript declare and abstract classes. ([@existentialism](https://github.com/existentialism))
+  * [#9335](https://github.com/babel/babel/pull/9335) Fix range on TypeScript index signature parameters. ([@existentialism](https://github.com/existentialism))
+  * [#9292](https://github.com/babel/babel/pull/9292) Throw error if TypeScript class has empty implements. ([@existentialism](https://github.com/existentialism))
+  * [#9284](https://github.com/babel/babel/pull/9284) Fix location for typescript type assertions in AST. ([@danez](https://github.com/danez))
+  * [#9276](https://github.com/babel/babel/pull/9276) Ensure modifiers are included in TSParameterProperty ranges. ([@existentialism](https://github.com/existentialism))
+  * [#9230](https://github.com/babel/babel/pull/9230) babel-parser: typescript: add missing bigint keyword. ([@armano2](https://github.com/armano2))
+* `babel-types`
+  * [#9333](https://github.com/babel/babel/pull/9333) Copy "optional" property when cloning Identifier node. ([@unconfident](https://github.com/unconfident))
+* `babel-helper-create-class-features-plugin`, `babel-helpers`, `babel-plugin-proposal-decorators`
+  * [#9244](https://github.com/babel/babel/pull/9244) [decorators] Set method names at compile time instead of at runtime. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-builder-react-jsx`, `babel-plugin-transform-react-jsx`
+  * [#9119](https://github.com/babel/babel/pull/9119) Revert "Revert babel-helper-builder-react-jsx change from #4988". ([@danez](https://github.com/danez))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-private-methods`
+  * [#9248](https://github.com/babel/babel/pull/9248) [private methods] Define private methods before executing initializers. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-preset-env`
+  * [#9219](https://github.com/babel/babel/pull/9219) Fix handling scoped packages in preset-env include/exclude options. ([@existentialism](https://github.com/existentialism))
+
+#### :nail_care: Polish
+* `babel-parser`
+  * [#9348](https://github.com/babel/babel/pull/9348) Parser Performance Collection. ([@danez](https://github.com/danez))
+
+#### :memo: Documentation
+* [#9370](https://github.com/babel/babel/pull/9370) add v7 downloads [skip ci]. ([@hzoo](https://github.com/hzoo))
+
+#### :house: Internal
+* `babel-parser`
+  * [#9312](https://github.com/babel/babel/pull/9312) Merge declaration and init of props in parser's state. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-types`
+  * [#9245](https://github.com/babel/babel/pull/9245) [@babel/types] Moved generators related to babel-types into the babel-types package directory.. ([@cameron-martin](https://github.com/cameron-martin))
+* Other
+  * [#9288](https://github.com/babel/babel/pull/9288) Test262 update. ([@existentialism](https://github.com/existentialism))
+  * [#9290](https://github.com/babel/babel/pull/9290) Use 2014-present in license. ([@xtuc](https://github.com/xtuc))
+  * [#9271](https://github.com/babel/babel/pull/9271) Bump license years for 2019. ([@berlamhenderson](https://github.com/berlamhenderson))
+* `babel-helpers`
+  * [#9166](https://github.com/babel/babel/pull/9166) Add mixins support to the _decorate helper. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  
+## v7.2.5 (2018-12-21)
+
+`@babel/polyfill` didn't get published correctly in v7.2.3 (#9227).
+
+## v7.2.4 (2018-12-20)
+
+Minify `@babel/standalone` and `@babel/preset-env-standalone`.
+
+## v7.2.3 (2018-12-20)
+
+This is a small release, mainly to test Lerna 3.
+We force-published `@babel/polyfill` and `@babel/preset-env`, since they should have been released respectively in v7.1.0 and v7.2.2 but for different reasons they didn't get updated.
+
+Half of the commits in this release are made by first time contributors! Thanks to @cameron-martin, @cphamlet, @tanhauhau and @jedwards1211. :tada:
+
+#### :rocket: New Feature
+* [#9110](https://github.com/babel/babel/pull/9110) Added type-level mapping between aliases and nodes that have that alias. ([@cameron-martin](https://github.com/cameron-martin))
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-flow-strip-types`
+  * [#9197](https://github.com/babel/babel/pull/9197) Strips flow directive fully. ([@tanhauhau](https://github.com/tanhauhau))
+* `babel-parser`
+  * [#9184](https://github.com/babel/babel/pull/9184) Allow keywords to be used in type annotations. ([@danez](https://github.com/danez))
+
+#### :house: Internal
+* `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-private-methods`, `babel-traverse`
+  * [#9206](https://github.com/babel/babel/pull/9206) Use @babel/eslint-plugin-developement. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+## v7.2.2 (2018-12-15)
+
+Mostrly bug fixes and internal changes.
+Thanks to @paleite, @saschanaz and @joeldenning for their first PRs!
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-destructuring`, `babel-plugin-transform-spread`
+  * [#9108](https://github.com/babel/babel/pull/9108) Correctly transform spreads to use proper concat method. ([@danez](https://github.com/danez))
+* `babel-parser`
+  * [#9168](https://github.com/babel/babel/pull/9168) [parser] Handle flow comments with leading spaces. ([@vikr01](https://github.com/vikr01))
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-commonjs`
+  * [#9171](https://github.com/babel/babel/pull/9171) Fix transforming empty export statement. ([@danez](https://github.com/danez))
+* `babel-node`
+  * [#9148](https://github.com/babel/babel/pull/9148) Fix --root-mode option in babel-node. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-classes`
+  * [#9135](https://github.com/babel/babel/pull/9135) Inherit properties in function from method in loose mode. ([@rubennorte](https://github.com/rubennorte))
+* `babel-preset-env`
+  * [#9140](https://github.com/babel/babel/pull/9140) Disable parameter-destructuring in Edge 18. ([@saschanaz](https://github.com/saschanaz))
+* `babel-plugin-transform-arrow-functions`, `babel-traverse`
+  * [#9060](https://github.com/babel/babel/pull/9060) Not depending on return value of super(). Closes [#9020](https://github.com/babel/babel/issues/9020).. ([@joeldenning](https://github.com/joeldenning))
+
+#### :house: Internal
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-nullish-coalescing-operator`, `babel-plugin-syntax-bigint`, `babel-plugin-transform-dotall-regex`
+  * [#9176](https://github.com/babel/babel/pull/9176) Fix package.json repository URLs. ([@paleite](https://github.com/paleite))
+* Other
+  * [#9158](https://github.com/babel/babel/pull/9158) add triage label to new issues [skip ci]. ([@danez](https://github.com/danez))
+  * [#9143](https://github.com/babel/babel/pull/9143) Fix a typo from the issue template for bugs. ([@saschanaz](https://github.com/saschanaz))
+  * [#9133](https://github.com/babel/babel/pull/9133) Move to travis vm based builds. ([@danez](https://github.com/danez))
+  * [#9132](https://github.com/babel/babel/pull/9132) Ensure we always use repository versions of babel dependencies in tests. ([@danez](https://github.com/danez))
+  * [#9131](https://github.com/babel/babel/pull/9131) Update issue templates [skip ci]. ([@hzoo](https://github.com/hzoo))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-decorators`
+  * [#9059](https://github.com/babel/babel/pull/9059) Move decorators transform to @babel/helper-create-class-features-plugin. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-parser`, `babel-template`
+  * [#9128](https://github.com/babel/babel/pull/9128) Fix running flow on travis and update flow. ([@danez](https://github.com/danez))
+
 ## v7.2.1 (2018-12-04)
 
 This release fixes a regression introduced in v7.2.0 (https://github.com/babel/babel/issues/9120)

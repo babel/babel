@@ -1,35 +1,35 @@
-class A extends (() => {}) {}
+class A1 extends (() => {}) {}
 
-class A extends (B = C) {}
+class A2 extends (B = C) {}
 
-class A extends (B || C) {}
+class A3 extends (B || C) {}
 
-class A extends (B + C) {}
+class A4 extends (B + C) {}
 
-class A extends B() {}
+class A5 extends B() {}
 
-class A extends class {} {}
+class A6 extends class {} {}
 
-class A extends (B ? C : D) {}
+class A7 extends (B ? C : D) {}
 
-class A extends (new B()) {}
+class A8 extends (new B()) {}
 
-class A extends (B, C) {}
+class A9 extends (B, C) {}
 
-class A extends {} {}
+class A10 extends {} {}
 
-class A extends B.C {}
+class A11 extends B.C {}
 
-class A extends function () {} {}
+class A12 extends function () {} {}
 
-class A extends (void B) {}
+class A13 extends (void B) {}
 
-class A extends (++B) {}
+class A14 extends (++B) {}
 
-async function f() {
-  class A extends (await C) {}
+async function f1() {
+  class A15 extends (await C) {}
 }
 
-function* f() {
-  class A extends (yield 1) {}
+function* f2() {
+  class A16 extends (yield 1) {}
 }

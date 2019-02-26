@@ -348,9 +348,6 @@ export default class Scope {
     // class expression
     if (local.kind === "local") return;
 
-    // ignore hoisted functions if there's also a local let
-    if (kind === "hoisted" && local.kind === "let") return;
-
     const duplicate =
       // don't allow duplicate bindings to exist alongside
       kind === "let" ||

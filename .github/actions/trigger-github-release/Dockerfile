@@ -12,6 +12,7 @@ ADD entrypoint.sh /action/entrypoint.sh
 ADD package.json /action/package.json
 ADD package-lock.json /action/package-lock.json
 ADD release.js /action/release.js
+ADD update-changelog.js /action/update-changelog.js
 
 RUN chmod +x /action/entrypoint.sh
 
