@@ -109,12 +109,12 @@
               },
               "left": {
                 "type": "PipelineHead",
-                "start": 7,
+                "start": 5,
                 "end": 6,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 7
+                    "column": 5
                   },
                   "end": {
                     "line": 1,

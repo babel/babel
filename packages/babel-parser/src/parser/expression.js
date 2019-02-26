@@ -2297,7 +2297,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   makePipelineHead(left: N.Expression): N.Expression {
-    const node = this.startNode();
+    const node = this.startNodeAtNode(left);
     node.head = left;
 
     return this.finishNode(node, "PipelineHead");
