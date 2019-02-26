@@ -1557,10 +1557,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseFunctionBodyAndFinish(
       node: N.BodilessFunctionOrMethodBase,
       type: string,
-      allowExpressionBody?: boolean,
     ): void {
-      // For arrow functions, `parseArrow` handles the return type itself.
-      if (!allowExpressionBody && this.match(tt.colon)) {
+      if (this.match(tt.colon)) {
         const typeNode = this.startNode();
 
         [
@@ -1575,7 +1573,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           : null;
       }
 
-      super.parseFunctionBodyAndFinish(node, type, allowExpressionBody);
+      super.parseFunctionBodyAndFinish(node, type);
     }
 
     // interfaces
