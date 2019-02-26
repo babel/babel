@@ -26,6 +26,7 @@ declare export * from 'asd';
 declare export { a, b };
 declare export {};
 declare export { c, d } from 'bar';
+var a, b;
 declare module B {
   declare export type B = {};
   declare export interface Moon {}
