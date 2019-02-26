@@ -226,7 +226,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
         return 0;
       });
 
-    // Find the lowest version such that all lower versions implement it.
+    // Find the lowest version such that all higher versions implement it.
     // Eg, given { chrome70: true, chrome60: false, chrome50: true }, the
     // lowest version is chrome70, not chrome50.
     let lowest = null;
