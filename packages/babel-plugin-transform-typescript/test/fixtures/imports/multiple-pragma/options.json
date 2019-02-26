@@ -1,0 +1,4 @@
+{
+  "args": ["src", "--out-dir", "lib"],
+  "plugins": [["transform-typescript", { "isTSX": true }]]
+}
