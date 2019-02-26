@@ -1,18 +1,38 @@
-class Cl {
-  static check() {
-    return babelHelpers.classPrivateFieldLooseBase(this, _staticPrivateMethod)[_staticPrivateMethod]();
+class A {
+  static get a() {
+    return 1;
   }
 
 }
 
-var _staticPrivateMethod = babelHelpers.classPrivateFieldLooseKey("staticPrivateMethod");
+class B extends A {
+  static get b() {
+    return 2;
+  }
 
-Cl.staticField = 'staticFieldString';
+  static extract() {
+    return [babelHelpers.classPrivateFieldLooseBase(this, _getA)[_getA], babelHelpers.classPrivateFieldLooseBase(this, _getB)[_getB]];
+  }
 
-var _staticPrivateMethod2 = function _staticPrivateMethod2() {
-  return Cl.staticField;
+}
+
+var _getA = babelHelpers.classPrivateFieldLooseKey("getA");
+
+var _getB = babelHelpers.classPrivateFieldLooseKey("getB");
+
+var _getA2 = function _getA2() {
+  return A.a;
 };
 
-Object.defineProperty(Cl, _staticPrivateMethod, {
-  value: _staticPrivateMethod2
+Object.defineProperty(B, _getA, {
+  value: _getA2
 });
+
+var _getB2 = function _getB2() {
+  return this.b;
+};
+
+Object.defineProperty(B, _getB, {
+  value: _getB2
+});
+var [getA, getB] = B.extract();

@@ -506,8 +506,9 @@ function replaceThisContext(path, ref, superRef, file, loose) {
   });
   replacer.isStatic = true;
   replacer.replace();
-
-  path.traverse(thisContextVisitor, state);
+  if (path.isProperty()) {
+    path.traverse(thisContextVisitor, state);
+  }
   return state.needsClassRef;
 }
 

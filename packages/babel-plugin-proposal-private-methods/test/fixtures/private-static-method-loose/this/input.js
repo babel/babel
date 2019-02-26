@@ -1,11 +1,16 @@
-class Cl {
-  static staticField = 'staticFieldString'
+class A {
+  static get a() { return 1 }
+}
 
-  static #staticPrivateMethod() {
-    return this.staticField;
-  }
+class B extends A {
+  static get b() { return 2 }
 
-  static check() {
-    return this.#staticPrivateMethod();
+  static #getA() { return super.a }
+  static #getB() { return this.b }
+
+  static extract() {
+    return [this.#getA, this.#getB];
   }
 }
+
+const [getA, getB] = B.extract();

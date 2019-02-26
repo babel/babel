@@ -1,12 +1,27 @@
-class Cl {
-  static check() {
-    return babelHelpers.classStaticPrivateMethodGet(this, Cl, _staticPrivateMethod).call(this);
+class A {
+  static get a() {
+    return 1;
   }
 
 }
 
-babelHelpers.defineProperty(Cl, "staticField", 'staticFieldString');
+class B extends A {
+  static get b() {
+    return 2;
+  }
 
-var _staticPrivateMethod = function _staticPrivateMethod() {
-  return Cl.staticField;
+  static extract() {
+    return [babelHelpers.classStaticPrivateMethodGet(this, B, _getA), babelHelpers.classStaticPrivateMethodGet(this, B, _getB)];
+  }
+
+}
+
+var _getA = function _getA() {
+  return babelHelpers.get(babelHelpers.getPrototypeOf(B), "a", this);
 };
+
+var _getB = function _getB() {
+  return this.b;
+};
+
+var [getA, getB] = B.extract();
