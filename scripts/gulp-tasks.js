@@ -61,6 +61,7 @@ function webpackBuild(opts) {
       filename: opts.filename,
       library: opts.library,
       libraryTarget: "umd",
+      globalObject: "typeof self !== 'undefined' ? self : this",
     },
     optimization: {
       concatenateModules: true,
