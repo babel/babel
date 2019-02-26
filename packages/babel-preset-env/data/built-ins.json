@@ -214,10 +214,10 @@
     "opera": "50",
     "edge": "12",
     "firefox": "5",
-    "safari": "10.1",
+    "safari": "12",
     "node": "10",
     "ie": "9",
-    "ios": "10.3",
+    "ios": "12",
     "electron": "3.1"
   },
   "es6.array.species": {
@@ -317,7 +317,7 @@
   "es6.function.name": {
     "chrome": "5",
     "opera": "10.50",
-    "edge": "12",
+    "edge": "14",
     "firefox": "2",
     "safari": "4",
     "node": "0.10",
@@ -729,7 +729,7 @@
   "es6.object.get-prototype-of": {
     "chrome": "44",
     "edge": "12",
-    "firefox": "3.5",
+    "firefox": "35",
     "safari": "9",
     "node": "4",
     "ios": "9",
