@@ -2,6 +2,7 @@ These are the core @babel/parser (babylon) AST node types.
 
 - [Node objects](#node-objects)
 - [Changes](#changes)
+    - [@babel/parser (Babylon) v7](#babelparser-babylon-v7)
 - [Identifier](#identifier)
 - [PrivateName](#privatename)
 - [Literals](#literals)
@@ -36,7 +37,7 @@ These are the core @babel/parser (babylon) AST node types.
     - [DoWhileStatement](#dowhilestatement)
     - [ForStatement](#forstatement)
     - [ForInStatement](#forinstatement)
-    - [ForOfStatement](#forofstatement)
+  - [ForOfStatement](#forofstatement)
 - [Declarations](#declarations)
   - [FunctionDeclaration](#functiondeclaration)
   - [VariableDeclaration](#variabledeclaration)
@@ -79,6 +80,8 @@ These are the core @babel/parser (babylon) AST node types.
   - [NewExpression](#newexpression)
   - [SequenceExpression](#sequenceexpression)
   - [DoExpression](#doexpression)
+  - [SwitchExpression](#switchexpression)
+  - [SwitchCaseExpression](#switchcaseexpression)
 - [Template Literals](#template-literals)
   - [TemplateLiteral](#templateliteral)
   - [TaggedTemplateExpression](#taggedtemplateexpression)
@@ -170,7 +173,6 @@ interface Identifier <: Expression, Pattern {
 
 An identifier. Note that an identifier may be an expression or a destructuring pattern.
 
-
 # PrivateName
 
 ```js
@@ -179,8 +181,8 @@ interface PrivateName <: Expression, Pattern {
   id: Identifier;
 }
 ```
-A Private Name Identifier.
 
+A Private Name Identifier.
 
 # Literals
 
@@ -942,6 +944,26 @@ A sequence expression, i.e., a comma-separated sequence of expressions.
 interface DoExpression <: Expression {
   type: "DoExpression";
   body: BlockStatement
+}
+```
+
+## SwitchExpression
+
+```js
+interface SwitchExpression <: Expression {
+  type: "SwitchExpression";
+  discriminant: Expression
+  cases: [ SwitchCaseExpression ]
+}
+```
+
+## SwitchCaseExpression
+
+```js
+interface SwitchCaseExpression <: Expression {
+  type: "SwitchCaseExpression";
+  tests: [ Expression ] | null
+  expression: ArrowFunctionExpression
 }
 ```
 
