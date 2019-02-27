@@ -229,7 +229,7 @@ exports.updateWhitelist = function(filename, summary) {
         return line;
       })
       .filter(function(line) {
-        return line !== null;
+        return line !== null && line !== "";
       })
       .concat(toAdd)
       .sort()

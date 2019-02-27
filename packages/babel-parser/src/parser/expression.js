@@ -27,6 +27,7 @@ import {
   isStrictReservedWord,
   isStrictBindReservedWord,
 } from "../util/identifier";
+import { lineBreak } from "../util/whitespace";
 import type { Pos, Position } from "../util/location";
 import * as charCodes from "charcodes";
 import {
@@ -67,10 +68,18 @@ export default class ExpressionParser extends LValParser {
   // strict mode, init properties are also not allowed to be repeated.
 
   checkPropClash(
-    prop: N.ObjectMember,
+    prop: N.ObjectMember | N.SpreadElement,
     propHash: { [key: string]: boolean },
   ): void {
-    if (prop.computed || prop.kind) return;
+    if (
+      prop.type === "SpreadElement" ||
+      prop.computed ||
+      prop.kind ||
+      // $FlowIgnore
+      prop.shorthand
+    ) {
+      return;
+    }
 
     const key = prop.key;
     // It is either an Identifier or a String/NumericLiteral
@@ -197,13 +206,10 @@ export default class ExpressionParser extends LValParser {
       this.checkLVal(left, undefined, undefined, "assignment expression");
 
       let patternErrorMsg;
-      let elementName;
       if (left.type === "ObjectPattern") {
         patternErrorMsg = "`({a}) = 0` use `({a} = 0)`";
-        elementName = "property";
       } else if (left.type === "ArrayPattern") {
         patternErrorMsg = "`([a]) = 0` use `([a] = 0)`";
-        elementName = "element";
       }
 
       if (patternErrorMsg && left.extra && left.extra.parenthesized) {
@@ -213,7 +219,7 @@ export default class ExpressionParser extends LValParser {
         );
       }
 
-      if (elementName) this.checkCommaAfterRestFromSpread(elementName);
+      if (patternErrorMsg) this.checkCommaAfterRestFromSpread();
       this.state.commaAfterSpreadAt = oldCommaAfterSpreadAt;
 
       this.next();
@@ -639,7 +645,7 @@ export default class ExpressionParser extends LValParser {
       if (possibleAsync && this.shouldParseAsyncArrow()) {
         state.stop = true;
 
-        this.checkCommaAfterRestFromSpread("parameter");
+        this.checkCommaAfterRestFromSpread();
 
         node = this.parseAsyncArrowFromCallExpression(
           this.startNodeAt(startPos, startLoc),
@@ -1207,13 +1213,13 @@ export default class ExpressionParser extends LValParser {
         spreadStart = this.state.start;
         exprList.push(
           this.parseParenItem(
-            this.parseRest(),
+            this.parseRestBinding(),
             spreadNodeStartPos,
             spreadNodeStartLoc,
           ),
         );
 
-        this.checkCommaAfterRest(tt.parenR, "parameter");
+        this.checkCommaAfterRest();
 
         break;
       } else {
@@ -1409,7 +1415,6 @@ export default class ExpressionParser extends LValParser {
     isPattern: boolean,
     refShorthandDefaultPos?: ?Pos,
   ): T {
-    let decorators = [];
     const propHash: any = Object.create(null);
     let first = true;
     const node = this.startNode();
@@ -1425,90 +1430,11 @@ export default class ExpressionParser extends LValParser {
         if (this.eat(tt.braceR)) break;
       }
 
-      if (this.match(tt.at)) {
-        if (this.hasPlugin("decorators")) {
-          this.raise(
-            this.state.start,
-            "Stage 2 decorators disallow object literal property decorators",
-          );
-        } else {
-          // we needn't check if decorators (stage 0) plugin is enabled since it's checked by
-          // the call to this.parseDecorator
-          while (this.match(tt.at)) {
-            decorators.push(this.parseDecorator());
-          }
-        }
-      }
+      const prop = this.parseObjectMember(isPattern, refShorthandDefaultPos);
+      // $FlowIgnore RestElement will never be returned if !isPattern
+      if (!isPattern) this.checkPropClash(prop, propHash);
 
-      let prop = this.startNode(),
-        isGenerator = false,
-        isAsync = false,
-        startPos,
-        startLoc;
-      if (decorators.length) {
-        prop.decorators = decorators;
-        decorators = [];
-      }
-
-      if (this.match(tt.ellipsis)) {
-        prop = this.parseSpread(isPattern ? { start: 0 } : undefined);
-        node.properties.push(prop);
-        if (isPattern) {
-          this.toAssignable(prop, true, "object pattern");
-          this.checkCommaAfterRest(tt.braceR, "property");
-          this.expect(tt.braceR);
-          break;
-        }
-        continue;
-      }
-
-      prop.method = false;
-
-      if (isPattern || refShorthandDefaultPos) {
-        startPos = this.state.start;
-        startLoc = this.state.startLoc;
-      }
-
-      if (!isPattern) {
-        isGenerator = this.eat(tt.star);
-      }
-
-      const containsEsc = this.state.containsEsc;
-
-      if (!isPattern && this.isContextual("async")) {
-        if (isGenerator) this.unexpected();
-
-        const asyncId = this.parseIdentifier();
-        if (
-          this.match(tt.colon) ||
-          this.match(tt.parenL) ||
-          this.match(tt.braceR) ||
-          this.match(tt.eq) ||
-          this.match(tt.comma)
-        ) {
-          prop.key = asyncId;
-          prop.computed = false;
-        } else {
-          isAsync = true;
-          isGenerator = this.eat(tt.star);
-          this.parsePropertyName(prop);
-        }
-      } else {
-        this.parsePropertyName(prop);
-      }
-
-      this.parseObjPropValue(
-        prop,
-        startPos,
-        startLoc,
-        isGenerator,
-        isAsync,
-        isPattern,
-        refShorthandDefaultPos,
-        containsEsc,
-      );
-      this.checkPropClash(prop, propHash);
-
+      // $FlowIgnore
       if (prop.shorthand) {
         this.addExtra(prop, "shorthand", true);
       }
@@ -1516,17 +1442,105 @@ export default class ExpressionParser extends LValParser {
       node.properties.push(prop);
     }
 
-    if (decorators.length) {
-      this.raise(
-        this.state.start,
-        "You have trailing decorators with no property",
-      );
-    }
-
     return this.finishNode(
       node,
       isPattern ? "ObjectPattern" : "ObjectExpression",
     );
+  }
+
+  isAsyncProp(prop: N.ObjectProperty): boolean {
+    return (
+      !prop.computed &&
+      prop.key.type === "Identifier" &&
+      prop.key.name === "async" &&
+      (this.match(tt.name) ||
+        this.match(tt.num) ||
+        this.match(tt.string) ||
+        this.match(tt.bracketL) ||
+        this.state.type.keyword ||
+        this.match(tt.star)) &&
+      !lineBreak.test(
+        this.state.input.slice(this.state.lastTokEnd, this.state.start),
+      )
+    );
+  }
+
+  parseObjectMember(
+    isPattern: boolean,
+    refShorthandDefaultPos: ?Pos,
+  ): N.ObjectMember | N.SpreadElement | N.RestElement {
+    let decorators = [];
+    if (this.match(tt.at)) {
+      if (this.hasPlugin("decorators")) {
+        this.raise(
+          this.state.start,
+          "Stage 2 decorators disallow object literal property decorators",
+        );
+      } else {
+        // we needn't check if decorators (stage 0) plugin is enabled since it's checked by
+        // the call to this.parseDecorator
+        while (this.match(tt.at)) {
+          decorators.push(this.parseDecorator());
+        }
+      }
+    }
+
+    const prop = this.startNode();
+    let isGenerator = false;
+    let isAsync = false;
+    let startPos;
+    let startLoc;
+    if (decorators.length) {
+      prop.decorators = decorators;
+      decorators = [];
+    }
+
+    if (this.match(tt.ellipsis)) {
+      if (isPattern) {
+        this.next();
+        // Don't use parseRestBinding() as we only allow Identifier here.
+        prop.argument = this.parseIdentifier();
+        this.checkCommaAfterRest();
+        return this.finishNode(prop, "RestElement");
+      }
+
+      return this.parseSpread();
+    }
+
+    prop.method = false;
+
+    if (isPattern || refShorthandDefaultPos) {
+      startPos = this.state.start;
+      startLoc = this.state.startLoc;
+    }
+
+    if (!isPattern) {
+      isGenerator = this.eat(tt.star);
+    }
+
+    const containsEsc = this.state.containsEsc;
+    this.parsePropertyName(prop);
+
+    if (!isPattern && !containsEsc && !isGenerator && this.isAsyncProp(prop)) {
+      isAsync = true;
+      isGenerator = this.eat(tt.star);
+      this.parsePropertyName(prop);
+    } else {
+      isAsync = false;
+    }
+
+    this.parseObjPropValue(
+      prop,
+      startPos,
+      startLoc,
+      isGenerator,
+      isAsync,
+      isPattern,
+      refShorthandDefaultPos,
+      containsEsc,
+    );
+
+    return prop;
   }
 
   isGetterOrSetterMethod(prop: N.ObjectMethod, isPattern: boolean): boolean {

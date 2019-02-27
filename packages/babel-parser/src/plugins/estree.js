@@ -126,16 +126,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     checkPropClash(
-      prop: N.ObjectMember,
+      prop: N.ObjectMember | N.SpreadElement,
       propHash: { [key: string]: boolean },
     ): void {
-      if (prop.computed || !isSimpleProperty(prop)) return;
+      if (
+        prop.type === "SpreadElement" ||
+        prop.computed ||
+        prop.method ||
+        // $FlowIgnore
+        prop.shorthand
+      ) {
+        return;
+      }
 
       const key = prop.key;
       // It is either an Identifier or a String/NumericLiteral
       const name = key.type === "Identifier" ? key.name : String(key.value);
 
-      if (name === "__proto__") {
+      if (name === "__proto__" && prop.kind === "init") {
         if (propHash.proto) {
           this.raise(key.start, "Redefinition of __proto__ property");
         }
