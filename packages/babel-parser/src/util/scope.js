@@ -117,8 +117,7 @@ export default class ScopeHandler {
         const scope = this.scopeStack[i];
         if (
           (scope.lexical.indexOf(name) > -1 &&
-            !(scope.flags & SCOPE_SIMPLE_CATCH) &&
-            scope.lexical[0] === name) ||
+            !(scope.flags & SCOPE_SIMPLE_CATCH && scope.lexical[0] === name)) ||
           (!this.treatFunctionsAsVarInScope(scope) &&
             scope.functions.indexOf(name) > -1)
         ) {
