@@ -1544,19 +1544,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // Overrides
     // ==================================
 
-    parseFunctionBody(node: N.Function, allowExpressionBody: ?boolean): void {
+    parseFunctionBody(
+      node: N.Function,
+      allowExpressionBody: ?boolean,
+      isMethod?: boolean = false,
+    ): void {
       if (allowExpressionBody) {
         return this.forwardNoArrowParamsConversionAt(node, () =>
-          super.parseFunctionBody(node, true),
+          super.parseFunctionBody(node, true, isMethod),
         );
       }
 
-      return super.parseFunctionBody(node, false);
+      return super.parseFunctionBody(node, false, isMethod);
     }
 
     parseFunctionBodyAndFinish(
       node: N.BodilessFunctionOrMethodBase,
       type: string,
+      isMethod?: boolean = false,
     ): void {
       if (this.match(tt.colon)) {
         const typeNode = this.startNode();
@@ -1573,7 +1578,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           : null;
       }
 
-      super.parseFunctionBodyAndFinish(node, type);
+      super.parseFunctionBodyAndFinish(node, type, isMethod);
     }
 
     // interfaces
