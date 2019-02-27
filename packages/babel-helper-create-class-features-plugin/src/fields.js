@@ -582,7 +582,9 @@ export function buildFieldsInitNodes(
             privateNamesMap,
           ),
         );
-        staticNodes.push(buildPrivateMethodDeclaration(prop, privateNamesMap));
+        staticNodes.push(
+          buildPrivateMethodDeclaration(prop, privateNamesMap, loose),
+        );
         break;
       case isInstance && isPrivate && isMethod && !loose:
         instanceNodes.unshift(
@@ -592,11 +594,15 @@ export function buildFieldsInitNodes(
             privateNamesMap,
           ),
         );
-        staticNodes.push(buildPrivateMethodDeclaration(prop, privateNamesMap));
+        staticNodes.push(
+          buildPrivateMethodDeclaration(prop, privateNamesMap, loose),
+        );
         break;
       case isStatic && isPrivate && isMethod && !loose:
         needsClassRef = true;
-        staticNodes.push(buildPrivateMethodDeclaration(prop, privateNamesMap));
+        staticNodes.push(
+          buildPrivateMethodDeclaration(prop, privateNamesMap, loose),
+        );
         break;
       case isStatic && isPrivate && isMethod && loose:
         needsClassRef = true;
