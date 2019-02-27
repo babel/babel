@@ -13,7 +13,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-template-literals { "ie":"10", "safari":"7" }
+  transform-template-literals { "ie":"10", "ios":"9", "safari":"7" }
   transform-literals { "firefox":"49", "ie":"10", "safari":"7" }
   transform-function-name { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-arrow-functions { "ie":"10", "ios":"9", "safari":"7" }
@@ -60,7 +60,7 @@ Using polyfills with `entry` option:
   es6.date.to-json { "ios":"9", "safari":"7" }
   es6.date.to-primitive { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es6.function.has-instance { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es6.function.name { "ie":"10" }
+  es6.function.name { "edge":"13", "ie":"10" }
   es6.map { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es6.math.acosh { "ie":"10", "safari":"7" }
   es6.math.asinh { "ie":"10", "safari":"7" }
