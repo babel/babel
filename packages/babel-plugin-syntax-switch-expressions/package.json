@@ -1,0 +1,24 @@
+{
+  "name": "@babel/plugin-syntax-switch-expressions",
+  "version": "7.2.0",
+  "description": "Allow parsing of switch expressions",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-switch-expressions",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "@babel/helper-plugin-utils": "^7.0.0"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.0"
+  }
+}
+

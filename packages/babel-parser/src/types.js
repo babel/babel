@@ -245,6 +245,18 @@ export type SwitchCase = NodeBase & {
   consequent: $ReadOnlyArray<Statement>,
 };
 
+export type SwitchExpression = NodeBase & {
+  type: "SwitchExpression",
+  discriminant: Expression,
+  cases: $ReadOnlyArray<SwitchCaseExpression>,
+};
+
+export type SwitchCaseExpression = NodeBase & {
+  type: "SwitchCaseExpression",
+  test: ?$ReadOnlyArray<Expression>,
+  expression: $ReadOnlyArray<ArrowFunctionExpression>,
+};
+
 // Exceptions
 
 export type ThrowStatement = NodeBase & {

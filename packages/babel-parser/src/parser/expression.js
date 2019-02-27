@@ -37,8 +37,10 @@ import {
   SCOPE_CLASS,
   SCOPE_DIRECT_SUPER,
   SCOPE_SUPER,
+  SCOPE_OTHER,
   SCOPE_PROGRAM,
 } from "../util/scopeflags";
+const switchLabel = { kind: "switch" };
 
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
@@ -1023,6 +1025,12 @@ export default class ExpressionParser extends LValParser {
         }
       }
 
+      case tt._switch: {
+        this.expectPlugin("switchExpressions");
+        node = this.startNode();
+        return this.parseSwitchExpression(node);
+      }
+
       default:
         throw this.unexpected();
     }
@@ -1077,6 +1085,70 @@ export default class ExpressionParser extends LValParser {
       return this.parseMetaProperty(node, meta, "sent");
     }
     return this.parseFunction(node);
+  }
+
+  parseSwitchExpression(node: N.SwitchStatement): N.SwitchExpression {
+    this.next();
+    node.discriminant = this.parseParenExpression();
+    const cases = (node.cases = []);
+    this.expect(tt.braceL);
+    this.state.labels.push(switchLabel);
+    this.scope.enter(SCOPE_OTHER);
+
+    let cur;
+    for (let sawDefault; !this.match(tt.braceR); ) {
+      if (
+        this.match(tt._case) ||
+        this.match(tt._default) ||
+        this.match(tt.comma)
+      ) {
+        const isDefault = this.match(tt._default);
+
+        if (!this.match(tt.comma)) {
+          if (cur) {
+            this.finishNode(cur, "SwitchCaseExpression");
+          }
+          cases.push((cur = this.startNode()));
+          cur.expression = null;
+          cur.tests = [];
+
+          if (isDefault) {
+            if (sawDefault) {
+              this.raise(this.state.lastTokStart, "Multiple default clauses");
+            }
+            sawDefault = true;
+          }
+        } else if (cur.expression) {
+          this.raise(this.state.lastTokStart, "Unexpected comma");
+        }
+
+        this.next();
+        if (!isDefault) {
+          const e = this.parseExpression();
+          if (e.type === "SequenceExpression") {
+            cur.tests = e.expressions;
+          } else {
+            cur.tests = [e];
+          }
+        }
+      } else {
+        this.expect(tt.arrow);
+        if (!cur || cur.expression) {
+          this.unexpected();
+        }
+        const expr = this.startNode();
+        cur.expression = this.parseArrowExpression(expr, [], false);
+
+        if (this.match(tt.semi)) {
+          this.next();
+        }
+      }
+    }
+    this.scope.exit();
+    if (cur) this.finishNode(cur, "SwitchCaseExpression");
+    this.next(); // Closing brace
+    this.state.labels.pop();
+    return this.finishNode(node, "SwitchExpression");
   }
 
   parseMetaProperty(

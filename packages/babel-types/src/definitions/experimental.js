@@ -210,6 +210,35 @@ defineType("DoExpression", {
   },
 });
 
+defineType("SwitchExpression", {
+  visitor: ["discriminant", "cases"],
+  aliases: ["Expression"],
+  fields: {
+    discriminant: {
+      validate: assertNodeType("Expression"),
+    },
+    cases: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("SwitchCaseExpression")),
+      ),
+    },
+  },
+});
+
+defineType("SwitchCaseExpression", {
+  visitor: ["tests", "expression"],
+  fields: {
+    tests: {
+      validate: assertEach(assertNodeType("Expression")),
+      optional: true,
+    },
+    expression: {
+      validate: assertNodeType("ArrowFunctionExpression"),
+    },
+  },
+});
+
 defineType("ExportDefaultSpecifier", {
   visitor: ["exported"],
   aliases: ["ModuleSpecifier"],
