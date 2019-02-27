@@ -259,8 +259,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
-    parseFunctionBody(node: N.Function, allowExpression: ?boolean): void {
-      super.parseFunctionBody(node, allowExpression);
+    parseFunctionBody(
+      node: N.Function,
+      allowExpression: ?boolean,
+      isMethod?: boolean = false,
+    ): void {
+      super.parseFunctionBody(node, allowExpression, isMethod);
       node.expression = node.body.type !== "BlockStatement";
     }
 

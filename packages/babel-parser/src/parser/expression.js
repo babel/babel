@@ -1740,7 +1740,7 @@ export default class ExpressionParser extends LValParser {
     );
     this.parseFunctionParams((node: any), allowModifiers);
     this.checkYieldAwaitInDefaultParams();
-    this.parseFunctionBodyAndFinish(node, type);
+    this.parseFunctionBodyAndFinish(node, type, true);
 
     this.state.yieldPos = oldYieldPos;
     this.state.awaitPos = oldAwaitPos;
@@ -1804,14 +1804,19 @@ export default class ExpressionParser extends LValParser {
   parseFunctionBodyAndFinish(
     node: N.BodilessFunctionOrMethodBase,
     type: string,
+    isMethod?: boolean = false,
   ): void {
     // $FlowIgnore (node is not bodiless if we get here)
-    this.parseFunctionBody(node);
+    this.parseFunctionBody(node, false, isMethod);
     this.finishNode(node, type);
   }
 
   // Parse function body and check parameters.
-  parseFunctionBody(node: N.Function, allowExpression: ?boolean): void {
+  parseFunctionBody(
+    node: N.Function,
+    allowExpression: ?boolean,
+    isMethod?: boolean = false,
+  ): void {
     const isExpression = allowExpression && !this.match(tt.braceL);
     const oldStrict = this.state.strict;
     let useStrict = false;
@@ -1853,7 +1858,7 @@ export default class ExpressionParser extends LValParser {
       // if a let/const declaration in the function clashes with one of the params.
       this.checkParams(
         node,
-        !oldStrict && !useStrict && !allowExpression && !nonSimple,
+        !oldStrict && !useStrict && !allowExpression && !isMethod && !nonSimple,
         allowExpression,
       );
       node.body = this.parseBlock(true, false);

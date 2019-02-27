@@ -1472,6 +1472,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseFunctionBodyAndFinish(
       node: N.BodilessFunctionOrMethodBase,
       type: string,
+      isMethod?: boolean = false,
     ): void {
       if (this.match(tt.colon)) {
         node.returnType = this.tsParseTypeOrTypePredicateAnnotation(tt.colon);
@@ -1488,7 +1489,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return;
       }
 
-      super.parseFunctionBodyAndFinish(node, type);
+      super.parseFunctionBodyAndFinish(node, type, isMethod);
     }
 
     parseSubscript(
