@@ -524,12 +524,21 @@ export default class ExpressionParser extends LValParser {
     startLoc: Position,
     noCalls?: ?boolean,
   ): N.Expression {
+    const maybeAsyncArrow = this.atPossibleAsync(base);
+
     const state = {
       optionalChainMember: false,
       stop: false,
     };
     do {
-      base = this.parseSubscript(base, startPos, startLoc, noCalls, state);
+      base = this.parseSubscript(
+        base,
+        startPos,
+        startLoc,
+        noCalls,
+        state,
+        maybeAsyncArrow,
+      );
     } while (!state.stop);
     return base;
   }
@@ -544,6 +553,7 @@ export default class ExpressionParser extends LValParser {
     startLoc: Position,
     noCalls: ?boolean,
     state: N.ParseSubscriptState,
+    maybeAsyncArrow: boolean,
   ): N.Expression {
     if (!noCalls && this.eat(tt.doubleColon)) {
       const node = this.startNodeAt(startPos, startLoc);
@@ -575,13 +585,8 @@ export default class ExpressionParser extends LValParser {
         this.expect(tt.bracketR);
         return this.finishNode(node, "OptionalMemberExpression");
       } else if (this.eat(tt.parenL)) {
-        const possibleAsync = this.atPossibleAsync(base);
-
         node.callee = base;
-        node.arguments = this.parseCallExpressionArguments(
-          tt.parenR,
-          possibleAsync,
-        );
+        node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
         node.optional = true;
         return this.finishNode(node, "OptionalCallExpression");
       } else {
@@ -620,7 +625,6 @@ export default class ExpressionParser extends LValParser {
       this.state.yieldPos = 0;
       this.state.awaitPos = 0;
 
-      const possibleAsync = this.atPossibleAsync(base);
       this.next();
 
       let node = this.startNodeAt(startPos, startLoc);
@@ -631,7 +635,7 @@ export default class ExpressionParser extends LValParser {
 
       node.arguments = this.parseCallExpressionArguments(
         tt.parenR,
-        possibleAsync,
+        maybeAsyncArrow,
         base.type === "Import",
         base.type !== "Super",
       );
@@ -641,7 +645,11 @@ export default class ExpressionParser extends LValParser {
         this.finishOptionalCallExpression(node);
       }
 
-      if (possibleAsync && this.shouldParseAsyncArrow()) {
+      if (
+        maybeAsyncArrow &&
+        !this.canInsertSemicolon() &&
+        this.shouldParseAsyncArrow()
+      ) {
         state.stop = true;
 
         this.checkCommaAfterRestFromSpread();
@@ -704,11 +712,11 @@ export default class ExpressionParser extends LValParser {
 
   atPossibleAsync(base: N.Expression): boolean {
     return (
-      !this.state.containsEsc &&
-      this.state.potentialArrowAt === base.start &&
       base.type === "Identifier" &&
       base.name === "async" &&
-      !this.canInsertSemicolon()
+      this.state.lastTokEnd === base.end &&
+      !this.canInsertSemicolon() &&
+      this.state.input.slice(base.start, base.end) === "async"
     );
   }
 
@@ -891,6 +899,7 @@ export default class ExpressionParser extends LValParser {
           return this.parseFunction(node, undefined, true);
         } else if (
           canBeArrow &&
+          !containsEsc &&
           id.name === "async" &&
           this.match(tt.name) &&
           !this.canInsertSemicolon()
