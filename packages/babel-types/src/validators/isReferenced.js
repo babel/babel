@@ -135,10 +135,12 @@ export default function isReferenced(
     case "ObjectTypeProperty":
       return parent.key !== node;
 
+    // yes: enum X { Foo = NODE }
     // no: enum X { NODE }
     case "TSEnumMember":
-      return false;
+      return parent.id !== node;
 
+    // yes: { [NODE]: value }
     // no: { NODE: value }
     case "TSPropertySignature":
       if (parent.key === node) {
