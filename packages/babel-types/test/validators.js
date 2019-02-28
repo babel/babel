@@ -122,7 +122,7 @@ describe("validators", function() {
       expect(t.isReferenced(node, parent)).toBe(true);
     });
 
-    it("returns true if node id a value of ObjectProperty of an expression", function() {
+    it("returns true if node is a value of ObjectProperty of an expression", function() {
       const node = t.identifier("a");
       const parent = t.objectProperty(t.identifier("key"), node);
       const grandparent = t.objectExpression([parent]);
@@ -130,12 +130,54 @@ describe("validators", function() {
       expect(t.isReferenced(node, parent, grandparent)).toBe(true);
     });
 
-    it("returns false if node id a value of ObjectProperty of a pattern", function() {
+    it("returns false if node is a value of ObjectProperty of a pattern", function() {
       const node = t.identifier("a");
       const parent = t.objectProperty(t.identifier("key"), node);
       const grandparent = t.objectPattern([parent]);
 
       expect(t.isReferenced(node, parent, grandparent)).toBe(false);
+    });
+
+    describe("TSPropertySignature", function() {
+      it("returns false if node is a key", function() {
+        // { A: string }
+        const node = t.identifier("A");
+        const parent = t.tsPropertySignature(
+          node,
+          t.tsTypeAnnotation(t.tsStringKeyword()),
+        );
+
+        expect(t.isReferenced(node, parent)).toBe(false);
+      });
+
+      it("returns true if node is a value", function() {
+        // { someKey: A }
+        const node = t.identifier("A");
+        const parent = t.tsPropertySignature(
+          t.identifier("someKey"),
+          t.tsTypeAnnotation(t.tsTypeReference(node)),
+        );
+
+        expect(t.isReferenced(node, parent)).toBe(true);
+      });
+    });
+
+    describe("TSEnumMember", function() {
+      it("returns false if node is an id", function() {
+        // enum X = { A };
+        const node = t.identifier("A");
+        const parent = t.tsEnumMember(node);
+
+        expect(t.isReferenced(node, parent)).toBe(false);
+      });
+
+      it("returns true if node is a value", function() {
+        // enum X = { Foo = A }
+        const node = t.identifier("A");
+        const parent = t.tsEnumMember(t.identifier("Foo"), node);
+
+        expect(t.isReferenced(node, parent)).toBe(true);
+      });
     });
   });
 
