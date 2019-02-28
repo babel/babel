@@ -1866,9 +1866,17 @@ export default class StatementParser extends ExpressionParser {
         // Named exports
         for (const specifier of node.specifiers) {
           this.checkDuplicateExports(specifier, specifier.exported.name);
-          // check if export is defined
           // $FlowIgnore
           if (!isFrom && specifier.local) {
+            // check for keywords used as local names
+            this.checkReservedWord(
+              specifier.local.name,
+              specifier.local.start,
+              true,
+              false,
+            );
+            // check if export is defined
+            // $FlowIgnore
             this.scope.checkLocalExport(specifier.local);
           }
         }
@@ -1954,7 +1962,6 @@ export default class StatementParser extends ExpressionParser {
   parseExportSpecifiers(): Array<N.ExportSpecifier> {
     const nodes = [];
     let first = true;
-    let needsFrom;
 
     // export { x, y as z } [from '...']
     this.expect(tt.braceL);
@@ -1967,20 +1974,12 @@ export default class StatementParser extends ExpressionParser {
         if (this.eat(tt.braceR)) break;
       }
 
-      const isDefault = this.match(tt._default);
-      if (isDefault && !needsFrom) needsFrom = true;
-
       const node = this.startNode();
-      node.local = this.parseIdentifier(isDefault);
+      node.local = this.parseIdentifier(true);
       node.exported = this.eatContextual("as")
         ? this.parseIdentifier(true)
         : node.local.__clone();
       nodes.push(this.finishNode(node, "ExportSpecifier"));
-    }
-
-    // https://github.com/ember-cli/ember-cli/pull/3739
-    if (needsFrom && !this.isContextual("from")) {
-      this.unexpected();
     }
 
     return nodes;
