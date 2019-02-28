@@ -13,6 +13,7 @@
     "typescript"
   ],
   "dependencies": {
+    "@babel/helper-create-class-features-plugin": "^7.3.4",
     "@babel/helper-plugin-utils": "^7.0.0",
     "@babel/plugin-syntax-typescript": "^7.2.0"
   },
