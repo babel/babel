@@ -27,7 +27,6 @@ import {
   isStrictReservedWord,
   isStrictBindReservedWord,
 } from "../util/identifier";
-import { lineBreak } from "../util/whitespace";
 import type { Pos, Position } from "../util/location";
 import * as charCodes from "charcodes";
 import {
@@ -1459,9 +1458,7 @@ export default class ExpressionParser extends LValParser {
         this.match(tt.bracketL) ||
         this.state.type.keyword ||
         this.match(tt.star)) &&
-      !lineBreak.test(
-        this.state.input.slice(this.state.lastTokEnd, this.state.start),
-      )
+      !this.hasPrecedingLineBreak()
     );
   }
 
