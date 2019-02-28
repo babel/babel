@@ -518,7 +518,7 @@ export default class Scope {
     }
 
     const parent = this.getProgramParent();
-    const ids = path.getBindingIdentifiers(true);
+    const ids = path.getOuterBindingIdentifiers(true);
 
     for (const name of Object.keys(ids)) {
       for (const id of (ids[name]: Array<Object>)) {
