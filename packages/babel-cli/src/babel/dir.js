@@ -23,11 +23,11 @@ export default async function({
       return false;
     }
 
-    // remove extension and then append back on the configured extension
-    relative = util.adjustRelative(
+    relative = util.withExtension(
       relative,
-      cliOptions.keepFileExtension,
-      cliOptions.useFileExtension,
+      cliOptions.keepFileExtension
+        ? path.extname(relative)
+        : cliOptions.useFileExtension,
     );
 
     const dest = getDest(relative, base);
