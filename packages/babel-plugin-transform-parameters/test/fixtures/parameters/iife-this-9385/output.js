@@ -22,10 +22,8 @@ function () {
     key: "invite",
     value: function invite() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      return function () {
-        var privacy = options.privacy || "Private";
-        console.log(this);
-      }.apply(this);
+      var privacy = options.privacy || "Private";
+      console.log(this);
     }
   }]);
 
