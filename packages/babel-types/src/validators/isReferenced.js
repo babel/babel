@@ -139,7 +139,7 @@ export default function isReferenced(
     case "TSEnumMember":
       return false;
 
-    // no: { NODE: NODE }
+    // no: { NODE: value }
     case "TSPropertySignature":
       if (parent.key === node) {
         return !!parent.computed;
