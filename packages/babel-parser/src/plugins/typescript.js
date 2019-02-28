@@ -2268,8 +2268,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): $ReadOnlyArray<N.Pattern> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
-        if (expr && expr.type === "TSTypeCastExpression") {
-          exprList[i] = this.typeCastToParameter(expr);
+        if (!expr) continue;
+        switch (expr.type) {
+          case "TSTypeCastExpression":
+            exprList[i] = this.typeCastToParameter(expr);
+            break;
+          case "TSAsExpression":
+          case "TSTypeAssertion":
+            this.raise(
+              expr.start,
+              "Unexpected type cast in parameter position.",
+            );
+            break;
         }
       }
       return super.toAssignableList(exprList, isBinding, contextDescription);
