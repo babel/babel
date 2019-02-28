@@ -1490,12 +1490,9 @@ export default class ExpressionParser extends LValParser {
     let isAsync = false;
     let startPos;
     let startLoc;
-    if (decorators.length) {
-      prop.decorators = decorators;
-      decorators = [];
-    }
 
     if (this.match(tt.ellipsis)) {
+      if (decorators.length) this.unexpected();
       if (isPattern) {
         this.next();
         // Don't use parseRestBinding() as we only allow Identifier here.
@@ -1505,6 +1502,11 @@ export default class ExpressionParser extends LValParser {
       }
 
       return this.parseSpread();
+    }
+
+    if (decorators.length) {
+      prop.decorators = decorators;
+      decorators = [];
     }
 
     prop.method = false;
