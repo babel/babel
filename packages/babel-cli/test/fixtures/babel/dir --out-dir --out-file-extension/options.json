@@ -3,7 +3,7 @@
     "src",
     "--out-dir",
     "lib",
-    "--use-file-extension",
+    "--out-file-extension",
     ".mjs",
     "--extensions",
     ".jsx,.mjs",

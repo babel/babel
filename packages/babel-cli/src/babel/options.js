@@ -150,7 +150,7 @@ commander.option(
   "Delete the out directory before compilation",
 );
 commander.option(
-  "--use-file-extension [string]",
+  "--out-file-extension [string]",
   "Use a specific extension for the output files",
 );
 
@@ -278,7 +278,7 @@ export default function parseArgv(args: Array<string>): CmdOptions {
       filenames,
       extensions: opts.extensions,
       keepFileExtension: opts.keepFileExtension,
-      useFileExtension: opts.useFileExtension,
+      outFileExtension: opts.outFileExtension,
       watch: opts.watch,
       skipInitialBuild: opts.skipInitialBuild,
       outFile: opts.outFile,

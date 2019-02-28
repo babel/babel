@@ -27,7 +27,7 @@ export default async function({
       relative,
       cliOptions.keepFileExtension
         ? path.extname(relative)
-        : cliOptions.useFileExtension,
+        : cliOptions.outFileExtension,
     );
 
     const dest = getDest(relative, base);
