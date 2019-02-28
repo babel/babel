@@ -18,7 +18,7 @@ exports.hoist = function(funPath) {
 
   let vars = {};
 
-  function varDeclToExpr(vdec, includeIdentifiers) {
+  function varDeclToExpr({ node: vdec, scope }, includeIdentifiers) {
     t.assertVariableDeclaration(vdec);
     // TODO assert.equal(vdec.kind, "var");
     let exprs = [];
@@ -27,6 +27,10 @@ exports.hoist = function(funPath) {
       // Note: We duplicate 'dec.id' here to ensure that the variable declaration IDs don't
       // have the same 'loc' value, since that can make sourcemaps and retainLines behave poorly.
       vars[dec.id.name] = t.identifier(dec.id.name);
+
+      // Remove the binding, to avoid "duplicate declaration" errors when it will
+      // be injected again.
+      scope.removeBinding(dec.id.name);
 
       if (dec.init) {
         exprs.push(t.assignmentExpression(
@@ -49,7 +53,7 @@ exports.hoist = function(funPath) {
   funPath.get("body").traverse({
     VariableDeclaration: {
       exit: function(path) {
-        let expr = varDeclToExpr(path.node, false);
+        let expr = varDeclToExpr(path, false);
         if (expr === null) {
           path.remove();
         } else {
@@ -65,16 +69,16 @@ exports.hoist = function(funPath) {
     },
 
     ForStatement: function(path) {
-      let init = path.node.init;
-      if (t.isVariableDeclaration(init)) {
-        util.replaceWithOrRemove(path.get("init"), varDeclToExpr(init, false));
+      let init = path.get("init");
+      if (init.isVariableDeclaration()) {
+        util.replaceWithOrRemove(init, varDeclToExpr(init, false));
       }
     },
 
     ForXStatement: function(path) {
       let left = path.get("left");
       if (left.isVariableDeclaration()) {
-        util.replaceWithOrRemove(left, varDeclToExpr(left.node, true));
+        util.replaceWithOrRemove(left, varDeclToExpr(left, true));
       }
     },
 
@@ -110,6 +114,10 @@ exports.hoist = function(funPath) {
         // without worrying about hoisting it.
         util.replaceWithOrRemove(path, assignment);
       }
+
+      // Remove the binding, to avoid "duplicate declaration" errors when it will
+      // be injected again.
+      path.scope.removeBinding(node.id.name);
 
       // Don't hoist variables out of inner functions.
       path.skip();

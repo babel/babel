@@ -237,4 +237,20 @@ context("functions", function() {
       assert.strictEqual(declarator.init.arguments[0].id.name, '_callee');
     });
   });
+
+  describe("variables hoisting", function() {
+    it("shouldn't throw about duplicate bindings", function() {
+      // https://github.com/babel/babel/issues/6923
+
+      assert.doesNotThrow(function() {
+        compile([
+          "async function foo() {",
+          "  (async function (number) {",
+          "    const tmp = number",
+          "  })",
+          "}",
+        ].join("\n"));
+      });
+    })
+  });
 });
