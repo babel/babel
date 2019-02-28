@@ -1,4 +1,3 @@
-
 annexB/language/statements/for-in/bare-initializer.js(default)
 annexB/language/statements/for-in/bare-initializer.js(strict mode)
 built-ins/RegExp/property-escapes/binary-property-with-value-ASCII_-_F-negated.js(default)
@@ -406,10 +405,6 @@ language/expressions/class/elements/syntax/early-errors/invalid-names/method-out
 language/expressions/class/elements/syntax/early-errors/invalid-names/method-outter-member-expression-this.js(strict mode)
 language/expressions/class/elements/syntax/early-errors/super-private-access-invalid.js(default)
 language/expressions/class/elements/syntax/early-errors/super-private-access-invalid.js(strict mode)
-language/expressions/object/method-definition/early-errors-object-method-async-lineterminator.js(default)
-language/expressions/object/method-definition/early-errors-object-method-async-lineterminator.js(strict mode)
-language/expressions/object/method-definition/private-name-early-error-async-fn-inside-class.js(default)
-language/expressions/object/method-definition/private-name-early-error-async-fn-inside-class.js(strict mode)
 language/expressions/object/method-definition/private-name-early-error-async-gen-inside-class.js(default)
 language/expressions/object/method-definition/private-name-early-error-async-gen-inside-class.js(strict mode)
 language/expressions/object/method-definition/private-name-early-error-gen-inside-class.js(default)
