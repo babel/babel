@@ -134,6 +134,18 @@ export default function isReferenced(
     // no: type X = { NODE: OtherType }
     case "ObjectTypeProperty":
       return parent.key !== node;
+
+    // no: enum X { NODE }
+    case "TSEnumMember":
+      return false;
+
+    // no: { NODE: NODE }
+    case "TSPropertySignature":
+      if (parent.key === node) {
+        return !!parent.computed;
+      }
+
+      return true;
   }
 
   return true;
