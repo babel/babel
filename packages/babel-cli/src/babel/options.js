@@ -222,6 +222,12 @@ export default function parseArgv(args: Array<string>): CmdOptions {
     );
   }
 
+  if (commander.keepFileExtension && commander.outFileExtension) {
+    errors.push(
+      "--out-file-extension cannot be used with --keep-file-extension",
+    );
+  }
+
   if (errors.length) {
     console.error("babel:");
     errors.forEach(function(e) {
