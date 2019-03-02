@@ -7,9 +7,8 @@
         "firefox": 50,
         "ie": 11
       },
-      "proposals": true,
       "useBuiltIns": "usage",
-      "corejs": 2
+      "corejs": { "version": 2, "proposals": true }
     }]
   ]
 }

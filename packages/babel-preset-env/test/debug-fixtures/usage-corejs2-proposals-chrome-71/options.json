@@ -6,8 +6,7 @@
         "chrome": 71
       },
       "useBuiltIns": "usage",
-      "corejs": 2,
-      "proposals": true
+      "corejs": { "version": 2, "proposals": true }
     }]
   ]
 }

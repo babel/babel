@@ -16,7 +16,9 @@ const corejs3Definitions = require("../lib/runtime-corejs3-definitions").default
 
 writeHelpers("@babel/runtime");
 writeHelpers("@babel/runtime-corejs2", { corejs: 2 });
-writeHelpers("@babel/runtime-corejs3", { corejs: 3, proposals: true });
+writeHelpers("@babel/runtime-corejs3", {
+  corejs: { version: 3, proposals: true },
+});
 
 writeCoreJS({
   corejs: 2,
