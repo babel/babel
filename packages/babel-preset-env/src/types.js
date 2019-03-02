@@ -23,7 +23,6 @@ export type Options = {
   include: Array<string | RegExp>,
   loose: boolean,
   modules: ModuleOption,
-  proposals: boolean,
   shippedProposals: boolean,
   spec: boolean,
   targets: Targets,

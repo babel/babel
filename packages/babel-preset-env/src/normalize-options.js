@@ -159,48 +159,58 @@ export const validateUseBuiltInsOption = (builtInsOpt = false) => {
   return builtInsOpt;
 };
 
-export default function normalizeOptions(opts) {
-  validateTopLevelOptions(opts);
+export function normalizeCoreJSOption(corejs, useBuiltIns) {
+  let proposals = false;
+  let rawVersion;
 
-  let corejs: any = null;
-  if (opts.useBuiltIns && opts.corejs === undefined) {
-    corejs = coerce("2");
+  if (useBuiltIns && corejs === undefined) {
+    rawVersion = 2;
     console.log(
       "\nWith `useBuiltIns` option, required direct setting of `corejs` option\n",
     );
-  } else if (["string", "number"].includes(typeof opts.corejs)) {
-    corejs = coerce(String(opts.corejs));
+  } else if (typeof corejs === "object" && corejs !== null) {
+    rawVersion = corejs.version;
+    proposals = Boolean(corejs.proposals);
+  } else {
+    rawVersion = corejs;
   }
 
-  if (opts.useBuiltIns && (!corejs || corejs.major < 2 || corejs.major > 3)) {
+  const version = rawVersion ? coerce(String(rawVersion)) : false;
+
+  if (useBuiltIns && (!version || version.major < 2 || version.major > 3)) {
     throw new RangeError("Supported only core-js@2 and core-js@3.");
   }
+
+  return { version, proposals };
+}
+
+export default function normalizeOptions(opts) {
+  validateTopLevelOptions(opts);
+
+  const useBuiltIns = validateUseBuiltInsOption(opts.useBuiltIns);
+
+  const corejs = normalizeCoreJSOption(opts.corejs, useBuiltIns);
 
   const include = expandIncludesAndExcludes(
     opts.include,
     TopLevelOptions.include,
-    corejs && corejs.major,
+    corejs.version && corejs.version.major,
   );
+
   const exclude = expandIncludesAndExcludes(
     opts.exclude,
     TopLevelOptions.exclude,
-    corejs && corejs.major,
+    corejs.version && corejs.version.major,
   );
 
   checkDuplicateIncludeExcludes(include, exclude);
-
-  const proposals = validateBoolOption(
-    TopLevelOptions.proposals,
-    opts.proposals,
-    false,
-  );
 
   const shippedProposals =
     validateBoolOption(
       TopLevelOptions.shippedProposals,
       opts.shippedProposals,
       false,
-    ) || proposals;
+    ) || corejs.proposals;
 
   return {
     configPath: validateConfigPathOption(opts.configPath),
@@ -218,10 +228,9 @@ export default function normalizeOptions(opts) {
     ),
     loose: validateBoolOption(TopLevelOptions.loose, opts.loose, false),
     modules: validateModulesOption(opts.modules),
-    proposals,
     shippedProposals,
     spec: validateBoolOption(TopLevelOptions.spec, opts.spec, false),
     targets: normalizeTargets(opts.targets),
-    useBuiltIns: validateUseBuiltInsOption(opts.useBuiltIns),
+    useBuiltIns: useBuiltIns,
   };
 }

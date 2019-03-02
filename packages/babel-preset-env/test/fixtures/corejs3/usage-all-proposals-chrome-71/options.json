@@ -7,8 +7,7 @@
         "targets": {
           "chrome": "71"
         },
-        "corejs": 3,
-        "proposals": true,
+        "corejs": { "version": 3, "proposals": true },
         "modules": false
       }
     ]

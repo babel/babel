@@ -80,8 +80,7 @@ export default declare((api, opts) => {
     spec,
     targets: optionsTargets,
     useBuiltIns,
-    corejs,
-    proposals,
+    corejs: { version: corejs, proposals },
   } = normalizeOptions(opts);
   // TODO: remove this in next major
   let hasUglifyTarget = false;

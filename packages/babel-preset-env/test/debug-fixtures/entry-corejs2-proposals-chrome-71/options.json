@@ -5,9 +5,8 @@
       "targets": {
         "browsers": "chrome 71"
       },
-      "proposals": true,
       "useBuiltIns": "entry",
-      "corejs": 2
+      "corejs": { "version": 2, "proposals": true }
     }]
   ]
 }

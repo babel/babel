@@ -8,7 +8,6 @@ export const TopLevelOptions = {
   include: "include",
   loose: "loose",
   modules: "modules",
-  proposals: "proposals",
   shippedProposals: "shippedProposals",
   spec: "spec",
   targets: "targets",

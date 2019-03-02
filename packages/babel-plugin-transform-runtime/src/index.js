@@ -34,28 +34,56 @@ export default declare((api, options, dirname) => {
   api.assertVersion(7);
 
   const {
-    corejs: corejsVersion = false,
+    corejs,
     helpers: useRuntimeHelpers = true,
     regenerator: useRuntimeRegenerator = true,
     useESModules = false,
     version: runtimeVersion = "7.0.0-beta.0",
     absoluteRuntime = false,
-    proposals = false,
   } = options;
+
+  let proposals = false;
+  let rawVersion;
+
+  if (typeof corejs === "object" && corejs !== null) {
+    rawVersion = corejs.version;
+    proposals = Boolean(corejs.proposals);
+  } else {
+    rawVersion = corejs;
+  }
+
+  const corejsVersion = rawVersion ? Number(rawVersion) : false;
+
+  if (![false, 2, 3].includes(corejsVersion)) {
+    throw new Error(
+      `The \`core-js\` version must be false, 2 or 3, but got ${JSON.stringify(
+        rawVersion,
+      )}.`,
+    );
+  }
+
+  if (proposals && (!corejsVersion || corejsVersion < 3)) {
+    throw new Error(
+      "The 'proposals' option is only supported when using 'corejs: 3'",
+    );
+  }
 
   if (typeof useRuntimeRegenerator !== "boolean") {
     throw new Error(
       "The 'regenerator' option must be undefined, or a boolean.",
     );
   }
+
   if (typeof useRuntimeHelpers !== "boolean") {
     throw new Error("The 'helpers' option must be undefined, or a boolean.");
   }
+
   if (typeof useESModules !== "boolean" && useESModules !== "auto") {
     throw new Error(
       "The 'useESModules' option must be undefined, or a boolean, or 'auto'.",
     );
   }
+
   if (
     typeof absoluteRuntime !== "boolean" &&
     typeof absoluteRuntime !== "string"
@@ -64,12 +92,7 @@ export default declare((api, options, dirname) => {
       "The 'absoluteRuntime' option must be undefined, a boolean, or a string.",
     );
   }
-  if (![false, undefined, 2, 3, "2", "3"].includes(corejsVersion)) {
-    throw new Error(
-      `The 'corejs' option must be undefined, false, 2, '2', 3 or '3', ` +
-        `but got ${JSON.stringify(corejsVersion)}.`,
-    );
-  }
+
   if (typeof runtimeVersion !== "string") {
     throw new Error(`The 'version' option must be a version string.`);
   }
@@ -102,6 +125,7 @@ export default declare((api, options, dirname) => {
       );
     }
   }
+
   if (has(options, "polyfill")) {
     if (options.polyfill === false) {
       throw new Error(
@@ -115,6 +139,7 @@ export default declare((api, options, dirname) => {
       );
     }
   }
+
   if (has(options, "moduleName")) {
     throw new Error(
       "The 'moduleName' option has been removed. @babel/transform-runtime " +
@@ -123,18 +148,13 @@ export default declare((api, options, dirname) => {
         "'absoluteRuntime' option.",
     );
   }
-  if (proposals && (!corejsVersion || corejsVersion < 3)) {
-    throw new Error(
-      "The 'proposals' option is only supported when using 'corejs: 3'",
-    );
-  }
 
   const esModules =
     useESModules === "auto" ? api.caller(supportsStaticESM) : useESModules;
 
-  const injectCoreJS2 = corejsVersion === 2 || corejsVersion === "2";
-  const injectCoreJS3 = corejsVersion === 3 || corejsVersion === "3";
-  const injectCoreJS = injectCoreJS2 || injectCoreJS3;
+  const injectCoreJS2 = corejsVersion === 2;
+  const injectCoreJS3 = corejsVersion === 3;
+  const injectCoreJS = corejsVersion !== false;
 
   const moduleName = injectCoreJS3
     ? "@babel/runtime-corejs3"
