@@ -8,11 +8,11 @@ export function call(key): boolean {
   this.debug(key);
 
   if (this.node) {
-    if (this._call(opts[key])) return true;
-  }
-
-  if (this.node) {
-    return this._call(opts[this.node.type] && opts[this.node.type][key]);
+    const common = opts[key];
+    const typed = opts[this.node.type] && opts[this.node.type][key];
+    return key === "exit"
+      ? this._call(typed) || this._call(common)
+      : this._call(common) || this._call(typed);
   }
 
   return false;

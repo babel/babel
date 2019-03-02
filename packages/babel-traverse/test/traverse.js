@@ -27,6 +27,32 @@ describe("traverse", function() {
     expect(ast2.body[1].expression.left.object).toBe(replacement);
   });
 
+  it("traverse order", function() {
+    let acc = "";
+    const ast2 = parse(`
+      "string literal";
+    `);
+    traverse(ast2.program, {
+      blacklist: ["DirectiveLiteral"],
+      enter: function() {
+        acc += "1";
+      },
+      exit: function() {
+        acc += "4";
+      },
+      Directive: {
+        enter: function() {
+          acc += "2";
+        },
+        exit: function() {
+          acc += "3";
+        },
+      },
+    });
+
+    expect(acc).toBe("1234");
+  });
+
   it("traverse", function() {
     const expected = [
       body[0],
