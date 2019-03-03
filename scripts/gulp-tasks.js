@@ -23,6 +23,31 @@ const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack
 const webpackStream = require("webpack-stream");
 const uglify = require("gulp-uglify");
 
+function SrcPlugin() {}
+
+SrcPlugin.prototype.apply = function(resolver) {
+  resolver.plugin("existing-file", function(request, callback) {
+    //console.log(request.path);
+    const match = request.path.match(/\/packages\/babel-[^/]+?\/lib\//);
+    if (!match) {
+      return callback();
+    }
+
+    const newPath = request.path.replace(
+      match[0],
+      match[0].replace("/lib/", "/src/")
+    );
+    const obj = Object.assign({}, request, {
+      path: newPath,
+    });
+    resolver.doResolve(
+      "relative",
+      obj,
+      "using babel src path: " + newPath,
+      callback
+    );
+  });
+};
 function webpackBuild(opts) {
   const plugins = opts.plugins || [];
   let babelVersion = require("../packages/babel-core/package.json").version;
@@ -84,6 +109,7 @@ function webpackBuild(opts) {
         // Dedupe packages that are used across multiple plugins.
         // This replaces DedupePlugin from Webpack 1.x
         new RootMostResolvePlugin(__dirname, true),
+        new SrcPlugin(),
       ],
     },
   };
@@ -97,7 +123,16 @@ function webpackBuild(opts) {
   return webpackStream(config, webpack);
   // To write JSON for debugging:
   /*return webpackStream(config, webpack, (err, stats) => {
-    require("fancy-log")(stats.toString({ colors: true }));
+    require("fancy-log")(
+      stats.toString({
+        colors: true,
+        // Examine all modules
+        maxModules: Infinity,
+        excludeModules: "node_modules",
+        // Display bailout reasons
+        optimizationBailout: true,
+      })
+    );
     require("fs").writeFileSync(
       "webpack-debug.json",
       JSON.stringify(stats.toJson())
