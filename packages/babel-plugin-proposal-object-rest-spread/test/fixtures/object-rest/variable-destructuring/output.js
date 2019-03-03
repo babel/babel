@@ -40,3 +40,11 @@ let {
     g = babelHelpers.objectWithoutProperties(complex, ["x"]);
 let {} = z,
     y4 = babelHelpers.extends({}, z.x4);
+var {
+  a,
+  'b': b1,
+  [`c`]: c1,
+  [d + 'e']: d1,
+  [`${d}e`]: d2
+} = e,
+    e1 = babelHelpers.objectWithoutProperties(e, ["a", "b", `c`, d + 'e', `${d}e`].map(babelHelpers.toPropertyKey));
