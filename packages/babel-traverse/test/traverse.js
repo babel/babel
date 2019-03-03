@@ -27,30 +27,51 @@ describe("traverse", function() {
     expect(ast2.body[1].expression.left.object).toBe(replacement);
   });
 
-  it("traverse order", function() {
-    let acc = "";
+  describe("traverse order", function() {
     const ast2 = parse(`
       "string literal";
     `);
-    traverse(ast2.program, {
-      blacklist: ["DirectiveLiteral"],
-      enter: function() {
-        acc += "1";
-      },
-      exit: function() {
-        acc += "4";
-      },
-      Directive: {
+    let acc = "";
+
+    const getVisitors = function(order) {
+      return {
+        blacklist: ["DirectiveLiteral"],
+        exitOrder: order,
         enter: function() {
-          acc += "2";
+          acc += "1";
         },
         exit: function() {
-          acc += "3";
+          acc += "4";
         },
-      },
+        Directive: {
+          enter: function() {
+            acc += "2";
+          },
+          exit: function() {
+            acc += "3";
+          },
+        },
+      };
+    };
+
+    beforeEach(function() {
+      acc = "";
     });
 
-    expect(acc).toBe("1234");
+    it("traverse default order", function() {
+      traverse(ast2.program, getVisitors());
+      expect(acc).toBe("1243");
+    });
+
+    it("traverse direct order", function() {
+      traverse(ast2.program, getVisitors("direct"));
+      expect(acc).toBe("1243");
+    });
+
+    it("traverse reverse order", function() {
+      traverse(ast2.program, getVisitors("reverse"));
+      expect(acc).toBe("1234");
+    });
   });
 
   it("traverse", function() {

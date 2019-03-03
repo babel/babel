@@ -4,15 +4,22 @@ import traverse from "../index";
 
 export function call(key): boolean {
   const opts = this.opts;
+  const order = opts.exitOrder || "direct";
 
   this.debug(key);
 
   if (this.node) {
     const common = opts[key];
     const typed = opts[this.node.type] && opts[this.node.type][key];
-    return key === "exit"
-      ? this._call(typed) || this._call(common)
-      : this._call(common) || this._call(typed);
+    if (key === "exit" && order === "reverse") {
+      return this._call(typed) || this._call(common);
+    }
+
+    if (key === "exit" && common && typed && !opts.exitOrder) {
+      // There we can show a warning about unexpected behavior
+    }
+
+    return this._call(common) || this._call(typed);
   }
 
   return false;
