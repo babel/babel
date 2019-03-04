@@ -416,15 +416,24 @@ export default class StatementParser extends ExpressionParser {
 
     if (this.isLineTerminator()) {
       node.label = null;
-    } else if (!this.match(tt.name)) {
-      this.unexpected();
     } else {
       node.label = this.parseIdentifier();
       this.semicolon();
     }
 
-    // Verify that there is an actual destination to break or
-    // continue to.
+    this.verifyBreakContinue(node, keyword);
+
+    return this.finishNode(
+      node,
+      isBreak ? "BreakStatement" : "ContinueStatement",
+    );
+  }
+
+  verifyBreakContinue(
+    node: N.BreakStatement | N.ContinueStatement,
+    keyword: string,
+  ) {
+    const isBreak = keyword === "break";
     let i;
     for (i = 0; i < this.state.labels.length; ++i) {
       const lab = this.state.labels[i];
@@ -436,10 +445,6 @@ export default class StatementParser extends ExpressionParser {
     if (i === this.state.labels.length) {
       this.raise(node.start, "Unsyntactic " + keyword);
     }
-    return this.finishNode(
-      node,
-      isBreak ? "BreakStatement" : "ContinueStatement",
-    );
   }
 
   parseDebuggerStatement(node: N.DebuggerStatement): N.DebuggerStatement {
@@ -800,7 +805,7 @@ export default class StatementParser extends ExpressionParser {
   parseExpressionStatement(
     node: N.ExpressionStatement,
     expr: N.Expression,
-  ): N.ExpressionStatement {
+  ): N.Statement {
     node.expression = expr;
     this.semicolon();
     return this.finishNode(node, "ExpressionStatement");
@@ -1024,6 +1029,7 @@ export default class StatementParser extends ExpressionParser {
   ): T {
     const isStatement = statement & FUNC_STATEMENT;
     const isHangingStatement = statement & FUNC_HANGING_STATEMENT;
+    const requireId = !!isStatement && !(statement & FUNC_NULLABLE_ID);
 
     this.initFunction(node, isAsync);
 
@@ -1036,10 +1042,7 @@ export default class StatementParser extends ExpressionParser {
     node.generator = this.eat(tt.star);
 
     if (isStatement) {
-      node.id =
-        statement & FUNC_NULLABLE_ID && !this.match(tt.name)
-          ? null
-          : this.parseIdentifier();
+      node.id = this.parseFunctionId(requireId);
       if (node.id && !isHangingStatement) {
         // If it is a regular function declaration in sloppy mode, then it is
         // subject to Annex B semantics (BIND_FUNCTION). Otherwise, the binding
@@ -1067,7 +1070,7 @@ export default class StatementParser extends ExpressionParser {
     this.scope.enter(functionFlags(node.async, node.generator));
 
     if (!isStatement) {
-      node.id = this.match(tt.name) ? this.parseIdentifier() : null;
+      node.id = this.parseFunctionId();
     }
 
     this.parseFunctionParams(node);
@@ -1088,6 +1091,10 @@ export default class StatementParser extends ExpressionParser {
     this.state.awaitPos = oldAwaitPos;
 
     return node;
+  }
+
+  parseFunctionId(requireId?: boolean): ?N.Identifier {
+    return requireId || this.match(tt.name) ? this.parseIdentifier() : null;
   }
 
   parseFunctionParams(node: N.Function, allowModifiers?: boolean): void {
@@ -1122,7 +1129,7 @@ export default class StatementParser extends ExpressionParser {
 
     this.parseClassId(node, isStatement, optionalId);
     this.parseClassSuper(node);
-    this.parseClassBody(node);
+    node.body = this.parseClassBody(!!node.superClass);
 
     this.state.strict = oldStrict;
 
@@ -1149,7 +1156,7 @@ export default class StatementParser extends ExpressionParser {
     );
   }
 
-  parseClassBody(node: N.Class): void {
+  parseClassBody(constructorAllowsSuper: boolean): N.ClassBody {
     this.state.classLevel++;
 
     const state = { hadConstructor: false };
@@ -1158,8 +1165,6 @@ export default class StatementParser extends ExpressionParser {
     classBody.body = [];
 
     this.expect(tt.braceL);
-
-    const constructorAllowsSuper = node.superClass !== null;
 
     // For the smartPipelines plugin: Disable topic references from outer
     // contexts within the class body. They are permitted in test expressions,
@@ -1212,9 +1217,9 @@ export default class StatementParser extends ExpressionParser {
       );
     }
 
-    node.body = this.finishNode(classBody, "ClassBody");
-
     this.state.classLevel--;
+
+    return this.finishNode(classBody, "ClassBody");
   }
 
   parseClassMember(
