@@ -24,7 +24,7 @@
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0",
     "@babel/helper-regex": "^7.0.0",
-    "regexpu-core": "^4.2.0"
+    "regexpu-core": "^4.5.2"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
