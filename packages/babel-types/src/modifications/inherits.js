@@ -16,7 +16,7 @@ export default function inherits<T: Object>(child: T, parent: Object): T {
   }
 
   // force inherit "private" properties
-  for (const key in parent) {
+  for (const key of Object.keys(parent)) {
     if (key[0] === "_" && key !== "__clone") child[key] = parent[key];
   }
 

@@ -83,7 +83,7 @@ export const visitor = {
       const nodes = [];
       const ids = path.getBindingIdentifiers();
 
-      for (const name in ids) {
+      for (const name of Object.keys(ids)) {
         const id = ids[name];
 
         if (isReference(id, path.scope, state)) {

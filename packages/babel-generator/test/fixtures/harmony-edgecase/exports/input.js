@@ -1,3 +1,4 @@
+var a, c;
 export * from "OK"
 export { name } from "OK"
 export { a as b, c as d } from "hello"

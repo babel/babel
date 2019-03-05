@@ -200,7 +200,6 @@ function hoistFunctionEnvironment(
         child.skip();
       },
       ClassProperty(child) {
-        if (child.node.static) return;
         child.skip();
       },
       CallExpression(child) {
@@ -453,7 +452,6 @@ function getThisBinding(thisEnvFn, inConstructor) {
         child.skip();
       },
       ClassProperty(child) {
-        if (child.node.static) return;
         child.skip();
       },
       CallExpression(child) {
@@ -581,7 +579,6 @@ function getScopeInformation(fnPath) {
 
   fnPath.traverse({
     ClassProperty(child) {
-      if (child.node.static) return;
       child.skip();
     },
     Function(child) {

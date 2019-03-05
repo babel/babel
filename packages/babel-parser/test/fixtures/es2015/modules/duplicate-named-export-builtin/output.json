@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 20,
+  "end": 41,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 1,
+      "line": 3,
       "column": 20
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 20,
+    "end": 41,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 1,
+        "line": 3,
         "column": 20
       }
     },
@@ -30,9 +30,9 @@
     "interpreter": null,
     "body": [
       {
-        "type": "ExportNamedDeclaration",
+        "type": "VariableDeclaration",
         "start": 0,
-        "end": 20,
+        "end": 19,
         "loc": {
           "start": {
             "line": 1,
@@ -40,36 +40,105 @@
           },
           "end": {
             "line": 1,
-            "column": 20
+            "column": 19
           }
         },
-        "declaration": null,
-        "specifiers": [
+        "declarations": [
           {
-            "type": "ExportSpecifier",
-            "start": 9,
-            "end": 17,
+            "type": "VariableDeclarator",
+            "start": 6,
+            "end": 18,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 9
+                "column": 6
               },
               "end": {
                 "line": 1,
+                "column": 18
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 6,
+              "end": 14,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 6
+                },
+                "end": {
+                  "line": 1,
+                  "column": 14
+                },
+                "identifierName": "toString"
+              },
+              "name": "toString"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start": 17,
+              "end": 18,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 17
+                },
+                "end": {
+                  "line": 1,
+                  "column": 18
+                }
+              },
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 21,
+        "end": 41,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 20
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 30,
+            "end": 38,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 9
+              },
+              "end": {
+                "line": 3,
                 "column": 17
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 9,
-              "end": 17,
+              "start": 30,
+              "end": 38,
               "loc": {
                 "start": {
-                  "line": 1,
+                  "line": 3,
                   "column": 9
                 },
                 "end": {
-                  "line": 1,
+                  "line": 3,
                   "column": 17
                 },
                 "identifierName": "toString"
@@ -78,15 +147,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 9,
-              "end": 17,
+              "start": 30,
+              "end": 38,
               "loc": {
                 "start": {
-                  "line": 1,
+                  "line": 3,
                   "column": 9
                 },
                 "end": {
-                  "line": 1,
+                  "line": 3,
                   "column": 17
                 },
                 "identifierName": "toString"
@@ -95,7 +164,8 @@
             }
           }
         ],
-        "source": null
+        "source": null,
+        "declaration": null
       }
     ],
     "directives": []

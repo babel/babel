@@ -367,7 +367,7 @@ export default class Printer {
 
     const loc = t.isProgram(node) || t.isFile(node) ? null : node.loc;
     this.withSource("start", loc, () => {
-      this[node.type](node, parent);
+      printMethod.call(this, node, parent);
     });
 
     this._printTrailingComments(node);

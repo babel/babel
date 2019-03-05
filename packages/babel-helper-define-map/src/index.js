@@ -98,7 +98,7 @@ export function push(
 }
 
 export function hasComputed(mutatorMap: Object): boolean {
-  for (const key in mutatorMap) {
+  for (const key of Object.keys(mutatorMap)) {
     if (mutatorMap[key]._computed) {
       return true;
     }

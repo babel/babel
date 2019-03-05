@@ -99,7 +99,7 @@ import type { imp2, imp3 } from "baz";
 import type { foo as imp4 } from "baz";
 import type from "foo";
 import typeof * as namespace from "bar";
-export type { foo };
+export type { foo1 };
 export type { foo2 } from "bar";
 import {type T} from "foo";
 import {type T2, V1} from "foo";

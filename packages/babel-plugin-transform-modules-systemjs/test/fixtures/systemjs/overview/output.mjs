@@ -10,11 +10,11 @@ System.register(["foo", "foo-bar", "./directory/foo-bar"], function (_export, _c
       bar2 = _foo.foo;
     }, function (_fooBar) {}, function (_directoryFooBar) {}],
     execute: function () {
-      _export("test", test);
+      _export("foo", foo);
 
       _export("test2", test2 = 5);
 
-      _export("default", test);
+      _export("default", foo);
     }
   };
 });

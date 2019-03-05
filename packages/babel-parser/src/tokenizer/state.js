@@ -66,13 +66,9 @@ export default class State {
   // and then convert them, we need to track it.
   commaAfterSpreadAt: number = -1;
 
-  // Flags to track whether we are in a function, a generator.
-  inFunction: boolean = false;
+  // Flags to track
   inParameters: boolean = false;
   maybeInArrowParameters: boolean = false;
-  inGenerator: boolean = false;
-  inMethod: boolean | N.MethodKind = false;
-  inAsync: boolean = false;
   inPipeline: boolean = false;
   inType: boolean = false;
   noAnonFunctionType: boolean = false;

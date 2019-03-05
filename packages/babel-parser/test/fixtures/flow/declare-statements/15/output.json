@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 69,
+  "end": 70,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 2,
-      "column": 33
+      "column": 34
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 69,
+    "end": 70,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 2,
-        "column": 33
+        "column": 34
       }
     },
     "sourceType": "module",
@@ -142,7 +142,7 @@
       {
         "type": "DeclareInterface",
         "start": 36,
-        "end": 69,
+        "end": 70,
         "loc": {
           "start": {
             "line": 2,
@@ -150,13 +150,13 @@
           },
           "end": {
             "line": 2,
-            "column": 33
+            "column": 34
           }
         },
         "id": {
           "type": "Identifier",
           "start": 54,
-          "end": 55,
+          "end": 56,
           "loc": {
             "start": {
               "line": 2,
@@ -164,39 +164,39 @@
             },
             "end": {
               "line": 2,
-              "column": 19
+              "column": 20
             },
-            "identifierName": "I"
+            "identifierName": "I2"
           },
-          "name": "I"
+          "name": "I2"
         },
         "typeParameters": {
           "type": "TypeParameterDeclaration",
-          "start": 55,
-          "end": 58,
+          "start": 56,
+          "end": 59,
           "loc": {
             "start": {
               "line": 2,
-              "column": 19
+              "column": 20
             },
             "end": {
               "line": 2,
-              "column": 22
+              "column": 23
             }
           },
           "params": [
             {
               "type": "TypeParameter",
-              "start": 56,
-              "end": 57,
+              "start": 57,
+              "end": 58,
               "loc": {
                 "start": {
                   "line": 2,
-                  "column": 20
+                  "column": 21
                 },
                 "end": {
                   "line": 2,
-                  "column": 21
+                  "column": 22
                 }
               },
               "name": "T",
@@ -209,46 +209,46 @@
         "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
-          "start": 59,
-          "end": 69,
+          "start": 60,
+          "end": 70,
           "loc": {
             "start": {
               "line": 2,
-              "column": 23
+              "column": 24
             },
             "end": {
               "line": 2,
-              "column": 33
+              "column": 34
             }
           },
           "callProperties": [],
           "properties": [
             {
               "type": "ObjectTypeProperty",
-              "start": 61,
-              "end": 67,
+              "start": 62,
+              "end": 68,
               "loc": {
                 "start": {
                   "line": 2,
-                  "column": 25
+                  "column": 26
                 },
                 "end": {
                   "line": 2,
-                  "column": 31
+                  "column": 32
                 }
               },
               "key": {
                 "type": "Identifier",
-                "start": 61,
-                "end": 64,
+                "start": 62,
+                "end": 65,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 25
+                    "column": 26
                   },
                   "end": {
                     "line": 2,
-                    "column": 28
+                    "column": 29
                   },
                   "identifierName": "foo"
                 },
@@ -260,31 +260,31 @@
               "method": false,
               "value": {
                 "type": "GenericTypeAnnotation",
-                "start": 66,
-                "end": 67,
+                "start": 67,
+                "end": 68,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 30
+                    "column": 31
                   },
                   "end": {
                     "line": 2,
-                    "column": 31
+                    "column": 32
                   }
                 },
                 "typeParameters": null,
                 "id": {
                   "type": "Identifier",
-                  "start": 66,
-                  "end": 67,
+                  "start": 67,
+                  "end": 68,
                   "loc": {
                     "start": {
                       "line": 2,
-                      "column": 30
+                      "column": 31
                     },
                     "end": {
                       "line": 2,
-                      "column": 31
+                      "column": 32
                     },
                     "identifierName": "T"
                   },
