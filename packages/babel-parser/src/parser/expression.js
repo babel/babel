@@ -1552,7 +1552,14 @@ export default class ExpressionParser extends LValParser {
   checkGetterSetterParams(method: N.ObjectMethod | N.ClassMethod): void {
     const paramCount = method.kind === "get" ? 0 : 1;
     const start = method.start;
-    if (method.params.length !== paramCount) {
+    // Allow `this` type annotation in TypeScript
+    if (
+      method.params.length === paramCount + 1 &&
+      method.params[0].type === "Identifier" &&
+      method.params[0].name === "this"
+    ) {
+      this.expectPlugin("typescript");
+    } else if (method.params.length !== paramCount) {
       if (method.kind === "get") {
         this.raise(start, "getter must not have any formal parameters");
       } else {
@@ -1560,7 +1567,10 @@ export default class ExpressionParser extends LValParser {
       }
     }
 
-    if (method.kind === "set" && method.params[0].type === "RestElement") {
+    if (
+      method.kind === "set" &&
+      method.params[method.params.length - 1].type === "RestElement"
+    ) {
       this.raise(
         start,
         "setter function argument must not be a rest parameter",
