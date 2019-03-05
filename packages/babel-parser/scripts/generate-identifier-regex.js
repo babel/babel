@@ -1,6 +1,7 @@
 "use strict";
 
-// Which Unicode version should be used?
+// We should always use the latest version of Unicode
+// https://tc39.github.io/ecma262/#sec-conformance
 const version = "12.0.0";
 
 const start = require("unicode-" +
