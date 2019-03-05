@@ -645,11 +645,7 @@ export default class ExpressionParser extends LValParser {
         this.finishOptionalCallExpression(node);
       }
 
-      if (
-        maybeAsyncArrow &&
-        !this.canInsertSemicolon() &&
-        this.shouldParseAsyncArrow()
-      ) {
+      if (maybeAsyncArrow && this.shouldParseAsyncArrow()) {
         state.stop = true;
 
         this.checkCommaAfterRestFromSpread();
@@ -799,7 +795,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   shouldParseAsyncArrow(): boolean {
-    return this.match(tt.arrow);
+    return this.match(tt.arrow) && !this.canInsertSemicolon();
   }
 
   parseAsyncArrowFromCallExpression(
