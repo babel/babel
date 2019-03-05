@@ -76,9 +76,7 @@ export default declare((api, opts) => {
       if (t.isIdentifier(prop.key) && !prop.computed) {
         // since a key {a: 3} is equivalent to {"a": 3}, use the latter
         keys.push(t.stringLiteral(prop.key.name));
-      } else if (t.isTemplateLiteral(prop.key)) {
-        keys.push(t.templateLiteral(prop.key.quasis, prop.key.expressions));
-      } else if (t.isLiteral(prop.key)) {
+      } else if (t.isLiteral(prop.key) && !t.isTemplateLiteral(prop.key)) {
         keys.push(t.stringLiteral(String(prop.key.value)));
       } else {
         keys.push(t.cloneNode(prop.key));

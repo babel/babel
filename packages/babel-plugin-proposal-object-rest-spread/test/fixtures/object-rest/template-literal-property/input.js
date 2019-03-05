@@ -8,3 +8,13 @@ const {
   [`${prefix}consents`]: consents,
   ...rest
 } = input;
+
+const secondInput = {};
+
+const {
+  name: name,
+  'first_name': first,
+  [`middle`]: middle,
+  [`${prefix}last`]: last,
+  ...another
+} = secondInput;
