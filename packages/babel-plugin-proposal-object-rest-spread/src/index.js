@@ -78,7 +78,7 @@ export default declare((api, opts) => {
         keys.push(t.stringLiteral(prop.key.name));
       } else if (t.isTemplateLiteral(prop.key)) {
         keys.push(t.cloneNode(prop.key));
-      } else if (t.isLiteral(prop.key) && !t.isTemplateLiteral(prop.key)) {
+      } else if (t.isLiteral(prop.key)) {
         keys.push(t.stringLiteral(String(prop.key.value)));
       } else {
         keys.push(t.cloneNode(prop.key));
