@@ -126,9 +126,16 @@ export default function(
       }
     },
 
-    // for-of, [a, b] = c, [...spread]
-    "ForOfStatement|ArrayPattern|SpreadElement"() {
+    // for-of, [a, b] = c
+    "ForOfStatement|ArrayPattern"() {
       this.addUnsupported(CommonIterators);
+    },
+
+    // [...spread]
+    SpreadElement({ parentPath }) {
+      if (!parentPath.isObjectExpression()) {
+        this.addUnsupported(CommonIterators);
+      }
     },
 
     // yield*
