@@ -1,13 +1,8 @@
+// @flow
 import presetStage2 from "./preset-stage-2";
+import * as babelPlugins from "./generated/plugins";
 
-import transformExportDefaultFrom from "@babel/plugin-proposal-export-default-from";
-import transformLogicalAssignmentOperators from "@babel/plugin-proposal-logical-assignment-operators";
-import transformOptionalChaining from "@babel/plugin-proposal-optional-chaining";
-import transformPipelineOperator from "@babel/plugin-proposal-pipeline-operator";
-import transformNullishCoalescingOperator from "@babel/plugin-proposal-nullish-coalescing-operator";
-import transformDoExpressions from "@babel/plugin-proposal-do-expressions";
-
-export default (_, opts = {}) => {
+export default (_: any, opts: Object = {}) => {
   const {
     loose = false,
     useBuiltIns = false,
@@ -24,12 +19,12 @@ export default (_, opts = {}) => {
       ],
     ],
     plugins: [
-      transformExportDefaultFrom,
-      transformLogicalAssignmentOperators,
-      [transformOptionalChaining, { loose }],
-      [transformPipelineOperator, { proposal: pipelineProposal }],
-      [transformNullishCoalescingOperator, { loose }],
-      transformDoExpressions,
+      babelPlugins.proposalExportDefaultFrom,
+      babelPlugins.proposalLogicalAssignmentOperators,
+      [babelPlugins.proposalOptionalChaining, { loose }],
+      [babelPlugins.proposalPipelineOperator, { proposal: pipelineProposal }],
+      [babelPlugins.proposalNullishCoalescingOperator, { loose }],
+      babelPlugins.proposalDoExpressions,
     ],
   };
 };
