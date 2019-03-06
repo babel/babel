@@ -1564,10 +1564,16 @@ export default class ExpressionParser extends LValParser {
     );
   }
 
+  getGetterSetterExpectedParamCount(
+    method: N.ObjectMethod | N.ClassMethod,
+  ): number {
+    return method.kind === "get" ? 0 : 1;
+  }
+
   // get methods aren't allowed to have any parameters
   // set methods must have exactly 1 parameter which is not a rest parameter
   checkGetterSetterParams(method: N.ObjectMethod | N.ClassMethod): void {
-    const paramCount = method.kind === "get" ? 0 : 1;
+    const paramCount = this.getGetterSetterExpectedParamCount(method);
     const start = method.start;
     if (method.params.length !== paramCount) {
       if (method.kind === "get") {
@@ -1577,7 +1583,10 @@ export default class ExpressionParser extends LValParser {
       }
     }
 
-    if (method.kind === "set" && method.params[0].type === "RestElement") {
+    if (
+      method.kind === "set" &&
+      method.params[method.params.length - 1].type === "RestElement"
+    ) {
       this.raise(
         start,
         "setter function argument must not be a rest parameter",

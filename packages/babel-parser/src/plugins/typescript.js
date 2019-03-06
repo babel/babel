@@ -2344,4 +2344,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (typeArguments) node.typeParameters = typeArguments;
       return super.jsxParseOpeningElementAfterName(node);
     }
+
+    getGetterSetterExpectedParamCount(
+      method: N.ObjectMethod | N.ClassMethod,
+    ): number {
+      const baseCount = super.getGetterSetterExpectedParamCount(method);
+      const firstParam = method.params[0];
+      const hasContextParam =
+        firstParam &&
+        firstParam.type === "Identifier" &&
+        firstParam.name === "this";
+
+      return hasContextParam ? baseCount + 1 : baseCount;
+    }
   };
