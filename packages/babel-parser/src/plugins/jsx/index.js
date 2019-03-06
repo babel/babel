@@ -14,6 +14,8 @@ import { isNewLine } from "../../util/whitespace";
 const HEX_NUMBER = /^[\da-fA-F]+$/;
 const DECIMAL_NUMBER = /^\d+$/;
 
+// Be aware that this file is always executed and not only when the plugin is enabled.
+// Therefore this contexts and tokens do always exist.
 tc.j_oTag = new TokContext("<tag", false);
 tc.j_cTag = new TokContext("</tag", false);
 tc.j_expr = new TokContext("<tag>...</tag>", true, true);

@@ -1329,7 +1329,7 @@ export default class Tokenizer extends LocationParser {
 
   readWord(): void {
     const word = this.readWord1();
-    const type = keywordTypes[word] || tt.name;
+    const type = keywordTypes.get(word) || tt.name;
 
     if (type.keyword && this.state.containsEsc) {
       this.raise(this.state.pos, `Escape sequence in keyword ${word}`);
