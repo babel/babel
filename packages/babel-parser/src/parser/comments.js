@@ -141,9 +141,8 @@ export default class CommentsParser extends BaseParser {
     }
 
     if (lastChild) {
-      if (lastChild.leadingComments) {
+      if (lastChild.leadingComments && lastChild !== node) {
         if (
-          lastChild !== node &&
           lastChild.leadingComments.length > 0 &&
           last(lastChild.leadingComments).end <= node.start
         ) {
