@@ -3,6 +3,7 @@
 // @flow
 
 import * as charCodes from "charcodes";
+import { keywords } from "../tokenizer/types";
 
 const reservedWords = {
   strict: [
@@ -51,44 +52,6 @@ export function isStrictBindReservedWord(
 ): boolean {
   return isReservedWord(word, inModule) || reservedWordsStrictBindSet.has(word);
 }
-
-const keywords = new Set([
-  "break",
-  "case",
-  "catch",
-  "continue",
-  "debugger",
-  "default",
-  "do",
-  "else",
-  "finally",
-  "for",
-  "function",
-  "if",
-  "return",
-  "switch",
-  "throw",
-  "try",
-  "var",
-  "while",
-  "with",
-  "null",
-  "true",
-  "false",
-  "instanceof",
-  "typeof",
-  "void",
-  "delete",
-  "new",
-  "in",
-  "this",
-  "const",
-  "class",
-  "extends",
-  "export",
-  "import",
-  "super",
-]);
 
 export function isKeyword(word: string): boolean {
   return keywords.has(word);

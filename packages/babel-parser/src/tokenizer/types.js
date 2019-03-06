@@ -32,7 +32,6 @@ const postfix = true;
 
 type TokenOptions = {
   keyword?: string,
-
   beforeExpr?: boolean,
   startsExpr?: boolean,
   rightAssociative?: boolean,
@@ -66,16 +65,21 @@ export class TokenType {
     this.isAssign = !!conf.isAssign;
     this.prefix = !!conf.prefix;
     this.postfix = !!conf.postfix;
-    this.binop = conf.binop === 0 ? 0 : conf.binop || null;
+    this.binop = conf.binop != null ? conf.binop : null;
     this.updateContext = null;
   }
 }
 
-function KeywordTokenType(keyword: string, options: TokenOptions = {}) {
-  return new TokenType(keyword, { ...options, keyword });
+export const keywords = new Map<string, TokenType>();
+
+function createKeyword(name: string, options: TokenOptions = {}): TokenType {
+  options.keyword = name;
+  const token = new TokenType(name, options);
+  keywords.set(name, token);
+  return token;
 }
 
-function BinopTokenType(name: string, binop: number) {
+function createBinop(name: string, binop: number) {
   return new TokenType(name, { beforeExpr, binop });
 }
 
@@ -133,74 +137,60 @@ export const types: { [name: string]: TokenType } = {
   incDec: new TokenType("++/--", { prefix, postfix, startsExpr }),
   bang: new TokenType("!", { beforeExpr, prefix, startsExpr }),
   tilde: new TokenType("~", { beforeExpr, prefix, startsExpr }),
-  pipeline: BinopTokenType("|>", 0),
-  nullishCoalescing: BinopTokenType("??", 1),
-  logicalOR: BinopTokenType("||", 1),
-  logicalAND: BinopTokenType("&&", 2),
-  bitwiseOR: BinopTokenType("|", 3),
-  bitwiseXOR: BinopTokenType("^", 4),
-  bitwiseAND: BinopTokenType("&", 5),
-  equality: BinopTokenType("==/!=", 6),
-  relational: BinopTokenType("</>", 7),
-  bitShift: BinopTokenType("<</>>", 8),
+  pipeline: createBinop("|>", 0),
+  nullishCoalescing: createBinop("??", 1),
+  logicalOR: createBinop("||", 1),
+  logicalAND: createBinop("&&", 2),
+  bitwiseOR: createBinop("|", 3),
+  bitwiseXOR: createBinop("^", 4),
+  bitwiseAND: createBinop("&", 5),
+  equality: createBinop("==/!=", 6),
+  relational: createBinop("</>", 7),
+  bitShift: createBinop("<</>>", 8),
   plusMin: new TokenType("+/-", { beforeExpr, binop: 9, prefix, startsExpr }),
-  modulo: BinopTokenType("%", 10),
-  star: BinopTokenType("*", 10),
-  slash: BinopTokenType("/", 10),
+  modulo: createBinop("%", 10),
+  star: createBinop("*", 10),
+  slash: createBinop("/", 10),
   exponent: new TokenType("**", {
     beforeExpr,
     binop: 11,
     rightAssociative: true,
   }),
+
+  // Keywords
+  _break: createKeyword("break"),
+  _case: createKeyword("case", { beforeExpr }),
+  _catch: createKeyword("catch"),
+  _continue: createKeyword("continue"),
+  _debugger: createKeyword("debugger"),
+  _default: createKeyword("default", { beforeExpr }),
+  _do: createKeyword("do", { isLoop, beforeExpr }),
+  _else: createKeyword("else", { beforeExpr }),
+  _finally: createKeyword("finally"),
+  _for: createKeyword("for", { isLoop }),
+  _function: createKeyword("function", { startsExpr }),
+  _if: createKeyword("if"),
+  _return: createKeyword("return", { beforeExpr }),
+  _switch: createKeyword("switch"),
+  _throw: createKeyword("throw", { beforeExpr, prefix, startsExpr }),
+  _try: createKeyword("try"),
+  _var: createKeyword("var"),
+  _const: createKeyword("const"),
+  _while: createKeyword("while", { isLoop }),
+  _with: createKeyword("with"),
+  _new: createKeyword("new", { beforeExpr, startsExpr }),
+  _this: createKeyword("this", { startsExpr }),
+  _super: createKeyword("super", { startsExpr }),
+  _class: createKeyword("class", { startsExpr }),
+  _extends: createKeyword("extends", { beforeExpr }),
+  _export: createKeyword("export"),
+  _import: createKeyword("import", { startsExpr }),
+  _null: createKeyword("null", { startsExpr }),
+  _true: createKeyword("true", { startsExpr }),
+  _false: createKeyword("false", { startsExpr }),
+  _in: createKeyword("in", { beforeExpr, binop: 7 }),
+  _instanceof: createKeyword("instanceof", { beforeExpr, binop: 7 }),
+  _typeof: createKeyword("typeof", { beforeExpr, prefix, startsExpr }),
+  _void: createKeyword("void", { beforeExpr, prefix, startsExpr }),
+  _delete: createKeyword("delete", { beforeExpr, prefix, startsExpr }),
 };
-
-function makeKeywordProps(
-  name: string,
-  conf: any,
-): PropertyDescriptor<TokenType> {
-  return { value: KeywordTokenType(name, conf), enumerable: true };
-}
-
-// $FlowIssue
-export const keywords = Object.create(null, {
-  break: makeKeywordProps("break"),
-  case: makeKeywordProps("case", { beforeExpr }),
-  catch: makeKeywordProps("catch"),
-  continue: makeKeywordProps("continue"),
-  debugger: makeKeywordProps("debugger"),
-  default: makeKeywordProps("default", { beforeExpr }),
-  do: makeKeywordProps("do", { isLoop, beforeExpr }),
-  else: makeKeywordProps("else", { beforeExpr }),
-  finally: makeKeywordProps("finally"),
-  for: makeKeywordProps("for", { isLoop }),
-  function: makeKeywordProps("function", { startsExpr }),
-  if: makeKeywordProps("if"),
-  return: makeKeywordProps("return", { beforeExpr }),
-  switch: makeKeywordProps("switch"),
-  throw: makeKeywordProps("throw", { beforeExpr, prefix, startsExpr }),
-  try: makeKeywordProps("try"),
-  var: makeKeywordProps("var"),
-  const: makeKeywordProps("const"),
-  while: makeKeywordProps("while", { isLoop }),
-  with: makeKeywordProps("with"),
-  new: makeKeywordProps("new", { beforeExpr, startsExpr }),
-  this: makeKeywordProps("this", { startsExpr }),
-  super: makeKeywordProps("super", { startsExpr }),
-  class: makeKeywordProps("class", { startsExpr }),
-  extends: makeKeywordProps("extends", { beforeExpr }),
-  export: makeKeywordProps("export"),
-  import: makeKeywordProps("import", { startsExpr }),
-  null: makeKeywordProps("null", { startsExpr }),
-  true: makeKeywordProps("true", { startsExpr }),
-  false: makeKeywordProps("false", { startsExpr }),
-  in: makeKeywordProps("in", { beforeExpr, binop: 7 }),
-  instanceof: makeKeywordProps("instanceof", { beforeExpr, binop: 7 }),
-  typeof: makeKeywordProps("typeof", { beforeExpr, prefix, startsExpr }),
-  void: makeKeywordProps("void", { beforeExpr, prefix, startsExpr }),
-  delete: makeKeywordProps("delete", { beforeExpr, prefix, startsExpr }),
-});
-
-// Map keyword names to token types.
-Object.keys(keywords).forEach(name => {
-  types["_" + name] = keywords[name];
-});
