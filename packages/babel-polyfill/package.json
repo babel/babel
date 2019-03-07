@@ -12,6 +12,6 @@
   "main": "lib/index.js",
   "dependencies": {
     "core-js": "^2.6.5",
-    "regenerator-runtime": "^0.12.0"
+    "regenerator-runtime": "^0.13.2"
   }
 }
