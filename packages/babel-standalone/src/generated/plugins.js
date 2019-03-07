@@ -1,4 +1,8 @@
 // @flow
+/*
+ * This file is auto-generated! Do not modify it directly.
+ * To re-generate run 'make build'
+ */
 import externalHelpers from "@babel/plugin-external-helpers";
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
