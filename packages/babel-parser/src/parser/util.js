@@ -89,7 +89,7 @@ export default class UtilParser extends Tokenizer {
 
   hasPrecedingLineBreak(): boolean {
     return lineBreak.test(
-      this.state.input.slice(this.state.lastTokEnd, this.state.start),
+      this.input.slice(this.state.lastTokEnd, this.state.start),
     );
   }
 
@@ -180,8 +180,8 @@ export default class UtilParser extends Tokenizer {
       // Try to find string literal.
       skipWhiteSpace.lastIndex = start;
       // $FlowIgnore
-      start += skipWhiteSpace.exec(this.state.input)[0].length;
-      const match = literal.exec(this.state.input.slice(start));
+      start += skipWhiteSpace.exec(this.input)[0].length;
+      const match = literal.exec(this.input.slice(start));
       if (!match) break;
       if (match[2] === "use strict") return true;
       start += match[0].length;
@@ -189,8 +189,8 @@ export default class UtilParser extends Tokenizer {
       // Skip semicolon, if any.
       skipWhiteSpace.lastIndex = start;
       // $FlowIgnore
-      start += skipWhiteSpace.exec(this.state.input)[0].length;
-      if (this.state.input[start] === ";") {
+      start += skipWhiteSpace.exec(this.input)[0].length;
+      if (this.input[start] === ";") {
         start++;
       }
     }

@@ -725,7 +725,7 @@ export default class ExpressionParser extends LValParser {
       base.name === "async" &&
       this.state.lastTokEnd === base.end &&
       !this.canInsertSemicolon() &&
-      this.state.input.slice(base.start, base.end) === "async"
+      this.input.slice(base.start, base.end) === "async"
     );
   }
 
@@ -1164,11 +1164,7 @@ export default class ExpressionParser extends LValParser {
 
     const node = this.startNodeAt(startPos, startLoc);
     this.addExtra(node, "rawValue", value);
-    this.addExtra(
-      node,
-      "raw",
-      this.state.input.slice(startPos, this.state.end),
-    );
+    this.addExtra(node, "raw", this.input.slice(startPos, this.state.end));
     node.value = value;
     this.next();
     return this.finishNode(node, type);
@@ -1390,7 +1386,7 @@ export default class ExpressionParser extends LValParser {
       }
     }
     elem.value = {
-      raw: this.state.input
+      raw: this.input
         .slice(this.state.start, this.state.end)
         .replace(/\r\n?/g, "\n"),
       cooked: this.state.value,
@@ -2028,8 +2024,7 @@ export default class ExpressionParser extends LValParser {
       if (
         (name === "class" || name === "function") &&
         (this.state.lastTokEnd !== this.state.lastTokStart + 1 ||
-          this.state.input.charCodeAt(this.state.lastTokStart) !==
-            charCodes.dot)
+          this.input.charCodeAt(this.state.lastTokStart) !== charCodes.dot)
       ) {
         this.state.context.pop();
       }
