@@ -5,4 +5,4 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-global.regeneratorRuntime = require("regenerator-runtime");
+require("regenerator-runtime");

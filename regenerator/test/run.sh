@@ -6,8 +6,7 @@ set -u
 cd $(dirname $0)/..
 ROOT_DIR=$(pwd)
 
-# Fresh install from package-lock.json.
-npm ci
+npm install
 
 install() {
     npm install ./packages/$1
