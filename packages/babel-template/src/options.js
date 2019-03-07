@@ -12,6 +12,8 @@ export type PublicOpts = {
   /**
    * A set of placeholder names to automatically accept, ignoring the given
    * pattern entirely.
+   *
+   * This option can be used when using %%foo%% style placeholders.
    */
   placeholderWhitelist?: ?Set<string>,
 
@@ -22,8 +24,9 @@ export type PublicOpts = {
    * 'false' will disable placeholder searching entirely, leaving only the
    * 'placeholderWhitelist' value to find replacements.
    *
-   * Defaults to /^[_$A-Z0-9]+$/ when using legacy placeholders, to
-   * /(?:)/ when using syntactic placeholders.
+   * Defaults to /^[_$A-Z0-9]+$/.
+   *
+   * This option can be used when using %%foo%% style placeholders.
    */
   placeholderPattern?: ?(RegExp | false),
 
