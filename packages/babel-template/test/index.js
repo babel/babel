@@ -242,22 +242,20 @@ describe("@babel/template", function() {
     });
 
     it("pattern", () => {
-      const output = template(`%%A%% + %%B%%`, {
-        placeholderPattern: /B/,
-      })({
-        B: t.numericLiteral(1),
-      });
-      expect(generator(output).code).toMatchInlineSnapshot(`"%%A%% + 1;"`);
+      expect(() => {
+        template(`%%A%% + %%B%%`, {
+          placeholderPattern: /B/,
+        })();
+      }).toThrow(/aren't compatible with '.syntacticPlaceholders: true'/);
     });
 
     it("whitelist", () => {
-      const output = template(`%%A%% + %%B%%`, {
-        placeholderPattern: false,
-        placeholderWhitelist: new Set(["B"]),
-      })({
-        B: t.numericLiteral(1),
-      });
-      expect(generator(output).code).toMatchInlineSnapshot(`"%%A%% + 1;"`);
+      expect(() => {
+        template(`%%A%% + %%B%%`, {
+          placeholderPattern: false,
+          placeholderWhitelist: new Set(["B"]),
+        })();
+      }).toThrow(/aren't compatible with '.syntacticPlaceholders: true'/);
     });
 
     describe("option value", () => {

@@ -21,7 +21,6 @@ export type Placeholder = {|
 |};
 
 const PATTERN = /^[_$A-Z0-9]+$/;
-const PATTERN_ALL = /(?:)/;
 
 export default function parseAndBuildMetadata<T>(
   formatter: Formatter<T>,
@@ -32,7 +31,7 @@ export default function parseAndBuildMetadata<T>(
 
   const {
     placeholderWhitelist,
-    placeholderPattern = PATTERN,
+    placeholderPattern,
     preserveComments,
     syntacticPlaceholders,
   } = opts;
@@ -97,13 +96,22 @@ function placeholderVisitorHandler(
     return;
   }
 
-  if (state.placeholderPattern === PATTERN && !state.isLegacyRef.value) {
-    // Change default pattern for %%foo%%-style placeholders
-    state.placeholderPattern = PATTERN_ALL;
+  if (
+    !state.isLegacyRef.value &&
+    (state.placeholderPattern != null || state.placeholderWhitelist != null)
+  ) {
+    // This check is also in options.js. We need it there to handle the default
+    // .syntacticPlaceholders behavior.
+    throw new Error(
+      "'.placeholderWhitelist' and '.placeholderPattern' aren't compatible" +
+        " with '.syntacticPlaceholders: true'",
+    );
   }
 
   if (
-    (!state.placeholderPattern || !state.placeholderPattern.test(name)) &&
+    state.isLegacyRef.value &&
+    (state.placeholderPattern === false ||
+      !(state.placeholderPattern || PATTERN).test(name)) &&
     (!state.placeholderWhitelist || !state.placeholderWhitelist.has(name))
   ) {
     return;

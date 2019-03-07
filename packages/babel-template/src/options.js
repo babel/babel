@@ -113,6 +113,15 @@ export function validate(opts: mixed): TemplateOpts {
       "'.syntacticPlaceholders' must be a boolean, null, or undefined",
     );
   }
+  if (
+    syntacticPlaceholders === true &&
+    (placeholderWhitelist != null || placeholderPattern != null)
+  ) {
+    throw new Error(
+      "'.placeholderWhitelist' and '.placeholderPattern' aren't compatible" +
+        " with '.syntacticPlaceholders: true'",
+    );
+  }
 
   return {
     parser,
