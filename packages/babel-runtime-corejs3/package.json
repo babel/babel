@@ -10,6 +10,6 @@
   "author": "Denis Pushkarev <zloirock@zloirock.ru>",
   "dependencies": {
     "core-js-pure": "3.0.0-beta.16",
-    "regenerator-runtime": "^0.12.0"
+    "regenerator-runtime": "^0.13.2"
   }
 }
