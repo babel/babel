@@ -66,6 +66,7 @@
     "through2": "^2.0.0",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
+    "warnings-to-errors-webpack-plugin": "^2.0.0",
     "webpack": "^3.4.1",
     "webpack-dependency-suite": "^2.4.4",
     "webpack-stream": "^4.0.0"
