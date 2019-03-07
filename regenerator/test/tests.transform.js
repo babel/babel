@@ -261,7 +261,7 @@ context("functions", function() {
 
         require("@babel/core").transformSync(code, {
           configFile: false,
-          plugins: [require("..//packages/regenerator-transform")],
+          plugins: [require("../packages/regenerator-transform")],
         });
       });
     })
