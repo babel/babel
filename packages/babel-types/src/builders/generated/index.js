@@ -596,6 +596,10 @@ export function Noop(...args: Array<any>): Object {
   return builder("Noop", ...args);
 }
 export { Noop as noop };
+export function Placeholder(...args: Array<any>): Object {
+  return builder("Placeholder", ...args);
+}
+export { Placeholder as placeholder };
 export function ArgumentPlaceholder(...args: Array<any>): Object {
   return builder("ArgumentPlaceholder", ...args);
 }

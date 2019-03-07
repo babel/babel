@@ -15,6 +15,11 @@ import {
   BUILDER_KEYS,
   DEPRECATED_KEYS,
 } from "./utils";
+import {
+  PLACEHOLDERS,
+  PLACEHOLDERS_ALIAS,
+  PLACEHOLDERS_FLIPPED_ALIAS,
+} from "./placeholders";
 
 // We do this here, because at this point the visitor keys should be ready and setup
 toFastProperties(VISITOR_KEYS);
@@ -23,6 +28,9 @@ toFastProperties(FLIPPED_ALIAS_KEYS);
 toFastProperties(NODE_FIELDS);
 toFastProperties(BUILDER_KEYS);
 toFastProperties(DEPRECATED_KEYS);
+
+toFastProperties(PLACEHOLDERS_ALIAS);
+toFastProperties(PLACEHOLDERS_FLIPPED_ALIAS);
 
 const TYPES: Array<string> = Object.keys(VISITOR_KEYS)
   .concat(Object.keys(FLIPPED_ALIAS_KEYS))
@@ -35,5 +43,8 @@ export {
   NODE_FIELDS,
   BUILDER_KEYS,
   DEPRECATED_KEYS,
+  PLACEHOLDERS,
+  PLACEHOLDERS_ALIAS,
+  PLACEHOLDERS_FLIPPED_ALIAS,
   TYPES,
 };
