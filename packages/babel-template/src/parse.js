@@ -184,7 +184,7 @@ type MetadataState = {
   },
   isLegacyRef: { value: boolean | void },
   placeholderWhitelist: Set<string> | void,
-  placeholderPattern: RegExp | false,
+  placeholderPattern: RegExp | false | void,
   syntacticPlaceholders: boolean | void,
 };
 
