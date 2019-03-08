@@ -19,7 +19,15 @@ writeHelpers("@babel/runtime-corejs2", { corejs: 2 });
 function writeCoreJS2(runtimeName) {
   const pkgDirname = getRuntimeRoot(runtimeName);
 
-  const paths = ["is-iterable", "get-iterator"];
+  const paths = [
+    "is-iterable",
+    "get-iterator",
+
+    // This was previously in definitions, but was removed to work around
+    // zloirock/core-js#262. We need to keep it in @babel/runtime-corejs2 to
+    // avoid a breaking change there.
+    "symbol/async-iterator",
+  ];
 
   Object.keys(corejs2Definitions.builtins).forEach(key => {
     const path = corejs2Definitions.builtins[key];
