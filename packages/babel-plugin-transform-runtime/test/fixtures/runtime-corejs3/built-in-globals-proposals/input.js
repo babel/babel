@@ -1,3 +1,4 @@
+AggregateError
 Map
 Observable
 Promise

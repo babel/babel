@@ -239,6 +239,7 @@ Using polyfills with `entry` option:
   es.typed-array.to-string {}
   es.weak-map {}
   es.weak-set {}
+  esnext.aggregate-error {}
   esnext.array.last-index {}
   esnext.array.last-item {}
   esnext.composite-key {}

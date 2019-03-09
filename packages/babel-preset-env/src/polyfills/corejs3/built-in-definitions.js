@@ -118,6 +118,7 @@ const WeakSetDependencies = [
 const URLSearchParamsDependencies = ["web.url", ...CommonIteratorsWithTag];
 
 export const BuiltIns = {
+  AggregateError: ["esnext.aggregate-error", ...CommonIterators],
   ArrayBuffer: [
     "es.array-buffer.constructor",
     "es.array-buffer.slice",

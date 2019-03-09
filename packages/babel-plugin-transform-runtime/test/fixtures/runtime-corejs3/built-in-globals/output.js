@@ -28,6 +28,7 @@ var _Promise = require("@babel/runtime-corejs3/core-js-stable/promise");
 
 var _Map = require("@babel/runtime-corejs3/core-js-stable/map");
 
+AggregateError;
 _Map;
 Observable;
 _Promise;

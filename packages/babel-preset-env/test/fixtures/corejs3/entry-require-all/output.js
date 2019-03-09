@@ -40,6 +40,8 @@ require("core-js/modules/es.string.trim-end");
 
 require("core-js/modules/es.string.trim-start");
 
+require("core-js/modules/esnext.aggregate-error");
+
 require("core-js/modules/esnext.array.last-index");
 
 require("core-js/modules/esnext.array.last-item");

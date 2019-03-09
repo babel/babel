@@ -1,6 +1,7 @@
 export default () => {
   return {
     BuiltIns: {
+      AggregateError: { stable: false, path: "aggregate-error" },
       Map: { stable: true, path: "map" },
       Observable: { stable: false, path: "observable" },
       Promise: { stable: true, path: "promise" },

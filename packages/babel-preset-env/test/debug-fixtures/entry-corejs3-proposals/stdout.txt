@@ -39,6 +39,7 @@ Using plugins:
 Using polyfills with `entry` option:
 
 [<CWD>/src/in.js] Replaced core-js entries with the following polyfills:
+  esnext.aggregate-error {}
   esnext.array.last-index {}
   esnext.array.last-item {}
   esnext.composite-key {}

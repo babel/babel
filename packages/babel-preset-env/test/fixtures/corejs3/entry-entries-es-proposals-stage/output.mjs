@@ -198,6 +198,7 @@ import "core-js/modules/es.typed-array.to-locale-string";
 import "core-js/modules/es.typed-array.to-string";
 import "core-js/modules/es.weak-map";
 import "core-js/modules/es.weak-set";
+import "core-js/modules/esnext.aggregate-error";
 import "core-js/modules/esnext.array.last-index";
 import "core-js/modules/esnext.array.last-item";
 import "core-js/modules/esnext.composite-key";
