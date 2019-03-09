@@ -1,3 +1,4 @@
+import "core-js/modules/esnext.aggregate-error";
 import "core-js/modules/esnext.array.last-index";
 import "core-js/modules/esnext.array.last-item";
 import "core-js/modules/esnext.composite-key";

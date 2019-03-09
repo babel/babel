@@ -16,6 +16,7 @@ Using plugins:
 Using polyfills with `entry` option:
 
 [<CWD>/src/in.js] Replaced core-js entries with the following polyfills:
+  esnext.aggregate-error { "chrome":"71" }
   esnext.array.last-index { "chrome":"71" }
   esnext.array.last-item { "chrome":"71" }
   esnext.composite-key { "chrome":"71" }

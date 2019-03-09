@@ -36,6 +36,9 @@ var _Observable = require("@babel/runtime-corejs3/core-js/observable");
 
 var _Map = require("@babel/runtime-corejs3/core-js/map");
 
+var _AggregateError = require("@babel/runtime-corejs3/core-js/aggregate-error");
+
+_AggregateError;
 _Map;
 _Observable;
 _Promise;
