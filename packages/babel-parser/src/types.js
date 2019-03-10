@@ -3,6 +3,7 @@
 import type { SourceType } from "./options";
 import type { Token } from "./tokenizer";
 import type { SourceLocation } from "./util/location";
+import type { PlaceholderTypes } from "./plugins/placeholders";
 
 /*
  * If making any changes to the AST, update:
@@ -45,6 +46,7 @@ export type Pattern =
   | ArrayPattern
   | RestElement
   | AssignmentPattern;
+//| Placeholder<"Pattern">;
 export type Declaration =
   | VariableDeclaration
   | ClassDeclaration
@@ -53,6 +55,8 @@ export type Declaration =
   | TsTypeAliasDeclaration
   | TsEnumDeclaration
   | TsModuleDeclaration;
+// | Placeholder<"Declaration">;
+
 export type DeclarationBase = NodeBase & {
   // TypeScript allows declarations to be prefixed by `declare`.
   //TODO: a FunctionDeclaration is never "declare", because it's a TSDeclareFunction instead.
@@ -78,6 +82,7 @@ export type Identifier = PatternBase & {
   // TypeScript only. Used in case of an optional parameter.
   optional?: ?true,
 };
+// | Placeholder<"Identifier">;
 
 export type PrivateName = NodeBase & {
   type: "PrivateName",
@@ -188,6 +193,7 @@ export type BlockStatement = NodeBase & {
   body: Array<Statement>, // TODO: $ReadOnlyArray
   directives: $ReadOnlyArray<Directive>,
 };
+// | Placeholder<"BlockStatement">;
 
 export type EmptyStatement = NodeBase & {
   type: "EmptyStatement",
@@ -339,6 +345,8 @@ export type VariableDeclarator = NodeBase & {
 };
 
 // Misc
+
+export type ArgumentPlaceholder = NodeBase & { type: "ArgumentPlaceholder" };
 
 export type Decorator = NodeBase & {
   type: "Decorator",
@@ -566,6 +574,11 @@ export type SequenceExpression = NodeBase & {
   expressions: $ReadOnlyArray<Expression>,
 };
 
+export type ParenthesizedExpression = NodeBase & {
+  type: "ParenthesizedExpression",
+  expression: Expression,
+};
+
 // Pipelines
 
 export type PipelineBody = NodeBase & {
@@ -680,6 +693,7 @@ export type ClassBody = NodeBase & {
   type: "ClassBody",
   body: Array<ClassMember | TsIndexSignature>, // TODO: $ReadOnlyArray
 };
+// | Placeholder<"ClassBody">;
 
 export type ClassMemberBase = NodeBase &
   HasDecorators & {
@@ -1417,6 +1431,16 @@ export type TsTypeAssertion = TsTypeAssertionLikeBase & {
 export type TsNonNullExpression = NodeBase & {
   type: "TSNonNullExpression",
   expression: Expression,
+};
+
+// ================
+// Babel placeholders %%foo%%
+// ================
+
+export type Placeholder<N: PlaceholderTypes> = NodeBase & {
+  type: "Placeholder",
+  id: Identifier,
+  expectedNode: N,
 };
 
 // ================

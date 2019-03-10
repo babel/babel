@@ -1,8 +1,8 @@
+// @flow
 import presetStage1 from "./preset-stage-1";
+import { proposalFunctionBind } from "./generated/plugins";
 
-import transformFunctionBind from "@babel/plugin-proposal-function-bind";
-
-export default (_, opts = {}) => {
+export default (_: any, opts: Object = {}) => {
   const {
     loose = false,
     useBuiltIns = false,
@@ -24,6 +24,6 @@ export default (_, opts = {}) => {
         },
       ],
     ],
-    plugins: [transformFunctionBind],
+    plugins: [proposalFunctionBind],
   };
 };

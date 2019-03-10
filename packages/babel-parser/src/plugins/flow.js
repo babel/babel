@@ -2619,6 +2619,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       startLoc: Position,
       noCalls: ?boolean,
       subscriptState: N.ParseSubscriptState,
+      maybeAsyncArrow: boolean,
     ): N.Expression {
       if (this.match(tt.questionDot) && this.isLookaheadRelational("<")) {
         this.expectPlugin("optionalChaining");
@@ -2671,6 +2672,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         startLoc,
         noCalls,
         subscriptState,
+        maybeAsyncArrow,
       );
     }
 

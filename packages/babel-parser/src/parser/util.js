@@ -113,6 +113,13 @@ export default class UtilParser extends Tokenizer {
     this.eat(type) || this.unexpected(pos, type);
   }
 
+  // Throws if the current token and the prev one are separated by a space.
+  assertNoSpace(message: string = "Unexpected space."): void {
+    if (this.state.start > this.state.lastTokEnd) {
+      this.raise(this.state.lastTokEnd, message);
+    }
+  }
+
   // Raise an unexpected token error. Can take the expected token type
   // instead of a message string.
 

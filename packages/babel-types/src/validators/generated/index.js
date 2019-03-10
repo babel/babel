@@ -551,6 +551,23 @@ export function isSequenceExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
+export function isParenthesizedExpression(
+  node: ?Object,
+  opts?: Object,
+): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "ParenthesizedExpression") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isSwitchCase(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -2076,14 +2093,25 @@ export function isNoop(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isParenthesizedExpression(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+export function isPlaceholder(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
-  if (nodeType === "ParenthesizedExpression") {
+  if (nodeType === "Placeholder") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isArgumentPlaceholder(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "ArgumentPlaceholder") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -3242,6 +3270,7 @@ export function isExpression(node: ?Object, opts?: Object): boolean {
     "NewExpression" === nodeType ||
     "ObjectExpression" === nodeType ||
     "SequenceExpression" === nodeType ||
+    "ParenthesizedExpression" === nodeType ||
     "ThisExpression" === nodeType ||
     "UnaryExpression" === nodeType ||
     "UpdateExpression" === nodeType ||
@@ -3255,7 +3284,6 @@ export function isExpression(node: ?Object, opts?: Object): boolean {
     "TypeCastExpression" === nodeType ||
     "JSXElement" === nodeType ||
     "JSXFragment" === nodeType ||
-    "ParenthesizedExpression" === nodeType ||
     "AwaitExpression" === nodeType ||
     "BindExpression" === nodeType ||
     "OptionalMemberExpression" === nodeType ||
@@ -3266,7 +3294,11 @@ export function isExpression(node: ?Object, opts?: Object): boolean {
     "BigIntLiteral" === nodeType ||
     "TSAsExpression" === nodeType ||
     "TSTypeAssertion" === nodeType ||
-    "TSNonNullExpression" === nodeType
+    "TSNonNullExpression" === nodeType ||
+    (nodeType === "Placeholder" &&
+      ("Expression" === node.expectedNode ||
+        "Identifier" === node.expectedNode ||
+        "StringLiteral" === node.expectedNode))
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3317,7 +3349,8 @@ export function isScopable(node: ?Object, opts?: Object): boolean {
     "ClassExpression" === nodeType ||
     "ForOfStatement" === nodeType ||
     "ClassMethod" === nodeType ||
-    "ClassPrivateMethod" === nodeType
+    "ClassPrivateMethod" === nodeType ||
+    (nodeType === "Placeholder" && "BlockStatement" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3348,7 +3381,8 @@ export function isBlockParent(node: ?Object, opts?: Object): boolean {
     "ArrowFunctionExpression" === nodeType ||
     "ForOfStatement" === nodeType ||
     "ClassMethod" === nodeType ||
-    "ClassPrivateMethod" === nodeType
+    "ClassPrivateMethod" === nodeType ||
+    (nodeType === "Placeholder" && "BlockStatement" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3366,7 +3400,8 @@ export function isBlock(node: ?Object, opts?: Object): boolean {
   if (
     nodeType === "Block" ||
     "BlockStatement" === nodeType ||
-    "Program" === nodeType
+    "Program" === nodeType ||
+    (nodeType === "Placeholder" && "BlockStatement" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3428,7 +3463,11 @@ export function isStatement(node: ?Object, opts?: Object): boolean {
     "TSModuleDeclaration" === nodeType ||
     "TSImportEqualsDeclaration" === nodeType ||
     "TSExportAssignment" === nodeType ||
-    "TSNamespaceExportDeclaration" === nodeType
+    "TSNamespaceExportDeclaration" === nodeType ||
+    (nodeType === "Placeholder" &&
+      ("Statement" === node.expectedNode ||
+        "Declaration" === node.expectedNode ||
+        "BlockStatement" === node.expectedNode))
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3545,8 +3584,8 @@ export function isExpressionWrapper(node: ?Object, opts?: Object): boolean {
   if (
     nodeType === "ExpressionWrapper" ||
     "ExpressionStatement" === nodeType ||
-    "TypeCastExpression" === nodeType ||
-    "ParenthesizedExpression" === nodeType
+    "ParenthesizedExpression" === nodeType ||
+    "TypeCastExpression" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3653,7 +3692,8 @@ export function isPureish(node: ?Object, opts?: Object): boolean {
     "ArrowFunctionExpression" === nodeType ||
     "ClassDeclaration" === nodeType ||
     "ClassExpression" === nodeType ||
-    "BigIntLiteral" === nodeType
+    "BigIntLiteral" === nodeType ||
+    (nodeType === "Placeholder" && "StringLiteral" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3694,7 +3734,8 @@ export function isDeclaration(node: ?Object, opts?: Object): boolean {
     "TSInterfaceDeclaration" === nodeType ||
     "TSTypeAliasDeclaration" === nodeType ||
     "TSEnumDeclaration" === nodeType ||
-    "TSModuleDeclaration" === nodeType
+    "TSModuleDeclaration" === nodeType ||
+    (nodeType === "Placeholder" && "Declaration" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3715,7 +3756,9 @@ export function isPatternLike(node: ?Object, opts?: Object): boolean {
     "RestElement" === nodeType ||
     "AssignmentPattern" === nodeType ||
     "ArrayPattern" === nodeType ||
-    "ObjectPattern" === nodeType
+    "ObjectPattern" === nodeType ||
+    (nodeType === "Placeholder" &&
+      ("Pattern" === node.expectedNode || "Identifier" === node.expectedNode))
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3738,7 +3781,9 @@ export function isLVal(node: ?Object, opts?: Object): boolean {
     "AssignmentPattern" === nodeType ||
     "ArrayPattern" === nodeType ||
     "ObjectPattern" === nodeType ||
-    "TSParameterProperty" === nodeType
+    "TSParameterProperty" === nodeType ||
+    (nodeType === "Placeholder" &&
+      ("Pattern" === node.expectedNode || "Identifier" === node.expectedNode))
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3756,7 +3801,8 @@ export function isTSEntityName(node: ?Object, opts?: Object): boolean {
   if (
     nodeType === "TSEntityName" ||
     "Identifier" === nodeType ||
-    "TSQualifiedName" === nodeType
+    "TSQualifiedName" === nodeType ||
+    (nodeType === "Placeholder" && "Identifier" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3779,7 +3825,8 @@ export function isLiteral(node: ?Object, opts?: Object): boolean {
     "BooleanLiteral" === nodeType ||
     "RegExpLiteral" === nodeType ||
     "TemplateLiteral" === nodeType ||
-    "BigIntLiteral" === nodeType
+    "BigIntLiteral" === nodeType ||
+    (nodeType === "Placeholder" && "StringLiteral" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3810,7 +3857,8 @@ export function isImmutable(node: ?Object, opts?: Object): boolean {
     "JSXFragment" === nodeType ||
     "JSXOpeningFragment" === nodeType ||
     "JSXClosingFragment" === nodeType ||
-    "BigIntLiteral" === nodeType
+    "BigIntLiteral" === nodeType ||
+    (nodeType === "Placeholder" && "StringLiteral" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3926,7 +3974,8 @@ export function isPattern(node: ?Object, opts?: Object): boolean {
     nodeType === "Pattern" ||
     "AssignmentPattern" === nodeType ||
     "ArrayPattern" === nodeType ||
-    "ObjectPattern" === nodeType
+    "ObjectPattern" === nodeType ||
+    (nodeType === "Placeholder" && "Pattern" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;

@@ -161,6 +161,10 @@ export function SequenceExpression(...args: Array<any>): Object {
   return builder("SequenceExpression", ...args);
 }
 export { SequenceExpression as sequenceExpression };
+export function ParenthesizedExpression(...args: Array<any>): Object {
+  return builder("ParenthesizedExpression", ...args);
+}
+export { ParenthesizedExpression as parenthesizedExpression };
 export function SwitchCase(...args: Array<any>): Object {
   return builder("SwitchCase", ...args);
 }
@@ -592,10 +596,14 @@ export function Noop(...args: Array<any>): Object {
   return builder("Noop", ...args);
 }
 export { Noop as noop };
-export function ParenthesizedExpression(...args: Array<any>): Object {
-  return builder("ParenthesizedExpression", ...args);
+export function Placeholder(...args: Array<any>): Object {
+  return builder("Placeholder", ...args);
 }
-export { ParenthesizedExpression as parenthesizedExpression };
+export { Placeholder as placeholder };
+export function ArgumentPlaceholder(...args: Array<any>): Object {
+  return builder("ArgumentPlaceholder", ...args);
+}
+export { ArgumentPlaceholder as argumentPlaceholder };
 export function AwaitExpression(...args: Array<any>): Object {
   return builder("AwaitExpression", ...args);
 }

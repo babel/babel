@@ -7,6 +7,10 @@ export function Identifier(node: Object) {
   });
 }
 
+export function ArgumentPlaceholder() {
+  this.token("?");
+}
+
 export function RestElement(node: Object) {
   this.token("...");
   this.print(node.argument, node);

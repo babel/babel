@@ -40,6 +40,12 @@ import {
   SCOPE_PROGRAM,
 } from "../util/scopeflags";
 
+const unwrapParenthesizedExpression = node => {
+  return node.type === "ParenthesizedExpression"
+    ? unwrapParenthesizedExpression(node.expression)
+    : node;
+};
+
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
   +parseBlock: (
@@ -204,16 +210,22 @@ export default class ExpressionParser extends LValParser {
 
       this.checkLVal(left, undefined, undefined, "assignment expression");
 
+      const maybePattern = unwrapParenthesizedExpression(left);
+
       let patternErrorMsg;
-      if (left.type === "ObjectPattern") {
+      if (maybePattern.type === "ObjectPattern") {
         patternErrorMsg = "`({a}) = 0` use `({a} = 0)`";
-      } else if (left.type === "ArrayPattern") {
+      } else if (maybePattern.type === "ArrayPattern") {
         patternErrorMsg = "`([a]) = 0` use `([a] = 0)`";
       }
 
-      if (patternErrorMsg && left.extra && left.extra.parenthesized) {
+      if (
+        patternErrorMsg &&
+        ((left.extra && left.extra.parenthesized) ||
+          left.type === "ParenthesizedExpression")
+      ) {
         this.raise(
-          left.start,
+          maybePattern.start,
           `You're trying to assign to a parenthesized expression, eg. instead of ${patternErrorMsg}`,
         );
       }
@@ -323,11 +335,11 @@ export default class ExpressionParser extends LValParser {
         const operator = this.state.value;
         node.left = left;
         node.operator = operator;
-
         if (
           operator === "**" &&
           left.type === "UnaryExpression" &&
-          !(left.extra && left.extra.parenthesized)
+          (this.options.createParenthesizedExpressions ||
+            !(left.extra && left.extra.parenthesized))
         ) {
           this.raise(
             left.argument.start,
@@ -525,12 +537,21 @@ export default class ExpressionParser extends LValParser {
     startLoc: Position,
     noCalls?: ?boolean,
   ): N.Expression {
+    const maybeAsyncArrow = this.atPossibleAsync(base);
+
     const state = {
       optionalChainMember: false,
       stop: false,
     };
     do {
-      base = this.parseSubscript(base, startPos, startLoc, noCalls, state);
+      base = this.parseSubscript(
+        base,
+        startPos,
+        startLoc,
+        noCalls,
+        state,
+        maybeAsyncArrow,
+      );
     } while (!state.stop);
     return base;
   }
@@ -545,6 +566,7 @@ export default class ExpressionParser extends LValParser {
     startLoc: Position,
     noCalls: ?boolean,
     state: N.ParseSubscriptState,
+    maybeAsyncArrow: boolean,
   ): N.Expression {
     if (!noCalls && this.eat(tt.doubleColon)) {
       const node = this.startNodeAt(startPos, startLoc);
@@ -576,13 +598,8 @@ export default class ExpressionParser extends LValParser {
         this.expect(tt.bracketR);
         return this.finishNode(node, "OptionalMemberExpression");
       } else if (this.eat(tt.parenL)) {
-        const possibleAsync = this.atPossibleAsync(base);
-
         node.callee = base;
-        node.arguments = this.parseCallExpressionArguments(
-          tt.parenR,
-          possibleAsync,
-        );
+        node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
         node.optional = true;
         return this.finishNode(node, "OptionalCallExpression");
       } else {
@@ -621,7 +638,6 @@ export default class ExpressionParser extends LValParser {
       this.state.yieldPos = 0;
       this.state.awaitPos = 0;
 
-      const possibleAsync = this.atPossibleAsync(base);
       this.next();
 
       let node = this.startNodeAt(startPos, startLoc);
@@ -632,8 +648,9 @@ export default class ExpressionParser extends LValParser {
 
       node.arguments = this.parseCallExpressionArguments(
         tt.parenR,
-        possibleAsync,
+        maybeAsyncArrow,
         base.type === "Import",
+        base.type !== "Super",
       );
       if (!state.optionalChainMember) {
         this.finishCallExpression(node);
@@ -641,7 +658,7 @@ export default class ExpressionParser extends LValParser {
         this.finishOptionalCallExpression(node);
       }
 
-      if (possibleAsync && this.shouldParseAsyncArrow()) {
+      if (maybeAsyncArrow && this.shouldParseAsyncArrow()) {
         state.stop = true;
 
         this.checkCommaAfterRestFromSpread();
@@ -704,11 +721,11 @@ export default class ExpressionParser extends LValParser {
 
   atPossibleAsync(base: N.Expression): boolean {
     return (
-      !this.state.containsEsc &&
-      this.state.potentialArrowAt === base.start &&
       base.type === "Identifier" &&
       base.name === "async" &&
-      !this.canInsertSemicolon()
+      this.state.lastTokEnd === base.end &&
+      !this.canInsertSemicolon() &&
+      this.state.input.slice(base.start, base.end) === "async"
     );
   }
 
@@ -744,6 +761,7 @@ export default class ExpressionParser extends LValParser {
     close: TokenType,
     possibleAsyncArrow: boolean,
     dynamicImport?: boolean,
+    allowPlaceholder?: boolean,
   ): $ReadOnlyArray<?N.Expression> {
     const elts = [];
     let innerParenStart;
@@ -776,6 +794,7 @@ export default class ExpressionParser extends LValParser {
           false,
           possibleAsyncArrow ? { start: 0 } : undefined,
           possibleAsyncArrow ? { start: 0 } : undefined,
+          allowPlaceholder,
         ),
       );
     }
@@ -789,7 +808,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   shouldParseAsyncArrow(): boolean {
-    return this.match(tt.arrow);
+    return this.match(tt.arrow) && !this.canInsertSemicolon();
   }
 
   parseAsyncArrowFromCallExpression(
@@ -889,6 +908,7 @@ export default class ExpressionParser extends LValParser {
           return this.parseFunction(node, undefined, true);
         } else if (
           canBeArrow &&
+          !containsEsc &&
           id.name === "async" &&
           this.match(tt.name) &&
           !this.canInsertSemicolon()
@@ -1046,19 +1066,8 @@ export default class ExpressionParser extends LValParser {
     if (isPrivate) {
       this.expectOnePlugin(["classPrivateProperties", "classPrivateMethods"]);
       const node = this.startNode();
-      const columnHashEnd = this.state.end;
       this.next();
-      const columnIdentifierStart = this.state.start;
-
-      const spacesBetweenHashAndIdentifier =
-        columnIdentifierStart - columnHashEnd;
-      if (spacesBetweenHashAndIdentifier != 0) {
-        this.raise(
-          columnIdentifierStart,
-          "Unexpected space between # and identifier",
-        );
-      }
-
+      this.assertNoSpace("Unexpected space between # and identifier");
       node.id = this.parseIdentifier(true);
       return this.finishNode(node, "PrivateName");
     } else {
@@ -1163,13 +1172,6 @@ export default class ExpressionParser extends LValParser {
     node.value = value;
     this.next();
     return this.finishNode(node, type);
-  }
-
-  parseParenExpression(): N.Expression {
-    this.expect(tt.parenL);
-    const val = this.parseExpression();
-    this.expect(tt.parenR);
-    return val;
   }
 
   parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {
@@ -1282,10 +1284,16 @@ export default class ExpressionParser extends LValParser {
       val = exprList[0];
     }
 
-    this.addExtra(val, "parenthesized", true);
-    this.addExtra(val, "parenStart", startPos);
+    if (!this.options.createParenthesizedExpressions) {
+      this.addExtra(val, "parenthesized", true);
+      this.addExtra(val, "parenStart", startPos);
+      return val;
+    }
 
-    return val;
+    const parenExpression = this.startNodeAt(startPos, startLoc);
+    parenExpression.expression = val;
+    this.finishNode(parenExpression, "ParenthesizedExpression");
+    return parenExpression;
   }
 
   shouldParseArrow(): boolean {
@@ -1556,10 +1564,16 @@ export default class ExpressionParser extends LValParser {
     );
   }
 
+  getGetterSetterExpectedParamCount(
+    method: N.ObjectMethod | N.ClassMethod,
+  ): number {
+    return method.kind === "get" ? 0 : 1;
+  }
+
   // get methods aren't allowed to have any parameters
   // set methods must have exactly 1 parameter which is not a rest parameter
   checkGetterSetterParams(method: N.ObjectMethod | N.ClassMethod): void {
-    const paramCount = method.kind === "get" ? 0 : 1;
+    const paramCount = this.getGetterSetterExpectedParamCount(method);
     const start = method.start;
     if (method.params.length !== paramCount) {
       if (method.kind === "get") {
@@ -1569,7 +1583,10 @@ export default class ExpressionParser extends LValParser {
       }
     }
 
-    if (method.kind === "set" && method.params[0].type === "RestElement") {
+    if (
+      method.kind === "set" &&
+      method.params[method.params.length - 1].type === "RestElement"
+    ) {
       this.raise(
         start,
         "setter function argument must not be a rest parameter",
@@ -1945,6 +1962,7 @@ export default class ExpressionParser extends LValParser {
     allowEmpty: ?boolean,
     refShorthandDefaultPos: ?Pos,
     refNeedsArrowPos: ?Pos,
+    allowPlaceholder: ?boolean,
   ): ?N.Expression {
     let elt;
     if (allowEmpty && this.match(tt.comma)) {
@@ -1957,6 +1975,14 @@ export default class ExpressionParser extends LValParser {
         spreadNodeStartPos,
         spreadNodeStartLoc,
       );
+    } else if (this.match(tt.question)) {
+      this.expectPlugin("partialApplication");
+      if (!allowPlaceholder) {
+        this.raise(this.state.start, "Unexpected argument placeholder");
+      }
+      const node = this.startNode();
+      this.next();
+      elt = this.finishNode(node, "ArgumentPlaceholder");
     } else {
       elt = this.parseMaybeAssign(
         false,

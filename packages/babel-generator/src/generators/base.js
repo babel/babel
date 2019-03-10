@@ -82,3 +82,13 @@ export function DirectiveLiteral(node: Object) {
 export function InterpreterDirective(node: Object) {
   this.token(`#!${node.value}\n`);
 }
+
+export function Placeholder(node: Object) {
+  this.token("%%");
+  this.print(node.name);
+  this.token("%%");
+
+  if (node.expectedNode === "Statement") {
+    this.semicolon();
+  }
+}

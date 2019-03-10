@@ -5,7 +5,7 @@ module.exports = function formatCode(code, filename) {
   filename = filename || __filename;
   const prettierConfig = prettier.resolveConfig.sync(filename);
   prettierConfig.filepath = filename;
-  prettierConfig.parser = "babylon";
+  prettierConfig.parser = "babel";
 
   return prettier.format(code, prettierConfig);
 };
