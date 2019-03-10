@@ -8,11 +8,11 @@ System.register([], function (_export, _context) {
     _export("c", +c + 1), c++;
   }
 
-  _export("a", a);
-
   function b() {
     a();
   }
+
+  _export("a", a);
 
   return {
     setters: [],
