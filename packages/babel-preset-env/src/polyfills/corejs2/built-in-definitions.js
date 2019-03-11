@@ -112,7 +112,7 @@ export const StaticProperties = {
     entries: "es7.object.entries",
     freeze: "es6.object.freeze",
     getOwnPropertyDescriptors: "es7.object.get-own-property-descriptors",
-    getOwnPropertySymbols: "es6.object.get-own-property-symbols",
+    getOwnPropertySymbols: "es6.symbol",
     is: "es6.object.is",
     isExtensible: "es6.object.is-extensible",
     isFrozen: "es6.object.is-frozen",
