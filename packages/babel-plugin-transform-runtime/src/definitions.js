@@ -109,7 +109,8 @@ export default runtimeVersion => {
         : {}),
 
       Symbol: {
-        asyncIterator: "symbol/async-iterator",
+        // FIXME: Disabled to work around zloirock/core-js#262.
+        // asyncIterator: "symbol/async-iterator",
         for: "symbol/for",
         hasInstance: "symbol/has-instance",
         isConcatSpreadable: "symbol/is-concat-spreadable",
