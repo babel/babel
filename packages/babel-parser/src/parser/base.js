@@ -16,6 +16,10 @@ export default class BaseParser {
 
   // Initialized by Tokenizer
   state: State;
+  // input and length are not in state as they are constant and we do
+  // not want to ever copy them, which happens if state gets cloned
+  input: string;
+  length: number;
 
   hasPlugin(name: string): boolean {
     return this.plugins.has(name);
