@@ -1,3 +1,5 @@
+// Copied over from TypeScript's test case
+// https://github.com/Microsoft/TypeScript/blob/master/tests/baselines/reference/constAssertions.js
 let v1 = 'abc' as const;
 let v2 = `abc` as const;
 let v3 = 10 as const;
@@ -14,18 +16,13 @@ let a3 = [10, 'hello', true] as const;
 let a4 = [...[1, 2, 3]] as const;
 let a5 = [1, 2, 3];
 let a6 = [...a5] as const;
-let a7 = [...a6];
 let a8 = ['abc', ...a7] as const;
-let a9 = [...a8];
 
 let o1 = { x: 10, y: 20 } as const;
 let o2 = { a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } as const;
 let o3 = { ...o1, ...o2 } as const;
-let o4 = { a: 1, b: 2 };
 let o5 = { ...o4 } as const;
-let o6 = { ...o5 };
 let o7 = { ...d } as const;
-let o8 = { ...o7 };
 let o9 = { x: 10, foo() { this.x = 20 } } as const;  // Error
 
 let p1 = (10) as const;
