@@ -113,6 +113,7 @@ Using polyfills with `entry` option:
   es7.object.lookup-getter {}
   es7.object.lookup-setter {}
   es6.object.prevent-extensions {}
+  es6.object.to-string {}
   es6.object.is {}
   es6.object.is-frozen {}
   es6.object.is-sealed {}

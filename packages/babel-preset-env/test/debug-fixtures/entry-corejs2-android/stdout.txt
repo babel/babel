@@ -94,6 +94,7 @@ Using polyfills with `entry` option:
   es7.object.lookup-getter { "android":"4" }
   es7.object.lookup-setter { "android":"4" }
   es6.object.prevent-extensions { "android":"4" }
+  es6.object.to-string { "android":"4" }
   es6.object.is { "android":"4" }
   es6.object.is-frozen { "android":"4" }
   es6.object.is-sealed { "android":"4" }

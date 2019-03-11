@@ -176,6 +176,7 @@ const es = {
     ],
   },
   "es6.object.prevent-extensions": "Object static methods accept primitives / Object.preventExtensions",
+  "es6.object.to-string": "well-known symbols / Symbol.toStringTag",
   "es6.object.is": "Object static methods / Object.is",
   "es6.object.is-frozen": "Object static methods accept primitives / Object.isFrozen",
   "es6.object.is-sealed": "Object static methods accept primitives / Object.isSealed",

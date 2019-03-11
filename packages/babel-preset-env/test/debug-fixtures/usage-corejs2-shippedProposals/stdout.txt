@@ -42,6 +42,7 @@ Using plugins:
 Using polyfills with `usage` option:
 
 [<CWD>/src/in.js] Added following core-js polyfills:
+  es6.object.to-string { "chrome":"52", "firefox":"50", "ie":"11" }
   es6.promise { "ie":"11" }
   es6.map { "firefox":"50", "ie":"11" }
   es6.string.iterator { "ie":"11" }

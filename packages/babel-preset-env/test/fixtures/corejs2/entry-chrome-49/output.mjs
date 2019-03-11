@@ -10,6 +10,7 @@ import "core-js/modules/es7.object.entries";
 import "core-js/modules/es7.object.get-own-property-descriptors";
 import "core-js/modules/es7.object.lookup-getter";
 import "core-js/modules/es7.object.lookup-setter";
+import "core-js/modules/es6.object.to-string";
 import "core-js/modules/es7.object.values";
 import "core-js/modules/es6.promise";
 import "core-js/modules/es7.promise.finally";

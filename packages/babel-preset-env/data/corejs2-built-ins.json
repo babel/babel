@@ -844,6 +844,17 @@
     "opera": "31",
     "electron": "0.31"
   },
+  "es6.object.to-string": {
+    "chrome": "57",
+    "edge": "15",
+    "firefox": "51",
+    "safari": "10",
+    "node": "8",
+    "ios": "10",
+    "samsung": "7.2",
+    "opera": "44",
+    "electron": "1.7"
+  },
   "es6.object.is": {
     "chrome": "19",
     "edge": "12",
