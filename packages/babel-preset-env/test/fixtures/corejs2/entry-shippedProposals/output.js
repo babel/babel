@@ -142,6 +142,8 @@ require("core-js/modules/es7.object.lookup-setter");
 
 require("core-js/modules/es6.object.prevent-extensions");
 
+require("core-js/modules/es6.object.to-string");
+
 require("core-js/modules/es6.object.is");
 
 require("core-js/modules/es6.object.is-frozen");

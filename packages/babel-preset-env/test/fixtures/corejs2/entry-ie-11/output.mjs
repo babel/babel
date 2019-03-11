@@ -51,6 +51,7 @@ import "core-js/modules/es6.object.get-prototype-of";
 import "core-js/modules/es7.object.lookup-getter";
 import "core-js/modules/es7.object.lookup-setter";
 import "core-js/modules/es6.object.prevent-extensions";
+import "core-js/modules/es6.object.to-string";
 import "core-js/modules/es6.object.is";
 import "core-js/modules/es6.object.is-frozen";
 import "core-js/modules/es6.object.is-sealed";

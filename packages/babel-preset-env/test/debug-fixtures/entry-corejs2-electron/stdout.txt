@@ -68,6 +68,7 @@ Using polyfills with `entry` option:
   es7.object.get-own-property-descriptors { "electron":"0.36" }
   es7.object.lookup-getter { "electron":"0.36" }
   es7.object.lookup-setter { "electron":"0.36" }
+  es6.object.to-string { "electron":"0.36" }
   es7.object.values { "electron":"0.36" }
   es6.promise { "electron":"0.36" }
   es7.promise.finally { "electron":"0.36" }

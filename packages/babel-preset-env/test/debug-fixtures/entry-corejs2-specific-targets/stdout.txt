@@ -101,6 +101,7 @@ Using polyfills with `entry` option:
   es7.object.lookup-getter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
   es7.object.lookup-setter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
   es6.object.prevent-extensions { "ie":"10", "safari":"7" }
+  es6.object.to-string { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es6.object.is { "ie":"10", "safari":"7" }
   es6.object.is-frozen { "ie":"10", "safari":"7" }
   es6.object.is-sealed { "ie":"10", "safari":"7" }
