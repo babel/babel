@@ -59,7 +59,7 @@
     "prettier": "^1.16.1",
     "pump": "^3.0.0",
     "rimraf": "^2.6.3",
-    "rollup": "^1.4.1",
+    "rollup": "^1.6.0",
     "rollup-plugin-babel": "^4.0.0",
     "rollup-plugin-node-resolve": "^4.0.1",
     "test262-stream": "^1.2.0",
