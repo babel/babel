@@ -1,0 +1,18 @@
+{
+  "minNodeVersion": "8.0.0",
+  "plugins": [
+    [
+      "external-helpers",
+      {
+        "helperVersion": "7.1000.0"
+      }
+    ],
+    "proposal-private-methods",
+    "proposal-class-properties",
+    "transform-block-scoping",
+    "syntax-class-properties"
+  ],
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  }
+}
