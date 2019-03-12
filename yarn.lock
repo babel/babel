@@ -4506,13 +4506,16 @@ gulp-rename@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/gulp-rename/-/gulp-rename-1.4.0.tgz#de1c718e7c4095ae861f7296ef4f3248648240bd"
 
-gulp-uglify@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/gulp-uglify/-/gulp-uglify-3.0.1.tgz#8d3eee466521bea6b10fd75dff72adf8b7ea2d97"
+gulp-uglify@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/gulp-uglify/-/gulp-uglify-3.0.2.tgz#5f5b2e8337f879ca9dec971feb1b82a5a87850b0"
+  integrity sha512-gk1dhB74AkV2kzqPMQBLA3jPoIAPd/nlNzP2XMDSG8XZrqnlCiDGAqC+rZOumzFvB5zOphlFh6yr3lgcAb/OOg==
   dependencies:
+    array-each "^1.0.1"
+    extend-shallow "^3.0.2"
     gulplog "^1.0.0"
     has-gulplog "^0.1.0"
-    lodash "^4.13.1"
+    isobject "^3.0.1"
     make-error-cause "^1.1.1"
     safe-buffer "^5.1.2"
     through2 "^2.0.0"
