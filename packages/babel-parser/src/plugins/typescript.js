@@ -710,7 +710,25 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.expectContextual(operator);
       node.operator = operator;
       node.typeAnnotation = this.tsParseTypeOperatorOrHigher();
+
+      if (operator === "readonly") {
+        this.tsCheckTypeAnnotationForReadOnly(node);
+      }
+
       return this.finishNode(node, "TSTypeOperator");
+    }
+
+    tsCheckTypeAnnotationForReadOnly(node: N.Node) {
+      switch (node.typeAnnotation.type) {
+        case "TSTupleType":
+        case "TSArrayType":
+          return;
+        default:
+          this.raise(
+            node.operator,
+            "'readonly' type modifier is only permitted on array and tuple literal types.",
+          );
+      }
     }
 
     tsParseInferType(): N.TsInferType {
