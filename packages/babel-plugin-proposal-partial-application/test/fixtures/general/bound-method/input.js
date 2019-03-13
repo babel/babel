@@ -1,10 +1,5 @@
-class Collator {
+class Partial {
   constructor() {
     this.compare = this.compare(?, ?);
-  }
-  compare(a, b) {
-    if (a > b) {
-      return a;
-    };
   }
 }
