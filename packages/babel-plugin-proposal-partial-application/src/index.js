@@ -76,7 +76,7 @@ export default declare(api => {
         const functionLVal = path.scope.generateUidIdentifierBasedOnNode(
           node.callee,
         );
-
+        const sequenceParts = [];
         const argsInitializers = unwrapArguments(node, scope);
         const [placeholdersParams, args] = replacePlaceholders(node, scope);
 
@@ -87,7 +87,7 @@ export default declare(api => {
             node.callee.object,
           );
           scope.push({ id: receiverLVal });
-          const finalExpression = t.sequenceExpression([
+          sequenceParts.push(
             t.assignmentExpression(
               "=",
               t.cloneNode(receiverLVal),
@@ -126,10 +126,9 @@ export default declare(api => {
               false,
               false,
             ),
-          ]);
-          path.replaceWith(finalExpression);
+          );
         } else {
-          const finalExpression = t.sequenceExpression([
+          sequenceParts.push(
             t.assignmentExpression("=", t.cloneNode(functionLVal), node.callee),
             ...argsInitializers,
             t.functionExpression(
@@ -142,9 +141,9 @@ export default declare(api => {
               false,
               false,
             ),
-          ]);
-          path.replaceWith(finalExpression);
+          );
         }
+        path.replaceWith(t.sequenceExpression(sequenceParts));
       },
     },
   };
