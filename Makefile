@@ -11,6 +11,7 @@ SOURCES = packages codemods
 
 build: clean clean-lib
 	./node_modules/.bin/gulp build
+	node ./packages/babel-standalone/scripts/generate.js
 	node ./packages/babel-types/scripts/generateTypeHelpers.js
 	# call build again as the generated files might need to be compiled again.
 	./node_modules/.bin/gulp build

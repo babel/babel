@@ -1,13 +1,13 @@
 System.register([], function (_export, _context) {
   "use strict";
 
-  var foo, foo2, foo3, foo4, foo5, foo6;
+  var foo8, foo, foo2, foo3, foo4, foo5, foo6;
 
   function foo7() {}
 
-  _export("foo7", foo7);
-
   _export({
+    foo7: foo7,
+    foo8: void 0,
     foo3: void 0,
     foo5: void 0
   });
@@ -23,9 +23,7 @@ System.register([], function (_export, _context) {
 
       _export("foo6", foo6 = 3);
 
-      class foo8 {}
-
-      _export("foo8", foo8);
+      _export("foo8", foo8 = class foo8 {});
 
       _export("foo3", foo3 = 5);
     }

@@ -73,7 +73,7 @@ export default class StatementParser extends ExpressionParser {
     const directiveLiteral = this.startNodeAt(expr.start, expr.loc.start);
     const directive = this.startNodeAt(stmt.start, stmt.loc.start);
 
-    const raw = this.state.input.slice(expr.start, expr.end);
+    const raw = this.input.slice(expr.start, expr.end);
     const val = (directiveLiteral.value = raw.slice(1, -1)); // remove quotes
 
     this.addExtra(directiveLiteral, "raw", raw);
@@ -105,10 +105,10 @@ export default class StatementParser extends ExpressionParser {
       return false;
     }
     skipWhiteSpace.lastIndex = this.state.pos;
-    const skip = skipWhiteSpace.exec(this.state.input);
+    const skip = skipWhiteSpace.exec(this.input);
     // $FlowIgnore
     const next = this.state.pos + skip[0].length;
-    const nextCh = this.state.input.charCodeAt(next);
+    const nextCh = this.input.charCodeAt(next);
     // For ambiguous cases, determine if a LexicalDeclaration (or only a
     // Statement) is allowed here. If context is not empty then only a Statement
     // is allowed. However, `let [` is an explicit negative lookahead for
@@ -120,10 +120,10 @@ export default class StatementParser extends ExpressionParser {
 
     if (isIdentifierStart(nextCh)) {
       let pos = next + 1;
-      while (isIdentifierChar(this.state.input.charCodeAt(pos))) {
+      while (isIdentifierChar(this.input.charCodeAt(pos))) {
         ++pos;
       }
-      const ident = this.state.input.slice(next, pos);
+      const ident = this.input.slice(next, pos);
       if (!keywordRelationalOperator.test(ident)) return true;
     }
     return false;
@@ -453,6 +453,13 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(node, "DebuggerStatement");
   }
 
+  parseHeaderExpression(): N.Expression {
+    this.expect(tt.parenL);
+    const val = this.parseExpression();
+    this.expect(tt.parenR);
+    return val;
+  }
+
   parseDoStatement(node: N.DoWhileStatement): N.DoWhileStatement {
     this.next();
     this.state.labels.push(loopLabel);
@@ -469,7 +476,7 @@ export default class StatementParser extends ExpressionParser {
     this.state.labels.pop();
 
     this.expect(tt._while);
-    node.test = this.parseParenExpression();
+    node.test = this.parseHeaderExpression();
     this.eat(tt.semi);
     return this.finishNode(node, "DoWhileStatement");
   }
@@ -567,7 +574,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseIfStatement(node: N.IfStatement): N.IfStatement {
     this.next();
-    node.test = this.parseParenExpression();
+    node.test = this.parseHeaderExpression();
     node.consequent = this.parseStatement("if");
     node.alternate = this.eat(tt._else) ? this.parseStatement("if") : null;
     return this.finishNode(node, "IfStatement");
@@ -596,7 +603,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseSwitchStatement(node: N.SwitchStatement): N.SwitchStatement {
     this.next();
-    node.discriminant = this.parseParenExpression();
+    node.discriminant = this.parseHeaderExpression();
     const cases = (node.cases = []);
     this.expect(tt.braceL);
     this.state.labels.push(switchLabel);
@@ -642,9 +649,7 @@ export default class StatementParser extends ExpressionParser {
   parseThrowStatement(node: N.ThrowStatement): N.ThrowStatement {
     this.next();
     if (
-      lineBreak.test(
-        this.state.input.slice(this.state.lastTokEnd, this.state.start),
-      )
+      lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start))
     ) {
       this.raise(this.state.lastTokEnd, "Illegal newline after throw");
     }
@@ -715,7 +720,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseWhileStatement(node: N.WhileStatement): N.WhileStatement {
     this.next();
-    node.test = this.parseParenExpression();
+    node.test = this.parseHeaderExpression();
     this.state.labels.push(loopLabel);
 
     node.body =
@@ -737,7 +742,7 @@ export default class StatementParser extends ExpressionParser {
       this.raise(this.state.start, "'with' in strict mode");
     }
     this.next();
-    node.object = this.parseParenExpression();
+    node.object = this.parseHeaderExpression();
 
     node.body =
       // For the smartPipelines plugin:
@@ -1321,6 +1326,7 @@ export default class StatementParser extends ExpressionParser {
       return;
     }
 
+    const containsEsc = this.state.containsEsc;
     const key = this.parseClassPropertyName(member);
     const isPrivate = key.type === "PrivateName";
     // Check the key is not a computed expression or string literal.
@@ -1371,7 +1377,12 @@ export default class StatementParser extends ExpressionParser {
       } else {
         this.pushClassProperty(classBody, publicProp);
       }
-    } else if (isSimple && key.name === "async" && !this.isLineTerminator()) {
+    } else if (
+      isSimple &&
+      key.name === "async" &&
+      !containsEsc &&
+      !this.isLineTerminator()
+    ) {
       // an async method
       const isGenerator = this.eat(tt.star);
 
@@ -1407,6 +1418,7 @@ export default class StatementParser extends ExpressionParser {
     } else if (
       isSimple &&
       (key.name === "get" || key.name === "set") &&
+      !containsEsc &&
       !(this.match(tt.star) && this.isLineTerminator())
     ) {
       // `get\n*` is an uninitialized property named 'get' followed by a generator.
@@ -1733,19 +1745,20 @@ export default class StatementParser extends ExpressionParser {
   isAsyncFunction(): boolean {
     if (!this.isContextual("async")) return false;
 
-    const { input, pos, length } = this.state;
+    const { pos } = this.state;
 
     skipWhiteSpace.lastIndex = pos;
-    const skip = skipWhiteSpace.exec(input);
+    const skip = skipWhiteSpace.exec(this.input);
 
     if (!skip || !skip.length) return false;
 
     const next = pos + skip[0].length;
 
     return (
-      !lineBreak.test(input.slice(pos, next)) &&
-      input.slice(next, next + 8) === "function" &&
-      (next + 8 === length || !isIdentifierChar(input.charCodeAt(next + 8)))
+      !lineBreak.test(this.input.slice(pos, next)) &&
+      this.input.slice(next, next + 8) === "function" &&
+      (next + 8 === this.length ||
+        !isIdentifierChar(this.input.charCodeAt(next + 8)))
     );
   }
 

@@ -31,7 +31,7 @@
     "@babel/code-frame": "^7.0.0",
     "@babel/helper-fixtures": "^7.2.0",
     "charcodes": "^0.2.0",
-    "unicode-11.0.0": "^0.7.8"
+    "unicode-12.0.0": "^0.7.9"
   },
   "bin": {
     "parser": "./bin/babel-parser.js"

@@ -12,9 +12,7 @@ const gulp = require("gulp");
 const path = require("path");
 const webpack = require("webpack");
 const merge = require("merge-stream");
-const rollup = require("rollup-stream");
-const source = require("vinyl-source-stream");
-const buffer = require("vinyl-buffer");
+const rollup = require("rollup");
 const rollupBabel = require("rollup-plugin-babel");
 const rollupNodeResolve = require("rollup-plugin-node-resolve");
 const { registerStandalonePackageTask } = require("./scripts/gulp-tasks");
@@ -35,13 +33,9 @@ function getIndexFromPackage(name) {
   return `${name}/src/index.js`;
 }
 
-function compilationLogger(rollup) {
+function compilationLogger() {
   return through.obj(function(file, enc, callback) {
-    fancyLog(
-      `Compiling '${chalk.cyan(file.relative)}'${
-        rollup ? " with rollup " : ""
-      }...`
-    );
+    fancyLog(`Compiling '${chalk.cyan(file.relative)}'...`);
     callback(null, file);
   });
 }
@@ -90,32 +84,36 @@ function buildBabel(exclude) {
 }
 
 function buildRollup(packages) {
-  return merge(
+  return Promise.all(
     packages.map(pkg => {
-      return rollup({
-        input: getIndexFromPackage(pkg),
-        format: "cjs",
-        plugins: [
-          rollupBabel({
-            envName: "babel-parser",
-          }),
-          rollupNodeResolve(),
-        ],
-      })
-        .pipe(source("index.js"))
-        .pipe(buffer())
-        .pipe(errorsLogger())
-        .pipe(compilationLogger(/* rollup */ true))
-        .pipe(gulp.dest(path.join(pkg, "lib")));
+      const input = getIndexFromPackage(pkg);
+      fancyLog(`Compiling '${chalk.cyan(input)}' with rollup ...`);
+      return rollup
+        .rollup({
+          input,
+          plugins: [
+            rollupBabel({
+              envName: "babel-parser",
+            }),
+            rollupNodeResolve(),
+          ],
+        })
+        .then(bundle => {
+          return bundle.write({
+            file: path.join(pkg, "lib/index.js"),
+            format: "cjs",
+            name: "babel-parser",
+          });
+        });
     })
   );
 }
 
-gulp.task("build", function() {
-  const bundles = ["packages/babel-parser"];
+const bundles = ["packages/babel-parser"];
 
-  return merge([buildBabel(/* exclude */ bundles), buildRollup(bundles)]);
-});
+gulp.task("build-rollup", () => buildRollup(bundles));
+gulp.task("build-babel", () => buildBabel(/* exclude */ bundles));
+gulp.task("build", gulp.parallel("build-rollup", "build-babel"));
 
 gulp.task("default", gulp.series("build"));
 

@@ -1,0 +1,4 @@
+{
+  "createParenthesizedExpressions": true,
+  "throws": "Invalid left-hand side in arrow function parameters (1:2)"
+}

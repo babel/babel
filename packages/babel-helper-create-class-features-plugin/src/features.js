@@ -67,9 +67,9 @@ export function verifyUsedFeatures(path, file) {
       throw path.buildCodeFrameError("Class private methods are not enabled.");
     }
 
-    if (path.node.static) {
+    if (path.node.static && path.node.kind !== "method") {
       throw path.buildCodeFrameError(
-        "@babel/plugin-class-features doesn't support class static private methods yet.",
+        "@babel/plugin-class-features doesn't support class static private accessors yet.",
       );
     }
   }
