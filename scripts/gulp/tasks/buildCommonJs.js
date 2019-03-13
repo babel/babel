@@ -11,6 +11,8 @@ const through = require("through2");
 
 const config = require("../config");
 
+const root = path.join(__dirname, "../../..");
+
 function rename(fn) {
   return through.obj(function(file, enc, callback) {
     file.path = fn(file);
@@ -27,9 +29,9 @@ function swapSrcWithLib(srcPath) {
 module.exports = function buildCommonJs(excludeBundles = true) {
   return merge(
     config.workspaces.map(source => {
-      const base = path.join(__dirname, source);
+      const base = path.join(root, source);
 
-      let stream = gulp.src(`./${source}/*/src/**/*.js`, { base: base });
+      let stream = gulp.src(`./${source}/*/src/**/*.js`, { base });
 
       if (excludeBundles) {
         const filters = config.rollupBundles.map(p => `!**/${p}/**`);
