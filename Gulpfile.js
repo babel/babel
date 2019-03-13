@@ -1,12 +1,12 @@
 "use strict";
 const gulp = require("gulp");
-const requireDir = require("require-dir");
 
-const tasks = requireDir("./scripts/gulp/tasks/");
-module.exports = exports = tasks;
+const tasks = require("./scripts/gulp/tasks");
 
-exports.build = gulp.parallel(exports.bundle, exports.buildCommonJs);
-exports.default = exports.build;
+tasks.build = gulp.parallel(tasks.bundle, tasks.buildCommonJs);
+tasks.default = tasks.build;
+
+module.exports = tasks;
 
 //gulp.task("build-no-bundle", () => buildBabel());
 
