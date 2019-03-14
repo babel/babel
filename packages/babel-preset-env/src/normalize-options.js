@@ -177,6 +177,10 @@ export function normalizeCoreJSOption(corejs, useBuiltIns) {
 
   const version = rawVersion ? coerce(String(rawVersion)) : false;
 
+  if (!useBuiltIns && version) {
+    console.log("\n`corejs` option required only with `useBuiltIns` option\n");
+  }
+
   if (useBuiltIns && (!version || version.major < 2 || version.major > 3)) {
     throw new RangeError("Supported only core-js@2 and core-js@3.");
   }
