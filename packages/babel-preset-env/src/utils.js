@@ -41,10 +41,6 @@ export function semverify(version: number | string): string {
   return split.join(".");
 }
 
-export function getValues<T: Object>(object: T): $Values<T> {
-  return Object.keys(object).map(key => object[key]);
-}
-
 export function intersection<T>(
   first: Set<T>,
   second: Set<T>,

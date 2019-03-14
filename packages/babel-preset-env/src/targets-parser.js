@@ -7,7 +7,6 @@ import {
   semverify,
   isUnreleasedVersion,
   getLowestUnreleased,
-  getValues,
   findSuggestion,
 } from "./utils";
 import browserModulesData from "../data/built-in-modules.json";
@@ -31,13 +30,13 @@ const objectToBrowserslist = (object: Targets): Array<string> => {
   }, []);
 };
 
-const validateTargetNames = (validTargets, targets) => {
+const validateTargetNames = (targets: Targets): void => {
+  const validTargets = Object.keys(TargetNames);
   for (const target in targets) {
     if (!TargetNames[target]) {
-      const validOptions = getValues(TargetNames);
       throw new Error(
         `Invalid Option: '${target}' is not a valid target
-        Maybe you meant to use '${findSuggestion(validOptions, target)}'?`,
+        Maybe you meant to use '${findSuggestion(validTargets, target)}'?`,
       );
     }
   }

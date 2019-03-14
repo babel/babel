@@ -5,14 +5,15 @@ import { defaultWebIncludes } from "./polyfills/corejs2/get-platform-specific-de
 import corejs3Polyfills from "core-js-compat/data";
 import moduleTransformations from "./module-transformations";
 import { isBrowsersQueryValid } from "./targets-parser";
-import { getValues, findSuggestion } from "./utils";
+import { findSuggestion } from "./utils";
 import pluginsList from "../data/plugins.json";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
 
 const validateTopLevelOptions = options => {
+  const validOptions = Object.keys(TopLevelOptions);
+
   for (const option in options) {
     if (!TopLevelOptions[option]) {
-      const validOptions = getValues(TopLevelOptions);
       throw new Error(
         `Invalid Option: ${option} is not a valid top-level option.
         Maybe you meant to use '${findSuggestion(validOptions, option)}'?`,

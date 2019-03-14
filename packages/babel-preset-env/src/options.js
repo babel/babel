@@ -1,3 +1,5 @@
+// @flow
+
 export const TopLevelOptions = {
   configPath: "configPath",
   corejs: "corejs",
@@ -44,4 +46,7 @@ export const TargetNames = {
   android: "android",
   electron: "electron",
   samsung: "samsung",
+
+  // deprecated
+  uglify: "uglify",
 };

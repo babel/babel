@@ -5,7 +5,7 @@ import { TargetNames, ModulesOption, UseBuiltInsOption } from "./options";
 // Targets
 export type Target = $Keys<typeof TargetNames>;
 export type Targets = {
-  [target: Target]: string,
+  [target: Target]: string | number,
 };
 
 // Options
