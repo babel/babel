@@ -7,7 +7,6 @@ import "core-js/modules/es.array.iterator";
 import "core-js/modules/es.map";
 import "core-js/modules/es.object.to-string";
 import "core-js/modules/es.promise";
-import "core-js/modules/es.promise.finally";
 import "core-js/modules/es.regexp.exec";
 import "core-js/modules/es.string.iterator";
 import "core-js/modules/es.string.match";

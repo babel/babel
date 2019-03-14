@@ -46,11 +46,7 @@ const TypedArrayStaticMethods = {
   of: "es.typed-array.of",
 };
 
-export const PromiseDependencies = [
-  "es.promise",
-  "es.promise.finally",
-  "es.object.to-string",
-];
+export const PromiseDependencies = ["es.promise", "es.object.to-string"];
 
 const PromiseDependenciesWithIterators = [
   ...PromiseDependencies,
@@ -185,7 +181,7 @@ export const InstanceProperties = {
   exec: ["es.regexp.exec"],
   fill: ["es.array.fill"],
   filter: ["es.array.filter"],
-  finally: PromiseDependencies,
+  finally: ["es.promise.finally", ...PromiseDependencies],
   find: ["es.array.find"],
   findIndex: ["es.array.find-index"],
   fixed: ["es.string.fixed"],
