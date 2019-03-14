@@ -1,0 +1,8 @@
+{
+  "presets": [
+    ["../../lib", {
+      "debug": true,
+      "corejs": 3
+    }]
+  ]
+}
