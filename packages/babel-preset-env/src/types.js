@@ -13,9 +13,11 @@ export type Targets = {
 export type ModuleOption = $Values<typeof ModulesOption>;
 export type BuiltInsOption = $Values<typeof UseBuiltInsOption>;
 
+type CorejsVersion = 2 | 3;
+
 export type Options = {
   configPath: string,
-  corejs: any,
+  corejs: CorejsVersion | { version: CorejsVersion, proposals: boolean },
   debug: boolean,
   exclude: Array<string | RegExp>,
   forceAllTransforms: boolean,
