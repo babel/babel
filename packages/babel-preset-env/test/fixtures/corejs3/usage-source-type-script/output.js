@@ -4,8 +4,6 @@ require("core-js/modules/es.object.to-string");
 
 require("core-js/modules/es.promise");
 
-require("core-js/modules/es.promise.finally");
-
 require("foo");
 
 var x = new Promise(function (resolve) {

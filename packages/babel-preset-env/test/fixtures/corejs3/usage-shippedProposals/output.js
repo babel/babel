@@ -18,8 +18,6 @@ require("core-js/modules/es.object.to-string");
 
 require("core-js/modules/es.promise");
 
-require("core-js/modules/es.promise.finally");
-
 require("core-js/modules/es.regexp.exec");
 
 require("core-js/modules/es.string.iterator");
