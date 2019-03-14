@@ -53,11 +53,7 @@ const PromiseDependenciesWithIterators = [
   ...CommonIterators,
 ];
 
-const SymbolDependencies = [
-  "es.symbol",
-  "es.symbol.description",
-  "es.object.to-string",
-];
+const SymbolDependencies = ["es.symbol", "es.object.to-string"];
 
 const MapDependencies = [
   "es.map",
