@@ -1,0 +1,4 @@
+{
+  "sourceType": "module",
+  "throws": "Export 'encrypt' is not defined (1:9)"
+}

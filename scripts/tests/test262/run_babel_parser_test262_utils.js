@@ -43,6 +43,7 @@ const ignoredFeatures = [
   "for-of",
   "generators",
   "globalThis",
+  "hashbang",
   "Int8Array",
   "Int32Array",
   "Intl.ListFormat",
@@ -209,7 +210,8 @@ exports.updateWhitelist = function(filename, summary) {
       .concat(summary.disallowed.failure)
       .map(function(test) {
         return test.id;
-      });
+      })
+      .concat(summary.unrecognized);
     const toAdd = summary.disallowed.falsePositive
       .concat(summary.disallowed.falseNegative)
       .map(function(test) {
@@ -227,7 +229,7 @@ exports.updateWhitelist = function(filename, summary) {
         return line;
       })
       .filter(function(line) {
-        return line !== null;
+        return line !== null && line !== "";
       })
       .concat(toAdd)
       .sort()

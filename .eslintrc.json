@@ -14,7 +14,8 @@
       "rules": {
         "@babel/development/no-undefined-identifier": "error",
         "@babel/development/no-deprecated-clone": "error",
-        "import/no-extraneous-dependencies": "error"
+        "import/no-extraneous-dependencies": "error",
+        "guard-for-in": "error"
       }
     },
     {

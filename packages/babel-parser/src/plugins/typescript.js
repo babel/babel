@@ -6,6 +6,7 @@ import { types as ct } from "../tokenizer/context";
 import * as N from "../types";
 import type { Pos, Position } from "../util/location";
 import Parser from "../parser";
+import { type BindingTypes, BIND_NONE, SCOPE_OTHER } from "../util/scopeflags";
 
 type TsModifier =
   | "readonly"
@@ -569,7 +570,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const restNode: N.TsRestType = this.startNode();
         this.next(); // skips ellipsis
         restNode.typeAnnotation = this.tsParseType();
-        this.checkCommaAfterRest(tt.bracketR, "type");
+        this.checkCommaAfterRest();
         return this.finishNode(restNode, "TSRestType");
       }
 
@@ -1071,6 +1072,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseModuleBlock(): N.TsModuleBlock {
       const node: N.TsModuleBlock = this.startNode();
+      this.scope.enter(SCOPE_OTHER);
+
       this.expect(tt.braceL);
       // Inside of a module block is considered "top-level", meaning it can have imports and exports.
       this.parseBlockOrModuleBlockBody(
@@ -1079,6 +1082,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         /* topLevel */ true,
         /* end */ tt.braceR,
       );
+      this.scope.exit();
       return this.finishNode(node, "TSModuleBlock");
     }
 
@@ -1217,8 +1221,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       switch (starttype) {
         case tt._function:
-          this.next();
-          return this.parseFunction(nany, /* isStatement */ true);
+          return this.parseFunctionStatement(nany);
         case tt._class:
           return this.parseClass(
             nany,
@@ -1372,18 +1375,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return undefined;
       }
 
-      const oldInAsync = this.state.inAsync;
-      const oldInGenerator = this.state.inGenerator;
-      this.state.inAsync = true;
-      this.state.inGenerator = false;
-      res.id = null;
-      res.generator = false;
-      res.expression = true; // May be set again by parseFunctionBody.
-      res.async = true;
-      this.parseFunctionBody(res, true);
-      this.state.inAsync = oldInAsync;
-      this.state.inGenerator = oldInGenerator;
-      return this.finishNode(res, "ArrowFunctionExpression");
+      return this.parseArrowExpression(
+        res,
+        /* params are already set */ null,
+        /* async */ true,
+      );
     }
 
     tsParseTypeArguments(): N.TsTypeParameterInstantiation {
@@ -1476,10 +1472,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseFunctionBodyAndFinish(
       node: N.BodilessFunctionOrMethodBase,
       type: string,
-      allowExpressionBody?: boolean,
+      isMethod?: boolean = false,
     ): void {
-      // For arrow functions, `parseArrow` handles the return type itself.
-      if (!allowExpressionBody && this.match(tt.colon)) {
+      if (this.match(tt.colon)) {
         node.returnType = this.tsParseTypeOrTypePredicateAnnotation(tt.colon);
       }
 
@@ -1494,7 +1489,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return;
       }
 
-      super.parseFunctionBodyAndFinish(node, type, allowExpressionBody);
+      super.parseFunctionBodyAndFinish(node, type, isMethod);
     }
 
     parseSubscript(
@@ -1503,6 +1498,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       startLoc: Position,
       noCalls: ?boolean,
       state: N.ParseSubscriptState,
+      maybeAsyncArrow: boolean,
     ): N.Expression {
       if (!this.hasPrecedingLineBreak() && this.match(tt.bang)) {
         this.state.exprAllowed = false;
@@ -1565,7 +1561,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (result) return result;
       }
 
-      return super.parseSubscript(base, startPos, startLoc, noCalls, state);
+      return super.parseSubscript(
+        base,
+        startPos,
+        startLoc,
+        noCalls,
+        state,
+        maybeAsyncArrow,
+      );
     }
 
     parseNewArguments(node: N.NewExpression): void {
@@ -1721,11 +1724,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       classBody: N.ClassBody,
       member: any,
       state: { hadConstructor: boolean },
+      constructorAllowsSuper: boolean,
     ): void {
       const accessibility = this.parseAccessModifier();
       if (accessibility) member.accessibility = accessibility;
 
-      super.parseClassMember(classBody, member, state);
+      super.parseClassMember(classBody, member, state, constructorAllowsSuper);
     }
 
     parseClassMemberWithIsStatic(
@@ -1733,6 +1737,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       member: any,
       state: { hadConstructor: boolean },
       isStatic: boolean,
+      constructorAllowsSuper: boolean,
     ): void {
       const methodOrProp: N.ClassMethod | N.ClassProperty = member;
       const prop: N.ClassProperty = member;
@@ -1773,7 +1778,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return;
       }
 
-      super.parseClassMemberWithIsStatic(classBody, member, state, isStatic);
+      super.parseClassMemberWithIsStatic(
+        classBody,
+        member,
+        state,
+        isStatic,
+        constructorAllowsSuper,
+      );
     }
 
     parsePostMemberNameModifiers(
@@ -1923,6 +1934,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isGenerator: boolean,
       isAsync: boolean,
       isConstructor: boolean,
+      allowsDirectSuper: boolean,
     ): void {
       const typeParameters = this.tsTryParseTypeParameters();
       if (typeParameters) method.typeParameters = typeParameters;
@@ -1932,6 +1944,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isGenerator,
         isAsync,
         isConstructor,
+        allowsDirectSuper,
       );
     }
 
@@ -2154,7 +2167,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkLVal(
       expr: N.Expression,
-      isBinding: ?boolean,
+      bindingType: ?BindingTypes = BIND_NONE,
       checkClashes: ?{ [key: string]: boolean },
       contextDescription: string,
     ): void {
@@ -2167,7 +2180,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "TSParameterProperty":
           this.checkLVal(
             expr.parameter,
-            isBinding,
+            bindingType,
             checkClashes,
             "parameter property",
           );
@@ -2177,13 +2190,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "TSTypeAssertion":
           this.checkLVal(
             expr.expression,
-            isBinding,
+            bindingType,
             checkClashes,
             contextDescription,
           );
           return;
         default:
-          super.checkLVal(expr, isBinding, checkClashes, contextDescription);
+          super.checkLVal(expr, bindingType, checkClashes, contextDescription);
           return;
       }
     }
@@ -2263,8 +2276,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): $ReadOnlyArray<N.Pattern> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
-        if (expr && expr.type === "TSTypeCastExpression") {
-          exprList[i] = this.typeCastToParameter(expr);
+        if (!expr) continue;
+        switch (expr.type) {
+          case "TSTypeCastExpression":
+            exprList[i] = this.typeCastToParameter(expr);
+            break;
+          case "TSAsExpression":
+          case "TSTypeAssertion":
+            this.raise(
+              expr.start,
+              "Unexpected type cast in parameter position.",
+            );
+            break;
         }
       }
       return super.toAssignableList(exprList, isBinding, contextDescription);
@@ -2320,5 +2343,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
       if (typeArguments) node.typeParameters = typeArguments;
       return super.jsxParseOpeningElementAfterName(node);
+    }
+
+    getGetterSetterExpectedParamCount(
+      method: N.ObjectMethod | N.ClassMethod,
+    ): number {
+      const baseCount = super.getGetterSetterExpectedParamCount(method);
+      const firstParam = method.params[0];
+      const hasContextParam =
+        firstParam &&
+        firstParam.type === "Identifier" &&
+        firstParam.name === "this";
+
+      return hasContextParam ? baseCount + 1 : baseCount;
     }
   };

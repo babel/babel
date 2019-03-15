@@ -23,7 +23,7 @@ export function explode(visitor) {
   visitor._exploded = true;
 
   // normalise pipes
-  for (const nodeType in visitor) {
+  for (const nodeType of Object.keys(visitor)) {
     if (shouldIgnoreKey(nodeType)) continue;
 
     const parts: Array<string> = nodeType.split("|");
@@ -59,7 +59,7 @@ export function explode(visitor) {
 
     // wrap all the functions
     const fns = visitor[nodeType];
-    for (const type in fns) {
+    for (const type of Object.keys(fns)) {
       fns[type] = wrapCheck(wrapper, fns[type]);
     }
 
@@ -81,7 +81,7 @@ export function explode(visitor) {
   }
 
   // add aliases
-  for (const nodeType in visitor) {
+  for (const nodeType of Object.keys(visitor)) {
     if (shouldIgnoreKey(nodeType)) continue;
 
     const fns = visitor[nodeType];
@@ -111,7 +111,7 @@ export function explode(visitor) {
     }
   }
 
-  for (const nodeType in visitor) {
+  for (const nodeType of Object.keys(visitor)) {
     if (shouldIgnoreKey(nodeType)) continue;
 
     ensureCallbackArrays(visitor[nodeType]);
@@ -130,7 +130,7 @@ export function verify(visitor) {
     );
   }
 
-  for (const nodeType in visitor) {
+  for (const nodeType of Object.keys(visitor)) {
     if (nodeType === "enter" || nodeType === "exit") {
       validateVisitorMethods(nodeType, visitor[nodeType]);
     }
@@ -145,7 +145,7 @@ export function verify(visitor) {
 
     const visitors = visitor[nodeType];
     if (typeof visitors === "object") {
-      for (const visitorKey in visitors) {
+      for (const visitorKey of Object.keys(visitors)) {
         if (visitorKey === "enter" || visitorKey === "exit") {
           // verify that it just contains functions
           validateVisitorMethods(
@@ -189,7 +189,7 @@ export function merge(
 
     explode(visitor);
 
-    for (const type in visitor) {
+    for (const type of Object.keys(visitor)) {
       let visitorType = visitor[type];
 
       // if we have state or wrapper then overload the callbacks to take it
@@ -208,7 +208,7 @@ export function merge(
 function wrapWithStateOrWrapper(oldVisitor, state, wrapper: ?Function) {
   const newVisitor = {};
 
-  for (const key in oldVisitor) {
+  for (const key of Object.keys(oldVisitor)) {
     let fns = oldVisitor[key];
 
     // not an enter/exit array of callbacks
@@ -237,7 +237,7 @@ function wrapWithStateOrWrapper(oldVisitor, state, wrapper: ?Function) {
 }
 
 function ensureEntranceObjects(obj) {
-  for (const key in obj) {
+  for (const key of Object.keys(obj)) {
     if (shouldIgnoreKey(key)) continue;
 
     const fns = obj[key];
@@ -278,7 +278,7 @@ function shouldIgnoreKey(key) {
 }
 
 function mergePair(dest, src) {
-  for (const key in src) {
+  for (const key of Object.keys(src)) {
     dest[key] = [].concat(dest[key] || [], src[key]);
   }
 }

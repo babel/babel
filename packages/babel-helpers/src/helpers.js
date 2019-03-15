@@ -1102,7 +1102,21 @@ helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
     descriptor.value = value;
     return value;
   }
-  
+`;
+
+helpers.classStaticPrivateMethodGet = helper("7.3.2")`
+  export default function _classStaticPrivateMethodGet(receiver, classConstructor, method) {
+    if (receiver !== classConstructor) {
+      throw new TypeError("Private static access of wrong provenance");
+    }
+    return method;
+  }
+`;
+
+helpers.classStaticPrivateMethodSet = helper("7.3.2")`
+  export default function _classStaticPrivateMethodSet() {
+    throw new TypeError("attempted to set read only static private field");
+  }
 `;
 
 helpers.decorate = helper("7.1.5")`

@@ -65,7 +65,7 @@ export const defaultOptions: Options = {
 
 export function getOptions(opts: ?Options): Options {
   const options: any = {};
-  for (const key in defaultOptions) {
+  for (const key of Object.keys(defaultOptions)) {
     options[key] = opts && opts[key] != null ? opts[key] : defaultOptions[key];
   }
   return options;

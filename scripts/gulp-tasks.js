@@ -20,6 +20,7 @@ const rename = require("gulp-rename");
 const webpack = require("webpack");
 const { RootMostResolvePlugin } = require("webpack-dependency-suite");
 const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin");
+const WarningsToErrorsPlugin = require("warnings-to-errors-webpack-plugin");
 const webpackStream = require("webpack-stream");
 const uglify = require("gulp-uglify");
 
@@ -62,6 +63,7 @@ function webpackBuild(opts) {
       libraryTarget: "umd",
     },
     plugins: [
+      new WarningsToErrorsPlugin(),
       new DuplicatePackageCheckerPlugin({
         exclude(instance) {
           return instance.name === "semver";

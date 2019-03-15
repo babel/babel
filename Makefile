@@ -1,6 +1,6 @@
 MAKEFLAGS = -j1
 FLOW_COMMIT = 2ac56861e3ceff9ca406ae586fbafb3480c6c0b7
-TEST262_COMMIT = 4f1155c566a222238fd86f179c6635ecb4c289bb
+TEST262_COMMIT = b4e15b3d5cf63571151dbd02c0987864544c6a56
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
@@ -11,6 +11,7 @@ SOURCES = packages codemods
 
 build: clean clean-lib
 	./node_modules/.bin/gulp build
+	node ./packages/babel-standalone/scripts/generate.js
 	node ./packages/babel-types/scripts/generateTypeHelpers.js
 	# call build again as the generated files might need to be compiled again.
 	./node_modules/.bin/gulp build
@@ -103,7 +104,7 @@ test-flow-update-whitelist:
 bootstrap-test262:
 	rm -rf ./build/test262
 	mkdir -p ./build
-	git clone --branch=master --single-branch --shallow-since=2010-01-10 https://github.com/tc39/test262.git ./build/test262
+	git clone --branch=master --single-branch --shallow-since=2019-01-01 https://github.com/tc39/test262.git ./build/test262
 	cd build/test262 && git checkout $(TEST262_COMMIT)
 
 test-test262:

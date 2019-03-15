@@ -72,6 +72,7 @@ These are the core @babel/parser (babylon) AST node types.
     - [LogicalExpression](#logicalexpression)
       - [LogicalOperator](#logicaloperator)
     - [SpreadElement](#spreadelement)
+    - [ArgumentPlaceholder](#argumentplaceholder)
     - [MemberExpression](#memberexpression)
     - [BindExpression](#bindexpression)
   - [ConditionalExpression](#conditionalexpression)
@@ -860,6 +861,14 @@ A logical operator token.
 interface SpreadElement <: Node {
   type: "SpreadElement";
   argument: Expression;
+}
+```
+
+### ArgumentPlaceholder
+
+```js
+interface ArgumentPlaceholder <: Node {
+    type: "ArgumentPlaceholder";
 }
 ```
 

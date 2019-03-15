@@ -1,10 +1,10 @@
 class C1<+T, -U> {}
 function f<+T, -U>() {}
 type T<+T, -U> = {};
-type T = { +p: T };
-type T = { -p: T };
-type T = { +[k:K]: V };
-type T = { -[k:K]: V };
+type T2 = { +p: T };
+type T3 = { -p: T };
+type T4 = { +[k:K]: V };
+type T5 = { -[k:K]: V };
 interface I { +p: T }
 interface I { -p: T }
 interface I { +[k:K]: V }

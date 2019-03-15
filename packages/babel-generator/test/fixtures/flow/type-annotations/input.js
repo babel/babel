@@ -107,7 +107,7 @@ import { type Foo12 } from "bar";
 import { typeof Foo13 } from "bar";
 import { type Foo as Bar1 } from "bar";
 import { typeof Foo as Bar2 } from "bar";
-export type { foo };
+export type { foo1 };
 export type { bar } from "bar";
 export interface baz { p: number }
 export interface qux<T> { p: T }

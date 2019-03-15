@@ -73,12 +73,12 @@ export default function removeTypeDuplicates(
   }
 
   // add back in bases
-  for (const type in bases) {
+  for (const type of Object.keys(bases)) {
     types.push(bases[type]);
   }
 
   // add back in generics
-  for (const name in generics) {
+  for (const name of Object.keys(generics)) {
     types.push(generics[name]);
   }
 

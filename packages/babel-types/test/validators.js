@@ -121,6 +121,82 @@ describe("validators", function() {
 
       expect(t.isReferenced(node, parent)).toBe(true);
     });
+
+    it("returns true if node is a value of ObjectProperty of an expression", function() {
+      const node = t.identifier("a");
+      const parent = t.objectProperty(t.identifier("key"), node);
+      const grandparent = t.objectExpression([parent]);
+
+      expect(t.isReferenced(node, parent, grandparent)).toBe(true);
+    });
+
+    it("returns false if node is a value of ObjectProperty of a pattern", function() {
+      const node = t.identifier("a");
+      const parent = t.objectProperty(t.identifier("key"), node);
+      const grandparent = t.objectPattern([parent]);
+
+      expect(t.isReferenced(node, parent, grandparent)).toBe(false);
+    });
+
+    describe("TSPropertySignature", function() {
+      it("returns false if node is a key", function() {
+        // { A: string }
+        const node = t.identifier("A");
+        const parent = t.tsPropertySignature(
+          node,
+          t.tsTypeAnnotation(t.tsStringKeyword()),
+        );
+
+        expect(t.isReferenced(node, parent)).toBe(false);
+      });
+
+      it("returns true if node is a value", function() {
+        // { someKey: A }
+        const node = t.identifier("A");
+        const parent = t.tsPropertySignature(
+          t.identifier("someKey"),
+          t.tsTypeAnnotation(t.tsTypeReference(node)),
+        );
+
+        expect(t.isReferenced(node, parent)).toBe(true);
+      });
+    });
+
+    describe("TSEnumMember", function() {
+      it("returns false if node is an id", function() {
+        // enum X = { A };
+        const node = t.identifier("A");
+        const parent = t.tsEnumMember(node);
+
+        expect(t.isReferenced(node, parent)).toBe(false);
+      });
+
+      it("returns true if node is a value", function() {
+        // enum X = { Foo = A }
+        const node = t.identifier("A");
+        const parent = t.tsEnumMember(t.identifier("Foo"), node);
+
+        expect(t.isReferenced(node, parent)).toBe(true);
+      });
+    });
+  });
+
+  describe("isBinding", function() {
+    it("returns false if node id a value of ObjectProperty of an expression", function() {
+      const node = t.identifier("a");
+      const parent = t.objectProperty(t.identifier("key"), node);
+      const grandparent = t.objectExpression([parent]);
+
+      expect(t.isBinding(node, parent, grandparent)).toBe(false);
+    });
+
+    it("returns true if node id a value of ObjectProperty of a pattern", function() {
+      const node = t.identifier("a");
+      const parent = t.objectProperty(t.identifier("key"), node);
+      const grandparent = t.objectPattern([parent]);
+
+      expect(t.isBinding(node, parent, grandparent)).toBe(true);
+    });
   });
 
   describe("isType", function() {
@@ -138,6 +214,97 @@ describe("validators", function() {
     });
     it("returns false if nodeType is undefined", function() {
       expect(t.isType(undefined, "Expression")).toBe(false);
+    });
+  });
+
+  describe("placeholders", function() {
+    describe("isPlaceholderType", function() {
+      describe("when placeholderType is a specific node type", function() {
+        const placeholder = "Identifier";
+
+        it("returns true if targetType is placeholderType", function() {
+          expect(t.isPlaceholderType(placeholder, "Identifier")).toBe(true);
+        });
+        it("returns true if targetType an alias for placeholderType", function() {
+          expect(t.isPlaceholderType(placeholder, "Expression")).toBe(true);
+        });
+        it("returns false for unrelated types", function() {
+          expect(t.isPlaceholderType(placeholder, "String")).toBe(false);
+        });
+      });
+
+      describe("when placeholderType is a generic alias type", function() {
+        const placeholder = "Pattern";
+
+        it("returns true if targetType is placeholderType", function() {
+          expect(t.isPlaceholderType(placeholder, "Pattern")).toBe(true);
+        });
+        it("returns true if targetType an alias for placeholderType", function() {
+          expect(t.isPlaceholderType(placeholder, "LVal")).toBe(true);
+        });
+        it("returns false for unrelated types", function() {
+          expect(t.isPlaceholderType(placeholder, "Expression")).toBe(false);
+        });
+        it("returns false if targetType is aliased by placeholderType", function() {
+          // i.e. a Pattern might not be an Identifier
+          expect(t.isPlaceholderType(placeholder, "Identifier")).toBe(false);
+        });
+      });
+    });
+
+    describe("is", function() {
+      describe("when the placeholder matches a specific node", function() {
+        const identifier = t.placeholder("Identifier", t.identifier("foo"));
+
+        it("returns false if targetType is expectedNode", function() {
+          expect(t.is("Identifier", identifier)).toBe(false);
+        });
+        it("returns true if targetType is an alias", function() {
+          expect(t.is("LVal", identifier)).toBe(true);
+        });
+      });
+
+      describe("when the placeholder matches a generic alias", function() {
+        const pattern = t.placeholder("Pattern", t.identifier("bar"));
+
+        it("returns false if targetType is aliased as expectedNode", function() {
+          // i.e. a Pattern might not be an Identifier
+          expect(t.is("Identifier", pattern)).toBe(false);
+        });
+        it("returns true if targetType is expectedNode", function() {
+          expect(t.is("Pattern", pattern)).toBe(true);
+        });
+        it("returns true if targetType is an alias for expectedNode", function() {
+          expect(t.is("LVal", pattern)).toBe(true);
+        });
+      });
+    });
+
+    describe("is[Type]", function() {
+      describe("when the placeholder matches a specific node", function() {
+        const identifier = t.placeholder("Identifier", t.identifier("foo"));
+
+        it("returns false if targetType is expectedNode", function() {
+          expect(t.isIdentifier(identifier)).toBe(false);
+        });
+        it("returns true if targetType is an alias", function() {
+          expect(t.isLVal(identifier)).toBe(true);
+        });
+      });
+
+      describe("when the placeholder matches a generic alias", function() {
+        const pattern = t.placeholder("Pattern", t.identifier("bar"));
+
+        it("returns false if targetType is aliased as expectedNode", function() {
+          expect(t.isIdentifier(pattern)).toBe(false);
+        });
+        it("returns true if targetType is expectedNode", function() {
+          expect(t.isPattern(pattern)).toBe(true);
+        });
+        it("returns true if targetType is an alias for expectedNode", function() {
+          expect(t.isLVal(pattern)).toBe(true);
+        });
+      });
     });
   });
 });

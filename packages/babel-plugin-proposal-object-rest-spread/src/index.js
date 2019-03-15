@@ -2,6 +2,17 @@ import { declare } from "@babel/helper-plugin-utils";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import { types as t } from "@babel/core";
 
+// TODO: Remove in Babel 8
+// @babel/types <=7.3.3 counts FOO as referenced in var { x: FOO }.
+// We need to detect this bug to know if "unused" means 0 or 1 references.
+const ZERO_REFS = (() => {
+  const node = t.identifier("a");
+  const property = t.objectProperty(t.identifier("key"), node);
+  const pattern = t.objectPattern([property]);
+
+  return t.isReferenced(node, property, pattern) ? 1 : 0;
+})();
+
 export default declare((api, opts) => {
   api.assertVersion(7);
 
@@ -65,6 +76,8 @@ export default declare((api, opts) => {
       if (t.isIdentifier(prop.key) && !prop.computed) {
         // since a key {a: 3} is equivalent to {"a": 3}, use the latter
         keys.push(t.stringLiteral(prop.key.name));
+      } else if (t.isTemplateLiteral(prop.key)) {
+        keys.push(t.cloneNode(prop.key));
       } else if (t.isLiteral(prop.key)) {
         keys.push(t.stringLiteral(String(prop.key.value)));
       } else {
@@ -98,7 +111,7 @@ export default declare((api, opts) => {
     Object.keys(bindings).forEach(bindingName => {
       const bindingParentPath = bindings[bindingName].parentPath;
       if (
-        path.scope.getBinding(bindingName).references > 1 ||
+        path.scope.getBinding(bindingName).references > ZERO_REFS ||
         !bindingParentPath.isObjectProperty()
       ) {
         return;
@@ -302,7 +315,7 @@ export default declare((api, opts) => {
 
         const specifiers = [];
 
-        for (const name in path.getOuterBindingIdentifiers(path)) {
+        for (const name of Object.keys(path.getOuterBindingIdentifiers(path))) {
           specifiers.push(
             t.exportSpecifier(t.identifier(name), t.identifier(name)),
           );

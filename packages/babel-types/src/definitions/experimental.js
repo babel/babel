@@ -10,6 +10,8 @@ import {
   classMethodOrDeclareMethodCommon,
 } from "./es2015";
 
+defineType("ArgumentPlaceholder", {});
+
 defineType("AwaitExpression", {
   builder: ["argument"],
   visitor: ["argument"],

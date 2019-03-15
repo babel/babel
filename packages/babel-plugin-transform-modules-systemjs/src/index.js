@@ -113,7 +113,7 @@ export default declare((api, options) => {
 
       if (arg.isObjectPattern() || arg.isArrayPattern()) {
         const exprs = [path.node];
-        for (const name in arg.getBindingIdentifiers()) {
+        for (const name of Object.keys(arg.getBindingIdentifiers())) {
           if (this.scope.getBinding(name) !== path.scope.getBinding(name)) {
             return;
           }
@@ -216,10 +216,11 @@ export default declare((api, options) => {
           state.contextIdent = path.scope.generateUid("context");
         },
         exit(path, state) {
+          const undefinedIdent = path.scope.buildUndefinedNode();
           const exportIdent = path.scope.generateUid("export");
           const contextIdent = state.contextIdent;
 
-          const exportNames = Object.create(null);
+          const exportMap = Object.create(null);
           const modules = [];
 
           let beforeBody = [];
@@ -229,8 +230,8 @@ export default declare((api, options) => {
           const removedPaths = [];
 
           function addExportName(key, val) {
-            exportNames[key] = exportNames[key] || [];
-            exportNames[key].push(val);
+            exportMap[key] = exportMap[key] || [];
+            exportMap[key].push(val);
           }
 
           function pushModule(source, key, specifiers) {
@@ -257,16 +258,30 @@ export default declare((api, options) => {
             );
           }
 
+          const exportNames = [];
+          const exportValues = [];
+
           const body: Array<Object> = path.get("body");
 
           for (const path of body) {
             if (path.isFunctionDeclaration()) {
               beforeBody.push(path.node);
               removedPaths.push(path);
+            } else if (path.isClassDeclaration()) {
+              variableIds.push(path.node.id);
+              path.replaceWith(
+                t.expressionStatement(
+                  t.assignmentExpression(
+                    "=",
+                    t.cloneNode(path.node.id),
+                    t.toExpression(path.node),
+                  ),
+                ),
+              );
             } else if (path.isImportDeclaration()) {
               const source = path.node.source.value;
               pushModule(source, "imports", path.node.specifiers);
-              for (const name in path.getBindingIdentifiers()) {
+              for (const name of Object.keys(path.getBindingIdentifiers())) {
                 path.scope.removeBinding(name);
                 variableIds.push(t.identifier(name));
               }
@@ -276,29 +291,38 @@ export default declare((api, options) => {
               path.remove();
             } else if (path.isExportDefaultDeclaration()) {
               const declar = path.get("declaration");
-              if (
-                declar.isClassDeclaration() ||
-                declar.isFunctionDeclaration()
-              ) {
-                const id = declar.node.id;
-                const nodes = [];
-
+              const id = declar.node.id;
+              if (declar.isClassDeclaration()) {
                 if (id) {
-                  nodes.push(declar.node);
-                  nodes.push(buildExportCall("default", t.cloneNode(id)));
+                  exportNames.push("default");
+                  exportValues.push(undefinedIdent);
+                  variableIds.push(id);
                   addExportName(id.name, "default");
-                } else {
-                  nodes.push(
-                    buildExportCall("default", t.toExpression(declar.node)),
+                  path.replaceWith(
+                    t.expressionStatement(
+                      t.assignmentExpression(
+                        "=",
+                        t.cloneNode(id),
+                        t.toExpression(declar.node),
+                      ),
+                    ),
                   );
-                }
-
-                if (declar.isClassDeclaration()) {
-                  path.replaceWithMultiple(nodes);
                 } else {
-                  beforeBody = beforeBody.concat(nodes);
+                  exportNames.push("default");
+                  exportValues.push(t.toExpression(declar.node));
                   removedPaths.push(path);
                 }
+              } else if (declar.isFunctionDeclaration()) {
+                if (id) {
+                  beforeBody.push(declar.node);
+                  exportNames.push("default");
+                  exportValues.push(t.cloneNode(id));
+                  addExportName(id.name, "default");
+                } else {
+                  exportNames.push("default");
+                  exportValues.push(t.toExpression(declar.node));
+                }
+                removedPaths.push(path);
               } else {
                 path.replaceWith(buildExportCall("default", declar.node));
               }
@@ -313,14 +337,28 @@ export default declare((api, options) => {
                   const name = node.id.name;
                   addExportName(name, name);
                   beforeBody.push(node);
-                  beforeBody.push(buildExportCall(name, t.cloneNode(node.id)));
+                  exportNames.push(name);
+                  exportValues.push(t.cloneNode(node.id));
                   removedPaths.push(path);
                 } else if (path.isClass()) {
                   const name = declar.node.id.name;
+                  exportNames.push(name);
+                  exportValues.push(undefinedIdent);
+                  variableIds.push(declar.node.id);
+                  path.replaceWith(
+                    t.expressionStatement(
+                      t.assignmentExpression(
+                        "=",
+                        t.cloneNode(declar.node.id),
+                        t.toExpression(declar.node),
+                      ),
+                    ),
+                  );
                   addExportName(name, name);
-                  path.insertAfter([buildExportCall(name, t.identifier(name))]);
                 } else {
-                  for (const name in declar.getBindingIdentifiers()) {
+                  for (const name of Object.keys(
+                    declar.getBindingIdentifiers(),
+                  )) {
                     addExportName(name, name);
                   }
                 }
@@ -342,12 +380,8 @@ export default declare((api, options) => {
                         binding &&
                         t.isFunctionDeclaration(binding.path.node)
                       ) {
-                        beforeBody.push(
-                          buildExportCall(
-                            specifier.exported.name,
-                            t.cloneNode(specifier.local),
-                          ),
-                        );
+                        exportNames.push(specifier.exported.name);
+                        exportValues.push(t.cloneNode(specifier.local));
                       }
                       // only globals also exported this way
                       else if (!binding) {
@@ -451,13 +485,13 @@ export default declare((api, options) => {
           let moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
-          const uninitializedVars = [];
           hoistVariables(
             path,
             (id, name, hasInit) => {
               variableIds.push(id);
               if (!hasInit) {
-                uninitializedVars.push(name);
+                exportNames.push(name);
+                exportValues.push(undefinedIdent);
               }
             },
             null,
@@ -472,25 +506,20 @@ export default declare((api, options) => {
             );
           }
 
-          if (uninitializedVars.length) {
-            const undefinedValues = [];
-            const undefinedIdent = path.scope.buildUndefinedNode();
-            for (let i = 0; i < uninitializedVars.length; i++) {
-              undefinedValues[i] = undefinedIdent;
-            }
+          if (exportNames.length) {
             beforeBody = beforeBody.concat(
               constructExportCall(
                 path,
                 t.identifier(exportIdent),
-                uninitializedVars,
-                undefinedValues,
+                exportNames,
+                exportValues,
                 null,
               ),
             );
           }
 
           path.traverse(reassignmentVisitor, {
-            exports: exportNames,
+            exports: exportMap,
             buildCall: buildExportCall,
             scope: path.scope,
           });

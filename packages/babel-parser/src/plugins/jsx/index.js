@@ -14,6 +14,8 @@ import { isNewLine } from "../../util/whitespace";
 const HEX_NUMBER = /^[\da-fA-F]+$/;
 const DECIMAL_NUMBER = /^\d+$/;
 
+// Be aware that this file is always executed and not only when the plugin is enabled.
+// Therefore this contexts and tokens do always exist.
 tc.j_oTag = new TokContext("<tag", false);
 tc.j_cTag = new TokContext("</tag", false);
 tc.j_expr = new TokContext("<tag>...</tag>", true, true);
@@ -79,11 +81,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let out = "";
       let chunkStart = this.state.pos;
       for (;;) {
-        if (this.state.pos >= this.state.length) {
+        if (this.state.pos >= this.length) {
           this.raise(this.state.start, "Unterminated JSX contents");
         }
 
-        const ch = this.state.input.charCodeAt(this.state.pos);
+        const ch = this.input.charCodeAt(this.state.pos);
 
         switch (ch) {
           case charCodes.lessThan:
@@ -95,18 +97,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               }
               return super.getTokenFromCode(ch);
             }
-            out += this.state.input.slice(chunkStart, this.state.pos);
+            out += this.input.slice(chunkStart, this.state.pos);
             return this.finishToken(tt.jsxText, out);
 
           case charCodes.ampersand:
-            out += this.state.input.slice(chunkStart, this.state.pos);
+            out += this.input.slice(chunkStart, this.state.pos);
             out += this.jsxReadEntity();
             chunkStart = this.state.pos;
             break;
 
           default:
             if (isNewLine(ch)) {
-              out += this.state.input.slice(chunkStart, this.state.pos);
+              out += this.input.slice(chunkStart, this.state.pos);
               out += this.jsxReadNewLine(true);
               chunkStart = this.state.pos;
             } else {
@@ -117,12 +119,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     jsxReadNewLine(normalizeCRLF: boolean): string {
-      const ch = this.state.input.charCodeAt(this.state.pos);
+      const ch = this.input.charCodeAt(this.state.pos);
       let out;
       ++this.state.pos;
       if (
         ch === charCodes.carriageReturn &&
-        this.state.input.charCodeAt(this.state.pos) === charCodes.lineFeed
+        this.input.charCodeAt(this.state.pos) === charCodes.lineFeed
       ) {
         ++this.state.pos;
         out = normalizeCRLF ? "\n" : "\r\n";
@@ -139,25 +141,25 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let out = "";
       let chunkStart = ++this.state.pos;
       for (;;) {
-        if (this.state.pos >= this.state.length) {
+        if (this.state.pos >= this.length) {
           this.raise(this.state.start, "Unterminated string constant");
         }
 
-        const ch = this.state.input.charCodeAt(this.state.pos);
+        const ch = this.input.charCodeAt(this.state.pos);
         if (ch === quote) break;
         if (ch === charCodes.ampersand) {
-          out += this.state.input.slice(chunkStart, this.state.pos);
+          out += this.input.slice(chunkStart, this.state.pos);
           out += this.jsxReadEntity();
           chunkStart = this.state.pos;
         } else if (isNewLine(ch)) {
-          out += this.state.input.slice(chunkStart, this.state.pos);
+          out += this.input.slice(chunkStart, this.state.pos);
           out += this.jsxReadNewLine(false);
           chunkStart = this.state.pos;
         } else {
           ++this.state.pos;
         }
       }
-      out += this.state.input.slice(chunkStart, this.state.pos++);
+      out += this.input.slice(chunkStart, this.state.pos++);
       return this.finishToken(tt.string, out);
     }
 
@@ -165,11 +167,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let str = "";
       let count = 0;
       let entity;
-      let ch = this.state.input[this.state.pos];
+      let ch = this.input[this.state.pos];
 
       const startPos = ++this.state.pos;
-      while (this.state.pos < this.state.length && count++ < 10) {
-        ch = this.state.input[this.state.pos++];
+      while (this.state.pos < this.length && count++ < 10) {
+        ch = this.input[this.state.pos++];
         if (ch === ";") {
           if (str[0] === "#") {
             if (str[1] === "x") {
@@ -208,11 +210,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let ch;
       const start = this.state.pos;
       do {
-        ch = this.state.input.charCodeAt(++this.state.pos);
+        ch = this.input.charCodeAt(++this.state.pos);
       } while (isIdentifierChar(ch) || ch === charCodes.dash);
       return this.finishToken(
         tt.jsxName,
-        this.state.input.slice(start, this.state.pos),
+        this.input.slice(start, this.state.pos),
       );
     }
 
@@ -508,8 +510,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.jsxParseElement();
       } else if (
         this.isRelational("<") &&
-        this.state.input.charCodeAt(this.state.pos) !==
-          charCodes.exclamationMark
+        this.input.charCodeAt(this.state.pos) !== charCodes.exclamationMark
       ) {
         // In case we encounter an lt token here it will always be the start of
         // jsx as the lt sign is not allowed in places that expect an expression
@@ -550,8 +551,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (
         code === charCodes.lessThan &&
         this.state.exprAllowed &&
-        this.state.input.charCodeAt(this.state.pos + 1) !==
-          charCodes.exclamationMark
+        this.input.charCodeAt(this.state.pos + 1) !== charCodes.exclamationMark
       ) {
         ++this.state.pos;
         return this.finishToken(tt.jsxTagStart);

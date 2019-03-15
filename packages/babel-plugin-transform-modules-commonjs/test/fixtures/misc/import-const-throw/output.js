@@ -18,24 +18,32 @@ _baz.Baz = (44, function () {
   throw new Error('"' + "Baz" + '" is read-only.');
 }());
 ({
-  Foo: _foo.default
-} = {});
+  Foo
+} = ({}, function () {
+  throw new Error('"' + "Foo" + '" is read-only.');
+}()));
 ({
   Bar
 } = ({}, function () {
   throw new Error('"' + "Bar" + '" is read-only.');
 }()));
 ({
-  Baz: _baz.Baz
-} = {});
+  Baz
+} = ({}, function () {
+  throw new Error('"' + "Baz" + '" is read-only.');
+}()));
 ({
-  prop: _foo.default
-} = {});
+  prop: Foo
+} = ({}, function () {
+  throw new Error('"' + "Foo" + '" is read-only.');
+}()));
 ({
   prop: Bar
 } = ({}, function () {
   throw new Error('"' + "Bar" + '" is read-only.');
 }()));
 ({
-  prop: _baz.Baz
-} = {});
+  prop: Baz
+} = ({}, function () {
+  throw new Error('"' + "Baz" + '" is read-only.');
+}()));

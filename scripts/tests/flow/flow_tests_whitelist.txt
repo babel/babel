@@ -10,7 +10,6 @@
 
 JSX_invalid/migrated_0000.js
 arrow_function_invalid/migrated_0002.js
-async_await/async_generic_method.js
 async_await/migrated_0007.js
 async_await/migrated_0020.js
 async_await/migrated_0024.js
@@ -35,3 +34,6 @@ numbers/underscored_float_whole.js
 numbers/underscored_hex.js
 numbers/underscored_number.js
 numbers/underscored_oct.js
+ES6/modules/migrated_0020.js
+export_import_reserved_words/migrated_0003.js
+export_statements/export_trailing_comma.js

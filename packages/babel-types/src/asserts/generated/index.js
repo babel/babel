@@ -660,6 +660,15 @@ export function assertJSXClosingFragment(
 export function assertNoop(node: Object, opts?: Object = {}): void {
   assert("Noop", node, opts);
 }
+export function assertPlaceholder(node: Object, opts?: Object = {}): void {
+  assert("Placeholder", node, opts);
+}
+export function assertArgumentPlaceholder(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("ArgumentPlaceholder", node, opts);
+}
 export function assertAwaitExpression(node: Object, opts?: Object = {}): void {
   assert("AwaitExpression", node, opts);
 }

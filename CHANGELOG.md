@@ -15,6 +15,37 @@ See [CHANGELOG - v4](/.github/CHANGELOG-v4.md), [CHANGELOG - v5](/.github/CHANGE
 See [CHANGELOG - 6to5](/.github/CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0.0-beta.29 version changelog.
 
+<!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
+<!-- insert-new-changelog-here -->
+
+## v7.3.4 (2019-02-25)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#9572](https://github.com/babel/babel/pull/9572) Fix TypeScript parsers missing token check (#9571) ([@elevatebart](https://github.com/elevatebart))
+  * [#9521](https://github.com/babel/babel/pull/9521) Also check AssignmentPatterns for duplicate export name ([@danez](https://github.com/danez))
+* `babel-helper-create-class-features-plugin`, `babel-helper-replace-supers`, `babel-plugin-proposal-class-properties`, `babel-traverse`
+  * [#9508](https://github.com/babel/babel/pull/9508) Use correct "this" in static fields ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-preset-env`
+  * [#9566](https://github.com/babel/babel/pull/9566) Closes [#9465](https://github.com/babel/babel/issues/9465) ([@zloirock](https://github.com/zloirock))
+* `babel-types`
+  * [#9539](https://github.com/babel/babel/pull/9539) babel-types is* type checks accept null | undefiend as value TS type ([@ian-craig](https://github.com/ian-craig))
+* `babel-plugin-transform-block-scoping`, `babel-traverse`
+  * [#9532](https://github.com/babel/babel/pull/9532) Migrate some duplicate binding tests to traverse ([@danez](https://github.com/danez))
+* `babel-generator`
+  * [#9524](https://github.com/babel/babel/pull/9524) Fix typescript generator params ([@tanhauhau](https://github.com/tanhauhau))
+  * [#9523](https://github.com/babel/babel/pull/9523) Fix flow babel-generator function parantheses ([@tanhauhau](https://github.com/tanhauhau))
+
+#### :house: Internal
+* Other
+  * [#9561](https://github.com/babel/babel/pull/9561) Update CHANGELOG.md using the "Trigger GitHub release" action ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-proposal-object-rest-spread`, `babel-plugin-transform-modules-systemjs`
+  * [#9541](https://github.com/babel/babel/pull/9541) Enable eqeqeq rule in eslint ([@danez](https://github.com/danez))
+* `babel-generator`, `babel-parser`, `babel-plugin-transform-flow-strip-types`, `babel-traverse`
+  * [#9522](https://github.com/babel/babel/pull/9522) Make tests spec compliant by avoiding duplicate declarations in input files ([@danez](https://github.com/danez))
+* `babel-plugin-transform-proto-to-assign`
+  * [#9533](https://github.com/babel/babel/pull/9533) Add import/no-extraneous-dependencies to ESLint ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
 ## v7.3.3 (2019-02-15)
 
 #### :eyeglasses: Spec Compliancy

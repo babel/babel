@@ -23,9 +23,6 @@ type TopicContextState = {
 
 export default class State {
   strict: boolean;
-  input: string;
-  length: number;
-
   curLine: number;
 
   // And, if locations are used, the {line, column} object
@@ -33,12 +30,9 @@ export default class State {
   startLoc: Position;
   endLoc: Position;
 
-  init(options: Options, input: string): void {
+  init(options: Options): void {
     this.strict =
       options.strictMode === false ? false : options.sourceType === "module";
-
-    this.input = input;
-    this.length = input.length;
 
     this.curLine = options.startLine;
     this.startLoc = this.endLoc = this.curPosition();
@@ -66,13 +60,9 @@ export default class State {
   // and then convert them, we need to track it.
   commaAfterSpreadAt: number = -1;
 
-  // Flags to track whether we are in a function, a generator.
-  inFunction: boolean = false;
+  // Flags to track
   inParameters: boolean = false;
   maybeInArrowParameters: boolean = false;
-  inGenerator: boolean = false;
-  inMethod: boolean | N.MethodKind = false;
-  inAsync: boolean = false;
   inPipeline: boolean = false;
   inType: boolean = false;
   noAnonFunctionType: boolean = false;

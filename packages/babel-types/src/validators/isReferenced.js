@@ -2,7 +2,11 @@
 /**
  * Check if the input `node` is a reference to a bound variable.
  */
-export default function isReferenced(node: Object, parent: Object): boolean {
+export default function isReferenced(
+  node: Object,
+  parent: Object,
+  grandparent?: Object,
+): boolean {
   switch (parent.type) {
     // yes: PARENT[NODE]
     // yes: NODE.child
@@ -37,6 +41,7 @@ export default function isReferenced(node: Object, parent: Object): boolean {
     // yes: { [NODE]: "" }
     // no: { NODE: "" }
     // depends: { NODE }
+    // depends: { key: NODE }
     case "ObjectProperty":
     // no: class { NODE = value; }
     // yes: class { [NODE] = value; }
@@ -51,7 +56,10 @@ export default function isReferenced(node: Object, parent: Object): boolean {
       if (parent.key === node) {
         return !!parent.computed;
       }
-      return parent.value === node;
+      if (parent.value === node) {
+        return !grandparent || grandparent.type !== "ObjectPattern";
+      }
+      return true;
 
     // no: class NODE {}
     // yes: class Foo extends NODE {}
@@ -126,6 +134,20 @@ export default function isReferenced(node: Object, parent: Object): boolean {
     // no: type X = { NODE: OtherType }
     case "ObjectTypeProperty":
       return parent.key !== node;
+
+    // yes: enum X { Foo = NODE }
+    // no: enum X { NODE }
+    case "TSEnumMember":
+      return parent.id !== node;
+
+    // yes: { [NODE]: value }
+    // no: { NODE: value }
+    case "TSPropertySignature":
+      if (parent.key === node) {
+        return !!parent.computed;
+      }
+
+      return true;
   }
 
   return true;
