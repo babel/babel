@@ -22,7 +22,7 @@ interface State {
 
 const PARSED_PARAMS = new WeakSet();
 
-export default declare((api, { jsxPragma = "React" }) => {
+export default declare((api, { jsxPragma = "React", keepAllImports: false }) => {
   api.assertVersion(7);
 
   const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
@@ -53,7 +53,7 @@ export default declare((api, { jsxPragma = "React" }) => {
 
         // remove type imports
         for (const stmt of path.get("body")) {
-          if (t.isImportDeclaration(stmt)) {
+          if (!keepAllImports && t.isImportDeclaration(stmt)) {
             // Note: this will allow both `import { } from "m"` and `import "m";`.
             // In TypeScript, the former would be elided.
             if (stmt.node.specifiers.length === 0) {
