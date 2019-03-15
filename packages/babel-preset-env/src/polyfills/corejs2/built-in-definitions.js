@@ -52,7 +52,7 @@ export const InstanceProperties = {
   flatMap: ["es7.array.flat-map"],
   fontcolor: ["es6.string.fontcolor"],
   fontsize: ["es6.string.fontsize"],
-  forEach: ["es6.array.for-each", "web.dom.iterable"],
+  forEach: ["es6.array.for-each"],
   includes: ["es6.string.includes", "es7.array.includes"],
   indexOf: ["es6.array.index-of"],
   italics: ["es6.string.italics"],
