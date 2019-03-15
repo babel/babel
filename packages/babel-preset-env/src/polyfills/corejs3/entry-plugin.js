@@ -90,7 +90,7 @@ export default function(
       if (debug) {
         logEntryPolyfills(
           "core-js",
-          this.polyfillsSet.size,
+          this.polyfillsSet.size > 0,
           filtered,
           this.file.opts.filename,
           polyfillTargets,
