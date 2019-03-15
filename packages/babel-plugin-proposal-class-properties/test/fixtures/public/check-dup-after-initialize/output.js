@@ -14,9 +14,8 @@ function (_ref) {
     babelHelpers.classCallCheck(this, Foo);
     _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
     babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "x", log.push(1));
-    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
     babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "x", log.push(1));
-    return _this;
+    return _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
   }
 
   return Foo;

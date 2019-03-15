@@ -14,8 +14,8 @@ function (_Bar) {
       _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
       babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "bar", "foo");
     } else {
-      _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
       babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "bar", "foo");
+      _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
     }
 
     return babelHelpers.possibleConstructorReturn(_this);

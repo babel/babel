@@ -10,22 +10,22 @@ let B = babelHelpers.decorate([dec], function (_initialize, _A) {
       };
 
       if (a) {
-        super();
-
         _initialize(this);
+
+        super();
       } else {
         foo();
       }
 
       while (0) {
-        super();
-
         _initialize(this);
+
+        super();
       }
 
-      super();
-
       _initialize(this);
+
+      super();
     }
 
   }

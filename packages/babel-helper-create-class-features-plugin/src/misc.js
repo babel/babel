@@ -74,8 +74,12 @@ export function injectInitialization(path, constructor, nodes, renamer) {
   if (isDerived) {
     const bareSupers = [];
     constructor.traverse(findBareSupers, bareSupers);
+    const firstSuper = bareSupers.shift();
+    if (firstSuper) {
+      firstSuper.insertAfter(nodes);
+    }
     for (const bareSuper of bareSupers) {
-      bareSuper.insertAfter(nodes);
+      bareSuper.insertBefore(nodes);
     }
   } else {
     constructor.get("body").unshiftContainer("body", nodes);

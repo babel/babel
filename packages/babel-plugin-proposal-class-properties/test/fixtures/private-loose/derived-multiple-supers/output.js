@@ -17,11 +17,11 @@ function (_Bar) {
         value: "foo"
       });
     } else {
-      _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
       Object.defineProperty(babelHelpers.assertThisInitialized(_this), _bar, {
         writable: true,
         value: "foo"
       });
+      _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
     }
 
     return babelHelpers.possibleConstructorReturn(_this);

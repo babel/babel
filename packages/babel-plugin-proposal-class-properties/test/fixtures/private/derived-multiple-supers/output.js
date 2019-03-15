@@ -18,12 +18,12 @@ function (_Bar) {
         value: "foo"
       });
     } else {
-      _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
-
       _bar.set(babelHelpers.assertThisInitialized(_this), {
         writable: true,
         value: "foo"
       });
+
+      _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
     }
 
     return babelHelpers.possibleConstructorReturn(_this);
