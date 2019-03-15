@@ -333,16 +333,8 @@ export default class ExpressionParser extends LValParser {
 
         if (op === tt.pipeline) {
           this.expectPlugin("pipelineOperator");
-          const wasInPipeline = this.state.inPipeline;
           this.state.inPipeline = true;
           this.checkPipelineAtInfixOperator(left, leftStartPos);
-
-          if (
-            !wasInPipeline &&
-            this.getPluginOption("pipelineOperator", "proposal") === "fsharp"
-          ) {
-            node.left = this.makePipelineHead(left);
-          }
         } else if (op === tt.nullishCoalescing) {
           this.expectPlugin("nullishCoalescingOperator");
         }
@@ -2294,13 +2286,6 @@ export default class ExpressionParser extends LValParser {
       this.state.topicContext.maxTopicIndex != null &&
       this.state.topicContext.maxTopicIndex >= 0
     );
-  }
-
-  makePipelineHead(left: N.Expression): N.Expression {
-    const node = this.startNodeAtNode(left);
-    node.head = left;
-
-    return this.finishNode(node, "PipelineHead");
   }
 
   parseFSharpPipelineBody(prec: number, noIn: ?boolean): N.Expression {

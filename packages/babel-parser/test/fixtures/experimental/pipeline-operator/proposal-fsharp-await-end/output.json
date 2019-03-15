@@ -107,7 +107,7 @@
                   }
                 },
                 "left": {
-                  "type": "PipelineHead",
+                  "type": "Identifier",
                   "start": 34,
                   "end": 35,
                   "loc": {
@@ -118,25 +118,10 @@
                     "end": {
                       "line": 2,
                       "column": 10
-                    }
-                  },
-                  "head": {
-                    "type": "Identifier",
-                    "start": 34,
-                    "end": 35,
-                    "loc": {
-                      "start": {
-                        "line": 2,
-                        "column": 9
-                      },
-                      "end": {
-                        "line": 2,
-                        "column": 10
-                      },
-                      "identifierName": "x"
                     },
-                    "name": "x"
-                  }
+                    "identifierName": "x"
+                  },
+                  "name": "x"
                 },
                 "operator": "|>",
                 "right": {

@@ -573,10 +573,6 @@ export type ParenthesizedExpression = NodeBase & {
 
 // Pipelines
 
-export type PipelineHead = NodeBase & {
-  type: "PipelineHead",
-};
-
 export type PipelineBody = NodeBase & {
   type: "PipelineBody",
 };
