@@ -182,22 +182,24 @@ export default declare((api, opts) => {
       debug,
     };
 
-    if (useBuiltIns === "usage") {
-      if (corejs.major === 2) {
-        plugins.push([addCoreJS2UsagePlugin, pluginOptions]);
+    if (corejs) {
+      if (useBuiltIns === "usage") {
+        if (corejs.major === 2) {
+          plugins.push([addCoreJS2UsagePlugin, pluginOptions]);
+        } else {
+          plugins.push([addCoreJS3UsagePlugin, pluginOptions]);
+        }
+        if (regenerator) {
+          plugins.push([addRegeneratorUsagePlugin, pluginOptions]);
+        }
       } else {
-        plugins.push([addCoreJS3UsagePlugin, pluginOptions]);
-      }
-      if (regenerator) {
-        plugins.push([addRegeneratorUsagePlugin, pluginOptions]);
-      }
-    } else {
-      if (corejs.major === 2) {
-        plugins.push([replaceCoreJS2EntryPlugin, pluginOptions]);
-      } else {
-        plugins.push([replaceCoreJS3EntryPlugin, pluginOptions]);
-        if (!regenerator) {
-          plugins.push([removeRegeneratorEntryPlugin, pluginOptions]);
+        if (corejs.major === 2) {
+          plugins.push([replaceCoreJS2EntryPlugin, pluginOptions]);
+        } else {
+          plugins.push([replaceCoreJS3EntryPlugin, pluginOptions]);
+          if (!regenerator) {
+            plugins.push([removeRegeneratorEntryPlugin, pluginOptions]);
+          }
         }
       }
     }

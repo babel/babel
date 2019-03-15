@@ -99,7 +99,10 @@ export function prettifyTargets(targets: Targets): Targets {
   }, {});
 }
 
-export function isUnreleasedVersion(version: string, env: string): boolean {
+export function isUnreleasedVersion(
+  version: string | number,
+  env: string,
+): boolean {
   const unreleasedLabel = unreleasedLabels[env];
   return (
     !!unreleasedLabel && unreleasedLabel === version.toString().toLowerCase()

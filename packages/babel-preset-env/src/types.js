@@ -15,17 +15,22 @@ export type BuiltInsOption = $Values<typeof UseBuiltInsOption>;
 
 type CorejsVersion = 2 | 3 | string;
 
+export type CorejsOption =
+  | false
+  | CorejsVersion
+  | { version: CorejsVersion, proposals: boolean };
+
+export type PluginListItem = string | RegExp;
+export type PluginListOption = Array<PluginListItem>;
+
 export type Options = {
   configPath: string,
-  corejs:
-    | false
-    | CorejsVersion
-    | { version: CorejsVersion, proposals: boolean },
+  corejs: CorejsOption,
   debug: boolean,
-  exclude: Array<string | RegExp>,
+  exclude: PluginListOption,
   forceAllTransforms: boolean,
   ignoreBrowserslistConfig: boolean,
-  include: Array<string | RegExp>,
+  include: PluginListOption,
   loose: boolean,
   modules: ModuleOption,
   shippedProposals: boolean,
