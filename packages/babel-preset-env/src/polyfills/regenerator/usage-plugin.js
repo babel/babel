@@ -1,4 +1,7 @@
+// @flow
+
 import { createImport } from "../../utils";
+import type { NodePath } from "@babel/traverse";
 
 export default function() {
   return {
@@ -7,7 +10,7 @@ export default function() {
       this.usesRegenerator = false;
     },
     visitor: {
-      Function(path) {
+      Function(path: NodePath) {
         const { node } = path;
 
         if (!this.usesRegenerator && (node.generator || node.async)) {

@@ -1,4 +1,7 @@
+// @flow
+
 import { getImportSource, getRequireSource } from "../../utils";
+import type { NodePath } from "@babel/traverse";
 
 function isRegeneratorSource(source) {
   return source === "regenerator-runtime/runtime";
@@ -6,13 +9,13 @@ function isRegeneratorSource(source) {
 
 export default function() {
   const visitor = {
-    ImportDeclaration(path) {
+    ImportDeclaration(path: NodePath) {
       if (isRegeneratorSource(getImportSource(path))) {
         this.regeneratorImportExcluded = true;
         path.remove();
       }
     },
-    Program(path) {
+    Program(path: NodePath) {
       path.get("body").forEach(bodyPath => {
         if (isRegeneratorSource(getRequireSource(bodyPath))) {
           this.regeneratorImportExcluded = true;
