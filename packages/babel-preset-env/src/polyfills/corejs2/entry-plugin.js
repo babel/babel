@@ -1,3 +1,5 @@
+// @flow
+
 import corejs2Polyfills from "../../../data/corejs2-built-ins.json";
 import getPlatformSpecificDefaultFor from "./get-platform-specific-default";
 import filterItems from "../../filter-items";
@@ -9,9 +11,20 @@ import {
 } from "../../utils";
 import { logEntryPolyfills } from "../../debug";
 
+import type { Targets } from "../../types";
+import type { NodePath } from "@babel/traverse";
+
+type Options = {
+  include: Set<string>,
+  exclude: Set<string>,
+  polyfillTargets: Targets,
+  regenerator: boolean,
+  debug: boolean,
+};
+
 export default function(
-  _,
-  { include, exclude, polyfillTargets, regenerator, debug },
+  _: any,
+  { include, exclude, polyfillTargets, regenerator, debug }: Options,
 ) {
   const polyfills = filterItems(
     corejs2Polyfills,
@@ -22,12 +35,12 @@ export default function(
   );
 
   const isPolyfillImport = {
-    ImportDeclaration(path) {
+    ImportDeclaration(path: NodePath) {
       if (isPolyfillSource(getImportSource(path))) {
         this.replaceBySeparateModulesImport(path);
       }
     },
-    Program(path) {
+    Program(path: NodePath) {
       path.get("body").forEach(bodyPath => {
         if (isPolyfillSource(getRequireSource(bodyPath))) {
           this.replaceBySeparateModulesImport(bodyPath);

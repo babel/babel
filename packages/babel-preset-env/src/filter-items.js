@@ -55,8 +55,8 @@ export default function(
   excludes: Set<string>,
   targets: Targets,
   defaultIncludes: Array<string> | null,
-  defaultExcludes: Array<string> | null,
-  pluginSyntaxMap: Map<string, string | null>,
+  defaultExcludes?: Array<string> | null,
+  pluginSyntaxMap?: Map<string, string | null>,
 ) {
   const result = new Set<string>();
 

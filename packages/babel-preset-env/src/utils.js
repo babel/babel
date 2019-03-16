@@ -147,7 +147,7 @@ export function getRequireSource({ node }: NodePath) {
   if (isRequire) return expression.arguments[0].value;
 }
 
-export function isPolyfillSource(source: string): boolean {
+export function isPolyfillSource(source: ?string): boolean {
   return source === "@babel/polyfill" || source === "core-js";
 }
 
