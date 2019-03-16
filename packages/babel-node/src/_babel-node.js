@@ -212,7 +212,7 @@ if (program.eval || program.print) {
 
 function replStart() {
   repl.start({
-    prompt: "> ",
+    prompt: "babel > ",
     input: process.stdin,
     output: process.stdout,
     eval: replEval,
