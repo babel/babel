@@ -933,10 +933,24 @@ helpers.arrayWithHoles = helper("7.0.0-beta.0")`
 
 helpers.iterableToArray = helper("7.0.0-beta.0")`
   export default function _iterableToArray(iter) {
-    if (
-      Symbol.iterator in Object(iter) ||
-      Object.prototype.toString.call(iter) === "[object Arguments]"
-    ) return Array.from(iter);
+    const prototypeWhiteList = [
+      '[object Arguments]',
+    ];
+    let hasSymbol = false;
+    try {
+      if (Symbol.iterator in Object(iter)) {
+        hasSymbol = true;
+      }
+    } catch (e) {}
+    if (hasSymbol) {
+      // Return outside catch block to allow any errors to be thrown by Array.from 
+      return Array.from(iter);
+    }
+    // Fallback to whitelist
+    if (prototypeWhiteList.indexOf(Object.prototype.toString.call(iter)) !== -1) {
+      return Array.from(iter);
+    }
+    return null;
   }
 `;
 
