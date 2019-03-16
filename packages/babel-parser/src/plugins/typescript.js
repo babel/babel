@@ -741,12 +741,32 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return type;
     }
 
-    tsParseTypeOperator(operator: "keyof" | "unique"): N.TsTypeOperator {
+    tsParseTypeOperator(
+      operator: "keyof" | "unique" | "readonly",
+    ): N.TsTypeOperator {
       const node: N.TsTypeOperator = this.startNode();
       this.expectContextual(operator);
       node.operator = operator;
       node.typeAnnotation = this.tsParseTypeOperatorOrHigher();
+
+      if (operator === "readonly") {
+        this.tsCheckTypeAnnotationForReadOnly(node);
+      }
+
       return this.finishNode(node, "TSTypeOperator");
+    }
+
+    tsCheckTypeAnnotationForReadOnly(node: N.Node) {
+      switch (node.typeAnnotation.type) {
+        case "TSTupleType":
+        case "TSArrayType":
+          return;
+        default:
+          this.raise(
+            node.operator,
+            "'readonly' type modifier is only permitted on array and tuple literal types.",
+          );
+      }
     }
 
     tsParseInferType(): N.TsInferType {
@@ -759,7 +779,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTypeOperatorOrHigher(): N.TsType {
-      const operator = ["keyof", "unique"].find(kw => this.isContextual(kw));
+      const operator = ["keyof", "unique", "readonly"].find(kw =>
+        this.isContextual(kw),
+      );
       return operator
         ? this.tsParseTypeOperator(operator)
         : this.isContextual("infer")
