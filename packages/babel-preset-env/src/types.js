@@ -1,6 +1,7 @@
 //@flow
 
 import { ModulesOption, UseBuiltInsOption } from "./options";
+import { NormalizedCorejsOption } from "./normalized-options";
 
 // Targets
 export type Target =
@@ -53,3 +54,14 @@ export type Options = {
 
 // Babel
 export type Plugin = [Object, Object];
+
+export type InternalPluginOptions = {
+  corejs: NormalizedCorejsOption,
+  include: Set<string>,
+  exclude: Set<string>,
+  polyfillTargets: Targets,
+  debug: boolean,
+  proposals: boolean,
+  shippedProposals: boolean,
+  regenerator: boolean,
+};

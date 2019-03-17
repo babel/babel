@@ -24,8 +24,7 @@ import {
 } from "../../utils";
 import { logUsagePolyfills } from "../../debug";
 
-import type { Targets } from "../../types";
-import type { NormalizedCorejsOption } from "../../normalize-options";
+import type { InternalPluginOptions } from "../../types";
 import type { NodePath } from "@babel/traverse";
 
 const NO_DIRECT_POLYFILL_IMPORT = `
@@ -47,16 +46,6 @@ const corejs3PolyfillsWithShippedProposals = corejs3ShippedProposalsList.reduce(
   { ...corejs3PolyfillsWithoutProposals },
 );
 
-type Options = {
-  corejs: NormalizedCorejsOption,
-  include: Set<string>,
-  exclude: Set<string>,
-  polyfillTargets: Targets,
-  debug: boolean,
-  proposals: boolean,
-  shippedProposals: boolean,
-};
-
 export default function(
   _: any,
   {
@@ -67,7 +56,7 @@ export default function(
     proposals,
     shippedProposals,
     debug,
-  }: Options,
+  }: InternalPluginOptions,
 ) {
   const polyfills = filterItems(
     proposals

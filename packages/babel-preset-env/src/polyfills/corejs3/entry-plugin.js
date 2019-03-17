@@ -13,8 +13,7 @@ import {
 } from "../../utils";
 import { logEntryPolyfills } from "../../debug";
 
-import type { Targets } from "../../types";
-import type { NormalizedCorejsOption } from "../../normalize-options";
+import type { InternalPluginOptions } from "../../types";
 import type { NodePath } from "@babel/traverse";
 
 function isBabelPolyfillSource(source) {
@@ -29,17 +28,9 @@ const BABEL_POLYFILL_DEPRECATION = `
   \`@babel/polyfill\` is deprecated. Please, use required parts of \`core-js\`
   and \`regenerator-runtime/runtime\` separately`;
 
-type Options = {
-  corejs: NormalizedCorejsOption,
-  include: Set<string>,
-  exclude: Set<string>,
-  polyfillTargets: Targets,
-  debug: boolean,
-};
-
 export default function(
   _: any,
-  { corejs, include, exclude, polyfillTargets, debug }: Options,
+  { corejs, include, exclude, polyfillTargets, debug }: InternalPluginOptions,
 ) {
   const polyfills = filterItems(
     corejs3Polyfills,

@@ -18,23 +18,16 @@ import {
 } from "../../utils";
 import { logUsagePolyfills } from "../../debug";
 
-import type { Targets } from "../../types";
+import type { InternalPluginOptions } from "../../types";
 import type { NodePath } from "@babel/traverse";
 
 const NO_DIRECT_POLYFILL_IMPORT = `
   When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
   Please remove the \`import '@babel/polyfill'\` call or use \`useBuiltIns: 'entry'\` instead.`;
 
-type Options = {
-  include: Set<string>,
-  exclude: Set<string>,
-  polyfillTargets: Targets,
-  debug: boolean,
-};
-
 export default function(
   { types: t }: { types: Object },
-  { include, exclude, polyfillTargets, debug }: Options,
+  { include, exclude, polyfillTargets, debug }: InternalPluginOptions,
 ) {
   const polyfills = filterItems(
     corejs2Polyfills,

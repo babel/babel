@@ -11,20 +11,18 @@ import {
 } from "../../utils";
 import { logEntryPolyfills } from "../../debug";
 
-import type { Targets } from "../../types";
+import type { InternalPluginOptions } from "../../types";
 import type { NodePath } from "@babel/traverse";
-
-type Options = {
-  include: Set<string>,
-  exclude: Set<string>,
-  polyfillTargets: Targets,
-  regenerator: boolean,
-  debug: boolean,
-};
 
 export default function(
   _: any,
-  { include, exclude, polyfillTargets, regenerator, debug }: Options,
+  {
+    include,
+    exclude,
+    polyfillTargets,
+    regenerator,
+    debug,
+  }: InternalPluginOptions,
 ) {
   const polyfills = filterItems(
     corejs2Polyfills,
