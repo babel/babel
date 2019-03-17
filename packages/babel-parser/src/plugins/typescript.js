@@ -321,6 +321,44 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSTypeParameterDeclaration");
     }
 
+    tsTryNextParseConstantContext(): ?N.TsTypeReference {
+      if (this.lookahead().type === tt._const) {
+        this.next();
+        return this.tsParseTypeReference();
+      }
+      return null;
+    }
+
+    tsCheckLiteralForConstantContext(node: N.Node) {
+      switch (node.type) {
+        case "StringLiteral":
+        case "TemplateLiteral":
+        case "NumericLiteral":
+        case "BooleanLiteral":
+        case "SpreadElement":
+        case "ObjectMethod":
+        case "ObjectExpression":
+          return;
+        case "ArrayExpression":
+          return (node: N.ArrayExpression).elements.forEach(element => {
+            if (element) {
+              this.tsCheckLiteralForConstantContext(element);
+            }
+          });
+        case "ObjectProperty":
+          return this.tsCheckLiteralForConstantContext(
+            (node: N.ObjectProperty).value,
+          );
+        case "UnaryExpression":
+          return this.tsCheckLiteralForConstantContext(node.argument);
+        default:
+          this.raise(
+            node.start,
+            "Only literal values are allowed in constant contexts",
+          );
+      }
+    }
+
     // Note: In TypeScript implementation we must provide `yieldContext` and `awaitContext`,
     // but here it's always false, because this is only used for types.
     tsFillSignature(
@@ -703,12 +741,32 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return type;
     }
 
-    tsParseTypeOperator(operator: "keyof" | "unique"): N.TsTypeOperator {
+    tsParseTypeOperator(
+      operator: "keyof" | "unique" | "readonly",
+    ): N.TsTypeOperator {
       const node: N.TsTypeOperator = this.startNode();
       this.expectContextual(operator);
       node.operator = operator;
       node.typeAnnotation = this.tsParseTypeOperatorOrHigher();
+
+      if (operator === "readonly") {
+        this.tsCheckTypeAnnotationForReadOnly(node);
+      }
+
       return this.finishNode(node, "TSTypeOperator");
+    }
+
+    tsCheckTypeAnnotationForReadOnly(node: N.Node) {
+      switch (node.typeAnnotation.type) {
+        case "TSTupleType":
+        case "TSArrayType":
+          return;
+        default:
+          this.raise(
+            node.operator,
+            "'readonly' type modifier is only permitted on array and tuple literal types.",
+          );
+      }
     }
 
     tsParseInferType(): N.TsInferType {
@@ -721,7 +779,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTypeOperatorOrHigher(): N.TsType {
-      const operator = ["keyof", "unique"].find(kw => this.isContextual(kw));
+      const operator = ["keyof", "unique", "readonly"].find(kw =>
+        this.isContextual(kw),
+      );
       return operator
         ? this.tsParseTypeOperator(operator)
         : this.isContextual("infer")
@@ -937,12 +997,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseTypeAssertion(): N.TsTypeAssertion {
       const node: N.TsTypeAssertion = this.startNode();
-      this.next(); // <
-      // Not actually necessary to set state.inType because we never reach here if JSX plugin is enabled,
-      // but need `tsInType` to satisfy the assertion in `tsParseType`.
-      node.typeAnnotation = this.tsInType(() => this.tsParseType());
+      const _const = this.tsTryNextParseConstantContext();
+      node.typeAnnotation = _const || this.tsNextThenParseType();
       this.expectRelational(">");
       node.expression = this.parseMaybeUnary();
+      if (_const) {
+        this.tsCheckLiteralForConstantContext(node.expression);
+      }
       return this.finishNode(node, "TSTypeAssertion");
     }
 
@@ -1605,7 +1666,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           leftStartLoc,
         );
         node.expression = left;
-        node.typeAnnotation = this.tsNextThenParseType();
+        const _const = this.tsTryNextParseConstantContext();
+        if (_const) {
+          this.tsCheckLiteralForConstantContext(node.expression);
+          node.typeAnnotation = _const;
+        } else {
+          node.typeAnnotation = this.tsNextThenParseType();
+        }
         this.finishNode(node, "TSAsExpression");
         return this.parseExprOp(
           node,
