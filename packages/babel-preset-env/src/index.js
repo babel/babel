@@ -37,12 +37,6 @@ const getPlugin = (pluginName: string) => {
   return plugin;
 };
 
-const getBuiltInTargets = targets => {
-  // eslint-disable-next-line no-unused-vars
-  const { uglify, ...builtInTargets } = targets;
-  return builtInTargets;
-};
-
 export const transformIncludesAndExcludes = (opts: Array<string>): Object => {
   return opts.reduce(
     (result, opt) => {
@@ -169,11 +163,9 @@ export default declare((api, opts) => {
   if (useBuiltIns === "usage" || useBuiltIns === "entry") {
     const regenerator = transformations.has("transform-regenerator");
 
-    const polyfillTargets = getBuiltInTargets(targets);
-
     const pluginOptions = {
       corejs,
-      polyfillTargets,
+      polyfillTargets: targets,
       include: include.builtIns,
       exclude: exclude.builtIns,
       proposals,

@@ -1,3 +1,5 @@
+// @flow
+
 import corejs3Polyfills from "core-js-compat/data";
 import corejsEntries from "core-js-compat/entries";
 import getModulesListForTargetVersion from "core-js-compat/get-modules-list-for-target-version";
@@ -11,6 +13,10 @@ import {
 } from "../../utils";
 import { logEntryPolyfills } from "../../debug";
 
+import type { Targets } from "../../types";
+import type { NormalizedCorejsOption } from "../../normalize-options";
+import type { NodePath } from "@babel/traverse";
+
 function isBabelPolyfillSource(source) {
   return source === "@babel/polyfill" || source === "babel-polyfill";
 }
@@ -23,21 +29,30 @@ const BABEL_POLYFILL_DEPRECATION = `
   \`@babel/polyfill\` is deprecated. Please, use required parts of \`core-js\`
   and \`regenerator-runtime/runtime\` separately`;
 
+type Options = {
+  corejs: NormalizedCorejsOption,
+  include: Set<string>,
+  exclude: Set<string>,
+  polyfillTargets: Targets,
+  debug: boolean,
+};
+
 export default function(
-  _,
-  { corejs, include, exclude, polyfillTargets, debug },
+  _: any,
+  { corejs, include, exclude, polyfillTargets, debug }: Options,
 ) {
   const polyfills = filterItems(
     corejs3Polyfills,
     include,
     exclude,
     polyfillTargets,
+    null,
   );
 
   const available = new Set(getModulesListForTargetVersion(corejs.version));
 
   const isPolyfillImport = {
-    ImportDeclaration(path) {
+    ImportDeclaration(path: NodePath) {
       const source = getImportSource(path);
       if (!source) return;
       if (isBabelPolyfillSource(source)) {
@@ -49,7 +64,7 @@ export default function(
         }
       }
     },
-    Program(path) {
+    Program(path: NodePath) {
       path.get("body").forEach(bodyPath => {
         const source = getRequireSource(bodyPath);
         if (!source) return;
@@ -79,7 +94,7 @@ export default function(
         path.remove();
       };
     },
-    post({ path }) {
+    post({ path }: { path: NodePath }) {
       const filtered = intersection(polyfills, this.polyfillsSet, available);
       const reversed = Array.from(filtered).reverse();
 

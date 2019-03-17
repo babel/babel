@@ -1,11 +1,23 @@
 //@flow
 
-import { TargetNames, ModulesOption, UseBuiltInsOption } from "./options";
+import { ModulesOption, UseBuiltInsOption } from "./options";
 
 // Targets
-export type Target = $Keys<typeof TargetNames>;
+export type Target =
+  | "node"
+  | "chrome"
+  | "opera"
+  | "edge"
+  | "firefox"
+  | "safari"
+  | "ie"
+  | "ios"
+  | "android"
+  | "electron"
+  | "samsung";
+
 export type Targets = {
-  [target: Target]: string | number,
+  [target: Target]: string,
 };
 
 // Options

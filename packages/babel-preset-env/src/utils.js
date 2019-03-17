@@ -65,7 +65,7 @@ export function findSuggestion(options: string[], option: string): string {
   }, undefined);
 }
 
-export function prettifyVersion(version: number | string) {
+export function prettifyVersion(version: string) {
   if (typeof version !== "string") {
     return version;
   }

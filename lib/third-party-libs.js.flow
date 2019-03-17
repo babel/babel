@@ -197,9 +197,11 @@ declare module "js-levenshtein" {
 }
 
 declare module "core-js-compat/data" {
+  declare type Target = "node" | "chrome" | "opera" | "edge" | "firefox" | "safari" | "ie" | "ios" | "android" | "electron" | "samsung";
+
   declare module.exports: {
     [key: string]: {
-      [target: string]: string;
+      [target: Target]: string;
     }
   }
 }

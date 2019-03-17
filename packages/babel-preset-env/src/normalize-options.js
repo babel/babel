@@ -189,7 +189,7 @@ export const validateUseBuiltInsOption = (
   return builtInsOpt;
 };
 
-type NormalizedCorejsOption = {
+export type NormalizedCorejsOption = {
   proposals: boolean,
   version: typeof SemVer | null | false,
 };

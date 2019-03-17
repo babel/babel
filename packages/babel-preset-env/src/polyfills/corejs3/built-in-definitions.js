@@ -1,3 +1,7 @@
+// @flow
+
+type ObjectMap<V> = { [name: string]: V };
+
 const ArrayNatureIterators = [
   "es.array.iterator",
   "web.dom-collections.iterator",
@@ -113,7 +117,7 @@ const WeakSetDependencies = [
 
 const URLSearchParamsDependencies = ["web.url", ...CommonIteratorsWithTag];
 
-export const BuiltIns = {
+export const BuiltIns: ObjectMap<string[]> = {
   AggregateError: ["esnext.aggregate-error", ...CommonIterators],
   ArrayBuffer: [
     "es.array-buffer.constructor",
@@ -163,7 +167,7 @@ export const BuiltIns = {
   setImmediate: ["web.immediate"],
 };
 
-export const InstanceProperties = {
+export const InstanceProperties: ObjectMap<string[]> = {
   at: ["esnext.string.at"],
   anchor: ["es.string.anchor"],
   big: ["es.string.big"],
@@ -240,7 +244,7 @@ export const InstanceProperties = {
   __lookupSetter__: ["es.object.lookup-setter"],
 };
 
-export const StaticProperties = {
+export const StaticProperties: ObjectMap<ObjectMap<string | string[]>> = {
   Array: {
     from: ["es.array.from", "es.string.iterator"],
     isArray: ["es.array.is-array"],
@@ -422,7 +426,7 @@ export const StaticProperties = {
   Float64Array: TypedArrayStaticMethods,
 };
 
-export const CommonInstanceDependencies = new Set([
+export const CommonInstanceDependencies = new Set<string>([
   "es.object.to-string",
   "es.object.define-getter",
   "es.object.define-setter",
@@ -431,7 +435,7 @@ export const CommonInstanceDependencies = new Set([
   "es.regexp.exec",
 ]);
 
-export const PossibleGlobalObjects = new Set([
+export const PossibleGlobalObjects = new Set<string>([
   "global",
   "globalThis",
   "self",
