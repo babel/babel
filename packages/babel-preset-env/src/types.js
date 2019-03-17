@@ -1,7 +1,7 @@
 //@flow
 
 import { ModulesOption, UseBuiltInsOption } from "./options";
-import { NormalizedCorejsOption } from "./normalized-options";
+import { NormalizedCorejsOption } from "./normalize-options";
 
 // Targets
 export type Target =
