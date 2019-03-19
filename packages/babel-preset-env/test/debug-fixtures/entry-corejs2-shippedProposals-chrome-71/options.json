@@ -1,0 +1,13 @@
+{
+  "presets": [
+    ["../../lib", {
+      "debug": true,
+      "targets": {
+        "browsers": "chrome 71"
+      },
+      "shippedProposals": true,
+      "useBuiltIns": "entry",
+      "corejs": 2
+    }]
+  ]
+}

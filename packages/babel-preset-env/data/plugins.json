@@ -4,6 +4,7 @@
     "edge": "13",
     "firefox": "34",
     "node": "4",
+    "samsung": "3.4",
     "opera": "28",
     "electron": "0.24"
   },
@@ -14,6 +15,7 @@
     "safari": "9",
     "node": "4",
     "ios": "9",
+    "samsung": "4",
     "opera": "31",
     "electron": "0.31"
   },
@@ -23,6 +25,7 @@
     "safari": "10",
     "node": "6.5",
     "ios": "10",
+    "samsung": "5",
     "opera": "38",
     "electron": "1.2"
   },
@@ -33,6 +36,7 @@
     "safari": "10",
     "node": "6",
     "ios": "10",
+    "samsung": "5",
     "opera": "34",
     "electron": "0.36"
   },
@@ -44,6 +48,7 @@
     "node": "4",
     "ie": "11",
     "ios": "10",
+    "samsung": "3.4",
     "opera": "28",
     "electron": "0.24"
   },
@@ -54,6 +59,7 @@
     "safari": "10",
     "node": "5",
     "ios": "10",
+    "samsung": "5",
     "opera": "33",
     "electron": "0.36"
   },
@@ -64,6 +70,7 @@
     "safari": "10",
     "node": "5",
     "ios": "10",
+    "samsung": "5",
     "opera": "33",
     "electron": "0.36"
   },
@@ -74,6 +81,7 @@
     "safari": "9",
     "node": "4",
     "ios": "9",
+    "samsung": "4",
     "opera": "30",
     "electron": "0.29"
   },
@@ -84,6 +92,7 @@
     "safari": "9",
     "node": "4",
     "ios": "9",
+    "samsung": "3.4",
     "opera": "29",
     "electron": "0.27"
   },
@@ -94,6 +103,7 @@
     "safari": "7.1",
     "node": "4",
     "ios": "8",
+    "samsung": "4",
     "opera": "31",
     "electron": "0.31"
   },
@@ -104,6 +114,7 @@
     "safari": "10",
     "node": "6.5",
     "ios": "10",
+    "samsung": "5",
     "opera": "38",
     "electron": "1.2"
   },
@@ -114,6 +125,7 @@
     "safari": "10",
     "node": "6",
     "ios": "10",
+    "samsung": "5",
     "opera": "36",
     "electron": "1"
   },
@@ -122,6 +134,7 @@
     "safari": "11.1",
     "node": "8.10",
     "ios": "11.3",
+    "samsung": "8.2",
     "opera": "49",
     "electron": "3.1"
   },
@@ -132,6 +145,7 @@
     "safari": "12",
     "node": "6",
     "ios": "12",
+    "samsung": "5",
     "opera": "37",
     "electron": "1.1"
   },
@@ -142,6 +156,7 @@
     "safari": "10",
     "node": "5",
     "ios": "10",
+    "samsung": "5",
     "opera": "33",
     "electron": "0.36"
   },
@@ -152,6 +167,7 @@
     "safari": "10",
     "node": "6",
     "ios": "10",
+    "samsung": "5",
     "opera": "36",
     "electron": "1"
   },
@@ -162,6 +178,7 @@
     "safari": "10",
     "node": "6.5",
     "ios": "10",
+    "samsung": "5",
     "opera": "38",
     "electron": "1.2"
   },
@@ -172,6 +189,7 @@
     "safari": "10.1",
     "node": "6",
     "ios": "10.3",
+    "samsung": "5",
     "opera": "36",
     "electron": "1"
   },
@@ -182,6 +200,7 @@
     "safari": "9",
     "node": "0.12",
     "ios": "9",
+    "samsung": "3",
     "opera": "25",
     "electron": "0.2"
   },
@@ -192,6 +211,7 @@
     "safari": "10",
     "node": "5",
     "ios": "10",
+    "samsung": "5",
     "opera": "33",
     "electron": "0.36"
   },
@@ -202,6 +222,7 @@
     "safari": "10",
     "node": "6",
     "ios": "10",
+    "samsung": "5",
     "opera": "37",
     "electron": "1.1"
   },
@@ -212,6 +233,7 @@
     "safari": "10.1",
     "node": "7",
     "ios": "10.3",
+    "samsung": "6.2",
     "opera": "39",
     "electron": "1.3"
   },
@@ -222,6 +244,7 @@
     "safari": "11",
     "node": "7.6",
     "ios": "11",
+    "samsung": "6.2",
     "opera": "42",
     "electron": "1.6"
   },
@@ -231,6 +254,7 @@
     "safari": "12",
     "node": "10",
     "ios": "12",
+    "samsung": "8.2",
     "opera": "50",
     "electron": "3.1"
   },
@@ -240,6 +264,7 @@
     "safari": "11.1",
     "node": "8.3",
     "ios": "11.3",
+    "samsung": "8.2",
     "opera": "47",
     "electron": "2.1"
   },

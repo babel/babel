@@ -1,0 +1,39 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "samsung": "8.2"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  syntax-async-generators { "samsung":"8.2" }
+  syntax-object-rest-spread { "samsung":"8.2" }
+  proposal-unicode-property-regex { "samsung":"8.2" }
+  proposal-json-strings { "samsung":"8.2" }
+  proposal-optional-catch-binding { "samsung":"8.2" }
+  transform-named-capturing-groups-regex { "samsung":"8.2" }
+
+Using polyfills with `entry` option:
+
+[<CWD>/src/in.js] Replaced core-js entries with the following polyfills:
+  es.symbol.description { "samsung":"8.2" }
+  es.array.flat { "samsung":"8.2" }
+  es.array.flat-map { "samsung":"8.2" }
+  es.array.iterator { "samsung":"8.2" }
+  es.array.unscopables.flat { "samsung":"8.2" }
+  es.array.unscopables.flat-map { "samsung":"8.2" }
+  es.object.from-entries { "samsung":"8.2" }
+  es.promise { "samsung":"8.2" }
+  es.promise.finally { "samsung":"8.2" }
+  es.string.replace { "samsung":"8.2" }
+  es.string.trim-end { "samsung":"8.2" }
+  es.string.trim-start { "samsung":"8.2" }
+  web.dom-collections.iterator { "samsung":"8.2" }
+  web.immediate { "samsung":"8.2" }
+  web.queue-microtask { "samsung":"8.2" }
+  web.url.to-json { "samsung":"8.2" }
+
+[<CWD>/src/in.js] Based on your targets, regenerator-runtime import excluded.
+Successfully compiled 1 file with Babel.

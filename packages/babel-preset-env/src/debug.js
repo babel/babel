@@ -1,20 +1,21 @@
+// @flow
 /*eslint quotes: ["error", "double", { "avoidEscape": true }]*/
 import semver from "semver";
 import { isUnreleasedVersion, prettifyVersion, semverify } from "./utils";
 
-const wordEnds = size => {
-  return size > 1 ? "s" : "";
-};
+import type { Targets } from "./types";
 
-export const logMessage = (message, context) => {
-  const pre = context ? `[${context}] ` : "";
-  const logStr = `  ${pre}${message}`;
-  console.log(logStr);
+const wordEnds = (size: number) => {
+  return size > 1 ? "s" : "";
 };
 
 // Outputs a message that shows which target(s) caused an item to be included:
 // transform-foo { "edge":"13", "firefox":"49", "ie":"10" }
-export const logPlugin = (item, targetVersions, list, context) => {
+export const logPluginOrPolyfill = (
+  item: string,
+  targetVersions: Targets,
+  list: { [key: string]: Targets },
+) => {
   const minVersions = list[item] || {};
 
   const filteredList = Object.keys(targetVersions).reduce((result, env) => {
@@ -29,7 +30,8 @@ export const logPlugin = (item, targetVersions, list, context) => {
 
       if (
         !targetIsUnreleased &&
-        (minIsUnreleased || semver.lt(targetVersion, semverify(minVersion)))
+        (minIsUnreleased ||
+          semver.lt(targetVersion.toString(), semverify(minVersion)))
       ) {
         result[env] = prettifyVersion(targetVersion);
       }
@@ -43,50 +45,56 @@ export const logPlugin = (item, targetVersions, list, context) => {
     .replace(/^\{"/, '{ "')
     .replace(/"\}$/, '" }');
 
-  logMessage(`${item} ${formattedTargets}`, context);
+  console.log(`  ${item} ${formattedTargets}`);
 };
 
 export const logEntryPolyfills = (
-  importPolyfillIncluded,
-  polyfills,
-  filename,
-  onDebug,
+  polyfillName: string,
+  importPolyfillIncluded: boolean,
+  polyfills: Set<string>,
+  filename: string,
+  polyfillTargets: Targets,
+  allBuiltInsList: { [key: string]: Targets },
 ) => {
   if (!importPolyfillIncluded) {
-    console.log(
-      `
-[${filename}] \`import '@babel/polyfill'\` was not found.`,
-    );
+    console.log(`\n[${filename}] Import of ${polyfillName} was not found.`);
     return;
   }
   if (!polyfills.size) {
     console.log(
-      `
-[${filename}] Based on your targets, none were added.`,
+      `\n[${filename}] Based on your targets, polyfills were not added.`,
     );
     return;
   }
 
   console.log(
-    `
-[${filename}] Replaced \`@babel/polyfill\` with the following polyfill${wordEnds(
+    `\n[${filename}] Replaced ${polyfillName} entries with the following polyfill${wordEnds(
       polyfills.size,
     )}:`,
   );
-  onDebug(polyfills);
+  for (const polyfill of polyfills) {
+    logPluginOrPolyfill(polyfill, polyfillTargets, allBuiltInsList);
+  }
 };
 
-export const logUsagePolyfills = (polyfills, filename, onDebug) => {
+export const logUsagePolyfills = (
+  polyfills: Set<string>,
+  filename: string,
+  polyfillTargets: Targets,
+  allBuiltInsList: { [key: string]: Targets },
+) => {
   if (!polyfills.size) {
     console.log(
-      `
-[${filename}] Based on your code and targets, none were added.`,
+      `\n[${filename}] Based on your code and targets, core-js polyfills were not added.`,
     );
     return;
   }
   console.log(
-    `
-[${filename}] Added following polyfill${wordEnds(polyfills.size)}:`,
+    `\n[${filename}] Added following core-js polyfill${wordEnds(
+      polyfills.size,
+    )}:`,
   );
-  onDebug(polyfills);
+  for (const polyfill of polyfills) {
+    logPluginOrPolyfill(polyfill, polyfillTargets, allBuiltInsList);
+  }
 };

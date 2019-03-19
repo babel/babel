@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "modules": false,
+        "useBuiltIns": "entry",
+        "corejs": 3,
+        "exclude": ["transform-regenerator"]
+      }
+    ]
+  ]
+}

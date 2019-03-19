@@ -1,0 +1,3 @@
+{
+  "plugins": [["transform-runtime", { "corejs": { "version": 3, "proposals": true } }]]
+}
