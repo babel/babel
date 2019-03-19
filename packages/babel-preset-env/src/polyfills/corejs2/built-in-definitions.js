@@ -6,6 +6,8 @@ const ArrayNatureIterators = [
 
 const CommonIterators = ["es6.string.iterator", ...ArrayNatureIterators];
 
+const PromiseDependencies = ["es6.object.to-string", "es6.promise"];
+
 export const BuiltIns = {
   DataView: "es6.typed.data-view",
   Float32Array: "es6.typed.float32-array",
@@ -15,7 +17,7 @@ export const BuiltIns = {
   Int32Array: "es6.typed.int32-array",
   Map: ["es6.map", ...CommonIterators],
   Number: "es6.number.constructor",
-  Promise: ["es6.object.to-string", "es6.promise"],
+  Promise: PromiseDependencies,
   RegExp: ["es6.regexp.constructor"],
   Set: ["es6.set", ...CommonIterators],
   Symbol: ["es6.symbol", "es7.symbol.async-iterator"],
@@ -44,7 +46,7 @@ export const InstanceProperties = {
   every: ["es6.array.is-array"],
   fill: ["es6.array.fill"],
   filter: ["es6.array.filter"],
-  finally: ["es7.promise.finally"],
+  finally: ["es7.promise.finally", ...PromiseDependencies],
   find: ["es6.array.find"],
   findIndex: ["es6.array.find-index"],
   fixed: ["es6.string.fixed"],
