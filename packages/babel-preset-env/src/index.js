@@ -20,6 +20,8 @@ import availablePlugins from "./available-plugins";
 import { filterStageFromList, prettifyTargets } from "./utils";
 import { declare } from "@babel/helper-plugin-utils";
 
+export { isPluginRequired } from "./filter-items";
+
 const pluginListWithoutProposals = filterStageFromList(
   pluginList,
   proposalPlugins,
