@@ -1,3 +1,5 @@
+// @flow
+
 import corejs3Polyfills from "core-js-compat/data";
 import corejs3ShippedProposalsList from "./shipped-proposals";
 import getModulesListForTargetVersion from "core-js-compat/get-modules-list-for-target-version";
@@ -22,6 +24,9 @@ import {
 } from "../../utils";
 import { logUsagePolyfills } from "../../debug";
 
+import type { InternalPluginOptions } from "../../types";
+import type { NodePath } from "@babel/traverse";
+
 const NO_DIRECT_POLYFILL_IMPORT = `
   When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
   Please remove the direct import of \`core-js\` or use \`useBuiltIns: 'entry'\` instead.`;
@@ -42,7 +47,7 @@ const corejs3PolyfillsWithShippedProposals = corejs3ShippedProposalsList.reduce(
 );
 
 export default function(
-  _,
+  _: any,
   {
     corejs,
     include,
@@ -51,7 +56,7 @@ export default function(
     proposals,
     shippedProposals,
     debug,
-  },
+  }: InternalPluginOptions,
 ) {
   const polyfills = filterItems(
     proposals
@@ -62,6 +67,7 @@ export default function(
     include,
     exclude,
     polyfillTargets,
+    null,
   );
 
   const available = new Set(getModulesListForTargetVersion(corejs.version));
@@ -97,7 +103,7 @@ export default function(
 
   const addAndRemovePolyfillImports = {
     // import 'core-js'
-    ImportDeclaration(path) {
+    ImportDeclaration(path: NodePath) {
       if (isPolyfillSource(getImportSource(path))) {
         console.warn(NO_DIRECT_POLYFILL_IMPORT);
         path.remove();
@@ -105,7 +111,7 @@ export default function(
     },
 
     // require('core-js')
-    Program(path) {
+    Program(path: NodePath) {
       path.get("body").forEach(bodyPath => {
         if (isPolyfillSource(getRequireSource(bodyPath))) {
           console.warn(NO_DIRECT_POLYFILL_IMPORT);
@@ -119,7 +125,7 @@ export default function(
       this.addUnsupported(PromiseDependencies);
     },
 
-    Function({ node }) {
+    Function({ node }: NodePath) {
       // (async function () { }).finally(...)
       if (node.async) {
         this.addUnsupported(PromiseDependencies);
@@ -132,27 +138,27 @@ export default function(
     },
 
     // [...spread]
-    SpreadElement({ parentPath }) {
+    SpreadElement({ parentPath }: NodePath) {
       if (!parentPath.isObjectExpression()) {
         this.addUnsupported(CommonIterators);
       }
     },
 
     // yield*
-    YieldExpression({ node }) {
+    YieldExpression({ node }: NodePath) {
       if (node.delegate) {
         this.addUnsupported(CommonIterators);
       }
     },
 
     // Symbol(), new Promise
-    ReferencedIdentifier({ node: { name }, scope }) {
+    ReferencedIdentifier({ node: { name }, scope }: NodePath) {
       if (scope.getBindingIdentifier(name)) return;
 
       this.addBuiltInDependencies(name);
     },
 
-    MemberExpression(path) {
+    MemberExpression(path: NodePath) {
       const source = resolveSource(path.get("object"));
       const key = resolveKey(path.get("property"));
 
@@ -161,7 +167,7 @@ export default function(
       this.addPropertyDependencies(source, key);
     },
 
-    ObjectPattern(path) {
+    ObjectPattern(path: NodePath) {
       const { parentPath, parent, key } = path;
       let source;
 
@@ -190,7 +196,7 @@ export default function(
       }
     },
 
-    BinaryExpression(path) {
+    BinaryExpression(path: NodePath) {
       if (path.node.operator !== "in") return;
 
       const source = resolveSource(path.get("right"));
@@ -242,7 +248,7 @@ export default function(
         this.addUnsupported(InstancePropertyDependencies);
       };
     },
-    post({ path }) {
+    post({ path }: { path: NodePath }) {
       const filtered = intersection(polyfills, this.polyfillsSet, available);
       const reversed = Array.from(filtered).reverse();
 

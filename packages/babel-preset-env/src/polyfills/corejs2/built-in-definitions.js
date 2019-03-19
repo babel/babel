@@ -1,3 +1,7 @@
+// @flow
+
+type ObjectMap<V> = { [name: string]: V };
+
 const ArrayNatureIterators = [
   "es6.object.to-string",
   "es6.array.iterator",
@@ -8,7 +12,7 @@ const CommonIterators = ["es6.string.iterator", ...ArrayNatureIterators];
 
 const PromiseDependencies = ["es6.object.to-string", "es6.promise"];
 
-export const BuiltIns = {
+export const BuiltIns: ObjectMap<string | string[]> = {
   DataView: "es6.typed.data-view",
   Float32Array: "es6.typed.float32-array",
   Float64Array: "es6.typed.float64-array",
@@ -29,7 +33,7 @@ export const BuiltIns = {
   WeakSet: ["es6.weak-set", ...CommonIterators],
 };
 
-export const InstanceProperties = {
+export const InstanceProperties: ObjectMap<string[]> = {
   __defineGetter__: ["es7.object.define-getter"],
   __defineSetter__: ["es7.object.define-setter"],
   __lookupGetter__: ["es7.object.lookup-getter"],
@@ -95,7 +99,7 @@ export const InstanceProperties = {
   values: ArrayNatureIterators,
 };
 
-export const StaticProperties = {
+export const StaticProperties: ObjectMap<ObjectMap<string | string[]>> = {
   Array: {
     from: ["es6.array.from", "es6.string.iterator"],
     isArray: "es6.array.is-array",

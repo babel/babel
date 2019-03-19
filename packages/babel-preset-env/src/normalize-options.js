@@ -1,18 +1,29 @@
-import { coerce } from "semver";
-import invariant from "invariant";
-import corejs2Polyfills from "../data/corejs2-built-ins.json";
-import { defaultWebIncludes } from "./polyfills/corejs2/get-platform-specific-default";
+// @flow
 import corejs3Polyfills from "core-js-compat/data";
-import moduleTransformations from "./module-transformations";
-import { isBrowsersQueryValid } from "./targets-parser";
-import { getValues, findSuggestion } from "./utils";
+import invariant from "invariant";
+import { coerce, SemVer } from "semver";
+import corejs2Polyfills from "../data/corejs2-built-ins.json";
 import pluginsList from "../data/plugins.json";
+import moduleTransformations from "./module-transformations";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
+import { defaultWebIncludes } from "./polyfills/corejs2/get-platform-specific-default";
+import { isBrowsersQueryValid } from "./targets-parser";
+import { findSuggestion } from "./utils";
 
-const validateTopLevelOptions = options => {
+import type {
+  BuiltInsOption,
+  CorejsOption,
+  ModuleOption,
+  Options,
+  PluginListItem,
+  PluginListOption,
+} from "./types";
+
+const validateTopLevelOptions = (options: Options) => {
+  const validOptions = Object.keys(TopLevelOptions);
+
   for (const option in options) {
     if (!TopLevelOptions[option]) {
-      const validOptions = getValues(TopLevelOptions);
       throw new Error(
         `Invalid Option: ${option} is not a valid top-level option.
         Maybe you meant to use '${findSuggestion(validOptions, option)}'?`,
@@ -39,7 +50,7 @@ const validIncludesAndExcludesWithCoreJS3 = new Set([
   ...Object.keys(corejs3Polyfills),
 ]);
 
-const pluginToRegExp = plugin => {
+const pluginToRegExp = (plugin: PluginListItem) => {
   if (plugin instanceof RegExp) return plugin;
   try {
     return new RegExp(`^${normalizePluginName(plugin)}$`);
@@ -48,7 +59,7 @@ const pluginToRegExp = plugin => {
   }
 };
 
-const selectPlugins = (regexp, corejs) =>
+const selectPlugins = (regexp: RegExp | null, corejs: number | false) =>
   Array.from(
     corejs
       ? corejs == 2
@@ -57,9 +68,13 @@ const selectPlugins = (regexp, corejs) =>
       : validIncludesAndExcludesWithoutCoreJS,
   ).filter(item => regexp instanceof RegExp && regexp.test(item));
 
-const flatten = array => [].concat(...array);
+const flatten = <T>(array: Array<Array<T>>): Array<T> => [].concat(...array);
 
-const expandIncludesAndExcludes = (plugins = [], type, corejs) => {
+const expandIncludesAndExcludes = (
+  plugins: PluginListOption = [],
+  type: "include" | "exclude",
+  corejs: number | false,
+) => {
   if (plugins.length === 0) return [];
 
   const selectedPlugins = plugins.map(plugin =>
@@ -77,13 +92,16 @@ const expandIncludesAndExcludes = (plugins = [], type, corejs) => {
     valid. Please check data/[plugin-features|built-in-features].js in babel-preset-env`,
   );
 
-  return flatten(selectedPlugins);
+  return flatten<string>(selectedPlugins);
 };
 
-export const normalizePluginName = plugin =>
+export const normalizePluginName = (plugin: string) =>
   plugin.replace(/^(@babel\/|babel-)(plugin-)?/, "");
 
-export const checkDuplicateIncludeExcludes = (include = [], exclude = []) => {
+export const checkDuplicateIncludeExcludes = (
+  include: Array<string> = [],
+  exclude: Array<string> = [],
+) => {
   const duplicates = include.filter(opt => exclude.indexOf(opt) >= 0);
 
   invariant(
@@ -105,7 +123,9 @@ const normalizeTargets = targets => {
   };
 };
 
-export const validateConfigPathOption = (configPath = process.cwd()) => {
+export const validateConfigPathOption = (
+  configPath: string = process.cwd(),
+) => {
   invariant(
     typeof configPath === "string",
     `Invalid Option: The configPath option '${configPath}' is invalid, only strings are allowed.`,
@@ -113,7 +133,11 @@ export const validateConfigPathOption = (configPath = process.cwd()) => {
   return configPath;
 };
 
-export const validateBoolOption = (name, value, defaultValue) => {
+export const validateBoolOption = (
+  name: string,
+  value?: boolean,
+  defaultValue: boolean,
+) => {
   if (typeof value === "undefined") {
     value = defaultValue;
   }
@@ -125,17 +149,21 @@ export const validateBoolOption = (name, value, defaultValue) => {
   return value;
 };
 
-export const validateIgnoreBrowserslistConfig = ignoreBrowserslistConfig =>
+export const validateIgnoreBrowserslistConfig = (
+  ignoreBrowserslistConfig: boolean,
+) =>
   validateBoolOption(
     TopLevelOptions.ignoreBrowserslistConfig,
     ignoreBrowserslistConfig,
     false,
   );
 
-export const validateModulesOption = (modulesOpt = ModulesOption.auto) => {
+export const validateModulesOption = (
+  modulesOpt: ModuleOption = ModulesOption.auto,
+) => {
   invariant(
-    ModulesOption[modulesOpt] ||
-      ModulesOption[modulesOpt] === ModulesOption.false,
+    ModulesOption[modulesOpt.toString()] ||
+      ModulesOption[modulesOpt.toString()] === ModulesOption.false,
     `Invalid Option: The 'modules' option must be one of \n` +
       ` - 'false' to indicate no module processing\n` +
       ` - a specific module type: 'commonjs', 'amd', 'umd', 'systemjs'` +
@@ -146,10 +174,12 @@ export const validateModulesOption = (modulesOpt = ModulesOption.auto) => {
   return modulesOpt;
 };
 
-export const validateUseBuiltInsOption = (builtInsOpt = false) => {
+export const validateUseBuiltInsOption = (
+  builtInsOpt: BuiltInsOption = false,
+) => {
   invariant(
-    UseBuiltInsOption[builtInsOpt] ||
-      UseBuiltInsOption[builtInsOpt] === UseBuiltInsOption.false,
+    UseBuiltInsOption[builtInsOpt.toString()] ||
+      UseBuiltInsOption[builtInsOpt.toString()] === UseBuiltInsOption.false,
     `Invalid Option: The 'useBuiltIns' option must be either
     'false' (default) to indicate no polyfill,
     '"entry"' to indicate replacing the entry polyfill, or
@@ -159,7 +189,15 @@ export const validateUseBuiltInsOption = (builtInsOpt = false) => {
   return builtInsOpt;
 };
 
-export function normalizeCoreJSOption(corejs, useBuiltIns) {
+export type NormalizedCorejsOption = {
+  proposals: boolean,
+  version: typeof SemVer | null | false,
+};
+
+export function normalizeCoreJSOption(
+  corejs?: CorejsOption,
+  useBuiltIns: BuiltInsOption,
+): NormalizedCorejsOption {
   let proposals = false;
   let rawVersion;
 
@@ -188,7 +226,7 @@ export function normalizeCoreJSOption(corejs, useBuiltIns) {
   return { version, proposals };
 }
 
-export default function normalizeOptions(opts) {
+export default function normalizeOptions(opts: Options) {
   validateTopLevelOptions(opts);
 
   const useBuiltIns = validateUseBuiltInsOption(opts.useBuiltIns);
@@ -198,13 +236,13 @@ export default function normalizeOptions(opts) {
   const include = expandIncludesAndExcludes(
     opts.include,
     TopLevelOptions.include,
-    corejs.version && corejs.version.major,
+    !!corejs.version && corejs.version.major,
   );
 
   const exclude = expandIncludesAndExcludes(
     opts.exclude,
     TopLevelOptions.exclude,
-    corejs.version && corejs.version.major,
+    !!corejs.version && corejs.version.major,
   );
 
   checkDuplicateIncludeExcludes(include, exclude);

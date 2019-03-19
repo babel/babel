@@ -1,14 +1,21 @@
+// @flow
 /*eslint quotes: ["error", "double", { "avoidEscape": true }]*/
 import semver from "semver";
 import { isUnreleasedVersion, prettifyVersion, semverify } from "./utils";
 
-const wordEnds = size => {
+import type { Targets } from "./types";
+
+const wordEnds = (size: number) => {
   return size > 1 ? "s" : "";
 };
 
 // Outputs a message that shows which target(s) caused an item to be included:
 // transform-foo { "edge":"13", "firefox":"49", "ie":"10" }
-export const logPluginOrPolyfill = (item, targetVersions, list) => {
+export const logPluginOrPolyfill = (
+  item: string,
+  targetVersions: Targets,
+  list: { [key: string]: Targets },
+) => {
   const minVersions = list[item] || {};
 
   const filteredList = Object.keys(targetVersions).reduce((result, env) => {
@@ -23,7 +30,8 @@ export const logPluginOrPolyfill = (item, targetVersions, list) => {
 
       if (
         !targetIsUnreleased &&
-        (minIsUnreleased || semver.lt(targetVersion, semverify(minVersion)))
+        (minIsUnreleased ||
+          semver.lt(targetVersion.toString(), semverify(minVersion)))
       ) {
         result[env] = prettifyVersion(targetVersion);
       }
@@ -41,12 +49,12 @@ export const logPluginOrPolyfill = (item, targetVersions, list) => {
 };
 
 export const logEntryPolyfills = (
-  polyfillName,
-  importPolyfillIncluded,
-  polyfills,
-  filename,
-  polyfillTargets,
-  allBuiltInsList,
+  polyfillName: string,
+  importPolyfillIncluded: boolean,
+  polyfills: Set<string>,
+  filename: string,
+  polyfillTargets: Targets,
+  allBuiltInsList: { [key: string]: Targets },
 ) => {
   if (!importPolyfillIncluded) {
     console.log(`\n[${filename}] Import of ${polyfillName} was not found.`);
@@ -70,10 +78,10 @@ export const logEntryPolyfills = (
 };
 
 export const logUsagePolyfills = (
-  polyfills,
-  filename,
-  polyfillTargets,
-  allBuiltInsList,
+  polyfills: Set<string>,
+  filename: string,
+  polyfillTargets: Targets,
+  allBuiltInsList: { [key: string]: Targets },
 ) => {
   if (!polyfills.size) {
     console.log(

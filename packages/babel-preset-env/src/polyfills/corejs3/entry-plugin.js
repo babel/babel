@@ -1,3 +1,5 @@
+// @flow
+
 import corejs3Polyfills from "core-js-compat/data";
 import corejsEntries from "core-js-compat/entries";
 import getModulesListForTargetVersion from "core-js-compat/get-modules-list-for-target-version";
@@ -10,6 +12,9 @@ import {
   getRequireSource,
 } from "../../utils";
 import { logEntryPolyfills } from "../../debug";
+
+import type { InternalPluginOptions } from "../../types";
+import type { NodePath } from "@babel/traverse";
 
 function isBabelPolyfillSource(source) {
   return source === "@babel/polyfill" || source === "babel-polyfill";
@@ -24,20 +29,21 @@ const BABEL_POLYFILL_DEPRECATION = `
   and \`regenerator-runtime/runtime\` separately`;
 
 export default function(
-  _,
-  { corejs, include, exclude, polyfillTargets, debug },
+  _: any,
+  { corejs, include, exclude, polyfillTargets, debug }: InternalPluginOptions,
 ) {
   const polyfills = filterItems(
     corejs3Polyfills,
     include,
     exclude,
     polyfillTargets,
+    null,
   );
 
   const available = new Set(getModulesListForTargetVersion(corejs.version));
 
   const isPolyfillImport = {
-    ImportDeclaration(path) {
+    ImportDeclaration(path: NodePath) {
       const source = getImportSource(path);
       if (!source) return;
       if (isBabelPolyfillSource(source)) {
@@ -49,7 +55,7 @@ export default function(
         }
       }
     },
-    Program(path) {
+    Program(path: NodePath) {
       path.get("body").forEach(bodyPath => {
         const source = getRequireSource(bodyPath);
         if (!source) return;
@@ -79,7 +85,7 @@ export default function(
         path.remove();
       };
     },
-    post({ path }) {
+    post({ path }: { path: NodePath }) {
       const filtered = intersection(polyfills, this.polyfillsSet, available);
       const reversed = Array.from(filtered).reverse();
 
@@ -90,7 +96,7 @@ export default function(
       if (debug) {
         logEntryPolyfills(
           "core-js",
-          this.polyfillsSet.size,
+          this.polyfillsSet.size > 0,
           filtered,
           this.file.opts.filename,
           polyfillTargets,

@@ -1,3 +1,5 @@
+// @flow
+
 import corejs2Polyfills from "../../../data/corejs2-built-ins.json";
 import getPlatformSpecificDefaultFor from "./get-platform-specific-default";
 import filterItems from "../../filter-items";
@@ -16,13 +18,16 @@ import {
 } from "../../utils";
 import { logUsagePolyfills } from "../../debug";
 
+import type { InternalPluginOptions } from "../../types";
+import type { NodePath } from "@babel/traverse";
+
 const NO_DIRECT_POLYFILL_IMPORT = `
   When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
   Please remove the \`import '@babel/polyfill'\` call or use \`useBuiltIns: 'entry'\` instead.`;
 
 export default function(
-  { types: t },
-  { include, exclude, polyfillTargets, debug },
+  { types: t }: { types: Object },
+  { include, exclude, polyfillTargets, debug }: InternalPluginOptions,
 ) {
   const polyfills = filterItems(
     corejs2Polyfills,
@@ -33,14 +38,14 @@ export default function(
   );
 
   const addAndRemovePolyfillImports = {
-    ImportDeclaration(path) {
+    ImportDeclaration(path: NodePath) {
       if (isPolyfillSource(getImportSource(path))) {
         console.warn(NO_DIRECT_POLYFILL_IMPORT);
         path.remove();
       }
     },
 
-    Program(path) {
+    Program(path: NodePath) {
       path.get("body").forEach(bodyPath => {
         if (isPolyfillSource(getRequireSource(bodyPath))) {
           console.warn(NO_DIRECT_POLYFILL_IMPORT);
@@ -51,7 +56,7 @@ export default function(
 
     // Symbol()
     // new Promise
-    ReferencedIdentifier({ node: { name }, parent, scope }) {
+    ReferencedIdentifier({ node: { name }, parent, scope }: NodePath) {
       if (t.isMemberExpression(parent)) return;
       if (!has(BuiltIns, name)) return;
       if (scope.getBindingIdentifier(name)) return;
@@ -61,7 +66,7 @@ export default function(
     },
 
     // arr[Symbol.iterator]()
-    CallExpression(path) {
+    CallExpression(path: NodePath) {
       // we can't compile this
       if (path.node.arguments.length) return;
 
@@ -77,7 +82,7 @@ export default function(
     },
 
     // Symbol.iterator in arr
-    BinaryExpression(path) {
+    BinaryExpression(path: NodePath) {
       if (path.node.operator !== "in") return;
       if (!path.get("left").matchesPattern("Symbol.iterator")) return;
 
@@ -85,7 +90,7 @@ export default function(
     },
 
     // yield*
-    YieldExpression(path) {
+    YieldExpression(path: NodePath) {
       if (path.node.delegate) {
         this.addImport("web.dom.iterable");
       }
@@ -93,13 +98,13 @@ export default function(
 
     // Array.from
     MemberExpression: {
-      enter(path) {
+      enter(path: NodePath) {
         const { node } = path;
         const { object, property } = node;
 
         let evaluatedPropType = object.name;
         let propertyName = property.name;
-        let instanceType;
+        let instanceType = "";
 
         if (node.computed) {
           if (t.isStringLiteral(property)) {
@@ -141,7 +146,7 @@ export default function(
       },
 
       // Symbol.match
-      exit(path) {
+      exit(path: NodePath) {
         const { name } = path.node.object;
 
         if (!has(BuiltIns, name)) return;
@@ -153,7 +158,7 @@ export default function(
     },
 
     // var { repeat, startsWith } = String
-    VariableDeclarator(path) {
+    VariableDeclarator(path: NodePath) {
       const { node } = path;
       const { id, init } = node;
 
@@ -177,7 +182,7 @@ export default function(
 
   return {
     name: "corejs2-usage",
-    pre({ path }) {
+    pre({ path }: { path: NodePath }) {
       this.polyfillsSet = new Set();
 
       this.addImport = function(builtIn) {

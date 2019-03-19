@@ -1,1 +1,3 @@
-export default ["esnext.global-this", "esnext.string.match-all"];
+// @flow
+
+export default (["esnext.global-this", "esnext.string.match-all"]: string[]);

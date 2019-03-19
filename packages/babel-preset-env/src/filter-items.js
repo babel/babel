@@ -1,7 +1,13 @@
+// @flow
 import semver from "semver";
 import { semverify, isUnreleasedVersion } from "./utils";
 
-export function isPluginRequired(supportedEnvironments, plugin) {
+import type { Targets } from "./types";
+
+export function isPluginRequired(
+  supportedEnvironments: Targets,
+  plugin: Targets,
+) {
   const targetEnvironments = Object.keys(supportedEnvironments);
 
   if (targetEnvironments.length === 0) {
@@ -16,15 +22,18 @@ export function isPluginRequired(supportedEnvironments, plugin) {
 
     const lowestImplementedVersion = plugin[environment];
     const lowestTargetedVersion = supportedEnvironments[environment];
+
     // If targets has unreleased value as a lowest version, then don't require a plugin.
     if (isUnreleasedVersion(lowestTargetedVersion, environment)) {
       return false;
-      // Include plugin if it is supported in the unreleased environment, which wasn't specified in targets
-    } else if (isUnreleasedVersion(lowestImplementedVersion, environment)) {
+    }
+
+    // Include plugin if it is supported in the unreleased environment, which wasn't specified in targets
+    if (isUnreleasedVersion(lowestImplementedVersion, environment)) {
       return true;
     }
 
-    if (!semver.valid(lowestTargetedVersion)) {
+    if (!semver.valid(lowestTargetedVersion.toString())) {
       throw new Error(
         `Invalid version passed for target "${environment}": "${lowestTargetedVersion}". ` +
           "Versions must be in semver format (major.minor.patch)",
@@ -33,7 +42,7 @@ export function isPluginRequired(supportedEnvironments, plugin) {
 
     return semver.gt(
       semverify(lowestImplementedVersion),
-      lowestTargetedVersion,
+      lowestTargetedVersion.toString(),
     );
   });
 
@@ -41,15 +50,15 @@ export function isPluginRequired(supportedEnvironments, plugin) {
 }
 
 export default function(
-  list,
-  includes,
-  excludes,
-  targets,
-  defaultIncludes,
-  defaultExcludes,
-  pluginSyntaxMap,
+  list: { [feature: string]: Targets },
+  includes: Set<string>,
+  excludes: Set<string>,
+  targets: Targets,
+  defaultIncludes: Array<string> | null,
+  defaultExcludes?: Array<string> | null,
+  pluginSyntaxMap?: Map<string, string | null>,
 ) {
-  const result = new Set();
+  const result = new Set<string>();
 
   for (const item in list) {
     if (
