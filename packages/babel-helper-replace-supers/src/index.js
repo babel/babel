@@ -112,7 +112,12 @@ const specHandlers = {
 
   set(superMember, value) {
     return t.callExpression(this.file.addHelper("set"), [
-      getPrototypeOfExpression(this.getObjectRef(), this.isStatic, this.file),
+      getPrototypeOfExpression(
+        this.getObjectRef(),
+        this.isStatic,
+        this.file,
+        this.isPrivateMethod,
+      ),
       this.prop(superMember),
       value,
       t.thisExpression(),
