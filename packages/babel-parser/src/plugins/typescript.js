@@ -2121,7 +2121,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // This is similar to TypeScript's `tryParseParenthesizedArrowFunctionExpression`.
         typeParameters = this.tsParseTypeParameters();
         arrowExpression = super.parseMaybeAssign(...args);
-        if (arrowExpression.type !== "ArrowFunctionExpression") {
+        if (
+          arrowExpression.type !== "ArrowFunctionExpression" ||
+          (arrowExpression.extra && arrowExpression.extra.parenthesized)
+        ) {
           this.unexpected(); // Go to the catch block (needs a SyntaxError).
         }
       } catch (err) {
