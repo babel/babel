@@ -1,6 +1,6 @@
 {
   "name": "@babel/register",
-  "version": "7.0.0",
+  "version": "7.4.0",
   "description": "babel require hook",
   "license": "MIT",
   "publishConfig": {
@@ -24,7 +24,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.4.0",
     "default-require-extensions": "^2.0.0"
   }
 }
