@@ -1870,7 +1870,7 @@ helpers.wrapRegExp = helper("7.2.6")`
       // but in that case Babel doesn't add the wrapper anyway.
 
       var g = _groups.get(re);
-      return Object.keys(groups).reduce(function(groups, name) {
+      return Object.keys(g).reduce(function(groups, name) {
         groups[name] = result[g[name]];
         return groups;
       }, Object.create(null));
