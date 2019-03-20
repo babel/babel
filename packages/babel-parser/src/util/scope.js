@@ -139,10 +139,13 @@ export default class ScopeHandler {
   }
 
   checkLocalExport(id: N.Identifier) {
-    // scope.functions must be empty as Module code is always strict.
     if (
       this.scopeStack[0].lexical.indexOf(id.name) === -1 &&
-      this.scopeStack[0].var.indexOf(id.name) === -1
+      this.scopeStack[0].var.indexOf(id.name) === -1 &&
+      // In strict mode, scope.functions will always be empty.
+      // Modules are strict by default, but the `scriptMode` option
+      // can overwrite this behavior.
+      this.scopeStack[0].functions.indexOf(id.name) === -1
     ) {
       this.undefinedExports.set(id.name, id.start);
     }
