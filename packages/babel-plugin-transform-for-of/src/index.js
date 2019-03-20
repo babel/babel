@@ -119,7 +119,7 @@ export default declare((api, options) => {
   function _ForOfStatementArray(path) {
     const { node, scope } = path;
 
-    const right = t.identifier(scope.generateUid("arr"));
+    const right = scope.generateUidIdentifierBasedOnNode(node.right, "arr");
     const iterationKey = scope.generateUidIdentifier("i");
 
     let loop = buildForOfArray({
