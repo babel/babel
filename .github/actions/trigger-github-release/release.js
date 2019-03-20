@@ -18,6 +18,7 @@ getStdin()
     repo: repoName,
     tag_name: tag,
     body: changelog,
+    draft: true,
   }))
   .catch(err => {
     console.error(err);
