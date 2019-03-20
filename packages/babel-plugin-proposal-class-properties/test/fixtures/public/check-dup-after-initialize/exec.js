@@ -2,8 +2,13 @@
 
 var log = [];
 
-class Foo extends class {} {
-  x = log.push(1);
+class Foo {
+  constructor() {
+    log.push(1);
+  }
+}
+class Bar extends Foo {
+  x = log.push(2);
 
   constructor() {
     super();
@@ -12,7 +17,7 @@ class Foo extends class {} {
 }
 
 try {
-  new Foo;
+  new Bar;
 } catch(e) {}
 
-expect(log).toEqual([1, 1]);
+expect(log).toEqual([1, 2, 1, 2]);
