@@ -10,9 +10,11 @@ import { types as tc } from "../tokenizer/context";
 import * as charCodes from "charcodes";
 import { isIteratorStart } from "../util/identifier";
 import {
+  functionFlags,
   type BindingTypes,
   BIND_NONE,
   BIND_LEXICAL,
+  SCOPE_ARROW,
   SCOPE_OTHER,
 } from "../util/scopeflags";
 
@@ -1776,8 +1778,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               true,
               "arrow function parameters",
             );
+            // Enter scope, as checkParams defines bindings
+            this.scope.enter(functionFlags(false, false) | SCOPE_ARROW);
             // Use super's method to force the parameters to be checked
             super.checkParams(node, false, true);
+            this.scope.exit();
           } else {
             arrows.push(node);
           }
