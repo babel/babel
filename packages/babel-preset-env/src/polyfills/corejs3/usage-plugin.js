@@ -189,10 +189,12 @@ export default function(
       }
 
       for (const property of path.get("properties")) {
-        const key = resolveKey(property.get("key"));
-        // const { keys, values } = Object
-        // const { keys, values } = [1, 2, 3]
-        this.addPropertyDependencies(source, key);
+        if (property.isObjectProperty()) {
+          const key = resolveKey(property.get("key"));
+          // const { keys, values } = Object
+          // const { keys, values } = [1, 2, 3]
+          this.addPropertyDependencies(source, key);
+        }
       }
     },
 
