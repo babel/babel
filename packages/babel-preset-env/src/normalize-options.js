@@ -208,7 +208,13 @@ export function normalizeCoreJSOption(
         "core-js version. Currently, we assume version 2.x when no version " +
         "is passed. Since this default version will likely change in future " +
         "versions of Babel, we recommend explicitly setting the core-js version " +
-        "you are using via the `corejs` option.\n",
+        "you are using via the `corejs` option.\n" +
+        "\nYou should also be sure that the version you pass to the `corejs` " +
+        "option matches the version specified in your `package.json`'s " +
+        "`dependencies` section. If it doesn't, you need to run one of the " +
+        "following commands:\n\n" +
+        "  npm install --save core-js@2    npm install --save core-js@3\n" +
+        "  yarn add core-js@2              yarn add core-js@3\n",
     );
   } else if (typeof corejs === "object" && corejs !== null) {
     rawVersion = corejs.version;
