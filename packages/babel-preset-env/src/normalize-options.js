@@ -204,7 +204,11 @@ export function normalizeCoreJSOption(
   if (useBuiltIns && corejs === undefined) {
     rawVersion = 2;
     console.log(
-      "\nWith `useBuiltIns` option, required direct setting of `corejs` option\n",
+      "\nWe noticed you're using the `useBuiltIns` option without declaring a " +
+        "core-js version. Currently, we assume version 2.x when no version " +
+        "is passed. Since this default version will likely change in future " +
+        "versions of Babel, we recommend explicitly setting the core-js version " +
+        "you are using via the `corejs` option.\n",
     );
   } else if (typeof corejs === "object" && corejs !== null) {
     rawVersion = corejs.version;
@@ -216,11 +220,16 @@ export function normalizeCoreJSOption(
   const version = rawVersion ? coerce(String(rawVersion)) : false;
 
   if (!useBuiltIns && version) {
-    console.log("\n`corejs` option required only with `useBuiltIns` option\n");
+    console.log(
+      "\nThe `corejs` option only has an effect when the `useBuiltIns` option is not `false`\n",
+    );
   }
 
   if (useBuiltIns && (!version || version.major < 2 || version.major > 3)) {
-    throw new RangeError("Supported only core-js@2 and core-js@3.");
+    throw new RangeError(
+      "Invalid Option: The version passed to `corejs` is invalid. Currently, " +
+        "only core-js@2 and core-js@3 are supported.",
+    );
   }
 
   return { version, proposals };
