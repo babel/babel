@@ -1,0 +1,34 @@
+WARNING: We noticed you're using the `useBuiltIns` option without declaring a core-js version. Currently, we assume version 2.x when no version is passed. Since this default version will likely change in future versions of Babel, we recommend explicitly setting the core-js version you are using via the `corejs` option.
+
+You should also be sure that the version you pass to the `corejs` option matches the version specified in your `package.json`'s `dependencies` section. If it doesn't, you need to run one of the following commands:
+
+  npm install --save core-js@2    npm install --save core-js@3
+  yarn add core-js@2              yarn add core-js@3
+
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "node": "6"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  transform-function-name { "node":"6" }
+  transform-for-of { "node":"6" }
+  transform-dotall-regex { "node":"6" }
+  transform-destructuring { "node":"6" }
+  transform-exponentiation-operator { "node":"6" }
+  transform-async-to-generator { "node":"6" }
+  proposal-async-generator-functions { "node":"6" }
+  proposal-object-rest-spread { "node":"6" }
+  proposal-unicode-property-regex { "node":"6" }
+  proposal-json-strings { "node":"6" }
+  proposal-optional-catch-binding { "node":"6" }
+  transform-named-capturing-groups-regex { "node":"6" }
+
+Using polyfills with `entry` option:
+
+[<CWD>/src/in.js] Import of @babel/polyfill was not found.
+Successfully compiled 1 file with Babel.

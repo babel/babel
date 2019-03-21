@@ -73,7 +73,7 @@ export default class StatementParser extends ExpressionParser {
     const directiveLiteral = this.startNodeAt(expr.start, expr.loc.start);
     const directive = this.startNodeAt(stmt.start, stmt.loc.start);
 
-    const raw = this.state.input.slice(expr.start, expr.end);
+    const raw = this.input.slice(expr.start, expr.end);
     const val = (directiveLiteral.value = raw.slice(1, -1)); // remove quotes
 
     this.addExtra(directiveLiteral, "raw", raw);
@@ -105,10 +105,10 @@ export default class StatementParser extends ExpressionParser {
       return false;
     }
     skipWhiteSpace.lastIndex = this.state.pos;
-    const skip = skipWhiteSpace.exec(this.state.input);
+    const skip = skipWhiteSpace.exec(this.input);
     // $FlowIgnore
     const next = this.state.pos + skip[0].length;
-    const nextCh = this.state.input.charCodeAt(next);
+    const nextCh = this.input.charCodeAt(next);
     // For ambiguous cases, determine if a LexicalDeclaration (or only a
     // Statement) is allowed here. If context is not empty then only a Statement
     // is allowed. However, `let [` is an explicit negative lookahead for
@@ -120,10 +120,10 @@ export default class StatementParser extends ExpressionParser {
 
     if (isIdentifierStart(nextCh)) {
       let pos = next + 1;
-      while (isIdentifierChar(this.state.input.charCodeAt(pos))) {
+      while (isIdentifierChar(this.input.charCodeAt(pos))) {
         ++pos;
       }
-      const ident = this.state.input.slice(next, pos);
+      const ident = this.input.slice(next, pos);
       if (!keywordRelationalOperator.test(ident)) return true;
     }
     return false;
@@ -649,9 +649,7 @@ export default class StatementParser extends ExpressionParser {
   parseThrowStatement(node: N.ThrowStatement): N.ThrowStatement {
     this.next();
     if (
-      lineBreak.test(
-        this.state.input.slice(this.state.lastTokEnd, this.state.start),
-      )
+      lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start))
     ) {
       this.raise(this.state.lastTokEnd, "Illegal newline after throw");
     }
@@ -1747,19 +1745,20 @@ export default class StatementParser extends ExpressionParser {
   isAsyncFunction(): boolean {
     if (!this.isContextual("async")) return false;
 
-    const { input, pos, length } = this.state;
+    const { pos } = this.state;
 
     skipWhiteSpace.lastIndex = pos;
-    const skip = skipWhiteSpace.exec(input);
+    const skip = skipWhiteSpace.exec(this.input);
 
     if (!skip || !skip.length) return false;
 
     const next = pos + skip[0].length;
 
     return (
-      !lineBreak.test(input.slice(pos, next)) &&
-      input.slice(next, next + 8) === "function" &&
-      (next + 8 === length || !isIdentifierChar(input.charCodeAt(next + 8)))
+      !lineBreak.test(this.input.slice(pos, next)) &&
+      this.input.slice(next, next + 8) === "function" &&
+      (next + 8 === this.length ||
+        !isIdentifierChar(this.input.charCodeAt(next + 8)))
     );
   }
 

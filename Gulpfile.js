@@ -16,9 +16,7 @@ const path = require("path");
 const fs = require("fs");
 const webpack = require("webpack");
 const merge = require("merge-stream");
-const rollup = require("rollup-stream");
-const source = require("vinyl-source-stream");
-const buffer = require("vinyl-buffer");
+const rollup = require("rollup");
 const rollupBabel = require("rollup-plugin-babel");
 const rollupReplace = require("rollup-plugin-replace");
 const rollupCommonJs = require("rollup-plugin-commonjs");
@@ -47,6 +45,7 @@ function getIndexFromPackage(name) {
   return `${name}/src/index.js`;
 }
 
+
 function compilationLogger(name, rollup) {
   return through.obj(function(file, enc, callback) {
 
@@ -59,6 +58,11 @@ function compilationLogger(name, rollup) {
         rollup ? " with rollup " : ""
       }...`
     );
+
+function compilationLogger() {
+  return through.obj(function(file, enc, callback) {
+    fancyLog(`Compiling '${chalk.cyan(file.relative)}'...`);
+
     callback(null, file);
   });
 }
@@ -102,6 +106,7 @@ function buildBabel(exclude) {
 }
 let babelVersion = require("./packages/babel-core/package.json").version;
 function buildRollup(packages) {
+
   return merge(
     packages.map(
       ({
@@ -299,6 +304,38 @@ gulp.task("build", function() {
     buildRollup(libBundles)
   );
 });
+
+  return Promise.all(
+    packages.map(pkg => {
+      const input = getIndexFromPackage(pkg);
+      fancyLog(`Compiling '${chalk.cyan(input)}' with rollup ...`);
+      return rollup
+        .rollup({
+          input,
+          plugins: [
+            rollupBabel({
+              envName: "babel-parser",
+            }),
+            rollupNodeResolve(),
+          ],
+        })
+        .then(bundle => {
+          return bundle.write({
+            file: path.join(pkg, "lib/index.js"),
+            format: "cjs",
+            name: "babel-parser",
+          });
+        });
+    })
+  );
+}
+
+const bundles = ["packages/babel-parser"];
+
+gulp.task("build-rollup", () => buildRollup(bundles));
+gulp.task("build-babel", () => buildBabel(/* exclude */ bundles));
+gulp.task("build", gulp.parallel("build-rollup", "build-babel"));
+
 
 gulp.task("bundle", function() {
   return buildRollup(bundles);

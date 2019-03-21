@@ -156,7 +156,7 @@ defineType("TSThisType", {
 
 const fnOrCtr = {
   aliases: ["TSType"],
-  visitor: ["typeParameters", "typeAnnotation"],
+  visitor: ["typeParameters", "parameters", "typeAnnotation"],
   fields: signatureDeclarationCommon,
 };
 

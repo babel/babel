@@ -998,7 +998,7 @@ helpers.initializerDefineProperty = helper("7.0.0-beta.0")`
 helpers.applyDecoratedDescriptor = helper("7.0.0-beta.0")`
     export default function _applyDecoratedDescriptor(target, property, decorators, descriptor, context){
         var desc = {};
-        Object['ke' + 'ys'](descriptor).forEach(function(key){
+        Object.keys(descriptor).forEach(function(key){
             desc[key] = descriptor[key];
         });
         desc.enumerable = !!desc.enumerable;
@@ -1019,7 +1019,7 @@ helpers.applyDecoratedDescriptor = helper("7.0.0-beta.0")`
         if (desc.initializer === void 0){
             // This is a hack to avoid this being processed by 'transform-runtime'.
             // See issue #9.
-            Object['define' + 'Property'](target, property, desc);
+            Object.defineProperty(target, property, desc);
             desc = null;
         }
 
@@ -1102,7 +1102,21 @@ helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
     descriptor.value = value;
     return value;
   }
-  
+`;
+
+helpers.classStaticPrivateMethodGet = helper("7.3.2")`
+  export default function _classStaticPrivateMethodGet(receiver, classConstructor, method) {
+    if (receiver !== classConstructor) {
+      throw new TypeError("Private static access of wrong provenance");
+    }
+    return method;
+  }
+`;
+
+helpers.classStaticPrivateMethodSet = helper("7.3.2")`
+  export default function _classStaticPrivateMethodSet() {
+    throw new TypeError("attempted to set read only static private field");
+  }
 `;
 
 helpers.decorate = helper("7.1.5")`
@@ -1856,7 +1870,7 @@ helpers.wrapRegExp = helper("7.2.6")`
       // but in that case Babel doesn't add the wrapper anyway.
 
       var g = _groups.get(re);
-      return Object.keys(groups).reduce(function(groups, name) {
+      return Object.keys(g).reduce(function(groups, name) {
         groups[name] = result[g[name]];
         return groups;
       }, Object.create(null));

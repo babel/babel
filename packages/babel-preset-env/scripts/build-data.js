@@ -132,6 +132,7 @@ const environments = [
   "android",
   "ios",
   "phantom",
+  "samsung",
 ];
 
 const compatibilityTests = flattenDeep(
@@ -162,22 +163,16 @@ const getLowestImplementedVersion = ({ features }, env) => {
       );
     })
     .reduce((result, test) => {
-      const isBuiltIn =
-        test.category === "built-ins" ||
-        test.category === "built-in extensions";
-
       if (!test.subtests) {
         result.push({
           name: test.name,
           res: test.res,
-          isBuiltIn,
         });
       } else {
         test.subtests.forEach(subtest =>
           result.push({
             name: `${test.name}/${subtest.name}`,
             res: subtest.res,
-            isBuiltIn,
           })
         );
       }
@@ -186,20 +181,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
     }, []);
 
   const unreleasedLabelForEnv = unreleasedLabels[env];
-  const envTests = tests.map(({ res: test, isBuiltIn }, i) => {
-    // Babel itself doesn't implement the feature correctly,
-    // don't count against it
-    // only doing this for built-ins atm
-    //
-    // NOTE: when/if compat-table adds a babel7 key, we'll want to update this
-    if (!test.babel6corejs2 && isBuiltIn) {
-      return {
-        version: "0.0.0",
-        semver: "0.0.0",
-        implements: true,
-      };
-    }
-
+  const envTests = tests.map(({ res: test }, i) => {
     const reportedVersions = Object.keys(test)
       .filter(t => t.startsWith(env))
       .map(t => {
@@ -308,7 +290,7 @@ const generateData = (environments, features) => {
   });
 };
 
-["plugin", "built-in"].forEach(target => {
+["plugin", "corejs2-built-in"].forEach(target => {
   const newData = generateData(
     environments,
     require(`../data/${target}-features`)

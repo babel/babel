@@ -1,0 +1,12 @@
+{
+  "presets": [
+    ["../../lib", {
+      "debug": true,
+      "targets": {
+        "node": 6
+      },
+      "useBuiltIns": "entry",
+      "corejs": 2
+    }]
+  ]
+}

@@ -137,7 +137,6 @@ export default declare((api, { jsxPragma = "React" }) => {
           path.remove();
           return;
         }
-        if (node.abstract) node.abstract = null;
       },
 
       Class(path) {
@@ -146,6 +145,7 @@ export default declare((api, { jsxPragma = "React" }) => {
         if (node.typeParameters) node.typeParameters = null;
         if (node.superTypeParameters) node.superTypeParameters = null;
         if (node.implements) node.implements = null;
+        if (node.abstract) node.abstract = null;
 
         // Similar to the logic in `transform-flow-strip-types`, we need to
         // handle `TSParameterProperty` and `ClassProperty` here because the

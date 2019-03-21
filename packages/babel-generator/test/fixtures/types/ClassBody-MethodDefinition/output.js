@@ -37,6 +37,24 @@ class Foo {
 
   static static() {}
 
+  static *foo() {}
+
+  static async *foo() {}
+
+  static #foo() {}
+
+  static async #foo() {}
+
+  static ["foo"]() {}
+
+  static get #foo() {}
+
+  static set #foo(taz) {}
+
+  static *#foo() {}
+
+  static async *#foo() {}
+
   get() {}
 
   set() {}

@@ -1,0 +1,12 @@
+{
+  "presets": [
+    ["../../lib", {
+      "debug": true,
+      "targets": {
+        "electron": 0.36
+      },
+      "useBuiltIns": "entry",
+      "corejs": 2
+    }]
+  ]
+}

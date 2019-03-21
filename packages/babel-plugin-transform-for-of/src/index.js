@@ -118,18 +118,14 @@ export default declare((api, options) => {
 
   function _ForOfStatementArray(path) {
     const { node, scope } = path;
-    const nodes = [];
-    let right = node.right;
 
-    if (!t.isIdentifier(right) || !scope.hasBinding(right.name)) {
-      const uid = scope.generateUid("arr");
-      nodes.push(
-        t.variableDeclaration("var", [
-          t.variableDeclarator(t.identifier(uid), right),
-        ]),
-      );
-      right = t.identifier(uid);
-    }
+    const uid = scope.generateUid("arr");
+    const nodes = [
+      t.variableDeclaration("var", [
+        t.variableDeclarator(t.identifier(uid), node.right),
+      ]),
+    ];
+    const right = t.identifier(uid);
 
     const iterationKey = scope.generateUidIdentifier("i");
 

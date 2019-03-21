@@ -1,0 +1,16 @@
+{
+  "plugins": ["syntax-dynamic-import"],
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "useBuiltIns": "usage",
+        "targets": {
+          "chrome": "71"
+        },
+        "corejs": 3,
+        "modules": false
+      }
+    ]
+  ]
+}

@@ -1,3 +1,5 @@
+// @flow
+
 export default {
   "syntax-async-generators": require("@babel/plugin-syntax-async-generators"),
   "syntax-json-strings": require("@babel/plugin-syntax-json-strings"),
