@@ -8,7 +8,7 @@ action "Trigger GitHub release" {
   secrets = ["GITHUB_TOKEN"]
   env = {
     COMMIT_AUTHOR_NAME = "Babel Bot"
-    COMMIT_AUTHOR_EMAIL = "babel@hopeinsource.com"
+    COMMIT_AUTHOR_EMAIL = "babel-bot@users.noreply.github.com"
   }
   needs = ["Create release tag"]
 }
