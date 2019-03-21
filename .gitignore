@@ -1,3 +1,5 @@
+.npmrc
+
 .DS_Store
 /node_modules
 /.github/actions/*/node_modules

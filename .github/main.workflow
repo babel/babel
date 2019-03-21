@@ -17,7 +17,7 @@ action "Publish to npm" {
   uses = "docker://node:10"
   secrets = ["NPM_TOKEN"]
   runs = "make"
-  args = "publish"
+  args = "publish-c"
   env = {
     CI = "true"
   }
