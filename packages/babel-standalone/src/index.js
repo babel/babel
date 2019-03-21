@@ -15,7 +15,11 @@ import {
   transform as babelTransform,
   buildExternalHelpers as babelBuildExternalHelpers,
 } from "@babel/core";
+
+import * as babelPlugins from "./plugins";
+
 import { all } from "./generated/plugins";
+
 import preset2015 from "./preset-es2015";
 import presetStage0 from "./preset-stage-0";
 import presetStage1 from "./preset-stage-1";
@@ -157,7 +161,93 @@ export function registerPresets(newPresets: {
 // All the plugins we should bundle
 // Want to get rid of this long whitelist of plugins?
 // Wait! Please read https://github.com/babel/babel/pull/6177 first.
+
+registerPlugins({
+  "external-helpers": babelPlugins.externalHelpers,
+  "syntax-async-generators": babelPlugins.syntaxAsyncGenerators,
+  "syntax-class-properties": babelPlugins.syntaxClassProperties,
+  "syntax-decorators": babelPlugins.syntaxDecorators,
+  "syntax-do-expressions": babelPlugins.syntaxDoExpressions,
+  "syntax-dynamic-import": babelPlugins.syntaxDynamicImport,
+  "syntax-export-default-from": babelPlugins.syntaxExportDefaultFrom,
+  "syntax-export-namespace-from": babelPlugins.syntaxExportNamespaceFrom,
+  "syntax-flow": babelPlugins.syntaxFlow,
+  "syntax-function-bind": babelPlugins.syntaxFunctionBind,
+  "syntax-function-sent": babelPlugins.syntaxFunctionSent,
+  "syntax-import-meta": babelPlugins.syntaxImportMeta,
+  "syntax-jsx": babelPlugins.syntaxJsx,
+  "syntax-object-rest-spread": babelPlugins.syntaxObjectRestSpread,
+  "syntax-optional-catch-binding": babelPlugins.syntaxOptionalCatchBinding,
+  "syntax-pipeline-operator": babelPlugins.syntaxPipelineOperator,
+  "syntax-typescript": babelPlugins.syntaxTypescript,
+  "transform-async-to-generator": babelPlugins.transformAsyncToGenerator,
+  "proposal-async-generator-functions":
+    babelPlugins.proposalAsyncGeneratorFunctions,
+  "proposal-class-properties": babelPlugins.proposalClassProperties,
+  "proposal-decorators": babelPlugins.proposalDecorators,
+  "proposal-do-expressions": babelPlugins.proposalDoExpressions,
+  "proposal-export-default-from": babelPlugins.proposalExportDefaultFrom,
+  "proposal-export-namespace-from": babelPlugins.proposalExportNamespaceFrom,
+  "proposal-pipeline-operator": babelPlugins.proposalPipelineOperator,
+  "transform-arrow-functions": babelPlugins.transformArrowFunctions,
+  "transform-block-scoped-functions":
+    babelPlugins.transformBlockScopedFunctions,
+  "transform-block-scoping": babelPlugins.transformBlockScoping,
+  "transform-classes": babelPlugins.transformClasses,
+  "transform-computed-properties": babelPlugins.transformComputedProperties,
+  "transform-destructuring": babelPlugins.transformDestructuring,
+  "transform-dotall-regex": babelPlugins.transformDotallRegex,
+  "transform-duplicate-keys": babelPlugins.transformDuplicateKeys,
+  "transform-for-of": babelPlugins.transformForOf,
+  "transform-function-name": babelPlugins.transformFunctionName,
+  "transform-instanceof": babelPlugins.transformInstanceof,
+  "transform-literals": babelPlugins.transformLiterals,
+  "transform-modules-amd": babelPlugins.transformModulesAMD,
+  "transform-modules-commonjs": babelPlugins.transformModulesCommonJS,
+  "transform-modules-systemjs": babelPlugins.transformModulesSystemJS,
+  "transform-modules-umd": babelPlugins.transformModulesUMD,
+  "transform-object-super": babelPlugins.transformObjectSuper,
+  "transform-parameters": babelPlugins.transformParameters,
+  "transform-shorthand-properties": babelPlugins.transformShorthandProperties,
+  "transform-spread": babelPlugins.transformSpread,
+  "transform-sticky-regex": babelPlugins.transformStickyRegex,
+  "transform-template-literals": babelPlugins.transformTemplateLiterals,
+  "transform-typeof-symbol": babelPlugins.transformTypeofSymbol,
+  "transform-typescript": babelPlugins.transformTypescript,
+  "transform-unicode-regex": babelPlugins.transformUnicodeRegex,
+  "transform-member-expression-literals":
+    babelPlugins.transformMemberExpressionLiterals,
+  "transform-property-literals": babelPlugins.transformPropertyLiterals,
+  "transform-property-mutators": babelPlugins.transformPropertyMutators,
+  "transform-exponentiation-operator":
+    babelPlugins.transformExponentiationOperator,
+  "transform-flow-comments": babelPlugins.transformFlowComments,
+  "transform-flow-strip-types": babelPlugins.transformFlowStripTypes,
+  "proposal-function-bind": babelPlugins.proposalFunctionBind,
+  "transform-jscript": babelPlugins.transformJscript,
+  "transform-new-target": babelPlugins.transformNewTarget,
+  "transform-object-assign": babelPlugins.transformObjectAssign,
+  "proposal-object-rest-spread": babelPlugins.proposalObjectRestSpread,
+  "transform-object-set-prototype-of-to-assign":
+    babelPlugins.transformObjectSetPrototypeOfToAssign,
+  "proposal-optional-catch-binding": babelPlugins.proposalOptionalCatchBinding,
+  "transform-proto-to-assign": babelPlugins.transformProtoToAssign,
+  "transform-react-constant-elements":
+    babelPlugins.transformReactConstantElements,
+  "transform-react-display-name": babelPlugins.transformReactDisplayName,
+  "transform-react-inline-elements": babelPlugins.transformReactInlineElements,
+  "transform-react-jsx": babelPlugins.transformReactJsx,
+  "transform-react-jsx-compat": babelPlugins.transformReactJsxCompat,
+  "transform-react-jsx-self": babelPlugins.transformReactJsxSelf,
+  "transform-react-jsx-source": babelPlugins.transformReactJsxSource,
+  "transform-regenerator": babelPlugins.transformRegenerator,
+  "transform-runtime": babelPlugins.transformRuntime,
+  "transform-strict-mode": babelPlugins.transformStrictMode,
+  "proposal-unicode-property-regex": babelPlugins.proposalUnicodePropertyRegex,
+});
+
 registerPlugins(all);
+
 
 // All the presets we should bundle
 // Want to get rid of this whitelist of presets?

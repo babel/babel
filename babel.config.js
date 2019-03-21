@@ -13,8 +13,10 @@ module.exports = function(api) {
 
   let convertESM = true;
   let ignoreLib = true;
+
   let includeRuntime = false;
   const nodeVersion = "6.9";
+
 
   switch (env) {
     // Configs used during bundling builds.
@@ -26,9 +28,8 @@ module.exports = function(api) {
       };
       break;
     case "standalone":
+    case "rollup":
       convertESM = false;
-      ignoreLib = false;
-      includeRuntime = true;
       break;
     case "production":
       // Config during builds before publish.
@@ -106,6 +107,8 @@ module.exports = function(api) {
           "packages/*/test",
           "codemods/*/src",
           "codemods/*/test",
+          "packages/babel-preset-env/data",
+          "**/node_modules/**",
         ],
         sourceType: "unambiguous",
       },
@@ -114,12 +117,13 @@ module.exports = function(api) {
         exclude: [
           "packages/babel-runtime",
           /[\\/]node_modules[\\/](?:@babel\/runtime|babel-runtime|core-js)[\\/]/,
-        ],
+
         plugins: [
           includeRuntime
             ? ["@babel/transform-runtime", { version: "7.3.4" }]
             : null,
         ].filter(Boolean),
+
       },
     ].filter(Boolean),
   };
