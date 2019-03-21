@@ -55,6 +55,7 @@ export default function makeAPI(
     async: () => false,
     caller,
     assertVersion,
+    tokTypes: undefined,
   };
 }
 

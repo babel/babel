@@ -19,7 +19,8 @@ Generators, const and let
 I used them all without regret  
 And it’s a terse and a destructured Hallelujah  
 
-Hallelujah etc.
+Hallelujah, Hallelujah  
+Hallelujah, Hallelujah
 
 Well my faith was strong but I needed proof  
 The standard was my source of truth  
@@ -28,7 +29,9 @@ So even though you weren’t impressed
 I checked the build against the spec  
 And it’s a more-or-less compliant Hallelujah  
 
-Hallelujah etc.
+
+Hallelujah, Hallelujah  
+Hallelujah, Hallelujah
 
 Now you say the build step’s too complex  
 And you claim no need for ES Next  
@@ -37,7 +40,9 @@ But your code grows older with each line
 It’s a joyless dirge on a withered vine  
 It’s a threnody for a bygone Hallelujah  
 
-Hallelujah etc.
+
+Hallelujah, Hallelujah  
+Hallelujah, Hallelujah
 
 Yes I learned about the danger signs  
 How they’d polyfilled a thousand lines  
@@ -46,7 +51,9 @@ Still I disregarded common sense
 Now my source is small but the build’s immense  
 And it’s a slow and unresponsive Hallelujah  
 
-Hallelujah etc.
+
+Hallelujah, Hallelujah  
+Hallelujah, Hallelujah
 
 There was a time when they let me know  
 What’s really going on below  
@@ -55,7 +62,9 @@ And debugging’s not a progress march
 It’s a frenzied fumble in the dark  
 It’s a labyrinthine search for Hallelujah  
 
-Hallelujah etc.
+
+Hallelujah, Hallelujah  
+Hallelujah, Hallelujah
 
 Well, maybe there’s a god up there  
 But all I ever got from prayers  
@@ -64,6 +73,8 @@ And that anguished cry you hear at night
 Is the plugin I forgot to write  
 It’s a cold and it’s a broken Hallelujah  
 
-Hallelujah etc.
+
+Hallelujah, Hallelujah  
+Hallelujah, Hallelujah
 
 [Angus Croll](https://github.com/angus-c)  

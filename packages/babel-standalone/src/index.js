@@ -15,7 +15,11 @@ import {
   transform as babelTransform,
   buildExternalHelpers as babelBuildExternalHelpers,
 } from "@babel/core";
+
 import * as babelPlugins from "./plugins";
+
+import { all } from "./generated/plugins";
+
 import preset2015 from "./preset-es2015";
 import presetStage0 from "./preset-stage-0";
 import presetStage1 from "./preset-stage-1";
@@ -157,6 +161,7 @@ export function registerPresets(newPresets: {
 // All the plugins we should bundle
 // Want to get rid of this long whitelist of plugins?
 // Wait! Please read https://github.com/babel/babel/pull/6177 first.
+
 registerPlugins({
   "external-helpers": babelPlugins.externalHelpers,
   "syntax-async-generators": babelPlugins.syntaxAsyncGenerators,
@@ -240,6 +245,9 @@ registerPlugins({
   "transform-strict-mode": babelPlugins.transformStrictMode,
   "proposal-unicode-property-regex": babelPlugins.proposalUnicodePropertyRegex,
 });
+
+registerPlugins(all);
+
 
 // All the presets we should bundle
 // Want to get rid of this whitelist of presets?

@@ -49,6 +49,7 @@ const es = {
     features: [
       'RegExp "y" and "u" flags / "u" flag, case folding',
       'RegExp "y" and "u" flags / "u" flag, Unicode code point escapes',
+      'RegExp "y" and "u" flags / "u" flag, non-BMP Unicode characters',
       'RegExp "y" and "u" flags / "u" flag',
     ],
   },
@@ -95,8 +96,9 @@ const es = {
   "proposal-object-rest-spread": "object rest/spread properties",
   "proposal-unicode-property-regex": "RegExp Unicode Property Escapes",
 
-  "proposal-json-strings": "", // Awaiting mapping in compat-table
+  "proposal-json-strings": "JSON superset",
   "proposal-optional-catch-binding": "optional catch binding",
+  "transform-named-capturing-groups-regex": "RegExp named capture groups",
 };
 
 const proposals = require("./shipped-proposals").features;

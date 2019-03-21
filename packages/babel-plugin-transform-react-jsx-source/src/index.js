@@ -75,6 +75,7 @@ export default declare(api => {
   };
 
   return {
+    name: "transform-react-jsx-source",
     visitor,
   };
 });

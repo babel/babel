@@ -1,1 +1,1 @@
-var source = '\uD800!';
+\uD800!

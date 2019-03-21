@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    ["proposal-class-properties", { "loose": true }],
+    ["proposal-decorators", { "legacy": true }]
+  ],
+  "throws": "Decorators are not enabled."
+}

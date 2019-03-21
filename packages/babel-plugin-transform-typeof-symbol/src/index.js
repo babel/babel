@@ -5,6 +5,8 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
+    name: "transform-typeof-symbol",
+
     visitor: {
       Scope({ scope }) {
         if (!scope.getBinding("Symbol")) {

@@ -5,6 +5,8 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
+    name: "transform-member-expression-literals",
+
     visitor: {
       MemberExpression: {
         exit({ node }) {

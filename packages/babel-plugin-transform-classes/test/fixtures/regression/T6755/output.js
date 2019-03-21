@@ -29,12 +29,14 @@ function () {
               return _context.stop();
           }
         }
-      }, _callee, this);
+      }, _callee);
     }));
 
-    return function test1() {
+    function test1() {
       return _test.apply(this, arguments);
-    };
+    }
+
+    return test1;
   }();
 
   _proto.test2 =
@@ -52,7 +54,7 @@ function () {
             return _context2.stop();
         }
       }
-    }, test2, this);
+    }, test2);
   });
   return Example;
 }();

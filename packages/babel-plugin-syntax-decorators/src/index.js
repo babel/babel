@@ -30,6 +30,8 @@ export default declare((api, options) => {
   }
 
   return {
+    name: "syntax-decorators",
+
     manipulateOptions(opts, parserOpts) {
       parserOpts.plugins.push(
         legacy

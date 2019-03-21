@@ -4,6 +4,8 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
+    name: "syntax-jsx",
+
     manipulateOptions(opts, parserOpts) {
       // If the Typescript plugin already ran, it will have decided whether
       // or not this is a TSX file.

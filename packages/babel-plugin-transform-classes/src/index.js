@@ -25,6 +25,8 @@ export default declare((api, options) => {
   const VISITED = Symbol();
 
   return {
+    name: "transform-classes",
+
     visitor: {
       ExportDefaultDeclaration(path: NodePath) {
         if (!path.get("declaration").isClassDeclaration()) return;

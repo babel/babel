@@ -13,7 +13,12 @@
 // expressions and divisions. It is set on all token types that can
 // be followed by an expression (thus, a slash after them would be a
 // regular expression).
-//
+
+// The `startsExpr` property is used to determine whether an expression
+// may be the “argument” subexpression of a `yield` expression or
+// `yield` statement. It is set on all token types that may be at the
+// start of a subexpression.
+
 // `isLoop` marks a keyword as starting a loop, which is important
 // to know when parsing a label, in order to allow or disallow
 // continue jumps to that label.
@@ -27,7 +32,6 @@ const postfix = true;
 
 type TokenOptions = {
   keyword?: string,
-
   beforeExpr?: boolean,
   startsExpr?: boolean,
   rightAssociative?: boolean,
@@ -61,16 +65,21 @@ export class TokenType {
     this.isAssign = !!conf.isAssign;
     this.prefix = !!conf.prefix;
     this.postfix = !!conf.postfix;
-    this.binop = conf.binop === 0 ? 0 : conf.binop || null;
+    this.binop = conf.binop != null ? conf.binop : null;
     this.updateContext = null;
   }
 }
 
-function KeywordTokenType(keyword: string, options: TokenOptions = {}) {
-  return new TokenType(keyword, { ...options, keyword });
+export const keywords = new Map<string, TokenType>();
+
+function createKeyword(name: string, options: TokenOptions = {}): TokenType {
+  options.keyword = name;
+  const token = new TokenType(name, options);
+  keywords.set(name, token);
+  return token;
 }
 
-function BinopTokenType(name: string, binop: number) {
+function createBinop(name: string, binop: number) {
   return new TokenType(name, { beforeExpr, binop });
 }
 
@@ -104,7 +113,7 @@ export const types: { [name: string]: TokenType } = {
   backQuote: new TokenType("`", { startsExpr }),
   dollarBraceL: new TokenType("${", { beforeExpr, startsExpr }),
   at: new TokenType("@"),
-  hash: new TokenType("#"),
+  hash: new TokenType("#", { startsExpr }),
 
   // Special hashbang token.
   interpreterDirective: new TokenType("#!..."),
@@ -128,68 +137,60 @@ export const types: { [name: string]: TokenType } = {
   incDec: new TokenType("++/--", { prefix, postfix, startsExpr }),
   bang: new TokenType("!", { beforeExpr, prefix, startsExpr }),
   tilde: new TokenType("~", { beforeExpr, prefix, startsExpr }),
-  pipeline: new BinopTokenType("|>", 0),
-  nullishCoalescing: new BinopTokenType("??", 1),
-  logicalOR: new BinopTokenType("||", 1),
-  logicalAND: new BinopTokenType("&&", 2),
-  bitwiseOR: new BinopTokenType("|", 3),
-  bitwiseXOR: new BinopTokenType("^", 4),
-  bitwiseAND: new BinopTokenType("&", 5),
-  equality: new BinopTokenType("==/!=", 6),
-  relational: new BinopTokenType("</>", 7),
-  bitShift: new BinopTokenType("<</>>", 8),
+  pipeline: createBinop("|>", 0),
+  nullishCoalescing: createBinop("??", 1),
+  logicalOR: createBinop("||", 1),
+  logicalAND: createBinop("&&", 2),
+  bitwiseOR: createBinop("|", 3),
+  bitwiseXOR: createBinop("^", 4),
+  bitwiseAND: createBinop("&", 5),
+  equality: createBinop("==/!=", 6),
+  relational: createBinop("</>", 7),
+  bitShift: createBinop("<</>>", 8),
   plusMin: new TokenType("+/-", { beforeExpr, binop: 9, prefix, startsExpr }),
-  modulo: new BinopTokenType("%", 10),
-  star: new BinopTokenType("*", 10),
-  slash: new BinopTokenType("/", 10),
+  modulo: createBinop("%", 10),
+  star: createBinop("*", 10),
+  slash: createBinop("/", 10),
   exponent: new TokenType("**", {
     beforeExpr,
     binop: 11,
     rightAssociative: true,
   }),
-};
 
-export const keywords = {
-  break: new KeywordTokenType("break"),
-  case: new KeywordTokenType("case", { beforeExpr }),
-  catch: new KeywordTokenType("catch"),
-  continue: new KeywordTokenType("continue"),
-  debugger: new KeywordTokenType("debugger"),
-  default: new KeywordTokenType("default", { beforeExpr }),
-  do: new KeywordTokenType("do", { isLoop, beforeExpr }),
-  else: new KeywordTokenType("else", { beforeExpr }),
-  finally: new KeywordTokenType("finally"),
-  for: new KeywordTokenType("for", { isLoop }),
-  function: new KeywordTokenType("function", { startsExpr }),
-  if: new KeywordTokenType("if"),
-  return: new KeywordTokenType("return", { beforeExpr }),
-  switch: new KeywordTokenType("switch"),
-  throw: new KeywordTokenType("throw", { beforeExpr, prefix, startsExpr }),
-  try: new KeywordTokenType("try"),
-  var: new KeywordTokenType("var"),
-  let: new KeywordTokenType("let"),
-  const: new KeywordTokenType("const"),
-  while: new KeywordTokenType("while", { isLoop }),
-  with: new KeywordTokenType("with"),
-  new: new KeywordTokenType("new", { beforeExpr, startsExpr }),
-  this: new KeywordTokenType("this", { startsExpr }),
-  super: new KeywordTokenType("super", { startsExpr }),
-  class: new KeywordTokenType("class", { startsExpr }),
-  extends: new KeywordTokenType("extends", { beforeExpr }),
-  export: new KeywordTokenType("export"),
-  import: new KeywordTokenType("import", { startsExpr }),
-  yield: new KeywordTokenType("yield", { beforeExpr, startsExpr }),
-  null: new KeywordTokenType("null", { startsExpr }),
-  true: new KeywordTokenType("true", { startsExpr }),
-  false: new KeywordTokenType("false", { startsExpr }),
-  in: new KeywordTokenType("in", { beforeExpr, binop: 7 }),
-  instanceof: new KeywordTokenType("instanceof", { beforeExpr, binop: 7 }),
-  typeof: new KeywordTokenType("typeof", { beforeExpr, prefix, startsExpr }),
-  void: new KeywordTokenType("void", { beforeExpr, prefix, startsExpr }),
-  delete: new KeywordTokenType("delete", { beforeExpr, prefix, startsExpr }),
+  // Keywords
+  _break: createKeyword("break"),
+  _case: createKeyword("case", { beforeExpr }),
+  _catch: createKeyword("catch"),
+  _continue: createKeyword("continue"),
+  _debugger: createKeyword("debugger"),
+  _default: createKeyword("default", { beforeExpr }),
+  _do: createKeyword("do", { isLoop, beforeExpr }),
+  _else: createKeyword("else", { beforeExpr }),
+  _finally: createKeyword("finally"),
+  _for: createKeyword("for", { isLoop }),
+  _function: createKeyword("function", { startsExpr }),
+  _if: createKeyword("if"),
+  _return: createKeyword("return", { beforeExpr }),
+  _switch: createKeyword("switch"),
+  _throw: createKeyword("throw", { beforeExpr, prefix, startsExpr }),
+  _try: createKeyword("try"),
+  _var: createKeyword("var"),
+  _const: createKeyword("const"),
+  _while: createKeyword("while", { isLoop }),
+  _with: createKeyword("with"),
+  _new: createKeyword("new", { beforeExpr, startsExpr }),
+  _this: createKeyword("this", { startsExpr }),
+  _super: createKeyword("super", { startsExpr }),
+  _class: createKeyword("class", { startsExpr }),
+  _extends: createKeyword("extends", { beforeExpr }),
+  _export: createKeyword("export"),
+  _import: createKeyword("import", { startsExpr }),
+  _null: createKeyword("null", { startsExpr }),
+  _true: createKeyword("true", { startsExpr }),
+  _false: createKeyword("false", { startsExpr }),
+  _in: createKeyword("in", { beforeExpr, binop: 7 }),
+  _instanceof: createKeyword("instanceof", { beforeExpr, binop: 7 }),
+  _typeof: createKeyword("typeof", { beforeExpr, prefix, startsExpr }),
+  _void: createKeyword("void", { beforeExpr, prefix, startsExpr }),
+  _delete: createKeyword("delete", { beforeExpr, prefix, startsExpr }),
 };
-
-// Map keyword names to token types.
-Object.keys(keywords).forEach(name => {
-  types["_" + name] = keywords[name];
-});

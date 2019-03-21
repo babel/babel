@@ -6,6 +6,7 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
+    name: "proposal-export-default-from",
     inherits: syntaxExportDefaultFrom,
 
     visitor: {

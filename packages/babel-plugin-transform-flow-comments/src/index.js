@@ -27,6 +27,7 @@ export default declare(api => {
   }
 
   return {
+    name: "transform-flow-comments",
     inherits: syntaxFlow,
 
     visitor: {

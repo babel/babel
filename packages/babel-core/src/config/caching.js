@@ -54,6 +54,7 @@ function makeCachedFunction<
   ArgT,
   ResultT,
   SideChannel,
+  // $FlowIssue https://github.com/facebook/flow/issues/4528
   Cache: CacheMap<ArgT, ResultT, SideChannel>,
 >(
   callCache: Cache,

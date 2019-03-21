@@ -200,7 +200,6 @@ function hoistFunctionEnvironment(
         child.skip();
       },
       ClassProperty(child) {
-        if (child.node.static) return;
         child.skip();
       },
       CallExpression(child) {
@@ -453,7 +452,6 @@ function getThisBinding(thisEnvFn, inConstructor) {
         child.skip();
       },
       ClassProperty(child) {
-        if (child.node.static) return;
         child.skip();
       },
       CallExpression(child) {
@@ -461,9 +459,14 @@ function getThisBinding(thisEnvFn, inConstructor) {
         if (supers.has(child.node)) return;
         supers.add(child.node);
 
-        child.replaceWith(
-          t.assignmentExpression("=", t.identifier(thisBinding), child.node),
-        );
+        child.replaceWithMultiple([
+          child.node,
+          t.assignmentExpression(
+            "=",
+            t.identifier(thisBinding),
+            t.identifier("this"),
+          ),
+        ]);
       },
     });
   });
@@ -576,7 +579,6 @@ function getScopeInformation(fnPath) {
 
   fnPath.traverse({
     ClassProperty(child) {
-      if (child.node.static) return;
       child.skip();
     },
     Function(child) {

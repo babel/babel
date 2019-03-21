@@ -77,7 +77,7 @@ export default function valueToNode(value: any): Object {
   // object
   if (isPlainObject(value)) {
     const props = [];
-    for (const key in value) {
+    for (const key of Object.keys(value)) {
       let nodeKey;
       if (isValidIdentifier(key)) {
         nodeKey = identifier(key);

@@ -138,7 +138,12 @@ defineType("CallExpression", {
       validate: chain(
         assertValueType("array"),
         assertEach(
-          assertNodeType("Expression", "SpreadElement", "JSXNamespacedName"),
+          assertNodeType(
+            "Expression",
+            "SpreadElement",
+            "JSXNamespacedName",
+            "ArgumentPlaceholder",
+          ),
         ),
       ),
     },
@@ -288,7 +293,14 @@ export const functionCommon = {
   params: {
     validate: chain(
       assertValueType("array"),
-      assertEach(assertNodeType("LVal")),
+      assertEach(
+        assertNodeType(
+          "Identifier",
+          "Pattern",
+          "RestElement",
+          "TSParameterProperty",
+        ),
+      ),
     ),
   },
   generator: {
@@ -388,7 +400,7 @@ export const patternLikeCommon = {
 
 defineType("Identifier", {
   builder: ["name"],
-  visitor: ["typeAnnotation"],
+  visitor: ["typeAnnotation", "decorators" /* for legacy param decorators */],
   aliases: ["Expression", "PatternLike", "LVal", "TSEntityName"],
   fields: {
     ...patternLikeCommon,
@@ -722,6 +734,16 @@ defineType("SequenceExpression", {
     },
   },
   aliases: ["Expression"],
+});
+
+defineType("ParenthesizedExpression", {
+  visitor: ["expression"],
+  aliases: ["Expression", "ExpressionWrapper"],
+  fields: {
+    expression: {
+      validate: assertNodeType("Expression"),
+    },
+  },
 });
 
 defineType("SwitchCase", {

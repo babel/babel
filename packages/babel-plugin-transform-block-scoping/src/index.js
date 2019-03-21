@@ -20,6 +20,8 @@ export default declare((api, opts) => {
   }
 
   return {
+    name: "transform-block-scoping",
+
     visitor: {
       VariableDeclaration(path) {
         const { node, parent, scope } = path;
@@ -151,8 +153,7 @@ function convertBlockScopedToVar(
   // Move bindings from current block scope to function scope.
   if (moveBindingsToParent) {
     const parentScope = scope.getFunctionParent() || scope.getProgramParent();
-    const ids = path.getBindingIdentifiers();
-    for (const name in ids) {
+    for (const name of Object.keys(path.getBindingIdentifiers())) {
       const binding = scope.getOwnBinding(name);
       if (binding) binding.kind = "var";
       scope.moveBindingTo(name, parentScope);
@@ -243,8 +244,7 @@ const loopLabelVisitor = {
 const continuationVisitor = {
   enter(path, state) {
     if (path.isAssignmentExpression() || path.isUpdateExpression()) {
-      const bindings = path.getBindingIdentifiers();
-      for (const name in bindings) {
+      for (const name of Object.keys(path.getBindingIdentifiers())) {
         if (
           state.outsideReferences[name] !==
           path.scope.getBindingIdentifier(name)
@@ -408,7 +408,7 @@ class BlockScoping {
     const scope = this.scope;
     const state = this.state;
 
-    for (const name in scope.bindings) {
+    for (const name of Object.keys(scope.bindings)) {
       const binding = scope.bindings[name];
       if (binding.kind !== "const") continue;
 
@@ -442,7 +442,7 @@ class BlockScoping {
     const parentScope = scope.getFunctionParent() || scope.getProgramParent();
     const letRefs = this.letReferences;
 
-    for (const key in letRefs) {
+    for (const key of Object.keys(letRefs)) {
       const ref = letRefs[key];
       const binding = scope.getBinding(ref.name);
       if (!binding) continue;
@@ -469,7 +469,7 @@ class BlockScoping {
     // those in upper scopes and then if they do, generate a uid
     // for them and replace all references with it
 
-    for (const key in letRefs) {
+    for (const key of Object.keys(letRefs)) {
       // just an Identifier node we collected in `getLetReferences`
       // this is the defining identifier of a declaration
       const ref = letRefs[key];
@@ -489,7 +489,7 @@ class BlockScoping {
       }
     }
 
-    for (const key in outsideLetRefs) {
+    for (const key of Object.keys(outsideLetRefs)) {
       const ref = letRefs[key];
       // check for collisions with a for loop's init variable and the enclosing scope's bindings
       // https://github.com/babel/babel/issues/8498
@@ -512,7 +512,7 @@ class BlockScoping {
 
     // remap loop heads with colliding variables
     if (this.loop) {
-      for (const name in outsideRefs) {
+      for (const name of Object.keys(outsideRefs)) {
         const id = outsideRefs[name];
 
         if (
@@ -812,7 +812,7 @@ class BlockScoping {
   pushDeclar(node: { type: "VariableDeclaration" }): Array<Object> {
     const declars = [];
     const names = t.getBindingIdentifiers(node);
-    for (const name in names) {
+    for (const name of Object.keys(names)) {
       declars.push(t.variableDeclarator(names[name]));
     }
 
@@ -850,7 +850,7 @@ class BlockScoping {
     }
 
     if (has.hasBreakContinue) {
-      for (const key in has.map) {
+      for (const key of Object.keys(has.map)) {
         cases.push(t.switchCase(t.stringLiteral(key), [has.map[key]]));
       }
 

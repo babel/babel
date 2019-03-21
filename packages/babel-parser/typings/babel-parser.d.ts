@@ -78,6 +78,14 @@ export interface ParserOptions {
      * Adds all parsed tokens to a tokens property on the File node.
      */
     tokens?: boolean;
+
+    /**
+     * By default, the parser adds information about parentheses by setting
+     * `extra.parenthesized` to `true` as needed.
+     * When this option is `true` the parser creates `ParenthesizedExpression`
+     * AST nodes instead of using the `extra` property.
+     */
+    createParenthesizedExpressions?: boolean;
 }
 
 export type ParserPlugin =
@@ -106,4 +114,22 @@ export type ParserPlugin =
     'optionalCatchBinding' |
     'throwExpressions' |
     'pipelineOperator' |
-    'nullishCoalescingOperator';
+    'nullishCoalescingOperator' |
+    ParserPluginWithOptions;
+
+export type ParserPluginWithOptions =
+    ['decorators', DecoratorsPluginOptions] |
+    ['pipelineOperator', PipelineOperatorPluginOptions] |
+    ['flow', FlowPluginOptions];
+
+export interface DecoratorsPluginOptions {
+    decoratorsBeforeExport?: boolean;
+}
+
+export interface PipelineOperatorPluginOptions {
+    proposal: 'minimal' | 'smart';
+}
+
+export interface FlowPluginOptions {
+    all?: boolean;
+}

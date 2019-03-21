@@ -14,6 +14,7 @@ Using plugins:
   proposal-unicode-property-regex { "chrome":"60" }
   proposal-json-strings { "chrome":"60" }
   proposal-optional-catch-binding { "chrome":"60" }
+  transform-named-capturing-groups-regex { "chrome":"60" }
 
 Using polyfills with `entry` option:
 

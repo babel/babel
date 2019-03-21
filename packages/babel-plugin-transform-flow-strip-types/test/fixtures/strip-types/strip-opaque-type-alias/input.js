@@ -1,6 +1,6 @@
 opaque type ID = string;
 opaque type Foo<T> = Bar<T>
-export opaque type Foo = number;
+export opaque type Foo1 = number;
 
 opaque type union =
  | {type: "A"}
@@ -12,5 +12,5 @@ opaque type overloads =
   & ((x: number) => string)
 ;
 
-declare opaque type Foo: Bar;
-declare export opaque type Foo: Bar;
+declare opaque type Foo2: Bar;
+declare export opaque type Fo3: Bar;

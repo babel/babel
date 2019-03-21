@@ -1,0 +1,3 @@
+{
+  "plugins": ["transform-named-capturing-groups-regex"]
+}

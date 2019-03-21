@@ -1,7 +1,7 @@
 type FBID = number;
 type Foo<T> = Bar<T>;
 type Maybe<T> = _Maybe<T, *>;
-export type Foo = number;
+export type Foo2 = number;
 
 type union =
  | {type: "A"}
@@ -14,3 +14,5 @@ type overloads =
 ;
 
 type func = string => string;
+
+type D = X.Y<Z>;

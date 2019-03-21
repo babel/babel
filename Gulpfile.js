@@ -9,6 +9,7 @@ const gulpWatch = require("gulp-watch");
 const rename = require("gulp-rename");
 const pump = require("pump");
 const gutil = require("gulp-util");
+const fancyLog = require("fancy-log");
 const filter = require("gulp-filter");
 const gulp = require("gulp");
 const path = require("path");
@@ -28,6 +29,7 @@ const uglify = require("gulp-uglify");
 const rollupJson = require("rollup-plugin-json");
 const registerStandalonePackageTask = require("./scripts/gulp-tasks")
   .registerStandalonePackageTask;
+const { registerStandalonePackageTask } = require("./scripts/gulp-tasks")
 
 const sources = ["codemods", "packages"];
 
@@ -47,8 +49,13 @@ function getIndexFromPackage(name) {
 
 function compilationLogger(name, rollup) {
   return through.obj(function(file, enc, callback) {
+
     gutil.log(
       `Compiling '${chalk.cyan(name || file.relative)}'${
+
+    fancyLog(
+      `Compiling '${chalk.cyan(file.relative)}'${
+
         rollup ? " with rollup " : ""
       }...`
     );
@@ -59,7 +66,7 @@ function compilationLogger(name, rollup) {
 function errorsLogger() {
   return plumber({
     errorHandler(err) {
-      gutil.log(err.stack);
+      fancyLog(err.stack);
     },
   });
 }
@@ -317,7 +324,7 @@ registerStandalonePackageTask(
   "babel",
   "Babel",
   path.join(__dirname, "packages"),
-  require("./packages/babel-core/package.json").version
+  require("./packages/babel-standalone/package.json").version
 );
 
 const presetEnvWebpackPlugins = [
@@ -346,6 +353,6 @@ registerStandalonePackageTask(
   "babel-preset-env",
   "babelPresetEnv",
   path.join(__dirname, "packages"),
-  require("./packages/babel-preset-env/package.json").version,
+  require("./packages/babel-preset-env-standalone/package.json").version,
   presetEnvWebpackPlugins
 );

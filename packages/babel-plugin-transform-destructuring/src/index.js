@@ -411,6 +411,8 @@ export default declare((api, options) => {
   }
 
   return {
+    name: "transform-destructuring",
+
     visitor: {
       ExportNamedDeclaration(path) {
         const declaration = path.get("declaration");
@@ -419,7 +421,7 @@ export default declare((api, options) => {
 
         const specifiers = [];
 
-        for (const name in path.getOuterBindingIdentifiers(path)) {
+        for (const name of Object.keys(path.getOuterBindingIdentifiers(path))) {
           specifiers.push(
             t.exportSpecifier(t.identifier(name), t.identifier(name)),
           );
@@ -447,8 +449,14 @@ export default declare((api, options) => {
 
           path.ensureBlock();
 
+          if (node.body.body.length === 0 && path.isCompletionRecord()) {
+            node.body.body.unshift(
+              t.expressionStatement(scope.buildUndefinedNode()),
+            );
+          }
+
           node.body.body.unshift(
-            t.variableDeclaration("var", [t.variableDeclarator(left, temp)]),
+            t.expressionStatement(t.assignmentExpression("=", left, temp)),
           );
 
           return;
@@ -538,7 +546,12 @@ export default declare((api, options) => {
         destructuring.init(node.left, ref || node.right);
 
         if (ref) {
-          nodes.push(t.expressionStatement(t.cloneNode(ref)));
+          if (path.parentPath.isArrowFunctionExpression()) {
+            path.replaceWith(t.blockStatement([]));
+            nodes.push(t.returnStatement(t.cloneNode(ref)));
+          } else {
+            nodes.push(t.expressionStatement(t.cloneNode(ref)));
+          }
         }
 
         path.replaceWithMultiple(nodes);

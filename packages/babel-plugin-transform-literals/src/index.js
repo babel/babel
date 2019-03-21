@@ -4,6 +4,8 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
+    name: "transform-literals",
+
     visitor: {
       NumericLiteral({ node }) {
         // number octal like 0b10 or 0o70

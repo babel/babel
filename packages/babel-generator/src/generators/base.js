@@ -50,8 +50,45 @@ export function Directive(node: Object) {
   this.semicolon();
 }
 
+// These regexes match an even number of \ followed by a quote
+const unescapedSingleQuoteRE = /(?:^|[^\\])(?:\\\\)*'/;
+const unescapedDoubleQuoteRE = /(?:^|[^\\])(?:\\\\)*"/;
+
+export function DirectiveLiteral(node: Object) {
+  const raw = this.getPossibleRaw(node);
+  if (raw != null) {
+    this.token(raw);
+    return;
+  }
+
+  const { value } = node;
+
+  // NOTE: In directives we can't change escapings,
+  // because they change the behavior.
+  // e.g. "us\x65 string" (\x65 is e) is not a "use strict" directive.
+
+  if (!unescapedDoubleQuoteRE.test(value)) {
+    this.token(`"${value}"`);
+  } else if (!unescapedSingleQuoteRE.test(value)) {
+    this.token(`'${value}'`);
+  } else {
+    throw new Error(
+      "Malformed AST: it is not possible to print a directive containing" +
+        " both unescaped single and double quotes.",
+    );
+  }
+}
+
 export function InterpreterDirective(node: Object) {
   this.token(`#!${node.value}\n`);
 }
 
-export { StringLiteral as DirectiveLiteral } from "./types";
+export function Placeholder(node: Object) {
+  this.token("%%");
+  this.print(node.name);
+  this.token("%%");
+
+  if (node.expectedNode === "Statement") {
+    this.semicolon();
+  }
+}

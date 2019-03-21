@@ -40,12 +40,14 @@ function () {
                 return _context.stop();
             }
           }
-        }, _callee, this);
+        }, _callee);
       }));
 
-      return function bar() {
+      function bar() {
         return _bar.apply(this, arguments);
-      };
+      }
+
+      return bar;
     }()
   }]);
 
@@ -84,7 +86,7 @@ function _foo() {
                         return _context2.stop();
                     }
                   }
-                }, _callee2, this);
+                }, _callee2);
               }));
               return _bar2.apply(this, arguments);
             };
@@ -98,7 +100,7 @@ function _foo() {
             return _context3.stop();
         }
       }
-    }, _callee3, this);
+    }, _callee3);
   }));
   return _foo.apply(this, arguments);
 }

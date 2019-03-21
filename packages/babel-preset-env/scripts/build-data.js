@@ -192,28 +192,51 @@ const getLowestImplementedVersion = ({ features }, env) => {
     // only doing this for built-ins atm
     //
     // NOTE: when/if compat-table adds a babel7 key, we'll want to update this
-    if (!test.babel6 && isBuiltIn) {
-      return "-1";
+    if (!test.babel6corejs2 && isBuiltIn) {
+      return {
+        version: "0.0.0",
+        semver: "0.0.0",
+        implements: true,
+      };
     }
 
-    return (
-      Object.keys(test)
-        .filter(t => t.startsWith(env))
-        // Babel assumes strict mode
-        .filter(
-          test => tests[i].res[test] === true || tests[i].res[test] === "strict"
-        )
-        // normalize some keys and get version from full string.
-        .map(test => {
-          return test.replace("_", ".").replace(env, "");
-        })
-        // version must be label from the unreleasedLabels (like tp) or number.
-        .filter(
-          version =>
-            unreleasedLabelForEnv === version || !isNaN(parseFloat(version))
-        )
-        .shift()
-    );
+    const reportedVersions = Object.keys(test)
+      .filter(t => t.startsWith(env))
+      .map(t => {
+        const version = t.replace(/_/g, ".").replace(env, "");
+        return {
+          version,
+          semver: semver.coerce(version) || version,
+          // Babel assumes strict mode
+          implements: tests[i].res[t] === true || tests[i].res[t] === "strict",
+        };
+      })
+      // version must be label from the unreleasedLabels (like tp) or number.
+      .filter(
+        version =>
+          unreleasedLabelForEnv === version.version ||
+          !isNaN(parseFloat(version.version))
+      )
+      // Sort in desc order, with unreleasedLabelForEnv coming last.
+      .sort(({ semver: av }, { semver: bv }) => {
+        if (av === unreleasedLabelForEnv) return -1;
+        if (bv === unreleasedLabelForEnv) return 1;
+        if (semver.gt(av, bv)) return -1;
+        if (semver.gt(bv, av)) return 1;
+        return 0;
+      });
+
+    // Find the lowest version such that all higher versions implement it.
+    // Eg, given { chrome70: true, chrome60: false, chrome50: true }, the
+    // lowest version is chrome70, not chrome50.
+    let lowest = null;
+    for (const version of reportedVersions) {
+      if (!version.implements) {
+        break;
+      }
+      lowest = version;
+    }
+    return lowest;
   });
 
   const envFiltered = envTests.filter(t => t);
@@ -229,15 +252,16 @@ const getLowestImplementedVersion = ({ features }, env) => {
     return null;
   }
 
-  return envTests
-    .map(str => str.replace(env, ""))
-    .reduce((a, b) => {
-      if (b === unreleasedLabelForEnv) {
-        return b;
-      }
+  return envFiltered.reduce((a, b) => {
+    if (
+      a.semver === unreleasedLabelForEnv ||
+      b.semver === unreleasedLabelForEnv
+    ) {
+      return unreleasedLabelForEnv;
+    }
 
-      return semver.lt(semver.coerce(a), semver.coerce(b)) ? b : a;
-    });
+    return semver.lt(a.semver, b.semver) ? b : a;
+  });
 };
 
 const generateData = (environments, features) => {
@@ -254,7 +278,14 @@ const generateData = (environments, features) => {
       const version = getLowestImplementedVersion(options, env);
 
       if (version !== null) {
-        plugin[env] = version.toString();
+        const versionString = version.version;
+
+        // NOTE(bng): A number of environments in compat-table changed to
+        // include a trailing zero (node10 -> node10_0), so for now stripping
+        // it to be consistent
+        plugin[env] = versionString.endsWith(".0")
+          ? versionString.slice(0, -2)
+          : versionString;
       }
     });
 

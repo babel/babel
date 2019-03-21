@@ -115,6 +115,8 @@ export default declare((api, options) => {
   }
 
   return {
+    name: "transform-computed-properties",
+
     visitor: {
       ObjectExpression: {
         exit(path, state) {

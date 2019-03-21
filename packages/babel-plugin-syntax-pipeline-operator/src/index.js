@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 
-export const proposals = ["minimal"];
+export const proposals = ["minimal", "smart"];
 
 export default declare((api, { proposal }) => {
   api.assertVersion(7);
@@ -15,6 +15,8 @@ export default declare((api, { proposal }) => {
   }
 
   return {
+    name: "syntax-pipeline-operator",
+
     manipulateOptions(opts, parserOpts) {
       parserOpts.plugins.push(["pipelineOperator", { proposal }]);
     },

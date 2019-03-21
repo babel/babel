@@ -12,11 +12,30 @@ describe("normalize-options", () => {
   describe("normalizeOptions", () => {
     it("should return normalized `include` and `exclude`", () => {
       const normalized = normalizeOptions.default({
-        include: ["babel-plugin-transform-spread", "transform-classes"],
+        include: [
+          "babel-plugin-transform-spread",
+          "transform-classes",
+          "@babel/plugin-transform-unicode-regex",
+          "@babel/transform-block-scoping",
+        ],
+        exclude: [
+          "babel-plugin-transform-for-of",
+          "transform-parameters",
+          "@babel/plugin-transform-regenerator",
+          "@babel/transform-new-target",
+        ],
       });
       expect(normalized.include).toEqual([
         "transform-spread",
         "transform-classes",
+        "transform-unicode-regex",
+        "transform-block-scoping",
+      ]);
+      expect(normalized.exclude).toEqual([
+        "transform-for-of",
+        "transform-parameters",
+        "transform-regenerator",
+        "transform-new-target",
       ]);
     });
 
@@ -25,15 +44,26 @@ describe("normalize-options", () => {
       expect(normalized).toBe("prefix-babel-plugin-postfix");
     });
 
-    it("should throw if duplicate names in `include` and `exclude`", () => {
-      const normalizeWithSameIncludes = () => {
-        normalizeOptions.default({
-          include: ["babel-plugin-transform-spread"],
-          exclude: ["transform-spread"],
-        });
-      };
-      expect(normalizeWithSameIncludes).toThrow();
-    });
+    test.each`
+      include                               | exclude
+      ${["babel-plugin-transform-spread"]}  | ${["transform-spread"]}
+      ${["@babel/plugin-transform-spread"]} | ${["transform-spread"]}
+      ${["transform-spread"]}               | ${["babel-plugin-transform-spread"]}
+      ${["transform-spread"]}               | ${["@babel/plugin-transform-spread"]}
+      ${["babel-plugin-transform-spread"]}  | ${["@babel/plugin-transform-spread"]}
+      ${["@babel/plugin-transform-spread"]} | ${["babel-plugin-transform-spread"]}
+      ${["@babel/plugin-transform-spread"]} | ${["@babel/transform-spread"]}
+      ${["@babel/transform-spread"]}        | ${["@babel/plugin-transform-spread"]}
+      ${["babel-plugin-transform-spread"]}  | ${["@babel/transform-spread"]}
+      ${["@babel/transform-spread"]}        | ${["babel-plugin-transform-spread"]}
+    `(
+      "should throw if with includes $include and excludes $exclude",
+      ({ include, exclude }) => {
+        expect(() =>
+          normalizeOptions.default({ include, exclude }),
+        ).toThrowError(/were found in both/);
+      },
+    );
   });
 
   describe("Config format validation", () => {

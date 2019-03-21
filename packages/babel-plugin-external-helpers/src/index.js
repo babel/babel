@@ -18,6 +18,7 @@ export default declare((api, options) => {
   const helperWhitelist = whitelist ? new Set(whitelist) : null;
 
   return {
+    name: "external-helpers",
     pre(file) {
       file.set("helperGenerator", name => {
         // If the helper didn't exist yet at the version given, we bail

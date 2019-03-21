@@ -231,7 +231,7 @@ export function tsPrintBraced(members, node) {
 }
 
 export function TSArrayType(node) {
-  this.print(node.elementType);
+  this.print(node.elementType, node);
   this.token("[]");
 }
 
@@ -474,6 +474,21 @@ export function TSModuleDeclaration(node) {
 
 export function TSModuleBlock(node) {
   this.tsPrintBraced(node.body, node);
+}
+
+export function TSImportType(node) {
+  const { argument, qualifier, typeParameters } = node;
+  this.word("import");
+  this.token("(");
+  this.print(argument, node);
+  this.token(")");
+  if (qualifier) {
+    this.token(".");
+    this.print(qualifier, node);
+  }
+  if (typeParameters) {
+    this.print(typeParameters, node);
+  }
 }
 
 export function TSImportEqualsDeclaration(node) {

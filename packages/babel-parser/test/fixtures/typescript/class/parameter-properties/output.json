@@ -116,12 +116,12 @@
               "params": [
                 {
                   "type": "TSParameterProperty",
-                  "start": 44,
+                  "start": 35,
                   "end": 45,
                   "loc": {
                     "start": {
                       "line": 3,
-                      "column": 17
+                      "column": 8
                     },
                     "end": {
                       "line": 3,
@@ -149,12 +149,12 @@
                 },
                 {
                   "type": "TSParameterProperty",
-                  "start": 62,
+                  "start": 55,
                   "end": 72,
                   "loc": {
                     "start": {
                       "line": 4,
-                      "column": 15
+                      "column": 8
                     },
                     "end": {
                       "line": 4,
@@ -212,12 +212,12 @@
                 },
                 {
                   "type": "TSParameterProperty",
-                  "start": 92,
+                  "start": 82,
                   "end": 95,
                   "loc": {
                     "start": {
                       "line": 5,
-                      "column": 18
+                      "column": 8
                     },
                     "end": {
                       "line": 5,
@@ -246,12 +246,12 @@
                 },
                 {
                   "type": "TSParameterProperty",
-                  "start": 113,
+                  "start": 105,
                   "end": 124,
                   "loc": {
                     "start": {
                       "line": 6,
-                      "column": 16
+                      "column": 8
                     },
                     "end": {
                       "line": 6,
@@ -310,12 +310,12 @@
                 },
                 {
                   "type": "TSParameterProperty",
-                  "start": 150,
+                  "start": 134,
                   "end": 153,
                   "loc": {
                     "start": {
                       "line": 7,
-                      "column": 24
+                      "column": 8
                     },
                     "end": {
                       "line": 7,
@@ -344,12 +344,12 @@
                 },
                 {
                   "type": "TSParameterProperty",
-                  "start": 215,
+                  "start": 206,
                   "end": 220,
                   "loc": {
                     "start": {
                       "line": 9,
-                      "column": 17
+                      "column": 8
                     },
                     "end": {
                       "line": 9,
@@ -430,12 +430,12 @@
                 },
                 {
                   "type": "TSParameterProperty",
-                  "start": 237,
+                  "start": 230,
                   "end": 251,
                   "loc": {
                     "start": {
                       "line": 10,
-                      "column": 15
+                      "column": 8
                     },
                     "end": {
                       "line": 10,

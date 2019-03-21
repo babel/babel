@@ -72,12 +72,14 @@ These are the core @babel/parser (babylon) AST node types.
     - [LogicalExpression](#logicalexpression)
       - [LogicalOperator](#logicaloperator)
     - [SpreadElement](#spreadelement)
+    - [ArgumentPlaceholder](#argumentplaceholder)
     - [MemberExpression](#memberexpression)
     - [BindExpression](#bindexpression)
   - [ConditionalExpression](#conditionalexpression)
   - [CallExpression](#callexpression)
   - [NewExpression](#newexpression)
   - [SequenceExpression](#sequenceexpression)
+  - [ParenthesizedExpression](#parenthesizedexpression)
   - [DoExpression](#doexpression)
 - [Template Literals](#template-literals)
   - [TemplateLiteral](#templateliteral)
@@ -862,6 +864,14 @@ interface SpreadElement <: Node {
 }
 ```
 
+### ArgumentPlaceholder
+
+```js
+interface ArgumentPlaceholder <: Node {
+    type: "ArgumentPlaceholder";
+}
+```
+
 ### MemberExpression
 
 ```js
@@ -935,6 +945,17 @@ interface SequenceExpression <: Expression {
 ```
 
 A sequence expression, i.e., a comma-separated sequence of expressions.
+
+## ParenthesizedExpression
+
+```js
+interface ParenthesizedExpression <: Expression {
+    type "ParenthesizedExpression";
+    expression: Expression;
+}
+```
+
+An expression wrapped by parentheses.
 
 ## DoExpression
 
@@ -1149,12 +1170,15 @@ A specifier in an import or export declaration.
 ```js
 interface ImportDeclaration <: ModuleDeclaration {
   type: "ImportDeclaration";
+  importKind: null | "type" | "typeof" | "value";
   specifiers: [ ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier ];
   source: Literal;
 }
 ```
 
 An import declaration, e.g., `import foo from "mod";`.
+
+> importKind is only set when `flow` plugin enabled in babel-parser
 
 ### ImportSpecifier
 

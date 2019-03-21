@@ -18,13 +18,12 @@ class Foo {
 
 var _foo = babelHelpers.classPrivateFieldLooseKey("foo");
 
+var _bar = babelHelpers.classPrivateFieldLooseKey("bar");
+
 Object.defineProperty(Foo, _foo, {
   writable: true,
   value: "foo"
 });
-
-var _bar = babelHelpers.classPrivateFieldLooseKey("bar");
-
 var f = new Foo();
 expect("foo" in Foo).toBe(false);
 expect("bar" in f).toBe(false);

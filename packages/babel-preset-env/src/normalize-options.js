@@ -76,7 +76,7 @@ const validBrowserslistTargets = [
 ];
 
 export const normalizePluginName = (plugin: string): string =>
-  plugin.replace(/^babel-plugin-/, "");
+  plugin.replace(/^(@babel\/|babel-)(plugin-)?/, "");
 
 export const checkDuplicateIncludeExcludes = (
   include: Array<string> = [],

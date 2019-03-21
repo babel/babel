@@ -16,9 +16,9 @@ class Foo {
 
 }
 
+var _bar = new WeakMap();
+
 var _foo = {
   writable: true,
   value: "foo"
 };
-
-var _bar = new WeakMap();

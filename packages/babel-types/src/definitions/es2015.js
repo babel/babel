@@ -13,7 +13,7 @@ import {
 } from "./core";
 
 defineType("AssignmentPattern", {
-  visitor: ["left", "right"],
+  visitor: ["left", "right", "decorators" /* for legacy param decorators */],
   builder: ["left", "right"],
   aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
@@ -87,6 +87,7 @@ defineType("ClassBody", {
         assertEach(
           assertNodeType(
             "ClassMethod",
+            "ClassPrivateMethod",
             "ClassProperty",
             "ClassPrivateProperty",
             "TSDeclareMethod",
@@ -321,6 +322,11 @@ defineType("ImportDeclaration", {
     source: {
       validate: assertNodeType("StringLiteral"),
     },
+    importKind: {
+      // Handle Flowtype's extension "import {typeof foo} from"
+      validate: assertOneOf("type", "typeof", "value"),
+      optional: true,
+    },
   },
 });
 
@@ -356,7 +362,8 @@ defineType("ImportSpecifier", {
     },
     importKind: {
       // Handle Flowtype's extension "import {typeof foo} from"
-      validate: assertOneOf(null, "type", "typeof"),
+      validate: assertOneOf("type", "typeof"),
+      optional: true,
     },
   },
 });
@@ -471,7 +478,11 @@ defineType("ClassMethod", {
 });
 
 defineType("ObjectPattern", {
-  visitor: ["properties", "typeAnnotation"],
+  visitor: [
+    "properties",
+    "typeAnnotation",
+    "decorators" /* for legacy param decorators */,
+  ],
   builder: ["properties"],
   aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {

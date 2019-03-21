@@ -140,6 +140,12 @@ export function ClassMethod(node: Object) {
   this.print(node.body, node);
 }
 
+export function ClassPrivateMethod(node: Object) {
+  this._classMethodHead(node);
+  this.space();
+  this.print(node.body, node);
+}
+
 export function _classMethodHead(node) {
   this.printJoin(node.decorators, node);
 

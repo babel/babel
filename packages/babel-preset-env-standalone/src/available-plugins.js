@@ -1,6 +1,7 @@
 import { availablePlugins, registerPlugin } from "@babel/standalone";
 
 const notIncludedPlugins = {
+  "transform-named-capturing-groups-regex": require("@babel/plugin-transform-named-capturing-groups-regex"),
   "transform-new-target": require("@babel/plugin-transform-new-target"),
   "proposal-json-strings": require("@babel/plugin-proposal-json-strings"),
 };

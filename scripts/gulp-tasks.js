@@ -13,10 +13,14 @@
 
 const path = require("path");
 const pump = require("pump");
+const chalk = require("chalk");
+const through = require("through2");
+const fancyLog = require("fancy-log");
 const rename = require("gulp-rename");
-const RootMostResolvePlugin = require("webpack-dependency-suite")
-  .RootMostResolvePlugin;
 const webpack = require("webpack");
+const { RootMostResolvePlugin } = require("webpack-dependency-suite");
+const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin");
+const WarningsToErrorsPlugin = require("warnings-to-errors-webpack-plugin");
 const webpackStream = require("webpack-stream");
 const uglify = require("gulp-uglify");
 
@@ -59,6 +63,12 @@ function webpackBuild(opts) {
       libraryTarget: "umd",
     },
     plugins: [
+      new WarningsToErrorsPlugin(),
+      new DuplicatePackageCheckerPlugin({
+        exclude(instance) {
+          return instance.name === "semver";
+        },
+      }),
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": '"production"',
         "process.env": JSON.stringify({ NODE_ENV: "production" }),
@@ -89,9 +99,36 @@ function webpackBuild(opts) {
   return webpackStream(config, webpack);
   // To write JSON for debugging:
   /*return webpackStream(config, webpack, (err, stats) => {
-    require('gulp-util').log(stats.toString({colors: true}));
-    require('fs').writeFileSync('webpack-debug.json', JSON.stringify(stats.toJson()));
+    require("fancy-log")(stats.toString({ colors: true }));
+    require("fs").writeFileSync(
+      "webpack-debug.json",
+      JSON.stringify(stats.toJson())
+    );
   });*/
+}
+
+function logUglify() {
+  return through.obj(function(file, enc, callback) {
+    fancyLog(
+      `Minifying '${chalk.cyan(
+        path.relative(path.join(__dirname, ".."), file.path)
+      )}'...`
+    );
+    callback(null, file);
+  });
+}
+
+function logNoUglify() {
+  return through.obj(function(file, enc, callback) {
+    fancyLog(
+      chalk.yellow(
+        `Skipped minification of '${chalk.cyan(
+          path.relative(path.join(__dirname, ".."), file.path)
+        )}' because not publishing`
+      )
+    );
+    callback(null, file);
+  });
 }
 
 function registerStandalonePackageTask(
@@ -116,8 +153,9 @@ function registerStandalonePackageTask(
         }),
         gulp.dest(standalonePath),
       ].concat(
-        // Minification is super slow, so we skip it in CI.
-        process.env.CI ? [] : uglify(),
+        // Minification is super slow, so we skip it unless we are publishing
+        process.env.IS_PUBLISH ? logUglify() : logNoUglify(),
+        process.env.IS_PUBLISH ? uglify() : [],
         rename({ extname: ".min.js" }),
         gulp.dest(standalonePath)
       ),

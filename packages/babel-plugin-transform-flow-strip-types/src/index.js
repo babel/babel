@@ -5,11 +5,12 @@ import { types as t } from "@babel/core";
 export default declare(api => {
   api.assertVersion(7);
 
-  const FLOW_DIRECTIVE = "@flow";
+  const FLOW_DIRECTIVE = /(@flow(\s+(strict(-local)?|weak))?|@noflow)/;
 
   let skipStrip = false;
 
   return {
+    name: "transform-flow-strip-types",
     inherits: syntaxFlow,
 
     visitor: {
@@ -27,7 +28,7 @@ export default declare(api => {
 
         if (comments) {
           for (const comment of (comments: Array<Object>)) {
-            if (comment.value.indexOf(FLOW_DIRECTIVE) >= 0) {
+            if (FLOW_DIRECTIVE.test(comment.value)) {
               directiveFound = true;
 
               // remove flow directive

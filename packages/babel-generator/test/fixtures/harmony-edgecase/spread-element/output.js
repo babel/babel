@@ -1,6 +1,6 @@
-var [a, b, ...rest] = array;
-const [a, b, ...rest] = array;
+var [a1, b1, ...rest1] = array;
+const [a2, b2, ...rest2] = array;
 
-function a([a, b, ...rest]) {}
+function a([a1, b1, ...rest1]) {}
 
-([a, b, ...rest]) => {};
+([a1, b1, ...rest1]) => {};

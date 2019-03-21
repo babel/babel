@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-jscript",
-  "version": "7.0.0",
+  "version": "7.2.0",
   "description": "Babel plugin to fix buggy JScript named function expressions",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-jscript",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.2.0",
     "@babel/helper-plugin-test-runner": "^7.0.0"
   }
 }

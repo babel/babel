@@ -22,7 +22,7 @@ commander.option(
   "comma-separated list of plugin names",
   collect,
 );
-commander.option("--config-file [path]", "Path a to .babelrc file to use");
+commander.option("--config-file [path]", "Path to a .babelrc file to use");
 commander.option(
   "--env-name [name]",
   "The name of the 'env' to use when loading configs and plugins. " +

@@ -1,6 +1,6 @@
 {
   "name": "@babel/template",
-  "version": "7.1.2",
+  "version": "7.2.2",
   "description": "Generate an AST from a string template.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -12,7 +12,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@babel/code-frame": "^7.0.0",
-    "@babel/parser": "^7.1.2",
-    "@babel/types": "^7.1.2"
+    "@babel/parser": "^7.2.2",
+    "@babel/types": "^7.2.2"
   }
 }

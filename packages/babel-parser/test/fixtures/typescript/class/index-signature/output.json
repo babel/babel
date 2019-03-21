@@ -94,7 +94,7 @@
                 {
                   "type": "Identifier",
                   "start": 15,
-                  "end": 16,
+                  "end": 24,
                   "loc": {
                     "start": {
                       "line": 2,
@@ -102,19 +102,19 @@
                     },
                     "end": {
                       "line": 2,
-                      "column": 6
+                      "column": 14
                     },
                     "identifierName": "x"
                   },
                   "name": "x",
                   "typeAnnotation": {
                     "type": "TSTypeAnnotation",
-                    "start": 18,
+                    "start": 16,
                     "end": 24,
                     "loc": {
                       "start": {
                         "line": 2,
-                        "column": 8
+                        "column": 6
                       },
                       "end": {
                         "line": 2,
@@ -189,7 +189,7 @@
                 {
                   "type": "Identifier",
                   "start": 46,
-                  "end": 47,
+                  "end": 55,
                   "loc": {
                     "start": {
                       "line": 3,
@@ -197,19 +197,19 @@
                     },
                     "end": {
                       "line": 3,
-                      "column": 15
+                      "column": 23
                     },
                     "identifierName": "x"
                   },
                   "name": "x",
                   "typeAnnotation": {
                     "type": "TSTypeAnnotation",
-                    "start": 49,
+                    "start": 47,
                     "end": 55,
                     "loc": {
                       "start": {
                         "line": 3,
-                        "column": 17
+                        "column": 15
                       },
                       "end": {
                         "line": 3,

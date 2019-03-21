@@ -1,7 +1,8 @@
 "use strict";
 
-// Which Unicode version should be used?
-const version = "11.0.0";
+// Always use the latest available version of Unicode!
+// https://tc39.github.io/ecma262/#sec-conformance
+const version = "12.0.0";
 
 const start = require("unicode-" +
   version +
@@ -60,11 +61,15 @@ function generate(chars) {
 const startData = generate(start);
 const contData = generate(cont);
 
+console.log("/* prettier-ignore */");
 console.log('let nonASCIIidentifierStartChars = "' + startData.nonASCII + '";');
+console.log("/* prettier-ignore */");
 console.log('let nonASCIIidentifierChars = "' + contData.nonASCII + '";');
+console.log("/* prettier-ignore */");
 console.log(
   "const astralIdentifierStartCodes = " + JSON.stringify(startData.astral) + ";"
 );
+console.log("/* prettier-ignore */");
 console.log(
   "const astralIdentifierCodes = " + JSON.stringify(contData.astral) + ";"
 );

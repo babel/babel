@@ -15,9 +15,10 @@ class Foo extends function () {} {
     };
 
     if (true) {
-      console.log(_this2 = super(), foo());
+      console.log((super(), _this2 = this), foo());
     } else {
-      _this2 = super();
+      super();
+      _this2 = this;
       console.log(foo());
     }
   }

@@ -19,13 +19,15 @@ export default declare((api, { isTSX }) => {
   api.assertVersion(7);
 
   return {
+    name: "syntax-typescript",
+
     manipulateOptions(opts, parserOpts) {
       const { plugins } = parserOpts;
       // If the Flow syntax plugin already ran, remove it since Typescript
       // takes priority.
       removePlugin(plugins, "flow");
 
-      // If the JSX syntax plugin already ran, remomove it because JSX handling
+      // If the JSX syntax plugin already ran, remove it because JSX handling
       // in TS depends on the extensions, and is purely dependent on 'isTSX'.
       removePlugin(plugins, "jsx");
 

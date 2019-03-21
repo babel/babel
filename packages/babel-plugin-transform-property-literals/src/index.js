@@ -5,6 +5,8 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
+    name: "transform-property-literals",
+
     visitor: {
       ObjectProperty: {
         exit({ node }) {

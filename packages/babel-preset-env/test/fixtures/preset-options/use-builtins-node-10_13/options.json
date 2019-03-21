@@ -1,0 +1,14 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "targets": {
+          "node": "10.13"
+        },
+        "modules": false,
+        "useBuiltIns": "entry"
+      }
+    ]
+  ]
+}

@@ -1,8 +1,10 @@
-import traverse from "../lib";
+import traverse, { NodePath } from "../lib";
 import { parse } from "@babel/parser";
+import * as t from "@babel/types";
 
 function getPath(code, options) {
-  const ast = parse(code, options);
+  const ast =
+    typeof code === "string" ? parse(code, options) : createNode(code);
   let path;
   traverse(ast, {
     Program: function(_path) {
@@ -26,8 +28,27 @@ function getIdentifierPath(code) {
   return nodePath;
 }
 
-describe("scope", function() {
-  describe("binding paths", function() {
+function createNode(node) {
+  const ast = t.file(t.program(Array.isArray(node) ? node : [node]));
+
+  // This puts the path into the cache internally
+  // We afterwards traverse ast, as we need to start traversing
+  // at the File node and not the Program node
+  NodePath.get({
+    hub: {
+      buildError: (_, msg) => new Error(msg),
+    },
+    parentPath: null,
+    parent: ast,
+    container: ast,
+    key: "program",
+  }).setContext();
+
+  return ast;
+}
+
+describe("scope", () => {
+  describe("binding paths", () => {
     it("function declaration id", function() {
       expect(
         getPath("function foo() {}").scope.getBinding("foo").path.type,
@@ -248,6 +269,138 @@ describe("scope", function() {
         line: 1,
         column: 32,
       });
+    });
+  });
+
+  describe("duplicate bindings", () => {
+    /*
+     * These tests do not use the parser as the parser has
+     * its own scope tracking and we want to test the scope tracking
+     * of traverse here and see if it handles duplicate bindings correctly
+     */
+    describe("catch", () => {
+      // try {} catch (e) { let e; }
+      const createTryCatch = function(kind) {
+        return t.tryStatement(
+          t.blockStatement([]),
+          t.catchClause(
+            t.identifier("e"),
+            t.blockStatement([
+              t.variableDeclaration(kind, [
+                t.variableDeclarator(t.identifier("e"), t.stringLiteral("1")),
+              ]),
+            ]),
+          ),
+        );
+      };
+      ["let", "const"].forEach(name => {
+        it(name, () => {
+          const ast = createTryCatch(name);
+
+          expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
+        });
+      });
+
+      it("var", () => {
+        const ast = createTryCatch("var");
+
+        expect(() => getPath(ast)).not.toThrow();
+      });
+    });
+
+    ["let", "const"].forEach(name => {
+      it(`${name} and function in sub scope`, () => {
+        const ast = [
+          t.variableDeclaration(name, [
+            t.variableDeclarator(t.identifier("foo")),
+          ]),
+          t.blockStatement([
+            t.functionDeclaration(
+              t.identifier("foo"),
+              [],
+              t.blockStatement([]),
+            ),
+          ]),
+        ];
+
+        expect(() => getPath(ast)).not.toThrow();
+      });
+    });
+
+    describe("global", () => {
+      // node1, node2, success
+      // every line will run 2 tests `node1;node2;` and `node2;node1;`
+      // unless node1 === node2
+      const cases = [
+        ["const", "let", false],
+
+        ["const", "const", false],
+        ["const", "function", false],
+        ["const", "class", false],
+        ["const", "var", false],
+
+        ["let", "let", false],
+        ["let", "class", false],
+        ["let", "function", false],
+        ["let", "var", false],
+
+        //["var", "class", true],
+        ["var", "function", true],
+        ["var", "var", true],
+
+        ["class", "function", false],
+      ];
+
+      const createNode = function(kind) {
+        switch (kind) {
+          case "let":
+          case "const":
+          case "var":
+            return t.variableDeclaration(kind, [
+              t.variableDeclarator(t.identifier("foo")),
+            ]);
+          case "class":
+            return t.classDeclaration(
+              t.identifier("foo"),
+              null,
+              t.classBody([]),
+            );
+          case "function":
+            return t.functionDeclaration(
+              t.identifier("foo"),
+              [],
+              t.blockStatement([]),
+            );
+        }
+      };
+
+      const createAST = function(kind1, kind2) {
+        return [createNode(kind1), createNode(kind2)];
+      };
+
+      for (const [kind1, kind2, success] of cases) {
+        it(`${kind1}/${kind2}`, () => {
+          const ast = createAST(kind1, kind2);
+
+          if (success) {
+            expect(() => getPath(ast)).not.toThrow();
+          } else {
+            expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
+          }
+        });
+
+        /*if (kind1 !== kind2) {
+          it(`${kind2}/${kind1}`, () => {
+            const ast = createAST(kind2, kind1);
+
+            if (success) {
+              expect(() => getPath(ast)).not.toThrow();
+            } else {
+              expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
+            }
+          });
+        }*/
+      }
     });
   });
 });

@@ -7,6 +7,10 @@ export function Identifier(node: Object) {
   });
 }
 
+export function ArgumentPlaceholder() {
+  this.token("?");
+}
+
 export function RestElement(node: Object) {
   this.token("...");
   this.print(node.argument, node);
@@ -150,4 +154,16 @@ export function BigIntLiteral(node: Object) {
     return;
   }
   this.token(node.value);
+}
+
+export function PipelineTopicExpression(node: Object) {
+  this.print(node.expression, node);
+}
+
+export function PipelineBareFunction(node: Object) {
+  this.print(node.callee, node);
+}
+
+export function PipelinePrimaryTopicReference() {
+  this.token("#");
 }

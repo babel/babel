@@ -40,6 +40,9 @@ function skipAllButComputedKey(path) {
 }
 
 export const environmentVisitor = {
+  TypeAnnotation(path) {
+    path.skip();
+  },
   Function(path) {
     // Methods will be handled by the Method visit
     if (path.isMethod()) return;
@@ -48,13 +51,7 @@ export const environmentVisitor = {
     path.skip();
   },
 
-  Method(path) {
-    skipAllButComputedKey(path);
-  },
-
-  "ClassProperty|ClassPrivateProperty"(path) {
-    // If the property is computed, we need to visit everything.
-    if (path.node.static) return;
+  "Method|ClassProperty|ClassPrivateProperty"(path) {
     skipAllButComputedKey(path);
   },
 };

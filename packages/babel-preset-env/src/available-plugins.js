@@ -1,5 +1,6 @@
 export default {
   "syntax-async-generators": require("@babel/plugin-syntax-async-generators"),
+  "syntax-json-strings": require("@babel/plugin-syntax-json-strings"),
   "syntax-object-rest-spread": require("@babel/plugin-syntax-object-rest-spread"),
   "syntax-optional-catch-binding": require("@babel/plugin-syntax-optional-catch-binding"),
   "transform-async-to-generator": require("@babel/plugin-transform-async-to-generator"),
@@ -20,6 +21,7 @@ export default {
   "transform-modules-commonjs": require("@babel/plugin-transform-modules-commonjs"),
   "transform-modules-systemjs": require("@babel/plugin-transform-modules-systemjs"),
   "transform-modules-umd": require("@babel/plugin-transform-modules-umd"),
+  "transform-named-capturing-groups-regex": require("@babel/plugin-transform-named-capturing-groups-regex"),
   "transform-object-super": require("@babel/plugin-transform-object-super"),
   "transform-parameters": require("@babel/plugin-transform-parameters"),
   "transform-shorthand-properties": require("@babel/plugin-transform-shorthand-properties"),

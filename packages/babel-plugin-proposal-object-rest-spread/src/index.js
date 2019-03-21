@@ -2,6 +2,17 @@ import { declare } from "@babel/helper-plugin-utils";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import { types as t } from "@babel/core";
 
+// TODO: Remove in Babel 8
+// @babel/types <=7.3.3 counts FOO as referenced in var { x: FOO }.
+// We need to detect this bug to know if "unused" means 0 or 1 references.
+const ZERO_REFS = (() => {
+  const node = t.identifier("a");
+  const property = t.objectProperty(t.identifier("key"), node);
+  const pattern = t.objectPattern([property]);
+
+  return t.isReferenced(node, property, pattern) ? 1 : 0;
+})();
+
 export default declare((api, opts) => {
   api.assertVersion(7);
 
@@ -31,8 +42,8 @@ export default declare((api, opts) => {
       Expression(path) {
         const parentType = path.parent.type;
         if (
-          (parentType == "AssignmentPattern" && path.key === "right") ||
-          (parentType == "ObjectProperty" &&
+          (parentType === "AssignmentPattern" && path.key === "right") ||
+          (parentType === "ObjectProperty" &&
             path.parent.computed &&
             path.key === "key")
         ) {
@@ -98,7 +109,7 @@ export default declare((api, opts) => {
     Object.keys(bindings).forEach(bindingName => {
       const bindingParentPath = bindings[bindingName].parentPath;
       if (
-        path.scope.getBinding(bindingName).references > 1 ||
+        path.scope.getBinding(bindingName).references > ZERO_REFS ||
         !bindingParentPath.isObjectProperty()
       ) {
         return;
@@ -178,6 +189,7 @@ export default declare((api, opts) => {
   }
 
   return {
+    name: "proposal-object-rest-spread",
     inherits: syntaxObjectRestSpread,
 
     visitor: {
@@ -301,7 +313,7 @@ export default declare((api, opts) => {
 
         const specifiers = [];
 
-        for (const name in path.getOuterBindingIdentifiers(path)) {
+        for (const name of Object.keys(path.getOuterBindingIdentifiers(path))) {
           specifiers.push(
             t.exportSpecifier(t.identifier(name), t.identifier(name)),
           );
@@ -376,10 +388,16 @@ export default declare((api, opts) => {
 
           path.ensureBlock();
 
+          if (node.body.body.length === 0 && path.isCompletionRecord()) {
+            node.body.body.unshift(
+              t.expressionStatement(scope.buildUndefinedNode()),
+            );
+          }
+
           node.body.body.unshift(
-            t.variableDeclaration("var", [
-              t.variableDeclarator(left, t.cloneNode(temp)),
-            ]),
+            t.expressionStatement(
+              t.assignmentExpression("=", left, t.cloneNode(temp)),
+            ),
           );
 
           return;

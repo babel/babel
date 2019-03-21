@@ -36,6 +36,7 @@ Using plugins:
   proposal-unicode-property-regex { "android":"4" }
   proposal-json-strings { "android":"4" }
   proposal-optional-catch-binding { "android":"4" }
+  transform-named-capturing-groups-regex { "android":"4" }
 
 Using polyfills with `entry` option:
 

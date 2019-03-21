@@ -1,0 +1,3 @@
+{
+  "throws": "Async functions can only be declared at the top level or inside a block (1:10)"
+}

@@ -44,6 +44,8 @@ export default declare((api, options) => {
   }
 
   return {
+    name: "transform-template-literals",
+
     visitor: {
       TaggedTemplateExpression(path) {
         const { node } = path;

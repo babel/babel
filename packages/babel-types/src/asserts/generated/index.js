@@ -162,6 +162,12 @@ export function assertSequenceExpression(
 ): void {
   assert("SequenceExpression", node, opts);
 }
+export function assertParenthesizedExpression(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("ParenthesizedExpression", node, opts);
+}
 export function assertSwitchCase(node: Object, opts?: Object = {}): void {
   assert("SwitchCase", node, opts);
 }
@@ -654,11 +660,14 @@ export function assertJSXClosingFragment(
 export function assertNoop(node: Object, opts?: Object = {}): void {
   assert("Noop", node, opts);
 }
-export function assertParenthesizedExpression(
+export function assertPlaceholder(node: Object, opts?: Object = {}): void {
+  assert("Placeholder", node, opts);
+}
+export function assertArgumentPlaceholder(
   node: Object,
   opts?: Object = {},
 ): void {
-  assert("ParenthesizedExpression", node, opts);
+  assert("ArgumentPlaceholder", node, opts);
 }
 export function assertAwaitExpression(node: Object, opts?: Object = {}): void {
   assert("AwaitExpression", node, opts);
@@ -675,6 +684,24 @@ export function assertOptionalMemberExpression(
 ): void {
   assert("OptionalMemberExpression", node, opts);
 }
+export function assertPipelineTopicExpression(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("PipelineTopicExpression", node, opts);
+}
+export function assertPipelineBareFunction(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("PipelineBareFunction", node, opts);
+}
+export function assertPipelinePrimaryTopicReference(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("PipelinePrimaryTopicReference", node, opts);
+}
 export function assertOptionalCallExpression(
   node: Object,
   opts?: Object = {},
@@ -686,6 +713,12 @@ export function assertClassPrivateProperty(
   opts?: Object = {},
 ): void {
   assert("ClassPrivateProperty", node, opts);
+}
+export function assertClassPrivateMethod(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("ClassPrivateMethod", node, opts);
 }
 export function assertImport(node: Object, opts?: Object = {}): void {
   assert("Import", node, opts);
@@ -914,6 +947,9 @@ export function assertTSModuleDeclaration(
 }
 export function assertTSModuleBlock(node: Object, opts?: Object = {}): void {
   assert("TSModuleBlock", node, opts);
+}
+export function assertTSImportType(node: Object, opts?: Object = {}): void {
+  assert("TSImportType", node, opts);
 }
 export function assertTSImportEqualsDeclaration(
   node: Object,

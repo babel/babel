@@ -3,9 +3,7 @@
     "chrome": "41",
     "edge": "13",
     "firefox": "34",
-    "safari": "9",
     "node": "4",
-    "ios": "9",
     "opera": "28",
     "electron": "0.24"
   },
@@ -125,15 +123,15 @@
     "node": "8.10",
     "ios": "11.3",
     "opera": "49",
-    "electron": "3"
+    "electron": "3.1"
   },
   "transform-unicode-regex": {
     "chrome": "50",
     "edge": "13",
     "firefox": "46",
-    "safari": "10",
+    "safari": "12",
     "node": "6",
-    "ios": "10",
+    "ios": "12",
     "opera": "37",
     "electron": "1.1"
   },
@@ -149,6 +147,7 @@
   },
   "transform-parameters": {
     "chrome": "49",
+    "edge": "18",
     "firefox": "53",
     "safari": "10",
     "node": "6",
@@ -158,6 +157,7 @@
   },
   "transform-destructuring": {
     "chrome": "51",
+    "edge": "18",
     "firefox": "53",
     "safari": "10",
     "node": "6.5",
@@ -169,9 +169,9 @@
     "chrome": "49",
     "edge": "14",
     "firefox": "51",
-    "safari": "10",
+    "safari": "10.1",
     "node": "6",
-    "ios": "10",
+    "ios": "10.3",
     "opera": "36",
     "electron": "1"
   },
@@ -219,9 +219,9 @@
     "chrome": "55",
     "edge": "15",
     "firefox": "52",
-    "safari": "10.1",
+    "safari": "11",
     "node": "7.6",
-    "ios": "10.3",
+    "ios": "11",
     "opera": "42",
     "electron": "1.6"
   },
@@ -229,9 +229,10 @@
     "chrome": "63",
     "firefox": "57",
     "safari": "12",
+    "node": "10",
     "ios": "12",
     "opera": "50",
-    "electron": "3"
+    "electron": "3.1"
   },
   "proposal-object-rest-spread": {
     "chrome": "60",
@@ -245,17 +246,35 @@
   "proposal-unicode-property-regex": {
     "chrome": "64",
     "safari": "11.1",
+    "node": "10",
     "ios": "11.3",
     "opera": "51",
-    "electron": "3"
+    "electron": "3.1"
   },
-  "proposal-json-strings": {},
+  "proposal-json-strings": {
+    "chrome": "66",
+    "firefox": "62",
+    "safari": "12",
+    "node": "10",
+    "ios": "12",
+    "opera": "53",
+    "electron": "3.1"
+  },
   "proposal-optional-catch-binding": {
     "chrome": "66",
     "firefox": "58",
     "safari": "11.1",
+    "node": "10",
     "ios": "11.3",
     "opera": "53",
-    "electron": "3"
+    "electron": "3.1"
+  },
+  "transform-named-capturing-groups-regex": {
+    "chrome": "64",
+    "safari": "11.1",
+    "node": "10",
+    "ios": "11.3",
+    "opera": "51",
+    "electron": "3.1"
   }
 }

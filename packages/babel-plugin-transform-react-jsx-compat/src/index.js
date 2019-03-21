@@ -6,6 +6,8 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
+    name: "transform-react-jsx-compat",
+
     manipulateOptions(opts, parserOpts) {
       parserOpts.plugins.push("jsx");
     },

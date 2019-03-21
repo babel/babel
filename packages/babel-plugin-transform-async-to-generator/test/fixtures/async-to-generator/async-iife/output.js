@@ -11,9 +11,11 @@ babelHelpers.asyncToGenerator(function* () {
     yield 'ok';
   });
 
-  return function notIIFE() {
+  function notIIFE() {
     return _notIIFE.apply(this, arguments);
-  };
+  }
+
+  return notIIFE;
 })();
 
 /*#__PURE__*/

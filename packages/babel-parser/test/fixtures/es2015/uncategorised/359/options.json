@@ -1,4 +1,4 @@
 {
   "sourceType": "module",
-  "throws": "await is a reserved word (1:6)"
+  "throws": "Can not use keyword 'await' outside an async function (1:6)"
 }

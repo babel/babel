@@ -12,3 +12,7 @@ function* a(b) {
     url: "views/test.html"
   })).data;
 }
+
+(async function* () {
+  await (yield 1);
+});

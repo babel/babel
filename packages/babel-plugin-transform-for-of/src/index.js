@@ -14,6 +14,8 @@ export default declare((api, options) => {
 
   if (assumeArray) {
     return {
+      name: "transform-for-of",
+
       visitor: {
         ForOfStatement(path) {
           const { scope } = path;
@@ -176,6 +178,7 @@ export default declare((api, options) => {
   }
 
   return {
+    name: "transform-for-of",
     visitor: {
       ForOfStatement(path, state) {
         const right = path.get("right");

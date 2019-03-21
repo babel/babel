@@ -53,6 +53,8 @@ export default declare(api => {
   }
 
   return {
+    name: "transform-react-display-name",
+
     visitor: {
       ExportDefaultDeclaration({ node }, state) {
         if (isCreateClass(node.declaration)) {

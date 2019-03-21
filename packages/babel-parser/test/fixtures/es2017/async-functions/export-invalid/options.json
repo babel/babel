@@ -1,4 +1,4 @@
 {
   "sourceType": "module",
-  "throws": "Unexpected token, expected \"function\" (1:21)"
+  "throws": "Unexpected token, expected \"=>\" (1:31)"
 }

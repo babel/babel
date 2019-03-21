@@ -1,4 +1,4 @@
-function foo() {
+function foo1() {
   return;
 }
 
@@ -6,7 +6,7 @@ function bar() {
   return "foo";
 }
 
-function foo() {
+function foo2() {
   return 1, "foo";
 }
 
@@ -14,6 +14,6 @@ function foo() {
   return /a/;
 };
 
-function foo() {
+function foo3() {
   return /a/;
 }

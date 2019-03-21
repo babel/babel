@@ -7,7 +7,9 @@
     return 3;
   });
 
-  return function agf() {
+  function agf() {
     return _agf.apply(this, arguments);
-  };
+  }
+
+  return agf;
 })();

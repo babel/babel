@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 36,
+  "end": 46,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 36,
+    "end": 46,
     "loc": {
       "start": {
         "line": 1,
@@ -32,7 +32,7 @@
       {
         "type": "ClassDeclaration",
         "start": 0,
-        "end": 36,
+        "end": 46,
         "loc": {
           "start": {
             "line": 1,
@@ -60,15 +60,31 @@
           },
           "name": "A"
         },
-        "superClass": null,
-        "body": {
-          "type": "ClassBody",
-          "start": 8,
-          "end": 36,
+        "superClass": {
+          "type": "Identifier",
+          "start": 16,
+          "end": 17,
           "loc": {
             "start": {
               "line": 1,
-              "column": 8
+              "column": 16
+            },
+            "end": {
+              "line": 1,
+              "column": 17
+            },
+            "identifierName": "B"
+          },
+          "name": "B"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start": 18,
+          "end": 46,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 18
             },
             "end": {
               "line": 3,
@@ -78,8 +94,8 @@
           "body": [
             {
               "type": "ClassProperty",
-              "start": 12,
-              "end": 34,
+              "start": 22,
+              "end": 44,
               "loc": {
                 "start": {
                   "line": 2,
@@ -93,8 +109,8 @@
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 12,
-                "end": 15,
+                "start": 22,
+                "end": 25,
                 "loc": {
                   "start": {
                     "line": 2,
@@ -111,8 +127,8 @@
               "computed": false,
               "value": {
                 "type": "ArrowFunctionExpression",
-                "start": 18,
-                "end": 33,
+                "start": 28,
+                "end": 43,
                 "loc": {
                   "start": {
                     "line": 2,
@@ -129,8 +145,8 @@
                 "params": [],
                 "body": {
                   "type": "CallExpression",
-                  "start": 24,
-                  "end": 33,
+                  "start": 34,
+                  "end": 43,
                   "loc": {
                     "start": {
                       "line": 2,
@@ -143,8 +159,8 @@
                   },
                   "callee": {
                     "type": "MemberExpression",
-                    "start": 24,
-                    "end": 31,
+                    "start": 34,
+                    "end": 41,
                     "loc": {
                       "start": {
                         "line": 2,
@@ -157,8 +173,8 @@
                     },
                     "object": {
                       "type": "Super",
-                      "start": 24,
-                      "end": 29,
+                      "start": 34,
+                      "end": 39,
                       "loc": {
                         "start": {
                           "line": 2,
@@ -172,8 +188,8 @@
                     },
                     "property": {
                       "type": "Identifier",
-                      "start": 30,
-                      "end": 31,
+                      "start": 40,
+                      "end": 41,
                       "loc": {
                         "start": {
                           "line": 2,

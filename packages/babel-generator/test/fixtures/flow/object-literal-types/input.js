@@ -1,11 +1,11 @@
 type U = {};
 type V = {};
-type T = { ...U, };
-type T = { ...U, ...V };
-type T = { p: V, ...U };
-type T = { ...U, p: V, };
-type T = { ...{}|{ p: V, }};
-type T = { foo(): number }
-type T = { foo: () => number }
-type T = { [string]: U };
-type T = { [param: string]: U };
+type T1 = { ...U, };
+type T2 = { ...U, ...V };
+type T3 = { p: V, ...U };
+type T4 = { ...U, p: V, };
+type T5 = { ...{}|{ p: V, }};
+type T6 = { foo(): number }
+type T7 = { foo: () => number }
+type T8 = { [string]: U };
+type T9 = { [param: string]: U };

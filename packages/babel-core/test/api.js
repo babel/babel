@@ -154,6 +154,14 @@ describe("api", function() {
     );
   });
 
+  it("exposes types", function() {
+    expect(babel.types).toBeDefined();
+  });
+
+  it("exposes the parser's token types", function() {
+    expect(babel.tokTypes).toBeDefined();
+  });
+
   it("transformFile", function(done) {
     const options = {
       babelrc: false,

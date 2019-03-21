@@ -4,6 +4,7 @@ import { types as tt, TokenType } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
 import type { Pos, Position } from "../util/location";
+import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
 
 function isSimpleProperty(node: N.Node): boolean {
   return (
@@ -104,7 +105,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkLVal(
       expr: N.Expression,
-      isBinding: ?boolean,
+      bindingType: ?BindingTypes = BIND_NONE,
       checkClashes: ?{ [key: string]: boolean },
       contextDescription: string,
     ): void {
@@ -113,28 +114,36 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           expr.properties.forEach(prop => {
             this.checkLVal(
               prop.type === "Property" ? prop.value : prop,
-              isBinding,
+              bindingType,
               checkClashes,
               "object destructuring pattern",
             );
           });
           break;
         default:
-          super.checkLVal(expr, isBinding, checkClashes, contextDescription);
+          super.checkLVal(expr, bindingType, checkClashes, contextDescription);
       }
     }
 
     checkPropClash(
-      prop: N.ObjectMember,
+      prop: N.ObjectMember | N.SpreadElement,
       propHash: { [key: string]: boolean },
     ): void {
-      if (prop.computed || !isSimpleProperty(prop)) return;
+      if (
+        prop.type === "SpreadElement" ||
+        prop.computed ||
+        prop.method ||
+        // $FlowIgnore
+        prop.shorthand
+      ) {
+        return;
+      }
 
       const key = prop.key;
       // It is either an Identifier or a String/NumericLiteral
       const name = key.type === "Identifier" ? key.name : String(key.value);
 
-      if (name === "__proto__") {
+      if (name === "__proto__" && prop.kind === "init") {
         if (propHash.proto) {
           this.raise(key.start, "Redefinition of __proto__ property");
         }
@@ -203,13 +212,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isGenerator: boolean,
       isAsync: boolean,
       isConstructor: boolean,
+      allowsDirectSuper: boolean,
     ): void {
       this.parseMethod(
         method,
         isGenerator,
         isAsync,
         isConstructor,
+        allowsDirectSuper,
         "MethodDefinition",
+        true,
       );
       if (method.typeParameters) {
         // $FlowIgnore
@@ -255,8 +267,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
-    parseFunctionBody(node: N.Function, allowExpression: ?boolean): void {
-      super.parseFunctionBody(node, allowExpression);
+    parseFunctionBody(
+      node: N.Function,
+      allowExpression: ?boolean,
+      isMethod?: boolean = false,
+    ): void {
+      super.parseFunctionBody(node, allowExpression, isMethod);
       node.expression = node.body.type !== "BlockStatement";
     }
 
@@ -265,7 +281,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isGenerator: boolean,
       isAsync: boolean,
       isConstructor: boolean,
+      allowDirectSuper: boolean,
       type: string,
+      inClassScope: boolean = false,
     ): T {
       let funcNode = this.startNode();
       funcNode.kind = node.kind; // provide kind, so super method correctly sets state
@@ -274,7 +292,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isGenerator,
         isAsync,
         isConstructor,
+        allowDirectSuper,
         "FunctionExpression",
+        inClassScope,
       );
       delete funcNode.kind;
       // $FlowIgnore
@@ -300,7 +320,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (node) {
         node.type = "Property";
-        if (node.kind === "method") node.kind = "init";
+        if (((node: any): N.ClassMethod).kind === "method") node.kind = "init";
         node.shorthand = false;
       }
 

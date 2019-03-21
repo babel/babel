@@ -21,7 +21,7 @@ var _ref4 = [a[1], a[0]];
 a[0] = _ref4[0];
 a[1] = _ref4[1];
 
-var _ref5 = babelHelpers.toConsumableArray(foo).concat([bar]),
+var _ref5 = [].concat(babelHelpers.toConsumableArray(foo), [bar]),
     a = _ref5[0],
     b = _ref5[1];
 
