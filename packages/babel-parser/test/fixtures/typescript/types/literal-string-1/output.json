@@ -102,8 +102,13 @@
                       "column": 12
                     }
                   },
+                  "extra": {
+                    "rawValue": "foo",
+                    "raw": "foo"
+                  },
+                  "value": "foo",
                   "literal": {
-                    "type": "StringLiteral",
+                    "type": "NoSubstitutionTemplateLiteral",
                     "start": 7,
                     "end": 12,
                     "loc": {
@@ -115,12 +120,7 @@
                         "line": 1,
                         "column": 12
                       }
-                    },
-                    "extra": {
-                      "rawValue": "foo",
-                      "raw": "\"foo\""
-                    },
-                    "value": "foo"
+                    }
                   }
                 }
               }
