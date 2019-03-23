@@ -232,7 +232,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           "Argument in a type import must be a string literal",
         );
       }
-      node.argument = this.parseLiteral(this.state.value, "StringLiteral");
+
+      // For compatibility to estree we cannot call parseLiteral directly here
+      node.argument = this.parseExprAtom();
       this.expect(tt.parenR);
 
       if (this.eat(tt.dot)) {
@@ -646,12 +648,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.literal = (() => {
         switch (this.state.type) {
           case tt.num:
-            return this.parseLiteral(this.state.value, "NumericLiteral");
           case tt.string:
-            return this.parseLiteral(this.state.value, "StringLiteral");
           case tt._true:
           case tt._false:
-            return this.parseBooleanLiteral();
+            // For compatibility to estree we cannot call parseLiteral directly here
+            return this.parseExprAtom();
           default:
             throw this.unexpected();
         }
@@ -684,16 +685,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case tt.plusMin:
           if (this.state.value === "-") {
             const node: N.TsLiteralType = this.startNode();
-            this.next();
-            if (!this.match(tt.num)) {
+            if (this.lookahead().type !== tt.num) {
               throw this.unexpected();
             }
-            node.literal = this.parseLiteral(
-              -this.state.value,
-              "NumericLiteral",
-              node.start,
-              node.loc.start,
-            );
+            node.literal = this.parseMaybeUnary();
             return this.finishNode(node, "TSLiteralType");
           }
           break;
@@ -1108,7 +1103,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node: N.TsEnumMember = this.startNode();
       // Computed property names are grammar errors in an enum, so accept just string literal or identifier.
       node.id = this.match(tt.string)
-        ? this.parseLiteral(this.state.value, "StringLiteral")
+        ? this.parseExprAtom()
         : this.parseIdentifier(/* liberal */ true);
       if (this.eat(tt.eq)) {
         node.initializer = this.parseMaybeAssign();
@@ -1213,7 +1208,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (!this.match(tt.string)) {
         throw this.unexpected();
       }
-      node.expression = this.parseLiteral(this.state.value, "StringLiteral");
+      // For compatibility to estree we cannot call parseLiteral directly here
+      node.expression = this.parseExprAtom();
       this.expect(tt.parenR);
       return this.finishNode(node, "TSExternalModuleReference");
     }
