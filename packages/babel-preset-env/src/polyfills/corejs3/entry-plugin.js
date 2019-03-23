@@ -21,6 +21,9 @@ function isBabelPolyfillSource(source) {
 }
 
 function isCoreJSSource(source) {
+  if (typeof source === "string") {
+    source = source.replace(/(\/(index)?)?(\.js)?$/i, "").toLowerCase();
+  }
   return has(corejsEntries, source) && corejsEntries[source];
 }
 
