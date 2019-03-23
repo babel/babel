@@ -1,3 +1,5 @@
+import "core-js/modules/es.symbol.async-iterator";
+import "core-js/modules/es.symbol.iterator";
 import "core-js/modules/es.array.from";
 import "core-js/modules/es.map";
 import "core-js/modules/es.object.to-string";
