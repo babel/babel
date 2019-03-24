@@ -3,5 +3,5 @@
   "plugins": [
     "typescript"
   ],
-  "throws": "Unexpected token (1:7)"
+  "throws": "Template literal types cannot have any substitution (1:14)"
 }

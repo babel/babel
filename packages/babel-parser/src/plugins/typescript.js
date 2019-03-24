@@ -661,28 +661,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseTemplateLiteralType(): N.TsType {
       const node: N.TsLiteralType = this.startNode();
-      const startPosition = this.state.start;
-      const startLocation = this.state.startLoc;
       const templateNode = this.parseTemplate(false);
-      if (
-        templateNode.expressions.length === 0 &&
-        templateNode.quasis.length === 1
-      ) {
-        const value = templateNode.quasis[0].value.raw;
-        const noSubstitutionTemplateLiteralNode = this.startNodeAt(
-          startPosition,
-          startLocation,
+      if (templateNode.expressions.length > 0) {
+        throw this.raise(
+          templateNode.expressions[0].start,
+          "Template literal types cannot have any substitution",
         );
-        this.addExtra(node, "rawValue", value);
-        this.addExtra(node, "raw", value);
-        node.value = value;
-        node.literal = this.finishNode(
-          noSubstitutionTemplateLiteralNode,
-          "NoSubstitutionTemplateLiteral",
-        );
-      } else {
-        throw this.unexpected(startPosition);
       }
+      node.literal = templateNode;
       return this.finishNode(node, "TSLiteralType");
     }
 
