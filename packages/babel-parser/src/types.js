@@ -51,6 +51,7 @@ export type Declaration =
   | VariableDeclaration
   | ClassDeclaration
   | FunctionDeclaration
+  | DecoratorDeclaration
   | TsInterfaceDeclaration
   | TsTypeAliasDeclaration
   | TsEnumDeclaration
@@ -346,10 +347,30 @@ export type VariableDeclarator = NodeBase & {
 
 export type ArgumentPlaceholder = NodeBase & { type: "ArgumentPlaceholder" };
 
+export type DecoratorDeclaration = NodeBase & {
+  type: "DecoratorDeclaration",
+  id: DecoratorIdentifier,
+  params: $ReadOnlyArray<Pattern>,
+  body: $ReadOnlyArray<Decorator>,
+};
+
 export type Decorator = NodeBase & {
   type: "Decorator",
+
+  // NOTE: expression is used for "decorators" and "legacy-decorators",
+  //       name is used for "staticDecorators"
+
   expression: Expression,
+  id: DecoratorIdentifier,
+
   arguments?: Array<Expression | SpreadElement>,
+};
+
+export type DecoratorIdentifier = NodeBase & {
+  type: "DecoratorIdentifier",
+  name: string,
+
+  __clone(): DecoratorIdentifier,
 };
 
 export type Directive = NodeBase & {
@@ -800,7 +821,7 @@ export type AnyExport =
   | TsNamespaceExportDeclaration;
 
 export type ModuleSpecifier = NodeBase & {
-  local: Identifier,
+  local: Identifier | DecoratorIdentifier,
 };
 
 // Imports
@@ -818,7 +839,7 @@ export type ImportDeclaration = NodeBase & {
 
 export type ImportSpecifier = ModuleSpecifier & {
   type: "ImportSpecifier",
-  imported: Identifier,
+  imported: Identifier | DecoratorIdentifier,
 };
 
 export type ImportDefaultSpecifier = ModuleSpecifier & {
@@ -842,13 +863,13 @@ export type ExportNamedDeclaration = NodeBase & {
 
 export type ExportSpecifier = NodeBase & {
   type: "ExportSpecifier",
-  exported: Identifier,
-  local: Identifier,
+  exported: Identifier | DecoratorIdentifier,
+  local: Identifier | DecoratorIdentifier,
 };
 
 export type ExportDefaultSpecifier = NodeBase & {
   type: "ExportDefaultSpecifier",
-  exported: Identifier,
+  exported: Identifier | DecoratorIdentifier,
 };
 
 export type ExportDefaultDeclaration = NodeBase & {
@@ -857,6 +878,7 @@ export type ExportDefaultDeclaration = NodeBase & {
     | OptFunctionDeclaration
     | OptTSDeclareFunction
     | OptClassDeclaration
+    | DecoratorDeclaration
     | Expression,
 };
 

@@ -1,0 +1,1 @@
+export @dec from "mod";

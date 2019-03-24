@@ -1,0 +1,4 @@
+{
+  "plugins": [],
+  "throws": "This experimental syntax requires enabling the parser plugin: 'staticDecorators' (1:7)"
+}

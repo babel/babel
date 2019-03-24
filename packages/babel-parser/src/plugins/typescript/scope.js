@@ -94,10 +94,11 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     return super.isRedeclaredInScope(...arguments);
   }
 
-  checkLocalExport(id: N.Identifier) {
+  checkLocalExport(id: N.Identifier | N.DecoratorIdentifier) {
     if (
-      this.scopeStack[0].types.indexOf(id.name) === -1 &&
-      this.scopeStack[0].exportOnlyBindings.indexOf(id.name) === -1
+      id.type !== "Identifier" ||
+      (this.scopeStack[0].types.indexOf(id.name) === -1 &&
+        this.scopeStack[0].exportOnlyBindings.indexOf(id.name) === -1)
     ) {
       super.checkLocalExport(id);
     }

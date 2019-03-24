@@ -13,6 +13,7 @@ import {
   lineBreakG,
   isNewLine,
   isWhitespace,
+  skipWhiteSpace,
 } from "../util/whitespace";
 import State from "./state";
 
@@ -166,6 +167,21 @@ export default class Tokenizer extends LocationParser {
     const curr = this.state;
     this.state = old;
     return curr;
+  }
+
+  // Get the next non-whitespace character position
+  lookaheadChPos(noNewLine?: boolean): number {
+    skipWhiteSpace.lastIndex = this.state.pos;
+    // $FlowIgnore
+    const [skip] = skipWhiteSpace.exec(this.input);
+
+    if (noNewLine && lineBreak.test(skip)) return -1;
+    return this.state.pos + skip.length;
+  }
+
+  lookaheadCh(noNewLine?: boolean): number {
+    const pos = this.lookaheadChPos(noNewLine);
+    return pos === -1 ? -1 : this.input.charCodeAt(pos);
   }
 
   // Toggle strict mode. Re-reads the next number or string to please

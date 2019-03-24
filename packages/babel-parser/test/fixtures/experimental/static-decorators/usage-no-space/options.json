@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "staticDecorators"
+  ],
+  "throws": "Unexpected space in decorator name (2:3)"
+}

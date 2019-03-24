@@ -2021,11 +2021,15 @@ export default class ExpressionParser extends LValParser {
     return this.createIdentifier(node, name);
   }
 
-  createIdentifier(node: N.Identifier, name: string): N.Identifier {
+  createIdentifier<T: N.Identifier | N.DecoratorIdentifier>(
+    node: T,
+    name: string,
+    type: $PropertyType<T, "name"> = "Identifier",
+  ): T {
     node.name = name;
     node.loc.identifierName = name;
 
-    return this.finishNode(node, "Identifier");
+    return this.finishNode(node, type);
   }
 
   parseIdentifierName(pos: number, liberal?: boolean): string {

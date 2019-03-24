@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "staticDecorators"
+  ],
+  "throws": "Identifier '@foo' has already been declared (2:10)"
+}

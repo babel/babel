@@ -14,6 +14,7 @@ import {
   BIND_SCOPE_VAR,
   BIND_SCOPE_LEXICAL,
   BIND_KIND_VALUE,
+  BIND_KIND_DECORATOR,
   type ScopeFlags,
   type BindingTypes,
 } from "./scopeflags";
@@ -28,6 +29,8 @@ export class Scope {
   lexical: string[] = [];
   // A list of lexically-declared FunctionDeclaration names in the current lexical scope
   functions: string[] = [];
+  // A list of decorator names in the current lexical scope
+  decorators: string[] = [];
 
   constructor(flags: ScopeFlags) {
     this.flags = flags;
@@ -102,11 +105,12 @@ export default class ScopeHandler<IScope: Scope = Scope> {
 
       if (bindingType & BIND_SCOPE_FUNCTION) {
         scope.functions.push(name);
+        this.maybeExportDefined(scope, name);
+      } else if (bindingType & BIND_KIND_DECORATOR) {
+        scope.decorators.push(name);
+        this.maybeExportDefined(scope, "@" + name);
       } else {
         scope.lexical.push(name);
-      }
-
-      if (bindingType & BIND_SCOPE_LEXICAL) {
         this.maybeExportDefined(scope, name);
       }
     } else if (bindingType & BIND_SCOPE_VAR) {
@@ -118,9 +122,6 @@ export default class ScopeHandler<IScope: Scope = Scope> {
 
         if (scope.flags & SCOPE_VAR) break;
       }
-    }
-    if (this.inModule && scope.flags & SCOPE_PROGRAM) {
-      this.undefinedExports.delete(name);
     }
   }
 
@@ -137,7 +138,11 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     pos: number,
   ) {
     if (this.isRedeclaredInScope(scope, name, bindingType)) {
-      this.raise(pos, `Identifier '${name}' has already been declared`);
+      const prefix = bindingType & BIND_KIND_DECORATOR ? "@" : "";
+      this.raise(
+        pos,
+        `Identifier '${prefix}${name}' has already been declared`,
+      );
     }
   }
 
@@ -146,6 +151,10 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     name: string,
     bindingType: BindingTypes,
   ): boolean {
+    if (bindingType & BIND_KIND_DECORATOR) {
+      return scope.decorators.indexOf(name) > -1;
+    }
+
     if (!(bindingType & BIND_KIND_VALUE)) return false;
 
     if (bindingType & BIND_SCOPE_LEXICAL) {
@@ -172,7 +181,14 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     );
   }
 
-  checkLocalExport(id: N.Identifier) {
+  checkLocalExport(id: N.Identifier | N.DecoratorIdentifier) {
+    if (id.type === "DecoratorIdentifier") {
+      if (this.scopeStack[0].decorators.indexOf(id.name) === -1) {
+        this.undefinedExports.set("@" + id.name, id.start);
+      }
+      return;
+    }
+
     if (
       this.scopeStack[0].lexical.indexOf(id.name) === -1 &&
       this.scopeStack[0].var.indexOf(id.name) === -1 &&

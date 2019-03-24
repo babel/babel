@@ -1,0 +1,6 @@
+decorator @foo
+()
+{}
+
+decorator @bar
+{}

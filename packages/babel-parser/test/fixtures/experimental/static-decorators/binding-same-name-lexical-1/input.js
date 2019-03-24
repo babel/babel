@@ -1,0 +1,2 @@
+let foo;
+decorator @foo {}

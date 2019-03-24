@@ -369,6 +369,9 @@ export default class LValParser extends NodeUtils {
             "'let' is not allowed to be used as a name in 'let' or 'const' declarations.",
           );
         }
+      /* falls through */
+
+      case "DecoratorIdentifier":
         if (!(bindingType & BIND_NONE)) {
           this.scope.declareName(expr.name, bindingType, expr.start);
         }

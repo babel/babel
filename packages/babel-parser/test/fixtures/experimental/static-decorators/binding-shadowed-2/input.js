@@ -1,0 +1,4 @@
+{
+  decorator @foo {}
+}
+decorator @foo {}

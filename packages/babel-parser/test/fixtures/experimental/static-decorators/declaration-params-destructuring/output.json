@@ -1,0 +1,176 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 35,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 35
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 35,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 35
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DecoratorDeclaration",
+        "start": 0,
+        "end": 35,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 35
+          }
+        },
+        "id": {
+          "type": "DecoratorIdentifier",
+          "start": 10,
+          "end": 14,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 1,
+              "column": 14
+            },
+            "identifierName": "foo"
+          },
+          "name": "foo"
+        },
+        "params": [
+          {
+            "type": "ObjectPattern",
+            "start": 15,
+            "end": 22,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 15
+              },
+              "end": {
+                "line": 1,
+                "column": 22
+              }
+            },
+            "properties": [
+              {
+                "type": "ObjectProperty",
+                "start": 17,
+                "end": 20,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 17
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 20
+                  }
+                },
+                "method": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 17,
+                  "end": 20,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 17
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 20
+                    },
+                    "identifierName": "bar"
+                  },
+                  "name": "bar"
+                },
+                "computed": false,
+                "shorthand": true,
+                "value": {
+                  "type": "Identifier",
+                  "start": 17,
+                  "end": 20,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 17
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 20
+                    },
+                    "identifierName": "bar"
+                  },
+                  "name": "bar"
+                },
+                "extra": {
+                  "shorthand": true
+                }
+              }
+            ]
+          },
+          {
+            "type": "ArrayPattern",
+            "start": 24,
+            "end": 31,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 24
+              },
+              "end": {
+                "line": 1,
+                "column": 31
+              }
+            },
+            "elements": [
+              {
+                "type": "Identifier",
+                "start": 26,
+                "end": 29,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 26
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 29
+                  },
+                  "identifierName": "baz"
+                },
+                "name": "baz"
+              }
+            ]
+          }
+        ],
+        "body": []
+      }
+    ],
+    "directives": []
+  }
+}

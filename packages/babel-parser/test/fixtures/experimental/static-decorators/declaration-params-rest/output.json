@@ -1,0 +1,136 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 29,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 29
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 29,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 29
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DecoratorDeclaration",
+        "start": 0,
+        "end": 29,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 29
+          }
+        },
+        "id": {
+          "type": "DecoratorIdentifier",
+          "start": 10,
+          "end": 14,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 1,
+              "column": 14
+            },
+            "identifierName": "foo"
+          },
+          "name": "foo"
+        },
+        "params": [
+          {
+            "type": "Identifier",
+            "start": 15,
+            "end": 16,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 15
+              },
+              "end": {
+                "line": 1,
+                "column": 16
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          {
+            "type": "Identifier",
+            "start": 18,
+            "end": 19,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 18
+              },
+              "end": {
+                "line": 1,
+                "column": 19
+              },
+              "identifierName": "b"
+            },
+            "name": "b"
+          },
+          {
+            "type": "RestElement",
+            "start": 21,
+            "end": 25,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 21
+              },
+              "end": {
+                "line": 1,
+                "column": 25
+              }
+            },
+            "argument": {
+              "type": "Identifier",
+              "start": 24,
+              "end": 25,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 24
+                },
+                "end": {
+                  "line": 1,
+                  "column": 25
+                },
+                "identifierName": "c"
+              },
+              "name": "c"
+            }
+          }
+        ],
+        "body": []
+      }
+    ],
+    "directives": []
+  }
+}

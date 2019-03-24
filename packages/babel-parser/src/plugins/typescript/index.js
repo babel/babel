@@ -1323,6 +1323,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "declare": {
           const declaration = this.tsTryParseDeclare(node);
           if (declaration) {
+            if (declaration.type === "DecoratorDeclaration") {
+              throw this.raise(
+                declaration.start,
+                `TypeScript's "declare" doesn't support decorator declarations`,
+              );
+            }
             declaration.declare = true;
             return declaration;
           }
@@ -1976,6 +1982,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (declaration && isDeclare) {
         // Reset location to include `declare` in range
         this.resetStartLocation(declaration, startPos, startLoc);
+
+        if (declaration.type === "DecoratorDeclaration") {
+          throw this.raise(
+            declaration.start,
+            `TypeScript's "declare" doesn't support decorator declarations`,
+          );
+        }
 
         declaration.declare = true;
       }

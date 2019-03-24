@@ -1,0 +1,4 @@
+{
+  "sourceType": "module",
+  "throws": "Decorator declarations are only allowed as named exports. (1:7)"
+}

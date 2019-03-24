@@ -1,0 +1,4 @@
+{
+  "sourceType": "module",
+  "throws": "Export '@foo' is not defined (1:9)"
+}

@@ -1,0 +1,2 @@
+export { @foo };
+decorator @foo {}
