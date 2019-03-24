@@ -70,7 +70,7 @@ export default declare((api, options) => {
     : pushComputedPropsSpec;
 
   const buildForOfArray = template(`
-    for (var KEY = 0; KEY < ARR.length; KEY++) BODY;
+    for (var KEY = 0, NAME = ARR; KEY < NAME.length; KEY++) BODY;
   `);
 
   const buildForOfLoose = template(`
@@ -119,20 +119,14 @@ export default declare((api, options) => {
   function _ForOfStatementArray(path) {
     const { node, scope } = path;
 
-    const uid = scope.generateUid("arr");
-    const nodes = [
-      t.variableDeclaration("var", [
-        t.variableDeclarator(t.identifier(uid), node.right),
-      ]),
-    ];
-    const right = t.identifier(uid);
-
+    const right = scope.generateUidIdentifierBasedOnNode(node.right, "arr");
     const iterationKey = scope.generateUidIdentifier("i");
 
     let loop = buildForOfArray({
       BODY: node.body,
       KEY: iterationKey,
-      ARR: right,
+      NAME: right,
+      ARR: node.right,
     });
 
     t.inherits(loop, node);
@@ -160,9 +154,7 @@ export default declare((api, options) => {
       loop = t.labeledStatement(path.parentPath.node.label, loop);
     }
 
-    nodes.push(loop);
-
-    return nodes;
+    return [loop];
   }
 
   function replaceWithArray(path) {

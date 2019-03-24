@@ -1,29 +1,19 @@
-var _arr = [];
-
-for (var _i = 0; _i < _arr.length; _i++) {
+for (var _i = 0, _arr = []; _i < _arr.length; _i++) {
   const y = _arr[_i];
 }
 
-var _arr2 = Array.from(x);
-
-for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
-  const y = _arr2[_i2];
+for (var _i2 = 0, _Array$from = Array.from(x); _i2 < _Array$from.length; _i2++) {
+  const y = _Array$from[_i2];
 }
 
-var _arr3 = Object.keys(x);
-
-for (var _i3 = 0; _i3 < _arr3.length; _i3++) {
-  const y = _arr3[_i3];
+for (var _i3 = 0, _Object$keys = Object.keys(x); _i3 < _Object$keys.length; _i3++) {
+  const y = _Object$keys[_i3];
 }
 
-var _arr4 = Object.values(x);
-
-for (var _i4 = 0; _i4 < _arr4.length; _i4++) {
-  const y = _arr4[_i4];
+for (var _i4 = 0, _Object$values = Object.values(x); _i4 < _Object$values.length; _i4++) {
+  const y = _Object$values[_i4];
 }
 
-var _arr5 = Object.entries(x);
-
-for (var _i5 = 0; _i5 < _arr5.length; _i5++) {
-  const y = _arr5[_i5];
+for (var _i5 = 0, _Object$entries = Object.entries(x); _i5 < _Object$entries.length; _i5++) {
+  const y = _Object$entries[_i5];
 }
