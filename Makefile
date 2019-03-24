@@ -64,6 +64,7 @@ fix-json:
 	./node_modules/.bin/prettier "{packages,codemod}/*/test/fixtures/**/options.json" --write --loglevel warn
 
 clean: test-clean
+	rm -f .npmrc
 	rm -rf packages/babel-polyfill/browser*
 	rm -rf packages/babel-polyfill/dist
 	rm -rf coverage
@@ -138,6 +139,17 @@ new-version:
 # NOTE: Run make new-version first
 publish: prepublish
 	./node_modules/.bin/lerna publish from-git --require-scripts
+	make clean
+
+publish-ci: prepublish
+ifneq ("$(NPM_TOKEN)", "")
+	echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+else
+	echo "Missing NPM_TOKEN env var"
+	exit 1
+endif
+	./node_modules/.bin/lerna publish from-git --require-scripts --yes
+	rm -f .npmrc
 	make clean
 
 bootstrap-only: clean-all
