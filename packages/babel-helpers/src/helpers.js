@@ -80,7 +80,7 @@ helpers.jsx = helper("7.0.0-beta.0")`
 helpers.asyncIterator = helper("7.0.0-beta.0")`
   export default function _asyncIterator(iterable) {
     var method
-    if (typeof Symbol === "function") {
+    if (typeof Symbol !== "undefined") {
       if (Symbol.asyncIterator) {
         method = iterable[Symbol.asyncIterator]
         if (method != null) return method.call(iterable);
