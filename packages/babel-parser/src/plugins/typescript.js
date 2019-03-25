@@ -660,6 +660,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSLiteralType");
     }
 
+    tsParseTemplateLiteralType(): N.TsType {
+      const node: N.TsLiteralType = this.startNode();
+      const templateNode = this.parseTemplate(false);
+      if (templateNode.expressions.length > 0) {
+        throw this.raise(
+          templateNode.expressions[0].start,
+          "Template literal types cannot have any substitution",
+        );
+      }
+      node.literal = templateNode;
+      return this.finishNode(node, "TSLiteralType");
+    }
+
     tsParseNonArrayType(): N.TsType {
       switch (this.state.type) {
         case tt.name:
@@ -712,6 +725,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.tsParseTupleType();
         case tt.parenL:
           return this.tsParseParenthesizedType();
+        case tt.backQuote:
+          return this.tsParseTemplateLiteralType();
       }
 
       throw this.unexpected();

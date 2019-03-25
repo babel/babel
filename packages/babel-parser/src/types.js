@@ -1308,7 +1308,7 @@ export type TsMappedType = TsTypeBase & {
 
 export type TsLiteralType = TsTypeBase & {
   type: "TSLiteralType",
-  literal: NumericLiteral | StringLiteral | BooleanLiteral,
+  literal: NumericLiteral | StringLiteral | BooleanLiteral | TemplateLiteral,
 };
 
 export type TsImportType = TsTypeBase & {
