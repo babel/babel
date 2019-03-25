@@ -1,12 +1,17 @@
 // @flow
 
-import type { TokenType } from "../tokenizer/types";
-import { types as tt } from "../tokenizer/types";
-import { types as ct } from "../tokenizer/context";
-import * as N from "../types";
-import type { Pos, Position } from "../util/location";
-import Parser from "../parser";
-import { type BindingTypes, BIND_NONE, SCOPE_OTHER } from "../util/scopeflags";
+import type { TokenType } from "../../tokenizer/types";
+import { types as tt } from "../../tokenizer/types";
+import { types as ct } from "../../tokenizer/context";
+import * as N from "../../types";
+import type { Pos, Position } from "../../util/location";
+import type Parser from "../../parser";
+import {
+  type BindingTypes,
+  BIND_NONE,
+  SCOPE_OTHER,
+} from "../../util/scopeflags";
+import mixinScope from "./scope";
 
 type TsModifier =
   | "readonly"
@@ -69,6 +74,8 @@ function keywordTypeFromName(
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
+    static ScopeHandler = mixinScope(super.ScopeHandler);
+
     tsIsIdentifier(): boolean {
       // TODO: actually a bit more complex in TypeScript, but shouldn't matter.
       // See https://github.com/Microsoft/TypeScript/issues/15008

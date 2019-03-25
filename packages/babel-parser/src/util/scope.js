@@ -33,19 +33,29 @@ class Scope {
   }
 }
 
+export type { Scope };
+
 type raiseFunction = (number, string) => void;
 
 // The functions in this module keep track of declared variables in the
 // current scope in order to detect duplicate variable names.
 export default class ScopeHandler {
+  static Scope = Scope;
+
   scopeStack: Array<Scope> = [];
   raise: raiseFunction;
   inModule: boolean;
   undefinedExports: Map<string, number> = new Map();
 
+  // We need to copy this from the static property because new.target
+  // isn't available in the "enter" method.
+  Scope: Class<Scope>;
+
   constructor(raise: raiseFunction, inModule: boolean) {
     this.raise = raise;
     this.inModule = inModule;
+    // $FlowIgnore flow doesn't support new.target
+    this.Scope = new.target.Scope;
   }
 
   get inFunction() {
@@ -71,7 +81,7 @@ export default class ScopeHandler {
   }
 
   enter(flags: ScopeFlags) {
-    this.scopeStack.push(new Scope(flags));
+    this.scopeStack.push(new this.Scope(flags));
   }
 
   exit() {
