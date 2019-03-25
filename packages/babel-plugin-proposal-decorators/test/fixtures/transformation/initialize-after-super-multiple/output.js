@@ -4,28 +4,36 @@ let B = babelHelpers.decorate([dec], function (_initialize, _A) {
   class B extends _A {
     constructor() {
       const foo = () => {
-        super();
-
-        _initialize(this);
+        try {
+          super();
+        } finally {
+          _initialize(this);
+        }
       };
 
       if (a) {
-        _initialize(this);
-
-        super();
+        try {
+          super();
+        } finally {
+          _initialize(this);
+        }
       } else {
         foo();
       }
 
       while (0) {
-        _initialize(this);
-
-        super();
+        try {
+          super();
+        } finally {
+          _initialize(this);
+        }
       }
 
-      _initialize(this);
-
-      super();
+      try {
+        super();
+      } finally {
+        _initialize(this);
+      }
     }
 
   }

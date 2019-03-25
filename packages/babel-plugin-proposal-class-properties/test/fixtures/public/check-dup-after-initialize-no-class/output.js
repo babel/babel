@@ -4,10 +4,17 @@ var log = [];
 
 class Foo extends class {} {
   constructor() {
-    super();
-    babelHelpers.defineProperty(this, "x", log.push(1));
-    babelHelpers.defineProperty(this, "x", log.push(1));
-    super();
+    try {
+      super();
+    } finally {
+      babelHelpers.defineProperty(this, "x", log.push(1));
+    }
+
+    try {
+      super();
+    } finally {
+      babelHelpers.defineProperty(this, "x", log.push(1));
+    }
   }
 
 }

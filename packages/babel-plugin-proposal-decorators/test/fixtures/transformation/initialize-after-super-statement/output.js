@@ -3,9 +3,11 @@ let B = babelHelpers.decorate([dec], function (_initialize, _A) {
 
   class B extends _A {
     constructor() {
-      super();
-
-      _initialize(this);
+      try {
+        super();
+      } finally {
+        _initialize(this);
+      }
     }
 
   }

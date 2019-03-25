@@ -22,12 +22,15 @@ function (_Foo) {
     var _this;
 
     babelHelpers.classCallCheck(this, Bar);
-    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Bar).call(this, ...args));
 
-    _prop2.set(babelHelpers.assertThisInitialized(_this), {
-      writable: true,
-      value: "bar"
-    });
+    try {
+      _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Bar).call(this, ...args));
+    } finally {
+      _prop2.set(babelHelpers.assertThisInitialized(_this), {
+        writable: true,
+        value: "bar"
+      });
+    }
 
     return _this;
   }

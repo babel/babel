@@ -29,21 +29,23 @@ var Test = function Test() {
     _inherits(Other, _Test);
 
     function Other() {
-      var _getPrototypeOf2;
-
       var _this;
 
       _classCallCheck(this, Other);
 
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
+      try {
+        var _getPrototypeOf2;
+
+        for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
+
+        _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Other)).call.apply(_getPrototypeOf2, [this].concat(args)));
+      } finally {
+        _defineProperty(_assertThisInitialized(_this), "a", function () {
+          return _get(_getPrototypeOf(Other.prototype), "test", _assertThisInitialized(_this));
+        });
       }
-
-      _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Other)).call.apply(_getPrototypeOf2, [this].concat(args)));
-
-      _defineProperty(_assertThisInitialized(_this), "a", function () {
-        return _get(_getPrototypeOf(Other.prototype), "test", _assertThisInitialized(_this));
-      });
 
       return _this;
     }

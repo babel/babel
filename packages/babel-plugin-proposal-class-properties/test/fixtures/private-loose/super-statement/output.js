@@ -9,11 +9,16 @@ function (_Bar) {
     var _this;
 
     babelHelpers.classCallCheck(this, Foo);
-    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
-    Object.defineProperty(babelHelpers.assertThisInitialized(_this), _bar, {
-      writable: true,
-      value: "foo"
-    });
+
+    try {
+      _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
+    } finally {
+      Object.defineProperty(babelHelpers.assertThisInitialized(_this), _bar, {
+        writable: true,
+        value: "foo"
+      });
+    }
+
     return _this;
   }
 

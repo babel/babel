@@ -1,7 +1,10 @@
 export class Foo extends Bar {
   constructor(..._args) {
-    super(..._args);
-    babelHelpers.defineProperty(this, "test", args);
+    try {
+      super(..._args);
+    } finally {
+      babelHelpers.defineProperty(this, "test", args);
+    }
   }
 
 }

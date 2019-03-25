@@ -27,8 +27,13 @@ function (_A) {
     var _this;
 
     babelHelpers.classCallCheck(this, B);
-    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(B).call(this, ...args));
-    babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "foo", babelHelpers.get(babelHelpers.getPrototypeOf(B.prototype), "foo", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this)));
+
+    try {
+      _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(B).call(this, ...args));
+    } finally {
+      babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "foo", babelHelpers.get(babelHelpers.getPrototypeOf(B.prototype), "foo", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this)));
+    }
+
     return _this;
   }
 

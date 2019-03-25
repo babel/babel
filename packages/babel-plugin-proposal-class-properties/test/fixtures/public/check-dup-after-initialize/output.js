@@ -12,10 +12,20 @@ function (_ref) {
     var _this;
 
     babelHelpers.classCallCheck(this, Foo);
-    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
-    babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "x", log.push(1));
-    babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "x", log.push(1));
-    return _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
+
+    try {
+      _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
+    } finally {
+      babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "x", log.push(1));
+    }
+
+    try {
+      _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
+    } finally {
+      babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "x", log.push(1));
+    }
+
+    return _this;
   }
 
   return Foo;
