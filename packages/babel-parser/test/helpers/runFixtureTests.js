@@ -131,6 +131,12 @@ function runTest(test, parseFunction) {
       if (err.message === opts.throws) {
         return;
       } else {
+        /*
+        const fn = path.dirname(test.expect.loc) + "/options.json";
+        test.options = test.options || {};
+        test.options.throws = err.message;
+        fs.writeFileSync(fn, JSON.stringify(test.options, null, "  "));
+        */
         err.message =
           "Expected error message: " +
           opts.throws +
