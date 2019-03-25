@@ -93,38 +93,28 @@ export default class ScopeHandler {
   }
 
   declareName(name: string, bindingType: ?BindingTypes, pos: number) {
-    let redeclared = false;
     let scope = this.currentScope();
 
-    if (bindingType === BIND_LEXICAL) {
-      redeclared =
-        scope.lexical.indexOf(name) > -1 ||
-        scope.functions.indexOf(name) > -1 ||
-        scope.var.indexOf(name) > -1;
-      scope.lexical.push(name);
-    } else if (bindingType === BIND_SIMPLE_CATCH) {
-      scope.lexical.push(name);
-    } else if (bindingType === BIND_FUNCTION) {
-      if (this.treatFunctionsAsVar) {
-        redeclared = scope.lexical.indexOf(name) > -1;
+    if (
+      bindingType === BIND_LEXICAL ||
+      bindingType === BIND_SIMPLE_CATCH ||
+      bindingType === BIND_FUNCTION
+    ) {
+      this.checkRedeclarationInScope(scope, name, bindingType, pos);
+
+      if (bindingType === BIND_FUNCTION) {
+        scope.functions.push(name);
       } else {
-        redeclared =
-          scope.lexical.indexOf(name) > -1 || scope.var.indexOf(name) > -1;
+        scope.lexical.push(name);
       }
-      scope.functions.push(name);
+
+      if (bindingType === BIND_LEXICAL) this.maybeExportDefined(scope, name);
     } else {
       for (let i = this.scopeStack.length - 1; i >= 0; --i) {
         scope = this.scopeStack[i];
-        if (
-          (scope.lexical.indexOf(name) > -1 &&
-            !(scope.flags & SCOPE_SIMPLE_CATCH && scope.lexical[0] === name)) ||
-          (!this.treatFunctionsAsVarInScope(scope) &&
-            scope.functions.indexOf(name) > -1)
-        ) {
-          redeclared = true;
-          break;
-        }
+        this.checkRedeclarationInScope(scope, name, bindingType, pos);
         scope.var.push(name);
+        this.maybeExportDefined(scope, name);
 
         if (scope.flags & SCOPE_VAR) break;
       }
@@ -132,9 +122,52 @@ export default class ScopeHandler {
     if (this.inModule && scope.flags & SCOPE_PROGRAM) {
       this.undefinedExports.delete(name);
     }
-    if (redeclared) {
+  }
+
+  maybeExportDefined(scope: Scope, name: string) {
+    if (this.inModule && scope.flags & SCOPE_PROGRAM) {
+      this.undefinedExports.delete(name);
+    }
+  }
+
+  checkRedeclarationInScope(
+    scope: Scope,
+    name: string,
+    bindingType: ?BindingTypes,
+    pos: number,
+  ) {
+    if (this.isRedeclaredInScope(scope, name, bindingType)) {
       this.raise(pos, `Identifier '${name}' has already been declared`);
     }
+  }
+
+  isRedeclaredInScope(
+    scope: Scope,
+    name: string,
+    bindingType: ?BindingTypes,
+  ): boolean {
+    if (bindingType === BIND_LEXICAL) {
+      return (
+        scope.lexical.indexOf(name) > -1 ||
+        scope.functions.indexOf(name) > -1 ||
+        scope.var.indexOf(name) > -1
+      );
+    }
+
+    if (bindingType === BIND_FUNCTION) {
+      return (
+        scope.lexical.indexOf(name) > -1 ||
+        (!this.treatFunctionsAsVarInScope(scope) &&
+          scope.var.indexOf(name) > -1)
+      );
+    }
+
+    return (
+      (scope.lexical.indexOf(name) > -1 &&
+        !(scope.flags & SCOPE_SIMPLE_CATCH && scope.lexical[0] === name)) ||
+      (!this.treatFunctionsAsVarInScope(scope) &&
+        scope.functions.indexOf(name) > -1)
+    );
   }
 
   checkLocalExport(id: N.Identifier) {

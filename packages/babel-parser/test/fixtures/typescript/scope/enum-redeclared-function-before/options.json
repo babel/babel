@@ -1,0 +1,7 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "typescript"
+  ],
+  "throws": "Identifier 'Foo' has already been declared (2:5)"
+}

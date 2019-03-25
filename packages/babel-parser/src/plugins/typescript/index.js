@@ -10,6 +10,7 @@ import {
   type BindingTypes,
   BIND_NONE,
   SCOPE_OTHER,
+  BIND_TS_ENUM,
 } from "../../util/scopeflags";
 import TypeScriptScopeHandler from "./scope";
 
@@ -1108,6 +1109,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.TsEnumDeclaration {
       if (isConst) node.const = true;
       node.id = this.parseIdentifier();
+      this.checkLVal(
+        node.id,
+        BIND_TS_ENUM,
+        undefined,
+        "typescript enum declaration",
+      );
+
       this.expect(tt.braceL);
       node.members = this.tsParseDelimitedList(
         "EnumMembers",

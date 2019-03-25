@@ -41,7 +41,8 @@ export const BIND_NONE = 0, // Not a binding
   BIND_LEXICAL = 2, // Let- or const-style binding
   BIND_FUNCTION = 3, // Function declaration
   BIND_SIMPLE_CATCH = 4, // Simple (identifier pattern) catch binding
-  BIND_OUTSIDE = 5; // Special case for function names as bound inside the function
+  BIND_OUTSIDE = 5, // Special case for function names as bound inside the function
+  BIND_TS_ENUM = 6; // TypeScript enums (block-scoped, but can be re-declared using var/function)
 
 export type BindingTypes =
   | typeof BIND_NONE
@@ -49,4 +50,5 @@ export type BindingTypes =
   | typeof BIND_LEXICAL
   | typeof BIND_FUNCTION
   | typeof BIND_SIMPLE_CATCH
-  | typeof BIND_OUTSIDE;
+  | typeof BIND_OUTSIDE
+  | typeof BIND_TS_ENUM;
