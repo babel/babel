@@ -1,5 +1,5 @@
 import ScopeHandler, { Scope } from "../../util/scope";
-import { BIND_TS_ENUM, BIND_LEXICAL } from "../../util/scopeflags";
+import { BIND_LEXICAL, BIND_TS_ENUM } from "../../util/scopeflags";
 
 class TypeScriptScope extends Scope {
   tsEnum: string = [];
