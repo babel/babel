@@ -526,7 +526,10 @@ export default class Tokenizer extends LocationParser {
         next === charCodes.dash &&
         !this.inModule &&
         this.input.charCodeAt(this.state.pos + 2) === charCodes.greaterThan &&
-        lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.pos))
+        (this.state.lastTokEnd === 0 ||
+          lineBreak.test(
+            this.input.slice(this.state.lastTokEnd, this.state.pos),
+          ))
       ) {
         // A `-->` line comment
         this.skipLineComment(3);
