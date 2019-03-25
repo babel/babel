@@ -16,21 +16,22 @@ export default class Parser extends StatementParser {
     node: JSXOpeningElement,
   ) => JSXOpeningElement;
 
-  // This can be overwritten, for example, by the TypeScript plugin.
-  static ScopeHandler = ScopeHandler;
-
   constructor(options: ?Options, input: string) {
     options = getOptions(options);
     super(options, input);
 
-    // $FlowIgnore flow doesn't support new.target
-    const { ScopeHandler } = new.target;
+    const ScopeHandler = this.getScopeHandler();
 
     this.options = options;
     this.inModule = this.options.sourceType === "module";
     this.scope = new ScopeHandler(this.raise.bind(this), this.inModule);
     this.plugins = pluginsMap(this.options.plugins);
     this.filename = options.sourceFilename;
+  }
+
+  // This can be overwritten, for example, by the TypeScript plugin.
+  getScopeHandler(): Class<ScopeHandler> {
+    return ScopeHandler;
   }
 
   parse(): File {

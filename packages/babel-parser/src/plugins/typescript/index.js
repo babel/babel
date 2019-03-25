@@ -11,7 +11,7 @@ import {
   BIND_NONE,
   SCOPE_OTHER,
 } from "../../util/scopeflags";
-import mixinScope from "./scope";
+import TypeScriptScopeHandler from "./scope";
 
 type TsModifier =
   | "readonly"
@@ -74,7 +74,9 @@ function keywordTypeFromName(
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
-    static ScopeHandler = mixinScope(super.ScopeHandler);
+    getScopeHandler() {
+      return TypeScriptScopeHandler;
+    }
 
     tsIsIdentifier(): boolean {
       // TODO: actually a bit more complex in TypeScript, but shouldn't matter.
