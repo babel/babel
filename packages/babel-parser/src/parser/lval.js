@@ -231,9 +231,6 @@ export default class LValParser extends NodeUtils {
   // Parses lvalue (assignable) atom.
   parseBindingAtom(): Pattern {
     switch (this.state.type) {
-      case tt.name:
-        return this.parseIdentifier();
-
       case tt.bracketL: {
         const node = this.startNode();
         this.next();
@@ -243,10 +240,9 @@ export default class LValParser extends NodeUtils {
 
       case tt.braceL:
         return this.parseObj(true);
-
-      default:
-        throw this.unexpected();
     }
+
+    return this.parseIdentifier();
   }
 
   parseBindingList(
