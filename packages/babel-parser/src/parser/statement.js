@@ -519,21 +519,11 @@ export default class StatementParser extends ExpressionParser {
       this.parseVar(init, true, kind);
       this.finishNode(init, "VariableDeclaration");
 
-      if (this.match(tt._in) || this.isContextual("of")) {
-        if (init.declarations.length === 1) {
-          const declaration = init.declarations[0];
-          const isForInInitializer =
-            kind === "var" &&
-            declaration.init &&
-            declaration.id.type != "ObjectPattern" &&
-            declaration.id.type != "ArrayPattern" &&
-            !this.isContextual("of");
-          if (this.state.strict && isForInInitializer) {
-            this.raise(this.state.start, "for-in initializer in strict mode");
-          } else if (isForInInitializer || !declaration.init) {
-            return this.parseForIn(node, init, awaitAt);
-          }
-        }
+      if (
+        (this.match(tt._in) || this.isContextual("of")) &&
+        init.declarations.length === 1
+      ) {
+        return this.parseForIn(node, init, awaitAt);
       }
       if (awaitAt > -1) {
         this.unexpected(awaitAt);
@@ -938,18 +928,36 @@ export default class StatementParser extends ExpressionParser {
 
   parseForIn(
     node: N.ForInOf,
-    init: N.VariableDeclaration,
+    init: N.VariableDeclaration | N.AssignmentPattern,
     awaitAt: number,
   ): N.ForInOf {
-    const type = this.match(tt._in) ? "ForInStatement" : "ForOfStatement";
-    if (awaitAt > -1) {
-      this.eatContextual("of");
+    const isForIn = this.match(tt._in);
+    this.next();
+
+    if (isForIn) {
+      if (awaitAt > -1) this.unexpected(awaitAt);
     } else {
-      this.next();
-    }
-    if (type === "ForOfStatement") {
       node.await = awaitAt > -1;
     }
+
+    if (
+      init.type === "VariableDeclaration" &&
+      init.declarations[0].init != null &&
+      (!isForIn ||
+        this.state.strict ||
+        init.kind !== "var" ||
+        init.declarations[0].id.type !== "Identifier")
+    ) {
+      this.raise(
+        init.start,
+        `${
+          isForIn ? "for-in" : "for-of"
+        } loop variable declaration may not have an initializer`,
+      );
+    } else if (init.type === "AssignmentPattern") {
+      this.raise(init.start, "Invalid left-hand side in for-loop");
+    }
+
     node.left = init;
     node.right =
       type === "ForInStatement"
@@ -969,7 +977,7 @@ export default class StatementParser extends ExpressionParser {
     this.scope.exit();
     this.state.labels.pop();
 
-    return this.finishNode(node, type);
+    return this.finishNode(node, isForIn ? "ForInStatement" : "ForOfStatement");
   }
 
   // Parse a list of variable declarations.
