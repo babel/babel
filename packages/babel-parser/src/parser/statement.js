@@ -959,10 +959,7 @@ export default class StatementParser extends ExpressionParser {
     }
 
     node.left = init;
-    node.right =
-      type === "ForInStatement"
-        ? this.parseExpression()
-        : this.parseMaybeAssign();
+    node.right = isForIn ? this.parseExpression() : this.parseMaybeAssign();
     this.expect(tt.parenR);
 
     node.body =
