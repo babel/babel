@@ -1213,7 +1213,13 @@ export default class Tokenizer extends LocationParser {
             octalStr = octalStr.slice(0, -1);
             octal = parseInt(octalStr, 8);
           }
-          if (octal > 0) {
+          this.state.pos += octalStr.length - 1;
+          const next = this.input.charCodeAt(this.state.pos);
+          if (
+            octalStr !== "0" ||
+            next === charCodes.digit8 ||
+            next === charCodes.digit9
+          ) {
             if (inTemplate) {
               this.state.invalidTemplateEscapePosition = codePos;
               return null;
@@ -1226,7 +1232,7 @@ export default class Tokenizer extends LocationParser {
               this.state.octalPosition = codePos;
             }
           }
-          this.state.pos += octalStr.length - 1;
+
           return String.fromCharCode(octal);
         }
 
