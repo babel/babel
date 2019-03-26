@@ -312,9 +312,9 @@
               "line": 5,
               "column": 9
             },
-            "identifierName": "Foo4"
+            "identifierName": "Foo5"
           },
-          "name": "Foo4"
+          "name": "Foo5"
         },
         "typeAnnotation": {
           "type": "TSLiteralType",
@@ -376,9 +376,9 @@
               "line": 6,
               "column": 9
             },
-            "identifierName": "Foo5"
+            "identifierName": "Foo6"
           },
-          "name": "Foo5"
+          "name": "Foo6"
         },
         "typeAnnotation": {
           "type": "TSLiteralType",
@@ -457,9 +457,9 @@
               "line": 7,
               "column": 9
             },
-            "identifierName": "Foo5"
+            "identifierName": "Foo7"
           },
-          "name": "Foo5"
+          "name": "Foo7"
         },
         "typeAnnotation": {
           "type": "TSLiteralType",
