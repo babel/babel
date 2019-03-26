@@ -35,20 +35,43 @@ export function functionFlags(isAsync: boolean, isGenerator: boolean) {
   );
 }
 
-// Used in checkLVal and declareName to determine the type of a binding
-export const BIND_NONE = 0, // Not a binding
-  BIND_VAR = 1, // Var-style binding
-  BIND_LEXICAL = 2, // Let- or const-style binding
-  BIND_FUNCTION = 3, // Function declaration
-  BIND_SIMPLE_CATCH = 4, // Simple (identifier pattern) catch binding
-  BIND_OUTSIDE = 5, // Special case for function names as bound inside the function
-  BIND_TS_ENUM = 6; // TypeScript enums (block-scoped, but can be re-declared using var/function)
+// prettier-ignore
+export const BIND_KIND_VALUE          = 0b0000_00000_01,
+             BIND_KIND_TYPE           = 0b0000_00000_10,
+             // Used in checkLVal and declareName to determine the type of a binding
+             BIND_SCOPE_VAR           = 0b0000_00001_00, // Var-style binding
+             BIND_SCOPE_LEXICAL       = 0b0000_00010_00, // Let- or const-style binding
+             BIND_SCOPE_FUNCTION      = 0b0000_00100_00, // Function declaration
+             BIND_SCOPE_SIMPLE_CATCH  = 0b0000_01000_00, // Simple (identifier pattern) catch binding
+             BIND_SCOPE_OUTSIDE       = 0b0000_10000_00, // Special case for function names as bound inside the function
+             // Misc flags
+             BIND_FLAGS_CLASS         = 0b0001_00000_00,
+             BIND_FLAGS_SCOPE_OUTSIDE = 0b0010_00000_00,
+             BIND_FLAGS_SIMPLE_CATCH  = 0b0100_00000_00,
+             BIND_FLAGS_TS_ENUM       = 0b1000_00000_00;
+
+// prettier-ignore
+/*                             =    is value?    |    is type?    |      scope          |    misc flags    */
+export const BIND_CLASS        = BIND_KIND_VALUE | BIND_KIND_TYPE | BIND_SCOPE_LEXICAL  | BIND_FLAGS_CLASS  ,
+             BIND_LEXICAL      = BIND_KIND_VALUE | 0              | BIND_SCOPE_LEXICAL  | 0                 ,
+             BIND_VAR          = BIND_KIND_VALUE | 0              | BIND_SCOPE_VAR      | 0                 ,
+             BIND_FUNCTION     = BIND_KIND_VALUE | 0              | BIND_SCOPE_FUNCTION | 0                 ,
+             BIND_OUTSIDE      = BIND_KIND_VALUE | 0              | BIND_SCOPE_OUTSIDE  | 0                 ,
+             BIND_TS_INTERFACE = 0               | BIND_KIND_TYPE | 0                   | BIND_FLAGS_CLASS  ,
+             BIND_TS_TYPE      = 0               | BIND_KIND_TYPE | 0                   | 0                 ,
+             BIND_TS_ENUM      = BIND_KIND_VALUE | BIND_KIND_TYPE | BIND_SCOPE_LEXICAL  | BIND_FLAGS_TS_ENUM,
+
+             BIND_SIMPLE_CATCH = BIND_LEXICAL  | BIND_FLAGS_SIMPLE_CATCH,
+             BIND_NONE         = 0;
 
 export type BindingTypes =
   | typeof BIND_NONE
   | typeof BIND_VAR
   | typeof BIND_LEXICAL
+  | typeof BIND_CLASS
   | typeof BIND_FUNCTION
   | typeof BIND_SIMPLE_CATCH
   | typeof BIND_OUTSIDE
+  | typeof BIND_TS_INTERFACE
+  | typeof BIND_TS_TYPE
   | typeof BIND_TS_ENUM;

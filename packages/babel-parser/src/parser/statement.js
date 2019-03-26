@@ -12,6 +12,7 @@ import { lineBreak, skipWhiteSpace } from "../util/whitespace";
 import * as charCodes from "charcodes";
 import {
   BIND_SIMPLE_CATCH,
+  BIND_CLASS,
   BIND_LEXICAL,
   BIND_VAR,
   BIND_FUNCTION,
@@ -1612,7 +1613,7 @@ export default class StatementParser extends ExpressionParser {
     if (this.match(tt.name)) {
       node.id = this.parseIdentifier();
       if (isStatement) {
-        this.checkLVal(node.id, BIND_LEXICAL, undefined, "class name");
+        this.checkLVal(node.id, BIND_CLASS, undefined, "class name");
       }
     } else {
       if (optionalId || !isStatement) {

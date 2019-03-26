@@ -14,6 +14,11 @@ import {
   BIND_FUNCTION,
   type ScopeFlags,
   type BindingTypes,
+  BIND_FLAGS_SCOPE_OUTSIDE,
+  BIND_SCOPE_FUNCTION,
+  BIND_SCOPE_VAR,
+  BIND_SCOPE_LEXICAL,
+  BIND_KIND_VALUE,
   SCOPE_CLASS,
 } from "./scopeflags";
 import * as N from "../types";
@@ -94,24 +99,21 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     );
   }
 
-  declareName(name: string, bindingType: ?BindingTypes, pos: number) {
+  declareName(name: string, bindingType: BindingTypes, pos: number) {
     let scope = this.currentScope();
-
-    if (
-      bindingType === BIND_LEXICAL ||
-      bindingType === BIND_SIMPLE_CATCH ||
-      bindingType === BIND_FUNCTION
-    ) {
+    if (bindingType & BIND_SCOPE_LEXICAL || bindingType & BIND_SCOPE_FUNCTION) {
       this.checkRedeclarationInScope(scope, name, bindingType, pos);
 
-      if (bindingType === BIND_FUNCTION) {
+      if (bindingType & BIND_SCOPE_FUNCTION) {
         scope.functions.push(name);
       } else {
         scope.lexical.push(name);
       }
 
-      if (bindingType === BIND_LEXICAL) this.maybeExportDefined(scope, name);
-    } else {
+      if (bindingType & BIND_SCOPE_LEXICAL) {
+        this.maybeExportDefined(scope, name);
+      }
+    } else if (bindingType & BIND_SCOPE_VAR) {
       for (let i = this.scopeStack.length - 1; i >= 0; --i) {
         scope = this.scopeStack[i];
         this.checkRedeclarationInScope(scope, name, bindingType, pos);
@@ -135,7 +137,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   checkRedeclarationInScope(
     scope: IScope,
     name: string,
-    bindingType: ?BindingTypes,
+    bindingType: BindingTypes,
     pos: number,
   ) {
     if (this.isRedeclaredInScope(scope, name, bindingType)) {
@@ -146,9 +148,11 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   isRedeclaredInScope(
     scope: IScope,
     name: string,
-    bindingType: ?BindingTypes,
+    bindingType: BindingTypes,
   ): boolean {
-    if (bindingType === BIND_LEXICAL) {
+    if (!(bindingType & BIND_KIND_VALUE)) return false;
+
+    if (bindingType & BIND_SCOPE_LEXICAL) {
       return (
         scope.lexical.indexOf(name) > -1 ||
         scope.functions.indexOf(name) > -1 ||
@@ -156,7 +160,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
       );
     }
 
-    if (bindingType === BIND_FUNCTION) {
+    if (bindingType & BIND_SCOPE_FUNCTION) {
       return (
         scope.lexical.indexOf(name) > -1 ||
         (!this.treatFunctionsAsVarInScope(scope) &&

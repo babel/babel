@@ -11,6 +11,8 @@ import {
   BIND_NONE,
   SCOPE_OTHER,
   BIND_TS_ENUM,
+  BIND_TS_TYPE,
+  BIND_TS_INTERFACE,
 } from "../../util/scopeflags";
 import TypeScriptScopeHandler from "./scope";
 
@@ -1027,6 +1029,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.TsInterfaceDeclaration,
     ): N.TsInterfaceDeclaration {
       node.id = this.parseIdentifier();
+      this.checkLVal(
+        node.id,
+        BIND_TS_INTERFACE,
+        undefined,
+        "typescript interface declaration",
+      );
       node.typeParameters = this.tsTryParseTypeParameters();
       if (this.eat(tt._extends)) {
         node.extends = this.tsParseHeritageClause("extends");
@@ -1041,6 +1049,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.TsTypeAliasDeclaration,
     ): N.TsTypeAliasDeclaration {
       node.id = this.parseIdentifier();
+      this.checkLVal(node.id, BIND_TS_TYPE, undefined, "typescript type alias");
+
       node.typeParameters = this.tsTryParseTypeParameters();
       node.typeAnnotation = this.tsExpectThenParseType(tt.eq);
       this.semicolon();
