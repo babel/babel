@@ -1,14 +1,20 @@
+// @flow
+
 import ScopeHandler, { Scope } from "../../util/scope";
-import { BIND_LEXICAL, BIND_TS_ENUM } from "../../util/scopeflags";
+import {
+  BIND_LEXICAL,
+  BIND_TS_ENUM,
+  type ScopeFlags,
+  type BindingTypes,
+} from "../../util/scopeflags";
+import * as N from "../../types";
 
 class TypeScriptScope extends Scope {
-  tsEnum: string = [];
+  tsEnum: string[] = [];
 }
 
-export default class TypeScriptScopeHandler extends ScopeHandler {
-  scopeStack: Array<TypeScriptScope>;
-
-  createScope(flags: ScopeFlags): Scope {
+export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope> {
+  createScope(flags: ScopeFlags): TypeScriptScope {
     return new TypeScriptScope(flags);
   }
 
@@ -24,7 +30,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler {
   }
 
   isRedeclaredInScope(
-    scope: Scope,
+    scope: TypeScriptScope,
     name: string,
     bindingType: ?BindingTypes,
   ): boolean {

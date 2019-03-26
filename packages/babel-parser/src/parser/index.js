@@ -30,7 +30,7 @@ export default class Parser extends StatementParser {
   }
 
   // This can be overwritten, for example, by the TypeScript plugin.
-  getScopeHandler(): Class<ScopeHandler> {
+  getScopeHandler(): Class<ScopeHandler<*>> {
     return ScopeHandler;
   }
 

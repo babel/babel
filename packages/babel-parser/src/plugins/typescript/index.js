@@ -75,7 +75,7 @@ function keywordTypeFromName(
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
-    getScopeHandler() {
+    getScopeHandler(): Class<TypeScriptScopeHandler> {
       return TypeScriptScopeHandler;
     }
 

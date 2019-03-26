@@ -37,8 +37,8 @@ type raiseFunction = (number, string) => void;
 
 // The functions in this module keep track of declared variables in the
 // current scope in order to detect duplicate variable names.
-export default class ScopeHandler {
-  scopeStack: Array<Scope> = [];
+export default class ScopeHandler<IScope: Scope = Scope> {
+  scopeStack: Array<IScope> = [];
   raise: raiseFunction;
   inModule: boolean;
   undefinedExports: Map<string, number> = new Map();
@@ -73,6 +73,8 @@ export default class ScopeHandler {
   createScope(flags: ScopeFlags): Scope {
     return new Scope(flags);
   }
+  // This method will be overwritten by subclasses
+  +createScope: (flags: ScopeFlags) => IScope;
 
   enter(flags: ScopeFlags) {
     this.scopeStack.push(this.createScope(flags));
@@ -85,7 +87,7 @@ export default class ScopeHandler {
   // The spec says:
   // > At the top level of a function, or script, function declarations are
   // > treated like var declarations rather than like lexical declarations.
-  treatFunctionsAsVarInScope(scope: Scope): boolean {
+  treatFunctionsAsVarInScope(scope: IScope): boolean {
     return !!(
       scope.flags & SCOPE_FUNCTION ||
       (!this.inModule && scope.flags & SCOPE_PROGRAM)
@@ -124,14 +126,14 @@ export default class ScopeHandler {
     }
   }
 
-  maybeExportDefined(scope: Scope, name: string) {
+  maybeExportDefined(scope: IScope, name: string) {
     if (this.inModule && scope.flags & SCOPE_PROGRAM) {
       this.undefinedExports.delete(name);
     }
   }
 
   checkRedeclarationInScope(
-    scope: Scope,
+    scope: IScope,
     name: string,
     bindingType: ?BindingTypes,
     pos: number,
@@ -142,7 +144,7 @@ export default class ScopeHandler {
   }
 
   isRedeclaredInScope(
-    scope: Scope,
+    scope: IScope,
     name: string,
     bindingType: ?BindingTypes,
   ): boolean {
@@ -183,12 +185,12 @@ export default class ScopeHandler {
     }
   }
 
-  currentScope(): Scope {
+  currentScope(): IScope {
     return this.scopeStack[this.scopeStack.length - 1];
   }
 
   // $FlowIgnore
-  currentVarScope(): Scope {
+  currentVarScope(): IScope {
     for (let i = this.scopeStack.length - 1; ; i--) {
       const scope = this.scopeStack[i];
       if (scope.flags & SCOPE_VAR) {
@@ -199,7 +201,7 @@ export default class ScopeHandler {
 
   // Could be useful for `this`, `new.target`, `super()`, `super.property`, and `super[property]`.
   // $FlowIgnore
-  currentThisScope(): Scope {
+  currentThisScope(): IScope {
     for (let i = this.scopeStack.length - 1; ; i--) {
       const scope = this.scopeStack[i];
       if (
