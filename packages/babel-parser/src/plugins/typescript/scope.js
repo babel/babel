@@ -13,7 +13,11 @@ import * as N from "../../types";
 
 class TypeScriptScope extends Scope {
   types: string[] = [];
+
+  // enums (which are also in .types)
   enums: string[] = [];
+
+  // classes (which are also in .lexical) and interface (which are also in .types)
   classes: string[] = [];
 }
 
@@ -64,5 +68,11 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     }
 
     return super.isRedeclaredInScope(...arguments);
+  }
+
+  checkLocalExport(id: N.Identifier) {
+    if (this.scopeStack[0].types.indexOf(id.name) === -1) {
+      super.checkLocalExport(id);
+    }
   }
 }
