@@ -951,7 +951,10 @@ export default class StatementParser extends ExpressionParser {
       node.await = awaitAt > -1;
     }
     node.left = init;
-    node.right = this.parseExpression();
+    node.right =
+      type === "ForInStatement"
+        ? this.parseExpression()
+        : this.parseMaybeAssign();
     this.expect(tt.parenR);
 
     node.body =
