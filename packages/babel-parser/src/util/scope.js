@@ -9,17 +9,13 @@ import {
   SCOPE_SUPER,
   SCOPE_PROGRAM,
   SCOPE_VAR,
-  BIND_SIMPLE_CATCH,
-  BIND_LEXICAL,
-  BIND_FUNCTION,
-  type ScopeFlags,
-  type BindingTypes,
-  BIND_FLAGS_SCOPE_OUTSIDE,
+  SCOPE_CLASS,
   BIND_SCOPE_FUNCTION,
   BIND_SCOPE_VAR,
   BIND_SCOPE_LEXICAL,
   BIND_KIND_VALUE,
-  SCOPE_CLASS,
+  type ScopeFlags,
+  type BindingTypes,
 } from "./scopeflags";
 import * as N from "../types";
 

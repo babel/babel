@@ -11,7 +11,6 @@ import {
 import { lineBreak, skipWhiteSpace } from "../util/whitespace";
 import * as charCodes from "charcodes";
 import {
-  BIND_SIMPLE_CATCH,
   BIND_CLASS,
   BIND_LEXICAL,
   BIND_VAR,
@@ -663,12 +662,7 @@ export default class StatementParser extends ExpressionParser {
         clause.param = this.parseBindingAtom();
         const simple = clause.param.type === "Identifier";
         this.scope.enter(simple ? SCOPE_SIMPLE_CATCH : 0);
-        this.checkLVal(
-          clause.param,
-          simple ? BIND_SIMPLE_CATCH : BIND_LEXICAL,
-          null,
-          "catch clause",
-        );
+        this.checkLVal(clause.param, BIND_LEXICAL, null, "catch clause");
         this.expect(tt.parenR);
       } else {
         clause.param = null;
