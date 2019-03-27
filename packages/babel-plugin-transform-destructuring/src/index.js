@@ -83,7 +83,11 @@ export default declare((api, options) => {
 
       if (op) {
         node = t.expressionStatement(
-          t.assignmentExpression(op, id, t.cloneNode(init)),
+          t.assignmentExpression(
+            op,
+            id,
+            t.cloneNode(init) || this.scope.buildUndefinedNode(),
+          ),
         );
       } else {
         node = t.variableDeclaration(this.kind, [

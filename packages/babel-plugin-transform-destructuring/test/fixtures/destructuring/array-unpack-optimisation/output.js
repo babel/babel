@@ -34,3 +34,10 @@ var _ref7 = [clazz.foo(), bar],
 var _ref8 = [clazz.foo, bar],
     a = _ref8[0],
     b = _ref8[1];
+var a,
+    b = 2;
+a = 1;
+b = 2;
+a = void 0;
+b = 2;
+; // Avoid completion record special case
