@@ -1,6 +1,7 @@
 import cloneDeep from "lodash/cloneDeep";
 import traverse from "../lib";
 import { parse } from "@babel/parser";
+import * as t from "@babel/types";
 
 describe("traverse", function() {
   const code = `
@@ -172,6 +173,46 @@ describe("traverse", function() {
 
     scopes2.forEach(function(p, i) {
       expect(p).not.toBe(scopes[i]);
+    });
+  });
+
+  describe("path.skip()", function() {
+    it("replaced paths can be skipped", function() {
+      const ast = parse("id");
+
+      let skipped;
+      traverse(ast, {
+        noScope: true,
+        Identifier(path) {
+          path.replaceWith(t.numericLiteral(0));
+          path.skip();
+          skipped = true;
+        },
+        NumericLiteral() {
+          skipped = false;
+        },
+      });
+
+      expect(skipped).toBe(true);
+    });
+
+    it("skipped and requeued paths should be visited", function() {
+      const ast = parse("id");
+
+      let visited = false;
+      traverse(ast, {
+        noScope: true,
+        Identifier(path) {
+          path.replaceWith(t.numericLiteral(0));
+          path.skip();
+          path.requeue();
+        },
+        NumericLiteral() {
+          visited = true;
+        },
+      });
+
+      expect(visited).toBe(true);
     });
   });
 });

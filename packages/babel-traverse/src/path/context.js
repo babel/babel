@@ -67,7 +67,12 @@ export function visit(): boolean {
     return false;
   }
 
-  if (this.call("enter") || this.shouldSkip) {
+  // Note: We need to check "this.shouldSkip" twice because
+  // the visitor can set it to true. Usually .shouldSkip is false
+  // before calling the enter visitor, but it can be true in case of
+  // a requeued node (e.g. by .replaceWith()) that is then marked
+  // with .skip().
+  if (this.shouldSkip || this.call("enter") || this.shouldSkip) {
     this.debug("Skip...");
     return this.shouldStop;
   }
@@ -232,6 +237,8 @@ export function setKey(key) {
 
 export function requeue(pathToQueue = this) {
   if (pathToQueue.removed) return;
+
+  pathToQueue.shouldSkip = false;
 
   // TODO(loganfsmyth): This should be switched back to queue in parent contexts
   // automatically once #2892 and #4135 have been resolved. See #4140.
