@@ -48,6 +48,8 @@ Using plugins:
   proposal-json-strings { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-optional-catch-binding { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-named-capturing-groups-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  transform-member-expression-literals { "electron":"0.36" }
+  transform-property-literals { "electron":"0.36" }
 
 Using polyfills with `entry` option:
 
