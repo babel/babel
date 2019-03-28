@@ -3350,6 +3350,7 @@ export function isScopable(node: ?Object, opts?: Object): boolean {
     "ForOfStatement" === nodeType ||
     "ClassMethod" === nodeType ||
     "ClassPrivateMethod" === nodeType ||
+    "TSModuleBlock" === nodeType ||
     (nodeType === "Placeholder" && "BlockStatement" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
@@ -3382,6 +3383,7 @@ export function isBlockParent(node: ?Object, opts?: Object): boolean {
     "ForOfStatement" === nodeType ||
     "ClassMethod" === nodeType ||
     "ClassPrivateMethod" === nodeType ||
+    "TSModuleBlock" === nodeType ||
     (nodeType === "Placeholder" && "BlockStatement" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
@@ -3401,6 +3403,7 @@ export function isBlock(node: ?Object, opts?: Object): boolean {
     nodeType === "Block" ||
     "BlockStatement" === nodeType ||
     "Program" === nodeType ||
+    "TSModuleBlock" === nodeType ||
     (nodeType === "Placeholder" && "BlockStatement" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {

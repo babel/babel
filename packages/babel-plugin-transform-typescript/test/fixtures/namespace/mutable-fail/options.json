@@ -1,0 +1,3 @@
+{
+  "throws": "Namespaces exporting non-const are not supported by Babel. Change to const or see: https://babeljs.io/docs/en/babel-plugin-transform-typescript"
+}
