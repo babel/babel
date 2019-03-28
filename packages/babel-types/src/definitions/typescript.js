@@ -399,6 +399,7 @@ defineType("TSModuleDeclaration", {
 });
 
 defineType("TSModuleBlock", {
+  aliases: ["Scopable", "Block", "BlockParent"],
   visitor: ["body"],
   fields: {
     body: validateArrayOfType("Statement"),
