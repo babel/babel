@@ -37,6 +37,7 @@ Using plugins:
   transform-named-capturing-groups-regex {}
   transform-member-expression-literals {}
   transform-property-literals {}
+  transform-reserved-words {}
 
 Using polyfills with `entry` option:
 

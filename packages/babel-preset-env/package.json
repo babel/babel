@@ -49,6 +49,7 @@
     "@babel/plugin-transform-parameters": "^7.4.0",
     "@babel/plugin-transform-property-literals": "^7.2.0",
     "@babel/plugin-transform-regenerator": "^7.4.0",
+    "@babel/plugin-transform-reserved-words": "^7.2.0",
     "@babel/plugin-transform-shorthand-properties": "^7.2.0",
     "@babel/plugin-transform-spread": "^7.2.0",
     "@babel/plugin-transform-sticky-regex": "^7.2.0",

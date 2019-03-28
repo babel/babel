@@ -28,6 +28,7 @@ export default {
   "transform-object-super": require("@babel/plugin-transform-object-super"),
   "transform-parameters": require("@babel/plugin-transform-parameters"),
   "transform-property-literals": require("@babel/plugin-transform-property-literals"),
+  "transform-reserved-words": require("@babel/plugin-transform-reserved-words"),
   "transform-shorthand-properties": require("@babel/plugin-transform-shorthand-properties"),
   "transform-spread": require("@babel/plugin-transform-spread"),
   "transform-sticky-regex": require("@babel/plugin-transform-sticky-regex"),
