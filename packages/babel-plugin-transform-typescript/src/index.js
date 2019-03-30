@@ -21,12 +21,12 @@ interface State {
 }
 
 const PARSED_PARAMS = new WeakSet();
+const PRAGMA_KEY = "@babel/plugin-transform-typescript/jsxPragma";
 
 export default declare((api, { jsxPragma = "React" }) => {
   api.assertVersion(7);
 
   const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
-  let currentJsxPragma = jsxPragma;
 
   return {
     name: "transform-typescript",
@@ -44,12 +44,11 @@ export default declare((api, { jsxPragma = "React" }) => {
         const { file } = state;
 
         // find the JSX pragma from comments or reset to the initial one
-        currentJsxPragma = jsxPragma;
         if (file.ast.comments) {
           for (const comment of (file.ast.comments: Array<Object>)) {
             const jsxMatches = JSX_ANNOTATION_REGEX.exec(comment.value);
             if (jsxMatches) {
-              currentJsxPragma = jsxMatches[1];
+              file.set(PRAGMA_KEY, jsxMatches[1]);
             }
           }
         }
@@ -75,7 +74,7 @@ export default declare((api, { jsxPragma = "React" }) => {
               // just bail if there is no binding, since chances are good that if
               // the import statement was injected then it wasn't a typescript type
               // import anyway.
-              if (binding && isImportTypeOnly(binding, state.programPath)) {
+              if (binding && isImportTypeOnly(file, binding, state.programPath)) {
                 importsToRemove.push(binding.path);
               } else {
                 allElided = false;
@@ -316,14 +315,15 @@ export default declare((api, { jsxPragma = "React" }) => {
     // 'access' and 'readonly' are only for parameter properties, so constructor visitor will handle them.
   }
 
-  function isImportTypeOnly(binding, programPath) {
+  function isImportTypeOnly(file, binding, programPath) {
     for (const path of binding.referencePaths) {
       if (!isInType(path)) {
         return false;
       }
     }
 
-    if (binding.identifier.name !== currentJsxPragma) {
+    const fileJsxPragma = file.get(PRAGMA_KEY) || jsxPragma;
+    if (binding.identifier.name !== fileJsxPragma) {
       return true;
     }
 
