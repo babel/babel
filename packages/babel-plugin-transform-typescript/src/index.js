@@ -74,7 +74,10 @@ export default declare((api, { jsxPragma = "React" }) => {
               // just bail if there is no binding, since chances are good that if
               // the import statement was injected then it wasn't a typescript type
               // import anyway.
-              if (binding && isImportTypeOnly(file, binding, state.programPath)) {
+              if (
+                binding &&
+                isImportTypeOnly(file, binding, state.programPath)
+              ) {
                 importsToRemove.push(binding.path);
               } else {
                 allElided = false;
