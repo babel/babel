@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports["default"] = void 0;
 
 var b = function b() {
   babelHelpers.classCallCheck(this, b);
@@ -51,4 +51,4 @@ function (_b2) {
   return a2;
 }(b);
 
-exports.default = a2;
+exports["default"] = a2;

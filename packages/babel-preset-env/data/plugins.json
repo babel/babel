@@ -301,5 +301,47 @@
     "ios": "11.3",
     "opera": "51",
     "electron": "3.1"
+  },
+  "transform-member-expression-literals": {
+    "chrome": "7",
+    "opera": "12",
+    "edge": "12",
+    "firefox": "2",
+    "safari": "5.1",
+    "node": "0.10",
+    "ie": "9",
+    "android": "4",
+    "ios": "6",
+    "phantom": "2",
+    "samsung": "2.1",
+    "electron": "5"
+  },
+  "transform-property-literals": {
+    "chrome": "7",
+    "opera": "12",
+    "edge": "12",
+    "firefox": "2",
+    "safari": "5.1",
+    "node": "0.10",
+    "ie": "9",
+    "android": "4",
+    "ios": "6",
+    "phantom": "2",
+    "samsung": "2.1",
+    "electron": "5"
+  },
+  "transform-reserved-words": {
+    "chrome": "13",
+    "opera": "10.50",
+    "edge": "12",
+    "firefox": "2",
+    "safari": "3.1",
+    "node": "0.10",
+    "ie": "9",
+    "android": "4.4",
+    "ios": "6",
+    "phantom": "2",
+    "samsung": "2.1",
+    "electron": "0.2"
   }
 }
