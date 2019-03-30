@@ -43,7 +43,6 @@ export default declare((api, { jsxPragma = "React" }) => {
 
         const { file } = state;
 
-        // find the JSX pragma from comments or reset to the initial one
         if (file.ast.comments) {
           for (const comment of (file.ast.comments: Array<Object>)) {
             const jsxMatches = JSX_ANNOTATION_REGEX.exec(comment.value);
