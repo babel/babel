@@ -1,6 +1,6 @@
 class Base {
   static basePublicStaticMethod() {
-    return 1017;
+    return 'good';
   }
 
 }

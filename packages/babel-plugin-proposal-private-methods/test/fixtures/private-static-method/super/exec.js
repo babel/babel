@@ -1,5 +1,7 @@
 class Base {
-  static basePublicStaticMethod() { return 1017; }
+  static basePublicStaticMethod() {
+    return 'good';
+  }
 }
 
 class Sub extends Base {
@@ -12,4 +14,4 @@ class Sub extends Base {
   }
 }
 
-expect(Sub.check()).toEqual(1017);
+expect(Sub.check()).toEqual('good');

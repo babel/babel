@@ -1,6 +1,6 @@
 class Base {
   superMethod() {
-    return 1017;
+    return 'good';
   }
 }
 
