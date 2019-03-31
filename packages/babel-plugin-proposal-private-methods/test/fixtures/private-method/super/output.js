@@ -12,6 +12,10 @@ class Sub extends Base {
     _privateMethod.add(this);
   }
 
+  superMethod() {
+    return 'bad';
+  }
+
   publicMethod() {
     return babelHelpers.classPrivateMethodGet(this, _privateMethod, _privateMethod2).call(this);
   }

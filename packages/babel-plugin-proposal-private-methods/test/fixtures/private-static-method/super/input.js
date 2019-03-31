@@ -5,6 +5,10 @@ class Base {
 }
 
 class Sub extends Base {
+  static basePublicStaticMethod() {
+    return 'bad';
+  }
+
   static #subStaticPrivateMethod() {
     return super.basePublicStaticMethod();
   }
