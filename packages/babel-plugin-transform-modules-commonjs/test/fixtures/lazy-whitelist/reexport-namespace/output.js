@@ -4,22 +4,22 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.namespace2 = exports.namespace1 = void 0;
-var namespace1 = babelHelpers.interopRequireDefault(require("white"));
-exports.namespace1 = namespace1;
 
-function namespace2() {
-  const data = babelHelpers.interopRequireDefault(require("black"));
+function namespace1() {
+  const data = babelHelpers.interopRequireDefault(require("white"));
 
-  namespace2 = function () {
+  namespace1 = function () {
     return data;
   };
 
   return data;
 }
 
-Object.defineProperty(exports, "namespace2", {
+Object.defineProperty(exports, "namespace1", {
   enumerable: true,
   get: function () {
-    return namespace2();
+    return namespace1();
   }
 });
+var namespace2 = babelHelpers.interopRequireDefault(require("black"));
+exports.namespace2 = namespace2;
