@@ -1,6 +1,6 @@
 class Base {
   superMethod() {
-    return 1017;
+    return 'good';
   }
 
 }
@@ -12,6 +12,10 @@ class Sub extends Base {
     _privateMethod.add(this);
   }
 
+  superMethod() {
+    return 'bad';
+  }
+
   publicMethod() {
     return babelHelpers.classPrivateMethodGet(this, _privateMethod, _privateMethod2).call(this);
   }
@@ -21,5 +25,5 @@ class Sub extends Base {
 var _privateMethod = new WeakSet();
 
 var _privateMethod2 = function _privateMethod2() {
-  return babelHelpers.get(babelHelpers.getPrototypeOf(this), "superMethod", this).call(this);
+  return babelHelpers.get(babelHelpers.getPrototypeOf(Sub.prototype), "superMethod", this).call(this);
 };

@@ -1,10 +1,14 @@
 class Base {
   superMethod() {
-    return 1017;
+    return 'good';
   }
 }
 
 class Sub extends Base {
+  superMethod() {
+    return 'bad';
+  }
+
   #privateMethod() {
     return super.superMethod();
   }
@@ -14,4 +18,4 @@ class Sub extends Base {
   }
 }
 
-expect((new Sub()).publicMethod()).toEqual(1017);
+expect((new Sub()).publicMethod()).toEqual('good');
