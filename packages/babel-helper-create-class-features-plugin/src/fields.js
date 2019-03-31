@@ -501,7 +501,9 @@ function replaceThisContext(path, ref, superRef, file, loose) {
     file,
     getObjectRef() {
       state.needsClassRef = true;
-      return path.node.static ? ref : t.thisExpression();
+      return path.node.static
+        ? ref
+        : t.memberExpression(ref, t.identifier("prototype"));
     },
   });
   replacer.replace();

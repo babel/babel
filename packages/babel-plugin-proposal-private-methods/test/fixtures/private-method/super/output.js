@@ -21,5 +21,5 @@ class Sub extends Base {
 var _privateMethod = new WeakSet();
 
 var _privateMethod2 = function _privateMethod2() {
-  return babelHelpers.get(babelHelpers.getPrototypeOf(this), "superMethod", this).call(this);
+  return babelHelpers.get(babelHelpers.getPrototypeOf(Sub.prototype), "superMethod", this).call(this);
 };
