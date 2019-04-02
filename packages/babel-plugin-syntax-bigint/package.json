@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-bigint",
-  "version": "7.2.0",
+  "version": "7.2.2",
   "description": "Allow parsing of BigInt literals",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-bigint",
   "license": "MIT",
