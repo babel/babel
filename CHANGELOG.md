@@ -18,6 +18,13 @@ See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
 
+## v7.4.3 (2019-04-02)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#9769](https://github.com/babel/babel/pull/9769) Don't accept '
+
+
 ## v7.4.2 (2019-03-21)
 
 #### :bug: Bug Fix
