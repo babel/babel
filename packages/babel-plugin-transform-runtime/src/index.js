@@ -6,6 +6,7 @@ import { types as t } from "@babel/core";
 
 import getCoreJS2Definitions from "./runtime-corejs2-definitions";
 import getCoreJS3Definitions from "./runtime-corejs3-definitions";
+import { typeAnnotationToString } from "./helpers";
 
 function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
   try {
@@ -110,6 +111,16 @@ export default declare((api, options, dirname) => {
       has(StaticProperties, object) &&
       hasMapping(StaticProperties[object], method)
     );
+  }
+
+  function maybeNeedsPolyfill(path, methods, name) {
+    if (!methods[name].types) return true;
+
+    const typeAnnotation = path.get("object").getTypeAnnotation();
+    const type = typeAnnotationToString(typeAnnotation);
+    if (!type) return true;
+
+    return methods[name].types.some(name => name === type);
   }
 
   if (has(options, "useBuiltIns")) {
@@ -284,7 +295,14 @@ export default declare((api, options, dirname) => {
 
         // transform calling instance methods like `something.includes()`
         if (injectCoreJS3 && !hasStaticMapping(object.name, propertyName)) {
-          if (hasMapping(InstanceProperties, propertyName)) {
+          if (
+            hasMapping(InstanceProperties, propertyName) &&
+            maybeNeedsPolyfill(
+              path.get("callee"),
+              InstanceProperties,
+              propertyName,
+            )
+          ) {
             let context1, context2;
             if (t.isIdentifier(object)) {
               context1 = object;
@@ -381,7 +399,11 @@ export default declare((api, options, dirname) => {
             !hasStaticMapping(objectName, propertyName)
           ) {
             // transform getting of instance methods like `method = something.includes`
-            if (injectCoreJS3 && hasMapping(InstanceProperties, propertyName)) {
+            if (
+              injectCoreJS3 &&
+              hasMapping(InstanceProperties, propertyName) &&
+              maybeNeedsPolyfill(path, InstanceProperties, propertyName)
+            ) {
               path.replaceWith(
                 t.callExpression(
                   this.addDefaultImport(
