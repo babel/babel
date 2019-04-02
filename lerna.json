@@ -21,7 +21,7 @@
         "test/**",
         "codemods/**",
         "# We ignore every JSON file, except for built-in-modules, built-ins and plugins defined in babel-preset-env/data.",
-        "@(!(built-in-modules|built-ins|plugins)).json"
+        "@(!(built-in-modules|built-ins|plugins|package)).json"
       ]
     }
   },
