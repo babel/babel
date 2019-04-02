@@ -5,11 +5,12 @@ module.exports = function(api) {
 
   const includeCoverage = process.env.BABEL_COVERAGE === "true";
 
-  const envOpts = {
+  const envOptsNoTargets = {
     loose: true,
     modules: false,
     exclude: ["transform-typeof-symbol"],
   };
+  const envOpts = Object.assign({}, envOptsNoTargets);
 
   let convertESM = true;
   let ignoreLib = true;
@@ -96,6 +97,11 @@ module.exports = function(api) {
           // leading to dependency cycles.
           convertESM ? "@babel/transform-modules-commonjs" : null,
         ].filter(Boolean),
+      },
+      {
+        test: "./packages/babel-polyfill",
+        presets: [["@babel/env", envOptsNoTargets]],
+        plugins: [["@babel/transform-modules-commonjs", null]],
       },
       {
         // The vast majority of our src files are modules, but we use
