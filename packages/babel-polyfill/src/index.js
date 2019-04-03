@@ -1,7 +1,5 @@
 import "./noConflict";
 
-import global from "core-js/library/fn/global";
-
 if (global._babelPolyfill && typeof console !== "undefined" && console.warn) {
   console.warn(
     "@babel/polyfill is loaded more than once on this page. This is probably not desirable/intended " +

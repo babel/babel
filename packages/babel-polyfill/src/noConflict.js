@@ -18,3 +18,6 @@ import "core-js/fn/promise/finally";
 import "core-js/web";
 
 import "regenerator-runtime/runtime";
+
+// eslint-disable-next-line no-unused-vars
+import global from "core-js/library/fn/global";
