@@ -101,7 +101,7 @@ module.exports = function(api) {
       {
         test: "./packages/babel-polyfill",
         presets: [["@babel/env", envOptsNoTargets]],
-        plugins: [["@babel/transform-modules-commonjs", null]],
+        plugins: [["@babel/transform-modules-commonjs", { lazy: false }]],
       },
       {
         // The vast majority of our src files are modules, but we use
