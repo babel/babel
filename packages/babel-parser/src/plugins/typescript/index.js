@@ -1287,7 +1287,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       switch (starttype) {
         case tt._function:
-          return this.parseFunctionStatement(nany);
+          return this.parseFunctionStatement(
+            nany,
+            /* async */ false,
+            /* declarationPosition */ true,
+          );
         case tt._class:
           return this.parseClass(
             nany,
