@@ -4,6 +4,7 @@ import ScopeHandler, { Scope } from "../../util/scope";
 import {
   BIND_KIND_TYPE,
   BIND_FLAGS_TS_ENUM,
+  BIND_FLAGS_TS_EXPORT_ONLY,
   BIND_KIND_VALUE,
   BIND_FLAGS_CLASS,
   type ScopeFlags,
@@ -19,6 +20,12 @@ class TypeScriptScope extends Scope {
 
   // classes (which are also in .lexical) and interface (which are also in .types)
   classes: string[] = [];
+
+  // namespaces and bodyless-functions are too difficult to track,
+  // especially without type analysis.
+  // We need to track them anyway, to avoid "X is not defined" errors
+  // when exporting them.
+  exportOnlyBindings: string[] = [];
 }
 
 // See https://github.com/babel/babel/pull/9766#discussion_r268920730 for an
@@ -30,9 +37,15 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
   }
 
   declareName(name: string, bindingType: BindingTypes, pos: number) {
+    const scope = this.currentScope();
+    if (bindingType & BIND_FLAGS_TS_EXPORT_ONLY) {
+      this.maybeExportDefined(scope, name);
+      scope.exportOnlyBindings.push(name);
+      return;
+    }
+
     super.declareName(...arguments);
 
-    const scope = this.currentScope();
     if (bindingType & BIND_KIND_TYPE) {
       if (!(bindingType & BIND_KIND_VALUE)) {
         // "Value" bindings have already been registered by the superclass.
@@ -71,7 +84,10 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
   }
 
   checkLocalExport(id: N.Identifier) {
-    if (this.scopeStack[0].types.indexOf(id.name) === -1) {
+    if (
+      this.scopeStack[0].types.indexOf(id.name) === -1 &&
+      this.scopeStack[0].exportOnlyBindings.indexOf(id.name) === -1
+    ) {
       super.checkLocalExport(id);
     }
   }

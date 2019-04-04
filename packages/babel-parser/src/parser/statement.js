@@ -1051,22 +1051,6 @@ export default class StatementParser extends ExpressionParser {
 
     if (isStatement) {
       node.id = this.parseFunctionId(requireId);
-      if (node.id && !isHangingStatement) {
-        // If it is a regular function declaration in sloppy mode, then it is
-        // subject to Annex B semantics (BIND_FUNCTION). Otherwise, the binding
-        // mode depends on properties of the current scope (see
-        // treatFunctionsAsVar).
-        this.checkLVal(
-          node.id,
-          this.state.strict || node.generator || node.async
-            ? this.scope.treatFunctionsAsVar
-              ? BIND_VAR
-              : BIND_LEXICAL
-            : BIND_FUNCTION,
-          null,
-          "function name",
-        );
-      }
     }
 
     const oldInClassProperty = this.state.inClassProperty;
@@ -1094,6 +1078,15 @@ export default class StatementParser extends ExpressionParser {
       );
     });
 
+    this.scope.exit();
+
+    if (isStatement && !isHangingStatement) {
+      // We need to validate this _after_ parsing the function body
+      // because of TypeScript body-less function declarations,
+      // which shouldn't be added to the scope.
+      this.checkFunctionStatementId(node);
+    }
+
     this.state.inClassProperty = oldInClassProperty;
     this.state.yieldPos = oldYieldPos;
     this.state.awaitPos = oldAwaitPos;
@@ -1118,6 +1111,25 @@ export default class StatementParser extends ExpressionParser {
 
     this.state.inParameters = oldInParameters;
     this.checkYieldAwaitInDefaultParams();
+  }
+
+  checkFunctionStatementId(node: N.Function): void {
+    if (!node.id) return;
+
+    // If it is a regular function declaration in sloppy mode, then it is
+    // subject to Annex B semantics (BIND_FUNCTION). Otherwise, the binding
+    // mode depends on properties of the current scope (see
+    // treatFunctionsAsVar).
+    this.checkLVal(
+      node.id,
+      this.state.strict || node.generator || node.async
+        ? this.scope.treatFunctionsAsVar
+          ? BIND_VAR
+          : BIND_LEXICAL
+        : BIND_FUNCTION,
+      null,
+      "function name",
+    );
   }
 
   // Parse a class declaration or literal (depending on the

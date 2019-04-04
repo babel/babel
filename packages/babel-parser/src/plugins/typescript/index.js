@@ -13,6 +13,8 @@ import {
   BIND_TS_ENUM,
   BIND_TS_TYPE,
   BIND_TS_INTERFACE,
+  BIND_TS_FN_TYPE,
+  BIND_TS_NAMESPACE,
 } from "../../util/scopeflags";
 import TypeScriptScopeHandler from "./scope";
 
@@ -1153,11 +1155,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseModuleOrNamespaceDeclaration(
       node: N.TsModuleDeclaration,
+      nested?: boolean = false,
     ): N.TsModuleDeclaration {
       node.id = this.parseIdentifier();
+
+      if (!nested) {
+        this.checkLVal(
+          node.id,
+          BIND_TS_NAMESPACE,
+          null,
+          "module or namespace declaration",
+        );
+      }
+
       if (this.eat(tt.dot)) {
         const inner = this.startNode();
-        this.tsParseModuleOrNamespaceDeclaration(inner);
+        this.tsParseModuleOrNamespaceDeclaration(inner, true);
         node.body = inner;
       } else {
         node.body = this.tsParseModuleBlock();
@@ -1560,6 +1573,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       super.parseFunctionBodyAndFinish(node, type, isMethod);
+    }
+
+    checkFunctionStatementId(node: N.Function): void {
+      if (!node.body && node.id) {
+        this.checkLVal(node.id, BIND_TS_FN_TYPE, null, "function name");
+      } else {
+        super.checkFunctionStatementId(...arguments);
+      }
     }
 
     parseSubscript(
