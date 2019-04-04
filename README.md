@@ -31,11 +31,11 @@
 Babel (pronounced ["babble"](https://soundcloud.com/sebmck/how-to-pronounce-babel))  is a community-driven project used by many companies and projects, and is maintained by a group of [volunteers](https://babeljs.io/team). If you'd like to help support the future of the project, please consider:
 
 - Giving developer time on the project. (Message us on [Twitter](https://twitter.com/babeljs) or [Slack](https://slack.babeljs.io/) for guidance!)
-- Giving funds by becoming a sponsor (see below)!
+- Giving funds by becoming a sponsor on [Open Collective](https://opencollective.com/babel) or [Patreon](https://www.patreon.com/henryzhu)!
 
-## Open Collective Sponsors
+## Sponsors
 
-Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/babel#sponsor)]
+Our top sponsors are shown below! [[Become a sponsor](https://opencollective.com/babel#sponsor)]
 
 <a href="https://opencollective.com/babel/sponsor/0/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/babel/sponsor/1/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/1/avatar.svg"></a>
@@ -52,15 +52,6 @@ Become a sponsor and get your logo on our README on Github with a link to your s
   <a href="https://opencollective.com/babel/sponsor/12/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/12/avatar.svg"></a>
   <a href="https://opencollective.com/babel/sponsor/13/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/13/avatar.svg"></a>
   <a href="https://opencollective.com/babel/sponsor/14/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/14/avatar.svg"></a>
-
-## Patreon Sponsors
-
-Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://www.patreon.com/henryzhu)]
-
-## Bronze
-
-<a href="https://webflow.com" target="_blank"><img src="https://opencollective.com/proxy/images/?src=https%3A%2F%2Fopencollective-production.s3-us-west-1.amazonaws.com%2F4a5024b0-8cf2-11e7-b1a2-b30b1de1463c.png&height=64"></a>
-<a href="https://issuehunt.io" target="_blank"><img src="https://github.com/BoostIO/issuehunt-materials/blob/master/v1/issuehunt-logo-and-word-v1.png?raw=true" height="64"></a>
 
 ## Intro
 
