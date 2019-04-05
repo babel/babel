@@ -112,7 +112,7 @@
     "access": "public"
   },
   "bugs": {
-    "url": "https://github.com/babel/babel-standalone/issues"
+    "url": "https://github.com/babel/babel/issues"
   },
-  "homepage": "https://github.com/babel/babel-standalone#readme"
+  "homepage": "https://github.com/babel/babel/tree/master/packages/babel-standalone"
 }
