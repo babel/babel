@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
-import wrapFunction from "@babel/helper-wrap-function";
+import proxyWrapFunction from "@babel/helper-proxy-wrap-function";
 import { types as t } from "@babel/core";
 
 export default declare(api => {
@@ -57,7 +57,7 @@ export default declare(api => {
           ]),
         );
 
-        wrapFunction(fnPath, state.addHelper("skipFirstGeneratorNext"));
+        proxyWrapFunction(fnPath, state.addHelper("skipFirstGeneratorNext"));
       },
     },
   };
