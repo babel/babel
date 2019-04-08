@@ -1,15 +1,17 @@
 function _skipFirstGeneratorNext(fn) { return function () { var it = fn.apply(this, arguments); it.next(); return it; }; }
 
-const foo = function () {
-  var _gen = _skipFirstGeneratorNext(function* () {
+const foo = (function () {
+  let _original_gen = function* gen() {
     let _functionSent = yield;
 
     return _functionSent;
+  },
+      _modified_gen = _skipFirstGeneratorNext(_original_gen);
+
+  return new Proxy(_original_gen, {
+    apply(target, thisArgument, argumentsList) {
+      return Reflect.apply(_modified_gen, thisArgument, argumentsList);
+    }
+
   });
-
-  function gen() {
-    return _gen.apply(this, arguments);
-  }
-
-  return gen;
-}();
+})();

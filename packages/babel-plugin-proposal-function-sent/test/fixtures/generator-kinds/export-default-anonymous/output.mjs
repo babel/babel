@@ -1,14 +1,18 @@
 function _skipFirstGeneratorNext(fn) { return function () { var it = fn.apply(this, arguments); it.next(); return it; }; }
 
-export default function () {
-  return _ref.apply(this, arguments);
-}
+let _ref = function* () {
+  let _functionSent = yield;
 
-function _ref() {
-  _ref = _skipFirstGeneratorNext(function* () {
-    let _functionSent = yield;
+  return _functionSent;
+},
+    _ref2 = _skipFirstGeneratorNext(_ref);
 
-    return _functionSent;
-  });
-  return _ref.apply(this, arguments);
-}
+let _ref3;
+
+_ref3 = new Proxy(_ref, {
+  apply(target, thisArgument, argumentsList) {
+    return Reflect.apply(_ref2, thisArgument, argumentsList);
+  }
+
+});
+export default _ref3;

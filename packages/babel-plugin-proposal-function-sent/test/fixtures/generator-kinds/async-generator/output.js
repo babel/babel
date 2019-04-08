@@ -21,10 +21,20 @@ function foo() {
 }
 
 function _foo() {
-  _foo = _wrapAsyncGenerator(_skipFirstGeneratorNext(function* () {
-    let _functionSent = yield;
+  _foo = _wrapAsyncGenerator((function () {
+    let _ref = function* () {
+      let _functionSent = yield;
 
-    _functionSent = yield _awaitAsyncGenerator(_functionSent);
-  }));
+      _functionSent = yield _awaitAsyncGenerator(_functionSent);
+    },
+        _ref2 = _skipFirstGeneratorNext(_ref);
+
+    return new Proxy(_ref, {
+      apply(target, thisArgument, argumentsList) {
+        return Reflect.apply(_ref2, thisArgument, argumentsList);
+      }
+
+    });
+  })());
   return _foo.apply(this, arguments);
 }
