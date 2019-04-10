@@ -933,21 +933,11 @@ helpers.arrayWithHoles = helper("7.0.0-beta.0")`
 
 helpers.iterableToArray = helper("7.0.0-beta.0")`
   export default function _iterableToArray(iter) {
-    // String.prototype
-    if (typeof iter === 'string') {
-      return Array.from(iter);
-    }
-
-    // Function Arguments
-    if (Object.prototype.toString.call(iter) === "[object Arguments]") {
-      return Array.from(iter);
-    }
-
-    // Check for iterable WeakMap, Map, Set, or TypedArray
-    // Check for custom iterator outside ES6 spec
-    if (Symbol.iterator in Object(iter)) {
-      return Array.from(iter);
-    }
+    if (
+      typeof iter === 'string'
+      || Object.prototype.toString.call(iter) === "[object Arguments]"
+      || Symbol.iterator in Object(iter)
+    ) return Array.from(iter);
   }
 `;
 
