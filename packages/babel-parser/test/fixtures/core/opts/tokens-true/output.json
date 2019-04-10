@@ -217,8 +217,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "var",
       "start": 0,
@@ -270,8 +269,7 @@
         "isAssign": true,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "=",
       "start": 6,
@@ -297,8 +295,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": 1,
       "start": 8,
@@ -324,8 +321,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "start": 9,
       "end": 10,
@@ -351,8 +347,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "var",
       "start": 12,
@@ -404,8 +399,7 @@
         "isAssign": true,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "=",
       "start": 18,
@@ -457,8 +451,7 @@
         "isAssign": false,
         "prefix": true,
         "postfix": false,
-        "binop": 9,
-        "updateContext": null
+        "binop": 9
       },
       "value": "+",
       "start": 22,
@@ -484,8 +477,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": 1,
       "start": 24,
@@ -511,8 +503,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "start": 25,
       "end": 26,
@@ -537,8 +528,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "start": 26,
       "end": 26,

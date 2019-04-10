@@ -10,6 +10,7 @@ packages/babel-runtime-corejs3
 packages/*/node_modules
 packages/*/lib
 packages/*/dist
+packages/babel-parser/bundle
 packages/*/test/fixtures
 packages/*/test/tmp
 codemods/*/node_modules

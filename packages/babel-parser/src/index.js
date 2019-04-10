@@ -1,17 +1,16 @@
 // @flow
 
-import { type Options } from "./options";
+import { load } from "::build-tool::";
+
+import type { Options } from "./options";
 import {
   hasPlugin,
   validatePlugins,
   mixinPluginNames,
-  mixinPlugins,
   type PluginList,
 } from "./plugin-utils";
-import Parser from "./parser";
 
-import { types as tokTypes } from "./tokenizer/types";
-import "./tokenizer/context";
+export { types as tokTypes } from "./util/token-types";
 
 import type { Expression, File } from "./types";
 
@@ -22,8 +21,8 @@ export function parse(input: string, options?: Options): File {
     };
     try {
       options.sourceType = "module";
-      const parser = getParser(options, input);
-      const ast = parser.parse();
+      const parser = getParser(options);
+      const ast = parser.parse(options, input);
 
       // Rather than try to parse as a script first, we opt to parse as a module and convert back
       // to a script where possible to avoid having to do a full re-parse of the input content.
@@ -32,52 +31,61 @@ export function parse(input: string, options?: Options): File {
     } catch (moduleError) {
       try {
         options.sourceType = "script";
-        return getParser(options, input).parse();
+        return getParser(options).parse(options, input);
       } catch (scriptError) {}
 
       throw moduleError;
     }
   } else {
-    return getParser(options, input).parse();
+    return getParser(options).parse(options, input);
   }
 }
 
 export function parseExpression(input: string, options?: Options): Expression {
-  const parser = getParser(options, input);
-  if (parser.options.strictMode) {
-    parser.state.strict = true;
-  }
-  return parser.getExpression();
+  return getParser(options).getExpression(options, input);
 }
 
-export { tokTypes };
+function getParser(options?: Options) {
+  const plugins = (options && options.plugins) || [];
+  validatePlugins(plugins);
 
-function getParser(options: ?Options, input: string): Parser {
-  let cls = Parser;
-  if (options && options.plugins) {
-    validatePlugins(options.plugins);
-    cls = getParserClass(options.plugins);
-  }
-
-  return new cls(options, input);
-}
-
-const parserClassCache: { [key: string]: Class<Parser> } = {};
-
-/** Get a Parser class with plugins applied. */
-function getParserClass(pluginsFromOptions: PluginList): Class<Parser> {
-  const pluginList = mixinPluginNames.filter(name =>
-    hasPlugin(pluginsFromOptions, name),
-  );
+  const pluginList = mixinPluginNames.filter(name => hasPlugin(plugins, name));
 
   const key = pluginList.join("/");
-  let cls = parserClassCache[key];
-  if (!cls) {
-    cls = Parser;
-    for (const plugin of pluginList) {
-      cls = mixinPlugins[plugin](cls);
-    }
-    parserClassCache[key] = cls;
+  let parser = parserCache[key];
+  if (!parser) {
+    parser = createParser(plugins);
+    parserCache[key] = parser;
   }
-  return cls;
+  return parser;
+}
+
+const parserCache: { [key: string]: any } = {};
+
+function createParser(plugins: PluginList) {
+  load("./tokenizer/entry.js");
+
+  const parser = load("./parser/entry.js");
+
+  // NOTE: order is important. estree must come first; placeholders must come last.
+
+  if (hasPlugin(plugins, "estree")) {
+    load("./plugins/estree.js");
+  }
+
+  if (hasPlugin(plugins, "jsx")) {
+    load("./plugins/jsx/index.js");
+  }
+
+  if (hasPlugin(plugins, "flow")) {
+    load("./plugins/flow.js");
+  } else if (hasPlugin(plugins, "typescript")) {
+    load("./plugins/typescript.js");
+  }
+
+  if (hasPlugin(plugins, "placeholders")) {
+    load("./plugins/placeholders.js");
+  }
+
+  return parser;
 }

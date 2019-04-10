@@ -3,7 +3,7 @@
 // @flow
 
 import * as charCodes from "charcodes";
-import { keywords } from "../tokenizer/types";
+import { keywords } from "./token-types";
 
 const reservedWords = {
   strict: [

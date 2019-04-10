@@ -1,0 +1,4 @@
+declare module "::build-tool::" {
+  declare function load<T>(path: string): T;
+  declare function original<T>(fn: T): T;
+}

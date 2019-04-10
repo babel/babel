@@ -24,211 +24,201 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import BaseParser from "./base";
 import type { Comment, Node } from "../types";
+
+import { filename, state } from "./index";
 
 function last<T>(stack: $ReadOnlyArray<T>): T {
   return stack[stack.length - 1];
 }
 
-export default class CommentsParser extends BaseParser {
-  addComment(comment: Comment): void {
-    if (this.filename) comment.loc.filename = this.filename;
-    this.state.trailingComments.push(comment);
-    this.state.leadingComments.push(comment);
+export function addComment(comment: Comment): void {
+  if (filename) comment.loc.filename = filename;
+  state.trailingComments.push(comment);
+  state.leadingComments.push(comment);
+}
+
+export function processComment(node: Node): void {
+  if (node.type === "Program" && node.body.length > 0) return;
+
+  const stack = state.commentStack;
+
+  let firstChild, lastChild, trailingComments, i, j;
+
+  if (state.trailingComments.length > 0) {
+    // If the first comment in trailingComments comes after the
+    // current node, then we're good - all comments in the array will
+    // come after the node and so it's safe to add them as official
+    // trailingComments.
+    if (state.trailingComments[0].start >= node.end) {
+      trailingComments = state.trailingComments;
+      state.trailingComments = [];
+    } else {
+      // Otherwise, if the first comment doesn't come after the
+      // current node, that means we have a mix of leading and trailing
+      // comments in the array and that leadingComments contains the
+      // same items as trailingComments. Reset trailingComments to
+      // zero items and we'll handle this by evaluating leadingComments
+      // later.
+      state.trailingComments.length = 0;
+    }
+  } else if (stack.length > 0) {
+    const lastInStack = last(stack);
+    if (
+      lastInStack.trailingComments &&
+      lastInStack.trailingComments[0].start >= node.end
+    ) {
+      trailingComments = lastInStack.trailingComments;
+      delete lastInStack.trailingComments;
+    }
   }
 
-  processComment(node: Node): void {
-    if (node.type === "Program" && node.body.length > 0) return;
+  // Eating the stack.
+  if (stack.length > 0 && last(stack).start >= node.start) {
+    firstChild = stack.pop();
+  }
 
-    const stack = this.state.commentStack;
+  while (stack.length > 0 && last(stack).start >= node.start) {
+    lastChild = stack.pop();
+  }
 
-    let firstChild, lastChild, trailingComments, i, j;
+  if (!lastChild && firstChild) lastChild = firstChild;
 
-    if (this.state.trailingComments.length > 0) {
-      // If the first comment in trailingComments comes after the
-      // current node, then we're good - all comments in the array will
-      // come after the node and so it's safe to add them as official
-      // trailingComments.
-      if (this.state.trailingComments[0].start >= node.end) {
-        trailingComments = this.state.trailingComments;
-        this.state.trailingComments = [];
-      } else {
-        // Otherwise, if the first comment doesn't come after the
-        // current node, that means we have a mix of leading and trailing
-        // comments in the array and that leadingComments contains the
-        // same items as trailingComments. Reset trailingComments to
-        // zero items and we'll handle this by evaluating leadingComments
-        // later.
-        this.state.trailingComments.length = 0;
-      }
-    } else if (stack.length > 0) {
-      const lastInStack = last(stack);
-      if (
-        lastInStack.trailingComments &&
-        lastInStack.trailingComments[0].start >= node.end
-      ) {
-        trailingComments = lastInStack.trailingComments;
-        delete lastInStack.trailingComments;
-      }
-    }
+  // Attach comments that follow a trailing comma on the last
+  // property in an object literal or a trailing comma in function arguments
+  // as trailing comments
+  if (firstChild && state.leadingComments.length > 0) {
+    const lastComment = last(state.leadingComments);
 
-    // Eating the stack.
-    if (stack.length > 0 && last(stack).start >= node.start) {
-      firstChild = stack.pop();
-    }
-
-    while (stack.length > 0 && last(stack).start >= node.start) {
-      lastChild = stack.pop();
-    }
-
-    if (!lastChild && firstChild) lastChild = firstChild;
-
-    // Attach comments that follow a trailing comma on the last
-    // property in an object literal or a trailing comma in function arguments
-    // as trailing comments
-    if (firstChild && this.state.leadingComments.length > 0) {
-      const lastComment = last(this.state.leadingComments);
-
-      if (firstChild.type === "ObjectProperty") {
-        if (lastComment.start >= node.start) {
-          if (this.state.commentPreviousNode) {
-            for (j = 0; j < this.state.leadingComments.length; j++) {
-              if (
-                this.state.leadingComments[j].end <
-                this.state.commentPreviousNode.end
-              ) {
-                this.state.leadingComments.splice(j, 1);
-                j--;
-              }
-            }
-
-            if (this.state.leadingComments.length > 0) {
-              firstChild.trailingComments = this.state.leadingComments;
-              this.state.leadingComments = [];
-            }
-          }
-        }
-      } else if (
-        node.type === "CallExpression" &&
-        node.arguments &&
-        node.arguments.length
-      ) {
-        const lastArg = last(node.arguments);
-
-        if (
-          lastArg &&
-          lastComment.start >= lastArg.start &&
-          lastComment.end <= node.end
-        ) {
-          if (this.state.commentPreviousNode) {
-            for (j = 0; j < this.state.leadingComments.length; j++) {
-              if (
-                this.state.leadingComments[j].end <
-                this.state.commentPreviousNode.end
-              ) {
-                this.state.leadingComments.splice(j, 1);
-                j--;
-              }
-            }
-            if (this.state.leadingComments.length > 0) {
-              lastArg.trailingComments = this.state.leadingComments;
-              this.state.leadingComments = [];
-            }
-          }
-        }
-      }
-    }
-
-    if (lastChild) {
-      if (lastChild.leadingComments) {
-        if (
-          lastChild !== node &&
-          lastChild.leadingComments.length > 0 &&
-          last(lastChild.leadingComments).end <= node.start
-        ) {
-          node.leadingComments = lastChild.leadingComments;
-          delete lastChild.leadingComments;
-        } else {
-          // A leading comment for an anonymous class had been stolen by its first ClassMethod,
-          // so this takes back the leading comment.
-          // See also: https://github.com/eslint/espree/issues/158
-          for (i = lastChild.leadingComments.length - 2; i >= 0; --i) {
-            if (lastChild.leadingComments[i].end <= node.start) {
-              node.leadingComments = lastChild.leadingComments.splice(0, i + 1);
-              break;
-            }
-          }
-        }
-      }
-    } else if (this.state.leadingComments.length > 0) {
-      if (last(this.state.leadingComments).end <= node.start) {
-        if (this.state.commentPreviousNode) {
-          for (j = 0; j < this.state.leadingComments.length; j++) {
-            if (
-              this.state.leadingComments[j].end <
-              this.state.commentPreviousNode.end
-            ) {
-              this.state.leadingComments.splice(j, 1);
+    if (firstChild.type === "ObjectProperty") {
+      if (lastComment.start >= node.start) {
+        if (state.commentPreviousNode) {
+          for (j = 0; j < state.leadingComments.length; j++) {
+            if (state.leadingComments[j].end < state.commentPreviousNode.end) {
+              state.leadingComments.splice(j, 1);
               j--;
             }
           }
+
+          if (state.leadingComments.length > 0) {
+            firstChild.trailingComments = state.leadingComments;
+            state.leadingComments = [];
+          }
         }
-        if (this.state.leadingComments.length > 0) {
-          node.leadingComments = this.state.leadingComments;
-          this.state.leadingComments = [];
+      }
+    } else if (
+      node.type === "CallExpression" &&
+      node.arguments &&
+      node.arguments.length
+    ) {
+      const lastArg = last(node.arguments);
+
+      if (
+        lastArg &&
+        lastComment.start >= lastArg.start &&
+        lastComment.end <= node.end
+      ) {
+        if (state.commentPreviousNode) {
+          for (j = 0; j < state.leadingComments.length; j++) {
+            if (state.leadingComments[j].end < state.commentPreviousNode.end) {
+              state.leadingComments.splice(j, 1);
+              j--;
+            }
+          }
+          if (state.leadingComments.length > 0) {
+            lastArg.trailingComments = state.leadingComments;
+            state.leadingComments = [];
+          }
         }
+      }
+    }
+  }
+
+  if (lastChild) {
+    if (lastChild.leadingComments) {
+      if (
+        lastChild !== node &&
+        lastChild.leadingComments.length > 0 &&
+        last(lastChild.leadingComments).end <= node.start
+      ) {
+        node.leadingComments = lastChild.leadingComments;
+        delete lastChild.leadingComments;
       } else {
-        // https://github.com/eslint/espree/issues/2
-        //
-        // In special cases, such as return (without a value) and
-        // debugger, all comments will end up as leadingComments and
-        // will otherwise be eliminated. This step runs when the
-        // commentStack is empty and there are comments left
-        // in leadingComments.
-        //
-        // This loop figures out the stopping point between the actual
-        // leading and trailing comments by finding the location of the
-        // first comment that comes after the given node.
-        for (i = 0; i < this.state.leadingComments.length; i++) {
-          if (this.state.leadingComments[i].end > node.start) {
+        // A leading comment for an anonymous class had been stolen by its first ClassMethod,
+        // so this takes back the leading comment.
+        // See also: https://github.com/eslint/espree/issues/158
+        for (i = lastChild.leadingComments.length - 2; i >= 0; --i) {
+          if (lastChild.leadingComments[i].end <= node.start) {
+            node.leadingComments = lastChild.leadingComments.splice(0, i + 1);
             break;
           }
         }
-
-        // Split the array based on the location of the first comment
-        // that comes after the node. Keep in mind that this could
-        // result in an empty array, and if so, the array must be
-        // deleted.
-        const leadingComments = this.state.leadingComments.slice(0, i);
-
-        if (leadingComments.length) {
-          node.leadingComments = leadingComments;
-        }
-
-        // Similarly, trailing comments are attached later. The variable
-        // must be reset to null if there are no trailing comments.
-        trailingComments = this.state.leadingComments.slice(i);
-        if (trailingComments.length === 0) {
-          trailingComments = null;
-        }
       }
     }
+  } else if (state.leadingComments.length > 0) {
+    if (last(state.leadingComments).end <= node.start) {
+      if (state.commentPreviousNode) {
+        for (j = 0; j < state.leadingComments.length; j++) {
+          if (state.leadingComments[j].end < state.commentPreviousNode.end) {
+            state.leadingComments.splice(j, 1);
+            j--;
+          }
+        }
+      }
+      if (state.leadingComments.length > 0) {
+        node.leadingComments = state.leadingComments;
+        state.leadingComments = [];
+      }
+    } else {
+      // https://github.com/eslint/espree/issues/2
+      //
+      // In special cases, such as return (without a value) and
+      // debugger, all comments will end up as leadingComments and
+      // will otherwise be eliminated. This step runs when the
+      // commentStack is empty and there are comments left
+      // in leadingComments.
+      //
+      // This loop figures out the stopping point between the actual
+      // leading and trailing comments by finding the location of the
+      // first comment that comes after the given node.
+      for (i = 0; i < state.leadingComments.length; i++) {
+        if (state.leadingComments[i].end > node.start) {
+          break;
+        }
+      }
 
-    this.state.commentPreviousNode = node;
+      // Split the array based on the location of the first comment
+      // that comes after the node. Keep in mind that this could
+      // result in an empty array, and if so, the array must be
+      // deleted.
+      const leadingComments = state.leadingComments.slice(0, i);
 
-    if (trailingComments) {
-      if (
-        trailingComments.length &&
-        trailingComments[0].start >= node.start &&
-        last(trailingComments).end <= node.end
-      ) {
-        node.innerComments = trailingComments;
-      } else {
-        node.trailingComments = trailingComments;
+      if (leadingComments.length) {
+        node.leadingComments = leadingComments;
+      }
+
+      // Similarly, trailing comments are attached later. The variable
+      // must be reset to null if there are no trailing comments.
+      trailingComments = state.leadingComments.slice(i);
+      if (trailingComments.length === 0) {
+        trailingComments = null;
       }
     }
-
-    stack.push(node);
   }
+
+  state.commentPreviousNode = node;
+
+  if (trailingComments) {
+    if (
+      trailingComments.length &&
+      trailingComments[0].start >= node.start &&
+      last(trailingComments).end <= node.end
+    ) {
+      node.innerComments = trailingComments;
+    } else {
+      node.trailingComments = trailingComments;
+    }
+  }
+
+  stack.push(node);
 }

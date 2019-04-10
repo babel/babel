@@ -103,6 +103,7 @@ module.exports = function(api) {
         // the modules to be more easily distinguished from CommonJS
         test: [
           "packages/*/src",
+          "packages/babel-parser/bundle",
           "packages/*/test",
           "codemods/*/src",
           "codemods/*/test",

@@ -2,11 +2,14 @@
 
 import type { Options } from "../options";
 import * as N from "../types";
-import { Position } from "../util/location";
+import { Position } from "./location";
 
-import { types as ct, type TokContext } from "./context";
-import type { Token } from "./index";
-import { types as tt, type TokenType } from "./types";
+import {
+  typeof types as ContextMap,
+  type TokContext,
+} from "../tokenizer/context";
+import type { Token } from "../tokenizer";
+import { typeof types as TypesMap, type TokenType } from "./token-types";
 
 type TopicContextState = {
   // When a topic binding has been currently established,
@@ -29,6 +32,16 @@ export default class State {
   // corresponding to those offsets
   startLoc: Position;
   endLoc: Position;
+
+  tt: TypesMap;
+  ct: ContextMap;
+
+  constructor(tt: TypesMap, ct: ContextMap) {
+    this.tt = tt;
+    this.ct = ct;
+    this.type = tt.eof;
+    this.context.push(ct.braceStatement);
+  }
 
   init(options: Options): void {
     this.strict =
@@ -120,7 +133,7 @@ export default class State {
 
   // Properties of the current token:
   // Its type
-  type: TokenType = tt.eof;
+  type: TokenType;
 
   // For tokens that include more information than their type, the value
   value: any = null;
@@ -140,7 +153,7 @@ export default class State {
   // The context stack is used to superficially track syntactic
   // context to predict whether a regular expression is allowed in a
   // given position.
-  context: Array<TokContext> = [ct.braceStatement];
+  context: Array<TokContext> = [];
   exprAllowed: boolean = true;
 
   // Used to signal to callers of `readWord1` whether the word
@@ -158,12 +171,17 @@ export default class State {
 
   invalidTemplateEscapePosition: ?number = null;
 
+  // The value of the @flow/@noflow pragma. Initially undefined, transitions
+  // to "@flow" or "@noflow" if we see a pragma. Transitions to null if we are
+  // past the initial comment.
+  flowPragma: void | null | "flow" | "noflow" = undefined;
+
   curPosition(): Position {
     return new Position(this.curLine, this.pos - this.lineStart);
   }
 
   clone(skipArrays?: boolean): State {
-    const state = new State();
+    const state = new State(this.tt, this.ct);
     const keys = Object.keys(this);
     for (let i = 0, length = keys.length; i < length; i++) {
       const key = keys[i];

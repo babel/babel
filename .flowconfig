@@ -5,6 +5,7 @@
 <PROJECT_ROOT>/codemods/.*/lib
 <PROJECT_ROOT>/codemods/.*/test
 <PROJECT_ROOT>/node_modules/module-deps/
+<PROJECT_ROOT>/packages/babel-parser/bundle
 
 [include]
 packages/*/src
@@ -15,6 +16,7 @@ lib/file.js
 lib/parser.js
 lib/third-party-libs.js.flow
 packages/babel-types/lib/index.js.flow
+packages/babel-parser/scripts/build-tool.js.flow
 
 [options]
 include_warnings=true
@@ -25,3 +27,4 @@ suppress_type=$FlowFixMe
 suppress_type=$FlowSubtype
 esproposal.export_star_as=enable
 module.name_mapper='^@babel\/\([a-zA-Z0-9_\-]+\)$' -> '<PROJECT_ROOT>/packages/babel-\1/src/index'
+module.name_mapper='^::build-tool::bindings\/\(.+\)$' -> '<PROJECT_ROOT>/packages/babel-parser/src/\1/entry'

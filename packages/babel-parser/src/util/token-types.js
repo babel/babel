@@ -53,7 +53,6 @@ export class TokenType {
   prefix: boolean;
   postfix: boolean;
   binop: ?number;
-  updateContext: ?(prevType: TokenType) => void;
 
   constructor(label: string, conf: TokenOptions = {}) {
     this.label = label;
@@ -66,7 +65,6 @@ export class TokenType {
     this.prefix = !!conf.prefix;
     this.postfix = !!conf.postfix;
     this.binop = conf.binop != null ? conf.binop : null;
-    this.updateContext = null;
   }
 }
 
@@ -193,4 +191,13 @@ export const types: { [name: string]: TokenType } = {
   _typeof: createKeyword("typeof", { beforeExpr, prefix, startsExpr }),
   _void: createKeyword("void", { beforeExpr, prefix, startsExpr }),
   _delete: createKeyword("delete", { beforeExpr, prefix, startsExpr }),
+
+  // JSX plugin
+  jsxName: new TokenType("jsxName"),
+  jsxText: new TokenType("jsxText", { beforeExpr: true }),
+  jsxTagStart: new TokenType("jsxTagStart", { startsExpr: true }),
+  jsxTagEnd: new TokenType("jsxTagEnd"),
+
+  // placeholders plugin
+  placeholder: new TokenType("%%", { startsExpr: true }),
 };

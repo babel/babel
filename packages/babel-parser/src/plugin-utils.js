@@ -1,12 +1,8 @@
 // @flow
 
-import type Parser from "./parser";
-
 export type Plugin = string | [string, Object];
 
 export type PluginList = $ReadOnlyArray<Plugin>;
-
-export type MixinPlugin = (superClass: Class<Parser>) => Class<Parser>;
 
 export function hasPlugin(plugins: PluginList, name: string): boolean {
   return plugins.some(plugin => {
@@ -82,23 +78,10 @@ export function validatePlugins(plugins: PluginList) {
   }
 }
 
-// These plugins are defined using a mixin which extends the parser class.
-
-import estree from "./plugins/estree";
-import flow from "./plugins/flow";
-import jsx from "./plugins/jsx";
-import typescript from "./plugins/typescript";
-import placeholders from "./plugins/placeholders";
-
-// NOTE: order is important. estree must come first; placeholders must come last.
-export const mixinPlugins: { [name: string]: MixinPlugin } = {
-  estree,
-  jsx,
-  flow,
-  typescript,
-  placeholders,
-};
-
-export const mixinPluginNames: $ReadOnlyArray<string> = Object.keys(
-  mixinPlugins,
-);
+export const mixinPluginNames: $ReadOnlyArray<string> = [
+  "estree",
+  "flow",
+  "typescript",
+  "jsx",
+  "placeholders",
+];

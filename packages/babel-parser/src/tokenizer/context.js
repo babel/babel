@@ -4,8 +4,12 @@
 // given point in the program is loosely based on sweet.js' approach.
 // See https://github.com/mozilla/sweet.js/wiki/design
 
-import { types as tt } from "./types";
 import { lineBreak } from "../util/whitespace";
+
+import { types as tt, type TokenType } from "../util/token-types";
+
+import { state, scope, input } from "::build-tool::bindings/parser";
+import { braceIsBlock, curContext, readTmplToken } from "./index";
 
 export class TokContext {
   constructor(
@@ -34,99 +38,136 @@ export const types: {
   templateQuasi: new TokContext("${", false),
   parenStatement: new TokContext("(", false),
   parenExpression: new TokContext("(", true),
-  template: new TokContext("`", true, true, p => p.readTmplToken()),
+  template: new TokContext("`", true, true, () => readTmplToken()),
   functionExpression: new TokContext("function", true),
   functionStatement: new TokContext("function", false),
+
+  // Used by the jsx plugin
+  j_oTag: new TokContext("<tag", false),
+  j_cTag: new TokContext("</tag", false),
+  j_expr: new TokContext("<tag>...</tag>", true, true),
 };
+
+const updaters: Map<TokenType, (prev: TokenType) => void> = new Map();
+
+export function updateContext(type: TokenType, prevType: TokenType): boolean {
+  const updater = updaters.get(type);
+  if (updater) {
+    updater(prevType);
+    return true;
+  }
+  return false;
+}
 
 // Token-specific context update code
 
-tt.parenR.updateContext = tt.braceR.updateContext = function() {
-  if (this.state.context.length === 1) {
-    this.state.exprAllowed = true;
+updaters.set(tt.parenR, function() {
+  if (state.context.length === 1) {
+    state.exprAllowed = true;
     return;
   }
 
-  let out = this.state.context.pop();
-  if (out === types.braceStatement && this.curContext().token === "function") {
-    out = this.state.context.pop();
+  let out = state.context.pop();
+  if (out === types.braceStatement && curContext().token === "function") {
+    out = state.context.pop();
   }
 
-  this.state.exprAllowed = !out.isExpr;
-};
+  state.exprAllowed = !out.isExpr;
+});
+// $FlowIgnore .get's return type is TokenType | void
+updaters.set(tt.braceR, updaters.get(tt.parenR));
 
-tt.name.updateContext = function(prevType) {
+updaters.set(tt.name, function(prevType) {
   let allowed = false;
   if (prevType !== tt.dot) {
     if (
-      (this.state.value === "of" && !this.state.exprAllowed) ||
-      (this.state.value === "yield" && this.scope.inGenerator)
+      (state.value === "of" && !state.exprAllowed) ||
+      (state.value === "yield" && scope.inGenerator)
     ) {
       allowed = true;
     }
   }
-  this.state.exprAllowed = allowed;
+  state.exprAllowed = allowed;
 
-  if (this.state.isIterator) {
-    this.state.isIterator = false;
+  if (state.isIterator) {
+    state.isIterator = false;
   }
-};
+});
 
-tt.braceL.updateContext = function(prevType) {
-  this.state.context.push(
-    this.braceIsBlock(prevType) ? types.braceStatement : types.braceExpression,
+updaters.set(tt.braceL, function(prevType) {
+  state.context.push(
+    braceIsBlock(prevType) ? types.braceStatement : types.braceExpression,
   );
-  this.state.exprAllowed = true;
-};
+  state.exprAllowed = true;
+});
 
-tt.dollarBraceL.updateContext = function() {
-  this.state.context.push(types.templateQuasi);
-  this.state.exprAllowed = true;
-};
+updaters.set(tt.dollarBraceL, function() {
+  state.context.push(types.templateQuasi);
+  state.exprAllowed = true;
+});
 
-tt.parenL.updateContext = function(prevType) {
+updaters.set(tt.parenL, function(prevType) {
   const statementParens =
     prevType === tt._if ||
     prevType === tt._for ||
     prevType === tt._with ||
     prevType === tt._while;
-  this.state.context.push(
+  state.context.push(
     statementParens ? types.parenStatement : types.parenExpression,
   );
-  this.state.exprAllowed = true;
-};
+  state.exprAllowed = true;
+});
 
-tt.incDec.updateContext = function() {
+updaters.set(tt.incDec, function() {
   // tokExprAllowed stays unchanged
-};
+});
 
-tt._function.updateContext = tt._class.updateContext = function(prevType) {
+updaters.set(tt._function, function(prevType) {
   if (
     prevType.beforeExpr &&
     prevType !== tt.semi &&
     prevType !== tt._else &&
     !(
       prevType === tt._return &&
-      lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start))
+      lineBreak.test(input.slice(state.lastTokEnd, state.start))
     ) &&
     !(
       (prevType === tt.colon || prevType === tt.braceL) &&
-      this.curContext() === types.b_stat
+      curContext() === types.b_stat
     )
   ) {
-    this.state.context.push(types.functionExpression);
+    state.context.push(types.functionExpression);
   } else {
-    this.state.context.push(types.functionStatement);
+    state.context.push(types.functionStatement);
   }
 
-  this.state.exprAllowed = false;
-};
+  state.exprAllowed = false;
+});
+// $FlowIgnore .get's return type is TokenType | void
+updaters.set(tt._class, updaters.get(tt._function));
 
-tt.backQuote.updateContext = function() {
-  if (this.curContext() === types.template) {
-    this.state.context.pop();
+updaters.set(tt.backQuote, function() {
+  if (curContext() === types.template) {
+    state.context.pop();
   } else {
-    this.state.context.push(types.template);
+    state.context.push(types.template);
   }
-  this.state.exprAllowed = false;
-};
+  state.exprAllowed = false;
+});
+
+// Used by the JSX plugin
+updaters.set(tt.jsxTagStart, function() {
+  state.context.push(types.j_expr); // treat as beginning of JSX expression
+  state.context.push(types.j_oTag); // start opening tag context
+  state.exprAllowed = false;
+});
+
+updaters.set(tt.jsxTagEnd, function(prevType) {
+  const out = state.context.pop();
+  if ((out === types.j_oTag && prevType === tt.slash) || out === types.j_cTag) {
+    state.context.pop();
+    state.exprAllowed = curContext() === types.j_expr;
+  } else {
+    state.exprAllowed = true;
+  }
+});

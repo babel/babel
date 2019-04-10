@@ -16,8 +16,18 @@ const rollup = require("rollup");
 const rollupBabel = require("rollup-plugin-babel");
 const rollupNodeResolve = require("rollup-plugin-node-resolve");
 const { registerStandalonePackageTask } = require("./scripts/gulp-tasks");
+const bundleParserHelper = require("./packages/babel-parser/scripts/build-bunde");
 
 const sources = ["codemods", "packages"];
+
+const parserCustomBundlerRoot = "babel-parser/src/index.js";
+const parserCustomBundler = [
+  parserCustomBundlerRoot,
+  "**/tokenizer/**/*.js",
+  "**/parser/**/*.js",
+  "**/plugins/**/*.js",
+];
+const parserCustomBundlerOutputGlob = "./packages/babel-parser/bundle/**/*.js";
 
 function swapSrcWithLib(srcPath) {
   const parts = srcPath.split(path.sep);
@@ -30,7 +40,9 @@ function getGlobFromSource(source) {
 }
 
 function getIndexFromPackage(name) {
-  return `${name}/src/index.js`;
+  return name.indexOf("babel-parser") > -1
+    ? `${name}/bundle/index.js`
+    : `${name}/src/index.js`;
 }
 
 function compilationLogger() {
@@ -55,18 +67,61 @@ function rename(fn) {
   });
 }
 
+function runParserBundler() {
+  return through.obj(async function(file, enc, callback) {
+    const transformedFile = file.clone();
+    transformedFile.contents = new Buffer(
+      await bundleParserHelper(transformedFile.path)
+    );
+    callback(null, transformedFile);
+  });
+}
+
+function bundleParser() {
+  const base = path.resolve(__dirname, "packages/babel-parser/src");
+  const outputPath = path.join(__dirname, "packages/babel-parser/bundle");
+
+  const filters = parserCustomBundler.map(p => `!**/${p}`);
+  filters.unshift("**");
+
+  const p = n => path.resolve("packages/babel-parser/src", n);
+
+  return merge(
+    gulp
+      .src(path.join(base, "./index.js"), { base })
+      .pipe(errorsLogger())
+      .pipe(
+        newer({
+          dest: outputPath,
+          extra: [p("tokenizer/*.js"), p("parser/*.js"), p("plugins/**/*.js")],
+        })
+      )
+      .pipe(compilationLogger())
+      .pipe(runParserBundler())
+      .pipe(gulp.dest(outputPath)),
+    gulp
+      .src(base + "/**/*.js", { base })
+      .pipe(filter(filters))
+      .pipe(gulp.dest(outputPath))
+  );
+}
+
 function buildBabel(exclude) {
   return merge(
     sources.map(source => {
       const base = path.join(__dirname, source);
 
-      let stream = gulp.src(getGlobFromSource(source), { base: base });
-
-      if (exclude) {
-        const filters = exclude.map(p => `!**/${p}/**`);
-        filters.unshift("**");
-        stream = stream.pipe(filter(filters));
+      let src = getGlobFromSource(source);
+      if (source === "packages") {
+        src = [src, parserCustomBundlerOutputGlob];
       }
+
+      let stream = gulp.src(src, { base: base });
+
+      const filters = (exclude || []).map(p => `!**/${p}/**`);
+      filters.unshift("**");
+      filters.push("!**/babel-parser/src/**");
+      stream = stream.pipe(filter(filters));
 
       return stream
         .pipe(errorsLogger())
@@ -111,13 +166,16 @@ function buildRollup(packages) {
 
 const bundles = ["packages/babel-parser"];
 
-gulp.task("build-rollup", () => buildRollup(bundles));
+gulp.task(
+  "build-rollup",
+  gulp.series(bundleParser, () => buildRollup(bundles))
+);
 gulp.task("build-babel", () => buildBabel(/* exclude */ bundles));
 gulp.task("build", gulp.parallel("build-rollup", "build-babel"));
 
 gulp.task("default", gulp.series("build"));
 
-gulp.task("build-no-bundle", () => buildBabel());
+gulp.task("build-no-bundle", gulp.series(bundleParser, () => buildBabel()));
 
 gulp.task(
   "watch",

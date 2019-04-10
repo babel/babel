@@ -20,6 +20,8 @@ dist
 package-lock.json
 !/.github/actions/*/package-lock.json
 
+/packages/babel-parser/bundle
+
 /packages/babel-runtime/helpers/*.js
 !/packages/babel-runtime/helpers/toArray.js
 !/packages/babel-runtime/helpers/iterableToArray.js
