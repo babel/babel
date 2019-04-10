@@ -1,20 +1,15 @@
 import _isIterable from "../../core-js/is-iterable";
 import _Array$from from "../../core-js/array/from";
 export default function _iterableToArray(iter) {
-  var prototypeWhiteList = [String.prototype, Array.prototype];
-  var iterObject = Object(iter);
-
-  if (prototypeWhiteList.some(function (prototype) {
-    return prototype.isPrototypeOf(iterObject);
-  })) {
+  if (typeof iter === 'string') {
     return _Array$from(iter);
   }
 
-  if (iterObject.toString() === "[object Arguments]") {
+  if (Object.prototype.toString.call(iter) === "[object Arguments]") {
     return _Array$from(iter);
   }
 
-  if (_isIterable(iterObject)) {
+  if (_isIterable(Object(iter))) {
     return _Array$from(iter);
   }
 }

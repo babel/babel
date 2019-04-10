@@ -1,18 +1,13 @@
 function _iterableToArray(iter) {
-  var prototypeWhiteList = [String.prototype, Array.prototype];
-  var iterObject = Object(iter);
-
-  if (prototypeWhiteList.some(function (prototype) {
-    return prototype.isPrototypeOf(iterObject);
-  })) {
+  if (typeof iter === 'string') {
     return Array.from(iter);
   }
 
-  if (iterObject.toString() === "[object Arguments]") {
+  if (Object.prototype.toString.call(iter) === "[object Arguments]") {
     return Array.from(iter);
   }
 
-  if (Symbol.iterator in iterObject) {
+  if (Symbol.iterator in Object(iter)) {
     return Array.from(iter);
   }
 }

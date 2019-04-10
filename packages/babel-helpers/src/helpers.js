@@ -933,25 +933,19 @@ helpers.arrayWithHoles = helper("7.0.0-beta.0")`
 
 helpers.iterableToArray = helper("7.0.0-beta.0")`
   export default function _iterableToArray(iter) {
-    // ES6 prototypes that use @@iterator
-    const prototypeWhiteList = [
-      String.prototype,
-      Array.prototype,
-      // Map.prototype,
-      // Set.prototype,
-    ];
-    const iterObject = Object(iter);
-    if (prototypeWhiteList.some(prototype => prototype.isPrototypeOf(iterObject))) {
+    // String.prototype
+    if (typeof iter === 'string') {
       return Array.from(iter);
     }
 
-    // IsArguments
-    if (iterObject.toString() === "[object Arguments]") {
+    // Function Arguments
+    if (Object.prototype.toString.call(iter) === "[object Arguments]") {
       return Array.from(iter);
     }
 
-    // Check for custom iterator outside ES6 spec, iterable WeakMap, or iterable TypedArray
-    if (Symbol.iterator in iterObject) {
+    // Check for iterable WeakMap, Map, Set, or TypedArray
+    // Check for custom iterator outside ES6 spec
+    if (Symbol.iterator in Object(iter)) {
       return Array.from(iter);
     }
   }
