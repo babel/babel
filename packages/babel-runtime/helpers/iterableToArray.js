@@ -1,22 +1,20 @@
 function _iterableToArray(iter) {
-  var prototypeWhiteList = ['[object Arguments]'];
-  var hasSymbol = false;
+  var prototypeWhiteList = [String.prototype, Array.prototype];
+  var iterObject = Object(iter);
 
-  try {
-    if (Symbol.iterator in Object(iter)) {
-      hasSymbol = true;
-    }
-  } catch (e) {}
-
-  if (hasSymbol) {
+  if (prototypeWhiteList.some(function (prototype) {
+    return prototype.isPrototypeOf(iterObject);
+  })) {
     return Array.from(iter);
   }
 
-  if (prototypeWhiteList.indexOf(Object.prototype.toString.call(iter)) !== -1) {
+  if (iterObject.toString() === "[object Arguments]") {
     return Array.from(iter);
   }
 
-  return null;
+  if (Symbol.iterator in iterObject) {
+    return Array.from(iter);
+  }
 }
 
 module.exports = _iterableToArray;
