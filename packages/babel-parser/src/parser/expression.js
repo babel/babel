@@ -331,8 +331,11 @@ export default class ExpressionParser extends LValParser {
     const prec = this.state.type.binop;
     if (prec != null && (!noIn || !this.match(tt._in))) {
       if (prec > minPrec) {
-        const node = this.startNodeAt(leftStartPos, leftStartLoc);
         const operator = this.state.value;
+        if (operator === "|>" && this.state.inFSharpPipelineDirectBody) {
+          return left;
+        }
+        const node = this.startNodeAt(leftStartPos, leftStartLoc);
         node.left = left;
         node.operator = operator;
         if (
@@ -1185,9 +1188,11 @@ export default class ExpressionParser extends LValParser {
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
     const oldYieldPos = this.state.yieldPos;
     const oldAwaitPos = this.state.awaitPos;
+    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
     this.state.maybeInArrowParameters = true;
     this.state.yieldPos = 0;
     this.state.awaitPos = 0;
+    this.state.inFSharpPipelineDirectBody = false;
 
     const innerStartPos = this.state.start;
     const innerStartLoc = this.state.startLoc;
@@ -1241,6 +1246,7 @@ export default class ExpressionParser extends LValParser {
     this.expect(tt.parenR);
 
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
+    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
     let arrowNode = this.startNodeAt(startPos, startLoc);
     if (
@@ -2347,6 +2353,8 @@ export default class ExpressionParser extends LValParser {
 
     const node = this.startNode();
     this.state.potentialArrowAt = this.state.start;
+    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
+    this.state.inFSharpPipelineDirectBody = true;
 
     node.body = this.parseExprOp(
       this.parseMaybeUnary(),
@@ -2355,6 +2363,8 @@ export default class ExpressionParser extends LValParser {
       prec,
       noIn,
     );
+
+    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
     return this.finishNode(node, "PipelineBody");
   }

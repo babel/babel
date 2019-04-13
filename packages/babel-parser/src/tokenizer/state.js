@@ -79,6 +79,7 @@ export default class State {
 
   // For the F# plugin
   soloAwait: boolean = false;
+  inFSharpPipelineDirectBody: boolean = false;
 
   // Check whether we are in a (nested) class or not.
   classLevel: number = 0;
