@@ -774,6 +774,8 @@ export default class ExpressionParser extends LValParser {
     const elts = [];
     let innerParenStart;
     let first = true;
+    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
+    this.state.inFSharpPipelineDirectBody = false;
 
     while (!this.eat(close)) {
       if (first) {
@@ -811,6 +813,8 @@ export default class ExpressionParser extends LValParser {
     if (possibleAsyncArrow && innerParenStart && this.shouldParseAsyncArrow()) {
       this.unexpected();
     }
+
+    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
     return elts;
   }
