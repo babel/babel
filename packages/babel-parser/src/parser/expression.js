@@ -977,7 +977,10 @@ export default class ExpressionParser extends LValParser {
       case tt.parenL:
         return this.parseParenAndDistinguishExpression(canBeArrow);
 
-      case tt.bracketL:
+      case tt.bracketL: {
+        const oldInFSharpPipelineDirectBody = this.state
+          .inFSharpPipelineDirectBody;
+        this.state.inFSharpPipelineDirectBody = false;
         node = this.startNode();
         this.next();
         node.elements = this.parseExprList(
@@ -993,11 +996,17 @@ export default class ExpressionParser extends LValParser {
           // expression by calling toReferencedListDeep.
           this.toReferencedList(node.elements);
         }
+        this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
         return this.finishNode(node, "ArrayExpression");
-
-      case tt.braceL:
-        return this.parseObj(false, refShorthandDefaultPos);
-
+      }
+      case tt.braceL: {
+        const oldInFSharpPipelineDirectBody = this.state
+          .inFSharpPipelineDirectBody;
+        this.state.inFSharpPipelineDirectBody = false;
+        const ret = this.parseObj(false, refShorthandDefaultPos);
+        this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
+        return ret;
+      }
       case tt._function:
         return this.parseFunctionExpression();
 
