@@ -1,0 +1,6 @@
+{
+  "parserOpts": {
+    "plugins": ["classProperties", "classPrivateProperties", "classPrivateMethods"]
+  },
+  "plugins": ["transform-modules-commonjs"]
+}
