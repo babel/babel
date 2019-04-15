@@ -2364,12 +2364,11 @@ export default class ExpressionParser extends LValParser {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
 
-    const node = this.startNode();
     this.state.potentialArrowAt = this.state.start;
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
     this.state.inFSharpPipelineDirectBody = true;
 
-    node.body = this.parseExprOp(
+    const ret = this.parseExprOp(
       this.parseMaybeUnary(),
       startPos,
       startLoc,
@@ -2379,6 +2378,6 @@ export default class ExpressionParser extends LValParser {
 
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
-    return this.finishNode(node, "PipelineBody");
+    return ret;
   }
 }

@@ -126,7 +126,7 @@
               },
               "operator": "|>",
               "right": {
-                "type": "PipelineBody",
+                "type": "ArrayExpression",
                 "start": 10,
                 "end": 22,
                 "loc": {
@@ -139,61 +139,61 @@
                     "column": 22
                   }
                 },
-                "body": {
-                  "type": "ArrayExpression",
-                  "start": 10,
-                  "end": 22,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 10
+                "elements": [
+                  {
+                    "type": "ArrowFunctionExpression",
+                    "start": 11,
+                    "end": 21,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 21
+                      }
                     },
-                    "end": {
-                      "line": 1,
-                      "column": 22
-                    }
-                  },
-                  "elements": [
-                    {
-                      "type": "ArrowFunctionExpression",
-                      "start": 11,
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [
+                      {
+                        "type": "Identifier",
+                        "start": 11,
+                        "end": 12,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 11
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 12
+                          },
+                          "identifierName": "y"
+                        },
+                        "name": "y"
+                      }
+                    ],
+                    "body": {
+                      "type": "BinaryExpression",
+                      "start": 16,
                       "end": 21,
                       "loc": {
                         "start": {
                           "line": 1,
-                          "column": 11
+                          "column": 16
                         },
                         "end": {
                           "line": 1,
                           "column": 21
                         }
                       },
-                      "id": null,
-                      "generator": false,
-                      "async": false,
-                      "params": [
-                        {
-                          "type": "Identifier",
-                          "start": 11,
-                          "end": 12,
-                          "loc": {
-                            "start": {
-                              "line": 1,
-                              "column": 11
-                            },
-                            "end": {
-                              "line": 1,
-                              "column": 12
-                            },
-                            "identifierName": "y"
-                          },
-                          "name": "y"
-                        }
-                      ],
-                      "body": {
-                        "type": "BinaryExpression",
+                      "left": {
+                        "type": "Identifier",
                         "start": 16,
-                        "end": 21,
+                        "end": 17,
                         "loc": {
                           "start": {
                             "line": 1,
@@ -201,56 +201,41 @@
                           },
                           "end": {
                             "line": 1,
+                            "column": 17
+                          },
+                          "identifierName": "y"
+                        },
+                        "name": "y"
+                      },
+                      "operator": "+",
+                      "right": {
+                        "type": "NumericLiteral",
+                        "start": 20,
+                        "end": 21,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 20
+                          },
+                          "end": {
+                            "line": 1,
                             "column": 21
                           }
                         },
-                        "left": {
-                          "type": "Identifier",
-                          "start": 16,
-                          "end": 17,
-                          "loc": {
-                            "start": {
-                              "line": 1,
-                              "column": 16
-                            },
-                            "end": {
-                              "line": 1,
-                              "column": 17
-                            },
-                            "identifierName": "y"
-                          },
-                          "name": "y"
+                        "extra": {
+                          "rawValue": 1,
+                          "raw": "1"
                         },
-                        "operator": "+",
-                        "right": {
-                          "type": "NumericLiteral",
-                          "start": 20,
-                          "end": 21,
-                          "loc": {
-                            "start": {
-                              "line": 1,
-                              "column": 20
-                            },
-                            "end": {
-                              "line": 1,
-                              "column": 21
-                            }
-                          },
-                          "extra": {
-                            "rawValue": 1,
-                            "raw": "1"
-                          },
-                          "value": 1
-                        }
+                        "value": 1
                       }
                     }
-                  ]
-                }
+                  }
+                ]
               }
             },
             "operator": "|>",
             "right": {
-              "type": "PipelineBody",
+              "type": "ArrowFunctionExpression",
               "start": 26,
               "end": 36,
               "loc": {
@@ -263,46 +248,46 @@
                   "column": 36
                 }
               },
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 26,
+                  "end": 27,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 26
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 27
+                    },
+                    "identifierName": "z"
+                  },
+                  "name": "z"
+                }
+              ],
               "body": {
-                "type": "ArrowFunctionExpression",
-                "start": 26,
+                "type": "BinaryExpression",
+                "start": 31,
                 "end": 36,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 26
+                    "column": 31
                   },
                   "end": {
                     "line": 1,
                     "column": 36
                   }
                 },
-                "id": null,
-                "generator": false,
-                "async": false,
-                "params": [
-                  {
-                    "type": "Identifier",
-                    "start": 26,
-                    "end": 27,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 26
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 27
-                      },
-                      "identifierName": "z"
-                    },
-                    "name": "z"
-                  }
-                ],
-                "body": {
-                  "type": "BinaryExpression",
+                "left": {
+                  "type": "Identifier",
                   "start": 31,
-                  "end": 36,
+                  "end": 32,
                   "loc": {
                     "start": {
                       "line": 1,
@@ -310,47 +295,32 @@
                     },
                     "end": {
                       "line": 1,
+                      "column": 32
+                    },
+                    "identifierName": "z"
+                  },
+                  "name": "z"
+                },
+                "operator": "*",
+                "right": {
+                  "type": "NumericLiteral",
+                  "start": 35,
+                  "end": 36,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 35
+                    },
+                    "end": {
+                      "line": 1,
                       "column": 36
                     }
                   },
-                  "left": {
-                    "type": "Identifier",
-                    "start": 31,
-                    "end": 32,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 31
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 32
-                      },
-                      "identifierName": "z"
-                    },
-                    "name": "z"
+                  "extra": {
+                    "rawValue": 2,
+                    "raw": "2"
                   },
-                  "operator": "*",
-                  "right": {
-                    "type": "NumericLiteral",
-                    "start": 35,
-                    "end": 36,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 35
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 36
-                      }
-                    },
-                    "extra": {
-                      "rawValue": 2,
-                      "raw": "2"
-                    },
-                    "value": 2
-                  }
+                  "value": 2
                 }
               }
             }

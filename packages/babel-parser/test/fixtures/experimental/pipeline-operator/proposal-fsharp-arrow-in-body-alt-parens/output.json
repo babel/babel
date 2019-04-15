@@ -112,59 +112,59 @@
             },
             "operator": "|>",
             "right": {
-              "type": "PipelineBody",
-              "start": 10,
-              "end": 38,
+              "type": "ArrowFunctionExpression",
+              "start": 11,
+              "end": 37,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 10
+                  "column": 11
                 },
                 "end": {
                   "line": 1,
-                  "column": 38
+                  "column": 37
                 }
               },
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 11,
+                  "end": 12,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 12
+                    },
+                    "identifierName": "y"
+                  },
+                  "name": "y"
+                }
+              ],
               "body": {
-                "type": "ArrowFunctionExpression",
-                "start": 11,
+                "type": "BinaryExpression",
+                "start": 16,
                 "end": 37,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 11
+                    "column": 16
                   },
                   "end": {
                     "line": 1,
                     "column": 37
                   }
                 },
-                "id": null,
-                "generator": false,
-                "async": false,
-                "params": [
-                  {
-                    "type": "Identifier",
-                    "start": 11,
-                    "end": 12,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 11
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 12
-                      },
-                      "identifierName": "y"
-                    },
-                    "name": "y"
-                  }
-                ],
-                "body": {
+                "left": {
                   "type": "BinaryExpression",
                   "start": 16,
-                  "end": 37,
+                  "end": 21,
                   "loc": {
                     "start": {
                       "line": 1,
@@ -172,13 +172,13 @@
                     },
                     "end": {
                       "line": 1,
-                      "column": 37
+                      "column": 21
                     }
                   },
                   "left": {
-                    "type": "BinaryExpression",
+                    "type": "Identifier",
                     "start": 16,
-                    "end": 21,
+                    "end": 17,
                     "loc": {
                       "start": {
                         "line": 1,
@@ -186,67 +186,57 @@
                       },
                       "end": {
                         "line": 1,
-                        "column": 21
-                      }
+                        "column": 17
+                      },
+                      "identifierName": "y"
                     },
-                    "left": {
-                      "type": "Identifier",
-                      "start": 16,
-                      "end": 17,
-                      "loc": {
-                        "start": {
-                          "line": 1,
-                          "column": 16
-                        },
-                        "end": {
-                          "line": 1,
-                          "column": 17
-                        },
-                        "identifierName": "y"
-                      },
-                      "name": "y"
-                    },
-                    "operator": "+",
-                    "right": {
-                      "type": "NumericLiteral",
-                      "start": 20,
-                      "end": 21,
-                      "loc": {
-                        "start": {
-                          "line": 1,
-                          "column": 20
-                        },
-                        "end": {
-                          "line": 1,
-                          "column": 21
-                        }
-                      },
-                      "extra": {
-                        "rawValue": 3,
-                        "raw": "3"
-                      },
-                      "value": 3
-                    }
+                    "name": "y"
                   },
-                  "operator": "|>",
+                  "operator": "+",
                   "right": {
-                    "type": "PipelineBody",
-                    "start": 25,
-                    "end": 37,
+                    "type": "NumericLiteral",
+                    "start": 20,
+                    "end": 21,
                     "loc": {
                       "start": {
                         "line": 1,
-                        "column": 25
+                        "column": 20
                       },
                       "end": {
                         "line": 1,
-                        "column": 37
+                        "column": 21
                       }
                     },
-                    "body": {
-                      "type": "ArrowFunctionExpression",
+                    "extra": {
+                      "rawValue": 3,
+                      "raw": "3"
+                    },
+                    "value": 3
+                  }
+                },
+                "operator": "|>",
+                "right": {
+                  "type": "ArrowFunctionExpression",
+                  "start": 26,
+                  "end": 36,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 26
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 36
+                    }
+                  },
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "Identifier",
                       "start": 26,
-                      "end": 36,
+                      "end": 27,
                       "loc": {
                         "start": {
                           "line": 1,
@@ -254,92 +244,72 @@
                         },
                         "end": {
                           "line": 1,
-                          "column": 36
-                        }
-                      },
-                      "id": null,
-                      "generator": false,
-                      "async": false,
-                      "params": [
-                        {
-                          "type": "Identifier",
-                          "start": 26,
-                          "end": 27,
-                          "loc": {
-                            "start": {
-                              "line": 1,
-                              "column": 26
-                            },
-                            "end": {
-                              "line": 1,
-                              "column": 27
-                            },
-                            "identifierName": "b"
-                          },
-                          "name": "b"
-                        }
-                      ],
-                      "body": {
-                        "type": "BinaryExpression",
-                        "start": 31,
-                        "end": 36,
-                        "loc": {
-                          "start": {
-                            "line": 1,
-                            "column": 31
-                          },
-                          "end": {
-                            "line": 1,
-                            "column": 36
-                          }
+                          "column": 27
                         },
-                        "left": {
-                          "type": "Identifier",
-                          "start": 31,
-                          "end": 32,
-                          "loc": {
-                            "start": {
-                              "line": 1,
-                              "column": 31
-                            },
-                            "end": {
-                              "line": 1,
-                              "column": 32
-                            },
-                            "identifierName": "y"
-                          },
-                          "name": "y"
-                        },
-                        "operator": "+",
-                        "right": {
-                          "type": "Identifier",
-                          "start": 35,
-                          "end": 36,
-                          "loc": {
-                            "start": {
-                              "line": 1,
-                              "column": 35
-                            },
-                            "end": {
-                              "line": 1,
-                              "column": 36
-                            },
-                            "identifierName": "b"
-                          },
-                          "name": "b"
-                        }
+                        "identifierName": "b"
                       },
-                      "extra": {
-                        "parenthesized": true,
-                        "parenStart": 25
-                      }
+                      "name": "b"
                     }
+                  ],
+                  "body": {
+                    "type": "BinaryExpression",
+                    "start": 31,
+                    "end": 36,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 31
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 36
+                      }
+                    },
+                    "left": {
+                      "type": "Identifier",
+                      "start": 31,
+                      "end": 32,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 31
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 32
+                        },
+                        "identifierName": "y"
+                      },
+                      "name": "y"
+                    },
+                    "operator": "+",
+                    "right": {
+                      "type": "Identifier",
+                      "start": 35,
+                      "end": 36,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 35
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 36
+                        },
+                        "identifierName": "b"
+                      },
+                      "name": "b"
+                    }
+                  },
+                  "extra": {
+                    "parenthesized": true,
+                    "parenStart": 25
                   }
-                },
-                "extra": {
-                  "parenthesized": true,
-                  "parenStart": 10
                 }
+              },
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 10
               }
             }
           }

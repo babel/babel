@@ -139,7 +139,7 @@
                   },
                   "operator": "|>",
                   "right": {
-                    "type": "PipelineBody",
+                    "type": "AwaitExpression",
                     "start": 39,
                     "end": 44,
                     "loc": {
@@ -151,27 +151,12 @@
                         "line": 2,
                         "column": 19
                       }
-                    },
-                    "body": {
-                      "type": "AwaitExpression",
-                      "start": 39,
-                      "end": 44,
-                      "loc": {
-                        "start": {
-                          "line": 2,
-                          "column": 14
-                        },
-                        "end": {
-                          "line": 2,
-                          "column": 19
-                        }
-                      }
                     }
                   }
                 },
                 "operator": "|>",
                 "right": {
-                  "type": "PipelineBody",
+                  "type": "Identifier",
                   "start": 48,
                   "end": 49,
                   "loc": {
@@ -182,25 +167,10 @@
                     "end": {
                       "line": 2,
                       "column": 24
-                    }
-                  },
-                  "body": {
-                    "type": "Identifier",
-                    "start": 48,
-                    "end": 49,
-                    "loc": {
-                      "start": {
-                        "line": 2,
-                        "column": 23
-                      },
-                      "end": {
-                        "line": 2,
-                        "column": 24
-                      },
-                      "identifierName": "f"
                     },
-                    "name": "f"
-                  }
+                    "identifierName": "f"
+                  },
+                  "name": "f"
                 }
               }
             }

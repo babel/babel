@@ -90,7 +90,7 @@
             },
             "operator": "|>",
             "right": {
-              "type": "PipelineBody",
+              "type": "Identifier",
               "start": 5,
               "end": 8,
               "loc": {
@@ -101,30 +101,15 @@
                 "end": {
                   "line": 1,
                   "column": 8
-                }
-              },
-              "body": {
-                "type": "Identifier",
-                "start": 5,
-                "end": 8,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 5
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 8
-                  },
-                  "identifierName": "inc"
                 },
-                "name": "inc"
-              }
+                "identifierName": "inc"
+              },
+              "name": "inc"
             }
           },
           "operator": "|>",
           "right": {
-            "type": "PipelineBody",
+            "type": "Identifier",
             "start": 12,
             "end": 18,
             "loc": {
@@ -135,25 +120,10 @@
               "end": {
                 "line": 1,
                 "column": 18
-              }
-            },
-            "body": {
-              "type": "Identifier",
-              "start": 12,
-              "end": 18,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 12
-                },
-                "end": {
-                  "line": 1,
-                  "column": 18
-                },
-                "identifierName": "double"
               },
-              "name": "double"
-            }
+              "identifierName": "double"
+            },
+            "name": "double"
           }
         }
       }
