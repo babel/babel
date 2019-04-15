@@ -38,6 +38,13 @@ export default function isReferenced(
       }
       return parent.local === node;
 
+    // no: class { #NODE; }
+    // no: class { get #NODE() {} }
+    // no: class { #NODE() {} }
+    // no: class { fn() { return this.#NODE; } }
+    case "PrivateName":
+      return false;
+
     // yes: { [NODE]: "" }
     // no: { NODE: "" }
     // depends: { NODE }
