@@ -331,36 +331,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return null;
     }
 
-    tsCheckLiteralForConstantContext(node: N.Node) {
-      switch (node.type) {
-        case "StringLiteral":
-        case "TemplateLiteral":
-        case "NumericLiteral":
-        case "BooleanLiteral":
-        case "SpreadElement":
-        case "ObjectMethod":
-        case "ObjectExpression":
-          return;
-        case "ArrayExpression":
-          return (node: N.ArrayExpression).elements.forEach(element => {
-            if (element) {
-              this.tsCheckLiteralForConstantContext(element);
-            }
-          });
-        case "ObjectProperty":
-          return this.tsCheckLiteralForConstantContext(
-            (node: N.ObjectProperty).value,
-          );
-        case "UnaryExpression":
-          return this.tsCheckLiteralForConstantContext(node.argument);
-        default:
-          this.raise(
-            node.start,
-            "Only literal values are allowed in constant contexts",
-          );
-      }
-    }
-
     // Note: In TypeScript implementation we must provide `yieldContext` and `awaitContext`,
     // but here it's always false, because this is only used for types.
     tsFillSignature(
@@ -1011,9 +981,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.typeAnnotation = _const || this.tsNextThenParseType();
       this.expectRelational(">");
       node.expression = this.parseMaybeUnary();
-      if (_const) {
-        this.tsCheckLiteralForConstantContext(node.expression);
-      }
       return this.finishNode(node, "TSTypeAssertion");
     }
 
@@ -1679,7 +1646,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.expression = left;
         const _const = this.tsTryNextParseConstantContext();
         if (_const) {
-          this.tsCheckLiteralForConstantContext(node.expression);
           node.typeAnnotation = _const;
         } else {
           node.typeAnnotation = this.tsNextThenParseType();

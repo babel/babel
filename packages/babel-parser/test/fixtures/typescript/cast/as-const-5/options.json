@@ -1,7 +1,0 @@
-{
-  "sourceType": "module",
-  "plugins": [
-    "typescript"
-  ],
-  "throws": "Only literal values are allowed in constant contexts (1:9)"
-}
