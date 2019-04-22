@@ -95,23 +95,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.getPluginOption("flow", "all") || this.flowPragma === "flow";
     }
 
-    addComment(comment: N.Comment): void {
-      if (this.flowPragma === undefined) {
-        // Try to parse a flow pragma.
-        const matches = FLOW_PRAGMA_REGEX.exec(comment.value);
-        if (!matches) {
-          this.flowPragma = null;
-        } else if (matches[1] === "flow") {
-          this.flowPragma = "flow";
-        } else if (matches[1] === "noflow") {
-          this.flowPragma = "noflow";
-        } else {
-          throw new Error("Unexpected flow pragma");
-        }
-      }
-      return super.addComment(comment);
-    }
-
     flowParseTypeInitialiser(tok?: TokenType): N.FlowType {
       const oldInType = this.state.inType;
       this.state.inType = true;
@@ -2744,7 +2727,60 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       super.readToken_pipe_amp(code);
     }
 
+    lookAheadForFlowPragma() {
+      // TODO: lookahead
+
+      const old = this.state;
+      this.state = old.clone(true);
+
+      this.isLookahead = true;
+      for (let i = 0; i < 10; i++) {
+        this.next();
+        console.log(this.state.type);
+      }
+      this.isLookahead = false;
+
+      const curr = this.state;
+      this.state = old;
+      return curr;
+
+      // TODO: lookahead, that includes comment token
+      const lookaheadTokens = this.todo();
+      forLoop: for (const token of lookaheadTokens) {
+        switch (token.type) {
+          case tt.string:
+          case tt.semi:
+            continue;
+          // TODO: no such token atm
+          case tt.comment: {
+            const flowPragma = this.getFlowPragma(token);
+            if (flowPragma !== null) {
+              this.flowPragma = flowPragma;
+            }
+            continue;
+          }
+          default:
+            break forLoop;
+        }
+      }
+    }
+
+    getFlowPragma(comment: N.Comment): void {
+      // Try to parse a flow pragma.
+      const matches = FLOW_PRAGMA_REGEX.exec(comment.value);
+      if (!matches) {
+        return null;
+      } else if (matches[1] === "flow") {
+        return "flow";
+      } else if (matches[1] === "noflow") {
+        return "noflow";
+      } else {
+        throw new Error("Unexpected flow pragma");
+      }
+    }
+
     parseTopLevel(file: N.File, program: N.Program): N.File {
+      this.lookAheadForFlowPragma();
       const fileNode = super.parseTopLevel(file, program);
       if (this.state.hasFlowComment) {
         this.unexpected(null, "Unterminated flow-comment");
