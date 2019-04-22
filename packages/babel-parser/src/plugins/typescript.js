@@ -773,7 +773,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return;
         default:
           this.raise(
-            node.operator,
+            node.start,
             "'readonly' type modifier is only permitted on array and tuple literal types.",
           );
       }
