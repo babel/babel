@@ -146,14 +146,31 @@ export default declare(api => {
 
       Class(path) {
         const { node } = path;
-        if (node.typeParameters) {
-          const typeParameters = path.get("typeParameters");
+        if (node.typeParameters || node.implements) {
+          const comments = [];
+          if (node.typeParameters) {
+            const typeParameters = path.get("typeParameters");
+            comments.push(
+              generateComment(typeParameters, typeParameters.node).replace(
+                /^:: /,
+                "",
+              ),
+            );
+            typeParameters.remove();
+          }
+          if (node.implements) {
+            const impls = path.get("implements");
+            comments.push(
+              "implements " +
+                impls
+                  .map(impl => generateComment(impl).replace(/^:: /, ""))
+                  .join(", "),
+            );
+            delete node["implements"];
+          }
+
           const block = path.get("body");
-          block.addComment(
-            "leading",
-            generateComment(typeParameters, typeParameters.node),
-          );
-          typeParameters.remove();
+          block.addComment("leading", ":: " + comments.join(" "));
         }
       },
     },
