@@ -90,21 +90,17 @@ export default class ScopeHandler {
 
   declareName(name: string, bindingType: ?BindingTypes, pos: number) {
     let redeclared = false;
+    let scope = this.currentScope();
+
     if (bindingType === BIND_LEXICAL) {
-      const scope = this.currentScope();
       redeclared =
         scope.lexical.indexOf(name) > -1 ||
         scope.functions.indexOf(name) > -1 ||
         scope.var.indexOf(name) > -1;
       scope.lexical.push(name);
-      if (this.inModule && scope.flags & SCOPE_PROGRAM) {
-        this.undefinedExports.delete(name);
-      }
     } else if (bindingType === BIND_SIMPLE_CATCH) {
-      const scope = this.currentScope();
       scope.lexical.push(name);
     } else if (bindingType === BIND_FUNCTION) {
-      const scope = this.currentScope();
       if (this.treatFunctionsAsVar) {
         redeclared = scope.lexical.indexOf(name) > -1;
       } else {
@@ -114,7 +110,7 @@ export default class ScopeHandler {
       scope.functions.push(name);
     } else {
       for (let i = this.scopeStack.length - 1; i >= 0; --i) {
-        const scope = this.scopeStack[i];
+        scope = this.scopeStack[i];
         if (
           (scope.lexical.indexOf(name) > -1 &&
             !(scope.flags & SCOPE_SIMPLE_CATCH && scope.lexical[0] === name)) ||
@@ -126,12 +122,11 @@ export default class ScopeHandler {
         }
         scope.var.push(name);
 
-        if (this.inModule && scope.flags & SCOPE_PROGRAM) {
-          this.undefinedExports.delete(name);
-        }
-
         if (scope.flags & SCOPE_VAR) break;
       }
+    }
+    if (this.inModule && scope.flags & SCOPE_PROGRAM) {
+      this.undefinedExports.delete(name);
     }
     if (redeclared) {
       this.raise(pos, `Identifier '${name}' has already been declared`);
