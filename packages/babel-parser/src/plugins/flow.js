@@ -95,12 +95,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.getPluginOption("flow", "all") || this.flowPragma === "flow";
     }
 
+    finishToken(type: TokenType, val: any): void {
+      if (!(type === tt.string || type === tt.semi)) {
+        if (this.flowPragma === undefined) {
+          this.flowPragma = null;
+        }
+      }
+      return super.finishToken(type, val);
+    }
+
     addComment(comment: N.Comment): void {
       if (this.flowPragma === undefined) {
         // Try to parse a flow pragma.
         const matches = FLOW_PRAGMA_REGEX.exec(comment.value);
         if (!matches) {
-          this.flowPragma = null;
+          // do nothing
         } else if (matches[1] === "flow") {
           this.flowPragma = "flow";
         } else if (matches[1] === "noflow") {
