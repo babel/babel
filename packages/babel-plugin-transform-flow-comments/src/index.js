@@ -127,6 +127,17 @@ export default declare(api => {
         }
         wrapInFlowComment(path, parent);
       },
+      ObjectPattern(path) {
+        const { node } = path;
+        if (node.typeAnnotation) {
+          const typeAnnotation = path.get("typeAnnotation");
+          path.addComment(
+            "trailing",
+            generateComment(typeAnnotation, typeAnnotation.node),
+          );
+          typeAnnotation.remove();
+        }
+      },
 
       Flow(path) {
         const { parent } = path;
