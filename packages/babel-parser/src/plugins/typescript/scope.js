@@ -4,6 +4,7 @@ import ScopeHandler, { Scope } from "../../util/scope";
 import {
   BIND_KIND_TYPE,
   BIND_FLAGS_TS_ENUM,
+  BIND_FLAGS_TS_CONST_ENUM,
   BIND_FLAGS_TS_EXPORT_ONLY,
   BIND_KIND_VALUE,
   BIND_FLAGS_CLASS,
@@ -17,6 +18,9 @@ class TypeScriptScope extends Scope {
 
   // enums (which are also in .types)
   enums: string[] = [];
+
+  // const enums (which are also in .enums and .types)
+  constEnums: string[] = [];
 
   // classes (which are also in .lexical) and interface (which are also in .types)
   classes: string[] = [];
@@ -55,6 +59,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
       scope.types.push(name);
     }
     if (bindingType & BIND_FLAGS_TS_ENUM) scope.enums.push(name);
+    if (bindingType & BIND_FLAGS_TS_CONST_ENUM) scope.constEnums.push(name);
     if (bindingType & BIND_FLAGS_CLASS) scope.classes.push(name);
   }
 
@@ -64,8 +69,14 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     bindingType: BindingTypes,
   ): boolean {
     if (scope.enums.indexOf(name) > -1) {
-      // Enums can be merged with other enums
-      return !(bindingType & BIND_FLAGS_TS_ENUM);
+      if (bindingType & BIND_FLAGS_TS_ENUM) {
+        // Enums can be merged with other enums if they are both
+        //  const or both non-const.
+        const isConst = !!(bindingType & BIND_FLAGS_TS_CONST_ENUM);
+        const wasConst = scope.constEnums.indexOf(name) > -1;
+        return isConst !== wasConst;
+      }
+      return true;
     }
     if (bindingType & BIND_FLAGS_CLASS && scope.classes.indexOf(name) > -1) {
       if (scope.lexical.indexOf(name) > -1) {

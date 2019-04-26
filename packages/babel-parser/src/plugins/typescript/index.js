@@ -11,6 +11,7 @@ import {
   BIND_NONE,
   SCOPE_OTHER,
   BIND_TS_ENUM,
+  BIND_TS_CONST_ENUM,
   BIND_TS_TYPE,
   BIND_TS_INTERFACE,
   BIND_TS_FN_TYPE,
@@ -1123,7 +1124,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.id = this.parseIdentifier();
       this.checkLVal(
         node.id,
-        BIND_TS_ENUM,
+        isConst ? BIND_TS_CONST_ENUM : BIND_TS_ENUM,
         undefined,
         "typescript enum declaration",
       );
