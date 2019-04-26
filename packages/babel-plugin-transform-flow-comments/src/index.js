@@ -1,19 +1,24 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxFlow from "@babel/plugin-syntax-flow";
 import { types as t } from "@babel/core";
+import generateCode from "@babel/generator";
 
 export default declare(api => {
   api.assertVersion(7);
 
-  function wrapInFlowComment(path, parent) {
+  function attachComment(path, comment) {
     let attach = path.getPrevSibling();
     let where = "trailing";
     if (!attach.node) {
       attach = path.parentPath;
       where = "inner";
     }
-    attach.addComment(where, generateComment(path, parent));
+    attach.addComment(where, comment);
     path.remove();
+  }
+
+  function wrapInFlowComment(path, parent) {
+    attachComment(path, generateComment(path, parent));
   }
 
   function generateComment(path, parent) {
@@ -24,6 +29,10 @@ export default declare(api => {
     if (parent && parent.optional) comment = "?" + comment;
     if (comment[0] !== ":") comment = ":: " + comment;
     return comment;
+  }
+
+  function isTypeImport(importKind) {
+    return importKind === "type" || importKind === "typeof";
   }
 
   return {
@@ -122,10 +131,33 @@ export default declare(api => {
       // support `import type A` and `import typeof A` #10
       ImportDeclaration(path) {
         const { node, parent } = path;
-        if (node.importKind !== "type" && node.importKind !== "typeof") {
+        if (isTypeImport(node.importKind)) {
+          wrapInFlowComment(path, parent);
           return;
         }
-        wrapInFlowComment(path, parent);
+
+        const typeSpecifiers = node.specifiers.filter(specifier =>
+          isTypeImport(specifier.importKind),
+        );
+
+        const nonTypeSpecifiers = node.specifiers.filter(
+          specifier => !isTypeImport(specifier.importKind),
+        );
+        node.specifiers = nonTypeSpecifiers;
+
+        if (typeSpecifiers.length > 0) {
+          const typeImportNode = t.cloneNode(node);
+          typeImportNode.specifiers = typeSpecifiers;
+
+          if (nonTypeSpecifiers.length > 0) {
+            path.addComment(
+              "trailing",
+              `:: ${generateCode(typeImportNode).code}`,
+            );
+          } else {
+            attachComment(path, `:: ${generateCode(typeImportNode).code}`);
+          }
+        }
       },
       ObjectPattern(path) {
         const { node } = path;
