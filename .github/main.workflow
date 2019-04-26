@@ -1,6 +1,12 @@
 workflow "Release" {
   on = "push"
-  resolves = ["Trigger GitHub release", "Publish to npm"]
+  resolves = [
+    "Trigger GitHub release",
+    # GitHub actions are too slow for this, it takes more than 15 mins.
+    # Publishing to npm from GH actions is a cool idea, but it's a lot faster to
+    # publish locally.
+    # "Publish to npm",
+   ]
 }
 
 action "Trigger GitHub release" {
