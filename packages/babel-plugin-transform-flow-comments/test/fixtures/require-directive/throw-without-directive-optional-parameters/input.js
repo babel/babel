@@ -1,0 +1,1 @@
+function multiply(num?: number) {}

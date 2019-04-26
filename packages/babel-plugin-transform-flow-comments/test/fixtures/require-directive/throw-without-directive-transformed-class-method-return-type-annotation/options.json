@@ -1,0 +1,5 @@
+{
+  "presets": ["env"],
+  "plugins": [["transform-flow-comments", { "requireDirective": true }], "external-helpers"],
+  "throws": "A @flow directive is required when using Flow annotations with the `requireDirective` option."
+}

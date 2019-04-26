@@ -5,6 +5,10 @@ import { types as t } from "@babel/core";
 export default declare(api => {
   api.assertVersion(7);
 
+  const FLOW_DIRECTIVE = /(@flow(\s+(strict(-local)?|weak))?|@noflow)/;
+
+  let skipTransform = false;
+
   function wrapInFlowComment(path, parent) {
     let attach = path.getPrevSibling();
     let where = "trailing";
@@ -26,12 +30,44 @@ export default declare(api => {
     return comment;
   }
 
+  function throwIfSkipTransform(path) {
+    if (skipTransform) {
+      throw path.buildCodeFrameError(
+        "A @flow directive is required when using Flow annotations with the `requireDirective` option.",
+      );
+    }
+  }
+
   return {
     name: "transform-flow-comments",
     inherits: syntaxFlow,
 
     visitor: {
+      Program(
+        path,
+        {
+          file: {
+            ast: { comments },
+          },
+          opts,
+        },
+      ) {
+        skipTransform = false;
+        let directiveFound = false;
+
+        if (comments) {
+          directiveFound = !!comments.find(comment =>
+            FLOW_DIRECTIVE.test(comment.value),
+          );
+        }
+
+        if (!directiveFound && opts.requireDirective) {
+          skipTransform = true;
+        }
+      },
+
       TypeCastExpression(path) {
+        throwIfSkipTransform(path);
         const { node } = path;
         path
           .get("expression")
@@ -47,6 +83,8 @@ export default declare(api => {
 
         const { node } = path;
         if (node.typeAnnotation) {
+          throwIfSkipTransform(path);
+
           const typeAnnotation = path.get("typeAnnotation");
           path.addComment("trailing", generateComment(typeAnnotation, node));
           typeAnnotation.remove();
@@ -54,15 +92,19 @@ export default declare(api => {
             node.optional = false;
           }
         } else if (node.optional) {
+          throwIfSkipTransform(path);
+
           path.addComment("trailing", ":: ?");
           node.optional = false;
         }
       },
 
       AssignmentPattern: {
-        exit({ node }) {
-          const { left } = node;
+        exit(path) {
+          const { left } = path.node;
           if (left.optional) {
+            throwIfSkipTransform(path);
+
             left.optional = false;
           }
         },
@@ -73,6 +115,8 @@ export default declare(api => {
         if (path.isDeclareFunction()) return;
         const { node } = path;
         if (node.returnType) {
+          throwIfSkipTransform(path);
+
           const returnType = path.get("returnType");
           const typeAnnotation = returnType.get("typeAnnotation");
           const block = path.get("body");
@@ -83,6 +127,8 @@ export default declare(api => {
           returnType.remove();
         }
         if (node.typeParameters) {
+          throwIfSkipTransform(path);
+
           const typeParameters = path.get("typeParameters");
           const id = path.get("id");
           id.addComment(
@@ -97,8 +143,12 @@ export default declare(api => {
       ClassProperty(path) {
         const { node, parent } = path;
         if (!node.value) {
+          throwIfSkipTransform(path);
+
           wrapInFlowComment(path, parent);
         } else if (node.typeAnnotation) {
+          throwIfSkipTransform(path);
+
           const typeAnnotation = path.get("typeAnnotation");
           path
             .get("key")
@@ -116,6 +166,8 @@ export default declare(api => {
         if (node.exportKind !== "type" && !t.isFlow(node.declaration)) {
           return;
         }
+        throwIfSkipTransform(path);
+
         wrapInFlowComment(path, parent);
       },
 
@@ -125,10 +177,14 @@ export default declare(api => {
         if (node.importKind !== "type" && node.importKind !== "typeof") {
           return;
         }
+        throwIfSkipTransform(path);
+
         wrapInFlowComment(path, parent);
       },
 
       Flow(path) {
+        throwIfSkipTransform(path);
+
         const { parent } = path;
         wrapInFlowComment(path, parent);
       },
@@ -136,6 +192,8 @@ export default declare(api => {
       Class(path) {
         const { node } = path;
         if (node.typeParameters) {
+          throwIfSkipTransform(path);
+
           const typeParameters = path.get("typeParameters");
           const block = path.get("body");
           block.addComment(
