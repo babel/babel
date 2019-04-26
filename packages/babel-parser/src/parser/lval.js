@@ -16,7 +16,7 @@ import type {
 import type { Pos, Position } from "../util/location";
 import { isStrictBindReservedWord } from "../util/identifier";
 import { NodeUtils } from "./node";
-import { type BindingTypes, BIND_NONE, BIND_OUTSIDE } from "../util/scopeflags";
+import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
 
 export default class LValParser extends NodeUtils {
   // Forward-declaration: defined in expression.js
@@ -325,7 +325,7 @@ export default class LValParser extends NodeUtils {
 
   checkLVal(
     expr: Expression,
-    bindingType: ?BindingTypes = BIND_NONE,
+    bindingType: BindingTypes = BIND_NONE,
     checkClashes: ?{ [key: string]: boolean },
     contextDescription: string,
   ): void {
@@ -363,7 +363,7 @@ export default class LValParser extends NodeUtils {
             checkClashes[key] = true;
           }
         }
-        if (bindingType !== BIND_NONE && bindingType !== BIND_OUTSIDE) {
+        if (!(bindingType & BIND_NONE)) {
           this.scope.declareName(expr.name, bindingType, expr.start);
         }
         break;

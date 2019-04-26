@@ -1,12 +1,23 @@
 // @flow
 
-import type { TokenType } from "../tokenizer/types";
-import { types as tt } from "../tokenizer/types";
-import { types as ct } from "../tokenizer/context";
-import * as N from "../types";
-import type { Pos, Position } from "../util/location";
-import Parser from "../parser";
-import { type BindingTypes, BIND_NONE, SCOPE_OTHER } from "../util/scopeflags";
+import type { TokenType } from "../../tokenizer/types";
+import { types as tt } from "../../tokenizer/types";
+import { types as ct } from "../../tokenizer/context";
+import * as N from "../../types";
+import type { Pos, Position } from "../../util/location";
+import type Parser from "../../parser";
+import {
+  type BindingTypes,
+  BIND_NONE,
+  SCOPE_OTHER,
+  BIND_TS_ENUM,
+  BIND_TS_CONST_ENUM,
+  BIND_TS_TYPE,
+  BIND_TS_INTERFACE,
+  BIND_TS_FN_TYPE,
+  BIND_TS_NAMESPACE,
+} from "../../util/scopeflags";
+import TypeScriptScopeHandler from "./scope";
 
 type TsModifier =
   | "readonly"
@@ -69,6 +80,10 @@ function keywordTypeFromName(
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
+    getScopeHandler(): Class<TypeScriptScopeHandler> {
+      return TypeScriptScopeHandler;
+    }
+
     tsIsIdentifier(): boolean {
       // TODO: actually a bit more complex in TypeScript, but shouldn't matter.
       // See https://github.com/Microsoft/TypeScript/issues/15008
@@ -1017,6 +1032,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.TsInterfaceDeclaration,
     ): N.TsInterfaceDeclaration {
       node.id = this.parseIdentifier();
+      this.checkLVal(
+        node.id,
+        BIND_TS_INTERFACE,
+        undefined,
+        "typescript interface declaration",
+      );
       node.typeParameters = this.tsTryParseTypeParameters();
       if (this.eat(tt._extends)) {
         node.extends = this.tsParseHeritageClause("extends");
@@ -1031,6 +1052,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.TsTypeAliasDeclaration,
     ): N.TsTypeAliasDeclaration {
       node.id = this.parseIdentifier();
+      this.checkLVal(node.id, BIND_TS_TYPE, undefined, "typescript type alias");
+
       node.typeParameters = this.tsTryParseTypeParameters();
       node.typeAnnotation = this.tsExpectThenParseType(tt.eq);
       this.semicolon();
@@ -1099,6 +1122,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.TsEnumDeclaration {
       if (isConst) node.const = true;
       node.id = this.parseIdentifier();
+      this.checkLVal(
+        node.id,
+        isConst ? BIND_TS_CONST_ENUM : BIND_TS_ENUM,
+        undefined,
+        "typescript enum declaration",
+      );
+
       this.expect(tt.braceL);
       node.members = this.tsParseDelimitedList(
         "EnumMembers",
@@ -1126,11 +1156,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseModuleOrNamespaceDeclaration(
       node: N.TsModuleDeclaration,
+      nested?: boolean = false,
     ): N.TsModuleDeclaration {
       node.id = this.parseIdentifier();
+
+      if (!nested) {
+        this.checkLVal(
+          node.id,
+          BIND_TS_NAMESPACE,
+          null,
+          "module or namespace declaration",
+        );
+      }
+
       if (this.eat(tt.dot)) {
         const inner = this.startNode();
-        this.tsParseModuleOrNamespaceDeclaration(inner);
+        this.tsParseModuleOrNamespaceDeclaration(inner, true);
         node.body = inner;
       } else {
         node.body = this.tsParseModuleBlock();
@@ -1260,7 +1301,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       switch (starttype) {
         case tt._function:
-          return this.parseFunctionStatement(nany);
+          return this.parseFunctionStatement(
+            nany,
+            /* async */ false,
+            /* declarationPosition */ true,
+          );
         case tt._class:
           return this.parseClass(
             nany,
@@ -1529,6 +1574,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       super.parseFunctionBodyAndFinish(node, type, isMethod);
+    }
+
+    checkFunctionStatementId(node: N.Function): void {
+      if (!node.body && node.id) {
+        this.checkLVal(node.id, BIND_TS_FN_TYPE, null, "function name");
+      } else {
+        super.checkFunctionStatementId(...arguments);
+      }
     }
 
     parseSubscript(
@@ -2214,7 +2267,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkLVal(
       expr: N.Expression,
-      bindingType: ?BindingTypes = BIND_NONE,
+      bindingType: BindingTypes = BIND_NONE,
       checkClashes: ?{ [key: string]: boolean },
       contextDescription: string,
     ): void {

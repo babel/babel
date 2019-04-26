@@ -1767,6 +1767,7 @@ export default class ExpressionParser extends LValParser {
     this.parseFunctionParams((node: any), allowModifiers);
     this.checkYieldAwaitInDefaultParams();
     this.parseFunctionBodyAndFinish(node, type, true);
+    this.scope.exit();
 
     this.state.yieldPos = oldYieldPos;
     this.state.awaitPos = oldAwaitPos;
@@ -1795,6 +1796,7 @@ export default class ExpressionParser extends LValParser {
     if (params) this.setArrowFunctionParameters(node, params);
     this.parseFunctionBody(node, true);
 
+    this.scope.exit();
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
     this.state.yieldPos = oldYieldPos;
     this.state.awaitPos = oldAwaitPos;
@@ -1890,7 +1892,6 @@ export default class ExpressionParser extends LValParser {
       node.body = this.parseBlock(true, false);
       this.state.labels = oldLabels;
     }
-    this.scope.exit();
 
     this.state.inParameters = oldInParameters;
     // Ensure the function name isn't a forbidden identifier in strict mode, e.g. 'eval'

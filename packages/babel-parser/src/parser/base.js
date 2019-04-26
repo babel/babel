@@ -9,7 +9,7 @@ export default class BaseParser {
   // Properties set by constructor in index.js
   options: Options;
   inModule: boolean;
-  scope: ScopeHandler;
+  scope: ScopeHandler<*>;
   plugins: PluginsMap;
   filename: ?string;
   sawUnambiguousESM: boolean = false;
