@@ -173,7 +173,7 @@
   },
   "transform-destructuring": {
     "chrome": "51",
-    "edge": "18",
+    "edge": "15",
     "firefox": "53",
     "safari": "10",
     "node": "6.5",
