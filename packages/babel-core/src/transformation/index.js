@@ -93,7 +93,7 @@ function transformFile(file: File, pluginPasses: PluginPasses): void {
         if (isThenable(result)) {
           throw new Error(
             `You appear to be using an plugin with an async .pre, ` +
-              `which your current version of Babel does not support.` +
+              `which your current version of Babel does not support. ` +
               `If you're using a published plugin, you may need to upgrade ` +
               `your @babel/core version.`,
           );
@@ -117,7 +117,7 @@ function transformFile(file: File, pluginPasses: PluginPasses): void {
         if (isThenable(result)) {
           throw new Error(
             `You appear to be using an plugin with an async .post, ` +
-              `which your current version of Babel does not support.` +
+              `which your current version of Babel does not support. ` +
               `If you're using a published plugin, you may need to upgrade ` +
               `your @babel/core version.`,
           );
