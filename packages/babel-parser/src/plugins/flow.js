@@ -1577,7 +1577,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.JSXOpeningElement,
     ): N.JSXOpeningElement {
       if (this.isRelational("<")) {
-        node.typeParameters = this.flowParseTypeParameterInstantiationCallOrNew();
+        node.typeArguments = this.flowParseTypeParameterInstantiationCallOrNew();
       }
       return super.jsxParseOpeningElementAfterName(node);
     }

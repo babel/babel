@@ -881,6 +881,7 @@ export type JSXOpeningElement = NodeBase & {
   type: "JSXOpeningElement",
   name: JSXNamespacedName | JSXMemberExpression,
   typeParameters?: ?TypeParameterInstantiationBase, // TODO: Not in spec
+  typeArguments?: ?TypeParameterInstantiationBase, // for Flow
   attributes: $ReadOnlyArray<JSXAttribute>,
   selfClosing: boolean,
 };

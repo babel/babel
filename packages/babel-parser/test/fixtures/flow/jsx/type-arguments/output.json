@@ -87,7 +87,7 @@
               },
               "name": "C"
             },
-            "typeParameters": {
+            "typeArguments": {
               "type": "TypeParameterInstantiation",
               "start": 11,
               "end": 19,
@@ -232,7 +232,7 @@
               },
               "name": "C"
             },
-            "typeParameters": {
+            "typeArguments": {
               "type": "TypeParameterInstantiation",
               "start": 28,
               "end": 36,
