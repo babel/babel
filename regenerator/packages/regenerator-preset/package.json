@@ -16,12 +16,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@babel/plugin-proposal-function-sent": "^7.0.0-beta.51",
-    "@babel/plugin-syntax-async-generators": "^7.0.0-beta.51",
-    "@babel/plugin-transform-arrow-functions": "^7.0.0-beta.51",
-    "@babel/plugin-transform-block-scoping": "^7.0.0-beta.51",
-    "@babel/plugin-transform-classes": "^7.0.0-beta.51",
-    "@babel/plugin-transform-for-of": "^7.0.0-beta.51",
+    "@babel/plugin-proposal-function-sent": "^7.2.0",
+    "@babel/plugin-syntax-async-generators": "^7.2.0",
+    "@babel/plugin-transform-arrow-functions": "^7.2.0",
+    "@babel/plugin-transform-block-scoping": "^7.4.4",
+    "@babel/plugin-transform-classes": "^7.4.4",
+    "@babel/plugin-transform-for-of": "^7.4.4",
     "regenerator-transform": "^0.14.0"
   }
 }
