@@ -34,9 +34,9 @@
     "commoner": "^0.10.8",
     "private": "^0.1.8",
     "recast": "^0.16.0",
-    "regenerator-preset": "^0.12.1",
+    "regenerator-preset": "^0.13.0",
     "regenerator-runtime": "^0.13.2",
-    "regenerator-transform": "^0.13.3",
+    "regenerator-transform": "^0.14.0",
     "through": "^2.3.8"
   },
   "devDependencies": {
