@@ -28,27 +28,27 @@
     "test": "test/run.sh"
   },
   "dependencies": {
-    "@babel/core": "^7.1.6",
-    "@babel/runtime": "^7.1.5",
-    "@babel/types": "^7.1.6",
+    "@babel/core": "^7.4.4",
+    "@babel/runtime": "^7.4.4",
+    "@babel/types": "^7.4.4",
     "commoner": "^0.10.8",
     "private": "^0.1.8",
-    "recast": "^0.16.0",
+    "recast": "^0.17.6",
     "regenerator-preset": "^0.13.0",
     "regenerator-runtime": "^0.13.2",
     "regenerator-transform": "^0.14.0",
     "through": "^2.3.8"
   },
   "devDependencies": {
-    "@babel/parser": "^7.1.6",
-    "@babel/plugin-transform-parameters": "^7.1.0",
-    "@babel/plugin-transform-spread": "^7.0.0",
+    "@babel/parser": "^7.4.4",
+    "@babel/plugin-transform-parameters": "^7.4.4",
+    "@babel/plugin-transform-spread": "^7.2.2",
     "babel-check-duplicated-nodes": "^1.0.0",
     "browserify": "^16.2.3",
-    "mocha": "^5.2.0",
-    "promise": "^8.0.2",
-    "semver": "^5.6.0",
-    "uglify-js": "^3.4.9"
+    "mocha": "^6.1.4",
+    "promise": "^8.0.3",
+    "semver": "^6.0.0",
+    "uglify-js": "^3.5.9"
   },
   "license": "MIT",
   "engines": {
