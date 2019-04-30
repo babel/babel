@@ -148,13 +148,18 @@ context("functions", function() {
     // using our variable name
     assert.strictEqual(marked.id.name, varName);
 
+    assertMarkCall(marked.init);
+  }
+
+  function assertMarkCall(node) {
     // assiging a call expression to regeneratorRuntime.mark()
-    n.CallExpression.assert(marked.init);
-    assert.strictEqual(marked.init.callee.object.name, 'regeneratorRuntime')
-    assert.strictEqual(marked.init.callee.property.name, 'mark')
+
+    n.CallExpression.assert(node);
+    assert.strictEqual(node.callee.object.name, 'regeneratorRuntime')
+    assert.strictEqual(node.callee.property.name, 'mark')
 
     // with said call expression marked as a pure function
-    assert.strictEqual(marked.init.leadingComments[0].value, '#__PURE__');
+    assert.strictEqual(node.leadingComments[0].value, '#__PURE__');
   }
 
   describe("function declarations", function() {
@@ -235,6 +240,52 @@ context("functions", function() {
       // and that our first argument is our original function expression
       n.FunctionExpression.assert(declarator.init.arguments[0]);
       assert.strictEqual(declarator.init.arguments[0].id.name, '_callee');
+    });
+  });
+
+  describe("class methods", function() {
+    it("should be correctly wrapped", function () {
+      const input = `
+        class A {
+          *foo() {}
+        }
+      `;
+
+      // The regenerator preset also transpiles classes
+      const { ast } = require("@babel/core").transformSync(input, {
+        configFile: false,
+        ast: true,
+        plugins: [require("../packages/regenerator-transform")],
+      });
+
+      const method = ast.program.body[0].body.body[0];
+      n.ClassMethod.assert(method);
+
+      const return_ = method.body.body[0];
+      n.ReturnStatement.assert(return_);
+      n.CallExpression.assert(return_.argument);
+
+      assertMarkCall(return_.argument.callee);
+
+      /*
+      class A {
+        foo() {
+          return (
+            #__PURE__
+            regeneratorRuntime.mark(function _callee() {
+              return regeneratorRuntime.wrap(function _callee$(_context) {
+                while (1) switch (_context.prev = _context.next) {
+                  case 0:
+                  case "end":
+                    return _context.stop();
+                }
+              }, _callee);
+            })()
+          );
+        }
+
+      }
+      */
     });
   });
 

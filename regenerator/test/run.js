@@ -115,6 +115,15 @@ if (semver.gte(process.version, "8.10.0")) {
   ]);
 }
 
+if (semver.gte(process.version, "6.0.0")) {
+  enqueue("mocha", [
+    "--harmony",
+    "--reporter", "spec",
+    "--require", "./test/runtime.js",
+    "./test/class.js",
+  ]);
+}
+
 if (semver.gte(process.version, "4.0.0")) {
   enqueue("mocha", [
     "--harmony",
@@ -149,6 +158,11 @@ enqueue(convert, [
 enqueue(convert, [
   "./test/async.js",
   "./test/async.es5.js"
+]);
+
+enqueue(convert, [
+  "./test/class.js",
+  "./test/class.es5.js"
 ]);
 
 function convertWithSpread(es6File, es5File, callback) {
