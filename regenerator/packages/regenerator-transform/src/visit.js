@@ -33,12 +33,12 @@ exports.getVisitor = ({ types: t }) => ({
         t.callExpression(container, []),
       ),
     ]);
-  
+
     // Regardless of whether or not the wrapped function is a an async method
     // or generator the outer function should not be
     node.async = false;
     node.generator = false;
-  
+
     // Unwrap the wrapper IIFE's environment so super and this and such still work.
     path
       .get("body.body.0.argument.callee")
