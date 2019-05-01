@@ -9,7 +9,6 @@ var fs = require("fs");
 var through = require("through");
 var transform = require("./lib/visit").transform;
 var utils = require("./lib/util");
-var genOrAsyncFunExp = /\bfunction\s*\*|\basync\b/;
 
 function exports(file, options) {
   var data = [];
@@ -64,12 +63,10 @@ function compile(source, options) {
     includeRuntime: false
   });
 
-  // Shortcut: Transform only if generators or async functions present.
-  if (genOrAsyncFunExp.test(source)) {
-    result = require("@babel/core").transformSync(source, transformOptions);
-  } else {
-    result = { code: source };
-  }
+  var result = require("@babel/core").transformSync(
+    source,
+    transformOptions
+  );
 
   if (options.includeRuntime === true) {
     result.code = getRuntimeCode() + "\n" + result.code;
