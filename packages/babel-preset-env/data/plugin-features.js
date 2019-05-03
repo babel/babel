@@ -68,7 +68,6 @@ const es = {
     features: [
       "destructuring, assignment",
       "destructuring, declarations",
-      "destructuring, parameters",
     ],
   },
   "transform-block-scoping": {

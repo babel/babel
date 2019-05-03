@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "targets": {
+          "browsers": ["edge >= 15"]
+        },
+        "modules": false
+      }
+    ]
+  ]
+}
