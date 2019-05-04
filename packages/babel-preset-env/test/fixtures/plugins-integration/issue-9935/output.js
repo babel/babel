@@ -4,15 +4,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 class MyClass extends BaseClass {
   loadEntity() {
-    var _this = this,
-        _superprop_getLoadEntity = () => super.loadEntity;
+    var _superprop_getLoadEntity = () => super.loadEntity,
+        _this = this;
 
     return _asyncToGenerator(function* () {
       _this.website = yield _this.loadWebsite();
 
       _this.report.setCompany(_this.website.company);
 
-      _superprop_getLoadEntity().call(this);
+      _superprop_getLoadEntity().call(_this);
     })();
   }
 

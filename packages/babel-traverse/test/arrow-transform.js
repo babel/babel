@@ -549,10 +549,11 @@ describe("arrow function conversion", () => {
       () => super.foo();
     `,
       `
-      var _superprop_getFoo = () => super.foo;
+      var _superprop_getFoo = () => super.foo,
+          _this = this;
 
       (function () {
-        _superprop_getFoo().call(this);
+        _superprop_getFoo().call(_this);
       });
       super.foo();
       () => super.foo();
@@ -570,10 +571,11 @@ describe("arrow function conversion", () => {
       () => super.foo(a, b, ...c);
     `,
       `
-      var _superprop_getFoo = () => super.foo;
+      var _superprop_getFoo = () => super.foo,
+          _this = this;
 
       (function () {
-        _superprop_getFoo().call(this, a, b, ...c);
+        _superprop_getFoo().call(_this, a, b, ...c);
       });
       super.foo(a, b, ...c);
       () => super.foo(a, b, ...c);
@@ -591,10 +593,11 @@ describe("arrow function conversion", () => {
       () => super[foo]();
     `,
       `
-      var _superprop_get = _prop => super[_prop];
+      var _superprop_get = _prop => super[_prop],
+          _this = this;
 
       (function () {
-        _superprop_get(foo).call(this);
+        _superprop_get(foo).call(_this);
       });
       super[foo]();
       () => super[foo]();

@@ -216,30 +216,6 @@ function hoistFunctionEnvironment(
     });
   }
 
-  // Convert all "this" references in the arrow to point at the alias.
-  let thisBinding;
-  if (thisPaths.length > 0 || specCompliant) {
-    thisBinding = getThisBinding(thisEnvFn, inConstructor);
-
-    if (
-      !specCompliant ||
-      // In subclass constructors, still need to rewrite because "this" can't be bound in spec mode
-      // because it might not have been initialized yet.
-      (inConstructor && hasSuperClass(thisEnvFn))
-    ) {
-      thisPaths.forEach(thisChild => {
-        const thisRef = thisChild.isJSX()
-          ? t.jsxIdentifier(thisBinding)
-          : t.identifier(thisBinding);
-
-        thisRef.loc = thisChild.node.loc;
-        thisChild.replaceWith(thisRef);
-      });
-
-      if (specCompliant) thisBinding = null;
-    }
-  }
-
   // Convert all "arguments" references in the arrow to point at the alias.
   if (argumentsPaths.length > 0) {
     const argumentsBinding = getBinding(thisEnvFn, "arguments", () =>
@@ -311,14 +287,43 @@ function hoistFunctionEnvironment(
       }
 
       if (isCall) {
+        superProp.node.arguments.unshift(t.thisExpression());
         call = t.callExpression(
           t.memberExpression(call, t.identifier("call")),
-          [t.thisExpression(), ...superProp.node.arguments],
+          superProp.node.arguments,
         );
       }
 
       superProp.replaceWith(call);
+
+      if (isCall) {
+        thisPaths.push(superProp.get("arguments.0"));
+      }
     });
+  }
+
+  // Convert all "this" references in the arrow to point at the alias.
+  let thisBinding;
+  if (thisPaths.length > 0 || specCompliant) {
+    thisBinding = getThisBinding(thisEnvFn, inConstructor);
+
+    if (
+      !specCompliant ||
+      // In subclass constructors, still need to rewrite because "this" can't be bound in spec mode
+      // because it might not have been initialized yet.
+      (inConstructor && hasSuperClass(thisEnvFn))
+    ) {
+      thisPaths.forEach(thisChild => {
+        const thisRef = thisChild.isJSX()
+          ? t.jsxIdentifier(thisBinding)
+          : t.identifier(thisBinding);
+
+        thisRef.loc = thisChild.node.loc;
+        thisChild.replaceWith(thisRef);
+      });
+
+      if (specCompliant) thisBinding = null;
+    }
   }
 
   return thisBinding;
