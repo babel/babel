@@ -6,6 +6,10 @@
 import getV8Flags from "v8flags";
 import path from "path";
 
+// TODO: When support for node < 10.10 will be dropped, this package
+// can be replaced with process.allowedNodeEnvironmentFlags
+import allowedNodeEnvironmentFlags from "node-environment-flags";
+
 let args = [path.join(__dirname, "_babel-node")];
 
 let babelArgs = process.argv.slice(2);
@@ -24,7 +28,9 @@ if (argSeparator > -1) {
  * that only the flag is returned.
  */
 function getNormalizedV8Flag(arg) {
-  const matches = arg.match(/--(.+)/);
+  // v8 uses the "no" prefix to negate boolean flags (e.g. --nolezy),
+  // but they are not listed by v8flags
+  const matches = arg.match(/--(?:no)?(.+)/);
 
   if (matches) {
     return `--${matches[1].replace(/-/g, "_")}`;
@@ -33,51 +39,30 @@ function getNormalizedV8Flag(arg) {
   return arg;
 }
 
+// These are aliases for node options defined by babel-node.
+const aliases = new Map([["-d", "--debug"], ["-gc", "--expose-gc"]]);
+
 getV8Flags(function(err, v8Flags) {
-  babelArgs.forEach(function(arg, index) {
+  for (let i = 0; i < babelArgs.length; i++) {
+    const arg = babelArgs[i];
     const flag = arg.split("=")[0];
 
-    switch (flag) {
-      case "-d":
-        args.unshift("--debug");
-        break;
-
-      case "debug":
-      case "--debug":
-      case "--debug-brk":
-      case "--inspect":
-      case "--inspect-brk":
-      case "--experimental-modules":
-        args.unshift(arg);
-        break;
-
-      case "-r":
-      case "--require":
-        args.push(flag);
-        args.push(babelArgs[index + 1]);
-        delete babelArgs[index + 1];
-        break;
-
-      case "-gc":
-        args.unshift("--expose-gc");
-        break;
-
-      case "--nolazy":
-        args.unshift(flag);
-        break;
-
-      default:
-        if (
-          v8Flags.indexOf(getNormalizedV8Flag(flag)) >= 0 ||
-          arg.indexOf("--trace") === 0
-        ) {
-          args.unshift(arg);
-        } else {
-          args.push(arg);
-        }
-        break;
+    if (flag === "-r" || flag === "--require") {
+      args.push(flag);
+      args.push(babelArgs[++i]);
+    } else if (aliases.has(flag)) {
+      args.unshift(aliases.get(flag));
+    } else if (
+      flag === "debug" || // node debug foo.js
+      flag === "inspect" ||
+      v8Flags.indexOf(getNormalizedV8Flag(flag)) >= 0 ||
+      allowedNodeEnvironmentFlags.has(flag)
+    ) {
+      args.unshift(arg);
+    } else {
+      args.push(arg);
     }
-  });
+  }
 
   // append arguments passed after --
   if (argSeparator > -1) {
