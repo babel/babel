@@ -539,7 +539,7 @@ describe("arrow function conversion", () => {
     );
   });
 
-  it("should convert super.prop() calls", () => {
+  it("should convert super.prop() calls without params", () => {
     assertConversion(
       `
       () => {
@@ -549,13 +549,34 @@ describe("arrow function conversion", () => {
       () => super.foo();
     `,
       `
-      var _superprop_callFoo = (..._args) => super.foo(..._args);
+      var _superprop_getFoo = () => super.foo;
 
       (function () {
-        _superprop_callFoo();
+        _superprop_getFoo().call(this);
       });
       super.foo();
       () => super.foo();
+    `,
+    );
+  });
+
+  it("should convert super.prop() calls with params", () => {
+    assertConversion(
+      `
+      () => {
+        super.foo(a, b, ...c);
+      };
+      super.foo(a, b, ...c);
+      () => super.foo(a, b, ...c);
+    `,
+      `
+      var _superprop_getFoo = () => super.foo;
+
+      (function () {
+        _superprop_getFoo().call(this, a, b, ...c);
+      });
+      super.foo(a, b, ...c);
+      () => super.foo(a, b, ...c);
     `,
     );
   });
@@ -570,10 +591,10 @@ describe("arrow function conversion", () => {
       () => super[foo]();
     `,
       `
-      var _superprop_call = (_prop, ..._args) => super[_prop](..._args);
+      var _superprop_get = _prop => super[_prop];
 
       (function () {
-        _superprop_call(foo);
+        _superprop_get(foo).call(this);
       });
       super[foo]();
       () => super[foo]();

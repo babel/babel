@@ -286,39 +286,38 @@ function hoistFunctionEnvironment(
         ? ""
         : superProp.get("property").node.name;
 
-      if (superProp.parentPath.isCallExpression({ callee: superProp.node })) {
-        const superBinding = getSuperPropCallBinding(thisEnvFn, key);
+      const isAssignment = superProp.parentPath.isAssignmentExpression({
+        left: superProp.node,
+      });
+      const isCall = superProp.parentPath.isCallExpression({
+        callee: superProp.node,
+      });
+      const superBinding = getSuperPropBinding(thisEnvFn, isAssignment, key);
 
-        if (superProp.node.computed) {
-          const prop = superProp.get("property").node;
-          superProp.replaceWith(t.identifier(superBinding));
-          superProp.parentPath.node.arguments.unshift(prop);
-        } else {
-          superProp.replaceWith(t.identifier(superBinding));
-        }
-      } else {
-        const isAssignment = superProp.parentPath.isAssignmentExpression({
-          left: superProp.node,
-        });
-        const superBinding = getSuperPropBinding(thisEnvFn, isAssignment, key);
-
-        const args = [];
-        if (superProp.node.computed) {
-          args.push(superProp.get("property").node);
-        }
-
-        if (isAssignment) {
-          const value = superProp.parentPath.node.right;
-          args.push(value);
-          superProp.parentPath.replaceWith(
-            t.callExpression(t.identifier(superBinding), args),
-          );
-        } else {
-          superProp.replaceWith(
-            t.callExpression(t.identifier(superBinding), args),
-          );
-        }
+      const args = [];
+      if (superProp.node.computed) {
+        args.push(superProp.get("property").node);
       }
+
+      if (isAssignment) {
+        const value = superProp.parentPath.node.right;
+        args.push(value);
+      }
+
+      let call = t.callExpression(t.identifier(superBinding), args);
+
+      if (isAssignment || isCall) {
+        superProp = superProp.parentPath;
+      }
+
+      if (isCall) {
+        call = t.callExpression(
+          t.memberExpression(call, t.identifier("call")),
+          [t.thisExpression(), ...superProp.node.arguments],
+        );
+      }
+
+      superProp.replaceWith(call);
     });
   }
 
@@ -482,37 +481,6 @@ function getSuperBinding(thisEnvFn) {
         t.spreadElement(t.identifier(argsBinding.name)),
       ]),
     );
-  });
-}
-
-// Create a binding for a function that will call "super.foo()" or "super[foo]()".
-function getSuperPropCallBinding(thisEnvFn, propName) {
-  return getBinding(thisEnvFn, `superprop_call:${propName || ""}`, () => {
-    const argsBinding = thisEnvFn.scope.generateUidIdentifier("args");
-    const argsList = [t.restElement(argsBinding)];
-
-    let fnBody;
-    if (propName) {
-      // (...args) => super.foo(...args)
-      fnBody = t.callExpression(
-        t.memberExpression(t.super(), t.identifier(propName)),
-        [t.spreadElement(t.identifier(argsBinding.name))],
-      );
-    } else {
-      const method = thisEnvFn.scope.generateUidIdentifier("prop");
-      // (method, ...args) => super[method](...args)
-      argsList.unshift(method);
-      fnBody = t.callExpression(
-        t.memberExpression(
-          t.super(),
-          t.identifier(method.name),
-          true /* computed */,
-        ),
-        [t.spreadElement(t.identifier(argsBinding.name))],
-      );
-    }
-
-    return t.arrowFunctionExpression(argsList, fnBody);
   });
 }
 
