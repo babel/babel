@@ -337,7 +337,7 @@ function assertPluginItem(loc: GeneralPath, value: mixed): PluginItem {
       if (
         opts !== undefined &&
         opts !== false &&
-        (typeof opts !== "object" || Array.isArray(opts))
+        (typeof opts !== "object" || Array.isArray(opts) || !opts)
       ) {
         throw new Error(
           `${msg(access(loc, 1))} must be an object, false, or undefined`,
