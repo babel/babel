@@ -31,7 +31,7 @@ function isTSExportableDeclaration(node) {
 
 interface State {
   programPath: any;
-  exportableTSNames: string[];
+  exportableTSNames: Set<string>;
 }
 
 const PARSED_PARAMS = new WeakSet();
@@ -54,7 +54,7 @@ export default declare((api, { jsxPragma = "React" }) => {
 
       Program(path, state: State) {
         state.programPath = path;
-        state.exportableTSNames = [];
+        state.exportableTSNames = new Set();
 
         const { file } = state;
 
@@ -71,14 +71,14 @@ export default declare((api, { jsxPragma = "React" }) => {
         for (const stmt of path.get("body")) {
           if (isTSExportableDeclaration(stmt.node)) {
             if (stmt.node.id && stmt.node.id.name) {
-              state.exportableTSNames.push(stmt.node.id.name);
+              state.exportableTSNames.add(stmt.node.id.name);
             } else if (
               stmt.node.declarations &&
               stmt.node.declarations.length > 0
             ) {
               for (const declaration of stmt.node.declarations) {
                 if (declaration.id && declaration.id.name) {
-                  state.exportableTSNames.push(declaration.id.name);
+                  state.exportableTSNames.add(declaration.id.name);
                 }
               }
             }
@@ -89,7 +89,7 @@ export default declare((api, { jsxPragma = "React" }) => {
             stmt.node.declaration.id &&
             stmt.node.declaration.id.name
           ) {
-            state.exportableTSNames.push(stmt.node.declaration.id.name);
+            state.exportableTSNames.add(stmt.node.declaration.id.name);
           }
         }
 
@@ -141,7 +141,7 @@ export default declare((api, { jsxPragma = "React" }) => {
           path.node.specifiers.length > 0 &&
           !path.node.specifiers.find(
             exportSpecifier =>
-              exportableTSNames.indexOf(exportSpecifier.local.name) === -1,
+              !exportableTSNames.has(exportSpecifier.local.name),
           )
         ) {
           path.remove();
@@ -150,7 +150,7 @@ export default declare((api, { jsxPragma = "React" }) => {
 
       ExportSpecifier(path, { exportableTSNames }) {
         // remove type exports
-        if (exportableTSNames.indexOf(path.node.local.name) !== -1) {
+        if (exportableTSNames.has(path.node.local.name)) {
           path.remove();
         }
       },
