@@ -12,6 +12,7 @@
     "babel-plugin"
   ],
   "dependencies": {
+    "@babel/generator": "^7.0.0",
     "@babel/helper-plugin-utils": "^7.0.0",
     "@babel/plugin-syntax-flow": "^7.2.0"
   },
