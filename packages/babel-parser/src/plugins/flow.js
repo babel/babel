@@ -96,7 +96,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     finishToken(type: TokenType, val: any): void {
-      if (!(type === tt.string || type === tt.semi)) {
+      if (
+        type !== tt.string &&
+        type !== tt.semi &&
+        type !== tt.interpreterDirective
+      ) {
         if (this.flowPragma === undefined) {
           this.flowPragma = null;
         }
