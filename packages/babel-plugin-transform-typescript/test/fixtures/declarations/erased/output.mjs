@@ -26,3 +26,7 @@ var BB2;
 function foo() {}
 
 export { BB2 as BB3, foo }; // only BB2 and foo
+// export an interface before declaration
+
+// everything removed
+export { C2 as C4 }; // only C4

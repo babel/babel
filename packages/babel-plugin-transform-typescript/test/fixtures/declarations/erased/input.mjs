@@ -40,3 +40,8 @@ type AA2 = {};
 enum BB2 {}
 function foo() {}
 export { II3 as default, AA2 as A, BB2 as BB3, foo }; // only BB2 and foo
+
+// export an interface before declaration
+export { Bar } // everything removed
+export { Bar as Bar2, C2 as C4 } // only C4
+interface Bar {}
