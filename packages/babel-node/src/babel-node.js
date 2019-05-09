@@ -73,7 +73,10 @@ getV8Flags(function(err, v8Flags) {
     const kexec = require("kexec");
     kexec(process.argv[0], args);
   } catch (err) {
-    if (err.code !== "MODULE_NOT_FOUND" && err.code !== "UNDECLARED_DEPENDENCY") {
+    if (
+      err.code !== "MODULE_NOT_FOUND" &&
+      err.code !== "UNDECLARED_DEPENDENCY"
+    ) {
       throw err;
     }
 
