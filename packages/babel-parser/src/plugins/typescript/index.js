@@ -1442,6 +1442,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       startPos: number,
       startLoc: Position,
     ): ?N.ArrowFunctionExpression {
+      if (!this.isRelational("<")) {
+        return undefined;
+      }
       const res: ?N.ArrowFunctionExpression = this.tsTryParseAndCatch(() => {
         const node: N.ArrowFunctionExpression = this.startNodeAt(
           startPos,
@@ -1464,6 +1467,36 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         /* params are already set */ null,
         /* async */ true,
       );
+    }
+
+    tsTryParseTypeArguments(): ?N.TsTypeParameterInstantiation {
+      if (!this.isRelational("<")) {
+        return undefined;
+      }
+      const state = this.state.clone();
+      const node = this.startNode();
+      const params = this.tsInType(() =>
+        // Temporarily remove a JSX parsing context, which makes us scan different tokens.
+        this.tsInNoContext(() => {
+          if (this.eatRelational("<")) {
+            return this.tsTryParseDelimitedList(
+              "TypeParametersOrArguments",
+              this.tsParseType.bind(this),
+            );
+          }
+        }),
+      );
+      if (params) {
+        node.params = params;
+        // This reads the next token after the `>` too, so do this in the enclosing context.
+        // But be sure not to parse a regex in the jsx expression `<C<number> />`, so set exprAllowed = false
+        this.state.exprAllowed = false;
+        if (this.eatRelational(">")) {
+          return this.finishNode(node, "TSTypeParameterInstantiation");
+        }
+      }
+      this.state = state;
+      return undefined;
     }
 
     tsParseTypeArguments(): N.TsTypeParameterInstantiation {
@@ -1624,27 +1657,28 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           const node: N.CallExpression = this.startNodeAt(startPos, startLoc);
           node.callee = base;
 
-          const typeArguments = this.tsParseTypeArguments();
+          const typeArguments = this.tsTryParseTypeArguments();
+          if (!typeArguments) {
+            return undefined;
+          }
 
-          if (typeArguments) {
-            if (!noCalls && this.eat(tt.parenL)) {
-              // possibleAsync always false here, because we would have handled it above.
-              // $FlowIgnore (won't be any undefined arguments)
-              node.arguments = this.parseCallExpressionArguments(
-                tt.parenR,
-                /* possibleAsync */ false,
-              );
-              node.typeParameters = typeArguments;
-              return this.finishCallExpression(node);
-            } else if (this.match(tt.backQuote)) {
-              return this.parseTaggedTemplateExpression(
-                startPos,
-                startLoc,
-                base,
-                state,
-                typeArguments,
-              );
-            }
+          if (!noCalls && this.eat(tt.parenL)) {
+            // possibleAsync always false here, because we would have handled it above.
+            // $FlowIgnore (won't be any undefined arguments)
+            node.arguments = this.parseCallExpressionArguments(
+              tt.parenR,
+              /* possibleAsync */ false,
+            );
+            node.typeParameters = typeArguments;
+            return this.finishCallExpression(node);
+          } else if (this.match(tt.backQuote)) {
+            return this.parseTaggedTemplateExpression(
+              startPos,
+              startLoc,
+              base,
+              state,
+              typeArguments,
+            );
           }
 
           this.unexpected();
@@ -2204,8 +2238,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           const returnType = this.tsParseTypeOrTypePredicateAnnotation(
             tt.colon,
           );
-          if (this.canInsertSemicolon()) this.unexpected();
-          if (!this.match(tt.arrow)) this.unexpected();
+          if (this.canInsertSemicolon() || !this.match(tt.arrow)) {
+            this.state = state;
+            return undefined;
+          }
           node.returnType = returnType;
         } catch (err) {
           if (err instanceof SyntaxError) {
@@ -2438,9 +2474,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     jsxParseOpeningElementAfterName(
       node: N.JSXOpeningElement,
     ): N.JSXOpeningElement {
-      const typeArguments = this.tsTryParseAndCatch(() =>
-        this.tsParseTypeArguments(),
-      );
+      const typeArguments = this.tsTryParseTypeArguments();
       if (typeArguments) node.typeParameters = typeArguments;
       return super.jsxParseOpeningElementAfterName(node);
     }
