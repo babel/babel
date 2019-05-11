@@ -18,6 +18,7 @@ import {
   BIND_TS_NAMESPACE,
 } from "../../util/scopeflags";
 import TypeScriptScopeHandler from "./scope";
+import Errors from "./errors";
 
 type TsModifier =
   | "readonly"
@@ -215,24 +216,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseBracketedList<T: N.Node>(
       kind: ParsingContext,
       parseElement: () => T,
-      bracket: boolean,
-      skipFirstToken: boolean,
+      before: () => void,
+      after: () => void,
     ): T[] {
-      if (!skipFirstToken) {
-        if (bracket) {
-          this.expect(tt.bracketL);
-        } else {
-          this.expectRelational("<");
-        }
-      }
-
+      before();
       const result = this.tsParseDelimitedList(kind, parseElement);
-
-      if (bracket) {
-        this.expect(tt.bracketR);
-      } else {
-        this.expectRelational(">");
-      }
+      after();
 
       return result;
     }
@@ -323,17 +312,26 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseTypeParameters() {
       const node: N.TsTypeParameterDeclaration = this.startNode();
 
-      if (this.isRelational("<") || this.match(tt.jsxTagStart)) {
-        this.next();
-      } else {
-        this.unexpected();
-      }
+      const before = () => {
+        if (this.isRelational("<") || this.match(tt.jsxTagStart)) {
+          this.next();
+          if (this.isRelational(">") || this.match(tt.jsxTagEnd)) {
+            this.unexpected(
+              null,
+              Errors.TS_ERR_0001.msg,
+              Errors.TS_ERR_0001.code,
+            );
+          }
+        } else {
+          this.unexpected();
+        }
+      };
 
       node.params = this.tsParseBracketedList(
         "TypeParametersOrArguments",
         this.tsParseTypeParameter.bind(this),
-        /* bracket */ false,
-        /* skipFirstToken */ true,
+        before,
+        () => this.expectRelational(">"),
       );
       return this.finishNode(node, "TSTypeParameterDeclaration");
     }
@@ -567,8 +565,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.elementTypes = this.tsParseBracketedList(
         "TupleElementTypes",
         this.tsParseTupleElementType.bind(this),
-        /* bracket */ true,
-        /* skipFirstToken */ false,
+        () => this.expect(tt.bracketL),
+        () => this.expect(tt.bracketR),
       );
 
       // Validate the elementTypes to ensure:
@@ -1246,11 +1244,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return res;
     }
 
-    tsTryParseAndCatch<T>(f: () => T): ?T {
+    tsTryParseAndCatch<T>(f: () => T, allowedErrors?: string[] = []): ?T {
       const state = this.state.clone();
       try {
         return f();
       } catch (e) {
+        if (e.code && allowedErrors.includes(e.code)) {
+          throw e;
+        }
         if (e instanceof SyntaxError) {
           this.state = state;
           return undefined;
@@ -1472,6 +1473,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // Temporarily remove a JSX parsing context, which makes us scan different tokens.
         this.tsInNoContext(() => {
           this.expectRelational("<");
+          if (this.isRelational(">")) {
+            this.unexpected(
+              null,
+              Errors.TS_ERR_0002.msg,
+              Errors.TS_ERR_0002.code,
+            );
+          }
           return this.tsParseDelimitedList(
             "TypeParametersOrArguments",
             this.tsParseType.bind(this),
@@ -1648,7 +1656,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
 
           this.unexpected();
-        });
+        }, [Errors.TS_ERR_0002.code]);
 
         if (result) return result;
       }
@@ -1671,7 +1679,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           const args = this.tsParseTypeArguments();
           if (!this.match(tt.parenL)) this.unexpected();
           return args;
-        });
+        }, [Errors.TS_ERR_0002.code]);
         if (typeParameters) {
           node.typeParameters = typeParameters;
         }
@@ -2178,8 +2186,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return super.parseMaybeAssign(...args);
       }
 
-      // Correct TypeScript code should have at least 1 type parameter, but don't crash on bad code.
-      if (typeParameters && typeParameters.params.length !== 0) {
+      if (typeParameters) {
         this.resetStartLocationFromNode(arrowExpression, typeParameters);
       }
       arrowExpression.typeParameters = typeParameters;
@@ -2438,8 +2445,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     jsxParseOpeningElementAfterName(
       node: N.JSXOpeningElement,
     ): N.JSXOpeningElement {
-      const typeArguments = this.tsTryParseAndCatch(() =>
-        this.tsParseTypeArguments(),
+      const typeArguments = this.tsTryParseAndCatch(
+        () => this.tsParseTypeArguments(),
+        [Errors.TS_ERR_0002.code],
       );
       if (typeArguments) node.typeParameters = typeArguments;
       return super.jsxParseOpeningElementAfterName(node);
