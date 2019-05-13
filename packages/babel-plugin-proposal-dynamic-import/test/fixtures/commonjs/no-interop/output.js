@@ -1,1 +1,1 @@
-var modP = new Promise(_resolve => _resolve(require("mod")));
+var modP = Promise.resolve().then(() => require("mod"));

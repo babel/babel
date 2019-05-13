@@ -6,13 +6,19 @@ import {
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
   wrapInterop,
-  rewriteDynamicImport,
 } from "@babel/helper-module-transforms";
 import simplifyAccess from "@babel/helper-simple-access";
 import { template, types as t } from "@babel/core";
 
+import babelPluginDynamicImportNode from "babel-plugin-dynamic-import-node";
+
 export default declare((api, options) => {
   api.assertVersion(7);
+
+  // TODO: expose a better interface
+  const transformImportCall = Function.call.bind(
+    babelPluginDynamicImportNode(api).visitor.Import,
+  );
 
   const {
     loose,
@@ -56,9 +62,6 @@ export default declare((api, options) => {
         "Babel config for this file.");
     })()
   `;
-
-  const getRequire = source =>
-    t.callExpression(t.identifier("require"), [source]);
 
   const moduleExportsVisitor = {
     ReferencedIdentifier(path) {
@@ -136,11 +139,7 @@ export default declare((api, options) => {
           scope.rename("require");
         } while ((scope = scope.parent));
 
-        rewriteDynamicImport(
-          path,
-          (source, resolve) => resolve(getRequire(source)),
-          { noInterop },
-        );
+        transformImportCall(this, path.get("callee"));
       },
 
       Program: {
@@ -187,7 +186,9 @@ export default declare((api, options) => {
           );
 
           for (const [source, metadata] of meta.source) {
-            const loadExpr = getRequire(t.stringLiteral(source));
+            const loadExpr = t.callExpression(t.identifier("require"), [
+              t.stringLiteral(source),
+            ]);
 
             let header;
             if (isSideEffectImport(metadata)) {

@@ -11,7 +11,8 @@
   "dependencies": {
     "@babel/helper-module-transforms": "^7.4.4",
     "@babel/helper-plugin-utils": "^7.0.0",
-    "@babel/helper-simple-access": "^7.1.0"
+    "@babel/helper-simple-access": "^7.1.0",
+    "babel-plugin-dynamic-import-node": "^2.2.0"
   },
   "keywords": [
     "babel-plugin"

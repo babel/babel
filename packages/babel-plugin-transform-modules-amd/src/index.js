@@ -7,7 +7,6 @@ import {
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
   wrapInterop,
-  rewriteDynamicImport,
 } from "@babel/helper-module-transforms";
 import { template, types as t } from "@babel/core";
 
@@ -50,18 +49,26 @@ export default declare((api, options) => {
         if (!this.file.has("@babel/plugin-proposal-dynamic-import")) return;
         if (!path.get("callee").isImport()) return;
 
-        if (!state.requireId) {
-          state.requireId = path.scope.generateUidIdentifier("require");
+        let { requireId, resolveId } = state;
+        if (!requireId) {
+          requireId = path.scope.generateUidIdentifier("require");
+          state.requireId = requireId;
+        }
+        if (!resolveId) {
+          resolveId = path.scope.generateUidIdentifier("resolve");
+          state.resolveId = resolveId;
         }
 
-        rewriteDynamicImport(
-          path,
-          (source, resolve) =>
-            template.expression.ast`${state.requireId}(
-              [${source}],
-              imported => ${resolve(t.identifier("imported"))}
+        let result = t.identifier("imported");
+        if (!noInterop) result = wrapInterop(path, result, "namespace");
+
+        path.replaceWith(
+          template.expression.ast`
+            new Promise((${resolveId}) =>
+              ${requireId}([${path.node.arguments[0]}], imported =>
+                ${resolveId}(${result})
+              )
             )`,
-          { noInterop },
         );
       },
 
