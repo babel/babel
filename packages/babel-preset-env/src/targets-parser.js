@@ -200,6 +200,7 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
 
     const browsers = browserslist(browsersquery, {
       path: options.configPath,
+      mobileToDesktop: true,
     });
 
     const queryBrowsers = getLowestVersions(browsers);
