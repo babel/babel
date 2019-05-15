@@ -44,13 +44,16 @@ const validateTargetNames = (targets: Targets): void => {
 
 const browserNameMap = {
   and_chr: "chrome",
+  and_ff: "firefox",
   android: "android",
   chrome: "chrome",
   edge: "edge",
   firefox: "firefox",
   ie: "ie",
+  ie_mob: "ie",
   ios_saf: "ios",
   node: "node",
+  op_mob: "opera",
   opera: "opera",
   safari: "safari",
   samsung: "samsung",
@@ -200,6 +203,7 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
 
     const browsers = browserslist(browsersquery, {
       path: options.configPath,
+      mobileToDesktop: true,
     });
 
     const queryBrowsers = getLowestVersions(browsers);

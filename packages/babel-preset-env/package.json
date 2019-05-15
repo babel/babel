@@ -57,7 +57,7 @@
     "@babel/plugin-transform-typeof-symbol": "^7.2.0",
     "@babel/plugin-transform-unicode-regex": "^7.4.4",
     "@babel/types": "^7.4.4",
-    "browserslist": "^4.5.2",
+    "browserslist": "^4.6.0",
     "core-js-compat": "^3.0.0",
     "invariant": "^2.2.2",
     "js-levenshtein": "^1.1.3",

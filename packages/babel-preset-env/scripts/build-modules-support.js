@@ -3,7 +3,7 @@ const fs = require("fs");
 
 const moduleSupport = require("caniuse-db/features-json/es6-module.json");
 
-const skipList = new Set(["and_chr", "android", "samsung"]);
+const skipList = new Set(["android", "samsung"]);
 const acceptedWithCaveats = new Set(["safari", "ios_saf"]);
 
 const { stats } = moduleSupport;
