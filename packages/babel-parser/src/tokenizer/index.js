@@ -356,7 +356,7 @@ export default class Tokenizer extends LocationParser {
     this.state.type = type;
     this.state.value = val;
 
-    this.updateContext(prevType);
+    if (!this.isLookahead) this.updateContext(prevType);
   }
 
   // ### Token reading
