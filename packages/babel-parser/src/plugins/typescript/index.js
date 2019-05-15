@@ -1478,12 +1478,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const params = this.tsInType(() =>
         // Temporarily remove a JSX parsing context, which makes us scan different tokens.
         this.tsInNoContext(() => {
-          if (this.eatRelational("<")) {
-            return this.tsTryParseDelimitedList(
-              "TypeParametersOrArguments",
-              this.tsParseType.bind(this),
-            );
-          }
+          this.next();
+          return this.tsTryParseDelimitedList(
+            "TypeParametersOrArguments",
+            this.tsParseType.bind(this),
+          );
         }),
       );
       if (params) {
