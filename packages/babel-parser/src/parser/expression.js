@@ -875,19 +875,19 @@ export default class ExpressionParser extends LValParser {
         return this.finishNode(node, "Super");
 
       case tt._import:
-        if (this.lookahead().type === tt.dot) {
-          return this.parseImportMetaProperty();
-        }
-
-        this.expectPlugin("dynamicImport");
-
         node = this.startNode();
         this.next();
+
+        if (this.match(tt.dot)) {
+          return this.parseImportMetaProperty(node);
+        }
+
+        this.expectPlugin("dynamicImport", node.start);
+
         if (!this.match(tt.parenL)) {
           this.unexpected(null, tt.parenL);
         }
         return this.finishNode(node, "Import");
-
       case tt._this:
         node = this.startNode();
         this.next();
@@ -1125,20 +1125,17 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "MetaProperty");
   }
 
-  parseImportMetaProperty(): N.MetaProperty {
-    const node = this.startNode();
-    const id = this.parseIdentifier(true);
+  parseImportMetaProperty(node: N.MetaProperty): N.MetaProperty {
+    const id = this.createIdentifier(this.startNodeAtNode(node), "import");
     this.expect(tt.dot);
 
-    if (id.name === "import") {
-      if (this.isContextual("meta")) {
-        this.expectPlugin("importMeta");
-      } else if (!this.hasPlugin("importMeta")) {
-        this.raise(
-          id.start,
-          `Dynamic imports require a parameter: import('a.js')`,
-        );
-      }
+    if (this.isContextual("meta")) {
+      this.expectPlugin("importMeta");
+    } else if (!this.hasPlugin("importMeta")) {
+      this.raise(
+        id.start,
+        `Dynamic imports require a parameter: import('a.js')`,
+      );
     }
 
     if (!this.inModule) {
