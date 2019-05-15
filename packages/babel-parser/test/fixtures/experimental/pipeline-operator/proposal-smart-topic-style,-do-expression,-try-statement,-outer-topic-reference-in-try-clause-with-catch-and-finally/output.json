@@ -396,7 +396,6 @@
                         "directives": []
                       }
                     },
-                    "guardedHandlers": [],
                     "finalizer": {
                       "type": "BlockStatement",
                       "start": 91,

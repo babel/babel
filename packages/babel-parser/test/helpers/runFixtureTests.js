@@ -166,6 +166,9 @@ function runTest(test, parseFunction) {
     const mis = misMatch(JSON.parse(test.expect.code), ast);
 
     if (mis) {
+      if (process.env.OVERWRITE) {
+        return save(test, ast);
+      }
       throw new Error(mis);
     }
   }

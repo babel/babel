@@ -61,7 +61,6 @@
           "directives": []
         },
         "handler": null,
-        "guardedHandlers": [],
         "finalizer": {
           "type": "BlockStatement",
           "start": 16,
