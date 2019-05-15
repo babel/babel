@@ -32,7 +32,7 @@
     "derequire": "^2.0.2",
     "duplicate-package-checker-webpack-plugin": "^2.1.0",
     "enhanced-resolve": "^3.0.0",
-    "eslint": "^5.15.1",
+    "eslint": "^5.16.0",
     "eslint-config-babel": "^9.0.0",
     "eslint-plugin-flowtype": "^3.2.1",
     "eslint-plugin-import": "^2.16.0",
