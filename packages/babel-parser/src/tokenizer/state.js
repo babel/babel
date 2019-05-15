@@ -170,7 +170,7 @@ export default class State {
       // $FlowIgnore
       let val = this[key];
 
-      if ((!skipArrays || key === "context") && Array.isArray(val)) {
+      if (!skipArrays && Array.isArray(val)) {
         val = val.slice();
       }
 
