@@ -125,7 +125,6 @@
             "expectedNode": "BlockStatement"
           }
         },
-        "guardedHandlers": [],
         "finalizer": {
           "type": "Placeholder",
           "start": 36,

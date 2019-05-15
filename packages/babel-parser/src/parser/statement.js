@@ -22,10 +22,6 @@ import {
   SCOPE_SUPER,
 } from "../util/scopeflags";
 
-// Reused empty array added for node fields that are always empty.
-
-const empty = [];
-
 const loopLabel = { kind: "loop" },
   switchLabel = { kind: "switch" };
 
@@ -683,7 +679,6 @@ export default class StatementParser extends ExpressionParser {
       node.handler = this.finishNode(clause, "CatchClause");
     }
 
-    node.guardedHandlers = empty;
     node.finalizer = this.eat(tt._finally) ? this.parseBlock() : null;
 
     if (!node.handler && !node.finalizer) {
