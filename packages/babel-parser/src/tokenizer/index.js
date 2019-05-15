@@ -226,11 +226,9 @@ export default class Tokenizer extends LocationParser {
       loc: new SourceLocation(startLoc, endLoc),
     };
 
-    if (!this.isLookahead) {
-      if (this.options.tokens) this.state.tokens.push(comment);
-      this.state.comments.push(comment);
-      this.addComment(comment);
-    }
+    if (this.options.tokens) this.state.tokens.push(comment);
+    this.state.comments.push(comment);
+    this.addComment(comment);
   }
 
   skipBlockComment(): void {
@@ -249,6 +247,10 @@ export default class Tokenizer extends LocationParser {
       ++this.state.curLine;
       this.state.lineStart = match.index + match[0].length;
     }
+
+    // If we are doing a lookahead right now we need to advance the position (above code)
+    // but we do not want to push the comment to the state.
+    if (this.isLookahead) return;
 
     this.pushComment(
       true,
@@ -275,6 +277,10 @@ export default class Tokenizer extends LocationParser {
         ch = this.input.charCodeAt(this.state.pos);
       }
     }
+
+    // If we are doing a lookahead right now we need to advance the position (above code)
+    // but we do not want to push the comment to the state.
+    if (this.isLookahead) return;
 
     this.pushComment(
       false,
