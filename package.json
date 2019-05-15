@@ -23,7 +23,7 @@
     "@babel/runtime": "^7.4.5",
     "babel-eslint": "^11.0.0-beta.0",
     "babel-jest": "^24.5.0",
-    "babel-loader": "^8.0.5",
+    "babel-loader": "^8.0.6",
     "babel-plugin-transform-charcodes": "^0.2.0",
     "browserify": "^16.2.3",
     "bundle-collapser": "^1.2.1",
