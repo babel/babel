@@ -293,14 +293,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         let bodyNode = this.startNode();
 
         if (this.match(tt._import)) {
-          const lookahead = this.lookahead();
-          if (lookahead.value !== "type" && lookahead.value !== "typeof") {
+          this.next();
+          if (!this.isContextual("type") && !this.isContextual("typeof")) {
             this.unexpected(
-              null,
+              this.state.lastTokStart,
               "Imports within a `declare module` body must always be `import type` or `import typeof`",
             );
           }
-          this.next();
           this.parseImport(bodyNode);
         } else {
           this.expectContextual(
