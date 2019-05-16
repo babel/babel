@@ -239,13 +239,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.flowParseDeclareFunction(node);
       } else if (this.match(tt._var)) {
         return this.flowParseDeclareVariable(node);
-      } else if (this.isContextual("module")) {
-        if (this.lookahead().type === tt.dot) {
+      } else if (this.eatContextual("module")) {
+        if (this.match(tt.dot)) {
           return this.flowParseDeclareModuleExports(node);
         } else {
           if (insideModule) {
             this.unexpected(
-              null,
+              this.state.lastTokStart,
               "`declare module` cannot be used inside another `declare module`",
             );
           }
@@ -276,8 +276,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     flowParseDeclareModule(node: N.FlowDeclareModule): N.FlowDeclareModule {
-      this.next();
-
       this.scope.enter(SCOPE_OTHER);
 
       if (this.match(tt.string)) {
@@ -422,8 +420,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     flowParseDeclareModuleExports(
       node: N.FlowDeclareModuleExports,
     ): N.FlowDeclareModuleExports {
-      this.expectContextual("module");
-      this.expect(tt.dot);
+      this.next();
       this.expectContextual("exports");
       node.typeAnnotation = this.flowParseTypeAnnotation();
       this.semicolon();
