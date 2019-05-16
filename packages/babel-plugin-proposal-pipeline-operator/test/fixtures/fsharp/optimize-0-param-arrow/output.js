@@ -1,5 +1,3 @@
-var _ref, _a;
-
 var a = 1,
     b = 2,
     c = 3;

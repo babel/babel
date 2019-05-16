@@ -8,7 +8,6 @@ const minimalVisitor = {
     if (operator !== "|>") return;
 
     const placeholder = scope.generateUidIdentifierBasedOnNode(left);
-    scope.push({ id: placeholder });
 
     const call = t.callExpression(right, [t.cloneNode(placeholder)]);
     path.replaceWith(

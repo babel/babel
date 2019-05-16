@@ -8,7 +8,6 @@ const fsharpVisitor = {
     if (operator !== "|>") return;
 
     const placeholder = scope.generateUidIdentifierBasedOnNode(left);
-    scope.push({ id: placeholder });
 
     const call =
       right.type === "AwaitExpression"

@@ -30,6 +30,8 @@ const buildOptimizedSequenceExpression = ({ assign, call, path }) => {
 
     call.callee = evalSequence;
 
+    path.scope.push({ id: placeholderNode });
+
     return t.sequenceExpression([assign, call]);
   }
 
@@ -37,6 +39,8 @@ const buildOptimizedSequenceExpression = ({ assign, call, path }) => {
     // Arrow function with 0 arguments
     return t.sequenceExpression([pipelineLeft, calledExpression.body]);
   }
+
+  path.scope.push({ id: placeholderNode });
 
   if (param) {
     path.get("right").scope.rename(param.name, placeholderNode.name);
