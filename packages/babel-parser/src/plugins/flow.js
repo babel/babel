@@ -239,8 +239,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.flowParseDeclareFunction(node);
       } else if (this.match(tt._var)) {
         return this.flowParseDeclareVariable(node);
-      } else if (this.isContextual("module")) {
-        this.next();
+      } else if (this.eatContextual("module")) {
         if (this.match(tt.dot)) {
           return this.flowParseDeclareModuleExports(node);
         } else {
