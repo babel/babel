@@ -203,7 +203,7 @@ export function normalizeCoreJSOption(
 
   if (useBuiltIns && corejs === undefined) {
     rawVersion = 2;
-    console.log(
+    console.warn(
       "\nWARNING: We noticed you're using the `useBuiltIns` option without declaring a " +
         "core-js version. Currently, we assume version 2.x when no version " +
         "is passed. Since this default version will likely change in future " +
