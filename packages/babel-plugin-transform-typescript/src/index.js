@@ -16,8 +16,22 @@ function isInType(path) {
   }
 }
 
+function isTSExportableDeclaration(node) {
+  // all kinds of type exports that transpile to nothing
+  // exception is enums, since they transpile to JS values
+  return (
+    t.isTSInterfaceDeclaration(node) ||
+    t.isTSTypeAliasDeclaration(node) ||
+    t.isTSModuleDeclaration(node) ||
+    (t.isVariableDeclaration(node) && node.declare) ||
+    (t.isClassDeclaration(node) && node.declare) ||
+    t.isTSDeclareFunction(node)
+  );
+}
+
 interface State {
   programPath: any;
+  exportableTSNames: Set<string>;
 }
 
 const PARSED_PARAMS = new WeakSet();
@@ -40,6 +54,7 @@ export default declare((api, { jsxPragma = "React" }) => {
 
       Program(path, state: State) {
         state.programPath = path;
+        state.exportableTSNames = new Set();
 
         const { file } = state;
 
@@ -49,6 +64,32 @@ export default declare((api, { jsxPragma = "React" }) => {
             if (jsxMatches) {
               file.set(PRAGMA_KEY, jsxMatches[1]);
             }
+          }
+        }
+
+        // find exportable top level type declarations
+        for (const stmt of path.get("body")) {
+          if (isTSExportableDeclaration(stmt.node)) {
+            if (stmt.node.id && stmt.node.id.name) {
+              state.exportableTSNames.add(stmt.node.id.name);
+            } else if (
+              stmt.node.declarations &&
+              stmt.node.declarations.length > 0
+            ) {
+              for (const declaration of stmt.node.declarations) {
+                if (declaration.id && declaration.id.name) {
+                  state.exportableTSNames.add(declaration.id.name);
+                }
+              }
+            }
+          } else if (
+            t.isExportNamedDeclaration(stmt.node) &&
+            stmt.node.specifiers.length === 0 &&
+            isTSExportableDeclaration(stmt.node.declaration) &&
+            stmt.node.declaration.id &&
+            stmt.node.declaration.id.name
+          ) {
+            state.exportableTSNames.add(stmt.node.declaration.id.name);
           }
         }
 
@@ -91,6 +132,26 @@ export default declare((api, { jsxPragma = "React" }) => {
               }
             }
           }
+        }
+      },
+
+      ExportNamedDeclaration(path, { exportableTSNames }) {
+        // remove export declaration if it's exporting only types
+        if (
+          path.node.specifiers.length > 0 &&
+          !path.node.specifiers.find(
+            exportSpecifier =>
+              !exportableTSNames.has(exportSpecifier.local.name),
+          )
+        ) {
+          path.remove();
+        }
+      },
+
+      ExportSpecifier(path, { exportableTSNames }) {
+        // remove type exports
+        if (exportableTSNames.has(path.node.local.name)) {
+          path.remove();
         }
       },
 
