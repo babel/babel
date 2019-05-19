@@ -97,6 +97,16 @@ export class NodeUtils extends UtilParser {
     if (this.options.ranges) node.range[0] = start;
   }
 
+  resetEndLocation(
+    node: NodeBase,
+    end?: number = this.state.lastTokEnd,
+    endLoc?: Position = this.state.lastTokEndLoc,
+  ): void {
+    node.end = end;
+    node.loc.end = endLoc;
+    if (this.options.ranges) node.range[1] = end;
+  }
+
   /**
    * Reset the start location of node to the start location of locationNode
    */

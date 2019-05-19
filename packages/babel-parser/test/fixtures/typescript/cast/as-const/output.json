@@ -3951,7 +3951,7 @@
               "expression": {
                 "type": "UnaryExpression",
                 "start": 858,
-                "end": 862,
+                "end": 861,
                 "loc": {
                   "start": {
                     "line": 29,
@@ -3959,7 +3959,7 @@
                   },
                   "end": {
                     "line": 29,
-                    "column": 15
+                    "column": 14
                   }
                 },
                 "operator": "-",
@@ -4104,7 +4104,7 @@
                   {
                     "type": "NumericLiteral",
                     "start": 886,
-                    "end": 889,
+                    "end": 888,
                     "loc": {
                       "start": {
                         "line": 30,
@@ -4112,7 +4112,7 @@
                       },
                       "end": {
                         "line": 30,
-                        "column": 15
+                        "column": 14
                       }
                     },
                     "extra": {

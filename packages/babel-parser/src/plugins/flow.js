@@ -1848,6 +1848,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node = super.parseParenItem(node, startPos, startLoc);
       if (this.eat(tt.question)) {
         node.optional = true;
+        // Include questionmark in location of node
+        // Don't use this.finishNode() as otherwise we might process comments twice and
+        // include already consumed parens
+        this.resetEndLocation(node);
       }
 
       if (this.match(tt.colon)) {
