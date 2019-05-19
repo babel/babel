@@ -397,13 +397,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseSignatureMember(
       kind: "TSCallSignatureDeclaration" | "TSConstructSignatureDeclaration",
+      node: N.TsCallSignatureDeclaration | N.TsConstructSignatureDeclaration,
     ): N.TsCallSignatureDeclaration | N.TsConstructSignatureDeclaration {
-      const node:
-        | N.TsCallSignatureDeclaration
-        | N.TsConstructSignatureDeclaration = this.startNode();
-      if (kind === "TSConstructSignatureDeclaration") {
-        this.expect(tt._new);
-      }
       this.tsFillSignature(tt.colon, node);
       this.tsParseTypeMemberSemicolon();
       return this.finishNode(node, kind);
@@ -442,7 +437,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.TsPropertySignature | N.TsMethodSignature,
       readonly: boolean,
     ): N.TsPropertySignature | N.TsMethodSignature {
-      this.parsePropertyName(node);
       if (this.eat(tt.question)) node.optional = true;
       const nodeAny: any = node;
 
@@ -462,17 +456,26 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTypeMember(): N.TsTypeElement {
-      if (this.match(tt.parenL) || this.isRelational("<")) {
-        return this.tsParseSignatureMember("TSCallSignatureDeclaration");
-      }
-      if (
-        this.match(tt._new) &&
-        this.tsLookAhead(this.tsIsStartOfConstructSignature.bind(this))
-      ) {
-        return this.tsParseSignatureMember("TSConstructSignatureDeclaration");
-      }
-      // Instead of fullStart, we create a node here.
       const node: any = this.startNode();
+
+      if (this.match(tt.parenL) || this.isRelational("<")) {
+        return this.tsParseSignatureMember("TSCallSignatureDeclaration", node);
+      }
+
+      if (this.match(tt._new)) {
+        const id: N.Identifier = this.startNode();
+        this.next();
+        if (this.match(tt.parenL) || this.isRelational("<")) {
+          return this.tsParseSignatureMember(
+            "TSConstructSignatureDeclaration",
+            node,
+          );
+        } else {
+          node.key = this.createIdentifier(id, "new");
+          return this.tsParsePropertyOrMethodSignature(node, false);
+        }
+      }
+
       const readonly = !!this.tsParseModifier(["readonly"]);
 
       const idx = this.tsTryParseIndexSignature(node);
@@ -480,12 +483,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (readonly) node.readonly = true;
         return idx;
       }
-      return this.tsParsePropertyOrMethodSignature(node, readonly);
-    }
 
-    tsIsStartOfConstructSignature() {
-      this.next();
-      return this.match(tt.parenL) || this.isRelational("<");
+      this.parsePropertyName(node);
+      return this.tsParsePropertyOrMethodSignature(node, readonly);
     }
 
     tsParseTypeLiteral(): N.TsTypeLiteral {
