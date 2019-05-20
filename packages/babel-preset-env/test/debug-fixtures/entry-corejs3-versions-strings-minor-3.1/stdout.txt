@@ -50,6 +50,7 @@ Using polyfills with `entry` option:
   es.symbol.is-concat-spreadable { "ie":"10" }
   es.symbol.iterator { "ie":"10" }
   es.symbol.match { "ie":"10" }
+  es.symbol.match-all { "chrome":"54", "ie":"10", "node":"6.10" }
   es.symbol.replace { "ie":"10" }
   es.symbol.search { "ie":"10" }
   es.symbol.species { "ie":"10" }
@@ -161,6 +162,7 @@ Using polyfills with `entry` option:
   es.string.includes { "ie":"10" }
   es.string.iterator { "ie":"10" }
   es.string.match { "ie":"10" }
+  es.string.match-all { "chrome":"54", "ie":"10", "node":"6.10" }
   es.string.pad-end { "chrome":"54", "ie":"10", "node":"6.10" }
   es.string.pad-start { "chrome":"54", "ie":"10", "node":"6.10" }
   es.string.raw { "ie":"10" }
