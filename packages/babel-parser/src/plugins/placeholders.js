@@ -71,8 +71,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.Node,
       expectedNode: T,
     ): /*N.Placeholder<T>*/ MaybePlaceholder<T> {
+      const isFinished = !!(node.expectedNode && node.type === "Placeholder");
       node.expectedNode = expectedNode;
-      return this.finishNode(node, "Placeholder");
+
+      return isFinished ? node : this.finishNode(node, "Placeholder");
     }
 
     /* ============================================================ *

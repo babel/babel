@@ -422,7 +422,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.expect(tt.bracketL);
       const id = this.parseIdentifier();
       id.typeAnnotation = this.tsParseTypeAnnotation();
-      this.finishNode(id, "Identifier"); // set end position to end of type
+      this.resetEndLocation(id); // set end position to end of type
 
       this.expect(tt.bracketR);
       node.parameters = [id];
@@ -2096,7 +2096,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const type = this.tsTryParseTypeAnnotation();
       if (type) {
         decl.id.typeAnnotation = type;
-        this.finishNode(decl.id, decl.id.type); // set end position to end of type
+        this.resetEndLocation(decl.id); // set end position to end of type
       }
     }
 
@@ -2238,7 +2238,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
       const type = this.tsTryParseTypeAnnotation();
       if (type) param.typeAnnotation = type;
-      return this.finishNode(param, param.type);
+      this.resetEndLocation(param);
+
+      return param;
     }
 
     toAssignable(
@@ -2400,12 +2402,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     typeCastToParameter(node: N.TsTypeCastExpression): N.Node {
       node.expression.typeAnnotation = node.typeAnnotation;
 
-      return this.finishNodeAt(
+      this.resetEndLocation(
         node.expression,
-        node.expression.type,
         node.typeAnnotation.end,
         node.typeAnnotation.loc.end,
       );
+
+      return node.expression;
     }
 
     toReferencedList(

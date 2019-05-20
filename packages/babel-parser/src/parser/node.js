@@ -83,6 +83,12 @@ export class NodeUtils extends UtilParser {
     pos: number,
     loc: Position,
   ): T {
+    if (process.env.NODE_ENV !== "production" && node.end > 1) {
+      throw new Error(
+        "Do not call finishNode*() twice on the same node." +
+          " Instead use resetEndLocation() or change type directly.",
+      );
+    }
     node.type = type;
     node.end = pos;
     node.loc.end = loc;

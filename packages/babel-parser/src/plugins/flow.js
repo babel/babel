@@ -222,8 +222,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       id.typeAnnotation = this.finishNode(typeContainer, "TypeAnnotation");
 
-      this.finishNode(id, id.type);
-
+      this.resetEndLocation(id);
       this.semicolon();
 
       return this.finishNode(node, "DeclareFunction");
@@ -432,7 +431,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.FlowDeclareTypeAlias {
       this.next();
       this.flowParseTypeAlias(node);
-      return this.finishNode(node, "DeclareTypeAlias");
+      // Don't do finishNode as we don't want to process comments twice
+      node.type = "DeclareTypeAlias";
+      return node;
     }
 
     flowParseDeclareOpaqueType(
@@ -440,7 +441,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.FlowDeclareOpaqueType {
       this.next();
       this.flowParseOpaqueType(node, true);
-      return this.finishNode(node, "DeclareOpaqueType");
+      // Don't do finishNode as we don't want to process comments twice
+      node.type = "DeclareOpaqueType";
+      return node;
     }
 
     flowParseDeclareInterface(
@@ -1520,7 +1523,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         : this.flowParseRestrictedIdentifier();
       if (this.match(tt.colon)) {
         ident.typeAnnotation = this.flowParseTypeAnnotation();
-        this.finishNode(ident, ident.type);
+        this.resetEndLocation(ident);
       }
       return ident;
     }
@@ -1528,12 +1531,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     typeCastToParameter(node: N.Node): N.Node {
       node.expression.typeAnnotation = node.typeAnnotation;
 
-      return this.finishNodeAt(
+      this.resetEndLocation(
         node.expression,
-        node.expression.type,
         node.typeAnnotation.end,
         node.typeAnnotation.loc.end,
       );
+
+      return node.expression;
     }
 
     flowParseVariance(): ?N.FlowVariance {
@@ -2209,7 +2213,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.match(tt.colon)) {
         param.typeAnnotation = this.flowParseTypeAnnotation();
       }
-      this.finishNode(param, param.type);
+      this.resetEndLocation(param);
       return param;
     }
 
@@ -2397,7 +2401,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       super.parseVarId(decl, kind);
       if (this.match(tt.colon)) {
         decl.id.typeAnnotation = this.flowParseTypeAnnotation();
-        this.finishNode(decl.id, decl.id.type);
+        this.resetEndLocation(decl.id); // set end position to end of type
       }
     }
 
