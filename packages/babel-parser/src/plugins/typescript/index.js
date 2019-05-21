@@ -422,7 +422,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.expect(tt.bracketL);
       const id = this.parseIdentifier();
       id.typeAnnotation = this.tsParseTypeAnnotation();
-      this.finishNode(id, "Identifier"); // set end position to end of type
+      this.resetEndLocation(id); // set end position to end of type
 
       this.expect(tt.bracketR);
       node.parameters = [id];
@@ -1961,6 +1961,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node = super.parseParenItem(node, startPos, startLoc);
       if (this.eat(tt.question)) {
         node.optional = true;
+        // Include questionmark in location of node
+        // Don't use this.finishNode() as otherwise we might process comments twice and
+        // include already consumed parens
+        this.resetEndLocation(node);
       }
 
       if (this.match(tt.colon)) {
@@ -1974,7 +1978,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.finishNode(typeCastNode, "TSTypeCastExpression");
       }
 
-      return this.finishNode(node, node.type);
+      return node;
     }
 
     parseExportDeclaration(node: N.ExportNamedDeclaration): ?N.Declaration {
@@ -2095,7 +2099,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const type = this.tsTryParseTypeAnnotation();
       if (type) {
         decl.id.typeAnnotation = type;
-        this.finishNode(decl.id, decl.id.type); // set end position to end of type
+        this.resetEndLocation(decl.id); // set end position to end of type
       }
     }
 
@@ -2239,7 +2243,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
       const type = this.tsTryParseTypeAnnotation();
       if (type) param.typeAnnotation = type;
-      return this.finishNode(param, param.type);
+      this.resetEndLocation(param);
+
+      return param;
     }
 
     toAssignable(
@@ -2401,12 +2407,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     typeCastToParameter(node: N.TsTypeCastExpression): N.Node {
       node.expression.typeAnnotation = node.typeAnnotation;
 
-      return this.finishNodeAt(
+      this.resetEndLocation(
         node.expression,
-        node.expression.type,
         node.typeAnnotation.end,
         node.typeAnnotation.loc.end,
       );
+
+      return node.expression;
     }
 
     toReferencedList(

@@ -15,6 +15,7 @@ const merge = require("merge-stream");
 const rollup = require("rollup");
 const rollupBabel = require("rollup-plugin-babel");
 const rollupNodeResolve = require("rollup-plugin-node-resolve");
+const rollupReplace = require("rollup-plugin-replace");
 const { registerStandalonePackageTask } = require("./scripts/gulp-tasks");
 
 const sources = ["codemods", "packages"];
@@ -92,6 +93,9 @@ function buildRollup(packages) {
         .rollup({
           input,
           plugins: [
+            rollupReplace({
+              "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+            }),
             rollupBabel({
               envName: "babel-parser",
             }),
@@ -103,6 +107,7 @@ function buildRollup(packages) {
             file: path.join(pkg, "lib/index.js"),
             format: "cjs",
             name: "babel-parser",
+            sourcemap: process.env.NODE_ENV !== "production",
           });
         });
     })
