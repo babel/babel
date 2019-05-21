@@ -21,7 +21,7 @@ import {
 
 import pkg from "../package.json";
 
-export { FEATURES };
+export { FEATURES, injectInitialization };
 
 // Note: Versions are represented as an integer. e.g. 7.1.5 is represented
 //       as 70000100005. This method is easier than using a semver-parsing

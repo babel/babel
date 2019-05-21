@@ -1,6 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
-import { types as t } from "@babel/core";
+import { types as t, template } from "@babel/core";
+import { injectInitialization } from "@babel/helper-create-class-features-plugin";
 
 import transpileEnum from "./enum";
 
@@ -240,41 +241,21 @@ export default declare((api, { jsxPragma = "React" }) => {
 
             if (parameterProperties.length) {
               const assigns = parameterProperties.map(p => {
-                let name;
+                let id;
                 if (t.isIdentifier(p)) {
-                  name = p.name;
+                  id = p;
                 } else if (t.isAssignmentPattern(p) && t.isIdentifier(p.left)) {
-                  name = p.left.name;
+                  id = p.left;
                 } else {
                   throw path.buildCodeFrameError(
                     "Parameter properties can not be destructuring patterns.",
                   );
                 }
 
-                const assign = t.assignmentExpression(
-                  "=",
-                  t.memberExpression(t.thisExpression(), t.identifier(name)),
-                  t.identifier(name),
-                );
-                return t.expressionStatement(assign);
+                return template.statement.ast`this.${id} = ${id}`;
               });
 
-              const statements = childNode.body.body;
-
-              const first = statements[0];
-
-              const startsWithSuperCall =
-                first !== undefined &&
-                t.isExpressionStatement(first) &&
-                t.isCallExpression(first.expression) &&
-                t.isSuper(first.expression.callee);
-
-              // Make sure to put parameter properties *after* the `super`
-              // call. TypeScript will enforce that a 'super()' call is the
-              // first statement when there are parameter properties.
-              childNode.body.body = startsWithSuperCall
-                ? [first, ...assigns, ...statements.slice(1)]
-                : [...assigns, ...statements];
+              injectInitialization(path, child, assigns);
             }
           } else if (child.isClassProperty()) {
             childNode.typeAnnotation = null;
