@@ -1442,6 +1442,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       startPos: number,
       startLoc: Position,
     ): ?N.ArrowFunctionExpression {
+      if (!this.isRelational("<")) {
+        return undefined;
+      }
       const res: ?N.ArrowFunctionExpression = this.tsTryParseAndCatch(() => {
         const node: N.ArrowFunctionExpression = this.startNodeAt(
           startPos,
@@ -2204,8 +2207,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           const returnType = this.tsParseTypeOrTypePredicateAnnotation(
             tt.colon,
           );
-          if (this.canInsertSemicolon()) this.unexpected();
-          if (!this.match(tt.arrow)) this.unexpected();
+          if (this.canInsertSemicolon() || !this.match(tt.arrow)) {
+            this.state = state;
+            return undefined;
+          }
           node.returnType = returnType;
         } catch (err) {
           if (err instanceof SyntaxError) {
@@ -2438,10 +2443,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     jsxParseOpeningElementAfterName(
       node: N.JSXOpeningElement,
     ): N.JSXOpeningElement {
-      const typeArguments = this.tsTryParseAndCatch(() =>
-        this.tsParseTypeArguments(),
-      );
-      if (typeArguments) node.typeParameters = typeArguments;
+      if (this.isRelational("<")) {
+        const typeArguments = this.tsTryParseAndCatch(() =>
+          this.tsParseTypeArguments(),
+        );
+        if (typeArguments) node.typeParameters = typeArguments;
+      }
       return super.jsxParseOpeningElementAfterName(node);
     }
 
