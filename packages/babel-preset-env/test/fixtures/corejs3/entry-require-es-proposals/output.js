@@ -180,8 +180,6 @@ require("core-js/modules/esnext.string.at");
 
 require("core-js/modules/esnext.string.code-points");
 
-require("core-js/modules/esnext.string.match-all");
-
 require("core-js/modules/esnext.string.replace-all");
 
 require("core-js/modules/esnext.symbol.dispose");
@@ -209,5 +207,7 @@ require("core-js/modules/web.url");
 require("core-js/modules/web.url.to-json");
 
 require("core-js/modules/web.url-search-params");
+
+require("core-js/modules/esnext.string.match-all");
 
 1 ** 2;
