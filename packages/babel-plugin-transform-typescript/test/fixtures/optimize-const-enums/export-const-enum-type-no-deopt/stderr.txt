@@ -1,4 +1,4 @@
-The exported identifier "WhitespaceFlag" is not declared in Babel's scope tracker
+[<CWD>/packages/babel-plugin-transform-typescript/test/fixtures/optimize-const-enums/export-const-enum-type-no-deopt/input.ts] The exported identifier "WhitespaceFlag" is not declared in Babel's scope tracker
 as a JavaScript value binding, and "@babel/plugin-transform-typescript"
 never encountered it as a TypeScript type declaration.
 It will be treated as a JavaScript value.
@@ -6,7 +6,7 @@ It will be treated as a JavaScript value.
 This problem is likely caused by another plugin injecting
 "WhitespaceFlag" without registering it in the scope tracker. If you are the author
  of that plugin, please use "scope.registerDeclaration(declarationPath)".
-The exported identifier "WhitespaceFlag" is not declared in Babel's scope tracker
+[<CWD>/packages/babel-plugin-transform-typescript/test/fixtures/optimize-const-enums/export-const-enum-type-no-deopt/input.ts] The exported identifier "WhitespaceFlag" is not declared in Babel's scope tracker
 as a JavaScript value binding, and "@babel/plugin-transform-typescript"
 never encountered it as a TypeScript type declaration.
 It will be treated as a JavaScript value.

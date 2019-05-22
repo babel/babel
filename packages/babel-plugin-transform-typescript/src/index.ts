@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
-import type { types as t } from "@babel/core";
+import type { PluginPass, types as t } from "@babel/core";
 import { injectInitialization } from "@babel/helper-create-class-features-plugin";
 import type { Binding, NodePath, Scope } from "@babel/traverse";
 import type { Options as SyntaxOptions } from "@babel/plugin-syntax-typescript";
@@ -43,12 +43,23 @@ const GLOBAL_TYPES = new WeakMap<Scope, Set<string>>();
 const NEEDS_EXPLICIT_ESM = new WeakMap();
 const PARSED_PARAMS = new WeakSet();
 
-function isGlobalType({ scope }: NodePath, name: string) {
+function isTypeReference(
+  { scope }: NodePath,
+  name: string,
+  filename: string | void = "unknown",
+) {
+  const binding = scope.getBinding(name);
+  if (binding) {
+    return (
+      binding.path.isImportSpecifier({ importKind: "type" }) ||
+      binding.path.parentPath.isImportDeclaration({ importKind: "type" })
+    );
+  }
   if (scope.hasBinding(name)) return false;
   if (GLOBAL_TYPES.get(scope).has(name)) return true;
 
   console.warn(
-    `The exported identifier "${name}" is not declared in Babel's scope tracker\n` +
+    `[${filename}] The exported identifier "${name}" is not declared in Babel's scope tracker\n` +
       `as a JavaScript value binding, and "@babel/plugin-transform-typescript"\n` +
       `never encountered it as a TypeScript type declaration.\n` +
       `It will be treated as a JavaScript value.\n\n` +
@@ -97,6 +108,11 @@ type ExtraNodeProps = {
   optional?: unknown;
   override?: unknown;
 };
+
+interface PluginState extends PluginPass {
+  pragmaImportName: string;
+  pragmaFragImportName: string;
+}
 
 export default declare((api, opts: Options) => {
   // `@babel/core` and `@babel/types` are bundled in some downstream libraries.
@@ -245,7 +261,7 @@ export default declare((api, opts: Options) => {
       RestElement: visitPattern,
 
       Program: {
-        enter(path, state) {
+        enter(path, state: PluginState) {
           const { file } = state;
           let fileJsxPragma = null;
           let fileJsxPragmaFrag = null;
@@ -273,95 +289,16 @@ export default declare((api, opts: Options) => {
           if (pragmaImportName) {
             [pragmaImportName] = pragmaImportName.split(".");
           }
+          state.pragmaImportName = pragmaImportName;
 
           let pragmaFragImportName = fileJsxPragmaFrag || jsxPragmaFrag;
           if (pragmaFragImportName) {
             [pragmaFragImportName] = pragmaFragImportName.split(".");
           }
+          state.pragmaFragImportName = pragmaFragImportName;
 
           // remove type imports
           for (let stmt of path.get("body")) {
-            if (stmt.isImportDeclaration()) {
-              if (!NEEDS_EXPLICIT_ESM.has(state.file.ast.program)) {
-                NEEDS_EXPLICIT_ESM.set(state.file.ast.program, true);
-              }
-
-              if (stmt.node.importKind === "type") {
-                for (const specifier of stmt.node.specifiers) {
-                  registerGlobalType(programScope, specifier.local.name);
-                }
-                stmt.remove();
-                continue;
-              }
-
-              const importsToRemove: Set<NodePath<t.Node>> = new Set();
-              const specifiersLength = stmt.node.specifiers.length;
-              const isAllSpecifiersElided = () =>
-                specifiersLength > 0 &&
-                specifiersLength === importsToRemove.size;
-
-              for (const specifier of stmt.node.specifiers) {
-                if (
-                  specifier.type === "ImportSpecifier" &&
-                  specifier.importKind === "type"
-                ) {
-                  registerGlobalType(programScope, specifier.local.name);
-                  const binding = stmt.scope.getBinding(specifier.local.name);
-                  if (binding) {
-                    importsToRemove.add(binding.path);
-                  }
-                }
-              }
-
-              // If onlyRemoveTypeImports is `true`, only remove type-only imports
-              // and exports introduced in TypeScript 3.8.
-              if (onlyRemoveTypeImports) {
-                NEEDS_EXPLICIT_ESM.set(path.node, false);
-              } else {
-                // Note: this will allow both `import { } from "m"` and `import "m";`.
-                // In TypeScript, the former would be elided.
-                if (stmt.node.specifiers.length === 0) {
-                  NEEDS_EXPLICIT_ESM.set(path.node, false);
-                  continue;
-                }
-
-                for (const specifier of stmt.node.specifiers) {
-                  const binding = stmt.scope.getBinding(specifier.local.name);
-
-                  // The binding may not exist if the import node was explicitly
-                  // injected by another plugin. Currently core does not do a good job
-                  // of keeping scope bindings synchronized with the AST. For now we
-                  // just bail if there is no binding, since chances are good that if
-                  // the import statement was injected then it wasn't a typescript type
-                  // import anyway.
-                  if (binding && !importsToRemove.has(binding.path)) {
-                    if (
-                      isImportTypeOnly({
-                        binding,
-                        programPath: path,
-                        pragmaImportName,
-                        pragmaFragImportName,
-                      })
-                    ) {
-                      importsToRemove.add(binding.path);
-                    } else {
-                      NEEDS_EXPLICIT_ESM.set(path.node, false);
-                    }
-                  }
-                }
-              }
-
-              if (isAllSpecifiersElided() && !onlyRemoveTypeImports) {
-                stmt.remove();
-              } else {
-                for (const importPath of importsToRemove) {
-                  importPath.remove();
-                }
-              }
-
-              continue;
-            }
-
             if (stmt.isExportDeclaration()) {
               stmt = stmt.get("declaration");
             }
@@ -385,8 +322,32 @@ export default declare((api, opts: Options) => {
               );
             }
           }
+
+          if (!process.env.BABEL_8_BREAKING) {
+            for (const stmt of path.get("body")) {
+              if (stmt.isImportDeclaration()) {
+                removeTypeImport(stmt, path, {
+                  onlyRemoveTypeImports,
+                  pragmaImportName: state.pragmaImportName,
+                  pragmaFragImportName: state.pragmaFragImportName,
+                });
+              }
+            }
+          }
         },
-        exit(path) {
+        exit(path, state) {
+          if (process.env.BABEL_8_BREAKING) {
+            for (const stmt of path.get("body")) {
+              if (stmt.isImportDeclaration()) {
+                removeTypeImport(stmt, path, {
+                  onlyRemoveTypeImports,
+                  pragmaImportName: state.pragmaImportName,
+                  pragmaFragImportName: state.pragmaFragImportName,
+                });
+              }
+            }
+          }
+
           if (
             path.node.sourceType === "module" &&
             NEEDS_EXPLICIT_ESM.get(path.node)
@@ -437,7 +398,7 @@ export default declare((api, opts: Options) => {
           path.node.specifiers.every(
             specifier =>
               t.isExportSpecifier(specifier) &&
-              isGlobalType(path, specifier.local.name),
+              isTypeReference(path, specifier.local.name, state.filename),
           )
         ) {
           path.remove();
@@ -451,12 +412,13 @@ export default declare((api, opts: Options) => {
         if (path.node.exportKind === "type") path.remove();
       },
 
-      ExportSpecifier(path) {
+      ExportSpecifier(path, state) {
         // remove type exports
         type Parent = t.ExportDeclaration & { source?: t.StringLiteral };
         const parent = path.parent as Parent;
         if (
-          (!parent.source && isGlobalType(path, path.node.local.name)) ||
+          (!parent.source &&
+            isTypeReference(path, path.node.local.name, state.filename)) ||
           path.node.exportKind === "type"
         ) {
           path.remove();
@@ -471,7 +433,7 @@ export default declare((api, opts: Options) => {
         // remove whole declaration if it's exporting a TS type
         if (
           t.isIdentifier(path.node.declaration) &&
-          isGlobalType(path, path.node.declaration.name)
+          isTypeReference(path, path.node.declaration.name, state.filename)
         ) {
           path.remove();
 
@@ -587,7 +549,7 @@ export default declare((api, opts: Options) => {
         }
 
         // import alias = Namespace;
-        path.replaceWith(
+        const [varPath] = path.replaceWith(
           t.variableDeclaration("var", [
             t.variableDeclarator(
               path.node.id,
@@ -595,7 +557,12 @@ export default declare((api, opts: Options) => {
             ),
           ]),
         );
-        path.scope.registerDeclaration(path);
+        path.scope.registerDeclaration(varPath);
+
+        let ref: NodePath<t.Expression> = varPath.get("declarations.0.init");
+        // @ts-ignore(Babel 7 vs Babel 8) In Babel 8 t.Super is not a t.Expression
+        while (ref.isMemberExpression()) ref = ref.get("object");
+        path.scope.getBinding((ref.node as t.Identifier).name)?.reference(ref);
       },
 
       TSExportAssignment(path) {
@@ -710,5 +677,116 @@ export default declare((api, opts: Options) => {
       },
     });
     return !sourceFileHasJsx;
+  }
+
+  /**
+   * Remove given path if it is type imports.
+   * The following import declarations are type imports
+   * import type Person from "./person"
+   * import Puppy from "./puppy"; function feed(puppy: Puppy) {}
+   *
+   * @param {NodePath<t.ImportDeclaration>} programPath
+   * @param {NodePath<t.Program>} programPath
+   * @param {{
+   *     onlyRemoveTypeImports: boolean,
+   *     pragmaImportName: string,
+   *     pragmaFragImportName: string,
+   *   }} {
+   *     onlyRemoveTypeImports, // only remove `import type` imports available since TS 3.8
+   *     pragmaImportName, // the JSX pragma import name, e.g. React. It should not be removed when the `programPath` contains JSX elements
+   *     pragmaFragImportName, // the JSX Fragment pragma import name, e.g. React.fragment. It should not be removed when the `programPath` contains JSX elements
+   *   }
+   */
+  function removeTypeImport(
+    path: NodePath<t.ImportDeclaration>,
+    programPath: NodePath<t.Program>,
+    {
+      onlyRemoveTypeImports,
+      pragmaImportName,
+      pragmaFragImportName,
+    }: {
+      onlyRemoveTypeImports: boolean;
+      pragmaImportName: string;
+      pragmaFragImportName: string;
+    },
+  ): void {
+    if (!NEEDS_EXPLICIT_ESM.has(programPath.node)) {
+      NEEDS_EXPLICIT_ESM.set(programPath.node, true);
+    }
+
+    if (path.node.importKind === "type") {
+      if (!process.env.BABEL_8_BREAKING) {
+        for (const specifier of path.node.specifiers) {
+          registerGlobalType(path.scope, specifier.local.name);
+        }
+      }
+      path.remove();
+      return;
+    }
+
+    const importsToRemove: Set<NodePath<t.Node>> = new Set();
+    const specifiersLength = path.node.specifiers.length;
+    const isAllSpecifiersElided = () =>
+      specifiersLength > 0 && specifiersLength === importsToRemove.size;
+
+    for (const specifier of path.get("specifiers")) {
+      if (
+        specifier.type === "ImportSpecifier" &&
+        (specifier.node as t.ImportSpecifier).importKind === "type"
+      ) {
+        if (!process.env.BABEL_8_BREAKING) {
+          registerGlobalType(path.scope, specifier.node.local.name);
+        }
+        importsToRemove.add(specifier);
+      }
+    }
+
+    // If onlyRemoveTypeImports is `true`, only remove type-only imports
+    // and exports introduced in TypeScript 3.8.
+    if (onlyRemoveTypeImports) {
+      NEEDS_EXPLICIT_ESM.set(programPath.node, false);
+    } else {
+      // Note: this will allow both `import { } from "m"` and `import "m";`.
+      // In TypeScript, the former would be elided.
+      if (path.node.specifiers.length === 0) {
+        NEEDS_EXPLICIT_ESM.set(programPath.node, false);
+        return;
+      }
+
+      for (const specifier of path.node.specifiers) {
+        const binding = path.scope.getBinding(specifier.local.name);
+        // The binding may not exist if the import node was explicitly
+        // injected by another plugin. Currently core does not do a good job
+        // of keeping scope bindings synchronized with the AST. For now we
+        // just bail if there is no binding, since chances are good that if
+        // the import statement was injected then it wasn't a typescript type
+        // import anyway.
+        if (binding && !importsToRemove.has(binding.path)) {
+          if (
+            isImportTypeOnly({
+              binding,
+              programPath: programPath,
+              pragmaImportName,
+              pragmaFragImportName,
+            })
+          ) {
+            if (!process.env.BABEL_8_BREAKING) {
+              registerGlobalType(path.scope, specifier.local.name);
+            }
+            importsToRemove.add(binding.path);
+          } else {
+            NEEDS_EXPLICIT_ESM.set(programPath.node, false);
+          }
+        }
+      }
+    }
+
+    if (isAllSpecifiersElided() && !onlyRemoveTypeImports) {
+      path.remove();
+    } else {
+      for (const importPath of importsToRemove) {
+        importPath.remove();
+      }
+    }
   }
 });

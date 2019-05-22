@@ -52,12 +52,7 @@ describe("retrievers", function () {
       [
         "export all as namespace declarations",
         getBody("export * as ns from 'x'"),
-        [], // exported bindings are not associated with declarations
-      ],
-      [
-        "export namespace specifiers",
-        getBody("export * as ns from 'x'")[0].specifiers,
-        ["ns"],
+        [],
       ],
       [
         "object patterns",

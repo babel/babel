@@ -1,4 +1,4 @@
-The exported identifier "foo" is not declared in Babel's scope tracker
+[<CWD>/packages/babel-plugin-transform-typescript/test/fixtures/regression/10162/input.ts] The exported identifier "foo" is not declared in Babel's scope tracker
 as a JavaScript value binding, and "@babel/plugin-transform-typescript"
 never encountered it as a TypeScript type declaration.
 It will be treated as a JavaScript value.
