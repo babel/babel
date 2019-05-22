@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    [
+      "proposal-optional-chaining",
+      { "loose": true, "falsyExpressionOptimisation": true }
+    ]
+  ]
+}

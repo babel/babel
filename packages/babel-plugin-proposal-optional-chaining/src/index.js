@@ -5,7 +5,7 @@ import { types as t } from "@babel/core";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { loose = false } = options;
+  const { loose = false, falsyExpressionOptimisation = false } = options;
 
   return {
     name: "proposal-optional-chaining",
@@ -39,6 +39,23 @@ export default declare((api, options) => {
         if (parentPath.isUnaryExpression({ operator: "delete" })) {
           replacementPath = parentPath;
         }
+
+        if (
+          falsyExpressionOptimisation &&
+          loose &&
+          parentPath.isIfStatement()
+        ) {
+          if (hasNoCallExpressionInChain(path)) {
+            let right = path.node;
+            for (let i = 0; i < optionals.length; i++) {
+              const node = optionals[i];
+              right = t.logicalExpression("&&", node.object, right);
+            }
+            replacementPath.replaceWith(right);
+            return;
+          }
+        }
+
         for (let i = optionals.length - 1; i >= 0; i--) {
           const node = optionals[i];
 
@@ -122,3 +139,10 @@ export default declare((api, options) => {
     },
   };
 });
+
+function hasNoCallExpressionInChain(path) {
+  while (path.isMemberExpression()) {
+    path = path.get("object");
+  }
+  return !path.isCallExpression();
+}
