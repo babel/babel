@@ -10,7 +10,8 @@
       "PR: Bug Fix :bug:": ":bug: Bug Fix",
       "PR: Polish :nail_care:": ":nail_care: Polish",
       "PR: Docs :memo:": ":memo: Documentation",
-      "PR: Internal :house:": ":house: Internal"
+      "PR: Internal :house:": ":house: Internal",
+      "PR: Performance :running_woman:": ":running_woman: Performance"
     }
   },
   "command": {
