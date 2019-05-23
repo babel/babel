@@ -156,6 +156,16 @@ export default declare((api, { jsxPragma = "React" }) => {
         }
       },
 
+      ExportDefaultDeclaration(path, { exportableTSNames }) {
+        // remove whole declaration if it's exporting a TS type
+        if (
+          t.isIdentifier(path.node.declaration) &&
+          exportableTSNames.has(path.node.declaration.name)
+        ) {
+          path.remove();
+        }
+      },
+
       TSDeclareFunction(path) {
         path.remove();
       },
