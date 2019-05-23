@@ -203,6 +203,8 @@ export default declare((api, options) => {
         const key = prop.key;
         if (t.isIdentifier(key) && !prop.computed) {
           keys.push(t.stringLiteral(key.name));
+        } else if (t.isTemplateLiteral(prop.key)) {
+          keys.push(t.cloneNode(prop.key));
         } else if (t.isLiteral(key)) {
           keys.push(t.stringLiteral(String(key.value)));
         } else {
