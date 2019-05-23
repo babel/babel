@@ -100,6 +100,26 @@ const handle = {
       return;
     }
 
+    // { KEY: MEMBER } = OBJ -> { KEY: _ref } = OBJ; _set(MEMBER, _ref);
+    // [MEMBER] = ARR -> [_ref] = ARR; _set(MEMBER, _ref);
+    if (
+      (parentPath.isObjectProperty({ value: node }) &&
+        parentPath.parentPath.isObjectPattern()) ||
+      parentPath.isArrayPattern()
+    ) {
+      const { scope } = member;
+      const ref = scope.generateUidIdentifierBasedOnNode(node);
+      scope.push({ id: ref });
+
+      const assignmentParent = parentPath.getStatementParent();
+      assignmentParent.insertAfter(
+        t.expressionStatement(this.set(member, t.cloneNode(ref))),
+      );
+      member.replaceWith(t.cloneNode(ref));
+
+      return;
+    }
+
     // MEMBER   ->   _get(MEMBER)
     member.replaceWith(this.get(member));
   },
