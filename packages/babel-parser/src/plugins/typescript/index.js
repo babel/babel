@@ -161,17 +161,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
     }
 
-    tsTryParseDelimitedList<T: N.Node>(
-      kind: ParsingContext,
-      parseElement: () => ?T,
-    ): ?(T[]) {
-      return this.tsParseDelimitedListWorker(
-        kind,
-        parseElement,
-        /* expectSuccess */ false,
-      );
-    }
-
     /**
      * If !expectSuccess, returns undefined instead of failing to parse.
      * If expectSuccess, parseElement should always return a defined value.
@@ -1268,23 +1257,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.state = state;
         return undefined;
       }
-    }
-
-    nodeWithSamePosition<T: N.Node>(original: N.Node, type: string): T {
-      const node = this.startNodeAtNode(original);
-      node.type = type;
-      node.end = original.end;
-      node.loc.end = original.loc.end;
-
-      if (original.leadingComments) {
-        node.leadingComments = original.leadingComments;
-      }
-      if (original.trailingComments) {
-        node.trailingComments = original.trailingComments;
-      }
-      if (original.innerComments) node.innerComments = original.innerComments;
-
-      return node;
     }
 
     tsTryParseDeclare(nany: any): ?N.Declaration {
