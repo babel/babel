@@ -2,6 +2,7 @@ class Foo {
   #client
 
   constructor(props) {
+    let x;
     ;({ x, ...this.#client } = props)
   }
 
@@ -11,4 +12,4 @@ class Foo {
 }
 
 const foo = new Foo({ x: 'foo', y: 'bar', z: 'baz' });
-expect(foo.getClient()).toBe({ y: 'bar', z: 'baz' });
+expect(foo.getClient()).toEqual({ y: 'bar', z: 'baz' });

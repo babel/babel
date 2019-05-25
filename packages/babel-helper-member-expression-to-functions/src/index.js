@@ -100,23 +100,17 @@ const handle = {
       return;
     }
 
-    // { KEY: MEMBER } = OBJ -> { KEY: _ref } = OBJ; _set(MEMBER, _ref);
-    // [MEMBER] = ARR -> [_ref] = ARR; _set(MEMBER, _ref);
+    // { KEY: MEMBER } = OBJ -> { KEY: _destructureSet(MEMBER) } = OBJ
+    // [MEMBER] = ARR -> [_destructureSet(MEMBER)] = ARR
+    // [...MEMBER] -> [..._destructureSet(MEMBER)]
+    // {...MEMBER} -> {..._destructureSet(MEMBER)}
     if (
       (parentPath.isObjectProperty({ value: node }) &&
         parentPath.parentPath.isObjectPattern()) ||
-      parentPath.isArrayPattern()
+      parentPath.isArrayPattern() ||
+      parentPath.isRestElement()
     ) {
-      const { scope } = member;
-      const ref = scope.generateUidIdentifierBasedOnNode(node);
-      scope.push({ id: ref });
-
-      const assignmentParent = parentPath.getStatementParent();
-      assignmentParent.insertAfter(
-        t.expressionStatement(this.set(member, t.cloneNode(ref))),
-      );
-      member.replaceWith(t.cloneNode(ref));
-
+      member.replaceWith(this.destructureSet(member));
       return;
     }
 

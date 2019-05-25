@@ -1,7 +1,7 @@
+function _classPrivateFieldDestructureSet(receiver, privateMap) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to set private field on non-instance"); } var descriptor = privateMap.get(receiver); if (descriptor.set) { if (!("__destrObj" in descriptor)) { descriptor.__destrObj = { set value(v) { descriptor.set.call(receiver, v); } }; } return descriptor.__destrObj; } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } return descriptor; } }
+
 var Foo = function Foo(props) {
   "use strict";
-
-  var _this$client;
 
   babelHelpers.classCallCheck(this, Foo);
 
@@ -12,9 +12,9 @@ var Foo = function Foo(props) {
 
   ;
   ({
-    client: _this$client
+    x,
+    ..._classPrivateFieldDestructureSet(this, _client).value
   } = props);
-  babelHelpers.classPrivateFieldSet(this, _client, _this$client);
 };
 
 var _client = new WeakMap();
