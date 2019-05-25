@@ -384,6 +384,7 @@ helpers.extends = helper("7.0.0-beta.0")`
   }
 `;
 
+// This old helper can be removed in babel v8
 helpers.objectSpread = helper("7.0.0-beta.0")`
   import defineProperty from "defineProperty";
 
@@ -399,6 +400,30 @@ helpers.objectSpread = helper("7.0.0-beta.0")`
       ownKeys.forEach(function(key) {
         defineProperty(target, key, source[key]);
       });
+    }
+    return target;
+  }
+`;
+
+helpers.objectSpread2 = helper("7.0.0-beta.0")`
+  import defineProperty from "defineProperty";
+
+  export default function _objectSpread2(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      if (i % 2) {
+        var source = (arguments[i] != null) ? arguments[i] : {};
+        var ownKeys = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === 'function') {
+          ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys.forEach(function(key) {
+          defineProperty(target, key, source[key]);
+        });
+      } else {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(arguments[i]));
+      }
     }
     return target;
   }
