@@ -116,6 +116,32 @@ describe("modification", function() {
       );
     });
 
+    it("returns inserted path with nested JSXElement", function() {
+      const ast = parse("<div><span>foo</span></div>", {
+        plugins: ["jsx"],
+      });
+      let path;
+      traverse(ast, {
+        Program: function(_path) {
+          path = _path.get("body.0");
+        },
+        JSXElement: function(path) {
+          const tagName = path.node.openingElement.name.name;
+          if (tagName !== "span") return;
+          path.insertBefore(
+            t.JSXElement(
+              t.JSXOpeningElement(t.JSXIdentifier("div"), [], false),
+              t.JSXClosingElement(t.JSXIdentifier("div")),
+              [],
+            ),
+          );
+        },
+      });
+      expect(generateCode(path)).toBe(
+        "<div><div></div><span>foo</span></div>;",
+      );
+    });
+
     describe("when the parent is an export declaration inserts the node before", function() {
       it("the ExportNamedDeclaration", function() {
         const bodyPath = getPath("export function a() {}", {

@@ -26,7 +26,8 @@ export function insertBefore(nodes) {
   } else if (
     (this.isNodeType("Expression") &&
       this.listKey !== "params" &&
-      this.listKey !== "arguments") ||
+      this.listKey !== "arguments" &&
+      !this.isJSXElement()) ||
     (parentPath.isForStatement() && this.key === "init")
   ) {
     if (this.node) nodes.push(this.node);
