@@ -77,7 +77,9 @@ class ComputedField extends Obj {
   constructor() {
     var _temp3;
 
-    var _ref = (_temp3 = super(), babelHelpers.defineProperty(this, "field", 1), _temp3);
+    let _ref;
+
+    _ref = (_temp3 = super(), babelHelpers.defineProperty(this, "field", 1), _temp3);
 
     class B extends Obj {
       constructor() {

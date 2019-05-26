@@ -85,6 +85,9 @@ export function injectInitialization(path, constructor, nodes, renamer) {
 export function extractComputedKeys(ref, path, computedPaths, file) {
   const declarations = [];
 
+  const nearestBlock = path.find(
+    parentPath => parentPath.isBlockStatement() || parentPath.isProgram(),
+  );
   for (const computedPath of computedPaths) {
     computedPath.traverse(classFieldDefinitionEvaluationTDZVisitor, {
       classBinding: path.node.id && path.scope.getBinding(path.node.id.name),
@@ -98,10 +101,14 @@ export function extractComputedKeys(ref, path, computedPaths, file) {
       const ident = path.scope.generateUidIdentifierBasedOnNode(
         computedNode.key,
       );
+      nearestBlock.unshiftContainer(
+        "body",
+        t.variableDeclaration("let", [t.variableDeclarator(ident, null)]),
+      );
       declarations.push(
-        t.variableDeclaration("var", [
-          t.variableDeclarator(ident, computedNode.key),
-        ]),
+        t.expressionStatement(
+          t.assignmentExpression("=", t.cloneNode(ident), computedNode.key),
+        ),
       );
       computedNode.key = t.cloneNode(ident);
     }

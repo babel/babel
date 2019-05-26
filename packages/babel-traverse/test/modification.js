@@ -36,6 +36,19 @@ describe("modification", function() {
 
       expect(generateCode(rootPath)).toBe("function test(a) {\n  b;\n}");
     });
+
+    it("properly handles more than one arguments", function() {
+      const code = "foo(a, b);";
+      const ast = parse(code);
+      traverse(ast, {
+        CallExpression: function(path) {
+          path.pushContainer("arguments", t.identifier("d"));
+          expect(generateCode(path)).toBe("foo(a, b, d);");
+          path.pushContainer("arguments", t.stringLiteral("s"));
+          expect(generateCode(path)).toBe(`foo(a, b, d, "s");`);
+        },
+      });
+    });
   });
   describe("unshiftContainer", function() {
     it("unshifts identifier into params", function() {

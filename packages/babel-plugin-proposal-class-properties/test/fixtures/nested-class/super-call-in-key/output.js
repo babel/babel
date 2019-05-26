@@ -18,9 +18,10 @@ function (_Hello) {
   function Outer() {
     var _this;
 
-    babelHelpers.classCallCheck(this, Outer);
+    let _this2;
 
-    var _this2 = _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Outer).call(this));
+    babelHelpers.classCallCheck(this, Outer);
+    _this2 = _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Outer).call(this));
 
     let Inner = function Inner() {
       babelHelpers.classCallCheck(this, Inner);
