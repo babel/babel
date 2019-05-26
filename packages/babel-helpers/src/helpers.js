@@ -701,7 +701,6 @@ helpers.superPropBase = helper("7.0.0-beta.0")`
 `;
 
 helpers.get = helper("7.0.0-beta.0")`
-  import getPrototypeOf from "getPrototypeOf";
   import superPropBase from "superPropBase";
 
   export default function _get(target, property, receiver) {
@@ -726,7 +725,6 @@ helpers.get = helper("7.0.0-beta.0")`
 `;
 
 helpers.set = helper("7.0.0-beta.0")`
-  import getPrototypeOf from "getPrototypeOf";
   import superPropBase from "superPropBase";
   import defineProperty from "defineProperty";
 
