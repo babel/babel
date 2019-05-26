@@ -125,6 +125,10 @@ const specHandlers = {
     ]);
   },
 
+  destructureSet() {
+    // TODO
+  },
+
   call(superMember, args) {
     return optimiseCall(this.get(superMember), t.thisExpression(), args);
   },
@@ -173,6 +177,13 @@ const looseHandlers = {
       t.memberExpression(t.thisExpression(), prop, computed),
       value,
     );
+  },
+
+  destructureSet(superMember) {
+    const { computed } = superMember.node;
+    const prop = this.prop(superMember);
+
+    return t.memberExpression(t.thisExpression(), prop, computed);
   },
 };
 
