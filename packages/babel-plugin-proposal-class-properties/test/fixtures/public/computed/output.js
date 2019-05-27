@@ -1,20 +1,4 @@
-var _ref4;
-
-var _baz;
-
-var _ref3;
-
-var _ref2;
-
-var _computed2;
-
-var _computed;
-
-var _undefined;
-
-var _ref;
-
-var _one;
+var _one, _ref, _undefined, _computed, _computed2, _ref2, _ref3, _baz, _ref4;
 
 var foo = "foo";
 
