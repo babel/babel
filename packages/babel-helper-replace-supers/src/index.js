@@ -125,8 +125,10 @@ const specHandlers = {
     ]);
   },
 
-  destructureSet() {
-    // TODO
+  destructureSet(superMember) {
+    throw superMember.buildCodeFrameError(
+      `Destructuring to a super field is not supported yet.`,
+    );
   },
 
   call(superMember, args) {
