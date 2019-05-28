@@ -53,87 +53,91 @@ export default declare((api, { jsxPragma = "React" }) => {
       Identifier: visitPattern,
       RestElement: visitPattern,
 
-      Program(path, state: State) {
-        state.programPath = path;
-        state.exportableTSNames = new Set();
+      Program: {
+        enter(path, state: State) {
+          state.programPath = path;
+          state.exportableTSNames = new Set();
 
-        const { file } = state;
+          const { file } = state;
 
-        if (file.ast.comments) {
-          for (const comment of (file.ast.comments: Array<Object>)) {
-            const jsxMatches = JSX_ANNOTATION_REGEX.exec(comment.value);
-            if (jsxMatches) {
-              file.set(PRAGMA_KEY, jsxMatches[1]);
+          if (file.ast.comments) {
+            for (const comment of (file.ast.comments: Array<Object>)) {
+              const jsxMatches = JSX_ANNOTATION_REGEX.exec(comment.value);
+              if (jsxMatches) {
+                file.set(PRAGMA_KEY, jsxMatches[1]);
+              }
             }
           }
-        }
 
-        // find exportable top level type declarations
-        for (const stmt of path.get("body")) {
-          if (isTSExportableDeclaration(stmt.node)) {
-            if (stmt.node.id && stmt.node.id.name) {
-              state.exportableTSNames.add(stmt.node.id.name);
+          // find exportable top level type declarations
+          for (const stmt of path.get("body")) {
+            if (isTSExportableDeclaration(stmt.node)) {
+              if (stmt.node.id && stmt.node.id.name) {
+                state.exportableTSNames.add(stmt.node.id.name);
+              } else if (
+                stmt.node.declarations &&
+                stmt.node.declarations.length > 0
+              ) {
+                for (const declaration of stmt.node.declarations) {
+                  if (declaration.id && declaration.id.name) {
+                    state.exportableTSNames.add(declaration.id.name);
+                  }
+                }
+              }
             } else if (
-              stmt.node.declarations &&
-              stmt.node.declarations.length > 0
+              t.isExportNamedDeclaration(stmt.node) &&
+              stmt.node.specifiers.length === 0 &&
+              isTSExportableDeclaration(stmt.node.declaration) &&
+              stmt.node.declaration.id &&
+              stmt.node.declaration.id.name
             ) {
-              for (const declaration of stmt.node.declarations) {
-                if (declaration.id && declaration.id.name) {
-                  state.exportableTSNames.add(declaration.id.name);
+              state.exportableTSNames.add(stmt.node.declaration.id.name);
+            }
+          }
+        },
+        exit(path, state: State) {
+          const { file } = state;
+          // remove type imports
+          for (const stmt of path.get("body")) {
+            if (t.isImportDeclaration(stmt)) {
+              // Note: this will allow both `import { } from "m"` and `import "m";`.
+              // In TypeScript, the former would be elided.
+              if (stmt.node.specifiers.length === 0) {
+                continue;
+              }
+
+              let allElided = true;
+              const importsToRemove: Path<Node>[] = [];
+
+              for (const specifier of stmt.node.specifiers) {
+                const binding = stmt.scope.getBinding(specifier.local.name);
+
+                // The binding may not exist if the import node was explicitly
+                // injected by another plugin. Currently core does not do a good job
+                // of keeping scope bindings synchronized with the AST. For now we
+                // just bail if there is no binding, since chances are good that if
+                // the import statement was injected then it wasn't a typescript type
+                // import anyway.
+                if (
+                  binding &&
+                  isImportTypeOnly(file, binding, state.programPath)
+                ) {
+                  importsToRemove.push(binding.path);
+                } else {
+                  allElided = false;
+                }
+              }
+
+              if (allElided) {
+                stmt.remove();
+              } else {
+                for (const importPath of importsToRemove) {
+                  importPath.remove();
                 }
               }
             }
-          } else if (
-            t.isExportNamedDeclaration(stmt.node) &&
-            stmt.node.specifiers.length === 0 &&
-            isTSExportableDeclaration(stmt.node.declaration) &&
-            stmt.node.declaration.id &&
-            stmt.node.declaration.id.name
-          ) {
-            state.exportableTSNames.add(stmt.node.declaration.id.name);
           }
-        }
-
-        // remove type imports
-        for (const stmt of path.get("body")) {
-          if (t.isImportDeclaration(stmt)) {
-            // Note: this will allow both `import { } from "m"` and `import "m";`.
-            // In TypeScript, the former would be elided.
-            if (stmt.node.specifiers.length === 0) {
-              continue;
-            }
-
-            let allElided = true;
-            const importsToRemove: Path<Node>[] = [];
-
-            for (const specifier of stmt.node.specifiers) {
-              const binding = stmt.scope.getBinding(specifier.local.name);
-
-              // The binding may not exist if the import node was explicitly
-              // injected by another plugin. Currently core does not do a good job
-              // of keeping scope bindings synchronized with the AST. For now we
-              // just bail if there is no binding, since chances are good that if
-              // the import statement was injected then it wasn't a typescript type
-              // import anyway.
-              if (
-                binding &&
-                isImportTypeOnly(file, binding, state.programPath)
-              ) {
-                importsToRemove.push(binding.path);
-              } else {
-                allElided = false;
-              }
-            }
-
-            if (allElided) {
-              stmt.remove();
-            } else {
-              for (const importPath of importsToRemove) {
-                importPath.remove();
-              }
-            }
-          }
-        }
+        },
       },
 
       ExportNamedDeclaration(path, { exportableTSNames }) {
