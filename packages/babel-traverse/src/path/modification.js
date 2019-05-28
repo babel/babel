@@ -24,9 +24,7 @@ export function insertBefore(nodes) {
   ) {
     return parentPath.insertBefore(nodes);
   } else if (
-    (this.isNodeType("Expression") &&
-      this.listKey !== "params" &&
-      this.listKey !== "arguments") ||
+    (this.isNodeType("Expression") && !this.isJSXElement()) ||
     (parentPath.isForStatement() && this.key === "init")
   ) {
     if (this.node) nodes.push(this.node);
@@ -220,7 +218,7 @@ export function unshiftContainer(listKey, nodes) {
     key: 0,
   });
 
-  return path.insertBefore(nodes);
+  return path._containerInsertBefore(nodes);
 }
 
 export function pushContainer(listKey, nodes) {
