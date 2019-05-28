@@ -24,7 +24,9 @@ export default function transpileEnum(path, t) {
         path.remove();
       } else {
         const isGlobal = t.isProgram(path.parent); // && !path.parent.body.some(t.isModuleDeclaration);
-        path.replaceWith(makeVar(node.id, t, isGlobal ? "var" : "let"));
+        path.scope.registerDeclaration(
+          path.replaceWith(makeVar(node.id, t, isGlobal ? "var" : "let"))[0],
+        );
       }
       break;
     }
