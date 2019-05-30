@@ -17,12 +17,7 @@ function isInType(path) {
   }
 }
 
-interface State {
-  programPath: any;
-}
-
 const PARSED_PARAMS = new WeakSet();
-const PRAGMA_KEY = "@babel/plugin-transform-typescript/jsxPragma";
 
 export default declare((api, { jsxPragma = "React" }) => {
   api.assertVersion(7);
@@ -39,16 +34,15 @@ export default declare((api, { jsxPragma = "React" }) => {
       Identifier: visitPattern,
       RestElement: visitPattern,
 
-      Program(path, state: State) {
-        state.programPath = path;
-
+      Program(path, state) {
         const { file } = state;
+        let fileJsxPragma = null;
 
         if (file.ast.comments) {
           for (const comment of (file.ast.comments: Array<Object>)) {
             const jsxMatches = JSX_ANNOTATION_REGEX.exec(comment.value);
             if (jsxMatches) {
-              file.set(PRAGMA_KEY, jsxMatches[1]);
+              fileJsxPragma = jsxMatches[1];
             }
           }
         }
@@ -76,7 +70,11 @@ export default declare((api, { jsxPragma = "React" }) => {
               // import anyway.
               if (
                 binding &&
-                isImportTypeOnly(file, binding, state.programPath)
+                isImportTypeOnly({
+                  binding,
+                  programPath: path,
+                  jsxPragma: fileJsxPragma || jsxPragma,
+                })
               ) {
                 importsToRemove.push(binding.path);
               } else {
@@ -327,15 +325,14 @@ export default declare((api, { jsxPragma = "React" }) => {
     // 'access' and 'readonly' are only for parameter properties, so constructor visitor will handle them.
   }
 
-  function isImportTypeOnly(file, binding, programPath) {
+  function isImportTypeOnly({ binding, programPath, jsxPragma }) {
     for (const path of binding.referencePaths) {
       if (!isInType(path)) {
         return false;
       }
     }
 
-    const fileJsxPragma = file.get(PRAGMA_KEY) || jsxPragma;
-    if (binding.identifier.name !== fileJsxPragma) {
+    if (binding.identifier.name !== jsxPragma) {
       return true;
     }
 
