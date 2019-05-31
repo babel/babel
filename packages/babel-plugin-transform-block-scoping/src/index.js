@@ -701,11 +701,7 @@ class BlockScoping {
 
     const addDeclarationsFromChild = (path, node) => {
       node = node || path.node;
-      if (
-        t.isClassDeclaration(node) ||
-        t.isFunctionDeclaration(node) ||
-        isBlockScoped(node)
-      ) {
+      if (t.isClassDeclaration(node) || isBlockScoped(node)) {
         if (isBlockScoped(node)) {
           convertBlockScopedToVar(path, node, block, this.scope);
         }

@@ -131,6 +131,13 @@ const collectorVisitor = {
     scope.getBlockParent().registerDeclaration(path);
   },
 
+  FunctionDeclaration(path) {
+    const scope =
+      path.parentPath.scope.getFunctionParent() ||
+      path.parentPath.scope.getProgramParent();
+    scope.registerDeclaration(path);
+  },
+
   ClassDeclaration(path) {
     const id = path.node.id;
     if (!id) return;
