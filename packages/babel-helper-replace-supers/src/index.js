@@ -209,7 +209,7 @@ export default class ReplaceSupers {
   isLoose: boolean;
   file;
   opts: {
-    getObjetRef: Function,
+    getObjectRef: Function,
     methodPath: NodePath,
     superRef: Object,
     isLoose: boolean,
