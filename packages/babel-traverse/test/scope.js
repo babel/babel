@@ -312,7 +312,7 @@ describe("scope", () => {
       it(`${name} and function in sub scope`, () => {
         const ast = [
           t.variableDeclaration(name, [
-            t.variableDeclarator(t.identifier("foo")),
+            t.variableDeclarator(t.identifier("foo"), t.numericLiteral(2)),
           ]),
           t.blockStatement([
             t.functionDeclaration(
