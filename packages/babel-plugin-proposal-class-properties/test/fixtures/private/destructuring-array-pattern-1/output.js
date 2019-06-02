@@ -9,7 +9,6 @@ var Foo = function Foo(props) {
   });
 
   babelHelpers.classPrivateFieldSet(this, _client, 1);
-  ;
   [this.x = babelHelpers.classPrivateFieldGet(this, _client), babelHelpers.classPrivateFieldDestructureSet(this, _client).value, this.y = babelHelpers.classPrivateFieldGet(this, _client)] = props;
 };
 

@@ -2,6 +2,6 @@ class Foo {
   #client
 
   constructor(props) {
-    ;({ x, ...this.#client } = props)
+    ({ x, ...this.#client } = props)
   }
 }

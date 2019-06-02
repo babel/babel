@@ -8,10 +8,7 @@ var Foo = function Foo(props) {
     value: void 0
   });
 
-  ({
-    x,
-    ...babelHelpers.classPrivateFieldDestructureSet(this, _client).value
-  } = props);
+  [babelHelpers.classPrivateFieldDestructureSet(this, _client).value = 5] = props;
 };
 
 var _client = new WeakMap();

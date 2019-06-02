@@ -7,7 +7,6 @@ var Foo = function Foo(props) {
     value: void 0
   });
   babelHelpers.classPrivateFieldLooseBase(this, _client)[_client] = 'foo';
-  ;
   ({
     x: this.x = babelHelpers.classPrivateFieldLooseBase(this, _client)[_client],
     y: babelHelpers.classPrivateFieldLooseBase(this, _client)[_client],

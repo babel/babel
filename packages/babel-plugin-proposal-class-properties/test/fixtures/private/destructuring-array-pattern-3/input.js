@@ -2,6 +2,6 @@ class Foo {
   #client
 
   constructor(props) {
-    ([this.#client] = props);
+    ([this.#client = 5] = props);
   }
 }

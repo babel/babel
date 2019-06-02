@@ -6,7 +6,7 @@ var Foo = function Foo(props) {
     writable: true,
     value: void 0
   });
-  [babelHelpers.classPrivateFieldLooseBase(this, _client)[_client]] = props;
+  [babelHelpers.classPrivateFieldLooseBase(this, _client)[_client] = 5] = props;
 };
 
 var _client = babelHelpers.classPrivateFieldLooseKey("client");

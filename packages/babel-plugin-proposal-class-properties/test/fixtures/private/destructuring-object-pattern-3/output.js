@@ -9,8 +9,7 @@ var Foo = function Foo(props) {
   });
 
   ({
-    x,
-    ...babelHelpers.classPrivateFieldDestructureSet(this, _client).value
+    x: babelHelpers.classPrivateFieldDestructureSet(this, _client).value = 5
   } = props);
 };
 
