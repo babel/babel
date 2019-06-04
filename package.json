@@ -1,5 +1,5 @@
 {
-  "name": "@babel/core",
+  "name": "babel-core",
   "private": true,
   "license": "MIT",
   "scripts": {
