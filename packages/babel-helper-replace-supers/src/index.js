@@ -1,3 +1,5 @@
+// @flow
+
 import type { NodePath } from "@babel/traverse";
 import traverse from "@babel/traverse";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
