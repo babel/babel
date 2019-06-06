@@ -87,7 +87,9 @@ export default async function({ cliOptions, babelOptions }) {
   async function handleFileDelete(src, base) {
     const relative = path.relative(base, src);
     const dest = getDest(relative, base);
-    util.deleteFile(dest);
+    util
+      .deleteFile(dest)
+      .catch(err => console.error("Unable to delete file: " + err, dest));
     // Delete the source map if they're enabled
     let sourceMapMessage = "";
     if (

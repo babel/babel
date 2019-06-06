@@ -104,7 +104,12 @@ export function deleteDir(path) {
 export function deleteFile(path) {
   if (fs.existsSync(path)) {
     fs.unlink(path, err => {
-      if (err) throw err;
+      if (err) {
+        return new Promise((resolve, reject) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      }
     });
   }
 }
