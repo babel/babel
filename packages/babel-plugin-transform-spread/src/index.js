@@ -57,11 +57,27 @@ export default declare((api, options) => {
         if (!hasSpread(elements)) return;
 
         const nodes = build(elements, scope);
-        const first = nodes.shift();
+        let first = nodes[0];
 
-        if (nodes.length === 0 && first !== elements[0].argument) {
+        // If there is only one element in the ArrayExpression and
+        // the element was transformed (Array.prototype.slice.call or toConsumableArray)
+        // we know that the transformed code already takes care of cloning the array.
+        // So we can simply return that element.
+        if (nodes.length === 1 && first !== elements[0].argument) {
           path.replaceWith(first);
           return;
+        }
+
+        // If the first element is a ArrayExpression we can directly call
+        // concat on it.
+        // `[..].concat(..)`
+        // If not then we have to use `[].concat(arr)` and not `arr.concat`
+        // because `arr` could be extended/modified (e.g. Immutable) and we do not know exactly
+        // what concat would produce.
+        if (!t.isArrayExpression(first)) {
+          first = t.arrayExpression([]);
+        } else {
+          nodes.shift();
         }
 
         path.replaceWith(

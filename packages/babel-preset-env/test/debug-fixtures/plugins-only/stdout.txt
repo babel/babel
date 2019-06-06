@@ -26,6 +26,7 @@ Using plugins:
   proposal-unicode-property-regex { "firefox":"52", "node":"7.4" }
   proposal-json-strings { "firefox":"52", "node":"7.4" }
   proposal-optional-catch-binding { "firefox":"52", "node":"7.4" }
+  transform-named-capturing-groups-regex { "firefox":"52", "node":"7.4" }
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
 Successfully compiled 1 file with Babel.

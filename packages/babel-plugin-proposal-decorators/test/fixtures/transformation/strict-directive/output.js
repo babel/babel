@@ -14,9 +14,7 @@
       d: [{
         kind: "method",
         key: "method",
-
-        value() {}
-
+        value: function method() {}
       }]
     };
   });
@@ -38,9 +36,7 @@
       d: [{
         kind: "method",
         key: "method",
-
-        value() {}
-
+        value: function method() {}
       }]
     };
   });

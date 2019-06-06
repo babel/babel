@@ -17,4 +17,7 @@ const rewriteThisVisitor = {
   ClassProperty(path) {
     path.skip();
   },
+  ClassPrivateProperty(path) {
+    path.skip();
+  },
 };

@@ -98,10 +98,16 @@ export function extractComputedKeys(ref, path, computedPaths, file) {
       const ident = path.scope.generateUidIdentifierBasedOnNode(
         computedNode.key,
       );
+      // Declaring in the same block scope
+      // Ref: https://github.com/babel/babel/pull/10029/files#diff-fbbdd83e7a9c998721c1484529c2ce92
+      path.scope.push({
+        id: ident,
+        kind: "let",
+      });
       declarations.push(
-        t.variableDeclaration("var", [
-          t.variableDeclarator(ident, computedNode.key),
-        ]),
+        t.expressionStatement(
+          t.assignmentExpression("=", t.cloneNode(ident), computedNode.key),
+        ),
       );
       computedNode.key = t.cloneNode(ident);
     }

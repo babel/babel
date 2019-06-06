@@ -3,11 +3,7 @@
 import type { Options } from "../options";
 import type { Position } from "../util/location";
 import * as charCodes from "charcodes";
-import {
-  isIdentifierStart,
-  isIdentifierChar,
-  isKeyword,
-} from "../util/identifier";
+import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
 import { types as tt, keywords as keywordTypes, type TokenType } from "./types";
 import { type TokContext, types as ct } from "./context";
 import LocationParser from "../parser/location";
@@ -20,7 +16,7 @@ import {
 } from "../util/whitespace";
 import State from "./state";
 
-const VALID_REGEX_FLAGS = "gmsiyu";
+const VALID_REGEX_FLAGS = new Set(["g", "m", "s", "i", "y", "u"]);
 
 // The following character codes are forbidden from being
 // an immediate sibling of NumericLiteralSeparator _
@@ -120,7 +116,9 @@ export default class Tokenizer extends LocationParser {
   constructor(options: Options, input: string) {
     super();
     this.state = new State();
-    this.state.init(options, input);
+    this.state.init(options);
+    this.input = input;
+    this.length = input.length;
     this.isLookahead = false;
   }
 
@@ -153,12 +151,6 @@ export default class Tokenizer extends LocationParser {
 
   match(type: TokenType): boolean {
     return this.state.type === type;
-  }
-
-  // TODO
-
-  isKeyword(word: string): boolean {
-    return isKeyword(word);
   }
 
   // TODO
@@ -206,7 +198,7 @@ export default class Tokenizer extends LocationParser {
     this.state.octalPosition = null;
     this.state.start = this.state.pos;
     this.state.startLoc = this.state.curPosition();
-    if (this.state.pos >= this.input.length) {
+    if (this.state.pos >= this.length) {
       this.finishToken(tt.eof);
       return;
     }
@@ -214,17 +206,7 @@ export default class Tokenizer extends LocationParser {
     if (curContext.override) {
       curContext.override(this);
     } else {
-      this.readToken(this.input.codePointAt(this.state.pos));
-    }
-  }
-
-  readToken(code: number): void {
-    // Identifier or keyword. '\uXXXX' sequences are allowed in
-    // identifiers, so '\' also dispatches to that.
-    if (isIdentifierStart(code) || code === charCodes.backslash) {
-      this.readWord();
-    } else {
-      this.getTokenFromCode(code);
+      this.getTokenFromCode(this.input.codePointAt(this.state.pos));
     }
   }
 
@@ -244,11 +226,9 @@ export default class Tokenizer extends LocationParser {
       loc: new SourceLocation(startLoc, endLoc),
     };
 
-    if (!this.isLookahead) {
-      if (this.options.tokens) this.state.tokens.push(comment);
-      this.state.comments.push(comment);
-      this.addComment(comment);
-    }
+    if (this.options.tokens) this.state.tokens.push(comment);
+    this.state.comments.push(comment);
+    this.addComment(comment);
   }
 
   skipBlockComment(): void {
@@ -268,6 +248,10 @@ export default class Tokenizer extends LocationParser {
       this.state.lineStart = match.index + match[0].length;
     }
 
+    // If we are doing a lookahead right now we need to advance the position (above code)
+    // but we do not want to push the comment to the state.
+    if (this.isLookahead) return;
+
     this.pushComment(
       true,
       this.input.slice(start + 2, end),
@@ -282,17 +266,21 @@ export default class Tokenizer extends LocationParser {
     const start = this.state.pos;
     const startLoc = this.state.curPosition();
     let ch = this.input.charCodeAt((this.state.pos += startSkip));
-    if (this.state.pos < this.input.length) {
+    if (this.state.pos < this.length) {
       while (
         ch !== charCodes.lineFeed &&
         ch !== charCodes.carriageReturn &&
         ch !== charCodes.lineSeparator &&
         ch !== charCodes.paragraphSeparator &&
-        ++this.state.pos < this.input.length
+        ++this.state.pos < this.length
       ) {
         ch = this.input.charCodeAt(this.state.pos);
       }
     }
+
+    // If we are doing a lookahead right now we need to advance the position (above code)
+    // but we do not want to push the comment to the state.
+    if (this.isLookahead) return;
 
     this.pushComment(
       false,
@@ -308,9 +296,14 @@ export default class Tokenizer extends LocationParser {
   // whitespace and comments, and.
 
   skipSpace(): void {
-    loop: while (this.state.pos < this.input.length) {
+    loop: while (this.state.pos < this.length) {
       const ch = this.input.charCodeAt(this.state.pos);
       switch (ch) {
+        case charCodes.space:
+        case charCodes.nonBreakingSpace:
+        case charCodes.tab:
+          ++this.state.pos;
+          break;
         case charCodes.carriageReturn:
           if (
             this.input.charCodeAt(this.state.pos + 1) === charCodes.lineFeed
@@ -363,7 +356,7 @@ export default class Tokenizer extends LocationParser {
     this.state.type = type;
     this.state.value = val;
 
-    this.updateContext(prevType);
+    if (!this.isLookahead) this.updateContext(prevType);
   }
 
   // ### Token reading
@@ -438,7 +431,7 @@ export default class Tokenizer extends LocationParser {
   }
 
   readToken_interpreter(): boolean {
-    if (this.state.pos !== 0 || this.state.input.length < 2) return false;
+    if (this.state.pos !== 0 || this.length < 2) return false;
 
     const start = this.state.pos;
     this.state.pos += 1;
@@ -451,7 +444,7 @@ export default class Tokenizer extends LocationParser {
       ch !== charCodes.carriageReturn &&
       ch !== charCodes.lineSeparator &&
       ch !== charCodes.paragraphSeparator &&
-      ++this.state.pos < this.input.length
+      ++this.state.pos < this.length
     ) {
       ch = this.input.charCodeAt(this.state.pos);
     }
@@ -486,7 +479,7 @@ export default class Tokenizer extends LocationParser {
   }
 
   readToken_pipe_amp(code: number): void {
-    // '|&'
+    // '||' '&&' '||=' '&&='
     const next = this.input.charCodeAt(this.state.pos + 1);
 
     if (next === code) {
@@ -505,10 +498,6 @@ export default class Tokenizer extends LocationParser {
       // '|>'
       if (next === charCodes.greaterThan) {
         this.finishOp(tt.pipeline, 2);
-        return;
-      } else if (next === charCodes.rightCurlyBrace && this.hasPlugin("flow")) {
-        // '|}'
-        this.finishOp(tt.braceBarR, 2);
         return;
       }
     }
@@ -543,7 +532,10 @@ export default class Tokenizer extends LocationParser {
         next === charCodes.dash &&
         !this.inModule &&
         this.input.charCodeAt(this.state.pos + 2) === charCodes.greaterThan &&
-        lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.pos))
+        (this.state.lastTokEnd === 0 ||
+          lineBreak.test(
+            this.input.slice(this.state.lastTokEnd, this.state.pos),
+          ))
       ) {
         // A `-->` line comment
         this.skipLineComment(3);
@@ -651,10 +643,6 @@ export default class Tokenizer extends LocationParser {
 
   getTokenFromCode(code: number): void {
     switch (code) {
-      case charCodes.numberSign:
-        this.readToken_numberSign();
-        return;
-
       // The interpretation of a dot depends on whether it is followed
       // by a digit or another two dots.
 
@@ -687,19 +675,10 @@ export default class Tokenizer extends LocationParser {
         ++this.state.pos;
         this.finishToken(tt.bracketR);
         return;
-
       case charCodes.leftCurlyBrace:
-        if (
-          this.hasPlugin("flow") &&
-          this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
-        ) {
-          this.finishOp(tt.braceBarL, 2);
-        } else {
-          ++this.state.pos;
-          this.finishToken(tt.braceL);
-        }
+        ++this.state.pos;
+        this.finishToken(tt.braceL);
         return;
-
       case charCodes.rightCurlyBrace:
         ++this.state.pos;
         this.finishToken(tt.braceR);
@@ -719,10 +698,6 @@ export default class Tokenizer extends LocationParser {
 
       case charCodes.questionMark:
         this.readToken_question();
-        return;
-      case charCodes.atSign:
-        ++this.state.pos;
-        this.finishToken(tt.at);
         return;
 
       case charCodes.graveAccent:
@@ -809,6 +784,25 @@ export default class Tokenizer extends LocationParser {
       case charCodes.tilde:
         this.finishOp(tt.tilde, 1);
         return;
+
+      case charCodes.atSign:
+        ++this.state.pos;
+        this.finishToken(tt.at);
+        return;
+
+      case charCodes.numberSign:
+        this.readToken_numberSign();
+        return;
+
+      case charCodes.backslash:
+        this.readWord();
+        return;
+
+      default:
+        if (isIdentifierStart(code)) {
+          this.readWord();
+          return;
+        }
     }
 
     this.raise(
@@ -827,7 +821,7 @@ export default class Tokenizer extends LocationParser {
     const start = this.state.pos;
     let escaped, inClass;
     for (;;) {
-      if (this.state.pos >= this.input.length) {
+      if (this.state.pos >= this.length) {
         this.raise(start, "Unterminated regular expression");
       }
       const ch = this.input.charAt(this.state.pos);
@@ -853,11 +847,11 @@ export default class Tokenizer extends LocationParser {
 
     let mods = "";
 
-    while (this.state.pos < this.input.length) {
+    while (this.state.pos < this.length) {
       const char = this.input[this.state.pos];
       const charCode = this.input.codePointAt(this.state.pos);
 
-      if (VALID_REGEX_FLAGS.indexOf(char) > -1) {
+      if (VALID_REGEX_FLAGS.has(char)) {
         if (mods.indexOf(char) > -1) {
           this.raise(this.state.pos + 1, "Duplicate regular expression flag");
         }
@@ -1085,7 +1079,7 @@ export default class Tokenizer extends LocationParser {
     let out = "",
       chunkStart = ++this.state.pos;
     for (;;) {
-      if (this.state.pos >= this.input.length) {
+      if (this.state.pos >= this.length) {
         this.raise(this.state.start, "Unterminated string constant");
       }
       const ch = this.input.charCodeAt(this.state.pos);
@@ -1118,7 +1112,7 @@ export default class Tokenizer extends LocationParser {
       chunkStart = this.state.pos,
       containsInvalid = false;
     for (;;) {
-      if (this.state.pos >= this.input.length) {
+      if (this.state.pos >= this.length) {
         this.raise(this.state.start, "Unterminated template");
       }
       const ch = this.input.charCodeAt(this.state.pos);
@@ -1210,6 +1204,8 @@ export default class Tokenizer extends LocationParser {
       case charCodes.lineFeed:
         this.state.lineStart = this.state.pos;
         ++this.state.curLine;
+      case charCodes.lineSeparator:
+      case charCodes.paragraphSeparator:
         return "";
       default:
         if (ch >= charCodes.digit0 && ch <= charCodes.digit7) {
@@ -1223,7 +1219,13 @@ export default class Tokenizer extends LocationParser {
             octalStr = octalStr.slice(0, -1);
             octal = parseInt(octalStr, 8);
           }
-          if (octal > 0) {
+          this.state.pos += octalStr.length - 1;
+          const next = this.input.charCodeAt(this.state.pos);
+          if (
+            octalStr !== "0" ||
+            next === charCodes.digit8 ||
+            next === charCodes.digit9
+          ) {
             if (inTemplate) {
               this.state.invalidTemplateEscapePosition = codePos;
               return null;
@@ -1236,9 +1238,10 @@ export default class Tokenizer extends LocationParser {
               this.state.octalPosition = codePos;
             }
           }
-          this.state.pos += octalStr.length - 1;
+
           return String.fromCharCode(octal);
         }
+
         return String.fromCharCode(ch);
     }
   }
@@ -1266,21 +1269,24 @@ export default class Tokenizer extends LocationParser {
   // as a micro-optimization.
 
   readWord1(): string {
+    let word = "";
     this.state.containsEsc = false;
-    let word = "",
-      first = true,
-      chunkStart = this.state.pos;
-    while (this.state.pos < this.input.length) {
+    const start = this.state.pos;
+    let chunkStart = this.state.pos;
+
+    while (this.state.pos < this.length) {
       const ch = this.input.codePointAt(this.state.pos);
       if (isIdentifierChar(ch)) {
         this.state.pos += ch <= 0xffff ? 1 : 2;
       } else if (this.state.isIterator && ch === charCodes.atSign) {
-        this.state.pos += 1;
+        ++this.state.pos;
       } else if (ch === charCodes.backslash) {
         this.state.containsEsc = true;
 
         word += this.input.slice(chunkStart, this.state.pos);
         const escStart = this.state.pos;
+        const identifierCheck =
+          this.state.pos === start ? isIdentifierStart : isIdentifierChar;
 
         if (this.input.charCodeAt(++this.state.pos) !== charCodes.lowercaseU) {
           this.raise(
@@ -1291,8 +1297,11 @@ export default class Tokenizer extends LocationParser {
 
         ++this.state.pos;
         const esc = this.readCodePoint(true);
-        // $FlowFixMe (thinks esc may be null, but throwOnInvalid is true)
-        if (!(first ? isIdentifierStart : isIdentifierChar)(esc, true)) {
+
+        if (
+          // $FlowFixMe (thinks esc may be null, but throwOnInvalid is true)
+          !identifierCheck(esc, true)
+        ) {
           this.raise(escStart, "Invalid Unicode escape");
         }
 
@@ -1302,7 +1311,6 @@ export default class Tokenizer extends LocationParser {
       } else {
         break;
       }
-      first = false;
     }
     return word + this.input.slice(chunkStart, this.state.pos);
   }
@@ -1316,14 +1324,10 @@ export default class Tokenizer extends LocationParser {
 
   readWord(): void {
     const word = this.readWord1();
-    let type = tt.name;
+    const type = keywordTypes.get(word) || tt.name;
 
-    if (this.isKeyword(word)) {
-      if (this.state.containsEsc) {
-        this.raise(this.state.pos, `Escape sequence in keyword ${word}`);
-      }
-
-      type = keywordTypes[word];
+    if (type.keyword && this.state.containsEsc) {
+      this.raise(this.state.pos, `Escape sequence in keyword ${word}`);
     }
 
     // Allow @@iterator and @@asyncIterator as a identifier only inside type
@@ -1354,7 +1358,6 @@ export default class Tokenizer extends LocationParser {
     // `tt.name`.
     if (
       prevType === tt._return ||
-      prevType === tt._yield ||
       (prevType === tt.name && this.state.exprAllowed)
     ) {
       return lineBreak.test(
@@ -1378,8 +1381,8 @@ export default class Tokenizer extends LocationParser {
 
     if (
       prevType === tt._var ||
-      prevType === tt._let ||
-      prevType === tt._const
+      prevType === tt._const ||
+      prevType === tt.name
     ) {
       return false;
     }

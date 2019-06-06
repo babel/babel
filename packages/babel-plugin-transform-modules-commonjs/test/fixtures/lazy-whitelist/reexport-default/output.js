@@ -6,8 +6,16 @@ Object.defineProperty(exports, "__esModule", {
 Object.defineProperty(exports, "default", {
   enumerable: true,
   get: function () {
-    return _white.default;
+    return _white().default;
   }
 });
 
-var _white = babelHelpers.interopRequireDefault(require("white"));
+function _white() {
+  const data = babelHelpers.interopRequireDefault(require("white"));
+
+  _white = function () {
+    return data;
+  };
+
+  return data;
+}

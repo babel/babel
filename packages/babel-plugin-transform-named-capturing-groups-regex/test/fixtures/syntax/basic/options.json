@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "external-helpers",
+    ["transform-named-capturing-groups-regex", { "runtime": false }]
+  ]
+}

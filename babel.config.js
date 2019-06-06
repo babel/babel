@@ -5,21 +5,26 @@ module.exports = function(api) {
 
   const includeCoverage = process.env.BABEL_COVERAGE === "true";
 
-  const envOpts = {
+  const envOptsNoTargets = {
     loose: true,
     modules: false,
     exclude: ["transform-typeof-symbol"],
   };
+  const envOpts = Object.assign({}, envOptsNoTargets);
 
   let convertESM = true;
   let ignoreLib = true;
   let includeRuntime = false;
+  const nodeVersion = "6.9";
 
   switch (env) {
     // Configs used during bundling builds.
     case "babel-parser":
       convertESM = false;
       ignoreLib = false;
+      envOpts.targets = {
+        node: nodeVersion,
+      };
       break;
     case "standalone":
       convertESM = false;
@@ -29,7 +34,7 @@ module.exports = function(api) {
     case "production":
       // Config during builds before publish.
       envOpts.targets = {
-        node: "6.9",
+        node: nodeVersion,
       };
       break;
     case "development":
@@ -94,6 +99,11 @@ module.exports = function(api) {
         ].filter(Boolean),
       },
       {
+        test: "./packages/babel-polyfill",
+        presets: [["@babel/env", envOptsNoTargets]],
+        plugins: [["@babel/transform-modules-commonjs", { lazy: false }]],
+      },
+      {
         // The vast majority of our src files are modules, but we use
         // unambiguous to keep things simple until we get around to renaming
         // the modules to be more easily distinguished from CommonJS
@@ -111,9 +121,11 @@ module.exports = function(api) {
           "packages/babel-runtime",
           /[\\/]node_modules[\\/](?:@babel\/runtime|babel-runtime|core-js)[\\/]/,
         ],
-        plugins: [includeRuntime ? "@babel/transform-runtime" : null].filter(
-          Boolean
-        ),
+        plugins: [
+          includeRuntime
+            ? ["@babel/transform-runtime", { version: "7.4.4" }]
+            : null,
+        ].filter(Boolean),
       },
     ].filter(Boolean),
   };

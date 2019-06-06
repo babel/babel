@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 78,
+  "end": 79,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 78,
+    "end": 79,
     "loc": {
       "start": {
         "line": 1,
@@ -33,9 +33,9 @@
     "innerComments": [
       {
         "type": "CommentBlock",
-        "value": "flow-include\ntype Foo = {\n  foo: number,\n  bar: boolean,\n  baz: string\n};\n",
+        "value": " flow-include\ntype Foo = {\n  foo: number,\n  bar: boolean,\n  baz: string\n};\n",
         "start": 0,
-        "end": 78,
+        "end": 79,
         "loc": {
           "start": {
             "line": 1,
@@ -52,9 +52,9 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "flow-include\ntype Foo = {\n  foo: number,\n  bar: boolean,\n  baz: string\n};\n",
+      "value": " flow-include\ntype Foo = {\n  foo: number,\n  bar: boolean,\n  baz: string\n};\n",
       "start": 0,
-      "end": 78,
+      "end": 79,
       "loc": {
         "start": {
           "line": 1,

@@ -19,6 +19,13 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
       );
     }
   };
+
+  visitor.JSXSpreadChild = function(path) {
+    throw path.buildCodeFrameError(
+      "Spread children are not supported in React.",
+    );
+  };
+
   visitor.JSXElement = {
     exit(path, file) {
       const callExpr = buildElementCall(path, file);

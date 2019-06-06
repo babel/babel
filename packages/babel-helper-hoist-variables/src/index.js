@@ -28,7 +28,7 @@ const visitor = {
         );
       }
 
-      for (const name in declar.getBindingIdentifiers()) {
+      for (const name of Object.keys(declar.getBindingIdentifiers())) {
         state.emit(t.identifier(name), name, declar.node.init !== null);
       }
     }

@@ -1,4 +1,4 @@
-import { hasDecorators } from "./decorators";
+import { hasOwnDecorators } from "./decorators";
 
 export const FEATURES = Object.freeze({
   //classes: 1 << 0,
@@ -39,14 +39,26 @@ export function isLoose(file, feature) {
 }
 
 export function verifyUsedFeatures(path, file) {
-  if (hasDecorators(path) && !hasFeature(file, FEATURES.decorators)) {
-    throw path.buildCodeFrameError("Decorators are not enabled.");
-  }
+  if (hasOwnDecorators(path.node)) {
+    if (!hasFeature(file, FEATURES.decorators)) {
+      throw path.buildCodeFrameError(
+        "Decorators are not enabled." +
+          "\nIf you are using " +
+          '["@babel/plugin-proposal-decorators", { "legacy": true }], ' +
+          'make sure it comes *before* "@babel/plugin-proposal-class-properties" ' +
+          "and enable loose mode, like so:\n" +
+          '\t["@babel/plugin-proposal-decorators", { "legacy": true }]\n' +
+          '\t["@babel/plugin-proposal-class-properties", { "loose": true }]',
+      );
+    }
 
-  if (hasFeature(file, FEATURES.decorators)) {
-    throw new Error(
-      "@babel/plugin-class-features doesn't support decorators yet.",
-    );
+    if (path.isPrivate()) {
+      throw path.buildCodeFrameError(
+        `Private ${
+          path.isClassMethod() ? "methods" : "fields"
+        } in decorated classes are not supported yet.`,
+      );
+    }
   }
 
   // NOTE: We can't use path.isPrivateMethod() because it isn't supported in <7.2.0
@@ -55,15 +67,9 @@ export function verifyUsedFeatures(path, file) {
       throw path.buildCodeFrameError("Class private methods are not enabled.");
     }
 
-    if (path.node.static) {
+    if (path.node.static && path.node.kind !== "method") {
       throw path.buildCodeFrameError(
-        "@babel/plugin-class-features doesn't support class static private methods yet.",
-      );
-    }
-
-    if (path.node.kind !== "method") {
-      throw path.buildCodeFrameError(
-        "@babel/plugin-class-features doesn't support class private accessors yet.",
+        "@babel/plugin-class-features doesn't support class static private accessors yet.",
       );
     }
   }

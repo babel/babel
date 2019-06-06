@@ -4,7 +4,9 @@ import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
 
-import getDefinitions from "./definitions";
+import getCoreJS2Definitions from "./runtime-corejs2-definitions";
+import getCoreJS3Definitions from "./runtime-corejs3-definitions";
+import { typeAnnotationToString } from "./helpers";
 
 function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
   try {
@@ -33,7 +35,7 @@ export default declare((api, options, dirname) => {
   api.assertVersion(7);
 
   const {
-    corejs: corejsVersion = false,
+    corejs,
     helpers: useRuntimeHelpers = true,
     regenerator: useRuntimeRegenerator = true,
     useESModules = false,
@@ -41,21 +43,48 @@ export default declare((api, options, dirname) => {
     absoluteRuntime = false,
   } = options;
 
-  const definitions = getDefinitions(runtimeVersion);
+  let proposals = false;
+  let rawVersion;
+
+  if (typeof corejs === "object" && corejs !== null) {
+    rawVersion = corejs.version;
+    proposals = Boolean(corejs.proposals);
+  } else {
+    rawVersion = corejs;
+  }
+
+  const corejsVersion = rawVersion ? Number(rawVersion) : false;
+
+  if (![false, 2, 3].includes(corejsVersion)) {
+    throw new Error(
+      `The \`core-js\` version must be false, 2 or 3, but got ${JSON.stringify(
+        rawVersion,
+      )}.`,
+    );
+  }
+
+  if (proposals && (!corejsVersion || corejsVersion < 3)) {
+    throw new Error(
+      "The 'proposals' option is only supported when using 'corejs: 3'",
+    );
+  }
 
   if (typeof useRuntimeRegenerator !== "boolean") {
     throw new Error(
       "The 'regenerator' option must be undefined, or a boolean.",
     );
   }
+
   if (typeof useRuntimeHelpers !== "boolean") {
     throw new Error("The 'helpers' option must be undefined, or a boolean.");
   }
+
   if (typeof useESModules !== "boolean" && useESModules !== "auto") {
     throw new Error(
       "The 'useESModules' option must be undefined, or a boolean, or 'auto'.",
     );
   }
+
   if (
     typeof absoluteRuntime !== "boolean" &&
     typeof absoluteRuntime !== "string"
@@ -64,16 +93,7 @@ export default declare((api, options, dirname) => {
       "The 'absoluteRuntime' option must be undefined, a boolean, or a string.",
     );
   }
-  if (
-    corejsVersion !== false &&
-    (typeof corejsVersion !== "number" || corejsVersion !== 2) &&
-    (typeof corejsVersion !== "string" || corejsVersion !== "2")
-  ) {
-    throw new Error(
-      `The 'corejs' option must be undefined, false, 2 or '2', ` +
-        `but got ${JSON.stringify(corejsVersion)}.`,
-    );
-  }
+
   if (typeof runtimeVersion !== "string") {
     throw new Error(`The 'version' option must be a version string.`);
   }
@@ -81,6 +101,28 @@ export default declare((api, options, dirname) => {
   function has(obj, key) {
     return Object.prototype.hasOwnProperty.call(obj, key);
   }
+
+  function hasMapping(methods, name) {
+    return has(methods, name) && (proposals || methods[name].stable);
+  }
+
+  function hasStaticMapping(object, method) {
+    return (
+      has(StaticProperties, object) &&
+      hasMapping(StaticProperties[object], method)
+    );
+  }
+
+  function maybeNeedsPolyfill(path, methods, name) {
+    if (!methods[name].types) return true;
+
+    const typeAnnotation = path.get("object").getTypeAnnotation();
+    const type = typeAnnotationToString(typeAnnotation);
+    if (!type) return true;
+
+    return methods[name].types.some(name => name === type);
+  }
+
   if (has(options, "useBuiltIns")) {
     if (options.useBuiltIns) {
       throw new Error(
@@ -90,10 +132,11 @@ export default declare((api, options, dirname) => {
     } else {
       throw new Error(
         "The 'useBuiltIns' option has been removed. Use the 'corejs'" +
-          "option with value '2' to polyfill with CoreJS 2.x via @babel/runtime.",
+          "option to polyfill with `core-js` via @babel/runtime.",
       );
     }
   }
+
   if (has(options, "polyfill")) {
     if (options.polyfill === false) {
       throw new Error(
@@ -103,10 +146,11 @@ export default declare((api, options, dirname) => {
     } else {
       throw new Error(
         "The 'polyfill' option has been removed. Use the 'corejs'" +
-          "option with value '2' to polyfill with CoreJS 2.x via @babel/runtime.",
+          "option to polyfill with `core-js` via @babel/runtime.",
       );
     }
   }
+
   if (has(options, "moduleName")) {
     throw new Error(
       "The 'moduleName' option has been removed. @babel/transform-runtime " +
@@ -119,10 +163,21 @@ export default declare((api, options, dirname) => {
   const esModules =
     useESModules === "auto" ? api.caller(supportsStaticESM) : useESModules;
 
-  const injectCoreJS2 = `${corejsVersion}` === "2";
-  const moduleName = injectCoreJS2
+  const injectCoreJS2 = corejsVersion === 2;
+  const injectCoreJS3 = corejsVersion === 3;
+  const injectCoreJS = corejsVersion !== false;
+
+  const moduleName = injectCoreJS3
+    ? "@babel/runtime-corejs3"
+    : injectCoreJS2
     ? "@babel/runtime-corejs2"
     : "@babel/runtime";
+
+  const corejsRoot = injectCoreJS3 && !proposals ? "core-js-stable" : "core-js";
+
+  const { BuiltIns, StaticProperties, InstanceProperties } = (injectCoreJS2
+    ? getCoreJS2Definitions
+    : getCoreJS3Definitions)(runtimeVersion);
 
   const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 
@@ -199,7 +254,10 @@ export default declare((api, options, dirname) => {
     visitor: {
       ReferencedIdentifier(path) {
         const { node, parent, scope } = path;
-        if (node.name === "regeneratorRuntime" && useRuntimeRegenerator) {
+        const { name } = node;
+
+        // transform `regeneratorRuntime`
+        if (name === "regeneratorRuntime" && useRuntimeRegenerator) {
           path.replaceWith(
             this.addDefaultImport(
               `${modulePath}/regenerator`,
@@ -209,50 +267,88 @@ export default declare((api, options, dirname) => {
           return;
         }
 
-        if (!injectCoreJS2) return;
+        if (!injectCoreJS) return;
 
         if (t.isMemberExpression(parent)) return;
-        if (!has(definitions.builtins, node.name)) return;
-        if (scope.getBindingIdentifier(node.name)) return;
+        if (!hasMapping(BuiltIns, name)) return;
+        if (scope.getBindingIdentifier(name)) return;
 
-        // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
+        // transform global built-ins like `Symbol()`, `new Promise`
         path.replaceWith(
           this.addDefaultImport(
-            `${modulePath}/core-js/${definitions.builtins[node.name]}`,
-            node.name,
+            `${modulePath}/${corejsRoot}/${BuiltIns[name].path}`,
+            name,
           ),
         );
       },
 
-      // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
       CallExpression(path) {
-        if (!injectCoreJS2) return;
+        if (!injectCoreJS) return;
 
-        // we can't compile this
-        if (path.node.arguments.length) return;
+        const { node } = path;
+        const { callee } = node;
 
-        const callee = path.node.callee;
         if (!t.isMemberExpression(callee)) return;
+
+        const { object, property } = callee;
+        const propertyName = property.name;
+
+        // transform calling instance methods like `something.includes()`
+        if (injectCoreJS3 && !hasStaticMapping(object.name, propertyName)) {
+          if (
+            hasMapping(InstanceProperties, propertyName) &&
+            maybeNeedsPolyfill(
+              path.get("callee"),
+              InstanceProperties,
+              propertyName,
+            )
+          ) {
+            let context1, context2;
+            if (t.isIdentifier(object)) {
+              context1 = object;
+              context2 = t.cloneNode(object);
+            } else {
+              context1 = path.scope.generateDeclaredUidIdentifier("context");
+              context2 = t.assignmentExpression("=", context1, object);
+            }
+            node.callee = t.memberExpression(
+              t.callExpression(
+                this.addDefaultImport(
+                  `${moduleName}/${corejsRoot}/instance/${
+                    InstanceProperties[propertyName].path
+                  }`,
+                  `${propertyName}InstanceProperty`,
+                ),
+                [context2],
+              ),
+              t.identifier("call"),
+            );
+            node.arguments.unshift(context1);
+            return;
+          }
+        }
+        // we can't compile this
+        if (node.arguments.length) return;
         if (!callee.computed) return;
         if (!path.get("callee.property").matchesPattern("Symbol.iterator")) {
           return;
         }
 
+        // transform `something[Symbol.iterator]()` to calling `getIterator(something)` helper
         path.replaceWith(
           t.callExpression(
             this.addDefaultImport(
               `${modulePath}/core-js/get-iterator`,
               "getIterator",
             ),
-            [callee.object],
+            [object],
           ),
         );
       },
 
-      // Symbol.iterator in arr -> core.$for.isIterable(arr)
+      // transform `Symbol.iterator in something` to calling `isIterable(something)` helper
       BinaryExpression(path) {
-        if (!injectCoreJS2) return;
-
+        if (!injectCoreJS) return;
         if (path.node.operator !== "in") return;
         if (!path.get("left").matchesPattern("Symbol.iterator")) return;
 
@@ -267,61 +363,88 @@ export default declare((api, options, dirname) => {
         );
       },
 
-      // Array.from -> _core.Array.from
+      // transform static built-ins methods like `Array.from`
       MemberExpression: {
         enter(path) {
-          if (!injectCoreJS2) return;
+          if (!injectCoreJS) return;
           if (!path.isReferenced()) return;
 
           const { node } = path;
-          const obj = node.object;
-          const prop = node.property;
+          const { object, property } = node;
 
-          if (!t.isReferenced(obj, node)) return;
-          if (node.computed) return;
-          if (!has(definitions.methods, obj.name)) return;
+          if (!t.isReferenced(object, node)) return;
 
-          const methods = definitions.methods[obj.name];
-          if (!has(methods, prop.name)) return;
-
-          // doesn't reference the global
-          if (path.scope.getBindingIdentifier(obj.name)) return;
-
-          // special case Object.defineProperty to not use core-js when using string keys
-          if (
-            obj.name === "Object" &&
-            prop.name === "defineProperty" &&
-            path.parentPath.isCallExpression()
-          ) {
-            const call = path.parentPath.node;
-            if (call.arguments.length === 3 && t.isLiteral(call.arguments[1])) {
-              return;
+          if (node.computed) {
+            if (injectCoreJS2) return;
+            // transform `something[Symbol.iterator]` to calling `getIteratorMethod(something)` helper
+            if (path.get("property").matchesPattern("Symbol.iterator")) {
+              path.replaceWith(
+                t.callExpression(
+                  this.addDefaultImport(
+                    `${moduleName}/core-js/get-iterator-method`,
+                    "getIteratorMethod",
+                  ),
+                  [object],
+                ),
+              );
             }
+            return;
+          }
+
+          const objectName = object.name;
+          const propertyName = property.name;
+          // doesn't reference the global
+          if (
+            path.scope.getBindingIdentifier(objectName) ||
+            !hasStaticMapping(objectName, propertyName)
+          ) {
+            // transform getting of instance methods like `method = something.includes`
+            if (
+              injectCoreJS3 &&
+              hasMapping(InstanceProperties, propertyName) &&
+              maybeNeedsPolyfill(path, InstanceProperties, propertyName)
+            ) {
+              path.replaceWith(
+                t.callExpression(
+                  this.addDefaultImport(
+                    `${moduleName}/${corejsRoot}/instance/${
+                      InstanceProperties[propertyName].path
+                    }`,
+                    `${propertyName}InstanceProperty`,
+                  ),
+                  [object],
+                ),
+              );
+            }
+            return;
           }
 
           path.replaceWith(
             this.addDefaultImport(
-              `${modulePath}/core-js/${methods[prop.name]}`,
-              `${obj.name}$${prop.name}`,
+              `${modulePath}/${corejsRoot}/${
+                StaticProperties[objectName][propertyName].path
+              }`,
+              `${objectName}$${propertyName}`,
             ),
           );
         },
 
         exit(path) {
-          if (!injectCoreJS2) return;
+          if (!injectCoreJS) return;
           if (!path.isReferenced()) return;
 
           const { node } = path;
-          const obj = node.object;
+          const { object } = node;
+          const { name } = object;
 
-          if (!has(definitions.builtins, obj.name)) return;
-          if (path.scope.getBindingIdentifier(obj.name)) return;
+          if (!hasMapping(BuiltIns, name)) return;
+          if (path.scope.getBindingIdentifier(name)) return;
 
           path.replaceWith(
             t.memberExpression(
               this.addDefaultImport(
-                `${modulePath}/core-js/${definitions.builtins[obj.name]}`,
-                obj.name,
+                `${modulePath}/${corejsRoot}/${BuiltIns[name].path}`,
+                name,
               ),
               node.property,
               node.computed,

@@ -1,0 +1,3 @@
+{
+  "throws": "Can not use 'yield' as identifier inside a generator (1:16)"
+}

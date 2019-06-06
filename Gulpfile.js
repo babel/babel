@@ -6,19 +6,17 @@ const chalk = require("chalk");
 const newer = require("gulp-newer");
 const babel = require("gulp-babel");
 const gulpWatch = require("gulp-watch");
-const gutil = require("gulp-util");
+const fancyLog = require("fancy-log");
 const filter = require("gulp-filter");
 const gulp = require("gulp");
 const path = require("path");
 const webpack = require("webpack");
 const merge = require("merge-stream");
-const rollup = require("rollup-stream");
-const source = require("vinyl-source-stream");
-const buffer = require("vinyl-buffer");
+const rollup = require("rollup");
 const rollupBabel = require("rollup-plugin-babel");
 const rollupNodeResolve = require("rollup-plugin-node-resolve");
-const registerStandalonePackageTask = require("./scripts/gulp-tasks")
-  .registerStandalonePackageTask;
+const rollupReplace = require("rollup-plugin-replace");
+const { registerStandalonePackageTask } = require("./scripts/gulp-tasks");
 
 const sources = ["codemods", "packages"];
 
@@ -36,13 +34,9 @@ function getIndexFromPackage(name) {
   return `${name}/src/index.js`;
 }
 
-function compilationLogger(rollup) {
+function compilationLogger() {
   return through.obj(function(file, enc, callback) {
-    gutil.log(
-      `Compiling '${chalk.cyan(file.relative)}'${
-        rollup ? " with rollup " : ""
-      }...`
-    );
+    fancyLog(`Compiling '${chalk.cyan(file.relative)}'...`);
     callback(null, file);
   });
 }
@@ -50,7 +44,7 @@ function compilationLogger(rollup) {
 function errorsLogger() {
   return plumber({
     errorHandler(err) {
-      gutil.log(err.stack);
+      fancyLog(err.stack);
     },
   });
 }
@@ -91,32 +85,40 @@ function buildBabel(exclude) {
 }
 
 function buildRollup(packages) {
-  return merge(
+  return Promise.all(
     packages.map(pkg => {
-      return rollup({
-        input: getIndexFromPackage(pkg),
-        format: "cjs",
-        plugins: [
-          rollupBabel({
-            envName: "babel-parser",
-          }),
-          rollupNodeResolve(),
-        ],
-      })
-        .pipe(source("index.js"))
-        .pipe(buffer())
-        .pipe(errorsLogger())
-        .pipe(compilationLogger(/* rollup */ true))
-        .pipe(gulp.dest(path.join(pkg, "lib")));
+      const input = getIndexFromPackage(pkg);
+      fancyLog(`Compiling '${chalk.cyan(input)}' with rollup ...`);
+      return rollup
+        .rollup({
+          input,
+          plugins: [
+            rollupReplace({
+              "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+            }),
+            rollupBabel({
+              envName: "babel-parser",
+            }),
+            rollupNodeResolve(),
+          ],
+        })
+        .then(bundle => {
+          return bundle.write({
+            file: path.join(pkg, "lib/index.js"),
+            format: "cjs",
+            name: "babel-parser",
+            sourcemap: process.env.NODE_ENV !== "production",
+          });
+        });
     })
   );
 }
 
-gulp.task("build", function() {
-  const bundles = ["packages/babel-parser"];
+const bundles = ["packages/babel-parser"];
 
-  return merge([buildBabel(/* exclude */ bundles), buildRollup(bundles)]);
-});
+gulp.task("build-rollup", () => buildRollup(bundles));
+gulp.task("build-babel", () => buildBabel(/* exclude */ bundles));
+gulp.task("build", gulp.parallel("build-rollup", "build-babel"));
 
 gulp.task("default", gulp.series("build"));
 
@@ -138,7 +140,7 @@ registerStandalonePackageTask(
   "babel",
   "Babel",
   path.join(__dirname, "packages"),
-  require("./packages/babel-core/package.json").version
+  require("./packages/babel-standalone/package.json").version
 );
 
 const presetEnvWebpackPlugins = [
@@ -167,6 +169,6 @@ registerStandalonePackageTask(
   "babel-preset-env",
   "babelPresetEnv",
   path.join(__dirname, "packages"),
-  require("./packages/babel-preset-env/package.json").version,
+  require("./packages/babel-preset-env-standalone/package.json").version,
   presetEnvWebpackPlugins
 );

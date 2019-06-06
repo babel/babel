@@ -1,2 +1,2 @@
 declare interface I { foo: string }
-declare interface I<T> { foo: T }
+declare interface I2<T> { foo: T }

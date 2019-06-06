@@ -1,16 +1,21 @@
 // @flow
-import defineType, { assertNodeType } from "./utils";
+import defineType, { assertNodeType, assertOneOf } from "./utils";
+import { PLACEHOLDERS } from "./placeholders";
 
 defineType("Noop", {
   visitor: [],
 });
 
-defineType("ParenthesizedExpression", {
-  visitor: ["expression"],
-  aliases: ["Expression", "ExpressionWrapper"],
+defineType("Placeholder", {
+  visitor: [],
+  builder: ["expectedNode", "name"],
+  // aliases: [], defined in placeholders.js
   fields: {
-    expression: {
-      validate: assertNodeType("Expression"),
+    name: {
+      validate: assertNodeType("Identifier"),
+    },
+    expectedNode: {
+      validate: assertOneOf(...PLACEHOLDERS),
     },
   },
 });

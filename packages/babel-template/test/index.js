@@ -218,4 +218,105 @@ describe("@babel/template", function() {
       expect(generator(result).code).toEqual("<div>{'content'}</div>");
     });
   });
+
+  describe.only(".syntacticPlaceholders", () => {
+    it("works in function body", () => {
+      const output = template(`function f() %%A%%`)({
+        A: t.blockStatement([]),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`"function f() {}"`);
+    });
+
+    it("works in class body", () => {
+      const output = template(`class C %%A%%`)({
+        A: t.classBody([]),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`"class C {}"`);
+    });
+
+    it("replaces lowercase names", () => {
+      const output = template(`%%foo%%`)({
+        foo: t.numericLiteral(1),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`"1;"`);
+    });
+
+    it("pattern", () => {
+      expect(() => {
+        template(`%%A%% + %%B%%`, {
+          placeholderPattern: /B/,
+        })();
+      }).toThrow(/aren't compatible with '.syntacticPlaceholders: true'/);
+    });
+
+    it("whitelist", () => {
+      expect(() => {
+        template(`%%A%% + %%B%%`, {
+          placeholderPattern: false,
+          placeholderWhitelist: new Set(["B"]),
+        })();
+      }).toThrow(/aren't compatible with '.syntacticPlaceholders: true'/);
+    });
+
+    describe("option value", () => {
+      describe("true", () => {
+        it("allows placeholders", () => {
+          const output = template(`%%FOO%%`, { syntacticPlaceholders: true })({
+            FOO: t.numericLiteral(1),
+          });
+          expect(generator(output).code).toMatchInlineSnapshot(`"1;"`);
+        });
+
+        it("doesn't replace identifiers", () => {
+          expect(() => {
+            template(`FOO`, { syntacticPlaceholders: true })({
+              FOO: t.numericLiteral(1),
+            });
+          }).toThrow(/Unknown substitution/);
+        });
+      });
+
+      describe("false", () => {
+        it("disallow placeholders", () => {
+          expect(() => {
+            template(`%%FOO%%`, { syntacticPlaceholders: false })({
+              FOO: t.numericLiteral(1),
+            });
+          }).toThrow(/%%.*placeholders can't be used/);
+        });
+
+        it("replaces identifiers", () => {
+          const output = template(`FOO`, { syntacticPlaceholders: false })({
+            FOO: t.numericLiteral(1),
+          });
+          expect(generator(output).code).toMatchInlineSnapshot(`"1;"`);
+        });
+      });
+
+      describe("undefined", () => {
+        it("allows placeholders", () => {
+          const output = template(`%%FOO%%`)({
+            FOO: t.numericLiteral(1),
+          });
+          expect(generator(output).code).toMatchInlineSnapshot(`"1;"`);
+        });
+
+        it("replaces identifiers", () => {
+          expect(() => {
+            const output = template(`FOO`)({
+              FOO: t.numericLiteral(1),
+            });
+            expect(generator(output).code).toMatchInlineSnapshot(`"1;"`);
+          });
+        });
+
+        it("doesn't mix placeholder styles", () => {
+          const output = template(`FOO + %%FOO%%`)({
+            FOO: t.numericLiteral(1),
+          });
+          expect(generator(output).code).toMatchInlineSnapshot(`"FOO + 1;"`);
+        });
+      });
+    });
+  });
 });

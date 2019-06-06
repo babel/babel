@@ -4,15 +4,15 @@ function t2({responseText}) {
 }
 function t3([a, b]) {
 }
-var [i, j, k] = array;
+var [i1, j1, k1] = array;
 var {
-  i,
-  j,
-  k
+  i2,
+  j2,
+  k2
 } = obj;
-let {i, j, k} = obj;
-const {i, j, k} = obj;
-var { value } = obj;
+let {i3, j3, k3} = obj;
+const {i4, j4, k4} = obj;
+var { value1 } = obj;
 var {
-  value
+  value2
 } = obj;

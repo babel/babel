@@ -74,6 +74,7 @@ function buildLiteralData<T>(
       ),
       placeholderPattern: opts.placeholderPattern,
       preserveComments: opts.preserveComments,
+      syntacticPlaceholders: opts.syntacticPlaceholders,
     });
   } while (
     metadata.placeholders.some(

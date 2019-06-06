@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 
-export const proposals = ["minimal"];
+export const proposals = ["minimal", "smart"];
 
 export default declare((api, { proposal }) => {
   api.assertVersion(7);

@@ -1,6 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
-import { types as t } from "@babel/core";
+import { types as t, template } from "@babel/core";
+import { injectInitialization } from "@babel/helper-create-class-features-plugin";
 
 import transpileEnum from "./enum";
 
@@ -16,14 +17,12 @@ function isInType(path) {
   }
 }
 
-interface State {
-  programPath: any;
-}
-
 const PARSED_PARAMS = new WeakSet();
 
 export default declare((api, { jsxPragma = "React" }) => {
   api.assertVersion(7);
+
+  const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
 
   return {
     name: "transform-typescript",
@@ -35,8 +34,18 @@ export default declare((api, { jsxPragma = "React" }) => {
       Identifier: visitPattern,
       RestElement: visitPattern,
 
-      Program(path, state: State) {
-        state.programPath = path;
+      Program(path, state) {
+        const { file } = state;
+        let fileJsxPragma = null;
+
+        if (file.ast.comments) {
+          for (const comment of (file.ast.comments: Array<Object>)) {
+            const jsxMatches = JSX_ANNOTATION_REGEX.exec(comment.value);
+            if (jsxMatches) {
+              fileJsxPragma = jsxMatches[1];
+            }
+          }
+        }
 
         // remove type imports
         for (const stmt of path.get("body")) {
@@ -59,7 +68,14 @@ export default declare((api, { jsxPragma = "React" }) => {
               // just bail if there is no binding, since chances are good that if
               // the import statement was injected then it wasn't a typescript type
               // import anyway.
-              if (binding && isImportTypeOnly(binding, state.programPath)) {
+              if (
+                binding &&
+                isImportTypeOnly({
+                  binding,
+                  programPath: path,
+                  jsxPragma: fileJsxPragma || jsxPragma,
+                })
+              ) {
                 importsToRemove.push(binding.path);
               } else {
                 allElided = false;
@@ -74,6 +90,35 @@ export default declare((api, { jsxPragma = "React" }) => {
               }
             }
           }
+        }
+      },
+
+      ExportNamedDeclaration(path) {
+        // remove export declaration if it's exporting only types
+        if (
+          path.node.specifiers.length > 0 &&
+          !path.node.specifiers.find(exportSpecifier =>
+            path.scope.hasOwnBinding(exportSpecifier.local.name),
+          )
+        ) {
+          path.remove();
+        }
+      },
+
+      ExportSpecifier(path) {
+        // remove type exports
+        if (!path.scope.hasOwnBinding(path.node.local.name)) {
+          path.remove();
+        }
+      },
+
+      ExportDefaultDeclaration(path) {
+        // remove whole declaration if it's exporting a TS type
+        if (
+          t.isIdentifier(path.node.declaration) &&
+          !path.scope.hasOwnBinding(path.node.declaration.name)
+        ) {
+          path.remove();
         }
       },
 
@@ -124,7 +169,6 @@ export default declare((api, { jsxPragma = "React" }) => {
           path.remove();
           return;
         }
-        if (node.abstract) node.abstract = null;
       },
 
       Class(path) {
@@ -133,6 +177,7 @@ export default declare((api, { jsxPragma = "React" }) => {
         if (node.typeParameters) node.typeParameters = null;
         if (node.superTypeParameters) node.superTypeParameters = null;
         if (node.implements) node.implements = null;
+        if (node.abstract) node.abstract = null;
 
         // Similar to the logic in `transform-flow-strip-types`, we need to
         // handle `TSParameterProperty` and `ClassProperty` here because the
@@ -162,41 +207,21 @@ export default declare((api, { jsxPragma = "React" }) => {
 
             if (parameterProperties.length) {
               const assigns = parameterProperties.map(p => {
-                let name;
+                let id;
                 if (t.isIdentifier(p)) {
-                  name = p.name;
+                  id = p;
                 } else if (t.isAssignmentPattern(p) && t.isIdentifier(p.left)) {
-                  name = p.left.name;
+                  id = p.left;
                 } else {
                   throw path.buildCodeFrameError(
                     "Parameter properties can not be destructuring patterns.",
                   );
                 }
 
-                const assign = t.assignmentExpression(
-                  "=",
-                  t.memberExpression(t.thisExpression(), t.identifier(name)),
-                  t.identifier(name),
-                );
-                return t.expressionStatement(assign);
+                return template.statement.ast`this.${id} = ${id}`;
               });
 
-              const statements = childNode.body.body;
-
-              const first = statements[0];
-
-              const startsWithSuperCall =
-                first !== undefined &&
-                t.isExpressionStatement(first) &&
-                t.isCallExpression(first.expression) &&
-                t.isSuper(first.expression.callee);
-
-              // Make sure to put parameter properties *after* the `super`
-              // call. TypeScript will enforce that a 'super()' call is the
-              // first statement when there are parameter properties.
-              childNode.body.body = startsWithSuperCall
-                ? [first, ...assigns, ...statements.slice(1)]
-                : [...assigns, ...statements];
+              injectInitialization(path, child, assigns);
             }
           } else if (child.isClassProperty()) {
             childNode.typeAnnotation = null;
@@ -300,7 +325,7 @@ export default declare((api, { jsxPragma = "React" }) => {
     // 'access' and 'readonly' are only for parameter properties, so constructor visitor will handle them.
   }
 
-  function isImportTypeOnly(binding, programPath) {
+  function isImportTypeOnly({ binding, programPath, jsxPragma }) {
     for (const path of binding.referencePaths) {
       if (!isInType(path)) {
         return false;

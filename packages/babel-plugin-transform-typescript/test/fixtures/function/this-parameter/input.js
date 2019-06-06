@@ -5,3 +5,9 @@ const o = {
 class C {
     m(this: {}) {}
 }
+const g = {
+    get m(this: {}) {}
+};
+const s = {
+    set m(this: {}, value: {}) {}
+};

@@ -1,4 +1,8 @@
 {
-  "plugins": [["pipelineOperator", { "proposal": "smart" }], "doExpressions", "asyncGenerators"],
+  "plugins": [
+    ["pipelineOperator", { "proposal": "smart" }],
+    "doExpressions",
+    "asyncGenerators"
+  ],
   "throws": "Topic reference was used in a lexical context without topic binding (2:48)"
 }

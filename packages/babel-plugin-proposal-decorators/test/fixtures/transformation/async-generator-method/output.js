@@ -13,21 +13,15 @@ let Foo = babelHelpers.decorate([decorator], function (_initialize) {
     d: [{
       kind: "method",
       key: "f1",
-
-      async value() {}
-
+      value: async function f1() {}
     }, {
       kind: "method",
       key: "f2",
-
-      *value() {}
-
+      value: function* f2() {}
     }, {
       kind: "method",
       key: "f3",
-
-      async *value() {}
-
+      value: async function* f3() {}
     }]
   };
 });

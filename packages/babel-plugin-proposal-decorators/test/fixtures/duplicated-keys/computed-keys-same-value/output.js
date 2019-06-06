@@ -13,19 +13,15 @@ let Foo = babelHelpers.decorate([_ => desc = _], function (_initialize) {
     d: [{
       kind: "method",
       key: getKeyI(),
-
-      value() {
+      value: function () {
         return 1;
       }
-
     }, {
       kind: "method",
       key: getKeyJ(),
-
-      value() {
+      value: function () {
         return 2;
       }
-
     }]
   };
 });

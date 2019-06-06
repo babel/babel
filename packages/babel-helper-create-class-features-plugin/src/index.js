@@ -1,11 +1,16 @@
 import nameFunction from "@babel/helper-function-name";
-import { types as t } from "@babel/core";
+import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import {
   buildPrivateNamesNodes,
   buildPrivateNamesMap,
   transformPrivateNamesUsage,
   buildFieldsInitNodes,
 } from "./fields";
+import {
+  hasOwnDecorators,
+  buildDecoratedClass,
+  hasDecorators,
+} from "./decorators";
 import { injectInitialization, extractComputedKeys } from "./misc";
 import {
   enableFeature,
@@ -16,7 +21,7 @@ import {
 
 import pkg from "../package.json";
 
-export { FEATURES };
+export { FEATURES, injectInitialization };
 
 // Note: Versions are represented as an integer. e.g. 7.1.5 is represented
 //       as 70000100005. This method is easier than using a semver-parsing
@@ -49,12 +54,12 @@ export function createClassFeaturePlugin({
 
         verifyUsedFeatures(path, this.file);
 
-        // Only fields are currently supported, this needs to be moved somewhere
-        // else when other features are added.
-        const loose = isLoose(this.file, FEATURES.fields);
+        const loose = isLoose(this.file, feature);
 
         let constructor;
+        let isDecorated = hasOwnDecorators(path.node);
         const props = [];
+        const elements = [];
         const computedPaths = [];
         const privateNames = new Set();
         const body = path.get("body");
@@ -68,21 +73,54 @@ export function createClassFeaturePlugin({
 
           if (path.isPrivate()) {
             const { name } = path.node.key.id;
+            const getName = `get ${name}`;
+            const setName = `set ${name}`;
 
-            if (privateNames.has(name)) {
-              throw path.buildCodeFrameError("Duplicate private field");
+            if (path.node.kind === "get") {
+              if (
+                privateNames.has(getName) ||
+                (privateNames.has(name) && !privateNames.has(setName))
+              ) {
+                throw path.buildCodeFrameError("Duplicate private field");
+              }
+
+              privateNames.add(getName).add(name);
+            } else if (path.node.kind === "set") {
+              if (
+                privateNames.has(setName) ||
+                (privateNames.has(name) && !privateNames.has(getName))
+              ) {
+                throw path.buildCodeFrameError("Duplicate private field");
+              }
+
+              privateNames.add(setName).add(name);
+            } else {
+              if (
+                (privateNames.has(name) &&
+                  (!privateNames.has(getName) && !privateNames.has(setName))) ||
+                (privateNames.has(name) &&
+                  (privateNames.has(getName) || privateNames.has(setName)))
+              ) {
+                throw path.buildCodeFrameError("Duplicate private field");
+              }
+
+              privateNames.add(name);
             }
-            privateNames.add(name);
           }
 
-          if (path.isProperty() || path.isPrivate()) {
-            props.push(path);
-          } else if (path.isClassMethod({ kind: "constructor" })) {
+          if (path.isClassMethod({ kind: "constructor" })) {
             constructor = path;
+          } else {
+            elements.push(path);
+            if (path.isProperty() || path.isPrivate()) {
+              props.push(path);
+            }
           }
+
+          if (!isDecorated) isDecorated = hasOwnDecorators(path.node);
         }
 
-        if (!props.length) return;
+        if (!props.length && !isDecorated) return;
 
         let ref;
 
@@ -93,13 +131,9 @@ export function createClassFeaturePlugin({
           ref = path.node.id;
         }
 
-        const keysNodes = extractComputedKeys(
-          ref,
-          path,
-          computedPaths,
-          this.file,
-        );
-
+        // NODE: These three functions don't support decorators yet,
+        //       but verifyUsedFeatures throws if there are both
+        //       decorators and private fields.
         const privateNamesMap = buildPrivateNamesMap(props);
         const privateNamesNodes = buildPrivateNamesNodes(
           privateNamesMap,
@@ -109,19 +143,35 @@ export function createClassFeaturePlugin({
 
         transformPrivateNamesUsage(ref, path, privateNamesMap, loose, state);
 
-        const { staticNodes, instanceNodes } = buildFieldsInitNodes(
-          ref,
-          props,
-          privateNamesMap,
-          state,
-          loose,
-        );
+        let keysNodes, staticNodes, instanceNodes, wrapClass;
+
+        if (isDecorated) {
+          staticNodes = keysNodes = [];
+          ({ instanceNodes, wrapClass } = buildDecoratedClass(
+            ref,
+            path,
+            elements,
+            this.file,
+          ));
+        } else {
+          keysNodes = extractComputedKeys(ref, path, computedPaths, this.file);
+          ({ staticNodes, instanceNodes, wrapClass } = buildFieldsInitNodes(
+            ref,
+            path.node.superClass,
+            props,
+            privateNamesMap,
+            state,
+            loose,
+          ));
+        }
+
         if (instanceNodes.length > 0) {
           injectInitialization(
             path,
             constructor,
             instanceNodes,
             (referenceVisitor, state) => {
+              if (isDecorated) return;
               for (const prop of props) {
                 if (prop.node.static) continue;
                 prop.traverse(referenceVisitor, state);
@@ -130,28 +180,7 @@ export function createClassFeaturePlugin({
           );
         }
 
-        for (const prop of props) {
-          prop.remove();
-        }
-
-        if (
-          keysNodes.length === 0 &&
-          staticNodes.length === 0 &&
-          privateNamesNodes.length === 0
-        ) {
-          return;
-        }
-
-        if (path.isClassExpression()) {
-          path.scope.push({ id: ref });
-          path.replaceWith(
-            t.assignmentExpression("=", t.cloneNode(ref), path.node),
-          );
-        } else if (!path.node.id) {
-          // Anonymous class declaration
-          path.node.id = ref;
-        }
-
+        path = wrapClass(path);
         path.insertBefore(keysNodes);
         path.insertAfter([...privateNamesNodes, ...staticNodes]);
       },
@@ -160,6 +189,25 @@ export function createClassFeaturePlugin({
         if (this.file.get(versionKey) !== version) return;
 
         throw path.buildCodeFrameError(`Unknown PrivateName "${path}"`);
+      },
+
+      ExportDefaultDeclaration(path) {
+        if (this.file.get(versionKey) !== version) return;
+
+        const decl = path.get("declaration");
+
+        if (decl.isClassDeclaration() && hasDecorators(decl.node)) {
+          if (decl.node.id) {
+            // export default class Foo {}
+            //   -->
+            // class Foo {} export { Foo as default }
+            splitExportDeclaration(path);
+          } else {
+            // Annyms class declarations can be
+            // transformed as if they were expressions
+            decl.node.type = "ClassExpression";
+          }
+        }
       },
     },
   };

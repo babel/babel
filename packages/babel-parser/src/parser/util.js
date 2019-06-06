@@ -3,7 +3,9 @@
 import { types as tt, type TokenType } from "../tokenizer/types";
 import Tokenizer from "../tokenizer";
 import type { Node } from "../types";
-import { lineBreak } from "../util/whitespace";
+import { lineBreak, skipWhiteSpace } from "../util/whitespace";
+
+const literal = /^('|")((?:\\?.)*?)\1/;
 
 // ## Parser utilities
 
@@ -25,7 +27,7 @@ export default class UtilParser extends Tokenizer {
 
   isLookaheadRelational(op: "<" | ">"): boolean {
     const l = this.lookahead();
-    return l.type == tt.relational && l.value == op;
+    return l.type === tt.relational && l.value === op;
   }
 
   // TODO
@@ -111,6 +113,13 @@ export default class UtilParser extends Tokenizer {
     this.eat(type) || this.unexpected(pos, type);
   }
 
+  // Throws if the current token and the prev one are separated by a space.
+  assertNoSpace(message: string = "Unexpected space."): void {
+    if (this.state.start > this.state.lastTokEnd) {
+      this.raise(this.state.lastTokEnd, message);
+    }
+  }
+
   // Raise an unexpected token error. Can take the expected token type
   // instead of a message string.
 
@@ -146,5 +155,46 @@ export default class UtilParser extends Tokenizer {
         { missingPluginNames: names },
       );
     }
+  }
+
+  checkYieldAwaitInDefaultParams() {
+    if (
+      this.state.yieldPos &&
+      (!this.state.awaitPos || this.state.yieldPos < this.state.awaitPos)
+    ) {
+      this.raise(
+        this.state.yieldPos,
+        "Yield cannot be used as name inside a generator function",
+      );
+    }
+    if (this.state.awaitPos) {
+      this.raise(
+        this.state.awaitPos,
+        "Await cannot be used as name inside an async function",
+      );
+    }
+  }
+
+  strictDirective(start: number): boolean {
+    for (;;) {
+      // Try to find string literal.
+      skipWhiteSpace.lastIndex = start;
+      // $FlowIgnore
+      start += skipWhiteSpace.exec(this.input)[0].length;
+      const match = literal.exec(this.input.slice(start));
+      if (!match) break;
+      if (match[2] === "use strict") return true;
+      start += match[0].length;
+
+      // Skip semicolon, if any.
+      skipWhiteSpace.lastIndex = start;
+      // $FlowIgnore
+      start += skipWhiteSpace.exec(this.input)[0].length;
+      if (this.input[start] === ";") {
+        start++;
+      }
+    }
+
+    return false;
   }
 }

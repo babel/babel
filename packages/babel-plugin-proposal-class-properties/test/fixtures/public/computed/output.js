@@ -1,24 +1,19 @@
+var _one, _ref, _undefined, _computed, _computed2, _ref2, _ref3, _baz, _ref4;
+
 var foo = "foo";
 
 var bar = () => {};
 
 var four = 4;
-
-var _one = one();
-
-var _ref = 2 * four + seven;
-
-var _undefined = undefined;
-
-var _computed = computed();
-
-var _computed2 = computed();
-
-var _ref2 = "test" + one;
-
-var _ref3 = /regex/;
-var _baz = baz;
-var _ref4 = `template${expression}`;
+_one = one();
+_ref = 2 * four + seven;
+_undefined = undefined;
+_computed = computed();
+_computed2 = computed();
+_ref2 = "test" + one;
+_ref3 = /regex/;
+_baz = baz;
+_ref4 = `template${expression}`;
 
 var MyClass =
 /*#__PURE__*/

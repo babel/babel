@@ -45,12 +45,12 @@
         },
         "expression": {
           "type": "TSTypeAssertion",
-          "start": 1,
+          "start": 0,
           "end": 10,
           "loc": {
             "start": {
               "line": 1,
-              "column": 1
+              "column": 0
             },
             "end": {
               "line": 1,

@@ -38,6 +38,17 @@ describe("option-manager", () => {
       expect(calls).toEqual([]);
     });
 
+    it("throws for null options", () => {
+      const { calls, plugin } = makePlugin();
+      expect(() => {
+        loadOptions({
+          plugins: [[plugin, null]],
+        }).toThrow(/.plugins[0][1] must be an object, false, or undefined/);
+      });
+
+      expect(calls).toEqual([]);
+    });
+
     it("should not throw if a repeated plugin has a different name", () => {
       const { calls: calls1, plugin: plugin1 } = makePlugin();
       const { calls: calls2, plugin: plugin2 } = makePlugin();
@@ -87,7 +98,6 @@ describe("option-manager", () => {
       expect(calls1).toEqual([{ arg: 1 }]);
       expect(calls2).toEqual([{ arg: 2 }]);
     });
-
     it("should merge .env[] presets with parent presets", () => {
       const { calls: calls1, plugin: preset1 } = makePlugin();
       const { calls: calls2, plugin: preset2 } = makePlugin();

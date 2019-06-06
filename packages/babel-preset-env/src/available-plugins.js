@@ -1,5 +1,8 @@
+// @flow
+
 export default {
   "syntax-async-generators": require("@babel/plugin-syntax-async-generators"),
+  "syntax-json-strings": require("@babel/plugin-syntax-json-strings"),
   "syntax-object-rest-spread": require("@babel/plugin-syntax-object-rest-spread"),
   "syntax-optional-catch-binding": require("@babel/plugin-syntax-optional-catch-binding"),
   "transform-async-to-generator": require("@babel/plugin-transform-async-to-generator"),
@@ -16,12 +19,16 @@ export default {
   "transform-for-of": require("@babel/plugin-transform-for-of"),
   "transform-function-name": require("@babel/plugin-transform-function-name"),
   "transform-literals": require("@babel/plugin-transform-literals"),
+  "transform-member-expression-literals": require("@babel/plugin-transform-member-expression-literals"),
   "transform-modules-amd": require("@babel/plugin-transform-modules-amd"),
   "transform-modules-commonjs": require("@babel/plugin-transform-modules-commonjs"),
   "transform-modules-systemjs": require("@babel/plugin-transform-modules-systemjs"),
   "transform-modules-umd": require("@babel/plugin-transform-modules-umd"),
+  "transform-named-capturing-groups-regex": require("@babel/plugin-transform-named-capturing-groups-regex"),
   "transform-object-super": require("@babel/plugin-transform-object-super"),
   "transform-parameters": require("@babel/plugin-transform-parameters"),
+  "transform-property-literals": require("@babel/plugin-transform-property-literals"),
+  "transform-reserved-words": require("@babel/plugin-transform-reserved-words"),
   "transform-shorthand-properties": require("@babel/plugin-transform-shorthand-properties"),
   "transform-spread": require("@babel/plugin-transform-spread"),
   "transform-sticky-regex": require("@babel/plugin-transform-sticky-regex"),

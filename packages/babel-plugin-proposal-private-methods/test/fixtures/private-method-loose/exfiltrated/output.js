@@ -1,17 +1,17 @@
 var exfiltrated;
 
-var Foo = function Foo() {
-  "use strict";
+class Foo {
+  constructor() {
+    Object.defineProperty(this, _privateMethod, {
+      value: _privateMethod2
+    });
 
-  babelHelpers.classCallCheck(this, Foo);
-  Object.defineProperty(this, _privateMethod, {
-    value: _privateMethod2
-  });
-
-  if (exfiltrated === undefined) {
-    exfiltrated = babelHelpers.classPrivateFieldLooseBase(this, _privateMethod)[_privateMethod];
+    if (exfiltrated === undefined) {
+      exfiltrated = babelHelpers.classPrivateFieldLooseBase(this, _privateMethod)[_privateMethod];
+    }
   }
-};
+
+}
 
 var _privateMethod = babelHelpers.classPrivateFieldLooseKey("privateMethod");
 

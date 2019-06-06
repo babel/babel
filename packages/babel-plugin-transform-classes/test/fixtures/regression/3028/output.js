@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports["default"] = void 0;
 
 var b = function b() {
   babelHelpers.classCallCheck(this, b);
@@ -21,7 +21,7 @@ function (_b) {
     _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(a1).call(this));
 
     _this.x = function () {
-      return babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this));
+      return babelHelpers.assertThisInitialized(_this);
     };
 
     return _this;
@@ -42,7 +42,7 @@ function (_b2) {
     _this2 = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(a2).call(this));
 
     _this2.x = function () {
-      return babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this2));
+      return babelHelpers.assertThisInitialized(_this2);
     };
 
     return _this2;
@@ -51,4 +51,4 @@ function (_b2) {
   return a2;
 }(b);
 
-exports.default = a2;
+exports["default"] = a2;

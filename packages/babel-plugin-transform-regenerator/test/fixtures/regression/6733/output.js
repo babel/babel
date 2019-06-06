@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = _callee;
+exports["default"] = _callee;
 
 var _marked =
 /*#__PURE__*/
@@ -27,5 +27,5 @@ function _callee() {
           return _context.stop();
       }
     }
-  }, _marked, this);
+  }, _marked);
 }

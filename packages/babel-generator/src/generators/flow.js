@@ -409,7 +409,7 @@ export function ObjectTypeAnnotation(node: Object) {
       indent: true,
       statement: true,
       iterator: () => {
-        if (props.length !== 1) {
+        if (props.length !== 1 || node.inexact) {
           this.token(",");
           this.space();
         }
@@ -417,6 +417,15 @@ export function ObjectTypeAnnotation(node: Object) {
     });
 
     this.space();
+  }
+
+  if (node.inexact) {
+    this.indent();
+    this.token("...");
+    if (props.length) {
+      this.newline();
+    }
+    this.dedent();
   }
 
   if (node.exact) {

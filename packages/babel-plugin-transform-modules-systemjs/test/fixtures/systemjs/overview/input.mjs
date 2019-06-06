@@ -6,7 +6,7 @@ import * as foo2 from "foo";
 import {bar} from "foo";
 import {foo as bar2} from "foo";
 
-export {test};
+export {foo};
 export var test2 = 5;
 
-export default test;
+export default foo;

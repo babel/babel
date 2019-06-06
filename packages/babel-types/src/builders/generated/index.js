@@ -161,6 +161,10 @@ export function SequenceExpression(...args: Array<any>): Object {
   return builder("SequenceExpression", ...args);
 }
 export { SequenceExpression as sequenceExpression };
+export function ParenthesizedExpression(...args: Array<any>): Object {
+  return builder("ParenthesizedExpression", ...args);
+}
+export { ParenthesizedExpression as parenthesizedExpression };
 export function SwitchCase(...args: Array<any>): Object {
   return builder("SwitchCase", ...args);
 }
@@ -592,10 +596,14 @@ export function Noop(...args: Array<any>): Object {
   return builder("Noop", ...args);
 }
 export { Noop as noop };
-export function ParenthesizedExpression(...args: Array<any>): Object {
-  return builder("ParenthesizedExpression", ...args);
+export function Placeholder(...args: Array<any>): Object {
+  return builder("Placeholder", ...args);
 }
-export { ParenthesizedExpression as parenthesizedExpression };
+export { Placeholder as placeholder };
+export function ArgumentPlaceholder(...args: Array<any>): Object {
+  return builder("ArgumentPlaceholder", ...args);
+}
+export { ArgumentPlaceholder as argumentPlaceholder };
 export function AwaitExpression(...args: Array<any>): Object {
   return builder("AwaitExpression", ...args);
 }
@@ -612,6 +620,18 @@ export function OptionalMemberExpression(...args: Array<any>): Object {
   return builder("OptionalMemberExpression", ...args);
 }
 export { OptionalMemberExpression as optionalMemberExpression };
+export function PipelineTopicExpression(...args: Array<any>): Object {
+  return builder("PipelineTopicExpression", ...args);
+}
+export { PipelineTopicExpression as pipelineTopicExpression };
+export function PipelineBareFunction(...args: Array<any>): Object {
+  return builder("PipelineBareFunction", ...args);
+}
+export { PipelineBareFunction as pipelineBareFunction };
+export function PipelinePrimaryTopicReference(...args: Array<any>): Object {
+  return builder("PipelinePrimaryTopicReference", ...args);
+}
+export { PipelinePrimaryTopicReference as pipelinePrimaryTopicReference };
 export function OptionalCallExpression(...args: Array<any>): Object {
   return builder("OptionalCallExpression", ...args);
 }
@@ -902,6 +922,11 @@ export function TSModuleBlock(...args: Array<any>): Object {
 }
 export { TSModuleBlock as tsModuleBlock };
 export { TSModuleBlock as tSModuleBlock };
+export function TSImportType(...args: Array<any>): Object {
+  return builder("TSImportType", ...args);
+}
+export { TSImportType as tsImportType };
+export { TSImportType as tSImportType };
 export function TSImportEqualsDeclaration(...args: Array<any>): Object {
   return builder("TSImportEqualsDeclaration", ...args);
 }

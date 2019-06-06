@@ -116,12 +116,12 @@
               "params": [
                 {
                   "type": "TSParameterProperty",
-                  "start": 40,
+                  "start": 31,
                   "end": 49,
                   "loc": {
                     "start": {
                       "line": 2,
-                      "column": 30
+                      "column": 21
                     },
                     "end": {
                       "line": 2,

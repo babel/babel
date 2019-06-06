@@ -1,7 +1,7 @@
 {
   "root": true,
+  "plugins": ["prettier", "@babel/development", "import"],
   "extends": "babel",
-  "plugins": ["local-rules", "prettier"],
   "rules": {
     "prettier/prettier": "error"
   },
@@ -12,8 +12,10 @@
     {
       "files": ["packages/*/src/**/*.js", "codemods/*/src/**/*.js"],
       "rules": {
-        "local-rules/no-undefined-identifier": "error",
-        "local-rules/no-deprecated-clone": "error"
+        "@babel/development/no-undefined-identifier": "error",
+        "@babel/development/no-deprecated-clone": "error",
+        "import/no-extraneous-dependencies": "error",
+        "guard-for-in": "error"
       }
     },
     {
@@ -31,7 +33,8 @@
       "files": ["packages/babel-plugin-*/src/index.js"],
       "excludedFiles": ["packages/babel-plugin-transform-regenerator/**/*.js"],
       "rules": {
-        "local-rules/plugin-name": "error"
+        "@babel/development/plugin-name": "error",
+        "eqeqeq": ["error", "always", { "null": "ignore" }]
       }
     }
   ]

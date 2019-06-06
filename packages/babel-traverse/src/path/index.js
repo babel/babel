@@ -28,7 +28,7 @@ export default class NodePath {
     this.parent = parent;
     this.hub = hub;
     this.contexts = [];
-    this.data = {};
+    this.data = Object.create(null);
     this.shouldSkip = false;
     this.shouldStop = false;
     this.removed = false;
@@ -116,7 +116,7 @@ export default class NodePath {
 
   getData(key: string, def?: any): any {
     let val = this.data[key];
-    if (!val && def) val = this.data[key] = def;
+    if (val === undefined && def !== undefined) val = this.data[key] = def;
     return val;
   }
 
@@ -183,7 +183,7 @@ for (const type of (t.TYPES: Array<string>)) {
   };
 }
 
-for (const type in virtualTypes) {
+for (const type of Object.keys(virtualTypes)) {
   if (type[0] === "_") continue;
   if (t.TYPES.indexOf(type) < 0) t.TYPES.push(type);
 

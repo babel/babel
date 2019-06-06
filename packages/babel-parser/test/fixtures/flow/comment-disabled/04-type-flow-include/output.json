@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 51,
+  "end": 90,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 3,
+      "line": 4,
       "column": 1
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 51,
+    "end": 90,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 3,
+        "line": 4,
         "column": 1
       }
     },
@@ -32,14 +32,14 @@
       {
         "type": "ClassDeclaration",
         "start": 0,
-        "end": 51,
+        "end": 90,
         "loc": {
           "start": {
             "line": 1,
             "column": 0
           },
           "end": {
-            "line": 3,
+            "line": 4,
             "column": 1
           }
         },
@@ -64,14 +64,14 @@
         "body": {
           "type": "ClassBody",
           "start": 14,
-          "end": 51,
+          "end": 90,
           "loc": {
             "start": {
               "line": 1,
               "column": 14
             },
             "end": {
-              "line": 3,
+              "line": 4,
               "column": 1
             }
           },
@@ -90,6 +90,22 @@
                 "end": {
                   "line": 2,
                   "column": 33
+                }
+              }
+            },
+            {
+              "type": "CommentBlock",
+              "value": "      flow-include foo: number; ",
+              "start": 52,
+              "end": 88,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 2
+                },
+                "end": {
+                  "line": 3,
+                  "column": 38
                 }
               }
             }
@@ -113,6 +129,22 @@
         "end": {
           "line": 2,
           "column": 33
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "      flow-include foo: number; ",
+      "start": 52,
+      "end": 88,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 2
+        },
+        "end": {
+          "line": 3,
+          "column": 38
         }
       }
     }

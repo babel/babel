@@ -19,41 +19,6 @@ function buildConstructor(classRef, constructorBody, node) {
   return func;
 }
 
-const verifyConstructorVisitor = traverse.visitors.merge([
-  environmentVisitor,
-  {
-    Super(path, state) {
-      if (state.isDerived) return;
-
-      const { node, parentPath } = path;
-      if (parentPath.isCallExpression({ callee: node })) {
-        throw path.buildCodeFrameError(
-          "super() is only allowed in a derived constructor",
-        );
-      }
-    },
-
-    ThisExpression(path, state) {
-      if (!state.isDerived) return;
-
-      const { node, parentPath } = path;
-      if (parentPath.isMemberExpression({ object: node })) {
-        // In cases like this.foo or this[foo], there is no need to add
-        // assertThisInitialized, since they already throw if this is
-        // undefined.
-        return;
-      }
-
-      const assertion = t.callExpression(
-        state.file.addHelper("assertThisInitialized"),
-        [node],
-      );
-      path.replaceWith(assertion);
-      path.skip();
-    },
-  },
-]);
-
 export default function transformClass(
   path: NodePath,
   file: any,
@@ -84,7 +49,6 @@ export default function transformClass(
     instancePropRefs: {},
     staticPropBody: [],
     body: [],
-    bareSupers: new Set(),
     superThises: [],
     pushedConstructor: false,
     pushedInherits: false,
@@ -200,13 +164,6 @@ export default function transformClass(
       if (t.isClassMethod(node)) {
         const isConstructor = node.kind === "constructor";
 
-        if (isConstructor) {
-          path.traverse(verifyConstructorVisitor, {
-            isDerived: classState.isDerived,
-            file: classState.file,
-          });
-        }
-
         const replaceSupers = new ReplaceSupers({
           methodPath: path,
           objectRef: classState.classRef,
@@ -217,34 +174,22 @@ export default function transformClass(
 
         replaceSupers.replace();
 
-        // TODO this needs to be cleaned up. But, one step at a time.
-        const state = {
-          returns: [],
-          bareSupers: new Set(),
-        };
+        const superReturns = [];
         path.traverse(
           traverse.visitors.merge([
             environmentVisitor,
             {
-              ReturnStatement(path, state) {
+              ReturnStatement(path) {
                 if (!path.getFunctionParent().isArrowFunctionExpression()) {
-                  state.returns.push(path);
-                }
-              },
-
-              Super(path, state) {
-                const { node, parentPath } = path;
-                if (parentPath.isCallExpression({ callee: node })) {
-                  state.bareSupers.add(parentPath);
+                  superReturns.push(path);
                 }
               },
             },
           ]),
-          state,
         );
 
         if (isConstructor) {
-          pushConstructor(state, node, path);
+          pushConstructor(superReturns, node, path);
         } else {
           pushMethod(node, path);
         }
@@ -378,15 +323,43 @@ export default function transformClass(
 
     path.traverse(findThisesVisitor);
 
-    let guaranteedSuperBeforeFinish = !!classState.bareSupers.size;
-
     let thisRef = function() {
       const ref = path.scope.generateDeclaredUidIdentifier("this");
       thisRef = () => t.cloneNode(ref);
       return ref;
     };
 
-    for (const bareSuper of classState.bareSupers) {
+    for (const thisPath of classState.superThises) {
+      const { node, parentPath } = thisPath;
+      if (parentPath.isMemberExpression({ object: node })) {
+        thisPath.replaceWith(thisRef());
+        continue;
+      }
+      thisPath.replaceWith(
+        t.callExpression(classState.file.addHelper("assertThisInitialized"), [
+          thisRef(),
+        ]),
+      );
+    }
+
+    const bareSupers = new Set();
+    path.traverse(
+      traverse.visitors.merge([
+        environmentVisitor,
+        {
+          Super(path) {
+            const { node, parentPath } = path;
+            if (parentPath.isCallExpression({ callee: node })) {
+              bareSupers.add(parentPath);
+            }
+          },
+        },
+      ]),
+    );
+
+    let guaranteedSuperBeforeFinish = !!bareSupers.size;
+
+    for (const bareSuper of bareSupers) {
       wrapSuperCall(bareSuper, classState.superName, thisRef, body);
 
       if (guaranteedSuperBeforeFinish) {
@@ -406,19 +379,6 @@ export default function transformClass(
           }
         });
       }
-    }
-
-    for (const thisPath of classState.superThises) {
-      const { node, parentPath } = thisPath;
-      if (parentPath.isMemberExpression({ object: node })) {
-        thisPath.replaceWith(thisRef());
-        continue;
-      }
-      thisPath.replaceWith(
-        t.callExpression(classState.file.addHelper("assertThisInitialized"), [
-          thisRef(),
-        ]),
-      );
     }
 
     let wrapReturn;
@@ -494,7 +454,8 @@ export default function transformClass(
         node.generator,
         node.async,
       );
-      func.returnType = node.returnType;
+      t.inherits(func, node);
+
       const key = t.toComputedKey(node, node.key);
       if (t.isStringLiteral(key)) {
         func = nameFunction({
@@ -534,7 +495,7 @@ export default function transformClass(
    * Replace the constructor body of our class.
    */
   function pushConstructor(
-    replaceSupers,
+    superReturns,
     method: { type: "ClassMethod" },
     path: NodePath,
   ) {
@@ -547,8 +508,7 @@ export default function transformClass(
       userConstructorPath: path,
       userConstructor: method,
       hasConstructor: true,
-      bareSupers: replaceSupers.bareSupers,
-      superReturns: replaceSupers.returns,
+      superReturns,
     });
 
     const { construct } = classState;

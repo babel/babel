@@ -3,23 +3,22 @@ const fs = require("fs");
 
 const moduleSupport = require("caniuse-db/features-json/es6-module.json");
 
-const acceptedWithCaveats = {
-  safari: true,
-  ios_saf: true,
-};
+const skipList = new Set(["android", "samsung"]);
+const acceptedWithCaveats = new Set(["safari", "ios_saf"]);
 
 const { stats } = moduleSupport;
 
 const allowedBrowsers = {};
 
 Object.keys(stats).forEach(browser => {
-  if (browser !== "and_chr") {
+  if (!skipList.has(browser)) {
     const browserVersions = stats[browser];
     const allowedVersions = Object.keys(browserVersions)
       .filter(value => {
-        return acceptedWithCaveats[browser]
+        // Edge 16/17 are marked as "y #6"
+        return acceptedWithCaveats.has(browser)
           ? browserVersions[value][0] === "a"
-          : browserVersions[value] === "y";
+          : browserVersions[value].startsWith("y");
       })
       .sort((a, b) => a - b);
 

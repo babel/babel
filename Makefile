@@ -1,6 +1,6 @@
 MAKEFLAGS = -j1
-FLOW_COMMIT = e192e1a4793dd8e43415fbfe8046d832cb513c8b
-TEST262_COMMIT = 238c88d4a084d9928372954e2fec54af2c951281
+FLOW_COMMIT = 2ac56861e3ceff9ca406ae586fbafb3480c6c0b7
+TEST262_COMMIT = de567d3aa5de4eaa11e00131d26b9fe77997dfb0
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
@@ -11,12 +11,13 @@ SOURCES = packages codemods
 
 build: clean clean-lib
 	./node_modules/.bin/gulp build
+	node ./packages/babel-standalone/scripts/generate.js
 	node ./packages/babel-types/scripts/generateTypeHelpers.js
 	# call build again as the generated files might need to be compiled again.
 	./node_modules/.bin/gulp build
 	# generate flow and typescript typings
-	node scripts/generators/flow.js > ./packages/babel-types/lib/index.js.flow
-	node scripts/generators/typescript.js > ./packages/babel-types/lib/index.d.ts
+	node packages/babel-types/scripts/generators/flow.js > ./packages/babel-types/lib/index.js.flow
+	node packages/babel-types/scripts/generators/typescript.js > ./packages/babel-types/lib/index.d.ts
 ifneq ("$(BABEL_COVERAGE)", "true")
 	make build-standalone
 	make build-preset-env-standalone
@@ -27,6 +28,12 @@ build-standalone:
 
 build-preset-env-standalone:
 	./node_modules/.bin/gulp build-babel-preset-env-standalone
+
+prepublish-build-standalone:
+	BABEL_ENV=production IS_PUBLISH=true ./node_modules/.bin/gulp build-babel-standalone
+
+prepublish-build-preset-env-standalone:
+	BABEL_ENV=production IS_PUBLISH=true ./node_modules/.bin/gulp build-babel-preset-env-standalone
 
 build-dist: build
 	cd packages/babel-polyfill; \
@@ -40,7 +47,8 @@ watch: clean clean-lib
 	# development too.
 	BABEL_ENV=development ./node_modules/.bin/gulp build-no-bundle
 	node ./packages/babel-types/scripts/generateTypeHelpers.js
-	node scripts/generators/flow.js > ./packages/babel-types/lib/index.js.flow
+	node packages/babel-types/scripts/generators/flow.js > ./packages/babel-types/lib/index.js.flow
+	node packages/babel-types/scripts/generators/typescript.js > ./packages/babel-types/lib/index.d.ts
 	BABEL_ENV=development ./node_modules/.bin/gulp watch
 
 flow:
@@ -56,6 +64,7 @@ fix-json:
 	./node_modules/.bin/prettier "{packages,codemod}/*/test/fixtures/**/options.json" --write --loglevel warn
 
 clean: test-clean
+	rm -f .npmrc
 	rm -rf packages/babel-polyfill/browser*
 	rm -rf packages/babel-polyfill/dist
 	rm -rf coverage
@@ -96,7 +105,7 @@ test-flow-update-whitelist:
 bootstrap-test262:
 	rm -rf ./build/test262
 	mkdir -p ./build
-	git clone --branch=master --single-branch --shallow-since=2018-11-01 https://github.com/tc39/test262.git ./build/test262
+	git clone --branch=master --single-branch --shallow-since=2019-01-01 https://github.com/tc39/test262.git ./build/test262
 	cd build/test262 && git checkout $(TEST262_COMMIT)
 
 test-test262:
@@ -115,22 +124,39 @@ prepublish-build:
 	rm -rf packages/babel-runtime/helpers
 	rm -rf packages/babel-runtime-corejs2/helpers
 	rm -rf packages/babel-runtime-corejs2/core-js
-	BABEL_ENV=production IS_PUBLISH=true make build-dist
+	NODE_ENV=production BABEL_ENV=production make build-dist
 	make clone-license
 
 prepublish:
-	git pull --rebase
+	make bootstrap-only
 	make prepublish-build
 	make test
 
+new-version:
+	git pull --rebase
+	./node_modules/.bin/lerna version --force-publish="@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@babel/standalone,@babel/preset-env-standalone"
+
+# NOTE: Run make new-version first
 publish: prepublish
-	# --only-explicit-updates
-	./node_modules/.bin/lerna publish --force-publish="@babel/runtime,@babel/runtime-corejs2" --dangerously-only-publish-explicit-updates-this-is-a-custom-flag-for-babel-and-you-should-not-be-using-it-just-deal-with-more-packages-being-published-it-is-not-a-big-deal
+	./node_modules/.bin/lerna publish from-git --require-scripts
 	make clean
 
-bootstrap: clean-all
+publish-ci: prepublish
+ifneq ("$(NPM_TOKEN)", "")
+	echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+else
+	echo "Missing NPM_TOKEN env var"
+	exit 1
+endif
+	./node_modules/.bin/lerna publish from-git --require-scripts --yes
+	rm -f .npmrc
+	make clean
+
+bootstrap-only: clean-all
 	yarn --ignore-engines
 	./node_modules/.bin/lerna bootstrap -- --ignore-engines
+
+bootstrap: bootstrap-only
 	make build
 	cd packages/babel-plugin-transform-runtime; \
 	node scripts/build-dist.js

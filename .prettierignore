@@ -1,2 +1,5 @@
 package.json
 packages/babel-preset-env/data
+packages/*/test/fixtures/**/input.*
+packages/*/test/fixtures/**/exec.*
+packages/*/test/fixtures/**/output.*

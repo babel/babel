@@ -1,5 +1,5 @@
 {
   "sourceType": "module",
   "plugins": ["typescript"],
-  "throws": "A rest element must be last in a tuple type. (1:8)"
+  "throws": "Rest element must be last element (1:19)"
 }

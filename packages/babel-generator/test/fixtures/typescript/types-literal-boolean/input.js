@@ -1,2 +1,2 @@
 let x: true;
-let x: false;
+let x2: false;

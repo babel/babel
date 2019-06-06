@@ -205,7 +205,6 @@
           },
           "id": null,
           "generator": false,
-          "expression": true,
           "async": true,
           "body": {
             "type": "Identifier",

@@ -97,8 +97,7 @@ const collectorVisitor = {
         if (binding) binding.reference(path);
       } else if (t.isVariableDeclaration(declar)) {
         for (const decl of (declar.declarations: Array<Object>)) {
-          const ids = t.getBindingIdentifiers(decl);
-          for (const name in ids) {
+          for (const name of Object.keys(t.getBindingIdentifiers(decl))) {
             const binding = scope.getBinding(name);
             if (binding) binding.reference(path);
           }
@@ -349,9 +348,6 @@ export default class Scope {
     // class expression
     if (local.kind === "local") return;
 
-    // ignore hoisted functions if there's also a local let
-    if (kind === "hoisted" && local.kind === "let") return;
-
     const duplicate =
       // don't allow duplicate bindings to exist alongside
       kind === "let" ||
@@ -391,7 +387,7 @@ export default class Scope {
     let scope = this;
     do {
       console.log("#", scope.block.type);
-      for (const name in scope.bindings) {
+      for (const name of Object.keys(scope.bindings)) {
         const binding = scope.bindings[name];
         console.log(" -", name, {
           constant: binding.constant,
@@ -497,13 +493,14 @@ export default class Scope {
     if (this.hasBinding("undefined")) {
       return t.unaryExpression("void", t.numericLiteral(0), true);
     } else {
+      // eslint-disable-next-line @babel/development/no-undefined-identifier
       return t.identifier("undefined");
     }
   }
 
   registerConstantViolation(path: NodePath) {
     const ids = path.getBindingIdentifiers();
-    for (const name in ids) {
+    for (const name of Object.keys(ids)) {
       const binding = this.getBinding(name);
       if (binding) binding.reassign(path);
     }
@@ -521,9 +518,9 @@ export default class Scope {
     }
 
     const parent = this.getProgramParent();
-    const ids = path.getBindingIdentifiers(true);
+    const ids = path.getOuterBindingIdentifiers(true);
 
-    for (const name in ids) {
+    for (const name of Object.keys(ids)) {
       for (const id of (ids[name]: Array<Object>)) {
         const local = this.getOwnBinding(name);
 
@@ -748,7 +745,7 @@ export default class Scope {
       // register undeclared bindings as globals
       const ids = path.getBindingIdentifiers();
       let programParent;
-      for (const name in ids) {
+      for (const name of Object.keys(ids)) {
         if (path.scope.getBinding(name)) continue;
 
         programParent = programParent || path.scope.getProgramParent();
@@ -888,7 +885,7 @@ export default class Scope {
     for (const kind of (arguments: Array)) {
       let scope = this;
       do {
-        for (const name in scope.bindings) {
+        for (const name of Object.keys(scope.bindings)) {
           const binding = scope.bindings[name];
           if (binding.kind === kind) ids[name] = binding;
         }

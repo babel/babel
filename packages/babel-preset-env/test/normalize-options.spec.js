@@ -12,11 +12,30 @@ describe("normalize-options", () => {
   describe("normalizeOptions", () => {
     it("should return normalized `include` and `exclude`", () => {
       const normalized = normalizeOptions.default({
-        include: ["babel-plugin-transform-spread", "transform-classes"],
+        include: [
+          "babel-plugin-transform-spread",
+          "transform-classes",
+          "@babel/plugin-transform-unicode-regex",
+          "@babel/transform-block-scoping",
+        ],
+        exclude: [
+          "babel-plugin-transform-for-of",
+          "transform-parameters",
+          "@babel/plugin-transform-regenerator",
+          "@babel/transform-new-target",
+        ],
       });
       expect(normalized.include).toEqual([
         "transform-spread",
         "transform-classes",
+        "transform-unicode-regex",
+        "transform-block-scoping",
+      ]);
+      expect(normalized.exclude).toEqual([
+        "transform-for-of",
+        "transform-parameters",
+        "transform-regenerator",
+        "transform-new-target",
       ]);
     });
 
@@ -25,14 +44,45 @@ describe("normalize-options", () => {
       expect(normalized).toBe("prefix-babel-plugin-postfix");
     });
 
-    it("should throw if duplicate names in `include` and `exclude`", () => {
-      const normalizeWithSameIncludes = () => {
-        normalizeOptions.default({
-          include: ["babel-plugin-transform-spread"],
-          exclude: ["transform-spread"],
+    test.each`
+      include                               | exclude
+      ${["babel-plugin-transform-spread"]}  | ${["transform-spread"]}
+      ${["@babel/plugin-transform-spread"]} | ${["transform-spread"]}
+      ${["transform-spread"]}               | ${["babel-plugin-transform-spread"]}
+      ${["transform-spread"]}               | ${["@babel/plugin-transform-spread"]}
+      ${["babel-plugin-transform-spread"]}  | ${["@babel/plugin-transform-spread"]}
+      ${["@babel/plugin-transform-spread"]} | ${["babel-plugin-transform-spread"]}
+      ${["@babel/plugin-transform-spread"]} | ${["@babel/transform-spread"]}
+      ${["@babel/transform-spread"]}        | ${["@babel/plugin-transform-spread"]}
+      ${["babel-plugin-transform-spread"]}  | ${["@babel/transform-spread"]}
+      ${["@babel/transform-spread"]}        | ${["babel-plugin-transform-spread"]}
+    `(
+      "should throw if with includes $include and excludes $exclude",
+      ({ include, exclude }) => {
+        expect(() =>
+          normalizeOptions.default({ include, exclude }),
+        ).toThrowError(/were found in both/);
+      },
+    );
+
+    it("should not throw if corejs version is valid", () => {
+      [2, 2.1, 3, 3.5].forEach(corejs => {
+        ["entry", "usage"].forEach(useBuiltIns => {
+          expect(() =>
+            normalizeOptions.default({ useBuiltIns, corejs }),
+          ).not.toThrowError();
         });
-      };
-      expect(normalizeWithSameIncludes).toThrow();
+      });
+    });
+
+    it("should throw if corejs version is invalid", () => {
+      [1, 1.2, 4, 4.5].forEach(corejs => {
+        ["entry", "usage"].forEach(useBuiltIns => {
+          expect(() =>
+            normalizeOptions.default({ useBuiltIns, corejs }),
+          ).toThrowError(/The version passed to `corejs` is invalid./);
+        });
+      });
     });
   });
 
@@ -67,20 +117,24 @@ describe("normalize-options", () => {
 
     it("should expand regular expressions in `include` and `exclude`", () => {
       const normalized = normalizeOptions.default({
-        exclude: ["es6.math.log.*"],
+        useBuiltIns: "entry",
+        corejs: 3,
+        exclude: ["es.math.log.*"],
       });
       expect(normalized.exclude).toEqual([
-        "es6.math.log1p",
-        "es6.math.log10",
-        "es6.math.log2",
+        "es.math.log10",
+        "es.math.log1p",
+        "es.math.log2",
       ]);
     });
 
     it("should not allow the same modules in `include` and `exclude`", () => {
       const normalizeWithNonExistingPlugin = () => {
         normalizeOptions.default({
-          include: ["es6.math.log2"],
-          exclude: ["es6.math.log.*"],
+          useBuiltIns: "entry",
+          corejs: 3,
+          include: ["es.math.log2"],
+          exclude: ["es.math.log.*"],
         });
       };
       expect(normalizeWithNonExistingPlugin).toThrow(Error);
@@ -88,11 +142,13 @@ describe("normalize-options", () => {
 
     it("should not do partial match if not explicitly defined `include` and `exclude`", () => {
       const normalized = normalizeOptions.default({
-        include: ["es6.reflect.set-prototype-of"],
-        exclude: ["es6.reflect.set"],
+        useBuiltIns: "entry",
+        corejs: 3,
+        include: ["es.reflect.set-prototype-of"],
+        exclude: ["es.reflect.set"],
       });
-      expect(normalized.include).toEqual(["es6.reflect.set-prototype-of"]);
-      expect(normalized.exclude).toEqual(["es6.reflect.set"]);
+      expect(normalized.include).toEqual(["es.reflect.set-prototype-of"]);
+      expect(normalized.exclude).toEqual(["es.reflect.set"]);
     });
   });
 

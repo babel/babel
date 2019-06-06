@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 316,
+  "end": 320,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 11,
-      "column": 34
+      "column": 35
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 316,
+    "end": 320,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 11,
-        "column": 34
+        "column": 35
       }
     },
     "sourceType": "module",
@@ -560,7 +560,7 @@
       {
         "type": "ImportDeclaration",
         "start": 186,
-        "end": 215,
+        "end": 216,
         "loc": {
           "start": {
             "line": 8,
@@ -568,161 +568,73 @@
           },
           "end": {
             "line": 8,
-            "column": 29
-          }
-        },
-        "specifiers": [
-          {
-            "type": "ImportSpecifier",
-            "start": 194,
-            "end": 202,
-            "loc": {
-              "start": {
-                "line": 8,
-                "column": 8
-              },
-              "end": {
-                "line": 8,
-                "column": 16
-              }
-            },
-            "imported": {
-              "type": "Identifier",
-              "start": 201,
-              "end": 202,
-              "loc": {
-                "start": {
-                  "line": 8,
-                  "column": 15
-                },
-                "end": {
-                  "line": 8,
-                  "column": 16
-                },
-                "identifierName": "t"
-              },
-              "name": "t"
-            },
-            "importKind": "typeof",
-            "local": {
-              "type": "Identifier",
-              "start": 201,
-              "end": 202,
-              "loc": {
-                "start": {
-                  "line": 8,
-                  "column": 15
-                },
-                "end": {
-                  "line": 8,
-                  "column": 16
-                },
-                "identifierName": "t"
-              },
-              "name": "t"
-            }
-          }
-        ],
-        "importKind": "value",
-        "source": {
-          "type": "StringLiteral",
-          "start": 209,
-          "end": 214,
-          "loc": {
-            "start": {
-              "line": 8,
-              "column": 23
-            },
-            "end": {
-              "line": 8,
-              "column": 28
-            }
-          },
-          "extra": {
-            "rawValue": "foo",
-            "raw": "\"foo\""
-          },
-          "value": "foo"
-        }
-      },
-      {
-        "type": "ImportDeclaration",
-        "start": 216,
-        "end": 246,
-        "loc": {
-          "start": {
-            "line": 9,
-            "column": 0
-          },
-          "end": {
-            "line": 9,
             "column": 30
           }
         },
         "specifiers": [
           {
             "type": "ImportSpecifier",
-            "start": 224,
-            "end": 233,
+            "start": 194,
+            "end": 203,
             "loc": {
               "start": {
-                "line": 9,
+                "line": 8,
                 "column": 8
               },
               "end": {
-                "line": 9,
+                "line": 8,
                 "column": 17
               }
             },
             "imported": {
               "type": "Identifier",
-              "start": 231,
-              "end": 233,
+              "start": 201,
+              "end": 203,
               "loc": {
                 "start": {
-                  "line": 9,
+                  "line": 8,
                   "column": 15
                 },
                 "end": {
-                  "line": 9,
+                  "line": 8,
                   "column": 17
                 },
-                "identifierName": "as"
+                "identifierName": "t2"
               },
-              "name": "as"
+              "name": "t2"
             },
             "importKind": "typeof",
             "local": {
               "type": "Identifier",
-              "start": 231,
-              "end": 233,
+              "start": 201,
+              "end": 203,
               "loc": {
                 "start": {
-                  "line": 9,
+                  "line": 8,
                   "column": 15
                 },
                 "end": {
-                  "line": 9,
+                  "line": 8,
                   "column": 17
                 },
-                "identifierName": "as"
+                "identifierName": "t2"
               },
-              "name": "as"
+              "name": "t2"
             }
           }
         ],
         "importKind": "value",
         "source": {
           "type": "StringLiteral",
-          "start": 240,
-          "end": 245,
+          "start": 210,
+          "end": 215,
           "loc": {
             "start": {
-              "line": 9,
+              "line": 8,
               "column": 24
             },
             "end": {
-              "line": 9,
+              "line": 8,
               "column": 29
             }
           },
@@ -735,8 +647,96 @@
       },
       {
         "type": "ImportDeclaration",
-        "start": 247,
-        "end": 281,
+        "start": 217,
+        "end": 248,
+        "loc": {
+          "start": {
+            "line": 9,
+            "column": 0
+          },
+          "end": {
+            "line": 9,
+            "column": 31
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start": 225,
+            "end": 235,
+            "loc": {
+              "start": {
+                "line": 9,
+                "column": 8
+              },
+              "end": {
+                "line": 9,
+                "column": 18
+              }
+            },
+            "imported": {
+              "type": "Identifier",
+              "start": 232,
+              "end": 235,
+              "loc": {
+                "start": {
+                  "line": 9,
+                  "column": 15
+                },
+                "end": {
+                  "line": 9,
+                  "column": 18
+                },
+                "identifierName": "as2"
+              },
+              "name": "as2"
+            },
+            "importKind": "typeof",
+            "local": {
+              "type": "Identifier",
+              "start": 232,
+              "end": 235,
+              "loc": {
+                "start": {
+                  "line": 9,
+                  "column": 15
+                },
+                "end": {
+                  "line": 9,
+                  "column": 18
+                },
+                "identifierName": "as2"
+              },
+              "name": "as2"
+            }
+          }
+        ],
+        "importKind": "value",
+        "source": {
+          "type": "StringLiteral",
+          "start": 242,
+          "end": 247,
+          "loc": {
+            "start": {
+              "line": 9,
+              "column": 25
+            },
+            "end": {
+              "line": 9,
+              "column": 30
+            }
+          },
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 249,
+        "end": 284,
         "loc": {
           "start": {
             "line": 10,
@@ -744,14 +744,14 @@
           },
           "end": {
             "line": 10,
-            "column": 34
+            "column": 35
           }
         },
         "specifiers": [
           {
             "type": "ImportSpecifier",
-            "start": 255,
-            "end": 268,
+            "start": 257,
+            "end": 271,
             "loc": {
               "start": {
                 "line": 10,
@@ -759,13 +759,13 @@
               },
               "end": {
                 "line": 10,
-                "column": 21
+                "column": 22
               }
             },
             "imported": {
               "type": "Identifier",
-              "start": 262,
-              "end": 263,
+              "start": 264,
+              "end": 265,
               "loc": {
                 "start": {
                   "line": 10,
@@ -782,8 +782,8 @@
             "importKind": "typeof",
             "local": {
               "type": "Identifier",
-              "start": 267,
-              "end": 268,
+              "start": 269,
+              "end": 271,
               "loc": {
                 "start": {
                   "line": 10,
@@ -791,27 +791,27 @@
                 },
                 "end": {
                   "line": 10,
-                  "column": 21
+                  "column": 22
                 },
-                "identifierName": "u"
+                "identifierName": "u2"
               },
-              "name": "u"
+              "name": "u2"
             }
           }
         ],
         "importKind": "value",
         "source": {
           "type": "StringLiteral",
-          "start": 275,
-          "end": 280,
+          "start": 278,
+          "end": 283,
           "loc": {
             "start": {
               "line": 10,
-              "column": 28
+              "column": 29
             },
             "end": {
               "line": 10,
-              "column": 33
+              "column": 34
             }
           },
           "extra": {
@@ -823,8 +823,8 @@
       },
       {
         "type": "ImportDeclaration",
-        "start": 282,
-        "end": 316,
+        "start": 285,
+        "end": 320,
         "loc": {
           "start": {
             "line": 11,
@@ -832,14 +832,14 @@
           },
           "end": {
             "line": 11,
-            "column": 34
+            "column": 35
           }
         },
         "specifiers": [
           {
             "type": "ImportSpecifier",
-            "start": 290,
-            "end": 303,
+            "start": 293,
+            "end": 307,
             "loc": {
               "start": {
                 "line": 11,
@@ -847,13 +847,13 @@
               },
               "end": {
                 "line": 11,
-                "column": 21
+                "column": 22
               }
             },
             "imported": {
               "type": "Identifier",
-              "start": 297,
-              "end": 303,
+              "start": 300,
+              "end": 307,
               "loc": {
                 "start": {
                   "line": 11,
@@ -861,17 +861,17 @@
                 },
                 "end": {
                   "line": 11,
-                  "column": 21
+                  "column": 22
                 },
-                "identifierName": "switch"
+                "identifierName": "switch2"
               },
-              "name": "switch"
+              "name": "switch2"
             },
             "importKind": "typeof",
             "local": {
               "type": "Identifier",
-              "start": 297,
-              "end": 303,
+              "start": 300,
+              "end": 307,
               "loc": {
                 "start": {
                   "line": 11,
@@ -879,27 +879,27 @@
                 },
                 "end": {
                   "line": 11,
-                  "column": 21
+                  "column": 22
                 },
-                "identifierName": "switch"
+                "identifierName": "switch2"
               },
-              "name": "switch"
+              "name": "switch2"
             }
           }
         ],
         "importKind": "value",
         "source": {
           "type": "StringLiteral",
-          "start": 310,
-          "end": 315,
+          "start": 314,
+          "end": 319,
           "loc": {
             "start": {
               "line": 11,
-              "column": 28
+              "column": 29
             },
             "end": {
               "line": 11,
-              "column": 33
+              "column": 34
             }
           },
           "extra": {

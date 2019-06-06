@@ -15,11 +15,12 @@ import * as t from "@babel/types";
  *
  *   helpers.getPrototypeOf(CLASS.prototype)
  */
-function getPrototypeOfExpression(objectRef, isStatic, file) {
+function getPrototypeOfExpression(objectRef, isStatic, file, isPrivateMethod) {
   objectRef = t.cloneNode(objectRef);
-  const targetRef = isStatic
-    ? objectRef
-    : t.memberExpression(objectRef, t.identifier("prototype"));
+  const targetRef =
+    isStatic || isPrivateMethod
+      ? objectRef
+      : t.memberExpression(objectRef, t.identifier("prototype"));
 
   return t.callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
 }
@@ -40,6 +41,9 @@ function skipAllButComputedKey(path) {
 }
 
 export const environmentVisitor = {
+  TypeAnnotation(path) {
+    path.skip();
+  },
   Function(path) {
     // Methods will be handled by the Method visit
     if (path.isMethod()) return;
@@ -48,13 +52,7 @@ export const environmentVisitor = {
     path.skip();
   },
 
-  Method(path) {
-    skipAllButComputedKey(path);
-  },
-
-  "ClassProperty|ClassPrivateProperty"(path) {
-    // If the property is computed, we need to visit everything.
-    if (path.node.static) return;
+  "Method|ClassProperty|ClassPrivateProperty"(path) {
     skipAllButComputedKey(path);
   },
 };
@@ -101,7 +99,12 @@ const specHandlers = {
 
   get(superMember) {
     return t.callExpression(this.file.addHelper("get"), [
-      getPrototypeOfExpression(this.getObjectRef(), this.isStatic, this.file),
+      getPrototypeOfExpression(
+        this.getObjectRef(),
+        this.isStatic,
+        this.file,
+        this.isPrivateMethod,
+      ),
       this.prop(superMember),
       t.thisExpression(),
     ]);
@@ -109,7 +112,12 @@ const specHandlers = {
 
   set(superMember, value) {
     return t.callExpression(this.file.addHelper("set"), [
-      getPrototypeOfExpression(this.getObjectRef(), this.isStatic, this.file),
+      getPrototypeOfExpression(
+        this.getObjectRef(),
+        this.isStatic,
+        this.file,
+        this.isPrivateMethod,
+      ),
       this.prop(superMember),
       value,
       t.thisExpression(),
@@ -173,8 +181,8 @@ export default class ReplaceSupers {
     const path = opts.methodPath;
 
     this.methodPath = path;
-    this.isStatic =
-      path.isClassMethod({ static: true }) || path.isObjectMethod();
+    this.isStatic = path.isObjectMethod() || path.node.static;
+    this.isPrivateMethod = path.isPrivate() && path.isMethod();
 
     this.file = opts.file;
     this.superRef = opts.superRef;
@@ -205,6 +213,7 @@ export default class ReplaceSupers {
     memberExpressionToFunctions(this.methodPath, visitor, {
       file: this.file,
       isStatic: this.isStatic,
+      isPrivateMethod: this.isPrivateMethod,
       getObjectRef: this.getObjectRef.bind(this),
       superRef: this.superRef,
       ...handler,

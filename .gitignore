@@ -1,5 +1,8 @@
+.npmrc
+
 .DS_Store
 /node_modules
+/.github/actions/*/node_modules
 /packages/*/node_modules
 /packages/*/LICENSE
 !/packages/babel-parser/LICENSE
@@ -15,6 +18,7 @@ coverage
 dist
 /.package.json
 package-lock.json
+!/.github/actions/*/package-lock.json
 
 /packages/babel-runtime/helpers/*.js
 !/packages/babel-runtime/helpers/toArray.js
@@ -35,6 +39,11 @@ package-lock.json
 !/packages/babel-runtime-corejs2/helpers/esm/temporalRef.js
 /packages/babel-runtime-corejs2/core-js/**/*.js
 !/packages/babel-runtime-corejs2/core-js/map.js
+
+/packages/babel-runtime-corejs3/helpers/*.js
+/packages/babel-runtime-corejs3/helpers/esm/*.js
+/packages/babel-runtime-corejs3/core-js/**/*.js
+/packages/babel-runtime-corejs3/core-js-stable/**/*.js
 
 /packages/babel-register/test/.babel
 /packages/babel-cli/test/tmp

@@ -10,6 +10,8 @@ import {
   classMethodOrDeclareMethodCommon,
 } from "./es2015";
 
+defineType("ArgumentPlaceholder", {});
+
 defineType("AwaitExpression", {
   builder: ["argument"],
   visitor: ["argument"],
@@ -89,6 +91,30 @@ defineType("OptionalMemberExpression", {
   },
 });
 
+defineType("PipelineTopicExpression", {
+  builder: ["expression"],
+  visitor: ["expression"],
+  fields: {
+    expression: {
+      validate: assertNodeType("Expression"),
+    },
+  },
+});
+
+defineType("PipelineBareFunction", {
+  builder: ["callee"],
+  visitor: ["callee"],
+  fields: {
+    callee: {
+      validate: assertNodeType("Expression"),
+    },
+  },
+});
+
+defineType("PipelinePrimaryTopicReference", {
+  aliases: ["Expression"],
+});
+
 defineType("OptionalCallExpression", {
   visitor: ["callee", "arguments", "typeParameters", "typeArguments"],
   builder: ["callee", "arguments", "optional"],
@@ -144,7 +170,14 @@ defineType("ClassPrivateMethod", {
     "returnType",
     "typeParameters",
   ],
-  aliases: ["Method", "Private", "Function"],
+  aliases: [
+    "Function",
+    "Scopable",
+    "BlockParent",
+    "FunctionParent",
+    "Method",
+    "Private",
+  ],
   fields: {
     ...classMethodOrDeclareMethodCommon,
     key: {

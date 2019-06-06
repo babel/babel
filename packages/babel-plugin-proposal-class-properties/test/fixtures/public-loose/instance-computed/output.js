@@ -1,5 +1,7 @@
 function test(x) {
-  var _x = x;
+  var _x;
+
+  _x = x;
 
   var F = function F() {
     "use strict";

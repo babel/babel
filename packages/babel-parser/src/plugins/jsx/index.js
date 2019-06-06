@@ -14,6 +14,8 @@ import { isNewLine } from "../../util/whitespace";
 const HEX_NUMBER = /^[\da-fA-F]+$/;
 const DECIMAL_NUMBER = /^\d+$/;
 
+// Be aware that this file is always executed and not only when the plugin is enabled.
+// Therefore this contexts and tokens do always exist.
 tc.j_oTag = new TokContext("<tag", false);
 tc.j_cTag = new TokContext("</tag", false);
 tc.j_expr = new TokContext("<tag>...</tag>", true, true);
@@ -79,7 +81,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let out = "";
       let chunkStart = this.state.pos;
       for (;;) {
-        if (this.state.pos >= this.input.length) {
+        if (this.state.pos >= this.length) {
           this.raise(this.state.start, "Unterminated JSX contents");
         }
 
@@ -93,7 +95,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
                 ++this.state.pos;
                 return this.finishToken(tt.jsxTagStart);
               }
-              return this.getTokenFromCode(ch);
+              return super.getTokenFromCode(ch);
             }
             out += this.input.slice(chunkStart, this.state.pos);
             return this.finishToken(tt.jsxText, out);
@@ -139,7 +141,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let out = "";
       let chunkStart = ++this.state.pos;
       for (;;) {
-        if (this.state.pos >= this.input.length) {
+        if (this.state.pos >= this.length) {
           this.raise(this.state.start, "Unterminated string constant");
         }
 
@@ -168,7 +170,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let ch = this.input[this.state.pos];
 
       const startPos = ++this.state.pos;
-      while (this.state.pos < this.input.length && count++ < 10) {
+      while (this.state.pos < this.length && count++ < 10) {
         ch = this.input[this.state.pos++];
         if (ch === ";") {
           if (str[0] === "#") {
@@ -267,7 +269,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let node;
       switch (this.state.type) {
         case tt.braceL:
-          node = this.jsxParseExpressionContainer();
+          node = this.startNode();
+          this.next();
+          node = this.jsxParseExpressionContainer(node);
           if (node.expression.type === "JSXEmptyExpression") {
             throw this.raise(
               node.start,
@@ -308,10 +312,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // Parse JSX spread child
 
-    jsxParseSpreadChild(): N.JSXSpreadChild {
-      const node = this.startNode();
-      this.expect(tt.braceL);
-      this.expect(tt.ellipsis);
+    jsxParseSpreadChild(node: N.JSXSpreadChild): N.JSXSpreadChild {
+      this.next(); // ellipsis
       node.expression = this.parseExpression();
       this.expect(tt.braceR);
 
@@ -320,9 +322,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // Parses JSX expression enclosed into curly brackets.
 
-    jsxParseExpressionContainer(): N.JSXExpressionContainer {
-      const node = this.startNode();
-      this.next();
+    jsxParseExpressionContainer(
+      node: N.JSXExpressionContainer,
+    ): N.JSXExpressionContainer {
       if (this.match(tt.braceR)) {
         node.expression = this.jsxParseEmptyExpression();
       } else {
@@ -421,15 +423,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               children.push(this.parseExprAtom());
               break;
 
-            case tt.braceL:
-              if (this.lookahead().type === tt.ellipsis) {
-                children.push(this.jsxParseSpreadChild());
+            case tt.braceL: {
+              const node = this.startNode();
+              this.next();
+              if (this.match(tt.ellipsis)) {
+                children.push(this.jsxParseSpreadChild(node));
               } else {
-                children.push(this.jsxParseExpressionContainer());
+                children.push(this.jsxParseExpressionContainer(node));
               }
 
               break;
-
+            }
             // istanbul ignore next - should never happen
             default:
               throw this.unexpected();
@@ -508,8 +512,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.jsxParseElement();
       } else if (
         this.isRelational("<") &&
-        this.state.input.charCodeAt(this.state.pos) !==
-          charCodes.exclamationMark
+        this.input.charCodeAt(this.state.pos) !== charCodes.exclamationMark
       ) {
         // In case we encounter an lt token here it will always be the start of
         // jsx as the lt sign is not allowed in places that expect an expression
@@ -520,8 +523,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    readToken(code: number): void {
-      if (this.state.inPropertyName) return super.readToken(code);
+    getTokenFromCode(code: number): void {
+      if (this.state.inPropertyName) return super.getTokenFromCode(code);
 
       const context = this.curContext();
 
@@ -550,14 +553,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (
         code === charCodes.lessThan &&
         this.state.exprAllowed &&
-        this.state.input.charCodeAt(this.state.pos + 1) !==
-          charCodes.exclamationMark
+        this.input.charCodeAt(this.state.pos + 1) !== charCodes.exclamationMark
       ) {
         ++this.state.pos;
         return this.finishToken(tt.jsxTagStart);
       }
 
-      return super.readToken(code);
+      return super.getTokenFromCode(code);
     }
 
     updateContext(prevType: TokenType): void {

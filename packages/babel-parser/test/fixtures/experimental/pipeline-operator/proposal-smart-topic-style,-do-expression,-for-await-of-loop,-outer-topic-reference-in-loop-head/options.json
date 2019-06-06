@@ -1,3 +1,7 @@
 {
-  "plugins": [["pipelineOperator", { "proposal": "smart" }], "doExpressions", "asyncGenerators"]
+  "plugins": [
+    ["pipelineOperator", { "proposal": "smart" }],
+    "doExpressions",
+    "asyncGenerators"
+  ]
 }

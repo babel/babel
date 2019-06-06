@@ -72,7 +72,7 @@ defineType("ClassImplements", {
   },
 });
 
-defineInterfaceishType("DeclareClass", "TypeParameterInstantiation");
+defineInterfaceishType("DeclareClass");
 
 defineType("DeclareFunction", {
   visitor: ["id"],
@@ -191,7 +191,7 @@ defineType("GenericTypeAnnotation", {
   visitor: ["id", "typeParameters"],
   aliases: ["Flow", "FlowType"],
   fields: {
-    id: validateType("Identifier"),
+    id: validateType(["Identifier", "QualifiedTypeIdentifier"]),
     typeParameters: validateOptionalType("TypeParameterInstantiation"),
   },
 });
@@ -204,7 +204,7 @@ defineType("InterfaceExtends", {
   visitor: ["id", "typeParameters"],
   aliases: ["Flow"],
   fields: {
-    id: validateType("Identifier"),
+    id: validateType(["Identifier", "QualifiedTypeIdentifier"]),
     typeParameters: validateOptionalType("TypeParameterInstantiation"),
   },
 });

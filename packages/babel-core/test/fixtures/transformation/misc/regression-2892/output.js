@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports["default"] = void 0;
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -40,7 +40,7 @@ function () {
                 return _context.stop();
             }
           }
-        }, _callee, this);
+        }, _callee);
       }));
 
       function bar() {
@@ -54,7 +54,7 @@ function () {
   return Foo;
 }();
 
-exports.default = Foo;
+exports["default"] = Foo;
 
 function foo() {
   return _foo.apply(this, arguments);
@@ -86,7 +86,7 @@ function _foo() {
                         return _context2.stop();
                     }
                   }
-                }, _callee2, this);
+                }, _callee2);
               }));
               return _bar2.apply(this, arguments);
             };
@@ -100,7 +100,7 @@ function _foo() {
             return _context3.stop();
         }
       }
-    }, _callee3, this);
+    }, _callee3);
   }));
   return _foo.apply(this, arguments);
 }

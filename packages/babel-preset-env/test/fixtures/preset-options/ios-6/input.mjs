@@ -1,1 +1,1 @@
-import "core-js";
+const a = () => 1;

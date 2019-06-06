@@ -31,7 +31,7 @@ export function _call(fns?: Array<Function>): boolean {
     if (ret && typeof ret === "object" && typeof ret.then === "function") {
       throw new Error(
         `You appear to be using a plugin with an async traversal visitor, ` +
-          `which your current version of Babel does not support.` +
+          `which your current version of Babel does not support. ` +
           `If you're using a published plugin, you may need to upgrade ` +
           `your @babel/core version.`,
       );
@@ -169,7 +169,7 @@ export function _resyncKey() {
       }
     }
   } else {
-    for (const key in this.container) {
+    for (const key of Object.keys(this.container)) {
       if (this.container[key] === this.node) {
         return this.setKey(key);
       }

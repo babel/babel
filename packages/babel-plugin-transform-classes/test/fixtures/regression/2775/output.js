@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports["default"] = void 0;
 
 var _react = babelHelpers.interopRequireDefault(require("react"));
 
@@ -20,12 +20,12 @@ function (_Component) {
   babelHelpers.createClass(RandomComponent, [{
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", {
+      return _react["default"].createElement("div", {
         className: "sui-RandomComponent"
-      }, _react.default.createElement("h2", null, "Hi there!"));
+      }, _react["default"].createElement("h2", null, "Hi there!"));
     }
   }]);
   return RandomComponent;
 }(_react.Component);
 
-exports.default = RandomComponent;
+exports["default"] = RandomComponent;

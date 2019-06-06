@@ -21,7 +21,7 @@ var _ref4 = [a[1], a[0]];
 a[0] = _ref4[0];
 a[1] = _ref4[1];
 
-var _ref5 = babelHelpers.toConsumableArray(foo).concat([bar]),
+var _ref5 = [].concat(babelHelpers.toConsumableArray(foo), [bar]),
     a = _ref5[0],
     b = _ref5[1];
 
@@ -34,3 +34,10 @@ var _ref7 = [clazz.foo(), bar],
 var _ref8 = [clazz.foo, bar],
     a = _ref8[0],
     b = _ref8[1];
+var a,
+    b = 2;
+a = 1;
+b = 2;
+a = void 0;
+b = 2;
+; // Avoid completion record special case

@@ -1,13 +1,13 @@
-let foo;
-var foo;
+let foo1;
+var foo2;
 
-let foo = "foo";
-var foo = "bar";
-const foo = "foo";
+let foo3 = "foo";
+var foo4 = "bar";
+const foo5 = "foo";
 
-let foo, bar = "bar";
-var foo, bar = "bar";
+let foo6, bar1 = "bar";
+var foo7, bar2 = "bar";
 
-let foo = "foo", bar = "bar";
-var foo = "foo", bar = "bar";
-const foo = "foo", bar = "bar";
+let foo8 = "foo", bar3 = "bar";
+var foo9 = "foo", bar4 = "bar";
+const foo10 = "foo", bar5 = "bar";
