@@ -29,6 +29,25 @@ const renameVisitor = {
   },
 };
 
+function isSafeBinding(scope, node) {
+  if (!scope.hasOwnBinding(node.name)) return true;
+  const { kind } = scope.getOwnBinding(node.name);
+  return kind === "param" || kind === "local";
+}
+
+const outerBindingVisitor = {
+  ReferencedIdentifier(path, state) {
+    const { node } = path;
+    if (node.name === state.oldName && !isSafeBinding(state.scope, node)) {
+      state.paramDefaultOuterBinding = true;
+      path.stop();
+    }
+  },
+  Scope(path) {
+    path.skip();
+  },
+};
+
 export default class Renamer {
   constructor(binding: Binding, oldName: string, newName: string) {
     this.newName = newName;
@@ -97,6 +116,30 @@ export default class Renamer {
     );
   }
 
+  parameterDefaultHasOuterBinding(path, state) {
+    const { oldName, scope } = state;
+    const params = path.get("params");
+    for (let i = 0; i < params.length; i++) {
+      const param = params[i];
+      if (param.isAssignmentPattern()) {
+        const right = param.get("right");
+        if (!state.paramDefaultOuterBinding) {
+          if (
+            right.isIdentifier() &&
+            right.node.body.name === oldName &&
+            !isSafeBinding(scope, right.node.body)
+          ) {
+            state.paramDefaultOuterBinding = true;
+            break;
+          } else {
+            right.traverse(outerBindingVisitor, state);
+          }
+        }
+      }
+    }
+    return state.paramDefaultOuterBinding;
+  }
+
   rename(block?) {
     const { binding, oldName, newName } = this;
     const { scope, path } = binding;
@@ -116,7 +159,14 @@ export default class Renamer {
       }
     }
 
-    scope.traverse(block || scope.block, renameVisitor, this);
+    if (
+      scope.path.isFunction() &&
+      this.parameterDefaultHasOuterBinding(scope.path, { scope, oldName })
+    ) {
+      scope.traverse(block || scope.block.body, renameVisitor, this);
+    } else {
+      scope.traverse(block || scope.block, renameVisitor, this);
+    }
 
     if (!block) {
       scope.removeOwnBinding(oldName);

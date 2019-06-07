@@ -8,7 +8,3 @@ function f(g = () => a) {
 function h(a, g = () => a) {
   return g();
 }
-
-function j(g = a) {
-  return g;
-}
