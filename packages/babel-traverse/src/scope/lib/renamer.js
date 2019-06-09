@@ -126,8 +126,8 @@ export default class Renamer {
         if (!state.paramDefaultOuterBinding) {
           if (
             right.isIdentifier() &&
-            right.node.body.name === oldName &&
-            !isSafeBinding(scope, right.node.body)
+            right.node.name === oldName &&
+            !isSafeBinding(scope, right.node)
           ) {
             state.paramDefaultOuterBinding = true;
             break;
