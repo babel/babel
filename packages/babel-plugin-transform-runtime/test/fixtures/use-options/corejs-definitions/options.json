@@ -1,0 +1,23 @@
+{
+  "plugins": [
+    [
+      "transform-runtime",
+      {
+        "corejs": {
+          "version": 3,
+          "definitions": {
+            "BuiltIns": {
+              "Symbol": false
+            },
+            "StaticProperties": {
+              "Array": false
+            },
+            "InstanceProperties": {
+              "repeat": false
+            }
+          }
+        }
+      }
+    ]
+  ]
+}

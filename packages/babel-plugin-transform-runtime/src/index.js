@@ -1,5 +1,6 @@
 import path from "path";
 import resolve from "resolve";
+import merge from "lodash/merge";
 import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
@@ -44,11 +45,13 @@ export default declare((api, options, dirname) => {
   } = options;
 
   let proposals = false;
+  let definitions = Object.create(null);
   let rawVersion;
 
   if (typeof corejs === "object" && corejs !== null) {
     rawVersion = corejs.version;
     proposals = Boolean(corejs.proposals);
+    definitions = Object.assign(definitions, corejs.definitions);
   } else {
     rawVersion = corejs;
   }
@@ -103,12 +106,17 @@ export default declare((api, options, dirname) => {
   }
 
   function hasMapping(methods, name) {
-    return has(methods, name) && (proposals || methods[name].stable);
+    return (
+      has(methods, name) &&
+      !!methods[name] &&
+      (proposals || methods[name].stable)
+    );
   }
 
   function hasStaticMapping(object, method) {
     return (
       has(StaticProperties, object) &&
+      !!StaticProperties[object] &&
       hasMapping(StaticProperties[object], method)
     );
   }
@@ -175,9 +183,12 @@ export default declare((api, options, dirname) => {
 
   const corejsRoot = injectCoreJS3 && !proposals ? "core-js-stable" : "core-js";
 
-  const { BuiltIns, StaticProperties, InstanceProperties } = (injectCoreJS2
-    ? getCoreJS2Definitions
-    : getCoreJS3Definitions)(runtimeVersion);
+  const { BuiltIns, StaticProperties, InstanceProperties } = merge(
+    (injectCoreJS2 ? getCoreJS2Definitions : getCoreJS3Definitions)(
+      runtimeVersion,
+    ),
+    definitions,
+  );
 
   const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 
