@@ -23,8 +23,8 @@ const buildExportAll = template(`
 
 const MISSING_PLUGIN_WARNING = `\
 WARNING: Dynamic import() transformation must be enabled using the
-         @babel/plugin-proposal-dynamic-import plugin. As of Babel 8,
-         without that plugin it won't be transformed.
+         @babel/plugin-proposal-dynamic-import plugin. Babel 8 will
+         no longer transform import() without using that plugin.
 `;
 
 function constructExportCall(
