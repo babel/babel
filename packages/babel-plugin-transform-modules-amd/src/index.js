@@ -49,14 +49,16 @@ export default declare((api, options) => {
         if (!this.file.has("@babel/plugin-proposal-dynamic-import")) return;
         if (!path.get("callee").isImport()) return;
 
-        let { requireId, resolveId } = state;
+        let { requireId, resolveId, rejectId } = state;
         if (!requireId) {
           requireId = path.scope.generateUidIdentifier("require");
           state.requireId = requireId;
         }
-        if (!resolveId) {
+        if (!resolveId || !rejectId) {
           resolveId = path.scope.generateUidIdentifier("resolve");
+          rejectId = path.scope.generateUidIdentifier("reject");
           state.resolveId = resolveId;
+          state.rejectId = rejectId;
         }
 
         let result = t.identifier("imported");
@@ -64,9 +66,11 @@ export default declare((api, options) => {
 
         path.replaceWith(
           template.expression.ast`
-            new Promise((${resolveId}) =>
-              ${requireId}([${path.node.arguments[0]}], imported =>
-                ${resolveId}(${result})
+            new Promise((${resolveId}, ${rejectId}) =>
+              ${requireId}(
+                [${path.node.arguments[0]}],
+                imported => ${resolveId}(${result}),
+                ${rejectId}
               )
             )`,
         );

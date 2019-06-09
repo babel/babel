@@ -8,5 +8,5 @@ define(["require", "exports", "foo"], function (_require, _exports, _foo) {
   _foo = babelHelpers.interopRequireDefault(_foo);
   var mod;
   _exports.mod = mod;
-  new Promise(_resolve => _require(["mod"], imported => _resolve(babelHelpers.interopRequireWildcard(imported)))).then(m => _exports.mod = mod = m);
+  new Promise((_resolve, _reject) => _require(["mod"], imported => _resolve(babelHelpers.interopRequireWildcard(imported)), _reject)).then(m => _exports.mod = mod = m);
 });
