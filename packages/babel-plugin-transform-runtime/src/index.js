@@ -1,5 +1,6 @@
 import path from "path";
 import resolve from "resolve";
+import { coerce } from "semver";
 import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
@@ -53,17 +54,17 @@ export default declare((api, options, dirname) => {
     rawVersion = corejs;
   }
 
-  const corejsVersion = rawVersion ? Number(rawVersion) : false;
+  const corejsVersion = rawVersion ? coerce(String(rawVersion)) : false;
 
-  if (![false, 2, 3].includes(corejsVersion)) {
+  if (corejsVersion !== false && !(2 <= corejsVersion.major <= 3)) {
     throw new Error(
-      `The \`core-js\` version must be false, 2 or 3, but got ${JSON.stringify(
+      `The \`core-js\` version must be false or >= 2 and <= 3, but got ${JSON.stringify(
         rawVersion,
       )}.`,
     );
   }
 
-  if (proposals && (!corejsVersion || corejsVersion < 3)) {
+  if (proposals && (!corejsVersion || corejsVersion.major < 3)) {
     throw new Error(
       "The 'proposals' option is only supported when using 'corejs: 3'",
     );
@@ -163,9 +164,9 @@ export default declare((api, options, dirname) => {
   const esModules =
     useESModules === "auto" ? api.caller(supportsStaticESM) : useESModules;
 
-  const injectCoreJS2 = corejsVersion === 2;
-  const injectCoreJS3 = corejsVersion === 3;
   const injectCoreJS = corejsVersion !== false;
+  const injectCoreJS2 = injectCoreJS && corejsVersion.major === 2;
+  const injectCoreJS3 = injectCoreJS && corejsVersion.major === 3;
 
   const moduleName = injectCoreJS3
     ? "@babel/runtime-corejs3"
@@ -177,7 +178,7 @@ export default declare((api, options, dirname) => {
 
   const { BuiltIns, StaticProperties, InstanceProperties } = (injectCoreJS2
     ? getCoreJS2Definitions
-    : getCoreJS3Definitions)(runtimeVersion);
+    : getCoreJS3Definitions)(runtimeVersion, corejsVersion);
 
   const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 

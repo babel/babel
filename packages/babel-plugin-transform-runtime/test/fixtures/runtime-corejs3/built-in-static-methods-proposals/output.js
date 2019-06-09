@@ -1,5 +1,3 @@
-var _Symbol = require("@babel/runtime-corejs3/core-js/symbol");
-
 var _Symbol$unscopables = require("@babel/runtime-corejs3/core-js/symbol/unscopables");
 
 var _Symbol$toStringTag = require("@babel/runtime-corejs3/core-js/symbol/to-string-tag");
@@ -12,11 +10,17 @@ var _Symbol$species = require("@babel/runtime-corejs3/core-js/symbol/species");
 
 var _Symbol$search = require("@babel/runtime-corejs3/core-js/symbol/search");
 
+var _replaceAllInstanceProperty = require("@babel/runtime-corejs3/core-js/instance/replace-all");
+
 var _Symbol$replace = require("@babel/runtime-corejs3/core-js/symbol/replace");
 
 var _Symbol$patternMatch = require("@babel/runtime-corejs3/core-js/symbol/pattern-match");
 
 var _Symbol$observable = require("@babel/runtime-corejs3/core-js/symbol/observable");
+
+var _Symbol = require("@babel/runtime-corejs3/core-js/symbol");
+
+var _matchAllInstanceProperty = require("@babel/runtime-corejs3/core-js/instance/match-all");
 
 var _Symbol$match = require("@babel/runtime-corejs3/core-js/symbol/match");
 
@@ -312,9 +316,15 @@ _Symbol$isConcatSpreadable;
 _Symbol$iterator;
 _Symbol$keyFor;
 _Symbol$match;
+
+_matchAllInstanceProperty(_Symbol);
+
 _Symbol$observable;
 _Symbol$patternMatch;
 _Symbol$replace;
+
+_replaceAllInstanceProperty(_Symbol);
+
 _Symbol$search;
 _Symbol$species;
 _Symbol$split;

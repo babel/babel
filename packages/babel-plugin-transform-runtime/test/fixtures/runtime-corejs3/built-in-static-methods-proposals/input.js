@@ -104,9 +104,11 @@ Symbol.isConcatSpreadable
 Symbol.iterator
 Symbol.keyFor
 Symbol.match
+Symbol.matchAll
 Symbol.observable
 Symbol.patternMatch
 Symbol.replace
+Symbol.replaceAll
 Symbol.search
 Symbol.species
 Symbol.split

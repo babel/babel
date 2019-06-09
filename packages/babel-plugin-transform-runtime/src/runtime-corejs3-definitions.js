@@ -1,26 +1,31 @@
-export default () => {
+import semver from "semver";
+
+export default (runtimeVersion, corejsVersion) => {
+  const isAtLeastCoreJSVersion31 =
+    corejsVersion && semver.gte(corejsVersion, "3.1.0");
+
   return {
     BuiltIns: {
       AggregateError: { stable: false, path: "aggregate-error" },
+      clearImmediate: { stable: true, path: "clear-immediate" },
+      compositeKey: { stable: false, path: "composite-key" },
+      compositeSymbol: { stable: false, path: "composite-symbol" },
+      globalThis: { stable: false, path: "global-this" },
       Map: { stable: true, path: "map" },
       Observable: { stable: false, path: "observable" },
+      parseFloat: { stable: true, path: "parse-float" },
+      parseInt: { stable: true, path: "parse-int" },
       Promise: { stable: true, path: "promise" },
+      queueMicrotask: { stable: true, path: "queue-microtask" },
       Set: { stable: true, path: "set" },
+      setImmediate: { stable: true, path: "set-immediate" },
+      setInterval: { stable: true, path: "set-interval" },
+      setTimeout: { stable: true, path: "set-timeout" },
       Symbol: { stable: true, path: "symbol" },
       URL: { stable: true, path: "url" },
       URLSearchParams: { stable: true, path: "url-search-params" },
       WeakMap: { stable: true, path: "weak-map" },
       WeakSet: { stable: true, path: "weak-set" },
-      clearImmediate: { stable: true, path: "clear-immediate" },
-      compositeKey: { stable: false, path: "composite-key" },
-      compositeSymbol: { stable: false, path: "composite-symbol" },
-      globalThis: { stable: false, path: "global-this" },
-      parseFloat: { stable: true, path: "parse-float" },
-      parseInt: { stable: true, path: "parse-int" },
-      queueMicrotask: { stable: true, path: "queue-microtask" },
-      setImmediate: { stable: true, path: "set-immediate" },
-      setInterval: { stable: true, path: "set-interval" },
-      setTimeout: { stable: true, path: "set-timeout" },
     },
 
     StaticProperties: {
@@ -177,6 +182,12 @@ export default () => {
         toPrimitive: { stable: true, path: "symbol/to-primitive" },
         toStringTag: { stable: true, path: "symbol/to-string-tag" },
         unscopables: { stable: true, path: "symbol/unscopables" },
+        ...(isAtLeastCoreJSVersion31
+          ? {
+              matchAll: { stable: true, path: "symbol/match-all" },
+              replaceAll: { stable: false, path: "symbol/replace-all" },
+            }
+          : {}),
       },
     },
 
@@ -207,7 +218,7 @@ export default () => {
       keys: { stable: true, path: "keys" },
       lastIndexOf: { stable: true, path: "last-index-of" },
       map: { stable: true, path: "map" },
-      matchAll: { stable: false, path: "match-all" },
+      matchAll: { stable: isAtLeastCoreJSVersion31, path: "match-all" },
       padEnd: { stable: true, path: "pad-end" },
       padStart: { stable: true, path: "pad-start" },
       reduce: { stable: true, path: "reduce" },
