@@ -1,5 +1,5 @@
-const x = () => do {
-  switch (new Date().getDay()) {
+const x = (n) => do {
+  switch (n) {
     case 0: case 6: "weekend 🚵"; break
     default: "weekday 🚴"
   }

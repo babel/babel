@@ -1,5 +1,5 @@
-const x = () => function () {
-  switch (new Date().getDay()) {
+const x = n => function () {
+  switch (n) {
     case 0:
     case 6:
       return "weekend 🚵";
