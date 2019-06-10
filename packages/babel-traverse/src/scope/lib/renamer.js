@@ -39,7 +39,7 @@ const outerBindingVisitor = {
   ReferencedIdentifier(path, state) {
     const { node } = path;
     if (node.name === state.oldName && !isSafeBinding(state.scope, node)) {
-      state.paramDefaultOuterBinding = true;
+      state.paramOuterBinding = true;
       path.stop();
     }
   },
@@ -57,6 +57,34 @@ const assignmentPatternVisitor = {
     path.skip();
   },
 };
+
+const computedPropertyVisitor = {
+  ObjectProperty(path, state) {
+    if (path.node.computed) {
+      state.computedObjectPropertyPath = path;
+      path.stop();
+    }
+  },
+  Scope(path) {
+    path.skip();
+  },
+};
+
+function pathHasOuterBinding(path, state) {
+  const { oldName, scope } = state;
+  if (!state.paramOuterBinding) {
+    if (
+      path.isIdentifier() &&
+      path.node.name === oldName &&
+      !isSafeBinding(scope, path.node)
+    ) {
+      state.paramOuterBinding = true;
+    } else {
+      path.traverse(outerBindingVisitor, state);
+    }
+  }
+  return state.paramOuterBinding;
+}
 
 export default class Renamer {
   constructor(binding: Binding, oldName: string, newName: string) {
@@ -126,33 +154,34 @@ export default class Renamer {
     );
   }
 
-  parameterDefaultHasOuterBinding(path, state) {
-    const { oldName, scope } = state;
+  parameterHasOuterBinding(path, state) {
     const params = path.get("params");
+    let result = false;
     for (let i = 0; i < params.length; i++) {
       const param = params[i];
+      let bindingPath;
       if (param.isAssignmentPattern()) {
         state.assignmentPatternPath = param;
       } else {
         param.traverse(assignmentPatternVisitor, state);
       }
       if (state.assignmentPatternPath) {
-        const right = state.assignmentPatternPath.get("right");
-        if (!state.paramDefaultOuterBinding) {
-          if (
-            right.isIdentifier() &&
-            right.node.name === oldName &&
-            !isSafeBinding(scope, right.node)
-          ) {
-            state.paramDefaultOuterBinding = true;
-            break;
-          } else {
-            right.traverse(outerBindingVisitor, state);
-          }
+        bindingPath = state.assignmentPatternPath.get("right");
+      }
+      if (!bindingPath) {
+        param.traverse(computedPropertyVisitor, state);
+        if (state.computedObjectPropertyPath) {
+          bindingPath = state.computedObjectPropertyPath.get("key");
+        }
+      }
+      if (bindingPath) {
+        result = pathHasOuterBinding(bindingPath, state);
+        if (result) {
+          break;
         }
       }
     }
-    return state.paramDefaultOuterBinding;
+    return result;
   }
 
   rename(block?) {
@@ -176,7 +205,7 @@ export default class Renamer {
 
     if (
       scope.path.isFunction() &&
-      this.parameterDefaultHasOuterBinding(scope.path, { scope, oldName })
+      this.parameterHasOuterBinding(scope.path, { scope, oldName })
     ) {
       scope.traverse(block || scope.block.body, renameVisitor, this);
     } else {

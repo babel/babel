@@ -14,9 +14,16 @@ function j(g = a) {
   return g;
 }
 
-function k({
+function k([{
   g = a
-}) {
+}]) {
+  let a = "inside";
+  return g;
+}
+
+function l([{
+  [a]: g
+}]) {
   let a = "inside";
   return g;
 }
