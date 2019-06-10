@@ -13,3 +13,10 @@ function j(g = a) {
   let z = "inside";
   return g;
 }
+
+function k({
+  g = a
+}) {
+  let z = "inside";
+  return g;
+}

@@ -48,6 +48,16 @@ const outerBindingVisitor = {
   },
 };
 
+const assignmentPatternVisitor = {
+  AssignmentPattern(path, state) {
+    state.assignmentPatternPath = path;
+    path.stop();
+  },
+  Scope(path) {
+    path.skip();
+  },
+};
+
 export default class Renamer {
   constructor(binding: Binding, oldName: string, newName: string) {
     this.newName = newName;
@@ -122,7 +132,12 @@ export default class Renamer {
     for (let i = 0; i < params.length; i++) {
       const param = params[i];
       if (param.isAssignmentPattern()) {
-        const right = param.get("right");
+        state.assignmentPatternPath = param;
+      } else {
+        param.traverse(assignmentPatternVisitor, state);
+      }
+      if (state.assignmentPatternPath) {
+        const right = state.assignmentPatternPath.get("right");
         if (!state.paramDefaultOuterBinding) {
           if (
             right.isIdentifier() &&
