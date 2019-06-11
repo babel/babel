@@ -27,3 +27,12 @@ function l([{
   let z = "inside";
   return g;
 }
+
+function m(g = {
+  [(({
+    [a]: x
+  }) => x)()]: "outside"
+}) {
+  let z = "inside";
+  return g;
+}
