@@ -43,9 +43,6 @@ const outerBindingVisitor = {
       path.stop();
     }
   },
-  Scope(path) {
-    path.skip();
-  },
 };
 
 const assignmentPatternVisitor = {
