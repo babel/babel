@@ -36,3 +36,11 @@ function m(g = {
   let z = "inside";
   return g;
 }
+
+function n(g = (z = a) => {}) {
+  let z = "inside";
+}
+
+function o(g = z => z) {
+  let z = "inside";
+}
