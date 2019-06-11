@@ -1,1 +1,1 @@
-({ foo<T = string>() {} });
+var x: Array<T = number>

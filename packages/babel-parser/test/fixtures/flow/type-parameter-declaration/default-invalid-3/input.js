@@ -1,1 +1,1 @@
-declare class A { foo<T = string>(): void }
+class A extends B<T = number> {}

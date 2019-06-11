@@ -798,9 +798,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.typeParameters = null;
 
       if (this.isRelational("<")) {
-        node.typeParameters = this.flowParseTypeParameterDeclaration(
-          /* allowDefault */ false,
-        );
+        node.typeParameters = this.flowParseTypeParameterDeclaration();
       }
 
       this.expect(tt.parenL);
@@ -1287,9 +1285,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         case tt.relational:
           if (this.state.value === "<") {
-            node.typeParameters = this.flowParseTypeParameterDeclaration(
-              /* allowDefault */ false,
-            );
+            node.typeParameters = this.flowParseTypeParameterDeclaration();
             this.expect(tt.parenL);
             tmp = this.flowParseFunctionTypeParams();
             node.params = tmp.params;
@@ -2092,9 +2088,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
       delete (method: $FlowFixMe).variance;
       if (this.isRelational("<")) {
-        method.typeParameters = this.flowParseTypeParameterDeclaration(
-          /* allowDefault */ false,
-        );
+        method.typeParameters = this.flowParseTypeParameterDeclaration();
       }
 
       super.pushClassMethod(
@@ -2176,9 +2170,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       // method shorthand
       if (this.isRelational("<")) {
-        typeParameters = this.flowParseTypeParameterDeclaration(
-          /* allowDefault */ false,
-        );
+        typeParameters = this.flowParseTypeParameterDeclaration();
         if (!this.match(tt.parenL)) this.unexpected();
       }
 
@@ -2386,9 +2378,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // $FlowFixMe
       const kind = node.kind;
       if (kind !== "get" && kind !== "set" && this.isRelational("<")) {
-        node.typeParameters = this.flowParseTypeParameterDeclaration(
-          /* allowDefault */ false,
-        );
+        node.typeParameters = this.flowParseTypeParameterDeclaration();
       }
       super.parseFunctionParams(node, allowModifiers);
     }

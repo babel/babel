@@ -1,3 +1,1 @@
-(class A {
-  foo<T = string>() {}
-});
+declare function foo<T = string>() {}
