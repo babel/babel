@@ -1352,16 +1352,25 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case tt.plusMin:
           if (this.state.value === "-") {
             this.next();
-            if (!this.match(tt.num)) {
-              this.unexpected(null, `Unexpected token, expected "number"`);
+            if (this.match(tt.num)) {
+              return this.parseLiteral(
+                -this.state.value,
+                "NumberLiteralTypeAnnotation",
+                node.start,
+                node.loc.start,
+              );
             }
 
-            return this.parseLiteral(
-              -this.state.value,
-              "NumberLiteralTypeAnnotation",
-              node.start,
-              node.loc.start,
-            );
+            if (this.match(tt.bigint)) {
+              return this.parseLiteral(
+                -this.state.value,
+                "BigIntLiteralTypeAnnotation",
+                node.start,
+                node.loc.start,
+              );
+            }
+
+            this.unexpected(null, `Unexpected token, expected "number"`);
           }
 
           this.unexpected();
@@ -1369,6 +1378,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.parseLiteral(
             this.state.value,
             "NumberLiteralTypeAnnotation",
+          );
+
+        case tt.bigint:
+          return this.parseLiteral(
+            this.state.value,
+            "BigIntLiteralTypeAnnotation",
           );
 
         case tt._void:
