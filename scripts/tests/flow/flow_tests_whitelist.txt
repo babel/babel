@@ -28,12 +28,6 @@ private_class_properties/setter_and_field.js
 private_class_properties/setter_duplicate.js
 types/member/reserved_words.js
 class_method_kinds/polymorphic_getter.js
-numbers/underscored_bin.js
-numbers/underscored_float.js
-numbers/underscored_float_whole.js
-numbers/underscored_hex.js
-numbers/underscored_number.js
-numbers/underscored_oct.js
 ES6/modules/migrated_0020.js
 export_import_reserved_words/migrated_0003.js
 export_statements/export_trailing_comma.js
