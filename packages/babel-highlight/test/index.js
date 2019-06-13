@@ -93,23 +93,5 @@ describe("@babel/highlight", function() {
         });
       });
     });
-
-    describe("when colors are supported", function() {
-      stubColorSupport(true);
-
-      describe("when forceColor is not passed", function() {
-        it("returns a Chalk instance", function() {
-          expect(getChalk({}).constructor).toBe(chalk.constructor);
-        });
-      });
-
-      describe("when forceColor is passed", function() {
-        it("returns a Chalk instance", function() {
-          expect(getChalk({ forceColor: true }).constructor).toBe(
-            chalk.constructor,
-          );
-        });
-      });
-    });
   });
 });
