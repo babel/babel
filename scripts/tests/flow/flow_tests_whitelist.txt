@@ -9,7 +9,6 @@
 # Entries should be removed incrementally as the babel parser is improved.
 
 JSX_invalid/migrated_0000.js
-arrow_function/tuple_return_type.js
 arrow_function_invalid/migrated_0002.js
 async_await/migrated_0007.js
 async_await/migrated_0020.js

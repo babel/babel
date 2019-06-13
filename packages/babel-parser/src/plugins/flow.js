@@ -1263,7 +1263,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           });
 
         case tt.bracketL:
-          return this.flowParseTupleType();
+          this.state.noAnonFunctionType = false;
+          type = this.flowParseTupleType();
+          this.state.noAnonFunctionType = oldNoAnonFunctionType;
+          return type;
 
         case tt.relational:
           if (this.state.value === "<") {
