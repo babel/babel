@@ -101,9 +101,10 @@ for (const type in t.NODE_FIELDS) {
       `export function ${toFunctionName(type)}(${args.join(", ")}): ${type};`
     );
   } else {
+    const functionName = toFunctionName(type);
     lines.push(
-      `declare function _${toFunctionName(type)}(${args.join(", ")}): ${type};`,
-      `export { _${toFunctionName(type)} as ${toFunctionName(type)}}`
+      `declare function _${functionName}(${args.join(", ")}): ${type};`,
+      `export { _${functionName} as ${functionName}}`
     );
   }
 }
@@ -147,7 +148,23 @@ lines.push(
     exit?: TraversalHandler<T>,
   };`.replace(/(^|\n) {2}/g, "$1"),
   // eslint-disable-next-line
-  `export function traverse<T>(n: Node, h: TraversalHandler<T> | TraversalHandlers<T>, state?: T): void;`
+  `export function traverse<T>(n: Node, h: TraversalHandler<T> | TraversalHandlers<T>, state?: T): void;`,
+  `export function is(type: string, n: Node, opts: object): boolean;`,
+  `export function isBinding(node: Node, parent: Node, grandparent?: Node): boolean`,
+  `export function isBlockScoped(node: Node): boolean`,
+  `export function isImmutable(node: Node): boolean`,
+  `export function isLet(node: Node): boolean`,
+  `export function isNode(node: ?object): boolean`,
+  `export function isNodesEquivalent(a: any, b: any): boolean`,
+  `export function isPlaceholderType(placeholderType: ?string, targetType: string): boolean`,
+  `export function isReferenced(node: Node, parent: Node, grandparent?: Node): boolean`,
+  `export function isScope(node: Node, parent: Node): boolean`,
+  `export function isSpecifierDefault(specifier: ModuleSpecifier): boolean`,
+  `export function isType(nodetype: ?string, targetType: string): boolean`,
+  `export function isValidES3Identifier(name: string): boolean`,
+  `export function isValidES3Identifier(name: string): boolean`,
+  `export function isValidIdentifier(name: string): boolean`,
+  `export function isVar(node: Node): boolean`
 );
 
 for (const type in t.DEPRECATED_KEYS) {
