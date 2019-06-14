@@ -110,24 +110,6 @@ export function canSwapBetweenExpressionAndStatement(replacement) {
 }
 
 /**
- * Check whether the current path contains an `await` expression
- */
-
-export function containsAwaitExpression(): boolean {
-  let foundAwait = false;
-  this.traverse({
-    Function(path) {
-      path.skip();
-    },
-    AwaitExpression(path) {
-      foundAwait = true;
-      path.stop();
-    },
-  });
-  return foundAwait;
-}
-
-/**
  * Check whether the current path references a completion record
  */
 

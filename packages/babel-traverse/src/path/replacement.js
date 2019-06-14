@@ -260,7 +260,14 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
   callee.arrowFunctionToExpression();
 
   // (() => await xxx)() -> await (async () => await xxx)();
-  if (isParentAsync && this.get("callee.body").containsAwaitExpression()) {
+  if (
+    isParentAsync &&
+    traverse.hasType(
+      this.get("callee.body").node,
+      "AwaitExpression",
+      t.FUNCTION_TYPES,
+    )
+  ) {
     callee.set("async", true);
     this.replaceWith(t.awaitExpression(this.node));
   }
