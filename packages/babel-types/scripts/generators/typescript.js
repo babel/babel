@@ -100,6 +100,11 @@ for (const type in t.NODE_FIELDS) {
     lines.push(
       `export function ${toFunctionName(type)}(${args.join(", ")}): ${type};`
     );
+  } else {
+    lines.push(
+      `declare function _${toFunctionName(type)}(${args.join(", ")}): ${type};`,
+      `export { _${toFunctionName(type)} as ${toFunctionName(type)}}`
+    );
   }
 }
 

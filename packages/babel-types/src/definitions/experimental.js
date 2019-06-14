@@ -146,8 +146,8 @@ defineType("OptionalCallExpression", {
 });
 
 defineType("ClassPrivateProperty", {
-  visitor: ["key", "value"],
-  builder: ["key", "value"],
+  visitor: ["key", "value", "decorators"],
+  builder: ["key", "value", "decorators"],
   aliases: ["Property", "Private"],
   fields: {
     key: {
@@ -155,6 +155,13 @@ defineType("ClassPrivateProperty", {
     },
     value: {
       validate: assertNodeType("Expression"),
+      optional: true,
+    },
+    decorators: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Decorator")),
+      ),
       optional: true,
     },
   },
