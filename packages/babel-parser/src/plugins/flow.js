@@ -588,16 +588,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // Type annotations
 
-    flowParseTypeParameter(
-      allowDefault?: boolean = true,
-      requireDefault?: boolean = false,
-    ): N.TypeParameter {
-      if (!allowDefault && requireDefault) {
-        throw new Error(
-          "Cannot disallow a default value (`allowDefault`) while also requiring it (`requireDefault`).",
-        );
-      }
-
+    flowParseTypeParameter(requireDefault?: boolean = false): N.TypeParameter {
       const nodeStart = this.state.start;
 
       const node = this.startNode();
@@ -610,12 +601,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.bound = ident.typeAnnotation;
 
       if (this.match(tt.eq)) {
-        if (allowDefault) {
-          this.eat(tt.eq);
-          node.default = this.flowParseType();
-        } else {
-          this.unexpected();
-        }
+        this.eat(tt.eq);
+        node.default = this.flowParseType();
       } else {
         if (requireDefault) {
           this.unexpected(
@@ -629,9 +616,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TypeParameter");
     }
 
-    flowParseTypeParameterDeclaration(
-      allowDefault?: boolean = true,
-    ): N.TypeParameterDeclaration {
+    flowParseTypeParameterDeclaration(): N.TypeParameterDeclaration {
       const oldInType = this.state.inType;
       const node = this.startNode();
       node.params = [];
@@ -648,10 +633,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let defaultRequired = false;
 
       do {
-        const typeParameter = this.flowParseTypeParameter(
-          allowDefault,
-          defaultRequired,
-        );
+        const typeParameter = this.flowParseTypeParameter(defaultRequired);
 
         node.params.push(typeParameter);
 
