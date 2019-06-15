@@ -94,8 +94,8 @@ describe("@babel/highlight", function() {
       });
     });
 
-    describe("when colors are supported", function() {
-      stubColorSupport(true);
+    describe("when colors are not supported", function() {
+      stubColorSupport(false);
 
       describe("when forceColor is not passed", function() {
         it("returns a Chalk instance", function() {
