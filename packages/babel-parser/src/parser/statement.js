@@ -1014,12 +1014,37 @@ export default class StatementParser extends ExpressionParser {
       this.unexpected(null, "let is disallowed as a lexically bound name");
     }
     decl.id = this.parseBindingAtom();
+    if (kind === "const" || kind === "let") {
+      const invalid = this.checkVarIdHasLet(decl.id);
+      if (invalid) {
+        this.raise(
+          invalid.start,
+          "'let' is not allowed to be used as a name in 'let' or 'const' declarations.",
+        );
+      }
+    }
     this.checkLVal(
       decl.id,
       kind === "var" ? BIND_VAR : BIND_LEXICAL,
       undefined,
       "variable declaration",
     );
+  }
+
+  checkVarIdHasLet(id: ?N.Pattern): ?N.Identifier {
+    if (!id) {
+      return null;
+    } else if (id.type === "ArrayPattern") {
+      return id.elements.find(element => this.checkVarIdHasLet(element));
+    } else if (id.type === "ObjectPattern") {
+      return id.properties.find(property =>
+        this.checkVarIdHasLet(property.value),
+      );
+    } else if (id.type === "Identifier" && id.name === "let") {
+      return id;
+    } else {
+      return null;
+    }
   }
 
   // Parse a function declaration or literal (depending on the
