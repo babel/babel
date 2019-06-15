@@ -461,6 +461,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isClass?: boolean = false,
     ): void {
       node.id = this.flowParseRestrictedIdentifier(/*liberal*/ !isClass);
+      this.scope.declareName(node.id.name, BIND_LEXICAL, node.id.start);
 
       if (this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
