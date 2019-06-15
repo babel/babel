@@ -588,16 +588,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // Type annotations
 
-    flowParseTypeParameter(
-      allowDefault?: boolean = true,
-      requireDefault?: boolean = false,
-    ): N.TypeParameter {
-      if (!allowDefault && requireDefault) {
-        throw new Error(
-          "Cannot disallow a default value (`allowDefault`) while also requiring it (`requireDefault`).",
-        );
-      }
-
+    flowParseTypeParameter(requireDefault?: boolean = false): N.TypeParameter {
       const nodeStart = this.state.start;
 
       const node = this.startNode();
@@ -610,12 +601,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.bound = ident.typeAnnotation;
 
       if (this.match(tt.eq)) {
-        if (allowDefault) {
-          this.eat(tt.eq);
-          node.default = this.flowParseType();
-        } else {
-          this.unexpected();
-        }
+        this.eat(tt.eq);
+        node.default = this.flowParseType();
       } else {
         if (requireDefault) {
           this.unexpected(
@@ -629,9 +616,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TypeParameter");
     }
 
-    flowParseTypeParameterDeclaration(
-      allowDefault?: boolean = true,
-    ): N.TypeParameterDeclaration {
+    flowParseTypeParameterDeclaration(): N.TypeParameterDeclaration {
       const oldInType = this.state.inType;
       const node = this.startNode();
       node.params = [];
@@ -648,10 +633,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let defaultRequired = false;
 
       do {
-        const typeParameter = this.flowParseTypeParameter(
-          allowDefault,
-          defaultRequired,
-        );
+        const typeParameter = this.flowParseTypeParameter(defaultRequired);
 
         node.params.push(typeParameter);
 
@@ -798,9 +780,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.typeParameters = null;
 
       if (this.isRelational("<")) {
-        node.typeParameters = this.flowParseTypeParameterDeclaration(
-          /* allowDefault */ false,
-        );
+        node.typeParameters = this.flowParseTypeParameterDeclaration();
       }
 
       this.expect(tt.parenL);
@@ -1287,9 +1267,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         case tt.relational:
           if (this.state.value === "<") {
-            node.typeParameters = this.flowParseTypeParameterDeclaration(
-              /* allowDefault */ false,
-            );
+            node.typeParameters = this.flowParseTypeParameterDeclaration();
             this.expect(tt.parenL);
             tmp = this.flowParseFunctionTypeParams();
             node.params = tmp.params;
@@ -2092,9 +2070,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
       delete (method: $FlowFixMe).variance;
       if (this.isRelational("<")) {
-        method.typeParameters = this.flowParseTypeParameterDeclaration(
-          /* allowDefault */ false,
-        );
+        method.typeParameters = this.flowParseTypeParameterDeclaration();
       }
 
       super.pushClassMethod(
@@ -2176,9 +2152,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       // method shorthand
       if (this.isRelational("<")) {
-        typeParameters = this.flowParseTypeParameterDeclaration(
-          /* allowDefault */ false,
-        );
+        typeParameters = this.flowParseTypeParameterDeclaration();
         if (!this.match(tt.parenL)) this.unexpected();
       }
 
@@ -2386,9 +2360,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // $FlowFixMe
       const kind = node.kind;
       if (kind !== "get" && kind !== "set" && this.isRelational("<")) {
-        node.typeParameters = this.flowParseTypeParameterDeclaration(
-          /* allowDefault */ false,
-        );
+        node.typeParameters = this.flowParseTypeParameterDeclaration();
       }
       super.parseFunctionParams(node, allowModifiers);
     }

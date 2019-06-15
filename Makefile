@@ -1,5 +1,5 @@
 MAKEFLAGS = -j1
-FLOW_COMMIT = 2ac56861e3ceff9ca406ae586fbafb3480c6c0b7
+FLOW_COMMIT = 09669846b7a7ca5a6c23c12d56bb3bebdafd67e9
 TEST262_COMMIT = de567d3aa5de4eaa11e00131d26b9fe77997dfb0
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967

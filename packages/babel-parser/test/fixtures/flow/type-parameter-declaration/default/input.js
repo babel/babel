@@ -20,3 +20,13 @@ interface A19<T: ?string = string> {}
 interface A20<S, T: ?string = string> {}
 interface A21<S = number, T: ?string = string> {}
 type A22<T = void> = T
+function A26<T = string>() {}
+;({ A28<T = string>() {} });
+class A29 {
+  foo<T = string>() {}
+}
+;(class A30 {
+  foo<T = string>() {}
+});
+declare class A31 { foo<T = string>(): void }
+<T = string>() => 123;
