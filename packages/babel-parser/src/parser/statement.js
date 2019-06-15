@@ -1019,22 +1019,6 @@ export default class StatementParser extends ExpressionParser {
     );
   }
 
-  checkVarIdHasLet(id: ?N.Pattern): ?N.Identifier {
-    if (!id) {
-      return null;
-    } else if (id.type === "ArrayPattern") {
-      return id.elements.find(element => this.checkVarIdHasLet(element));
-    } else if (id.type === "ObjectPattern") {
-      return id.properties.find(property =>
-        this.checkVarIdHasLet(property.value),
-      );
-    } else if (id.type === "Identifier" && id.name === "let") {
-      return id;
-    } else {
-      return null;
-    }
-  }
-
   // Parse a function declaration or literal (depending on the
   // `isStatement` parameter).
 
