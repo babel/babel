@@ -113,7 +113,10 @@ const options = {
     ["flow", { all: true }],
     "flowComments",
     "jsx",
+    "classProperties",
     "classPrivateProperties",
+    "classPrivateMethods",
+    "bigInt",
   ],
   sourceType: "module",
   ranges: true,
@@ -127,6 +130,7 @@ const flowOptionsMapping = {
   esproposal_nullish_coalescing: "nullishCoalescingOperator",
   esproposal_optional_chaining: "optionalChaining",
   types: "flowComments",
+  intern_comments: false,
 };
 
 const summary = {
@@ -169,10 +173,12 @@ tests.forEach(section => {
           }
           return;
         }
-        if (!flowOptionsMapping[option]) {
+        if (!(option in flowOptionsMapping)) {
           throw new Error("Parser options not mapped " + option);
         }
-        babelParserOptions.plugins.push(flowOptionsMapping[option]);
+        if (flowOptionsMapping[option]) {
+          babelParserOptions.plugins.push(flowOptionsMapping[option]);
+        }
       });
     }
 
