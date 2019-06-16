@@ -37,10 +37,14 @@ function m(g = {
   return g;
 }
 
-function n(g = (z = a) => {}) {
+function n(g = (a = a) => {}) {
   let z = "inside";
 }
 
-function o(g = z => z) {
+function o(g = (a = a) => a) {
   let z = "inside";
+}
+
+function p(z, g = (a = z) => a) {
+  g(z);
 }
