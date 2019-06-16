@@ -1177,6 +1177,9 @@ helpers.classStaticPrivateFieldSpecGet = helper("7.0.2")`
     if (receiver !== classConstructor) {
       throw new TypeError("Private static access of wrong provenance");
     }
+    if (descriptor.get) {
+      return descriptor.get.call(receiver);
+    }
     return descriptor.value;
   }
 `;
@@ -1186,13 +1189,18 @@ helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
     if (receiver !== classConstructor) {
       throw new TypeError("Private static access of wrong provenance");
     }
-    if (!descriptor.writable) {
-      // This should only throw in strict mode, but class bodies are
-      // always strict and private fields can only be used inside
-      // class bodies.
-      throw new TypeError("attempted to set read only private field");
+    if (descriptor.set) {
+      descriptor.set.call(receiver, value);
+    } else {
+      if (!descriptor.writable) {
+        // This should only throw in strict mode, but class bodies are
+        // always strict and private fields can only be used inside
+        // class bodies.
+        throw new TypeError("attempted to set read only private field");
+      }
+      descriptor.value = value;
     }
-    descriptor.value = value;
+
     return value;
   }
 `;
