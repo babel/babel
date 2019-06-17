@@ -19,28 +19,49 @@ function addCompletionRecords(path, paths) {
 }
 
 function completionRecordForSwitch(cases, paths) {
-  for (const switchCase of cases) {
-    let consequent = switchCase.get("consequent");
-    if (consequent.length > 0 && consequent[0].isBlockStatement()) {
-      consequent = consequent[0].get("body");
+  let isLastCaseWithConsequent = true;
+
+  for (let i = cases.length - 1; i >= 0; i--) {
+    const switchCase = cases[i];
+    const consequent = switchCase.get("consequent");
+
+    let breakStatement;
+    findBreak: for (const statement of consequent) {
+      if (statement.isBlockStatement()) {
+        for (const statementInBlock of statement.get("body")) {
+          if (statementInBlock.isBreakStatement()) {
+            breakStatement = statementInBlock;
+            break findBreak;
+          }
+        }
+      } else if (statement.isBreakStatement()) {
+        breakStatement = statement;
+        break;
+      }
     }
-    const isDefaultCase = switchCase.isSwitchCase({ test: null });
-    const breakStatement = consequent.find(statement =>
-      statement.isBreakStatement(),
-    );
 
     if (breakStatement) {
-      // get the previous statement
-      const previousKey = breakStatement.key - 1;
-      if (previousKey >= 0 && consequent[previousKey].isExpressionStatement()) {
-        paths = addCompletionRecords(consequent[previousKey], paths);
+      while (
+        breakStatement.key === 0 &&
+        breakStatement.parentPath.isBlockStatement()
+      ) {
+        breakStatement = breakStatement.parentPath;
+      }
+
+      const prevSibling = breakStatement.getPrevSibling();
+      if (
+        breakStatement.key > 0 &&
+        (prevSibling.isExpressionStatement() || prevSibling.isBlockStatement())
+      ) {
+        paths = addCompletionRecords(prevSibling, paths);
         breakStatement.remove();
       } else {
         breakStatement.replaceWith(switchCase.scope.buildUndefinedNode());
         paths = addCompletionRecords(breakStatement, paths);
       }
-    } else if (consequent.length > 0 && isDefaultCase) {
+    } else if (consequent.length > 0 && isLastCaseWithConsequent) {
       paths = addCompletionRecords(consequent[consequent.length - 1], paths);
+      isLastCaseWithConsequent = false;
     }
   }
   return paths;

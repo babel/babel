@@ -10,21 +10,17 @@ const x = n => function () {
         return 'b';
       }
 
+    default:
+      {
+        'd';
+      }
+
     case 2:
       {
         return 'c';
       }
 
     case 3:
-      return void 0;
-
     case 4:
-      {
-        'd';
-        'e';
-      }
-
-    default:
-      return 'f';
   }
 }();
