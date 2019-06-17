@@ -2,9 +2,33 @@ import Binding from "../binding";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as t from "@babel/types";
 
+function isInFunctionParameterScope(path) {
+  const computableNode = path.findParent(path => {
+    return (
+      path.type === "AssignmentPattern" ||
+      (path.type === "ObjectProperty" && path.node.computed)
+    );
+  });
+  const fdPath = path.findParent(path => path.type === "FunctionDeclaration");
+  if (computableNode && fdPath) {
+    return !!path.findParent(path => {
+      return fdPath.node.params.includes(path.node);
+    });
+  }
+  return false;
+}
+
 const renameVisitor = {
-  ReferencedIdentifier({ node }, state) {
+  ReferencedIdentifier(path, state) {
+    const { node } = path;
     if (node.name === state.oldName) {
+      if (isInFunctionParameterScope(path)) {
+        const binding = path.scope.getBinding(node.name);
+        if (binding && binding.kind !== "param") {
+          path.skip();
+          return;
+        }
+      }
       node.name = state.newName;
     }
   },
@@ -28,60 +52,6 @@ const renameVisitor = {
     }
   },
 };
-
-function isSafeBinding(scope, node) {
-  if (!scope.hasOwnBinding(node.name)) return true;
-  const { kind } = scope.getOwnBinding(node.name);
-  return kind === "param" || kind === "local";
-}
-
-const outerBindingVisitor = {
-  ReferencedIdentifier(path, state) {
-    const { node } = path;
-    if (node.name === state.oldName && !isSafeBinding(state.scope, node)) {
-      state.paramOuterBinding = true;
-      path.stop();
-    }
-  },
-};
-
-const assignmentPatternVisitor = {
-  AssignmentPattern(path, state) {
-    state.assignmentPatternPath = path;
-    path.stop();
-  },
-  Scope(path) {
-    path.skip();
-  },
-};
-
-const computedPropertyVisitor = {
-  ObjectProperty(path, state) {
-    if (path.node.computed) {
-      state.computedObjectPropertyPath = path;
-      path.stop();
-    }
-  },
-  Scope(path) {
-    path.skip();
-  },
-};
-
-function pathHasOuterBinding(path, state) {
-  const { oldName, scope } = state;
-  if (!state.paramOuterBinding) {
-    if (
-      path.isIdentifier() &&
-      path.node.name === oldName &&
-      !isSafeBinding(scope, path.node)
-    ) {
-      state.paramOuterBinding = true;
-    } else {
-      path.traverse(outerBindingVisitor, state);
-    }
-  }
-  return state.paramOuterBinding;
-}
 
 export default class Renamer {
   constructor(binding: Binding, oldName: string, newName: string) {
@@ -151,36 +121,6 @@ export default class Renamer {
     );
   }
 
-  parameterHasOuterBinding(path, state) {
-    const params = path.get("params");
-    let result = false;
-    for (let i = 0; i < params.length; i++) {
-      const param = params[i];
-      let bindingPath;
-      if (param.isAssignmentPattern()) {
-        state.assignmentPatternPath = param;
-      } else {
-        param.traverse(assignmentPatternVisitor, state);
-      }
-      if (state.assignmentPatternPath) {
-        bindingPath = state.assignmentPatternPath.get("right");
-      }
-      if (!bindingPath) {
-        param.traverse(computedPropertyVisitor, state);
-        if (state.computedObjectPropertyPath) {
-          bindingPath = state.computedObjectPropertyPath.get("key");
-        }
-      }
-      if (bindingPath) {
-        result = pathHasOuterBinding(bindingPath, state);
-        if (result) {
-          break;
-        }
-      }
-    }
-    return result;
-  }
-
   rename(block?) {
     const { binding, oldName, newName } = this;
     const { scope, path } = binding;
@@ -200,14 +140,7 @@ export default class Renamer {
       }
     }
 
-    if (
-      scope.path.isFunction() &&
-      this.parameterHasOuterBinding(scope.path, { scope, oldName })
-    ) {
-      scope.traverse(block || scope.block.body, renameVisitor, this);
-    } else {
-      scope.traverse(block || scope.block, renameVisitor, this);
-    }
+    scope.traverse(block || scope.block, renameVisitor, this);
 
     if (!block) {
       scope.removeOwnBinding(oldName);

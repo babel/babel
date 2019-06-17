@@ -45,6 +45,10 @@ function o(g = (a = a) => a) {
   let z = "inside";
 }
 
-function p(z, g = (a = z) => a) {
+function q(z, g = (b = z) => b) {
+  g(z);
+}
+
+function r(z, g = (a, b = a) => a) {
   g(z);
 }
