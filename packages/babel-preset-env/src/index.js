@@ -60,6 +60,10 @@ function supportsStaticESM(caller) {
   return !!(caller && caller.supportsStaticESM);
 }
 
+function supportsDynamicImport(caller) {
+  return !!(caller && caller.supportsDynamicImport);
+}
+
 export default declare((api, opts) => {
   api.assertVersion(7);
 
@@ -124,16 +128,37 @@ export default declare((api, opts) => {
   const plugins = [];
   const pluginUseBuiltIns = useBuiltIns !== false;
 
-  if (
-    modules !== false &&
-    moduleTransformations[modules] &&
+  if (modules !== false && moduleTransformations[modules]) {
     // TODO: Remove the 'api.caller' check eventually. Just here to prevent
     // unnecessary breakage in the short term for users on older betas/RCs.
-    (modules !== "auto" || !api.caller || !api.caller(supportsStaticESM))
-  ) {
-    // NOTE: not giving spec here yet to avoid compatibility issues when
-    // transform-modules-commonjs gets its spec mode
-    plugins.push([getPlugin(moduleTransformations[modules]), { loose }]);
+    const shouldTransformESM =
+      modules !== "auto" || !api.caller || !api.caller(supportsStaticESM);
+    const shouldTransformDynamicImport =
+      modules !== "auto" || !api.caller || !api.caller(supportsDynamicImport);
+
+    if (shouldTransformESM) {
+      // NOTE: not giving spec here yet to avoid compatibility issues when
+      // transform-modules-commonjs gets its spec mode
+      plugins.push([getPlugin(moduleTransformations[modules]), { loose }]);
+    }
+
+    if (
+      shouldTransformDynamicImport &&
+      shouldTransformESM &&
+      modules !== "umd"
+    ) {
+      plugins.push([getPlugin("proposal-dynamic-import"), { loose }]);
+    } else {
+      if (shouldTransformDynamicImport) {
+        console.warn(
+          "Dynamic import can only be supported when transforming ES modules" +
+            " to AMD, CommonJS or SystemJS. Only the parser plugin will be enabled.",
+        );
+      }
+      plugins.push(getPlugin("syntax-dynamic-import"));
+    }
+  } else {
+    plugins.push(getPlugin("syntax-dynamic-import"));
   }
 
   transformations.forEach(pluginName =>
