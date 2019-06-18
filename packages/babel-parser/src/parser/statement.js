@@ -1010,9 +1010,6 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseVarId(decl: N.VariableDeclarator, kind: "var" | "let" | "const"): void {
-    if ((kind === "const" || kind === "let") && this.isContextual("let")) {
-      this.unexpected(null, "let is disallowed as a lexically bound name");
-    }
     decl.id = this.parseBindingAtom();
     this.checkLVal(
       decl.id,
