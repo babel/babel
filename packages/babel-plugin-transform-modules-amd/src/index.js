@@ -9,6 +9,7 @@ import {
   wrapInterop,
 } from "@babel/helper-module-transforms";
 import { template, types as t } from "@babel/core";
+import { getImportSource } from "babel-plugin-dynamic-import-node/utils";
 
 const buildWrapper = template(`
   define(MODULE_NAME, AMD_ARGUMENTS, function(IMPORT_NAMES) {
@@ -68,7 +69,7 @@ export default declare((api, options) => {
           template.expression.ast`
             new Promise((${resolveId}, ${rejectId}) =>
               ${requireId}(
-                [${path.node.arguments[0]}],
+                [${getImportSource(t, path.node)}],
                 imported => ${resolveId}(${result}),
                 ${rejectId}
               )

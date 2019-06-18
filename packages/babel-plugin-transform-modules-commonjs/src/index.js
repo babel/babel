@@ -10,15 +10,12 @@ import {
 import simplifyAccess from "@babel/helper-simple-access";
 import { template, types as t } from "@babel/core";
 
-import babelPluginDynamicImportNode from "babel-plugin-dynamic-import-node";
+import { createDynamicImportTransform } from "babel-plugin-dynamic-import-node/utils";
 
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  // TODO: expose a better interface
-  const transformImportCall = Function.call.bind(
-    babelPluginDynamicImportNode(api).visitor.Import,
-  );
+  const transformImportCall = createDynamicImportTransform(api);
 
   const {
     loose,

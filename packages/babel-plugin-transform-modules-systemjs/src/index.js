@@ -1,6 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import hoistVariables from "@babel/helper-hoist-variables";
 import { template, types as t } from "@babel/core";
+import { getImportSource } from "babel-plugin-dynamic-import-node/utils";
 
 const buildTemplate = template(`
   SYSTEM_REGISTER(MODULE_NAME, SOURCES, function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
@@ -189,7 +190,7 @@ export default declare((api, options) => {
                 t.identifier(state.contextIdent),
                 t.identifier("import"),
               ),
-              path.node.arguments,
+              [getImportSource(t, path.node)],
             ),
           );
         }
