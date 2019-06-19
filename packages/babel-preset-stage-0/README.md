@@ -57,9 +57,9 @@ module.exports = function() {
 };
 ```
 
-**NOTE: Compatibility with @babel/plugin-proposal-class-properties**
+**NOTE: Compatibility between `@babel/plugin-proposal-class-properties` and `@babel/plugin-proposal-decorators`**
 If you are including your plugins manually and using `@babel/plugin-proposal-class-properties`, make sure that `@babel/plugin-proposal-decorators` comes before `@babel/plugin-proposal-class-properties`.
 
-When using the `legacy: true` mode, `@babel/plugin-proposal-class-properties` must be used in `loose: true` mode to support the @babel/plugin-proposal-decorators.
+When using the `legacy: true` option of `@babel/plugin-proposal-decorators`, `@babel/plugin-proposal-class-properties` must be used in `loose: true` mode.
 
-If are not using `@babel/plugin-proposal-decorators`, `loose` mode is not needed at all.
+If you are not using `@babel/plugin-proposal-decorators`, `loose` mode is not needed.
