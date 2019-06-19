@@ -29,7 +29,7 @@ module.exports = function() {
     plugins: [
       require("@babel/plugin-syntax-dynamic-import"),
       [require("@babel/plugin-proposal-decorators"), { "legacy": true }],
-      [require("@babel/plugin-proposal-class-properties"), { "loose": false }],
+      [require("@babel/plugin-proposal-class-properties"), { "loose": true }],
     ],
     presets: [
       // ...
@@ -37,3 +37,10 @@ module.exports = function() {
   };
 };
 ```
+
+**NOTE: Compatibility with @babel/plugin-proposal-class-properties**
+If you are including your plugins manually and using `@babel/plugin-proposal-class-properties`, make sure that `@babel/plugin-proposal-decorators` comes before `@babel/plugin-proposal-class-properties`.
+
+When using the `legacy: true` mode, `@babel/plugin-proposal-class-properties` must be used in `loose: true` mode to support the @babel/plugin-proposal-decorators.
+
+If are not using `@babel/plugin-proposal-decorators`, `loose` mode is not needed at all.
