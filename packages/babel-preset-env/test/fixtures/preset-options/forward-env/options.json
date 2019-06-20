@@ -4,6 +4,7 @@
     [
       "../../../../lib",
       {
+        "configPath": "packages/babel-preset-env/test/fixtures/preset-options/forward-env",
         "forwardEnv": true
       }
     ]
