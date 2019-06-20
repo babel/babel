@@ -25,10 +25,6 @@ const x = (n) => do {
       { "a"; }
       { break; "b"; }
       { break; "c"; }
-    case 6:
-      { "a" }
-    default:
-      { "b" }
   }
 }
 
@@ -38,5 +34,3 @@ expect(x(2)).toBe('a')
 expect(x(3)).toBe('b')
 expect(x(4)).toBe('c')
 expect(x(5)).toBe('a')
-expect(x(6)).toBe('b')
-expect(x(7)).toBe('b')

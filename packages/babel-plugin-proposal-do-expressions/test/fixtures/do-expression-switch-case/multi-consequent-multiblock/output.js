@@ -56,15 +56,5 @@ const x = n => function () {
         break;
         "c";
       }
-
-    case 6:
-      {
-        "a";
-      }
-
-    default:
-      {
-        return "b";
-      }
   }
 }();

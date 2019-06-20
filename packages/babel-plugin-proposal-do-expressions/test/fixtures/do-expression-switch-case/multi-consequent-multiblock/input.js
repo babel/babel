@@ -25,9 +25,5 @@ const x = (n) => do {
       { "a"; }
       { break; "b"; }
       { break; "c"; }
-    case 6:
-      { "a" }
-    default:
-      { "b" }
   }
 }
