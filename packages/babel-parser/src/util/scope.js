@@ -9,17 +9,18 @@ import {
   SCOPE_SUPER,
   SCOPE_PROGRAM,
   SCOPE_VAR,
-  BIND_SIMPLE_CATCH,
-  BIND_LEXICAL,
-  BIND_FUNCTION,
+  SCOPE_CLASS,
+  BIND_SCOPE_FUNCTION,
+  BIND_SCOPE_VAR,
+  BIND_SCOPE_LEXICAL,
+  BIND_KIND_VALUE,
   type ScopeFlags,
   type BindingTypes,
-  SCOPE_CLASS,
 } from "./scopeflags";
 import * as N from "../types";
 
 // Start an AST node, attaching a start offset.
-class Scope {
+export class Scope {
   flags: ScopeFlags;
   // A list of var-declared names in the current lexical scope
   var: string[] = [];
@@ -37,8 +38,8 @@ type raiseFunction = (number, string) => void;
 
 // The functions in this module keep track of declared variables in the
 // current scope in order to detect duplicate variable names.
-export default class ScopeHandler {
-  scopeStack: Array<Scope> = [];
+export default class ScopeHandler<IScope: Scope = Scope> {
+  scopeStack: Array<IScope> = [];
   raise: raiseFunction;
   inModule: boolean;
   undefinedExports: Map<string, number> = new Map();
@@ -70,8 +71,14 @@ export default class ScopeHandler {
     return this.treatFunctionsAsVarInScope(this.currentScope());
   }
 
+  createScope(flags: ScopeFlags): Scope {
+    return new Scope(flags);
+  }
+  // This method will be overwritten by subclasses
+  +createScope: (flags: ScopeFlags) => IScope;
+
   enter(flags: ScopeFlags) {
-    this.scopeStack.push(new Scope(flags));
+    this.scopeStack.push(this.createScope(flags));
   }
 
   exit() {
@@ -81,79 +88,109 @@ export default class ScopeHandler {
   // The spec says:
   // > At the top level of a function, or script, function declarations are
   // > treated like var declarations rather than like lexical declarations.
-  treatFunctionsAsVarInScope(scope: Scope): boolean {
+  treatFunctionsAsVarInScope(scope: IScope): boolean {
     return !!(
       scope.flags & SCOPE_FUNCTION ||
       (!this.inModule && scope.flags & SCOPE_PROGRAM)
     );
   }
 
-  declareName(name: string, bindingType: ?BindingTypes, pos: number) {
-    let redeclared = false;
-    if (bindingType === BIND_LEXICAL) {
-      const scope = this.currentScope();
-      redeclared =
-        scope.lexical.indexOf(name) > -1 ||
-        scope.functions.indexOf(name) > -1 ||
-        scope.var.indexOf(name) > -1;
-      scope.lexical.push(name);
-      if (this.inModule && scope.flags & SCOPE_PROGRAM) {
-        this.undefinedExports.delete(name);
-      }
-    } else if (bindingType === BIND_SIMPLE_CATCH) {
-      const scope = this.currentScope();
-      scope.lexical.push(name);
-    } else if (bindingType === BIND_FUNCTION) {
-      const scope = this.currentScope();
-      if (this.treatFunctionsAsVar) {
-        redeclared = scope.lexical.indexOf(name) > -1;
-      } else {
-        redeclared =
-          scope.lexical.indexOf(name) > -1 || scope.var.indexOf(name) > -1;
-      }
-      scope.functions.push(name);
-    } else {
-      for (let i = this.scopeStack.length - 1; i >= 0; --i) {
-        const scope = this.scopeStack[i];
-        if (
-          (scope.lexical.indexOf(name) > -1 &&
-            !(scope.flags & SCOPE_SIMPLE_CATCH && scope.lexical[0] === name)) ||
-          (!this.treatFunctionsAsVarInScope(scope) &&
-            scope.functions.indexOf(name) > -1)
-        ) {
-          redeclared = true;
-          break;
-        }
-        scope.var.push(name);
+  declareName(name: string, bindingType: BindingTypes, pos: number) {
+    let scope = this.currentScope();
+    if (bindingType & BIND_SCOPE_LEXICAL || bindingType & BIND_SCOPE_FUNCTION) {
+      this.checkRedeclarationInScope(scope, name, bindingType, pos);
 
-        if (this.inModule && scope.flags & SCOPE_PROGRAM) {
-          this.undefinedExports.delete(name);
-        }
+      if (bindingType & BIND_SCOPE_FUNCTION) {
+        scope.functions.push(name);
+      } else {
+        scope.lexical.push(name);
+      }
+
+      if (bindingType & BIND_SCOPE_LEXICAL) {
+        this.maybeExportDefined(scope, name);
+      }
+    } else if (bindingType & BIND_SCOPE_VAR) {
+      for (let i = this.scopeStack.length - 1; i >= 0; --i) {
+        scope = this.scopeStack[i];
+        this.checkRedeclarationInScope(scope, name, bindingType, pos);
+        scope.var.push(name);
+        this.maybeExportDefined(scope, name);
 
         if (scope.flags & SCOPE_VAR) break;
       }
     }
-    if (redeclared) {
+    if (this.inModule && scope.flags & SCOPE_PROGRAM) {
+      this.undefinedExports.delete(name);
+    }
+  }
+
+  maybeExportDefined(scope: IScope, name: string) {
+    if (this.inModule && scope.flags & SCOPE_PROGRAM) {
+      this.undefinedExports.delete(name);
+    }
+  }
+
+  checkRedeclarationInScope(
+    scope: IScope,
+    name: string,
+    bindingType: BindingTypes,
+    pos: number,
+  ) {
+    if (this.isRedeclaredInScope(scope, name, bindingType)) {
       this.raise(pos, `Identifier '${name}' has already been declared`);
     }
   }
 
+  isRedeclaredInScope(
+    scope: IScope,
+    name: string,
+    bindingType: BindingTypes,
+  ): boolean {
+    if (!(bindingType & BIND_KIND_VALUE)) return false;
+
+    if (bindingType & BIND_SCOPE_LEXICAL) {
+      return (
+        scope.lexical.indexOf(name) > -1 ||
+        scope.functions.indexOf(name) > -1 ||
+        scope.var.indexOf(name) > -1
+      );
+    }
+
+    if (bindingType & BIND_SCOPE_FUNCTION) {
+      return (
+        scope.lexical.indexOf(name) > -1 ||
+        (!this.treatFunctionsAsVarInScope(scope) &&
+          scope.var.indexOf(name) > -1)
+      );
+    }
+
+    return (
+      (scope.lexical.indexOf(name) > -1 &&
+        !(scope.flags & SCOPE_SIMPLE_CATCH && scope.lexical[0] === name)) ||
+      (!this.treatFunctionsAsVarInScope(scope) &&
+        scope.functions.indexOf(name) > -1)
+    );
+  }
+
   checkLocalExport(id: N.Identifier) {
-    // scope.functions must be empty as Module code is always strict.
     if (
       this.scopeStack[0].lexical.indexOf(id.name) === -1 &&
-      this.scopeStack[0].var.indexOf(id.name) === -1
+      this.scopeStack[0].var.indexOf(id.name) === -1 &&
+      // In strict mode, scope.functions will always be empty.
+      // Modules are strict by default, but the `scriptMode` option
+      // can overwrite this behavior.
+      this.scopeStack[0].functions.indexOf(id.name) === -1
     ) {
       this.undefinedExports.set(id.name, id.start);
     }
   }
 
-  currentScope(): Scope {
+  currentScope(): IScope {
     return this.scopeStack[this.scopeStack.length - 1];
   }
 
   // $FlowIgnore
-  currentVarScope(): Scope {
+  currentVarScope(): IScope {
     for (let i = this.scopeStack.length - 1; ; i--) {
       const scope = this.scopeStack[i];
       if (scope.flags & SCOPE_VAR) {
@@ -164,7 +201,7 @@ export default class ScopeHandler {
 
   // Could be useful for `this`, `new.target`, `super()`, `super.property`, and `super[property]`.
   // $FlowIgnore
-  currentThisScope(): Scope {
+  currentThisScope(): IScope {
     for (let i = this.scopeStack.length - 1; ; i--) {
       const scope = this.scopeStack[i];
       if (

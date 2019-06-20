@@ -202,7 +202,7 @@ const loadDescriptor = makeWeakCache(
     if (typeof item.then === "function") {
       throw new Error(
         `You appear to be using an async plugin, ` +
-          `which your current version of Babel does not support.` +
+          `which your current version of Babel does not support. ` +
           `If you're using a published plugin, ` +
           `you may need to upgrade your @babel/core version.`,
       );

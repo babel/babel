@@ -1,0 +1,3 @@
+{
+  "plugins": ["external-helpers", "proposal-class-properties"]
+}

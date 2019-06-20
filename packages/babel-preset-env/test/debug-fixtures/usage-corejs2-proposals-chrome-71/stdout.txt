@@ -1,0 +1,23 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "71"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  syntax-async-generators { "chrome":"71" }
+  syntax-object-rest-spread { "chrome":"71" }
+  syntax-json-strings { "chrome":"71" }
+  syntax-optional-catch-binding { "chrome":"71" }
+
+Using polyfills with `usage` option:
+
+[<CWD>/src/in.js] Added following core-js polyfill:
+  web.dom.iterable { "chrome":"71" }
+
+[<CWD>/src/in2.js] Added following core-js polyfill:
+  web.dom.iterable { "chrome":"71" }
+Successfully compiled 2 files with Babel.

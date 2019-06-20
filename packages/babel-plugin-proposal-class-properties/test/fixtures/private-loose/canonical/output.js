@@ -3,7 +3,7 @@ var Point =
 function () {
   "use strict";
 
-  function Point(_x2 = 0, _y2 = 0) {
+  function Point(x = 0, y = 0) {
     babelHelpers.classCallCheck(this, Point);
     Object.defineProperty(this, _x, {
       writable: true,
@@ -13,8 +13,8 @@ function () {
       writable: true,
       value: void 0
     });
-    babelHelpers.classPrivateFieldLooseBase(this, _x)[_x] = +_x2;
-    babelHelpers.classPrivateFieldLooseBase(this, _y)[_y] = +_y2;
+    babelHelpers.classPrivateFieldLooseBase(this, _x)[_x] = +x;
+    babelHelpers.classPrivateFieldLooseBase(this, _y)[_y] = +y;
   }
 
   babelHelpers.createClass(Point, [{

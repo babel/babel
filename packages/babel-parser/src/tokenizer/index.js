@@ -226,11 +226,9 @@ export default class Tokenizer extends LocationParser {
       loc: new SourceLocation(startLoc, endLoc),
     };
 
-    if (!this.isLookahead) {
-      if (this.options.tokens) this.state.tokens.push(comment);
-      this.state.comments.push(comment);
-      this.addComment(comment);
-    }
+    if (this.options.tokens) this.state.tokens.push(comment);
+    this.state.comments.push(comment);
+    this.addComment(comment);
   }
 
   skipBlockComment(): void {
@@ -249,6 +247,10 @@ export default class Tokenizer extends LocationParser {
       ++this.state.curLine;
       this.state.lineStart = match.index + match[0].length;
     }
+
+    // If we are doing a lookahead right now we need to advance the position (above code)
+    // but we do not want to push the comment to the state.
+    if (this.isLookahead) return;
 
     this.pushComment(
       true,
@@ -275,6 +277,10 @@ export default class Tokenizer extends LocationParser {
         ch = this.input.charCodeAt(this.state.pos);
       }
     }
+
+    // If we are doing a lookahead right now we need to advance the position (above code)
+    // but we do not want to push the comment to the state.
+    if (this.isLookahead) return;
 
     this.pushComment(
       false,
@@ -350,7 +356,7 @@ export default class Tokenizer extends LocationParser {
     this.state.type = type;
     this.state.value = val;
 
-    this.updateContext(prevType);
+    if (!this.isLookahead) this.updateContext(prevType);
   }
 
   // ### Token reading
@@ -526,7 +532,10 @@ export default class Tokenizer extends LocationParser {
         next === charCodes.dash &&
         !this.inModule &&
         this.input.charCodeAt(this.state.pos + 2) === charCodes.greaterThan &&
-        lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.pos))
+        (this.state.lastTokEnd === 0 ||
+          lineBreak.test(
+            this.input.slice(this.state.lastTokEnd, this.state.pos),
+          ))
       ) {
         // A `-->` line comment
         this.skipLineComment(3);
@@ -1210,7 +1219,13 @@ export default class Tokenizer extends LocationParser {
             octalStr = octalStr.slice(0, -1);
             octal = parseInt(octalStr, 8);
           }
-          if (octal > 0) {
+          this.state.pos += octalStr.length - 1;
+          const next = this.input.charCodeAt(this.state.pos);
+          if (
+            octalStr !== "0" ||
+            next === charCodes.digit8 ||
+            next === charCodes.digit9
+          ) {
             if (inTemplate) {
               this.state.invalidTemplateEscapePosition = codePos;
               return null;
@@ -1223,7 +1238,7 @@ export default class Tokenizer extends LocationParser {
               this.state.octalPosition = codePos;
             }
           }
-          this.state.pos += octalStr.length - 1;
+
           return String.fromCharCode(octal);
         }
 

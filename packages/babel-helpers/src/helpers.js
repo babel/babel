@@ -80,7 +80,7 @@ helpers.jsx = helper("7.0.0-beta.0")`
 helpers.asyncIterator = helper("7.0.0-beta.0")`
   export default function _asyncIterator(iterable) {
     var method
-    if (typeof Symbol === "function") {
+    if (typeof Symbol !== "undefined") {
       if (Symbol.asyncIterator) {
         method = iterable[Symbol.asyncIterator]
         if (method != null) return method.call(iterable);
@@ -384,6 +384,7 @@ helpers.extends = helper("7.0.0-beta.0")`
   }
 `;
 
+// This old helper can be removed in babel v8
 helpers.objectSpread = helper("7.0.0-beta.0")`
   import defineProperty from "defineProperty";
 
@@ -399,6 +400,30 @@ helpers.objectSpread = helper("7.0.0-beta.0")`
       ownKeys.forEach(function(key) {
         defineProperty(target, key, source[key]);
       });
+    }
+    return target;
+  }
+`;
+
+helpers.objectSpread2 = helper("7.0.0-beta.0")`
+  import defineProperty from "defineProperty";
+
+  export default function _objectSpread2(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      if (i % 2) {
+        var source = (arguments[i] != null) ? arguments[i] : {};
+        var ownKeys = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === 'function') {
+          ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys.forEach(function(key) {
+          defineProperty(target, key, source[key]);
+        });
+      } else {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(arguments[i]));
+      }
     }
     return target;
   }
@@ -998,7 +1023,7 @@ helpers.initializerDefineProperty = helper("7.0.0-beta.0")`
 helpers.applyDecoratedDescriptor = helper("7.0.0-beta.0")`
     export default function _applyDecoratedDescriptor(target, property, decorators, descriptor, context){
         var desc = {};
-        Object['ke' + 'ys'](descriptor).forEach(function(key){
+        Object.keys(descriptor).forEach(function(key){
             desc[key] = descriptor[key];
         });
         desc.enumerable = !!desc.enumerable;
@@ -1019,7 +1044,7 @@ helpers.applyDecoratedDescriptor = helper("7.0.0-beta.0")`
         if (desc.initializer === void 0){
             // This is a hack to avoid this being processed by 'transform-runtime'.
             // See issue #9.
-            Object['define' + 'Property'](target, property, desc);
+            Object.defineProperty(target, property, desc);
             desc = null;
         }
 
@@ -1870,7 +1895,7 @@ helpers.wrapRegExp = helper("7.2.6")`
       // but in that case Babel doesn't add the wrapper anyway.
 
       var g = _groups.get(re);
-      return Object.keys(groups).reduce(function(groups, name) {
+      return Object.keys(g).reduce(function(groups, name) {
         groups[name] = result[g[name]];
         return groups;
       }, Object.create(null));

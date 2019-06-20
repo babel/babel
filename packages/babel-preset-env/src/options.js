@@ -1,5 +1,8 @@
+// @flow
+
 export const TopLevelOptions = {
   configPath: "configPath",
+  corejs: "corejs",
   debug: "debug",
   exclude: "exclude",
   forceAllTransforms: "forceAllTransforms",
@@ -43,4 +46,8 @@ export const TargetNames = {
   ios: "ios",
   android: "android",
   electron: "electron",
+  samsung: "samsung",
+
+  // deprecated
+  uglify: "uglify",
 };

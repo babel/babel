@@ -1,5 +1,9 @@
 // @flow
 
+import type { Options as ParserOpts } from "@babel/parser/src/options";
+
+export type { ParserOpts };
+
 /**
  * These are the options that 'babel-template' actually accepts and typechecks
  * when called. All other options are passed through to the parser.
@@ -8,6 +12,8 @@ export type PublicOpts = {
   /**
    * A set of placeholder names to automatically accept, ignoring the given
    * pattern entirely.
+   *
+   * This option can be used when using %%foo%% style placeholders.
    */
   placeholderWhitelist?: ?Set<string>,
 
@@ -19,6 +25,8 @@ export type PublicOpts = {
    * 'placeholderWhitelist' value to find replacements.
    *
    * Defaults to /^[_$A-Z0-9]+$/.
+   *
+   * This option can be used when using %%foo%% style placeholders.
    */
   placeholderPattern?: ?(RegExp | false),
 
@@ -27,13 +35,22 @@ export type PublicOpts = {
    * or 'false' to automatically discard comments. Defaults to 'false'.
    */
   preserveComments?: ?boolean,
+
+  /**
+   * 'true' to use %%foo%% style placeholders, 'false' to use legacy placeholders
+   * described by placeholderPattern or placeholderWhitelist.
+   * When it is not set, it behaves as 'true' if there are syntactic placeholders,
+   * otherwise as 'false'.
+   */
+  syntacticPlaceholders?: ?boolean,
 };
 
 export type TemplateOpts = {|
-  parser: {},
+  parser: ParserOpts,
   placeholderWhitelist: Set<string> | void,
   placeholderPattern: RegExp | false | void,
   preserveComments: boolean | void,
+  syntacticPlaceholders: boolean | void,
 |};
 
 export function merge(a: TemplateOpts, b: TemplateOpts): TemplateOpts {
@@ -41,6 +58,7 @@ export function merge(a: TemplateOpts, b: TemplateOpts): TemplateOpts {
     placeholderWhitelist = a.placeholderWhitelist,
     placeholderPattern = a.placeholderPattern,
     preserveComments = a.preserveComments,
+    syntacticPlaceholders = a.syntacticPlaceholders,
   } = b;
 
   return {
@@ -51,6 +69,7 @@ export function merge(a: TemplateOpts, b: TemplateOpts): TemplateOpts {
     placeholderWhitelist,
     placeholderPattern,
     preserveComments,
+    syntacticPlaceholders,
   };
 }
 
@@ -63,6 +82,7 @@ export function validate(opts: mixed): TemplateOpts {
     placeholderWhitelist,
     placeholderPattern,
     preserveComments,
+    syntacticPlaceholders,
     ...parser
   } = opts || {};
 
@@ -88,12 +108,32 @@ export function validate(opts: mixed): TemplateOpts {
     );
   }
 
+  if (
+    syntacticPlaceholders != null &&
+    typeof syntacticPlaceholders !== "boolean"
+  ) {
+    throw new Error(
+      "'.syntacticPlaceholders' must be a boolean, null, or undefined",
+    );
+  }
+  if (
+    syntacticPlaceholders === true &&
+    (placeholderWhitelist != null || placeholderPattern != null)
+  ) {
+    throw new Error(
+      "'.placeholderWhitelist' and '.placeholderPattern' aren't compatible" +
+        " with '.syntacticPlaceholders: true'",
+    );
+  }
+
   return {
     parser,
     placeholderWhitelist: placeholderWhitelist || undefined,
     placeholderPattern:
       placeholderPattern == null ? undefined : placeholderPattern,
     preserveComments: preserveComments == null ? false : preserveComments,
+    syntacticPlaceholders:
+      syntacticPlaceholders == null ? undefined : syntacticPlaceholders,
   };
 }
 

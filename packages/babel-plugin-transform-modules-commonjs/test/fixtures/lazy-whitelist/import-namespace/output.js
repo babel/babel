@@ -1,16 +1,15 @@
 "use strict";
 
-var foo1 = babelHelpers.interopRequireDefault(require("white"));
+function foo1() {
+  const data = babelHelpers.interopRequireDefault(require("white"));
 
-function foo2() {
-  const data = babelHelpers.interopRequireDefault(require("black"));
-
-  foo2 = function () {
+  foo1 = function () {
     return data;
   };
 
   return data;
 }
 
-console.log(foo1);
-console.log(foo2());
+var foo2 = babelHelpers.interopRequireDefault(require("black"));
+console.log(foo1());
+console.log(foo2);

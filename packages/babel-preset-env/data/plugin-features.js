@@ -68,7 +68,6 @@ const es = {
     features: [
       "destructuring, assignment",
       "destructuring, declarations",
-      "destructuring, parameters",
     ],
   },
   "transform-block-scoping": {
@@ -99,6 +98,9 @@ const es = {
   "proposal-json-strings": "JSON superset",
   "proposal-optional-catch-binding": "optional catch binding",
   "transform-named-capturing-groups-regex": "RegExp named capture groups",
+  "transform-member-expression-literals": "Object/array literal extensions / Reserved words as property names",
+  "transform-property-literals": "Object/array literal extensions / Reserved words as property names",
+  "transform-reserved-words": "Miscellaneous / Unreserved words",
 };
 
 const proposals = require("./shipped-proposals").features;

@@ -5,6 +5,7 @@ cache:
   yarn: true
 node_js:
   # We test the latest version on circleci
+  - '11'
   - '10'
   - '8'
   - '6'

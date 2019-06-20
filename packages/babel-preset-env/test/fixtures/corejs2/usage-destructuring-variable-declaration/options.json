@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "useBuiltIns": "usage",
+        "corejs": 2,
+        "modules": false,
+        "exclude": ["transform-destructuring"]
+      }
+    ]
+  ]
+}

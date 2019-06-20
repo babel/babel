@@ -288,7 +288,7 @@ function getModuleMetadata(
         // dependency modules are loaded lazily.
         metadata.lazy = !/\./.test(source);
       } else if (Array.isArray(lazy)) {
-        metadata.lazy = lazy.indexOf(source);
+        metadata.lazy = lazy.indexOf(source) !== -1;
       } else if (typeof lazy === "function") {
         metadata.lazy = lazy(source);
       } else {

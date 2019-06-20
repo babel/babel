@@ -501,10 +501,11 @@ function replaceThisContext(path, ref, superRef, file, loose) {
     file,
     getObjectRef() {
       state.needsClassRef = true;
-      return ref;
+      return path.node.static
+        ? ref
+        : t.memberExpression(ref, t.identifier("prototype"));
     },
   });
-  replacer.isStatic = true;
   replacer.replace();
   if (path.isProperty()) {
     path.traverse(thisContextVisitor, state);
@@ -532,7 +533,7 @@ export function buildFieldsInitNodes(
     const isField = prop.isProperty();
     const isMethod = !isField;
 
-    if (isStatic) {
+    if (isStatic || (isMethod && isPrivate)) {
       const replaced = replaceThisContext(prop, ref, superRef, state, loose);
       needsClassRef = needsClassRef || replaced;
     }

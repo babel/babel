@@ -64,6 +64,26 @@ describe("normalize-options", () => {
         ).toThrowError(/were found in both/);
       },
     );
+
+    it("should not throw if corejs version is valid", () => {
+      [2, 2.1, 3, 3.5].forEach(corejs => {
+        ["entry", "usage"].forEach(useBuiltIns => {
+          expect(() =>
+            normalizeOptions.default({ useBuiltIns, corejs }),
+          ).not.toThrowError();
+        });
+      });
+    });
+
+    it("should throw if corejs version is invalid", () => {
+      [1, 1.2, 4, 4.5].forEach(corejs => {
+        ["entry", "usage"].forEach(useBuiltIns => {
+          expect(() =>
+            normalizeOptions.default({ useBuiltIns, corejs }),
+          ).toThrowError(/The version passed to `corejs` is invalid./);
+        });
+      });
+    });
   });
 
   describe("Config format validation", () => {
@@ -97,20 +117,24 @@ describe("normalize-options", () => {
 
     it("should expand regular expressions in `include` and `exclude`", () => {
       const normalized = normalizeOptions.default({
-        exclude: ["es6.math.log.*"],
+        useBuiltIns: "entry",
+        corejs: 3,
+        exclude: ["es.math.log.*"],
       });
       expect(normalized.exclude).toEqual([
-        "es6.math.log1p",
-        "es6.math.log10",
-        "es6.math.log2",
+        "es.math.log10",
+        "es.math.log1p",
+        "es.math.log2",
       ]);
     });
 
     it("should not allow the same modules in `include` and `exclude`", () => {
       const normalizeWithNonExistingPlugin = () => {
         normalizeOptions.default({
-          include: ["es6.math.log2"],
-          exclude: ["es6.math.log.*"],
+          useBuiltIns: "entry",
+          corejs: 3,
+          include: ["es.math.log2"],
+          exclude: ["es.math.log.*"],
         });
       };
       expect(normalizeWithNonExistingPlugin).toThrow(Error);
@@ -118,11 +142,13 @@ describe("normalize-options", () => {
 
     it("should not do partial match if not explicitly defined `include` and `exclude`", () => {
       const normalized = normalizeOptions.default({
-        include: ["es6.reflect.set-prototype-of"],
-        exclude: ["es6.reflect.set"],
+        useBuiltIns: "entry",
+        corejs: 3,
+        include: ["es.reflect.set-prototype-of"],
+        exclude: ["es.reflect.set"],
       });
-      expect(normalized.include).toEqual(["es6.reflect.set-prototype-of"]);
-      expect(normalized.exclude).toEqual(["es6.reflect.set"]);
+      expect(normalized.include).toEqual(["es.reflect.set-prototype-of"]);
+      expect(normalized.exclude).toEqual(["es.reflect.set"]);
     });
   });
 

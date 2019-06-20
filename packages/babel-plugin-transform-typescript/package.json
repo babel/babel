@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-typescript",
-  "version": "7.3.2",
+  "version": "7.4.5",
   "description": "Transform TypeScript into ES.next",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-typescript",
   "license": "MIT",
@@ -13,6 +13,7 @@
     "typescript"
   ],
   "dependencies": {
+    "@babel/helper-create-class-features-plugin": "^7.3.4",
     "@babel/helper-plugin-utils": "^7.0.0",
     "@babel/plugin-syntax-typescript": "^7.2.0"
   },
@@ -20,7 +21,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.2.0",
+    "@babel/core": "^7.4.5",
     "@babel/helper-plugin-test-runner": "^7.0.0"
   }
 }

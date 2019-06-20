@@ -77,6 +77,7 @@ import transformReactJsxCompat from "@babel/plugin-transform-react-jsx-compat";
 import transformReactJsxSelf from "@babel/plugin-transform-react-jsx-self";
 import transformReactJsxSource from "@babel/plugin-transform-react-jsx-source";
 import transformRegenerator from "@babel/plugin-transform-regenerator";
+import transformReservedWords from "@babel/plugin-transform-reserved-words";
 import transformRuntime from "@babel/plugin-transform-runtime";
 import transformShorthandProperties from "@babel/plugin-transform-shorthand-properties";
 import transformSpread from "@babel/plugin-transform-spread";
@@ -162,6 +163,7 @@ export {
   transformReactJsxSelf,
   transformReactJsxSource,
   transformRegenerator,
+  transformReservedWords,
   transformRuntime,
   transformShorthandProperties,
   transformSpread,
@@ -248,6 +250,7 @@ export const all = {
   "transform-react-jsx-self": transformReactJsxSelf,
   "transform-react-jsx-source": transformReactJsxSource,
   "transform-regenerator": transformRegenerator,
+  "transform-reserved-words": transformReservedWords,
   "transform-runtime": transformRuntime,
   "transform-shorthand-properties": transformShorthandProperties,
   "transform-spread": transformSpread,

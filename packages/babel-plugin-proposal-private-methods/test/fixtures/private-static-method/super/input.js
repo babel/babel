@@ -1,8 +1,14 @@
 class Base {
-  static basePublicStaticMethod() { return 1017; }
+  static basePublicStaticMethod() {
+    return 'good';
+  }
 }
 
 class Sub extends Base {
+  static basePublicStaticMethod() {
+    return 'bad';
+  }
+
   static #subStaticPrivateMethod() {
     return super.basePublicStaticMethod();
   }

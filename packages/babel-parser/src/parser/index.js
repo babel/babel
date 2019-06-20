@@ -20,11 +20,18 @@ export default class Parser extends StatementParser {
     options = getOptions(options);
     super(options, input);
 
+    const ScopeHandler = this.getScopeHandler();
+
     this.options = options;
     this.inModule = this.options.sourceType === "module";
     this.scope = new ScopeHandler(this.raise.bind(this), this.inModule);
     this.plugins = pluginsMap(this.options.plugins);
     this.filename = options.sourceFilename;
+  }
+
+  // This can be overwritten, for example, by the TypeScript plugin.
+  getScopeHandler(): Class<ScopeHandler<*>> {
+    return ScopeHandler;
   }
 
   parse(): File {

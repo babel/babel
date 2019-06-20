@@ -11,7 +11,7 @@ import {
 import { lineBreak, skipWhiteSpace } from "../util/whitespace";
 import * as charCodes from "charcodes";
 import {
-  BIND_SIMPLE_CATCH,
+  BIND_CLASS,
   BIND_LEXICAL,
   BIND_VAR,
   BIND_FUNCTION,
@@ -21,10 +21,6 @@ import {
   SCOPE_SIMPLE_CATCH,
   SCOPE_SUPER,
 } from "../util/scopeflags";
-
-// Reused empty array added for node fields that are always empty.
-
-const empty = [];
 
 const loopLabel = { kind: "loop" },
   switchLabel = { kind: "switch" };
@@ -519,21 +515,11 @@ export default class StatementParser extends ExpressionParser {
       this.parseVar(init, true, kind);
       this.finishNode(init, "VariableDeclaration");
 
-      if (this.match(tt._in) || this.isContextual("of")) {
-        if (init.declarations.length === 1) {
-          const declaration = init.declarations[0];
-          const isForInInitializer =
-            kind === "var" &&
-            declaration.init &&
-            declaration.id.type != "ObjectPattern" &&
-            declaration.id.type != "ArrayPattern" &&
-            !this.isContextual("of");
-          if (this.state.strict && isForInInitializer) {
-            this.raise(this.state.start, "for-in initializer in strict mode");
-          } else if (isForInInitializer || !declaration.init) {
-            return this.parseForIn(node, init, awaitAt);
-          }
-        }
+      if (
+        (this.match(tt._in) || this.isContextual("of")) &&
+        init.declarations.length === 1
+      ) {
+        return this.parseForIn(node, init, awaitAt);
       }
       if (awaitAt > -1) {
         this.unexpected(awaitAt);
@@ -672,12 +658,7 @@ export default class StatementParser extends ExpressionParser {
         clause.param = this.parseBindingAtom();
         const simple = clause.param.type === "Identifier";
         this.scope.enter(simple ? SCOPE_SIMPLE_CATCH : 0);
-        this.checkLVal(
-          clause.param,
-          simple ? BIND_SIMPLE_CATCH : BIND_LEXICAL,
-          null,
-          "catch clause",
-        );
+        this.checkLVal(clause.param, BIND_LEXICAL, null, "catch clause");
         this.expect(tt.parenR);
       } else {
         clause.param = null;
@@ -698,7 +679,6 @@ export default class StatementParser extends ExpressionParser {
       node.handler = this.finishNode(clause, "CatchClause");
     }
 
-    node.guardedHandlers = empty;
     node.finalizer = this.eat(tt._finally) ? this.parseBlock() : null;
 
     if (!node.handler && !node.finalizer) {
@@ -938,20 +918,38 @@ export default class StatementParser extends ExpressionParser {
 
   parseForIn(
     node: N.ForInOf,
-    init: N.VariableDeclaration,
+    init: N.VariableDeclaration | N.AssignmentPattern,
     awaitAt: number,
   ): N.ForInOf {
-    const type = this.match(tt._in) ? "ForInStatement" : "ForOfStatement";
-    if (awaitAt > -1) {
-      this.eatContextual("of");
+    const isForIn = this.match(tt._in);
+    this.next();
+
+    if (isForIn) {
+      if (awaitAt > -1) this.unexpected(awaitAt);
     } else {
-      this.next();
-    }
-    if (type === "ForOfStatement") {
       node.await = awaitAt > -1;
     }
+
+    if (
+      init.type === "VariableDeclaration" &&
+      init.declarations[0].init != null &&
+      (!isForIn ||
+        this.state.strict ||
+        init.kind !== "var" ||
+        init.declarations[0].id.type !== "Identifier")
+    ) {
+      this.raise(
+        init.start,
+        `${
+          isForIn ? "for-in" : "for-of"
+        } loop variable declaration may not have an initializer`,
+      );
+    } else if (init.type === "AssignmentPattern") {
+      this.raise(init.start, "Invalid left-hand side in for-loop");
+    }
+
     node.left = init;
-    node.right = this.parseExpression();
+    node.right = isForIn ? this.parseExpression() : this.parseMaybeAssign();
     this.expect(tt.parenR);
 
     node.body =
@@ -966,7 +964,7 @@ export default class StatementParser extends ExpressionParser {
     this.scope.exit();
     this.state.labels.pop();
 
-    return this.finishNode(node, type);
+    return this.finishNode(node, isForIn ? "ForInStatement" : "ForOfStatement");
   }
 
   // Parse a list of variable declarations.
@@ -1012,9 +1010,6 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseVarId(decl: N.VariableDeclarator, kind: "var" | "let" | "const"): void {
-    if ((kind === "const" || kind === "let") && this.isContextual("let")) {
-      this.unexpected(null, "let is disallowed as a lexically bound name");
-    }
     decl.id = this.parseBindingAtom();
     this.checkLVal(
       decl.id,
@@ -1048,22 +1043,6 @@ export default class StatementParser extends ExpressionParser {
 
     if (isStatement) {
       node.id = this.parseFunctionId(requireId);
-      if (node.id && !isHangingStatement) {
-        // If it is a regular function declaration in sloppy mode, then it is
-        // subject to Annex B semantics (BIND_FUNCTION). Otherwise, the binding
-        // mode depends on properties of the current scope (see
-        // treatFunctionsAsVar).
-        this.checkLVal(
-          node.id,
-          this.state.strict || node.generator || node.async
-            ? this.scope.treatFunctionsAsVar
-              ? BIND_VAR
-              : BIND_LEXICAL
-            : BIND_FUNCTION,
-          null,
-          "function name",
-        );
-      }
     }
 
     const oldInClassProperty = this.state.inClassProperty;
@@ -1091,6 +1070,15 @@ export default class StatementParser extends ExpressionParser {
       );
     });
 
+    this.scope.exit();
+
+    if (isStatement && !isHangingStatement) {
+      // We need to validate this _after_ parsing the function body
+      // because of TypeScript body-less function declarations,
+      // which shouldn't be added to the scope.
+      this.checkFunctionStatementId(node);
+    }
+
     this.state.inClassProperty = oldInClassProperty;
     this.state.yieldPos = oldYieldPos;
     this.state.awaitPos = oldAwaitPos;
@@ -1115,6 +1103,25 @@ export default class StatementParser extends ExpressionParser {
 
     this.state.inParameters = oldInParameters;
     this.checkYieldAwaitInDefaultParams();
+  }
+
+  checkFunctionStatementId(node: N.Function): void {
+    if (!node.id) return;
+
+    // If it is a regular function declaration in sloppy mode, then it is
+    // subject to Annex B semantics (BIND_FUNCTION). Otherwise, the binding
+    // mode depends on properties of the current scope (see
+    // treatFunctionsAsVar).
+    this.checkLVal(
+      node.id,
+      this.state.strict || node.generator || node.async
+        ? this.scope.treatFunctionsAsVar
+          ? BIND_VAR
+          : BIND_LEXICAL
+        : BIND_FUNCTION,
+      null,
+      "function name",
+    );
   }
 
   // Parse a class declaration or literal (depending on the
@@ -1604,7 +1611,7 @@ export default class StatementParser extends ExpressionParser {
     if (this.match(tt.name)) {
       node.id = this.parseIdentifier();
       if (isStatement) {
-        this.checkLVal(node.id, BIND_LEXICAL, undefined, "class name");
+        this.checkLVal(node.id, BIND_CLASS, undefined, "class name");
       }
     } else {
       if (optionalId || !isStatement) {

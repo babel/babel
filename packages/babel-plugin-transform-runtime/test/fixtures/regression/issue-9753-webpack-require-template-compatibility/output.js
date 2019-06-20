@@ -1,0 +1,1 @@
+require("./locale/".concat(lan));

@@ -22,12 +22,13 @@ function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
 
   function Outer() {
+    let _babelHelpers$get$cal;
+
     var _this;
 
     babelHelpers.classCallCheck(this, Outer);
     _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Outer).call(this));
-
-    var _babelHelpers$get$cal = babelHelpers.get(babelHelpers.getPrototypeOf(Outer.prototype), "toString", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this));
+    _babelHelpers$get$cal = babelHelpers.get(babelHelpers.getPrototypeOf(Outer.prototype), "toString", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this));
 
     let Inner = function Inner() {
       babelHelpers.classCallCheck(this, Inner);

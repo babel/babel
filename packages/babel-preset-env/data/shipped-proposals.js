@@ -1,11 +1,7 @@
-// These mappings represent the builtin/feature proposals that have been
+// These mappings represent the syntax proposals that have been
 // shipped by browsers, and are enabled by the `shippedProposals` option.
 
-const builtIns = {
-  "es7.array.flat-map": "Array.prototype.{flat, flatMap} / Array.prototype.flatMap"
-};
-
-const features = {};
+const proposalPlugins = {};
 
 const pluginSyntaxMap = new Map([
   ["proposal-async-generator-functions", "syntax-async-generators"],
@@ -15,4 +11,4 @@ const pluginSyntaxMap = new Map([
   ["proposal-json-strings", "syntax-json-strings"],
 ]);
 
-module.exports = { builtIns, features, pluginSyntaxMap };
+module.exports = { proposalPlugins, pluginSyntaxMap };

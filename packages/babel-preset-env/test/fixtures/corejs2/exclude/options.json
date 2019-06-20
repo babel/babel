@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "modules": false,
+        "useBuiltIns": "usage",
+        "corejs": 2,
+        "exclude": ["transform-async-to-generator", "transform-regenerator"]
+      }
+    ]
+  ]
+}

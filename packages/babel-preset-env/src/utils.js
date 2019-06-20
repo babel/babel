@@ -1,5 +1,7 @@
 // @flow
 
+import * as t from "@babel/types";
+import type { NodePath } from "@babel/traverse";
 import invariant from "invariant";
 import semver from "semver";
 import levenshtein from "js-levenshtein";
@@ -8,11 +10,20 @@ import unreleasedLabels from "../data/unreleased-labels";
 import { semverMin } from "./targets-parser";
 import type { Targets } from "./types";
 
+export const has = Object.hasOwnProperty.call.bind(Object.hasOwnProperty);
+
+export function getType(target: any): string {
+  return Object.prototype.toString
+    .call(target)
+    .slice(8, -1)
+    .toLowerCase();
+}
+
 const versionRegExp = /^(\d+|\d+.\d+)$/;
 
 // Convert version to a semver value.
 // 2.5 -> 2.5.0; 1 -> 1.0.0;
-export const semverify = (version: string | number): string => {
+export function semverify(version: number | string): string {
   if (typeof version === "string" && semver.valid(version)) {
     return version;
   }
@@ -28,12 +39,21 @@ export const semverify = (version: string | number): string => {
     split.push("0");
   }
   return split.join(".");
-};
+}
 
-export const getValues = (object: Object): Array<any> =>
-  Object.keys(object).map(key => object[key]);
+export function intersection<T>(
+  first: Set<T>,
+  second: Set<T>,
+  third: Set<T>,
+): Set<T> {
+  const result = new Set();
+  for (const el of first) {
+    if (second.has(el) && third.has(el)) result.add(el);
+  }
+  return result;
+}
 
-export const findSuggestion = (options: Array<string>, option: string) => {
+export function findSuggestion(options: string[], option: string): string {
   let levenshteinValue = Infinity;
   return options.reduce((suggestion, validOption) => {
     const value = levenshtein(validOption, option);
@@ -43,9 +63,9 @@ export const findSuggestion = (options: Array<string>, option: string) => {
     }
     return suggestion;
   }, undefined);
-};
+}
 
-export const prettifyVersion = (version: string): string => {
+export function prettifyVersion(version: string) {
   if (typeof version !== "string") {
     return version;
   }
@@ -63,9 +83,9 @@ export const prettifyVersion = (version: string): string => {
   }
 
   return parts.join(".");
-};
+}
 
-export const prettifyTargets = (targets: Targets): Object => {
+export function prettifyTargets(targets: Targets): Targets {
   return Object.keys(targets).reduce((results, target) => {
     let value = targets[target];
 
@@ -77,29 +97,31 @@ export const prettifyTargets = (targets: Targets): Object => {
     results[target] = value;
     return results;
   }, {});
-};
+}
 
-export const isUnreleasedVersion = (version: string, env: string): boolean => {
+export function isUnreleasedVersion(
+  version: string | number,
+  env: string,
+): boolean {
   const unreleasedLabel = unreleasedLabels[env];
   return (
     !!unreleasedLabel && unreleasedLabel === version.toString().toLowerCase()
   );
-};
+}
 
-export const getLowestUnreleased = (
-  a: string,
-  b: string,
-  env: string,
-): string => {
+export function getLowestUnreleased(a: string, b: string, env: string): string {
   const unreleasedLabel = unreleasedLabels[env];
   const hasUnreleased = [a, b].some(item => item === unreleasedLabel);
   if (hasUnreleased) {
     return a === hasUnreleased ? b : a || b;
   }
   return semverMin(a, b);
-};
+}
 
-export const filterStageFromList = (list: any, stageList: any) => {
+export function filterStageFromList(
+  list: { [feature: string]: Targets },
+  stageList: { [feature: string]: boolean },
+) {
   return Object.keys(list).reduce((result, item) => {
     if (!stageList[item]) {
       result[item] = list[item];
@@ -107,26 +129,36 @@ export const filterStageFromList = (list: any, stageList: any) => {
 
     return result;
   }, {});
-};
+}
 
-export const isPolyfillSource = (source: string): boolean =>
-  source === "@babel/polyfill" || source === "core-js";
+export function getImportSource({ node }: NodePath) {
+  if (node.specifiers.length === 0) return node.source.value;
+}
+
+export function getRequireSource({ node }: NodePath) {
+  if (!t.isExpressionStatement(node)) return;
+  const { expression } = node;
+  const isRequire =
+    t.isCallExpression(expression) &&
+    t.isIdentifier(expression.callee) &&
+    expression.callee.name === "require" &&
+    expression.arguments.length === 1 &&
+    t.isStringLiteral(expression.arguments[0]);
+  if (isRequire) return expression.arguments[0].value;
+}
+
+export function isPolyfillSource(source: ?string): boolean {
+  return source === "@babel/polyfill" || source === "core-js";
+}
 
 const modulePathMap = {
   "regenerator-runtime": "regenerator-runtime/runtime",
 };
 
-export const getModulePath = (mod: string) =>
-  modulePathMap[mod] || `core-js/modules/${mod}`;
+export function getModulePath(mod: string): string {
+  return modulePathMap[mod] || `core-js/modules/${mod}`;
+}
 
-export const createImport = (path: Object, mod: string) =>
-  addSideEffect(path, getModulePath(mod));
-
-export const isRequire = (t: Object, path: Object): boolean =>
-  t.isExpressionStatement(path.node) &&
-  t.isCallExpression(path.node.expression) &&
-  t.isIdentifier(path.node.expression.callee) &&
-  path.node.expression.callee.name === "require" &&
-  path.node.expression.arguments.length === 1 &&
-  t.isStringLiteral(path.node.expression.arguments[0]) &&
-  isPolyfillSource(path.node.expression.arguments[0].value);
+export function createImport(path: NodePath, mod: string) {
+  return addSideEffect(path, getModulePath(mod));
+}

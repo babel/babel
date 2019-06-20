@@ -8,43 +8,79 @@ const template = require("@babel/template");
 const t = require("@babel/types");
 
 const transformRuntime = require("../");
-const getCorejs2Definitions = require("../lib/definitions").default;
-const corejs2Definitions = getCorejs2Definitions();
+
+const corejs2Definitions = require("../lib/runtime-corejs2-definitions").default();
+const corejs3Definitions = require("../lib/runtime-corejs3-definitions").default();
 
 writeHelpers("@babel/runtime");
-
-writeCoreJS2("@babel/runtime-corejs2");
 writeHelpers("@babel/runtime-corejs2", { corejs: 2 });
+writeHelpers("@babel/runtime-corejs3", {
+  corejs: { version: 3, proposals: true },
+});
 
-function writeCoreJS2(runtimeName) {
-  const pkgDirname = getRuntimeRoot(runtimeName);
-
-  const paths = [
+writeCoreJS({
+  corejs: 2,
+  proposals: true,
+  definitions: corejs2Definitions,
+  paths: [
     "is-iterable",
     "get-iterator",
-
     // This was previously in definitions, but was removed to work around
     // zloirock/core-js#262. We need to keep it in @babel/runtime-corejs2 to
     // avoid a breaking change there.
     "symbol/async-iterator",
-  ];
+  ],
+  corejsRoot: "core-js/library/fn",
+});
+writeCoreJS({
+  corejs: 3,
+  proposals: false,
+  definitions: corejs3Definitions,
+  paths: [],
+  corejsRoot: "core-js-pure/stable",
+});
+writeCoreJS({
+  corejs: 3,
+  proposals: true,
+  definitions: corejs3Definitions,
+  paths: ["is-iterable", "get-iterator", "get-iterator-method"],
+  corejsRoot: "core-js-pure/features",
+});
 
-  Object.keys(corejs2Definitions.builtins).forEach(key => {
-    const path = corejs2Definitions.builtins[key];
-    paths.push(path);
+function writeCoreJS({
+  corejs,
+  proposals,
+  definitions: { BuiltIns, StaticProperties, InstanceProperties },
+  paths,
+  corejsRoot,
+}) {
+  const pkgDirname = getRuntimeRoot(`@babel/runtime-corejs${corejs}`);
+
+  Object.keys(BuiltIns).forEach(name => {
+    const { stable, path } = BuiltIns[name];
+    if (stable || proposals) paths.push(path);
   });
 
-  Object.keys(corejs2Definitions.methods).forEach(key => {
-    const props = corejs2Definitions.methods[key];
-    Object.keys(props).forEach(key2 => {
-      paths.push(props[key2]);
+  Object.keys(StaticProperties).forEach(builtin => {
+    const props = StaticProperties[builtin];
+    Object.keys(props).forEach(name => {
+      const { stable, path } = props[name];
+      if (stable || proposals) paths.push(path);
     });
   });
 
-  paths.forEach(function(corePath) {
+  if (InstanceProperties) {
+    Object.keys(InstanceProperties).forEach(name => {
+      const { stable, path } = InstanceProperties[name];
+      if (stable || proposals) paths.push(`instance/${path}`);
+    });
+  }
+
+  const runtimeRoot = proposals ? "core-js" : "core-js-stable";
+  paths.forEach(function(corejsPath) {
     outputFile(
-      path.join(pkgDirname, "core-js", `${corePath}.js`),
-      `module.exports = require("core-js/library/fn/${corePath}");`
+      path.join(pkgDirname, runtimeRoot, `${corejsPath}.js`),
+      `module.exports = require("${corejsRoot}/${corejsPath}");`
     );
   });
 }

@@ -3,7 +3,7 @@ import * as t from "@babel/types";
 import type { TraversalAncestors, TraversalHandler } from "@babel/types";
 import { parse } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
-import type { TemplateOpts } from "./options";
+import type { TemplateOpts, ParserOpts } from "./options";
 import type { Formatter } from "./formatters";
 
 export type Metadata = {
@@ -31,8 +31,9 @@ export default function parseAndBuildMetadata<T>(
 
   const {
     placeholderWhitelist,
-    placeholderPattern = PATTERN,
+    placeholderPattern,
     preserveComments,
+    syntacticPlaceholders,
   } = opts;
 
   t.removePropertiesDeep(ast, {
@@ -41,20 +42,28 @@ export default function parseAndBuildMetadata<T>(
 
   formatter.validate(ast);
 
-  const placeholders = [];
-  const placeholderNames = new Set();
+  const syntactic = {
+    placeholders: [],
+    placeholderNames: new Set(),
+  };
+  const legacy = {
+    placeholders: [],
+    placeholderNames: new Set(),
+  };
+  const isLegacyRef = { value: undefined };
 
   t.traverse(ast, (placeholderVisitorHandler: TraversalHandler<*>), {
-    placeholders,
-    placeholderNames,
+    syntactic,
+    legacy,
+    isLegacyRef,
     placeholderWhitelist,
     placeholderPattern,
+    syntacticPlaceholders,
   });
 
   return {
     ast,
-    placeholders,
-    placeholderNames,
+    ...(isLegacyRef.value ? legacy : syntactic),
   };
 }
 
@@ -64,16 +73,45 @@ function placeholderVisitorHandler(
   state: MetadataState,
 ) {
   let name;
-  if (t.isIdentifier(node) || t.isJSXIdentifier(node)) {
+
+  if (t.isPlaceholder(node)) {
+    if (state.syntacticPlaceholders === false) {
+      throw new Error(
+        "%%foo%%-style placeholders can't be used when " +
+          "'.syntacticPlaceholders' is false.",
+      );
+    } else {
+      name = ((node: any).name: BabelNodeIdentifier).name;
+      state.isLegacyRef.value = false;
+    }
+  } else if (state.isLegacyRef.value === false || state.syntacticPlaceholders) {
+    return;
+  } else if (t.isIdentifier(node) || t.isJSXIdentifier(node)) {
     name = ((node: any): BabelNodeIdentifier).name;
+    state.isLegacyRef.value = true;
   } else if (t.isStringLiteral(node)) {
     name = ((node: any): BabelNodeStringLiteral).value;
+    state.isLegacyRef.value = true;
   } else {
     return;
   }
 
   if (
-    (!state.placeholderPattern || !state.placeholderPattern.test(name)) &&
+    !state.isLegacyRef.value &&
+    (state.placeholderPattern != null || state.placeholderWhitelist != null)
+  ) {
+    // This check is also in options.js. We need it there to handle the default
+    // .syntacticPlaceholders behavior.
+    throw new Error(
+      "'.placeholderWhitelist' and '.placeholderPattern' aren't compatible" +
+        " with '.syntacticPlaceholders: true'",
+    );
+  }
+
+  if (
+    state.isLegacyRef.value &&
+    (state.placeholderPattern === false ||
+      !(state.placeholderPattern || PATTERN).test(name)) &&
     (!state.placeholderWhitelist || !state.placeholderWhitelist.has(name))
   ) {
     return;
@@ -85,7 +123,10 @@ function placeholderVisitorHandler(
   const { node: parent, key } = ancestors[ancestors.length - 1];
 
   let type: PlaceholderType;
-  if (t.isStringLiteral(node)) {
+  if (
+    t.isStringLiteral(node) ||
+    t.isPlaceholder(node, { expectedNode: "StringLiteral" })
+  ) {
     type = "string";
   } else if (
     (t.isNewExpression(parent) && key === "arguments") ||
@@ -93,20 +134,26 @@ function placeholderVisitorHandler(
     (t.isFunction(parent) && key === "params")
   ) {
     type = "param";
-  } else if (t.isExpressionStatement(parent)) {
+  } else if (t.isExpressionStatement(parent) && !t.isPlaceholder(node)) {
     type = "statement";
     ancestors = ancestors.slice(0, -1);
+  } else if (t.isStatement(node) && t.isPlaceholder(node)) {
+    type = "statement";
   } else {
     type = "other";
   }
 
-  state.placeholders.push({
+  const { placeholders, placeholderNames } = state.isLegacyRef.value
+    ? state.legacy
+    : state.syntactic;
+
+  placeholders.push({
     name,
     type,
     resolve: ast => resolveAncestors(ast, ancestors),
-    isDuplicate: state.placeholderNames.has(name),
+    isDuplicate: placeholderNames.has(name),
   });
-  state.placeholderNames.add(name);
+  placeholderNames.add(name);
 }
 
 function resolveAncestors(ast: BabelNodeFile, ancestors: TraversalAncestors) {
@@ -127,18 +174,30 @@ function resolveAncestors(ast: BabelNodeFile, ancestors: TraversalAncestors) {
 }
 
 type MetadataState = {
-  placeholders: Array<Placeholder>,
-  placeholderNames: Set<string>,
+  syntactic: {
+    placeholders: Array<Placeholder>,
+    placeholderNames: Set<string>,
+  },
+  legacy: {
+    placeholders: Array<Placeholder>,
+    placeholderNames: Set<string>,
+  },
+  isLegacyRef: { value: boolean | void },
   placeholderWhitelist: Set<string> | void,
-  placeholderPattern: RegExp | false,
+  placeholderPattern: RegExp | false | void,
+  syntacticPlaceholders: boolean | void,
 };
 
-function parseWithCodeFrame(code: string, parserOpts: {}): BabelNodeFile {
+function parseWithCodeFrame(
+  code: string,
+  parserOpts: ParserOpts,
+): BabelNodeFile {
   parserOpts = {
     allowReturnOutsideFunction: true,
     allowSuperOutsideMethod: true,
     sourceType: "module",
     ...parserOpts,
+    plugins: (parserOpts.plugins || []).concat("placeholders"),
   };
 
   try {

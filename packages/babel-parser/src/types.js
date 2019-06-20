@@ -263,8 +263,6 @@ export type TryStatement = NodeBase & {
   block: BlockStatement,
   handler: CatchClause | null,
   finalizer: BlockStatement | null,
-
-  guardedHandlers: $ReadOnlyArray<empty>, // TODO: Not in spec
 };
 
 export type CatchClause = NodeBase & {
@@ -1288,7 +1286,7 @@ export type TsParenthesizedType = TsTypeBase & {
 
 export type TsTypeOperator = TsTypeBase & {
   type: "TSTypeOperator",
-  operator: "keyof" | "unique",
+  operator: "keyof" | "unique" | "readonly",
   typeAnnotation: TsType,
 };
 
@@ -1308,7 +1306,7 @@ export type TsMappedType = TsTypeBase & {
 
 export type TsLiteralType = TsTypeBase & {
   type: "TSLiteralType",
-  literal: NumericLiteral | StringLiteral | BooleanLiteral,
+  literal: NumericLiteral | StringLiteral | BooleanLiteral | TemplateLiteral,
 };
 
 export type TsImportType = TsTypeBase & {

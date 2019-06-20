@@ -269,7 +269,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let node;
       switch (this.state.type) {
         case tt.braceL:
-          node = this.jsxParseExpressionContainer();
+          node = this.startNode();
+          this.next();
+          node = this.jsxParseExpressionContainer(node);
           if (node.expression.type === "JSXEmptyExpression") {
             throw this.raise(
               node.start,
@@ -310,10 +312,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // Parse JSX spread child
 
-    jsxParseSpreadChild(): N.JSXSpreadChild {
-      const node = this.startNode();
-      this.expect(tt.braceL);
-      this.expect(tt.ellipsis);
+    jsxParseSpreadChild(node: N.JSXSpreadChild): N.JSXSpreadChild {
+      this.next(); // ellipsis
       node.expression = this.parseExpression();
       this.expect(tt.braceR);
 
@@ -322,9 +322,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // Parses JSX expression enclosed into curly brackets.
 
-    jsxParseExpressionContainer(): N.JSXExpressionContainer {
-      const node = this.startNode();
-      this.next();
+    jsxParseExpressionContainer(
+      node: N.JSXExpressionContainer,
+    ): N.JSXExpressionContainer {
       if (this.match(tt.braceR)) {
         node.expression = this.jsxParseEmptyExpression();
       } else {
@@ -423,15 +423,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               children.push(this.parseExprAtom());
               break;
 
-            case tt.braceL:
-              if (this.lookahead().type === tt.ellipsis) {
-                children.push(this.jsxParseSpreadChild());
+            case tt.braceL: {
+              const node = this.startNode();
+              this.next();
+              if (this.match(tt.ellipsis)) {
+                children.push(this.jsxParseSpreadChild(node));
               } else {
-                children.push(this.jsxParseExpressionContainer());
+                children.push(this.jsxParseExpressionContainer(node));
               }
 
               break;
-
+            }
             // istanbul ignore next - should never happen
             default:
               throw this.unexpected();

@@ -1,32 +1,31 @@
 //@flow
 
-import semver from "semver";
-import builtInsList from "../data/built-ins.json";
-import { logPlugin } from "./debug";
-import {
-  getPlatformSpecificDefaultFor,
-  getOptionSpecificExcludesFor,
-} from "./defaults";
+import { logPluginOrPolyfill } from "./debug";
+import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
+import filterItems from "./filter-items";
 import moduleTransformations from "./module-transformations";
-import normalizeOptions from "./normalize-options.js";
+import normalizeOptions from "./normalize-options";
 import pluginList from "../data/plugins.json";
-import {
-  builtIns as proposalBuiltIns,
-  features as proposalPlugins,
-  pluginSyntaxMap,
-} from "../data/shipped-proposals.js";
-import useBuiltInsEntryPlugin from "./use-built-ins-entry-plugin";
-import addUsedBuiltInsPlugin from "./use-built-ins-plugin";
+import { proposalPlugins, pluginSyntaxMap } from "../data/shipped-proposals";
+
+import addCoreJS2UsagePlugin from "./polyfills/corejs2/usage-plugin";
+import addCoreJS3UsagePlugin from "./polyfills/corejs3/usage-plugin";
+import addRegeneratorUsagePlugin from "./polyfills/regenerator/usage-plugin";
+import replaceCoreJS2EntryPlugin from "./polyfills/corejs2/entry-plugin";
+import replaceCoreJS3EntryPlugin from "./polyfills/corejs3/entry-plugin";
+import removeRegeneratorEntryPlugin from "./polyfills/regenerator/entry-plugin";
+
 import getTargets from "./targets-parser";
 import availablePlugins from "./available-plugins";
-import {
-  filterStageFromList,
-  prettifyTargets,
-  semverify,
-  isUnreleasedVersion,
-} from "./utils";
-import type { Targets } from "./types";
+import { filterStageFromList, prettifyTargets } from "./utils";
 import { declare } from "@babel/helper-plugin-utils";
+
+export { isPluginRequired } from "./filter-items";
+
+const pluginListWithoutProposals = filterStageFromList(
+  pluginList,
+  proposalPlugins,
+);
 
 const getPlugin = (pluginName: string) => {
   const plugin = availablePlugins[pluginName];
@@ -40,74 +39,12 @@ const getPlugin = (pluginName: string) => {
   return plugin;
 };
 
-const builtInsListWithoutProposals = filterStageFromList(
-  builtInsList,
-  proposalBuiltIns,
-);
-
-const pluginListWithoutProposals = filterStageFromList(
-  pluginList,
-  proposalPlugins,
-);
-
-export const isPluginRequired = (
-  supportedEnvironments: Targets,
-  plugin: Targets,
-): boolean => {
-  const targetEnvironments: Array<string> = Object.keys(supportedEnvironments);
-
-  if (targetEnvironments.length === 0) {
-    return true;
-  }
-
-  const isRequiredForEnvironments: Array<string> = targetEnvironments.filter(
-    environment => {
-      // Feature is not implemented in that environment
-      if (!plugin[environment]) {
-        return true;
-      }
-
-      const lowestImplementedVersion: string = plugin[environment];
-      const lowestTargetedVersion: string = supportedEnvironments[environment];
-      // If targets has unreleased value as a lowest version, then don't require a plugin.
-      if (isUnreleasedVersion(lowestTargetedVersion, environment)) {
-        return false;
-        // Include plugin if it is supported in the unreleased environment, which wasn't specified in targets
-      } else if (isUnreleasedVersion(lowestImplementedVersion, environment)) {
-        return true;
-      }
-
-      if (!semver.valid(lowestTargetedVersion)) {
-        throw new Error(
-          `Invalid version passed for target "${environment}": "${lowestTargetedVersion}". ` +
-            "Versions must be in semver format (major.minor.patch)",
-        );
-      }
-
-      return semver.gt(
-        semverify(lowestImplementedVersion),
-        lowestTargetedVersion,
-      );
-    },
-  );
-
-  return isRequiredForEnvironments.length > 0;
-};
-
-const getBuiltInTargets = targets => {
-  const builtInTargets = {
-    ...targets,
-  };
-  if (builtInTargets.uglify != null) {
-    delete builtInTargets.uglify;
-  }
-  return builtInTargets;
-};
-
 export const transformIncludesAndExcludes = (opts: Array<string>): Object => {
   return opts.reduce(
     (result, opt) => {
-      const target = opt.match(/^(es\d+|web)\./) ? "builtIns" : "plugins";
+      const target = opt.match(/^(es|es6|es7|esnext|web)\./)
+        ? "builtIns"
+        : "plugins";
       result[target].add(opt);
       return result;
     },
@@ -117,42 +54,6 @@ export const transformIncludesAndExcludes = (opts: Array<string>): Object => {
       builtIns: new Set(),
     },
   );
-};
-
-const filterItems = (
-  list,
-  includes,
-  excludes,
-  targets,
-  defaultIncludes,
-  defaultExcludes,
-): Set<string> => {
-  const result = new Set();
-
-  for (const item in list) {
-    if (
-      !excludes.has(item) &&
-      (isPluginRequired(targets, list[item]) || includes.has(item))
-    ) {
-      result.add(item);
-    } else {
-      const shippedProposalsSyntax = pluginSyntaxMap.get(item);
-
-      if (shippedProposalsSyntax) {
-        result.add(shippedProposalsSyntax);
-      }
-    }
-  }
-
-  if (defaultIncludes) {
-    defaultIncludes.forEach(item => !excludes.has(item) && result.add(item));
-  }
-
-  if (defaultExcludes) {
-    defaultExcludes.forEach(item => !includes.has(item) && result.delete(item));
-  }
-
-  return result;
 };
 
 function supportsStaticESM(caller) {
@@ -176,6 +77,7 @@ export default declare((api, opts) => {
     spec,
     targets: optionsTargets,
     useBuiltIns,
+    corejs: { version: corejs, proposals },
   } = normalizeOptions(opts);
   // TODO: remove this in next major
   let hasUglifyTarget = false;
@@ -218,22 +120,8 @@ export default declare((api, opts) => {
     transformTargets,
     null,
     getOptionSpecificExcludesFor({ loose }),
+    pluginSyntaxMap,
   );
-
-  let polyfills;
-  let polyfillTargets;
-
-  if (useBuiltIns) {
-    polyfillTargets = getBuiltInTargets(targets);
-
-    polyfills = filterItems(
-      shippedProposals ? builtInsList : builtInsListWithoutProposals,
-      include.builtIns,
-      exclude.builtIns,
-      polyfillTargets,
-      getPlatformSpecificDefaultFor(polyfillTargets),
-    );
-  }
 
   const plugins = [];
   const pluginUseBuiltIns = useBuiltIns !== false;
@@ -257,8 +145,6 @@ export default declare((api, opts) => {
     ]),
   );
 
-  const regenerator = transformations.has("transform-regenerator");
-
   if (debug) {
     console.log("@babel/preset-env: `DEBUG` option");
     console.log("\nUsing targets:");
@@ -266,7 +152,7 @@ export default declare((api, opts) => {
     console.log(`\nUsing modules transform: ${modules.toString()}`);
     console.log("\nUsing plugins:");
     transformations.forEach(transform => {
-      logPlugin(transform, targets, pluginList);
+      logPluginOrPolyfill(transform, targets, pluginList);
     });
 
     if (!useBuiltIns) {
@@ -274,32 +160,46 @@ export default declare((api, opts) => {
         "\nUsing polyfills: No polyfills were added, since the `useBuiltIns` option was not set.",
       );
     } else {
-      console.log(
-        `
-Using polyfills with \`${useBuiltIns}\` option:`,
-      );
+      console.log(`\nUsing polyfills with \`${useBuiltIns}\` option:`);
     }
   }
 
   if (useBuiltIns === "usage" || useBuiltIns === "entry") {
+    const regenerator = transformations.has("transform-regenerator");
+
     const pluginOptions = {
-      debug,
-      polyfills,
+      corejs,
+      polyfillTargets: targets,
+      include: include.builtIns,
+      exclude: exclude.builtIns,
+      proposals,
+      shippedProposals,
       regenerator,
-      onDebug: (polyfills, context) => {
-        polyfills.forEach(polyfill =>
-          logPlugin(polyfill, polyfillTargets, builtInsList, context),
-        );
-      },
+      debug,
     };
 
-    plugins.push([
-      useBuiltIns === "usage" ? addUsedBuiltInsPlugin : useBuiltInsEntryPlugin,
-      pluginOptions,
-    ]);
+    if (corejs) {
+      if (useBuiltIns === "usage") {
+        if (corejs.major === 2) {
+          plugins.push([addCoreJS2UsagePlugin, pluginOptions]);
+        } else {
+          plugins.push([addCoreJS3UsagePlugin, pluginOptions]);
+        }
+        if (regenerator) {
+          plugins.push([addRegeneratorUsagePlugin, pluginOptions]);
+        }
+      } else {
+        if (corejs.major === 2) {
+          plugins.push([replaceCoreJS2EntryPlugin, pluginOptions]);
+        } else {
+          plugins.push([replaceCoreJS3EntryPlugin, pluginOptions]);
+          if (!regenerator) {
+            plugins.push([removeRegeneratorEntryPlugin, pluginOptions]);
+          }
+        }
+      }
+    }
   }
 
-  return {
-    plugins,
-  };
+  return { plugins };
 });

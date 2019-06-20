@@ -21,7 +21,7 @@ import {
 
 import pkg from "../package.json";
 
-export { FEATURES };
+export { FEATURES, injectInitialization };
 
 // Note: Versions are represented as an integer. e.g. 7.1.5 is represented
 //       as 70000100005. This method is easier than using a semver-parsing
@@ -54,9 +54,7 @@ export function createClassFeaturePlugin({
 
         verifyUsedFeatures(path, this.file);
 
-        // Only fields are currently supported, this needs to be moved somewhere
-        // else when other features are added.
-        const loose = isLoose(this.file, FEATURES.fields);
+        const loose = isLoose(this.file, feature);
 
         let constructor;
         let isDecorated = hasOwnDecorators(path.node);

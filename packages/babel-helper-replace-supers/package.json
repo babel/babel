@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-replace-supers",
-  "version": "7.3.4",
+  "version": "7.4.4",
   "description": "Helper function to replace supers",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-replace-supers",
   "license": "MIT",
@@ -11,7 +11,7 @@
   "dependencies": {
     "@babel/helper-member-expression-to-functions": "^7.0.0",
     "@babel/helper-optimise-call-expression": "^7.0.0",
-    "@babel/traverse": "^7.3.4",
-    "@babel/types": "^7.3.4"
+    "@babel/traverse": "^7.4.4",
+    "@babel/types": "^7.4.4"
   }
 }

@@ -1,0 +1,21 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "71"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  syntax-async-generators { "chrome":"71" }
+  syntax-object-rest-spread { "chrome":"71" }
+  syntax-json-strings { "chrome":"71" }
+  syntax-optional-catch-binding { "chrome":"71" }
+
+Using polyfills with `entry` option:
+
+[<CWD>/src/in.js] Import of core-js was not found.
+
+[<CWD>/src/in.js] Based on your targets, regenerator-runtime import excluded.
+Successfully compiled 1 file with Babel.

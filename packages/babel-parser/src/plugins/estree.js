@@ -105,7 +105,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkLVal(
       expr: N.Expression,
-      bindingType: ?BindingTypes = BIND_NONE,
+      bindingType: BindingTypes = BIND_NONE,
       checkClashes: ?{ [key: string]: boolean },
       contextDescription: string,
     ): void {
@@ -220,7 +220,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isAsync,
         isConstructor,
         allowsDirectSuper,
-        "MethodDefinition",
+        "ClassMethod",
         true,
       );
       if (method.typeParameters) {
@@ -293,13 +293,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isAsync,
         isConstructor,
         allowDirectSuper,
-        "FunctionExpression",
+        type,
         inClassScope,
       );
+      funcNode.type = "FunctionExpression";
       delete funcNode.kind;
       // $FlowIgnore
       node.value = funcNode;
 
+      type = type === "ClassMethod" ? "MethodDefinition" : type;
       return this.finishNode(node, type);
     }
 

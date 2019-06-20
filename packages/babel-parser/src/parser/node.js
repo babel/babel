@@ -83,6 +83,12 @@ export class NodeUtils extends UtilParser {
     pos: number,
     loc: Position,
   ): T {
+    if (process.env.NODE_ENV !== "production" && node.end > 0) {
+      throw new Error(
+        "Do not call finishNode*() twice on the same node." +
+          " Instead use resetEndLocation() or change type directly.",
+      );
+    }
     node.type = type;
     node.end = pos;
     node.loc.end = loc;
@@ -95,6 +101,16 @@ export class NodeUtils extends UtilParser {
     node.start = start;
     node.loc.start = startLoc;
     if (this.options.ranges) node.range[0] = start;
+  }
+
+  resetEndLocation(
+    node: NodeBase,
+    end?: number = this.state.lastTokEnd,
+    endLoc?: Position = this.state.lastTokEndLoc,
+  ): void {
+    node.end = end;
+    node.loc.end = endLoc;
+    if (this.options.ranges) node.range[1] = end;
   }
 
   /**
