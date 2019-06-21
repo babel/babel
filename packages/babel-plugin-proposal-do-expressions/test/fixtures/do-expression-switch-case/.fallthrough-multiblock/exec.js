@@ -1,3 +1,5 @@
+// `blockExpressions` before `break` is hard to deal with
+// https://github.com/babel/babel/pull/10070#discussion_r296048106
 const x = (n) => do {
   switch (n) {
     case 0: 
