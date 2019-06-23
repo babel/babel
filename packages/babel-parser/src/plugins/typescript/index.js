@@ -9,6 +9,7 @@ import type Parser from "../../parser";
 import {
   type BindingTypes,
   BIND_NONE,
+  SCOPE_TS_MODULE,
   SCOPE_OTHER,
   BIND_TS_ENUM,
   BIND_TS_CONST_ENUM,
@@ -1167,7 +1168,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.tsParseModuleOrNamespaceDeclaration(inner, true);
         node.body = inner;
       } else {
+        this.scope.enter(SCOPE_TS_MODULE);
         node.body = this.tsParseModuleBlock();
+        this.scope.exit();
       }
       return this.finishNode(node, "TSModuleDeclaration");
     }
@@ -1183,9 +1186,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         this.unexpected();
       }
-
       if (this.match(tt.braceL)) {
+        this.scope.enter(SCOPE_TS_MODULE);
         node.body = this.tsParseModuleBlock();
+        this.scope.exit();
       } else {
         this.semicolon();
       }
@@ -1337,10 +1341,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           // `global { }` (with no `declare`) may appear inside an ambient module declaration.
           // Would like to use tsParseAmbientExternalModuleDeclaration here, but already ran past "global".
           if (this.match(tt.braceL)) {
+            this.scope.enter(SCOPE_TS_MODULE);
             const mod: N.TsModuleDeclaration = node;
             mod.global = true;
             mod.id = expr;
             mod.body = this.tsParseModuleBlock();
+            this.scope.exit();
             return this.finishNode(mod, "TSModuleDeclaration");
           }
           break;
