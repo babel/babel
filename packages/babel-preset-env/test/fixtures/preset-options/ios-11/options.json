@@ -4,11 +4,9 @@
       "../../../../lib",
       {
         "targets": {
-          "ie": 11
+          "browsers": ["ios >= 11"]
         },
-        "modules": false,
-        "useBuiltIns": "entry",
-        "corejs": 2
+        "modules": false
       }
     ]
   ]

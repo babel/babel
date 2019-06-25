@@ -186,9 +186,9 @@
     "chrome": "49",
     "edge": "14",
     "firefox": "51",
-    "safari": "10.1",
+    "safari": "11",
     "node": "6",
-    "ios": "10.3",
+    "ios": "11",
     "samsung": "5",
     "opera": "36",
     "electron": "1"
