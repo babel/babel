@@ -837,7 +837,7 @@ export type ExportNamedDeclaration = NodeBase & {
   specifiers: $ReadOnlyArray<ExportSpecifier | ExportDefaultSpecifier>,
   source: ?Literal,
 
-  exportKind?: "type" | "value", // TODO: Not in spec
+  exportKind?: "type" | "value" | "let", // TODO: Not in spec
 };
 
 export type ExportSpecifier = NodeBase & {
