@@ -152,7 +152,7 @@ export default declare((api, opts) => {
       if (shouldTransformDynamicImport) {
         console.warn(
           "Dynamic import can only be supported when transforming ES modules" +
-            " to amd, commonjs or systemjs. Only the parser plugin will be enabled.",
+            " to AMD, CommonJS or SystemJS. Only the parser plugin will be enabled.",
         );
       }
       plugins.push(getPlugin("syntax-dynamic-import"));
