@@ -86,7 +86,7 @@ const assertTest = function(stdout, stderr, opts, cwd) {
   }
 
   if (opts.outFiles) {
-    const actualFiles = readDir(path.join(tmpLoc), fileFilter);
+    const actualFiles = readDir(tmpLoc, fileFilter);
 
     Object.keys(actualFiles).forEach(function(filename) {
       if (
