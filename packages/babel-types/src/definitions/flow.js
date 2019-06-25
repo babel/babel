@@ -150,7 +150,7 @@ defineType("DeclareExportAllDeclaration", {
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
     source: validateType("StringLiteral"),
-    exportKind: validateOptional(assertOneOf(["type", "value"])),
+    exportKind: validateOptional(assertOneOf("type", "value")),
   },
 });
 

@@ -5,6 +5,7 @@ import defineType, {
   chain,
   assertEach,
   assertOneOf,
+  validateOptional,
 } from "./utils";
 import {
   functionCommon,
@@ -260,6 +261,7 @@ defineType("ExportNamedDeclaration", {
       validate: assertNodeType("StringLiteral"),
       optional: true,
     },
+    exportKind: validateOptional(assertOneOf("type", "value")),
   },
 });
 
