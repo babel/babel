@@ -261,7 +261,7 @@ defineType("ExportNamedDeclaration", {
       validate: assertNodeType("StringLiteral"),
       optional: true,
     },
-    exportKind: validateOptional(assertOneOf("type", "value", "let")),
+    exportKind: validateOptional(assertOneOf("type", "value")),
   },
 });
 
