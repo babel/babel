@@ -1,29 +1,29 @@
 {
   "type": "File",
   "start": 0,
-  "end": 47,
+  "end": 78,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 1,
-      "column": 47
+      "line": 4,
+      "column": 1
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 47,
+    "end": 78,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 1,
-        "column": 47
+        "line": 4,
+        "column": 1
       }
     },
     "sourceType": "module",
@@ -32,15 +32,15 @@
       {
         "type": "DeclareModule",
         "start": 0,
-        "end": 47,
+        "end": 78,
         "loc": {
           "start": {
             "line": 1,
             "column": 0
           },
           "end": {
-            "line": 1,
-            "column": 47
+            "line": 4,
+            "column": 1
           }
         },
         "id": {
@@ -66,59 +66,59 @@
         "body": {
           "type": "BlockStatement",
           "start": 19,
-          "end": 47,
+          "end": 78,
           "loc": {
             "start": {
               "line": 1,
               "column": 19
             },
             "end": {
-              "line": 1,
-              "column": 47
+              "line": 4,
+              "column": 1
             }
           },
           "body": [
             {
               "type": "ImportDeclaration",
-              "start": 21,
-              "end": 45,
+              "start": 23,
+              "end": 47,
               "loc": {
                 "start": {
-                  "line": 1,
-                  "column": 21
+                  "line": 2,
+                  "column": 2
                 },
                 "end": {
-                  "line": 1,
-                  "column": 45
+                  "line": 2,
+                  "column": 26
                 }
               },
               "specifiers": [
                 {
                   "type": "ImportDefaultSpecifier",
-                  "start": 33,
-                  "end": 34,
+                  "start": 35,
+                  "end": 36,
                   "loc": {
                     "start": {
-                      "line": 1,
-                      "column": 33
+                      "line": 2,
+                      "column": 14
                     },
                     "end": {
-                      "line": 1,
-                      "column": 34
+                      "line": 2,
+                      "column": 15
                     }
                   },
                   "local": {
                     "type": "Identifier",
-                    "start": 33,
-                    "end": 34,
+                    "start": 35,
+                    "end": 36,
                     "loc": {
                       "start": {
-                        "line": 1,
-                        "column": 33
+                        "line": 2,
+                        "column": 14
                       },
                       "end": {
-                        "line": 1,
-                        "column": 34
+                        "line": 2,
+                        "column": 15
                       },
                       "identifierName": "T"
                     },
@@ -129,16 +129,16 @@
               "importKind": "type",
               "source": {
                 "type": "StringLiteral",
-                "start": 40,
-                "end": 44,
+                "start": 42,
+                "end": 46,
                 "loc": {
                   "start": {
-                    "line": 1,
-                    "column": 40
+                    "line": 2,
+                    "column": 21
                   },
                   "end": {
-                    "line": 1,
-                    "column": 44
+                    "line": 2,
+                    "column": 25
                   }
                 },
                 "extra": {
@@ -146,6 +146,76 @@
                   "raw": "\"TM\""
                 },
                 "value": "TM"
+              }
+            },
+            {
+              "type": "ImportDeclaration",
+              "start": 50,
+              "end": 76,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 2
+                },
+                "end": {
+                  "line": 3,
+                  "column": 28
+                }
+              },
+              "specifiers": [
+                {
+                  "type": "ImportDefaultSpecifier",
+                  "start": 64,
+                  "end": 65,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 16
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 17
+                    }
+                  },
+                  "local": {
+                    "type": "Identifier",
+                    "start": 64,
+                    "end": 65,
+                    "loc": {
+                      "start": {
+                        "line": 3,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 3,
+                        "column": 17
+                      },
+                      "identifierName": "U"
+                    },
+                    "name": "U"
+                  }
+                }
+              ],
+              "importKind": "typeof",
+              "source": {
+                "type": "StringLiteral",
+                "start": 71,
+                "end": 75,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 23
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 27
+                  }
+                },
+                "extra": {
+                  "rawValue": "UM",
+                  "raw": "\"UM\""
+                },
+                "value": "UM"
               }
             }
           ]
