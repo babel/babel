@@ -291,7 +291,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         if (this.match(tt._import)) {
           this.next();
-          if (!this.isContextual("type") && !this.isContextual("typeof")) {
+          if (!this.isContextual("type") && !this.match(tt._typeof)) {
             this.unexpected(
               this.state.lastTokStart,
               "Imports within a `declare module` body must always be `import type` or `import typeof`",
