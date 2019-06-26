@@ -1,0 +1,4 @@
+{
+  "plugins": [["flow", { "enums": true }]],
+  "throws": "Unexpected keyword 'class' (1:5)"
+}

@@ -1,0 +1,4 @@
+{
+  "plugins": [["flow", { "enums": true }]],
+  "throws": "Enum member names cannot start with lowercase 'a' through 'z'. Instead of using `foo`, consider using `Foo`, in enum `E`. (2:2)"
+}

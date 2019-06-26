@@ -1,0 +1,4 @@
+{
+  "plugins": [["flow", { "enums": true }]],
+  "throws": "String enum members need to consistently either all use initializers, or use no initializers, in enum `E`. (2:2)"
+}

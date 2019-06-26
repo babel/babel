@@ -1,0 +1,4 @@
+{
+  "plugins": [["flow", { "enums": true }]],
+  "throws": "Supplied enum type is not valid. Use one of `boolean`, `number`, `string`, or `symbol` in enum `E`. (1:10)"
+}

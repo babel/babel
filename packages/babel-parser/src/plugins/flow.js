@@ -81,6 +81,20 @@ function partition<T>(
 
 const FLOW_PRAGMA_REGEX = /\*?\s*@((?:no)?flow)\b/;
 
+// Flow enums types
+type EnumExplicitType = null | "boolean" | "number" | "string" | "symbol";
+type EnumContext = {|
+  enumName: string,
+  explicitType: EnumExplicitType,
+  memberName: string,
+|};
+type EnumMemberInit =
+  | {| type: "number", pos: number, value: N.Node |}
+  | {| type: "string", pos: number, value: N.Node |}
+  | {| type: "boolean", pos: number, value: boolean |}
+  | {| type: "invalid", pos: number |}
+  | {| type: "none", pos: number |};
+
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
     // The value of the @flow/@noflow pragma. Initially undefined, transitions
@@ -95,6 +109,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     shouldParseTypes(): boolean {
       return this.getPluginOption("flow", "all") || this.flowPragma === "flow";
+    }
+
+    shouldParseEnums(): boolean {
+      return !!this.getPluginOption("flow", "enums");
     }
 
     finishToken(type: TokenType, val: any): void {
@@ -1567,6 +1585,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // Overrides
     // ==================================
 
+    checkReservedWord(
+      word: string,
+      startLoc: number,
+      checkKeywords: boolean,
+      isBinding: boolean,
+    ): void {
+      if (this.shouldParseEnums() && word === "enum") {
+        return;
+      }
+      super.checkReservedWord(word, startLoc, checkKeywords, isBinding);
+    }
+
     parseFunctionBody(
       node: N.Function,
       allowExpressionBody: ?boolean,
@@ -1604,7 +1634,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       super.parseFunctionBodyAndFinish(node, type, isMethod);
     }
 
-    // interfaces
+    // interfaces and enums
     parseStatement(context: ?string, topLevel?: boolean): N.Statement {
       // strict mode handling of `interface` since it's a reserved word
       if (
@@ -1615,6 +1645,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const node = this.startNode();
         this.next();
         return this.flowParseInterface(node);
+      } else if (
+        this.shouldParseEnums() &&
+        this.match(tt.name) &&
+        this.state.value === "enum"
+      ) {
+        const node = this.startNode();
+        this.next();
+        return this.flowParseEnumDeclaration(node);
       } else {
         const stmt = super.parseStatement(context, topLevel);
         // We will parse a flow pragma in any comment before the first statement.
@@ -2838,5 +2876,417 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (end === -1) {
         this.raise(this.state.pos, "Unterminated comment");
       }
+    }
+
+    // Flow enum parsing
+
+    flowEnumErrorBooleanMemberNotInitialized(
+      pos: number,
+      { enumName, memberName }: { enumName: string, memberName: string },
+    ): void {
+      this.raise(
+        pos,
+        `Boolean enum members need to be initialized. Use either \`${memberName} = true,\` ` +
+          `or \`${memberName}\` = false,\` in enum \`${enumName}\`.`,
+      );
+    }
+
+    flowEnumErrorInvalidMemberName(
+      pos: number,
+      { enumName, memberName }: { enumName: string, memberName: string },
+    ): void {
+      const suggestion = memberName[0].toUpperCase() + memberName.slice(1);
+      this.raise(
+        pos,
+        `Enum member names cannot start with lowercase 'a' through 'z'. Instead of using ` +
+          `\`${memberName}\`, consider using \`${suggestion}\`, in enum \`${enumName}\`.`,
+      );
+    }
+
+    flowEnumErrorDuplicateMemberName(
+      pos: number,
+      { enumName, memberName }: { enumName: string, memberName: string },
+    ): void {
+      this.raise(
+        pos,
+        `Enum member names need to be unique, but the name \`${memberName}\` has already been used ` +
+          `before in enum \`${enumName}\`.`,
+      );
+    }
+
+    flowEnumErrorInconsistentMemberValues(
+      pos: number,
+      { enumName }: { enumName: string },
+    ): void {
+      this.raise(
+        pos,
+        `Enum \`${enumName}\` has inconsistent member initializers. Either use no initializers, or ` +
+          `consistently use literals (either booleans, numbers, or strings) for all member initializers.`,
+      );
+    }
+
+    flowEnumErrorInvalidExplicitType(
+      pos: number,
+      {
+        enumName,
+        suppliedType,
+      }: { enumName: string, suppliedType: null | string },
+    ): void {
+      const suggestion =
+        `Use one of \`boolean\`, \`number\`, \`string\`, or \`symbol\` in ` +
+        `enum \`${enumName}\`.`;
+      const message =
+        suppliedType === null
+          ? `Supplied enum type is not valid. ${suggestion}`
+          : `Enum type \`${suppliedType}\` is not valid. ${suggestion}`;
+      this.raise(pos, message);
+    }
+
+    flowEnumErrorInvalidMemberInitializer(
+      pos: number,
+      { enumName, explicitType, memberName }: EnumContext,
+    ): void {
+      let message = null;
+      switch (explicitType) {
+        case "boolean":
+        case "number":
+        case "string":
+          message =
+            `Enum \`${enumName}\` has type \`${explicitType}\`, so the initializer of ` +
+            `\`${memberName}\` needs to be a ${explicitType} literal.`;
+          break;
+        case "symbol":
+          message =
+            `Symbol enum members cannot be initialized. Use \`${memberName},\` in ` +
+            `enum \`${enumName}\`.`;
+          break;
+        default:
+          // null
+          message =
+            `The enum member initializer for \`${memberName}\` needs to be a literal (either ` +
+            `a boolean, number, or string) in enum \`${enumName}\`.`;
+      }
+      this.raise(pos, message);
+    }
+
+    flowEnumErrorNumberMemberNotInitialized(
+      pos: number,
+      { enumName, memberName }: { enumName: string, memberName: string },
+    ): void {
+      this.raise(
+        pos,
+        `Number enum members need to be initialized, e.g. \`${memberName} = 1\` in enum \`${enumName}\`.`,
+      );
+    }
+
+    flowEnumErrorStringMemberInconsistentlyInitailized(
+      pos: number,
+      { enumName }: { enumName: string },
+    ): void {
+      this.raise(
+        pos,
+        `String enum members need to consistently either all use initializers, or use no initializers, ` +
+          `in enum \`${enumName}\`.`,
+      );
+    }
+
+    flowEnumMemberInit(): EnumMemberInit {
+      const lookahead = this.lookahead();
+      if (lookahead.type === tt.comma || lookahead.type === tt.braceR) {
+        switch (this.state.type) {
+          case tt.num: {
+            const literal = this.parseLiteral(
+              this.state.value,
+              "NumericLiteral",
+            );
+            return { type: "number", pos: literal.start, value: literal };
+          }
+          case tt.string: {
+            const literal = this.parseLiteral(
+              this.state.value,
+              "StringLiteral",
+            );
+            return { type: "string", pos: literal.start, value: literal };
+          }
+          case tt._true:
+          case tt._false: {
+            const literal = this.parseBooleanLiteral();
+            return {
+              type: "boolean",
+              pos: literal.start,
+              value: literal.value,
+            };
+          }
+        }
+      }
+      return { type: "invalid", pos: this.state.start };
+    }
+
+    flowEnumMemberRaw(): { id: N.Node, init: EnumMemberInit } {
+      const pos = this.state.start;
+      const id = this.parseIdentifier(true);
+      const init = this.eat(tt.eq)
+        ? this.flowEnumMemberInit()
+        : { type: "none", pos };
+      return { id, init };
+    }
+
+    flowEnumCheckExplicitTypeMismatch(
+      pos: number,
+      context: EnumContext,
+      expectedType: EnumExplicitType,
+    ): void {
+      const { explicitType } = context;
+      if (explicitType === null) {
+        return;
+      }
+      if (explicitType !== expectedType) {
+        this.flowEnumErrorInvalidMemberInitializer(pos, context);
+      }
+    }
+
+    flowEnumMembers({
+      enumName,
+      explicitType,
+    }: {
+      enumName: string,
+      explicitType: EnumExplicitType,
+    }): {|
+      booleanMembers: Array<N.Node>,
+      numberMembers: Array<N.Node>,
+      stringMembers: Array<N.Node>,
+      defaultedMembers: Array<N.Node>,
+    |} {
+      const seenNames = new Set();
+      const members = {
+        booleanMembers: [],
+        numberMembers: [],
+        stringMembers: [],
+        defaultedMembers: [],
+      };
+      while (!this.match(tt.braceR)) {
+        const memberNode = this.startNode();
+        const { id, init } = this.flowEnumMemberRaw();
+        const memberName = id.name;
+        if (memberName === "") {
+          continue;
+        }
+        if (/^[a-z]/.test(memberName)) {
+          this.flowEnumErrorInvalidMemberName(id.start, {
+            enumName,
+            memberName,
+          });
+        }
+        if (seenNames.has(memberName)) {
+          this.flowEnumErrorDuplicateMemberName(id.start, {
+            enumName,
+            memberName,
+          });
+        }
+        seenNames.add(memberName);
+        const context = { enumName, explicitType, memberName };
+        memberNode.id = id;
+        switch (init.type) {
+          case "boolean": {
+            this.flowEnumCheckExplicitTypeMismatch(
+              init.pos,
+              context,
+              "boolean",
+            );
+            memberNode.init = init.value;
+            members.booleanMembers.push(
+              this.finishNode(memberNode, "EnumBooleanMember"),
+            );
+            break;
+          }
+          case "number": {
+            this.flowEnumCheckExplicitTypeMismatch(init.pos, context, "number");
+            memberNode.init = init.value;
+            members.numberMembers.push(
+              this.finishNode(memberNode, "EnumNumberMember"),
+            );
+            break;
+          }
+          case "string": {
+            this.flowEnumCheckExplicitTypeMismatch(init.pos, context, "string");
+            memberNode.init = init.value;
+            members.stringMembers.push(
+              this.finishNode(memberNode, "EnumStringMember"),
+            );
+            break;
+          }
+          case "invalid": {
+            this.flowEnumErrorInvalidMemberInitializer(init.pos, context);
+            break;
+          }
+          case "none": {
+            switch (explicitType) {
+              case "boolean":
+                this.flowEnumErrorBooleanMemberNotInitialized(
+                  init.pos,
+                  context,
+                );
+                break;
+              case "number":
+                this.flowEnumErrorNumberMemberNotInitialized(init.pos, context);
+                break;
+              default:
+                members.defaultedMembers.push(
+                  this.finishNode(memberNode, "EnumDefaultedMember"),
+                );
+            }
+          }
+        }
+
+        if (!this.match(tt.braceR)) {
+          this.expect(tt.comma);
+        }
+      }
+      return members;
+    }
+
+    flowEnumStringBody(
+      bodyNode: N.Node,
+      initializedMembers: Array<N.Node>,
+      defaultedMembers: Array<N.Node>,
+      { enumName }: { enumName: string },
+    ): N.Node {
+      if (initializedMembers.length === 0) {
+        bodyNode.members = defaultedMembers;
+      } else if (defaultedMembers.length === 0) {
+        bodyNode.members = initializedMembers;
+      } else if (defaultedMembers.length > initializedMembers.length) {
+        bodyNode.members = defaultedMembers;
+        for (const member of initializedMembers) {
+          this.flowEnumErrorStringMemberInconsistentlyInitailized(
+            member.start,
+            { enumName },
+          );
+        }
+      } else {
+        bodyNode.members = initializedMembers;
+        for (const member of defaultedMembers) {
+          this.flowEnumErrorStringMemberInconsistentlyInitailized(
+            member.start,
+            { enumName },
+          );
+        }
+      }
+      return this.finishNode(bodyNode, "EnumStringBody");
+    }
+
+    flowEnumParseExplicitType({
+      enumName,
+    }: {
+      enumName: string,
+    }): EnumExplicitType {
+      if (this.isContextual("of")) {
+        this.next();
+        if (this.state.type === tt.name) {
+          switch (this.state.value) {
+            case "boolean":
+            case "number":
+            case "string":
+            case "symbol": {
+              const explicitType = this.state.value;
+              this.next();
+              return explicitType;
+            }
+            default:
+              this.flowEnumErrorInvalidExplicitType(this.state.start, {
+                enumName,
+                suppliedType: this.state.value,
+              });
+          }
+        } else {
+          this.flowEnumErrorInvalidExplicitType(this.state.start, {
+            enumName,
+            suppliedType: null,
+          });
+        }
+      }
+      return null;
+    }
+
+    flowParseEnumDeclaration(node: N.Node): N.Node {
+      const id = this.parseIdentifier();
+      node.id = id;
+      const enumName = id.name;
+      const explicitType = this.flowEnumParseExplicitType({ enumName });
+      this.expect(tt.braceL);
+      const bodyNode = this.startNode();
+      const members = this.flowEnumMembers({ enumName, explicitType });
+
+      switch (explicitType) {
+        case "boolean":
+          bodyNode.explicitType = true;
+          bodyNode.members = members.booleanMembers;
+          node.body = this.finishNode(bodyNode, "EnumBooleanBody");
+          break;
+        case "number":
+          bodyNode.explicitType = true;
+          bodyNode.members = members.numberMembers;
+          node.body = this.finishNode(bodyNode, "EnumNumberBody");
+          break;
+        case "string":
+          bodyNode.explicitType = true;
+          node.body = this.flowEnumStringBody(
+            bodyNode,
+            members.stringMembers,
+            members.defaultedMembers,
+            { enumName },
+          );
+          break;
+        case "symbol":
+          bodyNode.members = members.defaultedMembers;
+          node.body = this.finishNode(bodyNode, "EnumSymbolBody");
+          break;
+        default: {
+          // null
+          const empty = () => {
+            bodyNode.members = [];
+            return this.finishNode(bodyNode, "EnumStringBody");
+          };
+          bodyNode.explicitType = false;
+          const boolsLen = members.booleanMembers.length;
+          const numsLen = members.numberMembers.length;
+          const strsLen = members.stringMembers.length;
+          const defaultedLen = members.defaultedMembers.length;
+
+          if (!(boolsLen | numsLen | strsLen | defaultedLen)) {
+            node.body = empty();
+          } else if (!(boolsLen | numsLen)) {
+            node.body = this.flowEnumStringBody(
+              bodyNode,
+              members.stringMembers,
+              members.defaultedMembers,
+              { enumName },
+            );
+          } else if (!(numsLen | strsLen) && boolsLen >= defaultedLen) {
+            bodyNode.members = members.booleanMembers;
+            node.body = this.finishNode(bodyNode, "EnumBooleanBody");
+            for (const member of members.defaultedMembers) {
+              this.flowEnumErrorBooleanMemberNotInitialized(member.start, {
+                enumName,
+                memberName: member.id.name,
+              });
+            }
+          } else if (!(boolsLen | strsLen) && numsLen >= defaultedLen) {
+            bodyNode.members = members.numberMembers;
+            node.body = this.finishNode(bodyNode, "EnumNumberBody");
+            for (const member of members.defaultedMembers) {
+              this.flowEnumErrorNumberMemberNotInitialized(member.start, {
+                enumName,
+                memberName: member.id.name,
+              });
+            }
+          } else {
+            node.body = empty();
+            this.flowEnumErrorInconsistentMemberValues(id.start, { enumName });
+          }
+        }
+      }
+      this.expect(tt.braceR);
+      return this.finishNode(node, "EnumDeclaration");
     }
   };

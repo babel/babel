@@ -584,6 +584,39 @@ export function assertVoidTypeAnnotation(
 ): void {
   assert("VoidTypeAnnotation", node, opts);
 }
+export function assertEnumDeclaration(node: Object, opts?: Object = {}): void {
+  assert("EnumDeclaration", node, opts);
+}
+export function assertEnumBooleanBody(node: Object, opts?: Object = {}): void {
+  assert("EnumBooleanBody", node, opts);
+}
+export function assertEnumNumberBody(node: Object, opts?: Object = {}): void {
+  assert("EnumNumberBody", node, opts);
+}
+export function assertEnumStringBody(node: Object, opts?: Object = {}): void {
+  assert("EnumStringBody", node, opts);
+}
+export function assertEnumSymbolBody(node: Object, opts?: Object = {}): void {
+  assert("EnumSymbolBody", node, opts);
+}
+export function assertEnumBooleanMember(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("EnumBooleanMember", node, opts);
+}
+export function assertEnumNumberMember(node: Object, opts?: Object = {}): void {
+  assert("EnumNumberMember", node, opts);
+}
+export function assertEnumStringMember(node: Object, opts?: Object = {}): void {
+  assert("EnumStringMember", node, opts);
+}
+export function assertEnumDefaultedMember(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("EnumDefaultedMember", node, opts);
+}
 export function assertJSXAttribute(node: Object, opts?: Object = {}): void {
   assert("JSXAttribute", node, opts);
 }
