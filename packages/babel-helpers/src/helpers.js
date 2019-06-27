@@ -1886,16 +1886,17 @@ helpers.wrapRegExp = helper("7.2.6")`
 
   export default function _wrapRegExp(re, groups) {
     _wrapRegExp = function(re, groups) {
-      return new BabelRegExp(re, groups);
+      return new BabelRegExp(re, undefined, groups);
     };
 
     var _RegExp = wrapNativeSuper(RegExp);
     var _super = RegExp.prototype;
     var _groups = new WeakMap();
 
-    function BabelRegExp(re, groups) {
-      var _this = _RegExp.call(this, re);
-      _groups.set(_this, groups);
+    function BabelRegExp(re, flags, groups) {
+      var _this = _RegExp.call(this, re, flags);
+      // if the regex is recreated with 'g' flag
+      _groups.set(_this, groups || _groups.get(re));
       return _this;
     }
     inherits(BabelRegExp, _RegExp);
