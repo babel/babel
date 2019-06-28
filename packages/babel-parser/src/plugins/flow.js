@@ -1373,7 +1373,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               );
             }
 
-            this.unexpected(null, `Unexpected token, expected "number"`);
+            this.unexpected(
+              null,
+              `Unexpected token, expected "number" or "bigint"`,
+            );
           }
 
           this.unexpected();
