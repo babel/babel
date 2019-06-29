@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "optionalChaining",
+    "v8instrinsic"
+  ]
+}

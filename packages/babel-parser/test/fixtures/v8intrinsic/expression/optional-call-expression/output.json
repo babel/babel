@@ -1,0 +1,100 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 19,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 19
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 19,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 19
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 19,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 19
+          }
+        },
+        "expression": {
+          "type": "OptionalCallExpression",
+          "start": 1,
+          "end": 19,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 1
+            },
+            "end": {
+              "line": 1,
+              "column": 19
+            }
+          },
+          "callee": {
+            "type": "V8IntrinsicIdentifier",
+            "start": 1,
+            "end": 11,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 1
+              },
+              "end": {
+                "line": 1,
+                "column": 11
+              },
+              "identifierName": "DebugPrint"
+            },
+            "name": "DebugPrint"
+          },
+          "arguments": [
+            {
+              "type": "NullLiteral",
+              "start": 14,
+              "end": 18,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 14
+                },
+                "end": {
+                  "line": 1,
+                  "column": 18
+                }
+              }
+            }
+          ],
+          "optional": true
+        }
+      }
+    ],
+    "directives": []
+  }
+}
