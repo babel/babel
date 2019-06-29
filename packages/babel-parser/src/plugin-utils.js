@@ -70,6 +70,13 @@ export function validatePlugins(plugins: PluginList) {
   }
 
   if (
+    hasPlugin(plugins, "placeholders") &&
+    hasPlugin(plugins, "v8instrinsic")
+  ) {
+    throw new Error("Cannot combine placeholders and v8instrinsic plugins.");
+  }
+
+  if (
     hasPlugin(plugins, "pipelineOperator") &&
     !PIPELINE_PROPOSALS.includes(
       getPluginOption(plugins, "pipelineOperator", "proposal"),
