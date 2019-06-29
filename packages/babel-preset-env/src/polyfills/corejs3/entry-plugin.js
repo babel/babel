@@ -10,6 +10,7 @@ import {
   createImport,
   getImportSource,
   getRequireSource,
+  getModulePath,
 } from "../../utils";
 import { logEntryPolyfills } from "../../debug";
 
@@ -48,6 +49,20 @@ export default function(
 
   const available = new Set(getModulesListForTargetVersion(corejs.version));
 
+  function shouldReplace(source, modules) {
+    if (!modules) return false;
+    if (
+      // Avoid replaing an import with itself, to avoid infinite loops.
+      modules.length === 1 &&
+      polyfills.has(modules[0]) &&
+      available.has(modules[0]) &&
+      getModulePath(modules[0]) === source
+    ) {
+      return false;
+    }
+    return true;
+  }
+
   const isPolyfillImport = {
     ImportDeclaration(path: NodePath) {
       const source = getImportSource(path);
@@ -56,24 +71,40 @@ export default function(
         console.warn(BABEL_POLYFILL_DEPRECATION);
       } else {
         const modules = isCoreJSSource(source);
-        if (modules) {
+        if (shouldReplace(source, modules)) {
           this.replaceBySeparateModulesImport(path, modules);
         }
       }
     },
-    Program(path: NodePath) {
-      path.get("body").forEach(bodyPath => {
-        const source = getRequireSource(bodyPath);
-        if (!source) return;
-        if (isBabelPolyfillSource(source)) {
-          console.warn(BABEL_POLYFILL_DEPRECATION);
-        } else {
-          const modules = isCoreJSSource(source);
-          if (modules) {
-            this.replaceBySeparateModulesImport(bodyPath, modules);
+    Program: {
+      enter(path: NodePath) {
+        path.get("body").forEach(bodyPath => {
+          const source = getRequireSource(bodyPath);
+          if (!source) return;
+          if (isBabelPolyfillSource(source)) {
+            console.warn(BABEL_POLYFILL_DEPRECATION);
+          } else {
+            const modules = isCoreJSSource(source);
+            if (shouldReplace(source, modules)) {
+              this.replaceBySeparateModulesImport(bodyPath, modules);
+            }
+          }
+        });
+      },
+      exit(path: NodePath) {
+        const filtered = intersection(polyfills, this.polyfillsSet, available);
+        const reversed = Array.from(filtered).reverse();
+
+        for (const module of reversed) {
+          // Program:exit could be called multiple times.
+          // Avoid injecting the polyfills twice.
+          if (!this.injectedPolyfills.has(module)) {
+            createImport(path, module);
           }
         }
-      });
+
+        filtered.forEach(module => this.injectedPolyfills.add(module));
+      },
     },
   };
 
@@ -81,6 +112,7 @@ export default function(
     name: "corejs3-entry",
     visitor: isPolyfillImport,
     pre() {
+      this.injectedPolyfills = new Set();
       this.polyfillsSet = new Set();
 
       this.replaceBySeparateModulesImport = function(path, modules) {
@@ -91,19 +123,12 @@ export default function(
         path.remove();
       };
     },
-    post({ path }: { path: NodePath }) {
-      const filtered = intersection(polyfills, this.polyfillsSet, available);
-      const reversed = Array.from(filtered).reverse();
-
-      for (const module of reversed) {
-        createImport(path, module);
-      }
-
+    post() {
       if (debug) {
         logEntryPolyfills(
           "core-js",
-          this.polyfillsSet.size > 0,
-          filtered,
+          this.injectedPolyfills.size > 0,
+          this.injectedPolyfills,
           this.file.opts.filename,
           polyfillTargets,
           corejs3Polyfills,
