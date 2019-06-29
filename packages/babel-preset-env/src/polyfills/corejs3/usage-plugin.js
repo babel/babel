@@ -112,13 +112,30 @@ export default function(
     },
 
     // require('core-js')
-    Program(path: NodePath) {
-      path.get("body").forEach(bodyPath => {
-        if (isPolyfillSource(getRequireSource(bodyPath))) {
-          console.warn(NO_DIRECT_POLYFILL_IMPORT);
-          bodyPath.remove();
+    Program: {
+      enter(path: NodePath) {
+        path.get("body").forEach(bodyPath => {
+          if (isPolyfillSource(getRequireSource(bodyPath))) {
+            console.warn(NO_DIRECT_POLYFILL_IMPORT);
+            bodyPath.remove();
+          }
+        });
+      },
+
+      exit(path: NodePath) {
+        const filtered = intersection(polyfills, this.polyfillsSet, available);
+        const reversed = Array.from(filtered).reverse();
+
+        for (const module of reversed) {
+          // Program:exit could be called multiple times.
+          // Avoid injecting the polyfills twice.
+          if (!this.injectedPolyfills.has(module)) {
+            createImport(path, module);
+          }
         }
-      });
+
+        filtered.forEach(module => this.injectedPolyfills.add(module));
+      },
     },
 
     // import('something').then(...)
@@ -214,6 +231,7 @@ export default function(
   return {
     name: "corejs3-usage",
     pre() {
+      this.injectedPolyfills = new Set();
       this.polyfillsSet = new Set();
 
       this.addUnsupported = function(builtIn) {
@@ -252,17 +270,10 @@ export default function(
         this.addUnsupported(InstancePropertyDependencies);
       };
     },
-    post({ path }: { path: NodePath }) {
-      const filtered = intersection(polyfills, this.polyfillsSet, available);
-      const reversed = Array.from(filtered).reverse();
-
-      for (const module of reversed) {
-        createImport(path, module);
-      }
-
+    post() {
       if (debug) {
         logUsagePolyfills(
-          filtered,
+          this.injectedPolyfills,
           this.file.opts.filename,
           polyfillTargets,
           corejs3Polyfills,
