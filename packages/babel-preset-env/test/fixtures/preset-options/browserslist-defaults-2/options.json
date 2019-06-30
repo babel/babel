@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "targets": {
+          "node": "current",
+          "browsers": ["defaults", "not ie <= 10"]
+        }
+      }
+    ]
+  ]
+}

@@ -20,6 +20,15 @@ describe("getTargets", () => {
     });
   });
 
+  it("allows 'defaults' query", () => {
+    const browserslistDefaults = browserslist.defaults;
+
+    const expected = getTargets({ browsers: browserslistDefaults });
+    const actual = getTargets({ browsers: "defaults" });
+
+    expect(actual).toEqual(expected);
+  });
+
   it("does not clobber browserslists defaults", () => {
     const browserslistDefaults = browserslist.defaults;
 

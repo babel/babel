@@ -1,0 +1,12 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "targets": {
+          "browsers": "defaults"
+        }
+      }
+    ]
+  ]
+}
