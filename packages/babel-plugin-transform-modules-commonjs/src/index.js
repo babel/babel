@@ -10,8 +10,12 @@ import {
 import simplifyAccess from "@babel/helper-simple-access";
 import { template, types as t } from "@babel/core";
 
+import { createDynamicImportTransform } from "babel-plugin-dynamic-import-node/utils";
+
 export default declare((api, options) => {
   api.assertVersion(7);
+
+  const transformImportCall = createDynamicImportTransform(api);
 
   const {
     loose,
@@ -118,7 +122,23 @@ export default declare((api, options) => {
   return {
     name: "transform-modules-commonjs",
 
+    pre() {
+      this.file.set("@babel/plugin-transform-modules-*", "commonjs");
+    },
+
     visitor: {
+      CallExpression(path) {
+        if (!this.file.has("@babel/plugin-proposal-dynamic-import")) return;
+        if (!path.get("callee").isImport()) return;
+
+        let { scope } = path;
+        do {
+          scope.rename("require");
+        } while ((scope = scope.parent));
+
+        transformImportCall(this, path.get("callee"));
+      },
+
       Program: {
         exit(path, state) {
           if (!isModule(path)) return;
