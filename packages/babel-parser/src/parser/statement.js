@@ -390,7 +390,7 @@ export default class StatementParser extends ExpressionParser {
       node.expression = this.parseMaybeDecoratorArguments(expr);
       this.state.decoratorStack.pop();
     } else {
-      node.expression = this.parseMaybeAssign();
+      node.expression = this.parseExprSubscripts();
     }
     return this.finishNode(node, "Decorator");
   }

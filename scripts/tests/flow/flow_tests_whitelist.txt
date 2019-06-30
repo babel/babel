@@ -19,7 +19,6 @@ async_generators/migrated_0007.js
 class_properties/migrated_0021.js
 class_properties/migrated_0026.js
 decorators/migrated_0003.js
-decorators/migrated_0007.js
 private_class_properties/multiple.js
 private_class_properties/super.js
 private_class_properties/getter_and_field.js
