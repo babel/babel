@@ -106,12 +106,12 @@
                   },
                   "argument": {
                     "type": "CallExpression",
-                    "start": 21,
+                    "start": 20,
                     "end": 45,
                     "loc": {
                       "start": {
                         "line": 1,
-                        "column": 21
+                        "column": 20
                       },
                       "end": {
                         "line": 1,
@@ -120,12 +120,12 @@
                     },
                     "callee": {
                       "type": "V8IntrinsicIdentifier",
-                      "start": 21,
+                      "start": 20,
                       "end": 35,
                       "loc": {
                         "start": {
                           "line": 1,
-                          "column": 21
+                          "column": 20
                         },
                         "end": {
                           "line": 1,

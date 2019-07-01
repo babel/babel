@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    "v8instrinsic"
-  ],
-  "throws": "Unexpected token (1:4)"
-}
