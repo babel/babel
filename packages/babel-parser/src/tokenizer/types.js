@@ -148,7 +148,8 @@ export const types: { [name: string]: TokenType } = {
   relational: createBinop("</>/<=/>=", 8),
   bitShift: createBinop("<</>>/>>>", 9),
   plusMin: new TokenType("+/-", { beforeExpr, binop: 10, prefix, startsExpr }),
-  modulo: createBinop("%", 11),
+  // startsExpr: required by v8intrinsic plugin
+  modulo: new TokenType("%", { beforeExpr, binop: 11, startsExpr }),
   star: createBinop("*", 11),
   slash: createBinop("/", 11),
   exponent: new TokenType("**", {
