@@ -69,11 +69,8 @@ export function validatePlugins(plugins: PluginList) {
     throw new Error("Cannot combine flow and typescript plugins.");
   }
 
-  if (
-    hasPlugin(plugins, "placeholders") &&
-    hasPlugin(plugins, "v8instrinsic")
-  ) {
-    throw new Error("Cannot combine placeholders and v8instrinsic plugins.");
+  if (hasPlugin(plugins, "placeholders") && hasPlugin(plugins, "v8intrinsic")) {
+    throw new Error("Cannot combine placeholders and v8intrinsic plugins.");
   }
 
   if (
@@ -96,7 +93,7 @@ import flow from "./plugins/flow";
 import jsx from "./plugins/jsx";
 import typescript from "./plugins/typescript";
 import placeholders from "./plugins/placeholders";
-import v8instrinsic from "./plugins/v8intrinsic";
+import v8intrinsic from "./plugins/v8intrinsic";
 
 // NOTE: order is important. estree must come first; placeholders must come last.
 export const mixinPlugins: { [name: string]: MixinPlugin } = {
@@ -104,7 +101,7 @@ export const mixinPlugins: { [name: string]: MixinPlugin } = {
   jsx,
   flow,
   typescript,
-  v8instrinsic,
+  v8intrinsic,
   placeholders,
 };
 

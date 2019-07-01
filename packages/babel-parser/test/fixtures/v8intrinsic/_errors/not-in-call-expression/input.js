@@ -1,2 +1,2 @@
-const i = %DebugpPrint;
+const i = %DebugPrint;
 i(foo);
