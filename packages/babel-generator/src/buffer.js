@@ -235,7 +235,7 @@ export default class Buffer {
   source(prop: string, loc: Location, force?: boolean): void {
     if (prop && !loc) return;
 
-    // Since this is called extremly often, we re-use the same _sourcePosition
+    // Since this is called extremely often, we re-use the same _sourcePosition
     // object for the whole lifetime of the buffer.
     this._normalizePosition(prop, loc, this._sourcePosition, force);
   }

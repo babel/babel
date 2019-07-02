@@ -427,7 +427,7 @@ describe("programmatic generation", function() {
     });
   });
 
-  describe("typescript generate parantheses if necessary", function() {
+  describe("typescript generate parentheses if necessary", function() {
     it("wraps around union for array", () => {
       const typeStatement = t.TSArrayType(
         t.TSUnionType([

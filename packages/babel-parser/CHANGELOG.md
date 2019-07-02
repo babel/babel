@@ -178,7 +178,7 @@ The returned AST will only consist of the expression. The options are the same a
 
 Add startLine option ([#346](https://github.com/babel/babylon/pull/346)) (Raphael Mu)
 
-A new option was added to babylon allowing to change the intial linenumber for the first line which is usually `1`.
+A new option was added to babylon allowing to change the initial linenumber for the first line which is usually `1`.
 Changing this for example to `100` will make line `1` of the input source to be marked as line `100`, line `2` as `101`, line `3` as `102`, ...
 
 Function predicate declaration ([#103](https://github.com/babel/babylon/pull/103)) (Panagiotis Vekris)
@@ -224,7 +224,7 @@ import { a as debugger } from "foo";
 
 Do not allow overwritting of primitive types ([#314](https://github.com/babel/babylon/pull/314)) (Daniel Tschinder)
 
-In flow it is now forbidden to overwrite the primitve types `"any"`, `"mixed"`, `"empty"`, `"bool"`, `"boolean"`, `"number"`, `"string"`, `"void"` and `"null"` with your own type declaration.
+In flow it is now forbidden to overwrite the primitive types `"any"`, `"mixed"`, `"empty"`, `"bool"`, `"boolean"`, `"number"`, `"string"`, `"void"` and `"null"` with your own type declaration.
 
 Disallow import type { type a } from … ([#305](https://github.com/babel/babylon/pull/305)) (Daniel Tschinder)
 
@@ -628,7 +628,7 @@ Annotate more errors with expected token ([#172](https://github.com/babel/babylo
 
 Remove kcheck ([#173](https://github.com/babel/babylon/pull/173)))  (Daniel Tschinder)
 
-Also run flow, linting, babel tests on seperate instances (add back node 0.10)
+Also run flow, linting, babel tests on separate instances (add back node 0.10)
 
 ## v6.11.6 (2016-10-12)
 

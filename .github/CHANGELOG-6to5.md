@@ -84,7 +84,7 @@
   * More performance improvements.
   * Parsing is now ~30% faster thanks to [marijnh/acorn@7264bc0178e7e6af7cfe02e9e0c6b26ee0e6007f](https://github.com/marijnh/acorn/commit/7264bc0178e7e6af7cfe02e9e0c6b26ee0e6007f).
  * **New Feature**
-  * Optional `es6.blockScopingTDZ` is now completely functional and handles all edgecases.
+  * Optional `es6.blockScopingTDZ` is now completely functional and handles all edge cases.
   * `super` in object literals.
   * Tail call optimisation. Thanks [@RReverser](https://github.com/RReverser)!
 
@@ -474,7 +474,7 @@
  * **Polish**
   * Rest parameters now allocate the array before populating.
  * **Internal**
-  * `for...in` loops have been changed to optimized `for` loops - better performance and no enumeration of protoype keys.
+  * `for...in` loops have been changed to optimized `for` loops - better performance and no enumeration of prototype keys.
   * Parts of the code generator have now been optimized thanks to [gaearon](https://github.com/gaearon).
 
 ## 2.12.3
@@ -643,7 +643,7 @@
 
  * **Bug Fix**
   * Better handling of number literal property keys.
-  * Handle `NewExpression` paren insertion edegcases better.
+  * Handle `NewExpression` paren insertion edge cases better.
  * **Internal**
   * Fix incorrect AST node `identifier("this")`.
   * Better `toIdentifier` method that handles reserved words.
@@ -850,7 +850,7 @@
 
 ## 1.14.10
 
- * Fix let scoping unneccesary override.
+ * Fix let scoping unnecessary override.
 
 ## 1.14.6
 
@@ -973,7 +973,7 @@
 
 ## 1.12.21
 
- * Fix unneccesary let scoping replacement.
+ * Fix unnecessary let scoping replacement.
  * Add `commonInterop` module formatter. Thanks [@Naddiseo](https://github.com/Naddiseo).
  * Fix `return` outside of function body bug. Thanks [@brentburg](https://github.com/brentburg).
  * Add more flexible option types.
@@ -1020,7 +1020,7 @@
 
 ## 1.12.12
 
- * Make scope tracker more reliable to handle all edgecases.
+ * Make scope tracker more reliable to handle all edge cases.
 
 ## 1.12.11
 

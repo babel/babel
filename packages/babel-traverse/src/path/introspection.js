@@ -209,7 +209,7 @@ export function willIMaybeExecuteBefore(target) {
 /**
  * Given a `target` check the execution status of it relative to the current path.
  *
- * "Execution status" simply refers to where or not we **think** this will execuete
+ * "Execution status" simply refers to where or not we **think** this will execute
  * before or after the input `target` element.
  */
 
@@ -305,7 +305,7 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
   // verify that all the calls have the same execution status
   for (const path of referencePaths) {
     // if a reference is a child of the function we're checking against then we can
-    // safelty ignore it
+    // safely ignore it
     const childOfFunction = !!path.find(
       path => path.node === targetFuncPath.node,
     );

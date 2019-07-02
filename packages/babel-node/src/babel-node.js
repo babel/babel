@@ -28,7 +28,7 @@ if (argSeparator > -1) {
  * that only the flag is returned.
  */
 function getNormalizedV8Flag(arg) {
-  // v8 uses the "no" prefix to negate boolean flags (e.g. --nolezy),
+  // v8 uses the "no" prefix to negate boolean flags (e.g. --nolazy),
   // but they are not listed by v8flags
   const matches = arg.match(/--(?:no)?(.+)/);
 
