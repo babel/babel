@@ -26,13 +26,14 @@ helpers.typeof = helper("7.0.0-beta.0")`
   }
 `;
 
+// "for" is a reserved keyword in ES3 so escaping it here for backward compatibility
 helpers.jsx = helper("7.0.0-beta.0")`
   var REACT_ELEMENT_TYPE;
 
   export default function _createRawReactElement(type, props, key, children) {
     if (!REACT_ELEMENT_TYPE) {
       REACT_ELEMENT_TYPE = (
-        typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")
+        typeof Symbol === "function" && Symbol["for"] && Symbol["for"]("react.element")
       ) || 0xeac7;
     }
 
