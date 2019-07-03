@@ -19,7 +19,7 @@
 
 ## 6.26.0 (2017-08-16)
 
-> Backports for some folks (also other's when we accidently merged PRs from both 6.x/master)
+> Backports for some folks (also other's when we accidentally merged PRs from both 6.x/master)
 > Lesson learned: just use `master` and backport on another branch.
 
 #### :eyeglasses: Spec Compliancy
@@ -1767,7 +1767,7 @@ typeof Symbol.prototype === 'object'
   * [#3456](https://github.com/babel/babel/pull/3456) Use the real sourcemap API and handle input sourcemaps - Fixes [#7259](https://github.com/babel/babel/issues/7259). ([@loganfsmyth](https://github.com/loganfsmyth))
   * [#4507](https://github.com/babel/babel/pull/4507) Only set options in cli if different from default. ([@danez](https://github.com/danez))
 
-Fix an issue with defaults not being overidden. This was causing options like `comments: false` not to work correctly.
+Fix an issue with defaults not being overridden. This was causing options like `comments: false` not to work correctly.
 
   * [#4508](https://github.com/babel/babel/pull/4508) Support custom ports for V8 --inspect. ([@andykant](https://github.com/andykant))
   * [#4562](https://github.com/babel/babel/pull/4562) Fixes [#2299](https://github.com/babel/babel/issues/2299): Prevent REPL from printing implicit 'use strict'. ([@hzoo](https://github.com/hzoo))
@@ -2084,7 +2084,7 @@ Also added more tests and will update Babel to use the new preset options after 
 
 ## v6.13.1 (2016-08-04)
 
-We had a regression in our new babel-preset-es2015@6.13.0 that made it unexpectedly backward-incompatible. This release introduces a new alternative plugin-options approach that is uglier but supports backward-compatiblity. Ideally new plugins would use the new `module.exports = function(babel, options){ }` approach and simple skip supporting `babel-core@<6.13.x`.
+We had a regression in our new babel-preset-es2015@6.13.0 that made it unexpectedly backward-incompatible. This release introduces a new alternative plugin-options approach that is uglier but supports backward-compatibility. Ideally new plugins would use the new `module.exports = function(babel, options){ }` approach and simple skip supporting `babel-core@<6.13.x`.
 
 #### Bug Fix
 * `babel-core`, `babel-preset-es2015`
@@ -2092,7 +2092,7 @@ We had a regression in our new babel-preset-es2015@6.13.0 that made it unexpecte
 
 ## v6.13.0 (2016-08-04)
 
-> Since the last release we've created https://github.com/babel/notes to track discussions on our slack and high level features/changes that could be added - definetely check it out if you're interested in Babel's development!
+> Since the last release we've created https://github.com/babel/notes to track discussions on our slack and high level features/changes that could be added - definitely check it out if you're interested in Babel's development!
 
 Some small but very important additions in this release:
 
@@ -3817,7 +3817,7 @@ Thanks to @samwgoldman for all the new flow support!
  * **New Feature**
   * Add support for `function.sent`.
  * **Internal**
-  * Bump `invariant` depenency version.
+  * Bump `invariant` dependency version.
  * **Polish**
   * Infer filename from the base directory when resolving plugins and presets.
   * Allow JSX pragma to be specified in line comments.
@@ -3887,7 +3887,7 @@ Thanks to @samwgoldman for all the new flow support!
 ## 6.1.2
 
  * **Bug Fix**
-  * Fix bug where the parser wouldn't allow typed annotated default parametesr in arrow functions.
+  * Fix bug where the parser wouldn't allow typed annotated default parameters in arrow functions.
   * Add existence check to `NodePath#has` to ensure safeness when making comparisons.
   * Protect against replacing a class expression with a name inferred version that would
     result in it never being transformed.
@@ -3976,7 +3976,7 @@ Thanks to @samwgoldman for all the new flow support!
   * Fix SystemJS module formatter exporting function parameters.
   * Ensure that invalid identifier JSX attribute keys are quoted when transforming to calls.
   * Fix ES3 property literal plugin.
-  * Fix parameters after defaults in arrow functions refering to the wrong `arguments`.
+  * Fix parameters after defaults in arrow functions referring to the wrong `arguments`.
 
 ## 6.0.13
 

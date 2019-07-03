@@ -9,5 +9,5 @@ async function foo({ a, b = mandatory("b") } = {}) {
 }
 
 return foo().then(() => {
-  throw new Error('should not occcur');
+  throw new Error('should not occur');
 }, () => true);

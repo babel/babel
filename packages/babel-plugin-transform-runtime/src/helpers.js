@@ -22,7 +22,7 @@ export function hasMinVersion(minVersion, runtimeVersion) {
   // and this fails because a prerelease version can only satisfy a range
   // if it is a prerelease within the same major/minor/patch range.
   //
-  // Note: If this is found to have issues, please also revist the logic in
+  // Note: If this is found to have issues, please also revisit the logic in
   // babel-core's availableHelper() API.
   if (semver.valid(runtimeVersion)) runtimeVersion = `^${runtimeVersion}`;
 

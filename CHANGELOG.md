@@ -404,7 +404,7 @@ Thanks to @jamesgeorge007 and @armano2 for their first PR!
   * [#9271](https://github.com/babel/babel/pull/9271) Bump license years for 2019. ([@berlamhenderson](https://github.com/berlamhenderson))
 * `babel-helpers`
   * [#9166](https://github.com/babel/babel/pull/9166) Add mixins support to the _decorate helper. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
-  
+
 ## v7.2.5 (2018-12-21)
 
 `@babel/polyfill` didn't get published correctly in v7.2.3 (#9227).
@@ -435,7 +435,7 @@ Half of the commits in this release are made by first time contributors! Thanks 
 
 ## v7.2.2 (2018-12-15)
 
-Mostrly bug fixes and internal changes.
+Mostly bug fixes and internal changes.
 Thanks to @paleite, @saschanaz and @joeldenning for their first PRs!
 
 #### :bug: Bug Fix
@@ -777,7 +777,7 @@ No change from rc.4. Finally released as https://babeljs.io/blog/2018/08/27/7.0.
 
 ## v7.0.0-rc.2 (2018-08-21)
 
-A notable change is the addition of https://github.com/babel/babel/pull/8485 which enables https://github.com/babel/babel-loader/pull/660 (automatically doing `modules: false` for `@babel/preset-env` when using `babel-loader`. 
+A notable change is the addition of https://github.com/babel/babel/pull/8485 which enables https://github.com/babel/babel-loader/pull/660 (automatically doing `modules: false` for `@babel/preset-env` when using `babel-loader`.
 
 #### :boom: Breaking Change
 * `babel-core`
@@ -932,7 +932,7 @@ Breaking Change in beta:
 ## v7.0.0-beta.53 (2018-07-11)
 
 - Fix for regression with paths on windows due to micromatch upgrade, remove yearly presets (not published)
-- (There was an issue with the Stage presets in this release, but it is also deprecated) 
+- (There was an issue with the Stage presets in this release, but it is also deprecated)
 
 #### :boom: Breaking Change
 * `babel-*`
@@ -2586,7 +2586,7 @@ Initial release of typescript equivalent of how Babel handles flow with a new `b
 * `babel-plugin-check-es2015-constants`
   * [#5930](https://github.com/babel/babel/pull/5930) Spec compliancy of check-es2015-constants plugin. ([@maurobringolf](https://github.com/maurobringolf))
 
-> Instead of throwing a compile time error when const is violated, Babel should insert a throw statement before the violation. 
+> Instead of throwing a compile time error when const is violated, Babel should insert a throw statement before the violation.
 
 #### :boom: Breaking Change
 * `babel-plugin-transform-flow-comments`

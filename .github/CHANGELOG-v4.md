@@ -127,7 +127,7 @@
 ## 4.6.4
 
  * **Bug Fix**
-  * Fix `ForOfStatement` not proplery inheriting labels.
+  * Fix `ForOfStatement` not properly inheriting labels.
   * When in closure mode in block scoping transformer, properly check for variable shadowing.
  * **New Feature**
   * New `utility.inlineEnvironmentVariables` and `utility.inlineExpression` transformers.
@@ -153,7 +153,7 @@
  * **Spec Compliancy**
   * `for...of` now outputs in a lengthy `try...catch` this is to ensure spec compliancy in regards to iterator returns and abrupt completions. See [google/traceur-compiler#1773](https://github.com/google/traceur-compiler/issues/1773) and [babel/babel/#838](https://github.com/babel/babel/issues/838) for more information.
  * **Polish**
-  * Rest parameters that are only refered to via number properties on member expressions are desugared into a direct `arguments` reference. Thanks [@neVERberleRfellerER](https://github.com/neVERberleRfellerER)!
+  * Rest parameters that are only referred to via number properties on member expressions are desugared into a direct `arguments` reference. Thanks [@neVERberleRfellerER](https://github.com/neVERberleRfellerER)!
   * `$ babel` no longer exits on syntax errors.
  * **Internal**
   * Upgrade `browserify`.

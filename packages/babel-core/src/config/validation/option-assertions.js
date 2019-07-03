@@ -231,7 +231,7 @@ function assertIgnoreItem(loc: GeneralPath, value: mixed): IgnoreItem {
     throw new Error(
       `${msg(
         loc,
-      )} must be an array of string/Funtion/RegExp values, or undefined`,
+      )} must be an array of string/Function/RegExp values, or undefined`,
     );
   }
   return value;

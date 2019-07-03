@@ -1,6 +1,6 @@
 /**
  * Entry point for @babel/standalone. This wraps Babel's API in a version that's
- * friendlier for use in web browers. It removes the automagical detection of
+ * friendlier for use in web browsers. It removes the automagical detection of
  * plugins, instead explicitly registering all the available plugins and
  * presets, and requiring custom ones to be registered through `registerPlugin`
  * and `registerPreset` respectively.
