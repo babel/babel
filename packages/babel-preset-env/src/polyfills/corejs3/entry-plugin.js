@@ -1,8 +1,8 @@
 // @flow
 
-import corejs3Polyfills from "core-js-compat/data";
-import corejsEntries from "core-js-compat/entries";
-import getModulesListForTargetVersion from "core-js-compat/get-modules-list-for-target-version";
+import corejs3Polyfills from "../../../data/corejs3-built-ins.json";
+import corejsEntries from "../../../data/corejs3-entries.json";
+import getSupportedPolyfills from "./get-supported-polyfills";
 import filterItems from "../../filter-items";
 import {
   has,
@@ -46,7 +46,7 @@ export default function(
     null,
   );
 
-  const available = new Set(getModulesListForTargetVersion(corejs.version));
+  const available = getSupportedPolyfills(corejs.version);
 
   const isPolyfillImport = {
     ImportDeclaration(path: NodePath) {

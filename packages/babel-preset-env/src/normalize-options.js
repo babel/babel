@@ -1,8 +1,8 @@
 // @flow
-import corejs3Polyfills from "core-js-compat/data";
 import invariant from "invariant";
 import { coerce, SemVer } from "semver";
 import corejs2Polyfills from "../data/corejs2-built-ins.json";
+import corejs3Polyfills from "../data/corejs3-built-ins.json";
 import pluginsList from "../data/plugins.json";
 import moduleTransformations from "./module-transformations";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";

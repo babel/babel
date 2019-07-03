@@ -55,7 +55,7 @@ If you wan to transform a new built-in by `useBuiltIns: 'usage'`, add mapping to
 
 ### Update data for `core-js@3` polyfilling
 
-Just update the version of [`core-js-compat`](https://github.com/zloirock/core-js/tree/master/packages/core-js-compat) in dependencies.
+Update the version of [`core-js-compat`](https://github.com/zloirock/core-js/tree/master/packages/core-js-compat) in dependencies, and then run `npm run build-data`.
 
 If you wan to transform a new built-in by `useBuiltIns: 'usage'`, add mapping to related [`core-js`](https://github.com/zloirock/core-js/tree/master/packages/core-js/modules) modules to [this file](https://github.com/babel/babel/blob/master/packages/babel-preset-env/polyfills/corejs3/built-in-definitions.js).
 

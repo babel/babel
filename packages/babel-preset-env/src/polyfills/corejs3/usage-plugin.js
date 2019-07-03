@@ -1,8 +1,8 @@
 // @flow
 
-import corejs3Polyfills from "core-js-compat/data";
+import corejs3Polyfills from "../../../data/corejs3-built-ins.json";
 import corejs3ShippedProposalsList from "./shipped-proposals";
-import getModulesListForTargetVersion from "core-js-compat/get-modules-list-for-target-version";
+import getSupportedPolyfills from "./get-supported-polyfills";
 import filterItems from "../../filter-items";
 import {
   BuiltIns,
@@ -70,7 +70,7 @@ export default function(
     null,
   );
 
-  const available = new Set(getModulesListForTargetVersion(corejs.version));
+  const available = getSupportedPolyfills(corejs.version);
 
   function resolveKey(path, computed) {
     const { node, parent, scope } = path;
