@@ -117,6 +117,7 @@ const options = {
     "classPrivateProperties",
     "classPrivateMethods",
     "bigInt",
+    "numericSeparator",
   ],
   sourceType: "module",
   ranges: true,
