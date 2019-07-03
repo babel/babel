@@ -26,7 +26,7 @@ helpers.typeof = helper("7.0.0-beta.0")`
   }
 `;
 
-// "for" is reserved keyword in es3 so escapting it here for backward compatibility
+// "for" is a reserved keyword in ES3 so escaping it here for backward compatibility
 helpers.jsx = helper("7.0.0-beta.0")`
   var REACT_ELEMENT_TYPE;
 
