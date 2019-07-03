@@ -114,7 +114,7 @@ export function findRootConfig(
 
   const conf = readConfig(filepath, envName, caller);
   if (conf) {
-    debug("Found root config %o in $o.", BABEL_CONFIG_JS_FILENAME, dirname);
+    debug("Found root config %o in %o.", BABEL_CONFIG_JS_FILENAME, dirname);
   }
   return conf;
 }
@@ -132,7 +132,7 @@ export function loadConfig(
     throw new Error(`Config file ${filepath} contains no configuration data`);
   }
 
-  debug("Loaded config %o from $o.", name, dirname);
+  debug("Loaded config %o from %o.", name, dirname);
   return conf;
 }
 
