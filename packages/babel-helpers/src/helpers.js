@@ -606,28 +606,35 @@ helpers.interopRequireDefault = helper("7.0.0-beta.0")`
 `;
 
 helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
+  var REQUIRE_WILD_CACHE = typeof WeakMap === 'function' ? new WeakMap() : undefined;
+
   export default function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
       return obj;
-    } else {
-      var newObj = {};
-      if (obj != null) {
-        for (var key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = Object.defineProperty && Object.getOwnPropertyDescriptor
-              ? Object.getOwnPropertyDescriptor(obj, key)
-              : {};
-            if (desc.get || desc.set) {
-              Object.defineProperty(newObj, key, desc);
-            } else {
-              newObj[key] = obj[key];
-            }
+    }
+
+    if (REQUIRE_WILD_CACHE && REQUIRE_WILD_CACHE.has(obj)) {
+      return REQUIRE_WILD_CACHE.get(obj);
+    }
+
+    var newObj = {};
+    if (obj != null) {
+      for (var key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+          var desc = Object.defineProperty && Object.getOwnPropertyDescriptor
+            ? Object.getOwnPropertyDescriptor(obj, key)
+            : {};
+          if (desc.get || desc.set) {
+            Object.defineProperty(newObj, key, desc);
+          } else {
+            newObj[key] = obj[key];
           }
         }
       }
-      newObj.default = obj;
-      return newObj;
     }
+    newObj.default = obj;
+    REQUIRE_WILD_CACHE && REQUIRE_WILD_CACHE.set(obj, newObj);
+    return newObj;
   }
 `;
 
