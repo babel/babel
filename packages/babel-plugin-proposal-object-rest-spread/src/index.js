@@ -452,7 +452,13 @@ export default declare((api, opts) => {
         if (loose) {
           helper = getExtendsHelper(file);
         } else {
-          helper = file.addHelper("objectSpread2");
+          try {
+            helper = file.addHelper("objectSpread2");
+          } catch {
+            // objectSpread2 has been introduced in v7.5.0
+            // We have to maintain backward compatibility.
+            helper = file.addHelper("objectSpread");
+          }
         }
 
         path.replaceWith(t.callExpression(helper, args));
