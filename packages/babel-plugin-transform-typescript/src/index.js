@@ -98,6 +98,7 @@ export default declare(
         ExportNamedDeclaration(path) {
           // remove export declaration if it's exporting only types
           if (
+            !path.node.source &&
             path.node.specifiers.length > 0 &&
             !path.node.specifiers.find(exportSpecifier =>
               path.scope.hasOwnBinding(exportSpecifier.local.name),
@@ -109,7 +110,10 @@ export default declare(
 
         ExportSpecifier(path) {
           // remove type exports
-          if (!path.scope.hasOwnBinding(path.node.local.name)) {
+          if (
+            !path.parent.source &&
+            !path.scope.hasOwnBinding(path.node.local.name)
+          ) {
             path.remove();
           }
         },
