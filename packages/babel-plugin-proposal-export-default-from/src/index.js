@@ -35,6 +35,11 @@ export default declare(api => {
 
         path.replaceWithMultiple(nodes);
       },
+      ImportDefaultSpecifier(path) {
+        if (!path.scope.hasOwnBinding(path.node.local.name)) {
+          path.scope.registerDeclaration(path.parentPath);
+        }
+      },
     },
   };
 });
