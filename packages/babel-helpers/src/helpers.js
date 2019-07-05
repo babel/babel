@@ -606,15 +606,34 @@ helpers.interopRequireDefault = helper("7.0.0-beta.0")`
 `;
 
 helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
-  var REQUIRE_WILD_CACHE = typeof WeakMap === 'function' ? new WeakMap() : undefined;
+  function _createRequireWildcardCache(obj) {
+    if (typeof global._REQUIRE_WILD_CACHE === 'undefined') {
+      global._REQUIRE_WILD_CACHE = typeof WeakMap === 'function' ? new WeakMap() : null;
+    }
+
+    const cache = global._REQUIRE_WILD_CACHE;
+
+    return {
+      has: function() {
+        return cache ? cache.has(obj) : false;
+      },
+      set: function(newObj) {
+        cache && cache.set(obj, newObj);
+      },
+      get: function() {
+        return cache ? cache.get(obj) : null;
+      }
+    };
+  }
 
   export default function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
       return obj;
     }
 
-    if (REQUIRE_WILD_CACHE && REQUIRE_WILD_CACHE.has(obj)) {
-      return REQUIRE_WILD_CACHE.get(obj);
+    var cache = _createRequireWildcardCache(obj);
+    if (cache.has()) {
+      return cache.get();
     }
 
     var newObj = {};
@@ -633,7 +652,7 @@ helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
       }
     }
     newObj.default = obj;
-    REQUIRE_WILD_CACHE && REQUIRE_WILD_CACHE.set(obj, newObj);
+    cache.set(newObj);
     return newObj;
   }
 `;
