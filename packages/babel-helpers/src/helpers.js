@@ -406,7 +406,7 @@ helpers.objectSpread = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.objectSpread2 = helper("7.0.0-beta.0")`
+helpers.objectSpread2 = helper("7.5.0")`
   import defineProperty from "defineProperty";
 
   export default function _objectSpread2(target) {
