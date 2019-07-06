@@ -18,6 +18,14 @@ See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
 
+## v7.5.1 (2019-07-06)
+
+#### :bug: Bug Fix
+* `babel-helpers`, `babel-plugin-proposal-object-rest-spread`
+  * [#10170](https://github.com/babel/babel/pull/10170) Fix objectSpread2 backward compatibility ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-typescript`
+  * [#10167](https://github.com/babel/babel/pull/10167) Retain typescript export-from-source ([@Wolvereness](https://github.com/Wolvereness))
+
 ## v7.5.0 (2019-07-04)
 
 #### :eyeglasses: Spec Compliance
