@@ -33,7 +33,8 @@ export default declare(api => {
           nodes.push(node);
         }
 
-        path.replaceWithMultiple(nodes);
+        const [importDeclaration] = path.replaceWithMultiple(nodes);
+        path.scope.registerDeclaration(importDeclaration);
       },
     },
   };
