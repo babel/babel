@@ -43,12 +43,8 @@ export default declare(api => {
           nodes.push(node);
         }
 
-        path.replaceWithMultiple(nodes);
-      },
-      ImportNamespaceSpecifier(path) {
-        if (!path.scope.hasOwnBinding(path.node.local.name)) {
-          path.scope.registerDeclaration(path.parentPath);
-        }
+        const [importDeclaration] = path.replaceWithMultiple(nodes);
+        path.scope.registerDeclaration(importDeclaration);
       },
     },
   };
