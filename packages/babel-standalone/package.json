@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.5.0",
+  "version": "7.5.1",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "babel.js",
   "files": [
@@ -24,7 +24,7 @@
     "@babel/plugin-proposal-logical-assignment-operators": "^7.2.0",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
     "@babel/plugin-proposal-numeric-separator": "^7.2.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.1",
     "@babel/plugin-proposal-optional-catch-binding": "^7.2.0",
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
     "@babel/plugin-proposal-pipeline-operator": "^7.5.0",
@@ -93,7 +93,7 @@
     "@babel/plugin-transform-strict-mode": "^7.2.0",
     "@babel/plugin-transform-template-literals": "^7.4.4",
     "@babel/plugin-transform-typeof-symbol": "^7.2.0",
-    "@babel/plugin-transform-typescript": "^7.5.0",
+    "@babel/plugin-transform-typescript": "^7.5.1",
     "@babel/plugin-transform-unicode-regex": "^7.4.4",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
