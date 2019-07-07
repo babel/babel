@@ -13,10 +13,8 @@ module.exports = function({ template, types: t }) {
     post({ path }) {
       console.warn = consoleWarn;
 
-      path.pushContainer(
-        "body",
-        t.expressionStatement(t.valueToNode(warnings)),
-      );
+      const stmt = t.expressionStatement(t.valueToNode(warnings));
+      path.pushContainer("body", stmt);
     },
 
     visitor: {
