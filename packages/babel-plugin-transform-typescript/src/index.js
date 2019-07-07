@@ -23,7 +23,20 @@ const GLOBAL_TYPES = new WeakMap();
 
 function isGlobalType(path, name) {
   const program = path.find(path => path.isProgram()).node;
-  return GLOBAL_TYPES.get(program).has(name) && !path.scope.hasOwnBinding(name);
+  if (path.scope.hasOwnBinding(name)) return false;
+  if (GLOBAL_TYPES.get(program).has(name)) return true;
+
+  console.warn(
+    `The exported identifier "${name}" is not declared in Babel's scope tracker\n` +
+      `as a JavaScript value binding, but "@babel/plugin-transform-typescript"\n` +
+      `never encountered it as a TypeScript type declaration.\n` +
+      `It will be treated as a JavaScript value.\n\n` +
+      `This problem is likely caused by another plugin plugin which is injecting\n` +
+      `"${name}" without registering it in the scope tracker. If you are the author\n` +
+      ` of that plugin, please use "scope.registerDeclaration(declarationPath)".`,
+  );
+
+  return false;
 }
 
 function registerGlobalType(programScope, name) {
