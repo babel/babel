@@ -19,6 +19,29 @@ function isInType(path) {
 }
 
 const PARSED_PARAMS = new WeakSet();
+const GLOBAL_TYPES = new WeakMap();
+
+function isGlobalType(path, name) {
+  const program = path.find(path => path.isProgram()).node;
+  if (path.scope.hasOwnBinding(name)) return false;
+  if (GLOBAL_TYPES.get(program).has(name)) return true;
+
+  console.warn(
+    `The exported identifier "${name}" is not declared in Babel's scope tracker\n` +
+      `as a JavaScript value binding, and "@babel/plugin-transform-typescript"\n` +
+      `never encountered it as a TypeScript type declaration.\n` +
+      `It will be treated as a JavaScript value.\n\n` +
+      `This problem is likely caused by another plugin injecting\n` +
+      `"${name}" without registering it in the scope tracker. If you are the author\n` +
+      ` of that plugin, please use "scope.registerDeclaration(declarationPath)".`,
+  );
+
+  return false;
+}
+
+function registerGlobalType(programScope, name) {
+  GLOBAL_TYPES.get(programScope.path.node).add(name);
+}
 
 export default declare(
   (api, { jsxPragma = "React", allowNamespaces = false }) => {
@@ -40,6 +63,10 @@ export default declare(
           const { file } = state;
           let fileJsxPragma = null;
 
+          if (!GLOBAL_TYPES.has(path.node)) {
+            GLOBAL_TYPES.set(path.node, new Set());
+          }
+
           if (file.ast.comments) {
             for (const comment of (file.ast.comments: Array<Object>)) {
               const jsxMatches = JSX_ANNOTATION_REGEX.exec(comment.value);
@@ -50,7 +77,7 @@ export default declare(
           }
 
           // remove type imports
-          for (const stmt of path.get("body")) {
+          for (let stmt of path.get("body")) {
             if (t.isImportDeclaration(stmt)) {
               // Note: this will allow both `import { } from "m"` and `import "m";`.
               // In TypeScript, the former would be elided.
@@ -91,6 +118,28 @@ export default declare(
                   importPath.remove();
                 }
               }
+
+              continue;
+            }
+
+            if (stmt.isExportDeclaration()) {
+              stmt = stmt.get("declaration");
+            }
+
+            if (stmt.isVariableDeclaration({ declare: true })) {
+              for (const name of Object.keys(stmt.getBindingIdentifiers())) {
+                registerGlobalType(path.scope, name);
+              }
+            } else if (
+              stmt.isTSTypeAliasDeclaration() ||
+              stmt.isTSDeclareFunction() ||
+              stmt.isTSInterfaceDeclaration() ||
+              stmt.isClassDeclaration({ declare: true }) ||
+              stmt.isTSEnumDeclaration({ declare: true }) ||
+              (stmt.isTSModuleDeclaration({ declare: true }) &&
+                stmt.get("id").isIdentifier())
+            ) {
+              registerGlobalType(path.scope, stmt.node.id.name);
             }
           }
         },
@@ -100,8 +149,8 @@ export default declare(
           if (
             !path.node.source &&
             path.node.specifiers.length > 0 &&
-            !path.node.specifiers.find(exportSpecifier =>
-              path.scope.hasOwnBinding(exportSpecifier.local.name),
+            path.node.specifiers.every(({ local }) =>
+              isGlobalType(path, local.name),
             )
           ) {
             path.remove();
@@ -110,10 +159,7 @@ export default declare(
 
         ExportSpecifier(path) {
           // remove type exports
-          if (
-            !path.parent.source &&
-            !path.scope.hasOwnBinding(path.node.local.name)
-          ) {
+          if (!path.parent.source && isGlobalType(path, path.node.local.name)) {
             path.remove();
           }
         },
@@ -122,7 +168,7 @@ export default declare(
           // remove whole declaration if it's exporting a TS type
           if (
             t.isIdentifier(path.node.declaration) &&
-            !path.scope.hasOwnBinding(path.node.declaration.name)
+            isGlobalType(path, path.node.declaration.name)
           ) {
             path.remove();
           }
@@ -137,7 +183,9 @@ export default declare(
         },
 
         VariableDeclaration(path) {
-          if (path.node.declare) path.remove();
+          if (path.node.declare) {
+            path.remove();
+          }
         },
 
         VariableDeclarator({ node }) {
