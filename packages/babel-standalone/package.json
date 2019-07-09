@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.5.3",
+  "version": "7.5.4",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "babel.js",
   "files": [
@@ -9,7 +9,7 @@
     "src"
   ],
   "devDependencies": {
-    "@babel/core": "^7.5.0",
+    "@babel/core": "^7.5.4",
     "@babel/helper-plugin-utils": "^7.0.0",
     "@babel/plugin-external-helpers": "^7.2.0",
     "@babel/plugin-proposal-async-generator-functions": "^7.2.0",
@@ -24,7 +24,7 @@
     "@babel/plugin-proposal-logical-assignment-operators": "^7.2.0",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
     "@babel/plugin-proposal-numeric-separator": "^7.2.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.4",
     "@babel/plugin-proposal-optional-catch-binding": "^7.2.0",
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
     "@babel/plugin-proposal-pipeline-operator": "^7.5.0",
