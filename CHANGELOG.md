@@ -18,6 +18,12 @@ See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
 
+## v7.5.3 (2019-07-09)
+
+#### :bug: Bug Fix
+* `babel-helpers`, `babel-plugin-proposal-object-rest-spread`, `babel-preset-env`
+  * [#10180](https://github.com/babel/babel/pull/10180) [_objectSpread2] Do not use hoisted var from prev iteration ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
 ## v7.5.2 (2019-07-08)
 
 #### :bug: Bug Fix
