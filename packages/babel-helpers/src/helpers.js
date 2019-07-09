@@ -430,7 +430,7 @@ helpers.objectSpread2 = helper("7.5.0")`
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(arguments[i]));
       } else {
-        ownKeys(source).forEach(function (key) {
+        ownKeys(arguments[i]).forEach(function (key) {
           Object.defineProperty(
             target,
             key,
