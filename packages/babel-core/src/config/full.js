@@ -278,6 +278,22 @@ const instantiatePlugin = makeWeakCache(
   },
 );
 
+const validatePreset = (
+  preset: PresetInstance,
+  context: ConfigContext,
+  descriptor: UnloadedDescriptor,
+): void => {
+  if (!context.filename) {
+    const { options } = preset;
+    if (options.test || options.include || options.exclude) {
+      throw new Error(
+        `Preset ${descriptor.name ||
+          ""} requires filename, but it was not passed.`.replace(/\s{2}/, " "),
+      );
+    }
+  }
+};
+
 /**
  * Generate a config object that will act as the root of a new nested config.
  */
@@ -285,10 +301,9 @@ const loadPresetDescriptor = (
   descriptor: UnloadedDescriptor,
   context: ConfigContext,
 ): ConfigChain | null => {
-  return buildPresetChain(
-    instantiatePreset(loadDescriptor(descriptor, context)),
-    context,
-  );
+  const preset = instantiatePreset(loadDescriptor(descriptor, context));
+  validatePreset(preset, context, descriptor);
+  return buildPresetChain(preset, context);
 };
 
 const instantiatePreset = makeWeakCache(
