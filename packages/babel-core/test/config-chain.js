@@ -1061,7 +1061,7 @@ describe("buildConfigChain", function() {
         loadOptions({
           presets: [require("./fixtures/config-loading/preset4")],
         });
-      }).toThrow(/Preset requires filename/);
+      }).toThrow(/Preset \/\* your preset \*\/ requires a filename/);
     });
 
     it("should throw when `preset.overrides` requires `filename` but it was not passed", () => {
@@ -1069,7 +1069,7 @@ describe("buildConfigChain", function() {
         loadOptions({
           presets: [require("./fixtures/config-loading/preset5")],
         });
-      }).toThrow(/Preset requires filename/);
+      }).toThrow(/Preset \/\* your preset \*\/ requires a filename/);
     });
   });
 });

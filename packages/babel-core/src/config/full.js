@@ -284,9 +284,18 @@ const validateIfOptionNeedsFilename = (
   descriptor: UnloadedDescriptor,
 ): void => {
   if (options.test || options.include || options.exclude) {
+    const formattedPresetName = descriptor.name
+      ? `"${descriptor.name}"`
+      : "/* your preset */";
     throw new Error(
-      `Preset ${descriptor.name ||
-        ""} requires filename, but it was not passed.`.replace(/\s{2}/, " "),
+      [
+        `Preset ${formattedPresetName} requires a filename be set.`,
+        `For example, if you are calling Babel directly`,
+        `\`\`\``,
+        `babel.transform(code, { filename: 'file.js', presets: [${formattedPresetName}] });`,
+        `\`\`\``,
+        `See https://babeljs.io/docs/en/options#filename for more information.`,
+      ].join("\n"),
     );
   }
 };
