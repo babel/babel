@@ -18,6 +18,7 @@ import { validatePluginObject } from "./validation/plugins";
 import makeAPI from "./helpers/config-api";
 
 import loadPrivatePartialConfig from "./partial";
+import type { ValidatedOptions } from "./validation/options";
 
 type LoadedDescriptor = {
   value: {},
@@ -278,6 +279,18 @@ const instantiatePlugin = makeWeakCache(
   },
 );
 
+const validateIfOptionNeedsFilename = (
+  options: ValidatedOptions,
+  descriptor: UnloadedDescriptor,
+): void => {
+  if (options.test || options.include || options.exclude) {
+    throw new Error(
+      `Preset ${descriptor.name ||
+        ""} requires filename, but it was not passed.`.replace(/\s{2}/, " "),
+    );
+  }
+};
+
 const validatePreset = (
   preset: PresetInstance,
   context: ConfigContext,
@@ -285,10 +298,10 @@ const validatePreset = (
 ): void => {
   if (!context.filename) {
     const { options } = preset;
-    if (options.test || options.include || options.exclude) {
-      throw new Error(
-        `Preset ${descriptor.name ||
-          ""} requires filename, but it was not passed.`.replace(/\s{2}/, " "),
+    validateIfOptionNeedsFilename(options, descriptor);
+    if (options.overrides) {
+      options.overrides.forEach(overrideOptions =>
+        validateIfOptionNeedsFilename(overrideOptions, descriptor),
       );
     }
   }

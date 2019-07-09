@@ -1063,5 +1063,13 @@ describe("buildConfigChain", function() {
         });
       }).toThrow(/Preset requires filename/);
     });
+
+    it("should throw when `preset.overrides` requires `filename` but it was not passed", () => {
+      expect(() => {
+        loadOptions({
+          presets: [require("./fixtures/config-loading/preset5")],
+        });
+      }).toThrow(/Preset requires filename/);
+    });
   });
 });
