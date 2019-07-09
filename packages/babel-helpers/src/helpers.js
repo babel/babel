@@ -422,19 +422,19 @@ helpers.objectSpread2 = helper("7.5.0")`
 
   export default function _objectSpread2(target) {
     for (var i = 1; i < arguments.length; i++) {
+      var source = (arguments[i] != null) ? arguments[i] : {};
       if (i % 2) {
-        var source = (arguments[i] != null) ? arguments[i] : {};
         ownKeys(source, true).forEach(function (key) {
           defineProperty(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(arguments[i]));
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys(arguments[i]).forEach(function (key) {
+        ownKeys(source).forEach(function (key) {
           Object.defineProperty(
             target,
             key,
-            Object.getOwnPropertyDescriptor(arguments[i], key)
+            Object.getOwnPropertyDescriptor(source, key)
           );
         });
       }
