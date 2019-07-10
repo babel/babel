@@ -19,7 +19,7 @@
     "@babel/types": "^7.5.0",
     "debug": "^4.1.0",
     "globals": "^11.1.0",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.13"
   },
   "devDependencies": {
     "@babel/helper-plugin-test-runner": "^7.0.0"
