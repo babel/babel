@@ -587,7 +587,7 @@ helpers.wrapNativeSuper = helper("7.0.0-beta.0")`
 helpers.instanceof = helper("7.0.0-beta.0")`
   export default function _instanceof(left, right) {
     if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
-      return right[Symbol.hasInstance](left);
+      return !!right[Symbol.hasInstance](left);
     } else {
       return left instanceof right;
     }
