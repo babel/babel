@@ -8,5 +8,15 @@
     "ios_saf": "10.3",
     "and_chr": "71",
     "and_ff": "64"
+  },
+  "dynamic-import": {
+    "edge": "75",
+    "firefox": "67",
+    "chrome": "63",
+    "safari": "11.1",
+    "opera": "50",
+    "ios_saf": "11.0",
+    "op_mob": "46",
+    "and_chr": "74"
   }
 }

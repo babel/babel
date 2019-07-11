@@ -2,11 +2,12 @@
 
 import { logPluginOrPolyfill } from "./debug";
 import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
-import filterItems from "./filter-items";
+import filterItems, { isPluginRequired } from "./filter-items";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options";
 import pluginList from "../data/plugins.json";
 import { proposalPlugins, pluginSyntaxMap } from "../data/shipped-proposals";
+import browserModulesData from "../data/built-in-modules.json";
 
 import addCoreJS2UsagePlugin from "./polyfills/corejs2/usage-plugin";
 import addCoreJS3UsagePlugin from "./polyfills/corejs3/usage-plugin";
@@ -134,7 +135,10 @@ export default declare((api, opts) => {
     const shouldTransformESM =
       modules !== "auto" || !api.caller || !api.caller(supportsStaticESM);
     const shouldTransformDynamicImport =
-      modules !== "auto" || !api.caller || !api.caller(supportsDynamicImport);
+      (modules !== "auto" ||
+        !api.caller ||
+        !api.caller(supportsDynamicImport)) &&
+      isPluginRequired(transformTargets, browserModulesData["dynamic-import"]);
 
     if (shouldTransformESM) {
       // NOTE: not giving spec here yet to avoid compatibility issues when
