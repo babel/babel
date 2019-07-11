@@ -1,7 +1,7 @@
 {
   "name": "@babel/plugin-transform-react-display-name",
   "version": "7.2.0",
-  "description": "Add displayName to React.createClass calls",
+  "description": "Add displayName to React.createClass and React.lazy calls",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-display-name",
   "license": "MIT",
   "publishConfig": {

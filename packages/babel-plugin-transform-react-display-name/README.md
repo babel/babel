@@ -1,6 +1,6 @@
 # @babel/plugin-transform-react-display-name
 
-> Add displayName to React.createClass calls
+> Add displayName to React.createClass and React.lazy calls
 
 See our website [@babel/plugin-transform-react-display-name](https://babeljs.io/docs/en/next/babel-plugin-transform-react-display-name.html) for more information.
 

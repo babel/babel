@@ -1,3 +1,4 @@
 {
-  "plugins": ["transform-react-display-name"]
+  "plugins": ["syntax-dynamic-import", "transform-react-display-name"],
+  "sourceType": "unambiguous"
 }
