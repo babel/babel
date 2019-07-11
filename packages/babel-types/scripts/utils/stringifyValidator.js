@@ -31,6 +31,19 @@ module.exports = function stringifyValidator(validator, nodePrefix) {
     return validator.type;
   }
 
+  if (validator.shapeOf) {
+    return (
+      "{" +
+      Object.keys(validator.shapeOf)
+        .map(
+          shapeKey =>
+            shapeKey + ":" + stringifyValidator(validator.shapeOf[shapeKey])
+        )
+        .join(", ") +
+      "}"
+    );
+  }
+
   return ["any"];
 };
 

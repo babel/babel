@@ -161,6 +161,35 @@ export function assertValueType(type: string): Validator {
   return validate;
 }
 
+export function assertShape(shape: {| [string]: Validator |}): Validator {
+  function validate(node, key, val) {
+    const errors = [];
+    for (const property of Object.keys(shape)) {
+      try {
+        const validator = shape[property];
+        validator(node, property, val[property]);
+      } catch (error) {
+        if (error instanceof TypeError) {
+          errors.push(error.message);
+          continue;
+        }
+        throw error;
+      }
+    }
+    if (errors.length) {
+      throw new TypeError(
+        `Property ${key} of ${
+          node.type
+        } expected to have the following:\n${errors.join("\n")}`,
+      );
+    }
+  }
+
+  validate.shapeOf = shape;
+
+  return validate;
+}
+
 export function chain(...fns: Array<Validator>): Validator {
   function validate(...args) {
     for (const fn of fns) {
