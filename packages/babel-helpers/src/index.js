@@ -280,6 +280,10 @@ export function getDependencies(name: string): $ReadOnlyArray<string> {
   return Array.from(loadHelper(name).dependencies.values());
 }
 
+export function ensure(name: string) {
+  loadHelper(name);
+}
+
 export const list = Object.keys(helpers)
   .map(name => name.replace(/^_/, ""))
   .filter(name => name !== "__esModule");

@@ -788,4 +788,28 @@ describe("api", function() {
       );
     });
   });
+
+  describe("missing helpers", function() {
+    it("should always throw", function() {
+      expect(() =>
+        babel.transformSync(``, {
+          configFile: false,
+          plugins: [
+            function() {
+              return {
+                visitor: {
+                  Program(path) {
+                    try {
+                      path.pushContainer("body", this.addHelper("fooBar"));
+                    } catch {}
+                    path.pushContainer("body", this.addHelper("fooBar"));
+                  },
+                },
+              };
+            },
+          ],
+        }),
+      ).toThrow();
+    });
+  });
 });
