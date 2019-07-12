@@ -432,6 +432,7 @@ export default declare((api, options, dirname) => {
         exit(path) {
           if (!injectCoreJS) return;
           if (!path.isReferenced()) return;
+          if (path.node.computed) return;
 
           const { node } = path;
           const { object } = node;
@@ -447,7 +448,6 @@ export default declare((api, options, dirname) => {
                 name,
               ),
               node.property,
-              node.computed,
             ),
           );
         },
