@@ -203,6 +203,9 @@ export default class File {
       if (res) return res;
     }
 
+    // make sure that the helper exists
+    helpers.ensure(name);
+
     const uid = (this.declarations[name] = this.scope.generateUidIdentifier(
       name,
     ));
