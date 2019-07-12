@@ -161,7 +161,7 @@ export function assertValueType(type: string): Validator {
   return validate;
 }
 
-export function assertShape(shape: {| [string]: Validator |}): Validator {
+export function assertShape(shape: { [string]: Validator }): Validator {
   function validate(node, key, val) {
     const errors = [];
     for (const property of Object.keys(shape)) {
