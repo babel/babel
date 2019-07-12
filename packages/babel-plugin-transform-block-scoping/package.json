@@ -10,7 +10,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.13"
   },
   "keywords": [
     "babel-plugin"
