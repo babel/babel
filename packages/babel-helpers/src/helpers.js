@@ -448,6 +448,30 @@ helpers.objectSpread2 = helper("7.5.0")`
   }
 `;
 
+helpers.combineRestSpread = helper("7.0.0-beta.0")`
+  import defineProperty from "defineProperty";
+
+  export default function _combineRestSpread(source, keysToRemove, toAdd) {
+    if (source == null) return {};
+
+    var target = {};
+    var sourceKeys = Object.keys(source);
+    var key, i;
+
+    for (i = 0; i < sourceKeys.length; i++) {
+      key = sourceKeys[i];
+      if (keysToRemove.indexOf(key) >= 0) continue;
+      target[key] = source[key];
+    }
+
+    Object.keys(toAdd).forEach(function (key) {
+      defineProperty(target, key, toAdd[key]);
+    })
+
+    return target;
+  }
+`;
+
 helpers.inherits = helper("7.0.0-beta.0")`
   import setPrototypeOf from "setPrototypeOf";
 
