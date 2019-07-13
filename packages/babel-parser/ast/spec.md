@@ -898,6 +898,54 @@ interface BindExpression <: Expression {
 
 If `object` is `null`, then `callee` should be a `MemberExpression`.
 
+### Pipeline
+
+These nodes are used by the Smart Pipeline to determine the type of the expression in a Pipeline Operator Expression. The F# Pipeline uses simple `BinaryExpression`s.
+
+#### PipelineBody
+
+```js
+interface PipelineBody <: NodeBase {
+    type: "PipelineBody";
+}
+```
+
+#### PipelineBareFunctionBody
+
+```js
+interface PipelineBody <: NodeBase {
+    type: "PipelineBareFunctionBody";
+    callee: Expression;
+}
+```
+
+#### PipelineBareConstructorBody
+
+```js
+interface PipelineBareConstructorBody <: NodeBase {
+    type: "PipelineBareConstructorBody";
+    callee: Expression;
+}
+```
+
+#### PipelineBareAwaitedFunctionBody
+
+```js
+interface PipelineBareConstructorBody <: NodeBase {
+    type: "PipelineTopicBody";
+    expression: Expression;
+}
+```
+
+#### PipelineTopicBody
+
+```js
+interface PipelineBareConstructorBody <: NodeBase {
+    type: "PipelineBareAwaitedFunctionBody";
+    callee: Expression;
+}
+```
+
 ## ConditionalExpression
 
 ```js
