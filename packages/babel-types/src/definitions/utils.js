@@ -1,5 +1,6 @@
 // @flow
 import is from "../validators/is";
+import { validateField } from "../validators/validate";
 
 export const VISITOR_KEYS: { [string]: Array<string> } = {};
 export const ALIAS_KEYS: { [string]: Array<string> } = {};
@@ -161,13 +162,12 @@ export function assertValueType(type: string): Validator {
   return validate;
 }
 
-export function assertShape(shape: { [string]: Validator }): Validator {
+export function assertShape(shape: { [string]: FieldOptions }): Validator {
   function validate(node, key, val) {
     const errors = [];
     for (const property of Object.keys(shape)) {
       try {
-        const validator = shape[property];
-        validator(node, property, val[property]);
+        validateField(node, property, val[property], shape[property]);
       } catch (error) {
         if (error instanceof TypeError) {
           errors.push(error.message);

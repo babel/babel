@@ -539,8 +539,13 @@ defineType("TemplateElement", {
   fields: {
     value: {
       validate: assertShape({
-        raw: assertValueType("string"),
-        cooked: assertValueType("string"),
+        raw: {
+          validate: assertValueType("string"),
+        },
+        cooked: {
+          validate: assertValueType("string"),
+          optional: true,
+        },
       }),
     },
     tail: {

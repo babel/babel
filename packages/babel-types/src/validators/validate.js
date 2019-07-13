@@ -8,6 +8,15 @@ export default function validate(node?: Object, key: string, val: any): void {
   if (!fields) return;
 
   const field = fields[key];
+  validateField(node, key, val, field);
+}
+
+export function validateField(
+  node?: Object,
+  key: string,
+  val: any,
+  field: any,
+): void {
   if (!field || !field.validate) return;
   if (field.optional && val == null) return;
 

@@ -33,14 +33,24 @@ module.exports = function stringifyValidator(validator, nodePrefix) {
 
   if (validator.shapeOf) {
     return (
-      "{" +
+      "{ " +
       Object.keys(validator.shapeOf)
-        .map(
-          shapeKey =>
-            shapeKey + ":" + stringifyValidator(validator.shapeOf[shapeKey])
-        )
+        .map(shapeKey => {
+          const propertyDefinition = validator.shapeOf[shapeKey];
+          if (propertyDefinition.validate) {
+            const isOptional =
+              propertyDefinition.optional || propertyDefinition.default != null;
+            return (
+              shapeKey +
+              (isOptional ? "?: " : ": ") +
+              stringifyValidator(propertyDefinition.validate)
+            );
+          }
+          return null;
+        })
+        .filter(Boolean)
         .join(", ") +
-      "}"
+      " }"
     );
   }
 

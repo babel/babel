@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`builders es2015 templateElement should validate 1`] = `
+Object {
+  "tail": false,
+  "type": "TemplateElement",
+  "value": Object {
+    "cooked": "foo",
+    "raw": "foo",
+  },
+}
+`;
+
+exports[`builders es2015 templateElement should validate 2`] = `
+Object {
+  "tail": false,
+  "type": "TemplateElement",
+  "value": Object {
+    "raw": "foo",
+  },
+}
+`;
+
+exports[`builders es2015 templateElement should validate 3`] = `
+"Property value of TemplateElement expected to have the following:
+Property raw expected type of string but got number"
+`;
+
+exports[`builders es2015 templateElement should validate 4`] = `
+"Property value of TemplateElement expected to have the following:
+Property cooked expected type of string but got number"
+`;
+
+exports[`builders es2015 templateElement should validate 5`] = `
+"Property value of TemplateElement expected to have the following:
+Property raw expected type of string but got undefined"
+`;
