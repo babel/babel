@@ -10,7 +10,7 @@ var _$a = {
     {
   [_ref]: y
 } = _$a,
-    x = babelHelpers.objectWithoutProperties(_$a, [_ref].map(babelHelpers.toPropertyKey));
+    x = babelHelpers.objectWithoutProperties(_$a, [babelHelpers.toPropertyKey(_ref)]);
 
 expect(x).toEqual({
   a: 1
@@ -30,7 +30,7 @@ var _$ = {
   [_ref2]: y,
   [_ref3]: z
 } = _$,
-    rest = babelHelpers.objectWithoutProperties(_$, [_ref2, _ref3].map(babelHelpers.toPropertyKey));
+    rest = babelHelpers.objectWithoutProperties(_$, [babelHelpers.toPropertyKey(_ref2), babelHelpers.toPropertyKey(_ref3)]);
 
 expect(y).toBe(2);
 expect(z).toBe(3); // pure, computed property should remain as-is
@@ -44,7 +44,7 @@ var _$z = {
   [key]: y,
   z
 } = _$z);
-x = babelHelpers.objectWithoutProperties(_$z, [key, "z"].map(babelHelpers.toPropertyKey));
+x = babelHelpers.objectWithoutProperties(_$z, [babelHelpers.toPropertyKey(key), "z"]);
 _$z;
 expect(y).toBe("two");
 expect(x).toEqual({});

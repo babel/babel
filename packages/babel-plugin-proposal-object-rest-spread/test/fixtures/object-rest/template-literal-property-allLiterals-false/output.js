@@ -9,4 +9,4 @@ const _ref = prefix + 'state',
   [_ref]: state,
   [_ref2]: consents
 } = input,
-      rest = babelHelpers.objectWithoutProperties(input, ["given_name", "last_name", `country`, _ref, _ref2].map(babelHelpers.toPropertyKey));
+      rest = babelHelpers.objectWithoutProperties(input, ["given_name", "last_name", `country`, babelHelpers.toPropertyKey(_ref), babelHelpers.toPropertyKey(_ref2)]);

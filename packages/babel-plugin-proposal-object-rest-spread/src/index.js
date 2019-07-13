@@ -67,10 +67,9 @@ export default declare((api, opts) => {
   // were converted to stringLiterals or not
   // e.g. extracts {keys: ["a", "b", "3", ++x], allLiteral: false }
   // from ast of {a: "foo", b, 3: "bar", [++x]: "baz"}
-  function extractNormalizedKeys(path) {
+  function extractNormalizedKeys(path, file) {
     const props = path.node.properties;
     const keys = [];
-    let allLiteral = true;
 
     for (const prop of props) {
       if (t.isIdentifier(prop.key) && !prop.computed) {
@@ -81,12 +80,15 @@ export default declare((api, opts) => {
       } else if (t.isLiteral(prop.key)) {
         keys.push(t.stringLiteral(String(prop.key.value)));
       } else {
-        keys.push(t.cloneNode(prop.key));
-        allLiteral = false;
+        keys.push(
+          t.callExpression(file.addHelper("toPropertyKey"), [
+            t.cloneNode(prop.key),
+          ]),
+        );
       }
     }
 
-    return { keys, allLiteral };
+    return keys;
   }
 
   // replaces impure computed keys with new identifiers
@@ -129,7 +131,7 @@ export default declare((api, opts) => {
     last.remove();
 
     const impureComputedPropertyDeclarators = replaceImpureComputedKeys(path);
-    const { keys, allLiteral } = extractNormalizedKeys(path);
+    const keys = extractNormalizedKeys(path, file);
 
     if (keys.length === 0) {
       return [
@@ -142,23 +144,12 @@ export default declare((api, opts) => {
       ];
     }
 
-    let keyExpression;
-    if (!allLiteral) {
-      // map to toPropertyKey to handle the possible non-string values
-      keyExpression = t.callExpression(
-        t.memberExpression(t.arrayExpression(keys), t.identifier("map")),
-        [file.addHelper("toPropertyKey")],
-      );
-    } else {
-      keyExpression = t.arrayExpression(keys);
-    }
-
     return [
       impureComputedPropertyDeclarators,
       restElement.argument,
       t.callExpression(
         file.addHelper(`objectWithoutProperties${loose ? "Loose" : ""}`),
-        [t.cloneNode(objRef), keyExpression],
+        [t.cloneNode(objRef), t.arrayExpression(keys)],
       ),
     ];
   }

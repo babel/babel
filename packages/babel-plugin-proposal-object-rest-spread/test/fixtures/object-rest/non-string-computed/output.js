@@ -30,7 +30,7 @@ const {
   [k4]: v4,
   [k5]: v5
 } = c,
-      vrest = babelHelpers.objectWithoutProperties(c, [k1, k2, k3, k4, k5].map(babelHelpers.toPropertyKey));
+      vrest = babelHelpers.objectWithoutProperties(c, [babelHelpers.toPropertyKey(k1), babelHelpers.toPropertyKey(k2), babelHelpers.toPropertyKey(k3), babelHelpers.toPropertyKey(k4), babelHelpers.toPropertyKey(k5)]);
 expect(v1).toBe("1");
 expect(v2).toBe("2");
 expect(v3).toBe("3");
