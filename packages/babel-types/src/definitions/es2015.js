@@ -1,5 +1,6 @@
 // @flow
 import defineType, {
+  assertShape,
   assertNodeType,
   assertValueType,
   chain,
@@ -542,7 +543,15 @@ defineType("TemplateElement", {
   builder: ["value", "tail"],
   fields: {
     value: {
-      // todo: flatten `raw` into main node
+      validate: assertShape({
+        raw: {
+          validate: assertValueType("string"),
+        },
+        cooked: {
+          validate: assertValueType("string"),
+          optional: true,
+        },
+      }),
     },
     tail: {
       validate: assertValueType("boolean"),
