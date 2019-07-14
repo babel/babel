@@ -125,6 +125,12 @@ const specHandlers = {
     ]);
   },
 
+  destructureSet(superMember) {
+    throw superMember.buildCodeFrameError(
+      `Destructuring to a super field is not supported yet.`,
+    );
+  },
+
   call(superMember, args) {
     return optimiseCall(this.get(superMember), t.thisExpression(), args);
   },
@@ -173,6 +179,13 @@ const looseHandlers = {
       t.memberExpression(t.thisExpression(), prop, computed),
       value,
     );
+  },
+
+  destructureSet(superMember) {
+    const { computed } = superMember.node;
+    const prop = this.prop(superMember);
+
+    return t.memberExpression(t.thisExpression(), prop, computed);
   },
 };
 

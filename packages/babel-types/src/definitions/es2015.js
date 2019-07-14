@@ -20,7 +20,12 @@ defineType("AssignmentPattern", {
   fields: {
     ...patternLikeCommon,
     left: {
-      validate: assertNodeType("Identifier", "ObjectPattern", "ArrayPattern"),
+      validate: assertNodeType(
+        "Identifier",
+        "ObjectPattern",
+        "ArrayPattern",
+        "MemberExpression",
+      ),
     },
     right: {
       validate: assertNodeType("Expression"),

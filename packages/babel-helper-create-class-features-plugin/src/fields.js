@@ -211,6 +211,19 @@ const privateNameHandlerSpec = {
     ]);
   },
 
+  destructureSet(member) {
+    const { privateNamesMap, file } = this;
+    const { name } = member.node.property.id;
+    const { id } = privateNamesMap.get(name);
+    return t.memberExpression(
+      t.callExpression(file.addHelper("classPrivateFieldDestructureSet"), [
+        this.receiver(member),
+        t.cloneNode(id),
+      ]),
+      t.identifier("value"),
+    );
+  },
+
   call(member, args) {
     // The first access (the get) should do the memo assignment.
     this.memoise(member, 1);
