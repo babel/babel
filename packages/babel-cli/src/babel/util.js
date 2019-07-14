@@ -1,10 +1,12 @@
+// @flow
+
 import readdirRecursive from "fs-readdir-recursive";
 import * as babel from "@babel/core";
 import includes from "lodash/includes";
 import path from "path";
 import fs from "fs";
 
-export function chmod(src, dest) {
+export function chmod(src: string, dest: string): void {
   fs.chmodSync(dest, fs.statSync(src).mode);
 }
 
@@ -13,8 +15,8 @@ type ReaddirFilter = (filename: string) => boolean;
 export function readdir(
   dirname: string,
   includeDotfiles: boolean,
-  filter: ReaddirFilter,
-) {
+  filter?: ReaddirFilter,
+): Array<string> {
   return readdirRecursive(dirname, (filename, _index, currentDirectory) => {
     const stat = fs.statSync(path.join(currentDirectory, filename));
 
@@ -30,7 +32,7 @@ export function readdirForCompilable(
   dirname: string,
   includeDotfiles: boolean,
   altExts?: Array<string>,
-) {
+): Array<string> {
   return readdir(dirname, includeDotfiles, function(filename) {
     return isCompilableExtension(filename, altExts);
   });
@@ -48,7 +50,7 @@ export function isCompilableExtension(
   return includes(exts, ext);
 }
 
-export function addSourceMappingUrl(code, loc) {
+export function addSourceMappingUrl(code: string, loc: string): string {
   return code + "\n//# sourceMappingURL=" + path.basename(loc);
 }
 
@@ -56,7 +58,11 @@ const CALLER = {
   name: "@babel/cli",
 };
 
-export function transform(filename, code, opts) {
+export function transform(
+  filename: string,
+  code: string,
+  opts: Object,
+): Promise<Object> {
   opts = {
     ...opts,
     caller: CALLER,
@@ -71,7 +77,10 @@ export function transform(filename, code, opts) {
   });
 }
 
-export function compile(filename, opts) {
+export function compile(
+  filename: string,
+  opts: Object | Function,
+): Promise<Object> {
   opts = {
     ...opts,
     caller: CALLER,
@@ -85,7 +94,7 @@ export function compile(filename, opts) {
   });
 }
 
-export function deleteDir(path) {
+export function deleteDir(path: string): void {
   if (fs.existsSync(path)) {
     fs.readdirSync(path).forEach(function(file) {
       const curPath = path + "/" + file;
@@ -106,7 +115,7 @@ process.on("uncaughtException", function(err) {
   process.exit(1);
 });
 
-export function requireChokidar() {
+export function requireChokidar(): Object {
   try {
     return require("chokidar");
   } catch (err) {
@@ -118,7 +127,10 @@ export function requireChokidar() {
   }
 }
 
-export function adjustRelative(relative, keepFileExtension) {
+export function adjustRelative(
+  relative: string,
+  keepFileExtension: boolean,
+): string {
   if (keepFileExtension) {
     return relative;
   }
