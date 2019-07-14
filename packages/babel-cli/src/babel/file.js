@@ -1,14 +1,18 @@
+// @flow
+
 import convertSourceMap from "convert-source-map";
 import defaults from "lodash/defaults";
+import isString from "lodash/isString";
+import toString from "lodash/toString";
 import sourceMap from "source-map";
 import slash from "slash";
 import path from "path";
 import fs from "fs";
 
 import * as util from "./util";
-import { type cmdOptions } from "./options";
+import { type CmdOptions } from "./options";
 
-type compileOutput = {
+type CompilationOutput = {
   code: string,
   map: Object,
 };
@@ -16,9 +20,9 @@ type compileOutput = {
 export default async function({
   cliOptions,
   babelOptions,
-}: cmdOptions): Promise<void> {
-  function buildResult(fileResults): compileOutput {
-    const map = new sourceMap.SourceMapGenerator({
+}: CmdOptions): Promise<void> {
+  function buildResult(fileResults: Array<Object>): CompilationOutput {
+    const map: Object = new sourceMap.SourceMapGenerator({
       file:
         cliOptions.sourceMapTarget ||
         path.basename(cliOptions.outFile || "") ||
@@ -101,21 +105,23 @@ export default async function({
   }
 
   function readStdin(): Promise<string> {
-    return new Promise((resolve: Function, reject: Function) => {
-      let code = "";
+    return new Promise(
+      (resolve: Function, reject: Function): void => {
+        let code = "";
 
-      process.stdin.setEncoding("utf8");
+        process.stdin.setEncoding("utf8");
 
-      process.stdin.on("readable", function() {
-        const chunk = process.stdin.read();
-        if (chunk !== null) code += chunk;
-      });
+        process.stdin.on("readable", function() {
+          const chunk = process.stdin.read();
+          if (isString(chunk)) code += toString(chunk);
+        });
 
-      process.stdin.on("end", function() {
-        resolve(code);
-      });
-      process.stdin.on("error", reject);
-    });
+        process.stdin.on("end", function() {
+          resolve(code);
+        });
+        process.stdin.on("error", reject);
+      },
+    );
   }
 
   async function stdin(): Promise<void> {
@@ -160,7 +166,7 @@ export default async function({
     });
 
     const results = await Promise.all(
-      _filenames.map(async function(filename): Promise<void> {
+      _filenames.map(async function(filename: string): Promise<Object> {
         let sourceFilename = filename;
         if (cliOptions.outFile) {
           sourceFilename = path.relative(
