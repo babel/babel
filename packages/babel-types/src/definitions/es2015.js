@@ -24,7 +24,6 @@ defineType("AssignmentPattern", {
         "ObjectPattern",
         "ArrayPattern",
         "MemberExpression",
-        "CallExpression",
       ),
     },
     right: {
