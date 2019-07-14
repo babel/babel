@@ -153,12 +153,12 @@ commander.option(
 commander.version(pkg.version + " (@babel/core " + version + ")");
 commander.usage("[options] <files ...>");
 
-export type cmdOptions = {
+export type CmdOptions = {
   babelOptions: Object,
   cliOptions: Object,
 };
 
-export default function parseArgv(args: Array<string>): cmdOptions {
+export default function parseArgv(args: Array<string>): CmdOptions {
   //
   commander.parse(args);
 

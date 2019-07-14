@@ -8,12 +8,12 @@ import path from "path";
 import fs from "fs";
 
 import * as util from "./util";
-import { type cmdOptions } from "./options";
+import { type CmdOptions } from "./options";
 
 export default async function({
   cliOptions,
   babelOptions,
-}: cmdOptions): Promise<void> {
+}: CmdOptions): Promise<void> {
   const filenames = cliOptions.filenames;
 
   async function write(src: string, base: string): Promise<boolean> {
