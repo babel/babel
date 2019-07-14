@@ -471,7 +471,47 @@ function buildPublicFieldInitSpec(ref, prop, state) {
 }
 
 function buildPrivateStaticMethodInitLoose(ref, prop, state, privateNamesMap) {
-  const { id, methodId } = privateNamesMap.get(prop.node.key.id.name);
+  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const { id, methodId, getId, setId, initAdded } = privateName;
+  if (initAdded) return;
+
+  if (getId || setId) {
+    privateNamesMap.set(prop.node.key.id.name, {
+      ...privateName,
+      initAdded: true,
+    });
+
+    if (getId && setId) {
+      return template.statement.ast`
+        Object.defineProperty(${ref}, ${id}, {
+          // configurable is false by default
+          // enumerable is false by default
+          // writable is false by default
+          get: ${getId.name},
+          set: ${setId.name}
+        })
+      `;
+    } else if (getId && !setId) {
+      return template.statement.ast`
+        Object.defineProperty(${ref}, ${id}, {
+          // configurable is false by default
+          // enumerable is false by default
+          // writable is false by default
+          get: ${getId.name},
+        })
+      `;
+    } else if (!getId && setId) {
+      return template.statement.ast`
+        Object.defineProperty(${ref}, ${id}, {
+          // configurable is false by default
+          // enumerable is false by default
+          // writable is false by default
+          set: ${setId.name},
+        })
+      `;
+    }
+  }
+
   return template.statement.ast`
     Object.defineProperty(${ref}, ${id}, {
       // configurable is false by default
@@ -666,15 +706,15 @@ export function buildFieldsInitNodes(
       case isStatic && isPrivate && isMethod && loose:
         needsClassRef = true;
         staticNodes.push(
-          buildPrivateMethodDeclaration(prop, privateNamesMap, loose),
-        );
-        staticNodes.push(
           buildPrivateStaticMethodInitLoose(
             t.cloneNode(ref),
             prop,
             state,
             privateNamesMap,
           ),
+        );
+        staticNodes.unshift(
+          buildPrivateMethodDeclaration(prop, privateNamesMap, loose),
         );
         break;
       case isInstance && isPublic && isField && loose:
