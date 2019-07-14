@@ -32,23 +32,29 @@ const validateTopLevelOptions = (options: Options) => {
   }
 };
 
-const allPluginsList = [
-  ...Object.keys(pluginsList),
+const allPluginsList = [...Object.keys(pluginsList)];
+
+// NOTE: Since module plugins are handled seperatly compared to other plugins (via the "modules" option) it
+// should only be possible to exclude and not include module plugins, otherwise it's possible that preset-env
+// will add a module plugin twice.
+const modulePlugins = [
+  "proposal-dynamic-import",
   ...Object.keys(moduleTransformations).map(m => moduleTransformations[m]),
 ];
 
-const validIncludesAndExcludesWithoutCoreJS = new Set(allPluginsList);
-
-const validIncludesAndExcludesWithCoreJS2 = new Set([
-  ...allPluginsList,
-  ...Object.keys(corejs2Polyfills),
-  ...defaultWebIncludes,
-]);
-
-const validIncludesAndExcludesWithCoreJS3 = new Set([
-  ...allPluginsList,
-  ...Object.keys(corejs3Polyfills),
-]);
+const getValidIncludesAndExcludes = (
+  type: "include" | "exclude",
+  corejs: number | false,
+) =>
+  new Set([
+    ...allPluginsList,
+    ...(type === "exclude" ? modulePlugins : []),
+    ...(corejs
+      ? corejs == 2
+        ? [...Object.keys(corejs2Polyfills), ...defaultWebIncludes]
+        : Object.keys(corejs3Polyfills)
+      : []),
+  ]);
 
 const pluginToRegExp = (plugin: PluginListItem) => {
   if (plugin instanceof RegExp) return plugin;
@@ -59,14 +65,14 @@ const pluginToRegExp = (plugin: PluginListItem) => {
   }
 };
 
-const selectPlugins = (regexp: RegExp | null, corejs: number | false) =>
-  Array.from(
-    corejs
-      ? corejs == 2
-        ? validIncludesAndExcludesWithCoreJS2
-        : validIncludesAndExcludesWithCoreJS3
-      : validIncludesAndExcludesWithoutCoreJS,
-  ).filter(item => regexp instanceof RegExp && regexp.test(item));
+const selectPlugins = (
+  regexp: RegExp | null,
+  type: "include" | "exclude",
+  corejs: number | false,
+) =>
+  Array.from(getValidIncludesAndExcludes(type, corejs)).filter(
+    item => regexp instanceof RegExp && regexp.test(item),
+  );
 
 const flatten = <T>(array: Array<Array<T>>): Array<T> => [].concat(...array);
 
@@ -78,7 +84,7 @@ const expandIncludesAndExcludes = (
   if (plugins.length === 0) return [];
 
   const selectedPlugins = plugins.map(plugin =>
-    selectPlugins(pluginToRegExp(plugin), corejs),
+    selectPlugins(pluginToRegExp(plugin), type, corejs),
   );
   const invalidRegExpList = plugins.filter(
     (p, i) => selectedPlugins[i].length === 0,

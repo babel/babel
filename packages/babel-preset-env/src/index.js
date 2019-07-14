@@ -132,9 +132,13 @@ export default declare((api, opts) => {
     // TODO: Remove the 'api.caller' check eventually. Just here to prevent
     // unnecessary breakage in the short term for users on older betas/RCs.
     const shouldTransformESM =
-      modules !== "auto" || !api.caller || !api.caller(supportsStaticESM);
+      (modules !== "auto" || !api.caller || !api.caller(supportsStaticESM)) &&
+      !exclude.plugins.has(moduleTransformations[modules]);
     const shouldTransformDynamicImport =
-      modules !== "auto" || !api.caller || !api.caller(supportsDynamicImport);
+      (modules !== "auto" ||
+        !api.caller ||
+        !api.caller(supportsDynamicImport)) &&
+      !exclude.plugins.has("proposal-dynamic-import");
 
     if (shouldTransformESM) {
       // NOTE: not giving spec here yet to avoid compatibility issues when
