@@ -2,7 +2,6 @@
 
 import convertSourceMap from "convert-source-map";
 import defaults from "lodash/defaults";
-import toString from "lodash/toString";
 import sourceMap from "source-map";
 import slash from "slash";
 import path from "path";
@@ -112,7 +111,8 @@ export default async function({
 
         process.stdin.on("readable", function() {
           const chunk = process.stdin.read();
-          if (chunk !== null) code += toString(chunk);
+          // $FlowIgnore
+          if (chunk !== null) code += chunk;
         });
 
         process.stdin.on("end", function() {
