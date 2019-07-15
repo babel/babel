@@ -835,7 +835,7 @@ helpers.temporalUndefined = helper("7.0.0-beta.0")`
   export default function _temporalUndefined() {}
 `;
 
-helpers.tdz = helper("7.3.3")`
+helpers.tdz = helper("7.5.5")`
   export default function _tdzError(name) {
     throw new ReferenceError(name + " is not defined - temporal dead zone");
   }
