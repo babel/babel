@@ -76,7 +76,7 @@ function getMarkerLines(
       } else if (i === 0) {
         const sourceLength = source[lineNumber - 1].length;
 
-        markerLines[lineNumber] = [startColumn, sourceLength - startColumn];
+        markerLines[lineNumber] = [startColumn, sourceLength - startColumn + 1];
       } else if (i === lineDiff) {
         markerLines[lineNumber] = [0, endColumn];
       } else {
@@ -112,15 +112,16 @@ export function codeFrameColumns(
   const maybeHighlight = (chalkFn, string) => {
     return highlighted ? chalkFn(string) : string;
   };
-  if (highlighted) rawLines = highlight(rawLines, opts);
-
   const lines = rawLines.split(NEWLINE);
   const { start, end, markerLines } = getMarkerLines(loc, lines, opts);
   const hasColumns = loc.start && typeof loc.start.column === "number";
 
   const numberMaxWidth = String(end).length;
 
-  let frame = lines
+  const highlightedLines = highlighted ? highlight(rawLines, opts) : rawLines;
+
+  let frame = highlightedLines
+    .split(NEWLINE)
     .slice(start, end)
     .map((line, index) => {
       const number = start + 1 + index;
