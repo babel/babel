@@ -1,15 +1,14 @@
 // @flow
 
 import commander from "commander";
-import isString from "lodash/isString";
 import { buildExternalHelpers } from "@babel/core";
 
 function collect(
-  value: String | any,
+  value: string | any,
   previousValue: Array<string>,
 ): Array<string> {
   // If the user passed the option with no value, like "babel-external-helpers --whitelist", do nothing.
-  if (!isString(value)) return previousValue;
+  if (typeof value !== "string") return previousValue;
 
   const values = value.split(",");
 
