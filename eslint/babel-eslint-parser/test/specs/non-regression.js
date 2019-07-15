@@ -4,6 +4,8 @@ const eslint = require("eslint");
 const path = require("path");
 const unpad = require("dedent");
 
+const parser = require("../..");
+
 function verifyAndAssertMessagesWithSpecificESLint(
   code,
   rules,
@@ -13,7 +15,7 @@ function verifyAndAssertMessagesWithSpecificESLint(
   linter
 ) {
   const config = {
-    parser: require.resolve("../.."),
+    parser: "current-babel-eslint",
     rules,
     env: {
       node: true,
@@ -66,13 +68,16 @@ function verifyAndAssertMessages(
   sourceType,
   overrideConfig
 ) {
+  const linter = new eslint.Linter();
+  linter.defineParser("current-babel-eslint", parser);
+
   verifyAndAssertMessagesWithSpecificESLint(
     unpad(`${code}`),
     rules || {},
     expectedMessages || [],
     sourceType,
     overrideConfig,
-    new eslint.Linter()
+    linter
   );
 }
 

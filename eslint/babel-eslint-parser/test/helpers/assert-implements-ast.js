@@ -24,9 +24,7 @@ module.exports = function assertImplementsAST(target, source, path) {
     target.constructor.name !== source.constructor.name
   ) {
     error(
-      `object have different constructors (${target.constructor.name} !== ${
-        source.constructor.name
-      }`
+      `object have different constructors (${target.constructor.name} !== ${source.constructor.name}`
     );
   } else if (typeA === "object") {
     const keysTarget = Object.keys(target);

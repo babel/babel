@@ -230,11 +230,11 @@ describe("babylon-to-espree", () => {
   });
 
   it("export named", () => {
-    parseAndAssertSame("export { foo };");
+    parseAndAssertSame("var foo = 1;export { foo };");
   });
 
   it("export named alias", () => {
-    parseAndAssertSame("export { foo as bar };");
+    parseAndAssertSame("var foo = 1;export { foo as bar };");
   });
 
   // Espree doesn't support the optional chaining operator yet

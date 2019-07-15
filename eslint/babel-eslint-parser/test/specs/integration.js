@@ -5,6 +5,10 @@ const eslint = require("eslint");
 const fs = require("fs");
 const path = require("path");
 
+const parser = require("../..");
+
+eslint.linter.defineParser("current-babel-eslint", parser);
+
 const paths = {
   fixtures: path.join(__dirname, "..", "fixtures", "rules"),
 };
@@ -13,7 +17,7 @@ const encoding = "utf8";
 const errorLevel = 2;
 
 const baseEslintOpts = {
-  parser: require.resolve("../.."),
+  parser: "current-babel-eslint",
   parserOptions: {
     sourceType: "script",
   },

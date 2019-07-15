@@ -46,9 +46,7 @@ module.exports = function(code, options) {
     if (config !== null) {
       if (!config.hasFilesystemConfig()) {
         throw new Error(
-          `No Babel config file detected for ${
-            config.options.filename
-          }. Either disable config file checking with requireConfigFile: false, or configure Babel so that it can find the config files.`
+          `No Babel config file detected for ${config.options.filename}. Either disable config file checking with requireConfigFile: false, or configure Babel so that it can find the config files.`
         );
       }
 
