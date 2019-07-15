@@ -388,7 +388,7 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
   // verify that all the calls have the same execution status
   for (const path of referencePaths) {
     // if a reference is a child of the function we're checking against then we can
-    // safelty ignore it
+    // safely ignore it
     const childOfFunction = !!path.find(path => path.node === target.node);
     if (childOfFunction) continue;
 
