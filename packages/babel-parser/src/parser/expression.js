@@ -1944,7 +1944,7 @@ export default class ExpressionParser extends LValParser {
         node.params[i],
         BIND_VAR,
         allowDuplicates ? null : nameHash,
-        "function paramter list",
+        "function parameter list",
       );
     }
   }
