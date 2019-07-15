@@ -198,6 +198,7 @@ export default async function({
           }
 
           console.error(err);
+          return null;
         }
       }),
     );
