@@ -238,9 +238,9 @@ function isExecutionUncertain(type, key) {
     case "SwitchStatement":
       return key === "cases";
 
-    // try { a } catch FOO finally FOO;
+    // try { a } catch FOO finally { b }
     case "TryStatement":
-      return key === "handler" || key === "finalizer";
+      return key === "handler";
 
     // var [ x = FOO ]
     case "AssignmentPattern":
