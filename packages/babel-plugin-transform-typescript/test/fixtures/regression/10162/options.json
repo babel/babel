@@ -1,3 +1,4 @@
 {
-  "plugins": ["./plugin.js", "transform-typescript"]
+  "plugins": ["./plugin.js", "transform-typescript"],
+  "sourceType": "module"
 }
