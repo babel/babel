@@ -34,9 +34,7 @@ export default function() {
     post() {
       if (this.opts.debug && this.regeneratorImportExcluded) {
         console.log(
-          `\n[${
-            this.file.opts.filename
-          }] Based on your targets, regenerator-runtime import excluded.`,
+          `\n[${this.file.opts.filename}] Based on your targets, regenerator-runtime import excluded.`,
         );
       }
     },

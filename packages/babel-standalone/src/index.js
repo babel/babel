@@ -40,7 +40,7 @@ const isArray =
  */
 function loadBuiltin(builtinTable, name) {
   if (isArray(name) && typeof name[0] === "string") {
-    if (builtinTable.hasOwnProperty(name[0])) {
+    if (Object.prototype.hasOwnProperty.call(builtinTable, name[0])) {
       return [builtinTable[name[0]]].concat(name.slice(1));
     }
     return;
@@ -66,7 +66,7 @@ function processOptions(options) {
       if (
         isArray(preset) &&
         typeof preset[0] === "object" &&
-        preset[0].hasOwnProperty("buildPreset")
+        Object.prototype.hasOwnProperty.call(preset[0], "buildPreset")
       ) {
         preset[0] = { ...preset[0], buildPreset: preset[0].buildPreset };
       }
@@ -112,7 +112,7 @@ export const buildExternalHelpers = babelBuildExternalHelpers;
  * Registers a named plugin for use with Babel.
  */
 export function registerPlugin(name: string, plugin: Object | Function): void {
-  if (availablePlugins.hasOwnProperty(name)) {
+  if (Object.prototype.hasOwnProperty.call(availablePlugins, name)) {
     console.warn(
       `A plugin named "${name}" is already registered, it will be overridden`,
     );
@@ -135,7 +135,7 @@ export function registerPlugins(newPlugins: {
  * Registers a named preset for use with Babel.
  */
 export function registerPreset(name: string, preset: Object | Function): void {
-  if (availablePresets.hasOwnProperty(name)) {
+  if (Object.prototype.hasOwnProperty.call(availablePresets, name)) {
     console.warn(
       `A preset named "${name}" is already registered, it will be overridden`,
     );

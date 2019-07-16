@@ -22,9 +22,7 @@ export default function() {
     post() {
       if (this.opts.debug && this.usesRegenerator) {
         console.log(
-          `\n[${
-            this.file.opts.filename
-          }] Based on your code and targets, added regenerator-runtime.`,
+          `\n[${this.file.opts.filename}] Based on your code and targets, added regenerator-runtime.`,
         );
       }
     },

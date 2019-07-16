@@ -77,7 +77,7 @@ const assertTest = function(stdout, stderr, opts) {
     const actualFiles = readDir(path.join(tmpLoc));
 
     Object.keys(actualFiles).forEach(function(filename) {
-      if (!opts.inFiles.hasOwnProperty(filename)) {
+      if (!Object.prototype.hasOwnProperty.call(opts.inFiles, filename)) {
         const expected = opts.outFiles[filename];
         const actual = actualFiles[filename];
 
