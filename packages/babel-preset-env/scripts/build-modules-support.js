@@ -4,7 +4,6 @@ const fs = require("fs");
 const moduleSupport = require("caniuse-db/features-json/es6-module.json");
 
 const skipList = new Set(["android", "samsung"]);
-const acceptedWithCaveats = new Set(["safari", "ios_saf"]);
 
 const { stats } = moduleSupport;
 
@@ -16,9 +15,7 @@ Object.keys(stats).forEach(browser => {
     const allowedVersions = Object.keys(browserVersions)
       .filter(value => {
         // Edge 16/17 are marked as "y #6"
-        return acceptedWithCaveats.has(browser)
-          ? browserVersions[value][0] === "a"
-          : browserVersions[value].startsWith("y");
+        return browserVersions[value].startsWith("y");
       })
       .sort((a, b) => a - b);
 
