@@ -1,7 +1,5 @@
 {
-  "plugins": [
-    "placeholders"
-  ],
+  "plugins": ["placeholders"],
   "sourceType": "module",
   "throws": "This experimental syntax requires enabling the parser plugin: 'exportNamespaceFrom' (1:9)"
 }
