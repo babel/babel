@@ -1,6 +1,6 @@
 // @flow
 
-import type { SourceMap } from "convert-source-map";
+import typeof { SourceMap } from "convert-source-map";
 import sourceMap from "source-map";
 
 export default function mergeSourceMap(

@@ -278,7 +278,7 @@ export function assertConfigFileSearch(
   ) {
     throw new Error(
       `${msg(loc)} must be a undefined, a boolean, a string, ` +
-        `got ${JSON.stringify(value)}`,
+        `got ${JSON.stringify((value: any))}`,
     );
   }
 
@@ -302,7 +302,7 @@ export function assertBabelrcSearch(
   } else if (!checkValidTest(value)) {
     throw new Error(
       `${msg(loc)} must be a undefined, a boolean, a string/Function/RegExp ` +
-        `or an array of those, got ${JSON.stringify(value)}`,
+        `or an array of those, got ${JSON.stringify((value: any))}`,
     );
   }
   return (value: any);
