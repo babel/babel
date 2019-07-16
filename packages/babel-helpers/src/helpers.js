@@ -606,24 +606,16 @@ helpers.interopRequireDefault = helper("7.0.0-beta.0")`
 `;
 
 helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
-  function _createRequireWildcardCache(obj) {
-    if (typeof global._REQUIRE_WILD_CACHE === 'undefined') {
-      global._REQUIRE_WILD_CACHE = typeof WeakMap === 'function' ? new WeakMap() : null;
+  function _getRequireWildcardCache(obj) {
+    if (!global || typeof WeakMap !== 'function') {
+      return null;
     }
 
-    const cache = global._REQUIRE_WILD_CACHE;
+    if (!global._REQUIRE_WILD_CACHE) {
+      global._REQUIRE_WILD_CACHE = new WeakMap();
+    }
 
-    return {
-      has: function() {
-        return cache ? cache.has(obj) : false;
-      },
-      set: function(newObj) {
-        cache && cache.set(obj, newObj);
-      },
-      get: function() {
-        return cache ? cache.get(obj) : null;
-      }
-    };
+    return global._REQUIRE_WILD_CACHE;
   }
 
   export default function _interopRequireWildcard(obj) {
@@ -631,9 +623,9 @@ helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
       return obj;
     }
 
-    var cache = _createRequireWildcardCache(obj);
-    if (cache.has()) {
-      return cache.get();
+    var cache = _getRequireWildcardCache(obj);
+    if (cache && cache.has(obj)) {
+      return cache.get(obj);
     }
 
     var newObj = {};
@@ -652,7 +644,7 @@ helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
       }
     }
     newObj.default = obj;
-    cache.set(newObj);
+    cache && cache.set(obj, newObj);
     return newObj;
   }
 `;
