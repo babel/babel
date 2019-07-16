@@ -606,16 +606,12 @@ helpers.interopRequireDefault = helper("7.0.0-beta.0")`
 `;
 
 helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
-  function _getRequireWildcardCache(obj) {
-    if (typeof global === 'undefined' || typeof WeakMap !== 'function') {
-      return null;
-    }
+  function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
 
-    if (!global._REQUIRE_WILD_CACHE) {
-      global._REQUIRE_WILD_CACHE = new WeakMap();
-    }
-
-    return global._REQUIRE_WILD_CACHE;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function () { return cache; };
+    return cache;
   }
 
   export default function _interopRequireWildcard(obj) {
@@ -623,19 +619,20 @@ helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
       return obj;
     }
 
-    var cache = _getRequireWildcardCache(obj);
+    var cache = _getRequireWildcardCache();
     if (cache && cache.has(obj)) {
       return cache.get(obj);
     }
 
     var newObj = {};
     if (obj != null) {
+      var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
       for (var key in obj) {
         if (Object.prototype.hasOwnProperty.call(obj, key)) {
-          var desc = Object.defineProperty && Object.getOwnPropertyDescriptor
+          var desc = hasPropertyDescriptor
             ? Object.getOwnPropertyDescriptor(obj, key)
-            : {};
-          if (desc.get || desc.set) {
+            : null;
+          if (desc && (desc.get || desc.set)) {
             Object.defineProperty(newObj, key, desc);
           } else {
             newObj[key] = obj[key];
