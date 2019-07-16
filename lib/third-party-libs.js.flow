@@ -165,7 +165,7 @@ declare module "source-map" {
 }
 
 declare module "convert-source-map" {
-  import type { SourceMap } from "source-map";
+  import type { SourceMap, SourceMapGenerator } from "source-map";
 
   declare class Converter {
     toJSON(): string;
@@ -177,7 +177,7 @@ declare module "convert-source-map" {
   declare module.exports: {
     SourceMap: SourceMap,
     Converter: Converter,
-    fromObject(obj: SourceMap): Converter,
+    fromObject(obj: SourceMap | SourceMapGenerator): Converter,
     fromJSON(str: string): Converter,
     fromBase64(str: string): Converter,
     fromComment(str: string): Converter,
