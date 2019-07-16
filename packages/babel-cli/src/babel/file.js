@@ -20,7 +20,7 @@ export default async function({
   babelOptions,
 }: CmdOptions): Promise<void> {
   function buildResult(fileResults: Array<Object>): CompilationOutput {
-    const map: Object = new sourceMap.SourceMapGenerator({
+    const map = new sourceMap.SourceMapGenerator({
       file:
         cliOptions.sourceMapTarget ||
         path.basename(cliOptions.outFile || "") ||
