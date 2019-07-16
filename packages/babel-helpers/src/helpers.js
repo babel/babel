@@ -607,7 +607,7 @@ helpers.interopRequireDefault = helper("7.0.0-beta.0")`
 
 helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
   function _getRequireWildcardCache(obj) {
-    if (!global || typeof WeakMap !== 'function') {
+    if (typeof global === 'undefined' || typeof WeakMap !== 'function') {
       return null;
     }
 
