@@ -1,6 +1,6 @@
 import includes from "lodash/includes";
 import repeat from "lodash/repeat";
-import Renamer from "./lib/renamer";
+import Renamer, { isPathInFunctionParameter } from "./lib/renamer";
 import type NodePath from "../path";
 import traverse from "../index";
 import defaults from "lodash/defaults";
@@ -46,16 +46,8 @@ function gatherNodeParts(node: Object, parts: Array) {
 }
 
 function isScopeInFunctionParameter(scope) {
-  //todo: check arrow function expression or any util method?
-  if (scope.parent && scope.parent.block.type === "FunctionDeclaration") {
-    const fdPath = scope.path.findParent(
-      path => path.type === "FunctionDeclaration",
-    );
-    if (fdPath) {
-      return !!fdPath.findParent(path => {
-        return fdPath.node.params.includes(path.node);
-      });
-    }
+  if (scope.parent && t.isFunction(scope.parent.block)) {
+    return isPathInFunctionParameter(scope.path);
   }
   return false;
 }
@@ -916,25 +908,18 @@ export default class Scope {
 
   getBinding(name: string) {
     let scope = this;
+    let childScopeInFunctionParameter = false;
 
     do {
       const binding = scope.getOwnBinding(name);
-      if (binding) return binding;
-      if (isScopeInFunctionParameter(scope)) {
-        scope = scope.parent;
-        if (!scope) {
-          break;
+      if (binding) {
+        if (childScopeInFunctionParameter && binding.kind !== "param") {
+          continue;
         }
-        const binding2 = scope.getOwnBinding(name);
-        if (binding2 && binding2.kind === "param") {
-          return binding2;
-        }
+        return binding;
       }
-      scope = scope.parent;
-      if (!scope) {
-        break;
-      }
-    } while (true);
+      childScopeInFunctionParameter = isScopeInFunctionParameter(scope);
+    } while ((scope = scope.parent));
   }
 
   getOwnBinding(name: string) {

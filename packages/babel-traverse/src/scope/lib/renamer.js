@@ -2,18 +2,17 @@ import Binding from "../binding";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as t from "@babel/types";
 
-function isInFunctionParameterScope(path) {
-  const computableNode = path.findParent(path => {
-    return (
-      path.type === "AssignmentPattern" ||
-      (path.type === "ObjectProperty" && path.node.computed)
-    );
-  });
-  const fdPath = path.findParent(path => path.type === "FunctionDeclaration");
-  if (computableNode && fdPath) {
-    return !!path.findParent(path => {
-      return fdPath.node.params.includes(path.node);
-    });
+export function isPathInFunctionParameter(path) {
+  let p = path;
+  while (p != null) {
+    if (
+      p.parentPath &&
+      p.parentPath.isFunction() &&
+      p.parentPath.node.params.includes(p.node)
+    ) {
+      return true;
+    }
+    p = p.parentPath;
   }
   return false;
 }
@@ -22,7 +21,15 @@ const renameVisitor = {
   ReferencedIdentifier(path, state) {
     const { node } = path;
     if (node.name === state.oldName) {
-      if (isInFunctionParameterScope(path)) {
+      let p = path;
+      while (
+        p.parentPath &&
+        !p.parentPath.isAssignmentPattern({ right: p.node }) &&
+        !p.isObjectProperty({ computed: true })
+      ) {
+        p = p.parentPath;
+      }
+      if (isPathInFunctionParameter(p)) {
         const binding = path.scope.getBinding(node.name);
         if (binding && binding.kind !== "param") {
           path.skip();
