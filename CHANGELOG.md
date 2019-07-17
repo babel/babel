@@ -18,6 +18,34 @@ See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
 
+## v7.5.5 (2019-07-17)
+
+#### :bug: Bug Fix
+* `babel-code-frame`
+  * [#10211](https://github.com/babel/babel/pull/10211) fix code-frame marker with highlighting ([@tanhauhau](https://github.com/tanhauhau))
+* `babel-plugin-proposal-object-rest-spread`
+  * [#10200](https://github.com/babel/babel/pull/10200) Workaround #10179 in proposal-object-rest-spread ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-types`
+  * [#10198](https://github.com/babel/babel/pull/10198) add assertShape to validate templateElement ([@tanhauhau](https://github.com/tanhauhau))
+* `babel-helper-create-class-features-plugin`, `babel-helper-member-expression-to-functions`, `babel-helper-replace-supers`, `babel-helpers`, `babel-plugin-proposal-class-properties`, `babel-plugin-transform-classes`, `babel-plugin-transform-object-super`, `babel-types`
+  * [#10017](https://github.com/babel/babel/pull/10017) destructuring private fields with array pattern / object pattern ([@tanhauhau](https://github.com/tanhauhau))
+* `babel-plugin-transform-flow-comments`
+  * [#9901](https://github.com/babel/babel/pull/9901) fix transform-flow-comments for import types ([@tanhauhau](https://github.com/tanhauhau))
+* `babel-core`, `babel-helpers`
+  * [#10208](https://github.com/babel/babel/pull/10208) always throw when add missing helpers ([@tanhauhau](https://github.com/tanhauhau))
+* `babel-plugin-transform-runtime`
+  * [#10207](https://github.com/babel/babel/pull/10207) Closes [#10205](https://github.com/babel/babel/issues/10205) ([@sag1v](https://github.com/sag1v))
+* `babel-helpers`, `babel-plugin-transform-instanceof`
+  * [#10197](https://github.com/babel/babel/pull/10197) fix: custom instOfHandler result should be cast to boolean ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-parser`, `babel-plugin-transform-typescript`
+  * [#10014](https://github.com/babel/babel/pull/10014) Use correct extension for typescript fixtures ([@danez](https://github.com/danez))
+
+#### :running_woman: Performance
+* `babel-helpers`, `babel-plugin-proposal-object-rest-spread`, `babel-preset-env`
+  * [#10189](https://github.com/babel/babel/pull/10189) perf: match ownKeys perf to the one of objectSpread ([@JLHwung](https://github.com/JLHwung))
+
 ## v7.5.4 (2019-07-09)
 
 #### :bug: Bug Fix
