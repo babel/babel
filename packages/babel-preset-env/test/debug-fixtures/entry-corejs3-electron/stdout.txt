@@ -34,6 +34,8 @@ Using plugins:
   transform-named-capturing-groups-regex { "electron":"0.36" }
   transform-member-expression-literals { "electron":"0.36" }
   transform-property-literals { "electron":"0.36" }
+  transform-modules-commonjs { "electron":"0.36" }
+  proposal-dynamic-import { "electron":"0.36" }
 
 Using polyfills with `entry` option:
 
