@@ -28,15 +28,15 @@
     "test": "test/run.sh"
   },
   "dependencies": {
-    "@babel/core": "^7.4.4",
-    "@babel/runtime": "^7.4.4",
-    "@babel/types": "^7.4.4",
+    "@babel/core": "^7.5.5",
+    "@babel/runtime": "^7.5.5",
+    "@babel/types": "^7.5.5",
     "commoner": "^0.10.8",
     "private": "^0.1.8",
-    "recast": "^0.17.6",
-    "regenerator-preset": "^0.13.0",
-    "regenerator-runtime": "^0.13.2",
-    "regenerator-transform": "^0.14.0",
+    "recast": "^0.18.1",
+    "regenerator-preset": "^0.13.1",
+    "regenerator-runtime": "^0.13.3",
+    "regenerator-transform": "^0.14.1",
     "through": "^2.3.8"
   },
   "devDependencies": {
