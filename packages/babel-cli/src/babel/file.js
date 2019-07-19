@@ -165,9 +165,7 @@ export default async function({
     });
 
     const results = await Promise.all(
-      _filenames.map(async function(
-        filename: string,
-      ): Promise<Object> | Promise<null> {
+      _filenames.map(async function(filename: string): Promise<Object> {
         let sourceFilename = filename;
         if (cliOptions.outFile) {
           sourceFilename = path.relative(
