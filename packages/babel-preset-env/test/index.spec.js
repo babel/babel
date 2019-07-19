@@ -13,6 +13,7 @@ const replaceCoreJS3EntryPlugin = require("../lib/polyfills/corejs3/entry-plugin
   .default;
 const removeRegeneratorEntryPlugin = require("../lib/polyfills/regenerator/entry-plugin")
   .default;
+const transformations = require("../lib/module-transformations").default;
 
 describe("babel-preset-env", () => {
   describe("transformIncludesAndExcludes", () => {
@@ -37,23 +38,25 @@ describe("babel-preset-env", () => {
     });
   });
   describe("getModulesPluginNames", () => {
-    describe("no moduleTransformation is specified", () => {
+    describe("modules is set to false", () => {
       it("returns only syntax-dynamic-import", () => {
         expect(
           babelPresetEnv.getModulesPluginNames({
-            moduleTransformation: null,
+            modules: false,
+            transformations,
             shouldTransformESM: false,
             shouldTransformDynamicImport: false,
           }),
         ).toEqual(["syntax-dynamic-import"]);
       });
     });
-    describe("a moduleTransformation is specified", () => {
+    describe("modules is not set to false", () => {
       describe("ESMs should not be transformed", () => {
         it("returns syntax-dynamic-import", () => {
           expect(
             babelPresetEnv.getModulesPluginNames({
-              moduleTransformation: "transform-modules-commonjs",
+              modules: "commonjs",
+              transformations,
               shouldTransformESM: false,
               shouldTransformDynamicImport: false,
             }),
@@ -62,27 +65,30 @@ describe("babel-preset-env", () => {
       });
       describe("ESMs should be transformed", () => {
         describe("dynamic imports should not be transformed", () => {
-          it("returns moduleTransformation and syntax-dynamic-import", () => {
-            const moduleTransformation = "transform-modules-commonjs";
+          it("returns specified modules transform and syntax-dynamic-import", () => {
             expect(
               babelPresetEnv.getModulesPluginNames({
-                moduleTransformation: moduleTransformation,
+                modules: "commonjs",
+                transformations,
                 shouldTransformESM: true,
                 shouldTransformDynamicImport: false,
               }),
-            ).toEqual([moduleTransformation, "syntax-dynamic-import"]);
+            ).toEqual(["transform-modules-commonjs", "syntax-dynamic-import"]);
           });
         });
         describe("dynamic imports should be transformed", () => {
-          it("returns moduleTransformation and proposal-dynamic-import", () => {
-            const moduleTransformation = "transform-modules-commonjs";
+          it("returns specified modules transform and proposal-dynamic-import", () => {
             expect(
               babelPresetEnv.getModulesPluginNames({
-                moduleTransformation: moduleTransformation,
+                modules: "systemjs",
+                transformations,
                 shouldTransformESM: true,
                 shouldTransformDynamicImport: true,
               }),
-            ).toEqual([moduleTransformation, "proposal-dynamic-import"]);
+            ).toEqual([
+              "transform-modules-systemjs",
+              "proposal-dynamic-import",
+            ]);
           });
         });
       });

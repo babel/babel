@@ -22,7 +22,7 @@ import { filterStageFromList, prettifyTargets } from "./utils";
 import { declare } from "@babel/helper-plugin-utils";
 
 import typeof ModuleTransformationsType from "./module-transformations";
-import type { BuiltInsOption, Targets } from "./types";
+import type { BuiltInsOption, Targets, ModuleOption } from "./types";
 
 export { isPluginRequired } from "./filter-items";
 
@@ -61,26 +61,26 @@ export const transformIncludesAndExcludes = (opts: Array<string>): Object => {
 };
 
 export const getModulesPluginNames = ({
-  moduleTransformation,
+  modules,
+  transformations,
   shouldTransformESM,
   shouldTransformDynamicImport,
 }: {
-  moduleTransformation: $Values<ModuleTransformationsType> | null,
+  modules: ModuleOption,
+  transformations: ModuleTransformationsType,
   shouldTransformESM: boolean,
   shouldTransformDynamicImport: boolean,
 }) => {
   const modulesPluginNames = [];
-  if (moduleTransformation) {
+  if (modules !== false && transformations[modules]) {
     if (shouldTransformESM) {
-      // NOTE: not giving spec here yet to avoid compatibility issues when
-      // transform-modules-commonjs gets its spec mode
-      modulesPluginNames.push(moduleTransformation);
+      modulesPluginNames.push(transformations[modules]);
     }
 
     if (
       shouldTransformDynamicImport &&
       shouldTransformESM &&
-      moduleTransformation !== "transform-modules-umd"
+      modules !== "umd"
     ) {
       modulesPluginNames.push("proposal-dynamic-import");
     } else {
@@ -217,7 +217,8 @@ export default declare((api, opts) => {
   const transformTargets = forceAllTransforms || hasUglifyTarget ? {} : targets;
 
   const modulesPluginNames = getModulesPluginNames({
-    moduleTransformation: moduleTransformations[modules.toString()] || null,
+    modules,
+    transformations: moduleTransformations,
     // TODO: Remove the 'api.caller' check eventually. Just here to prevent
     // unnecessary breakage in the short term for users on older betas/RCs.
     shouldTransformESM:
