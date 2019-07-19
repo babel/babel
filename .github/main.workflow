@@ -2,11 +2,12 @@ workflow "Release" {
   on = "push"
   resolves = [
     "Trigger GitHub release",
-    # GitHub actions are too slow for this, it takes more than 15 mins.
-    # Publishing to npm from GH actions is a cool idea, but it's a lot faster to
-    # publish locally.
-    # "Publish to npm",
-   ]
+  ]
+
+  # GitHub actions are too slow for this, it takes more than 15 mins.
+  # Publishing to npm from GH actions is a cool idea, but it's a lot faster to
+  # publish locally.
+  # "Publish to npm",
 }
 
 action "Trigger GitHub release" {
@@ -51,3 +52,22 @@ action "On master branch" {
   uses = "actions/bin/filter@master"
   args = "branch master"
 }
+
+workflow "Welcome comment" {
+  on = "issues"
+  resolves = ["Create Comment"]
+}
+
+action "Filters for GitHub Actions" {
+  uses = "actions/bin/filter@0dbb077f64d0ec1068a644d25c71b1db66148a24"
+  args = "action opened"
+}
+
+action "Create Comment" {
+  uses = "babel/actions/create-welcome-comment@master"
+  needs = ["Filters for GitHub Actions"]
+  secrets = ["GITHUB_TOKEN", "BOT_TOKEN"]
+}# GitHub actions are too slow for this, it takes more than 15 mins.
+# Publishing to npm from GH actions is a cool idea, but it's a lot faster to
+# publish locally.
+# "Publish to npm",
