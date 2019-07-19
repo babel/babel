@@ -214,6 +214,31 @@ describe("api", function () {
     );
   });
 
+  it("transformFromAst should mutate the AST when cloneInputAst is false", function () {
+    const program = "const identifier = 1";
+    const node = parse(program);
+    const { code } = transformFromAst(node, program, {
+      cloneInputAst: false,
+      plugins: [
+        function () {
+          return {
+            visitor: {
+              Identifier: function (path) {
+                path.node.name = "replaced";
+              },
+            },
+          };
+        },
+      ],
+    });
+
+    expect(code).toBe("const replaced = 1;");
+    expect(node.program.body[0].declarations[0].id.name).toBe(
+      "replaced",
+      "original ast should have been mutated",
+    );
+  });
+
   it("options throw on falsy true", function () {
     return expect(function () {
       transform("", {
