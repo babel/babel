@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@babel/parser": "^7.4.4",
+    "@babel/plugin-transform-modules-commonjs": "^7.5.0",
     "@babel/plugin-transform-parameters": "^7.4.4",
     "@babel/plugin-transform-spread": "^7.2.2",
     "babel-check-duplicated-nodes": "^1.0.0",

@@ -293,28 +293,41 @@ context("functions", function() {
     it("shouldn't throw about duplicate bindings", function() {
       // https://github.com/babel/babel/issues/6923
 
-      const code = [
-        "async function foo() {",
-        "  (async function (number) {",
-        "    const tmp = number",
-        "  })",
-        "}",
-      ].join("\n");
+      const code = `
+        async function foo() {
+          (async function f(number) {
+            const tmp = number
+          })
+        }
+      `;
 
       assert.doesNotThrow(function() {
-        const code = `
-          async function foo() {
-            (async function f(number) {
-              const tmp = number
-            })
-          }
-        `;
-
         require("@babel/core").transformSync(code, {
           configFile: false,
           plugins: [require("../packages/regenerator-transform")],
         });
       });
-    })
+    });
+
+    it("should register hoisted variable bindings", function() {
+      // https://github.com/babel/babel/issues/10193
+
+      const code = `
+        import { someAction } from 'actions';
+
+        function* foo() { const someAction = bar; }
+      `;
+
+      const compiled = require("@babel/core").transformSync(code, {
+        configFile: false,
+        plugins: [
+          require("../packages/regenerator-transform"),
+          require("@babel/plugin-transform-modules-commonjs")
+        ]
+      }).code;
+
+      assert.strictEqual(compiled.indexOf("throw"), -1);
+      assert.strictEqual(compiled.indexOf("read-only"), -1);
+    });
   });
 });

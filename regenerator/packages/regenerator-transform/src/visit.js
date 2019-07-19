@@ -156,6 +156,9 @@ exports.getVisitor = ({ types: t }) => ({
 
       outerBody.push(t.returnStatement(wrapCall));
       node.body = t.blockStatement(outerBody);
+      // We injected a few new variable declarations (for every hoisted var),
+      // so we need to add them to the scope.
+      path.get("body.body").forEach(p => p.scope.registerDeclaration(p));
 
       const oldDirectives = bodyBlockPath.node.directives;
       if (oldDirectives) {
