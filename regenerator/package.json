@@ -40,16 +40,17 @@
     "through": "^2.3.8"
   },
   "devDependencies": {
-    "@babel/parser": "^7.4.4",
-    "@babel/plugin-transform-modules-commonjs": "^7.5.0",
-    "@babel/plugin-transform-parameters": "^7.4.4",
-    "@babel/plugin-transform-spread": "^7.2.2",
-    "babel-check-duplicated-nodes": "^1.0.0",
-    "browserify": "^16.2.3",
-    "mocha": "^6.1.4",
-    "promise": "^8.0.3",
-    "semver": "^6.0.0",
-    "uglify-js": "^3.5.9"
+    "@babel/cli": "7.5.5",
+    "@babel/parser": "7.5.5",
+    "@babel/plugin-transform-modules-commonjs": "7.5.0",
+    "@babel/plugin-transform-parameters": "7.4.4",
+    "@babel/plugin-transform-spread": "7.2.2",
+    "babel-check-duplicated-nodes": "1.0.0",
+    "browserify": "16.3.0",
+    "mocha": "6.2.0",
+    "promise": "8.0.3",
+    "semver": "6.2.0",
+    "uglify-js": "3.6.0"
   },
   "license": "MIT",
   "engines": {
