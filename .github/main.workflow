@@ -1,18 +1,23 @@
 workflow "Release" {
-  resolves = [
-    "Trigger GitHub release",
-    "Is version tag",
-  ]
-  on = "release"
+  on = "push"
+  resolves = ["Trigger GitHub release"]
 }
 
 action "Is version tag" {
-  uses = "actions/bin/filter@master"
+  uses = "actions/bin/filter@0dbb077f64d0ec1068a644d25c71b1db66148a24"
   args = "tag v*"
 }
 
+action "Is tag from master" {
+  uses = "./commit-matches-branch/"
+  needs = [
+    "Is version tag",
+  ]
+  args = "master"
+}
+
 action "Trigger GitHub release" {
-  uses = "./.github/actions/trigger-github-release/"
+  uses = "./trigger-github-release/"
   secrets = ["GITHUB_TOKEN"]
   env = {
     COMMIT_AUTHOR_NAME = "Babel Bot"
@@ -20,6 +25,7 @@ action "Trigger GitHub release" {
   }
   needs = [
     "Is version tag",
+    "Is tag from master",
   ]
 }
 

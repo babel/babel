@@ -1,10 +1,10 @@
 FROM debian:stable-slim
 
-LABEL "name"="filter"
-LABEL "version"="1.1.0"
+LABEL "name"="commit-matches-branch"
+LABEL "version"="1.0.0"
 
-LABEL "com.github.actions.name"="Filter commit message"
-LABEL "com.github.actions.description"="Stop a workflow if the message of the current commit doesn't match the pattern"
+LABEL "com.github.actions.name"="Commit matches branch"
+LABEL "com.github.actions.description"="Only continue the workflow if the current commit is the last commit of the given branch"
 LABEL "com.github.actions.icon"="filter"
 LABEL "com.github.actions.color"="gray-dark"
 
