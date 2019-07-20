@@ -33,7 +33,7 @@ workflow "Issues" {
 }
 
 action "Is action 'opened'" {
-  uses = "actions/bin/filter@0dbb077f64d0ec1068a644d25c71b1db66148a24"
+  uses = "actions/bin/filter@master"
   args = "action opened"
 }
 
