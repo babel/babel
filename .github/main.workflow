@@ -9,7 +9,7 @@ action "Is version tag" {
 }
 
 action "Is tag from master" {
-  uses = "./commit-matches-branch/"
+  uses = "babel/actions/commit-matches-branch@master"
   needs = [
     "Is version tag",
   ]
@@ -17,7 +17,7 @@ action "Is tag from master" {
 }
 
 action "Trigger GitHub release" {
-  uses = "./trigger-github-release/"
+  uses = "babel/actions/trigger-github-release@master"
   secrets = ["GITHUB_TOKEN"]
   env = {
     COMMIT_AUTHOR_NAME = "Babel Bot"
