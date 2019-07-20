@@ -23,10 +23,9 @@ action "Trigger GitHub release" {
   ]
 }
 
-workflow "Issues" {
+workflow "Welcome" {
   resolves = [
-    "Create Welcome Comment",
-    "Create Needs Info Comment"
+    "Create Welcome Comment"
   ]
   on = "issues"
 }
@@ -42,6 +41,13 @@ action "Create Welcome Comment" {
   needs = ["Is action 'opened'"]
 }
 
+workflow "Needs Info" {
+  resolves = [
+    "Create Needs Info Comment"
+  ]
+  on = "issues"
+}
+
 action "Is action 'labeled'" {
   uses = "actions/bin/filter@master"
   args = "action labeled"
@@ -49,13 +55,15 @@ action "Is action 'labeled'" {
 
 action "Has label 'Needs Info'" {
   uses = "actions/bin/filter@master"
+  needs = [
+    "Is action 'labeled'"
+  ]
   args = "label 'Needs Info'"
 }
 
 action "Create Needs Info Comment" {
   uses = "babel/actions/create-needs-info-comment@master"
   needs = [
-    "Is action 'labeled'",
     "Has label 'Needs Info'",
   ]
   secrets = ["BOT_TOKEN", "GITHUB_TOKEN"]
