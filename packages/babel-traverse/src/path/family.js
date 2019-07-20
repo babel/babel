@@ -56,15 +56,15 @@ function completionRecordForSwitch(cases, paths) {
         paths = addCompletionRecords(prevSibling, paths);
         breakStatement.remove();
       } else {
-        breakStatement.replaceWith(switchCase.scope.buildUndefinedNode());
+        breakStatement.replaceWith(breakStatement.scope.buildUndefinedNode());
         paths = addCompletionRecords(breakStatement, paths);
       }
-    } else {
+    } else if (isLastCaseWithConsequent) {
       const statementFinder = statement =>
         !statement.isBlockStatement() ||
         statement.get("body").some(statementFinder);
       const hasConsequent = consequent.some(statementFinder);
-      if (hasConsequent && isLastCaseWithConsequent) {
+      if (hasConsequent) {
         paths = addCompletionRecords(consequent[consequent.length - 1], paths);
         isLastCaseWithConsequent = false;
       }
