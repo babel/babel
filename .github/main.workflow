@@ -7,7 +7,7 @@ workflow "Release" {
 }
 
 action "Is version tag" {
-  uses = "actions/bin/filter@0dbb077f64d0ec1068a644d25c71b1db66148a24"
+  uses = "actions/bin/filter@master"
   args = "tag v*"
 }
 
@@ -23,8 +23,12 @@ action "Trigger GitHub release" {
   ]
 }
 
-workflow "Welcome comment" {
-  resolves = ["Create Comment"]
+workflow "Issues" {
+  resolves = [
+    "Create Welcome Comment",
+    "Create Needs Info Comment",
+    "Has label 'Needs Info'",
+  ]
   on = "issues"
 }
 
@@ -33,8 +37,27 @@ action "Is action 'opened'" {
   args = "action opened"
 }
 
-action "Create Comment" {
+action "Create Welcome Comment" {
   uses = "babel/actions/create-welcome-comment@master"
   secrets = ["GITHUB_TOKEN", "BOT_TOKEN"]
   needs = ["Is action 'opened'"]
+}
+
+action "Is action 'labeled'" {
+  uses = "actions/bin/filter@master"
+  args = "action labeled"
+}
+
+action "Create Needs Info Comment" {
+  uses = "babel/actions/create-needs-info-comment@master"
+  needs = [
+    "Is action 'labeled'",
+    "Has label 'Needs Info'",
+  ]
+  secrets = ["BOT_TOKEN", "GITHUB_TOKEN"]
+}
+
+action "Has label 'Needs Info'" {
+  uses = "actions/bin/filter@master"
+  args = "label 'Needs Info'"
 }
