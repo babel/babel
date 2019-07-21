@@ -641,7 +641,9 @@ helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
       }
     }
     newObj.default = obj;
-    cache && cache.set(obj, newObj);
+    if (cache) {
+      cache.set(obj, newObj);
+    }
     return newObj;
   }
 `;
