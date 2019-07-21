@@ -65,6 +65,48 @@ export default async function({ cliOptions, babelOptions }) {
     }
   }
 
+  async function unlink(src, base) {
+    let relative = path.relative(base, src);
+
+    if (!util.isCompilableExtension(relative, cliOptions.extensions)) {
+      return false;
+    }
+
+    // remove extension and then append back on .js
+    relative = util.adjustRelative(relative, cliOptions.keepFileExtension);
+
+    const dest = getDest(relative, base);
+
+    try {
+      util.deleteFile(dest);
+      return true;
+    } catch (err) {
+      if (cliOptions.watch) {
+        console.error(err);
+        return false;
+      }
+
+      throw err;
+    }
+  }
+
+  async function unlinkDir(src, base) {
+    const relative = path.relative(base, src);
+    const dest = getDest(relative, base);
+
+    try {
+      util.deleteDir(dest);
+      return true;
+    } catch (err) {
+      if (cliOptions.watch) {
+        console.error(err);
+        return false;
+      }
+
+      throw err;
+    }
+  }
+
   function getDest(filename, base) {
     if (cliOptions.relative) {
       return path.join(base, cliOptions.outDir, filename);
@@ -153,6 +195,28 @@ export default async function({ cliOptions, babelOptions }) {
           ).catch(err => {
             console.error(err);
           });
+        });
+      });
+
+      watcher.on("unlink", filename => {
+        unlink(
+          filename,
+          filename === filenameOrDir
+            ? path.dirname(filenameOrDir)
+            : filenameOrDir,
+        ).catch(err => {
+          console.error(err);
+        });
+      });
+
+      watcher.on("unlinkDir", dirname => {
+        unlinkDir(
+          dirname,
+          dirname === filenameOrDir
+            ? path.dirname(filenameOrDir)
+            : filenameOrDir,
+        ).catch(err => {
+          console.error(err);
         });
       });
     });
