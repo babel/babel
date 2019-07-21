@@ -206,6 +206,75 @@ export function willIMaybeExecuteBefore(target) {
   return this._guessExecutionStatusRelativeTo(target) !== "after";
 }
 
+function getOuterFunction(path) {
+  return (path.scope.getFunctionParent() || path.scope.getProgramParent()).path;
+}
+
+function isExecutionUncertain(type, key) {
+  switch (type) {
+    // a && FOO
+    // a || FOO
+    case "LogicalExpression":
+      return key === "right";
+
+    // a ? FOO : FOO
+    // if (a) FOO; else FOO;
+    case "ConditionalExpression":
+    case "IfStatement":
+      return key === "consequent" || key === "alternate";
+
+    // while (a) FOO;
+    case "WhileStatement":
+    case "DoWhileStatement":
+    case "ForInStatement":
+    case "ForOfStatement":
+      return key === "body";
+
+    // for (a; b; FOO) FOO;
+    case "ForStatement":
+      return key === "body" || key === "update";
+
+    // switch (a) { FOO }
+    case "SwitchStatement":
+      return key === "cases";
+
+    // try { a } catch FOO finally { b }
+    case "TryStatement":
+      return key === "handler";
+
+    // var [ x = FOO ]
+    case "AssignmentPattern":
+      return key === "right";
+
+    // a?.[FOO]
+    case "OptionalMemberExpression":
+      return key === "property";
+
+    // a?.(FOO)
+    case "OptionalCallExpression":
+      return key === "arguments";
+
+    default:
+      return false;
+  }
+}
+
+function isExecutionUncertainInList(paths, maxIndex) {
+  for (let i = 0; i < maxIndex; i++) {
+    const path = paths[i];
+    if (isExecutionUncertain(path.parent.type, path.parentKey)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// TODO (Babel 8)
+// This can be { before: boolean, after: boolean, unknown: boolean }.
+// This allows transforms like the tdz one to treat cases when the status
+// is both before and unknown/after like if it were before.
+type RelativeExecutionStatus = "before" | "after" | "unknown";
+
 /**
  * Given a `target` check the execution status of it relative to the current path.
  *
@@ -213,92 +282,106 @@ export function willIMaybeExecuteBefore(target) {
  * before or after the input `target` element.
  */
 
-export function _guessExecutionStatusRelativeTo(target) {
+export function _guessExecutionStatusRelativeTo(
+  target: NodePath,
+): RelativeExecutionStatus {
   // check if the two paths are in different functions, we can't track execution of these
-  const targetFuncParent =
-    target.scope.getFunctionParent() || target.scope.getProgramParent();
-  const selfFuncParent =
-    this.scope.getFunctionParent() || target.scope.getProgramParent();
+  const funcParent = {
+    this: getOuterFunction(this),
+    target: getOuterFunction(target),
+  };
 
   // here we check the `node` equality as sometimes we may have different paths for the
   // same node due to path thrashing
-  if (targetFuncParent.node !== selfFuncParent.node) {
-    const status = this._guessExecutionStatusRelativeToDifferentFunctions(
-      targetFuncParent,
+  if (funcParent.target.node !== funcParent.this.node) {
+    return this._guessExecutionStatusRelativeToDifferentFunctions(
+      funcParent.target,
     );
-    if (status) {
-      return status;
-    } else {
-      target = targetFuncParent.path;
-    }
   }
 
-  const targetPaths = target.getAncestry();
-  if (targetPaths.indexOf(this) >= 0) return "after";
+  const paths = {
+    target: target.getAncestry(),
+    this: this.getAncestry(),
+  };
 
-  const selfPaths = this.getAncestry();
+  // If this is an ancestor of the target path,
+  // e.g. f(g); where this is f and target is g.
+  if (paths.target.indexOf(this) >= 0) return "after";
+  if (paths.this.indexOf(target) >= 0) return "before";
 
   // get ancestor where the branches intersect
   let commonPath;
-  let targetIndex;
-  let selfIndex;
-  for (selfIndex = 0; selfIndex < selfPaths.length; selfIndex++) {
-    const selfPath = selfPaths[selfIndex];
-    targetIndex = targetPaths.indexOf(selfPath);
-    if (targetIndex >= 0) {
-      commonPath = selfPath;
-      break;
+  const commonIndex = { target: 0, this: 0 };
+
+  while (!commonPath && commonIndex.this < paths.this.length) {
+    const path = paths.this[commonIndex.this];
+    commonIndex.target = paths.target.indexOf(path);
+    if (commonIndex.target >= 0) {
+      commonPath = path;
+    } else {
+      commonIndex.this++;
     }
   }
+
   if (!commonPath) {
-    return "before";
+    throw new Error(
+      "Internal Babel error - The two compared nodes" +
+        " don't appear to belong to the same program.",
+    );
   }
 
-  // get the relationship paths that associate these nodes to their common ancestor
-  const targetRelationship = targetPaths[targetIndex - 1];
-  const selfRelationship = selfPaths[selfIndex - 1];
-  if (!targetRelationship || !selfRelationship) {
-    return "before";
+  if (
+    isExecutionUncertainInList(paths.this, commonIndex.this - 1) ||
+    isExecutionUncertainInList(paths.target, commonIndex.target - 1)
+  ) {
+    return "unknown";
   }
+
+  const divergence = {
+    this: paths.this[commonIndex.this - 1],
+    target: paths.target[commonIndex.target - 1],
+  };
 
   // container list so let's see which one is after the other
+  // e.g. [ THIS, TARGET ]
   if (
-    targetRelationship.listKey &&
-    targetRelationship.container === selfRelationship.container
+    divergence.target.listKey &&
+    divergence.this.listKey &&
+    divergence.target.container === divergence.this.container
   ) {
-    return targetRelationship.key > selfRelationship.key ? "before" : "after";
+    return divergence.target.key > divergence.this.key ? "before" : "after";
   }
 
   // otherwise we're associated by a parent node, check which key comes before the other
   const keys = t.VISITOR_KEYS[commonPath.type];
-  const targetKeyPosition = keys.indexOf(targetRelationship.key);
-  const selfKeyPosition = keys.indexOf(selfRelationship.key);
-  return targetKeyPosition > selfKeyPosition ? "before" : "after";
+  const keyPosition = {
+    this: keys.indexOf(divergence.this.parentKey),
+    target: keys.indexOf(divergence.target.parentKey),
+  };
+  return keyPosition.target > keyPosition.this ? "before" : "after";
 }
 
+// Used to avoid infinite recursion in cases like
+//   function f() { if (false) f(); }
+//   f();
+// It also works with indirect recursion.
+const executionOrderCheckedNodes = new WeakSet();
+
 export function _guessExecutionStatusRelativeToDifferentFunctions(
-  targetFuncParent,
-) {
-  const targetFuncPath = targetFuncParent.path;
-  if (!targetFuncPath.isFunctionDeclaration()) return;
+  target: NodePath,
+): RelativeExecutionStatus {
+  if (!target.isFunctionDeclaration()) return "unknown";
 
   // so we're in a completely different function, if this is a function declaration
   // then we can be a bit smarter and handle cases where the function is either
   // a. not called at all (part of an export)
   // b. called directly
-  const binding = targetFuncPath.scope.getBinding(targetFuncPath.node.id.name);
+  const binding = target.scope.getBinding(target.node.id.name);
 
   // no references!
   if (!binding.references) return "before";
 
   const referencePaths: Array<NodePath> = binding.referencePaths;
-
-  // verify that all of the references are calls
-  for (const path of referencePaths) {
-    if (path.key !== "callee" || !path.parentPath.isCallExpression()) {
-      return;
-    }
-  }
 
   let allStatus;
 
@@ -306,15 +389,25 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
   for (const path of referencePaths) {
     // if a reference is a child of the function we're checking against then we can
     // safely ignore it
-    const childOfFunction = !!path.find(
-      path => path.node === targetFuncPath.node,
-    );
+    const childOfFunction = !!path.find(path => path.node === target.node);
     if (childOfFunction) continue;
+
+    if (path.key !== "callee" || !path.parentPath.isCallExpression()) {
+      // This function is passed as a reference, so we don't
+      // know when it will be called.
+      return "unknown";
+    }
+
+    // Prevent infinte loops in recursive functions
+    if (executionOrderCheckedNodes.has(path.node)) continue;
+    executionOrderCheckedNodes.add(path.node);
 
     const status = this._guessExecutionStatusRelativeTo(path);
 
-    if (allStatus) {
-      if (allStatus !== status) return;
+    executionOrderCheckedNodes.delete(path.node);
+
+    if (allStatus && allStatus !== status) {
+      return "unknown";
     } else {
       allStatus = status;
     }

@@ -5,6 +5,7 @@ if (x) {
 
 var innerScope = true;
 var res = transform(code, {
+  configFile: false,
   plugins: opts.plugins.concat([
     function (b) {
       var t = b.types;
@@ -34,3 +35,4 @@ if (x) {
 }`;
 
 expect(res.code).toBe(expected);
+expect(innerScope).toBe(false);

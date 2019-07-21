@@ -1,12 +1,12 @@
-import { types as t } from "@babel/core";
+import { types as t, template } from "@babel/core";
 
 function getTDZStatus(refPath, bindingPath) {
   const executionStatus = bindingPath._guessExecutionStatusRelativeTo(refPath);
 
   if (executionStatus === "before") {
-    return "inside";
-  } else if (executionStatus === "after") {
     return "outside";
+  } else if (executionStatus === "after") {
+    return "inside";
   } else {
     return "maybe";
   }
@@ -41,7 +41,7 @@ export const visitor = {
     if (bindingPath.isFunctionDeclaration()) return;
 
     const status = getTDZStatus(path, bindingPath);
-    if (status === "inside") return;
+    if (status === "outside") return;
 
     if (status === "maybe") {
       const assert = buildTDZAssert(node, state);
@@ -57,19 +57,8 @@ export const visitor = {
       } else {
         path.replaceWith(assert);
       }
-    } else if (status === "outside") {
-      path.replaceWith(
-        t.throwStatement(
-          t.inherits(
-            t.newExpression(t.identifier("ReferenceError"), [
-              t.stringLiteral(
-                `${node.name} is not defined - temporal dead zone`,
-              ),
-            ]),
-            node,
-          ),
-        ),
-      );
+    } else if (status === "inside") {
+      path.replaceWith(template.ast`${state.addHelper("tdz")}("${node.name}")`);
     }
   },
 
@@ -87,14 +76,14 @@ export const visitor = {
         const id = ids[name];
 
         if (isReference(id, path.scope, state)) {
-          nodes.push(buildTDZAssert(id, state));
+          nodes.push(id);
         }
       }
 
       if (nodes.length) {
         node._ignoreBlockScopingTDZ = true;
         nodes.push(node);
-        path.replaceWithMultiple(nodes.map(t.expressionStatement));
+        path.replaceWithMultiple(nodes.map(n => t.expressionStatement(n)));
       }
     },
   },

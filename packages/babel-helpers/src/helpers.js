@@ -817,18 +817,6 @@ helpers.taggedTemplateLiteralLoose = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.temporalRef = helper("7.0.0-beta.0")`
-  import undef from "temporalUndefined";
-
-  export default function _temporalRef(val, name) {
-    if (val === undef) {
-      throw new ReferenceError(name + " is not defined - temporal dead zone");
-    } else {
-      return val;
-    }
-  }
-`;
-
 helpers.readOnlyError = helper("7.0.0-beta.0")`
   export default function _readOnlyError(name) {
     throw new Error("\\"" + name + "\\" is read-only");
@@ -842,7 +830,24 @@ helpers.classNameTDZError = helper("7.0.0-beta.0")`
 `;
 
 helpers.temporalUndefined = helper("7.0.0-beta.0")`
-  export default {};
+  // This function isn't mean to be called, but to be used as a reference.
+  // We can't use a normal object because it isn't hoisted.
+  export default function _temporalUndefined() {}
+`;
+
+helpers.tdz = helper("7.5.5")`
+  export default function _tdzError(name) {
+    throw new ReferenceError(name + " is not defined - temporal dead zone");
+  }
+`;
+
+helpers.temporalRef = helper("7.0.0-beta.0")`
+  import undef from "temporalUndefined";
+  import err from "tdz";
+
+  export default function _temporalRef(val, name) {
+    return val === undef ? err(name) : val;
+  }
 `;
 
 helpers.slicedToArray = helper("7.0.0-beta.0")`

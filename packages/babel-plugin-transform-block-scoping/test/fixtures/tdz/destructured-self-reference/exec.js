@@ -1,1 +1,3 @@
-let { b: d } = { d }
+expect(() => {
+  let { b: d } = { d }
+}).toThrow(ReferenceError);

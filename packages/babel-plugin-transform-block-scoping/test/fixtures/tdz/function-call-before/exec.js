@@ -1,5 +1,7 @@
 expect(() => {
+  function f() {
+    x;
+  }
   f();
-
-  const f = function f() {}
+  let x;
 }).toThrow(ReferenceError);

@@ -1,4 +1,4 @@
 expect(() => {
-  i
+  i = 2;
   let i
 }).toThrow(ReferenceError);

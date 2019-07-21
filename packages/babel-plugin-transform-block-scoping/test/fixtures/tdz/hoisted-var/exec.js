@@ -1,3 +1,5 @@
-x = 3;
+expect(() => {
+  x = 3;
 
-var x;
+  var x;
+}).not.toThrow();

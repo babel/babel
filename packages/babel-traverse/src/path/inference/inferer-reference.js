@@ -102,7 +102,7 @@ function getConstantViolationsBefore(binding, path, functions) {
   return violations.filter(violation => {
     violation = violation.resolve();
     const status = violation._guessExecutionStatusRelativeTo(path);
-    if (functions && status === "function") functions.push(violation);
+    if (functions && status === "unknown") functions.push(violation);
     return status === "before";
   });
 }
