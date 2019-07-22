@@ -358,35 +358,15 @@ function buildPrivateMethodInitLoose(ref, prop, privateNamesMap) {
       initAdded: true,
     });
 
-    if (getId && setId) {
-      return template.statement.ast`
-        Object.defineProperty(${ref}, ${id}, {
-          // configurable is false by default
-          // enumerable is false by default
-          // writable is false by default
-          get: ${getId.name},
-          set: ${setId.name}
-        });
-      `;
-    } else if (getId && !setId) {
-      return template.statement.ast`
-        Object.defineProperty(${ref}, ${id}, {
-          // configurable is false by default
-          // enumerable is false by default
-          // writable is false by default
-          get: ${getId.name}
-        });
-      `;
-    } else if (!getId && setId) {
-      return template.statement.ast`
-        Object.defineProperty(${ref}, ${id}, {
-          // configurable is false by default
-          // enumerable is false by default
-          // writable is false by default
-          set: ${setId.name}
-        });
-      `;
-    }
+    return template.statement.ast`
+      Object.defineProperty(${ref}, ${id}, {
+        // configurable is false by default
+        // enumerable is false by default
+        // writable is false by default
+        get: ${getId ? getId.name : "undefined"},
+        set: ${setId ? setId.name : "undefined"}
+      });
+    `;
   }
 }
 
@@ -401,26 +381,12 @@ function buildPrivateInstanceMethodInitSpec(ref, prop, privateNamesMap) {
       initAdded: true,
     });
 
-    if (getId && setId) {
-      return template.statement.ast`
-        ${id}.set(${ref}, {
-          get: ${getId.name},
-          set: ${setId.name}
-        });
-      `;
-    } else if (getId && !setId) {
-      return template.statement.ast`
-        ${id}.set(${ref}, {
-          get: ${getId.name}
-        });
-      `;
-    } else if (!getId && setId) {
-      return template.statement.ast`
-        ${id}.set(${ref}, {
-          set: ${setId.name}
-        });
-      `;
-    }
+    return template.statement.ast`
+      ${id}.set(${ref}, {
+        get: ${getId ? getId.name : "undefined"},
+        set: ${setId ? setId.name : "undefined"}
+      });
+    `;
   }
   return template.statement.ast`${id}.add(${ref})`;
 }
@@ -462,35 +428,15 @@ function buildPrivateStaticMethodInitLoose(ref, prop, state, privateNamesMap) {
       initAdded: true,
     });
 
-    if (getId && setId) {
-      return template.statement.ast`
-        Object.defineProperty(${ref}, ${id}, {
-          // configurable is false by default
-          // enumerable is false by default
-          // writable is false by default
-          get: ${getId.name},
-          set: ${setId.name}
-        })
-      `;
-    } else if (getId && !setId) {
-      return template.statement.ast`
-        Object.defineProperty(${ref}, ${id}, {
-          // configurable is false by default
-          // enumerable is false by default
-          // writable is false by default
-          get: ${getId.name},
-        })
-      `;
-    } else if (!getId && setId) {
-      return template.statement.ast`
-        Object.defineProperty(${ref}, ${id}, {
-          // configurable is false by default
-          // enumerable is false by default
-          // writable is false by default
-          set: ${setId.name},
-        })
-      `;
-    }
+    return template.statement.ast`
+      Object.defineProperty(${ref}, ${id}, {
+        // configurable is false by default
+        // enumerable is false by default
+        // writable is false by default
+        get: ${getId ? getId.name : "undefined"},
+        set: ${setId ? setId.name : "undefined"}
+      })
+    `;
   }
 
   return template.statement.ast`
