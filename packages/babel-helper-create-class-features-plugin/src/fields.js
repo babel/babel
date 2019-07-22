@@ -314,35 +314,15 @@ function buildPrivateStaticFieldInitSpec(prop, privateNamesMap) {
       initAdded: true,
     });
 
-    if (getId && setId) {
-      return template.statement.ast`
-        var ${id.name} = {
-          // configurable is false by default
-          // enumerable is false by default
-          // writable is false by default
-          get: ${getId.name},
-          set: ${setId.name}
-        }
-      `;
-    } else if (getId && !setId) {
-      return template.statement.ast`
-        var ${id.name} = {
-          // configurable is false by default
-          // enumerable is false by default
-          // writable is false by default
-          get: ${getId.name}
-        }
-      `;
-    } else if (!getId && setId) {
-      return template.statement.ast`
-        var ${id.name} = {
-          // configurable is false by default
-          // enumerable is false by default
-          // writable is false by default
-          set: ${setId.name}
-        }
-      `;
-    }
+    return template.statement.ast`
+      var ${id.name} = {
+        // configurable is false by default
+        // enumerable is false by default
+        // writable is false by default
+        get: ${getId ? getId.name : "null"},
+        set: ${setId ? setId.name : "null"}
+      }
+    `;
   }
 
   const value = prop.node.value || prop.scope.buildUndefinedNode();
