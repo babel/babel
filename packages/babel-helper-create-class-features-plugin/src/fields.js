@@ -305,7 +305,7 @@ function buildPrivateInstanceFieldInitSpec(ref, prop, privateNamesMap) {
 function buildPrivateStaticFieldInitSpec(prop, privateNamesMap) {
   const privateName = privateNamesMap.get(prop.node.key.id.name);
   const { id, getId, setId, initAdded } = privateName;
-  const value = prop.node.value || prop.scope.buildUndefinedNode();
+
   if (!prop.isProperty() && (initAdded || !(getId || setId))) return;
 
   if (getId || setId) {
@@ -345,6 +345,7 @@ function buildPrivateStaticFieldInitSpec(prop, privateNamesMap) {
     }
   }
 
+  const value = prop.node.value || prop.scope.buildUndefinedNode();
   return template.statement.ast`
     var ${id} = {
       // configurable is false by default
