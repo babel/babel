@@ -3,6 +3,11 @@ git:
 language: node_js
 cache:
   yarn: true
+
+os:
+  - linux
+  - windows
+
 node_js:
   # We test the latest version on circleci
   - '11'
