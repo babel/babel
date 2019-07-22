@@ -7,8 +7,9 @@ import sourceMap from "source-map";
 export default class SourceMap {
   constructor(opts, code) {
     this._cachedMap = null;
-    this._code = code;
-    this._opts = opts;
+    const { _opts, _code } = normalizeSourceFileName(opts, code);
+    this._code = _code;
+    this._opts = _opts;
     this._rawMappings = [];
   }
 
@@ -73,6 +74,9 @@ export default class SourceMap {
     this._lastGenLine = generatedLine;
     this._lastSourceLine = line;
     this._lastSourceColumn = column;
+    if (filename) {
+      filename = filename.replace(/\\/g, "/");
+    }
 
     // We are deliberately not using the `source-map` library here to allow
     // callers to use these mappings without any overhead
@@ -93,4 +97,20 @@ export default class SourceMap {
             },
     });
   }
+}
+
+function normalizeSourceFileName(opts, code) {
+  let _opts = opts;
+  const _code = code;
+  if (typeof code === "string") {
+    _opts = {
+      ...opts,
+      sourceFileName: _opts.sourceFileName.replace(/\\/g, "/"),
+    };
+  } else if (typeof code === "object") {
+    Object.keys(code).forEach(sourceFileName => {
+      _code[sourceFileName.replace(/\\/g, "/")] = code[sourceFileName];
+    });
+  }
+  return { _opts, _code };
 }
