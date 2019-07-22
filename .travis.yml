@@ -4,9 +4,7 @@ language: node_js
 cache:
   yarn: true
 
-os:
-  - linux
-  - windows
+os: linux
 
 node_js:
   # We test the latest version on circleci
@@ -25,10 +23,11 @@ before_install:
 
 install:
   # the `make test-ci` script runs this command already
-  - if [ "$JOB" != "test" ] && [ "$JOB" != "lint" ]; then yarn install; fi
+  - if [ "$JOB" != "test" ] && [ "$JOB" != "test-windows" ] && [ "$JOB" != "lint" ]; then yarn install; fi
   - if [ "$JOB" = "lint" ]; then make bootstrap; fi
 
 before_script:
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then choco install make; fi
   - if [ "$JOB" = "babel-parser-flow-tests" ]; then make bootstrap-flow; fi
   - if [ "$JOB" = "babel-parser-test262-tests" ]; then make bootstrap-test262; fi
 
@@ -47,6 +46,9 @@ matrix:
       env: JOB=babel-parser-flow-tests
     - node_js: "node"
       env: JOB=babel-parser-test262-tests
+    - os: windows
+      node_js: "node"
+      env: JOB=test
 
 notifications:
   slack:
