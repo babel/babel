@@ -161,7 +161,7 @@ endif
 
 bootstrap-only: clean-all
 	yarn --ignore-engines
-	./node_modules/.bin/lerna bootstrap -- --ignore-engines
+	yarn lerna bootstrap -- --ignore-engines
 
 bootstrap: bootstrap-only
 	make build
