@@ -1,3 +1,3 @@
 interface I {
-  new (x: number): void
+  new (x: number): void;
 }
