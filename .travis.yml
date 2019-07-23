@@ -8,10 +8,10 @@ os: linux
 
 node_js:
   # We test the latest version on circleci
-  - '11'
-  - '10'
-  - '8'
-  - '6'
+  - "11"
+  - "10"
+  - "8"
+  - "6"
 
 env:
   global:
@@ -48,7 +48,7 @@ matrix:
       env: JOB=babel-parser-test262-tests
     - os: windows
       node_js: "node"
-      env: JOB=test
+      env: JOB=test-windows
 
 notifications:
   slack:

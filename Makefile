@@ -85,7 +85,9 @@ test-only:
 
 test: lint test-only
 
-test-ci: bootstrap test-only
+test-ci: bootstrap
+  BABEL_ENV=test yarn jest --maxWorkers=4 --ci
+	make test-clean
 
 test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
