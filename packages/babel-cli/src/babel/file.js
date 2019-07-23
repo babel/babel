@@ -76,7 +76,7 @@ export default async function({
       babelOptions.sourceMaps === "inline" ||
       (!cliOptions.outFile && babelOptions.sourceMaps)
     ) {
-      code += "\n" + convertSourceMap.fromObject(map.toJSON()).toComment();
+      code += "\n" + convertSourceMap.fromObject(map).toComment();
     }
 
     return {
