@@ -2107,6 +2107,20 @@ export function isPlaceholder(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
+export function isV8IntrinsicIdentifier(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "V8IntrinsicIdentifier") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isArgumentPlaceholder(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 

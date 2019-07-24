@@ -662,6 +662,12 @@ export function assertNoop(node: Object, opts?: Object = {}): void {
 export function assertPlaceholder(node: Object, opts?: Object = {}): void {
   assert("Placeholder", node, opts);
 }
+export function assertV8IntrinsicIdentifier(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("V8IntrinsicIdentifier", node, opts);
+}
 export function assertArgumentPlaceholder(
   node: Object,
   opts?: Object = {},

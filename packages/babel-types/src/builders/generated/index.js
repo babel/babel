@@ -600,6 +600,10 @@ export function Placeholder(...args: Array<any>): Object {
   return builder("Placeholder", ...args);
 }
 export { Placeholder as placeholder };
+export function V8IntrinsicIdentifier(...args: Array<any>): Object {
+  return builder("V8IntrinsicIdentifier", ...args);
+}
+export { V8IntrinsicIdentifier as v8IntrinsicIdentifier };
 export function ArgumentPlaceholder(...args: Array<any>): Object {
   return builder("ArgumentPlaceholder", ...args);
 }
