@@ -1,5 +1,9 @@
 // @flow
-import defineType, { assertNodeType, assertOneOf } from "./utils";
+import defineType, {
+  assertNodeType,
+  assertOneOf,
+  assertValueType,
+} from "./utils";
 import { PLACEHOLDERS } from "./placeholders";
 
 defineType("Noop", {
@@ -17,5 +21,12 @@ defineType("Placeholder", {
     expectedNode: {
       validate: assertOneOf(...PLACEHOLDERS),
     },
+  },
+});
+
+defineType("V8IntrinsicIdentifier", {
+  builder: ["name"],
+  fields: {
+    name: assertValueType("string"),
   },
 });
