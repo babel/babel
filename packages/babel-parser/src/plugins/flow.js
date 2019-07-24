@@ -194,7 +194,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.next();
 
       const id = (node.id = this.parseIdentifier());
-      this.scope.declareName(node.id.name, BIND_VAR, node.id.start);
 
       const typeNode = this.startNode();
       const typeContainer = this.startNode();
