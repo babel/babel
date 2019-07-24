@@ -67,6 +67,7 @@ export function TSQualifiedName(node) {
 
 export function TSCallSignatureDeclaration(node) {
   this.tsPrintSignatureDeclarationBase(node);
+  this.token(";");
 }
 
 export function TSConstructSignatureDeclaration(node) {
