@@ -380,6 +380,28 @@ export default class ExpressionParser extends LValParser {
 
         node.right = this.parseExprOpRightExpr(op, prec, noIn);
 
+        if (op === tt.nullishCoalescing) {
+          if (
+            left.type === "LogicalExpression" &&
+            left.operator !== "??" &&
+            !(left.extra && left.extra.parenthesized)
+          ) {
+            throw this.raise(
+              this.state.start,
+              `Wrap left hand side of the expression in parentheses`,
+            );
+          } else if (
+            node.right.type === "LogicalExpression" &&
+            node.right.operator !== "??" &&
+            !(node.right.extra && node.right.extra.parenthesized)
+          ) {
+            throw this.raise(
+              this.state.start,
+              `Wrap right hand side of the expression in parentheses.`,
+            );
+          }
+        }
+
         this.finishNode(
           node,
           op === tt.logicalOR ||
