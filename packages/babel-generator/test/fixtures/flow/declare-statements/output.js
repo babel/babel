@@ -22,17 +22,17 @@ declare class B {
   (): number
 }
 declare class A mixins B<T>, C {}
-declare type A = string;
+declare type A1 = string;
 declare type T<U> = {
   [k: string]: U
 };
-declare type B = {
+declare type B1 = {
   fn?: (foo: string) => void
 };
-declare interface I {
+declare interface I1 {
   foo: string
 }
-declare interface I<T> {
+declare interface I2<T> {
   foo: T
 }
 declare module.exports: {

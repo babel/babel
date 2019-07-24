@@ -4,10 +4,10 @@ declare class C {
 declare class C {
   [[foo]]: T
 }
-interface I {
+interface I1 {
   [[foo]]: X
 }
-interface I {
+interface I2 {
   [[foo]]() => X
 }
 type T1 = {
