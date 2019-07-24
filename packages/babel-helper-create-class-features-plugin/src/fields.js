@@ -319,8 +319,8 @@ function buildPrivateStaticFieldInitSpec(prop, privateNamesMap) {
         // configurable is false by default
         // enumerable is false by default
         // writable is false by default
-        get: ${getId ? getId.name : "null"},
-        set: ${setId ? setId.name : "null"}
+        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
+        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
       }
     `;
   }
@@ -363,8 +363,8 @@ function buildPrivateMethodInitLoose(ref, prop, privateNamesMap) {
         // configurable is false by default
         // enumerable is false by default
         // writable is false by default
-        get: ${getId ? getId.name : "undefined"},
-        set: ${setId ? setId.name : "undefined"}
+        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
+        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
       });
     `;
   }
@@ -383,8 +383,8 @@ function buildPrivateInstanceMethodInitSpec(ref, prop, privateNamesMap) {
 
     return template.statement.ast`
       ${id}.set(${ref}, {
-        get: ${getId ? getId.name : "undefined"},
-        set: ${setId ? setId.name : "undefined"}
+        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
+        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
       });
     `;
   }
@@ -433,8 +433,8 @@ function buildPrivateStaticMethodInitLoose(ref, prop, state, privateNamesMap) {
         // configurable is false by default
         // enumerable is false by default
         // writable is false by default
-        get: ${getId ? getId.name : "undefined"},
-        set: ${setId ? setId.name : "undefined"}
+        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
+        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
       })
     `;
   }

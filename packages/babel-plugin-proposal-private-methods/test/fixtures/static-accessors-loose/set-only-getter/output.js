@@ -19,5 +19,5 @@ Object.defineProperty(Cl, _PRIVATE_STATIC_FIELD, {
 });
 Object.defineProperty(Cl, _privateStaticFieldValue, {
   get: _get_privateStaticFieldValue,
-  set: undefined
+  set: void 0
 });

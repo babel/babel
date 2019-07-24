@@ -2,7 +2,7 @@ class Cl {
   constructor() {
     _privateFieldValue.set(this, {
       get: _get_privateFieldValue,
-      set: undefined
+      set: void 0
     });
 
     _privateField.set(this, {

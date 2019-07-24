@@ -15,5 +15,5 @@ var _PRIVATE_STATIC_FIELD = {
 };
 var _privateStaticFieldValue = {
   get: _get_privateStaticFieldValue,
-  set: null
+  set: void 0
 };
