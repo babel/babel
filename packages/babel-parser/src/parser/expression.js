@@ -380,6 +380,14 @@ export default class ExpressionParser extends LValParser {
 
         node.right = this.parseExprOpRightExpr(op, prec, noIn);
 
+        /* this check is needed because for operations like
+         * a ?? b || c
+         * a ?? b => This is considered as a logical expression in the ast tree
+         * c => Identifier
+         * so we need to check, only for || cases that if left is logical expression without paren
+         * then raise an error
+         */
+
         if (op === tt.logicalOR) {
           if (
             left.type === "LogicalExpression" &&
@@ -392,6 +400,16 @@ export default class ExpressionParser extends LValParser {
             );
           }
         }
+        /* this check is for all && and ?? operators
+         * a ?? b && c for this example
+         * b && c => This is considered as a logical expression in the ast tree
+         * a => Identifier
+         * so for ?? operator we need to check in this case the right expression
+         * second case a && b ?? c
+         * here a && b => This is considered as a logical expression in the ast tree
+         * c => identifer
+         * so now here for ?? operator we need to check the left expression
+         */
         if (op === tt.nullishCoalescing) {
           if (
             left.type === "LogicalExpression" &&
