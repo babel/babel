@@ -403,8 +403,8 @@ export const classMethodOrPropertyCommon = {
     optional: true,
   },
   static: {
+    default: false,
     validate: assertValueType("boolean"),
-    optional: true,
   },
   computed: {
     default: false,

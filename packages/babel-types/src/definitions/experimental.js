@@ -33,7 +33,14 @@ defineType("BindExpression", {
 
 defineType("ClassProperty", {
   visitor: ["key", "value", "typeAnnotation", "decorators"],
-  builder: ["key", "value", "typeAnnotation", "decorators", "computed"],
+  builder: [
+    "key",
+    "value",
+    "typeAnnotation",
+    "decorators",
+    "computed",
+    "static",
+  ],
   aliases: ["Property"],
   fields: {
     ...classMethodOrPropertyCommon,
