@@ -396,7 +396,7 @@ export default class ExpressionParser extends LValParser {
           ) {
             throw this.raise(
               left.start,
-              `Wrap left hand side of the expression in parentheses`,
+              `Wrap left hand side of the expression in parenthesis`,
             );
           }
         }
@@ -418,7 +418,7 @@ export default class ExpressionParser extends LValParser {
           ) {
             throw this.raise(
               left.start,
-              `Wrap left hand side of the expression in parentheses`,
+              `Wrap left hand side of the expression in parenthesis`,
             );
           } else if (
             node.right.type === "LogicalExpression" &&
@@ -427,7 +427,7 @@ export default class ExpressionParser extends LValParser {
           ) {
             throw this.raise(
               node.right.start,
-              `Wrap right hand side of the expression in parentheses.`,
+              `Wrap right hand side of the expression in parenthesis.`,
             );
           }
         }
