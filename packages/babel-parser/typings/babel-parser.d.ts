@@ -89,35 +89,35 @@ export interface ParserOptions {
 }
 
 export type ParserPlugin =
-    'estree' |
-    'jsx' |
-    'flow' |
-    'flowComments' |
-    'typescript' |
-    'doExpressions' |
-    'objectRestSpread' |
+    'asyncGenerators' |
+    'bigInt' |
+    'classPrivateMethods' |
+    'classPrivateProperties' |
+    'classProperties' |
     'decorators' |
     'decorators-legacy' |
-    'classProperties' |
-    'classPrivateProperties' |
-    'classPrivateMethods' |
+    'doExpressions' |
+    'dynamicImport' |
+    'estree' |
     'exportDefaultFrom' |
     'exportNamespaceFrom' |
-    'asyncGenerators' |
+    'flow' |
+    'flowComments' |
     'functionBind' |
     'functionSent' |
-    'dynamicImport' |
-    'numericSeparator' |
-    'optionalChaining' |
     'importMeta' |
-    'bigInt' |
-    'optionalCatchBinding' |
-    'throwExpressions' |
-    'pipelineOperator' |
-    'nullishCoalescingOperator' |
-    'placeholders' |
+    'jsx' |
     'logicalAssignment' |
+    'nullishCoalescingOperator' |
+    'numericSeparator' |
+    'objectRestSpread' |
+    'optionalCatchBinding' |
+    'optionalChaining' |
     'partialApplication' |
+    'pipelineOperator' |
+    'placeholders' |
+    'throwExpressions' |
+    'typescript' |
     ParserPluginWithOptions;
 
 export type ParserPluginWithOptions =
