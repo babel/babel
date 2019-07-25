@@ -37,6 +37,12 @@ export interface ParserOptions {
     allowSuperOutsideMethod?: boolean;
 
     /**
+     * By default, exported identifiers must refer to a declared variable.
+     * Set this to true to allow export statements to reference undeclared variables.
+     */
+    allowUndeclaredExports?: boolean;
+
+    /**
      * Indicate the mode the code should be parsed in.
      * Can be one of "script", "module", or "unambiguous". Defaults to "script".
      * "unambiguous" will make @babel/parser attempt to guess, based on the presence
