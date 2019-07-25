@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 12,
+  "end": 14,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 12
+      "column": 14
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 12,
+    "end": 14,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 1,
-        "column": 12
+        "column": 14
       }
     },
     "sourceType": "script",
@@ -32,7 +32,7 @@
       {
         "type": "ExpressionStatement",
         "start": 0,
-        "end": 12,
+        "end": 14,
         "loc": {
           "start": {
             "line": 1,
@@ -40,13 +40,13 @@
           },
           "end": {
             "line": 1,
-            "column": 12
+            "column": 14
           }
         },
         "expression": {
           "type": "LogicalExpression",
           "start": 0,
-          "end": 11,
+          "end": 13,
           "loc": {
             "start": {
               "line": 1,
@@ -54,13 +54,13 @@
             },
             "end": {
               "line": 1,
-              "column": 11
+              "column": 13
             }
           },
           "left": {
-            "type": "LogicalExpression",
+            "type": "Identifier",
             "start": 0,
-            "end": 6,
+            "end": 1,
             "loc": {
               "start": {
                 "line": 1,
@@ -68,62 +68,66 @@
               },
               "end": {
                 "line": 1,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "operator": "??",
+          "right": {
+            "type": "LogicalExpression",
+            "start": 6,
+            "end": 12,
+            "loc": {
+              "start": {
+                "line": 1,
                 "column": 6
+              },
+              "end": {
+                "line": 1,
+                "column": 12
               }
             },
             "left": {
               "type": "Identifier",
-              "start": 0,
-              "end": 1,
+              "start": 6,
+              "end": 7,
               "loc": {
                 "start": {
-                  "line": 1,
-                  "column": 0
-                },
-                "end": {
-                  "line": 1,
-                  "column": 1
-                },
-                "identifierName": "a"
-              },
-              "name": "a"
-            },
-            "operator": "??",
-            "right": {
-              "type": "Identifier",
-              "start": 5,
-              "end": 6,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 5
-                },
-                "end": {
                   "line": 1,
                   "column": 6
+                },
+                "end": {
+                  "line": 1,
+                  "column": 7
                 },
                 "identifierName": "b"
               },
               "name": "b"
-            }
-          },
-          "operator": "||",
-          "right": {
-            "type": "Identifier",
-            "start": 10,
-            "end": 11,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 10
-              },
-              "end": {
-                "line": 1,
-                "column": 11
-              },
-              "identifierName": "c"
             },
-            "name": "c"
+            "operator": "||",
+            "right": {
+              "type": "Identifier",
+              "start": 11,
+              "end": 12,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 11
+                },
+                "end": {
+                  "line": 1,
+                  "column": 12
+                },
+                "identifierName": "c"
+              },
+              "name": "c"
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 5
+            }
           }
         }
       }

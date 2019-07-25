@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 12,
+  "end": 14,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 12
+      "column": 14
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 12,
+    "end": 14,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 1,
-        "column": 12
+        "column": 14
       }
     },
     "sourceType": "script",
@@ -32,7 +32,7 @@
       {
         "type": "ExpressionStatement",
         "start": 0,
-        "end": 12,
+        "end": 14,
         "loc": {
           "start": {
             "line": 1,
@@ -40,13 +40,13 @@
           },
           "end": {
             "line": 1,
-            "column": 12
+            "column": 14
           }
         },
         "expression": {
           "type": "LogicalExpression",
           "start": 0,
-          "end": 11,
+          "end": 13,
           "loc": {
             "start": {
               "line": 1,
@@ -54,7 +54,7 @@
             },
             "end": {
               "line": 1,
-              "column": 11
+              "column": 13
             }
           },
           "left": {
@@ -77,30 +77,30 @@
           "operator": "??",
           "right": {
             "type": "LogicalExpression",
-            "start": 5,
-            "end": 11,
+            "start": 6,
+            "end": 12,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 5
+                "column": 6
               },
               "end": {
                 "line": 1,
-                "column": 11
+                "column": 12
               }
             },
             "left": {
               "type": "Identifier",
-              "start": 5,
-              "end": 6,
+              "start": 6,
+              "end": 7,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 5
+                  "column": 6
                 },
                 "end": {
                   "line": 1,
-                  "column": 6
+                  "column": 7
                 },
                 "identifierName": "b"
               },
@@ -109,20 +109,24 @@
             "operator": "&&",
             "right": {
               "type": "Identifier",
-              "start": 10,
-              "end": 11,
+              "start": 11,
+              "end": 12,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 10
+                  "column": 11
                 },
                 "end": {
                   "line": 1,
-                  "column": 11
+                  "column": 12
                 },
                 "identifierName": "c"
               },
               "name": "c"
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 5
             }
           }
         }

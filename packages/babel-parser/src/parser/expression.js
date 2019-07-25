@@ -380,6 +380,18 @@ export default class ExpressionParser extends LValParser {
 
         node.right = this.parseExprOpRightExpr(op, prec, noIn);
 
+        if (op === tt.logicalOR) {
+          if (
+            left.type === "LogicalExpression" &&
+            left.operator === "??" &&
+            !(left.extra && left.extra.parenthesized)
+          ) {
+            throw this.raise(
+              left.start,
+              `Wrap left hand side of the expression in parentheses`,
+            );
+          }
+        }
         if (op === tt.nullishCoalescing) {
           if (
             left.type === "LogicalExpression" &&
@@ -387,7 +399,7 @@ export default class ExpressionParser extends LValParser {
             !(left.extra && left.extra.parenthesized)
           ) {
             throw this.raise(
-              this.state.start,
+              left.start,
               `Wrap left hand side of the expression in parentheses`,
             );
           } else if (
@@ -396,7 +408,7 @@ export default class ExpressionParser extends LValParser {
             !(node.right.extra && node.right.extra.parenthesized)
           ) {
             throw this.raise(
-              this.state.start,
+              node.right.start,
               `Wrap right hand side of the expression in parentheses.`,
             );
           }
