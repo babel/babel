@@ -1,4 +1,7 @@
 {
-  "plugins": ["nullishCoalescingOperator", "estree"],
+  "plugins": [
+    "nullishCoalescingOperator",
+    "estree"
+  ],
   "throws": "Wrap left hand side of the expression in parenthesis (1:0)"
 }
