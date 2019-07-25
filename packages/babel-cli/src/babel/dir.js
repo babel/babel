@@ -1,3 +1,5 @@
+// @flow
+
 import defaults from "lodash/defaults";
 import outputFileSync from "output-file-sync";
 import { sync as mkdirpSync } from "mkdirp";
@@ -6,11 +8,15 @@ import path from "path";
 import fs from "fs";
 
 import * as util from "./util";
+import { type CmdOptions } from "./options";
 
-export default async function({ cliOptions, babelOptions }) {
+export default async function({
+  cliOptions,
+  babelOptions,
+}: CmdOptions): Promise<void> {
   const filenames = cliOptions.filenames;
 
-  async function write(src, base) {
+  async function write(src: string, base: string): Promise<boolean> {
     let relative = path.relative(base, src);
 
     if (!util.isCompilableExtension(relative, cliOptions.extensions)) {
@@ -65,14 +71,14 @@ export default async function({ cliOptions, babelOptions }) {
     }
   }
 
-  function getDest(filename, base) {
+  function getDest(filename: string, base: string): string {
     if (cliOptions.relative) {
       return path.join(base, cliOptions.outDir, filename);
     }
     return path.join(cliOptions.outDir, filename);
   }
 
-  async function handleFile(src, base) {
+  async function handleFile(src: string, base: string): Promise<boolean> {
     const written = await write(src, base);
 
     if (!written && cliOptions.copyFiles) {
@@ -84,7 +90,7 @@ export default async function({ cliOptions, babelOptions }) {
     return written;
   }
 
-  async function handle(filenameOrDir) {
+  async function handle(filenameOrDir: string): Promise<number> {
     if (!fs.existsSync(filenameOrDir)) return 0;
 
     const stat = fs.statSync(filenameOrDir);
