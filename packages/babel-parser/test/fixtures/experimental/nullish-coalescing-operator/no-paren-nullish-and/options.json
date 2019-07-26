@@ -2,5 +2,5 @@
   "plugins": [
     "nullishCoalescingOperator"
   ],
-  "throws": "Wrap right hand side of the expression in parenthesis. (1:5)"
+  "throws": "Nullish coalescing operator(??) requires parens when mixing with logical operators (1:5)"
 }

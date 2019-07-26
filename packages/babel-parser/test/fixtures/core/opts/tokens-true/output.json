@@ -457,7 +457,7 @@
         "isAssign": false,
         "prefix": true,
         "postfix": false,
-        "binop": 9,
+        "binop": 10,
         "updateContext": null
       },
       "value": "+",

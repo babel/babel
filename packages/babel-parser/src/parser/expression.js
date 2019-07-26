@@ -380,35 +380,16 @@ export default class ExpressionParser extends LValParser {
 
         node.right = this.parseExprOpRightExpr(op, prec, noIn);
 
-        /* this check is needed because for operations like
-         * a ?? b || c
-         * a ?? b => This is considered as a logical expression in the ast tree
-         * c => Identifier
-         * so we need to check, only for || cases that if left is logical expression without paren
-         * then raise an error
-         */
-
-        if (op === tt.logicalOR) {
-          if (
-            left.type === "LogicalExpression" &&
-            left.operator === "??" &&
-            !(left.extra && left.extra.parenthesized)
-          ) {
-            throw this.raise(
-              left.start,
-              `Wrap left hand side of the expression in parenthesis`,
-            );
-          }
-        }
-        /* this check is for all && and ?? operators
+        /* this check is for all ?? operators
          * a ?? b && c for this example
          * b && c => This is considered as a logical expression in the ast tree
          * a => Identifier
-         * so for ?? operator we need to check in this case the right expression
+         * so for ?? operator we need to check in this case the right expression to have parenthesis
          * second case a && b ?? c
          * here a && b => This is considered as a logical expression in the ast tree
          * c => identifer
-         * so now here for ?? operator we need to check the left expression
+         * so now here for ?? operator we need to check the left expression to have parenthesis
+         * if the parenthesis is missing we raise an error and throw it
          */
         if (op === tt.nullishCoalescing) {
           if (
@@ -418,7 +399,7 @@ export default class ExpressionParser extends LValParser {
           ) {
             throw this.raise(
               left.start,
-              `Wrap left hand side of the expression in parenthesis`,
+              `Nullish coalescing operator(??) requires parens when mixing with logical operators`,
             );
           } else if (
             node.right.type === "LogicalExpression" &&
@@ -427,7 +408,7 @@ export default class ExpressionParser extends LValParser {
           ) {
             throw this.raise(
               node.right.start,
-              `Wrap right hand side of the expression in parenthesis.`,
+              `Nullish coalescing operator(??) requires parens when mixing with logical operators`,
             );
           }
         }
