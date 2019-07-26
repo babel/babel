@@ -236,7 +236,7 @@
           }
         },
         "expression": {
-          "type": "TSAsExpression",
+          "type": "BinaryExpression",
           "start": 49,
           "end": 66,
           "loc": {
@@ -249,10 +249,10 @@
               "column": 17
             }
           },
-          "expression": {
-            "type": "BinaryExpression",
+          "left": {
+            "type": "Identifier",
             "start": 49,
-            "end": 56,
+            "end": 50,
             "loc": {
               "start": {
                 "line": 3,
@@ -260,28 +260,28 @@
               },
               "end": {
                 "line": 3,
-                "column": 7
+                "column": 1
+              },
+              "identifierName": "x"
+            },
+            "name": "x"
+          },
+          "operator": "===",
+          "right": {
+            "type": "TSAsExpression",
+            "start": 55,
+            "end": 66,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 6
+              },
+              "end": {
+                "line": 3,
+                "column": 17
               }
             },
-            "left": {
-              "type": "Identifier",
-              "start": 49,
-              "end": 50,
-              "loc": {
-                "start": {
-                  "line": 3,
-                  "column": 0
-                },
-                "end": {
-                  "line": 3,
-                  "column": 1
-                },
-                "identifierName": "x"
-              },
-              "name": "x"
-            },
-            "operator": "===",
-            "right": {
+            "expression": {
               "type": "NumericLiteral",
               "start": 55,
               "end": 56,
@@ -300,20 +300,20 @@
                 "raw": "1"
               },
               "value": 1
-            }
-          },
-          "typeAnnotation": {
-            "type": "TSNumberKeyword",
-            "start": 60,
-            "end": 66,
-            "loc": {
-              "start": {
-                "line": 3,
-                "column": 11
-              },
-              "end": {
-                "line": 3,
-                "column": 17
+            },
+            "typeAnnotation": {
+              "type": "TSNumberKeyword",
+              "start": 60,
+              "end": 66,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 11
+                },
+                "end": {
+                  "line": 3,
+                  "column": 17
+                }
               }
             }
           }
