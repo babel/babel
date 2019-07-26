@@ -96,6 +96,18 @@ export function needsParens(node, parent, printStack) {
   if (t.isNewExpression(parent) && parent.callee === node) {
     if (isOrHasCallExpression(node)) return true;
   }
+  /* this check if for NullishCoalescing with LogicalOperators liks && and ||
+   * For example when someone creates an ast programmaticaly like this
+   * t.logicalExpression(
+   * "??",
+   *  t.logicalExpression("||", t.identifier("a"), t.identifier("b")),
+   *  t.identifier("c"),
+   *  );
+   * In the above case we should that AST is equivalent to writing a || b ?? c
+   * This is incorrect because NullishCoalescing when used with LogicalExpressions should have parenthesis
+   * The correct syntax is (a || b) ?? c, that is why we need parens in this case
+   */
+  if (t.isLogicalExpression(node) && parent.operator === "??") return true;
 
   return find(expandedParens, node, parent, printStack);
 }

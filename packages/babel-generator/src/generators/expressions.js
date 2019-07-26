@@ -227,10 +227,8 @@ export function BindExpression(node: Object) {
   this.print(node.callee, node);
 }
 
-export {
-  AssignmentExpression as BinaryExpression,
-  AssignmentExpression as LogicalExpression,
-};
+export { AssignmentExpression as BinaryExpression };
+export { AssignmentExpression as LogicalExpression };
 
 export function MemberExpression(node: Object) {
   this.print(node.object, node);

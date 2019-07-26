@@ -8,3 +8,5 @@ foo || bar;
 0 || function () {
   return alpha;
 };
+
+a ?? (b || c);
