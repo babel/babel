@@ -308,6 +308,7 @@ describe("programmatic generation", function() {
     const output = generate(nullishCoalesc).code;
     expect(output).toBe(`(a || b) ?? c`);
   });
+
   it("should add parenthesis when NullishCoalesing is used with &&", function() {
     const nullishCoalesc = t.logicalExpression(
       "??",
@@ -321,6 +322,7 @@ describe("programmatic generation", function() {
     const output = generate(nullishCoalesc).code;
     expect(output).toBe(`a ?? (b && c && d)`);
   });
+
   it("numeric member expression", function() {
     // Should not generate `0.foo`
     const mem = t.memberExpression(

@@ -96,6 +96,7 @@ export function needsParens(node, parent, printStack) {
   if (t.isNewExpression(parent) && parent.callee === node) {
     if (isOrHasCallExpression(node)) return true;
   }
+
   /* this check is for NullishCoalescing being used with LogicalOperators like && and ||
    * For example when someone creates an ast programmaticaly like this
    * t.logicalExpression(
