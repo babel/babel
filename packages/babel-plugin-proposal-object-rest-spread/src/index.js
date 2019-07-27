@@ -37,6 +37,17 @@ export default declare((api, opts) => {
     return foundRestElement;
   }
 
+  function hasObjectPatternRestElement(path) {
+    let foundRestElement = false;
+    visitRestElements(path, restElement => {
+      if (restElement.parentPath.isObjectPattern()) {
+        foundRestElement = true;
+        path.stop();
+      }
+    });
+    return foundRestElement;
+  }
+
   function visitRestElements(path, visitor) {
     path.traverse({
       Expression(path) {
@@ -163,9 +174,9 @@ export default declare((api, opts) => {
     ];
   }
 
-  function replaceRestElement(parentPath, paramPath, i, numParams) {
+  function replaceRestElement(parentPath, paramPath) {
     if (paramPath.isAssignmentPattern()) {
-      replaceRestElement(parentPath, paramPath.get("left"), i, numParams);
+      replaceRestElement(parentPath, paramPath.get("left"));
       return;
     }
 
@@ -173,7 +184,7 @@ export default declare((api, opts) => {
       const elements = paramPath.get("elements");
 
       for (let i = 0; i < elements.length; i++) {
-        replaceRestElement(parentPath, elements[i], i, elements.length);
+        replaceRestElement(parentPath, elements[i]);
       }
     }
 
@@ -200,7 +211,7 @@ export default declare((api, opts) => {
       Function(path) {
         const params = path.get("params");
         for (let i = params.length - 1; i >= 0; i--) {
-          replaceRestElement(params[i].parentPath, params[i], i, params.length);
+          replaceRestElement(params[i].parentPath, params[i]);
         }
       },
       // adapted from transform-destructuring/src/index.js#pushObjectRest
@@ -380,48 +391,77 @@ export default declare((api, opts) => {
         const leftPath = path.get("left");
         const left = node.left;
 
-        // for ({a, ...b} of []) {}
-        if (t.isObjectPattern(left) && hasRestElement(leftPath)) {
-          const temp = scope.generateUidIdentifier("ref");
+        if (hasObjectPatternRestElement(leftPath)) {
+          if (!t.isVariableDeclaration(left)) {
+            // for ({a, ...b} of []) {}
+            const temp = scope.generateUidIdentifier("ref");
 
-          node.left = t.variableDeclaration("var", [
-            t.variableDeclarator(temp),
-          ]);
+            node.left = t.variableDeclaration("var", [
+              t.variableDeclarator(temp),
+            ]);
 
-          path.ensureBlock();
+            path.ensureBlock();
 
-          if (node.body.body.length === 0 && path.isCompletionRecord()) {
+            if (node.body.body.length === 0 && path.isCompletionRecord()) {
+              node.body.body.unshift(
+                t.expressionStatement(scope.buildUndefinedNode()),
+              );
+            }
+
             node.body.body.unshift(
-              t.expressionStatement(scope.buildUndefinedNode()),
+              t.expressionStatement(
+                t.assignmentExpression("=", left, t.cloneNode(temp)),
+              ),
+            );
+          } else {
+            // for (var {a, ...b} of []) {}
+            const pattern = left.declarations[0].id;
+
+            const key = scope.generateUidIdentifier("ref");
+            node.left = t.variableDeclaration(left.kind, [
+              t.variableDeclarator(key, null),
+            ]);
+
+            path.ensureBlock();
+
+            node.body.body.unshift(
+              t.variableDeclaration(node.left.kind, [
+                t.variableDeclarator(pattern, t.cloneNode(key)),
+              ]),
             );
           }
+        }
+      },
+      // [{a, ...b}] = c;
+      ArrayPattern(path) {
+        const objectPatterns = [];
 
-          node.body.body.unshift(
-            t.expressionStatement(
-              t.assignmentExpression("=", left, t.cloneNode(temp)),
+        visitRestElements(path, path => {
+          if (!path.parentPath.isObjectPattern()) {
+            // Return early if the parent is not an ObjectPattern, but
+            // (for example) an ArrayPattern or Function, because that
+            // means this RestElement is an not an object property.
+            return;
+          }
+
+          const objectPattern = path.parentPath;
+
+          const uid = path.scope.generateUidIdentifier("ref");
+          objectPatterns.push(t.variableDeclarator(objectPattern.node, uid));
+
+          objectPattern.replaceWith(t.cloneNode(uid));
+          path.skip();
+        });
+
+        if (objectPatterns.length > 0) {
+          const statementPath = path.getStatementParent();
+          statementPath.insertAfter(
+            t.variableDeclaration(
+              statementPath.node.kind || "var",
+              objectPatterns,
             ),
           );
-
-          return;
         }
-
-        if (!t.isVariableDeclaration(left)) return;
-
-        const pattern = left.declarations[0].id;
-        if (!t.isObjectPattern(pattern)) return;
-
-        const key = scope.generateUidIdentifier("ref");
-        node.left = t.variableDeclaration(left.kind, [
-          t.variableDeclarator(key, null),
-        ]);
-
-        path.ensureBlock();
-
-        node.body.body.unshift(
-          t.variableDeclaration(node.left.kind, [
-            t.variableDeclarator(pattern, t.cloneNode(key)),
-          ]),
-        );
       },
       // var a = { ...b, ...c }
       ObjectExpression(path, file) {
