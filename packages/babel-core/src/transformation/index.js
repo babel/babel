@@ -1,6 +1,6 @@
 // @flow
 import traverse from "@babel/traverse";
-import type { SourceMap } from "convert-source-map";
+import typeof { SourceMap } from "convert-source-map";
 
 import type { ResolvedConfig, PluginPasses } from "../config";
 

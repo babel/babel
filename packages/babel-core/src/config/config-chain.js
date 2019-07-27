@@ -268,13 +268,11 @@ function babelrcLoadEnabled(
   });
 }
 
-const validateConfigFile = makeWeakCache(
-  (file: ConfigFile): ValidatedFile => ({
-    filepath: file.filepath,
-    dirname: file.dirname,
-    options: validate("configfile", file.options),
-  }),
-);
+const validateConfigFile = makeWeakCache((file: ConfigFile): ValidatedFile => ({
+  filepath: file.filepath,
+  dirname: file.dirname,
+  options: validate("configfile", file.options),
+}));
 
 const validateBabelrcFile = makeWeakCache(
   (file: ConfigFile): ValidatedFile => ({
@@ -284,13 +282,11 @@ const validateBabelrcFile = makeWeakCache(
   }),
 );
 
-const validateExtendFile = makeWeakCache(
-  (file: ConfigFile): ValidatedFile => ({
-    filepath: file.filepath,
-    dirname: file.dirname,
-    options: validate("extendsfile", file.options),
-  }),
-);
+const validateExtendFile = makeWeakCache((file: ConfigFile): ValidatedFile => ({
+  filepath: file.filepath,
+  dirname: file.dirname,
+  options: validate("extendsfile", file.options),
+}));
 
 /**
  * Build a config chain for just the programmatic options passed into Babel.
@@ -549,7 +545,7 @@ function normalizeOptions(opts: ValidatedOptions): ValidatedOptions {
 
   // "sourceMap" is just aliased to sourceMap, so copy it over as
   // we merge the options together.
-  if (options.hasOwnProperty("sourceMap")) {
+  if (Object.prototype.hasOwnProperty.call(options, "sourceMap")) {
     options.sourceMaps = options.sourceMap;
     delete options.sourceMap;
   }

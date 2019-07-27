@@ -314,9 +314,7 @@ export default declare((api, options, dirname) => {
             node.callee = t.memberExpression(
               t.callExpression(
                 this.addDefaultImport(
-                  `${moduleName}/${corejsRoot}/instance/${
-                    InstanceProperties[propertyName].path
-                  }`,
+                  `${moduleName}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
                   `${propertyName}InstanceProperty`,
                 ),
                 [context2],
@@ -407,9 +405,7 @@ export default declare((api, options, dirname) => {
               path.replaceWith(
                 t.callExpression(
                   this.addDefaultImport(
-                    `${moduleName}/${corejsRoot}/instance/${
-                      InstanceProperties[propertyName].path
-                    }`,
+                    `${moduleName}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
                     `${propertyName}InstanceProperty`,
                   ),
                   [object],
@@ -421,9 +417,7 @@ export default declare((api, options, dirname) => {
 
           path.replaceWith(
             this.addDefaultImport(
-              `${modulePath}/${corejsRoot}/${
-                StaticProperties[objectName][propertyName].path
-              }`,
+              `${modulePath}/${corejsRoot}/${StaticProperties[objectName][propertyName].path}`,
               `${objectName}$${propertyName}`,
             ),
           );
