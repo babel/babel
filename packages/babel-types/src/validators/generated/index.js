@@ -2531,6 +2531,34 @@ export function isBigIntLiteral(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
+export function isRecordExpression(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "RecordExpression") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isTupleExpression(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "TupleExpression") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTSParameterProperty(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -3460,6 +3488,8 @@ export function isExpression(node: ?Object, opts?: Object): boolean {
     "Import" === nodeType ||
     "DoExpression" === nodeType ||
     "BigIntLiteral" === nodeType ||
+    "RecordExpression" === nodeType ||
+    "TupleExpression" === nodeType ||
     "TSAsExpression" === nodeType ||
     "TSTypeAssertion" === nodeType ||
     "TSNonNullExpression" === nodeType ||

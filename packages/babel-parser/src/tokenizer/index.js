@@ -405,6 +405,27 @@ export default class Tokenizer extends LocationParser {
     }
 
     if (
+      this.getPluginOption("recordAndTuple", "hash") &&
+      (next === charCodes.leftCurlyBrace ||
+        next === charCodes.leftSquareBracket)
+    ) {
+      if (next === charCodes.leftCurlyBrace) {
+        // #{
+        this.finishToken(tt.braceHashL);
+      } else {
+        // #[
+        this.finishToken(tt.bracketHashL);
+      }
+      this.state.pos += 2;
+    } else if (
+      (this.hasPlugin("classPrivateProperties") ||
+        this.hasPlugin("classPrivateMethods")) &&
+      this.state.classLevel > 0
+    ) {
+      ++this.state.pos;
+      this.finishToken(tt.hash);
+      return;
+    } else if (
       this.hasPlugin("classPrivateProperties") ||
       this.hasPlugin("classPrivateMethods") ||
       this.getPluginOption("pipelineOperator", "proposal") === "smart"
@@ -453,11 +474,11 @@ export default class Tokenizer extends LocationParser {
   readToken_interpreter(): boolean {
     if (this.state.pos !== 0 || this.length < 2) return false;
 
+    let ch = this.input.charCodeAt(this.state.pos + 1);
+    if (ch !== charCodes.exclamationMark) return false;
+
     const start = this.state.pos;
     this.state.pos += 1;
-
-    let ch = this.input.charCodeAt(this.state.pos);
-    if (ch !== charCodes.exclamationMark) return false;
 
     while (!isNewLine(ch) && ++this.state.pos < this.length) {
       ch = this.input.charCodeAt(this.state.pos);
@@ -512,6 +533,23 @@ export default class Tokenizer extends LocationParser {
       // '|>'
       if (next === charCodes.greaterThan) {
         this.finishOp(tt.pipeline, 2);
+        return;
+      }
+      // '|}'
+      if (
+        this.getPluginOption("recordAndTuple", "bar") &&
+        next === charCodes.rightCurlyBrace
+      ) {
+        this.finishOp(tt.braceBarR, 2);
+        return;
+      }
+
+      // '|]'
+      if (
+        this.getPluginOption("recordAndTuple", "bar") &&
+        next === charCodes.rightSquareBracket
+      ) {
+        this.finishOp(tt.bracketBarR, 2);
         return;
       }
     }
@@ -682,16 +720,34 @@ export default class Tokenizer extends LocationParser {
         this.finishToken(tt.comma);
         return;
       case charCodes.leftSquareBracket:
-        ++this.state.pos;
-        this.finishToken(tt.bracketL);
+        if (
+          this.getPluginOption("recordAndTuple", "bar") &&
+          this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
+        ) {
+          // [|
+          this.finishToken(tt.bracketBarL);
+          this.state.pos += 2;
+        } else {
+          ++this.state.pos;
+          this.finishToken(tt.bracketL);
+        }
         return;
       case charCodes.rightSquareBracket:
         ++this.state.pos;
         this.finishToken(tt.bracketR);
         return;
       case charCodes.leftCurlyBrace:
-        ++this.state.pos;
-        this.finishToken(tt.braceL);
+        if (
+          this.getPluginOption("recordAndTuple", "bar") &&
+          this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
+        ) {
+          // {|
+          this.finishToken(tt.braceBarL);
+          this.state.pos += 2;
+        } else {
+          ++this.state.pos;
+          this.finishToken(tt.braceL);
+        }
         return;
       case charCodes.rightCurlyBrace:
         ++this.state.pos;

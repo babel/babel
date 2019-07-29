@@ -106,6 +106,56 @@ export function ArrayExpression(node: Object) {
 
 export { ArrayExpression as ArrayPattern };
 
+export function RecordExpression(node: Object) {
+  const props = node.properties;
+
+  if (node.syntaxType === "bar") {
+    this.token("{|");
+  } else {
+    this.token("#{");
+  }
+  this.printInnerComments(node);
+
+  if (props.length) {
+    this.space();
+    this.printList(props, node, { indent: true, statement: true });
+    this.space();
+  }
+
+  if (node.syntaxType === "bar") {
+    this.token("|}");
+  } else {
+    this.token("}");
+  }
+}
+
+export function TupleExpression(node: Object) {
+  const elems = node.elements;
+  const len = elems.length;
+
+  if (node.syntaxType === "bar") {
+    this.token("[|");
+  } else {
+    this.token("#[");
+  }
+  this.printInnerComments(node);
+
+  for (let i = 0; i < elems.length; i++) {
+    const elem = elems[i];
+    if (elem) {
+      if (i > 0) this.space();
+      this.print(elem, node);
+      if (i < len - 1) this.token(",");
+    }
+  }
+
+  if (node.syntaxType === "bar") {
+    this.token("|]");
+  } else {
+    this.token("]");
+  }
+}
+
 export function RegExpLiteral(node: Object) {
   this.word(`/${node.pattern}/${node.flags}`);
 }

@@ -58,6 +58,8 @@ These are the core @babel/parser (babylon) AST node types.
     - [ObjectMember](#objectmember)
       - [ObjectProperty](#objectproperty)
       - [ObjectMethod](#objectmethod)
+  - [RecordExpression](#recordexpression)
+  - [TupleExpression](#tupleexpression)
   - [FunctionExpression](#functionexpression)
   - [Unary operations](#unary-operations)
     - [UnaryExpression](#unaryexpression)
@@ -716,6 +718,26 @@ interface ObjectProperty <: ObjectMember {
 interface ObjectMethod <: ObjectMember, Function {
   type: "ObjectMethod";
   kind: "get" | "set" | "method";
+}
+```
+
+## RecordExpression
+
+```js
+interface RecordExpression <: Expression {
+  type: "RecordExpression";
+  syntaxType: string;
+  properties: [ ObjectProperty | ObjectMethod | SpreadElement ];
+}
+```
+
+## TupleExpression
+
+```js
+interface TupleExpression <: Expression {
+  type: "TupleExpression";
+  syntaxType: string;
+  elements: [ Expression | SpreadElement | null ];
 }
 ```
 

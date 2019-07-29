@@ -389,9 +389,19 @@ export type ArrayExpression = NodeBase & {
   elements: $ReadOnlyArray<?(Expression | SpreadElement)>,
 };
 
+export type TupleExpression = NodeBase & {
+  type: "TupleExpression",
+  elements: $ReadOnlyArray<?(Expression | SpreadElement)>,
+};
+
 export type ObjectExpression = NodeBase & {
   type: "ObjectExpression",
   properties: $ReadOnlyArray<ObjectProperty | ObjectMethod | SpreadElement>,
+};
+
+export type RecordExpression = NodeBase & {
+  type: "RecordExpression",
+  properties: $ReadOnlyArray<ObjectProperty | SpreadElement>,
 };
 
 export type ObjectOrClassMember = ClassMethod | ClassProperty | ObjectMember;
