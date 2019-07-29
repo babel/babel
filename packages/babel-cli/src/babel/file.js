@@ -103,24 +103,22 @@ export default async function({
   }
 
   function readStdin(): Promise<string> {
-    return new Promise(
-      (resolve: Function, reject: Function): void => {
-        let code = "";
+    return new Promise((resolve: Function, reject: Function): void => {
+      let code = "";
 
-        process.stdin.setEncoding("utf8");
+      process.stdin.setEncoding("utf8");
 
-        process.stdin.on("readable", function() {
-          const chunk = process.stdin.read();
-          // $FlowIgnore
-          if (chunk !== null) code += chunk;
-        });
+      process.stdin.on("readable", function() {
+        const chunk = process.stdin.read();
+        // $FlowIgnore
+        if (chunk !== null) code += chunk;
+      });
 
-        process.stdin.on("end", function() {
-          resolve(code);
-        });
-        process.stdin.on("error", reject);
-      },
-    );
+      process.stdin.on("end", function() {
+        resolve(code);
+      });
+      process.stdin.on("error", reject);
+    });
   }
 
   async function stdin(): Promise<void> {
