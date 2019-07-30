@@ -216,6 +216,7 @@ export default async function({
       const chokidar = util.requireChokidar();
       chokidar
         .watch(filenames, {
+          disableGlobbing: true,
           persistent: true,
           ignoreInitial: true,
           awaitWriteFinish: {
