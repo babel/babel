@@ -215,7 +215,7 @@ export const InstanceProperties: ObjectMap<string[]> = {
   repeat: ["es.string.repeat"],
   replace: ["es.string.replace", "es.regexp.exec"],
   replaceAll: ["esnext.string.replace-all"],
-  reverse: ["es.string.reverse"],
+  reverse: ["es.array.reverse"],
   search: ["es.string.search", "es.regexp.exec"],
   slice: ["es.array.slice"],
   small: ["es.string.small"],
