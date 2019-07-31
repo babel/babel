@@ -32,7 +32,7 @@ export default function populatePlaceholders(
     });
   }
 
-  // Process in reverse order to AST mutation doesn't change indices that
+  // Process in reverse order so AST mutation doesn't change indices that
   // will be needed for later calls to `placeholder.resolve()`.
   metadata.placeholders
     .slice()
