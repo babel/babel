@@ -164,21 +164,21 @@ export default async function({
 
     const results = await Promise.all(
       _filenames.map(async function(filename: string): Promise<Object> {
-        let sourceFilename = filename;
+        let sourceFileName = filename;
         if (cliOptions.outFile) {
-          sourceFilename = path.relative(
+          sourceFileName = path.relative(
             path.dirname(cliOptions.outFile),
-            sourceFilename,
+            sourceFileName,
           );
         }
-        sourceFilename = slash(sourceFilename);
+        sourceFileName = slash(sourceFileName);
 
         try {
           return await util.compile(
             filename,
             defaults(
               {
-                sourceFileName: sourceFilename,
+                sourceFileName,
                 // Since we're compiling everything to be merged together,
                 // "inline" applies to the final output file, but not to the individual
                 // files being concatenated.

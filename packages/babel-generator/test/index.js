@@ -25,7 +25,7 @@ describe("generation", function() {
     };
     const parsed = Object.keys(sources).reduce(function(_parsed, filename) {
       _parsed[filename] = parse(sources[filename], {
-        sourceFilename: filename,
+        sourceFileName: filename,
       });
       return _parsed;
     }, {});

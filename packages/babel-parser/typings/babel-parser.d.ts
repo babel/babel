@@ -55,7 +55,7 @@ export interface ParserOptions {
      * Correlate output AST nodes with their source filename.
      * Useful when generating code and source maps from the ASTs of multiple input files.
      */
-    sourceFilename?: string;
+    sourceFileName?: string;
 
     /**
      * By default, the first line of code parsed is treated as line 1.
