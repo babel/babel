@@ -18,6 +18,61 @@ function addCompletionRecords(path, paths) {
   return paths;
 }
 
+function completionRecordForSwitch(cases, paths) {
+  let isLastCaseWithConsequent = true;
+
+  for (let i = cases.length - 1; i >= 0; i--) {
+    const switchCase = cases[i];
+    const consequent = switchCase.get("consequent");
+
+    let breakStatement;
+    findBreak: for (const statement of consequent) {
+      if (statement.isBlockStatement()) {
+        for (const statementInBlock of statement.get("body")) {
+          if (statementInBlock.isBreakStatement()) {
+            breakStatement = statementInBlock;
+            break findBreak;
+          }
+        }
+      } else if (statement.isBreakStatement()) {
+        breakStatement = statement;
+        break;
+      }
+    }
+
+    if (breakStatement) {
+      while (
+        breakStatement.key === 0 &&
+        breakStatement.parentPath.isBlockStatement()
+      ) {
+        breakStatement = breakStatement.parentPath;
+      }
+
+      const prevSibling = breakStatement.getPrevSibling();
+      if (
+        breakStatement.key > 0 &&
+        (prevSibling.isExpressionStatement() || prevSibling.isBlockStatement())
+      ) {
+        paths = addCompletionRecords(prevSibling, paths);
+        breakStatement.remove();
+      } else {
+        breakStatement.replaceWith(breakStatement.scope.buildUndefinedNode());
+        paths = addCompletionRecords(breakStatement, paths);
+      }
+    } else if (isLastCaseWithConsequent) {
+      const statementFinder = statement =>
+        !statement.isBlockStatement() ||
+        statement.get("body").some(statementFinder);
+      const hasConsequent = consequent.some(statementFinder);
+      if (hasConsequent) {
+        paths = addCompletionRecords(consequent[consequent.length - 1], paths);
+        isLastCaseWithConsequent = false;
+      }
+    }
+  }
+  return paths;
+}
+
 export function getCompletionRecords(): NodePath[] {
   let paths = [];
 
@@ -35,6 +90,8 @@ export function getCompletionRecords(): NodePath[] {
     paths = addCompletionRecords(this.get("handler"), paths);
   } else if (this.isCatchClause()) {
     paths = addCompletionRecords(this.get("body"), paths);
+  } else if (this.isSwitchStatement()) {
+    paths = completionRecordForSwitch(this.get("cases"), paths);
   } else {
     paths.push(this);
   }
