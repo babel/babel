@@ -490,12 +490,7 @@ export default class Scope {
   }
 
   buildUndefinedNode() {
-    if (this.hasBinding("undefined")) {
-      return t.unaryExpression("void", t.numericLiteral(0), true);
-    } else {
-      // eslint-disable-next-line @babel/development/no-undefined-identifier
-      return t.identifier("undefined");
-    }
+    return t.unaryExpression("void", t.numericLiteral(0), true);
   }
 
   registerConstantViolation(path: NodePath) {
