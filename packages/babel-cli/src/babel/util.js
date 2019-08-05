@@ -20,10 +20,8 @@ export function readdir(
   return readdirRecursive(dirname, (filename, _index, currentDirectory) => {
     const stat = fs.statSync(path.join(currentDirectory, filename));
 
-    if (stat.isDirectory()) return true;
-
     return (
-      (includeDotfiles || filename[0] !== ".") && (!filter || filter(filename))
+      (includeDotfiles || filename[0] !== ".") && (stat.isDirectory() || !filter || filter(filename))
     );
   });
 }
