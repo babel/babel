@@ -237,15 +237,18 @@ export default {
 
     const replacement = decoratedClassToExpression(decl);
     if (replacement) {
-      path.replaceWithMultiple([
-        replacement,
+      path.replaceWith(replacement);
+      path.insertAfter(
         t.exportNamedDeclaration(null, [
           t.exportSpecifier(
             t.cloneNode(replacement.declarations[0].id),
             t.identifier("default"),
           ),
         ]),
-      ]);
+      );
+      if (!decl.node.id) {
+        path.scope.registerDeclaration(path.get("declarations.0"));
+      }
     }
   },
   ClassDeclaration(path) {

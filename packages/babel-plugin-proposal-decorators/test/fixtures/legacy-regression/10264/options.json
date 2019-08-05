@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "transform-typescript",
+    [ "proposal-decorators", { "legacy": true } ]
+  ]
+}
