@@ -21,7 +21,8 @@ export function readdir(
     const stat = fs.statSync(path.join(currentDirectory, filename));
 
     return (
-      (includeDotfiles || filename[0] !== ".") && (stat.isDirectory() || !filter || filter(filename))
+      (includeDotfiles || filename[0] !== ".") &&
+      (stat.isDirectory() || !filter || filter(filename))
     );
   });
 }
