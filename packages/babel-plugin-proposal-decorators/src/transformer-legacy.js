@@ -237,7 +237,7 @@ export default {
 
     const replacement = decoratedClassToExpression(decl);
     if (replacement) {
-      path.replaceWithMultiple([
+      const [varDeclPath] = path.replaceWithMultiple([
         replacement,
         t.exportNamedDeclaration(null, [
           t.exportSpecifier(
@@ -246,6 +246,10 @@ export default {
           ),
         ]),
       ]);
+
+      if (!decl.node.id) {
+        path.scope.registerDeclaration(varDeclPath);
+      }
     }
   },
   ClassDeclaration(path) {
