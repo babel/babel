@@ -47,15 +47,6 @@ helpers.jsx = helper("7.0.0-beta.0")`
         children: void 0,
       };
     }
-    if (props && defaultProps) {
-      for (var propName in defaultProps) {
-        if (props[propName] === void 0) {
-          props[propName] = defaultProps[propName];
-        }
-      }
-    } else if (!props) {
-      props = defaultProps || {};
-    }
 
     if (childrenLength === 1) {
       props.children = children;
@@ -65,6 +56,16 @@ helpers.jsx = helper("7.0.0-beta.0")`
         childArray[i] = arguments[i + 3];
       }
       props.children = childArray;
+    }
+
+    if (props && defaultProps) {
+      for (var propName in defaultProps) {
+        if (props[propName] === void 0) {
+          props[propName] = defaultProps[propName];
+        }
+      }
+    } else if (!props) {
+      props = defaultProps || {};
     }
 
     return {
@@ -410,7 +411,7 @@ helpers.objectSpread2 = helper("7.5.0")`
   import defineProperty from "defineProperty";
 
   // This function is different to "Reflect.ownKeys". The enumerableOnly
-  // filters on symbol properties only. Returned string properties are always 
+  // filters on symbol properties only. Returned string properties are always
   // enumerable. It is good to use in objectSpread.
 
   function ownKeys(object, enumerableOnly) {
