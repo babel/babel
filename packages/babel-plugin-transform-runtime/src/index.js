@@ -1,4 +1,5 @@
 import path from "path";
+import fs from "fs";
 import resolve from "resolve";
 import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
@@ -6,7 +7,7 @@ import { types as t } from "@babel/core";
 
 import getCoreJS2Definitions from "./runtime-corejs2-definitions";
 import getCoreJS3Definitions from "./runtime-corejs3-definitions";
-import { typeAnnotationToString } from "./helpers";
+import { typeAnnotationToString, verifyRuntimeVersion } from "./helpers";
 
 function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
   try {
@@ -25,6 +26,30 @@ function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
       },
     );
   }
+}
+
+function resolveRuntimeVersion(
+  moduleName: string,
+  modulePath: string,
+  dirname: string,
+) {
+  try {
+    const runtimeDir = path.dirname(
+      resolve.sync(`${modulePath}/package.json`, {
+        basedir: dirname,
+      }),
+    );
+    const pkgFilename = path.resolve(runtimeDir, "../../../package.json");
+    const pkg = JSON.parse(fs.readFileSync(pkgFilename, "utf8"));
+
+    return (
+      pkg.dependencies?.[moduleName] ||
+      pkg.devDependencies?.[moduleName] ||
+      pkg.peerDependencies?.[moduleName]
+    );
+  } catch {}
+
+  return null;
 }
 
 function supportsStaticESM(caller) {
@@ -188,6 +213,13 @@ export default declare((api, options, dirname) => {
       path.resolve(dirname, absoluteRuntime === true ? "." : absoluteRuntime),
     );
   }
+
+  verifyRuntimeVersion(
+    options,
+    moduleName,
+    runtimeVersion,
+    resolveRuntimeVersion(moduleName, modulePath, dirname),
+  );
 
   return {
     name: "transform-runtime",

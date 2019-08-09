@@ -77,6 +77,7 @@ module.exports = function(api) {
         "@babel/proposal-object-rest-spread",
         { useBuiltIns: true, loose: true },
       ],
+      "@babel/proposal-optional-chaining",
 
       // Explicitly use the lazy version of CommonJS modules.
       convertESM ? ["@babel/transform-modules-commonjs", { lazy: true }] : null,
