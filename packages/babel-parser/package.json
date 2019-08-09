@@ -35,5 +35,8 @@
   },
   "bin": {
     "parser": "./bin/babel-parser.js"
+  },
+  "dependencies": {
+    "@babel/types": "^7.5.5"
   }
 }
