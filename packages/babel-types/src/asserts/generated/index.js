@@ -8,9 +8,8 @@ import is from "../../validators/is";
 function assert(type: string, node: Object, opts?: Object): void {
   if (!is(type, node, opts)) {
     throw new Error(
-      `Expected type "${type}" with option ${JSON.stringify(
-        (opts: any),
-      )}, but instead got "${node.type}".`,
+      `Expected type "${type}" with option ${JSON.stringify((opts: any))}, ` +
+        `but instead got "${node.type}".`,
     );
   }
 }
