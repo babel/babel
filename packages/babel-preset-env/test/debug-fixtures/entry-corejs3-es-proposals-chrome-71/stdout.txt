@@ -88,6 +88,7 @@ Using polyfills with `entry` option:
   esnext.set.union { "chrome":"71" }
   esnext.string.at { "chrome":"71" }
   esnext.string.code-points { "chrome":"71" }
+  esnext.string.match-all { "chrome":"71" }
   esnext.string.replace-all { "chrome":"71" }
   esnext.symbol.dispose { "chrome":"71" }
   esnext.symbol.observable { "chrome":"71" }
@@ -99,7 +100,6 @@ Using polyfills with `entry` option:
   esnext.weak-set.delete-all { "chrome":"71" }
   esnext.weak-set.from { "chrome":"71" }
   esnext.weak-set.of { "chrome":"71" }
-  esnext.string.match-all { "chrome":"71" }
 
 [<CWD>/src/in.js] Based on your targets, regenerator-runtime import excluded.
 Successfully compiled 1 file with Babel.
