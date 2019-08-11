@@ -1,11 +1,9 @@
 var temporalUndefined = require("./temporalUndefined");
 
+var tdz = require("./tdz");
+
 function _temporalRef(val, name) {
-  if (val === temporalUndefined) {
-    throw new ReferenceError(name + " is not defined - temporal dead zone");
-  } else {
-    return val;
-  }
+  return val === temporalUndefined ? tdz(name) : val;
 }
 
 module.exports = _temporalRef;

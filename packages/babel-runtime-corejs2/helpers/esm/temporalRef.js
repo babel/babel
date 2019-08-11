@@ -1,8 +1,5 @@
 import undef from "./temporalUndefined";
+import err from "./tdz";
 export default function _temporalRef(val, name) {
-  if (val === undef) {
-    throw new ReferenceError(name + " is not defined - temporal dead zone");
-  } else {
-    return val;
-  }
+  return val === undef ? err(name) : val;
 }
