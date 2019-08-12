@@ -141,11 +141,14 @@ export default function get(entryLoc): Array<Suite> {
       const taskOptsLoc = resolve(taskDir + "/options");
       if (taskOptsLoc) extend(taskOpts, require(taskOptsLoc));
 
+      const taskLogLoc = resolve(taskDir + "/expected-log.txt");
+
       const test = {
         optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
         title: humanize(taskName, true),
         disabled: taskName[0] === ".",
         options: taskOpts,
+        expectedLog: taskLogLoc ? readFile(taskLogLoc) : null,
         exec: {
           loc: execLoc,
           code: readFile(execLoc),
@@ -221,6 +224,12 @@ export default function get(entryLoc): Array<Suite> {
             "Test cannot throw and also return sourcemaps: " + sourceMapLoc,
           );
         }
+      }
+
+      if (test.exec.code && test.expectedLog) {
+        throw new Error(
+          "Test cannot have logs and also be executed: " + taskLogLoc,
+        );
       }
     }
   }

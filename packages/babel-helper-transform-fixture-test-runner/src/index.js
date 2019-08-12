@@ -131,11 +131,14 @@ function wrapPackagesArray(type, names, optionsDir) {
 }
 
 function run(task) {
-  const actual = task.actual;
-  const expected = task.expect;
-  const exec = task.exec;
-  const opts = task.options;
-  const optionsDir = task.optionsDir;
+  const {
+    actual,
+    expect: expected,
+    exec,
+    options: opts,
+    optionsDir,
+    expectedLog,
+  } = task;
 
   function getOpts(self) {
     const newOpts = merge(
@@ -194,11 +197,24 @@ function run(task) {
   let actualCode = actual.code;
   const expectCode = expected.code;
   if (!execCode || actualCode) {
+    let actualLogs = "";
+    if (expectedLog !== null) {
+      jest.spyOn(console, "log").mockImplementation(msg => {
+        actualLogs += `>>>>>> [console.log] <<<<<<\n${msg}\n\n`;
+      });
+      jest.spyOn(console, "warn").mockImplementation(msg => {
+        actualLogs += `>>>>>> [console.warn] <<<<<<\n${msg}\n\n`;
+      });
+    }
+
     result = babel.transform(actualCode, getOpts(actual));
+
     const expectedCode = result.code.replace(
       escapeRegExp(path.resolve(__dirname, "../../../")),
       "<CWD>",
     );
+
+    if (expectedLog !== null) expect(actualLogs.trim()).toBe(expectedLog);
 
     checkDuplicatedNodes(babel, result.ast);
     if (
