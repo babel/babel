@@ -1,0 +1,14 @@
+>>>>>> [console.warn] <<<<<<
+The installed version of "@babel/runtime" (^7.3.0) is greater than the version specified in "@babel/transform-runtime"'s options (7.2.0). This difference won't cause any problem in runtime functionality, but it will make your compiled code larger since Babel can't rely on some new or modified helpers to be present in the installed "@babel/runtime". For this reason, some helpers will be inlined in your code as if you weren't using "@babel/plugin-transform-runtime", leadng to bigger bundles.
+To fix this problem, you can specify the correct version in "@babel/transform-runtime"'s options:
+
+    {
+      "plugins": [
+        [
+          "@babel/plugin-transform-runtime",
+          {
+            "version": "7.3.0"
+          }
+        ]
+      ]
+    }
