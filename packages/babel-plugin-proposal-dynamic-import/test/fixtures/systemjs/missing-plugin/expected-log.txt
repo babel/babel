@@ -1,0 +1,4 @@
+>>>>>> [console.warn] <<<<<<
+WARNING: Dynamic import() transformation must be enabled using the
+         @babel/plugin-proposal-dynamic-import plugin. Babel 8 will
+         no longer transform import() without using that plugin.
