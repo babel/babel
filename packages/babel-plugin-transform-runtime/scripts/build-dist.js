@@ -153,7 +153,14 @@ function buildHelper(
   return babel.transformFromAst(tree, null, {
     presets: [[require("@babel/preset-env"), { modules: false }]],
     plugins: [
-      [transformRuntime, { corejs, useESModules: esm }],
+      [
+        transformRuntime,
+        {
+          corejs,
+          useESModules: esm,
+          version: require("@babel/runtime/package.json").version,
+        },
+      ],
       buildRuntimeRewritePlugin(
         runtimeName,
         path.relative(path.dirname(helperFilename), pkgDirname),
