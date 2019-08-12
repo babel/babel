@@ -494,6 +494,7 @@ defineType("TSTypeParameterDeclaration", {
 });
 
 defineType("TSTypeParameter", {
+  builder: ["constraint", "default", "name"],
   visitor: ["constraint", "default"],
   fields: {
     name: {
