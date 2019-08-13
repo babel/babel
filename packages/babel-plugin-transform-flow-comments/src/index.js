@@ -33,31 +33,45 @@ export default declare(api => {
     path.remove();
   }
 
-  function attachComment(path, comment) {
-    let attach = path.getPrevSibling();
-    let where = "trailing";
-    if (!attach.node) {
-      attach = path.getNextSibling();
+  function attachComment({
+    ofPath,
+    toPath,
+    where = "trailing",
+    optional = false,
+    comment = generateComment(ofPath, optional),
+    keepType = false,
+  }) {
+    if (!toPath || !toPath.node) {
+      toPath = ofPath.getPrevSibling();
+      where = "trailing";
+    }
+    if (!toPath.node) {
+      toPath = ofPath.getNextSibling();
       where = "leading";
     }
-    if (!attach.node) {
-      attach = path.parentPath;
+    if (!toPath.node) {
+      toPath = ofPath.parentPath;
       where = "inner";
     }
-    removeTypeAnnotation(path);
-    attach.addComment(where, comment);
+    if (ofPath && !keepType) {
+      removeTypeAnnotation(ofPath);
+    }
+    toPath.addComment(where, comment);
   }
 
-  function wrapInFlowComment(path, parent) {
-    attachComment(path, generateComment(path, parent));
+  function wrapInFlowComment(path) {
+    attachComment({
+      ofPath: path,
+      comment: generateComment(path, path.parent.optional),
+    });
   }
 
-  function generateComment(path, parent) {
+  function generateComment(path, optional) {
     let comment = path
       .getSource()
       .replace(/\*-\//g, "*-ESCAPED/")
       .replace(/\*\//g, "*-/");
-    if (parent && parent.optional) comment = "?" + comment;
+    if (optional) comment = "?" + comment;
     if (comment[0] !== ":") comment = ":: " + comment;
     return comment;
   }
@@ -73,28 +87,32 @@ export default declare(api => {
     visitor: {
       TypeCastExpression(path) {
         const { node } = path;
-        path
-          .get("expression")
-          .addComment("trailing", generateComment(path.get("typeAnnotation")));
+        attachComment({
+          ofPath: path.get("typeAnnotation"),
+          toPath: path.get("expression"),
+          keepType: true,
+        });
         path.replaceWith(t.parenthesizedExpression(node.expression));
       },
 
       // support function a(b?) {}
       Identifier(path) {
-        if (path.parentPath.isFlow()) {
-          return;
-        }
-
+        if (path.parentPath.isFlow()) return;
         const { node } = path;
         if (node.typeAnnotation) {
-          const typeAnnotation = path.get("typeAnnotation");
-          path.addComment("trailing", generateComment(typeAnnotation, node));
-          removeTypeAnnotation(typeAnnotation);
+          attachComment({
+            ofPath: path.get("typeAnnotation"),
+            toPath: path,
+            optional: node.optional || node.typeAnnotation.optional,
+          });
           if (node.optional) {
             node.optional = false;
           }
         } else if (node.optional) {
-          path.addComment("trailing", ":: ?");
+          attachComment({
+            toPath: path,
+            comment: ":: ?",
+          });
           node.optional = false;
         }
       },
@@ -112,58 +130,51 @@ export default declare(api => {
       Function(path) {
         if (path.isDeclareFunction()) return;
         const { node } = path;
-        if (node.returnType) {
-          const returnType = path.get("returnType");
-          const typeAnnotation = returnType.get("typeAnnotation");
-          const block = path.get("body");
-          block.addComment(
-            "leading",
-            generateComment(returnType, typeAnnotation.node),
-          );
-          removeTypeAnnotation(returnType);
-        }
         if (node.typeParameters) {
-          const typeParameters = path.get("typeParameters");
-          const id = path.get("id");
-          id.addComment(
-            "trailing",
-            generateComment(typeParameters, typeParameters.node),
-          );
-          removeTypeAnnotation(typeParameters);
+          attachComment({
+            ofPath: path.get("typeParameters"),
+            toPath: path.get("id"),
+            optional: node.typeParameters.optional,
+          });
+        }
+        if (node.returnType) {
+          attachComment({
+            ofPath: path.get("returnType"),
+            toPath: path.get("body"),
+            where: "leading",
+            optional: node.returnType.typeAnnotation.optional,
+          });
         }
       },
 
       // support for `class X { foo: string }` - #4622
       ClassProperty(path) {
-        const { node, parent } = path;
+        const { node } = path;
         if (!node.value) {
-          wrapInFlowComment(path, parent);
+          wrapInFlowComment(path);
         } else if (node.typeAnnotation) {
-          const typeAnnotation = path.get("typeAnnotation");
-          path
-            .get("key")
-            .addComment(
-              "trailing",
-              generateComment(typeAnnotation, typeAnnotation.node),
-            );
-          removeTypeAnnotation(typeAnnotation);
+          attachComment({
+            ofPath: path.get("typeAnnotation"),
+            toPath: path.get("key"),
+            optional: node.typeAnnotation.optional,
+          });
         }
       },
 
       // support `export type a = {}` - #8 Error: You passed path.replaceWith() a falsy node
       ExportNamedDeclaration(path) {
-        const { node, parent } = path;
+        const { node } = path;
         if (node.exportKind !== "type" && !t.isFlow(node.declaration)) {
           return;
         }
-        wrapInFlowComment(path, parent);
+        wrapInFlowComment(path);
       },
 
       // support `import type A` and `import typeof A` #10
       ImportDeclaration(path) {
-        const { node, parent } = path;
+        const { node } = path;
         if (isTypeImport(node.importKind)) {
-          wrapInFlowComment(path, parent);
+          wrapInFlowComment(path);
           return;
         }
 
@@ -179,32 +190,28 @@ export default declare(api => {
         if (typeSpecifiers.length > 0) {
           const typeImportNode = t.cloneNode(node);
           typeImportNode.specifiers = typeSpecifiers;
+          const comment = `:: ${generateCode(typeImportNode).code}`;
 
           if (nonTypeSpecifiers.length > 0) {
-            path.addComment(
-              "trailing",
-              `:: ${generateCode(typeImportNode).code}`,
-            );
+            attachComment({ toPath: path, comment });
           } else {
-            attachComment(path, `:: ${generateCode(typeImportNode).code}`);
+            attachComment({ ofPath: path, comment });
           }
         }
       },
       ObjectPattern(path) {
         const { node } = path;
         if (node.typeAnnotation) {
-          const typeAnnotation = path.get("typeAnnotation");
-          path.addComment(
-            "trailing",
-            generateComment(typeAnnotation, typeAnnotation.node),
-          );
-          removeTypeAnnotation(typeAnnotation);
+          attachComment({
+            ofPath: path.get("typeAnnotation"),
+            toPath: path,
+            optional: node.optional || node.typeAnnotation.optional,
+          });
         }
       },
 
       Flow(path) {
-        const { parent } = path;
-        wrapInFlowComment(path, parent);
+        wrapInFlowComment(path);
       },
 
       Class(path) {
@@ -214,7 +221,7 @@ export default declare(api => {
           const typeParameters = path.get("typeParameters");
           typeParametersComment = generateComment(
             typeParameters,
-            typeParameters.node,
+            typeParameters.node.optional,
           );
           removeTypeAnnotation(typeParameters);
         }
@@ -224,7 +231,7 @@ export default declare(api => {
           const superTypeParameters = path.get("superTypeParameters");
           superTypeParametersComment = generateComment(
             superTypeParameters,
-            superTypeParameters.node,
+            superTypeParameters.node.optional,
           );
           removeTypeAnnotation(superTypeParameters);
         }
@@ -243,8 +250,10 @@ export default declare(api => {
         let bodyComment = "";
         if (node.superClass) {
           if (typeParametersComment) {
-            const id = path.get("id");
-            id.addComment("trailing", typeParametersComment);
+            attachComment({
+              toPath: path.get("id"),
+              comment: typeParametersComment,
+            });
           }
           bodyComment = superTypeParametersComment;
         } else {
@@ -252,14 +261,17 @@ export default declare(api => {
         }
         if (implementsComment) {
           if (bodyComment) {
-            bodyComment += " " + implementsComment;
+            bodyComment += ` ${implementsComment}`;
           } else {
-            bodyComment = ":: " + implementsComment;
+            bodyComment = `:: ${implementsComment}`;
           }
         }
         if (bodyComment) {
-          const block = path.get("body");
-          block.addComment("leading", bodyComment);
+          attachComment({
+            toPath: path.get("body"),
+            where: "leading",
+            comment: bodyComment,
+          });
         }
       },
     },
