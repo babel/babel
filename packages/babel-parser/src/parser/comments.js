@@ -91,7 +91,7 @@ export default class CommentsParser extends BaseParser {
       const lastComment = last(this.state.leadingComments);
 
       if (firstChild.type === "ObjectProperty") {
-        if (lastComment.start >= node.start) {
+        if (lastComment.start >= node.start && lastComment.end <= node.end) {
           if (this.state.commentPreviousNode) {
             for (j = 0; j < this.state.leadingComments.length; j++) {
               if (
