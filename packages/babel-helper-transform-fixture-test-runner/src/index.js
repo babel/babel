@@ -196,9 +196,9 @@ function run(task) {
     }
   }
 
-  let actualCode = actual.code;
-  const expectCode = expected.code;
-  if (!execCode || actualCode) {
+  const inputCode = actual.code;
+  const expectedCode = expected.code;
+  if (!execCode || inputCode) {
     const actualLogs = { stdout: "", stderr: "" };
     if (validateLogs) {
       jest.spyOn(console, "log").mockImplementation(msg => {
@@ -209,17 +209,14 @@ function run(task) {
       });
     }
 
-    result = babel.transform(actualCode, getOpts(actual));
+    result = babel.transform(inputCode, getOpts(actual));
 
-    const expectedCode = result.code.replace(
-      escapeRegExp(path.resolve(__dirname, "../../../")),
-      "<CWD>",
-    );
+    const outputCode = normalizeOutput(result.code);
 
     checkDuplicatedNodes(babel, result.ast);
     if (
       !expected.code &&
-      expectedCode &&
+      outputCode &&
       !opts.throws &&
       fs.statSync(path.dirname(expected.loc)).isDirectory() &&
       !process.env.CI
@@ -230,7 +227,7 @@ function run(task) {
       );
 
       console.log(`New test file created: ${expectedFile}`);
-      fs.writeFileSync(expectedFile, `${expectedCode}\n`);
+      fs.writeFileSync(expectedFile, `${outputCode}\n`);
 
       if (expected.loc !== expectedFile) {
         try {
@@ -238,10 +235,9 @@ function run(task) {
         } catch (e) {}
       }
     } else {
-      actualCode = expectedCode.trim();
-      validateFile(actualCode, expected.loc, expectCode);
+      validateFile(outputCode, expected.loc, expectedCode);
 
-      if (actualCode) {
+      if (inputCode) {
         expect(expected.loc).toMatch(
           result.sourceType === "module" ? /\.mjs$/ : /\.js$/,
         );
@@ -249,8 +245,8 @@ function run(task) {
     }
 
     if (validateLogs) {
-      validateFile(actualLogs.stdout.trim(), stdout.loc, stdout.code);
-      validateFile(actualLogs.stderr.trim(), stderr.loc, stderr.code);
+      validateFile(normalizeOutput(actualLogs.stdout), stdout.loc, stdout.code);
+      validateFile(normalizeOutput(actualLogs.stderr), stderr.loc, stderr.code);
     }
   }
 
@@ -286,6 +282,12 @@ function validateFile(actualCode, expectedLoc, expectedCode) {
     console.log(`Updated test file: ${expectedLoc}`);
     fs.writeFileSync(expectedLoc, `${actualCode}\n`);
   }
+}
+
+function normalizeOutput(code) {
+  return code
+    .trim()
+    .replace(escapeRegExp(path.resolve(__dirname, "../../../")), "<CWD>");
 }
 
 const toEqualFile = () => ({
