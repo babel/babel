@@ -6,33 +6,6 @@ import generateCode from "@babel/generator";
 export default declare(api => {
   api.assertVersion(7);
 
-  /**
-   * Removes the node at the given path while conserving the comments attached
-   * to it.
-   * @param  {Path} path - The path of the node to remove
-   */
-  function removeTypeAnnotation(path) {
-    const node = path.node;
-    const parentPath = path.parentPath;
-    const prevPath = path.getPrevSibling();
-    const nextPath = path.getNextSibling();
-    if (node.leadingComments && !prevPath.node) {
-      if (prevPath.node) {
-        nextPath.addComments("leading", node.leadingComments);
-      } else {
-        parentPath.addComments("inner", node.leadingComments);
-      }
-    }
-    if (node.trailingComments && !nextPath.node) {
-      if (prevPath.node) {
-        prevPath.addComments("trailing", node.trailingComments);
-      } else {
-        parentPath.addComments("inner", node.trailingComments);
-      }
-    }
-    path.remove();
-  }
-
   function attachComment({
     ofPath,
     toPath,
@@ -53,10 +26,28 @@ export default declare(api => {
       toPath = ofPath.parentPath;
       where = "inner";
     }
-    if (ofPath && !keepType) {
-      removeTypeAnnotation(ofPath);
+    if (!keepType && ofPath && ofPath.node) {
+      // Removes the node at `ofPath` while conserving the comments attached
+      // to it.
+      const node = ofPath.node;
+      const parent = ofPath.parentPath;
+      const prev = ofPath.getPrevSibling();
+      const next = ofPath.getNextSibling();
+      const isSingleChild = !(prev.node || next.node);
+      const leading = node.leadingComments;
+      const trailing = node.trailingComments;
+
+      if (isSingleChild && leading) {
+        parent.addComments("inner", leading);
+      }
+      toPath.addComment(where, comment);
+      ofPath.remove();
+      if (isSingleChild && trailing) {
+        parent.addComments("inner", trailing);
+      }
+    } else {
+      toPath.addComment(where, comment);
     }
-    toPath.addComment(where, comment);
   }
 
   function wrapInFlowComment(path) {
@@ -223,7 +214,7 @@ export default declare(api => {
             typeParameters,
             typeParameters.node.optional,
           );
-          removeTypeAnnotation(typeParameters);
+          typeParameters.remove();
         }
 
         let superTypeParametersComment = "";
@@ -233,7 +224,7 @@ export default declare(api => {
             superTypeParameters,
             superTypeParameters.node.optional,
           );
-          removeTypeAnnotation(superTypeParameters);
+          superTypeParameters.remove();
         }
 
         let implementsComment = "";

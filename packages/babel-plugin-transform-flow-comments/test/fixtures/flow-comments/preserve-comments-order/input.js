@@ -1,3 +1,7 @@
-/**/
+/*a*/
 type Foo = number;
-X
+/*b*/
+var foo;
+/*c*/
+type Bar = number;
+/*d*/
