@@ -1564,7 +1564,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       startLoc: Position,
       noCalls: ?boolean,
       state: N.ParseSubscriptState,
-      maybeAsyncArrow: boolean,
     ): N.Expression {
       if (!this.hasPrecedingLineBreak() && this.match(tt.bang)) {
         this.state.exprAllowed = false;
@@ -1627,14 +1626,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (result) return result;
       }
 
-      return super.parseSubscript(
-        base,
-        startPos,
-        startLoc,
-        noCalls,
-        state,
-        maybeAsyncArrow,
-      );
+      return super.parseSubscript(base, startPos, startLoc, noCalls, state);
     }
 
     parseNewArguments(node: N.NewExpression): void {

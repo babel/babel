@@ -545,21 +545,16 @@ export default class ExpressionParser extends LValParser {
     startLoc: Position,
     noCalls?: ?boolean,
   ): N.Expression {
-    const maybeAsyncArrow = this.atPossibleAsync(base);
-
     const state = {
       optionalChainMember: false,
+      maybeAsyncArrow: this.atPossibleAsync(base),
       stop: false,
     };
     do {
-      base = this.parseSubscript(
-        base,
-        startPos,
-        startLoc,
-        noCalls,
-        state,
-        maybeAsyncArrow,
-      );
+      base = this.parseSubscript(base, startPos, startLoc, noCalls, state);
+
+      // After parsing a subscript, this isn't "async" for sure.
+      state.maybeAsyncArrow = false;
     } while (!state.stop);
     return base;
   }
@@ -574,7 +569,6 @@ export default class ExpressionParser extends LValParser {
     startLoc: Position,
     noCalls: ?boolean,
     state: N.ParseSubscriptState,
-    maybeAsyncArrow: boolean,
   ): N.Expression {
     if (!noCalls && this.eat(tt.doubleColon)) {
       const node = this.startNodeAt(startPos, startLoc);
@@ -656,7 +650,7 @@ export default class ExpressionParser extends LValParser {
 
       node.arguments = this.parseCallExpressionArguments(
         tt.parenR,
-        maybeAsyncArrow,
+        state.maybeAsyncArrow,
         base.type === "Import",
         base.type !== "Super",
       );
@@ -666,7 +660,7 @@ export default class ExpressionParser extends LValParser {
         this.finishOptionalCallExpression(node);
       }
 
-      if (maybeAsyncArrow && this.shouldParseAsyncArrow()) {
+      if (state.maybeAsyncArrow && this.shouldParseAsyncArrow()) {
         state.stop = true;
 
         this.checkCommaAfterRestFromSpread();
