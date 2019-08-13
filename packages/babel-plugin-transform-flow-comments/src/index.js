@@ -209,31 +209,57 @@ export default declare(api => {
 
       Class(path) {
         const { node } = path;
-        if (node.typeParameters || node.implements) {
-          const comments = [];
-          if (node.typeParameters) {
-            const typeParameters = path.get("typeParameters");
-            comments.push(
-              generateComment(typeParameters, typeParameters.node).replace(
-                /^:: /,
-                "",
-              ),
-            );
-            typeParameters.remove();
-          }
-          if (node.implements) {
-            const impls = path.get("implements");
-            comments.push(
-              "implements " +
-                impls
-                  .map(impl => generateComment(impl).replace(/^:: /, ""))
-                  .join(", "),
-            );
-            delete node["implements"];
-          }
+        let typeParametersComment = "";
+        if (node.typeParameters) {
+          const typeParameters = path.get("typeParameters");
+          typeParametersComment = generateComment(
+            typeParameters,
+            typeParameters.node,
+          );
+          removeTypeAnnotation(typeParameters);
+        }
 
+        let superTypeParametersComment = "";
+        if (node.superTypeParameters) {
+          const superTypeParameters = path.get("superTypeParameters");
+          superTypeParametersComment = generateComment(
+            superTypeParameters,
+            superTypeParameters.node,
+          );
+          removeTypeAnnotation(superTypeParameters);
+        }
+
+        let implementsComment = "";
+        if (node.implements) {
+          const impls = path.get("implements");
+          implementsComment =
+            "implements " +
+            impls
+              .map(impl => generateComment(impl).replace(/^:: /, ""))
+              .join(", ");
+          delete node["implements"];
+        }
+
+        let bodyComment = "";
+        if (node.superClass) {
+          if (typeParametersComment) {
+            const id = path.get("id");
+            id.addComment("trailing", typeParametersComment);
+          }
+          bodyComment = superTypeParametersComment;
+        } else {
+          bodyComment = typeParametersComment;
+        }
+        if (implementsComment) {
+          if (bodyComment) {
+            bodyComment += " " + implementsComment;
+          } else {
+            bodyComment = ":: " + implementsComment;
+          }
+        }
+        if (bodyComment) {
           const block = path.get("body");
-          block.addComment("leading", ":: " + comments.join(" "));
+          block.addComment("leading", bodyComment);
         }
       },
     },
