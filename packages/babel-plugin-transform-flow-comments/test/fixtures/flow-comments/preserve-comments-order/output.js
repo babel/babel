@@ -1,0 +1,4 @@
+/**/
+
+/*:: type Foo = number;*/
+X;

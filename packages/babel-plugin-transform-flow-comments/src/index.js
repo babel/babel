@@ -6,15 +6,46 @@ import generateCode from "@babel/generator";
 export default declare(api => {
   api.assertVersion(7);
 
+  /**
+   * Removes the node at the given path while conserving the comments attached
+   * to it.
+   * @param  {Path} path - The path of the node to remove
+   */
+  function removeTypeAnnotation(path) {
+    const node = path.node;
+    const parentPath = path.parentPath;
+    const prevPath = path.getPrevSibling();
+    const nextPath = path.getNextSibling();
+    if (node.leadingComments && !prevPath.node) {
+      if (prevPath.node) {
+        nextPath.addComments("leading", node.leadingComments);
+      } else {
+        parentPath.addComments("inner", node.leadingComments);
+      }
+    }
+    if (node.trailingComments && !nextPath.node) {
+      if (prevPath.node) {
+        prevPath.addComments("trailing", node.trailingComments);
+      } else {
+        parentPath.addComments("inner", node.trailingComments);
+      }
+    }
+    path.remove();
+  }
+
   function attachComment(path, comment) {
     let attach = path.getPrevSibling();
     let where = "trailing";
     if (!attach.node) {
+      attach = path.getNextSibling();
+      where = "leading";
+    }
+    if (!attach.node) {
       attach = path.parentPath;
       where = "inner";
     }
+    removeTypeAnnotation(path);
     attach.addComment(where, comment);
-    path.remove();
   }
 
   function wrapInFlowComment(path, parent) {
@@ -58,7 +89,7 @@ export default declare(api => {
         if (node.typeAnnotation) {
           const typeAnnotation = path.get("typeAnnotation");
           path.addComment("trailing", generateComment(typeAnnotation, node));
-          typeAnnotation.remove();
+          removeTypeAnnotation(typeAnnotation);
           if (node.optional) {
             node.optional = false;
           }
@@ -89,7 +120,7 @@ export default declare(api => {
             "leading",
             generateComment(returnType, typeAnnotation.node),
           );
-          returnType.remove();
+          removeTypeAnnotation(returnType);
         }
         if (node.typeParameters) {
           const typeParameters = path.get("typeParameters");
@@ -98,7 +129,7 @@ export default declare(api => {
             "trailing",
             generateComment(typeParameters, typeParameters.node),
           );
-          typeParameters.remove();
+          removeTypeAnnotation(typeParameters);
         }
       },
 
@@ -115,7 +146,7 @@ export default declare(api => {
               "trailing",
               generateComment(typeAnnotation, typeAnnotation.node),
             );
-          typeAnnotation.remove();
+          removeTypeAnnotation(typeAnnotation);
         }
       },
 
@@ -167,7 +198,7 @@ export default declare(api => {
             "trailing",
             generateComment(typeAnnotation, typeAnnotation.node),
           );
-          typeAnnotation.remove();
+          removeTypeAnnotation(typeAnnotation);
         }
       },
 
