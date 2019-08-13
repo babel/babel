@@ -200,16 +200,23 @@ function run(task) {
   const expectedCode = expected.code;
   if (!execCode || inputCode) {
     const actualLogs = { stdout: "", stderr: "" };
+    let restoreSpies = null;
     if (validateLogs) {
-      jest.spyOn(console, "log").mockImplementation(msg => {
+      const spy1 = jest.spyOn(console, "log").mockImplementation(msg => {
         actualLogs.stdout += `${msg}\n`;
       });
-      jest.spyOn(console, "warn").mockImplementation(msg => {
+      const spy2 = jest.spyOn(console, "warn").mockImplementation(msg => {
         actualLogs.stderr += `${msg}\n`;
       });
+      restoreSpies = () => {
+        spy1.mockRestore();
+        spy2.mockRestore();
+      };
     }
 
     result = babel.transform(inputCode, getOpts(actual));
+
+    if (restoreSpies) restoreSpies();
 
     const outputCode = normalizeOutput(result.code);
 
