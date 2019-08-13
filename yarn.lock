@@ -1107,7 +1107,7 @@
 
 "@lerna/collect-updates@3.14.2", "@lerna/collect-updates@https://github.com/babel/lerna.git#babel-collect-updates":
   version "3.14.2"
-  resolved "https://github.com/babel/lerna.git#89eab830be040fbaabc31ad7206c5efab878c6c3"
+  resolved "https://github.com/babel/lerna.git#ece37c645b84227edd4d10fdcf056acf8a2a4183"
   dependencies:
     "@lerna/child-process" "^3.3.0"
     "@lerna/describe-ref" "^3.6.0"
