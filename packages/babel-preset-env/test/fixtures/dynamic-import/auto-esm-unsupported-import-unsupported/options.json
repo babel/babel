@@ -1,4 +1,5 @@
 {
+  "validateLogs": true,
   "caller": {
     "name": "test-fixture",
     "supportsStaticESM": false,

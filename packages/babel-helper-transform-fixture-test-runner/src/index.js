@@ -137,7 +137,9 @@ function run(task) {
     exec,
     options: opts,
     optionsDir,
-    expectedLog,
+    validateLogs,
+    stdout,
+    stderr,
   } = task;
 
   function getOpts(self) {
@@ -197,13 +199,13 @@ function run(task) {
   let actualCode = actual.code;
   const expectCode = expected.code;
   if (!execCode || actualCode) {
-    let actualLogs = "";
-    if (expectedLog !== null) {
+    const actualLogs = { stdout: "", stderr: "" };
+    if (validateLogs) {
       jest.spyOn(console, "log").mockImplementation(msg => {
-        actualLogs += `>>>>>> [console.log] <<<<<<\n${msg}\n\n`;
+        actualLogs.stdout += `${msg}\n`;
       });
       jest.spyOn(console, "warn").mockImplementation(msg => {
-        actualLogs += `>>>>>> [console.warn] <<<<<<\n${msg}\n\n`;
+        actualLogs.stderr += `${msg}\n`;
       });
     }
 
@@ -213,8 +215,6 @@ function run(task) {
       escapeRegExp(path.resolve(__dirname, "../../../")),
       "<CWD>",
     );
-
-    if (expectedLog !== null) expect(actualLogs.trim()).toBe(expectedLog);
 
     checkDuplicatedNodes(babel, result.ast);
     if (
@@ -239,23 +239,18 @@ function run(task) {
       }
     } else {
       actualCode = expectedCode.trim();
-      try {
-        expect(actualCode).toEqualFile({
-          filename: expected.loc,
-          code: expectCode,
-        });
-      } catch (e) {
-        if (!process.env.OVERWRITE) throw e;
-
-        console.log(`Updated test file: ${expected.loc}`);
-        fs.writeFileSync(expected.loc, `${expectedCode}\n`);
-      }
+      validateFile(actualCode, expected.loc, expectCode);
 
       if (actualCode) {
         expect(expected.loc).toMatch(
           result.sourceType === "module" ? /\.mjs$/ : /\.js$/,
         );
       }
+    }
+
+    if (validateLogs) {
+      validateFile(actualLogs.stdout.trim(), stdout.loc, stdout.code);
+      validateFile(actualLogs.stderr.trim(), stderr.loc, stderr.code);
     }
   }
 
@@ -276,6 +271,20 @@ function run(task) {
 
   if (execCode && resultExec) {
     return resultExec;
+  }
+}
+
+function validateFile(actualCode, expectedLoc, expectedCode) {
+  try {
+    expect(actualCode).toEqualFile({
+      filename: expectedLoc,
+      code: expectedCode,
+    });
+  } catch (e) {
+    if (!process.env.OVERWRITE) throw e;
+
+    console.log(`Updated test file: ${expectedLoc}`);
+    fs.writeFileSync(expectedLoc, `${actualCode}\n`);
   }
 }
 
