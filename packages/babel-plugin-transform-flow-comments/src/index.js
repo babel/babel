@@ -6,12 +6,18 @@ import generateCode from "@babel/generator";
 export default declare(api => {
   api.assertVersion(7);
 
+  function commentFromString(comment) {
+    return typeof comment === "string"
+      ? { type: "CommentBlock", value: comment }
+      : comment;
+  }
+
   function attachComment({
     ofPath,
     toPath,
     where = "trailing",
     optional = false,
-    comment = generateComment(ofPath, optional),
+    comments = generateComment(ofPath, optional),
     keepType = false,
   }) {
     if (!toPath || !toPath.node) {
@@ -26,6 +32,10 @@ export default declare(api => {
       toPath = ofPath.parentPath;
       where = "inner";
     }
+    if (!Array.isArray(comments)) {
+      comments = [comments];
+    }
+    comments = comments.map(commentFromString);
     if (!keepType && ofPath && ofPath.node) {
       // Removes the node at `ofPath` while conserving the comments attached
       // to it.
@@ -40,20 +50,20 @@ export default declare(api => {
       if (isSingleChild && leading) {
         parent.addComments("inner", leading);
       }
-      toPath.addComment(where, comment);
+      toPath.addComments(where, comments);
       ofPath.remove();
       if (isSingleChild && trailing) {
         parent.addComments("inner", trailing);
       }
     } else {
-      toPath.addComment(where, comment);
+      toPath.addComments(where, comments);
     }
   }
 
   function wrapInFlowComment(path) {
     attachComment({
       ofPath: path,
-      comment: generateComment(path, path.parent.optional),
+      comments: generateComment(path, path.parent.optional),
     });
   }
 
@@ -102,7 +112,7 @@ export default declare(api => {
         } else if (node.optional) {
           attachComment({
             toPath: path,
-            comment: ":: ?",
+            comments: ":: ?",
           });
           node.optional = false;
         }
@@ -184,9 +194,9 @@ export default declare(api => {
           const comment = `:: ${generateCode(typeImportNode).code}`;
 
           if (nonTypeSpecifiers.length > 0) {
-            attachComment({ toPath: path, comment });
+            attachComment({ toPath: path, comments: comment });
           } else {
-            attachComment({ ofPath: path, comment });
+            attachComment({ ofPath: path, comments: comment });
           }
         }
       },
@@ -207,61 +217,61 @@ export default declare(api => {
 
       Class(path) {
         const { node } = path;
-        let typeParametersComment = "";
+        let comments = [];
         if (node.typeParameters) {
           const typeParameters = path.get("typeParameters");
-          typeParametersComment = generateComment(
-            typeParameters,
-            typeParameters.node.optional,
+          comments.push(
+            generateComment(typeParameters, node.typeParameters.optional),
           );
+          const trailingComments = node.typeParameters.trailingComments;
+          if (trailingComments) {
+            comments.push(...trailingComments);
+          }
           typeParameters.remove();
         }
 
-        let superTypeParametersComment = "";
-        if (node.superTypeParameters) {
-          const superTypeParameters = path.get("superTypeParameters");
-          superTypeParametersComment = generateComment(
-            superTypeParameters,
-            superTypeParameters.node.optional,
-          );
-          superTypeParameters.remove();
+        if (node.superClass) {
+          if (comments.length > 0) {
+            attachComment({
+              toPath: path.get("id"),
+              comments: comments,
+            });
+            comments = [];
+          }
+
+          if (node.superTypeParameters) {
+            const superTypeParameters = path.get("superTypeParameters");
+            comments.push(
+              generateComment(
+                superTypeParameters,
+                superTypeParameters.node.optional,
+              ),
+            );
+            superTypeParameters.remove();
+          }
         }
 
-        let implementsComment = "";
         if (node.implements) {
           const impls = path.get("implements");
-          implementsComment =
+          const comment =
             "implements " +
             impls
               .map(impl => generateComment(impl).replace(/^:: /, ""))
               .join(", ");
           delete node["implements"];
+
+          if (comments.length === 1) {
+            comments[0] += ` ${comment}`;
+          } else {
+            comments.push(`:: ${comment}`);
+          }
         }
 
-        let bodyComment = "";
-        if (node.superClass) {
-          if (typeParametersComment) {
-            attachComment({
-              toPath: path.get("id"),
-              comment: typeParametersComment,
-            });
-          }
-          bodyComment = superTypeParametersComment;
-        } else {
-          bodyComment = typeParametersComment;
-        }
-        if (implementsComment) {
-          if (bodyComment) {
-            bodyComment += ` ${implementsComment}`;
-          } else {
-            bodyComment = `:: ${implementsComment}`;
-          }
-        }
-        if (bodyComment) {
+        if (comments.length > 0) {
           attachComment({
             toPath: path.get("body"),
             where: "leading",
-            comment: bodyComment,
+            comments: comments,
           });
         }
       },
