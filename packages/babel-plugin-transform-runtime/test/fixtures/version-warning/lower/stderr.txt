@@ -1,4 +1,3 @@
->>>>>> [console.warn] <<<<<<
 The installed version of "@babel/runtime" (^7.3.0) is lower than the version specified in "@babel/transform-runtime"'s options (7.5.0). For this reason, Babel will assume that some helpers are supported by the installed "@babel/runtime" version, even if they might not actually be present.
 To fix this problem, you must specify the correct version in "@babel/transform-runtime"'s options:
 
