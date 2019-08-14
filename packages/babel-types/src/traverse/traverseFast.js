@@ -7,7 +7,7 @@ import { VISITOR_KEYS } from "../definitions";
  */
 export default function traverseFast(
   node: Object,
-  enter: (node: Node, opts?: Object) => void,
+  enter: (node: BabelNode, opts?: Object) => void,
   opts?: Object,
 ): void {
   if (!node) return;

@@ -181,7 +181,7 @@ declare module "convert-source-map" {
     fromJSON(str: string): Converter,
     fromBase64(str: string): Converter,
     fromComment(str: string): Converter,
-    fromMapFileComment(str: string): Converter,
+    fromMapFileComment(str: string, dir: string): Converter,
     fromSource(str: string): Converter,
     fromMapFileSource(str: string, dir: string): Converter,
     removeComments(str: string): string,
