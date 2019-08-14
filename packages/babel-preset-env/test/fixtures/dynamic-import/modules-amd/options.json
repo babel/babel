@@ -1,3 +1,4 @@
 {
+  "validateLogs": true,
   "presets": [["env", { "modules": "amd" }]]
 }

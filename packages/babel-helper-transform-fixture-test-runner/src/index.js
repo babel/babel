@@ -131,11 +131,16 @@ function wrapPackagesArray(type, names, optionsDir) {
 }
 
 function run(task) {
-  const actual = task.actual;
-  const expected = task.expect;
-  const exec = task.exec;
-  const opts = task.options;
-  const optionsDir = task.optionsDir;
+  const {
+    actual,
+    expect: expected,
+    exec,
+    options: opts,
+    optionsDir,
+    validateLogs,
+    stdout,
+    stderr,
+  } = task;
 
   function getOpts(self) {
     const newOpts = merge(
@@ -191,19 +196,34 @@ function run(task) {
     }
   }
 
-  let actualCode = actual.code;
-  const expectCode = expected.code;
-  if (!execCode || actualCode) {
-    result = babel.transform(actualCode, getOpts(actual));
-    const expectedCode = result.code.replace(
-      escapeRegExp(path.resolve(__dirname, "../../../")),
-      "<CWD>",
-    );
+  const inputCode = actual.code;
+  const expectedCode = expected.code;
+  if (!execCode || inputCode) {
+    const actualLogs = { stdout: "", stderr: "" };
+    let restoreSpies = null;
+    if (validateLogs) {
+      const spy1 = jest.spyOn(console, "log").mockImplementation(msg => {
+        actualLogs.stdout += `${msg}\n`;
+      });
+      const spy2 = jest.spyOn(console, "warn").mockImplementation(msg => {
+        actualLogs.stderr += `${msg}\n`;
+      });
+      restoreSpies = () => {
+        spy1.mockRestore();
+        spy2.mockRestore();
+      };
+    }
+
+    result = babel.transform(inputCode, getOpts(actual));
+
+    if (restoreSpies) restoreSpies();
+
+    const outputCode = normalizeOutput(result.code);
 
     checkDuplicatedNodes(babel, result.ast);
     if (
       !expected.code &&
-      expectedCode &&
+      outputCode &&
       !opts.throws &&
       fs.statSync(path.dirname(expected.loc)).isDirectory() &&
       !process.env.CI
@@ -214,7 +234,7 @@ function run(task) {
       );
 
       console.log(`New test file created: ${expectedFile}`);
-      fs.writeFileSync(expectedFile, `${expectedCode}\n`);
+      fs.writeFileSync(expectedFile, `${outputCode}\n`);
 
       if (expected.loc !== expectedFile) {
         try {
@@ -222,24 +242,18 @@ function run(task) {
         } catch (e) {}
       }
     } else {
-      actualCode = expectedCode.trim();
-      try {
-        expect(actualCode).toEqualFile({
-          filename: expected.loc,
-          code: expectCode,
-        });
-      } catch (e) {
-        if (!process.env.OVERWRITE) throw e;
+      validateFile(outputCode, expected.loc, expectedCode);
 
-        console.log(`Updated test file: ${expected.loc}`);
-        fs.writeFileSync(expected.loc, `${expectedCode}\n`);
-      }
-
-      if (actualCode) {
+      if (inputCode) {
         expect(expected.loc).toMatch(
           result.sourceType === "module" ? /\.mjs$/ : /\.js$/,
         );
       }
+    }
+
+    if (validateLogs) {
+      validateFile(normalizeOutput(actualLogs.stdout), stdout.loc, stdout.code);
+      validateFile(normalizeOutput(actualLogs.stderr), stderr.loc, stderr.code);
     }
   }
 
@@ -261,6 +275,26 @@ function run(task) {
   if (execCode && resultExec) {
     return resultExec;
   }
+}
+
+function validateFile(actualCode, expectedLoc, expectedCode) {
+  try {
+    expect(actualCode).toEqualFile({
+      filename: expectedLoc,
+      code: expectedCode,
+    });
+  } catch (e) {
+    if (!process.env.OVERWRITE) throw e;
+
+    console.log(`Updated test file: ${expectedLoc}`);
+    fs.writeFileSync(expectedLoc, `${actualCode}\n`);
+  }
+}
+
+function normalizeOutput(code) {
+  return code
+    .trim()
+    .replace(escapeRegExp(path.resolve(__dirname, "../../../")), "<CWD>");
 }
 
 const toEqualFile = () => ({

@@ -120,6 +120,8 @@ export default function get(entryLoc): Array<Suite> {
       const expectLoc =
         findFile(taskDir + "/output", true /* allowJSON */) ||
         taskDir + "/output.js";
+      const stdoutLoc = taskDir + "/stdout.txt";
+      const stderrLoc = taskDir + "/stderr.txt";
 
       const actualLocAlias =
         suiteName + "/" + taskName + "/" + path.basename(actualLoc);
@@ -146,6 +148,9 @@ export default function get(entryLoc): Array<Suite> {
         title: humanize(taskName, true),
         disabled: taskName[0] === ".",
         options: taskOpts,
+        validateLogs: taskOpts.validateLogs,
+        stdout: { loc: stdoutLoc, code: readFile(stdoutLoc) },
+        stderr: { loc: stderrLoc, code: readFile(stderrLoc) },
         exec: {
           loc: execLoc,
           code: readFile(execLoc),
@@ -222,6 +227,16 @@ export default function get(entryLoc): Array<Suite> {
           );
         }
       }
+
+      if (!test.validateLogs && (test.stdout.code || test.stderr.code)) {
+        throw new Error(
+          "stdout.txt and stderr.txt are only allowed when the 'validateLogs' option is enabled: " +
+            (test.stdout.code ? stdoutLoc : stderrLoc),
+        );
+      }
+
+      // Delete to avoid option validation error
+      delete test.options.validateLogs;
     }
   }
 

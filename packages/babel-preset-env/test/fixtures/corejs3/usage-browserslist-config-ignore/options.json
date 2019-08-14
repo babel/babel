@@ -1,4 +1,5 @@
 {
+  "validateLogs": true,
   "presets": [
     [
       "../../../../lib",
