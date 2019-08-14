@@ -49,21 +49,11 @@ export default function(
   const available = new Set(getModulesListForTargetVersion(corejs.version));
 
   const isPolyfillImport = {
-    ImportDeclaration(path: NodePath) {
-      const source = getImportSource(path);
-      if (!source) return;
-      if (isBabelPolyfillSource(source)) {
-        console.warn(BABEL_POLYFILL_DEPRECATION);
-      } else {
-        const modules = isCoreJSSource(source);
-        if (modules) {
-          this.replaceBySeparateModulesImport(path, modules);
-        }
-      }
-    },
     Program(path: NodePath) {
       path.get("body").forEach(bodyPath => {
-        const source = getRequireSource(bodyPath);
+        const source = bodyPath.isImportDeclaration()
+          ? getImportSource(bodyPath)
+          : getRequireSource(bodyPath);
         if (!source) return;
         if (isBabelPolyfillSource(source)) {
           console.warn(BABEL_POLYFILL_DEPRECATION);
@@ -74,6 +64,22 @@ export default function(
           }
         }
       });
+      const filtered = intersection(polyfills, this.polyfillsSet, available);
+      const reversed = Array.from(filtered).reverse();
+
+      for (const module of reversed) {
+        createImport(path, module);
+      }
+      if (debug) {
+        logEntryPolyfills(
+          "core-js",
+          this.polyfillsSet.size > 0,
+          filtered,
+          this.file.opts.filename,
+          polyfillTargets,
+          corejs3Polyfills,
+        );
+      }
     },
   };
 
@@ -90,25 +96,6 @@ export default function(
 
         path.remove();
       };
-    },
-    post({ path }: { path: NodePath }) {
-      const filtered = intersection(polyfills, this.polyfillsSet, available);
-      const reversed = Array.from(filtered).reverse();
-
-      for (const module of reversed) {
-        createImport(path, module);
-      }
-
-      if (debug) {
-        logEntryPolyfills(
-          "core-js",
-          this.polyfillsSet.size > 0,
-          filtered,
-          this.file.opts.filename,
-          polyfillTargets,
-          corejs3Polyfills,
-        );
-      }
     },
   };
 }
