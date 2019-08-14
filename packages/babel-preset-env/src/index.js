@@ -203,22 +203,22 @@ export default declare((api, opts) => {
 
     if (corejs) {
       if (useBuiltIns === "usage") {
-        if (corejs.major === 2) {
-          plugins.push([addCoreJS2UsagePlugin, pluginOptions]);
-        } else {
-          plugins.push([addCoreJS3UsagePlugin, pluginOptions]);
-        }
         if (regenerator) {
-          plugins.push([addRegeneratorUsagePlugin, pluginOptions]);
+          plugins.unshift([addRegeneratorUsagePlugin, pluginOptions]);
+        }
+        if (corejs.major === 2) {
+          plugins.unshift([addCoreJS2UsagePlugin, pluginOptions]);
+        } else {
+          plugins.unshift([addCoreJS3UsagePlugin, pluginOptions]);
         }
       } else {
+        if (!regenerator) {
+          plugins.unshift([removeRegeneratorEntryPlugin, pluginOptions]);
+        }
         if (corejs.major === 2) {
-          plugins.push([replaceCoreJS2EntryPlugin, pluginOptions]);
+          plugins.unshift([replaceCoreJS2EntryPlugin, pluginOptions]);
         } else {
-          plugins.push([replaceCoreJS3EntryPlugin, pluginOptions]);
-          if (!regenerator) {
-            plugins.push([removeRegeneratorEntryPlugin, pluginOptions]);
-          }
+          plugins.unshift([replaceCoreJS3EntryPlugin, pluginOptions]);
         }
       }
     }
