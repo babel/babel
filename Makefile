@@ -2,6 +2,9 @@ MAKEFLAGS = -j1
 FLOW_COMMIT = 09669846b7a7ca5a6c23c12d56bb3bebdafd67e9
 TEST262_COMMIT = de567d3aa5de4eaa11e00131d26b9fe77997dfb0
 
+# Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
+export FORCE_COLOR = true
+
 SOURCES = packages codemods
 
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
