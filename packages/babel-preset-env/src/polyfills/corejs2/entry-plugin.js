@@ -33,14 +33,12 @@ export default function(
   );
 
   const isPolyfillImport = {
-    ImportDeclaration(path: NodePath) {
-      if (isPolyfillSource(getImportSource(path))) {
-        this.replaceBySeparateModulesImport(path);
-      }
-    },
     Program(path: NodePath) {
       path.get("body").forEach(bodyPath => {
-        if (isPolyfillSource(getRequireSource(bodyPath))) {
+        const source = bodyPath.isImportDeclaration()
+          ? getImportSource(bodyPath)
+          : getRequireSource(bodyPath);
+        if (isPolyfillSource(source)) {
           this.replaceBySeparateModulesImport(bodyPath);
         }
       });
