@@ -453,9 +453,7 @@ class BlockScoping {
       if (binding.kind === "let" || binding.kind === "const") {
         binding.kind = "var";
 
-        if (wrappedInClosure) {
-          scope.removeBinding(ref.name);
-        } else {
+        if (!wrappedInClosure) {
           scope.moveBindingTo(ref.name, parentScope);
         }
       }
