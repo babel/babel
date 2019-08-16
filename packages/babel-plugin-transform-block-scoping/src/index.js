@@ -441,20 +441,25 @@ class BlockScoping {
   }
 
   updateScopeInfo(wrappedInClosure) {
-    const scope = this.scope;
+    const blockScope = this.blockPath.scope;
 
-    const parentScope = scope.getFunctionParent() || scope.getProgramParent();
+    const parentScope =
+      blockScope.getFunctionParent() || blockScope.getProgramParent();
     const letRefs = this.letReferences;
 
     for (const key of Object.keys(letRefs)) {
       const ref = letRefs[key];
-      const binding = scope.getBinding(ref.name);
+      const binding = blockScope.getBinding(ref.name);
       if (!binding) continue;
       if (binding.kind === "let" || binding.kind === "const") {
         binding.kind = "var";
 
-        if (!wrappedInClosure) {
-          scope.moveBindingTo(ref.name, parentScope);
+        if (wrappedInClosure) {
+          if (blockScope.hasOwnBinding(ref.name)) {
+            blockScope.removeBinding(ref.name);
+          }
+        } else {
+          blockScope.moveBindingTo(ref.name, parentScope);
         }
       }
     }

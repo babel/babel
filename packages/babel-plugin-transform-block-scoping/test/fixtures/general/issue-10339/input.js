@@ -1,4 +1,7 @@
 for (const {foo, ...bar} of {}) {
   () => foo;
-  bar;
+  const [qux] = bar;
+  try {} catch (e) {
+    const quux = qux;
+  }
 }

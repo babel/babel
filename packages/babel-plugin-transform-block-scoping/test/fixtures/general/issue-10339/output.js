@@ -3,7 +3,11 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 var _loop = function (foo, bar) {
   () => foo;
 
-  bar;
+  var [qux] = bar;
+
+  try {} catch (e) {
+    var quux = qux;
+  }
 };
 
 for (var _ref of {}) {
