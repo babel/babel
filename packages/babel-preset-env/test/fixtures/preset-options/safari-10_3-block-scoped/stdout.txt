@@ -10,13 +10,13 @@ Using modules transform: auto
 Using plugins:
   transform-template-literals { "safari":"10" }
   transform-dotall-regex { "safari":"10" }
+  proposal-unicode-property-regex { "safari":"10" }
   transform-unicode-regex { "safari":"10" }
   transform-block-scoping { "safari":"10" }
   transform-exponentiation-operator { "safari":"10" }
   transform-async-to-generator { "safari":"10" }
   proposal-async-generator-functions { "safari":"10" }
   proposal-object-rest-spread { "safari":"10" }
-  proposal-unicode-property-regex { "safari":"10" }
   proposal-json-strings { "safari":"10" }
   proposal-optional-catch-binding { "safari":"10" }
   transform-named-capturing-groups-regex { "safari":"10" }

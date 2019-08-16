@@ -32,6 +32,7 @@ Using plugins:
   transform-for-of { "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-sticky-regex { "electron":"0.36", "ie":"10" }
   transform-dotall-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  proposal-unicode-property-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-unicode-regex { "electron":"0.36", "ie":"10" }
   transform-spread { "ie":"10" }
   transform-parameters { "electron":"0.36", "ie":"10" }
@@ -44,7 +45,6 @@ Using plugins:
   transform-async-to-generator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-async-generator-functions { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-object-rest-spread { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  proposal-unicode-property-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-json-strings { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-optional-catch-binding { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-named-capturing-groups-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }

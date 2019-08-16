@@ -20,10 +20,10 @@ Using plugins:
   transform-function-name { "firefox":"52" }
   transform-for-of { "firefox":"52" }
   transform-dotall-regex { "firefox":"52", "node":"7.4" }
+  proposal-unicode-property-regex { "firefox":"52", "node":"7.4" }
   transform-destructuring { "firefox":"52" }
   proposal-async-generator-functions { "firefox":"52", "node":"7.4" }
   proposal-object-rest-spread { "firefox":"52", "node":"7.4" }
-  proposal-unicode-property-regex { "firefox":"52", "node":"7.4" }
   proposal-json-strings { "firefox":"52", "node":"7.4" }
   proposal-optional-catch-binding { "firefox":"52", "node":"7.4" }
   transform-named-capturing-groups-regex { "firefox":"52", "node":"7.4" }

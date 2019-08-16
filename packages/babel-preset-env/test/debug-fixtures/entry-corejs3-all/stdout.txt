@@ -19,6 +19,7 @@ Using plugins:
   transform-for-of {}
   transform-sticky-regex {}
   transform-dotall-regex {}
+  proposal-unicode-property-regex {}
   transform-unicode-regex {}
   transform-spread {}
   transform-parameters {}
@@ -31,7 +32,6 @@ Using plugins:
   transform-async-to-generator {}
   proposal-async-generator-functions {}
   proposal-object-rest-spread {}
-  proposal-unicode-property-regex {}
   proposal-json-strings {}
   proposal-optional-catch-binding {}
   transform-named-capturing-groups-regex {}
