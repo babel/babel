@@ -25,7 +25,7 @@ class TypeScriptScope extends Scope {
   // classes (which are also in .lexical) and interface (which are also in .types)
   classes: string[] = [];
 
-  // namespaces and bodyless-functions are too difficult to track,
+  // namespaces and ambient functions (or classes) are too difficult to track,
   // especially without type analysis.
   // We need to track them anyway, to avoid "X is not defined" errors
   // when exporting them.

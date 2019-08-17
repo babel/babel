@@ -20,6 +20,7 @@ import {
   SCOPE_OTHER,
   SCOPE_SIMPLE_CATCH,
   SCOPE_SUPER,
+  type BindingTypes,
 } from "../util/scopeflags";
 
 const loopLabel = { kind: "loop" },
@@ -1611,11 +1612,12 @@ export default class StatementParser extends ExpressionParser {
     node: N.Class,
     isStatement: boolean,
     optionalId: ?boolean,
+    bindingType: BindingTypes = BIND_CLASS,
   ): void {
     if (this.match(tt.name)) {
       node.id = this.parseIdentifier();
       if (isStatement) {
-        this.checkLVal(node.id, BIND_CLASS, undefined, "class name");
+        this.checkLVal(node.id, bindingType, undefined, "class name");
       }
     } else {
       if (optionalId || !isStatement) {

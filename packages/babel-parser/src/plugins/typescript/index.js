@@ -14,8 +14,9 @@ import {
   BIND_TS_CONST_ENUM,
   BIND_TS_TYPE,
   BIND_TS_INTERFACE,
-  BIND_TS_FN_TYPE,
+  BIND_TS_AMBIENT,
   BIND_TS_NAMESPACE,
+  BIND_CLASS,
 } from "../../util/scopeflags";
 import TypeScriptScopeHandler from "./scope";
 
@@ -1278,6 +1279,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             /* declarationPosition */ true,
           );
         case tt._class:
+          // While this is also set by tsParseExpressionStatement, we need to set it
+          // before parsing the class declaration to now how to register it in the scope.
+          nany.declare = true;
           return this.parseClass(
             nany,
             /* isStatement */ true,
@@ -1552,7 +1556,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkFunctionStatementId(node: N.Function): void {
       if (!node.body && node.id) {
-        this.checkLVal(node.id, BIND_TS_FN_TYPE, null, "function name");
+        this.checkLVal(node.id, BIND_TS_AMBIENT, null, "function name");
       } else {
         super.checkFunctionStatementId(...arguments);
       }
@@ -1988,7 +1992,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return;
       }
 
-      super.parseClassId(...arguments);
+      super.parseClassId(
+        node,
+        isStatement,
+        optionalId,
+        (node: any).declare ? BIND_TS_AMBIENT : BIND_CLASS,
+      );
       const typeParameters = this.tsTryParseTypeParameters();
       if (typeParameters) node.typeParameters = typeParameters;
     }

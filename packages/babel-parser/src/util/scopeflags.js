@@ -62,14 +62,14 @@ export const BIND_CLASS         = BIND_KIND_VALUE | BIND_KIND_TYPE | BIND_SCOPE_
              BIND_TS_INTERFACE  = 0               | BIND_KIND_TYPE | 0                   | BIND_FLAGS_CLASS  ,
              BIND_TS_TYPE       = 0               | BIND_KIND_TYPE | 0                   | 0                 ,
              BIND_TS_ENUM       = BIND_KIND_VALUE | BIND_KIND_TYPE | BIND_SCOPE_LEXICAL  | BIND_FLAGS_TS_ENUM,
-             BIND_TS_FN_TYPE    = 0               | 0              | 0            | BIND_FLAGS_TS_EXPORT_ONLY,
+             BIND_TS_AMBIENT    = 0               | 0              | 0            | BIND_FLAGS_TS_EXPORT_ONLY,
              // These bindings don't introduce anything in the scope. They are used for assignments and
              // function expressions IDs.
              BIND_NONE          = 0               | 0              | 0                   | BIND_FLAGS_NONE   ,
              BIND_OUTSIDE       = BIND_KIND_VALUE | 0              | 0                   | BIND_FLAGS_NONE   ,
 
              BIND_TS_CONST_ENUM = BIND_TS_ENUM | BIND_FLAGS_TS_CONST_ENUM,
-             BIND_TS_NAMESPACE  = BIND_TS_FN_TYPE;
+             BIND_TS_NAMESPACE  = 0               | 0              | 0            | BIND_FLAGS_TS_EXPORT_ONLY;
 
 export type BindingTypes =
   | typeof BIND_NONE
@@ -81,5 +81,5 @@ export type BindingTypes =
   | typeof BIND_TS_INTERFACE
   | typeof BIND_TS_TYPE
   | typeof BIND_TS_ENUM
-  | typeof BIND_TS_FN_TYPE
+  | typeof BIND_TS_AMBIENT
   | typeof BIND_TS_NAMESPACE;
