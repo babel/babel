@@ -15,8 +15,8 @@ Using modules transform: false
 Using plugins:
   transform-template-literals { "ios":"10.3", "safari":"10.1" }
   transform-function-name { "edge":"16" }
-  transform-dotall-regex { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
   proposal-unicode-property-regex { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
+  transform-dotall-regex { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
   transform-unicode-regex { "ios":"10.3", "safari":"10.1" }
   transform-parameters { "edge":"16" }
   transform-block-scoping { "ios":"10.3", "safari":"10.1" }

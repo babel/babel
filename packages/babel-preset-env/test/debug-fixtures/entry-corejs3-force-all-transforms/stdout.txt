@@ -20,8 +20,8 @@ Using plugins:
   transform-computed-properties {}
   transform-for-of {}
   transform-sticky-regex {}
-  transform-dotall-regex { "chrome":"55" }
   proposal-unicode-property-regex { "chrome":"55" }
+  transform-dotall-regex { "chrome":"55" }
   transform-unicode-regex {}
   transform-spread {}
   transform-parameters {}

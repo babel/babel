@@ -20,8 +20,8 @@ Using plugins:
   transform-computed-properties { "android":"4" }
   transform-for-of { "android":"4" }
   transform-sticky-regex { "android":"4" }
-  transform-dotall-regex { "android":"4" }
   proposal-unicode-property-regex { "android":"4" }
+  transform-dotall-regex { "android":"4" }
   transform-unicode-regex { "android":"4" }
   transform-spread { "android":"4" }
   transform-parameters { "android":"4" }

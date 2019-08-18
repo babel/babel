@@ -20,12 +20,14 @@ export default declare((api, options) => {
           return;
         }
         node.pattern = rewritePattern(node.pattern, node.flags, {
+          dotAllFlag: regex.is(node, "s"),
           unicodePropertyEscape: true,
           useUnicodeFlag,
         });
         if (!useUnicodeFlag) {
           regex.pullFlag(node, "u");
         }
+        regex.pullFlag(node, "s");
       },
     },
   };

@@ -9,8 +9,8 @@ Using modules transform: auto
 
 Using plugins:
   transform-template-literals { "safari":"10" }
-  transform-dotall-regex { "safari":"10" }
   proposal-unicode-property-regex { "safari":"10" }
+  transform-dotall-regex { "safari":"10" }
   transform-unicode-regex { "safari":"10" }
   transform-block-scoping { "safari":"10" }
   transform-exponentiation-operator { "safari":"10" }

@@ -10,8 +10,8 @@ Using modules transform: auto
 Using plugins:
   transform-function-name { "node":"6" }
   transform-for-of { "node":"6" }
-  transform-dotall-regex { "node":"6" }
   proposal-unicode-property-regex { "node":"6" }
+  transform-dotall-regex { "node":"6" }
   transform-destructuring { "node":"6" }
   transform-exponentiation-operator { "node":"6" }
   transform-async-to-generator { "node":"6" }
