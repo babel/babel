@@ -80,13 +80,13 @@ Try it out at our [REPL](https://babeljs.io/repl/build/master#?code_lz=NoRgNATGD
 
 Mostly a handful of volunteers, funded by you! Please check out our [team page](https://babeljs.io/team)!
 
-### Looking for support?
-
-For questions and support please join our [Slack Community](https://slack.babeljs.io/) (you can sign-up [here](https://slack.babeljs.io/) for an invite), ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/babeljs), or ping us on [Twitter](https://twitter.com/babeljs).
-
 ### Is there a Babel song?
 
 I'm so glad you asked: [Hallelujah —— In Praise of Babel](SONG.md) by [@angus-c](https://github.com/angus-c), [audio version](https://youtu.be/40abpedBKK8) by [@swyx](https://twitter.com/@swyx). Tweet us your recordings!
+
+### Looking for support?
+
+For questions and support please join our [Slack Community](https://slack.babeljs.io/) (you can sign-up [here](https://slack.babeljs.io/) for an invite), ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/babeljs), or ping us on [Twitter](https://twitter.com/babeljs).
 
 ### Where are the docs?
 
@@ -98,12 +98,19 @@ Please read through our [CONTRIBUTING.md](CONTRIBUTING.md) and fill out the issu
 
 ### Want to contribute to Babel?
 
-Check out our [CONTRIBUTING.md](CONTRIBUTING.md) to get started with setting up the repo.
+Check out:
 
-- If you have already joined Slack, join our [#development](https://babeljs.slack.com/messages/development) channel and say hi!
-- Check out the issues with the [good first issue](https://github.com/babel/babel/labels/good%20first%20issue) and [help wanted](https://github.com/babel/babel/labels/help%20wanted) label. We suggest also looking at the closed ones to get a sense of the kinds of issues you can tackle.
+- Our [#development](https://babeljs.slack.com/messages/development) Slack channel and say hi ([signup](https://slack.babeljs.io))!
+- Issues with the [good first issue](https://github.com/babel/babel/labels/good%20first%20issue) and [help wanted](https://github.com/babel/babel/labels/help%20wanted) label. We suggest also looking at the [closed ones](https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aclosed+label%3A%22good+first+issue%22) to get a sense of the kinds of issues you can tackle.
+
+Some resources:
+
+- Our [CONTRIBUTING.md](CONTRIBUTING.md) to get started with setting up the repo.
 - Our discussions/notes/roadmap: [babel/notes](https://github.com/babel/notes)
 - Our progress on TC39 proposals: [babel/proposals](https://github.com/babel/proposals)
+- Our blog which contains release posts and explainations: [/blog](https://babeljs.io/blog)
+- Our videos page with talks about open source and Babel: [/videos](https://babeljs.io/videos)
+- Our [podcast](https://podcast.babeljs.io)
 
 ### How is the repo structured?
 
