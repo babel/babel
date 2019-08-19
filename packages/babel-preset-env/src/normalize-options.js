@@ -32,7 +32,7 @@ const validateTopLevelOptions = (options: Options) => {
   }
 };
 
-const allPluginsList = [...Object.keys(pluginsList)];
+const allPluginsList = Object.keys(pluginsList);
 
 // NOTE: Since module plugins are handled seperatly compared to other plugins (via the "modules" option) it
 // should only be possible to exclude and not include module plugins, otherwise it's possible that preset-env
