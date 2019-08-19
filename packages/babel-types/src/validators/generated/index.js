@@ -2391,6 +2391,20 @@ export function isBigIntLiteral(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
+export function isSliceExpression(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "SliceExpression") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTSParameterProperty(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -3320,6 +3334,7 @@ export function isExpression(node: ?Object, opts?: Object): boolean {
     "Import" === nodeType ||
     "DoExpression" === nodeType ||
     "BigIntLiteral" === nodeType ||
+    "SliceExpression" === nodeType ||
     "TSAsExpression" === nodeType ||
     "TSTypeAssertion" === nodeType ||
     "TSNonNullExpression" === nodeType ||
@@ -3812,6 +3827,7 @@ export function isLVal(node: ?Object, opts?: Object): boolean {
     "AssignmentPattern" === nodeType ||
     "ArrayPattern" === nodeType ||
     "ObjectPattern" === nodeType ||
+    "SliceExpression" === nodeType ||
     "TSParameterProperty" === nodeType ||
     (nodeType === "Placeholder" &&
       ("Pattern" === node.expectedNode || "Identifier" === node.expectedNode))

@@ -265,3 +265,25 @@ defineType("BigIntLiteral", {
   },
   aliases: ["Expression", "Pureish", "Literal", "Immutable"],
 });
+
+defineType("SliceExpression", {
+  visitor: ["object", "begin", "end", "step"],
+  aliases: ["Expression", "LVal"],
+  fields: {
+    object: {
+      validate: assertNodeType("Expression"),
+    },
+    lower: {
+      validate: assertNodeType("Identifier", "NumericLiteral"),
+      optional: true,
+    },
+    upper: {
+      validate: assertNodeType("Identifier", "NumericLiteral"),
+      optional: true,
+    },
+    step: {
+      validate: assertNodeType("Identifier", "NumericLiteral"),
+      optional: true,
+    },
+  },
+});

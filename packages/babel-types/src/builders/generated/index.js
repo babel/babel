@@ -676,6 +676,10 @@ export function BigIntLiteral(...args: Array<any>): Object {
   return builder("BigIntLiteral", ...args);
 }
 export { BigIntLiteral as bigIntLiteral };
+export function SliceExpression(...args: Array<any>): Object {
+  return builder("SliceExpression", ...args);
+}
+export { SliceExpression as sliceExpression };
 export function TSParameterProperty(...args: Array<any>): Object {
   return builder("TSParameterProperty", ...args);
 }
