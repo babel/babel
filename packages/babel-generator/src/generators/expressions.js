@@ -269,3 +269,16 @@ export function V8IntrinsicIdentifier(node: Object) {
   this.token("%");
   this.word(node.name);
 }
+
+export function SliceExpression(node: Object) {
+  this.print(node.object, node);
+  this.token("[");
+  this.print(node.lower, node);
+  this.token(":");
+  this.print(node.upper, node);
+  if (node.step) {
+  this.token(":");
+    this.print(node.step, node);
+  }
+  this.word("]");
+}
