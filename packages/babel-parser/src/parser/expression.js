@@ -746,6 +746,17 @@ export default class ExpressionParser extends LValParser {
       );
     }
   }
+
+  parseSliceArgument(): ?N.Expression {
+    let expr = null;
+    this.eat(tt.colon);
+    if (!this.match(tt.colon) && !this.match(tt.bracketR)) {
+      expr = this.parseExpression();
+      this.checkSliceArgument(this.state.pos, expr);
+    }
+    return expr;
+  }
+
   parseMaybeSliceExpression(
     startPos: number,
     startLoc: Position,
@@ -754,8 +765,12 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     const node = this.startNodeAt(startPos, startLoc);
     node.object = base;
-    if (!this.hasPlugin("sliceNotation")) {
-      node.property = this.parseExpression();
+    let expr;
+    if (!this.hasPlugin("sliceNotation") || !this.match(tt.colon)) {
+      expr = this.parseExpression();
+    }
+    if (!this.hasPlugin("sliceNotation") || !this.match(tt.colon)) {
+      node.property = expr;
       node.computed = true;
       this.expect(tt.bracketR);
       if (state.optionalChainMember) {
@@ -763,40 +778,21 @@ export default class ExpressionParser extends LValParser {
         return this.finishNode(node, "OptionalMemberExpression");
       }
       return this.finishNode(node, "MemberExpression");
-    } else {
-      let expr;
-      if (!this.match(tt.colon)) {
-        expr = this.parseExpression();
-        if (!this.match(tt.colon)) {
-          node.property = expr;
-          node.computed = true;
-          this.expect(tt.bracketR);
-          if (state.optionalChainMember) {
-            node.optional = false;
-            return this.finishNode(node, "OptionalMemberExpression");
-          }
-          return this.finishNode(node, "MemberExpression");
-        }
-      }
-      if (expr) {
-        this.checkSliceArgument(this.state.pos, expr);
-        node.lower = expr;
-      }
-      this.eat(tt.colon);
-      if (!this.match(tt.colon) && !this.match(tt.bracketR)) {
-        expr = this.parseExpression();
-        this.checkSliceArgument(this.state.pos, expr);
-        node.upper = expr;
-      }
-      this.eat(tt.colon);
-      if (!this.match(tt.colon) && !this.match(tt.bracketR)) {
-        expr = this.parseExpression();
-        this.checkSliceArgument(this.state.pos, expr);
-        node.step = expr;
-      }
-      this.expect(tt.bracketR);
-      return this.finishNode(node, "SliceExpression");
     }
+    if (expr) {
+      this.checkSliceArgument(this.state.pos, expr);
+      node.lower = expr;
+    }
+    expr = this.parseSliceArgument();
+    if (expr) {
+      node.upper = expr;
+    }
+    expr = this.parseSliceArgument();
+    if (expr) {
+      node.step = expr;
+    }
+    this.expect(tt.bracketR);
+    return this.finishNode(node, "SliceExpression");
   }
 
   parseTaggedTemplateExpression(
