@@ -31,7 +31,7 @@ export default class LocationParser extends CommentsParser {
       missingPluginNames?: Array<string>,
       code?: string,
     } = {},
-  ): empty {
+  ): Error | empty {
     const loc = this.getLocationForPosition(pos);
 
     message += ` (${loc.line}:${loc.column})`;
@@ -47,6 +47,12 @@ export default class LocationParser extends CommentsParser {
     if (code !== undefined) {
       err.code = code;
     }
-    throw err;
+
+    if (this.options.errorRecovery) {
+      this.state.errors.push(err);
+      return err;
+    } else {
+      throw err;
+    }
   }
 }

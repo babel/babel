@@ -38,6 +38,8 @@ export default class State {
     this.startLoc = this.endLoc = this.curPosition();
   }
 
+  errors: Error[] = [];
+
   // Used to signify the start of a potential arrow function
   potentialArrowAt: number = -1;
 
