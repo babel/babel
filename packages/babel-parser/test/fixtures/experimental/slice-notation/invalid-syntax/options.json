@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "sliceNotation"
+  ],
+  "throws": "Unexpected token (1:2)"
+}
