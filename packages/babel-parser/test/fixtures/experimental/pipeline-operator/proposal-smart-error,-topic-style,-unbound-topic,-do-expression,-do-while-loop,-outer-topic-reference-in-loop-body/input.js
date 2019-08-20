@@ -1,1 +1,1 @@
-value |> do { do x += # while (x < 50); }
+value |> do { do x += #; while (x < 50); }

@@ -1,3 +1,5 @@
 {
-  "throws": "Trailing comma is disallowed inside import(...) arguments (1:12)"
+  "plugins": [
+    "dynamicImport"
+  ]
 }

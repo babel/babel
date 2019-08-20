@@ -1,5 +1,7 @@
 {
-  "throws": "The only valid meta property for import is import.meta (1:7)",
   "sourceType": "module",
-  "plugins": ["dynamicImport", "importMeta"]
+  "plugins": [
+    "dynamicImport",
+    "importMeta"
+  ]
 }

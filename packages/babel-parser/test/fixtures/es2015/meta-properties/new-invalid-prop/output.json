@@ -1,0 +1,103 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 8,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 8
+    }
+  },
+  "errors": [
+    "SyntaxError: The only valid meta property for new is new.target (1:4)",
+    "SyntaxError: new.target can only be used in functions (1:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 8,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 8
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 8,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 8
+          }
+        },
+        "expression": {
+          "type": "MetaProperty",
+          "start": 0,
+          "end": 8,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 8
+            }
+          },
+          "meta": {
+            "type": "Identifier",
+            "start": 0,
+            "end": 3,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 3
+              },
+              "identifierName": "new"
+            },
+            "name": "new"
+          },
+          "property": {
+            "type": "Identifier",
+            "start": 4,
+            "end": 8,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 8
+              },
+              "identifierName": "prop"
+            },
+            "name": "prop"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

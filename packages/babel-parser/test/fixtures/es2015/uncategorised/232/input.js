@@ -1,1 +1,1 @@
-const default
+const default = 2

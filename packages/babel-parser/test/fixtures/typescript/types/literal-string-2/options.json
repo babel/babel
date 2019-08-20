@@ -1,5 +1,0 @@
-{
-  "sourceType": "module",
-  "plugins": ["typescript"],
-  "throws": "Template literal types cannot have any substitution (1:14)"
-}

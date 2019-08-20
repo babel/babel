@@ -1,4 +1,5 @@
 {
-  "plugins": ["classProperties"],
-  "throws": "'arguments' is not allowed in class field initializer (3:16)"
+  "plugins": [
+    "classProperties"
+  ]
 }

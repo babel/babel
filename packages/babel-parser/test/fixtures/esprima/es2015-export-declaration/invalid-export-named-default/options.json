@@ -1,4 +1,3 @@
 {
-  "sourceType": "module",
-  "throws": "Unexpected keyword 'default' (1:8)"
+  "sourceType": "module"
 }
