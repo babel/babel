@@ -2523,11 +2523,53 @@ export function isTSAnyKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSUnknownKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSBooleanKeyword(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
-  if (nodeType === "TSUnknownKeyword") {
+  if (nodeType === "TSBooleanKeyword") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isTSBigIntKeyword(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "TSBigIntKeyword") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isTSNeverKeyword(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "TSNeverKeyword") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isTSNullKeyword(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "TSNullKeyword") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -2565,20 +2607,6 @@ export function isTSObjectKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSBooleanKeyword(node: ?Object, opts?: Object): boolean {
-  if (!node) return false;
-
-  const nodeType = node.type;
-  if (nodeType === "TSBooleanKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
 export function isTSStringKeyword(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -2607,20 +2635,6 @@ export function isTSSymbolKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSVoidKeyword(node: ?Object, opts?: Object): boolean {
-  if (!node) return false;
-
-  const nodeType = node.type;
-  if (nodeType === "TSVoidKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
 export function isTSUndefinedKeyword(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -2635,11 +2649,11 @@ export function isTSUndefinedKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSNullKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSUnknownKeyword(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
-  if (nodeType === "TSNullKeyword") {
+  if (nodeType === "TSUnknownKeyword") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -2649,11 +2663,11 @@ export function isTSNullKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSNeverKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSVoidKeyword(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
-  if (nodeType === "TSNeverKeyword") {
+  if (nodeType === "TSVoidKeyword") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -4326,16 +4340,17 @@ export function isTSType(node: ?Object, opts?: Object): boolean {
   if (
     nodeType === "TSType" ||
     "TSAnyKeyword" === nodeType ||
-    "TSUnknownKeyword" === nodeType ||
+    "TSBooleanKeyword" === nodeType ||
+    "TSBigIntKeyword" === nodeType ||
+    "TSNeverKeyword" === nodeType ||
+    "TSNullKeyword" === nodeType ||
     "TSNumberKeyword" === nodeType ||
     "TSObjectKeyword" === nodeType ||
-    "TSBooleanKeyword" === nodeType ||
     "TSStringKeyword" === nodeType ||
     "TSSymbolKeyword" === nodeType ||
-    "TSVoidKeyword" === nodeType ||
     "TSUndefinedKeyword" === nodeType ||
-    "TSNullKeyword" === nodeType ||
-    "TSNeverKeyword" === nodeType ||
+    "TSUnknownKeyword" === nodeType ||
+    "TSVoidKeyword" === nodeType ||
     "TSThisType" === nodeType ||
     "TSFunctionType" === nodeType ||
     "TSConstructorType" === nodeType ||

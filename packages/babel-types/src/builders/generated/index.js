@@ -722,11 +722,26 @@ export function TSAnyKeyword(...args: Array<any>): Object {
 }
 export { TSAnyKeyword as tsAnyKeyword };
 export { TSAnyKeyword as tSAnyKeyword };
-export function TSUnknownKeyword(...args: Array<any>): Object {
-  return builder("TSUnknownKeyword", ...args);
+export function TSBooleanKeyword(...args: Array<any>): Object {
+  return builder("TSBooleanKeyword", ...args);
 }
-export { TSUnknownKeyword as tsUnknownKeyword };
-export { TSUnknownKeyword as tSUnknownKeyword };
+export { TSBooleanKeyword as tsBooleanKeyword };
+export { TSBooleanKeyword as tSBooleanKeyword };
+export function TSBigIntKeyword(...args: Array<any>): Object {
+  return builder("TSBigIntKeyword", ...args);
+}
+export { TSBigIntKeyword as tsBigIntKeyword };
+export { TSBigIntKeyword as tSBigIntKeyword };
+export function TSNeverKeyword(...args: Array<any>): Object {
+  return builder("TSNeverKeyword", ...args);
+}
+export { TSNeverKeyword as tsNeverKeyword };
+export { TSNeverKeyword as tSNeverKeyword };
+export function TSNullKeyword(...args: Array<any>): Object {
+  return builder("TSNullKeyword", ...args);
+}
+export { TSNullKeyword as tsNullKeyword };
+export { TSNullKeyword as tSNullKeyword };
 export function TSNumberKeyword(...args: Array<any>): Object {
   return builder("TSNumberKeyword", ...args);
 }
@@ -737,11 +752,6 @@ export function TSObjectKeyword(...args: Array<any>): Object {
 }
 export { TSObjectKeyword as tsObjectKeyword };
 export { TSObjectKeyword as tSObjectKeyword };
-export function TSBooleanKeyword(...args: Array<any>): Object {
-  return builder("TSBooleanKeyword", ...args);
-}
-export { TSBooleanKeyword as tsBooleanKeyword };
-export { TSBooleanKeyword as tSBooleanKeyword };
 export function TSStringKeyword(...args: Array<any>): Object {
   return builder("TSStringKeyword", ...args);
 }
@@ -752,26 +762,21 @@ export function TSSymbolKeyword(...args: Array<any>): Object {
 }
 export { TSSymbolKeyword as tsSymbolKeyword };
 export { TSSymbolKeyword as tSSymbolKeyword };
-export function TSVoidKeyword(...args: Array<any>): Object {
-  return builder("TSVoidKeyword", ...args);
-}
-export { TSVoidKeyword as tsVoidKeyword };
-export { TSVoidKeyword as tSVoidKeyword };
 export function TSUndefinedKeyword(...args: Array<any>): Object {
   return builder("TSUndefinedKeyword", ...args);
 }
 export { TSUndefinedKeyword as tsUndefinedKeyword };
 export { TSUndefinedKeyword as tSUndefinedKeyword };
-export function TSNullKeyword(...args: Array<any>): Object {
-  return builder("TSNullKeyword", ...args);
+export function TSUnknownKeyword(...args: Array<any>): Object {
+  return builder("TSUnknownKeyword", ...args);
 }
-export { TSNullKeyword as tsNullKeyword };
-export { TSNullKeyword as tSNullKeyword };
-export function TSNeverKeyword(...args: Array<any>): Object {
-  return builder("TSNeverKeyword", ...args);
+export { TSUnknownKeyword as tsUnknownKeyword };
+export { TSUnknownKeyword as tSUnknownKeyword };
+export function TSVoidKeyword(...args: Array<any>): Object {
+  return builder("TSVoidKeyword", ...args);
 }
-export { TSNeverKeyword as tsNeverKeyword };
-export { TSNeverKeyword as tSNeverKeyword };
+export { TSVoidKeyword as tsVoidKeyword };
+export { TSVoidKeyword as tSVoidKeyword };
 export function TSThisType(...args: Array<any>): Object {
   return builder("TSThisType", ...args);
 }
