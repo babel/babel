@@ -37,6 +37,8 @@ export default class LValParser extends NodeUtils {
 
   // Convert existing expression atom to assignable pattern
   // if possible.
+  // NOTE: There is a corresponding "isAssignable" method in flow.js.
+  // When this one is updated, please check if also that one needs to be updated.
 
   toAssignable(
     node: Node,
@@ -489,7 +491,7 @@ export default class LValParser extends NodeUtils {
   }
 
   raiseRestNotLast(pos: number) {
-    this.raise(pos, `Rest element must be last element`);
+    throw this.raise(pos, `Rest element must be last element`);
   }
 
   raiseTrailingCommaAfterRest(pos: number) {

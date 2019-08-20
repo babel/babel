@@ -203,7 +203,7 @@ export default class StatementParser extends ExpressionParser {
       case tt._var:
         kind = kind || this.state.value;
         if (context && kind !== "var") {
-          this.unexpected(
+          this.raise(
             this.state.start,
             "Lexical declaration cannot appear in a single-statement context",
           );
@@ -269,8 +269,8 @@ export default class StatementParser extends ExpressionParser {
       default: {
         if (this.isAsyncFunction()) {
           if (context) {
-            this.unexpected(
-              null,
+            this.raise(
+              this.state.start,
               "Async functions can only be declared at the top level or inside a block",
             );
           }
@@ -351,7 +351,7 @@ export default class StatementParser extends ExpressionParser {
         );
       }
     } else if (!this.canHaveLeadingDecorator()) {
-      this.raise(
+      throw this.raise(
         this.state.start,
         "Leading decorators must be attached to a class declaration",
       );
@@ -1036,7 +1036,7 @@ export default class StatementParser extends ExpressionParser {
     this.initFunction(node, isAsync);
 
     if (this.match(tt.star) && isHangingStatement) {
-      this.unexpected(
+      this.raise(
         this.state.start,
         "Generators can only be declared at the top level or inside a block",
       );
@@ -1077,7 +1077,7 @@ export default class StatementParser extends ExpressionParser {
     this.scope.exit();
 
     if (isStatement && !isHangingStatement) {
-      // We need to validate this _after_ parsing the function body
+      // We need to register this _after_ parsing the function body
       // because of TypeScript body-less function declarations,
       // which shouldn't be added to the scope.
       this.checkFunctionStatementId(node);
@@ -1191,7 +1191,7 @@ export default class StatementParser extends ExpressionParser {
       while (!this.eat(tt.braceR)) {
         if (this.eat(tt.semi)) {
           if (decorators.length > 0) {
-            this.raise(
+            throw this.raise(
               this.state.lastTokEnd,
               "Decorators must not be followed by a semicolon",
             );
@@ -1229,7 +1229,7 @@ export default class StatementParser extends ExpressionParser {
     });
 
     if (decorators.length) {
-      this.raise(
+      throw this.raise(
         this.state.start,
         "You have trailing decorators with no method",
       );
@@ -1797,7 +1797,7 @@ export default class StatementParser extends ExpressionParser {
         this.hasPlugin("decorators") &&
         this.getPluginOption("decorators", "decoratorsBeforeExport")
       ) {
-        this.unexpected(
+        this.raise(
           this.state.start,
           "Decorators must be placed *before* the 'export' keyword." +
             " You can set the 'decoratorsBeforeExport' option to false to use" +
@@ -1807,7 +1807,7 @@ export default class StatementParser extends ExpressionParser {
       this.parseDecorators(false);
       return this.parseClass(expr, true, true);
     } else if (this.match(tt._const) || this.match(tt._var) || this.isLet()) {
-      return this.raise(
+      throw this.raise(
         this.state.start,
         "Only expressions, functions or classes are allowed as the `default` export.",
       );
@@ -1977,7 +1977,7 @@ export default class StatementParser extends ExpressionParser {
     name: string,
   ): void {
     if (this.state.exportedIdentifiers.indexOf(name) > -1) {
-      throw this.raise(
+      this.raise(
         node.start,
         name === "default"
           ? "Only one default export allowed per module."
@@ -2098,8 +2098,8 @@ export default class StatementParser extends ExpressionParser {
       } else {
         // Detect an attempt to deep destructure
         if (this.eat(tt.colon)) {
-          this.unexpected(
-            null,
+          throw this.raise(
+            this.state.start,
             "ES2015 named imports do not destructure. " +
               "Use another statement for destructuring after the import.",
           );

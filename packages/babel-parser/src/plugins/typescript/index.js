@@ -234,8 +234,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.expect(tt._import);
       this.expect(tt.parenL);
       if (!this.match(tt.string)) {
-        throw this.unexpected(
-          null,
+        this.raise(
+          this.state.start,
           "Argument in a type import must be a string literal",
         );
       }
@@ -371,13 +371,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             pattern.type !== "ObjectPattern" &&
             pattern.type !== "ArrayPattern"
           ) {
-            throw this.unexpected(
+            this.raise(
               pattern.start,
               "Name in a signature must be an Identifier, ObjectPattern or ArrayPattern," +
                 `instead got ${pattern.type}`,
             );
           }
-          return pattern;
+          return (pattern: any);
         },
       );
     }
@@ -642,7 +642,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node: N.TsLiteralType = this.startNode();
       const templateNode = this.parseTemplate(false);
       if (templateNode.expressions.length > 0) {
-        throw this.raise(
+        this.raise(
           templateNode.expressions[0].start,
           "Template literal types cannot have any substitution",
         );
@@ -1558,12 +1558,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (accessibility) pp.accessibility = accessibility;
         if (readonly) pp.readonly = readonly;
         if (elt.type !== "Identifier" && elt.type !== "AssignmentPattern") {
-          throw this.raise(
+          this.raise(
             pp.start,
             "A parameter property may not be declared using a binding pattern.",
           );
         }
-        pp.parameter = elt;
+        pp.parameter = ((elt: any): N.Identifier | N.AssignmentPattern);
         return this.finishNode(pp, "TSParameterProperty");
       }
 
@@ -2277,13 +2277,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseAssignableListItemTypes(param: N.Pattern) {
       if (this.eat(tt.question)) {
         if (param.type !== "Identifier") {
-          throw this.raise(
+          this.raise(
             param.start,
             "A binding pattern parameter cannot be optional in an implementation signature.",
           );
         }
 
-        param.optional = true;
+        ((param: any): N.Identifier).optional = true;
       }
       const type = this.tsTryParseTypeAnnotation();
       if (type) param.typeAnnotation = type;

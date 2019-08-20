@@ -89,14 +89,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const start = prop.start;
       if (prop.value.params.length !== paramCount) {
         if (prop.kind === "get") {
-          this.raise(start, "getter must not have any formal parameters");
+          throw this.raise(start, "getter must not have any formal parameters");
         } else {
-          this.raise(start, "setter must have exactly one formal parameter");
+          throw this.raise(
+            start,
+            "setter must have exactly one formal parameter",
+          );
         }
       }
 
       if (prop.kind === "set" && prop.value.params[0].type === "RestElement") {
-        this.raise(
+        throw this.raise(
           start,
           "setter function argument must not be a rest parameter",
         );
@@ -382,12 +385,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isLast: boolean,
     ) {
       if (prop.kind === "get" || prop.kind === "set") {
-        this.raise(
+        throw this.raise(
           prop.key.start,
           "Object pattern can't contain getter or setter",
         );
       } else if (prop.method) {
-        this.raise(prop.key.start, "Object pattern can't contain methods");
+        throw this.raise(
+          prop.key.start,
+          "Object pattern can't contain methods",
+        );
       } else {
         super.toAssignableObjectExpressionProp(prop, isBinding, isLast);
       }

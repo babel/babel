@@ -108,6 +108,7 @@ export default class ExpressionParser extends LValParser {
       this.unexpected();
     }
     expr.comments = this.state.comments;
+    expr.errors = this.state.errors;
     return expr;
   }
 
@@ -783,9 +784,10 @@ export default class ExpressionParser extends LValParser {
     node: T,
     optional: boolean,
   ): T {
-    if (node.callee.type === "Import") {
+    validate: if (node.callee.type === "Import") {
       if (node.arguments.length !== 1) {
         this.raise(node.start, "import() requires exactly one argument");
+        break validate;
       }
 
       const importArg = node.arguments[0];
@@ -1106,15 +1108,16 @@ export default class ExpressionParser extends LValParser {
           }
 
           this.next();
-          if (this.primaryTopicReferenceIsAllowedInCurrentTopicContext()) {
-            this.registerTopicReference();
-            return this.finishNode(node, "PipelinePrimaryTopicReference");
-          } else {
-            throw this.raise(
+
+          if (!this.primaryTopicReferenceIsAllowedInCurrentTopicContext()) {
+            this.raise(
               node.start,
               `Topic reference was used in a lexical context without topic binding`,
             );
           }
+
+          this.registerTopicReference();
+          return this.finishNode(node, "PipelinePrimaryTopicReference");
         }
       }
 
@@ -1199,21 +1202,21 @@ export default class ExpressionParser extends LValParser {
 
     if (this.isContextual("meta")) {
       this.expectPlugin("importMeta");
+
+      if (!this.inModule) {
+        this.raise(
+          id.start,
+          `import.meta may appear only with 'sourceType: "module"'`,
+          { code: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED" },
+        );
+      }
+      this.sawUnambiguousESM = true;
     } else if (!this.hasPlugin("importMeta")) {
       this.raise(
         id.start,
         `Dynamic imports require a parameter: import('a.js')`,
       );
     }
-
-    if (!this.inModule) {
-      this.raise(
-        id.start,
-        `import.meta may appear only with 'sourceType: "module"'`,
-        { code: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED" },
-      );
-    }
-    this.sawUnambiguousESM = true;
 
     return this.parseMetaProperty(node, id, "meta");
   }
@@ -2219,7 +2222,7 @@ export default class ExpressionParser extends LValParser {
         "await is not allowed in async function parameters",
       );
     }
-    if (this.match(tt.star)) {
+    if (this.eat(tt.star)) {
       this.raise(
         node.start,
         "await* has been removed from the async functions proposal. Use Promise.all() instead.",
@@ -2291,7 +2294,7 @@ export default class ExpressionParser extends LValParser {
       if (left.type === "SequenceExpression") {
         // Ensure that the pipeline head is not a comma-delimited
         // sequence expression.
-        throw this.raise(
+        this.raise(
           leftStartPos,
           `Pipeline head should not be a comma-separated sequence expression`,
         );
@@ -2336,7 +2339,7 @@ export default class ExpressionParser extends LValParser {
       pipelineStyle === "PipelineTopicExpression" &&
       childExpression.type === "SequenceExpression"
     ) {
-      throw this.raise(
+      this.raise(
         startPos,
         `Pipeline body may not be a comma-separated sequence expression`,
       );
@@ -2362,7 +2365,7 @@ export default class ExpressionParser extends LValParser {
         break;
       case "PipelineTopicExpression":
         if (!this.topicReferenceWasUsedInCurrentTopicContext()) {
-          throw this.raise(
+          this.raise(
             startPos,
             `Pipeline is in topic style but does not use topic reference`,
           );
@@ -2370,7 +2373,9 @@ export default class ExpressionParser extends LValParser {
         bodyNode.expression = childExpression;
         break;
       default:
-        throw this.raise(startPos, `Unknown pipeline style ${pipelineStyle}`);
+        throw new Error(
+          `Internal @babel/parser error: Unknown pipeline style (${pipelineStyle})`,
+        );
     }
     return this.finishNode(bodyNode, pipelineStyle);
   }

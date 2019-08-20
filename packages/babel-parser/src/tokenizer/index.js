@@ -248,7 +248,7 @@ export default class Tokenizer extends LocationParser {
     const startLoc = this.state.curPosition();
     const start = this.state.pos;
     const end = this.input.indexOf("*/", this.state.pos + 2);
-    if (end === -1) this.raise(start, "Unterminated comment");
+    if (end === -1) throw this.raise(start, "Unterminated comment");
 
     this.state.pos = end + 2;
     lineBreakG.lastIndex = start;
@@ -384,7 +384,7 @@ export default class Tokenizer extends LocationParser {
     const nextPos = this.state.pos + 1;
     const next = this.input.charCodeAt(nextPos);
     if (next >= charCodes.digit0 && next <= charCodes.digit9) {
-      this.raise(this.state.pos, "Unexpected digit after hash token");
+      throw this.raise(this.state.pos, "Unexpected digit after hash token");
     }
 
     if (
@@ -400,7 +400,7 @@ export default class Tokenizer extends LocationParser {
     ) {
       this.finishOp(tt.hash, 1);
     } else {
-      this.raise(this.state.pos, "Unexpected character '#'");
+      throw this.raise(this.state.pos, "Unexpected character '#'");
     }
   }
 
@@ -808,7 +808,7 @@ export default class Tokenizer extends LocationParser {
         }
     }
 
-    this.raise(
+    throw this.raise(
       this.state.pos,
       `Unexpected character '${String.fromCodePoint(code)}'`,
     );
@@ -825,11 +825,11 @@ export default class Tokenizer extends LocationParser {
     let escaped, inClass;
     for (;;) {
       if (this.state.pos >= this.length) {
-        this.raise(start, "Unterminated regular expression");
+        throw this.raise(start, "Unterminated regular expression");
       }
       const ch = this.input.charAt(this.state.pos);
       if (lineBreak.test(ch)) {
-        this.raise(start, "Unterminated regular expression");
+        throw this.raise(start, "Unterminated regular expression");
       }
       if (escaped) {
         escaped = false;
@@ -858,9 +858,6 @@ export default class Tokenizer extends LocationParser {
         if (mods.indexOf(char) > -1) {
           this.raise(this.state.pos + 1, "Duplicate regular expression flag");
         }
-
-        ++this.state.pos;
-        mods += char;
       } else if (
         isIdentifierChar(charCode) ||
         charCode === charCodes.backslash
@@ -869,6 +866,9 @@ export default class Tokenizer extends LocationParser {
       } else {
         break;
       }
+
+      ++this.state.pos;
+      mods += char;
     }
 
     this.finishToken(tt.regexp, {
@@ -880,10 +880,16 @@ export default class Tokenizer extends LocationParser {
   // Read an integer in the given radix. Return null if zero digits
   // were read, the integer value otherwise. When `len` is given, this
   // will return `null` unless the integer has exactly `len` digits.
+  // When `forceLen` is `true`, it means that we already know that in case
+  // of a malformed number we have to skip `len` characters anyway, instead
+  // of bailing out early. For example, in "\u{123Z}" we want to read up to }
+  // anyway, while in "\u00Z" we will stop at Z instead of consuming four
+  // characters (and thus the closing quote).
 
   readInt(
     radix: number,
     len?: number,
+    forceLen?: boolean,
     allowNumSeparator: boolean = true,
   ): number | null {
     const start = this.state.pos;
@@ -900,6 +906,7 @@ export default class Tokenizer extends LocationParser {
         ? allowedNumericSeparatorSiblings.oct
         : allowedNumericSeparatorSiblings.bin;
 
+    let invalid = false;
     let total = 0;
 
     for (let i = 0, e = len == null ? Infinity : len; i < e; ++i) {
@@ -911,15 +918,19 @@ export default class Tokenizer extends LocationParser {
           const prev = this.input.charCodeAt(this.state.pos - 1);
           const next = this.input.charCodeAt(this.state.pos + 1);
           if (allowedSiblings.indexOf(next) === -1) {
-            this.raise(this.state.pos, "Invalid or unexpected token");
-          }
-
-          if (
+            this.raise(
+              this.state.pos,
+              "A numeric separator is only allowed between two digits",
+            );
+          } else if (
             forbiddenSiblings.indexOf(prev) > -1 ||
             forbiddenSiblings.indexOf(next) > -1 ||
             Number.isNaN(next)
           ) {
-            this.raise(this.state.pos, "Invalid or unexpected token");
+            this.raise(
+              this.state.pos,
+              "A numeric separator is only allowed between two digits",
+            );
           }
 
           if (!allowNumSeparator) {
@@ -944,13 +955,30 @@ export default class Tokenizer extends LocationParser {
       } else {
         val = Infinity;
       }
-      if (val >= radix) break;
+      if (val >= radix) {
+        // If we are in "errorRecovery" mode and we found a digit which is too big,
+        // don't break the loop.
+
+        if (this.options.errorRecovery && val <= 9) {
+          val = 0;
+          this.raise(
+            this.state.start + i + 2,
+            "Expected number in radix " + radix,
+          );
+        } else if (forceLen) {
+          val = 0;
+          invalid = true;
+        } else {
+          break;
+        }
+      }
       ++this.state.pos;
       total = total * radix + val;
     }
     if (
       this.state.pos === start ||
-      (len != null && this.state.pos - start !== len)
+      (len != null && this.state.pos - start !== len) ||
+      invalid
     ) {
       return null;
     }
@@ -976,7 +1004,7 @@ export default class Tokenizer extends LocationParser {
     }
 
     if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {
-      this.raise(this.state.pos, "Identifier directly after number");
+      throw this.raise(this.state.pos, "Identifier directly after number");
     }
 
     if (isBigInt) {
@@ -1062,7 +1090,7 @@ export default class Tokenizer extends LocationParser {
     }
 
     if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {
-      this.raise(this.state.pos, "Identifier directly after number");
+      throw this.raise(this.state.pos, "Identifier directly after number");
     }
 
     // remove "_" for numeric literal separator, and "n" for BigInts
@@ -1087,6 +1115,7 @@ export default class Tokenizer extends LocationParser {
       const codePos = ++this.state.pos;
       code = this.readHexChar(
         this.input.indexOf("}", this.state.pos) - this.state.pos,
+        true,
         throwOnInvalid,
       );
       ++this.state.pos;
@@ -1102,7 +1131,7 @@ export default class Tokenizer extends LocationParser {
         }
       }
     } else {
-      code = this.readHexChar(4, throwOnInvalid);
+      code = this.readHexChar(4, false, throwOnInvalid);
     }
     return code;
   }
@@ -1112,7 +1141,7 @@ export default class Tokenizer extends LocationParser {
       chunkStart = ++this.state.pos;
     for (;;) {
       if (this.state.pos >= this.length) {
-        this.raise(this.state.start, "Unterminated string constant");
+        throw this.raise(this.state.start, "Unterminated string constant");
       }
       const ch = this.input.charCodeAt(this.state.pos);
       if (ch === quote) break;
@@ -1128,7 +1157,7 @@ export default class Tokenizer extends LocationParser {
         ++this.state.pos;
         ++this.state.curLine;
       } else if (isNewLine(ch)) {
-        this.raise(this.state.start, "Unterminated string constant");
+        throw this.raise(this.state.start, "Unterminated string constant");
       } else {
         ++this.state.pos;
       }
@@ -1145,7 +1174,7 @@ export default class Tokenizer extends LocationParser {
       containsInvalid = false;
     for (;;) {
       if (this.state.pos >= this.length) {
-        this.raise(this.state.start, "Unterminated template");
+        throw this.raise(this.state.start, "Unterminated template");
       }
       const ch = this.input.charCodeAt(this.state.pos);
       if (
@@ -1214,7 +1243,7 @@ export default class Tokenizer extends LocationParser {
       case charCodes.lowercaseR:
         return "\r";
       case charCodes.lowercaseX: {
-        const code = this.readHexChar(2, throwOnInvalid);
+        const code = this.readHexChar(2, false, throwOnInvalid);
         return code === null ? null : String.fromCharCode(code);
       }
       case charCodes.lowercaseU: {
@@ -1288,9 +1317,13 @@ export default class Tokenizer extends LocationParser {
 
   // Used to read character escape sequences ('\x', '\u').
 
-  readHexChar(len: number, throwOnInvalid: boolean): number | null {
+  readHexChar(
+    len: number,
+    forceLen: boolean,
+    throwOnInvalid: boolean,
+  ): number | null {
     const codePos = this.state.pos;
-    const n = this.readInt(16, len, false);
+    const n = this.readInt(16, len, forceLen, false);
     if (n === null) {
       if (throwOnInvalid) {
         this.raise(codePos, "Bad character escape sequence");
@@ -1333,6 +1366,7 @@ export default class Tokenizer extends LocationParser {
             this.state.pos,
             "Expecting Unicode escape sequence \\uXXXX",
           );
+          continue;
         }
 
         ++this.state.pos;

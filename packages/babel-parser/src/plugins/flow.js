@@ -263,7 +263,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.flowParseDeclareModuleExports(node);
         } else {
           if (insideModule) {
-            this.unexpected(
+            this.raise(
               this.state.lastTokStart,
               "`declare module` cannot be used inside another `declare module`",
             );
@@ -313,7 +313,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (this.match(tt._import)) {
           this.next();
           if (!this.isContextual("type") && !this.match(tt._typeof)) {
-            this.unexpected(
+            this.raise(
               this.state.lastTokStart,
               "Imports within a `declare module` body must always be `import type` or `import typeof`",
             );
@@ -345,17 +345,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       body.forEach(bodyElement => {
         if (isEsModuleType(bodyElement)) {
           if (kind === "CommonJS") {
-            this.unexpected(bodyElement.start, errorMessage);
+            this.raise(bodyElement.start, errorMessage);
           }
           kind = "ES";
         } else if (bodyElement.type === "DeclareModuleExports") {
           if (hasModuleExport) {
-            this.unexpected(
+            this.raise(
               bodyElement.start,
               "Duplicate `declare module.exports` statement",
             );
           }
-          if (kind === "ES") this.unexpected(bodyElement.start, errorMessage);
+          if (kind === "ES") this.raise(bodyElement.start, errorMessage);
           kind = "CommonJS";
           hasModuleExport = true;
         }
@@ -548,8 +548,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkNotUnderscore(word: string) {
       if (word === "_") {
-        throw this.unexpected(
-          null,
+        this.raise(
+          this.state.start,
           "`_` is only allowed as a type argument to call or new",
         );
       }
@@ -632,7 +632,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.default = this.flowParseType();
       } else {
         if (requireDefault) {
-          this.unexpected(
+          this.raise(
             nodeStart,
             // eslint-disable-next-line max-len
             "Type parameter declaration needs a default, since a preceding type parameter declaration has a default.",
@@ -992,8 +992,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): (N.FlowObjectTypeProperty | N.FlowObjectTypeSpreadProperty) | null {
       if (this.match(tt.ellipsis)) {
         if (!allowSpread) {
-          this.unexpected(
-            null,
+          this.raise(
+            this.state.start,
             "Spread operator cannot appear in class or interface definitions",
           );
         }
@@ -1001,20 +1001,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.unexpected(protoStart);
         }
         if (variance) {
-          this.unexpected(
-            variance.start,
-            "Spread properties cannot have variance",
-          );
+          this.raise(variance.start, "Spread properties cannot have variance");
         }
         this.expect(tt.ellipsis);
         const isInexactToken = this.eat(tt.comma) || this.eat(tt.semi);
 
         if (this.match(tt.braceR)) {
-          if (allowInexact) return null;
-          this.unexpected(
-            null,
-            "Explicit inexact syntax is only allowed inside inexact objects",
-          );
+          if (!allowInexact) {
+            this.raise(
+              this.state.start,
+              "Explicit inexact syntax is only allowed inside inexact objects",
+            );
+          }
+          return null;
         }
 
         if (this.match(tt.braceBarR)) {
@@ -1400,8 +1399,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               );
             }
 
-            this.unexpected(
-              null,
+            throw this.raise(
+              this.state.start,
               `Unexpected token, expected "number" or "bigint"`,
             );
           }
@@ -1720,7 +1719,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.Expression {
       if (!this.match(tt.question)) return expr;
 
-      // only do the expensive clone if there is a question mark
+      // only use the expensive "tryParse" method if there is a question mark
       // and if we come from inside parens
       if (refNeedsArrowPos) {
         const state = this.state.clone();
@@ -2025,6 +2024,49 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
+    isAssignable(node: Node, isBinding?: boolean): boolean {
+      switch (node.type) {
+        case "Identifier":
+        case "ObjectPattern":
+        case "ArrayPattern":
+        case "AssignmentPattern":
+          return true;
+
+        case "ObjectExpression": {
+          const last = node.properties.length - 1;
+          return node.properties.every((prop, i) => {
+            return (
+              prop.type !== "ObjectMethod" &&
+              (i === last || prop.type === "SpreadElement") &&
+              this.isAssignable(prop)
+            );
+          });
+        }
+
+        case "ObjectProperty":
+          return this.isAssignable(node.value);
+
+        case "SpreadElement":
+          return this.isAssignable(node.argument);
+
+        case "ArrayExpression":
+          return node.elements.every(element => this.isAssignable(element));
+
+        case "AssignmentExpression":
+          return node.operator === "=";
+
+        case "ParenthesizedExpression":
+          return this.isAssignable(node.expression);
+
+        case "MemberExpression":
+        case "OptionalMemberExpression":
+          return !isBinding;
+
+        default:
+          return false;
+      }
+    }
+
     toAssignable(
       node: N.Node,
       isBinding: ?boolean,
@@ -2253,13 +2295,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseAssignableListItemTypes(param: N.Pattern): N.Pattern {
       if (this.eat(tt.question)) {
         if (param.type !== "Identifier") {
-          throw this.raise(
+          this.raise(
             param.start,
             "A binding pattern parameter cannot be optional in an implementation signature.",
           );
         }
 
-        param.optional = true;
+        ((param: any): N.Identifier).optional = true;
       }
       if (this.match(tt.colon)) {
         param.typeAnnotation = this.flowParseTypeAnnotation();
@@ -2549,7 +2591,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } else if (jsxError != null) {
           throw jsxError;
         } else {
-          this.raise(
+          throw this.raise(
             typeParameters.start,
             "Expected an arrow function after this type parameter declaration",
           );
@@ -2811,7 +2853,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseTopLevel(file: N.File, program: N.Program): N.File {
       const fileNode = super.parseTopLevel(file, program);
       if (this.state.hasFlowComment) {
-        this.unexpected(null, "Unterminated flow-comment");
+        this.raise(this.state.pos, "Unterminated flow-comment");
       }
       return fileNode;
     }
@@ -2832,7 +2874,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (this.state.hasFlowComment) {
         const end = this.input.indexOf("*-/", (this.state.pos += 2));
-        if (end === -1) this.raise(this.state.pos - 2, "Unterminated comment");
+        if (end === -1) {
+          throw this.raise(this.state.pos - 2, "Unterminated comment");
+        }
         this.state.pos = end + 3;
         return;
       }
@@ -2874,7 +2918,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     hasFlowCommentCompletion(): void {
       const end = this.input.indexOf("*/", this.state.pos);
       if (end === -1) {
-        this.raise(this.state.pos, "Unterminated comment");
+        throw this.raise(this.state.pos, "Unterminated comment");
       }
     }
 
