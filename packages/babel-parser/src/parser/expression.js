@@ -742,7 +742,7 @@ export default class ExpressionParser extends LValParser {
     if (expr.type !== "NumericLiteral" && expr.type !== "Identifier") {
       this.raise(
         pos,
-        `The slice-notation supports only numerical literal and identifier, but ${expr.type} is supplied`,
+        "Slice argument requires to be either numeric literal or identifier",
       );
     }
   }
@@ -750,9 +750,10 @@ export default class ExpressionParser extends LValParser {
   parseSliceArgument(): ?N.Expression {
     let expr = null;
     this.eat(tt.colon);
+    const pos = this.state.pos;
     if (!this.match(tt.colon) && !this.match(tt.bracketR)) {
       expr = this.parseExpression();
-      this.checkSliceArgument(this.state.pos, expr);
+      this.checkSliceArgument(pos, expr);
     }
     return expr;
   }
@@ -766,6 +767,7 @@ export default class ExpressionParser extends LValParser {
     const node = this.startNodeAt(startPos, startLoc);
     node.object = base;
     let expr;
+    const pos = this.state.pos;
     if (!this.hasPlugin("sliceNotation") || !this.match(tt.colon)) {
       expr = this.parseExpression();
     }
@@ -780,7 +782,7 @@ export default class ExpressionParser extends LValParser {
       return this.finishNode(node, "MemberExpression");
     }
     if (expr) {
-      this.checkSliceArgument(this.state.pos, expr);
+      this.checkSliceArgument(pos, expr);
       node.lower = expr;
     }
     expr = this.parseSliceArgument();
