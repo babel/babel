@@ -27,6 +27,8 @@ defineType("Placeholder", {
 defineType("V8IntrinsicIdentifier", {
   builder: ["name"],
   fields: {
-    name: assertValueType("string"),
+    name: {
+      validate: assertValueType("string"),
+    },
   },
 });
