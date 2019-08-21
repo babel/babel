@@ -744,7 +744,8 @@ export default class ExpressionParser extends LValParser {
       expr.type === "Identifier" ||
       (expr.type === "UnaryExpression" &&
         expr.operator === "-" &&
-        expr.argument.type === "NumericLiteral")
+        (expr.argument.type === "NumericLiteral" ||
+          expr.argument.type === "Identifier"))
     ) {
       return;
     }
