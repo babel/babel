@@ -88,8 +88,6 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
     const value = convertAttributeValue(node.value || t.booleanLiteral(true));
 
     if (t.isStringLiteral(value) && !t.isJSXExpressionContainer(node.value)) {
-      value.value = value.value.replace(/\n\s+/g, " ");
-
       // "raw" JSXText should not be used from a StringLiteral because it needs to be escaped.
       if (value.extra && value.extra.raw) {
         delete value.extra.raw;
