@@ -267,7 +267,7 @@ defineType("BigIntLiteral", {
 });
 
 defineType("SliceExpression", {
-  visitor: ["object", "begin", "end", "step"],
+  visitor: ["object", "lower", "upper", "step"],
   aliases: ["Expression", "LVal"],
   fields: {
     object: {
