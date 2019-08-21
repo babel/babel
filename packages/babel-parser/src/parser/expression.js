@@ -739,12 +739,19 @@ export default class ExpressionParser extends LValParser {
   }
 
   checkSliceArgument(pos: number, expr: N.Expression) {
-    if (expr.type !== "NumericLiteral" && expr.type !== "Identifier") {
-      this.raise(
-        pos,
-        "Slice argument requires to be either numeric literal or identifier",
-      );
+    if (
+      expr.type === "NumericLiteral" ||
+      expr.type === "Identifier" ||
+      (expr.type === "UnaryExpression" &&
+        expr.operator === "-" &&
+        expr.argument.type === "NumericLiteral")
+    ) {
+      return;
     }
+    this.raise(
+      pos,
+      "Slice argument requires to be either numeric literal or identifier",
+    );
   }
 
   parseSliceArgument(): ?N.Expression {
