@@ -1,0 +1,26 @@
+{
+  "name": "@babel/plugin-proposal-slice-notation",
+  "version": "7.5.0",
+  "description": "This plugin transforms slice notation",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-slice-notation",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "@babel/helper-plugin-utils": "^7.0.0",
+    "@babel/plugin-syntax-slice-notation": "^7.5.0",
+    "@babel/types": "^7.5.0"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/helper-plugin-test-runner": "^7.0.0"
+  }
+}

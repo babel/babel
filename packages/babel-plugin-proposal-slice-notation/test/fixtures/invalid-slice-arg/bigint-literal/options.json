@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "proposal-slice-notation",
+    "syntax-bigint"
+  ],
+  "throws": "Slice argument requires to be either numeric literal or identifier (2:6)"
+}
