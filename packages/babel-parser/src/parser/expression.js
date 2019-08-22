@@ -644,13 +644,17 @@ export default class ExpressionParser extends LValParser {
       ) {
         this.raise(startPos, "Private fields can't be accessed on super");
       }
-      if (state.optionalChainMember) {
-        node.optional = false;
-        return this.finishNode(node, "OptionalMemberExpression");
-      }
-      return this.finishNode(node, "MemberExpression");
+      return this.finishMaybeOptionalMemberExpression(node, state);
     } else if (this.eat(tt.bracketL)) {
-      return this.parseMaybeSliceExpression(startPos, startLoc, base, state);
+      const node = this.startNodeAt(startPos, startLoc);
+      node.object = base;
+      if (this.hasPlugin("sliceNotation")) {
+        return this.parseMaybeSliceExpression(node, state);
+      }
+      node.property = this.parseExpression();
+      node.computed = true;
+      this.expect(tt.bracketR);
+      return this.finishMaybeOptionalMemberExpression(node, state);
     } else if (!noCalls && this.match(tt.parenL)) {
       const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
       const oldYieldPos = this.state.yieldPos;
@@ -766,16 +770,10 @@ export default class ExpressionParser extends LValParser {
     return expr;
   }
 
-  finishOptionalMemberExpression(
+  finishMaybeOptionalMemberExpression(
     node: N.Expression,
-    object: N.Expression,
-    property: N.Expression,
     state: N.ParseSubscriptState,
   ): N.Expression {
-    node.object = object;
-    node.property = property;
-    node.computed = true;
-    this.expect(tt.bracketR);
     if (state.optionalChainMember) {
       node.optional = false;
       return this.finishNode(node, "OptionalMemberExpression");
@@ -784,23 +782,18 @@ export default class ExpressionParser extends LValParser {
   }
 
   parseMaybeSliceExpression(
-    startPos: number,
-    startLoc: Position,
-    base: N.Expression,
+    node: N.Expression,
     state: N.ParseSubscriptState,
   ): N.Expression {
-    const node = this.startNodeAt(startPos, startLoc);
-    if (!this.hasPlugin("sliceNotation")) {
-      const property = this.parseExpression();
-      return this.finishOptionalMemberExpression(node, base, property, state);
-    }
     const pos = this.state.pos;
-    node.object = base;
     let lower;
     if (!this.match(tt.colon)) {
       lower = this.parseExpression();
       if (!this.match(tt.colon)) {
-        return this.finishOptionalMemberExpression(node, base, lower, state);
+        node.property = lower;
+        node.computed = true;
+        this.expect(tt.bracketR);
+        return this.finishMaybeOptionalMemberExpression(node, state);
       }
     }
     if (lower) {
