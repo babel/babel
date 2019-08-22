@@ -766,6 +766,23 @@ export default class ExpressionParser extends LValParser {
     return expr;
   }
 
+  finishOptionalMemberExpression(
+    node: N.Expression,
+    object: N.Expression,
+    property: N.Expression,
+    state: N.ParseSubscriptState,
+  ): N.Expression {
+    node.object = object;
+    node.property = property;
+    node.computed = true;
+    this.expect(tt.bracketR);
+    if (state.optionalChainMember) {
+      node.optional = false;
+      return this.finishNode(node, "OptionalMemberExpression");
+    }
+    return this.finishNode(node, "MemberExpression");
+  }
+
   parseMaybeSliceExpression(
     startPos: number,
     startLoc: Position,
@@ -773,33 +790,30 @@ export default class ExpressionParser extends LValParser {
     state: N.ParseSubscriptState,
   ): N.Expression {
     const node = this.startNodeAt(startPos, startLoc);
-    node.object = base;
-    let expr;
+    if (!this.hasPlugin("sliceNotation")) {
+      const property = this.parseExpression();
+      return this.finishOptionalMemberExpression(node, base, property, state);
+    }
     const pos = this.state.pos;
-    if (!this.hasPlugin("sliceNotation") || !this.match(tt.colon)) {
-      expr = this.parseExpression();
-    }
-    if (!this.hasPlugin("sliceNotation") || !this.match(tt.colon)) {
-      node.property = expr;
-      node.computed = true;
-      this.expect(tt.bracketR);
-      if (state.optionalChainMember) {
-        node.optional = false;
-        return this.finishNode(node, "OptionalMemberExpression");
+    node.object = base;
+    let lower;
+    if (!this.match(tt.colon)) {
+      lower = this.parseExpression();
+      if (!this.match(tt.colon)) {
+        return this.finishOptionalMemberExpression(node, base, lower, state);
       }
-      return this.finishNode(node, "MemberExpression");
     }
-    if (expr) {
-      this.checkSliceArgument(pos, expr);
-      node.lower = expr;
+    if (lower) {
+      this.checkSliceArgument(pos, lower);
+      node.lower = lower;
     }
-    expr = this.parseSliceArgument();
-    if (expr) {
-      node.upper = expr;
+    const upper = this.parseSliceArgument();
+    if (upper) {
+      node.upper = upper;
     }
-    expr = this.parseSliceArgument();
-    if (expr) {
-      node.step = expr;
+    const step = this.parseSliceArgument();
+    if (step) {
+      node.step = step;
     }
     this.expect(tt.bracketR);
     return this.finishNode(node, "SliceExpression");
