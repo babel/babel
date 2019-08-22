@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`builders experimental sliceExpression should validate 1`] = `
+Object {
+  "lower": Object {
+    "name": "bar",
+    "type": "Identifier",
+  },
+  "object": Object {
+    "name": "foo",
+    "type": "Identifier",
+  },
+  "step": Object {
+    "argument": Object {
+      "type": "NumericLiteral",
+      "value": 42,
+    },
+    "operator": "-",
+    "prefix": true,
+    "type": "UnaryExpression",
+  },
+  "type": "SliceExpression",
+  "upper": Object {
+    "type": "NumericLiteral",
+    "value": 42,
+  },
+}
+`;
+
+exports[`builders experimental sliceExpression should validate 2`] = `
+Object {
+  "lower": Object {
+    "argument": Object {
+      "name": "Infinity",
+      "type": "Identifier",
+    },
+    "operator": "-",
+    "prefix": true,
+    "type": "UnaryExpression",
+  },
+  "object": Object {
+    "name": "foo",
+    "type": "Identifier",
+  },
+  "step": null,
+  "type": "SliceExpression",
+  "upper": null,
+}
+`;

@@ -274,15 +274,27 @@ defineType("SliceExpression", {
       validate: assertNodeType("Expression"),
     },
     lower: {
-      validate: assertNodeType("Identifier", "NumericLiteral"),
+      validate: assertNodeType(
+        "Identifier",
+        "NumericLiteral",
+        "UnaryExpression",
+      ),
       optional: true,
     },
     upper: {
-      validate: assertNodeType("Identifier", "NumericLiteral"),
+      validate: assertNodeType(
+        "Identifier",
+        "NumericLiteral",
+        "UnaryExpression",
+      ),
       optional: true,
     },
     step: {
-      validate: assertNodeType("Identifier", "NumericLiteral"),
+      validate: assertNodeType(
+        "Identifier",
+        "NumericLiteral",
+        "UnaryExpression",
+      ),
       optional: true,
     },
   },
