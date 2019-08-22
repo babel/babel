@@ -90,7 +90,9 @@
               "identifierName": "b"
             },
             "name": "b"
-          }
+          },
+          "upper": null,
+          "step": null
         }
       }
     ],

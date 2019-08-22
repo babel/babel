@@ -74,6 +74,7 @@
             },
             "name": "a"
           },
+          "lower": null,
           "upper": {
             "type": "Identifier",
             "start": 3,

@@ -74,6 +74,7 @@
             },
             "name": "a"
           },
+          "lower": null,
           "upper": {
             "type": "Identifier",
             "start": 3,
@@ -90,7 +91,8 @@
               "identifierName": "c"
             },
             "name": "c"
-          }
+          },
+          "step": null
         }
       }
     ],

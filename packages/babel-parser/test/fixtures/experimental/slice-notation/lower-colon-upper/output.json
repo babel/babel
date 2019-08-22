@@ -107,7 +107,8 @@
               "identifierName": "c"
             },
             "name": "c"
-          }
+          },
+          "step": null
         }
       }
     ],

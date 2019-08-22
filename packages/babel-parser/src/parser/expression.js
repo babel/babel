@@ -744,6 +744,7 @@ export default class ExpressionParser extends LValParser {
 
   checkSliceArgument(pos: number, expr: N.Expression) {
     if (
+      !expr ||
       expr.type === "NumericLiteral" ||
       expr.type === "Identifier" ||
       (expr.type === "UnaryExpression" &&
@@ -786,7 +787,7 @@ export default class ExpressionParser extends LValParser {
     state: N.ParseSubscriptState,
   ): N.Expression {
     const pos = this.state.pos;
-    let lower;
+    let lower = null;
     if (!this.match(tt.colon)) {
       lower = this.parseExpression();
       if (!this.match(tt.colon)) {
@@ -796,18 +797,12 @@ export default class ExpressionParser extends LValParser {
         return this.finishMaybeOptionalMemberExpression(node, state);
       }
     }
-    if (lower) {
-      this.checkSliceArgument(pos, lower);
-      node.lower = lower;
-    }
+    this.checkSliceArgument(pos, lower);
+    node.lower = lower;
     const upper = this.parseSliceArgument();
-    if (upper) {
-      node.upper = upper;
-    }
+    node.upper = upper;
     const step = this.parseSliceArgument();
-    if (step) {
-      node.step = step;
-    }
+    node.step = step;
     this.expect(tt.bracketR);
     return this.finishNode(node, "SliceExpression");
   }

@@ -73,7 +73,10 @@
               "identifierName": "a"
             },
             "name": "a"
-          }
+          },
+          "lower": null,
+          "upper": null,
+          "step": null
         }
       }
     ],
