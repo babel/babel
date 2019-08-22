@@ -1,5 +1,7 @@
 // @flow
 
+/*:: declare var invariant; */
+
 import type Parser from "../parser";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import * as N from "../types";
@@ -1722,20 +1724,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // only use the expensive "tryParse" method if there is a question mark
       // and if we come from inside parens
       if (refNeedsArrowPos) {
-        const state = this.state.clone();
-        try {
-          return super.parseConditional(expr, noIn, startPos, startLoc);
-        } catch (err) {
-          if (err instanceof SyntaxError) {
-            this.state = state;
-            refNeedsArrowPos.start = err.pos || this.state.start;
-            return expr;
-          } else {
-            // istanbul ignore next: no such error is expected
-            throw err;
-          }
+        const result = this.tryParse(() =>
+          super.parseConditional(expr, noIn, startPos, startLoc),
+        );
+
+        if (!result.node) {
+          // $FlowIgnore
+          refNeedsArrowPos.start = result.error.pos || this.state.start;
+          return expr;
         }
+
+        if (result.error) this.state = result.failState;
+        return result.node;
       }
+
       this.expect(tt.question);
       const state = this.state.clone();
       const originalNoArrowAt = this.state.noArrowAt;
@@ -1860,17 +1862,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       return partition(arrows, node => {
-        try {
+        const result = this.tryParse(() =>
           this.toAssignableList(
             ((node.params: any): N.Expression[]),
             true,
             "arrow function parameters",
             node.extra?.trailingComma,
-          );
-          return true;
-        } catch (err) {
-          return false;
-        }
+          ),
+        );
+        return !result.error;
       });
     }
 
@@ -2532,45 +2532,50 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       afterLeftParse?: Function,
       refNeedsArrowPos?: ?Pos,
     ): N.Expression {
-      let jsxError = null;
+      let state = null;
+
+      let jsx;
+
       if (
         this.hasPlugin("jsx") &&
         (this.match(tt.jsxTagStart) || this.isRelational("<"))
       ) {
-        const state = this.state.clone();
-        try {
-          return super.parseMaybeAssign(
-            noIn,
-            refShorthandDefaultPos,
-            afterLeftParse,
-            refNeedsArrowPos,
-          );
-        } catch (err) {
-          if (err instanceof SyntaxError) {
-            this.state = state;
+        state = this.state.clone();
 
-            // Remove `tc.j_expr` and `tc.j_oTag` from context added
-            // by parsing `jsxTagStart` to stop the JSX plugin from
-            // messing with the tokens
-            const cLength = this.state.context.length;
-            if (this.state.context[cLength - 1] === tc.j_oTag) {
-              this.state.context.length -= 2;
-            }
+        jsx = this.tryParse(
+          () =>
+            super.parseMaybeAssign(
+              noIn,
+              refShorthandDefaultPos,
+              afterLeftParse,
+              refNeedsArrowPos,
+            ),
+          state,
+        );
+        /*:: invariant(!jsx.aborted) */
 
-            jsxError = err;
-          } else {
-            // istanbul ignore next: no such error is expected
-            throw err;
-          }
+        if (!jsx.error) return jsx.node;
+
+        // Remove `tc.j_expr` and `tc.j_oTag` from context added
+        // by parsing `jsxTagStart` to stop the JSX plugin from
+        // messing with the tokens
+        const { context } = this.state;
+        if (context[context.length - 1] === tc.j_oTag) {
+          context.length -= 2;
+        } else if (context[context.length - 1] === tc.j_expr) {
+          context.length -= 1;
         }
       }
 
-      if (jsxError != null || this.isRelational("<")) {
-        let arrowExpression;
+      if ((jsx && jsx.error) || this.isRelational("<")) {
+        state = state || this.state.clone();
+
         let typeParameters;
-        try {
+
+        const arrow = this.tryParse(() => {
           typeParameters = this.flowParseTypeParameterDeclaration();
-          arrowExpression = this.forwardNoArrowParamsConversionAt(
+
+          const arrowExpression = this.forwardNoArrowParamsConversionAt(
             typeParameters,
             () =>
               super.parseMaybeAssign(
@@ -2582,20 +2587,43 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           );
           arrowExpression.typeParameters = typeParameters;
           this.resetStartLocationFromNode(arrowExpression, typeParameters);
-        } catch (err) {
-          throw jsxError || err;
+
+          return arrowExpression;
+        }, state);
+
+        const arrowExpression: ?N.ArrowFunctionExpression =
+          arrow.node && arrow.node.type === "ArrowFunctionExpression"
+            ? arrow.node
+            : null;
+
+        if (!arrow.error && arrowExpression) return arrowExpression;
+
+        // If we are here, both JSX and Flow parsing attemps failed.
+        // Give the precedence to the JSX error, except if JSX had an
+        // unrecoverable error while Flow didn't.
+        // If the error is recoverable, we can only re-report it if there is
+        // a node we can return.
+
+        if (jsx && jsx.node) {
+          /*:: invariant(jsx.failState) */
+          this.state = jsx.failState;
+          return jsx.node;
         }
 
-        if (arrowExpression.type === "ArrowFunctionExpression") {
+        if (arrowExpression) {
+          /*:: invariant(arrow.failState) */
+          this.state = arrow.failState;
           return arrowExpression;
-        } else if (jsxError != null) {
-          throw jsxError;
-        } else {
-          throw this.raise(
-            typeParameters.start,
-            "Expected an arrow function after this type parameter declaration",
-          );
         }
+
+        if (jsx && jsx.thrown) throw jsx.error;
+        if (arrow.thrown) throw arrow.error;
+
+        /*:: invariant(typeParameters) */
+        throw this.raise(
+          typeParameters.start,
+          "Expected an arrow function after this type parameter declaration",
+        );
       }
 
       return super.parseMaybeAssign(
@@ -2609,8 +2637,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // handle return types for arrow functions
     parseArrow(node: N.ArrowFunctionExpression): ?N.ArrowFunctionExpression {
       if (this.match(tt.colon)) {
-        const state = this.state.clone();
-        try {
+        const result = this.tryParse(() => {
           const oldNoAnonFunctionType = this.state.noAnonFunctionType;
           this.state.noAnonFunctionType = true;
 
@@ -2628,18 +2655,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (this.canInsertSemicolon()) this.unexpected();
           if (!this.match(tt.arrow)) this.unexpected();
 
-          // assign after it is clear it is an arrow
-          node.returnType = typeNode.typeAnnotation
-            ? this.finishNode(typeNode, "TypeAnnotation")
-            : null;
-        } catch (err) {
-          if (err instanceof SyntaxError) {
-            this.state = state;
-          } else {
-            // istanbul ignore next: no such error is expected
-            throw err;
-          }
-        }
+          return typeNode;
+        });
+
+        if (result.thrown) return null;
+        /*:: invariant(result.node) */
+
+        if (result.error) this.state = result.failState;
+
+        // assign after it is clear it is an arrow
+        node.returnType = result.node.typeAnnotation
+          ? this.finishNode(result.node, "TypeAnnotation")
+          : null;
       }
 
       return super.parseArrow(node);
@@ -2704,23 +2731,33 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.isRelational("<")
       ) {
         const state = this.state.clone();
-        let error;
-        try {
-          const node = this.parseAsyncArrowWithTypeParameters(
-            startPos,
-            startLoc,
-          );
-          if (node) return node;
-        } catch (e) {
-          error = e;
+        const arrow = this.tryParse(
+          abort =>
+            this.parseAsyncArrowWithTypeParameters(startPos, startLoc) ||
+            abort(),
+          state,
+        );
+
+        if (!arrow.error && !arrow.aborted) return arrow.node;
+
+        const result = this.tryParse(
+          () => super.parseSubscripts(base, startPos, startLoc, noCalls),
+          state,
+        );
+
+        if (result.node && !result.error) return result.node;
+
+        if (arrow.node) {
+          this.state = arrow.failState;
+          return arrow.node;
         }
 
-        this.state = state;
-        try {
-          return super.parseSubscripts(base, startPos, startLoc, noCalls);
-        } catch (e) {
-          throw error || e;
+        if (result.node) {
+          this.state = result.failState;
+          return result.node;
         }
+
+        throw arrow.error || result.error;
       }
 
       return super.parseSubscripts(base, startPos, startLoc, noCalls);
@@ -2759,8 +2796,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       ) {
         const node = this.startNodeAt(startPos, startLoc);
         node.callee = base;
-        const state = this.state.clone();
-        try {
+
+        const result = this.tryParse(() => {
           node.typeArguments = this.flowParseTypeParameterInstantiationCallOrNew();
           this.expect(tt.parenL);
           node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
@@ -2769,12 +2806,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             node,
             subscriptState.optionalChainMember,
           );
-        } catch (e) {
-          if (e instanceof SyntaxError) {
-            this.state = state;
-          } else {
-            throw e;
-          }
+        });
+
+        if (result.node) {
+          if (result.error) this.state = result.failState;
+          return result.node;
         }
       }
 
@@ -2790,16 +2826,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseNewArguments(node: N.NewExpression): void {
       let targs = null;
       if (this.shouldParseTypes() && this.isRelational("<")) {
-        const state = this.state.clone();
-        try {
-          targs = this.flowParseTypeParameterInstantiationCallOrNew();
-        } catch (e) {
-          if (e instanceof SyntaxError) {
-            this.state = state;
-          } else {
-            throw e;
-          }
-        }
+        targs = this.tryParse(() =>
+          this.flowParseTypeParameterInstantiationCallOrNew(),
+        ).node;
       }
       node.typeArguments = targs;
 

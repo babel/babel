@@ -465,7 +465,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             getQualifiedJSXName(closingElement.name) !==
             getQualifiedJSXName(openingElement.name)
           ) {
-            throw this.raise(
+            this.raise(
               // $FlowIgnore
               closingElement.start,
               "Expected corresponding JSX closing tag for <" +
@@ -484,12 +484,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.closingElement = closingElement;
       }
       node.children = children;
-      if (this.match(tt.relational) && this.state.value === "<") {
-        throw this.raise(
+      while (this.isRelational("<")) {
+        // In case we encounter an lt token here it will always be the start of
+        // jsx as the lt sign is not allowed in places that expect an expression
+        this.finishToken(tt.jsxTagStart);
+
+        this.raise(
           this.state.start,
           "Adjacent JSX elements must be wrapped in an enclosing tag. " +
             "Did you want a JSX fragment <>...</>?",
         );
+
+        this.jsxParseElement();
       }
 
       return isFragment(openingElement)

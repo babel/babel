@@ -10,6 +10,8 @@ import CommentsParser from "./comments";
 // message.
 
 export default class LocationParser extends CommentsParser {
+  +isLookahead: boolean;
+
   getLocationForPosition(pos: number): Position {
     let loc;
     if (pos === this.state.start) loc = this.state.startLoc;
@@ -49,7 +51,7 @@ export default class LocationParser extends CommentsParser {
     }
 
     if (this.options.errorRecovery) {
-      this.state.errors.push(err);
+      if (!this.isLookahead) this.state.errors.push(err);
       return err;
     } else {
       throw err;
