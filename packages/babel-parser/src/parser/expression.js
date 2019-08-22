@@ -742,7 +742,7 @@ export default class ExpressionParser extends LValParser {
     }
   }
 
-  checkSliceArgument(pos: number, expr: N.Expression) {
+  checkSliceArgument(pos: number, expr: ?N.Expression) {
     if (
       !expr ||
       expr.type === "NumericLiteral" ||
