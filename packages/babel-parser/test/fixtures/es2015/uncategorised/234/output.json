@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Assigning to 'arguments' in strict mode (1:20)",
-    "SyntaxError: You're trying to assign to a parenthesized expression, eg. instead of `({a}) = 0` use `({a} = 0)` (1:15)"
+    "SyntaxError: Assigning to 'arguments' in strict mode (1:20)"
   ],
   "program": {
     "type": "Program",
@@ -49,16 +48,16 @@
         },
         "expression": {
           "type": "AssignmentExpression",
-          "start": 14,
-          "end": 38,
+          "start": 15,
+          "end": 37,
           "loc": {
             "start": {
               "line": 1,
-              "column": 14
+              "column": 15
             },
             "end": {
               "line": 1,
-              "column": 38
+              "column": 37
             }
           },
           "operator": "=",
@@ -129,28 +128,28 @@
                   "name": "arguments"
                 }
               }
-            ],
-            "extra": {
-              "parenthesized": true,
-              "parenStart": 14
-            }
+            ]
           },
           "right": {
             "type": "Identifier",
-            "start": 35,
-            "end": 38,
+            "start": 34,
+            "end": 37,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 35
+                "column": 34
               },
               "end": {
                 "line": 1,
-                "column": 38
+                "column": 37
               },
               "identifierName": "obj"
             },
             "name": "obj"
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 14
           }
         }
       }

@@ -1,1 +1,3 @@
-new.prop
+function f() {
+  new.prop
+}

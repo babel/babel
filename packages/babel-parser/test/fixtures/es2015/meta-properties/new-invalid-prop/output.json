@@ -1,100 +1,152 @@
 {
   "type": "File",
   "start": 0,
-  "end": 8,
+  "end": 27,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 1,
-      "column": 8
+      "line": 3,
+      "column": 1
     }
   },
   "errors": [
-    "SyntaxError: The only valid meta property for new is new.target (1:4)",
-    "SyntaxError: new.target can only be used in functions (1:0)"
+    "SyntaxError: The only valid meta property for new is new.target (2:6)"
   ],
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 8,
+    "end": 27,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 1,
-        "column": 8
+        "line": 3,
+        "column": 1
       }
     },
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
-        "type": "ExpressionStatement",
+        "type": "FunctionDeclaration",
         "start": 0,
-        "end": 8,
+        "end": 27,
         "loc": {
           "start": {
             "line": 1,
             "column": 0
           },
           "end": {
-            "line": 1,
-            "column": 8
+            "line": 3,
+            "column": 1
           }
         },
-        "expression": {
-          "type": "MetaProperty",
-          "start": 0,
-          "end": 8,
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 10,
           "loc": {
             "start": {
               "line": 1,
-              "column": 0
+              "column": 9
             },
             "end": {
               "line": 1,
-              "column": 8
+              "column": 10
+            },
+            "identifierName": "f"
+          },
+          "name": "f"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start": 13,
+          "end": 27,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 13
+            },
+            "end": {
+              "line": 3,
+              "column": 1
             }
           },
-          "meta": {
-            "type": "Identifier",
-            "start": 0,
-            "end": 3,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 0
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 17,
+              "end": 25,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 10
+                }
               },
-              "end": {
-                "line": 1,
-                "column": 3
-              },
-              "identifierName": "new"
-            },
-            "name": "new"
-          },
-          "property": {
-            "type": "Identifier",
-            "start": 4,
-            "end": 8,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 4
-              },
-              "end": {
-                "line": 1,
-                "column": 8
-              },
-              "identifierName": "prop"
-            },
-            "name": "prop"
-          }
+              "expression": {
+                "type": "MetaProperty",
+                "start": 17,
+                "end": 25,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 10
+                  }
+                },
+                "meta": {
+                  "type": "Identifier",
+                  "start": 17,
+                  "end": 20,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 5
+                    },
+                    "identifierName": "new"
+                  },
+                  "name": "new"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start": 21,
+                  "end": 25,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 6
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 10
+                    },
+                    "identifierName": "prop"
+                  },
+                  "name": "prop"
+                }
+              }
+            }
+          ],
+          "directives": []
         }
       }
     ],

@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Assigning to 'eval' in strict mode (1:20)",
-    "SyntaxError: You're trying to assign to a parenthesized expression, eg. instead of `({a}) = 0` use `({a} = 0)` (1:15)"
+    "SyntaxError: Assigning to 'eval' in strict mode (1:20)"
   ],
   "program": {
     "type": "Program",
@@ -49,16 +48,16 @@
         },
         "expression": {
           "type": "AssignmentExpression",
-          "start": 14,
-          "end": 33,
+          "start": 15,
+          "end": 32,
           "loc": {
             "start": {
               "line": 1,
-              "column": 14
+              "column": 15
             },
             "end": {
               "line": 1,
-              "column": 33
+              "column": 32
             }
           },
           "operator": "=",
@@ -129,28 +128,28 @@
                   "name": "eval"
                 }
               }
-            ],
-            "extra": {
-              "parenthesized": true,
-              "parenStart": 14
-            }
+            ]
           },
           "right": {
             "type": "Identifier",
-            "start": 30,
-            "end": 33,
+            "start": 29,
+            "end": 32,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 30
+                "column": 29
               },
               "end": {
                 "line": 1,
-                "column": 33
+                "column": 32
               },
               "identifierName": "obj"
             },
             "name": "obj"
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 14
           }
         }
       }

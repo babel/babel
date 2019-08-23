@@ -14,8 +14,7 @@
   },
   "errors": [
     "SyntaxError: Object pattern can't contain getter or setter (1:8)",
-    "SyntaxError: Invalid left-hand side in object destructuring pattern (1:4)",
-    "SyntaxError: You're trying to assign to a parenthesized expression, eg. instead of `({a}) = 0` use `({a} = 0)` (1:2)"
+    "SyntaxError: Invalid left-hand side in object destructuring pattern (1:4)"
   ],
   "program": {
     "type": "Program",
@@ -50,16 +49,16 @@
         },
         "expression": {
           "type": "AssignmentExpression",
-          "start": 0,
-          "end": 22,
+          "start": 2,
+          "end": 20,
           "loc": {
             "start": {
               "line": 1,
-              "column": 0
+              "column": 2
             },
             "end": {
               "line": 1,
-              "column": 22
+              "column": 20
             }
           },
           "operator": "=",
@@ -134,24 +133,20 @@
                   "directives": []
                 }
               }
-            ],
-            "extra": {
-              "parenthesized": true,
-              "parenStart": 0
-            }
+            ]
           },
           "right": {
             "type": "NumericLiteral",
-            "start": 21,
-            "end": 22,
+            "start": 19,
+            "end": 20,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 21
+                "column": 19
               },
               "end": {
                 "line": 1,
-                "column": 22
+                "column": 20
               }
             },
             "extra": {
@@ -159,6 +154,10 @@
               "raw": "0"
             },
             "value": 0
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }
