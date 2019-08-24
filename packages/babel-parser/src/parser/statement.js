@@ -1080,7 +1080,7 @@ export default class StatementParser extends ExpressionParser {
       // We need to register this _after_ parsing the function body
       // because of TypeScript body-less function declarations,
       // which shouldn't be added to the scope.
-      this.checkFunctionStatementId(node);
+      this.registerFunctionStatementId(node);
     }
 
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
@@ -1111,22 +1111,21 @@ export default class StatementParser extends ExpressionParser {
     this.checkYieldAwaitInDefaultParams();
   }
 
-  checkFunctionStatementId(node: N.Function): void {
+  registerFunctionStatementId(node: N.Function): void {
     if (!node.id) return;
 
     // If it is a regular function declaration in sloppy mode, then it is
     // subject to Annex B semantics (BIND_FUNCTION). Otherwise, the binding
     // mode depends on properties of the current scope (see
     // treatFunctionsAsVar).
-    this.checkLVal(
-      node.id,
+    this.scope.declareName(
+      node.id.name,
       this.state.strict || node.generator || node.async
         ? this.scope.treatFunctionsAsVar
           ? BIND_VAR
           : BIND_LEXICAL
         : BIND_FUNCTION,
-      null,
-      "function name",
+      node.id.start,
     );
   }
 

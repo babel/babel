@@ -13,7 +13,6 @@
     }
   },
   "errors": [
-    "SyntaxError: Binding 'eval' in strict mode (1:41)",
     "SyntaxError: Binding 'eval' in strict mode (1:41)"
   ],
   "program": {

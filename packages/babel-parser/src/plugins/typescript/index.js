@@ -1595,11 +1595,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       super.parseFunctionBodyAndFinish(node, type, isMethod);
     }
 
-    checkFunctionStatementId(node: N.Function): void {
+    registerFunctionStatementId(node: N.Function): void {
       if (!node.body && node.id) {
+        // Function ids are validated after parsing their body.
+        // For bodyless function, we need to do it here.
         this.checkLVal(node.id, BIND_TS_AMBIENT, null, "function name");
       } else {
-        super.checkFunctionStatementId(...arguments);
+        super.registerFunctionStatementId(...arguments);
       }
     }
 

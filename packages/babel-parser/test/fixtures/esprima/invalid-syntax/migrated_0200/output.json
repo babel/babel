@@ -13,7 +13,6 @@
     }
   },
   "errors": [
-    "SyntaxError: Binding 'arguments' in strict mode (1:41)",
     "SyntaxError: Binding 'arguments' in strict mode (1:41)"
   ],
   "program": {
