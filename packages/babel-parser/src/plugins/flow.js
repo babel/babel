@@ -1009,7 +1009,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const isInexactToken = this.eat(tt.comma) || this.eat(tt.semi);
 
         if (this.match(tt.braceR)) {
-          if (!allowInexact) {
+          if (allowSpread && !allowInexact) {
             this.raise(
               this.state.start,
               "Explicit inexact syntax is only allowed inside inexact objects",

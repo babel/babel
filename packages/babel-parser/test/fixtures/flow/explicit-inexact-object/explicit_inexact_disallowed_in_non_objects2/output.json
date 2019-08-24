@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Spread operator cannot appear in class or interface definitions (4:2)",
-    "SyntaxError: Explicit inexact syntax is only allowed inside inexact objects (5:0)"
+    "SyntaxError: Spread operator cannot appear in class or interface definitions (4:2)"
   ],
   "program": {
     "type": "Program",
