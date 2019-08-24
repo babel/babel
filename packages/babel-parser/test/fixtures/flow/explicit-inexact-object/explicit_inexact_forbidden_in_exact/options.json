@@ -1,5 +1,4 @@
 {
   "sourceType": "module",
-  "plugins": ["jsx", "flow"],
-  "throws": "Explicit inexact syntax cannot appear inside an explicit exact object type (2:29)"
+  "plugins": ["jsx", "flow"]
 }

@@ -880,6 +880,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       while (!this.match(endDelim)) {
         let isStatic = false;
         let protoStart: ?number = null;
+        let inexactStart: ?number = null;
         const node = this.startNode();
 
         if (allowProto && this.isContextual("proto")) {
@@ -952,17 +953,29 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             variance,
             kind,
             allowSpread,
-            allowInexact,
+            allowInexact == null ? !exact : allowInexact,
           );
 
           if (propOrInexact === null) {
             inexact = true;
+            inexactStart = this.state.lastTokStart;
           } else {
             nodeStart.properties.push(propOrInexact);
           }
         }
 
         this.flowObjectTypeSemicolon();
+
+        if (
+          inexactStart &&
+          !this.match(tt.braceR) &&
+          !this.match(tt.braceBarR)
+        ) {
+          this.raise(
+            inexactStart,
+            "Explicit inexact syntax must appear at the end of an inexact object",
+          );
+        }
       }
 
       this.expect(endDelim);
@@ -992,10 +1005,38 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       allowSpread: boolean,
       allowInexact: boolean,
     ): (N.FlowObjectTypeProperty | N.FlowObjectTypeSpreadProperty) | null {
-      if (this.match(tt.ellipsis)) {
+      if (this.eat(tt.ellipsis)) {
+        const isInexactToken =
+          this.match(tt.comma) ||
+          this.match(tt.semi) ||
+          this.match(tt.braceR) ||
+          this.match(tt.braceBarR);
+
+        if (isInexactToken) {
+          if (!allowSpread) {
+            this.raise(
+              this.state.lastTokStart,
+              "Explicit inexact syntax cannot appear in class or interface definitions",
+            );
+          } else if (!allowInexact) {
+            this.raise(
+              this.state.lastTokStart,
+              "Explicit inexact syntax cannot appear inside an explicit exact object type",
+            );
+          }
+          if (variance) {
+            this.raise(
+              variance.start,
+              "Explicit inexact syntax cannot have variance",
+            );
+          }
+
+          return null;
+        }
+
         if (!allowSpread) {
           this.raise(
-            this.state.start,
+            this.state.lastTokStart,
             "Spread operator cannot appear in class or interface definitions",
           );
         }
@@ -1005,32 +1046,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (variance) {
           this.raise(variance.start, "Spread properties cannot have variance");
         }
-        this.expect(tt.ellipsis);
-        const isInexactToken = this.eat(tt.comma) || this.eat(tt.semi);
 
-        if (this.match(tt.braceR)) {
-          if (allowSpread && !allowInexact) {
-            this.raise(
-              this.state.start,
-              "Explicit inexact syntax is only allowed inside inexact objects",
-            );
-          }
-          return null;
-        }
-
-        if (this.match(tt.braceBarR)) {
-          this.unexpected(
-            null,
-            "Explicit inexact syntax cannot appear inside an explicit exact object type",
-          );
-        }
-
-        if (isInexactToken) {
-          this.unexpected(
-            null,
-            "Explicit inexact syntax must appear at the end of an inexact object",
-          );
-        }
         node.argument = this.flowParseType();
         return this.finishNode(node, "ObjectTypeSpreadProperty");
       } else {

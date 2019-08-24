@@ -13,7 +13,8 @@
     }
   },
   "errors": [
-    "SyntaxError: Explicit inexact syntax cannot appear in class or interface definitions (4:2)"
+    "SyntaxError: Explicit inexact syntax cannot appear in class or interface definitions (3:2)",
+    "SyntaxError: Explicit inexact syntax must appear at the end of an inexact object (3:2)"
   ],
   "program": {
     "type": "Program",
@@ -59,9 +60,9 @@
               "line": 2,
               "column": 11
             },
-            "identifierName": "F"
+            "identifierName": "G"
           },
-          "name": "F"
+          "name": "G"
         },
         "typeParameters": null,
         "extends": [],
@@ -85,29 +86,29 @@
           "properties": [
             {
               "type": "ObjectTypeProperty",
-              "start": 24,
-              "end": 35,
+              "start": 31,
+              "end": 42,
               "loc": {
                 "start": {
-                  "line": 3,
+                  "line": 4,
                   "column": 2
                 },
                 "end": {
-                  "line": 3,
+                  "line": 4,
                   "column": 13
                 }
               },
               "key": {
                 "type": "Identifier",
-                "start": 24,
-                "end": 27,
+                "start": 31,
+                "end": 34,
                 "loc": {
                   "start": {
-                    "line": 3,
+                    "line": 4,
                     "column": 2
                   },
                   "end": {
-                    "line": 3,
+                    "line": 4,
                     "column": 5
                   },
                   "identifierName": "foo"
@@ -120,15 +121,15 @@
               "method": false,
               "value": {
                 "type": "NumberTypeAnnotation",
-                "start": 29,
-                "end": 35,
+                "start": 36,
+                "end": 42,
                 "loc": {
                   "start": {
-                    "line": 3,
+                    "line": 4,
                     "column": 7
                   },
                   "end": {
-                    "line": 3,
+                    "line": 4,
                     "column": 13
                   }
                 }

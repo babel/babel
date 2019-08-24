@@ -1,31 +1,32 @@
 {
   "type": "File",
   "start": 0,
-  "end": 45,
+  "end": 64,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 5,
+      "line": 6,
       "column": 1
     }
   },
   "errors": [
-    "SyntaxError: Explicit inexact syntax cannot appear in class or interface definitions (4:2)"
+    "SyntaxError: Explicit inexact syntax cannot appear in class or interface definitions (4:2)",
+    "SyntaxError: Explicit inexact syntax must appear at the end of an inexact object (4:2)"
   ],
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 45,
+    "end": 64,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 5,
+        "line": 6,
         "column": 1
       }
     },
@@ -33,35 +34,35 @@
     "interpreter": null,
     "body": [
       {
-        "type": "InterfaceDeclaration",
+        "type": "DeclareClass",
         "start": 8,
-        "end": 45,
+        "end": 64,
         "loc": {
           "start": {
             "line": 2,
             "column": 0
           },
           "end": {
-            "line": 5,
+            "line": 6,
             "column": 1
           }
         },
         "id": {
           "type": "Identifier",
-          "start": 18,
-          "end": 19,
+          "start": 22,
+          "end": 23,
           "loc": {
             "start": {
               "line": 2,
-              "column": 10
+              "column": 14
             },
             "end": {
               "line": 2,
-              "column": 11
+              "column": 15
             },
-            "identifierName": "F"
+            "identifierName": "D"
           },
-          "name": "F"
+          "name": "D"
         },
         "typeParameters": null,
         "extends": [],
@@ -69,15 +70,15 @@
         "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
-          "start": 20,
-          "end": 45,
+          "start": 24,
+          "end": 64,
           "loc": {
             "start": {
               "line": 2,
-              "column": 12
+              "column": 16
             },
             "end": {
-              "line": 5,
+              "line": 6,
               "column": 1
             }
           },
@@ -85,8 +86,8 @@
           "properties": [
             {
               "type": "ObjectTypeProperty",
-              "start": 24,
-              "end": 35,
+              "start": 28,
+              "end": 39,
               "loc": {
                 "start": {
                   "line": 3,
@@ -99,8 +100,8 @@
               },
               "key": {
                 "type": "Identifier",
-                "start": 24,
-                "end": 27,
+                "start": 28,
+                "end": 31,
                 "loc": {
                   "start": {
                     "line": 3,
@@ -120,8 +121,8 @@
               "method": false,
               "value": {
                 "type": "NumberTypeAnnotation",
-                "start": 29,
-                "end": 35,
+                "start": 33,
+                "end": 39,
                 "loc": {
                   "start": {
                     "line": 3,
@@ -129,6 +130,59 @@
                   },
                   "end": {
                     "line": 3,
+                    "column": 13
+                  }
+                }
+              },
+              "variance": null,
+              "optional": false
+            },
+            {
+              "type": "ObjectTypeProperty",
+              "start": 50,
+              "end": 61,
+              "loc": {
+                "start": {
+                  "line": 5,
+                  "column": 2
+                },
+                "end": {
+                  "line": 5,
+                  "column": 13
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 50,
+                "end": 53,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 5
+                  },
+                  "identifierName": "bar"
+                },
+                "name": "bar"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": false,
+              "value": {
+                "type": "NumberTypeAnnotation",
+                "start": 55,
+                "end": 61,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 5,
                     "column": 13
                   }
                 }

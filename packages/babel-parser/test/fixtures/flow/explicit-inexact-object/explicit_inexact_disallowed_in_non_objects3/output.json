@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 45,
+  "end": 49,
   "loc": {
     "start": {
       "line": 1,
@@ -13,12 +13,13 @@
     }
   },
   "errors": [
-    "SyntaxError: Explicit inexact syntax cannot appear in class or interface definitions (4:2)"
+    "SyntaxError: Explicit inexact syntax cannot appear in class or interface definitions (3:2)",
+    "SyntaxError: Explicit inexact syntax must appear at the end of an inexact object (3:2)"
   ],
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 45,
+    "end": 49,
     "loc": {
       "start": {
         "line": 1,
@@ -33,9 +34,9 @@
     "interpreter": null,
     "body": [
       {
-        "type": "InterfaceDeclaration",
+        "type": "DeclareClass",
         "start": 8,
-        "end": 45,
+        "end": 49,
         "loc": {
           "start": {
             "line": 2,
@@ -48,20 +49,20 @@
         },
         "id": {
           "type": "Identifier",
-          "start": 18,
-          "end": 19,
+          "start": 22,
+          "end": 23,
           "loc": {
             "start": {
               "line": 2,
-              "column": 10
+              "column": 14
             },
             "end": {
               "line": 2,
-              "column": 11
+              "column": 15
             },
-            "identifierName": "F"
+            "identifierName": "C"
           },
-          "name": "F"
+          "name": "C"
         },
         "typeParameters": null,
         "extends": [],
@@ -69,12 +70,12 @@
         "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
-          "start": 20,
-          "end": 45,
+          "start": 24,
+          "end": 49,
           "loc": {
             "start": {
               "line": 2,
-              "column": 12
+              "column": 16
             },
             "end": {
               "line": 5,
@@ -85,29 +86,29 @@
           "properties": [
             {
               "type": "ObjectTypeProperty",
-              "start": 24,
-              "end": 35,
+              "start": 35,
+              "end": 46,
               "loc": {
                 "start": {
-                  "line": 3,
+                  "line": 4,
                   "column": 2
                 },
                 "end": {
-                  "line": 3,
+                  "line": 4,
                   "column": 13
                 }
               },
               "key": {
                 "type": "Identifier",
-                "start": 24,
-                "end": 27,
+                "start": 35,
+                "end": 38,
                 "loc": {
                   "start": {
-                    "line": 3,
+                    "line": 4,
                     "column": 2
                   },
                   "end": {
-                    "line": 3,
+                    "line": 4,
                     "column": 5
                   },
                   "identifierName": "foo"
@@ -120,15 +121,15 @@
               "method": false,
               "value": {
                 "type": "NumberTypeAnnotation",
-                "start": 29,
-                "end": 35,
+                "start": 40,
+                "end": 46,
                 "loc": {
                   "start": {
-                    "line": 3,
+                    "line": 4,
                     "column": 7
                   },
                   "end": {
-                    "line": 3,
+                    "line": 4,
                     "column": 13
                   }
                 }
