@@ -1371,16 +1371,13 @@ export default class Tokenizer extends LocationParser {
 
         ++this.state.pos;
         const esc = this.readCodePoint(true);
+        if (esc !== null) {
+          if (!identifierCheck(esc)) {
+            this.raise(escStart, "Invalid Unicode escape");
+          }
 
-        if (
-          // $FlowFixMe (thinks esc may be null, but throwOnInvalid is true)
-          !identifierCheck(esc, true)
-        ) {
-          this.raise(escStart, "Invalid Unicode escape");
+          word += String.fromCodePoint(esc);
         }
-
-        // $FlowFixMe
-        word += String.fromCodePoint(esc);
         chunkStart = this.state.pos;
       } else {
         break;
