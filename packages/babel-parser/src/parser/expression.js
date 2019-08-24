@@ -905,13 +905,6 @@ export default class ExpressionParser extends LValParser {
 
     switch (this.state.type) {
       case tt._super:
-        if (!this.scope.allowSuper && !this.options.allowSuperOutsideMethod) {
-          this.raise(
-            this.state.start,
-            "super is only allowed in object methods and classes",
-          );
-        }
-
         node = this.startNode();
         this.next();
         if (
@@ -923,6 +916,14 @@ export default class ExpressionParser extends LValParser {
             node.start,
             "super() is only valid inside a class constructor of a subclass. " +
               "Maybe a typo in the method name ('constructor') or not extending another class?",
+          );
+        } else if (
+          !this.scope.allowSuper &&
+          !this.options.allowSuperOutsideMethod
+        ) {
+          this.raise(
+            node.start,
+            "super is only allowed in object methods and classes",
           );
         }
 

@@ -13,7 +13,6 @@
     }
   },
   "errors": [
-    "SyntaxError: super is only allowed in object methods and classes (1:8)",
     "SyntaxError: super() is only valid inside a class constructor of a subclass. Maybe a typo in the method name ('constructor') or not extending another class? (1:8)"
   ],
   "program": {
