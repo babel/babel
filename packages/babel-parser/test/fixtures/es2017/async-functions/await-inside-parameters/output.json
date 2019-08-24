@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: await is not allowed in async function parameters (1:22)",
-    "SyntaxError: Await cannot be used as name inside an async function (1:22)"
+    "SyntaxError: await is not allowed in async function parameters (1:22)"
   ],
   "program": {
     "type": "Program",

@@ -2226,9 +2226,6 @@ export default class ExpressionParser extends LValParser {
   // Parses await expression inside async function.
 
   parseAwait(): N.AwaitExpression {
-    if (this.state.awaitPos === -1) {
-      this.state.awaitPos = this.state.start;
-    }
     const node = this.startNode();
 
     this.next();
@@ -2238,6 +2235,8 @@ export default class ExpressionParser extends LValParser {
         node.start,
         "await is not allowed in async function parameters",
       );
+    } else if (this.state.awaitPos === -1) {
+      this.state.awaitPos = node.start;
     }
     if (this.eat(tt.star)) {
       this.raise(
@@ -2279,13 +2278,12 @@ export default class ExpressionParser extends LValParser {
   // Parses yield expression inside generator.
 
   parseYield(noIn?: ?boolean): N.YieldExpression {
-    if (this.state.yieldPos === -1) {
-      this.state.yieldPos = this.state.start;
-    }
     const node = this.startNode();
 
     if (this.state.inParameters) {
       this.raise(node.start, "yield is not allowed in generator parameters");
+    } else if (this.state.yieldPos === -1) {
+      this.state.yieldPos = node.start;
     }
 
     this.next();

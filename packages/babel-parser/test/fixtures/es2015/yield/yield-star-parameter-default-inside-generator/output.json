@@ -14,8 +14,7 @@
   },
   "errors": [
     "SyntaxError: yield is not allowed in generator parameters (1:17)",
-    "SyntaxError: yield is not allowed in generator parameters (1:24)",
-    "SyntaxError: Yield cannot be used as name inside a generator function (1:17)"
+    "SyntaxError: yield is not allowed in generator parameters (1:24)"
   ],
   "program": {
     "type": "Program",
