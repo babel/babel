@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Unexpected reserved word 'interface' (1:37)",
-    "SyntaxError: Binding 'interface' in strict mode (1:37)"
+    "SyntaxError: Unexpected reserved word 'interface' (1:37)"
   ],
   "program": {
     "type": "Program",

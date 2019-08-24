@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Unexpected reserved word 'implements' (1:37)",
-    "SyntaxError: Binding 'implements' in strict mode (1:37)"
+    "SyntaxError: Unexpected reserved word 'implements' (1:37)"
   ],
   "program": {
     "type": "Program",

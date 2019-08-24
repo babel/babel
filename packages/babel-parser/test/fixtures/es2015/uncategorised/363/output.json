@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Can not use keyword 'await' outside an async function (1:15)",
-    "SyntaxError: Binding 'await' in strict mode (1:15)"
+    "SyntaxError: Can not use keyword 'await' outside an async function (1:15)"
   ],
   "program": {
     "type": "Program",

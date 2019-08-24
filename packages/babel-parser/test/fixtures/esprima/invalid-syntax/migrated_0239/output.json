@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Unexpected reserved word 'static' (1:23)",
-    "SyntaxError: Binding 'static' in strict mode (1:23)"
+    "SyntaxError: Unexpected reserved word 'static' (1:23)"
   ],
   "program": {
     "type": "Program",

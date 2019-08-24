@@ -2688,7 +2688,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return;
       }
 
-      return super.checkParams(node, allowDuplicates, isArrowFunction);
+      return super.checkParams(...arguments);
     }
 
     parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {

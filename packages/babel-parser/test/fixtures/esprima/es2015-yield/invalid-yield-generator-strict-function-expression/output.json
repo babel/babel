@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Unexpected reserved word 'yield' (1:46)",
-    "SyntaxError: Binding 'yield' in strict mode (1:46)"
+    "SyntaxError: Unexpected reserved word 'yield' (1:46)"
   ],
   "program": {
     "type": "Program",

@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Unexpected reserved word 'public' (2:8)",
-    "SyntaxError: Binding 'public' in strict mode (2:8)"
+    "SyntaxError: Unexpected reserved word 'public' (2:8)"
   ],
   "program": {
     "type": "Program",

@@ -1970,6 +1970,7 @@ export default class ExpressionParser extends LValParser {
         node,
         !oldStrict && !useStrict && !allowExpression && !isMethod && !nonSimple,
         allowExpression,
+        !oldStrict && useStrict,
       );
       node.body = this.parseBlock(true, false);
       this.state.labels = oldLabels;
@@ -1978,7 +1979,14 @@ export default class ExpressionParser extends LValParser {
     this.state.inParameters = oldInParameters;
     // Ensure the function name isn't a forbidden identifier in strict mode, e.g. 'eval'
     if (this.state.strict && node.id) {
-      this.checkLVal(node.id, BIND_OUTSIDE, undefined, "function name");
+      this.checkLVal(
+        node.id,
+        BIND_OUTSIDE,
+        undefined,
+        "function name",
+        undefined,
+        !oldStrict && useStrict,
+      );
     }
     this.state.strict = oldStrict;
   }
@@ -1997,6 +2005,7 @@ export default class ExpressionParser extends LValParser {
     allowDuplicates: boolean,
     // eslint-disable-next-line no-unused-vars
     isArrowFunction: ?boolean,
+    strictModeChanged?: boolean = true,
   ): void {
     // $FlowIssue
     const nameHash: {} = Object.create(null);
@@ -2006,6 +2015,8 @@ export default class ExpressionParser extends LValParser {
         BIND_VAR,
         allowDuplicates ? null : nameHash,
         "function parameter list",
+        undefined,
+        strictModeChanged,
       );
     }
   }

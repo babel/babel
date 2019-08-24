@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Unexpected reserved word 'protected' (1:37)",
-    "SyntaxError: Binding 'protected' in strict mode (1:37)"
+    "SyntaxError: Unexpected reserved word 'protected' (1:37)"
   ],
   "program": {
     "type": "Program",

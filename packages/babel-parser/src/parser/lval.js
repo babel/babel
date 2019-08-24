@@ -15,7 +15,10 @@ import type {
   SpreadElement,
 } from "../types";
 import type { Pos, Position } from "../util/location";
-import { isStrictBindReservedWord } from "../util/identifier";
+import {
+  isStrictBindOnlyReservedWord,
+  isStrictBindReservedWord,
+} from "../util/identifier";
 import { NodeUtils } from "./node";
 import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
 
@@ -347,12 +350,18 @@ export default class LValParser extends NodeUtils {
     checkClashes: ?{ [key: string]: boolean },
     contextDescription: string,
     disallowLetBinding?: boolean,
+    strictModeChanged?: boolean = false,
   ): void {
     switch (expr.type) {
       case "Identifier":
         if (
           this.state.strict &&
-          isStrictBindReservedWord(expr.name, this.inModule)
+          // "Global" reserved words have already been checked by parseIdentifier,
+          // unless they have been found in the id or parameters of a strict-mode
+          // function in a sloppy context.
+          (strictModeChanged
+            ? isStrictBindReservedWord(expr.name, this.inModule)
+            : isStrictBindOnlyReservedWord(expr.name))
         ) {
           this.raise(
             expr.start,

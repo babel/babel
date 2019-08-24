@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Unexpected reserved word 'enum' (1:11)",
-    "SyntaxError: Binding 'enum' in strict mode (1:11)"
+    "SyntaxError: Unexpected reserved word 'enum' (1:11)"
   ],
   "program": {
     "type": "Program",

@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Unexpected reserved word 'let' (1:37)",
-    "SyntaxError: Binding 'let' in strict mode (1:37)"
+    "SyntaxError: Unexpected reserved word 'let' (1:37)"
   ],
   "program": {
     "type": "Program",

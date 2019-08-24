@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Unexpected reserved word 'package' (1:37)",
-    "SyntaxError: Binding 'package' in strict mode (1:37)"
+    "SyntaxError: Unexpected reserved word 'package' (1:37)"
   ],
   "program": {
     "type": "Program",
