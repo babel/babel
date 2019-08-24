@@ -602,6 +602,21 @@ const patterns = [
         valid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
         invalid: []
     },
+
+    // Class Private Instance Properties.
+    {
+        code: "class A {#a = this.b;};",
+        parserOptions: { ecmaVersion: 6 },
+        valid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
+        invalid: []
+    },
+
+    {
+        code: "class A {#a = () => {return this.b;};};",
+        parserOptions: { ecmaVersion: 6 },
+        valid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
+        invalid: []
+    },
 ];
 
 const ruleTester = new RuleTester();
