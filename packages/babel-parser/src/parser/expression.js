@@ -932,7 +932,11 @@ export default class ExpressionParser extends LValParser {
           !this.match(tt.bracketL) &&
           !this.match(tt.dot)
         ) {
-          this.unexpected();
+          this.raise(
+            node.start,
+            "super can only be used with function calls (i.e. super()) or " +
+              "in property accesses (i.e. super.prop or super[prop])",
+          );
         }
 
         return this.finishNode(node, "Super");
