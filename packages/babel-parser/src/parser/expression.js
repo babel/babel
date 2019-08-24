@@ -1561,12 +1561,12 @@ export default class ExpressionParser extends LValParser {
           this.state.start,
           "Stage 2 decorators disallow object literal property decorators",
         );
-      } else {
-        // we needn't check if decorators (stage 0) plugin is enabled since it's checked by
-        // the call to this.parseDecorator
-        while (this.match(tt.at)) {
-          decorators.push(this.parseDecorator());
-        }
+      }
+
+      // we needn't check if decorators (stage 0) plugin is enabled since it's checked by
+      // the call to this.parseDecorator
+      while (this.match(tt.at)) {
+        decorators.push(this.parseDecorator());
       }
     }
 
