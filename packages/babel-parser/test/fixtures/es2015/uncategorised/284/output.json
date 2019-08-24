@@ -13,7 +13,6 @@
     }
   },
   "errors": [
-    "SyntaxError: Invalid left-hand side in arrow function parameters (1:3)",
     "SyntaxError: Binding invalid left-hand side in array destructuring pattern (1:3)"
   ],
   "program": {

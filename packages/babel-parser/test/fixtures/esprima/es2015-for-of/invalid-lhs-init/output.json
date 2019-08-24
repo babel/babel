@@ -13,7 +13,6 @@
     }
   },
   "errors": [
-    "SyntaxError: Invalid left-hand side in for-of statement (1:5)",
     "SyntaxError: Invalid left-hand side in for-of statement (1:5)"
   ],
   "program": {

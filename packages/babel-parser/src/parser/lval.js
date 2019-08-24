@@ -101,6 +101,7 @@ export default class LValParser extends NodeUtils {
           if (node.operator === "=") {
             node.type = "AssignmentPattern";
             delete node.operator;
+            this.toAssignable(node.left, isBinding, contextDescription);
           } else {
             this.raise(
               node.left.end,
@@ -120,14 +121,9 @@ export default class LValParser extends NodeUtils {
         case "MemberExpression":
           if (!isBinding) break;
 
-        default: {
-          const message =
-            "Invalid left-hand side" +
-            (contextDescription
-              ? " in " + contextDescription
-              : /* istanbul ignore next */ "expression");
-          this.raise(node.start, message);
-        }
+        default:
+        // We don't know how to deal with this node. It will
+        // be reported by a later call to checkLVal
       }
     }
     return node;

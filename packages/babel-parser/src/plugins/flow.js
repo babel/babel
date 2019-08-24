@@ -1777,9 +1777,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.state.noArrowAt = noArrowAt.concat(valid[0].start);
           ({ consequent, failed } = this.tryParseConditionalConsequent());
         }
-
-        this.getArrowLikeExpressions(consequent, true);
       }
+
+      this.getArrowLikeExpressions(consequent, true);
 
       this.state.noArrowAt = originalNoArrowAt;
       this.expect(tt.colon);
@@ -1826,19 +1826,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (node.type === "ArrowFunctionExpression") {
           if (node.typeParameters || !node.returnType) {
             // This is an arrow expression without ambiguity, so check its parameters
-            this.toAssignableList(
-              // node.params is Expression[] instead of $ReadOnlyArray<Pattern> because it
-              // has not been converted yet.
-              ((node.params: any): N.Expression[]),
-              true,
-              "arrow function parameters",
-              node.extra?.trailingComma,
-            );
-            // Enter scope, as checkParams defines bindings
-            this.scope.enter(functionFlags(false, false) | SCOPE_ARROW);
-            // Use super's method to force the parameters to be checked
-            super.checkParams(node, false, true);
-            this.scope.exit();
+            this.finishArrowValidation(node);
           } else {
             arrows.push(node);
           }
@@ -1850,28 +1838,29 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       if (disallowInvalid) {
-        for (let i = 0; i < arrows.length; i++) {
-          this.toAssignableList(
-            ((node.params: any): N.Expression[]),
-            true,
-            "arrow function parameters",
-            node.extra?.trailingComma,
-          );
-        }
+        arrows.forEach(node => this.finishArrowValidation(node));
         return [arrows, []];
       }
 
-      return partition(arrows, node => {
-        const result = this.tryParse(() =>
-          this.toAssignableList(
-            ((node.params: any): N.Expression[]),
-            true,
-            "arrow function parameters",
-            node.extra?.trailingComma,
-          ),
-        );
-        return !result.error;
-      });
+      return partition(arrows, node =>
+        node.params.every(param => this.isAssignable(param, true)),
+      );
+    }
+
+    finishArrowValidation(node: N.ArrowFunctionExpression) {
+      this.toAssignableList(
+        // node.params is Expression[] instead of $ReadOnlyArray<Pattern> because it
+        // has not been converted yet.
+        ((node.params: any): N.Expression[]),
+        true,
+        "arrow function parameters",
+        node.extra?.trailingComma,
+      );
+      // Enter scope, as checkParams defines bindings
+      this.scope.enter(functionFlags(false, false) | SCOPE_ARROW);
+      // Use super's method to force the parameters to be checked
+      super.checkParams(node, false, true);
+      this.scope.exit();
     }
 
     forwardNoArrowParamsConversionAt<T>(node: N.Node, parse: () => T): T {

@@ -13,7 +13,6 @@
     }
   },
   "errors": [
-    "SyntaxError: Invalid left-hand side in assignment expression (1:1)",
     "SyntaxError: Invalid left-hand side in array destructuring pattern (1:1)"
   ],
   "program": {

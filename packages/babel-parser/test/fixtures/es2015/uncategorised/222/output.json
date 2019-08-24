@@ -13,7 +13,6 @@
     }
   },
   "errors": [
-    "SyntaxError: Invalid left-hand side in object destructuring pattern (1:7)",
     "SyntaxError: Invalid left-hand side in object destructuring pattern (1:7)"
   ],
   "program": {

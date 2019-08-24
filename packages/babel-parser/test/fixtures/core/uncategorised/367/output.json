@@ -13,7 +13,6 @@
     }
   },
   "errors": [
-    "SyntaxError: Invalid left-hand side in assignment expression (1:0)",
     "SyntaxError: Invalid left-hand side in assignment expression (1:0)"
   ],
   "program": {

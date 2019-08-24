@@ -13,7 +13,6 @@
     }
   },
   "errors": [
-    "SyntaxError: Invalid left-hand side in arrow function parameters (1:2)",
     "SyntaxError: Binding member expression (1:2)"
   ],
   "program": {

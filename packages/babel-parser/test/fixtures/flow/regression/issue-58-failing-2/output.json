@@ -13,7 +13,6 @@
     }
   },
   "errors": [
-    "SyntaxError: Invalid left-hand side in arrow function parameters (2:8)",
     "SyntaxError: Binding invalid left-hand side in function parameter list (2:8)"
   ],
   "program": {

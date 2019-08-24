@@ -13,7 +13,6 @@
     }
   },
   "errors": [
-    "SyntaxError: Invalid left-hand side in object destructuring pattern (1:24)",
     "SyntaxError: Binding member expression (1:24)"
   ],
   "program": {

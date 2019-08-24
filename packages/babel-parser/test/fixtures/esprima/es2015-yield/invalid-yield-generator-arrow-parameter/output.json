@@ -14,7 +14,6 @@
   },
   "errors": [
     "SyntaxError: Yield cannot be used as name inside a generator function (1:16)",
-    "SyntaxError: Invalid left-hand side in arrow function parameters (1:16)",
     "SyntaxError: Binding invalid left-hand side in function parameter list (1:16)"
   ],
   "program": {
