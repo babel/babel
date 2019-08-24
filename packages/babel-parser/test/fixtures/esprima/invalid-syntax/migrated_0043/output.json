@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 21,
+  "end": 19,
   "loc": {
     "start": {
       "line": 1,
@@ -9,20 +9,18 @@
     },
     "end": {
       "line": 1,
-      "column": 21
+      "column": 19
     }
   },
   "errors": [
     "SyntaxError: Invalid regular expression flag (1:16)",
     "SyntaxError: Invalid regular expression flag (1:17)",
-    "SyntaxError: Invalid regular expression flag (1:18)",
-    "SyntaxError: Invalid regular expression flag (1:19)",
-    "SyntaxError: Invalid regular expression flag (1:21)"
+    "SyntaxError: Invalid regular expression flag (1:19)"
   ],
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 21,
+    "end": 19,
     "loc": {
       "start": {
         "line": 1,
@@ -30,7 +28,7 @@
       },
       "end": {
         "line": 1,
-        "column": 21
+        "column": 19
       }
     },
     "sourceType": "script",
@@ -39,7 +37,7 @@
       {
         "type": "VariableDeclaration",
         "start": 0,
-        "end": 21,
+        "end": 19,
         "loc": {
           "start": {
             "line": 1,
@@ -47,14 +45,14 @@
           },
           "end": {
             "line": 1,
-            "column": 21
+            "column": 19
           }
         },
         "declarations": [
           {
             "type": "VariableDeclarator",
             "start": 4,
-            "end": 21,
+            "end": 19,
             "loc": {
               "start": {
                 "line": 1,
@@ -62,7 +60,7 @@
               },
               "end": {
                 "line": 1,
-                "column": 21
+                "column": 19
               }
             },
             "id": {
@@ -85,7 +83,7 @@
             "init": {
               "type": "RegExpLiteral",
               "start": 8,
-              "end": 21,
+              "end": 19,
               "loc": {
                 "start": {
                   "line": 1,
@@ -93,14 +91,14 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 21
+                  "column": 19
                 }
               },
               "extra": {
-                "raw": "/[a-z]/\\\\\\\\ux"
+                "raw": "/[a-z]/\\\\ux"
               },
               "pattern": "[a-z]",
-              "flags": "\\\\\\\\ux"
+              "flags": "\\\\ux"
             }
           }
         ],

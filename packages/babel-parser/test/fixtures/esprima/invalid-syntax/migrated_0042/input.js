@@ -1,1 +1,1 @@
-var x = /[a-z\n]/\\ux
+var x = /[a-z\n]/\ux
