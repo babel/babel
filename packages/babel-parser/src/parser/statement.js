@@ -1361,13 +1361,6 @@ export default class StatementParser extends ExpressionParser {
       if (isConstructor) {
         publicMethod.kind = "constructor";
 
-        if (publicMethod.decorators) {
-          this.raise(
-            publicMethod.start,
-            "You can't attach decorators to a class constructor",
-          );
-        }
-
         // TypeScript allows multiple overloaded constructor declarations.
         if (state.hadConstructor && !this.hasPlugin("typescript")) {
           this.raise(key.start, "Duplicate constructor in the same class");

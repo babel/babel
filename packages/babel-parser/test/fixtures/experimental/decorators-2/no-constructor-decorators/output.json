@@ -13,7 +13,6 @@
     }
   },
   "errors": [
-    "SyntaxError: You can't attach decorators to a class constructor (2:2)",
     "SyntaxError: Decorators can't be used with a constructor. Did you mean '@dec class { ... }'? (2:2)"
   ],
   "program": {
