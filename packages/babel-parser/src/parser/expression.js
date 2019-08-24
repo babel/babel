@@ -2156,6 +2156,7 @@ export default class ExpressionParser extends LValParser {
         startLoc,
         "Can not use 'yield' as identifier inside a generator",
       );
+      return;
     }
 
     if (word === "await") {
@@ -2164,7 +2165,9 @@ export default class ExpressionParser extends LValParser {
           startLoc,
           "Can not use 'await' as identifier inside an async function",
         );
-      } else if (
+        return;
+      }
+      if (
         this.state.awaitPos === -1 &&
         (this.state.maybeInArrowParameters || this.isAwaitAllowed())
       ) {
@@ -2177,9 +2180,11 @@ export default class ExpressionParser extends LValParser {
         startLoc,
         "'arguments' is not allowed in class field initializer",
       );
+      return;
     }
     if (checkKeywords && isKeyword(word)) {
       this.raise(startLoc, `Unexpected keyword '${word}'`);
+      return;
     }
 
     const reservedTest = !this.state.strict
@@ -2194,8 +2199,9 @@ export default class ExpressionParser extends LValParser {
           startLoc,
           "Can not use keyword 'await' outside an async function",
         );
+      } else {
+        this.raise(startLoc, `Unexpected reserved word '${word}'`);
       }
-      this.raise(startLoc, `Unexpected reserved word '${word}'`);
     }
   }
 

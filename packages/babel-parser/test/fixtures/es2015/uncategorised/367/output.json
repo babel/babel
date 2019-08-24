@@ -14,7 +14,6 @@
   },
   "errors": [
     "SyntaxError: Can not use keyword 'await' outside an async function (1:6)",
-    "SyntaxError: Unexpected reserved word 'await' (1:6)",
     "SyntaxError: Binding 'await' in strict mode (1:6)"
   ],
   "program": {
