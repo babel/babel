@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Object pattern can't contain getter or setter (1:8)",
-    "SyntaxError: Invalid left-hand side in object destructuring pattern (1:4)"
+    "SyntaxError: Object pattern can't contain getter or setter (1:8)"
   ],
   "program": {
     "type": "Program",
