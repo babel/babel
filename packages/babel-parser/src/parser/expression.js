@@ -1937,7 +1937,7 @@ export default class ExpressionParser extends LValParser {
 
     if (isExpression) {
       node.body = this.parseMaybeAssign();
-      this.checkParams(node, false, allowExpression);
+      this.checkParams(node, false, allowExpression, false);
     } else {
       const nonSimple = !this.isSimpleParamList(node.params);
       if (!oldStrict || nonSimple) {
