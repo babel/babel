@@ -30,7 +30,11 @@ defineType("JSXClosingElement", {
   aliases: ["JSX", "Immutable"],
   fields: {
     name: {
-      validate: assertNodeType("JSXIdentifier", "JSXMemberExpression"),
+      validate: assertNodeType(
+        "JSXIdentifier",
+        "JSXMemberExpression",
+        "JSXNamespacedName",
+      ),
     },
   },
 });
@@ -130,7 +134,11 @@ defineType("JSXOpeningElement", {
   aliases: ["JSX", "Immutable"],
   fields: {
     name: {
-      validate: assertNodeType("JSXIdentifier", "JSXMemberExpression"),
+      validate: assertNodeType(
+        "JSXIdentifier",
+        "JSXMemberExpression",
+        "JSXNamespacedName",
+      ),
     },
     selfClosing: {
       default: false,

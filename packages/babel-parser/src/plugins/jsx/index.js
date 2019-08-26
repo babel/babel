@@ -250,10 +250,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // Parses element name in any form - namespaced, member
     // or single identifier.
 
-    jsxParseElementName(): N.JSXNamespacedName | N.JSXMemberExpression {
+    jsxParseElementName():
+      | N.JSXIdentifier
+      | N.JSXNamespacedName
+      | N.JSXMemberExpression {
       const startPos = this.state.start;
       const startLoc = this.state.startLoc;
       let node = this.jsxParseNamespacedName();
+      if (node.type === "JSXNamespacedName") {
+        return node;
+      }
       while (this.eat(tt.dot)) {
         const newNode = this.startNodeAt(startPos, startLoc);
         newNode.object = node;
