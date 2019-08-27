@@ -138,7 +138,6 @@ export default class CommentsParser extends BaseParser {
           }
         }
       } else if (node.type === "ArrayExpression" && node.elements.length > 0) {
-        const lastElement = last(node.elements);
         if (this.state.commentPreviousNode) {
           for (j = 0; j < this.state.leadingComments.length; j++) {
             if (
@@ -151,6 +150,7 @@ export default class CommentsParser extends BaseParser {
           }
 
           if (this.state.leadingComments.length > 0) {
+            const lastElement = last(node.elements);
             lastElement.trailingComments = this.state.leadingComments;
             this.state.leadingComments = [];
           }
