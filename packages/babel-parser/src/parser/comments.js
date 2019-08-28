@@ -151,12 +151,15 @@ export default class CommentsParser extends BaseParser {
 
           const lastElement = last(node.elements);
           lastElement.trailingComments = [];
-          for (j = 0; j < this.state.leadingComments.length; j++) {
-            if (this.state.leadingComments[j].end < node.end) {
-              lastElement.trailingComments.push(
-                this.state.leadingComments.splice(j, 1)[0],
-              );
-              j--;
+          while (this.state.leadingComments.length) {
+            const leadingComment = this.state.leadingComments.shift();
+            if (leadingComment.end < node.end) {
+              lastElement.trailingComments.push(leadingComment);
+            } else {
+              if (node.trailingComments === undefined) {
+                node.trailingComments = [];
+              }
+              node.trailingComments.push(leadingComment);
             }
           }
         }
