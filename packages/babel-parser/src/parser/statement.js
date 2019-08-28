@@ -170,7 +170,7 @@ export default class StatementParser extends ExpressionParser {
       case tt._for:
         return this.parseForStatement(node);
       case tt._function:
-        if (this.lookahead().type === tt.dot) break;
+        if (this.lookaheadCharCode() === charCodes.dot) break;
         if (context) {
           if (this.state.strict) {
             this.raise(
@@ -223,8 +223,11 @@ export default class StatementParser extends ExpressionParser {
         return this.parseEmptyStatement(node);
       case tt._export:
       case tt._import: {
-        const nextToken = this.lookahead();
-        if (nextToken.type === tt.parenL || nextToken.type === tt.dot) {
+        const nextTokenCharCode = this.lookaheadCharCode();
+        if (
+          nextTokenCharCode === charCodes.leftParenthesis ||
+          nextTokenCharCode === charCodes.dot
+        ) {
           break;
         }
 

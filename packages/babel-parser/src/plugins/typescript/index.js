@@ -19,6 +19,7 @@ import {
   BIND_CLASS,
 } from "../../util/scopeflags";
 import TypeScriptScopeHandler from "./scope";
+import * as charCodes from "charcodes";
 
 type TsModifier =
   | "readonly"
@@ -657,7 +658,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             : this.match(tt._null)
             ? "TSNullKeyword"
             : keywordTypeFromName(this.state.value);
-          if (type !== undefined && this.lookahead().type !== tt.dot) {
+          if (
+            type !== undefined &&
+            this.lookaheadCharCode() !== charCodes.dot
+          ) {
             const node: N.TsKeywordType = this.startNode();
             this.next();
             return this.finishNode(node, type);
@@ -1203,7 +1207,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsIsExternalModuleReference(): boolean {
       return (
-        this.isContextual("require") && this.lookahead().type === tt.parenL
+        this.isContextual("require") &&
+        this.lookaheadCharCode() === charCodes.leftParenthesis
       );
     }
 

@@ -590,7 +590,7 @@ export default class ExpressionParser extends LValParser {
     } else if (this.match(tt.questionDot)) {
       this.expectPlugin("optionalChaining");
       state.optionalChainMember = true;
-      if (noCalls && this.lookahead().type === tt.parenL) {
+      if (noCalls && this.lookaheadCharCode() === charCodes.leftParenthesis) {
         state.stop = true;
         return base;
       }
