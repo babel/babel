@@ -86,7 +86,7 @@ export default class CommentsParser extends BaseParser {
 
     // Attach comments that follow a trailing comma on the last
     // property in an object literal or a trailing comma in function arguments
-    // as trailing comments
+    // or a trailing comma in array expressions as trailing comments
     if (firstChild && this.state.leadingComments.length > 0) {
       const lastComment = last(this.state.leadingComments);
 
@@ -134,6 +134,32 @@ export default class CommentsParser extends BaseParser {
             if (this.state.leadingComments.length > 0) {
               lastArg.trailingComments = this.state.leadingComments;
               this.state.leadingComments = [];
+            }
+          }
+        }
+      } else if (node.type === "ArrayExpression" && node.elements.length > 0) {
+        if (this.state.commentPreviousNode) {
+          for (j = 0; j < this.state.leadingComments.length; j++) {
+            if (
+              this.state.leadingComments[j].end <
+              this.state.commentPreviousNode.end
+            ) {
+              this.state.leadingComments.splice(j, 1);
+              j--;
+            }
+          }
+
+          const lastElement = last(node.elements);
+          lastElement.trailingComments = [];
+          while (this.state.leadingComments.length) {
+            const leadingComment = this.state.leadingComments.shift();
+            if (leadingComment.end < node.end) {
+              lastElement.trailingComments.push(leadingComment);
+            } else {
+              if (node.trailingComments === undefined) {
+                node.trailingComments = [];
+              }
+              node.trailingComments.push(leadingComment);
             }
           }
         }
