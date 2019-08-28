@@ -8,7 +8,7 @@ import {
   isIdentifierStart,
   keywordRelationalOperator,
 } from "../util/identifier";
-import { lineBreak, skipWhiteSpace } from "../util/whitespace";
+import { lineBreak } from "../util/whitespace";
 import * as charCodes from "charcodes";
 import {
   BIND_CLASS,
@@ -105,10 +105,7 @@ export default class StatementParser extends ExpressionParser {
     if (!this.isContextual("let")) {
       return false;
     }
-    skipWhiteSpace.lastIndex = this.state.pos;
-    const skip = skipWhiteSpace.exec(this.input);
-    // $FlowIgnore
-    const next = this.state.pos + skip[0].length;
+    const next = this.nextTokenStart();
     const nextCh = this.input.charCodeAt(next);
     // For ambiguous cases, determine if a LexicalDeclaration (or only a
     // Statement) is allowed here. If context is not empty then only a Statement
@@ -1760,18 +1757,9 @@ export default class StatementParser extends ExpressionParser {
 
   isAsyncFunction(): boolean {
     if (!this.isContextual("async")) return false;
-
-    const { pos } = this.state;
-
-    skipWhiteSpace.lastIndex = pos;
-    const skip = skipWhiteSpace.exec(this.input);
-
-    if (!skip || !skip.length) return false;
-
-    const next = pos + skip[0].length;
-
+    const next = this.nextTokenStart();
     return (
-      !lineBreak.test(this.input.slice(pos, next)) &&
+      !lineBreak.test(this.input.slice(this.state.pos, next)) &&
       this.input.slice(next, next + 8) === "function" &&
       (next + 8 === this.length ||
         !isIdentifierChar(this.input.charCodeAt(next + 8)))

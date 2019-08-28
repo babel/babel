@@ -13,11 +13,11 @@ import {
   lineBreakG,
   isNewLine,
   isWhitespace,
+  skipWhiteSpace,
 } from "../util/whitespace";
 import State from "./state";
 
 const VALID_REGEX_FLAGS = new Set(["g", "m", "s", "i", "y", "u"]);
-const skipWhiteSpace = /(?:\s|\/\/.*|\/\*[^]*?\*\/)*/g;
 
 // The following character codes are forbidden from being
 // an immediate sibling of NumericLiteralSeparator _
@@ -169,13 +169,16 @@ export default class Tokenizer extends LocationParser {
     return curr;
   }
 
-  lookaheadCharCode(): number {
+  nextTokenStart(): number {
     const thisTokEnd = this.state.pos;
     skipWhiteSpace.lastIndex = thisTokEnd;
     const skip = skipWhiteSpace.exec(this.input);
     // $FlowIgnore: The skipWhiteSpace ensures to match any string
-    const next = thisTokEnd + skip[0].length;
-    return this.input.charCodeAt(next);
+    return thisTokEnd + skip[0].length;
+  }
+
+  lookaheadCharCode(): number {
+    return this.input.charCodeAt(this.nextTokenStart());
   }
 
   // Toggle strict mode. Re-reads the next number or string to please
