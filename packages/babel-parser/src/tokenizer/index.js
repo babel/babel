@@ -280,13 +280,7 @@ export default class Tokenizer extends LocationParser {
     const startLoc = this.state.curPosition();
     let ch = this.input.charCodeAt((this.state.pos += startSkip));
     if (this.state.pos < this.length) {
-      while (
-        ch !== charCodes.lineFeed &&
-        ch !== charCodes.carriageReturn &&
-        ch !== charCodes.lineSeparator &&
-        ch !== charCodes.paragraphSeparator &&
-        ++this.state.pos < this.length
-      ) {
+      while (!isNewLine(ch) && ++this.state.pos < this.length) {
         ch = this.input.charCodeAt(this.state.pos);
       }
     }
@@ -452,13 +446,7 @@ export default class Tokenizer extends LocationParser {
     let ch = this.input.charCodeAt(this.state.pos);
     if (ch !== charCodes.exclamationMark) return false;
 
-    while (
-      ch !== charCodes.lineFeed &&
-      ch !== charCodes.carriageReturn &&
-      ch !== charCodes.lineSeparator &&
-      ch !== charCodes.paragraphSeparator &&
-      ++this.state.pos < this.length
-    ) {
+    while (!isNewLine(ch) && ++this.state.pos < this.length) {
       ch = this.input.charCodeAt(this.state.pos);
     }
 
