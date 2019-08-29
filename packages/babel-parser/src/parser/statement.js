@@ -1738,11 +1738,11 @@ export default class StatementParser extends ExpressionParser {
   maybeParseExportDeclaration(node: N.Node): boolean {
     if (this.shouldParseExportDeclaration()) {
       if (this.isContextual("async")) {
-        const next = this.lookahead();
+        const next = this.nextTokenStart();
 
         // export async;
-        if (next.type !== tt._function) {
-          this.unexpected(next.start, `Unexpected token, expected "function"`);
+        if (!this.isUnparsedContextual(next, "function")) {
+          this.unexpected(next, `Unexpected token, expected "function"`);
         }
       }
 
@@ -1760,9 +1760,7 @@ export default class StatementParser extends ExpressionParser {
     const next = this.nextTokenStart();
     return (
       !lineBreak.test(this.input.slice(this.state.pos, next)) &&
-      this.input.slice(next, next + 8) === "function" &&
-      (next + 8 === this.length ||
-        !isIdentifierChar(this.input.charCodeAt(next + 8)))
+      this.isUnparsedContextual(next, "function")
     );
   }
 
@@ -1824,10 +1822,10 @@ export default class StatementParser extends ExpressionParser {
       return false;
     }
 
-    const lookahead = this.lookahead();
+    const next = this.nextTokenStart();
     return (
-      lookahead.type === tt.comma ||
-      (lookahead.type === tt.name && lookahead.value === "from")
+      this.input.charCodeAt(next) === charCodes.comma ||
+      this.isUnparsedContextual(next, "from")
     );
   }
 
