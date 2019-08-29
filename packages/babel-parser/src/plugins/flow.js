@@ -1699,6 +1699,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.isContextual("type") ||
         this.isContextual("interface") ||
         this.isContextual("opaque") ||
+        (this.shouldParseEnums() && this.isContextual("enum")) ||
         super.shouldParseExportDeclaration()
       );
     }
@@ -1708,12 +1709,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.match(tt.name) &&
         (this.state.value === "type" ||
           this.state.value === "interface" ||
-          this.state.value === "opaque")
+          this.state.value === "opaque" ||
+          (this.shouldParseEnums() && this.state.value === "enum"))
       ) {
         return false;
       }
 
       return super.isExportDefaultSpecifier();
+    }
+
+    parseExportDefaultExpression(): N.Expression | N.Declaration {
+      if (this.shouldParseEnums() && this.isContextual("enum")) {
+        const node = this.startNode();
+        this.next();
+        return this.flowParseEnumDeclaration(node);
+      }
+      return super.parseExportDefaultExpression();
     }
 
     parseConditional(
@@ -1973,6 +1984,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const declarationNode = this.startNode();
         this.next();
         return this.flowParseInterface(declarationNode);
+      } else if (this.shouldParseEnums() && this.isContextual("enum")) {
+        node.exportKind = "value";
+        const declarationNode = this.startNode();
+        this.next();
+        return this.flowParseEnumDeclaration(declarationNode);
       } else {
         return super.parseExportDeclaration(node);
       }
