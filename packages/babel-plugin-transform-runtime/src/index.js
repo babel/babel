@@ -113,7 +113,14 @@ export default declare((api, options, dirname) => {
     );
   }
 
+  function isNamespaced(path) {
+    const binding = path.scope.getBinding(path.node.name);
+    if (!binding) return false;
+    return binding.path.isImportNamespaceSpecifier();
+  }
+
   function maybeNeedsPolyfill(path, methods, name) {
+    if (isNamespaced(path.get("object"))) return false;
     if (!methods[name].types) return true;
 
     const typeAnnotation = path.get("object").getTypeAnnotation();
