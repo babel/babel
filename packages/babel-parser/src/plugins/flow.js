@@ -3007,35 +3007,38 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     flowEnumMemberInit(): EnumMemberInit {
-      const lookahead = this.lookahead();
-      if (lookahead.type === tt.comma || lookahead.type === tt.braceR) {
-        switch (this.state.type) {
-          case tt.num: {
-            const literal = this.parseLiteral(
-              this.state.value,
-              "NumericLiteral",
-            );
+      const startPos = this.state.start;
+      const endOfInit = () => this.match(tt.comma) || this.match(tt.braceR);
+      switch (this.state.type) {
+        case tt.num: {
+          const literal = this.parseLiteral(this.state.value, "NumericLiteral");
+          if (endOfInit()) {
             return { type: "number", pos: literal.start, value: literal };
           }
-          case tt.string: {
-            const literal = this.parseLiteral(
-              this.state.value,
-              "StringLiteral",
-            );
+          return { type: "invalid", pos: startPos };
+        }
+        case tt.string: {
+          const literal = this.parseLiteral(this.state.value, "StringLiteral");
+          if (endOfInit()) {
             return { type: "string", pos: literal.start, value: literal };
           }
-          case tt._true:
-          case tt._false: {
-            const literal = this.parseBooleanLiteral();
+          return { type: "invalid", pos: startPos };
+        }
+        case tt._true:
+        case tt._false: {
+          const literal = this.parseBooleanLiteral();
+          if (endOfInit()) {
             return {
               type: "boolean",
               pos: literal.start,
               value: literal.value,
             };
           }
+          return { type: "invalid", pos: startPos };
         }
+        default:
+          return { type: "invalid", pos: startPos };
       }
-      return { type: "invalid", pos: this.state.start };
     }
 
     flowEnumMemberRaw(): { id: N.Node, init: EnumMemberInit } {
@@ -3198,7 +3201,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }): EnumExplicitType {
       if (this.isContextual("of")) {
         this.next();
-        if (this.state.type === tt.name) {
+        if (this.match(tt.name)) {
           switch (this.state.value) {
             case "boolean":
             case "number":
