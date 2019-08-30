@@ -144,6 +144,10 @@ commander.option(
   "--include-dotfiles",
   "Include dotfiles when compiling and copying non-compilable files",
 );
+commander.option(
+  "--exclude-dotdirs",
+  "Exclude dot directories when compiling and copying non-compilable files",
+);
 commander.option("--verbose", "Log everything");
 commander.option(
   "--delete-dir-on-start",
@@ -281,6 +285,7 @@ export default function parseArgv(args: Array<string>): CmdOptions {
       relative: opts.relative,
       copyFiles: opts.copyFiles,
       includeDotfiles: opts.includeDotfiles,
+      excludeDotdirs: opts.excludeDotdirs,
       verbose: opts.verbose,
       deleteDirOnStart: opts.deleteDirOnStart,
       sourceMapTarget: opts.sourceMapTarget,

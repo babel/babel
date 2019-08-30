@@ -100,7 +100,11 @@ export default async function({
 
       let count = 0;
 
-      const files = util.readdir(dirname, cliOptions.includeDotfiles);
+      const files = util.readdir(
+        dirname,
+        cliOptions.includeDotfiles,
+        cliOptions.excludeDotdirs,
+      );
       for (const filename of files) {
         const src = path.join(dirname, filename);
 
