@@ -138,6 +138,7 @@ export default class CommentsParser extends BaseParser {
           this.adjustCommentsAfterTrailingComma(node, node.arguments);
           break;
         case "ArrayExpression":
+        case "ArrayPattern":
           this.adjustCommentsAfterTrailingComma(node, node.elements);
           break;
       }
