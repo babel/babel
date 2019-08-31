@@ -1,6 +1,6 @@
 {
   "plugins": [
     "transform-classes",
-    ["transform-runtime", { "absoluteRuntime": true }]
+    ["transform-runtime", { "relativeRuntime": true }]
   ]
 }
