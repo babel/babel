@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 28,
+  "end": 46,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 28
+      "column": 46
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 28,
+    "end": 46,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 1,
-        "column": 28
+        "column": 46
       }
     },
     "sourceType": "script",
@@ -32,7 +32,7 @@
       {
         "type": "ExpressionStatement",
         "start": 0,
-        "end": 28,
+        "end": 46,
         "loc": {
           "start": {
             "line": 1,
@@ -40,13 +40,13 @@
           },
           "end": {
             "line": 1,
-            "column": 28
+            "column": 46
           }
         },
         "expression": {
           "type": "CallExpression",
           "start": 0,
-          "end": 27,
+          "end": 29,
           "loc": {
             "start": {
               "line": 1,
@@ -54,7 +54,7 @@
             },
             "end": {
               "line": 1,
-              "column": 27
+              "column": 29
             }
           },
           "callee": {
@@ -166,9 +166,9 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": " comment ",
+                  "value": " comment 1 ",
                   "start": 13,
-                  "end": 26,
+                  "end": 28,
                   "loc": {
                     "start": {
                       "line": 1,
@@ -176,11 +176,29 @@
                     },
                     "end": {
                       "line": 1,
-                      "column": 26
+                      "column": 28
                     }
                   }
                 }
               ]
+            }
+          ],
+          "trailingComments": [
+            {
+              "type": "CommentBlock",
+              "value": " comment 2 ",
+              "start": 30,
+              "end": 45,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 30
+                },
+                "end": {
+                  "line": 1,
+                  "column": 45
+                }
+              }
             }
           ]
         }
@@ -191,9 +209,9 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": " comment ",
+      "value": " comment 1 ",
       "start": 13,
-      "end": 26,
+      "end": 28,
       "loc": {
         "start": {
           "line": 1,
@@ -201,7 +219,23 @@
         },
         "end": {
           "line": 1,
-          "column": 26
+          "column": 28
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": " comment 2 ",
+      "start": 30,
+      "end": 45,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 30
+        },
+        "end": {
+          "line": 1,
+          "column": 45
         }
       }
     }
