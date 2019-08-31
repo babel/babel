@@ -38,7 +38,7 @@ export default class CommentsParser extends BaseParser {
     this.state.leadingComments.push(comment);
   }
 
-  adjustCommentsAfterTrailingComma_(node: Node, elements: Node[]) {
+  adjustCommentsAfterTrailingComma(node: Node, elements: Node[]) {
     if (elements.length === 0) {
       return;
     }
@@ -132,13 +132,13 @@ export default class CommentsParser extends BaseParser {
     if (firstChild) {
       switch (node.type) {
         case "ObjectExpression":
-          this.adjustCommentsAfterTrailingComma_(node, node.properties);
+          this.adjustCommentsAfterTrailingComma(node, node.properties);
           break;
         case "CallExpression":
-          this.adjustCommentsAfterTrailingComma_(node, node.arguments);
+          this.adjustCommentsAfterTrailingComma(node, node.arguments);
           break;
         case "ArrayExpression":
-          this.adjustCommentsAfterTrailingComma_(node, node.elements);
+          this.adjustCommentsAfterTrailingComma(node, node.elements);
           break;
       }
     }
