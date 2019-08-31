@@ -60,17 +60,23 @@ export default class CommentsParser extends BaseParser {
       }
     }
 
-    lastElement.trailingComments = [];
+    const newTrailingComments = [];
     while (this.state.leadingComments.length) {
       const leadingComment = this.state.leadingComments.shift();
       if (leadingComment.end < node.end) {
-        lastElement.trailingComments.push(leadingComment);
+        newTrailingComments.push(leadingComment);
       } else {
         if (node.trailingComments === undefined) {
           node.trailingComments = [];
         }
         node.trailingComments.push(leadingComment);
       }
+    }
+
+    if (newTrailingComments.length > 0) {
+      lastElement.trailingComments = newTrailingComments;
+    } else if (lastElement.trailingComments !== undefined) {
+      lastElement.trailingComments = [];
     }
   }
 
