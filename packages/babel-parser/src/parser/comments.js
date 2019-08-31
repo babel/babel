@@ -143,6 +143,16 @@ export default class CommentsParser extends BaseParser {
           this.adjustCommentsAfterTrailingComma(node, node.elements);
           break;
       }
+    } else if (
+      this.state.commentPreviousNode &&
+      ((this.state.commentPreviousNode.type === "ImportSpecifier" &&
+        node.type !== "ImportSpecifier") ||
+        (this.state.commentPreviousNode.type === "ExportSpecifier" &&
+          node.type !== "ExportSpecifier"))
+    ) {
+      this.adjustCommentsAfterTrailingComma(node, [
+        this.state.commentPreviousNode,
+      ]);
     }
 
     if (lastChild) {
