@@ -132,6 +132,7 @@ export default class CommentsParser extends BaseParser {
     if (firstChild) {
       switch (node.type) {
         case "ObjectExpression":
+        case "ObjectPattern":
           this.adjustCommentsAfterTrailingComma(node, node.properties);
           break;
         case "CallExpression":
