@@ -133,6 +133,12 @@ Substitute spaces for hyphens and forward slashes when targeting specific test n
 $ TEST_GREP="arrow functions destructuring parameters" make test
 ```
 
+Use the `TEST_WATCH` flag to run tests in watch mode:
+
+```sh
+TEST_GREP=transformation TEST_WATCH=1 make test
+```
+
 To enable the Node.js debugger added in v6.3.0, set the `TEST_DEBUG` environment variable:
 
 ```sh
