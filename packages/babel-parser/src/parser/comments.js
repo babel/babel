@@ -45,9 +45,6 @@ export default class CommentsParser extends BaseParser {
     if (this.state.leadingComments.length === 0) {
       return;
     }
-    if (!this.state.commentPreviousNode) {
-      return;
-    }
 
     const lastElement = last(elements);
 
