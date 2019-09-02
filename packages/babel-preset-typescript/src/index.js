@@ -4,12 +4,7 @@ import transformTypeScript from "@babel/plugin-transform-typescript";
 export default declare(
   (
     api,
-    {
-      jsxPragma,
-      allExtensions = false,
-      isTSX = false,
-      allowNamespaces = false,
-    },
+    { jsxPragma, allExtensions = false, isTSX = false, allowNamespaces },
   ) => {
     api.assertVersion(7);
 
