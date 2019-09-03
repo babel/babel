@@ -132,7 +132,7 @@ defineType("CallExpression", {
   aliases: ["Expression"],
   fields: {
     callee: {
-      validate: assertNodeType("Expression"),
+      validate: assertNodeType("Expression", "V8IntrinsicIdentifier"),
     },
     arguments: {
       validate: chain(
