@@ -126,6 +126,7 @@ lines.push(
   `declare function validate(n: BabelNode, key: string, value: mixed): void;`,
   `declare function clone<T>(n: T): T;`,
   `declare function cloneDeep<T>(n: T): T;`,
+  `declare function cloneNode<T>(n: T, deep?: boolean): T;`,
   `declare function removeProperties<T>(n: T, opts: ?{}): void;`,
   `declare function removePropertiesDeep<T>(n: T, opts: ?{}): T;`,
   `declare type TraversalAncestors = Array<{
