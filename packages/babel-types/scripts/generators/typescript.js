@@ -129,6 +129,7 @@ lines.push(
   `export function validate(n: Node, key: string, value: any): void;`,
   `export function clone<T extends Node>(n: T): T;`,
   `export function cloneDeep<T extends Node>(n: T): T;`,
+  `export function cloneNode<T extends Node>(n: T, deep?: boolean): T;`,
   `export function removeProperties(
   n: Node,
   opts?: { preserveComments: boolean } | null
