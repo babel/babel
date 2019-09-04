@@ -100,7 +100,15 @@ const assertTest = function(stdout, stderr, opts, cwd) {
         expect(expected).not.toBeUndefined();
 
         if (expected) {
-          expect(actual).toBe(expected);
+          try {
+            expect(actual).toBe(expected);
+          } catch (e) {
+            if (!process.env.OVERWRITE) throw e;
+
+            const fullFileName = path.join(opts.testLoc, "out-files", filename);
+            console.log(`Updated test file: ${fullFileName}`);
+            fs.writeFileSync(fullFileName, `${actual}\n`);
+          }
         }
       }
     });
@@ -181,6 +189,7 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
       const testLoc = path.join(suiteLoc, testName);
 
       const opts = {
+        testLoc,
         args: [],
       };
 
