@@ -3,9 +3,7 @@ import * as t from "@babel/types";
 export function _params(node: Object) {
   this.print(node.typeParameters, node);
   this.token("(");
-  this.indent();
   this._parameters(node.params, node);
-  this.dedent();
   this.token(")");
 
   this.print(node.returnType, node);

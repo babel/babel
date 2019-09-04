@@ -145,9 +145,7 @@ export function CallExpression(node: Object) {
   this.print(node.typeArguments, node); // Flow
   this.print(node.typeParameters, node); // TS
   this.token("(");
-  this.indent();
   this.printList(node.arguments, node);
-  this.dedent();
   this.withSource("end", node.loc, () => {
     this.token(")");
   });

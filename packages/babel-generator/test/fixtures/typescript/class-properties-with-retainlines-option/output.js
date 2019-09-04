@@ -8,14 +8,14 @@ class ClassName {
     b2: number;
   };
   c(
-    a: number,
-    b: number,
-    c: number,
-    d: {
-      d1: number;
-      d2: number;
-      d3: number;
-    })
+  a: number,
+  b: number,
+  c: number,
+  d: {
+    d1: number;
+    d2: number;
+    d3: number;
+  })
   : {
     a: number;
     b: number;
@@ -23,10 +23,10 @@ class ClassName {
     d: number;
   } {
     fn(
-      a,
-      b,
-      c,
-      d
+    a,
+    b,
+    c,
+    d
     );
     return {
       a,
