@@ -30,7 +30,7 @@
     "source-map": "^0.5.0"
   },
   "optionalDependencies": {
-    "chokidar": "^2.0.4"
+    "chokidar": "^2.1.8"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
