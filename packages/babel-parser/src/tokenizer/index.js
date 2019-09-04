@@ -404,8 +404,10 @@ export default class Tokenizer extends LocationParser {
       return;
     }
 
-    const next2 = this.input.charCodeAt(this.state.pos + 2);
-    if (next === charCodes.dot && next2 === charCodes.dot) {
+    if (
+      next === charCodes.dot &&
+      this.input.charCodeAt(this.state.pos + 2) === charCodes.dot
+    ) {
       this.state.pos += 3;
       this.finishToken(tt.ellipsis);
     } else {
