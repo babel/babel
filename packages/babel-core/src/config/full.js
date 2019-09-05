@@ -289,10 +289,9 @@ const validateIfOptionNeedsFilename = (
       : "/* your preset */";
     throw new Error(
       [
-        `Preset ${formattedPresetName} requires a filename be set.`,
-        `For example, if you are calling Babel directly`,
+        `Preset ${formattedPresetName} requires a filename to be set when babel is called directly,`,
         `\`\`\``,
-        `babel.transform(code, { filename: 'file.js', presets: [${formattedPresetName}] });`,
+        `babel.transform(code, { filename: 'file.ts', presets: [${formattedPresetName}] });`,
         `\`\`\``,
         `See https://babeljs.io/docs/en/options#filename for more information.`,
       ].join("\n"),
