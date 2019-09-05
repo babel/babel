@@ -38,6 +38,8 @@ Using plugins:
   transform-member-expression-literals {}
   transform-property-literals {}
   transform-reserved-words {}
+  transform-modules-commonjs {}
+  proposal-dynamic-import {}
 
 Using polyfills with `entry` option:
 

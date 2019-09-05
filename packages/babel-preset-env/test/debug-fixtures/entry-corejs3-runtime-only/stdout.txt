@@ -12,6 +12,8 @@ Using plugins:
   syntax-object-rest-spread { "chrome":"71" }
   syntax-json-strings { "chrome":"71" }
   syntax-optional-catch-binding { "chrome":"71" }
+  transform-modules-commonjs { "chrome":"71" }
+  proposal-dynamic-import { "chrome":"71" }
 
 Using polyfills with `entry` option:
 

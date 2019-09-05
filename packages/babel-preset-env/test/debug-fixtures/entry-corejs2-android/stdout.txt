@@ -38,6 +38,8 @@ Using plugins:
   proposal-optional-catch-binding { "android":"4" }
   transform-named-capturing-groups-regex { "android":"4" }
   transform-reserved-words { "android":"4" }
+  transform-modules-commonjs { "android":"4" }
+  proposal-dynamic-import { "android":"4" }
 
 Using polyfills with `entry` option:
 
