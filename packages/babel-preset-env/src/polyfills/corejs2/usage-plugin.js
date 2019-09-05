@@ -15,6 +15,7 @@ import {
   isPolyfillSource,
   getImportSource,
   getRequireSource,
+  isNamespaced,
 } from "../../utils";
 import { logUsagePolyfills } from "../../debug";
 
@@ -101,6 +102,9 @@ export default function(
       enter(path: NodePath) {
         const { node } = path;
         const { object, property } = node;
+
+        // ignore namespace
+        if (isNamespaced(path.get("object"))) return;
 
         let evaluatedPropType = object.name;
         let propertyName = property.name;

@@ -162,3 +162,10 @@ export function getModulePath(mod: string): string {
 export function createImport(path: NodePath, mod: string) {
   return addSideEffect(path, getModulePath(mod));
 }
+
+export function isNamespaced(path: NodePath) {
+  if (!path.node) return false;
+  const binding = path.scope.getBinding(path.node.name);
+  if (!binding) return false;
+  return binding.path.isImportNamespaceSpecifier();
+}
