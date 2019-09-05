@@ -1,1 +1,1 @@
-bar[filter]()
+bar['filter']()
