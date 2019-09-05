@@ -1,4 +1,4 @@
-const regex = /(?<=a)(?<a>[a]+?)/
+const regex = /(?<=a)(?<a>[a])/
 
 const result = regex.exec("aa");
 
