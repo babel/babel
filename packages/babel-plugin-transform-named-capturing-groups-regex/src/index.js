@@ -12,7 +12,7 @@ export default function({ types: t }, options) {
     visitor: {
       RegExpLiteral(path) {
         const node = path.node;
-        if (node.pattern.indexOf("(?<") === -1) {
+        if (!/\(\?<(?![=!])/.test(node.pattern)) {
           // Return early if there are no named groups.
           // The .indexOf check may have false positives (e.g. /\(?</); in
           // this case we parse the regex and regexp-tree won't transform it.
@@ -28,10 +28,9 @@ export default function({ types: t }, options) {
           namedCapturingGroups &&
           Object.keys(namedCapturingGroups).length > 0
         ) {
-          const oldPattern = node.pattern;
           node.pattern = result.getSource();
 
-          if (runtime && !isRegExpTest(path) && node.pattern !== oldPattern) {
+          if (runtime && !isRegExpTest(path)) {
             path.replaceWith(
               t.callExpression(this.addHelper("wrapRegExp"), [
                 node,
