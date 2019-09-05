@@ -107,7 +107,7 @@ export default function(
         if (isNamespaced(path.get("object"))) return;
 
         let evaluatedPropType = object.name;
-        let propertyName = property.name;
+        let propertyName = "";
         let instanceType = "";
 
         if (node.computed) {
@@ -119,6 +119,8 @@ export default function(
               propertyName = result.value;
             }
           }
+        } else {
+          propertyName = property.name;
         }
 
         if (path.scope.getBindingIdentifier(object.name)) {
