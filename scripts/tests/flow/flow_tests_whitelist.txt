@@ -29,3 +29,5 @@ class_method_kinds/polymorphic_getter.js
 ES6/modules/migrated_0020.js
 export_import_reserved_words/migrated_0003.js
 export_statements/export_trailing_comma.js
+nullish_coalescing/precedence_and.js
+nullish_coalescing/precedence_or.js

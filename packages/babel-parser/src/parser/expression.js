@@ -380,6 +380,39 @@ export default class ExpressionParser extends LValParser {
 
         node.right = this.parseExprOpRightExpr(op, prec, noIn);
 
+        /* this check is for all ?? operators
+         * a ?? b && c for this example
+         * b && c => This is considered as a logical expression in the ast tree
+         * a => Identifier
+         * so for ?? operator we need to check in this case the right expression to have parenthesis
+         * second case a && b ?? c
+         * here a && b => This is considered as a logical expression in the ast tree
+         * c => identifer
+         * so now here for ?? operator we need to check the left expression to have parenthesis
+         * if the parenthesis is missing we raise an error and throw it
+         */
+        if (op === tt.nullishCoalescing) {
+          if (
+            left.type === "LogicalExpression" &&
+            left.operator !== "??" &&
+            !(left.extra && left.extra.parenthesized)
+          ) {
+            throw this.raise(
+              left.start,
+              `Nullish coalescing operator(??) requires parens when mixing with logical operators`,
+            );
+          } else if (
+            node.right.type === "LogicalExpression" &&
+            node.right.operator !== "??" &&
+            !(node.right.extra && node.right.extra.parenthesized)
+          ) {
+            throw this.raise(
+              node.right.start,
+              `Nullish coalescing operator(??) requires parens when mixing with logical operators`,
+            );
+          }
+        }
+
         this.finishNode(
           node,
           op === tt.logicalOR ||
