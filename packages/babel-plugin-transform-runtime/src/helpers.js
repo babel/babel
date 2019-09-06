@@ -32,6 +32,57 @@ export function hasMinVersion(minVersion, runtimeVersion) {
   );
 }
 
+export function verifyRuntimeVersion(
+  options,
+  moduleName,
+  runtimeVersion,
+  actualRuntimeVersion,
+) {
+  if (!actualRuntimeVersion) return;
+
+  const minActualVersion = semver.minVersion(actualRuntimeVersion).version;
+  const minVersion = semver.minVersion(runtimeVersion).version;
+
+  if (minActualVersion === minVersion) return;
+
+  const fixedOptions = JSON.stringify(
+    {
+      plugins: [
+        [
+          "@babel/plugin-transform-runtime",
+          { ...options, version: minActualVersion },
+        ],
+      ],
+    },
+    null,
+    2,
+  ).replace(/^/gm, "  ".repeat(2));
+
+  if (semver.gt(minActualVersion, minVersion)) {
+    console.warn(
+      `The installed version of "${moduleName}" (${actualRuntimeVersion}) is greater ` +
+        `than the version specified in "@babel/transform-runtime"'s options ` +
+        `(${options.version}). This difference won't cause any problem in runtime ` +
+        `functionality, but it will make your compiled code larger since Babel ` +
+        `can't rely on some new or modified helpers to be present in the installed ` +
+        `"${moduleName}". For this reason, some helpers will be inlined in your code ` +
+        `as if you weren't using "@babel/plugin-transform-runtime", leadng to bigger bundles.\n` +
+        `To fix this problem, you can specify the correct version in ` +
+        `"@babel/transform-runtime"'s options:\n\n${fixedOptions}`,
+    );
+  } else {
+    console.warn(
+      `The installed version of "${moduleName}" (${actualRuntimeVersion}) is lower ` +
+        `than the version specified in "@babel/transform-runtime"'s options ` +
+        `(${options.version}). For this reason, Babel will assume that some helpers ` +
+        `are supported by the installed "${moduleName}" version, even if they ` +
+        `might not actually be present.\n` +
+        `To fix this problem, you must specify the correct version in ` +
+        `"@babel/transform-runtime"'s options:\n\n${fixedOptions}`,
+    );
+  }
+}
+
 // Note: We can't use NodePath#couldBeBaseType because it doesn't support arrays.
 // Even if we added support for arrays, this package needs to be compatible with
 // ^7.0.0 so we can't rely on it.
