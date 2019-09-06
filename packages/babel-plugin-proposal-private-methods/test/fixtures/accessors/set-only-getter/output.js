@@ -1,7 +1,8 @@
 class Cl {
   constructor() {
     _privateFieldValue.set(this, {
-      get: _get_privateFieldValue
+      get: _get_privateFieldValue,
+      set: void 0
     });
 
     _privateField.set(this, {
