@@ -1,0 +1,20 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "71"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  syntax-async-generators { "chrome":"71" }
+  syntax-object-rest-spread { "chrome":"71" }
+  syntax-json-strings { "chrome":"71" }
+  syntax-optional-catch-binding { "chrome":"71" }
+  transform-modules-commonjs { "chrome":"71" }
+  proposal-dynamic-import { "chrome":"71" }
+
+Using polyfills with `usage` option:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs3-chrome-71-2/input.js] Based on your code and targets, core-js polyfills were not added.

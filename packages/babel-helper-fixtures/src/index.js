@@ -149,6 +149,7 @@ export default function get(entryLoc): Array<Suite> {
         disabled: taskName[0] === ".",
         options: taskOpts,
         validateLogs: taskOpts.validateLogs,
+        ignoreOutput: taskOpts.ignoreOutput,
         stdout: { loc: stdoutLoc, code: readFile(stdoutLoc) },
         stderr: { loc: stderrLoc, code: readFile(stderrLoc) },
         exec: {
@@ -234,9 +235,23 @@ export default function get(entryLoc): Array<Suite> {
             (test.stdout.code ? stdoutLoc : stderrLoc),
         );
       }
+      if (test.options.ignoreOutput) {
+        if (test.expect.code) {
+          throw new Error(
+            "Test cannot ignore its output and also validate it: " + expectLoc,
+          );
+        }
+        if (!test.validateLogs) {
+          throw new Error(
+            "ignoreOutput can only be used when validateLogs is true: " +
+              taskOptsLoc,
+          );
+        }
+      }
 
       // Delete to avoid option validation error
       delete test.options.validateLogs;
+      delete test.options.ignoreOutput;
     }
   }
 
