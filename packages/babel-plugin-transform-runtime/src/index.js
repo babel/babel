@@ -113,7 +113,14 @@ export default declare((api, options, dirname) => {
     );
   }
 
+  function isNamespaced(path) {
+    const binding = path.scope.getBinding(path.node.name);
+    if (!binding) return false;
+    return binding.path.isImportNamespaceSpecifier();
+  }
+
   function maybeNeedsPolyfill(path, methods, name) {
+    if (isNamespaced(path.get("object"))) return false;
     if (!methods[name].types) return true;
 
     const typeAnnotation = path.get("object").getTypeAnnotation();
@@ -121,6 +128,14 @@ export default declare((api, options, dirname) => {
     if (!type) return true;
 
     return methods[name].types.some(name => name === type);
+  }
+
+  function resolvePropertyName(path, computed) {
+    const { node } = path;
+    if (!computed) return node.name;
+    if (path.isStringLiteral()) return node.value;
+    const result = path.evaluate();
+    return result.value;
   }
 
   if (has(options, "useBuiltIns")) {
@@ -290,8 +305,11 @@ export default declare((api, options, dirname) => {
 
         if (!t.isMemberExpression(callee)) return;
 
-        const { object, property } = callee;
-        const propertyName = property.name;
+        const { object } = callee;
+        const propertyName = resolvePropertyName(
+          path.get("callee.property"),
+          callee.computed,
+        );
 
         // transform calling instance methods like `something.includes()`
         if (injectCoreJS3 && !hasStaticMapping(object.name, propertyName)) {
@@ -368,29 +386,33 @@ export default declare((api, options, dirname) => {
           if (!path.isReferenced()) return;
 
           const { node } = path;
-          const { object, property } = node;
+          const { object } = node;
 
           if (!t.isReferenced(object, node)) return;
 
-          if (node.computed) {
-            if (injectCoreJS2) return;
-            // transform `something[Symbol.iterator]` to calling `getIteratorMethod(something)` helper
-            if (path.get("property").matchesPattern("Symbol.iterator")) {
-              path.replaceWith(
-                t.callExpression(
-                  this.addDefaultImport(
-                    `${moduleName}/core-js/get-iterator-method`,
-                    "getIteratorMethod",
-                  ),
-                  [object],
+          // transform `something[Symbol.iterator]` to calling `getIteratorMethod(something)` helper
+          if (
+            !injectCoreJS2 &&
+            node.computed &&
+            path.get("property").matchesPattern("Symbol.iterator")
+          ) {
+            path.replaceWith(
+              t.callExpression(
+                this.addDefaultImport(
+                  `${moduleName}/core-js/get-iterator-method`,
+                  "getIteratorMethod",
                 ),
-              );
-            }
+                [object],
+              ),
+            );
             return;
           }
 
           const objectName = object.name;
-          const propertyName = property.name;
+          const propertyName = resolvePropertyName(
+            path.get("property"),
+            node.computed,
+          );
           // doesn't reference the global
           if (
             path.scope.getBindingIdentifier(objectName) ||

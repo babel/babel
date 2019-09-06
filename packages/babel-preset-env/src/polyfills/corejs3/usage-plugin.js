@@ -21,6 +21,7 @@ import {
   isPolyfillSource,
   getImportSource,
   getRequireSource,
+  isNamespaced,
 } from "../../utils";
 import { logUsagePolyfills } from "../../debug";
 
@@ -98,7 +99,7 @@ export default function(
         }
       }
     }
-    return { builtIn, instanceType };
+    return { builtIn, instanceType, isNamespaced: isNamespaced(path) };
   }
 
   const addAndRemovePolyfillImports = {
@@ -230,7 +231,8 @@ export default function(
       };
 
       this.addPropertyDependencies = function(source = {}, key) {
-        const { builtIn, instanceType } = source;
+        const { builtIn, instanceType, isNamespaced } = source;
+        if (isNamespaced) return;
         if (PossibleGlobalObjects.has(builtIn)) {
           this.addBuiltInDependencies(key);
         } else if (has(StaticProperties, builtIn)) {

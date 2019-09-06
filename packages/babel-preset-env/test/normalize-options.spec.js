@@ -84,6 +84,24 @@ describe("normalize-options", () => {
         });
       });
     });
+
+    it("throws when including module plugins", () => {
+      expect(() =>
+        normalizeOptions.default({ include: ["proposal-dynamic-import"] }),
+      ).toThrow();
+      expect(() =>
+        normalizeOptions.default({ include: ["transform-modules-amd"] }),
+      ).toThrow();
+    });
+
+    it("allows exclusion of module plugins ", () => {
+      expect(() =>
+        normalizeOptions.default({ exclude: ["proposal-dynamic-import"] }),
+      ).not.toThrow();
+      expect(() =>
+        normalizeOptions.default({ exclude: ["transform-modules-commonjs"] }),
+      ).not.toThrow();
+    });
   });
 
   describe("Config format validation", () => {
