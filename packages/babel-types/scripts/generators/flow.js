@@ -146,7 +146,7 @@ lines.push(
   `declare function isLet(node: BabelNode): boolean`,
   `declare function isNode(node: ?Object): boolean`,
   `declare function isNodesEquivalent(a: any, b: any): boolean`,
-  `declare function isPlaceholderType(placeholderType: ?string, targetType: string): boolean`,
+  `declare function isPlaceholderType(placeholderType: string, targetType: string): boolean`,
   `declare function isReferenced(node: BabelNode, parent: BabelNode, grandparent?: BabelNode): boolean`,
   `declare function isScope(node: BabelNode, parent: BabelNode): boolean`,
   `declare function isSpecifierDefault(specifier: BabelNodeModuleSpecifier): boolean`,
