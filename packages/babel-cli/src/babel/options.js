@@ -145,6 +145,7 @@ commander.option(
   "Include dotfiles when compiling and copying non-compilable files",
 );
 commander.option("--verbose", "Log everything");
+commander.option("--quiet", "Don't log anything");
 commander.option(
   "--delete-dir-on-start",
   "Delete the out directory before compilation",
@@ -282,6 +283,7 @@ export default function parseArgv(args: Array<string>): CmdOptions {
       copyFiles: opts.copyFiles,
       includeDotfiles: opts.includeDotfiles,
       verbose: opts.verbose,
+      quiet: opts.quiet,
       deleteDirOnStart: opts.deleteDirOnStart,
       sourceMapTarget: opts.sourceMapTarget,
     },
