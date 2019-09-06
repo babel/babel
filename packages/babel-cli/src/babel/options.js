@@ -158,7 +158,7 @@ export type CmdOptions = {
   cliOptions: Object,
 };
 
-export default function parseArgv(args: Array<string>): CmdOptions {
+export default function parseArgv(args: Array<string>): CmdOptions | null {
   //
   commander.parse(args);
 
@@ -223,7 +223,7 @@ export default function parseArgv(args: Array<string>): CmdOptions {
     errors.forEach(function(e) {
       console.error("  " + e);
     });
-    process.exit(2);
+    return null;
   }
 
   const opts = commander.opts();
