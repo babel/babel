@@ -50,7 +50,7 @@
     "gulp-watch": "^5.0.1",
     "husky": "^3.0.0",
     "jest": "^24.8.0",
-    "lerna": "^3.14.2",
+    "lerna": "^3.16.0",
     "lerna-changelog": "^0.5.0",
     "lint-staged": "^9.2.0",
     "lodash": "^4.17.13",
@@ -134,6 +134,5 @@
     "moduleNameMapper": {
       "^@babel/([a-zA-Z0-9_-]+)$": "<rootDir>/packages/babel-$1/"
     }
-  },
-  "dependencies": {}
+  }
 }
