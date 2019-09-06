@@ -138,6 +138,7 @@ function run(task) {
     options: opts,
     optionsDir,
     validateLogs,
+    ignoreOutput,
     stdout,
     stderr,
   } = task;
@@ -221,33 +222,35 @@ function run(task) {
     const outputCode = normalizeOutput(result.code);
 
     checkDuplicatedNodes(babel, result.ast);
-    if (
-      !expected.code &&
-      outputCode &&
-      !opts.throws &&
-      fs.statSync(path.dirname(expected.loc)).isDirectory() &&
-      !process.env.CI
-    ) {
-      const expectedFile = expected.loc.replace(
-        /\.m?js$/,
-        result.sourceType === "module" ? ".mjs" : ".js",
-      );
-
-      console.log(`New test file created: ${expectedFile}`);
-      fs.writeFileSync(expectedFile, `${outputCode}\n`);
-
-      if (expected.loc !== expectedFile) {
-        try {
-          fs.unlinkSync(expected.loc);
-        } catch (e) {}
-      }
-    } else {
-      validateFile(outputCode, expected.loc, expectedCode);
-
-      if (inputCode) {
-        expect(expected.loc).toMatch(
-          result.sourceType === "module" ? /\.mjs$/ : /\.js$/,
+    if (!ignoreOutput) {
+      if (
+        !expected.code &&
+        outputCode &&
+        !opts.throws &&
+        fs.statSync(path.dirname(expected.loc)).isDirectory() &&
+        !process.env.CI
+      ) {
+        const expectedFile = expected.loc.replace(
+          /\.m?js$/,
+          result.sourceType === "module" ? ".mjs" : ".js",
         );
+
+        console.log(`New test file created: ${expectedFile}`);
+        fs.writeFileSync(expectedFile, `${outputCode}\n`);
+
+        if (expected.loc !== expectedFile) {
+          try {
+            fs.unlinkSync(expected.loc);
+          } catch (e) {}
+        }
+      } else {
+        validateFile(outputCode, expected.loc, expectedCode);
+
+        if (inputCode) {
+          expect(expected.loc).toMatch(
+            result.sourceType === "module" ? /\.mjs$/ : /\.js$/,
+          );
+        }
       }
     }
 
@@ -294,7 +297,10 @@ function validateFile(actualCode, expectedLoc, expectedCode) {
 function normalizeOutput(code) {
   return code
     .trim()
-    .replace(escapeRegExp(path.resolve(__dirname, "../../../")), "<CWD>");
+    .replace(
+      new RegExp(escapeRegExp(path.resolve(__dirname, "../../../")), "g"),
+      "<CWD>",
+    );
 }
 
 const toEqualFile = () => ({
