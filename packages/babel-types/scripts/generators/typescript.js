@@ -155,6 +155,7 @@ lines.push(
   `export function isLet(node: Node): boolean`,
   `export function isNode(node: object | null | undefined): boolean`,
   `export function isNodesEquivalent(a: any, b: any): boolean`,
+  // eslint-disable-next-line
   `export function isPlaceholderType(placeholderType: string | null | undefined, targetType: string): boolean`,
   `export function isReferenced(node: Node, parent: Node, grandparent?: Node): boolean`,
   `export function isScope(node: Node, parent: Node): boolean`,
