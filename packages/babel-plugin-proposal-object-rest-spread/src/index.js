@@ -391,45 +391,47 @@ export default declare((api, opts) => {
         const leftPath = path.get("left");
         const left = node.left;
 
-        if (hasObjectPatternRestElement(leftPath)) {
-          if (!t.isVariableDeclaration(left)) {
-            // for ({a, ...b} of []) {}
-            const temp = scope.generateUidIdentifier("ref");
+        if (!hasObjectPatternRestElement(leftPath)) {
+          return;
+        }
 
-            node.left = t.variableDeclaration("var", [
-              t.variableDeclarator(temp),
-            ]);
+        if (!t.isVariableDeclaration(left)) {
+          // for ({a, ...b} of []) {}
+          const temp = scope.generateUidIdentifier("ref");
 
-            path.ensureBlock();
+          node.left = t.variableDeclaration("var", [
+            t.variableDeclarator(temp),
+          ]);
 
-            if (node.body.body.length === 0 && path.isCompletionRecord()) {
-              node.body.body.unshift(
-                t.expressionStatement(scope.buildUndefinedNode()),
-              );
-            }
+          path.ensureBlock();
 
+          if (node.body.body.length === 0 && path.isCompletionRecord()) {
             node.body.body.unshift(
-              t.expressionStatement(
-                t.assignmentExpression("=", left, t.cloneNode(temp)),
-              ),
-            );
-          } else {
-            // for (var {a, ...b} of []) {}
-            const pattern = left.declarations[0].id;
-
-            const key = scope.generateUidIdentifier("ref");
-            node.left = t.variableDeclaration(left.kind, [
-              t.variableDeclarator(key, null),
-            ]);
-
-            path.ensureBlock();
-
-            node.body.body.unshift(
-              t.variableDeclaration(node.left.kind, [
-                t.variableDeclarator(pattern, t.cloneNode(key)),
-              ]),
+              t.expressionStatement(scope.buildUndefinedNode()),
             );
           }
+
+          node.body.body.unshift(
+            t.expressionStatement(
+              t.assignmentExpression("=", left, t.cloneNode(temp)),
+            ),
+          );
+        } else {
+          // for (var {a, ...b} of []) {}
+          const pattern = left.declarations[0].id;
+
+          const key = scope.generateUidIdentifier("ref");
+          node.left = t.variableDeclaration(left.kind, [
+            t.variableDeclarator(key, null),
+          ]);
+
+          path.ensureBlock();
+
+          node.body.body.unshift(
+            t.variableDeclaration(node.left.kind, [
+              t.variableDeclarator(pattern, t.cloneNode(key)),
+            ]),
+          );
         }
       },
       // [{a, ...b}] = c;
