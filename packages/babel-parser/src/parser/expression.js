@@ -2191,7 +2191,7 @@ export default class ExpressionParser extends LValParser {
     if (
       this.match(tt.semi) ||
       (!this.match(tt.star) && !this.state.type.startsExpr) ||
-      this.canInsertSemicolon()
+      this.hasPrecedingLineBreak()
     ) {
       node.delegate = false;
       node.argument = null;
