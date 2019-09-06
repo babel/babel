@@ -18,6 +18,14 @@ See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
 
+## v7.6.1 (2019-09-06)
+
+#### :bug: Bug Fix
+* `babel-types`
+  * [#10404](https://github.com/babel/babel/pull/10404) fix(types): correct typescript function headers ([@forstermatth](https://github.com/forstermatth))
+* `babel-node`
+  * [#9758](https://github.com/babel/babel/pull/9758) Remove process.exit(1) from babel-node ([@dword-design](https://github.com/dword-design))
+
 ## v7.6.0 (2019-09-06)
 
 #### :eyeglasses: Spec Compliance
