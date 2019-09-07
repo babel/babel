@@ -2,7 +2,7 @@
 
 > **Tags:**
 > - :boom:       [Breaking Change]
-> - :eyeglasses: [Spec Compliancy]
+> - :eyeglasses: [Spec Compliance]
 > - :rocket:     [New Feature]
 > - :bug:        [Bug Fix]
 > - :memo:       [Documentation]
@@ -484,7 +484,7 @@ See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0
 
 ## v7.3.3 (2019-02-15)
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-generator`
   * [#9501](https://github.com/babel/babel/pull/9501) Correctly output escapes in directives ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 
@@ -506,11 +506,11 @@ See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0
   * [#9491](https://github.com/babel/babel/pull/9491) Better error output in parser tests ([@danez](https://github.com/danez))
 ## v7.3.2 (2019-02-04)
 
-Various spec compliancy fixes and better support for smart pipelines and private methods.
+Various spec compliance fixes and better support for smart pipelines and private methods.
 
 Thanks @gverni, @naffiq, @spondbob and @dstaley for their first PRs!
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-parser`
   * [#9403](https://github.com/babel/babel/pull/9403) Fix line continuation with Unicode line terminators. ([@danez](https://github.com/danez))
   * [#9400](https://github.com/babel/babel/pull/9400) Make yield a contextual keyword. ([@danez](https://github.com/danez))
@@ -558,7 +558,7 @@ This release fixes some regressions introduced in v7.3.0
 
 Thanks to @jamesgeorge007 and @armano2 for their first PR!
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-parser`
   * [#9314](https://github.com/babel/babel/pull/9314) Disallow async functions as loop body. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
   * [#9315](https://github.com/babel/babel/pull/9315) Parse class heritage as strict mode code. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
@@ -779,7 +779,7 @@ You can read more about this release at https://babeljs.io/blog/2018/12/03/7.2.0
 
 ## v7.1.5 (2018-11-06)
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-parser`, `babylon`
   * [#7727](https://github.com/babel/babel/pull/7727) Fix await in function name and parameters. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 
@@ -1242,7 +1242,7 @@ Fixed a peerDep issue
 
 Mostly bug fixes and some decorator updates
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-plugin-proposal-unicode-property-regex`
   * [#8127](https://github.com/babel/babel/pull/8127) Update plugin-proposal-unicode-property-regex for Unicode v11. ([@mathiasbynens](https://github.com/mathiasbynens))
 * `babel-parser`
@@ -1342,7 +1342,7 @@ Mostly bugfix release for a regression in decorators, and a quick fix for some n
 - Fix IE10 class regression
 - Various fixes, many TS fixes
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-parser`, `babel-plugin-proposal-json-strings`, `babel-plugin-syntax-json-strings`, `babel-preset-stage-3`
   * [#7985](https://github.com/babel/babel/pull/7985) Subsume json. ([@jridgewell](https://github.com/jridgewell))
 
@@ -1532,7 +1532,7 @@ Mostly bugfix release for a regression in decorators, and a quick fix for some n
 * `babel-generator`, `babel-helper-define-map`, `babel-plugin-syntax-class-properties`, `babel-plugin-transform-parameters`, `babel-plugin-transform-react-constant-elements`, `babel-traverse`, `babel-types`
   * [#7666](https://github.com/babel/babel/pull/7666) Private Properties phase 1. ([@jridgewell](https://github.com/jridgewell))
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-helper-simple-access`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`
   * [#7766](https://github.com/babel/babel/pull/7766) Correct update expression Number coercion. ([@jridgewell](https://github.com/jridgewell))
 * `babel-core`, `babel-generator`, `babel-plugin-proposal-decorators`, `babel-types`, `babylon`
@@ -1620,7 +1620,7 @@ Mostly bugfix release for a regression in decorators, and a quick fix for some n
 
 Various fixes, also lazy-load `@babel/core` dependencies (should make config lookup and other API methods fast for other projects to use).
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-plugin-proposal-logical-assignment-operators`
   * [#7604](https://github.com/babel/babel/pull/7604) Logical Assignment: ensure computed key isn't recomputed. ([@jridgewell](https://github.com/jridgewell))
 
@@ -1719,7 +1719,7 @@ We'll need to update tooling for this ^. Also published `gulp-babel@8.0.0-beta.2
 * `babel-register`
   * [#7416](https://github.com/babel/babel/pull/7416) Replace instead of merging babel-register options, and resolve cwd up front. ([@loganfsmyth](https://github.com/loganfsmyth))
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babylon`
   * [#7503](https://github.com/babel/babel/pull/7503) Update test262 test script and a few keyword escape fixes. ([@existentialism](https://github.com/existentialism))
   * [#7498](https://github.com/babel/babel/pull/7498) Disallow setters to have RestElement. ([@danez](https://github.com/danez))
@@ -1867,7 +1867,7 @@ We'll need to update tooling for this ^. Also published `gulp-babel@8.0.0-beta.2
 
 ## v7.0.0-beta.39 (2018-01-30)
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-plugin-proposal-optional-chaining`
   * [#6345](https://github.com/babel/babel/pull/6345) Remove old optional chain features. ([@jridgewell](https://github.com/jridgewell))
 
@@ -2080,7 +2080,7 @@ Fixes + [overrides](https://github.com/babel/babel/pull/7091) config feature
 
 Various bug fixes, first version of Babel to use the MIT version of `regenerator`
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babylon`
   * [#6986](https://github.com/babel/babel/pull/6986) Fix destructuring assignment spec violation. ([@ksashikumar](https://github.com/ksashikumar))
 * `babel-helper-replace-supers`, `babel-helpers`, `babel-plugin-proposal-class-properties`, `babel-plugin-transform-classes`, `babel-plugin-transform-parameters`
@@ -2133,7 +2133,7 @@ Various bug fixes, first version of Babel to use the MIT version of `regenerator
 * `babel-preset-stage-1`, `babel-preset-stage-2`
   * [#6949](https://github.com/babel/babel/pull/6949) Fix stage refs to exportNamespaceFrom and exportDefaultFrom. ([@existentialism](https://github.com/existentialism))
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-preset-stage-0`, `babel-preset-stage-1`
   * [#6943](https://github.com/babel/babel/pull/6943) Moving Do expression to stage 1. ([@rajzshkr](https://github.com/rajzshkr))
 
@@ -2147,7 +2147,7 @@ Various bug fixes, first version of Babel to use the MIT version of `regenerator
 
 ## v7.0.0-beta.33 (2017-12-01)
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-generator`, `babel-plugin-proposal-export-default-from`, `babel-plugin-proposal-export-default`, `babel-plugin-proposal-export-namespace-from`, `babel-plugin-proposal-export-namespace`, `babel-plugin-syntax-export-default-from`, `babel-plugin-syntax-export-extensions`, `babel-plugin-syntax-export-namespace-from`, `babel-standalone`, `babylon`
   * [#6920](https://github.com/babel/babel/pull/6920) Split exportExtensions into exportDefault and exportNamespace plugins…. ([@existentialism](https://github.com/existentialism))
 * `babylon`
@@ -2332,7 +2332,7 @@ Various bug fixes, first version of Babel to use the MIT version of `regenerator
 
 > Note: don't use ^ in your dependencies when using a beta. It can still break between (we should try not to do it but it can), so pin all the packages like `"@babel/cli" : "7.0.0-beta.4"`
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-plugin-transform-optional-chaining`
   * [#6525](https://github.com/babel/babel/pull/6525) Optional Chaining: Account for document.all. ([@azz](https://github.com/azz))
 * `babel-preset-env`, `babel-helper-remap-async-to-generator`, `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-function-sent`
@@ -2612,7 +2612,7 @@ let {...{}} = {}; let {...[]} = {};
 - Add `--config-file` CLI flag to explicitly pass a config location
 - Move `babel-standalone` into the repo (another form of this used to be `babel-browser`)
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-plugin-transform-async-to-generator`, `babel-*`
   * [#6094](https://github.com/babel/babel/pull/6094) Spec compatibility for iteratorClose condition.. ([@yavorsky](https://github.com/yavorsky))
 * `babel-helpers`, `babel-plugin-transform-es2015-computed-properties`
@@ -2748,7 +2748,7 @@ Initial release of typescript equivalent of how Babel handles flow with a new `b
 
 ## v7.0.0-alpha.18 (2017-08-03)
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-generator`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`, `babel-types`
   * [#5990](https://github.com/babel/babel/pull/5990) Flow opaque type aliases. ([@jbrown215](https://github.com/jbrown215))
 * `babel-preset-stage-3`
@@ -2797,9 +2797,9 @@ Initial release of typescript equivalent of how Babel handles flow with a new `b
 - Optional catch binding `try {} catch {}`: `babel-plugin-transform-optional-catch-binding`
 - es2015-parameters `loose` mode that doesn't use `arguments`
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-plugin-check-es2015-constants`
-  * [#5930](https://github.com/babel/babel/pull/5930) Spec compliancy of check-es2015-constants plugin. ([@maurobringolf](https://github.com/maurobringolf))
+  * [#5930](https://github.com/babel/babel/pull/5930) Spec compliance of check-es2015-constants plugin. ([@maurobringolf](https://github.com/maurobringolf))
 
 > Instead of throwing a compile time error when const is violated, Babel should insert a throw statement before the violation.
 
@@ -3104,7 +3104,7 @@ var A = function A() {
 
 ## v7.0.0-alpha.12 (2017-05-31)
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-core`, `babel-generator`, `babel-plugin-syntax-numeric-separator`, `babel-plugin-transform-numeric-separator`, `babel-preset-stage-1`, `babel-template`, `babel-traverse`, `babel-types`
   * [#5793](https://github.com/babel/babel/pull/5793) Support for NumericLiteralSeparator, Stage 1 feature. ([@rwaldron](https://github.com/rwaldron))
 
@@ -3145,7 +3145,7 @@ var A = function A() {
 
 Update Babylon: https://github.com/babel/babylon/releases/tag/v7.0.0-beta.9, https://github.com/babel/babylon/releases/tag/v7.0.0-beta.10
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-generator`, `babel-plugin-transform-flow-strip-types`, `babel-types`
   * [#5525](https://github.com/babel/babel/pull/5525) Add support for object type spread. ([@conartist6](https://github.com/conartist6))
 
@@ -3219,7 +3219,7 @@ Update Babylon: https://github.com/babel/babylon/releases/tag/v7.0.0-beta.9, htt
 
 ## v7.0.0-alpha.8 (2017-04-17)
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-preset-stage-2`, `babel-preset-stage-3`
   * [#5610](https://github.com/babel/babel/pull/5610) Move syntax-dynamic-import to stage-3. ([@dkaoster](https://github.com/dkaoster))
 

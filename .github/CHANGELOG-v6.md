@@ -22,7 +22,7 @@
 > Backports for some folks (also other's when we accidentally merged PRs from both 6.x/master)
 > Lesson learned: just use `master` and backport on another branch.
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-core`, `babel-generator`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`, `babel-traverse`, `babel-types`
   * [#6081](https://github.com/babel/babel/pull/6081) Flow opaque type 6.x backport. ([@jbrown215](https://github.com/jbrown215))
 
@@ -1468,7 +1468,7 @@ It's a one-time use tool (helpful after the initial release when upgrading from 
 
 ## v6.17.0 (2016-10-01)
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 * `babel-preset-stage-2`, `babel-preset-stage-3`
   * [#4617](https://github.com/babel/babel/pull/4617) Move async-generators to stage-3. ([@hzoo](https://github.com/hzoo))
 
@@ -1476,7 +1476,7 @@ It's a one-time use tool (helpful after the initial release when upgrading from 
 
 Specification repo: https://github.com/tc39/proposal-async-iteration
 
-Asynchronous Iteration was already added in [6.16.0](http://babeljs.io/blog/2016/09/28/6.16.0#spec-compliancy) under stage-2 but it was moved to stage-3 at the [latest TC-39 meeting](https://github.com/tc39/agendas/blob/master/2016/09.md#agenda-for-the-54th-meeting-of-ecma-tc39).
+Asynchronous Iteration was already added in [6.16.0](http://babeljs.io/blog/2016/09/28/6.16.0#spec-compliance) under stage-2 but it was moved to stage-3 at the [latest TC-39 meeting](https://github.com/tc39/agendas/blob/master/2016/09.md#agenda-for-the-54th-meeting-of-ecma-tc39).
 
 ```js
 // async generator syntax
@@ -1569,7 +1569,7 @@ First PR!
 
 Babel 6.16: Happy 2nd Birthday 🎂!
 
-#### :eyeglasses: Spec Compliancy
+#### :eyeglasses: Spec Compliance
 
 * `babel-core`, `babel-generator`, `babel-helper-remap-async-to-generator`, `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-types`, `babel-preset-stage-2`, ...
   * [#3473](https://github.com/babel/babel/pull/3473) via [#4576](https://github.com/babel/babel/pull/4576) Implement support for async generator functions and for-await statements. ([@zenparsing](https://github.com/zenparsing))
@@ -2036,7 +2036,7 @@ It's also a lot folk's first PR (or first code PR)!
 * `babel-generator`, `babel-types`
   * [#3570](https://github.com/babel/babel/pull/3570) Add support for the new declare module.exports of flow. ([@danez](https://github.com/danez))
 
-#### Spec Compliancy
+#### Spec Compliance
 * `babel-plugin-transform-es2015-modules-amd`, `babel-plugin-transform-es2015-modules-commonjs`, `babel-plugin-transform-es2015-modules-umd`
   * [#3518](https://github.com/babel/babel/pull/3518) Throw error for multiple exports default. ([@kaicataldo](https://github.com/kaicataldo))
 
@@ -2332,7 +2332,7 @@ Length: The number of characters in the output code
 * `babel-plugin-transform-react-jsx-self`, `babel-preset-react`
   * [#3540](https://github.com/babel/babel/pull/3540) Added jsx-self babel transform plugin. ([@jimfb](https://github.com/jimfb))
 
-#### Spec Compliancy
+#### Spec Compliance
 * `babel-plugin-transform-es2015-unicode-regex`
   * [#3338](https://github.com/babel/babel/pull/3338) Update to `regexpu-core@2.0.0` for ES2016 compliance. ([@mathiasbynens](https://github.com/mathiasbynens))
 
@@ -3206,7 +3206,7 @@ Changes to note:
 - Reverting the class properties semicolon parser error.
 - Fix regression with plugin ordering with `babel-register`.
 
-#### Spec Compliancy
+#### Spec Compliance
 * `babel-plugin-transform-class-properties`, `babylon`
   * [#3332](https://github.com/babel/babel/pull/3332) Revert to standard ASI behavior for class properties. ([@loganfsmyth](https://github.com/loganfsmyth))
 
@@ -3628,7 +3628,7 @@ Thanks to @samwgoldman for all the new flow support!
  * `babel-plugin-transform-es2015-parameters`: [#3191](https://github.com/babel/babel/pull/3191) Fix the order of arguments initialization (fixes [T6809](http://phabricator.babeljs.io/T6809))
  * `babel-traverse`: [#3198](https://github.com/babel/babel/pull/3198) In `evaluate()`, it should not mistake lack of confidence for falsy
 
-* **Spec Compliancy**
+* **Spec Compliance**
  * `babylon`, `babel-generator`, `babel-plugin-transform-regenerator`: [#3190](https://github.com/babel/babel/pull/3190): Remove `await *` from `babylon` and raise an error for that syntax since it was removed from the proposal and was causing an issue at runtime but not at compile time (fixes [T6688](http://phabricator.babeljs.io/T6688)).
 
 * **Internal**
@@ -3863,7 +3863,7 @@ Thanks to @samwgoldman for all the new flow support!
   * Move `children` prop pushing to after props to ensure correct order in the react inline elements plugin.
   * Fix `buildExternalHelpers` script ignoring non-underscored helpers.
   * Fix exported classes with static class properties.
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Add support for computed mutators in `babel-plugin-transform-es2015-computed-properties`.
  * **Polish**
   * Make interop for plugins with the `__esModule` work for all plugins no matter how they're imported/specified.
@@ -3904,7 +3904,7 @@ Thanks to @samwgoldman for all the new flow support!
  * **Polish**
   * Add npm 3 check to `babel-doctor`.
   * Autoclear the `babel/register` cache when it gets too big to be serialised.
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Add support for flow existential type parameters.
 
 ## 6.1.1
@@ -3969,7 +3969,7 @@ Thanks to @samwgoldman for all the new flow support!
 
 ## 6.0.14
 
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Update exponentiation operator precedence.
   * Fix parser bug where arrow functions have a higher precedence than they should.
  * **Bug Fix**

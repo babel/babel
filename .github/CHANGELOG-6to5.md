@@ -122,7 +122,7 @@
   * Restructure transformers so they're only ran if the AST contains nodes that they need to worry about. Improves transpilation speed significantly.
  * **Bug Fix**
   * Fix source maps not tracking end of node locations.
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Use static super references as the home object is actually done at definition time.
  * **Polish**
   * Force the `es6.destructuring` transformer to be whitelisted when the `es7.objectSpread` transformer is.
@@ -479,7 +479,7 @@
 
 ## 2.12.3
 
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Optional `typeof` transformer checks for `undefined` before passing it to the helper.
   * Class methods are now named.
 
@@ -551,7 +551,7 @@
   * Add `classesFastSuper` optional transformer that doesn't support parent getters and prototype changing.
   * Add `forOfFast` transformer that speeds up `for...of` on arrays but produces more code.
   * Add `--react-compat` to `bin/6to5`.
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Disallow setters without a single parameter.
   * Add `configurable` and `writable` to defined properties.
   * Use define instead of assignment for class methods.
@@ -619,7 +619,7 @@
 
 ## 2.7.0
 
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Disallow reassignments of imports.
  * **New Feature**
   * `reactCompat` option to enable pre-v0.12 react components.
@@ -662,7 +662,7 @@
  * **Polish**
   * Move `"use strict";` to inside module bodies instead of at the top of the file.
   * Better handling of dynamic imports.
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Class inheritance now has a `function` or `null` type check.
   * Add `interopRequireWildcard` around wildcard imports and exports to handle non-object exports.
 
