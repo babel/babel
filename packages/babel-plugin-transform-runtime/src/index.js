@@ -107,10 +107,7 @@ export default declare((api, options, dirname) => {
       "The 'relativeRuntime' option must be undefined, a boolean, or a string.",
     );
   }
-  if (
-    absoluteRuntime !== false &&
-    relativeRuntime !== false
-  ) {
+  if (absoluteRuntime !== false && relativeRuntime !== false) {
     throw new Error(
       "The 'absoluteRuntime' and 'relativeRuntime' settings cannot be enabled at the same time",
     );
