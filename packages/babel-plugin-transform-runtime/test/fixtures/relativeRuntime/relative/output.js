@@ -1,4 +1,4 @@
-var _classCallCheck = require("../../../../node_modules/@babel/runtime/helpers/classCallCheck");
+var _classCallCheck = require("../../../../../node_modules/@babel/runtime/helpers/classCallCheck");
 
 let Foo = function Foo() {
   "use strict";

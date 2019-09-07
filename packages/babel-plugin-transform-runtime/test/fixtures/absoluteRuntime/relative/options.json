@@ -1,6 +1,6 @@
 {
   "plugins": [
     "transform-classes",
-    ["transform-runtime", { "relativeRuntime": "./subfolder" }]
+    ["transform-runtime", { "absoluteRuntime": "./subfolder" }]
   ]
 }
