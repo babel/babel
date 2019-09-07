@@ -1,6 +1,6 @@
 {
   "name": "@babel/register",
-  "version": "7.5.5",
+  "version": "7.6.0",
   "description": "babel require hook",
   "license": "MIT",
   "publishConfig": {
@@ -13,7 +13,6 @@
     "./lib/node.js": "./lib/browser.js"
   },
   "dependencies": {
-    "core-js": "^3.0.0",
     "find-cache-dir": "^2.0.0",
     "lodash": "^4.17.13",
     "mkdirp": "^0.5.1",
@@ -24,7 +23,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
+    "@babel/core": "^7.6.0",
     "default-require-extensions": "^2.0.0"
   }
 }

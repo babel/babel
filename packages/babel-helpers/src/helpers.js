@@ -943,7 +943,9 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
     // _e = _iteratorError
     // _i = _iterator
     // _s = _step
-
+    if (!(
+      Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]"
+    )) { return }
     var _arr = [];
     var _n = true;
     var _d = false;
@@ -969,6 +971,9 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
 
 helpers.iterableToArrayLimitLoose = helper("7.0.0-beta.0")`
   export default function _iterableToArrayLimitLoose(arr, i) {
+    if (!(
+      Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]"
+    )) { return }
     var _arr = [];
     for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
       _arr.push(_step.value);
@@ -1177,6 +1182,9 @@ helpers.classStaticPrivateFieldSpecGet = helper("7.0.2")`
     if (receiver !== classConstructor) {
       throw new TypeError("Private static access of wrong provenance");
     }
+    if (descriptor.get) {
+      return descriptor.get.call(receiver);
+    }
     return descriptor.value;
   }
 `;
@@ -1186,13 +1194,18 @@ helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
     if (receiver !== classConstructor) {
       throw new TypeError("Private static access of wrong provenance");
     }
-    if (!descriptor.writable) {
-      // This should only throw in strict mode, but class bodies are
-      // always strict and private fields can only be used inside
-      // class bodies.
-      throw new TypeError("attempted to set read only private field");
+    if (descriptor.set) {
+      descriptor.set.call(receiver, value);
+    } else {
+      if (!descriptor.writable) {
+        // This should only throw in strict mode, but class bodies are
+        // always strict and private fields can only be used inside
+        // class bodies.
+        throw new TypeError("attempted to set read only private field");
+      }
+      descriptor.value = value;
     }
-    descriptor.value = value;
+
     return value;
   }
 `;

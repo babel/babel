@@ -2,7 +2,10 @@ import { declare } from "@babel/helper-plugin-utils";
 import transformTypeScript from "@babel/plugin-transform-typescript";
 
 export default declare(
-  (api, { jsxPragma, allExtensions = false, isTSX = false }) => {
+  (
+    api,
+    { jsxPragma, allExtensions = false, isTSX = false, allowNamespaces },
+  ) => {
     api.assertVersion(7);
 
     if (typeof allExtensions !== "boolean") {
@@ -20,7 +23,9 @@ export default declare(
       overrides: allExtensions
         ? [
             {
-              plugins: [[transformTypeScript, { jsxPragma, isTSX }]],
+              plugins: [
+                [transformTypeScript, { jsxPragma, isTSX, allowNamespaces }],
+              ],
             },
           ]
         : [
@@ -28,13 +33,18 @@ export default declare(
               // Only set 'test' if explicitly requested, since it requires that
               // Babel is being called`
               test: /\.ts$/,
-              plugins: [[transformTypeScript, { jsxPragma }]],
+              plugins: [[transformTypeScript, { jsxPragma, allowNamespaces }]],
             },
             {
               // Only set 'test' if explicitly requested, since it requires that
               // Babel is being called`
               test: /\.tsx$/,
-              plugins: [[transformTypeScript, { jsxPragma, isTSX: true }]],
+              plugins: [
+                [
+                  transformTypeScript,
+                  { jsxPragma, isTSX: true, allowNamespaces },
+                ],
+              ],
             },
           ],
     };

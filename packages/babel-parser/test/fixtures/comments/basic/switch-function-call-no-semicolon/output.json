@@ -250,25 +250,7 @@
                 "label": null
               }
             ],
-            "test": null,
-            "leadingComments": [
-              {
-                "type": "CommentLine",
-                "value": " comment",
-                "start": 47,
-                "end": 57,
-                "loc": {
-                  "start": {
-                    "line": 4,
-                    "column": 4
-                  },
-                  "end": {
-                    "line": 4,
-                    "column": 14
-                  }
-                }
-              }
-            ]
+            "test": null
           }
         ]
       }

@@ -99,6 +99,14 @@ for (const type in t.NODE_FIELDS) {
         ", "
       )}): ${NODE_PREFIX}${type};`
     );
+  } else {
+    const functionName = toFunctionName(type);
+    lines.push(
+      `declare function _${functionName}(${args.join(
+        ", "
+      )}): ${NODE_PREFIX}${type};`,
+      `declare export { _${functionName} as ${functionName} }`
+    );
   }
 }
 
@@ -116,6 +124,7 @@ lines.push(
   `declare function validate(n: BabelNode, key: string, value: mixed): void;`,
   `declare function clone<T>(n: T): T;`,
   `declare function cloneDeep<T>(n: T): T;`,
+  `declare function cloneNode<T>(n: T, deep?: boolean): T;`,
   `declare function removeProperties<T>(n: T, opts: ?{}): void;`,
   `declare function removePropertiesDeep<T>(n: T, opts: ?{}): T;`,
   `declare type TraversalAncestors = Array<{
@@ -129,7 +138,23 @@ lines.push(
     exit?: TraversalHandler<T>,
   };`.replace(/(^|\n) {2}/g, "$1"),
   // eslint-disable-next-line
-  `declare function traverse<T>(n: BabelNode, TraversalHandler<T> | TraversalHandlers<T>, state?: T): void;`
+  `declare function traverse<T>(n: BabelNode, TraversalHandler<T> | TraversalHandlers<T>, state?: T): void;`,
+  `declare function is(type: string, n: BabelNode, opts: Object): boolean;`,
+  `declare function isBinding(node: BabelNode, parent: BabelNode, grandparent?: BabelNode): boolean`,
+  `declare function isBlockScoped(node: BabelNode): boolean`,
+  `declare function isImmutable(node: BabelNode): boolean`,
+  `declare function isLet(node: BabelNode): boolean`,
+  `declare function isNode(node: ?Object): boolean`,
+  `declare function isNodesEquivalent(a: any, b: any): boolean`,
+  `declare function isPlaceholderType(placeholderType: string, targetType: string): boolean`,
+  `declare function isReferenced(node: BabelNode, parent: BabelNode, grandparent?: BabelNode): boolean`,
+  `declare function isScope(node: BabelNode, parent: BabelNode): boolean`,
+  `declare function isSpecifierDefault(specifier: BabelNodeModuleSpecifier): boolean`,
+  `declare function isType(nodetype: ?string, targetType: string): boolean`,
+  `declare function isValidES3Identifier(name: string): boolean`,
+  `declare function isValidES3Identifier(name: string): boolean`,
+  `declare function isValidIdentifier(name: string): boolean`,
+  `declare function isVar(node: BabelNode): boolean`
 );
 
 for (const type in t.FLIPPED_ALIAS_KEYS) {

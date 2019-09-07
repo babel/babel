@@ -124,6 +124,7 @@ export type ParserPlugin =
     'placeholders' |
     'throwExpressions' |
     'typescript' |
+    'v8intrinsic' |
     ParserPluginWithOptions;
 
 export type ParserPluginWithOptions =

@@ -1049,5 +1049,27 @@ describe("buildConfigChain", function() {
         loadOptions({ filename, cwd: path.dirname(filename) }),
       ).toThrow(/Error while parsing JSON - /);
     });
+
+    it("should throw when `test` presents but `filename` is not passed", () => {
+      expect(() => loadOptions({ test: /\.ts$/, plugins: [] })).toThrow(
+        /Configuration contains string\/RegExp pattern/,
+      );
+    });
+
+    it("should throw when `preset` requires `filename` but it was not passed", () => {
+      expect(() => {
+        loadOptions({
+          presets: [require("./fixtures/config-loading/preset4")],
+        });
+      }).toThrow(/Preset \/\* your preset \*\/ requires a filename/);
+    });
+
+    it("should throw when `preset.overrides` requires `filename` but it was not passed", () => {
+      expect(() => {
+        loadOptions({
+          presets: [require("./fixtures/config-loading/preset5")],
+        });
+      }).toThrow(/Preset \/\* your preset \*\/ requires a filename/);
+    });
   });
 });

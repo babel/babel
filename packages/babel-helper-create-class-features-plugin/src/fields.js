@@ -44,6 +44,7 @@ export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
     // because static fields are directly assigned to a variable in the
     // buildPrivateStaticFieldInitSpec function.
     const { id, static: isStatic, method: isMethod, getId, setId } = value;
+    const isAccessor = getId || setId;
     if (loose) {
       initNodes.push(
         template.statement.ast`
@@ -51,7 +52,7 @@ export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
         `,
       );
     } else if (isMethod && !isStatic) {
-      if (getId || setId) {
+      if (isAccessor) {
         initNodes.push(template.statement.ast`var ${id} = new WeakMap();`);
       } else {
         initNodes.push(template.statement.ast`var ${id} = new WeakSet();`);
@@ -140,11 +141,13 @@ const privateNameHandlerSpec = {
       getId,
       setId,
     } = privateNamesMap.get(name);
+    const isAccessor = getId || setId;
 
     if (isStatic) {
-      const helperName = isMethod
-        ? "classStaticPrivateMethodGet"
-        : "classStaticPrivateFieldSpecGet";
+      const helperName =
+        isMethod && !isAccessor
+          ? "classStaticPrivateMethodGet"
+          : "classStaticPrivateFieldSpecGet";
 
       return t.callExpression(file.addHelper(helperName), [
         this.receiver(member),
@@ -154,7 +157,7 @@ const privateNameHandlerSpec = {
     }
 
     if (isMethod) {
-      if (getId || setId) {
+      if (isAccessor) {
         return t.callExpression(file.addHelper("classPrivateFieldGet"), [
           this.receiver(member),
           t.cloneNode(id),
@@ -180,12 +183,15 @@ const privateNameHandlerSpec = {
       static: isStatic,
       method: isMethod,
       setId,
+      getId,
     } = privateNamesMap.get(name);
+    const isAccessor = getId || setId;
 
     if (isStatic) {
-      const helperName = isMethod
-        ? "classStaticPrivateMethodSet"
-        : "classStaticPrivateFieldSpecSet";
+      const helperName =
+        isMethod && !isAccessor
+          ? "classStaticPrivateMethodSet"
+          : "classStaticPrivateFieldSpecSet";
 
       return t.callExpression(file.addHelper(helperName), [
         this.receiver(member),
@@ -300,9 +306,30 @@ function buildPrivateInstanceFieldInitSpec(ref, prop, privateNamesMap) {
 }
 
 function buildPrivateStaticFieldInitSpec(prop, privateNamesMap) {
-  const { id } = privateNamesMap.get(prop.node.key.id.name);
-  const value = prop.node.value || prop.scope.buildUndefinedNode();
+  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const { id, getId, setId, initAdded } = privateName;
+  const isAccessor = getId || setId;
 
+  if (!prop.isProperty() && (initAdded || !isAccessor)) return;
+
+  if (isAccessor) {
+    privateNamesMap.set(prop.node.key.id.name, {
+      ...privateName,
+      initAdded: true,
+    });
+
+    return template.statement.ast`
+      var ${id.name} = {
+        // configurable is false by default
+        // enumerable is false by default
+        // writable is false by default
+        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
+        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
+      }
+    `;
+  }
+
+  const value = prop.node.value || prop.scope.buildUndefinedNode();
   return template.statement.ast`
     var ${id} = {
       // configurable is false by default
@@ -328,76 +355,44 @@ function buildPrivateMethodInitLoose(ref, prop, privateNamesMap) {
         });
       `;
   }
-
-  if (getId || setId) {
+  const isAccessor = getId || setId;
+  if (isAccessor) {
     privateNamesMap.set(prop.node.key.id.name, {
       ...privateName,
       initAdded: true,
     });
 
-    if (getId && setId) {
-      return template.statement.ast`
-        Object.defineProperty(${ref}, ${id}, {
-          // configurable is false by default
-          // enumerable is false by default
-          // writable is false by default
-          get: ${getId.name},
-          set: ${setId.name}
-        });
-      `;
-    } else if (getId && !setId) {
-      return template.statement.ast`
-        Object.defineProperty(${ref}, ${id}, {
-          // configurable is false by default
-          // enumerable is false by default
-          // writable is false by default
-          get: ${getId.name}
-        });
-      `;
-    } else if (!getId && setId) {
-      return template.statement.ast`
-        Object.defineProperty(${ref}, ${id}, {
-          // configurable is false by default
-          // enumerable is false by default
-          // writable is false by default
-          set: ${setId.name}
-        });
-      `;
-    }
+    return template.statement.ast`
+      Object.defineProperty(${ref}, ${id}, {
+        // configurable is false by default
+        // enumerable is false by default
+        // writable is false by default
+        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
+        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
+      });
+    `;
   }
 }
 
 function buildPrivateInstanceMethodInitSpec(ref, prop, privateNamesMap) {
   const privateName = privateNamesMap.get(prop.node.key.id.name);
   const { id, getId, setId, initAdded } = privateName;
+
   if (initAdded) return;
 
-  if (getId || setId) {
+  const isAccessor = getId || setId;
+  if (isAccessor) {
     privateNamesMap.set(prop.node.key.id.name, {
       ...privateName,
       initAdded: true,
     });
 
-    if (getId && setId) {
-      return template.statement.ast`
-        ${id}.set(${ref}, {
-          get: ${getId.name},
-          set: ${setId.name}
-        });
-      `;
-    } else if (getId && !setId) {
-      return template.statement.ast`
-        ${id}.set(${ref}, {
-          get: ${getId.name}
-        });
-      `;
-    } else if (!getId && setId) {
-      return template.statement.ast`
-        ${id}.set(${ref}, {
-          set: ${setId.name}
-        });
-      `;
-    }
+    return template.statement.ast`
+      ${id}.set(${ref}, {
+        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
+        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
+      });
+    `;
   }
   return template.statement.ast`${id}.add(${ref})`;
 }
@@ -429,7 +424,29 @@ function buildPublicFieldInitSpec(ref, prop, state) {
 }
 
 function buildPrivateStaticMethodInitLoose(ref, prop, state, privateNamesMap) {
-  const { id, methodId } = privateNamesMap.get(prop.node.key.id.name);
+  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const { id, methodId, getId, setId, initAdded } = privateName;
+
+  if (initAdded) return;
+
+  const isAccessor = getId || setId;
+  if (isAccessor) {
+    privateNamesMap.set(prop.node.key.id.name, {
+      ...privateName,
+      initAdded: true,
+    });
+
+    return template.statement.ast`
+      Object.defineProperty(${ref}, ${id}, {
+        // configurable is false by default
+        // enumerable is false by default
+        // writable is false by default
+        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
+        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
+      })
+    `;
+  }
+
   return template.statement.ast`
     Object.defineProperty(${ref}, ${id}, {
       // configurable is false by default
@@ -615,14 +632,14 @@ export function buildFieldsInitNodes(
       case isStatic && isPrivate && isMethod && !loose:
         needsClassRef = true;
         staticNodes.push(
+          buildPrivateStaticFieldInitSpec(prop, privateNamesMap),
+        );
+        staticNodes.unshift(
           buildPrivateMethodDeclaration(prop, privateNamesMap, loose),
         );
         break;
       case isStatic && isPrivate && isMethod && loose:
         needsClassRef = true;
-        staticNodes.push(
-          buildPrivateMethodDeclaration(prop, privateNamesMap, loose),
-        );
         staticNodes.push(
           buildPrivateStaticMethodInitLoose(
             t.cloneNode(ref),
@@ -630,6 +647,9 @@ export function buildFieldsInitNodes(
             state,
             privateNamesMap,
           ),
+        );
+        staticNodes.unshift(
+          buildPrivateMethodDeclaration(prop, privateNamesMap, loose),
         );
         break;
       case isInstance && isPublic && isField && loose:
@@ -646,7 +666,7 @@ export function buildFieldsInitNodes(
   }
 
   return {
-    staticNodes,
+    staticNodes: staticNodes.filter(Boolean),
     instanceNodes: instanceNodes.filter(Boolean),
     wrapClass(path) {
       for (const prop of props) {

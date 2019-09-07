@@ -1,0 +1,11 @@
+{
+  "validateLogs": true,
+  "ignoreOutput": true,
+  "presets": [
+    ["env", {
+      "debug": true,
+      "useBuiltIns": "entry",
+      "corejs": { "version": 2, "proposals": true }
+    }]
+  ]
+}
