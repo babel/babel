@@ -30,9 +30,9 @@ export default declare((api, opts) => {
 
   function hasRestElement(path) {
     let foundRestElement = false;
-    visitRestElements(path, () => {
+    visitRestElements(path, restElement => {
       foundRestElement = true;
-      path.stop();
+      restElement.stop();
     });
     return foundRestElement;
   }
@@ -42,7 +42,7 @@ export default declare((api, opts) => {
     visitRestElements(path, restElement => {
       if (restElement.parentPath.isObjectPattern()) {
         foundRestElement = true;
-        path.stop();
+        restElement.stop();
       }
     });
     return foundRestElement;
