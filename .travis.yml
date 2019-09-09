@@ -40,15 +40,15 @@ script:
 matrix:
   fast_finish: true
   include:
+    - os: windows
+      node_js: "node"
+      env: JOB=test
     - node_js: "node"
       env: JOB=lint
     - node_js: "node"
       env: JOB=babel-parser-flow-tests
     - node_js: "node"
       env: JOB=babel-parser-test262-tests
-    - os: windows
-      node_js: "node"
-      env: JOB=test
 
 notifications:
   slack:
