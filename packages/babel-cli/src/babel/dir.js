@@ -56,7 +56,7 @@ export default async function({
       outputFileSync(dest, res.code);
       util.chmod(src, dest);
 
-      if (cliOptions.verbose && !cliOptions.quiet) {
+      if (cliOptions.verbose) {
         console.log(src + " -> " + dest);
       }
 
