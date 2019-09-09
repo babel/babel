@@ -67,10 +67,9 @@ export default declare((api, opts) => {
   // were converted to stringLiterals or not
   // e.g. extracts {keys: ["a", "b", "3", ++x], allLiteral: false }
   // from ast of {a: "foo", b, 3: "bar", [++x]: "baz"}
-  function extractNormalizedKeys(path) {
+  function extractNormalizedKeys(path, file) {
     const props = path.node.properties;
     const keys = [];
-    let allLiteral = true;
 
     for (const prop of props) {
       if (t.isIdentifier(prop.key) && !prop.computed) {
@@ -81,12 +80,15 @@ export default declare((api, opts) => {
       } else if (t.isLiteral(prop.key)) {
         keys.push(t.stringLiteral(String(prop.key.value)));
       } else {
-        keys.push(t.cloneNode(prop.key));
-        allLiteral = false;
+        keys.push(
+          t.callExpression(file.addHelper("toPropertyKey"), [
+            t.cloneNode(prop.key),
+          ]),
+        );
       }
     }
 
-    return { keys, allLiteral };
+    return keys;
   }
 
   // replaces impure computed keys with new identifiers
@@ -121,15 +123,13 @@ export default declare((api, opts) => {
   }
 
   //expects path to an object pattern
-  function createObjectSpread(path, file, objRef) {
-    const props = path.get("properties");
-    const last = props[props.length - 1];
-    t.assertRestElement(last.node);
-    const restElement = t.cloneNode(last.node);
-    last.remove();
+  function createObjectRest(path, file, objRef) {
+    const resetElementPath = getRestElementPath(path);
+    const restElement = t.cloneNode(resetElementPath.node);
+    resetElementPath.remove();
 
     const impureComputedPropertyDeclarators = replaceImpureComputedKeys(path);
-    const { keys, allLiteral } = extractNormalizedKeys(path);
+    const keys = extractNormalizedKeys(path, file);
 
     if (keys.length === 0) {
       return [
@@ -142,25 +142,85 @@ export default declare((api, opts) => {
       ];
     }
 
-    let keyExpression;
-    if (!allLiteral) {
-      // map to toPropertyKey to handle the possible non-string values
-      keyExpression = t.callExpression(
-        t.memberExpression(t.arrayExpression(keys), t.identifier("map")),
-        [file.addHelper("toPropertyKey")],
-      );
-    } else {
-      keyExpression = t.arrayExpression(keys);
-    }
-
     return [
       impureComputedPropertyDeclarators,
       restElement.argument,
       t.callExpression(
         file.addHelper(`objectWithoutProperties${loose ? "Loose" : ""}`),
-        [t.cloneNode(objRef), keyExpression],
+        [t.cloneNode(objRef), t.arrayExpression(keys)],
       ),
     ];
+  }
+
+  function getRestElementPath(path) {
+    const props = path.get("properties");
+    const last = props[props.length - 1];
+    t.assertRestElement(last.node);
+    return last;
+  }
+
+  // **only** optimise for the following case:
+  // let { a, b, ...rest } = obj;
+  // let result = { ...rest, c: 1 };
+  function tryOptimiseRestElementWithSpread(
+    objectPatternPath,
+    insertionPath,
+    file,
+    ref,
+  ) {
+    const restElementPath = getRestElementPath(objectPatternPath);
+    const restElementIdentifierName = restElementPath.get("argument.name").node;
+    const referencePaths = restElementPath.scope.getBinding(
+      restElementIdentifierName,
+    ).referencePaths;
+
+    // rest should only be used once
+    if (referencePaths.length !== 1) return false;
+
+    const referencePath = referencePaths[0];
+
+    // rest should only be used as a spread
+    if (
+      !referencePath.parentPath.isSpreadElement({
+        argument: referencePath.node,
+      })
+    ) {
+      return false;
+    }
+
+    // and the spread must be the first element in the object expression
+    const objectExpressionPath = referencePath.findParent(path =>
+      path.isObjectExpression(),
+    );
+    const objectExpressionProperties = objectExpressionPath.get("properties");
+    if (!objectExpressionProperties[0] === referencePath.parentPath) {
+      return false;
+    }
+
+    restElementPath.remove();
+    const impureComputedPropertyDeclarators = replaceImpureComputedKeys(
+      objectPatternPath,
+    );
+    const keys = extractNormalizedKeys(objectPatternPath, file);
+    const propertiesToAddAfterRest = objectExpressionProperties
+      .slice(1)
+      .map(propertyPath => propertyPath.node);
+
+    if (loose) {
+      removeUnusedExcludedKeys(objectPatternPath);
+    }
+
+    insertionPath.insertBefore(impureComputedPropertyDeclarators);
+
+    objectExpressionPath.replaceWith(
+      t.callExpression(file.addHelper("combineRestSpread"), [
+        ref,
+        t.arrayExpression(keys),
+        t.objectExpression(propertiesToAddAfterRest),
+      ]),
+    );
+
+    return true;
   }
 
   function replaceRestElement(parentPath, paramPath, i, numParams) {
@@ -271,23 +331,33 @@ export default declare((api, opts) => {
             path.isObjectPattern(),
           );
 
-          const [
-            impureComputedPropertyDeclarators,
-            argument,
-            callExpression,
-          ] = createObjectSpread(objectPatternPath, file, ref);
-
-          if (loose) {
-            removeUnusedExcludedKeys(objectPatternPath);
-          }
-
-          t.assertIdentifier(argument);
-
-          insertionPath.insertBefore(impureComputedPropertyDeclarators);
-
-          insertionPath.insertAfter(
-            t.variableDeclarator(argument, callExpression),
+          // NOTE:
+          const optimised = tryOptimiseRestElementWithSpread(
+            objectPatternPath,
+            insertionPath,
+            file,
+            ref,
           );
+
+          if (!optimised) {
+            const [
+              impureComputedPropertyDeclarators,
+              restElement,
+              restObject,
+            ] = createObjectRest(objectPatternPath, file, ref);
+
+            if (loose) {
+              removeUnusedExcludedKeys(objectPatternPath);
+            }
+
+            t.assertIdentifier(restElement);
+
+            insertionPath.insertBefore(impureComputedPropertyDeclarators);
+
+            insertionPath.insertAfter(
+              t.variableDeclarator(restElement, restObject),
+            );
+          }
 
           insertionPath = insertionPath.getSibling(insertionPath.key + 1);
 
@@ -353,7 +423,7 @@ export default declare((api, opts) => {
             impureComputedPropertyDeclarators,
             argument,
             callExpression,
-          ] = createObjectSpread(leftPath, file, t.identifier(refName));
+          ] = createObjectRest(leftPath, file, t.identifier(refName));
 
           if (impureComputedPropertyDeclarators.length > 0) {
             nodes.push(
