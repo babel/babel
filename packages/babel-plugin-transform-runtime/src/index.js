@@ -109,7 +109,7 @@ export default declare((api, options, dirname) => {
   }
   if (absoluteRuntime !== false && relativeRuntime !== false) {
     throw new Error(
-      "The 'absoluteRuntime' and 'relativeRuntime' settings cannot be enabled at the same time",
+      "The 'absoluteRuntime' and 'relativeRuntime' options cannot be enabled at the same time",
     );
   }
 
