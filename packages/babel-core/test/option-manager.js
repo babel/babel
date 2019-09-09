@@ -27,14 +27,19 @@ describe("option-manager", () => {
       return { plugin, calls };
     }
 
-    it("should throw if a plugin is repeated", () => {
-      const { calls, plugin } = makePlugin();
+    it("should throw if a plugin is repeated, with information about the repeated plugin", () => {
+      const { calls, plugin } = makePlugin("my-plugin");
 
       expect(() => {
         loadOptions({
-          plugins: [plugin, plugin],
+          plugins: [
+            [plugin, undefined, "my-plugin"],
+            [plugin, undefined, "my-plugin"],
+          ],
         });
-      }).toThrow(/Duplicate plugin\/preset detected/);
+      }).toThrow(
+        /Duplicate plugin\/preset detected.*Duplicates detected are.*my-plugin.*my-plugin/ms,
+      );
       expect(calls).toEqual([]);
     });
 

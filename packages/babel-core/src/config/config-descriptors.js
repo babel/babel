@@ -345,6 +345,7 @@ function assertNoDuplicates(items: Array<UnloadedDescriptor>): void {
     }
 
     if (nameMap.has(item.name)) {
+      const conflicts = items.filter(i => i.value === item.value);
       throw new Error(
         [
           `Duplicate plugin/preset detected.`,
@@ -355,6 +356,9 @@ function assertNoDuplicates(items: Array<UnloadedDescriptor>): void {
           `    ['some-plugin', {}],`,
           `    ['some-plugin', {}, 'some unique name'],`,
           `  ]`,
+          ``,
+          `Duplicates detected are:`,
+          `${JSON.stringify(conflicts, null, 2)}`,
         ].join("\n"),
       );
     }
