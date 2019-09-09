@@ -2,7 +2,7 @@
 
 > **Tags:**
 > - :boom:       [Breaking Change]
-> - :eyeglasses: [Spec Compliancy]
+> - :eyeglasses: [Spec Compliance]
 > - :rocket:     [New Feature]
 > - :bug:        [Bug Fix]
 > - :memo:       [Documentation]
@@ -56,7 +56,7 @@ See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.m
 
 ## 7.0.0-beta.7 (2017-03-22)
 
-### Spec Compliancy
+### Spec Compliance
 * Remove babylon plugin for template revision since it's stage-4 (#426) (Henry Zhu)
 
 ### Bug Fix
@@ -200,7 +200,7 @@ declare module "C" {
 }
 ```
 
-### :eyeglasses: Spec Compliancy
+### :eyeglasses: Spec Compliance
 
 Forbid semicolons after decorators in classes ([#352](https://github.com/babel/babylon/pull/352)) (Kevin Gibbons)
 
@@ -305,7 +305,7 @@ AST spec: fix casing of `RegExpLiteral` ([#318](https://github.com/babel/babylon
 
 ## 6.15.0 (2017-01-10)
 
-### :eyeglasses: Spec Compliancy
+### :eyeglasses: Spec Compliance
 
 Add support for Flow shorthand import type ([#267](https://github.com/babel/babylon/pull/267)) (Jeff Morrison)
 
@@ -411,7 +411,7 @@ Will include all parser plugins instead of specifying each one individually. Use
 
 ## 6.14.0 (2016-11-16)
 
-### :eyeglasses: Spec Compliancy
+### :eyeglasses: Spec Compliance
 
 Throw error for reserved words `enum` and `await` ([#195](https://github.com/babel/babylon/pull/195)) (Kai Cataldo)
 
@@ -491,7 +491,7 @@ With that test case, there was a ~95ms savings by removing the need for node to 
 
 ## v6.13.0 (2016-10-21)
 
-### :eyeglasses: Spec Compliancy
+### :eyeglasses: Spec Compliance
 
 Property variance type annotations for Flow plugin ([#161](https://github.com/babel/babylon/pull/161)) (Sam Goldman)
 
@@ -549,7 +549,7 @@ Fixes two tests that are failing after the merge of #172 ([#177](https://github.
 
 ## v6.12.0 (2016-10-14)
 
-### :eyeglasses: Spec Compliancy
+### :eyeglasses: Spec Compliance
 
 Implement import() syntax ([#163](https://github.com/babel/babylon/pull/163)) (Jordan Gensler)
 
@@ -643,7 +643,7 @@ export const { foo: [ ,, qux7 ] } = bar;
 
 ## v6.11.5 (2016-10-12)
 
-### :eyeglasses: Spec Compliancy
+### :eyeglasses: Spec Compliance
 
 Fix: Check for duplicate named exports in exported destructuring assignments ([#144](https://github.com/babel/babylon/pull/144)) (Kai Cataldo)
 
@@ -689,7 +689,7 @@ Temporary rollback for erroring on trailing comma with spread (#154) (Henry Zhu)
 
 ## v6.11.3 (2016-10-01)
 
-### :eyeglasses: Spec Compliancy
+### :eyeglasses: Spec Compliance
 
 Add static errors for object rest (#149) ([@danez](https://github.com/danez))
 
@@ -782,7 +782,7 @@ export toString from './toString';
 
 ## 6.11.0 (2016-09-22)
 
-### Spec Compliancy (will break CI)
+### Spec Compliance (will break CI)
 
 - Disallow duplicate named exports ([#107](https://github.com/babel/babylon/pull/107)) @kaicataldo
 
@@ -862,9 +862,9 @@ for (+i in {});
 
 ## 6.10.0 (2016-09-19)
 
-> We plan to include some spec compliancy bugs in patch versions. An example was the multiple default exports issue.
+> We plan to include some spec compliance bugs in patch versions. An example was the multiple default exports issue.
 
-### Spec Compliancy
+### Spec Compliance
 
 * Implement ES2016 check for simple parameter list in strict mode ([#106](https://github.com/babel/babylon/pull/106)) (Timothy Gu)
 
@@ -1023,7 +1023,7 @@ declare module "foo" {
 - The existential type `*` is not a valid type parameter.
 - The existential type `*` is a primary type
 
-### Spec Compliancy
+### Spec Compliance
 - The param list for type parameter declarations now consists of `TypeParameter` nodes
 - New `TypeParameter` AST Node (replaces using the `Identifier` node before)
 

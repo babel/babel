@@ -936,7 +936,7 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
   export default function _iterableToArrayLimit(arr, i) {
     // this is an expanded form of \`for...of\` that properly supports abrupt completions of
     // iterators etc. variable names have been minimised to reduce the size of this massive
-    // helper. sometimes spec compliancy is annoying :(
+    // helper. sometimes spec compliance is annoying :(
     //
     // _n = _iteratorNormalCompletion
     // _d = _didIteratorError

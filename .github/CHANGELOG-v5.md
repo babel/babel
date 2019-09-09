@@ -12,7 +12,7 @@
 
 ## 5.8.24
 
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Updated `optimisation.react.inlineElements` transformer to React 0.14 output. Thanks [@spicyj](https://github.com/spicyj)!
  * **Polish**
   * Add support for evaluating more static nodes. Thanks [@hzoo](https://github.com/hzoo)!
@@ -451,7 +451,7 @@ Issues with publish process.
 
 ![gifs lol](https://31.media.tumblr.com/568205a0e37ae15eca510fa639589a59/tumblr_n8kw8kpcSb1sg6cg8o1_500.gif)
 
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Allow trailing param commas for methods when using the `es7.trailingCommas` transformer.
  * **Bug Fix**
   * Fix `es6.blockScoping` transformer not properly ignoring `break` in `SwitchCase`.
@@ -481,7 +481,7 @@ Issues with publish process.
   * Fix correct function scope being passed to `nameMethod.property` when inferring the function name for class methods.
   * Fix incorrect extensions reference causing weird issues when using the Babel CLI.
   * Fix destructuring param reference replacements not inheriting from their original param.
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Fix order that method decorators are ran in.
 
 ## 5.2.15
@@ -616,7 +616,7 @@ Issues with publish process.
   * Fix `externalHelpers` option being incorrectly listed as type `string`.
  * **Internal**
   * Upgrade `core-js` to `0.9.0`.
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Fix object decorators not using the `initializer` pattern.
   * Remove property initializer descriptor reflection.
 
