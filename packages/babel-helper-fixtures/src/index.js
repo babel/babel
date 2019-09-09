@@ -1,5 +1,4 @@
 import cloneDeep from "lodash/cloneDeep";
-import trimEnd from "lodash/trimEnd";
 import resolve from "try-resolve";
 import clone from "lodash/clone";
 import extend from "lodash/extend";
@@ -275,7 +274,7 @@ export function multiple(entryLoc, ignore?: Array<string>) {
 
 export function readFile(filename) {
   if (fs.existsSync(filename)) {
-    let file = trimEnd(fs.readFileSync(filename, "utf8"));
+    let file = fs.readFileSync(filename, "utf8").trimRight();
     file = file.replace(/\r\n/g, "\n");
     return file;
   } else {

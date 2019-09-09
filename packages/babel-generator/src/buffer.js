@@ -1,5 +1,4 @@
 import type SourceMap from "./source-map";
-import trimRight from "trim-right";
 
 const SPACES_RE = /^[ \t]+$/;
 
@@ -43,7 +42,7 @@ export default class Buffer {
     const result = {
       // Whatever trim is used here should not execute a regex against the
       // source string since it may be arbitrarily large after all transformations
-      code: trimRight(this._buf.join("")),
+      code: this._buf.join("").trimRight(),
       map: null,
       rawMappings: map && map.getRawMappings(),
     };
