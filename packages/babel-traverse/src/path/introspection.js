@@ -370,7 +370,12 @@ const executionOrderCheckedNodes = new WeakSet();
 export function _guessExecutionStatusRelativeToDifferentFunctions(
   target: NodePath,
 ): RelativeExecutionStatus {
-  if (!target.isFunctionDeclaration()) return "unknown";
+  if (
+    !target.isFunctionDeclaration() ||
+    target.parentPath.isExportDeclaration()
+  ) {
+    return "unknown";
+  }
 
   // so we're in a completely different function, if this is a function declaration
   // then we can be a bit smarter and handle cases where the function is either
