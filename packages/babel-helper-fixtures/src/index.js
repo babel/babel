@@ -1,5 +1,4 @@
 import cloneDeep from "lodash/cloneDeep";
-import resolve from "try-resolve";
 import clone from "lodash/clone";
 import extend from "lodash/extend";
 import semver from "semver";
@@ -35,6 +34,13 @@ type Suite = {
   filename: string,
 };
 
+function tryResolve(module) {
+  try {
+    return require.resolve(module);
+  } catch (e) {
+    return null;
+  }
+}
 function assertDirectory(loc) {
   if (!fs.statSync(loc).isDirectory()) {
     throw new Error(`Expected ${loc} to be a directory.`);
@@ -76,7 +82,7 @@ export default function get(entryLoc): Array<Suite> {
   const suites = [];
 
   let rootOpts = {};
-  const rootOptsLoc = resolve(entryLoc + "/options");
+  const rootOptsLoc = tryResolve(entryLoc + "/options");
   if (rootOptsLoc) rootOpts = require(rootOptsLoc);
 
   for (const suiteName of fs.readdirSync(entryLoc)) {
@@ -92,7 +98,7 @@ export default function get(entryLoc): Array<Suite> {
     assertDirectory(suite.filename);
     suites.push(suite);
 
-    const suiteOptsLoc = resolve(suite.filename + "/options");
+    const suiteOptsLoc = tryResolve(suite.filename + "/options");
     if (suiteOptsLoc) suite.options = require(suiteOptsLoc);
 
     for (const taskName of fs.readdirSync(suite.filename)) {
@@ -139,7 +145,7 @@ export default function get(entryLoc): Array<Suite> {
 
       const taskOpts = cloneDeep(suite.options);
 
-      const taskOptsLoc = resolve(taskDir + "/options");
+      const taskOptsLoc = tryResolve(taskDir + "/options");
       if (taskOptsLoc) extend(taskOpts, require(taskOptsLoc));
 
       const test = {
