@@ -22,9 +22,10 @@ export function readdir(
 
     if (stat.isDirectory()) return true;
 
-    return (
-      (includeDotfiles || filename[0] !== ".") && (!filter || filter(filename))
-    );
+    stat.isDirectory()
+      ? true
+      : (includeDotfiles || filename[0] !== ".") &&
+        (!filter || filter(filename));
   });
 }
 
