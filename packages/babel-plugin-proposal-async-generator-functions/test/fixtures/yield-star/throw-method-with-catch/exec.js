@@ -7,7 +7,7 @@ async function* inner() {
     log.push(2);
     yield "b";
     log.push(3);
-  } catch {
+  } catch (e) {
     log.push(4);
     yield "c";
     log.push(5);
