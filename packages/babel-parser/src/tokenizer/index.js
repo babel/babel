@@ -234,8 +234,8 @@ export default class Tokenizer extends LocationParser {
   skipBlockComment(): void {
     const startLoc = this.state.curPosition();
     const start = this.state.pos;
-    const end = this.input.indexOf("*/", (this.state.pos += 2));
-    if (end === -1) this.raise(this.state.pos - 2, "Unterminated comment");
+    const end = this.input.indexOf("*/", this.state.pos + 2);
+    if (end === -1) this.raise(start, "Unterminated comment");
 
     this.state.pos = end + 2;
     lineBreakG.lastIndex = start;
@@ -404,8 +404,10 @@ export default class Tokenizer extends LocationParser {
       return;
     }
 
-    const next2 = this.input.charCodeAt(this.state.pos + 2);
-    if (next === charCodes.dot && next2 === charCodes.dot) {
+    if (
+      next === charCodes.dot &&
+      this.input.charCodeAt(this.state.pos + 2) === charCodes.dot
+    ) {
       this.state.pos += 3;
       this.finishToken(tt.ellipsis);
     } else {
@@ -900,9 +902,9 @@ export default class Tokenizer extends LocationParser {
       let val;
 
       if (this.hasPlugin("numericSeparator")) {
-        const prev = this.input.charCodeAt(this.state.pos - 1);
-        const next = this.input.charCodeAt(this.state.pos + 1);
         if (code === charCodes.underscore) {
+          const prev = this.input.charCodeAt(this.state.pos - 1);
+          const next = this.input.charCodeAt(this.state.pos + 1);
           if (allowedSiblings.indexOf(next) === -1) {
             this.raise(this.state.pos, "Invalid or unexpected token");
           }

@@ -39,10 +39,11 @@ export default class CommentsParser extends BaseParser {
   }
 
   adjustCommentsAfterTrailingComma(node: Node, elements: Node[]) {
-    if (elements.length === 0) {
+    if (this.state.leadingComments.length === 0) {
       return;
     }
-    if (this.state.leadingComments.length === 0) {
+
+    if (elements.length === 0) {
       return;
     }
 
