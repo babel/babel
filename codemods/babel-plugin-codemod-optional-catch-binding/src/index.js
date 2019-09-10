@@ -6,10 +6,11 @@ export default function({ types: t }) {
 
     visitor: {
       CatchClause(path) {
-        if (path.node.param === null || !t.isIdentifier(path.node.param)) {
+        const nodeParam = path.node.param;
+        if (nodeParam === null || !t.isIdentifier(nodeParam)) {
           return;
         }
-        const binding = path.scope.getOwnBinding(path.node.param.name);
+        const binding = path.scope.getOwnBinding(nodeParam.name);
         if (binding.constantViolations.length > 0) {
           return;
         }
