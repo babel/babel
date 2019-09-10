@@ -19,11 +19,12 @@
     "compiler"
   ],
   "dependencies": {
-    "@babel/polyfill": "^7.6.0",
     "@babel/register": "^7.6.0",
     "commander": "^2.8.1",
+    "core-js": "^3.2.1",
     "lodash": "^4.17.13",
     "node-environment-flags": "^1.0.5",
+    "regenerator-runtime": "^0.13.3",
     "v8flags": "^3.1.1"
   },
   "peerDependencies": {
