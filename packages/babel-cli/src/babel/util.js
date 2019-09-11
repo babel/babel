@@ -112,7 +112,7 @@ export function deleteDir(path: string): void {
 
 process.on("uncaughtException", function(err) {
   console.error(err);
-  process.exit(1);
+  process.exitCode = 1;
 });
 
 export function requireChokidar(): Object {
