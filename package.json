@@ -65,6 +65,7 @@
     "rollup-plugin-replace": "^2.2.0",
     "test262-stream": "^1.2.0",
     "through2": "^2.0.0",
+    "typescript": "^3.6.3",
     "warnings-to-errors-webpack-plugin": "^2.0.0",
     "webpack": "^3.4.1",
     "webpack-dependency-suite": "^2.4.4",

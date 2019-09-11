@@ -54,8 +54,13 @@ watch: clean clean-lib
 flow:
 	./node_modules/.bin/flow check --strip-root
 
-lint:
+lint: lint-js lint-ts
+
+lint-js:
 	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' --format=codeframe
+
+lint-ts:
+	./scripts/tests/typescript/lint.sh
 
 fix: fix-json
 	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' --format=codeframe --fix
