@@ -322,6 +322,21 @@ describe("@babel/core config loading", () => {
         }
       }
     });
+
+    it("should thrown when plugin is not valid", () => {
+      const fooPlugin = {
+        inherits: "inhertis-should-not-be-string",
+      };
+      const opts = {
+        cwd: path.dirname(FILEPATH),
+        filename: FILEPATH,
+        plugins: [fooPlugin],
+      };
+
+      expect(() => loadConfig(opts)).toThrow(
+        /\.inherits must be a function, or undefined/,
+      );
+    });
   });
 
   describe("caller metadata", () => {

@@ -272,7 +272,8 @@ export type OptionsSource =
   | "configfile"
   | "babelrcfile"
   | "extendsfile"
-  | "preset";
+  | "preset"
+  | "plugin";
 
 type RootPath = $ReadOnly<{
   type: "root",
