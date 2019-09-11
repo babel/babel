@@ -1,4 +1,4 @@
-import regexpTree from "regexp-tree";
+import rewritePattern from "regexpu-core";
 
 export default function({ types: t }, options) {
   const { runtime = true } = options;
@@ -19,16 +19,18 @@ export default function({ types: t }, options) {
           return;
         }
 
-        const result = regexpTree.compatTranspile(node.extra.raw, [
-          "namedCapturingGroups",
-        ]);
-        const { namedCapturingGroups } = result.getExtra();
+        const namedCapturingGroups = {};
+        const result = rewritePattern(node.pattern, node.flags, {
+          namedGroup: true,
+          //todo: consider refactor `lookbehind` true as modular plugin
+          lookbehind: true,
+          onNamedGroup(name, index) {
+            namedCapturingGroups[name] = index;
+          },
+        });
 
-        if (
-          namedCapturingGroups &&
-          Object.keys(namedCapturingGroups).length > 0
-        ) {
-          node.pattern = result.getSource();
+        if (Object.keys(namedCapturingGroups).length > 0) {
+          node.pattern = result;
 
           if (runtime && !isRegExpTest(path)) {
             path.replaceWith(
