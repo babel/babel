@@ -769,11 +769,12 @@ export default class ExpressionParser extends LValParser {
 
   parseSliceArgument(): ?N.Expression {
     let expr = null;
-    this.eat(tt.colon);
-    const pos = this.state.pos;
-    if (!this.match(tt.colon) && !this.match(tt.bracketR)) {
-      expr = this.parseExpression();
-      this.checkSliceArgument(pos, expr);
+    if (this.eat(tt.colon)) {
+      if (!this.match(tt.colon) && !this.match(tt.bracketR)) {
+        const pos = this.state.pos;
+        expr = this.parseExpression();
+        this.checkSliceArgument(pos, expr);
+      }
     }
     return expr;
   }
