@@ -2029,7 +2029,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    isAssignable(node: Node, isBinding?: boolean): boolean {
+    isAssignable(node: N.Node, isBinding?: boolean): boolean {
       switch (node.type) {
         case "Identifier":
         case "ObjectPattern":
