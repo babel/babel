@@ -743,9 +743,10 @@ export default class ExpressionParser extends LValParser {
   }
 
   isSliceSimpleArgument(expr: N.Expression): boolean {
+    const { type, extra } = expr;
     return (
-      (expr.type === "NumericLiteral" || expr.type === "Identifier") &&
-      expr.extra?.parenthesized !== true
+      (type === "NumericLiteral" || type === "Identifier") &&
+      extra?.parenthesized !== true
     );
   }
 

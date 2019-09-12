@@ -392,4 +392,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         super.toAssignableObjectExpressionProp(prop, isBinding, isLast);
       }
     }
+
+    isSliceSimpleArgument(expr: N.Expression) {
+      const { type, value, extra } = expr;
+      return (
+        ((type === "Literal" && value === +value) || type === "Identifier") &&
+        extra?.parenthesized !== true
+      );
+    }
   };
