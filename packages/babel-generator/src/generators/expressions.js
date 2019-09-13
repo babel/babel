@@ -277,8 +277,8 @@ export function SliceExpression(node: Object) {
   this.token(":");
   this.print(node.upper, node);
   if (node.step) {
-  this.token(":");
+    this.token(":");
     this.print(node.step, node);
   }
-  this.word("]");
+  this.token("]");
 }
