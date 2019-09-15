@@ -20,6 +20,7 @@ script:
   - if [ "$JOB" = "test" ]; then make -j test-ci; fi
   - if [ "$JOB" = "lint" ]; then make -j code-quality-ci; fi
   - if [ "$JOB" = "babel-parser-flow-tests" ]; then make -j test-flow-ci; fi
+  - if [ "$JOB" = "babel-parser-typescript-tests" ]; then make -j test-typescript-ci; fi
   - if [ "$JOB" = "babel-parser-test262-tests" ]; then make -j test-test262-ci; fi
 
 matrix:
@@ -42,6 +43,8 @@ matrix:
     - node_js: "8"
     - node_js: "node"
       env: JOB=babel-parser-flow-tests
+    - node_js: "node"
+      env: JOB=babel-parser-typescript-tests
     - node_js: "node"
       env: JOB=babel-parser-test262-tests
 
