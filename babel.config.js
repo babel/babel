@@ -78,8 +78,7 @@ module.exports = function(api) {
         { useBuiltIns: true, loose: true },
       ],
 
-      // Explicitly use the lazy version of CommonJS modules.
-      convertESM ? ["@babel/transform-modules-commonjs", { lazy: true }] : null,
+      convertESM ? "@babel/transform-modules-commonjs" : null,
     ].filter(Boolean),
     overrides: [
       {
@@ -90,18 +89,17 @@ module.exports = function(api) {
         ],
       },
       {
-        test: "./packages/babel-register",
+        test: ["./packages/babel-cli", "./packages/babel-core"],
         plugins: [
-          // Override the root options to disable lazy imports for babel-register
-          // because otherwise the require hook will try to lazy-import things
-          // leading to dependency cycles.
-          convertESM ? "@babel/transform-modules-commonjs" : null,
+          // Explicitly use the lazy version of CommonJS modules.
+          convertESM
+            ? ["@babel/transform-modules-commonjs", { lazy: true }]
+            : null,
         ].filter(Boolean),
       },
       {
         test: "./packages/babel-polyfill",
         presets: [["@babel/env", envOptsNoTargets]],
-        plugins: [["@babel/transform-modules-commonjs", { lazy: false }]],
       },
       {
         // The vast majority of our src files are modules, but we use
