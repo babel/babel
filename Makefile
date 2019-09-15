@@ -1,5 +1,6 @@
 FLOW_COMMIT = 09669846b7a7ca5a6c23c12d56bb3bebdafd67e9
 TEST262_COMMIT = 8688c4ab79059c3097098605e69f1ee5eda6c409
+TYPESCRIPT_COMMIT = 038d95144d8b93c2799d1732181c89c3d84362d5
 
 FORCE_PUBLISH = "@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@babel/standalone,@babel/preset-env-standalone"
 
@@ -111,7 +112,7 @@ lint-js:
 	yarn eslint scripts $(SOURCES) '*.js' --format=codeframe
 
 lint-ts:
-	scripts/tests/typescript/lint.sh
+	scripts/lint-ts-typings.sh
 
 fix: fix-json fix-js
 
@@ -159,13 +160,28 @@ bootstrap-flow:
 	cd build/flow && git checkout $(FLOW_COMMIT)
 
 test-flow:
-	node scripts/tests/flow
+	node scripts/parser-tests/flow
 
 test-flow-ci: build-bundle-ci bootstrap-flow
 	$(MAKE) test-flow
 
 test-flow-update-whitelist:
-	node scripts/tests/flow --update-whitelist
+	node scripts/parser-tests/flow --update-whitelist
+
+bootstrap-typescript:
+	rm -rf ./build/typescript
+	mkdir -p ./build
+	git clone --branch=master --single-branch --shallow-since=2019-09-01 https://github.com/microsoft/TypeScript.git ./build/typescript
+	cd build/typescript && git checkout $(TYPESCRIPT_COMMIT)
+
+test-typescript:
+	node scripts/parser-tests/typescript
+
+test-typescript-ci: build-bundle-ci bootstrap-typescript
+	$(MAKE) test-typescript
+
+test-typescript-update-whitelist:
+	node scripts/parser-tests/typescript --update-whitelist
 
 bootstrap-test262:
 	rm -rf build/test262
@@ -174,13 +190,13 @@ bootstrap-test262:
 	cd build/test262 && git checkout $(TEST262_COMMIT)
 
 test-test262:
-	node scripts/tests/test262
+	node scripts/parser-tests/test262
 
 test-test262-ci: build-bundle-ci bootstrap-test262
 	$(MAKE) test-test262
 
 test-test262-update-whitelist:
-	node scripts/tests/test262 --update-whitelist
+	node scripts/parser-tests/test262 --update-whitelist
 
 # Does not work on Windows
 clone-license:
