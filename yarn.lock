@@ -7438,6 +7438,11 @@ merge2@^1.2.3:
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.3.0.tgz#5b366ee83b2f1582c48f87e47cf1a9352103ca81"
   integrity sha512-2j4DAdlBOkiSZIsaXk4mTE3sRS02yBHAtfy127xRV3bQUFqXkjHCHLW6Scv7DwNRbIWNHH8zpnz9zMaKXIdvYw==
 
+mergeiterator@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/mergeiterator/-/mergeiterator-1.2.5.tgz#40f0a27888f2eb85d80fa4c29632cf400a0b8c7b"
+  integrity sha512-KVZWGnRkEgmVewnpVIEUm/KuQ2kHx4T0zYQlPbGypBk4kM5sJ1+7bPDR2N4yg3EoS1CiGKk2GRb5PkAsMEoh3w==
+
 micromatch@^2.1.5:
   version "2.3.11"
   resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-2.3.11.tgz#86677c97d1720b363431d04d0d15293bd38c1565"

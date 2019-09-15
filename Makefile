@@ -159,13 +159,13 @@ bootstrap-flow:
 	cd build/flow && git checkout $(FLOW_COMMIT)
 
 test-flow:
-	node scripts/tests/flow/run_babel_parser_flow_tests.js
+	node scripts/tests/flow
 
 test-flow-ci: build-bundle-ci bootstrap-flow
 	$(MAKE) test-flow
 
 test-flow-update-whitelist:
-	node scripts/tests/flow/run_babel_parser_flow_tests.js --update-whitelist
+	node scripts/tests/flow --update-whitelist
 
 bootstrap-test262:
 	rm -rf build/test262
@@ -174,13 +174,13 @@ bootstrap-test262:
 	cd build/test262 && git checkout $(TEST262_COMMIT)
 
 test-test262:
-	node scripts/tests/test262/run_babel_parser_test262.js
+	node scripts/tests/test262
 
 test-test262-ci: build-bundle-ci bootstrap-test262
 	$(MAKE) test-test262
 
 test-test262-update-whitelist:
-	node scripts/tests/test262/run_babel_parser_test262.js --update-whitelist
+	node scripts/tests/test262 --update-whitelist
 
 # Does not work on Windows
 clone-license:
