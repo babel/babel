@@ -1,6 +1,8 @@
 name: Issue Triage
 
-on: issues
+on:
+  issues:
+    types: [opened, labeled]
 
 jobs:
   welcome:
