@@ -1,0 +1,53 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  github_release:
+    name: Trigger GitHub release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the new tag
+        uses: actions/checkout@v1.0.0
+
+      - name: Get tag info
+        id: tags
+        uses: babel/actions/get-release-tags@v2
+
+      - name: Generate the changelog
+        id: changelog
+        uses: babel/actions/generate-lerna-changelog@v2
+        with:
+          from: ${{ steps.tags.outputs.old }}
+          to: ${{ steps.tags.outputs.new }}
+        env:
+          GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create a draft GitHub release
+        uses: babel/actions/publish-github-release@v2
+        with:
+          tag: ${{ steps.tags.outputs.new }}
+          changelog: ${{ steps.changelog.outputs.changelog }}
+          token: ${{ secrets.BOT_TOKEN }}
+
+      - name: Check if releasing from master
+        id: is_master
+        uses: babel/actions/ref-matches-branch@v2
+        with:
+          name: master
+
+      - name: Update CHANGELOG.md
+        if: steps.is_master.outputs.result == 1
+        uses: babel/actions/update-changelog@v2
+        with:
+          changelog: ${{ steps.changelog.outputs.changelog }}
+
+      - name: Commit CHANGELOG.md
+        if: steps.is_master.outputs.result == 1
+        run: |
+          git add CHANGELOG.md
+          git -c user.name="Babel Bot" -c user.email="babel-bot@users.noreply.github.com" \
+            commit -m "Add ${{ steps.tags.outputs.new }} to CHANGELOG.md [skip ci]" --no-verify --quiet
+          git push "https://babel-bot:${{ secrets.BOT_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" master
