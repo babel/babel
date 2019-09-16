@@ -75,8 +75,12 @@ export default class CommentsParser extends BaseParser {
       const leadingComment = this.state.leadingComments[i];
       if (leadingComment.end < node.end) {
         newTrailingComments.push(leadingComment);
-        this.state.leadingComments.splice(i, 1);
-        i--;
+
+        // Perf: we don't need to splice if we are going to reset the array anyway
+        if (!takeAllComments) {
+          this.state.leadingComments.splice(i, 1);
+          i--;
+        }
       } else {
         if (node.trailingComments === undefined) {
           node.trailingComments = [];
@@ -84,7 +88,7 @@ export default class CommentsParser extends BaseParser {
         node.trailingComments.push(leadingComment);
       }
     }
-    if (takeAllComments) this.state.leadingComments.length = 0;
+    if (takeAllComments) this.state.leadingComments = [];
 
     if (newTrailingComments.length > 0) {
       lastElement.trailingComments = newTrailingComments;
