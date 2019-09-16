@@ -1,6 +1,6 @@
+/* eslint-disable @babel/development/plugin-name */
+import { createRegExpFeaturePlugin } from "@babel/helper-create-regexp-features-plugin";
 import { declare } from "@babel/helper-plugin-utils";
-import rewritePattern from "regexpu-core";
-import * as regex from "@babel/helper-regex";
 
 export default declare((api, options) => {
   api.assertVersion(7);
@@ -10,23 +10,9 @@ export default declare((api, options) => {
     throw new Error(".useUnicodeFlag must be a boolean, or undefined");
   }
 
-  return {
+  return createRegExpFeaturePlugin({
     name: "proposal-unicode-property-regex",
-
-    visitor: {
-      RegExpLiteral(path) {
-        const node = path.node;
-        if (!regex.is(node, "u")) {
-          return;
-        }
-        node.pattern = rewritePattern(node.pattern, node.flags, {
-          unicodePropertyEscape: true,
-          useUnicodeFlag,
-        });
-        if (!useUnicodeFlag) {
-          regex.pullFlag(node, "u");
-        }
-      },
-    },
-  };
+    feature: "unicodePropertyEscape",
+    options: { useUnicodeFlag },
+  });
 });

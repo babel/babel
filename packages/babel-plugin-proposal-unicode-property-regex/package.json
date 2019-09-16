@@ -23,8 +23,7 @@
   "bugs": "https://github.com/babel/babel/issues",
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0",
-    "@babel/helper-regex": "^7.4.4",
-    "regexpu-core": "^4.6.0"
+    "@babel/helper-create-regexp-features-plugin": "^7.6.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
