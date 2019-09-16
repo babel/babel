@@ -215,7 +215,25 @@
             "identifierName": "B"
           },
           "name": "B"
-        }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Two",
+            "start": 27,
+            "end": 33,
+            "loc": {
+              "start": {
+                "line": 6,
+                "column": 0
+              },
+              "end": {
+                "line": 6,
+                "column": 6
+              }
+            }
+          }
+        ]
       }
     ],
     "directives": []
