@@ -1498,13 +1498,16 @@ export default class StatementParser extends ExpressionParser {
   }
 
   pushClassProperty(classBody: N.ClassBody, prop: N.ClassProperty) {
-    // This only affects properties, not methods.
-    if (this.isNonstaticConstructor(prop)) {
+    if (
+      !prop.computed &
+      (prop.key.name === "constructor" || prop.key.value === "constructor")
+    ) {
       this.raise(
         prop.key.start,
-        "Classes may not have a non-static field named 'constructor'",
+        "Classes may not have a field named 'constructor'",
       );
     }
+
     classBody.body.push(this.parseClassProperty(prop));
   }
 
