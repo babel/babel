@@ -16,10 +16,20 @@ export const FEATURES = Object.freeze({
 export const featuresKey = "@babel/plugin-regexp-features/featuresKey";
 export const runtimeKey = "@babel/plugin-regexp-features/runtimeKey";
 
-export function enableFeature(features, feature): number {
+type unicodeFlag = 1;
+type dotAllFlag = 2;
+type unicodePropertyEscape = 4;
+type namedCaptureGroups = 8;
+type featureType =
+  | unicodeFlag
+  | dotAllFlag
+  | unicodePropertyEscape
+  | namedCaptureGroups;
+
+export function enableFeature(features: number, feature: featureType): number {
   return features | feature;
 }
 
-export function hasFeature(features, feature) {
+export function hasFeature(features: number, feature: featureType) {
   return !!(features & feature);
 }
