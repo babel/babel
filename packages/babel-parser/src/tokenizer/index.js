@@ -1326,11 +1326,7 @@ export default class Tokenizer extends LocationParser {
 
   readWord(): void {
     const word = this.readWord1();
-    const type = keywordTypes.get(word) || tt.name;
-
-    if (type.keyword && this.state.containsEsc) {
-      this.raise(this.state.pos, `Escape sequence in keyword ${word}`);
-    }
+    const type = (!this.state.containsEsc && keywordTypes.get(word)) || tt.name;
 
     // Allow @@iterator and @@asyncIterator as a identifier only inside type
     if (

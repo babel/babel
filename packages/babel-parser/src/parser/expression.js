@@ -2066,6 +2066,11 @@ export default class ExpressionParser extends LValParser {
 
     if (this.match(tt.name)) {
       name = this.state.value;
+
+      // An escaped identifier whose value is the same as a keyword
+      if (!liberal && this.state.containsEsc && isKeyword(name)) {
+        this.raise(this.state.pos, `Escape sequence in keyword ${name}`);
+      }
     } else if (this.state.type.keyword) {
       name = this.state.type.keyword;
 
