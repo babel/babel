@@ -14,8 +14,11 @@ import {
   BIND_SCOPE_VAR,
   BIND_SCOPE_LEXICAL,
   BIND_KIND_VALUE,
+  CLASS_ELEMENT_KIND_ACCESSOR,
+  CLASS_ELEMENT_FLAG_STATIC,
   type ScopeFlags,
   type BindingTypes,
+  type ClassElementTypes,
 } from "./scopeflags";
 import * as N from "../types";
 
@@ -28,10 +31,20 @@ export class Scope {
   lexical: string[] = [];
   // A list of lexically-declared FunctionDeclaration names in the current lexical scope
   functions: string[] = [];
+  // A list of private names defined in the current class body
+  privateNames: string[] = [];
 
   constructor(flags: ScopeFlags) {
     this.flags = flags;
   }
+}
+
+export class ClassScope {
+  privateNames: string[] = new Set();
+
+  loneAccessors: Map<string, ClassElementTypes> = new Map();
+
+  undefinedPrivateNames: Map<string, number> = new Map();
 }
 
 type raiseFunction = (number, string) => void;
@@ -40,9 +53,11 @@ type raiseFunction = (number, string) => void;
 // current scope in order to detect duplicate variable names.
 export default class ScopeHandler<IScope: Scope = Scope> {
   scopeStack: Array<IScope> = [];
+  classScopeStack: Array<ClassScope> = [];
   raise: raiseFunction;
   inModule: boolean;
   undefinedExports: Map<string, number> = new Map();
+  undefinedPrivateNames: Map<string, number> = new Map();
 
   constructor(raise: raiseFunction, inModule: boolean) {
     this.raise = raise;
@@ -101,6 +116,30 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     this.scopeStack.pop();
   }
 
+  enterClassBody() {
+    this.classScopeStack.push(new ClassScope());
+  }
+
+  exitClassBody() {
+    const oldClassScope = this.classScopeStack.pop();
+
+    // Migrate the usage of not yet defined private names to the outer
+    // class scope, or raise an error if we reached the top-level scope.
+
+    const currentClassScope = this.currentClassScope();
+
+    // Array.from is needed because this is compiled to an array-like for loop
+    for (const [name, pos] of Array.from(oldClassScope.undefinedPrivateNames)) {
+      if (currentClassScope) {
+        if (!currentClassScope.undefinedPrivateNames.has(name)) {
+          currentClassScope.undefinedPrivateNames.set(name, pos);
+        }
+      } else {
+        this.raiseUndeclaredPrivateName(name, pos);
+      }
+    }
+  }
+
   // The spec says:
   // > At the top level of a function, or script, function declarations are
   // > treated like var declarations rather than like lexical declarations.
@@ -138,6 +177,58 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     if (this.inModule && scope.flags & SCOPE_PROGRAM) {
       this.undefinedExports.delete(name);
     }
+  }
+
+  declarePrivateName(
+    name: string,
+    elementType: ClassElementTypes,
+    pos: number,
+  ) {
+    const classScope = this.currentClassScope();
+    let redefined = classScope.privateNames.has(name);
+
+    if (elementType & CLASS_ELEMENT_KIND_ACCESSOR) {
+      const accessor = redefined && classScope.loneAccessors.get(name);
+      if (accessor) {
+        const differences = elementType ^ accessor;
+
+        // The private name can be duplicated only if it is used by
+        // two accessors with different kind (get and set), and if
+        // they have the same placement (static or not).
+        redefined =
+          !(differences & CLASS_ELEMENT_KIND_ACCESSOR) ||
+          differences & CLASS_ELEMENT_FLAG_STATIC;
+
+        if (!redefined) classScope.loneAccessors.delete(name);
+      } else if (!redefined) {
+        classScope.loneAccessors.set(name, elementType);
+      }
+    }
+
+    if (redefined) {
+      this.raise(pos, `Duplicate private name #${name}`);
+    }
+
+    classScope.privateNames.add(name);
+    classScope.undefinedPrivateNames.delete(name);
+  }
+
+  usePrivateName(name: string, pos: number) {
+    let classScope;
+    for (classScope of this.classScopeStack) {
+      if (classScope.privateNames.has(name)) return;
+    }
+
+    if (classScope) {
+      classScope.undefinedPrivateNames.set(name, pos);
+    } else {
+      // top-level
+      this.raiseUndeclaredPrivateName(name, pos);
+    }
+  }
+
+  raiseUndeclaredPrivateName(name, pos) {
+    this.raise(pos, `Private name #${name} is not defined`);
   }
 
   maybeExportDefined(scope: IScope, name: string) {
@@ -203,6 +294,10 @@ export default class ScopeHandler<IScope: Scope = Scope> {
 
   currentScope(): IScope {
     return this.scopeStack[this.scopeStack.length - 1];
+  }
+
+  currentClassScope(): ClassScope {
+    return this.classScopeStack[this.classScopeStack.length - 1];
   }
 
   // $FlowIgnore
