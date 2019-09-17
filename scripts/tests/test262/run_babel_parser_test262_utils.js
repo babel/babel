@@ -120,6 +120,7 @@ const featuresToPlugins = {
   "export-star-as-namespace-from-module": "exportNamespaceFrom",
   "import.meta": "importMeta",
   "numeric-separator-literal": "numericSeparator",
+  "optional-chaining": "optionalChaining",
 };
 
 function getPlugins(features) {
