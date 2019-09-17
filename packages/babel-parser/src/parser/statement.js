@@ -1499,9 +1499,11 @@ export default class StatementParser extends ExpressionParser {
 
   pushClassProperty(classBody: N.ClassBody, prop: N.ClassProperty) {
     if (
-      !prop.computed &
+      !prop.computed &&
       (prop.key.name === "constructor" || prop.key.value === "constructor")
     ) {
+      // Non-computed field, which is either an identifier named "constructor"
+      // or a string literal named "constructor"
       this.raise(
         prop.key.start,
         "Classes may not have a field named 'constructor'",
