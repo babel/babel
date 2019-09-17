@@ -495,11 +495,7 @@ export default class StatementParser extends ExpressionParser {
     this.state.labels.push(loopLabel);
 
     let awaitAt = -1;
-    if (
-      (this.scope.inAsync ||
-        (!this.scope.inFunction && this.options.allowAwaitOutsideFunction)) &&
-      this.eatContextual("await")
-    ) {
+    if (this.isAwaitAllowed() && this.eatContextual("await")) {
       awaitAt = this.state.lastTokStart;
     }
     this.scope.enter(SCOPE_OTHER);

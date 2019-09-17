@@ -2208,6 +2208,7 @@ export default class ExpressionParser extends LValParser {
   isAwaitAllowed(): boolean {
     if (this.scope.inFunction) return this.scope.inAsync;
     if (this.options.allowAwaitOutsideFunction) return true;
+    if (this.hasPlugin("topLevelAwait")) return this.inModule;
     return false;
   }
 
