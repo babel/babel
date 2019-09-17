@@ -108,6 +108,8 @@ const ignoredFeatures = [
   "well-formed-json-stringify",
 ];
 
+const ignoredTests = ["built-ins/RegExp/", "language/literals/regexp/"];
+
 const featuresToPlugins = {
   BigInt: "bigInt",
   "class-fields-private": "classPrivateProperties",
@@ -152,6 +154,8 @@ exports.getTests = function(testDir) {
   stream.on("data", test => {
     // strip test/
     const fileName = test.file.substr(5);
+
+    if (ignoredTests.some(start => fileName.startsWith(start))) return;
 
     tests.push({
       contents: test.contents,
