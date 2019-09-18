@@ -1,0 +1,4 @@
+{
+  "plugins": ["classPrivateProperties"],
+  "throws": "Private name #priv is not defined (4:19)"
+}

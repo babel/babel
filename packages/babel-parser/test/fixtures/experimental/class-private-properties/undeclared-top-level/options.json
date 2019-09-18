@@ -1,0 +1,4 @@
+{
+  "plugins": ["classPrivateProperties"],
+  "throws": "Unexpected character '#' (1:15)"
+}
