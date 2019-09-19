@@ -993,6 +993,7 @@ export default class Tokenizer extends LocationParser {
     const start = this.state.pos;
     let isFloat = false;
     let isBigInt = false;
+    let isNonOctalDecimal = false;
 
     if (!startsWithDot && this.readInt(10) === null) {
       this.raise(start, "Invalid number");
@@ -1007,9 +1008,10 @@ export default class Tokenizer extends LocationParser {
           "Legacy octal literals are not allowed in strict mode",
         );
       }
-      if (/[89]/.test(this.input.slice(start, this.state.pos))) {
-        octal = false;
-      }
+
+      const number = this.input.slice(start, this.state.pos);
+      if (/[89]/.test(number)) octal = false;
+      if (/^[0-9]*/.test(number)) isNonOctalDecimal = true;
     }
 
     let next = this.input.charCodeAt(this.state.pos);
@@ -1036,7 +1038,9 @@ export default class Tokenizer extends LocationParser {
     if (this.hasPlugin("bigInt")) {
       if (next === charCodes.lowercaseN) {
         // disallow floats and legacy octal syntax, new style octal ("0o") is handled in this.readRadixNumber
-        if (isFloat || octal) this.raise(start, "Invalid BigIntLiteral");
+        if (isFloat || octal || isNonOctalDecimal) {
+          this.raise(start, "Invalid BigIntLiteral");
+        }
         ++this.state.pos;
         isBigInt = true;
       }
