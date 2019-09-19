@@ -31,8 +31,6 @@ export class Scope {
   lexical: string[] = [];
   // A list of lexically-declared FunctionDeclaration names in the current lexical scope
   functions: string[] = [];
-  // A list of private names defined in the current class body
-  privateNames: string[] = [];
 
   constructor(flags: ScopeFlags) {
     this.flags = flags;
@@ -40,10 +38,14 @@ export class Scope {
 }
 
 export class ClassScope {
-  privateNames: string[] = new Set();
+  // A list of private named declared in the current class
+  privateNames: Set<string> = new Set();
 
+  // A list of private getters of setters without their counterpart
   loneAccessors: Map<string, ClassElementTypes> = new Map();
 
+  // A list of private names used before being defined, mapping to
+  // their position.
   undefinedPrivateNames: Map<string, number> = new Map();
 }
 
@@ -227,7 +229,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     }
   }
 
-  raiseUndeclaredPrivateName(name, pos) {
+  raiseUndeclaredPrivateName(name: string, pos: number) {
     this.raise(pos, `Private name #${name} is not defined`);
   }
 
