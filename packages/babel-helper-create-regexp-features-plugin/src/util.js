@@ -8,13 +8,13 @@ export function generateRegexpuOptions(node, features) {
   const { flags, pattern } = node;
   const flagsIncludesU = flags.includes("u");
 
-  if (flagsIncludesU === true) {
-    if (hasFeature(features, FEATURES.unicodeFlag) === false) {
+  if (flagsIncludesU) {
+    if (!hasFeature(features, FEATURES.unicodeFlag)) {
       useUnicodeFlag = true;
     }
     if (
-      hasFeature(features, FEATURES.unicodePropertyEscape) === true &&
-      /\\[pP]{/.test(pattern) === true
+      hasFeature(features, FEATURES.unicodePropertyEscape) &&
+      /\\[pP]{/.test(pattern)
     ) {
       unicodePropertyEscape = true;
     }
@@ -30,10 +30,10 @@ export function generateRegexpuOptions(node, features) {
     namedGroup = true;
   }
   if (
-    namedGroup === false &&
-    unicodePropertyEscape === false &&
-    dotAllFlag === false &&
-    !(flagsIncludesU === true && hasFeature(features, FEATURES.unicodeFlag))
+    !namedGroup &&
+    !unicodePropertyEscape &&
+    !dotAllFlag &&
+    (!flagsIncludesU || useUnicodeFlag)
   ) {
     return null;
   }

@@ -31,15 +31,15 @@ export function createRegExpFeaturePlugin({ name, feature, options = {} }) {
       if (useUnicodeFlag === false) {
         newFeatures = enableFeature(newFeatures, FEATURES.unicodeFlag);
       }
-      if (newFeatures > features) {
+      if (newFeatures !== features) {
         file.set(featuresKey, newFeatures);
       }
 
-      if (runtime === false) {
+      if (!runtime) {
         file.set(runtimeKey, false);
       }
 
-      if (file.has(versionKey) === false || file.get(versionKey) < version) {
+      if (!file.has(versionKey) || file.get(versionKey) < version) {
         file.set(versionKey, version);
       }
     },
@@ -55,7 +55,7 @@ export function createRegExpFeaturePlugin({ name, feature, options = {} }) {
           return;
         }
         const namedCaptureGroups = {};
-        if (regexpuOptions.namedGroup === true) {
+        if (regexpuOptions.namedGroup) {
           regexpuOptions.onNamedGroup = (name, index) => {
             namedCaptureGroups[name] = index;
           };
@@ -63,10 +63,10 @@ export function createRegExpFeaturePlugin({ name, feature, options = {} }) {
         node.pattern = rewritePattern(node.pattern, node.flags, regexpuOptions);
 
         if (
-          regexpuOptions.namedGroup === true &&
+          regexpuOptions.namedGroup &&
           Object.keys(namedCaptureGroups).length > 0 &&
-          runtime === true &&
-          isRegExpTest(path) === false
+          runtime &&
+          !isRegExpTest(path)
         ) {
           path.replaceWith(
             t.callExpression(this.addHelper("wrapRegExp"), [
