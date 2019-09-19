@@ -1050,9 +1050,11 @@ export default class StatementParser extends ExpressionParser {
       node.id = this.parseFunctionId(requireId);
     }
 
+    const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
     const oldInClassProperty = this.state.inClassProperty;
     const oldYieldPos = this.state.yieldPos;
     const oldAwaitPos = this.state.awaitPos;
+    this.state.maybeInArrowParameters = false;
     this.state.inClassProperty = false;
     this.state.yieldPos = 0;
     this.state.awaitPos = 0;
@@ -1084,6 +1086,7 @@ export default class StatementParser extends ExpressionParser {
       this.checkFunctionStatementId(node);
     }
 
+    this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
     this.state.inClassProperty = oldInClassProperty;
     this.state.yieldPos = oldYieldPos;
     this.state.awaitPos = oldAwaitPos;

@@ -490,11 +490,7 @@ export default class ExpressionParser extends LValParser {
   // Parse unary operators, both prefix and postfix.
 
   parseMaybeUnary(refShorthandDefaultPos: ?Pos): N.Expression {
-    if (
-      this.isContextual("await") &&
-      (this.scope.inAsync ||
-        (!this.scope.inFunction && this.options.allowAwaitOutsideFunction))
-    ) {
+    if (this.isContextual("await") && this.isAwaitAllowed()) {
       return this.parseAwait();
     } else if (this.state.type.prefix) {
       const node = this.startNode();
@@ -716,8 +712,33 @@ export default class ExpressionParser extends LValParser {
 
         // We keep the old value if it isn't null, for cases like
         //   (x = async(yield)) => {}
+        //
+        // Hi developer of the future :) If you are implementing generator
+        // arrow functions, please read the note below about "await" and
+        // verify if the same logic is needed for yield.
         this.state.yieldPos = oldYieldPos || this.state.yieldPos;
-        this.state.awaitPos = oldAwaitPos || this.state.awaitPos;
+
+        // Await is trickier than yield. When parsing a possible arrow function
+        // (e.g. something starting with `async(`) we don't know if its possible
+        // parameters will actually be inside an async arrow function or if it is
+        // a normal call expression.
+        // If it ended up being a call expression, if we are in a context where
+        // await expression are disallowed (and thus "await" is an identifier)
+        // we must be careful not to leak this.state.awaitPos to an even outer
+        // context, where "await" could not be an identifier.
+        // For example, this code is valid because "await" isn't directly inside
+        // an async function:
+        //
+        //     async function a() {
+        //       function b(param = async (await)) {
+        //       }
+        //     }
+        //
+        if (this.isAwaitAllowed() || oldMaybeInArrowParameters) {
+          this.state.awaitPos = oldAwaitPos || this.state.awaitPos;
+        } else {
+          this.state.awaitPos = oldAwaitPos;
+        }
       }
 
       this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
@@ -2117,11 +2138,18 @@ export default class ExpressionParser extends LValParser {
       );
     }
 
-    if (this.scope.inAsync && word === "await") {
-      this.raise(
-        startLoc,
-        "Can not use 'await' as identifier inside an async function",
-      );
+    if (word === "await") {
+      if (this.scope.inAsync) {
+        this.raise(
+          startLoc,
+          "Can not use 'await' as identifier inside an async function",
+        );
+      } else if (
+        !this.state.awaitPos &&
+        (this.state.maybeInArrowParameters || this.isAwaitAllowed())
+      ) {
+        this.state.awaitPos = this.state.start;
+      }
     }
 
     if (this.state.inClassProperty && word === "arguments") {
@@ -2149,6 +2177,12 @@ export default class ExpressionParser extends LValParser {
       }
       this.raise(startLoc, `Unexpected reserved word '${word}'`);
     }
+  }
+
+  isAwaitAllowed(): boolean {
+    if (this.scope.inFunction) return this.scope.inAsync;
+    if (this.options.allowAwaitOutsideFunction) return true;
+    return false;
   }
 
   // Parses await expression inside async function.
