@@ -897,16 +897,18 @@ export default class Tokenizer extends LocationParser {
 
     let total = 0;
 
-    // Called from readHexChar
-    if (radix === 16) {
-      const unicode = this.input.slice(this.state.pos, this.state.pos + len);
+    if (this.hasPlugin("numericSeparator")) {
+      // Called from readHexChar
+      if (radix === 16) {
+        const unicode = this.input.slice(this.state.pos, this.state.pos + len);
 
-      if (unicode.includes("_")) {
-        const numSeparatorPos = this.input.indexOf("_");
-        this.raise(
-          numSeparatorPos,
-          "Numeric separators are not allowed inside unicode escape sequences",
-        );
+        if (unicode.includes("_")) {
+          const numSeparatorPos = this.input.indexOf("_");
+          this.raise(
+            numSeparatorPos,
+            "Numeric separators are not allowed inside unicode escape sequences",
+          );
+        }
       }
     }
 
