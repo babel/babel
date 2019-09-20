@@ -1179,9 +1179,7 @@ export default class ExpressionParser extends LValParser {
     if (node.property.name !== propertyName || containsEsc) {
       this.raise(
         node.property.start,
-        `The only valid meta property for ${meta.name} is ${
-          meta.name
-        }.${propertyName}`,
+        `The only valid meta property for ${meta.name} is ${meta.name}.${propertyName}`,
       );
     }
 
