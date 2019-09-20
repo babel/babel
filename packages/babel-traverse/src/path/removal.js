@@ -1,6 +1,7 @@
 // This file contains methods responsible for removing a node.
 
 import { hooks } from "./lib/removal-hooks";
+import { REMOVED, SHOULD_SKIP } from "./index";
 
 export function remove() {
   this._assertUnremoved();
@@ -39,8 +40,7 @@ export function _remove() {
 }
 
 export function _markRemoved() {
-  this.shouldSkip = true;
-  this.removed = true;
+  this._traverseFlags |= SHOULD_SKIP | REMOVED;
   this.node = null;
 }
 

@@ -1,6 +1,7 @@
 // This file contains methods responsible for maintaining a TraversalContext.
 
 import traverse from "../index";
+import { SHOULD_SKIP, SHOULD_STOP } from "./index";
 
 export function call(key): boolean {
   const opts = this.opts;
@@ -43,7 +44,7 @@ export function _call(fns?: Array<Function>): boolean {
     // node has been replaced, it will have been requeued
     if (this.node !== node) return true;
 
-    if (this.shouldStop || this.shouldSkip || this.removed) return true;
+    if (this._traverseFlags > 0) return true;
   }
 
   return false;
@@ -96,8 +97,7 @@ export function skipKey(key) {
 }
 
 export function stop() {
-  this.shouldStop = true;
-  this.shouldSkip = true;
+  this._traverseFlags |= SHOULD_SKIP | SHOULD_STOP;
 }
 
 export function setScope() {
@@ -117,10 +117,8 @@ export function setScope() {
 }
 
 export function setContext(context) {
-  this.shouldSkip = false;
-  this.shouldStop = false;
-  this.removed = false;
   this.skipKeys = {};
+  this._traverseFlags = 0;
 
   if (context) {
     this.context = context;

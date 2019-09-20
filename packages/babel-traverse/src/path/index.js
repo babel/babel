@@ -23,15 +23,18 @@ import * as NodePath_comments from "./comments";
 
 const debug = buildDebug("babel");
 
+export const REMOVED = 1 << 0;
+export const SHOULD_STOP = 1 << 1;
+export const SHOULD_SKIP = 1 << 2;
+
 export default class NodePath {
   constructor(hub: HubInterface, parent: Object) {
     this.parent = parent;
     this.hub = hub;
     this.contexts = [];
     this.data = Object.create(null);
-    this.shouldSkip = false;
-    this.shouldStop = false;
-    this.removed = false;
+    // shouldSkip = false && shouldStop = false && removed = false
+    this._traverseFlags = 0;
     this.state = null;
     this.opts = null;
     this.skipKeys = null;
@@ -55,6 +58,7 @@ export default class NodePath {
   removed: boolean;
   state: any;
   opts: ?Object;
+  _traverseFlags: number;
   skipKeys: ?Object;
   parentPath: ?NodePath;
   context: TraversalContext;
@@ -155,6 +159,41 @@ export default class NodePath {
 
   get parentKey() {
     return this.listKey || this.key;
+  }
+
+  get shouldSkip() {
+    return !!(this._traverseFlags & SHOULD_SKIP);
+  }
+
+  set shouldSkip(v) {
+    if (v) {
+      this._traverseFlags |= SHOULD_SKIP;
+    } else {
+      this._traverseFlags &= ~SHOULD_SKIP;
+    }
+  }
+
+  get shouldStop() {
+    return !!(this._traverseFlags & SHOULD_STOP);
+  }
+
+  set shouldStop(v) {
+    if (v) {
+      this._traverseFlags |= SHOULD_STOP;
+    } else {
+      this._traverseFlags &= ~SHOULD_STOP;
+    }
+  }
+
+  get removed() {
+    return !!(this._traverseFlags & REMOVED);
+  }
+  set removed(v) {
+    if (v) {
+      this._traverseFlags |= REMOVED;
+    } else {
+      this._traverseFlags &= ~REMOVED;
+    }
   }
 }
 
