@@ -659,10 +659,7 @@ export default class ExpressionParser extends LValParser {
         node.property.type === "PrivateName" &&
         node.object.type === "Super"
       ) {
-        this.raise(
-          startPos,
-          "super is not allowed to be called on a private identifier of a class",
-        );
+        this.raise(startPos, "Private fields can't be accessed on super");
       }
       if (state.optionalChainMember) {
         node.optional = false;

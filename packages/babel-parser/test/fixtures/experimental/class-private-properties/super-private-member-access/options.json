@@ -2,5 +2,5 @@
   "plugins": [
     "classPrivateProperties"
   ],
-  "throws": "super is not allowed to be called on a private identifier of a class (5:4)"
+  "throws": "Private fields can't be accessed on super (5:4)"
 }
