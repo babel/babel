@@ -655,6 +655,15 @@ export default class ExpressionParser extends LValParser {
       node.object = base;
       node.property = this.parseMaybePrivateName();
       node.computed = false;
+      if (
+        node.property.type === "PrivateName" &&
+        node.object.type === "Super"
+      ) {
+        this.raise(
+          startPos,
+          "super is not allowed to be called on a private identifier of a class",
+        );
+      }
       if (state.optionalChainMember) {
         node.optional = false;
         return this.finishNode(node, "OptionalMemberExpression");
@@ -1170,7 +1179,9 @@ export default class ExpressionParser extends LValParser {
     if (node.property.name !== propertyName || containsEsc) {
       this.raise(
         node.property.start,
-        `The only valid meta property for ${meta.name} is ${meta.name}.${propertyName}`,
+        `The only valid meta property for ${meta.name} is ${
+          meta.name
+        }.${propertyName}`,
       );
     }
 

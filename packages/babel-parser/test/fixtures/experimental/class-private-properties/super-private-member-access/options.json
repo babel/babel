@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "classPrivateProperties"
+  ],
+  "throws": "super is not allowed to be called on a private identifier of a class (5:4)"
+}
