@@ -216,7 +216,6 @@ export function pushContext(context) {
 
 export function setup(parentPath, container, listKey, key) {
   this.listKey = listKey;
-  this.parentKey = listKey || key;
   this.container = container;
 
   this.parentPath = parentPath || this.parentPath;
