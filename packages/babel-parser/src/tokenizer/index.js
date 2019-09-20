@@ -1002,15 +1002,16 @@ export default class Tokenizer extends LocationParser {
       this.state.pos - start >= 2 &&
       this.input.charCodeAt(start) === charCodes.digit0;
     if (octal) {
-      const number = this.input.slice(start, this.state.pos);
       if (this.state.strict) {
         this.raise(
           start,
           "Legacy octal literals are not allowed in strict mode",
         );
       }
-      if (/[89]/.test(number)) octal = false;
-      if (/^[0-9]*$/.test(number)) isNonOctalDecimal = true;
+      if (/[89]/.test(this.input.slice(start, this.state.pos))) {
+        octal = false;
+        isNonOctalDecimal = true;
+      }
     }
 
     let next = this.input.charCodeAt(this.state.pos);
