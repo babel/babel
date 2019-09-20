@@ -1015,6 +1015,12 @@ export default class Tokenizer extends LocationParser {
     }
 
     let next = this.input.charCodeAt(this.state.pos);
+    if (next === charCodes.underscore && !octal) {
+      this.raise(
+        this.state.pos,
+        "Numeric separator can not be used after leading 0",
+      );
+    }
     if (next === charCodes.dot && !octal) {
       ++this.state.pos;
       this.readInt(10);
