@@ -11,7 +11,7 @@ If you are making a change that should have a docs update: submit another PR to 
 
 | Q                        | A <!--(Can use an emoji 👍) -->
 | ------------------------ | ---
-| Fixed Issues?            | `Fixes #1, Fixes #2` <!-- remove the (`) quotes to link the issues -->
+| Fixed Issues?            | `Fixes #1, Fixes #2` <!-- remove the (`) quotes and write "Fixes" before the number to link the issues -->
 | Patch: Bug Fix?          |
 | Major: Breaking Change?  |
 | Minor: New Feature?      |
