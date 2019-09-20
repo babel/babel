@@ -39,7 +39,6 @@ export default class NodePath {
     this.context = null;
     this.container = null;
     this.listKey = null;
-    this.inList = false;
     this.parentKey = null;
     this.key = null;
     this.node = null;
@@ -62,7 +61,6 @@ export default class NodePath {
   context: TraversalContext;
   container: ?Object | Array<Object>;
   listKey: ?string;
-  inList: boolean;
   parentKey: ?string;
   key: ?string;
   node: ?Object;
@@ -151,6 +149,10 @@ export default class NodePath {
 
   toString() {
     return generator(this.node).code;
+  }
+
+  get inList() {
+    return !!this.listKey;
   }
 }
 
