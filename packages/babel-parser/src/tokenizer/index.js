@@ -1035,18 +1035,6 @@ export default class Tokenizer extends LocationParser {
       next = this.input.charCodeAt(this.state.pos);
     }
 
-    if (this.hasPlugin("bigInt")) {
-      if (next === charCodes.lowercaseN) {
-        // disallow floats, legacy octal syntax and non octal decimals
-        // new style octal ("0o") is handled in this.readRadixNumber
-        if (isFloat || octal || isNonOctalDecimalInt) {
-          this.raise(start, "Invalid BigIntLiteral");
-        }
-        ++this.state.pos;
-        isBigInt = true;
-      }
-    }
-
     // disallow numeric separators in non octal decimals
     if (this.hasPlugin("numericSeparator") && isNonOctalDecimalInt) {
       const underscorePos = this.input
@@ -1057,6 +1045,18 @@ export default class Tokenizer extends LocationParser {
           underscorePos,
           "Numeric separator can not be used after leading 0",
         );
+      }
+    }
+
+    if (this.hasPlugin("bigInt")) {
+      if (next === charCodes.lowercaseN) {
+        // disallow floats, legacy octal syntax and non octal decimals
+        // new style octal ("0o") is handled in this.readRadixNumber
+        if (isFloat || octal || isNonOctalDecimalInt) {
+          this.raise(start, "Invalid BigIntLiteral");
+        }
+        ++this.state.pos;
+        isBigInt = true;
       }
     }
 
