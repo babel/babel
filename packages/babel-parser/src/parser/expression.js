@@ -19,6 +19,7 @@
 // [opp]: http://en.wikipedia.org/wiki/Operator-precedence_parser
 
 import { types as tt, type TokenType } from "../tokenizer/types";
+import { types as tc } from "../tokenizer/context";
 import * as N from "../types";
 import LValParser from "./lval";
 import {
@@ -949,6 +950,18 @@ export default class ExpressionParser extends LValParser {
           this.match(tt._function) &&
           !this.canInsertSemicolon()
         ) {
+          if (this.state.context.pop() !== tc.functionStatement) {
+            // Since "async" is an identifier and normally identifiers
+            // can't be followed by expression, the tokenizer assumes
+            // that "function" starts a statement.
+            // Fixing it in the tokenizer would mean traking not only the
+            // previous token ("async"), but also the one before to know
+            // if its beforeExpr value.
+            // It's easier and more efficient to adjust the context here.
+            throw new Error("Internal error");
+          }
+          this.state.context.push(tc.functionExpression);
+
           this.next();
           return this.parseFunction(node, undefined, true);
         } else if (
