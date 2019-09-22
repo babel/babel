@@ -93,6 +93,9 @@ export function skip() {
 }
 
 export function skipKey(key) {
+  if (this.skipKeys == null) {
+    this.skipKeys = {};
+  }
   this.skipKeys[key] = true;
 }
 
@@ -117,7 +120,9 @@ export function setScope() {
 }
 
 export function setContext(context) {
-  this.skipKeys = {};
+  if (this.skipKeys != null) {
+    this.skipKeys = {};
+  }
   this._traverseFlags = 0;
 
   if (context) {
