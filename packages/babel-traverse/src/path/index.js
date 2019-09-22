@@ -32,7 +32,7 @@ export default class NodePath {
     this.parent = parent;
     this.hub = hub;
     this.contexts = [];
-    this.data = Object.create(null);
+    this.data = null;
     // shouldSkip = false && shouldStop = false && removed = false
     this._traverseFlags = 0;
     this.state = null;
@@ -111,10 +111,16 @@ export default class NodePath {
   }
 
   setData(key: string, val: any): any {
+    if (this.data == null) {
+      this.data = Object.create(null);
+    }
     return (this.data[key] = val);
   }
 
   getData(key: string, def?: any): any {
+    if (this.data == null) {
+      this.data = Object.create(null);
+    }
     let val = this.data[key];
     if (val === undefined && def !== undefined) val = this.data[key] = def;
     return val;
