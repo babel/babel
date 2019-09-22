@@ -4,8 +4,10 @@ import * as t from "@babel/types";
 import NodePath from "./index";
 
 /**
- * Call the provided `callback` with the `NodePath`s of all the parents.
- * When the `callback` returns a truthy value, we return that node path.
+ * Starting at the parent path of the current `NodePath` and going up the
+ * tree, return the first `NodePath` that causes the provided `callback`
+ * to return a truthy value, or `null` if the `callback` never returns a
+ * truthy value.
  */
 
 export function findParent(callback): ?NodePath {
@@ -18,7 +20,8 @@ export function findParent(callback): ?NodePath {
 
 /**
  * Starting at current `NodePath` and going up the tree, return the first
- * `NodePath` that causes the provided `callback` to return a truthy value.
+ * `NodePath` that causes the provided `callback` to return a truthy value,
+ * or `null` if the `callback` never returns a truthy value.
  */
 
 export function find(callback): ?NodePath {
