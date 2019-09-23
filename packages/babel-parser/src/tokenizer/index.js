@@ -880,7 +880,11 @@ export default class Tokenizer extends LocationParser {
   // were read, the integer value otherwise. When `len` is given, this
   // will return `null` unless the integer has exactly `len` digits.
 
-  readInt(radix: number, len?: number): number | null {
+  readInt(
+    radix: number,
+    len?: number,
+    allowNumSeparator: boolean = false,
+  ): number | null {
     const start = this.state.pos;
     const forbiddenSiblings =
       radix === 16
@@ -896,21 +900,6 @@ export default class Tokenizer extends LocationParser {
         : allowedNumericSeparatorSiblings.bin;
 
     let total = 0;
-
-    if (this.hasPlugin("numericSeparator")) {
-      // Called from readHexChar
-      if (radix === 16) {
-        const unicode = this.input.slice(this.state.pos, this.state.pos + len);
-
-        if (unicode.includes("_")) {
-          const numSeparatorPos = this.input.indexOf("_");
-          this.raise(
-            numSeparatorPos,
-            "Numeric separators are not allowed inside unicode escape sequences",
-          );
-        }
-      }
-    }
 
     for (let i = 0, e = len == null ? Infinity : len; i < e; ++i) {
       const code = this.input.charCodeAt(this.state.pos);
@@ -930,6 +919,13 @@ export default class Tokenizer extends LocationParser {
             Number.isNaN(next)
           ) {
             this.raise(this.state.pos, "Invalid or unexpected token");
+          }
+
+          if (allowNumSeparator) {
+            this.raise(
+              this.state.pos,
+              "Numeric separators are not allowed inside unicode escape sequences",
+            );
           }
 
           // Ignore this _ character
@@ -1073,6 +1069,7 @@ export default class Tokenizer extends LocationParser {
       code = this.readHexChar(
         this.input.indexOf("}", this.state.pos) - this.state.pos,
         throwOnInvalid,
+        true,
       );
       ++this.state.pos;
       if (code === null) {
@@ -1087,7 +1084,7 @@ export default class Tokenizer extends LocationParser {
         }
       }
     } else {
-      code = this.readHexChar(4, throwOnInvalid);
+      code = this.readHexChar(4, throwOnInvalid, true);
     }
     return code;
   }
@@ -1265,9 +1262,13 @@ export default class Tokenizer extends LocationParser {
 
   // Used to read character escape sequences ('\x', '\u').
 
-  readHexChar(len: number, throwOnInvalid: boolean): number | null {
+  readHexChar(
+    len: number,
+    throwOnInvalid: boolean,
+    allowNumSeparator: boolean = false,
+  ): number | null {
     const codePos = this.state.pos;
-    const n = this.readInt(16, len);
+    const n = this.readInt(16, len, allowNumSeparator);
     if (n === null) {
       if (throwOnInvalid) {
         this.raise(codePos, "Bad character escape sequence");
