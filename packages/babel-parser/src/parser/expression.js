@@ -1898,8 +1898,6 @@ export default class ExpressionParser extends LValParser {
     isMethod?: boolean = false,
   ): void {
     const isExpression = allowExpression && !this.match(tt.braceL);
-    const oldStrict = this.state.strict;
-    let useStrict = false;
 
     const oldInParameters = this.state.inParameters;
     this.state.inParameters = false;
@@ -1909,58 +1907,37 @@ export default class ExpressionParser extends LValParser {
       this.checkParams(node, false, allowExpression);
     } else {
       const nonSimple = !this.isSimpleParamList(node.params);
-      if (!oldStrict || nonSimple) {
-        useStrict = this.strictDirective(this.state.end);
-        // If this is a strict mode function, verify that argument names
-        // are not repeated, and it does not try to bind the words `eval`
-        // or `arguments`.
-        if (useStrict && nonSimple) {
-          // This logic is here to align the error location with the estree plugin
-          const errorPos =
-            // $FlowIgnore
-            (node.kind === "method" || node.kind === "constructor") &&
-            // $FlowIgnore
-            !!node.key
-              ? node.key.end
-              : node.start;
-          this.raise(
-            errorPos,
-            "Illegal 'use strict' directive in function with non-simple parameter list",
-          );
-        }
-      }
       // Start a new scope with regard to labels
       // flag (restore them to their old value afterwards).
       const oldLabels = this.state.labels;
       this.state.labels = [];
-      if (useStrict) this.state.strict = true;
-      node.body = this.parseBlock(true, false, () => {
-        if (this.state.strict && nonSimple) {
-          // This logic is here to align the error location with the estree plugin
-          const errorPos =
-            // $FlowIgnore
-            (node.kind === "method" || node.kind === "constructor") &&
-            // $FlowIgnore
-            !!node.key
-              ? node.key.end
-              : node.start;
-          this.raise(
-            errorPos,
-            "Illegal 'use strict' directive in function with non-simple parameter list",
+      node.body = this.parseBlock(
+        true,
+        false,
+        (hasStrictDirective: boolean) => {
+          if (hasStrictDirective && nonSimple) {
+            // This logic is here to align the error location with the estree plugin
+            const errorPos =
+              // $FlowIgnore
+              (node.kind === "method" || node.kind === "constructor") &&
+              // $FlowIgnore
+              !!node.key
+                ? node.key.end
+                : node.start;
+            this.raise(
+              errorPos,
+              "Illegal 'use strict' directive in function with non-simple parameter list",
+            );
+          }
+          // Add the params to varDeclaredNames to ensure that an error is thrown
+          // if a let/const declaration in the function clashes with one of the params.
+          this.checkParams(
+            node,
+            !this.state.strict && !allowExpression && !isMethod && !nonSimple,
+            allowExpression,
           );
-        }
-        // Add the params to varDeclaredNames to ensure that an error is thrown
-        // if a let/const declaration in the function clashes with one of the params.
-        this.checkParams(
-          node,
-          !oldStrict &&
-            !this.state.strict &&
-            !allowExpression &&
-            !isMethod &&
-            !nonSimple,
-          allowExpression,
-        );
-      });
+        },
+      );
       this.state.labels = oldLabels;
     }
 
@@ -1969,7 +1946,6 @@ export default class ExpressionParser extends LValParser {
     if (this.state.strict && node.id) {
       this.checkLVal(node.id, BIND_OUTSIDE, undefined, "function name");
     }
-    this.state.strict = oldStrict;
   }
 
   isSimpleParamList(

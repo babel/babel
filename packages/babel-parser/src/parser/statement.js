@@ -815,12 +815,15 @@ export default class StatementParser extends ExpressionParser {
     if (createNewLexicalScope) {
       this.scope.enter(SCOPE_OTHER);
     }
-    this.parseBlockBody(node, allowDirectives, false, tt.braceR);
+    this.parseBlockBody(
+      node,
+      allowDirectives,
+      false,
+      tt.braceR,
+      afterDirectivesParse,
+    );
     if (createNewLexicalScope) {
       this.scope.exit();
-    }
-    if (afterDirectivesParse) {
-      afterDirectivesParse.call();
     }
     return this.finishNode(node, "BlockStatement");
   }
@@ -838,6 +841,7 @@ export default class StatementParser extends ExpressionParser {
     allowDirectives: ?boolean,
     topLevel: boolean,
     end: TokenType,
+    afterDirectivesParse?: Function,
   ): void {
     const body = (node.body = []);
     const directives = (node.directives = []);
@@ -846,6 +850,7 @@ export default class StatementParser extends ExpressionParser {
       allowDirectives ? directives : undefined,
       topLevel,
       end,
+      afterDirectivesParse,
     );
   }
 
@@ -855,8 +860,10 @@ export default class StatementParser extends ExpressionParser {
     directives: ?(N.Directive[]),
     topLevel: boolean,
     end: TokenType,
+    afterDirectivesParse?: Function,
   ): void {
     let parsedNonDirective = false;
+    let hasStrictDirective = false;
     let oldStrict;
     let octalPosition;
 
@@ -872,6 +879,7 @@ export default class StatementParser extends ExpressionParser {
         directives.push(directive);
 
         if (oldStrict === undefined && directive.value.value === "use strict") {
+          hasStrictDirective = true;
           oldStrict = this.state.strict;
           this.setStrict(true);
 
@@ -884,7 +892,13 @@ export default class StatementParser extends ExpressionParser {
       }
 
       parsedNonDirective = true;
+      if (afterDirectivesParse) {
+        afterDirectivesParse(hasStrictDirective);
+      }
       body.push(stmt);
+    }
+    if (!parsedNonDirective && afterDirectivesParse) {
+      afterDirectivesParse(hasStrictDirective);
     }
 
     if (oldStrict === false) {
