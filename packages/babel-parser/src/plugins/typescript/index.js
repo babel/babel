@@ -2021,12 +2021,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseClassPrivateProperty(
       node: N.ClassPrivateProperty,
     ): N.ClassPrivateProperty {
+      // $FlowIgnore
       if (node.abstract) {
         this.raise(
           node.start,
           "Private elements cannot have the 'abstract' modifier.",
         );
       }
+
+      // $FlowIgnore
       if (node.accessibility) {
         this.raise(
           node.start,
