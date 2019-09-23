@@ -1069,7 +1069,6 @@ export default class Tokenizer extends LocationParser {
       code = this.readHexChar(
         this.input.indexOf("}", this.state.pos) - this.state.pos,
         throwOnInvalid,
-        false,
       );
       ++this.state.pos;
       if (code === null) {
@@ -1084,7 +1083,7 @@ export default class Tokenizer extends LocationParser {
         }
       }
     } else {
-      code = this.readHexChar(4, throwOnInvalid, false);
+      code = this.readHexChar(4, throwOnInvalid);
     }
     return code;
   }
@@ -1196,7 +1195,7 @@ export default class Tokenizer extends LocationParser {
       case charCodes.lowercaseR:
         return "\r";
       case charCodes.lowercaseX: {
-        const code = this.readHexChar(2, throwOnInvalid, false);
+        const code = this.readHexChar(2, throwOnInvalid);
         return code === null ? null : String.fromCharCode(code);
       }
       case charCodes.lowercaseU: {
@@ -1262,13 +1261,9 @@ export default class Tokenizer extends LocationParser {
 
   // Used to read character escape sequences ('\x', '\u').
 
-  readHexChar(
-    len: number,
-    throwOnInvalid: boolean,
-    allowNumSeparator: boolean = true,
-  ): number | null {
+  readHexChar(len: number, throwOnInvalid: boolean): number | null {
     const codePos = this.state.pos;
-    const n = this.readInt(16, len, allowNumSeparator);
+    const n = this.readInt(16, len, false);
     if (n === null) {
       if (throwOnInvalid) {
         this.raise(codePos, "Bad character escape sequence");
