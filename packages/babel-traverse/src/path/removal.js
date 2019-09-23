@@ -40,6 +40,7 @@ export function _remove() {
 }
 
 export function _markRemoved() {
+  // this.shouldSkip = true; this.removed = true;
   this._traverseFlags |= SHOULD_SKIP | REMOVED;
   this.node = null;
 }

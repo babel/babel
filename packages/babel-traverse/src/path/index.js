@@ -33,7 +33,7 @@ export default class NodePath {
     this.hub = hub;
     this.contexts = [];
     this.data = null;
-    // shouldSkip = false && shouldStop = false && removed = false
+    // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
     this._traverseFlags = 0;
     this.state = null;
     this.opts = null;

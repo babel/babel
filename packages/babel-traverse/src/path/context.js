@@ -44,6 +44,7 @@ export function _call(fns?: Array<Function>): boolean {
     // node has been replaced, it will have been requeued
     if (this.node !== node) return true;
 
+    // this.shouldSkip || this.shouldStop || this.removed
     if (this._traverseFlags > 0) return true;
   }
 
@@ -100,6 +101,7 @@ export function skipKey(key) {
 }
 
 export function stop() {
+  // this.shouldSkip = true; this.shouldStop = true;
   this._traverseFlags |= SHOULD_SKIP | SHOULD_STOP;
 }
 
@@ -123,6 +125,7 @@ export function setContext(context) {
   if (this.skipKeys != null) {
     this.skipKeys = {};
   }
+  // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
   this._traverseFlags = 0;
 
   if (context) {
