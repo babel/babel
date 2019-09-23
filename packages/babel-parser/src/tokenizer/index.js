@@ -1042,7 +1042,7 @@ export default class Tokenizer extends LocationParser {
         .indexOf("_");
       if (underscorePos > 0) {
         this.raise(
-          underscorePos,
+          underscorePos + start,
           "Numeric separator can not be used after leading 0",
         );
       }
