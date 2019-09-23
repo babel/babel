@@ -880,7 +880,11 @@ export default class Tokenizer extends LocationParser {
   // were read, the integer value otherwise. When `len` is given, this
   // will return `null` unless the integer has exactly `len` digits.
 
-  readInt(radix: number, len?: number): number | null {
+  readInt(
+    radix: number,
+    len?: number,
+    allowNumSeparator: boolean = true,
+  ): number | null {
     const start = this.state.pos;
     const forbiddenSiblings =
       radix === 16
@@ -915,6 +919,13 @@ export default class Tokenizer extends LocationParser {
             Number.isNaN(next)
           ) {
             this.raise(this.state.pos, "Invalid or unexpected token");
+          }
+
+          if (!allowNumSeparator) {
+            this.raise(
+              this.state.pos,
+              "Numeric separators are not allowed inside unicode escape sequences or hex escape sequences",
+            );
           }
 
           // Ignore this _ character
@@ -1252,7 +1263,7 @@ export default class Tokenizer extends LocationParser {
 
   readHexChar(len: number, throwOnInvalid: boolean): number | null {
     const codePos = this.state.pos;
-    const n = this.readInt(16, len);
+    const n = this.readInt(16, len, false);
     if (n === null) {
       if (throwOnInvalid) {
         this.raise(codePos, "Bad character escape sequence");
