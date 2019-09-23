@@ -1,1 +1,1 @@
-{ "throws": "Numeric separators are not allowed inside unicode escape sequences (1:5)" }
+{ "throws": "Numeric separators are not allowed inside unicode escape sequences or hex escape sequences (1:5)" }

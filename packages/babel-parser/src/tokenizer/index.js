@@ -924,7 +924,7 @@ export default class Tokenizer extends LocationParser {
           if (!allowNumSeparator) {
             this.raise(
               this.state.pos,
-              "Numeric separators are not allowed inside unicode escape sequences",
+              "Numeric separators are not allowed inside unicode escape sequences or hex escape sequences",
             );
           }
 
@@ -1196,7 +1196,7 @@ export default class Tokenizer extends LocationParser {
       case charCodes.lowercaseR:
         return "\r";
       case charCodes.lowercaseX: {
-        const code = this.readHexChar(2, throwOnInvalid);
+        const code = this.readHexChar(2, throwOnInvalid, false);
         return code === null ? null : String.fromCharCode(code);
       }
       case charCodes.lowercaseU: {
