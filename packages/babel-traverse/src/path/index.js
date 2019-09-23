@@ -46,7 +46,6 @@ export default class NodePath {
     this.node = null;
     this.scope = null;
     this.type = null;
-    this.typeAnnotation = null;
   }
 
   parent: Object;
@@ -68,7 +67,6 @@ export default class NodePath {
   node: ?Object;
   scope: Scope;
   type: ?string;
-  typeAnnotation: ?Object;
 
   static get({ hub, parentPath, parent, container, listKey, key }): NodePath {
     if (!hub && parentPath) {
