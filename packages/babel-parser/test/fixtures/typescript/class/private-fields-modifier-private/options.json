@@ -1,0 +1,3 @@
+{
+  "throws": "Private elements cannot have an accessibility modifier ('private') (2:2)"
+}
