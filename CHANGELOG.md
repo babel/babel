@@ -17,6 +17,17 @@ See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.6.2 (2019-09-23)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#10472](https://github.com/babel/babel/pull/10472) added check to disallow super.private variable access and test case added ([@vivek12345](https://github.com/vivek12345))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#10467](https://github.com/babel/babel/pull/10467) [parser] Invalid NonOctal Decimal ([@gonzarodriguezt](https://github.com/gonzarodriguezt))
+  * [#10468](https://github.com/babel/babel/pull/10468) [parser] Disallow numeric separator in unicode scape sequences ([@ivandevp](https://github.com/ivandevp))
+  * [#10445](https://github.com/babel/babel/pull/10445) Leave trailing comments after handling a possible trailing comma ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 
 ## v7.6.1 (2019-09-06)
 
