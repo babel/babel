@@ -883,7 +883,7 @@ export default class Tokenizer extends LocationParser {
   readInt(
     radix: number,
     len?: number,
-    allowNumSeparator: boolean = false,
+    allowNumSeparator: boolean = true,
   ): number | null {
     const start = this.state.pos;
     const forbiddenSiblings =
@@ -921,7 +921,7 @@ export default class Tokenizer extends LocationParser {
             this.raise(this.state.pos, "Invalid or unexpected token");
           }
 
-          if (allowNumSeparator) {
+          if (!allowNumSeparator) {
             this.raise(
               this.state.pos,
               "Numeric separators are not allowed inside unicode escape sequences",
@@ -1069,7 +1069,7 @@ export default class Tokenizer extends LocationParser {
       code = this.readHexChar(
         this.input.indexOf("}", this.state.pos) - this.state.pos,
         throwOnInvalid,
-        true,
+        false,
       );
       ++this.state.pos;
       if (code === null) {
@@ -1084,7 +1084,7 @@ export default class Tokenizer extends LocationParser {
         }
       }
     } else {
-      code = this.readHexChar(4, throwOnInvalid, true);
+      code = this.readHexChar(4, throwOnInvalid, false);
     }
     return code;
   }
@@ -1265,7 +1265,7 @@ export default class Tokenizer extends LocationParser {
   readHexChar(
     len: number,
     throwOnInvalid: boolean,
-    allowNumSeparator: boolean = false,
+    allowNumSeparator: boolean = true,
   ): number | null {
     const codePos = this.state.pos;
     const n = this.readInt(16, len, allowNumSeparator);
