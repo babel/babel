@@ -993,6 +993,7 @@ export default class Tokenizer extends LocationParser {
     const start = this.state.pos;
     let isFloat = false;
     let isBigInt = false;
+    let isNonOctalDecimalInt = false;
 
     if (!startsWithDot && this.readInt(10) === null) {
       this.raise(start, "Invalid number");
@@ -1009,6 +1010,7 @@ export default class Tokenizer extends LocationParser {
       }
       if (/[89]/.test(this.input.slice(start, this.state.pos))) {
         octal = false;
+        isNonOctalDecimalInt = true;
       }
     }
 
@@ -1033,10 +1035,26 @@ export default class Tokenizer extends LocationParser {
       next = this.input.charCodeAt(this.state.pos);
     }
 
+    // disallow numeric separators in non octal decimals
+    if (this.hasPlugin("numericSeparator") && isNonOctalDecimalInt) {
+      const underscorePos = this.input
+        .slice(start, this.state.pos)
+        .indexOf("_");
+      if (underscorePos > 0) {
+        this.raise(
+          underscorePos + start,
+          "Numeric separator can not be used after leading 0",
+        );
+      }
+    }
+
     if (this.hasPlugin("bigInt")) {
       if (next === charCodes.lowercaseN) {
-        // disallow floats and legacy octal syntax, new style octal ("0o") is handled in this.readRadixNumber
-        if (isFloat || octal) this.raise(start, "Invalid BigIntLiteral");
+        // disallow floats, legacy octal syntax and non octal decimals
+        // new style octal ("0o") is handled in this.readRadixNumber
+        if (isFloat || octal || isNonOctalDecimalInt) {
+          this.raise(start, "Invalid BigIntLiteral");
+        }
         ++this.state.pos;
         isBigInt = true;
       }
