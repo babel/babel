@@ -19,7 +19,6 @@ class_properties/migrated_0021.js
 class_properties/migrated_0026.js
 decorators/migrated_0003.js
 private_class_properties/multiple.js
-private_class_properties/super.js
 private_class_properties/getter_and_field.js
 private_class_properties/getter_duplicate.js
 private_class_properties/setter_and_field.js
