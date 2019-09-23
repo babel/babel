@@ -21,13 +21,42 @@ See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0
 
 #### :eyeglasses: Spec Compliance
 * `babel-parser`
-  * [#10472](https://github.com/babel/babel/pull/10472) added check to disallow super.private variable access and test case added ([@vivek12345](https://github.com/vivek12345))
+  * [#10472](https://github.com/babel/babel/pull/10472) added check to disallow super.private variable access and test case added. ([@vivek12345](https://github.com/vivek12345))
+  * [#10468](https://github.com/babel/babel/pull/10468) [parser] Disallow numeric separator in unicode scape sequences. ([@ivandevp](https://github.com/ivandevp))
+  * [#10467](https://github.com/babel/babel/pull/10467) [parser] Invalid NonOctal Decimal. ([@gonzarodriguezt](https://github.com/gonzarodriguezt))
+  * [#10461](https://github.com/babel/babel/pull/10461) [parser] Disallow static fields named `constructor`. ([@guywaldman](https://github.com/guywaldman))
+  * [#10455](https://github.com/babel/babel/pull/10455) [parser] Report escapes in kws only if they won't be used as identifiers. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 
 #### :bug: Bug Fix
 * `babel-parser`
-  * [#10467](https://github.com/babel/babel/pull/10467) [parser] Invalid NonOctal Decimal ([@gonzarodriguezt](https://github.com/gonzarodriguezt))
-  * [#10468](https://github.com/babel/babel/pull/10468) [parser] Disallow numeric separator in unicode scape sequences ([@ivandevp](https://github.com/ivandevp))
-  * [#10445](https://github.com/babel/babel/pull/10445) Leave trailing comments after handling a possible trailing comma ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#10445](https://github.com/babel/babel/pull/10445) Leave trailing comments after handling a possible trailing comma. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-cli`
+  * [#10400](https://github.com/babel/babel/pull/10400) fix: allow the process to exit naturally. ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#10402](https://github.com/babel/babel/pull/10402) fix: pass optionLoc when validating plugin object. ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-block-scoping`, `babel-plugin-transform-spread`, `babel-traverse`
+  * [#10417](https://github.com/babel/babel/pull/10417) Do not guess relative execution status for exported fns. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-proposal-object-rest-spread`, `babel-preset-env`
+  * [#10275](https://github.com/babel/babel/pull/10275) fix object rest in array pattern. ([@tanhauhau](https://github.com/tanhauhau))
+
+#### :house: Internal
+* `babel-plugin-transform-named-capturing-groups-regex`
+  * [#10430](https://github.com/babel/babel/pull/10430) refactor: replace regexp-tree by regexpu. ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#10441](https://github.com/babel/babel/pull/10441) Update GitHub actions to v2. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#10427](https://github.com/babel/babel/pull/10427) chore: add lint-ts rule. ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-fixtures`
+  * [#10428](https://github.com/babel/babel/pull/10428) chore: remove tryResolve dependency. ([@JLHwung](https://github.com/JLHwung))
+* `babel-node`
+  * [#10429](https://github.com/babel/babel/pull/10429) Remove babel polyfill dependency of babel-node. ([@bdwain](https://github.com/bdwain))
+* `babel-generator`, `babel-helper-fixtures`
+  * [#10420](https://github.com/babel/babel/pull/10420) chore: remove trim-right dependency. ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-plugin-transform-runtime`, `babel-register`
+  * [#10405](https://github.com/babel/babel/pull/10405) Remove circular dependency. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-parser`
+  * [#10421](https://github.com/babel/babel/pull/10421) Miscellaneous perf tweak. ([@JLHwung](https://github.com/JLHwung))
 
 ## v7.6.1 (2019-09-06)
 
