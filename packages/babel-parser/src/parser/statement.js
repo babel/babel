@@ -808,6 +808,7 @@ export default class StatementParser extends ExpressionParser {
   parseBlock(
     allowDirectives?: boolean = false,
     createNewLexicalScope?: boolean = true,
+    afterDirectivesParse?: Function,
   ): N.BlockStatement {
     const node = this.startNode();
     this.expect(tt.braceL);
@@ -817,6 +818,9 @@ export default class StatementParser extends ExpressionParser {
     this.parseBlockBody(node, allowDirectives, false, tt.braceR);
     if (createNewLexicalScope) {
       this.scope.exit();
+    }
+    if (afterDirectivesParse) {
+      afterDirectivesParse.call();
     }
     return this.finishNode(node, "BlockStatement");
   }

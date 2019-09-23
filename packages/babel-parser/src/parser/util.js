@@ -5,7 +5,7 @@ import Tokenizer from "../tokenizer";
 import type { Node } from "../types";
 import { lineBreak, skipWhiteSpace } from "../util/whitespace";
 
-const literal = /^('|")((?:\\?.)*?)\1(?!\.)/;
+const literal = /^('|")((?:\\?.)*?)\1/;
 
 // ## Parser utilities
 

@@ -1934,14 +1934,33 @@ export default class ExpressionParser extends LValParser {
       const oldLabels = this.state.labels;
       this.state.labels = [];
       if (useStrict) this.state.strict = true;
-      // Add the params to varDeclaredNames to ensure that an error is thrown
-      // if a let/const declaration in the function clashes with one of the params.
-      this.checkParams(
-        node,
-        !oldStrict && !useStrict && !allowExpression && !isMethod && !nonSimple,
-        allowExpression,
-      );
-      node.body = this.parseBlock(true, false);
+      node.body = this.parseBlock(true, false, () => {
+        if (this.state.strict && nonSimple) {
+          // This logic is here to align the error location with the estree plugin
+          const errorPos =
+            // $FlowIgnore
+            (node.kind === "method" || node.kind === "constructor") &&
+            // $FlowIgnore
+            !!node.key
+              ? node.key.end
+              : node.start;
+          this.raise(
+            errorPos,
+            "Illegal 'use strict' directive in function with non-simple parameter list",
+          );
+        }
+        // Add the params to varDeclaredNames to ensure that an error is thrown
+        // if a let/const declaration in the function clashes with one of the params.
+        this.checkParams(
+          node,
+          !oldStrict &&
+            !this.state.strict &&
+            !allowExpression &&
+            !isMethod &&
+            !nonSimple,
+          allowExpression,
+        );
+      });
       this.state.labels = oldLabels;
     }
 
