@@ -6,7 +6,7 @@
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "publishConfig": {
-    "tag": "next"
+    "access": "public"
   },
   "keywords": [
     "babel",
