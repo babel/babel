@@ -35,3 +35,19 @@ exports[`builders es2015 templateElement should validate 5`] = `
 "Property value of TemplateElement expected to have the following:
 Property raw expected type of string but got undefined"
 `;
+
+exports[`builders es2015 templateLiteral should validate 1`] = `[Function]`;
+
+exports[`builders es2015 templateLiteral should validate 2`] = `[Function]`;
+
+exports[`builders es2015 templateLiteral should validate 3`] = `
+"Length of TemplateLiteral quasis should be exactly one more than the number of expressions.
+Expected 3 quasis but got 2"
+`;
+
+exports[`builders es2015 templateLiteral should validate 4`] = `
+"Length of TemplateLiteral quasis should be exactly one more than the number of expressions.
+Expected 1 quasis but got 2"
+`;
+
+exports[`builders es2015 templateLiteral should validate 5`] = `"Property quasis expected type of array but got object"`;

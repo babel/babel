@@ -568,6 +568,16 @@ defineType("TemplateLiteral", {
       validate: chain(
         assertValueType("array"),
         assertEach(assertNodeType("TemplateElement")),
+        function(node, key, val) {
+          if (val.length !== node.expressions.length + 1) {
+            throw new TypeError(
+              `Length of ${
+                node.type
+              } ${key} should be exactly one more than the number of expressions.\nExpected ${node
+                .expressions.length + 1} ${key} but got ${val.length}`,
+            );
+          }
+        },
       ),
     },
     expressions: {
