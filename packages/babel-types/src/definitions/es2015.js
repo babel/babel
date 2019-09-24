@@ -569,7 +569,10 @@ defineType("TemplateLiteral", {
         assertValueType("array"),
         assertEach(assertNodeType("TemplateElement")),
         function(node, key, val) {
-          if (val.length !== node.expressions.length + 1) {
+          if (
+            Array.isArray(node.expressions) &&
+            val.length !== node.expressions.length + 1
+          ) {
             throw new TypeError(
               `Length of ${
                 node.type

@@ -41,6 +41,10 @@ describe("builders", function() {
         expect(() =>
           t.templateLiteral({}, ["baz"]),
         ).toThrowErrorMatchingSnapshot();
+
+        expect(() =>
+          t.templateLiteral([foo, bar]),
+        ).toThrowErrorMatchingSnapshot();
       });
     });
   });
