@@ -92,6 +92,7 @@
             }
           ],
           "extra": {
+            "trailingComma": 6,
             "parenthesized": true,
             "parenStart": 0
           }

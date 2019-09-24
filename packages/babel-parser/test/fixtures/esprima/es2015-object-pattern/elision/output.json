@@ -128,7 +128,10 @@
                     "shorthand": true
                   }
                 }
-              ]
+              ],
+              "extra": {
+                "trailingComma": 6
+              }
             },
             "init": {
               "type": "NumericLiteral",

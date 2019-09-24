@@ -150,7 +150,10 @@
                 },
                 "value": 3
               }
-            ]
+            ],
+            "extra": {
+              "trailingComma": 13
+            }
           }
         }
       }

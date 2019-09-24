@@ -181,6 +181,9 @@
                   }
                 }
               ],
+              "extra": {
+                "trailingComma": 35
+              },
               "trailingComments": [
                 {
                   "type": "CommentBlock",

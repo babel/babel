@@ -187,7 +187,6 @@
                               "column": 23
                             }
                           },
-                          "attributes": [],
                           "name": {
                             "type": "JSXIdentifier",
                             "start": 29,
@@ -204,6 +203,7 @@
                             },
                             "name": "Foo"
                           },
+                          "attributes": [],
                           "selfClosing": true
                         },
                         "closingElement": null,
@@ -263,7 +263,10 @@
                     ]
                   }
                 }
-              ]
+              ],
+              "extra": {
+                "trailingComma": 39
+              }
             }
           }
         ],

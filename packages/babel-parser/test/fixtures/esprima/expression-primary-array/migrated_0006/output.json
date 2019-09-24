@@ -151,7 +151,10 @@
                 },
                 "value": 3
               }
-            ]
+            ],
+            "extra": {
+              "trailingComma": 14
+            }
           }
         }
       }

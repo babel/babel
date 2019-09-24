@@ -132,7 +132,10 @@
               },
               "value": 2
             }
-          ]
+          ],
+          "extra": {
+            "trailingComma": 14
+          }
         }
       }
     ],

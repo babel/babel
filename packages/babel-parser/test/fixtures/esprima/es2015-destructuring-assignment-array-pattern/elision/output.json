@@ -75,7 +75,10 @@
             "elements": [
               null,
               null
-            ]
+            ],
+            "extra": {
+              "trailingComma": 2
+            }
           },
           "right": {
             "type": "NumericLiteral",

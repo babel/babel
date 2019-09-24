@@ -289,6 +289,7 @@
             }
           ],
           "extra": {
+            "trailingComma": 21,
             "parenthesized": true,
             "parenStart": 0
           }

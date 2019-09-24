@@ -110,7 +110,10 @@
                 },
                 "value": 42
               }
-            ]
+            ],
+            "extra": {
+              "trailingComma": 8
+            }
           }
         }
       }
