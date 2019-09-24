@@ -26,12 +26,15 @@ describe("builders", function() {
         const foo = t.templateElement({ raw: "foo" });
         const bar = t.templateElement({ raw: "bar" });
 
-        expect(() => t.templateLiteral([foo], [])).toMatchSnapshot();
+        const baz = t.stringLiteral("baz");
+        const qux = t.stringLiteral("qux");
 
-        expect(() => t.templateLiteral([foo, bar], ["baz"])).toMatchSnapshot();
+        expect(t.templateLiteral([foo], [])).toMatchSnapshot();
+
+        expect(t.templateLiteral([foo, bar], [baz])).toMatchSnapshot();
 
         expect(() =>
-          t.templateLiteral([foo, bar], ["baz", "qux"]),
+          t.templateLiteral([foo, bar], [baz, qux]),
         ).toThrowErrorMatchingSnapshot();
 
         expect(() =>
@@ -39,7 +42,7 @@ describe("builders", function() {
         ).toThrowErrorMatchingSnapshot();
 
         expect(() =>
-          t.templateLiteral({}, ["baz"]),
+          t.templateLiteral({}, [baz]),
         ).toThrowErrorMatchingSnapshot();
 
         expect(() =>

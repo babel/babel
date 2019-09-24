@@ -36,17 +36,57 @@ exports[`builders es2015 templateElement should validate 5`] = `
 Property raw expected type of string but got undefined"
 `;
 
-exports[`builders es2015 templateLiteral should validate 1`] = `[Function]`;
+exports[`builders es2015 templateLiteral should validate 1`] = `
+Object {
+  "expressions": Array [],
+  "quasis": Array [
+    Object {
+      "tail": false,
+      "type": "TemplateElement",
+      "value": Object {
+        "raw": "foo",
+      },
+    },
+  ],
+  "type": "TemplateLiteral",
+}
+`;
 
-exports[`builders es2015 templateLiteral should validate 2`] = `[Function]`;
+exports[`builders es2015 templateLiteral should validate 2`] = `
+Object {
+  "expressions": Array [
+    Object {
+      "type": "StringLiteral",
+      "value": "baz",
+    },
+  ],
+  "quasis": Array [
+    Object {
+      "tail": false,
+      "type": "TemplateElement",
+      "value": Object {
+        "raw": "foo",
+      },
+    },
+    Object {
+      "tail": false,
+      "type": "TemplateElement",
+      "value": Object {
+        "raw": "bar",
+      },
+    },
+  ],
+  "type": "TemplateLiteral",
+}
+`;
 
 exports[`builders es2015 templateLiteral should validate 3`] = `
-"Length of TemplateLiteral quasis should be exactly one more than the number of expressions.
+"Number of TemplateLiteral quasis should be exactly one more than the number of expressions.
 Expected 3 quasis but got 2"
 `;
 
 exports[`builders es2015 templateLiteral should validate 4`] = `
-"Length of TemplateLiteral quasis should be exactly one more than the number of expressions.
+"Number of TemplateLiteral quasis should be exactly one more than the number of expressions.
 Expected 1 quasis but got 2"
 `;
 
