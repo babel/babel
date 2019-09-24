@@ -60,6 +60,14 @@ export default class LValParser extends NodeUtils {
             const prop = node.properties[i];
             const isLast = i === last;
             this.toAssignableObjectExpressionProp(prop, isBinding, isLast);
+
+            if (
+              isLast &&
+              prop.type === "RestElement" &&
+              node.extra?.trailingComma
+            ) {
+              this.raiseRestNotLast(node.extra.trailingComma);
+            }
           }
           break;
 
@@ -78,7 +86,12 @@ export default class LValParser extends NodeUtils {
 
         case "ArrayExpression":
           node.type = "ArrayPattern";
-          this.toAssignableList(node.elements, isBinding, contextDescription);
+          this.toAssignableList(
+            node.elements,
+            isBinding,
+            contextDescription,
+            node.extra?.trailingComma,
+          );
           break;
 
         case "AssignmentExpression":
@@ -142,6 +155,7 @@ export default class LValParser extends NodeUtils {
     exprList: Expression[],
     isBinding: ?boolean,
     contextDescription: string,
+    trailingCommaPos?: ?number,
   ): $ReadOnlyArray<Pattern> {
     let end = exprList.length;
     if (end) {
@@ -160,6 +174,11 @@ export default class LValParser extends NodeUtils {
         ) {
           this.unexpected(arg.start);
         }
+
+        if (trailingCommaPos) {
+          this.raiseRestNotLast(trailingCommaPos);
+        }
+
         --end;
       }
     }
@@ -213,11 +232,6 @@ export default class LValParser extends NodeUtils {
       undefined,
       refNeedsArrowPos,
     );
-
-    if (this.state.commaAfterSpreadAt === -1 && this.match(tt.comma)) {
-      this.state.commaAfterSpreadAt = this.state.start;
-    }
-
     return this.finishNode(node, "SpreadElement");
   }
 
@@ -458,12 +472,6 @@ export default class LValParser extends NodeUtils {
   checkCommaAfterRest(): void {
     if (this.match(tt.comma)) {
       this.raiseRestNotLast(this.state.start);
-    }
-  }
-
-  checkCommaAfterRestFromSpread(): void {
-    if (this.state.commaAfterSpreadAt > -1) {
-      this.raiseRestNotLast(this.state.commaAfterSpreadAt);
     }
   }
 

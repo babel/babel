@@ -168,9 +168,6 @@ export default class ExpressionParser extends LValParser {
       }
     }
 
-    const oldCommaAfterSpreadAt = this.state.commaAfterSpreadAt;
-    this.state.commaAfterSpreadAt = -1;
-
     let failOnShorthandAssign;
     if (refShorthandDefaultPos) {
       failOnShorthandAssign = false;
@@ -230,17 +227,12 @@ export default class ExpressionParser extends LValParser {
         );
       }
 
-      if (patternErrorMsg) this.checkCommaAfterRestFromSpread();
-      this.state.commaAfterSpreadAt = oldCommaAfterSpreadAt;
-
       this.next();
       node.right = this.parseMaybeAssign(noIn);
       return this.finishNode(node, "AssignmentExpression");
     } else if (failOnShorthandAssign && refShorthandDefaultPos.start) {
       this.unexpected(refShorthandDefaultPos.start);
     }
-
-    this.state.commaAfterSpreadAt = oldCommaAfterSpreadAt;
 
     return left;
   }
@@ -680,14 +672,12 @@ export default class ExpressionParser extends LValParser {
       let node = this.startNodeAt(startPos, startLoc);
       node.callee = base;
 
-      const oldCommaAfterSpreadAt = this.state.commaAfterSpreadAt;
-      this.state.commaAfterSpreadAt = -1;
-
       node.arguments = this.parseCallExpressionArguments(
         tt.parenR,
         state.maybeAsyncArrow,
         base.type === "Import",
         base.type !== "Super",
+        node,
       );
       if (!state.optionalChainMember) {
         this.finishCallExpression(node);
@@ -697,8 +687,6 @@ export default class ExpressionParser extends LValParser {
 
       if (state.maybeAsyncArrow && this.shouldParseAsyncArrow()) {
         state.stop = true;
-
-        this.checkCommaAfterRestFromSpread();
 
         node = this.parseAsyncArrowFromCallExpression(
           this.startNodeAt(startPos, startLoc),
@@ -743,7 +731,6 @@ export default class ExpressionParser extends LValParser {
       }
 
       this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
-      this.state.commaAfterSpreadAt = oldCommaAfterSpreadAt;
 
       return node;
     } else if (this.match(tt.backQuote)) {
@@ -825,6 +812,7 @@ export default class ExpressionParser extends LValParser {
     possibleAsyncArrow: boolean,
     dynamicImport?: boolean,
     allowPlaceholder?: boolean,
+    nodeForExtra?: ?N.Node,
   ): $ReadOnlyArray<?N.Expression> {
     const elts = [];
     let innerParenStart;
@@ -842,6 +830,13 @@ export default class ExpressionParser extends LValParser {
             this.raise(
               this.state.lastTokStart,
               "Trailing comma is disallowed inside import(...) arguments",
+            );
+          }
+          if (nodeForExtra) {
+            this.addExtra(
+              nodeForExtra,
+              "trailingComma",
+              this.state.lastTokStart,
             );
           }
           break;
@@ -883,7 +878,12 @@ export default class ExpressionParser extends LValParser {
     call: N.CallExpression,
   ): N.ArrowFunctionExpression {
     this.expect(tt.arrow);
-    this.parseArrowExpression(node, call.arguments, true);
+    this.parseArrowExpression(
+      node,
+      call.arguments,
+      true,
+      call.extra?.trailingComma,
+    );
     return node;
   }
 
@@ -1046,6 +1046,7 @@ export default class ExpressionParser extends LValParser {
           tt.bracketR,
           true,
           refShorthandDefaultPos,
+          node,
         );
         if (!this.state.maybeInArrowParameters) {
           // This could be an array pattern:
@@ -1504,7 +1505,11 @@ export default class ExpressionParser extends LValParser {
         first = false;
       } else {
         this.expect(tt.comma);
-        if (this.eat(tt.braceR)) break;
+        if (this.match(tt.braceR)) {
+          this.addExtra(node, "trailingComma", this.state.lastTokStart);
+          this.next();
+          break;
+        }
       }
 
       const prop = this.parseObjectMember(isPattern, refShorthandDefaultPos);
@@ -1856,6 +1861,7 @@ export default class ExpressionParser extends LValParser {
     node: N.ArrowFunctionExpression,
     params: ?(N.Expression[]),
     isAsync: boolean,
+    trailingCommaPos: ?number,
   ): N.ArrowFunctionExpression {
     this.scope.enter(functionFlags(isAsync, false) | SCOPE_ARROW);
     this.initFunction(node, isAsync);
@@ -1867,7 +1873,7 @@ export default class ExpressionParser extends LValParser {
     this.state.yieldPos = -1;
     this.state.awaitPos = -1;
 
-    if (params) this.setArrowFunctionParameters(node, params);
+    if (params) this.setArrowFunctionParameters(node, params, trailingCommaPos);
     this.parseFunctionBody(node, true);
 
     this.scope.exit();
@@ -1881,11 +1887,13 @@ export default class ExpressionParser extends LValParser {
   setArrowFunctionParameters(
     node: N.ArrowFunctionExpression,
     params: N.Expression[],
+    trailingCommaPos: ?number,
   ): void {
     node.params = this.toAssignableList(
       params,
       true,
       "arrow function parameters",
+      trailingCommaPos,
     );
   }
 
@@ -2012,6 +2020,7 @@ export default class ExpressionParser extends LValParser {
     close: TokenType,
     allowEmpty?: boolean,
     refShorthandDefaultPos?: ?Pos,
+    nodeForExtra?: ?N.Node,
   ): $ReadOnlyArray<?N.Expression> {
     const elts = [];
     let first = true;
@@ -2021,7 +2030,17 @@ export default class ExpressionParser extends LValParser {
         first = false;
       } else {
         this.expect(tt.comma);
-        if (this.eat(close)) break;
+        if (this.match(close)) {
+          if (nodeForExtra) {
+            this.addExtra(
+              nodeForExtra,
+              "trailingComma",
+              this.state.lastTokStart,
+            );
+          }
+          this.next();
+          break;
+        }
       }
 
       elts.push(this.parseExprListItem(allowEmpty, refShorthandDefaultPos));

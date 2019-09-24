@@ -2357,11 +2357,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    toAssignableList(
-      exprList: N.Expression[],
-      isBinding: ?boolean,
-      contextDescription: string,
-    ): $ReadOnlyArray<N.Pattern> {
+    toAssignableList(exprList: N.Expression[]): $ReadOnlyArray<N.Pattern> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
         if (!expr) continue;
@@ -2378,7 +2374,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             break;
         }
       }
-      return super.toAssignableList(exprList, isBinding, contextDescription);
+      return super.toAssignableList(...arguments);
     }
 
     typeCastToParameter(node: N.TsTypeCastExpression): N.Node {
