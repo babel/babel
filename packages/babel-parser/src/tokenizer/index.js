@@ -1036,10 +1036,7 @@ export default class Tokenizer extends LocationParser {
     }
 
     // disallow numeric separators in non octal decimals and legacy octal likes
-    if (
-      (this.hasPlugin("numericSeparator") && isNonOctalDecimalInt) ||
-      (this.hasPlugin("numericSeparator") && octal)
-    ) {
+    if (this.hasPlugin("numericSeparator") && (octal || isNonOctalDecimalInt)) {
       const underscorePos = this.input
         .slice(start, this.state.pos)
         .indexOf("_");
