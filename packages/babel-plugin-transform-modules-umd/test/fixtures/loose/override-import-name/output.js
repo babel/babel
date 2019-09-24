@@ -10,6 +10,6 @@
     factory(global.Promise);
     global.input = mod.exports;
   }
-})(this, function (_es6Promise) {
+})(typeof globalThis === "object" ? globalThis : typeof self === "object" ? self : this, function (_es6Promise) {
   "use strict";
 });

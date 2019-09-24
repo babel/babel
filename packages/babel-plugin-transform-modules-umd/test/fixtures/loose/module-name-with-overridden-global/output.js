@@ -10,7 +10,7 @@
     factory(mod.exports);
     global.looseModuleNameWithOverriddenGlobalInput = mod.exports;
   }
-})(this, function (_exports) {
+})(typeof globalThis === "object" ? globalThis : typeof self === "object" ? self : this, function (_exports) {
   "use strict";
 
   _exports.__esModule = true;
