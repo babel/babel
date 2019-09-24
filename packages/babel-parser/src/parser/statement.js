@@ -891,10 +891,10 @@ export default class StatementParser extends ExpressionParser {
         continue;
       }
 
-      parsedNonDirective = true;
-      if (afterDirectivesParse) {
+      if (!parsedNonDirective && afterDirectivesParse) {
         afterDirectivesParse(hasStrictDirective);
       }
+      parsedNonDirective = true;
       body.push(stmt);
     }
     if (!parsedNonDirective && afterDirectivesParse) {
