@@ -954,9 +954,9 @@ export default class ExpressionParser extends LValParser {
             // Since "async" is an identifier and normally identifiers
             // can't be followed by expression, the tokenizer assumes
             // that "function" starts a statement.
-            // Fixing it in the tokenizer would mean traking not only the
+            // Fixing it in the tokenizer would mean tracking not only the
             // previous token ("async"), but also the one before to know
-            // if its beforeExpr value.
+            // its beforeExpr value.
             // It's easier and more efficient to adjust the context here.
             throw new Error("Internal error");
           }
