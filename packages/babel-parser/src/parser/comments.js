@@ -40,7 +40,7 @@ export default class CommentsParser extends BaseParser {
 
   adjustCommentsAfterTrailingComma(
     node: Node,
-    elements: Node[],
+    elements: (Node | null)[],
     // When the current node is followed by a token which hasn't a respective AST node, we
     // need to take all the trailing comments to prevent them from being attached to an
     // unrelated node. e.g. in
@@ -55,11 +55,14 @@ export default class CommentsParser extends BaseParser {
       return;
     }
 
-    if (elements.length === 0) {
+    let lastElement = null;
+    let i = elements.length;
+    while (lastElement === null && i > 0) {
+      lastElement = elements[--i];
+    }
+    if (lastElement === null) {
       return;
     }
-
-    const lastElement = last(elements);
 
     for (let j = 0; j < this.state.leadingComments.length; j++) {
       if (
