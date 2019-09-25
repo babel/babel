@@ -87,6 +87,10 @@ export const logUsagePolyfills = (
   polyfillTargets: Targets,
   allBuiltInsList: { [key: string]: Targets },
 ) => {
+  // normalize filename to generate consistent preset-env test fixtures
+  if (process.env.BABEL_ENV === "test") {
+    filename = filename.replace(/\\/g, "/");
+  }
   if (!polyfills.size) {
     console.log(
       `\n[${filename}] Based on your code and targets, core-js polyfills were not added.`,

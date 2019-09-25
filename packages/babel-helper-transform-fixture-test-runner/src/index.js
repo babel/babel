@@ -295,15 +295,22 @@ function validateFile(actualCode, expectedLoc, expectedCode) {
 }
 
 function normalizeOutput(code) {
-  return code
+  let result = code
     .trim()
     .replace(
+      new RegExp(escapeRegExp(path.resolve(__dirname, "../../../")), "g"),
+      "<CWD>",
+    );
+  if (process.platform === "win32") {
+    result = result.replace(
       new RegExp(
         escapeRegExp(path.resolve(__dirname, "../../../").replace(/\\/g, "/")),
         "g",
       ),
       "<CWD>",
     );
+  }
+  return result;
 }
 
 const toEqualFile = () => ({
