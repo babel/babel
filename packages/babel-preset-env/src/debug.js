@@ -56,6 +56,10 @@ export const logEntryPolyfills = (
   polyfillTargets: Targets,
   allBuiltInsList: { [key: string]: Targets },
 ) => {
+  // normalize filename to generate consistent preset-env test fixtures
+  if (process.env.BABEL_ENV === "test") {
+    filename = filename.replace(/\\/g, "/");
+  }
   if (!importPolyfillIncluded) {
     console.log(`\n[${filename}] Import of ${polyfillName} was not found.`);
     return;
