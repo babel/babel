@@ -298,7 +298,10 @@ function normalizeOutput(code) {
   return code
     .trim()
     .replace(
-      new RegExp(escapeRegExp(path.resolve(__dirname, "../../../")), "g"),
+      new RegExp(
+        escapeRegExp(path.resolve(__dirname, "../../../").replace(/\\/g, "/")),
+        "g",
+      ),
       "<CWD>",
     );
 }
