@@ -185,7 +185,32 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
       };
 
       const optionsLoc = path.join(testLoc, "options.json");
-      if (fs.existsSync(optionsLoc)) merge(opts, require(optionsLoc));
+      if (fs.existsSync(optionsLoc)) {
+        const taskOpts = require(optionsLoc);
+        if (taskOpts.nodePlatform) {
+          let nodePlatform = taskOpts.nodePlatform;
+
+          if (
+            !Array.isArray(nodePlatform) &&
+            typeof nodePlatform !== "string"
+          ) {
+            throw new Error(
+              `'nodePlatform' should be either string or string array: ${taskOpts.nodePlatform}`,
+            );
+          }
+
+          if (typeof nodePlatform === "string") {
+            nodePlatform = [nodePlatform];
+          }
+
+          if (!nodePlatform.includes(process.platform)) {
+            return;
+          }
+
+          delete taskOpts.nodePlatform;
+        }
+        merge(opts, taskOpts);
+      }
 
       ["stdout", "stdin", "stderr"].forEach(function(key) {
         const loc = path.join(testLoc, key + ".txt");

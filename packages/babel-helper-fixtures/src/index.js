@@ -195,7 +195,7 @@ export default function get(entryLoc): Array<Suite> {
       if (taskOpts.nodePlatform) {
         let nodePlatform = taskOpts.nodePlatform;
 
-        if (!nodePlatform) {
+        if (!Array.isArray(nodePlatform) && typeof nodePlatform !== "string") {
           throw new Error(
             `'nodePlatform' should be either string or string array: ${taskOpts.nodePlatform}`,
           );
