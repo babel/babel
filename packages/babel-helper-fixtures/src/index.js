@@ -192,6 +192,26 @@ export default function get(entryLoc): Array<Suite> {
         delete taskOpts.minNodeVersion;
       }
 
+      if (taskOpts.nodePlatform) {
+        let nodePlatform = taskOpts.nodePlatform;
+
+        if (!nodePlatform) {
+          throw new Error(
+            `'nodePlatform' should be either string or string array: ${taskOpts.nodePlatform}`,
+          );
+        }
+
+        if (typeof nodePlatform === "string") {
+          nodePlatform = [nodePlatform];
+        }
+
+        if (!nodePlatform.includes(process.platform)) {
+          return;
+        }
+
+        delete taskOpts.nodePlatform;
+      }
+
       // traceur checks
 
       if (test.exec.code.indexOf("// Async.") >= 0) {
