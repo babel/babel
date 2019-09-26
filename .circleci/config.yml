@@ -54,10 +54,6 @@ jobs:
       - store_artifacts: *artifact_env_min
       - save_cache: *save-node-modules-cache
       - save_cache: *save-yarn-cache
-  hold:
-    type: approval
-    requires:
-      - build
   test262:
     requires:
       - hold
@@ -72,3 +68,16 @@ jobs:
       - run:
           working_directory: ~/babel/babel-test262-runner
           command: node lib/run-tests arrow-function
+
+workflows:
+  version: 2
+  test262-with-approval:
+    jobs:
+      - build
+      - hold:
+          type: approval
+          requires:
+            - build
+      - test262:
+          requires:
+            - hold
