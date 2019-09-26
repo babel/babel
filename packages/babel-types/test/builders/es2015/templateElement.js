@@ -21,5 +21,34 @@ describe("builders", function() {
         expect(() => t.templateElement("foo")).toThrowErrorMatchingSnapshot();
       });
     });
+    describe("templateLiteral", function() {
+      it("should validate", function() {
+        const foo = t.templateElement({ raw: "foo" });
+        const bar = t.templateElement({ raw: "bar" });
+
+        const baz = t.stringLiteral("baz");
+        const qux = t.stringLiteral("qux");
+
+        expect(t.templateLiteral([foo], [])).toMatchSnapshot();
+
+        expect(t.templateLiteral([foo, bar], [baz])).toMatchSnapshot();
+
+        expect(() =>
+          t.templateLiteral([foo, bar], [baz, qux]),
+        ).toThrowErrorMatchingSnapshot();
+
+        expect(() =>
+          t.templateLiteral([foo, bar], []),
+        ).toThrowErrorMatchingSnapshot();
+
+        expect(() =>
+          t.templateLiteral({}, [baz]),
+        ).toThrowErrorMatchingSnapshot();
+
+        expect(() =>
+          t.templateLiteral([foo, bar]),
+        ).toThrowErrorMatchingSnapshot();
+      });
+    });
   });
 });

@@ -574,6 +574,16 @@ defineType("TemplateLiteral", {
       validate: chain(
         assertValueType("array"),
         assertEach(assertNodeType("Expression")),
+        function(node, key, val) {
+          if (node.quasis.length !== val.length + 1) {
+            throw new TypeError(
+              `Number of ${
+                node.type
+              } quasis should be exactly one more than the number of expressions.\nExpected ${val.length +
+                1} quasis but got ${node.quasis.length}`,
+            );
+          }
+        },
       ),
     },
   },
