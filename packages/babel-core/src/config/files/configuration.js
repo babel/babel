@@ -118,17 +118,29 @@ export function findRootConfig(
   envName: string,
   caller: CallerMetadata | void,
 ): ConfigFile | null {
-  let conf = null;
-  for (const filename of ROOT_CONFIG_FILENAMES) {
-    const filepath = path.resolve(dirname, filename);
+  const config = ROOT_CONFIG_FILENAMES.reduce(
+    (previousConfig: ConfigFile | null, name) => {
+      const filepath = path.resolve(dirname, name);
+      const config = readConfig(filepath, envName, caller);
 
-    conf = readConfig(filepath, envName, caller);
-    if (conf) {
-      debug("Found root config %o in %o.", filename, dirname);
-      break;
-    }
+      if (config && previousConfig) {
+        throw new Error(
+          `Multiple configuration files found. Please remove one:\n` +
+            ` - ${path.basename(previousConfig.filepath)}\n` +
+            ` - ${name}\n` +
+            `from ${dirname}`,
+        );
+      }
+
+      return config || previousConfig;
+    },
+    null,
+  );
+
+  if (config) {
+    debug("Found configuration %o from %o.", config.filepath, dirname);
   }
-  return conf;
+  return config;
 }
 
 export function loadConfig(
