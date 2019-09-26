@@ -54,3 +54,21 @@ jobs:
       - store_artifacts: *artifact_env_min
       - save_cache: *save-node-modules-cache
       - save_cache: *save-yarn-cache
+  hold:
+    type: approval
+    requires:
+      - build
+  test262:
+    requires:
+      - hold
+    working_directory: ~/babel
+    docker:
+      - image: circleci/node:12
+    steps:
+      - run: git clone https://github.com/babel/babel-test262-runner
+      - run:
+          working_directory: ~/babel/babel-test262-runner
+          command: node lib/download-node
+      - run:
+          working_directory: ~/babel/babel-test262-runner
+          command: node lib/run-tests arrow-function
