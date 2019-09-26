@@ -230,7 +230,7 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
         opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
       }
 
-      it(testName, buildTest(binName, testName, opts));
+      it(testName, buildTest(binName, testName, opts), 20000);
     });
   });
 });
