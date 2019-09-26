@@ -30,8 +30,17 @@ aliases:
   - &artifact_env_min
     path: ~/babel/packages/babel-preset-env-standalone/babel-preset-env.min.js
 
+  - &test262_workdir
+    working_directory: ~/babel/babel-test262-runner
+
+  - &artifact_test262_tap
+    path: ~/test262.tap
+
+  - &artifact_test262_xunit
+    path: ~/test262.xml
+
 jobs:
-  build:
+  test:
     working_directory: ~/babel
     docker:
       - image: circleci/node:12
@@ -54,21 +63,60 @@ jobs:
       - store_artifacts: *artifact_env_min
       - save_cache: *save-node-modules-cache
       - save_cache: *save-yarn-cache
-  hold:
-    type: approval
-    requires:
-      - build
   test262:
-    requires:
-      - hold
     working_directory: ~/babel
     docker:
       - image: circleci/node:12
     steps:
-      - run: git clone https://github.com/babel/babel-test262-runner
+      - checkout
+      - restore-cache: *restore-yarn-cache
+      - restore-cache: *restore-node-modules-cache
       - run:
-          working_directory: ~/babel/babel-test262-runner
-          command: node lib/download-node
+          name: Build Babel
+          command: BABEL_ENV=test make bootstrap
       - run:
-          working_directory: ~/babel/babel-test262-runner
-          command: node lib/run-tests arrow-function
+          name: Link Babel
+          command: |
+            cd packages
+            for package in */; do
+              cd $package
+              yarn link
+              cd ..
+            done
+      - run:
+          name: Setup Test Runner
+          command: |
+            git clone --recurse-submodules https://github.com/babel/babel-test262-runner
+            cd babel-test262-runner
+            yarn
+            # yarn add tap-xunit --dev
+            curl -L https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 > jq
+            chmod +x ./jq
+            for package in ../packages/*/package.json; do
+              yarn link $(./jq -j ".name" $package)
+            done
+            node lib/download-node
+      - run:
+          name: Run Test262
+          command: node lib/run-tests I_AM_SURE | tee ~/test262.tap
+          <<: *test262_workdir
+      - store_artifacts: *artifact_test262_tap
+      # - run:
+      #     name: Convert Tap output to Xunit
+      #     command: cat ~/test262.tap | grep -v "INFO Using" | grep -v " out of " | ./node_modules/.bin/tap-xunit > ~/test262.xml
+      #     <<: *test262_workdir
+      # - store_test_results: *artifact_test262_xunit
+
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
+  test262-after-approval:
+    jobs:
+      - approve-test262-run:
+          type: approval
+      - test262:
+          requires:
+            - approve-test262-run
