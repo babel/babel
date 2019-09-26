@@ -1,4 +1,4 @@
 {
   "presets": [["react", { "development": true }]],
-  "os": ["linux", "darwin"]
+  "os": ["win32"]
 }

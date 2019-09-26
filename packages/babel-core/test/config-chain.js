@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import escapeRegExp from "lodash/escapeRegExp";
 import { loadOptions as loadOptionsOrig } from "../lib";
 
 function fixture(...args) {
@@ -33,7 +34,7 @@ describe("buildConfigChain", function() {
           cwd: fixture("nonexistant-fake"),
           filename: fixture("nonexistant-fake", "src.js"),
           babelrc: false,
-          test: new RegExp(fixture("nonexistant-fake")),
+          test: new RegExp(escapeRegExp(fixture("nonexistant-fake"))),
           comments: true,
         });
 
@@ -69,7 +70,7 @@ describe("buildConfigChain", function() {
           cwd: fixture("nonexistant-fake"),
           filename: fixture("nonexistant-fake", "src.js"),
           babelrc: false,
-          test: new RegExp(fixture("nonexistant-unknown")),
+          test: new RegExp(escapeRegExp(fixture("nonexistant-unknown"))),
           comments: true,
         });
 
@@ -107,7 +108,7 @@ describe("buildConfigChain", function() {
           cwd: fixture("nonexistant-fake"),
           filename: fixture("nonexistant-fake", "src.js"),
           babelrc: false,
-          test: [new RegExp(fixture("nonexistant-fake"))],
+          test: [new RegExp(escapeRegExp(fixture("nonexistant-fake")))],
           comments: true,
         });
 
@@ -143,7 +144,7 @@ describe("buildConfigChain", function() {
           cwd: fixture("nonexistant-fake"),
           filename: fixture("nonexistant-fake", "src.js"),
           babelrc: false,
-          test: [new RegExp(fixture("nonexistant-unknown"))],
+          test: [new RegExp(escapeRegExp(fixture("nonexistant-unknown")))],
           comments: true,
         });
 
@@ -183,7 +184,7 @@ describe("buildConfigChain", function() {
           cwd: fixture("nonexistant-fake"),
           filename: fixture("nonexistant-fake", "src.js"),
           babelrc: false,
-          include: new RegExp(fixture("nonexistant-fake")),
+          include: new RegExp(escapeRegExp(fixture("nonexistant-fake"))),
           comments: true,
         });
 
@@ -219,7 +220,7 @@ describe("buildConfigChain", function() {
           cwd: fixture("nonexistant-fake"),
           filename: fixture("nonexistant-fake", "src.js"),
           babelrc: false,
-          include: new RegExp(fixture("nonexistant-unknown")),
+          include: new RegExp(escapeRegExp(fixture("nonexistant-unknown"))),
           comments: true,
         });
 
@@ -257,7 +258,7 @@ describe("buildConfigChain", function() {
           cwd: fixture("nonexistant-fake"),
           filename: fixture("nonexistant-fake", "src.js"),
           babelrc: false,
-          include: [new RegExp(fixture("nonexistant-fake"))],
+          include: [new RegExp(escapeRegExp(fixture("nonexistant-fake")))],
           comments: true,
         });
 
@@ -293,7 +294,7 @@ describe("buildConfigChain", function() {
           cwd: fixture("nonexistant-fake"),
           filename: fixture("nonexistant-fake", "src.js"),
           babelrc: false,
-          include: [new RegExp(fixture("nonexistant-unknown"))],
+          include: [new RegExp(escapeRegExp(fixture("nonexistant-unknown")))],
           comments: true,
         });
 
@@ -333,7 +334,7 @@ describe("buildConfigChain", function() {
           cwd: fixture("nonexistant-fake"),
           filename: fixture("nonexistant-fake", "src.js"),
           babelrc: false,
-          exclude: new RegExp(fixture("nonexistant-fake")),
+          exclude: new RegExp(escapeRegExp(fixture("nonexistant-fake"))),
           comments: true,
         });
 
@@ -369,7 +370,7 @@ describe("buildConfigChain", function() {
           cwd: fixture("nonexistant-fake"),
           filename: fixture("nonexistant-fake", "src.js"),
           babelrc: false,
-          exclude: new RegExp(fixture("nonexistant-unknown")),
+          exclude: new RegExp(escapeRegExp(fixture("nonexistant-unknown"))),
           comments: true,
         });
 
@@ -407,7 +408,7 @@ describe("buildConfigChain", function() {
           cwd: fixture("nonexistant-fake"),
           filename: fixture("nonexistant-fake", "src.js"),
           babelrc: false,
-          exclude: [new RegExp(fixture("nonexistant-fake"))],
+          exclude: [new RegExp(escapeRegExp(fixture("nonexistant-fake")))],
           comments: true,
         });
 
@@ -443,7 +444,7 @@ describe("buildConfigChain", function() {
           cwd: fixture("nonexistant-fake"),
           filename: fixture("nonexistant-fake", "src.js"),
           babelrc: false,
-          exclude: [new RegExp(fixture("nonexistant-unknown"))],
+          exclude: [new RegExp(escapeRegExp(fixture("nonexistant-unknown")))],
           comments: true,
         });
 

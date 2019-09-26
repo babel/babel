@@ -185,7 +185,29 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
       };
 
       const optionsLoc = path.join(testLoc, "options.json");
-      if (fs.existsSync(optionsLoc)) merge(opts, require(optionsLoc));
+      if (fs.existsSync(optionsLoc)) {
+        const taskOpts = require(optionsLoc);
+        if (taskOpts.os) {
+          let os = taskOpts.os;
+
+          if (!Array.isArray(os) && typeof os !== "string") {
+            throw new Error(
+              `'os' should be either string or string array: ${taskOpts.os}`,
+            );
+          }
+
+          if (typeof os === "string") {
+            os = [os];
+          }
+
+          if (!os.includes(process.platform)) {
+            return;
+          }
+
+          delete taskOpts.os;
+        }
+        merge(opts, taskOpts);
+      }
 
       ["stdout", "stdin", "stderr"].forEach(function(key) {
         const loc = path.join(testLoc, key + ".txt");
@@ -205,7 +227,7 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
         opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
       }
 
-      it(testName, buildTest(binName, testName, opts));
+      it(testName, buildTest(binName, testName, opts), 20000);
     });
   });
 });

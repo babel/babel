@@ -3,12 +3,15 @@ git:
 language: node_js
 cache:
   yarn: true
+
+os: linux
+
 node_js:
   # We test the latest version on circleci
-  - '11'
-  - '10'
-  - '8'
-  - '6'
+  - "11"
+  - "10"
+  - "8"
+  - "6"
 
 env:
   global:
@@ -24,6 +27,7 @@ install:
   - if [ "$JOB" = "lint" ]; then make bootstrap; fi
 
 before_script:
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then choco install make; fi
   - if [ "$JOB" = "babel-parser-flow-tests" ]; then make bootstrap-flow; fi
   - if [ "$JOB" = "babel-parser-test262-tests" ]; then make bootstrap-test262; fi
 
@@ -36,6 +40,12 @@ script:
 matrix:
   fast_finish: true
   include:
+    - os: windows
+      node_js: "node"
+      env:
+      - JOB=test
+      # https://travis-ci.community/t/build-doesnt-finish-after-completing-tests/288/9
+      - YARN_GPG=no
     - node_js: "node"
       env: JOB=lint
     - node_js: "node"

@@ -10,30 +10,30 @@ SOURCES = packages codemods
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
 build: clean clean-lib
-	./node_modules/.bin/gulp build
-	node ./packages/babel-standalone/scripts/generate.js
-	node ./packages/babel-types/scripts/generateTypeHelpers.js
+	yarn gulp build
+	node packages/babel-standalone/scripts/generate.js
+	node packages/babel-types/scripts/generateTypeHelpers.js
 	# call build again as the generated files might need to be compiled again.
-	./node_modules/.bin/gulp build
+	yarn gulp build
 	# generate flow and typescript typings
-	node packages/babel-types/scripts/generators/flow.js > ./packages/babel-types/lib/index.js.flow
-	node packages/babel-types/scripts/generators/typescript.js > ./packages/babel-types/lib/index.d.ts
+	node packages/babel-types/scripts/generators/flow.js > packages/babel-types/lib/index.js.flow
+	node packages/babel-types/scripts/generators/typescript.js > packages/babel-types/lib/index.d.ts
 ifneq ("$(BABEL_COVERAGE)", "true")
 	make build-standalone
 	make build-preset-env-standalone
 endif
 
 build-standalone:
-	./node_modules/.bin/gulp build-babel-standalone
+	yarn gulp build-babel-standalone
 
 build-preset-env-standalone:
-	./node_modules/.bin/gulp build-babel-preset-env-standalone
+	yarn gulp build-babel-preset-env-standalone
 
 prepublish-build-standalone:
-	BABEL_ENV=production IS_PUBLISH=true ./node_modules/.bin/gulp build-babel-standalone
+	BABEL_ENV=production IS_PUBLISH=true yarn gulp build-babel-standalone
 
 prepublish-build-preset-env-standalone:
-	BABEL_ENV=production IS_PUBLISH=true ./node_modules/.bin/gulp build-babel-preset-env-standalone
+	BABEL_ENV=production IS_PUBLISH=true yarn gulp build-babel-preset-env-standalone
 
 build-dist: build
 	cd packages/babel-polyfill; \
@@ -45,28 +45,28 @@ watch: clean clean-lib
 
 	# Ensure that build artifacts for types are created during local
 	# development too.
-	BABEL_ENV=development ./node_modules/.bin/gulp build-no-bundle
-	node ./packages/babel-types/scripts/generateTypeHelpers.js
-	node packages/babel-types/scripts/generators/flow.js > ./packages/babel-types/lib/index.js.flow
-	node packages/babel-types/scripts/generators/typescript.js > ./packages/babel-types/lib/index.d.ts
-	BABEL_ENV=development ./node_modules/.bin/gulp watch
+	BABEL_ENV=development yarn gulp build-no-bundle
+	node packages/babel-types/scripts/generateTypeHelpers.js
+	node packages/babel-types/scripts/generators/flow.js > packages/babel-types/lib/index.js.flow
+	node packages/babel-types/scripts/generators/typescript.js > packages/babel-types/lib/index.d.ts
+	BABEL_ENV=development yarn gulp watch
 
 flow:
-	./node_modules/.bin/flow check --strip-root
+	yarn flow check --strip-root
 
 lint: lint-js lint-ts
 
 lint-js:
-	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' --format=codeframe
+	yarn eslint scripts $(SOURCES) '*.js' --format=codeframe
 
 lint-ts:
-	./scripts/tests/typescript/lint.sh
+	scripts/tests/typescript/lint.sh
 
 fix: fix-json
-	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' --format=codeframe --fix
+	yarn eslint scripts $(SOURCES) '*.js' --format=codeframe --fix
 
 fix-json:
-	./node_modules/.bin/prettier "{packages,codemod}/*/test/fixtures/**/options.json" --write --loglevel warn
+	yarn prettier "{packages,codemod}/*/test/fixtures/**/options.json" --write --loglevel warn
 
 clean: test-clean
 	rm -f .npmrc
@@ -79,14 +79,18 @@ test-clean:
 	$(foreach source, $(SOURCES), \
 		$(call clean-source-test, $(source)))
 
+# Does not work on Windows; use "yarn jest" instead
 test-only:
 	BABEL_ENV=test ./scripts/test.sh
 	make test-clean
 
 test: lint test-only
 
-test-ci: bootstrap test-only
+test-ci: bootstrap
+	BABEL_ENV=test yarn jest --maxWorkers=4 --ci
+	make test-clean
 
+# Does not work on Windows
 test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
 	BABEL_COVERAGE=true BABEL_ENV=test make bootstrap
@@ -94,9 +98,9 @@ test-ci-coverage:
 	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
 bootstrap-flow:
-	rm -rf ./build/flow
-	mkdir -p ./build
-	git clone --branch=master --single-branch --shallow-since=2018-11-01 https://github.com/facebook/flow.git ./build/flow
+	rm -rf build/flow
+	mkdir -p build
+	git clone --branch=master --single-branch --shallow-since=2018-11-01 https://github.com/facebook/flow.git build/flow
 	cd build/flow && git checkout $(FLOW_COMMIT)
 
 test-flow:
@@ -108,9 +112,9 @@ test-flow-update-whitelist:
 	node scripts/tests/flow/run_babel_parser_flow_tests.js --update-whitelist
 
 bootstrap-test262:
-	rm -rf ./build/test262
-	mkdir -p ./build
-	git clone --branch=master --single-branch --shallow-since=2019-01-01 https://github.com/tc39/test262.git ./build/test262
+	rm -rf build/test262
+	mkdir -p build
+	git clone --branch=master --single-branch --shallow-since=2019-01-01 https://github.com/tc39/test262.git build/test262
 	cd build/test262 && git checkout $(TEST262_COMMIT)
 
 test-test262:
@@ -121,6 +125,7 @@ test-test262-ci: bootstrap test-test262
 test-test262-update-whitelist:
 	node scripts/tests/test262/run_babel_parser_test262.js --update-whitelist
 
+# Does not work on Windows
 clone-license:
 	./scripts/clone-license.sh
 
@@ -139,11 +144,11 @@ prepublish:
 
 new-version:
 	git pull --rebase
-	./node_modules/.bin/lerna version --force-publish="@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@babel/standalone,@babel/preset-env-standalone"
+	yarn lerna version --force-publish="@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@babel/standalone,@babel/preset-env-standalone"
 
 # NOTE: Run make new-version first
 publish: prepublish
-	./node_modules/.bin/lerna publish from-git --require-scripts
+	yarn lerna publish from-git --require-scripts
 	make clean
 
 publish-ci: prepublish
@@ -153,13 +158,13 @@ else
 	echo "Missing NPM_TOKEN env var"
 	exit 1
 endif
-	./node_modules/.bin/lerna publish from-git --require-scripts --yes
+	yarn lerna publish from-git --require-scripts --yes
 	rm -f .npmrc
 	make clean
 
 bootstrap-only: clean-all
 	yarn --ignore-engines
-	./node_modules/.bin/lerna bootstrap -- --ignore-engines
+	yarn lerna bootstrap -- --ignore-engines
 
 bootstrap: bootstrap-only
 	make build

@@ -192,6 +192,26 @@ export default function get(entryLoc): Array<Suite> {
         delete taskOpts.minNodeVersion;
       }
 
+      if (taskOpts.os) {
+        let os = taskOpts.os;
+
+        if (!Array.isArray(os) && typeof os !== "string") {
+          throw new Error(
+            `'os' should be either string or string array: ${taskOpts.os}`,
+          );
+        }
+
+        if (typeof os === "string") {
+          os = [os];
+        }
+
+        if (!os.includes(process.platform)) {
+          return;
+        }
+
+        delete taskOpts.os;
+      }
+
       // traceur checks
 
       if (test.exec.code.indexOf("// Async.") >= 0) {
