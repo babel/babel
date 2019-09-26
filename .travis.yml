@@ -42,7 +42,10 @@ matrix:
   include:
     - os: windows
       node_js: "node"
-      env: JOB=test
+      env:
+      - JOB=test
+      # https://travis-ci.community/t/build-doesnt-finish-after-completing-tests/288/9
+      - YARN_GPG=no
     - node_js: "node"
       env: JOB=lint
     - node_js: "node"
