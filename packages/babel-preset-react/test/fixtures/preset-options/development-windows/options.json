@@ -1,4 +1,4 @@
 {
   "presets": [["react", { "development": true }]],
-  "nodePlatform": ["win32"]
+  "os": ["win32"]
 }

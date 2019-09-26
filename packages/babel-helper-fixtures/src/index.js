@@ -192,24 +192,24 @@ export default function get(entryLoc): Array<Suite> {
         delete taskOpts.minNodeVersion;
       }
 
-      if (taskOpts.nodePlatform) {
-        let nodePlatform = taskOpts.nodePlatform;
+      if (taskOpts.os) {
+        let os = taskOpts.os;
 
-        if (!Array.isArray(nodePlatform) && typeof nodePlatform !== "string") {
+        if (!Array.isArray(os) && typeof os !== "string") {
           throw new Error(
-            `'nodePlatform' should be either string or string array: ${taskOpts.nodePlatform}`,
+            `'os' should be either string or string array: ${taskOpts.os}`,
           );
         }
 
-        if (typeof nodePlatform === "string") {
-          nodePlatform = [nodePlatform];
+        if (typeof os === "string") {
+          os = [os];
         }
 
-        if (!nodePlatform.includes(process.platform)) {
+        if (!os.includes(process.platform)) {
           return;
         }
 
-        delete taskOpts.nodePlatform;
+        delete taskOpts.os;
       }
 
       // traceur checks
