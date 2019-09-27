@@ -101,11 +101,11 @@ jobs:
           command: node lib/run-tests I_AM_SURE | tee ~/test262.tap
           <<: *test262_workdir
       - store_artifacts: *artifact_test262_tap
-      # - run:
-      #     name: Convert Tap output to Xunit
-      #     command: cat ~/test262.tap | grep -v "INFO Using" | grep -v " out of " | ./node_modules/.bin/tap-xunit > ~/test262.xml
-      #     <<: *test262_workdir
-      # - store_test_results: *artifact_test262_xunit
+      - run:
+          name: Convert Tap output to Xunit
+          command: cat ~/test262.tap | ./node_modules/.bin/tap-xunit > ~/test262.xml
+          <<: *test262_workdir
+      - store_test_results: *artifact_test262_xunit
 
 
 workflows:
