@@ -59,11 +59,11 @@ build-dist: build-polyfill-dist build-plugin-transform-runtime-dist
 
 build-polyfill-dist:
 	cd packages/babel-polyfill; \
-    scripts/build-dist.sh
+	scripts/build-dist.sh
 
 build-plugin-transform-runtime-dist:
 	cd packages/babel-plugin-transform-runtime; \
-    node scripts/build-dist.js
+	node scripts/build-dist.js
 
 build-no-bundle: clean clean-lib
 	BABEL_ENV=development yarn gulp build-no-bundle
@@ -165,7 +165,6 @@ bootstrap-test262:
 	git clone --branch=master --single-branch --shallow-since=2019-01-01 https://github.com/tc39/test262.git build/test262
 	cd build/test262 && git checkout $(TEST262_COMMIT)
 
-	
 test-test262:
 	node scripts/tests/test262/run_babel_parser_test262.js
 
