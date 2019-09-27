@@ -4,6 +4,7 @@
 
 declare module "resolve" {
   declare export default {
+    (string, {| basedir: string |}, (err: ?Error, res: string) => void): void;
     sync: (string, {| basedir: string |}) => string;
   };
 }

@@ -28,3 +28,14 @@ function mergeDefaultFields<T: {}>(target: T, source: T) {
     if (val !== undefined) target[k] = (val: any);
   }
 }
+
+export function isIterableIterator(value: mixed): boolean %checks {
+  return (
+    /*:: value instanceof Generator && */
+    // /*:: "@@iterator" in value && */
+    !!value &&
+    typeof value.next === "function" &&
+    // $FlowIgnore
+    typeof value[Symbol.iterator] === "function"
+  );
+}

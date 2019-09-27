@@ -1,5 +1,7 @@
 // @flow
 
+import gensync from "gensync";
+
 import loadConfig, { type InputOptions } from "./config";
 import parser from "./parser";
 import type { ParseResult } from "./parser";
@@ -19,6 +21,18 @@ type Parse = {
   (code: string, opts: ?InputOptions): ParseResult | null,
 };
 
+const parseRunner = gensync<[string, ?InputOptions], ParseResult | null>(
+  function* parse(code, opts) {
+    const config = yield* loadConfig(opts);
+
+    if (config === null) {
+      return null;
+    }
+
+    return yield* parser(config.passes, normalizeOptions(config), code);
+  },
+);
+
 export const parse: Parse = (function parse(code, opts, callback) {
   if (typeof opts === "function") {
     callback = opts;
@@ -27,55 +41,10 @@ export const parse: Parse = (function parse(code, opts, callback) {
 
   // For backward-compat with Babel 7's early betas, we allow sync parsing when
   // no callback is given. Will be dropped in some future Babel major version.
-  if (callback === undefined) return parseSync(code, opts);
+  if (callback === undefined) return parseRunner.sync(code, opts);
 
-  const config = loadConfig(opts);
-
-  if (config === null) {
-    return null;
-  }
-
-  // Reassign to keep Flowtype happy.
-  const cb = callback;
-
-  // Just delaying the transform one tick for now to simulate async behavior
-  // but more async logic may land here eventually.
-  process.nextTick(() => {
-    let ast = null;
-    try {
-      const cfg = loadConfig(opts);
-      if (cfg === null) return cb(null, null);
-
-      ast = parser(cfg.passes, normalizeOptions(cfg), code);
-    } catch (err) {
-      return cb(err);
-    }
-
-    cb(null, ast);
-  });
+  parseRunner.errback(code, opts, callback);
 }: Function);
 
-export function parseSync(
-  code: string,
-  opts?: InputOptions,
-): ParseResult | null {
-  const config = loadConfig(opts);
-
-  if (config === null) {
-    return null;
-  }
-
-  return parser(config.passes, normalizeOptions(config), code);
-}
-
-export function parseAsync(
-  code: string,
-  opts?: InputOptions,
-): Promise<ParseResult | null> {
-  return new Promise((res, rej) => {
-    parse(code, opts, (err, result) => {
-      if (err == null) res(result);
-      else rej(err);
-    });
-  });
-}
+export const parseSync = parseRunner.sync;
+export const parseAsync = parseRunner.async;

@@ -5,8 +5,8 @@ import { loadPlugin, loadPreset } from "./files";
 import { getItemDescriptor } from "./item";
 
 import {
-  makeWeakCache,
-  makeStrongCache,
+  makeWeakCacheSync,
+  makeStrongCacheSync,
   type CacheConfigurator,
 } from "./caching";
 
@@ -130,11 +130,11 @@ export function createUncachedDescriptors(
 }
 
 const PRESET_DESCRIPTOR_CACHE = new WeakMap();
-const createCachedPresetDescriptors = makeWeakCache(
+const createCachedPresetDescriptors = makeWeakCacheSync(
   (items: PluginList, cache: CacheConfigurator<string>) => {
     const dirname = cache.using(dir => dir);
-    return makeStrongCache((alias: string) =>
-      makeStrongCache((passPerPreset: boolean) =>
+    return makeStrongCacheSync((alias: string) =>
+      makeStrongCacheSync((passPerPreset: boolean) =>
         createPresetDescriptors(items, dirname, alias, passPerPreset).map(
           // Items are cached using the overall preset array identity when
           // possibly, but individual descriptors are also cached if a match
@@ -147,10 +147,10 @@ const createCachedPresetDescriptors = makeWeakCache(
 );
 
 const PLUGIN_DESCRIPTOR_CACHE = new WeakMap();
-const createCachedPluginDescriptors = makeWeakCache(
+const createCachedPluginDescriptors = makeWeakCacheSync(
   (items: PluginList, cache: CacheConfigurator<string>) => {
     const dirname = cache.using(dir => dir);
-    return makeStrongCache((alias: string) =>
+    return makeStrongCacheSync((alias: string) =>
       createPluginDescriptors(items, dirname, alias).map(
         // Items are cached using the overall plugin array identity when
         // possibly, but individual descriptors are also cached if a match

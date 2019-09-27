@@ -1,6 +1,7 @@
 // @flow
 import traverse from "@babel/traverse";
 import typeof { SourceMap } from "convert-source-map";
+import type { Handler } from "gensync";
 
 import type { ResolvedConfig, PluginPasses } from "../config";
 
@@ -25,30 +26,12 @@ export type FileResult = {
   map: SourceMap | null,
 };
 
-export function runAsync(
+export function* run(
   config: ResolvedConfig,
   code: string,
   ast: ?(BabelNodeFile | BabelNodeProgram),
-  callback: Function,
-) {
-  let result;
-  try {
-    result = runSync(config, code, ast);
-  } catch (err) {
-    return callback(err);
-  }
-
-  // We don't actually care about calling this synchronously here because it is
-  // already running within a .nextTick handler from the transform calls above.
-  return callback(null, result);
-}
-
-export function runSync(
-  config: ResolvedConfig,
-  code: string,
-  ast: ?(BabelNodeFile | BabelNodeProgram),
-): FileResult {
-  const file = normalizeFile(
+): Handler<FileResult> {
+  const file = yield* normalizeFile(
     config.passes,
     normalizeOptions(config),
     code,
@@ -57,7 +40,7 @@ export function runSync(
 
   const opts = file.opts;
   try {
-    transformFile(file, config.passes);
+    yield* transformFile(file, config.passes);
   } catch (e) {
     e.message = `${opts.filename ?? "unknown"}: ${e.message}`;
     if (!e.code) {
@@ -89,7 +72,7 @@ export function runSync(
   };
 }
 
-function transformFile(file: File, pluginPasses: PluginPasses): void {
+function* transformFile(file: File, pluginPasses: PluginPasses): Handler<void> {
   for (const pluginPairs of pluginPasses) {
     const passPairs = [];
     const passes = [];
@@ -108,6 +91,7 @@ function transformFile(file: File, pluginPasses: PluginPasses): void {
       if (fn) {
         const result = fn.call(pass, file);
 
+        yield* [];
         if (isThenable(result)) {
           throw new Error(
             `You appear to be using an plugin with an async .pre, ` +
@@ -132,6 +116,7 @@ function transformFile(file: File, pluginPasses: PluginPasses): void {
       if (fn) {
         const result = fn.call(pass, file);
 
+        yield* [];
         if (isThenable(result)) {
           throw new Error(
             `You appear to be using an plugin with an async .post, ` +

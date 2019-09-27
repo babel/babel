@@ -1,5 +1,7 @@
 // @flow
 
+import type { Handler } from "gensync";
+
 import type {
   ConfigFile,
   IgnoreFile,
@@ -11,13 +13,15 @@ import type { CallerMetadata } from "../validation/options";
 
 export type { ConfigFile, IgnoreFile, RelativeConfig, FilePackageData };
 
-export function findConfigUpwards(
+// eslint-disable-next-line require-yield
+export function* findConfigUpwards(
   rootDir: string, // eslint-disable-line no-unused-vars
-): string | null {
+): Handler<string | null> {
   return null;
 }
 
-export function findPackageData(filepath: string): FilePackageData {
+// eslint-disable-next-line require-yield
+export function* findPackageData(filepath: string): Handler<FilePackageData> {
   return {
     filepath,
     directories: [],
@@ -26,28 +30,31 @@ export function findPackageData(filepath: string): FilePackageData {
   };
 }
 
-export function findRelativeConfig(
+// eslint-disable-next-line require-yield
+export function* findRelativeConfig(
   pkgData: FilePackageData, // eslint-disable-line no-unused-vars
   envName: string, // eslint-disable-line no-unused-vars
   caller: CallerMetadata | void, // eslint-disable-line no-unused-vars
-): RelativeConfig {
+): Handler<RelativeConfig> {
   return { pkg: null, config: null, ignore: null };
 }
 
-export function findRootConfig(
+// eslint-disable-next-line require-yield
+export function* findRootConfig(
   dirname: string, // eslint-disable-line no-unused-vars
   envName: string, // eslint-disable-line no-unused-vars
   caller: CallerMetadata | void, // eslint-disable-line no-unused-vars
-): ConfigFile | null {
+): Handler<ConfigFile | null> {
   return null;
 }
 
-export function loadConfig(
+// eslint-disable-next-line require-yield
+export function* loadConfig(
   name: string,
   dirname: string,
   envName: string, // eslint-disable-line no-unused-vars
   caller: CallerMetadata | void, // eslint-disable-line no-unused-vars
-): ConfigFile {
+): Handler<ConfigFile> {
   throw new Error(`Cannot load ${name} relative to ${dirname} in a browser`);
 }
 
