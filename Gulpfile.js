@@ -11,23 +11,18 @@ const filter = require("gulp-filter");
 const gulp = require("gulp");
 const path = require("path");
 const webpack = require("webpack");
-const merge = require("merge-stream");
 const rollup = require("rollup");
 const rollupBabel = require("rollup-plugin-babel");
 const rollupNodeResolve = require("rollup-plugin-node-resolve");
 const rollupReplace = require("rollup-plugin-replace");
 const { registerStandalonePackageTask } = require("./scripts/gulp-tasks");
 
-const sources = ["codemods", "packages"];
+const defaultSourcesGlob = "./@(codemods|packages)/*/src/**/*.js";
 
 function swapSrcWithLib(srcPath) {
   const parts = srcPath.split(path.sep);
-  parts[1] = "lib";
+  parts[2] = "lib";
   return parts.join(path.sep);
-}
-
-function getGlobFromSource(source) {
-  return `./${source}/*/src/**/*.js`;
 }
 
 function getIndexFromPackage(name) {
@@ -56,32 +51,28 @@ function rename(fn) {
   });
 }
 
-function buildBabel(exclude) {
-  return merge(
-    sources.map(source => {
-      const base = path.join(__dirname, source);
+function buildBabel(exclude, sourcesGlob = defaultSourcesGlob) {
+  const base = __dirname;
 
-      let stream = gulp.src(getGlobFromSource(source), { base: base });
+  let stream = gulp.src(sourcesGlob, { base: __dirname });
 
-      if (exclude) {
-        const filters = exclude.map(p => `!**/${p}/**`);
-        filters.unshift("**");
-        stream = stream.pipe(filter(filters));
-      }
+  if (exclude) {
+    const filters = exclude.map(p => `!**/${p}/**`);
+    filters.unshift("**");
+    stream = stream.pipe(filter(filters));
+  }
 
-      return stream
-        .pipe(errorsLogger())
-        .pipe(newer({ dest: base, map: swapSrcWithLib }))
-        .pipe(compilationLogger())
-        .pipe(babel())
-        .pipe(
-          // Passing 'file.relative' because newer() above uses a relative
-          // path and this keeps it consistent.
-          rename(file => path.resolve(file.base, swapSrcWithLib(file.relative)))
-        )
-        .pipe(gulp.dest(base));
-    })
-  );
+  return stream
+    .pipe(errorsLogger())
+    .pipe(newer({ dest: base, map: swapSrcWithLib }))
+    .pipe(compilationLogger())
+    .pipe(babel())
+    .pipe(
+      // Passing 'file.relative' because newer() above uses a relative
+      // path and this keeps it consistent.
+      rename(file => path.resolve(file.base, swapSrcWithLib(file.relative)))
+    )
+    .pipe(gulp.dest(base));
 }
 
 function buildRollup(packages) {
@@ -118,6 +109,9 @@ const bundles = ["packages/babel-parser"];
 
 gulp.task("build-rollup", () => buildRollup(bundles));
 gulp.task("build-babel", () => buildBabel(/* exclude */ bundles));
+gulp.task("build-babel-types", () =>
+  buildBabel(/* exclude */ bundles, "packages/babel-types/src/**/*.js")
+);
 gulp.task("build", gulp.parallel("build-rollup", "build-babel"));
 
 gulp.task("default", gulp.series("build"));
@@ -128,7 +122,7 @@ gulp.task(
   "watch",
   gulp.series("build-no-bundle", function watch() {
     gulpWatch(
-      sources.map(getGlobFromSource),
+      defaultSourcesGlob,
       { debounceDelay: 200 },
       gulp.task("build-no-bundle")
     );

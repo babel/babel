@@ -56,7 +56,6 @@
     "lerna-changelog": "^0.5.0",
     "lint-staged": "^9.2.0",
     "lodash": "^4.17.13",
-    "merge-stream": "^1.0.1",
     "output-file-sync": "^2.0.0",
     "prettier": "^1.17.1",
     "pump": "^3.0.0",
