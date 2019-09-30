@@ -55,7 +55,15 @@ export function runSync(
     ast,
   );
 
-  transformFile(file, config.passes);
+  try {
+    transformFile(file, config.passes);
+  } catch (e) {
+    e.message = `${file.opts.filename ?? "unknown"}: ${e.message}`;
+    if (!e.code) {
+      e.code = "BABEL_TRANSFORM_ERROR";
+    }
+    throw e;
+  }
 
   const opts = file.opts;
   const { outputCode, outputMap } =
