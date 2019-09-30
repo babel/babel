@@ -1,6 +1,6 @@
 MAKEFLAGS = -j1
 FLOW_COMMIT = 09669846b7a7ca5a6c23c12d56bb3bebdafd67e9
-TEST262_COMMIT = ce2dfd49d13740e995c96c34686d45c7960e628c
+TEST262_COMMIT = a1acc23cd85c552cde9c06cfed300c58d4b5b04c
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
@@ -114,7 +114,7 @@ test-flow-update-whitelist:
 bootstrap-test262:
 	rm -rf build/test262
 	mkdir -p build
-	git clone --branch=master --single-branch --shallow-since=2019-01-01 https://github.com/tc39/test262.git build/test262
+	git clone --branch=master --single-branch --shallow-since=2019-09-01 https://github.com/tc39/test262.git build/test262
 	cd build/test262 && git checkout $(TEST262_COMMIT)
 
 test-test262:
