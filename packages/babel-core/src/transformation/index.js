@@ -68,8 +68,9 @@ export function runSync(
 
   let outputCode, outputMap;
   try {
-    ({ outputCode, outputMap } =
-      opts.code !== false ? generateCode(config.passes, file) : {});
+    if (opts.code !== false) {
+      ({ outputCode, outputMap } = generateCode(config.passes, file));
+    }
   } catch (e) {
     e.message = `${opts.filename ?? "unknown"}: ${e.message}`;
     if (!e.code) {
