@@ -55,11 +55,29 @@ export function runSync(
     ast,
   );
 
-  transformFile(file, config.passes);
-
   const opts = file.opts;
-  const { outputCode, outputMap } =
-    opts.code !== false ? generateCode(config.passes, file) : {};
+  try {
+    transformFile(file, config.passes);
+  } catch (e) {
+    e.message = `${opts.filename ?? "unknown"}: ${e.message}`;
+    if (!e.code) {
+      e.code = "BABEL_TRANSFORM_ERROR";
+    }
+    throw e;
+  }
+
+  let outputCode, outputMap;
+  try {
+    if (opts.code !== false) {
+      ({ outputCode, outputMap } = generateCode(config.passes, file));
+    }
+  } catch (e) {
+    e.message = `${opts.filename ?? "unknown"}: ${e.message}`;
+    if (!e.code) {
+      e.code = "BABEL_GENERATE_ERROR";
+    }
+    throw e;
+  }
 
   return {
     metadata: file.metadata,

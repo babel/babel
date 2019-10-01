@@ -107,7 +107,7 @@ function parser(
     } else if (results.length === 1) {
       if (typeof results[0].then === "function") {
         throw new Error(
-          `You appear to be using an async codegen plugin, ` +
+          `You appear to be using an async parser plugin, ` +
             `which your current version of Babel does not support. ` +
             `If you're using a published plugin, you may need to upgrade ` +
             `your @babel/core version.`,
@@ -121,6 +121,7 @@ function parser(
       err.message +=
         "\nConsider renaming the file to '.mjs', or setting sourceType:module " +
         "or sourceType:unambiguous in your Babel config for this file.";
+      // err.code will be changed to BABEL_PARSE_ERROR later.
     }
 
     const { loc, missingPlugin } = err;
