@@ -62,7 +62,7 @@ export function findSuggestion(options: string[], option: string): string {
       return validOption;
     }
     return suggestion;
-  }, undefined);
+  }, "");
 }
 
 export function prettifyVersion(version: string) {
