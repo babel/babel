@@ -14,6 +14,8 @@ import {
   type BindingTypes,
   BIND_NONE,
   BIND_LEXICAL,
+  BIND_VAR,
+  BIND_FUNCTION,
   SCOPE_ARROW,
   SCOPE_OTHER,
 } from "../util/scopeflags";
@@ -270,6 +272,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.id = this.flowParseTypeAnnotatableIdentifier(
         /*allowPrimitiveOverride*/ true,
       );
+      this.scope.declareName(node.id.name, BIND_VAR, node.id.start);
       this.semicolon();
       return this.finishNode(node, "DeclareVariable");
     }
@@ -461,6 +464,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isClass?: boolean = false,
     ): void {
       node.id = this.flowParseRestrictedIdentifier(/*liberal*/ !isClass);
+
+      this.scope.declareName(
+        node.id.name,
+        isClass ? BIND_FUNCTION : BIND_LEXICAL,
+        node.id.start,
+      );
 
       if (this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();

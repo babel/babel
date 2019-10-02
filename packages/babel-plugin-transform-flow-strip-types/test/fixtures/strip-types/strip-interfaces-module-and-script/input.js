@@ -1,7 +1,7 @@
-interface A {}
-interface A extends B {}
-interface A<T> extends B<T>, C<T> {}
-interface A { foo: () => number; }
+interface A1 {}
+interface A2 extends B {}
+interface A3<T> extends B<T>, C<T> {}
+interface A4 { foo: () => number; }
 interface Dictionary { [index: string]: string; length: number; }
 class Foo implements Bar {}
 class Foo2 extends Bar implements Bat, Man<number> {}

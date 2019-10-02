@@ -15,16 +15,16 @@ type T4 = {
 type T5 = {
   -[k: K]: V
 };
-interface I {
+interface I1 {
   +p: T
 }
-interface I {
+interface I2 {
   -p: T
 }
-interface I {
+interface I3 {
   +[k: K]: V
 }
-interface I {
+interface I4 {
   -[k: K]: V
 }
 declare class I {
