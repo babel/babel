@@ -6,48 +6,40 @@ cache:
 
 os: linux
 
-node_js:
-  # We test the latest version on circleci
-  - "11"
-  - "10"
-  - "8"
-  - "6"
-
 env:
   global:
     - PATH=$HOME/.yarn/bin:$PATH
     - JOB=test
 
-before_install:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
-
-install:
-  # the `make test-ci` script runs this command already
-  - if [ "$JOB" != "test" ] && [ "$JOB" != "lint" ]; then yarn install; fi
-  - if [ "$JOB" = "lint" ]; then make bootstrap; fi
-
+install: skip
 before_script:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash
   - if [ "$TRAVIS_OS_NAME" = "windows" ]; then choco install make; fi
-  - if [ "$JOB" = "babel-parser-flow-tests" ]; then make bootstrap-flow; fi
-  - if [ "$JOB" = "babel-parser-test262-tests" ]; then make bootstrap-test262; fi
 
 script:
-  - if [ "$JOB" = "test" ]; then make test-ci; fi
-  - if [ "$JOB" = "lint" ]; then make lint && make flow; fi
-  - if [ "$JOB" = "babel-parser-flow-tests" ]; then make test-flow-ci; fi
-  - if [ "$JOB" = "babel-parser-test262-tests" ]; then make test-test262-ci; fi
+  - if [ "$JOB" = "test" ]; then make -j test-ci; fi
+  - if [ "$JOB" = "lint" ]; then make -j code-quality-ci; fi
+  - if [ "$JOB" = "babel-parser-flow-tests" ]; then make -j test-flow-ci; fi
+  - if [ "$JOB" = "babel-parser-test262-tests" ]; then make -j test-test262-ci; fi
 
 matrix:
   fast_finish: true
   include:
+    - node_js: "node"
+      env: JOB=lint
+  # We test the latest version on circleci
+    - node_js: "11"
+  # Move `windows` build to be the third since it is slow
     - os: windows
       node_js: "node"
       env:
       - JOB=test
       # https://travis-ci.community/t/build-doesnt-finish-after-completing-tests/288/9
       - YARN_GPG=no
-    - node_js: "node"
-      env: JOB=lint
+  # Continue node_js matrix
+    - node_js: "6"
+    - node_js: "10"
+    - node_js: "8"
     - node_js: "node"
       env: JOB=babel-parser-flow-tests
     - node_js: "node"
