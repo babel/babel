@@ -29,8 +29,7 @@ matrix:
       env: JOB=lint
   # We test the latest version on circleci
     - node_js: "11"
-    - node_js: "10"
-  # Move `windows` build to be the fourth since it is slow
+  # Move `windows` build to be the third since it is slow
     - os: windows
       node_js: "node"
       env:
@@ -38,8 +37,9 @@ matrix:
       # https://travis-ci.community/t/build-doesnt-finish-after-completing-tests/288/9
       - YARN_GPG=no
   # Continue node_js matrix
-    - node_js: "8"
     - node_js: "6"
+    - node_js: "10"
+    - node_js: "8"
     - node_js: "node"
       env: JOB=babel-parser-flow-tests
     - node_js: "node"
