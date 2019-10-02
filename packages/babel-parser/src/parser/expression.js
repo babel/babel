@@ -490,11 +490,7 @@ export default class ExpressionParser extends LValParser {
   // Parse unary operators, both prefix and postfix.
 
   parseMaybeUnary(refShorthandDefaultPos: ?Pos): N.Expression {
-    if (
-      this.isContextual("await") &&
-      (this.scope.inAsync ||
-        (!this.scope.inFunction && this.options.allowAwaitOutsideFunction))
-    ) {
+    if (this.isContextual("await") && this.isAwaitAllowed()) {
       return this.parseAwait();
     } else if (this.state.type.prefix) {
       const node = this.startNode();
@@ -676,8 +672,8 @@ export default class ExpressionParser extends LValParser {
       const oldYieldPos = this.state.yieldPos;
       const oldAwaitPos = this.state.awaitPos;
       this.state.maybeInArrowParameters = true;
-      this.state.yieldPos = 0;
-      this.state.awaitPos = 0;
+      this.state.yieldPos = -1;
+      this.state.awaitPos = -1;
 
       this.next();
 
@@ -716,8 +712,34 @@ export default class ExpressionParser extends LValParser {
 
         // We keep the old value if it isn't null, for cases like
         //   (x = async(yield)) => {}
-        this.state.yieldPos = oldYieldPos || this.state.yieldPos;
-        this.state.awaitPos = oldAwaitPos || this.state.awaitPos;
+        //
+        // Hi developer of the future :) If you are implementing generator
+        // arrow functions, please read the note below about "await" and
+        // verify if the same logic is needed for yield.
+        if (oldYieldPos !== -1) this.state.yieldPos = oldYieldPos;
+
+        // Await is trickier than yield. When parsing a possible arrow function
+        // (e.g. something starting with `async(`) we don't know if its possible
+        // parameters will actually be inside an async arrow function or if it is
+        // a normal call expression.
+        // If it ended up being a call expression, if we are in a context where
+        // await expression are disallowed (and thus "await" is an identifier)
+        // we must be careful not to leak this.state.awaitPos to an even outer
+        // context, where "await" could not be an identifier.
+        // For example, this code is valid because "await" isn't directly inside
+        // an async function:
+        //
+        //     async function a() {
+        //       function b(param = async (await)) {
+        //       }
+        //     }
+        //
+        if (
+          (!this.isAwaitAllowed() && !oldMaybeInArrowParameters) ||
+          oldAwaitPos !== -1
+        ) {
+          this.state.awaitPos = oldAwaitPos;
+        }
       }
 
       this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
@@ -1231,8 +1253,8 @@ export default class ExpressionParser extends LValParser {
     const oldAwaitPos = this.state.awaitPos;
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
     this.state.maybeInArrowParameters = true;
-    this.state.yieldPos = 0;
-    this.state.awaitPos = 0;
+    this.state.yieldPos = -1;
+    this.state.awaitPos = -1;
     this.state.inFSharpPipelineDirectBody = false;
 
     const innerStartPos = this.state.start;
@@ -1310,8 +1332,8 @@ export default class ExpressionParser extends LValParser {
 
     // We keep the old value if it isn't null, for cases like
     //   (x = (yield)) => {}
-    this.state.yieldPos = oldYieldPos || this.state.yieldPos;
-    this.state.awaitPos = oldAwaitPos || this.state.awaitPos;
+    if (oldYieldPos !== -1) this.state.yieldPos = oldYieldPos;
+    if (oldAwaitPos !== -1) this.state.awaitPos = oldAwaitPos;
 
     if (!exprList.length) {
       this.unexpected(this.state.lastTokStart);
@@ -1804,8 +1826,8 @@ export default class ExpressionParser extends LValParser {
   ): T {
     const oldYieldPos = this.state.yieldPos;
     const oldAwaitPos = this.state.awaitPos;
-    this.state.yieldPos = 0;
-    this.state.awaitPos = 0;
+    this.state.yieldPos = -1;
+    this.state.awaitPos = -1;
 
     this.initFunction(node, isAsync);
     node.generator = !!isGenerator;
@@ -1842,8 +1864,8 @@ export default class ExpressionParser extends LValParser {
     const oldYieldPos = this.state.yieldPos;
     const oldAwaitPos = this.state.awaitPos;
     this.state.maybeInArrowParameters = false;
-    this.state.yieldPos = 0;
-    this.state.awaitPos = 0;
+    this.state.yieldPos = -1;
+    this.state.awaitPos = -1;
 
     if (params) this.setArrowFunctionParameters(node, params);
     this.parseFunctionBody(node, true);
@@ -2117,11 +2139,18 @@ export default class ExpressionParser extends LValParser {
       );
     }
 
-    if (this.scope.inAsync && word === "await") {
-      this.raise(
-        startLoc,
-        "Can not use 'await' as identifier inside an async function",
-      );
+    if (word === "await") {
+      if (this.scope.inAsync) {
+        this.raise(
+          startLoc,
+          "Can not use 'await' as identifier inside an async function",
+        );
+      } else if (
+        this.state.awaitPos === -1 &&
+        (this.state.maybeInArrowParameters || this.isAwaitAllowed())
+      ) {
+        this.state.awaitPos = this.state.start;
+      }
     }
 
     if (this.state.inClassProperty && word === "arguments") {
@@ -2151,10 +2180,16 @@ export default class ExpressionParser extends LValParser {
     }
   }
 
+  isAwaitAllowed(): boolean {
+    if (this.scope.inFunction) return this.scope.inAsync;
+    if (this.options.allowAwaitOutsideFunction) return true;
+    return false;
+  }
+
   // Parses await expression inside async function.
 
   parseAwait(): N.AwaitExpression {
-    if (!this.state.awaitPos) {
+    if (this.state.awaitPos === -1) {
       this.state.awaitPos = this.state.start;
     }
     const node = this.startNode();
@@ -2183,7 +2218,7 @@ export default class ExpressionParser extends LValParser {
   // Parses yield expression inside generator.
 
   parseYield(noIn?: ?boolean): N.YieldExpression {
-    if (!this.state.yieldPos) {
+    if (this.state.yieldPos === -1) {
       this.state.yieldPos = this.state.start;
     }
     const node = this.startNode();

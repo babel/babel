@@ -159,15 +159,15 @@ export default class UtilParser extends Tokenizer {
 
   checkYieldAwaitInDefaultParams() {
     if (
-      this.state.yieldPos &&
-      (!this.state.awaitPos || this.state.yieldPos < this.state.awaitPos)
+      this.state.yieldPos !== -1 &&
+      (this.state.awaitPos === -1 || this.state.yieldPos < this.state.awaitPos)
     ) {
       this.raise(
         this.state.yieldPos,
         "Yield cannot be used as name inside a generator function",
       );
     }
-    if (this.state.awaitPos) {
+    if (this.state.awaitPos !== -1) {
       this.raise(
         this.state.awaitPos,
         "Await cannot be used as name inside an async function",

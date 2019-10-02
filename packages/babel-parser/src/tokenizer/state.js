@@ -97,8 +97,8 @@ export default class State {
   decoratorStack: Array<Array<N.Decorator>> = [[]];
 
   // Positions to delayed-check that yield/await does not exist in default parameters.
-  yieldPos: number = 0;
-  awaitPos: number = 0;
+  yieldPos: number = -1;
+  awaitPos: number = -1;
 
   // Token store.
   tokens: Array<Token | N.Comment> = [];
