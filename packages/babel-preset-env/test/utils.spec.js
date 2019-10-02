@@ -56,6 +56,8 @@ describe("utils", () => {
       const options = ["one", "two", "three"];
       expect(findSuggestion(options, "onr")).toEqual("one");
       expect(findSuggestion(options, "tree")).toEqual("three");
+      expect(findSuggestion(options, "")).toEqual("one");
+      expect(findSuggestion(options, "xxx")).toEqual("one");
     });
   });
 });
