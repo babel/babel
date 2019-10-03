@@ -825,7 +825,7 @@ export default class ExpressionParser extends LValParser {
         first = false;
       } else {
         this.expect(tt.comma);
-        if (this.eat(close)) {
+        if (this.match(close)) {
           if (dynamicImport) {
             this.raise(
               this.state.lastTokStart,
@@ -839,6 +839,7 @@ export default class ExpressionParser extends LValParser {
               this.state.lastTokStart,
             );
           }
+          this.next();
           break;
         }
       }
@@ -1290,7 +1291,7 @@ export default class ExpressionParser extends LValParser {
           ),
         );
 
-        this.checkCommaAfterRest();
+        this.checkCommaAfterRest(tt.parenR);
 
         break;
       } else {
@@ -1577,7 +1578,7 @@ export default class ExpressionParser extends LValParser {
         this.next();
         // Don't use parseRestBinding() as we only allow Identifier here.
         prop.argument = this.parseIdentifier();
-        this.checkCommaAfterRest();
+        this.checkCommaAfterRest(tt.braceR);
         return this.finishNode(prop, "RestElement");
       }
 

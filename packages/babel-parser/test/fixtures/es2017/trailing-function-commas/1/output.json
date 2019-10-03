@@ -74,6 +74,9 @@
             },
             "name": "log"
           },
+          "extra": {
+            "trailingComma": 13
+          },
           "arguments": [
             {
               "type": "Identifier",
@@ -132,10 +135,7 @@
               },
               "value": 2
             }
-          ],
-          "extra": {
-            "trailingComma": 14
-          }
+          ]
         }
       }
     ],

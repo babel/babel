@@ -585,7 +585,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const restNode: N.TsRestType = this.startNode();
         this.next(); // skips ellipsis
         restNode.typeAnnotation = this.tsParseType();
-        this.checkCommaAfterRest();
+        this.checkCommaAfterRest(tt.braketR);
         return this.finishNode(restNode, "TSRestType");
       }
 

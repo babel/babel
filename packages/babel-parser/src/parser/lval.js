@@ -176,7 +176,7 @@ export default class LValParser extends NodeUtils {
         }
 
         if (trailingCommaPos) {
-          this.raiseRestNotLast(trailingCommaPos);
+          this.raiseTrailingCommaAfterRest(trailingCommaPos);
         }
 
         --end;
@@ -279,7 +279,7 @@ export default class LValParser extends NodeUtils {
         break;
       } else if (this.match(tt.ellipsis)) {
         elts.push(this.parseAssignableListItemTypes(this.parseRestBinding()));
-        this.checkCommaAfterRest();
+        this.checkCommaAfterRest(close);
         this.expect(close);
         break;
       } else {
@@ -469,13 +469,22 @@ export default class LValParser extends NodeUtils {
     }
   }
 
-  checkCommaAfterRest(): void {
+  checkCommaAfterRest(close: TokenType): void {
     if (this.match(tt.comma)) {
-      this.raiseRestNotLast(this.state.start);
+      // TODO: Use lookaheadCharCode after that https://github.com/babel/babel/pull/10371 is merged
+      if (this.lookahead().type == close) {
+        this.raiseTrailingCommaAfterRest(this.state.start);
+      } else {
+        this.raiseRestNotLast(this.state.start);
+      }
     }
   }
 
   raiseRestNotLast(pos: number) {
     this.raise(pos, `Rest element must be last element`);
+  }
+
+  raiseTrailingCommaAfterRest(pos: number) {
+    this.raise(pos, `Unexpected trailing comma after rest element`);
   }
 }

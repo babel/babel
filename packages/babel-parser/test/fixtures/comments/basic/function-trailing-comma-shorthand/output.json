@@ -74,6 +74,9 @@
             },
             "name": "fn"
           },
+          "extra": {
+            "trailingComma": 11
+          },
           "arguments": [
             {
               "type": "Identifier",
@@ -183,9 +186,6 @@
               ]
             }
           ],
-          "extra": {
-            "trailingComma": 28
-          },
           "trailingComments": [
             {
               "type": "CommentBlock",
