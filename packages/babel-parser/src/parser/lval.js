@@ -472,7 +472,7 @@ export default class LValParser extends NodeUtils {
   checkCommaAfterRest(close: TokenType): void {
     if (this.match(tt.comma)) {
       // TODO: Use lookaheadCharCode after that https://github.com/babel/babel/pull/10371 is merged
-      if (this.lookahead().type == close) {
+      if (this.lookahead().type === close) {
         this.raiseTrailingCommaAfterRest(this.state.start);
       } else {
         this.raiseRestNotLast(this.state.start);
