@@ -127,6 +127,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return undefined;
     }
 
+    /** Parses a list of modifiers, in any order.
+     *  If you need a specific order, you must call this function multiple times:
+     *    this.tsParseModifiers(["public"]);
+     *    this.tsParseModifiers(["abstract", "readonly"]);
+     */
     tsParseModifiers<T: TsModifier>(
       allowedModifiers: T[],
     ): { [key: TsModifier]: ?true, __proto__: null } {
