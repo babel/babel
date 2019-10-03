@@ -91,7 +91,7 @@ type EnumContext = {|
 type EnumMemberInit =
   | {| type: "number", pos: number, value: N.Node |}
   | {| type: "string", pos: number, value: N.Node |}
-  | {| type: "boolean", pos: number, value: boolean |}
+  | {| type: "boolean", pos: number, value: N.Node |}
   | {| type: "invalid", pos: number |}
   | {| type: "none", pos: number |};
 
