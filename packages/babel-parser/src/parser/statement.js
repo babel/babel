@@ -1712,7 +1712,6 @@ export default class StatementParser extends ExpressionParser {
   maybeParseExportNamespaceSpecifier(node: N.Node): boolean {
     if (this.isContextual("as")) {
       if (!node.specifiers) node.specifiers = [];
-      this.expectPlugin("exportNamespaceFrom");
 
       const specifier = this.startNodeAt(
         this.state.lastTokStart,
