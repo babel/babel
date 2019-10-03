@@ -3031,7 +3031,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             return {
               type: "boolean",
               pos: literal.start,
-              value: literal.value,
+              value: literal,
             };
           }
           return { type: "invalid", pos: startPos };

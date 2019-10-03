@@ -482,6 +482,7 @@ defineType("EnumDeclaration", {
 });
 
 defineType("EnumBooleanBody", {
+  aliases: ["EnumBody"],
   visitor: ["members"],
   fields: {
     explicit: validate(assertValueType("boolean")),
@@ -490,6 +491,7 @@ defineType("EnumBooleanBody", {
 });
 
 defineType("EnumNumberBody", {
+  aliases: ["EnumBody"],
   visitor: ["members"],
   fields: {
     explicit: validate(assertValueType("boolean")),
@@ -498,6 +500,7 @@ defineType("EnumNumberBody", {
 });
 
 defineType("EnumStringBody", {
+  aliases: ["EnumBody"],
   visitor: ["members"],
   fields: {
     explicit: validate(assertValueType("boolean")),
@@ -506,6 +509,7 @@ defineType("EnumStringBody", {
 });
 
 defineType("EnumSymbolBody", {
+  aliases: ["EnumBody"],
   visitor: ["members"],
   fields: {
     members: validateArrayOfType("EnumDefaultedMember"),
@@ -513,14 +517,16 @@ defineType("EnumSymbolBody", {
 });
 
 defineType("EnumBooleanMember", {
+  aliases: ["EnumMember"],
   visitor: ["id"],
   fields: {
     id: validateType("Identifier"),
-    init: validate(assertValueType("boolean")),
+    init: validateType("BooleanLiteral"),
   },
 });
 
 defineType("EnumNumberMember", {
+  aliases: ["EnumMember"],
   visitor: ["id", "init"],
   fields: {
     id: validateType("Identifier"),
@@ -529,6 +535,7 @@ defineType("EnumNumberMember", {
 });
 
 defineType("EnumStringMember", {
+  aliases: ["EnumMember"],
   visitor: ["id", "init"],
   fields: {
     id: validateType("Identifier"),
@@ -537,6 +544,7 @@ defineType("EnumStringMember", {
 });
 
 defineType("EnumDefaultedMember", {
+  aliases: ["EnumMember"],
   visitor: ["id"],
   fields: {
     id: validateType("Identifier"),

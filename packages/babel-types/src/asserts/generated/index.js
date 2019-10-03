@@ -1172,6 +1172,12 @@ export function assertFlowDeclaration(node: Object, opts?: Object = {}): void {
 export function assertFlowPredicate(node: Object, opts?: Object = {}): void {
   assert("FlowPredicate", node, opts);
 }
+export function assertEnumBody(node: Object, opts?: Object = {}): void {
+  assert("EnumBody", node, opts);
+}
+export function assertEnumMember(node: Object, opts?: Object = {}): void {
+  assert("EnumMember", node, opts);
+}
 export function assertJSX(node: Object, opts?: Object = {}): void {
   assert("JSX", node, opts);
 }

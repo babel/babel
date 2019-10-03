@@ -45,6 +45,8 @@ export const FLOWBASEANNOTATION_TYPES =
   FLIPPED_ALIAS_KEYS["FlowBaseAnnotation"];
 export const FLOWDECLARATION_TYPES = FLIPPED_ALIAS_KEYS["FlowDeclaration"];
 export const FLOWPREDICATE_TYPES = FLIPPED_ALIAS_KEYS["FlowPredicate"];
+export const ENUMBODY_TYPES = FLIPPED_ALIAS_KEYS["EnumBody"];
+export const ENUMMEMBER_TYPES = FLIPPED_ALIAS_KEYS["EnumMember"];
 export const JSX_TYPES = FLIPPED_ALIAS_KEYS["JSX"];
 export const PRIVATE_TYPES = FLIPPED_ALIAS_KEYS["Private"];
 export const TSTYPEELEMENT_TYPES = FLIPPED_ALIAS_KEYS["TSTypeElement"];

@@ -107,7 +107,22 @@
                 },
                 "name": "A"
               },
-              "init": true
+              "init": {
+                "type": "BooleanLiteral",
+                "start": 15,
+                "end": 19,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 10
+                  }
+                },
+                "value": true
+              }
             },
             {
               "type": "EnumBooleanMember",
@@ -140,7 +155,22 @@
                 },
                 "name": "B"
               },
-              "init": false
+              "init": {
+                "type": "BooleanLiteral",
+                "start": 27,
+                "end": 32,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 11
+                  }
+                },
+                "value": false
+              }
             }
           ]
         }
