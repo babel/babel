@@ -127,12 +127,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return undefined;
     }
 
-    tsParseModifiers<T: TsModifier>(allowedModifiers: T[]): { [*]: true } {
-      const modifiers = {};
+    tsParseModifiers<T: TsModifier>(
+      allowedModifiers: T[],
+    ): { [key: TsModifier]: ?true, __proto__: null } {
+      const modifiers = Object.create(null);
 
       while (true) {
         const startPos = this.state.start;
-        const modifier = this.tsParseModifier(allowedModifiers);
+        const modifier: ?T = this.tsParseModifier(allowedModifiers);
 
         if (!modifier) break;
 
