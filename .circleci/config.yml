@@ -115,8 +115,8 @@ workflows:
       - test
   test262-after-approval:
     jobs:
-      - approve-test262-run:
-          type: approval
+#       - approve-test262-run:
+#           type: approval
       - test262:
-          requires:
-            - approve-test262-run
+#           requires:
+#             - approve-test262-run
