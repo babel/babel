@@ -33,9 +33,6 @@ aliases:
   - &test262_workdir
     working_directory: ~/babel/babel-test262-runner
 
-  - &artifact_test262_tap
-    path: ~/test262.tap
-
   - &artifact_test262_xunit
     path: ~/test-results
 
@@ -100,7 +97,7 @@ jobs:
           name: Run Test262
           command: |
             mkdir -p ~/test-results/test262
-            node lib/run-tests arrow-function | tee >(./node_modules/.bin/tap-mocha-reporter xunit) > ~/test-results/test262/results.xml
+            node lib/run-tests arrow-function | tee >(./node_modules/.bin/tap-mocha-reporter xunit > ~/test-results/test262/results.xml)
           <<: *test262_workdir
       - store_test_results: *artifact_test262_xunit
 
