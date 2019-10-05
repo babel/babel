@@ -98,7 +98,7 @@ jobs:
             node lib/download-node
       - run:
           name: Run Test262
-          command: node lib/run-tests arrow-function | tee ~/test262.tap
+          command: node lib/run-tests arrow-function | tee >(./node_modules/.bin/tap-mocha-reporter xunit > ~/test-results/test262/results.xml) tee >(./node_modules/.bin/tap-mocha-reporter spec >&1)
           <<: *test262_workdir
       - store_artifacts: *artifact_test262_tap
       - run:
