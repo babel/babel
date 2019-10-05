@@ -37,7 +37,7 @@ aliases:
     path: ~/test262.tap
 
   - &artifact_test262_xunit
-    path: ~/test-results/test262/results.xml
+    path: ~/test-results
 
 jobs:
   test:
