@@ -105,7 +105,7 @@ jobs:
           name: Convert Tap output to Xunit
           command: |
             mkdir -p ~/test-results/test262
-            cat ~/test262.tap | ./node_modules/.bin/tap-mocha-reporter xunit | tee ~/test-results/test262/results.xml
+            cat ~/test262.tap | $(npm bin)/tap-mocha-reporter xunit | tee ~/test-results/test262/results.xml
           <<: *test262_workdir
       - store_test_results: *artifact_test262_xunit
 
