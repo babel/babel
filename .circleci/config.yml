@@ -103,7 +103,7 @@ jobs:
       - store_artifacts: *artifact_test262_tap
       - run:
           name: Convert Tap output to Xunit
-          command: cat ~/test262.tap | ./node_modules/.bin/tap-mocha-reporter xunit | tee ~/test262.xml
+          command: cat ~/test262.tap | ./node_modules/.bin/tap-mocha-reporter xunit | tee ~/test262.xml || true
           <<: *test262_workdir
       - store_test_results: *artifact_test262_xunit
 
