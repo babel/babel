@@ -98,14 +98,9 @@ jobs:
             node lib/download-node
       - run:
           name: Run Test262
-          command: node lib/run-tests arrow-function | tee >(./node_modules/.bin/tap-mocha-reporter xunit > ~/test-results/test262/results.xml) tee >(./node_modules/.bin/tap-mocha-reporter spec >&1)
-          <<: *test262_workdir
-      - store_artifacts: *artifact_test262_tap
-      - run:
-          name: Convert Tap output to Xunit
           command: |
             mkdir -p ~/test-results/test262
-            cat ~/test262.tap | ./node_modules/.bin/tap-mocha-reporter xunit | tee ~/test-results/test262/results.xml || true
+            node lib/run-tests arrow-function | tee >(./node_modules/.bin/tap-mocha-reporter xunit > ~/test-results/test262/results.xml) tee >(./node_modules/.bin/tap-mocha-reporter spec >&1)
           <<: *test262_workdir
       - store_test_results: *artifact_test262_xunit
 
