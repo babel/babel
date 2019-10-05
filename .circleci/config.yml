@@ -122,3 +122,13 @@ workflows:
       - test262
 #           requires:
 #             - approve-test262-run
+  nightly:
+      triggers:
+        - schedule:
+            cron: "0 0 * * *"
+            filters:
+              branches:
+                only:
+                  - master
+      jobs:
+        - test262
