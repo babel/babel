@@ -37,7 +37,7 @@ aliases:
     path: ~/test262.tap
 
   - &artifact_test262_xunit
-    path: ~/test262.xml
+    path: ~/test-results/test262/results.xml
 
 jobs:
   test:
@@ -103,7 +103,9 @@ jobs:
       - store_artifacts: *artifact_test262_tap
       - run:
           name: Convert Tap output to Xunit
-          command: cat ~/test262.tap | ./node_modules/.bin/tap-mocha-reporter xunit | tee ~/test262.xml || true
+          command: |
+            mkdir -p ~/test-results/test262
+            cat ~/test262.tap | ./node_modules/.bin/tap-mocha-reporter xunit | tee ~/test-results/test262/results.xml || true
           <<: *test262_workdir
       - store_test_results: *artifact_test262_xunit
 
