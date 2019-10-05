@@ -98,7 +98,7 @@ jobs:
             node lib/download-node
       - run:
           name: Run Test262
-          command: node lib/run-tests I_AM_SURE | tee ~/test262.tap
+          command: node lib/run-tests arrow-function | tee ~/test262.tap
           <<: *test262_workdir
       - store_artifacts: *artifact_test262_tap
       - run:
