@@ -89,7 +89,7 @@ jobs:
             git clone --recurse-submodules https://github.com/babel/babel-test262-runner
             cd babel-test262-runner
             yarn
-            # yarn add tap-mocha-reporter --dev
+            yarn add tap-mocha-reporter --dev
             curl -L https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 > jq
             chmod +x ./jq
             for package in ../packages/*/package.json; do
