@@ -86,7 +86,7 @@ jobs:
       - run:
           name: Setup Test Runner
           command: |
-            git clone --recurse-submodules https://github.com/babel/babel-test262-runner
+            git clone --recurse-submodules https://github.com/jbhoosreddy/babel-test262-runner
             cd babel-test262-runner
             yarn
             yarn add tap-mocha-reporter --dev
