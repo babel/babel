@@ -4,6 +4,8 @@ import { types as tt, type TokenType } from "../tokenizer/types";
 import Tokenizer from "../tokenizer";
 import type { Node } from "../types";
 import { lineBreak, skipWhiteSpace } from "../util/whitespace";
+import { isIdentifierChar } from "../util/identifier";
+import * as charCodes from "charcodes";
 
 const literal = /^('|")((?:\\?.)*?)\1/;
 
@@ -26,8 +28,15 @@ export default class UtilParser extends Tokenizer {
   }
 
   isLookaheadRelational(op: "<" | ">"): boolean {
-    const l = this.lookahead();
-    return l.type === tt.relational && l.value === op;
+    const next = this.nextTokenStart();
+    if (this.input.charAt(next) === op) {
+      if (next + 1 === this.input.length) {
+        return true;
+      }
+      const afterNext = this.input.charCodeAt(next + 1);
+      return afterNext !== op.charCodeAt(0) && afterNext !== charCodes.equalsTo;
+    }
+    return false;
   }
 
   // TODO
@@ -60,9 +69,18 @@ export default class UtilParser extends Tokenizer {
     );
   }
 
+  isUnparsedContextual(nameStart: number, name: string): boolean {
+    const nameEnd = nameStart + name.length;
+    return (
+      this.input.slice(nameStart, nameEnd) === name &&
+      (nameEnd === this.input.length ||
+        !isIdentifierChar(this.input.charCodeAt(nameEnd)))
+    );
+  }
+
   isLookaheadContextual(name: string): boolean {
-    const l = this.lookahead();
-    return l.type === tt.name && l.value === name;
+    const next = this.nextTokenStart();
+    return this.isUnparsedContextual(next, name);
   }
 
   // Consumes contextual keyword if possible.

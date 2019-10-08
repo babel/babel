@@ -8,7 +8,7 @@ import {
   isIdentifierStart,
   keywordRelationalOperator,
 } from "../util/identifier";
-import { lineBreak, skipWhiteSpace } from "../util/whitespace";
+import { lineBreak } from "../util/whitespace";
 import * as charCodes from "charcodes";
 import {
   BIND_CLASS,
@@ -105,10 +105,7 @@ export default class StatementParser extends ExpressionParser {
     if (!this.isContextual("let")) {
       return false;
     }
-    skipWhiteSpace.lastIndex = this.state.pos;
-    const skip = skipWhiteSpace.exec(this.input);
-    // $FlowIgnore
-    const next = this.state.pos + skip[0].length;
+    const next = this.nextTokenStart();
     const nextCh = this.input.charCodeAt(next);
     // For ambiguous cases, determine if a LexicalDeclaration (or only a
     // Statement) is allowed here. If context is not empty then only a Statement
@@ -170,7 +167,7 @@ export default class StatementParser extends ExpressionParser {
       case tt._for:
         return this.parseForStatement(node);
       case tt._function:
-        if (this.lookahead().type === tt.dot) break;
+        if (this.lookaheadCharCode() === charCodes.dot) break;
         if (context) {
           if (this.state.strict) {
             this.raise(
@@ -223,8 +220,11 @@ export default class StatementParser extends ExpressionParser {
         return this.parseEmptyStatement(node);
       case tt._export:
       case tt._import: {
-        const nextToken = this.lookahead();
-        if (nextToken.type === tt.parenL || nextToken.type === tt.dot) {
+        const nextTokenCharCode = this.lookaheadCharCode();
+        if (
+          nextTokenCharCode === charCodes.leftParenthesis ||
+          nextTokenCharCode === charCodes.dot
+        ) {
           break;
         }
 
@@ -1746,11 +1746,11 @@ export default class StatementParser extends ExpressionParser {
   maybeParseExportDeclaration(node: N.Node): boolean {
     if (this.shouldParseExportDeclaration()) {
       if (this.isContextual("async")) {
-        const next = this.lookahead();
+        const next = this.nextTokenStart();
 
         // export async;
-        if (next.type !== tt._function) {
-          this.unexpected(next.start, `Unexpected token, expected "function"`);
+        if (!this.isUnparsedContextual(next, "function")) {
+          this.unexpected(next, `Unexpected token, expected "function"`);
         }
       }
 
@@ -1765,21 +1765,10 @@ export default class StatementParser extends ExpressionParser {
 
   isAsyncFunction(): boolean {
     if (!this.isContextual("async")) return false;
-
-    const { pos } = this.state;
-
-    skipWhiteSpace.lastIndex = pos;
-    const skip = skipWhiteSpace.exec(this.input);
-
-    if (!skip || !skip.length) return false;
-
-    const next = pos + skip[0].length;
-
+    const next = this.nextTokenStart();
     return (
-      !lineBreak.test(this.input.slice(pos, next)) &&
-      this.input.slice(next, next + 8) === "function" &&
-      (next + 8 === this.length ||
-        !isIdentifierChar(this.input.charCodeAt(next + 8)))
+      !lineBreak.test(this.input.slice(this.state.pos, next)) &&
+      this.isUnparsedContextual(next, "function")
     );
   }
 
@@ -1841,10 +1830,10 @@ export default class StatementParser extends ExpressionParser {
       return false;
     }
 
-    const lookahead = this.lookahead();
+    const next = this.nextTokenStart();
     return (
-      lookahead.type === tt.comma ||
-      (lookahead.type === tt.name && lookahead.value === "from")
+      this.input.charCodeAt(next) === charCodes.comma ||
+      this.isUnparsedContextual(next, "from")
     );
   }
 

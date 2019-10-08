@@ -13,6 +13,7 @@ import {
   lineBreakG,
   isNewLine,
   isWhitespace,
+  skipWhiteSpace,
 } from "../util/whitespace";
 import State from "./state";
 
@@ -168,6 +169,18 @@ export default class Tokenizer extends LocationParser {
     return curr;
   }
 
+  nextTokenStart(): number {
+    const thisTokEnd = this.state.pos;
+    skipWhiteSpace.lastIndex = thisTokEnd;
+    const skip = skipWhiteSpace.exec(this.input);
+    // $FlowIgnore: The skipWhiteSpace ensures to match any string
+    return thisTokEnd + skip[0].length;
+  }
+
+  lookaheadCharCode(): number {
+    return this.input.charCodeAt(this.nextTokenStart());
+  }
+
   // Toggle strict mode. Re-reads the next number or string to please
   // pedantic tests (`"use strict"; 010;` should fail).
 
@@ -267,13 +280,7 @@ export default class Tokenizer extends LocationParser {
     const startLoc = this.state.curPosition();
     let ch = this.input.charCodeAt((this.state.pos += startSkip));
     if (this.state.pos < this.length) {
-      while (
-        ch !== charCodes.lineFeed &&
-        ch !== charCodes.carriageReturn &&
-        ch !== charCodes.lineSeparator &&
-        ch !== charCodes.paragraphSeparator &&
-        ++this.state.pos < this.length
-      ) {
+      while (!isNewLine(ch) && ++this.state.pos < this.length) {
         ch = this.input.charCodeAt(this.state.pos);
       }
     }
@@ -441,13 +448,7 @@ export default class Tokenizer extends LocationParser {
     let ch = this.input.charCodeAt(this.state.pos);
     if (ch !== charCodes.exclamationMark) return false;
 
-    while (
-      ch !== charCodes.lineFeed &&
-      ch !== charCodes.carriageReturn &&
-      ch !== charCodes.lineSeparator &&
-      ch !== charCodes.paragraphSeparator &&
-      ++this.state.pos < this.length
-    ) {
+    while (!isNewLine(ch) && ++this.state.pos < this.length) {
       ch = this.input.charCodeAt(this.state.pos);
     }
 
