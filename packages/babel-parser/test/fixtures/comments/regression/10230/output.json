@@ -163,7 +163,10 @@
                   }
                 ]
               }
-            ]
+            ],
+            "extra": {
+              "trailingComma": 13
+            }
           }
         },
         "trailingComments": [

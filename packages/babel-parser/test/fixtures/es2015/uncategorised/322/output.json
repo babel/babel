@@ -91,7 +91,10 @@
                 "name": "x"
               },
               null
-            ]
+            ],
+            "extra": {
+              "trailingComma": 3
+            }
           },
           "right": {
             "type": "NumericLiteral",

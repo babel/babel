@@ -55,11 +55,6 @@ export default class State {
   //          ^
   noArrowParamsConversionAt: number[] = [];
 
-  // A comma after "...a" is only allowed in spread, but not in rest.
-  // Since we parse destructuring patterns as array/object literals
-  // and then convert them, we need to track it.
-  commaAfterSpreadAt: number = -1;
-
   // Flags to track
   inParameters: boolean = false;
   maybeInArrowParameters: boolean = false;

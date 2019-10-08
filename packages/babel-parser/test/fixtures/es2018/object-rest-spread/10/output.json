@@ -183,7 +183,10 @@
                     "shorthand": true
                   }
                 }
-              ]
+              ],
+              "extra": {
+                "trailingComma": 10
+              }
             },
             "init": {
               "type": "Identifier",

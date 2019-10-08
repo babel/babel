@@ -1798,6 +1798,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               ((node.params: any): N.Expression[]),
               true,
               "arrow function parameters",
+              node.extra?.trailingComma,
             );
             // Enter scope, as checkParams defines bindings
             this.scope.enter(functionFlags(false, false) | SCOPE_ARROW);
@@ -1820,6 +1821,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             ((node.params: any): N.Expression[]),
             true,
             "arrow function parameters",
+            node.extra?.trailingComma,
           );
         }
         return [arrows, []];
@@ -1831,6 +1833,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             ((node.params: any): N.Expression[]),
             true,
             "arrow function parameters",
+            node.extra?.trailingComma,
           );
           return true;
         } catch (err) {
@@ -2005,6 +2008,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       exprList: N.Expression[],
       isBinding: ?boolean,
       contextDescription: string,
+      trailingCommaPos?: ?number,
     ): $ReadOnlyArray<N.Pattern> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
@@ -2012,7 +2016,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           exprList[i] = this.typeCastToParameter(expr);
         }
       }
-      return super.toAssignableList(exprList, isBinding, contextDescription);
+      return super.toAssignableList(
+        exprList,
+        isBinding,
+        contextDescription,
+        trailingCommaPos,
+      );
     }
 
     // this is a list of nodes, from something like a call expression, we need to filter the

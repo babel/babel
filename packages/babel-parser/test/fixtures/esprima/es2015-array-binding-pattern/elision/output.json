@@ -78,7 +78,10 @@
               "elements": [
                 null,
                 null
-              ]
+              ],
+              "extra": {
+                "trailingComma": 3
+              }
             }
           ],
           "body": {

@@ -1,5 +1,6 @@
 // @flow
 
+import * as charCodes from "charcodes";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import type {
   TSParameterProperty,
@@ -60,6 +61,14 @@ export default class LValParser extends NodeUtils {
             const prop = node.properties[i];
             const isLast = i === last;
             this.toAssignableObjectExpressionProp(prop, isBinding, isLast);
+
+            if (
+              isLast &&
+              prop.type === "RestElement" &&
+              node.extra?.trailingComma
+            ) {
+              this.raiseRestNotLast(node.extra.trailingComma);
+            }
           }
           break;
 
@@ -78,7 +87,12 @@ export default class LValParser extends NodeUtils {
 
         case "ArrayExpression":
           node.type = "ArrayPattern";
-          this.toAssignableList(node.elements, isBinding, contextDescription);
+          this.toAssignableList(
+            node.elements,
+            isBinding,
+            contextDescription,
+            node.extra?.trailingComma,
+          );
           break;
 
         case "AssignmentExpression":
@@ -142,6 +156,7 @@ export default class LValParser extends NodeUtils {
     exprList: Expression[],
     isBinding: ?boolean,
     contextDescription: string,
+    trailingCommaPos?: ?number,
   ): $ReadOnlyArray<Pattern> {
     let end = exprList.length;
     if (end) {
@@ -160,6 +175,11 @@ export default class LValParser extends NodeUtils {
         ) {
           this.unexpected(arg.start);
         }
+
+        if (trailingCommaPos) {
+          this.raiseTrailingCommaAfterRest(trailingCommaPos);
+        }
+
         --end;
       }
     }
@@ -213,11 +233,6 @@ export default class LValParser extends NodeUtils {
       undefined,
       refNeedsArrowPos,
     );
-
-    if (this.state.commaAfterSpreadAt === -1 && this.match(tt.comma)) {
-      this.state.commaAfterSpreadAt = this.state.start;
-    }
-
     return this.finishNode(node, "SpreadElement");
   }
 
@@ -234,7 +249,11 @@ export default class LValParser extends NodeUtils {
       case tt.bracketL: {
         const node = this.startNode();
         this.next();
-        node.elements = this.parseBindingList(tt.bracketR, true);
+        node.elements = this.parseBindingList(
+          tt.bracketR,
+          charCodes.rightSquareBracket,
+          true,
+        );
         return this.finishNode(node, "ArrayPattern");
       }
 
@@ -247,6 +266,7 @@ export default class LValParser extends NodeUtils {
 
   parseBindingList(
     close: TokenType,
+    closeCharCode: $Values<typeof charCodes>,
     allowEmpty?: boolean,
     allowModifiers?: boolean,
   ): $ReadOnlyArray<Pattern | TSParameterProperty> {
@@ -265,7 +285,7 @@ export default class LValParser extends NodeUtils {
         break;
       } else if (this.match(tt.ellipsis)) {
         elts.push(this.parseAssignableListItemTypes(this.parseRestBinding()));
-        this.checkCommaAfterRest();
+        this.checkCommaAfterRest(closeCharCode);
         this.expect(close);
         break;
       } else {
@@ -455,19 +475,21 @@ export default class LValParser extends NodeUtils {
     }
   }
 
-  checkCommaAfterRest(): void {
+  checkCommaAfterRest(close: $Values<typeof charCodes>): void {
     if (this.match(tt.comma)) {
-      this.raiseRestNotLast(this.state.start);
-    }
-  }
-
-  checkCommaAfterRestFromSpread(): void {
-    if (this.state.commaAfterSpreadAt > -1) {
-      this.raiseRestNotLast(this.state.commaAfterSpreadAt);
+      if (this.lookaheadCharCode() === close) {
+        this.raiseTrailingCommaAfterRest(this.state.start);
+      } else {
+        this.raiseRestNotLast(this.state.start);
+      }
     }
   }
 
   raiseRestNotLast(pos: number) {
     this.raise(pos, `Rest element must be last element`);
+  }
+
+  raiseTrailingCommaAfterRest(pos: number) {
+    this.raise(pos, `Unexpected trailing comma after rest element`);
   }
 }
