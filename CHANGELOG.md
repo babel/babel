@@ -17,6 +17,47 @@ See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.6.3 (2019-10-08)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#10469](https://github.com/babel/babel/pull/10469) Disallow await inside async arrow params ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#10493](https://github.com/babel/babel/pull/10493) [parser] Disallow numeric separators in legacy octal like integers ([@gonzarodriguezt](https://github.com/gonzarodriguezt))
+
+#### :rocket: New Feature
+* `babel-types`
+  * [#10504](https://github.com/babel/babel/pull/10504) Add declarations for more of @babel/types exports ([@Jessidhia](https://github.com/Jessidhia))
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-block-scoping`
+  * [#10343](https://github.com/babel/babel/pull/10343) Do not remove let bindings even they are wrapped in closure ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#10119](https://github.com/babel/babel/pull/10119) add scope to TSModuleDeclaration ([@tanhauhau](https://github.com/tanhauhau))
+  * [#10332](https://github.com/babel/babel/pull/10332) Do not allow member expressions to start async arrows ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#10490](https://github.com/babel/babel/pull/10490) [parser] Don't crash on comment after trailing comma after elision ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-react-constant-elements`, `babel-traverse`
+  * [#10529](https://github.com/babel/babel/pull/10529) Do not hoist jsx referencing a mutable binding ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-parser`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`, `babel-plugin-transform-typescript`
+  * [#10220](https://github.com/babel/babel/pull/10220) Flow: interface identifier should be declared in the scope ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-core`
+  * [#10419](https://github.com/babel/babel/pull/10419) assertNoDuplicates throw with more context ([@hjdivad](https://github.com/hjdivad))
+  * [#10511](https://github.com/babel/babel/pull/10511) Add filename to transform error ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* Other
+  * [#10506](https://github.com/babel/babel/pull/10506) Use `make -j` for parallel build ([@JLHwung](https://github.com/JLHwung))
+  * [#10443](https://github.com/babel/babel/pull/10443) perf: only apply lazy cjs module transform on cli and core ([@JLHwung](https://github.com/JLHwung))
+  * [#10494](https://github.com/babel/babel/pull/10494) Enable optional chaining and nullish coalescing plugins ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-helper-fixtures`, `babel-helper-transform-fixture-test-runner`, `babel-node`, `babel-plugin-transform-react-jsx-source`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-preset-react`
+  * [#10249](https://github.com/babel/babel/pull/10249) Add windows to travis ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-parser`
+  * [#10371](https://github.com/babel/babel/pull/10371) perf: replace lookahead by lookaheadCharCode ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#10443](https://github.com/babel/babel/pull/10443) perf: only apply lazy cjs module transform on cli and core ([@JLHwung](https://github.com/JLHwung))
 ## v7.6.2 (2019-09-23)
 
 #### :eyeglasses: Spec Compliance
