@@ -362,21 +362,23 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseBindingListForSignature(): $ReadOnlyArray<
       N.Identifier | N.RestElement | N.ObjectPattern | N.ArrayPattern,
     > {
-      return this.parseBindingList(tt.parenR).map(pattern => {
-        if (
-          pattern.type !== "Identifier" &&
-          pattern.type !== "RestElement" &&
-          pattern.type !== "ObjectPattern" &&
-          pattern.type !== "ArrayPattern"
-        ) {
-          throw this.unexpected(
-            pattern.start,
-            "Name in a signature must be an Identifier, ObjectPattern or ArrayPattern," +
-              `instead got ${pattern.type}`,
-          );
-        }
-        return pattern;
-      });
+      return this.parseBindingList(tt.parenR, charCodes.rightParenthesis).map(
+        pattern => {
+          if (
+            pattern.type !== "Identifier" &&
+            pattern.type !== "RestElement" &&
+            pattern.type !== "ObjectPattern" &&
+            pattern.type !== "ArrayPattern"
+          ) {
+            throw this.unexpected(
+              pattern.start,
+              "Name in a signature must be an Identifier, ObjectPattern or ArrayPattern," +
+                `instead got ${pattern.type}`,
+            );
+          }
+          return pattern;
+        },
+      );
     }
 
     tsParseTypeMemberSemicolon(): void {
@@ -585,7 +587,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const restNode: N.TsRestType = this.startNode();
         this.next(); // skips ellipsis
         restNode.typeAnnotation = this.tsParseType();
-        this.checkCommaAfterRest(tt.braketR);
+        this.checkCommaAfterRest(charCodes.rightSquareBracket);
         return this.finishNode(restNode, "TSRestType");
       }
 

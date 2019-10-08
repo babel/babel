@@ -1105,6 +1105,7 @@ export default class StatementParser extends ExpressionParser {
     this.expect(tt.parenL);
     node.params = this.parseBindingList(
       tt.parenR,
+      charCodes.rightParenthesis,
       /* allowEmpty */ false,
       allowModifiers,
     );

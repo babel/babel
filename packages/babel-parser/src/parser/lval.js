@@ -1,5 +1,6 @@
 // @flow
 
+import * as charCodes from "charcodes";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import type {
   TSParameterProperty,
@@ -248,7 +249,11 @@ export default class LValParser extends NodeUtils {
       case tt.bracketL: {
         const node = this.startNode();
         this.next();
-        node.elements = this.parseBindingList(tt.bracketR, true);
+        node.elements = this.parseBindingList(
+          tt.bracketR,
+          charCodes.rightSquareBracket,
+          true,
+        );
         return this.finishNode(node, "ArrayPattern");
       }
 
@@ -261,6 +266,7 @@ export default class LValParser extends NodeUtils {
 
   parseBindingList(
     close: TokenType,
+    closeCharCode: $Values<typeof charCodes>,
     allowEmpty?: boolean,
     allowModifiers?: boolean,
   ): $ReadOnlyArray<Pattern | TSParameterProperty> {
@@ -279,7 +285,7 @@ export default class LValParser extends NodeUtils {
         break;
       } else if (this.match(tt.ellipsis)) {
         elts.push(this.parseAssignableListItemTypes(this.parseRestBinding()));
-        this.checkCommaAfterRest(close);
+        this.checkCommaAfterRest(closeCharCode);
         this.expect(close);
         break;
       } else {
@@ -469,10 +475,9 @@ export default class LValParser extends NodeUtils {
     }
   }
 
-  checkCommaAfterRest(close: TokenType): void {
+  checkCommaAfterRest(close: $Values<typeof charCodes>): void {
     if (this.match(tt.comma)) {
-      // TODO: Use lookaheadCharCode after that https://github.com/babel/babel/pull/10371 is merged
-      if (this.lookahead().type === close) {
+      if (this.lookaheadCharCode() === close) {
         this.raiseTrailingCommaAfterRest(this.state.start);
       } else {
         this.raiseRestNotLast(this.state.start);

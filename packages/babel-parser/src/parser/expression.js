@@ -1291,7 +1291,7 @@ export default class ExpressionParser extends LValParser {
           ),
         );
 
-        this.checkCommaAfterRest(tt.parenR);
+        this.checkCommaAfterRest(charCodes.rightParenthesis);
 
         break;
       } else {
@@ -1578,7 +1578,7 @@ export default class ExpressionParser extends LValParser {
         this.next();
         // Don't use parseRestBinding() as we only allow Identifier here.
         prop.argument = this.parseIdentifier();
-        this.checkCommaAfterRest(tt.braceR);
+        this.checkCommaAfterRest(charCodes.rightCurlyBrace);
         return this.finishNode(prop, "RestElement");
       }
 
