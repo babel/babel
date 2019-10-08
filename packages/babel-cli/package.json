@@ -1,6 +1,6 @@
 {
   "name": "@babel/cli",
-  "version": "7.6.2",
+  "version": "7.6.3",
   "description": "Babel command line.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -36,8 +36,8 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.2",
-    "@babel/helper-fixtures": "^7.6.2"
+    "@babel/core": "^7.6.3",
+    "@babel/helper-fixtures": "^7.6.3"
   },
   "bin": {
     "babel": "./bin/babel.js",

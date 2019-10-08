@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.6.2",
+  "version": "7.6.3",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "babel.js",
   "files": [
@@ -9,7 +9,7 @@
     "src"
   ],
   "devDependencies": {
-    "@babel/core": "^7.6.2",
+    "@babel/core": "^7.6.3",
     "@babel/helper-plugin-utils": "^7.0.0",
     "@babel/plugin-external-helpers": "^7.2.0",
     "@babel/plugin-proposal-async-generator-functions": "^7.2.0",
@@ -50,15 +50,15 @@
     "@babel/plugin-transform-arrow-functions": "^7.2.0",
     "@babel/plugin-transform-async-to-generator": "^7.5.0",
     "@babel/plugin-transform-block-scoped-functions": "^7.2.0",
-    "@babel/plugin-transform-block-scoping": "^7.6.2",
+    "@babel/plugin-transform-block-scoping": "^7.6.3",
     "@babel/plugin-transform-classes": "^7.5.5",
     "@babel/plugin-transform-computed-properties": "^7.2.0",
     "@babel/plugin-transform-destructuring": "^7.6.0",
     "@babel/plugin-transform-dotall-regex": "^7.6.2",
     "@babel/plugin-transform-duplicate-keys": "^7.5.0",
     "@babel/plugin-transform-exponentiation-operator": "^7.2.0",
-    "@babel/plugin-transform-flow-comments": "^7.6.0",
-    "@babel/plugin-transform-flow-strip-types": "^7.4.4",
+    "@babel/plugin-transform-flow-comments": "^7.6.3",
+    "@babel/plugin-transform-flow-strip-types": "^7.6.3",
     "@babel/plugin-transform-for-of": "^7.4.4",
     "@babel/plugin-transform-function-name": "^7.4.4",
     "@babel/plugin-transform-instanceof": "^7.5.5",
@@ -77,7 +77,7 @@
     "@babel/plugin-transform-property-literals": "^7.2.0",
     "@babel/plugin-transform-property-mutators": "^7.2.0",
     "@babel/plugin-transform-proto-to-assign": "^7.5.5",
-    "@babel/plugin-transform-react-constant-elements": "^7.6.0",
+    "@babel/plugin-transform-react-constant-elements": "^7.6.3",
     "@babel/plugin-transform-react-display-name": "^7.2.0",
     "@babel/plugin-transform-react-inline-elements": "^7.2.0",
     "@babel/plugin-transform-react-jsx": "^7.3.0",
@@ -93,10 +93,10 @@
     "@babel/plugin-transform-strict-mode": "^7.2.0",
     "@babel/plugin-transform-template-literals": "^7.4.4",
     "@babel/plugin-transform-typeof-symbol": "^7.2.0",
-    "@babel/plugin-transform-typescript": "^7.6.0",
+    "@babel/plugin-transform-typescript": "^7.6.3",
     "@babel/plugin-transform-unicode-regex": "^7.6.2",
     "@babel/preset-flow": "^7.0.0",
-    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-react": "^7.6.3",
     "@babel/preset-typescript": "^7.6.0"
   },
   "keywords": [
