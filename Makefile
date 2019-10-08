@@ -179,7 +179,7 @@ clone-license:
 	./scripts/clone-license.sh
 
 prepublish-build: clean-lib clean-runtime-helpers
-	NODE_ENV=production BABEL_ENV=production $(MAKE) build-dist
+	NODE_ENV=production BABEL_ENV=production $(MAKE) build
 	$(MAKE) clone-license
 
 prepublish:
