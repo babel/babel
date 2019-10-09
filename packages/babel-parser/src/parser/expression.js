@@ -73,7 +73,7 @@ export default class ExpressionParser extends LValParser {
 
   checkDuplicatedProto(
     prop: N.ObjectMember | N.SpreadElement,
-    propHash: { [key: string]: number },
+    protoRef: { used: boolean, start?: number },
   ): void {
     if (
       prop.type === "SpreadElement" ||
@@ -90,12 +90,12 @@ export default class ExpressionParser extends LValParser {
     const name = key.type === "Identifier" ? key.name : String(key.value);
 
     if (name === "__proto__") {
-      propHash.proto = (propHash.proto || 0) + 1;
-
-      // Store the first redefinition's position
-      if (propHash.proto === 2) {
-        propHash.protoStart = key.start;
+      // Store the latest redefinition's position
+      if (protoRef.used) {
+        protoRef.start = key.start;
       }
+
+      protoRef.used = true;
     }
   }
 
@@ -1520,8 +1520,8 @@ export default class ExpressionParser extends LValParser {
       node.properties.push(prop);
     }
 
-    if (!this.match(tt.eq) && propHash.protoStart !== undefined) {
-      this.raise(propHash.protoStart, "Redefinition of __proto__ property");
+    if (!this.match(tt.eq) && propHash.start !== undefined) {
+      this.raise(propHash.start, "Redefinition of __proto__ property");
     }
 
     return this.finishNode(
