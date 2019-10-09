@@ -280,24 +280,18 @@ function hoistFunctionEnvironment(
         args.push(value);
       }
 
-      let call = t.callExpression(t.identifier(superBinding), args);
-
-      if (isAssignment || isCall) {
-        superProp = superProp.parentPath;
-      }
+      const call = t.callExpression(t.identifier(superBinding), args);
 
       if (isCall) {
-        superProp.node.arguments.unshift(t.thisExpression());
-        call = t.callExpression(
-          t.memberExpression(call, t.identifier("call")),
-          superProp.node.arguments,
-        );
-      }
+        superProp.parentPath.unshiftContainer("arguments", t.thisExpression());
+        superProp.replaceWith(t.memberExpression(call, t.identifier("call")));
 
-      superProp.replaceWith(call);
-
-      if (isCall) {
-        thisPaths.push(superProp.get("arguments.0"));
+        thisPaths.push(superProp.parentPath.get("arguments.0"));
+      } else if (isAssignment) {
+        // Replace not only the super.prop, but the whole assignment
+        superProp.parentPath.replaceWith(call);
+      } else {
+        superProp.replaceWith(call);
       }
     });
   }
