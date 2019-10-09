@@ -125,9 +125,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    checkPropClash(
+    checkDuplicatedProto(
       prop: N.ObjectMember | N.SpreadElement,
-      propHash: { [key: string]: boolean },
+      propHash: { [key: string]: number },
     ): void {
       if (
         prop.type === "SpreadElement" ||
@@ -144,10 +144,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const name = key.type === "Identifier" ? key.name : String(key.value);
 
       if (name === "__proto__" && prop.kind === "init") {
-        if (propHash.proto) {
-          this.raise(key.start, "Redefinition of __proto__ property");
+        propHash.proto = (propHash.proto || 0) + 1;
+
+        // Store the first redefinition's position
+        if (propHash.proto === 2) {
+          propHash.protoStart = key.start;
         }
-        propHash.proto = true;
       }
     }
 
