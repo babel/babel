@@ -17,6 +17,15 @@ See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.6.4 (2019-10-10)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#10491](https://github.com/babel/babel/pull/10491) Trailing comma after rest - The final fix ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-helper-transform-fixture-test-runner`
+  * [#10536](https://github.com/babel/babel/pull/10536) Revert "chore: Upgrade source-map to 0.6.1 (#10446)" ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.6.3 (2019-10-08)
 
 #### :eyeglasses: Spec Compliance
