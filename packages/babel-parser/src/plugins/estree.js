@@ -144,8 +144,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const name = key.type === "Identifier" ? key.name : String(key.value);
 
       if (name === "__proto__" && prop.kind === "init") {
-        // Store the latest redefinition's position
-        if (protoRef.used) {
+        // Store the first redefinition's position
+        if (protoRef.used && !protoRef.start) {
           protoRef.start = key.start;
         }
 

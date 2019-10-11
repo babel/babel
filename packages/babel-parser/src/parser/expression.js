@@ -90,8 +90,8 @@ export default class ExpressionParser extends LValParser {
     const name = key.type === "Identifier" ? key.name : String(key.value);
 
     if (name === "__proto__") {
-      // Store the latest redefinition's position
-      if (protoRef.used) {
+      // Store the first redefinition's position
+      if (protoRef.used && !protoRef.start) {
         protoRef.start = key.start;
       }
 
