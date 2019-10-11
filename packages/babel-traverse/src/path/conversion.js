@@ -216,30 +216,6 @@ function hoistFunctionEnvironment(
     });
   }
 
-  // Convert all "this" references in the arrow to point at the alias.
-  let thisBinding;
-  if (thisPaths.length > 0 || specCompliant) {
-    thisBinding = getThisBinding(thisEnvFn, inConstructor);
-
-    if (
-      !specCompliant ||
-      // In subclass constructors, still need to rewrite because "this" can't be bound in spec mode
-      // because it might not have been initialized yet.
-      (inConstructor && hasSuperClass(thisEnvFn))
-    ) {
-      thisPaths.forEach(thisChild => {
-        const thisRef = thisChild.isJSX()
-          ? t.jsxIdentifier(thisBinding)
-          : t.identifier(thisBinding);
-
-        thisRef.loc = thisChild.node.loc;
-        thisChild.replaceWith(thisRef);
-      });
-
-      if (specCompliant) thisBinding = null;
-    }
-  }
-
   // Convert all "arguments" references in the arrow to point at the alias.
   if (argumentsPaths.length > 0) {
     const argumentsBinding = getBinding(thisEnvFn, "arguments", () =>
@@ -286,40 +262,62 @@ function hoistFunctionEnvironment(
         ? ""
         : superProp.get("property").node.name;
 
-      if (superProp.parentPath.isCallExpression({ callee: superProp.node })) {
-        const superBinding = getSuperPropCallBinding(thisEnvFn, key);
+      const isAssignment = superProp.parentPath.isAssignmentExpression({
+        left: superProp.node,
+      });
+      const isCall = superProp.parentPath.isCallExpression({
+        callee: superProp.node,
+      });
+      const superBinding = getSuperPropBinding(thisEnvFn, isAssignment, key);
 
-        if (superProp.node.computed) {
-          const prop = superProp.get("property").node;
-          superProp.replaceWith(t.identifier(superBinding));
-          superProp.parentPath.node.arguments.unshift(prop);
-        } else {
-          superProp.replaceWith(t.identifier(superBinding));
-        }
+      const args = [];
+      if (superProp.node.computed) {
+        args.push(superProp.get("property").node);
+      }
+
+      if (isAssignment) {
+        const value = superProp.parentPath.node.right;
+        args.push(value);
+      }
+
+      const call = t.callExpression(t.identifier(superBinding), args);
+
+      if (isCall) {
+        superProp.parentPath.unshiftContainer("arguments", t.thisExpression());
+        superProp.replaceWith(t.memberExpression(call, t.identifier("call")));
+
+        thisPaths.push(superProp.parentPath.get("arguments.0"));
+      } else if (isAssignment) {
+        // Replace not only the super.prop, but the whole assignment
+        superProp.parentPath.replaceWith(call);
       } else {
-        const isAssignment = superProp.parentPath.isAssignmentExpression({
-          left: superProp.node,
-        });
-        const superBinding = getSuperPropBinding(thisEnvFn, isAssignment, key);
-
-        const args = [];
-        if (superProp.node.computed) {
-          args.push(superProp.get("property").node);
-        }
-
-        if (isAssignment) {
-          const value = superProp.parentPath.node.right;
-          args.push(value);
-          superProp.parentPath.replaceWith(
-            t.callExpression(t.identifier(superBinding), args),
-          );
-        } else {
-          superProp.replaceWith(
-            t.callExpression(t.identifier(superBinding), args),
-          );
-        }
+        superProp.replaceWith(call);
       }
     });
+  }
+
+  // Convert all "this" references in the arrow to point at the alias.
+  let thisBinding;
+  if (thisPaths.length > 0 || specCompliant) {
+    thisBinding = getThisBinding(thisEnvFn, inConstructor);
+
+    if (
+      !specCompliant ||
+      // In subclass constructors, still need to rewrite because "this" can't be bound in spec mode
+      // because it might not have been initialized yet.
+      (inConstructor && hasSuperClass(thisEnvFn))
+    ) {
+      thisPaths.forEach(thisChild => {
+        const thisRef = thisChild.isJSX()
+          ? t.jsxIdentifier(thisBinding)
+          : t.identifier(thisBinding);
+
+        thisRef.loc = thisChild.node.loc;
+        thisChild.replaceWith(thisRef);
+      });
+
+      if (specCompliant) thisBinding = null;
+    }
   }
 
   return thisBinding;
@@ -482,37 +480,6 @@ function getSuperBinding(thisEnvFn) {
         t.spreadElement(t.identifier(argsBinding.name)),
       ]),
     );
-  });
-}
-
-// Create a binding for a function that will call "super.foo()" or "super[foo]()".
-function getSuperPropCallBinding(thisEnvFn, propName) {
-  return getBinding(thisEnvFn, `superprop_call:${propName || ""}`, () => {
-    const argsBinding = thisEnvFn.scope.generateUidIdentifier("args");
-    const argsList = [t.restElement(argsBinding)];
-
-    let fnBody;
-    if (propName) {
-      // (...args) => super.foo(...args)
-      fnBody = t.callExpression(
-        t.memberExpression(t.super(), t.identifier(propName)),
-        [t.spreadElement(t.identifier(argsBinding.name))],
-      );
-    } else {
-      const method = thisEnvFn.scope.generateUidIdentifier("prop");
-      // (method, ...args) => super[method](...args)
-      argsList.unshift(method);
-      fnBody = t.callExpression(
-        t.memberExpression(
-          t.super(),
-          t.identifier(method.name),
-          true /* computed */,
-        ),
-        [t.spreadElement(t.identifier(argsBinding.name))],
-      );
-    }
-
-    return t.arrowFunctionExpression(argsList, fnBody);
   });
 }
 

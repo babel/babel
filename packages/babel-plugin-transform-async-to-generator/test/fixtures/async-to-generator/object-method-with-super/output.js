@@ -1,11 +1,12 @@
 class Foo extends class {} {
   method() {
-    var _superprop_callMethod = (..._args) => super.method(..._args);
+    var _superprop_getMethod = () => super.method,
+        _this = this;
 
     return babelHelpers.asyncToGenerator(function* () {
-      _superprop_callMethod();
+      _superprop_getMethod().call(_this);
 
-      var arrow = () => _superprop_callMethod();
+      var arrow = () => _superprop_getMethod().call(_this);
     })();
   }
 
