@@ -904,21 +904,33 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const t: N.TsTypeAnnotation = this.startNode();
         this.expect(returnToken);
 
+        const assertsModifier = this.tsTryParse(
+          this.tsParseTypePredicateAssertsModifier.bind(this),
+        );
+
         const typePredicateVariable =
           this.tsIsIdentifier() &&
           this.tsTryParse(this.tsParseTypePredicatePrefix.bind(this));
 
-        if (!typePredicateVariable) {
+        if (!assertsModifier && !typePredicateVariable) {
           return this.tsParseTypeAnnotation(/* eatColon */ false, t);
         }
 
-        const type = this.tsParseTypeAnnotation(/* eatColon */ false);
+        let node: N.TsTypePredicate;
 
-        const node: N.TsTypePredicate = this.startNodeAtNode(
-          typePredicateVariable,
-        );
-        node.parameterName = typePredicateVariable;
-        node.typeAnnotation = type;
+        if (!typePredicateVariable) {
+          node = this.startNodeAtNode(assertsModifier);
+          node.parameterName = this.parseIdentifier();
+        } else {
+          const type = this.tsParseTypeAnnotation(/* eatColon */ false);
+          node = this.startNodeAtNode(
+            assertsModifier ? assertsModifier : typePredicateVariable,
+          );
+          node.parameterName = typePredicateVariable;
+          node.typeAnnotation = type;
+        }
+
+        node.assertsModifier = assertsModifier;
         t.typeAnnotation = this.finishNode(node, "TSTypePredicate");
         return this.finishNode(t, "TSTypeAnnotation");
       });
@@ -944,6 +956,29 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.next();
         return id;
       }
+    }
+
+    tsParseTypePredicateAssertsModifier(): ?N.TsKeywordType {
+      if (!this.tsIsIdentifier()) {
+        return;
+      }
+
+      const id = this.parseIdentifier();
+      if (
+        id.name !== "asserts" ||
+        this.hasPrecedingLineBreak() ||
+        !this.tsIsIdentifier()
+      ) {
+        return;
+      }
+
+      const assertsKeyword = this.startNodeAtNode(id);
+      return this.finishNodeAt(
+        assertsKeyword,
+        "TSAssertsKeyword",
+        id.end,
+        id.loc.end,
+      );
     }
 
     tsParseTypeAnnotation(

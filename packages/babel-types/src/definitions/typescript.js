@@ -139,6 +139,7 @@ const tsKeywordTypes = [
   "TSUndefinedKeyword",
   "TSUnknownKeyword",
   "TSVoidKeyword",
+  "TSAssertsKeyword",
 ];
 
 for (const type of tsKeywordTypes) {
@@ -175,8 +176,9 @@ defineType("TSTypeReference", {
 
 defineType("TSTypePredicate", {
   aliases: ["TSType"],
-  visitor: ["parameterName", "typeAnnotation"],
+  visitor: ["parameterName", "typeAnnotation", "assertsModifier"],
   fields: {
+    assertsModifier: validateOptionalType("TSAssertsKeyword"),
     parameterName: validateType(["Identifier", "TSThisType"]),
     typeAnnotation: validateType("TSTypeAnnotation"),
   },
