@@ -1,0 +1,3 @@
+{
+  "throws": "Class methods cannot have the 'declare' modifier (2:2)"
+}

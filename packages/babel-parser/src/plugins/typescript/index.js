@@ -28,6 +28,7 @@ import * as charCodes from "charcodes";
 type TsModifier =
   | "readonly"
   | "abstract"
+  | "declare"
   | "static"
   | "public"
   | "private"
@@ -127,6 +128,31 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return modifier;
       }
       return undefined;
+    }
+
+    /** Parses a list of modifiers, in any order.
+     *  If you need a specific order, you must call this function multiple times:
+     *    this.tsParseModifiers(["public"]);
+     *    this.tsParseModifiers(["abstract", "readonly"]);
+     */
+    tsParseModifiers<T: TsModifier>(
+      allowedModifiers: T[],
+    ): { [key: TsModifier]: ?true, __proto__: null } {
+      const modifiers = Object.create(null);
+
+      while (true) {
+        const startPos = this.state.start;
+        const modifier: ?T = this.tsParseModifier(allowedModifiers);
+
+        if (!modifier) break;
+
+        if (Object.hasOwnProperty.call(modifiers, modifier)) {
+          this.raise(startPos, `Duplicate modifier: '${modifier}'`);
+        }
+        modifiers[modifier] = true;
+      }
+
+      return modifiers;
     }
 
     tsIsListTerminator(kind: ParsingContext): boolean {
@@ -405,7 +431,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.eat(tt.name) && this.match(tt.colon);
     }
 
-    tsTryParseIndexSignature(node: N.TsIndexSignature): ?N.TsIndexSignature {
+    tsTryParseIndexSignature(node: N.Node): ?N.TsIndexSignature {
       if (
         !(
           this.match(tt.bracketL) &&
@@ -1844,49 +1870,48 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseClassMemberWithIsStatic(
       classBody: N.ClassBody,
-      member: any,
+      member: N.ClassMember | N.TsIndexSignature,
       state: { hadConstructor: boolean },
       isStatic: boolean,
       constructorAllowsSuper: boolean,
     ): void {
-      const methodOrProp: N.ClassMethod | N.ClassProperty = member;
-      const prop: N.ClassProperty = member;
-      const propOrIdx: N.ClassProperty | N.TsIndexSignature = member;
+      const modifiers = this.tsParseModifiers([
+        "abstract",
+        "readonly",
+        "declare",
+      ]);
 
-      let abstract = false,
-        readonly = false;
+      Object.assign(member, modifiers);
 
-      const mod = this.tsParseModifier(["abstract", "readonly"]);
-      switch (mod) {
-        case "readonly":
-          readonly = true;
-          abstract = !!this.tsParseModifier(["abstract"]);
-          break;
-        case "abstract":
-          abstract = true;
-          readonly = !!this.tsParseModifier(["readonly"]);
-          break;
-      }
+      const idx = this.tsTryParseIndexSignature(member);
+      if (idx) {
+        classBody.body.push(idx);
 
-      if (abstract) methodOrProp.abstract = true;
-      if (readonly) propOrIdx.readonly = true;
-
-      if (!abstract && !isStatic && !methodOrProp.accessibility) {
-        const idx = this.tsTryParseIndexSignature(member);
-        if (idx) {
-          classBody.body.push(idx);
-          return;
+        if (modifiers.abstract) {
+          this.raise(
+            member.start,
+            "Index signatures cannot have the 'abstract' modifier",
+          );
         }
-      }
+        if (isStatic) {
+          this.raise(
+            member.start,
+            "Index signatures cannot have the 'static' modifier",
+          );
+        }
+        if ((member: any).accessibility) {
+          this.raise(
+            member.start,
+            `Index signatures cannot have an accessibility modifier ('${
+              (member: any).accessibility
+            }')`,
+          );
+        }
 
-      if (readonly) {
-        // Must be a property (if not an index signature).
-        methodOrProp.static = isStatic;
-        this.parseClassPropertyName(prop);
-        this.parsePostMemberNameModifiers(methodOrProp);
-        this.pushClassProperty(classBody, prop);
         return;
       }
+
+      /*:: invariant(member.type !== "TSIndexSignature") */
 
       super.parseClassMemberWithIsStatic(
         classBody,
@@ -1902,6 +1927,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): void {
       const optional = this.eat(tt.question);
       if (optional) methodOrProp.optional = true;
+
+      if ((methodOrProp: any).readonly && this.match(tt.parenL)) {
+        this.raise(
+          methodOrProp.start,
+          "Class methods cannot have the 'readonly' modifier",
+        );
+      }
+
+      if ((methodOrProp: any).declare && this.match(tt.parenL)) {
+        this.raise(
+          methodOrProp.start,
+          "Class methods cannot have the 'declare' modifier",
+        );
+      }
     }
 
     // Note: The reason we do this in `parseExpressionStatement` and not `parseStatement`
@@ -2048,6 +2087,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseClassProperty(node: N.ClassProperty): N.ClassProperty {
       this.parseClassPropertyAnnotation(node);
+
+      if (node.declare && this.match(tt.equal)) {
+        this.raise(
+          this.state.start,
+          "'declare' class fields cannot have an initializer",
+        );
+      }
+
       return super.parseClassProperty(node);
     }
 
