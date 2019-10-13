@@ -115,13 +115,6 @@ const buildTest = function(binName, testName, opts) {
   const binLoc = path.join(__dirname, "../lib", binName);
 
   return function(callback) {
-    const dir = process.cwd();
-
-    process.chdir(__dirname);
-    if (fs.existsSync(tmpLoc)) rimraf.sync(tmpLoc);
-    fs.mkdirSync(tmpLoc);
-    process.chdir(tmpLoc);
-
     saveInFiles(opts.inFiles);
 
     let args = [binLoc];
@@ -159,7 +152,6 @@ const buildTest = function(binName, testName, opts) {
           args.map(arg => `"${arg}"`).join(" ") + ": " + err.message;
       }
 
-      process.chdir(dir);
       callback(err);
     });
 
@@ -175,6 +167,26 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
 
   const suiteLoc = path.join(fixtureLoc, binName);
   describe("bin/" + binName, function() {
+    let cwd;
+
+    beforeEach(() => {
+      cwd = process.cwd();
+
+      if (fs.existsSync(tmpLoc)) {
+        for (const child of fs.readdirSync(tmpLoc)) {
+          rimraf.sync(path.join(tmpLoc, child));
+        }
+      } else {
+        fs.mkdirSync(tmpLoc);
+      }
+
+      process.chdir(tmpLoc);
+    });
+
+    afterEach(() => {
+      process.chdir(cwd);
+    });
+
     fs.readdirSync(suiteLoc).forEach(function(testName) {
       if (testName.startsWith(".")) return;
 

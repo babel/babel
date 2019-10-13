@@ -99,7 +99,6 @@ const buildTest = function(binName, testName, opts) {
   const binLoc = path.join(__dirname, "../lib", binName);
 
   return function(callback) {
-    clear();
     saveInFiles(opts.inFiles);
 
     let args = [binLoc];
@@ -146,13 +145,6 @@ const buildTest = function(binName, testName, opts) {
   };
 };
 
-const clear = function() {
-  process.chdir(__dirname);
-  if (fs.existsSync(tmpLoc)) rimraf.sync(tmpLoc);
-  fs.mkdirSync(tmpLoc);
-  process.chdir(tmpLoc);
-};
-
 fs.readdirSync(fixtureLoc).forEach(function(binName) {
   if (binName[0] === ".") return;
 
@@ -162,6 +154,16 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
 
     beforeEach(() => {
       cwd = process.cwd();
+
+      if (fs.existsSync(tmpLoc)) {
+        for (const child of fs.readdirSync(tmpLoc)) {
+          rimraf.sync(path.join(tmpLoc, child));
+        }
+      } else {
+        fs.mkdirSync(tmpLoc);
+      }
+
+      process.chdir(tmpLoc);
     });
 
     afterEach(() => {
