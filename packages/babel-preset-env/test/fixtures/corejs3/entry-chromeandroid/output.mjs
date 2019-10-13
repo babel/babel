@@ -6,6 +6,7 @@ import "core-js/modules/es.array.iterator";
 import "core-js/modules/es.array.sort";
 import "core-js/modules/es.array.unscopables.flat";
 import "core-js/modules/es.array.unscopables.flat-map";
+import "core-js/modules/es.math.hypot";
 import "core-js/modules/es.object.define-getter";
 import "core-js/modules/es.object.define-setter";
 import "core-js/modules/es.object.from-entries";

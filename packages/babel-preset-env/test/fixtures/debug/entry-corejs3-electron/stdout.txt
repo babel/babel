@@ -71,6 +71,7 @@ Using polyfills with `entry` option:
   es.json.to-string-tag { "electron":"0.36" }
   es.map { "electron":"0.36" }
   es.math.acosh { "electron":"0.36" }
+  es.math.hypot { "electron":"0.36" }
   es.math.to-string-tag { "electron":"0.36" }
   es.object.assign { "electron":"0.36" }
   es.object.define-getter { "electron":"0.36" }

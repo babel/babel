@@ -20,6 +20,7 @@ Using polyfills with `entry` option:
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-es-proposals-chrome-71/input.mjs] Replaced core-js entries with the following polyfills:
   es.array.unscopables.flat { "chrome":"71" }
   es.array.unscopables.flat-map { "chrome":"71" }
+  es.math.hypot { "chrome":"71" }
   es.object.from-entries { "chrome":"71" }
   esnext.aggregate-error { "chrome":"71" }
   esnext.array.last-index { "chrome":"71" }

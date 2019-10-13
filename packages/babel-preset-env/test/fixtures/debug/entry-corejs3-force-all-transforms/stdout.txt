@@ -53,6 +53,7 @@ Using polyfills with `entry` option:
   es.array.sort { "chrome":"55" }
   es.array.unscopables.flat { "chrome":"55" }
   es.array.unscopables.flat-map { "chrome":"55" }
+  es.math.hypot { "chrome":"55" }
   es.object.define-getter { "chrome":"55" }
   es.object.define-setter { "chrome":"55" }
   es.object.from-entries { "chrome":"55" }

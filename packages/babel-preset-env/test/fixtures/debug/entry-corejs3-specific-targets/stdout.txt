@@ -110,7 +110,7 @@ Using polyfills with `entry` option:
   es.math.cosh { "ie":"10", "safari":"7" }
   es.math.expm1 { "ie":"10", "safari":"7" }
   es.math.fround { "ie":"10", "safari":"7" }
-  es.math.hypot { "ie":"10", "safari":"7" }
+  es.math.hypot { "chrome":"54", "ie":"10", "safari":"7" }
   es.math.imul { "ie":"10", "safari":"7" }
   es.math.log10 { "ie":"10", "safari":"7" }
   es.math.log1p { "ie":"10", "safari":"7" }
