@@ -180,7 +180,7 @@ defineType("TSTypePredicate", {
   fields: {
     assertsModifier: validateOptionalType("TSAssertsKeyword"),
     parameterName: validateType(["Identifier", "TSThisType"]),
-    typeAnnotation: validateType("TSTypeAnnotation"),
+    typeAnnotation: validateOptionalType("TSTypeAnnotation"),
   },
 });
 

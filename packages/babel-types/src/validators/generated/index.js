@@ -2691,6 +2691,20 @@ export function isTSVoidKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
+export function isTSAssertsKeyword(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "TSAssertsKeyword") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTSThisType(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -4365,6 +4379,7 @@ export function isTSType(node: ?Object, opts?: Object): boolean {
     "TSUndefinedKeyword" === nodeType ||
     "TSUnknownKeyword" === nodeType ||
     "TSVoidKeyword" === nodeType ||
+    "TSAssertsKeyword" === nodeType ||
     "TSThisType" === nodeType ||
     "TSFunctionType" === nodeType ||
     "TSConstructorType" === nodeType ||
