@@ -912,24 +912,27 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.tsIsIdentifier() &&
           this.tsTryParse(this.tsParseTypePredicatePrefix.bind(this));
 
-        if (!assertsModifier && !typePredicateVariable) {
-          return this.tsParseTypeAnnotation(/* eatColon */ false, t);
-        }
-
-        let node: N.TsTypePredicate;
-
         if (!typePredicateVariable) {
-          node = this.startNodeAtNode(assertsModifier);
+          if (!assertsModifier) {
+            // : type
+            return this.tsParseTypeAnnotation(/* eatColon */ false, t);
+          }
+
+          // : asserts foo
+          const node = this.startNodeAtNode(assertsModifier);
           node.parameterName = this.parseIdentifier();
-        } else {
-          const type = this.tsParseTypeAnnotation(/* eatColon */ false);
-          node = this.startNodeAtNode(
-            assertsModifier ? assertsModifier : typePredicateVariable,
-          );
-          node.parameterName = typePredicateVariable;
-          node.typeAnnotation = type;
+          node.assertsModifier = assertsModifier;
+          t.typeAnnotation = this.finishNode(node, "TSTypePredicate");
+          return this.finishNode(t, "TSTypeAnnotation");
         }
 
+        // : foo is type
+        const type = this.tsParseTypeAnnotation(/* eatColon */ false);
+        const node = this.startNodeAtNode(
+          assertsModifier ? assertsModifier : typePredicateVariable,
+        );
+        node.parameterName = typePredicateVariable;
+        node.typeAnnotation = type;
         node.assertsModifier = assertsModifier;
         t.typeAnnotation = this.finishNode(node, "TSTypePredicate");
         return this.finishNode(t, "TSTypeAnnotation");
