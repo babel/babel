@@ -44,10 +44,89 @@ function registerGlobalType(programScope, name) {
 }
 
 export default declare(
-  (api, { jsxPragma = "React", allowNamespaces = false }) => {
+  (
+    api,
+    { jsxPragma = "React", allowNamespaces = false, declareFields = false },
+  ) => {
     api.assertVersion(7);
 
     const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
+
+    const classMemberVisitors = {
+      field(path) {
+        const { node } = path;
+
+        if (!declareFields && node.declare) {
+          throw path.buildCodeFrameError(
+            `The 'declare' modifier is only allowed when the 'declareFields' option of ` +
+              `@babel/plugin-transform-typescript or @babel/preset-typescript is enabled.`,
+          );
+        }
+        if (node.definite || node.declare) {
+          if (node.value) {
+            throw path.buildCodeFrameError(
+              `Definietly assigned fields and fields with the 'declare' modifier cannot` +
+                ` be initialized here, but only in the constructor`,
+            );
+          }
+
+          path.remove();
+        } else if (!declareFields && !node.value && !node.decorators) {
+          path.remove();
+        }
+
+        if (node.accessibility) node.accessibility = null;
+        if (node.abstract) node.abstract = null;
+        if (node.readonly) node.readonly = null;
+        if (node.optional) node.optional = null;
+        if (node.typeAnnotation) node.typeAnnotation = null;
+      },
+      method({ node }) {
+        if (node.accessibility) node.accessibility = null;
+        if (node.abstract) node.abstract = null;
+        if (node.optional) node.optional = null;
+
+        // Rest handled by Function visitor
+      },
+      constructor(path, classPath) {
+        // Collects parameter properties so that we can add an assignment
+        // for each of them in the constructor body
+        //
+        // We use a WeakSet to ensure an assignment for a parameter
+        // property is only added once. This is necessary for cases like
+        // using `transform-classes`, which causes this visitor to run
+        // twice.
+        const parameterProperties = [];
+        for (const param of path.node.params) {
+          if (
+            param.type === "TSParameterProperty" &&
+            !PARSED_PARAMS.has(param.parameter)
+          ) {
+            PARSED_PARAMS.add(param.parameter);
+            parameterProperties.push(param.parameter);
+          }
+        }
+
+        if (parameterProperties.length) {
+          const assigns = parameterProperties.map(p => {
+            let id;
+            if (t.isIdentifier(p)) {
+              id = p;
+            } else if (t.isAssignmentPattern(p) && t.isIdentifier(p.left)) {
+              id = p.left;
+            } else {
+              throw path.buildCodeFrameError(
+                "Parameter properties can not be destructuring patterns.",
+              );
+            }
+
+            return template.statement.ast`this.${id} = ${id}`;
+          });
+
+          injectInitialization(classPath, path, assigns);
+        }
+      },
+    };
 
     return {
       name: "transform-typescript",
@@ -192,27 +271,6 @@ export default declare(
           if (node.definite) node.definite = null;
         },
 
-        ClassMethod(path) {
-          const { node } = path;
-
-          if (node.accessibility) node.accessibility = null;
-          if (node.abstract) node.abstract = null;
-          if (node.optional) node.optional = null;
-
-          // Rest handled by Function visitor
-        },
-
-        ClassProperty(path) {
-          const { node } = path;
-
-          if (node.accessibility) node.accessibility = null;
-          if (node.abstract) node.abstract = null;
-          if (node.readonly) node.readonly = null;
-          if (node.optional) node.optional = null;
-          if (node.definite) node.definite = null;
-          if (node.typeAnnotation) node.typeAnnotation = null;
-        },
-
         TSIndexSignature(path) {
           path.remove();
         },
@@ -238,54 +296,14 @@ export default declare(
           // class transform would transform the class, causing more specific
           // visitors to not run.
           path.get("body.body").forEach(child => {
-            const childNode = child.node;
-
-            if (t.isClassMethod(childNode, { kind: "constructor" })) {
-              // Collects parameter properties so that we can add an assignment
-              // for each of them in the constructor body
-              //
-              // We use a WeakSet to ensure an assignment for a parameter
-              // property is only added once. This is necessary for cases like
-              // using `transform-classes`, which causes this visitor to run
-              // twice.
-              const parameterProperties = [];
-              for (const param of childNode.params) {
-                if (
-                  param.type === "TSParameterProperty" &&
-                  !PARSED_PARAMS.has(param.parameter)
-                ) {
-                  PARSED_PARAMS.add(param.parameter);
-                  parameterProperties.push(param.parameter);
-                }
-              }
-
-              if (parameterProperties.length) {
-                const assigns = parameterProperties.map(p => {
-                  let id;
-                  if (t.isIdentifier(p)) {
-                    id = p;
-                  } else if (
-                    t.isAssignmentPattern(p) &&
-                    t.isIdentifier(p.left)
-                  ) {
-                    id = p.left;
-                  } else {
-                    throw path.buildCodeFrameError(
-                      "Parameter properties can not be destructuring patterns.",
-                    );
-                  }
-
-                  return template.statement.ast`this.${id} = ${id}`;
-                });
-
-                injectInitialization(path, child, assigns);
+            if (child.isClassMethod()) {
+              if (child.node.kind === "constructor") {
+                classMemberVisitors.constructor(child, path);
+              } else {
+                classMemberVisitors.method(child, path);
               }
             } else if (child.isClassProperty()) {
-              childNode.typeAnnotation = null;
-
-              if (!childNode.value && !childNode.decorators) {
-                child.remove();
-              }
+              classMemberVisitors.field(child, path);
             }
           });
         },
