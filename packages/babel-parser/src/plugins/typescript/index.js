@@ -919,7 +919,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
 
           // : asserts foo
-          const node = this.startNodeAtNode(assertsModifier);
+          const node = this.startNodeAtNode(t);
           node.parameterName = this.parseIdentifier();
           node.assertsModifier = assertsModifier;
           t.typeAnnotation = this.finishNode(node, "TSTypePredicate");
@@ -928,9 +928,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         // : foo is type
         const type = this.tsParseTypeAnnotation(/* eatColon */ false);
-        const node = this.startNodeAtNode(
-          assertsModifier ? assertsModifier : typePredicateVariable,
-        );
+        const node = this.startNodeAtNode(t);
         node.parameterName = typePredicateVariable;
         node.typeAnnotation = type;
         node.assertsModifier = assertsModifier;
@@ -961,9 +959,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    tsParseTypePredicateAssertsModifier(): ?N.TsKeywordType {
+    tsParseTypePredicateAssertsModifier(): boolean {
       if (!this.tsIsIdentifier()) {
-        return;
+        return false;
       }
 
       const id = this.parseIdentifier();
@@ -972,16 +970,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.hasPrecedingLineBreak() ||
         !this.tsIsIdentifier()
       ) {
-        return;
+        return false;
       }
 
-      const assertsKeyword = this.startNodeAtNode(id);
-      return this.finishNodeAt(
-        assertsKeyword,
-        "TSAssertsKeyword",
-        id.end,
-        id.loc.end,
-      );
+      return true;
     }
 
     tsParseTypeAnnotation(

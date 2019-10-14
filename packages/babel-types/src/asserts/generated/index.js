@@ -836,9 +836,6 @@ export function assertTSUnknownKeyword(node: Object, opts?: Object = {}): void {
 export function assertTSVoidKeyword(node: Object, opts?: Object = {}): void {
   assert("TSVoidKeyword", node, opts);
 }
-export function assertTSAssertsKeyword(node: Object, opts?: Object = {}): void {
-  assert("TSAssertsKeyword", node, opts);
-}
 export function assertTSThisType(node: Object, opts?: Object = {}): void {
   assert("TSThisType", node, opts);
 }

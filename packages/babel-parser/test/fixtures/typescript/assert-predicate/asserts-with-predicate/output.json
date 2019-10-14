@@ -127,12 +127,12 @@
           },
           "typeAnnotation": {
             "type": "TSTypePredicate",
-            "start": 49,
+            "start": 47,
             "end": 72,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 49
+                "column": 47
               },
               "end": {
                 "line": 1,
@@ -186,21 +186,7 @@
                 }
               }
             },
-            "assertsModifier": {
-              "type": "TSAssertsKeyword",
-              "start": 49,
-              "end": 56,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 49
-                },
-                "end": {
-                  "line": 1,
-                  "column": 56
-                }
-              }
-            }
+            "assertsModifier": true
           }
         },
         "declare": true

@@ -1186,8 +1186,7 @@ export type TsKeywordTypeType =
   | "TSVoidKeyword"
   | "TSUndefinedKeyword"
   | "TSNullKeyword"
-  | "TSNeverKeyword"
-  | "TSAssertsKeyword";
+  | "TSNeverKeyword";
 export type TsKeywordType = TsTypeBase & {
   type: TsKeywordTypeType,
 };

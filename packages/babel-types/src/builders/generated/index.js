@@ -781,11 +781,6 @@ export function TSVoidKeyword(...args: Array<any>): Object {
 }
 export { TSVoidKeyword as tsVoidKeyword };
 export { TSVoidKeyword as tSVoidKeyword };
-export function TSAssertsKeyword(...args: Array<any>): Object {
-  return builder("TSAssertsKeyword", ...args);
-}
-export { TSAssertsKeyword as tsAssertsKeyword };
-export { TSAssertsKeyword as tSAssertsKeyword };
 export function TSThisType(...args: Array<any>): Object {
   return builder("TSThisType", ...args);
 }

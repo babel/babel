@@ -162,9 +162,6 @@ export function TSNullKeyword() {
 export function TSNeverKeyword() {
   this.word("never");
 }
-export function TSAssertsKeyword() {
-  this.word("asserts");
-}
 
 export function TSThisType() {
   this.word("this");
@@ -201,7 +198,7 @@ export function TSTypeReference(node) {
 
 export function TSTypePredicate(node) {
   if (node.assertsModifier) {
-    this.print(node.assertsModifier);
+    this.word("asserts");
     this.space();
   }
   this.print(node.parameterName);

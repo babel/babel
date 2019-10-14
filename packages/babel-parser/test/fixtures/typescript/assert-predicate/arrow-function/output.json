@@ -105,12 +105,12 @@
                 },
                 "typeAnnotation": {
                   "type": "TSTypePredicate",
-                  "start": 34,
+                  "start": 32,
                   "end": 57,
                   "loc": {
                     "start": {
                       "line": 1,
-                      "column": 34
+                      "column": 32
                     },
                     "end": {
                       "line": 1,
@@ -164,21 +164,7 @@
                       }
                     }
                   },
-                  "assertsModifier": {
-                    "type": "TSAssertsKeyword",
-                    "start": 34,
-                    "end": 41,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 34
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 41
-                      }
-                    }
-                  }
+                  "assertsModifier": true
                 }
               },
               "id": null,
@@ -331,12 +317,12 @@
                 },
                 "typeAnnotation": {
                   "type": "TSTypePredicate",
-                  "start": 98,
+                  "start": 96,
                   "end": 111,
                   "loc": {
                     "start": {
                       "line": 2,
-                      "column": 34
+                      "column": 32
                     },
                     "end": {
                       "line": 2,
@@ -360,21 +346,7 @@
                     },
                     "name": "value"
                   },
-                  "assertsModifier": {
-                    "type": "TSAssertsKeyword",
-                    "start": 98,
-                    "end": 105,
-                    "loc": {
-                      "start": {
-                        "line": 2,
-                        "column": 34
-                      },
-                      "end": {
-                        "line": 2,
-                        "column": 41
-                      }
-                    }
-                  }
+                  "assertsModifier": true
                 }
               },
               "id": null,
