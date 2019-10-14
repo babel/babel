@@ -259,8 +259,6 @@ export default class File {
   ): Error {
     let loc = node && (node.loc || node._loc);
 
-    msg = `${this.opts.filename ?? "unknown"}: ${msg}`;
-
     if (!loc && node) {
       const state = {
         loc: null,
