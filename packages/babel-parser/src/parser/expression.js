@@ -67,14 +67,13 @@ export default class ExpressionParser extends LValParser {
   +parseFunctionParams: (node: N.Function, allowModifiers?: boolean) => void;
   +takeDecorators: (node: N.HasDecorators) => void;
 
-  // Check if property name clashes with already added.
-  // Object/class getters and setters are not allowed to clash —
-  // either with each other or with an init property — and in
-  // strict mode, init properties are also not allowed to be repeated.
+  // Check if property __proto__ has been used more than once.
+  // If the expression is a destructuring assignment, then __proto__ may appear
+  // multiple times. Otherwise, __proto__ is a duplicated key.
 
-  checkPropClash(
+  checkDuplicatedProto(
     prop: N.ObjectMember | N.SpreadElement,
-    propHash: { [key: string]: boolean },
+    protoRef: { used: boolean, start?: number },
   ): void {
     if (
       prop.type === "SpreadElement" ||
@@ -91,10 +90,12 @@ export default class ExpressionParser extends LValParser {
     const name = key.type === "Identifier" ? key.name : String(key.value);
 
     if (name === "__proto__") {
-      if (propHash.proto) {
-        this.raise(key.start, "Redefinition of __proto__ property");
+      // Store the first redefinition's position
+      if (protoRef.used && !protoRef.start) {
+        protoRef.start = key.start;
       }
-      propHash.proto = true;
+
+      protoRef.used = true;
     }
   }
 
@@ -1515,7 +1516,7 @@ export default class ExpressionParser extends LValParser {
 
       const prop = this.parseObjectMember(isPattern, refShorthandDefaultPos);
       // $FlowIgnore RestElement will never be returned if !isPattern
-      if (!isPattern) this.checkPropClash(prop, propHash);
+      if (!isPattern) this.checkDuplicatedProto(prop, propHash);
 
       // $FlowIgnore
       if (prop.shorthand) {
@@ -1523,6 +1524,10 @@ export default class ExpressionParser extends LValParser {
       }
 
       node.properties.push(prop);
+    }
+
+    if (!this.match(tt.eq) && propHash.start !== undefined) {
+      this.raise(propHash.start, "Redefinition of __proto__ property");
     }
 
     return this.finishNode(

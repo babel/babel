@@ -1,5 +1,3 @@
-language/expressions/assignment/destructuring/obj-prop-__proto__dup.js(default)
-language/expressions/assignment/destructuring/obj-prop-__proto__dup.js(strict mode)
 language/expressions/class/elements/fields-duplicate-privatenames.js(default)
 language/expressions/class/elements/fields-duplicate-privatenames.js(strict mode)
 language/expressions/class/elements/syntax/early-errors/grammar-private-environment-on-class-heritage-chained-usage.js(default)
