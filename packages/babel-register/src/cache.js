@@ -24,6 +24,7 @@ function isCacheDisabled() {
  */
 
 export function save() {
+  if (isCacheDisabled()) return;
   let serialised: string = "{}";
 
   try {
@@ -70,6 +71,9 @@ because it resides in a readonly filesystem. Cache is disabled.`,
 export function load() {
   if (isCacheDisabled()) return;
 
+  process.on("exit", save);
+  process.nextTick(save);
+
   let cacheContent;
 
   try {
@@ -90,9 +94,6 @@ due to a permission issue. Cache is disabled.`,
         throw e;
     }
   }
-
-  process.on("exit", save);
-  process.nextTick(save);
 
   try {
     data = JSON.parse(cacheContent);
