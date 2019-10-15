@@ -70,6 +70,9 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   get treatFunctionsAsVar() {
     return this.treatFunctionsAsVarInScope(this.currentScope());
   }
+  get inCatchBlock() {
+    return (this.currentScope().flags & SCOPE_SIMPLE_CATCH) > 0;
+  }
 
   createScope(flags: ScopeFlags): Scope {
     return new Scope(flags);

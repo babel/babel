@@ -383,7 +383,11 @@ export default class LValParser extends NodeUtils {
             checkClashes[key] = true;
           }
         }
-        if (bindingType === BIND_LEXICAL && expr.name === "let") {
+        if (
+          bindingType === BIND_LEXICAL &&
+          expr.name === "let" &&
+          !this.scope.inCatchBlock
+        ) {
           this.raise(
             expr.start,
             "'let' is not allowed to be used as a name in 'let' or 'const' declarations.",
