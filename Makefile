@@ -193,7 +193,7 @@ new-version:
 
 # NOTE: Run make new-version first
 publish: prepublish
-	yarn lerna publish from-git --require-scripts
+	yarn lerna publish from-git
 	$(MAKE) clean
 
 publish-ci: prepublish
