@@ -14,6 +14,11 @@ const DEFAULT_FILENAME = path.join(
 const FILENAME: string = process.env.BABEL_CACHE_PATH || DEFAULT_FILENAME;
 let data: Object = {};
 
+let cacheDisabled = false;
+
+function isCacheDisabled() {
+  return process.env.BABEL_DISABLE_CACHE ?? cacheDisabled;
+}
 /**
  * Write stringified cache to disk.
  */
@@ -32,8 +37,20 @@ export function save() {
     }
   }
 
-  mkdirpSync(path.dirname(FILENAME));
-  fs.writeFileSync(FILENAME, serialised);
+  try {
+    mkdirpSync(path.dirname(FILENAME));
+    fs.writeFileSync(FILENAME, serialised);
+  } catch (e) {
+    if (e.code === "EACCES" || e.code === "EPERM") {
+      console.warn(
+        `Babel could not write cache to file: ${FILENAME} 
+due to a permission issue. Cache is now disabled.`,
+      );
+      cacheDisabled = true;
+    } else {
+      throw e;
+    }
+  }
 }
 
 /**
@@ -41,18 +58,35 @@ export function save() {
  */
 
 export function load() {
-  if (process.env.BABEL_DISABLE_CACHE) return;
+  if (isCacheDisabled()) return;
+
+  let cacheContent;
+
+  try {
+    cacheContent = fs.readFileSync(FILENAME);
+  } catch (e) {
+    switch (e.code) {
+      case "ENOENT":
+        return;
+      case "EACCES":
+      case "EPERM":
+        console.warn(
+          `Babel could not read cache file: ${FILENAME}
+due to a permission issue. Cache is now disabled.`,
+        );
+        cacheDisabled = true;
+        return;
+      default:
+        throw e;
+    }
+  }
 
   process.on("exit", save);
   process.nextTick(save);
 
-  if (!fs.existsSync(FILENAME)) return;
-
   try {
-    data = JSON.parse(fs.readFileSync(FILENAME));
-  } catch (err) {
-    return;
-  }
+    data = JSON.parse(cacheContent);
+  } catch (err) {}
 }
 
 /**
