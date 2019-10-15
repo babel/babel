@@ -52,7 +52,7 @@ export default function(
   function shouldReplace(source, modules) {
     if (!modules) return false;
     if (
-      // Avoid replaing an import with itself, to avoid infinite loops.
+      // Don't replace an import with itself to avoid an infinite loop
       modules.length === 1 &&
       polyfills.has(modules[0]) &&
       available.has(modules[0]) &&
