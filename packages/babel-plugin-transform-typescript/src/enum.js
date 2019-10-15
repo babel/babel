@@ -164,7 +164,7 @@ function evaluate(
         if (expr.quasis.length === 1) {
           return expr.quasis[0].value.cooked;
         }
-      /* falls throught */
+      /* falls through */
       default:
         return undefined;
     }
