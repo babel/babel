@@ -1585,18 +1585,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // Overrides
     // ==================================
 
-    checkReservedWord(
-      word: string,
-      startLoc: number,
-      checkKeywords: boolean,
-      isBinding: boolean,
-    ): void {
-      if (this.shouldParseEnums() && word === "enum") {
-        return;
-      }
-      super.checkReservedWord(word, startLoc, checkKeywords, isBinding);
-    }
-
     parseFunctionBody(
       node: N.Function,
       allowExpressionBody: ?boolean,
@@ -1645,11 +1633,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const node = this.startNode();
         this.next();
         return this.flowParseInterface(node);
-      } else if (
-        this.shouldParseEnums() &&
-        this.match(tt.name) &&
-        this.state.value === "enum"
-      ) {
+      } else if (this.shouldParseEnums() && this.isContextual("enum")) {
         const node = this.startNode();
         this.next();
         return this.flowParseEnumDeclaration(node);
@@ -3199,8 +3183,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }: {
       enumName: string,
     }): EnumExplicitType {
-      if (this.isContextual("of")) {
-        this.next();
+      if (this.eatContextual("of")) {
         if (this.match(tt.name)) {
           switch (this.state.value) {
             case "boolean":
@@ -3272,16 +3255,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           const strsLen = members.stringMembers.length;
           const defaultedLen = members.defaultedMembers.length;
 
-          if (!(boolsLen | numsLen | strsLen | defaultedLen)) {
+          if (!boolsLen && !numsLen && !strsLen && !defaultedLen) {
             node.body = empty();
-          } else if (!(boolsLen | numsLen)) {
+          } else if (!boolsLen && !numsLen) {
             node.body = this.flowEnumStringBody(
               bodyNode,
               members.stringMembers,
               members.defaultedMembers,
               { enumName },
             );
-          } else if (!(numsLen | strsLen) && boolsLen >= defaultedLen) {
+          } else if (!numsLen && !strsLen && boolsLen >= defaultedLen) {
             bodyNode.members = members.booleanMembers;
             node.body = this.finishNode(bodyNode, "EnumBooleanBody");
             for (const member of members.defaultedMembers) {
@@ -3290,7 +3273,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
                 memberName: member.id.name,
               });
             }
-          } else if (!(boolsLen | strsLen) && numsLen >= defaultedLen) {
+          } else if (!boolsLen && !strsLen && numsLen >= defaultedLen) {
             bodyNode.members = members.numberMembers;
             node.body = this.finishNode(bodyNode, "EnumNumberBody");
             for (const member of members.defaultedMembers) {
