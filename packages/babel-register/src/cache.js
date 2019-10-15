@@ -41,14 +41,24 @@ export function save() {
     mkdirpSync(path.dirname(FILENAME));
     fs.writeFileSync(FILENAME, serialised);
   } catch (e) {
-    if (e.code === "EACCES" || e.code === "EPERM") {
-      console.warn(
-        `Babel could not write cache to file: ${FILENAME} 
-due to a permission issue. Cache is now disabled.`,
-      );
-      cacheDisabled = true;
-    } else {
-      throw e;
+    switch (e.code) {
+      case "EACCES":
+      case "EPERM":
+        console.warn(
+          `Babel could not write cache to file: ${FILENAME} 
+due to a permission issue. Cache is disabled.`,
+        );
+        cacheDisabled = true;
+        break;
+      case "EROFS":
+        console.warn(
+          `Babel could not write cache to file: ${FILENAME} 
+because it resides in a readonly filesystem. Cache is disabled.`,
+        );
+        cacheDisabled = true;
+        break;
+      default:
+        throw e;
     }
   }
 }
@@ -72,7 +82,7 @@ export function load() {
       case "EPERM":
         console.warn(
           `Babel could not read cache file: ${FILENAME}
-due to a permission issue. Cache is now disabled.`,
+due to a permission issue. Cache is disabled.`,
         );
         cacheDisabled = true;
         return;
