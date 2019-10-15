@@ -26,7 +26,7 @@ A clear and concise description of what the regression is.
 var your => (code) => here;
 ```
 
-**Babel Configuration (.babelrc, package.json, cli command)**
+**Babel Configuration (.babelrc, babel.config.js, cli command)**
 
 ```js
 {
@@ -38,6 +38,12 @@ var your => (code) => here;
 A clear and concise description of what you expected to happen (or code).
 
 **Environment**
+<!--- Tryme: you can run `npx envinfo --preset babel` and paste the result below ``` -->
+```
+
+```
+<!--- you can delete the questions below if you have pasted `envinfo` results -->
+<!--- :-) It is also okay if instead you prefer to fill in the information below -->
 - Babel version(s): [e.g. v6.0.0, v7.0.0-beta.34]
 - Node/npm version: [e.g. Node 8/npm 5]
 - OS: [e.g. OSX 10.13.4, Windows 10]
