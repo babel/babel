@@ -115,8 +115,6 @@ workflows:
   test:
     jobs:
       - test
-  test262-after-approval:
-    jobs:
   nightly:
       triggers:
         - schedule:
