@@ -115,13 +115,11 @@ workflows:
   test:
     jobs:
       - test
-  nightly:
-      triggers:
-        - schedule:
-            cron: "0 5 * * *"
-            filters:
-              branches:
-                only:
-                  - master
-      jobs:
-        - test262
+  master:
+    filters:
+      branches:
+        only:
+          - master
+    jobs:
+      - test
+      - test262
