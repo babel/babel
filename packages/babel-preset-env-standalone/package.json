@@ -8,6 +8,9 @@
     "babel-preset-env.min.js",
     "src"
   ],
+  "scripts": {
+    "prepublishOnly": "cd ../.. && make prepublish-build-preset-env-standalone"
+  },
   "devDependencies": {
     "@babel/plugin-proposal-dynamic-import": "^7.5.0",
     "@babel/plugin-proposal-json-strings": "^7.0.0",
