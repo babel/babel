@@ -197,7 +197,7 @@ export const InstanceProperties: ObjectMap<string[]> = {
   forEach: ["es.array.for-each", "web.dom-collections.for-each"],
   includes: ["es.array.includes", "es.string.includes"],
   indexOf: ["es.array.index-of"],
-  italic: ["es.string.italics"],
+  italics: ["es.string.italics"],
   join: ["es.array.join"],
   keys: ArrayNatureIteratorsWithTag,
   lastIndex: ["esnext.array.last-index"],
