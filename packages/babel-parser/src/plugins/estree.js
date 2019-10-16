@@ -108,6 +108,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       bindingType: BindingTypes = BIND_NONE,
       checkClashes: ?{ [key: string]: boolean },
       contextDescription: string,
+      disallowLetBinding?: boolean,
     ): void {
       switch (expr.type) {
         case "ObjectPattern":
@@ -117,11 +118,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               bindingType,
               checkClashes,
               "object destructuring pattern",
+              disallowLetBinding,
             );
           });
           break;
         default:
-          super.checkLVal(expr, bindingType, checkClashes, contextDescription);
+          super.checkLVal(
+            expr,
+            bindingType,
+            checkClashes,
+            contextDescription,
+            disallowLetBinding,
+          );
       }
     }
 

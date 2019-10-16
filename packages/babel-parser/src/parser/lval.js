@@ -17,7 +17,7 @@ import type {
 import type { Pos, Position } from "../util/location";
 import { isStrictBindReservedWord } from "../util/identifier";
 import { NodeUtils } from "./node";
-import { type BindingTypes, BIND_NONE, BIND_LEXICAL } from "../util/scopeflags";
+import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
 
 export default class LValParser extends NodeUtils {
   // Forward-declaration: defined in expression.js
@@ -348,6 +348,7 @@ export default class LValParser extends NodeUtils {
     bindingType: BindingTypes = BIND_NONE,
     checkClashes: ?{ [key: string]: boolean },
     contextDescription: string,
+    disallowLetBinding?: boolean,
   ): void {
     switch (expr.type) {
       case "Identifier":
@@ -383,11 +384,7 @@ export default class LValParser extends NodeUtils {
             checkClashes[key] = true;
           }
         }
-        if (
-          bindingType === BIND_LEXICAL &&
-          expr.name === "let" &&
-          !this.scope.inCatchBlock
-        ) {
+        if (disallowLetBinding && expr.name === "let") {
           this.raise(
             expr.start,
             "'let' is not allowed to be used as a name in 'let' or 'const' declarations.",
@@ -412,6 +409,7 @@ export default class LValParser extends NodeUtils {
             bindingType,
             checkClashes,
             "object destructuring pattern",
+            disallowLetBinding,
           );
         }
         break;
@@ -424,6 +422,7 @@ export default class LValParser extends NodeUtils {
               bindingType,
               checkClashes,
               "array destructuring pattern",
+              disallowLetBinding,
             );
           }
         }
