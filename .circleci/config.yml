@@ -102,12 +102,10 @@ jobs:
           <<: *test262_workdir
       - store_artifacts: *artifact_test262_tap
       - run:
-          name: Convert Tap output to Xunit
+          name: Output test262 results
           command: |
-            mkdir -p ~/test-results/test262
-            cat ~/test262.tap | $(npm bin)/tap-mocha-reporter xunit | tee ~/test-results/test262/results.xml
+            cat ~/test262.tap | $(npm bin)/tap-mocha-reporter spec || true
           <<: *test262_workdir
-      - store_test_results: *artifact_test262_xunit
 
 
 workflows:
@@ -117,8 +115,4 @@ workflows:
       - test
   master:
     jobs:
-      - test262:
-          filters:
-            branches:
-              only:
-                - master
+      - test262
