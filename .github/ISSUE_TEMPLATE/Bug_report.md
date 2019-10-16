@@ -22,7 +22,7 @@ var your => (code) => here;
 **Expected behavior/code**
 A clear and concise description of what you expected to happen (or code).
 
-**Babel Configuration (.babelrc, package.json, cli command)**
+**Babel Configuration (babel.config.js, .babelrc, package.json#babel, cli command)**
 
 ```js
 {
@@ -31,6 +31,10 @@ A clear and concise description of what you expected to happen (or code).
 ```
 
 **Environment**
+<!--- Tip: Instead of filling out the questions below, you can run `npx envinfo --preset babel` and paste the result below ``` -->
+```
+
+```
 - Babel version(s): [e.g. v6.0.0, v7.0.0-beta.34]
 - Node/npm version: [e.g. Node 8/npm 5]
 - OS: [e.g. OSX 10.13.4, Windows 10]
