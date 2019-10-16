@@ -1239,6 +1239,14 @@ export default class Tokenizer extends LocationParser {
       case charCodes.lineSeparator:
       case charCodes.paragraphSeparator:
         return "";
+      case charCodes.digit8:
+      case charCodes.digit9:
+        if (inTemplate) {
+          const codePos = this.state.pos - 1;
+
+          this.state.invalidTemplateEscapePosition = codePos;
+          return null;
+        }
       default:
         if (ch >= charCodes.digit0 && ch <= charCodes.digit7) {
           const codePos = this.state.pos - 1;
