@@ -31,7 +31,7 @@ A clear and concise description of what you expected to happen (or code).
 ```
 
 **Environment**
-<!--- Tryme: you can run `npx envinfo --preset babel` and paste the result below ``` -->
+<!--- Tip: Instead of filling out the questions below, you can run `npx envinfo --preset babel` and paste the result below ``` -->
 ```
 
 ```
