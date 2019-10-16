@@ -115,4 +115,8 @@ workflows:
       - test
   master:
     jobs:
-      - test262
+      - test262:
+          filters:
+            branches:
+              only:
+                - master
