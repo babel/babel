@@ -74,6 +74,18 @@ describe("@babel/register - caching", () => {
       expect(get()).toEqual({});
     });
 
+    it("should create the cache after load", cb => {
+      load();
+
+      process.nextTick(() => {
+        process.nextTick(() => {
+          expect(fs.existsSync(testCacheFilename)).toBe(true);
+          expect(get()).toEqual({});
+          cb();
+        });
+      });
+    });
+
     it("should be disabled when CACHE_PATH is not allowed to read", () => {
       writeCache({ foo: "bar" });
 
