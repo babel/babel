@@ -213,7 +213,7 @@ yarn-install: clean-all
 	yarn --ignore-engines
 
 lerna-bootstrap: yarn-install
-	yarn lerna bootstrap -- --ignore-engines
+	yarn lerna bootstrap -- -- --ignore-engines
 
 bootstrap: bootstrap-only
 	$(MAKE) build
