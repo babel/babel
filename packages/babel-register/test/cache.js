@@ -73,5 +73,30 @@ describe("@babel/register - caching", () => {
       expect(fs.existsSync(testCacheFilename)).toBe(true);
       expect(get()).toEqual({});
     });
+
+    it("should be disabled when CACHE_PATH is not allowed to read", () => {
+      writeCache({ foo: "bar" });
+
+      fs.chmodSync(testCacheFilename, 0o375);
+      load();
+
+      expect(get()).toEqual({});
+    });
+
+    it("should be disabled when CACHE_PATH is not allowed to write", cb => {
+      writeCache({ foo: "bar" });
+
+      fs.chmodSync(testCacheFilename, 0o575);
+      load();
+
+      expect(get()).toEqual({ foo: "bar" });
+      process.nextTick(() => {
+        process.nextTick(() => {
+          load();
+          expect(get()).toEqual({});
+          cb();
+        });
+      });
+    });
   });
 });

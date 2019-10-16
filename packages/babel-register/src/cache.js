@@ -69,7 +69,10 @@ because it resides in a readonly filesystem. Cache is disabled.`,
  */
 
 export function load() {
-  if (isCacheDisabled()) return;
+  if (isCacheDisabled()) {
+    data = {};
+    return;
+  }
 
   process.on("exit", save);
   process.nextTick(save);
@@ -80,8 +83,6 @@ export function load() {
     cacheContent = fs.readFileSync(FILENAME);
   } catch (e) {
     switch (e.code) {
-      case "ENOENT":
-        return;
       case "EACCES":
       case "EPERM":
         console.warn(
@@ -89,15 +90,15 @@ export function load() {
 due to a permission issue. Cache is disabled.`,
         );
         cacheDisabled = true;
-        return;
+      /* fall through */
       default:
-        throw e;
+        return;
     }
   }
 
   try {
     data = JSON.parse(cacheContent);
-  } catch (err) {}
+  } catch {}
 }
 
 /**
