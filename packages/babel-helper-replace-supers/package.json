@@ -12,6 +12,6 @@
     "@babel/helper-member-expression-to-functions": "^7.5.5",
     "@babel/helper-optimise-call-expression": "^7.0.0",
     "@babel/traverse": "^7.5.5",
-    "@babel/types": "^7.5.5"
+    "@babel/types": "^7.6.3"
   }
 }

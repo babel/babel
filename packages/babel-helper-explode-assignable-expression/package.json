@@ -10,6 +10,6 @@
   "main": "lib/index.js",
   "dependencies": {
     "@babel/traverse": "^7.1.0",
-    "@babel/types": "^7.0.0"
+    "@babel/types": "^7.6.3"
   }
 }
