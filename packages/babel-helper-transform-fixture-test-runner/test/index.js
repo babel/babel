@@ -40,7 +40,7 @@ describe("helper-transform-fixture-test-runner", function() {
       filename: `${__filename}.fake4`,
     };
     runCodeInTestContext(
-      `try { throw new Error()} catch (e) {
+      `try { throw new Error() } catch (e) {
           opts.stack = e.stack
         }
       `,
