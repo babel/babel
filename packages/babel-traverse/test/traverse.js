@@ -196,7 +196,8 @@ describe("traverse", function() {
       expect(skipped).toBe(true);
     });
 
-    it("skipped and requeued paths should be visited", function() {
+    // Skipped: see the comment in the `NodePath.requque` method.
+    it.skip("skipped and requeued paths should be visited", function() {
       const ast = parse("id");
 
       let visited = false;

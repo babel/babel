@@ -238,7 +238,13 @@ export function setKey(key) {
 export function requeue(pathToQueue = this) {
   if (pathToQueue.removed) return;
 
-  pathToQueue.shouldSkip = false;
+  // TODO: Uncomment in Babel 8. If a path is skipped, and then replaced with a
+  // new one, the new one shouldn't probably be skipped.
+  // Note that this currently causes an infinite loop because of
+  // packages/babel-plugin-transform-block-scoping/src/tdz.js#L52-L59
+  // (b5b8055cc00756f94bf71deb45f288738520ee3c)
+  //
+  // pathToQueue.shouldSkip = false;
 
   // TODO(loganfsmyth): This should be switched back to queue in parent contexts
   // automatically once #2892 and #4135 have been resolved. See #4140.
