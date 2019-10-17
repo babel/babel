@@ -14,11 +14,17 @@ const DEFAULT_FILENAME = path.join(
 const FILENAME: string = process.env.BABEL_CACHE_PATH || DEFAULT_FILENAME;
 let data: Object = {};
 
+let cacheDisabled = false;
+
+function isCacheDisabled() {
+  return process.env.BABEL_DISABLE_CACHE ?? cacheDisabled;
+}
 /**
  * Write stringified cache to disk.
  */
 
 export function save() {
+  if (isCacheDisabled()) return;
   let serialised: string = "{}";
 
   try {
@@ -32,8 +38,30 @@ export function save() {
     }
   }
 
-  mkdirpSync(path.dirname(FILENAME));
-  fs.writeFileSync(FILENAME, serialised);
+  try {
+    mkdirpSync(path.dirname(FILENAME));
+    fs.writeFileSync(FILENAME, serialised);
+  } catch (e) {
+    switch (e.code) {
+      case "EACCES":
+      case "EPERM":
+        console.warn(
+          `Babel could not write cache to file: ${FILENAME} 
+due to a permission issue. Cache is disabled.`,
+        );
+        cacheDisabled = true;
+        break;
+      case "EROFS":
+        console.warn(
+          `Babel could not write cache to file: ${FILENAME} 
+because it resides in a readonly filesystem. Cache is disabled.`,
+        );
+        cacheDisabled = true;
+        break;
+      default:
+        throw e;
+    }
+  }
 }
 
 /**
@@ -41,18 +69,37 @@ export function save() {
  */
 
 export function load() {
-  if (process.env.BABEL_DISABLE_CACHE) return;
+  if (isCacheDisabled()) {
+    data = {};
+    return;
+  }
 
   process.on("exit", save);
   process.nextTick(save);
 
-  if (!fs.existsSync(FILENAME)) return;
+  let cacheContent;
 
   try {
-    data = JSON.parse(fs.readFileSync(FILENAME));
-  } catch (err) {
-    return;
+    cacheContent = fs.readFileSync(FILENAME);
+  } catch (e) {
+    switch (e.code) {
+      // check EACCES only as fs.readFileSync will never throw EPERM on Windows
+      // https://github.com/libuv/libuv/blob/076df64dbbda4320f93375913a728efc40e12d37/src/win/fs.c#L735
+      case "EACCES":
+        console.warn(
+          `Babel could not read cache file: ${FILENAME}
+due to a permission issue. Cache is disabled.`,
+        );
+        cacheDisabled = true;
+      /* fall through */
+      default:
+        return;
+    }
   }
+
+  try {
+    data = JSON.parse(cacheContent);
+  } catch {}
 }
 
 /**
