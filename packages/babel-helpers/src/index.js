@@ -13,6 +13,7 @@ function makePath(path) {
   return parts.reverse().join(".");
 }
 
+let fileClass = undefined;
 /**
  * Given a file AST for a given helper, get a bunch of metadata about it so that Babel can quickly render
  * the helper is whatever context it is needed in.
@@ -29,7 +30,7 @@ function getHelperMetadata(file) {
   const importPaths = [];
   const importBindingsReferences = [];
 
-  traverse(file, {
+  const dependencyVisitor = {
     ImportDeclaration(child) {
       const name = child.node.source.value;
       if (!helpers[name]) {
@@ -72,9 +73,9 @@ function getHelperMetadata(file) {
 
       child.skip();
     },
-  });
+  };
 
-  traverse(file, {
+  const referenceVisitor = {
     Program(path) {
       const bindings = path.scope.getAllBindings();
 
@@ -111,7 +112,10 @@ function getHelperMetadata(file) {
         exportBindingAssignments.push(makePath(child));
       }
     },
-  });
+  };
+
+  traverse(file.ast, dependencyVisitor, file.scope);
+  traverse(file.ast, referenceVisitor, file.scope);
 
   if (!exportPath) throw new Error("Helpers must default-export something.");
 
@@ -170,7 +174,7 @@ function permuteHelperAST(file, metadata, id, localBindings, getDependency) {
     toRename[exportName] = id.name;
   }
 
-  traverse(file, {
+  const visitor = {
     Program(path) {
       // We need to compute these in advance because removing nodes would
       // invalidate the paths.
@@ -223,7 +227,8 @@ function permuteHelperAST(file, metadata, id, localBindings, getDependency) {
       // actually doing the traversal.
       path.stop();
     },
-  });
+  };
+  traverse(file.ast, visitor, file.scope);
 }
 
 const helperData = Object.create(null);
@@ -238,7 +243,16 @@ function loadHelper(name) {
     }
 
     const fn = () => {
-      return t.file(helper.ast());
+      const file = { ast: t.file(helper.ast()) };
+      if (fileClass) {
+        return new fileClass(
+          {
+            filename: `babel-helper://${name}`,
+          },
+          file,
+        );
+      }
+      return file;
     };
 
     const metadata = getHelperMetadata(fn());
@@ -249,7 +263,7 @@ function loadHelper(name) {
         permuteHelperAST(file, metadata, id, localBindings, getDependency);
 
         return {
-          nodes: file.program.body,
+          nodes: file.ast.program.body,
           globals: metadata.globals,
         };
       },
@@ -280,7 +294,12 @@ export function getDependencies(name: string): $ReadOnlyArray<string> {
   return Array.from(loadHelper(name).dependencies.values());
 }
 
-export function ensure(name: string) {
+export function ensure(name: string, newFileClass?) {
+  if (!fileClass) {
+    // optional fileClass used to wrap helper snippets into File instance,
+    // offering `path.hub` support during traversal
+    fileClass = newFileClass;
+  }
   loadHelper(name);
 }
 
