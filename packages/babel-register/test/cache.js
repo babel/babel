@@ -7,12 +7,12 @@ const oldBabelDisableCacheValue = process.env.BABEL_DISABLE_CACHE;
 process.env.BABEL_CACHE_PATH = testCacheFilename;
 delete process.env.BABEL_DISABLE_CACHE;
 
-function writeCache(data) {
+function writeCache(data, mode = 0o666) {
   if (typeof data === "object") {
     data = JSON.stringify(data);
   }
 
-  fs.writeFileSync(testCacheFilename, data);
+  fs.writeFileSync(testCacheFilename, data, { mode });
 }
 
 function cleanCache() {
@@ -84,19 +84,20 @@ describe("@babel/register - caching", () => {
       });
     });
 
-    it("should be disabled when CACHE_PATH is not allowed to read", () => {
-      writeCache({ foo: "bar" });
+    // Only write mode is effective on Windows
+    if (process.platform !== "win32") {
+      it("should be disabled when CACHE_PATH is not allowed to read", () => {
+        writeCache({ foo: "bar" }, 0o266);
 
-      fs.chmodSync(testCacheFilename, 0o375);
-      load();
+        load();
 
-      expect(get()).toEqual({});
-    });
+        expect(get()).toEqual({});
+      });
+    }
 
     it("should be disabled when CACHE_PATH is not allowed to write", cb => {
-      writeCache({ foo: "bar" });
+      writeCache({ foo: "bar" }, 0o466);
 
-      fs.chmodSync(testCacheFilename, 0o575);
       load();
 
       expect(get()).toEqual({ foo: "bar" });

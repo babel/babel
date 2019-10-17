@@ -83,8 +83,9 @@ export function load() {
     cacheContent = fs.readFileSync(FILENAME);
   } catch (e) {
     switch (e.code) {
+      // check EACCES only as fs.readFileSync will never throw EPERM on Windows
+      // https://github.com/libuv/libuv/blob/076df64dbbda4320f93375913a728efc40e12d37/src/win/fs.c#L735
       case "EACCES":
-      case "EPERM":
         console.warn(
           `Babel could not read cache file: ${FILENAME}
 due to a permission issue. Cache is disabled.`,
