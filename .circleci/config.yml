@@ -30,8 +30,17 @@ aliases:
   - &artifact_env_min
     path: ~/babel/packages/babel-preset-env-standalone/babel-preset-env.min.js
 
+  - &test262_workdir
+    working_directory: ~/babel/babel-test262-runner
+
+  - &artifact_test262_tap
+    path: ~/test262.tap
+
+  - &artifact_test262_xunit
+    path: ~/test-results
+
 jobs:
-  build:
+  test:
     working_directory: ~/babel
     docker:
       - image: circleci/node:12
@@ -54,3 +63,60 @@ jobs:
       - store_artifacts: *artifact_env_min
       - save_cache: *save-node-modules-cache
       - save_cache: *save-yarn-cache
+  test262:
+    working_directory: ~/babel
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - restore-cache: *restore-yarn-cache
+      - restore-cache: *restore-node-modules-cache
+      - run:
+          name: Build Babel
+          command: BABEL_ENV=test make bootstrap
+      - run:
+          name: Link Babel
+          command: |
+            cd packages
+            for package in */; do
+              cd $package
+              yarn link
+              cd ..
+            done
+      - run:
+          name: Setup Test Runner
+          command: |
+            git clone --recurse-submodules https://github.com/babel/babel-test262-runner
+            cd babel-test262-runner
+            yarn
+            yarn add tap-mocha-reporter --dev
+            curl -L https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 > jq
+            chmod +x ./jq
+            for package in ../packages/*/package.json; do
+              yarn link $(./jq -j ".name" $package)
+            done
+            node lib/download-node
+      - run:
+          name: Run Test262
+          command: node lib/run-tests I_AM_SURE | tee ~/test262.tap
+          <<: *test262_workdir
+      - store_artifacts: *artifact_test262_tap
+      - run:
+          name: Output test262 results
+          command: |
+            cat ~/test262.tap | $(npm bin)/tap-mocha-reporter spec || true
+          <<: *test262_workdir
+
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
+  master:
+    jobs:
+      - test262:
+          filters:
+            branches:
+              only:
+                - master
