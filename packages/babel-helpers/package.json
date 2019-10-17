@@ -13,7 +13,7 @@
   "dependencies": {
     "@babel/template": "^7.6.0",
     "@babel/traverse": "^7.6.2",
-    "@babel/types": "^7.6.0"
+    "@babel/types": "^7.6.3"
   },
   "devDependencies": {
     "@babel/helper-plugin-test-runner": "^7.0.0"

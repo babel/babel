@@ -9,7 +9,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/types": "^7.3.0",
+    "@babel/types": "^7.6.3",
     "esutils": "^2.0.0"
   }
 }

@@ -13,6 +13,6 @@
     "@babel/helper-wrap-function": "^7.1.0",
     "@babel/template": "^7.1.0",
     "@babel/traverse": "^7.1.0",
-    "@babel/types": "^7.0.0"
+    "@babel/types": "^7.6.3"
   }
 }

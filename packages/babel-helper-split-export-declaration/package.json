@@ -9,6 +9,6 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/types": "^7.4.4"
+    "@babel/types": "^7.6.3"
   }
 }
