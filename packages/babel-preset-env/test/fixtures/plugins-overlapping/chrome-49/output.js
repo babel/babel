@@ -5,5 +5,5 @@ function foo() {
       case "end":
         return _context.stop();
     }
-  }, null, this);
+  });
 }
