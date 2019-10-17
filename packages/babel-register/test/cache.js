@@ -78,11 +78,9 @@ describe("@babel/register - caching", () => {
       load();
 
       process.nextTick(() => {
-        process.nextTick(() => {
-          expect(fs.existsSync(testCacheFilename)).toBe(true);
-          expect(get()).toEqual({});
-          cb();
-        });
+        expect(fs.existsSync(testCacheFilename)).toBe(true);
+        expect(get()).toEqual({});
+        cb();
       });
     });
 
@@ -103,11 +101,9 @@ describe("@babel/register - caching", () => {
 
       expect(get()).toEqual({ foo: "bar" });
       process.nextTick(() => {
-        process.nextTick(() => {
-          load();
-          expect(get()).toEqual({});
-          cb();
-        });
+        load();
+        expect(get()).toEqual({});
+        cb();
       });
     });
   });
