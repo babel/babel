@@ -1021,6 +1021,7 @@ export default class StatementParser extends ExpressionParser {
       kind === "var" ? BIND_VAR : BIND_LEXICAL,
       undefined,
       "variable declaration",
+      kind !== "var",
     );
   }
 
