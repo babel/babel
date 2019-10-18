@@ -172,6 +172,14 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
     let _props = [];
     const objs = [];
 
+    const useSpread = file.opts.useSpread || false;
+    if (typeof useSpread !== "boolean") {
+      throw new Error(
+        "transform-react-jsx currently only accepts a boolean option for " +
+          "useSpread (defaults to false)",
+      );
+    }
+
     const useBuiltIns = file.opts.useBuiltIns || false;
     if (typeof useBuiltIns !== "boolean") {
       throw new Error(
@@ -185,6 +193,9 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
       if (t.isJSXSpreadAttribute(prop)) {
         _props = pushProps(_props, objs);
         objs.push(prop.argument);
+        if (useSpread) {
+          _props.push(t.spreadElement(prop.argument));
+        }
       } else {
         _props.push(convertAttribute(prop));
       }
@@ -201,12 +212,15 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
         objs.unshift(t.objectExpression([]));
       }
 
-      const helper = useBuiltIns
-        ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
-        : file.addHelper("extends");
-
-      // spread it
-      attribs = t.callExpression(helper, objs);
+      if (useSpread) {
+        attribs = t.objectExpression(_props);
+      } else {
+        const helper = useBuiltIns
+          ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
+          : file.addHelper("extends");
+        // spread it
+        attribs = t.callExpression(helper, objs);
+      }
     }
 
     return attribs;
