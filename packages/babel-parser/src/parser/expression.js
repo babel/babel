@@ -2235,9 +2235,18 @@ export default class ExpressionParser extends LValParser {
       );
     }
 
+    if (!this.scope.inFunction && !this.options.allowAwaitOutsideFunction) {
+      if (this.hasPrecedingLineBreak()) {
+        this.ambiguousScriptDifferentAst = true;
+      } else {
+        this.sawUnambiguousESM = true;
+      }
+    }
+
     if (!this.state.soloAwait) {
       node.argument = this.parseMaybeUnary();
     }
+
     return this.finishNode(node, "AwaitExpression");
   }
 

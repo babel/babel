@@ -13,6 +13,7 @@ export default class BaseParser {
   plugins: PluginsMap;
   filename: ?string;
   sawUnambiguousESM: boolean = false;
+  ambiguousScriptDifferentAst: boolean = false;
 
   // Initialized by Tokenizer
   state: State;
