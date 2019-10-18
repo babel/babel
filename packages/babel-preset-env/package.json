@@ -27,6 +27,7 @@
     "@babel/plugin-syntax-json-strings": "^7.2.0",
     "@babel/plugin-syntax-object-rest-spread": "^7.2.0",
     "@babel/plugin-syntax-optional-catch-binding": "^7.2.0",
+    "@babel/plugin-syntax-top-level-await": "^7.6.4",
     "@babel/plugin-transform-arrow-functions": "^7.2.0",
     "@babel/plugin-transform-async-to-generator": "^7.5.0",
     "@babel/plugin-transform-block-scoped-functions": "^7.2.0",
