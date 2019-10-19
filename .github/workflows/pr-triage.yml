@@ -65,6 +65,7 @@ jobs:
               ]
             }
       - name: Add labels
+        if: steps.labels.outputs.labels != '[]'
         uses: babel/actions/add-labels@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
