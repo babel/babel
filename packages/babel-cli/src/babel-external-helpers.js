@@ -2,7 +2,7 @@
 
 import commander from "commander";
 import { buildExternalHelpers } from "@babel/core";
-
+// test
 function collect(
   value: string | any,
   previousValue: Array<string>,
