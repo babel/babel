@@ -68,6 +68,6 @@ jobs:
         if: steps.labels.outputs.labels != '[]'
         uses: babel/actions/add-labels@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.BOT_TOKEN }}
           number: ${{ github.event.pull_request.number }}
           labels: ${{ steps.labels.outputs.labels }}
