@@ -40,6 +40,9 @@ aliases:
   - &artifact_test262_xunit
     path: ~/test-results
 
+  - &artifact_test262_diff_tap
+    path: ~/diff.tap
+
 executors:
   node-executor:
     docker:
@@ -73,6 +76,14 @@ jobs:
     executor: node-executor
     steps:
       - checkout
+      - run:
+          name: Sync with latest master branch (only on PRs)
+          command: |
+            if [ -n "$CIRCLE_PULL_REQUEST" ]
+            then
+              git fetch origin refs/pull/$CIRCLE_PR_NUMBER/merge
+              git checkout -qf FETCH_HEAD
+            fi
       - restore_cache: *restore-yarn-cache
       - restore_cache: *restore-node-modules-cache
       - run:
@@ -101,15 +112,33 @@ jobs:
             done
             node lib/download-node
       - run:
+          name: Download master branch Test262 artifact
+          command: node lib/download-master-artifact ~/master.tap
+          <<: *test262_workdir
+      - run:
           name: Run Test262
           command: node lib/run-tests I_AM_SURE | tee ~/test262.tap
           <<: *test262_workdir
       - store_artifacts: *artifact_test262_tap
       - run:
-          name: Output test262 results
+          name: Output Test262 results
           command: |
             cat ~/test262.tap | $(npm bin)/tap-mocha-reporter spec || true
           <<: *test262_workdir
+      - run:
+          name: Compare previous master branch & current job results
+          command: |
+            mkdir -p ~/test-results/test262
+            node lib/compare-results ~/master.tap ~/test262.tap | tee ~/diff.tap
+          <<: *test262_workdir
+      - store_artifacts: *artifact_test262_diff_tap
+      - run:
+          name: Output comparision results and report to CircleCI
+          command: |
+            mkdir -p ~/test-results/test262
+            cat ~/diff.tap | $(npm bin)/tap-merge | $(npm bin)/tap-mocha-reporter xunit | tee ~/test-results/test262/results.xml
+          <<: *test262_workdir
+      - store_test_results: *artifact_test262_xunit
 
   publish-verdaccio:
     executor: node-executor
@@ -136,7 +165,6 @@ workflows:
   test:
     jobs:
       - test
-
   master:
     jobs:
       - test262:
@@ -144,7 +172,13 @@ workflows:
             branches:
               only:
                 - master
-
+  test262:
+    jobs:
+      - approve-test262-run:
+          type: approval
+      - test262:
+          requires:
+            - approve-test262-run
   e2e:
     jobs:
       - publish-verdaccio
