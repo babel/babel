@@ -254,7 +254,7 @@ export default declare((api, options, dirname) => {
         if (cached) {
           cached = t.cloneNode(cached);
         } else {
-          cached = addDefault(file.path, source, {
+          cached = addDefault(file.path, `${source}.js`, {
             importedInterop: "uncompiled",
             nameHint,
             blockHoist,
@@ -275,7 +275,7 @@ export default declare((api, options, dirname) => {
         if (name === "regeneratorRuntime" && useRuntimeRegenerator) {
           path.replaceWith(
             this.addDefaultImport(
-              `${modulePath}/regenerator`,
+              `${modulePath}/regenerator/index`,
               "regeneratorRuntime",
             ),
           );
