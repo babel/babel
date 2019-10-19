@@ -1,6 +1,6 @@
-import "core-js/modules/es.object.to-string";
-import "core-js/modules/es.promise";
-import "regenerator-runtime/runtime";
+import "core-js/modules/es.object.to-string.js";
+import "core-js/modules/es.promise.js";
+import "regenerator-runtime/runtime.js";
 
 function a() {
   return regeneratorRuntime.async(function a$(_context) {

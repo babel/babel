@@ -1,8 +1,8 @@
-import "core-js/modules/es6.array.map";
-import "core-js/modules/web.dom.iterable";
-import "core-js/modules/es6.array.iterator";
-import "core-js/modules/es6.object.to-string";
-import "core-js/modules/es7.object.values";
+import "core-js/modules/es6.array.map.js";
+import "core-js/modules/web.dom.iterable.js";
+import "core-js/modules/es6.array.iterator.js";
+import "core-js/modules/es6.object.to-string.js";
+import "core-js/modules/es7.object.values.js";
 Object['values'](); // include
 
 []['map'](); // include
@@ -10,4 +10,3 @@ Object['values'](); // include
 Object[keys](); // don't include
 
 [][filter](); // don't include
-

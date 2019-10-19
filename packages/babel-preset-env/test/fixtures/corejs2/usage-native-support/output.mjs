@@ -1,4 +1,4 @@
-import "core-js/modules/web.dom.iterable";
+import "core-js/modules/web.dom.iterable.js";
 Array.from; // static method
 
 Map; // built-in

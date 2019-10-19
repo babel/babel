@@ -1,4 +1,4 @@
-var _regeneratorRuntime = require("@babel/runtime/regenerator");
+var _regeneratorRuntime = require("@babel/runtime/regenerator/index.js");
 
 var _marked =
 /*#__PURE__*/

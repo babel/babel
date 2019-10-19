@@ -1,4 +1,4 @@
-var _regeneratorRuntime = require("@babel/runtime-corejs3/regenerator");
+var _regeneratorRuntime = require("@babel/runtime-corejs3/regenerator/index.js");
 
 void
 /*#__PURE__*/
