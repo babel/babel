@@ -2424,7 +2424,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    toAssignableList(exprList: N.Expression[]): $ReadOnlyArray<N.Pattern> {
+    toAssignableList(
+      exprList: N.Expression[],
+      isBinding: ?boolean,
+      contextDescription: string,
+    ): $ReadOnlyArray<N.Pattern> {
+      const isAssignmentExpression =
+        contextDescription === "assignment expression";
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
         if (!expr) continue;
@@ -2434,10 +2440,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             break;
           case "TSAsExpression":
           case "TSTypeAssertion":
-            this.raise(
-              expr.start,
-              "Unexpected type cast in parameter position.",
-            );
+            if (isAssignmentExpression) {
+              exprList[i] = this.typeCastToParameter(expr);
+            } else {
+              this.raise(
+                expr.start,
+                "Unexpected type cast in parameter position.",
+              );
+            }
             break;
         }
       }
