@@ -204,11 +204,7 @@ function enumInitializedMember(context: Object, node: Object) {
   context.space();
   context.token("=");
   context.space();
-  if (typeof init === "boolean") {
-    context.word(init ? "true" : "false");
-  } else {
-    context.print(init, node);
-  }
+  context.print(init, node);
   context.token(",");
 }
 

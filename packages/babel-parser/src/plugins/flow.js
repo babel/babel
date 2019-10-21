@@ -2887,7 +2887,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.raise(
         pos,
         `Boolean enum members need to be initialized. Use either \`${memberName} = true,\` ` +
-          `or \`${memberName}\` = false,\` in enum \`${enumName}\`.`,
+          `or \`${memberName} = false,\` in enum \`${enumName}\`.`,
       );
     }
 
