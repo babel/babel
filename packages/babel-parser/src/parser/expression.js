@@ -2236,7 +2236,23 @@ export default class ExpressionParser extends LValParser {
     }
 
     if (!this.scope.inFunction && !this.options.allowAwaitOutsideFunction) {
-      if (this.hasPrecedingLineBreak()) {
+      if (
+        this.hasPrecedingLineBreak() ||
+        // All the following expressions are ambiguous:
+        //   await + 0
+        //   await - 0
+        //   await ( 0 )
+        //   await [ 0 ]
+        //   await / 0 /u
+        this.match(tt.plusMin) ||
+        this.match(tt.parenL) ||
+        this.match(tt.bracketL) ||
+        this.match(tt.backQuote) ||
+        // Sometimes the tokenizer generates tt.slach for regexps, and this is
+        // handler by parseExprAtom
+        this.match(tt.regexp) ||
+        this.match(tt.slash)
+      ) {
         this.ambiguousScriptDifferentAst = true;
       } else {
         this.sawUnambiguousESM = true;
