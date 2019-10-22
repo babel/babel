@@ -21,9 +21,7 @@ export default (_: any, opts: Object = {}) => {
     plugins: [
       babelPlugins.proposalExportDefaultFrom,
       babelPlugins.proposalLogicalAssignmentOperators,
-      [babelPlugins.proposalOptionalChaining, { loose }],
       [babelPlugins.proposalPipelineOperator, { proposal: pipelineProposal }],
-      [babelPlugins.proposalNullishCoalescingOperator, { loose }],
       babelPlugins.proposalDoExpressions,
     ],
   };
