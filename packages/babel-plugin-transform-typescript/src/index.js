@@ -46,7 +46,11 @@ function registerGlobalType(programScope, name) {
 export default declare(
   (
     api,
-    { jsxPragma = "React", allowNamespaces = false, declareFields = false },
+    {
+      jsxPragma = "React",
+      allowNamespaces = false,
+      allowDeclareFields = false,
+    },
   ) => {
     api.assertVersion(7);
 
@@ -56,9 +60,9 @@ export default declare(
       field(path) {
         const { node } = path;
 
-        if (!declareFields && node.declare) {
+        if (!allowDeclareFields && node.declare) {
           throw path.buildCodeFrameError(
-            `The 'declare' modifier is only allowed when the 'declareFields' option of ` +
+            `The 'declare' modifier is only allowed when the 'allowDeclareFields' option of ` +
               `@babel/plugin-transform-typescript or @babel/preset-typescript is enabled.`,
           );
         }
@@ -71,7 +75,7 @@ export default declare(
           }
 
           path.remove();
-        } else if (!declareFields && !node.value && !node.decorators) {
+        } else if (!allowDeclareFields && !node.value && !node.decorators) {
           path.remove();
         }
 

@@ -9,7 +9,7 @@ export default declare(
       allExtensions = false,
       isTSX = false,
       allowNamespaces,
-      declareFields,
+      allowDeclareFields,
     },
   ) => {
     api.assertVersion(7);
@@ -29,7 +29,7 @@ export default declare(
       jsxPragma,
       isTSX,
       allowNamespaces,
-      declareFields,
+      allowDeclareFields,
     });
 
     return {
