@@ -2239,19 +2239,18 @@ export default class ExpressionParser extends LValParser {
       if (
         this.hasPrecedingLineBreak() ||
         // All the following expressions are ambiguous:
-        //   await + 0
-        //   await - 0
-        //   await ( 0 )
-        //   await [ 0 ]
-        //   await / 0 /u
+        //   await + 0, await - 0, await ( 0 ), await [ 0 ], await / 0 /u, await ``
         this.match(tt.plusMin) ||
         this.match(tt.parenL) ||
         this.match(tt.bracketL) ||
         this.match(tt.backQuote) ||
-        // Sometimes the tokenizer generates tt.slach for regexps, and this is
+        // Sometimes the tokenizer generates tt.slash for regexps, and this is
         // handler by parseExprAtom
         this.match(tt.regexp) ||
-        this.match(tt.slash)
+        this.match(tt.slash) ||
+        // This code couls be parsed both as a modulo operator or as an intrinsic:
+        //   await %x(0)
+        (this.hasPlugin("v8intrinsic") && this.match(tt.modulo))
       ) {
         this.ambiguousScriptDifferentAst = true;
       } else {
