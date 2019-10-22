@@ -27,8 +27,8 @@ matrix:
   include:
     - node_js: "node"
       env: JOB=lint
-  # We test the latest version on circleci
-    - node_js: "11"
+  # We test the Node.js 12 on circleci
+    - node_js: "13"
   # Move `windows` build to be the third since it is slow
     - os: windows
       node_js: "node"
