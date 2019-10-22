@@ -1,35 +1,37 @@
 {
   "type": "File",
   "start": 0,
-  "end": 47,
+  "end": 90,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 1,
-      "column": 47
+      "line": 3,
+      "column": 41
     }
   },
   "errors": [
-    "SyntaxError: Escape sequence in keyword import (1:40)"
+    "SyntaxError: Unexpected keyword 'import' (1:4)",
+    "SyntaxError: Escape sequence in keyword import (1:4)",
+    "SyntaxError: Escape sequence in keyword import (3:0)"
   ],
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 47,
+    "end": 90,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 1,
-        "column": 47
+        "line": 3,
+        "column": 41
       }
     },
-    "sourceType": "script",
+    "sourceType": "module",
     "interpreter": null,
     "body": [
       {
@@ -101,6 +103,42 @@
           }
         ],
         "kind": "var"
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 49,
+        "end": 90,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 41
+          }
+        },
+        "specifiers": [],
+        "source": {
+          "type": "StringLiteral",
+          "start": 86,
+          "end": 89,
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 37
+            },
+            "end": {
+              "line": 3,
+              "column": 40
+            }
+          },
+          "extra": {
+            "rawValue": "x",
+            "raw": "\"x\""
+          },
+          "value": "x"
+        }
       }
     ],
     "directives": []

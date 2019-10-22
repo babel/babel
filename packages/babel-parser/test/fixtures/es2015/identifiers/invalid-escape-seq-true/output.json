@@ -13,7 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Escape sequence in keyword true (1:9)"
+    "SyntaxError: Escape sequence in keyword true (1:0)"
   ],
   "program": {
     "type": "Program",
@@ -47,7 +47,7 @@
           }
         },
         "expression": {
-          "type": "Identifier",
+          "type": "BooleanLiteral",
           "start": 0,
           "end": 9,
           "loc": {
@@ -58,10 +58,9 @@
             "end": {
               "line": 1,
               "column": 9
-            },
-            "identifierName": "true"
+            }
           },
-          "name": "true"
+          "value": true
         }
       }
     ],

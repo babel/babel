@@ -13,7 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Escape sequence in keyword new (1:23)"
+    "SyntaxError: Escape sequence in keyword new (1:15)"
   ],
   "program": {
     "type": "Program",
@@ -96,7 +96,7 @@
                 }
               },
               "expression": {
-                "type": "MemberExpression",
+                "type": "MetaProperty",
                 "start": 15,
                 "end": 30,
                 "loc": {
@@ -109,7 +109,7 @@
                     "column": 30
                   }
                 },
-                "object": {
+                "meta": {
                   "type": "Identifier",
                   "start": 15,
                   "end": 23,
@@ -142,8 +142,7 @@
                     "identifierName": "target"
                   },
                   "name": "target"
-                },
-                "computed": false
+                }
               }
             }
           ],

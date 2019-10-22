@@ -126,8 +126,11 @@ export default class Tokenizer extends LocationParser {
   // Move to the next token
 
   next(): void {
-    if (this.options.tokens && !this.isLookahead) {
-      this.state.tokens.push(new Token(this.state));
+    if (!this.isLookahead) {
+      this.checkKeywordEscapes();
+      if (this.options.tokens) {
+        this.state.tokens.push(new Token(this.state));
+      }
     }
 
     this.state.lastTokEnd = this.state.end;
@@ -1395,7 +1398,7 @@ export default class Tokenizer extends LocationParser {
 
   readWord(): void {
     const word = this.readWord1();
-    const type = (!this.state.containsEsc && keywordTypes.get(word)) || tt.name;
+    const type = keywordTypes.get(word) || tt.name;
 
     // Allow @@iterator and @@asyncIterator as a identifier only inside type
     if (
@@ -1406,6 +1409,13 @@ export default class Tokenizer extends LocationParser {
     }
 
     this.finishToken(type, word);
+  }
+
+  checkKeywordEscapes(): void {
+    const kw = this.state.type.keyword;
+    if (kw && this.state.containsEsc) {
+      this.raise(this.state.start, `Escape sequence in keyword ${kw}`);
+    }
   }
 
   braceIsBlock(prevType: TokenType): boolean {

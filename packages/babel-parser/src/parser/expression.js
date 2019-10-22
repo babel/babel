@@ -1394,7 +1394,10 @@ export default class ExpressionParser extends LValParser {
 
   parseNew(): N.NewExpression | N.MetaProperty {
     const node = this.startNode();
-    const meta = this.parseIdentifier(true);
+
+    let meta = this.startNode();
+    this.next();
+    meta = this.createIdentifier(meta, "new");
 
     if (this.eat(tt.dot)) {
       const metaProp = this.parseMetaProperty(node, meta, "target");
@@ -2103,6 +2106,8 @@ export default class ExpressionParser extends LValParser {
   // Parse the next token as an identifier. If `liberal` is true (used
   // when parsing properties), it will also convert keywords into
   // identifiers.
+  // This shouldn't be used to parse the keywords of meta properties, since they
+  // are not identifiers and cannot contain escape sequences.
 
   parseIdentifier(liberal?: boolean): N.Identifier {
     const node = this.startNode();
@@ -2123,11 +2128,6 @@ export default class ExpressionParser extends LValParser {
 
     if (this.match(tt.name)) {
       name = this.state.value;
-
-      // An escaped identifier whose value is the same as a keyword
-      if (!liberal && this.state.containsEsc && isKeyword(name)) {
-        this.raise(this.state.pos, `Escape sequence in keyword ${name}`);
-      }
     } else if (this.state.type.keyword) {
       name = this.state.type.keyword;
 
@@ -2147,7 +2147,11 @@ export default class ExpressionParser extends LValParser {
       throw this.unexpected();
     }
 
-    if (!liberal) {
+    if (liberal) {
+      // If the current token is not used as a keyword, set its type to "tt.name".
+      // This will prevent this.next() from throwing about unexpected escapes.
+      this.state.type = tt.name;
+    } else {
       this.checkReservedWord(
         name,
         this.state.start,
