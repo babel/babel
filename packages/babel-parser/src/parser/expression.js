@@ -742,15 +742,21 @@ export default class ExpressionParser extends LValParser {
     }
   }
 
+  isSliceSimpleArgument(expr: N.Expression): boolean {
+    return (
+      (expr.type === "NumericLiteral" || expr.type === "Identifier") &&
+      expr.extra?.parenthesized !== true
+    );
+  }
+
   checkSliceArgument(pos: number, expr: ?N.Expression) {
     if (
       !expr ||
-      expr.type === "NumericLiteral" ||
-      expr.type === "Identifier" ||
+      this.isSliceSimpleArgument(expr) ||
       (expr.type === "UnaryExpression" &&
         expr.operator === "-" &&
-        (expr.argument.type === "NumericLiteral" ||
-          expr.argument.type === "Identifier"))
+        expr.extra?.parenthesized !== true &&
+        this.isSliceSimpleArgument(expr.argument))
     ) {
       return;
     }
