@@ -18,8 +18,12 @@ import type { CallerMetadata } from "../validation/options";
 
 const debug = buildDebug("babel:config:loading:files:configuration");
 
-const ROOT_CONFIG_FILENAMES = ["babel.config.js", "babel.config.json"];
-const RELATIVE_CONFIG_FILENAMES = [".babelrc", ".babelrc.js"];
+const ROOT_CONFIG_FILENAMES = [
+  "babel.config.js",
+  "babel.config.cjs",
+  "babel.config.json",
+];
+const RELATIVE_CONFIG_FILENAMES = [".babelrc", ".babelrc.js", ".babelrc.cjs"];
 
 const BABELIGNORE_FILENAME = ".babelignore";
 
@@ -134,7 +138,8 @@ export function loadConfig(
  * throw if there are parsing errors while loading a config.
  */
 function readConfig(filepath, envName, caller): ConfigFile | null {
-  return path.extname(filepath) === ".js"
+  const ext = path.extname(filepath);
+  return ext === ".js" || ext === ".cjs"
     ? readConfigJS(filepath, { envName, caller })
     : readConfigJSON5(filepath);
 }
