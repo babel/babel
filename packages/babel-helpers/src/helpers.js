@@ -2011,9 +2011,6 @@ helpers.slice = helper("7.6.0")`
     if (isNaN(number)) {
       return 0;
     }
-    if (number === 0 || number === Infinity || number === -Infinity) {
-      return number;
-    }
     return number > 0 ? Math.floor(number) : -Math.floor(-number);
   }
 
@@ -2026,7 +2023,7 @@ helpers.slice = helper("7.6.0")`
     if (step === 0 || step === Infinity || step === -Infinity) {
       // todo: the proposal does not specify details about these cases
       // https://github.com/tc39/proposal-slice-notation/issues/28
-      throw new Error("Slice step can not be zero, NaN of Infinity");
+      throw new Error("Slice step can not be zero, NaN or Infinity");
     }
     var tIsString = isString(t);
     var tIsArray = Array.isArray(t);

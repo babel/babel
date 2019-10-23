@@ -6,7 +6,7 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
-    name: "proposal-pipeline-operator",
+    name: "proposal-slice-notation",
     inherits: syntaxSliceNotation,
     visitor: {
       SliceExpression(path, file) {
