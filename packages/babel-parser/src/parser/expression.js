@@ -799,10 +799,8 @@ export default class ExpressionParser extends LValParser {
     }
     this.checkSliceArgument(pos, lower);
     node.lower = lower;
-    const upper = this.parseSliceArgument();
-    node.upper = upper;
-    const step = this.parseSliceArgument();
-    node.step = step;
+    node.upper = this.parseSliceArgument();
+    node.step = this.parseSliceArgument();
     this.expect(tt.bracketR);
     return this.finishNode(node, "SliceExpression");
   }
