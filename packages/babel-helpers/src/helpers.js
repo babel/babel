@@ -620,6 +620,10 @@ helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
       return obj;
     }
 
+    if (obj === null || (typeof obj !== "object" && typeof obj !== "function")) {
+      return { default: obj }
+    }
+
     var cache = _getRequireWildcardCache();
     if (cache && cache.has(obj)) {
       return cache.get(obj);
