@@ -18,26 +18,18 @@ import type { CallerMetadata } from "../validation/options";
 
 const debug = buildDebug("babel:config:loading:files:configuration");
 
-const BABEL_CONFIG_JS_FILENAME = "babel.config.js";
-const BABEL_CONFIG_JSON_FILENAME = "babel.config.json";
-const ROOT_CONFIG_FILENAMES = [
-  BABEL_CONFIG_JS_FILENAME,
-  BABEL_CONFIG_JSON_FILENAME,
-];
+const ROOT_CONFIG_FILENAMES = ["babel.config.js", "babel.config.json"];
+const RELATIVE_CONFIG_FILENAMES = [".babelrc", ".babelrc.js"];
 
-const BABELRC_FILENAME = ".babelrc";
-const BABELRC_JS_FILENAME = ".babelrc.js";
 const BABELIGNORE_FILENAME = ".babelignore";
 
 export function findConfigUpwards(rootDir: string): string | null {
   let dirname = rootDir;
   while (true) {
-    if (
-      fs.existsSync(path.join(dirname, BABEL_CONFIG_JS_FILENAME)) ||
-      fs.existsSync(path.join(dirname, BABEL_CONFIG_JSON_FILENAME))
-    ) {
-      return dirname;
-    }
+    const configFileFound = ROOT_CONFIG_FILENAMES.some(filename =>
+      fs.existsSync(path.join(dirname, filename)),
+    );
+    if (configFileFound) return dirname;
 
     const nextDir = path.dirname(dirname);
     if (dirname === nextDir) break;
@@ -59,45 +51,15 @@ export function findRelativeConfig(
 
   for (const loc of packageData.directories) {
     if (!config) {
-      config = [BABELRC_FILENAME, BABELRC_JS_FILENAME].reduce(
-        (previousConfig: ConfigFile | null, name) => {
-          const filepath = path.join(loc, name);
-          const config = readConfig(filepath, envName, caller);
-
-          if (config && previousConfig) {
-            throw new Error(
-              `Multiple configuration files found. Please remove one:\n` +
-                ` - ${path.basename(previousConfig.filepath)}\n` +
-                ` - ${name}\n` +
-                `from ${loc}`,
-            );
-          }
-
-          return config || previousConfig;
-        },
-        null,
-      );
-
-      const pkgConfig =
+      config = loadOneConfig(
+        RELATIVE_CONFIG_FILENAMES,
+        loc,
+        envName,
+        caller,
         packageData.pkg && packageData.pkg.dirname === loc
           ? packageToBabelConfig(packageData.pkg)
-          : null;
-
-      if (pkgConfig) {
-        if (config) {
-          throw new Error(
-            `Multiple configuration files found. Please remove one:\n` +
-              ` - ${path.basename(pkgConfig.filepath)}#babel\n` +
-              ` - ${path.basename(config.filepath)}\n` +
-              `from ${loc}`,
-          );
-        }
-        config = pkgConfig;
-      }
-
-      if (config) {
-        debug("Found configuration %o from %o.", config.filepath, dirname);
-      }
+          : null,
+      );
     }
 
     if (!ignore) {
@@ -118,24 +80,31 @@ export function findRootConfig(
   envName: string,
   caller: CallerMetadata | void,
 ): ConfigFile | null {
-  const config = ROOT_CONFIG_FILENAMES.reduce(
-    (previousConfig: ConfigFile | null, name) => {
-      const filepath = path.resolve(dirname, name);
-      const config = readConfig(filepath, envName, caller);
+  return loadOneConfig(ROOT_CONFIG_FILENAMES, dirname, envName, caller);
+}
 
-      if (config && previousConfig) {
-        throw new Error(
-          `Multiple configuration files found. Please remove one:\n` +
-            ` - ${path.basename(previousConfig.filepath)}\n` +
-            ` - ${name}\n` +
-            `from ${dirname}`,
-        );
-      }
+function loadOneConfig(
+  names: string[],
+  dirname: string,
+  envName: string,
+  caller: CallerMetadata | void,
+  previousConfig?: ConfigFile | null = null,
+): ConfigFile | null {
+  const config = names.reduce((previousConfig: ConfigFile | null, name) => {
+    const filepath = path.resolve(dirname, name);
+    const config = readConfig(filepath, envName, caller);
 
-      return config || previousConfig;
-    },
-    null,
-  );
+    if (config && previousConfig) {
+      throw new Error(
+        `Multiple configuration files found. Please remove one:\n` +
+          ` - ${path.basename(previousConfig.filepath)}\n` +
+          ` - ${name}\n` +
+          `from ${dirname}`,
+      );
+    }
+
+    return config || previousConfig;
+  }, previousConfig);
 
   if (config) {
     debug("Found configuration %o from %o.", config.filepath, dirname);
