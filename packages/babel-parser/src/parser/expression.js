@@ -742,22 +742,29 @@ export default class ExpressionParser extends LValParser {
     }
   }
 
-  isSliceSimpleArgument(expr: N.Expression): boolean {
-    const { type, extra } = expr;
-    return (
-      (type === "NumericLiteral" || type === "Identifier") &&
-      extra?.parenthesized !== true
-    );
+  isAtomicSliceArgument(
+    expr: N.Expression,
+    inUnaryExpression: boolean,
+  ): boolean {
+    if (expr.extra?.parenthesized !== true) {
+      if (expr.type === "NumericLiteral") {
+        return true;
+      }
+      if (expr.type === "Identifier") {
+        return !inUnaryExpression || expr.name === "Infinity";
+      }
+    }
+    return false;
   }
 
   checkSliceArgument(pos: number, expr: ?N.Expression) {
     if (
       !expr ||
-      this.isSliceSimpleArgument(expr) ||
+      this.isAtomicSliceArgument(expr, false) ||
       (expr.type === "UnaryExpression" &&
         expr.operator === "-" &&
         expr.extra?.parenthesized !== true &&
-        this.isSliceSimpleArgument(expr.argument))
+        this.isAtomicSliceArgument(expr.argument, true))
     ) {
       return;
     }

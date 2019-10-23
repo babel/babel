@@ -393,11 +393,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    isSliceSimpleArgument(expr: N.Expression) {
-      const { type, value, extra } = expr;
-      return (
-        ((type === "Literal" && value === +value) || type === "Identifier") &&
-        extra?.parenthesized !== true
-      );
+    isAtomicSliceArgument(expr: N.Expression, inUnaryExpression: boolean) {
+      if (expr.extra?.parenthesized !== true) {
+        if (expr.type === "Literal" && expr.value === +expr.value) {
+          return true;
+        }
+        if (expr.type === "Identifier") {
+          return !inUnaryExpression || expr.name === "Infinity";
+        }
+      }
+      return false;
     }
   };
