@@ -1349,7 +1349,8 @@ export default class StatementParser extends ExpressionParser {
     // Check the key is not a computed expression or string literal.
     const isSimple = key.type === "Identifier";
 
-    this.parsePostMemberNameModifiers(publicMember);
+    // "async" should not be treated as normal porperty names
+    if (key.name !== "async") this.parsePostMemberNameModifiers(publicMember);
 
     if (this.isClassMethod()) {
       method.kind = "method";
