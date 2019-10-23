@@ -1,4 +1,5 @@
 import fs from "fs";
+import os from "os";
 import path from "path";
 import escapeRegExp from "lodash/escapeRegExp";
 import { loadOptions as loadOptionsOrig } from "../lib";
@@ -12,6 +13,24 @@ function loadOptions(opts) {
     cwd: __dirname,
     ...opts,
   });
+}
+
+function pairs(items) {
+  const pairs = [];
+  for (let i = 0; i < items.length - 1; i++) {
+    for (let j = i + 1; j < items.length; j++) {
+      pairs.push([items[i], items[j]]);
+    }
+  }
+  return pairs;
+}
+
+async function getTemp(name) {
+  const cwd = await fs.promises.mkdtemp(os.tmpdir() + path.sep + name);
+  const tmp = name => path.join(cwd, name);
+  const config = name =>
+    fs.promises.copyFile(fixture("config-files-templates", name), tmp(name));
+  return { cwd, tmp, config };
 }
 
 describe("buildConfigChain", function() {
@@ -944,157 +963,120 @@ describe("buildConfigChain", function() {
       }
     });
 
-    it("should load babel.config.json", () => {
-      const filename = fixture("config-files", "babel-config-json", "src.js");
+    describe("root", () => {
+      test.each(["babel.config.json", "babel.config.js", "babel.config.cjs"])(
+        "should load %s",
+        async name => {
+          const { cwd, tmp, config } = await getTemp(
+            `babel-test-load-config-${name}`,
+          );
+          const filename = tmp("src.js");
 
-      expect(
-        loadOptions({
-          filename,
-          cwd: path.dirname(filename),
-        }),
-      ).toEqual({
-        ...getDefaults(),
-        filename: filename,
-        cwd: path.dirname(filename),
-        root: path.dirname(filename),
-        comments: true,
-      });
-    });
+          await config(name);
 
-    it("should load babel.config.js", () => {
-      const filename = fixture("config-files", "babel-config-js", "src.js");
-
-      expect(
-        loadOptions({
-          filename,
-          cwd: path.dirname(filename),
-        }),
-      ).toEqual({
-        ...getDefaults(),
-        filename: filename,
-        cwd: path.dirname(filename),
-        root: path.dirname(filename),
-        comments: true,
-      });
-    });
-
-    it("should whtow if both babel.config.json and babel.config.js are used", () => {
-      const filename = fixture(
-        "config-files",
-        "babel-config-js-and-json",
-        "src.js",
+          expect(
+            loadOptions({
+              filename,
+              cwd,
+            }),
+          ).toEqual({
+            ...getDefaults(),
+            filename,
+            cwd,
+            root: cwd,
+            comments: true,
+          });
+        },
       );
 
-      expect(() =>
-        loadOptions({ filename, cwd: path.dirname(filename) }),
-      ).toThrow(/Multiple configuration files found/);
+      test.each(
+        pairs(["babel.config.json", "babel.config.js", "babel.config.cjs"]),
+      )("should throw if both %s and %s are used", async (name1, name2) => {
+        const { cwd, tmp, config } = await getTemp(
+          `babel-test-dup-config-${name1}-${name2}`,
+        );
+
+        await Promise.all([config(name1), config(name2)]);
+
+        expect(() => loadOptions({ filename: tmp("src.js"), cwd })).toThrow(
+          /Multiple configuration files found/,
+        );
+      });
     });
 
-    it("should load .babelrc", () => {
-      const filename = fixture("config-files", "babelrc", "src.js");
+    describe("relative", () => {
+      test.each(["package.json", ".babelrc", ".babelrc.js", ".babelrc.cjs"])(
+        "should load %s",
+        async name => {
+          const { cwd, tmp, config } = await getTemp(
+            `babel-test-load-config-${name}`,
+          );
+          const filename = tmp("src.js");
 
-      expect(
-        loadOptions({
-          filename,
+          await config(name);
+
+          expect(
+            loadOptions({
+              filename,
+              cwd,
+            }),
+          ).toEqual({
+            ...getDefaults(),
+            filename,
+            cwd,
+            root: cwd,
+            comments: true,
+          });
+        },
+      );
+
+      it("should load .babelignore", () => {
+        const filename = fixture("config-files", "babelignore", "src.js");
+
+        expect(
+          loadOptions({ filename, cwd: path.dirname(filename) }),
+        ).toBeNull();
+      });
+
+      test.each(
+        pairs(["package.json", ".babelrc", ".babelrc.js", ".babelrc.cjs"]),
+      )("should throw if both %s and %s are used", async (name1, name2) => {
+        const { cwd, tmp, config } = await getTemp(
+          `babel-test-dup-config-${name1}-${name2}`,
+        );
+
+        await Promise.all([config(name1), config(name2)]);
+
+        expect(() => loadOptions({ filename: tmp("src.js"), cwd })).toThrow(
+          /Multiple configuration files found/,
+        );
+      });
+
+      it("should ignore package.json without a 'babel' property", () => {
+        const filename = fixture("config-files", "pkg-ignored", "src.js");
+
+        expect(loadOptions({ filename, cwd: path.dirname(filename) })).toEqual({
+          ...getDefaults(),
+          filename: filename,
           cwd: path.dirname(filename),
-        }),
-      ).toEqual({
-        ...getDefaults(),
-        filename: filename,
-        cwd: path.dirname(filename),
-        root: path.dirname(filename),
-        comments: true,
+          root: path.dirname(filename),
+          comments: true,
+        });
       });
-    });
 
-    it("should load .babelrc.js", () => {
-      const filename = fixture("config-files", "babelrc-js", "src.js");
+      test.each`
+        config            | dir                    | error
+        ${".babelrc"}     | ${"babelrc-error"}     | ${/Error while parsing config - /}
+        ${".babelrc.js"}  | ${"babelrc-js-error"}  | ${/Babelrc threw an error/}
+        ${".babelrc.cjs"} | ${"babelrc-cjs-error"} | ${/Babelrc threw an error/}
+        ${"package.json"} | ${"pkg-error"}         | ${/Error while parsing JSON - /}
+      `("should show helpful errors for $config", ({ dir, error }) => {
+        const filename = fixture("config-files", dir, "src.js");
 
-      expect(loadOptions({ filename, cwd: path.dirname(filename) })).toEqual({
-        ...getDefaults(),
-        filename: filename,
-        cwd: path.dirname(filename),
-        root: path.dirname(filename),
-        comments: true,
+        expect(() =>
+          loadOptions({ filename, cwd: path.dirname(filename) }),
+        ).toThrow(error);
       });
-    });
-
-    it("should load package.json#babel", () => {
-      const filename = fixture("config-files", "pkg", "src.js");
-
-      expect(loadOptions({ filename, cwd: path.dirname(filename) })).toEqual({
-        ...getDefaults(),
-        filename: filename,
-        cwd: path.dirname(filename),
-        root: path.dirname(filename),
-        comments: true,
-      });
-    });
-
-    it("should load .babelignore", () => {
-      const filename = fixture("config-files", "babelignore", "src.js");
-
-      expect(loadOptions({ filename, cwd: path.dirname(filename) })).toBeNull();
-    });
-
-    it("should throw if there are both .babelrc and .babelrc.js", () => {
-      const filename = fixture("config-files", "both-babelrc", "src.js");
-
-      expect(() =>
-        loadOptions({ filename, cwd: path.dirname(filename) }),
-      ).toThrow(/Multiple configuration files found/);
-    });
-
-    it("should throw if there are both .babelrc and package.json", () => {
-      const filename = fixture("config-files", "pkg-babelrc", "src.js");
-
-      expect(() =>
-        loadOptions({ filename, cwd: path.dirname(filename) }),
-      ).toThrow(/Multiple configuration files found/);
-    });
-
-    it("should throw if there are both .babelrc.js and package.json", () => {
-      const filename = fixture("config-files", "pkg-babelrc-js", "src.js");
-
-      expect(() =>
-        loadOptions({ filename, cwd: path.dirname(filename) }),
-      ).toThrow(/Multiple configuration files found/);
-    });
-
-    it("should ignore package.json without a 'babel' property", () => {
-      const filename = fixture("config-files", "pkg-ignored", "src.js");
-
-      expect(loadOptions({ filename, cwd: path.dirname(filename) })).toEqual({
-        ...getDefaults(),
-        filename: filename,
-        cwd: path.dirname(filename),
-        root: path.dirname(filename),
-        comments: true,
-      });
-    });
-
-    it("should show helpful errors for .babelrc", () => {
-      const filename = fixture("config-files", "babelrc-error", "src.js");
-
-      expect(() =>
-        loadOptions({ filename, cwd: path.dirname(filename) }),
-      ).toThrow(/Error while parsing config - /);
-    });
-
-    it("should show helpful errors for .babelrc.js", () => {
-      const filename = fixture("config-files", "babelrc-js-error", "src.js");
-
-      expect(() =>
-        loadOptions({ filename, cwd: path.dirname(filename) }),
-      ).toThrow(/Babelrc threw an error/);
-    });
-
-    it("should show helpful errors for package.json", () => {
-      const filename = fixture("config-files", "pkg-error", "src.js");
-
-      expect(() =>
-        loadOptions({ filename, cwd: path.dirname(filename) }),
-      ).toThrow(/Error while parsing JSON - /);
     });
 
     it("should throw when `test` presents but `filename` is not passed", () => {
