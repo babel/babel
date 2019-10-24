@@ -161,6 +161,14 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
     return [];
   }
 
+  function setDefaultValue(option, defaultValue) {
+    if (typeof option === "undefined") {
+      return defaultValue;
+    }
+
+    return option;
+  }
+
   /**
    * The logic for this is quite terse. It's because we need to
    * support spread elements. We loop over all attributes,
@@ -172,7 +180,7 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
     let _props = [];
     const objs = [];
 
-    const useSpread = file.opts.useSpread || false;
+    const useSpread = setDefaultValue(file.opts.useSpread, false);
     if (typeof useSpread !== "boolean") {
       throw new Error(
         "transform-react-jsx currently only accepts a boolean option for " +
@@ -180,7 +188,7 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
       );
     }
 
-    const useBuiltIns = file.opts.useBuiltIns || false;
+    const useBuiltIns = setDefaultValue(file.opts.useBuiltIns, false);
     if (typeof useBuiltIns !== "boolean") {
       throw new Error(
         "transform-react-jsx currently only accepts a boolean option for " +
