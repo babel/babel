@@ -24,7 +24,7 @@ export function createRegExpFeaturePlugin({ name, feature, options = {} }) {
     name,
     pre() {
       const { file } = this;
-      const features = file.get(featuresKey) || 0;
+      const features = file.get(featuresKey) ?? 0;
       let newFeatures = enableFeature(features, FEATURES[feature]);
 
       const { useUnicodeFlag, runtime = true } = options;
@@ -49,7 +49,7 @@ export function createRegExpFeaturePlugin({ name, feature, options = {} }) {
         const { node } = path;
         const { file } = this;
         const features = file.get(featuresKey);
-        const runtime = file.has(runtimeKey) ? file.get(runtimeKey) : true;
+        const runtime = file.get(runtimeKey) ?? true;
         const regexpuOptions = generateRegexpuOptions(node, features);
         if (regexpuOptions === null) {
           return;
