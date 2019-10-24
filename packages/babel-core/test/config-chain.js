@@ -4,6 +4,41 @@ import path from "path";
 import escapeRegExp from "lodash/escapeRegExp";
 import { loadOptions as loadOptionsOrig } from "../lib";
 
+// TODO: In Babel 8, we can directly uses fs.promises which is supported by
+// node 8+
+const pfs =
+  fs.promises ??
+  new Proxy(fs, {
+    get(target, name) {
+      if (name === "copyFile") {
+        // fs.copyFile is only supported since node 8.5
+        // https://stackoverflow.com/a/30405105/2359289
+        return function copyFile(source, target) {
+          const rd = fs.createReadStream(source);
+          const wr = fs.createWriteStream(target);
+          return new Promise(function(resolve, reject) {
+            rd.on("error", reject);
+            wr.on("error", reject);
+            wr.on("finish", resolve);
+            rd.pipe(wr);
+          }).catch(function(error) {
+            rd.destroy();
+            wr.end();
+            throw error;
+          });
+        };
+      }
+
+      return (...args) =>
+        new Promise((resolve, reject) =>
+          target[name](...args, (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }),
+        );
+    },
+  });
+
 function fixture(...args) {
   return path.join(__dirname, "fixtures", "config", ...args);
 }
@@ -26,10 +61,10 @@ function pairs(items) {
 }
 
 async function getTemp(name) {
-  const cwd = await fs.promises.mkdtemp(os.tmpdir() + path.sep + name);
+  const cwd = await pfs.mkdtemp(os.tmpdir() + path.sep + name);
   const tmp = name => path.join(cwd, name);
   const config = name =>
-    fs.promises.copyFile(fixture("config-files-templates", name), tmp(name));
+    pfs.copyFile(fixture("config-files-templates", name), tmp(name));
   return { cwd, tmp, config };
 }
 
