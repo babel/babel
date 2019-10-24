@@ -27,16 +27,16 @@ matrix:
   include:
     - node_js: "node"
       env: JOB=lint
-  # We test the Node.js 12 on circleci
-    - node_js: "13"
-  # Move `windows` build to be the third since it is slow
+    # We test the latest version on circleci
+    - node_js: "12"
+    # Move `windows` build to be the third since it is slow
     - os: windows
       node_js: "node"
       env:
-      - JOB=test
-      # https://travis-ci.community/t/build-doesnt-finish-after-completing-tests/288/9
-      - YARN_GPG=no
-  # Continue node_js matrix
+        - JOB=test
+        # https://travis-ci.community/t/build-doesnt-finish-after-completing-tests/288/9
+        - YARN_GPG=no
+    # Continue node_js matrix
     - node_js: "6"
     - node_js: "10"
     - node_js: "8"
