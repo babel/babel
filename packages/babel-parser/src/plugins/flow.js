@@ -22,12 +22,15 @@ import {
   SCOPE_OTHER,
 } from "../util/scopeflags";
 
-const reservedTypes = [
+const reservedTypes = new Set([
+  "_",
   "any",
   "bool",
   "boolean",
   "empty",
+  "extends",
   "false",
+  "interface",
   "mixed",
   "null",
   "number",
@@ -36,10 +39,7 @@ const reservedTypes = [
   "true",
   "typeof",
   "void",
-  "interface",
-  "extends",
-  "_",
-];
+]);
 
 function isEsModuleType(bodyElement: N.Node): boolean {
   return (
@@ -483,7 +483,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.FlowDeclare,
       isClass?: boolean = false,
     ): void {
-      node.id = this.flowParseRestrictedIdentifier(/*liberal*/ !isClass);
+      node.id = this.flowParseRestrictedIdentifier(
+        /* liberal */ !isClass,
+        /* declaration */ true,
+      );
 
       this.scope.declareName(
         node.id.name,
@@ -557,21 +560,32 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    checkReservedType(word: string, startLoc: number) {
-      if (reservedTypes.indexOf(word) > -1) {
+    checkReservedType(word: string, startLoc: number, declaration?: boolean) {
+      if (!reservedTypes.has(word)) return;
+
+      if (declaration) {
         this.raise(startLoc, `Cannot overwrite reserved type ${word}`);
+        return;
       }
+
+      this.raise(startLoc, `Unexpected reserved type ${word}`);
     }
 
-    flowParseRestrictedIdentifier(liberal?: boolean): N.Identifier {
-      this.checkReservedType(this.state.value, this.state.start);
+    flowParseRestrictedIdentifier(
+      liberal?: boolean,
+      declaration?: boolean,
+    ): N.Identifier {
+      this.checkReservedType(this.state.value, this.state.start, declaration);
       return this.parseIdentifier(liberal);
     }
 
     // Type aliases
 
     flowParseTypeAlias(node: N.FlowTypeAlias): N.FlowTypeAlias {
-      node.id = this.flowParseRestrictedIdentifier();
+      node.id = this.flowParseRestrictedIdentifier(
+        /* liberal */ false,
+        /* declaration */ true,
+      );
       this.scope.declareName(node.id.name, BIND_LEXICAL, node.id.start);
 
       if (this.isRelational("<")) {
@@ -591,7 +605,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       declare: boolean,
     ): N.FlowOpaqueType {
       this.expectContextual("type");
-      node.id = this.flowParseRestrictedIdentifier(/*liberal*/ true);
+      node.id = this.flowParseRestrictedIdentifier(
+        /* liberal */ true,
+        /* declaration */ true,
+      );
       this.scope.declareName(node.id.name, BIND_LEXICAL, node.id.start);
 
       if (this.isRelational("<")) {
@@ -1134,12 +1151,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.FlowQualifiedTypeIdentifier {
       startPos = startPos || this.state.start;
       startLoc = startLoc || this.state.startLoc;
-      let node = id || this.parseIdentifier();
+      let node = id || this.flowParseRestrictedIdentifier(true);
 
       while (this.eat(tt.dot)) {
         const node2 = this.startNodeAt(startPos, startLoc);
         node2.qualification = node;
-        node2.id = this.parseIdentifier();
+        node2.id = this.flowParseRestrictedIdentifier(true);
         node = this.finishNode(node2, "QualifiedTypeIdentifier");
       }
 
@@ -2353,7 +2370,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       contextDescription: string,
     ): void {
       specifier.local = hasTypeImportKind(node)
-        ? this.flowParseRestrictedIdentifier(true)
+        ? this.flowParseRestrictedIdentifier(
+            /* liberal */ true,
+            /* declaration */ true,
+          )
         : this.parseIdentifier();
 
       this.checkLVal(
@@ -2459,7 +2479,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       if (nodeIsTypeImport || specifierIsTypeImport) {
-        this.checkReservedType(specifier.local.name, specifier.local.start);
+        this.checkReservedType(
+          specifier.local.name,
+          specifier.local.start,
+          /* declaration */ true,
+        );
       }
 
       if (isBinding && !nodeIsTypeImport && !specifierIsTypeImport) {

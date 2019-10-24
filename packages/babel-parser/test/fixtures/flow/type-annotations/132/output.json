@@ -13,7 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Cannot overwrite reserved type number (1:9)"
+    "SyntaxError: Unexpected reserved type number (1:9)"
   ],
   "program": {
     "type": "Program",

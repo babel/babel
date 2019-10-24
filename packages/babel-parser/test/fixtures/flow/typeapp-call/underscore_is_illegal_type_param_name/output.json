@@ -13,7 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Cannot overwrite reserved type _ (2:13)",
+    "SyntaxError: Unexpected reserved type _ (2:13)",
     "SyntaxError: `_` is only allowed as a type argument to call or new (2:19)"
   ],
   "program": {

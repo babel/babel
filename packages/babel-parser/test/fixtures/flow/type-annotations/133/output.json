@@ -13,7 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Cannot overwrite reserved type string (1:11)"
+    "SyntaxError: Unexpected reserved type string (1:11)"
   ],
   "program": {
     "type": "Program",
