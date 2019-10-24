@@ -43,7 +43,7 @@ jobs:
   test:
     working_directory: ~/babel
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:13
     steps:
       - checkout
       - restore-cache: *restore-yarn-cache
@@ -106,7 +106,6 @@ jobs:
           command: |
             cat ~/test262.tap | $(npm bin)/tap-mocha-reporter spec || true
           <<: *test262_workdir
-
 
 workflows:
   version: 2
