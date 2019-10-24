@@ -91,9 +91,7 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
       value.value = value.value.replace(/\n\s+/g, " ");
 
       // "raw" JSXText should not be used from a StringLiteral because it needs to be escaped.
-      if (value.extra && value.extra.raw) {
-        delete value.extra.raw;
-      }
+      delete value.extra?.raw;
     }
 
     if (t.isJSXNamespacedName(node.name)) {
