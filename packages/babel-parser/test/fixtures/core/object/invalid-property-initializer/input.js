@@ -1,4 +1,4 @@
 const obj = {
-  foo = 123, // no error
+  foo = 123
   bar: x = 123
 };
