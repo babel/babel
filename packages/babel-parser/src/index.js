@@ -34,7 +34,7 @@ export function parse(input: string, options?: Options): File {
         // a valid module, but which produces different ASTs:
         //    await
         //    0
-        // can be parser either as an AwaitExpression, or as two ExpressionStatements.
+        // can be parsed either as an AwaitExpression, or as two ExpressionStatements.
         try {
           options.sourceType = "script";
           return getParser(options, input).parse();
