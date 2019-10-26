@@ -1,1 +1,1 @@
-(a as number) = 42;
+[a as number] = [42];
