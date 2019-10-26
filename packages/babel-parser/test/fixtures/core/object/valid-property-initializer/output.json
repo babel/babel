@@ -282,7 +282,10 @@
                       }
                     }
                   }
-                ]
+                ],
+                "extra": {
+                  "trailingComma": 41
+                }
               },
               "right": {
                 "type": "ObjectExpression",
