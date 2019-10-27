@@ -417,10 +417,10 @@ export default class ImportInjector {
       node._blockHoist = blockHoist;
     });
 
-    const targetPath = this._programPath.get("body").filter(p => {
+    const targetPath = this._programPath.get("body").find(p => {
       const val = p.node._blockHoist;
       return Number.isFinite(val) && val < 4;
-    })[0];
+    });
 
     if (targetPath) {
       targetPath.insertBefore(statements);
