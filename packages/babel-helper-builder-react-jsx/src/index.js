@@ -87,6 +87,10 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
   function convertAttribute(node) {
     const value = convertAttributeValue(node.value || t.booleanLiteral(true));
 
+    if (t.isJSXSpreadAttribute(node)) {
+      return t.spreadElement(node.argument);
+    }
+
     if (t.isStringLiteral(value) && !t.isJSXExpressionContainer(node.value)) {
       value.value = value.value.replace(/\n\s+/g, " ");
 
@@ -195,14 +199,16 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
       );
     }
 
+    if (useSpread) {
+      const props = attribs.map(convertAttribute);
+      return t.objectExpression(props);
+    }
+
     while (attribs.length) {
       const prop = attribs.shift();
       if (t.isJSXSpreadAttribute(prop)) {
         _props = pushProps(_props, objs);
         objs.push(prop.argument);
-        if (useSpread) {
-          _props.push(t.spreadElement(prop.argument));
-        }
       } else {
         _props.push(convertAttribute(prop));
       }
@@ -219,15 +225,12 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
         objs.unshift(t.objectExpression([]));
       }
 
-      if (useSpread) {
-        attribs = t.objectExpression(_props);
-      } else {
-        const helper = useBuiltIns
-          ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
-          : file.addHelper("extends");
-        // spread it
-        attribs = t.callExpression(helper, objs);
-      }
+      const helper = useBuiltIns
+        ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
+        : file.addHelper("extends");
+
+      // spread it
+      attribs = t.callExpression(helper, objs);
     }
 
     return attribs;
