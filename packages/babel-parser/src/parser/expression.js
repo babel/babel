@@ -621,7 +621,10 @@ export default class ExpressionParser extends LValParser {
       }
       this.next();
 
-      const HANDLED_PROMISE = "HandledPromise";
+      // Look up the handled promise statics.
+      const HANDLED_PROMISE =
+        this.getPluginOption("eventualSend", "handledPromise") ||
+        "HandledPromise";
       const node = this.startNodeAt(startPos, startLoc);
 
       // Do HandledPromise.METHOD(BASE, ...)
@@ -633,9 +636,9 @@ export default class ExpressionParser extends LValParser {
         args.push(this.parseExpression());
         this.expect(tt.bracketR);
       } else if (this.match(tt.parenL)) {
-        // x ~. (y, z) := HandledPromise.apply(base, [y, z])
+        // x ~. (y, z) := HandledPromise.applyFunction(base, [y, z])
         // No argument other than base.
-        method = "apply";
+        method = "applyFunction";
       } else {
         // Simple case: x ~. p...
         // Second argument is stringified identifier.
@@ -648,7 +651,7 @@ export default class ExpressionParser extends LValParser {
 
       if (this.eat(tt.parenL)) {
         // x ~. [i](y, z) := HandledPromise.applyMethod(base, i, [y, z])
-        // x ~. (y, z) := HandledPromise.apply(base, [y, z]);
+        // x ~. (y, z) := HandledPromise.applyFunction(base, [y, z]);
         if (method !== "apply") {
           method = "applyMethod";
         }
