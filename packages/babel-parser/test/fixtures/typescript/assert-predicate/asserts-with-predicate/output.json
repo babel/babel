@@ -186,7 +186,7 @@
                 }
               }
             },
-            "assertsModifier": true
+            "asserts": true
           }
         },
         "declare": true
