@@ -12,6 +12,8 @@ export default (_: any, opts: Object) => {
     plugins: [
       babelPlugins.syntaxDynamicImport,
       babelPlugins.syntaxImportMeta,
+      [babelPlugins.proposalOptionalChaining, { loose }],
+      [babelPlugins.proposalNullishCoalescingOperator, { loose }],
       [babelPlugins.proposalClassProperties, { loose }],
       babelPlugins.proposalJsonStrings,
       [babelPlugins.proposalPrivateMethods, { loose }],
