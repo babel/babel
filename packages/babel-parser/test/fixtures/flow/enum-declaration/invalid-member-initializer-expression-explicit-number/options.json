@@ -1,0 +1,4 @@
+{
+  "plugins": [["flow", { "enums": true }]],
+  "throws": "Enum `E` has type `number`, so the initializer of `A` needs to be a number literal. (2:6)"
+}

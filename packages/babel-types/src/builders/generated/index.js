@@ -517,6 +517,42 @@ export function VoidTypeAnnotation(...args: Array<any>): Object {
   return builder("VoidTypeAnnotation", ...args);
 }
 export { VoidTypeAnnotation as voidTypeAnnotation };
+export function EnumDeclaration(...args: Array<any>): Object {
+  return builder("EnumDeclaration", ...args);
+}
+export { EnumDeclaration as enumDeclaration };
+export function EnumBooleanBody(...args: Array<any>): Object {
+  return builder("EnumBooleanBody", ...args);
+}
+export { EnumBooleanBody as enumBooleanBody };
+export function EnumNumberBody(...args: Array<any>): Object {
+  return builder("EnumNumberBody", ...args);
+}
+export { EnumNumberBody as enumNumberBody };
+export function EnumStringBody(...args: Array<any>): Object {
+  return builder("EnumStringBody", ...args);
+}
+export { EnumStringBody as enumStringBody };
+export function EnumSymbolBody(...args: Array<any>): Object {
+  return builder("EnumSymbolBody", ...args);
+}
+export { EnumSymbolBody as enumSymbolBody };
+export function EnumBooleanMember(...args: Array<any>): Object {
+  return builder("EnumBooleanMember", ...args);
+}
+export { EnumBooleanMember as enumBooleanMember };
+export function EnumNumberMember(...args: Array<any>): Object {
+  return builder("EnumNumberMember", ...args);
+}
+export { EnumNumberMember as enumNumberMember };
+export function EnumStringMember(...args: Array<any>): Object {
+  return builder("EnumStringMember", ...args);
+}
+export { EnumStringMember as enumStringMember };
+export function EnumDefaultedMember(...args: Array<any>): Object {
+  return builder("EnumDefaultedMember", ...args);
+}
+export { EnumDefaultedMember as enumDefaultedMember };
 export function JSXAttribute(...args: Array<any>): Object {
   return builder("JSXAttribute", ...args);
 }
