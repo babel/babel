@@ -1348,9 +1348,9 @@ export default class StatementParser extends ExpressionParser {
     const isPrivate = key.type === "PrivateName";
     // Check the key is not a computed expression or string literal.
     const isSimple = key.type === "Identifier";
+    const maybeQuestionTokenStart = this.state.start;
 
-    // "async" should not be treated as normal porperty names
-    if (key.name !== "async") this.parsePostMemberNameModifiers(publicMember);
+    this.parsePostMemberNameModifiers(publicMember);
 
     if (this.isClassMethod()) {
       method.kind = "method";
@@ -1403,6 +1403,10 @@ export default class StatementParser extends ExpressionParser {
     ) {
       // an async method
       const isGenerator = this.eat(tt.star);
+
+      if (publicMember.optional) {
+        this.unexpected(maybeQuestionTokenStart);
+      }
 
       method.kind = "method";
       // The so-called parsed name would have been "async": get the real name.
