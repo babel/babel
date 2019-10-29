@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import os from "os";
-import { sync as mkdirpSync } from "mkdirp";
+import { sync as makeDirSync } from "make-dir";
 import * as babel from "@babel/core";
 import findCacheDir from "find-cache-dir";
 
@@ -39,7 +39,7 @@ export function save() {
   }
 
   try {
-    mkdirpSync(path.dirname(FILENAME));
+    makeDirSync(path.dirname(FILENAME));
     fs.writeFileSync(FILENAME, serialised);
   } catch (e) {
     switch (e.code) {
