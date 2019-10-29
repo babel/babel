@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    ["transform-react-jsx", { "useSpread": true, "useBuiltIns": true }]
+  ],
+  "throws": "transform-react-jsx currently only accepts useBuiltIns or useSpread but not both"
+}
