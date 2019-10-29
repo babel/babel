@@ -15,25 +15,26 @@ type ReaddirFilter = (filename: string) => boolean;
 export function readdir(
   dirname: string,
   includeDotfiles: boolean,
+  excludeDotdirs: Boolean,
   filter?: ReaddirFilter,
 ): Array<string> {
   return readdirRecursive(dirname, (filename, _index, currentDirectory) => {
     const stat = fs.statSync(path.join(currentDirectory, filename));
+    const isDotEntry = filename[0] === ".";
 
-    if (stat.isDirectory()) return true;
+    if (stat.isDirectory()) return !(excludeDotdirs && isDotEntry);
 
-    return (
-      (includeDotfiles || filename[0] !== ".") && (!filter || filter(filename))
-    );
+    return (includeDotfiles || !isDotEntry) && (!filter || filter(filename));
   });
 }
 
 export function readdirForCompilable(
   dirname: string,
   includeDotfiles: boolean,
+  excludeDotdirs: Boolean,
   altExts?: Array<string>,
 ): Array<string> {
-  return readdir(dirname, includeDotfiles, function(filename) {
+  return readdir(dirname, includeDotfiles, excludeDotdirs, function(filename) {
     return isCompilableExtension(filename, altExts);
   });
 }

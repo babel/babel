@@ -152,6 +152,7 @@ export default async function({
           .readdirForCompilable(
             filename,
             cliOptions.includeDotfiles,
+            cliOptions.excludeDotdirs,
             cliOptions.extensions,
           )
           .forEach(function(filename) {
