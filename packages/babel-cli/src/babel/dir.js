@@ -129,11 +129,13 @@ export default async function({
       compiledFiles += await handle(filename);
     }
 
-    console.log(
-      `Successfully compiled ${compiledFiles} ${
-        compiledFiles !== 1 ? "files" : "file"
-      } with Babel.`,
-    );
+    if (!cliOptions.quiet) {
+      console.log(
+        `Successfully compiled ${compiledFiles} ${
+          compiledFiles !== 1 ? "files" : "file"
+        } with Babel.`,
+      );
+    }
   }
 
   if (cliOptions.watch) {

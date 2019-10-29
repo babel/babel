@@ -144,7 +144,14 @@ commander.option(
   "--include-dotfiles",
   "Include dotfiles when compiling and copying non-compilable files",
 );
-commander.option("--verbose", "Log everything");
+commander.option(
+  "--verbose",
+  "Log everything. This option conflicts with --quiet",
+);
+commander.option(
+  "--quiet",
+  "Don't log anything. This option conflicts with --verbose",
+);
 commander.option(
   "--delete-dir-on-start",
   "Delete the out directory before compilation",
@@ -205,6 +212,10 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
   }
   if (commander.deleteDirOnStart && !commander.outDir) {
     errors.push("--delete-dir-on-start requires --out-dir");
+  }
+
+  if (commander.verbose && commander.quiet) {
+    errors.push("--verbose and --quiet cannot be used together");
   }
 
   if (
@@ -282,6 +293,7 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
       copyFiles: opts.copyFiles,
       includeDotfiles: opts.includeDotfiles,
       verbose: opts.verbose,
+      quiet: opts.quiet,
       deleteDirOnStart: opts.deleteDirOnStart,
       sourceMapTarget: opts.sourceMapTarget,
     },
