@@ -19,6 +19,17 @@ const errorVisitor = {
   },
 };
 
+export type NodeLocation = {
+  loc?: {
+    end?: { line: number, column: number },
+    start: { line: number, column: number },
+  },
+  _loc?: {
+    end?: { line: number, column: number },
+    start: { line: number, column: number },
+  },
+};
+
 export default class File {
   _map: Map<any, any> = new Map();
   opts: Object;
@@ -250,10 +261,7 @@ export default class File {
   }
 
   buildCodeFrameError(
-    node: ?{
-      loc?: { start: { line: number, column: number } },
-      _loc?: { start: { line: number, column: number } },
-    },
+    node: ?NodeLocation,
     msg: string,
     Error: typeof Error = SyntaxError,
   ): Error {
@@ -285,6 +293,13 @@ export default class File {
               line: loc.start.line,
               column: loc.start.column + 1,
             },
+            end:
+              loc.end && loc.start.line === loc.end.line
+                ? {
+                    line: loc.end.line,
+                    column: loc.end.column + 1,
+                  }
+                : undefined,
           },
           { highlightCode },
         );
