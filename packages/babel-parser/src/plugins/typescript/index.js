@@ -904,8 +904,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const t: N.TsTypeAnnotation = this.startNode();
         this.expect(returnToken);
 
-        const assertsModifier = this.tsTryParse(
-          this.tsParseTypePredicateAssertsModifier.bind(this),
+        const asserts = this.tsTryParse(
+          this.tsParseTypePredicateAsserts.bind(this),
         );
 
         const typePredicateVariable =
@@ -913,7 +913,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.tsTryParse(this.tsParseTypePredicatePrefix.bind(this));
 
         if (!typePredicateVariable) {
-          if (!assertsModifier) {
+          if (!asserts) {
             // : type
             return this.tsParseTypeAnnotation(/* eatColon */ false, t);
           }
@@ -921,7 +921,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           // : asserts foo
           const node = this.startNodeAtNode(t);
           node.parameterName = this.parseIdentifier();
-          node.assertsModifier = assertsModifier;
+          node.asserts = asserts;
           t.typeAnnotation = this.finishNode(node, "TSTypePredicate");
           return this.finishNode(t, "TSTypeAnnotation");
         }
@@ -931,7 +931,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const node = this.startNodeAtNode(t);
         node.parameterName = typePredicateVariable;
         node.typeAnnotation = type;
-        node.assertsModifier = assertsModifier;
+        node.asserts = asserts;
         t.typeAnnotation = this.finishNode(node, "TSTypePredicate");
         return this.finishNode(t, "TSTypeAnnotation");
       });
@@ -959,7 +959,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    tsParseTypePredicateAssertsModifier(): boolean {
+    tsParseTypePredicateAsserts(): boolean {
       if (!this.tsIsIdentifier()) {
         return false;
       }

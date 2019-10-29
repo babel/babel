@@ -156,7 +156,7 @@
               },
               "name": "value"
             },
-            "assertsModifier": true
+            "asserts": true
           }
         },
         "declare": true

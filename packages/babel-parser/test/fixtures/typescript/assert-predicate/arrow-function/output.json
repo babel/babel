@@ -164,7 +164,7 @@
                       }
                     }
                   },
-                  "assertsModifier": true
+                  "asserts": true
                 }
               },
               "id": null,
@@ -346,7 +346,7 @@
                     },
                     "name": "value"
                   },
-                  "assertsModifier": true
+                  "asserts": true
                 }
               },
               "id": null,

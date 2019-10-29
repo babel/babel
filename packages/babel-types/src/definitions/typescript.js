@@ -175,11 +175,11 @@ defineType("TSTypeReference", {
 
 defineType("TSTypePredicate", {
   aliases: ["TSType"],
-  visitor: ["parameterName", "typeAnnotation", "assertsModifier"],
+  visitor: ["parameterName", "typeAnnotation", "asserts"],
   fields: {
     parameterName: validateType(["Identifier", "TSThisType"]),
     typeAnnotation: validateOptionalType("TSTypeAnnotation"),
-    assertsModifier: validate(bool),
+    asserts: validate(bool),
   },
 });
 

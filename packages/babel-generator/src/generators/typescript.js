@@ -197,7 +197,7 @@ export function TSTypeReference(node) {
 }
 
 export function TSTypePredicate(node) {
-  if (node.assertsModifier) {
+  if (node.asserts) {
     this.word("asserts");
     this.space();
   }
