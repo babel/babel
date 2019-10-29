@@ -133,9 +133,9 @@
                       "line": 1,
                       "column": 30
                     },
-                    "identifierName": "apply"
+                    "identifierName": "applyFunction"
                   },
-                  "name": "apply"
+                  "name": "applyFunction"
                 },
                 "computed": false
               },

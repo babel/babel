@@ -652,7 +652,7 @@ export default class ExpressionParser extends LValParser {
       if (this.eat(tt.parenL)) {
         // x ~. [i](y, z) := HandledPromise.applyMethod(base, i, [y, z])
         // x ~. (y, z) := HandledPromise.applyFunction(base, [y, z]);
-        if (method !== "apply") {
+        if (method !== "applyFunction") {
           method = "applyMethod";
         }
         // The rest of the arguments are in parens.
