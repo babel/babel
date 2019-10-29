@@ -1868,7 +1868,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parsePostMemberNameModifiers(
-      methodOrProp: N.ClassMethod | N.ClassProperty,
+      methodOrProp: N.ClassMethod | N.ClassProperty | N.ClassPrivateProperty,
     ): void {
       const optional = this.eat(tt.question);
       if (optional) methodOrProp.optional = true;
@@ -2007,14 +2007,43 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (typeParameters) node.typeParameters = typeParameters;
     }
 
-    parseClassProperty(node: N.ClassProperty): N.ClassProperty {
+    parseClassPropertyAnnotation(
+      node: N.ClassProperty | N.ClassPrivateProperty,
+    ): void {
       if (!node.optional && this.eat(tt.bang)) {
         node.definite = true;
       }
 
       const type = this.tsTryParseTypeAnnotation();
       if (type) node.typeAnnotation = type;
+    }
+
+    parseClassProperty(node: N.ClassProperty): N.ClassProperty {
+      this.parseClassPropertyAnnotation(node);
       return super.parseClassProperty(node);
+    }
+
+    parseClassPrivateProperty(
+      node: N.ClassPrivateProperty,
+    ): N.ClassPrivateProperty {
+      // $FlowIgnore
+      if (node.abstract) {
+        this.raise(
+          node.start,
+          "Private elements cannot have the 'abstract' modifier.",
+        );
+      }
+
+      // $FlowIgnore
+      if (node.accessibility) {
+        this.raise(
+          node.start,
+          `Private elements cannot have an accessibility modifier ('${node.accessibility}')`,
+        );
+      }
+
+      this.parseClassPropertyAnnotation(node);
+      return super.parseClassPrivateProperty(node);
     }
 
     pushClassMethod(
