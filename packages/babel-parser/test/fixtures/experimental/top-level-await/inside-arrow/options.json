@@ -1,0 +1,5 @@
+{
+  "plugins": ["topLevelAwait"],
+  "sourceType": "module",
+  "throws": "Can not use keyword 'await' outside an async function (1:6)"
+}

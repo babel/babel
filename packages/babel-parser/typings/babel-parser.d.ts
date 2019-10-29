@@ -123,6 +123,7 @@ export type ParserPlugin =
     'pipelineOperator' |
     'placeholders' |
     'throwExpressions' |
+    'topLevelAwait' |
     'typescript' |
     'v8intrinsic' |
     ParserPluginWithOptions;

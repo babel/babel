@@ -2208,6 +2208,7 @@ export default class ExpressionParser extends LValParser {
   isAwaitAllowed(): boolean {
     if (this.scope.inFunction) return this.scope.inAsync;
     if (this.options.allowAwaitOutsideFunction) return true;
+    if (this.hasPlugin("topLevelAwait")) return this.inModule;
     return false;
   }
 
@@ -2234,9 +2235,33 @@ export default class ExpressionParser extends LValParser {
       );
     }
 
+    if (!this.scope.inFunction && !this.options.allowAwaitOutsideFunction) {
+      if (
+        this.hasPrecedingLineBreak() ||
+        // All the following expressions are ambiguous:
+        //   await + 0, await - 0, await ( 0 ), await [ 0 ], await / 0 /u, await ``
+        this.match(tt.plusMin) ||
+        this.match(tt.parenL) ||
+        this.match(tt.bracketL) ||
+        this.match(tt.backQuote) ||
+        // Sometimes the tokenizer generates tt.slash for regexps, and this is
+        // handler by parseExprAtom
+        this.match(tt.regexp) ||
+        this.match(tt.slash) ||
+        // This code could be parsed both as a modulo operator or as an intrinsic:
+        //   await %x(0)
+        (this.hasPlugin("v8intrinsic") && this.match(tt.modulo))
+      ) {
+        this.ambiguousScriptDifferentAst = true;
+      } else {
+        this.sawUnambiguousESM = true;
+      }
+    }
+
     if (!this.state.soloAwait) {
       node.argument = this.parseMaybeUnary();
     }
+
     return this.finishNode(node, "AwaitExpression");
   }
 

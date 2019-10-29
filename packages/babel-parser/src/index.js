@@ -25,15 +25,32 @@ export function parse(input: string, options?: Options): File {
       const parser = getParser(options, input);
       const ast = parser.parse();
 
-      // Rather than try to parse as a script first, we opt to parse as a module and convert back
-      // to a script where possible to avoid having to do a full re-parse of the input content.
-      if (!parser.sawUnambiguousESM) ast.program.sourceType = "script";
+      if (parser.sawUnambiguousESM) {
+        return ast;
+      }
+
+      if (parser.ambiguousScriptDifferentAst) {
+        // Top level await introduces code which can be both a valid script and
+        // a valid module, but which produces different ASTs:
+        //    await
+        //    0
+        // can be parsed either as an AwaitExpression, or as two ExpressionStatements.
+        try {
+          options.sourceType = "script";
+          return getParser(options, input).parse();
+        } catch {}
+      } else {
+        // This is both a valid module and a valid script, but
+        // we parse it as a script by default
+        ast.program.sourceType = "script";
+      }
+
       return ast;
     } catch (moduleError) {
       try {
         options.sourceType = "script";
         return getParser(options, input).parse();
-      } catch (scriptError) {}
+      } catch {}
 
       throw moduleError;
     }
