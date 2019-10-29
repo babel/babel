@@ -10,7 +10,7 @@
     factory();
     global.looseModuleNameInput = mod.exports;
   }
-})(this, function () {
+})(typeof globalThis === "object" ? globalThis : typeof self === "object" ? self : this, function () {
   "use strict";
 
   foobar();

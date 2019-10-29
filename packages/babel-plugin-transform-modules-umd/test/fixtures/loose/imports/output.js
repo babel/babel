@@ -10,6 +10,6 @@
     factory(global.foo, global.fooBar, global.fooBar);
     global.input = mod.exports;
   }
-})(this, function (_foo, _fooBar, _fooBar2) {
+})(typeof globalThis === "object" ? globalThis : typeof self === "object" ? self : this, function (_foo, _fooBar, _fooBar2) {
   "use strict";
 });

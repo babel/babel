@@ -10,7 +10,7 @@
     factory(mod.exports, global.foo);
     global.input = mod.exports;
   }
-})(this, function (_exports, _foo) {
+})(typeof globalThis === "object" ? globalThis : typeof self === "object" ? self : this, function (_exports, _foo) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {

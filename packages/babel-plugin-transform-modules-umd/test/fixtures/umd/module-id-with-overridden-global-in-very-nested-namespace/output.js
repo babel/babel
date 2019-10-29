@@ -13,7 +13,7 @@
     global.foo.bar.baz = global.foo.bar.baz || {};
     global.foo.bar.baz.qux = mod.exports;
   }
-})(this, function (_exports) {
+})(typeof globalThis === "object" ? globalThis : typeof self === "object" ? self : this, function (_exports) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {

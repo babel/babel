@@ -27,7 +27,11 @@ const buildWrapper = template(`
 
       GLOBAL_TO_ASSIGN;
     }
-  })(this, function(IMPORT_NAMES) {
+  })(
+    typeof globalThis === "object" ? globalThis
+      : typeof self === "object" ? self
+      : this,
+    function(IMPORT_NAMES) {
   })
 `);
 
