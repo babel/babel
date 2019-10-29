@@ -904,21 +904,34 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const t: N.TsTypeAnnotation = this.startNode();
         this.expect(returnToken);
 
+        const assertsModifier = this.tsTryParse(
+          this.tsParseTypePredicateAssertsModifier.bind(this),
+        );
+
         const typePredicateVariable =
           this.tsIsIdentifier() &&
           this.tsTryParse(this.tsParseTypePredicatePrefix.bind(this));
 
         if (!typePredicateVariable) {
-          return this.tsParseTypeAnnotation(/* eatColon */ false, t);
+          if (!assertsModifier) {
+            // : type
+            return this.tsParseTypeAnnotation(/* eatColon */ false, t);
+          }
+
+          // : asserts foo
+          const node = this.startNodeAtNode(t);
+          node.parameterName = this.parseIdentifier();
+          node.assertsModifier = assertsModifier;
+          t.typeAnnotation = this.finishNode(node, "TSTypePredicate");
+          return this.finishNode(t, "TSTypeAnnotation");
         }
 
+        // : foo is type
         const type = this.tsParseTypeAnnotation(/* eatColon */ false);
-
-        const node: N.TsTypePredicate = this.startNodeAtNode(
-          typePredicateVariable,
-        );
+        const node = this.startNodeAtNode(t);
         node.parameterName = typePredicateVariable;
         node.typeAnnotation = type;
+        node.assertsModifier = assertsModifier;
         t.typeAnnotation = this.finishNode(node, "TSTypePredicate");
         return this.finishNode(t, "TSTypeAnnotation");
       });
@@ -944,6 +957,23 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.next();
         return id;
       }
+    }
+
+    tsParseTypePredicateAssertsModifier(): boolean {
+      if (!this.tsIsIdentifier()) {
+        return false;
+      }
+
+      const id = this.parseIdentifier();
+      if (
+        id.name !== "asserts" ||
+        this.hasPrecedingLineBreak() ||
+        !this.tsIsIdentifier()
+      ) {
+        return false;
+      }
+
+      return true;
     }
 
     tsParseTypeAnnotation(

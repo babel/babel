@@ -197,11 +197,17 @@ export function TSTypeReference(node) {
 }
 
 export function TSTypePredicate(node) {
+  if (node.assertsModifier) {
+    this.word("asserts");
+    this.space();
+  }
   this.print(node.parameterName);
-  this.space();
-  this.word("is");
-  this.space();
-  this.print(node.typeAnnotation.typeAnnotation);
+  if (node.typeAnnotation) {
+    this.space();
+    this.word("is");
+    this.space();
+    this.print(node.typeAnnotation.typeAnnotation);
+  }
 }
 
 export function TSTypeQuery(node) {
