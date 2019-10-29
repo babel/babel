@@ -2248,7 +2248,7 @@ export default class ExpressionParser extends LValParser {
         // handler by parseExprAtom
         this.match(tt.regexp) ||
         this.match(tt.slash) ||
-        // This code couls be parsed both as a modulo operator or as an intrinsic:
+        // This code could be parsed both as a modulo operator or as an intrinsic:
         //   await %x(0)
         (this.hasPlugin("v8intrinsic") && this.match(tt.modulo))
       ) {
