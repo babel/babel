@@ -65,11 +65,13 @@ export const getModulesPluginNames = ({
   transformations,
   shouldTransformESM,
   shouldTransformDynamicImport,
+  shouldParseTopLevelAwait,
 }: {
   modules: ModuleOption,
   transformations: ModuleTransformationsType,
   shouldTransformESM: boolean,
   shouldTransformDynamicImport: boolean,
+  shouldParseTopLevelAwait: boolean,
 }) => {
   const modulesPluginNames = [];
   if (modules !== false && transformations[modules]) {
@@ -95,6 +97,11 @@ export const getModulesPluginNames = ({
   } else {
     modulesPluginNames.push("syntax-dynamic-import");
   }
+
+  if (shouldParseTopLevelAwait) {
+    modulesPluginNames.push("syntax-top-level-await");
+  }
+
   return modulesPluginNames;
 };
 
@@ -165,6 +172,10 @@ function supportsDynamicImport(caller) {
   return !!(caller && caller.supportsDynamicImport);
 }
 
+function supportsTopLevelAwait(caller) {
+  return !!(caller && caller.supportsTopLevelAwait);
+}
+
 export default declare((api, opts) => {
   api.assertVersion(7);
 
@@ -225,6 +236,7 @@ export default declare((api, opts) => {
       modules !== "auto" || !api.caller || !api.caller(supportsStaticESM),
     shouldTransformDynamicImport:
       modules !== "auto" || !api.caller || !api.caller(supportsDynamicImport),
+    shouldParseTopLevelAwait: api.caller(supportsTopLevelAwait),
   });
 
   const pluginNames = filterItems(
