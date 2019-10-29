@@ -21,7 +21,7 @@
   },
   "bugs": "https://github.com/babel/babel/issues",
   "dependencies": {
-    "regexpu-core": "^4.6.0"
+    "@babel/helper-create-regexp-features-plugin": "^7.6.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
