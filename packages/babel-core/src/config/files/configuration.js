@@ -19,6 +19,11 @@ import type { CallerMetadata } from "../validation/options";
 const debug = buildDebug("babel:config:loading:files:configuration");
 
 const BABEL_CONFIG_JS_FILENAME = "babel.config.js";
+const BABEL_CONFIG_JSON_FILENAME = "babel.config.json";
+const ROOT_CONFIG_FILENAMES = [
+  BABEL_CONFIG_JS_FILENAME,
+  BABEL_CONFIG_JSON_FILENAME,
+];
 
 const BABELRC_FILENAME = ".babelrc";
 const BABELRC_JS_FILENAME = ".babelrc.js";
@@ -27,7 +32,10 @@ const BABELIGNORE_FILENAME = ".babelignore";
 export function findConfigUpwards(rootDir: string): string | null {
   let dirname = rootDir;
   while (true) {
-    if (fs.existsSync(path.join(dirname, BABEL_CONFIG_JS_FILENAME))) {
+    if (
+      fs.existsSync(path.join(dirname, BABEL_CONFIG_JS_FILENAME)) ||
+      fs.existsSync(path.join(dirname, BABEL_CONFIG_JSON_FILENAME))
+    ) {
       return dirname;
     }
 
@@ -110,13 +118,29 @@ export function findRootConfig(
   envName: string,
   caller: CallerMetadata | void,
 ): ConfigFile | null {
-  const filepath = path.resolve(dirname, BABEL_CONFIG_JS_FILENAME);
+  const config = ROOT_CONFIG_FILENAMES.reduce(
+    (previousConfig: ConfigFile | null, name) => {
+      const filepath = path.resolve(dirname, name);
+      const config = readConfig(filepath, envName, caller);
 
-  const conf = readConfig(filepath, envName, caller);
-  if (conf) {
-    debug("Found root config %o in %o.", BABEL_CONFIG_JS_FILENAME, dirname);
+      if (config && previousConfig) {
+        throw new Error(
+          `Multiple configuration files found. Please remove one:\n` +
+            ` - ${path.basename(previousConfig.filepath)}\n` +
+            ` - ${name}\n` +
+            `from ${dirname}`,
+        );
+      }
+
+      return config || previousConfig;
+    },
+    null,
+  );
+
+  if (config) {
+    debug("Found configuration %o from %o.", config.filepath, dirname);
   }
-  return conf;
+  return config;
 }
 
 export function loadConfig(

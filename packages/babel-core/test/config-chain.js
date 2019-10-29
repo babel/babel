@@ -944,6 +944,52 @@ describe("buildConfigChain", function() {
       }
     });
 
+    it("should load babel.config.json", () => {
+      const filename = fixture("config-files", "babel-config-json", "src.js");
+
+      expect(
+        loadOptions({
+          filename,
+          cwd: path.dirname(filename),
+        }),
+      ).toEqual({
+        ...getDefaults(),
+        filename: filename,
+        cwd: path.dirname(filename),
+        root: path.dirname(filename),
+        comments: true,
+      });
+    });
+
+    it("should load babel.config.js", () => {
+      const filename = fixture("config-files", "babel-config-js", "src.js");
+
+      expect(
+        loadOptions({
+          filename,
+          cwd: path.dirname(filename),
+        }),
+      ).toEqual({
+        ...getDefaults(),
+        filename: filename,
+        cwd: path.dirname(filename),
+        root: path.dirname(filename),
+        comments: true,
+      });
+    });
+
+    it("should whtow if both babel.config.json and babel.config.js are used", () => {
+      const filename = fixture(
+        "config-files",
+        "babel-config-js-and-json",
+        "src.js",
+      );
+
+      expect(() =>
+        loadOptions({ filename, cwd: path.dirname(filename) }),
+      ).toThrow(/Multiple configuration files found/);
+    });
+
     it("should load .babelrc", () => {
       const filename = fixture("config-files", "babelrc", "src.js");
 
