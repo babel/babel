@@ -204,7 +204,10 @@ export default class ExpressionParser extends LValParser {
       node.left = this.match(tt.eq)
         ? this.toAssignable(left, undefined, "assignment expression")
         : left;
-      refShorthandDefaultPos.start = 0; // reset because shorthand default was used correctly
+
+      if (refShorthandDefaultPos.start >= node.left.start) {
+        refShorthandDefaultPos.start = 0; // reset because shorthand default was used correctly
+      }
 
       this.checkLVal(left, undefined, undefined, "assignment expression");
 
