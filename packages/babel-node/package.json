@@ -34,7 +34,7 @@
     "@babel/core": "^7.6.3",
     "@babel/helper-fixtures": "^7.6.3",
     "fs-readdir-recursive": "^1.0.0",
-    "output-file-sync": "^2.0.0"
+    "make-dir": "^2.1.0"
   },
   "bin": {
     "babel-node": "./bin/babel-node.js"
