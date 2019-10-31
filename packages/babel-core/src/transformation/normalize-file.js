@@ -65,7 +65,8 @@ export default function normalizeFile(
       if (typeof options.filename === "string" && lastComment) {
         try {
           inputMap = convertSourceMap.fromMapFileComment(
-            lastComment,
+            // fromMapFileComment requires the whole comment block
+            `//${lastComment}`,
             path.dirname(options.filename),
           );
         } catch (err) {
