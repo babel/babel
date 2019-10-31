@@ -1,7 +1,6 @@
 // @flow
 
 import defaults from "lodash/defaults";
-import outputFileSync from "output-file-sync";
 import { sync as makeDirSync } from "make-dir";
 import slash from "slash";
 import path from "path";
@@ -9,6 +8,11 @@ import fs from "fs";
 
 import * as util from "./util";
 import { type CmdOptions } from "./options";
+
+function outputFileSync(filePath: string, data: string | Buffer): void {
+  makeDirSync(path.dirname(filePath));
+  fs.writeFileSync(filePath, data);
+}
 
 export default async function({
   cliOptions,
