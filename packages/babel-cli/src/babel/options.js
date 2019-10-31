@@ -101,6 +101,7 @@ commander.option(
 // Config params for certain module output formats.
 commander.option(
   "--module-root [filename]",
+  // eslint-disable-next-line max-len
   "Optional prefix for the AMD module formatter that will be prepended to the filename on module definitions.",
 );
 commander.option("-M, --module-ids", "Insert an explicit id for modules.");
