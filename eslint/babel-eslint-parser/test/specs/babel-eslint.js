@@ -451,7 +451,9 @@ describe("babylon-to-espree", () => {
     });
 
     it("super outside method", () => {
-      parseAndAssertSame("function F() { super(); }");
+      assert.throws(() => {
+        parseAndAssertSame("function F() { super(); }");
+      }, /SyntaxError: 'super' keyword outside a method/);
     });
 
     it("StringLiteral", () => {

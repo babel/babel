@@ -47,26 +47,6 @@ const astTransformVisitor = {
   exit(path) {
     const node = path.node;
 
-    if (path.isJSXText()) {
-      node.type = "Literal";
-    }
-
-    if (
-      path.isRestElement() &&
-      path.parent &&
-      path.parent.type === "ObjectPattern"
-    ) {
-      node.type = "ExperimentalRestProperty";
-    }
-
-    if (
-      path.isSpreadElement() &&
-      path.parent &&
-      path.parent.type === "ObjectExpression"
-    ) {
-      node.type = "ExperimentalSpreadProperty";
-    }
-
     if (path.isTypeParameter()) {
       node.type = "Identifier";
       node.typeAnnotation = node.bound;
