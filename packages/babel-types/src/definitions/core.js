@@ -1,5 +1,5 @@
 // @flow
-import isValidIdentifier from "../validators/isValidIdentifier";
+import isIdentifierName from "../validators/isIdentifierName";
 
 import {
   BINARY_OPERATORS,
@@ -406,7 +406,7 @@ defineType("Identifier", {
     ...patternLikeCommon,
     name: {
       validate: chain(function(node, key, val) {
-        if (!isValidIdentifier(val)) {
+        if (!isIdentifierName(val)) {
           throw new TypeError(`"${val}" is not a valid identifer name`);
         }
       }, assertValueType("string")),
