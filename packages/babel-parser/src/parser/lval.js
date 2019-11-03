@@ -22,6 +22,12 @@ import {
 import { NodeUtils } from "./node";
 import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
 
+const unwrapParenthesizedExpression = (node: Node) => {
+  return node.type === "ParenthesizedExpression"
+    ? unwrapParenthesizedExpression(node.expression)
+    : node;
+};
+
 export default class LValParser extends NodeUtils {
   // Forward-declaration: defined in expression.js
   +parseIdentifier: (liberal?: boolean) => Identifier;
@@ -43,33 +49,26 @@ export default class LValParser extends NodeUtils {
   // NOTE: There is a corresponding "isAssignable" method in flow.js.
   // When this one is updated, please check if also that one needs to be updated.
 
-  validateParenthesizedExpression(node: Node): void {
-    let parenthesized;
-    if (
-      this.options.createParenthesizedExpressions &&
-      node.type === "ParenthesizedExpression"
-    ) {
-      parenthesized = node.expression;
-    } else if (node.extra?.parenthesized) {
-      parenthesized = node;
-    }
-
-    if (
-      parenthesized &&
-      parenthesized.type !== "Identifier" &&
-      parenthesized.type !== "MemberExpression"
-    ) {
-      this.raise(node.start, "Invalid parenthesized assignment pattern");
-    }
-  }
-
   toAssignable(
     node: Node,
     isBinding: ?boolean,
     contextDescription: string,
   ): Node {
     if (node) {
-      this.validateParenthesizedExpression(node);
+      if (
+        (this.options.createParenthesizedExpressions &&
+          node.type === "ParenthesizedExpression") ||
+        node.extra?.parenthesized
+      ) {
+        const parenthesized = unwrapParenthesizedExpression(node);
+        if (
+          parenthesized.type !== "Identifier" &&
+          parenthesized.type !== "MemberExpression"
+        ) {
+          this.raise(node.start, "Invalid parenthesized assignment pattern");
+        }
+      }
+
       switch (node.type) {
         case "Identifier":
         case "ObjectPattern":
