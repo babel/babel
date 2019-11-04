@@ -628,7 +628,7 @@ export default class ExpressionParser extends LValParser {
         node.callee = base;
         node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
         node.optional = true;
-        return this.finishNode(node, "OptionalCallExpression");
+        return this.finishCallExpression(node, /* optional */ true);
       } else {
         node.object = base;
         node.property = this.parseIdentifier(true);
@@ -683,11 +683,7 @@ export default class ExpressionParser extends LValParser {
         base.type !== "Super",
         node,
       );
-      if (!state.optionalChainMember) {
-        this.finishCallExpression(node);
-      } else {
-        this.finishOptionalCallExpression(node);
-      }
+      this.finishCallExpression(node, state.optionalChainMember);
 
       if (state.maybeAsyncArrow && this.shouldParseAsyncArrow()) {
         state.stop = true;
@@ -783,7 +779,10 @@ export default class ExpressionParser extends LValParser {
     );
   }
 
-  finishCallExpression(node: N.CallExpression): N.CallExpression {
+  finishCallExpression<T: N.CallExpression | N.OptionalCallExpression>(
+    node: T,
+    optional: boolean,
+  ): T {
     if (node.callee.type === "Import") {
       if (node.arguments.length !== 1) {
         this.raise(node.start, "import() requires exactly one argument");
@@ -794,21 +793,10 @@ export default class ExpressionParser extends LValParser {
         this.raise(importArg.start, "... is not allowed in import()");
       }
     }
-    return this.finishNode(node, "CallExpression");
-  }
-
-  finishOptionalCallExpression(node: N.CallExpression): N.CallExpression {
-    if (node.callee.type === "Import") {
-      if (node.arguments.length !== 1) {
-        this.raise(node.start, "import() requires exactly one argument");
-      }
-
-      const importArg = node.arguments[0];
-      if (importArg && importArg.type === "SpreadElement") {
-        this.raise(importArg.start, "... is not allowed in import()");
-      }
-    }
-    return this.finishNode(node, "OptionalCallExpression");
+    return this.finishNode(
+      node,
+      optional ? "OptionalCallExpression" : "CallExpression",
+    );
   }
 
   parseCallExpressionArguments(
