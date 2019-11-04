@@ -27,11 +27,8 @@ return (async () => {
   expect(res).toEqual({ value: "a", done: false });
   expect(log).toEqual([6, 1]);
 
-  res = await iterator.return();
-  expect(res).toEqual({ value: "c", done: false });
-  expect(log).toEqual([6, 1, 4]);
-
-  res = await iterator.return();
-  expect(res).toEqual({ value: undefined, done: true });
+  const [res1, res2] = await Promise.all([ iterator.return("x"), iterator.return("y") ]);
+  expect(res1).toEqual({ value: "c", done: false });
+  expect(res2).toEqual({ value: "y", done: true });
   expect(log).toEqual([6, 1, 4]);
 })();
