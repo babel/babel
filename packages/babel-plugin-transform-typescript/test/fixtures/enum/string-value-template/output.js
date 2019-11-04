@@ -1,5 +1,5 @@
 var E;
 
 (function (E) {
-  E["A"] = "HALLOWERLD";
+  E["A"] = "Hey";
 })(E || (E = {}));
