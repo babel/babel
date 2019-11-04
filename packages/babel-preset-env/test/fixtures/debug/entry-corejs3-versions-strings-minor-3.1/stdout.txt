@@ -32,7 +32,6 @@ Using plugins:
   transform-new-target { "ie":"10" }
   transform-regenerator { "ie":"10" }
   transform-exponentiation-operator { "ie":"10", "node":"6.10" }
-  transform-async-to-generator { "chrome":"54", "ie":"10", "node":"6.10" }
   proposal-async-generator-functions { "chrome":"54", "ie":"10", "node":"6.10" }
   proposal-object-rest-spread { "chrome":"54", "ie":"10", "node":"6.10" }
   proposal-unicode-property-regex { "chrome":"54", "ie":"10", "node":"6.10" }

@@ -3,11 +3,12 @@
 import { SemVer } from "semver";
 import { logPluginOrPolyfill } from "./debug";
 import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
-import filterItems from "./filter-items";
+import filterItems, { removeUnnecessaryItems } from "./filter-items";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options";
 import pluginList from "../data/plugins.json";
 import { proposalPlugins, pluginSyntaxMap } from "../data/shipped-proposals";
+import overlappingPlugins from "../data/overlapping-plugins";
 
 import addCoreJS2UsagePlugin from "./polyfills/corejs2/usage-plugin";
 import addCoreJS3UsagePlugin from "./polyfills/corejs3/usage-plugin";
@@ -248,6 +249,7 @@ export default declare((api, opts) => {
     getOptionSpecificExcludesFor({ loose }),
     pluginSyntaxMap,
   );
+  removeUnnecessaryItems(pluginNames, overlappingPlugins);
 
   const polyfillPlugins = getPolyfillPlugins({
     useBuiltIns,
