@@ -25,6 +25,8 @@ import normalizeModuleAndLoadMetadata, {
   hasExports,
   isSideEffectImport,
   validateImportInteropOption,
+  removeExportDeclarations,
+  removeImportDeclarations,
 } from "./normalize-and-load-metadata";
 import type {
   InteropType,
@@ -91,7 +93,9 @@ export function rewriteModuleStatementsAndPrepareHeader(
     rewriteThis(path);
   }
 
+  removeExportDeclarations(path);
   rewriteLiveReferences(path, meta);
+  removeImportDeclarations(path);
 
   if (strictMode !== false) {
     const hasStrict = path.node.directives.some(directive => {
