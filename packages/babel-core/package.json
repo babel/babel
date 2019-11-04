@@ -30,7 +30,8 @@
   },
   "browser": {
     "./lib/config/files/index.js": "./lib/config/files/index-browser.js",
-    "./lib/transform-file.js": "./lib/transform-file-browser.js"
+    "./lib/transform-file.js": "./lib/transform-file-browser.js",
+    "convert-source-map": false
   },
   "dependencies": {
     "@babel/code-frame": "^7.5.5",
