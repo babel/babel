@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Only '=' operator can be used for specifying default value. (1:3)",
-    "SyntaxError: Invalid left-hand side in array destructuring pattern (1:2)"
+    "SyntaxError: Only '=' operator can be used for specifying default value. (1:3)"
   ],
   "program": {
     "type": "Program",
@@ -78,7 +77,7 @@
             },
             "elements": [
               {
-                "type": "AssignmentExpression",
+                "type": "AssignmentPattern",
                 "start": 2,
                 "end": 8,
                 "loc": {
@@ -91,7 +90,6 @@
                     "column": 8
                   }
                 },
-                "operator": "+=",
                 "left": {
                   "type": "Identifier",
                   "start": 2,

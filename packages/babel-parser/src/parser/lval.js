@@ -101,16 +101,16 @@ export default class LValParser extends NodeUtils {
           break;
 
         case "AssignmentExpression":
-          if (node.operator === "=") {
-            node.type = "AssignmentPattern";
-            delete node.operator;
-            this.toAssignable(node.left, isBinding, contextDescription);
-          } else {
+          if (node.operator !== "=") {
             this.raise(
               node.left.end,
               "Only '=' operator can be used for specifying default value.",
             );
           }
+
+          node.type = "AssignmentPattern";
+          delete node.operator;
+          this.toAssignable(node.left, isBinding, contextDescription);
           break;
 
         case "ParenthesizedExpression":
