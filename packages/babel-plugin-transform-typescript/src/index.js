@@ -93,6 +93,7 @@ export default declare(
         // Rest handled by Function visitor
       },
       constructor(path, classPath) {
+        if (path.node.accessibility) path.node.accessibility = null;
         // Collects parameter properties so that we can add an assignment
         // for each of them in the constructor body
         //
