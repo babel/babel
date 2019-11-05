@@ -109,7 +109,6 @@ export {
   default as isValidES3Identifier,
 } from "./validators/isValidES3Identifier";
 export { default as isValidIdentifier } from "./validators/isValidIdentifier";
-export { default as isIdentifierName } from "./validators/isIdentifierName";
 export { default as isVar } from "./validators/isVar";
 export { default as matchesPattern } from "./validators/matchesPattern";
 export { default as validate } from "./validators/validate";
