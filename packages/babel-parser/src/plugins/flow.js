@@ -3009,7 +3009,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         enumName,
         suppliedType,
       }: { enumName: string, suppliedType: null | string },
-    ): void {
+    ) {
       const suggestion =
         `Use one of \`boolean\`, \`number\`, \`string\`, or \`symbol\` in ` +
         `enum \`${enumName}\`.`;
@@ -3017,13 +3017,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         suppliedType === null
           ? `Supplied enum type is not valid. ${suggestion}`
           : `Enum type \`${suppliedType}\` is not valid. ${suggestion}`;
-      this.raise(pos, message);
+      return this.raise(pos, message);
     }
 
     flowEnumErrorInvalidMemberInitializer(
       pos: number,
       { enumName, explicitType, memberName }: EnumContext,
-    ): void {
+    ) {
       let message = null;
       switch (explicitType) {
         case "boolean":
@@ -3044,7 +3044,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             `The enum member initializer for \`${memberName}\` needs to be a literal (either ` +
             `a boolean, number, or string) in enum \`${enumName}\`.`;
       }
-      this.raise(pos, message);
+      return this.raise(pos, message);
     }
 
     flowEnumErrorNumberMemberNotInitialized(
@@ -3197,8 +3197,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             break;
           }
           case "invalid": {
-            this.flowEnumErrorInvalidMemberInitializer(init.pos, context);
-            break;
+            throw this.flowEnumErrorInvalidMemberInitializer(init.pos, context);
           }
           case "none": {
             switch (explicitType) {
@@ -3262,28 +3261,29 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       enumName: string,
     }): EnumExplicitType {
       if (this.eatContextual("of")) {
-        if (this.match(tt.name)) {
-          switch (this.state.value) {
-            case "boolean":
-            case "number":
-            case "string":
-            case "symbol": {
-              const explicitType = this.state.value;
-              this.next();
-              return explicitType;
-            }
-            default:
-              this.flowEnumErrorInvalidExplicitType(this.state.start, {
-                enumName,
-                suppliedType: this.state.value,
-              });
-          }
-        } else {
-          this.flowEnumErrorInvalidExplicitType(this.state.start, {
+        if (!this.match(tt.name)) {
+          throw this.flowEnumErrorInvalidExplicitType(this.state.start, {
             enumName,
             suppliedType: null,
           });
         }
+
+        const { value } = this.state;
+        this.next();
+
+        if (
+          value !== "boolean" &&
+          value !== "number" &&
+          value !== "string" &&
+          value !== "symbol"
+        ) {
+          this.flowEnumErrorInvalidExplicitType(this.state.start, {
+            enumName,
+            suppliedType: value,
+          });
+        }
+
+        return value;
       }
       return null;
     }

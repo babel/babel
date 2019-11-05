@@ -1,4 +1,3 @@
 {
-  "plugins": [["flow", { "enums": true }]],
-  "throws": "Boolean enum members need to be initialized. Use either `A = true,` or `A = false,` in enum `E`. (2:2)"
+  "plugins": [["flow", { "enums": true }]]
 }
