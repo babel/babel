@@ -784,15 +784,14 @@ export default class ExpressionParser extends LValParser {
     node: T,
     optional: boolean,
   ): T {
-    validate: if (node.callee.type === "Import") {
+    if (node.callee.type === "Import") {
       if (node.arguments.length !== 1) {
         this.raise(node.start, "import() requires exactly one argument");
-        break validate;
-      }
-
-      const importArg = node.arguments[0];
-      if (importArg && importArg.type === "SpreadElement") {
-        this.raise(importArg.start, "... is not allowed in import()");
+      } else {
+        const importArg = node.arguments[0];
+        if (importArg && importArg.type === "SpreadElement") {
+          this.raise(importArg.start, "... is not allowed in import()");
+        }
       }
     }
     return this.finishNode(
