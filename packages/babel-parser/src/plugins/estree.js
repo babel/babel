@@ -89,17 +89,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const start = prop.start;
       if (prop.value.params.length !== paramCount) {
         if (prop.kind === "get") {
-          throw this.raise(start, "getter must not have any formal parameters");
+          this.raise(start, "getter must not have any formal parameters");
         } else {
-          throw this.raise(
-            start,
-            "setter must have exactly one formal parameter",
-          );
+          this.raise(start, "setter must have exactly one formal parameter");
         }
-      }
-
-      if (prop.kind === "set" && prop.value.params[0].type === "RestElement") {
-        throw this.raise(
+      } else if (
+        prop.kind === "set" &&
+        prop.value.params[0].type === "RestElement"
+      ) {
+        this.raise(
           start,
           "setter function argument must not be a rest parameter",
         );

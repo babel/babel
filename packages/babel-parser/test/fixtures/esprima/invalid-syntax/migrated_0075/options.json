@@ -1,5 +1,4 @@
 {
-  "throws": "setter must have exactly one formal parameter (1:3)",
   "plugins": [
     "estree"
   ]
