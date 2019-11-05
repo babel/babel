@@ -15,7 +15,10 @@ import type {
   SpreadElement,
 } from "../types";
 import type { Pos, Position } from "../util/location";
-import { isStrictBindReservedWord } from "../util/identifier";
+import {
+  isStrictBindOnlyReservedWord,
+  isStrictBindReservedWord,
+} from "../util/identifier";
 import { NodeUtils } from "./node";
 import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
 
@@ -37,6 +40,8 @@ export default class LValParser extends NodeUtils {
 
   // Convert existing expression atom to assignable pattern
   // if possible.
+  // NOTE: There is a corresponding "isAssignable" method in flow.js.
+  // When this one is updated, please check if also that one needs to be updated.
 
   toAssignable(
     node: Node,
@@ -96,15 +101,16 @@ export default class LValParser extends NodeUtils {
           break;
 
         case "AssignmentExpression":
-          if (node.operator === "=") {
-            node.type = "AssignmentPattern";
-            delete node.operator;
-          } else {
+          if (node.operator !== "=") {
             this.raise(
               node.left.end,
               "Only '=' operator can be used for specifying default value.",
             );
           }
+
+          node.type = "AssignmentPattern";
+          delete node.operator;
+          this.toAssignable(node.left, isBinding, contextDescription);
           break;
 
         case "ParenthesizedExpression":
@@ -118,14 +124,9 @@ export default class LValParser extends NodeUtils {
         case "MemberExpression":
           if (!isBinding) break;
 
-        default: {
-          const message =
-            "Invalid left-hand side" +
-            (contextDescription
-              ? " in " + contextDescription
-              : /* istanbul ignore next */ "expression");
-          this.raise(node.start, message);
-        }
+        default:
+        // We don't know how to deal with this node. It will
+        // be reported by a later call to checkLVal
       }
     }
     return node;
@@ -349,12 +350,18 @@ export default class LValParser extends NodeUtils {
     checkClashes: ?{ [key: string]: boolean },
     contextDescription: string,
     disallowLetBinding?: boolean,
+    strictModeChanged?: boolean = false,
   ): void {
     switch (expr.type) {
       case "Identifier":
         if (
           this.state.strict &&
-          isStrictBindReservedWord(expr.name, this.inModule)
+          // "Global" reserved words have already been checked by parseIdentifier,
+          // unless they have been found in the id or parameters of a strict-mode
+          // function in a sloppy context.
+          (strictModeChanged
+            ? isStrictBindReservedWord(expr.name, this.inModule)
+            : isStrictBindOnlyReservedWord(expr.name))
         ) {
           this.raise(
             expr.start,
@@ -404,6 +411,11 @@ export default class LValParser extends NodeUtils {
       case "ObjectPattern":
         for (let prop of expr.properties) {
           if (prop.type === "ObjectProperty") prop = prop.value;
+          // If we find here an ObjectMethod, it's because this was originally
+          // an ObjectExpression which has then been converted.
+          // toAssignable already reported this error with a nicer message.
+          else if (prop.type === "ObjectMethod") continue;
+
           this.checkLVal(
             prop,
             bindingType,
@@ -489,7 +501,7 @@ export default class LValParser extends NodeUtils {
   }
 
   raiseRestNotLast(pos: number) {
-    this.raise(pos, `Rest element must be last element`);
+    throw this.raise(pos, `Rest element must be last element`);
   }
 
   raiseTrailingCommaAfterRest(pos: number) {

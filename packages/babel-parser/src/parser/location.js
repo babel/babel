@@ -10,6 +10,8 @@ import CommentsParser from "./comments";
 // message.
 
 export default class LocationParser extends CommentsParser {
+  +isLookahead: boolean;
+
   getLocationForPosition(pos: number): Position {
     let loc;
     if (pos === this.state.start) loc = this.state.startLoc;
@@ -31,7 +33,7 @@ export default class LocationParser extends CommentsParser {
       missingPluginNames?: Array<string>,
       code?: string,
     } = {},
-  ): empty {
+  ): Error | empty {
     const loc = this.getLocationForPosition(pos);
 
     message += ` (${loc.line}:${loc.column})`;
@@ -47,6 +49,12 @@ export default class LocationParser extends CommentsParser {
     if (code !== undefined) {
       err.code = code;
     }
-    throw err;
+
+    if (this.options.errorRecovery) {
+      if (!this.isLookahead) this.state.errors.push(err);
+      return err;
+    } else {
+      throw err;
+    }
   }
 }

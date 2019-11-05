@@ -1,4 +1,6 @@
 {
-  "plugins": ["flow"],
-  "throws": "Unexpected keyword 'default' (1:9)"
+  "sourceType": "module",
+  "plugins": [
+    "flow"
+  ]
 }

@@ -1,4 +1,3 @@
 {
-  "sourceType": "module",
-  "throws": "Unexpected reserved word 'arguments' (1:8)"
+  "sourceType": "module"
 }

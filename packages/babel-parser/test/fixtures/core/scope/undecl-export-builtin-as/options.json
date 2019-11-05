@@ -1,4 +1,3 @@
 {
-  "sourceType": "module",
-  "throws": "Export 'Object' is not defined (1:9)"
+  "sourceType": "module"
 }

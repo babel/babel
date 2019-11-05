@@ -2,12 +2,21 @@
 
 import { types as tt, type TokenType } from "../tokenizer/types";
 import Tokenizer from "../tokenizer";
+import State from "../tokenizer/state";
 import type { Node } from "../types";
 import { lineBreak, skipWhiteSpace } from "../util/whitespace";
 import { isIdentifierChar } from "../util/identifier";
 import * as charCodes from "charcodes";
 
 const literal = /^('|")((?:\\?.)*?)\1/;
+
+type TryParse<Node, Error, Thrown, Aborted, FailState> = {
+  node: Node,
+  error: Error,
+  thrown: Thrown,
+  aborted: Aborted,
+  failState: FailState,
+};
 
 // ## Parser utilities
 
@@ -214,5 +223,59 @@ export default class UtilParser extends Tokenizer {
     }
 
     return false;
+  }
+
+  // tryParse will clone parser state.
+  // It is expensive and should be used with cautions
+  tryParse<T: Node | $ReadOnlyArray<Node>>(
+    fn: (abort: (node?: T) => empty) => T,
+    oldState: State = this.state.clone(),
+  ):
+    | TryParse<T, null, false, false, null>
+    | TryParse<T | null, SyntaxError, boolean, false, State>
+    | TryParse<T | null, null, false, true, State> {
+    const abortSignal: { node: T | null } = { node: null };
+    try {
+      const node = fn((node = null) => {
+        abortSignal.node = node;
+        throw abortSignal;
+      });
+      if (this.state.errors.length > oldState.errors.length) {
+        const failState = this.state;
+        this.state = oldState;
+        return {
+          node,
+          error: (failState.errors[oldState.errors.length]: SyntaxError),
+          thrown: false,
+          aborted: false,
+          failState,
+        };
+      }
+
+      return {
+        node,
+        error: null,
+        thrown: false,
+        aborted: false,
+        failState: null,
+      };
+    } catch (error) {
+      const failState = this.state;
+      this.state = oldState;
+      if (error instanceof SyntaxError) {
+        return { node: null, error, thrown: true, aborted: false, failState };
+      }
+      if (error === abortSignal) {
+        return {
+          node: abortSignal.node,
+          error: null,
+          thrown: false,
+          aborted: true,
+          failState,
+        };
+      }
+
+      throw error;
+    }
   }
 }

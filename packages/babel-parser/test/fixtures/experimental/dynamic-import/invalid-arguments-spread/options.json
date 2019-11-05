@@ -1,3 +1,5 @@
 {
-  "throws": "... is not allowed in import() (1:7)"
+  "plugins": [
+    "dynamicImport"
+  ]
 }

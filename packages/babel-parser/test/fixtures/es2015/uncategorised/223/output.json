@@ -1,0 +1,166 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 22,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 22
+    }
+  },
+  "errors": [
+    "SyntaxError: Object pattern can't contain getter or setter (1:8)"
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 22,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 22
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 22,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 22
+          }
+        },
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 2,
+          "end": 20,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 2
+            },
+            "end": {
+              "line": 1,
+              "column": 20
+            }
+          },
+          "operator": "=",
+          "left": {
+            "type": "ObjectPattern",
+            "start": 2,
+            "end": 16,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 2
+              },
+              "end": {
+                "line": 1,
+                "column": 16
+              }
+            },
+            "properties": [
+              {
+                "type": "ObjectMethod",
+                "start": 4,
+                "end": 14,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 14
+                  }
+                },
+                "method": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 8,
+                  "end": 9,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 9
+                    },
+                    "identifierName": "x"
+                  },
+                  "name": "x"
+                },
+                "computed": false,
+                "kind": "get",
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 12,
+                  "end": 14,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 12
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 14
+                    }
+                  },
+                  "body": [],
+                  "directives": []
+                }
+              }
+            ]
+          },
+          "right": {
+            "type": "NumericLiteral",
+            "start": 19,
+            "end": 20,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 19
+              },
+              "end": {
+                "line": 1,
+                "column": 20
+              }
+            },
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}
