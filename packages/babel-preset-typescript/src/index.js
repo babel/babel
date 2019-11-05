@@ -17,6 +17,7 @@ export default declare(
     if (typeof allExtensions !== "boolean") {
       throw new Error(".allExtensions must be a boolean, or undefined");
     }
+
     if (typeof isTSX !== "boolean") {
       throw new Error(".isTSX must be a boolean, or undefined");
     }
