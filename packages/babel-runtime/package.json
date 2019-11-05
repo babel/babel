@@ -1,14 +1,14 @@
 {
   "name": "@babel/runtime",
-  "version": "7.6.3",
+  "version": "7.7.0",
   "description": "babel's modular runtime helpers",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/babel/babel.git",
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-runtime"
   },
   "homepage": "https://babeljs.io/docs/en/next/babel-runtime",
@@ -17,6 +17,6 @@
     "regenerator-runtime": "^0.13.2"
   },
   "devDependencies": {
-    "@babel/helpers": "^7.6.2"
+    "@babel/helpers": "^7.7.0"
   }
 }

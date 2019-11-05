@@ -1,6 +1,6 @@
 {
   "name": "@babel/runtime-corejs3",
-  "version": "7.6.3",
+  "version": "7.7.0",
   "description": "babel's modular runtime helpers with core-js@3 polyfilling",
   "license": "MIT",
   "publishConfig": {
