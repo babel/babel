@@ -77,7 +77,7 @@
           },
           "body": [
             {
-              "type": "ClassPrivateProperty",
+              "type": "ClassProperty",
               "start": 12,
               "end": 24,
               "loc": {
@@ -90,44 +90,30 @@
                   "column": 14
                 }
               },
-              "readonly": true,
+              "declare": true,
               "static": false,
               "key": {
-                "type": "PrivateName",
-                "start": 21,
+                "type": "Identifier",
+                "start": 20,
                 "end": 23,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 11
+                    "column": 10
                   },
                   "end": {
                     "line": 2,
                     "column": 13
-                  }
-                },
-                "id": {
-                  "type": "Identifier",
-                  "start": 22,
-                  "end": 23,
-                  "loc": {
-                    "start": {
-                      "line": 2,
-                      "column": 12
-                    },
-                    "end": {
-                      "line": 2,
-                      "column": 13
-                    },
-                    "identifierName": "a"
                   },
-                  "name": "a"
-                }
+                  "identifierName": "foo"
+                },
+                "name": "foo"
               },
+              "computed": false,
               "value": null
             },
             {
-              "type": "ClassPrivateProperty",
+              "type": "ClassProperty",
               "start": 27,
               "end": 47,
               "loc": {
@@ -140,40 +126,26 @@
                   "column": 22
                 }
               },
-              "readonly": true,
+              "declare": true,
               "static": false,
               "key": {
-                "type": "PrivateName",
-                "start": 36,
+                "type": "Identifier",
+                "start": 35,
                 "end": 38,
                 "loc": {
                   "start": {
                     "line": 3,
-                    "column": 11
+                    "column": 10
                   },
                   "end": {
                     "line": 3,
                     "column": 13
-                  }
-                },
-                "id": {
-                  "type": "Identifier",
-                  "start": 37,
-                  "end": 38,
-                  "loc": {
-                    "start": {
-                      "line": 3,
-                      "column": 12
-                    },
-                    "end": {
-                      "line": 3,
-                      "column": 13
-                    },
-                    "identifierName": "b"
                   },
-                  "name": "b"
-                }
+                  "identifierName": "bar"
+                },
+                "name": "bar"
               },
+              "computed": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start": 38,

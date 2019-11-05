@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 49,
+  "end": 43,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 4,
+      "line": 3,
       "column": 1
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 49,
+    "end": 43,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 4,
+        "line": 3,
         "column": 1
       }
     },
@@ -32,14 +32,14 @@
       {
         "type": "ClassDeclaration",
         "start": 0,
-        "end": 49,
+        "end": 43,
         "loc": {
           "start": {
             "line": 1,
             "column": 0
           },
           "end": {
-            "line": 4,
+            "line": 3,
             "column": 1
           }
         },
@@ -64,22 +64,22 @@
         "body": {
           "type": "ClassBody",
           "start": 8,
-          "end": 49,
+          "end": 43,
           "loc": {
             "start": {
               "line": 1,
               "column": 8
             },
             "end": {
-              "line": 4,
+              "line": 3,
               "column": 1
             }
           },
           "body": [
             {
-              "type": "ClassPrivateProperty",
+              "type": "ClassProperty",
               "start": 12,
-              "end": 24,
+              "end": 41,
               "loc": {
                 "start": {
                   "line": 2,
@@ -87,124 +87,79 @@
                 },
                 "end": {
                   "line": 2,
-                  "column": 14
+                  "column": 31
                 }
               },
-              "readonly": true,
+              "declare": true,
               "static": false,
               "key": {
-                "type": "PrivateName",
-                "start": 21,
+                "type": "Identifier",
+                "start": 20,
                 "end": 23,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 11
+                    "column": 10
                   },
                   "end": {
                     "line": 2,
                     "column": 13
-                  }
-                },
-                "id": {
-                  "type": "Identifier",
-                  "start": 22,
-                  "end": 23,
-                  "loc": {
-                    "start": {
-                      "line": 2,
-                      "column": 12
-                    },
-                    "end": {
-                      "line": 2,
-                      "column": 13
-                    },
-                    "identifierName": "a"
                   },
-                  "name": "a"
-                }
-              },
-              "value": null
-            },
-            {
-              "type": "ClassPrivateProperty",
-              "start": 27,
-              "end": 47,
-              "loc": {
-                "start": {
-                  "line": 3,
-                  "column": 2
+                  "identifierName": "bar"
                 },
-                "end": {
-                  "line": 3,
-                  "column": 22
-                }
+                "name": "bar"
               },
-              "readonly": true,
-              "static": false,
-              "key": {
-                "type": "PrivateName",
-                "start": 36,
-                "end": 38,
-                "loc": {
-                  "start": {
-                    "line": 3,
-                    "column": 11
-                  },
-                  "end": {
-                    "line": 3,
-                    "column": 13
-                  }
-                },
-                "id": {
-                  "type": "Identifier",
-                  "start": 37,
-                  "end": 38,
-                  "loc": {
-                    "start": {
-                      "line": 3,
-                      "column": 12
-                    },
-                    "end": {
-                      "line": 3,
-                      "column": 13
-                    },
-                    "identifierName": "b"
-                  },
-                  "name": "b"
-                }
-              },
+              "computed": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
-                "start": 38,
-                "end": 46,
+                "start": 23,
+                "end": 31,
                 "loc": {
                   "start": {
-                    "line": 3,
+                    "line": 2,
                     "column": 13
                   },
                   "end": {
-                    "line": 3,
+                    "line": 2,
                     "column": 21
                   }
                 },
                 "typeAnnotation": {
                   "type": "TSStringKeyword",
-                  "start": 40,
-                  "end": 46,
+                  "start": 25,
+                  "end": 31,
                   "loc": {
                     "start": {
-                      "line": 3,
+                      "line": 2,
                       "column": 15
                     },
                     "end": {
-                      "line": 3,
+                      "line": 2,
                       "column": 21
                     }
                   }
                 }
               },
-              "value": null
+              "value": {
+                "type": "StringLiteral",
+                "start": 34,
+                "end": 40,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 24
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 30
+                  }
+                },
+                "extra": {
+                  "rawValue": "test",
+                  "raw": "\"test\""
+                },
+                "value": "test"
+              }
             }
           ]
         }
