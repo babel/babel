@@ -5,6 +5,8 @@ import ReplaceSupers, {
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 
+import * as ts from "./typescript";
+
 export function buildPrivateNamesMap(props) {
   const privateNamesMap = new Map();
   for (const prop of props) {
@@ -556,6 +558,8 @@ export function buildFieldsInitNodes(
   let needsClassRef = false;
 
   for (const prop of props) {
+    ts.assertFieldTransformed(prop);
+
     const isStatic = prop.node.static;
     const isInstance = !isStatic;
     const isPrivate = prop.isPrivate();
