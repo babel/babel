@@ -953,7 +953,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             variance,
             kind,
             allowSpread,
-            allowInexact == null ? !exact : allowInexact,
+            allowInexact ?? !exact,
           );
 
           if (propOrInexact === null) {
