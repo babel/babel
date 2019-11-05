@@ -23,15 +23,18 @@ import * as NodePath_comments from "./comments";
 
 const debug = buildDebug("babel");
 
+export const REMOVED = 1 << 0;
+export const SHOULD_STOP = 1 << 1;
+export const SHOULD_SKIP = 1 << 2;
+
 export default class NodePath {
   constructor(hub: HubInterface, parent: Object) {
     this.parent = parent;
     this.hub = hub;
     this.contexts = [];
-    this.data = Object.create(null);
-    this.shouldSkip = false;
-    this.shouldStop = false;
-    this.removed = false;
+    this.data = null;
+    // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
+    this._traverseFlags = 0;
     this.state = null;
     this.opts = null;
     this.skipKeys = null;
@@ -39,13 +42,10 @@ export default class NodePath {
     this.context = null;
     this.container = null;
     this.listKey = null;
-    this.inList = false;
-    this.parentKey = null;
     this.key = null;
     this.node = null;
     this.scope = null;
     this.type = null;
-    this.typeAnnotation = null;
   }
 
   parent: Object;
@@ -57,18 +57,16 @@ export default class NodePath {
   removed: boolean;
   state: any;
   opts: ?Object;
+  _traverseFlags: number;
   skipKeys: ?Object;
   parentPath: ?NodePath;
   context: TraversalContext;
   container: ?Object | Array<Object>;
   listKey: ?string;
-  inList: boolean;
-  parentKey: ?string;
   key: ?string;
   node: ?Object;
   scope: Scope;
   type: ?string;
-  typeAnnotation: ?Object;
 
   static get({ hub, parentPath, parent, container, listKey, key }): NodePath {
     if (!hub && parentPath) {
@@ -111,10 +109,16 @@ export default class NodePath {
   }
 
   setData(key: string, val: any): any {
+    if (this.data == null) {
+      this.data = Object.create(null);
+    }
     return (this.data[key] = val);
   }
 
   getData(key: string, def?: any): any {
+    if (this.data == null) {
+      this.data = Object.create(null);
+    }
     let val = this.data[key];
     if (val === undefined && def !== undefined) val = this.data[key] = def;
     return val;
@@ -151,6 +155,49 @@ export default class NodePath {
 
   toString() {
     return generator(this.node).code;
+  }
+
+  get inList() {
+    return !!this.listKey;
+  }
+
+  get parentKey() {
+    return this.listKey || this.key;
+  }
+
+  get shouldSkip() {
+    return !!(this._traverseFlags & SHOULD_SKIP);
+  }
+
+  set shouldSkip(v) {
+    if (v) {
+      this._traverseFlags |= SHOULD_SKIP;
+    } else {
+      this._traverseFlags &= ~SHOULD_SKIP;
+    }
+  }
+
+  get shouldStop() {
+    return !!(this._traverseFlags & SHOULD_STOP);
+  }
+
+  set shouldStop(v) {
+    if (v) {
+      this._traverseFlags |= SHOULD_STOP;
+    } else {
+      this._traverseFlags &= ~SHOULD_STOP;
+    }
+  }
+
+  get removed() {
+    return !!(this._traverseFlags & REMOVED);
+  }
+  set removed(v) {
+    if (v) {
+      this._traverseFlags |= REMOVED;
+    } else {
+      this._traverseFlags &= ~REMOVED;
+    }
   }
 }
 
