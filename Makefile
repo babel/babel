@@ -203,7 +203,7 @@ else
 	echo "Missing NPM_TOKEN env var"
 	exit 1
 endif
-	yarn lerna publish from-git --require-scripts --yes
+	yarn lerna publish from-git --yes
 	rm -f .npmrc
 	$(MAKE) clean
 
