@@ -17,6 +17,13 @@ See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.7.1 (2019-11-05)
+
+#### :bug: Bug Fix
+* `babel-types`
+  * [#10650](https://github.com/babel/babel/pull/10650) Revert "throw a TypeError if identifier validation fails (#10621)" ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-preset-env`
+  * [#10649](https://github.com/babel/babel/pull/10649) Fix(babel-preset-env): check api.caller is a function to avoid to thr… ([@love2me](https://github.com/love2me))
 
 ## v7.7.0 (2019-11-05)
 

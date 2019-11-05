@@ -161,6 +161,13 @@ export default class NodePath {
     return !!this.listKey;
   }
 
+  set inList(inList) {
+    if (!inList) {
+      this.listKey = null;
+    }
+    // ignore inList = true as it should depend on `listKey`
+  }
+
   get parentKey() {
     return this.listKey || this.key;
   }

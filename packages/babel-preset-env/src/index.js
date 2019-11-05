@@ -237,7 +237,7 @@ export default declare((api, opts) => {
       modules !== "auto" || !api.caller || !api.caller(supportsStaticESM),
     shouldTransformDynamicImport:
       modules !== "auto" || !api.caller || !api.caller(supportsDynamicImport),
-    shouldParseTopLevelAwait: api.caller(supportsTopLevelAwait),
+    shouldParseTopLevelAwait: !api.caller || api.caller(supportsTopLevelAwait),
   });
 
   const pluginNames = filterItems(

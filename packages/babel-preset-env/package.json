@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-env",
-  "version": "7.7.0",
+  "version": "7.7.1",
   "description": "A Babel preset for each environment.",
   "author": "Henry Zhu <hi@henryzoo.com>",
   "homepage": "https://babeljs.io/",
@@ -59,7 +59,7 @@
     "@babel/plugin-transform-template-literals": "^7.4.4",
     "@babel/plugin-transform-typeof-symbol": "^7.2.0",
     "@babel/plugin-transform-unicode-regex": "^7.7.0",
-    "@babel/types": "^7.7.0",
+    "@babel/types": "^7.7.1",
     "browserslist": "^4.6.0",
     "core-js-compat": "^3.1.1",
     "invariant": "^2.2.2",
