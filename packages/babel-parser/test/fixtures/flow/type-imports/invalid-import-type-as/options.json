@@ -1,3 +1,7 @@
 {
-  "throws": "Unexpected keyword 'debugger' (1:17)"
+  "sourceType": "module",
+  "plugins": [
+    "jsx",
+    "flow"
+  ]
 }

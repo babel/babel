@@ -1,4 +1,3 @@
 {
-  "plugins": [["flow", { "enums": true }]],
-  "throws": "Number enum members need to be initialized, e.g. `A = 1` in enum `E`. (2:2)"
+  "plugins": [["flow", { "enums": true }]]
 }

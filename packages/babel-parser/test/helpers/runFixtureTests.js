@@ -107,11 +107,19 @@ export function runThrowTestsWithEstree(fixturesPath, parseFunction) {
 }
 
 function save(test, ast) {
-  // Ensure that RegExp are serialized as strings
-  const toJSON = RegExp.prototype.toJSON;
-  RegExp.prototype.toJSON = RegExp.prototype.toString;
-  require("fs").writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  "));
-  RegExp.prototype.toJSON = toJSON;
+  // Ensure that RegExp and Errors are serialized as strings
+  forceToString(RegExp, () =>
+    forceToString(Error, () =>
+      fs.writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  ")),
+    ),
+  );
+}
+
+function forceToString(obj, cb) {
+  const { toJSON } = obj.prototype;
+  obj.prototype.toJSON = obj.prototype.toString;
+  cb();
+  obj.prototype.toJSON = toJSON;
 }
 
 function runTest(test, parseFunction) {
@@ -125,7 +133,7 @@ function runTest(test, parseFunction) {
 
   let ast;
   try {
-    ast = parseFunction(test.actual.code, opts);
+    ast = parseFunction(test.actual.code, { errorRecovery: true, ...opts });
   } catch (err) {
     if (opts.throws) {
       if (err.message === opts.throws) {
@@ -152,6 +160,7 @@ function runTest(test, parseFunction) {
   }
 
   if (ast.comments && !ast.comments.length) delete ast.comments;
+  if (ast.errors && !ast.errors.length) delete ast.errors;
 
   if (!test.expect.code && !opts.throws && !process.env.CI) {
     test.expect.loc += "on";
@@ -159,6 +168,20 @@ function runTest(test, parseFunction) {
   }
 
   if (opts.throws) {
+    if (process.env.OVERWRITE) {
+      const fn = path.dirname(test.expect.loc) + "/options.json";
+      test.options = test.options || {};
+      delete test.options.throws;
+      const contents = JSON.stringify(test.options, null, "  ");
+      if (contents === "{}") {
+        fs.unlinkSync(fn);
+      } else {
+        fs.writeFileSync(fn, JSON.stringify(test.options, null, "  "));
+      }
+      test.expect.loc += "on";
+      return save(test, ast);
+    }
+
     throw new Error(
       "Expected error message: " + opts.throws + ". But parsing succeeded.",
     );
@@ -175,7 +198,7 @@ function runTest(test, parseFunction) {
 }
 
 function ppJSON(v) {
-  v = v instanceof RegExp ? v.toString() : v;
+  v = v instanceof RegExp || v instanceof Error ? v.toString() : v;
   return JSON.stringify(v, null, 2);
 }
 
@@ -188,7 +211,12 @@ function addPath(str, pt) {
 }
 
 function misMatch(exp, act) {
-  if (exp instanceof RegExp || act instanceof RegExp) {
+  if (
+    exp instanceof RegExp ||
+    act instanceof RegExp ||
+    exp instanceof Error ||
+    act instanceof Error
+  ) {
     const left = ppJSON(exp);
     const right = ppJSON(act);
     if (left !== right) return left + " !== " + right;

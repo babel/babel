@@ -1,11 +1,4 @@
 {
-  "plugins": [
-    [
-      "flow",
-      {
-        "enums": true
-      }
-    ]
-  ],
+  "plugins": [["flow", { "enums": true }]],
   "sourceType": "module"
 }

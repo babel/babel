@@ -31,6 +31,10 @@ export default function traverse(
     }
   }
 
+  if (!t.VISITOR_KEYS[parent.type]) {
+    return;
+  }
+
   visitors.explode(opts);
 
   traverse.node(parent, opts, scope, state, parentPath);

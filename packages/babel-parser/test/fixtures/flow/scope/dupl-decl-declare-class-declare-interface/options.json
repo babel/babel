@@ -1,3 +1,7 @@
 {
-  "throws": "Identifier 'A' has already been declared (2:18)"
+  "sourceType": "module",
+  "plugins": [
+    "jsx",
+    "flow"
+  ]
 }

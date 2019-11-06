@@ -1,3 +1,5 @@
 {
-  "throws": "Dynamic imports require a parameter: import('a.js') (2:9)"
+  "plugins": [
+    "dynamicImport"
+  ]
 }

@@ -1,6 +1,9 @@
 // @flow
 
+/*:: declare var invariant; */
+
 import type { TokenType } from "../../tokenizer/types";
+import type State from "../../tokenizer/state";
 import { types as tt } from "../../tokenizer/types";
 import { types as ct } from "../../tokenizer/context";
 import * as N from "../../types";
@@ -25,6 +28,7 @@ import * as charCodes from "charcodes";
 type TsModifier =
   | "readonly"
   | "abstract"
+  | "declare"
   | "static"
   | "public"
   | "private"
@@ -124,6 +128,31 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return modifier;
       }
       return undefined;
+    }
+
+    /** Parses a list of modifiers, in any order.
+     *  If you need a specific order, you must call this function multiple times:
+     *    this.tsParseModifiers(["public"]);
+     *    this.tsParseModifiers(["abstract", "readonly"]);
+     */
+    tsParseModifiers<T: TsModifier>(
+      allowedModifiers: T[],
+    ): { [key: TsModifier]: ?true, __proto__: null } {
+      const modifiers = Object.create(null);
+
+      while (true) {
+        const startPos = this.state.start;
+        const modifier: ?T = this.tsParseModifier(allowedModifiers);
+
+        if (!modifier) break;
+
+        if (Object.hasOwnProperty.call(modifiers, modifier)) {
+          this.raise(startPos, `Duplicate modifier: '${modifier}'`);
+        }
+        modifiers[modifier] = true;
+      }
+
+      return modifiers;
     }
 
     tsIsListTerminator(kind: ParsingContext): boolean {
@@ -234,8 +263,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.expect(tt._import);
       this.expect(tt.parenL);
       if (!this.match(tt.string)) {
-        throw this.unexpected(
-          null,
+        this.raise(
+          this.state.start,
           "Argument in a type import must be a string literal",
         );
       }
@@ -371,13 +400,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             pattern.type !== "ObjectPattern" &&
             pattern.type !== "ArrayPattern"
           ) {
-            throw this.unexpected(
+            this.raise(
               pattern.start,
               "Name in a signature must be an Identifier, ObjectPattern or ArrayPattern," +
                 `instead got ${pattern.type}`,
             );
           }
-          return pattern;
+          return (pattern: any);
         },
       );
     }
@@ -402,7 +431,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.eat(tt.name) && this.match(tt.colon);
     }
 
-    tsTryParseIndexSignature(node: N.TsIndexSignature): ?N.TsIndexSignature {
+    tsTryParseIndexSignature(node: N.Node): ?N.TsIndexSignature {
       if (
         !(
           this.match(tt.bracketL) &&
@@ -642,7 +671,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node: N.TsLiteralType = this.startNode();
       const templateNode = this.parseTemplate(false);
       if (templateNode.expressions.length > 0) {
-        throw this.raise(
+        this.raise(
           templateNode.expressions[0].start,
           "Template literal types cannot have any substitution",
         );
@@ -1276,17 +1305,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return res;
     }
 
-    tsTryParseAndCatch<T>(f: () => T): ?T {
-      const state = this.state.clone();
-      try {
-        return f();
-      } catch (e) {
-        if (e instanceof SyntaxError) {
-          this.state = state;
-          return undefined;
-        }
-        throw e;
-      }
+    tsTryParseAndCatch<T: ?N.NodeBase>(f: () => T): ?T {
+      const result = this.tryParse(abort => f() || abort());
+
+      if (result.aborted || !result.node) return undefined;
+      if (result.error) this.state = result.failState;
+      return result.node;
     }
 
     tsTryParse<T>(f: () => ?T): ?T {
@@ -1558,12 +1582,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (accessibility) pp.accessibility = accessibility;
         if (readonly) pp.readonly = readonly;
         if (elt.type !== "Identifier" && elt.type !== "AssignmentPattern") {
-          throw this.raise(
+          this.raise(
             pp.start,
             "A parameter property may not be declared using a binding pattern.",
           );
         }
-        pp.parameter = elt;
+        pp.parameter = ((elt: any): N.Identifier | N.AssignmentPattern);
         return this.finishNode(pp, "TSParameterProperty");
       }
 
@@ -1597,11 +1621,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       super.parseFunctionBodyAndFinish(node, type, isMethod);
     }
 
-    checkFunctionStatementId(node: N.Function): void {
+    registerFunctionStatementId(node: N.Function): void {
       if (!node.body && node.id) {
+        // Function ids are validated after parsing their body.
+        // For bodyless function, we need to do it here.
         this.checkLVal(node.id, BIND_TS_AMBIENT, null, "function name");
       } else {
-        super.checkFunctionStatementId(...arguments);
+        super.registerFunctionStatementId(...arguments);
       }
     }
 
@@ -1844,49 +1870,48 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseClassMemberWithIsStatic(
       classBody: N.ClassBody,
-      member: any,
+      member: N.ClassMember | N.TsIndexSignature,
       state: { hadConstructor: boolean },
       isStatic: boolean,
       constructorAllowsSuper: boolean,
     ): void {
-      const methodOrProp: N.ClassMethod | N.ClassProperty = member;
-      const prop: N.ClassProperty = member;
-      const propOrIdx: N.ClassProperty | N.TsIndexSignature = member;
+      const modifiers = this.tsParseModifiers([
+        "abstract",
+        "readonly",
+        "declare",
+      ]);
 
-      let abstract = false,
-        readonly = false;
+      Object.assign(member, modifiers);
 
-      const mod = this.tsParseModifier(["abstract", "readonly"]);
-      switch (mod) {
-        case "readonly":
-          readonly = true;
-          abstract = !!this.tsParseModifier(["abstract"]);
-          break;
-        case "abstract":
-          abstract = true;
-          readonly = !!this.tsParseModifier(["readonly"]);
-          break;
-      }
+      const idx = this.tsTryParseIndexSignature(member);
+      if (idx) {
+        classBody.body.push(idx);
 
-      if (abstract) methodOrProp.abstract = true;
-      if (readonly) propOrIdx.readonly = true;
-
-      if (!abstract && !isStatic && !methodOrProp.accessibility) {
-        const idx = this.tsTryParseIndexSignature(member);
-        if (idx) {
-          classBody.body.push(idx);
-          return;
+        if (modifiers.abstract) {
+          this.raise(
+            member.start,
+            "Index signatures cannot have the 'abstract' modifier",
+          );
         }
-      }
+        if (isStatic) {
+          this.raise(
+            member.start,
+            "Index signatures cannot have the 'static' modifier",
+          );
+        }
+        if ((member: any).accessibility) {
+          this.raise(
+            member.start,
+            `Index signatures cannot have an accessibility modifier ('${
+              (member: any).accessibility
+            }')`,
+          );
+        }
 
-      if (readonly) {
-        // Must be a property (if not an index signature).
-        methodOrProp.static = isStatic;
-        this.parseClassPropertyName(prop);
-        this.parsePostMemberNameModifiers(methodOrProp);
-        this.pushClassProperty(classBody, prop);
         return;
       }
+
+      /*:: invariant(member.type !== "TSIndexSignature") */
 
       super.parseClassMemberWithIsStatic(
         classBody,
@@ -1902,6 +1927,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): void {
       const optional = this.eat(tt.question);
       if (optional) methodOrProp.optional = true;
+
+      if ((methodOrProp: any).readonly && this.match(tt.parenL)) {
+        this.raise(
+          methodOrProp.start,
+          "Class methods cannot have the 'readonly' modifier",
+        );
+      }
+
+      if ((methodOrProp: any).declare && this.match(tt.parenL)) {
+        this.raise(
+          methodOrProp.start,
+          "Class methods cannot have the 'declare' modifier",
+        );
+      }
     }
 
     // Note: The reason we do this in `parseExpressionStatement` and not `parseStatement`
@@ -1946,19 +1985,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         );
       }
 
-      const state = this.state.clone();
-      try {
-        return super.parseConditional(expr, noIn, startPos, startLoc);
-      } catch (err) {
-        if (!(err instanceof SyntaxError)) {
-          // istanbul ignore next: no such error is expected
-          throw err;
-        }
+      const result = this.tryParse(() =>
+        super.parseConditional(expr, noIn, startPos, startLoc),
+      );
 
-        this.state = state;
-        refNeedsArrowPos.start = err.pos || this.state.start;
+      if (!result.node) {
+        // $FlowIgnore
+        refNeedsArrowPos.start = result.error.pos || this.state.start;
         return expr;
       }
+      if (result.error) this.state = result.failState;
+      return result.node;
     }
 
     // Note: These "type casts" are *not* valid TS expressions.
@@ -2050,6 +2087,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseClassProperty(node: N.ClassProperty): N.ClassProperty {
       this.parseClassPropertyAnnotation(node);
+
+      if (node.declare && this.match(tt.equal)) {
+        this.raise(
+          this.state.start,
+          "'declare' class fields cannot have an initializer",
+        );
+      }
+
       return super.parseClassProperty(node);
     }
 
@@ -2161,80 +2206,97 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseMaybeAssign(...args): N.Expression {
       // Note: When the JSX plugin is on, type assertions (`<T> x`) aren't valid syntax.
 
-      let jsxError: ?SyntaxError;
+      let state: ?State;
+      let jsx;
+      let typeCast;
 
       if (this.match(tt.jsxTagStart)) {
-        const context = this.curContext();
-        assert(context === ct.j_oTag);
-        // Only time j_oTag is pushed is right after j_expr.
-        assert(this.state.context[this.state.context.length - 2] === ct.j_expr);
-
         // Prefer to parse JSX if possible. But may be an arrow fn.
-        const state = this.state.clone();
-        try {
-          return super.parseMaybeAssign(...args);
-        } catch (err) {
-          if (!(err instanceof SyntaxError)) {
-            // istanbul ignore next: no such error is expected
-            throw err;
-          }
+        state = this.state.clone();
 
-          this.state = state;
-          // Pop the context added by the jsxTagStart.
-          assert(this.curContext() === ct.j_oTag);
-          this.state.context.pop();
-          assert(this.curContext() === ct.j_expr);
-          this.state.context.pop();
-          jsxError = err;
+        jsx = this.tryParse(() => super.parseMaybeAssign(...args), state);
+        /*:: invariant(!jsx.aborted) */
+
+        if (!jsx.error) return jsx.node;
+
+        // Remove `tc.j_expr` and `tc.j_oTag` from context added
+        // by parsing `jsxTagStart` to stop the JSX plugin from
+        // messing with the tokens
+        const { context } = this.state;
+        if (context[context.length - 1] === ct.j_oTag) {
+          context.length -= 2;
+        } else if (context[context.length - 1] === ct.j_expr) {
+          context.length -= 1;
         }
       }
 
-      if (jsxError === undefined && !this.isRelational("<")) {
+      if (!(jsx && jsx.error) && !this.isRelational("<")) {
         return super.parseMaybeAssign(...args);
       }
 
       // Either way, we're looking at a '<': tt.jsxTagStart or relational.
 
-      let arrowExpression;
       let typeParameters: N.TsTypeParameterDeclaration;
-      const state = this.state.clone();
-      try {
+      state = state || this.state.clone();
+
+      const arrow = this.tryParse(abort => {
         // This is similar to TypeScript's `tryParseParenthesizedArrowFunctionExpression`.
         typeParameters = this.tsParseTypeParameters();
-        arrowExpression = super.parseMaybeAssign(...args);
+        const expr = super.parseMaybeAssign(...args);
+
         if (
-          arrowExpression.type !== "ArrowFunctionExpression" ||
-          (arrowExpression.extra && arrowExpression.extra.parenthesized)
+          expr.type !== "ArrowFunctionExpression" ||
+          (expr.extra && expr.extra.parenthesized)
         ) {
-          this.unexpected(); // Go to the catch block (needs a SyntaxError).
-        }
-      } catch (err) {
-        if (!(err instanceof SyntaxError)) {
-          // istanbul ignore next: no such error is expected
-          throw err;
+          abort();
         }
 
-        if (jsxError) {
-          throw jsxError;
+        // Correct TypeScript code should have at least 1 type parameter, but don't crash on bad code.
+        if (typeParameters && typeParameters.params.length !== 0) {
+          this.resetStartLocationFromNode(expr, typeParameters);
         }
+        expr.typeParameters = typeParameters;
+        return expr;
+      }, state);
 
+      if (!arrow.error && !arrow.aborted) return arrow.node;
+
+      if (!jsx) {
         // Try parsing a type cast instead of an arrow function.
         // This will never happen outside of JSX.
         // (Because in JSX the '<' should be a jsxTagStart and not a relational.
         assert(!this.hasPlugin("jsx"));
-        // Parsing an arrow function failed, so try a type cast.
-        this.state = state;
+
         // This will start with a type assertion (via parseMaybeUnary).
         // But don't directly call `this.tsParseTypeAssertion` because we want to handle any binary after it.
-        return super.parseMaybeAssign(...args);
+        typeCast = this.tryParse(() => super.parseMaybeAssign(...args), state);
+        /*:: invariant(!typeCast.aborted) */
+        if (!typeCast.error) return typeCast.node;
       }
 
-      // Correct TypeScript code should have at least 1 type parameter, but don't crash on bad code.
-      if (typeParameters && typeParameters.params.length !== 0) {
-        this.resetStartLocationFromNode(arrowExpression, typeParameters);
+      if (jsx && jsx.node) {
+        /*:: invariant(jsx.failState) */
+        this.state = jsx.failState;
+        return jsx.node;
       }
-      arrowExpression.typeParameters = typeParameters;
-      return arrowExpression;
+
+      if (arrow.node) {
+        /*:: invariant(arrow.failState) */
+        this.state = arrow.failState;
+        return arrow.node;
+      }
+
+      if (typeCast && typeCast.node) {
+        /*:: invariant(typeCast.failState) */
+        this.state = typeCast.failState;
+        return typeCast.node;
+      }
+
+      if (jsx && jsx.thrown) throw jsx.error;
+      if (arrow.thrown) throw arrow.error;
+      if (typeCast && typeCast.thrown) throw typeCast.error;
+
+      throw (jsx && jsx.error) || arrow.error || (typeCast && typeCast.error);
     }
 
     // Handle type assertions
@@ -2250,23 +2312,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.match(tt.colon)) {
         // This is different from how the TS parser does it.
         // TS uses lookahead. The Babel Parser parses it as a parenthesized expression and converts.
-        const state = this.state.clone();
-        try {
+
+        const result = this.tryParse(abort => {
           const returnType = this.tsParseTypeOrTypePredicateAnnotation(
             tt.colon,
           );
-          if (this.canInsertSemicolon() || !this.match(tt.arrow)) {
-            this.state = state;
-            return undefined;
-          }
-          node.returnType = returnType;
-        } catch (err) {
-          if (err instanceof SyntaxError) {
-            this.state = state;
-          } else {
-            // istanbul ignore next: no such error is expected
-            throw err;
-          }
+          if (this.canInsertSemicolon() || !this.match(tt.arrow)) abort();
+          return returnType;
+        });
+
+        if (result.aborted) return;
+
+        if (!result.thrown) {
+          if (result.error) this.state = result.failState;
+          node.returnType = result.node;
         }
       }
 
@@ -2277,13 +2336,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseAssignableListItemTypes(param: N.Pattern) {
       if (this.eat(tt.question)) {
         if (param.type !== "Identifier") {
-          throw this.raise(
+          this.raise(
             param.start,
             "A binding pattern parameter cannot be optional in an implementation signature.",
           );
         }
 
-        param.optional = true;
+        ((param: any): N.Identifier).optional = true;
       }
       const type = this.tsTryParseTypeAnnotation();
       if (type) param.typeAnnotation = type;

@@ -1,3 +1,5 @@
 {
-  "throws": "import() requires exactly one argument (1:0)"
+  "plugins": [
+    "dynamicImport"
+  ]
 }

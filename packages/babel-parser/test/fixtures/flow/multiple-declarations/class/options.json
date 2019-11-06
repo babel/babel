@@ -3,6 +3,5 @@
   "plugins": [
     "jsx",
     "flow"
-  ],
-  "throws": "Identifier 'C1' has already been declared (2:6)"
+  ]
 }

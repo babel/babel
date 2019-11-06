@@ -1,1 +1,1 @@
-class A { constructor() {} 'constructor'() }
+class A { constructor() {} 'constructor'() {} }

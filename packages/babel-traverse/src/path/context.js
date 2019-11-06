@@ -1,6 +1,7 @@
 // This file contains methods responsible for maintaining a TraversalContext.
 
 import traverse from "../index";
+import { SHOULD_SKIP, SHOULD_STOP } from "./index";
 
 export function call(key): boolean {
   const opts = this.opts;
@@ -43,7 +44,8 @@ export function _call(fns?: Array<Function>): boolean {
     // node has been replaced, it will have been requeued
     if (this.node !== node) return true;
 
-    if (this.shouldStop || this.shouldSkip || this.removed) return true;
+    // this.shouldSkip || this.shouldStop || this.removed
+    if (this._traverseFlags > 0) return true;
   }
 
   return false;
@@ -97,12 +99,15 @@ export function skip() {
 }
 
 export function skipKey(key) {
+  if (this.skipKeys == null) {
+    this.skipKeys = {};
+  }
   this.skipKeys[key] = true;
 }
 
 export function stop() {
-  this.shouldStop = true;
-  this.shouldSkip = true;
+  // this.shouldSkip = true; this.shouldStop = true;
+  this._traverseFlags |= SHOULD_SKIP | SHOULD_STOP;
 }
 
 export function setScope() {
@@ -122,10 +127,11 @@ export function setScope() {
 }
 
 export function setContext(context) {
-  this.shouldSkip = false;
-  this.shouldStop = false;
-  this.removed = false;
-  this.skipKeys = {};
+  if (this.skipKeys != null) {
+    this.skipKeys = {};
+  }
+  // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
+  this._traverseFlags = 0;
 
   if (context) {
     this.context = context;
@@ -220,9 +226,7 @@ export function pushContext(context) {
 }
 
 export function setup(parentPath, container, listKey, key) {
-  this.inList = !!listKey;
   this.listKey = listKey;
-  this.parentKey = listKey || key;
   this.container = container;
 
   this.parentPath = parentPath || this.parentPath;

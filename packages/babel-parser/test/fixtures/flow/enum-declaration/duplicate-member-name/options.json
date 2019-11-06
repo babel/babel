@@ -1,4 +1,3 @@
 {
-  "plugins": [["flow", { "enums": true }]],
-  "throws": "Enum member names need to be unique, but the name `A` has already been used before in enum `E`. (3:2)"
+  "plugins": [["flow", { "enums": true }]]
 }

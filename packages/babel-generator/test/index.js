@@ -197,7 +197,7 @@ describe("generation", function() {
 
     const id2 = fn.body.body[0].expression;
     id2.name += "2";
-    id2.loc.identiferName = "bar";
+    id2.loc.identifierName = "bar";
 
     const generated = generate(
       ast,

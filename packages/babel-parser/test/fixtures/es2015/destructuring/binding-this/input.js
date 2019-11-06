@@ -1,1 +1,1 @@
-var { this };
+var { this } = {};

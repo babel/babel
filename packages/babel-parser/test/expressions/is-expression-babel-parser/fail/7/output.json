@@ -1,0 +1,128 @@
+{
+  "type": "FunctionExpression",
+  "start": 0,
+  "end": 40,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 40
+    }
+  },
+  "id": null,
+  "generator": false,
+  "async": false,
+  "params": [
+    {
+      "type": "AssignmentPattern",
+      "start": 10,
+      "end": 23,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 10
+        },
+        "end": {
+          "line": 1,
+          "column": 23
+        }
+      },
+      "left": {
+        "type": "Identifier",
+        "start": 10,
+        "end": 11,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 10
+          },
+          "end": {
+            "line": 1,
+            "column": 11
+          },
+          "identifierName": "a"
+        },
+        "name": "a"
+      },
+      "right": {
+        "type": "StringLiteral",
+        "start": 14,
+        "end": 23,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 14
+          },
+          "end": {
+            "line": 1,
+            "column": 23
+          }
+        },
+        "extra": {
+          "rawValue": "default",
+          "raw": "\"default\""
+        },
+        "value": "default"
+      }
+    }
+  ],
+  "body": {
+    "type": "BlockStatement",
+    "start": 25,
+    "end": 40,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 25
+      },
+      "end": {
+        "line": 1,
+        "column": 40
+      }
+    },
+    "body": [],
+    "directives": [
+      {
+        "type": "Directive",
+        "start": 26,
+        "end": 39,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 26
+          },
+          "end": {
+            "line": 1,
+            "column": 39
+          }
+        },
+        "value": {
+          "type": "DirectiveLiteral",
+          "start": 26,
+          "end": 38,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 26
+            },
+            "end": {
+              "line": 1,
+              "column": 38
+            }
+          },
+          "value": "use strict",
+          "extra": {
+            "raw": "\"use strict\"",
+            "rawValue": "use strict"
+          }
+        }
+      }
+    ]
+  },
+  "errors": [
+    "SyntaxError: Illegal 'use strict' directive in function with non-simple parameter list (1:0)"
+  ]
+}

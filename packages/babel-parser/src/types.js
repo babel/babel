@@ -743,18 +743,19 @@ export type ClassPrivateMethod = NodeBase &
     computed: false,
   };
 
-export type ClassProperty = ClassMemberBase & {
-  type: "ClassProperty",
-  key: Expression,
-  value: ?Expression, // TODO: Not in spec that this is nullable.
+export type ClassProperty = ClassMemberBase &
+  DeclarationBase & {
+    type: "ClassProperty",
+    key: Expression,
+    value: ?Expression, // TODO: Not in spec that this is nullable.
 
-  typeAnnotation?: ?TypeAnnotationBase, // TODO: Not in spec
-  variance?: ?FlowVariance, // TODO: Not in spec
+    typeAnnotation?: ?TypeAnnotationBase, // TODO: Not in spec
+    variance?: ?FlowVariance, // TODO: Not in spec
 
-  // TypeScript only: (TODO: Not in spec)
-  readonly?: true,
-  definite?: true,
-};
+    // TypeScript only: (TODO: Not in spec)
+    readonly?: true,
+    definite?: true,
+  };
 
 export type ClassPrivateProperty = NodeBase & {
   type: "ClassPrivateProperty",

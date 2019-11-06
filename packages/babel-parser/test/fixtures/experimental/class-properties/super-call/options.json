@@ -1,4 +1,5 @@
 {
-  "plugins": ["classProperties"],
-  "throws": "super() is only valid inside a class constructor of a subclass. Maybe a typo in the method name ('constructor') or not extending another class? (4:12)"
+  "plugins": [
+    "classProperties"
+  ]
 }

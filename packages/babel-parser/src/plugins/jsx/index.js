@@ -82,7 +82,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let chunkStart = this.state.pos;
       for (;;) {
         if (this.state.pos >= this.length) {
-          this.raise(this.state.start, "Unterminated JSX contents");
+          throw this.raise(this.state.start, "Unterminated JSX contents");
         }
 
         const ch = this.input.charCodeAt(this.state.pos);
@@ -142,7 +142,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let chunkStart = ++this.state.pos;
       for (;;) {
         if (this.state.pos >= this.length) {
-          this.raise(this.state.start, "Unterminated string constant");
+          throw this.raise(this.state.start, "Unterminated string constant");
         }
 
         const ch = this.input.charCodeAt(this.state.pos);
@@ -279,13 +279,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.next();
           node = this.jsxParseExpressionContainer(node);
           if (node.expression.type === "JSXEmptyExpression") {
-            throw this.raise(
+            this.raise(
               node.start,
               "JSX attributes must only be assigned a non-empty expression",
             );
-          } else {
-            return node;
           }
+          return node;
 
         case tt.jsxTagStart:
         case tt.string:
@@ -485,12 +484,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.closingElement = closingElement;
       }
       node.children = children;
-      if (this.match(tt.relational) && this.state.value === "<") {
+      while (this.isRelational("<")) {
+        // In case we encounter an lt token here it will always be the start of
+        // jsx as the lt sign is not allowed in places that expect an expression
+        this.finishToken(tt.jsxTagStart);
+
         this.raise(
           this.state.start,
           "Adjacent JSX elements must be wrapped in an enclosing tag. " +
             "Did you want a JSX fragment <>...</>?",
         );
+
+        this.jsxParseElement();
       }
 
       return isFragment(openingElement)

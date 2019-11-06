@@ -136,7 +136,7 @@ helpers.AsyncGenerator = helper("7.0.0-beta.0")`
         Promise.resolve(wrappedAwait ? value.wrapped : value).then(
           function (arg) {
             if (wrappedAwait) {
-              resume("next", arg);
+              resume(key === "return" ? "return" : "next", arg);
               return
             }
 
@@ -238,6 +238,10 @@ helpers.asyncGeneratorDelegate = helper("7.0.0-beta.0")`
 
     if (typeof inner.return === "function") {
       iter.return = function (value) {
+        if (waiting) {
+          waiting = false;
+          return value;
+        }
         return pump("return", value);
       };
     }
