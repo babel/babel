@@ -40,7 +40,7 @@
     "@babel/template": "^7.6.0",
     "@babel/traverse": "^7.6.3",
     "@babel/types": "^7.6.3",
-    "convert-source-map": "^1.1.0",
+    "convert-source-map": "^1.7.0",
     "debug": "^4.1.0",
     "json5": "^2.1.0",
     "lodash": "^4.17.13",
