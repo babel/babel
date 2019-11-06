@@ -88,7 +88,6 @@ function webpackBuild(opts) {
       }),
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": '"production"',
-        "process.env": JSON.stringify({ NODE_ENV: "production" }),
         BABEL_VERSION: JSON.stringify(babelVersion),
         VERSION: JSON.stringify(version),
       }),
