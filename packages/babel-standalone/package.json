@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.7.1",
+  "version": "7.7.2",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "babel.js",
   "files": [
@@ -12,7 +12,7 @@
     "prepublishOnly": "cd ../.. && make prepublish-build-standalone"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.0",
+    "@babel/core": "^7.7.2",
     "@babel/helper-plugin-utils": "^7.0.0",
     "@babel/plugin-external-helpers": "^7.2.0",
     "@babel/plugin-proposal-async-generator-functions": "^7.7.0",
@@ -96,11 +96,11 @@
     "@babel/plugin-transform-strict-mode": "^7.2.0",
     "@babel/plugin-transform-template-literals": "^7.4.4",
     "@babel/plugin-transform-typeof-symbol": "^7.2.0",
-    "@babel/plugin-transform-typescript": "^7.7.0",
+    "@babel/plugin-transform-typescript": "^7.7.2",
     "@babel/plugin-transform-unicode-regex": "^7.7.0",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.7.0",
-    "@babel/preset-typescript": "^7.7.0"
+    "@babel/preset-typescript": "^7.7.2"
   },
   "keywords": [
     "babel",

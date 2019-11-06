@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-env-standalone",
-  "version": "7.7.1",
+  "version": "7.7.2",
   "description": "Standalone build of babel-prest-env for use in non-Node.js environments.",
   "main": "babel-preset-env.js",
   "files": [
@@ -17,7 +17,7 @@
     "@babel/plugin-transform-named-capturing-groups-regex": "^7.7.0",
     "@babel/plugin-transform-new-target": "^7.4.4",
     "@babel/preset-env": "^7.7.1",
-    "@babel/standalone": "^7.7.1"
+    "@babel/standalone": "^7.7.2"
   },
   "keywords": [
     "babel",
