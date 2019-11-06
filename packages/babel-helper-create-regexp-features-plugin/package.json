@@ -6,7 +6,7 @@
   "description": "Compile ESNext Regular Expressions to ES5",
   "repository": {
     "type": "git",
-    "repository": "https://github.com/babel/babel",
+    "url": "https://github.com/babel/babel",
     "directory": "packages/babel-helper-create-regexp-features-plugin"
   },
   "main": "lib/index.js",
