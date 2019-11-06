@@ -2061,6 +2061,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return node.operator === "=";
 
         case "ParenthesizedExpression":
+        case "TypeCastExpression":
           return this.isAssignable(node.expression);
 
         case "MemberExpression":
