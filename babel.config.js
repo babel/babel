@@ -11,6 +11,7 @@ module.exports = function(api) {
     exclude: ["transform-typeof-symbol"],
   };
   const envOpts = Object.assign({}, envOptsNoTargets);
+  let transformRuntimeOpts = null;
 
   let convertESM = true;
   let ignoreLib = true;
@@ -48,6 +49,17 @@ module.exports = function(api) {
         node: "current",
       };
       break;
+  }
+
+  if (includeRuntime) {
+    const babelRuntimePackageJSONPath = require.resolve(
+      "@babel/runtime/package.json"
+    );
+    const path = require("path");
+    transformRuntimeOpts = {
+      version: require(babelRuntimePackageJSONPath).version,
+      absoluteRuntime: path.dirname(babelRuntimePackageJSONPath),
+    };
   }
 
   const config = {
@@ -123,10 +135,7 @@ module.exports = function(api) {
         ],
         plugins: [
           includeRuntime
-            ? [
-                "@babel/transform-runtime",
-                { version: require("@babel/runtime/package").version },
-              ]
+            ? ["@babel/transform-runtime", transformRuntimeOpts]
             : null,
         ].filter(Boolean),
       },
