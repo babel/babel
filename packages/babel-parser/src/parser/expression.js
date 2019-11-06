@@ -384,7 +384,7 @@ export default class ExpressionParser extends LValParser {
          * so for ?? operator we need to check in this case the right expression to have parenthesis
          * second case a && b ?? c
          * here a && b => This is considered as a logical expression in the ast tree
-         * c => identifer
+         * c => identifier
          * so now here for ?? operator we need to check the left expression to have parenthesis
          * if the parenthesis is missing we raise an error and throw it
          */
