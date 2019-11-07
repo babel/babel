@@ -680,6 +680,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSLiteralType");
     }
 
+    tsParseThisTypeOrThisTypePredicate(): N.TsThisType | N.TsTypePredicate {
+      const thisKeyword = this.tsParseThisTypeNode();
+      if (this.isContextual("is") && !this.hasPrecedingLineBreak()) {
+        return this.tsParseThisTypePredicate(thisKeyword);
+      } else {
+        return thisKeyword;
+      }
+    }
+
     tsParseNonArrayType(): N.TsType {
       switch (this.state.type) {
         case tt.name:
@@ -715,14 +724,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             return this.finishNode(node, "TSLiteralType");
           }
           break;
-        case tt._this: {
-          const thisKeyword = this.tsParseThisTypeNode();
-          if (this.isContextual("is") && !this.hasPrecedingLineBreak()) {
-            return this.tsParseThisTypePredicate(thisKeyword);
-          } else {
-            return thisKeyword;
-          }
-        }
+        case tt._this:
+          return this.tsParseThisTypeOrThisTypePredicate();
         case tt._typeof:
           return this.tsParseTypeQuery();
         case tt._import:
@@ -937,9 +940,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.tsParseTypePredicateAsserts.bind(this),
         );
 
-        const typePredicateVariable =
-          this.tsIsIdentifier() &&
-          this.tsTryParse(this.tsParseTypePredicatePrefix.bind(this));
+        let typePredicateVariable = null;
+        if (this.tsIsIdentifier()) {
+          // TypePredicate
+          // : foo is type
+          typePredicateVariable = this.tsTryParse(
+            this.tsParseTypePredicatePrefix.bind(this),
+          );
+        } else if (asserts && this.match(tt._this)) {
+          // When asserts is false, thisKeyword is handled by tsParseNonArraytype
+          // TypePredicate
+          // : this is type
+          typePredicateVariable = this.tsTryParse(
+            this.tsParseThisTypeOrThisTypePredicate.bind(this),
+          );
+        }
 
         if (!typePredicateVariable) {
           if (!asserts) {
@@ -947,15 +962,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             return this.tsParseTypeAnnotation(/* eatColon */ false, t);
           }
 
-          // : asserts foo
           const node = this.startNodeAtNode(t);
-          node.parameterName = this.parseIdentifier();
+          if (this.match(tt._this)) {
+            // : asserts this
+            node.parameterName = this.tsParseThisTypeNode();
+          } else {
+            // : asserts foo
+            node.parameterName = this.parseIdentifier();
+          }
           node.asserts = asserts;
           t.typeAnnotation = this.finishNode(node, "TSTypePredicate");
           return this.finishNode(t, "TSTypeAnnotation");
         }
 
-        // : foo is type
+        // : asserts TypePredicate
         const type = this.tsParseTypeAnnotation(/* eatColon */ false);
         const node = this.startNodeAtNode(t);
         node.parameterName = typePredicateVariable;
@@ -997,7 +1017,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (
         id.name !== "asserts" ||
         this.hasPrecedingLineBreak() ||
-        !this.tsIsIdentifier()
+        (!this.tsIsIdentifier() && !this.match(tt._this))
       ) {
         return false;
       }

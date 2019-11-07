@@ -1,0 +1,263 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 40,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 3,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 40,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 3,
+        "column": 1
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 40,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 7,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 7
+            },
+            "identifierName": "C"
+          },
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 8,
+          "end": 40,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 8
+            },
+            "end": {
+              "line": 3,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "TSDeclareMethod",
+              "start": 12,
+              "end": 38,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 28
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 12,
+                "end": 13,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 3
+                  },
+                  "identifierName": "m"
+                },
+                "name": "m"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "returnType": {
+                "type": "TSTypeAnnotation",
+                "start": 15,
+                "end": 37,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 27
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSTypePredicate",
+                  "start": 15,
+                  "end": 37,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 27
+                    }
+                  },
+                  "parameterName": {
+                    "type": "TSTypePredicate",
+                    "start": 25,
+                    "end": 34,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 24
+                      }
+                    },
+                    "parameterName": {
+                      "type": "TSThisType",
+                      "start": 25,
+                      "end": 29,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 15
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 19
+                        }
+                      }
+                    },
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start": 33,
+                      "end": 34,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 23
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 24
+                        }
+                      },
+                      "typeAnnotation": {
+                        "type": "TSTypeReference",
+                        "start": 33,
+                        "end": 34,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 23
+                          },
+                          "end": {
+                            "line": 2,
+                            "column": 24
+                          }
+                        },
+                        "typeName": {
+                          "type": "Identifier",
+                          "start": 33,
+                          "end": 34,
+                          "loc": {
+                            "start": {
+                              "line": 2,
+                              "column": 23
+                            },
+                            "end": {
+                              "line": 2,
+                              "column": 24
+                            },
+                            "identifierName": "C"
+                          },
+                          "name": "C"
+                        }
+                      }
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start": 35,
+                    "end": 37,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 27
+                      }
+                    },
+                    "typeAnnotation": {
+                      "type": "TSTypeLiteral",
+                      "start": 35,
+                      "end": 37,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 25
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 27
+                        }
+                      },
+                      "members": []
+                    }
+                  },
+                  "asserts": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
