@@ -1013,6 +1013,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return false;
       }
 
+      const containsEsc = this.state.containsEsc;
+
       const id = this.parseIdentifier();
       if (
         id.name !== "asserts" ||
@@ -1020,6 +1022,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         (!this.tsIsIdentifier() && !this.match(tt._this))
       ) {
         return false;
+      }
+
+      if (containsEsc) {
+        this.raise(id.start, "Escape sequence in keyword asserts");
       }
 
       return true;
