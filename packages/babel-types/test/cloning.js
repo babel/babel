@@ -80,6 +80,7 @@ describe("cloneNode", function() {
         typeAnnotation: t.anyTypeAnnotation(),
       }),
     ]);
+    node.loc = {};
     const cloned = t.cloneNode(node, /* deep */ false, /* withoutLoc */ true);
     expect(cloned.loc).toBeNull();
   });
@@ -91,6 +92,7 @@ describe("cloneNode", function() {
         typeAnnotation: t.anyTypeAnnotation(),
       }),
     ]);
+    node.loc = {};
     const cloned = t.cloneNode(node, /* deep */ true, /* withoutLoc */ true);
     expect(cloned.loc).toBeNull();
   });
