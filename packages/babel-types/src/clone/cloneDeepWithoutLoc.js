@@ -6,7 +6,5 @@ import cloneNode from "./cloneNode";
  * excluding `_private` and location properties.
  */
 export default function cloneDeepWithoutLoc<T: Object>(node: T): T {
-  const newNode = cloneNode(node, /* deep */ true, /* withoutLoc */ true);
-
-  return newNode;
+  return cloneNode(node, /* deep */ true, /* withoutLoc */ true);
 }

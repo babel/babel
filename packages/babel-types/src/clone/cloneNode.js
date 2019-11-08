@@ -27,6 +27,8 @@ function cloneIfNodeOrArray(obj, deep) {
 /**
  * Create a clone of a `node` including only properties belonging to the node.
  * If the second parameter is `false`, cloneNode performs a shallow clone.
+ * If the third parameter is `true`, cloneNode performs a shallow clone
+ * of a `node` excluding `_private` location properties.
  */
 export default function cloneNode<T: Object>(
   node: T,
@@ -64,7 +66,11 @@ export default function cloneNode<T: Object>(
   }
 
   if (has(node, "loc")) {
-    newNode.loc = node.loc;
+    if (withoutLoc) {
+      newNode.loc = null;
+    } else {
+      newNode.loc = node.loc;
+    }
   }
   if (has(node, "leadingComments")) {
     newNode.leadingComments = node.leadingComments;
@@ -79,10 +85,6 @@ export default function cloneNode<T: Object>(
     newNode.extra = {
       ...node.extra,
     };
-  }
-
-  if (withoutLoc) {
-    newNode.loc = null;
   }
 
   return newNode;
