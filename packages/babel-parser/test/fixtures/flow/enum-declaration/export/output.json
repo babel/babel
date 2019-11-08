@@ -79,16 +79,16 @@
           },
           "body": {
             "type": "EnumStringBody",
-            "start": 15,
-            "end": 15,
+            "start": 14,
+            "end": 16,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 15
+                "column": 14
               },
               "end": {
                 "line": 1,
-                "column": 15
+                "column": 16
               }
             },
             "explicitType": false,
@@ -143,16 +143,16 @@
           },
           "body": {
             "type": "EnumStringBody",
-            "start": 41,
-            "end": 41,
+            "start": 40,
+            "end": 42,
             "loc": {
               "start": {
                 "line": 3,
-                "column": 23
+                "column": 22
               },
               "end": {
                 "line": 3,
-                "column": 23
+                "column": 24
               }
             },
             "explicitType": false,
