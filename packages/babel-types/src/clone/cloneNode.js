@@ -28,7 +28,11 @@ function cloneIfNodeOrArray(obj, deep) {
  * Create a clone of a `node` including only properties belonging to the node.
  * If the second parameter is `false`, cloneNode performs a shallow clone.
  */
-export default function cloneNode<T: Object>(node: T, deep: boolean = true): T {
+export default function cloneNode<T: Object>(
+  node: T,
+  deep: boolean = true,
+  withoutLoc: boolean = false,
+): T {
   if (!node) return node;
 
   const { type } = node;
@@ -75,6 +79,10 @@ export default function cloneNode<T: Object>(node: T, deep: boolean = true): T {
     newNode.extra = {
       ...node.extra,
     };
+  }
+
+  if (withoutLoc) {
+    newNode.loc = null;
   }
 
   return newNode;
