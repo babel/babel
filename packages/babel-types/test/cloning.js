@@ -93,6 +93,7 @@ describe("cloneNode", function() {
       }),
     ]);
     node.loc = {};
+    node.declarations[0].id.loc = {};
     const cloned = t.cloneNode(node, /* deep */ true, /* withoutLoc */ true);
     expect(cloned.loc).toBeNull();
   });
