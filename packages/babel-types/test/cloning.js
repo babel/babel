@@ -73,6 +73,17 @@ describe("cloneNode", function() {
     );
   });
 
+  it("should support shallow cloning without loc", function() {
+    const node = t.variableDeclaration("let", [
+      t.variableDeclarator({
+        ...t.identifier("value"),
+        typeAnnotation: t.anyTypeAnnotation(),
+      }),
+    ]);
+    const cloned = t.cloneNode(node, /* deep */ false, /* withoutLoc */ true);
+    expect(cloned.loc).toBeNull();
+  });
+
   it("should support deep cloning without loc", function() {
     const node = t.variableDeclaration("let", [
       t.variableDeclarator({
@@ -81,12 +92,6 @@ describe("cloneNode", function() {
       }),
     ]);
     const cloned = t.cloneNode(node, /* deep */ true, /* withoutLoc */ true);
-    expect(cloned.declarations[0].id.typeAnnotation).toEqual(
-      node.declarations[0].id.typeAnnotation,
-    );
-    expect(cloned.declarations[0].id.typeAnnotation).not.toBe(
-      node.declarations[0].id.typeAnnotation,
-    );
     expect(cloned.loc).toBeNull();
   });
 });
