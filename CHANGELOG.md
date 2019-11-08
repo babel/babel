@@ -17,6 +17,11 @@ See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.7.3 (2019-11-08)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#10682](https://github.com/babel/babel/pull/10682) Don't recover from "adjacent jsx elements" parser error ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.7.2 (2019-11-07)
 
 #### :bug: Bug Fix
