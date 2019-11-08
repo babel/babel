@@ -135,9 +135,9 @@ lines.push(
   // clone/
   `declare function clone<T>(n: T): T;`,
   `declare function cloneDeep<T>(n: T): T;`,
+  `declare function cloneDeepWithoutLoc<T>(n: T): T;`,
   `declare function cloneNode<T>(n: T, deep?: boolean, withoutLoc?: boolean): T;`,
   `declare function cloneWithoutLoc<T>(n: T): T;`,
-  `declare function cloneDeepWithoutLoc<T>(n: T): T;`,
 
   // comments/
   `declare type CommentTypeShorthand = 'leading' | 'inner' | 'trailing'`,
