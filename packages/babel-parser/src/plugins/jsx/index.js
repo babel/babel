@@ -484,18 +484,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.closingElement = closingElement;
       }
       node.children = children;
-      while (this.isRelational("<")) {
-        // In case we encounter an lt token here it will always be the start of
-        // jsx as the lt sign is not allowed in places that expect an expression
-        this.finishToken(tt.jsxTagStart);
-
-        this.raise(
+      if (this.isRelational("<")) {
+        throw this.raise(
           this.state.start,
           "Adjacent JSX elements must be wrapped in an enclosing tag. " +
             "Did you want a JSX fragment <>...</>?",
         );
-
-        this.jsxParseElement();
       }
 
       return isFragment(openingElement)
