@@ -940,21 +940,25 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.tsParseTypePredicateAsserts.bind(this),
         );
 
-        let typePredicateVariable = null;
-        if (this.tsIsIdentifier()) {
-          // TypePredicate
-          // : foo is type
-          typePredicateVariable = this.tsTryParse(
-            this.tsParseTypePredicatePrefix.bind(this),
-          );
-        } else if (asserts && this.match(tt._this)) {
-          // When asserts is false, thisKeyword is handled by tsParseNonArraytype
-          // TypePredicate
-          // : this is type
-          typePredicateVariable = this.tsTryParse(
-            this.tsParseThisTypeOrThisTypePredicate.bind(this),
-          );
+        if (asserts && this.match(tt._this)) {
+          // When asserts is false, thisKeyword is handled by tsParseNonArrayType
+          const node = this.startNodeAtNode(t);
+          // : asserts this is type
+          let thisTypePredicate = this.tsParseThisTypeOrThisTypePredicate();
+          // if it turns out to be a `TSThisType`, wrap it with `TSTypePredicate`
+          // : asserts this
+          if (thisTypePredicate.type === "TSThisType") {
+            node.parameterName = thisTypePredicate;
+            node.asserts = true;
+            thisTypePredicate = this.finishNode(node, "TSTypePredicate");
+          }
+          t.typeAnnotation = thisTypePredicate;
+          return this.finishNode(t, "TSTypeAnnotation");
         }
+
+        const typePredicateVariable =
+          this.tsIsIdentifier() &&
+          this.tsTryParse(this.tsParseTypePredicatePrefix.bind(this));
 
         if (!typePredicateVariable) {
           if (!asserts) {
@@ -963,19 +967,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
 
           const node = this.startNodeAtNode(t);
-          if (this.match(tt._this)) {
-            // : asserts this
-            node.parameterName = this.tsParseThisTypeNode();
-          } else {
-            // : asserts foo
-            node.parameterName = this.parseIdentifier();
-          }
+          // : asserts foo
+          node.parameterName = this.parseIdentifier();
           node.asserts = asserts;
           t.typeAnnotation = this.finishNode(node, "TSTypePredicate");
           return this.finishNode(t, "TSTypeAnnotation");
         }
 
-        // : asserts TypePredicate
+        // : asserts foo is type
         const type = this.tsParseTypeAnnotation(/* eatColon */ false);
         const node = this.startNodeAtNode(t);
         node.parameterName = typePredicateVariable;
