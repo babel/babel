@@ -3,10 +3,6 @@ import { parse } from "@babel/parser";
 import generate from "@babel/generator";
 import * as t from "@babel/types";
 
-function generateCode(path) {
-  return generate(path.parentPath.node).code;
-}
-
 describe("path/replacement", function() {
   describe("replaceWith", function() {
     it("replaces declaration in ExportDefaultDeclaration node", function() {
@@ -107,18 +103,14 @@ describe("path/replacement", function() {
       const ast = parse(`<div><span><p></p><h></h></span></div>`, {
         plugins: ["jsx"],
       });
-      let path;
       traverse(ast, {
-        Program: _path => {
-          path = _path.get("body.0");
-        },
         JSXElement: path => {
           if (path.node.openingElement.name.name === "span") {
             path.replaceWithMultiple(path.node.children.filter(t.isJSXElement));
           }
         },
       });
-      expect(generateCode(path)).toBe("<div><p></p><h></h></div>;");
+      expect(generate(ast).code).toBe("<div><p></p><h></h></div>;");
     });
   });
 });
