@@ -73,7 +73,10 @@ commander.option(
   "Do not include superfluous whitespace characters and line terminators.",
   booleanify,
 );
-commander.option("--minified [true|false]", "Save as many bytes when printing.");
+commander.option(
+  "--minified [true|false]",
+  "Save as many bytes when printing.",
+);
 commander.option(
   "--auxiliary-comment-before [string]",
   "Print a comment before any injected non-user code.",
