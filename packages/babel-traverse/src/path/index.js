@@ -199,6 +199,7 @@ export default class NodePath {
   get removed() {
     return !!(this._traverseFlags & REMOVED);
   }
+
   set removed(v) {
     if (v) {
       this._traverseFlags |= REMOVED;

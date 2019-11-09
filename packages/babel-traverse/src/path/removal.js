@@ -40,9 +40,16 @@ export function _remove() {
 }
 
 export function _markRemoved() {
+  if (this.removed) return;
+
   // this.shouldSkip = true; this.removed = true;
   this._traverseFlags |= SHOULD_SKIP | REMOVED;
   this.node = null;
+
+  const queue = this.context?.child?.queue;
+  if (queue) {
+    for (const path of queue) path._markRemoved();
+  }
 }
 
 export function _assertUnremoved() {

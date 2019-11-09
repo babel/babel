@@ -9,6 +9,9 @@ export default class TraversalContext {
     this.scope = scope;
     this.state = state;
     this.opts = opts;
+
+    const parentContext = parentPath?.context;
+    if (parentContext) parentContext.child = this;
   }
 
   parentPath: NodePath;
@@ -16,6 +19,7 @@ export default class TraversalContext {
   state;
   opts;
   queue: ?Array<NodePath> = null;
+  child: ?TraversalContext = null;
 
   /**
    * This method does a simple check to determine whether or not we really need to attempt
@@ -150,6 +154,8 @@ export default class TraversalContext {
   visit(node, key) {
     const nodes = node[key];
     if (!nodes) return false;
+
+    if (this.parentPath?.removed) return false;
 
     if (Array.isArray(nodes)) {
       return this.visitMultiple(nodes, node, key);

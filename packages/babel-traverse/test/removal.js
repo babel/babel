@@ -33,4 +33,46 @@ describe("removal", function() {
       expect(generateCode(rootPath)).toBe("x = () => {};");
     });
   });
+
+  it("can remove during deep traversal without error", function() {
+    const ast = parse(`const { foo } = props;`);
+
+    let calls = 0;
+    traverse(ast, {
+      ObjectPattern(path) {
+        // Removing the declarator removes the declaration.
+        path.parentPath.remove();
+      },
+
+      Expression: {
+        exit() {
+          calls++;
+        },
+      },
+    });
+
+    expect(calls).toBe(0);
+    expect(generate(ast).code).toBe("");
+  });
+
+  it("can remove during reallly deep traversal without error", function() {
+    const ast = parse(`const { foo } = props;`);
+
+    let calls = 0;
+    traverse(ast, {
+      ObjectPattern(path) {
+        // Removing the declaration.
+        path.parentPath.parentPath.remove();
+      },
+
+      Expression: {
+        exit() {
+          calls++;
+        },
+      },
+    });
+
+    expect(calls).toBe(0);
+    expect(generate(ast).code).toBe("");
+  });
 });
