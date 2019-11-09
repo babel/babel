@@ -1227,6 +1227,7 @@ export type TsTypePredicate = TsTypeBase & {
   type: "TSTypePredicate",
   parameterName: Identifier | TsThisType,
   typeAnnotation: TsTypeAnnotation,
+  asserts?: boolean,
 };
 
 // `typeof` operator
