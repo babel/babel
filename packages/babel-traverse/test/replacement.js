@@ -103,7 +103,7 @@ describe("path/replacement", function() {
     });
   });
   describe("replaceWithMultiple", () => {
-    it("ReplaceWithMultiple for a JSXElement with a JSXElement parent", () => {
+    it("does not add extra parentheses for a JSXElement with a JSXElement parent", () => {
       const ast = parse(`<div><span><p></p><h></h></span></div>`, {
         plugins: ["jsx"],
       });
