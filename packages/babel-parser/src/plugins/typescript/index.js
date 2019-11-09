@@ -1008,23 +1008,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTypePredicateAsserts(): boolean {
-      if (!this.tsIsIdentifier()) {
+      if (
+        !this.match(tt.name) ||
+        this.state.value !== "asserts" ||
+        this.hasPrecedingLineBreak()
+      ) {
         return false;
       }
-
       const containsEsc = this.state.containsEsc;
-
-      const id = this.parseIdentifier();
-      if (
-        id.name !== "asserts" ||
-        this.hasPrecedingLineBreak() ||
-        (!this.tsIsIdentifier() && !this.match(tt._this))
-      ) {
+      this.next();
+      if (!this.match(tt.name) && !this.match(tt._this)) {
         return false;
       }
 
       if (containsEsc) {
-        this.raise(id.start, "Escape sequence in keyword asserts");
+        this.raise(
+          this.state.lastTokStart,
+          "Escape sequence in keyword asserts",
+        );
       }
 
       return true;
