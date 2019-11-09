@@ -203,7 +203,8 @@
                         "name": "Foo"
                       }
                     }
-                  }
+                  },
+                  "asserts": true
                 }
               },
               "body": {
@@ -360,7 +361,8 @@
                           "name": "Foo"
                         }
                       }
-                    }
+                    },
+                    "asserts": true
                   }
                 },
                 "id": null,

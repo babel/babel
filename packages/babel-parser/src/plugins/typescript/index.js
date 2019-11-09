@@ -942,15 +942,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         if (asserts && this.match(tt._this)) {
           // When asserts is false, thisKeyword is handled by tsParseNonArrayType
-          const node = this.startNodeAtNode(t);
           // : asserts this is type
           let thisTypePredicate = this.tsParseThisTypeOrThisTypePredicate();
           // if it turns out to be a `TSThisType`, wrap it with `TSTypePredicate`
           // : asserts this
           if (thisTypePredicate.type === "TSThisType") {
-            node.parameterName = thisTypePredicate;
+            const node: N.TsTypePredicate = this.startNodeAtNode(t);
+            node.parameterName = (thisTypePredicate: N.TsThisType);
             node.asserts = true;
             thisTypePredicate = this.finishNode(node, "TSTypePredicate");
+          } else {
+            (thisTypePredicate: N.TsTypePredicate).asserts = true;
           }
           t.typeAnnotation = thisTypePredicate;
           return this.finishNode(t, "TSTypeAnnotation");
@@ -966,7 +968,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             return this.tsParseTypeAnnotation(/* eatColon */ false, t);
           }
 
-          const node = this.startNodeAtNode(t);
+          const node: N.TsTypePredicate = this.startNodeAtNode(t);
           // : asserts foo
           node.parameterName = this.parseIdentifier();
           node.asserts = asserts;
