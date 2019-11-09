@@ -1,3 +1,4 @@
-class C {
-  m(): asserts this is C {};
+class Foo {
+  isBar(): asserts this is Foo {}
+  isBaz = (): asserts this is Foo => {}
 }

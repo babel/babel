@@ -1,1 +1,3 @@
-declare function assertIsString(value: unknown): asserts value is string;
+class C {
+  assertIsString(value: unknown): asserts value is string {}
+}

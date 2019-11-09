@@ -77,9 +77,9 @@
           },
           "body": [
             {
-              "type": "TSDeclareMethod",
+              "type": "ClassMethod",
               "start": 12,
-              "end": 33,
+              "end": 32,
               "loc": {
                 "start": {
                   "line": 2,
@@ -87,7 +87,7 @@
                 },
                 "end": {
                   "line": 2,
-                  "column": 23
+                  "column": 22
                 }
               },
               "static": false,
@@ -117,7 +117,7 @@
               "returnType": {
                 "type": "TSTypeAnnotation",
                 "start": 15,
-                "end": 32,
+                "end": 29,
                 "loc": {
                   "start": {
                     "line": 2,
@@ -125,13 +125,13 @@
                   },
                   "end": {
                     "line": 2,
-                    "column": 22
+                    "column": 19
                   }
                 },
                 "typeAnnotation": {
                   "type": "TSTypePredicate",
                   "start": 15,
-                  "end": 32,
+                  "end": 29,
                   "loc": {
                     "start": {
                       "line": 2,
@@ -139,7 +139,7 @@
                     },
                     "end": {
                       "line": 2,
-                      "column": 22
+                      "column": 19
                     }
                   },
                   "parameterName": {
@@ -157,39 +157,25 @@
                       }
                     }
                   },
-                  "typeAnnotation": {
-                    "type": "TSTypeAnnotation",
-                    "start": 30,
-                    "end": 32,
-                    "loc": {
-                      "start": {
-                        "line": 2,
-                        "column": 20
-                      },
-                      "end": {
-                        "line": 2,
-                        "column": 22
-                      }
-                    },
-                    "typeAnnotation": {
-                      "type": "TSTypeLiteral",
-                      "start": 30,
-                      "end": 32,
-                      "loc": {
-                        "start": {
-                          "line": 2,
-                          "column": 20
-                        },
-                        "end": {
-                          "line": 2,
-                          "column": 22
-                        }
-                      },
-                      "members": []
-                    }
-                  },
                   "asserts": true
                 }
+              },
+              "body": {
+                "type": "BlockStatement",
+                "start": 30,
+                "end": 32,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 20
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 22
+                  }
+                },
+                "body": [],
+                "directives": []
               }
             }
           ]
