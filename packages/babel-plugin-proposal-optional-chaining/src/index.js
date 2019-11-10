@@ -86,6 +86,10 @@ export default declare((api, options) => {
                 context = object;
               }
 
+              if (t.isSuper(context)) {
+                context = t.thisExpression();
+              }
+
               node.arguments.unshift(t.cloneNode(context));
               node.callee = t.memberExpression(
                 node.callee,
