@@ -223,7 +223,7 @@ export default async function({
             pollInterval: 10,
           },
         })
-        .on("all", function(type: string, filename: string) {
+        .on("all", function(type: string, filename: string): void {
           if (!util.isCompilableExtension(filename, cliOptions.extensions)) {
             return;
           }
