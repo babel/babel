@@ -27,8 +27,7 @@ function cloneIfNodeOrArray(obj, deep) {
 /**
  * Create a clone of a `node` including only properties belonging to the node.
  * If the second parameter is `false`, cloneNode performs a shallow clone.
- * If the third parameter is `true`, cloneNode performs a shallow clone
- * of a `node` excluding `_private` location properties.
+ * If the third parameter is true, the cloned nodes exclude location properties.
  */
 export default function cloneNode<T: Object>(
   node: T,
