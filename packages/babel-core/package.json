@@ -52,7 +52,7 @@
     "@babel/helper-transform-fixture-test-runner": "^7.6.4"
   },
   "funding": {
-	  "type": "opencollective",
+    "type": "opencollective",
     "url": "https://opencollective.com/babel"
   }
 }
