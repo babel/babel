@@ -19,7 +19,7 @@ function cleanupE2Egit {
   # Delete release tags
   git tag -d $(git tag -l "version-e2e-test-*")
 
-  # Checkout the prev branch
+  # Checkout the previous branch
   git checkout -f $original_git_branch
   git branch -D $tmp_branch_name
 
