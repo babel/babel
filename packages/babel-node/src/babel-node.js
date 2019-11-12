@@ -40,7 +40,10 @@ function getNormalizedV8Flag(arg) {
 }
 
 // These are aliases for node options defined by babel-node.
-const aliases = new Map([["-d", "--debug"], ["-gc", "--expose-gc"]]);
+const aliases = new Map([
+  ["-d", "--debug"],
+  ["-gc", "--expose-gc"],
+]);
 
 getV8Flags(function(err, v8Flags) {
   for (let i = 0; i < babelArgs.length; i++) {

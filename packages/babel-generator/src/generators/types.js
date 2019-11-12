@@ -65,9 +65,9 @@ export function ObjectProperty(node: Object) {
     // shorthand!
     if (
       node.shorthand &&
-      (t.isIdentifier(node.key) &&
-        t.isIdentifier(node.value) &&
-        node.key.name === node.value.name)
+      t.isIdentifier(node.key) &&
+      t.isIdentifier(node.value) &&
+      node.key.name === node.value.name
     ) {
       return;
     }

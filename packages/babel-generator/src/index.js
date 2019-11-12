@@ -70,7 +70,8 @@ function normalizeOptions(code, opts): Format {
       format.shouldPrintComment ||
       (value =>
         format.comments ||
-        (value.indexOf("@license") >= 0 || value.indexOf("@preserve") >= 0));
+        value.indexOf("@license") >= 0 ||
+        value.indexOf("@preserve") >= 0);
   }
 
   if (format.compact === "auto") {
