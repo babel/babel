@@ -19,7 +19,7 @@
     "compiler"
   ],
   "dependencies": {
-    "commander": "^2.8.1",
+    "commander": "^4.0.1",
     "convert-source-map": "^1.1.0",
     "fs-readdir-recursive": "^1.1.0",
     "glob": "^7.0.0",

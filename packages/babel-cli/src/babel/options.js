@@ -163,6 +163,10 @@ commander.option(
 
 commander.version(pkg.version + " (@babel/core " + version + ")");
 commander.usage("[options] <files ...>");
+// register an empty action handler so that commander.js can throw on
+// unknown options _after_ args
+// see https://github.com/tj/commander.js/issues/561#issuecomment-522209408
+commander.action(() => {});
 
 export type CmdOptions = {
   babelOptions: Object,
