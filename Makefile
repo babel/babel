@@ -1,6 +1,8 @@
 FLOW_COMMIT = 09669846b7a7ca5a6c23c12d56bb3bebdafd67e9
 TEST262_COMMIT = 8688c4ab79059c3097098605e69f1ee5eda6c409
 
+FORCE_PUBLISH = "@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@babel/standalone,@babel/preset-env-standalone"
+
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
 
@@ -189,7 +191,7 @@ prepublish:
 
 new-version:
 	git pull --rebase
-	yarn lerna version --force-publish="@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@babel/standalone,@babel/preset-env-standalone"
+	yarn lerna version --force-publish=$(FORCE_PUBLISH)
 
 # NOTE: Run make new-version first
 publish: prepublish
@@ -205,6 +207,16 @@ else
 endif
 	yarn lerna publish from-git --yes
 	rm -f .npmrc
+	$(MAKE) clean
+
+publish-test:
+ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
+	echo "You probably don't know what you are doing"
+	exit 1
+endif
+	$(MAKE) prepublish-build
+	yarn lerna version patch --force-publish=$(FORCE_PUBLISH)  --no-push --yes --tag-version-prefix="version-e2e-test-"
+	yarn lerna publish from-git --registry http://localhost:4873 --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
 
 bootstrap-only: lerna-bootstrap

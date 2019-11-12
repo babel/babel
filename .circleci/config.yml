@@ -1,4 +1,5 @@
-version: 2
+version: 2.1
+
 aliases:
   - &restore-node-modules-cache
     keys:
@@ -39,15 +40,19 @@ aliases:
   - &artifact_test262_xunit
     path: ~/test-results
 
-jobs:
-  test:
-    working_directory: ~/babel
+executors:
+  node-executor:
     docker:
       - image: circleci/node:13
+    working_directory: ~/babel
+
+jobs:
+  test:
+    executor: node-executor
     steps:
       - checkout
-      - restore-cache: *restore-yarn-cache
-      - restore-cache: *restore-node-modules-cache
+      - restore_cache: *restore-yarn-cache
+      - restore_cache: *restore-node-modules-cache
       - run: yarn --version
       - run: make test-ci-coverage
       # Builds babel-standalone with the regular Babel config
@@ -63,14 +68,13 @@ jobs:
       - store_artifacts: *artifact_env_min
       - save_cache: *save-node-modules-cache
       - save_cache: *save-yarn-cache
+
   test262:
-    working_directory: ~/babel
-    docker:
-      - image: circleci/node:12
+    executor: node-executor
     steps:
       - checkout
-      - restore-cache: *restore-yarn-cache
-      - restore-cache: *restore-node-modules-cache
+      - restore_cache: *restore-yarn-cache
+      - restore_cache: *restore-node-modules-cache
       - run:
           name: Build Babel
           command: BABEL_ENV=test make bootstrap
@@ -107,11 +111,32 @@ jobs:
             cat ~/test262.tap | $(npm bin)/tap-mocha-reporter spec || true
           <<: *test262_workdir
 
+  publish-verdaccio:
+    executor: node-executor
+    steps:
+      - checkout
+      - run: yarn install
+      - run: ./scripts/integration-tests/publish-local.sh
+      - persist_to_workspace:
+          root: /tmp/verdaccio-workspace
+          paths:
+            - storage
+            - htpasswd
+
+  e2e-babel:
+    executor: node-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/verdaccio-workspace
+      - run: ./scripts/integration-tests/e2e-babel.sh
+
 workflows:
   version: 2
   test:
     jobs:
       - test
+
   master:
     jobs:
       - test262:
@@ -119,3 +144,10 @@ workflows:
             branches:
               only:
                 - master
+
+  e2e:
+    jobs:
+      - publish-verdaccio
+      - e2e-babel:
+          requires:
+            - publish-verdaccio
