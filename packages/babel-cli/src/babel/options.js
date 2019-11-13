@@ -320,7 +320,10 @@ function booleanify(val: any): boolean | any {
   return val;
 }
 
-function collect(value, previousValue): Array<string> {
+function collect(
+  value: string | any,
+  previousValue: Array<string>,
+): Array<string> {
   // If the user passed the option with no value, like "babel file.js --presets", do nothing.
   if (typeof value !== "string") return previousValue;
 
