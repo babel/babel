@@ -10,7 +10,7 @@
     factory(global.fooBAR, global.mylib.fooBar, global.fizz.buzz);
     global.input = mod.exports;
   }
-})(typeof globalThis === "object" ? globalThis : typeof self === "object" ? self : this, function (_fooBar, _fooBar2, _fizzbuzz) {
+})(typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : this, function (_fooBar, _fooBar2, _fizzbuzz) {
   "use strict";
 
   _fooBar = babelHelpers.interopRequireDefault(_fooBar);
