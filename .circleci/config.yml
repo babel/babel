@@ -165,7 +165,7 @@ workflows:
   test:
     jobs:
       - test
-  master:
+  test262-master:
     jobs:
       - test262:
           filters:
