@@ -29,10 +29,7 @@ function generateResolveAlias() {
   const alias = {};
   const packagePath = path.resolve(process.cwd(), "packages");
   fs.readdirSync(packagePath).forEach(folder => {
-    if (["babel-core"].includes(folder)) {
-      return;
-    }
-    alias[folder.replace("babel-", "@babel/")] = path.resolve(
+    alias[folder.replace("babel-", "@babel/") + "$"] = path.resolve(
       packagePath,
       folder,
       "src"
@@ -100,8 +97,6 @@ function webpackBuild(opts) {
     resolve: {
       //todo: remove resolve.alias when babel packages offer ESModule entry
       alias: generateResolveAlias(),
-      aliasFields: ["_browser:used-by-babel-standalone", "browser"],
-      mainFields: ["_main:used-by-babel-standalone", "main"],
       plugins: [
         // Dedupe packages that are used across multiple plugins.
         // This replaces DedupePlugin from Webpack 1.x
