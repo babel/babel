@@ -176,9 +176,17 @@ workflows:
     jobs:
       - approve-test262-run:
           type: approval
+          filters:
+            branches:
+              ignore:
+                - master
       - test262:
           requires:
             - approve-test262-run
+          filters:
+            branches:
+              ignore:
+                - master
   e2e:
     jobs:
       - publish-verdaccio
