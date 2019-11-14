@@ -28,6 +28,7 @@
   },
   "packages": [
     "codemods/*",
+    "eslint/*",
     "packages/*"
   ],
   "npmClient": "yarn",
