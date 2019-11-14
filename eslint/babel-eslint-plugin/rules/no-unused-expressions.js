@@ -59,6 +59,6 @@ function isOptionalCallExpression(node) {
 
 module.exports = ruleComposer.filterReports(
   rule,
-  (problem, metadata) =>
+  problem =>
     !isInDoStatement(problem.node) && !isOptionalCallExpression(problem.node)
 );

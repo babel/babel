@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 /**
  * @fileoverview Tests for new-cap rule.
  * @author Nicholas C. Zakas

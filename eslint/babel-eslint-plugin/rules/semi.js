@@ -106,7 +106,7 @@ const semiRuleWithClassProperty = ruleComposer.joinReports([
 
 module.exports = ruleComposer.filterReports(
   semiRuleWithClassProperty,
-  (problem, metadata) => {
+  problem => {
     const node = problem.node;
 
     // Handle async iterator:

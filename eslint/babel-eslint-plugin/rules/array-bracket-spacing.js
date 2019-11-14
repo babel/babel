@@ -30,17 +30,15 @@ module.exports = {
       Program: function() {
         if (
           isWarnedForDeprecation ||
-          /\=-(f|-format)=/.test(process.argv.join("="))
+          /=-(f|-format)=/.test(process.argv.join("="))
         ) {
           return;
         }
 
-        /* eslint-disable no-console */
         console.log(
           "The babel/array-bracket-spacing rule is deprecated. Please " +
             "use the built in array-bracket-spacing rule instead."
         );
-        /* eslint-enable no-console */
         isWarnedForDeprecation = true;
       },
     };

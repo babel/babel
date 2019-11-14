@@ -15,5 +15,5 @@ function isDecorator(node) {
 
 module.exports = ruleComposer.filterReports(
   newCapRule,
-  (problem, metadata) => !isDecorator(problem.node)
+  problem => !isDecorator(problem.node)
 );
