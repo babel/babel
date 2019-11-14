@@ -6,6 +6,9 @@
   "scripts": {
     "test": "mocha ./tests/rules/*.js"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/babel/eslint-plugin-babel.git"
