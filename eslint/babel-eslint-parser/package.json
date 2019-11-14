@@ -50,7 +50,6 @@
     "@babel/preset-react": "^7.0.0",
     "dedent": "^0.7.0",
     "espree": "^6.0.0",
-    "husky": "^1.0.0-rc.13",
     "mocha": "^6.1.4"
   }
 }
