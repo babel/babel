@@ -49,6 +49,7 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "dedent": "^0.7.0",
+    "eslint": "^6.0.1",
     "espree": "^6.0.0",
     "mocha": "^6.1.4"
   }
