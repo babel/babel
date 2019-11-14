@@ -21,6 +21,7 @@ import {
   BIND_TS_AMBIENT,
   BIND_TS_NAMESPACE,
   BIND_CLASS,
+  BIND_LEXICAL,
 } from "../../util/scopeflags";
 import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";
@@ -1292,6 +1293,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.TsImportEqualsDeclaration {
       node.isExport = isExport || false;
       node.id = this.parseIdentifier();
+      this.checkLVal(
+        node.id,
+        BIND_LEXICAL,
+        undefined,
+        "import equals declaration",
+      );
       this.expect(tt.eq);
       node.moduleReference = this.tsParseModuleReference();
       this.semicolon();
