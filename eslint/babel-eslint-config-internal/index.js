@@ -4,12 +4,12 @@ module.exports = {
   plugins: ["flowtype"],
   parserOptions: {
     ecmaVersion: 2017,
-    sourceType: "module"
+    sourceType: "module",
   },
   rules: {
-    "camelcase": "off",
+    camelcase: "off",
     "consistent-return": "off",
-    "curly": ["error", "multi-line"],
+    curly: ["error", "multi-line"],
     "linebreak-style": ["error", "unix"],
     "max-len": ["error", 110, 2],
     "new-cap": "off",
@@ -31,18 +31,18 @@ module.exports = {
     "no-use-before-define": "off",
     "no-var": "error",
     "prefer-const": "error",
-    "strict": "off",
+    strict: "off",
     "flowtype/define-flow-type": "warn",
     "flowtype/use-flow-type": "warn",
   },
   globals: {
     // Flow
     Iterator: true,
-    $Keys: true
+    $Keys: true,
   },
   env: {
     node: true,
     es6: true,
-    browser: true
-  }
+    browser: true,
+  },
 };

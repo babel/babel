@@ -1,8 +1,8 @@
 "use strict";
 
-const ruleComposer = require('eslint-rule-composer');
-const eslint = require('eslint');
-const newCapRule = new eslint.Linter().getRules().get('new-cap');
+const ruleComposer = require("eslint-rule-composer");
+const eslint = require("eslint");
+const newCapRule = new eslint.Linter().getRules().get("new-cap");
 
 /**
  * Returns whether a node is under a decorator or not.
@@ -10,10 +10,10 @@ const newCapRule = new eslint.Linter().getRules().get('new-cap');
  * @returns {Boolean} Returns true if the node is under a decorator.
  */
 function isDecorator(node) {
-    return node.parent.type === "Decorator";
+  return node.parent.type === "Decorator";
 }
 
 module.exports = ruleComposer.filterReports(
-    newCapRule,
-    (problem, metadata) => !isDecorator(problem.node)
+  newCapRule,
+  (problem, metadata) => !isDecorator(problem.node)
 );
