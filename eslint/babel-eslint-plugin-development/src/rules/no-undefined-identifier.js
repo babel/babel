@@ -32,7 +32,7 @@ module.exports = {
         ) {
           context.report(
             node,
-            "Use path.scope.buildUndefinedNode() to create an undefined identifier directly.",
+            "Use path.scope.buildUndefinedNode() to create an undefined identifier directly."
           );
         }
       },

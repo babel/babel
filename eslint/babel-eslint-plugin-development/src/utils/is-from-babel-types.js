@@ -6,7 +6,7 @@ const isBabelPluginFactory = require("./is-babel-plugin-factory");
 // is a reference to a @babel/types export.
 module.exports = function isFromBabelTypes(
   origin /*: ReferenceOrigin */,
-  scope /*: Scope */,
+  scope /*: Scope */
 ) {
   if (origin.kind === "import" && origin.source === "@babel/types") {
     // imported from @babel/types

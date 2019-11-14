@@ -44,7 +44,7 @@ module.exports = {
       if (!returnValue.properties.some(p => p.key.name === "name")) {
         context.report(
           returnValue,
-          "This Babel plugin doesn't have a 'name' property.",
+          "This Babel plugin doesn't have a 'name' property."
         );
       }
     }
