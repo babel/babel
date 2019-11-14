@@ -1,5 +1,3 @@
-// @flow
-
 "use strict";
 
 const getReferenceOrigin = require("../utils/get-reference-origin");

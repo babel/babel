@@ -14,14 +14,11 @@
   },
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha tests --recursive",
-    "lint": "eslint src tests"
+    "test": "mocha tests --recursive"
   },
   "devDependencies": {
     "eslint": "^5.9.0",
-    "eslint-plugin-prettier": "^3.0.0",
-    "mocha": "^5.2.0",
-    "prettier": "^1.15.2"
+    "mocha": "^5.2.0"
   },
   "engines": {
     "node": ">=8.0.0"

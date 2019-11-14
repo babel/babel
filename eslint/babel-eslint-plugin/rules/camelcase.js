@@ -15,7 +15,7 @@ module.exports = {
       description: "enforce camelcase naming convention",
       category: "Stylistic Issues",
       recommended: false,
-      url: "https://eslint.org/docs/rules/camelcase"
+      url: "https://eslint.org/docs/rules/camelcase",
     },
 
     schema: [
@@ -23,23 +23,22 @@ module.exports = {
         type: "object",
         properties: {
           ignoreDestructuring: {
-            type: "boolean"
+            type: "boolean",
           },
           properties: {
-            enum: ["always", "never"]
-          }
+            enum: ["always", "never"],
+          },
         },
-        additionalProperties: false
-      }
+        additionalProperties: false,
+      },
     ],
 
     messages: {
-      notCamelCase: "Identifier '{{name}}' is not in camel case."
-    }
+      notCamelCase: "Identifier '{{name}}' is not in camel case.",
+    },
   },
 
   create(context) {
-
     //--------------------------------------------------------------------------
     // Helpers
     //--------------------------------------------------------------------------
@@ -66,7 +65,6 @@ module.exports = {
      * @private
      */
     function isUnderscored(name) {
-
       // if there's an underscore, it might be A_CONSTANT, which is okay
       return name.indexOf("_") > -1 && name !== name.toUpperCase();
     }
@@ -100,7 +98,11 @@ module.exports = {
     function report(node) {
       if (reported.indexOf(node.parent) < 0) {
         reported.push(node.parent);
-        context.report({ node, messageId: "notCamelCase", data: { name: node.name } });
+        context.report({
+          node,
+          messageId: "notCamelCase",
+          data: { name: node.name },
+        });
       }
     }
 
@@ -113,30 +115,39 @@ module.exports = {
     }
 
     return {
-
       Identifier(node) {
-
         /*
          * Leading and trailing underscores are commonly used to flag
          * private/protected identifiers, strip them
          */
         const name = node.name.replace(/^_+|_+$/g, ""),
-          effectiveParent = isMemberExpression(node.parent.type) ? node.parent.parent : node.parent;
+          effectiveParent = isMemberExpression(node.parent.type)
+            ? node.parent.parent
+            : node.parent;
 
         // MemberExpressions get special rules
         if (isMemberExpression(node.parent.type)) {
-
           // "never" check properties
           if (properties === "never") {
             return;
           }
 
           // Always report underscored object names
-          if (node.parent.object.type === "Identifier" && node.parent.object.name === node.name && isUnderscored(name)) {
+          if (
+            node.parent.object.type === "Identifier" &&
+            node.parent.object.name === node.name &&
+            isUnderscored(name)
+          ) {
             report(node);
 
             // Report AssignmentExpressions only if they are the left side of the assignment
-          } else if (effectiveParent.type === "AssignmentExpression" && isUnderscored(name) && (!isMemberExpression(effectiveParent.right.type) || isMemberExpression(effectiveParent.left.type) && effectiveParent.left.property.name === node.name)) {
+          } else if (
+            effectiveParent.type === "AssignmentExpression" &&
+            isUnderscored(name) &&
+            (!isMemberExpression(effectiveParent.right.type) ||
+              (isMemberExpression(effectiveParent.left.type) &&
+                effectiveParent.left.property.name === node.name))
+          ) {
             report(node);
           }
 
@@ -145,50 +156,76 @@ module.exports = {
            * AssignmentPattern nodes can be treated like Properties:
            * e.g.: const { no_camelcased = false } = bar;
            */
-        } else if (node.parent.type === "Property" || node.parent.type === "AssignmentPattern") {
-
-          if (node.parent.parent && node.parent.parent.type === "ObjectPattern") {
-
-            const assignmentKeyEqualsValue = node.parent.key.name === node.parent.value.name;
+        } else if (
+          node.parent.type === "Property" ||
+          node.parent.type === "AssignmentPattern"
+        ) {
+          if (
+            node.parent.parent &&
+            node.parent.parent.type === "ObjectPattern"
+          ) {
+            const assignmentKeyEqualsValue =
+              node.parent.key.name === node.parent.value.name;
 
             // prevent checking righthand side of destructured object
             if (node.parent.key === node && node.parent.value !== node) {
               return;
             }
 
-            const valueIsUnderscored = node.parent.value.name && isUnderscored(name);
+            const valueIsUnderscored =
+              node.parent.value.name && isUnderscored(name);
 
             // ignore destructuring if the option is set, unless a new identifier is created
-            if (valueIsUnderscored && !(assignmentKeyEqualsValue && ignoreDestructuring)) {
+            if (
+              valueIsUnderscored &&
+              !(assignmentKeyEqualsValue && ignoreDestructuring)
+            ) {
               report(node);
             }
           }
 
           // "never" check properties or always ignore destructuring
-          if (properties === "never" || (ignoreDestructuring && isInsideObjectPattern(node))) {
+          if (
+            properties === "never" ||
+            (ignoreDestructuring && isInsideObjectPattern(node))
+          ) {
             return;
           }
 
           // don't check right hand side of AssignmentExpression to prevent duplicate warnings
-          if (isUnderscored(name) && !ALLOWED_PARENT_TYPES.has(effectiveParent.type) && !(node.parent.right === node)) {
+          if (
+            isUnderscored(name) &&
+            !ALLOWED_PARENT_TYPES.has(effectiveParent.type) &&
+            !(node.parent.right === node)
+          ) {
             report(node);
           }
 
           // Check if it's an import specifier
-        } else if (["ImportSpecifier", "ImportNamespaceSpecifier", "ImportDefaultSpecifier"].indexOf(node.parent.type) >= 0) {
-
+        } else if (
+          [
+            "ImportSpecifier",
+            "ImportNamespaceSpecifier",
+            "ImportDefaultSpecifier",
+          ].indexOf(node.parent.type) >= 0
+        ) {
           // Report only if the local imported identifier is underscored
-          if (node.parent.local && node.parent.local.name === node.name && isUnderscored(name)) {
+          if (
+            node.parent.local &&
+            node.parent.local.name === node.name &&
+            isUnderscored(name)
+          ) {
             report(node);
           }
 
           // Report anything that is underscored that isn't a CallExpression
-        } else if (isUnderscored(name) && !ALLOWED_PARENT_TYPES.has(effectiveParent.type)) {
+        } else if (
+          isUnderscored(name) &&
+          !ALLOWED_PARENT_TYPES.has(effectiveParent.type)
+        ) {
           report(node);
         }
-      }
-
+      },
     };
-
-  }
+  },
 };

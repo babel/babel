@@ -13,11 +13,7 @@
   },
   "homepage": "https://github.com/babel/babel-eslint",
   "scripts": {
-    "test": "npm run lint && npm run test-only",
-    "test-only": "cd test && mocha specs && cd -",
-    "lint": "eslint .",
-    "lint-fix": "npm run lint -- --fix",
-    "precommit": "lint-staged",
+    "test": "cd test && mocha specs && cd -",
     "preversion": "npm test",
     "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'"
   },
@@ -52,23 +48,9 @@
     "@babel/preset-env": "^7.1.5",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "babel-eslint": "^10.0.2",
     "dedent": "^0.7.0",
     "eslint": "^6.0.1",
-    "eslint-config-babel": "^9.0.0",
-    "eslint-plugin-flowtype": "^3.11.1",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-prettier": "^3.1.0",
     "espree": "^6.0.0",
-    "husky": "^1.0.0-rc.13",
-    "lint-staged": "^7.2.2",
-    "mocha": "^6.1.4",
-    "prettier": "^1.4.4"
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint --format=codeframe --fix",
-      "git add"
-    ]
+    "mocha": "^6.1.4"
   }
 }

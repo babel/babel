@@ -6,7 +6,7 @@ FORCE_PUBLISH = "@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@b
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
 
-SOURCES = packages codemods
+SOURCES = packages codemods eslint
 
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
