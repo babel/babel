@@ -160,6 +160,14 @@ jobs:
           at: /tmp/verdaccio-workspace
       - run: ./scripts/integration-tests/e2e-babel.sh
 
+  e2e-create-react-app:
+    executor: node-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/verdaccio-workspace
+      - run: ./scripts/integration-tests/e2e-create-react-app.sh
+
 workflows:
   version: 2
   test:
@@ -191,5 +199,8 @@ workflows:
     jobs:
       - publish-verdaccio
       - e2e-babel:
+          requires:
+            - publish-verdaccio
+      - e2e-create-react-app:
           requires:
             - publish-verdaccio
