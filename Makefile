@@ -225,7 +225,8 @@ yarn-install: clean-all
 	yarn --ignore-engines
 
 lerna-bootstrap: yarn-install
-	yarn lerna bootstrap
+# todo: remove `-- -- --ignore-engines` in Babel 8
+	yarn lerna bootstrap -- -- --ignore-engines
 
 bootstrap: bootstrap-only
 	$(MAKE) build
