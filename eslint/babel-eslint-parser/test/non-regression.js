@@ -4,7 +4,7 @@ const eslint = require("eslint");
 const path = require("path");
 const unpad = require("dedent");
 
-const parser = require("../lib");
+const parser = require("../");
 
 function verifyAndAssertMessagesWithSpecificESLint(
   code,

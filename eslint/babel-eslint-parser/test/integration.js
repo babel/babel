@@ -4,7 +4,7 @@ const eslint = require("eslint");
 const fs = require("fs");
 const path = require("path");
 
-const parser = require("../lib");
+const parser = require("../");
 
 eslint.linter.defineParser("current-babel-eslint", parser);
 

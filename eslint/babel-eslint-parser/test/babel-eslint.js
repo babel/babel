@@ -2,7 +2,7 @@
 
 const assert = require("assert");
 const path = require("path");
-const babelEslint = require("../lib");
+const babelEslint = require("../");
 const espree = require("espree");
 const escope = require("eslint-scope");
 const unpad = require("dedent");
