@@ -14,7 +14,6 @@
   "homepage": "https://github.com/babel/babel-eslint",
   "scripts": {
     "test": "cd test && mocha specs && cd -",
-    "preversion": "npm test",
     "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'"
   },
   "engines": {

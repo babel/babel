@@ -22,7 +22,9 @@
         "test/**",
         "codemods/**",
         "# We ignore every JSON file, except for built-in-modules, built-ins and plugins defined in babel-preset-env/data.",
-        "@(!(built-in-modules|built-ins|plugins|package)).json"
+        "@(!(built-in-modules|built-ins|plugins|package)).json",
+        "# Until the ESLint packages version are aligned with Babel's, we ignore them",
+        "eslint/**"
       ]
     }
   },
