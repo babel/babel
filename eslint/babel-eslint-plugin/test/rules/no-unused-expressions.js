@@ -10,7 +10,7 @@
 //------------------------------------------------------------------------------
 
 const rule = require("../../rules/no-unused-expressions"),
-    RuleTester = require("../RuleTester");
+      RuleTester = require("../helpers/RuleTester");
 
 //------------------------------------------------------------------------------
 // Tests

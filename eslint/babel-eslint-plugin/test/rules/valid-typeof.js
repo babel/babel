@@ -10,7 +10,7 @@
 //------------------------------------------------------------------------------
 
 const rule = require("../../rules/valid-typeof"),
-    RuleTester = require("../RuleTester");
+      RuleTester = require("../helpers/RuleTester");
 
 //------------------------------------------------------------------------------
 // Tests

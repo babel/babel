@@ -1,5 +1,5 @@
 var rule = require('../../rules/quotes'),
-    RuleTester = require('../RuleTester');
+    RuleTester = require("../helpers/RuleTester");
 
 var ruleTester = new RuleTester();
 ruleTester.run('babel/quotes', rule, {

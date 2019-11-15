@@ -10,7 +10,7 @@
 //------------------------------------------------------------------------------
 
 const rule = require("../../rules/camelcase"),
-  RuleTester = require("../RuleTester");
+  RuleTester = require("../helpers/RuleTester");
 
 //------------------------------------------------------------------------------
 // Tests
