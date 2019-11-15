@@ -150,6 +150,10 @@ const buildTest = function(binName, testName, opts) {
   };
 };
 
+it("main file present", function() {
+  require.resolve("..");
+});
+
 fs.readdirSync(fixtureLoc).forEach(function(binName) {
   if (binName[0] === ".") return;
 
