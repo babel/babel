@@ -1,16 +1,15 @@
 "use strict";
 
-const assert = require("assert");
 const eslint = require("eslint");
 const fs = require("fs");
 const path = require("path");
 
-const parser = require("../..");
+const parser = require("../lib");
 
 eslint.linter.defineParser("current-babel-eslint", parser);
 
 const paths = {
-  fixtures: path.join(__dirname, "..", "fixtures", "rules"),
+  fixtures: path.join(__dirname, "fixtures", "rules"),
 };
 
 const encoding = "utf8";
@@ -71,7 +70,7 @@ function strictSuite() {
           },
           (err, report) => {
             if (err) return done(err);
-            assert(report[0].ruleId === ruleId);
+            expect(report[0].ruleId).toBe(ruleId);
             done();
           }
         );
@@ -95,7 +94,7 @@ function strictSuite() {
         },
         (err, report) => {
           if (err) return done(err);
-          assert(!report.length);
+          expect(report.length).toBe(0);
           done();
         }
       );
@@ -111,7 +110,7 @@ function strictSuite() {
         (err, report) => {
           if (err) return done(err);
           [0, 1].forEach(i => {
-            assert(report[i].ruleId === ruleId);
+            expect(report[0].ruleId).toBe(ruleId);
           });
           done();
         }
@@ -127,13 +126,12 @@ function strictSuite() {
         },
         (err, report) => {
           if (err) return done(err);
-          assert(report[0].ruleId === ruleId);
-
+          expect(report[0].ruleId).toBe(ruleId);
           // This is to make sure the test fails prior to adapting Babel AST
           // directive representation to ESLint format. Otherwise it reports an
           // error for missing global directive that masquerades as the expected
           // result of the previous assertion.
-          assert(report[0].nodeType !== "Program");
+          expect(report[0].nodeType).not.toBe("Program");
           done();
         }
       );
@@ -148,7 +146,7 @@ function strictSuite() {
         },
         (err, report) => {
           if (err) return done(err);
-          assert(report[0].ruleId === ruleId);
+          expect(report[0].ruleId).toBe(ruleId);
           done();
         }
       );
@@ -171,7 +169,7 @@ function strictSuite() {
         },
         (err, report) => {
           if (err) return done(err);
-          assert(!report.length);
+          expect(report.length).toBe(0);
           done();
         }
       );
@@ -187,7 +185,8 @@ function strictSuite() {
         (err, report) => {
           if (err) return done(err);
           [0, 1].forEach(i => {
-            assert(report[i].ruleId === ruleId);
+            // assert(report[i].ruleId === ruleId);
+            expect(report[i].ruleId).toBe(ruleId);
           });
           done();
         }
@@ -203,7 +202,7 @@ function strictSuite() {
         },
         (err, report) => {
           if (err) return done(err);
-          assert(report[0].ruleId === ruleId);
+          expect(report[0].ruleId).toBe(ruleId);
           done();
         }
       );
@@ -218,8 +217,10 @@ function strictSuite() {
         },
         (err, report) => {
           if (err) return done(err);
-          assert(report[0].ruleId === ruleId);
-          assert(report[0].nodeType.indexOf("Function") === -1);
+          // assert(report[0].ruleId === ruleId);
+          expect(report[0].ruleId).toBe(ruleId);
+          // assert(report[0].nodeType.indexOf("Function") === -1);
+          expect(report[0].nodeType.indexOf("Function")).toBe(-1);
           done();
         }
       );
@@ -228,13 +229,13 @@ function strictSuite() {
   });
 }
 
-describe("https://github.com/babel/babel-eslint/issues/558", () => {
-  it("doesn't crash with eslint-plugin-import", () => {
-    const engine = new eslint.CLIEngine({ ignore: false });
-    engine.executeOnFiles([
-      "fixtures/eslint-plugin-import/a.js",
-      "fixtures/eslint-plugin-import/b.js",
-      "fixtures/eslint-plugin-import/c.js",
-    ]);
-  });
-});
+// describe("https://github.com/babel/babel-eslint/issues/558", () => {
+//   it("doesn't crash with eslint-plugin-import", () => {
+//     const engine = new eslint.CLIEngine({ ignore: false });
+//     engine.executeOnFiles([
+//       "fixtures/eslint-plugin-import/a.js",
+//       "fixtures/eslint-plugin-import/b.js",
+//       "fixtures/eslint-plugin-import/c.js",
+//     ]);
+//   });
+// });
