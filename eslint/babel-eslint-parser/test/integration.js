@@ -229,13 +229,13 @@ function strictSuite() {
   });
 }
 
-// describe("https://github.com/babel/babel-eslint/issues/558", () => {
-//   it("doesn't crash with eslint-plugin-import", () => {
-//     const engine = new eslint.CLIEngine({ ignore: false });
-//     engine.executeOnFiles([
-//       "fixtures/eslint-plugin-import/a.js",
-//       "fixtures/eslint-plugin-import/b.js",
-//       "fixtures/eslint-plugin-import/c.js",
-//     ]);
-//   });
-// });
+describe("https://github.com/babel/babel-eslint/issues/558", () => {
+  it("doesn't crash with eslint-plugin-import", () => {
+    const engine = new eslint.CLIEngine({ ignore: false });
+    const files = ['a.js', 'b.js', 'c.js'];
+    let fileWithPath = files.map(file =>
+        path.resolve(__dirname, `./fixtures/eslint-plugin-import/${file}`));
+    engine.executeOnFiles(fileWithPath);
+  });
+});
+
