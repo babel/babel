@@ -42,34 +42,23 @@ function parseAndAssertSame(code) {
 }
 
 describe("babylon-to-espree", () => {
-  // describe("compatibility", () => {
-  //   it("should allow ast.analyze to be called without options", function() {
-  //     const esAST = babelEslint.parseForESLint("`test`", {
-  //       eslintScopeManager: true,
-  //       eslintVisitorKeys: true,
-  //       parserOptions: {
-  //         // sourceType,
-  //         ecmaFeatures: {
-  //           globalReturn: true,
-  //         },
-  //         babelOptions: {
-  //           configFile: path.resolve(
-  //             __dirname,
-  //             "./fixtures/config/babel.config.js"
-  //           ),
-  //         },
-  //       }
-  //     }).ast;
-
-  //     assert.doesNotThrow(
-  //       () => {
-  //         escope.analyze(esAST);
-  //       },
-  //       TypeError,
-  //       "Should allow no options argument."
-  //     );
-  //   });
-  // });
+  describe("compatibility", () => {
+    it("should allow ast.analyze to be called without options", function() {
+      const esAST = babelEslint.parseForESLint("`test`", {
+        eslintScopeManager: true,
+        eslintVisitorKeys: true,
+        babelOptions: {
+          configFile: path.resolve(
+            __dirname,
+            "./fixtures/config/babel.config.js"
+          ),
+        },
+      }).ast;
+      expect(() => {
+        escope.analyze(esAST)
+      }).not.toThrow(new TypeError('Should allow no options argument.'));
+    });
+  });
 
   describe("templates", () => {
     it("empty template string", () => {
