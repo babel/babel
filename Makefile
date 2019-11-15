@@ -221,9 +221,9 @@ endif
 
 publish-eslint:
 	cd eslint/$(PKG)
-	node -p "JSON.stringify({ ...require('./package.jon'), private: false }, null, 2)" > package.json
+	node -p "JSON.stringify({ ...require('./package.json'), private: false }, null, 2)" > package.json
 	yarn publish
-	node -p "JSON.stringify({ ...require('./package.jon'), private: true }, null, 2)" > package.json
+	node -p "JSON.stringify({ ...require('./package.json'), private: true }, null, 2)" > package.json
 
 bootstrap-only: lerna-bootstrap
 
