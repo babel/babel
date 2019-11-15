@@ -13,7 +13,6 @@
   },
   "homepage": "https://github.com/babel/babel-eslint",
   "scripts": {
-    "preversion": "npm test",
     "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'"
   },
   "engines": {
