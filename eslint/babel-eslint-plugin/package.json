@@ -19,6 +19,7 @@
   ],
   "author": "Jason Quense @monasticpanic",
   "license": "MIT",
+  "private": true,
   "engines": {
     "node": ">=4"
   },

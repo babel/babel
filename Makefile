@@ -219,6 +219,12 @@ endif
 	yarn lerna publish from-git --registry http://localhost:4873 --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
 
+publish-eslint:
+	cd eslint/$(PKG)
+	node -p "JSON.stringify({ ...require('./package.jon'), private: false }, null, 2)" > package.json
+	yarn publish
+	node -p "JSON.stringify({ ...require('./package.jon'), private: true }, null, 2)" > package.json
+
 bootstrap-only: lerna-bootstrap
 
 yarn-install: clean-all
