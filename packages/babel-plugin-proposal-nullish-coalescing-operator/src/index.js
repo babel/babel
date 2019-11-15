@@ -16,14 +16,17 @@ export default declare((api, { loose = false }) => {
           return;
         }
 
-        const ref = scope.generateUidIdentifierBasedOnNode(node.left);
-        scope.push({ id: ref });
+        let ref, assignment;
+        // skip creating extra reference when `left` is semantically safe to re-use
+        if (t.isIdentifier(node.left)) {
+          ref = node.left;
+          assignment = t.cloneNode(node.left);
+        } else {
+          ref = scope.generateUidIdentifierBasedOnNode(node.left);
+          scope.push({ id: ref });
 
-        const assignment = t.assignmentExpression(
-          "=",
-          t.cloneNode(ref),
-          node.left,
-        );
+          assignment = t.assignmentExpression("=", t.cloneNode(ref), node.left);
+        }
 
         path.replaceWith(
           t.conditionalExpression(
