@@ -220,10 +220,9 @@ endif
 	$(MAKE) clean
 
 publish-eslint:
-	cd eslint/$(PKG)
-	node -p "JSON.stringify({ ...require('./package.json'), private: false }, null, 2)" > package.json
-	yarn publish
-	node -p "JSON.stringify({ ...require('./package.json'), private: true }, null, 2)" > package.json
+	$(call set-json-field, ./eslint/$(PKG)/package.json, private, false)
+	cd eslint/$(PKG); yarn publish
+	$(call set-json-field, ./eslint/$(PKG)/package.json, private, true)
 
 bootstrap-only: lerna-bootstrap
 
@@ -275,4 +274,11 @@ define clean-source-all
 	rm -rf $(1)/*/node_modules
 	rm -rf $(1)/*/package-lock.json
 
+endef
+
+define set-json-field
+	node -e "\
+		require('fs').writeFileSync('$1'.trim(), \
+			JSON.stringify({ ...require('$1'.trim()), $2: $3 }, null, 2) + '\\n' \
+		)"
 endef
