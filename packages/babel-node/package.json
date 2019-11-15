@@ -39,5 +39,5 @@
   "bin": {
     "babel-node": "./bin/babel-node.js"
   },
-  "main": "src/babel-node.js"
+  "main": "lib/babel-node.js"
 }
