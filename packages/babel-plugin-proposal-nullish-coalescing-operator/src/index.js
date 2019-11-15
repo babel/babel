@@ -16,16 +16,14 @@ export default declare((api, { loose = false }) => {
           return;
         }
 
-        let ref, assignment;
-        // skip creating extra reference when `left` is semantically safe to re-use
-        if (t.isIdentifier(node.left)) {
+        let ref = scope.maybeGenerateMemoised(node.left);
+        let assignment;
+        // skip creating extra reference when `left` is static
+        if (ref === null) {
           ref = node.left;
           assignment = t.cloneNode(node.left);
         } else {
-          ref = scope.generateUidIdentifierBasedOnNode(node.left);
-          scope.push({ id: ref });
-
-          assignment = t.assignmentExpression("=", t.cloneNode(ref), node.left);
+          assignment = t.assignmentExpression("=", ref, node.left);
         }
 
         path.replaceWith(
