@@ -38,5 +38,6 @@
   },
   "bin": {
     "babel-node": "./bin/babel-node.js"
-  }
+  },
+  "main": "src/babel-node.js"
 }
