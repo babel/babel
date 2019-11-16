@@ -1,6 +1,6 @@
 # @babel/preset-env-standalone
 
-> Standalone build of babel-prest-env for use in non-Node.js environments.
+> Standalone build of babel-preset-env for use in non-Node.js environments.
 
 See our website [@babel/preset-env-standalone](https://babeljs.io/docs/en/next/babel-preset-env-standalone.html) for more information.
 
