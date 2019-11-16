@@ -3,7 +3,8 @@
   "plugins": ["prettier", "@babel/development", "import"],
   "extends": "babel",
   "rules": {
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "max-len": "off"
   },
   "env": {
     "node": true
