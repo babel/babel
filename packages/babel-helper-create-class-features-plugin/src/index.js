@@ -97,7 +97,8 @@ export function createClassFeaturePlugin({
             } else {
               if (
                 (privateNames.has(name) &&
-                  (!privateNames.has(getName) && !privateNames.has(setName))) ||
+                  !privateNames.has(getName) &&
+                  !privateNames.has(setName)) ||
                 (privateNames.has(name) &&
                   (privateNames.has(getName) || privateNames.has(setName)))
               ) {

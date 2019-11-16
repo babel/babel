@@ -87,26 +87,28 @@ const memberExpressionOptimisationVisitor = {
 
         const argsOptEligible =
           !state.deopted &&
-          !// ex: `args[0] = "whatever"`
-          (
-            (grandparentPath.isAssignmentExpression() &&
-              parentPath.node === grandparentPath.node.left) ||
-            // ex: `[args[0]] = ["whatever"]`
-            grandparentPath.isLVal() ||
-            // ex: `for (rest[0] in this)`
-            // ex: `for (rest[0] of this)`
-            grandparentPath.isForXStatement() ||
-            // ex: `++args[0]`
-            // ex: `args[0]--`
-            grandparentPath.isUpdateExpression() ||
-            // ex: `delete args[0]`
-            grandparentPath.isUnaryExpression({ operator: "delete" }) ||
-            // ex: `args[0]()`
-            // ex: `new args[0]()`
-            // ex: `new args[0]`
-            ((grandparentPath.isCallExpression() ||
-              grandparentPath.isNewExpression()) &&
-              parentPath.node === grandparentPath.node.callee)
+          !(
+            // ex: `args[0] = "whatever"`
+            (
+              (grandparentPath.isAssignmentExpression() &&
+                parentPath.node === grandparentPath.node.left) ||
+              // ex: `[args[0]] = ["whatever"]`
+              grandparentPath.isLVal() ||
+              // ex: `for (rest[0] in this)`
+              // ex: `for (rest[0] of this)`
+              grandparentPath.isForXStatement() ||
+              // ex: `++args[0]`
+              // ex: `args[0]--`
+              grandparentPath.isUpdateExpression() ||
+              // ex: `delete args[0]`
+              grandparentPath.isUnaryExpression({ operator: "delete" }) ||
+              // ex: `args[0]()`
+              // ex: `new args[0]()`
+              // ex: `new args[0]`
+              ((grandparentPath.isCallExpression() ||
+                grandparentPath.isNewExpression()) &&
+                parentPath.node === grandparentPath.node.callee)
+            )
           );
 
         if (argsOptEligible) {
