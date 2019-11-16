@@ -8,6 +8,12 @@ export FORCE_COLOR = true
 
 SOURCES = packages codemods eslint
 
+COMMA := ,
+EMPTY :=
+SPACE := $(EMPTY) $(EMPTY)
+COMMA_SEPARATED_SOURCES = $(subst $(SPACE),$(COMMA),$(SOURCES))
+
+
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
 build: build-bundle
@@ -113,7 +119,7 @@ fix-js:
 	yarn eslint scripts $(SOURCES) '*.js' --format=codeframe --fix
 
 fix-json:
-	yarn prettier "{packages,codemod}/*/test/fixtures/**/options.json" --write --loglevel warn
+	yarn prettier "{$(COMMA_SEPARATED_SOURCES)}/*/test/fixtures/**/options.json" --write --loglevel warn
 
 clean: test-clean
 	rm -f .npmrc

@@ -112,6 +112,8 @@ module.exports = function(api) {
           "packages/*/test",
           "codemods/*/src",
           "codemods/*/test",
+          "eslint/*/src",
+          "eslint/*/test",
         ],
         sourceType: "unambiguous",
       },

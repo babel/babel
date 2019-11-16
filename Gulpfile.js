@@ -17,7 +17,7 @@ const rollupNodeResolve = require("rollup-plugin-node-resolve");
 const rollupReplace = require("rollup-plugin-replace");
 const { registerStandalonePackageTask } = require("./scripts/gulp-tasks");
 
-const defaultSourcesGlob = "./@(codemods|packages)/*/src/**/*.js";
+const defaultSourcesGlob = "./@(codemods|packages|eslint)/*/src/**/*.js";
 
 function swapSrcWithLib(srcPath) {
   const parts = srcPath.split(path.sep);

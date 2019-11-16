@@ -2,9 +2,12 @@
   "validateLogs": true,
   "ignoreOutput": true,
   "presets": [
-    ["env", {
-      "debug": true,
-      "corejs": 3
-    }]
+    [
+      "env",
+      {
+        "debug": true,
+        "corejs": 3
+      }
+    ]
   ]
 }

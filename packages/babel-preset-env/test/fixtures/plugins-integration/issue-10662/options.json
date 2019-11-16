@@ -4,10 +4,7 @@
       "env",
       {
         "modules": "umd",
-        "targets": [
-          "Safari 8",
-          "IE 11"
-        ]
+        "targets": ["Safari 8", "IE 11"]
       }
     ]
   ]

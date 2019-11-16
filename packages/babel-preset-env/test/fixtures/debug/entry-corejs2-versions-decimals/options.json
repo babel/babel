@@ -2,16 +2,19 @@
   "validateLogs": true,
   "ignoreOutput": true,
   "presets": [
-    ["env", {
-      "useBuiltIns": "entry",
-      "corejs": 2,
-      "debug": true,
-      "targets": {
-        "chrome": 54,
-        "electron": 0.36,
-        "node": 6.10,
-        "ie": 10
+    [
+      "env",
+      {
+        "useBuiltIns": "entry",
+        "corejs": 2,
+        "debug": true,
+        "targets": {
+          "chrome": 54,
+          "electron": 0.36,
+          "node": 6.1,
+          "ie": 10
+        }
       }
-    }]
+    ]
   ]
 }

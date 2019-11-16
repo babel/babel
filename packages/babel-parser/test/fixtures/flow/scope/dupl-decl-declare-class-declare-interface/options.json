@@ -1,7 +1,4 @@
 {
   "sourceType": "module",
-  "plugins": [
-    "jsx",
-    "flow"
-  ]
+  "plugins": ["jsx", "flow"]
 }
