@@ -12,7 +12,11 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["packages/*/src/**/*.js", "codemods/*/src/**/*.js"],
+      files: [
+        "packages/*/src/**/*.js",
+        "codemods/*/src/**/*.js",
+        "eslint/*/src/**/*.js",
+      ],
       rules: {
         "@babel/development/no-undefined-identifier": "error",
         "@babel/development/no-deprecated-clone": "error",
@@ -24,6 +28,7 @@ module.exports = {
       files: [
         "packages/*/test/**/*.js",
         "codemods/*/test/**/*.js",
+        "eslint/*/test/**/*.js",
         "packages/babel-helper-transform-fixture-test-runner/src/helpers.js",
         "test/**/*.js",
       ],

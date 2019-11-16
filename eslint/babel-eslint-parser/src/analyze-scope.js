@@ -94,7 +94,7 @@ class Referencer extends OriginalReferencer {
     // Flow super types.
     this._visitTypeAnnotation(node.implements);
     this._visitTypeAnnotation(
-      node.superTypeParameters && node.superTypeParameters.params
+      node.superTypeParameters && node.superTypeParameters.params,
     );
 
     // Basic.
@@ -205,7 +205,7 @@ class Referencer extends OriginalReferencer {
   _createScopeVariable(node, name) {
     this.currentScope().variableScope.__define(
       name,
-      new Definition("Variable", name, node, null, null, null)
+      new Definition("Variable", name, node, null, null, null),
     );
   }
 
@@ -220,7 +220,7 @@ class Referencer extends OriginalReferencer {
       "type-parameters",
       parentScope,
       node,
-      false
+      false,
     );
 
     this.scopeManager.__nestScope(scope);

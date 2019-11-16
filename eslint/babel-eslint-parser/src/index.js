@@ -9,7 +9,7 @@ const SUPPORTED_BABEL_VERSION_RANGE =
   packageJson.peerDependencies["@babel/core"];
 const IS_RUNNING_SUPPORTED_VERSION = semver.satisfies(
   CURRENT_BABEL_VERSION,
-  SUPPORTED_BABEL_VERSION_RANGE
+  SUPPORTED_BABEL_VERSION_RANGE,
 );
 
 exports.parse = function(code, options) {
@@ -19,7 +19,7 @@ exports.parse = function(code, options) {
 exports.parseForESLint = function(code, options = {}) {
   if (!IS_RUNNING_SUPPORTED_VERSION) {
     throw new Error(
-      `babel-eslint@${packageJson.version} does not support @babel/core@${CURRENT_BABEL_VERSION}. Please downgrade to babel-eslint@^10 or upgrade to @babel/core@${SUPPORTED_BABEL_VERSION_RANGE}`
+      `babel-eslint@${packageJson.version} does not support @babel/core@${CURRENT_BABEL_VERSION}. Please downgrade to babel-eslint@^10 or upgrade to @babel/core@${SUPPORTED_BABEL_VERSION_RANGE}`,
     );
   }
 
