@@ -1,1 +1,1 @@
-function foo(foo, bar = foo ?? "bar") {}
+function foo(foo, qux = foo.bar ?? "qux") {}
