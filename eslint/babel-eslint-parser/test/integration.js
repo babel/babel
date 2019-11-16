@@ -185,7 +185,6 @@ function strictSuite() {
         (err, report) => {
           if (err) return done(err);
           [0, 1].forEach(i => {
-            // assert(report[i].ruleId === ruleId);
             expect(report[i].ruleId).toBe(ruleId);
           });
           done();
@@ -217,9 +216,7 @@ function strictSuite() {
         },
         (err, report) => {
           if (err) return done(err);
-          // assert(report[0].ruleId === ruleId);
           expect(report[0].ruleId).toBe(ruleId);
-          // assert(report[0].nodeType.indexOf("Function") === -1);
           expect(report[0].nodeType.indexOf("Function")).toBe(-1);
           done();
         }

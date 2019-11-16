@@ -41,8 +41,6 @@ function verifyAndAssertMessagesWithSpecificESLint(
     }
   }
 
-  // console.log(config);
-
   const messages = linter.verify(code, config);
 
   if (messages.length !== expectedMessages.length) {
