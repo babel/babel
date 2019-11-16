@@ -9,6 +9,11 @@ assignees: ''
 
 ## Bug Report
 
+<!--
+@babel/eslint-parser:
+  If you are having issues with JSX you might want to check out eslint-plugin-react. If there's an issue with new experimental syntax you might need check if it's supported by @babel/eslint-plugin.
+-->
+
 **Current Behavior**
 A clear and concise description of the behavior.
 
@@ -22,7 +27,9 @@ var your => (code) => here;
 **Expected behavior/code**
 A clear and concise description of what you expected to happen (or code).
 
-**Babel Configuration (.babelrc, package.json, cli command)**
+**Babel Configuration (.babelrc, package.json, cli command, .eslintrc)**
+
+- Filename: `babel.config.js`
 
 ```js
 {

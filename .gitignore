@@ -60,3 +60,7 @@ packages/babel-preset-env-standalone/babel-preset-env.min.js
 /packages/babel-parser/build
 .idea/
 /.changelog
+
+/eslint/*/node_modules
+/eslint/*/LICENSE
+!/packages/babel-eslint-plugin/LICENSE
