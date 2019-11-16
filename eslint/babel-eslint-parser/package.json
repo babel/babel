@@ -20,9 +20,6 @@
     "node": ">=6"
   },
   "main": "lib/index.js",
-  "files": [
-    "lib"
-  ],
   "peerDependencies": {
     "@babel/core": ">=7.2.0",
     "eslint": ">= 4.12.1"

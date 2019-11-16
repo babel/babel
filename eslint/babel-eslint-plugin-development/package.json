@@ -13,7 +13,7 @@
     "email": "nicolo.ribaudo@gmail.com",
     "url": "https://github.com/nicolo-ribaudo"
   },
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "devDependencies": {
     "eslint": "^5.9.0"
   },
