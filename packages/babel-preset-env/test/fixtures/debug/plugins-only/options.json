@@ -2,18 +2,21 @@
   "validateLogs": true,
   "ignoreOutput": true,
   "presets": [
-    ["env", {
-      "debug": true,
-      "exclude": [
-        "transform-async-to-generator",
-        "transform-regenerator",
-        "transform-parameters"
+    [
+      "env",
+      {
+        "debug": true,
+        "exclude": [
+          "transform-async-to-generator",
+          "transform-regenerator",
+          "transform-parameters"
         ],
-      "targets": {
-        "firefox": 52,
-        "node": 7.4
-      },
-      "useBuiltIns": false
-    }]
+        "targets": {
+          "firefox": 52,
+          "node": 7.4
+        },
+        "useBuiltIns": false
+      }
+    ]
   ]
 }

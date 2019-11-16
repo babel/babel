@@ -1,5 +1,3 @@
 {
-  "plugins": [
-    "classPrivateMethods"
-  ]
+  "plugins": ["classPrivateMethods"]
 }

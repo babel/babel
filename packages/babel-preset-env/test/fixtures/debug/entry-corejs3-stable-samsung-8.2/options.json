@@ -2,14 +2,17 @@
   "validateLogs": true,
   "ignoreOutput": true,
   "presets": [
-    ["env", {
-      "debug": true,
-      "targets": {
-        "browsers": "samsung 8.2"
-      },
-      "shippedProposals": true,
-      "useBuiltIns": "entry",
-      "corejs": 3
-    }]
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "browsers": "samsung 8.2"
+        },
+        "shippedProposals": true,
+        "useBuiltIns": "entry",
+        "corejs": 3
+      }
+    ]
   ]
 }

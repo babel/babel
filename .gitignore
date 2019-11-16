@@ -61,6 +61,7 @@ packages/babel-preset-env-standalone/babel-preset-env.min.js
 .idea/
 /.changelog
 
+/eslint/*/lib
 /eslint/*/node_modules
 /eslint/*/LICENSE
 !/packages/babel-eslint-plugin/LICENSE

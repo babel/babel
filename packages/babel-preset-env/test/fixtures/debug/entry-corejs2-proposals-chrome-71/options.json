@@ -2,13 +2,16 @@
   "validateLogs": true,
   "ignoreOutput": true,
   "presets": [
-    ["env", {
-      "debug": true,
-      "targets": {
-        "browsers": "chrome 71"
-      },
-      "useBuiltIns": "entry",
-      "corejs": { "version": 2, "proposals": true }
-    }]
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "browsers": "chrome 71"
+        },
+        "useBuiltIns": "entry",
+        "corejs": { "version": 2, "proposals": true }
+      }
+    ]
   ]
 }

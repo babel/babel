@@ -2,13 +2,16 @@
   "validateLogs": true,
   "ignoreOutput": true,
   "presets": [
-    ["env", {
-      "debug": true,
-      "targets": {
-      "chrome": 71
-      },
-      "useBuiltIns": "usage",
-      "corejs": 3
-    }]
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "chrome": 71
+        },
+        "useBuiltIns": "usage",
+        "corejs": 3
+      }
+    ]
   ]
 }

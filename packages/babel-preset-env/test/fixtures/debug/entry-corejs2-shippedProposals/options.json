@@ -2,11 +2,14 @@
   "validateLogs": true,
   "ignoreOutput": true,
   "presets": [
-    ["env", {
-      "debug": true,
-      "shippedProposals": true,
-      "useBuiltIns": "entry",
-      "corejs": 2
-    }]
+    [
+      "env",
+      {
+        "debug": true,
+        "shippedProposals": true,
+        "useBuiltIns": "entry",
+        "corejs": 2
+      }
+    ]
   ]
 }
