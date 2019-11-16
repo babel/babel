@@ -11,7 +11,6 @@ module.exports = {
     "consistent-return": "off",
     curly: ["error", "multi-line"],
     "linebreak-style": ["error", "unix"],
-    "max-len": ["error", 110, 2],
     "new-cap": "off",
     "no-case-declarations": "error",
     "no-cond-assign": "off",

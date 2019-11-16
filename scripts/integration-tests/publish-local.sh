@@ -11,6 +11,13 @@ source utils/local-registry.sh
 source utils/git.sh
 source utils/cleanup.sh
 
+function publishESLintPkg {
+  cd eslint/$1
+  yarn version --patch --no-git-tag-version
+  cd ../..
+  make publish-eslint PKG=$1
+}
+
 # Echo every command being executed
 set -x
 
@@ -29,5 +36,10 @@ startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 loginLocalRegistry
 
 I_AM_USING_VERDACCIO=I_AM_SURE make publish-test
+
+publishESLintPkg babel-eslint-config-internal
+publishESLintPkg babel-eslint-parser
+publishESLintPkg babel-eslint-plugin
+publishESLintPkg babel-eslint-plugin-development
 
 cleanup

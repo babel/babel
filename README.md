@@ -108,7 +108,7 @@ Some resources:
 - Our [CONTRIBUTING.md](CONTRIBUTING.md) to get started with setting up the repo.
 - Our discussions/notes/roadmap: [babel/notes](https://github.com/babel/notes)
 - Our progress on TC39 proposals: [babel/proposals](https://github.com/babel/proposals)
-- Our blog which contains release posts and explainations: [/blog](https://babeljs.io/blog)
+- Our blog which contains release posts and explanations: [/blog](https://babeljs.io/blog)
 - Our videos page with talks about open source and Babel: [/videos](https://babeljs.io/videos)
 - Our [podcast](https://podcast.babeljs.io)
 

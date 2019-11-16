@@ -8,6 +8,12 @@ export FORCE_COLOR = true
 
 SOURCES = packages codemods eslint
 
+COMMA := ,
+EMPTY :=
+SPACE := $(EMPTY) $(EMPTY)
+COMMA_SEPARATED_SOURCES = $(subst $(SPACE),$(COMMA),$(SOURCES))
+
+
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
 build: build-bundle
@@ -113,7 +119,7 @@ fix-js:
 	yarn eslint scripts $(SOURCES) '*.js' --format=codeframe --fix
 
 fix-json:
-	yarn prettier "{packages,codemod}/*/test/fixtures/**/options.json" --write --loglevel warn
+	yarn prettier "{$(COMMA_SEPARATED_SOURCES)}/*/test/fixtures/**/options.json" --write --loglevel warn
 
 clean: test-clean
 	rm -f .npmrc
@@ -219,6 +225,11 @@ endif
 	yarn lerna publish from-git --registry http://localhost:4873 --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
 
+publish-eslint:
+	$(call set-json-field, ./eslint/$(PKG)/package.json, private, false)
+	cd eslint/$(PKG); yarn publish
+	$(call set-json-field, ./eslint/$(PKG)/package.json, private, true)
+
 bootstrap-only: lerna-bootstrap
 
 yarn-install: clean-all
@@ -232,8 +243,10 @@ bootstrap: bootstrap-only
 	$(MAKE) build
 
 clean-lib:
+	# TODO: Don't delete eslint/*/lib when they use src
 	$(foreach source, $(SOURCES), \
-		$(call clean-source-lib, $(source)))
+		$(if $(filter-out $(source), eslint), \
+			$(call clean-source-lib, $(source))))
 
 clean-runtime-helpers:
 	rm -rf packages/babel-runtime/helpers
@@ -262,8 +275,16 @@ define clean-source-test
 endef
 
 define clean-source-all
-	rm -rf $(1)/*/lib
+	# TODO: Don't delete eslint/*/lib when they use src
+	$(if $(filter-out $1, eslint), $(call clean-source-lib, $1))
 	rm -rf $(1)/*/node_modules
 	rm -rf $(1)/*/package-lock.json
 
+endef
+
+define set-json-field
+	node -e "\
+		require('fs').writeFileSync('$1'.trim(), \
+			JSON.stringify({ ...require('$1'.trim()), $2: $3 }, null, 2) + '\\n' \
+		)"
 endef

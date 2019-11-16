@@ -16,14 +16,15 @@ export default declare((api, { loose = false }) => {
           return;
         }
 
-        const ref = scope.generateUidIdentifierBasedOnNode(node.left);
-        scope.push({ id: ref });
-
-        const assignment = t.assignmentExpression(
-          "=",
-          t.cloneNode(ref),
-          node.left,
-        );
+        let ref = scope.maybeGenerateMemoised(node.left);
+        let assignment;
+        // skip creating extra reference when `left` is static
+        if (ref === null) {
+          ref = node.left;
+          assignment = t.cloneNode(node.left);
+        } else {
+          assignment = t.assignmentExpression("=", ref, node.left);
+        }
 
         path.replaceWith(
           t.conditionalExpression(

@@ -1,6 +1,6 @@
 # @babel/plugin-transform-literals
 
-> Compile ES2015 unicode string and number literals to ES5
+> Compile ES2015 Unicode string and number literals to ES5
 
 See our website [@babel/plugin-transform-literals](https://babeljs.io/docs/en/next/babel-plugin-transform-literals.html) for more information.
 

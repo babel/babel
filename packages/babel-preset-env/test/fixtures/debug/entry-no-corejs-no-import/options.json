@@ -2,12 +2,15 @@
   "validateLogs": true,
   "ignoreOutput": true,
   "presets": [
-    ["env", {
-      "debug": true,
-      "targets": {
-        "node": 6
-      },
-      "useBuiltIns": "entry"
-    }]
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "node": 6
+        },
+        "useBuiltIns": "entry"
+      }
+    ]
   ]
 }

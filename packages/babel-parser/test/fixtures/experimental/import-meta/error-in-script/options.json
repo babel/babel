@@ -1,7 +1,4 @@
 {
-  "plugins": [
-    "dynamicImport",
-    "importMeta"
-  ],
+  "plugins": ["dynamicImport", "importMeta"],
   "sourceType": "script"
 }
