@@ -1,11 +1,19 @@
 "use strict";
 
 const assert = require("assert");
-const babelEslint = require("../..");
+const path = require("path");
+const babelEslint = require("../");
 const espree = require("espree");
 const escope = require("eslint-scope");
 const unpad = require("dedent");
-const assertImplementsAST = require("../helpers/assert-implements-ast");
+const assertImplementsAST = require("./helpers/assert-implements-ast");
+
+const babelOptions = {
+  configFile: path.resolve(
+    __dirname,
+    "./fixtures/config/babel.config.js"
+  ),
+}
 
 function parseAndAssertSame(code) {
   code = unpad(code);
@@ -30,6 +38,7 @@ function parseAndAssertSame(code) {
   const babylonAST = babelEslint.parseForESLint(code, {
     eslintVisitorKeys: true,
     eslintScopeManager: true,
+    babelOptions,
   }).ast;
   assertImplementsAST(esAST, babylonAST);
 }
@@ -40,15 +49,11 @@ describe("babylon-to-espree", () => {
       const esAST = babelEslint.parseForESLint("`test`", {
         eslintScopeManager: true,
         eslintVisitorKeys: true,
+        babelOptions,
       }).ast;
-
-      assert.doesNotThrow(
-        () => {
-          escope.analyze(esAST);
-        },
-        TypeError,
-        "Should allow no options argument."
-      );
+      expect(() => {
+        escope.analyze(esAST)
+      }).not.toThrow(new TypeError('Should allow no options argument.'));
     });
   });
 
@@ -243,6 +248,7 @@ describe("babylon-to-espree", () => {
     const babylonAST = babelEslint.parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
+      babelOptions,
     }).ast;
     assert.strictEqual(babylonAST.tokens[1].type, "Punctuator");
   });
@@ -253,6 +259,7 @@ describe("babylon-to-espree", () => {
     const babylonAST = babelEslint.parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
+      babelOptions,
     }).ast;
     assert.strictEqual(babylonAST.tokens[1].type, "Punctuator");
   });
@@ -263,6 +270,7 @@ describe("babylon-to-espree", () => {
     const babylonAST = babelEslint.parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
+      babelOptions,
     }).ast;
     assert.strictEqual(babylonAST.tokens[1].type, "Punctuator");
   });
@@ -273,6 +281,7 @@ describe("babylon-to-espree", () => {
     const babylonAST = babelEslint.parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
+      babelOptions,
     }).ast;
     assert.strictEqual(babylonAST.tokens[3].type, "Punctuator");
     assert.strictEqual(babylonAST.tokens[3].value, "#");

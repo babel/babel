@@ -14,7 +14,6 @@
   },
   "homepage": "https://github.com/babel/babel-eslint",
   "scripts": {
-    "test": "cd test && mocha specs && cd -",
     "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'"
   },
   "engines": {
@@ -50,7 +49,6 @@
     "@babel/preset-react": "^7.0.0",
     "dedent": "^0.7.0",
     "eslint": "^6.0.1",
-    "espree": "^6.0.0",
-    "mocha": "^6.1.4"
+    "espree": "^6.0.0"
   }
 }

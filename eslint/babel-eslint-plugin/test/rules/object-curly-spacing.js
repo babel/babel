@@ -7,7 +7,7 @@
  */
 
 var rule = require('../../rules/object-curly-spacing'),
-    RuleTester = require('../RuleTester');
+    RuleTester = require("../helpers/RuleTester");
 
 var ruleTester = new RuleTester();
 ruleTester.run('babel/object-curly-spacing', rule, {

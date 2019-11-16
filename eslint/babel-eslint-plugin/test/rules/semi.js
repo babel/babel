@@ -11,7 +11,7 @@
 //------------------------------------------------------------------------------
 
 const rule = require("../../rules/semi"),
-    RuleTester = require("../RuleTester");
+      RuleTester = require("../helpers/RuleTester");
 
 const ruleTester = new RuleTester();
 

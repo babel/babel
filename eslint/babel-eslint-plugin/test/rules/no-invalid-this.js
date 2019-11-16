@@ -10,8 +10,8 @@
 //------------------------------------------------------------------------------
 
 const cloneDeep = require("lodash.clonedeep");
-const rule = require("../../rules/no-invalid-this");
-const RuleTester = require("../RuleTester");
+const rule = require("../../rules/no-invalid-this"),
+      RuleTester = require("../helpers/RuleTester");
 
 //------------------------------------------------------------------------------
 // Helpers

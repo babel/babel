@@ -4,7 +4,7 @@ const eslint = require("eslint");
 const path = require("path");
 const unpad = require("dedent");
 
-const parser = require("../..");
+const parser = require("../");
 
 function verifyAndAssertMessagesWithSpecificESLint(
   code,
@@ -26,7 +26,13 @@ function verifyAndAssertMessagesWithSpecificESLint(
       ecmaFeatures: {
         globalReturn: true,
       },
-    },
+      babelOptions: {
+        configFile: path.resolve(
+          __dirname,
+          "./fixtures/config/babel.config.js"
+        ),
+      },
+    }
   };
 
   if (overrideConfig) {
@@ -1162,7 +1168,7 @@ describe("verify", () => {
           babelOptions: {
             configFile: path.resolve(
               __dirname,
-              "../fixtures/config/babel.config.decorators-legacy.js"
+              "./fixtures/config/babel.config.decorators-legacy.js"
             ),
           },
         },

@@ -4,7 +4,7 @@
  */
 
 var rule = require('../../rules/new-cap'),
-    RuleTester = require('../RuleTester');
+    RuleTester = require("../helpers/RuleTester");
 
 var ruleTester = new RuleTester();
 ruleTester.run('babel/new-cap', rule, {

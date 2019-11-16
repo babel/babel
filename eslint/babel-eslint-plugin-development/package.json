@@ -14,12 +14,8 @@
     "url": "https://github.com/nicolo-ribaudo"
   },
   "main": "src/index.js",
-  "scripts": {
-    "test": "mocha tests --recursive"
-  },
   "devDependencies": {
-    "eslint": "^5.9.0",
-    "mocha": "^5.2.0"
+    "eslint": "^5.9.0"
   },
   "engines": {
     "node": ">=8.0.0"
