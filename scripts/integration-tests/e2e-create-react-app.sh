@@ -21,7 +21,7 @@ cd tmp/create-react-app
 #                                   TEST                                       #
 #==============================================================================#
 
-startLocalRegistry "$PWD"/../../../../scripts/integration-tests/verdaccio-config.yml
+startLocalRegistry "$PWD"/../../verdaccio-config.yml
 yarn install
 # "yarn upgrade --scope @babel --latest" doesn't seem to work.
 # a means "all", while \n is the enter needed to confirm the selection.
