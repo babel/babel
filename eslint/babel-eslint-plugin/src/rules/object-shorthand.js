@@ -22,7 +22,7 @@ module.exports = {
 
         console.log(
           "The babel/object-shorthand rule is deprecated. Please " +
-            "use the built in object-shorthand rule instead."
+            "use the built in object-shorthand rule instead.",
         );
         isWarnedForDeprecation = true;
       },

@@ -119,5 +119,5 @@ module.exports = ruleComposer.filterReports(
     }
 
     return true;
-  }
+  },
 );
