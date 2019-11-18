@@ -21,8 +21,5 @@
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/helper-plugin-test-runner": "^7.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
