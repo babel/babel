@@ -1399,6 +1399,7 @@ export default class StatementParser extends ExpressionParser {
       method.kind = "method";
       // The so-called parsed name would have been "async": get the real name.
       this.parseClassPropertyName(method);
+      this.parsePostMemberNameModifiers(publicMember);
 
       if (method.key.type === "PrivateName") {
         // private async method
