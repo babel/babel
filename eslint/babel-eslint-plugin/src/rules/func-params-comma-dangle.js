@@ -22,7 +22,7 @@ module.exports = {
 
         console.log(
           "The babel/func-params-comma-dangle rule is deprecated. Please " +
-            "use the built in comma-dangle rule instead."
+            "use the built in comma-dangle rule instead.",
         );
         isWarnedForDeprecation = true;
       },

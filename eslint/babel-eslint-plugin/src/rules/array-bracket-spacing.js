@@ -37,7 +37,7 @@ module.exports = {
 
         console.log(
           "The babel/array-bracket-spacing rule is deprecated. Please " +
-            "use the built in array-bracket-spacing rule instead."
+            "use the built in array-bracket-spacing rule instead.",
         );
         isWarnedForDeprecation = true;
       },

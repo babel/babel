@@ -22,7 +22,7 @@ module.exports = {
 
         console.log(
           "The babel/arrow-parens rule is deprecated. Please " +
-            "use the built in arrow-parens rule instead."
+            "use the built in arrow-parens rule instead.",
         );
         isWarnedForDeprecation = true;
       },

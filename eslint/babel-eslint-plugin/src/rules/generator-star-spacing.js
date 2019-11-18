@@ -34,7 +34,7 @@ module.exports = {
 
         console.log(
           "The babel/generator-star-spacing rule is deprecated. Please " +
-            "use the built in generator-star-spacing rule instead."
+            "use the built in generator-star-spacing rule instead.",
         );
         isWarnedForDeprecation = true;
       },

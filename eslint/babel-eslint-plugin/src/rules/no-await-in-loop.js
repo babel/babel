@@ -18,7 +18,7 @@ module.exports = {
 
         console.log(
           "The babel/no-await-in-loop rule is deprecated. Please " +
-            "use the built in no-await-in-loop rule instead."
+            "use the built in no-await-in-loop rule instead.",
         );
         isWarnedForDeprecation = true;
       },
