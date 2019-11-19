@@ -72,13 +72,22 @@ export default function cloneNode<T: Object>(
     }
   }
   if (has(node, "leadingComments")) {
-    newNode.leadingComments = node.leadingComments;
+    newNode.leadingComments =
+      deep && withoutLoc
+        ? cloneIfNodeOrArray(node.leadingComments, true, true)
+        : node.leadingComments;
   }
   if (has(node, "innerComments")) {
-    newNode.innerComments = node.innerComments;
+    newNode.innerComments =
+      deep && withoutLoc
+        ? cloneIfNodeOrArray(node.innerComments, true, true)
+        : node.innerComments;
   }
   if (has(node, "trailingComments")) {
-    newNode.trailingComments = node.trailingComments;
+    newNode.trailingComments =
+      deep && withoutLoc
+        ? cloneIfNodeOrArray(node.trailingComments, true, true)
+        : node.trailingComments;
   }
   if (has(node, "extra")) {
     newNode.extra = {
