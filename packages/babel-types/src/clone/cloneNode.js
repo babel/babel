@@ -2,7 +2,7 @@ import { NODE_FIELDS } from "../definitions";
 
 const has = Function.call.bind(Object.prototype.hasOwnProperty);
 
-function cloneIfNode(obj, deep) {
+function cloneIfNode(obj, deep, withoutLoc) {
   if (
     obj &&
     typeof obj.type === "string" &&
@@ -11,17 +11,17 @@ function cloneIfNode(obj, deep) {
     obj.type !== "CommentLine" &&
     obj.type !== "CommentBlock"
   ) {
-    return cloneNode(obj, deep);
+    return cloneNode(obj, deep, withoutLoc);
   }
 
   return obj;
 }
 
-function cloneIfNodeOrArray(obj, deep) {
+function cloneIfNodeOrArray(obj, deep, withoutLoc) {
   if (Array.isArray(obj)) {
-    return obj.map(node => cloneIfNode(node, deep));
+    return obj.map(node => cloneIfNode(node, deep, withoutLoc));
   }
-  return cloneIfNode(obj, deep);
+  return cloneIfNode(obj, deep, withoutLoc);
 }
 
 /**
@@ -49,7 +49,7 @@ export default function cloneNode<T: Object>(
 
     if (has(node, "typeAnnotation")) {
       newNode.typeAnnotation = deep
-        ? cloneIfNodeOrArray(node.typeAnnotation, true)
+        ? cloneIfNodeOrArray(node.typeAnnotation, true, withoutLoc)
         : node.typeAnnotation;
     }
   } else if (!has(NODE_FIELDS, type)) {
@@ -58,7 +58,7 @@ export default function cloneNode<T: Object>(
     for (const field of Object.keys(NODE_FIELDS[type])) {
       if (has(node, field)) {
         newNode[field] = deep
-          ? cloneIfNodeOrArray(node[field], true)
+          ? cloneIfNodeOrArray(node[field], true, withoutLoc)
           : node[field];
       }
     }
