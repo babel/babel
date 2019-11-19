@@ -132,6 +132,48 @@ export default declare((api, opts) => {
     });
   }
 
+  function createObjRefExpression(path, objRef) {
+    let impureDefaultValueDeclarator;
+    let objRefExpression;
+    if (path.parentPath?.isAssignmentPattern()) {
+      // { { foo, ...bar } = qux } = quux;
+      const { scope } = path;
+      const parentRight = path.parentPath.get("right");
+      const parentRightId = scope.maybeGenerateMemoised(parentRight.node);
+      if (parentRightId) {
+        impureDefaultValueDeclarator = t.variableDeclarator(
+          parentRightId,
+          t.cloneNode(parentRight.node),
+        );
+      }
+      const objRefName = scope.generateUidBasedOnNode(objRef, "_ref");
+      scope.push({ id: t.identifier(objRefName) });
+
+      objRefExpression = t.sequenceExpression([
+        t.assignmentExpression(
+          "=",
+          t.identifier(objRefName),
+          t.cloneNode(objRef),
+        ),
+        t.conditionalExpression(
+          t.binaryExpression(
+            "!==",
+            t.identifier(objRefName),
+            scope.buildUndefinedNode(),
+          ),
+          t.identifier(objRefName),
+          parentRightId ?? t.cloneNode(parentRight.node),
+        ),
+      ]);
+    } else {
+      objRefExpression = t.cloneNode(objRef);
+    }
+    return {
+      impureDefaultValueDeclarator,
+      objRefExpression,
+    };
+  }
+
   //expects path to an object pattern
   function createObjectSpread(path, file, objRef) {
     const props = path.get("properties");
@@ -145,14 +187,19 @@ export default declare((api, opts) => {
       path.scope,
     );
     const { keys, allLiteral } = extractNormalizedKeys(path);
+    const {
+      objRefExpression,
+      impureDefaultValueDeclarator,
+    } = createObjRefExpression(path, objRef);
 
     if (keys.length === 0) {
       return [
         impureComputedPropertyDeclarators,
+        impureDefaultValueDeclarator,
         restElement.argument,
         t.callExpression(getExtendsHelper(file), [
           t.objectExpression([]),
-          t.cloneNode(objRef),
+          objRefExpression,
         ]),
       ];
     }
@@ -170,10 +217,11 @@ export default declare((api, opts) => {
 
     return [
       impureComputedPropertyDeclarators,
+      impureDefaultValueDeclarator,
       restElement.argument,
       t.callExpression(
         file.addHelper(`objectWithoutProperties${loose ? "Loose" : ""}`),
-        [t.cloneNode(objRef), keyExpression],
+        [objRefExpression, keyExpression],
       ),
     ];
   }
@@ -359,6 +407,7 @@ export default declare((api, opts) => {
 
           const [
             impureComputedPropertyDeclarators,
+            impureDefaultValueDeclarator,
             argument,
             callExpression,
           ] = createObjectSpread(objectPatternPath, file, ref);
@@ -369,7 +418,15 @@ export default declare((api, opts) => {
 
           t.assertIdentifier(argument);
 
-          insertionPath.insertBefore(impureComputedPropertyDeclarators);
+          const extraDeclarators = impureComputedPropertyDeclarators;
+          if (impureDefaultValueDeclarator) {
+            extraDeclarators.push(impureDefaultValueDeclarator);
+            objectPatternPath.parentPath
+              .get("right")
+              .replaceWith(t.cloneNode(impureDefaultValueDeclarator.id));
+          }
+
+          insertionPath.insertBefore(extraDeclarators);
 
           insertionPath.insertBefore(impureObjRefComputedDeclarators);
 
@@ -442,14 +499,21 @@ export default declare((api, opts) => {
 
           const [
             impureComputedPropertyDeclarators,
+            impureDefaultValueDeclarator,
             argument,
             callExpression,
           ] = createObjectSpread(leftPath, file, t.identifier(refName));
 
-          if (impureComputedPropertyDeclarators.length > 0) {
-            nodes.push(
-              t.variableDeclaration("var", impureComputedPropertyDeclarators),
-            );
+          const extraDeclarators = impureComputedPropertyDeclarators;
+          if (impureDefaultValueDeclarator) {
+            leftPath.parentPath
+              .get("right")
+              .replaceWith(t.cloneNode(impureDefaultValueDeclarator.id));
+            extraDeclarators.push(impureDefaultValueDeclarator);
+          }
+
+          if (extraDeclarators.length > 0) {
+            nodes.push(t.variableDeclaration("var", extraDeclarators));
           }
 
           const nodeWithoutSpread = t.cloneNode(path.node);
