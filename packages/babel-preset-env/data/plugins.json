@@ -3,7 +3,9 @@
     "chrome": "41",
     "edge": "13",
     "firefox": "34",
+    "safari": "13",
     "node": "4",
+    "ios": "13",
     "samsung": "3.4",
     "opera": "28",
     "electron": "0.24"
@@ -273,6 +275,7 @@
     "safari": "11.1",
     "node": "10",
     "ios": "11.3",
+    "samsung": "9.2",
     "opera": "51",
     "electron": "3.1"
   },
@@ -282,6 +285,7 @@
     "safari": "12",
     "node": "10",
     "ios": "12",
+    "samsung": "9.2",
     "opera": "53",
     "electron": "3.1"
   },
@@ -291,6 +295,7 @@
     "safari": "11.1",
     "node": "10",
     "ios": "11.3",
+    "samsung": "9.2",
     "opera": "53",
     "electron": "3.1"
   },
@@ -299,6 +304,7 @@
     "safari": "11.1",
     "node": "10",
     "ios": "11.3",
+    "samsung": "9.2",
     "opera": "51",
     "electron": "3.1"
   },

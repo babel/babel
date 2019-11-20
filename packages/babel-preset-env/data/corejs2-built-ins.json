@@ -77,6 +77,7 @@
     "safari": "12",
     "node": "11",
     "ios": "12",
+    "samsung": "10.2",
     "opera": "56",
     "electron": "4"
   },
@@ -1496,6 +1497,7 @@
     "safari": "12",
     "node": "10",
     "ios": "12",
+    "samsung": "9.2",
     "opera": "53",
     "electron": "3.1"
   },
@@ -1505,6 +1507,7 @@
     "safari": "12",
     "node": "10",
     "ios": "12",
+    "samsung": "9.2",
     "opera": "53",
     "electron": "3.1"
   },

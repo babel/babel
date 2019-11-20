@@ -95,7 +95,31 @@ const es = {
     ],
   },
 
-  "es6.map": "Map",
+  // This is explicit to prevent Map-related proposals (like
+  // Map.prototype.upsert) from being included
+  "es6.map": {
+    features: [
+      "Map / basic functionality",
+      "Map / constructor arguments",
+      "Map / constructor requires new",
+      "Map / constructor accepts null",
+      "Map / constructor invokes set",
+      "Map / iterator closing",
+      "Map / Map.prototype.add returns this",
+      "Map / -0 key converts to +0",
+      "Map / Map.prototype.size",
+      "Map / Map.prototype.delete",
+      "Map / Map.prototype.clear",
+      "Map / Map.prototype.forEach",
+      "Map / Map.prototype.keys",
+      "Map / Map.prototype.values",
+      "Map / Map.prototype.entries",
+      "Map / Map.prototype[Symbol.iterator]",
+      "Map / Map.prototype isn't an instance",
+      "Map / Map iterator prototype chain",
+      "Map / Map[Symbol.species]",
+    ],
+  },
 
   "es6.math.acosh": "Math methods / Math.acosh",
   "es6.math.asinh": "Math methods / Math.asinh",
