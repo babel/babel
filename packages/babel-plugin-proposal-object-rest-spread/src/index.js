@@ -133,7 +133,7 @@ export default declare((api, opts) => {
   }
 
   function createObjRefExpression(path, objRef) {
-    let impureDefaultValueDeclarator;
+    let nonStaticDefaultValueDeclarator;
     let objRefExpression;
     if (path.parentPath?.isAssignmentPattern()) {
       // { { foo, ...bar } = qux } = quux;
@@ -141,7 +141,7 @@ export default declare((api, opts) => {
       const parentRight = path.parentPath.get("right");
       const parentRightId = scope.maybeGenerateMemoised(parentRight.node);
       if (parentRightId) {
-        impureDefaultValueDeclarator = t.variableDeclarator(
+        nonStaticDefaultValueDeclarator = t.variableDeclarator(
           parentRightId,
           t.cloneNode(parentRight.node),
         );
@@ -169,7 +169,7 @@ export default declare((api, opts) => {
       objRefExpression = t.cloneNode(objRef);
     }
     return {
-      impureDefaultValueDeclarator,
+      nonStaticDefaultValueDeclarator,
       objRefExpression,
     };
   }
@@ -189,13 +189,13 @@ export default declare((api, opts) => {
     const { keys, allLiteral } = extractNormalizedKeys(path);
     const {
       objRefExpression,
-      impureDefaultValueDeclarator,
+      nonStaticDefaultValueDeclarator,
     } = createObjRefExpression(path, objRef);
 
     if (keys.length === 0) {
       return [
         impureComputedPropertyDeclarators,
-        impureDefaultValueDeclarator,
+        nonStaticDefaultValueDeclarator,
         restElement.argument,
         t.callExpression(getExtendsHelper(file), [
           t.objectExpression([]),
@@ -217,7 +217,7 @@ export default declare((api, opts) => {
 
     return [
       impureComputedPropertyDeclarators,
-      impureDefaultValueDeclarator,
+      nonStaticDefaultValueDeclarator,
       restElement.argument,
       t.callExpression(
         file.addHelper(`objectWithoutProperties${loose ? "Loose" : ""}`),
@@ -407,7 +407,7 @@ export default declare((api, opts) => {
 
           const [
             impureComputedPropertyDeclarators,
-            impureDefaultValueDeclarator,
+            nonStaticDefaultValueDeclarator,
             argument,
             callExpression,
           ] = createObjectSpread(objectPatternPath, file, ref);
@@ -419,11 +419,11 @@ export default declare((api, opts) => {
           t.assertIdentifier(argument);
 
           const extraDeclarators = impureComputedPropertyDeclarators;
-          if (impureDefaultValueDeclarator) {
-            extraDeclarators.push(impureDefaultValueDeclarator);
+          if (nonStaticDefaultValueDeclarator) {
+            extraDeclarators.push(nonStaticDefaultValueDeclarator);
             objectPatternPath.parentPath
               .get("right")
-              .replaceWith(t.cloneNode(impureDefaultValueDeclarator.id));
+              .replaceWith(t.cloneNode(nonStaticDefaultValueDeclarator.id));
           }
 
           insertionPath.insertBefore(extraDeclarators);
@@ -499,17 +499,17 @@ export default declare((api, opts) => {
 
           const [
             impureComputedPropertyDeclarators,
-            impureDefaultValueDeclarator,
+            nonStaticDefaultValueDeclarator,
             argument,
             callExpression,
           ] = createObjectSpread(leftPath, file, t.identifier(refName));
 
           const extraDeclarators = impureComputedPropertyDeclarators;
-          if (impureDefaultValueDeclarator) {
+          if (nonStaticDefaultValueDeclarator) {
             leftPath.parentPath
               .get("right")
-              .replaceWith(t.cloneNode(impureDefaultValueDeclarator.id));
-            extraDeclarators.push(impureDefaultValueDeclarator);
+              .replaceWith(t.cloneNode(nonStaticDefaultValueDeclarator.id));
+            extraDeclarators.push(nonStaticDefaultValueDeclarator);
           }
 
           if (extraDeclarators.length > 0) {
