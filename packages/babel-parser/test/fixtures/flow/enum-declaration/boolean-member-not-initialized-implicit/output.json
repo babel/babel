@@ -65,16 +65,16 @@
         },
         "body": {
           "type": "EnumBooleanBody",
-          "start": 11,
-          "end": 25,
+          "start": 7,
+          "end": 27,
           "loc": {
             "start": {
-              "line": 2,
-              "column": 2
+              "line": 1,
+              "column": 7
             },
             "end": {
-              "line": 3,
-              "column": 11
+              "line": 4,
+              "column": 1
             }
           },
           "explicitType": false,
