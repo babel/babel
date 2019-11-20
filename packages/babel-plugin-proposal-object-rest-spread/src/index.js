@@ -135,7 +135,7 @@ export default declare((api, opts) => {
   function createObjRefExpression(path, objRef) {
     let nonStaticDefaultValueDeclarator;
     let objRefExpression;
-    if (path.parentPath?.isAssignmentPattern()) {
+    if (path.parentPath.isAssignmentPattern()) {
       // { { foo, ...bar } = qux } = quux;
       const { scope } = path;
       const parentRight = path.parentPath.get("right");
