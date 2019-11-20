@@ -3395,7 +3395,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     flowParseEnumDeclaration(node: N.Node): N.Node {
       const id = this.parseIdentifier();
       node.id = id;
-      node.body = this.flowEnumBody(this.startNode(), { enumName: id.name, nameLoc: id.start });
+      node.body = this.flowEnumBody(this.startNode(), {
+        enumName: id.name,
+        nameLoc: id.start,
+      });
       return this.finishNode(node, "EnumDeclaration");
     }
   };
