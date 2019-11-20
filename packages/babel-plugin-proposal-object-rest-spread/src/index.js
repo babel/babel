@@ -146,7 +146,7 @@ export default declare((api, opts) => {
           t.cloneNode(parentRight.node),
         );
       }
-      const objRefName = scope.generateUidBasedOnNode(objRef, "_ref");
+      const objRefName = scope.generateUidBasedOnNode(objRef, "ref");
       scope.push({ id: t.identifier(objRefName) });
 
       objRefExpression = t.sequenceExpression([
