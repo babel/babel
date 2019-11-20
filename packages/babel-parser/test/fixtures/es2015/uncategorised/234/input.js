@@ -1,1 +1,1 @@
-"use strict"; ({ v: arguments }) = obj
+"use strict"; ({ v: arguments } = obj)

@@ -1,6 +1,6 @@
 {
   "name": "@babel/core",
-  "version": "7.6.4",
+  "version": "7.7.2",
   "description": "Babel compiler core.",
   "main": "lib/index.js",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
@@ -28,19 +28,23 @@
   "engines": {
     "node": ">=6.9.0"
   },
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/babel"
+  },
   "browser": {
     "./lib/config/files/index.js": "./lib/config/files/index-browser.js",
     "./lib/transform-file.js": "./lib/transform-file-browser.js"
   },
   "dependencies": {
     "@babel/code-frame": "^7.5.5",
-    "@babel/generator": "^7.6.4",
-    "@babel/helpers": "^7.6.2",
-    "@babel/parser": "^7.6.4",
-    "@babel/template": "^7.6.0",
-    "@babel/traverse": "^7.6.3",
-    "@babel/types": "^7.6.3",
-    "convert-source-map": "^1.1.0",
+    "@babel/generator": "^7.7.2",
+    "@babel/helpers": "^7.7.0",
+    "@babel/parser": "^7.7.2",
+    "@babel/template": "^7.7.0",
+    "@babel/traverse": "^7.7.2",
+    "@babel/types": "^7.7.2",
+    "convert-source-map": "^1.7.0",
     "debug": "^4.1.0",
     "json5": "^2.1.0",
     "lodash": "^4.17.13",

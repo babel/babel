@@ -1,5 +1,6 @@
 import traverse from "../lib";
 import { parse } from "@babel/parser";
+import generate from "@babel/generator";
 import * as t from "@babel/types";
 
 describe("path/replacement", function() {
@@ -95,6 +96,21 @@ describe("path/replacement", function() {
       }).toThrow(
         /You passed `path\.replaceWith\(\)` a falsy node, use `path\.remove\(\)` instead/,
       );
+    });
+  });
+  describe("replaceWithMultiple", () => {
+    it("does not add extra parentheses for a JSXElement with a JSXElement parent", () => {
+      const ast = parse(`<div><span><p></p><h></h></span></div>`, {
+        plugins: ["jsx"],
+      });
+      traverse(ast, {
+        JSXElement: path => {
+          if (path.node.openingElement.name.name === "span") {
+            path.replaceWithMultiple(path.node.children.filter(t.isJSXElement));
+          }
+        },
+      });
+      expect(generate(ast).code).toBe("<div><p></p><h></h></div>;");
     });
   });
 });

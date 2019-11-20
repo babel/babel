@@ -13,7 +13,7 @@
   <a href="https://www.npmjs.com/package/babel-core"><img alt="v6 npm Downloads" src="https://img.shields.io/npm/dm/babel-core.svg?maxAge=43200&label=v6%20downloads"></a>
 </p>
 <p align="center">
-  <a href="https://travis-ci.org/babel/babel"><img alt="Travis Status" src="https://img.shields.io/travis/babel/babel/master.svg?label=travis&maxAge=43200"></a>
+  <a href="https://travis-ci.com/babel/babel"><img alt="Travis Status" src="https://img.shields.io/travis/com/babel/babel/master.svg?label=travis&maxAge=43200"></a>
   <a href="https://circleci.com/gh/babel/babel"><img alt="CircleCI Status" src="https://img.shields.io/circleci/project/github/babel/babel/master.svg?label=circle&maxAge=43200"></a>
   <a href="https://codecov.io/github/babel/babel"><img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/babel/babel/master.svg?maxAge=43200"></a>
   <a href="https://slack.babeljs.io/"><img alt="Slack Status" src="https://slack.babeljs.io/badge.svg"></a>
@@ -108,7 +108,7 @@ Some resources:
 - Our [CONTRIBUTING.md](CONTRIBUTING.md) to get started with setting up the repo.
 - Our discussions/notes/roadmap: [babel/notes](https://github.com/babel/notes)
 - Our progress on TC39 proposals: [babel/proposals](https://github.com/babel/proposals)
-- Our blog which contains release posts and explainations: [/blog](https://babeljs.io/blog)
+- Our blog which contains release posts and explanations: [/blog](https://babeljs.io/blog)
 - Our videos page with talks about open source and Babel: [/videos](https://babeljs.io/videos)
 - Our [podcast](https://podcast.babeljs.io)
 

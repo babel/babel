@@ -1,0 +1,21 @@
+{
+  "name": "eslint-config-babel",
+  "version": "9.0.0",
+  "description": "ESLint config for babel",
+  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "homepage": "https://babeljs.io/",
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/eslint-config-babel"
+  },
+  "main": "index.js",
+  "peerDependencies": {
+    "babel-eslint": "^10.0.0 || ^11.0.0-0",
+    "eslint-plugin-flowtype": "^3.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

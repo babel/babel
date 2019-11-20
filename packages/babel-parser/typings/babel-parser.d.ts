@@ -106,7 +106,7 @@ export type ParserPlugin =
     'dynamicImport' |
     'estree' |
     'exportDefaultFrom' |
-    'exportNamespaceFrom' |
+    'exportNamespaceFrom' | // deprecated
     'flow' |
     'flowComments' |
     'functionBind' |
@@ -123,6 +123,7 @@ export type ParserPlugin =
     'pipelineOperator' |
     'placeholders' |
     'throwExpressions' |
+    'topLevelAwait' |
     'typescript' |
     'v8intrinsic' |
     ParserPluginWithOptions;

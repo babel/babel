@@ -93,9 +93,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } else {
           this.raise(start, "setter must have exactly one formal parameter");
         }
-      }
-
-      if (prop.kind === "set" && prop.value.params[0].type === "RestElement") {
+      } else if (
+        prop.kind === "set" &&
+        prop.value.params[0].type === "RestElement"
+      ) {
         this.raise(
           start,
           "setter function argument must not be a rest parameter",
@@ -108,6 +109,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       bindingType: BindingTypes = BIND_NONE,
       checkClashes: ?{ [key: string]: boolean },
       contextDescription: string,
+      disallowLetBinding?: boolean,
     ): void {
       switch (expr.type) {
         case "ObjectPattern":
@@ -117,11 +119,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               bindingType,
               checkClashes,
               "object destructuring pattern",
+              disallowLetBinding,
             );
           });
           break;
         default:
-          super.checkLVal(expr, bindingType, checkClashes, contextDescription);
+          super.checkLVal(
+            expr,
+            bindingType,
+            checkClashes,
+            contextDescription,
+            disallowLetBinding,
+          );
       }
     }
 
@@ -374,12 +383,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isLast: boolean,
     ) {
       if (prop.kind === "get" || prop.kind === "set") {
-        this.raise(
+        throw this.raise(
           prop.key.start,
           "Object pattern can't contain getter or setter",
         );
       } else if (prop.method) {
-        this.raise(prop.key.start, "Object pattern can't contain methods");
+        throw this.raise(
+          prop.key.start,
+          "Object pattern can't contain methods",
+        );
       } else {
         super.toAssignableObjectExpressionProp(prop, isBinding, isLast);
       }

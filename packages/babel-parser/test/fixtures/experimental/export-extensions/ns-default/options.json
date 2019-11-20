@@ -1,4 +1,0 @@
-{
-  "plugins": ["exportNamespaceFrom"],
-  "sourceType": "module"
-}

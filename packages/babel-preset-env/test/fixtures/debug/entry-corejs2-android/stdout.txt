@@ -30,7 +30,6 @@ Using plugins:
   transform-new-target { "android":"4" }
   transform-regenerator { "android":"4" }
   transform-exponentiation-operator { "android":"4" }
-  transform-async-to-generator { "android":"4" }
   proposal-async-generator-functions { "android":"4" }
   proposal-object-rest-spread { "android":"4" }
   proposal-unicode-property-regex { "android":"4" }

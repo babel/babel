@@ -1,1 +1,3 @@
-{ "throws": "Invalid BigIntLiteral (1:0)" }
+{
+  "plugins": ["bigInt"]
+}

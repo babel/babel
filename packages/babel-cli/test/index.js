@@ -1,7 +1,7 @@
 const readdir = require("fs-readdir-recursive");
 const helper = require("@babel/helper-fixtures");
 const rimraf = require("rimraf");
-const outputFileSync = require("output-file-sync");
+const { sync: makeDirSync } = require("make-dir");
 const child = require("child_process");
 const merge = require("lodash/merge");
 const path = require("path");
@@ -12,6 +12,11 @@ const tmpLoc = path.join(__dirname, "tmp");
 
 const fileFilter = function(x) {
   return x !== ".DS_Store";
+};
+
+const outputFileSync = function(filePath, data) {
+  makeDirSync(path.dirname(filePath));
+  fs.writeFileSync(filePath, data);
 };
 
 const presetLocs = [path.join(__dirname, "../../babel-preset-react")];

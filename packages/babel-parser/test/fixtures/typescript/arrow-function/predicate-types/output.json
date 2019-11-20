@@ -73,12 +73,12 @@
             },
             "typeAnnotation": {
               "type": "TSTypePredicate",
-              "start": 10,
+              "start": 8,
               "end": 21,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 10
+                  "column": 8
                 },
                 "end": {
                   "line": 1,

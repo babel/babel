@@ -1,7 +1,4 @@
 {
-  "plugins": [
-    "nullishCoalescingOperator",
-    "estree"
-  ],
+  "plugins": ["nullishCoalescingOperator", "estree"],
   "throws": "Nullish coalescing operator(??) requires parens when mixing with logical operators (1:0)"
 }

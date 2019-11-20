@@ -1,1 +1,3 @@
-{ "throws": "Numeric separators are not allowed inside unicode escape sequences or hex escape sequences (1:4)" }
+{
+  "plugins": ["bigInt", "numericSeparator"]
+}

@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "classPrivateProperties"
-  ],
-  "throws": "Private fields can't be accessed on super (5:4)"
+  "plugins": ["classPrivateProperties"]
 }

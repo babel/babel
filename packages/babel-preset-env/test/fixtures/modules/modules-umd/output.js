@@ -10,7 +10,7 @@
     factory(global.a);
     global.input = mod.exports;
   }
-})(this, function (_a) {
+})(typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : this, function (_a) {
   "use strict";
 
   _a = _interopRequireDefault(_a);

@@ -1,0 +1,3 @@
+{
+  "args": ["script.js", "--out-file", "folder/nested/script.js"]
+}

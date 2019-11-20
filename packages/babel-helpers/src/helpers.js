@@ -136,7 +136,7 @@ helpers.AsyncGenerator = helper("7.0.0-beta.0")`
         Promise.resolve(wrappedAwait ? value.wrapped : value).then(
           function (arg) {
             if (wrappedAwait) {
-              resume("next", arg);
+              resume(key === "return" ? "return" : "next", arg);
               return
             }
 
@@ -238,6 +238,10 @@ helpers.asyncGeneratorDelegate = helper("7.0.0-beta.0")`
 
     if (typeof inner.return === "function") {
       iter.return = function (value) {
+        if (waiting) {
+          waiting = false;
+          return value;
+        }
         return pump("return", value);
       };
     }
@@ -393,7 +397,7 @@ helpers.objectSpread = helper("7.0.0-beta.0")`
   export default function _objectSpread(target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = (arguments[i] != null) ? arguments[i] : {};
-      var ownKeys = Object.keys(source);
+      var ownKeys = Object.keys(Object(source));
       if (typeof Object.getOwnPropertySymbols === 'function') {
         ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
           return Object.getOwnPropertyDescriptor(source, sym).enumerable;
@@ -430,13 +434,13 @@ helpers.objectSpread2 = helper("7.5.0")`
     for (var i = 1; i < arguments.length; i++) {
       var source = (arguments[i] != null) ? arguments[i] : {};
       if (i % 2) {
-        ownKeys(source, true).forEach(function (key) {
+        ownKeys(Object(source), true).forEach(function (key) {
           defineProperty(target, key, source[key]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys(source).forEach(function (key) {
+        ownKeys(Object(source)).forEach(function (key) {
           Object.defineProperty(
             target,
             key,
@@ -620,24 +624,26 @@ helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
       return obj;
     }
 
+    if (obj === null || (typeof obj !== "object" && typeof obj !== "function")) {
+      return { default: obj }
+    }
+
     var cache = _getRequireWildcardCache();
     if (cache && cache.has(obj)) {
       return cache.get(obj);
     }
 
     var newObj = {};
-    if (obj != null) {
-      var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-      for (var key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-          var desc = hasPropertyDescriptor
-            ? Object.getOwnPropertyDescriptor(obj, key)
-            : null;
-          if (desc && (desc.get || desc.set)) {
-            Object.defineProperty(newObj, key, desc);
-          } else {
-            newObj[key] = obj[key];
-          }
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for (var key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor
+          ? Object.getOwnPropertyDescriptor(obj, key)
+          : null;
+        if (desc && (desc.get || desc.set)) {
+          Object.defineProperty(newObj, key, desc);
+        } else {
+          newObj[key] = obj[key];
         }
       }
     }
@@ -1038,9 +1044,7 @@ helpers.initializerWarningHelper = helper("7.0.0-beta.0")`
     export default function _initializerWarningHelper(descriptor, context){
         throw new Error(
           'Decorating class property failed. Please ensure that ' +
-          'proposal-class-properties is enabled and set to use loose mode. ' +
-          'To use proposal-class-properties in spec mode with decorators, wait for ' +
-          'the next major version of decorators in stage 2.'
+          'proposal-class-properties is enabled and runs after the decorators transform.'
         );
     }
 `;

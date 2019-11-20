@@ -1,14 +1,18 @@
 // @flow
 
 import defaults from "lodash/defaults";
-import outputFileSync from "output-file-sync";
-import { sync as mkdirpSync } from "mkdirp";
+import { sync as makeDirSync } from "make-dir";
 import slash from "slash";
 import path from "path";
 import fs from "fs";
 
 import * as util from "./util";
 import { type CmdOptions } from "./options";
+
+function outputFileSync(filePath: string, data: string | Buffer): void {
+  makeDirSync(path.dirname(filePath));
+  fs.writeFileSync(filePath, data);
+}
 
 export default async function({
   cliOptions,
@@ -122,24 +126,26 @@ export default async function({
       util.deleteDir(cliOptions.outDir);
     }
 
-    mkdirpSync(cliOptions.outDir);
+    makeDirSync(cliOptions.outDir);
 
     let compiledFiles = 0;
     for (const filename of cliOptions.filenames) {
       compiledFiles += await handle(filename);
     }
 
-    console.log(
-      `Successfully compiled ${compiledFiles} ${
-        compiledFiles !== 1 ? "files" : "file"
-      } with Babel.`,
-    );
+    if (!cliOptions.quiet) {
+      console.log(
+        `Successfully compiled ${compiledFiles} ${
+          compiledFiles !== 1 ? "files" : "file"
+        } with Babel.`,
+      );
+    }
   }
 
   if (cliOptions.watch) {
     const chokidar = util.requireChokidar();
 
-    filenames.forEach(function(filenameOrDir) {
+    filenames.forEach(function(filenameOrDir: string): void {
       const watcher = chokidar.watch(filenameOrDir, {
         persistent: true,
         ignoreInitial: true,
@@ -149,8 +155,8 @@ export default async function({
         },
       });
 
-      ["add", "change"].forEach(function(type) {
-        watcher.on(type, function(filename) {
+      ["add", "change"].forEach(function(type: string): void {
+        watcher.on(type, function(filename: string): void {
           handleFile(
             filename,
             filename === filenameOrDir

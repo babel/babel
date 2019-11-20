@@ -1,5 +1,7 @@
 // @flow
 
+/*:: declare var invariant; */
+
 import type Parser from "../parser";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import * as N from "../types";
@@ -20,12 +22,15 @@ import {
   SCOPE_OTHER,
 } from "../util/scopeflags";
 
-const reservedTypes = [
+const reservedTypes = new Set([
+  "_",
   "any",
   "bool",
   "boolean",
   "empty",
+  "extends",
   "false",
+  "interface",
   "mixed",
   "null",
   "number",
@@ -34,10 +39,7 @@ const reservedTypes = [
   "true",
   "typeof",
   "void",
-  "interface",
-  "extends",
-  "_",
-];
+]);
 
 function isEsModuleType(bodyElement: N.Node): boolean {
   return (
@@ -81,6 +83,20 @@ function partition<T>(
 
 const FLOW_PRAGMA_REGEX = /\*?\s*@((?:no)?flow)\b/;
 
+// Flow enums types
+type EnumExplicitType = null | "boolean" | "number" | "string" | "symbol";
+type EnumContext = {|
+  enumName: string,
+  explicitType: EnumExplicitType,
+  memberName: string,
+|};
+type EnumMemberInit =
+  | {| type: "number", pos: number, value: N.Node |}
+  | {| type: "string", pos: number, value: N.Node |}
+  | {| type: "boolean", pos: number, value: N.Node |}
+  | {| type: "invalid", pos: number |}
+  | {| type: "none", pos: number |};
+
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
     // The value of the @flow/@noflow pragma. Initially undefined, transitions
@@ -95,6 +111,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     shouldParseTypes(): boolean {
       return this.getPluginOption("flow", "all") || this.flowPragma === "flow";
+    }
+
+    shouldParseEnums(): boolean {
+      return !!this.getPluginOption("flow", "enums");
     }
 
     finishToken(type: TokenType, val: any): void {
@@ -245,7 +265,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.flowParseDeclareModuleExports(node);
         } else {
           if (insideModule) {
-            this.unexpected(
+            this.raise(
               this.state.lastTokStart,
               "`declare module` cannot be used inside another `declare module`",
             );
@@ -295,7 +315,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (this.match(tt._import)) {
           this.next();
           if (!this.isContextual("type") && !this.match(tt._typeof)) {
-            this.unexpected(
+            this.raise(
               this.state.lastTokStart,
               "Imports within a `declare module` body must always be `import type` or `import typeof`",
             );
@@ -327,17 +347,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       body.forEach(bodyElement => {
         if (isEsModuleType(bodyElement)) {
           if (kind === "CommonJS") {
-            this.unexpected(bodyElement.start, errorMessage);
+            this.raise(bodyElement.start, errorMessage);
           }
           kind = "ES";
         } else if (bodyElement.type === "DeclareModuleExports") {
           if (hasModuleExport) {
-            this.unexpected(
+            this.raise(
               bodyElement.start,
               "Duplicate `declare module.exports` statement",
             );
           }
-          if (kind === "ES") this.unexpected(bodyElement.start, errorMessage);
+          if (kind === "ES") this.raise(bodyElement.start, errorMessage);
           kind = "CommonJS";
           hasModuleExport = true;
         }
@@ -463,7 +483,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.FlowDeclare,
       isClass?: boolean = false,
     ): void {
-      node.id = this.flowParseRestrictedIdentifier(/*liberal*/ !isClass);
+      node.id = this.flowParseRestrictedIdentifier(
+        /* liberal */ !isClass,
+        /* declaration */ true,
+      );
 
       this.scope.declareName(
         node.id.name,
@@ -530,28 +553,39 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkNotUnderscore(word: string) {
       if (word === "_") {
-        throw this.unexpected(
-          null,
+        this.raise(
+          this.state.start,
           "`_` is only allowed as a type argument to call or new",
         );
       }
     }
 
-    checkReservedType(word: string, startLoc: number) {
-      if (reservedTypes.indexOf(word) > -1) {
+    checkReservedType(word: string, startLoc: number, declaration?: boolean) {
+      if (!reservedTypes.has(word)) return;
+
+      if (declaration) {
         this.raise(startLoc, `Cannot overwrite reserved type ${word}`);
+        return;
       }
+
+      this.raise(startLoc, `Unexpected reserved type ${word}`);
     }
 
-    flowParseRestrictedIdentifier(liberal?: boolean): N.Identifier {
-      this.checkReservedType(this.state.value, this.state.start);
+    flowParseRestrictedIdentifier(
+      liberal?: boolean,
+      declaration?: boolean,
+    ): N.Identifier {
+      this.checkReservedType(this.state.value, this.state.start, declaration);
       return this.parseIdentifier(liberal);
     }
 
     // Type aliases
 
     flowParseTypeAlias(node: N.FlowTypeAlias): N.FlowTypeAlias {
-      node.id = this.flowParseRestrictedIdentifier();
+      node.id = this.flowParseRestrictedIdentifier(
+        /* liberal */ false,
+        /* declaration */ true,
+      );
       this.scope.declareName(node.id.name, BIND_LEXICAL, node.id.start);
 
       if (this.isRelational("<")) {
@@ -571,7 +605,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       declare: boolean,
     ): N.FlowOpaqueType {
       this.expectContextual("type");
-      node.id = this.flowParseRestrictedIdentifier(/*liberal*/ true);
+      node.id = this.flowParseRestrictedIdentifier(
+        /* liberal */ true,
+        /* declaration */ true,
+      );
       this.scope.declareName(node.id.name, BIND_LEXICAL, node.id.start);
 
       if (this.isRelational("<")) {
@@ -614,7 +651,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.default = this.flowParseType();
       } else {
         if (requireDefault) {
-          this.unexpected(
+          this.raise(
             nodeStart,
             // eslint-disable-next-line max-len
             "Type parameter declaration needs a default, since a preceding type parameter declaration has a default.",
@@ -860,6 +897,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       while (!this.match(endDelim)) {
         let isStatic = false;
         let protoStart: ?number = null;
+        let inexactStart: ?number = null;
         const node = this.startNode();
 
         if (allowProto && this.isContextual("proto")) {
@@ -932,17 +970,29 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             variance,
             kind,
             allowSpread,
-            allowInexact,
+            allowInexact ?? !exact,
           );
 
           if (propOrInexact === null) {
             inexact = true;
+            inexactStart = this.state.lastTokStart;
           } else {
             nodeStart.properties.push(propOrInexact);
           }
         }
 
         this.flowObjectTypeSemicolon();
+
+        if (
+          inexactStart &&
+          !this.match(tt.braceR) &&
+          !this.match(tt.braceBarR)
+        ) {
+          this.raise(
+            inexactStart,
+            "Explicit inexact syntax must appear at the end of an inexact object",
+          );
+        }
       }
 
       this.expect(endDelim);
@@ -972,10 +1022,38 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       allowSpread: boolean,
       allowInexact: boolean,
     ): (N.FlowObjectTypeProperty | N.FlowObjectTypeSpreadProperty) | null {
-      if (this.match(tt.ellipsis)) {
+      if (this.eat(tt.ellipsis)) {
+        const isInexactToken =
+          this.match(tt.comma) ||
+          this.match(tt.semi) ||
+          this.match(tt.braceR) ||
+          this.match(tt.braceBarR);
+
+        if (isInexactToken) {
+          if (!allowSpread) {
+            this.raise(
+              this.state.lastTokStart,
+              "Explicit inexact syntax cannot appear in class or interface definitions",
+            );
+          } else if (!allowInexact) {
+            this.raise(
+              this.state.lastTokStart,
+              "Explicit inexact syntax cannot appear inside an explicit exact object type",
+            );
+          }
+          if (variance) {
+            this.raise(
+              variance.start,
+              "Explicit inexact syntax cannot have variance",
+            );
+          }
+
+          return null;
+        }
+
         if (!allowSpread) {
-          this.unexpected(
-            null,
+          this.raise(
+            this.state.lastTokStart,
             "Spread operator cannot appear in class or interface definitions",
           );
         }
@@ -983,35 +1061,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.unexpected(protoStart);
         }
         if (variance) {
-          this.unexpected(
-            variance.start,
-            "Spread properties cannot have variance",
-          );
-        }
-        this.expect(tt.ellipsis);
-        const isInexactToken = this.eat(tt.comma) || this.eat(tt.semi);
-
-        if (this.match(tt.braceR)) {
-          if (allowInexact) return null;
-          this.unexpected(
-            null,
-            "Explicit inexact syntax is only allowed inside inexact objects",
-          );
+          this.raise(variance.start, "Spread properties cannot have variance");
         }
 
-        if (this.match(tt.braceBarR)) {
-          this.unexpected(
-            null,
-            "Explicit inexact syntax cannot appear inside an explicit exact object type",
-          );
-        }
-
-        if (isInexactToken) {
-          this.unexpected(
-            null,
-            "Explicit inexact syntax must appear at the end of an inexact object",
-          );
-        }
         node.argument = this.flowParseType();
         return this.finishNode(node, "ObjectTypeSpreadProperty");
       } else {
@@ -1099,12 +1151,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.FlowQualifiedTypeIdentifier {
       startPos = startPos || this.state.start;
       startLoc = startLoc || this.state.startLoc;
-      let node = id || this.parseIdentifier();
+      let node = id || this.flowParseRestrictedIdentifier(true);
 
       while (this.eat(tt.dot)) {
         const node2 = this.startNodeAt(startPos, startLoc);
         node2.qualification = node;
-        node2.id = this.parseIdentifier();
+        node2.id = this.flowParseRestrictedIdentifier(true);
         node = this.finishNode(node2, "QualifiedTypeIdentifier");
       }
 
@@ -1382,8 +1434,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               );
             }
 
-            this.unexpected(
-              null,
+            throw this.raise(
+              this.state.start,
               `Unexpected token, expected "number" or "bigint"`,
             );
           }
@@ -1604,7 +1656,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       super.parseFunctionBodyAndFinish(node, type, isMethod);
     }
 
-    // interfaces
+    // interfaces and enums
     parseStatement(context: ?string, topLevel?: boolean): N.Statement {
       // strict mode handling of `interface` since it's a reserved word
       if (
@@ -1615,6 +1667,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const node = this.startNode();
         this.next();
         return this.flowParseInterface(node);
+      } else if (this.shouldParseEnums() && this.isContextual("enum")) {
+        const node = this.startNode();
+        this.next();
+        return this.flowParseEnumDeclaration(node);
       } else {
         const stmt = super.parseStatement(context, topLevel);
         // We will parse a flow pragma in any comment before the first statement.
@@ -1661,6 +1717,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.isContextual("type") ||
         this.isContextual("interface") ||
         this.isContextual("opaque") ||
+        (this.shouldParseEnums() && this.isContextual("enum")) ||
         super.shouldParseExportDeclaration()
       );
     }
@@ -1670,12 +1727,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.match(tt.name) &&
         (this.state.value === "type" ||
           this.state.value === "interface" ||
-          this.state.value === "opaque")
+          this.state.value === "opaque" ||
+          (this.shouldParseEnums() && this.state.value === "enum"))
       ) {
         return false;
       }
 
       return super.isExportDefaultSpecifier();
+    }
+
+    parseExportDefaultExpression(): N.Expression | N.Declaration {
+      if (this.shouldParseEnums() && this.isContextual("enum")) {
+        const node = this.startNode();
+        this.next();
+        return this.flowParseEnumDeclaration(node);
+      }
+      return super.parseExportDefaultExpression();
     }
 
     parseConditional(
@@ -1687,23 +1754,23 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.Expression {
       if (!this.match(tt.question)) return expr;
 
-      // only do the expensive clone if there is a question mark
+      // only use the expensive "tryParse" method if there is a question mark
       // and if we come from inside parens
       if (refNeedsArrowPos) {
-        const state = this.state.clone();
-        try {
-          return super.parseConditional(expr, noIn, startPos, startLoc);
-        } catch (err) {
-          if (err instanceof SyntaxError) {
-            this.state = state;
-            refNeedsArrowPos.start = err.pos || this.state.start;
-            return expr;
-          } else {
-            // istanbul ignore next: no such error is expected
-            throw err;
-          }
+        const result = this.tryParse(() =>
+          super.parseConditional(expr, noIn, startPos, startLoc),
+        );
+
+        if (!result.node) {
+          // $FlowIgnore
+          refNeedsArrowPos.start = result.error.pos || this.state.start;
+          return expr;
         }
+
+        if (result.error) this.state = result.failState;
+        return result.node;
       }
+
       this.expect(tt.question);
       const state = this.state.clone();
       const originalNoArrowAt = this.state.noArrowAt;
@@ -1743,9 +1810,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.state.noArrowAt = noArrowAt.concat(valid[0].start);
           ({ consequent, failed } = this.tryParseConditionalConsequent());
         }
-
-        this.getArrowLikeExpressions(consequent, true);
       }
+
+      this.getArrowLikeExpressions(consequent, true);
 
       this.state.noArrowAt = originalNoArrowAt;
       this.expect(tt.colon);
@@ -1792,19 +1859,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (node.type === "ArrowFunctionExpression") {
           if (node.typeParameters || !node.returnType) {
             // This is an arrow expression without ambiguity, so check its parameters
-            this.toAssignableList(
-              // node.params is Expression[] instead of $ReadOnlyArray<Pattern> because it
-              // has not been converted yet.
-              ((node.params: any): N.Expression[]),
-              true,
-              "arrow function parameters",
-              node.extra?.trailingComma,
-            );
-            // Enter scope, as checkParams defines bindings
-            this.scope.enter(functionFlags(false, false) | SCOPE_ARROW);
-            // Use super's method to force the parameters to be checked
-            super.checkParams(node, false, true);
-            this.scope.exit();
+            this.finishArrowValidation(node);
           } else {
             arrows.push(node);
           }
@@ -1816,30 +1871,29 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       if (disallowInvalid) {
-        for (let i = 0; i < arrows.length; i++) {
-          this.toAssignableList(
-            ((node.params: any): N.Expression[]),
-            true,
-            "arrow function parameters",
-            node.extra?.trailingComma,
-          );
-        }
+        arrows.forEach(node => this.finishArrowValidation(node));
         return [arrows, []];
       }
 
-      return partition(arrows, node => {
-        try {
-          this.toAssignableList(
-            ((node.params: any): N.Expression[]),
-            true,
-            "arrow function parameters",
-            node.extra?.trailingComma,
-          );
-          return true;
-        } catch (err) {
-          return false;
-        }
-      });
+      return partition(arrows, node =>
+        node.params.every(param => this.isAssignable(param, true)),
+      );
+    }
+
+    finishArrowValidation(node: N.ArrowFunctionExpression) {
+      this.toAssignableList(
+        // node.params is Expression[] instead of $ReadOnlyArray<Pattern> because it
+        // has not been converted yet.
+        ((node.params: any): N.Expression[]),
+        true,
+        "arrow function parameters",
+        node.extra?.trailingComma,
+      );
+      // Enter scope, as checkParams defines bindings
+      this.scope.enter(functionFlags(false, false) | SCOPE_ARROW);
+      // Use super's method to force the parameters to be checked
+      super.checkParams(node, false, true);
+      this.scope.exit();
     }
 
     forwardNoArrowParamsConversionAt<T>(node: N.Node, parse: () => T): T {
@@ -1935,6 +1989,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const declarationNode = this.startNode();
         this.next();
         return this.flowParseInterface(declarationNode);
+      } else if (this.shouldParseEnums() && this.isContextual("enum")) {
+        node.exportKind = "value";
+        const declarationNode = this.startNode();
+        this.next();
+        return this.flowParseEnumDeclaration(declarationNode);
       } else {
         return super.parseExportDeclaration(node);
       }
@@ -1984,6 +2043,50 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return super.readWord();
       } else {
         return super.getTokenFromCode(code);
+      }
+    }
+
+    isAssignable(node: N.Node, isBinding?: boolean): boolean {
+      switch (node.type) {
+        case "Identifier":
+        case "ObjectPattern":
+        case "ArrayPattern":
+        case "AssignmentPattern":
+          return true;
+
+        case "ObjectExpression": {
+          const last = node.properties.length - 1;
+          return node.properties.every((prop, i) => {
+            return (
+              prop.type !== "ObjectMethod" &&
+              (i === last || prop.type === "SpreadElement") &&
+              this.isAssignable(prop)
+            );
+          });
+        }
+
+        case "ObjectProperty":
+          return this.isAssignable(node.value);
+
+        case "SpreadElement":
+          return this.isAssignable(node.argument);
+
+        case "ArrayExpression":
+          return node.elements.every(element => this.isAssignable(element));
+
+        case "AssignmentExpression":
+          return node.operator === "=";
+
+        case "ParenthesizedExpression":
+        case "TypeCastExpression":
+          return this.isAssignable(node.expression);
+
+        case "MemberExpression":
+        case "OptionalMemberExpression":
+          return !isBinding;
+
+        default:
+          return false;
       }
     }
 
@@ -2215,13 +2318,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseAssignableListItemTypes(param: N.Pattern): N.Pattern {
       if (this.eat(tt.question)) {
         if (param.type !== "Identifier") {
-          throw this.raise(
+          this.raise(
             param.start,
             "A binding pattern parameter cannot be optional in an implementation signature.",
           );
         }
 
-        param.optional = true;
+        ((param: any): N.Identifier).optional = true;
       }
       if (this.match(tt.colon)) {
         param.typeAnnotation = this.flowParseTypeAnnotation();
@@ -2267,7 +2370,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       contextDescription: string,
     ): void {
       specifier.local = hasTypeImportKind(node)
-        ? this.flowParseRestrictedIdentifier(true)
+        ? this.flowParseRestrictedIdentifier(
+            /* liberal */ true,
+            /* declaration */ true,
+          )
         : this.parseIdentifier();
 
       this.checkLVal(
@@ -2373,7 +2479,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       if (nodeIsTypeImport || specifierIsTypeImport) {
-        this.checkReservedType(specifier.local.name, specifier.local.start);
+        this.checkReservedType(
+          specifier.local.name,
+          specifier.local.start,
+          /* declaration */ true,
+        );
       }
 
       if (isBinding && !nodeIsTypeImport && !specifierIsTypeImport) {
@@ -2452,45 +2562,50 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       afterLeftParse?: Function,
       refNeedsArrowPos?: ?Pos,
     ): N.Expression {
-      let jsxError = null;
+      let state = null;
+
+      let jsx;
+
       if (
         this.hasPlugin("jsx") &&
         (this.match(tt.jsxTagStart) || this.isRelational("<"))
       ) {
-        const state = this.state.clone();
-        try {
-          return super.parseMaybeAssign(
-            noIn,
-            refShorthandDefaultPos,
-            afterLeftParse,
-            refNeedsArrowPos,
-          );
-        } catch (err) {
-          if (err instanceof SyntaxError) {
-            this.state = state;
+        state = this.state.clone();
 
-            // Remove `tc.j_expr` and `tc.j_oTag` from context added
-            // by parsing `jsxTagStart` to stop the JSX plugin from
-            // messing with the tokens
-            const cLength = this.state.context.length;
-            if (this.state.context[cLength - 1] === tc.j_oTag) {
-              this.state.context.length -= 2;
-            }
+        jsx = this.tryParse(
+          () =>
+            super.parseMaybeAssign(
+              noIn,
+              refShorthandDefaultPos,
+              afterLeftParse,
+              refNeedsArrowPos,
+            ),
+          state,
+        );
+        /*:: invariant(!jsx.aborted) */
 
-            jsxError = err;
-          } else {
-            // istanbul ignore next: no such error is expected
-            throw err;
-          }
+        if (!jsx.error) return jsx.node;
+
+        // Remove `tc.j_expr` and `tc.j_oTag` from context added
+        // by parsing `jsxTagStart` to stop the JSX plugin from
+        // messing with the tokens
+        const { context } = this.state;
+        if (context[context.length - 1] === tc.j_oTag) {
+          context.length -= 2;
+        } else if (context[context.length - 1] === tc.j_expr) {
+          context.length -= 1;
         }
       }
 
-      if (jsxError != null || this.isRelational("<")) {
-        let arrowExpression;
+      if ((jsx && jsx.error) || this.isRelational("<")) {
+        state = state || this.state.clone();
+
         let typeParameters;
-        try {
+
+        const arrow = this.tryParse(() => {
           typeParameters = this.flowParseTypeParameterDeclaration();
-          arrowExpression = this.forwardNoArrowParamsConversionAt(
+
+          const arrowExpression = this.forwardNoArrowParamsConversionAt(
             typeParameters,
             () =>
               super.parseMaybeAssign(
@@ -2502,20 +2617,43 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           );
           arrowExpression.typeParameters = typeParameters;
           this.resetStartLocationFromNode(arrowExpression, typeParameters);
-        } catch (err) {
-          throw jsxError || err;
+
+          return arrowExpression;
+        }, state);
+
+        const arrowExpression: ?N.ArrowFunctionExpression =
+          arrow.node && arrow.node.type === "ArrowFunctionExpression"
+            ? arrow.node
+            : null;
+
+        if (!arrow.error && arrowExpression) return arrowExpression;
+
+        // If we are here, both JSX and Flow parsing attemps failed.
+        // Give the precedence to the JSX error, except if JSX had an
+        // unrecoverable error while Flow didn't.
+        // If the error is recoverable, we can only re-report it if there is
+        // a node we can return.
+
+        if (jsx && jsx.node) {
+          /*:: invariant(jsx.failState) */
+          this.state = jsx.failState;
+          return jsx.node;
         }
 
-        if (arrowExpression.type === "ArrowFunctionExpression") {
+        if (arrowExpression) {
+          /*:: invariant(arrow.failState) */
+          this.state = arrow.failState;
           return arrowExpression;
-        } else if (jsxError != null) {
-          throw jsxError;
-        } else {
-          this.raise(
-            typeParameters.start,
-            "Expected an arrow function after this type parameter declaration",
-          );
         }
+
+        if (jsx && jsx.thrown) throw jsx.error;
+        if (arrow.thrown) throw arrow.error;
+
+        /*:: invariant(typeParameters) */
+        throw this.raise(
+          typeParameters.start,
+          "Expected an arrow function after this type parameter declaration",
+        );
       }
 
       return super.parseMaybeAssign(
@@ -2529,8 +2667,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // handle return types for arrow functions
     parseArrow(node: N.ArrowFunctionExpression): ?N.ArrowFunctionExpression {
       if (this.match(tt.colon)) {
-        const state = this.state.clone();
-        try {
+        const result = this.tryParse(() => {
           const oldNoAnonFunctionType = this.state.noAnonFunctionType;
           this.state.noAnonFunctionType = true;
 
@@ -2548,18 +2685,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (this.canInsertSemicolon()) this.unexpected();
           if (!this.match(tt.arrow)) this.unexpected();
 
-          // assign after it is clear it is an arrow
-          node.returnType = typeNode.typeAnnotation
-            ? this.finishNode(typeNode, "TypeAnnotation")
-            : null;
-        } catch (err) {
-          if (err instanceof SyntaxError) {
-            this.state = state;
-          } else {
-            // istanbul ignore next: no such error is expected
-            throw err;
-          }
-        }
+          return typeNode;
+        });
+
+        if (result.thrown) return null;
+        /*:: invariant(result.node) */
+
+        if (result.error) this.state = result.failState;
+
+        // assign after it is clear it is an arrow
+        node.returnType = result.node.typeAnnotation
+          ? this.finishNode(result.node, "TypeAnnotation")
+          : null;
       }
 
       return super.parseArrow(node);
@@ -2592,7 +2729,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return;
       }
 
-      return super.checkParams(node, allowDuplicates, isArrowFunction);
+      return super.checkParams(...arguments);
     }
 
     parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {
@@ -2624,23 +2761,33 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.isRelational("<")
       ) {
         const state = this.state.clone();
-        let error;
-        try {
-          const node = this.parseAsyncArrowWithTypeParameters(
-            startPos,
-            startLoc,
-          );
-          if (node) return node;
-        } catch (e) {
-          error = e;
+        const arrow = this.tryParse(
+          abort =>
+            this.parseAsyncArrowWithTypeParameters(startPos, startLoc) ||
+            abort(),
+          state,
+        );
+
+        if (!arrow.error && !arrow.aborted) return arrow.node;
+
+        const result = this.tryParse(
+          () => super.parseSubscripts(base, startPos, startLoc, noCalls),
+          state,
+        );
+
+        if (result.node && !result.error) return result.node;
+
+        if (arrow.node) {
+          this.state = arrow.failState;
+          return arrow.node;
         }
 
-        this.state = state;
-        try {
-          return super.parseSubscripts(base, startPos, startLoc, noCalls);
-        } catch (e) {
-          throw error || e;
+        if (result.node) {
+          this.state = result.failState;
+          return result.node;
         }
+
+        throw arrow.error || result.error;
       }
 
       return super.parseSubscripts(base, startPos, startLoc, noCalls);
@@ -2671,7 +2818,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // $FlowFixMe
         node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
         node.optional = true;
-        return this.finishNode(node, "OptionalCallExpression");
+        return this.finishCallExpression(node, /* optional */ true);
       } else if (
         !noCalls &&
         this.shouldParseTypes() &&
@@ -2679,22 +2826,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       ) {
         const node = this.startNodeAt(startPos, startLoc);
         node.callee = base;
-        const state = this.state.clone();
-        try {
+
+        const result = this.tryParse(() => {
           node.typeArguments = this.flowParseTypeParameterInstantiationCallOrNew();
           this.expect(tt.parenL);
           node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
-          if (subscriptState.optionalChainMember) {
-            node.optional = false;
-            return this.finishNode(node, "OptionalCallExpression");
-          }
-          return this.finishNode(node, "CallExpression");
-        } catch (e) {
-          if (e instanceof SyntaxError) {
-            this.state = state;
-          } else {
-            throw e;
-          }
+          if (subscriptState.optionalChainMember) node.optional = false;
+          return this.finishCallExpression(
+            node,
+            subscriptState.optionalChainMember,
+          );
+        });
+
+        if (result.node) {
+          if (result.error) this.state = result.failState;
+          return result.node;
         }
       }
 
@@ -2710,16 +2856,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseNewArguments(node: N.NewExpression): void {
       let targs = null;
       if (this.shouldParseTypes() && this.isRelational("<")) {
-        const state = this.state.clone();
-        try {
-          targs = this.flowParseTypeParameterInstantiationCallOrNew();
-        } catch (e) {
-          if (e instanceof SyntaxError) {
-            this.state = state;
-          } else {
-            throw e;
-          }
-        }
+        targs = this.tryParse(() =>
+          this.flowParseTypeParameterInstantiationCallOrNew(),
+        ).node;
       }
       node.typeArguments = targs;
 
@@ -2773,7 +2912,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseTopLevel(file: N.File, program: N.Program): N.File {
       const fileNode = super.parseTopLevel(file, program);
       if (this.state.hasFlowComment) {
-        this.unexpected(null, "Unterminated flow-comment");
+        this.raise(this.state.pos, "Unterminated flow-comment");
       }
       return fileNode;
     }
@@ -2794,7 +2933,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (this.state.hasFlowComment) {
         const end = this.input.indexOf("*-/", (this.state.pos += 2));
-        if (end === -1) this.raise(this.state.pos - 2, "Unterminated comment");
+        if (end === -1) {
+          throw this.raise(this.state.pos - 2, "Unterminated comment");
+        }
         this.state.pos = end + 3;
         return;
       }
@@ -2836,7 +2977,428 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     hasFlowCommentCompletion(): void {
       const end = this.input.indexOf("*/", this.state.pos);
       if (end === -1) {
-        this.raise(this.state.pos, "Unterminated comment");
+        throw this.raise(this.state.pos, "Unterminated comment");
       }
+    }
+
+    // Flow enum parsing
+
+    flowEnumErrorBooleanMemberNotInitialized(
+      pos: number,
+      { enumName, memberName }: { enumName: string, memberName: string },
+    ): void {
+      this.raise(
+        pos,
+        `Boolean enum members need to be initialized. Use either \`${memberName} = true,\` ` +
+          `or \`${memberName} = false,\` in enum \`${enumName}\`.`,
+      );
+    }
+
+    flowEnumErrorInvalidMemberName(
+      pos: number,
+      { enumName, memberName }: { enumName: string, memberName: string },
+    ): void {
+      const suggestion = memberName[0].toUpperCase() + memberName.slice(1);
+      this.raise(
+        pos,
+        `Enum member names cannot start with lowercase 'a' through 'z'. Instead of using ` +
+          `\`${memberName}\`, consider using \`${suggestion}\`, in enum \`${enumName}\`.`,
+      );
+    }
+
+    flowEnumErrorDuplicateMemberName(
+      pos: number,
+      { enumName, memberName }: { enumName: string, memberName: string },
+    ): void {
+      this.raise(
+        pos,
+        `Enum member names need to be unique, but the name \`${memberName}\` has already been used ` +
+          `before in enum \`${enumName}\`.`,
+      );
+    }
+
+    flowEnumErrorInconsistentMemberValues(
+      pos: number,
+      { enumName }: { enumName: string },
+    ): void {
+      this.raise(
+        pos,
+        `Enum \`${enumName}\` has inconsistent member initializers. Either use no initializers, or ` +
+          `consistently use literals (either booleans, numbers, or strings) for all member initializers.`,
+      );
+    }
+
+    flowEnumErrorInvalidExplicitType(
+      pos: number,
+      {
+        enumName,
+        suppliedType,
+      }: { enumName: string, suppliedType: null | string },
+    ) {
+      const suggestion =
+        `Use one of \`boolean\`, \`number\`, \`string\`, or \`symbol\` in ` +
+        `enum \`${enumName}\`.`;
+      const message =
+        suppliedType === null
+          ? `Supplied enum type is not valid. ${suggestion}`
+          : `Enum type \`${suppliedType}\` is not valid. ${suggestion}`;
+      return this.raise(pos, message);
+    }
+
+    flowEnumErrorInvalidMemberInitializer(
+      pos: number,
+      { enumName, explicitType, memberName }: EnumContext,
+    ) {
+      let message = null;
+      switch (explicitType) {
+        case "boolean":
+        case "number":
+        case "string":
+          message =
+            `Enum \`${enumName}\` has type \`${explicitType}\`, so the initializer of ` +
+            `\`${memberName}\` needs to be a ${explicitType} literal.`;
+          break;
+        case "symbol":
+          message =
+            `Symbol enum members cannot be initialized. Use \`${memberName},\` in ` +
+            `enum \`${enumName}\`.`;
+          break;
+        default:
+          // null
+          message =
+            `The enum member initializer for \`${memberName}\` needs to be a literal (either ` +
+            `a boolean, number, or string) in enum \`${enumName}\`.`;
+      }
+      return this.raise(pos, message);
+    }
+
+    flowEnumErrorNumberMemberNotInitialized(
+      pos: number,
+      { enumName, memberName }: { enumName: string, memberName: string },
+    ): void {
+      this.raise(
+        pos,
+        `Number enum members need to be initialized, e.g. \`${memberName} = 1\` in enum \`${enumName}\`.`,
+      );
+    }
+
+    flowEnumErrorStringMemberInconsistentlyInitailized(
+      pos: number,
+      { enumName }: { enumName: string },
+    ): void {
+      this.raise(
+        pos,
+        `String enum members need to consistently either all use initializers, or use no initializers, ` +
+          `in enum \`${enumName}\`.`,
+      );
+    }
+
+    flowEnumMemberInit(): EnumMemberInit {
+      const startPos = this.state.start;
+      const endOfInit = () => this.match(tt.comma) || this.match(tt.braceR);
+      switch (this.state.type) {
+        case tt.num: {
+          const literal = this.parseLiteral(this.state.value, "NumericLiteral");
+          if (endOfInit()) {
+            return { type: "number", pos: literal.start, value: literal };
+          }
+          return { type: "invalid", pos: startPos };
+        }
+        case tt.string: {
+          const literal = this.parseLiteral(this.state.value, "StringLiteral");
+          if (endOfInit()) {
+            return { type: "string", pos: literal.start, value: literal };
+          }
+          return { type: "invalid", pos: startPos };
+        }
+        case tt._true:
+        case tt._false: {
+          const literal = this.parseBooleanLiteral();
+          if (endOfInit()) {
+            return {
+              type: "boolean",
+              pos: literal.start,
+              value: literal,
+            };
+          }
+          return { type: "invalid", pos: startPos };
+        }
+        default:
+          return { type: "invalid", pos: startPos };
+      }
+    }
+
+    flowEnumMemberRaw(): { id: N.Node, init: EnumMemberInit } {
+      const pos = this.state.start;
+      const id = this.parseIdentifier(true);
+      const init = this.eat(tt.eq)
+        ? this.flowEnumMemberInit()
+        : { type: "none", pos };
+      return { id, init };
+    }
+
+    flowEnumCheckExplicitTypeMismatch(
+      pos: number,
+      context: EnumContext,
+      expectedType: EnumExplicitType,
+    ): void {
+      const { explicitType } = context;
+      if (explicitType === null) {
+        return;
+      }
+      if (explicitType !== expectedType) {
+        this.flowEnumErrorInvalidMemberInitializer(pos, context);
+      }
+    }
+
+    flowEnumMembers({
+      enumName,
+      explicitType,
+    }: {
+      enumName: string,
+      explicitType: EnumExplicitType,
+    }): {|
+      booleanMembers: Array<N.Node>,
+      numberMembers: Array<N.Node>,
+      stringMembers: Array<N.Node>,
+      defaultedMembers: Array<N.Node>,
+    |} {
+      const seenNames = new Set();
+      const members = {
+        booleanMembers: [],
+        numberMembers: [],
+        stringMembers: [],
+        defaultedMembers: [],
+      };
+      while (!this.match(tt.braceR)) {
+        const memberNode = this.startNode();
+        const { id, init } = this.flowEnumMemberRaw();
+        const memberName = id.name;
+        if (memberName === "") {
+          continue;
+        }
+        if (/^[a-z]/.test(memberName)) {
+          this.flowEnumErrorInvalidMemberName(id.start, {
+            enumName,
+            memberName,
+          });
+        }
+        if (seenNames.has(memberName)) {
+          this.flowEnumErrorDuplicateMemberName(id.start, {
+            enumName,
+            memberName,
+          });
+        }
+        seenNames.add(memberName);
+        const context = { enumName, explicitType, memberName };
+        memberNode.id = id;
+        switch (init.type) {
+          case "boolean": {
+            this.flowEnumCheckExplicitTypeMismatch(
+              init.pos,
+              context,
+              "boolean",
+            );
+            memberNode.init = init.value;
+            members.booleanMembers.push(
+              this.finishNode(memberNode, "EnumBooleanMember"),
+            );
+            break;
+          }
+          case "number": {
+            this.flowEnumCheckExplicitTypeMismatch(init.pos, context, "number");
+            memberNode.init = init.value;
+            members.numberMembers.push(
+              this.finishNode(memberNode, "EnumNumberMember"),
+            );
+            break;
+          }
+          case "string": {
+            this.flowEnumCheckExplicitTypeMismatch(init.pos, context, "string");
+            memberNode.init = init.value;
+            members.stringMembers.push(
+              this.finishNode(memberNode, "EnumStringMember"),
+            );
+            break;
+          }
+          case "invalid": {
+            throw this.flowEnumErrorInvalidMemberInitializer(init.pos, context);
+          }
+          case "none": {
+            switch (explicitType) {
+              case "boolean":
+                this.flowEnumErrorBooleanMemberNotInitialized(
+                  init.pos,
+                  context,
+                );
+                break;
+              case "number":
+                this.flowEnumErrorNumberMemberNotInitialized(init.pos, context);
+                break;
+              default:
+                members.defaultedMembers.push(
+                  this.finishNode(memberNode, "EnumDefaultedMember"),
+                );
+            }
+          }
+        }
+
+        if (!this.match(tt.braceR)) {
+          this.expect(tt.comma);
+        }
+      }
+      return members;
+    }
+
+    flowEnumStringMembers(
+      initializedMembers: Array<N.Node>,
+      defaultedMembers: Array<N.Node>,
+      { enumName }: { enumName: string },
+    ): Array<N.Node> {
+      if (initializedMembers.length === 0) {
+        return defaultedMembers;
+      } else if (defaultedMembers.length === 0) {
+        return initializedMembers;
+      } else if (defaultedMembers.length > initializedMembers.length) {
+        for (const member of initializedMembers) {
+          this.flowEnumErrorStringMemberInconsistentlyInitailized(
+            member.start,
+            { enumName },
+          );
+        }
+        return defaultedMembers;
+      } else {
+        for (const member of defaultedMembers) {
+          this.flowEnumErrorStringMemberInconsistentlyInitailized(
+            member.start,
+            { enumName },
+          );
+        }
+        return initializedMembers;
+      }
+    }
+
+    flowEnumParseExplicitType({
+      enumName,
+    }: {
+      enumName: string,
+    }): EnumExplicitType {
+      if (this.eatContextual("of")) {
+        if (!this.match(tt.name)) {
+          throw this.flowEnumErrorInvalidExplicitType(this.state.start, {
+            enumName,
+            suppliedType: null,
+          });
+        }
+
+        const { value } = this.state;
+        this.next();
+
+        if (
+          value !== "boolean" &&
+          value !== "number" &&
+          value !== "string" &&
+          value !== "symbol"
+        ) {
+          this.flowEnumErrorInvalidExplicitType(this.state.start, {
+            enumName,
+            suppliedType: value,
+          });
+        }
+
+        return value;
+      }
+      return null;
+    }
+
+    flowEnumBody(node: N.Node, { enumName, nameLoc }): N.Node {
+      const explicitType = this.flowEnumParseExplicitType({ enumName });
+      this.expect(tt.braceL);
+      const members = this.flowEnumMembers({ enumName, explicitType });
+
+      switch (explicitType) {
+        case "boolean":
+          node.explicitType = true;
+          node.members = members.booleanMembers;
+          this.expect(tt.braceR);
+          return this.finishNode(node, "EnumBooleanBody");
+        case "number":
+          node.explicitType = true;
+          node.members = members.numberMembers;
+          this.expect(tt.braceR);
+          return this.finishNode(node, "EnumNumberBody");
+        case "string":
+          node.explicitType = true;
+          node.members = this.flowEnumStringMembers(
+            members.stringMembers,
+            members.defaultedMembers,
+            { enumName },
+          );
+          this.expect(tt.braceR);
+          return this.finishNode(node, "EnumStringBody");
+        case "symbol":
+          node.members = members.defaultedMembers;
+          this.expect(tt.braceR);
+          return this.finishNode(node, "EnumSymbolBody");
+        default: {
+          // `explicitType` is `null`
+          const empty = () => {
+            node.members = [];
+            this.expect(tt.braceR);
+            return this.finishNode(node, "EnumStringBody");
+          };
+          node.explicitType = false;
+
+          const boolsLen = members.booleanMembers.length;
+          const numsLen = members.numberMembers.length;
+          const strsLen = members.stringMembers.length;
+          const defaultedLen = members.defaultedMembers.length;
+
+          if (!boolsLen && !numsLen && !strsLen && !defaultedLen) {
+            return empty();
+          } else if (!boolsLen && !numsLen) {
+            node.members = this.flowEnumStringMembers(
+              members.stringMembers,
+              members.defaultedMembers,
+              { enumName },
+            );
+            this.expect(tt.braceR);
+            return this.finishNode(node, "EnumStringBody");
+          } else if (!numsLen && !strsLen && boolsLen >= defaultedLen) {
+            for (const member of members.defaultedMembers) {
+              this.flowEnumErrorBooleanMemberNotInitialized(member.start, {
+                enumName,
+                memberName: member.id.name,
+              });
+            }
+            node.members = members.booleanMembers;
+            this.expect(tt.braceR);
+            return this.finishNode(node, "EnumBooleanBody");
+          } else if (!boolsLen && !strsLen && numsLen >= defaultedLen) {
+            for (const member of members.defaultedMembers) {
+              this.flowEnumErrorNumberMemberNotInitialized(member.start, {
+                enumName,
+                memberName: member.id.name,
+              });
+            }
+            node.members = members.numberMembers;
+            this.expect(tt.braceR);
+            return this.finishNode(node, "EnumNumberBody");
+          } else {
+            this.flowEnumErrorInconsistentMemberValues(nameLoc, { enumName });
+            return empty();
+          }
+        }
+      }
+    }
+
+    flowParseEnumDeclaration(node: N.Node): N.Node {
+      const id = this.parseIdentifier();
+      node.id = id;
+      node.body = this.flowEnumBody(this.startNode(), {
+        enumName: id.name,
+        nameLoc: id.start,
+      });
+      return this.finishNode(node, "EnumDeclaration");
     }
   };

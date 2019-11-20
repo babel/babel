@@ -1,4 +1,5 @@
-version: 2
+version: 2.1
+
 aliases:
   - &restore-node-modules-cache
     keys:
@@ -30,15 +31,31 @@ aliases:
   - &artifact_env_min
     path: ~/babel/packages/babel-preset-env-standalone/babel-preset-env.min.js
 
-jobs:
-  build:
-    working_directory: ~/babel
+  - &test262_workdir
+    working_directory: ~/babel/babel-test262-runner
+
+  - &artifact_test262_tap
+    path: ~/test262.tap
+
+  - &artifact_test262_xunit
+    path: ~/test-results
+
+  - &artifact_test262_diff_tap
+    path: ~/diff.tap
+
+executors:
+  node-executor:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:13
+    working_directory: ~/babel
+
+jobs:
+  test:
+    executor: node-executor
     steps:
       - checkout
-      - restore-cache: *restore-yarn-cache
-      - restore-cache: *restore-node-modules-cache
+      - restore_cache: *restore-yarn-cache
+      - restore_cache: *restore-node-modules-cache
       - run: yarn --version
       - run: make test-ci-coverage
       # Builds babel-standalone with the regular Babel config
@@ -54,3 +71,125 @@ jobs:
       - store_artifacts: *artifact_env_min
       - save_cache: *save-node-modules-cache
       - save_cache: *save-yarn-cache
+
+  test262:
+    executor: node-executor
+    steps:
+      - checkout
+      - run:
+          name: Sync with latest master branch (only on PRs)
+          command: |
+            if [ -n "$CIRCLE_PULL_REQUEST" ]
+            then
+              git fetch origin refs/pull/$CIRCLE_PR_NUMBER/merge
+              git checkout -qf FETCH_HEAD
+            fi
+      - restore_cache: *restore-yarn-cache
+      - restore_cache: *restore-node-modules-cache
+      - run:
+          name: Build Babel
+          command: BABEL_ENV=test make bootstrap
+      - run:
+          name: Link Babel
+          command: |
+            cd packages
+            for package in */; do
+              cd $package
+              yarn link
+              cd ..
+            done
+      - run:
+          name: Setup Test Runner
+          command: |
+            git clone --recurse-submodules https://github.com/babel/babel-test262-runner
+            cd babel-test262-runner
+            yarn
+            yarn add tap-mocha-reporter --dev
+            curl -L https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 > jq
+            chmod +x ./jq
+            for package in ../packages/*/package.json; do
+              yarn link $(./jq -j ".name" $package)
+            done
+            node lib/download-node
+      - run:
+          name: Download master branch Test262 artifact
+          command: node lib/download-master-artifact ~/master.tap
+          <<: *test262_workdir
+      - run:
+          name: Run Test262
+          command: node lib/run-tests I_AM_SURE | tee ~/test262.tap
+          <<: *test262_workdir
+      - store_artifacts: *artifact_test262_tap
+      - run:
+          name: Output Test262 results
+          command: |
+            cat ~/test262.tap | $(npm bin)/tap-mocha-reporter spec || true
+          <<: *test262_workdir
+      - run:
+          name: Compare previous master branch & current job results
+          command: |
+            mkdir -p ~/test-results/test262
+            node lib/compare-results ~/master.tap ~/test262.tap | tee ~/diff.tap
+          <<: *test262_workdir
+      - store_artifacts: *artifact_test262_diff_tap
+      - run:
+          name: Output comparision results and report to CircleCI
+          command: |
+            mkdir -p ~/test-results/test262
+            cat ~/diff.tap | $(npm bin)/tap-merge | $(npm bin)/tap-mocha-reporter xunit | tee ~/test-results/test262/results.xml
+          <<: *test262_workdir
+      - store_test_results: *artifact_test262_xunit
+
+  publish-verdaccio:
+    executor: node-executor
+    steps:
+      - checkout
+      - run: yarn install
+      - run: ./scripts/integration-tests/publish-local.sh
+      - persist_to_workspace:
+          root: /tmp/verdaccio-workspace
+          paths:
+            - storage
+            - htpasswd
+
+  e2e-babel:
+    executor: node-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/verdaccio-workspace
+      - run: ./scripts/integration-tests/e2e-babel.sh
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
+  test262-master:
+    jobs:
+      - test262:
+          filters:
+            branches:
+              only:
+                - master
+  test262:
+    jobs:
+      - approve-test262-run:
+          type: approval
+          filters:
+            branches:
+              ignore:
+                - master
+      - test262:
+          requires:
+            - approve-test262-run
+          filters:
+            branches:
+              ignore:
+                - master
+  e2e:
+    jobs:
+      - publish-verdaccio
+      - e2e-babel:
+          requires:
+            - publish-verdaccio

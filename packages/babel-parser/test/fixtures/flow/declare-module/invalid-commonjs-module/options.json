@@ -1,3 +1,0 @@
-{
-  "throws": "Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module (1:55)"
-}

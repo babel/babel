@@ -21,9 +21,7 @@ const reservedWords = {
 };
 
 const reservedWordsStrictSet = new Set(reservedWords.strict);
-const reservedWordsStrictBindSet = new Set(
-  reservedWords.strict.concat(reservedWords.strictBind),
-);
+const reservedWordsStrictBindSet = new Set(reservedWords.strictBind);
 
 /**
  * Checks if word is a reserved word in non-strict mode
@@ -42,6 +40,14 @@ export function isStrictReservedWord(word: string, inModule: boolean): boolean {
 }
 
 /**
+ * Checks if word is a reserved word in binding strict mode, but it is allowed as
+ * a normal identifier.
+ */
+export function isStrictBindOnlyReservedWord(word: string): boolean {
+  return reservedWordsStrictBindSet.has(word);
+}
+
+/**
  * Checks if word is a reserved word in binding strict mode
  *
  * Includes non-strict reserved words and non-binding strict reserved words
@@ -50,7 +56,9 @@ export function isStrictBindReservedWord(
   word: string,
   inModule: boolean,
 ): boolean {
-  return isReservedWord(word, inModule) || reservedWordsStrictBindSet.has(word);
+  return (
+    isStrictReservedWord(word, inModule) || isStrictBindOnlyReservedWord(word)
+  );
 }
 
 export function isKeyword(word: string): boolean {

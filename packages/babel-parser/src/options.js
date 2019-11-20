@@ -21,6 +21,7 @@ export type Options = {
   ranges: boolean,
   tokens: boolean,
   createParenthesizedExpressions: boolean,
+  errorRecovery: boolean,
 };
 
 export const defaultOptions: Options = {
@@ -62,6 +63,9 @@ export const defaultOptions: Options = {
   // Whether to create ParenthesizedExpression AST nodes (if false
   // the parser sets extra.parenthesized on the expression nodes instead).
   createParenthesizedExpressions: false,
+  // When enabled, errors are attached to the AST instead of being directly thrown.
+  // Some errors will still throw, because @babel/parser can't always recover.
+  errorRecovery: false,
 };
 
 // Interpret and default an options object

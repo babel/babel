@@ -1,0 +1,6 @@
+class ClassName {
+  constructor() {
+
+  },
+  aMethod() {}
+}

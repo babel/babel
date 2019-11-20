@@ -115,7 +115,9 @@ export function insertAfter(nodes) {
       }),
     );
   } else if (
-    (this.isNodeType("Expression") && !this.isJSXElement()) ||
+    (this.isNodeType("Expression") &&
+      !this.isJSXElement() &&
+      !parentPath.isJSXElement()) ||
     (parentPath.isForStatement() && this.key === "init")
   ) {
     if (this.node) {

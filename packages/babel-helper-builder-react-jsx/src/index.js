@@ -87,13 +87,15 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
   function convertAttribute(node) {
     const value = convertAttributeValue(node.value || t.booleanLiteral(true));
 
+    if (t.isJSXSpreadAttribute(node)) {
+      return t.spreadElement(node.argument);
+    }
+
     if (t.isStringLiteral(value) && !t.isJSXExpressionContainer(node.value)) {
       value.value = value.value.replace(/\n\s+/g, " ");
 
       // "raw" JSXText should not be used from a StringLiteral because it needs to be escaped.
-      if (value.extra && value.extra.raw) {
-        delete value.extra.raw;
-      }
+      delete value.extra?.raw;
     }
 
     if (t.isJSXNamespacedName(node.name)) {
@@ -172,12 +174,32 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
     let _props = [];
     const objs = [];
 
+    const { useSpread = false } = file.opts;
+    if (typeof useSpread !== "boolean") {
+      throw new Error(
+        "transform-react-jsx currently only accepts a boolean option for " +
+          "useSpread (defaults to false)",
+      );
+    }
+
     const useBuiltIns = file.opts.useBuiltIns || false;
     if (typeof useBuiltIns !== "boolean") {
       throw new Error(
         "transform-react-jsx currently only accepts a boolean option for " +
           "useBuiltIns (defaults to false)",
       );
+    }
+
+    if (useSpread && useBuiltIns) {
+      throw new Error(
+        "transform-react-jsx currently only accepts useBuiltIns or useSpread " +
+          "but not both",
+      );
+    }
+
+    if (useSpread) {
+      const props = attribs.map(convertAttribute);
+      return t.objectExpression(props);
     }
 
     while (attribs.length) {

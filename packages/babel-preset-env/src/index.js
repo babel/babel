@@ -3,11 +3,12 @@
 import { SemVer } from "semver";
 import { logPluginOrPolyfill } from "./debug";
 import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
-import filterItems from "./filter-items";
+import filterItems, { removeUnnecessaryItems } from "./filter-items";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options";
 import pluginList from "../data/plugins.json";
 import { proposalPlugins, pluginSyntaxMap } from "../data/shipped-proposals";
+import overlappingPlugins from "../data/overlapping-plugins";
 
 import addCoreJS2UsagePlugin from "./polyfills/corejs2/usage-plugin";
 import addCoreJS3UsagePlugin from "./polyfills/corejs3/usage-plugin";
@@ -65,11 +66,13 @@ export const getModulesPluginNames = ({
   transformations,
   shouldTransformESM,
   shouldTransformDynamicImport,
+  shouldParseTopLevelAwait,
 }: {
   modules: ModuleOption,
   transformations: ModuleTransformationsType,
   shouldTransformESM: boolean,
   shouldTransformDynamicImport: boolean,
+  shouldParseTopLevelAwait: boolean,
 }) => {
   const modulesPluginNames = [];
   if (modules !== false && transformations[modules]) {
@@ -95,6 +98,11 @@ export const getModulesPluginNames = ({
   } else {
     modulesPluginNames.push("syntax-dynamic-import");
   }
+
+  if (shouldParseTopLevelAwait) {
+    modulesPluginNames.push("syntax-top-level-await");
+  }
+
   return modulesPluginNames;
 };
 
@@ -165,6 +173,10 @@ function supportsDynamicImport(caller) {
   return !!(caller && caller.supportsDynamicImport);
 }
 
+function supportsTopLevelAwait(caller) {
+  return !!(caller && caller.supportsTopLevelAwait);
+}
+
 export default declare((api, opts) => {
   api.assertVersion(7);
 
@@ -225,6 +237,7 @@ export default declare((api, opts) => {
       modules !== "auto" || !api.caller || !api.caller(supportsStaticESM),
     shouldTransformDynamicImport:
       modules !== "auto" || !api.caller || !api.caller(supportsDynamicImport),
+    shouldParseTopLevelAwait: !api.caller || api.caller(supportsTopLevelAwait),
   });
 
   const pluginNames = filterItems(
@@ -236,6 +249,7 @@ export default declare((api, opts) => {
     getOptionSpecificExcludesFor({ loose }),
     pluginSyntaxMap,
   );
+  removeUnnecessaryItems(pluginNames, overlappingPlugins);
 
   const polyfillPlugins = getPolyfillPlugins({
     useBuiltIns,

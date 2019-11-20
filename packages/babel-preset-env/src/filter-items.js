@@ -85,3 +85,13 @@ export default function(
 
   return result;
 }
+
+export function removeUnnecessaryItems(
+  items: Set<string>,
+  overlapping: Map<string, Set<string>>,
+) {
+  items.forEach(item => {
+    const names = overlapping.get(item);
+    if (names) names.forEach(name => items.delete(name));
+  });
+}

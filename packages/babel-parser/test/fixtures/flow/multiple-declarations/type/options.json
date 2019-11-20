@@ -1,8 +1,4 @@
 {
   "sourceType": "module",
-  "plugins": [
-    "jsx",
-    "flow"
-  ],
-  "throws": "Identifier 'T1' has already been declared (2:5)"
+  "plugins": ["jsx", "flow"]
 }

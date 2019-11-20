@@ -1,4 +1,4 @@
 {
-  "throws": "Unexpected keyword 'delete' (1:14)",
+  "sourceType": "module",
   "plugins": ["flow", "jsx"]
 }

@@ -59,7 +59,10 @@ describe("option-manager", () => {
       const { calls: calls2, plugin: plugin2 } = makePlugin();
 
       loadOptions({
-        plugins: [[plugin1, { arg: 1 }], [plugin2, { arg: 2 }, "some-name"]],
+        plugins: [
+          [plugin1, { arg: 1 }],
+          [plugin2, { arg: 2 }, "some-name"],
+        ],
       });
       expect(calls1).toEqual([{ arg: 1 }]);
       expect(calls2).toEqual([{ arg: 2 }]);
@@ -74,7 +77,10 @@ describe("option-manager", () => {
         plugins: [[plugin1, { arg: 1 }]],
         env: {
           test: {
-            plugins: [[plugin1, { arg: 3 }], [plugin2, { arg: 2 }]],
+            plugins: [
+              [plugin1, { arg: 3 }],
+              [plugin2, { arg: 2 }],
+            ],
           },
         },
       });
@@ -98,7 +104,10 @@ describe("option-manager", () => {
       const { calls: calls2, plugin: preset2 } = makePlugin();
 
       loadOptions({
-        presets: [[preset1, { arg: 1 }], [preset2, { arg: 2 }, "some-name"]],
+        presets: [
+          [preset1, { arg: 1 }],
+          [preset2, { arg: 2 }, "some-name"],
+        ],
       });
       expect(calls1).toEqual([{ arg: 1 }]);
       expect(calls2).toEqual([{ arg: 2 }]);
@@ -112,7 +121,10 @@ describe("option-manager", () => {
         presets: [[preset1, { arg: 1 }]],
         env: {
           test: {
-            presets: [[preset1, { arg: 3 }], [preset2, { arg: 2 }]],
+            presets: [
+              [preset1, { arg: 3 }],
+              [preset2, { arg: 2 }],
+            ],
           },
         },
       });
@@ -130,7 +142,10 @@ describe("option-manager", () => {
         presets: [[preset1, { arg: 1 }]],
         env: {
           test: {
-            presets: [[preset1, { arg: 3 }], [preset2, { arg: 2 }]],
+            presets: [
+              [preset1, { arg: 3 }],
+              [preset2, { arg: 2 }],
+            ],
           },
         },
       });

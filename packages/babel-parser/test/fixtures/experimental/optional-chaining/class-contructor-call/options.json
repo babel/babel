@@ -1,4 +1,3 @@
 {
-  "plugins": ["optionalChaining"],
-  "throws": "constructors in/after an Optional Chain are not allowed (1:10)"
+  "plugins": ["optionalChaining"]
 }

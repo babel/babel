@@ -77,8 +77,8 @@ module.exports = function(api) {
         "@babel/proposal-object-rest-spread",
         { useBuiltIns: true, loose: true },
       ],
-      "@babel/plugin-proposal-optional-chaining",
-      "@babel/plugin-proposal-nullish-coalescing-operator",
+      ["@babel/plugin-proposal-optional-chaining", { loose: true }],
+      ["@babel/plugin-proposal-nullish-coalescing-operator", { loose: true }],
 
       convertESM ? "@babel/transform-modules-commonjs" : null,
     ].filter(Boolean),
@@ -112,6 +112,8 @@ module.exports = function(api) {
           "packages/*/test",
           "codemods/*/src",
           "codemods/*/test",
+          "eslint/*/src",
+          "eslint/*/test",
         ],
         sourceType: "unambiguous",
       },
@@ -123,7 +125,10 @@ module.exports = function(api) {
         ],
         plugins: [
           includeRuntime
-            ? ["@babel/transform-runtime", { version: "7.4.4" }]
+            ? [
+                "@babel/transform-runtime",
+                { version: require("@babel/runtime/package").version },
+              ]
             : null,
         ].filter(Boolean),
       },

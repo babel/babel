@@ -13,6 +13,7 @@ export default declare((api, opts) => {
     opts.throwIfNamespace === undefined ? true : !!opts.throwIfNamespace;
   const development = !!opts.development;
   const useBuiltIns = !!opts.useBuiltIns;
+  const { useSpread } = opts;
 
   if (typeof development !== "boolean") {
     throw new Error(
@@ -24,7 +25,7 @@ export default declare((api, opts) => {
     plugins: [
       [
         transformReactJSX,
-        { pragma, pragmaFrag, throwIfNamespace, useBuiltIns },
+        { pragma, pragmaFrag, throwIfNamespace, useBuiltIns, useSpread },
       ],
       transformReactDisplayName,
 

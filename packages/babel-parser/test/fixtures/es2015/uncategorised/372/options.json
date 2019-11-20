@@ -1,4 +1,3 @@
 {
-  "sourceType": "script",
-  "throws": "Unexpected reserved word 'enum' (1:8)"
+  "sourceType": "script"
 }

@@ -123,6 +123,7 @@ const featuresToPlugins = {
   "import.meta": "importMeta",
   "numeric-separator-literal": "numericSeparator",
   "optional-chaining": "optionalChaining",
+  "top-level-await": "topLevelAwait",
 };
 
 function getPlugins(features) {

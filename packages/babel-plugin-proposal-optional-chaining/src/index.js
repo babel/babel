@@ -82,6 +82,8 @@ export default declare((api, options) => {
               let context = scope.maybeGenerateMemoised(object);
               if (context) {
                 chain.object = t.assignmentExpression("=", context, object);
+              } else if (t.isSuper(object)) {
+                context = t.thisExpression();
               } else {
                 context = object;
               }

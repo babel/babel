@@ -407,7 +407,7 @@ defineType("Identifier", {
     name: {
       validate: chain(function(node, key, val) {
         if (!isValidIdentifier(val)) {
-          // throw new TypeError(`"${val}" is not a valid identifer name`);
+          // throw new TypeError(`"${val}" is not a valid identifier name`);
         }
       }, assertValueType("string")),
     },

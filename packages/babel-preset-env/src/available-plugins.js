@@ -6,6 +6,7 @@ export default {
   "syntax-json-strings": require("@babel/plugin-syntax-json-strings"),
   "syntax-object-rest-spread": require("@babel/plugin-syntax-object-rest-spread"),
   "syntax-optional-catch-binding": require("@babel/plugin-syntax-optional-catch-binding"),
+  "syntax-top-level-await": require("@babel/plugin-syntax-top-level-await"),
   "transform-async-to-generator": require("@babel/plugin-transform-async-to-generator"),
   "proposal-async-generator-functions": require("@babel/plugin-proposal-async-generator-functions"),
   "proposal-dynamic-import": require("@babel/plugin-proposal-dynamic-import"),

@@ -2,13 +2,16 @@
   "validateLogs": true,
   "ignoreOutput": true,
   "presets": [
-    ["env", {
-      "debug": true,
-      "targets": {
-        "browsers": [ "Android >= 4" ]
-      },
-      "useBuiltIns": "entry",
-      "corejs": 2
-    }]
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "browsers": ["Android >= 4"]
+        },
+        "useBuiltIns": "entry",
+        "corejs": 2
+      }
+    ]
   ]
 }

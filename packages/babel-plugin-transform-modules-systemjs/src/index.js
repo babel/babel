@@ -413,6 +413,8 @@ export default declare((api, options) => {
 
                     path.replaceWithMultiple(nodes);
                   }
+                } else {
+                  path.remove();
                 }
               }
             }

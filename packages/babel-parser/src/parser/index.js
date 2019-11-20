@@ -39,7 +39,10 @@ export default class Parser extends StatementParser {
     const file = this.startNode();
     const program = this.startNode();
     this.nextToken();
-    return this.parseTopLevel(file, program);
+    file.errors = null;
+    this.parseTopLevel(file, program);
+    file.errors = this.state.errors;
+    return file;
   }
 }
 
