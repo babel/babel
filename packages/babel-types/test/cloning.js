@@ -98,4 +98,27 @@ describe("cloneNode", function() {
     expect(cloned.loc).toBeNull();
     expect(cloned.declarations[0].id.loc).toBeNull();
   });
+
+  it("should support deep cloning for leadingComments, innerComments and trailingComments", function() {
+    const node = t.variableDeclaration("let", [
+      t.variableDeclarator({
+        ...t.identifier("value"),
+        typeAnnotation: t.anyTypeAnnotation(),
+      }),
+    ]);
+    node.loc = {};
+    node.declarations[0].id.loc = {};
+    const cloned = t.cloneNode(node, /* deep */ true, /* withoutLoc */ true);
+    expect(cloned.loc).toBeNull();
+    expect(cloned.declarations[0].id.loc).toBeNull();
+    expect(cloned.declarations[0].id.leadingComments).toEqual(
+      node.declarations[0].id.leadingComments,
+    );
+    expect(cloned.declarations[0].id.innerComments).toEqual(
+      node.declarations[0].id.innerComments,
+    );
+    expect(cloned.declarations[0].id.trailingComments).toEqual(
+      node.declarations[0].id.trailingComments,
+    );
+  });
 });
