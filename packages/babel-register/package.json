@@ -15,7 +15,6 @@
   "dependencies": {
     "find-cache-dir": "^2.0.0",
     "lodash": "^4.17.13",
-    "make-dir": "^2.1.0",
     "pirates": "^4.0.0",
     "source-map-support": "^0.5.16"
   },

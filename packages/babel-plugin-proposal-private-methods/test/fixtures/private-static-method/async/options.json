@@ -1,5 +1,4 @@
 {
-  "minNodeVersion": "8.0.0",
   "plugins": [
     [
       "external-helpers",
