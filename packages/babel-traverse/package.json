@@ -18,7 +18,7 @@
     "@babel/parser": "^7.8.4",
     "@babel/types": "^7.8.3",
     "debug": "^4.1.0",
-    "globals": "^11.1.0",
+    "globals": "^12.3.0",
     "lodash": "^4.17.13"
   },
   "devDependencies": {

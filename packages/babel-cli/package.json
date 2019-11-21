@@ -24,11 +24,11 @@
     "fs-readdir-recursive": "^1.1.0",
     "glob": "^7.0.0",
     "lodash": "^4.17.13",
-    "slash": "^2.0.0",
+    "slash": "^3.0.0",
     "source-map": "^0.5.0"
   },
   "optionalDependencies": {
-    "chokidar": "^2.1.8"
+    "chokidar": "^3.3.1"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
