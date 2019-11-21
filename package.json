@@ -80,7 +80,7 @@
     "@lerna/collect-updates": "https://github.com/babel/lerna.git#babel-collect-updates"
   },
   "engines": {
-    "node": ">= 6.9.0 < 14.0.0",
+    "node": ">= 10.13.0 < 14.0.0",
     "npm": ">= 3.x <= 6.x",
     "yarn": ">=0.27.5 || >=1.0.0-20170811"
   },

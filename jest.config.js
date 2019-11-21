@@ -23,11 +23,7 @@ module.exports = {
     "eslint/*/src/**/*.mjs",
     "eslint/*/src/**/*.js",
   ],
-  // The eslint/* packages use ESLint v6, which has dropped support for Node v6.
-  // TODO: Remove this process.version check in Babel 8.
-  testRegex: `./(packages|codemods${
-    /^v6./u.test(process.version) ? "" : "|eslint"
-  })/[^/]+/test/.+\\.m?js$`,
+  testRegex: `./(packages|codemods|eslint)/[^/]+/test/.+\\.m?js$`,
   testPathIgnorePatterns: [
     "/node_modules/",
     "/test/fixtures/",
