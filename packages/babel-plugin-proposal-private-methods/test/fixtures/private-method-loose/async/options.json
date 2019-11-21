@@ -1,9 +1,23 @@
 {
-  "minNodeVersion": "8.0.0",
   "plugins": [
-    ["external-helpers", { "helperVersion": "7.1000.0" }],
-    ["proposal-private-methods", { "loose": true }],
-    ["proposal-class-properties", { "loose": true }]
+    [
+      "external-helpers",
+      {
+        "helperVersion": "7.1000.0"
+      }
+    ],
+    [
+      "proposal-private-methods",
+      {
+        "loose": true
+      }
+    ],
+    [
+      "proposal-class-properties",
+      {
+        "loose": true
+      }
+    ]
   ],
   "parserOpts": {
     "allowReturnOutsideFunction": true

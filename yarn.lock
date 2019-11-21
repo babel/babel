@@ -46,7 +46,6 @@ __metadata:
     fs-readdir-recursive: ^1.1.0
     glob: ^7.0.0
     lodash: ^4.17.19
-    make-dir: ^2.1.0
     rimraf: ^3.0.0
     slash: ^2.0.0
     source-map: ^0.5.0
@@ -877,8 +876,6 @@ __metadata:
     core-js: ^3.2.1
     fs-readdir-recursive: ^1.0.0
     lodash: ^4.17.19
-    make-dir: ^2.1.0
-    node-environment-flags: ^1.0.5
     regenerator-runtime: ^0.13.4
     resolve: ^1.13.1
     rimraf: ^3.0.0
@@ -3129,7 +3126,6 @@ __metadata:
     browserify: ^16.5.2
     find-cache-dir: ^2.0.0
     lodash: ^4.17.19
-    make-dir: ^2.1.0
     pirates: ^4.0.0
     source-map-support: ^0.5.16
   peerDependencies:
@@ -6324,7 +6320,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"es-abstract@npm:^1.17.0, es-abstract@npm:^1.17.0-next.1, es-abstract@npm:^1.17.5, es-abstract@npm:^1.4.3, es-abstract@npm:^1.5.1":
+"es-abstract@npm:^1.17.0, es-abstract@npm:^1.17.0-next.1, es-abstract@npm:^1.17.5, es-abstract@npm:^1.4.3":
   version: 1.17.6
   resolution: "es-abstract@npm:1.17.6"
   dependencies:
@@ -9989,16 +9985,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"node-environment-flags@npm:^1.0.5":
-  version: 1.0.6
-  resolution: "node-environment-flags@npm:1.0.6"
-  dependencies:
-    object.getownpropertydescriptors: ^2.0.3
-    semver: ^5.7.0
-  checksum: 1f6d1e636d5bb0caae32cd39b87b61ff1fa101d66db1ccb1417c8cb8df72089d10b0b5150bf10700c5f8a58f4f4ce7f64b1cf17392a3639b597e5fe9ea0dfcc0
-  languageName: node
-  linkType: hard
-
 "node-fetch@npm:^1.7.0":
   version: 1.7.3
   resolution: "node-fetch@npm:1.7.3"
@@ -10235,16 +10221,6 @@ fsevents@^1.2.7:
     for-own: ^1.0.0
     isobject: ^3.0.0
   checksum: 837678fe93d13de49d7cdfbe9fd62991512b6b4cbd0a1b75019d23d76bdb79502b7e0bc87cb66324363079b1fb75c618021f629319d5b48e50392c883fbb9890
-  languageName: node
-  linkType: hard
-
-"object.getownpropertydescriptors@npm:^2.0.3":
-  version: 2.0.3
-  resolution: "object.getownpropertydescriptors@npm:2.0.3"
-  dependencies:
-    define-properties: ^1.1.2
-    es-abstract: ^1.5.1
-  checksum: aceab22c5f3890a44757053bd655ca4c10e28929ce55407c07c2c7b7e88225b75ecebdcc7f98c1b2c0e05ebe6a8903395b89d84233a9717d9684d9b6925fdfab
   languageName: node
   linkType: hard
 
@@ -11767,7 +11743,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"semver@npm:2 || 3 || 4 || 5, semver@npm:^5.3.0, semver@npm:^5.4.1, semver@npm:^5.5.0, semver@npm:^5.5.1, semver@npm:^5.6.0, semver@npm:^5.7.0":
+"semver@npm:2 || 3 || 4 || 5, semver@npm:^5.3.0, semver@npm:^5.4.1, semver@npm:^5.5.0, semver@npm:^5.5.1, semver@npm:^5.6.0":
   version: 5.7.1
   resolution: "semver@npm:5.7.1"
   bin:

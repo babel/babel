@@ -2,7 +2,6 @@ const includes = require("lodash/includes");
 const readdir = require("fs-readdir-recursive");
 const helper = require("@babel/helper-fixtures");
 const rimraf = require("rimraf");
-const { sync: makeDirSync } = require("make-dir");
 const child = require("child_process");
 const merge = require("lodash/merge");
 const path = require("path");
@@ -16,7 +15,7 @@ const fileFilter = function (x) {
 };
 
 const outputFileSync = function (filePath, data) {
-  makeDirSync(path.dirname(filePath));
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, data);
 };
 
