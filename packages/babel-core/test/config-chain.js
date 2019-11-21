@@ -4,40 +4,7 @@ import path from "path";
 import escapeRegExp from "lodash/escapeRegExp";
 import * as babel from "../lib";
 
-// TODO: In Babel 8, we can directly uses fs.promises which is supported by
-// node 8+
-const pfs =
-  fs.promises ??
-  new Proxy(fs, {
-    get(target, name) {
-      if (name === "copyFile") {
-        // fs.copyFile is only supported since node 8.5
-        // https://stackoverflow.com/a/30405105/2359289
-        return function copyFile(source, target) {
-          const rd = fs.createReadStream(source);
-          const wr = fs.createWriteStream(target);
-          return new Promise(function(resolve, reject) {
-            rd.on("error", reject);
-            wr.on("error", reject);
-            wr.on("finish", resolve);
-            rd.pipe(wr);
-          }).catch(function(error) {
-            rd.destroy();
-            wr.end();
-            throw error;
-          });
-        };
-      }
-
-      return (...args) =>
-        new Promise((resolve, reject) =>
-          target[name](...args, (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-          }),
-        );
-    },
-  });
+const pfs = fs.promises;
 
 function fixture(...args) {
   return path.join(__dirname, "fixtures", "config", ...args);

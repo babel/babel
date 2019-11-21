@@ -1,7 +1,6 @@
 // @flow
 
 import defaults from "lodash/defaults";
-import { sync as makeDirSync } from "make-dir";
 import slash from "slash";
 import path from "path";
 import fs from "fs";
@@ -17,7 +16,7 @@ const FILE_TYPE = Object.freeze({
 });
 
 function outputFileSync(filePath: string, data: string | Buffer): void {
-  makeDirSync(path.dirname(filePath));
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, data);
 }
 
@@ -143,7 +142,7 @@ export default async function({
       util.deleteDir(cliOptions.outDir);
     }
 
-    makeDirSync(cliOptions.outDir);
+    fs.mkdirSync(cliOptions.outDir, { recursive: true });
 
     let compiledFiles = 0;
     for (const filename of cliOptions.filenames) {
