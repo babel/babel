@@ -8,9 +8,6 @@
     "access": "public"
   },
   "main": "lib/index.js",
-  "engines": {
-    "node": ">=4"
-  },
   "keywords": [
     "babel-plugin",
     "regex",

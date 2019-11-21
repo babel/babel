@@ -19,7 +19,7 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": ">=10.9"
+    "node": ">=10.13.0"
   },
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
