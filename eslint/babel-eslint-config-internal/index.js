@@ -1,9 +1,11 @@
+"use strict";
+
 module.exports = {
   parser: "babel-eslint",
   extends: "eslint:recommended",
   plugins: ["flowtype"],
   parserOptions: {
-    ecmaVersion: 2017,
+    ecmaVersion: 2019,
     sourceType: "module",
   },
   rules: {
