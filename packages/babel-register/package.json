@@ -13,7 +13,7 @@
     "./lib/node.js": "./lib/browser.js"
   },
   "dependencies": {
-    "find-cache-dir": "^2.0.0",
+    "find-cache-dir": "^3.2.0",
     "lodash": "^4.17.13",
     "pirates": "^4.0.0",
     "source-map-support": "^0.5.16"
