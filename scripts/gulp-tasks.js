@@ -11,6 +11,7 @@
  * to make standalone builds of other Babel plugins/presets (such as babel-minify)
  */
 
+const fs = require("fs");
 const path = require("path");
 const pump = require("pump");
 const chalk = require("chalk");
@@ -23,6 +24,19 @@ const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack
 const WarningsToErrorsPlugin = require("warnings-to-errors-webpack-plugin");
 const webpackStream = require("webpack-stream");
 const uglify = require("gulp-uglify");
+
+function generateResolveAlias() {
+  const alias = {};
+  const packagePath = path.resolve(process.cwd(), "packages");
+  fs.readdirSync(packagePath).forEach(folder => {
+    alias[folder.replace("babel-", "@babel/") + "$"] = path.resolve(
+      packagePath,
+      folder,
+      "src"
+    );
+  });
+  return alias;
+}
 
 function webpackBuild(opts) {
   const plugins = opts.plugins || [];
@@ -71,7 +85,6 @@ function webpackBuild(opts) {
       }),
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": '"production"',
-        "process.env": JSON.stringify({ NODE_ENV: "production" }),
         BABEL_VERSION: JSON.stringify(babelVersion),
         VERSION: JSON.stringify(version),
       }),
@@ -82,6 +95,8 @@ function webpackBuild(opts) {
       new webpack.optimize.ModuleConcatenationPlugin(),
     ].concat(plugins),
     resolve: {
+      //todo: remove resolve.alias when babel packages offer ESModule entry
+      alias: generateResolveAlias(),
       plugins: [
         // Dedupe packages that are used across multiple plugins.
         // This replaces DedupePlugin from Webpack 1.x
