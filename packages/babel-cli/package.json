@@ -28,11 +28,10 @@
     "fs-readdir-recursive": "^1.1.0",
     "glob": "^7.0.0",
     "lodash": "^4.17.19",
-    "slash": "^2.0.0",
+    "slash": "^3.0.0",
     "source-map": "^0.5.0"
   },
   "optionalDependencies": {
-    "@nicolo-ribaudo/chokidar-2": "^2.1.8",
     "chokidar": "^3.4.0"
   },
   "peerDependencies": {

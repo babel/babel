@@ -22,7 +22,7 @@
     "@babel/parser": "workspace:^7.12.1",
     "@babel/types": "workspace:^7.12.1",
     "debug": "^4.1.0",
-    "globals": "^11.1.0",
+    "globals": "^12.3.0",
     "lodash": "^4.17.19"
   },
   "devDependencies": {
