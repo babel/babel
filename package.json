@@ -74,7 +74,7 @@
     "caniuse-lite": "npm:1.0.30001077"
   },
   "engines": {
-    "node": ">= 6.9.0",
+    "node": ">= 10.13.0",
     "yarn": ">=1.4.0"
   },
   "lint-staged": {
