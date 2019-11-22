@@ -103,8 +103,6 @@ jobs:
           command: |
             git clone --recurse-submodules https://github.com/babel/babel-test262-runner
             cd babel-test262-runner
-            git fetch origin local-babel
-            git checkout local-babel
             yarn
             yarn add tap-mocha-reporter --dev
             node lib/download-node
