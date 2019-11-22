@@ -222,6 +222,7 @@ ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 endif
 	$(MAKE) prepublish-build
 	yarn lerna version patch --force-publish=$(FORCE_PUBLISH)  --no-push --yes --tag-version-prefix="version-e2e-test-"
+	git --no-pager diff HEAD
 	yarn lerna publish from-git --registry http://localhost:4873 --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
 
