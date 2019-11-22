@@ -90,15 +90,6 @@ jobs:
           name: Build Babel
           command: BABEL_ENV=test make bootstrap
       - run:
-          name: Link Babel
-          command: |
-            cd packages
-            for package in */; do
-              cd $package
-              yarn link
-              cd ..
-            done
-      - run:
           name: Setup Test Runner
           command: |
             git clone --recurse-submodules https://github.com/babel/babel-test262-runner
