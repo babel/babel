@@ -12,7 +12,7 @@ function verifyAndAssertMessagesWithSpecificESLint(
   expectedMessages,
   sourceType,
   overrideConfig,
-  linter
+  linter,
 ) {
   const config = {
     parser: "current-babel-eslint",
@@ -29,10 +29,10 @@ function verifyAndAssertMessagesWithSpecificESLint(
       babelOptions: {
         configFile: path.resolve(
           __dirname,
-          "./fixtures/config/babel.config.js"
+          "./fixtures/config/babel.config.js",
         ),
       },
-    }
+    },
   };
 
   if (overrideConfig) {
@@ -47,7 +47,7 @@ function verifyAndAssertMessagesWithSpecificESLint(
     throw new Error(
       `Expected ${expectedMessages.length} message(s), got ${
         messages.length
-      }\n${JSON.stringify(messages, null, 2)}`
+      }\n${JSON.stringify(messages, null, 2)}`,
     );
   }
 
@@ -61,7 +61,7 @@ function verifyAndAssertMessagesWithSpecificESLint(
           Message ${i} does not match:
           Expected: ${expectedMessages[i]}
           Actual:   ${formatedMessage}
-        `
+        `,
       );
     }
   });
@@ -72,7 +72,7 @@ function verifyAndAssertMessages(
   rules,
   expectedMessages,
   sourceType,
-  overrideConfig
+  overrideConfig,
 ) {
   const linter = new eslint.Linter();
   linter.defineParser("current-babel-eslint", parser);
@@ -83,7 +83,7 @@ function verifyAndAssertMessages(
     expectedMessages || [],
     sourceType,
     overrideConfig,
-    linter
+    linter,
   );
 }
 
@@ -96,7 +96,7 @@ describe("verify", () => {
     verifyAndAssertMessages(
       'module.exports = "something";',
       { "eol-last": 1, semi: 1 },
-      ["1:30 Newline required at end of file but not found. eol-last"]
+      ["1:30 Newline required at end of file but not found. eol-last"],
     );
   });
 
@@ -113,7 +113,7 @@ describe("verify", () => {
         export default Foo;
         export const c = 'c';
         export class Store {}
-      `
+      `,
     );
   });
 
@@ -138,7 +138,7 @@ describe("verify", () => {
   it("Rest parameter in destructuring assignment (issue #11)", () => {
     verifyAndAssertMessages(
       "const [a, ...rest] = ['1', '2', '3']; module.exports = rest;",
-      { "no-undef": 1 }
+      { "no-undef": 1 },
     );
   });
 
@@ -159,7 +159,7 @@ describe("verify", () => {
       '"use strict"; () => 1',
       { strict: [1, "global"] },
       [],
-      "script"
+      "script",
     );
   });
 
@@ -190,7 +190,7 @@ describe("verify", () => {
           let b = c
         }
       `,
-      { "padded-blocks": [1, "never"] }
+      { "padded-blocks": [1, "never"] },
     );
   });
 
@@ -198,7 +198,7 @@ describe("verify", () => {
     it("check regular function", () => {
       verifyAndAssertMessages(
         "function a(b, c) { b += 1; c += 1; return b + c; } a;",
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -221,7 +221,7 @@ describe("verify", () => {
           }
           log(1, 2);
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -234,7 +234,7 @@ describe("verify", () => {
           };
         `,
         { "no-unused-vars": 1, "no-undef": 1 },
-        ["2:11 'Bar' is defined but never used. no-unused-vars"]
+        ["2:11 'Bar' is defined but never used. no-unused-vars"],
       );
     });
 
@@ -249,7 +249,7 @@ describe("verify", () => {
           new Log();
         `,
         { "no-unused-vars": 1, "no-undef": 1 },
-        ["3:34 'T4' is defined but never used. no-unused-vars"]
+        ["3:34 'T4' is defined but never used. no-unused-vars"],
       );
     });
 
@@ -266,7 +266,7 @@ describe("verify", () => {
           "1:1 'T' is not defined. no-undef",
           "2:11 'T' is defined but never used. no-unused-vars",
           "3:1 'T' is not defined. no-undef",
-        ]
+        ],
       );
     });
 
@@ -282,7 +282,7 @@ describe("verify", () => {
         [
           "2:11 'Log' is defined but never used. no-unused-vars",
           "2:38 'T4' is defined but never used. no-unused-vars",
-        ]
+        ],
       );
     });
 
@@ -299,7 +299,7 @@ describe("verify", () => {
           "1:1 'T' is not defined. no-undef",
           "2:15 'T' is defined but never used. no-unused-vars",
           "3:1 'T' is not defined. no-undef",
-        ]
+        ],
       );
     });
 
@@ -316,7 +316,7 @@ describe("verify", () => {
         [
           "2:6 'Log' is defined but never used. no-unused-vars",
           "2:29 'T3' is defined but never used. no-unused-vars",
-        ]
+        ],
       );
     });
 
@@ -333,7 +333,7 @@ describe("verify", () => {
           "1:1 'T' is not defined. no-undef",
           "2:10 'T' is defined but never used. no-unused-vars",
           "3:1 'T' is not defined. no-undef",
-        ]
+        ],
       );
     });
 
@@ -346,7 +346,7 @@ describe("verify", () => {
           log(1, 2);
         `,
         { "no-unused-vars": 1, "no-undef": 1 },
-        ["3:37 'T4' is defined but never used. no-unused-vars"]
+        ["3:37 'T4' is defined but never used. no-unused-vars"],
       );
     });
 
@@ -363,7 +363,7 @@ describe("verify", () => {
           "1:1 'T' is not defined. no-undef",
           "2:14 'T' is defined but never used. no-unused-vars",
           "3:1 'T' is not defined. no-undef",
-        ]
+        ],
       );
     });
 
@@ -376,7 +376,7 @@ describe("verify", () => {
           }
           foo();
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -387,7 +387,7 @@ describe("verify", () => {
           var x: Foo = 1;
           x;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -398,7 +398,7 @@ describe("verify", () => {
           var a: {numVal: Foo};
           a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -412,7 +412,7 @@ describe("verify", () => {
           };
           a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -429,7 +429,7 @@ describe("verify", () => {
           b;
           c;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -439,7 +439,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           var x: Foo[]; x;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -449,7 +449,7 @@ describe("verify", () => {
           import type Bar from 'foo';
           export default class Foo implements Bar {}
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -459,7 +459,7 @@ describe("verify", () => {
           type Foo = any;
           var x : Foo = 1; x;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -471,7 +471,7 @@ describe("verify", () => {
           type Foo<T> = Bar<T, Foo3>
           var x : Foo = 1; x;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -481,14 +481,14 @@ describe("verify", () => {
           import type Foo2 from 'foo';
           export type Foo = Foo2;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
     it("polymorphic types #109", () => {
       verifyAndAssertMessages(
         "export default function groupByEveryN<T>(array: Array<T>, n: number): Array<Array<?T>> { n; }",
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -499,7 +499,7 @@ describe("verify", () => {
           type Operation = () => Promise;
           x: Operation;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -512,7 +512,7 @@ describe("verify", () => {
           var box = new Box();
           console.log(box.value);
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -523,7 +523,7 @@ describe("verify", () => {
             var a: T = value; a;
           }
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -533,7 +533,7 @@ describe("verify", () => {
           import Bar from './Bar';
           type Foo<T> = Bar<T>; var x: Foo = 1; console.log(x);
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -547,7 +547,7 @@ describe("verify", () => {
         [
           "1:21 'T' is defined but never used. no-unused-vars",
           "2:8 'T' is not defined. no-undef",
-        ]
+        ],
       );
     });
 
@@ -558,7 +558,7 @@ describe("verify", () => {
           export class Foo extends Bar<T> {}
         `,
         { "no-unused-vars": 1, "no-undef": 1 },
-        ["2:30 'T' is not defined. no-undef"]
+        ["2:30 'T' is not defined. no-undef"],
       );
     });
 
@@ -569,7 +569,7 @@ describe("verify", () => {
           f<T>();
         `,
         { "no-unused-vars": 1, "no-undef": 1 },
-        ["2:3 'T' is not defined. no-undef"]
+        ["2:3 'T' is not defined. no-undef"],
       );
     });
 
@@ -580,7 +580,7 @@ describe("verify", () => {
           function f<T>(): T {}
           f<Type>();
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -593,7 +593,7 @@ describe("verify", () => {
           declare var bar
           A; B; foo(); bar;
         `,
-        { "no-undef": 1, "no-unused-vars": 1 }
+        { "no-undef": 1, "no-unused-vars": 1 },
       );
     });
 
@@ -607,7 +607,7 @@ describe("verify", () => {
         [
           "2:6 'T' is defined but never used. no-unused-vars",
           "2:31 'V' is not defined. no-undef",
-        ]
+        ],
       );
     });
 
@@ -618,7 +618,7 @@ describe("verify", () => {
           import type Foo2 from 'foo';
           export default function(a: Foo, b: ?Foo2, c){ a; b; c; }
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -628,7 +628,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           export default function(a: () => Foo){ a; }
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -639,7 +639,7 @@ describe("verify", () => {
           import type Foo2 from 'foo';
           export default function(a: (_:Foo) => Foo2){ a; }
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -651,7 +651,7 @@ describe("verify", () => {
           import type Foo3 from 'foo';
           export default function(a: (_1:Foo, _2:Foo2) => Foo3){ a; }
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -662,7 +662,7 @@ describe("verify", () => {
           import type Foo2 from 'foo';
           export default function(a: (_1:Foo, ...foo:Array<Foo2>) => number){ a; }
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -672,7 +672,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           export default function(): Foo {}
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -682,7 +682,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           export default function():() => Foo {}
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -693,21 +693,21 @@ describe("verify", () => {
           import type Foo2 from 'foo';
           export default function():(_?:Foo) => Foo2{}
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
     it("9", () => {
       verifyAndAssertMessages(
         "export default function <T1, T2>(a: T1, b: T2) { b; }",
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
     it("10", () => {
       verifyAndAssertMessages(
         "var a=function<T1,T2>(a: T1, b: T2) {return a + b;}; a;",
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -739,7 +739,7 @@ describe("verify", () => {
           import type Foo2 from 'foo';
           export default class Bar {set fooProp(value:Foo):Foo2{ value; }}
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -749,7 +749,7 @@ describe("verify", () => {
           import type Foo2 from 'foo';
           export default class Foo {get fooProp(): Foo2{}}
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -759,7 +759,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           var numVal:Foo; numVal;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -769,7 +769,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           var a: {numVal: Foo;}; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -781,7 +781,7 @@ describe("verify", () => {
           import type Foo3 from 'foo';
           var a: ?{numVal: Foo; [indexer: Foo2]: Foo3}; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -792,7 +792,7 @@ describe("verify", () => {
           import type Foo2 from 'foo';
           var a: {numVal: Foo; subObj?: ?{strVal: Foo2}}; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -805,7 +805,7 @@ describe("verify", () => {
           import type Foo4 from 'foo';
           var a: { [a: Foo]: Foo2; [b: Foo3]: Foo4; }; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -817,7 +817,7 @@ describe("verify", () => {
           import type Foo3 from 'foo';
           var a: {add(x:Foo, ...y:Array<Foo2>): Foo3}; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -829,7 +829,7 @@ describe("verify", () => {
           import type Foo3 from 'foo';
           var a: { id<Foo>(x: Foo2): Foo3; }; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -839,7 +839,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           var a:Array<Foo> = [1, 2, 3]; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -849,14 +849,14 @@ describe("verify", () => {
           import type Baz from 'baz';
           export default class Bar<T> extends Baz<T> { };
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
     it("25", () => {
       verifyAndAssertMessages(
         "export default class Bar<T> { bar(): T { return 42; }}",
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -867,7 +867,7 @@ describe("verify", () => {
           import type Foo2 from 'foo';
           export default class Bar { static prop1:Foo; prop2:Foo2; }
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -878,7 +878,7 @@ describe("verify", () => {
           import type Foo2 from 'foo';
           var x : Foo | Foo2 = 4; x;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -889,7 +889,7 @@ describe("verify", () => {
           import type Foo2 from 'foo';
           var x : () => Foo | () => Foo2; x;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -900,7 +900,7 @@ describe("verify", () => {
           import type Foo2 from 'foo';
           var x: typeof Foo | number = Foo2; x;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -910,7 +910,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           var {x}: {x: Foo; } = { x: 'hello' }; x;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -920,7 +920,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           var [x]: Array<Foo> = [ 'hello' ]; x;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -930,7 +930,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           export default function({x}: { x: Foo; }) { x; }
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -940,7 +940,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           function foo([x]: Array<Foo>) { x; } foo();
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -951,7 +951,7 @@ describe("verify", () => {
           import type Foo2 from 'foo';
           var a: Map<Foo, Array<Foo2> >; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -961,7 +961,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           var a: ?Promise<Foo>[]; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -972,7 +972,7 @@ describe("verify", () => {
           import type Foo2 from 'foo';
           var a:(...rest:Array<Foo>) => Foo2; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -985,7 +985,7 @@ describe("verify", () => {
           import type Foo4 from 'foo';
           var a: <Foo>(x: Foo2, ...y:Foo3[]) => Foo4; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -995,7 +995,7 @@ describe("verify", () => {
           import type {foo, bar} from 'baz';
           foo; bar;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -1005,7 +1005,7 @@ describe("verify", () => {
           import type {foo as bar} from 'baz';
           bar;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -1015,7 +1015,7 @@ describe("verify", () => {
           import type from 'foo';
           type;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -1025,7 +1025,7 @@ describe("verify", () => {
           import type, {foo} from 'bar';
           type; foo;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -1035,7 +1035,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           var a: Foo[]; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -1045,7 +1045,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           var a: ?Foo[]; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -1055,7 +1055,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           var a: (?Foo)[]; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -1065,7 +1065,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           var a: () => Foo[]; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -1075,7 +1075,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           var a: (() => Foo)[]; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -1085,7 +1085,7 @@ describe("verify", () => {
           import type Foo from 'foo';
           var a: typeof Foo[]; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
 
@@ -1097,7 +1097,7 @@ describe("verify", () => {
           import type Foo3 from 'foo';
           var a : [Foo, Foo2<Foo3>,] = [123, 'duck',]; a;
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
       );
     });
   });
@@ -1117,7 +1117,7 @@ describe("verify", () => {
         };
         }
       `,
-      { "no-undef": 1, "no-unused-vars": 1 }
+      { "no-undef": 1, "no-unused-vars": 1 },
     );
   });
 
@@ -1139,7 +1139,7 @@ describe("verify", () => {
         }
         };
       `,
-      { "comma-spacing": 1 }
+      { "comma-spacing": 1 },
     );
   });
 
@@ -1151,7 +1151,7 @@ describe("verify", () => {
         }}\`;
       `,
       { indent: 1 },
-      []
+      [],
     );
   });
 
@@ -1160,7 +1160,7 @@ describe("verify", () => {
       code,
       rules,
       expectedMessages,
-      sourceType
+      sourceType,
     ) {
       const overrideConfig = {
         parserOptions: {
@@ -1168,7 +1168,7 @@ describe("verify", () => {
           babelOptions: {
             configFile: path.resolve(
               __dirname,
-              "./fixtures/config/babel.config.decorators-legacy.js"
+              "./fixtures/config/babel.config.decorators-legacy.js",
             ),
           },
         },
@@ -1178,7 +1178,7 @@ describe("verify", () => {
         rules,
         expectedMessages,
         sourceType,
-        overrideConfig
+        overrideConfig,
       );
     }
 
@@ -1192,7 +1192,7 @@ describe("verify", () => {
           @classDeclaration
           export class TextareaAutosize {}
         `,
-        { "no-unused-vars": 1 }
+        { "no-unused-vars": 1 },
       );
     });
 
@@ -1210,7 +1210,7 @@ describe("verify", () => {
           }
           }
         `,
-        { "no-unused-vars": 1 }
+        { "no-unused-vars": 1 },
       );
     });
 
@@ -1230,7 +1230,7 @@ describe("verify", () => {
           set bar(val) { val; }
           }
         `,
-        { "no-unused-vars": 1 }
+        { "no-unused-vars": 1 },
       );
     });
 
@@ -1249,7 +1249,7 @@ describe("verify", () => {
           };
           obj;
         `,
-        { "no-unused-vars": 1 }
+        { "no-unused-vars": 1 },
       );
     });
 
@@ -1270,7 +1270,7 @@ describe("verify", () => {
           };
           obj;
         `,
-        { "no-unused-vars": 1 }
+        { "no-unused-vars": 1 },
       );
     });
   });
@@ -1287,7 +1287,7 @@ describe("verify", () => {
           @classDeclaration
           class TextareaAutosize {}
         `,
-        { "no-unused-vars": 1 }
+        { "no-unused-vars": 1 },
       );
     });
 
@@ -1305,7 +1305,7 @@ describe("verify", () => {
           }
           }
         `,
-        { "no-unused-vars": 1 }
+        { "no-unused-vars": 1 },
       );
     });
 
@@ -1325,7 +1325,7 @@ describe("verify", () => {
           set bar(val) { val; }
           }
         `,
-        { "no-unused-vars": 1 }
+        { "no-unused-vars": 1 },
       );
     });
   });
@@ -1342,35 +1342,35 @@ describe("verify", () => {
   it.skip("visits excluded properties left of spread #95", () => {
     verifyAndAssertMessages(
       "var originalObject = {}; var {field1, field2, ...clone} = originalObject;",
-      { "no-unused-vars": 1 }
+      { "no-unused-vars": 1 },
     );
   });
 
   it.skip("visits excluded properties left of spread #210", () => {
     verifyAndAssertMessages(
       "const props = { yo: 'yo' }; const { ...otherProps } = props;",
-      { "no-unused-vars": 1 }
+      { "no-unused-vars": 1 },
     );
   });
 
   it("does not mark spread variables false-positive", () => {
     verifyAndAssertMessages(
       "var originalObject = {}; var {field1, field2, ...clone} = originalObject;",
-      { "no-undef": 1, "no-redeclare": 1 }
+      { "no-undef": 1, "no-redeclare": 1 },
     );
   });
 
   it("does not mark spread variables false-positive", () => {
     verifyAndAssertMessages(
       "const props = { yo: 'yo' }; const { ...otherProps } = props;",
-      { "no-undef": 1, "no-redeclare": 1 }
+      { "no-undef": 1, "no-redeclare": 1 },
     );
   });
 
   it("does not mark spread variables as use-before-define #249", () => {
     verifyAndAssertMessages(
       "var originalObject = {}; var {field1, field2, ...clone} = originalObject;",
-      { "no-use-before-define": 1 }
+      { "no-use-before-define": 1 },
     );
   });
 
@@ -1378,7 +1378,7 @@ describe("verify", () => {
     verifyAndAssertMessages(
       "const {Bacona} = require('baconjs')",
       { "no-undef": 1, "no-unused-vars": 1 },
-      ["1:8 'Bacona' is assigned a value but never used. no-unused-vars"]
+      ["1:8 'Bacona' is assigned a value but never used. no-unused-vars"],
     );
   });
 
@@ -1392,7 +1392,7 @@ describe("verify", () => {
         };
         }
       `,
-      { "no-undef": 1, "no-unused-vars": 1 }
+      { "no-undef": 1, "no-unused-vars": 1 },
     );
   });
 
@@ -1404,7 +1404,7 @@ describe("verify", () => {
         2, // a trailing comment makes this line fail comma-dangle (always-multiline)
         ];
       `,
-      { "comma-dangle": [2, "always-multiline"] }
+      { "comma-dangle": [2, "always-multiline"] },
     );
 
     verifyAndAssertMessages(
@@ -1415,7 +1415,7 @@ describe("verify", () => {
         console.log(a);
         }
       `,
-      { "brace-style": 2 }
+      { "brace-style": 2 },
     );
   });
 
@@ -1434,7 +1434,7 @@ describe("verify", () => {
         }
         });
       `,
-      { "space-in-parens": 1 }
+      { "space-in-parens": 1 },
     );
   });
 
@@ -1451,7 +1451,7 @@ describe("verify", () => {
         }
         });
       `,
-      { "space-in-parens": 1 }
+      { "space-in-parens": 1 },
     );
   });
 
@@ -1482,7 +1482,7 @@ describe("verify", () => {
         options;
         }
       `,
-      { "no-unused-vars": 1, "no-undef": 1 }
+      { "no-unused-vars": 1, "no-undef": 1 },
     );
   });
 
@@ -1493,7 +1493,7 @@ describe("verify", () => {
         var x = 1;
       `,
       { "no-use-before-define": 1 },
-      ["1:13 'x' was used before it was defined. no-use-before-define"]
+      ["1:13 'x' was used before it was defined. no-use-before-define"],
     );
   });
 
@@ -1512,7 +1512,7 @@ describe("verify", () => {
         "space-before-function-paren": 1,
         "keyword-spacing": [1, { before: true }],
         indent: 1,
-      }
+      },
     );
   });
 
@@ -1528,7 +1528,7 @@ describe("verify", () => {
         }
         };
       `,
-      { "no-dupe-keys": 1 }
+      { "no-dupe-keys": 1 },
     );
   });
 
@@ -1541,7 +1541,7 @@ describe("verify", () => {
           bar({ foo }: Foo) { foo; }
         }
       `,
-      { "no-unused-vars": 1, "no-shadow": 1 }
+      { "no-unused-vars": 1, "no-shadow": 1 },
     );
   });
 
@@ -1553,7 +1553,7 @@ describe("verify", () => {
       `,
       { "no-redeclare": 1 },
       ["2:5 'a' is already defined. no-redeclare"],
-      "script"
+      "script",
     );
   });
 
@@ -1565,7 +1565,7 @@ describe("verify", () => {
       `,
       { "no-redeclare": 1 },
       ["2:5 'a' is already defined. no-redeclare"],
-      "module"
+      "module",
     );
   });
 
@@ -1574,13 +1574,13 @@ describe("verify", () => {
       "var leakedGlobal = 1;",
       { "no-implicit-globals": 1 },
       [
-        "1:5 Implicit global variable, assign as global property instead. no-implicit-globals",
+        "1:5 Unexpected 'var' declaration in the global scope, wrap in an IIFE for a local variable, assign as global property for a global variable. no-implicit-globals",
       ],
       "script",
       {
         env: {},
         parserOptions: { ecmaVersion: 6, sourceType: "script" },
-      }
+      },
     );
   });
 
@@ -1593,7 +1593,7 @@ describe("verify", () => {
       {
         env: {},
         parserOptions: { ecmaVersion: 6, sourceType: "module" },
-      }
+      },
     );
   });
 
@@ -1606,7 +1606,7 @@ describe("verify", () => {
       {
         env: {},
         parserOptions: { ecmaVersion: 6 },
-      }
+      },
     );
   });
 
@@ -1627,7 +1627,7 @@ describe("verify", () => {
           sourceType: "module",
           allowImportExportEverywhere: true,
         },
-      }
+      },
     );
   });
 
@@ -1656,7 +1656,7 @@ describe("verify", () => {
         }
       `,
       { "no-undef": 1 },
-      ["2:4 'test' is not defined. no-undef"]
+      ["2:4 'test' is not defined. no-undef"],
     );
   });
 
@@ -1666,7 +1666,7 @@ describe("verify", () => {
         import { Map as $Map } from 'immutable';
         function myFunction($state: $Map, { a, b, c } : { a: ?Object, b: ?Object, c: $Map }) {}
       `,
-      { "no-dupe-args": 1, "no-redeclare": 1, "no-shadow": 1 }
+      { "no-dupe-args": 1, "no-redeclare": 1, "no-shadow": 1 },
     );
   });
 
@@ -1683,7 +1683,7 @@ describe("verify", () => {
         return hasGlobal;
         }
       `,
-      { "newline-before-return": 1 }
+      { "newline-before-return": 1 },
     );
   });
 
@@ -1693,7 +1693,7 @@ describe("verify", () => {
         #!/usr/bin/env babel-node
         import {spawn} from 'foobar';
       `,
-      { "spaced-comment": 1 }
+      { "spaced-comment": 1 },
     );
   });
 
@@ -1708,7 +1708,7 @@ describe("verify", () => {
             static propTypes = {};
           }
         `,
-        { "no-redeclare": 1 }
+        { "no-redeclare": 1 },
       );
     });
 
@@ -1720,7 +1720,7 @@ describe("verify", () => {
             static validate = validate;
           }
         `,
-        { "no-redeclare": 1 }
+        { "no-redeclare": 1 },
       );
     });
 
@@ -1736,7 +1736,7 @@ describe("verify", () => {
           new A
         `,
         { "no-undef": 1, "no-unused-vars": 1, "no-redeclare": 1 },
-        ["5:11 'b' is not defined. no-undef"]
+        ["5:11 'b' is not defined. no-undef"],
       );
     });
   });
@@ -1747,7 +1747,7 @@ describe("verify", () => {
 
   it("regex with es6 unicodeCodePointEscapes", () => {
     verifyAndAssertMessages(
-      "string.replace(/[\u{0000A0}-\u{10FFFF}<>&]/gmiu, (char) => `&#x${char.codePointAt(0).toString(16)};`);"
+      "string.replace(/[\u{0000A0}-\u{10FFFF}<>&]/gmiu, (char) => `&#x${char.codePointAt(0).toString(16)};`);",
     );
   });
 
@@ -1759,7 +1759,7 @@ describe("verify", () => {
               #d = 1;
             }
         `,
-        { "no-undef": 1 }
+        { "no-undef": 1 },
       );
     });
 
@@ -1770,7 +1770,7 @@ describe("verify", () => {
               #d = 1;
             }
         `,
-        { "no-unused-vars": 1 }
+        { "no-unused-vars": 1 },
       );
     });
   });
@@ -1782,7 +1782,7 @@ describe("verify", () => {
             const foo = {};
             foo?.bar;
         `,
-        { "no-undef": 1 }
+        { "no-undef": 1 },
       );
     });
   });
@@ -1797,7 +1797,7 @@ describe("verify", () => {
 
         new NodeUtils();
       `,
-      { "no-unused-vars": 1 }
+      { "no-unused-vars": 1 },
     );
   });
 
@@ -1805,7 +1805,7 @@ describe("verify", () => {
     verifyAndAssertMessages(
       `
         import('a');
-      `
+      `,
     );
   });
 
@@ -1813,7 +1813,7 @@ describe("verify", () => {
     verifyAndAssertMessages(
       `
         1_000
-      `
+      `,
     );
   });
 
@@ -1821,7 +1821,7 @@ describe("verify", () => {
     verifyAndAssertMessages(
       `
         a?.b
-      `
+      `,
     );
   });
 
@@ -1829,7 +1829,7 @@ describe("verify", () => {
     verifyAndAssertMessages(
       `
         import.meta
-      `
+      `,
     );
   });
 
@@ -1837,7 +1837,7 @@ describe("verify", () => {
     verifyAndAssertMessages(
       `
         class A { #a = 1; }
-      `
+      `,
     );
   });
 
@@ -1846,7 +1846,7 @@ describe("verify", () => {
       `
         try {} catch {}
         try {} catch {} finally {}
-      `
+      `,
     );
   });
 
@@ -1854,7 +1854,7 @@ describe("verify", () => {
     verifyAndAssertMessages(
       `
         export v from "mod"
-      `
+      `,
     );
   });
 
@@ -1862,7 +1862,7 @@ describe("verify", () => {
     verifyAndAssertMessages(
       `
         export * as ns from "mod"
-      `
+      `,
     );
   });
 
@@ -1873,7 +1873,7 @@ describe("verify", () => {
         console.log(a);
         eval('');
       `,
-      { "no-unused-vars": 1, "no-undef": 1 }
+      { "no-unused-vars": 1, "no-undef": 1 },
     );
   });
 });
