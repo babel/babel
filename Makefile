@@ -249,8 +249,9 @@ clean-lib:
 			$(call clean-source-lib, $(source))))
 
 clean-runtime-helpers:
-	rm -rf packages/babel-runtime/helpers
-	rm -rf packages/babel-runtime-corejs2/helpers
+	rm -f packages/babel-runtime/helpers/**/*.js
+	rm -f packages/babel-runtime-corejs2/helpers/**/*.js
+	rm -f packages/babel-runtime-corejs3/helpers/**/*.js
 	rm -rf packages/babel-runtime-corejs2/core-js
 
 clean-all:
