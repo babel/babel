@@ -1,14 +1,12 @@
-"use strict";
-
-const babylonToEspree = require("./babylon-to-espree");
-const {
-  parseSync: parse,
-  tokTypes: tt,
+import babylonToEspree from "./babylon-to-espree";
+import {
+  parseSync as parse,
+  tokTypes as tt,
   traverse,
   loadPartialConfig,
-} = require("@babel/core");
+} from "@babel/core";
 
-module.exports = function(code, options) {
+export default function(code, options) {
   let opts = {
     sourceType: options.sourceType,
     filename: options.filePath,
@@ -70,4 +68,4 @@ module.exports = function(code, options) {
   babylonToEspree(ast, traverse, tt, code);
 
   return ast;
-};
+}

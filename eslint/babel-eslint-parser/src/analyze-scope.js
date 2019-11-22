@@ -1,12 +1,10 @@
-"use strict";
-
-const t = require("@babel/core").types;
-const escope = require("eslint-scope");
-const Definition = require("eslint-scope/lib/definition").Definition;
-const OriginalPatternVisitor = require("eslint-scope/lib/pattern-visitor");
-const OriginalReferencer = require("eslint-scope/lib/referencer");
-const fallback = require("eslint-visitor-keys").getKeys;
-const childVisitorKeys = require("./visitor-keys");
+import { types as t } from "@babel/core";
+import escope from "eslint-scope";
+import { Definition } from "eslint-scope/lib/definition";
+import OriginalPatternVisitor from "eslint-scope/lib/pattern-visitor";
+import OriginalReferencer from "eslint-scope/lib/referencer";
+import { getKeys as fallback } from "eslint-visitor-keys";
+import childVisitorKeys from "./visitor-keys";
 
 const flowFlippedAliasKeys = t.FLIPPED_ALIAS_KEYS.Flow.concat([
   "ArrayPattern",
@@ -18,13 +16,16 @@ const flowFlippedAliasKeys = t.FLIPPED_ALIAS_KEYS.Flow.concat([
   "ObjectPattern",
   "RestElement",
 ]);
-const visitorKeysMap = Object.keys(t.VISITOR_KEYS).reduce(function(acc, key) {
-  const value = t.VISITOR_KEYS[key];
+const visitorKeysMap = Object.entries(t.VISITOR_KEYS).reduce(function(
+  acc,
+  [key, value],
+) {
   if (flowFlippedAliasKeys.indexOf(value) === -1) {
     acc[key] = value;
   }
   return acc;
-}, {});
+},
+{});
 
 const propertyTypes = {
   // loops
@@ -124,7 +125,7 @@ class Referencer extends OriginalReferencer {
 
   // inherits.
   visitProperty(node) {
-    if (node.value && node.value.type === "TypeCastExpression") {
+    if (node?.value?.type === "TypeCastExpression") {
       this._visitTypeAnnotation(node.value);
     }
     this._visitArray(node.decorators);
@@ -294,9 +295,9 @@ class Referencer extends OriginalReferencer {
   }
 
   _checkIdentifierOrVisit(node) {
-    if (node && node.typeAnnotation) {
+    if (node?.typeAnnotation) {
       this._visitTypeAnnotation(node.typeAnnotation);
-    } else if (node && node.type === "Identifier") {
+    } else if (node?.type === "Identifier") {
       this.visit(node);
     } else {
       this._visitTypeAnnotation(node);
@@ -312,7 +313,7 @@ class Referencer extends OriginalReferencer {
   }
 }
 
-module.exports = function(ast, parserOptions) {
+export default function(ast, parserOptions) {
   const options = {
     ignoreEval: true,
     optimistic: false,
@@ -335,4 +336,4 @@ module.exports = function(ast, parserOptions) {
   referencer.visit(ast);
 
   return scopeManager;
-};
+}

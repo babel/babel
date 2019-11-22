@@ -1,6 +1,4 @@
-"use strict";
-
-module.exports = function(tokens, tt) {
+export default function(tokens, tt) {
   let curlyBrace = null;
   let templateTokens = [];
   const result = [];
@@ -89,4 +87,4 @@ module.exports = function(tokens, tt) {
   });
 
   return result;
-};
+}

@@ -1,6 +1,4 @@
-"use strict";
-
-module.exports = function(ast) {
+export default function(ast) {
   ast.type = "Program";
   ast.sourceType = ast.program.sourceType;
   ast.directives = ast.program.directives;
@@ -37,4 +35,4 @@ module.exports = function(ast) {
     ast.loc.start.line = ast.body[0].loc.start.line;
     ast.range[0] = ast.body[0].start;
   }
-};
+}

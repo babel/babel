@@ -1,6 +1,4 @@
-"use strict";
-
-module.exports = function(token, tt, source) {
+export default function(token, tt, source) {
   const type = token.type;
   token.range = [token.start, token.end];
 
@@ -82,4 +80,4 @@ module.exports = function(token, tt, source) {
   }
 
   return token;
-};
+}

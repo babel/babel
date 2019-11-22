@@ -1,9 +1,9 @@
-"use strict";
+import { types as t } from "@babel/core";
+import { KEYS as ESLINT_VISITOR_KEYS } from "eslint-visitor-keys";
 
-const BABEL_VISITOR_KEYS = require("@babel/core").types.VISITOR_KEYS;
-const ESLINT_VISITOR_KEYS = require("eslint-visitor-keys").KEYS;
+const { VISITOR_KEYS: BABEL_VISITOR_KEYS } = t;
 
-module.exports = Object.assign(
+export default Object.assign(
   {
     Literal: ESLINT_VISITOR_KEYS.Literal,
     MethodDefinition: ["decorators"].concat(
