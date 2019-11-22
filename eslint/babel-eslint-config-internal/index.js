@@ -5,8 +5,18 @@ module.exports = {
   extends: "eslint:recommended",
   plugins: ["flowtype"],
   parserOptions: {
-    ecmaVersion: 2019,
+    ecmaVersion: 2020,
     sourceType: "module",
+  },
+  globals: {
+    // Flow
+    Iterator: true,
+    $Keys: true,
+  },
+  env: {
+    node: true,
+    es2020: true,
+    browser: true,
   },
   rules: {
     camelcase: "off",
@@ -35,15 +45,5 @@ module.exports = {
     strict: "off",
     "flowtype/define-flow-type": "warn",
     "flowtype/use-flow-type": "warn",
-  },
-  globals: {
-    // Flow
-    Iterator: true,
-    $Keys: true,
-  },
-  env: {
-    node: true,
-    es6: true,
-    browser: true,
   },
 };
