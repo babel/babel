@@ -19,6 +19,53 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+
+## v7.7.4 (2019-11-23)
+
+#### :bug: Bug Fix
+* `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#10748](https://github.com/babel/babel/pull/10748) Add support for native esm to @babel/runtime. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-preset-env`
+  * [#10742](https://github.com/babel/babel/pull/10742) Update preset-env mappings. ([@existentialism](https://github.com/existentialism))
+* `babel-parser`
+  * [#10737](https://github.com/babel/babel/pull/10737) Flow enums: fix enum body location. ([@gkz](https://github.com/gkz))
+  * [#10657](https://github.com/babel/babel/pull/10657) Fix some incorrect typeof parsing in flow. ([@existentialism](https://github.com/existentialism))
+  * [#10582](https://github.com/babel/babel/pull/10582) [parser] Allow optional async methods. ([@gonzarodriguezt](https://github.com/gonzarodriguezt))
+  * [#10710](https://github.com/babel/babel/pull/10710) register import equals specifier. ([@JLHwung](https://github.com/JLHwung))
+  * [#10592](https://github.com/babel/babel/pull/10592) Allow TypeScript type assertions in array destructuring. ([@SakibulMowla](https://github.com/SakibulMowla))
+* `babel-preset-env-standalone`
+  * [#10732](https://github.com/babel/babel/pull/10732) fix: add missing available plugins to babel-preset-env-standalone. ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-function-name`, `babel-plugin-transform-modules-umd`, `babel-preset-env`
+  * [#10701](https://github.com/babel/babel/pull/10701) Circumvent typeof transform for umd build template. ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`
+  * [#10698](https://github.com/babel/babel/pull/10698) Babel should not silently remove unknown options after commander arguments. ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-proposal-optional-chaining`
+  * [#10694](https://github.com/babel/babel/pull/10694) Fix optional method chaining in derived classes. ([@Shriram-Balaji](https://github.com/Shriram-Balaji))
+* `babel-parser`, `babel-types`
+  * [#10677](https://github.com/babel/babel/pull/10677) Add `asserts this [is type]` parsing support. ([@JLHwung](https://github.com/JLHwung))
+* `babel-traverse`
+  * [#10598](https://github.com/babel/babel/pull/10598) Fix parentheses on replaceWithMultiple for JSX. ([@khoumani](https://github.com/khoumani))
+* `babel-helpers`, `babel-plugin-proposal-object-rest-spread`, `babel-preset-env`
+  * [#10683](https://github.com/babel/babel/pull/10683) Fix: Don't call Object.keys on non-objects (babel#10482). ([@chrishinrichs](https://github.com/chrishinrichs))
+
+#### :nail_care: Polish
+* `babel-plugin-proposal-nullish-coalescing-operator`
+  * [#10720](https://github.com/babel/babel/pull/10720) polish: skip creating extra reference for safely re-used node. ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* Other
+  * [#10731](https://github.com/babel/babel/pull/10731) Removed duplicate key in package.json. ([@rajasekarm](https://github.com/rajasekarm))
+  * [#10718](https://github.com/babel/babel/pull/10718) chore: use loose mode of transform. ([@JLHwung](https://github.com/JLHwung))
+  * [#10579](https://github.com/babel/babel/pull/10579) Implement PR workflow for running test262 on babel PRs. ([@jbhoosreddy](https://github.com/jbhoosreddy))
+  * [#10648](https://github.com/babel/babel/pull/10648) bump @babel/* dev dependencies. ([@JLHwung](https://github.com/JLHwung))
+  * [#10569](https://github.com/babel/babel/pull/10569) E2E test Babel with itself before publishing. ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`
+  * [#10668](https://github.com/babel/babel/pull/10668) Reduce standalone build size. ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-literals`, `babel-preset-env-standalone`
+  * [#10725](https://github.com/babel/babel/pull/10725) fix typo [ci-skip]. ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`
+  * [#10692](https://github.com/babel/babel/pull/10692) Add missing flow type to babel-cli for consistency. ([@ZYSzys](https://github.com/ZYSzys))
+
 ## v7.7.3 (2019-11-08)
 
 #### :bug: Bug Fix
