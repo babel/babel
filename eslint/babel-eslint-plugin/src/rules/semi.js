@@ -1,7 +1,6 @@
-"use strict";
+import ruleComposer from "eslint-rule-composer";
+import eslint from "eslint";
 
-const ruleComposer = require("eslint-rule-composer");
-const eslint = require("eslint");
 const semiRule = new eslint.Linter().getRules().get("semi");
 
 const OPT_OUT_PATTERN = /^[-[(/+`]/; // One of [(/+-`
@@ -104,7 +103,7 @@ const semiRuleWithClassProperty = ruleComposer.joinReports([
   }),
 ]);
 
-module.exports = ruleComposer.filterReports(
+export default ruleComposer.filterReports(
   semiRuleWithClassProperty,
   problem => {
     const node = problem.node;

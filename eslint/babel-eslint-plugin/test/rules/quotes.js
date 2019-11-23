@@ -1,7 +1,7 @@
-var rule = require("../../src/rules/quotes"),
-  RuleTester = require("../helpers/RuleTester");
+import rule from "../../src/rules/quotes";
+import RuleTester from "../helpers/RuleTester";
 
-var ruleTester = new RuleTester();
+const ruleTester = new RuleTester();
 ruleTester.run("babel/quotes", rule, {
   valid: [
     'var foo = "bar";',

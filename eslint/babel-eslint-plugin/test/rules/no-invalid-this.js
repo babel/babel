@@ -3,15 +3,13 @@
  * @author Toru Nagashima
  */
 
-"use strict";
-
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
 
-const cloneDeep = require("lodash.clonedeep");
-const rule = require("../../src/rules/no-invalid-this"),
-  RuleTester = require("../helpers/RuleTester");
+import cloneDeep from "lodash.clonedeep";
+import rule from "../../src/rules/no-invalid-this";
+import RuleTester from "../helpers/RuleTester";
 
 //------------------------------------------------------------------------------
 // Helpers

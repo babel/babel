@@ -1,10 +1,9 @@
-"use strict";
+import ruleComposer from "eslint-rule-composer";
+import eslint from "eslint";
 
-const ruleComposer = require("eslint-rule-composer");
-const eslint = require("eslint");
 const noInvalidThisRule = new eslint.Linter().getRules().get("no-invalid-this");
 
-module.exports = ruleComposer.filterReports(noInvalidThisRule, problem => {
+export default ruleComposer.filterReports(noInvalidThisRule, problem => {
   let inClassProperty = false;
   let node = problem.node;
 

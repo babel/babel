@@ -4,14 +4,12 @@
  * @author Nicholas C. Zakas
  */
 
-"use strict";
-
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
 
-const rule = require("../../src/rules/semi"),
-  RuleTester = require("../helpers/RuleTester");
+import rule from "../../src/rules/semi";
+import RuleTester from "../helpers/RuleTester";
 
 const ruleTester = new RuleTester();
 
