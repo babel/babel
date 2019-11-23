@@ -1,7 +1,7 @@
 {
   "name": "@babel/eslint-plugin-development",
-  "version": "1.0.1",
-  "description": "A set of eslint rules to enforce best practices in the development of Babel plugins.",
+  "version": "0.0.0",
+  "description": "ESLint rules that enforce best practices in the development of Babel plugins.",
   "private": true,
   "keywords": [
     "eslint",
@@ -26,6 +26,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/babel/eslint-plugin-babel-plugin.git"
-  }
+    "url": "https://github.com/babel/babel.git"
+  },
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
+  "homepage": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-plugin-development"
 }

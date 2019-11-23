@@ -1,9 +1,7 @@
-"use strict";
+import getReferenceOrigin from "../utils/get-reference-origin";
+import isFromBabelTypes from "../utils/is-from-babel-types";
 
-const getReferenceOrigin = require("../utils/get-reference-origin");
-const isFromBabelTypes = require("../utils/is-from-babel-types");
-
-module.exports = {
+export default {
   meta: {
     schema: [],
     fixable: "code",

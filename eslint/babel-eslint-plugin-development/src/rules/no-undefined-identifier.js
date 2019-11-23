@@ -1,7 +1,5 @@
-"use strict";
-
-const getReferenceOrigin = require("../utils/get-reference-origin");
-const isFromBabelTypes = require("../utils/is-from-babel-types");
+import getReferenceOrigin from "../utils/get-reference-origin";
+import isFromBabelTypes from "../utils/is-from-babel-types";
 
 function firstArgumentIsUndefinedString(argumentsArray) {
   return (
@@ -11,7 +9,7 @@ function firstArgumentIsUndefinedString(argumentsArray) {
   );
 }
 
-module.exports = {
+export default {
   meta: {
     schema: [],
   },

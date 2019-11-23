@@ -1,7 +1,5 @@
-"use strict";
-
-const rule = require("../../src/rules/no-undefined-identifier");
-const { RuleTester } = require("eslint");
+import rule from "../../src/rules/no-undefined-identifier";
+import { RuleTester } from "eslint";
 
 const error =
   "Use path.scope.buildUndefinedNode() to create an undefined identifier directly.";

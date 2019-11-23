@@ -1,6 +1,4 @@
-"use strict";
-
-const isBabelPluginFactory = require("../utils/is-babel-plugin-factory");
+import isBabelPluginFactory from "../utils/is-babel-plugin-factory";
 
 function getReturnValue(node) {
   const { body } = node;
@@ -14,7 +12,7 @@ function getReturnValue(node) {
   return body;
 }
 
-module.exports = {
+export default {
   meta: {
     schema: [],
   },

@@ -1,7 +1,5 @@
-"use strict";
-
-const rule = require("../../src/rules/no-deprecated-clone");
-const { RuleTester } = require("eslint");
+import rule from "../../src/rules/no-deprecated-clone";
+import { RuleTester } from "eslint";
 
 const cloneError = "t.clone() is deprecated. Use t.cloneNode() instead.";
 const cloneDeepError =

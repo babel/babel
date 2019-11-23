@@ -1,7 +1,5 @@
-"use strict";
-
-const rule = require("../../src/rules/plugin-name");
-const { RuleTester } = require("eslint");
+import rule from "../../src/rules/plugin-name";
+import { RuleTester } from "eslint";
 
 const missingPluginError = "This file does not export a Babel plugin.";
 const missingNameError = "This Babel plugin doesn't have a 'name' property.";

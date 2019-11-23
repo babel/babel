@@ -1,7 +1,3 @@
-"use strict";
-
-module.exports = getReferenceOrigin;
-
 /*::
 type ReferenceOriginImport = { kind: "import", source: string, name: string };
 type ReferenceOriginParam = {
@@ -26,7 +22,10 @@ type ReferenceOrigin =
 // from.
 // It resolves imports, parameters of exported functions and property accesses.
 // See the ReferenceOrigin type for more informations.
-function getReferenceOrigin(node, scope) /*: ?ReferenceOrigin */ {
+export default function getReferenceOrigin(
+  node,
+  scope,
+) /*: ?ReferenceOrigin */ {
   if (node.type === "Identifier") {
     const variable = getVariableDefinition(node.name, scope);
     if (!variable) return null;
