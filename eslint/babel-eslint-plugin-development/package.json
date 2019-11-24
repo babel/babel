@@ -26,7 +26,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/babel/babel.git"
+    "url": "https://github.com/babel/babel.git",
+    "directory": "eslint/babel-eslint-plugin-development"
   },
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
