@@ -7,7 +7,8 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/babel/babel.git"
+    "url": "https://github.com/babel/babel.git",
+    "directory": "eslint/babel-eslint-parser"
   },
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
@@ -42,7 +43,7 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "dedent": "^0.7.0",
-    "eslint": "^6.0.0",
+    "eslint": "^6.0.1",
     "espree": "^6.0.0"
   }
 }

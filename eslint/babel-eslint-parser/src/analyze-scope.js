@@ -125,7 +125,7 @@ class Referencer extends OriginalReferencer {
 
   // inherits.
   visitProperty(node) {
-    if (node?.value?.type === "TypeCastExpression") {
+    if (node.value?.type === "TypeCastExpression") {
       this._visitTypeAnnotation(node.value);
     }
     this._visitArray(node.decorators);
