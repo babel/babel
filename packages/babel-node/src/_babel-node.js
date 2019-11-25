@@ -169,15 +169,15 @@ if (program.eval || program.print) {
       }
 
       if (arg[0] === "-") {
-        const camelArg = arg
-          .slice(2)
-          .replace(/-(\w)/, (s, c) => c.toUpperCase());
-        const parsedArg = program[camelArg];
-        if (
-          arg === "-r" ||
-          arg === "--require" ||
-          (parsedArg && parsedArg !== true)
-        ) {
+        const parsedOption = program.options.find(option => {
+          return option.long === arg || option.short === arg;
+        });
+        if (parsedOption === undefined) {
+          return;
+        }
+        const optionName = parsedOption.name();
+        const parsedArg = program[optionName];
+        if (optionName === "require" || (parsedArg && parsedArg !== true)) {
           ignoreNext = true;
         }
       } else {
