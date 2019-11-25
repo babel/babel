@@ -1,7 +1,5 @@
-"use strict";
-
-const t = require("@babel/core").types;
-const convertProgramNode = require("./convertProgramNode");
+import { types as t } from "@babel/core";
+import convertProgramNode from "./convertProgramNode";
 
 module.exports = function(ast, traverse, code) {
   const state = { source: code };
@@ -79,8 +77,8 @@ const astTransformVisitor = {
 
     // template string range fixes
     if (path.isTemplateLiteral()) {
-      for (let j = 0; j < node.quasis.length; j++) {
-        const q = node.quasis[j];
+      for (let i = 0; i < node.quasis.length; i++) {
+        const q = node.quasis[i];
         q.range[0] -= 1;
         if (q.tail) {
           q.range[1] += 1;

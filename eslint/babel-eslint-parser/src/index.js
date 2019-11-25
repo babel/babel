@@ -1,10 +1,8 @@
-"use strict";
+import semver from "semver";
+import { version as CURRENT_BABEL_VERSION } from "@babel/core";
+import parseWithScope from "./parse-with-scope";
+import packageJson from "../package.json";
 
-const semver = require("semver");
-const babelCore = require("@babel/core");
-const packageJson = require("../package.json");
-
-const CURRENT_BABEL_VERSION = babelCore.version;
 const SUPPORTED_BABEL_VERSION_RANGE =
   packageJson.peerDependencies["@babel/core"];
 const IS_RUNNING_SUPPORTED_VERSION = semver.satisfies(
@@ -12,11 +10,11 @@ const IS_RUNNING_SUPPORTED_VERSION = semver.satisfies(
   SUPPORTED_BABEL_VERSION_RANGE,
 );
 
-exports.parse = function(code, options) {
+export function parse(code, options) {
   return exports.parseForESLint(code, options).ast;
-};
+}
 
-exports.parseForESLint = function(code, options = {}) {
+export function parseForESLint(code, options = {}) {
   if (!IS_RUNNING_SUPPORTED_VERSION) {
     throw new Error(
       `babel-eslint@${packageJson.version} does not support @babel/core@${CURRENT_BABEL_VERSION}. Please downgrade to babel-eslint@^10 or upgrade to @babel/core@${SUPPORTED_BABEL_VERSION_RANGE}`,
@@ -29,5 +27,5 @@ exports.parseForESLint = function(code, options = {}) {
   options.allowImportExportEverywhere =
     options.allowImportExportEverywhere || false;
 
-  return require("./parse-with-scope")(code, options);
-};
+  return parseWithScope(code, options);
+}

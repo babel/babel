@@ -1,10 +1,7 @@
-"use strict";
-
-const eslint = require("eslint");
-const path = require("path");
-const unpad = require("dedent");
-
-const parser = require("../");
+import eslint from "eslint";
+import path from "path";
+import unpad from "dedent";
+import * as parser from "../src";
 
 function verifyAndAssertMessagesWithSpecificESLint(
   code,

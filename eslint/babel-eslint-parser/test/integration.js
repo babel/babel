@@ -1,10 +1,7 @@
-"use strict";
-
-const eslint = require("eslint");
-const fs = require("fs");
-const path = require("path");
-
-const parser = require("../");
+import eslint from "eslint";
+import fs from "fs";
+import path from "path";
+import * as parser from "../src";
 
 eslint.linter.defineParser("current-babel-eslint", parser);
 
@@ -72,7 +69,7 @@ function strictSuite() {
             if (err) return done(err);
             expect(report[0].ruleId).toBe(ruleId);
             done();
-          }
+          },
         );
       });
       // it
@@ -96,7 +93,7 @@ function strictSuite() {
           if (err) return done(err);
           expect(report.length).toBe(0);
           done();
-        }
+        },
       );
     });
     // it
@@ -113,7 +110,7 @@ function strictSuite() {
             expect(report[0].ruleId).toBe(ruleId);
           });
           done();
-        }
+        },
       );
     });
     // it
@@ -133,7 +130,7 @@ function strictSuite() {
           // result of the previous assertion.
           expect(report[0].nodeType).not.toBe("Program");
           done();
-        }
+        },
       );
     });
     // it
@@ -148,7 +145,7 @@ function strictSuite() {
           if (err) return done(err);
           expect(report[0].ruleId).toBe(ruleId);
           done();
-        }
+        },
       );
     });
     // it
@@ -171,7 +168,7 @@ function strictSuite() {
           if (err) return done(err);
           expect(report.length).toBe(0);
           done();
-        }
+        },
       );
     });
     // it
@@ -188,7 +185,7 @@ function strictSuite() {
             expect(report[i].ruleId).toBe(ruleId);
           });
           done();
-        }
+        },
       );
     });
     // it
@@ -203,7 +200,7 @@ function strictSuite() {
           if (err) return done(err);
           expect(report[0].ruleId).toBe(ruleId);
           done();
-        }
+        },
       );
     });
     // it
@@ -219,7 +216,7 @@ function strictSuite() {
           expect(report[0].ruleId).toBe(ruleId);
           expect(report[0].nodeType.indexOf("Function")).toBe(-1);
           done();
-        }
+        },
       );
     });
     // it
@@ -229,10 +226,10 @@ function strictSuite() {
 describe("https://github.com/babel/babel-eslint/issues/558", () => {
   it("doesn't crash with eslint-plugin-import", () => {
     const engine = new eslint.CLIEngine({ ignore: false });
-    const files = ['a.js', 'b.js', 'c.js'];
+    const files = ["a.js", "b.js", "c.js"];
     let fileWithPath = files.map(file =>
-        path.resolve(__dirname, `./fixtures/eslint-plugin-import/${file}`));
+      path.resolve(__dirname, `./fixtures/eslint-plugin-import/${file}`),
+    );
     engine.executeOnFiles(fileWithPath);
   });
 });
-

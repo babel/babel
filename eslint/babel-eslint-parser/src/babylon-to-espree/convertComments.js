@@ -1,6 +1,4 @@
-"use strict";
-
-module.exports = function(comments) {
+export default function(comments) {
   for (let i = 0; i < comments.length; i++) {
     const comment = comments[i];
     if (comment.type === "CommentBlock") {
@@ -14,4 +12,4 @@ module.exports = function(comments) {
       comment.range = [comment.start, comment.end];
     }
   }
-};
+}

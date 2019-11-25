@@ -1,19 +1,14 @@
-"use strict";
-
-const assert = require("assert");
-const path = require("path");
-const babelEslint = require("../");
-const espree = require("espree");
-const escope = require("eslint-scope");
-const unpad = require("dedent");
-const assertImplementsAST = require("./helpers/assert-implements-ast");
+import assert from "assert";
+import path from "path";
+import espree from "espree";
+import escope from "eslint-scope";
+import unpad from "dedent";
+import { parseForESLint } from "../src";
+import assertImplementsAST from "./helpers/assert-implements-ast";
 
 const babelOptions = {
-  configFile: path.resolve(
-    __dirname,
-    "./fixtures/config/babel.config.js"
-  ),
-}
+  configFile: path.resolve(__dirname, "./fixtures/config/babel.config.js"),
+};
 
 function parseAndAssertSame(code) {
   code = unpad(code);
@@ -35,7 +30,7 @@ function parseAndAssertSame(code) {
     ecmaVersion: 2018,
     sourceType: "module",
   });
-  const babylonAST = babelEslint.parseForESLint(code, {
+  const babylonAST = parseForESLint(code, {
     eslintVisitorKeys: true,
     eslintScopeManager: true,
     babelOptions,
@@ -46,14 +41,14 @@ function parseAndAssertSame(code) {
 describe("babylon-to-espree", () => {
   describe("compatibility", () => {
     it("should allow ast.analyze to be called without options", function() {
-      const esAST = babelEslint.parseForESLint("`test`", {
+      const esAST = parseForESLint("`test`", {
         eslintScopeManager: true,
         eslintVisitorKeys: true,
         babelOptions,
       }).ast;
       expect(() => {
-        escope.analyze(esAST)
-      }).not.toThrow(new TypeError('Should allow no options argument.'));
+        escope.analyze(esAST);
+      }).not.toThrow(new TypeError("Should allow no options argument."));
     });
   });
 
@@ -100,13 +95,13 @@ describe("babylon-to-espree", () => {
 
     it("template with nested function/object", () => {
       parseAndAssertSame(
-        "`outer${{x: {y: 10}}}bar${`nested${function(){return 1;}}endnest`}end`"
+        "`outer${{x: {y: 10}}}bar${`nested${function(){return 1;}}endnest`}end`",
       );
     });
 
     it("template with braces inside and outside of template string #96", () => {
       parseAndAssertSame(
-        "if (a) { var target = `{}a:${webpackPort}{}}}}`; } else { app.use(); }"
+        "if (a) { var target = `{}a:${webpackPort}{}}}}`; } else { app.use(); }",
       );
     });
 
@@ -245,7 +240,7 @@ describe("babylon-to-espree", () => {
   // Espree doesn't support the optional chaining operator yet
   it("optional chaining operator (token)", () => {
     const code = "foo?.bar";
-    const babylonAST = babelEslint.parseForESLint(code, {
+    const babylonAST = parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
       babelOptions,
@@ -256,7 +251,7 @@ describe("babylon-to-espree", () => {
   // Espree doesn't support the nullish coalescing operator yet
   it("nullish coalescing operator (token)", () => {
     const code = "foo ?? bar";
-    const babylonAST = babelEslint.parseForESLint(code, {
+    const babylonAST = parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
       babelOptions,
@@ -267,7 +262,7 @@ describe("babylon-to-espree", () => {
   // Espree doesn't support the pipeline operator yet
   it("pipeline operator (token)", () => {
     const code = "foo |> bar";
-    const babylonAST = babelEslint.parseForESLint(code, {
+    const babylonAST = parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
       babelOptions,
@@ -278,7 +273,7 @@ describe("babylon-to-espree", () => {
   // Espree doesn't support the private fields yet
   it("hash (token)", () => {
     const code = "class A { #x }";
-    const babylonAST = babelEslint.parseForESLint(code, {
+    const babylonAST = parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
       babelOptions,
@@ -398,7 +393,7 @@ describe("babylon-to-espree", () => {
 
     it("MethodDefinition 2", () => {
       parseAndAssertSame(
-        "export default class Bar { get bar() { return 42; }}"
+        "export default class Bar { get bar() { return 42; }}",
       );
     });
 
