@@ -1,7 +1,6 @@
-"use strict";
-
 let isWarnedForDeprecation = false;
-module.exports = {
+
+export default {
   meta: {
     deprecated: true,
     schema: [
@@ -22,9 +21,9 @@ module.exports = {
       },
     ],
   },
-  create: function() {
+  create() {
     return {
-      Program: function() {
+      Program() {
         if (
           isWarnedForDeprecation ||
           /=-(f|-format)=/.test(process.argv.join("="))

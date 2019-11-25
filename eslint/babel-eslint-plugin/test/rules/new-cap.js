@@ -3,10 +3,10 @@
  * @author Nicholas C. Zakas
  */
 
-var rule = require("../../src/rules/new-cap"),
-  RuleTester = require("../helpers/RuleTester");
+import rule from "../../src/rules/new-cap";
+import RuleTester from "../helpers/RuleTester";
 
-var ruleTester = new RuleTester();
+const ruleTester = new RuleTester();
 ruleTester.run("babel/new-cap", rule, {
   valid: [
     // Original test cases.

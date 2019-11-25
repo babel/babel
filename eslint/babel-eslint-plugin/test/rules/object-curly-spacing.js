@@ -6,10 +6,10 @@
  * @copyright 2015 Mathieu M-Gosselin. All rights reserved.
  */
 
-var rule = require("../../src/rules/object-curly-spacing"),
-  RuleTester = require("../helpers/RuleTester");
+import rule from "../../src/rules/object-curly-spacing";
+import RuleTester from "../helpers/RuleTester";
 
-var ruleTester = new RuleTester();
+const ruleTester = new RuleTester();
 ruleTester.run("babel/object-curly-spacing", rule, {
   valid: [
     // always - object literals

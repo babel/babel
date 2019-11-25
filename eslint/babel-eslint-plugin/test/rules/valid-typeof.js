@@ -3,14 +3,12 @@
  * @author Ian Christian Myers
  */
 
-"use strict";
-
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
 
-const rule = require("../../src/rules/valid-typeof"),
-  RuleTester = require("../helpers/RuleTester");
+import rule from "../../src/rules/valid-typeof";
+import RuleTester from "../helpers/RuleTester";
 
 //------------------------------------------------------------------------------
 // Tests

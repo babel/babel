@@ -1,24 +1,22 @@
-# eslint-plugin-babel
+# @babel/eslint-plugin
 
-An `eslint` plugin companion to `babel-eslint`. `babel-eslint` does a great job at adapting `eslint`
+Companion rules for `@babel/eslint-parser`. `@babel/eslint-parser` does a great job at adapting `eslint`
 for use with Babel, but it can't change the built in rules to support experimental features.
-`eslint-plugin-babel` re-implements problematic rules so they do not give false positives or negatives.
+`@babel/eslint-plugin` re-implements problematic rules so they do not give false positives or negatives.
 
-> Requires Node 4 or greater
+> Requires Node 10.9 or greater
 
 ### Install
 
 ```sh
-npm install eslint-plugin-babel --save-dev
+npm install @babel/eslint-plugin --save-dev
 ```
 
-Load the plugin in your `.eslintrc` file:
+Load the plugin in your `.eslintrc.json` file:
 
 ```json
 {
-  "plugins": [
-    "babel"
-  ]
+  "plugins": ["@babel/eslint-plugin"]
 }
 ```
 
@@ -28,14 +26,14 @@ original ones as well!).
 ```json
 {
   "rules": {
-    "babel/new-cap": 1,
-    "babel/camelcase": 1,
-    "babel/no-invalid-this": 1,
-    "babel/object-curly-spacing": 1,
-    "babel/quotes": 1,
-    "babel/semi": 1,
-    "babel/no-unused-expressions": 1,
-    "babel/valid-typeof": 1
+    "babel/new-cap": "error",
+    "babel/camelcase": "error",
+    "babel/no-invalid-this": "error",
+    "babel/object-curly-spacing": "error",
+    "babel/quotes": "error",
+    "babel/semi": "error",
+    "babel/no-unused-expressions": "error",
+    "babel/valid-typeof": "error"
   }
 }
 ```

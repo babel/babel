@@ -1,11 +1,12 @@
 {
-  "name": "eslint-plugin-babel",
-  "version": "5.3.0",
-  "description": "an eslint rule plugin companion to babel-eslint",
+  "name": "@babel/eslint-plugin",
+  "version": "0.0.0",
+  "description": "Companion rules for @babel/eslint-parser",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/babel/eslint-plugin-babel.git"
+    "url": "git+https://github.com/babel/babel.git",
+    "directory": "eslint/babel-eslint-plugin"
   },
   "keywords": [
     "babel",
@@ -18,12 +19,12 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": ">=4"
+    "node": ">=10.9"
   },
   "bugs": {
-    "url": "https://github.com/babel/eslint-plugin-babel/issues"
+    "url": "https://github.com/babel/babel/issues"
   },
-  "homepage": "https://github.com/babel/eslint-plugin-babel#readme",
+  "homepage": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-plugin",
   "peerDependencies": {
     "eslint": ">=4.0.0"
   },

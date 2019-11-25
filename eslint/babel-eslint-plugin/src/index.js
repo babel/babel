@@ -1,38 +1,52 @@
-"use strict";
+import arrayBracketSpacing from "./rules/array-bracket-spacing";
+import arrowParens from "./rules/arrow-parens";
+import flowObjectType from "./rules/flow-object-type";
+import funcParamsCommaDangle from "./rules/func-params-comma-dangle";
+import generatorStarSpacing from "./rules/generator-star-spacing";
+import newCap from "./rules/new-cap";
+import camelcase from "./rules/camelcase";
+import noAwaitInLoop from "./rules/no-await-in-loop";
+import noInvalidThis from "./rules/no-invalid-this";
+import noUnusedExpressions from "./rules/no-unused-expressions";
+import objectCurlySpacing from "./rules/object-curly-spacing";
+import objectShorthand from "./rules/object-shorthand";
+import quotes from "./rules/quotes";
+import semi from "./rules/semi";
+import validTypeof from "./rules/valid-typeof";
 
 module.exports = {
   rules: {
-    "array-bracket-spacing": require("./rules/array-bracket-spacing"),
-    "arrow-parens": require("./rules/arrow-parens"),
-    "flow-object-type": require("./rules/flow-object-type"),
-    "func-params-comma-dangle": require("./rules/func-params-comma-dangle"),
-    "generator-star-spacing": require("./rules/generator-star-spacing"),
-    "new-cap": require("./rules/new-cap"),
-    camelcase: require("./rules/camelcase"),
-    "no-await-in-loop": require("./rules/no-await-in-loop"),
-    "no-invalid-this": require("./rules/no-invalid-this"),
-    "no-unused-expressions": require("./rules/no-unused-expressions"),
-    "object-curly-spacing": require("./rules/object-curly-spacing"),
-    "object-shorthand": require("./rules/object-shorthand"),
-    quotes: require("./rules/quotes"),
-    semi: require("./rules/semi"),
-    "valid-typeof": require("./rules/valid-typeof"),
+    "array-bracket-spacing": arrayBracketSpacing,
+    "arrow-parens": arrowParens,
+    "flow-object-type": flowObjectType,
+    "func-params-comma-dangle": funcParamsCommaDangle,
+    "generator-star-spacing": generatorStarSpacing,
+    "new-cap": newCap,
+    camelcase,
+    "no-await-in-loop": noAwaitInLoop,
+    "no-invalid-this": noInvalidThis,
+    "no-unused-expressions": noUnusedExpressions,
+    "object-curly-spacing": objectCurlySpacing,
+    "object-shorthand": objectShorthand,
+    quotes,
+    semi,
+    "valid-typeof": validTypeof,
   },
   rulesConfig: {
-    "array-bracket-spacing": 0,
-    "arrow-parens": 0,
-    camelcase: 0,
-    "flow-object-type": 0,
-    "func-params-comma-dangle": 0,
-    "generator-star-spacing": 0,
-    "new-cap": 0,
-    "no-await-in-loop": 0,
-    "no-invalid-this": 0,
-    "no-unused-expressions": 0,
-    "object-curly-spacing": 0,
-    "object-shorthand": 0,
-    quotes: 0,
-    semi: 0,
-    "valid-typeof": 0,
+    "array-bracket-spacing": "off",
+    "arrow-parens": "off",
+    camelcase: "off",
+    "flow-object-type": "off",
+    "func-params-comma-dangle": "off",
+    "generator-star-spacing": "off",
+    "new-cap": "off",
+    "no-await-in-loop": "off",
+    "no-invalid-this": "off",
+    "no-unused-expressions": "off",
+    "object-curly-spacing": "off",
+    "object-shorthand": "off",
+    quotes: "off",
+    semi: "off",
+    "valid-typeof": "off",
   },
 };

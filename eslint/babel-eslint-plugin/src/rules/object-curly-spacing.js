@@ -1,12 +1,11 @@
-"use strict";
+import ruleComposer from "eslint-rule-composer";
+import eslint from "eslint";
 
-const ruleComposer = require("eslint-rule-composer");
-const eslint = require("eslint");
 const objectCurlySpacingRule = new eslint.Linter()
   .getRules()
   .get("object-curly-spacing");
 
-module.exports = ruleComposer.filterReports(
+export default ruleComposer.filterReports(
   objectCurlySpacingRule,
   (problem, metadata) => {
     const node = problem.node;

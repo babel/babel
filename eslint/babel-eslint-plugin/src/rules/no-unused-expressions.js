@@ -1,7 +1,6 @@
-"use strict";
+import ruleComposer from "eslint-rule-composer";
+import eslint from "eslint";
 
-const ruleComposer = require("eslint-rule-composer");
-const eslint = require("eslint");
 const rule = new eslint.Linter().getRules().get("no-unused-expressions");
 
 /**
@@ -57,7 +56,7 @@ function isOptionalCallExpression(node) {
   );
 }
 
-module.exports = ruleComposer.filterReports(
+export default ruleComposer.filterReports(
   rule,
   problem =>
     !isInDoStatement(problem.node) && !isOptionalCallExpression(problem.node),

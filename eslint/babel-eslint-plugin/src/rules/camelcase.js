@@ -9,7 +9,7 @@
 // Rule Definition
 //------------------------------------------------------------------------------
 
-module.exports = {
+export default {
   meta: {
     docs: {
       description: "enforce camelcase naming convention",

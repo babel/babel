@@ -3,14 +3,12 @@
  * @author Michael Ficarra
  */
 
-"use strict";
-
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
 
-const rule = require("../../src/rules/no-unused-expressions"),
-  RuleTester = require("../helpers/RuleTester");
+import rule from "../../src/rules/no-unused-expressions";
+import RuleTester from "../helpers/RuleTester";
 
 //------------------------------------------------------------------------------
 // Tests

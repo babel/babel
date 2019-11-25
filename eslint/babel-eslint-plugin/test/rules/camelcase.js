@@ -3,14 +3,12 @@
  * @author Nicholas C. Zakas
  */
 
-"use strict";
-
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
 
-const rule = require("../../src/rules/camelcase"),
-  RuleTester = require("../helpers/RuleTester");
+import rule from "../../src/rules/camelcase";
+import RuleTester from "../helpers/RuleTester";
 
 //------------------------------------------------------------------------------
 // Tests

@@ -1,7 +1,6 @@
-"use strict";
+import ruleComposer from "eslint-rule-composer";
+import eslint from "eslint";
 
-const ruleComposer = require("eslint-rule-composer");
-const eslint = require("eslint");
 const newCapRule = new eslint.Linter().getRules().get("new-cap");
 
 /**
@@ -13,7 +12,7 @@ function isDecorator(node) {
   return node.parent.type === "Decorator";
 }
 
-module.exports = ruleComposer.filterReports(
+export default ruleComposer.filterReports(
   newCapRule,
   problem => !isDecorator(problem.node),
 );

@@ -1,10 +1,9 @@
-"use strict";
+import ruleComposer from "eslint-rule-composer";
+import eslint from "eslint";
 
-const ruleComposer = require("eslint-rule-composer");
-const eslint = require("eslint");
 const quotesRule = new eslint.Linter().getRules().get("quotes");
 
-module.exports = ruleComposer.filterReports(quotesRule, problem => {
+export default ruleComposer.filterReports(quotesRule, problem => {
   // Workaround for JSX fragment syntax until
   // https://github.com/eslint/eslint/issues/9662
   if (problem.node.parent.type === "JSXFragment") {
