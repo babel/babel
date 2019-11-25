@@ -4,7 +4,7 @@ Companion rules for `@babel/eslint-parser`. `@babel/eslint-parser` does a great 
 for use with Babel, but it can't change the built in rules to support experimental features.
 `@babel/eslint-plugin` re-implements problematic rules so they do not give false positives or negatives.
 
-> Requires Node 4 or greater
+> Requires Node 10.9 or greater
 
 ### Install
 
