@@ -15,7 +15,7 @@
   },
   "homepage": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-parser",
   "engines": {
-    "node": ">=10"
+    "node": ">=10.9"
   },
   "main": "lib/index.js",
   "peerDependencies": {
