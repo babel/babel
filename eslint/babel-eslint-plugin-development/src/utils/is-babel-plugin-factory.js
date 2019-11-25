@@ -1,9 +1,7 @@
-"use strict";
+import getReferenceOrigin from "./get-reference-origin";
+import getExportName from "./get-export-name";
 
-const getReferenceOrigin = require("./get-reference-origin");
-const getExportName = require("./get-export-name");
-
-module.exports = function isBabelPluginFactory(node, scope) {
+export default function isBabelPluginFactory(node, scope) {
   const { parent } = node;
 
   if (parent.type === "CallExpression") {
@@ -23,4 +21,4 @@ module.exports = function isBabelPluginFactory(node, scope) {
   // export default function ({ types: t }) {}
   // module.exports = function ({ types: t }) {}
   return exportName === "default" || exportName === "module.exports";
-};
+}

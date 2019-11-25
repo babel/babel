@@ -1,9 +1,11 @@
-"use strict";
+import noDeprecatedClone from "./rules/no-deprecated-clone";
+import noUndefinedIdentifier from "./rules/no-undefined-identifier";
+import pluginName from "./rules/plugin-name";
 
-module.exports = {
+export default {
   rules: {
-    "no-deprecated-clone": require("./rules/no-deprecated-clone"),
-    "no-undefined-identifier": require("./rules/no-undefined-identifier"),
-    "plugin-name": require("./rules/plugin-name"),
+    "no-deprecated-clone": noDeprecatedClone,
+    "no-undefined-identifier": noUndefinedIdentifier,
+    "plugin-name": pluginName,
   },
 };
