@@ -80,10 +80,7 @@ export default function rewriteLiveReferences(
  * A visitor to inject export update statements during binding initialization.
  */
 const rewriteBindingInitVisitor = {
-  ClassProperty(path) {
-    path.skip();
-  },
-  Function(path) {
+  Scope(path) {
     path.skip();
   },
   ClassDeclaration(path) {
