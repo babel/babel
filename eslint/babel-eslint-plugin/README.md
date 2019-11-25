@@ -12,13 +12,11 @@ for use with Babel, but it can't change the built in rules to support experiment
 npm install @babel/eslint-plugin --save-dev
 ```
 
-Load the plugin in your `.eslintrc` file:
+Load the plugin in your `.eslintrc.json` file:
 
 ```json
 {
-  "plugins": [
-    "babel"
-  ]
+  "plugins": ["@babel/eslint-plugin"]
 }
 ```
 
