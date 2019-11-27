@@ -11,11 +11,9 @@ module.exports = function(api) {
     exclude: ["transform-typeof-symbol"],
   };
   const envOpts = Object.assign({}, envOptsNoTargets);
-  let transformRuntimeOpts = null;
 
   let convertESM = true;
   let ignoreLib = true;
-  let includeRuntime = false;
   const nodeVersion = "6.9";
 
   switch (env) {
@@ -30,7 +28,7 @@ module.exports = function(api) {
     case "standalone":
       convertESM = false;
       ignoreLib = false;
-      includeRuntime = true;
+      // targets to default browserslist
       break;
     case "production":
       // Config during builds before publish.
@@ -49,17 +47,6 @@ module.exports = function(api) {
         node: "current",
       };
       break;
-  }
-
-  if (includeRuntime) {
-    const babelRuntimePackageJSONPath = require.resolve(
-      "@babel/runtime/package.json"
-    );
-    const path = require("path");
-    transformRuntimeOpts = {
-      version: require(babelRuntimePackageJSONPath).version,
-      absoluteRuntime: path.dirname(babelRuntimePackageJSONPath),
-    };
   }
 
   const config = {
@@ -131,18 +118,6 @@ module.exports = function(api) {
           "packages/babel-preset-env/data",
         ],
         sourceType: "unambiguous",
-      },
-      {
-        // The runtime transform shouldn't process its own runtime or core-js.
-        exclude: [
-          "packages/babel-runtime",
-          /[\\/]node_modules[\\/](?:@babel\/runtime|babel-runtime|core-js)[\\/]/,
-        ],
-        plugins: [
-          includeRuntime
-            ? ["@babel/transform-runtime", transformRuntimeOpts]
-            : null,
-        ].filter(Boolean),
       },
     ].filter(Boolean),
   };

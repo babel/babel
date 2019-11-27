@@ -90,13 +90,16 @@ function buildRollup(packages) {
         const extraPlugins = [];
         let inputExternal = undefined,
           outputGlobals = undefined,
-          nodeResolveBrowser = false;
+          nodeResolveBrowser = false,
+          babelEnvName = "rollup"
         switch (src) {
           case "packages/babel-standalone":
             nodeResolveBrowser = true;
+            babelEnvName = "standalone";
             break;
           case "packages/babel-preset-env-standalone":
             nodeResolveBrowser = true;
+            babelEnvName = "standalone";
             inputExternal = ["@babel/standalone"];
             outputGlobals = {
               "@babel/standalone": "Babel",
@@ -143,7 +146,7 @@ function buildRollup(packages) {
                 VERSION: JSON.stringify(version),
               }),
               rollupBabel({
-                envName: "rollup",
+                envName: babelEnvName,
                 babelrc: false,
                 extends: "./babel.config.js",
               }),
