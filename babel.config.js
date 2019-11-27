@@ -20,7 +20,7 @@ module.exports = function(api) {
 
   switch (env) {
     // Configs used during bundling builds.
-    case "babel-parser":
+    case "rollup":
       convertESM = false;
       ignoreLib = false;
       envOpts.targets = {
@@ -68,6 +68,7 @@ module.exports = function(api) {
     // and then mark actual modules as modules farther down.
     sourceType: "script",
     comments: false,
+    exclude: "**/node_modules/**",
     ignore: [
       // These may not be strictly necessary with the newly-limited scope of
       // babelrc searching, but including them for now because we had them
@@ -126,6 +127,7 @@ module.exports = function(api) {
           "codemods/*/test",
           "eslint/*/src",
           "eslint/*/test",
+          "**/node_modules",
         ],
         sourceType: "unambiguous",
       },
