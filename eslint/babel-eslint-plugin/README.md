@@ -37,6 +37,15 @@ original ones as well!).
   }
 }
 ```
+
+Or, to perform all these steps at once, just extend from the recommended configuration instead:
+
+```json
+{
+  "extends": ["plugin:@babel/eslint-plugin/recommended"]
+}
+```
+
 ### Rules
 
 Each rule corresponds to a core `eslint` rule, and has the same options.

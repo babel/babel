@@ -16,22 +16,50 @@ import validTypeof from "./rules/valid-typeof";
 
 module.exports = {
   rules: {
-    "array-bracket-spacing": arrayBracketSpacing,
-    "arrow-parens": arrowParens,
-    "flow-object-type": flowObjectType,
-    "func-params-comma-dangle": funcParamsCommaDangle,
-    "generator-star-spacing": generatorStarSpacing,
-    "new-cap": newCap,
     camelcase,
-    "no-await-in-loop": noAwaitInLoop,
+    "new-cap": newCap,
     "no-invalid-this": noInvalidThis,
     "no-unused-expressions": noUnusedExpressions,
     "object-curly-spacing": objectCurlySpacing,
-    "object-shorthand": objectShorthand,
     quotes,
     semi,
     "valid-typeof": validTypeof,
+
+    // Deprecated rules:
+    "generator-star-spacing": generatorStarSpacing,
+    "object-shorthand": objectShorthand,
+    "arrow-parens": arrowParens,
+    "func-params-comma-dangle": funcParamsCommaDangle,
+    "array-bracket-spacing": arrayBracketSpacing,
+    "flow-object-type": flowObjectType,
+    "no-await-in-loop": noAwaitInLoop,
   },
+  configs: {
+    recommended: {
+      parser: "@babel/eslint-parser",
+      plugins: ["@babel/eslint-plugin"],
+      rules: {
+        camelcase: "off",
+        "new-cap": "off",
+        "no-invalid-this": "off",
+        "no-unused-expressions": "off",
+        "object-curly-spacing": "off",
+        quotes: "off",
+        semi: "off",
+        "valid-typeof": "off",
+
+        "@babel/camelcase": "error",
+        "@babel/new-cap": "error",
+        "@babel/no-invalid-this": "error",
+        "@babel/no-unused-expressions": "error",
+        "@babel/object-curly-spacing": "error",
+        "@babel/quotes": "error",
+        "@babel/semi": "error",
+        "@babel/valid-typeof": "error",
+      },
+    },
+  },
+  // `rulesConfig` only works on ESLint 1.x:
   rulesConfig: {
     "array-bracket-spacing": "off",
     "arrow-parens": "off",
