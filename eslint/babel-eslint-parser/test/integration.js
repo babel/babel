@@ -16,6 +16,8 @@ const baseEslintOpts = {
   parser: "current-babel-eslint",
   parserOptions: {
     sourceType: "script",
+    requireConfigFile: false,
+    babelOptions: { configFile: false }
   },
 };
 

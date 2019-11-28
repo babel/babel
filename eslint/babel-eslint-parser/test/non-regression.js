@@ -18,25 +18,22 @@ function verifyAndAssertMessagesWithSpecificESLint(
       node: true,
       es6: true,
     },
+    ...overrideConfig,
     parserOptions: {
       sourceType,
       ecmaFeatures: {
         globalReturn: true,
       },
+      requireConfigFile: false,
       babelOptions: {
         configFile: path.resolve(
           __dirname,
           "./fixtures/config/babel.config.js",
         ),
       },
+      ...overrideConfig?.parserOptions
     },
   };
-
-  if (overrideConfig) {
-    for (const key in overrideConfig) {
-      config[key] = overrideConfig[key];
-    }
-  }
 
   const messages = linter.verify(code, config);
 
