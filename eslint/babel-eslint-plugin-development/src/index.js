@@ -8,4 +8,14 @@ export default {
     "no-undefined-identifier": noUndefinedIdentifier,
     "plugin-name": pluginName,
   },
+  configs: {
+    recommended: {
+      plugins: ["@babel/development"],
+      rules: {
+        "@babel/development/no-deprecated-clone": "error",
+        "@babel/development/no-undefined-identifier": "error",
+        "@babel/development/plugin-name": "error",
+      },
+    },
+  },
 };
