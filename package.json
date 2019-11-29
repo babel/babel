@@ -31,14 +31,12 @@
     "@rollup/plugin-json": "^4.0.0",
     "babel-eslint": "^11.0.0-beta.1",
     "babel-jest": "^24.9.0",
-    "babel-loader": "^8.0.6",
     "babel-plugin-transform-charcodes": "^0.2.0",
     "browserify": "^16.2.3",
     "bundle-collapser": "^1.2.1",
     "chalk": "^2.4.2",
     "charcodes": "^0.2.0",
     "derequire": "^2.0.2",
-    "duplicate-package-checker-webpack-plugin": "^2.1.0",
     "enhanced-resolve": "^3.0.0",
     "eslint": "^6.0.1",
     "eslint-config-babel": "^9.0.0",
@@ -54,7 +52,6 @@
     "gulp-newer": "^1.0.0",
     "gulp-plumber": "^1.2.1",
     "gulp-rename": "^1.4.0",
-    "gulp-uglify": "^3.0.2",
     "gulp-watch": "^5.0.1",
     "husky": "^3.0.0",
     "jest": "^24.9.0",
@@ -76,11 +73,7 @@
     "rollup-plugin-terser": "^5.1.2",
     "test262-stream": "^1.3.0",
     "through2": "^2.0.0",
-    "typescript": "^3.6.3",
-    "warnings-to-errors-webpack-plugin": "^2.0.0",
-    "webpack": "^3.4.1",
-    "webpack-dependency-suite": "^2.4.4",
-    "webpack-stream": "^4.0.0"
+    "typescript": "^3.6.3"
   },
   "resolutions": {
     "@lerna/**/@lerna/collect-updates": "https://github.com/babel/lerna.git#babel-collect-updates"
