@@ -65,7 +65,7 @@ Using polyfills with `entry` option:
   es.array.copy-within { "ie":"10", "safari":"7" }
   es.array.every { "safari":"7" }
   es.array.fill { "ie":"10", "safari":"7" }
-  es.array.filter { "ie":"10", "ios":"9", "safari":"7" }
+  es.array.filter { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.array.find { "ie":"10", "safari":"7" }
   es.array.find-index { "ie":"10", "safari":"7" }
   es.array.flat { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
@@ -77,7 +77,7 @@ Using polyfills with `entry` option:
   es.array.iterator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.array.join { "ie":"10", "safari":"7" }
   es.array.last-index-of { "safari":"7" }
-  es.array.map { "ie":"10", "ios":"9", "safari":"7" }
+  es.array.map { "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.array.of { "ie":"10", "safari":"7" }
   es.array.reduce { "safari":"7" }
   es.array.reduce-right { "safari":"7" }
@@ -131,7 +131,7 @@ Using polyfills with `entry` option:
   es.number.parse-int { "ie":"10", "safari":"7" }
   es.number.to-fixed { "edge":"13", "ie":"10", "safari":"7" }
   es.number.to-precision { "safari":"7" }
-  es.object.assign { "ie":"10", "safari":"7" }
+  es.object.assign { "edge":"13", "ie":"10", "safari":"7" }
   es.object.define-getter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
   es.object.define-properties { "safari":"7" }
   es.object.define-property { "safari":"7" }
@@ -170,7 +170,7 @@ Using polyfills with `entry` option:
   es.reflect.is-extensible { "ie":"10", "ios":"9", "safari":"7" }
   es.reflect.own-keys { "ie":"10", "ios":"9", "safari":"7" }
   es.reflect.prevent-extensions { "ie":"10", "ios":"9", "safari":"7" }
-  es.reflect.set { "ie":"10", "ios":"9", "safari":"7" }
+  es.reflect.set { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.reflect.set-prototype-of { "ie":"10", "ios":"9", "safari":"7" }
   es.regexp.constructor { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.regexp.exec { "safari":"7" }
