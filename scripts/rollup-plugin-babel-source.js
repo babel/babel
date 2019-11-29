@@ -1,5 +1,7 @@
 const path = require("path");
 const fs = require("fs");
+const dirname = path.join(__dirname, "..");
+
 module.exports = function() {
   return {
     name: "babel-source",
@@ -7,7 +9,7 @@ module.exports = function() {
       const matches = id.match(/packages\/(babel-[^/]+)\/src\//);
       if (matches) {
         // check if browser field exists for this file and replace
-        const packageFolder = path.join(__dirname, "packages", matches[1]);
+        const packageFolder = path.join(dirname, "packages", matches[1]);
         const packageJson = require(path.join(packageFolder, "package.json"));
 
         if (
@@ -44,7 +46,7 @@ module.exports = function() {
       if (packageFolderName) {
         // resolve babel package names to their src index file
         const packageFolder = path.join(
-          __dirname,
+          dirname,
           "packages",
           packageFolderName
         );
