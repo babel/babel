@@ -12,6 +12,7 @@ const gulp = require("gulp");
 const path = require("path");
 const webpack = require("webpack");
 const rollup = require("rollup");
+const rollupAlias = require("@rollup/plugin-alias");
 const rollupBabel = require("rollup-plugin-babel");
 const rollupBabelSource = require("./rollup-plugin-babel-source");
 const rollupCommonJs = require("rollup-plugin-commonjs");
@@ -81,11 +82,45 @@ function buildBabel(exclude, sourcesGlob = defaultSourcesGlob) {
 }
 
 let babelVersion = require("./packages/babel-core/package.json").version;
-function buildRollup(packages, { browser }) {
+function buildRollup(packages) {
   const sourcemap = process.env.NODE_ENV === "production";
   return Promise.all(
     packages.map(
       ({ src, format, dest, name, filename, version = babelVersion }) => {
+        const extraPlugins = [];
+        let inputExternal = undefined,
+          outputGlobals = undefined,
+          nodeResolveBrowser = false;
+        switch (src) {
+          case "packages/babel-standalone":
+            nodeResolveBrowser = true;
+            break;
+          case "packages/babel-preset-env-standalone":
+            nodeResolveBrowser = true;
+            inputExternal = ["@babel/standalone"];
+            outputGlobals = {
+              "@babel/standalone": "Babel",
+            };
+            extraPlugins.push(
+              rollupAlias({
+                entries: [
+                  {
+                    find: "./available-plugins",
+                    replacement: require.resolve(
+                      path.join(__dirname, src, "./src/available-plugins")
+                    ),
+                  },
+                  {
+                    find: "caniuse-lite/data/regions",
+                    replacement: require.resolve(
+                      path.join(__dirname, src, "./src/caniuse-lite-regions")
+                    ),
+                  },
+                ],
+              })
+            );
+            break;
+        }
         // If this build is part of a pull request, include the pull request number in
         // the version number.
         if (process.env.CIRCLE_PR_NUMBER) {
@@ -98,7 +133,9 @@ function buildRollup(packages, { browser }) {
         return rollup
           .rollup({
             input,
+            external: inputExternal,
             plugins: [
+              ...extraPlugins,
               rollupBabelSource(),
               rollupReplace({
                 "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
@@ -111,17 +148,17 @@ function buildRollup(packages, { browser }) {
                 extends: "./babel.config.js",
               }),
               rollupNodeResolve({
-                browser,
+                browser: nodeResolveBrowser,
                 preferBuiltins: true,
-                dedupe: ["esutils", "semver", "source-map", "lodash"],
               }),
               rollupCommonJs({
-                include: /node_modules/,
+                include: [/node_modules/, "packages/babel-preset-env/data/**"],
                 namedExports: {
                   "babel-plugin-dynamic-import-node/utils.js": [
                     "createDynamicImportTransform",
                     "getImportSource",
                   ],
+                  "@babel/standalone": ["availablePlugins", "registerPlugin"],
                 },
               }),
               rollupJson(),
@@ -134,9 +171,7 @@ function buildRollup(packages, { browser }) {
               file: path.resolve(src, dest, filename || "index.js"),
               format,
               name,
-              globals: {
-                "@babel/standalone": "Babel",
-              },
+              globals: outputGlobals,
               sourcemap: sourcemap,
             });
           });
@@ -154,21 +189,35 @@ const libBundles = [
   },
 ];
 
-const standaloneBundles = [
+const standaloneBundle = [
   {
     src: "packages/babel-standalone",
     format: "umd",
     name: "Babel",
     filename: "babel.js",
     dest: "",
-    version: require("./packages/babel-standalone/package").version,
+    version: require("./packages/babel-core/package").version,
   },
 ];
 
-gulp.task("build-rollup", () => buildRollup(libBundles, { browser: false }));
-gulp.task("build-babel-standalone-rollup", () =>
-  buildRollup(standaloneBundles, { browser: true })
+const presetEnvStandaloneBundle = [
+  {
+    src: "packages/babel-preset-env-standalone",
+    format: "umd",
+    name: "BabelPresetEnv",
+    filename: "babel-preset-env.js",
+    dest: "",
+    version: require("./packages/babel-preset-env/package").version,
+  },
+];
+
+gulp.task("build-rollup", () => buildRollup(libBundles));
+gulp.task("build-babel-standalone-rollup", () => buildRollup(standaloneBundle));
+
+gulp.task("build-babel-preset-env-standalone-rollup", () =>
+  buildRollup(presetEnvStandaloneBundle)
 );
+
 gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
 gulp.task("build-babel-types", () =>
   buildBabel(/* exclude */ libBundles, "packages/babel-types/src/**/*.js")

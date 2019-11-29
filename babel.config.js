@@ -128,6 +128,7 @@ module.exports = function(api) {
           "eslint/*/src",
           "eslint/*/test",
           "**/node_modules",
+          "packages/babel-preset-env/data",
         ],
         sourceType: "unambiguous",
       },
