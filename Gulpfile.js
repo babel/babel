@@ -167,6 +167,18 @@ function buildRollup(packages) {
               rollupNodeResolve({
                 browser: nodeResolveBrowser,
                 preferBuiltins: true,
+                //todo: When Yarn workspaces is enabled, remove `dedupe` option
+                dedupe(importee) {
+                  return (
+                    importee.startsWith("lodash/") ||
+                    [
+                      "babel-plugin-dynamic-import-node/utils",
+                      "esutils",
+                      "semver",
+                      "source-map",
+                    ].includes(importee)
+                  );
+                },
               }),
               rollupCommonJs({
                 include: [/node_modules/, "packages/babel-preset-env/data/**"],
