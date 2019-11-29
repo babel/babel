@@ -20,6 +20,7 @@ const rollupNodeBuiltins = require("rollup-plugin-node-builtins");
 const rollupNodeGlobals = require("rollup-plugin-node-globals");
 const rollupNodeResolve = require("rollup-plugin-node-resolve");
 const rollupReplace = require("rollup-plugin-replace");
+const { terser: rollupTerser } = require("rollup-plugin-terser");
 
 const defaultSourcesGlob = "./@(codemods|packages|eslint)/*/src/**/*.js";
 
@@ -82,6 +83,7 @@ function buildBabel(exclude, sourcesGlob = defaultSourcesGlob) {
 let babelVersion = require("./packages/babel-core/package.json").version;
 function buildRollup(packages) {
   const sourcemap = process.env.NODE_ENV === "production";
+  const minify = !!process.env.IS_PUBLISH;
   return Promise.all(
     packages.map(
       ({ src, format, dest, name, filename, version = babelVersion }) => {
@@ -89,15 +91,29 @@ function buildRollup(packages) {
         let inputExternal = undefined,
           outputGlobals = undefined,
           nodeResolveBrowser = false,
-          babelEnvName = "rollup"
+          babelEnvName = "rollup";
         switch (src) {
           case "packages/babel-standalone":
             nodeResolveBrowser = true;
             babelEnvName = "standalone";
+            if (minify) {
+              extraPlugins.push(
+                rollupTerser({
+                  include: /^.+\.min\.js$/,
+                })
+              );
+            }
             break;
           case "packages/babel-preset-env-standalone":
             nodeResolveBrowser = true;
             babelEnvName = "standalone";
+            if (minify) {
+              extraPlugins.push(
+                rollupTerser({
+                  include: /^.+\.min\.js$/,
+                })
+              );
+            }
             inputExternal = ["@babel/standalone"];
             outputGlobals = {
               "@babel/standalone": "Babel",
@@ -168,13 +184,40 @@ function buildRollup(packages) {
             ],
           })
           .then(bundle => {
-            return bundle.write({
-              file: path.resolve(src, dest, filename || "index.js"),
-              format,
-              name,
-              globals: outputGlobals,
-              sourcemap: sourcemap,
-            });
+            const outputFile = path.resolve(src, dest, filename || "index.js");
+            return bundle
+              .write({
+                file: outputFile,
+                format,
+                name,
+                globals: outputGlobals,
+                sourcemap: sourcemap,
+              })
+              .then(() => {
+                if (!process.env.IS_PUBLISH) {
+                  fancyLog(
+                    chalk.yellow(
+                      `Skipped minification of '${chalk.cyan(
+                        path.relative(path.join(__dirname, ".."), outputFile)
+                      )}' because not publishing`
+                    )
+                  );
+                  return undefined;
+                }
+                fancyLog(
+                  `Minifying '${chalk.cyan(
+                    path.relative(path.join(__dirname, ".."), outputFile)
+                  )}'...`
+                );
+
+                return bundle.write({
+                  file: outputFile.replace(/\.js$/, ".min.js"),
+                  format,
+                  name,
+                  globals: outputGlobals,
+                  sourcemap: sourcemap,
+                });
+              });
           });
       }
     )
