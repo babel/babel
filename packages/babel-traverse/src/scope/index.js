@@ -107,7 +107,7 @@ const collectorVisitor = {
   },
 
   LabeledStatement(path) {
-    path.scope.getProgramParent().addGlobal(path.node);
+    path.scope.getProgramParent().addGlobal(path.node.label);
     path.scope.getBlockParent().registerDeclaration(path);
   },
 
