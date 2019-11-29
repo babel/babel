@@ -2,6 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import hoistVariables from "@babel/helper-hoist-variables";
 import { template, types as t } from "@babel/core";
 import { getImportSource } from "babel-plugin-dynamic-import-node/utils";
+import { rewriteThis } from "@babel/helper-module-transforms";
 
 const buildTemplate = template(`
   SYSTEM_REGISTER(MODULE_NAME, SOURCES, function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
@@ -106,7 +107,7 @@ function constructExportCall(
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { systemGlobal = "System" } = options;
+  const { systemGlobal = "System", allowTopLevelThis = false } = options;
   const IGNORE_REASSIGNMENT_SYMBOL = Symbol();
 
   const reassignmentVisitor = {
@@ -227,6 +228,9 @@ export default declare((api, options) => {
       Program: {
         enter(path, state) {
           state.contextIdent = path.scope.generateUid("context");
+          if (!allowTopLevelThis) {
+            rewriteThis(path);
+          }
         },
         exit(path, state) {
           const undefinedIdent = path.scope.buildUndefinedNode();
