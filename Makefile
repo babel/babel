@@ -246,15 +246,15 @@ endif
 
 publish-eslint:
 	$(call set-json-field, ./eslint/$(PKG)/package.json, private, false)
-	cd eslint/$(PKG); $(YARN) publish
+	cd eslint/$(PKG); yarn publish
 	$(call set-json-field, ./eslint/$(PKG)/package.json, private, true)
 
 bootstrap-only: lerna-bootstrap
 
-$(YARN)-install: clean-all
-	$(YARN) --ignore-engines
+yarn-install: clean-all
+	yarn --ignore-engines
 
-lerna-bootstrap: $(YARN)-install
+lerna-bootstrap: yarn-install
 # todo: remove `-- -- --ignore-engines` in Babel 8
 	$(YARN) lerna bootstrap -- -- --ignore-engines
 
