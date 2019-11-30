@@ -32,6 +32,7 @@ const RELATIVE_CONFIG_FILENAMES = [
   ".babelrc.js",
   ".babelrc.cjs",
   ".babelrc.mjs",
+  ".babelrc.json",
 ];
 
 const BABELIGNORE_FILENAME = ".babelignore";
