@@ -14,6 +14,9 @@ EMPTY :=
 SPACE := $(EMPTY) $(EMPTY)
 COMMA_SEPARATED_SOURCES = $(subst $(SPACE),$(COMMA),$(SOURCES))
 
+YARN := yarn --silent
+NODE := $(YARN) node
+
 
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
@@ -23,10 +26,10 @@ ifneq ("$(BABEL_COVERAGE)", "true")
 endif
 
 build-bundle: clean clean-lib
-	yarn gulp build
+	$(YARN) gulp build
 	$(MAKE) generate-standalone generate-type-helpers
 	# call build again as the generated files might need to be compiled again.
-	yarn gulp build
+	$(YARN) gulp build
 	$(MAKE) build-typings
 	$(MAKE) build-dist
 
@@ -34,18 +37,18 @@ build-bundle-ci: bootstrap-only
 	$(MAKE) build-bundle
 
 generate-standalone:
-	yarn node packages/babel-standalone/scripts/generate.js
+	$(NODE) packages/babel-standalone/scripts/generate.js
 
 generate-type-helpers:
-	yarn node packages/babel-types/scripts/generateTypeHelpers.js
+	$(NODE) packages/babel-types/scripts/generateTypeHelpers.js
 
 build-typings: build-flow-typings build-typescript-typings
 
 build-flow-typings:
-	yarn node packages/babel-types/scripts/generators/flow.js > packages/babel-types/lib/index.js.flow
+	$(NODE) packages/babel-types/scripts/generators/flow.js > packages/babel-types/lib/index.js.flow
 
 build-typescript-typings:
-	yarn node packages/babel-types/scripts/generators/typescript.js > packages/babel-types/lib/index.d.ts
+	$(NODE) packages/babel-types/scripts/generators/typescript.js > packages/babel-types/lib/index.d.ts
 
 build-standalone: build-babel-standalone build-preset-env-standalone
 
@@ -53,16 +56,16 @@ build-standalone-ci: build-bundle-ci
 	$(MAKE) build-standalone
 
 build-babel-standalone:
-	yarn gulp build-babel-standalone
+	$(YARN) gulp build-babel-standalone
 
 build-preset-env-standalone:
-	yarn gulp build-babel-preset-env-standalone
+	$(YARN) gulp build-babel-preset-env-standalone
 
 prepublish-build-standalone:
-	BABEL_ENV=production IS_PUBLISH=true yarn gulp build-babel-standalone
+	BABEL_ENV=production IS_PUBLISH=true $(YARN) gulp build-babel-standalone
 
 prepublish-build-preset-env-standalone:
-	BABEL_ENV=production IS_PUBLISH=true yarn gulp build-babel-preset-env-standalone
+	BABEL_ENV=production IS_PUBLISH=true $(YARN) gulp build-babel-preset-env-standalone
 
 build-dist: build-polyfill-dist build-plugin-transform-runtime-dist
 
@@ -72,17 +75,17 @@ build-polyfill-dist:
 
 build-plugin-transform-runtime-dist:
 	cd packages/babel-plugin-transform-runtime; \
-	yarn node scripts/build-dist.js
+	$(NODE) scripts/build-dist.js
 
 build-no-bundle: clean clean-lib
-	BABEL_ENV=development yarn gulp build-no-bundle
+	BABEL_ENV=development $(YARN) gulp build-no-bundle
 	# Ensure that build artifacts for types are created during local
 	# development too.
 	$(MAKE) generate-type-helpers
 	$(MAKE) build-typings
 
 watch: build-no-bundle
-	BABEL_ENV=development yarn gulp watch
+	BABEL_ENV=development $(YARN) gulp watch
 
 code-quality-ci: flowcheck-ci lint-ci
 
@@ -92,10 +95,10 @@ flowcheck-ci: bootstrap-flowcheck
 code-quality: flow lint
 
 flow:
-	yarn flow check --strip-root
+	$(YARN) flow check --strip-root
 
 bootstrap-flowcheck: bootstrap-only
-	yarn gulp build-babel-types
+	$(YARN) gulp build-babel-types
 	$(MAKE) build-typings
 
 lint-ci: lint-js-ci lint-ts-ci
@@ -109,7 +112,7 @@ lint-ts-ci: bootstrap-flowcheck
 lint: lint-js lint-ts
 
 lint-js:
-	yarn eslint scripts $(SOURCES) '*.js' --format=codeframe
+	$(YARN) eslint scripts $(SOURCES) '*.js' --format=codeframe
 
 lint-ts:
 	scripts/lint-ts-typings.sh
@@ -117,10 +120,10 @@ lint-ts:
 fix: fix-json fix-js
 
 fix-js:
-	yarn eslint scripts $(SOURCES) '*.js' --format=codeframe --fix
+	$(YARN) eslint scripts $(SOURCES) '*.js' --format=codeframe --fix
 
 fix-json:
-	yarn prettier "{$(COMMA_SEPARATED_SOURCES)}/*/test/fixtures/**/options.json" --write --loglevel warn
+	$(YARN) prettier "{$(COMMA_SEPARATED_SOURCES)}/*/test/fixtures/**/options.json" --write --loglevel warn
 
 clean: test-clean
 	rm -f .npmrc
@@ -133,7 +136,7 @@ test-clean:
 	$(foreach source, $(SOURCES), \
 		$(call clean-source-test, $(source)))
 
-# Does not work on Windows; use "yarn jest" instead
+# Does not work on Windows; use "$(YARN) jest" instead
 test-only:
 	BABEL_ENV=test ./scripts/test.sh
 	$(MAKE) test-clean
@@ -143,7 +146,7 @@ test: lint test-only
 test-ci: jest-ci
 
 jest-ci: build-standalone-ci
-	BABEL_ENV=test yarn jest --maxWorkers=4 --ci
+	BABEL_ENV=test $(YARN) jest --maxWorkers=4 --ci
 	$(MAKE) test-clean
 
 # Does not work on Windows
@@ -160,13 +163,13 @@ bootstrap-flow:
 	cd build/flow && git checkout $(FLOW_COMMIT)
 
 test-flow:
-	yarn node scripts/parser-tests/flow
+	$(NODE) scripts/parser-tests/flow
 
 test-flow-ci: build-bundle-ci bootstrap-flow
 	$(MAKE) test-flow
 
 test-flow-update-whitelist:
-	yarn node scripts/parser-tests/flow --update-whitelist
+	$(NODE) scripts/parser-tests/flow --update-whitelist
 
 bootstrap-typescript:
 	rm -rf ./build/typescript
@@ -175,13 +178,13 @@ bootstrap-typescript:
 	cd build/typescript && git checkout $(TYPESCRIPT_COMMIT)
 
 test-typescript:
-	yarn node scripts/parser-tests/typescript
+	$(NODE) scripts/parser-tests/typescript
 
 test-typescript-ci: build-bundle-ci bootstrap-typescript
 	$(MAKE) test-typescript
 
 test-typescript-update-whitelist:
-	yarn node scripts/parser-tests/typescript --update-whitelist
+	$(NODE) scripts/parser-tests/typescript --update-whitelist
 
 bootstrap-test262:
 	rm -rf build/test262
@@ -190,13 +193,13 @@ bootstrap-test262:
 	cd build/test262 && git checkout $(TEST262_COMMIT)
 
 test-test262:
-	yarn node scripts/parser-tests/test262
+	$(NODE) scripts/parser-tests/test262
 
 test-test262-ci: build-bundle-ci bootstrap-test262
 	$(MAKE) test-test262
 
 test-test262-update-whitelist:
-	yarn node scripts/parser-tests/test262 --update-whitelist
+	$(NODE) scripts/parser-tests/test262 --update-whitelist
 
 # Does not work on Windows
 clone-license:
@@ -213,11 +216,11 @@ prepublish:
 
 new-version:
 	git pull --rebase
-	yarn lerna version --force-publish=$(FORCE_PUBLISH)
+	$(YARN) lerna version --force-publish=$(FORCE_PUBLISH)
 
 # NOTE: Run make new-version first
 publish: prepublish
-	yarn lerna publish from-git
+	$(YARN) lerna publish from-git
 	$(MAKE) clean
 
 publish-ci: prepublish
@@ -227,7 +230,7 @@ else
 	echo "Missing NPM_TOKEN env var"
 	exit 1
 endif
-	yarn lerna publish from-git --yes
+	$(YARN) lerna publish from-git --yes
 	rm -f .npmrc
 	$(MAKE) clean
 
@@ -237,23 +240,23 @@ ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 	exit 1
 endif
 	$(MAKE) prepublish-build
-	yarn lerna version patch --force-publish=$(FORCE_PUBLISH)  --no-push --yes --tag-version-prefix="version-e2e-test-"
-	yarn lerna publish from-git --registry http://localhost:4873 --yes --tag-version-prefix="version-e2e-test-"
+	$(YARN) lerna version patch --force-publish=$(FORCE_PUBLISH)  --no-push --yes --tag-version-prefix="version-e2e-test-"
+	$(YARN) lerna publish from-git --registry http://localhost:4873 --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
 
 publish-eslint:
 	$(call set-json-field, ./eslint/$(PKG)/package.json, private, false)
-	cd eslint/$(PKG); yarn publish
+	cd eslint/$(PKG); $(YARN) publish
 	$(call set-json-field, ./eslint/$(PKG)/package.json, private, true)
 
 bootstrap-only: lerna-bootstrap
 
-yarn-install: clean-all
-	yarn --ignore-engines
+$(YARN)-install: clean-all
+	$(YARN) --ignore-engines
 
-lerna-bootstrap: yarn-install
+lerna-bootstrap: $(YARN)-install
 # todo: remove `-- -- --ignore-engines` in Babel 8
-	yarn lerna bootstrap -- -- --ignore-engines
+	$(YARN) lerna bootstrap -- -- --ignore-engines
 
 bootstrap: bootstrap-only
 	$(MAKE) build
@@ -300,7 +303,7 @@ define clean-source-all
 endef
 
 define set-json-field
-	yarn node -e "\
+	$(NODE) -e "\
 		require('fs').writeFileSync('$1'.trim(), \
 			JSON.stringify({ ...require('$1'.trim()), $2: $3 }, null, 2) + '\\n' \
 		)"
