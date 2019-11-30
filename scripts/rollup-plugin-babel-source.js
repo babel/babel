@@ -45,11 +45,7 @@ module.exports = function() {
 
       if (packageFolderName) {
         // resolve babel package names to their src index file
-        const packageFolder = path.join(
-          dirname,
-          "packages",
-          packageFolderName
-        );
+        const packageFolder = path.join(dirname, "packages", packageFolderName);
         const packageJson = require(path.join(packageFolder, "package.json"));
 
         const filename =
