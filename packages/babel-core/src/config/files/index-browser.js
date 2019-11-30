@@ -51,6 +51,8 @@ export function loadConfig(
   throw new Error(`Cannot load ${name} relative to ${dirname} in a browser`);
 }
 
+export const ROOT_CONFIG_FILENAMES = [];
+
 // eslint-disable-next-line no-unused-vars
 export function resolvePlugin(name: string, dirname: string): string | null {
   return null;

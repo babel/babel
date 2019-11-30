@@ -12,7 +12,12 @@ import {
   type RootMode,
 } from "./validation/options";
 
-import { findConfigUpwards, type ConfigFile, type IgnoreFile } from "./files";
+import {
+  findConfigUpwards,
+  ROOT_CONFIG_FILENAMES,
+  type ConfigFile,
+  type IgnoreFile,
+} from "./files";
 
 function resolveRootMode(rootDir: string, rootMode: RootMode): string {
   switch (rootMode) {
@@ -31,7 +36,9 @@ function resolveRootMode(rootDir: string, rootMode: RootMode): string {
       throw Object.assign(
         (new Error(
           `Babel was run with rootMode:"upward" but a root could not ` +
-            `be found when searching upward from "${rootDir}"`,
+            `be found when searching upward from "${rootDir}".\n` +
+            `One of the following config files must be in the directory tree: ` +
+            `"${ROOT_CONFIG_FILENAMES.join(", ")}".`,
         ): any),
         {
           code: "BABEL_ROOT_NOT_FOUND",
@@ -40,7 +47,7 @@ function resolveRootMode(rootDir: string, rootMode: RootMode): string {
       );
     }
     default:
-      throw new Error(`Assertion failure - unknown rootMode value`);
+      throw new Error(`Assertion failure - unknown rootMode value.`);
   }
 }
 

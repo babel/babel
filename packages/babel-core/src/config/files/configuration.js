@@ -18,7 +18,7 @@ import type { CallerMetadata } from "../validation/options";
 
 const debug = buildDebug("babel:config:loading:files:configuration");
 
-const ROOT_CONFIG_FILENAMES = [
+export const ROOT_CONFIG_FILENAMES = [
   "babel.config.js",
   "babel.config.cjs",
   "babel.config.json",
