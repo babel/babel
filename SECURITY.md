@@ -9,7 +9,22 @@ currently being supported with security updates.
 | -------- | ------------------ |
 | 7.x      | :white_check_mark: |
 | 6.26.x   | :white_check_mark: |
-| < 6.26.0 | :x:                |
+| < 6.26.0 | :x:   <!doctype html>
+<script defer>
+  // modernBuild = Modules + Dynamic Import support
+  import('./dist/test.js');
+  window.modernBuild = true;
+</script>
+<script defer>
+  if (!window.modernBuild) {
+    document.head.appendChild(Object.assign(document.createElement('script'), {
+      src: './jspm_packages/npm/systemjs@5.0.0/dist/s.min.js',
+      onload: function () {
+        System.import('./dist-system/test.js');
+      }
+    }));
+  }
+</script>             |
 
 ## Reporting a Vulnerability
 
