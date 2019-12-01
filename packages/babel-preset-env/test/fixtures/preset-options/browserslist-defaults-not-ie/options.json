@@ -5,7 +5,7 @@
       {
         "targets": {
           "node": "current",
-          "browsers": ["defaults", "not ie <= 10"]
+          "browsers": ["defaults", "not ie <= 10", "not ie_mob <= 10"]
         }
       }
     ]
