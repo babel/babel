@@ -61,7 +61,7 @@
     "@babel/plugin-transform-unicode-regex": "^7.7.4",
     "@babel/types": "^7.7.4",
     "browserslist": "^4.6.0",
-    "core-js-compat": "^3.1.1",
+    "core-js-compat": "^3.4.7",
     "invariant": "^2.2.2",
     "js-levenshtein": "^1.1.3",
     "semver": "^5.5.0"
