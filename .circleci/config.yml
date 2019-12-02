@@ -3,21 +3,21 @@ version: 2.1
 aliases:
   - &restore-node-modules-cache
     keys:
-      - v1-yarn-deps-{{ checksum "yarn.lock" }}
+      - v2-yarn-deps-{{ checksum "yarn.lock" }}
 
   - &restore-yarn-cache
     keys:
-      - v1-yarn-cache
+      - v2-yarn-cache
 
   - &save-node-modules-cache
     paths:
       - node_modules
-    key: v1-yarn-deps-{{ checksum "yarn.lock" }}
+    key: v2-yarn-deps-{{ checksum "yarn.lock" }}
 
   - &save-yarn-cache
     paths:
       - ~/.yarn-cache
-    key: v1-yarn-cache
+    key: v2-yarn-cache
 
   - &artifact_babel
     path: ~/babel/packages/babel-standalone/babel.js
