@@ -151,8 +151,6 @@ function buildHelper(
   );
   tree.body.push(...helper.nodes);
 
-  console.log(helperFilename);
-
   return babel.transformFromAst(tree, null, {
     filename: helperFilename,
     presets: [
