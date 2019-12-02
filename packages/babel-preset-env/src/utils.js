@@ -7,7 +7,7 @@ import semver from "semver";
 import { addSideEffect } from "@babel/helper-module-imports";
 import unreleasedLabels from "../data/unreleased-labels";
 import { semverMin } from "./targets-parser";
-import type { Targets } from "./types";
+import type { Target, Targets } from "./types";
 
 export const has = Object.hasOwnProperty.call.bind(Object.hasOwnProperty);
 
@@ -105,7 +105,10 @@ export function getLowestUnreleased(a: string, b: string, env: string): string {
   return semverMin(a, b);
 }
 
-export function getLowestImplementedVersion(plugin, environment) {
+export function getLowestImplementedVersion(
+  plugin: Targets,
+  environment: Target,
+): string {
   const result = plugin[environment];
   // When Android support data is absent, use Chrome data as fallback
   if (!result && environment === "android") {
