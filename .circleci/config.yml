@@ -57,6 +57,7 @@ jobs:
       - restore_cache: *restore-yarn-cache
       - restore_cache: *restore-node-modules-cache
       - run: yarn --version
+      - run: yarn info core-js-compat
       - run: make test-ci-coverage
       # Builds babel-standalone with the regular Babel config
       - run: IS_PUBLISH=true make build
