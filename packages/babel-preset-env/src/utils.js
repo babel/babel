@@ -105,6 +105,15 @@ export function getLowestUnreleased(a: string, b: string, env: string): string {
   return semverMin(a, b);
 }
 
+export function getLowestImplementedVersion(plugin, environment) {
+  const result = plugin[environment];
+  // When Android support data is absent, use Chrome data as fallback
+  if (!result && environment === "android") {
+    return plugin.chrome;
+  }
+  return result;
+}
+
 export function filterStageFromList(
   list: { [feature: string]: Targets },
   stageList: { [feature: string]: boolean },

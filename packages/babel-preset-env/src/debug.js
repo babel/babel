@@ -1,7 +1,12 @@
 // @flow
 /*eslint quotes: ["error", "double", { "avoidEscape": true }]*/
 import semver from "semver";
-import { isUnreleasedVersion, prettifyVersion, semverify } from "./utils";
+import {
+  isUnreleasedVersion,
+  prettifyVersion,
+  semverify,
+  getLowestImplementedVersion,
+} from "./utils";
 
 import type { Targets } from "./types";
 
@@ -19,7 +24,7 @@ export const logPluginOrPolyfill = (
   const minVersions = list[item] || {};
 
   const filteredList = Object.keys(targetVersions).reduce((result, env) => {
-    const minVersion = minVersions[env];
+    const minVersion = getLowestImplementedVersion(minVersions, env);
     const targetVersion = targetVersions[env];
 
     if (!minVersion) {
