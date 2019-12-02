@@ -15,12 +15,29 @@ module.exports = function(api) {
   let convertESM = true;
   let ignoreLib = true;
   const nodeVersion = "6.9";
+  // The vast majority of our src files are modules, but we use
+  // unambiguous to keep things simple until we get around to renaming
+  // the modules to be more easily distinguished from CommonJS
+  const unambiguousSources = [
+    "packages/*/src",
+    "packages/*/test",
+    "codemods/*/src",
+    "codemods/*/test",
+    "eslint/*/src",
+    "eslint/*/test",
+  ];
 
   switch (env) {
     // Configs used during bundling builds.
     case "rollup":
       convertESM = false;
       ignoreLib = false;
+      // rollup-commonjs will converts node_modules to ESM
+      unambiguousSources.push(
+        "**/node_modules",
+        // todo: remove this after it is rewritten into ESM
+        "packages/babel-preset-env/data"
+      );
       envOpts.targets = {
         node: nodeVersion,
       };
@@ -28,7 +45,11 @@ module.exports = function(api) {
     case "standalone":
       convertESM = false;
       ignoreLib = false;
-      // targets to default browserslist
+      unambiguousSources.push(
+        "**/node_modules",
+        "packages/babel-preset-env/data"
+      );
+      // targets to browserslists: defaults
       break;
     case "production":
       // Config during builds before publish.
@@ -55,7 +76,6 @@ module.exports = function(api) {
     // and then mark actual modules as modules farther down.
     sourceType: "script",
     comments: false,
-    exclude: "**/node_modules/**",
     ignore: [
       // These may not be strictly necessary with the newly-limited scope of
       // babelrc searching, but including them for now because we had them
@@ -104,19 +124,7 @@ module.exports = function(api) {
         presets: [["@babel/env", envOptsNoTargets]],
       },
       {
-        // The vast majority of our src files are modules, but we use
-        // unambiguous to keep things simple until we get around to renaming
-        // the modules to be more easily distinguished from CommonJS
-        test: [
-          "packages/*/src",
-          "packages/*/test",
-          "codemods/*/src",
-          "codemods/*/test",
-          "eslint/*/src",
-          "eslint/*/test",
-          "**/node_modules",
-          "packages/babel-preset-env/data",
-        ],
+        test: unambiguousSources,
         sourceType: "unambiguous",
       },
     ].filter(Boolean),
