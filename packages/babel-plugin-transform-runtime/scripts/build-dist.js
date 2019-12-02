@@ -158,7 +158,7 @@ function buildHelper(
     presets: [
       [
         "@babel/preset-env",
-        { modules: false, exclude: ["transform-typeof-symbol"] },
+        { modules: false, exclude: ["@babel/plugin-transform-typeof-symbol"] },
       ],
     ],
     plugins: [
@@ -177,7 +177,6 @@ function buildHelper(
         exclude: /typeof/,
         plugins: ["@babel/plugin-transform-typeof-symbol"],
       },
-      {},
     ],
   }).code;
 }
