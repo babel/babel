@@ -2208,7 +2208,11 @@ export default class ExpressionParser extends LValParser {
       }
     }
 
-    if (this.state.inClassProperty && word === "arguments") {
+    if (
+      this.scope.inClass &&
+      !this.scope.inNonArrowFunction &&
+      word === "arguments"
+    ) {
       this.raise(
         startLoc,
         "'arguments' is not allowed in class field initializer",
