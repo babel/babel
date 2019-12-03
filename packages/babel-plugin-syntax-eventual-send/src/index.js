@@ -7,7 +7,10 @@ export default declare(api => {
     name: "syntax-eventual-send",
 
     manipulateOptions(opts, parserOpts) {
-      parserOpts.plugins.push([ "eventualSend", { "handledPromise": "$h_HandledPromise" } ]);
+      parserOpts.plugins.push([
+        "eventualSend",
+        { handledPromise: "$h_HandledPromise" },
+      ]);
     },
   };
 });
