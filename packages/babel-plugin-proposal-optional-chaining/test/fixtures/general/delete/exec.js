@@ -16,7 +16,7 @@ expect(test).toBe(true);
 
 test = delete obj?.b?.b;
 expect(obj.b).toBeUndefined();
-expect(test).toBeUndefined();
+expect(test).toBe(true);
 
 delete obj?.a;
 expect(obj.a).toBeUndefined();

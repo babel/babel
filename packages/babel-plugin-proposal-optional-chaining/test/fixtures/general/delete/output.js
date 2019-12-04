@@ -7,7 +7,7 @@ const obj = {
     b: 0
   }
 };
-let test = obj === null || obj === void 0 ? void 0 : (_obj$a = obj.a) === null || _obj$a === void 0 ? void 0 : delete _obj$a.b;
-test = obj === null || obj === void 0 ? void 0 : delete obj.a.b;
-test = obj === null || obj === void 0 ? void 0 : (_obj$b = obj.b) === null || _obj$b === void 0 ? void 0 : delete _obj$b.b;
-obj === null || obj === void 0 ? void 0 : delete obj.a;
+let test = obj === null || obj === void 0 ? true : (_obj$a = obj.a) === null || _obj$a === void 0 ? true : delete _obj$a.b;
+test = obj === null || obj === void 0 ? true : delete obj.a.b;
+test = obj === null || obj === void 0 ? true : (_obj$b = obj.b) === null || _obj$b === void 0 ? true : delete _obj$b.b;
+obj === null || obj === void 0 ? true : delete obj.a;

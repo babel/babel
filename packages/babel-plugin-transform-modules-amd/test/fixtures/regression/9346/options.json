@@ -1,5 +1,3 @@
 {
-  "plugins": [
-    "transform-modules-amd"
-  ]
+  "plugins": ["transform-modules-amd"]
 }
