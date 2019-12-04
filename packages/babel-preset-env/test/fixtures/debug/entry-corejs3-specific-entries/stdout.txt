@@ -37,6 +37,7 @@ Using plugins:
   transform-member-expression-literals {}
   transform-property-literals {}
   transform-reserved-words {}
+  proposal-nullish-coalescing-operator {}
   transform-modules-commonjs {}
   proposal-dynamic-import {}
 

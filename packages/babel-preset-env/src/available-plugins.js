@@ -7,6 +7,7 @@ export default {
   "syntax-object-rest-spread": require("@babel/plugin-syntax-object-rest-spread"),
   "syntax-optional-catch-binding": require("@babel/plugin-syntax-optional-catch-binding"),
   "syntax-top-level-await": require("@babel/plugin-syntax-top-level-await"),
+  "syntax-nullish-coalescing-operator": require("@babel/plugin-syntax-nullish-coalescing-operator"),
   "transform-async-to-generator": require("@babel/plugin-transform-async-to-generator"),
   "proposal-async-generator-functions": require("@babel/plugin-proposal-async-generator-functions"),
   "proposal-dynamic-import": require("@babel/plugin-proposal-dynamic-import"),
@@ -44,4 +45,5 @@ export default {
   "proposal-optional-catch-binding": require("@babel/plugin-proposal-optional-catch-binding"),
   "transform-regenerator": require("@babel/plugin-transform-regenerator"),
   "proposal-unicode-property-regex": require("@babel/plugin-proposal-unicode-property-regex"),
+  "proposal-nullish-coalescing-operator": require("@babel/plugin-proposal-nullish-coalescing-operator"),
 };

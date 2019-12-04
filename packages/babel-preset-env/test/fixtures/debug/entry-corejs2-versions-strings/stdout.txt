@@ -38,6 +38,7 @@ Using plugins:
   proposal-json-strings { "chrome":"54", "ie":"10", "node":"6.10" }
   proposal-optional-catch-binding { "chrome":"54", "ie":"10", "node":"6.10" }
   transform-named-capturing-groups-regex { "chrome":"54", "ie":"10", "node":"6.10" }
+  proposal-nullish-coalescing-operator { "chrome":"54", "ie":"10", "node":"6.10" }
   transform-modules-commonjs { "chrome":"54", "ie":"10", "node":"6.10" }
   proposal-dynamic-import { "chrome":"54", "ie":"10", "node":"6.10" }
 

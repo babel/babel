@@ -349,5 +349,10 @@
     "phantom": "2",
     "samsung": "2.1",
     "electron": "0.2"
+  },
+  "proposal-nullish-coalescing-operator": {
+    "chrome": "80",
+    "firefox": "72",
+    "opera": "67"
   }
 }

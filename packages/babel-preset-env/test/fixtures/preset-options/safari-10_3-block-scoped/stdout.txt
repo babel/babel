@@ -20,6 +20,7 @@ Using plugins:
   proposal-json-strings { "safari":"10" }
   proposal-optional-catch-binding { "safari":"10" }
   transform-named-capturing-groups-regex { "safari":"10" }
+  proposal-nullish-coalescing-operator { "safari":"10" }
   transform-modules-commonjs { "safari":"10" }
   proposal-dynamic-import { "safari":"10" }
 

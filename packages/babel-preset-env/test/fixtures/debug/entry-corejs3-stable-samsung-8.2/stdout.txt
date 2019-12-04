@@ -14,6 +14,7 @@ Using plugins:
   proposal-json-strings { "samsung":"8.2" }
   proposal-optional-catch-binding { "samsung":"8.2" }
   transform-named-capturing-groups-regex { "samsung":"8.2" }
+  proposal-nullish-coalescing-operator { "samsung":"8.2" }
   transform-modules-commonjs { "samsung":"8.2" }
   proposal-dynamic-import { "samsung":"8.2" }
 
