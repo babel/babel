@@ -62,11 +62,12 @@ function runModuleInTestContext(id: string, relativeFilename: string) {
   const req = id => runModuleInTestContext(id, filename);
 
   const src = fs.readFileSync(filename, "utf8");
-  const code = `(function (exports, require, module, __filename, __dirname) {${src}\n});`;
+  const code = `(function (exports, require, module, __filename, __dirname) {\n${src}\n});`;
 
   vm.runInContext(code, testContext, {
     filename,
     displayErrors: true,
+    lineOffset: -1,
   }).call(module.exports, module.exports, req, module, filename, dirname);
 
   return module.exports;
@@ -94,10 +95,11 @@ export function runCodeInTestContext(code: string, opts: { filename: string }) {
     // Expose the test options as "opts", but otherwise run the test in a CommonJS-like environment.
     // Note: This isn't doing .call(module.exports, ...) because some of our tests currently
     // rely on 'this === global'.
-    const src = `(function(exports, require, module, __filename, __dirname, opts) {${code}\n});`;
+    const src = `(function(exports, require, module, __filename, __dirname, opts) {\n${code}\n});`;
     return vm.runInContext(src, testContext, {
       filename,
       displayErrors: true,
+      lineOffset: -1,
     })(module.exports, req, module, filename, dirname, opts);
   } finally {
     process.chdir(oldCwd);
