@@ -3,6 +3,7 @@ import proposalJsonStrings from "@babel/plugin-proposal-json-strings";
 import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";
 import proposalOptionalChaining from "@babel/plugin-proposal-optional-chaining";
 import syntaxJsonStrings from "@babel/plugin-syntax-json-strings";
+import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
 import syntaxTopLevelAwait from "@babel/plugin-syntax-top-level-await";
 import transformNamedCapturingGroupsRegex from "@babel/plugin-transform-named-capturing-groups-regex";
 import transformNewTarget from "@babel/plugin-transform-new-target";
@@ -12,6 +13,7 @@ const notIncludedPlugins = {
   "proposal-json-strings": proposalJsonStrings,
   "proposal-optional-chaining": proposalOptionalChaining,
   "syntax-json-strings": syntaxJsonStrings,
+  "syntax-optional-chaining": syntaxOptionalChaining,
   "syntax-top-level-await": syntaxTopLevelAwait,
   "transform-named-capturing-groups-regex": transformNamedCapturingGroupsRegex,
   "transform-new-target": transformNewTarget,

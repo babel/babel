@@ -15,6 +15,7 @@
     "@babel/plugin-proposal-json-strings": "^7.7.4",
     "@babel/plugin-proposal-optional-chaining": "^7.7.4",
     "@babel/plugin-syntax-json-strings": "^7.7.4",
+    "@babel/plugin-syntax-optional-chaining": "^7.7.4",
     "@babel/plugin-syntax-top-level-await": "^7.7.4",
     "@babel/plugin-transform-named-capturing-groups-regex": "^7.7.4",
     "@babel/plugin-transform-new-target": "^7.7.4",

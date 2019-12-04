@@ -4,6 +4,7 @@ import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
 import syntaxJsonStrings from "@babel/plugin-syntax-json-strings";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-binding";
+import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
 import syntaxTopLevelAwait from "@babel/plugin-syntax-top-level-await";
 import proposalAsyncGeneratorFunctions from "@babel/plugin-proposal-async-generator-functions";
 import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";
@@ -50,6 +51,7 @@ export default {
   "syntax-json-strings": syntaxJsonStrings,
   "syntax-object-rest-spread": syntaxObjectRestSpread,
   "syntax-optional-catch-binding": syntaxOptionalCatchBinding,
+  "syntax-optional-chaining": syntaxOptionalChaining,
   "syntax-top-level-await": syntaxTopLevelAwait,
   "transform-async-to-generator": transformAsyncToGenerator,
   "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,
