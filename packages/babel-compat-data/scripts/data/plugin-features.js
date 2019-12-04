@@ -101,4 +101,5 @@ module.exports = {
   "transform-property-literals":
     "Object/array literal extensions / Reserved words as property names",
   "transform-reserved-words": "Miscellaneous / Unreserved words",
+  "proposal-nullish-coalescing-operator": "nullish coalescing operator (??)",
 };

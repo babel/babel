@@ -10,6 +10,7 @@ const pluginSyntaxMap = new Map([
   ["proposal-optional-chaining", "syntax-optional-chaining"],
   ["proposal-unicode-property-regex", null],
   ["proposal-json-strings", "syntax-json-strings"],
+  ["proposal-nullish-coalescing-operator", "syntax-nullish-coalescing-operator"],
 ]);
 
 module.exports = { proposalPlugins, pluginSyntaxMap };

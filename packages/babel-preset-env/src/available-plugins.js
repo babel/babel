@@ -2,6 +2,7 @@
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
 import syntaxJsonStrings from "@babel/plugin-syntax-json-strings";
+import syntaxNullishCoalescingOperator from "@babel/plugin-syntax-nullish-coalescing-operator";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-binding";
 import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
@@ -9,6 +10,7 @@ import syntaxTopLevelAwait from "@babel/plugin-syntax-top-level-await";
 import proposalAsyncGeneratorFunctions from "@babel/plugin-proposal-async-generator-functions";
 import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";
 import proposalJsonStrings from "@babel/plugin-proposal-json-strings";
+import proposalNullishCoalescingOperator from "@babel/plugin-proposal-nullish-coalescing-operator";
 import proposalObjectRestSpread from "@babel/plugin-proposal-object-rest-spread";
 import proposalOptionalCatchBinding from "@babel/plugin-proposal-optional-catch-binding";
 import proposalOptionalChaining from "@babel/plugin-proposal-optional-chaining";
@@ -49,6 +51,7 @@ export default {
   "syntax-async-generators": syntaxAsyncGenerators,
   "syntax-dynamic-import": syntaxDynamicImport,
   "syntax-json-strings": syntaxJsonStrings,
+  "syntax-nullish-coalescing-operator": syntaxNullishCoalescingOperator,
   "syntax-object-rest-spread": syntaxObjectRestSpread,
   "syntax-optional-catch-binding": syntaxOptionalCatchBinding,
   "syntax-optional-chaining": syntaxOptionalChaining,
@@ -57,6 +60,7 @@ export default {
   "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,
   "proposal-dynamic-import": proposalDynamicImport,
   "proposal-json-strings": proposalJsonStrings,
+  "proposal-nullish-coalescing-operator": proposalNullishCoalescingOperator,
   "transform-arrow-functions": transformArrowFunctions,
   "transform-block-scoped-functions": transformBlockScopedFunctions,
   "transform-block-scoping": transformBlockScoping,

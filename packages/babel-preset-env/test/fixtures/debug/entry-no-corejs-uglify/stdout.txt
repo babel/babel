@@ -44,6 +44,7 @@ Using plugins:
   transform-member-expression-literals {}
   transform-property-literals {}
   transform-reserved-words {}
+  proposal-nullish-coalescing-operator { "chrome":"55" }
   syntax-dynamic-import { "chrome":"55" }
 
 Using polyfills with `entry` option:
