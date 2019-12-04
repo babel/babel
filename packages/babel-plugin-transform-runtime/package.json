@@ -24,6 +24,7 @@
     "@babel/core": "^7.7.4",
     "@babel/helper-plugin-test-runner": "^7.7.4",
     "@babel/helpers": "^7.7.4",
+    "@babel/plugin-transform-typeof-symbol": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "@babel/runtime": "^7.7.4",
     "@babel/template": "^7.7.4",

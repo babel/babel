@@ -9,6 +9,7 @@ const t = require("@babel/types");
 
 const transformRuntime = require("../");
 
+const runtimeVersion = require("@babel/runtime/package.json").version;
 const corejs2Definitions = require("../lib/runtime-corejs2-definitions").default();
 const corejs3Definitions = require("../lib/runtime-corejs3-definitions").default();
 
@@ -151,14 +152,29 @@ function buildHelper(
   tree.body.push(...helper.nodes);
 
   return babel.transformFromAst(tree, null, {
-    presets: [[require("@babel/preset-env"), { modules: false }]],
+    filename: helperFilename,
+    presets: [
+      [
+        "@babel/preset-env",
+        { modules: false, exclude: ["@babel/plugin-transform-typeof-symbol"] },
+      ],
+    ],
     plugins: [
-      [transformRuntime, { corejs, useESModules: esm }],
+      [
+        transformRuntime,
+        { corejs, useESModules: esm, version: runtimeVersion },
+      ],
       buildRuntimeRewritePlugin(
         runtimeName,
         path.relative(path.dirname(helperFilename), pkgDirname),
         helperName
       ),
+    ],
+    overrides: [
+      {
+        exclude: /typeof/,
+        plugins: ["@babel/plugin-transform-typeof-symbol"],
+      },
     ],
   }).code;
 }
