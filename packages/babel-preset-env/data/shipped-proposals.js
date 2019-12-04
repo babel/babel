@@ -7,6 +7,7 @@ const pluginSyntaxMap = new Map([
   ["proposal-async-generator-functions", "syntax-async-generators"],
   ["proposal-object-rest-spread", "syntax-object-rest-spread"],
   ["proposal-optional-catch-binding", "syntax-optional-catch-binding"],
+  ["proposal-optional-chaining", "syntax-optional-chaining"],
   ["proposal-unicode-property-regex", null],
   ["proposal-json-strings", "syntax-json-strings"],
 ]);
