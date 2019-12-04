@@ -34,6 +34,7 @@ Using plugins:
   proposal-unicode-property-regex {}
   proposal-json-strings {}
   proposal-optional-catch-binding {}
+  proposal-optional-chaining {}
   transform-named-capturing-groups-regex {}
   transform-member-expression-literals {}
   transform-property-literals {}

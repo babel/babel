@@ -10,6 +10,7 @@ import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";
 import proposalJsonStrings from "@babel/plugin-proposal-json-strings";
 import proposalObjectRestSpread from "@babel/plugin-proposal-object-rest-spread";
 import proposalOptionalCatchBinding from "@babel/plugin-proposal-optional-catch-binding";
+import proposalOptionalChaining from "@babel/plugin-proposal-optional-chaining";
 import proposalUnicodePropertyRegex from "@babel/plugin-proposal-unicode-property-regex";
 import transformAsyncToGenerator from "@babel/plugin-transform-async-to-generator";
 import transformArrowFunctions from "@babel/plugin-transform-arrow-functions";
@@ -85,6 +86,7 @@ export default {
   "transform-new-target": transformNewTarget,
   "proposal-object-rest-spread": proposalObjectRestSpread,
   "proposal-optional-catch-binding": proposalOptionalCatchBinding,
+  "proposal-optional-chaining": proposalOptionalChaining,
   "transform-regenerator": transformRegenerator,
   "proposal-unicode-property-regex": proposalUnicodePropertyRegex,
 };

@@ -299,6 +299,10 @@
     "opera": "53",
     "electron": "3.1"
   },
+  "proposal-optional-chaining": {
+    "chrome": "80",
+    "opera": "67"
+  },
   "transform-named-capturing-groups-regex": {
     "chrome": "64",
     "safari": "11.1",

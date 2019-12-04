@@ -14,6 +14,7 @@ Using plugins:
   proposal-unicode-property-regex { "chrome":"55" }
   proposal-json-strings { "chrome":"55" }
   proposal-optional-catch-binding { "chrome":"55" }
+  proposal-optional-chaining { "chrome":"55" }
   transform-named-capturing-groups-regex { "chrome":"55" }
   transform-modules-commonjs { "chrome":"55" }
   proposal-dynamic-import { "chrome":"55" }

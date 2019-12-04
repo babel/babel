@@ -26,6 +26,7 @@ Using plugins:
   proposal-unicode-property-regex { "firefox":"52", "node":"7.4" }
   proposal-json-strings { "firefox":"52", "node":"7.4" }
   proposal-optional-catch-binding { "firefox":"52", "node":"7.4" }
+  proposal-optional-chaining { "firefox":"52", "node":"7.4" }
   transform-named-capturing-groups-regex { "firefox":"52", "node":"7.4" }
   transform-modules-commonjs { "firefox":"52", "node":"7.4" }
   proposal-dynamic-import { "firefox":"52", "node":"7.4" }
