@@ -14,6 +14,7 @@ export default declare((api, options) => {
     visitor: {
       "OptionalCallExpression|OptionalMemberExpression"(path) {
         const { parentPath, scope } = path;
+        let isDeleteOperation = false;
         const optionals = [];
 
         let optionalPath = path;
@@ -38,6 +39,7 @@ export default declare((api, options) => {
         let replacementPath = path;
         if (parentPath.isUnaryExpression({ operator: "delete" })) {
           replacementPath = parentPath;
+          isDeleteOperation = true;
         }
         for (let i = optionals.length - 1; i >= 0; i--) {
           const node = optionals[i];
@@ -113,7 +115,9 @@ export default declare((api, options) => {
                       scope.buildUndefinedNode(),
                     ),
                   ),
-              scope.buildUndefinedNode(),
+              isDeleteOperation
+                ? t.booleanLiteral(true)
+                : scope.buildUndefinedNode(),
               replacementPath.node,
             ),
           );
