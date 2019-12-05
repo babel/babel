@@ -587,7 +587,6 @@ export default class ExpressionParser extends LValParser {
     }
     let optional = false;
     if (this.match(tt.questionDot)) {
-      this.expectPlugin("optionalChaining");
       state.optionalChainMember = optional = true;
       if (noCalls && this.lookaheadCharCode() === charCodes.leftParenthesis) {
         state.stop = true;
