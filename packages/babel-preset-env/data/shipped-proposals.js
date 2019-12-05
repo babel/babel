@@ -15,6 +15,10 @@ const pluginSyntaxObject = {
   "proposal-unicode-property-regex": null,
 };
 
-const pluginSyntaxMap = new Map(Object.entries(pluginSyntaxObject));
+const pluginSyntaxEntries = Object.keys(pluginSyntaxObject).map(function (key) {
+  return [key, pluginSyntaxObject[key]];
+});
+
+const pluginSyntaxMap = new Map(pluginSyntaxEntries);
 
 module.exports = { pluginSyntaxMap, proposalPlugins };
