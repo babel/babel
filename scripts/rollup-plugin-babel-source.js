@@ -48,26 +48,37 @@ module.exports = function() {
       }
 
       const matches = importee.match(/^@babel\/([^/]+)$/);
-      if (matches) {
-        const packageFolderName = `babel-${matches[1]}`;
+      if (!matches) return null;
 
-        // resolve babel package names to their src index file
-        const packageFolder = path.join(dirname, "packages", packageFolderName);
-        const packageJson = require(path.join(packageFolder, "package.json"));
+      // resolve babel package names to their src index file
+      const packageFolder = path.join(
+        dirname,
+        "packages",
+        `babel-${matches[1]}`
+      );
 
-        const filename =
-          typeof packageJson["browser"] === "string"
-            ? packageJson["browser"]
-            : packageJson["main"];
-
-        return path.join(
-          packageFolder,
-          // replace lib with src in the pkg.json entry
-          filename.replace(/^(\.\/)?lib\//, "src/")
+      let packageJsonSource;
+      try {
+        packageJsonSource = fs.readFileSync(
+          path.join(packageFolder, "package.json")
         );
+      } catch (e) {
+        // Some Babel packahes aren't in this repository, but in
+        return null;
       }
 
-      return null;
+      const packageJson = JSON.parse(packageJsonSource);
+
+      const filename =
+        typeof packageJson["browser"] === "string"
+          ? packageJson["browser"]
+          : packageJson["main"];
+
+      return path.join(
+        packageFolder,
+        // replace lib with src in the pkg.json entry
+        filename.replace(/^(\.\/)?lib\//, "src/")
+      );
     },
   };
 };
