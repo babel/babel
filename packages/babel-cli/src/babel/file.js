@@ -216,6 +216,7 @@ export default async function({
       const chokidar = util.requireChokidar();
       chokidar
         .watch(filenames, {
+          disableGlobbing: true,
           persistent: true,
           ignoreInitial: true,
           awaitWriteFinish: {
@@ -224,7 +225,10 @@ export default async function({
           },
         })
         .on("all", function(type: string, filename: string): void {
-          if (!util.isCompilableExtension(filename, cliOptions.extensions)) {
+          if (
+            !util.isCompilableExtension(filename, cliOptions.extensions) &&
+            !filenames.includes(filename)
+          ) {
             return;
           }
 
