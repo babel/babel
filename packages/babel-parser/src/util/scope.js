@@ -64,6 +64,9 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   get allowDirectSuper() {
     return (this.currentThisScope().flags & SCOPE_DIRECT_SUPER) > 0;
   }
+  get inClass() {
+    return (this.currentThisScope().flags & SCOPE_CLASS) > 0;
+  }
   get inNonArrowFunction() {
     return (this.currentThisScope().flags & SCOPE_FUNCTION) > 0;
   }
@@ -199,7 +202,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     }
   }
 
-  // Could be useful for `this`, `new.target`, `super()`, `super.property`, and `super[property]`.
+  // Could be useful for `arguments`, `this`, `new.target`, `super()`, `super.property`, and `super[property]`.
   // $FlowIgnore
   currentThisScope(): IScope {
     for (let i = this.scopeStack.length - 1; ; i--) {
