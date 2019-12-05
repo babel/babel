@@ -2801,7 +2801,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       subscriptState: N.ParseSubscriptState,
     ): N.Expression {
       if (this.match(tt.questionDot) && this.isLookaheadRelational("<")) {
-        this.expectPlugin("optionalChaining");
         subscriptState.optionalChainMember = true;
         if (noCalls) {
           subscriptState.stop = true;
