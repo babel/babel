@@ -1,3 +1,5 @@
+/* eslint sort-keys: "error" */
+
 import { availablePlugins, registerPlugin } from "@babel/standalone";
 import proposalJsonStrings from "@babel/plugin-proposal-json-strings";
 import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";

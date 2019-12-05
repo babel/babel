@@ -1,4 +1,6 @@
 // @flow
+/* eslint sort-keys: "error" */
+
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
 import syntaxJsonStrings from "@babel/plugin-syntax-json-strings";
@@ -48,6 +50,14 @@ import transformTypeofSymbol from "@babel/plugin-transform-typeof-symbol";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
 
 export default {
+  "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,
+  "proposal-dynamic-import": proposalDynamicImport,
+  "proposal-json-strings": proposalJsonStrings,
+  "proposal-nullish-coalescing-operator": proposalNullishCoalescingOperator,
+  "proposal-object-rest-spread": proposalObjectRestSpread,
+  "proposal-optional-catch-binding": proposalOptionalCatchBinding,
+  "proposal-optional-chaining": proposalOptionalChaining,
+  "proposal-unicode-property-regex": proposalUnicodePropertyRegex,
   "syntax-async-generators": syntaxAsyncGenerators,
   "syntax-dynamic-import": syntaxDynamicImport,
   "syntax-json-strings": syntaxJsonStrings,
@@ -56,12 +66,8 @@ export default {
   "syntax-optional-catch-binding": syntaxOptionalCatchBinding,
   "syntax-optional-chaining": syntaxOptionalChaining,
   "syntax-top-level-await": syntaxTopLevelAwait,
-  "transform-async-to-generator": transformAsyncToGenerator,
-  "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,
-  "proposal-dynamic-import": proposalDynamicImport,
-  "proposal-json-strings": proposalJsonStrings,
-  "proposal-nullish-coalescing-operator": proposalNullishCoalescingOperator,
   "transform-arrow-functions": transformArrowFunctions,
+  "transform-async-to-generator": transformAsyncToGenerator,
   "transform-block-scoped-functions": transformBlockScopedFunctions,
   "transform-block-scoping": transformBlockScoping,
   "transform-classes": transformClasses,
@@ -69,6 +75,7 @@ export default {
   "transform-destructuring": transformDestructuring,
   "transform-dotall-regex": transformDotallRegex,
   "transform-duplicate-keys": transformDuplicateKeys,
+  "transform-exponentiation-operator": transformExponentialOperator,
   "transform-for-of": transformForOf,
   "transform-function-name": transformFunctionName,
   "transform-literals": transformLiterals,
@@ -78,9 +85,11 @@ export default {
   "transform-modules-systemjs": transformModulesSystemjs,
   "transform-modules-umd": transformModulesUmd,
   "transform-named-capturing-groups-regex": transformNamedCapturingGroupsRegex,
+  "transform-new-target": transformNewTarget,
   "transform-object-super": transformObjectSuper,
   "transform-parameters": transformParameters,
   "transform-property-literals": transformPropertyLiterals,
+  "transform-regenerator": transformRegenerator,
   "transform-reserved-words": transformReservedWords,
   "transform-shorthand-properties": transformShorthandProperties,
   "transform-spread": transformSpread,
@@ -88,11 +97,4 @@ export default {
   "transform-template-literals": transformTemplateLiterals,
   "transform-typeof-symbol": transformTypeofSymbol,
   "transform-unicode-regex": transformUnicodeRegex,
-  "transform-exponentiation-operator": transformExponentialOperator,
-  "transform-new-target": transformNewTarget,
-  "proposal-object-rest-spread": proposalObjectRestSpread,
-  "proposal-optional-catch-binding": proposalOptionalCatchBinding,
-  "proposal-optional-chaining": proposalOptionalChaining,
-  "transform-regenerator": transformRegenerator,
-  "proposal-unicode-property-regex": proposalUnicodePropertyRegex,
 };
