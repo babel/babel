@@ -21,8 +21,9 @@ import presetStage0 from "./preset-stage-0";
 import presetStage1 from "./preset-stage-1";
 import presetStage2 from "./preset-stage-2";
 import presetStage3 from "./preset-stage-3";
-import presetReact from "@babel/preset-react";
+import presetEnv from "@babel/preset-env";
 import presetFlow from "@babel/preset-flow";
+import presetReact from "@babel/preset-react";
 import presetTypescript from "@babel/preset-typescript";
 
 import { runScripts } from "./transformScriptTags";
@@ -163,6 +164,7 @@ registerPlugins(all);
 // Want to get rid of this whitelist of presets?
 // Wait! Please read https://github.com/babel/babel/pull/6177 first.
 registerPresets({
+  env: presetEnv,
   es2015: preset2015,
   es2016: () => {
     return {
