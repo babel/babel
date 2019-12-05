@@ -137,9 +137,15 @@ export function registerPlugins(newPlugins: {
  */
 export function registerPreset(name: string, preset: Object | Function): void {
   if (Object.prototype.hasOwnProperty.call(availablePresets, name)) {
-    console.warn(
-      `A preset named "${name}" is already registered, it will be overridden`,
-    );
+    if (name === "env") {
+      console.warn(
+        "@babel/preset-env is now included in @babel/standalone, please remove @babel/preset-env-standalone",
+      );
+    } else {
+      console.warn(
+        `A preset named "${name}" is already registered, it will be overridden`,
+      );
+    }
   }
   availablePresets[name] = preset;
 }
