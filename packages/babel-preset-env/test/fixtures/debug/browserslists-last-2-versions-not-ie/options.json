@@ -10,8 +10,7 @@
           "browsers": [
             "last 2 versions",
             "not ie <= 11",
-            "not ie_mob <= 11",
-            "not op_mob <= 12.1"
+            "not ie_mob <= 11"
           ]
         }
       }
