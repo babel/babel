@@ -10,12 +10,17 @@ const fancyLog = require("fancy-log");
 const filter = require("gulp-filter");
 const gulp = require("gulp");
 const path = require("path");
-const webpack = require("webpack");
 const rollup = require("rollup");
+const rollupAlias = require("@rollup/plugin-alias");
 const rollupBabel = require("rollup-plugin-babel");
+const rollupBabelSource = require("./scripts/rollup-plugin-babel-source");
+const rollupCommonJs = require("rollup-plugin-commonjs");
+const rollupJson = require("@rollup/plugin-json");
+const rollupNodeBuiltins = require("rollup-plugin-node-builtins");
+const rollupNodeGlobals = require("rollup-plugin-node-globals");
 const rollupNodeResolve = require("rollup-plugin-node-resolve");
 const rollupReplace = require("rollup-plugin-replace");
-const { registerStandalonePackageTask } = require("./scripts/gulp-tasks");
+const { terser: rollupTerser } = require("rollup-plugin-terser");
 
 const defaultSourcesGlob = "./@(codemods|packages|eslint)/*/src/**/*.js";
 
@@ -75,42 +80,203 @@ function buildBabel(exclude, sourcesGlob = defaultSourcesGlob) {
     .pipe(gulp.dest(base));
 }
 
+let babelVersion = require("./packages/babel-core/package.json").version;
 function buildRollup(packages) {
+  const sourcemap = process.env.NODE_ENV === "production";
+  const minify = !!process.env.IS_PUBLISH;
   return Promise.all(
-    packages.map(pkg => {
-      const input = getIndexFromPackage(pkg);
-      fancyLog(`Compiling '${chalk.cyan(input)}' with rollup ...`);
-      return rollup
-        .rollup({
-          input,
-          plugins: [
-            rollupReplace({
-              "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-            }),
-            rollupBabel({
-              envName: "babel-parser",
-            }),
-            rollupNodeResolve(),
-          ],
-        })
-        .then(bundle => {
-          return bundle.write({
-            file: path.join(pkg, "lib/index.js"),
-            format: "cjs",
-            name: "babel-parser",
-            sourcemap: process.env.NODE_ENV !== "production",
+    packages.map(
+      ({ src, format, dest, name, filename, version = babelVersion }) => {
+        const extraPlugins = [];
+        let inputExternal = undefined,
+          outputGlobals = undefined,
+          nodeResolveBrowser = false,
+          babelEnvName = "rollup";
+        switch (src) {
+          case "packages/babel-standalone":
+            nodeResolveBrowser = true;
+            babelEnvName = "standalone";
+            if (minify) {
+              extraPlugins.push(
+                rollupTerser({
+                  include: /^.+\.min\.js$/,
+                })
+              );
+            }
+            break;
+          case "packages/babel-preset-env-standalone":
+            nodeResolveBrowser = true;
+            babelEnvName = "standalone";
+            if (minify) {
+              extraPlugins.push(
+                rollupTerser({
+                  include: /^.+\.min\.js$/,
+                })
+              );
+            }
+            inputExternal = ["@babel/standalone"];
+            outputGlobals = {
+              "@babel/standalone": "Babel",
+            };
+            extraPlugins.push(
+              rollupAlias({
+                entries: [
+                  {
+                    find: "./available-plugins",
+                    replacement: require.resolve(
+                      path.join(__dirname, src, "./src/available-plugins")
+                    ),
+                  },
+                  {
+                    find: "caniuse-lite/data/regions",
+                    replacement: require.resolve(
+                      path.join(__dirname, src, "./src/caniuse-lite-regions")
+                    ),
+                  },
+                ],
+              })
+            );
+            break;
+        }
+        // If this build is part of a pull request, include the pull request number in
+        // the version number.
+        if (process.env.CIRCLE_PR_NUMBER) {
+          const prVersion = "+pr." + process.env.CIRCLE_PR_NUMBER;
+          babelVersion += prVersion;
+          version += prVersion;
+        }
+        const input = getIndexFromPackage(src);
+        fancyLog(`Compiling '${chalk.cyan(input)}' with rollup ...`);
+        return rollup
+          .rollup({
+            input,
+            external: inputExternal,
+            plugins: [
+              ...extraPlugins,
+              rollupBabelSource(),
+              rollupReplace({
+                "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+                BABEL_VERSION: JSON.stringify(babelVersion),
+                VERSION: JSON.stringify(version),
+              }),
+              rollupBabel({
+                envName: babelEnvName,
+                babelrc: false,
+                extends: "./babel.config.js",
+              }),
+              rollupNodeResolve({
+                browser: nodeResolveBrowser,
+                preferBuiltins: true,
+                //todo: When Yarn workspaces is enabled, remove `dedupe` option
+                dedupe(importee) {
+                  return (
+                    importee.startsWith("lodash/") ||
+                    [
+                      "babel-plugin-dynamic-import-node/utils",
+                      "esutils",
+                      "semver",
+                      "source-map",
+                    ].includes(importee)
+                  );
+                },
+              }),
+              rollupCommonJs({
+                include: [/node_modules/, "packages/babel-preset-env/data/**"],
+                namedExports: {
+                  "babel-plugin-dynamic-import-node/utils.js": [
+                    "createDynamicImportTransform",
+                    "getImportSource",
+                  ],
+                  "@babel/standalone": ["availablePlugins", "registerPlugin"],
+                },
+              }),
+              rollupJson(),
+              rollupNodeBuiltins(),
+              rollupNodeGlobals({ sourceMap: sourcemap }),
+            ],
+          })
+          .then(bundle => {
+            const outputFile = path.resolve(src, dest, filename || "index.js");
+            return bundle
+              .write({
+                file: outputFile,
+                format,
+                name,
+                globals: outputGlobals,
+                sourcemap: sourcemap,
+              })
+              .then(() => {
+                if (!process.env.IS_PUBLISH) {
+                  fancyLog(
+                    chalk.yellow(
+                      `Skipped minification of '${chalk.cyan(
+                        path.relative(path.join(__dirname, ".."), outputFile)
+                      )}' because not publishing`
+                    )
+                  );
+                  return undefined;
+                }
+                fancyLog(
+                  `Minifying '${chalk.cyan(
+                    path.relative(path.join(__dirname, ".."), outputFile)
+                  )}'...`
+                );
+
+                return bundle.write({
+                  file: outputFile.replace(/\.js$/, ".min.js"),
+                  format,
+                  name,
+                  globals: outputGlobals,
+                  sourcemap: sourcemap,
+                });
+              });
           });
-        });
-    })
+      }
+    )
   );
 }
 
-const bundles = ["packages/babel-parser"];
+const libBundles = [
+  {
+    src: "packages/babel-parser",
+    format: "cjs",
+    dest: "lib",
+    version: require("./packages/babel-parser/package").version,
+  },
+];
 
-gulp.task("build-rollup", () => buildRollup(bundles));
-gulp.task("build-babel", () => buildBabel(/* exclude */ bundles));
+const standaloneBundle = [
+  {
+    src: "packages/babel-standalone",
+    format: "umd",
+    name: "Babel",
+    filename: "babel.js",
+    dest: "",
+    version: require("./packages/babel-core/package").version,
+  },
+];
+
+const presetEnvStandaloneBundle = [
+  {
+    src: "packages/babel-preset-env-standalone",
+    format: "umd",
+    name: "BabelPresetEnv",
+    filename: "babel-preset-env.js",
+    dest: "",
+    version: require("./packages/babel-preset-env/package").version,
+  },
+];
+
+gulp.task("build-rollup", () => buildRollup(libBundles));
+gulp.task("build-babel-standalone", () => buildRollup(standaloneBundle));
+
+gulp.task("build-babel-preset-env-standalone", () =>
+  buildRollup(presetEnvStandaloneBundle)
+);
+
+gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
 gulp.task("build-babel-types", () =>
-  buildBabel(/* exclude */ bundles, "packages/babel-types/src/**/*.js")
+  buildBabel(/* exclude */ libBundles, "packages/babel-types/src/**/*.js")
 );
 gulp.task("build", gulp.parallel("build-rollup", "build-babel"));
 
@@ -127,42 +293,4 @@ gulp.task(
       gulp.task("build-no-bundle")
     );
   })
-);
-
-registerStandalonePackageTask(
-  gulp,
-  "babel",
-  "Babel",
-  path.join(__dirname, "packages"),
-  require("./packages/babel-standalone/package.json").version
-);
-
-const presetEnvWebpackPlugins = [
-  new webpack.NormalModuleReplacementPlugin(
-    /\.\/available-plugins/,
-    require.resolve(
-      path.join(
-        __dirname,
-        "./packages/babel-preset-env-standalone/src/available-plugins"
-      )
-    )
-  ),
-  new webpack.NormalModuleReplacementPlugin(
-    /caniuse-lite\/data\/regions\/.+/,
-    require.resolve(
-      path.join(
-        __dirname,
-        "./packages/babel-preset-env-standalone/src/caniuse-lite-regions"
-      )
-    )
-  ),
-];
-
-registerStandalonePackageTask(
-  gulp,
-  "babel-preset-env",
-  "babelPresetEnv",
-  path.join(__dirname, "packages"),
-  require("./packages/babel-preset-env-standalone/package.json").version,
-  presetEnvWebpackPlugins
 );

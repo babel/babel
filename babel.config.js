@@ -11,18 +11,33 @@ module.exports = function(api) {
     exclude: ["transform-typeof-symbol"],
   };
   const envOpts = Object.assign({}, envOptsNoTargets);
-  let transformRuntimeOpts = null;
 
   let convertESM = true;
   let ignoreLib = true;
-  let includeRuntime = false;
   const nodeVersion = "6.9";
+  // The vast majority of our src files are modules, but we use
+  // unambiguous to keep things simple until we get around to renaming
+  // the modules to be more easily distinguished from CommonJS
+  const unambiguousSources = [
+    "packages/*/src",
+    "packages/*/test",
+    "codemods/*/src",
+    "codemods/*/test",
+    "eslint/*/src",
+    "eslint/*/test",
+  ];
 
   switch (env) {
     // Configs used during bundling builds.
-    case "babel-parser":
+    case "rollup":
       convertESM = false;
       ignoreLib = false;
+      // rollup-commonjs will converts node_modules to ESM
+      unambiguousSources.push(
+        "**/node_modules",
+        // todo: remove this after it is rewritten into ESM
+        "packages/babel-preset-env/data"
+      );
       envOpts.targets = {
         node: nodeVersion,
       };
@@ -30,7 +45,11 @@ module.exports = function(api) {
     case "standalone":
       convertESM = false;
       ignoreLib = false;
-      includeRuntime = true;
+      unambiguousSources.push(
+        "**/node_modules",
+        "packages/babel-preset-env/data"
+      );
+      // targets to browserslists: defaults
       break;
     case "production":
       // Config during builds before publish.
@@ -49,17 +68,6 @@ module.exports = function(api) {
         node: "current",
       };
       break;
-  }
-
-  if (includeRuntime) {
-    const babelRuntimePackageJSONPath = require.resolve(
-      "@babel/runtime/package.json"
-    );
-    const path = require("path");
-    transformRuntimeOpts = {
-      version: require(babelRuntimePackageJSONPath).version,
-      absoluteRuntime: path.dirname(babelRuntimePackageJSONPath),
-    };
   }
 
   const config = {
@@ -116,30 +124,8 @@ module.exports = function(api) {
         presets: [["@babel/env", envOptsNoTargets]],
       },
       {
-        // The vast majority of our src files are modules, but we use
-        // unambiguous to keep things simple until we get around to renaming
-        // the modules to be more easily distinguished from CommonJS
-        test: [
-          "packages/*/src",
-          "packages/*/test",
-          "codemods/*/src",
-          "codemods/*/test",
-          "eslint/*/src",
-          "eslint/*/test",
-        ],
+        test: unambiguousSources,
         sourceType: "unambiguous",
-      },
-      {
-        // The runtime transform shouldn't process its own runtime or core-js.
-        exclude: [
-          "packages/babel-runtime",
-          /[\\/]node_modules[\\/](?:@babel\/runtime|babel-runtime|core-js)[\\/]/,
-        ],
-        plugins: [
-          includeRuntime
-            ? ["@babel/transform-runtime", transformRuntimeOpts]
-            : null,
-        ].filter(Boolean),
       },
     ].filter(Boolean),
   };

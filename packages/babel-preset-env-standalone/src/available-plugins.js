@@ -1,12 +1,18 @@
 import { availablePlugins, registerPlugin } from "@babel/standalone";
+import proposalJsonStrings from "@babel/plugin-proposal-json-strings";
+import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";
+import syntaxJsonStrings from "@babel/plugin-syntax-json-strings";
+import syntaxTopLevelAwait from "@babel/plugin-syntax-top-level-await";
+import transformNamedCapturingGroupsRegex from "@babel/plugin-transform-named-capturing-groups-regex";
+import transformNewTarget from "@babel/plugin-transform-new-target";
 
 const notIncludedPlugins = {
-  "transform-named-capturing-groups-regex": require("@babel/plugin-transform-named-capturing-groups-regex"),
-  "transform-new-target": require("@babel/plugin-transform-new-target"),
-  "proposal-json-strings": require("@babel/plugin-proposal-json-strings"),
-  "proposal-dynamic-import": require("@babel/plugin-proposal-dynamic-import"),
-  "syntax-json-strings": require("@babel/plugin-syntax-json-strings"),
-  "syntax-top-level-await": require("@babel/plugin-syntax-top-level-await"),
+  "proposal-dynamic-import": proposalDynamicImport,
+  "proposal-json-strings": proposalJsonStrings,
+  "syntax-json-strings": syntaxJsonStrings,
+  "syntax-top-level-await": syntaxTopLevelAwait,
+  "transform-named-capturing-groups-regex": transformNamedCapturingGroupsRegex,
+  "transform-new-target": transformNewTarget,
 };
 
 Object.keys(notIncludedPlugins).forEach(pluginName => {
