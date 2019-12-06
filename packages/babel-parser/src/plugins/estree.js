@@ -411,4 +411,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         super.toAssignableObjectExpressionProp(prop, isBinding, isLast);
       }
     }
+
+    finishCallExpression<T: N.CallExpression | N.OptionalCallExpression>(
+      node: T,
+      optional: boolean,
+    ): T & { source?: N.Node } {
+      const finishedNode = super.finishCallExpression(node, optional);
+
+      if (node.callee.type === "Import") {
+        finishedNode.type = "ImportExpression";
+        finishedNode.source = node.arguments[0];
+      }
+
+      return finishedNode;
+    }
   };

@@ -759,7 +759,6 @@ export default class ExpressionParser extends LValParser {
     node: T,
     optional: boolean,
   ): T {
-    let nodeType = optional ? "OptionalCallExpression" : "CallExpression";
     if (node.callee.type === "Import") {
       if (node.arguments.length !== 1) {
         this.raise(node.start, "import() requires exactly one argument");
@@ -769,13 +768,11 @@ export default class ExpressionParser extends LValParser {
           this.raise(importArg.start, "... is not allowed in import()");
         }
       }
-
-      if (this.hasPlugin("estree")) {
-        nodeType = "ImportExpression";
-        node.source = node.arguments[0];
-      }
     }
-    return this.finishNode(node, nodeType);
+    return this.finishNode(
+      node,
+      optional ? "OptionalCallExpression" : "CallExpression",
+    );
   }
 
   parseCallExpressionArguments(
