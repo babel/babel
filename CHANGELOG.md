@@ -19,6 +19,35 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.7.5 (2019-12-06)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs2`
+  * [#10549](https://github.com/babel/babel/pull/10549) Add ".js" extension to injected polyfill imports ([@shimataro](https://github.com/shimataro))
+* `babel-cli`
+  * [#10283](https://github.com/babel/babel/pull/10283) `babel --watch` should have equivalent file selection logic with `babel` ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#10801](https://github.com/babel/babel/pull/10801) Use scope flags to check arguments ([@JLHwung](https://github.com/JLHwung))
+  * [#10800](https://github.com/babel/babel/pull/10800) Allow tuple rest trailing comma ([@yeonjuan](https://github.com/yeonjuan))
+  * [#10475](https://github.com/babel/babel/pull/10475) Correctly disambiguate / after async fuctions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`, `babel-plugin-proposal-optional-chaining`, `babel-plugin-transform-modules-amd`
+  * [#10806](https://github.com/babel/babel/pull/10806) fix(optional chaining): Optional delete returns true with nullish base ([@mpaarating](https://github.com/mpaarating))
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-amd`
+  * [#10764](https://github.com/babel/babel/pull/10764) fix: rewriteBindingInitVisitor should skip on scopable node ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-plugin-transform-runtime`
+  * [#10788](https://github.com/babel/babel/pull/10788) Do not transpile typeof helper with itself in babel/runtime ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`
+  * [#10778](https://github.com/babel/babel/pull/10778) refactor: Improve error message in @babel/core ([@jaroslav-kubicek](https://github.com/jaroslav-kubicek))
+
+#### :house: Internal
+* `babel-preset-env-standalone`
+  * [#10779](https://github.com/babel/babel/pull/10779) Bundle standalone using rollup ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#10781](https://github.com/babel/babel/pull/10781) Tune makefile scripts ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-transform-fixture-test-runner`
+  * [#10566](https://github.com/babel/babel/pull/10566) Incorrect trace position in fixture runner ([@JLHwung](https://github.com/JLHwung))
 
 ## v7.7.4 (2019-11-23)
 
