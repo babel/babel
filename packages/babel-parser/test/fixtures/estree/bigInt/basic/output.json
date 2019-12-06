@@ -89,7 +89,7 @@
                   "column": 12
                 }
               },
-              "value": null,
+              "value": "1",
               "raw": "1n",
               "bigint": "1"
             }
