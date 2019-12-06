@@ -14,7 +14,6 @@ module.exports = function(api) {
 
   let convertESM = true;
   let ignoreLib = true;
-  let isStandalone = false;
   const nodeVersion = "6.9";
   // The vast majority of our src files are modules, but we use
   // unambiguous to keep things simple until we get around to renaming
@@ -46,7 +45,6 @@ module.exports = function(api) {
     case "standalone":
       convertESM = false;
       ignoreLib = false;
-      isStandalone = true;
       unambiguousSources.push(
         "**/node_modules",
         "packages/babel-preset-env/data"
@@ -103,7 +101,6 @@ module.exports = function(api) {
       ["@babel/plugin-proposal-nullish-coalescing-operator", { loose: true }],
 
       convertESM ? "@babel/transform-modules-commonjs" : null,
-      isStandalone ? ["@babel/transform-for-of", { assumeArray: true }] : null,
     ].filter(Boolean),
     overrides: [
       {
