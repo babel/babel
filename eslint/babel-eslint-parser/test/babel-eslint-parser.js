@@ -27,7 +27,7 @@ function parseAndAssertSame(code) {
     loc: true,
     range: true,
     comment: true,
-    ecmaVersion: 2018,
+    ecmaVersion: 2020,
     sourceType: "module",
   });
   const babylonAST = parseForESLint(code, {
@@ -516,6 +516,12 @@ describe("babylon-to-espree", () => {
         async function a() {
           await 1;
         }
+      `);
+    });
+
+    it("BigInt", () => {
+      parseAndAssertSame(`
+        const a = 1n;
       `);
     });
   });
