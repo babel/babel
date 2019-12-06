@@ -41,6 +41,11 @@ class FixtureError extends Error {
   }
 }
 
+// https://github.com/estree/estree/blob/master/es2020.md#bigintliteral
+function bigIntReplacer(key, value) {
+  return typeof value === "bigint" ? null : value;
+}
+
 export function runFixtureTests(fixturesPath, parseFunction) {
   const fixtures = getFixtures(fixturesPath);
 
@@ -61,7 +66,10 @@ export function runFixtureTests(fixturesPath, parseFunction) {
                   /^.*Got error message: /,
                   "",
                 );
-                fs.writeFileSync(fn, JSON.stringify(task.options, null, "  "));
+                fs.writeFileSync(
+                  fn,
+                  JSON.stringify(task.options, bigIntReplacer, "  "),
+                );
               }
             }
 
@@ -110,7 +118,10 @@ function save(test, ast) {
   // Ensure that RegExp and Errors are serialized as strings
   forceToString(RegExp, () =>
     forceToString(Error, () =>
-      fs.writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  ")),
+      fs.writeFileSync(
+        test.expect.loc,
+        JSON.stringify(ast, bigIntReplacer, "  "),
+      ),
     ),
   );
 }
@@ -143,7 +154,10 @@ function runTest(test, parseFunction) {
           const fn = path.dirname(test.expect.loc) + "/options.json";
           test.options = test.options || {};
           test.options.throws = err.message;
-          fs.writeFileSync(fn, JSON.stringify(test.options, null, "  "));
+          fs.writeFileSync(
+            fn,
+            JSON.stringify(test.options, bigIntReplacer, "  "),
+          );
           return;
         }
 
@@ -172,11 +186,14 @@ function runTest(test, parseFunction) {
       const fn = path.dirname(test.expect.loc) + "/options.json";
       test.options = test.options || {};
       delete test.options.throws;
-      const contents = JSON.stringify(test.options, null, "  ");
+      const contents = JSON.stringify(test.options, bigIntReplacer, "  ");
       if (contents === "{}") {
         fs.unlinkSync(fn);
       } else {
-        fs.writeFileSync(fn, JSON.stringify(test.options, null, "  "));
+        fs.writeFileSync(
+          fn,
+          JSON.stringify(test.options, bigIntReplacer, "  "),
+        );
       }
       test.expect.loc += "on";
       return save(test, ast);
@@ -199,7 +216,7 @@ function runTest(test, parseFunction) {
 
 function ppJSON(v) {
   v = v instanceof RegExp || v instanceof Error ? v.toString() : v;
-  return JSON.stringify(v, null, 2);
+  return JSON.stringify(v, bigIntReplacer, 2);
 }
 
 function addPath(str, pt) {
