@@ -1,4 +1,4 @@
-var _concatInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/concat");
+var _concatInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/concat.js");
 
 var _context;
 

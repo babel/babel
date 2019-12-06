@@ -1,25 +1,25 @@
-import "core-js/modules/es.array.copy-within";
-import "core-js/modules/es.array.fill";
-import "core-js/modules/es.array.find";
-import "core-js/modules/es.array.find-index";
-import "core-js/modules/es.array.from";
-import "core-js/modules/es.array.includes";
-import "core-js/modules/es.array.iterator";
-import "core-js/modules/es.function.bind";
-import "core-js/modules/es.map";
-import "core-js/modules/es.object.to-string";
-import "core-js/modules/es.regexp.exec";
-import "core-js/modules/es.string.code-point-at";
-import "core-js/modules/es.string.ends-with";
-import "core-js/modules/es.string.includes";
-import "core-js/modules/es.string.iterator";
-import "core-js/modules/es.string.pad-end";
-import "core-js/modules/es.string.pad-start";
-import "core-js/modules/es.string.replace";
-import "core-js/modules/es.string.search";
-import "core-js/modules/es.string.split";
-import "core-js/modules/es.string.starts-with";
-import "core-js/modules/web.dom-collections.iterator";
+import "core-js/modules/es.array.copy-within.js";
+import "core-js/modules/es.array.fill.js";
+import "core-js/modules/es.array.find.js";
+import "core-js/modules/es.array.find-index.js";
+import "core-js/modules/es.array.from.js";
+import "core-js/modules/es.array.includes.js";
+import "core-js/modules/es.array.iterator.js";
+import "core-js/modules/es.function.bind.js";
+import "core-js/modules/es.map.js";
+import "core-js/modules/es.object.to-string.js";
+import "core-js/modules/es.regexp.exec.js";
+import "core-js/modules/es.string.code-point-at.js";
+import "core-js/modules/es.string.ends-with.js";
+import "core-js/modules/es.string.includes.js";
+import "core-js/modules/es.string.iterator.js";
+import "core-js/modules/es.string.pad-end.js";
+import "core-js/modules/es.string.pad-start.js";
+import "core-js/modules/es.string.replace.js";
+import "core-js/modules/es.string.search.js";
+import "core-js/modules/es.string.split.js";
+import "core-js/modules/es.string.starts-with.js";
+import "core-js/modules/web.dom-collections.iterator.js";
 Array.from; // static function
 
 Map; // top level built-in

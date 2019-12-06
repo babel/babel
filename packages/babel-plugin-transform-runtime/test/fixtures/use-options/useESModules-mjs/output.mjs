@@ -1,7 +1,7 @@
-import _classCallCheck from "@babel/runtime/helpers/esm/classCallCheck";
-import _possibleConstructorReturn from "@babel/runtime/helpers/esm/possibleConstructorReturn";
-import _getPrototypeOf from "@babel/runtime/helpers/esm/getPrototypeOf";
-import _inherits from "@babel/runtime/helpers/esm/inherits";
+import _classCallCheck from "@babel/runtime/helpers/esm/classCallCheck.js";
+import _possibleConstructorReturn from "@babel/runtime/helpers/esm/possibleConstructorReturn.js";
+import _getPrototypeOf from "@babel/runtime/helpers/esm/getPrototypeOf.js";
+import _inherits from "@babel/runtime/helpers/esm/inherits.js";
 
 let Foo =
 /*#__PURE__*/

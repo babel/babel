@@ -1,18 +1,18 @@
-import "core-js/modules/esnext.map.delete-all";
-import "core-js/modules/esnext.map.every";
-import "core-js/modules/esnext.map.filter";
-import "core-js/modules/esnext.map.find";
-import "core-js/modules/esnext.map.find-key";
-import "core-js/modules/esnext.map.includes";
-import "core-js/modules/esnext.map.key-of";
-import "core-js/modules/esnext.map.map-keys";
-import "core-js/modules/esnext.map.map-values";
-import "core-js/modules/esnext.map.merge";
-import "core-js/modules/esnext.map.reduce";
-import "core-js/modules/esnext.map.some";
-import "core-js/modules/esnext.map.update";
-import "core-js/modules/esnext.observable";
-import "core-js/modules/esnext.symbol.observable";
+import "core-js/modules/esnext.map.delete-all.js";
+import "core-js/modules/esnext.map.every.js";
+import "core-js/modules/esnext.map.filter.js";
+import "core-js/modules/esnext.map.find.js";
+import "core-js/modules/esnext.map.find-key.js";
+import "core-js/modules/esnext.map.includes.js";
+import "core-js/modules/esnext.map.key-of.js";
+import "core-js/modules/esnext.map.map-keys.js";
+import "core-js/modules/esnext.map.map-values.js";
+import "core-js/modules/esnext.map.merge.js";
+import "core-js/modules/esnext.map.reduce.js";
+import "core-js/modules/esnext.map.some.js";
+import "core-js/modules/esnext.map.update.js";
+import "core-js/modules/esnext.observable.js";
+import "core-js/modules/esnext.symbol.observable.js";
 Array.from; // static method
 
 Map; // built-in
