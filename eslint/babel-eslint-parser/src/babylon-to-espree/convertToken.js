@@ -77,6 +77,9 @@ export default function(token, tt, source) {
       flags: value.flags,
     };
     token.value = `/${value.pattern}/${value.flags}`;
+  } else if (type === tt.bigint) {
+    token.type = "Numeric";
+    token.value = `${token.value}n`;
   }
 
   return token;

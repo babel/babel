@@ -36,10 +36,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     estreeParseBigIntLiteral(value: any): N.Node {
       // https://github.com/estree/estree/blob/master/es2020.md#bigintliteral
       const bigInt = typeof BigInt !== "undefined" ? BigInt(value) : null;
-
-      // Espree creates a "Numeric" token for BigIntLiterals.
-      this.state.type = tt.num;
-
       const node = this.estreeParseLiteral(bigInt);
       node.bigint = String(node.value || value);
 
