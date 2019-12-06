@@ -254,7 +254,14 @@ export default declare((api, options, dirname) => {
         if (cached) {
           cached = t.cloneNode(cached);
         } else {
-          cached = addDefault(file.path, source, {
+          const moduleTransforms = file.get(
+            "@babel/plugin-transform-modules-*",
+          );
+          // Remove the trailing `.js` requires by ES Module when module transforms presents
+          const validSource = moduleTransforms
+            ? source.replace(/\.js$/, "")
+            : source;
+          cached = addDefault(file.path, validSource, {
             importedInterop: "uncompiled",
             nameHint,
             blockHoist,
