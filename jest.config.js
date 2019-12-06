@@ -1,3 +1,19 @@
+// These packages undet the @babel namespace aren't in this monorepo.
+const externalBabelPackages = [
+  "plugin-syntax-async-generators",
+  "plugin-syntax-bigint",
+  "plugin-syntax-dynamic-import",
+  "plugin-syntax-json-strings",
+  "plugin-syntax-nullish-coalescing-operator",
+  "plugin-syntax-object-rest-spread",
+  "plugin-syntax-optional-catch-binding",
+  "plugin-syntax-optional-chaining",
+];
+
+// prettier-ignore
+const monorepoPackagePattern =
+  `^@babel/(?!eslint-)(?!${externalBabelPackages.join("|")})([a-zA-Z0-9_-]+)$`;
+
 module.exports = {
   collectCoverageFrom: [
     "packages/*/src/**/*.mjs",
@@ -46,7 +62,7 @@ module.exports = {
     "<rootDir>/build/",
   ],
   moduleNameMapper: {
-    "^@babel/(?!eslint-)([a-zA-Z0-9_-]+)$": "<rootDir>/packages/babel-$1/",
+    [monorepoPackagePattern]: "<rootDir>/packages/babel-$1/",
     "^@babel/eslint-([a-zA-Z0-9_-]+)$": "<rootDir>/eslint/babel-eslint-$1/",
   },
 };
