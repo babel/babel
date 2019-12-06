@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-module-transforms",
-  "version": "7.7.4",
+  "version": "7.7.5",
   "description": "Babel helper functions for implementing ES6 module transformations",
   "author": "Logan Smyth <loganfsmyth@gmail.com>",
   "homepage": "https://babeljs.io/",

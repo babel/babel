@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-env",
-  "version": "7.7.4",
+  "version": "7.7.5",
   "description": "A Babel preset for each environment.",
   "author": "Henry Zhu <hi@henryzoo.com>",
   "homepage": "https://babeljs.io/",
@@ -42,8 +42,8 @@
     "@babel/plugin-transform-function-name": "^7.7.4",
     "@babel/plugin-transform-literals": "^7.7.4",
     "@babel/plugin-transform-member-expression-literals": "^7.7.4",
-    "@babel/plugin-transform-modules-amd": "^7.7.4",
-    "@babel/plugin-transform-modules-commonjs": "^7.7.4",
+    "@babel/plugin-transform-modules-amd": "^7.7.5",
+    "@babel/plugin-transform-modules-commonjs": "^7.7.5",
     "@babel/plugin-transform-modules-systemjs": "^7.7.4",
     "@babel/plugin-transform-modules-umd": "^7.7.4",
     "@babel/plugin-transform-named-capturing-groups-regex": "^7.7.4",
@@ -51,7 +51,7 @@
     "@babel/plugin-transform-object-super": "^7.7.4",
     "@babel/plugin-transform-parameters": "^7.7.4",
     "@babel/plugin-transform-property-literals": "^7.7.4",
-    "@babel/plugin-transform-regenerator": "^7.7.4",
+    "@babel/plugin-transform-regenerator": "^7.7.5",
     "@babel/plugin-transform-reserved-words": "^7.7.4",
     "@babel/plugin-transform-shorthand-properties": "^7.7.4",
     "@babel/plugin-transform-spread": "^7.7.4",
@@ -70,8 +70,8 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.7.4",
-    "@babel/core": "^7.7.4",
+    "@babel/cli": "^7.7.5",
+    "@babel/core": "^7.7.5",
     "@babel/helper-fixtures": "^7.6.3",
     "@babel/helper-plugin-test-runner": "^7.7.4",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",

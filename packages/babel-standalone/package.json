@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.7.4",
+  "version": "7.7.5",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "babel.js",
   "files": [
@@ -12,7 +12,7 @@
     "prepublishOnly": "cd ../.. && make prepublish-build-standalone"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.4",
+    "@babel/core": "^7.7.5",
     "@babel/helper-plugin-utils": "^7.0.0",
     "@babel/plugin-external-helpers": "^7.7.4",
     "@babel/plugin-proposal-async-generator-functions": "^7.7.4",
@@ -29,7 +29,7 @@
     "@babel/plugin-proposal-numeric-separator": "^7.7.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
     "@babel/plugin-proposal-optional-catch-binding": "^7.7.4",
-    "@babel/plugin-proposal-optional-chaining": "^7.7.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.7.5",
     "@babel/plugin-proposal-pipeline-operator": "^7.7.4",
     "@babel/plugin-proposal-private-methods": "^7.7.4",
     "@babel/plugin-proposal-throw-expressions": "^7.7.4",
@@ -68,8 +68,8 @@
     "@babel/plugin-transform-jscript": "^7.7.4",
     "@babel/plugin-transform-literals": "^7.7.4",
     "@babel/plugin-transform-member-expression-literals": "^7.7.4",
-    "@babel/plugin-transform-modules-amd": "^7.7.4",
-    "@babel/plugin-transform-modules-commonjs": "^7.7.4",
+    "@babel/plugin-transform-modules-amd": "^7.7.5",
+    "@babel/plugin-transform-modules-commonjs": "^7.7.5",
     "@babel/plugin-transform-modules-systemjs": "^7.7.4",
     "@babel/plugin-transform-modules-umd": "^7.7.4",
     "@babel/plugin-transform-new-target": "^7.7.4",
@@ -87,9 +87,9 @@
     "@babel/plugin-transform-react-jsx-compat": "^7.7.4",
     "@babel/plugin-transform-react-jsx-self": "^7.7.4",
     "@babel/plugin-transform-react-jsx-source": "^7.7.4",
-    "@babel/plugin-transform-regenerator": "^7.7.4",
+    "@babel/plugin-transform-regenerator": "^7.7.5",
     "@babel/plugin-transform-reserved-words": "^7.7.4",
-    "@babel/plugin-transform-runtime": "^7.7.4",
+    "@babel/plugin-transform-runtime": "^7.7.5",
     "@babel/plugin-transform-shorthand-properties": "^7.7.4",
     "@babel/plugin-transform-spread": "^7.7.4",
     "@babel/plugin-transform-sticky-regex": "^7.7.4",
