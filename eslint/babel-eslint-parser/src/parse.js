@@ -26,7 +26,7 @@ export default function(code, options) {
     ignore: options.babelOptions.ignore,
     only: options.babelOptions.only,
     parserOpts: {
-      allowImportExportEverywhere: options.allowImportExportEverywhere, // consistent with espree
+      allowImportExportEverywhere: true,
       allowReturnOutsideFunction: true,
       allowSuperOutsideMethod: true,
       ranges: true,
@@ -34,7 +34,7 @@ export default function(code, options) {
       plugins: ["estree"],
     },
     caller: {
-      name: "babel-eslint",
+      name: "@babel/eslint-parser",
     },
   };
 

@@ -51,7 +51,6 @@ Additional configuration options can be set in your ESLint configuration under t
 
 - `requireConfigFile` (default `true`) can be set to `false` to allow @babel/eslint-parser to run on files that do not have a Babel configuration associated with them. This can be useful for linting files that are not transformed by Babel (such as tooling configuration files), though we recommend using the default parser via [glob-based configuration](https://eslint.org/docs/user-guide/configuring#configuration-based-on-glob-patterns). Note: @babel/eslint-parser will not parse any experimental syntax when no configuration file is found.
 - `sourceType` can be set to `"module"`(default) or `"script"` if your code isn't using ECMAScript modules.
-- `allowImportExportEverywhere` (default `false`) can be set to `true` to allow import and export declarations to appear anywhere a statement is allowed if your build environment supports that. Otherwise import and export declarations can only appear at a program's top level.
 - `ecmaFeatures.globalReturn` (default `false`) allow return statements in the global scope when used with `sourceType: "script"`.
 - `babelOptions` passes through Babel's configuration [loading](https://babeljs.io/docs/en/options#config-loading-options) and [merging](https://babeljs.io/docs/en/options#config-merging-options) options (for instance, in case of a monorepo). When not defined, @babel/eslint-parser will use Babel's default configuration file resolution logic.
 
@@ -62,7 +61,6 @@ module.exports = {
   parser: "@babel/eslint-parser",
   parserOptions: {
     sourceType: "module",
-    allowImportExportEverywhere: false,
     ecmaFeatures: {
       globalReturn: false,
     },
