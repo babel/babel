@@ -133,6 +133,10 @@ export default declare((api, options) => {
   return {
     name: "transform-modules-umd",
 
+    pre() {
+      this.file.set("@babel/plugin-transform-modules-*", "umd");
+    },
+
     visitor: {
       Program: {
         exit(path) {
