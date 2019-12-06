@@ -34,7 +34,7 @@ export default function(code, options) {
       plugins: ["estree"],
     },
     caller: {
-      name: "babel-eslint",
+      name: "@babel/eslint-parser",
     },
   };
 

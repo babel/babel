@@ -772,6 +772,7 @@ export default class ExpressionParser extends LValParser {
 
       if (this.hasPlugin("estree")) {
         nodeType = "ImportExpression";
+        node.source = node.arguments[0];
       }
     }
     return this.finishNode(node, nodeType);
