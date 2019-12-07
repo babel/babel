@@ -415,17 +415,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     finishCallExpression<T: N.CallExpression | N.OptionalCallExpression>(
       node: T,
       optional: boolean,
-    ): T | N.EstreeImportExpression {
+    ): N.Expression {
+      super.finishCallExpression(node, optional);
+
       if (node.callee.type === "Import") {
-        const finishedNode: N.EstreeImportExpression = (super.finishCallExpression(
-          node,
-          optional,
-        ): any);
-        finishedNode.type = "ImportExpression";
-        finishedNode.source = node.arguments[0];
-        return finishedNode;
+        ((node: N.Node): N.EstreeImportExpression).type = "ImportExpression";
+        ((node: N.Node): N.EstreeImportExpression).source = node.arguments[0];
       }
 
-      return super.finishCallExpression(node, optional);
+      return node;
     }
   };

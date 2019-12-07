@@ -758,7 +758,7 @@ export default class ExpressionParser extends LValParser {
   finishCallExpression<T: N.CallExpression | N.OptionalCallExpression>(
     node: T,
     optional: boolean,
-  ): T {
+  ): N.Expression {
     if (node.callee.type === "Import") {
       if (node.arguments.length !== 1) {
         this.raise(node.start, "import() requires exactly one argument");
