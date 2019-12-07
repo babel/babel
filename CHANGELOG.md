@@ -19,6 +19,14 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.7.6 (2019-12-08)
+
+#### :house: Internal
+* [#10836](https://github.com/babel/babel/pull/10836) chore: add PR Revert labels to changelog [ci-skip] ([@JLHwung](https://github.com/JLHwung))
+
+#### :leftwards_arrow_with_hook: Revert
+* `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs2`
+  * [#10835](https://github.com/babel/babel/pull/10835) Revert "Add ".js" extension to injected polyfill imports" ([@JLHwung](https://github.com/JLHwung))
 ## v7.7.5 (2019-12-06)
 
 #### :bug: Bug Fix
