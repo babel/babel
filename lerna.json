@@ -1,5 +1,5 @@
 {
-  "version": "7.7.5",
+  "version": "7.7.6",
   "changelog": {
     "repo": "babel/babel",
     "cacheDir": ".changelog",
@@ -21,6 +21,7 @@
         "*.md",
         "*.txt",
         "test/**",
+        "**/test/**",
         "codemods/**",
         "# We ignore every JSON file, except for built-in-modules, built-ins and plugins defined in babel-preset-env/data.",
         "@(!(built-in-modules|built-ins|plugins|package)).json",

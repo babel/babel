@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.7.5",
+  "version": "7.7.6",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "babel.js",
   "files": [
@@ -89,7 +89,7 @@
     "@babel/plugin-transform-react-jsx-source": "^7.7.4",
     "@babel/plugin-transform-regenerator": "^7.7.5",
     "@babel/plugin-transform-reserved-words": "^7.7.4",
-    "@babel/plugin-transform-runtime": "^7.7.5",
+    "@babel/plugin-transform-runtime": "^7.7.6",
     "@babel/plugin-transform-shorthand-properties": "^7.7.4",
     "@babel/plugin-transform-spread": "^7.7.4",
     "@babel/plugin-transform-sticky-regex": "^7.7.4",
