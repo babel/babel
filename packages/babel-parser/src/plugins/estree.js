@@ -35,6 +35,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     estreeParseBigIntLiteral(value: any): N.Node {
       // https://github.com/estree/estree/blob/master/es2020.md#bigintliteral
+      // $FlowIgnore
       const bigInt = typeof BigInt !== "undefined" ? BigInt(value) : null;
       const node = this.estreeParseLiteral(bigInt);
       node.bigint = String(node.value || value);
