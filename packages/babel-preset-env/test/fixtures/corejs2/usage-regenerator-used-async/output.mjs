@@ -1,4 +1,4 @@
-import "regenerator-runtime/runtime.js";
+import "regenerator-runtime/runtime";
 
 function a() {
   return regeneratorRuntime.async(function a$(_context) {

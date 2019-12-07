@@ -1,7 +1,7 @@
-import "core-js/modules/es.array.from.js";
-import "core-js/modules/es.object.entries.js";
-import "core-js/modules/es.string.includes.js";
-import "core-js/modules/es.string.iterator.js";
+import "core-js/modules/es.array.from";
+import "core-js/modules/es.object.entries";
+import "core-js/modules/es.string.includes";
+import "core-js/modules/es.string.iterator";
 !function (foo, {
   entries: entries
 }) {}({}, Object);

@@ -1,5 +1,5 @@
-import "core-js/modules/es7.string.pad-end.js";
-import "core-js/modules/es7.string.pad-start.js";
+import "core-js/modules/es7.string.pad-end";
+import "core-js/modules/es7.string.pad-start";
 
 for (const {
   padStart

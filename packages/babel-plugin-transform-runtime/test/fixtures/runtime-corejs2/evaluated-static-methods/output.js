@@ -1,6 +1,6 @@
-var _Array$isArray = require("@babel/runtime-corejs2/core-js/array/is-array.js");
+var _Array$isArray = require("@babel/runtime-corejs2/core-js/array/is-array");
 
-var _Array$from = require("@babel/runtime-corejs2/core-js/array/from.js");
+var _Array$from = require("@babel/runtime-corejs2/core-js/array/from");
 
 var _isArray = "isArray";
 _Array$from; // polyfill

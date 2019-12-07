@@ -234,7 +234,7 @@ export default declare((api, options, dirname) => {
               : "helpers";
 
           return this.addDefaultImport(
-            `${modulePath}/${helpersDir}/${name}.js`,
+            `${modulePath}/${helpersDir}/${name}`,
             name,
             blockHoist,
           );
@@ -275,7 +275,7 @@ export default declare((api, options, dirname) => {
         if (name === "regeneratorRuntime" && useRuntimeRegenerator) {
           path.replaceWith(
             this.addDefaultImport(
-              `${modulePath}/regenerator/index.js`,
+              `${modulePath}/regenerator`,
               "regeneratorRuntime",
             ),
           );
@@ -291,7 +291,7 @@ export default declare((api, options, dirname) => {
         // transform global built-ins like `Symbol()`, `new Promise`
         path.replaceWith(
           this.addDefaultImport(
-            `${modulePath}/${corejsRoot}/${BuiltIns[name].path}.js`,
+            `${modulePath}/${corejsRoot}/${BuiltIns[name].path}`,
             name,
           ),
         );
@@ -332,7 +332,7 @@ export default declare((api, options, dirname) => {
             node.callee = t.memberExpression(
               t.callExpression(
                 this.addDefaultImport(
-                  `${moduleName}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}.js`,
+                  `${moduleName}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
                   `${propertyName}InstanceProperty`,
                 ),
                 [context2],
@@ -354,7 +354,7 @@ export default declare((api, options, dirname) => {
         path.replaceWith(
           t.callExpression(
             this.addDefaultImport(
-              `${modulePath}/core-js/get-iterator.js`,
+              `${modulePath}/core-js/get-iterator`,
               "getIterator",
             ),
             [object],
@@ -371,7 +371,7 @@ export default declare((api, options, dirname) => {
         path.replaceWith(
           t.callExpression(
             this.addDefaultImport(
-              `${modulePath}/core-js/is-iterable.js`,
+              `${modulePath}/core-js/is-iterable`,
               "isIterable",
             ),
             [path.node.right],
@@ -399,7 +399,7 @@ export default declare((api, options, dirname) => {
             path.replaceWith(
               t.callExpression(
                 this.addDefaultImport(
-                  `${moduleName}/core-js/get-iterator-method.js`,
+                  `${moduleName}/core-js/get-iterator-method`,
                   "getIteratorMethod",
                 ),
                 [object],
@@ -427,7 +427,7 @@ export default declare((api, options, dirname) => {
               path.replaceWith(
                 t.callExpression(
                   this.addDefaultImport(
-                    `${moduleName}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}.js`,
+                    `${moduleName}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
                     `${propertyName}InstanceProperty`,
                   ),
                   [object],
@@ -439,7 +439,7 @@ export default declare((api, options, dirname) => {
 
           path.replaceWith(
             this.addDefaultImport(
-              `${modulePath}/${corejsRoot}/${StaticProperties[objectName][propertyName].path}.js`,
+              `${modulePath}/${corejsRoot}/${StaticProperties[objectName][propertyName].path}`,
               `${objectName}$${propertyName}`,
             ),
           );
@@ -460,7 +460,7 @@ export default declare((api, options, dirname) => {
           path.replaceWith(
             t.memberExpression(
               this.addDefaultImport(
-                `${modulePath}/${corejsRoot}/${BuiltIns[name].path}.js`,
+                `${modulePath}/${corejsRoot}/${BuiltIns[name].path}`,
                 name,
               ),
               node.property,

@@ -1,4 +1,4 @@
-import "regenerator-runtime/runtime.js";
+import "regenerator-runtime/runtime";
 
 var _marked =
 /*#__PURE__*/

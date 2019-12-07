@@ -1,166 +1,166 @@
-var _Symbol$unscopables = require("@babel/runtime-corejs3/core-js-stable/symbol/unscopables.js");
+var _Symbol$unscopables = require("@babel/runtime-corejs3/core-js-stable/symbol/unscopables");
 
-var _Symbol$toStringTag = require("@babel/runtime-corejs3/core-js-stable/symbol/to-string-tag.js");
+var _Symbol$toStringTag = require("@babel/runtime-corejs3/core-js-stable/symbol/to-string-tag");
 
-var _Symbol$toPrimitive = require("@babel/runtime-corejs3/core-js-stable/symbol/to-primitive.js");
+var _Symbol$toPrimitive = require("@babel/runtime-corejs3/core-js-stable/symbol/to-primitive");
 
-var _Symbol$split = require("@babel/runtime-corejs3/core-js-stable/symbol/split.js");
+var _Symbol$split = require("@babel/runtime-corejs3/core-js-stable/symbol/split");
 
-var _Symbol$species = require("@babel/runtime-corejs3/core-js-stable/symbol/species.js");
+var _Symbol$species = require("@babel/runtime-corejs3/core-js-stable/symbol/species");
 
-var _Symbol$search = require("@babel/runtime-corejs3/core-js-stable/symbol/search.js");
+var _Symbol$search = require("@babel/runtime-corejs3/core-js-stable/symbol/search");
 
-var _Symbol$replace = require("@babel/runtime-corejs3/core-js-stable/symbol/replace.js");
+var _Symbol$replace = require("@babel/runtime-corejs3/core-js-stable/symbol/replace");
 
-var _Symbol$match = require("@babel/runtime-corejs3/core-js-stable/symbol/match.js");
+var _Symbol$match = require("@babel/runtime-corejs3/core-js-stable/symbol/match");
 
-var _Symbol$keyFor = require("@babel/runtime-corejs3/core-js-stable/symbol/key-for.js");
+var _Symbol$keyFor = require("@babel/runtime-corejs3/core-js-stable/symbol/key-for");
 
-var _Symbol$iterator = require("@babel/runtime-corejs3/core-js-stable/symbol/iterator.js");
+var _Symbol$iterator = require("@babel/runtime-corejs3/core-js-stable/symbol/iterator");
 
-var _Symbol$isConcatSpreadable = require("@babel/runtime-corejs3/core-js-stable/symbol/is-concat-spreadable.js");
+var _Symbol$isConcatSpreadable = require("@babel/runtime-corejs3/core-js-stable/symbol/is-concat-spreadable");
 
-var _Symbol$hasInstance = require("@babel/runtime-corejs3/core-js-stable/symbol/has-instance.js");
+var _Symbol$hasInstance = require("@babel/runtime-corejs3/core-js-stable/symbol/has-instance");
 
-var _Symbol$for = require("@babel/runtime-corejs3/core-js-stable/symbol/for.js");
+var _Symbol$for = require("@babel/runtime-corejs3/core-js-stable/symbol/for");
 
-var _Symbol = require("@babel/runtime-corejs3/core-js-stable/symbol.js");
+var _Symbol = require("@babel/runtime-corejs3/core-js-stable/symbol");
 
-var _Symbol$asyncIterator = require("@babel/runtime-corejs3/core-js-stable/symbol/async-iterator.js");
+var _Symbol$asyncIterator = require("@babel/runtime-corejs3/core-js-stable/symbol/async-iterator");
 
-var _String$raw = require("@babel/runtime-corejs3/core-js-stable/string/raw.js");
+var _String$raw = require("@babel/runtime-corejs3/core-js-stable/string/raw");
 
-var _String$fromCodePoint = require("@babel/runtime-corejs3/core-js-stable/string/from-code-point.js");
+var _String$fromCodePoint = require("@babel/runtime-corejs3/core-js-stable/string/from-code-point");
 
-var _Reflect$setPrototypeOf = require("@babel/runtime-corejs3/core-js-stable/reflect/set-prototype-of.js");
+var _Reflect$setPrototypeOf = require("@babel/runtime-corejs3/core-js-stable/reflect/set-prototype-of");
 
-var _Reflect$set = require("@babel/runtime-corejs3/core-js-stable/reflect/set.js");
+var _Reflect$set = require("@babel/runtime-corejs3/core-js-stable/reflect/set");
 
-var _Reflect$preventExtensions = require("@babel/runtime-corejs3/core-js-stable/reflect/prevent-extensions.js");
+var _Reflect$preventExtensions = require("@babel/runtime-corejs3/core-js-stable/reflect/prevent-extensions");
 
-var _Reflect$ownKeys = require("@babel/runtime-corejs3/core-js-stable/reflect/own-keys.js");
+var _Reflect$ownKeys = require("@babel/runtime-corejs3/core-js-stable/reflect/own-keys");
 
-var _Reflect$isExtensible = require("@babel/runtime-corejs3/core-js-stable/reflect/is-extensible.js");
+var _Reflect$isExtensible = require("@babel/runtime-corejs3/core-js-stable/reflect/is-extensible");
 
-var _Reflect$has = require("@babel/runtime-corejs3/core-js-stable/reflect/has.js");
+var _Reflect$has = require("@babel/runtime-corejs3/core-js-stable/reflect/has");
 
-var _Reflect$get = require("@babel/runtime-corejs3/core-js-stable/reflect/get.js");
+var _Reflect$get = require("@babel/runtime-corejs3/core-js-stable/reflect/get");
 
-var _Reflect$getPrototypeOf = require("@babel/runtime-corejs3/core-js-stable/reflect/get-prototype-of.js");
+var _Reflect$getPrototypeOf = require("@babel/runtime-corejs3/core-js-stable/reflect/get-prototype-of");
 
-var _Reflect$getOwnPropertyDescriptor = require("@babel/runtime-corejs3/core-js-stable/reflect/get-own-property-descriptor.js");
+var _Reflect$getOwnPropertyDescriptor = require("@babel/runtime-corejs3/core-js-stable/reflect/get-own-property-descriptor");
 
-var _Reflect$deleteProperty = require("@babel/runtime-corejs3/core-js-stable/reflect/delete-property.js");
+var _Reflect$deleteProperty = require("@babel/runtime-corejs3/core-js-stable/reflect/delete-property");
 
-var _Reflect$defineProperty = require("@babel/runtime-corejs3/core-js-stable/reflect/define-property.js");
+var _Reflect$defineProperty = require("@babel/runtime-corejs3/core-js-stable/reflect/define-property");
 
-var _Reflect$construct = require("@babel/runtime-corejs3/core-js-stable/reflect/construct.js");
+var _Reflect$construct = require("@babel/runtime-corejs3/core-js-stable/reflect/construct");
 
-var _Reflect$apply = require("@babel/runtime-corejs3/core-js-stable/reflect/apply.js");
+var _Reflect$apply = require("@babel/runtime-corejs3/core-js-stable/reflect/apply");
 
-var _Object$values = require("@babel/runtime-corejs3/core-js-stable/object/values.js");
+var _Object$values = require("@babel/runtime-corejs3/core-js-stable/object/values");
 
-var _Object$setPrototypeOf = require("@babel/runtime-corejs3/core-js-stable/object/set-prototype-of.js");
+var _Object$setPrototypeOf = require("@babel/runtime-corejs3/core-js-stable/object/set-prototype-of");
 
-var _Object$seal = require("@babel/runtime-corejs3/core-js-stable/object/seal.js");
+var _Object$seal = require("@babel/runtime-corejs3/core-js-stable/object/seal");
 
-var _Object$preventExtensions = require("@babel/runtime-corejs3/core-js-stable/object/prevent-extensions.js");
+var _Object$preventExtensions = require("@babel/runtime-corejs3/core-js-stable/object/prevent-extensions");
 
-var _Object$keys = require("@babel/runtime-corejs3/core-js-stable/object/keys.js");
+var _Object$keys = require("@babel/runtime-corejs3/core-js-stable/object/keys");
 
-var _Object$is = require("@babel/runtime-corejs3/core-js-stable/object/is.js");
+var _Object$is = require("@babel/runtime-corejs3/core-js-stable/object/is");
 
-var _Object$isSealed = require("@babel/runtime-corejs3/core-js-stable/object/is-sealed.js");
+var _Object$isSealed = require("@babel/runtime-corejs3/core-js-stable/object/is-sealed");
 
-var _Object$isFrozen = require("@babel/runtime-corejs3/core-js-stable/object/is-frozen.js");
+var _Object$isFrozen = require("@babel/runtime-corejs3/core-js-stable/object/is-frozen");
 
-var _Object$isExtensible = require("@babel/runtime-corejs3/core-js-stable/object/is-extensible.js");
+var _Object$isExtensible = require("@babel/runtime-corejs3/core-js-stable/object/is-extensible");
 
-var _Object$getPrototypeOf = require("@babel/runtime-corejs3/core-js-stable/object/get-prototype-of.js");
+var _Object$getPrototypeOf = require("@babel/runtime-corejs3/core-js-stable/object/get-prototype-of");
 
-var _Object$getOwnPropertySymbols = require("@babel/runtime-corejs3/core-js-stable/object/get-own-property-symbols.js");
+var _Object$getOwnPropertySymbols = require("@babel/runtime-corejs3/core-js-stable/object/get-own-property-symbols");
 
-var _Object$getOwnPropertyNames = require("@babel/runtime-corejs3/core-js-stable/object/get-own-property-names.js");
+var _Object$getOwnPropertyNames = require("@babel/runtime-corejs3/core-js-stable/object/get-own-property-names");
 
-var _Object$getOwnPropertyDescriptors = require("@babel/runtime-corejs3/core-js-stable/object/get-own-property-descriptors.js");
+var _Object$getOwnPropertyDescriptors = require("@babel/runtime-corejs3/core-js-stable/object/get-own-property-descriptors");
 
-var _Object$getOwnPropertyDescriptor = require("@babel/runtime-corejs3/core-js-stable/object/get-own-property-descriptor.js");
+var _Object$getOwnPropertyDescriptor = require("@babel/runtime-corejs3/core-js-stable/object/get-own-property-descriptor");
 
-var _Object$fromEntries = require("@babel/runtime-corejs3/core-js-stable/object/from-entries.js");
+var _Object$fromEntries = require("@babel/runtime-corejs3/core-js-stable/object/from-entries");
 
-var _Object$freeze = require("@babel/runtime-corejs3/core-js-stable/object/freeze.js");
+var _Object$freeze = require("@babel/runtime-corejs3/core-js-stable/object/freeze");
 
-var _Object$entries = require("@babel/runtime-corejs3/core-js-stable/object/entries.js");
+var _Object$entries = require("@babel/runtime-corejs3/core-js-stable/object/entries");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property.js");
+var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
-var _Object$defineProperties = require("@babel/runtime-corejs3/core-js-stable/object/define-properties.js");
+var _Object$defineProperties = require("@babel/runtime-corejs3/core-js-stable/object/define-properties");
 
-var _Object$create = require("@babel/runtime-corejs3/core-js-stable/object/create.js");
+var _Object$create = require("@babel/runtime-corejs3/core-js-stable/object/create");
 
-var _Object$assign = require("@babel/runtime-corejs3/core-js-stable/object/assign.js");
+var _Object$assign = require("@babel/runtime-corejs3/core-js-stable/object/assign");
 
-var _Number$parseInt = require("@babel/runtime-corejs3/core-js-stable/number/parse-int.js");
+var _Number$parseInt = require("@babel/runtime-corejs3/core-js-stable/number/parse-int");
 
-var _Number$parseFloat = require("@babel/runtime-corejs3/core-js-stable/number/parse-float.js");
+var _Number$parseFloat = require("@babel/runtime-corejs3/core-js-stable/number/parse-float");
 
-var _Number$isSafeInteger = require("@babel/runtime-corejs3/core-js-stable/number/is-safe-integer.js");
+var _Number$isSafeInteger = require("@babel/runtime-corejs3/core-js-stable/number/is-safe-integer");
 
-var _Number$isNaN = require("@babel/runtime-corejs3/core-js-stable/number/is-nan.js");
+var _Number$isNaN = require("@babel/runtime-corejs3/core-js-stable/number/is-nan");
 
-var _Number$isInteger = require("@babel/runtime-corejs3/core-js-stable/number/is-integer.js");
+var _Number$isInteger = require("@babel/runtime-corejs3/core-js-stable/number/is-integer");
 
-var _Number$isFinite = require("@babel/runtime-corejs3/core-js-stable/number/is-finite.js");
+var _Number$isFinite = require("@babel/runtime-corejs3/core-js-stable/number/is-finite");
 
-var _Number$MIN_SAFE_INTEGER = require("@babel/runtime-corejs3/core-js-stable/number/min-safe-integer.js");
+var _Number$MIN_SAFE_INTEGER = require("@babel/runtime-corejs3/core-js-stable/number/min-safe-integer");
 
-var _Number$MAX_SAFE_INTEGER = require("@babel/runtime-corejs3/core-js-stable/number/max-safe-integer.js");
+var _Number$MAX_SAFE_INTEGER = require("@babel/runtime-corejs3/core-js-stable/number/max-safe-integer");
 
-var _Number$EPSILON = require("@babel/runtime-corejs3/core-js-stable/number/epsilon.js");
+var _Number$EPSILON = require("@babel/runtime-corejs3/core-js-stable/number/epsilon");
 
-var _Math$trunc = require("@babel/runtime-corejs3/core-js-stable/math/trunc.js");
+var _Math$trunc = require("@babel/runtime-corejs3/core-js-stable/math/trunc");
 
-var _Math$tanh = require("@babel/runtime-corejs3/core-js-stable/math/tanh.js");
+var _Math$tanh = require("@babel/runtime-corejs3/core-js-stable/math/tanh");
 
-var _Math$sinh = require("@babel/runtime-corejs3/core-js-stable/math/sinh.js");
+var _Math$sinh = require("@babel/runtime-corejs3/core-js-stable/math/sinh");
 
-var _Math$sign = require("@babel/runtime-corejs3/core-js-stable/math/sign.js");
+var _Math$sign = require("@babel/runtime-corejs3/core-js-stable/math/sign");
 
-var _Math$log2 = require("@babel/runtime-corejs3/core-js-stable/math/log2.js");
+var _Math$log2 = require("@babel/runtime-corejs3/core-js-stable/math/log2");
 
-var _Math$log1p = require("@babel/runtime-corejs3/core-js-stable/math/log1p.js");
+var _Math$log1p = require("@babel/runtime-corejs3/core-js-stable/math/log1p");
 
-var _Math$log = require("@babel/runtime-corejs3/core-js-stable/math/log10.js");
+var _Math$log = require("@babel/runtime-corejs3/core-js-stable/math/log10");
 
-var _Math$imul = require("@babel/runtime-corejs3/core-js-stable/math/imul.js");
+var _Math$imul = require("@babel/runtime-corejs3/core-js-stable/math/imul");
 
-var _Math$hypot = require("@babel/runtime-corejs3/core-js-stable/math/hypot.js");
+var _Math$hypot = require("@babel/runtime-corejs3/core-js-stable/math/hypot");
 
-var _Math$fround = require("@babel/runtime-corejs3/core-js-stable/math/fround.js");
+var _Math$fround = require("@babel/runtime-corejs3/core-js-stable/math/fround");
 
-var _Math$expm = require("@babel/runtime-corejs3/core-js-stable/math/expm1.js");
+var _Math$expm = require("@babel/runtime-corejs3/core-js-stable/math/expm1");
 
-var _Math$cosh = require("@babel/runtime-corejs3/core-js-stable/math/cosh.js");
+var _Math$cosh = require("@babel/runtime-corejs3/core-js-stable/math/cosh");
 
-var _Math$clz = require("@babel/runtime-corejs3/core-js-stable/math/clz32.js");
+var _Math$clz = require("@babel/runtime-corejs3/core-js-stable/math/clz32");
 
-var _Math$cbrt = require("@babel/runtime-corejs3/core-js-stable/math/cbrt.js");
+var _Math$cbrt = require("@babel/runtime-corejs3/core-js-stable/math/cbrt");
 
-var _Math$atanh = require("@babel/runtime-corejs3/core-js-stable/math/atanh.js");
+var _Math$atanh = require("@babel/runtime-corejs3/core-js-stable/math/atanh");
 
-var _Math$asinh = require("@babel/runtime-corejs3/core-js-stable/math/asinh.js");
+var _Math$asinh = require("@babel/runtime-corejs3/core-js-stable/math/asinh");
 
-var _Math$acosh = require("@babel/runtime-corejs3/core-js-stable/math/acosh.js");
+var _Math$acosh = require("@babel/runtime-corejs3/core-js-stable/math/acosh");
 
-var _JSON$stringify = require("@babel/runtime-corejs3/core-js-stable/json/stringify.js");
+var _JSON$stringify = require("@babel/runtime-corejs3/core-js-stable/json/stringify");
 
-var _Date$now = require("@babel/runtime-corejs3/core-js-stable/date/now.js");
+var _Date$now = require("@babel/runtime-corejs3/core-js-stable/date/now");
 
-var _Array$of = require("@babel/runtime-corejs3/core-js-stable/array/of.js");
+var _Array$of = require("@babel/runtime-corejs3/core-js-stable/array/of");
 
-var _Array$isArray = require("@babel/runtime-corejs3/core-js-stable/array/is-array.js");
+var _Array$isArray = require("@babel/runtime-corejs3/core-js-stable/array/is-array");
 
-var _Array$from = require("@babel/runtime-corejs3/core-js-stable/array/from.js");
+var _Array$from = require("@babel/runtime-corejs3/core-js-stable/array/from");
 
 _Array$from;
 _Array$isArray;

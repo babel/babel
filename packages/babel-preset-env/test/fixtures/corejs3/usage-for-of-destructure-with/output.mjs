@@ -1,6 +1,6 @@
-import "core-js/modules/es.array.iterator.js";
-import "core-js/modules/es.string.pad-end.js";
-import "core-js/modules/es.string.pad-start.js";
+import "core-js/modules/es.array.iterator";
+import "core-js/modules/es.string.pad-end";
+import "core-js/modules/es.string.pad-start";
 
 for (const {
   padStart

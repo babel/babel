@@ -1,2 +1,2 @@
-import "core-js/modules/web.dom.iterable.js";
+import "core-js/modules/web.dom.iterable";
 var a = new Map();
