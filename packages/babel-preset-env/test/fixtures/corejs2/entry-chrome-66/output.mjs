@@ -1,7 +1,7 @@
-import "core-js/modules/es7.array.flat-map.js";
-import "core-js/modules/web.timers.js";
-import "core-js/modules/web.immediate.js";
-import "core-js/modules/web.dom.iterable.js";
+import "core-js/modules/es7.array.flat-map";
+import "core-js/modules/web.timers";
+import "core-js/modules/web.immediate";
+import "core-js/modules/web.dom.iterable";
 const foo = {
   a: true
 };

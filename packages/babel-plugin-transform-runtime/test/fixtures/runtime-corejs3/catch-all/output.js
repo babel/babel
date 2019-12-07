@@ -1,3 +1,3 @@
-var _Promise = require("@babel/runtime-corejs3/core-js-stable/promise.js");
+var _Promise = require("@babel/runtime-corejs3/core-js-stable/promise");
 
 _Promise.resolve;

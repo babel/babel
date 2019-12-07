@@ -152,11 +152,11 @@ export function isPolyfillSource(source: ?string): boolean {
 }
 
 const modulePathMap = {
-  "regenerator-runtime": "regenerator-runtime/runtime.js",
+  "regenerator-runtime": "regenerator-runtime/runtime",
 };
 
 export function getModulePath(mod: string): string {
-  return modulePathMap[mod] || `core-js/modules/${mod}.js`;
+  return modulePathMap[mod] || `core-js/modules/${mod}`;
 }
 
 export function createImport(path: NodePath, mod: string) {

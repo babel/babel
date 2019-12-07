@@ -1,34 +1,34 @@
 "use strict";
 
-require("core-js/modules/es.symbol.js");
+require("core-js/modules/es.symbol");
 
-require("core-js/modules/es.symbol.description.js");
+require("core-js/modules/es.symbol.description");
 
-require("core-js/modules/es.symbol.iterator.js");
+require("core-js/modules/es.symbol.iterator");
 
-require("core-js/modules/es.symbol.match.js");
+require("core-js/modules/es.symbol.match");
 
-require("core-js/modules/es.array.from.js");
+require("core-js/modules/es.array.from");
 
-require("core-js/modules/es.array.iterator.js");
+require("core-js/modules/es.array.iterator");
 
-require("core-js/modules/es.map.js");
+require("core-js/modules/es.map");
 
-require("core-js/modules/es.object.to-string.js");
+require("core-js/modules/es.object.to-string");
 
-require("core-js/modules/es.promise.js");
+require("core-js/modules/es.promise");
 
-require("core-js/modules/es.regexp.exec.js");
+require("core-js/modules/es.regexp.exec");
 
-require("core-js/modules/es.string.iterator.js");
+require("core-js/modules/es.string.iterator");
 
-require("core-js/modules/es.string.match.js");
+require("core-js/modules/es.string.match");
 
-require("core-js/modules/web.dom-collections.iterator.js");
+require("core-js/modules/web.dom-collections.iterator");
 
-require("core-js/modules/web.queue-microtask.js");
+require("core-js/modules/web.queue-microtask");
 
-require("core-js/modules/esnext.global-this.js");
+require("core-js/modules/esnext.global-this");
 
 Array.from; // static method
 

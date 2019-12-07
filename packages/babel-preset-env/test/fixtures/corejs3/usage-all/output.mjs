@@ -1,17 +1,17 @@
-import "core-js/modules/es.symbol.js";
-import "core-js/modules/es.symbol.description.js";
-import "core-js/modules/es.symbol.iterator.js";
-import "core-js/modules/es.symbol.match.js";
-import "core-js/modules/es.array.from.js";
-import "core-js/modules/es.array.iterator.js";
-import "core-js/modules/es.map.js";
-import "core-js/modules/es.object.to-string.js";
-import "core-js/modules/es.promise.js";
-import "core-js/modules/es.regexp.exec.js";
-import "core-js/modules/es.string.iterator.js";
-import "core-js/modules/es.string.match.js";
-import "core-js/modules/web.dom-collections.iterator.js";
-import "core-js/modules/web.queue-microtask.js";
+import "core-js/modules/es.symbol";
+import "core-js/modules/es.symbol.description";
+import "core-js/modules/es.symbol.iterator";
+import "core-js/modules/es.symbol.match";
+import "core-js/modules/es.array.from";
+import "core-js/modules/es.array.iterator";
+import "core-js/modules/es.map";
+import "core-js/modules/es.object.to-string";
+import "core-js/modules/es.promise";
+import "core-js/modules/es.regexp.exec";
+import "core-js/modules/es.string.iterator";
+import "core-js/modules/es.string.match";
+import "core-js/modules/web.dom-collections.iterator";
+import "core-js/modules/web.queue-microtask";
 Array.from; // static method
 
 Map; // built-in
