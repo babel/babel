@@ -28,6 +28,7 @@ Using plugins:
   transform-new-target {}
   transform-regenerator {}
   transform-exponentiation-operator {}
+  transform-async-to-generator {}
   proposal-async-generator-functions {}
   proposal-object-rest-spread {}
   proposal-unicode-property-regex {}

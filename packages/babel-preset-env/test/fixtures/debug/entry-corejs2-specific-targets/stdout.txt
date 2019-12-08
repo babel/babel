@@ -35,6 +35,7 @@ Using plugins:
   transform-new-target { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   transform-regenerator { "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-exponentiation-operator { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  transform-async-to-generator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   proposal-async-generator-functions { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   proposal-object-rest-spread { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   proposal-unicode-property-regex { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
