@@ -96,7 +96,8 @@ export type Literal =
   | NullLiteral
   | StringLiteral
   | BooleanLiteral
-  | NumericLiteral;
+  | NumericLiteral
+  | BigIntLiteral;
 
 export type RegExpLiteral = NodeBase & {
   type: "RegExpLiteral",

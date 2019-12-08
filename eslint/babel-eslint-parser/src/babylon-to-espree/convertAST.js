@@ -70,7 +70,6 @@ const astTransformVisitor = {
     }
 
     // modules
-
     if (path.isImportDeclaration()) {
       delete node.isType;
     }

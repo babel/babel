@@ -1,3 +1,5 @@
+/* global BigInt */
+
 import { multiple as getFixtures } from "@babel/helper-fixtures";
 import { codeFrameColumns } from "@babel/code-frame";
 import fs from "fs";
@@ -61,7 +63,7 @@ export function runFixtureTests(fixturesPath, parseFunction) {
                   /^.*Got error message: /,
                   "",
                 );
-                fs.writeFileSync(fn, JSON.stringify(task.options, null, "  "));
+                fs.writeFileSync(fn, JSON.stringify(task.options, null, 2));
               }
             }
 
@@ -107,19 +109,33 @@ export function runThrowTestsWithEstree(fixturesPath, parseFunction) {
 }
 
 function save(test, ast) {
-  // Ensure that RegExp and Errors are serialized as strings
-  forceToString(RegExp, () =>
-    forceToString(Error, () =>
-      fs.writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  ")),
-    ),
+  overrideToJSON(() =>
+    fs.writeFileSync(test.expect.loc, JSON.stringify(ast, null, 2)),
   );
 }
 
-function forceToString(obj, cb) {
-  const { toJSON } = obj.prototype;
-  obj.prototype.toJSON = obj.prototype.toString;
+// Ensure that RegExp, BigInt, and Errors are serialized as strings
+function overrideToJSON(cb) {
+  const originalToJSONMap = new Map();
+  const notJSONparseableObj = [RegExp, Error];
+
+  if (typeof BigInt !== "undefined") {
+    notJSONparseableObj.push(BigInt);
+  }
+
+  for (const obj of notJSONparseableObj) {
+    const { toJSON } = obj.prototype;
+    originalToJSONMap.set(obj, toJSON);
+    obj.prototype.toJSON = function() {
+      return this.toString();
+    };
+  }
+
   cb();
-  obj.prototype.toJSON = toJSON;
+
+  for (const obj of notJSONparseableObj) {
+    obj.prototype.toJSON = originalToJSONMap.get(obj);
+  }
 }
 
 function runTest(test, parseFunction) {
@@ -143,7 +159,7 @@ function runTest(test, parseFunction) {
           const fn = path.dirname(test.expect.loc) + "/options.json";
           test.options = test.options || {};
           test.options.throws = err.message;
-          fs.writeFileSync(fn, JSON.stringify(test.options, null, "  "));
+          fs.writeFileSync(fn, JSON.stringify(test.options, null, 2));
           return;
         }
 
@@ -172,11 +188,11 @@ function runTest(test, parseFunction) {
       const fn = path.dirname(test.expect.loc) + "/options.json";
       test.options = test.options || {};
       delete test.options.throws;
-      const contents = JSON.stringify(test.options, null, "  ");
+      const contents = JSON.stringify(test.options, null, 2);
       if (contents === "{}") {
         fs.unlinkSync(fn);
       } else {
-        fs.writeFileSync(fn, JSON.stringify(test.options, null, "  "));
+        fs.writeFileSync(fn, JSON.stringify(test.options, null, 2));
       }
       test.expect.loc += "on";
       return save(test, ast);
@@ -198,7 +214,6 @@ function runTest(test, parseFunction) {
 }
 
 function ppJSON(v) {
-  v = v instanceof RegExp || v instanceof Error ? v.toString() : v;
   return JSON.stringify(v, null, 2);
 }
 
@@ -211,42 +226,49 @@ function addPath(str, pt) {
 }
 
 function misMatch(exp, act) {
-  if (
-    exp instanceof RegExp ||
-    act instanceof RegExp ||
-    exp instanceof Error ||
-    act instanceof Error
-  ) {
-    const left = ppJSON(exp);
-    const right = ppJSON(act);
-    if (left !== right) return left + " !== " + right;
-  } else if (Array.isArray(exp)) {
-    if (!Array.isArray(act)) return ppJSON(exp) + " != " + ppJSON(act);
-    if (act.length != exp.length) {
-      return "array length mismatch " + exp.length + " != " + act.length;
-    }
-    for (let i = 0; i < act.length; ++i) {
-      const mis = misMatch(exp[i], act[i]);
-      if (mis) return addPath(mis, i);
-    }
-  } else if (!exp || !act || typeof exp != "object" || typeof act != "object") {
-    if (exp !== act && typeof exp != "function") {
-      return ppJSON(exp) + " !== " + ppJSON(act);
-    }
-  } else {
-    for (const prop of Object.keys(exp)) {
-      const mis = misMatch(exp[prop], act[prop]);
-      if (mis) return addPath(mis, prop);
-    }
-
-    for (const prop of Object.keys(act)) {
-      if (typeof act[prop] === "function") {
-        continue;
+  overrideToJSON(() => {
+    if (
+      exp instanceof RegExp ||
+      act instanceof RegExp ||
+      exp instanceof Error ||
+      act instanceof Error
+    ) {
+      const left = ppJSON(exp);
+      const right = ppJSON(act);
+      if (left !== right) return left + " !== " + right;
+    } else if (Array.isArray(exp)) {
+      if (!Array.isArray(act)) return ppJSON(exp) + " != " + ppJSON(act);
+      if (act.length != exp.length) {
+        return "array length mismatch " + exp.length + " != " + act.length;
+      }
+      for (let i = 0; i < act.length; ++i) {
+        const mis = misMatch(exp[i], act[i]);
+        if (mis) return addPath(mis, i);
+      }
+    } else if (
+      !exp ||
+      !act ||
+      typeof exp != "object" ||
+      typeof act != "object"
+    ) {
+      if (exp !== act && typeof exp != "function") {
+        return ppJSON(exp) + " !== " + ppJSON(act);
+      }
+    } else {
+      for (const prop of Object.keys(exp)) {
+        const mis = misMatch(exp[prop], act[prop]);
+        if (mis) return addPath(mis, prop);
       }
 
-      if (!(prop in exp) && act[prop] !== undefined) {
-        return `Did not expect a property '${prop}'`;
+      for (const prop of Object.keys(act)) {
+        if (typeof act[prop] === "function") {
+          continue;
+        }
+
+        if (!(prop in exp) && act[prop] !== undefined) {
+          return `Did not expect a property '${prop}'`;
+        }
       }
     }
-  }
+  });
 }

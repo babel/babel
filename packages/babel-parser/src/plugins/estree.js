@@ -1,5 +1,7 @@
 // @flow
 
+/* global BigInt */
+
 import { types as tt, TokenType } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
@@ -27,6 +29,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
       const node = this.estreeParseLiteral(regex);
       node.regex = { pattern, flags };
+
+      return node;
+    }
+
+    estreeParseBigIntLiteral(value: any): N.Node {
+      // https://github.com/estree/estree/blob/master/es2020.md#bigintliteral
+      // $FlowIgnore
+      const bigInt = typeof BigInt !== "undefined" ? BigInt(value) : null;
+      const node = this.estreeParseLiteral(bigInt);
+      node.bigint = String(node.value || value);
 
       return node;
     }
@@ -244,12 +256,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseExprAtom(refShorthandDefaultPos?: ?Pos): N.Expression {
       switch (this.state.type) {
-        case tt.regexp:
-          return this.estreeParseRegExpLiteral(this.state.value);
-
         case tt.num:
         case tt.string:
           return this.estreeParseLiteral(this.state.value);
+
+        case tt.regexp:
+          return this.estreeParseRegExpLiteral(this.state.value);
+
+        case tt.bigint:
+          return this.estreeParseBigIntLiteral(this.state.value);
 
         case tt._null:
           return this.estreeParseLiteral(null);
