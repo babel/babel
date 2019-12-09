@@ -10,4 +10,3 @@ Object['values'](); // include
 Object[keys](); // don't include
 
 [][filter](); // don't include
-
