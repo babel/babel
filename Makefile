@@ -283,6 +283,12 @@ clean-all:
 
 	$(MAKE) clean
 
+update-env-corejs-fixture:
+	rm -rf packages/babel-preset-env/node_modules/core-js-compat
+	$(YARN) lerna bootstrap
+	$(MAKE) build-bundle
+	OVERWRITE=true $(YARN) jest packages/babel-preset-env
+
 define clean-source-lib
 	rm -rf $(1)/*/lib
 
