@@ -4,6 +4,7 @@
   "description": "Compile ES2015 computed properties to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-computed-properties",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

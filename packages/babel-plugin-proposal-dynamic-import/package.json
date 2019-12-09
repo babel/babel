@@ -4,6 +4,7 @@
   "description": "Transform import() expressions",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-dynamic-import",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

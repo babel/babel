@@ -4,6 +4,7 @@
   "description": "Turn JSX elements into exploded React objects",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-inline-elements",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

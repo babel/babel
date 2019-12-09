@@ -17,6 +17,7 @@
   ],
   "author": "Jason Quense @monasticpanic",
   "license": "MIT",
+  "type": "commonjs",
   "private": true,
   "engines": {
     "node": ">=10.9"

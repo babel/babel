@@ -4,6 +4,7 @@
   "description": "Ensure that reserved words are quoted in property accesses",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-member-expression-literals",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

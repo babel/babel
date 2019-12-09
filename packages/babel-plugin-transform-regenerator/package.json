@@ -10,6 +10,7 @@
     "regenerator-transform": "^0.14.0"
   },
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },
