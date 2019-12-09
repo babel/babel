@@ -78,7 +78,8 @@
     "typescript": "^3.6.3"
   },
   "resolutions": {
-    "@lerna/**/@lerna/collect-updates": "https://github.com/babel/lerna.git#babel-collect-updates"
+    "@lerna/**/@lerna/collect-updates": "https://github.com/babel/lerna.git#babel-collect-updates",
+    "eslint-scope": "^5.0.0"
   },
   "engines": {
     "node": ">= 6.9.0 < 14.0.0",
