@@ -923,8 +923,6 @@ export default class ExpressionParser extends LValParser {
           return this.parseImportMetaProperty(node);
         }
 
-        this.expectPlugin("dynamicImport", node.start);
-
         if (!this.match(tt.parenL)) {
           this.unexpected(null, tt.parenL);
         }

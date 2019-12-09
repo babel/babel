@@ -754,23 +754,6 @@ describe("api", function() {
       babelrc: false,
     };
 
-    it("only syntax plugin available", function(done) {
-      transformFile(
-        __dirname + "/fixtures/api/parsing-errors/only-syntax/file.js",
-        options,
-        function(err) {
-          expect(err.message).toMatch(
-            "Support for the experimental syntax 'dynamicImport' isn't currently enabled (1:9)",
-          );
-          expect(err.message).toMatch(
-            "Add @babel/plugin-syntax-dynamic-import (https://git.io/vb4Sv) to the " +
-              "'plugins' section of your Babel config to enable parsing.",
-          );
-          done();
-        },
-      );
-    });
-
     it("both syntax and transform plugin available", function(done) {
       transformFile(
         __dirname + "/fixtures/api/parsing-errors/syntax-and-transform/file.js",
