@@ -33,8 +33,10 @@
   "devDependencies": {
     "@babel/core": "^7.7.4",
     "@babel/helper-fixtures": "^7.6.3",
+    "@babel/runtime": "^7.7.4",
     "fs-readdir-recursive": "^1.0.0",
-    "make-dir": "^2.1.0"
+    "make-dir": "^2.1.0",
+    "rimraf": "^3.0.0"
   },
   "bin": {
     "babel-node": "./bin/babel-node.js"

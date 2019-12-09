@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",
+    "@babel/plugin-transform-modules-commonjs": "^7.7.4",
     "default-require-extensions": "^2.0.0"
   }
 }
