@@ -21,9 +21,6 @@ function verifyAndAssertMessagesWithSpecificESLint(
     ...overrideConfig,
     parserOptions: {
       sourceType,
-      ecmaFeatures: {
-        globalReturn: true,
-      },
       requireConfigFile: false,
       babelOptions: {
         configFile: path.resolve(
