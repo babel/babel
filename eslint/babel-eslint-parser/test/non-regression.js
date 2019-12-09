@@ -31,7 +31,7 @@ function verifyAndAssertMessagesWithSpecificESLint(
           "./fixtures/config/babel.config.js",
         ),
       },
-      ...overrideConfig?.parserOptions
+      ...overrideConfig?.parserOptions,
     },
   };
 
@@ -1563,7 +1563,7 @@ describe("verify", () => {
     );
   });
 
-  it("no-implicit-globals in script", () => {
+  it("no-implicit-globals in script: globalReturn is false", () => {
     verifyAndAssertMessages(
       "var leakedGlobal = 1;",
       { "no-implicit-globals": 1 },
@@ -1573,7 +1573,28 @@ describe("verify", () => {
       "script",
       {
         env: {},
-        parserOptions: { ecmaVersion: 6, sourceType: "script" },
+        parserOptions: {
+          ecmaVersion: 6,
+          sourceType: "script",
+          ecmaFeatures: { globalReturn: false },
+        },
+      },
+    );
+  });
+
+  it("no-implicit-globals in script: globalReturn is true", () => {
+    verifyAndAssertMessages(
+      "var leakedGlobal = 1;",
+      { "no-implicit-globals": 1 },
+      [],
+      "script",
+      {
+        env: {},
+        parserOptions: {
+          ecmaVersion: 6,
+          sourceType: "script",
+          ecmaFeatures: { globalReturn: true },
+        },
       },
     );
   });
