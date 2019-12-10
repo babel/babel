@@ -15,5 +15,34 @@
   "dependencies": {
     "core-js-pure": "^3.0.0",
     "regenerator-runtime": "^0.13.4"
+  },
+  "exports": {
+    "./": "./",
+    "./helpers/": "./helpers/",
+    "./helpers/esm/": "./helpers/esm/",
+    "./regenerator": "./regenerator/index.js",
+    "./regenerator/": "./regenerator/",
+    "./core-js-stable/": "./core-js-stable/",
+    "./core-js-stable/array/": "./core-js-stable/array/",
+    "./core-js-stable/date/": "./core-js-stable/date/",
+    "./core-js-stable/json/": "./core-js-stable/json/",
+    "./core-js-stable/math/": "./core-js-stable/math/",
+    "./core-js-stable/number/": "./core-js-stable/number/",
+    "./core-js-stable/object/": "./core-js-stable/object/",
+    "./core-js-stable/reflect/": "./core-js-stable/reflect/",
+    "./core-js-stable/string/": "./core-js-stable/string/",
+    "./core-js-stable/symbol/": "./core-js-stable/symbol/",
+    "./core-js-stable/instance/": "./core-js-stable/instance/",
+    "./core-js/": "./core-js/",
+    "./core-js/array/": "./core-js/array/",
+    "./core-js/date/": "./core-js/date/",
+    "./core-js/json/": "./core-js/json/",
+    "./core-js/math/": "./core-js/math/",
+    "./core-js/number/": "./core-js/number/",
+    "./core-js/object/": "./core-js/object/",
+    "./core-js/reflect/": "./core-js/reflect/",
+    "./core-js/string/": "./core-js/string/",
+    "./core-js/symbol/": "./core-js/symbol/",
+    "./core-js/instance/": "./core-js/instance/"
   }
 }

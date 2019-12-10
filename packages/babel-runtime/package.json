@@ -18,5 +18,12 @@
   },
   "devDependencies": {
     "@babel/helpers": "workspace:^7.10.4"
+  },
+  "exports": {
+    "./": "./",
+    "./helpers/": "./helpers/",
+    "./helpers/esm/": "./helpers/esm/",
+    "./regenerator": "./regenerator/index.js",
+    "./regenerator/": "./regenerator/"
   }
 }

@@ -18,5 +18,22 @@
   },
   "devDependencies": {
     "@babel/helpers": "workspace:^7.10.4"
+  },
+  "exports": {
+    "./": "./",
+    "./helpers/": "./helpers/",
+    "./helpers/esm/": "./helpers/esm/",
+    "./regenerator": "./regenerator/index.js",
+    "./regenerator/": "./regenerator/",
+    "./core-js/": "./core-js/",
+    "./core-js/symbol/": "./core-js/symbol/",
+    "./core-js/array/": "./core-js/array/",
+    "./core-js/json/": "./core-js/json/",
+    "./core-js/object/": "./core-js/object/",
+    "./core-js/math/": "./core-js/math/",
+    "./core-js/string/": "./core-js/string/",
+    "./core-js/number/": "./core-js/number/",
+    "./core-js/reflect/": "./core-js/reflect/",
+    "./core-js/date/": "./core-js/date/"
   }
 }
