@@ -421,8 +421,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (node.callee.type === "Import") {
         ((node: N.Node): N.EstreeImportExpression).type = "ImportExpression";
         ((node: N.Node): N.EstreeImportExpression).source = node.arguments[0];
+        delete node.arguments;
+        delete node.callee;
       }
 
       return node;
+    }
+
+    // ImportExpressions do not have an arguments array.
+    toReferencedListDeep(
+      exprList: $ReadOnlyArray<?N.Expression> = [],
+      isParenthesizedExpr?: boolean,
+    ): $ReadOnlyArray<?N.Expression> {
+      return super.toReferencedListDeep(exprList, isParenthesizedExpr);
     }
   };

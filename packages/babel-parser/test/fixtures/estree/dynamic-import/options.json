@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "estree",
-    "dynamicImport"
-  ]
+  "plugins": ["estree", "dynamicImport"]
 }

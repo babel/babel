@@ -1041,8 +1041,6 @@ export type EstreeMethodDefinition = NodeBase & {
 
 export type EstreeImportExpression = NodeBase & {
   type: "ImportExpression",
-  callee: Import,
-  arguments: Array<Expression>,
   source: Expression,
 };
 
