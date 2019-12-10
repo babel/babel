@@ -13,7 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: You're trying to assign to a parenthesized expression, eg. instead of `({a}) = 0` use `({a} = 0)` (1:1)"
+    "SyntaxError: Invalid parenthesized assignment pattern (1:1)"
   ],
   "program": {
     "type": "Program",
