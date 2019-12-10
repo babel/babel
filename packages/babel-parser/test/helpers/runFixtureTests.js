@@ -131,11 +131,13 @@ function overrideToJSON(cb) {
     };
   }
 
-  cb();
+  const result = cb();
 
   for (const obj of notJSONparseableObj) {
     obj.prototype.toJSON = originalToJSONMap.get(obj);
   }
+
+  return result;
 }
 
 function runTest(test, parseFunction) {
@@ -226,12 +228,14 @@ function addPath(str, pt) {
 }
 
 function misMatch(exp, act) {
-  overrideToJSON(() => {
+  return overrideToJSON(() => {
     if (
       exp instanceof RegExp ||
       act instanceof RegExp ||
       exp instanceof Error ||
-      act instanceof Error
+      act instanceof Error ||
+      typeof exp === "bigint" ||
+      typeof act === "bigint"
     ) {
       const left = ppJSON(exp);
       const right = ppJSON(act);
