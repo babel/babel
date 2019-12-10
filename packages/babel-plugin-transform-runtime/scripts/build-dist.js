@@ -90,13 +90,44 @@ function writeCoreJS({
       `module.exports = require("${corejsRoot}/${corejsPath}");`
     );
   });
+
+  writeCorejsExports(pkgDirname, runtimeRoot, paths);
+}
+
+function writeCorejsExports(pkgDirname, runtimeRoot, paths) {
+  const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
+  const pkgJson = require(pkgJsonPath);
+  const exports = pkgJson.exports || {};
+  const exportEntries = new Set();
+  for (const corejsPath of paths) {
+    exportEntries.add(`./${path.dirname(path.join(runtimeRoot, corejsPath))}/`);
+  }
+  for (const entry of exportEntries) {
+    exports[entry] = entry;
+  }
+  pkgJson.exports = exports;
+  outputFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2) + "\n");
 }
 
 function writeHelpers(runtimeName, { corejs } = {}) {
   writeHelperFiles(runtimeName, { corejs, esm: false });
   writeHelperFiles(runtimeName, { corejs, esm: true });
+  writeHelperExports(runtimeName);
 }
 
+function writeHelperExports(runtimeName) {
+  const pkgDirname = getRuntimeRoot(runtimeName);
+  const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
+  const pkgJson = require(pkgJsonPath);
+  pkgJson.exports = {
+    "./": "./",
+    "./helpers/": "./helpers/",
+    "./helpers/esm/": "./helpers/esm/",
+    "./regenerator": "./regenerator/index.js",
+    "./regenerator/": "./regenerator/",
+  };
+  outputFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2) + "\n");
+}
 function writeHelperFiles(runtimeName, { esm, corejs }) {
   const pkgDirname = getRuntimeRoot(runtimeName);
 
