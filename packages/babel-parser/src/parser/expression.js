@@ -41,12 +41,6 @@ import {
   SCOPE_PROGRAM,
 } from "../util/scopeflags";
 
-const unwrapParenthesizedExpression = node => {
-  return node.type === "ParenthesizedExpression"
-    ? unwrapParenthesizedExpression(node.expression)
-    : node;
-};
-
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
   +parseBlock: (
@@ -212,26 +206,6 @@ export default class ExpressionParser extends LValParser {
       }
 
       this.checkLVal(left, undefined, undefined, "assignment expression");
-
-      const maybePattern = unwrapParenthesizedExpression(left);
-
-      let patternErrorMsg;
-      if (maybePattern.type === "ObjectPattern") {
-        patternErrorMsg = "`({a}) = 0` use `({a} = 0)`";
-      } else if (maybePattern.type === "ArrayPattern") {
-        patternErrorMsg = "`([a]) = 0` use `([a] = 0)`";
-      }
-
-      if (
-        patternErrorMsg &&
-        ((left.extra && left.extra.parenthesized) ||
-          left.type === "ParenthesizedExpression")
-      ) {
-        this.raise(
-          maybePattern.start,
-          `You're trying to assign to a parenthesized expression, eg. instead of ${patternErrorMsg}`,
-        );
-      }
 
       this.next();
       node.right = this.parseMaybeAssign(noIn);
