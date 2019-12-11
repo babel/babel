@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 22,
+  "end": 20,
   "loc": {
     "start": {
       "line": 1,
@@ -9,16 +9,16 @@
     },
     "end": {
       "line": 1,
-      "column": 22
+      "column": 20
     }
   },
   "errors": [
-    "SyntaxError: Object pattern can't contain getter or setter (1:8)"
+    "SyntaxError: Object pattern can't contain getter or setter (1:7)"
   ],
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 22,
+    "end": 20,
     "loc": {
       "start": {
         "line": 1,
@@ -26,7 +26,7 @@
       },
       "end": {
         "line": 1,
-        "column": 22
+        "column": 20
       }
     },
     "sourceType": "script",
@@ -35,7 +35,7 @@
       {
         "type": "ExpressionStatement",
         "start": 0,
-        "end": 22,
+        "end": 20,
         "loc": {
           "start": {
             "line": 1,
@@ -43,66 +43,66 @@
           },
           "end": {
             "line": 1,
-            "column": 22
+            "column": 20
           }
         },
         "expression": {
           "type": "AssignmentExpression",
-          "start": 2,
-          "end": 20,
+          "start": 1,
+          "end": 19,
           "loc": {
             "start": {
               "line": 1,
-              "column": 2
+              "column": 1
             },
             "end": {
               "line": 1,
-              "column": 20
+              "column": 19
             }
           },
           "operator": "=",
           "left": {
             "type": "ObjectPattern",
-            "start": 2,
-            "end": 16,
+            "start": 1,
+            "end": 15,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 2
+                "column": 1
               },
               "end": {
                 "line": 1,
-                "column": 16
+                "column": 15
               }
             },
             "properties": [
               {
                 "type": "ObjectMethod",
-                "start": 4,
-                "end": 14,
+                "start": 3,
+                "end": 13,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 4
+                    "column": 3
                   },
                   "end": {
                     "line": 1,
-                    "column": 14
+                    "column": 13
                   }
                 },
                 "method": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 8,
-                  "end": 9,
+                  "start": 7,
+                  "end": 8,
                   "loc": {
                     "start": {
                       "line": 1,
-                      "column": 8
+                      "column": 7
                     },
                     "end": {
                       "line": 1,
-                      "column": 9
+                      "column": 8
                     },
                     "identifierName": "x"
                   },
@@ -116,16 +116,16 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 12,
-                  "end": 14,
+                  "start": 11,
+                  "end": 13,
                   "loc": {
                     "start": {
                       "line": 1,
-                      "column": 12
+                      "column": 11
                     },
                     "end": {
                       "line": 1,
-                      "column": 14
+                      "column": 13
                     }
                   },
                   "body": [],
@@ -136,16 +136,16 @@
           },
           "right": {
             "type": "NumericLiteral",
-            "start": 19,
-            "end": 20,
+            "start": 18,
+            "end": 19,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 19
+                "column": 18
               },
               "end": {
                 "line": 1,
-                "column": 20
+                "column": 19
               }
             },
             "extra": {

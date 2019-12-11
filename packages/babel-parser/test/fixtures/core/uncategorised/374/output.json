@@ -13,6 +13,7 @@
     }
   },
   "errors": [
+    "SyntaxError: Invalid parenthesized assignment pattern (1:5)",
     "SyntaxError: Invalid left-hand side in for-in statement (1:5)"
   ],
   "program": {

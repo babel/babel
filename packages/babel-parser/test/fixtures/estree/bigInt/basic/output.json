@@ -89,7 +89,10 @@
                   "column": 12
                 }
               },
-              "value": "1",
+              "value": {
+                "$$ babel internal serialized type": "BigInt",
+                "value": "1n"
+              },
               "raw": "1n",
               "bigint": "1"
             }

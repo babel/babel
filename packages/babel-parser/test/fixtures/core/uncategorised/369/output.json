@@ -13,6 +13,7 @@
     }
   },
   "errors": [
+    "SyntaxError: Invalid parenthesized assignment pattern (1:1)",
     "SyntaxError: Invalid left-hand side in assignment expression (1:1)"
   ],
   "program": {
