@@ -232,7 +232,7 @@ function ppJSON(v) {
   if (v && typeof v === "object" && v[serialized]) {
     switch (v[serialized]) {
       case "BigInt":
-        return typeof BigInt === "undefined" ? null : v.value;
+        return typeof BigInt === "undefined" ? "null" : v.value;
     }
   }
 
