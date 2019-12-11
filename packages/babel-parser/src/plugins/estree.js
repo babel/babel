@@ -428,11 +428,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
-    // ImportExpressions do not have an arguments array.
     toReferencedListDeep(
-      exprList: $ReadOnlyArray<?N.Expression> = [],
+      exprList: $ReadOnlyArray<?N.Expression>,
       isParenthesizedExpr?: boolean,
-    ): $ReadOnlyArray<?N.Expression> {
-      return super.toReferencedListDeep(exprList, isParenthesizedExpr);
+    ): void {
+      // ImportExpressions do not have an arguments array.
+      if (!exprList) {
+        return;
+      }
+
+      super.toReferencedListDeep(exprList, isParenthesizedExpr);
     }
   };
