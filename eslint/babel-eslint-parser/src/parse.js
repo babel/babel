@@ -1,61 +1,13 @@
+import { parseSync as babelParse, tokTypes as tt, traverse } from "@babel/core";
 import babylonToEspree from "./babylon-to-espree";
-import {
-  parseSync as parse,
-  tokTypes as tt,
-  traverse,
-  loadPartialConfig,
-} from "@babel/core";
+import { normalizeBabelParseConfig } from "./configuration";
 
-export default function(code, options) {
-  let opts = {
-    sourceType: options.sourceType,
-    filename: options.filePath,
-    cwd: options.babelOptions.cwd,
-    root: options.babelOptions.root,
-    rootMode: options.babelOptions.rootMode,
-    envName: options.babelOptions.envName,
-    configFile: options.babelOptions.configFile,
-    babelrc: options.babelOptions.babelrc,
-    babelrcRoots: options.babelOptions.babelrcRoots,
-    extends: options.babelOptions.extends,
-    env: options.babelOptions.env,
-    overrides: options.babelOptions.overrides,
-    test: options.babelOptions.test,
-    include: options.babelOptions.include,
-    exclude: options.babelOptions.exclude,
-    ignore: options.babelOptions.ignore,
-    only: options.babelOptions.only,
-    parserOpts: {
-      allowImportExportEverywhere: options.allowImportExportEverywhere, // consistent with espree
-      allowReturnOutsideFunction: true,
-      allowSuperOutsideMethod: true,
-      ranges: true,
-      tokens: true,
-      plugins: ["estree"],
-    },
-    caller: {
-      name: "@babel/eslint-parser",
-    },
-  };
-
-  if (options.requireConfigFile !== false) {
-    const config = loadPartialConfig(opts);
-
-    if (config !== null) {
-      if (!config.hasFilesystemConfig()) {
-        throw new Error(
-          `No Babel config file detected for ${config.options.filename}. Either disable config file checking with requireConfigFile: false, or configure Babel so that it can find the config files.`,
-        );
-      }
-
-      opts = config.options;
-    }
-  }
-
+export default function parse(code, options) {
+  const parseOptions = normalizeBabelParseConfig(options);
   let ast;
 
   try {
-    ast = parse(code, opts);
+    ast = babelParse(code, parseOptions);
   } catch (err) {
     if (err instanceof SyntaxError) {
       err.lineNumber = err.loc.line;
