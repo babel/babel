@@ -1,6 +1,7 @@
 import semver from "semver";
 import { version as CURRENT_BABEL_VERSION } from "@babel/core";
 import parseWithScope from "./parse-with-scope";
+import { normalizeESLintConfig } from "./configuration";
 import packageJson from "../package.json";
 
 const SUPPORTED_BABEL_VERSION_RANGE =
@@ -21,11 +22,5 @@ export function parseForESLint(code, options = {}) {
     );
   }
 
-  options.babelOptions = options.babelOptions || {};
-  options.ecmaVersion = options.ecmaVersion || 2018;
-  options.sourceType = options.sourceType || "module";
-  options.allowImportExportEverywhere =
-    options.allowImportExportEverywhere || false;
-
-  return parseWithScope(code, options);
+  return parseWithScope(code, normalizeESLintConfig(options));
 }

@@ -1614,7 +1614,7 @@ describe("verify", () => {
       "var leakedGlobal = 1;",
       { "no-implicit-globals": 1 },
       [],
-      null,
+      undefined,
       {
         env: {},
         parserOptions: { ecmaVersion: 6 },
