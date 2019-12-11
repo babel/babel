@@ -89,7 +89,11 @@
                   "column": 13
                 }
               },
-              "value": "/.*/i",
+              "value": {
+                "$$ babel internal serialized type": "RegExp",
+                "source": ".*",
+                "flags": "i"
+              },
               "raw": "/.*/i",
               "regex": {
                 "pattern": ".*",
