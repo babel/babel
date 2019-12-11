@@ -7,6 +7,8 @@ import path from "path";
 
 const rootPath = path.join(__dirname, "../../../..");
 
+const serialized = "$$ babel internal serialized type";
+
 class FixtureError extends Error {
   constructor(previousError, fixturePath, code) {
     super(previousError.message);
@@ -127,6 +129,10 @@ function overrideToJSON(cb) {
     const { toJSON } = obj.prototype;
     originalToJSONMap.set(obj, toJSON);
     obj.prototype.toJSON = function() {
+      if (typeof this === "bigint") {
+        return { [serialized]: "BigInt", value: serialize(this) };
+      }
+
       return this.toString();
     };
   }
@@ -215,8 +221,22 @@ function runTest(test, parseFunction) {
   }
 }
 
+function serialize(value) {
+  if (typeof value === "bigint") {
+    return value.toString() + "n";
+  }
+  return JSON.stringify(value, null, 2);
+}
+
 function ppJSON(v) {
-  return JSON.stringify(v, null, 2);
+  if (v && typeof v === "object" && v[serialized]) {
+    switch (v[serialized]) {
+      case "BigInt":
+        return typeof BigInt === "undefined" ? null : v.value;
+    }
+  }
+
+  return serialize(v);
 }
 
 function addPath(str, pt) {
@@ -230,12 +250,10 @@ function addPath(str, pt) {
 function misMatch(exp, act) {
   return overrideToJSON(() => {
     if (
-      exp instanceof RegExp ||
       act instanceof RegExp ||
-      exp instanceof Error ||
       act instanceof Error ||
-      typeof exp === "bigint" ||
-      typeof act === "bigint"
+      typeof act === "bigint" ||
+      (exp && typeof exp === "object" && exp[serialized])
     ) {
       const left = ppJSON(exp);
       const right = ppJSON(act);
