@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "estree",
-    "bigInt"
-  ]
+  "plugins": ["estree", "bigInt"]
 }

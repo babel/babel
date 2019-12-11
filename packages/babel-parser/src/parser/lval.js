@@ -228,7 +228,7 @@ export default class LValParser extends NodeUtils {
   toReferencedListDeep(
     exprList: $ReadOnlyArray<?Expression>,
     isParenthesizedExpr?: boolean,
-  ): $ReadOnlyArray<?Expression> {
+  ): void {
     this.toReferencedList(exprList, isParenthesizedExpr);
 
     for (const expr of exprList) {
@@ -236,8 +236,6 @@ export default class LValParser extends NodeUtils {
         this.toReferencedListDeep(expr.elements);
       }
     }
-
-    return exprList;
   }
 
   // Parses spread element.

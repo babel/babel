@@ -411,4 +411,32 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         super.toAssignableObjectExpressionProp(prop, isBinding, isLast);
       }
     }
+
+    finishCallExpression<T: N.CallExpression | N.OptionalCallExpression>(
+      node: T,
+      optional: boolean,
+    ): N.Expression {
+      super.finishCallExpression(node, optional);
+
+      if (node.callee.type === "Import") {
+        ((node: N.Node): N.EstreeImportExpression).type = "ImportExpression";
+        ((node: N.Node): N.EstreeImportExpression).source = node.arguments[0];
+        delete node.arguments;
+        delete node.callee;
+      }
+
+      return node;
+    }
+
+    toReferencedListDeep(
+      exprList: $ReadOnlyArray<?N.Expression>,
+      isParenthesizedExpr?: boolean,
+    ): void {
+      // ImportExpressions do not have an arguments array.
+      if (!exprList) {
+        return;
+      }
+
+      super.toReferencedListDeep(exprList, isParenthesizedExpr);
+    }
   };

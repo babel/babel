@@ -524,5 +524,11 @@ describe("babylon-to-espree", () => {
         const a = 1n;
       `);
     });
+
+    it("Dynamic Import", () => {
+      parseAndAssertSame(`
+        const a = import('a');
+      `);
+    });
   });
 });

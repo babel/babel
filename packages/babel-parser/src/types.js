@@ -1013,7 +1013,7 @@ export type FlowInterfaceType = NodeBase & {
   body: FlowObjectTypeAnnotation,
 };
 
-// estree
+// ESTree
 
 export type EstreeProperty = NodeBase & {
   type: "Property",
@@ -1037,6 +1037,11 @@ export type EstreeMethodDefinition = NodeBase & {
   kind?: "get" | "set" | "method",
 
   variance?: ?FlowVariance,
+};
+
+export type EstreeImportExpression = NodeBase & {
+  type: "ImportExpression",
+  source: Expression,
 };
 
 // === === === ===
