@@ -91,7 +91,7 @@
               },
               "value": {
                 "$$ babel internal serialized type": "BigInt",
-                "value": "1n"
+                "value": "1"
               },
               "raw": "1n",
               "bigint": "1"
