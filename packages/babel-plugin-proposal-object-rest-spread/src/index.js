@@ -102,12 +102,12 @@ export default declare((api, opts) => {
 
   // replaces impure computed keys with new identifiers
   // and returns variable declarators of these new identifiers
-  function replaceImpureComputedKeys(path) {
+  function replaceImpureComputedKeys(properties, scope) {
     const impureComputedPropertyDeclarators = [];
-    for (const propPath of path.get("properties")) {
+    for (const propPath of properties) {
       const key = propPath.get("key");
       if (propPath.node.computed && !key.isPure()) {
-        const name = path.scope.generateUidBasedOnNode(key.node);
+        const name = scope.generateUidBasedOnNode(key.node);
         const declarator = t.variableDeclarator(t.identifier(name), key.node);
         impureComputedPropertyDeclarators.push(declarator);
         key.replaceWith(t.identifier(name));
@@ -139,7 +139,10 @@ export default declare((api, opts) => {
     const restElement = t.cloneNode(last.node);
     last.remove();
 
-    const impureComputedPropertyDeclarators = replaceImpureComputedKeys(path);
+    const impureComputedPropertyDeclarators = replaceImpureComputedKeys(
+      path.get("properties"),
+      path.scope,
+    );
     const { keys, allLiteral } = extractNormalizedKeys(path);
 
     if (keys.length === 0) {
@@ -265,18 +268,21 @@ export default declare((api, opts) => {
 
           path.findParent(path => {
             if (path.isObjectProperty()) {
-              refPropertyPath.unshift(path.node.key.name);
+              refPropertyPath.unshift(path);
             } else if (path.isVariableDeclarator()) {
               kind = path.parentPath.node.kind;
               return true;
             }
           });
 
-          if (refPropertyPath.length) {
-            refPropertyPath.forEach(prop => {
-              ref = t.memberExpression(ref, t.identifier(prop));
-            });
-          }
+          const impureObjRefComputedDeclarators = replaceImpureComputedKeys(
+            refPropertyPath,
+            path.scope,
+          );
+          refPropertyPath.forEach(prop => {
+            const { node } = prop;
+            ref = t.memberExpression(ref, t.cloneNode(node.key), node.computed);
+          });
 
           const objectPatternPath = path.findParent(path =>
             path.isObjectPattern(),
@@ -295,6 +301,8 @@ export default declare((api, opts) => {
           t.assertIdentifier(argument);
 
           insertionPath.insertBefore(impureComputedPropertyDeclarators);
+
+          insertionPath.insertBefore(impureObjRefComputedDeclarators);
 
           insertionPath.insertAfter(
             t.variableDeclarator(argument, callExpression),
