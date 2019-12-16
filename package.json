@@ -29,7 +29,7 @@
     "@babel/runtime": "^7.7.2",
     "@rollup/plugin-alias": "^2.2.0",
     "@rollup/plugin-json": "^4.0.0",
-    "babel-eslint": "^11.0.0-beta.1",
+    "babel-eslint": "^11.0.0-beta.2",
     "babel-jest": "^24.9.0",
     "babel-plugin-transform-charcodes": "^0.2.0",
     "browserify": "^16.2.3",
@@ -78,8 +78,7 @@
     "typescript": "^3.6.3"
   },
   "resolutions": {
-    "@lerna/**/@lerna/collect-updates": "https://github.com/babel/lerna.git#babel-collect-updates",
-    "eslint-scope": "^5.0.0"
+    "@lerna/**/@lerna/collect-updates": "https://github.com/babel/lerna.git#babel-collect-updates"
   },
   "engines": {
     "node": ">= 6.9.0 < 14.0.0",

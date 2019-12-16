@@ -2467,13 +2467,13 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.9.0.tgz#24390e6ad61386b0a747265754d2a17219de862c"
   integrity sha512-Uvq6hVe90D0B2WEnUqtdgY1bATGz3mw33nH9Y+dmA+w5DHvUmBgkr5rM/KCHpCsiFNRUfokW/szpPPgMK2hm4A==
 
-babel-eslint@^11.0.0-beta.1:
-  version "11.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/babel-eslint/-/babel-eslint-11.0.0-beta.1.tgz#1762faffeaee26877761b9a19af43cef679999a4"
-  integrity sha512-4xDIJZUn6RDNfSfKmrywNT+e37srxxPP+GdciWakL5U36fde3/K7Y/X8XyEquXGQz02tPvzRuF6SNrR61uZ+fA==
+babel-eslint@^11.0.0-beta.2:
+  version "11.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/babel-eslint/-/babel-eslint-11.0.0-beta.2.tgz#de1f06795aa0d8cedcf6ac943e63056f5b4a7048"
+  integrity sha512-D2tunrOu04XloEdU2XVUminUu25FILlGruZmffqH5OSnLDhCheKNvUoM1ihrexdUvhizlix8bjqRnsss4V/UIQ==
   dependencies:
-    eslint-scope "3.7.1"
-    eslint-visitor-keys "^1.0.0"
+    eslint-scope "5.0.0"
+    eslint-visitor-keys "^1.1.0"
     semver "^6.3.0"
 
 babel-jest@^24.9.0:
@@ -4231,7 +4231,7 @@ eslint-plugin-prettier@^3.1.0:
   dependencies:
     prettier-linter-helpers "^1.0.0"
 
-eslint-scope@3.7.1, eslint-scope@^5.0.0:
+eslint-scope@5.0.0, eslint-scope@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/eslint-scope/-/eslint-scope-5.0.0.tgz#e87c8887c73e8d1ec84f1ca591645c358bfc8fb9"
   integrity sha512-oYrhJW7S0bxAFDvWqzvMPRm6pcgcnWc4QnofCAqRTRfQC0JcwenzGglTtsLyIuuWFfkqDG9vz67cnttSd53djw==
@@ -4246,7 +4246,7 @@ eslint-utils@^1.4.3:
   dependencies:
     eslint-visitor-keys "^1.1.0"
 
-eslint-visitor-keys@^1.0.0, eslint-visitor-keys@^1.1.0:
+eslint-visitor-keys@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-1.1.0.tgz#e2a82cea84ff246ad6fb57f9bde5b46621459ec2"
   integrity sha512-8y9YjtM1JBJU/A9Kc+SbaOV4y29sSWckBwMHa+FGtVj5gN/sbnKDf6xJUl+8g7FAij9LVaP8C24DUiH/f/2Z9A==
