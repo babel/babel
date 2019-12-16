@@ -80,7 +80,7 @@ export default declare((api, options) => {
       ) {
         throw new Error(
           "transform-react-jsx: pragma has been set but " +
-            "pragmafrag has not been set",
+            "pragmaFrag has not been set",
         );
       }
     },
