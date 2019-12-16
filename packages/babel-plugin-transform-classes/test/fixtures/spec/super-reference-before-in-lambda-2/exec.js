@@ -10,4 +10,4 @@ class Foo extends Bar {
   }
 }
 
-expect(() => new Foo()).toThrow("this hasn't been initialised");
+expect(() => new Foo()).toThrow("this hasn't been initialized");
