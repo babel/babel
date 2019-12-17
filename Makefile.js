@@ -90,7 +90,6 @@ target.buildPresetEnvStandalone = function() {
 target.prepublishBuildStandalone = function() {
   env["BABEL_ENV"] = "production";
   env["IS_PUBLISH"] = "true";
-
   exec(
     `BABEL_ENV=production IS_PUBLISH=true ${YARN} gulp build-babel-standalone`
   );
@@ -200,7 +199,13 @@ target.fixJs = function() {
   );
 };
 
-target.fixJson = function() {};
+target.fixJson = function() {
+  exec(
+    `${YARN} prettier "{${SOURCES.join(
+      ","
+    )}}/*/test/fixtures/**/options.json" --write --loglevel warn`
+  );
+};
 
 target.clean = function() {
   rm("-f", ".npmrc");
