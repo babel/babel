@@ -14,14 +14,13 @@ env:
 install: skip
 before_script:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
-  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then choco install make; fi
 
 script:
-  - if [ "$JOB" = "test" ]; then make -j test-ci; fi
-  - if [ "$JOB" = "lint" ]; then make -j code-quality-ci; fi
-  - if [ "$JOB" = "babel-parser-flow-tests" ]; then make -j test-flow-ci; fi
-  - if [ "$JOB" = "babel-parser-typescript-tests" ]; then make -j test-typescript-ci; fi
-  - if [ "$JOB" = "babel-parser-test262-tests" ]; then make -j test-test262-ci; fi
+  - if [ "$JOB" = "test" ]; then node Makefile.js testCi; fi
+  - if [ "$JOB" = "lint" ]; then node Makefile.js codeQualityCi; fi
+  - if [ "$JOB" = "babel-parser-flow-tests" ]; then node Makefile.js testFlowCi; fi
+  - if [ "$JOB" = "babel-parser-typescript-tests" ]; then node Makefile.js testTypescriptCi; fi
+  - if [ "$JOB" = "babel-parser-test262-tests" ]; then node Makefile.js testTest262Ci; fi
 
 matrix:
   fast_finish: true
