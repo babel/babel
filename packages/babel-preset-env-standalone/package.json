@@ -5,8 +5,7 @@
   "main": "babel-preset-env.js",
   "files": [
     "babel-preset-env.js",
-    "babel-preset-env.min.js",
-    "src"
+    "babel-preset-env.min.js"
   ],
   "scripts": {
     "prepublishOnly": "cd ../.. && make prepublish-build-preset-env-standalone"

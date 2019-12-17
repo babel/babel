@@ -5,8 +5,7 @@
   "main": "babel.js",
   "files": [
     "babel.js",
-    "babel.min.js",
-    "src"
+    "babel.min.js"
   ],
   "scripts": {
     "prepublishOnly": "cd ../.. && make prepublish-build-standalone"
