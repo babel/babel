@@ -17,5 +17,8 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "regenerator-runtime": "^0.13.2"
+  },
+  "devDependencies": {
+    "shelljs": "^0.8.3"
   }
 }

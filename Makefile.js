@@ -108,12 +108,14 @@ target.buildDist = function() {
 
 target.buildPolyfillDist = function() {
   cd("packages/babel-polyfill");
-  exec("scripts/build-dist.sh");
+  exec(`${NODE} scripts/build-dist.js`);
+  cd("../..");
 };
 
 target.buildPluginTransformRuntimeDist = function() {
   cd("packages/babel-plugin-transform-runtime");
   exec(`${NODE} scripts/build-dist.js`);
+  cd("../..");
 };
 
 target.buildNoBundle = function() {
@@ -294,7 +296,9 @@ target.bootstrapFlow = function() {
   exec(
     "git clone --branch=master --single-branch --shallow-since=2018-11-01 https://github.com/facebook/flow.git build/flow"
   );
-  cd("build/flow") && exec(`git checkout ${FLOW_COMMIT}`);
+  cd("build/flow");
+  exec(`git checkout ${FLOW_COMMIT}`);
+  cd("../..");
 };
 
 target.testFlow = function() {
@@ -319,6 +323,7 @@ target.bootstrapTypescript = function() {
   );
   cd("build/typescript");
   exec(`git checkout ${TYPESCRIPT_COMMIT}`);
+  cd("../..");
 };
 
 target.testTypescript = function() {
@@ -343,6 +348,7 @@ target.bootstrapTest262 = function() {
   );
   cd("build/test262");
   exec(`git checkout ${TEST262_COMMIT}`);
+  cd("../..");
 };
 
 target.testTest262 = function() {
@@ -428,6 +434,7 @@ target.publishEslint = function() {
   cd(`eslint/${pkg}`);
   exec("yarn publish");
   setJsonField(`./eslint/${pkg}/package.json`, "private", true);
+  cd("../..");
 };
 
 target.bootstrapOnly = function() {
