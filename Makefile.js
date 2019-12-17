@@ -3,8 +3,7 @@
 "use strict";
 
 require("shelljs/make");
-
-const { cd, echo, env, exec, mkdir, rm } = require("shelljs");
+const { cd, echo, env, exec, exit, mkdir, rm } = require("shelljs");
 
 function setJsonField(filePath, key, value) {
   require("fs").writeFileSync(
@@ -89,15 +88,18 @@ target.buildPresetEnvStandalone = function() {
 };
 
 target.prepublishBuildStandalone = function() {
+  env["BABEL_ENV"] = "production";
+  env["IS_PUBLISH"] = "true";
+
   exec(
     `BABEL_ENV=production IS_PUBLISH=true ${YARN} gulp build-babel-standalone`
   );
 };
 
 target.prepublishBuildPresetEnvStandalone = function() {
-  exec(
-    `	BABEL_ENV=production IS_PUBLISH=true ${YARN} gulp build-babel-preset-env-standalone`
-  );
+  env["BABEL_ENV"] = "production";
+  env["IS_PUBLISH"] = "true";
+  exec(`${YARN} gulp build-babel-preset-env-standalone`);
 };
 
 target.buildDist = function() {
@@ -118,7 +120,8 @@ target.buildPluginTransformRuntimeDist = function() {
 target.buildNoBundle = function() {
   target.clean();
   target.cleanLib();
-  exec(`BABEL_ENV=development ${YARN} gulp build-no-bundle`);
+  env["BABEL_ENV"] = "development";
+  exec(`${YARN} gulp build-no-bundle`);
   // Ensure that build artifacts for types are created during local
   // development too.
   target.generateTypeHelpers();
@@ -127,32 +130,66 @@ target.buildNoBundle = function() {
 
 target.watch = function() {
   target.buildNoBundle();
-  exec(`BABEL_ENV=development ${YARN} gulp watch`);
+  env["BABEL_ENV"] = "development";
+  exec(`${YARN} gulp watch`);
 };
 
-target.codeQualityCi = function() {};
+target.codeQualityCi = function() {
+  target.flowCheckCi();
+  target.lintCi();
+};
 
-target.flowcheckCi = function() {};
+target.flowcheckCi = function() {
+  target.bootstrapFlowcheck();
+  target.flow();
+};
 
-target.codeQuality = function() {};
+target.codeQuality = function() {
+  target.flow();
+  target.lint();
+};
 
-target.flow = function() {};
+target.flow = function() {
+  exec(`${YARN} flow check --strip-root`);
+};
 
-target.bootstrapFlowcheck = function() {};
+target.bootstrapFlowcheck = function() {
+  target.bootstrapOnly();
+  exec(`${YARN} gulp build-babel-types`);
+};
 
-target.lintCi = function() {};
+target.lintCi = function() {
+  target.lintJsCi();
+  target.lintTsCi();
+};
 
-target.lintJsCi = function() {};
+target.lintJsCi = function() {
+  target.bootstrapOnly();
+  target.lintJs();
+};
 
-target.lintTsCi = function() {};
+target.lintTsCi = function() {
+  target.bootstrapFlowcheck();
+  target.lintTs();
+};
 
-target.lint = function() {};
+target.lint = function() {
+  target.lintJs();
+  target.lintTs();
+};
 
-target.lintJs = function() {};
+target.lintJs = function() {
+  exec(`${YARN} eslint scripts ${SOURCES.join(" ")} --format=codeframe`);
+};
 
-target.lintTs = function() {};
+target.lintTs = function() {
+  exec("./scripts/lint-ts-typings.sh");
+};
 
-target.fix = function() {};
+target.fix = function() {
+  target.fixJson();
+  target.fixJs();
+};
 
 target.fixJs = function() {
   echo(
@@ -181,7 +218,8 @@ target.testClean = function() {
 
 // Does not work on Windows; use `${YARN} jest` instead
 target.testOnly = function() {
-  exec("BABEL_ENV=test ./scripts/test.sh");
+  env["BABEL_ENV"] = "test";
+  exec("./scripts/test.sh");
   target.testClean();
 };
 
@@ -196,15 +234,18 @@ target.testCi = function() {
 
 target.jestCi = function() {
   target.buildStandaloneCi();
-  exec(`BABEL_ENV=test ${YARN} jest --maxWorkers=4 --ci`);
+  env["BABEL_ENV"] = "test";
+  exec(`${YARN} jest --maxWorkers=4 --ci`);
   target.testClean();
 };
 
 // Does not work on Windows
 target.testCiCoverage = function() {
+  env["SHELL"] = "/bin/bash";
   env["BABEL_COVERAGE"] = "true";
   env["BABEL_ENV"] = "test";
   target.bootstrap();
+  env["BABEL_ENV"] = "test";
   env["TEST_TYPE"] = "cov";
   exec("./scripts/test-cov.sh");
   exec(
@@ -322,14 +363,14 @@ target.publishCi = function() {
     echo(`"//registry.npmjs.org/:_authToken=${env["NPM_TOKEN"]}" > .npmrc`);
   } else {
     echo("Missing NPM_TOKEN env var");
-    process.exit(1);
+    exit(1);
   }
 };
 
 target.publishTest = function() {
   if (env["I_AM_USING_VERDACCIO"] !== "I_AM_SURE") {
     echo("You probably don't know what you are doing");
-    process.exit(1);
+    exit(1);
   }
 
   target.prepublishBuild();
@@ -412,5 +453,6 @@ target.updateEnvCorejsFixture = function() {
   rm("-rf", "packages/babel-preset-env/node_modules/core-js-compat");
   exec(`${YARN} lerna bootstrap`);
   target.buildBundle();
-  exec(`OVERWRITE=true ${YARN} jest packages/babel-preset-env`);
+  env["OVERWRITE"] = "true";
+  exec(`${YARN} jest packages/babel-preset-env`);
 };

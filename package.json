@@ -3,7 +3,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "bootstrap": "node Makefils.js bootstrap",
+    "bootstrap": "yarn && node Makefile.js bootstrap",
     "build": "node Makefile.js build",
     "fix": "node Makefile.js fix",
     "lint": "node Makefile.js lint",
