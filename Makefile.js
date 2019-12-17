@@ -267,15 +267,23 @@ target.jestCi = function() {
 
 // Does not work on Windows
 target.testCiCoverage = function() {
-  env["SHELL"] = "/bin/bash";
   env["BABEL_COVERAGE"] = "true";
   env["BABEL_ENV"] = "test";
+
   target.bootstrap();
+
   env["BABEL_ENV"] = "test";
   env["TEST_TYPE"] = "cov";
-  exec("./scripts/test-cov.sh");
+
+  let jestArgs = "--coverage";
+
+  if (env["$CI"]) {
+    jestArgs += " --maxWorkers=4 --ci";
+  }
+
+  exec(`${NODE} node_modules/.bin/jest ${jestArgs}`);
   exec(
-    "bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json"
+    "/bin/bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json"
   );
 };
 
