@@ -183,7 +183,8 @@ target.lintJs = function() {
 };
 
 target.lintTs = function() {
-  exec("./scripts/lint-ts-typings.sh");
+  const tsFlags = "--strict";
+  exec(`${YARN} --silent tsc ${tsFlags} ./packages/babel-types/lib/index.d.ts`);
 };
 
 target.fix = function() {
@@ -216,10 +217,30 @@ target.testClean = function() {
   }
 };
 
-// Does not work on Windows; use `${YARN} jest` instead
 target.testOnly = function() {
+  let nodeCmd = NODE;
+  let jestArgs = "";
+
+  if (env["TEST_DEBUG"]) {
+    nodeCmd += ` --inspect-brk`;
+    jestArgs += " --runInBand";
+  }
+
+  if (env["$CI"]) {
+    jestArgs += " --maxWorkers=4 --ci";
+  }
+
+  if (env["TEST_GREP"]) {
+    jestArgs += ` -t ${env["TEST_GREP"]}`;
+  }
+
+  if (env["TEST_ONLY"]) {
+    jestArgs += ` (packages|codemods|eslint)/.*${env["TEST_ONLY"]}.*/test`;
+  }
+
   env["BABEL_ENV"] = "test";
-  exec("./scripts/test.sh");
+  // node_modules/.bin/jest fails on Windows
+  exec(`${nodeCmd} node_modules/jest-cli/bin/jest.js ${jestArgs}`);
   target.testClean();
 };
 
