@@ -9,6 +9,9 @@ assignees: ''
 
 ## Bug Report
 
+<!-- Check this if you would like to implement a PR, we are more than happy to help you go through the process !-->
+- [ ] I would like to work on a fix!
+
 <!--
 @babel/eslint-parser:
   If you are having issues with JSX you might want to check out eslint-plugin-react. If there's an issue with new experimental syntax you might need check if it's supported by @babel/eslint-plugin.
@@ -48,7 +51,7 @@ A clear and concise description of what you expected to happen (or code).
 - How you are using Babel: [e.g. `cli`, `register`, `loader`]
 
 **Possible Solution**
-<!--- Only if you have suggestions on a fix for the bug -->
+<!--- If you have suggestions on a fix for the bug -->
 
 **Additional context/Screenshots**
 Add any other context about the problem here. If applicable, add screenshots to help explain.

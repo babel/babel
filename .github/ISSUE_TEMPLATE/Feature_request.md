@@ -9,6 +9,9 @@ assignees: ''
 
 ## Feature Request
 
+<!-- Check this if you would like to implement a PR, we are more than happy to help you go through the process !-->
+- [ ] I would like to work on this feature!
+
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I have an issue when [...]
 
