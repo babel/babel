@@ -92,7 +92,7 @@ export default async function({
     if (
       !written &&
       ((!isCompilableExtension && cliOptions.copyFiles) ||
-        cliOptions.includeIgnore)
+        cliOptions.includeIgnored)
     ) {
       const filename = path.relative(base, src);
       const dest = getDest(filename, base);

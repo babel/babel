@@ -6,7 +6,7 @@
     "--copy-files",
     "--ignore",
     "src/foo/*",
-    "--include-ignore",
+    "--include-ignored",
     "--verbose"
   ]
 }
