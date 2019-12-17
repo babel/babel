@@ -89,7 +89,11 @@ export default async function({
       relative,
       cliOptions.extensions,
     );
-    if (!written && !isCompilableExtension && cliOptions.copyFiles) {
+    if (
+      !written &&
+      ((!isCompilableExtension && cliOptions.copyFiles) ||
+        cliOptions.includeIgnore)
+    ) {
       const filename = path.relative(base, src);
       const dest = getDest(filename, base);
       outputFileSync(dest, fs.readFileSync(src));
