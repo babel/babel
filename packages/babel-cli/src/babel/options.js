@@ -163,7 +163,7 @@ commander.option(
 
 commander.option(
   "--include-ignore",
-  "Copy the ignored files to destination",
+  "Include ignored files when compiling and copying non-compilable files.",
 );
 
 commander.version(pkg.version + " (@babel/core " + version + ")");
