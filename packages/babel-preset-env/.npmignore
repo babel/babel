@@ -15,3 +15,4 @@ babel-preset-env-*.tgz
 flow-typed
 .github
 .idea
+/build

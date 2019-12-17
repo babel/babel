@@ -46,7 +46,7 @@ const renameTests = (tests, getName, category) =>
 // environments (node4 and chrome45), as well as familial relationships (edge
 // and ie11) can be handled properly.
 
-const envs = require("compat-table/environments");
+const envs = require("../build/compat-table/environments");
 
 const byTestSuite = suite => browser => {
   return Array.isArray(browser.test_suites)
@@ -56,7 +56,7 @@ const byTestSuite = suite => browser => {
 
 const compatSources = ["es5", "es6", "es2016plus", "esnext"].reduce(
   (result, source) => {
-    const data = require(`compat-table/data-${source}`);
+    const data = require(`../build/compat-table/data-${source}`);
     data.browsers = pickBy(envs, byTestSuite(source));
     result.push(data);
     return result;
