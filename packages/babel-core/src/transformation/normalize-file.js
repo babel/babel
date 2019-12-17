@@ -1,5 +1,6 @@
 // @flow
 
+import fs from "fs";
 import path from "path";
 import buildDebug from "debug";
 import cloneDeep from "lodash/cloneDeep";
@@ -64,10 +65,12 @@ export default function normalizeFile(
       const lastComment = extractComments(EXTERNAL_SOURCEMAP_REGEX, ast);
       if (typeof options.filename === "string" && lastComment) {
         try {
-          inputMap = convertSourceMap.fromMapFileComment(
-            // fromMapFileComment requires the whole comment block
-            `//${lastComment}`,
-            path.dirname(options.filename),
+          const inputMapFilename = EXTERNAL_SOURCEMAP_REGEX.exec(lastComment)
+            .groups.url;
+          inputMap = convertSourceMap.fromJSON(
+            fs.readFileSync(
+              path.resolve(path.dirname(options.filename), inputMapFilename),
+            ),
           );
         } catch (err) {
           debug("discarding unknown file input sourcemap", err);
@@ -157,7 +160,7 @@ function parser(
 
 // eslint-disable-next-line max-len
 const INLINE_SOURCEMAP_REGEX = /^[@#]\s+sourceMappingURL=data:(?:application|text)\/json;(?:charset[:=]\S+?;)?base64,(?:.*)$/;
-const EXTERNAL_SOURCEMAP_REGEX = /^[@#][ \t]+sourceMappingURL=(?:[^\s'"`]+?)[ \t]*$/;
+const EXTERNAL_SOURCEMAP_REGEX = /^[@#][ \t]+sourceMappingURL=(?<url>[^\s'"`]+?)[ \t]*$/;
 
 function extractCommentsFromList(regex, comments, lastComment) {
   if (comments) {
