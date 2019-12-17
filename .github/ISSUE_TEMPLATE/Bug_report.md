@@ -10,7 +10,7 @@ assignees: ''
 ## Bug Report
 
 <!-- Check this if you would like to implement a PR, we are more than happy to help you go through the process !-->
-- [ ] I want to implement a PR
+- [ ] I would like to work on a fix!
 
 <!--
 @babel/eslint-parser:
