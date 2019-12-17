@@ -65,8 +65,9 @@ export default function normalizeFile(
       const lastComment = extractComments(EXTERNAL_SOURCEMAP_REGEX, ast);
       if (typeof options.filename === "string" && lastComment) {
         try {
-          const inputMapFilename = EXTERNAL_SOURCEMAP_REGEX.exec(lastComment)
-            .groups.url;
+          const inputMapFilename = EXTERNAL_SOURCEMAP_REGEX.exec(
+            lastComment,
+          )[1];
           inputMap = convertSourceMap.fromJSON(
             fs.readFileSync(
               path.resolve(path.dirname(options.filename), inputMapFilename),
@@ -160,7 +161,7 @@ function parser(
 
 // eslint-disable-next-line max-len
 const INLINE_SOURCEMAP_REGEX = /^[@#]\s+sourceMappingURL=data:(?:application|text)\/json;(?:charset[:=]\S+?;)?base64,(?:.*)$/;
-const EXTERNAL_SOURCEMAP_REGEX = /^[@#][ \t]+sourceMappingURL=(?<url>[^\s'"`]+?)[ \t]*$/;
+const EXTERNAL_SOURCEMAP_REGEX = /^[@#][ \t]+sourceMappingURL=([^\s'"`]+?)[ \t]*$/;
 
 function extractCommentsFromList(regex, comments, lastComment) {
   if (comments) {
