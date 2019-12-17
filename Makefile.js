@@ -138,7 +138,7 @@ target.codeQualityCi = function() {
   target.lintCi();
 };
 
-target.flowcheckCi = function() {
+target.flowCheckCi = function() {
   target.bootstrapFlowcheck();
   target.flow();
 };
