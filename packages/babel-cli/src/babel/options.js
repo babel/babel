@@ -161,6 +161,11 @@ commander.option(
   "Delete the out directory before compilation.",
 );
 
+commander.option(
+  "--include-ignore",
+  "Include ignored files when compiling and copy to destination",
+);
+
 commander.version(pkg.version + " (@babel/core " + version + ")");
 commander.usage("[options] <files ...>");
 // register an empty action handler so that commander.js can throw on
@@ -304,6 +309,7 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
       quiet: opts.quiet,
       deleteDirOnStart: opts.deleteDirOnStart,
       sourceMapTarget: opts.sourceMapTarget,
+      includeIgnore: opts.includeIgnore,
     },
   };
 }
