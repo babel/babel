@@ -22,6 +22,8 @@ const YARN = "yarn --silent";
 const NODE = `${YARN} node`;
 
 target.build = function() {
+  target.buildBundle();
+
   if (env["BABEL_COVERAGE"] !== "true") {
     target.buildStandalone();
   }
@@ -90,9 +92,7 @@ target.buildPresetEnvStandalone = function() {
 target.prepublishBuildStandalone = function() {
   env["BABEL_ENV"] = "production";
   env["IS_PUBLISH"] = "true";
-  exec(
-    `BABEL_ENV=production IS_PUBLISH=true ${YARN} gulp build-babel-standalone`
-  );
+  exec(`${YARN} gulp build-babel-standalone`);
 };
 
 target.prepublishBuildPresetEnvStandalone = function() {
@@ -155,6 +155,7 @@ target.flow = function() {
 target.bootstrapFlowcheck = function() {
   target.bootstrapOnly();
   exec(`${YARN} gulp build-babel-types`);
+  target.buildTypings();
 };
 
 target.lintCi = function() {
@@ -183,7 +184,7 @@ target.lintJs = function() {
 
 target.lintTs = function() {
   const tsFlags = "--strict";
-  exec(`${YARN} --silent tsc ${tsFlags} ./packages/babel-types/lib/index.d.ts`);
+  exec(`${YARN} --silent tsc ${tsFlags} packages/babel-types/lib/index.d.ts`);
 };
 
 target.fix = function() {
@@ -208,6 +209,7 @@ target.fixJson = function() {
 };
 
 target.clean = function() {
+  target.testClean();
   rm("-f", ".npmrc");
   rm("-rf", "packages/babel-polyfill/browser*");
   rm("-rf", "packages/babel-polyfill/dist");
@@ -269,19 +271,18 @@ target.jestCi = function() {
 target.testCiCoverage = function() {
   env["BABEL_COVERAGE"] = "true";
   env["BABEL_ENV"] = "test";
-
   target.bootstrap();
 
   env["BABEL_ENV"] = "test";
   env["TEST_TYPE"] = "cov";
-
   let jestArgs = "--coverage";
 
   if (env["$CI"]) {
     jestArgs += " --maxWorkers=4 --ci";
   }
 
-  exec(`${NODE} node_modules/.bin/jest ${jestArgs}`);
+  // node_modules/.bin/jest fails on Windows
+  exec(`${NODE} node_modules/jest-cli/bin/jest.js ${jestArgs}`);
   exec(
     "/bin/bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json"
   );
@@ -399,6 +400,10 @@ target.publishCi = function() {
     echo("Missing NPM_TOKEN env var");
     exit(1);
   }
+
+  exec(`${YARN} lerna publish from-git --yes`);
+  rm("-f", ".npmrc");
+  target.clean();
 };
 
 target.publishTest = function() {
