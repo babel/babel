@@ -105,7 +105,12 @@ module.exports = function(api) {
     overrides: [
       {
         test: "packages/babel-parser",
-        plugins: ["babel-plugin-transform-charcodes"],
+        plugins: [
+          "babel-plugin-transform-charcodes",
+          env === "standalone"
+            ? ["@babel/transform-for-of", { assumeArray: true }]
+            : null,
+        ].filter(Boolean),
       },
       {
         test: ["./packages/babel-cli", "./packages/babel-core"],
