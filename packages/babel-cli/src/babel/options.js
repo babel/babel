@@ -162,8 +162,8 @@ commander.option(
 );
 
 commander.option(
-  "--include-ignore",
-  "Include ignored files when compiling and copying non-compilable files.",
+  "--include-ignored",
+  "Include ignored files when copying non-compilable files.",
 );
 
 commander.version(pkg.version + " (@babel/core " + version + ")");
@@ -309,7 +309,7 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
       quiet: opts.quiet,
       deleteDirOnStart: opts.deleteDirOnStart,
       sourceMapTarget: opts.sourceMapTarget,
-      includeIgnore: opts.includeIgnore,
+      includeIgnored: opts.includeIgnored,
     },
   };
 }
