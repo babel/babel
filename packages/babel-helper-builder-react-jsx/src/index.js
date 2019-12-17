@@ -9,6 +9,10 @@ type ElementState = {
   pure: boolean, // true if the element can be marked with a #__PURE__ annotation
 };
 
+const NEW_LINE_REGEX = process.env.BABEL_8_BREAKING
+  ? /(?:\r\n|[\n\r\u2028\u2029])\s+/g
+  : /\n\s+/g;
+
 export default function (opts) {
   const visitor = {};
 
@@ -93,7 +97,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     }
 
     if (t.isStringLiteral(value) && !t.isJSXExpressionContainer(node.value)) {
-      value.value = value.value.replace(/\n\s+/g, " ");
+      value.value = value.value.replace(NEW_LINE_REGEX, " ");
 
       // "raw" JSXText should not be used from a StringLiteral because it needs to be escaped.
       delete value.extra?.raw;

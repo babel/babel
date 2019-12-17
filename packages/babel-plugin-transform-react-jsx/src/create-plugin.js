@@ -17,6 +17,10 @@ const JSX_RUNTIME_ANNOTATION_REGEX = /\*?\s*@jsxRuntime\s+([^\s]+)/;
 const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
 const JSX_FRAG_ANNOTATION_REGEX = /\*?\s*@jsxFrag\s+([^\s]+)/;
 
+const NEW_LINE_REGEX = process.env.BABEL_8_BREAKING
+  ? /(?:\r\n|[\n\r\u2028\u2029])\s+/g
+  : /\n\s+/g;
+
 const get = (pass, name) => pass.get(`@babel/plugin-react-jsx/${name}`);
 const set = (pass, name, v) => pass.set(`@babel/plugin-react-jsx/${name}`, v);
 
@@ -369,7 +373,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         t.isStringLiteral(value) &&
         !t.isJSXExpressionContainer(attribute.node.value)
       ) {
-        value.value = value.value.replace(/\n\s+/g, " ");
+        value.value = value.value.replace(NEW_LINE_REGEX, " ");
 
         // "raw" JSXText should not be used from a StringLiteral because it needs to be escaped.
         delete value.extra?.raw;
