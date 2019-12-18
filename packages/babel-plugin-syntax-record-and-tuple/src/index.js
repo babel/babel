@@ -9,10 +9,7 @@ export default declare((api, options) => {
     manipulateOptions(opts, parserOpts) {
       parserOpts.plugins.push([
         "recordAndTuple",
-        {
-          hash: options.hash,
-          bar: options.bar,
-        },
+        { syntaxType: options.syntaxType },
       ]);
     },
   };

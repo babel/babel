@@ -405,7 +405,7 @@ export default class Tokenizer extends LocationParser {
     }
 
     if (
-      this.getPluginOption("recordAndTuple", "hash") &&
+      this.getPluginOption("recordAndTuple", "syntaxType") === "hash" &&
       (next === charCodes.leftCurlyBrace ||
         next === charCodes.leftSquareBracket)
     ) {
@@ -537,7 +537,7 @@ export default class Tokenizer extends LocationParser {
       }
       // '|}'
       if (
-        this.getPluginOption("recordAndTuple", "bar") &&
+        this.getPluginOption("recordAndTuple", "syntaxType") === "bar" &&
         next === charCodes.rightCurlyBrace
       ) {
         this.finishOp(tt.braceBarR, 2);
@@ -546,7 +546,7 @@ export default class Tokenizer extends LocationParser {
 
       // '|]'
       if (
-        this.getPluginOption("recordAndTuple", "bar") &&
+        this.getPluginOption("recordAndTuple", "syntaxType") == "bar" &&
         next === charCodes.rightSquareBracket
       ) {
         this.finishOp(tt.bracketBarR, 2);
@@ -721,7 +721,7 @@ export default class Tokenizer extends LocationParser {
         return;
       case charCodes.leftSquareBracket:
         if (
-          this.getPluginOption("recordAndTuple", "bar") &&
+          this.getPluginOption("recordAndTuple", "syntaxType") === "bar" &&
           this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
         ) {
           // [|
@@ -738,7 +738,7 @@ export default class Tokenizer extends LocationParser {
         return;
       case charCodes.leftCurlyBrace:
         if (
-          this.getPluginOption("recordAndTuple", "bar") &&
+          this.getPluginOption("recordAndTuple", "syntaxType") === "bar" &&
           this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
         ) {
           // {|
