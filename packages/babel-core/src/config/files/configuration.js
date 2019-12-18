@@ -11,6 +11,7 @@ import {
 } from "../caching";
 import makeAPI, { type PluginAPI } from "../helpers/config-api";
 import { makeStaticFileCache } from "./utils";
+import loadCjsOrMjsDefault from "./module-types";
 import pathPatternToRegex from "../pattern-to-regex";
 import type { FilePackageData, RelativeConfig, ConfigFile } from "./types";
 import type { CallerMetadata } from "../validation/options";
@@ -23,9 +24,15 @@ const debug = buildDebug("babel:config:loading:files:configuration");
 export const ROOT_CONFIG_FILENAMES = [
   "babel.config.js",
   "babel.config.cjs",
+  "babel.config.mjs",
   "babel.config.json",
 ];
-const RELATIVE_CONFIG_FILENAMES = [".babelrc", ".babelrc.js", ".babelrc.cjs"];
+const RELATIVE_CONFIG_FILENAMES = [
+  ".babelrc",
+  ".babelrc.js",
+  ".babelrc.cjs",
+  ".babelrc.mjs",
+];
 
 const BABELIGNORE_FILENAME = ".babelignore";
 
@@ -144,7 +151,7 @@ export function* loadConfig(
  */
 function readConfig(filepath, envName, caller) {
   const ext = path.extname(filepath);
-  return ext === ".js" || ext === ".cjs"
+  return ext === ".js" || ext === ".cjs" || ext === ".mjs"
     ? readConfigJS(filepath, { envName, caller })
     : readConfigJSON5(filepath);
 }
@@ -177,17 +184,14 @@ const readConfigJS = makeStrongCache(function* readConfigJS(
     };
   }
 
-  let options;
+  let options: mixed;
   try {
     LOADING_CONFIGS.add(filepath);
-
-    yield* []; // If we want to allow mjs configs imported using `import()`
-    // $FlowIssue
-    const configModule = (require(filepath): mixed);
-    options =
-      configModule && configModule.__esModule
-        ? configModule.default || undefined
-        : configModule;
+    options = (yield* loadCjsOrMjsDefault(
+      filepath,
+      "You appear to be using a native ECMAScript module configuration " +
+        "file, which is only supported when running Babel asynchronously.",
+    ): mixed);
   } catch (err) {
     err.message = `${filepath}: Error while loading config - ${err.message}`;
     throw err;
