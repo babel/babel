@@ -8,3 +8,4 @@ test/tmp
 .nyc_output
 tmp
 babel-preset-env-*.tgz
+/build

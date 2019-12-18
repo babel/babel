@@ -63,9 +63,9 @@ If you want to mark a new proposal as shipped, add it to [this list](https://git
 
 ### Update [`plugins.json`](https://github.com/babel/babel/blob/master/packages/babel-preset-env/data/plugins.json)
 
-Until `compat-table` is a standalone npm module for data we are using the git url
+Until `compat-table` is a standalone npm module for data we are using the git commit in `scripts/download-compat-table.sh`
 
-`"compat-table": "kangax/compat-table#[latest-commit-hash]"`,
+`COMPAT_TABLE_COMMIT=[latest-commit-hash]`,
 
 So we update and then run `npm run build-data`. If there are no changes, then `plugins.json` will be the same.
 

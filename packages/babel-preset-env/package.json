@@ -11,7 +11,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-env",
   "main": "lib/index.js",
   "scripts": {
-    "build-data": "node ./scripts/build-data.js; node ./scripts/build-modules-support.js"
+    "build-data": "./scripts/download-compat-table.sh; node ./scripts/build-data.js; node ./scripts/build-modules-support.js"
   },
   "dependencies": {
     "@babel/helper-module-imports": "^7.7.4",
@@ -76,7 +76,6 @@
     "@babel/helper-plugin-test-runner": "^7.7.4",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "caniuse-db": "1.0.30000969",
-    "compat-table": "kangax/compat-table#4195aca631ad904cb0efeb62a9c2d8c8511706f8",
     "electron-to-chromium": "1.3.113"
   }
 }
