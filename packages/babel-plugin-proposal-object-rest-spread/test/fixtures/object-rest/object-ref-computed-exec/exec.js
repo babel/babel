@@ -17,4 +17,4 @@ expect(y).toBe(2);
 expect(rest_y).toEqual({z: 3});
 expect(z).toBe(3);
 expect(rest_z).toEqual({ y: 2 });
-
+expect(key).toBe(3);
