@@ -1028,6 +1028,7 @@ export default class ExpressionParser extends LValParser {
 
       case tt.bracketBarL:
       case tt.bracketHashL: {
+        this.expectPlugin("recordAndTuple");
         const oldInFSharpPipelineDirectBody = this.state
           .inFSharpPipelineDirectBody;
         const close =
@@ -1065,6 +1066,7 @@ export default class ExpressionParser extends LValParser {
       }
       case tt.braceBarL:
       case tt.braceHashL: {
+        this.expectPlugin("recordAndTuple");
         const oldInFSharpPipelineDirectBody = this.state
           .inFSharpPipelineDirectBody;
         const close =
