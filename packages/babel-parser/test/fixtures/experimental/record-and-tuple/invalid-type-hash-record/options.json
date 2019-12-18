@@ -1,0 +1,4 @@
+{
+  "plugins": [["recordAndTuple", { "syntaxType": "invalid" }]],
+  "throws": "Unexpected character '#' (1:0)"
+}

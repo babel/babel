@@ -1,0 +1,4 @@
+{
+  "plugins": [["recordAndTuple", { "syntaxType": "invalid" }]],
+  "throws": "Unexpected token (1:1)"
+}
