@@ -37,6 +37,10 @@ matrix:
         - JOB=test
         # https://travis-ci.community/t/build-doesnt-finish-after-completing-tests/288/9
         - YARN_GPG=no
+      cache:
+        yarn: true
+        directories:
+          - $HOME/AppData/Local/Temp/chocolatey
     # Continue node_js matrix
     - node_js: "6"
     - node_js: "10"
