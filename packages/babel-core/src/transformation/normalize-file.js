@@ -65,12 +65,12 @@ export default function normalizeFile(
       const lastComment = extractComments(EXTERNAL_SOURCEMAP_REGEX, ast);
       if (typeof options.filename === "string" && lastComment) {
         try {
-          const inputMapFilename = EXTERNAL_SOURCEMAP_REGEX.exec(
-            lastComment,
-          )[1];
+          const match = EXTERNAL_SOURCEMAP_REGEX.exec(lastComment);
+          if (!match) throw new Error("Invalid source map comment format.");
           inputMap = convertSourceMap.fromJSON(
             fs.readFileSync(
-              path.resolve(path.dirname(options.filename), inputMapFilename),
+              path.resolve(path.dirname(options.filename), match[1]),
+              "utf8",
             ),
           );
         } catch (err) {
