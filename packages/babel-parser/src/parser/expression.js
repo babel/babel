@@ -1037,7 +1037,6 @@ export default class ExpressionParser extends LValParser {
         node = this.startNode();
         this.next();
         node.elements = this.parseExprList(close, true, refShorthandDefaultPos);
-        node.syntaxType = close === tt.bracketBarR ? "bar" : "hash";
         this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
         return this.finishNode(node, "TupleExpression");
       }
@@ -1543,7 +1542,6 @@ export default class ExpressionParser extends LValParser {
       type = "ObjectPattern";
     } else if (isRecord) {
       type = "RecordExpression";
-      node.syntaxType = close === tt.bracketBarR ? "bar" : "hash";
     }
     return this.finishNode(node, type);
   }

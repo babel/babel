@@ -282,9 +282,6 @@ defineType("RecordExpression", {
   visitor: ["properties"],
   aliases: ["Expression"],
   fields: {
-    syntaxType: {
-      validate: assertValueType("string"),
-    },
     properties: {
       validate: chain(
         assertValueType("array"),
@@ -298,9 +295,6 @@ defineType("RecordExpression", {
 
 defineType("TupleExpression", {
   fields: {
-    syntaxType: {
-      validate: assertValueType("string"),
-    },
     elements: {
       validate: chain(
         assertValueType("array"),

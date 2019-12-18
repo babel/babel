@@ -109,11 +109,21 @@ export { ArrayExpression as ArrayPattern };
 export function RecordExpression(node: Object) {
   const props = node.properties;
 
-  if (node.syntaxType === "bar") {
-    this.token("{|");
+  let startToken;
+  let endToken;
+  if (this.format.recordAndTupleSyntaxType === "bar") {
+    startToken = "{|";
+    endToken = "|}";
+  } else if (this.format.recordAndTupleSyntaxType === "hash") {
+    startToken = "#{";
+    endToken = "}";
   } else {
-    this.token("#{");
+    throw new Error(
+      `${this.format.recordAndTupleSyntaxType} is not a valid recordAndTuple syntax type`,
+    );
   }
+
+  this.token(startToken);
   this.printInnerComments(node);
 
   if (props.length) {
@@ -121,23 +131,28 @@ export function RecordExpression(node: Object) {
     this.printList(props, node, { indent: true, statement: true });
     this.space();
   }
-
-  if (node.syntaxType === "bar") {
-    this.token("|}");
-  } else {
-    this.token("}");
-  }
+  this.token(endToken);
 }
 
 export function TupleExpression(node: Object) {
   const elems = node.elements;
   const len = elems.length;
 
-  if (node.syntaxType === "bar") {
-    this.token("[|");
+  let startToken;
+  let endToken;
+  if (this.format.recordAndTupleSyntaxType === "bar") {
+    startToken = "[|";
+    endToken = "|]";
+  } else if (this.format.recordAndTupleSyntaxType === "hash") {
+    startToken = "#[";
+    endToken = "]";
   } else {
-    this.token("#[");
+    throw new Error(
+      `${this.format.recordAndTupleSyntaxType} is not a valid recordAndTuple syntax type`,
+    );
   }
+
+  this.token(startToken);
   this.printInnerComments(node);
 
   for (let i = 0; i < elems.length; i++) {
@@ -149,11 +164,7 @@ export function TupleExpression(node: Object) {
     }
   }
 
-  if (node.syntaxType === "bar") {
-    this.token("|]");
-  } else {
-    this.token("]");
-  }
+  this.token(endToken);
 }
 
 export function RegExpLiteral(node: Object) {

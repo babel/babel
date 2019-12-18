@@ -57,8 +57,7 @@
               "column": 4
             }
           },
-          "properties": [],
-          "syntaxType": "hash"
+          "properties": []
         }
       },
       {
@@ -255,8 +254,7 @@
                 "value": 3
               }
             }
-          ],
-          "syntaxType": "hash"
+          ]
         }
       },
       {
@@ -450,15 +448,13 @@
                 ],
                 "extra": {
                   "trailingComma": 59
-                },
-                "syntaxType": "hash"
+                }
               }
             }
           ],
           "extra": {
             "trailingComma": 65
-          },
-          "syntaxType": "hash"
+          }
         }
       },
       {
@@ -489,8 +485,7 @@
               "column": 4
             }
           },
-          "elements": [],
-          "syntaxType": "bar"
+          "elements": []
         }
       },
       {
@@ -582,8 +577,7 @@
               },
               "value": 3
             }
-          ],
-          "syntaxType": "bar"
+          ]
         }
       },
       {
@@ -690,8 +684,7 @@
                   },
                   "value": 3
                 }
-              ],
-              "syntaxType": "bar"
+              ]
             },
             {
               "type": "NumericLiteral",
@@ -713,8 +706,7 @@
               },
               "value": 4
             }
-          ],
-          "syntaxType": "bar"
+          ]
         }
       }
     ],

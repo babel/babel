@@ -726,7 +726,6 @@ interface ObjectMethod <: ObjectMember, Function {
 ```js
 interface RecordExpression <: Expression {
   type: "RecordExpression";
-  syntaxType: string;
   properties: [ ObjectProperty | ObjectMethod | SpreadElement ];
 }
 ```
@@ -736,7 +735,6 @@ interface RecordExpression <: Expression {
 ```js
 interface TupleExpression <: Expression {
   type: "TupleExpression";
-  syntaxType: string;
   elements: [ Expression | SpreadElement | null ];
 }
 ```
