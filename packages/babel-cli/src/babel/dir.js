@@ -84,16 +84,8 @@ export default async function({
 
   async function handleFile(src: string, base: string): Promise<boolean> {
     const written = await write(src, base);
-    const relative = path.relative(base, src);
-    const isCompilableExtension = util.isCompilableExtension(
-      relative,
-      cliOptions.extensions,
-    );
-    if (
-      !written &&
-      ((!isCompilableExtension && cliOptions.copyFiles) ||
-        cliOptions.includeIgnored)
-    ) {
+
+    if (!written && cliOptions.copyFiles) {
       const filename = path.relative(base, src);
       const dest = getDest(filename, base);
       outputFileSync(dest, fs.readFileSync(src));
