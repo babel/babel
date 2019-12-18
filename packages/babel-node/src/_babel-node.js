@@ -8,6 +8,7 @@ import vm from "vm";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import register from "@babel/register";
+import resolve from "resolve";
 
 import pkg from "../package.json";
 
@@ -188,11 +189,9 @@ if (program.eval || program.print) {
 
     // We have to handle require ourselves, as we want to require it in the context of babel-register
     if (program.require) {
-      let requireFileName = program.require;
-      if (!path.isAbsolute(requireFileName)) {
-        requireFileName = path.join(process.cwd(), requireFileName);
-      }
-      require(requireFileName);
+      require(resolve.sync(program.require, {
+        basedir: process.cwd(),
+      }));
     }
 
     // make the filename absolute
