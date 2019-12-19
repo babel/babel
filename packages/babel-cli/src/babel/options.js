@@ -169,6 +169,7 @@ commander.option(
   "--copy-ignored",
   "Include ignored files when copying non-compilable files.",
 );
+commander.option("--show-config", "show config");
 
 commander.version(pkg.version + " (@babel/core " + version + ")");
 commander.usage("[options] <files ...>");
@@ -289,6 +290,7 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     babelrc: opts.babelrc === true ? undefined : opts.babelrc,
     highlightCode: opts.highlightCode === true ? undefined : opts.highlightCode,
     comments: opts.comments === true ? undefined : opts.comments,
+    showConfig: opts.showConfig,
   };
 
   // If the @babel/cli version is newer than the @babel/core version, and we have added

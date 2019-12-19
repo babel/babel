@@ -169,6 +169,9 @@ const COMMON_VALIDATORS: ValidatorSet = {
   generatorOpts: (assertObject: Validator<
     $PropertyType<ValidatedOptions, "generatorOpts">,
   >),
+  showConfig: (assertBoolean: Validator<
+    $PropertyType<ValidatedOptions, "showConfig">,
+  >),
 };
 export type InputOptions = ValidatedOptions;
 
@@ -233,6 +236,7 @@ export type ValidatedOptions = {
   parserOpts?: {},
   // Deprecate top level generatorOpts
   generatorOpts?: {},
+  showConfig?: boolean,
 };
 
 export type CallerMetadata = {
@@ -307,7 +311,6 @@ export function validate(type: OptionsSource, opts: {}): ValidatedOptions {
 
 function validateNested(loc: NestingPath, opts: {}) {
   const type = getSource(loc);
-
   assertNoDuplicateSourcemap(opts);
 
   Object.keys(opts).forEach(key => {
