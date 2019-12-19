@@ -9,11 +9,17 @@ jobs:
       matrix:
         node-version: [13.x]
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout code
+        uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Environment log
+        id: env
+        run: |
+          echo "::set-output name=yarn-cache-dir::$(yarn cache dir)"
+          yarn --version
       - name: Get node_modules cache
         uses: actions/cache@v1
         with:
@@ -22,15 +28,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Get yarn cache
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v1
+        uses: actions/cache@v1
         with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
+          path: ${{ steps.env.outputs.yarn-cache-dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-      - name: Test and generate coverage
+      - name: Generate coverage report
         run: |
           yarn --version
           make test-ci-coverage
@@ -40,7 +44,8 @@ jobs:
           # data for a JS file that's several megabytes large is bound to fail. Here,
           # we just run the babel-standalone test separately.
           yarn jest "\-standalone/test"
-      - uses: codecov/codecov-action@v1
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
