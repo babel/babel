@@ -25,10 +25,6 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 * `babel-parser`
   * [#10576](https://github.com/babel/babel/pull/10576) [parser] validation for parentheses in the left-hand side of assignment expressions ([@boweihan](https://github.com/boweihan))
 
-#### :rocket: New Feature
-* `babel-cli`
-  * [#10831](https://github.com/babel/babel/pull/10831) Prevent ignored files in out dir ([@rajasekarm](https://github.com/rajasekarm))
-
 #### :bug: Bug Fix
 * `babel-plugin-proposal-object-rest-spread`
   * [#10863](https://github.com/babel/babel/pull/10863) fix: add computed property support for object Ref ([@JLHwung](https://github.com/JLHwung))
@@ -65,8 +61,6 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
   * [#10847](https://github.com/babel/babel/pull/10847) Add missing dev dependencies ([@JLHwung](https://github.com/JLHwung))
 
 #### :leftwards_arrow_with_hook: Revert
-* `babel-cli`
-  * [#10886](https://github.com/babel/babel/pull/10886) Revert "Prevent ignored files in out dir" ([@rajasekarm](https://github.com/rajasekarm))
 * `babel-plugin-transform-classes`, `babel-plugin-transform-regenerator`, `babel-preset-env`
   * [#10839](https://github.com/babel/babel/pull/10839) Use `async-to-generator` even when `regenerator` is enabled ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.7.6 (2019-12-08)
