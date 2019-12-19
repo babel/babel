@@ -272,10 +272,10 @@ describe("scope", () => {
     });
 
     it("reference paths after crawl", function() {
-      const path = getPath("class a { build() { return new a(); } }; a;");
+      const path = getPath("class a { build() { return new a(); } }");
       path.scope.crawl();
       const referencePaths = path.scope.bindings.a.referencePaths;
-      expect(referencePaths).toHaveLength(2);
+      expect(referencePaths).toHaveLength(1);
     });
   });
 
