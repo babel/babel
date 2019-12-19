@@ -1036,7 +1036,12 @@ export default class ExpressionParser extends LValParser {
         this.state.inFSharpPipelineDirectBody = false;
         node = this.startNode();
         this.next();
-        node.elements = this.parseExprList(close, true, refShorthandDefaultPos);
+        node.elements = this.parseExprList(
+          close,
+          true,
+          refExpressionErrors,
+          node,
+        );
         this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
         return this.finishNode(node, "TupleExpression");
       }
@@ -1071,7 +1076,7 @@ export default class ExpressionParser extends LValParser {
         const close =
           this.state.type === tt.braceBarL ? tt.braceBarR : tt.braceR;
         this.state.inFSharpPipelineDirectBody = false;
-        const ret = this.parseObj(close, false, true, refShorthandDefaultPos);
+        const ret = this.parseObj(close, false, true, refExpressionErrors);
         this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
         return ret;
       }
@@ -1079,12 +1084,7 @@ export default class ExpressionParser extends LValParser {
         const oldInFSharpPipelineDirectBody = this.state
           .inFSharpPipelineDirectBody;
         this.state.inFSharpPipelineDirectBody = false;
-        const ret = this.parseObj(
-          tt.braceR,
-          false,
-          false,
-          refExpressionErrors,
-        );
+        const ret = this.parseObj(tt.braceR, false, false, refExpressionErrors);
         this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
         return ret;
       }
@@ -1501,7 +1501,7 @@ export default class ExpressionParser extends LValParser {
   parseObj<T: N.ObjectPattern | N.ObjectExpression>(
     close: TokenType,
     isPattern: boolean,
-    isRecord: boolean,
+    isRecord?: ?boolean,
     refExpressionErrors?: ?ExpressionErrors,
   ): T {
     const propHash: any = Object.create(null);

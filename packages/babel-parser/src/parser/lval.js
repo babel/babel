@@ -41,7 +41,9 @@ export default class LValParser extends NodeUtils {
     refNeedsArrowPos?: ?Pos,
   ) => Expression;
   +parseObj: <T: ObjectPattern | ObjectExpression>(
+    close: TokenType,
     isPattern: boolean,
+    isRecord?: ?boolean,
     refExpressionErrors?: ?ExpressionErrors,
   ) => T;
   */
