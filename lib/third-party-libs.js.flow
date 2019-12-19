@@ -178,7 +178,7 @@ declare module "convert-source-map" {
     SourceMap: SourceMap,
     Converter: Converter,
     fromObject(obj: SourceMap | SourceMapGenerator): Converter,
-    fromJSON(str: string): Converter,
+    fromJSON(str: string | Buffer): Converter,
     fromBase64(str: string): Converter,
     fromComment(str: string): Converter,
     fromMapFileComment(str: string, dir: string): Converter,

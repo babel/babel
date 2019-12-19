@@ -13,6 +13,7 @@ import File from "./file/file";
 import generateMissingPluginMessage from "./util/missing-plugin-helper";
 
 const debug = buildDebug("babel:transform:file");
+const LARGE_INPUT_SOURCEMAP_THRESHOLD = 1_000_000;
 
 export type NormalizedFile = {
   code: string,
@@ -65,14 +66,18 @@ export default function normalizeFile(
       const lastComment = extractComments(EXTERNAL_SOURCEMAP_REGEX, ast);
       if (typeof options.filename === "string" && lastComment) {
         try {
-          const match = EXTERNAL_SOURCEMAP_REGEX.exec(lastComment);
-          if (!match) throw new Error("Invalid source map comment format.");
-          inputMap = convertSourceMap.fromJSON(
-            fs.readFileSync(
-              path.resolve(path.dirname(options.filename), match[1]),
-              "utf8",
-            ),
+          // when `lastComment` is non-null, EXTERNAL_SOURCEMAP_REGEX must have matches
+          const match: [string, string] = (EXTERNAL_SOURCEMAP_REGEX.exec(
+            lastComment,
+          ): any);
+          const inputMapContent: Buffer = fs.readFileSync(
+            path.resolve(path.dirname(options.filename), match[1]),
           );
+          if (inputMapContent.length > LARGE_INPUT_SOURCEMAP_THRESHOLD) {
+            debug("skip merging input map > 1 MB");
+          } else {
+            inputMap = convertSourceMap.fromJSON(inputMapContent);
+          }
         } catch (err) {
           debug("discarding unknown file input sourcemap", err);
         }
