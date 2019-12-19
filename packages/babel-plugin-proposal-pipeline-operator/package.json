@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-pipeline-operator",
-  "version": "7.7.4",
+  "version": "7.7.7",
   "description": "Transform pipeline operator into call expressions",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-pipeline-operator",
   "license": "MIT",
@@ -13,13 +13,13 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0",
-    "@babel/plugin-syntax-pipeline-operator": "^7.7.4"
+    "@babel/plugin-syntax-pipeline-operator": "^7.7.7"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.4",
+    "@babel/core": "^7.7.7",
     "@babel/helper-plugin-test-runner": "^7.7.4"
   }
 }

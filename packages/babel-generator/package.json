@@ -1,6 +1,6 @@
 {
   "name": "@babel/generator",
-  "version": "7.7.4",
+  "version": "7.7.7",
   "description": "Turns an AST into code.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -21,6 +21,6 @@
   },
   "devDependencies": {
     "@babel/helper-fixtures": "^7.6.3",
-    "@babel/parser": "^7.7.4"
+    "@babel/parser": "^7.7.7"
   }
 }
