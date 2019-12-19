@@ -270,6 +270,13 @@ describe("scope", () => {
         column: 32,
       });
     });
+
+    it("reference paths after crawl", function() {
+      const path = getPath("class a { build() { return new a(); } }; a;");
+      path.scope.crawl();
+      const referencePaths = path.scope.bindings.a.referencePaths;
+      expect(referencePaths).toHaveLength(2);
+    });
   });
 
   describe("duplicate bindings", () => {
