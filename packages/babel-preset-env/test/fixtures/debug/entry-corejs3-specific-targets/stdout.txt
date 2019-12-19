@@ -174,7 +174,7 @@ Using polyfills with `entry` option:
   es.reflect.set { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.reflect.set-prototype-of { "ie":"10", "ios":"9", "safari":"7" }
   es.regexp.constructor { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es.regexp.exec { "safari":"7" }
+  es.regexp.exec { "ie":"10", "ios":"9", "safari":"7" }
   es.regexp.flags { "edge":"13", "ie":"10", "safari":"7" }
   es.regexp.to-string { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.set { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }

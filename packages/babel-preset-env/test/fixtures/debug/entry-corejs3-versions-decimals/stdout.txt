@@ -167,6 +167,7 @@ Using polyfills with `entry` option:
   es.reflect.set { "electron":"0.36", "ie":"10" }
   es.reflect.set-prototype-of { "electron":"0.36", "ie":"10" }
   es.regexp.constructor { "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.regexp.exec { "ie":"10" }
   es.regexp.flags { "electron":"0.36", "ie":"10" }
   es.regexp.to-string { "electron":"0.36", "ie":"10" }
   es.set { "electron":"0.36", "ie":"10", "node":"6.1" }

@@ -103,6 +103,7 @@ import "core-js/modules/es.reflect.prevent-extensions";
 import "core-js/modules/es.reflect.set";
 import "core-js/modules/es.reflect.set-prototype-of";
 import "core-js/modules/es.regexp.constructor";
+import "core-js/modules/es.regexp.exec";
 import "core-js/modules/es.regexp.flags";
 import "core-js/modules/es.regexp.to-string";
 import "core-js/modules/es.set";
