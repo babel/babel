@@ -19,6 +19,56 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.7.7 (2019-12-19)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#10576](https://github.com/babel/babel/pull/10576) [parser] validation for parentheses in the left-hand side of assignment expressions ([@boweihan](https://github.com/boweihan))
+
+#### :rocket: New Feature
+* `babel-cli`
+  * [#10831](https://github.com/babel/babel/pull/10831) Prevent ignored files in out dir ([@rajasekarm](https://github.com/rajasekarm))
+
+#### :bug: Bug Fix
+* `babel-plugin-proposal-object-rest-spread`
+  * [#10863](https://github.com/babel/babel/pull/10863) fix: add computed property support for object Ref ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#10890](https://github.com/babel/babel/pull/10890) fix: skip merging large input sourcemaps ([@JLHwung](https://github.com/JLHwung))
+  * [#10885](https://github.com/babel/babel/pull/10885) fix: avoid string copy when processing input source-map ([@JLHwung](https://github.com/JLHwung))
+* `babel-node`
+  * [#10871](https://github.com/babel/babel/pull/10871) Allow -r from node_modules with @babel/node ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-parameters`
+  * [#10053](https://github.com/babel/babel/pull/10053) Check shadow variable to identifier in default parameters ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#10828](https://github.com/babel/babel/pull/10828) @babel/eslint-parser: fix ImportExpression node to match ESTree spec  ([@kaicataldo](https://github.com/kaicataldo))
+  * [#10827](https://github.com/babel/babel/pull/10827) @babel/eslint-parser: fix BigIntLiteral node to match ESTree spec ([@kaicataldo](https://github.com/kaicataldo))
+
+#### :nail_care: Polish
+* `babel-plugin-transform-react-jsx`
+  * [#10868](https://github.com/babel/babel/pull/10868) Fix pragmaFrag spelling in error message ([@azizhk](https://github.com/azizhk))
+
+#### :house: Internal
+* `babel-generator`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-proposal-unicode-property-regex`, `babel-plugin-syntax-pipeline-operator`, `babel-plugin-transform-dotall-regex`, `babel-preset-env-standalone`, `babel-preset-typescript`, `babel-standalone`
+  * [#10882](https://github.com/babel/babel/pull/10882) Ignore some files in npm package ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#10874](https://github.com/babel/babel/pull/10874) chore: cache chocolatey installation temporary files ([@JLHwung](https://github.com/JLHwung))
+  * [#10880](https://github.com/babel/babel/pull/10880) chore: add PR Intent checkbox [ci-skip] ([@JLHwung](https://github.com/JLHwung))
+  * [#10870](https://github.com/babel/babel/pull/10870) chore: update babel-eslint to 11.0.0-beta.2 ([@JLHwung](https://github.com/JLHwung))
+  * [#10848](https://github.com/babel/babel/pull/10848) Tune eslint packages test configuration ([@JLHwung](https://github.com/JLHwung))
+* `babel-preset-env`
+  * [#10873](https://github.com/babel/babel/pull/10873) chore: download compat-table when build-data is run ([@JLHwung](https://github.com/JLHwung))
+  * [#10846](https://github.com/babel/babel/pull/10846) Update corejs fixtures ([@JLHwung](https://github.com/JLHwung))
+  * [#10837](https://github.com/babel/babel/pull/10837) refactor: rewrite available-plugins to esm ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#10858](https://github.com/babel/babel/pull/10858) Properly serialize non-json values in parser tests ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-cli`, `babel-node`, `babel-register`
+  * [#10847](https://github.com/babel/babel/pull/10847) Add missing dev dependencies ([@JLHwung](https://github.com/JLHwung))
+
+#### :leftwards_arrow_with_hook: Revert
+* `babel-cli`
+  * [#10886](https://github.com/babel/babel/pull/10886) Revert "Prevent ignored files in out dir" ([@rajasekarm](https://github.com/rajasekarm))
+* `babel-plugin-transform-classes`, `babel-plugin-transform-regenerator`, `babel-preset-env`
+  * [#10839](https://github.com/babel/babel/pull/10839) Use `async-to-generator` even when `regenerator` is enabled ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.7.6 (2019-12-08)
 
 #### :house: Internal
