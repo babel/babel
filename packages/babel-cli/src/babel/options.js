@@ -162,7 +162,7 @@ commander.option(
 );
 
 commander.option(
-  "--include-ignored",
+  "--copy-ignored",
   "Include ignored files when copying non-compilable files.",
 );
 
@@ -229,6 +229,10 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
 
   if (commander.verbose && commander.quiet) {
     errors.push("--verbose and --quiet cannot be used together");
+  }
+
+  if (commander.copyIgnored && !commander.ignore) {
+    errors.push("--copy-ignored requires --ignore");
   }
 
   if (
@@ -309,7 +313,7 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
       quiet: opts.quiet,
       deleteDirOnStart: opts.deleteDirOnStart,
       sourceMapTarget: opts.sourceMapTarget,
-      includeIgnored: opts.includeIgnored,
+      copyIgnored: opts.copyIgnored,
     },
   };
 }
