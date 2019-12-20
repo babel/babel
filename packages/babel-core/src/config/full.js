@@ -39,6 +39,7 @@ export type { InputOptions } from "./validation/options";
 export type ResolvedConfig = {
   options: Object,
   passes: PluginPasses,
+  babelrc: Object,
 };
 
 export type { Plugin };
@@ -59,7 +60,8 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
   if (!result) {
     return null;
   }
-  const { options, context } = result;
+
+  const { options, context, babelrc } = result;
 
   const optionDefaults = {};
   const passes = [[]];
@@ -172,6 +174,7 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
   return {
     options: opts,
     passes: passes,
+    babelrc: babelrc,
   };
 });
 
