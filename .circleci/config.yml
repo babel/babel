@@ -112,9 +112,6 @@ jobs:
 
 workflows:
   version: 2
-  test:
-    jobs:
-      - test
   test262-master:
     jobs:
       - test262:
