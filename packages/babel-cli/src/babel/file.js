@@ -164,7 +164,7 @@ export default async function({
         _filenames.push(filename);
       }
     });
-
+    let print = true;
     const results = await Promise.all(
       _filenames.map(async function(filename: string): Promise<Object> {
         let sourceFilename = filename;
@@ -175,7 +175,10 @@ export default async function({
           );
         }
         sourceFilename = slash(sourceFilename);
-
+        if (!print) {
+          babelOptions.showConfig = false;
+        }
+        print = false;
         try {
           return await util.compile(
             filename,

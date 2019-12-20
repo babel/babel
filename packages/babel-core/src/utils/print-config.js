@@ -1,4 +1,9 @@
-export default function printConfig(config): void {
+export type PrintConfig = {
+  options: Object,
+  babelrc: Object,
+};
+
+export function printConfig(config): void {
   if (config.babelrc) {
     const babelrc = {
       from: "config",

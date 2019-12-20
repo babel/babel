@@ -47,15 +47,16 @@ export default async function({
     const dest = getDest(relative, base);
 
     try {
-      const res = await util.compile(
-        src,
-        defaults(
-          {
-            sourceFileName: slash(path.relative(dest + "/..", src)),
-          },
-          babelOptions,
-        ),
+      const opts = defaults(
+        {
+          sourceFileName: slash(path.relative(dest + "/..", src)),
+        },
+        babelOptions,
       );
+      if (!print) {
+        opts.showConfig = false;
+      }
+      const res = await util.compile(src, opts);
 
       if (!res) return FILE_TYPE.IGNORED;
 
@@ -96,8 +97,12 @@ export default async function({
     return path.join(cliOptions.outDir, filename);
   }
 
-  async function handleFile(src: string, base: string): Promise<boolean> {
-    const written = await write(src, base);
+  async function handleFile(
+    src: string,
+    base: string,
+    print: boolean,
+  ): Promise<boolean> {
+    const written = await write(src, base, print);
 
     if (
       (cliOptions.copyFiles && written === FILE_TYPE.NON_COMPILABLE) ||
@@ -122,17 +127,19 @@ export default async function({
       let count = 0;
 
       const files = util.readdir(dirname, cliOptions.includeDotfiles);
+      let print = true;
       for (const filename of files) {
         const src = path.join(dirname, filename);
 
-        const written = await handleFile(src, dirname);
+        const written = await handleFile(src, dirname, print);
         if (written) count += 1;
+        print = false;
       }
 
       return count;
     } else {
       const filename = filenameOrDir;
-      const written = await handleFile(filename, path.dirname(filename));
+      const written = await handleFile(filename, path.dirname(filename), true);
 
       return written ? 1 : 0;
     }

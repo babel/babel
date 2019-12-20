@@ -10,7 +10,7 @@ import {
 } from "./transformation";
 import * as fs from "./gensync-utils/fs";
 
-import printConfig from "./utils/print-config";
+import { printConfig, type PrintConfig } from "./utils/print-config";
 
 import typeof * as transformFileBrowserType from "./transform-file-browser";
 import typeof * as transformFileType from "./transform-file";
