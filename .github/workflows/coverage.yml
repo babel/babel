@@ -18,22 +18,7 @@ jobs:
       - name: Environment log
         id: env
         run: |
-          echo "::set-output name=yarn-cache-dir::$(yarn cache dir)"
           yarn --version
-      - name: Get node_modules cache
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Get yarn cache
-        uses: actions/cache@v1
-        with:
-          path: ${{ steps.env.outputs.yarn-cache-dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
       - name: Generate coverage report
         run: |
           yarn --version
