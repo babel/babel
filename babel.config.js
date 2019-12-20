@@ -1,5 +1,7 @@
 "use strict";
 
+const path = require("path");
+
 module.exports = function(api) {
   const env = api.env();
 
@@ -14,6 +16,10 @@ module.exports = function(api) {
 
   let convertESM = true;
   let ignoreLib = true;
+  let includeRegeneratorRuntime = false;
+
+  let transformRuntimeOptions;
+
   const nodeVersion = "6.9";
   // The vast majority of our src files are modules, but we use
   // unambiguous to keep things simple until we get around to renaming
@@ -36,6 +42,8 @@ module.exports = function(api) {
     case "standalone":
       convertESM = false;
       ignoreLib = false;
+      includeRegeneratorRuntime = true;
+      // rollup-commonjs will converts node_modules to ESM
       unambiguousSources.push(
         "**/node_modules",
         "packages/babel-preset-env/data",
@@ -60,6 +68,17 @@ module.exports = function(api) {
         node: "current",
       };
       break;
+  }
+
+  if (includeRegeneratorRuntime) {
+    const babelRuntimePkgPath = require.resolve("@babel/runtime/package.json");
+
+    transformRuntimeOptions = {
+      helpers: false, // Helpers are handled by rollup when needed
+      regenerator: true,
+      version: require(babelRuntimePkgPath).version,
+      absoluteRuntime: path.dirname(babelRuntimePkgPath),
+    };
   }
 
   const config = {
@@ -118,6 +137,10 @@ module.exports = function(api) {
       {
         test: unambiguousSources,
         sourceType: "unambiguous",
+      },
+      includeRegeneratorRuntime && {
+        exclude: /regenerator-runtime/,
+        plugins: [["@babel/transform-runtime", transformRuntimeOptions]],
       },
     ].filter(Boolean),
   };
