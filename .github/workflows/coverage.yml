@@ -1,0 +1,36 @@
+name: Report Coverage
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [13.x]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Environment log
+        id: env
+        run: |
+          yarn --version
+      - name: Generate coverage report
+        run: |
+          yarn --version
+          make test-ci-coverage
+          # Builds babel-standalone with the regular Babel config
+          # test-ci-coverage doesn't test babel-standalone, as trying to gather coverage
+          IS_PUBLISH=true make build-standalone
+          # data for a JS file that's several megabytes large is bound to fail. Here,
+          # we just run the babel-standalone test separately.
+          yarn jest "\-standalone/test"
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
