@@ -1,12 +1,12 @@
 "use strict";
 
-const presetEnv = require("../");
+const { isItemRequired } = require("../");
 
 describe("isPluginRequired", () => {
   const MAX_VERSION = `${Number.MAX_SAFE_INTEGER}.0.0`;
 
   it("returns true if no targets are specified", () => {
-    expect(presetEnv.isPluginRequired({}, {})).toBe(true);
+    expect(isItemRequired({}, {})).toBe(true);
   });
 
   it("returns true if plugin feature is not implemented in one or more targets", () => {
@@ -21,12 +21,12 @@ describe("isPluginRequired", () => {
       chrome: MAX_VERSION,
       firefox: MAX_VERSION,
     };
-    expect(presetEnv.isPluginRequired(targets, plugin)).toBe(false);
+    expect(isItemRequired(targets, plugin)).toBe(false);
 
     targets = {
       edge: "12",
     };
-    expect(presetEnv.isPluginRequired(targets, plugin)).toBe(true);
+    expect(isItemRequired(targets, plugin)).toBe(true);
   });
 
   it("returns false if plugin feature is implemented by lower than target", () => {
@@ -37,7 +37,7 @@ describe("isPluginRequired", () => {
       chrome: MAX_VERSION,
     };
 
-    expect(presetEnv.isPluginRequired(targets, plugin)).toBe(false);
+    expect(isItemRequired(targets, plugin)).toBe(false);
   });
 
   it("returns false if plugin feature is implemented is equal to target", () => {
@@ -47,7 +47,7 @@ describe("isPluginRequired", () => {
     const targets = {
       chrome: "49.0.0",
     };
-    expect(presetEnv.isPluginRequired(targets, plugin)).toBe(false);
+    expect(isItemRequired(targets, plugin)).toBe(false);
   });
 
   it("returns true if plugin feature is implemented is greater than target", () => {
@@ -57,7 +57,7 @@ describe("isPluginRequired", () => {
     const targets = {
       chrome: "49.0.0",
     };
-    expect(presetEnv.isPluginRequired(targets, plugin)).toBe(true);
+    expect(isItemRequired(targets, plugin)).toBe(true);
   });
 
   it("returns when target is a decimal", () => {
@@ -67,7 +67,7 @@ describe("isPluginRequired", () => {
     const targets = {
       node: "6.10.0",
     };
-    expect(presetEnv.isPluginRequired(targets, plugin)).toBe(false);
+    expect(isItemRequired(targets, plugin)).toBe(false);
   });
 
   it("throws an error if target version is invalid", () => {
@@ -77,6 +77,6 @@ describe("isPluginRequired", () => {
     const targets = {
       chrome: 55,
     };
-    expect(() => presetEnv.isPluginRequired(targets, plugin)).toThrow();
+    expect(() => isItemRequired(targets, plugin)).toThrow();
   });
 });

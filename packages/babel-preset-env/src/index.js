@@ -3,12 +3,12 @@
 import { SemVer } from "semver";
 import { logPluginOrPolyfill } from "./debug";
 import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
-import filterItems, { removeUnnecessaryItems } from "./filter-items";
+import { removeUnnecessaryItems } from "./filter-items";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options";
-import pluginList from "../data/plugins.json";
+import pluginList from "@babel/compat-data/plugins";
 import { proposalPlugins, pluginSyntaxMap } from "../data/shipped-proposals";
-import overlappingPlugins from "../data/overlapping-plugins";
+import overlappingPlugins from "@babel/compat-data/overlapping-plugins";
 
 import addCoreJS2UsagePlugin from "./polyfills/corejs2/usage-plugin";
 import addCoreJS3UsagePlugin from "./polyfills/corejs3/usage-plugin";
@@ -17,15 +17,19 @@ import replaceCoreJS2EntryPlugin from "./polyfills/corejs2/entry-plugin";
 import replaceCoreJS3EntryPlugin from "./polyfills/corejs3/entry-plugin";
 import removeRegeneratorEntryPlugin from "./polyfills/regenerator/entry-plugin";
 
-import getTargets from "./targets-parser";
+import getTargets, {
+  prettifyTargets,
+  filterItems,
+  type Targets,
+} from "@babel/helper-compilation-targets";
 import availablePlugins from "./available-plugins";
-import { filterStageFromList, prettifyTargets } from "./utils";
+import { filterStageFromList } from "./utils";
 import { declare } from "@babel/helper-plugin-utils";
 
 import typeof ModuleTransformationsType from "./module-transformations";
-import type { BuiltInsOption, Targets, ModuleOption } from "./types";
+import type { BuiltInsOption, ModuleOption } from "./types";
 
-export { isPluginRequired } from "./filter-items";
+export { isItemRequired as isPluginRequired } from "@babel/helper-compilation-targets";
 
 const pluginListWithoutProposals = filterStageFromList(
   pluginList,

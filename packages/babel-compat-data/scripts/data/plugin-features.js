@@ -1,4 +1,4 @@
-const es = {
+module.exports = {
   "transform-template-literals": {
     features: ["template literals"],
   },
@@ -65,10 +65,7 @@ const es = {
     ],
   },
   "transform-destructuring": {
-    features: [
-      "destructuring, assignment",
-      "destructuring, declarations",
-    ],
+    features: ["destructuring, assignment", "destructuring, declarations"],
   },
   "transform-block-scoping": {
     features: ["const", "let"],
@@ -98,11 +95,9 @@ const es = {
   "proposal-json-strings": "JSON superset",
   "proposal-optional-catch-binding": "optional catch binding",
   "transform-named-capturing-groups-regex": "RegExp named capture groups",
-  "transform-member-expression-literals": "Object/array literal extensions / Reserved words as property names",
-  "transform-property-literals": "Object/array literal extensions / Reserved words as property names",
+  "transform-member-expression-literals":
+    "Object/array literal extensions / Reserved words as property names",
+  "transform-property-literals":
+    "Object/array literal extensions / Reserved words as property names",
   "transform-reserved-words": "Miscellaneous / Unreserved words",
 };
-
-const proposals = require("./shipped-proposals").features;
-
-module.exports = Object.assign({}, es, proposals);

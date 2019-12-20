@@ -30,24 +30,16 @@ module.exports = function(api) {
   switch (env) {
     // Configs used during bundling builds.
     case "rollup":
-      convertESM = false;
-      ignoreLib = false;
-      // rollup-commonjs will converts node_modules to ESM
-      unambiguousSources.push(
-        "**/node_modules",
-        // todo: remove this after it is rewritten into ESM
-        "packages/babel-preset-env/data"
-      );
       envOpts.targets = {
         node: nodeVersion,
       };
-      break;
     case "standalone":
       convertESM = false;
       ignoreLib = false;
       unambiguousSources.push(
         "**/node_modules",
-        "packages/babel-preset-env/data"
+        "packages/babel-preset-env/data",
+        "packages/babel-compat-data"
       );
       // targets to browserslists: defaults
       break;

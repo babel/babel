@@ -181,7 +181,12 @@ function buildRollup(packages) {
                 },
               }),
               rollupCommonJs({
-                include: [/node_modules/, "packages/babel-preset-env/data/**"],
+                include: [
+                  /node_modules/,
+                  "packages/babel-preset-env/data/*.js",
+                  // Rollup doesn't read export maps, so it loads the cjs fallback
+                  "packages/babel-compat-data/*.js",
+                ],
                 namedExports: {
                   "babel-plugin-dynamic-import-node/utils.js": [
                     "createDynamicImportTransform",
