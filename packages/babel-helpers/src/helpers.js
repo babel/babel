@@ -396,10 +396,10 @@ helpers.objectSpread = helper("7.0.0-beta.0")`
 
   export default function _objectSpread(target) {
     for (var i = 1; i < arguments.length; i++) {
-      var source = (arguments[i] != null) ? arguments[i] : {};
-      var ownKeys = Object.keys(Object(source));
+      var source = (arguments[i] != null) ? Object(arguments[i]) : {};
+      var ownKeys = Object.keys(source);
       if (typeof Object.getOwnPropertySymbols === 'function') {
-        ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(Object(source)).filter(function(sym) {
+        ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
           return Object.getOwnPropertyDescriptor(source, sym).enumerable;
         }));
       }
