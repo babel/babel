@@ -1389,7 +1389,7 @@ export default class ExpressionParser extends LValParser {
     if (this.eat(tt.dot)) {
       const metaProp = this.parseMetaProperty(node, meta, "target");
 
-      if (!this.scope.inNonArrowFunction && !this.state.inClassProperty) {
+      if (!this.scope.inNonArrowFunction && !this.scope.inClass) {
         let error = "new.target can only be used in functions";
 
         if (this.hasPlugin("classProperties")) {
