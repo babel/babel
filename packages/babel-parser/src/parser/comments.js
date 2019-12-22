@@ -174,11 +174,9 @@ export default class CommentsParser extends BaseParser {
         (this.state.commentPreviousNode.type === "ExportSpecifier" &&
           node.type !== "ExportSpecifier"))
     ) {
-      this.adjustCommentsAfterTrailingComma(
-        node,
-        [this.state.commentPreviousNode],
-        true,
-      );
+      this.adjustCommentsAfterTrailingComma(node, [
+        this.state.commentPreviousNode,
+      ]);
     }
 
     if (lastChild) {
