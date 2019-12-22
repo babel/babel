@@ -59,8 +59,8 @@ jobs:
         # Builds babel-standalone with the regular Babel config
         # test-ci-coverage doesn't test babel-standalone, as trying to gather coverage
       - run: IS_PUBLISH=true make -j build-standalone-ci
-          # data for a JS file that's several megabytes large is bound to fail. Here,
-          # we just run the babel-standalone test separately.
+        # data for a JS file that's several megabytes large is bound to fail. Here,
+        # we just run the babel-standalone test separately.
       - run: yarn jest "\-standalone/test"
       - store_artifacts: *artifact_babel
       - store_artifacts: *artifact_babel_min
