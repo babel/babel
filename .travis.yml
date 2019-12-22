@@ -34,9 +34,22 @@ matrix:
     - os: windows
       node_js: "node"
       env:
-        - JOB=test
-        # https://travis-ci.community/t/build-doesnt-finish-after-completing-tests/288/9
-        - YARN_GPG=no
+        global:
+          # https://travis-ci.community/t/windows-builds-time-out-during-cache-restore/4642/4
+          - >
+              DISABLE_WINDOWS_DEFENDER=`powershell -Command
+              Set-MpPreference -DisableArchiveScanning \\\$true`
+          - >
+              DISABLE_WINDOWS_DEFENDER=`powershell -Command
+              Set-MpPreference -DisableRealtimeMonitoring \\\$true`
+          - >
+              DISABLE_WINDOWS_DEFENDER=`powershell -Command
+              Set-MpPreference -DisableBehaviorMonitoring \\\$true`
+        jobs:
+          - JOB=test
+          # https://travis-ci.community/t/build-doesnt-finish-after-completing-tests/288/9
+          - YARN_GPG=no
+
       cache:
         yarn: true
         directories:
