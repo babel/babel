@@ -9,6 +9,28 @@ aliases:
     keys:
       - v1-yarn-cache
 
+  - &save-node-modules-cache
+    paths:
+      - node_modules
+    key: v1-yarn-deps-{{ checksum "yarn.lock" }}
+
+  - &save-yarn-cache
+    paths:
+      - ~/.yarn-cache
+    key: v1-yarn-cache
+
+  - &artifact_babel
+    path: ~/babel/packages/babel-standalone/babel.js
+
+  - &artifact_babel_min
+    path: ~/babel/packages/babel-standalone/babel.min.js
+
+  - &artifact_env
+    path: ~/babel/packages/babel-preset-env-standalone/babel-preset-env.js
+
+  - &artifact_env_min
+    path: ~/babel/packages/babel-preset-env-standalone/babel-preset-env.min.js
+
   - &test262_workdir
     working_directory: ~/babel/babel-test262-runner
 
@@ -28,6 +50,25 @@ executors:
     working_directory: ~/babel
 
 jobs:
+  build-standalone:
+    executor: node-executor
+    steps:
+      - checkout
+      - restore_cache: *restore-yarn-cache
+      - restore_cache: *restore-node-modules-cache
+        # Builds babel-standalone with the regular Babel config
+        # test-ci-coverage doesn't test babel-standalone, as trying to gather coverage
+      - run: IS_PUBLISH=true make -j build-standalone-ci
+          # data for a JS file that's several megabytes large is bound to fail. Here,
+          # we just run the babel-standalone test separately.
+      - run: yarn jest "\-standalone/test"
+      - store_artifacts: *artifact_babel
+      - store_artifacts: *artifact_babel_min
+      - store_artifacts: *artifact_env
+      - store_artifacts: *artifact_env_min
+      - save_cache: *save-node-modules-cache
+      - save_cache: *save-yarn-cache
+
   test262:
     executor: node-executor
     steps:
@@ -81,6 +122,8 @@ jobs:
             cat ~/diff.tap | $(npm bin)/tap-merge | $(npm bin)/tap-mocha-reporter xunit | tee ~/test-results/test262/results.xml
           <<: *test262_workdir
       - store_test_results: *artifact_test262_xunit
+      - save_cache: *save-node-modules-cache
+      - save_cache: *save-yarn-cache
 
   publish-verdaccio:
     executor: node-executor
@@ -112,6 +155,9 @@ jobs:
 
 workflows:
   version: 2
+  build-standalone:
+    jobs:
+      - build-standalone
   test262-master:
     jobs:
       - test262:
