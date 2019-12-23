@@ -224,11 +224,11 @@ export function assertArrowFunctionExpression(
 export function assertClassBody(node: Object, opts?: Object = {}): void {
   assert("ClassBody", node, opts);
 }
-export function assertClassDeclaration(node: Object, opts?: Object = {}): void {
-  assert("ClassDeclaration", node, opts);
-}
 export function assertClassExpression(node: Object, opts?: Object = {}): void {
   assert("ClassExpression", node, opts);
+}
+export function assertClassDeclaration(node: Object, opts?: Object = {}): void {
+  assert("ClassDeclaration", node, opts);
 }
 export function assertExportAllDeclaration(
   node: Object,

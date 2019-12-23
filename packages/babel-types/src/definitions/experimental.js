@@ -26,9 +26,16 @@ defineType("AwaitExpression", {
 defineType("BindExpression", {
   visitor: ["object", "callee"],
   aliases: ["Expression"],
-  fields: {
-    // todo
-  },
+  fields: !process.env.BABEL_TYPES_8_BREAKING
+    ? {}
+    : {
+        object: {
+          validate: assertNodeType("Expression"),
+        },
+        callee: {
+          validate: assertNodeType("Expression"),
+        },
+      },
 });
 
 defineType("ClassProperty", {
