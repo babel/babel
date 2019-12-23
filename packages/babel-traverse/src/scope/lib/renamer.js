@@ -9,8 +9,9 @@ const renameVisitor = {
     }
   },
 
-  Scope(path, state) {
+  "Pattern|Scope"(path, state) {
     if (
+      path.isScope() &&
       !path.scope.bindingIdentifierEquals(
         state.oldName,
         state.binding.identifier,
