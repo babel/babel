@@ -902,14 +902,14 @@ export default class Scope {
     do {
       const binding = scope.getOwnBinding(name);
       if (binding) {
-        // When a pattern is a Scope, it is a part of parameter expressions.
+        // Check if a pattern is a part of parameter expressions.
         // 9.2.10.28: The closure created by this expression should not have visibility of
         // declarations in the function body. If the binding is not a `param`-kind,
         // then it must be defined inside the function body, thus it should be skipped
         if (
           previousPath &&
           previousPath.isPattern() &&
-          previousPath.isScope() &&
+          previousPath.parentPath.isFunction() &&
           binding.kind !== "param"
         ) {
           // do nothing
