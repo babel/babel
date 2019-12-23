@@ -2,13 +2,10 @@
 
 import loadConfig, { type InputOptions } from "./config";
 import parser from "./parser";
+import type { ParseResult } from "./parser";
 import normalizeOptions from "./transformation/normalize-opts";
 
-type AstRoot = BabelNodeFile | BabelNodeProgram;
-
-export type ParseResult = AstRoot;
-
-export type FileParseCallback = {
+type FileParseCallback = {
   (Error, null): any,
   (null, ParseResult | null): any,
 };
