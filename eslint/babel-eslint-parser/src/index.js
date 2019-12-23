@@ -12,7 +12,7 @@ const IS_RUNNING_SUPPORTED_VERSION = semver.satisfies(
 );
 
 export function parse(code, options) {
-  return exports.parseForESLint(code, options).ast;
+  return parseForESLint(code, options).ast;
 }
 
 export function parseForESLint(code, options = {}) {
