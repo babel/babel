@@ -153,6 +153,14 @@ jobs:
           at: /tmp/verdaccio-workspace
       - run: ./scripts/integration-tests/e2e-create-react-app.sh
 
+  e2e-vue-cli:
+    executor: node-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/verdaccio-workspace
+      - run: ./scripts/integration-tests/e2e-vue-cli.sh
+
 workflows:
   version: 2
   build-standalone:
@@ -189,3 +197,7 @@ workflows:
       - e2e-create-react-app:
           requires:
             - publish-verdaccio
+      - e2e-vue-cli:
+          requires:
+            - publish-verdaccio
+
