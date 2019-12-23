@@ -1,4 +1,6 @@
-export default function(token, tt, source) {
+import { tokTypes as tt } from "@babel/core";
+
+export default function(token, source) {
   const type = token.type;
   token.range = [token.start, token.end];
 

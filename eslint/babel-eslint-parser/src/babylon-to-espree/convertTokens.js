@@ -1,8 +1,8 @@
 import convertTemplateType from "./convertTemplateType";
 import convertToken from "./convertToken";
 
-export default function(tokens, tt, code) {
-  return convertTemplateType(tokens, tt)
+export default function(tokens, code) {
+  return convertTemplateType(tokens)
     .filter(t => t.type !== "CommentLine" && t.type !== "CommentBlock")
-    .map(t => convertToken(t, tt, code));
+    .map(t => convertToken(t, code));
 }

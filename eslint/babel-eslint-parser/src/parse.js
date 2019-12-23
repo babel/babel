@@ -1,4 +1,4 @@
-import { parseSync as babelParse, tokTypes as tt, traverse } from "@babel/core";
+import { parseSync as babelParse } from "@babel/core";
 import babylonToEspree from "./babylon-to-espree";
 import { normalizeBabelParseConfig } from "./configuration";
 
@@ -17,7 +17,7 @@ export default function parse(code, options) {
     throw err;
   }
 
-  babylonToEspree(ast, traverse, tt, code);
+  babylonToEspree(ast, code);
 
   return ast;
 }

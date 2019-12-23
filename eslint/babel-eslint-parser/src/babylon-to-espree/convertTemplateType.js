@@ -1,4 +1,6 @@
-export default function(tokens, tt) {
+import { tokTypes as tt } from "@babel/core";
+
+export default function(tokens) {
   let curlyBrace = null;
   let templateTokens = [];
   const result = [];
