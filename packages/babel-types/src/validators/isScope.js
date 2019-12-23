@@ -4,6 +4,7 @@ import {
   isCatchClause,
   isBlockStatement,
   isScopable,
+  isPattern,
 } from "./generated";
 
 /**
@@ -16,6 +17,10 @@ export default function isScope(node: Object, parent: Object): boolean {
 
   if (isBlockStatement(node) && isCatchClause(parent, { body: node })) {
     return false;
+  }
+
+  if (isPattern(node) && isFunction(parent)) {
+    return true;
   }
 
   return isScopable(node);
