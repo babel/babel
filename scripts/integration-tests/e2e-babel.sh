@@ -5,7 +5,7 @@
 #==============================================================================#
 
 # Start in scripts/integration-tests/ even if run from root directory
-cd "$(dirname "$0")"
+cd "$(dirname "$0")" || exit
 
 source utils/local-registry.sh
 source utils/cleanup.sh
