@@ -48,6 +48,7 @@ executors:
     docker:
       - image: circleci/node:13
     working_directory: ~/babel
+  # e2e-vue-cli test requires chromium
   node-browsers-executor:
     docker:
       - image: circleci/node:13-browsers
