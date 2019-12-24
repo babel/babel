@@ -4,7 +4,6 @@ import * as t from "@babel/types";
 import type { NodePath } from "@babel/traverse";
 import invariant from "invariant";
 import semver from "semver";
-import levenshtein from "js-levenshtein";
 import { addSideEffect } from "@babel/helper-module-imports";
 import unreleasedLabels from "../data/unreleased-labels";
 import { semverMin } from "./targets-parser";
@@ -51,18 +50,6 @@ export function intersection<T>(
     if (second.has(el) && third.has(el)) result.add(el);
   }
   return result;
-}
-
-export function findSuggestion(options: string[], option: string): string {
-  let levenshteinValue = Infinity;
-  return options.reduce((suggestion, validOption) => {
-    const value = levenshtein(validOption, option);
-    if (value < levenshteinValue) {
-      levenshteinValue = value;
-      return validOption;
-    }
-    return suggestion;
-  }, "");
 }
 
 export function prettifyVersion(version: string) {

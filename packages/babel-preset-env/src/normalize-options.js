@@ -8,7 +8,7 @@ import moduleTransformations from "./module-transformations";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
 import { defaultWebIncludes } from "./polyfills/corejs2/get-platform-specific-default";
 import { isBrowsersQueryValid } from "./targets-parser";
-import { findSuggestion } from "./utils";
+import findSuggestion from "levenary";
 
 import type {
   BuiltInsOption,

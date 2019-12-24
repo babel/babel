@@ -3,12 +3,8 @@
 import browserslist from "browserslist";
 import invariant from "invariant";
 import semver from "semver";
-import {
-  semverify,
-  isUnreleasedVersion,
-  getLowestUnreleased,
-  findSuggestion,
-} from "./utils";
+import findSuggestion from "levenary";
+import { semverify, isUnreleasedVersion, getLowestUnreleased } from "./utils";
 import browserModulesData from "../data/built-in-modules.json";
 import { TargetNames } from "./options";
 import type { Targets } from "./types";
