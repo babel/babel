@@ -1048,11 +1048,9 @@ export default class StatementParser extends ExpressionParser {
     }
 
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    const oldInClassProperty = this.state.inClassProperty;
     const oldYieldPos = this.state.yieldPos;
     const oldAwaitPos = this.state.awaitPos;
     this.state.maybeInArrowParameters = false;
-    this.state.inClassProperty = false;
     this.state.yieldPos = -1;
     this.state.awaitPos = -1;
     this.scope.enter(functionFlags(node.async, node.generator));
@@ -1084,7 +1082,6 @@ export default class StatementParser extends ExpressionParser {
     }
 
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
-    this.state.inClassProperty = oldInClassProperty;
     this.state.yieldPos = oldYieldPos;
     this.state.awaitPos = oldAwaitPos;
 
@@ -1575,13 +1572,10 @@ export default class StatementParser extends ExpressionParser {
   parseClassPrivateProperty(
     node: N.ClassPrivateProperty,
   ): N.ClassPrivateProperty {
-    this.state.inClassProperty = true;
-
     this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
 
     node.value = this.eat(tt.eq) ? this.parseMaybeAssign() : null;
     this.semicolon();
-    this.state.inClassProperty = false;
 
     this.scope.exit();
 
@@ -1593,8 +1587,6 @@ export default class StatementParser extends ExpressionParser {
       this.expectPlugin("classProperties");
     }
 
-    this.state.inClassProperty = true;
-
     this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
 
     if (this.match(tt.eq)) {
@@ -1605,7 +1597,6 @@ export default class StatementParser extends ExpressionParser {
       node.value = null;
     }
     this.semicolon();
-    this.state.inClassProperty = false;
 
     this.scope.exit();
 

@@ -64,7 +64,6 @@ export default class State {
   inType: boolean = false;
   noAnonFunctionType: boolean = false;
   inPropertyName: boolean = false;
-  inClassProperty: boolean = false;
   hasFlowComment: boolean = false;
   isIterator: boolean = false;
 
