@@ -48,6 +48,10 @@ executors:
     docker:
       - image: circleci/node:13
     working_directory: ~/babel
+  node-browsers-executor:
+    docker:
+      - image: circleci/node:13-browsers
+    working_directory: ~/babel
 
 jobs:
   build-standalone:
@@ -154,7 +158,7 @@ jobs:
       - run: ./scripts/integration-tests/e2e-create-react-app.sh
 
   e2e-vue-cli:
-    executor: node-executor
+    executor: node-browsers-executor
     steps:
       - checkout
       - attach_workspace:
