@@ -5,6 +5,7 @@ import { sync as makeDirSync } from "make-dir";
 import slash from "slash";
 import path from "path";
 import fs from "fs";
+import { pathToPattern } from "@babel/core";
 
 import * as util from "./util";
 import { type CmdOptions } from "./options";
@@ -12,6 +13,28 @@ import { type CmdOptions } from "./options";
 function outputFileSync(filePath: string, data: string | Buffer): void {
   makeDirSync(path.dirname(filePath));
   fs.writeFileSync(filePath, data);
+}
+
+function isIgnoredFile(fileName: string, ignoredList: Array<string>): boolean {
+  const dir = process.cwd();
+
+  if (ignoredList.length === 1) {
+    const pattern = pathToPattern(ignoredList[0], dir);
+    const absolutePath = path.resolve(dir, fileName);
+    return pattern.test(absolutePath);
+  }
+  const cache = {};
+  return ignoredList.some(ignorePattern => {
+    let pattern;
+    if (cache[ignorePattern]) {
+      pattern = cache[ignorePattern];
+    } else {
+      cache[ignorePattern] = pathToPattern(ignorePattern, dir);
+    }
+    pattern = cache[ignorePattern];
+    const absolutePath = path.resolve(dir, fileName);
+    return pattern.test(absolutePath);
+  });
 }
 
 export default async function({
@@ -92,7 +115,9 @@ export default async function({
     if (
       !written &&
       ((!isCompilableExtension && cliOptions.copyFiles) ||
-        cliOptions.copyIgnored)
+        (cliOptions.copyIgnored &&
+          cliOptions.ignore.length &&
+          isIgnoredFile(src, cliOptions.ignore)))
     ) {
       const filename = path.relative(base, src);
       const dest = getDest(filename, base);

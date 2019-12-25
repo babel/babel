@@ -3,9 +3,8 @@
     "src",
     "--out-dir",
     "lib",
-    "--copy-files",
-    "--ignore",
-    "src/foo",
+    "--only",
+    "src/bar",
     "--copy-ignored",
     "--verbose"
   ]
