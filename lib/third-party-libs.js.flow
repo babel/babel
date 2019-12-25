@@ -190,12 +190,6 @@ declare module "convert-source-map" {
   };
 }
 
-declare module "js-levenshtein" {
-  declare module.exports: {
-    (string, string): number,
-  };
-}
-
 declare module "core-js-compat/data" {
   declare type Target = "node" | "chrome" | "opera" | "edge" | "firefox" | "safari" | "ie" | "ios" | "android" | "electron" | "samsung";
 
