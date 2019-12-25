@@ -66,11 +66,11 @@ export class TokenType {
         return keyword;
       },
       set(val) {
+        if (keyword && keywords.has(keyword)) {
+          keywords.delete(keyword);
+        }
         if (!val) {
           return;
-        }
-        if (keywords.has(keyword)) {
-          keywords.delete(keyword);
         }
         keywords.set(val, this);
         this.label = val;
