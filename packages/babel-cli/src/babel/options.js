@@ -74,8 +74,8 @@ commander.option(
   booleanify,
 );
 commander.option(
-  "--minified [true|false]",
-  "Save as many bytes when printing.",
+  "--minified",
+  "Save as many bytes when printing. (false by default)",
 );
 commander.option(
   "--auxiliary-comment-before [string]",
