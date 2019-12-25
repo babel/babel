@@ -66,6 +66,9 @@ export class TokenType {
         return keyword;
       },
       set(val) {
+        if (!val) {
+          return;
+        }
         if (keywords.has(keyword)) {
           keywords.delete(keyword);
         }
