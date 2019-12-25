@@ -64,7 +64,9 @@ export class TokenType {
         return keyword;
       },
       set(val) {
-        keywords.delete(keyword);
+        if(keywords.has(keyword)) {
+          keywords.delete(keyword);
+        }
         keywords.set(val, this);
         this.label = val;
         keyword = val;
