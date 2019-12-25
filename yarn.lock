@@ -1139,18 +1139,7 @@
     figgy-pudding "^3.5.1"
     npmlog "^4.1.2"
 
-"@lerna/collect-updates@3.18.0":
-  version "3.18.0"
-  resolved "https://registry.yarnpkg.com/@lerna/collect-updates/-/collect-updates-3.18.0.tgz#6086c64df3244993cc0a7f8fc0ddd6a0103008a6"
-  integrity sha512-LJMKgWsE/var1RSvpKDIxS8eJ7POADEc0HM3FQiTpEczhP6aZfv9x3wlDjaHpZm9MxJyQilqxZcasRANmRcNgw==
-  dependencies:
-    "@lerna/child-process" "3.16.5"
-    "@lerna/describe-ref" "3.16.5"
-    minimatch "^3.0.4"
-    npmlog "^4.1.2"
-    slash "^2.0.0"
-
-"@lerna/collect-updates@https://github.com/babel/lerna.git#babel-collect-updates":
+"@lerna/collect-updates@3.18.0", "@lerna/collect-updates@https://github.com/babel/lerna.git#babel-collect-updates":
   version "3.16.0"
   resolved "https://github.com/babel/lerna.git#ae87fff020c5ad00366878c14b749e8ee0a34145"
   dependencies:
