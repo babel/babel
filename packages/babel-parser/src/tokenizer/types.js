@@ -57,7 +57,18 @@ export class TokenType {
 
   constructor(label: string, conf: TokenOptions = {}) {
     this.label = label;
-    this.keyword = conf.keyword;
+    let keyword = conf.keyword;
+    Object.defineProperty(this,'keyword',{
+      get:function() {
+        return keyword;
+      },
+      set:function(val) {
+        keywords.delete(keyword)
+        keywords.set(val, this)
+        this.label = val;
+        keyword = val;
+      }
+    })
     this.beforeExpr = !!conf.beforeExpr;
     this.startsExpr = !!conf.startsExpr;
     this.rightAssociative = !!conf.rightAssociative;
