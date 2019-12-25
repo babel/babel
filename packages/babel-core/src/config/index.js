@@ -11,7 +11,6 @@ export type {
 export { loadFullConfig as default };
 export { loadPartialConfig } from "./partial";
 export type { PartialConfig } from "./partial";
-export { default as pathToPattern } from "./pattern-to-regex";
 
 export function loadOptions(opts: {}): Object | null {
   const config = loadFullConfig(opts);

@@ -20,9 +20,9 @@ const starStarPatLast = `${starPat}*?${starPatLast}?`;
  */
 
 /**
- *  NOTE - This function is duplicated in babel-cli. Any changes to be made in function
- *  should be made in babel/cli as well. This will be removed in v8
- *  Path - babel-cli/src/pattern-to-regex
+ *  NOTE - This is copied from babel/core. Any changes to be made in function
+ *  should be made in babel/core as well. This will be removed in v8
+ *  Path - babel-core/src/config/pattern-to-regex
  */
 
 export default function pathToPattern(

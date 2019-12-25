@@ -5,7 +5,7 @@ import { sync as makeDirSync } from "make-dir";
 import slash from "slash";
 import path from "path";
 import fs from "fs";
-import { pathToPattern } from "@babel/core";
+import pathToPattern from "./pattern-to-regex";
 
 import * as util from "./util";
 import { type CmdOptions } from "./options";
