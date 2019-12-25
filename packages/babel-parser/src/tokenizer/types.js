@@ -58,7 +58,8 @@ export class TokenType {
   constructor(label: string, conf: TokenOptions = {}) {
     this.label = label;
     let keyword = conf.keyword;
-    Reflect.defineProperty(this, 'keyword', {
+    Reflect.defineProperty(this, "keyword", {
+      enumerable: true,
       get() {
         return keyword;
       },
