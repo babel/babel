@@ -42,6 +42,8 @@ type TokenOptions = {
   binop?: ?number,
 };
 
+export const keywords = new Map<string, TokenType>();
+
 export class TokenType {
   label: string;
   keyword: ?string;
@@ -64,7 +66,7 @@ export class TokenType {
         return keyword;
       },
       set(val) {
-        if(keywords.has(keyword)) {
+        if (keywords.has(keyword)) {
           keywords.delete(keyword);
         }
         keywords.set(val, this);
@@ -83,8 +85,6 @@ export class TokenType {
     this.updateContext = null;
   }
 }
-
-export const keywords = new Map<string, TokenType>();
 
 function createKeyword(name: string, options: TokenOptions = {}): TokenType {
   options.keyword = name;
