@@ -1,7 +1,5 @@
 "use strict";
 
-const path = require("path");
-
 module.exports = function(api) {
   const env = api.env();
 
@@ -35,21 +33,19 @@ module.exports = function(api) {
 
   switch (env) {
     // Configs used during bundling builds.
-    case "rollup":
-      envOpts.targets = {
-        node: nodeVersion,
-      };
     case "standalone":
+      includeRegeneratorRuntime = true;
+      unambiguousSources.push("packages/babel-runtime/regenerator");
+    case "rollup":
       convertESM = false;
       ignoreLib = false;
-      includeRegeneratorRuntime = true;
       // rollup-commonjs will converts node_modules to ESM
       unambiguousSources.push(
         "**/node_modules",
         "packages/babel-preset-env/data",
         "packages/babel-compat-data"
       );
-      // targets to browserslists: defaults
+      if (env === "rollup") envOpts.targets = { node: nodeVersion };
       break;
     case "production":
       // Config during builds before publish.
@@ -77,7 +73,6 @@ module.exports = function(api) {
       helpers: false, // Helpers are handled by rollup when needed
       regenerator: true,
       version: require(babelRuntimePkgPath).version,
-      absoluteRuntime: path.dirname(babelRuntimePkgPath),
     };
   }
 
