@@ -10,6 +10,9 @@ import "core-js/modules/es.promise";
 import "core-js/modules/es.regexp.exec";
 import "core-js/modules/es.string.iterator";
 import "core-js/modules/es.string.match";
+import "core-js/modules/esnext.global-this";
+import "core-js/modules/esnext.promise.all-settled";
+import "core-js/modules/esnext.string.match-all";
 import "core-js/modules/web.dom-collections.iterator";
 import "core-js/modules/web.queue-microtask";
 Array.from; // static method
@@ -49,3 +52,5 @@ queueMicrotask(function () {
   return globalThis;
 });
 Observable.from(10);
+Promise.allSettled([]);
+S.matchAll();
