@@ -57,6 +57,11 @@ const PromiseDependenciesWithIterators = [
   ...CommonIterators,
 ];
 
+const PromiseAnyDependencies = [
+  "esnext.aggregate-error",
+  ...PromiseDependenciesWithIterators, // includes aggregate-error dependencies
+];
+
 const SymbolDependencies = [
   "es.symbol",
   "es.symbol.description",
@@ -358,7 +363,7 @@ export const StaticProperties: ObjectMap<ObjectMap<string | string[]>> = {
       "esnext.promise.all-settled",
       ...PromiseDependenciesWithIterators,
     ],
-    any: ["esnext.promise.any", ...PromiseDependenciesWithIterators],
+    any: ["esnext.promise.any", ...PromiseAnyDependencies],
     race: PromiseDependenciesWithIterators,
     try: ["esnext.promise.try", ...PromiseDependenciesWithIterators],
   },
