@@ -309,7 +309,6 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
       quiet: opts.quiet,
       deleteDirOnStart: opts.deleteDirOnStart,
       sourceMapTarget: opts.sourceMapTarget,
-      ignore: opts.ignore,
       copyIgnored: opts.copyIgnored,
     },
   };
