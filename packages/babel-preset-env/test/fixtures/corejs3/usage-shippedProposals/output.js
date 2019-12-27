@@ -24,11 +24,11 @@ require("core-js/modules/es.string.iterator");
 
 require("core-js/modules/es.string.match");
 
-require("core-js/modules/esnext.global-this");
-
 require("core-js/modules/web.dom-collections.iterator");
 
 require("core-js/modules/web.queue-microtask");
+
+require("core-js/modules/esnext.global-this");
 
 Array.from; // static method
 
