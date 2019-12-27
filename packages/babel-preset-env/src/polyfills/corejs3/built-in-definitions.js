@@ -358,7 +358,11 @@ export const StaticProperties: ObjectMap<ObjectMap<string | string[]>> = {
       "esnext.promise.all-settled",
       ...PromiseDependenciesWithIterators,
     ],
-    any: ["esnext.promise.any", ...PromiseDependenciesWithIterators],
+    any: [
+      "esnext.promise.any",
+      "esnext.aggregate-error",
+      ...PromiseDependenciesWithIterators,
+    ],
     race: PromiseDependenciesWithIterators,
     try: ["esnext.promise.try", ...PromiseDependenciesWithIterators],
   },
