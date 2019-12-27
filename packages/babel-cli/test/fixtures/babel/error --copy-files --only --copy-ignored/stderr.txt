@@ -1,2 +1,0 @@
-babel:
-  --copy-ignored requires --ignore

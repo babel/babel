@@ -231,10 +231,6 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     errors.push("--verbose and --quiet cannot be used together");
   }
 
-  if (commander.copyIgnored && !commander.ignore) {
-    errors.push("--copy-ignored requires --ignore");
-  }
-
   if (
     !commander.outDir &&
     filenames.length === 0 &&

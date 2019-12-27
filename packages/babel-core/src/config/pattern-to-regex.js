@@ -18,13 +18,6 @@ const starStarPatLast = `${starPat}*?${starPatLast}?`;
  * tests with * and **. If users want full complex pattern matching, then can
  * always use regex matching, or function validation.
  */
-
-/**
- *  NOTE - This function is duplicated in babel-cli. Any changes to be made in function
- *  should be made in babel/cli as well. This will be removed in v8
- *  Path - babel-cli/src/pattern-to-regex
- */
-
 export default function pathToPattern(
   pattern: string,
   dirname: string,

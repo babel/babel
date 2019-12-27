@@ -5,36 +5,20 @@ import { sync as makeDirSync } from "make-dir";
 import slash from "slash";
 import path from "path";
 import fs from "fs";
-import pathToPattern from "./pattern-to-regex";
 
 import * as util from "./util";
 import { type CmdOptions } from "./options";
 
+const FILE_TYPE = Object.freeze({
+  NON_COMPACTIBLE: "NON_COMPACTIBLE",
+  COMPILED: "COMPILED",
+  IGNORED: "IGNORED",
+  ERR_COMPILATION: "ERR_COMPILATION",
+});
+
 function outputFileSync(filePath: string, data: string | Buffer): void {
   makeDirSync(path.dirname(filePath));
   fs.writeFileSync(filePath, data);
-}
-
-function isIgnoredFile(fileName: string, ignoredList: Array<string>): boolean {
-  const dir = process.cwd();
-
-  if (ignoredList.length === 1) {
-    const pattern = pathToPattern(ignoredList[0], dir);
-    const absolutePath = path.resolve(dir, fileName);
-    return pattern.test(absolutePath);
-  }
-  const cache = {};
-  return ignoredList.some(ignorePattern => {
-    let pattern;
-    if (cache[ignorePattern]) {
-      pattern = cache[ignorePattern];
-    } else {
-      cache[ignorePattern] = pathToPattern(ignorePattern, dir);
-    }
-    pattern = cache[ignorePattern];
-    const absolutePath = path.resolve(dir, fileName);
-    return pattern.test(absolutePath);
-  });
 }
 
 export default async function({
@@ -43,11 +27,11 @@ export default async function({
 }: CmdOptions): Promise<void> {
   const filenames = cliOptions.filenames;
 
-  async function write(src: string, base: string): Promise<boolean> {
+  async function write(src: string, base: string): Promise<string> {
     let relative = path.relative(base, src);
 
     if (!util.isCompilableExtension(relative, cliOptions.extensions)) {
-      return false;
+      return FILE_TYPE.NON_COMPACTIBLE;
     }
 
     // remove extension and then append back on .js
@@ -66,7 +50,7 @@ export default async function({
         ),
       );
 
-      if (!res) return false;
+      if (!res) return FILE_TYPE.IGNORED;
 
       // we've requested explicit sourcemaps to be written to disk
       if (
@@ -87,11 +71,11 @@ export default async function({
         console.log(src + " -> " + dest);
       }
 
-      return true;
+      return FILE_TYPE.COMPILED;
     } catch (err) {
       if (cliOptions.watch) {
         console.error(err);
-        return false;
+        return FILE_TYPE.ERR_COMPILATION;
       }
 
       throw err;
@@ -107,24 +91,17 @@ export default async function({
 
   async function handleFile(src: string, base: string): Promise<boolean> {
     const written = await write(src, base);
-    const relative = path.relative(base, src);
-    const isCompilableExtension = util.isCompilableExtension(
-      relative,
-      cliOptions.extensions,
-    );
+
     if (
-      !written &&
-      ((!isCompilableExtension && cliOptions.copyFiles) ||
-        (cliOptions.copyIgnored &&
-          cliOptions.ignore.length &&
-          isIgnoredFile(src, cliOptions.ignore)))
+      (cliOptions.copyFiles && written === FILE_TYPE.NON_COMPACTIBLE) ||
+      (cliOptions.copyIgnored && written === FILE_TYPE.IGNORED)
     ) {
       const filename = path.relative(base, src);
       const dest = getDest(filename, base);
       outputFileSync(dest, fs.readFileSync(src));
       util.chmod(src, dest);
     }
-    return written;
+    return written === FILE_TYPE.COMPILED;
   }
 
   async function handle(filenameOrDir: string): Promise<number> {

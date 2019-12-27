@@ -1,9 +1,0 @@
-{
-  "args": [
-    "src",
-    "--out-dir",
-    "lib",
-    "--copy-ignored",
-    "--verbose"
-  ]
-}
