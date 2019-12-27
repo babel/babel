@@ -1,7 +1,6 @@
 // @flow
 
 import corejs3Polyfills from "core-js-compat/data";
-import corejs3FinishedProposalsList from "../../../data/corejs3-finished-proposals.json";
 import corejs3ShippedProposalsList from "../../../data/corejs3-shipped-proposals.json";
 import getModulesListForTargetVersion from "core-js-compat/get-modules-list-for-target-version";
 import { filterItems } from "@babel/helper-compilation-targets";
@@ -34,11 +33,7 @@ const NO_DIRECT_POLYFILL_IMPORT = `
   Please remove the direct import of \`core-js\` or use \`useBuiltIns: 'entry'\` instead.`;
 
 const corejs3PolyfillsWithoutProposals = Object.keys(corejs3Polyfills)
-  .filter(
-    name =>
-      !name.startsWith("esnext.") ||
-      (corejs3FinishedProposalsList: string[]).includes(name),
-  )
+  .filter(name => !name.startsWith("esnext."))
   .reduce((memo, key) => {
     memo[key] = corejs3Polyfills[key];
     return memo;

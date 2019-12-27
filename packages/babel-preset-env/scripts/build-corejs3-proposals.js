@@ -17,7 +17,16 @@ const finishedProposals = shippedProposals.filter(feature => {
   return features.includes(feature.replace("esnext.", "es."));
 });
 
-fs.writeFileSync(
-  path.join(__dirname, "../data/corejs3-finished-proposals.json"),
-  JSON.stringify(finishedProposals, undefined, 2) + "\n"
+const builtInDefinitions = fs.readFileSync(
+  path.join(__dirname, "../src/polyfills/corejs3/built-in-definitions.js"),
+  "utf-8"
 );
+
+for (const feature of finishedProposals) {
+  const standarizedName = feature.replace("esnext.", "es.");
+  if (!builtInDefinitions.includes(standarizedName)) {
+    console.log(
+      `${feature} is now standarized as ${standarizedName}, please add "${standarizedName}" to src/polyfills/corejs3/built-in-definitions`
+    );
+  }
+}
