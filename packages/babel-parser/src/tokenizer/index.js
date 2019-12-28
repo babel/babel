@@ -1122,7 +1122,7 @@ export default class Tokenizer extends LocationParser {
         throwOnInvalid,
       );
       ++this.state.pos;
-      if (code > 0x10ffff) {
+      if (code !== null && code > 0x10ffff) {
         if (throwOnInvalid) {
           this.raise(codePos, "Code point out of bounds");
         } else {
