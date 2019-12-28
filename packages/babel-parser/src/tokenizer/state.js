@@ -156,8 +156,6 @@ export default class State {
   // `export default foo;` and `export { foo as default };`.
   exportedIdentifiers: Array<string> = [];
 
-  invalidTemplateEscapePosition: ?number = null;
-
   curPosition(): Position {
     return new Position(this.curLine, this.pos - this.lineStart);
   }
