@@ -2,6 +2,7 @@
   "plugins": [
     "external-helpers",
     "syntax-object-rest-spread",
+    "syntax-optional-chaining",
     [
       "transform-modules-commonjs",
       { "strict": true, "mjsStrictNamespace": false }

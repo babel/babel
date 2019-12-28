@@ -183,6 +183,7 @@ const rewriteReferencesVisitor = {
 
       if (
         (path.parentPath.isCallExpression({ callee: path.node }) ||
+          path.parentPath.isOptionalCallExpression({ callee: path.node }) ||
           path.parentPath.isTaggedTemplateExpression({ tag: path.node })) &&
         t.isMemberExpression(ref)
       ) {
