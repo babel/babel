@@ -10,7 +10,7 @@ import * as util from "./util";
 import { type CmdOptions } from "./options";
 
 const FILE_TYPE = Object.freeze({
-  NON_COMPACTIBLE: "NON_COMPACTIBLE",
+  NON_COMPILABLE: "NON_COMPILABLE",
   COMPILED: "COMPILED",
   IGNORED: "IGNORED",
   ERR_COMPILATION: "ERR_COMPILATION",
@@ -27,11 +27,14 @@ export default async function({
 }: CmdOptions): Promise<void> {
   const filenames = cliOptions.filenames;
 
-  async function write(src: string, base: string): Promise<string> {
+  async function write(
+    src: string,
+    base: string,
+  ): Promise<$Keys<typeof FILE_TYPE>> {
     let relative = path.relative(base, src);
 
     if (!util.isCompilableExtension(relative, cliOptions.extensions)) {
-      return FILE_TYPE.NON_COMPACTIBLE;
+      return FILE_TYPE.NON_COMPILABLE;
     }
 
     // remove extension and then append back on .js
@@ -93,7 +96,7 @@ export default async function({
     const written = await write(src, base);
 
     if (
-      (cliOptions.copyFiles && written === FILE_TYPE.NON_COMPACTIBLE) ||
+      (cliOptions.copyFiles && written === FILE_TYPE.NON_COMPILABLE) ||
       (cliOptions.copyIgnored && written === FILE_TYPE.IGNORED)
     ) {
       const filename = path.relative(base, src);
