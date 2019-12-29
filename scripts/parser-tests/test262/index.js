@@ -118,6 +118,7 @@ const featuresToPlugins = {
   "class-static-fields-public": "classProperties",
   "class-static-fields-private": "classPrivateProperties",
   "class-static-methods-private": "classPrivateMethods",
+  "coalesce-expression": "nullishCoalescingOperator",
   "dynamic-import": "dynamicImport",
   "export-star-as-namespace-from-module": "exportNamespaceFrom",
   "import.meta": "importMeta",
