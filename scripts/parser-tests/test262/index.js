@@ -3,6 +3,7 @@ const TestStream = require("test262-stream");
 const TestRunner = require("../utils/parser-test-runner");
 
 const ignoredFeatures = [
+  "AggregateError",
   "Array.prototype.flat",
   "Array.prototype.flatMap",
   "Array.prototype.values",
@@ -31,6 +32,7 @@ const ignoredFeatures = [
   "FinalizationGroup",
   "Float32Array",
   "Float64Array",
+  "for-in-order",
   "for-of",
   "generators",
   "globalThis",
@@ -42,6 +44,7 @@ const ignoredFeatures = [
   "Intl.DateTimeFormat-dayPeriod",
   "Intl.DateTimeFormat-fractionalSecondDigits",
   "Intl.DateTimeFormat-formatRange",
+  "Intl.DisplayNames",
   "Intl.ListFormat",
   "Intl.Locale",
   "Intl.NumberFormat-unified",
@@ -76,6 +79,7 @@ const ignoredFeatures = [
   "String.prototype.endsWith",
   "String.prototype.includes",
   "String.prototype.matchAll",
+  "String.prototype.replaceAll",
   "String.prototype.trimEnd",
   "String.prototype.trimStart",
   "string-trimming",
