@@ -17,9 +17,6 @@
             "type": "Import",
             "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}}
           },
-          "extra": {
-            "trailingComma": 15
-          },
           "arguments": [
             {
               "type": "StringLiteral",
@@ -42,9 +39,6 @@
           "callee": {
             "type": "Import",
             "start":19,"end":25,"loc":{"start":{"line":2,"column":0,"index":19},"end":{"line":2,"column":6,"index":25}}
-          },
-          "extra": {
-            "trailingComma": 66
           },
           "arguments": [
             {
