@@ -649,7 +649,7 @@ export default class ExpressionParser extends LValParser {
       }
       this.finishCallExpression(node, state.optionalChainMember);
 
-      if (state.maybeAsyncArrow && this.shouldParseAsyncArrow()) {
+      if (state.maybeAsyncArrow && this.shouldParseAsyncArrow() && !optional) {
         state.stop = true;
 
         node = this.parseAsyncArrowFromCallExpression(
