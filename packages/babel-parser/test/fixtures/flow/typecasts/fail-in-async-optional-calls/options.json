@@ -3,5 +3,6 @@
   "plugins": [
     "flow",
     "optionalChaining"
-  ]
+  ],
+  "throws": "Unexpected token, expected \";\" (1:21)"
 }
