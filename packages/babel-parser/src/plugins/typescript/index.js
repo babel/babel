@@ -2568,11 +2568,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): $ReadOnlyArray<?N.Expression> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
-        if (
-          expr &&
-          expr._exprListItem &&
-          expr.type === "TsTypeCastExpression"
-        ) {
+        if (expr && expr.type === "TSTypeCastExpression") {
           this.raise(expr.start, "Did not expect a type annotation here.");
         }
       }
