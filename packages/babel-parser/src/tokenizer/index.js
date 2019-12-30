@@ -1159,6 +1159,7 @@ export default class Tokenizer extends LocationParser {
       ) {
         ++this.state.pos;
         ++this.state.curLine;
+        this.state.lineStart = this.state.pos;
       } else if (isNewLine(ch)) {
         throw this.raise(this.state.start, "Unterminated string constant");
       } else {
