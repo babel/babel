@@ -582,63 +582,46 @@ export default class ExpressionParser extends LValParser {
         startLoc,
         noCalls,
       );
-    } else if (this.match(tt.questionDot)) {
+    }
+    let optional = false;
+    if (this.match(tt.questionDot)) {
       this.expectPlugin("optionalChaining");
-      state.optionalChainMember = true;
+      state.optionalChainMember = optional = true;
       if (noCalls && this.lookaheadCharCode() === charCodes.leftParenthesis) {
         state.stop = true;
         return base;
       }
       this.next();
-
-      const node = this.startNodeAt(startPos, startLoc);
-
-      if (this.eat(tt.bracketL)) {
-        node.object = base;
-        node.property = this.parseExpression();
-        node.computed = true;
-        node.optional = true;
-        this.expect(tt.bracketR);
-        return this.finishNode(node, "OptionalMemberExpression");
-      } else if (this.eat(tt.parenL)) {
-        node.callee = base;
-        node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
-        node.optional = true;
-        return this.finishCallExpression(node, /* optional */ true);
-      } else {
-        node.object = base;
-        node.property = this.parseIdentifier(true);
-        node.computed = false;
-        node.optional = true;
-        return this.finishNode(node, "OptionalMemberExpression");
-      }
-    } else if (this.eat(tt.dot)) {
+    }
+    const computed = this.eat(tt.bracketL);
+    if (
+      (optional && !this.match(tt.parenL) && !this.match(tt.backQuote)) ||
+      computed ||
+      this.eat(tt.dot)
+    ) {
       const node = this.startNodeAt(startPos, startLoc);
       node.object = base;
-      node.property = this.parseMaybePrivateName();
-      node.computed = false;
+      node.property = computed
+        ? this.parseExpression()
+        : optional
+        ? this.parseIdentifier(true)
+        : this.parseMaybePrivateName();
+      node.computed = computed;
       if (
         node.property.type === "PrivateName" &&
         node.object.type === "Super"
       ) {
         this.raise(startPos, "Private fields can't be accessed on super");
       }
-      if (state.optionalChainMember) {
-        node.optional = false;
-        return this.finishNode(node, "OptionalMemberExpression");
+      if (computed) {
+        this.expect(tt.bracketR);
       }
-      return this.finishNode(node, "MemberExpression");
-    } else if (this.eat(tt.bracketL)) {
-      const node = this.startNodeAt(startPos, startLoc);
-      node.object = base;
-      node.property = this.parseExpression();
-      node.computed = true;
-      this.expect(tt.bracketR);
       if (state.optionalChainMember) {
-        node.optional = false;
+        node.optional = optional;
         return this.finishNode(node, "OptionalMemberExpression");
+      } else {
+        return this.finishNode(node, "MemberExpression");
       }
-      return this.finishNode(node, "MemberExpression");
     } else if (!noCalls && this.match(tt.parenL)) {
       const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
       const oldYieldPos = this.state.yieldPos;
@@ -652,16 +635,21 @@ export default class ExpressionParser extends LValParser {
       let node = this.startNodeAt(startPos, startLoc);
       node.callee = base;
 
-      node.arguments = this.parseCallExpressionArguments(
-        tt.parenR,
-        state.maybeAsyncArrow,
-        base.type === "Import",
-        base.type !== "Super",
-        node,
-      );
+      if (optional) {
+        node.optional = true;
+        node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+      } else {
+        node.arguments = this.parseCallExpressionArguments(
+          tt.parenR,
+          state.maybeAsyncArrow,
+          base.type === "Import",
+          base.type !== "Super",
+          node,
+        );
+      }
       this.finishCallExpression(node, state.optionalChainMember);
 
-      if (state.maybeAsyncArrow && this.shouldParseAsyncArrow()) {
+      if (state.maybeAsyncArrow && this.shouldParseAsyncArrow() && !optional) {
         state.stop = true;
 
         node = this.parseAsyncArrowFromCallExpression(
