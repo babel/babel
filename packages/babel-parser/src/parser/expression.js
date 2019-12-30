@@ -1821,7 +1821,6 @@ export default class ExpressionParser extends LValParser {
         (allowDirectSuper ? SCOPE_DIRECT_SUPER : 0),
     );
     this.parseFunctionParams((node: any), allowModifiers);
-    this.checkYieldAwaitInDefaultParams();
     this.parseFunctionBodyAndFinish(node, type, true);
     this.scope.exit();
 
