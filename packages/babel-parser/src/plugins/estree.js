@@ -174,26 +174,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    isStrictBody(node: { body: N.BlockStatement }): boolean {
-      const isBlockStatement = node.body.type === "BlockStatement";
-
-      if (isBlockStatement && node.body.body.length > 0) {
-        for (const directive of node.body.body) {
-          if (
-            directive.type === "ExpressionStatement" &&
-            directive.expression.type === "Literal"
-          ) {
-            if (directive.expression.value === "use strict") return true;
-          } else {
-            // Break for the first non literal expression
-            break;
-          }
-        }
-      }
-
-      return false;
-    }
-
     isValidDirective(stmt: N.Statement): boolean {
       return (
         stmt.type === "ExpressionStatement" &&
