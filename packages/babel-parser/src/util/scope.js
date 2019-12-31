@@ -55,6 +55,8 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   get inGenerator() {
     return (this.currentVarScope().flags & SCOPE_GENERATOR) > 0;
   }
+  // the following loop always exit because SCOPE_PROGRAM is SCOPE_VAR
+  // $FlowIgnore
   get inAsync() {
     for (let i = this.scopeStack.length - 1; ; i--) {
       const scope = this.scopeStack[i];
