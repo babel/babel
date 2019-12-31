@@ -5,7 +5,7 @@ import type { File, JSXOpeningElement } from "../types";
 import type { PluginList } from "../plugin-utils";
 import { getOptions } from "../options";
 import StatementParser from "./statement";
-import { SCOPE_PROGRAM } from "../util/scopeflags";
+import { SCOPE_ASYNC, SCOPE_PROGRAM } from "../util/scopeflags";
 import ScopeHandler from "../util/scope";
 
 export type PluginsMap = Map<string, { [string]: any }>;
@@ -35,7 +35,11 @@ export default class Parser extends StatementParser {
   }
 
   parse(): File {
-    this.scope.enter(SCOPE_PROGRAM);
+    let scopeFlags = SCOPE_PROGRAM;
+    if (this.hasPlugin("topLevelAwait") && this.inModule) {
+      scopeFlags |= SCOPE_ASYNC;
+    }
+    this.scope.enter(scopeFlags);
     const file = this.startNode();
     const program = this.startNode();
     this.nextToken();
