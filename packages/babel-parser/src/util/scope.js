@@ -55,8 +55,21 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   get inGenerator() {
     return (this.currentVarScope().flags & SCOPE_GENERATOR) > 0;
   }
+  // the following loop always exit because SCOPE_PROGRAM is SCOPE_VAR
+  // $FlowIgnore
   get inAsync() {
-    return (this.currentVarScope().flags & SCOPE_ASYNC) > 0;
+    for (let i = this.scopeStack.length - 1; ; i--) {
+      const scope = this.scopeStack[i];
+      const isVarScope = scope.flags & SCOPE_VAR;
+      const isClassScope = scope.flags & SCOPE_CLASS;
+      if (isClassScope && !isVarScope) {
+        // If it meets a class scope before a var scope, it means it is a class property initializer
+        // which does not have an [Await] parameter in its grammar
+        return false;
+      } else if (isVarScope) {
+        return (scope.flags & SCOPE_ASYNC) > 0;
+      }
+    }
   }
   get allowSuper() {
     return (this.currentThisScope().flags & SCOPE_SUPER) > 0;
