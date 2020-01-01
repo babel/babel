@@ -221,6 +221,8 @@ function wrapWithStateOrWrapper(oldVisitor, state, wrapper: ?Function) {
         newFn = function(path) {
           return fn.call(state, path, state);
         };
+        // Override toString in case this function is printed, we want to print the wrapped function, same as we do in `wrapCheck`
+        newFn.toString = () => fn.toString();
       }
 
       if (wrapper) {
