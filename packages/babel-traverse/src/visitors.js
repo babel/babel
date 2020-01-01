@@ -218,15 +218,18 @@ function wrapWithStateOrWrapper(oldVisitor, state, wrapper: ?Function) {
       let newFn = fn;
 
       if (state) {
-        newFn = function(path) {
+        newFn = function (path) {
           return fn.call(state, path, state);
         };
-        // Override toString in case this function is printed, we want to print the wrapped function, same as we do in `wrapCheck`
-        newFn.toString = () => fn.toString();
       }
 
       if (wrapper) {
         newFn = wrapper(state.key, key, newFn);
+      }
+
+      // Override toString in case this function is printed, we want to print the wrapped function, same as we do in `wrapCheck` 
+      if (newFn !== fn) {
+        newFn.toString = () => fn.toString();
       }
 
       return newFn;
