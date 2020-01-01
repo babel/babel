@@ -1076,25 +1076,28 @@ describe("buildConfigChain", function() {
     });
 
     describe("relative", () => {
-      test.each(["package.json", ".babelrc", ".babelrc.js", ".babelrc.cjs"])(
-        "should load %s synchronously",
-        async name => {
-          const { cwd, tmp, config } = await getTemp(
-            `babel-test-load-config-${name}`,
-          );
-          const filename = tmp("src.js");
+      test.each([
+        "package.json",
+        ".babelrc",
+        ".babelrc.js",
+        ".babelrc.cjs",
+        ".babelrc.json",
+      ])("should load %s synchronously", async name => {
+        const { cwd, tmp, config } = await getTemp(
+          `babel-test-load-config-${name}`,
+        );
+        const filename = tmp("src.js");
 
-          await config(name);
+        await config(name);
 
-          expect(loadOptions({ filename, cwd })).toEqual({
-            ...getDefaults(),
-            filename,
-            cwd,
-            root: cwd,
-            comments: true,
-          });
-        },
-      );
+        expect(loadOptions({ filename, cwd })).toEqual({
+          ...getDefaults(),
+          filename,
+          cwd,
+          root: cwd,
+          comments: true,
+        });
+      });
 
       test("should not load .babelrc.mjs synchronously", async () => {
         const { cwd, tmp, config } = await getTemp(
@@ -1147,6 +1150,7 @@ describe("buildConfigChain", function() {
           ".babelrc.js",
           ".babelrc.cjs",
           ".babelrc.mjs",
+          ".babelrc.json",
         ]),
       )("should throw if both %s and %s are used", async (name1, name2) => {
         const { cwd, tmp, config } = await getTemp(
@@ -1173,12 +1177,13 @@ describe("buildConfigChain", function() {
       });
 
       test.each`
-        config            | dir                    | error
-        ${".babelrc"}     | ${"babelrc-error"}     | ${/Error while parsing config - /}
-        ${".babelrc.js"}  | ${"babelrc-js-error"}  | ${/Babelrc threw an error/}
-        ${".babelrc.cjs"} | ${"babelrc-cjs-error"} | ${/Babelrc threw an error/}
-        ${".babelrc.mjs"} | ${"babelrc-mjs-error"} | ${/Babelrc threw an error/}
-        ${"package.json"} | ${"pkg-error"}         | ${/Error while parsing JSON - /}
+        config             | dir                     | error
+        ${".babelrc"}      | ${"babelrc-error"}      | ${/Error while parsing config - /}
+        ${".babelrc.json"} | ${"babelrc-json-error"} | ${/Error while parsing config - /}
+        ${".babelrc.js"}   | ${"babelrc-js-error"}   | ${/Babelrc threw an error/}
+        ${".babelrc.cjs"}  | ${"babelrc-cjs-error"}  | ${/Babelrc threw an error/}
+        ${".babelrc.mjs"}  | ${"babelrc-mjs-error"}  | ${/Babelrc threw an error/}
+        ${"package.json"}  | ${"pkg-error"}          | ${/Error while parsing JSON - /}
       `("should show helpful errors for $config", async ({ dir, error }) => {
         const filename = fixture("config-files", dir, "src.js");
 
