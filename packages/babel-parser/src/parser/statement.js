@@ -15,8 +15,8 @@ import {
   BIND_LEXICAL,
   BIND_VAR,
   BIND_FUNCTION,
-  functionFlags,
   SCOPE_CLASS,
+  SCOPE_FUNCTION,
   SCOPE_OTHER,
   SCOPE_SIMPLE_CATCH,
   SCOPE_SUPER,
@@ -28,6 +28,7 @@ import {
   type BindingTypes,
 } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
+import { PARAM_, functionFlags } from "../util/production-parameter";
 
 const loopLabel = { kind: "loop" },
   switchLabel = { kind: "switch" };
@@ -1059,7 +1060,8 @@ export default class StatementParser extends ExpressionParser {
     this.state.maybeInArrowParameters = false;
     this.state.yieldPos = -1;
     this.state.awaitPos = -1;
-    this.scope.enter(functionFlags(node.async, node.generator));
+    this.scope.enter(SCOPE_FUNCTION);
+    this.param.enter(functionFlags(isAsync, node.generator));
 
     if (!isStatement) {
       node.id = this.parseFunctionId();
@@ -1078,6 +1080,7 @@ export default class StatementParser extends ExpressionParser {
       );
     });
 
+    this.param.exit();
     this.scope.exit();
 
     if (isStatement && !isHangingStatement) {
@@ -1599,9 +1602,12 @@ export default class StatementParser extends ExpressionParser {
     node: N.ClassPrivateProperty,
   ): N.ClassPrivateProperty {
     this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
+    // [In] production parameter is tracked in parseMaybeAssign
+    this.param.enter(PARAM_);
 
     node.value = this.eat(tt.eq) ? this.parseMaybeAssign() : null;
     this.semicolon();
+    this.param.exit();
 
     this.scope.exit();
 
@@ -1614,6 +1620,8 @@ export default class StatementParser extends ExpressionParser {
     }
 
     this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
+    // [In] production parameter is tracked in parseMaybeAssign
+    this.param.enter(PARAM_);
 
     if (this.match(tt.eq)) {
       this.expectPlugin("classProperties");
@@ -1624,6 +1632,7 @@ export default class StatementParser extends ExpressionParser {
     }
     this.semicolon();
 
+    this.param.exit();
     this.scope.exit();
 
     return this.finishNode(node, "ClassProperty");
