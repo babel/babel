@@ -16,16 +16,16 @@ const flowFlippedAliasKeys = t.FLIPPED_ALIAS_KEYS.Flow.concat([
   "ObjectPattern",
   "RestElement",
 ]);
-const visitorKeysMap = Object.entries(t.VISITOR_KEYS).reduce(function(
-  acc,
-  [key, value],
-) {
-  if (flowFlippedAliasKeys.indexOf(value) === -1) {
-    acc[key] = value;
-  }
-  return acc;
-},
-{});
+
+const visitorKeysMap = Object.entries(t.VISITOR_KEYS).reduce(
+  (acc, [key, value]) => {
+    if (!flowFlippedAliasKeys.includes(value)) {
+      acc[key] = value;
+    }
+    return acc;
+  },
+  {},
+);
 
 const propertyTypes = {
   // loops
@@ -164,6 +164,11 @@ class Referencer extends OriginalReferencer {
 
   ClassPrivateProperty(node) {
     this._visitClassProperty(node);
+  }
+
+  // TODO: Update to visit type annotations when TypeScript/Flow support this syntax.
+  ClassPrivateMethod(node) {
+    super.MethodDefinition(node);
   }
 
   DeclareModule(node) {
