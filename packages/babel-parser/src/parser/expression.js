@@ -39,6 +39,7 @@ import {
   SCOPE_DIRECT_SUPER,
   SCOPE_SUPER,
   SCOPE_PROGRAM,
+  SCOPE_ASYNC,
 } from "../util/scopeflags";
 
 export default class ExpressionParser extends LValParser {
@@ -96,7 +97,11 @@ export default class ExpressionParser extends LValParser {
 
   // Convenience method to parse an Expression only
   getExpression(): N.Expression {
-    this.scope.enter(SCOPE_PROGRAM);
+    let scopeFlags = SCOPE_PROGRAM;
+    if (this.hasPlugin("topLevelAwait") && this.inModule) {
+      scopeFlags |= SCOPE_ASYNC;
+    }
+    this.scope.enter(scopeFlags);
     this.nextToken();
     const expr = this.parseExpression();
     if (!this.match(tt.eof)) {
@@ -2186,7 +2191,9 @@ export default class ExpressionParser extends LValParser {
   isAwaitAllowed(): boolean {
     if (this.scope.inFunction) return this.scope.inAsync;
     if (this.options.allowAwaitOutsideFunction) return true;
-    if (this.hasPlugin("topLevelAwait")) return this.inModule;
+    if (this.hasPlugin("topLevelAwait")) {
+      return this.inModule && this.scope.inAsync;
+    }
     return false;
   }
 
