@@ -919,7 +919,10 @@ export default class ExpressionParser extends LValParser {
         this.expectPlugin("dynamicImport", node.start);
 
         if (!this.match(tt.parenL)) {
-          this.unexpected(null, tt.parenL);
+          this.raise(
+            this.state.lastTokStart,
+            "import can only be used in import() or import.meta",
+          );
         }
         return this.finishNode(node, "Import");
       case tt._this:
