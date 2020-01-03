@@ -1,4 +1,3 @@
 {
-  "plugins": ["dynamicImport"],
-  "throws": "Unexpected token, expected \"(\" (1:7)"
+  "plugins": ["dynamicImport"]
 }
