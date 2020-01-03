@@ -1,3 +1,4 @@
+// @flow
 export const PARAM_ = 0b000, // Initial Parameter flags
   PARAM_YIELD = 0b001, // track [Await] production parameter
   PARAM_AWAIT = 0b010; // track [Yield] production parameter
@@ -24,9 +25,11 @@ export const PARAM_ = 0b000, // Initial Parameter flags
 // 6. parse function body
 // 7. exit current stack
 
+export type ParamKind = typeof PARAM_ | typeof PARAM_AWAIT | typeof PARAM_YIELD;
+
 export default class ProductionParameterHandler {
-  stacks: Array = [];
-  enter(flags) {
+  stacks: Array<ParamKind> = [];
+  enter(flags: ParamKind) {
     this.stacks.push(flags);
   }
 
@@ -34,19 +37,22 @@ export default class ProductionParameterHandler {
     this.stacks.pop();
   }
 
-  currentFlags() {
+  currentFlags(): ParamKind {
     return this.stacks[this.stacks.length - 1];
   }
 
-  get hasAwait() {
+  get hasAwait(): boolean {
     return (this.currentFlags() & PARAM_AWAIT) > 0;
   }
 
-  get hasYield() {
+  get hasYield(): boolean {
     return (this.currentFlags() & PARAM_YIELD) > 0;
   }
 }
 
-export function functionFlags(isAsync: boolean, isGenerator: boolean) {
+export function functionFlags(
+  isAsync: boolean,
+  isGenerator: boolean,
+): ParamKind {
   return (isAsync ? PARAM_AWAIT : 0) | (isGenerator ? PARAM_YIELD : 0);
 }
