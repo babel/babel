@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 101,
+  "end": 106,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 3,
-      "column": 83
+      "column": 88
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 101,
+    "end": 106,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 3,
-        "column": 83
+        "column": 88
       }
     },
     "sourceType": "script",
@@ -44,7 +44,7 @@
           }
         },
         "expression": {
-          "type": "StringLiteral",
+          "type": "TemplateLiteral",
           "start": 1,
           "end": 15,
           "loc": {
@@ -57,20 +57,40 @@
               "column": 6
             }
           },
+          "expressions": [],
+          "quasis": [
+            {
+              "type": "TemplateElement",
+              "start": 2,
+              "end": 14,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 5
+                }
+              },
+              "value": {
+                "raw": "before after",
+                "cooked": "before after"
+              },
+              "tail": true
+            }
+          ],
           "extra": {
-            "rawValue": "before after",
-            "raw": "\"before after\"",
             "parenthesized": true,
             "parenStart": 0
-          },
-          "value": "before after"
+          }
         },
         "trailingComments": [
           {
             "type": "CommentLine",
-            "value": "      ^ That's a U+2028 LINE SEPARATOR UTF-16 char (between 'before' and 'after')",
+            "value": "      ^ That's a U+2029 PARAGRAPH SEPARATOR UTF-16 char (between 'before' and 'after')",
             "start": 18,
-            "end": 101,
+            "end": 106,
             "loc": {
               "start": {
                 "line": 3,
@@ -78,7 +98,7 @@
               },
               "end": {
                 "line": 3,
-                "column": 83
+                "column": 88
               }
             }
           }
@@ -90,9 +110,9 @@
   "comments": [
     {
       "type": "CommentLine",
-      "value": "      ^ That's a U+2028 LINE SEPARATOR UTF-16 char (between 'before' and 'after')",
+      "value": "      ^ That's a U+2029 PARAGRAPH SEPARATOR UTF-16 char (between 'before' and 'after')",
       "start": 18,
-      "end": 101,
+      "end": 106,
       "loc": {
         "start": {
           "line": 3,
@@ -100,7 +120,7 @@
         },
         "end": {
           "line": 3,
-          "column": 83
+          "column": 88
         }
       }
     }

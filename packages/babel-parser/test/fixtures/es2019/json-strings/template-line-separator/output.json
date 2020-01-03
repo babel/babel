@@ -44,7 +44,7 @@
           }
         },
         "expression": {
-          "type": "StringLiteral",
+          "type": "TemplateLiteral",
           "start": 1,
           "end": 15,
           "loc": {
@@ -57,13 +57,33 @@
               "column": 6
             }
           },
+          "expressions": [],
+          "quasis": [
+            {
+              "type": "TemplateElement",
+              "start": 2,
+              "end": 14,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 5
+                }
+              },
+              "value": {
+                "raw": "before after",
+                "cooked": "before after"
+              },
+              "tail": true
+            }
+          ],
           "extra": {
-            "rawValue": "before after",
-            "raw": "\"before after\"",
             "parenthesized": true,
             "parenStart": 0
-          },
-          "value": "before after"
+          }
         },
         "trailingComments": [
           {
