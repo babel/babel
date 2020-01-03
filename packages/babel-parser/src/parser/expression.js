@@ -960,8 +960,18 @@ export default class ExpressionParser extends LValParser {
           this.match(tt.name) &&
           !this.canInsertSemicolon()
         ) {
+          const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
+          const oldYieldPos = this.state.yieldPos;
+          const oldAwaitPos = this.state.awaitPos;
+          this.state.maybeInArrowParameters = true;
+          this.state.yieldPos = -1;
+          this.state.awaitPos = -1;
           const params = [this.parseIdentifier()];
           this.expect(tt.arrow);
+          this.checkYieldAwaitInDefaultParams();
+          this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
+          this.state.yieldPos = oldYieldPos;
+          this.state.awaitPos = oldAwaitPos;
           // let foo = async bar => {};
           this.parseArrowExpression(node, params, true);
           return node;
