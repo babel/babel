@@ -60,7 +60,7 @@
     "@babel/plugin-transform-typeof-symbol": "^7.7.4",
     "@babel/plugin-transform-unicode-regex": "^7.7.4",
     "@babel/types": "^7.7.4",
-    "browserslist": "^4.6.0",
+    "browserslist": "^4.8.2",
     "core-js-compat": "^3.6.0",
     "invariant": "^2.2.2",
     "levenary": "^1.1.0",

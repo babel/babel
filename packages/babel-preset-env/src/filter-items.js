@@ -1,6 +1,10 @@
 // @flow
 import semver from "semver";
-import { semverify, isUnreleasedVersion } from "./utils";
+import {
+  semverify,
+  isUnreleasedVersion,
+  getLowestImplementedVersion,
+} from "./utils";
 
 import type { Targets } from "./types";
 
@@ -15,12 +19,14 @@ export function isPluginRequired(
   }
 
   const isRequiredForEnvironments = targetEnvironments.filter(environment => {
+    const lowestImplementedVersion = getLowestImplementedVersion(
+      plugin,
+      environment,
+    );
     // Feature is not implemented in that environment
-    if (!plugin[environment]) {
+    if (!lowestImplementedVersion) {
       return true;
     }
-
-    const lowestImplementedVersion = plugin[environment];
     const lowestTargetedVersion = supportedEnvironments[environment];
 
     // If targets has unreleased value as a lowest version, then don't require a plugin.
