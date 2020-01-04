@@ -575,7 +575,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseReturnStatement(node: N.ReturnStatement): N.ReturnStatement {
-    if (!this.scope.inFunction && !this.options.allowReturnOutsideFunction) {
+    if (!this.prodParam.hasReturn && !this.options.allowReturnOutsideFunction) {
       this.raise(this.state.start, "'return' outside of function");
     }
 

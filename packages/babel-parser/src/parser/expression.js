@@ -43,6 +43,7 @@ import {
 import { ExpressionErrors } from "./util";
 import {
   PARAM_AWAIT,
+  PARAM_RETURN,
   PARAM,
   functionFlags,
 } from "../util/production-parameter";
@@ -1986,7 +1987,11 @@ export default class ExpressionParser extends LValParser {
         allowExpression,
         !oldStrict && useStrict,
       );
+      // FunctionBody[Yield, Await]:
+      //   StatementList[?Yield, ?Await, +Return] opt
+      this.prodParam.enter(this.prodParam.currentFlags() | PARAM_RETURN);
       node.body = this.parseBlock(true, false);
+      this.prodParam.exit();
       this.state.labels = oldLabels;
     }
 
