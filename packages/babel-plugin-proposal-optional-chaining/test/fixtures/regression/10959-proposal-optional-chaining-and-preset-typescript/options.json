@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-optional-chaining"],
+  "presets": ["../../../../../babel-preset-typescript"]
+}
