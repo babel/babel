@@ -43,7 +43,7 @@ import {
 import { ExpressionErrors } from "./util";
 import {
   PARAM_AWAIT,
-  PARAM_,
+  PARAM,
   functionFlags,
 } from "../util/production-parameter";
 
@@ -110,12 +110,12 @@ export default class ExpressionParser extends LValParser {
 
   // Convenience method to parse an Expression only
   getExpression(): N.Expression {
-    let paramFlags = PARAM_;
+    let paramFlags = PARAM;
     if (this.hasPlugin("topLevelAwait") && this.inModule) {
       paramFlags |= PARAM_AWAIT;
     }
     this.scope.enter(SCOPE_PROGRAM);
-    this.param.enter(paramFlags);
+    this.prodParam.enter(paramFlags);
     this.nextToken();
     const expr = this.parseExpression();
     if (!this.match(tt.eof)) {
@@ -178,7 +178,7 @@ export default class ExpressionParser extends LValParser {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     if (this.isContextual("yield")) {
-      if (this.param.hasYield) {
+      if (this.prodParam.hasYield) {
         let left = this.parseYield(noIn);
         if (afterLeftParse) {
           left = afterLeftParse.call(this, left, startPos, startLoc);
@@ -370,7 +370,7 @@ export default class ExpressionParser extends LValParser {
           if (
             this.match(tt.name) &&
             this.state.value === "await" &&
-            this.param.hasAwait
+            this.prodParam.hasAwait
           ) {
             throw this.raise(
               this.state.start,
@@ -1191,7 +1191,7 @@ export default class ExpressionParser extends LValParser {
     this.next();
     meta = this.createIdentifier(meta, "function");
 
-    if (this.param.hasYield && this.eat(tt.dot)) {
+    if (this.prodParam.hasYield && this.eat(tt.dot)) {
       return this.parseMetaProperty(node, meta, "sent");
     }
     return this.parseFunction(node);
@@ -1868,10 +1868,10 @@ export default class ExpressionParser extends LValParser {
         (inClassScope ? SCOPE_CLASS : 0) |
         (allowDirectSuper ? SCOPE_DIRECT_SUPER : 0),
     );
-    this.param.enter(functionFlags(isAsync, node.generator));
+    this.prodParam.enter(functionFlags(isAsync, node.generator));
     this.parseFunctionParams((node: any), allowModifiers);
     this.parseFunctionBodyAndFinish(node, type, true);
-    this.param.exit();
+    this.prodParam.exit();
     this.scope.exit();
 
     this.state.yieldPos = oldYieldPos;
@@ -1890,7 +1890,7 @@ export default class ExpressionParser extends LValParser {
     trailingCommaPos: ?number,
   ): N.ArrowFunctionExpression {
     this.scope.enter(SCOPE_FUNCTION | SCOPE_ARROW);
-    this.param.enter(functionFlags(isAsync, false));
+    this.prodParam.enter(functionFlags(isAsync, false));
     this.initFunction(node, isAsync);
 
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
@@ -1903,7 +1903,7 @@ export default class ExpressionParser extends LValParser {
     if (params) this.setArrowFunctionParameters(node, params, trailingCommaPos);
     this.parseFunctionBody(node, true);
 
-    this.param.exit();
+    this.prodParam.exit();
     this.scope.exit();
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
     this.state.yieldPos = oldYieldPos;
@@ -2177,7 +2177,7 @@ export default class ExpressionParser extends LValParser {
     checkKeywords: boolean,
     isBinding: boolean,
   ): void {
-    if (this.param.hasYield && word === "yield") {
+    if (this.prodParam.hasYield && word === "yield") {
       this.raise(
         startLoc,
         "Can not use 'yield' as identifier inside a generator",
@@ -2186,7 +2186,7 @@ export default class ExpressionParser extends LValParser {
     }
 
     if (word === "await") {
-      if (this.param.hasAwait) {
+      if (this.prodParam.hasAwait) {
         this.raise(
           startLoc,
           "Can not use 'await' as identifier inside an async function",
@@ -2224,7 +2224,7 @@ export default class ExpressionParser extends LValParser {
       : isStrictReservedWord;
 
     if (reservedTest(word, this.inModule)) {
-      if (!this.param.hasAwait && word === "await") {
+      if (!this.prodParam.hasAwait && word === "await") {
         this.raise(
           startLoc,
           "Can not use keyword 'await' outside an async function",
@@ -2236,10 +2236,10 @@ export default class ExpressionParser extends LValParser {
   }
 
   isAwaitAllowed(): boolean {
-    if (this.scope.inFunction) return this.param.hasAwait;
+    if (this.scope.inFunction) return this.prodParam.hasAwait;
     if (this.options.allowAwaitOutsideFunction) return true;
     if (this.hasPlugin("topLevelAwait")) {
-      return this.inModule && this.param.hasAwait;
+      return this.inModule && this.prodParam.hasAwait;
     }
     return false;
   }

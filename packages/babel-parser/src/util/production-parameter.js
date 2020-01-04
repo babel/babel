@@ -1,7 +1,7 @@
 // @flow
-export const PARAM_ = 0b000, // Initial Parameter flags
-  PARAM_YIELD = 0b001, // track [Await] production parameter
-  PARAM_AWAIT = 0b010; // track [Yield] production parameter
+export const PARAM = 0b00, // Initial Parameter flags
+  PARAM_YIELD = 0b01, // track [Await] production parameter
+  PARAM_AWAIT = 0b10; // track [Yield] production parameter
 
 // ProductionParameterHandler is a stack fashioned production parameter tracker
 // https://tc39.es/ecma262/#sec-grammar-notation
@@ -25,7 +25,7 @@ export const PARAM_ = 0b000, // Initial Parameter flags
 // 6. parse function body
 // 7. exit current stack
 
-export type ParamKind = typeof PARAM_ | typeof PARAM_AWAIT | typeof PARAM_YIELD;
+export type ParamKind = typeof PARAM | typeof PARAM_AWAIT | typeof PARAM_YIELD;
 
 export default class ProductionParameterHandler {
   stacks: Array<ParamKind> = [];

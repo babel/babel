@@ -10,7 +10,7 @@ import ScopeHandler from "../util/scope";
 import ClassScopeHandler from "../util/class-scope";
 import ProductionParameterHandler, {
   PARAM_AWAIT,
-  PARAM_,
+  PARAM,
 } from "../util/production-parameter";
 
 export type PluginsMap = Map<string, { [string]: any }>;
@@ -30,7 +30,7 @@ export default class Parser extends StatementParser {
     this.options = options;
     this.inModule = this.options.sourceType === "module";
     this.scope = new ScopeHandler(this.raise.bind(this), this.inModule);
-    this.param = new ProductionParameterHandler();
+    this.prodParam = new ProductionParameterHandler();
     this.classScope = new ClassScopeHandler(this.raise.bind(this));
     this.plugins = pluginsMap(this.options.plugins);
     this.filename = options.sourceFilename;
@@ -42,12 +42,12 @@ export default class Parser extends StatementParser {
   }
 
   parse(): File {
-    let paramFlags = PARAM_;
+    let paramFlags = PARAM;
     if (this.hasPlugin("topLevelAwait") && this.inModule) {
       paramFlags |= PARAM_AWAIT;
     }
     this.scope.enter(SCOPE_PROGRAM);
-    this.param.enter(paramFlags);
+    this.prodParam.enter(paramFlags);
     const file = this.startNode();
     const program = this.startNode();
     this.nextToken();

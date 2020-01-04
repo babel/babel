@@ -13,7 +13,7 @@ export default class BaseParser {
   inModule: boolean;
   scope: ScopeHandler<*>;
   classScope: ClassScopeHandler;
-  param: ProductionParameterHandler;
+  prodParam: ProductionParameterHandler;
   plugins: PluginsMap;
   filename: ?string;
   sawUnambiguousESM: boolean = false;

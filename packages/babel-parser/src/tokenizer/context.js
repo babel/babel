@@ -60,7 +60,7 @@ tt.name.updateContext = function(prevType) {
   if (prevType !== tt.dot) {
     if (
       (this.state.value === "of" && !this.state.exprAllowed) ||
-      (this.state.value === "yield" && this.param.hasYield)
+      (this.state.value === "yield" && this.prodParam.hasYield)
     ) {
       allowed = true;
     }
