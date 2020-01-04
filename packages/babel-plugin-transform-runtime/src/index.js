@@ -27,6 +27,11 @@ function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
   }
 }
 
+function resolveRelativeRuntime(moduleName: string, dirname: string) {
+  const absoluteRuntime = resolveAbsoluteRuntime(moduleName, dirname);
+  return path.relative(dirname, absoluteRuntime);
+}
+
 function supportsStaticESM(caller) {
   return !!(caller && caller.supportsStaticESM);
 }
@@ -41,6 +46,7 @@ export default declare((api, options, dirname) => {
     useESModules = false,
     version: runtimeVersion = "7.0.0-beta.0",
     absoluteRuntime = false,
+    relativeRuntime = false,
   } = options;
 
   let proposals = false;
@@ -91,6 +97,19 @@ export default declare((api, options, dirname) => {
   ) {
     throw new Error(
       "The 'absoluteRuntime' option must be undefined, a boolean, or a string.",
+    );
+  }
+  if (
+    typeof relativeRuntime !== "boolean" &&
+    typeof relativeRuntime !== "string"
+  ) {
+    throw new Error(
+      "The 'relativeRuntime' option must be undefined, a boolean, or a string.",
+    );
+  }
+  if (absoluteRuntime !== false && relativeRuntime !== false) {
+    throw new Error(
+      "The 'absoluteRuntime' and 'relativeRuntime' options cannot be enabled at the same time",
     );
   }
 
@@ -201,6 +220,11 @@ export default declare((api, options, dirname) => {
     modulePath = resolveAbsoluteRuntime(
       moduleName,
       path.resolve(dirname, absoluteRuntime === true ? "." : absoluteRuntime),
+    );
+  } else if (relativeRuntime !== false) {
+    modulePath = resolveRelativeRuntime(
+      moduleName,
+      path.resolve(dirname, relativeRuntime === true ? "." : relativeRuntime),
     );
   }
 
