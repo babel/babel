@@ -20,7 +20,8 @@
             "name": "FILE"
           },
           "expectedNode": "StringLiteral"
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": []

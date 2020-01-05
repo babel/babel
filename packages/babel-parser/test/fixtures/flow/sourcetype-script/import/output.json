@@ -36,7 +36,8 @@
             "raw": "\"\""
           },
           "value": ""
-        }
+        },
+        "attributes": []
       },
       {
         "type": "ImportDeclaration",
@@ -61,7 +62,8 @@
             "raw": "\"\""
           },
           "value": ""
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": []

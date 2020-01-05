@@ -38,7 +38,8 @@
             "raw": "'foobar'"
           },
           "value": "foobar"
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": []

@@ -2041,13 +2041,26 @@ export default class StatementParser extends ExpressionParser {
     // import '...'
     node.specifiers = [];
     if (!this.match(tt.string)) {
+      // check if we have a default import like
+      // import React from "react";
       const hasDefault = this.maybeParseDefaultImportSpecifier(node);
+      /* we are checking if we do not have a default import, then it is obvious that we need named imports
+       * import { get } from "axios";
+       * but if we do have a default import
+       * we need to check if we have a comma after that and
+       * that is where this || this.eat comes into play
+       */
       const parseNext = !hasDefault || this.eat(tt.comma);
+      // if we do have to parse the next set of specifiers, we first check for start imports
+      // import React, * from "react";
       const hasStar = parseNext && this.maybeParseStarImportSpecifier(node);
+      // now we check that if we need to parse the next imports
+      // but only if he/she is not importing * which means all
       if (parseNext && !hasStar) this.parseNamedImportSpecifiers(node);
       this.expectContextual("from");
     }
     node.source = this.parseImportSource();
+    node.attributes = this.maybeParseModuleAttributes();
     this.semicolon();
     return this.finishNode(node, "ImportDeclaration");
   }
@@ -2076,6 +2089,15 @@ export default class StatementParser extends ExpressionParser {
       contextDescription,
     );
     node.specifiers.push(this.finishNode(specifier, type));
+  }
+
+  maybeParseModuleAttributes() {
+    if (this.match(tt._with) && !this.hasPlugin("moduleAttributes")) {
+      this.expectPlugin("moduleAttributes");
+    } else if (this.eat(tt._with)) {
+      return this.parseKeyValuePairs();
+    }
+    return [];
   }
 
   maybeParseDefaultImportSpecifier(node: N.ImportDeclaration): boolean {

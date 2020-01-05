@@ -34,7 +34,8 @@
             "raw": "\"file\""
           },
           "value": "file"
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": []

@@ -1498,6 +1498,26 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "TemplateLiteral");
   }
 
+  parseKeyValuePairs() {
+    const propHash: any = Object.create(null);
+    const node = this.startNode();
+    node.properties = [];
+
+    do {
+      const prop = this.parseObjectMember();
+      // $FlowIgnore
+      if (prop.shorthand) {
+        this.addExtra(prop, "shorthand", true);
+      }
+
+      node.properties.push(prop);
+    } while (this.eat(tt.comma));
+    if (!this.match(tt.eq) && propHash.start !== undefined) {
+      this.raise(propHash.start, "Redefinition of __proto__ property");
+    }
+    return this.finishNode(node, "ObjectExpression");
+  }
+
   // Parse an object literal, binding pattern, or record.
 
   parseObj<T: N.ObjectPattern | N.ObjectExpression>(
