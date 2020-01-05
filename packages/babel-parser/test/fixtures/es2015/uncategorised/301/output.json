@@ -38,8 +38,7 @@
             "raw": "'baz'"
           },
           "value": "baz"
-        },
-        "attributes": []
+        }
       }
     ],
     "directives": []

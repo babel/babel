@@ -869,6 +869,35 @@ export default class ExpressionParser extends LValParser {
     return this.parseSubscripts(this.parseExprAtom(), startPos, startLoc, true);
   }
 
+  /**
+   * Parse a primitive value
+   * primitive values are null, undefined, number, bigint, string, boolean
+   */
+  parsePrimitiveValue(): N.Expression {
+    let node;
+    switch (this.state.type) {
+      case tt.num:
+        return this.parseLiteral(this.state.value, "NumericLiteral");
+
+      case tt.bigint:
+        return this.parseLiteral(this.state.value, "BigIntLiteral");
+
+      case tt.string:
+        return this.parseLiteral(this.state.value, "StringLiteral");
+
+      case tt._null:
+        node = this.startNode();
+        this.next();
+        return this.finishNode(node, "NullLiteral");
+
+      case tt._true:
+      case tt._false:
+        return this.parseBooleanLiteral();
+      default:
+        throw this.unexpected();
+    }
+  }
+
   // Parse an atomic expression — either a single token that is an
   // expression, an expression started by a keyword like `function` or
   // `new`, or an expression wrapped in punctuation like `()`, `[]`,
@@ -1498,28 +1527,7 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "TemplateLiteral");
   }
 
-  parseKeyValuePairs() {
-    const propHash: any = Object.create(null);
-    const node = this.startNode();
-    node.properties = [];
-
-    do {
-      const prop = this.parseObjectMember();
-      // $FlowIgnore
-      if (prop.shorthand) {
-        this.addExtra(prop, "shorthand", true);
-      }
-
-      node.properties.push(prop);
-    } while (this.eat(tt.comma));
-    if (!this.match(tt.eq) && propHash.start !== undefined) {
-      this.raise(propHash.start, "Redefinition of __proto__ property");
-    }
-    return this.finishNode(node, "ObjectExpression");
-  }
-
   // Parse an object literal, binding pattern, or record.
-
   parseObj<T: N.ObjectPattern | N.ObjectExpression>(
     close: TokenType,
     isPattern: boolean,

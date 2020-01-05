@@ -97,25 +97,25 @@
           },
           "value": "foo.json"
         },
-        "attributes": {
-          "type": "ObjectExpression",
-          "start": 32,
-          "end": 44,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 32
+        "attributes": [
+          {
+            "type": "ObjectProperty",
+            "start": 32,
+            "end": 44,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 32
+              },
+              "end": {
+                "line": 1,
+                "column": 44
+              }
             },
-            "end": {
-              "line": 1,
-              "column": 44
-            }
-          },
-          "properties": [
-            {
-              "type": "ObjectProperty",
+            "key": {
+              "type": "Identifier",
               "start": 32,
-              "end": 44,
+              "end": 36,
               "loc": {
                 "start": {
                   "line": 1,
@@ -123,52 +123,37 @@
                 },
                 "end": {
                   "line": 1,
+                  "column": 36
+                },
+                "identifierName": "type"
+              },
+              "name": "type"
+            },
+            "computed": false,
+            "method": false,
+            "shorthand": false,
+            "value": {
+              "type": "StringLiteral",
+              "start": 38,
+              "end": 44,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 38
+                },
+                "end": {
+                  "line": 1,
                   "column": 44
                 }
               },
-              "method": false,
-              "key": {
-                "type": "Identifier",
-                "start": 32,
-                "end": 36,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 32
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 36
-                  },
-                  "identifierName": "type"
-                },
-                "name": "type"
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
               },
-              "computed": false,
-              "shorthand": false,
-              "value": {
-                "type": "StringLiteral",
-                "start": 38,
-                "end": 44,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 38
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 44
-                  }
-                },
-                "extra": {
-                  "rawValue": "json",
-                  "raw": "\"json\""
-                },
-                "value": "json"
-              }
+              "value": "json"
             }
-          ]
-        }
+          }
+        ]
       }
     ],
     "directives": []
