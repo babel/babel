@@ -115,7 +115,8 @@
             "raw": "\"bar\""
           },
           "value": "bar"
-        }
+        },
+        "attributes": []
       },
       {
         "type": "ExportNamedDeclaration",

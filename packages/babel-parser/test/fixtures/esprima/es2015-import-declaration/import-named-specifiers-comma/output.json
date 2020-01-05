@@ -162,7 +162,8 @@
             "raw": "\"foo\""
           },
           "value": "foo"
-        }
+        },
+        "attributes": []
       }
     ],
     "directives": []
