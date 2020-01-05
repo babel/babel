@@ -147,8 +147,7 @@
             "raw": "\"bar\""
           },
           "value": "bar"
-        },
-        "attributes": []
+        }
       }
     ],
     "directives": []

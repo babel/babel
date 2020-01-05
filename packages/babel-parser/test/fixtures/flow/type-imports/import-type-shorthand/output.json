@@ -115,8 +115,7 @@
             "raw": "\"foo\""
           },
           "value": "foo"
-        },
-        "attributes": []
+        }
       },
       {
         "type": "ImportDeclaration",
@@ -204,8 +203,7 @@
             "raw": "\"foo\""
           },
           "value": "foo"
-        },
-        "attributes": []
+        }
       },
       {
         "type": "ImportDeclaration",
@@ -293,8 +291,7 @@
             "raw": "\"foo\""
           },
           "value": "foo"
-        },
-        "attributes": []
+        }
       },
       {
         "type": "ImportDeclaration",
@@ -382,8 +379,7 @@
             "raw": "\"foo\""
           },
           "value": "foo"
-        },
-        "attributes": []
+        }
       },
       {
         "type": "ImportDeclaration",
@@ -471,8 +467,7 @@
             "raw": "\"foo\""
           },
           "value": "foo"
-        },
-        "attributes": []
+        }
       },
       {
         "type": "ImportDeclaration",
@@ -560,8 +555,7 @@
             "raw": "\"foo\""
           },
           "value": "foo"
-        },
-        "attributes": []
+        }
       },
       {
         "type": "ImportDeclaration",
@@ -649,8 +643,7 @@
             "raw": "\"foo\""
           },
           "value": "foo"
-        },
-        "attributes": []
+        }
       },
       {
         "type": "ImportDeclaration",
@@ -738,8 +731,7 @@
             "raw": "\"foo\""
           },
           "value": "foo"
-        },
-        "attributes": []
+        }
       },
       {
         "type": "ImportDeclaration",
@@ -827,8 +819,7 @@
             "raw": "\"foo\""
           },
           "value": "foo"
-        },
-        "attributes": []
+        }
       },
       {
         "type": "ImportDeclaration",
@@ -916,8 +907,7 @@
             "raw": "\"foo\""
           },
           "value": "foo"
-        },
-        "attributes": []
+        }
       }
     ],
     "directives": []

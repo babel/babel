@@ -146,8 +146,7 @@
                   "raw": "\"TM\""
                 },
                 "value": "TM"
-              },
-              "attributes": []
+              }
             },
             {
               "type": "ImportDeclaration",
@@ -217,8 +216,7 @@
                   "raw": "\"UM\""
                 },
                 "value": "UM"
-              },
-              "attributes": []
+              }
             }
           ]
         },

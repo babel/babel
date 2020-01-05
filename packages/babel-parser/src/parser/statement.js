@@ -2024,7 +2024,10 @@ export default class StatementParser extends ExpressionParser {
       this.expectContextual("from");
     }
     node.source = this.parseImportSource();
-    node.attributes = this.maybeParseModuleAttributes();
+    const attributes = this.maybeParseModuleAttributes();
+    if (Array.isArray(attributes)) {
+      node.attributes = attributes;
+    }
     this.semicolon();
     return this.finishNode(node, "ImportDeclaration");
   }
@@ -2056,12 +2059,24 @@ export default class StatementParser extends ExpressionParser {
   }
 
   maybeParseModuleAttributes() {
-    if (this.match(tt._with) && !this.hasPlugin("moduleAttributes")) {
-      this.expectPlugin("moduleAttributes");
-    } else if (this.eat(tt._with)) {
-      return this.parseKeyValuePairs();
+    if (!this.eat(tt._with)) {
+      if (this.hasPlugin("moduleAttributes")) return [];
+      return null;
     }
-    return [];
+    this.expectPlugin("moduleAttributes");
+    const attrs = [];
+    do {
+      const node = this.startNode();
+      node.key = this.parseIdentifier();
+      node.computed = false;
+      node.method = false;
+      node.shorthand = false;
+      this.expect(tt.colon);
+      node.value = this.parsePrimitiveValue();
+      this.finishNode(node, "ObjectProperty");
+      attrs.push(node);
+    } while (this.eat(tt.comma));
+    return attrs;
   }
 
   maybeParseDefaultImportSpecifier(node: N.ImportDeclaration): boolean {
