@@ -27,6 +27,7 @@ import {
   type Validator,
   type OptionPath,
 } from "./option-assertions";
+import { validatePluginObject } from "./plugins";
 
 const ROOT_VALIDATORS: ValidatorSet = {
   cwd: (assertString: Validator<$PropertyType<ValidatedOptions, "cwd">>),
@@ -296,6 +297,10 @@ function getSource(loc: NestingPath): OptionsSource {
 }
 
 export function validate(type: OptionsSource, opts: {}): ValidatedOptions {
+  //todo: consider merge validatePluginObject with validateNested
+  if (type === "plugin") {
+    return validatePluginObject(opts);
+  }
   return validateNested(
     {
       type: "root",
