@@ -61,21 +61,26 @@ Using polyfills with `entry` option:
   es.symbol.unscopables { "ie":"10" }
   es.array.concat { "ie":"10", "node":"6" }
   es.array.copy-within { "ie":"10" }
+  es.array.every { "ie":"10" }
   es.array.fill { "ie":"10" }
   es.array.filter { "ie":"10", "node":"6" }
   es.array.find { "ie":"10" }
   es.array.find-index { "ie":"10" }
   es.array.flat { "chrome":"54", "ie":"10", "node":"6" }
   es.array.flat-map { "chrome":"54", "ie":"10", "node":"6" }
+  es.array.for-each { "ie":"10" }
   es.array.from { "ie":"10", "node":"6" }
   es.array.includes { "ie":"10", "node":"6" }
-  es.array.index-of { "node":"6" }
+  es.array.index-of { "ie":"10", "node":"6" }
   es.array.iterator { "chrome":"54", "ie":"10", "node":"6" }
   es.array.join { "ie":"10" }
-  es.array.last-index-of { "node":"6" }
+  es.array.last-index-of { "ie":"10", "node":"6" }
   es.array.map { "ie":"10", "node":"6" }
   es.array.of { "ie":"10" }
+  es.array.reduce { "ie":"10" }
+  es.array.reduce-right { "ie":"10" }
   es.array.slice { "ie":"10", "node":"6" }
+  es.array.some { "ie":"10" }
   es.array.sort { "chrome":"54", "node":"6" }
   es.array.species { "ie":"10", "node":"6" }
   es.array.splice { "ie":"10", "node":"6" }

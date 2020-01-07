@@ -64,30 +64,30 @@ Using polyfills with `entry` option:
   es.symbol.unscopables { "ie":"10", "safari":"7" }
   es.array.concat { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.array.copy-within { "ie":"10", "safari":"7" }
-  es.array.every { "safari":"7" }
+  es.array.every { "edge":"13", "firefox":"49", "ie":"10", "safari":"7" }
   es.array.fill { "ie":"10", "safari":"7" }
   es.array.filter { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.array.find { "ie":"10", "safari":"7" }
   es.array.find-index { "ie":"10", "safari":"7" }
   es.array.flat { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.array.flat-map { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es.array.for-each { "safari":"7" }
+  es.array.for-each { "edge":"13", "firefox":"49", "ie":"10", "safari":"7" }
   es.array.from { "edge":"13", "firefox":"49", "ie":"10", "safari":"7" }
   es.array.includes { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es.array.index-of { "safari":"7" }
+  es.array.index-of { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.array.iterator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.array.join { "ie":"10", "safari":"7" }
-  es.array.last-index-of { "safari":"7" }
+  es.array.last-index-of { "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.array.map { "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.array.of { "ie":"10", "safari":"7" }
-  es.array.reduce { "safari":"7" }
-  es.array.reduce-right { "safari":"7" }
+  es.array.reduce { "edge":"13", "firefox":"49", "ie":"10", "safari":"7" }
+  es.array.reduce-right { "edge":"13", "firefox":"49", "ie":"10", "safari":"7" }
   es.array.reverse { "ios":"9", "safari":"7" }
-  es.array.slice { "ie":"10", "ios":"9", "safari":"7" }
-  es.array.some { "safari":"7" }
+  es.array.slice { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.array.some { "edge":"13", "firefox":"49", "ie":"10", "safari":"7" }
   es.array.sort { "chrome":"54", "ios":"9", "safari":"7" }
   es.array.species { "ie":"10", "ios":"9", "safari":"7" }
-  es.array.splice { "ie":"10", "ios":"9", "safari":"7" }
+  es.array.splice { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.array.unscopables.flat { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.array.unscopables.flat-map { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.array-buffer.constructor { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
