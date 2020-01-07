@@ -72,21 +72,26 @@ Using polyfills with `entry` option:
   es.symbol.unscopables { "ie":"10" }
   es.array.concat { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.copy-within { "ie":"10" }
+  es.array.every { "electron":"0.36", "ie":"10" }
   es.array.fill { "ie":"10" }
   es.array.filter { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.find { "ie":"10" }
   es.array.find-index { "ie":"10" }
   es.array.flat { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.flat-map { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.for-each { "electron":"0.36", "ie":"10" }
   es.array.from { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.includes { "electron":"0.36", "ie":"10", "node":"6.1" }
-  es.array.index-of { "electron":"0.36", "node":"6.1" }
+  es.array.index-of { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.iterator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.join { "ie":"10" }
-  es.array.last-index-of { "electron":"0.36", "node":"6.1" }
+  es.array.last-index-of { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.map { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.of { "ie":"10" }
+  es.array.reduce { "electron":"0.36", "ie":"10" }
+  es.array.reduce-right { "electron":"0.36", "ie":"10" }
   es.array.slice { "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.some { "electron":"0.36", "ie":"10" }
   es.array.sort { "chrome":"54", "electron":"0.36", "node":"6.1" }
   es.array.species { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.splice { "electron":"0.36", "ie":"10", "node":"6.1" }
