@@ -439,3 +439,24 @@ function assertOverridesList(loc: OptionPath, value: mixed): OverridesList {
   }
   return (arr: any);
 }
+
+export function assertNoUnwrappedItemOptionPairs(
+  items: [PluginItem, PluginItem],
+  type: "plugin" | "preset",
+): void {
+  if (
+    items.length === 2 &&
+    typeof items[0] === "string" &&
+    typeof items[1] === "object"
+  ) {
+    try {
+      validate(items[1]);
+    } catch (e) {
+      throw new Error(
+        `.${type}[1] is not a valid ${type}. Maybe you meant to use\n` +
+          `"${type}": [\n  ["${items[0]}", ${JSON.stringify(items[1])}]\n]\n` +
+          `To be a valid ${type}, its name and options should be wrapped in a pair of brackets`,
+      );
+    }
+  }
+}

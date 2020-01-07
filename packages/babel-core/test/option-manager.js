@@ -27,6 +27,14 @@ describe("option-manager", () => {
       return { plugin, calls };
     }
 
+    it("should throw when an option is provided as a preset", () => {
+      expect(() => {
+        loadOptions({
+          presets: ["@babel/env", { useBuiltIns: "entry" }],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
     it("should throw if a plugin is repeated, with information about the repeated plugin", () => {
       const { calls, plugin } = makePlugin("my-plugin");
 
