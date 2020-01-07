@@ -447,10 +447,11 @@ export function assertNoUnwrappedItemOptionPairs(
   if (
     items.length === 2 &&
     typeof items[0] === "string" &&
-    typeof items[1] === "object"
+    typeof items[1] === "object" &&
+    !Array.isArray(items[1])
   ) {
     try {
-      validate(items[1]);
+      validate(type, items[1]);
     } catch (e) {
       throw new Error(
         `.${type}[1] is not a valid ${type}. Maybe you meant to use\n` +
