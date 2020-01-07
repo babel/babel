@@ -442,7 +442,7 @@ function assertOverridesList(loc: OptionPath, value: mixed): OverridesList {
 }
 
 export function assertNoUnwrappedItemOptionPairs(
-  items: [PluginItem, PluginItem],
+  items: PluginList,
   type: "plugin" | "preset",
 ): void {
   if (
