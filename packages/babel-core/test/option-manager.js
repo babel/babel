@@ -35,6 +35,14 @@ describe("option-manager", () => {
       }).toThrowErrorMatchingSnapshot();
     });
 
+    it("should throw when an option is provided as a plugin", () => {
+      expect(() => {
+        loadOptions({
+          plugins: ["@babel/transform-react-jsx", { useSpread: true }],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
     it("should throw if a plugin is repeated, with information about the repeated plugin", () => {
       const { calls, plugin } = makePlugin("my-plugin");
 
