@@ -1790,7 +1790,7 @@ export default class ExpressionParser extends LValParser {
       this.state.inPropertyName = true;
       // We check if it's valid for it to be a private name when we push it.
       (prop: $FlowFixMe).key =
-        this.match(tt.num) || this.match(tt.string)
+        this.match(tt.num) || this.match(tt.string) || this.match(tt.bigint)
           ? this.parseExprAtom()
           : this.parseMaybePrivateName();
 

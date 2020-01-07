@@ -61,6 +61,7 @@ augmentedTypesVar.ts
 awaitInNonAsyncFunction.ts
 awaitLiteralValues.ts
 bigIntWithTargetES3.ts
+bigintIndex.ts
 bigintWithLib.ts
 breakNotInIterationOrSwitchStatement1.ts
 breakNotInIterationOrSwitchStatement2.ts
