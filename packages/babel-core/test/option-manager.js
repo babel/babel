@@ -43,6 +43,18 @@ describe("option-manager", () => {
       }).toThrowErrorMatchingSnapshot();
     });
 
+    it("should not throw when a preset string followed by valid preset object", () => {
+      const { plugin } = makePlugin("my-plugin");
+      expect(
+        loadOptions({
+          presets: [
+            "@babel/env",
+            { plugins: [[plugin, undefined, "my-plugin"]] },
+          ],
+        }),
+      ).toBeTruthy();
+    });
+
     it("should throw if a plugin is repeated, with information about the repeated plugin", () => {
       const { calls, plugin } = makePlugin("my-plugin");
 

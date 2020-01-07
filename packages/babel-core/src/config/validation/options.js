@@ -27,6 +27,7 @@ import {
   type Validator,
   type OptionPath,
 } from "./option-assertions";
+import { validatePluginObject } from "./plugins";
 
 const ROOT_VALIDATORS: ValidatorSet = {
   cwd: (assertString: Validator<$PropertyType<ValidatedOptions, "cwd">>),
@@ -451,7 +452,9 @@ export function assertNoUnwrappedItemOptionPairs(
     !Array.isArray(items[1])
   ) {
     try {
-      validate(type, items[1]);
+      type === "preset"
+        ? validate(type, items[1])
+        : validatePluginObject(items[1]);
     } catch (e) {
       throw new Error(
         `.${type}[1] is not a valid ${type}. Maybe you meant to use\n` +
