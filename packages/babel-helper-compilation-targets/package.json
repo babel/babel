@@ -3,9 +3,11 @@
   "version": "0.0.0",
   "author": "The Babel Team (https://babeljs.io/team)",
   "license": "MIT",
-  "description": "",
+  "description": "Engine compat data used in @babel/preset-env",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-compilation-targets",
   "main": "lib/index.js",
+  "type": "commonjs",
+  "exports": false,
   "publishConfig": {
     "access": "public"
   },
