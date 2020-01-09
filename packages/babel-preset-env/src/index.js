@@ -20,6 +20,7 @@ import removeRegeneratorEntryPlugin from "./polyfills/regenerator/entry-plugin";
 import getTargets, {
   prettifyTargets,
   filterItems,
+  targetsSupported,
   type Targets,
 } from "@babel/helper-compilation-targets";
 import availablePlugins from "./available-plugins";
@@ -29,7 +30,10 @@ import { declare } from "@babel/helper-plugin-utils";
 import typeof ModuleTransformationsType from "./module-transformations";
 import type { BuiltInsOption, ModuleOption } from "./types";
 
-export { isItemRequired as isPluginRequired } from "@babel/helper-compilation-targets";
+// TODO: Remove in Babel 8
+export function isPluginRequired(target: Targets, support: Targets) {
+  return !targetsSupported(target, support);
+}
 
 const pluginListWithoutProposals = filterStageFromList(
   pluginList,

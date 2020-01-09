@@ -9,16 +9,16 @@ import {
   semverify,
 } from "./utils";
 
-export function isItemRequired(supportedEnvironments: Targets, item: Targets) {
-  const targetEnvironments = Object.keys(supportedEnvironments);
+export function targetsSupported(target: Targets, support: Targets) {
+  const targetEnvironments = Object.keys(target);
 
   if (targetEnvironments.length === 0) {
-    return true;
+    return false;
   }
 
-  const isRequiredForEnvironments = targetEnvironments.filter(environment => {
+  const unsupportedEnvironments = targetEnvironments.filter(environment => {
     const lowestImplementedVersion = getLowestImplementedVersion(
-      item,
+      support,
       environment,
     );
 
@@ -27,7 +27,7 @@ export function isItemRequired(supportedEnvironments: Targets, item: Targets) {
       return true;
     }
 
-    const lowestTargetedVersion = supportedEnvironments[environment];
+    const lowestTargetedVersion = target[environment];
 
     // If targets has unreleased value as a lowest version, then don't require a plugin.
     if (isUnreleasedVersion(lowestTargetedVersion, environment)) {
@@ -52,7 +52,7 @@ export function isItemRequired(supportedEnvironments: Targets, item: Targets) {
     );
   });
 
-  return isRequiredForEnvironments.length > 0;
+  return unsupportedEnvironments.length === 0;
 }
 
 export default function filterItems(
@@ -69,7 +69,7 @@ export default function filterItems(
   for (const item in list) {
     if (
       !excludes.has(item) &&
-      (isItemRequired(targets, list[item]) || includes.has(item))
+      (!targetsSupported(targets, list[item]) || includes.has(item))
     ) {
       result.add(item);
     } else if (pluginSyntaxMap) {

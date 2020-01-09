@@ -1,15 +1,15 @@
 "use strict";
 
-const { isItemRequired } = require("../");
+const { targetsSupported } = require("../lib");
 
-describe("isPluginRequired", () => {
+describe("targetsSupported", () => {
   const MAX_VERSION = `${Number.MAX_SAFE_INTEGER}.0.0`;
 
-  it("returns true if no targets are specified", () => {
-    expect(isItemRequired({}, {})).toBe(true);
+  it("returns false if no targets are specified", () => {
+    expect(targetsSupported({}, {})).toBe(false);
   });
 
-  it("returns true if plugin feature is not implemented in one or more targets", () => {
+  it("returns false if plugin feature is not implemented in one or more targets", () => {
     let targets;
     const plugin = {
       edge: false,
@@ -21,15 +21,15 @@ describe("isPluginRequired", () => {
       chrome: MAX_VERSION,
       firefox: MAX_VERSION,
     };
-    expect(isItemRequired(targets, plugin)).toBe(false);
+    expect(targetsSupported(targets, plugin)).toBe(true);
 
     targets = {
       edge: "12",
     };
-    expect(isItemRequired(targets, plugin)).toBe(true);
+    expect(targetsSupported(targets, plugin)).toBe(false);
   });
 
-  it("returns false if plugin feature is implemented by lower than target", () => {
+  it("returns true if plugin feature is implemented by lower than target", () => {
     const plugin = {
       chrome: 49,
     };
@@ -37,27 +37,27 @@ describe("isPluginRequired", () => {
       chrome: MAX_VERSION,
     };
 
-    expect(isItemRequired(targets, plugin)).toBe(false);
+    expect(targetsSupported(targets, plugin)).toBe(true);
   });
 
-  it("returns false if plugin feature is implemented is equal to target", () => {
+  it("returns true if plugin feature is implemented is equal to target", () => {
     const plugin = {
       chrome: 49,
     };
     const targets = {
       chrome: "49.0.0",
     };
-    expect(isItemRequired(targets, plugin)).toBe(false);
+    expect(targetsSupported(targets, plugin)).toBe(true);
   });
 
-  it("returns true if plugin feature is implemented is greater than target", () => {
+  it("returns false if plugin feature is implemented is greater than target", () => {
     const plugin = {
       chrome: 50,
     };
     const targets = {
       chrome: "49.0.0",
     };
-    expect(isItemRequired(targets, plugin)).toBe(true);
+    expect(targetsSupported(targets, plugin)).toBe(false);
   });
 
   it("returns when target is a decimal", () => {
@@ -67,7 +67,7 @@ describe("isPluginRequired", () => {
     const targets = {
       node: "6.10.0",
     };
-    expect(isItemRequired(targets, plugin)).toBe(false);
+    expect(targetsSupported(targets, plugin)).toBe(true);
   });
 
   it("throws an error if target version is invalid", () => {
@@ -77,6 +77,6 @@ describe("isPluginRequired", () => {
     const targets = {
       chrome: 55,
     };
-    expect(() => isItemRequired(targets, plugin)).toThrow();
+    expect(() => targetsSupported(targets, plugin)).toThrow();
   });
 });
