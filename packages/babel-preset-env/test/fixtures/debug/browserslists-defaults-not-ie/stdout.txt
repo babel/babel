@@ -3,7 +3,7 @@
 Using targets:
 {
   "android": "77",
-  "chrome": "77",
+  "chrome": "49",
   "edge": "17",
   "firefox": "68",
   "ios": "12.2",
@@ -17,7 +17,7 @@ Using modules transform: auto
 Using plugins:
   transform-template-literals { "ios":"12.2", "safari":"5.1" }
   transform-literals { "safari":"5.1" }
-  transform-function-name { "edge":"17", "safari":"5.1" }
+  transform-function-name { "chrome":"49", "edge":"17", "safari":"5.1" }
   transform-arrow-functions { "safari":"5.1" }
   transform-block-scoped-functions { "safari":"5.1" }
   transform-classes { "safari":"5.1" }
@@ -25,26 +25,26 @@ Using plugins:
   transform-shorthand-properties { "safari":"5.1" }
   transform-duplicate-keys { "safari":"5.1" }
   transform-computed-properties { "safari":"5.1" }
-  transform-for-of { "safari":"5.1" }
+  transform-for-of { "chrome":"49", "safari":"5.1" }
   transform-sticky-regex { "safari":"5.1" }
-  transform-dotall-regex { "edge":"17", "firefox":"68", "safari":"5.1" }
-  transform-unicode-regex { "safari":"5.1" }
+  transform-dotall-regex { "chrome":"49", "edge":"17", "firefox":"68", "safari":"5.1" }
+  transform-unicode-regex { "chrome":"49", "safari":"5.1" }
   transform-spread { "safari":"5.1" }
   transform-parameters { "edge":"17", "safari":"5.1" }
-  transform-destructuring { "safari":"5.1" }
+  transform-destructuring { "chrome":"49", "safari":"5.1" }
   transform-block-scoping { "safari":"5.1" }
   transform-typeof-symbol { "safari":"5.1" }
   transform-new-target { "safari":"5.1" }
-  transform-regenerator { "safari":"5.1" }
-  transform-exponentiation-operator { "safari":"5.1" }
-  transform-async-to-generator { "safari":"5.1" }
-  proposal-async-generator-functions { "edge":"17", "safari":"5.1" }
-  proposal-object-rest-spread { "edge":"17", "safari":"5.1" }
-  proposal-unicode-property-regex { "edge":"17", "firefox":"68", "safari":"5.1" }
-  proposal-json-strings { "edge":"17", "safari":"5.1" }
-  proposal-optional-catch-binding { "edge":"17", "safari":"5.1" }
-  transform-named-capturing-groups-regex { "edge":"17", "firefox":"68", "safari":"5.1" }
-  transform-modules-commonjs { "android":"77", "chrome":"77", "edge":"17", "firefox":"68", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
-  proposal-dynamic-import { "android":"77", "chrome":"77", "edge":"17", "firefox":"68", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
+  transform-regenerator { "chrome":"49", "safari":"5.1" }
+  transform-exponentiation-operator { "chrome":"49", "safari":"5.1" }
+  transform-async-to-generator { "chrome":"49", "safari":"5.1" }
+  proposal-async-generator-functions { "chrome":"49", "edge":"17", "safari":"5.1" }
+  proposal-object-rest-spread { "chrome":"49", "edge":"17", "safari":"5.1" }
+  proposal-unicode-property-regex { "chrome":"49", "edge":"17", "firefox":"68", "safari":"5.1" }
+  proposal-json-strings { "chrome":"49", "edge":"17", "safari":"5.1" }
+  proposal-optional-catch-binding { "chrome":"49", "edge":"17", "safari":"5.1" }
+  transform-named-capturing-groups-regex { "chrome":"49", "edge":"17", "firefox":"68", "safari":"5.1" }
+  transform-modules-commonjs { "android":"77", "chrome":"49", "edge":"17", "firefox":"68", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
+  proposal-dynamic-import { "android":"77", "chrome":"49", "edge":"17", "firefox":"68", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
