@@ -99,6 +99,7 @@ const es2017 = {
 
 const es2018 = {
   "proposal-async-generator-functions": "Asynchronous Iterators",
+  "proposal-numeric-separator": "numeric separator",
   "proposal-object-rest-spread": "object rest/spread properties",
 
   "transform-dotall-regex": "s (dotAll) flag for regular expressions",
