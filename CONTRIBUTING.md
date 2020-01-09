@@ -1,4 +1,4 @@
-----
+---
 
 <p align="center" class="toc">
    <strong><a href="#setup">Setup</a></strong>
@@ -12,8 +12,7 @@
    <strong><a href="#internals">Internals</a></strong>
 </p>
 
-----
-
+---
 
 # Contributing
 
@@ -24,13 +23,13 @@ contributing, please read the
 ## Not sure where to start?
 
 - If you aren't just making a documentation change, you'll probably want to learn a bit about a few topics.
- - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): The Babel AST [spec](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md) is a bit different from [ESTree](https://github.com/estree/estree). The differences are listed [here](https://babeljs.io/docs/en/next/babel-parser.html#output).
- - Check out [`/doc`](https://github.com/babel/babel/tree/master/doc) for information about Babel's internals
- - Check out [the Babel Plugin Handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook) - core plugins are written the same way as any other plugin!
- - Check out [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or make your own plugin in the browser
+- [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): The Babel AST [spec](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md) is a bit different from [ESTree](https://github.com/estree/estree). The differences are listed [here](https://babeljs.io/docs/en/next/babel-parser.html#output).
+- Check out [`/doc`](https://github.com/babel/babel/tree/master/doc) for information about Babel's internals
+- Check out [the Babel Plugin Handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook) - core plugins are written the same way as any other plugin!
+- Check out [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or make your own plugin in the browser
 - When you feel ready to jump into the Babel source code, a good place to start is to look for issues tagged with [help wanted](https://github.com/babel/babel/labels/help%20wanted) and/or [good first issue](https://github.com/babel/babel/labels/good%20first%20issue).
 - Follow along with what we are working on by joining our [Slack](https://babeljs.slack.com) (you can sign-up [here](https://slack.babeljs.io/)
-    for an invite), following our announcements on [Twitter](https://twitter.com/babeljs), and reading (or participating!) in our [meeting notes](https://github.com/babel/notes).
+  for an invite), following our announcements on [Twitter](https://twitter.com/babeljs), and reading (or participating!) in our [meeting notes](https://github.com/babel/notes).
 - Check out our [website](http://babeljs.io/) and the [repo](https://github.com/babel/website)
 - You can contribute by triaging issues which may include reproducing bug reports or asking for vital information, such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to [subscribe to babel on CodeTriage](https://www.codetriage.com/babel/babel). [![Open Source Helpers](https://www.codetriage.com/babel/babel/badges/users.svg)](https://www.codetriage.com/babel/babel)
 
@@ -49,8 +48,12 @@ Installation instructions can be found here: https://yarnpkg.com/en/docs/install
 
 ### Setup
 
+Fork the `babel` repository to your Github Account.
+
+Then, run:
+
 ```sh
-$ git clone https://github.com/babel/babel
+$ git clone https://github.com/<your-github-username>/babel
 $ cd babel
 $ make bootstrap
 ```
@@ -158,12 +161,12 @@ $ ./scripts/test-cov.sh
 
 In case you're not able to reproduce an error on CI locally, it may be due to
 
- - Node Version: Travis CI runs the tests against all major node versions. If your tests use JavaScript features unsupported by lower versions of node, then use [minNodeVersion option](#writing-tests) in options.json.
- - Timeout: Check the CI log and if the only errors are timeout errors and you are sure that it's not related to the changes you made, ask someone in the slack channel to trigger rebuild on the CI build and it might be resolved
+- Node Version: Travis CI runs the tests against all major node versions. If your tests use JavaScript features unsupported by lower versions of node, then use [minNodeVersion option](#writing-tests) in options.json.
+- Timeout: Check the CI log and if the only errors are timeout errors and you are sure that it's not related to the changes you made, ask someone in the slack channel to trigger rebuild on the CI build and it might be resolved
 
 In case you're locally getting errors which are not on the CI, it may be due to
 
- - Updates in Dependencies: Make sure you run `make bootstrap` before you run `make build` or `make watch` before you run the tests.
+- Updates in Dependencies: Make sure you run `make bootstrap` before you run `make build` or `make watch` before you run the tests.
 
 ### Writing tests
 
@@ -177,15 +180,16 @@ For example, in [`@babel/plugin-transform-exponentiation-operator/test`](https:/
 
 - There is an `index.js` file. It imports our [test helper](https://github.com/babel/babel/tree/master/packages/babel-helper-plugin-test-runner). (You don't have to worry about this).
 - There can be multiple folders under [`/fixtures`](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures)
-   - There is an [`options.json`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/options.json) file whose function is similar to a `.babelrc` file, allowing you to pass in the plugins and settings you need for your tests.
-   - For this test, we only need the relevant plugin, so it's just `{ "plugins": ["@babel/plugin-transform-exponentiation-operator"] }`.
-   - If necessary, you can have an `options.json` with different options in each subfolder.
+
+  - There is an [`options.json`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/options.json) file whose function is similar to a `.babelrc` file, allowing you to pass in the plugins and settings you need for your tests.
+  - For this test, we only need the relevant plugin, so it's just `{ "plugins": ["@babel/plugin-transform-exponentiation-operator"] }`.
+  - If necessary, you can have an `options.json` with different options in each subfolder.
 
 - In each subfolder, you can organize your directory structure by categories of tests. (Example: these folders can be named after the feature you are testing or can reference the issue number they fix)
 - Generally, there are two kinds of tests for plugins
-   - The first is a simple test of the input and output produced by running Babel on some code. We do this by creating an [`input.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/input.js) file and an [`output.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/output.js) file. This kind of test only works in sub-subdirectories of `/fixtures`, i.e. `/fixtures/exponentian-operator/binary/input.js` and **not** `/fixtures/exponentian-operator/input.js`.
-   - If you need to expect an error, you can ignore creating the `output.js` file and pass a new `throws` key to the `options.json` that contains the error string that is created.
-   - The second and preferred type is a test that actually evaluates the produced code and asserts that certain properties are true or false. We do this by creating an [`exec.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/comprehensive/exec.js) file.
+    - The first is a simple test of the input and output produced by running Babel on some code. We do this by creating an [`input.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/input.js) file and an [`output.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/output.js) file. This kind of test only works in sub-subdirectories of `/fixtures`, i.e. `/fixtures/exponentian-operator/binary/input.js` and **not** `/fixtures/exponentian-operator/input.js`.
+  - If you need to expect an error, you can ignore creating the `output.js` file and pass a new `throws` key to the `options.json` that contains the error string that is created.
+  - The second and preferred type is a test that actually evaluates the produced code and asserts that certain properties are true or false. We do this by creating an [`exec.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/comprehensive/exec.js) file.
 
 In a fixture test, you simply write out the code you want to transform in `input.js`.
 
@@ -200,6 +204,7 @@ and the expected output after transforming it with your `options.json` in `outpu
 // output.js
 Math.pow(2, 2);
 ```
+
 In an `exec.js` test, we run or check that the code actually does what it's supposed to do rather than just check the static output.
 
 ```js
@@ -235,9 +240,9 @@ Inside the `packages/babel-parser/test/fixtures` folder are categories/groupings
 etc.). To add a test, create a folder under one of these groupings (or create a new one) with a
 descriptive name, and add the following:
 
-* Create an `input.js` file that contains the code you want the babel parser to parse.
+- Create an `input.js` file that contains the code you want the babel parser to parse.
 
-* Add an `output.json` file with the expected parser output. For added convenience, if there is no `output.json` present, the test runner will generate one for you.
+- Add an `output.json` file with the expected parser output. For added convenience, if there is no `output.json` present, the test runner will generate one for you.
 
 After writing tests for @babel/parser, just build it by running:
 
@@ -317,6 +322,7 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
 - Start working about the Babel transform itself!
 
 ## Internals
+
 - AST spec ([babel-parser/ast/spec.md](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md))
 - Versioning ([doc/design/versioning.md](https://github.com/babel/babel/blob/master/doc/design/versioning.md))
 - Monorepo ([doc/design/monorepo.md](https://github.com/babel/babel/blob/master/doc/design/monorepo.md))
