@@ -101,6 +101,7 @@ export function validatePluginObject(obj: {}): PluginObject {
       const invalidPluginPropertyError = new Error(
         `.${key} is not a valid Plugin property`,
       );
+      // $FlowIgnore
       invalidPluginPropertyError.code = "BABEL_UNKNOWN_PLUGIN_PROPERTY";
       throw invalidPluginPropertyError;
     }

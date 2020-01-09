@@ -376,6 +376,7 @@ function throwUnknownError(loc: OptionPath) {
         loc,
       )}. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.`,
     );
+    // $FlowIgnore
     unknownOptErr.code = "BABEL_UNKNOWN_OPTION";
 
     throw unknownOptErr;
