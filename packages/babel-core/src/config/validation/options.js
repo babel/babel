@@ -366,12 +366,12 @@ function throwUnknownError(loc: OptionPath) {
   if (removed[key]) {
     const { message, version = 5 } = removed[key];
 
-    throw new ReferenceError(
+    throw new Error(
       `Using removed Babel ${version} option: ${msg(loc)} - ${message}`,
     );
   } else {
     // eslint-disable-next-line max-len
-    const unknownOptErr = new ReferenceError(
+    const unknownOptErr = new Error(
       `Unknown option: ${msg(
         loc,
       )}. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.`,
