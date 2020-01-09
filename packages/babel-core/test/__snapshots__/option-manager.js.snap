@@ -1,17 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`option-manager config plugin/preset flattening and overriding should throw when an option is provided as a plugin 1`] = `
-".plugin[1] is not a valid plugin. Maybe you meant to use
+"[BABEL] unknown: .plugin[1] is not a valid plugin. Maybe you meant to use
 \\"plugin\\": [
-  [\\"@babel/transform-react-jsx\\", {\\"useSpread\\":true}]
+  [\\"./fixtures/option-manager/babel-plugin-foo\\", {
+  \\"useSpread\\": true
+}]
 ]
 To be a valid plugin, its name and options should be wrapped in a pair of brackets"
 `;
 
 exports[`option-manager config plugin/preset flattening and overriding should throw when an option is provided as a preset 1`] = `
-".preset[1] is not a valid preset. Maybe you meant to use
+"[BABEL] unknown: .preset[1] is not a valid preset. Maybe you meant to use
 \\"preset\\": [
-  [\\"@babel/env\\", {\\"useBuiltIns\\":\\"entry\\"}]
+  [\\"./fixtures/option-manager/babel-preset-bar\\", {
+  \\"useBuiltIns\\": \\"entry\\"
+}]
 ]
 To be a valid preset, its name and options should be wrapped in a pair of brackets"
 `;

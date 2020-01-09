@@ -30,7 +30,10 @@ describe("option-manager", () => {
     it("should throw when an option is provided as a preset", () => {
       expect(() => {
         loadOptions({
-          presets: ["@babel/env", { useBuiltIns: "entry" }],
+          presets: [
+            "./fixtures/option-manager/babel-preset-bar",
+            { useBuiltIns: "entry" },
+          ],
         });
       }).toThrowErrorMatchingSnapshot();
     });
@@ -38,7 +41,10 @@ describe("option-manager", () => {
     it("should throw when an option is provided as a plugin", () => {
       expect(() => {
         loadOptions({
-          plugins: ["@babel/transform-react-jsx", { useSpread: true }],
+          plugins: [
+            "./fixtures/option-manager/babel-plugin-foo",
+            { useSpread: true },
+          ],
         });
       }).toThrowErrorMatchingSnapshot();
     });
