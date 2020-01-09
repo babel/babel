@@ -2,7 +2,9 @@
 // These mappings represent the syntax proposals that have been
 // shipped by browsers, and are enabled by the `shippedProposals` option.
 
-const proposalPlugins = {};
+const proposalPlugins = {
+  "proposal-numeric-separator": true
+};
 
 // use intermediary object to enforce alphabetical key order
 const pluginSyntaxObject = {
