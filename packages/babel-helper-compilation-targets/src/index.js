@@ -19,7 +19,7 @@ export type { Targets };
 
 export { prettifyTargets } from "./pretty";
 export { getInclusionReasons } from "./debug";
-export { default as filterItems, targetsSupported } from "./filter-items";
+export { default as filterItems, isRequired } from "./filter-items";
 export { unreleasedLabels } from "./targets";
 
 const browserslistDefaults = browserslist.defaults;

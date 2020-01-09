@@ -20,7 +20,7 @@ import removeRegeneratorEntryPlugin from "./polyfills/regenerator/entry-plugin";
 import getTargets, {
   prettifyTargets,
   filterItems,
-  targetsSupported,
+  isRequired,
   type Targets,
 } from "@babel/helper-compilation-targets";
 import availablePlugins from "./available-plugins";
@@ -31,8 +31,10 @@ import typeof ModuleTransformationsType from "./module-transformations";
 import type { BuiltInsOption, ModuleOption } from "./types";
 
 // TODO: Remove in Babel 8
-export function isPluginRequired(target: Targets, support: Targets) {
-  return !targetsSupported(target, support);
+export function isPluginRequired(targets: Targets, support: Targets) {
+  return !isRequired("fake-name", targets, {
+    compatData: { "fake-name": support },
+  });
 }
 
 const pluginListWithoutProposals = filterStageFromList(

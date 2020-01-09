@@ -2,6 +2,8 @@
 
 import semver from "semver";
 
+import pluginsCompatData from "@babel/compat-data/plugins";
+
 import type { Targets } from "./types";
 import {
   getLowestImplementedVersion,
@@ -55,6 +57,24 @@ export function targetsSupported(target: Targets, support: Targets) {
   return unsupportedEnvironments.length === 0;
 }
 
+export function isRequired(
+  name: string,
+  targets: Targets,
+  {
+    compatData = pluginsCompatData,
+    includes,
+    excludes,
+  }: {
+    compatData?: { [feature: string]: Targets },
+    includes?: Set<string>,
+    excludes?: Set<string>,
+  } = {},
+) {
+  if (excludes && excludes.has(name)) return false;
+  if (includes && includes.has(name)) return true;
+  return !targetsSupported(targets, compatData[name]);
+}
+
 export default function filterItems(
   list: { [feature: string]: Targets },
   includes: Set<string>,
@@ -65,12 +85,10 @@ export default function filterItems(
   pluginSyntaxMap?: Map<string, string | null>,
 ) {
   const result = new Set<string>();
+  const options = { compatData: list, includes, excludes };
 
   for (const item in list) {
-    if (
-      !excludes.has(item) &&
-      (!targetsSupported(targets, list[item]) || includes.has(item))
-    ) {
+    if (isRequired(item, targets, options)) {
       result.add(item);
     } else if (pluginSyntaxMap) {
       const shippedProposalsSyntax = pluginSyntaxMap.get(item);
