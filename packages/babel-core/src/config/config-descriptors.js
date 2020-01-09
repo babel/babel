@@ -15,7 +15,6 @@ import type {
   PluginList,
   PluginItem,
 } from "./validation/options";
-import { assertNoUnwrappedItemOptionPairs } from "./validation/options";
 
 // Represents a config object and functions to lazily load the descriptors
 // for the plugins and presets so we don't load the plugins/presets unless
@@ -230,7 +229,6 @@ function createDescriptors(
   alias: string,
   ownPass?: boolean,
 ): Array<UnloadedDescriptor> {
-  assertNoUnwrappedItemOptionPairs(items, type);
   const descriptors = items.map((item, index) =>
     createDescriptor(item, dirname, {
       type,

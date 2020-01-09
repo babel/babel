@@ -27,7 +27,7 @@ import {
   type Validator,
   type OptionPath,
 } from "./option-assertions";
-import { validatePluginObject } from "./plugins";
+import type { UnloadedDescriptor } from "../config-descriptors";
 
 const ROOT_VALIDATORS: ValidatorSet = {
   cwd: (assertString: Validator<$PropertyType<ValidatedOptions, "cwd">>),
@@ -371,11 +371,14 @@ function throwUnknownError(loc: OptionPath) {
     );
   } else {
     // eslint-disable-next-line max-len
-    const unknownOptErr = `Unknown option: ${msg(
-      loc,
-    )}. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.`;
+    const unknownOptErr = new ReferenceError(
+      `Unknown option: ${msg(
+        loc,
+      )}. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.`,
+    );
+    unknownOptErr.code = "BABEL_UNKNOWN_OPTION";
 
-    throw new ReferenceError(unknownOptErr);
+    throw unknownOptErr;
   }
 }
 
@@ -441,26 +444,25 @@ function assertOverridesList(loc: OptionPath, value: mixed): OverridesList {
   return (arr: any);
 }
 
-export function assertNoUnwrappedItemOptionPairs(
-  items: PluginList,
+export function checkNoUnwrappedItemOptionPairs(
+  lastItem: UnloadedDescriptor,
+  thisItem: UnloadedDescriptor,
   type: "plugin" | "preset",
+  index: number,
+  e: Error,
 ): void {
   if (
-    items.length === 2 &&
-    typeof items[0] === "string" &&
-    typeof items[1] === "object" &&
-    !Array.isArray(items[1])
+    lastItem.file &&
+    lastItem.options === undefined &&
+    typeof thisItem.value === "object"
   ) {
-    try {
-      type === "preset"
-        ? validate(type, items[1])
-        : validatePluginObject(items[1]);
-    } catch (e) {
-      throw new Error(
-        `.${type}[1] is not a valid ${type}. Maybe you meant to use\n` +
-          `"${type}": [\n  ["${items[0]}", ${JSON.stringify(items[1])}]\n]\n` +
-          `To be a valid ${type}, its name and options should be wrapped in a pair of brackets`,
-      );
-    }
+    e.message +=
+      `\n- Maybe you meant to use\n` +
+      `"${type}": [\n  ["${lastItem.file.request}", ${JSON.stringify(
+        thisItem.value,
+        undefined,
+        2,
+      )}]\n]\n` +
+      `To be a valid ${type}, its name and options should be wrapped in a pair of brackets`;
   }
 }
