@@ -5,6 +5,7 @@ import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
 import syntaxJsonStrings from "@babel/plugin-syntax-json-strings";
 import syntaxNullishCoalescingOperator from "@babel/plugin-syntax-nullish-coalescing-operator";
+import syntaxNumericSeparator from "@babel/plugin-syntax-numeric-separator";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-binding";
 import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
@@ -13,6 +14,7 @@ import proposalAsyncGeneratorFunctions from "@babel/plugin-proposal-async-genera
 import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";
 import proposalJsonStrings from "@babel/plugin-proposal-json-strings";
 import proposalNullishCoalescingOperator from "@babel/plugin-proposal-nullish-coalescing-operator";
+import proposalNumericSeparator from "@babel/plugin-proposal-numeric-separator";
 import proposalObjectRestSpread from "@babel/plugin-proposal-object-rest-spread";
 import proposalOptionalCatchBinding from "@babel/plugin-proposal-optional-catch-binding";
 import proposalOptionalChaining from "@babel/plugin-proposal-optional-chaining";
@@ -62,6 +64,7 @@ export default {
   "syntax-dynamic-import": syntaxDynamicImport,
   "syntax-json-strings": syntaxJsonStrings,
   "syntax-nullish-coalescing-operator": syntaxNullishCoalescingOperator,
+  "syntax-numeric-separator": syntaxNumericSeparator,
   "syntax-object-rest-spread": syntaxObjectRestSpread,
   "syntax-optional-catch-binding": syntaxOptionalCatchBinding,
   "syntax-optional-chaining": syntaxOptionalChaining,
@@ -97,4 +100,5 @@ export default {
   "transform-template-literals": transformTemplateLiterals,
   "transform-typeof-symbol": transformTypeofSymbol,
   "transform-unicode-regex": transformUnicodeRegex,
+  "proposal-numeric-separator": proposalNumericSeparator,
 };
