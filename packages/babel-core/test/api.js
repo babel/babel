@@ -760,11 +760,11 @@ describe("api", function() {
         options,
         function(err) {
           expect(err.message).toMatch(
-            "Support for the experimental syntax 'dynamicImport' isn't currently enabled (1:9)",
+            "Support for the experimental syntax 'pipelineOperator' isn't currently enabled (1:3):",
           );
           expect(err.message).toMatch(
-            "Add @babel/plugin-syntax-dynamic-import (https://git.io/vb4Sv) to the " +
-              "'plugins' section of your Babel config to enable parsing.",
+            "Add @babel/plugin-proposal-pipeline-operator (https://git.io/vb4SU) to the " +
+              "'plugins' section of your Babel config to enable transformation.",
           );
           done();
         },
