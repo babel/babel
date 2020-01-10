@@ -32,8 +32,7 @@ function isInDoStatement(node) {
   if (
     node.type === "IfStatement" &&
     node.parent &&
-    node.parent.type === "IfStatement" &&
-    node.parent.alternate === node
+    node.parent.type === "IfStatement"
   ) {
     return isInDoStatement(node.parent);
   }
