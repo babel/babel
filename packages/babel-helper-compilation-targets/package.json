@@ -1,0 +1,32 @@
+{
+  "name": "@babel/helper-compilation-targets",
+  "version": "0.0.0",
+  "author": "The Babel Team (https://babeljs.io/team)",
+  "license": "MIT",
+  "description": "Engine compat data used in @babel/preset-env",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-compilation-targets",
+  "main": "lib/index.js",
+  "type": "commonjs",
+  "exports": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "babel",
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "@babel/compat-data": "^0.0.0",
+    "browserslist": "^4.8.2",
+    "levenary": "^1.1.0",
+    "invariant": "^2.2.4",
+    "semver": "^7.1.1"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.5",
+    "@babel/helper-plugin-test-runner": "^7.7.4"
+  }
+}

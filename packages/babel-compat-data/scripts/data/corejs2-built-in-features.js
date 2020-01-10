@@ -26,7 +26,7 @@ const typedArrayMethods = [
   "typed arrays / %TypedArray%[Symbol.species]",
 ];
 
-const es = {
+module.exports = {
   // compat-table missing babel6 mapping
   // "es6.array.concat": {
   //   features: [
@@ -34,7 +34,8 @@ const es = {
   //     "well-known symbols / Symbol.species, Array.prototype.concat",
   //   ]
   // },
-  "es6.array.copy-within": "Array.prototype methods / Array.prototype.copyWithin",
+  "es6.array.copy-within":
+    "Array.prototype methods / Array.prototype.copyWithin",
   "es6.array.every": "Array methods / Array.prototype.every",
   "es6.array.fill": "Array.prototype methods / Array.prototype.fill",
   "es6.array.filter": {
@@ -46,7 +47,8 @@ const es = {
   },
   "es6.array.find": "Array.prototype methods / Array.prototype.find",
   "es6.array.find-index": "Array.prototype methods / Array.prototype.findIndex",
-  "es7.array.flat-map": "Array.prototype.{flat, flatMap} / Array.prototype.flatMap",
+  "es7.array.flat-map":
+    "Array.prototype.{flat, flatMap} / Array.prototype.flatMap",
   "es6.array.for-each": "Array methods / Array.prototype.forEach",
   "es6.array.from": "Array static methods / Array.from",
   "es7.array.includes": "Array.prototype.includes",
@@ -90,8 +92,8 @@ const es = {
   "es6.function.has-instance": "well-known symbols / Symbol.hasInstance",
   "es6.function.name": {
     features: [
-      "function \"name\" property / function statements",
-      "function \"name\" property / function expressions",
+      'function "name" property / function statements',
+      'function "name" property / function expressions',
     ],
   },
 
@@ -174,13 +176,19 @@ const es = {
     ],
   },
   "es6.object.define-property": "Object static methods / Object.defineProperty",
-  "es6.object.define-properties": "Object static methods / Object.defineProperties",
+  "es6.object.define-properties":
+    "Object static methods / Object.defineProperties",
   "es7.object.entries": "Object static methods / Object.entries",
-  "es6.object.freeze": "Object static methods accept primitives / Object.freeze",
-  "es6.object.get-own-property-descriptor": "Object static methods accept primitives / Object.getOwnPropertyDescriptor",
-  "es7.object.get-own-property-descriptors": "Object static methods / Object.getOwnPropertyDescriptors",
-  "es6.object.get-own-property-names": "Object static methods accept primitives / Object.getOwnPropertyNames",
-  "es6.object.get-prototype-of": "Object static methods accept primitives / Object.getPrototypeOf",
+  "es6.object.freeze":
+    "Object static methods accept primitives / Object.freeze",
+  "es6.object.get-own-property-descriptor":
+    "Object static methods accept primitives / Object.getOwnPropertyDescriptor",
+  "es7.object.get-own-property-descriptors":
+    "Object static methods / Object.getOwnPropertyDescriptors",
+  "es6.object.get-own-property-names":
+    "Object static methods accept primitives / Object.getOwnPropertyNames",
+  "es6.object.get-prototype-of":
+    "Object static methods accept primitives / Object.getPrototypeOf",
   "es7.object.lookup-getter": {
     features: [
       "Object.prototype getter/setter methods / __lookupGetter__",
@@ -199,15 +207,20 @@ const es = {
       "Object.prototype getter/setter methods / __lookupSetter__, data properties can shadow accessors",
     ],
   },
-  "es6.object.prevent-extensions": "Object static methods accept primitives / Object.preventExtensions",
+  "es6.object.prevent-extensions":
+    "Object static methods accept primitives / Object.preventExtensions",
   "es6.object.to-string": "well-known symbols / Symbol.toStringTag",
   "es6.object.is": "Object static methods / Object.is",
-  "es6.object.is-frozen": "Object static methods accept primitives / Object.isFrozen",
-  "es6.object.is-sealed": "Object static methods accept primitives / Object.isSealed",
-  "es6.object.is-extensible": "Object static methods accept primitives / Object.isExtensible",
+  "es6.object.is-frozen":
+    "Object static methods accept primitives / Object.isFrozen",
+  "es6.object.is-sealed":
+    "Object static methods accept primitives / Object.isSealed",
+  "es6.object.is-extensible":
+    "Object static methods accept primitives / Object.isExtensible",
   "es6.object.keys": "Object static methods accept primitives / Object.keys",
   "es6.object.seal": "Object static methods accept primitives / Object.seal",
-  "es6.object.set-prototype-of": "Object static methods / Object.setPrototypeOf",
+  "es6.object.set-prototype-of":
+    "Object static methods / Object.setPrototypeOf",
   "es7.object.values": "Object static methods / Object.values",
 
   "es6.promise": {
@@ -224,7 +237,8 @@ const es = {
   "es6.reflect.define-property": "Reflect / Reflect.defineProperty",
   "es6.reflect.delete-property": "Reflect / Reflect.deleteProperty",
   "es6.reflect.get": "Reflect / Reflect.get",
-  "es6.reflect.get-own-property-descriptor": "Reflect / Reflect.getOwnPropertyDescriptor",
+  "es6.reflect.get-own-property-descriptor":
+    "Reflect / Reflect.getOwnPropertyDescriptor",
   "es6.reflect.get-prototype-of": "Reflect / Reflect.getPrototypeOf",
   "es6.reflect.has": "Reflect / Reflect.has",
   "es6.reflect.is-extensible": "Reflect / Reflect.isExtensible",
@@ -240,11 +254,16 @@ const es = {
     ],
   },
   "es6.regexp.flags": "RegExp.prototype properties / RegExp.prototype.flags",
-  "es6.regexp.match": "RegExp.prototype properties / RegExp.prototype[Symbol.match]",
-  "es6.regexp.replace": "RegExp.prototype properties / RegExp.prototype[Symbol.replace]",
-  "es6.regexp.split": "RegExp.prototype properties / RegExp.prototype[Symbol.split]",
-  "es6.regexp.search": "RegExp.prototype properties / RegExp.prototype[Symbol.search]",
-  "es6.regexp.to-string": "miscellaneous / RegExp.prototype.toString generic and uses \"flags\" property",
+  "es6.regexp.match":
+    "RegExp.prototype properties / RegExp.prototype[Symbol.match]",
+  "es6.regexp.replace":
+    "RegExp.prototype properties / RegExp.prototype[Symbol.replace]",
+  "es6.regexp.split":
+    "RegExp.prototype properties / RegExp.prototype[Symbol.split]",
+  "es6.regexp.search":
+    "RegExp.prototype properties / RegExp.prototype[Symbol.search]",
+  "es6.regexp.to-string":
+    'miscellaneous / RegExp.prototype.toString generic and uses "flags" property',
 
   // This is explicit due to prevent the stage-1 Set proposals under the
   // category "Set methods" from being included.
@@ -295,15 +314,18 @@ const es = {
   "es6.string.big": "String.prototype HTML methods",
   "es6.string.blink": "String.prototype HTML methods",
   "es6.string.bold": "String.prototype HTML methods",
-  "es6.string.code-point-at": "String.prototype methods / String.prototype.codePointAt",
-  "es6.string.ends-with": "String.prototype methods / String.prototype.endsWith",
+  "es6.string.code-point-at":
+    "String.prototype methods / String.prototype.codePointAt",
+  "es6.string.ends-with":
+    "String.prototype methods / String.prototype.endsWith",
   "es6.string.fixed": "String.prototype HTML methods",
   "es6.string.fontcolor": "String.prototype HTML methods",
   "es6.string.fontsize": "String.prototype HTML methods",
   "es6.string.from-code-point": "String static methods / String.fromCodePoint",
   "es6.string.includes": "String.prototype methods / String.prototype.includes",
   "es6.string.italics": "String.prototype HTML methods",
-  "es6.string.iterator": "String.prototype methods / String.prototype[Symbol.iterator]",
+  "es6.string.iterator":
+    "String.prototype methods / String.prototype[Symbol.iterator]",
   "es6.string.link": "String.prototype HTML methods",
   // "String.prototype methods / String.prototype.normalize" not implemented
   "es7.string.pad-start": "String padding / String.prototype.padStart",
@@ -311,7 +333,8 @@ const es = {
   "es6.string.raw": "String static methods / String.raw",
   "es6.string.repeat": "String.prototype methods / String.prototype.repeat",
   "es6.string.small": "String.prototype HTML methods",
-  "es6.string.starts-with": "String.prototype methods / String.prototype.startsWith",
+  "es6.string.starts-with":
+    "String.prototype methods / String.prototype.startsWith",
   "es6.string.strike": "String.prototype HTML methods",
   "es6.string.sub": "String.prototype HTML methods",
   "es6.string.sup": "String.prototype HTML methods",
@@ -353,7 +376,3 @@ const es = {
 
   "es6.weak-set": "WeakSet",
 };
-
-const proposals = require("./shipped-proposals").builtIns;
-
-module.exports = Object.assign({}, es, proposals);

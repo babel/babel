@@ -1,14 +1,9 @@
 // @flow
-/*eslint quotes: ["error", "double", { "avoidEscape": true }]*/
-import semver from "semver";
-import {
-  isUnreleasedVersion,
-  prettifyVersion,
-  semverify,
-  getLowestImplementedVersion,
-} from "./utils";
 
-import type { Targets } from "./types";
+import {
+  getInclusionReasons,
+  type Targets,
+} from "@babel/helper-compilation-targets";
 
 const wordEnds = (size: number) => {
   return size > 1 ? "s" : "";
@@ -21,29 +16,7 @@ export const logPluginOrPolyfill = (
   targetVersions: Targets,
   list: { [key: string]: Targets },
 ) => {
-  const minVersions = list[item] || {};
-
-  const filteredList = Object.keys(targetVersions).reduce((result, env) => {
-    const minVersion = getLowestImplementedVersion(minVersions, env);
-    const targetVersion = targetVersions[env];
-
-    if (!minVersion) {
-      result[env] = prettifyVersion(targetVersion);
-    } else {
-      const minIsUnreleased = isUnreleasedVersion(minVersion, env);
-      const targetIsUnreleased = isUnreleasedVersion(targetVersion, env);
-
-      if (
-        !targetIsUnreleased &&
-        (minIsUnreleased ||
-          semver.lt(targetVersion.toString(), semverify(minVersion)))
-      ) {
-        result[env] = prettifyVersion(targetVersion);
-      }
-    }
-
-    return result;
-  }, {});
+  const filteredList = getInclusionReasons(item, targetVersions, list);
 
   const formattedTargets = JSON.stringify(filteredList)
     .replace(/,/g, ", ")

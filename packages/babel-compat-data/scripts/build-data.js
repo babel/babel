@@ -7,7 +7,7 @@ const flattenDeep = require("lodash/flattenDeep");
 const isEqual = require("lodash/isEqual");
 const mapValues = require("lodash/mapValues");
 const pickBy = require("lodash/pickBy");
-const unreleasedLabels = require("../data/unreleased-labels");
+const { unreleasedLabels } = require("babel/helper-compilation-targets");
 const electronToChromiumVersions = require("electron-to-chromium").versions;
 
 const electronToChromiumKeys = Object.keys(
@@ -293,7 +293,7 @@ const generateData = (environments, features) => {
 ["plugin", "corejs2-built-in"].forEach(target => {
   const newData = generateData(
     environments,
-    require(`../data/${target}-features`)
+    require(`./data/${target}-features`)
   );
   const dataPath = path.join(__dirname, `../data/${target}s.json`);
 

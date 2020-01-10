@@ -1,5 +1,5 @@
 import browserslist from "browserslist";
-import getTargets from "../lib/targets-parser";
+import getTargets from "..";
 
 describe("getTargets", () => {
   it("parses", () => {

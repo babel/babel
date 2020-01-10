@@ -1,0 +1,36 @@
+{
+  "name": "@babel/compat-data",
+  "version": "0.0.0",
+  "author": "The Babel Team (https://babeljs.io/team)",
+  "license": "MIT",
+  "description": "",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-compat-data",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    "./plugins": "./data/plugins.json",
+    "./native-modules": "./data/native-modules.json",
+    "./corejs2-built-ins": "./data/corejs2-built-ins.json",
+    "./overlapping-plugins": "./data/overlapping-plugins.json"
+  },
+  "scripts": {
+    "build-data": "./scripts/download-compat-table.sh; node ./scripts/build-data.js; node ./scripts/build-modules-support.js; node ./scripts/build-overlapping-plugins.js"
+  },
+  "keywords": [
+    "babel",
+    "compat-table",
+    "compat-data"
+  ],
+  "dependencies": {
+    "browserslist": "^4.8.2",
+    "invariant": "^2.2.4",
+    "semver": "^7.1.1"
+  },
+  "devDependencies": {
+    "caniuse-db": "1.0.30000969",
+    "electron-to-chromium": "1.3.113",
+    "lodash": "^4.17.15",
+    "@babel/helper-compilation-targets": "^0.0.0"
+  }
+}
