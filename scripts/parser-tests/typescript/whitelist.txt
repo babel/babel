@@ -482,7 +482,6 @@ targetEs6DecoratorMetadataImportNotElided.ts
 targetTypeCastTest.ts
 throwWithoutNewLine2.ts
 tsxDeepAttributeAssignabilityError.tsx
-typeParameterLeak.ts
 typeReferenceDirectives10.ts
 typeReferenceDirectives11.ts
 typeReferenceDirectives12.ts
