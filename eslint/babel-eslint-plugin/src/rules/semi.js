@@ -1,13 +1,15 @@
 import ruleComposer from "eslint-rule-composer";
 import eslint from "eslint";
 
-const semiRule = new eslint.Linter().getRules().get("semi");
-
 const OPT_OUT_PATTERN = /^[-[(/+`]/; // One of [(/+-`
 
-const isSemicolon = token => token.type === "Punctuator" && token.value === ";";
+const rule = new eslint.Linter().getRules().get("semi");
 
-const isUnnecessarySemicolon = (context, lastToken) => {
+function isSemicolon(token) {
+  return token.type === "Punctuator" && token.value === ";";
+}
+
+function isUnnecessarySemicolon(context, lastToken) {
   if (!isSemicolon(lastToken)) {
     return false;
   }
@@ -27,9 +29,9 @@ const isUnnecessarySemicolon = (context, lastToken) => {
   const isDivider = nextToken.value === "}" || nextToken.value === ";";
 
   return (lastTokenLine !== nextTokenLine && !isOptOutToken) || isDivider;
-};
+}
 
-const isOneLinerBlock = (context, node) => {
+function isOneLinerBlock(context, node) {
   const nextToken = context.getSourceCode().getTokenAfter(node);
 
   if (!nextToken || nextToken.value !== "}") {
@@ -43,9 +45,9 @@ const isOneLinerBlock = (context, node) => {
     parent.type === "BlockStatement" &&
     parent.loc.start.line === parent.loc.end.line
   );
-};
+}
 
-const report = (context, node, missing) => {
+function report(context, node, missing) {
   const lastToken = context.getSourceCode().getLastToken(node);
 
   let message,
@@ -72,15 +74,14 @@ const report = (context, node, missing) => {
     message,
     fix,
   });
-};
+}
 
-const semiRuleWithClassProperty = ruleComposer.joinReports([
-  semiRule,
+export default ruleComposer.joinReports([
+  rule,
   context => ({
     ClassProperty(node) {
       const options = context.options[1];
       const exceptOneLine = options && options.omitLastInOneLineBlock === true;
-
       const sourceCode = context.getSourceCode();
       const lastToken = sourceCode.getLastToken(node);
 
@@ -102,21 +103,3 @@ const semiRuleWithClassProperty = ruleComposer.joinReports([
     },
   }),
 ]);
-
-export default ruleComposer.filterReports(
-  semiRuleWithClassProperty,
-  problem => {
-    const node = problem.node;
-
-    // Handle async iterator:
-    // for await (let something of {})
-    if (
-      node.type === "VariableDeclaration" &&
-      node.parent.type === "ForAwaitStatement"
-    ) {
-      return false;
-    }
-
-    return true;
-  },
-);

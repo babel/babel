@@ -21,6 +21,7 @@ function isFinalStatementInBlockStatement(node) {
  * @param {ASTNode} node - any node
  * @returns {boolean} whether the given node represents an unbroken chain of
  *   tail ExpressionStatements and IfStatements within a DoExpression
+ * https://github.com/tc39/proposal-do-expressions
  */
 function isInDoStatement(node) {
   if (!node) return false;
@@ -31,7 +32,8 @@ function isInDoStatement(node) {
   if (
     node.type === "IfStatement" &&
     node.parent &&
-    node.parent.type === "IfStatement"
+    node.parent.type === "IfStatement" &&
+    node.parent.alternate === node
   ) {
     return isInDoStatement(node.parent);
   }
@@ -46,7 +48,7 @@ function isInDoStatement(node) {
 /**
  * @param {ASTNode} node - any node
  * @returns {boolean} whether the given node is an optional call expression,
- * see https://github.com/tc39/proposal-optional-chaining
+ * https://github.com/tc39/proposal-optional-chaining
  */
 function isOptionalCallExpression(node) {
   return (
