@@ -4,12 +4,14 @@ import type { Options } from "../options";
 import type State from "../tokenizer/state";
 import type { PluginsMap } from "./index";
 import type ScopeHandler from "../util/scope";
+import type ClassScopeHandler from "../util/class-scope";
 
 export default class BaseParser {
   // Properties set by constructor in index.js
   options: Options;
   inModule: boolean;
   scope: ScopeHandler<*>;
+  classScope: ClassScopeHandler;
   plugins: PluginsMap;
   filename: ?string;
   sawUnambiguousESM: boolean = false;

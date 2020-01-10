@@ -617,7 +617,10 @@ export default class ExpressionParser extends LValParser {
         if (node.object.type === "Super") {
           this.raise(startPos, "Private fields can't be accessed on super");
         }
-        this.scope.usePrivateName(node.property.id.name, node.property.start);
+        this.classScope.usePrivateName(
+          node.property.id.name,
+          node.property.start,
+        );
       }
 
       if (computed) {

@@ -1176,8 +1176,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseClassBody(constructorAllowsSuper: boolean): N.ClassBody {
-    this.state.classLevel++;
-    this.scope.enterClassBody();
+    this.classScope.enter();
 
     const state = { hadConstructor: false };
     let decorators: N.Decorator[] = [];
@@ -1237,8 +1236,7 @@ export default class StatementParser extends ExpressionParser {
       );
     }
 
-    this.state.classLevel--;
-    this.scope.exitClassBody();
+    this.classScope.exit();
 
     return this.finishNode(classBody, "ClassBody");
   }
@@ -1525,7 +1523,7 @@ export default class StatementParser extends ExpressionParser {
     const node = this.parseClassPrivateProperty(prop);
     classBody.body.push(node);
 
-    this.scope.declarePrivateName(
+    this.classScope.declarePrivateName(
       node.key.id.name,
       CLASS_ELEMENT_OTHER,
       node.key.start,
@@ -1582,7 +1580,7 @@ export default class StatementParser extends ExpressionParser {
           ? CLASS_ELEMENT_STATIC_SETTER
           : CLASS_ELEMENT_INSTANCE_SETTER
         : CLASS_ELEMENT_OTHER;
-    this.scope.declarePrivateName(node.key.id.name, kind, node.key.start);
+    this.classScope.declarePrivateName(node.key.id.name, kind, node.key.start);
   }
 
   // Overridden in typescript.js
