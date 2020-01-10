@@ -9,6 +9,13 @@ import fs from "fs";
 import * as util from "./util";
 import { type CmdOptions } from "./options";
 
+const FILE_TYPE = Object.freeze({
+  NON_COMPILABLE: "NON_COMPILABLE",
+  COMPILED: "COMPILED",
+  IGNORED: "IGNORED",
+  ERR_COMPILATION: "ERR_COMPILATION",
+});
+
 function outputFileSync(filePath: string, data: string | Buffer): void {
   makeDirSync(path.dirname(filePath));
   fs.writeFileSync(filePath, data);
@@ -20,11 +27,14 @@ export default async function({
 }: CmdOptions): Promise<void> {
   const filenames = cliOptions.filenames;
 
-  async function write(src: string, base: string): Promise<boolean> {
+  async function write(
+    src: string,
+    base: string,
+  ): Promise<$Keys<typeof FILE_TYPE>> {
     let relative = path.relative(base, src);
 
     if (!util.isCompilableExtension(relative, cliOptions.extensions)) {
-      return false;
+      return FILE_TYPE.NON_COMPILABLE;
     }
 
     relative = util.withExtension(
@@ -47,7 +57,7 @@ export default async function({
         ),
       );
 
-      if (!res) return false;
+      if (!res) return FILE_TYPE.IGNORED;
 
       // we've requested explicit sourcemaps to be written to disk
       if (
@@ -68,11 +78,11 @@ export default async function({
         console.log(src + " -> " + dest);
       }
 
-      return true;
+      return FILE_TYPE.COMPILED;
     } catch (err) {
       if (cliOptions.watch) {
         console.error(err);
-        return false;
+        return FILE_TYPE.ERR_COMPILATION;
       }
 
       throw err;
@@ -89,13 +99,16 @@ export default async function({
   async function handleFile(src: string, base: string): Promise<boolean> {
     const written = await write(src, base);
 
-    if (!written && cliOptions.copyFiles) {
+    if (
+      (cliOptions.copyFiles && written === FILE_TYPE.NON_COMPILABLE) ||
+      (cliOptions.copyIgnored && written === FILE_TYPE.IGNORED)
+    ) {
       const filename = path.relative(base, src);
       const dest = getDest(filename, base);
       outputFileSync(dest, fs.readFileSync(src));
       util.chmod(src, dest);
     }
-    return written;
+    return written === FILE_TYPE.COMPILED;
   }
 
   async function handle(filenameOrDir: string): Promise<number> {
