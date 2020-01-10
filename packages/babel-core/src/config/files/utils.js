@@ -1,24 +1,32 @@
 // @flow
 
-import fs from "fs";
-import { makeStrongCache } from "../caching";
+import type { Gensync, Handler } from "gensync";
+
+import { makeStrongCache, type CacheConfigurator } from "../caching";
+import * as fs from "../../gensync-utils/fs";
+import nodeFs from "fs";
 
 export function makeStaticFileCache<T>(
   fn: (string, string) => T,
-): string => T | null {
-  return makeStrongCache((filepath, cache) => {
-    if (cache.invalidate(() => fileMtime(filepath)) === null) {
+): Gensync<[string], T | null> {
+  return (makeStrongCache(function*(
+    filepath: string,
+    cache: CacheConfigurator<?void>,
+  ): Handler<null | T> {
+    const cached = cache.invalidate(() => fileMtime(filepath));
+
+    if (cached === null) {
       cache.forever();
       return null;
     }
 
-    return fn(filepath, fs.readFileSync(filepath, "utf8"));
-  });
+    return fn(filepath, yield* fs.readFile(filepath, "utf8"));
+  }): Gensync<any, *>);
 }
 
 function fileMtime(filepath: string): number | null {
   try {
-    return +fs.statSync(filepath).mtime;
+    return +nodeFs.statSync(filepath).mtime;
   } catch (e) {
     if (e.code !== "ENOENT" && e.code !== "ENOTDIR") throw e;
   }

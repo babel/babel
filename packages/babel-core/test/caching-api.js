@@ -1,10 +1,12 @@
-import { makeStrongCache } from "../lib/config/caching";
+import gensync from "gensync";
+import { makeStrongCacheSync, makeStrongCache } from "../lib/config/caching";
+import { waitFor } from "../lib/gensync-utils/async";
 
 describe("caching API", () => {
   it("should allow permacaching with .forever()", () => {
     let count = 0;
 
-    const fn = makeStrongCache((arg, cache) => {
+    const fn = makeStrongCacheSync((arg, cache) => {
       cache.forever();
       return { arg, count: count++ };
     });
@@ -21,7 +23,7 @@ describe("caching API", () => {
   it("should allow disabling caching with .never()", () => {
     let count = 0;
 
-    const fn = makeStrongCache((arg, cache) => {
+    const fn = makeStrongCacheSync((arg, cache) => {
       cache.never();
       return { arg, count: count++ };
     });
@@ -41,7 +43,7 @@ describe("caching API", () => {
     let count = 0;
     let other = "default";
 
-    const fn = makeStrongCache((arg, cache) => {
+    const fn = makeStrongCacheSync((arg, cache) => {
       const val = cache.using(() => other);
 
       return { arg, val, count: count++ };
@@ -82,7 +84,7 @@ describe("caching API", () => {
     let count = 0;
     let other = "default";
 
-    const fn = makeStrongCache((arg, cache) => {
+    const fn = makeStrongCacheSync((arg, cache) => {
       const val = cache.invalidate(() => other);
 
       return { arg, val, count: count++ };
@@ -124,7 +126,7 @@ describe("caching API", () => {
     let other = "default";
     let another = "another";
 
-    const fn = makeStrongCache((arg, cache) => {
+    const fn = makeStrongCacheSync((arg, cache) => {
       const val = cache.using(() => other);
       const val2 = cache.invalidate(() => another);
 
@@ -223,7 +225,7 @@ describe("caching API", () => {
   it("should auto-permacache by default", () => {
     let count = 0;
 
-    const fn = makeStrongCache(arg => ({ arg, count: count++ }));
+    const fn = makeStrongCacheSync(arg => ({ arg, count: count++ }));
 
     expect(fn("one")).toEqual({ arg: "one", count: 0 });
     expect(fn("one")).toBe(fn("one"));
@@ -235,7 +237,7 @@ describe("caching API", () => {
   });
 
   it("should throw if you set permacaching and use .using", () => {
-    const fn = makeStrongCache((arg, cache) => {
+    const fn = makeStrongCacheSync((arg, cache) => {
       cache.forever();
 
       cache.using(() => null);
@@ -245,7 +247,7 @@ describe("caching API", () => {
   });
 
   it("should throw if you set permacaching and use .invalidate", () => {
-    const fn = makeStrongCache((arg, cache) => {
+    const fn = makeStrongCacheSync((arg, cache) => {
       cache.forever();
 
       cache.invalidate(() => null);
@@ -255,7 +257,7 @@ describe("caching API", () => {
   });
 
   it("should throw if you set permacaching and use .never", () => {
-    const fn = makeStrongCache((arg, cache) => {
+    const fn = makeStrongCacheSync((arg, cache) => {
       cache.forever();
 
       cache.never();
@@ -265,7 +267,7 @@ describe("caching API", () => {
   });
 
   it("should throw if you set no caching and use .using", () => {
-    const fn = makeStrongCache((arg, cache) => {
+    const fn = makeStrongCacheSync((arg, cache) => {
       cache.never();
 
       cache.using(() => null);
@@ -275,7 +277,7 @@ describe("caching API", () => {
   });
 
   it("should throw if you set no caching and use .invalidate", () => {
-    const fn = makeStrongCache((arg, cache) => {
+    const fn = makeStrongCacheSync((arg, cache) => {
       cache.never();
 
       cache.invalidate(() => null);
@@ -285,7 +287,7 @@ describe("caching API", () => {
   });
 
   it("should throw if you set no caching and use .never", () => {
-    const fn = makeStrongCache((arg, cache) => {
+    const fn = makeStrongCacheSync((arg, cache) => {
       cache.never();
 
       cache.using(() => null);
@@ -295,7 +297,7 @@ describe("caching API", () => {
   });
 
   it("should throw if you configure .forever after exiting", () => {
-    const fn = makeStrongCache((arg, cache) => cache);
+    const fn = makeStrongCacheSync((arg, cache) => cache);
 
     expect(() => fn().forever()).toThrow(
       /Cannot change caching after evaluation/,
@@ -303,7 +305,7 @@ describe("caching API", () => {
   });
 
   it("should throw if you configure .never after exiting", () => {
-    const fn = makeStrongCache((arg, cache) => cache);
+    const fn = makeStrongCacheSync((arg, cache) => cache);
 
     expect(() => fn().never()).toThrow(
       /Cannot change caching after evaluation/,
@@ -311,7 +313,7 @@ describe("caching API", () => {
   });
 
   it("should throw if you configure .using after exiting", () => {
-    const fn = makeStrongCache((arg, cache) => cache);
+    const fn = makeStrongCacheSync((arg, cache) => cache);
 
     expect(() => fn().using(() => null)).toThrow(
       /Cannot change caching after evaluation/,
@@ -319,7 +321,7 @@ describe("caching API", () => {
   });
 
   it("should throw if you configure .invalidate after exiting", () => {
-    const fn = makeStrongCache((arg, cache) => cache);
+    const fn = makeStrongCacheSync((arg, cache) => cache);
 
     expect(() => fn().invalidate(() => null)).toThrow(
       /Cannot change caching after evaluation/,
@@ -330,7 +332,7 @@ describe("caching API", () => {
     it("should allow permacaching with cache(true)", () => {
       let count = 0;
 
-      const fn = makeStrongCache((arg, cache) => {
+      const fn = makeStrongCacheSync((arg, cache) => {
         cache = cache.simple();
 
         cache(true);
@@ -349,7 +351,7 @@ describe("caching API", () => {
     it("should allow disabling caching with cache(false)", () => {
       let count = 0;
 
-      const fn = makeStrongCache((arg, cache) => {
+      const fn = makeStrongCacheSync((arg, cache) => {
         cache = cache.simple();
 
         cache(false);
@@ -371,7 +373,7 @@ describe("caching API", () => {
       let count = 0;
       let other = "default";
 
-      const fn = makeStrongCache((arg, cache) => {
+      const fn = makeStrongCacheSync((arg, cache) => {
         cache = cache.simple();
 
         const val = cache(() => other);
@@ -408,6 +410,62 @@ describe("caching API", () => {
 
       expect(fn("two")).toEqual({ arg: "two", val: "new", count: 3 });
       expect(fn("two")).toBe(fn("two"));
+    });
+  });
+
+  describe("async", () => {
+    const wait = gensync({
+      sync: () => {},
+      errback: (t, cb) => setTimeout(cb, t),
+    });
+
+    it("should throw if the cache is configured asynchronously", async () => {
+      const fn = gensync(
+        makeStrongCache(function*(arg, cache) {
+          yield* wait(1000);
+          cache.never();
+          return { arg };
+        }),
+      ).async;
+
+      await expect(fn("bar")).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"Cannot change caching after evaluation has completed."`,
+      );
+    });
+
+    it("should allow asynchronous cache invalidation functions", async () => {
+      const fn = gensync(
+        makeStrongCache(function*(arg, cache) {
+          yield* waitFor(
+            cache.using(async () => {
+              await wait.async(50);
+              return "x";
+            }),
+          );
+          return { arg };
+        }),
+      ).async;
+
+      const [res1, res2] = await Promise.all([fn("foo"), fn("foo")]);
+
+      expect(res1).toBe(res2);
+    });
+
+    it("should allow synchronous yield before cache configuration", async () => {
+      const fn = gensync(
+        makeStrongCache(function*(arg, cache) {
+          yield* gensync({
+            sync: () => 2,
+            errback: cb => cb(null, 2),
+          })();
+          cache.forever();
+          return { arg };
+        }),
+      ).async;
+
+      const [res1, res2] = await Promise.all([fn("foo"), fn("foo")]);
+
+      expect(res1).toBe(res2);
     });
   });
 });

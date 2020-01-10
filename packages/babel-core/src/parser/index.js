@@ -1,3 +1,4 @@
+import type { Handler } from "gensync";
 import { parse } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
 import generateMissingPluginMessage from "./util/missing-plugin-helper";
@@ -6,11 +7,11 @@ type AstRoot = BabelNodeFile | BabelNodeProgram;
 
 export type ParseResult = AstRoot;
 
-export default function parser(
+export default function* parser(
   pluginPasses: PluginPasses,
   { parserOpts, highlightCode = true, filename = "unknown" }: Object,
   code: string,
-): ParseResult {
+): Handler<ParseResult> {
   try {
     const results = [];
     for (const plugins of pluginPasses) {
@@ -27,6 +28,7 @@ export default function parser(
     if (results.length === 0) {
       return parse(code, parserOpts);
     } else if (results.length === 1) {
+      yield* []; // If we want to allow async parsers
       if (typeof results[0].then === "function") {
         throw new Error(
           `You appear to be using an async parser plugin, ` +

@@ -1,6 +1,7 @@
 // @flow
 
 import path from "path";
+import gensync, { type Handler } from "gensync";
 import Plugin from "./plugin";
 import { mergeOptions } from "./util";
 import { createItemFromDescriptor } from "./item";
@@ -19,18 +20,21 @@ import {
   type IgnoreFile,
 } from "./files";
 
-function resolveRootMode(rootDir: string, rootMode: RootMode): string {
+function* resolveRootMode(
+  rootDir: string,
+  rootMode: RootMode,
+): Handler<string> {
   switch (rootMode) {
     case "root":
       return rootDir;
 
     case "upward-optional": {
-      const upwardRootDir = findConfigUpwards(rootDir);
+      const upwardRootDir = yield* findConfigUpwards(rootDir);
       return upwardRootDir === null ? rootDir : upwardRootDir;
     }
 
     case "upward": {
-      const upwardRootDir = findConfigUpwards(rootDir);
+      const upwardRootDir = yield* findConfigUpwards(rootDir);
       if (upwardRootDir !== null) return upwardRootDir;
 
       throw Object.assign(
@@ -51,15 +55,17 @@ function resolveRootMode(rootDir: string, rootMode: RootMode): string {
   }
 }
 
-export default function loadPrivatePartialConfig(
-  inputOpts: mixed,
-): {
+type PrivPartialConfig = {
   options: ValidatedOptions,
   context: ConfigContext,
   ignore: IgnoreFile | void,
   babelrc: ConfigFile | void,
   config: ConfigFile | void,
-} | null {
+};
+
+export default function* loadPrivatePartialConfig(
+  inputOpts: mixed,
+): Handler<PrivPartialConfig | null> {
   if (
     inputOpts != null &&
     (typeof inputOpts !== "object" || Array.isArray(inputOpts))
@@ -77,7 +83,7 @@ export default function loadPrivatePartialConfig(
     caller,
   } = args;
   const absoluteCwd = path.resolve(cwd);
-  const absoluteRootDir = resolveRootMode(
+  const absoluteRootDir = yield* resolveRootMode(
     path.resolve(absoluteCwd, rootDir),
     rootMode,
   );
@@ -93,7 +99,7 @@ export default function loadPrivatePartialConfig(
     caller,
   };
 
-  const configChain = buildRootChain(args, context);
+  const configChain = yield* buildRootChain(args, context);
   if (!configChain) return null;
 
   const options = {};
@@ -129,8 +135,10 @@ export default function loadPrivatePartialConfig(
   };
 }
 
-export function loadPartialConfig(inputOpts: mixed): PartialConfig | null {
-  const result = loadPrivatePartialConfig(inputOpts);
+export const loadPartialConfig = gensync<[any], PartialConfig | null>(function*(
+  inputOpts: mixed,
+): Handler<PartialConfig | null> {
+  const result: ?PrivPartialConfig = yield* loadPrivatePartialConfig(inputOpts);
   if (!result) return null;
 
   const { options, babelrc, ignore, config } = result;
@@ -150,7 +158,7 @@ export function loadPartialConfig(inputOpts: mixed): PartialConfig | null {
     ignore ? ignore.filepath : undefined,
     config ? config.filepath : undefined,
   );
-}
+});
 
 export type { PartialConfig };
 

@@ -11,7 +11,7 @@ export default function loadBlockHoistPlugin(): Plugin {
     // Lazy-init the internal plugin to remove the init-time circular
     // dependency between plugins being passed @babel/core's export object,
     // which loads this file, and this 'loadConfig' loading plugins.
-    const config = loadConfig({
+    const config = loadConfig.sync({
       babelrc: false,
       configFile: false,
       plugins: [blockHoistPlugin],

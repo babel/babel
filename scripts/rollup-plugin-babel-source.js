@@ -37,13 +37,20 @@ module.exports = function() {
       return null;
     },
     resolveId(importee) {
-      let packageFolderName;
-      const matches = importee.match(/^@babel\/([^/]+)$/);
-      if (matches) {
-        packageFolderName = `babel-${matches[1]}`;
+      if (importee === "@babel/runtime/regenerator") {
+        return path.join(
+          dirname,
+          "packages",
+          "babel-runtime",
+          "regenerator",
+          "index.js"
+        );
       }
 
-      if (packageFolderName) {
+      const matches = importee.match(/^@babel\/([^/]+)$/);
+      if (matches) {
+        const packageFolderName = `babel-${matches[1]}`;
+
         // resolve babel package names to their src index file
         const packageFolder = path.join(dirname, "packages", packageFolderName);
         const packageJson = require(path.join(packageFolder, "package.json"));

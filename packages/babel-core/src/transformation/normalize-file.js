@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import buildDebug from "debug";
 import cloneDeep from "lodash/cloneDeep";
+import type { Handler } from "gensync";
 import * as t from "@babel/types";
 import type { PluginPasses } from "../config";
 import convertSourceMap, { typeof Converter } from "convert-source-map";
@@ -19,12 +20,12 @@ export type NormalizedFile = {
   inputMap: Converter | null,
 };
 
-export default function normalizeFile(
+export default function* normalizeFile(
   pluginPasses: PluginPasses,
   options: Object,
   code: string,
   ast: ?(BabelNodeFile | BabelNodeProgram),
-): File {
+): Handler<File> {
   code = `${code || ""}`;
 
   if (ast) {
@@ -35,7 +36,7 @@ export default function normalizeFile(
     }
     ast = cloneDeep(ast);
   } else {
-    ast = parser(pluginPasses, options, code);
+    ast = yield* parser(pluginPasses, options, code);
   }
 
   let inputMap = null;
