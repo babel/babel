@@ -1,0 +1,12 @@
+{
+  "args": [
+    "src",
+    "--out-dir",
+    "lib",
+    "--out-file-extension",
+    ".mjs",
+    "--extensions",
+    ".jsx,.mjs",
+    "--verbose"
+  ]
+}
