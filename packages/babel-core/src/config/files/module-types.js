@@ -1,5 +1,6 @@
 import { isAsync, waitFor } from "../../gensync-utils/async";
 import type { Handler } from "gensync";
+import path from "path";
 
 let import_;
 try {
@@ -28,8 +29,8 @@ export default function* loadCjsOrMjsDefault(
   }
 }
 
-function guessJSModuleType(path: string): "cjs" | "mjs" | "unknown" {
-  switch (path.slice(-4)) {
+function guessJSModuleType(filename: string): "cjs" | "mjs" | "unknown" {
+  switch (path.extname(filename)) {
     case ".cjs":
       return "cjs";
     case ".mjs":
@@ -41,6 +42,7 @@ function guessJSModuleType(path: string): "cjs" | "mjs" | "unknown" {
 
 function loadCjsDefault(filepath: string) {
   const module = (require(filepath): mixed);
+  // TODO (Babel 8): Remove "undefined" fallback
   return module?.__esModule ? module.default || undefined : module;
 }
 
