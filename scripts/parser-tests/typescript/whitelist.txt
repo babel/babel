@@ -30,6 +30,7 @@ ambientWithStatements.ts
 amdDeclarationEmitNoExtraDeclare.ts
 amdModuleConstEnumUsage.ts
 amdModuleName2.ts
+anonClassDeclarationEmitIsAnon.ts
 anyDeclare.ts
 argumentsBindsToFunctionScopeArgumentList.ts
 arrayOfExportedClass.ts
@@ -58,6 +59,7 @@ augmentedTypesEnum2.ts
 augmentedTypesFunction.ts
 augmentedTypesInterface.ts
 augmentedTypesVar.ts
+awaitInClassInAsyncFunction.ts
 awaitInNonAsyncFunction.ts
 awaitLiteralValues.ts
 bigIntWithTargetES3.ts
@@ -103,6 +105,7 @@ constDeclarationShadowedByVarDeclaration.ts
 constDeclarations-invalidContexts.ts
 constDeclarations-scopes.ts
 constDeclarations-validContexts.ts
+constEnumNoEmitReexport.ts
 constEnumNoPreserveDeclarationReexport.ts
 constEnumPreserveEmitReexport.ts
 constInClassExpression.ts
@@ -136,6 +139,7 @@ declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts
 declarationEmitPrefersPathKindBasedOnBundling.ts
 declarationEmitPrefersPathKindBasedOnBundling2.ts
 declarationEmitPrivateSymbolCausesVarDeclarationEmit2.ts
+declarationImportTypeAliasInferredAndEmittable.ts
 declarationMapsMultifile.ts
 declarationMapsOutFile.ts
 declarationsForInferredTypeFromOtherFile.ts
@@ -319,6 +323,7 @@ jsFileCompilationExternalPackageError.ts
 jsNoImplicitAnyNoCascadingReferenceErrors.ts
 jsdocAccessEnumType.ts
 jsxAttributeWithoutExpressionReact.tsx
+jsxIntrinsicElementsExtendsRecord.tsx
 letAndVarRedeclaration.ts
 letAsIdentifier.ts
 letAsIdentifierInStrictMode.ts
@@ -385,6 +390,7 @@ multipleClassPropertyModifiers.ts
 multipleClassPropertyModifiersErrors.ts
 multipleInheritance.ts
 nameCollisions.ts
+namespacesWithTypeAliasOnlyExportsMerge.ts
 narrowedImports.ts
 newNamesInGlobalAugmentations1.ts
 noBundledEmitFromNodeModules.ts
@@ -414,6 +420,7 @@ parameterPropertyOutsideConstructor.ts
 parseGenericArrowRatherThanLeftShift.ts
 pathMappingBasedModuleResolution3_classic.ts
 pathMappingBasedModuleResolution3_node.ts
+preserveUnusedImports.ts
 privacyCheckExternalModuleExportAssignmentOfGenericClass.ts
 privacyImportParseErrors.ts
 privacyTopLevelAmbientExternalModuleImportWithExport.ts
