@@ -30,7 +30,7 @@ async function baselineContainsParserErrorCodes(testName) {
       path.join(
         TSTestsPath,
         "baselines/reference",
-        testName.replace(/\.ts|\.tsx/, ".errors.txt")
+        testName.replace(/\.tsx?$/, ".errors.txt")
       ),
       "utf8"
     );
