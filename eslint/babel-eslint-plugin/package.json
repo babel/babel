@@ -34,6 +34,7 @@
     "eslint-rule-composer": "^0.3.0"
   },
   "devDependencies": {
+    "@babel/eslint-shared-fixtures": "0.0.0",
     "@babel/eslint-parser": "0.0.0",
     "eslint": "^6.0.0",
     "lodash.clonedeep": "^4.5.0"
