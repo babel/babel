@@ -196,7 +196,6 @@ export default class ExpressionParser extends LValParser {
       node.operator = operator;
 
       if (operator === "??=") {
-        this.expectPlugin("nullishCoalescingOperator");
         this.expectPlugin("logicalAssignment");
       }
       if (operator === "||=" || operator === "&&=") {
@@ -333,8 +332,6 @@ export default class ExpressionParser extends LValParser {
           this.expectPlugin("pipelineOperator");
           this.state.inPipeline = true;
           this.checkPipelineAtInfixOperator(left, leftStartPos);
-        } else if (op === tt.nullishCoalescing) {
-          this.expectPlugin("nullishCoalescingOperator");
         }
 
         this.next();

@@ -113,16 +113,6 @@ const pluginNameMap = {
       url: "https://git.io/vAlRe",
     },
   },
-  nullishCoalescingOperator: {
-    syntax: {
-      name: "@babel/plugin-syntax-nullish-coalescing-operator",
-      url: "https://git.io/vb4yx",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-nullish-coalescing-operator",
-      url: "https://git.io/vb4Se",
-    },
-  },
   numericSeparator: {
     syntax: {
       name: "@babel/plugin-syntax-numeric-separator",
@@ -186,6 +176,16 @@ const pluginNameMap = {
     transform: {
       name: "@babel/plugin-proposal-async-generator-functions",
       url: "https://git.io/vb4yp",
+    },
+  },
+  nullishCoalescingOperator: {
+    syntax: {
+      name: "@babel/plugin-syntax-nullish-coalescing-operator",
+      url: "https://git.io/vb4yx",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-nullish-coalescing-operator",
+      url: "https://git.io/vb4Se",
     },
   },
   objectRestSpread: {
