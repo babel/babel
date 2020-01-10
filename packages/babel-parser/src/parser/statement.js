@@ -20,6 +20,11 @@ import {
   SCOPE_OTHER,
   SCOPE_SIMPLE_CATCH,
   SCOPE_SUPER,
+  CLASS_ELEMENT_OTHER,
+  CLASS_ELEMENT_INSTANCE_GETTER,
+  CLASS_ELEMENT_INSTANCE_SETTER,
+  CLASS_ELEMENT_STATIC_GETTER,
+  CLASS_ELEMENT_STATIC_SETTER,
   type BindingTypes,
 } from "../util/scopeflags";
 
@@ -1171,7 +1176,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseClassBody(constructorAllowsSuper: boolean): N.ClassBody {
-    this.state.classLevel++;
+    this.classScope.enter();
 
     const state = { hadConstructor: false };
     let decorators: N.Decorator[] = [];
@@ -1231,7 +1236,7 @@ export default class StatementParser extends ExpressionParser {
       );
     }
 
-    this.state.classLevel--;
+    this.classScope.exit();
 
     return this.finishNode(classBody, "ClassBody");
   }
@@ -1514,7 +1519,15 @@ export default class StatementParser extends ExpressionParser {
     prop: N.ClassPrivateProperty,
   ) {
     this.expectPlugin("classPrivateProperties", prop.key.start);
-    classBody.body.push(this.parseClassPrivateProperty(prop));
+
+    const node = this.parseClassPrivateProperty(prop);
+    classBody.body.push(node);
+
+    this.classScope.declarePrivateName(
+      node.key.id.name,
+      CLASS_ELEMENT_OTHER,
+      node.key.start,
+    );
   }
 
   pushClassMethod(
@@ -1545,17 +1558,29 @@ export default class StatementParser extends ExpressionParser {
     isAsync: boolean,
   ): void {
     this.expectPlugin("classPrivateMethods", method.key.start);
-    classBody.body.push(
-      this.parseMethod(
-        method,
-        isGenerator,
-        isAsync,
-        /* isConstructor */ false,
-        false,
-        "ClassPrivateMethod",
-        true,
-      ),
+
+    const node = this.parseMethod(
+      method,
+      isGenerator,
+      isAsync,
+      /* isConstructor */ false,
+      false,
+      "ClassPrivateMethod",
+      true,
     );
+    classBody.body.push(node);
+
+    const kind =
+      node.kind === "get"
+        ? node.static
+          ? CLASS_ELEMENT_STATIC_GETTER
+          : CLASS_ELEMENT_INSTANCE_GETTER
+        : node.kind === "set"
+        ? node.static
+          ? CLASS_ELEMENT_STATIC_SETTER
+          : CLASS_ELEMENT_INSTANCE_SETTER
+        : CLASS_ELEMENT_OTHER;
+    this.classScope.declarePrivateName(node.key.id.name, kind, node.key.start);
   }
 
   // Overridden in typescript.js

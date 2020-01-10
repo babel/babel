@@ -6,13 +6,13 @@ class Foo {
   set foo(bar) {}
 
   async #foo() {}
-  #foo() {}
-  get #foo() {}
-  set #foo(bar) {}
-  * #foo() {}
-  async * #foo() {}
-  get #bar() {}
-  set #baz(taz) {}
+  #foo2() {}
+  get #foo3() {}
+  set #foo3(bar) {}
+  * #foo4() {}
+  async * #foo5() {}
+  get #bar6() {}
+  set #baz6(taz) {}
 
   static async foo() {}
   static foo() {}
@@ -23,13 +23,13 @@ class Foo {
   static * foo() {}
   static async * foo() {}
 
-  static #foo() {}
-  static async #foo() {}
+  static #foo7() {}
+  static async #foo8() {}
   static ["foo"]() {}
-  static get #foo() {}
-  static set #foo(taz) {}
-  static * #foo() {}
-  static async * #foo() {}
+  static get #foo9() {}
+  static set #foo9(taz) {}
+  static * #foo10() {}
+  static async * #foo11() {}
 
   get
   () {}

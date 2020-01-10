@@ -612,15 +612,21 @@ export default class ExpressionParser extends LValParser {
         ? this.parseIdentifier(true)
         : this.parseMaybePrivateName();
       node.computed = computed;
-      if (
-        node.property.type === "PrivateName" &&
-        node.object.type === "Super"
-      ) {
-        this.raise(startPos, "Private fields can't be accessed on super");
+
+      if (node.property.type === "PrivateName") {
+        if (node.object.type === "Super") {
+          this.raise(startPos, "Private fields can't be accessed on super");
+        }
+        this.classScope.usePrivateName(
+          node.property.id.name,
+          node.property.start,
+        );
       }
+
       if (computed) {
         this.expect(tt.bracketR);
       }
+
       if (state.optionalChainMember) {
         node.optional = optional;
         return this.finishNode(node, "OptionalMemberExpression");

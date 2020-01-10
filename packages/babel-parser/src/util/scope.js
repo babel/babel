@@ -43,6 +43,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   raise: raiseFunction;
   inModule: boolean;
   undefinedExports: Map<string, number> = new Map();
+  undefinedPrivateNames: Map<string, number> = new Map();
 
   constructor(raise: raiseFunction, inModule: boolean) {
     this.raise = raise;
