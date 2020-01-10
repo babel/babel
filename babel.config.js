@@ -107,6 +107,10 @@ module.exports = function(api) {
       ["@babel/plugin-proposal-nullish-coalescing-operator", { loose: true }],
 
       convertESM ? "@babel/transform-modules-commonjs" : null,
+      // Until Jest supports native mjs, we must simulate it 🤷
+      env === "test" || env === "development"
+        ? "@babel/plugin-proposal-dynamic-import"
+        : null,
     ].filter(Boolean),
     overrides: [
       {
