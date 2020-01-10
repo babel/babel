@@ -68,14 +68,16 @@ export default class ClassScopeHandler {
     if (elementType & CLASS_ELEMENT_KIND_ACCESSOR) {
       const accessor = redefined && classScope.loneAccessors.get(name);
       if (accessor) {
-        const differences = elementType ^ accessor;
+        const oldStatic = accessor & CLASS_ELEMENT_FLAG_STATIC;
+        const newStatic = elementType & CLASS_ELEMENT_FLAG_STATIC;
+
+        const oldKind = accessor & CLASS_ELEMENT_KIND_ACCESSOR;
+        const newKind = elementType & CLASS_ELEMENT_KIND_ACCESSOR;
 
         // The private name can be duplicated only if it is used by
         // two accessors with different kind (get and set), and if
         // they have the same placement (static or not).
-        redefined =
-          !(differences & CLASS_ELEMENT_KIND_ACCESSOR) ||
-          differences & CLASS_ELEMENT_FLAG_STATIC;
+        redefined = oldKind === newKind || oldStatic !== newStatic;
 
         if (!redefined) classScope.loneAccessors.delete(name);
       } else if (!redefined) {
