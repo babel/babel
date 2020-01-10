@@ -36,10 +36,12 @@ Using plugins:
   proposal-unicode-property-regex { "android":"3" }
   proposal-json-strings { "android":"3" }
   proposal-optional-catch-binding { "android":"3" }
+  proposal-optional-chaining { "android":"3" }
   transform-named-capturing-groups-regex { "android":"3" }
   transform-member-expression-literals { "android":"3" }
   transform-property-literals { "android":"3" }
   transform-reserved-words { "android":"3" }
+  proposal-nullish-coalescing-operator { "android":"3" }
   transform-modules-commonjs { "android":"3" }
   proposal-dynamic-import { "android":"3" }
 

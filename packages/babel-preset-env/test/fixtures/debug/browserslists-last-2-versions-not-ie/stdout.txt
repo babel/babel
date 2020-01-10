@@ -24,7 +24,9 @@ Using plugins:
   proposal-unicode-property-regex { "edge":"17", "firefox":"70" }
   proposal-json-strings { "edge":"17" }
   proposal-optional-catch-binding { "edge":"17" }
+  proposal-optional-chaining { "android":"77", "chrome":"77", "edge":"17", "firefox":"70", "ios":"13", "opera":"63", "safari":"12.1", "samsung":"9.2" }
   transform-named-capturing-groups-regex { "edge":"17", "firefox":"70" }
+  proposal-nullish-coalescing-operator { "android":"77", "chrome":"77", "edge":"17", "firefox":"70", "ios":"13", "opera":"63", "safari":"12.1", "samsung":"9.2" }
   transform-modules-commonjs { "android":"77", "chrome":"77", "edge":"17", "firefox":"70", "ios":"13", "opera":"63", "safari":"12.1", "samsung":"9.2" }
   proposal-dynamic-import { "android":"77", "chrome":"77", "edge":"17", "firefox":"70", "ios":"13", "opera":"63", "safari":"12.1", "samsung":"9.2" }
 

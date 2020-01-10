@@ -25,7 +25,9 @@ Using plugins:
   proposal-unicode-property-regex { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
   proposal-json-strings { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
   proposal-optional-catch-binding { "chrome":"61", "edge":"16", "ios":"10.3", "opera":"48", "safari":"10.1" }
+  proposal-optional-chaining { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
   transform-named-capturing-groups-regex { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
+  proposal-nullish-coalescing-operator { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
   syntax-dynamic-import { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
 
 Using polyfills with `usage` option:

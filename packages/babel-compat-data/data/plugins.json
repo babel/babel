@@ -299,6 +299,10 @@
     "opera": "53",
     "electron": "3.1"
   },
+  "proposal-optional-chaining": {
+    "chrome": "80",
+    "opera": "67"
+  },
   "transform-named-capturing-groups-regex": {
     "chrome": "64",
     "safari": "11.1",
@@ -349,5 +353,10 @@
     "phantom": "2",
     "samsung": "2.1",
     "electron": "0.2"
+  },
+  "proposal-nullish-coalescing-operator": {
+    "chrome": "80",
+    "firefox": "72",
+    "opera": "67"
   }
 }

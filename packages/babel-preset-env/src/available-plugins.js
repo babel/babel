@@ -1,15 +1,21 @@
 // @flow
+/* eslint sort-keys: "error" */
+
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
 import syntaxJsonStrings from "@babel/plugin-syntax-json-strings";
+import syntaxNullishCoalescingOperator from "@babel/plugin-syntax-nullish-coalescing-operator";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-binding";
+import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
 import syntaxTopLevelAwait from "@babel/plugin-syntax-top-level-await";
 import proposalAsyncGeneratorFunctions from "@babel/plugin-proposal-async-generator-functions";
 import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";
 import proposalJsonStrings from "@babel/plugin-proposal-json-strings";
+import proposalNullishCoalescingOperator from "@babel/plugin-proposal-nullish-coalescing-operator";
 import proposalObjectRestSpread from "@babel/plugin-proposal-object-rest-spread";
 import proposalOptionalCatchBinding from "@babel/plugin-proposal-optional-catch-binding";
+import proposalOptionalChaining from "@babel/plugin-proposal-optional-chaining";
 import proposalUnicodePropertyRegex from "@babel/plugin-proposal-unicode-property-regex";
 import transformAsyncToGenerator from "@babel/plugin-transform-async-to-generator";
 import transformArrowFunctions from "@babel/plugin-transform-arrow-functions";
@@ -44,17 +50,24 @@ import transformTypeofSymbol from "@babel/plugin-transform-typeof-symbol";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
 
 export default {
-  "syntax-async-generators": syntaxAsyncGenerators,
-  "syntax-dynamic-import": syntaxDynamicImport,
-  "syntax-json-strings": syntaxJsonStrings,
-  "syntax-object-rest-spread": syntaxObjectRestSpread,
-  "syntax-optional-catch-binding": syntaxOptionalCatchBinding,
-  "syntax-top-level-await": syntaxTopLevelAwait,
-  "transform-async-to-generator": transformAsyncToGenerator,
   "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,
   "proposal-dynamic-import": proposalDynamicImport,
   "proposal-json-strings": proposalJsonStrings,
+  "proposal-nullish-coalescing-operator": proposalNullishCoalescingOperator,
+  "proposal-object-rest-spread": proposalObjectRestSpread,
+  "proposal-optional-catch-binding": proposalOptionalCatchBinding,
+  "proposal-optional-chaining": proposalOptionalChaining,
+  "proposal-unicode-property-regex": proposalUnicodePropertyRegex,
+  "syntax-async-generators": syntaxAsyncGenerators,
+  "syntax-dynamic-import": syntaxDynamicImport,
+  "syntax-json-strings": syntaxJsonStrings,
+  "syntax-nullish-coalescing-operator": syntaxNullishCoalescingOperator,
+  "syntax-object-rest-spread": syntaxObjectRestSpread,
+  "syntax-optional-catch-binding": syntaxOptionalCatchBinding,
+  "syntax-optional-chaining": syntaxOptionalChaining,
+  "syntax-top-level-await": syntaxTopLevelAwait,
   "transform-arrow-functions": transformArrowFunctions,
+  "transform-async-to-generator": transformAsyncToGenerator,
   "transform-block-scoped-functions": transformBlockScopedFunctions,
   "transform-block-scoping": transformBlockScoping,
   "transform-classes": transformClasses,
@@ -62,6 +75,7 @@ export default {
   "transform-destructuring": transformDestructuring,
   "transform-dotall-regex": transformDotallRegex,
   "transform-duplicate-keys": transformDuplicateKeys,
+  "transform-exponentiation-operator": transformExponentialOperator,
   "transform-for-of": transformForOf,
   "transform-function-name": transformFunctionName,
   "transform-literals": transformLiterals,
@@ -71,9 +85,11 @@ export default {
   "transform-modules-systemjs": transformModulesSystemjs,
   "transform-modules-umd": transformModulesUmd,
   "transform-named-capturing-groups-regex": transformNamedCapturingGroupsRegex,
+  "transform-new-target": transformNewTarget,
   "transform-object-super": transformObjectSuper,
   "transform-parameters": transformParameters,
   "transform-property-literals": transformPropertyLiterals,
+  "transform-regenerator": transformRegenerator,
   "transform-reserved-words": transformReservedWords,
   "transform-shorthand-properties": transformShorthandProperties,
   "transform-spread": transformSpread,
@@ -81,10 +97,4 @@ export default {
   "transform-template-literals": transformTemplateLiterals,
   "transform-typeof-symbol": transformTypeofSymbol,
   "transform-unicode-regex": transformUnicodeRegex,
-  "transform-exponentiation-operator": transformExponentialOperator,
-  "transform-new-target": transformNewTarget,
-  "proposal-object-rest-spread": proposalObjectRestSpread,
-  "proposal-optional-catch-binding": proposalOptionalCatchBinding,
-  "transform-regenerator": transformRegenerator,
-  "proposal-unicode-property-regex": proposalUnicodePropertyRegex,
 };
