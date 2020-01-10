@@ -4,6 +4,7 @@
   "description": "Turn flow type annotations into comments",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-flow-comments",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

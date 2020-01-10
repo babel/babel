@@ -4,6 +4,7 @@
   "description": "Turn Object.setPrototypeOf to assignments",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-set-prototype-of-to-assign",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

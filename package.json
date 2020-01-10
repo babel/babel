@@ -2,6 +2,7 @@
   "name": "babel",
   "private": true,
   "license": "MIT",
+  "type": "commonjs",
   "scripts": {
     "bootstrap": "make bootstrap",
     "build": "make build",

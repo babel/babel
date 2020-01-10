@@ -4,6 +4,7 @@
   "description": "Add displayName to React.createClass calls",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-display-name",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

@@ -4,6 +4,7 @@
   "description": "Turn JSX into React Pre-0.12 function calls",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-jsx-compat",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

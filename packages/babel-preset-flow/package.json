@@ -5,6 +5,7 @@
   "author": "James Kyle <me@thejameskyle.com>",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-flow",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

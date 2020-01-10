@@ -4,6 +4,7 @@
   "description": "Compile object rest and spread to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-object-rest-spread",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

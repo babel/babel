@@ -4,6 +4,7 @@
   "description": "Compile exponentiation operator to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

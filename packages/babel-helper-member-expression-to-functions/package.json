@@ -4,6 +4,7 @@
   "description": "Helper function to replace certain member expressions with function calls",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-member-expression-to-functions",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

@@ -3,6 +3,7 @@
   "version": "7.7.4",
   "author": "The Babel Team (https://babeljs.io/team)",
   "license": "MIT",
+  "type": "commonjs",
   "description": "Compile ESNext Regular Expressions to ES5",
   "repository": {
     "type": "git",

@@ -4,6 +4,7 @@
   "description": "Transform pipeline operator into call expressions",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-pipeline-operator",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

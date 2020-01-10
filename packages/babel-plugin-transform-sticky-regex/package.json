@@ -4,6 +4,7 @@
   "description": "Compile ES2015 sticky regex to an ES5 RegExp constructor",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-sticky-regex",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

@@ -4,6 +4,7 @@
   "description": "Allow parsing of jsx",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-jsx",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },
