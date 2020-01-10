@@ -49,6 +49,18 @@ describe("option-manager", () => {
       }).toThrowErrorMatchingSnapshot();
     });
 
+    it("should throw when an option is following a preset", () => {
+      expect(() => {
+        loadOptions({
+          presets: [
+            "./fixtures/option-manager/babel-plugin-foo",
+            "./fixtures/option-manager/babel-preset-bar",
+            { useSpread: true },
+          ],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
     it("should not throw when a preset string followed by valid preset object", () => {
       const { plugin } = makePlugin("my-plugin");
       expect(
