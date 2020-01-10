@@ -36,3 +36,13 @@ Then, load the plugin in your `.eslintrc` configuration file. You can omit the `
   value, since it might cause problem if `undefined` is redeclared.
 * `@babel/development/plugin-name`: Requires plugins to have a `name` property, which
   can be useful for debugging purposes.
+
+## Recommended Configuration
+
+You can enable this plugin and all its rules by extending the recommended configuration:
+
+```json
+{
+  "extends": ["plugin:@babel/development/recommended"]
+}
+```
