@@ -14,10 +14,4 @@ export_import_reserved_words/migrated_0003.js
 export_statements/export_trailing_comma.js
 nullish_coalescing/precedence_and.js
 nullish_coalescing/precedence_or.js
-private_class_properties/getter_and_field.js
-private_class_properties/getter_duplicate.js
-private_class_properties/multiple.js
-private_class_properties/multiple.js
-private_class_properties/setter_and_field.js
-private_class_properties/setter_duplicate.js
 types/member/reserved_words.js
