@@ -46,6 +46,7 @@ module.exports = {
     "<rootDir>/build/",
   ],
   moduleNameMapper: {
-    "^@babel/([a-zA-Z0-9_-]+)$": "<rootDir>/packages/babel-$1/",
+    "^@babel/(?!eslint-)([a-zA-Z0-9_-]+)$": "<rootDir>/packages/babel-$1/",
+    "^@babel/eslint-([a-zA-Z0-9_-]+)$": "<rootDir>/eslint/babel-eslint-$1/",
   },
 };
