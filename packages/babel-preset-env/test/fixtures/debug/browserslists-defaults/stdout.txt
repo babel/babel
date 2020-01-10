@@ -44,7 +44,9 @@ Using plugins:
   proposal-unicode-property-regex { "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "safari":"5.1" }
   proposal-json-strings { "chrome":"49", "edge":"17", "ie":"11", "safari":"5.1" }
   proposal-optional-catch-binding { "chrome":"49", "edge":"17", "ie":"11", "safari":"5.1" }
+  proposal-optional-chaining { "android":"77", "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
   transform-named-capturing-groups-regex { "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "safari":"5.1" }
+  proposal-nullish-coalescing-operator { "android":"77", "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
   transform-modules-commonjs { "android":"77", "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
   proposal-dynamic-import { "android":"77", "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
 
