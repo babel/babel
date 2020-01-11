@@ -268,4 +268,26 @@ export default class UtilParser extends Tokenizer {
       throw error;
     }
   }
+
+  checkExpressionErrors(
+    refExpressionErrors: ?ExpressionErrors,
+    andThrow: boolean,
+  ) {
+    if (!refExpressionErrors) return false;
+    const { shorthandAssign } = refExpressionErrors;
+    if (!andThrow) return shorthandAssign >= 0;
+    if (shorthandAssign >= 0) {
+      this.unexpected(shorthandAssign);
+    }
+  }
+}
+
+/**
+ * The Expression Errors is a context struct used to track
+ * - **shorthandAssign**: track initializer `=` position when parsing ambiguous
+ *   patterns. When we are sure the parsed pattern is a RHS, we will throw on
+ *   this position for invalid assign syntax, otherwise reset to -1
+ */
+export class ExpressionErrors {
+  shorthandAssign = -1;
 }

@@ -4,8 +4,9 @@
 
 import { types as tt, TokenType } from "../tokenizer/types";
 import type Parser from "../parser";
+import type { ExpressionErrors } from "../parser/util";
 import * as N from "../types";
-import type { Pos, Position } from "../util/location";
+import type { Position } from "../util/location";
 import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
 
 function isSimpleProperty(node: N.Node): boolean {
@@ -234,7 +235,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       classBody.body.push(method);
     }
 
-    parseExprAtom(refShorthandDefaultPos?: ?Pos): N.Expression {
+    parseExprAtom(refExpressionErrors?: ?ExpressionErrors): N.Expression {
       switch (this.state.type) {
         case tt.num:
         case tt.string:
@@ -256,7 +257,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.estreeParseLiteral(false);
 
         default:
-          return super.parseExprAtom(refShorthandDefaultPos);
+          return super.parseExprAtom(refExpressionErrors);
       }
     }
 
@@ -340,14 +341,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       startPos: ?number,
       startLoc: ?Position,
       isPattern: boolean,
-      refShorthandDefaultPos: ?Pos,
+      refExpressionErrors: ?ExpressionErrors,
     ): ?N.ObjectProperty {
       const node: N.EstreeProperty = (super.parseObjectProperty(
         prop,
         startPos,
         startLoc,
         isPattern,
-        refShorthandDefaultPos,
+        refExpressionErrors,
       ): any);
 
       if (node) {

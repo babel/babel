@@ -21,6 +21,7 @@ import {
 } from "../util/identifier";
 import { NodeUtils } from "./node";
 import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
+import { ExpressionErrors } from "./util";
 
 const unwrapParenthesizedExpression = (node: Node) => {
   return node.type === "ParenthesizedExpression"
@@ -33,13 +34,13 @@ export default class LValParser extends NodeUtils {
   +parseIdentifier: (liberal?: boolean) => Identifier;
   +parseMaybeAssign: (
     noIn?: ?boolean,
-    refShorthandDefaultPos?: ?Pos,
+    refExpressionErrors?: ?ExpressionErrors,
     afterLeftParse?: Function,
     refNeedsArrowPos?: ?Pos,
   ) => Expression;
   +parseObj: <T: ObjectPattern | ObjectExpression>(
     isPattern: boolean,
-    refShorthandDefaultPos?: ?Pos,
+    refExpressionErrors?: ?ExpressionErrors,
   ) => T;
   // Forward-declaration: defined in statement.js
   +parseDecorator: () => Decorator;
@@ -241,14 +242,14 @@ export default class LValParser extends NodeUtils {
   // Parses spread element.
 
   parseSpread(
-    refShorthandDefaultPos: ?Pos,
+    refExpressionErrors: ?ExpressionErrors,
     refNeedsArrowPos?: ?Pos,
   ): SpreadElement {
     const node = this.startNode();
     this.next();
     node.argument = this.parseMaybeAssign(
       false,
-      refShorthandDefaultPos,
+      refExpressionErrors,
       undefined,
       refNeedsArrowPos,
     );

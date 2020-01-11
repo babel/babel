@@ -4,11 +4,12 @@ import * as charCodes from "charcodes";
 
 import XHTMLEntities from "./xhtml";
 import type Parser from "../../parser";
+import type { ExpressionErrors } from "../../parser/util";
 import { TokenType, types as tt } from "../../tokenizer/types";
 import { TokContext, types as tc } from "../../tokenizer/context";
 import * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
-import type { Pos, Position } from "../../util/location";
+import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
 
 const HEX_NUMBER = /^[\da-fA-F]+$/;
@@ -510,7 +511,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // Overrides
     // ==================================
 
-    parseExprAtom(refShortHandDefaultPos: ?Pos): N.Expression {
+    parseExprAtom(refExpressionErrors: ?ExpressionErrors): N.Expression {
       if (this.match(tt.jsxText)) {
         return this.parseLiteral(this.state.value, "JSXText");
       } else if (this.match(tt.jsxTagStart)) {
@@ -524,7 +525,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.finishToken(tt.jsxTagStart);
         return this.jsxParseElement();
       } else {
-        return super.parseExprAtom(refShortHandDefaultPos);
+        return super.parseExprAtom(refExpressionErrors);
       }
     }
 
