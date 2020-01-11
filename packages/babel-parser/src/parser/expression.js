@@ -1141,7 +1141,7 @@ export default class ExpressionParser extends LValParser {
       if (!isPrivateNameAllowed) {
         this.raise(
           this.state.pos,
-          "Private name can only be used as name of class element (i.e. class C { #p = 42 #m() {} } )\n or property of member expression (i.e. this.#p).",
+          "Private name can only be used as name of class element (i.e. class C { #p = 42; #m() {} } )\n or property of member expression (i.e. this.#p).",
         );
       }
       const node = this.startNode();
