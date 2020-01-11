@@ -1787,7 +1787,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   parsePropertyName(
-    prop: N.ObjectOrClassMember | N.TsNamedTypeElementBase,
+    prop: N.ObjectOrClassMember | N.ClassMember | N.TsNamedTypeElementBase,
     isPrivateNameAllowed: boolean,
   ): N.Expression | N.Identifier {
     if (this.eat(tt.bracketL)) {
