@@ -2,7 +2,7 @@
 
 ## Adding a new plugin or polyfill to support (when approved in the next ECMAScript version)
 
-### Update [`plugin-features.js`](https://github.com/babel/babel/blob/master/packages/babel-preset-env/data/plugin-features.js)
+### Update [`plugin-features.js`](https://github.com/babel/babel/blob/master/packages/babel-compat-data/scripts/data/plugin-features.js)
 
 *Example:*
 
