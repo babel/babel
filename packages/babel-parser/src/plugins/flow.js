@@ -2265,10 +2265,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parsePropertyName(
-      node: N.ObjectOrClassMember | N.ClassMember | N.TsNamedTypeElementBase,
+      node: N.ObjectOrClassMember | N.TsNamedTypeElementBase,
+      isPrivateNameAllowed: boolean,
     ): N.Identifier {
       const variance = this.flowParseVariance();
-      const key = super.parsePropertyName(node);
+      const key = super.parsePropertyName(node, isPrivateNameAllowed);
       // $FlowIgnore ("variance" not defined on TsNamedTypeElementBase)
       node.variance = variance;
       return key;

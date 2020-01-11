@@ -606,7 +606,7 @@ export default class ExpressionParser extends LValParser {
         ? this.parseExpression()
         : optional
         ? this.parseIdentifier(true)
-        : this.parseMaybePrivateName();
+        : this.parseMaybePrivateName(true);
       node.computed = computed;
 
       if (node.property.type === "PrivateName") {
@@ -1131,11 +1131,19 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "BooleanLiteral");
   }
 
-  parseMaybePrivateName(): N.PrivateName | N.Identifier {
+  parseMaybePrivateName(
+    isPrivateNameAllowed: boolean,
+  ): N.PrivateName | N.Identifier {
     const isPrivate = this.match(tt.hash);
 
     if (isPrivate) {
       this.expectOnePlugin(["classPrivateProperties", "classPrivateMethods"]);
+      if (!isPrivateNameAllowed) {
+        this.raise(
+          this.state.pos,
+          "Private name can only be used as name of class element (i.e. class C { #p = 42 #m() {} } )\n or property of member expression (i.e. this.#p).",
+        );
+      }
       const node = this.startNode();
       this.next();
       this.assertNoSpace("Unexpected space between # and identifier");
@@ -1596,12 +1604,12 @@ export default class ExpressionParser extends LValParser {
     }
 
     const containsEsc = this.state.containsEsc;
-    this.parsePropertyName(prop);
+    this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
 
     if (!isPattern && !containsEsc && !isGenerator && this.isAsyncProp(prop)) {
       isAsync = true;
       isGenerator = this.eat(tt.star);
-      this.parsePropertyName(prop);
+      this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
     } else {
       isAsync = false;
     }
@@ -1688,7 +1696,7 @@ export default class ExpressionParser extends LValParser {
     if (!containsEsc && this.isGetterOrSetterMethod(prop, isPattern)) {
       if (isGenerator || isAsync) this.unexpected();
       prop.kind = prop.key.name;
-      this.parsePropertyName(prop);
+      this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
       this.parseMethod(
         prop,
         /* isGenerator */ false,
@@ -1779,7 +1787,8 @@ export default class ExpressionParser extends LValParser {
   }
 
   parsePropertyName(
-    prop: N.ObjectOrClassMember | N.ClassMember | N.TsNamedTypeElementBase,
+    prop: N.ObjectOrClassMember | N.TsNamedTypeElementBase,
+    isPrivateNameAllowed: boolean,
   ): N.Expression | N.Identifier {
     if (this.eat(tt.bracketL)) {
       (prop: $FlowSubtype<N.ObjectOrClassMember>).computed = true;
@@ -1792,7 +1801,7 @@ export default class ExpressionParser extends LValParser {
       (prop: $FlowFixMe).key =
         this.match(tt.num) || this.match(tt.string) || this.match(tt.bigint)
           ? this.parseExprAtom()
-          : this.parseMaybePrivateName();
+          : this.parseMaybePrivateName(isPrivateNameAllowed);
 
       if (prop.key.type !== "PrivateName") {
         // ClassPrivateProperty is never computed, so we don't assign in that case.

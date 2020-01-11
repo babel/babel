@@ -507,7 +507,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return idx;
       }
 
-      this.parsePropertyName(node);
+      this.parsePropertyName(node, /* isPrivateNameAllowed */ false);
       return this.tsParsePropertyOrMethodSignature(node, readonly);
     }
 

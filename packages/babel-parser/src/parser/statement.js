@@ -1474,7 +1474,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseClassPropertyName(member: N.ClassMember): N.Expression | N.Identifier {
-    const key = this.parsePropertyName(member);
+    const key = this.parsePropertyName(member, /* isPrivateNameAllowed */ true);
 
     if (
       !member.computed &&
