@@ -142,7 +142,6 @@ defineType("JSXOpeningElement", {
     },
     selfClosing: {
       default: false,
-      validate: assertValueType("boolean"),
     },
     attributes: {
       validate: chain(
