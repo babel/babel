@@ -13,7 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Private name can only be used as name of class element (i.e. class C { #p = 42 #m() {} } )\n or property of member expression (i.e. this.#p). (3:11)"
+    "SyntaxError: Private name can only be used as name of class element (i.e. class C { #p = 42; #m() {} } )\n or property of member expression (i.e. this.#p). (3:11)"
   ],
   "program": {
     "type": "Program",
