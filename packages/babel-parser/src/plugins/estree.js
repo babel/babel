@@ -149,7 +149,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkDuplicatedProto(
       prop: N.ObjectMember | N.SpreadElement,
-      protoRef: { used: boolean, start?: number },
+      protoRef: { used: boolean },
+      refExpressionErrors: ?ExpressionErrors,
     ): void {
       if (
         prop.type === "SpreadElement" ||
@@ -167,8 +168,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (name === "__proto__" && prop.kind === "init") {
         // Store the first redefinition's position
-        if (protoRef.used && !protoRef.start) {
-          protoRef.start = key.start;
+        if (protoRef.used) {
+          if (refExpressionErrors && refExpressionErrors.doubleProto === -1) {
+            refExpressionErrors.doubleProto = key.start;
+          } else {
+            this.raise(key.start, "Redefinition of __proto__ property");
+          }
         }
 
         protoRef.used = true;

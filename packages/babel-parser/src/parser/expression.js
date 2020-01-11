@@ -70,7 +70,8 @@ export default class ExpressionParser extends LValParser {
 
   checkDuplicatedProto(
     prop: N.ObjectMember | N.SpreadElement,
-    protoRef: { used: boolean, start?: number },
+    protoRef: { used: boolean },
+    refExpressionErrors: ?ExpressionErrors,
   ): void {
     if (
       prop.type === "SpreadElement" ||
@@ -88,8 +89,12 @@ export default class ExpressionParser extends LValParser {
 
     if (name === "__proto__") {
       // Store the first redefinition's position
-      if (protoRef.used && !protoRef.start) {
-        protoRef.start = key.start;
+      if (protoRef.used) {
+        if (refExpressionErrors && refExpressionErrors.doubleProto === -1) {
+          refExpressionErrors.doubleProto = key.start;
+        } else {
+          this.raise(key.start, "Redefinition of __proto__ property");
+        }
       }
 
       protoRef.used = true;
@@ -203,9 +208,12 @@ export default class ExpressionParser extends LValParser {
       if (operator === "||=" || operator === "&&=") {
         this.expectPlugin("logicalAssignment");
       }
-      node.left = this.match(tt.eq)
-        ? this.toAssignable(left, undefined, "assignment expression")
-        : left;
+      if (this.match(tt.eq)) {
+        node.left = this.toAssignable(left, undefined, "assignment expression");
+        refExpressionErrors.doubleProto = -1; // reset because double __proto__ is valid in assignment expression
+      } else {
+        node.left = left;
+      }
 
       if (refExpressionErrors.shorthandAssign >= node.left.start) {
         refExpressionErrors.shorthandAssign = -1; // reset because shorthand default was used correctly
@@ -1513,8 +1521,10 @@ export default class ExpressionParser extends LValParser {
       }
 
       const prop = this.parseObjectMember(isPattern, refExpressionErrors);
-      // $FlowIgnore RestElement will never be returned if !isPattern
-      if (!isPattern) this.checkDuplicatedProto(prop, propHash);
+      if (!isPattern) {
+        // $FlowIgnore RestElement will never be returned if !isPattern
+        this.checkDuplicatedProto(prop, propHash, refExpressionErrors);
+      }
 
       // $FlowIgnore
       if (prop.shorthand) {
@@ -1522,10 +1532,6 @@ export default class ExpressionParser extends LValParser {
       }
 
       node.properties.push(prop);
-    }
-
-    if (!this.match(tt.eq) && propHash.start !== undefined) {
-      this.raise(propHash.start, "Redefinition of __proto__ property");
     }
 
     return this.finishNode(

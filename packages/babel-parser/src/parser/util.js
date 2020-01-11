@@ -274,10 +274,13 @@ export default class UtilParser extends Tokenizer {
     andThrow: boolean,
   ) {
     if (!refExpressionErrors) return false;
-    const { shorthandAssign } = refExpressionErrors;
-    if (!andThrow) return shorthandAssign >= 0;
+    const { shorthandAssign, doubleProto } = refExpressionErrors;
+    if (!andThrow) return shorthandAssign >= 0 || doubleProto >= 0;
     if (shorthandAssign >= 0) {
       this.unexpected(shorthandAssign);
+    }
+    if (doubleProto >= 0) {
+      this.raise(doubleProto, "Redefinition of __proto__ property");
     }
   }
 }
@@ -290,4 +293,5 @@ export default class UtilParser extends Tokenizer {
  */
 export class ExpressionErrors {
   shorthandAssign = -1;
+  doubleProto = -1;
 }
