@@ -99,9 +99,8 @@ Using polyfills with `entry` option:
   es.date.to-iso-string { "safari":"7" }
   es.date.to-json { "ios":"9", "safari":"7" }
   es.date.to-primitive { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es.date.to-string { "safari":"7" }
   es.function.has-instance { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es.function.name { "edge":"13", "ie":"10", "safari":"7" }
+  es.function.name { "ie":"10" }
   es.json.to-string-tag { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.map { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.math.acosh { "ie":"10", "safari":"7" }
@@ -136,8 +135,6 @@ Using polyfills with `entry` option:
   es.number.to-precision { "safari":"7" }
   es.object.assign { "edge":"13", "ie":"10", "safari":"7" }
   es.object.define-getter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
-  es.object.define-properties { "safari":"7" }
-  es.object.define-property { "safari":"7" }
   es.object.define-setter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
   es.object.entries { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.object.freeze { "ie":"10", "safari":"7" }
@@ -197,19 +194,19 @@ Using polyfills with `entry` option:
   es.string.trim { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.string.trim-end { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.string.trim-start { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es.string.anchor { "ie":"10", "safari":"7" }
-  es.string.big { "ie":"10", "safari":"7" }
-  es.string.blink { "ie":"10", "safari":"7" }
-  es.string.bold { "ie":"10", "safari":"7" }
-  es.string.fixed { "ie":"10", "safari":"7" }
-  es.string.fontcolor { "ie":"10", "safari":"7" }
-  es.string.fontsize { "ie":"10", "safari":"7" }
-  es.string.italics { "ie":"10", "safari":"7" }
-  es.string.link { "ie":"10", "safari":"7" }
-  es.string.small { "ie":"10", "safari":"7" }
-  es.string.strike { "ie":"10", "safari":"7" }
-  es.string.sub { "ie":"10", "safari":"7" }
-  es.string.sup { "ie":"10", "safari":"7" }
+  es.string.anchor { "ie":"10" }
+  es.string.big { "ie":"10" }
+  es.string.blink { "ie":"10" }
+  es.string.bold { "ie":"10" }
+  es.string.fixed { "ie":"10" }
+  es.string.fontcolor { "ie":"10" }
+  es.string.fontsize { "ie":"10" }
+  es.string.italics { "ie":"10" }
+  es.string.link { "ie":"10" }
+  es.string.small { "ie":"10" }
+  es.string.strike { "ie":"10" }
+  es.string.sub { "ie":"10" }
+  es.string.sup { "ie":"10" }
   es.typed-array.float32-array { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.typed-array.float64-array { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.typed-array.int8-array { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
