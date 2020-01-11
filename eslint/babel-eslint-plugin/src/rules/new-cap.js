@@ -1,7 +1,7 @@
 import ruleComposer from "eslint-rule-composer";
 import eslint from "eslint";
 
-const newCapRule = new eslint.Linter().getRules().get("new-cap");
+const rule = new eslint.Linter().getRules().get("new-cap");
 
 /**
  * Returns whether a node is under a decorator or not.
@@ -13,6 +13,6 @@ function isDecorator(node) {
 }
 
 export default ruleComposer.filterReports(
-  newCapRule,
+  rule,
   problem => !isDecorator(problem.node),
 );

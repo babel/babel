@@ -19,5 +19,6 @@ module.exports = {
     ["@babel/plugin-proposal-pipeline-operator", { proposal: "minimal" }],
     "@babel/plugin-syntax-bigint",
     "@babel/plugin-proposal-private-methods",
+    "@babel/plugin-proposal-do-expressions",
   ],
 };

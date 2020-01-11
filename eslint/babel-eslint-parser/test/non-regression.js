@@ -23,9 +23,8 @@ function verifyAndAssertMessagesWithSpecificESLint(
       sourceType,
       requireConfigFile: false,
       babelOptions: {
-        configFile: path.resolve(
-          __dirname,
-          "./fixtures/config/babel.config.js",
+        configFile: require.resolve(
+          "@babel/eslint-shared-fixtures/config/babel.config.js",
         ),
       },
       ...overrideConfig?.parserOptions,
@@ -1157,9 +1156,8 @@ describe("verify", () => {
         parserOptions: {
           sourceType,
           babelOptions: {
-            configFile: path.resolve(
-              __dirname,
-              "./fixtures/config/babel.config.decorators-legacy.js",
+            configFile: require.resolve(
+              "@babel/eslint-shared-fixtures/config/babel.config.decorators-legacy.js",
             ),
           },
         },
