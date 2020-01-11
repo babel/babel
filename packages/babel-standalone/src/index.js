@@ -21,8 +21,9 @@ import presetStage0 from "./preset-stage-0";
 import presetStage1 from "./preset-stage-1";
 import presetStage2 from "./preset-stage-2";
 import presetStage3 from "./preset-stage-3";
-import presetReact from "@babel/preset-react";
+import presetEnv from "@babel/preset-env";
 import presetFlow from "@babel/preset-flow";
+import presetReact from "@babel/preset-react";
 import presetTypescript from "@babel/preset-typescript";
 
 import { runScripts } from "./transformScriptTags";
@@ -136,9 +137,15 @@ export function registerPlugins(newPlugins: {
  */
 export function registerPreset(name: string, preset: Object | Function): void {
   if (Object.prototype.hasOwnProperty.call(availablePresets, name)) {
-    console.warn(
-      `A preset named "${name}" is already registered, it will be overridden`,
-    );
+    if (name === "env") {
+      console.warn(
+        "@babel/preset-env is now included in @babel/standalone, please remove @babel/preset-env-standalone",
+      );
+    } else {
+      console.warn(
+        `A preset named "${name}" is already registered, it will be overridden`,
+      );
+    }
   }
   availablePresets[name] = preset;
 }
@@ -163,6 +170,7 @@ registerPlugins(all);
 // Want to get rid of this whitelist of presets?
 // Wait! Please read https://github.com/babel/babel/pull/6177 first.
 registerPresets({
+  env: presetEnv,
   es2015: preset2015,
   es2016: () => {
     return {
