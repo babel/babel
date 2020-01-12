@@ -32,7 +32,7 @@ import type { BuiltInsOption, ModuleOption } from "./types";
 
 // TODO: Remove in Babel 8
 export function isPluginRequired(targets: Targets, support: Targets) {
-  return !isRequired("fake-name", targets, {
+  return isRequired("fake-name", targets, {
     compatData: { "fake-name": support },
   });
 }
