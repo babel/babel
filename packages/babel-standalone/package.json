@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.8.1",
+  "version": "7.8.2",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "babel.js",
   "files": [
@@ -100,7 +100,7 @@
     "@babel/plugin-transform-typeof-symbol": "^7.8.0",
     "@babel/plugin-transform-typescript": "^7.8.0",
     "@babel/plugin-transform-unicode-regex": "^7.8.0",
-    "@babel/preset-env": "^7.8.0",
+    "@babel/preset-env": "^7.8.2",
     "@babel/preset-flow": "^7.8.0",
     "@babel/preset-react": "^7.8.0",
     "@babel/preset-typescript": "^7.8.0"
