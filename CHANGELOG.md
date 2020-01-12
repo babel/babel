@@ -19,6 +19,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.8.2 (2020-01-12)
+
+#### :bug: Bug Fix
+* `babel-preset-env`
+  * [#10992](https://github.com/babel/babel/pull/10992) fix: `isPluginRequired` returns the opposite result in v7.8.0 ([@sodatea](https://github.com/sodatea))
 ## v7.8.1 (2020-01-12)
 
 #### :bug: Bug Fix
