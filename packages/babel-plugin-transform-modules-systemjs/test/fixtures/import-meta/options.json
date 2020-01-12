@@ -1,7 +1,6 @@
 {
   "plugins": [
     "external-helpers",
-    "syntax-dynamic-import",
     "syntax-import-meta",
     "transform-modules-systemjs"
   ]
