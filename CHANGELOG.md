@@ -19,6 +19,113 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.8.0 (2020-01-12)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#10980](https://github.com/babel/babel/pull/10980) Disallow private name in object elements and TS type elements ([@JLHwung](https://github.com/JLHwung))
+  * [#10955](https://github.com/babel/babel/pull/10955) LiteralPropertyName should allow BigIntLiteral ([@JLHwung](https://github.com/JLHwung))
+  * [#10953](https://github.com/babel/babel/pull/10953) fix: check await when parsing AsyncArrowBindingIdentifier ([@JLHwung](https://github.com/JLHwung))
+  * [#10947](https://github.com/babel/babel/pull/10947) Fix: TopLevelAwait should respect await identifiers defined in sub scope. ([@JLHwung](https://github.com/JLHwung))
+  * [#10946](https://github.com/babel/babel/pull/10946) fix: Class Field Initializer should not allow await expression as immediate child ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-proposal-numeric-separator`
+  * [#10938](https://github.com/babel/babel/pull/10938) StringNumericLiteral does not include NumericLiteralSeparator ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-parser`, `babel-plugin-proposal-private-methods`
+  * [#10456](https://github.com/babel/babel/pull/10456) [parser] Disallow duplicate and undeclared private names ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :boom: Breaking Change
+* `babel-types`
+  * [#10917](https://github.com/babel/babel/pull/10917) (opt-in) Improve @babel/types with env.BABEL_TYPES_8_BREAKING ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :rocket: New Feature
+* `babel-standalone`
+  * [#10821](https://github.com/babel/babel/pull/10821) Merge env-standalone to babel-standalone ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#10783](https://github.com/babel/babel/pull/10783) Add babelrc.json support ([@yordis](https://github.com/yordis))
+  * [#10903](https://github.com/babel/babel/pull/10903) Add support for babel.config.mjs and .babelrc.mjs ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-compat-data`, `babel-preset-env-standalone`, `babel-preset-env`
+  * [#10811](https://github.com/babel/babel/pull/10811) Add optional-chaining and nullish-coalescing to preset-env ([@Druotic](https://github.com/Druotic))
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-systemjs`
+  * [#10780](https://github.com/babel/babel/pull/10780) add `allowTopLevelThis` option to `transform-modules-systemjs` ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#10817](https://github.com/babel/babel/pull/10817) enable optional chaining by default in @babel/parser ([@jackisherwood](https://github.com/jackisherwood))
+* `babel-cli`
+  * [#10887](https://github.com/babel/babel/pull/10887) --copy-ignored flag added to CLI  ([@rajasekarm](https://github.com/rajasekarm))
+  * [#9144](https://github.com/babel/babel/pull/9144) Add --out-file-extension option to babel-cli ([@eps1lon](https://github.com/eps1lon))
+* `babel-core`, `babel-generator`, `babel-parser`
+  * [#10819](https://github.com/babel/babel/pull/10819) Enable nullish coalescing by default in @babel/parser ([@layershifter](https://github.com/layershifter))
+* `babel-core`, `babel-parser`
+  * [#10843](https://github.com/babel/babel/pull/10843) [parser] enable dynamic import by default ([@AbdulAli19](https://github.com/AbdulAli19))
+
+#### :bug: Bug Fix
+* `babel-node`
+  * [#10763](https://github.com/babel/babel/pull/10763) Filename detection should respect short flags ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-proposal-numeric-separator`
+  * [#10938](https://github.com/babel/babel/pull/10938) StringNumericLiteral does not include NumericLiteralSeparator ([@JLHwung](https://github.com/JLHwung))
+* `babel-preset-env`
+  * [#10790](https://github.com/babel/babel/pull/10790) Use chrome data when android is absent ([@JLHwung](https://github.com/JLHwung))
+  * [#10930](https://github.com/babel/babel/pull/10930) fix: Promise.any requires global.AggregateError ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#10944](https://github.com/babel/babel/pull/10944) When reading a new string, U+2028/2029 should correctly set the new column ([@JLHwung](https://github.com/JLHwung))
+  * [#10937](https://github.com/babel/babel/pull/10937) Refactor parseSubscript ([@JLHwung](https://github.com/JLHwung))
+  * [#10901](https://github.com/babel/babel/pull/10901) fix: lost leading comment after named import ([@elevatebart](https://github.com/elevatebart))
+* Other
+  * [#10913](https://github.com/babel/babel/pull/10913) @babel/eslint-parser: update scope analysis for ClassPrivateProperty ([@kaicataldo](https://github.com/kaicataldo))
+* `babel-traverse`
+  * [#10949](https://github.com/babel/babel/pull/10949) Override toString in case this function is printed ([@jayenashar](https://github.com/jayenashar))
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-commonjs`
+  * [#10934](https://github.com/babel/babel/pull/10934) helper-module-transforms: dereference imported template tag ([@ajafff](https://github.com/ajafff))
+* `babel-traverse`, `babel-types`
+  * [#10912](https://github.com/babel/babel/pull/10912) Fix parameter expression get binding ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#10914](https://github.com/babel/babel/pull/10914) @babel-core: parse should parse only ([@kaicataldo](https://github.com/kaicataldo))
+* `babel-helpers`
+  * [#10902](https://github.com/babel/babel/pull/10902) fix: Object.getOwnPropertySymbols called on non-object ([@bassaer](https://github.com/bassaer))
+
+#### :nail_care: Polish
+* `babel-node`
+  * [#9695](https://github.com/babel/babel/pull/9695) Use `babel > ` as prompt in babel-node ([@ZYSzys](https://github.com/ZYSzys))
+* `babel-parser`
+  * [#10906](https://github.com/babel/babel/pull/10906) refactor: remove inClassProperty parser state ([@JLHwung](https://github.com/JLHwung))
+
+#### :memo: Documentation
+* `babel-preset-env`
+  * [#10982](https://github.com/babel/babel/pull/10982) CONTRIBUTING: Update link to plugin-features.js [skip ci] ([@andersk](https://github.com/andersk))
+* Other
+  * [#10973](https://github.com/babel/babel/pull/10973) Added instructions to fork the repo in order to setup. ([@sidntrivedi012](https://github.com/sidntrivedi012))
+
+#### :house: Internal
+* `babel-preset-env`
+  * [#10983](https://github.com/babel/babel/pull/10983) chore: update corejs fixtures ([@JLHwung](https://github.com/JLHwung))
+  * [#10974](https://github.com/babel/babel/pull/10974) chore: update caniuse-usage Chrome 49 related fixtures ([@JLHwung](https://github.com/JLHwung))
+  * [#10924](https://github.com/babel/babel/pull/10924) Replace custom "findSuggestion" function with "levenary" ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`
+  * [#10507](https://github.com/babel/babel/pull/10507) Prepare @babel/core for asynchronicity ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* Other
+  * [#10979](https://github.com/babel/babel/pull/10979) Reduce false negative cases of typescript parser tests ([@JLHwung](https://github.com/JLHwung))
+  * [#10976](https://github.com/babel/babel/pull/10976) Update Test262, Flow and TS parser tests ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#10964](https://github.com/babel/babel/pull/10964) Bump coverage target from 80% to 90% ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#10958](https://github.com/babel/babel/pull/10958) Fix recent e2e-vuejs-cli error ([@JLHwung](https://github.com/JLHwung))
+  * [#10919](https://github.com/babel/babel/pull/10919) Add integration test: e2e-vue-cli  ([@JLHwung](https://github.com/JLHwung))
+  * [#10943](https://github.com/babel/babel/pull/10943) chore: update test262 ([@JLHwung](https://github.com/JLHwung))
+  * [#10918](https://github.com/babel/babel/pull/10918) chore: refine e2e test scripts ([@JLHwung](https://github.com/JLHwung))
+  * [#10916](https://github.com/babel/babel/pull/10916) @babel/eslint-parser: Refactor ([@kaicataldo](https://github.com/kaicataldo))
+  * [#10905](https://github.com/babel/babel/pull/10905) chore: separate build-standalone with coverage ([@JLHwung](https://github.com/JLHwung))
+  * [#10898](https://github.com/babel/babel/pull/10898) Move coverage to GitHub actions ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`, `babel-code-frame`, `babel-core`, `babel-generator`, `babel-helper-annotate-as-pure`, `babel-helper-bindify-decorators`, `babel-helper-builder-binary-assignment-operator-visitor`, `babel-helper-builder-react-jsx`, `babel-helper-call-delegate`, `babel-helper-create-class-features-plugin`, `babel-helper-create-regexp-features-plugin`, `babel-helper-define-map`, `babel-helper-explode-assignable-expression`, `babel-helper-explode-class`, `babel-helper-fixtures`, `babel-helper-function-name`, `babel-helper-get-function-arity`, `babel-helper-hoist-variables`, `babel-helper-member-expression-to-functions`, `babel-helper-module-imports`, `babel-helper-module-transforms`, `babel-helper-optimise-call-expression`, `babel-helper-plugin-test-runner`, `babel-helper-plugin-utils`, `babel-helper-regex`, `babel-helper-remap-async-to-generator`, `babel-helper-replace-supers`, `babel-helper-simple-access`, `babel-helper-split-export-declaration`, `babel-helper-transform-fixture-test-runner`, `babel-helper-wrap-function`, `babel-helpers`, `babel-highlight`, `babel-node`, `babel-parser`, `babel-plugin-external-helpers`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-do-expressions`, `babel-plugin-proposal-dynamic-import`, `babel-plugin-proposal-export-default-from`, `babel-plugin-proposal-export-namespace-from`, `babel-plugin-proposal-function-bind`, `babel-plugin-proposal-function-sent`, `babel-plugin-proposal-json-strings`, `babel-plugin-proposal-logical-assignment-operators`, `babel-plugin-proposal-nullish-coalescing-operator`, `babel-plugin-proposal-numeric-separator`, `babel-plugin-proposal-object-rest-spread`, `babel-plugin-proposal-optional-catch-binding`, `babel-plugin-proposal-optional-chaining`, `babel-plugin-proposal-partial-application`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-proposal-private-methods`, `babel-plugin-proposal-throw-expressions`, `babel-plugin-proposal-unicode-property-regex`, `babel-plugin-syntax-async-generators`, `babel-plugin-syntax-bigint`, `babel-plugin-syntax-class-properties`, `babel-plugin-syntax-decorators`, `babel-plugin-syntax-do-expressions`, `babel-plugin-syntax-dynamic-import`, `babel-plugin-syntax-export-default-from`, `babel-plugin-syntax-export-namespace-from`, `babel-plugin-syntax-flow`, `babel-plugin-syntax-function-bind`, `babel-plugin-syntax-function-sent`, `babel-plugin-syntax-import-meta`, `babel-plugin-syntax-json-strings`, `babel-plugin-syntax-jsx`, `babel-plugin-syntax-logical-assignment-operators`, `babel-plugin-syntax-nullish-coalescing-operator`, `babel-plugin-syntax-numeric-separator`, `babel-plugin-syntax-object-rest-spread`, `babel-plugin-syntax-optional-catch-binding`, `babel-plugin-syntax-optional-chaining`, `babel-plugin-syntax-partial-application`, `babel-plugin-syntax-pipeline-operator`, `babel-plugin-syntax-throw-expressions`, `babel-plugin-syntax-top-level-await`, `babel-plugin-syntax-typescript`, `babel-plugin-transform-arrow-functions`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-block-scoped-functions`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-classes`, `babel-plugin-transform-computed-properties`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-dotall-regex`, `babel-plugin-transform-duplicate-keys`, `babel-plugin-transform-exponentiation-operator`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`, `babel-plugin-transform-for-of`, `babel-plugin-transform-function-name`, `babel-plugin-transform-instanceof`, `babel-plugin-transform-jscript`, `babel-plugin-transform-literals`, `babel-plugin-transform-member-expression-literals`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-modules-umd`, `babel-plugin-transform-named-capturing-groups-regex`, `babel-plugin-transform-new-target`, `babel-plugin-transform-object-assign`, `babel-plugin-transform-object-set-prototype-of-to-assign`, `babel-plugin-transform-object-super`, `babel-plugin-transform-parameters`, `babel-plugin-transform-property-literals`, `babel-plugin-transform-property-mutators`, `babel-plugin-transform-proto-to-assign`, `babel-plugin-transform-react-constant-elements`, `babel-plugin-transform-react-display-name`, `babel-plugin-transform-react-inline-elements`, `babel-plugin-transform-react-jsx-compat`, `babel-plugin-transform-react-jsx-self`, `babel-plugin-transform-react-jsx-source`, `babel-plugin-transform-react-jsx`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-reserved-words`, `babel-plugin-transform-runtime`, `babel-plugin-transform-shorthand-properties`, `babel-plugin-transform-spread`, `babel-plugin-transform-sticky-regex`, `babel-plugin-transform-strict-mode`, `babel-plugin-transform-template-literals`, `babel-plugin-transform-typeof-symbol`, `babel-plugin-transform-typescript`, `babel-plugin-transform-unicode-regex`, `babel-polyfill`, `babel-preset-env`, `babel-preset-flow`, `babel-preset-react`, `babel-preset-stage-0`, `babel-preset-stage-1`, `babel-preset-stage-2`, `babel-preset-stage-3`, `babel-preset-typescript`, `babel-register`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`, `babel-template`, `babel-traverse`, `babel-types`
+  * [#10849](https://github.com/babel/babel/pull/10849) chore: specify package type [skip-ci] ([@JLHwung](https://github.com/JLHwung))
+* `babel-compat-data`, `babel-helper-compilation-targets`, `babel-preset-env`
+  * [#10899](https://github.com/babel/babel/pull/10899) Extract targets parser and compat data from preset-env ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#10950](https://github.com/babel/babel/pull/10950) test: add invalid-lone-import test ([@JLHwung](https://github.com/JLHwung))
+  * [#10936](https://github.com/babel/babel/pull/10936) refactor: remove unecessary checkYieldAwaitInDefaultParams ([@JLHwung](https://github.com/JLHwung))
+  * [#10935](https://github.com/babel/babel/pull/10935) refactor: remove unused invalidTemplateEscapePosition tokenizer state ([@JLHwung](https://github.com/JLHwung))
+  * [#10939](https://github.com/babel/babel/pull/10939) TSTypeCastExpression should not be inside call parameters ([@JLHwung](https://github.com/JLHwung))
+  * [#10942](https://github.com/babel/babel/pull/10942) Remove unused parser methods ([@JLHwung](https://github.com/JLHwung))
+
+#### :leftwards_arrow_with_hook: Revert
+* `babel-cli`
+  * [#10923](https://github.com/babel/babel/pull/10923) fix: minified should not accept optional argument ([@JLHwung](https://github.com/JLHwung))
 ## v7.7.7 (2019-12-19)
 
 #### :eyeglasses: Spec Compliance
