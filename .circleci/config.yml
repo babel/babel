@@ -25,12 +25,6 @@ aliases:
   - &artifact_babel_min
     path: ~/babel/packages/babel-standalone/babel.min.js
 
-  - &artifact_env
-    path: ~/babel/packages/babel-preset-env-standalone/babel-preset-env.js
-
-  - &artifact_env_min
-    path: ~/babel/packages/babel-preset-env-standalone/babel-preset-env.min.js
-
   - &test262_workdir
     working_directory: ~/babel/babel-test262-runner
 
@@ -69,8 +63,6 @@ jobs:
       - run: yarn jest "\-standalone/test"
       - store_artifacts: *artifact_babel
       - store_artifacts: *artifact_babel_min
-      - store_artifacts: *artifact_env
-      - store_artifacts: *artifact_env_min
       - save_cache: *save-node-modules-cache
       - save_cache: *save-yarn-cache
 
