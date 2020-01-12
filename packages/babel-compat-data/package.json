@@ -25,7 +25,7 @@
   "dependencies": {
     "browserslist": "^4.8.2",
     "invariant": "^2.2.4",
-    "semver": "^7.1.1"
+    "semver": "^5.5.0"
   },
   "devDependencies": {
     "@babel/helper-compilation-targets": "^7.8.0",
