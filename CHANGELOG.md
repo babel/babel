@@ -19,6 +19,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.8.1 (2020-01-12)
+
+#### :bug: Bug Fix
+* `babel-compat-data`, `babel-helper-compilation-targets`
+  * [#10991](https://github.com/babel/babel/pull/10991) Downgrade semver for compatibility with Node 6 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.8.0 (2020-01-12)
 
 #### :eyeglasses: Spec Compliance
