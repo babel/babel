@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-builder-react-jsx",
-  "version": "7.7.4",
+  "version": "7.8.0",
   "description": "Helper function to build react jsx",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-builder-react-jsx",
   "license": "MIT",
@@ -10,7 +10,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/types": "^7.7.4",
+    "@babel/types": "^7.8.0",
     "esutils": "^2.0.0"
   }
 }
