@@ -20,7 +20,7 @@
     "browserslist": "^4.8.2",
     "invariant": "^2.2.4",
     "levenary": "^1.1.0",
-    "semver": "^7.1.1"
+    "semver": "^5.5.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
