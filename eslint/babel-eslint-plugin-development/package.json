@@ -24,7 +24,6 @@
     "access": "public"
   },
   "license": "MIT",
-  "type": "commonjs",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",

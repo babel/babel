@@ -4,7 +4,6 @@
   "description": "Allow parsing of top-level await in modules",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-top-level-await",
   "license": "MIT",
-  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

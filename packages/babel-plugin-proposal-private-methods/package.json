@@ -4,7 +4,6 @@
   "description": "This plugin transforms private class methods",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-private-methods",
   "license": "MIT",
-  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

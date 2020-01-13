@@ -4,7 +4,6 @@
   "description": "Allow parsing of the pipeline operator",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-pipeline-operator",
   "license": "MIT",
-  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

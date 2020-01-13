@@ -4,7 +4,6 @@
   "description": "Allow parsing of export default from",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-export-default-from",
   "license": "MIT",
-  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

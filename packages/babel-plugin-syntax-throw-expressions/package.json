@@ -4,7 +4,6 @@
   "description": "Allow parsing of Throw Expressions",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-throw-expressions",
   "license": "MIT",
-  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

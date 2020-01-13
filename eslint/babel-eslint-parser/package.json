@@ -4,7 +4,6 @@
   "description": "ESLint parser that allows for linting of experimental syntax transformed by Babel",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "license": "MIT",
-  "type": "commonjs",
   "private": true,
   "repository": {
     "type": "git",

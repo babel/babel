@@ -4,7 +4,6 @@
   "description": "Helper function to support fixtures",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "license": "MIT",
-  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

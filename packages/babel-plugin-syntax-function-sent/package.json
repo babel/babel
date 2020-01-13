@@ -4,7 +4,6 @@
   "description": "Allow parsing of the function.sent meta property",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-function-sent",
   "license": "MIT",
-  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },
