@@ -17,10 +17,15 @@ codemods/*/lib
 codemods/*/dist
 codemods/*/test/fixtures
 codemods/*/test/tmp
-packages/babel-preset-env/data
+packages/babel-preset-env/data/[^(plugin-features|shipped-proposals).js]
 packages/babel-preset-env/test/debug-fixtures
 packages/babel-preset-env-standalone/babel-preset-env.js
 packages/babel-preset-env-standalone/babel-preset-env.min.js
 packages/babel-standalone/babel.js
 packages/babel-standalone/babel.min.js
 packages/babel-parser/test/expressions
+
+eslint/*/lib
+eslint/*/node_modules
+eslint/*/test
+eslint/*/tests

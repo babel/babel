@@ -1,9 +1,13 @@
+/* global BigInt */
+
 import { multiple as getFixtures } from "@babel/helper-fixtures";
 import { codeFrameColumns } from "@babel/code-frame";
 import fs from "fs";
 import path from "path";
 
 const rootPath = path.join(__dirname, "../../../..");
+
+const serialized = "$$ babel internal serialized type";
 
 class FixtureError extends Error {
   constructor(previousError, fixturePath, code) {
@@ -61,7 +65,7 @@ export function runFixtureTests(fixturesPath, parseFunction) {
                   /^.*Got error message: /,
                   "",
                 );
-                fs.writeFileSync(fn, JSON.stringify(task.options, null, "  "));
+                fs.writeFileSync(fn, JSON.stringify(task.options, null, 2));
               }
             }
 
@@ -107,11 +111,10 @@ export function runThrowTestsWithEstree(fixturesPath, parseFunction) {
 }
 
 function save(test, ast) {
-  // Ensure that RegExp are serialized as strings
-  const toJSON = RegExp.prototype.toJSON;
-  RegExp.prototype.toJSON = RegExp.prototype.toString;
-  require("fs").writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  "));
-  RegExp.prototype.toJSON = toJSON;
+  fs.writeFileSync(
+    test.expect.loc,
+    JSON.stringify(ast, (k, v) => serialize(v), 2),
+  );
 }
 
 function runTest(test, parseFunction) {
@@ -125,12 +128,20 @@ function runTest(test, parseFunction) {
 
   let ast;
   try {
-    ast = parseFunction(test.actual.code, opts);
+    ast = parseFunction(test.actual.code, { errorRecovery: true, ...opts });
   } catch (err) {
     if (opts.throws) {
       if (err.message === opts.throws) {
         return;
       } else {
+        if (process.env.OVERWRITE) {
+          const fn = path.dirname(test.expect.loc) + "/options.json";
+          test.options = test.options || {};
+          test.options.throws = err.message;
+          fs.writeFileSync(fn, JSON.stringify(test.options, null, 2));
+          return;
+        }
+
         err.message =
           "Expected error message: " +
           opts.throws +
@@ -144,6 +155,7 @@ function runTest(test, parseFunction) {
   }
 
   if (ast.comments && !ast.comments.length) delete ast.comments;
+  if (ast.errors && !ast.errors.length) delete ast.errors;
 
   if (!test.expect.code && !opts.throws && !process.env.CI) {
     test.expect.loc += "on";
@@ -151,6 +163,20 @@ function runTest(test, parseFunction) {
   }
 
   if (opts.throws) {
+    if (process.env.OVERWRITE) {
+      const fn = path.dirname(test.expect.loc) + "/options.json";
+      test.options = test.options || {};
+      delete test.options.throws;
+      const contents = JSON.stringify(test.options, null, 2);
+      if (contents === "{}") {
+        fs.unlinkSync(fn);
+      } else {
+        fs.writeFileSync(fn, JSON.stringify(test.options, null, 2));
+      }
+      test.expect.loc += "on";
+      return save(test, ast);
+    }
+
     throw new Error(
       "Expected error message: " + opts.throws + ". But parsing succeeded.",
     );
@@ -158,14 +184,51 @@ function runTest(test, parseFunction) {
     const mis = misMatch(JSON.parse(test.expect.code), ast);
 
     if (mis) {
+      if (process.env.OVERWRITE) {
+        return save(test, ast);
+      }
       throw new Error(mis);
     }
   }
 }
 
+function serialize(value) {
+  if (typeof value === "bigint") {
+    return {
+      [serialized]: "BigInt",
+      value: value.toString(),
+    };
+  } else if (value instanceof RegExp) {
+    return {
+      [serialized]: "RegExp",
+      source: value.source,
+      flags: value.flags,
+    };
+  } else if (value instanceof Error) {
+    // Errors are serialized to a simple string, because are used frequently
+    return value.toString();
+  }
+  return value;
+}
+
 function ppJSON(v) {
-  v = v instanceof RegExp ? v.toString() : v;
-  return JSON.stringify(v, null, 2);
+  if (typeof v === "bigint" || v instanceof Error || v instanceof RegExp) {
+    return ppJSON(serialize(v));
+  }
+
+  if (v && typeof v === "object" && v[serialized]) {
+    switch (v[serialized]) {
+      case "BigInt":
+        return typeof BigInt === "undefined" ? "null" : v.value + "n";
+      case "RegExp":
+        return `/${v.source}/${v.flags}`;
+    }
+  } else if (typeof v === "string" && /^[A-Z][a-z]+Error: /.test(v)) {
+    // Errors are serialized to a simple string, because are used frequently
+    return v;
+  }
+
+  return JSON.stringify(v, (k, v) => serialize(v), 2);
 }
 
 function addPath(str, pt) {
@@ -177,7 +240,12 @@ function addPath(str, pt) {
 }
 
 function misMatch(exp, act) {
-  if (exp instanceof RegExp || act instanceof RegExp) {
+  if (
+    act instanceof RegExp ||
+    act instanceof Error ||
+    typeof act === "bigint" ||
+    (exp && typeof exp === "object" && exp[serialized])
+  ) {
     const left = ppJSON(exp);
     const right = ppJSON(act);
     if (left !== right) return left + " !== " + right;

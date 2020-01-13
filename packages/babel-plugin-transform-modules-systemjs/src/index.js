@@ -1,6 +1,8 @@
 import { declare } from "@babel/helper-plugin-utils";
 import hoistVariables from "@babel/helper-hoist-variables";
 import { template, types as t } from "@babel/core";
+import { getImportSource } from "babel-plugin-dynamic-import-node/utils";
+import { rewriteThis } from "@babel/helper-module-transforms";
 
 const buildTemplate = template(`
   SYSTEM_REGISTER(MODULE_NAME, SOURCES, function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
@@ -20,6 +22,12 @@ const buildExportAll = template(`
     if (KEY !== "default" && KEY !== "__esModule") EXPORT_OBJ[KEY] = TARGET[KEY];
   }
 `);
+
+const MISSING_PLUGIN_WARNING = `\
+WARNING: Dynamic import() transformation must be enabled using the
+         @babel/plugin-proposal-dynamic-import plugin. Babel 8 will
+         no longer transform import() without using that plugin.
+`;
 
 function constructExportCall(
   path,
@@ -96,12 +104,10 @@ function constructExportCall(
   return statements;
 }
 
-const TYPE_IMPORT = "Import";
-
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { systemGlobal = "System" } = options;
+  const { systemGlobal = "System", allowTopLevelThis = false } = options;
   const IGNORE_REASSIGNMENT_SYMBOL = Symbol();
 
   const reassignmentVisitor = {
@@ -168,16 +174,24 @@ export default declare((api, options) => {
   return {
     name: "transform-modules-systemjs",
 
+    pre() {
+      this.file.set("@babel/plugin-transform-modules-*", "systemjs");
+    },
+
     visitor: {
       CallExpression(path, state) {
-        if (path.node.callee.type === TYPE_IMPORT) {
+        if (t.isImport(path.node.callee)) {
+          if (!this.file.has("@babel/plugin-proposal-dynamic-import")) {
+            console.warn(MISSING_PLUGIN_WARNING);
+          }
+
           path.replaceWith(
             t.callExpression(
               t.memberExpression(
                 t.identifier(state.contextIdent),
                 t.identifier("import"),
               ),
-              path.node.arguments,
+              [getImportSource(t, path.node)],
             ),
           );
         }
@@ -214,6 +228,9 @@ export default declare((api, options) => {
       Program: {
         enter(path, state) {
           state.contextIdent = path.scope.generateUid("context");
+          if (!allowTopLevelThis) {
+            rewriteThis(path);
+          }
         },
         exit(path, state) {
           const undefinedIdent = path.scope.buildUndefinedNode();
@@ -400,6 +417,8 @@ export default declare((api, options) => {
 
                     path.replaceWithMultiple(nodes);
                   }
+                } else {
+                  path.remove();
                 }
               }
             }

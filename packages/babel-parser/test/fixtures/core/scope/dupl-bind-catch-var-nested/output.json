@@ -238,14 +238,12 @@
                     "directives": []
                   }
                 },
-                "guardedHandlers": [],
                 "finalizer": null
               }
             ],
             "directives": []
           }
         },
-        "guardedHandlers": [],
         "finalizer": null
       }
     ],

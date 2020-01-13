@@ -6,7 +6,7 @@ let currentOptions;
 let sourceMapSupport = false;
 
 const registerFile = require.resolve("../lib/node");
-const testFile = require.resolve("./__data__/es2015");
+const testFile = require.resolve("./fixtures/babelrc/es2015");
 const testFileContent = fs.readFileSync(testFile);
 
 jest.mock("pirates", () => {

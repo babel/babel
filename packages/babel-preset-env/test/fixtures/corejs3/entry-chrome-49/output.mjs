@@ -26,6 +26,7 @@ import "core-js/modules/es.function.has-instance";
 import "core-js/modules/es.json.to-string-tag";
 import "core-js/modules/es.map";
 import "core-js/modules/es.math.acosh";
+import "core-js/modules/es.math.hypot";
 import "core-js/modules/es.math.to-string-tag";
 import "core-js/modules/es.object.define-getter";
 import "core-js/modules/es.object.define-setter";

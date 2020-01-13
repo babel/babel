@@ -8,9 +8,7 @@ export default function builder(type: string, ...args: Array<any>): Object {
   const countArgs = args.length;
   if (countArgs > keys.length) {
     throw new Error(
-      `${type}: Too many arguments passed. Received ${countArgs} but can receive no more than ${
-        keys.length
-      }`,
+      `${type}: Too many arguments passed. Received ${countArgs} but can receive no more than ${keys.length}`,
     );
   }
 

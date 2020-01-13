@@ -274,7 +274,7 @@ describe("babel-runtime", () => {
 
     it("matchAll, exists", () => {
       expect(
-        typeof require("../core-js/instance/match-all")("").call("qwe", /./).next,
+        typeof require("../core-js/instance/match-all")("").call("qwe", /./g).next,
       ).toEqual("function");
     });
 

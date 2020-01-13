@@ -90,7 +90,10 @@
                 "name": "a"
               }
             }
-          ]
+          ],
+          "extra": {
+            "trailingComma": 5
+          }
         }
       }
     ],

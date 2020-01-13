@@ -1,24 +1,48 @@
+// @flow
+
 import defaults from "lodash/defaults";
-import outputFileSync from "output-file-sync";
-import { sync as mkdirpSync } from "mkdirp";
+import { sync as makeDirSync } from "make-dir";
 import slash from "slash";
 import path from "path";
 import fs from "fs";
 
 import * as util from "./util";
+import { type CmdOptions } from "./options";
 
-export default async function({ cliOptions, babelOptions }) {
+const FILE_TYPE = Object.freeze({
+  NON_COMPILABLE: "NON_COMPILABLE",
+  COMPILED: "COMPILED",
+  IGNORED: "IGNORED",
+  ERR_COMPILATION: "ERR_COMPILATION",
+});
+
+function outputFileSync(filePath: string, data: string | Buffer): void {
+  makeDirSync(path.dirname(filePath));
+  fs.writeFileSync(filePath, data);
+}
+
+export default async function({
+  cliOptions,
+  babelOptions,
+}: CmdOptions): Promise<void> {
   const filenames = cliOptions.filenames;
 
-  async function write(src, base) {
+  async function write(
+    src: string,
+    base: string,
+  ): Promise<$Keys<typeof FILE_TYPE>> {
     let relative = path.relative(base, src);
 
     if (!util.isCompilableExtension(relative, cliOptions.extensions)) {
-      return false;
+      return FILE_TYPE.NON_COMPILABLE;
     }
 
-    // remove extension and then append back on .js
-    relative = util.adjustRelative(relative, cliOptions.keepFileExtension);
+    relative = util.withExtension(
+      relative,
+      cliOptions.keepFileExtension
+        ? path.extname(relative)
+        : cliOptions.outFileExtension,
+    );
 
     const dest = getDest(relative, base);
 
@@ -33,7 +57,7 @@ export default async function({ cliOptions, babelOptions }) {
         ),
       );
 
-      if (!res) return false;
+      if (!res) return FILE_TYPE.IGNORED;
 
       // we've requested explicit sourcemaps to be written to disk
       if (
@@ -54,37 +78,40 @@ export default async function({ cliOptions, babelOptions }) {
         console.log(src + " -> " + dest);
       }
 
-      return true;
+      return FILE_TYPE.COMPILED;
     } catch (err) {
       if (cliOptions.watch) {
         console.error(err);
-        return false;
+        return FILE_TYPE.ERR_COMPILATION;
       }
 
       throw err;
     }
   }
 
-  function getDest(filename, base) {
+  function getDest(filename: string, base: string): string {
     if (cliOptions.relative) {
       return path.join(base, cliOptions.outDir, filename);
     }
     return path.join(cliOptions.outDir, filename);
   }
 
-  async function handleFile(src, base) {
+  async function handleFile(src: string, base: string): Promise<boolean> {
     const written = await write(src, base);
 
-    if (!written && cliOptions.copyFiles) {
+    if (
+      (cliOptions.copyFiles && written === FILE_TYPE.NON_COMPILABLE) ||
+      (cliOptions.copyIgnored && written === FILE_TYPE.IGNORED)
+    ) {
       const filename = path.relative(base, src);
       const dest = getDest(filename, base);
       outputFileSync(dest, fs.readFileSync(src));
       util.chmod(src, dest);
     }
-    return written;
+    return written === FILE_TYPE.COMPILED;
   }
 
-  async function handle(filenameOrDir) {
+  async function handle(filenameOrDir: string): Promise<number> {
     if (!fs.existsSync(filenameOrDir)) return 0;
 
     const stat = fs.statSync(filenameOrDir);
@@ -116,24 +143,26 @@ export default async function({ cliOptions, babelOptions }) {
       util.deleteDir(cliOptions.outDir);
     }
 
-    mkdirpSync(cliOptions.outDir);
+    makeDirSync(cliOptions.outDir);
 
     let compiledFiles = 0;
     for (const filename of cliOptions.filenames) {
       compiledFiles += await handle(filename);
     }
 
-    console.log(
-      `Successfully compiled ${compiledFiles} ${
-        compiledFiles !== 1 ? "files" : "file"
-      } with Babel.`,
-    );
+    if (!cliOptions.quiet) {
+      console.log(
+        `Successfully compiled ${compiledFiles} ${
+          compiledFiles !== 1 ? "files" : "file"
+        } with Babel.`,
+      );
+    }
   }
 
   if (cliOptions.watch) {
     const chokidar = util.requireChokidar();
 
-    filenames.forEach(function(filenameOrDir) {
+    filenames.forEach(function(filenameOrDir: string): void {
       const watcher = chokidar.watch(filenameOrDir, {
         persistent: true,
         ignoreInitial: true,
@@ -143,8 +172,8 @@ export default async function({ cliOptions, babelOptions }) {
         },
       });
 
-      ["add", "change"].forEach(function(type) {
-        watcher.on(type, function(filename) {
+      ["add", "change"].forEach(function(type: string): void {
+        watcher.on(type, function(filename: string): void {
           handleFile(
             filename,
             filename === filenameOrDir

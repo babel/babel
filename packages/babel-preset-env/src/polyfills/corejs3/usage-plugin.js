@@ -3,7 +3,7 @@
 import corejs3Polyfills from "core-js-compat/data";
 import corejs3ShippedProposalsList from "./shipped-proposals";
 import getModulesListForTargetVersion from "core-js-compat/get-modules-list-for-target-version";
-import filterItems from "../../filter-items";
+import { filterItems } from "@babel/helper-compilation-targets";
 import {
   BuiltIns,
   StaticProperties,
@@ -21,6 +21,7 @@ import {
   isPolyfillSource,
   getImportSource,
   getRequireSource,
+  isNamespaced,
 } from "../../utils";
 import { logUsagePolyfills } from "../../debug";
 
@@ -98,7 +99,7 @@ export default function(
         }
       }
     }
-    return { builtIn, instanceType };
+    return { builtIn, instanceType, isNamespaced: isNamespaced(path) };
   }
 
   const addAndRemovePolyfillImports = {
@@ -111,13 +112,30 @@ export default function(
     },
 
     // require('core-js')
-    Program(path: NodePath) {
-      path.get("body").forEach(bodyPath => {
-        if (isPolyfillSource(getRequireSource(bodyPath))) {
-          console.warn(NO_DIRECT_POLYFILL_IMPORT);
-          bodyPath.remove();
+    Program: {
+      enter(path: NodePath) {
+        path.get("body").forEach(bodyPath => {
+          if (isPolyfillSource(getRequireSource(bodyPath))) {
+            console.warn(NO_DIRECT_POLYFILL_IMPORT);
+            bodyPath.remove();
+          }
+        });
+      },
+
+      exit(path: NodePath) {
+        const filtered = intersection(polyfills, this.polyfillsSet, available);
+        const reversed = Array.from(filtered).reverse();
+
+        for (const module of reversed) {
+          // Program:exit could be called multiple times.
+          // Avoid injecting the polyfills twice.
+          if (!this.injectedPolyfills.has(module)) {
+            createImport(path, module);
+          }
         }
-      });
+
+        filtered.forEach(module => this.injectedPolyfills.add(module));
+      },
     },
 
     // import('something').then(...)
@@ -189,10 +207,12 @@ export default function(
       }
 
       for (const property of path.get("properties")) {
-        const key = resolveKey(property.get("key"));
-        // const { keys, values } = Object
-        // const { keys, values } = [1, 2, 3]
-        this.addPropertyDependencies(source, key);
+        if (property.isObjectProperty()) {
+          const key = resolveKey(property.get("key"));
+          // const { keys, values } = Object
+          // const { keys, values } = [1, 2, 3]
+          this.addPropertyDependencies(source, key);
+        }
       }
     },
 
@@ -211,6 +231,7 @@ export default function(
   return {
     name: "corejs3-usage",
     pre() {
+      this.injectedPolyfills = new Set();
       this.polyfillsSet = new Set();
 
       this.addUnsupported = function(builtIn) {
@@ -228,7 +249,8 @@ export default function(
       };
 
       this.addPropertyDependencies = function(source = {}, key) {
-        const { builtIn, instanceType } = source;
+        const { builtIn, instanceType, isNamespaced } = source;
+        if (isNamespaced) return;
         if (PossibleGlobalObjects.has(builtIn)) {
           this.addBuiltInDependencies(key);
         } else if (has(StaticProperties, builtIn)) {
@@ -248,17 +270,10 @@ export default function(
         this.addUnsupported(InstancePropertyDependencies);
       };
     },
-    post({ path }: { path: NodePath }) {
-      const filtered = intersection(polyfills, this.polyfillsSet, available);
-      const reversed = Array.from(filtered).reverse();
-
-      for (const module of reversed) {
-        createImport(path, module);
-      }
-
+    post() {
       if (debug) {
         logUsagePolyfills(
-          filtered,
+          this.injectedPolyfills,
           this.file.opts.filename,
           polyfillTargets,
           corejs3Polyfills,

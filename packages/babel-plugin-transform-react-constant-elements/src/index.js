@@ -59,7 +59,8 @@ export default declare((api, options) => {
             const { value } = expressionResult;
             const isMutable =
               (!state.mutablePropsAllowed &&
-                (value && typeof value === "object")) ||
+                value &&
+                typeof value === "object") ||
               typeof value === "function";
             if (!isMutable) {
               // It evaluated to an immutable value, so we can hoist it.

@@ -62,11 +62,12 @@ function runModuleInTestContext(id: string, relativeFilename: string) {
   const req = id => runModuleInTestContext(id, filename);
 
   const src = fs.readFileSync(filename, "utf8");
-  const code = `(function (exports, require, module, __filename, __dirname) {${src}\n});`;
+  const code = `(function (exports, require, module, __filename, __dirname) {\n${src}\n});`;
 
   vm.runInContext(code, testContext, {
     filename,
     displayErrors: true,
+    lineOffset: -1,
   }).call(module.exports, module.exports, req, module, filename, dirname);
 
   return module.exports;
@@ -94,10 +95,11 @@ export function runCodeInTestContext(code: string, opts: { filename: string }) {
     // Expose the test options as "opts", but otherwise run the test in a CommonJS-like environment.
     // Note: This isn't doing .call(module.exports, ...) because some of our tests currently
     // rely on 'this === global'.
-    const src = `(function(exports, require, module, __filename, __dirname, opts) {${code}\n});`;
+    const src = `(function(exports, require, module, __filename, __dirname, opts) {\n${code}\n});`;
     return vm.runInContext(src, testContext, {
       filename,
       displayErrors: true,
+      lineOffset: -1,
     })(module.exports, req, module, filename, dirname, opts);
   } finally {
     process.chdir(oldCwd);
@@ -131,11 +133,17 @@ function wrapPackagesArray(type, names, optionsDir) {
 }
 
 function run(task) {
-  const actual = task.actual;
-  const expected = task.expect;
-  const exec = task.exec;
-  const opts = task.options;
-  const optionsDir = task.optionsDir;
+  const {
+    actual,
+    expect: expected,
+    exec,
+    options: opts,
+    optionsDir,
+    validateLogs,
+    ignoreOutput,
+    stdout,
+    stderr,
+  } = task;
 
   function getOpts(self) {
     const newOpts = merge(
@@ -191,55 +199,66 @@ function run(task) {
     }
   }
 
-  let actualCode = actual.code;
-  const expectCode = expected.code;
-  if (!execCode || actualCode) {
-    result = babel.transform(actualCode, getOpts(actual));
-    const expectedCode = result.code.replace(
-      escapeRegExp(path.resolve(__dirname, "../../../")),
-      "<CWD>",
-    );
+  const inputCode = actual.code;
+  const expectedCode = expected.code;
+  if (!execCode || inputCode) {
+    const actualLogs = { stdout: "", stderr: "" };
+    let restoreSpies = null;
+    if (validateLogs) {
+      const spy1 = jest.spyOn(console, "log").mockImplementation(msg => {
+        actualLogs.stdout += `${msg}\n`;
+      });
+      const spy2 = jest.spyOn(console, "warn").mockImplementation(msg => {
+        actualLogs.stderr += `${msg}\n`;
+      });
+      restoreSpies = () => {
+        spy1.mockRestore();
+        spy2.mockRestore();
+      };
+    }
+
+    result = babel.transform(inputCode, getOpts(actual));
+
+    if (restoreSpies) restoreSpies();
+
+    const outputCode = normalizeOutput(result.code);
 
     checkDuplicatedNodes(babel, result.ast);
-    if (
-      !expected.code &&
-      expectedCode &&
-      !opts.throws &&
-      fs.statSync(path.dirname(expected.loc)).isDirectory() &&
-      !process.env.CI
-    ) {
-      const expectedFile = expected.loc.replace(
-        /\.m?js$/,
-        result.sourceType === "module" ? ".mjs" : ".js",
-      );
-
-      console.log(`New test file created: ${expectedFile}`);
-      fs.writeFileSync(expectedFile, `${expectedCode}\n`);
-
-      if (expected.loc !== expectedFile) {
-        try {
-          fs.unlinkSync(expected.loc);
-        } catch (e) {}
-      }
-    } else {
-      actualCode = expectedCode.trim();
-      try {
-        expect(actualCode).toEqualFile({
-          filename: expected.loc,
-          code: expectCode,
-        });
-      } catch (e) {
-        if (!process.env.OVERWRITE) throw e;
-
-        console.log(`Updated test file: ${expected.loc}`);
-        fs.writeFileSync(expected.loc, `${expectedCode}\n`);
-      }
-
-      if (actualCode) {
-        expect(expected.loc).toMatch(
-          result.sourceType === "module" ? /\.mjs$/ : /\.js$/,
+    if (!ignoreOutput) {
+      if (
+        !expected.code &&
+        outputCode &&
+        !opts.throws &&
+        fs.statSync(path.dirname(expected.loc)).isDirectory() &&
+        !process.env.CI
+      ) {
+        const expectedFile = expected.loc.replace(
+          /\.m?js$/,
+          result.sourceType === "module" ? ".mjs" : ".js",
         );
+
+        console.log(`New test file created: ${expectedFile}`);
+        fs.writeFileSync(expectedFile, `${outputCode}\n`);
+
+        if (expected.loc !== expectedFile) {
+          try {
+            fs.unlinkSync(expected.loc);
+          } catch (e) {}
+        }
+      } else {
+        validateFile(outputCode, expected.loc, expectedCode);
+
+        if (inputCode) {
+          expect(expected.loc).toMatch(
+            result.sourceType === "module" ? /\.mjs$/ : /\.js$/,
+          );
+        }
       }
+    }
+
+    if (validateLogs) {
+      validateFile(normalizeOutput(actualLogs.stdout), stdout.loc, stdout.code);
+      validateFile(normalizeOutput(actualLogs.stderr), stderr.loc, stderr.code);
     }
   }
 
@@ -261,6 +280,39 @@ function run(task) {
   if (execCode && resultExec) {
     return resultExec;
   }
+}
+
+function validateFile(actualCode, expectedLoc, expectedCode) {
+  try {
+    expect(actualCode).toEqualFile({
+      filename: expectedLoc,
+      code: expectedCode,
+    });
+  } catch (e) {
+    if (!process.env.OVERWRITE) throw e;
+
+    console.log(`Updated test file: ${expectedLoc}`);
+    fs.writeFileSync(expectedLoc, `${actualCode}\n`);
+  }
+}
+
+function normalizeOutput(code) {
+  let result = code
+    .trim()
+    .replace(
+      new RegExp(escapeRegExp(path.resolve(__dirname, "../../../")), "g"),
+      "<CWD>",
+    );
+  if (process.platform === "win32") {
+    result = result.replace(
+      new RegExp(
+        escapeRegExp(path.resolve(__dirname, "../../../").replace(/\\/g, "/")),
+        "g",
+      ),
+      "<CWD>",
+    );
+  }
+  return result;
 }
 
 const toEqualFile = () => ({

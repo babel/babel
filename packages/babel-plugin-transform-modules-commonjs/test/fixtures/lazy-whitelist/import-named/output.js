@@ -1,16 +1,16 @@
 "use strict";
 
-var _white = require("white");
+function _white() {
+  const data = require("white");
 
-function _black() {
-  const data = require("black");
-
-  _black = function () {
+  _white = function () {
     return data;
   };
 
   return data;
 }
 
-console.log(_white.foo1);
-console.log(_black().foo2);
+var _black = require("black");
+
+console.log(_white().foo1);
+console.log(_black.foo2);

@@ -27,14 +27,30 @@ describe("option-manager", () => {
       return { plugin, calls };
     }
 
-    it("should throw if a plugin is repeated", () => {
-      const { calls, plugin } = makePlugin();
+    it("should throw if a plugin is repeated, with information about the repeated plugin", () => {
+      const { calls, plugin } = makePlugin("my-plugin");
 
       expect(() => {
         loadOptions({
-          plugins: [plugin, plugin],
+          plugins: [
+            [plugin, undefined, "my-plugin"],
+            [plugin, undefined, "my-plugin"],
+          ],
         });
-      }).toThrow(/Duplicate plugin\/preset detected/);
+      }).toThrow(
+        /Duplicate plugin\/preset detected.*Duplicates detected are.*my-plugin.*my-plugin/ms,
+      );
+      expect(calls).toEqual([]);
+    });
+
+    it("throws for null options", () => {
+      const { calls, plugin } = makePlugin();
+      expect(() => {
+        loadOptions({
+          plugins: [[plugin, null]],
+        }).toThrow(/.plugins[0][1] must be an object, false, or undefined/);
+      });
+
       expect(calls).toEqual([]);
     });
 
@@ -43,7 +59,10 @@ describe("option-manager", () => {
       const { calls: calls2, plugin: plugin2 } = makePlugin();
 
       loadOptions({
-        plugins: [[plugin1, { arg: 1 }], [plugin2, { arg: 2 }, "some-name"]],
+        plugins: [
+          [plugin1, { arg: 1 }],
+          [plugin2, { arg: 2 }, "some-name"],
+        ],
       });
       expect(calls1).toEqual([{ arg: 1 }]);
       expect(calls2).toEqual([{ arg: 2 }]);
@@ -58,7 +77,10 @@ describe("option-manager", () => {
         plugins: [[plugin1, { arg: 1 }]],
         env: {
           test: {
-            plugins: [[plugin1, { arg: 3 }], [plugin2, { arg: 2 }]],
+            plugins: [
+              [plugin1, { arg: 3 }],
+              [plugin2, { arg: 2 }],
+            ],
           },
         },
       });
@@ -82,12 +104,14 @@ describe("option-manager", () => {
       const { calls: calls2, plugin: preset2 } = makePlugin();
 
       loadOptions({
-        presets: [[preset1, { arg: 1 }], [preset2, { arg: 2 }, "some-name"]],
+        presets: [
+          [preset1, { arg: 1 }],
+          [preset2, { arg: 2 }, "some-name"],
+        ],
       });
       expect(calls1).toEqual([{ arg: 1 }]);
       expect(calls2).toEqual([{ arg: 2 }]);
     });
-
     it("should merge .env[] presets with parent presets", () => {
       const { calls: calls1, plugin: preset1 } = makePlugin();
       const { calls: calls2, plugin: preset2 } = makePlugin();
@@ -97,7 +121,10 @@ describe("option-manager", () => {
         presets: [[preset1, { arg: 1 }]],
         env: {
           test: {
-            presets: [[preset1, { arg: 3 }], [preset2, { arg: 2 }]],
+            presets: [
+              [preset1, { arg: 3 }],
+              [preset2, { arg: 2 }],
+            ],
           },
         },
       });
@@ -115,7 +142,10 @@ describe("option-manager", () => {
         presets: [[preset1, { arg: 1 }]],
         env: {
           test: {
-            presets: [[preset1, { arg: 3 }], [preset2, { arg: 2 }]],
+            presets: [
+              [preset1, { arg: 3 }],
+              [preset2, { arg: 2 }],
+            ],
           },
         },
       });

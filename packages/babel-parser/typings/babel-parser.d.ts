@@ -37,6 +37,12 @@ export interface ParserOptions {
     allowSuperOutsideMethod?: boolean;
 
     /**
+     * By default, exported identifiers must refer to a declared variable.
+     * Set this to true to allow export statements to reference undeclared variables.
+     */
+    allowUndeclaredExports?: boolean;
+
+    /**
      * Indicate the mode the code should be parsed in.
      * Can be one of "script", "module", or "unambiguous". Defaults to "script".
      * "unambiguous" will make @babel/parser attempt to guess, based on the presence
@@ -89,32 +95,37 @@ export interface ParserOptions {
 }
 
 export type ParserPlugin =
-    'estree' |
-    'jsx' |
-    'flow' |
-    'flowComments' |
-    'typescript' |
-    'doExpressions' |
-    'objectRestSpread' |
+    'asyncGenerators' |
+    'bigInt' |
+    'classPrivateMethods' |
+    'classPrivateProperties' |
+    'classProperties' |
     'decorators' |
     'decorators-legacy' |
-    'classProperties' |
-    'classPrivateProperties' |
-    'classPrivateMethods' |
+    'doExpressions' |
+    'dynamicImport' |
+    'estree' |
     'exportDefaultFrom' |
-    'exportNamespaceFrom' |
-    'asyncGenerators' |
+    'exportNamespaceFrom' | // deprecated
+    'flow' |
+    'flowComments' |
     'functionBind' |
     'functionSent' |
-    'dynamicImport' |
-    'numericSeparator' |
-    'optionalChaining' |
     'importMeta' |
-    'bigInt' |
-    'optionalCatchBinding' |
-    'throwExpressions' |
-    'pipelineOperator' |
+    'jsx' |
+    'logicalAssignment' |
     'nullishCoalescingOperator' |
+    'numericSeparator' |
+    'objectRestSpread' |
+    'optionalCatchBinding' |
+    'optionalChaining' |
+    'partialApplication' |
+    'pipelineOperator' |
+    'placeholders' |
+    'throwExpressions' |
+    'topLevelAwait' |
+    'typescript' |
+    'v8intrinsic' |
     ParserPluginWithOptions;
 
 export type ParserPluginWithOptions =

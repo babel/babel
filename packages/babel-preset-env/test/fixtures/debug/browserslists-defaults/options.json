@@ -1,0 +1,15 @@
+{
+  "validateLogs": true,
+  "ignoreOutput": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "browsers": "defaults"
+        }
+      }
+    ]
+  ]
+}

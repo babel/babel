@@ -231,7 +231,7 @@ function assertIgnoreItem(loc: GeneralPath, value: mixed): IgnoreItem {
     throw new Error(
       `${msg(
         loc,
-      )} must be an array of string/Funtion/RegExp values, or undefined`,
+      )} must be an array of string/Function/RegExp values, or undefined`,
     );
   }
   return value;
@@ -278,7 +278,7 @@ export function assertConfigFileSearch(
   ) {
     throw new Error(
       `${msg(loc)} must be a undefined, a boolean, a string, ` +
-        `got ${JSON.stringify(value)}`,
+        `got ${JSON.stringify((value: any))}`,
     );
   }
 
@@ -302,7 +302,7 @@ export function assertBabelrcSearch(
   } else if (!checkValidTest(value)) {
     throw new Error(
       `${msg(loc)} must be a undefined, a boolean, a string/Function/RegExp ` +
-        `or an array of those, got ${JSON.stringify(value)}`,
+        `or an array of those, got ${JSON.stringify((value: any))}`,
     );
   }
   return (value: any);
@@ -337,7 +337,7 @@ function assertPluginItem(loc: GeneralPath, value: mixed): PluginItem {
       if (
         opts !== undefined &&
         opts !== false &&
-        (typeof opts !== "object" || Array.isArray(opts))
+        (typeof opts !== "object" || Array.isArray(opts) || opts === null)
       ) {
         throw new Error(
           `${msg(access(loc, 1))} must be an object, false, or undefined`,

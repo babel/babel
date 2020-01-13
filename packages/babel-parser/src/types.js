@@ -96,7 +96,8 @@ export type Literal =
   | NullLiteral
   | StringLiteral
   | BooleanLiteral
-  | NumericLiteral;
+  | NumericLiteral
+  | BigIntLiteral;
 
 export type RegExpLiteral = NodeBase & {
   type: "RegExpLiteral",
@@ -263,8 +264,6 @@ export type TryStatement = NodeBase & {
   block: BlockStatement,
   handler: CatchClause | null,
   finalizer: BlockStatement | null,
-
-  guardedHandlers: $ReadOnlyArray<empty>, // TODO: Not in spec
 };
 
 export type CatchClause = NodeBase & {
@@ -745,18 +744,19 @@ export type ClassPrivateMethod = NodeBase &
     computed: false,
   };
 
-export type ClassProperty = ClassMemberBase & {
-  type: "ClassProperty",
-  key: Expression,
-  value: ?Expression, // TODO: Not in spec that this is nullable.
+export type ClassProperty = ClassMemberBase &
+  DeclarationBase & {
+    type: "ClassProperty",
+    key: Expression,
+    value: ?Expression, // TODO: Not in spec that this is nullable.
 
-  typeAnnotation?: ?TypeAnnotationBase, // TODO: Not in spec
-  variance?: ?FlowVariance, // TODO: Not in spec
+    typeAnnotation?: ?TypeAnnotationBase, // TODO: Not in spec
+    variance?: ?FlowVariance, // TODO: Not in spec
 
-  // TypeScript only: (TODO: Not in spec)
-  readonly?: true,
-  definite?: true,
-};
+    // TypeScript only: (TODO: Not in spec)
+    readonly?: true,
+    definite?: true,
+  };
 
 export type ClassPrivateProperty = NodeBase & {
   type: "ClassPrivateProperty",
@@ -764,7 +764,14 @@ export type ClassPrivateProperty = NodeBase & {
   value: ?Expression, // TODO: Not in spec that this is nullable.
   static: boolean,
   computed: false,
-  typeAnnotation?: ?TypeAnnotation, // TODO: Not in spec
+
+  // Flow and Typescript
+  typeAnnotation?: ?TypeAnnotationBase,
+
+  // TypeScript only
+  optional?: true,
+  definite?: true,
+  readonly?: true,
 };
 
 export type OptClassDeclaration = ClassBase &
@@ -1006,7 +1013,7 @@ export type FlowInterfaceType = NodeBase & {
   body: FlowObjectTypeAnnotation,
 };
 
-// estree
+// ESTree
 
 export type EstreeProperty = NodeBase & {
   type: "Property",
@@ -1030,6 +1037,11 @@ export type EstreeMethodDefinition = NodeBase & {
   kind?: "get" | "set" | "method",
 
   variance?: ?FlowVariance,
+};
+
+export type EstreeImportExpression = NodeBase & {
+  type: "ImportExpression",
+  source: Expression,
 };
 
 // === === === ===
@@ -1221,6 +1233,7 @@ export type TsTypePredicate = TsTypeBase & {
   type: "TSTypePredicate",
   parameterName: Identifier | TsThisType,
   typeAnnotation: TsTypeAnnotation,
+  asserts?: boolean,
 };
 
 // `typeof` operator
@@ -1308,7 +1321,7 @@ export type TsMappedType = TsTypeBase & {
 
 export type TsLiteralType = TsTypeBase & {
   type: "TSLiteralType",
-  literal: NumericLiteral | StringLiteral | BooleanLiteral,
+  literal: NumericLiteral | StringLiteral | BooleanLiteral | TemplateLiteral,
 };
 
 export type TsImportType = TsTypeBase & {
@@ -1449,5 +1462,6 @@ export type Placeholder<N: PlaceholderTypes> = NodeBase & {
 
 export type ParseSubscriptState = {
   optionalChainMember: boolean,
+  maybeAsyncArrow: boolean,
   stop: boolean,
 };

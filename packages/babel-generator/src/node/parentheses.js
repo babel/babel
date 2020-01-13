@@ -35,14 +35,22 @@ export function NullableTypeAnnotation(node: Object, parent: Object): boolean {
   return t.isArrayTypeAnnotation(parent);
 }
 
-export function FunctionTypeAnnotation(node: Object, parent: Object): boolean {
+export function FunctionTypeAnnotation(
+  node: Object,
+  parent: Object,
+  printStack: Array<Object>,
+): boolean {
   return (
     // (() => A) | (() => B)
     t.isUnionTypeAnnotation(parent) ||
     // (() => A) & (() => B)
     t.isIntersectionTypeAnnotation(parent) ||
     // (() => A)[]
-    t.isArrayTypeAnnotation(parent)
+    t.isArrayTypeAnnotation(parent) ||
+    // <T>(A: T): (T => T[]) => B => [A, B]
+    (t.isTypeAnnotation(parent) &&
+      // Check grandparent
+      t.isArrowFunctionExpression(printStack[printStack.length - 3]))
   );
 }
 

@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 83,
+  "end": 96,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 5,
-      "column": 2
+      "column": 15
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 83,
+    "end": 96,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 5,
-        "column": 2
+        "column": 15
       }
     },
     "sourceType": "script",
@@ -309,11 +309,32 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "extra": {
+                "trailingComma": 66
+              }
             }
           }
         ],
-        "kind": "var"
+        "kind": "var",
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " comment 4",
+            "start": 84,
+            "end": 96,
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 3
+              },
+              "end": {
+                "line": 5,
+                "column": 15
+              }
+            }
+          }
+        ]
       }
     ],
     "directives": []
@@ -364,6 +385,22 @@
         "end": {
           "line": 4,
           "column": 22
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " comment 4",
+      "start": 84,
+      "end": 96,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 3
+        },
+        "end": {
+          "line": 5,
+          "column": 15
         }
       }
     }

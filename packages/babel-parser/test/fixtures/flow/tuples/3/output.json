@@ -157,7 +157,10 @@
                   },
                   "value": 123
                 }
-              ]
+              ],
+              "extra": {
+                "trailingComma": 24
+              }
             }
           }
         ],

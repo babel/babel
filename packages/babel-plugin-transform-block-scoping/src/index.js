@@ -16,7 +16,7 @@ export default declare((api, opts) => {
     throw new Error(`.throwIfClosureRequired must be a boolean, or undefined`);
   }
   if (typeof tdzEnabled !== "boolean") {
-    throw new Error(`.throwIfClosureRequired must be a boolean, or undefined`);
+    throw new Error(`.tdz must be a boolean, or undefined`);
   }
 
   return {
@@ -33,11 +33,13 @@ export default declare((api, opts) => {
 
           for (let i = 0; i < node.declarations.length; i++) {
             const decl = node.declarations[i];
-            if (decl.init) {
-              const assign = t.assignmentExpression("=", decl.id, decl.init);
-              assign._ignoreBlockScopingTDZ = true;
-              nodes.push(t.expressionStatement(assign));
-            }
+            const assign = t.assignmentExpression(
+              "=",
+              decl.id,
+              decl.init || scope.buildUndefinedNode(),
+            );
+            assign._ignoreBlockScopingTDZ = true;
+            nodes.push(t.expressionStatement(assign));
             decl.init = this.addHelper("temporalUndefined");
           }
 
@@ -181,6 +183,8 @@ const letReferenceBlockVisitor = traverse.visitors.merge([
       // simply rename the variables.
       if (state.loopDepth > 0) {
         path.traverse(letReferenceFunctionVisitor, state);
+      } else {
+        path.traverse(tdzVisitor, state);
       }
       return path.skip();
     },
@@ -437,22 +441,25 @@ class BlockScoping {
   }
 
   updateScopeInfo(wrappedInClosure) {
-    const scope = this.scope;
+    const blockScope = this.blockPath.scope;
 
-    const parentScope = scope.getFunctionParent() || scope.getProgramParent();
+    const parentScope =
+      blockScope.getFunctionParent() || blockScope.getProgramParent();
     const letRefs = this.letReferences;
 
     for (const key of Object.keys(letRefs)) {
       const ref = letRefs[key];
-      const binding = scope.getBinding(ref.name);
+      const binding = blockScope.getBinding(ref.name);
       if (!binding) continue;
       if (binding.kind === "let" || binding.kind === "const") {
         binding.kind = "var";
 
         if (wrappedInClosure) {
-          scope.removeBinding(ref.name);
+          if (blockScope.hasOwnBinding(ref.name)) {
+            blockScope.removeBinding(ref.name);
+          }
         } else {
-          scope.moveBindingTo(ref.name, parentScope);
+          blockScope.moveBindingTo(ref.name, parentScope);
         }
       }
     }
@@ -756,7 +763,7 @@ class BlockScoping {
       closurify: false,
       loopDepth: 0,
       tdzEnabled: this.tdzEnabled,
-      addHelper: name => this.addHelper(name),
+      addHelper: name => this.state.addHelper(name),
     };
 
     if (isInLoop(this.blockPath)) {

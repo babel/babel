@@ -141,7 +141,6 @@
             "expectedNode": "BlockStatement"
           }
         },
-        "guardedHandlers": [],
         "finalizer": null
       }
     ],

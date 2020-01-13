@@ -1,16 +1,17 @@
 {
   "name": "@babel/helper-define-map",
-  "version": "7.4.0",
+  "version": "7.8.0",
   "description": "Helper function to define a map",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-define-map",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-function-name": "^7.1.0",
-    "@babel/types": "^7.4.0",
-    "lodash": "^4.17.11"
+    "@babel/helper-function-name": "^7.8.0",
+    "@babel/types": "^7.8.0",
+    "lodash": "^4.17.13"
   }
 }

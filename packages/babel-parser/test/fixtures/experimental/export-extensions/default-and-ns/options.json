@@ -1,4 +1,4 @@
 {
-  "plugins": ["exportDefaultFrom", "exportNamespaceFrom"],
+  "plugins": ["exportDefaultFrom"],
   "sourceType": "module"
 }

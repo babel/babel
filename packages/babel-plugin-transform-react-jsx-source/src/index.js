@@ -48,7 +48,7 @@ export default declare(api => {
       for (let i = 0; i < attributes.length; i++) {
         const name = attributes[i].name;
         if (name && name.name === TRACE_ID) {
-          // The __source attibute already exists
+          // The __source attribute already exists
           return;
         }
       }

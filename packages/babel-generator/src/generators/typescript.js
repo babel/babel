@@ -67,12 +67,14 @@ export function TSQualifiedName(node) {
 
 export function TSCallSignatureDeclaration(node) {
   this.tsPrintSignatureDeclarationBase(node);
+  this.token(";");
 }
 
 export function TSConstructSignatureDeclaration(node) {
   this.word("new");
   this.space();
   this.tsPrintSignatureDeclarationBase(node);
+  this.token(";");
 }
 
 export function TSPropertySignature(node) {
@@ -126,6 +128,9 @@ export function TSIndexSignature(node) {
 
 export function TSAnyKeyword() {
   this.word("any");
+}
+export function TSBigIntKeyword() {
+  this.word("bigint");
 }
 export function TSUnknownKeyword() {
   this.word("unknown");
@@ -192,11 +197,17 @@ export function TSTypeReference(node) {
 }
 
 export function TSTypePredicate(node) {
+  if (node.asserts) {
+    this.word("asserts");
+    this.space();
+  }
   this.print(node.parameterName);
-  this.space();
-  this.word("is");
-  this.space();
-  this.print(node.typeAnnotation.typeAnnotation);
+  if (node.typeAnnotation) {
+    this.space();
+    this.word("is");
+    this.space();
+    this.print(node.typeAnnotation.typeAnnotation);
+  }
 }
 
 export function TSTypeQuery(node) {
@@ -544,4 +555,27 @@ export function tsPrintSignatureDeclarationBase(node) {
   this._parameters(parameters, node);
   this.token(")");
   this.print(node.typeAnnotation, node);
+}
+
+export function tsPrintClassMemberModifiers(node, isField) {
+  if (isField && node.declare) {
+    this.word("declare");
+    this.space();
+  }
+  if (node.accessibility) {
+    this.word(node.accessibility);
+    this.space();
+  }
+  if (node.static) {
+    this.word("static");
+    this.space();
+  }
+  if (node.abstract) {
+    this.word("abstract");
+    this.space();
+  }
+  if (isField && node.readonly) {
+    this.word("readonly");
+    this.space();
+  }
 }

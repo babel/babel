@@ -1,12 +1,14 @@
 //@flow
 
+import { SemVer } from "semver";
 import { logPluginOrPolyfill } from "./debug";
 import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
-import filterItems from "./filter-items";
+import { removeUnnecessaryItems } from "./filter-items";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options";
-import pluginList from "../data/plugins.json";
+import pluginList from "@babel/compat-data/plugins";
 import { proposalPlugins, pluginSyntaxMap } from "../data/shipped-proposals";
+import overlappingPlugins from "@babel/compat-data/overlapping-plugins";
 
 import addCoreJS2UsagePlugin from "./polyfills/corejs2/usage-plugin";
 import addCoreJS3UsagePlugin from "./polyfills/corejs3/usage-plugin";
@@ -15,12 +17,25 @@ import replaceCoreJS2EntryPlugin from "./polyfills/corejs2/entry-plugin";
 import replaceCoreJS3EntryPlugin from "./polyfills/corejs3/entry-plugin";
 import removeRegeneratorEntryPlugin from "./polyfills/regenerator/entry-plugin";
 
-import getTargets from "./targets-parser";
+import getTargets, {
+  prettifyTargets,
+  filterItems,
+  isRequired,
+  type Targets,
+} from "@babel/helper-compilation-targets";
 import availablePlugins from "./available-plugins";
-import { filterStageFromList, prettifyTargets } from "./utils";
+import { filterStageFromList } from "./utils";
 import { declare } from "@babel/helper-plugin-utils";
 
-export { isPluginRequired } from "./filter-items";
+import typeof ModuleTransformationsType from "./module-transformations";
+import type { BuiltInsOption, ModuleOption } from "./types";
+
+// TODO: Remove in Babel 8
+export function isPluginRequired(targets: Targets, support: Targets) {
+  return isRequired("fake-name", targets, {
+    compatData: { "fake-name": support },
+  });
+}
 
 const pluginListWithoutProposals = filterStageFromList(
   pluginList,
@@ -56,8 +71,120 @@ export const transformIncludesAndExcludes = (opts: Array<string>): Object => {
   );
 };
 
+export const getModulesPluginNames = ({
+  modules,
+  transformations,
+  shouldTransformESM,
+  shouldTransformDynamicImport,
+  shouldParseTopLevelAwait,
+}: {
+  modules: ModuleOption,
+  transformations: ModuleTransformationsType,
+  shouldTransformESM: boolean,
+  shouldTransformDynamicImport: boolean,
+  shouldParseTopLevelAwait: boolean,
+}) => {
+  const modulesPluginNames = [];
+  if (modules !== false && transformations[modules]) {
+    if (shouldTransformESM) {
+      modulesPluginNames.push(transformations[modules]);
+    }
+
+    if (
+      shouldTransformDynamicImport &&
+      shouldTransformESM &&
+      modules !== "umd"
+    ) {
+      modulesPluginNames.push("proposal-dynamic-import");
+    } else {
+      if (shouldTransformDynamicImport) {
+        console.warn(
+          "Dynamic import can only be supported when transforming ES modules" +
+            " to AMD, CommonJS or SystemJS. Only the parser plugin will be enabled.",
+        );
+      }
+      modulesPluginNames.push("syntax-dynamic-import");
+    }
+  } else {
+    modulesPluginNames.push("syntax-dynamic-import");
+  }
+
+  if (shouldParseTopLevelAwait) {
+    modulesPluginNames.push("syntax-top-level-await");
+  }
+
+  return modulesPluginNames;
+};
+
+export const getPolyfillPlugins = ({
+  useBuiltIns,
+  corejs,
+  polyfillTargets,
+  include,
+  exclude,
+  proposals,
+  shippedProposals,
+  regenerator,
+  debug,
+}: {
+  useBuiltIns: BuiltInsOption,
+  corejs: typeof SemVer | null | false,
+  polyfillTargets: Targets,
+  include: Set<string>,
+  exclude: Set<string>,
+  proposals: boolean,
+  shippedProposals: boolean,
+  regenerator: boolean,
+  debug: boolean,
+}) => {
+  const polyfillPlugins = [];
+  if (useBuiltIns === "usage" || useBuiltIns === "entry") {
+    const pluginOptions = {
+      corejs,
+      polyfillTargets,
+      include,
+      exclude,
+      proposals,
+      shippedProposals,
+      regenerator,
+      debug,
+    };
+
+    if (corejs) {
+      if (useBuiltIns === "usage") {
+        if (corejs.major === 2) {
+          polyfillPlugins.push([addCoreJS2UsagePlugin, pluginOptions]);
+        } else {
+          polyfillPlugins.push([addCoreJS3UsagePlugin, pluginOptions]);
+        }
+        if (regenerator) {
+          polyfillPlugins.push([addRegeneratorUsagePlugin, pluginOptions]);
+        }
+      } else {
+        if (corejs.major === 2) {
+          polyfillPlugins.push([replaceCoreJS2EntryPlugin, pluginOptions]);
+        } else {
+          polyfillPlugins.push([replaceCoreJS3EntryPlugin, pluginOptions]);
+          if (!regenerator) {
+            polyfillPlugins.push([removeRegeneratorEntryPlugin, pluginOptions]);
+          }
+        }
+      }
+    }
+  }
+  return polyfillPlugins;
+};
+
 function supportsStaticESM(caller) {
   return !!(caller && caller.supportsStaticESM);
+}
+
+function supportsDynamicImport(caller) {
+  return !!(caller && caller.supportsDynamicImport);
+}
+
+function supportsTopLevelAwait(caller) {
+  return !!(caller && caller.supportsTopLevelAwait);
 }
 
 export default declare((api, opts) => {
@@ -111,37 +238,48 @@ export default declare((api, opts) => {
 
   const transformTargets = forceAllTransforms || hasUglifyTarget ? {} : targets;
 
-  const transformations = filterItems(
+  const modulesPluginNames = getModulesPluginNames({
+    modules,
+    transformations: moduleTransformations,
+    // TODO: Remove the 'api.caller' check eventually. Just here to prevent
+    // unnecessary breakage in the short term for users on older betas/RCs.
+    shouldTransformESM:
+      modules !== "auto" || !api.caller || !api.caller(supportsStaticESM),
+    shouldTransformDynamicImport:
+      modules !== "auto" || !api.caller || !api.caller(supportsDynamicImport),
+    shouldParseTopLevelAwait: !api.caller || api.caller(supportsTopLevelAwait),
+  });
+
+  const pluginNames = filterItems(
     shippedProposals ? pluginList : pluginListWithoutProposals,
     include.plugins,
     exclude.plugins,
     transformTargets,
-    null,
+    modulesPluginNames,
     getOptionSpecificExcludesFor({ loose }),
     pluginSyntaxMap,
   );
+  removeUnnecessaryItems(pluginNames, overlappingPlugins);
 
-  const plugins = [];
+  const polyfillPlugins = getPolyfillPlugins({
+    useBuiltIns,
+    corejs,
+    polyfillTargets: targets,
+    include: include.builtIns,
+    exclude: exclude.builtIns,
+    proposals,
+    shippedProposals,
+    regenerator: pluginNames.has("transform-regenerator"),
+    debug,
+  });
+
   const pluginUseBuiltIns = useBuiltIns !== false;
-
-  if (
-    modules !== false &&
-    moduleTransformations[modules] &&
-    // TODO: Remove the 'api.caller' check eventually. Just here to prevent
-    // unnecessary breakage in the short term for users on older betas/RCs.
-    (modules !== "auto" || !api.caller || !api.caller(supportsStaticESM))
-  ) {
-    // NOTE: not giving spec here yet to avoid compatibility issues when
-    // transform-modules-commonjs gets its spec mode
-    plugins.push([getPlugin(moduleTransformations[modules]), { loose }]);
-  }
-
-  transformations.forEach(pluginName =>
-    plugins.push([
+  const plugins = Array.from(pluginNames)
+    .map(pluginName => [
       getPlugin(pluginName),
       { spec, loose, useBuiltIns: pluginUseBuiltIns },
-    ]),
-  );
+    ])
+    .concat(polyfillPlugins);
 
   if (debug) {
     console.log("@babel/preset-env: `DEBUG` option");
@@ -149,8 +287,8 @@ export default declare((api, opts) => {
     console.log(JSON.stringify(prettifyTargets(targets), null, 2));
     console.log(`\nUsing modules transform: ${modules.toString()}`);
     console.log("\nUsing plugins:");
-    transformations.forEach(transform => {
-      logPluginOrPolyfill(transform, targets, pluginList);
+    pluginNames.forEach(pluginName => {
+      logPluginOrPolyfill(pluginName, targets, pluginList);
     });
 
     if (!useBuiltIns) {
@@ -158,44 +296,8 @@ export default declare((api, opts) => {
         "\nUsing polyfills: No polyfills were added, since the `useBuiltIns` option was not set.",
       );
     } else {
+      // NOTE: Polyfill plugins are outputting debug info internally
       console.log(`\nUsing polyfills with \`${useBuiltIns}\` option:`);
-    }
-  }
-
-  if (useBuiltIns === "usage" || useBuiltIns === "entry") {
-    const regenerator = transformations.has("transform-regenerator");
-
-    const pluginOptions = {
-      corejs,
-      polyfillTargets: targets,
-      include: include.builtIns,
-      exclude: exclude.builtIns,
-      proposals,
-      shippedProposals,
-      regenerator,
-      debug,
-    };
-
-    if (corejs) {
-      if (useBuiltIns === "usage") {
-        if (corejs.major === 2) {
-          plugins.push([addCoreJS2UsagePlugin, pluginOptions]);
-        } else {
-          plugins.push([addCoreJS3UsagePlugin, pluginOptions]);
-        }
-        if (regenerator) {
-          plugins.push([addRegeneratorUsagePlugin, pluginOptions]);
-        }
-      } else {
-        if (corejs.major === 2) {
-          plugins.push([replaceCoreJS2EntryPlugin, pluginOptions]);
-        } else {
-          plugins.push([replaceCoreJS3EntryPlugin, pluginOptions]);
-          if (!regenerator) {
-            plugins.push([removeRegeneratorEntryPlugin, pluginOptions]);
-          }
-        }
-      }
     }
   }
 

@@ -1,5 +1,4 @@
 import type SourceMap from "./source-map";
-import trimRight from "trim-right";
 
 const SPACES_RE = /^[ \t]+$/;
 
@@ -43,7 +42,7 @@ export default class Buffer {
     const result = {
       // Whatever trim is used here should not execute a regex against the
       // source string since it may be arbitrarily large after all transformations
-      code: trimRight(this._buf.join("")),
+      code: this._buf.join("").trimRight(),
       map: null,
       rawMappings: map && map.getRawMappings(),
     };
@@ -235,7 +234,7 @@ export default class Buffer {
   source(prop: string, loc: Location, force?: boolean): void {
     if (prop && !loc) return;
 
-    // Since this is called extremly often, we re-use the same _sourcePosition
+    // Since this is called extremely often, we re-use the same _sourcePosition
     // object for the whole lifetime of the buffer.
     this._normalizePosition(prop, loc, this._sourcePosition, force);
   }

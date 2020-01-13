@@ -4,6 +4,7 @@ import defineType, {
   assertOneOf,
   assertValueType,
   validate,
+  validateArrayOfType,
   validateOptional,
   validateOptionalType,
   validateType,
@@ -150,7 +151,7 @@ defineType("DeclareExportAllDeclaration", {
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
     source: validateType("StringLiteral"),
-    exportKind: validateOptional(assertOneOf(["type", "value"])),
+    exportKind: validateOptional(assertOneOf("type", "value")),
   },
 });
 
@@ -463,4 +464,89 @@ defineType("Variance", {
 
 defineType("VoidTypeAnnotation", {
   aliases: ["Flow", "FlowType", "FlowBaseAnnotation"],
+});
+
+// Enums
+defineType("EnumDeclaration", {
+  aliases: ["Declaration"],
+  visitor: ["id", "body"],
+  fields: {
+    id: validateType("Identifier"),
+    body: validateType([
+      "EnumBooleanBody",
+      "EnumNumberBody",
+      "EnumStringBody",
+      "EnumSymbolBody",
+    ]),
+  },
+});
+
+defineType("EnumBooleanBody", {
+  aliases: ["EnumBody"],
+  visitor: ["members"],
+  fields: {
+    explicit: validate(assertValueType("boolean")),
+    members: validateArrayOfType("EnumBooleanMember"),
+  },
+});
+
+defineType("EnumNumberBody", {
+  aliases: ["EnumBody"],
+  visitor: ["members"],
+  fields: {
+    explicit: validate(assertValueType("boolean")),
+    members: validateArrayOfType("EnumNumberMember"),
+  },
+});
+
+defineType("EnumStringBody", {
+  aliases: ["EnumBody"],
+  visitor: ["members"],
+  fields: {
+    explicit: validate(assertValueType("boolean")),
+    members: validateArrayOfType(["EnumStringMember", "EnumDefaultedMember"]),
+  },
+});
+
+defineType("EnumSymbolBody", {
+  aliases: ["EnumBody"],
+  visitor: ["members"],
+  fields: {
+    members: validateArrayOfType("EnumDefaultedMember"),
+  },
+});
+
+defineType("EnumBooleanMember", {
+  aliases: ["EnumMember"],
+  visitor: ["id"],
+  fields: {
+    id: validateType("Identifier"),
+    init: validateType("BooleanLiteral"),
+  },
+});
+
+defineType("EnumNumberMember", {
+  aliases: ["EnumMember"],
+  visitor: ["id", "init"],
+  fields: {
+    id: validateType("Identifier"),
+    init: validateType("NumericLiteral"),
+  },
+});
+
+defineType("EnumStringMember", {
+  aliases: ["EnumMember"],
+  visitor: ["id", "init"],
+  fields: {
+    id: validateType("Identifier"),
+    init: validateType("StringLiteral"),
+  },
+});
+
+defineType("EnumDefaultedMember", {
+  aliases: ["EnumMember"],
+  visitor: ["id"],
+  fields: {
+    id: validateType("Identifier"),
+  },
 });

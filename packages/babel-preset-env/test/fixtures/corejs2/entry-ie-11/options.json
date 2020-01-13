@@ -8,8 +8,7 @@
         },
         "modules": false,
         "useBuiltIns": "entry",
-        "corejs": 2,
-        "modules": false
+        "corejs": 2
       }
     ]
   ]

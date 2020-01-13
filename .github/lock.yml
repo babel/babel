@@ -4,7 +4,7 @@
 daysUntilLock: 91
 # Comment to post before locking. Set to `false` to disable
 lockComment: false
-only: issues
+# The label to be applied when an issue is locked
 lockLabel: 'outdated'
 
 # Issues or pull requests with these labels will not be locked

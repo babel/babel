@@ -1,3 +1,4 @@
 {
-  "presets": [["react", { "development": true }]]
+  "presets": [["react", { "development": true }]],
+  "os": ["linux", "darwin"]
 }

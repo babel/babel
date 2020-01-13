@@ -1,4 +1,4 @@
 {
-  "plugins": ["placeholders", "exportDefaultFrom", "exportNamespaceFrom"],
+  "plugins": ["placeholders", "exportDefaultFrom"],
   "sourceType": "module"
 }

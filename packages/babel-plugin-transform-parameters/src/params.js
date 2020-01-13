@@ -32,7 +32,11 @@ function isSafeBinding(scope, node) {
 const iifeVisitor = {
   ReferencedIdentifier(path, state) {
     const { scope, node } = path;
-    if (node.name === "eval" || !isSafeBinding(scope, node)) {
+    if (
+      node.name === "eval" ||
+      !isSafeBinding(scope, node) ||
+      !isSafeBinding(state.scope, node)
+    ) {
       state.iife = true;
       path.stop();
     }

@@ -1,6 +1,7 @@
 class Cl {
   constructor() {
     Object.defineProperty(this, _privateFieldValue, {
+      get: void 0,
       set: _set_privateFieldValue
     });
     Object.defineProperty(this, _privateField, {

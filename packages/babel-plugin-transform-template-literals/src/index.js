@@ -23,7 +23,7 @@ export default declare((api, options) => {
    * the second member and convert that one, which reflects the spec behavior
    * of template literals.
    */
-  function buildConcatCallExressions(items) {
+  function buildConcatCallExpressions(items) {
     let avail = true;
     return items.reduce(function(left, right) {
       let canBeInserted = t.isLiteral(right);
@@ -133,7 +133,7 @@ export default declare((api, options) => {
             root = t.binaryExpression("+", root, nodes[i]);
           }
         } else if (nodes.length > 1) {
-          root = buildConcatCallExressions(nodes);
+          root = buildConcatCallExpressions(nodes);
         }
 
         path.replaceWith(root);

@@ -84,7 +84,7 @@
   * More performance improvements.
   * Parsing is now ~30% faster thanks to [marijnh/acorn@7264bc0178e7e6af7cfe02e9e0c6b26ee0e6007f](https://github.com/marijnh/acorn/commit/7264bc0178e7e6af7cfe02e9e0c6b26ee0e6007f).
  * **New Feature**
-  * Optional `es6.blockScopingTDZ` is now completely functional and handles all edgecases.
+  * Optional `es6.blockScopingTDZ` is now completely functional and handles all edge cases.
   * `super` in object literals.
   * Tail call optimisation. Thanks [@RReverser](https://github.com/RReverser)!
 
@@ -122,7 +122,7 @@
   * Restructure transformers so they're only ran if the AST contains nodes that they need to worry about. Improves transpilation speed significantly.
  * **Bug Fix**
   * Fix source maps not tracking end of node locations.
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Use static super references as the home object is actually done at definition time.
  * **Polish**
   * Force the `es6.destructuring` transformer to be whitelisted when the `es7.objectSpread` transformer is.
@@ -474,12 +474,12 @@
  * **Polish**
   * Rest parameters now allocate the array before populating.
  * **Internal**
-  * `for...in` loops have been changed to optimized `for` loops - better performance and no enumeration of protoype keys.
+  * `for...in` loops have been changed to optimized `for` loops - better performance and no enumeration of prototype keys.
   * Parts of the code generator have now been optimized thanks to [gaearon](https://github.com/gaearon).
 
 ## 2.12.3
 
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Optional `typeof` transformer checks for `undefined` before passing it to the helper.
   * Class methods are now named.
 
@@ -551,7 +551,7 @@
   * Add `classesFastSuper` optional transformer that doesn't support parent getters and prototype changing.
   * Add `forOfFast` transformer that speeds up `for...of` on arrays but produces more code.
   * Add `--react-compat` to `bin/6to5`.
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Disallow setters without a single parameter.
   * Add `configurable` and `writable` to defined properties.
   * Use define instead of assignment for class methods.
@@ -619,7 +619,7 @@
 
 ## 2.7.0
 
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Disallow reassignments of imports.
  * **New Feature**
   * `reactCompat` option to enable pre-v0.12 react components.
@@ -643,7 +643,7 @@
 
  * **Bug Fix**
   * Better handling of number literal property keys.
-  * Handle `NewExpression` paren insertion edegcases better.
+  * Handle `NewExpression` paren insertion edge cases better.
  * **Internal**
   * Fix incorrect AST node `identifier("this")`.
   * Better `toIdentifier` method that handles reserved words.
@@ -662,7 +662,7 @@
  * **Polish**
   * Move `"use strict";` to inside module bodies instead of at the top of the file.
   * Better handling of dynamic imports.
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Class inheritance now has a `function` or `null` type check.
   * Add `interopRequireWildcard` around wildcard imports and exports to handle non-object exports.
 
@@ -850,7 +850,7 @@
 
 ## 1.14.10
 
- * Fix let scoping unneccesary override.
+ * Fix let scoping unnecessary override.
 
 ## 1.14.6
 
@@ -973,7 +973,7 @@
 
 ## 1.12.21
 
- * Fix unneccesary let scoping replacement.
+ * Fix unnecessary let scoping replacement.
  * Add `commonInterop` module formatter. Thanks [@Naddiseo](https://github.com/Naddiseo).
  * Fix `return` outside of function body bug. Thanks [@brentburg](https://github.com/brentburg).
  * Add more flexible option types.
@@ -1020,7 +1020,7 @@
 
 ## 1.12.12
 
- * Make scope tracker more reliable to handle all edgecases.
+ * Make scope tracker more reliable to handle all edge cases.
 
 ## 1.12.11
 

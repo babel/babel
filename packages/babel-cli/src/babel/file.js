@@ -1,14 +1,26 @@
+// @flow
+
 import convertSourceMap from "convert-source-map";
 import defaults from "lodash/defaults";
 import sourceMap from "source-map";
 import slash from "slash";
+import { sync as makeDirSync } from "make-dir";
 import path from "path";
 import fs from "fs";
 
 import * as util from "./util";
+import { type CmdOptions } from "./options";
 
-export default async function({ cliOptions, babelOptions }) {
-  function buildResult(fileResults) {
+type CompilationOutput = {
+  code: string,
+  map: Object,
+};
+
+export default async function({
+  cliOptions,
+  babelOptions,
+}: CmdOptions): Promise<void> {
+  function buildResult(fileResults: Array<Object>): CompilationOutput {
     const map = new sourceMap.SourceMapGenerator({
       file:
         cliOptions.sourceMapTarget ||
@@ -74,10 +86,12 @@ export default async function({ cliOptions, babelOptions }) {
     };
   }
 
-  function output(fileResults) {
+  function output(fileResults: Array<string>): void {
     const result = buildResult(fileResults);
 
     if (cliOptions.outFile) {
+      makeDirSync(path.dirname(cliOptions.outFile));
+
       // we've requested for a sourcemap to be written to disk
       if (babelOptions.sourceMaps && babelOptions.sourceMaps !== "inline") {
         const mapLoc = cliOptions.outFile + ".map";
@@ -91,14 +105,15 @@ export default async function({ cliOptions, babelOptions }) {
     }
   }
 
-  function readStdin() {
-    return new Promise((resolve, reject) => {
+  function readStdin(): Promise<string> {
+    return new Promise((resolve: Function, reject: Function): void => {
       let code = "";
 
       process.stdin.setEncoding("utf8");
 
       process.stdin.on("readable", function() {
         const chunk = process.stdin.read();
+        // $FlowIgnore
         if (chunk !== null) code += chunk;
       });
 
@@ -109,7 +124,7 @@ export default async function({ cliOptions, babelOptions }) {
     });
   }
 
-  async function stdin() {
+  async function stdin(): Promise<void> {
     const code = await readStdin();
 
     const res = await util.transform(
@@ -126,7 +141,7 @@ export default async function({ cliOptions, babelOptions }) {
     output([res]);
   }
 
-  async function walk(filenames) {
+  async function walk(filenames: Array<string>): Promise<void> {
     const _filenames = [];
 
     filenames.forEach(function(filename) {
@@ -151,7 +166,7 @@ export default async function({ cliOptions, babelOptions }) {
     });
 
     const results = await Promise.all(
-      _filenames.map(async function(filename) {
+      _filenames.map(async function(filename: string): Promise<Object> {
         let sourceFilename = filename;
         if (cliOptions.outFile) {
           sourceFilename = path.relative(
@@ -168,7 +183,7 @@ export default async function({ cliOptions, babelOptions }) {
               {
                 sourceFileName: sourceFilename,
                 // Since we're compiling everything to be merged together,
-                // "inline" applies to the final output file, but to the individual
+                // "inline" applies to the final output file, but not to the individual
                 // files being concatenated.
                 sourceMaps:
                   babelOptions.sourceMaps === "inline"
@@ -192,7 +207,7 @@ export default async function({ cliOptions, babelOptions }) {
     output(results);
   }
 
-  async function files(filenames) {
+  async function files(filenames: Array<string>): Promise<void> {
     if (!cliOptions.skipInitialBuild) {
       await walk(filenames);
     }
@@ -201,6 +216,7 @@ export default async function({ cliOptions, babelOptions }) {
       const chokidar = util.requireChokidar();
       chokidar
         .watch(filenames, {
+          disableGlobbing: true,
           persistent: true,
           ignoreInitial: true,
           awaitWriteFinish: {
@@ -208,8 +224,11 @@ export default async function({ cliOptions, babelOptions }) {
             pollInterval: 10,
           },
         })
-        .on("all", function(type, filename) {
-          if (!util.isCompilableExtension(filename, cliOptions.extensions)) {
+        .on("all", function(type: string, filename: string): void {
+          if (
+            !util.isCompilableExtension(filename, cliOptions.extensions) &&
+            !filenames.includes(filename)
+          ) {
             return;
           }
 

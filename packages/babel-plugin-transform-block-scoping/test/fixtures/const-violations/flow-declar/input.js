@@ -1,2 +1,2 @@
 declare class foo {}
-const foo = 1;
+const foo1 = 1;

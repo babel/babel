@@ -1,14 +1,13 @@
 // @flow
 import corejs3Polyfills from "core-js-compat/data";
+import findSuggestion from "levenary";
 import invariant from "invariant";
 import { coerce, SemVer } from "semver";
-import corejs2Polyfills from "../data/corejs2-built-ins.json";
-import pluginsList from "../data/plugins.json";
+import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
+import pluginsList from "@babel/compat-data/plugins";
 import moduleTransformations from "./module-transformations";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
 import { defaultWebIncludes } from "./polyfills/corejs2/get-platform-specific-default";
-import { isBrowsersQueryValid } from "./targets-parser";
-import { findSuggestion } from "./utils";
 
 import type {
   BuiltInsOption,
@@ -26,29 +25,35 @@ const validateTopLevelOptions = (options: Options) => {
     if (!TopLevelOptions[option]) {
       throw new Error(
         `Invalid Option: ${option} is not a valid top-level option.
-        Maybe you meant to use '${findSuggestion(validOptions, option)}'?`,
+        Maybe you meant to use '${findSuggestion(option, validOptions)}'?`,
       );
     }
   }
 };
 
-const allPluginsList = [
-  ...Object.keys(pluginsList),
+const allPluginsList = Object.keys(pluginsList);
+
+// NOTE: Since module plugins are handled seperatly compared to other plugins (via the "modules" option) it
+// should only be possible to exclude and not include module plugins, otherwise it's possible that preset-env
+// will add a module plugin twice.
+const modulePlugins = [
+  "proposal-dynamic-import",
   ...Object.keys(moduleTransformations).map(m => moduleTransformations[m]),
 ];
 
-const validIncludesAndExcludesWithoutCoreJS = new Set(allPluginsList);
-
-const validIncludesAndExcludesWithCoreJS2 = new Set([
-  ...allPluginsList,
-  ...Object.keys(corejs2Polyfills),
-  ...defaultWebIncludes,
-]);
-
-const validIncludesAndExcludesWithCoreJS3 = new Set([
-  ...allPluginsList,
-  ...Object.keys(corejs3Polyfills),
-]);
+const getValidIncludesAndExcludes = (
+  type: "include" | "exclude",
+  corejs: number | false,
+) =>
+  new Set([
+    ...allPluginsList,
+    ...(type === "exclude" ? modulePlugins : []),
+    ...(corejs
+      ? corejs == 2
+        ? [...Object.keys(corejs2Polyfills), ...defaultWebIncludes]
+        : Object.keys(corejs3Polyfills)
+      : []),
+  ]);
 
 const pluginToRegExp = (plugin: PluginListItem) => {
   if (plugin instanceof RegExp) return plugin;
@@ -59,14 +64,14 @@ const pluginToRegExp = (plugin: PluginListItem) => {
   }
 };
 
-const selectPlugins = (regexp: RegExp | null, corejs: number | false) =>
-  Array.from(
-    corejs
-      ? corejs == 2
-        ? validIncludesAndExcludesWithCoreJS2
-        : validIncludesAndExcludesWithCoreJS3
-      : validIncludesAndExcludesWithoutCoreJS,
-  ).filter(item => regexp instanceof RegExp && regexp.test(item));
+const selectPlugins = (
+  regexp: RegExp | null,
+  type: "include" | "exclude",
+  corejs: number | false,
+) =>
+  Array.from(getValidIncludesAndExcludes(type, corejs)).filter(
+    item => regexp instanceof RegExp && regexp.test(item),
+  );
 
 const flatten = <T>(array: Array<Array<T>>): Array<T> => [].concat(...array);
 
@@ -78,7 +83,7 @@ const expandIncludesAndExcludes = (
   if (plugins.length === 0) return [];
 
   const selectedPlugins = plugins.map(plugin =>
-    selectPlugins(pluginToRegExp(plugin), corejs),
+    selectPlugins(pluginToRegExp(plugin), type, corejs),
   );
   const invalidRegExpList = plugins.filter(
     (p, i) => selectedPlugins[i].length === 0,
@@ -115,7 +120,7 @@ export const checkDuplicateIncludeExcludes = (
 
 const normalizeTargets = targets => {
   // TODO: Allow to use only query or strings as a targets from next breaking change.
-  if (isBrowsersQueryValid(targets)) {
+  if (typeof targets === "string" || Array.isArray(targets)) {
     return { browsers: targets };
   }
   return {
@@ -203,8 +208,18 @@ export function normalizeCoreJSOption(
 
   if (useBuiltIns && corejs === undefined) {
     rawVersion = 2;
-    console.log(
-      "\nWith `useBuiltIns` option, required direct setting of `corejs` option\n",
+    console.warn(
+      "\nWARNING: We noticed you're using the `useBuiltIns` option without declaring a " +
+        "core-js version. Currently, we assume version 2.x when no version " +
+        "is passed. Since this default version will likely change in future " +
+        "versions of Babel, we recommend explicitly setting the core-js version " +
+        "you are using via the `corejs` option.\n" +
+        "\nYou should also be sure that the version you pass to the `corejs` " +
+        "option matches the version specified in your `package.json`'s " +
+        "`dependencies` section. If it doesn't, you need to run one of the " +
+        "following commands:\n\n" +
+        "  npm install --save core-js@2    npm install --save core-js@3\n" +
+        "  yarn add core-js@2              yarn add core-js@3\n",
     );
   } else if (typeof corejs === "object" && corejs !== null) {
     rawVersion = corejs.version;
@@ -216,11 +231,16 @@ export function normalizeCoreJSOption(
   const version = rawVersion ? coerce(String(rawVersion)) : false;
 
   if (!useBuiltIns && version) {
-    console.log("\n`corejs` option required only with `useBuiltIns` option\n");
+    console.log(
+      "\nThe `corejs` option only has an effect when the `useBuiltIns` option is not `false`\n",
+    );
   }
 
   if (useBuiltIns && (!version || version.major < 2 || version.major > 3)) {
-    throw new RangeError("Supported only core-js@2 and core-js@3.");
+    throw new RangeError(
+      "Invalid Option: The version passed to `corejs` is invalid. Currently, " +
+        "only core-js@2 and core-js@3 are supported.",
+    );
   }
 
   return { version, proposals };

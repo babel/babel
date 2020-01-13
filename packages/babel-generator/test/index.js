@@ -197,7 +197,7 @@ describe("generation", function() {
 
     const id2 = fn.body.body[0].expression;
     id2.name += "2";
-    id2.loc.identiferName = "bar";
+    id2.loc.identifierName = "bar";
 
     const generated = generate(
       ast,
@@ -298,6 +298,31 @@ describe("generation", function() {
 });
 
 describe("programmatic generation", function() {
+  it("should add parenthesis when NullishCoalescing is used along with ||", function() {
+    // https://github.com/babel/babel/issues/10260
+    const nullishCoalesc = t.logicalExpression(
+      "??",
+      t.logicalExpression("||", t.identifier("a"), t.identifier("b")),
+      t.identifier("c"),
+    );
+    const output = generate(nullishCoalesc).code;
+    expect(output).toBe(`(a || b) ?? c`);
+  });
+
+  it("should add parenthesis when NullishCoalesing is used with &&", function() {
+    const nullishCoalesc = t.logicalExpression(
+      "??",
+      t.identifier("a"),
+      t.logicalExpression(
+        "&&",
+        t.identifier("b"),
+        t.logicalExpression("&&", t.identifier("c"), t.identifier("d")),
+      ),
+    );
+    const output = generate(nullishCoalesc).code;
+    expect(output).toBe(`a ?? (b && c && d)`);
+  });
+
   it("numeric member expression", function() {
     // Should not generate `0.foo`
     const mem = t.memberExpression(
@@ -427,7 +452,7 @@ describe("programmatic generation", function() {
     });
   });
 
-  describe("typescript generate parantheses if necessary", function() {
+  describe("typescript generate parentheses if necessary", function() {
     it("wraps around union for array", () => {
       const typeStatement = t.TSArrayType(
         t.TSUnionType([

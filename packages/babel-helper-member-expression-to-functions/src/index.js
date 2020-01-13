@@ -100,6 +100,34 @@ const handle = {
       return;
     }
 
+    // { KEY: MEMBER } = OBJ -> { KEY: _destructureSet(MEMBER) } = OBJ
+    // { KEY: MEMBER = _VALUE } = OBJ -> { KEY: _destructureSet(MEMBER) = _VALUE } = OBJ
+    // {...MEMBER} -> {..._destructureSet(MEMBER)}
+    //
+    // [MEMBER] = ARR -> [_destructureSet(MEMBER)] = ARR
+    // [MEMBER = _VALUE] = ARR -> [_destructureSet(MEMBER) = _VALUE] = ARR
+    // [...MEMBER] -> [..._destructureSet(MEMBER)]
+    if (
+      // { KEY: MEMBER } = OBJ
+      (parentPath.isObjectProperty({ value: node }) &&
+        parentPath.parentPath.isObjectPattern()) ||
+      // { KEY: MEMBER = _VALUE } = OBJ
+      (parentPath.isAssignmentPattern({ left: node }) &&
+        parentPath.parentPath.isObjectProperty({ value: parent }) &&
+        parentPath.parentPath.parentPath.isObjectPattern()) ||
+      // [MEMBER] = ARR
+      parentPath.isArrayPattern() ||
+      // [MEMBER = _VALUE] = ARR
+      (parentPath.isAssignmentPattern({ left: node }) &&
+        parentPath.parentPath.isArrayPattern()) ||
+      // {...MEMBER}
+      // [...MEMBER]
+      parentPath.isRestElement()
+    ) {
+      member.replaceWith(this.destructureSet(member));
+      return;
+    }
+
     // MEMBER   ->   _get(MEMBER)
     member.replaceWith(this.get(member));
   },

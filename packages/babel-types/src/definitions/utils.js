@@ -1,5 +1,6 @@
 // @flow
 import is from "../validators/is";
+import { validateField, validateChild } from "../validators/validate";
 
 export const VISITOR_KEYS: { [string]: Array<string> } = {};
 export const ALIAS_KEYS: { [string]: Array<string> } = {};
@@ -7,14 +8,13 @@ export const FLIPPED_ALIAS_KEYS: { [string]: Array<string> } = {};
 export const NODE_FIELDS: { [string]: {} } = {};
 export const BUILDER_KEYS: { [string]: Array<string> } = {};
 export const DEPRECATED_KEYS: { [string]: string } = {};
+export const NODE_PARENT_VALIDATIONS = {};
 
 function getType(val) {
   if (Array.isArray(val)) {
     return "array";
   } else if (val === null) {
     return "null";
-  } else if (val === undefined) {
-    return "undefined";
   } else {
     return typeof val;
   }
@@ -70,7 +70,10 @@ export function assertEach(callback: Validator): Validator {
     if (!Array.isArray(val)) return;
 
     for (let i = 0; i < val.length; i++) {
-      callback(node, `${key}[${i}]`, val[i]);
+      const subkey = `${key}[${i}]`;
+      const v = val[i];
+      callback(node, subkey, v);
+      if (process.env.BABEL_TYPES_8_BREAKING) validateChild(node, subkey, v);
     }
   }
   validator.each = callback;
@@ -95,23 +98,20 @@ export function assertOneOf(...values: Array<any>): Validator {
 
 export function assertNodeType(...types: Array<string>): Validator {
   function validate(node, key, val) {
-    let valid = false;
-
     for (const type of types) {
       if (is(type, val)) {
-        valid = true;
-        break;
+        validateChild(node, key, val);
+        return;
       }
     }
 
-    if (!valid) {
-      throw new TypeError(
-        `Property ${key} of ${
-          node.type
-        } expected node to be of a type ${JSON.stringify(types)} ` +
-          `but instead got ${JSON.stringify(val && val.type)}`,
-      );
-    }
+    throw new TypeError(
+      `Property ${key} of ${
+        node.type
+      } expected node to be of a type ${JSON.stringify(
+        types,
+      )} but instead got ${JSON.stringify(val && val.type)}`,
+    );
   }
 
   validate.oneOfNodeTypes = types;
@@ -121,23 +121,20 @@ export function assertNodeType(...types: Array<string>): Validator {
 
 export function assertNodeOrValueType(...types: Array<string>): Validator {
   function validate(node, key, val) {
-    let valid = false;
-
     for (const type of types) {
       if (getType(val) === type || is(type, val)) {
-        valid = true;
-        break;
+        validateChild(node, key, val);
+        return;
       }
     }
 
-    if (!valid) {
-      throw new TypeError(
-        `Property ${key} of ${
-          node.type
-        } expected node to be of a type ${JSON.stringify(types)} ` +
-          `but instead got ${JSON.stringify(val && val.type)}`,
-      );
-    }
+    throw new TypeError(
+      `Property ${key} of ${
+        node.type
+      } expected node to be of a type ${JSON.stringify(
+        types,
+      )} but instead got ${JSON.stringify(val && val.type)}`,
+    );
   }
 
   validate.oneOfNodeOrValueTypes = types;
@@ -161,6 +158,34 @@ export function assertValueType(type: string): Validator {
   return validate;
 }
 
+export function assertShape(shape: { [string]: FieldOptions }): Validator {
+  function validate(node, key, val) {
+    const errors = [];
+    for (const property of Object.keys(shape)) {
+      try {
+        validateField(node, property, val[property], shape[property]);
+      } catch (error) {
+        if (error instanceof TypeError) {
+          errors.push(error.message);
+          continue;
+        }
+        throw error;
+      }
+    }
+    if (errors.length) {
+      throw new TypeError(
+        `Property ${key} of ${
+          node.type
+        } expected to have the following:\n${errors.join("\n")}`,
+      );
+    }
+  }
+
+  validate.shapeOf = shape;
+
+  return validate;
+}
+
 export function chain(...fns: Array<Validator>): Validator {
   function validate(...args) {
     for (const fn of fns) {
@@ -170,6 +195,17 @@ export function chain(...fns: Array<Validator>): Validator {
   validate.chainOf = fns;
   return validate;
 }
+
+const validTypeOpts = [
+  "aliases",
+  "builder",
+  "deprecatedAlias",
+  "fields",
+  "inherits",
+  "visitor",
+  "validate",
+];
+const validFieldKeys = ["default", "optional", "validate"];
 
 export default function defineType(
   type: string,
@@ -182,15 +218,37 @@ export default function defineType(
     builder?: Array<string>,
     inherits?: string,
     deprecatedAlias?: string,
+    validate?: Validator,
   } = {},
 ) {
   const inherits = (opts.inherits && store[opts.inherits]) || {};
 
-  const fields: Object = opts.fields || inherits.fields || {};
+  let fields = opts.fields;
+  if (!fields) {
+    fields = {};
+    if (inherits.fields) {
+      const keys = Object.getOwnPropertyNames(inherits.fields);
+      for (const key of (keys: Array<string>)) {
+        const field = inherits.fields[key];
+        fields[key] = {
+          default: field.default,
+          optional: field.optional,
+          validate: field.validate,
+        };
+      }
+    }
+  }
+
   const visitor: Array<string> = opts.visitor || inherits.visitor || [];
   const aliases: Array<string> = opts.aliases || inherits.aliases || [];
   const builder: Array<string> =
     opts.builder || inherits.builder || opts.visitor || [];
+
+  for (const k of (Object.keys(opts): Array<string>)) {
+    if (validTypeOpts.indexOf(k) === -1) {
+      throw new Error(`Unknown type option "${k}" on ${type}`);
+    }
+  }
 
   if (opts.deprecatedAlias) {
     DEPRECATED_KEYS[opts.deprecatedAlias] = type;
@@ -204,13 +262,19 @@ export default function defineType(
   for (const key of Object.keys(fields)) {
     const field = fields[key];
 
-    if (builder.indexOf(key) === -1) {
+    if (field.default !== undefined && builder.indexOf(key) === -1) {
       field.optional = true;
     }
     if (field.default === undefined) {
       field.default = null;
-    } else if (!field.validate) {
+    } else if (!field.validate && field.default != null) {
       field.validate = assertValueType(getType(field.default));
+    }
+
+    for (const k of (Object.keys(field): Array<string>)) {
+      if (validFieldKeys.indexOf(k) === -1) {
+        throw new Error(`Unknown field key "${k}" on ${type}.${key}`);
+      }
     }
   }
 
@@ -222,6 +286,10 @@ export default function defineType(
     FLIPPED_ALIAS_KEYS[alias] = FLIPPED_ALIAS_KEYS[alias] || [];
     FLIPPED_ALIAS_KEYS[alias].push(type);
   });
+
+  if (opts.validate) {
+    NODE_PARENT_VALIDATIONS[type] = opts.validate;
+  }
 
   store[type] = opts;
 }

@@ -1,6 +1,7 @@
 // @flow
 
 import type File from "./file/file";
+import type NodeLocation from "./file/file";
 
 export default class PluginPass {
   _map: Map<mixed, mixed> = new Map();
@@ -47,14 +48,7 @@ export default class PluginPass {
     return this.file.getModuleName();
   }
 
-  buildCodeFrameError(
-    node: ?{
-      loc?: { start: { line: number, column: number } },
-      _loc?: { start: { line: number, column: number } },
-    },
-    msg: string,
-    Error?: typeof Error,
-  ) {
+  buildCodeFrameError(node: ?NodeLocation, msg: string, Error?: typeof Error) {
     return this.file.buildCodeFrameError(node, msg, Error);
   }
 }

@@ -80,10 +80,7 @@ export default function rewriteLiveReferences(
  * A visitor to inject export update statements during binding initialization.
  */
 const rewriteBindingInitVisitor = {
-  ClassProperty(path) {
-    path.skip();
-  },
-  Function(path) {
+  Scope(path) {
     path.skip();
   },
   ClassDeclaration(path) {
@@ -185,7 +182,9 @@ const rewriteReferencesVisitor = {
       ref.loc = path.node.loc;
 
       if (
-        path.parentPath.isCallExpression({ callee: path.node }) &&
+        (path.parentPath.isCallExpression({ callee: path.node }) ||
+          path.parentPath.isOptionalCallExpression({ callee: path.node }) ||
+          path.parentPath.isTaggedTemplateExpression({ tag: path.node })) &&
         t.isMemberExpression(ref)
       ) {
         path.replaceWith(t.sequenceExpression([t.numericLiteral(0), ref]));
@@ -224,6 +223,10 @@ const rewriteReferencesVisitor = {
       seen.add(path.node);
 
       const left = path.get("left");
+
+      // No change needed
+      if (left.isMemberExpression()) return;
+
       if (left.isIdentifier()) {
         // Simple update-assign foo += 1; export { foo };
         // =>   exports.foo =  (foo += 1);
@@ -234,9 +237,9 @@ const rewriteReferencesVisitor = {
           return;
         }
 
-        const exportedNames = exported.get(localName) || [];
+        const exportedNames = exported.get(localName);
         const importData = imported.get(localName);
-        if (exportedNames.length > 0 || importData) {
+        if (exportedNames?.length > 0 || importData) {
           assert(path.node.operator === "=", "Path was not simplified");
 
           const assignment = path.node;
@@ -259,13 +262,14 @@ const rewriteReferencesVisitor = {
           );
           requeueInParent(path);
         }
-      } else if (left.isMemberExpression()) {
-        // No change needed
       } else {
         const ids = left.getOuterBindingIdentifiers();
-        const id = Object.keys(ids)
-          .filter(localName => imported.has(localName))
-          .pop();
+        const programScopeIds = Object.keys(ids).filter(
+          localName =>
+            scope.getBinding(localName) === path.scope.getBinding(localName),
+        );
+        const id = programScopeIds.find(localName => imported.has(localName));
+
         if (id) {
           path.node.right = t.sequenceExpression([
             path.node.right,
@@ -276,14 +280,7 @@ const rewriteReferencesVisitor = {
         // Complex ({a, b, c} = {}); export { a, c };
         // =>   ({a, b, c} = {}), (exports.a = a, exports.c = c);
         const items = [];
-        Object.keys(ids).forEach(localName => {
-          // redeclared in this scope
-          if (
-            scope.getBinding(localName) !== path.scope.getBinding(localName)
-          ) {
-            return;
-          }
-
+        programScopeIds.forEach(localName => {
           const exportedNames = exported.get(localName) || [];
           if (exportedNames.length > 0) {
             items.push(

@@ -1,4 +1,5 @@
 import semver from "semver";
+import { types as t } from "@babel/core";
 
 export function hasMinVersion(minVersion, runtimeVersion) {
   // If the range is unavailable, we're running the script during Babel's
@@ -21,7 +22,7 @@ export function hasMinVersion(minVersion, runtimeVersion) {
   // and this fails because a prerelease version can only satisfy a range
   // if it is a prerelease within the same major/minor/patch range.
   //
-  // Note: If this is found to have issues, please also revist the logic in
+  // Note: If this is found to have issues, please also revisit the logic in
   // babel-core's availableHelper() API.
   if (semver.valid(runtimeVersion)) runtimeVersion = `^${runtimeVersion}`;
 
@@ -29,4 +30,17 @@ export function hasMinVersion(minVersion, runtimeVersion) {
     !semver.intersects(`<${minVersion}`, runtimeVersion) &&
     !semver.intersects(`>=8.0.0`, runtimeVersion)
   );
+}
+
+// Note: We can't use NodePath#couldBeBaseType because it doesn't support arrays.
+// Even if we added support for arrays, this package needs to be compatible with
+// ^7.0.0 so we can't rely on it.
+export function typeAnnotationToString(node) {
+  switch (node.type) {
+    case "GenericTypeAnnotation":
+      if (t.isIdentifier(node.id, { name: "Array" })) return "array";
+      break;
+    case "StringTypeAnnotation":
+      return "string";
+  }
 }

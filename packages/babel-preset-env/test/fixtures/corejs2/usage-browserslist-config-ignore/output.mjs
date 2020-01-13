@@ -1,2 +1,2 @@
 import "core-js/modules/web.dom.iterable";
-const a = new Map();
+var a = new Map();

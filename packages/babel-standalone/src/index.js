@@ -1,6 +1,6 @@
 /**
  * Entry point for @babel/standalone. This wraps Babel's API in a version that's
- * friendlier for use in web browers. It removes the automagical detection of
+ * friendlier for use in web browsers. It removes the automagical detection of
  * plugins, instead explicitly registering all the available plugins and
  * presets, and requiring custom ones to be registered through `registerPlugin`
  * and `registerPreset` respectively.
@@ -21,8 +21,9 @@ import presetStage0 from "./preset-stage-0";
 import presetStage1 from "./preset-stage-1";
 import presetStage2 from "./preset-stage-2";
 import presetStage3 from "./preset-stage-3";
-import presetReact from "@babel/preset-react";
+import presetEnv from "@babel/preset-env";
 import presetFlow from "@babel/preset-flow";
+import presetReact from "@babel/preset-react";
 import presetTypescript from "@babel/preset-typescript";
 
 import { runScripts } from "./transformScriptTags";
@@ -40,7 +41,7 @@ const isArray =
  */
 function loadBuiltin(builtinTable, name) {
   if (isArray(name) && typeof name[0] === "string") {
-    if (builtinTable.hasOwnProperty(name[0])) {
+    if (Object.prototype.hasOwnProperty.call(builtinTable, name[0])) {
       return [builtinTable[name[0]]].concat(name.slice(1));
     }
     return;
@@ -66,7 +67,7 @@ function processOptions(options) {
       if (
         isArray(preset) &&
         typeof preset[0] === "object" &&
-        preset[0].hasOwnProperty("buildPreset")
+        Object.prototype.hasOwnProperty.call(preset[0], "buildPreset")
       ) {
         preset[0] = { ...preset[0], buildPreset: preset[0].buildPreset };
       }
@@ -112,7 +113,7 @@ export const buildExternalHelpers = babelBuildExternalHelpers;
  * Registers a named plugin for use with Babel.
  */
 export function registerPlugin(name: string, plugin: Object | Function): void {
-  if (availablePlugins.hasOwnProperty(name)) {
+  if (Object.prototype.hasOwnProperty.call(availablePlugins, name)) {
     console.warn(
       `A plugin named "${name}" is already registered, it will be overridden`,
     );
@@ -135,10 +136,16 @@ export function registerPlugins(newPlugins: {
  * Registers a named preset for use with Babel.
  */
 export function registerPreset(name: string, preset: Object | Function): void {
-  if (availablePresets.hasOwnProperty(name)) {
-    console.warn(
-      `A preset named "${name}" is already registered, it will be overridden`,
-    );
+  if (Object.prototype.hasOwnProperty.call(availablePresets, name)) {
+    if (name === "env") {
+      console.warn(
+        "@babel/preset-env is now included in @babel/standalone, please remove @babel/preset-env-standalone",
+      );
+    } else {
+      console.warn(
+        `A preset named "${name}" is already registered, it will be overridden`,
+      );
+    }
   }
   availablePresets[name] = preset;
 }
@@ -163,6 +170,7 @@ registerPlugins(all);
 // Want to get rid of this whitelist of presets?
 // Wait! Please read https://github.com/babel/babel/pull/6177 first.
 registerPresets({
+  env: presetEnv,
   es2015: preset2015,
   es2016: () => {
     return {

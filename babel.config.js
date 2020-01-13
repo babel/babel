@@ -5,30 +5,47 @@ module.exports = function(api) {
 
   const includeCoverage = process.env.BABEL_COVERAGE === "true";
 
-  const envOpts = {
+  const envOptsNoTargets = {
     loose: true,
     modules: false,
     exclude: ["transform-typeof-symbol"],
   };
+  const envOpts = Object.assign({}, envOptsNoTargets);
 
   let convertESM = true;
   let ignoreLib = true;
-  let includeRuntime = false;
+  let includeRegeneratorRuntime = false;
+
+  let transformRuntimeOptions;
+
   const nodeVersion = "6.9";
+  // The vast majority of our src files are modules, but we use
+  // unambiguous to keep things simple until we get around to renaming
+  // the modules to be more easily distinguished from CommonJS
+  const unambiguousSources = [
+    "packages/*/src",
+    "packages/*/test",
+    "codemods/*/src",
+    "codemods/*/test",
+    "eslint/*/src",
+    "eslint/*/test",
+  ];
 
   switch (env) {
     // Configs used during bundling builds.
-    case "babel-parser":
-      convertESM = false;
-      ignoreLib = false;
-      envOpts.targets = {
-        node: nodeVersion,
-      };
-      break;
     case "standalone":
+      includeRegeneratorRuntime = true;
+      unambiguousSources.push("packages/babel-runtime/regenerator");
+    case "rollup":
       convertESM = false;
       ignoreLib = false;
-      includeRuntime = true;
+      // rollup-commonjs will converts node_modules to ESM
+      unambiguousSources.push(
+        "**/node_modules",
+        "packages/babel-preset-env/data",
+        "packages/babel-compat-data"
+      );
+      if (env === "rollup") envOpts.targets = { node: nodeVersion };
       break;
     case "production":
       // Config during builds before publish.
@@ -47,6 +64,16 @@ module.exports = function(api) {
         node: "current",
       };
       break;
+  }
+
+  if (includeRegeneratorRuntime) {
+    const babelRuntimePkgPath = require.resolve("@babel/runtime/package.json");
+
+    transformRuntimeOptions = {
+      helpers: false, // Helpers are handled by rollup when needed
+      regenerator: true,
+      version: require(babelRuntimePkgPath).version,
+    };
   }
 
   const config = {
@@ -76,9 +103,14 @@ module.exports = function(api) {
         "@babel/proposal-object-rest-spread",
         { useBuiltIns: true, loose: true },
       ],
+      ["@babel/plugin-proposal-optional-chaining", { loose: true }],
+      ["@babel/plugin-proposal-nullish-coalescing-operator", { loose: true }],
 
-      // Explicitly use the lazy version of CommonJS modules.
-      convertESM ? ["@babel/transform-modules-commonjs", { lazy: true }] : null,
+      convertESM ? "@babel/transform-modules-commonjs" : null,
+      // Until Jest supports native mjs, we must simulate it 🤷
+      env === "test" || env === "development"
+        ? "@babel/plugin-proposal-dynamic-import"
+        : null,
     ].filter(Boolean),
     overrides: [
       {
@@ -89,37 +121,25 @@ module.exports = function(api) {
         ],
       },
       {
-        test: "./packages/babel-register",
+        test: ["./packages/babel-cli", "./packages/babel-core"],
         plugins: [
-          // Override the root options to disable lazy imports for babel-register
-          // because otherwise the require hook will try to lazy-import things
-          // leading to dependency cycles.
-          convertESM ? "@babel/transform-modules-commonjs" : null,
-        ].filter(Boolean),
-      },
-      {
-        // The vast majority of our src files are modules, but we use
-        // unambiguous to keep things simple until we get around to renaming
-        // the modules to be more easily distinguished from CommonJS
-        test: [
-          "packages/*/src",
-          "packages/*/test",
-          "codemods/*/src",
-          "codemods/*/test",
-        ],
-        sourceType: "unambiguous",
-      },
-      {
-        // The runtime transform shouldn't process its own runtime or core-js.
-        exclude: [
-          "packages/babel-runtime",
-          /[\\/]node_modules[\\/](?:@babel\/runtime|babel-runtime|core-js)[\\/]/,
-        ],
-        plugins: [
-          includeRuntime
-            ? ["@babel/transform-runtime", { version: "7.3.4" }]
+          // Explicitly use the lazy version of CommonJS modules.
+          convertESM
+            ? ["@babel/transform-modules-commonjs", { lazy: true }]
             : null,
         ].filter(Boolean),
+      },
+      {
+        test: "./packages/babel-polyfill",
+        presets: [["@babel/env", envOptsNoTargets]],
+      },
+      {
+        test: unambiguousSources,
+        sourceType: "unambiguous",
+      },
+      includeRegeneratorRuntime && {
+        exclude: /regenerator-runtime/,
+        plugins: [["@babel/transform-runtime", transformRuntimeOptions]],
       },
     ].filter(Boolean),
   };

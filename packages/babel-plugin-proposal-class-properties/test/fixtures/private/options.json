@@ -3,7 +3,7 @@
     [
       "external-helpers",
       {
-        "helperVersion": "7.0.2"
+        "helperVersion": "7.4.4"
       }
     ],
     "proposal-class-properties",

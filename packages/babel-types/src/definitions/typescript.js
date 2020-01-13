@@ -128,16 +128,17 @@ defineType("TSIndexSignature", {
 
 const tsKeywordTypes = [
   "TSAnyKeyword",
-  "TSUnknownKeyword",
+  "TSBooleanKeyword",
+  "TSBigIntKeyword",
+  "TSNeverKeyword",
+  "TSNullKeyword",
   "TSNumberKeyword",
   "TSObjectKeyword",
-  "TSBooleanKeyword",
   "TSStringKeyword",
   "TSSymbolKeyword",
-  "TSVoidKeyword",
   "TSUndefinedKeyword",
-  "TSNullKeyword",
-  "TSNeverKeyword",
+  "TSUnknownKeyword",
+  "TSVoidKeyword",
 ];
 
 for (const type of tsKeywordTypes) {
@@ -175,9 +176,11 @@ defineType("TSTypeReference", {
 defineType("TSTypePredicate", {
   aliases: ["TSType"],
   visitor: ["parameterName", "typeAnnotation"],
+  builder: ["parameterName", "typeAnnotation", "asserts"],
   fields: {
     parameterName: validateType(["Identifier", "TSThisType"]),
-    typeAnnotation: validateType("TSTypeAnnotation"),
+    typeAnnotation: validateOptionalType("TSTypeAnnotation"),
+    asserts: validateOptional(bool),
   },
 });
 
@@ -399,6 +402,7 @@ defineType("TSModuleDeclaration", {
 });
 
 defineType("TSModuleBlock", {
+  aliases: ["Scopable", "Block", "BlockParent"],
   visitor: ["body"],
   fields: {
     body: validateArrayOfType("Statement"),
@@ -493,6 +497,7 @@ defineType("TSTypeParameterDeclaration", {
 });
 
 defineType("TSTypeParameter", {
+  builder: ["constraint", "default", "name"],
   visitor: ["constraint", "default"],
   fields: {
     name: {

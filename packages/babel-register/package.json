@@ -1,8 +1,9 @@
 {
   "name": "@babel/register",
-  "version": "7.4.0",
+  "version": "7.8.0",
   "description": "babel require hook",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },
@@ -13,18 +14,19 @@
     "./lib/node.js": "./lib/browser.js"
   },
   "dependencies": {
-    "core-js": "^3.0.0",
     "find-cache-dir": "^2.0.0",
-    "lodash": "^4.17.11",
-    "mkdirp": "^0.5.1",
+    "lodash": "^4.17.13",
+    "make-dir": "^2.1.0",
     "pirates": "^4.0.0",
-    "source-map-support": "^0.5.9"
+    "source-map-support": "^0.5.16"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.0",
+    "@babel/core": "^7.8.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.8.0",
+    "browserify": "16.5.0",
     "default-require-extensions": "^2.0.0"
   }
 }

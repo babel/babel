@@ -2,10 +2,21 @@
 
 import { types as tt, type TokenType } from "../tokenizer/types";
 import Tokenizer from "../tokenizer";
+import State from "../tokenizer/state";
 import type { Node } from "../types";
 import { lineBreak, skipWhiteSpace } from "../util/whitespace";
+import { isIdentifierChar } from "../util/identifier";
+import * as charCodes from "charcodes";
 
 const literal = /^('|")((?:\\?.)*?)\1/;
+
+type TryParse<Node, Error, Thrown, Aborted, FailState> = {
+  node: Node,
+  error: Error,
+  thrown: Thrown,
+  aborted: Aborted,
+  failState: FailState,
+};
 
 // ## Parser utilities
 
@@ -26,8 +37,15 @@ export default class UtilParser extends Tokenizer {
   }
 
   isLookaheadRelational(op: "<" | ">"): boolean {
-    const l = this.lookahead();
-    return l.type === tt.relational && l.value === op;
+    const next = this.nextTokenStart();
+    if (this.input.charAt(next) === op) {
+      if (next + 1 === this.input.length) {
+        return true;
+      }
+      const afterNext = this.input.charCodeAt(next + 1);
+      return afterNext !== op.charCodeAt(0) && afterNext !== charCodes.equalsTo;
+    }
+    return false;
   }
 
   // TODO
@@ -40,16 +58,6 @@ export default class UtilParser extends Tokenizer {
     }
   }
 
-  // eat() for relational operators.
-
-  eatRelational(op: "<" | ">"): boolean {
-    if (this.isRelational(op)) {
-      this.next();
-      return true;
-    }
-    return false;
-  }
-
   // Tests whether parsed token is a contextual keyword.
 
   isContextual(name: string): boolean {
@@ -60,9 +68,18 @@ export default class UtilParser extends Tokenizer {
     );
   }
 
+  isUnparsedContextual(nameStart: number, name: string): boolean {
+    const nameEnd = nameStart + name.length;
+    return (
+      this.input.slice(nameStart, nameEnd) === name &&
+      (nameEnd === this.input.length ||
+        !isIdentifierChar(this.input.charCodeAt(nameEnd)))
+    );
+  }
+
   isLookaheadContextual(name: string): boolean {
-    const l = this.lookahead();
-    return l.type === tt.name && l.value === name;
+    const next = this.nextTokenStart();
+    return this.isUnparsedContextual(next, name);
   }
 
   // Consumes contextual keyword if possible.
@@ -159,15 +176,15 @@ export default class UtilParser extends Tokenizer {
 
   checkYieldAwaitInDefaultParams() {
     if (
-      this.state.yieldPos &&
-      (!this.state.awaitPos || this.state.yieldPos < this.state.awaitPos)
+      this.state.yieldPos !== -1 &&
+      (this.state.awaitPos === -1 || this.state.yieldPos < this.state.awaitPos)
     ) {
       this.raise(
         this.state.yieldPos,
         "Yield cannot be used as name inside a generator function",
       );
     }
-    if (this.state.awaitPos) {
+    if (this.state.awaitPos !== -1) {
       this.raise(
         this.state.awaitPos,
         "Await cannot be used as name inside an async function",
@@ -196,5 +213,59 @@ export default class UtilParser extends Tokenizer {
     }
 
     return false;
+  }
+
+  // tryParse will clone parser state.
+  // It is expensive and should be used with cautions
+  tryParse<T: Node | $ReadOnlyArray<Node>>(
+    fn: (abort: (node?: T) => empty) => T,
+    oldState: State = this.state.clone(),
+  ):
+    | TryParse<T, null, false, false, null>
+    | TryParse<T | null, SyntaxError, boolean, false, State>
+    | TryParse<T | null, null, false, true, State> {
+    const abortSignal: { node: T | null } = { node: null };
+    try {
+      const node = fn((node = null) => {
+        abortSignal.node = node;
+        throw abortSignal;
+      });
+      if (this.state.errors.length > oldState.errors.length) {
+        const failState = this.state;
+        this.state = oldState;
+        return {
+          node,
+          error: (failState.errors[oldState.errors.length]: SyntaxError),
+          thrown: false,
+          aborted: false,
+          failState,
+        };
+      }
+
+      return {
+        node,
+        error: null,
+        thrown: false,
+        aborted: false,
+        failState: null,
+      };
+    } catch (error) {
+      const failState = this.state;
+      this.state = oldState;
+      if (error instanceof SyntaxError) {
+        return { node: null, error, thrown: true, aborted: false, failState };
+      }
+      if (error === abortSignal) {
+        return {
+          node: abortSignal.node,
+          error: null,
+          thrown: false,
+          aborted: true,
+          failState,
+        };
+      }
+
+      throw error;
+    }
   }
 }

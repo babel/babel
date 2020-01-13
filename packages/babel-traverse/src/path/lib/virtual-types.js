@@ -64,7 +64,8 @@ export const Expression = {
 };
 
 export const Scope = {
-  types: ["Scopable"],
+  // When pattern is inside the function params, it is a scope
+  types: ["Scopable", "Pattern"],
   checkPath(path) {
     return t.isScope(path.node, path.parent);
   },

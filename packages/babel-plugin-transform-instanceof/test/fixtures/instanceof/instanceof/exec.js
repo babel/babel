@@ -4,6 +4,11 @@ foo[Symbol.hasInstance]= function () { return true; };
 var bar = {};
 
 expect(bar instanceof foo).toBe(true);
+
+var qux = {};
+qux[Symbol.hasInstance]= function () { return NaN };
+expect(bar instanceof qux).toBe(false);
+
 expect(new String).toBeInstanceOf(String);
 
 //

@@ -1,3 +1,5 @@
+// @flow
+
 import fs from "fs";
 
 import commander from "commander";
@@ -10,19 +12,19 @@ import pkg from "../../package.json";
 // Standard Babel input configs.
 commander.option(
   "-f, --filename [filename]",
-  "filename to use when reading from stdin - this will be used in source-maps, errors etc",
+  "The filename to use when reading from stdin. This will be used in source-maps, errors etc.",
 );
 commander.option(
   "--presets [list]",
-  "comma-separated list of preset names",
+  "A comma-separated list of preset names.",
   collect,
 );
 commander.option(
   "--plugins [list]",
-  "comma-separated list of plugin names",
+  "A comma-separated list of plugin names.",
   collect,
 );
-commander.option("--config-file [path]", "Path to a .babelrc file to use");
+commander.option("--config-file [path]", "Path to a .babelrc file to use.");
 commander.option(
   "--env-name [name]",
   "The name of the 'env' to use when loading configs and plugins. " +
@@ -38,97 +40,101 @@ commander.option(
 commander.option("--source-type [script|module]", "");
 commander.option(
   "--no-babelrc",
-  "Whether or not to look up .babelrc and .babelignore files",
+  "Whether or not to look up .babelrc and .babelignore files.",
 );
 commander.option(
   "--ignore [list]",
-  "list of glob paths to **not** compile",
+  "List of glob paths to **not** compile.",
   collect,
 );
 commander.option(
   "--only [list]",
-  "list of glob paths to **only** compile",
+  "List of glob paths to **only** compile.",
   collect,
 );
 
 // Misc babel config.
 commander.option(
   "--no-highlight-code",
-  "enable/disable ANSI syntax highlighting of code frames (on by default)",
+  "Enable or disable ANSI syntax highlighting of code frames. (on by default)",
 );
 
 // General output formatting.
 commander.option(
   "--no-comments",
-  "write comments to generated output (true by default)",
+  "Write comments to generated output. (true by default)",
 );
 commander.option(
   "--retain-lines",
-  "retain line numbers - will result in really ugly code",
+  "Retain line numbers. This will result in really ugly code.",
 );
 commander.option(
   "--compact [true|false|auto]",
-  "do not include superfluous whitespace characters and line terminators",
+  "Do not include superfluous whitespace characters and line terminators.",
   booleanify,
 );
-commander.option("--minified", "save as much bytes when printing [true|false]");
+commander.option(
+  "--minified",
+  "Save as many bytes when printing. (false by default)",
+);
 commander.option(
   "--auxiliary-comment-before [string]",
-  "print a comment before any injected non-user code",
+  "Print a comment before any injected non-user code.",
 );
 commander.option(
   "--auxiliary-comment-after [string]",
-  "print a comment after any injected non-user code",
+  "Print a comment after any injected non-user code.",
 );
 
 // General source map formatting.
 commander.option("-s, --source-maps [true|false|inline|both]", "", booleanify);
 commander.option(
   "--source-map-target [string]",
-  "set `file` on returned source map",
+  "Set `file` on returned source map.",
 );
 commander.option(
   "--source-file-name [string]",
-  "set `sources[0]` on returned source map",
+  "Set `sources[0]` on returned source map.",
 );
 commander.option(
   "--source-root [filename]",
-  "the root from which all sources are relative",
+  "The root from which all sources are relative.",
 );
 
 // Config params for certain module output formats.
 commander.option(
   "--module-root [filename]",
-  "optional prefix for the AMD module formatter that will be prepend to the filename on module definitions",
+  // eslint-disable-next-line max-len
+  "Optional prefix for the AMD module formatter that will be prepended to the filename on module definitions.",
 );
-commander.option("-M, --module-ids", "insert an explicit id for modules");
+commander.option("-M, --module-ids", "Insert an explicit id for modules.");
 commander.option(
   "--module-id [string]",
-  "specify a custom name for module ids",
+  "Specify a custom name for module ids.",
 );
 
 // "babel" command specific arguments that are not passed to @babel/core.
 commander.option(
   "-x, --extensions [extensions]",
-  "List of extensions to compile when a directory has been input [.es6,.js,.es,.jsx,.mjs]",
+  "List of extensions to compile when a directory has been the input. [.es6,.js,.es,.jsx,.mjs]",
   collect,
 );
 commander.option(
   "--keep-file-extension",
-  "Preserve the file extensions of the input files",
+  "Preserve the file extensions of the input files.",
 );
-commander.option("-w, --watch", "Recompile files on changes");
+commander.option("-w, --watch", "Recompile files on changes.");
 commander.option(
   "--skip-initial-build",
-  "Do not compile files before watching",
+  "Do not compile files before watching.",
 );
 commander.option(
   "-o, --out-file [out]",
-  "Compile all input files into a single file",
+  "Compile all input files into a single file.",
 );
 commander.option(
   "-d, --out-dir [out]",
-  "Compile an input directory of modules into an output directory",
+  "Compile an input directory of modules into an output directory.",
 );
 commander.option(
   "--relative",
@@ -136,22 +142,47 @@ commander.option(
 );
 commander.option(
   "-D, --copy-files",
-  "When compiling a directory copy over non-compilable files",
+  "When compiling a directory copy over non-compilable files.",
 );
 commander.option(
   "--include-dotfiles",
-  "Include dotfiles when compiling and copying non-compilable files",
+  "Include dotfiles when compiling and copying non-compilable files.",
 );
-commander.option("--verbose", "Log everything");
+commander.option(
+  "--verbose",
+  "Log everything. This option conflicts with --quiet",
+);
+commander.option(
+  "--quiet",
+  "Don't log anything. This option conflicts with --verbose",
+);
 commander.option(
   "--delete-dir-on-start",
-  "Delete the out directory before compilation",
+  "Delete the out directory before compilation.",
+);
+commander.option(
+  "--out-file-extension [string]",
+  "Use a specific extension for the output files",
+);
+
+commander.option(
+  "--copy-ignored",
+  "Include ignored files when copying non-compilable files.",
 );
 
 commander.version(pkg.version + " (@babel/core " + version + ")");
 commander.usage("[options] <files ...>");
+// register an empty action handler so that commander.js can throw on
+// unknown options _after_ args
+// see https://github.com/tj/commander.js/issues/561#issuecomment-522209408
+commander.action(() => {});
 
-export default function parseArgv(args: Array<string>) {
+export type CmdOptions = {
+  babelOptions: Object,
+  cliOptions: Object,
+};
+
+export default function parseArgv(args: Array<string>): CmdOptions | null {
   //
   commander.parse(args);
 
@@ -200,6 +231,10 @@ export default function parseArgv(args: Array<string>) {
     errors.push("--delete-dir-on-start requires --out-dir");
   }
 
+  if (commander.verbose && commander.quiet) {
+    errors.push("--verbose and --quiet cannot be used together");
+  }
+
   if (
     !commander.outDir &&
     filenames.length === 0 &&
@@ -211,12 +246,18 @@ export default function parseArgv(args: Array<string>) {
     );
   }
 
+  if (commander.keepFileExtension && commander.outFileExtension) {
+    errors.push(
+      "--out-file-extension cannot be used with --keep-file-extension",
+    );
+  }
+
   if (errors.length) {
     console.error("babel:");
     errors.forEach(function(e) {
       console.error("  " + e);
     });
-    process.exit(2);
+    return null;
   }
 
   const opts = commander.opts();
@@ -267,6 +308,7 @@ export default function parseArgv(args: Array<string>) {
       filenames,
       extensions: opts.extensions,
       keepFileExtension: opts.keepFileExtension,
+      outFileExtension: opts.outFileExtension,
       watch: opts.watch,
       skipInitialBuild: opts.skipInitialBuild,
       outFile: opts.outFile,
@@ -275,8 +317,10 @@ export default function parseArgv(args: Array<string>) {
       copyFiles: opts.copyFiles,
       includeDotfiles: opts.includeDotfiles,
       verbose: opts.verbose,
+      quiet: opts.quiet,
       deleteDirOnStart: opts.deleteDirOnStart,
       sourceMapTarget: opts.sourceMapTarget,
+      copyIgnored: opts.copyIgnored,
     },
   };
 }
@@ -293,7 +337,10 @@ function booleanify(val: any): boolean | any {
   return val;
 }
 
-function collect(value, previousValue): Array<string> {
+function collect(
+  value: string | any,
+  previousValue: Array<string>,
+): Array<string> {
   // If the user passed the option with no value, like "babel file.js --presets", do nothing.
   if (typeof value !== "string") return previousValue;
 

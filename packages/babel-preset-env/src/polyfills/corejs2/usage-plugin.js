@@ -1,8 +1,8 @@
 // @flow
 
-import corejs2Polyfills from "../../../data/corejs2-built-ins.json";
+import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
+import { filterItems } from "@babel/helper-compilation-targets";
 import getPlatformSpecificDefaultFor from "./get-platform-specific-default";
-import filterItems from "../../filter-items";
 import {
   BuiltIns,
   StaticProperties,
@@ -15,6 +15,7 @@ import {
   isPolyfillSource,
   getImportSource,
   getRequireSource,
+  isNamespaced,
 } from "../../utils";
 import { logUsagePolyfills } from "../../debug";
 
@@ -102,8 +103,11 @@ export default function(
         const { node } = path;
         const { object, property } = node;
 
+        // ignore namespace
+        if (isNamespaced(path.get("object"))) return;
+
         let evaluatedPropType = object.name;
-        let propertyName = property.name;
+        let propertyName = "";
         let instanceType = "";
 
         if (node.computed) {
@@ -115,6 +119,8 @@ export default function(
               propertyName = result.value;
             }
           }
+        } else {
+          propertyName = property.name;
         }
 
         if (path.scope.getBindingIdentifier(object.name)) {

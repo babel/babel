@@ -4,6 +4,7 @@
 
 declare module "resolve" {
   declare export default {
+    (string, {| basedir: string |}, (err: ?Error, res: string) => void): void;
     sync: (string, {| basedir: string |}) => string;
   };
 }
@@ -165,7 +166,7 @@ declare module "source-map" {
 }
 
 declare module "convert-source-map" {
-  import type { SourceMap } from "source-map";
+  import type { SourceMap, SourceMapGenerator } from "source-map";
 
   declare class Converter {
     toJSON(): string;
@@ -177,22 +178,16 @@ declare module "convert-source-map" {
   declare module.exports: {
     SourceMap: SourceMap,
     Converter: Converter,
-    fromObject(obj: SourceMap): Converter,
-    fromJSON(str: string): Converter,
+    fromObject(obj: SourceMap | SourceMapGenerator): Converter,
+    fromJSON(str: string | Buffer): Converter,
     fromBase64(str: string): Converter,
     fromComment(str: string): Converter,
-    fromMapFileComment(str: string): Converter,
+    fromMapFileComment(str: string, dir: string): Converter,
     fromSource(str: string): Converter,
     fromMapFileSource(str: string, dir: string): Converter,
     removeComments(str: string): string,
     removeMapFileComments(str: string): string,
     generateMapFileComment(path: string, options?: ?{ multiline: boolean }): string,
-  };
-}
-
-declare module "js-levenshtein" {
-  declare module.exports: {
-    (string, string): number,
   };
 }
 

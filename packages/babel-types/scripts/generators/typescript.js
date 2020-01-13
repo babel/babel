@@ -62,6 +62,13 @@ for (const type in t.NODE_FIELDS) {
 
   fieldNames.forEach(fieldName => {
     const field = fields[fieldName];
+    // Future / annoying TODO:
+    // MemberExpression.property, ObjectProperty.key and ObjectMethod.key need special cases; either:
+    // - convert the declaration to chain() like ClassProperty.key and ClassMethod.key,
+    // - declare an alias type for valid keys, detect the case and reuse it here,
+    // - declare a disjoint union with, for example, ObjectPropertyBase,
+    //   ObjectPropertyLiteralKey and ObjectPropertyComputedKey, and declare ObjectProperty
+    //   as "ObjectPropertyBase & (ObjectPropertyLiteralKey | ObjectPropertyComputedKey)"
     let typeAnnotation = stringifyValidator(field.validate, "");
 
     if (isNullable(field) && !hasDefault(field)) {
@@ -100,29 +107,122 @@ for (const type in t.NODE_FIELDS) {
     lines.push(
       `export function ${toFunctionName(type)}(${args.join(", ")}): ${type};`
     );
+  } else {
+    const functionName = toFunctionName(type);
+    lines.push(
+      `declare function _${functionName}(${args.join(", ")}): ${type};`,
+      `export { _${functionName} as ${functionName}}`
+    );
   }
 }
 
-for (let i = 0; i < t.TYPES.length; i++) {
-  let decl = `export function is${
-    t.TYPES[i]
-  }(node: object | null | undefined, opts?: object | null): `;
+for (const typeName of t.TYPES) {
+  const result =
+    t.NODE_FIELDS[typeName] || t.FLIPPED_ALIAS_KEYS[typeName]
+      ? `node is ${typeName}`
+      : "boolean";
 
-  if (t.NODE_FIELDS[t.TYPES[i]]) {
-    decl += `node is ${t.TYPES[i]};`;
-  } else if (t.FLIPPED_ALIAS_KEYS[t.TYPES[i]]) {
-    decl += `node is ${t.TYPES[i]};`;
-  } else {
-    decl += `boolean;`;
-  }
-
-  lines.push(decl);
+  lines.push(
+    `export function is${typeName}(node: object | null | undefined, opts?: object | null): ${result};`,
+    // TypeScript 3.7: https://github.com/microsoft/TypeScript/pull/32695 will allow assert declarations
+    // eslint-disable-next-line max-len
+    `// export function assert${typeName}(node: object | null | undefined, opts?: object | null): asserts ${
+      result === "boolean" ? "node" : result
+    };`
+  );
 }
 
 lines.push(
-  `export function validate(n: Node, key: string, value: any): void;`,
+  // assert/
+  // Commented out as this declaration requires TypeScript 3.7 (what do?)
+  `// export function assertNode(obj: any): asserts obj is Node`,
+
+  // builders/
+  // eslint-disable-next-line max-len
+  `export function createTypeAnnotationBasedOnTypeof(type: 'string' | 'number' | 'undefined' | 'boolean' | 'function' | 'object' | 'symbol'): StringTypeAnnotation | VoidTypeAnnotation | NumberTypeAnnotation | BooleanTypeAnnotation | GenericTypeAnnotation`,
+  `export function createUnionTypeAnnotation<T extends FlowType>(types: [T]): T`,
+  // this probably misbehaves if there are 0 elements, and it's not a UnionTypeAnnotation if there's only 1
+  // it is possible to require "2 or more" for this overload ([T, T, ...T[]]) but it requires typescript 3.0
+  `export function createUnionTypeAnnotation(types: ReadonlyArray<FlowType>): UnionTypeAnnotation`,
+  // this smells like "internal API"
+  // eslint-disable-next-line max-len
+  `export function buildChildren(node: { children: ReadonlyArray<JSXText | JSXExpressionContainer | JSXSpreadChild | JSXElement | JSXFragment | JSXEmptyExpression> }): JSXElement['children']`,
+
+  // clone/
   `export function clone<T extends Node>(n: T): T;`,
   `export function cloneDeep<T extends Node>(n: T): T;`,
+  `export function cloneNode<T extends Node>(n: T, deep?: boolean): T;`,
+  `export function cloneWithoutLoc<T extends Node>(n: T): T;`,
+
+  // comments/
+  `export type CommentTypeShorthand = 'leading' | 'inner' | 'trailing'`,
+  // eslint-disable-next-line max-len
+  `export function addComment<T extends Node>(node: T, type: CommentTypeShorthand, content: string, line?: boolean): T`,
+  // eslint-disable-next-line max-len
+  `export function addComments<T extends Node>(node: T, type: CommentTypeShorthand, comments: ReadonlyArray<Comment>): T`,
+  `export function inheritInnerComments(node: Node, parent: Node): void`,
+  `export function inheritLeadingComments(node: Node, parent: Node): void`,
+  `export function inheritsComments<T extends Node>(node: T, parent: Node): void`,
+  `export function inheritTrailingComments(node: Node, parent: Node): void`,
+  `export function removeComments<T extends Node>(node: T): T`,
+
+  // converters/
+  // eslint-disable-next-line max-len
+  `export function ensureBlock(node: Extract<Node, { body: BlockStatement | Statement | Expression }>): BlockStatement`,
+  // too complex?
+  // eslint-disable-next-line max-len
+  `export function ensureBlock<K extends keyof Extract<Node, { body: BlockStatement | Statement | Expression }> = 'body'>(node: Extract<Node, Record<K, BlockStatement | Statement | Expression>>, key: K): BlockStatement`,
+  // gatherSequenceExpressions is not exported
+  `export function toBindingIdentifierName(name: { toString(): string } | null | undefined): string`,
+  `export function toBlock(node: Statement | Expression, parent?: Function | null): BlockStatement`,
+  // it is possible for `node` to be an arbitrary object if `key` is always provided,
+  // but that doesn't look like intended API
+  // eslint-disable-next-line max-len
+  `export function toComputedKey<T extends Extract<Node, { computed: boolean | null }>>(node: T, key?: Expression | Identifier): Expression`,
+  `export function toExpression(node: Function): FunctionExpression`,
+  `export function toExpression(node: Class): ClassExpression`,
+  `export function toExpression(node: ExpressionStatement | Expression | Class | Function): Expression`,
+  `export function toIdentifier(name: { toString(): string } | null | undefined): string`,
+  `export function toKeyAlias(node: Method | Property, key?: Node): string`,
+  // NOTE: this actually uses Scope from @babel/traverse, but we can't add a dependency on its types,
+  // as they live in @types. Declare the structural subset that is required.
+  // eslint-disable-next-line max-len
+  `export function toSequenceExpression(nodes: ReadonlyArray<Node>, scope: { push(value: { id: LVal; kind: 'var'; init?: Expression}): void; buildUndefinedNode(): Node }): SequenceExpression | undefined`,
+  `export function toStatement(node: AssignmentExpression, ignore?: boolean): ExpressionStatement`,
+  `export function toStatement(node: Statement | AssignmentExpression, ignore?: boolean): Statement`,
+  `export function toStatement(node: Class, ignore: true): ClassDeclaration | undefined`,
+  `export function toStatement(node: Class, ignore?: boolean): ClassDeclaration`,
+  `export function toStatement(node: Function, ignore: true): FunctionDeclaration | undefined`,
+  `export function toStatement(node: Function, ignore?: boolean): FunctionDeclaration`,
+  // eslint-disable-next-line max-len
+  `export function toStatement(node: Statement | Class | Function | AssignmentExpression, ignore: true): Statement | undefined`,
+  // eslint-disable-next-line max-len
+  `export function toStatement(node: Statement | Class | Function | AssignmentExpression, ignore?: boolean): Statement`,
+  // eslint-disable-next-line max-len
+  `export function valueToNode(value: undefined): Identifier`, // (should this not be a UnaryExpression to avoid shadowing?)
+  `export function valueToNode(value: boolean): BooleanLiteral`,
+  `export function valueToNode(value: null): NullLiteral`,
+  `export function valueToNode(value: string): StringLiteral`,
+  // Infinities and NaN need to use a BinaryExpression; negative values must be wrapped in UnaryExpression
+  `export function valueToNode(value: number): NumericLiteral | BinaryExpression | UnaryExpression`,
+  `export function valueToNode(value: RegExp): RegExpLiteral`,
+  // eslint-disable-next-line max-len
+  `export function valueToNode(value: ReadonlyArray<undefined | boolean | null | string | number | RegExp | object>): ArrayExpression`,
+  // this throws with objects that are not PlainObject according to lodash,
+  // or if there are non-valueToNode-able values
+  `export function valueToNode(value: object): ObjectExpression`,
+  // eslint-disable-next-line max-len
+  `export function valueToNode(value: undefined | boolean | null | string | number | RegExp | object): Expression`,
+
+  // modifications/
+  // eslint-disable-next-line max-len
+  `export function removeTypeDuplicates(types: ReadonlyArray<FlowType | false | null | undefined>): FlowType[]`,
+  // eslint-disable-next-line max-len
+  `export function appendToMemberExpression<T extends Pick<MemberExpression, 'object' | 'property'>>(member: T, append: MemberExpression['property'], computed?: boolean): T`,
+  // eslint-disable-next-line max-len
+  `export function inherits<T extends Node | null | undefined>(child: T, parent: Node | null | undefined): T`,
+  // eslint-disable-next-line max-len
+  `export function prependToMemberExpression<T extends Pick<MemberExpression, 'object' | 'property'>>(member: T, prepend: MemberExpression['object']): T`,
   `export function removeProperties(
   n: Node,
   opts?: { preserveComments: boolean } | null
@@ -131,18 +231,76 @@ lines.push(
   n: T,
   opts?: { preserveComments: boolean } | null
 ): T;`,
+
+  // retrievers/
+  // eslint-disable-next-line max-len
+  `export function getBindingIdentifiers(node: Node, duplicates: true, outerOnly?: boolean): Record<string, Array<Identifier>>`,
+  // eslint-disable-next-line max-len
+  `export function getBindingIdentifiers(node: Node, duplicates?: false, outerOnly?: boolean): Record<string, Identifier>`,
+  // eslint-disable-next-line max-len
+  `export function getBindingIdentifiers(node: Node, duplicates: boolean, outerOnly?: boolean): Record<string, Identifier | Array<Identifier>>`,
+  // eslint-disable-next-line max-len
+  `export function getOuterBindingIdentifiers(node: Node, duplicates: true): Record<string, Array<Identifier>>`,
+  `export function getOuterBindingIdentifiers(node: Node, duplicates?: false): Record<string, Identifier>`,
+  // eslint-disable-next-line max-len
+  `export function getOuterBindingIdentifiers(node: Node, duplicates: boolean): Record<string, Identifier | Array<Identifier>>`,
+
+  // traverse/
   `export type TraversalAncestors = ReadonlyArray<{
     node: Node,
     key: string,
     index?: number,
   }>;
-  export type TraversalHandler<T> = (node: Node, parent: TraversalAncestors, type: T) => void;
+  export type TraversalHandler<T> = (
+    this: undefined, node: Node, parent: TraversalAncestors, type: T
+  ) => void;
   export type TraversalHandlers<T> = {
     enter?: TraversalHandler<T>,
     exit?: TraversalHandler<T>,
   };`.replace(/(^|\n) {2}/g, "$1"),
   // eslint-disable-next-line
-  `export function traverse<T>(n: Node, h: TraversalHandler<T> | TraversalHandlers<T>, state?: T): void;`
+  `export function traverse<T>(n: Node, h: TraversalHandler<T> | TraversalHandlers<T>, state?: T): void;`,
+  `export function traverseFast<T>(n: Node, h: TraversalHandler<T>, state?: T): void;`,
+
+  // utils/
+  // cleanJSXElementLiteralChild is not exported
+  // inherit is not exported
+  `export function shallowEqual<T extends object>(actual: object, expected: T): actual is T`,
+
+  // validators/
+  // eslint-disable-next-line max-len
+  `export function buildMatchMemberExpression(match: string, allowPartial?: boolean): (node: Node | null | undefined) => node is MemberExpression`,
+  // eslint-disable-next-line max-len
+  `export function is<T extends Node['type']>(type: T, n: Node | null | undefined, required?: undefined): n is Extract<Node, { type: T }>`,
+  // eslint-disable-next-line max-len
+  `export function is<T extends Node['type'], P extends Extract<Node, { type: T }>>(type: T, n: Node | null | undefined, required: Partial<P>): n is P`,
+  // eslint-disable-next-line max-len
+  `export function is<P extends Node>(type: string, n: Node | null | undefined, required: Partial<P>): n is P`,
+  `export function is(type: string, n: Node | null | undefined, required?: Partial<Node>): n is Node`,
+  `export function isBinding(node: Node, parent: Node, grandparent?: Node): boolean`,
+  // eslint-disable-next-line max-len
+  `export function isBlockScoped(node: Node): node is FunctionDeclaration | ClassDeclaration | VariableDeclaration`,
+  `export function isImmutable(node: Node): node is Immutable`,
+  `export function isLet(node: Node): node is VariableDeclaration`,
+  `export function isNode(node: object | null | undefined): node is Node`,
+  `export function isNodesEquivalent<T extends Partial<Node>>(a: T, b: any): b is T`,
+  `export function isNodesEquivalent(a: any, b: any): boolean`,
+  `export function isPlaceholderType(placeholderType: Node['type'], targetType: Node['type']): boolean`,
+  `export function isReferenced(node: Node, parent: Node, grandparent?: Node): boolean`,
+  `export function isScope(node: Node, parent: Node): node is Scopable`,
+  `export function isSpecifierDefault(specifier: ModuleSpecifier): boolean`,
+  `export function isType<T extends Node['type']>(nodetype: string, targetType: T): nodetype is T`,
+  `export function isType(nodetype: string | null | undefined, targetType: string): boolean`,
+  `export function isValidES3Identifier(name: string): boolean`,
+  `export function isValidIdentifier(name: string): boolean`,
+  `export function isVar(node: Node): node is VariableDeclaration`,
+  // the MemberExpression implication is incidental, but it follows from the implementation
+  // eslint-disable-next-line max-len
+  `export function matchesPattern(node: Node | null | undefined, match: string | ReadonlyArray<string>, allowPartial?: boolean): node is MemberExpression`,
+  // TypeScript 3.7: ": asserts n is T"
+  // eslint-disable-next-line max-len
+  `export function validate<T extends Node, K extends keyof T>(n: Node | null | undefined, key: K, value: T[K]): void`,
+  `export function validate(n: Node, key: string, value: any): void;`
 );
 
 for (const type in t.DEPRECATED_KEYS) {

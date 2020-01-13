@@ -75,9 +75,11 @@ new ComputedMethod(); // ensure ComputedKey Field is still transformed
 
 class ComputedField extends Obj {
   constructor() {
+    let _ref;
+
     var _temp3;
 
-    var _ref = (_temp3 = super(), babelHelpers.defineProperty(this, "field", 1), _temp3);
+    _ref = (_temp3 = super(), babelHelpers.defineProperty(this, "field", 1), _temp3);
 
     class B extends Obj {
       constructor() {

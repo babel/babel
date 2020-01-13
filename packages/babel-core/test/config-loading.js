@@ -1,5 +1,7 @@
-import loadConfig, { loadPartialConfig } from "../lib/config";
+import loadConfigRunner, { loadPartialConfig } from "../lib/config";
 import path from "path";
+
+const loadConfig = loadConfigRunner.sync;
 
 describe("@babel/core config loading", () => {
   const FILEPATH = path.join(
@@ -321,6 +323,21 @@ describe("@babel/core config loading", () => {
           expect(options2.plugins[i]).toBe(options1.plugins[i]);
         }
       }
+    });
+
+    it("should thrown when plugin is not valid", () => {
+      const fooPlugin = {
+        inherits: "inhertis-should-not-be-string",
+      };
+      const opts = {
+        cwd: path.dirname(FILEPATH),
+        filename: FILEPATH,
+        plugins: [fooPlugin],
+      };
+
+      expect(() => loadConfig(opts)).toThrow(
+        /\.inherits must be a function, or undefined/,
+      );
     });
   });
 

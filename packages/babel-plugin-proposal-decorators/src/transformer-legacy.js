@@ -237,7 +237,7 @@ export default {
 
     const replacement = decoratedClassToExpression(decl);
     if (replacement) {
-      path.replaceWithMultiple([
+      const [varDeclPath] = path.replaceWithMultiple([
         replacement,
         t.exportNamedDeclaration(null, [
           t.exportSpecifier(
@@ -246,6 +246,10 @@ export default {
           ),
         ]),
       ]);
+
+      if (!decl.node.id) {
+        path.scope.registerDeclaration(varDeclPath);
+      }
     }
   },
   ClassDeclaration(path) {
@@ -277,9 +281,32 @@ export default {
     path.replaceWith(
       t.callExpression(state.addHelper("initializerDefineProperty"), [
         t.cloneNode(path.get("left.object").node),
-        t.stringLiteral(path.get("left.property").node.name),
+        t.stringLiteral(
+          path.get("left.property").node.name ||
+            path.get("left.property").node.value,
+        ),
         t.cloneNode(path.get("right.arguments")[0].node),
         t.cloneNode(path.get("right.arguments")[1].node),
+      ]),
+    );
+  },
+
+  CallExpression(path, state) {
+    if (path.node.arguments.length !== 3) return;
+    if (!WARNING_CALLS.has(path.node.arguments[2])) return;
+
+    // If the class properties plugin isn't enabled, this line will add an unused helper
+    // to the code. It's not ideal, but it's ok since the configuration is not valid anyway.
+    if (path.node.callee.name !== state.addHelper("defineProperty").name) {
+      return;
+    }
+
+    path.replaceWith(
+      t.callExpression(state.addHelper("initializerDefineProperty"), [
+        t.cloneNode(path.get("arguments")[0].node),
+        t.cloneNode(path.get("arguments")[1].node),
+        t.cloneNode(path.get("arguments.2.arguments")[0].node),
+        t.cloneNode(path.get("arguments.2.arguments")[1].node),
       ]),
     );
   },

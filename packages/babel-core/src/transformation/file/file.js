@@ -19,6 +19,17 @@ const errorVisitor = {
   },
 };
 
+export type NodeLocation = {
+  loc?: {
+    end?: { line: number, column: number },
+    start: { line: number, column: number },
+  },
+  _loc?: {
+    end?: { line: number, column: number },
+    start: { line: number, column: number },
+  },
+};
+
 export default class File {
   _map: Map<any, any> = new Map();
   opts: Object;
@@ -183,7 +194,7 @@ export default class File {
     // and this fails because a prerelease version can only satisfy a range
     // if it is a prerelease within the same major/minor/patch range.
     //
-    // Note: If this is found to have issues, please also revist the logic in
+    // Note: If this is found to have issues, please also revisit the logic in
     // transform-runtime's definitions.js file.
     if (semver.valid(versionRange)) versionRange = `^${versionRange}`;
 
@@ -202,6 +213,9 @@ export default class File {
       const res = generator(name);
       if (res) return res;
     }
+
+    // make sure that the helper exists
+    helpers.ensure(name);
 
     const uid = (this.declarations[name] = this.scope.generateUidIdentifier(
       name,
@@ -247,16 +261,11 @@ export default class File {
   }
 
   buildCodeFrameError(
-    node: ?{
-      loc?: { start: { line: number, column: number } },
-      _loc?: { start: { line: number, column: number } },
-    },
+    node: ?NodeLocation,
     msg: string,
     Error: typeof Error = SyntaxError,
   ): Error {
     let loc = node && (node.loc || node._loc);
-
-    msg = `${this.opts.filename}: ${msg}`;
 
     if (!loc && node) {
       const state = {
@@ -284,6 +293,13 @@ export default class File {
               line: loc.start.line,
               column: loc.start.column + 1,
             },
+            end:
+              loc.end && loc.start.line === loc.end.line
+                ? {
+                    line: loc.end.line,
+                    column: loc.end.column + 1,
+                  }
+                : undefined,
           },
           { highlightCode },
         );

@@ -1,3 +1,5 @@
-f();
+expect(() => {
+  f();
 
-function f() {}
+  function f() {}
+}).not.toThrow();

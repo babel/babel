@@ -1,4 +1,3 @@
 {
-  "sourceType": "module",
-  "throws": "Can not use keyword 'await' outside an async function (1:9)"
+  "sourceType": "module"
 }

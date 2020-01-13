@@ -1,0 +1,4 @@
+{
+  "plugins": [["pipelineOperator", { "proposal": "fsharp" }]],
+  "throws": "Unexpected token, expected \";\" (2:20)"
+}

@@ -1,0 +1,32 @@
+{
+  "name": "@babel/helper-create-regexp-features-plugin",
+  "version": "7.8.0",
+  "author": "The Babel Team (https://babeljs.io/team)",
+  "license": "MIT",
+  "type": "commonjs",
+  "description": "Compile ESNext Regular Expressions to ES5",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel",
+    "directory": "packages/babel-helper-create-regexp-features-plugin"
+  },
+  "main": "lib/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "babel",
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "@babel/helper-regex": "^7.8.0",
+    "regexpu-core": "^4.6.0"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.0",
+    "@babel/helper-plugin-test-runner": "^7.8.0"
+  }
+}

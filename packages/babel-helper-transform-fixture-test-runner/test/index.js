@@ -35,4 +35,17 @@ describe("helper-transform-fixture-test-runner", function() {
       );
     }
   });
+  it("should print correct trace position when error is thrown in the first line", () => {
+    const opts = {
+      filename: `${__filename}.fake4`,
+    };
+    runCodeInTestContext(
+      `try { throw new Error() } catch (e) {
+          opts.stack = e.stack
+        }
+      `,
+      opts,
+    );
+    expect(opts.stack).toContain(opts.filename + ":1:13");
+  });
 });

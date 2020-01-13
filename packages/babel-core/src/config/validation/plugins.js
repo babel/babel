@@ -84,10 +84,19 @@ export type PluginObject = {
 };
 
 export function validatePluginObject(obj: {}): PluginObject {
+  const rootPath: RootPath = {
+    type: "root",
+    source: "plugin",
+  };
   Object.keys(obj).forEach(key => {
     const validator = VALIDATORS[key];
+    const optLoc = {
+      type: "option",
+      name: key,
+      parent: rootPath,
+    };
 
-    if (validator) validator(key, obj[key]);
+    if (validator) validator(optLoc, obj[key]);
     else throw new Error(`.${key} is not a valid Plugin property`);
   });
 

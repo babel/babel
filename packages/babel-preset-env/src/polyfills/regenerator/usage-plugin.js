@@ -21,10 +21,13 @@ export default function() {
     },
     post() {
       if (this.opts.debug && this.usesRegenerator) {
+        let filename = this.file.opts.filename;
+        // normalize filename to generate consistent preset-env test fixtures
+        if (process.env.BABEL_ENV === "test") {
+          filename = filename.replace(/\\/g, "/");
+        }
         console.log(
-          `\n[${
-            this.file.opts.filename
-          }] Based on your code and targets, added regenerator-runtime.`,
+          `\n[${filename}] Based on your code and targets, added regenerator-runtime.`,
         );
       }
     },

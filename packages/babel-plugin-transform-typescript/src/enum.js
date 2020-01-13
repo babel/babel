@@ -24,7 +24,9 @@ export default function transpileEnum(path, t) {
         path.remove();
       } else {
         const isGlobal = t.isProgram(path.parent); // && !path.parent.body.some(t.isModuleDeclaration);
-        path.replaceWith(makeVar(node.id, t, isGlobal ? "var" : "let"));
+        path.scope.registerDeclaration(
+          path.replaceWith(makeVar(node.id, t, isGlobal ? "var" : "let"))[0],
+        );
       }
       break;
     }
@@ -142,13 +144,12 @@ function evaluate(
   expr,
   seen: PreviousEnumMembers,
 ): number | string | typeof undefined {
-  if (expr.type === "StringLiteral") {
-    return expr.value;
-  }
   return evalConstant(expr);
 
   function evalConstant(expr): number | typeof undefined {
     switch (expr.type) {
+      case "StringLiteral":
+        return expr.value;
       case "UnaryExpression":
         return evalUnaryExpression(expr);
       case "BinaryExpression":
@@ -159,6 +160,11 @@ function evaluate(
         return evalConstant(expr.expression);
       case "Identifier":
         return seen[expr.name];
+      case "TemplateLiteral":
+        if (expr.quasis.length === 1) {
+          return expr.quasis[0].value.cooked;
+        }
+      /* falls through */
       default:
         return undefined;
     }

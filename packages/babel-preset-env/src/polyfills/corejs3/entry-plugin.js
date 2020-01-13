@@ -3,13 +3,14 @@
 import corejs3Polyfills from "core-js-compat/data";
 import corejsEntries from "core-js-compat/entries";
 import getModulesListForTargetVersion from "core-js-compat/get-modules-list-for-target-version";
-import filterItems from "../../filter-items";
+import { filterItems } from "@babel/helper-compilation-targets";
 import {
   has,
   intersection,
   createImport,
   getImportSource,
   getRequireSource,
+  getModulePath,
 } from "../../utils";
 import { logEntryPolyfills } from "../../debug";
 
@@ -21,6 +22,12 @@ function isBabelPolyfillSource(source) {
 }
 
 function isCoreJSSource(source) {
+  if (typeof source === "string") {
+    source = source
+      .replace(/\\/g, "/")
+      .replace(/(\/(index)?)?(\.js)?$/i, "")
+      .toLowerCase();
+  }
   return has(corejsEntries, source) && corejsEntries[source];
 }
 
@@ -42,6 +49,20 @@ export default function(
 
   const available = new Set(getModulesListForTargetVersion(corejs.version));
 
+  function shouldReplace(source, modules) {
+    if (!modules) return false;
+    if (
+      // Don't replace an import with itself to avoid an infinite loop
+      modules.length === 1 &&
+      polyfills.has(modules[0]) &&
+      available.has(modules[0]) &&
+      getModulePath(modules[0]) === source
+    ) {
+      return false;
+    }
+    return true;
+  }
+
   const isPolyfillImport = {
     ImportDeclaration(path: NodePath) {
       const source = getImportSource(path);
@@ -50,24 +71,40 @@ export default function(
         console.warn(BABEL_POLYFILL_DEPRECATION);
       } else {
         const modules = isCoreJSSource(source);
-        if (modules) {
+        if (shouldReplace(source, modules)) {
           this.replaceBySeparateModulesImport(path, modules);
         }
       }
     },
-    Program(path: NodePath) {
-      path.get("body").forEach(bodyPath => {
-        const source = getRequireSource(bodyPath);
-        if (!source) return;
-        if (isBabelPolyfillSource(source)) {
-          console.warn(BABEL_POLYFILL_DEPRECATION);
-        } else {
-          const modules = isCoreJSSource(source);
-          if (modules) {
-            this.replaceBySeparateModulesImport(bodyPath, modules);
+    Program: {
+      enter(path: NodePath) {
+        path.get("body").forEach(bodyPath => {
+          const source = getRequireSource(bodyPath);
+          if (!source) return;
+          if (isBabelPolyfillSource(source)) {
+            console.warn(BABEL_POLYFILL_DEPRECATION);
+          } else {
+            const modules = isCoreJSSource(source);
+            if (shouldReplace(source, modules)) {
+              this.replaceBySeparateModulesImport(bodyPath, modules);
+            }
+          }
+        });
+      },
+      exit(path: NodePath) {
+        const filtered = intersection(polyfills, this.polyfillsSet, available);
+        const reversed = Array.from(filtered).reverse();
+
+        for (const module of reversed) {
+          // Program:exit could be called multiple times.
+          // Avoid injecting the polyfills twice.
+          if (!this.injectedPolyfills.has(module)) {
+            createImport(path, module);
           }
         }
-      });
+
+        filtered.forEach(module => this.injectedPolyfills.add(module));
+      },
     },
   };
 
@@ -75,6 +112,7 @@ export default function(
     name: "corejs3-entry",
     visitor: isPolyfillImport,
     pre() {
+      this.injectedPolyfills = new Set();
       this.polyfillsSet = new Set();
 
       this.replaceBySeparateModulesImport = function(path, modules) {
@@ -85,19 +123,12 @@ export default function(
         path.remove();
       };
     },
-    post({ path }: { path: NodePath }) {
-      const filtered = intersection(polyfills, this.polyfillsSet, available);
-      const reversed = Array.from(filtered).reverse();
-
-      for (const module of reversed) {
-        createImport(path, module);
-      }
-
+    post() {
       if (debug) {
         logEntryPolyfills(
           "core-js",
-          this.polyfillsSet.size > 0,
-          filtered,
+          this.injectedPolyfills.size > 0,
+          this.injectedPolyfills,
           this.file.opts.filename,
           polyfillTargets,
           corejs3Polyfills,

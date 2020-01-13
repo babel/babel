@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 24,
+  "end": 41,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 24
+      "column": 41
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 24,
+    "end": 41,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 1,
-        "column": 24
+        "column": 41
       }
     },
     "sourceType": "script",
@@ -32,7 +32,7 @@
       {
         "type": "ExpressionStatement",
         "start": 0,
-        "end": 24,
+        "end": 41,
         "loc": {
           "start": {
             "line": 1,
@@ -40,13 +40,13 @@
           },
           "end": {
             "line": 1,
-            "column": 24
+            "column": 41
           }
         },
         "expression": {
           "type": "CallExpression",
           "start": 0,
-          "end": 23,
+          "end": 25,
           "loc": {
             "start": {
               "line": 1,
@@ -54,7 +54,7 @@
             },
             "end": {
               "line": 1,
-              "column": 23
+              "column": 25
             }
           },
           "callee": {
@@ -73,6 +73,9 @@
               "identifierName": "fn"
             },
             "name": "fn"
+          },
+          "extra": {
+            "trailingComma": 7
           },
           "arguments": [
             {
@@ -111,9 +114,9 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": " comment ",
+                  "value": " comment 1 ",
                   "start": 9,
-                  "end": 22,
+                  "end": 24,
                   "loc": {
                     "start": {
                       "line": 1,
@@ -121,11 +124,29 @@
                     },
                     "end": {
                       "line": 1,
-                      "column": 22
+                      "column": 24
                     }
                   }
                 }
               ]
+            }
+          ],
+          "trailingComments": [
+            {
+              "type": "CommentBlock",
+              "value": " comment 2",
+              "start": 26,
+              "end": 40,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 26
+                },
+                "end": {
+                  "line": 1,
+                  "column": 40
+                }
+              }
             }
           ]
         }
@@ -136,9 +157,9 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": " comment ",
+      "value": " comment 1 ",
       "start": 9,
-      "end": 22,
+      "end": 24,
       "loc": {
         "start": {
           "line": 1,
@@ -146,7 +167,23 @@
         },
         "end": {
           "line": 1,
-          "column": 22
+          "column": 24
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": " comment 2",
+      "start": 26,
+      "end": 40,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 26
+        },
+        "end": {
+          "line": 1,
+          "column": 40
         }
       }
     }

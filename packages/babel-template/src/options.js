@@ -149,7 +149,7 @@ export function normalizeReplacements(
       return acc;
     }, {});
   } else if (typeof replacements === "object" || replacements == null) {
-    return replacements || undefined;
+    return (replacements: any) || undefined;
   }
 
   throw new Error(

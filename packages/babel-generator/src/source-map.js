@@ -24,14 +24,20 @@ export default class SourceMap {
 
       const code = this._code;
       if (typeof code === "string") {
-        map.setSourceContent(this._opts.sourceFileName, code);
+        map.setSourceContent(
+          this._opts.sourceFileName.replace(/\\/g, "/"),
+          code,
+        );
       } else if (typeof code === "object") {
         Object.keys(code).forEach(sourceFileName => {
-          map.setSourceContent(sourceFileName, code[sourceFileName]);
+          map.setSourceContent(
+            sourceFileName.replace(/\\/g, "/"),
+            code[sourceFileName],
+          );
         });
       }
 
-      this._rawMappings.forEach(map.addMapping, map);
+      this._rawMappings.forEach(mapping => map.addMapping(mapping), map);
     }
 
     return this._cachedMap.toJSON();
@@ -83,7 +89,10 @@ export default class SourceMap {
         line: generatedLine,
         column: generatedColumn,
       },
-      source: line == null ? undefined : filename || this._opts.sourceFileName,
+      source:
+        line == null
+          ? undefined
+          : (filename || this._opts.sourceFileName).replace(/\\/g, "/"),
       original:
         line == null
           ? undefined

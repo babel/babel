@@ -1,0 +1,9 @@
+{
+  "validateLogs": true,
+  "caller": {
+    "name": "test-fixture",
+    "supportsStaticESM": false,
+    "supportsSynamicImport": false
+  },
+  "presets": ["env"]
+}

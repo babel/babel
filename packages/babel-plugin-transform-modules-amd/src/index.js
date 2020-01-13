@@ -9,11 +9,30 @@ import {
   wrapInterop,
 } from "@babel/helper-module-transforms";
 import { template, types as t } from "@babel/core";
+import { getImportSource } from "babel-plugin-dynamic-import-node/utils";
 
 const buildWrapper = template(`
   define(MODULE_NAME, AMD_ARGUMENTS, function(IMPORT_NAMES) {
   })
 `);
+
+const buildAnonymousWrapper = template(`
+  define(["require"], function(REQUIRE) {
+  })
+`);
+
+function injectWrapper(path, wrapper) {
+  const { body, directives } = path.node;
+  path.node.directives = [];
+  path.node.body = [];
+  const amdWrapper = path.pushContainer("body", wrapper)[0];
+  const amdFactory = amdWrapper
+    .get("expression.arguments")
+    .filter(arg => arg.isFunctionExpression())[0]
+    .get("body");
+  amdFactory.pushContainer("directives", directives);
+  amdFactory.pushContainer("body", body);
+}
 
 export default declare((api, options) => {
   api.assertVersion(7);
@@ -22,10 +41,60 @@ export default declare((api, options) => {
   return {
     name: "transform-modules-amd",
 
+    pre() {
+      this.file.set("@babel/plugin-transform-modules-*", "amd");
+    },
+
     visitor: {
+      CallExpression(path, state) {
+        if (!this.file.has("@babel/plugin-proposal-dynamic-import")) return;
+        if (!path.get("callee").isImport()) return;
+
+        let { requireId, resolveId, rejectId } = state;
+        if (!requireId) {
+          requireId = path.scope.generateUidIdentifier("require");
+          state.requireId = requireId;
+        }
+        if (!resolveId || !rejectId) {
+          resolveId = path.scope.generateUidIdentifier("resolve");
+          rejectId = path.scope.generateUidIdentifier("reject");
+          state.resolveId = resolveId;
+          state.rejectId = rejectId;
+        }
+
+        let result = t.identifier("imported");
+        if (!noInterop) result = wrapInterop(path, result, "namespace");
+
+        path.replaceWith(
+          template.expression.ast`
+            new Promise((${resolveId}, ${rejectId}) =>
+              ${requireId}(
+                [${getImportSource(t, path.node)}],
+                imported => ${resolveId}(${result}),
+                ${rejectId}
+              )
+            )`,
+        );
+      },
+
       Program: {
-        exit(path) {
-          if (!isModule(path)) return;
+        exit(path, { requireId }) {
+          if (!isModule(path)) {
+            if (requireId) {
+              injectWrapper(
+                path,
+                buildAnonymousWrapper({ REQUIRE: requireId }),
+              );
+            }
+            return;
+          }
+
+          const amdArgs = [];
+          const importNames = [];
+          if (requireId) {
+            amdArgs.push(t.stringLiteral("require"));
+            importNames.push(requireId);
+          }
 
           let moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);
@@ -40,9 +109,6 @@ export default declare((api, options) => {
               noInterop,
             },
           );
-
-          const amdArgs = [];
-          const importNames = [];
 
           if (hasExports(meta)) {
             amdArgs.push(t.stringLiteral("exports"));
@@ -81,23 +147,15 @@ export default declare((api, options) => {
           ensureStatementsHoisted(headers);
           path.unshiftContainer("body", headers);
 
-          const { body, directives } = path.node;
-          path.node.directives = [];
-          path.node.body = [];
-          const amdWrapper = path.pushContainer("body", [
+          injectWrapper(
+            path,
             buildWrapper({
               MODULE_NAME: moduleName,
 
               AMD_ARGUMENTS: t.arrayExpression(amdArgs),
               IMPORT_NAMES: importNames,
             }),
-          ])[0];
-          const amdFactory = amdWrapper
-            .get("expression.arguments")
-            .filter(arg => arg.isFunctionExpression())[0]
-            .get("body");
-          amdFactory.pushContainer("directives", directives);
-          amdFactory.pushContainer("body", body);
+          );
         },
       },
     },

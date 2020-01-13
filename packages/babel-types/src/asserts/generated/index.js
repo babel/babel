@@ -8,9 +8,8 @@ import is from "../../validators/is";
 function assert(type: string, node: Object, opts?: Object): void {
   if (!is(type, node, opts)) {
     throw new Error(
-      `Expected type "${type}" with option ${JSON.stringify(
-        opts,
-      )}, but instead got "${node.type}".`,
+      `Expected type "${type}" with option ${JSON.stringify((opts: any))}, ` +
+        `but instead got "${node.type}".`,
     );
   }
 }
@@ -225,11 +224,11 @@ export function assertArrowFunctionExpression(
 export function assertClassBody(node: Object, opts?: Object = {}): void {
   assert("ClassBody", node, opts);
 }
-export function assertClassDeclaration(node: Object, opts?: Object = {}): void {
-  assert("ClassDeclaration", node, opts);
-}
 export function assertClassExpression(node: Object, opts?: Object = {}): void {
   assert("ClassExpression", node, opts);
+}
+export function assertClassDeclaration(node: Object, opts?: Object = {}): void {
+  assert("ClassDeclaration", node, opts);
 }
 export function assertExportAllDeclaration(
   node: Object,
@@ -585,6 +584,39 @@ export function assertVoidTypeAnnotation(
 ): void {
   assert("VoidTypeAnnotation", node, opts);
 }
+export function assertEnumDeclaration(node: Object, opts?: Object = {}): void {
+  assert("EnumDeclaration", node, opts);
+}
+export function assertEnumBooleanBody(node: Object, opts?: Object = {}): void {
+  assert("EnumBooleanBody", node, opts);
+}
+export function assertEnumNumberBody(node: Object, opts?: Object = {}): void {
+  assert("EnumNumberBody", node, opts);
+}
+export function assertEnumStringBody(node: Object, opts?: Object = {}): void {
+  assert("EnumStringBody", node, opts);
+}
+export function assertEnumSymbolBody(node: Object, opts?: Object = {}): void {
+  assert("EnumSymbolBody", node, opts);
+}
+export function assertEnumBooleanMember(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("EnumBooleanMember", node, opts);
+}
+export function assertEnumNumberMember(node: Object, opts?: Object = {}): void {
+  assert("EnumNumberMember", node, opts);
+}
+export function assertEnumStringMember(node: Object, opts?: Object = {}): void {
+  assert("EnumStringMember", node, opts);
+}
+export function assertEnumDefaultedMember(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("EnumDefaultedMember", node, opts);
+}
 export function assertJSXAttribute(node: Object, opts?: Object = {}): void {
   assert("JSXAttribute", node, opts);
 }
@@ -662,6 +694,12 @@ export function assertNoop(node: Object, opts?: Object = {}): void {
 }
 export function assertPlaceholder(node: Object, opts?: Object = {}): void {
   assert("Placeholder", node, opts);
+}
+export function assertV8IntrinsicIdentifier(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("V8IntrinsicIdentifier", node, opts);
 }
 export function assertArgumentPlaceholder(
   node: Object,
@@ -795,8 +833,17 @@ export function assertTSIndexSignature(node: Object, opts?: Object = {}): void {
 export function assertTSAnyKeyword(node: Object, opts?: Object = {}): void {
   assert("TSAnyKeyword", node, opts);
 }
-export function assertTSUnknownKeyword(node: Object, opts?: Object = {}): void {
-  assert("TSUnknownKeyword", node, opts);
+export function assertTSBooleanKeyword(node: Object, opts?: Object = {}): void {
+  assert("TSBooleanKeyword", node, opts);
+}
+export function assertTSBigIntKeyword(node: Object, opts?: Object = {}): void {
+  assert("TSBigIntKeyword", node, opts);
+}
+export function assertTSNeverKeyword(node: Object, opts?: Object = {}): void {
+  assert("TSNeverKeyword", node, opts);
+}
+export function assertTSNullKeyword(node: Object, opts?: Object = {}): void {
+  assert("TSNullKeyword", node, opts);
 }
 export function assertTSNumberKeyword(node: Object, opts?: Object = {}): void {
   assert("TSNumberKeyword", node, opts);
@@ -804,17 +851,11 @@ export function assertTSNumberKeyword(node: Object, opts?: Object = {}): void {
 export function assertTSObjectKeyword(node: Object, opts?: Object = {}): void {
   assert("TSObjectKeyword", node, opts);
 }
-export function assertTSBooleanKeyword(node: Object, opts?: Object = {}): void {
-  assert("TSBooleanKeyword", node, opts);
-}
 export function assertTSStringKeyword(node: Object, opts?: Object = {}): void {
   assert("TSStringKeyword", node, opts);
 }
 export function assertTSSymbolKeyword(node: Object, opts?: Object = {}): void {
   assert("TSSymbolKeyword", node, opts);
-}
-export function assertTSVoidKeyword(node: Object, opts?: Object = {}): void {
-  assert("TSVoidKeyword", node, opts);
 }
 export function assertTSUndefinedKeyword(
   node: Object,
@@ -822,11 +863,11 @@ export function assertTSUndefinedKeyword(
 ): void {
   assert("TSUndefinedKeyword", node, opts);
 }
-export function assertTSNullKeyword(node: Object, opts?: Object = {}): void {
-  assert("TSNullKeyword", node, opts);
+export function assertTSUnknownKeyword(node: Object, opts?: Object = {}): void {
+  assert("TSUnknownKeyword", node, opts);
 }
-export function assertTSNeverKeyword(node: Object, opts?: Object = {}): void {
-  assert("TSNeverKeyword", node, opts);
+export function assertTSVoidKeyword(node: Object, opts?: Object = {}): void {
+  assert("TSVoidKeyword", node, opts);
 }
 export function assertTSThisType(node: Object, opts?: Object = {}): void {
   assert("TSThisType", node, opts);
@@ -1130,6 +1171,12 @@ export function assertFlowDeclaration(node: Object, opts?: Object = {}): void {
 }
 export function assertFlowPredicate(node: Object, opts?: Object = {}): void {
   assert("FlowPredicate", node, opts);
+}
+export function assertEnumBody(node: Object, opts?: Object = {}): void {
+  assert("EnumBody", node, opts);
+}
+export function assertEnumMember(node: Object, opts?: Object = {}): void {
+  assert("EnumMember", node, opts);
 }
 export function assertJSX(node: Object, opts?: Object = {}): void {
   assert("JSX", node, opts);

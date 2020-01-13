@@ -5,8 +5,10 @@ import path from "path";
 import repl from "repl";
 import * as babel from "@babel/core";
 import vm from "vm";
-import "@babel/polyfill";
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 import register from "@babel/register";
+import resolve from "resolve";
 
 import pkg from "../package.json";
 
@@ -167,15 +169,15 @@ if (program.eval || program.print) {
       }
 
       if (arg[0] === "-") {
-        const camelArg = arg
-          .slice(2)
-          .replace(/-(\w)/, (s, c) => c.toUpperCase());
-        const parsedArg = program[camelArg];
-        if (
-          arg === "-r" ||
-          arg === "--require" ||
-          (parsedArg && parsedArg !== true)
-        ) {
+        const parsedOption = program.options.find(option => {
+          return option.long === arg || option.short === arg;
+        });
+        if (parsedOption === undefined) {
+          return;
+        }
+        const optionName = parsedOption.attributeName();
+        const parsedArg = program[optionName];
+        if (optionName === "require" || (parsedArg && parsedArg !== true)) {
           ignoreNext = true;
         }
       } else {
@@ -187,11 +189,9 @@ if (program.eval || program.print) {
 
     // We have to handle require ourselves, as we want to require it in the context of babel-register
     if (program.require) {
-      let requireFileName = program.require;
-      if (!path.isAbsolute(requireFileName)) {
-        requireFileName = path.join(process.cwd(), requireFileName);
-      }
-      require(requireFileName);
+      require(resolve.sync(program.require, {
+        basedir: process.cwd(),
+      }));
     }
 
     // make the filename absolute
@@ -212,7 +212,7 @@ if (program.eval || program.print) {
 
 function replStart() {
   repl.start({
-    prompt: "> ",
+    prompt: "babel > ",
     input: process.stdin,
     output: process.stdout,
     eval: replEval,

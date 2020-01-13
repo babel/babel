@@ -781,11 +781,11 @@ export function isClassBody(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isClassDeclaration(node: ?Object, opts?: Object): boolean {
+export function isClassExpression(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
-  if (nodeType === "ClassDeclaration") {
+  if (nodeType === "ClassExpression") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -795,11 +795,11 @@ export function isClassDeclaration(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isClassExpression(node: ?Object, opts?: Object): boolean {
+export function isClassDeclaration(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
-  if (nodeType === "ClassExpression") {
+  if (nodeType === "ClassDeclaration") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -1866,6 +1866,132 @@ export function isVoidTypeAnnotation(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
+export function isEnumDeclaration(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "EnumDeclaration") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isEnumBooleanBody(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "EnumBooleanBody") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isEnumNumberBody(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "EnumNumberBody") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isEnumStringBody(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "EnumStringBody") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isEnumSymbolBody(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "EnumSymbolBody") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isEnumBooleanMember(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "EnumBooleanMember") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isEnumNumberMember(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "EnumNumberMember") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isEnumStringMember(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "EnumStringMember") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isEnumDefaultedMember(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "EnumDefaultedMember") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isJSXAttribute(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -2098,6 +2224,20 @@ export function isPlaceholder(node: ?Object, opts?: Object): boolean {
 
   const nodeType = node.type;
   if (nodeType === "Placeholder") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isV8IntrinsicIdentifier(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "V8IntrinsicIdentifier") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -2523,11 +2663,53 @@ export function isTSAnyKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSUnknownKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSBooleanKeyword(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
-  if (nodeType === "TSUnknownKeyword") {
+  if (nodeType === "TSBooleanKeyword") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isTSBigIntKeyword(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "TSBigIntKeyword") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isTSNeverKeyword(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "TSNeverKeyword") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isTSNullKeyword(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "TSNullKeyword") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -2565,20 +2747,6 @@ export function isTSObjectKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSBooleanKeyword(node: ?Object, opts?: Object): boolean {
-  if (!node) return false;
-
-  const nodeType = node.type;
-  if (nodeType === "TSBooleanKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
 export function isTSStringKeyword(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -2607,20 +2775,6 @@ export function isTSSymbolKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSVoidKeyword(node: ?Object, opts?: Object): boolean {
-  if (!node) return false;
-
-  const nodeType = node.type;
-  if (nodeType === "TSVoidKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
 export function isTSUndefinedKeyword(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -2635,11 +2789,11 @@ export function isTSUndefinedKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSNullKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSUnknownKeyword(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
-  if (nodeType === "TSNullKeyword") {
+  if (nodeType === "TSUnknownKeyword") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -2649,11 +2803,11 @@ export function isTSNullKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSNeverKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSVoidKeyword(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
-  if (nodeType === "TSNeverKeyword") {
+  if (nodeType === "TSVoidKeyword") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -3345,11 +3499,12 @@ export function isScopable(node: ?Object, opts?: Object): boolean {
     "SwitchStatement" === nodeType ||
     "WhileStatement" === nodeType ||
     "ArrowFunctionExpression" === nodeType ||
-    "ClassDeclaration" === nodeType ||
     "ClassExpression" === nodeType ||
+    "ClassDeclaration" === nodeType ||
     "ForOfStatement" === nodeType ||
     "ClassMethod" === nodeType ||
     "ClassPrivateMethod" === nodeType ||
+    "TSModuleBlock" === nodeType ||
     (nodeType === "Placeholder" && "BlockStatement" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
@@ -3382,6 +3537,7 @@ export function isBlockParent(node: ?Object, opts?: Object): boolean {
     "ForOfStatement" === nodeType ||
     "ClassMethod" === nodeType ||
     "ClassPrivateMethod" === nodeType ||
+    "TSModuleBlock" === nodeType ||
     (nodeType === "Placeholder" && "BlockStatement" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
@@ -3401,6 +3557,7 @@ export function isBlock(node: ?Object, opts?: Object): boolean {
     nodeType === "Block" ||
     "BlockStatement" === nodeType ||
     "Program" === nodeType ||
+    "TSModuleBlock" === nodeType ||
     (nodeType === "Placeholder" && "BlockStatement" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
@@ -3690,8 +3847,8 @@ export function isPureish(node: ?Object, opts?: Object): boolean {
     "NullLiteral" === nodeType ||
     "BooleanLiteral" === nodeType ||
     "ArrowFunctionExpression" === nodeType ||
-    "ClassDeclaration" === nodeType ||
     "ClassExpression" === nodeType ||
+    "ClassDeclaration" === nodeType ||
     "BigIntLiteral" === nodeType ||
     (nodeType === "Placeholder" && "StringLiteral" === node.expectedNode)
   ) {
@@ -3730,6 +3887,7 @@ export function isDeclaration(node: ?Object, opts?: Object): boolean {
     "InterfaceDeclaration" === nodeType ||
     "OpaqueType" === nodeType ||
     "TypeAlias" === nodeType ||
+    "EnumDeclaration" === nodeType ||
     "TSDeclareFunction" === nodeType ||
     "TSInterfaceDeclaration" === nodeType ||
     "TSTypeAliasDeclaration" === nodeType ||
@@ -3992,8 +4150,8 @@ export function isClass(node: ?Object, opts?: Object): boolean {
   const nodeType = node.type;
   if (
     nodeType === "Class" ||
-    "ClassDeclaration" === nodeType ||
-    "ClassExpression" === nodeType
+    "ClassExpression" === nodeType ||
+    "ClassDeclaration" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -4245,6 +4403,46 @@ export function isFlowPredicate(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
+export function isEnumBody(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (
+    nodeType === "EnumBody" ||
+    "EnumBooleanBody" === nodeType ||
+    "EnumNumberBody" === nodeType ||
+    "EnumStringBody" === nodeType ||
+    "EnumSymbolBody" === nodeType
+  ) {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isEnumMember(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (
+    nodeType === "EnumMember" ||
+    "EnumBooleanMember" === nodeType ||
+    "EnumNumberMember" === nodeType ||
+    "EnumStringMember" === nodeType ||
+    "EnumDefaultedMember" === nodeType
+  ) {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isJSX(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -4323,16 +4521,17 @@ export function isTSType(node: ?Object, opts?: Object): boolean {
   if (
     nodeType === "TSType" ||
     "TSAnyKeyword" === nodeType ||
-    "TSUnknownKeyword" === nodeType ||
+    "TSBooleanKeyword" === nodeType ||
+    "TSBigIntKeyword" === nodeType ||
+    "TSNeverKeyword" === nodeType ||
+    "TSNullKeyword" === nodeType ||
     "TSNumberKeyword" === nodeType ||
     "TSObjectKeyword" === nodeType ||
-    "TSBooleanKeyword" === nodeType ||
     "TSStringKeyword" === nodeType ||
     "TSSymbolKeyword" === nodeType ||
-    "TSVoidKeyword" === nodeType ||
     "TSUndefinedKeyword" === nodeType ||
-    "TSNullKeyword" === nodeType ||
-    "TSNeverKeyword" === nodeType ||
+    "TSUnknownKeyword" === nodeType ||
+    "TSVoidKeyword" === nodeType ||
     "TSThisType" === nodeType ||
     "TSFunctionType" === nodeType ||
     "TSConstructorType" === nodeType ||

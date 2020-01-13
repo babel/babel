@@ -38,6 +38,68 @@ export default class CommentsParser extends BaseParser {
     this.state.leadingComments.push(comment);
   }
 
+  adjustCommentsAfterTrailingComma(
+    node: Node,
+    elements: (Node | null)[],
+    // When the current node is followed by a token which hasn't a respective AST node, we
+    // need to take all the trailing comments to prevent them from being attached to an
+    // unrelated node. e.g. in
+    //     var { x } /* cmt */ = { y }
+    // we don't want /* cmt */ to be attached to { y }.
+    // On the other hand, in
+    //     fn(x) [new line] /* cmt */ [new line] y
+    // /* cmt */ is both a trailing comment of fn(x) and a leading comment of y
+    takeAllComments?: boolean,
+  ) {
+    if (this.state.leadingComments.length === 0) {
+      return;
+    }
+
+    let lastElement = null;
+    let i = elements.length;
+    while (lastElement === null && i > 0) {
+      lastElement = elements[--i];
+    }
+    if (lastElement === null) {
+      return;
+    }
+
+    for (let j = 0; j < this.state.leadingComments.length; j++) {
+      if (
+        this.state.leadingComments[j].end < this.state.commentPreviousNode.end
+      ) {
+        this.state.leadingComments.splice(j, 1);
+        j--;
+      }
+    }
+
+    const newTrailingComments = [];
+    for (let i = 0; i < this.state.leadingComments.length; i++) {
+      const leadingComment = this.state.leadingComments[i];
+      if (leadingComment.end < node.end) {
+        newTrailingComments.push(leadingComment);
+
+        // Perf: we don't need to splice if we are going to reset the array anyway
+        if (!takeAllComments) {
+          this.state.leadingComments.splice(i, 1);
+          i--;
+        }
+      } else {
+        if (node.trailingComments === undefined) {
+          node.trailingComments = [];
+        }
+        node.trailingComments.push(leadingComment);
+      }
+    }
+    if (takeAllComments) this.state.leadingComments = [];
+
+    if (newTrailingComments.length > 0) {
+      lastElement.trailingComments = newTrailingComments;
+    } else if (lastElement.trailingComments !== undefined) {
+      lastElement.trailingComments = [];
+    }
+  }
+
   processComment(node: Node): void {
     if (node.type === "Program" && node.body.length > 0) return;
 
@@ -84,60 +146,37 @@ export default class CommentsParser extends BaseParser {
 
     if (!lastChild && firstChild) lastChild = firstChild;
 
-    // Attach comments that follow a trailing comma on the last
-    // property in an object literal or a trailing comma in function arguments
-    // as trailing comments
-    if (firstChild && this.state.leadingComments.length > 0) {
-      const lastComment = last(this.state.leadingComments);
-
-      if (firstChild.type === "ObjectProperty") {
-        if (lastComment.start >= node.start) {
-          if (this.state.commentPreviousNode) {
-            for (j = 0; j < this.state.leadingComments.length; j++) {
-              if (
-                this.state.leadingComments[j].end <
-                this.state.commentPreviousNode.end
-              ) {
-                this.state.leadingComments.splice(j, 1);
-                j--;
-              }
-            }
-
-            if (this.state.leadingComments.length > 0) {
-              firstChild.trailingComments = this.state.leadingComments;
-              this.state.leadingComments = [];
-            }
-          }
-        }
-      } else if (
-        node.type === "CallExpression" &&
-        node.arguments &&
-        node.arguments.length
-      ) {
-        const lastArg = last(node.arguments);
-
-        if (
-          lastArg &&
-          lastComment.start >= lastArg.start &&
-          lastComment.end <= node.end
-        ) {
-          if (this.state.commentPreviousNode) {
-            for (j = 0; j < this.state.leadingComments.length; j++) {
-              if (
-                this.state.leadingComments[j].end <
-                this.state.commentPreviousNode.end
-              ) {
-                this.state.leadingComments.splice(j, 1);
-                j--;
-              }
-            }
-            if (this.state.leadingComments.length > 0) {
-              lastArg.trailingComments = this.state.leadingComments;
-              this.state.leadingComments = [];
-            }
-          }
-        }
+    // Adjust comments that follow a trailing comma on the last element in a
+    // comma separated list of nodes to be the trailing comments on the last
+    // element
+    if (firstChild) {
+      switch (node.type) {
+        case "ObjectExpression":
+          this.adjustCommentsAfterTrailingComma(node, node.properties);
+          break;
+        case "ObjectPattern":
+          this.adjustCommentsAfterTrailingComma(node, node.properties, true);
+          break;
+        case "CallExpression":
+          this.adjustCommentsAfterTrailingComma(node, node.arguments);
+          break;
+        case "ArrayExpression":
+          this.adjustCommentsAfterTrailingComma(node, node.elements);
+          break;
+        case "ArrayPattern":
+          this.adjustCommentsAfterTrailingComma(node, node.elements, true);
+          break;
       }
+    } else if (
+      this.state.commentPreviousNode &&
+      ((this.state.commentPreviousNode.type === "ImportSpecifier" &&
+        node.type !== "ImportSpecifier") ||
+        (this.state.commentPreviousNode.type === "ExportSpecifier" &&
+          node.type !== "ExportSpecifier"))
+    ) {
+      this.adjustCommentsAfterTrailingComma(node, [
+        this.state.commentPreviousNode,
+      ]);
     }
 
     if (lastChild) {

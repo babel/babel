@@ -12,7 +12,7 @@
 
 ## 5.8.24
 
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Updated `optimisation.react.inlineElements` transformer to React 0.14 output. Thanks [@spicyj](https://github.com/spicyj)!
  * **Polish**
   * Add support for evaluating more static nodes. Thanks [@hzoo](https://github.com/hzoo)!
@@ -262,8 +262,8 @@ Issues with publish process.
   * Register labels as bindings to fix undeclared variable checks.
  * **Polish**
   * Remove unnecessary string binary expressions when transforming template literals.
-  * Support module live bindings in arbitary positions not in Program statement position.
-  * Throw error when attemping to replace a `Program` root node with another node not of type `Program`.
+  * Support module live bindings in arbitrary positions not in Program statement position.
+  * Throw error when attempting to replace a `Program` root node with another node not of type `Program`.
   * Optimise rest parameters in spread element position and allocate rest array at the earliest common ancestor of all references.
   * Generate original number representation when value was not changed.
   * Check for invalid binding identifiers when generating inferred method names.
@@ -451,7 +451,7 @@ Issues with publish process.
 
 ![gifs lol](https://31.media.tumblr.com/568205a0e37ae15eca510fa639589a59/tumblr_n8kw8kpcSb1sg6cg8o1_500.gif)
 
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Allow trailing param commas for methods when using the `es7.trailingCommas` transformer.
  * **Bug Fix**
   * Fix `es6.blockScoping` transformer not properly ignoring `break` in `SwitchCase`.
@@ -481,7 +481,7 @@ Issues with publish process.
   * Fix correct function scope being passed to `nameMethod.property` when inferring the function name for class methods.
   * Fix incorrect extensions reference causing weird issues when using the Babel CLI.
   * Fix destructuring param reference replacements not inheriting from their original param.
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Fix order that method decorators are ran in.
 
 ## 5.2.15
@@ -543,12 +543,12 @@ Issues with publish process.
  * **Internal**
   * Removed native inheritance support from classes.
   * Added `replaceWithSourceString` path API.
-  * Split up `es3.propertyLiterals` and `es3.memberExpressionLiterals` transformers to `minfication.propertyLiterals` and `es3.memberExpressionLiterals`.
+  * Split up `es3.propertyLiterals` and `es3.memberExpressionLiterals` transformers to `minification.propertyLiterals` and `es3.memberExpressionLiterals`.
 
 ## 5.2.6
 
  * **Internal**
-  * Fix transformer aliases being accidently set as deprecated ones.
+  * Fix transformer aliases being accidentally set as deprecated ones.
   * Expose `Pipeline` as `TransformerPipeline` instead.
 
 ## 5.2.5
@@ -616,7 +616,7 @@ Issues with publish process.
   * Fix `externalHelpers` option being incorrectly listed as type `string`.
  * **Internal**
   * Upgrade `core-js` to `0.9.0`.
- * **Spec Compliancy**
+ * **Spec Compliance**
   * Fix object decorators not using the `initializer` pattern.
   * Remove property initializer descriptor reflection.
 
@@ -824,10 +824,10 @@ Issues with publish process.
   * Save register cache on tick instead of `SIGINT`.
   * Enable strict mode on babel-node eval flag.
  * **Bug Fixes**
-  * Add support for live bindings. This change also increases the reliablity of export specifier renaming.
+  * Add support for live bindings. This change also increases the reliability of export specifier renaming.
   * Add support for super update and non equals assignment expressions.
   * Rename shadow constructor binding in classes.
-  * Seed next iteration bindings with previous fresh bindings when reassinging loop block scoped variables.
+  * Seed next iteration bindings with previous fresh bindings when reassigning loop block scoped variables.
   * Fix new expression spread referencing the wrong constructor.
   * Call `resolveModuleSource` on dynamic imports.
   * Added `param` to list of duplicate declaration kinds.
@@ -836,4 +836,3 @@ Issues with publish process.
   * ES7 Abstract References have been removed.
   * Experimental option has been removed in favor of a stage option.
   * Rename `returnUsedHelpers` to `metadataUsedHelpers`.
-  

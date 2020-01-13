@@ -180,12 +180,16 @@ export default () => {
       },
     },
 
+    // NOTE: You can specify the object types whose method needs to be polyfilled.
+    // e.g.  concat: { types: ["array"] }
+    // See ./helpers.js@typeAnnotationToString for the supported types
+
     InstanceProperties: {
       at: { stable: false, path: "at" },
       bind: { stable: true, path: "bind" },
       codePointAt: { stable: true, path: "code-point-at" },
       codePoints: { stable: false, path: "code-points" },
-      concat: { stable: true, path: "concat" },
+      concat: { stable: true, path: "concat", types: ["array"] },
       copyWithin: { stable: true, path: "copy-within" },
       endsWith: { stable: true, path: "ends-with" },
       entries: { stable: true, path: "entries" },

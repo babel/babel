@@ -6,6 +6,7 @@ import { types as t } from "@babel/core";
 
 import getCoreJS2Definitions from "./runtime-corejs2-definitions";
 import getCoreJS3Definitions from "./runtime-corejs3-definitions";
+import { typeAnnotationToString } from "./helpers";
 
 function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
   try {
@@ -110,6 +111,31 @@ export default declare((api, options, dirname) => {
       has(StaticProperties, object) &&
       hasMapping(StaticProperties[object], method)
     );
+  }
+
+  function isNamespaced(path) {
+    const binding = path.scope.getBinding(path.node.name);
+    if (!binding) return false;
+    return binding.path.isImportNamespaceSpecifier();
+  }
+
+  function maybeNeedsPolyfill(path, methods, name) {
+    if (isNamespaced(path.get("object"))) return false;
+    if (!methods[name].types) return true;
+
+    const typeAnnotation = path.get("object").getTypeAnnotation();
+    const type = typeAnnotationToString(typeAnnotation);
+    if (!type) return true;
+
+    return methods[name].types.some(name => name === type);
+  }
+
+  function resolvePropertyName(path, computed) {
+    const { node } = path;
+    if (!computed) return node.name;
+    if (path.isStringLiteral()) return node.value;
+    const result = path.evaluate();
+    return result.value;
   }
 
   if (has(options, "useBuiltIns")) {
@@ -279,12 +305,22 @@ export default declare((api, options, dirname) => {
 
         if (!t.isMemberExpression(callee)) return;
 
-        const { object, property } = callee;
-        const propertyName = property.name;
+        const { object } = callee;
+        const propertyName = resolvePropertyName(
+          path.get("callee.property"),
+          callee.computed,
+        );
 
         // transform calling instance methods like `something.includes()`
         if (injectCoreJS3 && !hasStaticMapping(object.name, propertyName)) {
-          if (hasMapping(InstanceProperties, propertyName)) {
+          if (
+            hasMapping(InstanceProperties, propertyName) &&
+            maybeNeedsPolyfill(
+              path.get("callee"),
+              InstanceProperties,
+              propertyName,
+            )
+          ) {
             let context1, context2;
             if (t.isIdentifier(object)) {
               context1 = object;
@@ -296,9 +332,7 @@ export default declare((api, options, dirname) => {
             node.callee = t.memberExpression(
               t.callExpression(
                 this.addDefaultImport(
-                  `${moduleName}/${corejsRoot}/instance/${
-                    InstanceProperties[propertyName].path
-                  }`,
+                  `${moduleName}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
                   `${propertyName}InstanceProperty`,
                 ),
                 [context2],
@@ -352,42 +386,48 @@ export default declare((api, options, dirname) => {
           if (!path.isReferenced()) return;
 
           const { node } = path;
-          const { object, property } = node;
+          const { object } = node;
 
           if (!t.isReferenced(object, node)) return;
 
-          if (node.computed) {
-            if (injectCoreJS2) return;
-            // transform `something[Symbol.iterator]` to calling `getIteratorMethod(something)` helper
-            if (path.get("property").matchesPattern("Symbol.iterator")) {
-              path.replaceWith(
-                t.callExpression(
-                  this.addDefaultImport(
-                    `${moduleName}/core-js/get-iterator-method`,
-                    "getIteratorMethod",
-                  ),
-                  [object],
+          // transform `something[Symbol.iterator]` to calling `getIteratorMethod(something)` helper
+          if (
+            !injectCoreJS2 &&
+            node.computed &&
+            path.get("property").matchesPattern("Symbol.iterator")
+          ) {
+            path.replaceWith(
+              t.callExpression(
+                this.addDefaultImport(
+                  `${moduleName}/core-js/get-iterator-method`,
+                  "getIteratorMethod",
                 ),
-              );
-            }
+                [object],
+              ),
+            );
             return;
           }
 
           const objectName = object.name;
-          const propertyName = property.name;
+          const propertyName = resolvePropertyName(
+            path.get("property"),
+            node.computed,
+          );
           // doesn't reference the global
           if (
             path.scope.getBindingIdentifier(objectName) ||
             !hasStaticMapping(objectName, propertyName)
           ) {
             // transform getting of instance methods like `method = something.includes`
-            if (injectCoreJS3 && hasMapping(InstanceProperties, propertyName)) {
+            if (
+              injectCoreJS3 &&
+              hasMapping(InstanceProperties, propertyName) &&
+              maybeNeedsPolyfill(path, InstanceProperties, propertyName)
+            ) {
               path.replaceWith(
                 t.callExpression(
                   this.addDefaultImport(
-                    `${moduleName}/${corejsRoot}/instance/${
-                      InstanceProperties[propertyName].path
-                    }`,
+                    `${moduleName}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
                     `${propertyName}InstanceProperty`,
                   ),
                   [object],
@@ -399,9 +439,7 @@ export default declare((api, options, dirname) => {
 
           path.replaceWith(
             this.addDefaultImport(
-              `${modulePath}/${corejsRoot}/${
-                StaticProperties[objectName][propertyName].path
-              }`,
+              `${modulePath}/${corejsRoot}/${StaticProperties[objectName][propertyName].path}`,
               `${objectName}$${propertyName}`,
             ),
           );
@@ -410,6 +448,7 @@ export default declare((api, options, dirname) => {
         exit(path) {
           if (!injectCoreJS) return;
           if (!path.isReferenced()) return;
+          if (path.node.computed) return;
 
           const { node } = path;
           const { object } = node;
@@ -425,7 +464,6 @@ export default declare((api, options, dirname) => {
                 name,
               ),
               node.property,
-              node.computed,
             ),
           );
         },

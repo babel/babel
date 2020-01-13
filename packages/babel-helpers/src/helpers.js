@@ -26,13 +26,14 @@ helpers.typeof = helper("7.0.0-beta.0")`
   }
 `;
 
+// "for" is a reserved keyword in ES3 so escaping it here for backward compatibility
 helpers.jsx = helper("7.0.0-beta.0")`
   var REACT_ELEMENT_TYPE;
 
   export default function _createRawReactElement(type, props, key, children) {
     if (!REACT_ELEMENT_TYPE) {
       REACT_ELEMENT_TYPE = (
-        typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")
+        typeof Symbol === "function" && Symbol["for"] && Symbol["for"]("react.element")
       ) || 0xeac7;
     }
 
@@ -46,15 +47,6 @@ helpers.jsx = helper("7.0.0-beta.0")`
         children: void 0,
       };
     }
-    if (props && defaultProps) {
-      for (var propName in defaultProps) {
-        if (props[propName] === void 0) {
-          props[propName] = defaultProps[propName];
-        }
-      }
-    } else if (!props) {
-      props = defaultProps || {};
-    }
 
     if (childrenLength === 1) {
       props.children = children;
@@ -64,6 +56,16 @@ helpers.jsx = helper("7.0.0-beta.0")`
         childArray[i] = arguments[i + 3];
       }
       props.children = childArray;
+    }
+
+    if (props && defaultProps) {
+      for (var propName in defaultProps) {
+        if (props[propName] === void 0) {
+          props[propName] = defaultProps[propName];
+        }
+      }
+    } else if (!props) {
+      props = defaultProps || {};
     }
 
     return {
@@ -80,7 +82,7 @@ helpers.jsx = helper("7.0.0-beta.0")`
 helpers.asyncIterator = helper("7.0.0-beta.0")`
   export default function _asyncIterator(iterable) {
     var method
-    if (typeof Symbol === "function") {
+    if (typeof Symbol !== "undefined") {
       if (Symbol.asyncIterator) {
         method = iterable[Symbol.asyncIterator]
         if (method != null) return method.call(iterable);
@@ -134,7 +136,7 @@ helpers.AsyncGenerator = helper("7.0.0-beta.0")`
         Promise.resolve(wrappedAwait ? value.wrapped : value).then(
           function (arg) {
             if (wrappedAwait) {
-              resume("next", arg);
+              resume(key === "return" ? "return" : "next", arg);
               return
             }
 
@@ -236,6 +238,10 @@ helpers.asyncGeneratorDelegate = helper("7.0.0-beta.0")`
 
     if (typeof inner.return === "function") {
       iter.return = function (value) {
+        if (waiting) {
+          waiting = false;
+          return value;
+        }
         return pump("return", value);
       };
     }
@@ -384,12 +390,13 @@ helpers.extends = helper("7.0.0-beta.0")`
   }
 `;
 
+// This old helper can be removed in babel v8
 helpers.objectSpread = helper("7.0.0-beta.0")`
   import defineProperty from "defineProperty";
 
   export default function _objectSpread(target) {
     for (var i = 1; i < arguments.length; i++) {
-      var source = (arguments[i] != null) ? arguments[i] : {};
+      var source = (arguments[i] != null) ? Object(arguments[i]) : {};
       var ownKeys = Object.keys(source);
       if (typeof Object.getOwnPropertySymbols === 'function') {
         ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
@@ -399,6 +406,48 @@ helpers.objectSpread = helper("7.0.0-beta.0")`
       ownKeys.forEach(function(key) {
         defineProperty(target, key, source[key]);
       });
+    }
+    return target;
+  }
+`;
+
+helpers.objectSpread2 = helper("7.5.0")`
+  import defineProperty from "defineProperty";
+
+  // This function is different to "Reflect.ownKeys". The enumerableOnly
+  // filters on symbol properties only. Returned string properties are always
+  // enumerable. It is good to use in objectSpread.
+
+  function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+      if (enumerableOnly) symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+      keys.push.apply(keys, symbols);
+    }
+    return keys;
+  }
+
+  export default function _objectSpread2(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = (arguments[i] != null) ? arguments[i] : {};
+      if (i % 2) {
+        ownKeys(Object(source), true).forEach(function (key) {
+          defineProperty(target, key, source[key]);
+        });
+      } else if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+      } else {
+        ownKeys(Object(source)).forEach(function (key) {
+          Object.defineProperty(
+            target,
+            key,
+            Object.getOwnPropertyDescriptor(source, key)
+          );
+        });
+      }
     }
     return target;
   }
@@ -548,7 +597,7 @@ helpers.wrapNativeSuper = helper("7.0.0-beta.0")`
 helpers.instanceof = helper("7.0.0-beta.0")`
   export default function _instanceof(left, right) {
     if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
-      return right[Symbol.hasInstance](left);
+      return !!right[Symbol.hasInstance](left);
     } else {
       return left instanceof right;
     }
@@ -562,28 +611,47 @@ helpers.interopRequireDefault = helper("7.0.0-beta.0")`
 `;
 
 helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
+  function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function () { return cache; };
+    return cache;
+  }
+
   export default function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
       return obj;
-    } else {
-      var newObj = {};
-      if (obj != null) {
-        for (var key in obj) {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = Object.defineProperty && Object.getOwnPropertyDescriptor
-              ? Object.getOwnPropertyDescriptor(obj, key)
-              : {};
-            if (desc.get || desc.set) {
-              Object.defineProperty(newObj, key, desc);
-            } else {
-              newObj[key] = obj[key];
-            }
-          }
+    }
+
+    if (obj === null || (typeof obj !== "object" && typeof obj !== "function")) {
+      return { default: obj }
+    }
+
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) {
+      return cache.get(obj);
+    }
+
+    var newObj = {};
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for (var key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor
+          ? Object.getOwnPropertyDescriptor(obj, key)
+          : null;
+        if (desc && (desc.get || desc.set)) {
+          Object.defineProperty(newObj, key, desc);
+        } else {
+          newObj[key] = obj[key];
         }
       }
-      newObj.default = obj;
-      return newObj;
     }
+    newObj.default = obj;
+    if (cache) {
+      cache.set(obj, newObj);
+    }
+    return newObj;
   }
 `;
 
@@ -676,7 +744,6 @@ helpers.superPropBase = helper("7.0.0-beta.0")`
 `;
 
 helpers.get = helper("7.0.0-beta.0")`
-  import getPrototypeOf from "getPrototypeOf";
   import superPropBase from "superPropBase";
 
   export default function _get(target, property, receiver) {
@@ -701,7 +768,6 @@ helpers.get = helper("7.0.0-beta.0")`
 `;
 
 helpers.set = helper("7.0.0-beta.0")`
-  import getPrototypeOf from "getPrototypeOf";
   import superPropBase from "superPropBase";
   import defineProperty from "defineProperty";
 
@@ -775,18 +841,6 @@ helpers.taggedTemplateLiteralLoose = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.temporalRef = helper("7.0.0-beta.0")`
-  import undef from "temporalUndefined";
-
-  export default function _temporalRef(val, name) {
-    if (val === undef) {
-      throw new ReferenceError(name + " is not defined - temporal dead zone");
-    } else {
-      return val;
-    }
-  }
-`;
-
 helpers.readOnlyError = helper("7.0.0-beta.0")`
   export default function _readOnlyError(name) {
     throw new Error("\\"" + name + "\\" is read-only");
@@ -800,7 +854,24 @@ helpers.classNameTDZError = helper("7.0.0-beta.0")`
 `;
 
 helpers.temporalUndefined = helper("7.0.0-beta.0")`
-  export default {};
+  // This function isn't mean to be called, but to be used as a reference.
+  // We can't use a normal object because it isn't hoisted.
+  export default function _temporalUndefined() {}
+`;
+
+helpers.tdz = helper("7.5.5")`
+  export default function _tdzError(name) {
+    throw new ReferenceError(name + " is not defined - temporal dead zone");
+  }
+`;
+
+helpers.temporalRef = helper("7.0.0-beta.0")`
+  import undef from "temporalUndefined";
+  import err from "tdz";
+
+  export default function _temporalRef(val, name) {
+    return val === undef ? err(name) : val;
+  }
 `;
 
 helpers.slicedToArray = helper("7.0.0-beta.0")`
@@ -871,14 +942,16 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
   export default function _iterableToArrayLimit(arr, i) {
     // this is an expanded form of \`for...of\` that properly supports abrupt completions of
     // iterators etc. variable names have been minimised to reduce the size of this massive
-    // helper. sometimes spec compliancy is annoying :(
+    // helper. sometimes spec compliance is annoying :(
     //
     // _n = _iteratorNormalCompletion
     // _d = _didIteratorError
     // _e = _iteratorError
     // _i = _iterator
     // _s = _step
-
+    if (!(
+      Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]"
+    )) { return }
     var _arr = [];
     var _n = true;
     var _d = false;
@@ -904,6 +977,9 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
 
 helpers.iterableToArrayLimitLoose = helper("7.0.0-beta.0")`
   export default function _iterableToArrayLimitLoose(arr, i) {
+    if (!(
+      Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]"
+    )) { return }
     var _arr = [];
     for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
       _arr.push(_step.value);
@@ -968,9 +1044,7 @@ helpers.initializerWarningHelper = helper("7.0.0-beta.0")`
     export default function _initializerWarningHelper(descriptor, context){
         throw new Error(
           'Decorating class property failed. Please ensure that ' +
-          'proposal-class-properties is enabled and set to use loose mode. ' +
-          'To use proposal-class-properties in spec mode with decorators, wait for ' +
-          'the next major version of decorators in stage 2.'
+          'proposal-class-properties is enabled and runs after the decorators transform.'
         );
     }
 `;
@@ -1045,10 +1119,10 @@ helpers.classPrivateFieldLooseBase = helper("7.0.0-beta.0")`
 
 helpers.classPrivateFieldGet = helper("7.0.0-beta.0")`
   export default function _classPrivateFieldGet(receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
+    var descriptor = privateMap.get(receiver);
+    if (!descriptor) {
       throw new TypeError("attempted to get private field on non-instance");
     }
-    var descriptor = privateMap.get(receiver);
     if (descriptor.get) {
       return descriptor.get.call(receiver);
     }
@@ -1058,10 +1132,10 @@ helpers.classPrivateFieldGet = helper("7.0.0-beta.0")`
 
 helpers.classPrivateFieldSet = helper("7.0.0-beta.0")`
   export default function _classPrivateFieldSet(receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
+    var descriptor = privateMap.get(receiver);
+    if (!descriptor) {
       throw new TypeError("attempted to set private field on non-instance");
     }
-    var descriptor = privateMap.get(receiver);
     if (descriptor.set) {
       descriptor.set.call(receiver, value);
     } else {
@@ -1079,10 +1153,41 @@ helpers.classPrivateFieldSet = helper("7.0.0-beta.0")`
   }
 `;
 
+helpers.classPrivateFieldDestructureSet = helper("7.4.4")`
+  export default function _classPrivateFieldDestructureSet(receiver, privateMap) {
+    if (!privateMap.has(receiver)) {
+      throw new TypeError("attempted to set private field on non-instance");
+    }
+    var descriptor = privateMap.get(receiver);
+    if (descriptor.set) {
+      if (!("__destrObj" in descriptor)) {
+        descriptor.__destrObj = {
+          set value(v) {
+            descriptor.set.call(receiver, v)
+          },
+        };
+      }
+      return descriptor.__destrObj;
+    } else {
+      if (!descriptor.writable) {
+        // This should only throw in strict mode, but class bodies are
+        // always strict and private fields can only be used inside
+        // class bodies.
+        throw new TypeError("attempted to set read only private field");
+      }
+
+      return descriptor;
+    }
+  }
+`;
+
 helpers.classStaticPrivateFieldSpecGet = helper("7.0.2")`
   export default function _classStaticPrivateFieldSpecGet(receiver, classConstructor, descriptor) {
     if (receiver !== classConstructor) {
       throw new TypeError("Private static access of wrong provenance");
+    }
+    if (descriptor.get) {
+      return descriptor.get.call(receiver);
     }
     return descriptor.value;
   }
@@ -1093,13 +1198,18 @@ helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
     if (receiver !== classConstructor) {
       throw new TypeError("Private static access of wrong provenance");
     }
-    if (!descriptor.writable) {
-      // This should only throw in strict mode, but class bodies are
-      // always strict and private fields can only be used inside
-      // class bodies.
-      throw new TypeError("attempted to set read only private field");
+    if (descriptor.set) {
+      descriptor.set.call(receiver, value);
+    } else {
+      if (!descriptor.writable) {
+        // This should only throw in strict mode, but class bodies are
+        // always strict and private fields can only be used inside
+        // class bodies.
+        throw new TypeError("attempted to set read only private field");
+      }
+      descriptor.value = value;
     }
-    descriptor.value = value;
+
     return value;
   }
 `;
@@ -1816,16 +1926,17 @@ helpers.wrapRegExp = helper("7.2.6")`
 
   export default function _wrapRegExp(re, groups) {
     _wrapRegExp = function(re, groups) {
-      return new BabelRegExp(re, groups);
+      return new BabelRegExp(re, undefined, groups);
     };
 
     var _RegExp = wrapNativeSuper(RegExp);
     var _super = RegExp.prototype;
     var _groups = new WeakMap();
 
-    function BabelRegExp(re, groups) {
-      var _this = _RegExp.call(this, re);
-      _groups.set(_this, groups);
+    function BabelRegExp(re, flags, groups) {
+      var _this = _RegExp.call(this, re, flags);
+      // if the regex is recreated with 'g' flag
+      _groups.set(_this, groups || _groups.get(re));
       return _this;
     }
     inherits(BabelRegExp, _RegExp);
@@ -1870,7 +1981,7 @@ helpers.wrapRegExp = helper("7.2.6")`
       // but in that case Babel doesn't add the wrapper anyway.
 
       var g = _groups.get(re);
-      return Object.keys(groups).reduce(function(groups, name) {
+      return Object.keys(g).reduce(function(groups, name) {
         groups[name] = result[g[name]];
         return groups;
       }, Object.create(null));

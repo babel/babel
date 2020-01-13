@@ -1,10 +1,11 @@
 {
   "name": "@babel/plugin-transform-object-assign",
-  "version": "7.2.0",
+  "version": "7.8.0",
   "description": "Replace Object.assign with an inline helper",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-assign",
   "author": "Jed Watson",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },
@@ -13,13 +14,13 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.0.0"
+    "@babel/helper-plugin-utils": "^7.8.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.2.0",
-    "@babel/helper-plugin-test-runner": "^7.0.0"
+    "@babel/core": "^7.8.0",
+    "@babel/helper-plugin-test-runner": "^7.8.0"
   }
 }

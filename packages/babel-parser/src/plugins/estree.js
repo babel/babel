@@ -1,5 +1,7 @@
 // @flow
 
+/* global BigInt */
+
 import { types as tt, TokenType } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
@@ -27,6 +29,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
       const node = this.estreeParseLiteral(regex);
       node.regex = { pattern, flags };
+
+      return node;
+    }
+
+    estreeParseBigIntLiteral(value: any): N.Node {
+      // https://github.com/estree/estree/blob/master/es2020.md#bigintliteral
+      // $FlowIgnore
+      const bigInt = typeof BigInt !== "undefined" ? BigInt(value) : null;
+      const node = this.estreeParseLiteral(bigInt);
+      node.bigint = String(node.value || value);
 
       return node;
     }
@@ -93,9 +105,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } else {
           this.raise(start, "setter must have exactly one formal parameter");
         }
-      }
-
-      if (prop.kind === "set" && prop.value.params[0].type === "RestElement") {
+      } else if (
+        prop.kind === "set" &&
+        prop.value.params[0].type === "RestElement"
+      ) {
         this.raise(
           start,
           "setter function argument must not be a rest parameter",
@@ -105,9 +118,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkLVal(
       expr: N.Expression,
-      bindingType: ?BindingTypes = BIND_NONE,
+      bindingType: BindingTypes = BIND_NONE,
       checkClashes: ?{ [key: string]: boolean },
       contextDescription: string,
+      disallowLetBinding?: boolean,
     ): void {
       switch (expr.type) {
         case "ObjectPattern":
@@ -117,17 +131,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               bindingType,
               checkClashes,
               "object destructuring pattern",
+              disallowLetBinding,
             );
           });
           break;
         default:
-          super.checkLVal(expr, bindingType, checkClashes, contextDescription);
+          super.checkLVal(
+            expr,
+            bindingType,
+            checkClashes,
+            contextDescription,
+            disallowLetBinding,
+          );
       }
     }
 
-    checkPropClash(
+    checkDuplicatedProto(
       prop: N.ObjectMember | N.SpreadElement,
-      propHash: { [key: string]: boolean },
+      protoRef: { used: boolean, start?: number },
     ): void {
       if (
         prop.type === "SpreadElement" ||
@@ -144,31 +165,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const name = key.type === "Identifier" ? key.name : String(key.value);
 
       if (name === "__proto__" && prop.kind === "init") {
-        if (propHash.proto) {
-          this.raise(key.start, "Redefinition of __proto__ property");
+        // Store the first redefinition's position
+        if (protoRef.used && !protoRef.start) {
+          protoRef.start = key.start;
         }
-        propHash.proto = true;
+
+        protoRef.used = true;
       }
-    }
-
-    isStrictBody(node: { body: N.BlockStatement }): boolean {
-      const isBlockStatement = node.body.type === "BlockStatement";
-
-      if (isBlockStatement && node.body.body.length > 0) {
-        for (const directive of node.body.body) {
-          if (
-            directive.type === "ExpressionStatement" &&
-            directive.expression.type === "Literal"
-          ) {
-            if (directive.expression.value === "use strict") return true;
-          } else {
-            // Break for the first non literal expression
-            break;
-          }
-        }
-      }
-
-      return false;
     }
 
     isValidDirective(stmt: N.Statement): boolean {
@@ -220,7 +223,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isAsync,
         isConstructor,
         allowsDirectSuper,
-        "MethodDefinition",
+        "ClassMethod",
         true,
       );
       if (method.typeParameters) {
@@ -233,12 +236,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseExprAtom(refShorthandDefaultPos?: ?Pos): N.Expression {
       switch (this.state.type) {
-        case tt.regexp:
-          return this.estreeParseRegExpLiteral(this.state.value);
-
         case tt.num:
         case tt.string:
           return this.estreeParseLiteral(this.state.value);
+
+        case tt.regexp:
+          return this.estreeParseRegExpLiteral(this.state.value);
+
+        case tt.bigint:
+          return this.estreeParseBigIntLiteral(this.state.value);
 
         case tt._null:
           return this.estreeParseLiteral(null);
@@ -293,13 +299,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isAsync,
         isConstructor,
         allowDirectSuper,
-        "FunctionExpression",
+        type,
         inClassScope,
       );
+      funcNode.type = "FunctionExpression";
       delete funcNode.kind;
       // $FlowIgnore
       node.value = funcNode;
 
+      type = type === "ClassMethod" ? "MethodDefinition" : type;
       return this.finishNode(node, type);
     }
 
@@ -370,14 +378,45 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isLast: boolean,
     ) {
       if (prop.kind === "get" || prop.kind === "set") {
-        this.raise(
+        throw this.raise(
           prop.key.start,
           "Object pattern can't contain getter or setter",
         );
       } else if (prop.method) {
-        this.raise(prop.key.start, "Object pattern can't contain methods");
+        throw this.raise(
+          prop.key.start,
+          "Object pattern can't contain methods",
+        );
       } else {
         super.toAssignableObjectExpressionProp(prop, isBinding, isLast);
       }
+    }
+
+    finishCallExpression<T: N.CallExpression | N.OptionalCallExpression>(
+      node: T,
+      optional: boolean,
+    ): N.Expression {
+      super.finishCallExpression(node, optional);
+
+      if (node.callee.type === "Import") {
+        ((node: N.Node): N.EstreeImportExpression).type = "ImportExpression";
+        ((node: N.Node): N.EstreeImportExpression).source = node.arguments[0];
+        delete node.arguments;
+        delete node.callee;
+      }
+
+      return node;
+    }
+
+    toReferencedListDeep(
+      exprList: $ReadOnlyArray<?N.Expression>,
+      isParenthesizedExpr?: boolean,
+    ): void {
+      // ImportExpressions do not have an arguments array.
+      if (!exprList) {
+        return;
+      }
+
+      super.toReferencedListDeep(exprList, isParenthesizedExpr);
     }
   };

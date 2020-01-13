@@ -1,7 +1,7 @@
 // @flow
 
 import type { PluginPasses } from "../../config";
-import convertSourceMap, { type SourceMap } from "convert-source-map";
+import convertSourceMap, { typeof SourceMap } from "convert-source-map";
 import generate from "@babel/generator";
 
 import type File from "./file";
@@ -41,7 +41,7 @@ export default function generateCode(
 
     if (typeof result.then === "function") {
       throw new Error(
-        `You appear to be using an async parser plugin, ` +
+        `You appear to be using an async codegen plugin, ` +
           `which your current version of Babel does not support. ` +
           `If you're using a published plugin, ` +
           `you may need to upgrade your @babel/core version.`,

@@ -102,6 +102,45 @@ describe("@babel/code-frame", function() {
     );
   });
 
+  test("opts.highlightCode with multiple columns and lines", function() {
+    // prettier-ignore
+    const rawLines = [
+      "function a(b, c) {", 
+      "  return b + c;", 
+      "}"
+    ].join("\n");
+
+    const result = codeFrameColumns(
+      rawLines,
+      {
+        start: {
+          line: 1,
+          column: 1,
+        },
+        end: {
+          line: 3,
+          column: 1,
+        },
+      },
+      {
+        highlightCode: true,
+        message: "Message about things",
+      },
+    );
+    const stripped = stripAnsi(result);
+    expect(stripped).toEqual(
+      // prettier-ignore
+      [
+        "> 1 | function a(b, c) {",
+        "    | ^^^^^^^^^^^^^^^^^^",
+        "> 2 |   return b + c;",
+        "    | ^^^^^^^^^^^^^^^",
+        "> 3 | }",
+        "    | ^ Message about things",
+      ].join('\n'),
+    );
+  });
+
   test("opts.linesAbove", function() {
     const rawLines = [
       "/**",

@@ -71,26 +71,8 @@ export function ClassBody(node: Object) {
 
 export function ClassProperty(node: Object) {
   this.printJoin(node.decorators, node);
+  this.tsPrintClassMemberModifiers(node, /* isField */ true);
 
-  if (node.accessibility) {
-    // TS
-    this.word(node.accessibility);
-    this.space();
-  }
-  if (node.static) {
-    this.word("static");
-    this.space();
-  }
-  if (node.abstract) {
-    // TS
-    this.word("abstract");
-    this.space();
-  }
-  if (node.readonly) {
-    // TS
-    this.word("readonly");
-    this.space();
-  }
   if (node.computed) {
     this.token("[");
     this.print(node.key, node);
@@ -148,23 +130,6 @@ export function ClassPrivateMethod(node: Object) {
 
 export function _classMethodHead(node) {
   this.printJoin(node.decorators, node);
-
-  if (node.accessibility) {
-    // TS
-    this.word(node.accessibility);
-    this.space();
-  }
-
-  if (node.abstract) {
-    // TS
-    this.word("abstract");
-    this.space();
-  }
-
-  if (node.static) {
-    this.word("static");
-    this.space();
-  }
-
+  this.tsPrintClassMemberModifiers(node, /* isField */ false);
   this._methodHead(node);
 }

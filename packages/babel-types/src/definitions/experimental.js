@@ -26,14 +26,28 @@ defineType("AwaitExpression", {
 defineType("BindExpression", {
   visitor: ["object", "callee"],
   aliases: ["Expression"],
-  fields: {
-    // todo
-  },
+  fields: !process.env.BABEL_TYPES_8_BREAKING
+    ? {}
+    : {
+        object: {
+          validate: assertNodeType("Expression"),
+        },
+        callee: {
+          validate: assertNodeType("Expression"),
+        },
+      },
 });
 
 defineType("ClassProperty", {
   visitor: ["key", "value", "typeAnnotation", "decorators"],
-  builder: ["key", "value", "typeAnnotation", "decorators", "computed"],
+  builder: [
+    "key",
+    "value",
+    "typeAnnotation",
+    "decorators",
+    "computed",
+    "static",
+  ],
   aliases: ["Property"],
   fields: {
     ...classMethodOrPropertyCommon,
@@ -57,6 +71,10 @@ defineType("ClassProperty", {
       optional: true,
     },
     readonly: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
+    declare: {
       validate: assertValueType("boolean"),
       optional: true,
     },
@@ -146,8 +164,8 @@ defineType("OptionalCallExpression", {
 });
 
 defineType("ClassPrivateProperty", {
-  visitor: ["key", "value"],
-  builder: ["key", "value"],
+  visitor: ["key", "value", "decorators"],
+  builder: ["key", "value", "decorators"],
   aliases: ["Property", "Private"],
   fields: {
     key: {
@@ -155,6 +173,13 @@ defineType("ClassPrivateProperty", {
     },
     value: {
       validate: assertNodeType("Expression"),
+      optional: true,
+    },
+    decorators: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Decorator")),
+      ),
       optional: true,
     },
   },

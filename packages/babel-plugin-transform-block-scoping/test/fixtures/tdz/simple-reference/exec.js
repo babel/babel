@@ -1,2 +1,4 @@
-i
-let i
+expect(() => {
+  i
+  let i
+}).toThrow(ReferenceError);

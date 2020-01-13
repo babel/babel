@@ -134,6 +134,92 @@ export function DeclareExportAllDeclaration(/*node: Object*/) {
   ExportAllDeclaration.apply(this, arguments);
 }
 
+export function EnumDeclaration(node: Object) {
+  const { id, body } = node;
+  this.word("enum");
+  this.space();
+  this.print(id, node);
+  this.print(body, node);
+}
+
+function enumExplicitType(
+  context: Object,
+  name: string,
+  hasExplicitType: boolean,
+) {
+  if (hasExplicitType) {
+    context.space();
+    context.word("of");
+    context.space();
+    context.word(name);
+  }
+  context.space();
+}
+
+function enumBody(context: Object, node: Object) {
+  const { members } = node;
+  context.token("{");
+  context.indent();
+  context.newline();
+  for (const member of members) {
+    context.print(member, node);
+    context.newline();
+  }
+  context.dedent();
+  context.token("}");
+}
+
+export function EnumBooleanBody(node: Object) {
+  const { explicitType } = node;
+  enumExplicitType(this, "boolean", explicitType);
+  enumBody(this, node);
+}
+
+export function EnumNumberBody(node: Object) {
+  const { explicitType } = node;
+  enumExplicitType(this, "number", explicitType);
+  enumBody(this, node);
+}
+
+export function EnumStringBody(node: Object) {
+  const { explicitType } = node;
+  enumExplicitType(this, "string", explicitType);
+  enumBody(this, node);
+}
+
+export function EnumSymbolBody(node: Object) {
+  enumExplicitType(this, "symbol", true);
+  enumBody(this, node);
+}
+
+export function EnumDefaultedMember(node: Object) {
+  const { id } = node;
+  this.print(id, node);
+  this.token(",");
+}
+
+function enumInitializedMember(context: Object, node: Object) {
+  const { id, init } = node;
+  context.print(id, node);
+  context.space();
+  context.token("=");
+  context.space();
+  context.print(init, node);
+  context.token(",");
+}
+
+export function EnumBooleanMember(node: Object) {
+  enumInitializedMember(this, node);
+}
+
+export function EnumNumberMember(node: Object) {
+  enumInitializedMember(this, node);
+}
+
+export function EnumStringMember(node: Object) {
+  enumInitializedMember(this, node);
+}
+
 function FlowExportDeclaration(node: Object) {
   if (node.declaration) {
     const declar = node.declaration;
@@ -409,7 +495,7 @@ export function ObjectTypeAnnotation(node: Object) {
       indent: true,
       statement: true,
       iterator: () => {
-        if (props.length !== 1) {
+        if (props.length !== 1 || node.inexact) {
           this.token(",");
           this.space();
         }
@@ -417,6 +503,15 @@ export function ObjectTypeAnnotation(node: Object) {
     });
 
     this.space();
+  }
+
+  if (node.inexact) {
+    this.indent();
+    this.token("...");
+    if (props.length) {
+      this.newline();
+    }
+    this.dedent();
   }
 
   if (node.exact) {

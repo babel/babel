@@ -1,0 +1,7 @@
+{
+  "validateLogs": true,
+  "plugins": [
+    "transform-modules-systemjs",
+    "external-helpers"
+  ]
+}

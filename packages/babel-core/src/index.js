@@ -1,9 +1,7 @@
 // @flow
 
 export { default as File } from "./transformation/file/file";
-export {
-  default as buildExternalHelpers,
-} from "./tools/build-external-helpers";
+export { default as buildExternalHelpers } from "./tools/build-external-helpers";
 export { resolvePlugin, resolvePreset } from "./config/files";
 
 export { version } from "../package.json";
@@ -17,7 +15,14 @@ export { default as template } from "@babel/template";
 
 export { createConfigItem } from "./config/item";
 
-export { loadPartialConfig, loadOptions } from "./config";
+export {
+  loadPartialConfig,
+  loadPartialConfigSync,
+  loadPartialConfigAsync,
+  loadOptions,
+  loadOptionsSync,
+  loadOptionsAsync,
+} from "./config";
 
 export { transform, transformSync, transformAsync } from "./transform";
 export {

@@ -32,6 +32,15 @@ const referenceVisitor = {
     const binding = path.scope.getBinding(path.node.name);
     if (!binding) return;
 
+    // we can handle reassignments only if they happen in the same scope as the declaration
+    for (const violation of binding.constantViolations) {
+      if (violation.scope !== binding.path.scope) {
+        state.mutableBinding = true;
+        path.stop();
+        return;
+      }
+    }
+
     // this binding isn't accessible from the parent scope so we can safely ignore it
     // eg. it's in a closure etc
     if (binding !== state.scope.getBinding(path.node.name)) return;
@@ -46,6 +55,9 @@ export default class PathHoister {
     this.breakOnScopePaths = [];
     // Storage for bindings that may affect what path we can hoist to.
     this.bindings = {};
+    // "true" if the current path contains a reference to a binding whose
+    // value can change and thus can't be safely hoisted.
+    this.mutableBinding = false;
     // Storage for eligible scopes.
     this.scopes = [];
     // Our original scope and path.
@@ -194,6 +206,8 @@ export default class PathHoister {
 
   run() {
     this.path.traverse(referenceVisitor, this);
+
+    if (this.mutableBinding) return;
 
     this.getCompatibleScopes();
 

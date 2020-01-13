@@ -10,6 +10,19 @@ import CommentsParser from "./comments";
 // message.
 
 export default class LocationParser extends CommentsParser {
+  +isLookahead: boolean;
+
+  getLocationForPosition(pos: number): Position {
+    let loc;
+    if (pos === this.state.start) loc = this.state.startLoc;
+    else if (pos === this.state.lastTokStart) loc = this.state.lastTokStartLoc;
+    else if (pos === this.state.end) loc = this.state.endLoc;
+    else if (pos === this.state.lastTokEnd) loc = this.state.lastTokEndLoc;
+    else loc = getLineInfo(this.input, pos);
+
+    return loc;
+  }
+
   raise(
     pos: number,
     message: string,
@@ -20,8 +33,9 @@ export default class LocationParser extends CommentsParser {
       missingPluginNames?: Array<string>,
       code?: string,
     } = {},
-  ): empty {
-    const loc = getLineInfo(this.input, pos);
+  ): Error | empty {
+    const loc = this.getLocationForPosition(pos);
+
     message += ` (${loc.line}:${loc.column})`;
     // $FlowIgnore
     const err: SyntaxError & { pos: number, loc: Position } = new SyntaxError(
@@ -35,6 +49,12 @@ export default class LocationParser extends CommentsParser {
     if (code !== undefined) {
       err.code = code;
     }
-    throw err;
+
+    if (this.options.errorRecovery) {
+      if (!this.isLookahead) this.state.errors.push(err);
+      return err;
+    } else {
+      throw err;
+    }
   }
 }

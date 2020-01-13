@@ -1,0 +1,1 @@
+"no use strict anywhere";

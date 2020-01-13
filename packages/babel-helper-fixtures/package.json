@@ -1,17 +1,17 @@
 {
   "name": "@babel/helper-fixtures",
-  "version": "7.2.0",
+  "version": "7.8.0",
   "description": "Helper function to support fixtures",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "license": "MIT",
+  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-fixtures",
   "main": "lib/index.js",
   "dependencies": {
-    "lodash": "^4.17.11",
-    "semver": "^5.3.0",
-    "try-resolve": "^1.0.0"
+    "lodash": "^4.17.13",
+    "semver": "^5.3.0"
   }
 }

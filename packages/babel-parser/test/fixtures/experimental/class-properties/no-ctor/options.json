@@ -1,4 +1,3 @@
 {
-  "throws": "Classes may not have a non-static field named 'constructor' (2:2)",
   "plugins": ["classProperties"]
 }

@@ -1,6 +1,4 @@
 import cloneDeep from "lodash/cloneDeep";
-import trimEnd from "lodash/trimEnd";
-import resolve from "try-resolve";
 import clone from "lodash/clone";
 import extend from "lodash/extend";
 import semver from "semver";
@@ -36,6 +34,13 @@ type Suite = {
   filename: string,
 };
 
+function tryResolve(module) {
+  try {
+    return require.resolve(module);
+  } catch (e) {
+    return null;
+  }
+}
 function assertDirectory(loc) {
   if (!fs.statSync(loc).isDirectory()) {
     throw new Error(`Expected ${loc} to be a directory.`);
@@ -77,7 +82,7 @@ export default function get(entryLoc): Array<Suite> {
   const suites = [];
 
   let rootOpts = {};
-  const rootOptsLoc = resolve(entryLoc + "/options");
+  const rootOptsLoc = tryResolve(entryLoc + "/options");
   if (rootOptsLoc) rootOpts = require(rootOptsLoc);
 
   for (const suiteName of fs.readdirSync(entryLoc)) {
@@ -93,7 +98,7 @@ export default function get(entryLoc): Array<Suite> {
     assertDirectory(suite.filename);
     suites.push(suite);
 
-    const suiteOptsLoc = resolve(suite.filename + "/options");
+    const suiteOptsLoc = tryResolve(suite.filename + "/options");
     if (suiteOptsLoc) suite.options = require(suiteOptsLoc);
 
     for (const taskName of fs.readdirSync(suite.filename)) {
@@ -120,6 +125,8 @@ export default function get(entryLoc): Array<Suite> {
       const expectLoc =
         findFile(taskDir + "/output", true /* allowJSON */) ||
         taskDir + "/output.js";
+      const stdoutLoc = taskDir + "/stdout.txt";
+      const stderrLoc = taskDir + "/stderr.txt";
 
       const actualLocAlias =
         suiteName + "/" + taskName + "/" + path.basename(actualLoc);
@@ -138,7 +145,7 @@ export default function get(entryLoc): Array<Suite> {
 
       const taskOpts = cloneDeep(suite.options);
 
-      const taskOptsLoc = resolve(taskDir + "/options");
+      const taskOptsLoc = tryResolve(taskDir + "/options");
       if (taskOptsLoc) extend(taskOpts, require(taskOptsLoc));
 
       const test = {
@@ -146,6 +153,10 @@ export default function get(entryLoc): Array<Suite> {
         title: humanize(taskName, true),
         disabled: taskName[0] === ".",
         options: taskOpts,
+        validateLogs: taskOpts.validateLogs,
+        ignoreOutput: taskOpts.ignoreOutput,
+        stdout: { loc: stdoutLoc, code: readFile(stdoutLoc) },
+        stderr: { loc: stderrLoc, code: readFile(stderrLoc) },
         exec: {
           loc: execLoc,
           code: readFile(execLoc),
@@ -169,9 +180,7 @@ export default function get(entryLoc): Array<Suite> {
 
         if (minimumVersion == null) {
           throw new Error(
-            `'minNodeVersion' has invalid semver format: ${
-              taskOpts.minNodeVersion
-            }`,
+            `'minNodeVersion' has invalid semver format: ${taskOpts.minNodeVersion}`,
           );
         }
 
@@ -181,6 +190,26 @@ export default function get(entryLoc): Array<Suite> {
 
         // Delete to avoid option validation error
         delete taskOpts.minNodeVersion;
+      }
+
+      if (taskOpts.os) {
+        let os = taskOpts.os;
+
+        if (!Array.isArray(os) && typeof os !== "string") {
+          throw new Error(
+            `'os' should be either string or string array: ${taskOpts.os}`,
+          );
+        }
+
+        if (typeof os === "string") {
+          os = [os];
+        }
+
+        if (!os.includes(process.platform)) {
+          return;
+        }
+
+        delete taskOpts.os;
       }
 
       // traceur checks
@@ -224,6 +253,30 @@ export default function get(entryLoc): Array<Suite> {
           );
         }
       }
+
+      if (!test.validateLogs && (test.stdout.code || test.stderr.code)) {
+        throw new Error(
+          "stdout.txt and stderr.txt are only allowed when the 'validateLogs' option is enabled: " +
+            (test.stdout.code ? stdoutLoc : stderrLoc),
+        );
+      }
+      if (test.options.ignoreOutput) {
+        if (test.expect.code) {
+          throw new Error(
+            "Test cannot ignore its output and also validate it: " + expectLoc,
+          );
+        }
+        if (!test.validateLogs) {
+          throw new Error(
+            "ignoreOutput can only be used when validateLogs is true: " +
+              taskOptsLoc,
+          );
+        }
+      }
+
+      // Delete to avoid option validation error
+      delete test.options.validateLogs;
+      delete test.options.ignoreOutput;
     }
   }
 
@@ -247,7 +300,7 @@ export function multiple(entryLoc, ignore?: Array<string>) {
 
 export function readFile(filename) {
   if (fs.existsSync(filename)) {
-    let file = trimEnd(fs.readFileSync(filename, "utf8"));
+    let file = fs.readFileSync(filename, "utf8").trimRight();
     file = file.replace(/\r\n/g, "\n");
     return file;
   } else {

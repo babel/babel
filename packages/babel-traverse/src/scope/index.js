@@ -490,12 +490,7 @@ export default class Scope {
   }
 
   buildUndefinedNode() {
-    if (this.hasBinding("undefined")) {
-      return t.unaryExpression("void", t.numericLiteral(0), true);
-    } else {
-      // eslint-disable-next-line @babel/development/no-undefined-identifier
-      return t.identifier("undefined");
-    }
+    return t.unaryExpression("void", t.numericLiteral(0), true);
   }
 
   registerConstantViolation(path: NodePath) {
@@ -902,10 +897,27 @@ export default class Scope {
 
   getBinding(name: string) {
     let scope = this;
+    let previousPath;
 
     do {
       const binding = scope.getOwnBinding(name);
-      if (binding) return binding;
+      if (binding) {
+        // Check if a pattern is a part of parameter expressions.
+        // 9.2.10.28: The closure created by this expression should not have visibility of
+        // declarations in the function body. If the binding is not a `param`-kind,
+        // then it must be defined inside the function body, thus it should be skipped
+        if (
+          previousPath &&
+          previousPath.isPattern() &&
+          previousPath.parentPath.isFunction() &&
+          binding.kind !== "param"
+        ) {
+          // do nothing
+        } else {
+          return binding;
+        }
+      }
+      previousPath = scope.path;
     } while ((scope = scope.parent));
   }
 

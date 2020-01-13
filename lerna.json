@@ -1,5 +1,5 @@
 {
-  "version": "7.4.1",
+  "version": "7.8.2",
   "changelog": {
     "repo": "babel/babel",
     "cacheDir": ".changelog",
@@ -10,7 +10,9 @@
       "PR: Bug Fix :bug:": ":bug: Bug Fix",
       "PR: Polish :nail_care:": ":nail_care: Polish",
       "PR: Docs :memo:": ":memo: Documentation",
-      "PR: Internal :house:": ":house: Internal"
+      "PR: Internal :house:": ":house: Internal",
+      "PR: Performance :running_woman:": ":running_woman: Performance",
+      "PR: Revert :leftwards_arrow_with_hook:": ":leftwards_arrow_with_hook: Revert"
     }
   },
   "command": {
@@ -19,14 +21,18 @@
         "*.md",
         "*.txt",
         "test/**",
+        "**/test/**",
         "codemods/**",
         "# We ignore every JSON file, except for built-in-modules, built-ins and plugins defined in babel-preset-env/data.",
-        "@(!(built-in-modules|built-ins|plugins)).json"
+        "@(!(built-in-modules|built-ins|plugins|package)).json",
+        "# Until the ESLint packages version are aligned with Babel's, we ignore them",
+        "eslint/**"
       ]
     }
   },
   "packages": [
     "codemods/*",
+    "eslint/*",
     "packages/*"
   ],
   "npmClient": "yarn",

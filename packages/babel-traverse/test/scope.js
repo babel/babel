@@ -73,6 +73,25 @@ describe("scope", () => {
       ).toBe("Identifier");
     });
 
+    describe("function parameter expression", function() {
+      it("should not have visibility of declarations inside function body", () => {
+        expect(
+          getPath(
+            `var a = "outside"; (function foo(b = a) { let a = "inside" })`,
+          )
+            .get("body.1.expression.params.0")
+            .scope.getBinding("a").path.node.init.value,
+        ).toBe("outside");
+      });
+      it("should have visibility on parameter bindings", () => {
+        expect(
+          getPath(`var a = "outside"; (function foo(b = a, a = "inside") {})`)
+            .get("body.1.expression.params.0")
+            .scope.getBinding("a").path.node.right.value,
+        ).toBe("inside");
+      });
+    });
+
     it("variable declaration", function() {
       expect(getPath("var foo = null;").scope.getBinding("foo").path.type).toBe(
         "VariableDeclarator",

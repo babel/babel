@@ -101,8 +101,12 @@ Object.keys(types.BUILDER_KEYS)
         }
         if (defaultValue !== null || types.NODE_FIELDS[key][field].optional) {
           fieldDescription.push(
-            " (default: `" + util.inspect(defaultValue) + "`)"
+            " (default: `" + util.inspect(defaultValue) + "`"
           );
+          if (types.BUILDER_KEYS[key].indexOf(field) < 0) {
+            fieldDescription.push(", excluded from builder function");
+          }
+          fieldDescription.push(")");
         } else {
           fieldDescription.push(" (required)");
         }

@@ -74,6 +74,9 @@
             },
             "name": "log"
           },
+          "extra": {
+            "trailingComma": 13
+          },
           "arguments": [
             {
               "type": "Identifier",

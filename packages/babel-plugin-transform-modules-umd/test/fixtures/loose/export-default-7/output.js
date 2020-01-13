@@ -10,7 +10,7 @@
     factory(mod.exports);
     global.input = mod.exports;
   }
-})(this, function (_exports) {
+})(typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : this, function (_exports) {
   "use strict";
 
   _exports.__esModule = true;

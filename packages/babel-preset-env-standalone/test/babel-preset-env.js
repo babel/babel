@@ -1,3 +1,4 @@
+// build-babel-standalone in CI coverage tests is skipped, so we skip this test as well
 (process.env.TEST_TYPE === "cov" ? describe.skip : describe)(
   "babel-preset-env-standalone",
   () => {

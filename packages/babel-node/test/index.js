@@ -2,7 +2,7 @@ const includes = require("lodash/includes");
 const readdir = require("fs-readdir-recursive");
 const helper = require("@babel/helper-fixtures");
 const rimraf = require("rimraf");
-const outputFileSync = require("output-file-sync");
+const { sync: makeDirSync } = require("make-dir");
 const child = require("child_process");
 const merge = require("lodash/merge");
 const path = require("path");
@@ -13,6 +13,11 @@ const tmpLoc = path.join(__dirname, "tmp");
 
 const fileFilter = function(x) {
   return x !== ".DS_Store";
+};
+
+const outputFileSync = function(filePath, data) {
+  makeDirSync(path.dirname(filePath));
+  fs.writeFileSync(filePath, data);
 };
 
 const presetLocs = [
@@ -77,7 +82,7 @@ const assertTest = function(stdout, stderr, opts) {
     const actualFiles = readDir(path.join(tmpLoc));
 
     Object.keys(actualFiles).forEach(function(filename) {
-      if (!opts.inFiles.hasOwnProperty(filename)) {
+      if (!Object.prototype.hasOwnProperty.call(opts.inFiles, filename)) {
         const expected = opts.outFiles[filename];
         const actual = actualFiles[filename];
 
@@ -99,7 +104,6 @@ const buildTest = function(binName, testName, opts) {
   const binLoc = path.join(__dirname, "../lib", binName);
 
   return function(callback) {
-    clear();
     saveInFiles(opts.inFiles);
 
     let args = [binLoc];
@@ -146,13 +150,6 @@ const buildTest = function(binName, testName, opts) {
   };
 };
 
-const clear = function() {
-  process.chdir(__dirname);
-  if (fs.existsSync(tmpLoc)) rimraf.sync(tmpLoc);
-  fs.mkdirSync(tmpLoc);
-  process.chdir(tmpLoc);
-};
-
 fs.readdirSync(fixtureLoc).forEach(function(binName) {
   if (binName[0] === ".") return;
 
@@ -162,6 +159,16 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
 
     beforeEach(() => {
       cwd = process.cwd();
+
+      if (fs.existsSync(tmpLoc)) {
+        for (const child of fs.readdirSync(tmpLoc)) {
+          rimraf.sync(path.join(tmpLoc, child));
+        }
+      } else {
+        fs.mkdirSync(tmpLoc);
+      }
+
+      process.chdir(tmpLoc);
     });
 
     afterEach(() => {
@@ -198,7 +205,7 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
         opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
       }
 
-      it(testName, buildTest(binName, testName, opts));
+      it(testName, buildTest(binName, testName, opts), 20000);
     });
   });
 });

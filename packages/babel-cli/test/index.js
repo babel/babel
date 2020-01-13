@@ -1,7 +1,7 @@
 const readdir = require("fs-readdir-recursive");
 const helper = require("@babel/helper-fixtures");
 const rimraf = require("rimraf");
-const outputFileSync = require("output-file-sync");
+const { sync: makeDirSync } = require("make-dir");
 const child = require("child_process");
 const merge = require("lodash/merge");
 const path = require("path");
@@ -12,6 +12,11 @@ const tmpLoc = path.join(__dirname, "tmp");
 
 const fileFilter = function(x) {
   return x !== ".DS_Store";
+};
+
+const outputFileSync = function(filePath, data) {
+  makeDirSync(path.dirname(filePath));
+  fs.writeFileSync(filePath, data);
 };
 
 const presetLocs = [path.join(__dirname, "../../babel-preset-react")];
@@ -86,13 +91,14 @@ const assertTest = function(stdout, stderr, opts, cwd) {
   }
 
   if (opts.outFiles) {
-    const actualFiles = readDir(path.join(tmpLoc), fileFilter);
+    const actualFiles = readDir(tmpLoc, fileFilter);
 
     Object.keys(actualFiles).forEach(function(filename) {
       if (
         // saveInFiles always creates an empty .babelrc, so lets exclude for now
         filename !== ".babelrc" &&
-        !opts.inFiles.hasOwnProperty(filename)
+        filename !== ".babelignore" &&
+        !Object.prototype.hasOwnProperty.call(opts.inFiles, filename)
       ) {
         const expected = opts.outFiles[filename];
         const actual = actualFiles[filename];
@@ -115,13 +121,6 @@ const buildTest = function(binName, testName, opts) {
   const binLoc = path.join(__dirname, "../lib", binName);
 
   return function(callback) {
-    const dir = process.cwd();
-
-    process.chdir(__dirname);
-    if (fs.existsSync(tmpLoc)) rimraf.sync(tmpLoc);
-    fs.mkdirSync(tmpLoc);
-    process.chdir(tmpLoc);
-
     saveInFiles(opts.inFiles);
 
     let args = [binLoc];
@@ -159,7 +158,6 @@ const buildTest = function(binName, testName, opts) {
           args.map(arg => `"${arg}"`).join(" ") + ": " + err.message;
       }
 
-      process.chdir(dir);
       callback(err);
     });
 
@@ -171,12 +169,32 @@ const buildTest = function(binName, testName, opts) {
 };
 
 fs.readdirSync(fixtureLoc).forEach(function(binName) {
-  if (binName[0] === ".") return;
+  if (binName.startsWith(".")) return;
 
   const suiteLoc = path.join(fixtureLoc, binName);
   describe("bin/" + binName, function() {
+    let cwd;
+
+    beforeEach(() => {
+      cwd = process.cwd();
+
+      if (fs.existsSync(tmpLoc)) {
+        for (const child of fs.readdirSync(tmpLoc)) {
+          rimraf.sync(path.join(tmpLoc, child));
+        }
+      } else {
+        fs.mkdirSync(tmpLoc);
+      }
+
+      process.chdir(tmpLoc);
+    });
+
+    afterEach(() => {
+      process.chdir(cwd);
+    });
+
     fs.readdirSync(suiteLoc).forEach(function(testName) {
-      if (testName[0] === ".") return;
+      if (testName.startsWith(".")) return;
 
       const testLoc = path.join(suiteLoc, testName);
 
@@ -185,7 +203,29 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
       };
 
       const optionsLoc = path.join(testLoc, "options.json");
-      if (fs.existsSync(optionsLoc)) merge(opts, require(optionsLoc));
+      if (fs.existsSync(optionsLoc)) {
+        const taskOpts = require(optionsLoc);
+        if (taskOpts.os) {
+          let os = taskOpts.os;
+
+          if (!Array.isArray(os) && typeof os !== "string") {
+            throw new Error(
+              `'os' should be either string or string array: ${taskOpts.os}`,
+            );
+          }
+
+          if (typeof os === "string") {
+            os = [os];
+          }
+
+          if (!os.includes(process.platform)) {
+            return;
+          }
+
+          delete taskOpts.os;
+        }
+        merge(opts, taskOpts);
+      }
 
       ["stdout", "stdin", "stderr"].forEach(function(key) {
         const loc = path.join(testLoc, key + ".txt");
@@ -200,12 +240,18 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
       opts.inFiles = readDir(path.join(testLoc, "in-files"), fileFilter);
 
       const babelrcLoc = path.join(testLoc, ".babelrc");
+      const babelIgnoreLoc = path.join(testLoc, ".babelignore");
       if (fs.existsSync(babelrcLoc)) {
         // copy .babelrc file to tmp directory
         opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
+        opts.inFiles[".babelignore"] = helper.readFile(babelIgnoreLoc);
+      }
+      if (fs.existsSync(babelIgnoreLoc)) {
+        // copy .babelignore file to tmp directory
+        opts.inFiles[".babelignore"] = helper.readFile(babelIgnoreLoc);
       }
 
-      it(testName, buildTest(binName, testName, opts));
+      it(testName, buildTest(binName, testName, opts), 20000);
     });
   });
 });

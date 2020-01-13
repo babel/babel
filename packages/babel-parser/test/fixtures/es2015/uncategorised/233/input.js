@@ -1,1 +1,1 @@
-"use strict"; ({ v: eval }) = obj
+"use strict"; ({ v: eval } = obj)

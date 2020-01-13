@@ -6,10 +6,10 @@ declare class A {
   @@asyncIterator(): Iterator<File>;
 }
 
-interface A {
+interface A1 {
   @@iterator(): Iterator<File>;
 }
 
-interface A {
+interface A2 {
   @@asyncIterator(): Iterator<File>;
 }

@@ -11,3 +11,5 @@ const bar5 = (x): string => {};
 const bar6 = (x: number) => {};
 
 const bar7 = <T>(x) => {};
+
+const bar8 = <T>(x: T): ((T) => T[]) => y => [x, y];

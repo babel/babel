@@ -5,7 +5,7 @@ import { PLACEHOLDERS_ALIAS } from "../definitions";
  * Test if a `placeholderType` is a `targetType` or if `targetType` is an alias of `placeholderType`.
  */
 export default function isPlaceholderType(
-  placeholderType: ?string,
+  placeholderType: string,
   targetType: string,
 ): boolean {
   if (placeholderType === targetType) return true;

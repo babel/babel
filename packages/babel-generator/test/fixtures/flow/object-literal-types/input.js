@@ -9,3 +9,7 @@ type T6 = { foo(): number }
 type T7 = { foo: () => number }
 type T8 = { [string]: U };
 type T9 = { [param: string]: U };
+type T10 = { ... };
+type T11 = { a: { b: { c: {...}, ... }, ... } }
+type T12 = { foo: number, ... };
+type T13 = { foo: number, bar: string, ... };

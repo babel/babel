@@ -1,4 +1,3 @@
 {
-  "plugins": ["partialApplication"],
-  "throws": "Unexpected argument placeholder (3:16)"
+  "plugins": ["partialApplication"]
 }

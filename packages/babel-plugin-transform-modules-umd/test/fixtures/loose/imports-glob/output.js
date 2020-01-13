@@ -10,7 +10,7 @@
     factory(global.foo);
     global.input = mod.exports;
   }
-})(this, function (foo) {
+})(typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : this, function (foo) {
   "use strict";
 
   foo = babelHelpers.interopRequireWildcard(foo);

@@ -12,7 +12,7 @@ import normalizeAndLoadModuleMetadata, {
   isSideEffectImport,
 } from "./normalize-and-load-metadata";
 
-export { hasExports, isSideEffectImport, isModule };
+export { hasExports, isSideEffectImport, isModule, rewriteThis };
 
 /**
  * Perform all of the generic ES6 module rewriting needed to handle initial

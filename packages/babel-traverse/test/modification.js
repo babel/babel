@@ -36,6 +36,19 @@ describe("modification", function() {
 
       expect(generateCode(rootPath)).toBe("function test(a) {\n  b;\n}");
     });
+
+    it("properly handles more than one arguments", function() {
+      const code = "foo(a, b);";
+      const ast = parse(code);
+      traverse(ast, {
+        CallExpression: function(path) {
+          path.pushContainer("arguments", t.identifier("d"));
+          expect(generateCode(path)).toBe("foo(a, b, d);");
+          path.pushContainer("arguments", t.stringLiteral("s"));
+          expect(generateCode(path)).toBe(`foo(a, b, d, "s");`);
+        },
+      });
+    });
   });
   describe("unshiftContainer", function() {
     it("unshifts identifier into params", function() {
@@ -113,6 +126,32 @@ describe("modification", function() {
       expect(result[result.length - 1].node).toEqual(t.identifier("b"));
       expect(generateCode(rootPath)).toBe(
         "if (x) {\n  b\n\n  for (var i = 0; i < 0; i++) {}\n}",
+      );
+    });
+
+    it("returns inserted path with nested JSXElement", function() {
+      const ast = parse("<div><span>foo</span></div>", {
+        plugins: ["jsx"],
+      });
+      let path;
+      traverse(ast, {
+        Program: function(_path) {
+          path = _path.get("body.0");
+        },
+        JSXElement: function(path) {
+          const tagName = path.node.openingElement.name.name;
+          if (tagName !== "span") return;
+          path.insertBefore(
+            t.JSXElement(
+              t.JSXOpeningElement(t.JSXIdentifier("div"), [], false),
+              t.JSXClosingElement(t.JSXIdentifier("div")),
+              [],
+            ),
+          );
+        },
+      });
+      expect(generateCode(path)).toBe(
+        "<div><div></div><span>foo</span></div>;",
       );
     });
 

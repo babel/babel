@@ -1,16 +1,20 @@
 // @flow
 import defineType, {
+  assertShape,
   assertNodeType,
   assertValueType,
+  assertNodeOrValueType,
   chain,
   assertEach,
   assertOneOf,
+  validateOptional,
 } from "./utils";
 import {
   functionCommon,
   functionTypeAnnotationCommon,
   patternLikeCommon,
 } from "./core";
+import is from "../validators/is";
 
 defineType("AssignmentPattern", {
   visitor: ["left", "right", "decorators" /* for legacy param decorators */],
@@ -19,16 +23,23 @@ defineType("AssignmentPattern", {
   fields: {
     ...patternLikeCommon,
     left: {
-      validate: assertNodeType("Identifier", "ObjectPattern", "ArrayPattern"),
+      validate: assertNodeType(
+        "Identifier",
+        "ObjectPattern",
+        "ArrayPattern",
+        "MemberExpression",
+      ),
     },
     right: {
       validate: assertNodeType("Expression"),
     },
+    // For TypeScript
     decorators: {
       validate: chain(
         assertValueType("array"),
         assertEach(assertNodeType("Decorator")),
       ),
+      optional: true,
     },
   },
 });
@@ -42,14 +53,16 @@ defineType("ArrayPattern", {
     elements: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("PatternLike")),
+        assertEach(assertNodeOrValueType("null", "PatternLike")),
       ),
     },
+    // For TypeScript
     decorators: {
       validate: chain(
         assertValueType("array"),
         assertEach(assertNodeType("Decorator")),
       ),
+      optional: true,
     },
   },
 });
@@ -99,41 +112,7 @@ defineType("ClassBody", {
   },
 });
 
-const classCommon = {
-  typeParameters: {
-    validate: assertNodeType(
-      "TypeParameterDeclaration",
-      "TSTypeParameterDeclaration",
-      "Noop",
-    ),
-    optional: true,
-  },
-  body: {
-    validate: assertNodeType("ClassBody"),
-  },
-  superClass: {
-    optional: true,
-    validate: assertNodeType("Expression"),
-  },
-  superTypeParameters: {
-    validate: assertNodeType(
-      "TypeParameterInstantiation",
-      "TSTypeParameterInstantiation",
-    ),
-    optional: true,
-  },
-  implements: {
-    validate: chain(
-      assertValueType("array"),
-      assertEach(
-        assertNodeType("TSExpressionWithTypeArguments", "ClassImplements"),
-      ),
-    ),
-    optional: true,
-  },
-};
-
-defineType("ClassDeclaration", {
+defineType("ClassExpression", {
   builder: ["id", "superClass", "body", "decorators"],
   visitor: [
     "id",
@@ -145,20 +124,44 @@ defineType("ClassDeclaration", {
     "implements",
     "decorators",
   ],
-  aliases: ["Scopable", "Class", "Statement", "Declaration", "Pureish"],
+  aliases: ["Scopable", "Class", "Expression", "Pureish"],
   fields: {
-    ...classCommon,
-    declare: {
-      validate: assertValueType("boolean"),
-      optional: true,
-    },
-    abstract: {
-      validate: assertValueType("boolean"),
-      optional: true,
-    },
     id: {
       validate: assertNodeType("Identifier"),
-      optional: true, // Missing if this is the child of an ExportDefaultDeclaration.
+      // In declarations, this is missing if this is the
+      // child of an ExportDefaultDeclaration.
+      optional: true,
+    },
+    typeParameters: {
+      validate: assertNodeType(
+        "TypeParameterDeclaration",
+        "TSTypeParameterDeclaration",
+        "Noop",
+      ),
+      optional: true,
+    },
+    body: {
+      validate: assertNodeType("ClassBody"),
+    },
+    superClass: {
+      optional: true,
+      validate: assertNodeType("Expression"),
+    },
+    superTypeParameters: {
+      validate: assertNodeType(
+        "TypeParameterInstantiation",
+        "TSTypeParameterInstantiation",
+      ),
+      optional: true,
+    },
+    implements: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(
+          assertNodeType("TSExpressionWithTypeArguments", "ClassImplements"),
+        ),
+      ),
+      optional: true,
     },
     decorators: {
       validate: chain(
@@ -170,30 +173,30 @@ defineType("ClassDeclaration", {
   },
 });
 
-defineType("ClassExpression", {
-  inherits: "ClassDeclaration",
-  aliases: ["Scopable", "Class", "Expression", "Pureish"],
+defineType("ClassDeclaration", {
+  inherits: "ClassExpression",
+  aliases: ["Scopable", "Class", "Statement", "Declaration", "Pureish"],
   fields: {
-    ...classCommon,
-    id: {
+    declare: {
+      validate: assertValueType("boolean"),
       optional: true,
-      validate: assertNodeType("Identifier"),
     },
-    body: {
-      validate: assertNodeType("ClassBody"),
-    },
-    superClass: {
-      optional: true,
-      validate: assertNodeType("Expression"),
-    },
-    decorators: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Decorator")),
-      ),
+    abstract: {
+      validate: assertValueType("boolean"),
       optional: true,
     },
   },
+  validate: (function() {
+    const identifier = assertNodeType("Identifier");
+
+    return function(parent, key, node) {
+      if (!process.env.BABEL_TYPES_8_BREAKING) return;
+
+      if (!is("ExportDefaultDeclaration", parent)) {
+        identifier(node, "id", node.id);
+      }
+    };
+  })(),
 });
 
 defineType("ExportAllDeclaration", {
@@ -241,18 +244,53 @@ defineType("ExportNamedDeclaration", {
   ],
   fields: {
     declaration: {
-      validate: assertNodeType("Declaration"),
       optional: true,
+      validate: chain(
+        assertNodeType("Declaration"),
+        function(node, key, val) {
+          if (!process.env.BABEL_TYPES_8_BREAKING) return;
+
+          // This validator isn't put at the top level because we can run it
+          // even if this node doesn't have a parent.
+
+          if (val && node.specifiers.length) {
+            throw new TypeError(
+              "Only declaration or specifiers is allowed on ExportNamedDeclaration",
+            );
+          }
+        },
+        function(node, key, val) {
+          if (!process.env.BABEL_TYPES_8_BREAKING) return;
+
+          // This validator isn't put at the top level because we can run it
+          // even if this node doesn't have a parent.
+
+          if (val && node.source) {
+            throw new TypeError("Cannot export a declaration from a source");
+          }
+        },
+      ),
     },
     specifiers: {
+      default: [],
       validate: chain(
         assertValueType("array"),
         assertEach(
-          assertNodeType(
-            "ExportSpecifier",
-            "ExportDefaultSpecifier",
-            "ExportNamespaceSpecifier",
-          ),
+          (function() {
+            const sourced = assertNodeType(
+              "ExportSpecifier",
+              "ExportDefaultSpecifier",
+              "ExportNamespaceSpecifier",
+            );
+            const sourceless = assertNodeType("ExportSpecifier");
+
+            if (!process.env.BABEL_TYPES_8_BREAKING) return sourced;
+
+            return function(node, key, val) {
+              const validator = node.source ? sourced : sourceless;
+              validator(node, key, val);
+            };
+          })(),
         ),
       ),
     },
@@ -260,6 +298,7 @@ defineType("ExportNamedDeclaration", {
       validate: assertNodeType("StringLiteral"),
       optional: true,
     },
+    exportKind: validateOptional(assertOneOf("type", "value")),
   },
 });
 
@@ -278,6 +317,7 @@ defineType("ExportSpecifier", {
 
 defineType("ForOfStatement", {
   visitor: ["left", "right", "body"],
+  builder: ["left", "right", "body", "await"],
   aliases: [
     "Scopable",
     "Statement",
@@ -288,7 +328,27 @@ defineType("ForOfStatement", {
   ],
   fields: {
     left: {
-      validate: assertNodeType("VariableDeclaration", "LVal"),
+      validate: (function() {
+        if (!process.env.BABEL_TYPES_8_BREAKING) {
+          return assertNodeType("VariableDeclaration", "LVal");
+        }
+
+        const declaration = assertNodeType("VariableDeclaration");
+        const lval = assertNodeType(
+          "Identifier",
+          "MemberExpression",
+          "ArrayPattern",
+          "ObjectPattern",
+        );
+
+        return function(node, key, val) {
+          if (is("VariableDeclaration", val)) {
+            declaration(node, key, val);
+          } else {
+            lval(node, key, val);
+          }
+        };
+      })(),
     },
     right: {
       validate: assertNodeType("Expression"),
@@ -298,7 +358,6 @@ defineType("ForOfStatement", {
     },
     await: {
       default: false,
-      validate: assertValueType("boolean"),
     },
   },
 });
@@ -372,9 +431,26 @@ defineType("MetaProperty", {
   visitor: ["meta", "property"],
   aliases: ["Expression"],
   fields: {
-    // todo: limit to new.target
     meta: {
-      validate: assertNodeType("Identifier"),
+      validate: chain(assertNodeType("Identifier"), function(node, key, val) {
+        if (!process.env.BABEL_TYPES_8_BREAKING) return;
+
+        let property;
+        switch (val.name) {
+          case "function":
+            property = "sent";
+            break;
+          case "new":
+            property = "target";
+            break;
+          case "import":
+            property = "meta";
+            break;
+        }
+        if (!is("Identifier", node.property, { name: property })) {
+          throw new TypeError("Unrecognised MetaProperty");
+        }
+      }),
     },
     property: {
       validate: assertNodeType("Identifier"),
@@ -388,19 +464,14 @@ export const classMethodOrPropertyCommon = {
     optional: true,
   },
   accessibility: {
-    validate: chain(
-      assertValueType("string"),
-      assertOneOf("public", "private", "protected"),
-    ),
+    validate: assertOneOf("public", "private", "protected"),
     optional: true,
   },
   static: {
-    validate: assertValueType("boolean"),
-    optional: true,
+    default: false,
   },
   computed: {
     default: false,
-    validate: assertValueType("boolean"),
   },
   optional: {
     validate: assertValueType("boolean"),
@@ -435,10 +506,7 @@ export const classMethodOrDeclareMethodCommon = {
   ...functionCommon,
   ...classMethodOrPropertyCommon,
   kind: {
-    validate: chain(
-      assertValueType("string"),
-      assertOneOf("get", "set", "method", "constructor"),
-    ),
+    validate: assertOneOf("get", "set", "method", "constructor"),
     default: "method",
   },
   access: {
@@ -459,7 +527,16 @@ export const classMethodOrDeclareMethodCommon = {
 
 defineType("ClassMethod", {
   aliases: ["Function", "Scopable", "BlockParent", "FunctionParent", "Method"],
-  builder: ["kind", "key", "params", "body", "computed", "static"],
+  builder: [
+    "kind",
+    "key",
+    "params",
+    "body",
+    "computed",
+    "static",
+    "generator",
+    "async",
+  ],
   visitor: [
     "key",
     "params",
@@ -535,10 +612,17 @@ defineType("TemplateElement", {
   builder: ["value", "tail"],
   fields: {
     value: {
-      // todo: flatten `raw` into main node
+      validate: assertShape({
+        raw: {
+          validate: assertValueType("string"),
+        },
+        cooked: {
+          validate: assertValueType("string"),
+          optional: true,
+        },
+      }),
     },
     tail: {
-      validate: assertValueType("boolean"),
       default: false,
     },
   },
@@ -558,6 +642,16 @@ defineType("TemplateLiteral", {
       validate: chain(
         assertValueType("array"),
         assertEach(assertNodeType("Expression")),
+        function(node, key, val) {
+          if (node.quasis.length !== val.length + 1) {
+            throw new TypeError(
+              `Number of ${
+                node.type
+              } quasis should be exactly one more than the number of expressions.\nExpected ${val.length +
+                1} quasis but got ${node.quasis.length}`,
+            );
+          }
+        },
       ),
     },
   },
@@ -569,7 +663,15 @@ defineType("YieldExpression", {
   aliases: ["Expression", "Terminatorless"],
   fields: {
     delegate: {
-      validate: assertValueType("boolean"),
+      validate: chain(assertValueType("boolean"), function(node, key, val) {
+        if (!process.env.BABEL_TYPES_8_BREAKING) return;
+
+        if (val && !node.argument) {
+          throw new TypeError(
+            "Property delegate of YieldExpression cannot be true if there is no argument",
+          );
+        }
+      }),
       default: false,
     },
     argument: {

@@ -2,24 +2,7 @@
 
 import { ModulesOption, UseBuiltInsOption } from "./options";
 import type { NormalizedCorejsOption } from "./normalize-options";
-
-// Targets
-export type Target =
-  | "node"
-  | "chrome"
-  | "opera"
-  | "edge"
-  | "firefox"
-  | "safari"
-  | "ie"
-  | "ios"
-  | "android"
-  | "electron"
-  | "samsung";
-
-export type Targets = {
-  [target: Target]: string,
-};
+import type { Targets } from "@babel/helper-compilation-targets";
 
 // Options
 // Use explicit modules to prevent typo errors.

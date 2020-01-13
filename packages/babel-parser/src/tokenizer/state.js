@@ -38,6 +38,8 @@ export default class State {
     this.startLoc = this.endLoc = this.curPosition();
   }
 
+  errors: SyntaxError[] = [];
+
   // Used to signify the start of a potential arrow function
   potentialArrowAt: number = -1;
 
@@ -55,11 +57,6 @@ export default class State {
   //          ^
   noArrowParamsConversionAt: number[] = [];
 
-  // A comma after "...a" is only allowed in spread, but not in rest.
-  // Since we parse destructuring patterns as array/object literals
-  // and then convert them, we need to track it.
-  commaAfterSpreadAt: number = -1;
-
   // Flags to track
   inParameters: boolean = false;
   maybeInArrowParameters: boolean = false;
@@ -67,7 +64,6 @@ export default class State {
   inType: boolean = false;
   noAnonFunctionType: boolean = false;
   inPropertyName: boolean = false;
-  inClassProperty: boolean = false;
   hasFlowComment: boolean = false;
   isIterator: boolean = false;
 
@@ -77,8 +73,9 @@ export default class State {
     maxTopicIndex: null,
   };
 
-  // Check whether we are in a (nested) class or not.
-  classLevel: number = 0;
+  // For the F# plugin
+  soloAwait: boolean = false;
+  inFSharpPipelineDirectBody: boolean = false;
 
   // Labels in scope.
   labels: Array<{
@@ -93,8 +90,8 @@ export default class State {
   decoratorStack: Array<Array<N.Decorator>> = [[]];
 
   // Positions to delayed-check that yield/await does not exist in default parameters.
-  yieldPos: number = 0;
-  awaitPos: number = 0;
+  yieldPos: number = -1;
+  awaitPos: number = -1;
 
   // Token store.
   tokens: Array<Token | N.Comment> = [];
@@ -156,8 +153,6 @@ export default class State {
   // `export default foo;` and `export { foo as default };`.
   exportedIdentifiers: Array<string> = [];
 
-  invalidTemplateEscapePosition: ?number = null;
-
   curPosition(): Position {
     return new Position(this.curLine, this.pos - this.lineStart);
   }
@@ -170,7 +165,7 @@ export default class State {
       // $FlowIgnore
       let val = this[key];
 
-      if ((!skipArrays || key === "context") && Array.isArray(val)) {
+      if (!skipArrays && Array.isArray(val)) {
         val = val.slice();
       }
 

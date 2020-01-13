@@ -19,11 +19,13 @@ import syntaxJsx from "@babel/plugin-syntax-jsx";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-binding";
 import syntaxPipelineOperator from "@babel/plugin-syntax-pipeline-operator";
+import syntaxTopLevelAwait from "@babel/plugin-syntax-top-level-await";
 import syntaxTypescript from "@babel/plugin-syntax-typescript";
 import proposalAsyncGeneratorFunctions from "@babel/plugin-proposal-async-generator-functions";
 import proposalClassProperties from "@babel/plugin-proposal-class-properties";
 import proposalDecorators from "@babel/plugin-proposal-decorators";
 import proposalDoExpressions from "@babel/plugin-proposal-do-expressions";
+import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";
 import proposalExportDefaultFrom from "@babel/plugin-proposal-export-default-from";
 import proposalExportNamespaceFrom from "@babel/plugin-proposal-export-namespace-from";
 import proposalFunctionBind from "@babel/plugin-proposal-function-bind";
@@ -61,6 +63,7 @@ import transformModulesAmd from "@babel/plugin-transform-modules-amd";
 import transformModulesCommonjs from "@babel/plugin-transform-modules-commonjs";
 import transformModulesSystemjs from "@babel/plugin-transform-modules-systemjs";
 import transformModulesUmd from "@babel/plugin-transform-modules-umd";
+import transformNamedCapturingGroupsRegex from "@babel/plugin-transform-named-capturing-groups-regex";
 import transformNewTarget from "@babel/plugin-transform-new-target";
 import transformObjectAssign from "@babel/plugin-transform-object-assign";
 import transformObjectSuper from "@babel/plugin-transform-object-super";
@@ -77,6 +80,7 @@ import transformReactJsxCompat from "@babel/plugin-transform-react-jsx-compat";
 import transformReactJsxSelf from "@babel/plugin-transform-react-jsx-self";
 import transformReactJsxSource from "@babel/plugin-transform-react-jsx-source";
 import transformRegenerator from "@babel/plugin-transform-regenerator";
+import transformReservedWords from "@babel/plugin-transform-reserved-words";
 import transformRuntime from "@babel/plugin-transform-runtime";
 import transformShorthandProperties from "@babel/plugin-transform-shorthand-properties";
 import transformSpread from "@babel/plugin-transform-spread";
@@ -104,11 +108,13 @@ export {
   syntaxObjectRestSpread,
   syntaxOptionalCatchBinding,
   syntaxPipelineOperator,
+  syntaxTopLevelAwait,
   syntaxTypescript,
   proposalAsyncGeneratorFunctions,
   proposalClassProperties,
   proposalDecorators,
   proposalDoExpressions,
+  proposalDynamicImport,
   proposalExportDefaultFrom,
   proposalExportNamespaceFrom,
   proposalFunctionBind,
@@ -146,6 +152,7 @@ export {
   transformModulesCommonjs,
   transformModulesSystemjs,
   transformModulesUmd,
+  transformNamedCapturingGroupsRegex,
   transformNewTarget,
   transformObjectAssign,
   transformObjectSuper,
@@ -162,6 +169,7 @@ export {
   transformReactJsxSelf,
   transformReactJsxSource,
   transformRegenerator,
+  transformReservedWords,
   transformRuntime,
   transformShorthandProperties,
   transformSpread,
@@ -190,11 +198,13 @@ export const all = {
   "syntax-object-rest-spread": syntaxObjectRestSpread,
   "syntax-optional-catch-binding": syntaxOptionalCatchBinding,
   "syntax-pipeline-operator": syntaxPipelineOperator,
+  "syntax-top-level-await": syntaxTopLevelAwait,
   "syntax-typescript": syntaxTypescript,
   "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,
   "proposal-class-properties": proposalClassProperties,
   "proposal-decorators": proposalDecorators,
   "proposal-do-expressions": proposalDoExpressions,
+  "proposal-dynamic-import": proposalDynamicImport,
   "proposal-export-default-from": proposalExportDefaultFrom,
   "proposal-export-namespace-from": proposalExportNamespaceFrom,
   "proposal-function-bind": proposalFunctionBind,
@@ -232,6 +242,7 @@ export const all = {
   "transform-modules-commonjs": transformModulesCommonjs,
   "transform-modules-systemjs": transformModulesSystemjs,
   "transform-modules-umd": transformModulesUmd,
+  "transform-named-capturing-groups-regex": transformNamedCapturingGroupsRegex,
   "transform-new-target": transformNewTarget,
   "transform-object-assign": transformObjectAssign,
   "transform-object-super": transformObjectSuper,
@@ -248,6 +259,7 @@ export const all = {
   "transform-react-jsx-self": transformReactJsxSelf,
   "transform-react-jsx-source": transformReactJsxSource,
   "transform-regenerator": transformRegenerator,
+  "transform-reserved-words": transformReservedWords,
   "transform-runtime": transformRuntime,
   "transform-shorthand-properties": transformShorthandProperties,
   "transform-spread": transformSpread,

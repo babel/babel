@@ -14,7 +14,9 @@ import { types as t, template } from "@babel/core";
 const buildPrerequisiteAssignment = template(`
   GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}
 `);
-
+// Note: we avoid comparing typeof results with "object" or "symbol" otherwise
+// they will be processed by `transform-typeof-symbol`, which in return could
+// cause typeof helper used before declaration
 const buildWrapper = template(`
   (function (global, factory) {
     if (typeof define === "function" && define.amd) {
@@ -27,7 +29,11 @@ const buildWrapper = template(`
 
       GLOBAL_TO_ASSIGN;
     }
-  })(this, function(IMPORT_NAMES) {
+  })(
+    typeof globalThis !== "undefined" ? globalThis
+      : typeof self !== "undefined" ? self
+      : this,
+    function(IMPORT_NAMES) {
   })
 `);
 

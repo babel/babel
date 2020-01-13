@@ -13,10 +13,12 @@
       "**/codemods/*/src/**/*.js",
       "**/codemods/*/test/**/*.js",
       "**/packages/*/src/**/*.js",
-      "**/packages/*/test/**/*.js"
+      "**/packages/*/test/**/*.js",
+      "**/eslint/*/src/**/*.js",
+      "**/eslint/*/test/**/*.js"
     ],
-    "parser": "babylon",
     "options": {
+      "parser": "babel",
       "trailingComma": "all"
     }
   }]

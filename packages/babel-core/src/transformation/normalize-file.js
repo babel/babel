@@ -1,17 +1,18 @@
 // @flow
 
+import fs from "fs";
 import path from "path";
 import buildDebug from "debug";
 import cloneDeep from "lodash/cloneDeep";
+import type { Handler } from "gensync";
 import * as t from "@babel/types";
 import type { PluginPasses } from "../config";
 import convertSourceMap, { typeof Converter } from "convert-source-map";
-import { parse } from "@babel/parser";
-import { codeFrameColumns } from "@babel/code-frame";
 import File from "./file/file";
-import generateMissingPluginMessage from "./util/missing-plugin-helper";
+import parser from "../parser";
 
 const debug = buildDebug("babel:transform:file");
+const LARGE_INPUT_SOURCEMAP_THRESHOLD = 1_000_000;
 
 export type NormalizedFile = {
   code: string,
@@ -19,13 +20,24 @@ export type NormalizedFile = {
   inputMap: Converter | null,
 };
 
-export default function normalizeFile(
+export default function* normalizeFile(
   pluginPasses: PluginPasses,
   options: Object,
   code: string,
   ast: ?(BabelNodeFile | BabelNodeProgram),
-): File {
+): Handler<File> {
   code = `${code || ""}`;
+
+  if (ast) {
+    if (ast.type === "Program") {
+      ast = t.file(ast, [], []);
+    } else if (ast.type !== "File") {
+      throw new Error("AST root must be a Program or File node");
+    }
+    ast = cloneDeep(ast);
+  } else {
+    ast = yield* parser(pluginPasses, options, code);
+  }
 
   let inputMap = null;
   if (options.inputSourceMap !== false) {
@@ -36,52 +48,39 @@ export default function normalizeFile(
     }
 
     if (!inputMap) {
-      try {
-        inputMap = convertSourceMap.fromSource(code);
-
-        if (inputMap) {
-          code = convertSourceMap.removeComments(code);
+      const lastComment = extractComments(INLINE_SOURCEMAP_REGEX, ast);
+      if (lastComment) {
+        try {
+          inputMap = convertSourceMap.fromComment(lastComment);
+        } catch (err) {
+          debug("discarding unknown inline input sourcemap", err);
         }
-      } catch (err) {
-        debug("discarding unknown inline input sourcemap", err);
-        code = convertSourceMap.removeComments(code);
       }
     }
 
     if (!inputMap) {
-      if (typeof options.filename === "string") {
+      const lastComment = extractComments(EXTERNAL_SOURCEMAP_REGEX, ast);
+      if (typeof options.filename === "string" && lastComment) {
         try {
-          inputMap = convertSourceMap.fromMapFileSource(
-            code,
-            path.dirname(options.filename),
+          // when `lastComment` is non-null, EXTERNAL_SOURCEMAP_REGEX must have matches
+          const match: [string, string] = (EXTERNAL_SOURCEMAP_REGEX.exec(
+            lastComment,
+          ): any);
+          const inputMapContent: Buffer = fs.readFileSync(
+            path.resolve(path.dirname(options.filename), match[1]),
           );
-
-          if (inputMap) {
-            code = convertSourceMap.removeMapFileComments(code);
+          if (inputMapContent.length > LARGE_INPUT_SOURCEMAP_THRESHOLD) {
+            debug("skip merging input map > 1 MB");
+          } else {
+            inputMap = convertSourceMap.fromJSON(inputMapContent);
           }
         } catch (err) {
           debug("discarding unknown file input sourcemap", err);
-          code = convertSourceMap.removeMapFileComments(code);
         }
-      } else {
+      } else if (lastComment) {
         debug("discarding un-loadable file input sourcemap");
-        code = convertSourceMap.removeMapFileComments(code);
       }
     }
-  }
-
-  if (ast) {
-    if (ast.type === "Program") {
-      ast = t.file(ast, [], []);
-    } else if (ast.type !== "File") {
-      throw new Error("AST root must be a Program or File node");
-    }
-    ast = cloneDeep(ast);
-  } else {
-    // The parser's AST types aren't fully compatible with the types generated
-    // by the logic in babel-types.
-    // $FlowFixMe
-    ast = parser(pluginPasses, options, code);
   }
 
   return new File(options, {
@@ -91,68 +90,47 @@ export default function normalizeFile(
   });
 }
 
-function parser(
-  pluginPasses: PluginPasses,
-  { parserOpts, highlightCode = true, filename = "unknown" }: Object,
-  code: string,
-) {
-  try {
-    const results = [];
-    for (const plugins of pluginPasses) {
-      for (const plugin of plugins) {
-        const { parserOverride } = plugin;
-        if (parserOverride) {
-          const ast = parserOverride(code, parserOpts, parse);
+// These regexps are copied from the convert-source-map package,
+// but without // or /* at the beginning of the comment.
 
-          if (ast !== undefined) results.push(ast);
-        }
-      }
-    }
+// eslint-disable-next-line max-len
+const INLINE_SOURCEMAP_REGEX = /^[@#]\s+sourceMappingURL=data:(?:application|text)\/json;(?:charset[:=]\S+?;)?base64,(?:.*)$/;
+const EXTERNAL_SOURCEMAP_REGEX = /^[@#][ \t]+sourceMappingURL=([^\s'"`]+)[ \t]*$/;
 
-    if (results.length === 0) {
-      return parse(code, parserOpts);
-    } else if (results.length === 1) {
-      if (typeof results[0].then === "function") {
-        throw new Error(
-          `You appear to be using an async codegen plugin, ` +
-            `which your current version of Babel does not support. ` +
-            `If you're using a published plugin, you may need to upgrade ` +
-            `your @babel/core version.`,
-        );
+function extractCommentsFromList(regex, comments, lastComment) {
+  if (comments) {
+    comments = comments.filter(({ value }) => {
+      if (regex.test(value)) {
+        lastComment = value;
+        return false;
       }
-      return results[0];
-    }
-    throw new Error("More than one plugin attempted to override parsing.");
-  } catch (err) {
-    if (err.code === "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED") {
-      err.message +=
-        "\nConsider renaming the file to '.mjs', or setting sourceType:module " +
-        "or sourceType:unambiguous in your Babel config for this file.";
-    }
-
-    const { loc, missingPlugin } = err;
-    if (loc) {
-      const codeFrame = codeFrameColumns(
-        code,
-        {
-          start: {
-            line: loc.line,
-            column: loc.column + 1,
-          },
-        },
-        {
-          highlightCode,
-        },
-      );
-      if (missingPlugin) {
-        err.message =
-          `${filename}: ` +
-          generateMissingPluginMessage(missingPlugin[0], loc, codeFrame);
-      } else {
-        err.message = `${filename}: ${err.message}\n\n` + codeFrame;
-      }
-      err.code = "BABEL_PARSE_ERROR";
-    }
-    throw err;
+      return true;
+    });
   }
+  return [comments, lastComment];
+}
+
+function extractComments(regex, ast) {
+  let lastComment = null;
+  t.traverseFast(ast, node => {
+    // $FlowIgnore destructuring with expressions is not supported
+    [node.leadingComments, lastComment] = extractCommentsFromList(
+      regex,
+      node.leadingComments,
+      lastComment,
+    );
+    // $FlowIgnore destructuring with expressions is not supported
+    [node.innerComments, lastComment] = extractCommentsFromList(
+      regex,
+      node.innerComments,
+      lastComment,
+    );
+    // $FlowIgnore destructuring with expressions is not supported
+    [node.trailingComments, lastComment] = extractCommentsFromList(
+      regex,
+      node.trailingComments,
+      lastComment,
+    );
+  });
+  return lastComment;
 }

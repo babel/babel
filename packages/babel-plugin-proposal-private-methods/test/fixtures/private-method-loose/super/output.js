@@ -1,6 +1,6 @@
 class Base {
   superMethod() {
-    return 1017;
+    return 'good';
   }
 
 }
@@ -11,6 +11,10 @@ class Sub extends Base {
     Object.defineProperty(this, _privateMethod, {
       value: _privateMethod2
     });
+  }
+
+  superMethod() {
+    return 'bad';
   }
 
   publicMethod() {

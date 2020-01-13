@@ -10,6 +10,6 @@
     factory();
     global.myCustomModuleName = mod.exports;
   }
-})(this, function () {
+})(typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : this, function () {
   "use strict";
 });

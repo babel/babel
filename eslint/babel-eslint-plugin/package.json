@@ -1,0 +1,42 @@
+{
+  "name": "@babel/eslint-plugin",
+  "version": "0.0.0",
+  "description": "Companion rules for @babel/eslint-parser",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/babel/babel.git",
+    "directory": "eslint/babel-eslint-plugin"
+  },
+  "keywords": [
+    "babel",
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin",
+    "babel-eslint"
+  ],
+  "author": "Jason Quense @monasticpanic",
+  "license": "MIT",
+  "type": "commonjs",
+  "private": true,
+  "engines": {
+    "node": ">=10.9"
+  },
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
+  "homepage": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-plugin",
+  "peerDependencies": {
+    "@babel/eslint-parser": "0.0.0",
+    "eslint": ">=6.0.0"
+  },
+  "dependencies": {
+    "eslint-rule-composer": "^0.3.0"
+  },
+  "devDependencies": {
+    "@babel/eslint-shared-fixtures": "*",
+    "@babel/eslint-parser": "*",
+    "eslint": "^6.0.0",
+    "lodash.clonedeep": "^4.5.0"
+  }
+}
