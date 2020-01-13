@@ -401,7 +401,7 @@ export type ObjectExpression = NodeBase & {
 
 export type RecordExpression = NodeBase & {
   type: "RecordExpression",
-  properties: $ReadOnlyArray<ObjectProperty | SpreadElement>,
+  properties: $ReadOnlyArray<ObjectProperty | ObjectMethod | SpreadElement>,
 };
 
 export type ObjectOrClassMember = ClassMethod | ClassProperty | ObjectMember;
