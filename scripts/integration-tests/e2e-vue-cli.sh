@@ -30,6 +30,6 @@ yarn add --dev -W @babel/core
 printf "a\n" | yarn upgrade-interactive --scope @babel --latest
 
 # Test
-CI=true yarn test -p babel
+CI=true yarn test -p babel,babel-preset-app
 
 cleanup
