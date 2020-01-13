@@ -3,7 +3,6 @@
   "version": "7.8.0",
   "author": "Logan Smyth <loganfsmyth@gmail.com>",
   "license": "MIT",
-  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

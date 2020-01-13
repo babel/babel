@@ -4,7 +4,6 @@
   "description": "Compile function bind operator to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-function-bind",
   "license": "MIT",
-  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

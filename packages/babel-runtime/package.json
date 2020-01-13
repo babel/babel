@@ -3,7 +3,6 @@
   "version": "7.8.0",
   "description": "babel's modular runtime helpers",
   "license": "MIT",
-  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

@@ -3,7 +3,6 @@
   "version": "7.8.0",
   "description": "babel require hook",
   "license": "MIT",
-  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

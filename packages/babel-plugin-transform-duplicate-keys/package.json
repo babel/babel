@@ -4,7 +4,6 @@
   "description": "Compile objects with duplicate keys to valid strict ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-duplicate-keys",
   "license": "MIT",
-  "type": "commonjs",
   "publishConfig": {
     "access": "public"
   },

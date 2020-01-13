@@ -5,7 +5,6 @@
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
-  "type": "commonjs",
   "private": true,
   "repository": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-config-internal",
   "main": "lib/index.js",
