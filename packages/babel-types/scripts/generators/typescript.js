@@ -56,6 +56,7 @@ const lines = [];
 for (const type in t.NODE_FIELDS) {
   const fields = t.NODE_FIELDS[type];
   const fieldNames = sortFieldNames(Object.keys(t.NODE_FIELDS[type]), type);
+  const builderNames = t.BUILDER_KEYS[type];
 
   const struct = ['type: "' + type + '";'];
   const args = [];
@@ -75,18 +76,20 @@ for (const type in t.NODE_FIELDS) {
       typeAnnotation += " | null";
     }
 
-    if (areAllRemainingFieldsNullable(fieldName, fieldNames, fields)) {
-      args.push(
-        `${t.toBindingIdentifierName(fieldName)}${
-          isNullable(field) ? "?:" : ":"
-        } ${typeAnnotation}`
-      );
-    } else {
-      args.push(
-        `${t.toBindingIdentifierName(fieldName)}: ${typeAnnotation}${
-          isNullable(field) ? " | undefined" : ""
-        }`
-      );
+    if (builderNames.includes(fieldName)) {
+      if (areAllRemainingFieldsNullable(fieldName, builderNames, fields)) {
+        args.push(
+          `${t.toBindingIdentifierName(fieldName)}${
+            isNullable(field) ? "?:" : ":"
+          } ${typeAnnotation}`
+        );
+      } else {
+        args.push(
+          `${t.toBindingIdentifierName(fieldName)}: ${typeAnnotation}${
+            isNullable(field) ? " | undefined" : ""
+          }`
+        );
+      }
     }
 
     const alphaNumeric = /^\w+$/;
