@@ -159,8 +159,7 @@ const memberExpressionOptimisationVisitor = {
 function getParamsCount(node) {
   let count = node.params.length;
   // skip the first parameter if it is a TypeScript 'this parameter'
-  const p0 = node.params[0];
-  if (p0 && t.isIdentifier(p0) && p0.name === "this") {
+  if (count > 0 && t.isIdentifier(node.params[0], { name: "this" })) {
     count -= 1;
   }
   return count;
