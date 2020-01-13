@@ -1044,6 +1044,10 @@ describe("buildConfigChain", function() {
         );
         const filename = tmp("src.js");
 
+        // We can't transpile import() while publishing, and it isn't supported
+        // by jest.
+        if (process.env.IS_PUBLISH && name === "babel.config.mjs") return;
+
         await config(name);
 
         expect(await loadOptionsAsync({ filename, cwd })).toEqual({
@@ -1066,6 +1070,15 @@ describe("buildConfigChain", function() {
         const { cwd, tmp, config } = await getTemp(
           `babel-test-dup-config-${name1}-${name2}`,
         );
+
+        // We can't transpile import() while publishing, and it isn't supported
+        // by jest.
+        if (
+          process.env.IS_PUBLISH &&
+          (name1 === "babel.config.mjs" || name2 === "babel.config.mjs")
+        ) {
+          return;
+        }
 
         await Promise.all([config(name1), config(name2)]);
 
@@ -1124,6 +1137,10 @@ describe("buildConfigChain", function() {
         );
         const filename = tmp("src.js");
 
+        // We can't transpile import() while publishing, and it isn't supported
+        // by jest.
+        if (process.env.IS_PUBLISH && name === ".babelrc.mjs") return;
+
         await config(name);
 
         expect(await loadOptionsAsync({ filename, cwd })).toEqual({
@@ -1157,6 +1174,15 @@ describe("buildConfigChain", function() {
           `babel-test-dup-config-${name1}-${name2}`,
         );
 
+        // We can't transpile import() while publishing, and it isn't supported
+        // by jest.
+        if (
+          process.env.IS_PUBLISH &&
+          (name1 === ".babelrc.mjs" || name2 === ".babelrc.mjs")
+        ) {
+          return;
+        }
+
         await Promise.all([config(name1), config(name2)]);
 
         await expect(
@@ -1186,6 +1212,10 @@ describe("buildConfigChain", function() {
         ${"package.json"}  | ${"pkg-error"}          | ${/Error while parsing JSON - /}
       `("should show helpful errors for $config", async ({ dir, error }) => {
         const filename = fixture("config-files", dir, "src.js");
+
+        // We can't transpile import() while publishing, and it isn't supported
+        // by jest.
+        if (process.env.IS_PUBLISH && dir === "babelrc-mjs-error") return;
 
         await expect(
           loadOptionsAsync({ filename, cwd: path.dirname(filename) }),
