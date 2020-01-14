@@ -1,2 +1,5 @@
 {
+  "transform-parameters": [
+    "bugfix/transform-edge-default-parameters"
+  ]
 }

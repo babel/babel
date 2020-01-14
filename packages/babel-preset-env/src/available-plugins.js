@@ -49,7 +49,10 @@ import transformTemplateLiterals from "@babel/plugin-transform-template-literals
 import transformTypeofSymbol from "@babel/plugin-transform-typeof-symbol";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
 
+import bugfixEdgeDefaultParameters from "@babel/preset-modules/lib/plugins/transform-edge-default-parameters";
+
 export default {
+  "bugfix/transform-edge-default-parameters": bugfixEdgeDefaultParameters,
   "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,
   "proposal-dynamic-import": proposalDynamicImport,
   "proposal-json-strings": proposalJsonStrings,
