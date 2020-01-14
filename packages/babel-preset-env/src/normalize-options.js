@@ -275,6 +275,11 @@ export default function normalizeOptions(opts: Options) {
     ) || corejs.proposals;
 
   return {
+    bugfixes: validateBoolOption(
+      TopLevelOptions.bugfixes,
+      opts.bugfixes,
+      false,
+    ),
     configPath: validateConfigPathOption(opts.configPath),
     corejs,
     debug: validateBoolOption(TopLevelOptions.debug, opts.debug, false),

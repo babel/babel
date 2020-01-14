@@ -13,10 +13,11 @@
     "./native-modules": "./data/native-modules.json",
     "./corejs2-built-ins": "./data/corejs2-built-ins.json",
     "./corejs3-shipped-proposals": "./data/corejs3-shipped-proposals",
-    "./overlapping-plugins": "./data/overlapping-plugins.json"
+    "./overlapping-plugins": "./data/overlapping-plugins.json",
+    "./plugin-bugfixes": "./data/plugin-bugfixes.json"
   },
   "scripts": {
-    "build-data": "./scripts/download-compat-table.sh; node ./scripts/build-data.js; node ./scripts/build-modules-support.js; node ./scripts/build-overlapping-plugins.js; node ./scripts/build-corejs3-proposals.js"
+    "build-data": "./scripts/download-compat-table.sh; node ./scripts/build-data.js; node ./scripts/build-modules-support.js; node ./scripts/build-bugfixes-targets.js"
   },
   "keywords": [
     "babel",

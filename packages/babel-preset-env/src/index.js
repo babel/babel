@@ -6,8 +6,9 @@ import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
 import { removeUnnecessaryItems } from "./filter-items";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options";
-import pluginList from "./plugins-compat-data";
 import { proposalPlugins, pluginSyntaxMap } from "../data/shipped-proposals";
+import pluginList from "./plugins-compat-data";
+import bugfixPluginList from "@babel/compat-data/plugin-bugfixes";
 import overlappingPlugins from "@babel/compat-data/overlapping-plugins";
 
 import addCoreJS2UsagePlugin from "./polyfills/corejs2/usage-plugin";
@@ -37,8 +38,14 @@ export function isPluginRequired(targets: Targets, support: Targets) {
   });
 }
 
-const pluginListWithoutProposals = filterStageFromList(
-  pluginList,
+// getPluginList[proposals: boolean][bugfixes: boolean]
+const getPluginList = { true: {}, false: {} };
+
+getPluginList[true][false] = pluginList;
+getPluginList[false][false] = filterStageFromList(pluginList, proposalPlugins);
+getPluginList[true][true] = Object.assign({}, pluginList, bugfixPluginList);
+getPluginList[false][true] = filterStageFromList(
+  Object.assign({}, pluginList, bugfixPluginList),
   proposalPlugins,
 );
 
@@ -191,6 +198,7 @@ export default declare((api, opts) => {
   api.assertVersion(7);
 
   const {
+    bugfixes,
     configPath,
     debug,
     exclude: optionsExclude,
@@ -251,7 +259,7 @@ export default declare((api, opts) => {
   });
 
   const pluginNames = filterItems(
-    shippedProposals ? pluginList : pluginListWithoutProposals,
+    getPluginList[shippedProposals][bugfixes],
     include.plugins,
     exclude.plugins,
     transformTargets,
