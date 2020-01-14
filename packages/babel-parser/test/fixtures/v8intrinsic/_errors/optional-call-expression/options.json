@@ -1,4 +1,4 @@
 {
-  "plugins": ["optionalChaining", "v8intrinsic"],
+  "plugins": ["v8intrinsic"],
   "throws": "Unexpected token (1:0)"
 }

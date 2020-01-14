@@ -1,0 +1,4 @@
+{
+  "args": ["--keep-file-extension", "--out-file-extension", ".mjs"],
+  "stderrContains": true
+}

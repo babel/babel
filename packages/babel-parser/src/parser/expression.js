@@ -39,6 +39,7 @@ import {
   SCOPE_DIRECT_SUPER,
   SCOPE_SUPER,
   SCOPE_PROGRAM,
+  SCOPE_ASYNC,
 } from "../util/scopeflags";
 
 export default class ExpressionParser extends LValParser {
@@ -96,7 +97,11 @@ export default class ExpressionParser extends LValParser {
 
   // Convenience method to parse an Expression only
   getExpression(): N.Expression {
-    this.scope.enter(SCOPE_PROGRAM);
+    let scopeFlags = SCOPE_PROGRAM;
+    if (this.hasPlugin("topLevelAwait") && this.inModule) {
+      scopeFlags |= SCOPE_ASYNC;
+    }
+    this.scope.enter(scopeFlags);
     this.nextToken();
     const expr = this.parseExpression();
     if (!this.match(tt.eof)) {
@@ -191,7 +196,6 @@ export default class ExpressionParser extends LValParser {
       node.operator = operator;
 
       if (operator === "??=") {
-        this.expectPlugin("nullishCoalescingOperator");
         this.expectPlugin("logicalAssignment");
       }
       if (operator === "||=" || operator === "&&=") {
@@ -328,8 +332,6 @@ export default class ExpressionParser extends LValParser {
           this.expectPlugin("pipelineOperator");
           this.state.inPipeline = true;
           this.checkPipelineAtInfixOperator(left, leftStartPos);
-        } else if (op === tt.nullishCoalescing) {
-          this.expectPlugin("nullishCoalescingOperator");
         }
 
         this.next();
@@ -582,63 +584,51 @@ export default class ExpressionParser extends LValParser {
         startLoc,
         noCalls,
       );
-    } else if (this.match(tt.questionDot)) {
-      this.expectPlugin("optionalChaining");
-      state.optionalChainMember = true;
+    }
+    let optional = false;
+    if (this.match(tt.questionDot)) {
+      state.optionalChainMember = optional = true;
       if (noCalls && this.lookaheadCharCode() === charCodes.leftParenthesis) {
         state.stop = true;
         return base;
       }
       this.next();
-
+    }
+    const computed = this.eat(tt.bracketL);
+    if (
+      (optional && !this.match(tt.parenL) && !this.match(tt.backQuote)) ||
+      computed ||
+      this.eat(tt.dot)
+    ) {
       const node = this.startNodeAt(startPos, startLoc);
+      node.object = base;
+      node.property = computed
+        ? this.parseExpression()
+        : optional
+        ? this.parseIdentifier(true)
+        : this.parseMaybePrivateName(true);
+      node.computed = computed;
 
-      if (this.eat(tt.bracketL)) {
-        node.object = base;
-        node.property = this.parseExpression();
-        node.computed = true;
-        node.optional = true;
+      if (node.property.type === "PrivateName") {
+        if (node.object.type === "Super") {
+          this.raise(startPos, "Private fields can't be accessed on super");
+        }
+        this.classScope.usePrivateName(
+          node.property.id.name,
+          node.property.start,
+        );
+      }
+
+      if (computed) {
         this.expect(tt.bracketR);
+      }
+
+      if (state.optionalChainMember) {
+        node.optional = optional;
         return this.finishNode(node, "OptionalMemberExpression");
-      } else if (this.eat(tt.parenL)) {
-        node.callee = base;
-        node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
-        node.optional = true;
-        return this.finishCallExpression(node, /* optional */ true);
       } else {
-        node.object = base;
-        node.property = this.parseIdentifier(true);
-        node.computed = false;
-        node.optional = true;
-        return this.finishNode(node, "OptionalMemberExpression");
+        return this.finishNode(node, "MemberExpression");
       }
-    } else if (this.eat(tt.dot)) {
-      const node = this.startNodeAt(startPos, startLoc);
-      node.object = base;
-      node.property = this.parseMaybePrivateName();
-      node.computed = false;
-      if (
-        node.property.type === "PrivateName" &&
-        node.object.type === "Super"
-      ) {
-        this.raise(startPos, "Private fields can't be accessed on super");
-      }
-      if (state.optionalChainMember) {
-        node.optional = false;
-        return this.finishNode(node, "OptionalMemberExpression");
-      }
-      return this.finishNode(node, "MemberExpression");
-    } else if (this.eat(tt.bracketL)) {
-      const node = this.startNodeAt(startPos, startLoc);
-      node.object = base;
-      node.property = this.parseExpression();
-      node.computed = true;
-      this.expect(tt.bracketR);
-      if (state.optionalChainMember) {
-        node.optional = false;
-        return this.finishNode(node, "OptionalMemberExpression");
-      }
-      return this.finishNode(node, "MemberExpression");
     } else if (!noCalls && this.match(tt.parenL)) {
       const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
       const oldYieldPos = this.state.yieldPos;
@@ -652,16 +642,21 @@ export default class ExpressionParser extends LValParser {
       let node = this.startNodeAt(startPos, startLoc);
       node.callee = base;
 
-      node.arguments = this.parseCallExpressionArguments(
-        tt.parenR,
-        state.maybeAsyncArrow,
-        base.type === "Import",
-        base.type !== "Super",
-        node,
-      );
+      if (optional) {
+        node.optional = true;
+        node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+      } else {
+        node.arguments = this.parseCallExpressionArguments(
+          tt.parenR,
+          state.maybeAsyncArrow,
+          base.type === "Import",
+          base.type !== "Super",
+          node,
+        );
+      }
       this.finishCallExpression(node, state.optionalChainMember);
 
-      if (state.maybeAsyncArrow && this.shouldParseAsyncArrow()) {
+      if (state.maybeAsyncArrow && this.shouldParseAsyncArrow() && !optional) {
         state.stop = true;
 
         node = this.parseAsyncArrowFromCallExpression(
@@ -923,10 +918,11 @@ export default class ExpressionParser extends LValParser {
           return this.parseImportMetaProperty(node);
         }
 
-        this.expectPlugin("dynamicImport", node.start);
-
         if (!this.match(tt.parenL)) {
-          this.unexpected(null, tt.parenL);
+          this.raise(
+            this.state.lastTokStart,
+            "import can only be used in import() or import.meta",
+          );
         }
         return this.finishNode(node, "Import");
       case tt._this:
@@ -967,8 +963,18 @@ export default class ExpressionParser extends LValParser {
           this.match(tt.name) &&
           !this.canInsertSemicolon()
         ) {
+          const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
+          const oldYieldPos = this.state.yieldPos;
+          const oldAwaitPos = this.state.awaitPos;
+          this.state.maybeInArrowParameters = true;
+          this.state.yieldPos = -1;
+          this.state.awaitPos = -1;
           const params = [this.parseIdentifier()];
           this.expect(tt.arrow);
+          this.checkYieldAwaitInDefaultParams();
+          this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
+          this.state.yieldPos = oldYieldPos;
+          this.state.awaitPos = oldAwaitPos;
           // let foo = async bar => {};
           this.parseArrowExpression(node, params, true);
           return node;
@@ -1125,11 +1131,19 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "BooleanLiteral");
   }
 
-  parseMaybePrivateName(): N.PrivateName | N.Identifier {
+  parseMaybePrivateName(
+    isPrivateNameAllowed: boolean,
+  ): N.PrivateName | N.Identifier {
     const isPrivate = this.match(tt.hash);
 
     if (isPrivate) {
       this.expectOnePlugin(["classPrivateProperties", "classPrivateMethods"]);
+      if (!isPrivateNameAllowed) {
+        this.raise(
+          this.state.pos,
+          "Private names can only be used as the name of a class element (i.e. class C { #p = 42; #m() {} } )\n or a property of member expression (i.e. this.#p).",
+        );
+      }
       const node = this.startNode();
       this.next();
       this.assertNoSpace("Unexpected space between # and identifier");
@@ -1389,7 +1403,7 @@ export default class ExpressionParser extends LValParser {
     if (this.eat(tt.dot)) {
       const metaProp = this.parseMetaProperty(node, meta, "target");
 
-      if (!this.scope.inNonArrowFunction && !this.state.inClassProperty) {
+      if (!this.scope.inNonArrowFunction && !this.scope.inClass) {
         let error = "new.target can only be used in functions";
 
         if (this.hasPlugin("classProperties")) {
@@ -1442,13 +1456,7 @@ export default class ExpressionParser extends LValParser {
     const elem = this.startNode();
     if (this.state.value === null) {
       if (!isTagged) {
-        // TODO: fix this
-        this.raise(
-          this.state.invalidTemplateEscapePosition || 0,
-          "Invalid escape sequence in template",
-        );
-      } else {
-        this.state.invalidTemplateEscapePosition = null;
+        this.raise(this.state.start + 1, "Invalid escape sequence in template");
       }
     }
     elem.value = {
@@ -1596,12 +1604,12 @@ export default class ExpressionParser extends LValParser {
     }
 
     const containsEsc = this.state.containsEsc;
-    this.parsePropertyName(prop);
+    this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
 
     if (!isPattern && !containsEsc && !isGenerator && this.isAsyncProp(prop)) {
       isAsync = true;
       isGenerator = this.eat(tt.star);
-      this.parsePropertyName(prop);
+      this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
     } else {
       isAsync = false;
     }
@@ -1688,7 +1696,7 @@ export default class ExpressionParser extends LValParser {
     if (!containsEsc && this.isGetterOrSetterMethod(prop, isPattern)) {
       if (isGenerator || isAsync) this.unexpected();
       prop.kind = prop.key.name;
-      this.parsePropertyName(prop);
+      this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
       this.parseMethod(
         prop,
         /* isGenerator */ false,
@@ -1780,6 +1788,7 @@ export default class ExpressionParser extends LValParser {
 
   parsePropertyName(
     prop: N.ObjectOrClassMember | N.ClassMember | N.TsNamedTypeElementBase,
+    isPrivateNameAllowed: boolean,
   ): N.Expression | N.Identifier {
     if (this.eat(tt.bracketL)) {
       (prop: $FlowSubtype<N.ObjectOrClassMember>).computed = true;
@@ -1790,9 +1799,9 @@ export default class ExpressionParser extends LValParser {
       this.state.inPropertyName = true;
       // We check if it's valid for it to be a private name when we push it.
       (prop: $FlowFixMe).key =
-        this.match(tt.num) || this.match(tt.string)
+        this.match(tt.num) || this.match(tt.string) || this.match(tt.bigint)
           ? this.parseExprAtom()
-          : this.parseMaybePrivateName();
+          : this.parseMaybePrivateName(isPrivateNameAllowed);
 
       if (prop.key.type !== "PrivateName") {
         // ClassPrivateProperty is never computed, so we don't assign in that case.
@@ -1839,7 +1848,6 @@ export default class ExpressionParser extends LValParser {
         (allowDirectSuper ? SCOPE_DIRECT_SUPER : 0),
     );
     this.parseFunctionParams((node: any), allowModifiers);
-    this.checkYieldAwaitInDefaultParams();
     this.parseFunctionBodyAndFinish(node, type, true);
     this.scope.exit();
 
@@ -1890,20 +1898,6 @@ export default class ExpressionParser extends LValParser {
       "arrow function parameters",
       trailingCommaPos,
     );
-  }
-
-  isStrictBody(node: { body: N.BlockStatement }): boolean {
-    const isBlockStatement = node.body.type === "BlockStatement";
-
-    if (isBlockStatement && node.body.directives.length) {
-      for (const directive of node.body.directives) {
-        if (directive.value.value === "use strict") {
-          return true;
-        }
-      }
-    }
-
-    return false;
   }
 
   parseFunctionBodyAndFinish(
@@ -2219,7 +2213,9 @@ export default class ExpressionParser extends LValParser {
   isAwaitAllowed(): boolean {
     if (this.scope.inFunction) return this.scope.inAsync;
     if (this.options.allowAwaitOutsideFunction) return true;
-    if (this.hasPlugin("topLevelAwait")) return this.inModule;
+    if (this.hasPlugin("topLevelAwait")) {
+      return this.inModule && this.scope.inAsync;
+    }
     return false;
   }
 

@@ -19,7 +19,9 @@ Using plugins:
   proposal-unicode-property-regex { "node":"6" }
   proposal-json-strings { "node":"6" }
   proposal-optional-catch-binding { "node":"6" }
+  proposal-optional-chaining { "node":"6" }
   transform-named-capturing-groups-regex { "node":"6" }
+  proposal-nullish-coalescing-operator { "node":"6" }
   transform-modules-commonjs { "node":"6" }
   proposal-dynamic-import { "node":"6" }
 

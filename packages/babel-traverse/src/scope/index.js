@@ -897,10 +897,27 @@ export default class Scope {
 
   getBinding(name: string) {
     let scope = this;
+    let previousPath;
 
     do {
       const binding = scope.getOwnBinding(name);
-      if (binding) return binding;
+      if (binding) {
+        // Check if a pattern is a part of parameter expressions.
+        // 9.2.10.28: The closure created by this expression should not have visibility of
+        // declarations in the function body. If the binding is not a `param`-kind,
+        // then it must be defined inside the function body, thus it should be skipped
+        if (
+          previousPath &&
+          previousPath.isPattern() &&
+          previousPath.parentPath.isFunction() &&
+          binding.kind !== "param"
+        ) {
+          // do nothing
+        } else {
+          return binding;
+        }
+      }
+      previousPath = scope.path;
     } while ((scope = scope.parent));
   }
 

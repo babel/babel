@@ -1,6 +1,6 @@
-FLOW_COMMIT = 09669846b7a7ca5a6c23c12d56bb3bebdafd67e9
-TEST262_COMMIT = 8688c4ab79059c3097098605e69f1ee5eda6c409
-TYPESCRIPT_COMMIT = 038d95144d8b93c2799d1732181c89c3d84362d5
+FLOW_COMMIT = a1f9a4c709dcebb27a5084acf47755fbae699c25
+TEST262_COMMIT = 28b4fcca4b1b1d278dfe0cc0e69c7d9d59b31aab
+TYPESCRIPT_COMMIT = 5fc917be2e4dd64c8e9504d36615cd7fbfdd4cd3
 
 FORCE_PUBLISH = "@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@babel/standalone,@babel/preset-env-standalone"
 
@@ -189,7 +189,7 @@ test-typescript-update-whitelist:
 bootstrap-test262:
 	rm -rf build/test262
 	mkdir -p build
-	git clone --branch=master --single-branch --shallow-since=2019-09-01 https://github.com/tc39/test262.git build/test262
+	git clone --branch=master --single-branch --shallow-since=2019-12-01 https://github.com/tc39/test262.git build/test262
 	cd build/test262 && git checkout $(TEST262_COMMIT)
 
 test-test262:

@@ -58,16 +58,6 @@ export default class UtilParser extends Tokenizer {
     }
   }
 
-  // eat() for relational operators.
-
-  eatRelational(op: "<" | ">"): boolean {
-    if (this.isRelational(op)) {
-      this.next();
-      return true;
-    }
-    return false;
-  }
-
   // Tests whether parsed token is a contextual keyword.
 
   isContextual(name: string): boolean {

@@ -64,7 +64,6 @@ export default class State {
   inType: boolean = false;
   noAnonFunctionType: boolean = false;
   inPropertyName: boolean = false;
-  inClassProperty: boolean = false;
   hasFlowComment: boolean = false;
   isIterator: boolean = false;
 
@@ -77,9 +76,6 @@ export default class State {
   // For the F# plugin
   soloAwait: boolean = false;
   inFSharpPipelineDirectBody: boolean = false;
-
-  // Check whether we are in a (nested) class or not.
-  classLevel: number = 0;
 
   // Labels in scope.
   labels: Array<{
@@ -156,8 +152,6 @@ export default class State {
   // Names of exports store. `default` is stored as a name for both
   // `export default foo;` and `export { foo as default };`.
   exportedIdentifiers: Array<string> = [];
-
-  invalidTemplateEscapePosition: ?number = null;
 
   curPosition(): Position {
     return new Position(this.curLine, this.pos - this.lineStart);

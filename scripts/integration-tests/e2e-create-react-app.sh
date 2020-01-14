@@ -5,7 +5,7 @@
 #==============================================================================#
 
 # Start in scripts/integration-tests/ even if run from root directory
-cd "$(dirname "$0")"
+cd "$(dirname "$0")" || exit
 
 source utils/local-registry.sh
 source utils/cleanup.sh
@@ -14,8 +14,8 @@ source utils/cleanup.sh
 set -x
 
 # Clone create-react-app
-git clone https://github.com/facebook/create-react-app.git tmp/create-react-app
-cd tmp/create-react-app
+git clone --depth=1 https://github.com/facebook/create-react-app.git tmp/create-react-app
+cd tmp/create-react-app || exit
 
 #==============================================================================#
 #                                   TEST                                       #
@@ -25,7 +25,7 @@ startLocalRegistry "$PWD"/../../verdaccio-config.yml
 yarn install
 # "yarn upgrade --scope @babel --latest" doesn't seem to work.
 # a means "all", while \n is the enter needed to confirm the selection.
-echo "a\n" | yarn upgrade-interactive --scope @babel --latest
+printf "a\n" | yarn upgrade-interactive --scope @babel --latest
 
 # Test
 CI=true yarn test

@@ -225,14 +225,14 @@ export function ClassBody(...args: Array<any>): Object {
   return builder("ClassBody", ...args);
 }
 export { ClassBody as classBody };
-export function ClassDeclaration(...args: Array<any>): Object {
-  return builder("ClassDeclaration", ...args);
-}
-export { ClassDeclaration as classDeclaration };
 export function ClassExpression(...args: Array<any>): Object {
   return builder("ClassExpression", ...args);
 }
 export { ClassExpression as classExpression };
+export function ClassDeclaration(...args: Array<any>): Object {
+  return builder("ClassDeclaration", ...args);
+}
+export { ClassDeclaration as classDeclaration };
 export function ExportAllDeclaration(...args: Array<any>): Object {
   return builder("ExportAllDeclaration", ...args);
 }

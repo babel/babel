@@ -1,14 +1,13 @@
 // @flow
 import corejs3Polyfills from "core-js-compat/data";
+import findSuggestion from "levenary";
 import invariant from "invariant";
 import { coerce, SemVer } from "semver";
-import corejs2Polyfills from "../data/corejs2-built-ins.json";
-import pluginsList from "../data/plugins.json";
+import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
+import pluginsList from "@babel/compat-data/plugins";
 import moduleTransformations from "./module-transformations";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
 import { defaultWebIncludes } from "./polyfills/corejs2/get-platform-specific-default";
-import { isBrowsersQueryValid } from "./targets-parser";
-import { findSuggestion } from "./utils";
 
 import type {
   BuiltInsOption,
@@ -26,7 +25,7 @@ const validateTopLevelOptions = (options: Options) => {
     if (!TopLevelOptions[option]) {
       throw new Error(
         `Invalid Option: ${option} is not a valid top-level option.
-        Maybe you meant to use '${findSuggestion(validOptions, option)}'?`,
+        Maybe you meant to use '${findSuggestion(option, validOptions)}'?`,
       );
     }
   }
@@ -121,7 +120,7 @@ export const checkDuplicateIncludeExcludes = (
 
 const normalizeTargets = targets => {
   // TODO: Allow to use only query or strings as a targets from next breaking change.
-  if (isBrowsersQueryValid(targets)) {
+  if (typeof targets === "string" || Array.isArray(targets)) {
     return { browsers: targets };
   }
   return {

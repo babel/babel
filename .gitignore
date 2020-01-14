@@ -20,6 +20,8 @@ dist
 package-lock.json
 !/.github/actions/*/package-lock.json
 
+/packages/babel-compat-data/build
+
 /packages/babel-runtime/helpers/*.js
 !/packages/babel-runtime/helpers/toArray.js
 !/packages/babel-runtime/helpers/iterableToArray.js
@@ -52,8 +54,10 @@ package-lock.json
 .nyc_output
 /babel.sublime-workspace
 packages/babel-standalone/babel.js
+packages/babel-standalone/babel.js.map
 packages/babel-standalone/babel.min.js
 packages/babel-preset-env-standalone/babel-preset-env.js
+packages/babel-preset-env-standalone/babel-preset-env.js.map
 packages/babel-preset-env-standalone/babel-preset-env.min.js
 /codemods/*/lib
 /codemods/*/node_modules

@@ -391,14 +391,8 @@ export default class Tokenizer extends LocationParser {
     }
 
     if (
-      (this.hasPlugin("classPrivateProperties") ||
-        this.hasPlugin("classPrivateMethods")) &&
-      this.state.classLevel > 0
-    ) {
-      ++this.state.pos;
-      this.finishToken(tt.hash);
-      return;
-    } else if (
+      this.hasPlugin("classPrivateProperties") ||
+      this.hasPlugin("classPrivateMethods") ||
       this.getPluginOption("pipelineOperator", "proposal") === "smart"
     ) {
       this.finishOp(tt.hash, 1);
@@ -1122,14 +1116,10 @@ export default class Tokenizer extends LocationParser {
         throwOnInvalid,
       );
       ++this.state.pos;
-      if (code === null) {
-        // $FlowFixMe (is this always non-null?)
-        --this.state.invalidTemplateEscapePosition; // to point to the '\'' instead of the 'u'
-      } else if (code > 0x10ffff) {
+      if (code !== null && code > 0x10ffff) {
         if (throwOnInvalid) {
           this.raise(codePos, "Code point out of bounds");
         } else {
-          this.state.invalidTemplateEscapePosition = codePos - 2;
           return null;
         }
       }
@@ -1159,6 +1149,7 @@ export default class Tokenizer extends LocationParser {
       ) {
         ++this.state.pos;
         ++this.state.curLine;
+        this.state.lineStart = this.state.pos;
       } else if (isNewLine(ch)) {
         throw this.raise(this.state.start, "Unterminated string constant");
       } else {
@@ -1274,9 +1265,6 @@ export default class Tokenizer extends LocationParser {
       case charCodes.digit8:
       case charCodes.digit9:
         if (inTemplate) {
-          const codePos = this.state.pos - 1;
-
-          this.state.invalidTemplateEscapePosition = codePos;
           return null;
         }
       default:
@@ -1299,7 +1287,6 @@ export default class Tokenizer extends LocationParser {
             next === charCodes.digit9
           ) {
             if (inTemplate) {
-              this.state.invalidTemplateEscapePosition = codePos;
               return null;
             } else if (this.state.strict) {
               this.raise(codePos, "Octal literal in strict mode");
@@ -1332,7 +1319,6 @@ export default class Tokenizer extends LocationParser {
         this.raise(codePos, "Bad character escape sequence");
       } else {
         this.state.pos = codePos - 1;
-        this.state.invalidTemplateEscapePosition = codePos - 1;
       }
     }
     return n;

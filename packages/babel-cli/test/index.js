@@ -97,6 +97,7 @@ const assertTest = function(stdout, stderr, opts, cwd) {
       if (
         // saveInFiles always creates an empty .babelrc, so lets exclude for now
         filename !== ".babelrc" &&
+        filename !== ".babelignore" &&
         !Object.prototype.hasOwnProperty.call(opts.inFiles, filename)
       ) {
         const expected = opts.outFiles[filename];
@@ -239,9 +240,15 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
       opts.inFiles = readDir(path.join(testLoc, "in-files"), fileFilter);
 
       const babelrcLoc = path.join(testLoc, ".babelrc");
+      const babelIgnoreLoc = path.join(testLoc, ".babelignore");
       if (fs.existsSync(babelrcLoc)) {
         // copy .babelrc file to tmp directory
         opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
+        opts.inFiles[".babelignore"] = helper.readFile(babelIgnoreLoc);
+      }
+      if (fs.existsSync(babelIgnoreLoc)) {
+        // copy .babelignore file to tmp directory
+        opts.inFiles[".babelignore"] = helper.readFile(babelIgnoreLoc);
       }
 
       it(testName, buildTest(binName, testName, opts), 20000);

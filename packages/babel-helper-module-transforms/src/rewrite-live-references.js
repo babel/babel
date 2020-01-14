@@ -182,7 +182,9 @@ const rewriteReferencesVisitor = {
       ref.loc = path.node.loc;
 
       if (
-        path.parentPath.isCallExpression({ callee: path.node }) &&
+        (path.parentPath.isCallExpression({ callee: path.node }) ||
+          path.parentPath.isOptionalCallExpression({ callee: path.node }) ||
+          path.parentPath.isTaggedTemplateExpression({ tag: path.node })) &&
         t.isMemberExpression(ref)
       ) {
         path.replaceWith(t.sequenceExpression([t.numericLiteral(0), ref]));

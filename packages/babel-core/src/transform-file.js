@@ -1,13 +1,14 @@
 // @flow
-import fs from "fs";
 
-import loadConfig, { type InputOptions } from "./config";
+import gensync from "gensync";
+
+import loadConfig, { type InputOptions, type ResolvedConfig } from "./config";
 import {
-  runSync,
-  runAsync,
+  run,
   type FileResult,
   type FileResultCallback,
 } from "./transformation";
+import * as fs from "./gensync-utils/fs";
 
 import typeof * as transformFileBrowserType from "./transform-file-browser";
 import typeof * as transformFileType from "./transform-file";
@@ -22,74 +23,26 @@ type TransformFile = {
   (filename: string, opts: ?InputOptions, callback: FileResultCallback): void,
 };
 
-export const transformFile: TransformFile = (function transformFile(
-  filename,
-  opts,
-  callback,
-) {
-  let options;
-  if (typeof opts === "function") {
-    callback = opts;
-    opts = undefined;
-  }
-
-  if (opts == null) {
-    options = { filename };
-  } else if (opts && typeof opts === "object") {
-    options = {
-      ...opts,
-      filename,
-    };
-  }
-
-  process.nextTick(() => {
-    let cfg;
-    try {
-      cfg = loadConfig(options);
-      if (cfg === null) return callback(null, null);
-    } catch (err) {
-      return callback(err);
+const transformFileRunner = gensync<[string, ?InputOptions], FileResult | null>(
+  function*(filename, opts) {
+    let options;
+    if (opts == null) {
+      options = { filename };
+    } else if (opts && typeof opts === "object") {
+      options = {
+        ...opts,
+        filename,
+      };
     }
 
-    // Reassignment to keep Flow happy.
-    const config = cfg;
+    const config: ResolvedConfig | null = yield* loadConfig(options);
+    if (config === null) return null;
 
-    fs.readFile(filename, "utf8", function(err, code: string) {
-      if (err) return callback(err, null);
+    const code = yield* fs.readFile(filename, "utf8");
+    return yield* run(config, code);
+  },
+);
 
-      runAsync(config, code, null, callback);
-    });
-  });
-}: Function);
-
-export function transformFileSync(
-  filename: string,
-  opts: ?InputOptions,
-): FileResult | null {
-  let options;
-  if (opts == null) {
-    options = { filename };
-  } else if (opts && typeof opts === "object") {
-    options = {
-      ...opts,
-      filename,
-    };
-  }
-
-  const config = loadConfig(options);
-  if (config === null) return null;
-
-  return runSync(config, fs.readFileSync(filename, "utf8"));
-}
-
-export function transformFileAsync(
-  filename: string,
-  opts: ?InputOptions,
-): Promise<FileResult | null> {
-  return new Promise((res, rej) => {
-    transformFile(filename, opts, (err, result) => {
-      if (err == null) res(result);
-      else rej(err);
-    });
-  });
-}
+export const transformFile: TransformFile = transformFileRunner.errback;
+export const transformFileSync = transformFileRunner.sync;
+export const transformFileAsync = transformFileRunner.async;

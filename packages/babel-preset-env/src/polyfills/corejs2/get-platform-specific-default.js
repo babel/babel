@@ -1,6 +1,6 @@
 // @flow
 
-import type { Targets } from "../../types";
+import type { Targets } from "@babel/helper-compilation-targets";
 
 export const defaultWebIncludes = [
   "web.timers",

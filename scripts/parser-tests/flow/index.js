@@ -15,9 +15,11 @@ const flowOptionsMapping = {
 };
 
 function getPlugins(test) {
+  const flowOptions = { all: true };
+
   const plugins = [
     "dynamicImport",
-    ["flow", { all: true }],
+    ["flow", flowOptions],
     "flowComments",
     "jsx",
     "classProperties",
@@ -33,6 +35,8 @@ function getPlugins(test) {
     if (!enabled) {
       const idx = plugins.indexOf(flowOptionsMapping[option]);
       if (idx !== -1) plugins.splice(idx, 1);
+    } else if (option === "enums") {
+      flowOptions.enums = true;
     } else if (!(option in flowOptionsMapping)) {
       throw new Error("Parser options not mapped " + option);
     } else if (flowOptionsMapping[option]) {

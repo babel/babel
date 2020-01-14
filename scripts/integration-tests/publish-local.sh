@@ -15,7 +15,7 @@ function publishESLintPkg {
   cd eslint/$1
   yarn version --patch --no-git-tag-version
   cd ../..
-  make publish-eslint PKG=$1
+  make -j publish-eslint PKG=$1
 }
 
 # Echo every command being executed
@@ -30,7 +30,7 @@ initializeE2Egit
 #                                 PUBLISH                                      #
 #==============================================================================#
 
-make bootstrap-only
+make -j bootstrap-only
 
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 loginLocalRegistry

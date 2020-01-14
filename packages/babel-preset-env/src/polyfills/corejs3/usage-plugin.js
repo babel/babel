@@ -3,7 +3,7 @@
 import corejs3Polyfills from "core-js-compat/data";
 import corejs3ShippedProposalsList from "./shipped-proposals";
 import getModulesListForTargetVersion from "core-js-compat/get-modules-list-for-target-version";
-import filterItems from "../../filter-items";
+import { filterItems } from "@babel/helper-compilation-targets";
 import {
   BuiltIns,
   StaticProperties,

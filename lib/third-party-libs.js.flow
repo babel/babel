@@ -4,6 +4,7 @@
 
 declare module "resolve" {
   declare export default {
+    (string, {| basedir: string |}, (err: ?Error, res: string) => void): void;
     sync: (string, {| basedir: string |}) => string;
   };
 }
@@ -187,12 +188,6 @@ declare module "convert-source-map" {
     removeComments(str: string): string,
     removeMapFileComments(str: string): string,
     generateMapFileComment(path: string, options?: ?{ multiline: boolean }): string,
-  };
-}
-
-declare module "js-levenshtein" {
-  declare module.exports: {
-    (string, string): number,
   };
 }
 

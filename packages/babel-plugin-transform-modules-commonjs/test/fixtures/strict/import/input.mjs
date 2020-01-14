@@ -7,3 +7,5 @@ foo;
 foo2;
 foo3;
 foo3();
+foo3``;
+foo3?.();

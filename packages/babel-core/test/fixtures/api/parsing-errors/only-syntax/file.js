@@ -1,1 +1,1 @@
-var $ = import("jquery");
+a |> b

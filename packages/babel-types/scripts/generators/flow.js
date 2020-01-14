@@ -54,6 +54,7 @@ for (const type in t.NODE_FIELDS) {
 
   const struct = ['type: "' + type + '";'];
   const args = [];
+  const builderNames = t.BUILDER_KEYS[type];
 
   Object.keys(t.NODE_FIELDS[type])
     .sort((fieldA, fieldB) => {
@@ -80,8 +81,9 @@ for (const type in t.NODE_FIELDS) {
       if (typeAnnotation) {
         suffix += ": " + typeAnnotation;
       }
-
-      args.push(t.toBindingIdentifierName(fieldName) + suffix);
+      if (builderNames.includes(fieldName)) {
+        args.push(t.toBindingIdentifierName(fieldName) + suffix);
+      }
 
       if (t.isValidIdentifier(fieldName)) {
         struct.push(fieldName + suffix + ";");

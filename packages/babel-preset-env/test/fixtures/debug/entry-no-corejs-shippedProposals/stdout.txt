@@ -34,10 +34,12 @@ Using plugins:
   proposal-unicode-property-regex {}
   proposal-json-strings {}
   proposal-optional-catch-binding {}
+  proposal-optional-chaining {}
   transform-named-capturing-groups-regex {}
   transform-member-expression-literals {}
   transform-property-literals {}
   transform-reserved-words {}
+  proposal-nullish-coalescing-operator {}
   transform-modules-commonjs {}
   proposal-dynamic-import {}
 

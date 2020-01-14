@@ -11,19 +11,19 @@ class Foo {
 
   async #foo() {}
 
-  #foo() {}
+  #foo2() {}
 
-  get #foo() {}
+  get #foo3() {}
 
-  set #foo(bar) {}
+  set #foo3(bar) {}
 
-  *#foo() {}
+  *#foo4() {}
 
-  async *#foo() {}
+  async *#foo5() {}
 
-  get #bar() {}
+  get #bar6() {}
 
-  set #baz(taz) {}
+  set #baz6(taz) {}
 
   static async foo() {}
 
@@ -41,19 +41,19 @@ class Foo {
 
   static async *foo() {}
 
-  static #foo() {}
+  static #foo7() {}
 
-  static async #foo() {}
+  static async #foo8() {}
 
   static ["foo"]() {}
 
-  static get #foo() {}
+  static get #foo9() {}
 
-  static set #foo(taz) {}
+  static set #foo9(taz) {}
 
-  static *#foo() {}
+  static *#foo10() {}
 
-  static async *#foo() {}
+  static async *#foo11() {}
 
   get() {}
 

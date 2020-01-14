@@ -48,23 +48,25 @@ executors:
     docker:
       - image: circleci/node:13
     working_directory: ~/babel
+  # e2e-vue-cli test requires chromium
+  node-browsers-executor:
+    docker:
+      - image: circleci/node:13-browsers
+    working_directory: ~/babel
 
 jobs:
-  test:
+  build-standalone:
     executor: node-executor
     steps:
       - checkout
       - restore_cache: *restore-yarn-cache
       - restore_cache: *restore-node-modules-cache
-      - run: yarn --version
-      - run: make test-ci-coverage
-      # Builds babel-standalone with the regular Babel config
-      - run: IS_PUBLISH=true make build
-      # test-ci-coverage doesn't test babel-standalone, as trying to gather coverage
-      # data for a JS file that's several megabytes large is bound to fail. Here,
-      # we just run the babel-standalone test separately.
-      - run: ./node_modules/.bin/jest packages/babel-standalone/test/
-      - run: ./node_modules/.bin/jest packages/babel-preset-env-standalone/test/
+        # Builds babel-standalone with the regular Babel config
+        # test-ci-coverage doesn't test babel-standalone, as trying to gather coverage
+      - run: IS_PUBLISH=true make -j build-standalone-ci
+        # data for a JS file that's several megabytes large is bound to fail. Here,
+        # we just run the babel-standalone test separately.
+      - run: yarn jest "\-standalone/test"
       - store_artifacts: *artifact_babel
       - store_artifacts: *artifact_babel_min
       - store_artifacts: *artifact_env
@@ -125,6 +127,8 @@ jobs:
             cat ~/diff.tap | $(npm bin)/tap-merge | $(npm bin)/tap-mocha-reporter xunit | tee ~/test-results/test262/results.xml
           <<: *test262_workdir
       - store_test_results: *artifact_test262_xunit
+      - save_cache: *save-node-modules-cache
+      - save_cache: *save-yarn-cache
 
   publish-verdaccio:
     executor: node-executor
@@ -154,11 +158,19 @@ jobs:
           at: /tmp/verdaccio-workspace
       - run: ./scripts/integration-tests/e2e-create-react-app.sh
 
+  e2e-vue-cli:
+    executor: node-browsers-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/verdaccio-workspace
+      - run: ./scripts/integration-tests/e2e-vue-cli.sh
+
 workflows:
   version: 2
-  test:
+  build-standalone:
     jobs:
-      - test
+      - build-standalone
   test262-master:
     jobs:
       - test262:
@@ -190,3 +202,7 @@ workflows:
       - e2e-create-react-app:
           requires:
             - publish-verdaccio
+      - e2e-vue-cli:
+          requires:
+            - publish-verdaccio
+

@@ -1,6 +1,5 @@
 {
   "plugins": [
-    "syntax-dynamic-import",
     "transform-modules-amd",
     "external-helpers"
   ]

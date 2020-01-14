@@ -1,26 +1,5 @@
-import { types as t } from "@babel/core";
+import { types as t, traverse } from "@babel/core";
 import convertProgramNode from "./convertProgramNode";
-
-module.exports = function(ast, traverse, code) {
-  const state = { source: code };
-
-  // Monkey patch visitor keys in order to be able to traverse the estree nodes
-  t.VISITOR_KEYS.Property = t.VISITOR_KEYS.ObjectProperty;
-  t.VISITOR_KEYS.MethodDefinition = [
-    "key",
-    "value",
-    "decorators",
-    "returnType",
-    "typeParameters",
-  ];
-
-  traverse(ast, astTransformVisitor, null, state);
-
-  delete t.VISITOR_KEYS.Property;
-  delete t.VISITOR_KEYS.MethodDefinition;
-
-  convertProgramNode(ast);
-};
 
 const astTransformVisitor = {
   noScope: true,
@@ -94,3 +73,24 @@ const astTransformVisitor = {
     }
   },
 };
+
+export default function(ast, code) {
+  const state = { source: code };
+
+  // Monkey patch visitor keys in order to be able to traverse the estree nodes
+  t.VISITOR_KEYS.Property = t.VISITOR_KEYS.ObjectProperty;
+  t.VISITOR_KEYS.MethodDefinition = [
+    "key",
+    "value",
+    "decorators",
+    "returnType",
+    "typeParameters",
+  ];
+
+  traverse(ast, astTransformVisitor, null, state);
+
+  delete t.VISITOR_KEYS.Property;
+  delete t.VISITOR_KEYS.MethodDefinition;
+
+  convertProgramNode(ast);
+}

@@ -37,30 +37,48 @@ module.exports = function() {
       return null;
     },
     resolveId(importee) {
-      let packageFolderName;
-      const matches = importee.match(/^@babel\/([^/]+)$/);
-      if (matches) {
-        packageFolderName = `babel-${matches[1]}`;
-      }
-
-      if (packageFolderName) {
-        // resolve babel package names to their src index file
-        const packageFolder = path.join(dirname, "packages", packageFolderName);
-        const packageJson = require(path.join(packageFolder, "package.json"));
-
-        const filename =
-          typeof packageJson["browser"] === "string"
-            ? packageJson["browser"]
-            : packageJson["main"];
-
+      if (importee === "@babel/runtime/regenerator") {
         return path.join(
-          packageFolder,
-          // replace lib with src in the pkg.json entry
-          filename.replace(/^(\.\/)?lib\//, "src/")
+          dirname,
+          "packages",
+          "babel-runtime",
+          "regenerator",
+          "index.js"
         );
       }
 
-      return null;
+      const matches = importee.match(/^@babel\/([^/]+)$/);
+      if (!matches) return null;
+
+      // resolve babel package names to their src index file
+      const packageFolder = path.join(
+        dirname,
+        "packages",
+        `babel-${matches[1]}`
+      );
+
+      let packageJsonSource;
+      try {
+        packageJsonSource = fs.readFileSync(
+          path.join(packageFolder, "package.json")
+        );
+      } catch (e) {
+        // Some Babel packahes aren't in this repository, but in
+        return null;
+      }
+
+      const packageJson = JSON.parse(packageJsonSource);
+
+      const filename =
+        typeof packageJson["browser"] === "string"
+          ? packageJson["browser"]
+          : packageJson["main"];
+
+      return path.join(
+        packageFolder,
+        // replace lib with src in the pkg.json entry
+        filename.replace(/^(\.\/)?lib\//, "src/")
+      );
     },
   };
 };
