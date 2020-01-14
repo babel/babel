@@ -136,7 +136,7 @@ const collectorVisitor = {
     if (!id) return;
 
     const name = id.name;
-    path.scope.bindings[name] = path.scope.getBinding(name);
+    path.scope.bindings[name] = path.scope.parent.getBinding(name);
   },
 
   Block(path) {
