@@ -534,22 +534,33 @@ suites.forEach(function(testSuite) {
               sourceMaps: task.sourceMap ? true : task.options.sourceMaps,
             };
 
-            const result = generate(actualAst, options, actualCode);
-
-            if (options.sourceMaps) {
-              expect(result.map).toEqual(task.sourceMap);
+            function run() {
+              return generate(actualAst, options, actualCode);
             }
 
-            if (
-              !expected.code &&
-              result.code &&
-              fs.statSync(path.dirname(expected.loc)).isDirectory() &&
-              !process.env.CI
-            ) {
-              console.log(`New test file created: ${expected.loc}`);
-              fs.writeFileSync(expected.loc, result.code);
+            const throwMsg = task.options.throws;
+            if (throwMsg) {
+              expect(() => run()).toThrow(
+                throwMsg === true ? undefined : throwMsg,
+              );
             } else {
-              expect(result.code).toBe(expected.code);
+              const result = run();
+
+              if (options.sourceMaps) {
+                expect(result.map).toEqual(task.sourceMap);
+              }
+
+              if (
+                !expected.code &&
+                result.code &&
+                fs.statSync(path.dirname(expected.loc)).isDirectory() &&
+                !process.env.CI
+              ) {
+                console.log(`New test file created: ${expected.loc}`);
+                fs.writeFileSync(expected.loc, result.code);
+              } else {
+                expect(result.code).toBe(expected.code);
+              }
             }
           }
         },

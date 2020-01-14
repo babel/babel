@@ -119,7 +119,9 @@ export function RecordExpression(node: Object) {
     endToken = "}";
   } else {
     throw new Error(
-      `${this.format.recordAndTupleSyntaxType} is not a valid recordAndTuple syntax type`,
+      `The "recordAndTupleSyntaxType" generator option must be either "bar" or "hash" (${JSON.stringify(
+        this.format.recordAndTupleSyntaxType,
+      )} received).`,
     );
   }
 
