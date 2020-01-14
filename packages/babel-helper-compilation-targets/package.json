@@ -6,7 +6,9 @@
   "description": "Engine compat data used in @babel/preset-env",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-compilation-targets",
   "main": "lib/index.js",
-  "exports": false,
+  "exports": {
+    ".": "./lib/index.js"
+  },
   "publishConfig": {
     "access": "public"
   },
