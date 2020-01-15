@@ -4,8 +4,9 @@
 
 import { types as tt, TokenType } from "../tokenizer/types";
 import type Parser from "../parser";
+import type { ExpressionErrors } from "../parser/util";
 import * as N from "../types";
-import type { Pos, Position } from "../util/location";
+import type { Position } from "../util/location";
 import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
 
 function isSimpleProperty(node: N.Node): boolean {
@@ -148,7 +149,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkDuplicatedProto(
       prop: N.ObjectMember | N.SpreadElement,
-      protoRef: { used: boolean, start?: number },
+      protoRef: { used: boolean },
+      refExpressionErrors: ?ExpressionErrors,
     ): void {
       if (
         prop.type === "SpreadElement" ||
@@ -166,8 +168,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (name === "__proto__" && prop.kind === "init") {
         // Store the first redefinition's position
-        if (protoRef.used && !protoRef.start) {
-          protoRef.start = key.start;
+        if (protoRef.used) {
+          if (refExpressionErrors && refExpressionErrors.doubleProto === -1) {
+            refExpressionErrors.doubleProto = key.start;
+          } else {
+            this.raise(key.start, "Redefinition of __proto__ property");
+          }
         }
 
         protoRef.used = true;
@@ -234,7 +240,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       classBody.body.push(method);
     }
 
-    parseExprAtom(refShorthandDefaultPos?: ?Pos): N.Expression {
+    parseExprAtom(refExpressionErrors?: ?ExpressionErrors): N.Expression {
       switch (this.state.type) {
         case tt.num:
         case tt.string:
@@ -256,7 +262,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.estreeParseLiteral(false);
 
         default:
-          return super.parseExprAtom(refShorthandDefaultPos);
+          return super.parseExprAtom(refExpressionErrors);
       }
     }
 
@@ -340,14 +346,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       startPos: ?number,
       startLoc: ?Position,
       isPattern: boolean,
-      refShorthandDefaultPos: ?Pos,
+      refExpressionErrors: ?ExpressionErrors,
     ): ?N.ObjectProperty {
       const node: N.EstreeProperty = (super.parseObjectProperty(
         prop,
         startPos,
         startLoc,
         isPattern,
-        refShorthandDefaultPos,
+        refExpressionErrors,
       ): any);
 
       if (node) {

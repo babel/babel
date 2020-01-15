@@ -27,6 +27,7 @@ import {
   CLASS_ELEMENT_STATIC_SETTER,
   type BindingTypes,
 } from "../util/scopeflags";
+import { ExpressionErrors } from "./util";
 
 const loopLabel = { kind: "loop" },
   switchLabel = { kind: "switch" };
@@ -533,8 +534,8 @@ export default class StatementParser extends ExpressionParser {
       return this.parseFor(node, init);
     }
 
-    const refShorthandDefaultPos = { start: 0 };
-    const init = this.parseExpression(true, refShorthandDefaultPos);
+    const refExpressionErrors = new ExpressionErrors();
+    const init = this.parseExpression(true, refExpressionErrors);
     if (this.match(tt._in) || this.isContextual("of")) {
       const description = this.isContextual("of")
         ? "for-of statement"
@@ -542,8 +543,8 @@ export default class StatementParser extends ExpressionParser {
       this.toAssignable(init, undefined, description);
       this.checkLVal(init, undefined, undefined, description);
       return this.parseForIn(node, init, awaitAt);
-    } else if (refShorthandDefaultPos.start) {
-      this.unexpected(refShorthandDefaultPos.start);
+    } else {
+      this.checkExpressionErrors(refExpressionErrors, true);
     }
     if (awaitAt > -1) {
       this.unexpected(awaitAt);

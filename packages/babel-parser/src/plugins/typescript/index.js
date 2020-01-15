@@ -25,6 +25,7 @@ import {
 } from "../../util/scopeflags";
 import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";
+import type { ExpressionErrors } from "../../parser/util";
 
 type TsModifier =
   | "readonly"
@@ -2340,11 +2341,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // Handle type assertions
-    parseMaybeUnary(refShorthandDefaultPos?: ?Pos): N.Expression {
+    parseMaybeUnary(refExpressionErrors?: ?ExpressionErrors): N.Expression {
       if (!this.hasPlugin("jsx") && this.isRelational("<")) {
         return this.tsParseTypeAssertion();
       } else {
-        return super.parseMaybeUnary(refShorthandDefaultPos);
+        return super.parseMaybeUnary(refExpressionErrors);
       }
     }
 

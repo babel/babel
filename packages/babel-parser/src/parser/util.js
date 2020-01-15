@@ -268,4 +268,35 @@ export default class UtilParser extends Tokenizer {
       throw error;
     }
   }
+
+  checkExpressionErrors(
+    refExpressionErrors: ?ExpressionErrors,
+    andThrow: boolean,
+  ) {
+    if (!refExpressionErrors) return false;
+    const { shorthandAssign, doubleProto } = refExpressionErrors;
+    if (!andThrow) return shorthandAssign >= 0 || doubleProto >= 0;
+    if (shorthandAssign >= 0) {
+      this.unexpected(shorthandAssign);
+    }
+    if (doubleProto >= 0) {
+      this.raise(doubleProto, "Redefinition of __proto__ property");
+    }
+  }
+}
+
+/**
+ * The ExpressionErrors is a context struct used to track
+ * - **shorthandAssign**: track initializer `=` position when parsing ambiguous
+ *   patterns. When we are sure the parsed pattern is a RHS, which means it is
+ *   not a pattern, we will throw on this position on invalid assign syntax,
+ *   otherwise it will be reset to -1
+ * - **doubleProto**: track the duplicate `__proto__` key position when parsing
+ *   ambiguous object patterns. When we are sure the parsed pattern is a RHS,
+ *   which means it is an object literal, we will throw on this position for
+ *   __proto__ redefinition, otherwise it will be reset to -1
+ */
+export class ExpressionErrors {
+  shorthandAssign = -1;
+  doubleProto = -1;
 }
