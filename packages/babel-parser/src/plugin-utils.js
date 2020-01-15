@@ -39,6 +39,7 @@ export function getPluginOption(
 }
 
 const PIPELINE_PROPOSALS = ["minimal", "smart", "fsharp"];
+const RECORD_AND_TUPLE_SYNTAX_TYPES = ["hash", "bar"];
 
 export function validatePlugins(plugins: PluginList) {
   if (hasPlugin(plugins, "decorators")) {
@@ -82,6 +83,18 @@ export function validatePlugins(plugins: PluginList) {
     throw new Error(
       "'pipelineOperator' requires 'proposal' option whose value should be one of: " +
         PIPELINE_PROPOSALS.map(p => `'${p}'`).join(", "),
+    );
+  }
+
+  if (
+    hasPlugin(plugins, "recordAndTuple") &&
+    !RECORD_AND_TUPLE_SYNTAX_TYPES.includes(
+      getPluginOption(plugins, "recordAndTuple", "syntaxType"),
+    )
+  ) {
+    throw new Error(
+      "'recordAndTuple' requires 'syntaxType' option whose value should be one of: " +
+        RECORD_AND_TUPLE_SYNTAX_TYPES.map(p => `'${p}'`).join(", "),
     );
   }
 }
