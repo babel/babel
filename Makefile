@@ -212,7 +212,7 @@ prepublish-build: clean-lib clean-runtime-helpers
 prepublish:
 	$(MAKE) bootstrap-only
 	$(MAKE) prepublish-build
-	$(MAKE) test
+	IS_PUBLISH=true $(MAKE) test
 
 new-version:
 	git pull --rebase
