@@ -2,6 +2,7 @@ import * as t from "@babel/types";
 
 const PRECEDENCE = {
   "||": 0,
+  "??": 1,
   "&&": 1,
   "|": 2,
   "^": 3,
