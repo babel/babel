@@ -72,6 +72,14 @@ const collectorVisitor = {
     const parent =
       path.scope.getFunctionParent() || path.scope.getProgramParent();
     parent.registerDeclaration(path);
+
+    // Register class identifier in class' scope if this is a class declaration.
+    if (path.isClassDeclaration() && path.node.id) {
+      const id = path.node.id;
+      const name = id.name;
+
+      path.scope.bindings[name] = parent.getBinding(name);
+    }
   },
 
   ReferencedIdentifier(path, state) {
@@ -129,14 +137,6 @@ const collectorVisitor = {
     let scope = path.scope;
     if (scope.path === path) scope = scope.parent;
     scope.getBlockParent().registerDeclaration(path);
-  },
-
-  ClassDeclaration(path) {
-    const id = path.node.id;
-    if (!id) return;
-
-    const name = id.name;
-    path.scope.bindings[name] = path.scope.parent.getBinding(name);
   },
 
   Block(path) {
