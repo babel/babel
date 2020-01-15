@@ -88,10 +88,13 @@ export default class ExpressionParser extends LValParser {
     const name = key.type === "Identifier" ? key.name : String(key.value);
 
     if (name === "__proto__") {
-      // Store the first redefinition's position
       if (protoRef.used) {
-        if (refExpressionErrors && refExpressionErrors.doubleProto === -1) {
-          refExpressionErrors.doubleProto = key.start;
+        if (refExpressionErrors) {
+          // Store the first redefinition's position, otherwise ignore because
+          // we are parsing ambiguous pattern
+          if (refExpressionErrors.doubleProto === -1) {
+            refExpressionErrors.doubleProto = key.start;
+          }
         } else {
           this.raise(key.start, "Redefinition of __proto__ property");
         }
