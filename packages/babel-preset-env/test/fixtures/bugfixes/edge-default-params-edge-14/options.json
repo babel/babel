@@ -5,7 +5,7 @@
       "debug": true,
       "bugfixes": true,
       "targets": {
-        "edge": "15"
+        "edge": "14"
       }
     }]
   ]

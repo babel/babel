@@ -1,7 +1,7 @@
 {
   "transform-parameters": {
     "chrome": "49",
-    "edge": "16",
+    "edge": "15",
     "firefox": "53",
     "safari": "10",
     "node": "6",
@@ -11,14 +11,14 @@
     "electron": "1"
   },
   "bugfix/transform-edge-default-parameters": {
+    "chrome": "49",
     "edge": "18",
-    "chrome": "0",
-    "firefox": "0",
-    "safari": "0",
-    "node": "0",
-    "ios": "0",
-    "samsung": "0",
-    "opera": "0",
-    "electron": "0"
+    "firefox": "52",
+    "safari": "10",
+    "node": "6",
+    "ios": "10",
+    "samsung": "5",
+    "opera": "36",
+    "electron": "1"
   }
 }

@@ -4,72 +4,79 @@
 
 const semver = require("semver");
 const path = require("path");
-const fs = require("fs");
-const isEqual = require("lodash/isEqual");
 
 // TODO: This is an internal file of a separate package
 const {
   semverify,
 } = require("../../babel-helper-compilation-targets/lib/utils");
 
+const {
+  getLowestImplementedVersion,
+  environments,
+  addOperaAndElectron,
+  writeFile,
+} = require("./utils-build-data");
+
 const data = require("./data/plugin-bugfixes");
-const plugins = require("../data/plugins.json");
+const pluginFeatures = require("./data/plugin-features");
 
 const generatedTargets = {};
 const overlappingPlugins = {};
 
 const has = Function.call.bind(Object.hasOwnProperty);
 
-for (const [plugin, { replaces, targets }] of Object.entries(data)) {
+for (const [plugin, { replaces, features }] of Object.entries(data)) {
   if (!has(overlappingPlugins, replaces)) {
     overlappingPlugins[replaces] = [];
-    generatedTargets[replaces] = Object.assign({}, plugins[replaces]);
+    generatedTargets[replaces] = {};
   }
   generatedTargets[plugin] = {};
 
-  for (const [target, [include, exclude]] of Object.entries(targets)) {
-    generatedTargets[plugin][target] = exclude;
-
-    if (
-      !has(generatedTargets[replaces], target) ||
-      compare(include, generatedTargets[replaces][target]) == -1
-    ) {
-      generatedTargets[replaces][target] = include;
-    }
+  let replacedFeatures = pluginFeatures[replaces];
+  if (!Array.isArray(replacedFeatures)) {
+    replacedFeatures = replacedFeatures.features;
   }
 
-  for (const target of Object.keys(plugins[replaces])) {
-    if (!has(generatedTargets[plugin], target)) {
-      generatedTargets[plugin][target] = "0";
+  for (const env of environments) {
+    const supportedWithBugfix = getLowestImplementedVersion({ features }, env);
+    if (!supportedWithBugfix) continue;
+
+    generatedTargets[plugin][env] = supportedWithBugfix;
+
+    const stillNotSupported = getLowestImplementedVersion(
+      { features: replacedFeatures },
+      env,
+      name => features.some(feat => name.includes(feat))
+    );
+    if (!stillNotSupported) continue;
+
+    if (
+      !has(generatedTargets[replaces], env) ||
+      compare(stillNotSupported, generatedTargets[replaces][env]) == -1
+    ) {
+      generatedTargets[replaces][env] = stillNotSupported;
     }
   }
 
   overlappingPlugins[replaces].push(plugin);
 }
 
+for (const plugin of Object.values(generatedTargets)) {
+  addOperaAndElectron(plugin);
+}
+
 function compare(a, b) {
   return semver.compare(semverify(a), semverify(b));
 }
 
-[
+for (const [filename, data] of [
   ["plugin-bugfixes", generatedTargets],
   ["overlapping-plugins", overlappingPlugins],
-].forEach(([filename, newData]) => {
+]) {
   const dataPath = path.join(__dirname, `../data/${filename}.json`);
 
-  if (process.argv[2] === "--check") {
-    const currentData = require(dataPath);
-
-    if (!isEqual(currentData, newData)) {
-      console.error(
-        `The newly generated ${filename} data does not match the current ` +
-          "files. Re-run `npm run build-data`."
-      );
-      process.exit(1);
-    }
-
-    process.exit(0);
+  if (!writeFile(data, dataPath, filename)) {
+    process.exitCode = 1;
+    break;
   }
-
-  fs.writeFileSync(dataPath, `${JSON.stringify(newData, null, 2)}\n`);
-});
+}
