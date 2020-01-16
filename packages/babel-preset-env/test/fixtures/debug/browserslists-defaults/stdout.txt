@@ -16,6 +16,17 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-nullish-coalescing-operator { "android":"77", "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
+  proposal-optional-chaining { "android":"77", "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
+  proposal-json-strings { "chrome":"49", "edge":"17", "ie":"11", "safari":"5.1" }
+  proposal-optional-catch-binding { "chrome":"49", "edge":"17", "ie":"11", "safari":"5.1" }
+  proposal-async-generator-functions { "chrome":"49", "edge":"17", "ie":"11", "safari":"5.1" }
+  proposal-object-rest-spread { "chrome":"49", "edge":"17", "ie":"11", "safari":"5.1" }
+  transform-dotall-regex { "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "safari":"5.1" }
+  proposal-unicode-property-regex { "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "safari":"5.1" }
+  transform-named-capturing-groups-regex { "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "safari":"5.1" }
+  transform-async-to-generator { "chrome":"49", "ie":"11", "safari":"5.1" }
+  transform-exponentiation-operator { "chrome":"49", "ie":"11", "safari":"5.1" }
   transform-template-literals { "ie":"11", "ios":"12.2", "safari":"5.1" }
   transform-literals { "ie":"11", "safari":"5.1" }
   transform-function-name { "chrome":"49", "edge":"17", "ie":"11", "safari":"5.1" }
@@ -28,7 +39,6 @@ Using plugins:
   transform-computed-properties { "ie":"11", "safari":"5.1" }
   transform-for-of { "chrome":"49", "ie":"11", "safari":"5.1" }
   transform-sticky-regex { "ie":"11", "safari":"5.1" }
-  transform-dotall-regex { "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "safari":"5.1" }
   transform-unicode-regex { "chrome":"49", "ie":"11", "safari":"5.1" }
   transform-spread { "ie":"11", "safari":"5.1" }
   transform-parameters { "edge":"17", "ie":"11", "safari":"5.1" }
@@ -37,16 +47,6 @@ Using plugins:
   transform-typeof-symbol { "ie":"11", "safari":"5.1" }
   transform-new-target { "ie":"11", "safari":"5.1" }
   transform-regenerator { "chrome":"49", "ie":"11", "safari":"5.1" }
-  transform-exponentiation-operator { "chrome":"49", "ie":"11", "safari":"5.1" }
-  transform-async-to-generator { "chrome":"49", "ie":"11", "safari":"5.1" }
-  proposal-async-generator-functions { "chrome":"49", "edge":"17", "ie":"11", "safari":"5.1" }
-  proposal-object-rest-spread { "chrome":"49", "edge":"17", "ie":"11", "safari":"5.1" }
-  proposal-unicode-property-regex { "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "safari":"5.1" }
-  proposal-json-strings { "chrome":"49", "edge":"17", "ie":"11", "safari":"5.1" }
-  proposal-optional-catch-binding { "chrome":"49", "edge":"17", "ie":"11", "safari":"5.1" }
-  proposal-optional-chaining { "android":"77", "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
-  transform-named-capturing-groups-regex { "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "safari":"5.1" }
-  proposal-nullish-coalescing-operator { "android":"77", "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
   transform-modules-commonjs { "android":"77", "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
   proposal-dynamic-import { "android":"77", "chrome":"49", "edge":"17", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
 

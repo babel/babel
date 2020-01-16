@@ -1,98 +1,53 @@
-/* eslint sort-keys: "error" */
+// WARNING: Plugin ordering is important. Don't reorder this file
+// without checking that it doesn't break anything.
 
-module.exports = {
-  "proposal-async-generator-functions": "Asynchronous Iterators",
-  "proposal-json-strings": "JSON superset",
-  "proposal-nullish-coalescing-operator": "nullish coalescing operator (??)",
-  "proposal-object-rest-spread": "object rest/spread properties",
-  "proposal-optional-catch-binding": "optional catch binding",
-  "proposal-optional-chaining": "optional chaining operator (?.)",
-  "proposal-unicode-property-regex": "RegExp Unicode Property Escapes",
+const es5 = {
+  "transform-member-expression-literals":
+    "Object/array literal extensions / Reserved words as property names",
+  "transform-property-literals":
+    "Object/array literal extensions / Reserved words as property names",
+  "transform-reserved-words": "Miscellaneous / Unreserved words",
+};
 
-  "transform-arrow-functions": {
-    features: ["arrow functions"],
-  },
-
-  "transform-async-to-generator": {
-    features: ["async functions"],
-  },
-
-  "transform-block-scoped-functions": {
-    features: ["block-level function declaration"],
-  },
-  "transform-block-scoping": {
-    features: ["const", "let"],
-  },
-  "transform-classes": {
-    features: ["class", "super"],
-  },
-  "transform-computed-properties": {
-    features: ["object literal extensions / computed properties"],
-  },
-  "transform-destructuring": {
-    features: ["destructuring, assignment", "destructuring, declarations"],
-  },
-
-  // We want to apply this prior to unicode regex so that "." and "u"
-  // are properly handled.
-  //
-  // Ref: https://github.com/babel/babel/pull/7065#issuecomment-395959112
-  "transform-dotall-regex": "s (dotAll) flag for regular expressions",
-
-  "transform-duplicate-keys": {
-    features: ["miscellaneous / duplicate property names in strict mode"],
-  },
-  "transform-exponentiation-operator": {
-    features: ["exponentiation (**) operator"],
-  },
-  "transform-for-of": {
-    features: ["for..of loops"],
-  },
-  "transform-function-name": {
-    features: ['function "name" property'],
+const es2015 = {
+  "transform-template-literals": {
+    features: ["template literals"],
   },
   "transform-literals": {
     features: ["Unicode code point escapes"],
   },
-  "transform-member-expression-literals":
-    "Object/array literal extensions / Reserved words as property names",
-  "transform-named-capturing-groups-regex": "RegExp named capture groups",
-  "transform-new-target": {
-    features: ["new.target"],
+  "transform-function-name": {
+    features: ['function "name" property'],
+  },
+  "transform-arrow-functions": {
+    features: ["arrow functions"],
+  },
+  "transform-block-scoped-functions": {
+    features: ["block-level function declaration"],
+  },
+  "transform-classes": {
+    features: ["class", "super"],
   },
   "transform-object-super": {
     features: ["super"],
   },
-  "transform-parameters": {
-    features: [
-      "default function parameters",
-      "rest parameters",
-      "destructuring, parameters / defaults, arrow function",
-    ],
-  },
-  "transform-property-literals":
-    "Object/array literal extensions / Reserved words as property names",
-  "transform-regenerator": {
-    features: ["generators"],
-  },
-  "transform-reserved-words": "Miscellaneous / Unreserved words",
   "transform-shorthand-properties": {
     features: ["object literal extensions / shorthand properties"],
   },
-  "transform-spread": {
-    features: "spread syntax for iterable objects",
+  "transform-duplicate-keys": {
+    features: ["miscellaneous / duplicate property names in strict mode"],
+  },
+  "transform-computed-properties": {
+    features: ["object literal extensions / computed properties"],
+  },
+  "transform-for-of": {
+    features: ["for..of loops"],
   },
   "transform-sticky-regex": {
     features: [
       'RegExp "y" and "u" flags / "y" flag, lastIndex',
       'RegExp "y" and "u" flags / "y" flag',
     ],
-  },
-  "transform-template-literals": {
-    features: ["template literals"],
-  },
-  "transform-typeof-symbol": {
-    features: ["Symbol / typeof support"],
   },
   "transform-unicode-regex": {
     features: [
@@ -102,4 +57,72 @@ module.exports = {
       'RegExp "y" and "u" flags / "u" flag',
     ],
   },
+  "transform-spread": {
+    features: ["spread syntax for iterable objects"],
+  },
+  "transform-parameters": {
+    features: [
+      "default function parameters",
+      "rest parameters",
+      "destructuring, parameters / defaults, arrow function",
+    ],
+  },
+  "transform-destructuring": {
+    features: ["destructuring, assignment", "destructuring, declarations"],
+  },
+  "transform-block-scoping": {
+    features: ["const", "let"],
+  },
+  "transform-typeof-symbol": {
+    features: ["Symbol / typeof support"],
+  },
+  "transform-new-target": {
+    features: ["new.target"],
+  },
+  "transform-regenerator": {
+    features: ["generators"],
+  },
 };
+
+const es2016 = {
+  "transform-exponentiation-operator": {
+    features: ["exponentiation (**) operator"],
+  },
+};
+
+const es2017 = {
+  "transform-async-to-generator": {
+    features: ["async functions"],
+  },
+};
+
+const es2018 = {
+  "proposal-async-generator-functions": "Asynchronous Iterators",
+  "proposal-object-rest-spread": "object rest/spread properties",
+
+  "transform-dotall-regex": "s (dotAll) flag for regular expressions",
+  "proposal-unicode-property-regex": "RegExp Unicode Property Escapes",
+  "transform-named-capturing-groups-regex": "RegExp named capture groups",
+};
+
+const es2019 = {
+  "proposal-json-strings": "JSON superset",
+  "proposal-optional-catch-binding": "optional catch binding",
+};
+
+const es2020 = {
+  "proposal-nullish-coalescing-operator": "nullish coalescing operator (??)",
+  "proposal-optional-chaining": "optional chaining operator (?.)",
+};
+
+// Run plugins for modern features first
+module.exports = Object.assign(
+  {},
+  es2020,
+  es2019,
+  es2018,
+  es2017,
+  es2016,
+  es2015,
+  es5
+);
