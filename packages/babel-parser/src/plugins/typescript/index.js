@@ -57,34 +57,28 @@ type ParsingContext =
   | "TypeMembers"
   | "TypeParametersOrArguments";
 
+const tsKeywordTypes = {
+  any: "TSAnyKeyword",
+  boolean: "TSBooleanKeyword",
+  bigint: "TSBigIntKeyword",
+  never: "TSNeverKeyword",
+  number: "TSNumberKeyword",
+  object: "TSObjectKeyword",
+  string: "TSStringKeyword",
+  symbol: "TSSymbolKeyword",
+  undefined: "TSUndefinedKeyword",
+  unknown: "TSUnknownKeyword",
+};
+
 // Doesn't handle "void" or "null" because those are keywords, not identifiers.
 function keywordTypeFromName(
   value: string,
 ): N.TsKeywordTypeType | typeof undefined {
-  switch (value) {
-    case "any":
-      return "TSAnyKeyword";
-    case "boolean":
-      return "TSBooleanKeyword";
-    case "bigint":
-      return "TSBigIntKeyword";
-    case "never":
-      return "TSNeverKeyword";
-    case "number":
-      return "TSNumberKeyword";
-    case "object":
-      return "TSObjectKeyword";
-    case "string":
-      return "TSStringKeyword";
-    case "symbol":
-      return "TSSymbolKeyword";
-    case "undefined":
-      return "TSUndefinedKeyword";
-    case "unknown":
-      return "TSUnknownKeyword";
-    default:
-      return undefined;
+  if (!Object.prototype.hasOwnProperty.call(tsKeywordTypes, value)) {
+    return undefined;
   }
+
+  return tsKeywordTypes[value];
 }
 
 export default (superClass: Class<Parser>): Class<Parser> =>
