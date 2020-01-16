@@ -290,7 +290,7 @@ const generateData = (environments, features) => {
   });
 };
 
-["plugin", "corejs2-built-in"].forEach(target => {
+for (const target of ["plugin", "corejs2-built-in"]) {
   const newData = generateData(
     environments,
     require(`./data/${target}-features`)
@@ -305,11 +305,10 @@ const generateData = (environments, features) => {
         "The newly generated plugin/built-in data does not match the current " +
           "files. Re-run `npm run build-data`."
       );
-      process.exit(1);
+      process.exitCode = 1;
+      break;
     }
-
-    process.exit(0);
+  } else {
+    fs.writeFileSync(dataPath, `${JSON.stringify(newData, null, 2)}\n`);
   }
-
-  fs.writeFileSync(dataPath, `${JSON.stringify(newData, null, 2)}\n`);
-});
+}

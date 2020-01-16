@@ -7,10 +7,9 @@ var fs = require("fs");
 var filename = process.argv[2];
 if (!filename) {
   console.error("no filename specified");
-  process.exit(0);
+} else {
+  var file = fs.readFileSync(filename, "utf8");
+  var ast = parser.parse(file);
+
+  console.log(JSON.stringify(ast, null, "  "));
 }
-
-var file = fs.readFileSync(filename, "utf8");
-var ast = parser.parse(file);
-
-console.log(JSON.stringify(ast, null, "  "));
