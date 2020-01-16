@@ -22,9 +22,10 @@ cd tmp/vue-cli || exit
 #==============================================================================#
 
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
-yarn install
 # Workaround https://github.com/yarnpkg/yarn/issues/7797
-yarn add --dev -W @babel/core
+yarn policies set-version 1.18.0
+yarn install
+yarn lerna bootstrap
 # "yarn upgrade --scope @babel --latest" doesn't seem to work.
 # a means "all", while \n is the enter needed to confirm the selection.
 printf "a\n" | yarn upgrade-interactive --scope @babel --latest
