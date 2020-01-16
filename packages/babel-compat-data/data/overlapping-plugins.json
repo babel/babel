@@ -1,5 +1,14 @@
 {
+  "transform-async-to-generator": [
+    "bugfix/transform-async-arrows-in-class"
+  ],
   "transform-parameters": [
     "bugfix/transform-edge-default-parameters"
+  ],
+  "transform-function-name": [
+    "bugfix/transform-edge-function-name"
+  ],
+  "transform-template-literals": [
+    "bugfix/transform-tagged-template-caching"
   ]
 }

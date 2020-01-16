@@ -39,9 +39,9 @@ for (const [plugin, { replaces, features }] of Object.entries(data)) {
 
   for (const env of environments) {
     const supportedWithBugfix = getLowestImplementedVersion({ features }, env);
-    if (!supportedWithBugfix) continue;
-
-    generatedTargets[plugin][env] = supportedWithBugfix;
+    if (supportedWithBugfix) {
+      generatedTargets[plugin][env] = supportedWithBugfix;
+    }
 
     const stillNotSupported = getLowestImplementedVersion(
       { features: replacedFeatures },
