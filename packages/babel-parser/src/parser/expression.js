@@ -353,7 +353,7 @@ export default class ExpressionParser extends LValParser {
         } else if (coalesce) {
           // Handle the precedence of `tt.coalesce` as equal to the range of logical expressions.
           // In other words, `node.right` shouldn't contain logical expressions in order to check the mixed error.
-          prec = tt.logicalAND.binop;
+          prec = ((tt.logicalAND: any): { binop: number }).binop;
         }
 
         this.next();
