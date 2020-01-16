@@ -13,21 +13,21 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-template-literals { "ios":"10.3", "safari":"10.1" }
-  transform-function-name { "edge":"16" }
-  transform-dotall-regex { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
-  transform-unicode-regex { "ios":"10.3", "safari":"10.1" }
-  transform-block-scoping { "ios":"10.3", "safari":"10.1" }
-  transform-async-to-generator { "ios":"10.3", "safari":"10.1" }
-  proposal-async-generator-functions { "chrome":"61", "edge":"16", "ios":"10.3", "opera":"48", "safari":"10.1" }
-  proposal-object-rest-spread { "edge":"16", "ios":"10.3", "safari":"10.1" }
-  proposal-unicode-property-regex { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
+  proposal-nullish-coalescing-operator { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
+  proposal-optional-chaining { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
   proposal-json-strings { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
   proposal-optional-catch-binding { "chrome":"61", "edge":"16", "ios":"10.3", "opera":"48", "safari":"10.1" }
-  proposal-optional-chaining { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
+  proposal-async-generator-functions { "chrome":"61", "edge":"16", "ios":"10.3", "opera":"48", "safari":"10.1" }
+  proposal-object-rest-spread { "edge":"16", "ios":"10.3", "safari":"10.1" }
+  transform-dotall-regex { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
+  proposal-unicode-property-regex { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
   transform-named-capturing-groups-regex { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
-  proposal-nullish-coalescing-operator { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
+  transform-unicode-regex { "ios":"10.3", "safari":"10.1" }
+  transform-block-scoping { "ios":"10.3", "safari":"10.1" }
+  bugfix/transform-async-arrows-in-class { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
   bugfix/transform-edge-default-parameters { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
+  bugfix/transform-edge-function-name { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
+  bugfix/transform-tagged-template-caching { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
   transform-modules-commonjs { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
   proposal-dynamic-import { "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1" }
 
