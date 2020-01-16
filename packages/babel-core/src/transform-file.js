@@ -9,6 +9,7 @@ import {
   type FileResultCallback,
 } from "./transformation";
 import * as fs from "./gensync-utils/fs";
+import { printConfig, type PrintConfig } from "./utils/print-config";
 
 import typeof * as transformFileBrowserType from "./transform-file-browser";
 import typeof * as transformFileType from "./transform-file";
@@ -26,9 +27,13 @@ type TransformFile = {
 const transformFileRunner = gensync<[string, ?InputOptions], FileResult | null>(
   function*(filename, opts) {
     let options;
+    const print: PrintConfig = {};
+    print.cli = opts;
+
     if (opts == null) {
       options = { filename };
     } else if (opts && typeof opts === "object") {
+      print.cli = opts;
       options = {
         ...opts,
         filename,
@@ -37,7 +42,12 @@ const transformFileRunner = gensync<[string, ?InputOptions], FileResult | null>(
 
     const config: ResolvedConfig | null = yield* loadConfig(options);
     if (config === null) return null;
-
+    if (config.babelrc) {
+      print.babelrc = config.babelrc;
+    }
+    if (opts && opts.showConfig) {
+      printConfig(print);
+    }
     const code = yield* fs.readFile(filename, "utf8");
     return yield* run(config, code);
   },

@@ -170,6 +170,8 @@ commander.option(
   "Include ignored files when copying non-compilable files.",
 );
 
+commander.option("--show-config", "show config");
+
 commander.version(pkg.version + " (@babel/core " + version + ")");
 commander.usage("[options] <files ...>");
 // register an empty action handler so that commander.js can throw on
@@ -187,7 +189,6 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
   commander.parse(args);
 
   const errors = [];
-
   let filenames = commander.args.reduce(function(globbed, input) {
     let files = glob.sync(input);
     if (!files.length) files = [input];
@@ -289,6 +290,7 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     babelrc: opts.babelrc === true ? undefined : opts.babelrc,
     highlightCode: opts.highlightCode === true ? undefined : opts.highlightCode,
     comments: opts.comments === true ? undefined : opts.comments,
+    showConfig: opts.showConfig,
   };
 
   // If the @babel/cli version is newer than the @babel/core version, and we have added

@@ -30,6 +30,7 @@ export default async function({
   async function write(
     src: string,
     base: string,
+    print: boolean,
   ): Promise<$Keys<typeof FILE_TYPE>> {
     let relative = path.relative(base, src);
 
@@ -43,7 +44,9 @@ export default async function({
         ? path.extname(relative)
         : cliOptions.outFileExtension,
     );
-
+    if (!print) {
+      babelOptions.showConfig = false;
+    }
     const dest = getDest(relative, base);
 
     try {
@@ -96,8 +99,12 @@ export default async function({
     return path.join(cliOptions.outDir, filename);
   }
 
-  async function handleFile(src: string, base: string): Promise<boolean> {
-    const written = await write(src, base);
+  async function handleFile(
+    src: string,
+    base: string,
+    print: boolean,
+  ): Promise<boolean> {
+    const written = await write(src, base, print);
 
     if (
       (cliOptions.copyFiles && written === FILE_TYPE.NON_COMPILABLE) ||
@@ -115,7 +122,7 @@ export default async function({
     if (!fs.existsSync(filenameOrDir)) return 0;
 
     const stat = fs.statSync(filenameOrDir);
-
+    let print = true;
     if (stat.isDirectory()) {
       const dirname = filenameOrDir;
 
@@ -125,14 +132,15 @@ export default async function({
       for (const filename of files) {
         const src = path.join(dirname, filename);
 
-        const written = await handleFile(src, dirname);
+        const written = await handleFile(src, dirname, print);
+        print = false;
         if (written) count += 1;
       }
 
       return count;
     } else {
       const filename = filenameOrDir;
-      const written = await handleFile(filename, path.dirname(filename));
+      const written = await handleFile(filename, path.dirname(filename), print);
 
       return written ? 1 : 0;
     }
@@ -179,6 +187,7 @@ export default async function({
             filename === filenameOrDir
               ? path.dirname(filenameOrDir)
               : filenameOrDir,
+            false,
           ).catch(err => {
             console.error(err);
           });

@@ -170,6 +170,9 @@ const COMMON_VALIDATORS: ValidatorSet = {
   generatorOpts: (assertObject: Validator<
     $PropertyType<ValidatedOptions, "generatorOpts">,
   >),
+  showConfig: (assertBoolean: Validator<
+    $PropertyType<ValidatedOptions, "showConfig">,
+  >),
 };
 export type InputOptions = ValidatedOptions;
 
@@ -234,6 +237,7 @@ export type ValidatedOptions = {
   parserOpts?: {},
   // Deprecate top level generatorOpts
   generatorOpts?: {},
+  showConfig?: boolean,
 };
 
 export type CallerMetadata = {
