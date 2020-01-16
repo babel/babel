@@ -1,3 +1,6 @@
+// WARNING: Plugin ordering is important. Don't reorder this file
+// without checking that it doesn't break anything.
+
 const es5 = {
   "transform-member-expression-literals":
     "Object/array literal extensions / Reserved words as property names",
@@ -97,10 +100,6 @@ const es2018 = {
   "proposal-async-generator-functions": "Asynchronous Iterators",
   "proposal-object-rest-spread": "object rest/spread properties",
 
-  // We want to apply this prior to unicode regex so that "." and "u"
-  // are properly handled.
-  //
-  // Ref: https://github.com/babel/babel/pull/7065#issuecomment-395959112
   "transform-dotall-regex": "s (dotAll) flag for regular expressions",
   "proposal-unicode-property-regex": "RegExp Unicode Property Escapes",
   "transform-named-capturing-groups-regex": "RegExp named capture groups",
