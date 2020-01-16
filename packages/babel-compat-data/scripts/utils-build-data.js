@@ -173,12 +173,14 @@ exports.getLowestImplementedVersion = (
           res: test.res,
         });
       } else {
-        test.subtests.forEach(subtest =>
-          result.push({
-            name: `${test.name}/${subtest.name}`,
-            res: subtest.res,
-          })
-        );
+        test.subtests.forEach(subtest => {
+          if (!exclude(`${test.name} / ${subtest.name}`)) {
+            result.push({
+              name: `${test.name} /${subtest.name}`,
+              res: subtest.res,
+            });
+          }
+        });
       }
 
       return result;
