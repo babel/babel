@@ -19,7 +19,10 @@ export default declare((api, options) => {
       visitor: {
         ForOfStatement(path) {
           const { scope } = path;
-          const { left, right, body } = path.node;
+          const { left, right, body, await: isAwait } = path.node;
+          if (isAwait) {
+            return;
+          }
           const i = scope.generateUidIdentifier("i");
           let array = scope.maybeGenerateMemoised(right, true);
 
