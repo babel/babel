@@ -101,7 +101,7 @@ bootstrap-flowcheck: bootstrap-only
 	$(YARN) gulp build-babel-types
 	$(MAKE) build-typings
 
-lint-ci: lint-js-ci lint-ts-ci
+lint-ci: lint-js-ci lint-ts-ci check-compat-data
 
 lint-js-ci: bootstrap-only
 	$(MAKE) lint-js
@@ -124,6 +124,12 @@ fix-js:
 
 fix-json:
 	$(YARN) prettier "{$(COMMA_SEPARATED_SOURCES)}/*/test/fixtures/**/options.json" --write --loglevel warn
+
+check-compat-data:
+	cd packages/babel-compat-data; CHECK_COMPAT_DATA=true $(YARN) run build-data
+
+build-compat-data:
+	cd packages/babel-compat-data; $(YARN) run build-data
 
 clean: test-clean
 	rm -f .npmrc
