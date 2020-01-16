@@ -1,7 +1,10 @@
+const path = require("path");
+
 module.exports = {
   root: true,
   plugins: ["prettier", "@babel/development", "import"],
-  extends: "babel",
+  // replace it by `@babel/internal` when `@babel/eslint-config-internal` is published
+  extends: path.resolve(__dirname, "eslint/babel-eslint-config-internal"),
   rules: {
     "prettier/prettier": "error",
     // TODO: remove after babel-eslint-config-internal is fully integrated into this repository.

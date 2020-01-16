@@ -1,7 +1,5 @@
 // @flow
 
-/* global BigInt */
-
 import { types as tt, TokenType } from "../tokenizer/types";
 import type Parser from "../parser";
 import type { ExpressionErrors } from "../parser/util";
