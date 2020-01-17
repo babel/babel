@@ -107,6 +107,7 @@ These are the core @babel/parser (babylon) AST node types.
     - [ImportSpecifier](#importspecifier)
     - [ImportDefaultSpecifier](#importdefaultspecifier)
     - [ImportNamespaceSpecifier](#importnamespacespecifier)
+    - [ImportAttribute](#importattribute)
   - [Exports](#exports)
     - [ExportNamedDeclaration](#exportnameddeclaration)
     - [ExportSpecifier](#exportspecifier)
@@ -1221,6 +1222,7 @@ interface ImportDeclaration <: ModuleDeclaration {
   importKind: null | "type" | "typeof" | "value";
   specifiers: [ ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier ];
   source: Literal;
+  attributes?: [ ImportAttribute ];
 }
 ```
 
@@ -1258,6 +1260,18 @@ interface ImportNamespaceSpecifier <: ModuleSpecifier {
 ```
 
 A namespace import specifier, e.g., `* as foo` in `import * as foo from "mod.js"`.
+
+### ImportAttribute
+
+```js
+interface ImportAttribute <: Node {
+  type: "ImportAttribute";
+  key: Identifier;
+  value: StringLiteral;
+}
+```
+
+An attribute specified on the ImportDeclaration.
 
 ## Exports
 
