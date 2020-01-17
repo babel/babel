@@ -1,6 +1,7 @@
 // @flow
 
 import type { Options } from "../options";
+import * as N from "../types";
 import type { Position } from "../util/location";
 import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
@@ -114,6 +115,9 @@ export default class Tokenizer extends LocationParser {
 
   isLookahead: boolean;
 
+  // Token store.
+  tokens: Array<Token | N.Comment> = [];
+
   constructor(options: Options, input: string) {
     super();
     this.state = new State();
@@ -129,7 +133,7 @@ export default class Tokenizer extends LocationParser {
     if (!this.isLookahead) {
       this.checkKeywordEscapes();
       if (this.options.tokens) {
-        this.state.tokens.push(new Token(this.state));
+        this.tokens.push(new Token(this.state));
       }
     }
 
@@ -242,7 +246,7 @@ export default class Tokenizer extends LocationParser {
       loc: new SourceLocation(startLoc, endLoc),
     };
 
-    if (this.options.tokens) this.state.tokens.push(comment);
+    if (this.options.tokens) this.tokens.push(comment);
     this.state.comments.push(comment);
     this.addComment(comment);
   }

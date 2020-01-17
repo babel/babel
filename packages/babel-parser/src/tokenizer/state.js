@@ -5,7 +5,6 @@ import * as N from "../types";
 import { Position } from "../util/location";
 
 import { types as ct, type TokContext } from "./context";
-import type { Token } from "./index";
 import { types as tt, type TokenType } from "./types";
 
 type TopicContextState = {
@@ -92,9 +91,6 @@ export default class State {
   // Positions to delayed-check that yield/await does not exist in default parameters.
   yieldPos: number = -1;
   awaitPos: number = -1;
-
-  // Token store.
-  tokens: Array<Token | N.Comment> = [];
 
   // Comment store.
   comments: Array<N.Comment> = [];
