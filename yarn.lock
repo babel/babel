@@ -4167,11 +4167,6 @@ escope@^3.6.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-config-babel@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-babel/-/eslint-config-babel-9.0.0.tgz#bcfb9e9a1892aff29b8773cb9d2c76639de83c07"
-  integrity sha512-J7l2KdDKi2y9QifMqXdSIkghrVXr6fcpxegj+803C+4xBfpp0h2LcY9X5N+ivJMBoX6G2PJ/TBTM1Kro0MELBA==
-
 eslint-import-resolver-node@^0.3.2:
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/eslint-import-resolver-node/-/eslint-import-resolver-node-0.3.2.tgz#58f15fb839b8d0576ca980413476aab2472db66a"
