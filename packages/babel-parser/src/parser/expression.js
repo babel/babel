@@ -320,7 +320,7 @@ export default class ExpressionParser extends LValParser {
     minPrec: number,
     noIn: ?boolean,
   ): N.Expression {
-    const prec = this.state.type.binop;
+    let prec = this.state.type.binop;
     if (prec != null && (!noIn || !this.match(tt._in))) {
       if (prec > minPrec) {
         const operator = this.state.value;
@@ -343,11 +343,17 @@ export default class ExpressionParser extends LValParser {
         }
 
         const op = this.state.type;
+        const logical = op === tt.logicalOR || op === tt.logicalAND;
+        const coalesce = op === tt.nullishCoalescing;
 
         if (op === tt.pipeline) {
           this.expectPlugin("pipelineOperator");
           this.state.inPipeline = true;
           this.checkPipelineAtInfixOperator(left, leftStartPos);
+        } else if (coalesce) {
+          // Handle the precedence of `tt.coalesce` as equal to the range of logical expressions.
+          // In other words, `node.right` shouldn't contain logical expressions in order to check the mixed error.
+          prec = ((tt.logicalAND: any): { binop: number }).binop;
         }
 
         this.next();
@@ -369,48 +375,25 @@ export default class ExpressionParser extends LValParser {
         }
 
         node.right = this.parseExprOpRightExpr(op, prec, noIn);
-
-        /* this check is for all ?? operators
-         * a ?? b && c for this example
-         * b && c => This is considered as a logical expression in the ast tree
-         * a => Identifier
-         * so for ?? operator we need to check in this case the right expression to have parenthesis
-         * second case a && b ?? c
-         * here a && b => This is considered as a logical expression in the ast tree
-         * c => identifier
-         * so now here for ?? operator we need to check the left expression to have parenthesis
-         * if the parenthesis is missing we raise an error and throw it
-         */
-        if (op === tt.nullishCoalescing) {
-          if (
-            left.type === "LogicalExpression" &&
-            left.operator !== "??" &&
-            !(left.extra && left.extra.parenthesized)
-          ) {
-            throw this.raise(
-              left.start,
-              `Nullish coalescing operator(??) requires parens when mixing with logical operators`,
-            );
-          } else if (
-            node.right.type === "LogicalExpression" &&
-            node.right.operator !== "??" &&
-            !(node.right.extra && node.right.extra.parenthesized)
-          ) {
-            throw this.raise(
-              node.right.start,
-              `Nullish coalescing operator(??) requires parens when mixing with logical operators`,
-            );
-          }
-        }
-
         this.finishNode(
           node,
-          op === tt.logicalOR ||
-            op === tt.logicalAND ||
-            op === tt.nullishCoalescing
-            ? "LogicalExpression"
-            : "BinaryExpression",
+          logical || coalesce ? "LogicalExpression" : "BinaryExpression",
         );
+        /* this check is for all ?? operators
+         * a ?? b && c for this example
+         * when op is coalesce and nextOp is logical (&&), throw at the pos of nextOp that it can not be mixed.
+         * Symmetrically it also throws when op is logical and nextOp is coalesce
+         */
+        const nextOp = this.state.type;
+        if (
+          (coalesce && (nextOp === tt.logicalOR || nextOp === tt.logicalAND)) ||
+          (logical && nextOp === tt.nullishCoalescing)
+        ) {
+          throw this.raise(
+            this.state.start,
+            `Nullish coalescing operator(??) requires parens when mixing with logical operators`,
+          );
+        }
 
         return this.parseExprOp(
           node,
