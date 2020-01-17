@@ -1,0 +1,14 @@
+{
+  "validateLogs": true,
+  "ignoreOutput": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "configPath": "packages/babel-preset-env/test/fixtures/debug/browserslists-ignore-config",
+        "ignoreBrowserslistConfig": true
+      }
+    ]
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "validateLogs": true,
+  "ignoreOutput": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": { "browsers": "chrome 76" },
+        "configPath": "packages/babel-preset-env/test/fixtures/debug/browserslists-targets-browsers-override-config"
+      }
+    ]
+  ]
+}

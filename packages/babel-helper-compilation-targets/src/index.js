@@ -22,23 +22,6 @@ export { getInclusionReasons } from "./debug";
 export { default as filterItems, isRequired } from "./filter-items";
 export { unreleasedLabels } from "./targets";
 
-const browserslistDefaults = browserslist.defaults;
-
-const validBrowserslistTargets = [
-  ...Object.keys(browserslist.data),
-  ...Object.keys(browserslist.aliases),
-];
-
-function objectToBrowserslist(object: Targets): Array<string> {
-  return Object.keys(object).reduce((list, targetName) => {
-    if (validBrowserslistTargets.indexOf(targetName) >= 0) {
-      const targetVersion = object[targetName];
-      return list.concat(`${targetName} ${targetVersion}`);
-    }
-    return list;
-  }, []);
-}
-
 function validateTargetNames(targets: InputTargets): Targets {
   const validTargets = Object.keys(TargetNames);
   for (const target in targets) {
@@ -178,7 +161,7 @@ export default function getTargets(
   }
 
   // Parse browsers target via browserslist
-  const browsersquery = validateBrowsers(browsers);
+  let browsersquery = validateBrowsers(browsers);
 
   // Remove esmodules after being consumed to fix `hasTargets` below
   const input = { ...inputTargets };
@@ -192,29 +175,30 @@ export default function getTargets(
   const shouldSearchForConfig =
     !options.ignoreBrowserslistConfig && !hasTargets;
 
-  if (shouldParseBrowsers || shouldSearchForConfig) {
-    // If no targets are passed, we need to overwrite browserslist's defaults
-    // so that we enable all transforms (acting like the now deprecated
-    // preset-latest).
-    //
-    // Note, if browserslist resolves the config (ex. package.json), then usage
-    // of `defaults` in queries will be different since we don't want to break
-    // the behavior of "no targets is the same as preset-latest".
-    if (!hasTargets) {
-      browserslist.defaults = objectToBrowserslist(targets);
+  if (!hasTargets) {
+    // If no targets are passed, we call loadConfig to resolve any external browserslist
+    // config
+    if (shouldSearchForConfig) {
+      browsersquery = browserslist.loadConfig({
+        path: options.configPath,
+        env: options.browserslistEnv,
+      });
     }
+    // If there is no external browserslist config and no targets are specified,
+    // return "defaults" browserslists query
+    if (!browsersquery) {
+      browsersquery = "defaults";
+    }
+  }
 
+  if (shouldParseBrowsers || shouldSearchForConfig) {
     const browsers = browserslist(browsersquery, {
-      path: options.configPath,
       mobileToDesktop: true,
       env: options.browserslistEnv,
     });
 
     const queryBrowsers = getLowestVersions(browsers);
     targets = Object.assign(queryBrowsers, targets);
-
-    // Reset browserslist defaults
-    browserslist.defaults = browserslistDefaults;
   }
 
   // Parse remaining targets

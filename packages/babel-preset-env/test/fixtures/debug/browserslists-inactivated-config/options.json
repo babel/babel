@@ -1,0 +1,15 @@
+{
+  "validateLogs": true,
+  "ignoreOutput": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": { "node": "13.4" },
+        "configPath": "packages/babel-preset-env/test/fixtures/debug/browserslists-inactivated-config",
+        "ignoreBrowserslistConfig": false
+      }
+    ]
+  ]
+}

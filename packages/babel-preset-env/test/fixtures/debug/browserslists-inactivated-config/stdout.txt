@@ -1,0 +1,18 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "node": "13.4"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  syntax-async-generators { "node":"13.4" }
+  syntax-object-rest-spread { "node":"13.4" }
+  syntax-json-strings { "node":"13.4" }
+  syntax-optional-catch-binding { "node":"13.4" }
+  transform-modules-commonjs { "node":"13.4" }
+  proposal-dynamic-import { "node":"13.4" }
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
