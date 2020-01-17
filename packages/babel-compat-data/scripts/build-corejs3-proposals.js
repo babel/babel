@@ -17,16 +17,18 @@ const finishedProposals = shippedProposals.filter(feature => {
   return features.includes(feature.replace("esnext.", "es."));
 });
 
-const builtInDefinitions = fs.readFileSync(
-  path.join(__dirname, "../src/polyfills/corejs3/built-in-definitions.js"),
-  "utf-8"
+const builtInDefinitionsPath = path.join(
+  __dirname,
+  "../../babel-preset-env/src/polyfills/corejs3/built-in-definitions.js"
 );
+
+const builtInDefinitions = fs.readFileSync(builtInDefinitionsPath, "utf-8");
 
 for (const feature of finishedProposals) {
   const standarizedName = feature.replace("esnext.", "es.");
   if (!builtInDefinitions.includes(standarizedName)) {
     console.log(
-      `${feature} is now standarized as ${standarizedName}, please add "${standarizedName}" to src/polyfills/corejs3/built-in-definitions`
+      `${feature} is now standarized as ${standarizedName}, please add "${standarizedName}" to "${builtInDefinitionsPath}"`
     );
   }
 }

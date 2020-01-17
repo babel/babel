@@ -1,7 +1,7 @@
 // @flow
 
 import corejs3Polyfills from "core-js-compat/data";
-import corejs3ShippedProposalsList from "../../../data/corejs3-shipped-proposals.json";
+import corejs3ShippedProposalsList from "@babel/compat-data/corejs3-shipped-proposals";
 import getModulesListForTargetVersion from "core-js-compat/get-modules-list-for-target-version";
 import { filterItems } from "@babel/helper-compilation-targets";
 import {
