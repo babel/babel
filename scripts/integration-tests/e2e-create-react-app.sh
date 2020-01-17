@@ -23,9 +23,9 @@ cd tmp/create-react-app || exit
 
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
 yarn install
-# "yarn upgrade --scope @babel --latest" doesn't seem to work.
-# a means "all", while \n is the enter needed to confirm the selection.
-printf "a\n" | yarn upgrade-interactive --scope @babel --latest
+node "$PWD"/../../utils/bump-babel-dependencies.js
+yarn lerna exec -- node "$PWD"/../../utils/bump-babel-dependencies.js
+yarn install
 
 # Test
 CI=true yarn test
