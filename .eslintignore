@@ -17,9 +17,9 @@ codemods/*/lib
 codemods/*/dist
 codemods/*/test/fixtures
 codemods/*/test/tmp
+packages/babel-compat-data/build
 packages/babel-preset-env/data/[^(plugin-features|shipped-proposals).js]
 packages/babel-preset-env/test/debug-fixtures
-packages/babel-preset-env/build
 packages/babel-preset-env-standalone/babel-preset-env.js
 packages/babel-preset-env-standalone/babel-preset-env.min.js
 packages/babel-standalone/babel.js
