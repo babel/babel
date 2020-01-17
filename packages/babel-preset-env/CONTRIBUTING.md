@@ -63,7 +63,7 @@ If you want to mark a new proposal as shipped, add it to [this list](https://git
 
 ### Update [`plugins.json`](https://github.com/babel/babel/blob/master/packages/babel-preset-env/data/plugins.json)
 
-Until `compat-table` is a standalone npm module for data we are using the git commit in `scripts/download-compat-table.sh`
+Until `compat-table` is a standalone npm module for data we are using the git commit in `packages/babel-compat-data/scripts/download-compat-table.sh`
 
 `COMPAT_TABLE_COMMIT=[latest-commit-hash]`,
 
@@ -71,17 +71,8 @@ So we update and then run `npm run build-data`. If there are no changes, then `p
 
 ## Tests
 
-### Running tests locally
-
-```bash
-npm test
-```
-
-### Checking code coverage locally
-
-```bash
-npm run coverage
-```
+### Running tests
+See general [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md#running-lintingtests).
 
 ### Writing tests
 
