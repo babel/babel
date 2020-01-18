@@ -127,13 +127,25 @@ export default class Tokenizer extends LocationParser {
     this.isLookahead = false;
   }
 
+  pushToken(token: Token | N.Comment) {
+    // Pop out invalid tokens trapped by try-catch parsing.
+    // Those parsing branches are mainly created by typescript and flow plugins.
+    while (
+      this.tokens.length > 0 &&
+      this.tokens[this.tokens.length - 1].end > token.start
+    ) {
+      this.tokens.pop();
+    }
+    this.tokens.push(token);
+  }
+
   // Move to the next token
 
   next(): void {
     if (!this.isLookahead) {
       this.checkKeywordEscapes();
       if (this.options.tokens) {
-        this.tokens.push(new Token(this.state));
+        this.pushToken(new Token(this.state));
       }
     }
 
@@ -246,7 +258,7 @@ export default class Tokenizer extends LocationParser {
       loc: new SourceLocation(startLoc, endLoc),
     };
 
-    if (this.options.tokens) this.tokens.push(comment);
+    if (this.options.tokens) this.pushToken(comment);
     this.state.comments.push(comment);
     this.addComment(comment);
   }
