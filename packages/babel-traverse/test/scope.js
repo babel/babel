@@ -290,11 +290,18 @@ describe("scope", () => {
       });
     });
 
-    it("reference paths after crawl", function() {
+    it("class identifier available in class scope after crawl", function() {
       const path = getPath("class a { build() { return new a(); } }");
+
       path.scope.crawl();
-      const referencePaths = path.scope.bindings.a.referencePaths;
+
+      let referencePaths = path.scope.bindings.a.referencePaths;
       expect(referencePaths).toHaveLength(1);
+
+      referencePaths = path.get("body[0]").scope.bindings.a.referencePaths;
+      expect(referencePaths).toHaveLength(1);
+
+      expect(path.scope.bindings.a).toBe(path.get("body[0]").scope.bindings.a);
     });
   });
 
