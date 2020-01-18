@@ -121,9 +121,8 @@ export function NullLiteral() {
 export function NumericLiteral(node: Object) {
   const raw = this.getPossibleRaw(node);
   const opts = this.format.jsescOption;
-  if (this.format.jsonCompatibleStrings) {
-    opts.json = true;
-  }
+  opts.numbers = "hexadecimal";
+  opts.lowercaseHex = true;
   const value = jsesc(node.value, opts);
   if (raw == null) {
     this.number(value); // normalize

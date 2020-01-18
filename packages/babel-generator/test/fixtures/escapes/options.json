@@ -1,4 +1,6 @@
 {
   "minified": true,
-  "jsonCompatibleStrings": true
+  "jsonCompatibleStrings": true,
+  "numbers": "hexadecimal",
+  "lowercaseHex": true
 }
