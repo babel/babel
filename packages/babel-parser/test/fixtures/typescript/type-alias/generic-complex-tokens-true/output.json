@@ -336,7 +336,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": 8,
+        "binop": 7,
         "updateContext": null
       },
       "value": "<",
@@ -598,7 +598,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": 8,
+        "binop": 7,
         "updateContext": null
       },
       "value": ">",
@@ -678,7 +678,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": 8,
+        "binop": 7,
         "updateContext": null
       },
       "value": "<",
@@ -731,7 +731,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": 8,
+        "binop": 7,
         "updateContext": null
       },
       "value": ">",
