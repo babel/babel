@@ -51,88 +51,86 @@ export default class LValParser extends NodeUtils {
   // When this one is updated, please check if also that one needs to be updated.
 
   toAssignable(node: Node): Node {
-    if (node) {
+    if (
+      (this.options.createParenthesizedExpressions &&
+        node.type === "ParenthesizedExpression") ||
+      node.extra?.parenthesized
+    ) {
+      const parenthesized = unwrapParenthesizedExpression(node);
       if (
-        (this.options.createParenthesizedExpressions &&
-          node.type === "ParenthesizedExpression") ||
-        node.extra?.parenthesized
+        parenthesized.type !== "Identifier" &&
+        parenthesized.type !== "MemberExpression"
       ) {
-        const parenthesized = unwrapParenthesizedExpression(node);
-        if (
-          parenthesized.type !== "Identifier" &&
-          parenthesized.type !== "MemberExpression"
+        this.raise(node.start, "Invalid parenthesized assignment pattern");
+      }
+    }
+
+    switch (node.type) {
+      case "Identifier":
+      case "ObjectPattern":
+      case "ArrayPattern":
+      case "AssignmentPattern":
+        break;
+
+      case "ObjectExpression":
+        node.type = "ObjectPattern";
+        for (
+          let i = 0, length = node.properties.length, last = length - 1;
+          i < length;
+          i++
         ) {
-          this.raise(node.start, "Invalid parenthesized assignment pattern");
-        }
-      }
+          const prop = node.properties[i];
+          const isLast = i === last;
+          this.toAssignableObjectExpressionProp(prop, isLast);
 
-      switch (node.type) {
-        case "Identifier":
-        case "ObjectPattern":
-        case "ArrayPattern":
-        case "AssignmentPattern":
-          break;
-
-        case "ObjectExpression":
-          node.type = "ObjectPattern";
-          for (
-            let i = 0, length = node.properties.length, last = length - 1;
-            i < length;
-            i++
+          if (
+            isLast &&
+            prop.type === "RestElement" &&
+            node.extra?.trailingComma
           ) {
-            const prop = node.properties[i];
-            const isLast = i === last;
-            this.toAssignableObjectExpressionProp(prop, isLast);
-
-            if (
-              isLast &&
-              prop.type === "RestElement" &&
-              node.extra?.trailingComma
-            ) {
-              this.raiseRestNotLast(node.extra.trailingComma);
-            }
+            this.raiseRestNotLast(node.extra.trailingComma);
           }
-          break;
+        }
+        break;
 
-        case "ObjectProperty":
-          this.toAssignable(node.value);
-          break;
+      case "ObjectProperty":
+        this.toAssignable(node.value);
+        break;
 
-        case "SpreadElement": {
-          this.checkToRestConversion(node);
+      case "SpreadElement": {
+        this.checkToRestConversion(node);
 
-          node.type = "RestElement";
-          const arg = node.argument;
-          this.toAssignable(arg);
-          break;
+        node.type = "RestElement";
+        const arg = node.argument;
+        this.toAssignable(arg);
+        break;
+      }
+
+      case "ArrayExpression":
+        node.type = "ArrayPattern";
+        this.toAssignableList(node.elements, node.extra?.trailingComma);
+        break;
+
+      case "AssignmentExpression":
+        if (node.operator !== "=") {
+          this.raise(
+            node.left.end,
+            "Only '=' operator can be used for specifying default value.",
+          );
         }
 
-        case "ArrayExpression":
-          node.type = "ArrayPattern";
-          this.toAssignableList(node.elements, node.extra?.trailingComma);
-          break;
+        node.type = "AssignmentPattern";
+        delete node.operator;
+        this.toAssignable(node.left);
+        break;
 
-        case "AssignmentExpression":
-          if (node.operator !== "=") {
-            this.raise(
-              node.left.end,
-              "Only '=' operator can be used for specifying default value.",
-            );
-          }
+      case "ParenthesizedExpression":
+        node.expression = this.toAssignable(node.expression);
+        break;
 
-          node.type = "AssignmentPattern";
-          delete node.operator;
-          this.toAssignable(node.left);
-          break;
-
-        case "ParenthesizedExpression":
-          node.expression = this.toAssignable(node.expression);
-          break;
-
-        default:
-        // We don't know how to deal with this node. It will
-        // be reported by a later call to checkLVal
-      }
+      default:
+      // We don't know how to deal with this node. It will
+      // be reported by a later call to checkLVal
     }
     return node;
   }
