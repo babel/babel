@@ -532,10 +532,6 @@ export default class ExpressionParser extends LValParser {
       return expr;
     }
 
-    if (this.checkExpressionErrors(refExpressionErrors, false)) {
-      return expr;
-    }
-
     return this.parseSubscripts(expr, startPos, startLoc);
   }
 
