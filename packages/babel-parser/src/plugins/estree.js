@@ -362,14 +362,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return (node: any);
     }
 
-    toAssignable(node: N.Node, contextDescription: string): N.Node {
+    toAssignable(node: N.Node): N.Node {
       if (isSimpleProperty(node)) {
-        this.toAssignable(node.value, contextDescription);
+        this.toAssignable(node.value);
 
         return node;
       }
 
-      return super.toAssignable(node, contextDescription);
+      return super.toAssignable(node);
     }
 
     toAssignableObjectExpressionProp(prop: N.Node, isLast: boolean) {

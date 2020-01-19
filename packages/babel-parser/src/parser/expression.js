@@ -212,7 +212,7 @@ export default class ExpressionParser extends LValParser {
         this.expectPlugin("logicalAssignment");
       }
       if (this.match(tt.eq)) {
-        node.left = this.toAssignable(left, "assignment expression");
+        node.left = this.toAssignable(left);
         refExpressionErrors.doubleProto = -1; // reset because double __proto__ is valid in assignment expression
       } else {
         node.left = left;
@@ -1883,11 +1883,7 @@ export default class ExpressionParser extends LValParser {
     params: N.Expression[],
     trailingCommaPos: ?number,
   ): void {
-    node.params = this.toAssignableList(
-      params,
-      "arrow function parameters",
-      trailingCommaPos,
-    );
+    node.params = this.toAssignableList(params, trailingCommaPos);
   }
 
   parseFunctionBodyAndFinish(
