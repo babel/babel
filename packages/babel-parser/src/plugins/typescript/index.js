@@ -2392,31 +2392,25 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return param;
     }
 
-    toAssignable(
-      node: N.Node,
-      isBinding: ?boolean,
-      contextDescription: string,
-    ): N.Node {
+    toAssignable(node: N.Node, contextDescription: string): N.Node {
       switch (node.type) {
         case "TSTypeCastExpression":
           return super.toAssignable(
             this.typeCastToParameter(node),
-            isBinding,
             contextDescription,
           );
         case "TSParameterProperty":
-          return super.toAssignable(node, isBinding, contextDescription);
+          return super.toAssignable(node, contextDescription);
         case "TSAsExpression":
         case "TSNonNullExpression":
         case "TSTypeAssertion":
           node.expression = this.toAssignable(
             node.expression,
-            isBinding,
             contextDescription,
           );
           return node;
         default:
-          return super.toAssignable(node, isBinding, contextDescription);
+          return super.toAssignable(node, contextDescription);
       }
     }
 
@@ -2524,10 +2518,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    toAssignableList(
-      exprList: N.Expression[],
-      isBinding: ?boolean,
-    ): $ReadOnlyArray<N.Pattern> {
+    toAssignableList(exprList: N.Expression[]): $ReadOnlyArray<N.Pattern> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
         if (!expr) continue;
@@ -2537,7 +2528,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             break;
           case "TSAsExpression":
           case "TSTypeAssertion":
-            if (!isBinding) {
+            if (!this.state.maybeInArrowParameters) {
               exprList[i] = this.typeCastToParameter(expr);
             } else {
               this.raise(

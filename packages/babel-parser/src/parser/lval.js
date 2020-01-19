@@ -50,11 +50,7 @@ export default class LValParser extends NodeUtils {
   // NOTE: There is a corresponding "isAssignable" method in flow.js.
   // When this one is updated, please check if also that one needs to be updated.
 
-  toAssignable(
-    node: Node,
-    isBinding: ?boolean,
-    contextDescription: string,
-  ): Node {
+  toAssignable(node: Node, contextDescription: string): Node {
     if (node) {
       if (
         (this.options.createParenthesizedExpressions &&
@@ -86,7 +82,7 @@ export default class LValParser extends NodeUtils {
           ) {
             const prop = node.properties[i];
             const isLast = i === last;
-            this.toAssignableObjectExpressionProp(prop, isBinding, isLast);
+            this.toAssignableObjectExpressionProp(prop, isLast);
 
             if (
               isLast &&
@@ -99,7 +95,7 @@ export default class LValParser extends NodeUtils {
           break;
 
         case "ObjectProperty":
-          this.toAssignable(node.value, isBinding, contextDescription);
+          this.toAssignable(node.value, contextDescription);
           break;
 
         case "SpreadElement": {
@@ -107,7 +103,7 @@ export default class LValParser extends NodeUtils {
 
           node.type = "RestElement";
           const arg = node.argument;
-          this.toAssignable(arg, isBinding, contextDescription);
+          this.toAssignable(arg, contextDescription);
           break;
         }
 
@@ -115,7 +111,6 @@ export default class LValParser extends NodeUtils {
           node.type = "ArrayPattern";
           this.toAssignableList(
             node.elements,
-            isBinding,
             contextDescription,
             node.extra?.trailingComma,
           );
@@ -131,19 +126,15 @@ export default class LValParser extends NodeUtils {
 
           node.type = "AssignmentPattern";
           delete node.operator;
-          this.toAssignable(node.left, isBinding, contextDescription);
+          this.toAssignable(node.left, contextDescription);
           break;
 
         case "ParenthesizedExpression":
           node.expression = this.toAssignable(
             node.expression,
-            isBinding,
             contextDescription,
           );
           break;
-
-        case "MemberExpression":
-          if (!isBinding) break;
 
         default:
         // We don't know how to deal with this node. It will
@@ -153,11 +144,7 @@ export default class LValParser extends NodeUtils {
     return node;
   }
 
-  toAssignableObjectExpressionProp(
-    prop: Node,
-    isBinding: ?boolean,
-    isLast: boolean,
-  ) {
+  toAssignableObjectExpressionProp(prop: Node, isLast: boolean) {
     if (prop.type === "ObjectMethod") {
       const error =
         prop.kind === "get" || prop.kind === "set"
@@ -168,7 +155,7 @@ export default class LValParser extends NodeUtils {
     } else if (prop.type === "SpreadElement" && !isLast) {
       this.raiseRestNotLast(prop.start);
     } else {
-      this.toAssignable(prop, isBinding, "object destructuring pattern");
+      this.toAssignable(prop, "object destructuring pattern");
     }
   }
 
@@ -176,7 +163,6 @@ export default class LValParser extends NodeUtils {
 
   toAssignableList(
     exprList: Expression[],
-    isBinding: ?boolean,
     contextDescription: string,
     trailingCommaPos?: ?number,
   ): $ReadOnlyArray<Pattern> {
@@ -188,7 +174,7 @@ export default class LValParser extends NodeUtils {
       } else if (last && last.type === "SpreadElement") {
         last.type = "RestElement";
         const arg = last.argument;
-        this.toAssignable(arg, isBinding, contextDescription);
+        this.toAssignable(arg, contextDescription);
         if (
           arg.type !== "Identifier" &&
           arg.type !== "MemberExpression" &&
@@ -208,7 +194,7 @@ export default class LValParser extends NodeUtils {
     for (let i = 0; i < end; i++) {
       const elt = exprList[i];
       if (elt) {
-        this.toAssignable(elt, isBinding, contextDescription);
+        this.toAssignable(elt, contextDescription);
         if (elt.type === "RestElement") {
           this.raiseRestNotLast(elt.start);
         }

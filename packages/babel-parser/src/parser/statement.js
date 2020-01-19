@@ -540,7 +540,7 @@ export default class StatementParser extends ExpressionParser {
       const description = this.isContextual("of")
         ? "for-of statement"
         : "for-in statement";
-      this.toAssignable(init, undefined, description);
+      this.toAssignable(init, description);
       this.checkLVal(init, undefined, undefined, description);
       return this.parseForIn(node, init, awaitAt);
     } else {
