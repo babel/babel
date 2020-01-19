@@ -121,8 +121,12 @@ export function NullLiteral() {
 export function NumericLiteral(node: Object) {
   const raw = this.getPossibleRaw(node);
   const opts = this.format.jsescOption;
-  opts.numbers = "hexadecimal";
-  opts.lowercaseHex = true;
+  if (this.format.numbers) {
+    opts.numbers = "hexadecimal";
+    if (this.format.lowercaseHex) {
+      opts.lowercaseHex = true;
+    }
+  }
   const value = jsesc(node.value, opts);
   if (raw == null) {
     this.number(value); // normalize

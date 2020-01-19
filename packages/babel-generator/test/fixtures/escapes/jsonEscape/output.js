@@ -1,2 +1,2 @@
 0;// Not a directive
-"\u00a9";
+"\u00A9";

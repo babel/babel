@@ -47,6 +47,8 @@ function normalizeOptions(code, opts): Format {
     minified: opts.minified,
     concise: opts.concise,
     jsonCompatibleStrings: opts.jsonCompatibleStrings,
+    numbers: opts.numbers,
+    lowercaseHex: opts.lowercaseHex,
     indent: {
       adjustMultilineComment: true,
       style: "  ",
