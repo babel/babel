@@ -1,6 +1,6 @@
 {
-  "minified": true,
-  "jsonCompatibleStrings": true,
-  "numbers": "hexadecimal",
-  "lowercaseHex": true
+  "jsescOption": {
+    "numbers": "hexadecimal",
+    "lowercaseHex": true
+  }
 }

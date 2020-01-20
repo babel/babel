@@ -1,1 +1,1 @@
-let x=0x2a;
+let x = 0x2a;

@@ -121,19 +121,30 @@ export function NullLiteral() {
 export function NumericLiteral(node: Object) {
   const raw = this.getPossibleRaw(node);
   const opts = this.format.jsescOption;
-  if (this.format.numbers) {
-    opts.numbers = "hexadecimal";
-    if (this.format.lowercaseHex) {
-      opts.lowercaseHex = true;
-    }
-  }
-  const value = jsesc(node.value, opts);
+  const value = node.value + "";
   if (raw == null) {
-    this.number(value); // normalize
+    //normalize
+    if (this.format.jsescOption.numbers) {
+      this.number(jsesc(parseInt(value), opts));
+    } else {
+      this.number(value);
+    }
   } else if (this.format.minified) {
-    this.number(raw.length < value.length ? raw : value);
+    if (this.format.jsescOption.numbers) {
+      this.number(
+        raw.length < value.length
+          ? jsesc(parseInt(raw), opts)
+          : jsesc(parseInt(value), opts),
+      );
+    } else {
+      this.number(raw.length < value.length ? raw : value);
+    }
   } else {
-    this.number(raw);
+    if (this.format.jsescOption.numbers) {
+      this.number(jsesc(parseInt(raw), opts));
+    } else {
+      this.number(raw);
+    }
   }
 }
 
