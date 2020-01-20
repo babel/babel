@@ -4,7 +4,6 @@ const fs = require("fs");
 const path = require("path");
 const semver = require("semver");
 const flattenDeep = require("lodash/flattenDeep");
-const isEqual = require("lodash/isEqual");
 const mapValues = require("lodash/mapValues");
 const pickBy = require("lodash/pickBy");
 const { unreleasedLabels } = require("@babel/helper-compilation-targets");
@@ -297,18 +296,20 @@ for (const target of ["plugin", "corejs2-built-in"]) {
   );
   const dataPath = path.join(__dirname, `../data/${target}s.json`);
 
-  if (process.argv[2] === "--check") {
-    const currentData = require(dataPath);
+  const stringified = JSON.stringify(newData, null, 2) + "\n";
+  if (process.env.CHECK_COMPAT_DATA) {
+    const currentData = fs.readFileSync(dataPath, "utf8");
 
-    if (!isEqual(currentData, newData)) {
+    // Compare as JSON strings to also check keys ordering
+    if (currentData !== stringified) {
       console.error(
         "The newly generated plugin/built-in data does not match the current " +
-          "files. Re-run `npm run build-data`."
+          "files. Re-run `make build-compat-data`."
       );
       process.exitCode = 1;
       break;
     }
   } else {
-    fs.writeFileSync(dataPath, `${JSON.stringify(newData, null, 2)}\n`);
+    fs.writeFileSync(dataPath, stringified);
   }
 }
