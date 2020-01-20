@@ -362,25 +362,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return (node: any);
     }
 
-    toAssignable(
-      node: N.Node,
-      isBinding: ?boolean,
-      contextDescription: string,
-    ): N.Node {
+    toAssignable(node: N.Node): N.Node {
       if (isSimpleProperty(node)) {
-        this.toAssignable(node.value, isBinding, contextDescription);
+        this.toAssignable(node.value);
 
         return node;
       }
 
-      return super.toAssignable(node, isBinding, contextDescription);
+      return super.toAssignable(node);
     }
 
-    toAssignableObjectExpressionProp(
-      prop: N.Node,
-      isBinding: ?boolean,
-      isLast: boolean,
-    ) {
+    toAssignableObjectExpressionProp(prop: N.Node, isLast: boolean) {
       if (prop.kind === "get" || prop.kind === "set") {
         throw this.raise(
           prop.key.start,
@@ -392,7 +384,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           "Object pattern can't contain methods",
         );
       } else {
-        super.toAssignableObjectExpressionProp(prop, isBinding, isLast);
+        super.toAssignableObjectExpressionProp(prop, isLast);
       }
     }
 

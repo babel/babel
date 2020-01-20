@@ -212,7 +212,7 @@ export default class ExpressionParser extends LValParser {
         this.expectPlugin("logicalAssignment");
       }
       if (this.match(tt.eq)) {
-        node.left = this.toAssignable(left, undefined, "assignment expression");
+        node.left = this.toAssignable(left);
         refExpressionErrors.doubleProto = -1; // reset because double __proto__ is valid in assignment expression
       } else {
         node.left = left;
@@ -1857,15 +1857,17 @@ export default class ExpressionParser extends LValParser {
   ): N.ArrowFunctionExpression {
     this.scope.enter(functionFlags(isAsync, false) | SCOPE_ARROW);
     this.initFunction(node, isAsync);
-
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
     const oldYieldPos = this.state.yieldPos;
     const oldAwaitPos = this.state.awaitPos;
+
+    if (params) {
+      this.state.maybeInArrowParameters = true;
+      this.setArrowFunctionParameters(node, params, trailingCommaPos);
+    }
     this.state.maybeInArrowParameters = false;
     this.state.yieldPos = -1;
     this.state.awaitPos = -1;
-
-    if (params) this.setArrowFunctionParameters(node, params, trailingCommaPos);
     this.parseFunctionBody(node, true);
 
     this.scope.exit();
@@ -1881,12 +1883,7 @@ export default class ExpressionParser extends LValParser {
     params: N.Expression[],
     trailingCommaPos: ?number,
   ): void {
-    node.params = this.toAssignableList(
-      params,
-      true,
-      "arrow function parameters",
-      trailingCommaPos,
-    );
+    node.params = this.toAssignableList(params, trailingCommaPos);
   }
 
   parseFunctionBodyAndFinish(

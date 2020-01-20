@@ -50,114 +50,89 @@ export default class LValParser extends NodeUtils {
   // NOTE: There is a corresponding "isAssignable" method in flow.js.
   // When this one is updated, please check if also that one needs to be updated.
 
-  toAssignable(
-    node: Node,
-    isBinding: ?boolean,
-    contextDescription: string,
-  ): Node {
-    if (node) {
+  toAssignable(node: Node): Node {
+    let parenthesized = undefined;
+    if (node.type === "ParenthesizedExpression" || node.extra?.parenthesized) {
+      parenthesized = unwrapParenthesizedExpression(node);
       if (
-        (this.options.createParenthesizedExpressions &&
-          node.type === "ParenthesizedExpression") ||
-        node.extra?.parenthesized
+        parenthesized.type !== "Identifier" &&
+        parenthesized.type !== "MemberExpression"
       ) {
-        const parenthesized = unwrapParenthesizedExpression(node);
-        if (
-          parenthesized.type !== "Identifier" &&
-          parenthesized.type !== "MemberExpression"
+        this.raise(node.start, "Invalid parenthesized assignment pattern");
+      }
+    }
+
+    switch (node.type) {
+      case "Identifier":
+      case "ObjectPattern":
+      case "ArrayPattern":
+      case "AssignmentPattern":
+        break;
+
+      case "ObjectExpression":
+        node.type = "ObjectPattern";
+        for (
+          let i = 0, length = node.properties.length, last = length - 1;
+          i < length;
+          i++
         ) {
-          this.raise(node.start, "Invalid parenthesized assignment pattern");
-        }
-      }
+          const prop = node.properties[i];
+          const isLast = i === last;
+          this.toAssignableObjectExpressionProp(prop, isLast);
 
-      switch (node.type) {
-        case "Identifier":
-        case "ObjectPattern":
-        case "ArrayPattern":
-        case "AssignmentPattern":
-          break;
-
-        case "ObjectExpression":
-          node.type = "ObjectPattern";
-          for (
-            let i = 0, length = node.properties.length, last = length - 1;
-            i < length;
-            i++
+          if (
+            isLast &&
+            prop.type === "RestElement" &&
+            node.extra?.trailingComma
           ) {
-            const prop = node.properties[i];
-            const isLast = i === last;
-            this.toAssignableObjectExpressionProp(prop, isBinding, isLast);
-
-            if (
-              isLast &&
-              prop.type === "RestElement" &&
-              node.extra?.trailingComma
-            ) {
-              this.raiseRestNotLast(node.extra.trailingComma);
-            }
+            this.raiseRestNotLast(node.extra.trailingComma);
           }
-          break;
+        }
+        break;
 
-        case "ObjectProperty":
-          this.toAssignable(node.value, isBinding, contextDescription);
-          break;
+      case "ObjectProperty":
+        this.toAssignable(node.value);
+        break;
 
-        case "SpreadElement": {
-          this.checkToRestConversion(node);
+      case "SpreadElement": {
+        this.checkToRestConversion(node);
 
-          node.type = "RestElement";
-          const arg = node.argument;
-          this.toAssignable(arg, isBinding, contextDescription);
-          break;
+        node.type = "RestElement";
+        const arg = node.argument;
+        this.toAssignable(arg);
+        break;
+      }
+
+      case "ArrayExpression":
+        node.type = "ArrayPattern";
+        this.toAssignableList(node.elements, node.extra?.trailingComma);
+        break;
+
+      case "AssignmentExpression":
+        if (node.operator !== "=") {
+          this.raise(
+            node.left.end,
+            "Only '=' operator can be used for specifying default value.",
+          );
         }
 
-        case "ArrayExpression":
-          node.type = "ArrayPattern";
-          this.toAssignableList(
-            node.elements,
-            isBinding,
-            contextDescription,
-            node.extra?.trailingComma,
-          );
-          break;
+        node.type = "AssignmentPattern";
+        delete node.operator;
+        this.toAssignable(node.left);
+        break;
 
-        case "AssignmentExpression":
-          if (node.operator !== "=") {
-            this.raise(
-              node.left.end,
-              "Only '=' operator can be used for specifying default value.",
-            );
-          }
+      case "ParenthesizedExpression":
+        this.toAssignable(((parenthesized: any): Expression));
+        break;
 
-          node.type = "AssignmentPattern";
-          delete node.operator;
-          this.toAssignable(node.left, isBinding, contextDescription);
-          break;
-
-        case "ParenthesizedExpression":
-          node.expression = this.toAssignable(
-            node.expression,
-            isBinding,
-            contextDescription,
-          );
-          break;
-
-        case "MemberExpression":
-          if (!isBinding) break;
-
-        default:
-        // We don't know how to deal with this node. It will
-        // be reported by a later call to checkLVal
-      }
+      default:
+      // We don't know how to deal with this node. It will
+      // be reported by a later call to checkLVal
     }
     return node;
   }
 
-  toAssignableObjectExpressionProp(
-    prop: Node,
-    isBinding: ?boolean,
-    isLast: boolean,
-  ) {
+  toAssignableObjectExpressionProp(prop: Node, isLast: boolean) {
     if (prop.type === "ObjectMethod") {
       const error =
         prop.kind === "get" || prop.kind === "set"
@@ -168,7 +143,7 @@ export default class LValParser extends NodeUtils {
     } else if (prop.type === "SpreadElement" && !isLast) {
       this.raiseRestNotLast(prop.start);
     } else {
-      this.toAssignable(prop, isBinding, "object destructuring pattern");
+      this.toAssignable(prop);
     }
   }
 
@@ -176,8 +151,6 @@ export default class LValParser extends NodeUtils {
 
   toAssignableList(
     exprList: Expression[],
-    isBinding: ?boolean,
-    contextDescription: string,
     trailingCommaPos?: ?number,
   ): $ReadOnlyArray<Pattern> {
     let end = exprList.length;
@@ -188,7 +161,7 @@ export default class LValParser extends NodeUtils {
       } else if (last && last.type === "SpreadElement") {
         last.type = "RestElement";
         const arg = last.argument;
-        this.toAssignable(arg, isBinding, contextDescription);
+        this.toAssignable(arg);
         if (
           arg.type !== "Identifier" &&
           arg.type !== "MemberExpression" &&
@@ -208,7 +181,7 @@ export default class LValParser extends NodeUtils {
     for (let i = 0; i < end; i++) {
       const elt = exprList[i];
       if (elt) {
-        this.toAssignable(elt, isBinding, contextDescription);
+        this.toAssignable(elt);
         if (elt.type === "RestElement") {
           this.raiseRestNotLast(elt.start);
         }

@@ -1886,8 +1886,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // node.params is Expression[] instead of $ReadOnlyArray<Pattern> because it
         // has not been converted yet.
         ((node.params: any): N.Expression[]),
-        true,
-        "arrow function parameters",
         node.extra?.trailingComma,
       );
       // Enter scope, as checkParams defines bindings
@@ -2091,27 +2089,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    toAssignable(
-      node: N.Node,
-      isBinding: ?boolean,
-      contextDescription: string,
-    ): N.Node {
+    toAssignable(node: N.Node): N.Node {
       if (node.type === "TypeCastExpression") {
-        return super.toAssignable(
-          this.typeCastToParameter(node),
-          isBinding,
-          contextDescription,
-        );
+        return super.toAssignable(this.typeCastToParameter(node));
       } else {
-        return super.toAssignable(node, isBinding, contextDescription);
+        return super.toAssignable(node);
       }
     }
 
     // turn type casts that we found in function parameter head into type annotated params
     toAssignableList(
       exprList: N.Expression[],
-      isBinding: ?boolean,
-      contextDescription: string,
       trailingCommaPos?: ?number,
     ): $ReadOnlyArray<N.Pattern> {
       for (let i = 0; i < exprList.length; i++) {
@@ -2120,12 +2108,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           exprList[i] = this.typeCastToParameter(expr);
         }
       }
-      return super.toAssignableList(
-        exprList,
-        isBinding,
-        contextDescription,
-        trailingCommaPos,
-      );
+      return super.toAssignableList(exprList, trailingCommaPos);
     }
 
     // this is a list of nodes, from something like a call expression, we need to filter the
