@@ -5,7 +5,6 @@ import * as N from "../types";
 import { Position } from "../util/location";
 
 import { types as ct, type TokContext } from "./context";
-import type { Token } from "./index";
 import { types as tt, type TokenType } from "./types";
 
 type TopicContextState = {
@@ -93,9 +92,6 @@ export default class State {
   yieldPos: number = -1;
   awaitPos: number = -1;
 
-  // Token store.
-  tokens: Array<Token | N.Comment> = [];
-
   // Comment store.
   comments: Array<N.Comment> = [];
 
@@ -152,6 +148,9 @@ export default class State {
   // Names of exports store. `default` is stored as a name for both
   // `export default foo;` and `export { foo as default };`.
   exportedIdentifiers: Array<string> = [];
+
+  // Tokens length in token store
+  tokensLength: number = 0;
 
   curPosition(): Position {
     return new Position(this.curLine, this.pos - this.lineStart);

@@ -1,6 +1,7 @@
 // @flow
 
 import type { Options } from "../options";
+import * as N from "../types";
 import type { Position } from "../util/location";
 import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
@@ -114,6 +115,9 @@ export default class Tokenizer extends LocationParser {
 
   isLookahead: boolean;
 
+  // Token store.
+  tokens: Array<Token | N.Comment> = [];
+
   constructor(options: Options, input: string) {
     super();
     this.state = new State();
@@ -123,13 +127,21 @@ export default class Tokenizer extends LocationParser {
     this.isLookahead = false;
   }
 
+  pushToken(token: Token | N.Comment) {
+    // Pop out invalid tokens trapped by try-catch parsing.
+    // Those parsing branches are mainly created by typescript and flow plugins.
+    this.tokens.length = this.state.tokensLength;
+    this.tokens.push(token);
+    ++this.state.tokensLength;
+  }
+
   // Move to the next token
 
   next(): void {
     if (!this.isLookahead) {
       this.checkKeywordEscapes();
       if (this.options.tokens) {
-        this.state.tokens.push(new Token(this.state));
+        this.pushToken(new Token(this.state));
       }
     }
 
@@ -242,7 +254,7 @@ export default class Tokenizer extends LocationParser {
       loc: new SourceLocation(startLoc, endLoc),
     };
 
-    if (this.options.tokens) this.state.tokens.push(comment);
+    if (this.options.tokens) this.pushToken(comment);
     this.state.comments.push(comment);
     this.addComment(comment);
   }

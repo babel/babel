@@ -67,7 +67,7 @@ export default class StatementParser extends ExpressionParser {
     file.program = this.finishNode(program, "Program");
     file.comments = this.state.comments;
 
-    if (this.options.tokens) file.tokens = this.state.tokens;
+    if (this.options.tokens) file.tokens = this.tokens;
 
     return this.finishNode(file, "File");
   }
