@@ -51,12 +51,9 @@ export default class LValParser extends NodeUtils {
   // When this one is updated, please check if also that one needs to be updated.
 
   toAssignable(node: Node): Node {
-    if (
-      (this.options.createParenthesizedExpressions &&
-        node.type === "ParenthesizedExpression") ||
-      node.extra?.parenthesized
-    ) {
-      const parenthesized = unwrapParenthesizedExpression(node);
+    let parenthesized = undefined;
+    if (node.type === "ParenthesizedExpression" || node.extra?.parenthesized) {
+      parenthesized = unwrapParenthesizedExpression(node);
       if (
         parenthesized.type !== "Identifier" &&
         parenthesized.type !== "MemberExpression"
@@ -125,7 +122,7 @@ export default class LValParser extends NodeUtils {
         break;
 
       case "ParenthesizedExpression":
-        node.expression = this.toAssignable(node.expression);
+        this.toAssignable(((parenthesized: any): Expression));
         break;
 
       default:
