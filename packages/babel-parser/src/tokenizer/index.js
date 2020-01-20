@@ -130,13 +130,9 @@ export default class Tokenizer extends LocationParser {
   pushToken(token: Token | N.Comment) {
     // Pop out invalid tokens trapped by try-catch parsing.
     // Those parsing branches are mainly created by typescript and flow plugins.
-    while (
-      this.tokens.length > 0 &&
-      this.tokens[this.tokens.length - 1].end > token.start
-    ) {
-      this.tokens.pop();
-    }
+    this.tokens.length = this.state.tokensLength;
     this.tokens.push(token);
+    ++this.state.tokensLength;
   }
 
   // Move to the next token

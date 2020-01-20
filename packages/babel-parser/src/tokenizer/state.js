@@ -149,6 +149,9 @@ export default class State {
   // `export default foo;` and `export { foo as default };`.
   exportedIdentifiers: Array<string> = [];
 
+  // Tokens length in token store
+  tokensLength: number = 0;
+
   curPosition(): Position {
     return new Position(this.curLine, this.pos - this.lineStart);
   }
