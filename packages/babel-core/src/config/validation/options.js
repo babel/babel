@@ -27,6 +27,7 @@ import {
   type Validator,
   type OptionPath,
 } from "./option-assertions";
+import type { UnloadedDescriptor } from "../config-descriptors";
 
 const ROOT_VALIDATORS: ValidatorSet = {
   cwd: (assertString: Validator<$PropertyType<ValidatedOptions, "cwd">>),
@@ -365,16 +366,20 @@ function throwUnknownError(loc: OptionPath) {
   if (removed[key]) {
     const { message, version = 5 } = removed[key];
 
-    throw new ReferenceError(
+    throw new Error(
       `Using removed Babel ${version} option: ${msg(loc)} - ${message}`,
     );
   } else {
     // eslint-disable-next-line max-len
-    const unknownOptErr = `Unknown option: ${msg(
-      loc,
-    )}. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.`;
+    const unknownOptErr = new Error(
+      `Unknown option: ${msg(
+        loc,
+      )}. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.`,
+    );
+    // $FlowIgnore
+    unknownOptErr.code = "BABEL_UNKNOWN_OPTION";
 
-    throw new ReferenceError(unknownOptErr);
+    throw unknownOptErr;
   }
 }
 
@@ -438,4 +443,27 @@ function assertOverridesList(loc: OptionPath, value: mixed): OverridesList {
     }
   }
   return (arr: any);
+}
+
+export function checkNoUnwrappedItemOptionPairs(
+  lastItem: UnloadedDescriptor,
+  thisItem: UnloadedDescriptor,
+  type: "plugin" | "preset",
+  index: number,
+  e: Error,
+): void {
+  if (
+    lastItem.file &&
+    lastItem.options === undefined &&
+    typeof thisItem.value === "object"
+  ) {
+    e.message +=
+      `\n- Maybe you meant to use\n` +
+      `"${type}": [\n  ["${lastItem.file.request}", ${JSON.stringify(
+        thisItem.value,
+        undefined,
+        2,
+      )}]\n]\n` +
+      `To be a valid ${type}, its name and options should be wrapped in a pair of brackets`;
+  }
 }

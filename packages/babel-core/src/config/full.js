@@ -20,7 +20,11 @@ import {
   makeWeakCacheSync,
   type CacheConfigurator,
 } from "./caching";
-import { validate, type CallerMetadata } from "./validation/options";
+import {
+  validate,
+  type CallerMetadata,
+  checkNoUnwrappedItemOptionPairs,
+} from "./validation/options";
 import { validatePluginObject } from "./validation/plugins";
 import makeAPI from "./helpers/config-api";
 
@@ -78,19 +82,48 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
       pass: Array<Plugin>,
     ) {
       const plugins = [];
-      for (const descriptor of config.plugins) {
+      for (let i = 0; i < config.plugins.length; i++) {
+        const descriptor = config.plugins[i];
         if (descriptor.options !== false) {
-          plugins.push(yield* loadPluginDescriptor(descriptor, context));
+          try {
+            plugins.push(yield* loadPluginDescriptor(descriptor, context));
+          } catch (e) {
+            // print special message for `plugins: ["@babel/foo", { foo: "option" }]`
+            if (i > 0 && e.code === "BABEL_UNKNOWN_PLUGIN_PROPERTY") {
+              checkNoUnwrappedItemOptionPairs(
+                config.plugins[i - 1],
+                descriptor,
+                "plugin",
+                i,
+                e,
+              );
+            }
+            throw e;
+          }
         }
       }
 
       const presets = [];
-      for (const descriptor of config.presets) {
+      for (let i = 0; i < config.presets.length; i++) {
+        const descriptor = config.presets[i];
         if (descriptor.options !== false) {
-          presets.push({
-            preset: yield* loadPresetDescriptor(descriptor, context),
-            pass: descriptor.ownPass ? [] : pass,
-          });
+          try {
+            presets.push({
+              preset: yield* loadPresetDescriptor(descriptor, context),
+              pass: descriptor.ownPass ? [] : pass,
+            });
+          } catch (e) {
+            if (i > 0 && e.code === "BABEL_UNKNOWN_OPTION") {
+              checkNoUnwrappedItemOptionPairs(
+                config.presets[i - 1],
+                descriptor,
+                "preset",
+                i,
+                e,
+              );
+            }
+            throw e;
+          }
         }
       }
 
