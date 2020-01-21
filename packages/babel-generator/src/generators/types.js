@@ -123,7 +123,7 @@ export function NumericLiteral(node: Object) {
   const opts = this.format.jsescOption;
   const value = node.value + "";
   if (opts.numbers) {
-    this.number(jsesc(value, opts));
+    this.number(jsesc(node.value, opts));
   } else if (raw == null) {
     this.number(value); // normalize
   } else if (this.format.minified) {
