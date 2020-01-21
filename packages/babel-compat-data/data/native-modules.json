@@ -6,7 +6,10 @@
     "safari": "10.1",
     "opera": "48",
     "ios_saf": "10.3",
-    "and_chr": "74",
-    "and_ff": "66"
+    "android": "61",
+    "op_mob": "48",
+    "and_chr": "61",
+    "and_ff": "60",
+    "samsung": "8.2"
   }
 }
