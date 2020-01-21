@@ -122,29 +122,14 @@ export function NumericLiteral(node: Object) {
   const raw = this.getPossibleRaw(node);
   const opts = this.format.jsescOption;
   const value = node.value + "";
-  if (raw == null) {
-    //normalize
-    if (this.format.jsescOption.numbers) {
-      this.number(jsesc(parseInt(value), opts));
-    } else {
-      this.number(value);
-    }
+  if (this.format.jsescOption.numbers) {
+    this.number(jsesc(parseInt(value), opts));
+  } else if (raw == null) {
+    this.number(value); // normalize
   } else if (this.format.minified) {
-    if (this.format.jsescOption.numbers) {
-      this.number(
-        raw.length < value.length
-          ? jsesc(parseInt(raw), opts)
-          : jsesc(parseInt(value), opts),
-      );
-    } else {
-      this.number(raw.length < value.length ? raw : value);
-    }
+    this.number(raw.length < value.length ? raw : value);
   } else {
-    if (this.format.jsescOption.numbers) {
-      this.number(jsesc(parseInt(raw), opts));
-    } else {
-      this.number(raw);
-    }
+    this.number(raw);
   }
 }
 
