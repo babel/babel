@@ -122,8 +122,8 @@ export function NumericLiteral(node: Object) {
   const raw = this.getPossibleRaw(node);
   const opts = this.format.jsescOption;
   const value = node.value + "";
-  if (this.format.jsescOption.numbers) {
-    this.number(jsesc(parseInt(value), opts));
+  if (opts.numbers) {
+    this.number(jsesc(value, opts));
   } else if (raw == null) {
     this.number(value); // normalize
   } else if (this.format.minified) {
