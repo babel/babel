@@ -64,7 +64,8 @@ const es2015 = {
     features: [
       "default function parameters",
       "rest parameters",
-      "destructuring, parameters / defaults, arrow function",
+      "destructuring, parameters / aliased defaults, arrow function",
+      "destructuring, parameters / shorthand defaults, arrow function",
     ],
   },
   "transform-destructuring": {

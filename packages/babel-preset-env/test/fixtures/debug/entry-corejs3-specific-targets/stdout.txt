@@ -28,7 +28,7 @@ Using plugins:
   transform-literals { "firefox":"49", "ie":"10", "safari":"7" }
   transform-function-name { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-arrow-functions { "ie":"10", "ios":"9", "safari":"7" }
-  transform-block-scoped-functions { "ie":"10", "ios":"9", "safari":"7" }
+  transform-block-scoped-functions { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   transform-classes { "ie":"10", "ios":"9", "safari":"7" }
   transform-object-super { "ie":"10", "ios":"9", "safari":"7" }
   transform-shorthand-properties { "ie":"10", "safari":"7" }
@@ -44,6 +44,9 @@ Using plugins:
   transform-typeof-symbol { "ie":"10", "safari":"7" }
   transform-new-target { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   transform-regenerator { "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  transform-member-expression-literals { "edge":"13" }
+  transform-property-literals { "edge":"13" }
+  transform-reserved-words { "edge":"13" }
   transform-modules-commonjs { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   proposal-dynamic-import { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
 

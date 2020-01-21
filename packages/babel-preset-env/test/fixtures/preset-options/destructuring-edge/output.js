@@ -1,5 +1,5 @@
 ((a, _ref) => {
-  let {
+  var {
     b = 0,
     c = 3
   } = _ref;
