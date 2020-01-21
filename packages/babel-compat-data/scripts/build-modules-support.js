@@ -16,10 +16,6 @@ const { stats } = moduleSupport;
 const allowedBrowsers = {};
 
 Object.keys(stats).forEach(browser => {
-  //todo: skip android until https://github.com/browserslist/browserslist/pull/428 is resolved
-  if (browser === "android") {
-    return;
-  }
   const browserName = browserNameMap[browser] || browser;
   const browserVersions = stats[browserName];
   const allowedVersions = Object.keys(browserVersions)

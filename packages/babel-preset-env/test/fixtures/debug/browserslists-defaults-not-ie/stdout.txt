@@ -2,7 +2,7 @@
 
 Using targets:
 {
-  "android": "78",
+  "android": "77",
   "chrome": "49",
   "edge": "17",
   "firefox": "68",
@@ -15,8 +15,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-nullish-coalescing-operator { "android":"78", "chrome":"49", "edge":"17", "firefox":"68", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
-  proposal-optional-chaining { "android":"78", "chrome":"49", "edge":"17", "firefox":"68", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
+  proposal-nullish-coalescing-operator { "android":"77", "chrome":"49", "edge":"17", "firefox":"68", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
+  proposal-optional-chaining { "android":"77", "chrome":"49", "edge":"17", "firefox":"68", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
   proposal-json-strings { "chrome":"49", "edge":"17", "safari":"5.1" }
   proposal-optional-catch-binding { "chrome":"49", "edge":"17", "safari":"5.1" }
   proposal-async-generator-functions { "chrome":"49", "edge":"17", "safari":"5.1" }
@@ -46,7 +46,7 @@ Using plugins:
   transform-typeof-symbol { "safari":"5.1" }
   transform-new-target { "safari":"5.1" }
   transform-regenerator { "chrome":"49", "safari":"5.1" }
-  transform-modules-commonjs { "android":"78", "chrome":"49", "edge":"17", "firefox":"68", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
-  proposal-dynamic-import { "android":"78", "chrome":"49", "edge":"17", "firefox":"68", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
+  transform-modules-commonjs { "android":"77", "chrome":"49", "edge":"17", "firefox":"68", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
+  proposal-dynamic-import { "android":"77", "chrome":"49", "edge":"17", "firefox":"68", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
