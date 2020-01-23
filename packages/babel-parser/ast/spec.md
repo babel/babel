@@ -1222,6 +1222,7 @@ interface ImportDeclaration <: ModuleDeclaration {
   importKind: null | "type" | "typeof" | "value";
   specifiers: [ ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier ];
   source: Literal;
+  as?: StringLiteral;
   attributes?: [ ImportAttribute ];
 }
 ```
