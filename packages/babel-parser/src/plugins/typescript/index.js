@@ -1823,7 +1823,29 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.match(tt.name) && this.lookahead().type === tt.eq) {
         return this.tsParseImportEqualsDeclaration(node);
       }
-      return super.parseImport(node);
+
+      if (this.eatContextual("type")) {
+        node.importKind = "type";
+      } else {
+        node.importKind = "value";
+      }
+
+      const importNode = super.parseImport(node);
+
+      // `import type` can only be used on imports with named imports or with a
+      // default import - but not both
+      if (
+        importNode.importKind === "type" &&
+        importNode.specifiers.length > 1 &&
+        importNode.specifiers[0].type === "ImportDefaultSpecifier"
+      ) {
+        this.raise(
+          importNode.start,
+          "A type-only import can specify a default import or named bindings, but not both.",
+        );
+      }
+
+      return importNode;
     }
 
     parseExport(node: N.Node): N.AnyExport {
@@ -1945,7 +1967,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             member.start,
             `Index signatures cannot have an accessibility modifier ('${
               (member: any).accessibility
-            }')`,
+            } ')`,
           );
         }
 
