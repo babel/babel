@@ -1967,7 +1967,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             member.start,
             `Index signatures cannot have an accessibility modifier ('${
               (member: any).accessibility
-            } ')`,
+            }')`,
           );
         }
 
