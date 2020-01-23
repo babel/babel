@@ -107,6 +107,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             chunkStart = this.state.pos;
             break;
 
+          case charCodes.greaterThan:
+          case charCodes.rightCurlyBrace:
+            throw this.raise(
+              this.state.pos,
+              `Unexpected token \`${
+                this.input[this.state.pos]
+              }\`. Did you mean \`{'${this.input[this.state.pos]}'}\`?`,
+            );
+
           default:
             if (isNewLine(ch)) {
               out += this.input.slice(chunkStart, this.state.pos);
@@ -507,35 +516,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.jsxParseElementAt(startPos, startLoc);
     }
 
-    // Validates and parses the current state as JSXText
-
-    parseJSXText(): N.Expression {
-      const startPos = this.state.start;
-      for (let idx = 0; idx < this.state.value.length; idx += 1) {
-        const character = this.state.value[idx];
-        if (character === "}") {
-          this.raise(
-            startPos + idx,
-            `Unexpected token \`}\`. Did you mean \`{'}'}\`?`,
-          );
-        } else if (character === ">") {
-          this.raise(
-            startPos + idx,
-            `Unexpected token \`>\`. Did you mean \`{'>'}\`?`,
-          );
-        }
-      }
-
-      return this.parseLiteral(this.state.value, "JSXText");
-    }
-
     // ==================================
     // Overrides
     // ==================================
 
     parseExprAtom(refExpressionErrors: ?ExpressionErrors): N.Expression {
       if (this.match(tt.jsxText)) {
-        return this.parseJSXText();
+        return this.parseLiteral(this.state.value, "JSXText");
       } else if (this.match(tt.jsxTagStart)) {
         return this.jsxParseElement();
       } else if (
