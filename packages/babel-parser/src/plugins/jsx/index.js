@@ -507,13 +507,35 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.jsxParseElementAt(startPos, startLoc);
     }
 
+    // Validates and parses the current state as JSXText
+
+    parseJSXText(): N.Expression {
+      const startPos = this.state.start;
+      for (let idx = 0; idx < this.state.value.length; idx += 1) {
+        const character = this.state.value[idx];
+        if (character === "}") {
+          this.raise(
+            startPos + idx,
+            `Unexpected token \`}\`. Did you mean \`{'}'}\`?`,
+          );
+        } else if (character === ">") {
+          this.raise(
+            startPos + idx,
+            `Unexpected token \`>\`. Did you mean \`{'>'}\`?`,
+          );
+        }
+      }
+
+      return this.parseLiteral(this.state.value, "JSXText");
+    }
+
     // ==================================
     // Overrides
     // ==================================
 
     parseExprAtom(refExpressionErrors: ?ExpressionErrors): N.Expression {
       if (this.match(tt.jsxText)) {
-        return this.parseLiteral(this.state.value, "JSXText");
+        return this.parseJSXText();
       } else if (this.match(tt.jsxTagStart)) {
         return this.jsxParseElement();
       } else if (
