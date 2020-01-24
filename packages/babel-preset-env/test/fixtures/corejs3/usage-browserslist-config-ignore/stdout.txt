@@ -27,13 +27,9 @@ Using plugins:
   transform-async-to-generator { "ios":"10.3", "safari":"10.1" }
   transform-template-literals { "ios":"10.3", "safari":"10.1" }
   transform-function-name { "edge":"16" }
-  transform-block-scoped-functions { "edge":"16" }
   transform-unicode-regex { "ios":"10.3", "safari":"10.1" }
   transform-parameters { "edge":"16" }
-  transform-block-scoping { "edge":"16", "ios":"10.3", "safari":"10.1" }
-  transform-member-expression-literals { "edge":"16" }
-  transform-property-literals { "edge":"16" }
-  transform-reserved-words { "edge":"16" }
+  transform-block-scoping { "ios":"10.3", "safari":"10.1" }
   syntax-dynamic-import { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1", "samsung":"8.2" }
 
 Using polyfills with `usage` option:

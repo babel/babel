@@ -7,6 +7,7 @@
   },
   "proposal-optional-chaining": {
     "chrome": "80",
+    "firefox": "74",
     "safari": "tp",
     "opera": "67"
   },
@@ -152,7 +153,7 @@
   },
   "transform-block-scoped-functions": {
     "chrome": "41",
-    "edge": "79",
+    "edge": "12",
     "firefox": "46",
     "safari": "10",
     "node": "4",
@@ -285,7 +286,7 @@
   },
   "transform-block-scoping": {
     "chrome": "49",
-    "edge": "79",
+    "edge": "14",
     "firefox": "51",
     "safari": "11",
     "node": "6",
@@ -330,7 +331,7 @@
   "transform-member-expression-literals": {
     "chrome": "7",
     "opera": "12",
-    "edge": "79",
+    "edge": "12",
     "firefox": "2",
     "safari": "5.1",
     "node": "0.10",
@@ -344,7 +345,7 @@
   "transform-property-literals": {
     "chrome": "7",
     "opera": "12",
-    "edge": "79",
+    "edge": "12",
     "firefox": "2",
     "safari": "5.1",
     "node": "0.10",
@@ -358,7 +359,7 @@
   "transform-reserved-words": {
     "chrome": "13",
     "opera": "10.50",
-    "edge": "79",
+    "edge": "12",
     "firefox": "2",
     "safari": "3.1",
     "node": "0.10",

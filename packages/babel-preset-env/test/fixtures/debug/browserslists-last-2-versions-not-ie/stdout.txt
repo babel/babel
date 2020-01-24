@@ -26,12 +26,7 @@ Using plugins:
   transform-named-capturing-groups-regex { "edge":"17", "firefox":"71" }
   transform-template-literals { "safari":"12.1" }
   transform-function-name { "edge":"17" }
-  transform-block-scoped-functions { "edge":"17" }
   transform-parameters { "edge":"17" }
-  transform-block-scoping { "edge":"17" }
-  transform-member-expression-literals { "edge":"17" }
-  transform-property-literals { "edge":"17" }
-  transform-reserved-words { "edge":"17" }
   transform-modules-commonjs { "android":"78", "chrome":"78", "edge":"17", "firefox":"71", "ios":"13", "opera":"63", "safari":"12.1", "samsung":"9.2" }
   proposal-dynamic-import { "android":"78", "chrome":"78", "edge":"17", "firefox":"71", "ios":"13", "opera":"63", "safari":"12.1", "samsung":"9.2" }
 

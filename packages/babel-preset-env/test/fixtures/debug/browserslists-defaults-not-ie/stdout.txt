@@ -30,7 +30,7 @@ Using plugins:
   transform-literals { "safari":"5.1" }
   transform-function-name { "chrome":"49", "edge":"17", "safari":"5.1" }
   transform-arrow-functions { "safari":"5.1" }
-  transform-block-scoped-functions { "edge":"17", "safari":"5.1" }
+  transform-block-scoped-functions { "safari":"5.1" }
   transform-classes { "safari":"5.1" }
   transform-object-super { "safari":"5.1" }
   transform-shorthand-properties { "safari":"5.1" }
@@ -42,13 +42,10 @@ Using plugins:
   transform-spread { "safari":"5.1" }
   transform-parameters { "edge":"17", "safari":"5.1" }
   transform-destructuring { "chrome":"49", "safari":"5.1" }
-  transform-block-scoping { "edge":"17", "safari":"5.1" }
+  transform-block-scoping { "safari":"5.1" }
   transform-typeof-symbol { "safari":"5.1" }
   transform-new-target { "safari":"5.1" }
   transform-regenerator { "chrome":"49", "safari":"5.1" }
-  transform-member-expression-literals { "edge":"17" }
-  transform-property-literals { "edge":"17" }
-  transform-reserved-words { "edge":"17" }
   transform-modules-commonjs { "android":"78", "chrome":"49", "edge":"17", "firefox":"68", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
   proposal-dynamic-import { "android":"78", "chrome":"49", "edge":"17", "firefox":"68", "ios":"12.2", "opera":"63", "safari":"5.1", "samsung":"9.2" }
 
