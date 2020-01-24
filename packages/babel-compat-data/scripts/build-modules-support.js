@@ -33,7 +33,7 @@ Object.keys(stats).forEach(browser => {
   }
 });
 
-const dataPath = path.join(__dirname, "../data/built-in-modules.json");
+const dataPath = path.join(__dirname, "../data/native-modules.json");
 const data = {
   "es6.module": allowedBrowsers,
 };
