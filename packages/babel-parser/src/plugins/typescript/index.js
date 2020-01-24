@@ -1831,6 +1831,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       const importNode = super.parseImport(node);
+      /*:: invariant(importNode.type !== "TSImportEqualsDeclaration") */
 
       // `import type` can only be used on imports with named imports or with a
       // default import - but not both
