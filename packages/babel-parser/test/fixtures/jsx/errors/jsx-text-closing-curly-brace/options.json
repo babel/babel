@@ -3,5 +3,5 @@
     "jsx",
     "flow"
   ],
-  "throws": "Unexpected token `}`. Did you mean `{'}'}`? (1:5)"
+  "throws": "Unexpected token `}`. Did you mean `&rbrace;`, or `{'}'}`? (1:5)"
 }
