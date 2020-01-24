@@ -166,6 +166,11 @@ export default declare(
           // remove type imports
           for (let stmt of path.get("body")) {
             if (t.isImportDeclaration(stmt)) {
+              if (stmt.node.importKind === "type") {
+                stmt.remove();
+                continue;
+              }
+
               // Note: this will allow both `import { } from "m"` and `import "m";`.
               // In TypeScript, the former would be elided.
               if (stmt.node.specifiers.length === 0) {
