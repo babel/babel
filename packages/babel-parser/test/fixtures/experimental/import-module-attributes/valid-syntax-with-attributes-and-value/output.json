@@ -1,29 +1,29 @@
 {
   "type": "File",
   "start": 0,
-  "end": 45,
+  "end": 32,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 1,
-      "column": 45
+      "line": 2,
+      "column": 3
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 45,
+    "end": 32,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 1,
-        "column": 45
+        "line": 2,
+        "column": 3
       }
     },
     "sourceType": "module",
@@ -32,7 +32,7 @@
       {
         "type": "ImportDeclaration",
         "start": 0,
-        "end": 45,
+        "end": 28,
         "loc": {
           "start": {
             "line": 1,
@@ -40,90 +40,57 @@
           },
           "end": {
             "line": 1,
-            "column": 45
+            "column": 28
           }
         },
-        "specifiers": [
-          {
-            "type": "ImportDefaultSpecifier",
-            "start": 7,
-            "end": 10,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 7
-              },
-              "end": {
-                "line": 1,
-                "column": 10
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 7,
-              "end": 10,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 7
-                },
-                "end": {
-                  "line": 1,
-                  "column": 10
-                },
-                "identifierName": "foo"
-              },
-              "name": "foo"
-            }
-          }
-        ],
+        "specifiers": [],
         "source": {
           "type": "StringLiteral",
-          "start": 16,
-          "end": 26,
+          "start": 7,
+          "end": 10,
           "loc": {
             "start": {
               "line": 1,
-              "column": 16
+              "column": 7
             },
             "end": {
               "line": 1,
-              "column": 26
+              "column": 10
             }
           },
           "extra": {
-            "rawValue": "foo.json",
-            "raw": "\"foo.json\""
+            "rawValue": "x",
+            "raw": "\"x\""
           },
-          "value": "foo.json"
+          "value": "x"
         },
         "attributes": [
           {
             "type": "ImportAttribute",
-            "start": 32,
-            "end": 44,
+            "start": 16,
+            "end": 28,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 32
+                "column": 16
               },
               "end": {
                 "line": 1,
-                "column": 44
+                "column": 28
               }
             },
             "key": {
               "type": "Identifier",
-              "start": 32,
-              "end": 36,
+              "start": 16,
+              "end": 20,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 32
+                  "column": 16
                 },
                 "end": {
                   "line": 1,
-                  "column": 36
+                  "column": 20
                 },
                 "identifierName": "type"
               },
@@ -131,16 +98,16 @@
             },
             "value": {
               "type": "StringLiteral",
-              "start": 38,
-              "end": 44,
+              "start": 22,
+              "end": 28,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 38
+                  "column": 22
                 },
                 "end": {
                   "line": 1,
-                  "column": 44
+                  "column": 28
                 }
               },
               "extra": {
@@ -151,6 +118,58 @@
             }
           }
         ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 29,
+        "end": 32,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 3
+          }
+        },
+        "expression": {
+          "type": "ArrayExpression",
+          "start": 29,
+          "end": 32,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 0
+            },
+            "end": {
+              "line": 2,
+              "column": 3
+            }
+          },
+          "elements": [
+            {
+              "type": "NumericLiteral",
+              "start": 30,
+              "end": 31,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 1
+                },
+                "end": {
+                  "line": 2,
+                  "column": 2
+                }
+              },
+              "extra": {
+                "rawValue": 0,
+                "raw": "0"
+              },
+              "value": 0
+            }
+          ]
+        }
       }
     ],
     "directives": []

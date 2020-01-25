@@ -869,35 +869,6 @@ export default class ExpressionParser extends LValParser {
     return this.parseSubscripts(this.parseExprAtom(), startPos, startLoc, true);
   }
 
-  /**
-   * Parse a primitive value
-   * primitive values are null, undefined, number, bigint, string, boolean
-   */
-  parsePrimitiveValue(): N.Expression {
-    let node;
-    switch (this.state.type) {
-      case tt.num:
-        return this.parseLiteral(this.state.value, "NumericLiteral");
-
-      case tt.bigint:
-        return this.parseLiteral(this.state.value, "BigIntLiteral");
-
-      case tt.string:
-        return this.parseLiteral(this.state.value, "StringLiteral");
-
-      case tt._null:
-        node = this.startNode();
-        this.next();
-        return this.finishNode(node, "NullLiteral");
-
-      case tt._true:
-      case tt._false:
-        return this.parseBooleanLiteral();
-      default:
-        throw this.unexpected();
-    }
-  }
-
   // Parse an atomic expression — either a single token that is an
   // expression, an expression started by a keyword like `function` or
   // `new`, or an expression wrapped in punctuation like `()`, `[]`,

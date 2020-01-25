@@ -2048,20 +2048,23 @@ export default class StatementParser extends ExpressionParser {
        * import { get } from "axios";
        * but if we do have a default import
        * we need to check if we have a comma after that and
-       * that is where this || this.eat comes into play
+       * that is where this `|| this.eat` condition comes into play
        */
       const parseNext = !hasDefault || this.eat(tt.comma);
-      // if we do have to parse the next set of specifiers, we first check for start imports
+      // if we do have to parse the next set of specifiers, we first check for star imports
       // import React, * from "react";
       const hasStar = parseNext && this.maybeParseStarImportSpecifier(node);
-      // now we check that if we need to parse the next imports
-      // but only if he/she is not importing * which means all
+      // now we check if we need to parse the next imports
+      // but only if they are not importing * (everything)
       if (parseNext && !hasStar) this.parseNamedImportSpecifiers(node);
       this.expectContextual("from");
     }
     node.source = this.parseImportSource();
+    // new proposal
+    // https://github.com/tc39/proposal-module-attributes
+    // parse module attributes if the next token is with or ignore and finish the ImportDeclaration node.
     const attributes = this.maybeParseModuleAttributes();
-    if (Array.isArray(attributes)) {
+    if (attributes) {
       node.attributes = attributes;
     }
     this.semicolon();
@@ -2102,14 +2105,20 @@ export default class StatementParser extends ExpressionParser {
     this.expectPlugin("moduleAttributes");
     const attrs = [];
     do {
+      // we are trying to parse a node which has the following syntax
+      // with type: "json"
+      // [with -> keyword], [type -> Identifier], [":" -> token for colon], ["json" -> StringLiteral]
       const node = this.startNode();
       node.key = this.parseIdentifier();
-      node.computed = false;
-      node.method = false;
-      node.shorthand = false;
       this.expect(tt.colon);
-      node.value = this.parsePrimitiveValue();
-      this.finishNode(node, "ObjectProperty");
+      if (!this.match(tt.string)) {
+        return this.unexpected(
+          this.state.start,
+          "Only string literal values are allowed",
+        );
+      }
+      node.value = this.parseLiteral(this.state.value, "StringLiteral");
+      this.finishNode(node, "ImportAttribute");
       attrs.push(node);
     } while (this.eat(tt.comma));
     return attrs;
