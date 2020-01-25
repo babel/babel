@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "moduleAttributes",
+    "estree"
+  ],
+  "sourceType": "module",
+  "throws": "Unexpected token (2:5)"
+}

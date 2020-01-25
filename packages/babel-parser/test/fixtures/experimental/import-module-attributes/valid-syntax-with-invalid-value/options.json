@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "moduleAttributes"
+  ],
+  "sourceType": "module",
+  "throws": "Only string literal values are allowed (1:52)"
+}
