@@ -6,6 +6,17 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-nullish-coalescing-operator {}
+  proposal-optional-chaining {}
+  proposal-json-strings {}
+  proposal-optional-catch-binding {}
+  proposal-async-generator-functions {}
+  proposal-object-rest-spread {}
+  transform-dotall-regex {}
+  proposal-unicode-property-regex {}
+  transform-named-capturing-groups-regex {}
+  transform-async-to-generator {}
+  transform-exponentiation-operator {}
   transform-template-literals {}
   transform-literals {}
   transform-function-name {}
@@ -18,7 +29,6 @@ Using plugins:
   transform-computed-properties {}
   transform-for-of {}
   transform-sticky-regex {}
-  transform-dotall-regex {}
   transform-unicode-regex {}
   transform-spread {}
   transform-parameters {}
@@ -27,14 +37,6 @@ Using plugins:
   transform-typeof-symbol {}
   transform-new-target {}
   transform-regenerator {}
-  transform-exponentiation-operator {}
-  transform-async-to-generator {}
-  proposal-async-generator-functions {}
-  proposal-object-rest-spread {}
-  proposal-unicode-property-regex {}
-  proposal-json-strings {}
-  proposal-optional-catch-binding {}
-  transform-named-capturing-groups-regex {}
   transform-member-expression-literals {}
   transform-property-literals {}
   transform-reserved-words {}

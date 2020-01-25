@@ -27,6 +27,52 @@ describe("option-manager", () => {
       return { plugin, calls };
     }
 
+    it("should throw when an option is provided as a preset", () => {
+      expect(() => {
+        loadOptions({
+          presets: [
+            "./fixtures/option-manager/babel-preset-bar",
+            { useBuiltIns: "entry" },
+          ],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    it("should throw when an option is provided as a plugin", () => {
+      expect(() => {
+        loadOptions({
+          plugins: [
+            "./fixtures/option-manager/babel-plugin-foo",
+            { useSpread: true },
+          ],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    it("should throw when an option is following a preset", () => {
+      expect(() => {
+        loadOptions({
+          presets: [
+            "./fixtures/option-manager/babel-plugin-foo",
+            "./fixtures/option-manager/babel-preset-bar",
+            { useSpread: true },
+          ],
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
+    it("should not throw when a preset string followed by valid preset object", () => {
+      const { plugin } = makePlugin("my-plugin");
+      expect(
+        loadOptions({
+          presets: [
+            "@babel/env",
+            { plugins: [[plugin, undefined, "my-plugin"]] },
+          ],
+        }),
+      ).toBeTruthy();
+    });
+
     it("should throw if a plugin is repeated, with information about the repeated plugin", () => {
       const { calls, plugin } = makePlugin("my-plugin");
 

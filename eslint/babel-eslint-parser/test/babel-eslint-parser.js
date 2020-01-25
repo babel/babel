@@ -1,5 +1,4 @@
 import assert from "assert";
-import path from "path";
 import espree from "espree";
 import escope from "eslint-scope";
 import unpad from "dedent";
@@ -7,7 +6,9 @@ import { parseForESLint } from "../src";
 import assertImplementsAST from "./helpers/assert-implements-ast";
 
 const babelOptions = {
-  configFile: path.resolve(__dirname, "./fixtures/config/babel.config.js"),
+  configFile: require.resolve(
+    "@babel/eslint-shared-fixtures/config/babel.config.js",
+  ),
 };
 
 function parseAndAssertSame(code) {
@@ -270,7 +271,7 @@ describe("babylon-to-espree", () => {
     assert.strictEqual(babylonAST.tokens[1].type, "Punctuator");
   });
 
-  // Espree doesn't support the private fields yet
+  // Espree doesn't support private fields yet
   it("hash (token)", () => {
     const code = "class A { #x }";
     const babylonAST = parseForESLint(code, {

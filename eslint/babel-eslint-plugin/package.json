@@ -26,14 +26,16 @@
   },
   "homepage": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-plugin",
   "peerDependencies": {
-    "eslint": ">=4.0.0"
+    "@babel/eslint-parser": "0.0.0",
+    "eslint": ">=6.0.0"
   },
   "dependencies": {
     "eslint-rule-composer": "^0.3.0"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.2",
-    "eslint": "^4.19.1",
+    "@babel/eslint-shared-fixtures": "*",
+    "@babel/eslint-parser": "*",
+    "eslint": "^6.0.0",
     "lodash.clonedeep": "^4.5.0"
   }
 }

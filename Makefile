@@ -1,6 +1,6 @@
-FLOW_COMMIT = 09669846b7a7ca5a6c23c12d56bb3bebdafd67e9
-TEST262_COMMIT = 157b18d16b5d52501c4d75ac422d3a80bfad1c17
-TYPESCRIPT_COMMIT = 038d95144d8b93c2799d1732181c89c3d84362d5
+FLOW_COMMIT = a1f9a4c709dcebb27a5084acf47755fbae699c25
+TEST262_COMMIT = 28b4fcca4b1b1d278dfe0cc0e69c7d9d59b31aab
+TYPESCRIPT_COMMIT = 5fc917be2e4dd64c8e9504d36615cd7fbfdd4cd3
 
 FORCE_PUBLISH = "@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@babel/standalone,@babel/preset-env-standalone"
 
@@ -101,7 +101,7 @@ bootstrap-flowcheck: bootstrap-only
 	$(YARN) gulp build-babel-types
 	$(MAKE) build-typings
 
-lint-ci: lint-js-ci lint-ts-ci
+lint-ci: lint-js-ci lint-ts-ci check-compat-data
 
 lint-js-ci: bootstrap-only
 	$(MAKE) lint-js
@@ -124,6 +124,12 @@ fix-js:
 
 fix-json:
 	$(YARN) prettier "{$(COMMA_SEPARATED_SOURCES)}/*/test/fixtures/**/options.json" --write --loglevel warn
+
+check-compat-data:
+	cd packages/babel-compat-data; CHECK_COMPAT_DATA=true $(YARN) run build-data
+
+build-compat-data:
+	cd packages/babel-compat-data; $(YARN) run build-data
 
 clean: test-clean
 	rm -f .npmrc
@@ -212,7 +218,7 @@ prepublish-build: clean-lib clean-runtime-helpers
 prepublish:
 	$(MAKE) bootstrap-only
 	$(MAKE) prepublish-build
-	$(MAKE) test
+	IS_PUBLISH=true $(MAKE) test
 
 new-version:
 	git pull --rebase

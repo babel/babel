@@ -1,5 +1,7 @@
-import loadConfig, { loadPartialConfig } from "../lib/config";
+import loadConfigRunner, { loadPartialConfig } from "../lib/config";
 import path from "path";
+
+const loadConfig = loadConfigRunner.sync;
 
 describe("@babel/core config loading", () => {
   const FILEPATH = path.join(

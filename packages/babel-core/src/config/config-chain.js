@@ -2,6 +2,7 @@
 
 import path from "path";
 import buildDebug from "debug";
+import type { Handler } from "gensync";
 import {
   validate,
   type ValidatedOptions,
@@ -24,7 +25,7 @@ import {
   type FilePackageData,
 } from "./files";
 
-import { makeWeakCache, makeStrongCache } from "./caching";
+import { makeWeakCacheSync, makeStrongCacheSync } from "./caching";
 
 import {
   createCachedDescriptors,
@@ -57,11 +58,11 @@ export type ConfigContext = {
 /**
  * Build a config chain for a given preset.
  */
-export function buildPresetChain(
+export function* buildPresetChain(
   arg: PresetInstance,
   context: *,
-): ConfigChain | null {
-  const chain = buildPresetChainWalker(arg, context);
+): Handler<ConfigChain | null> {
+  const chain = yield* buildPresetChainWalker(arg, context);
   if (!chain) return null;
 
   return {
@@ -82,11 +83,11 @@ export const buildPresetChainWalker: (
   overridesEnv: (preset, index, envName) =>
     loadPresetOverridesEnvDescriptors(preset)(index)(envName),
 });
-const loadPresetDescriptors = makeWeakCache((preset: PresetInstance) =>
+const loadPresetDescriptors = makeWeakCacheSync((preset: PresetInstance) =>
   buildRootDescriptors(preset, preset.alias, createUncachedDescriptors),
 );
-const loadPresetEnvDescriptors = makeWeakCache((preset: PresetInstance) =>
-  makeStrongCache((envName: string) =>
+const loadPresetEnvDescriptors = makeWeakCacheSync((preset: PresetInstance) =>
+  makeStrongCacheSync((envName: string) =>
     buildEnvDescriptors(
       preset,
       preset.alias,
@@ -95,20 +96,21 @@ const loadPresetEnvDescriptors = makeWeakCache((preset: PresetInstance) =>
     ),
   ),
 );
-const loadPresetOverridesDescriptors = makeWeakCache((preset: PresetInstance) =>
-  makeStrongCache((index: number) =>
-    buildOverrideDescriptors(
-      preset,
-      preset.alias,
-      createUncachedDescriptors,
-      index,
-    ),
-  ),
-);
-const loadPresetOverridesEnvDescriptors = makeWeakCache(
+const loadPresetOverridesDescriptors = makeWeakCacheSync(
   (preset: PresetInstance) =>
-    makeStrongCache((index: number) =>
-      makeStrongCache((envName: string) =>
+    makeStrongCacheSync((index: number) =>
+      buildOverrideDescriptors(
+        preset,
+        preset.alias,
+        createUncachedDescriptors,
+        index,
+      ),
+    ),
+);
+const loadPresetOverridesEnvDescriptors = makeWeakCacheSync(
+  (preset: PresetInstance) =>
+    makeStrongCacheSync((index: number) =>
+      makeStrongCacheSync((envName: string) =>
         buildOverrideEnvDescriptors(
           preset,
           preset.alias,
@@ -129,11 +131,11 @@ export type RootConfigChain = ConfigChain & {
 /**
  * Build a config chain for Babel's full root configuration.
  */
-export function buildRootChain(
+export function* buildRootChain(
   opts: ValidatedOptions,
   context: ConfigContext,
-): RootConfigChain | null {
-  const programmaticChain = loadProgrammaticChain(
+): Handler<RootConfigChain | null> {
+  const programmaticChain = yield* loadProgrammaticChain(
     {
       options: opts,
       dirname: context.cwd,
@@ -144,14 +146,18 @@ export function buildRootChain(
 
   let configFile;
   if (typeof opts.configFile === "string") {
-    configFile = loadConfig(
+    configFile = yield* loadConfig(
       opts.configFile,
       context.cwd,
       context.envName,
       context.caller,
     );
   } else if (opts.configFile !== false) {
-    configFile = findRootConfig(context.root, context.envName, context.caller);
+    configFile = yield* findRootConfig(
+      context.root,
+      context.envName,
+      context.caller,
+    );
   }
 
   let { babelrc, babelrcRoots } = opts;
@@ -160,7 +166,7 @@ export function buildRootChain(
   const configFileChain = emptyChain();
   if (configFile) {
     const validatedFile = validateConfigFile(configFile);
-    const result = loadFileChain(validatedFile, context);
+    const result = yield* loadFileChain(validatedFile, context);
     if (!result) return null;
 
     // Allow config files to toggle `.babelrc` resolution on and off and
@@ -178,7 +184,7 @@ export function buildRootChain(
 
   const pkgData =
     typeof context.filename === "string"
-      ? findPackageData(context.filename)
+      ? yield* findPackageData(context.filename)
       : null;
 
   let ignoreFile, babelrcFile;
@@ -189,7 +195,7 @@ export function buildRootChain(
     pkgData &&
     babelrcLoadEnabled(context, pkgData, babelrcRoots, babelrcRootsDirectory)
   ) {
-    ({ ignore: ignoreFile, config: babelrcFile } = findRelativeConfig(
+    ({ ignore: ignoreFile, config: babelrcFile } = yield* findRelativeConfig(
       pkgData,
       context.envName,
       context.caller,
@@ -203,7 +209,10 @@ export function buildRootChain(
     }
 
     if (babelrcFile) {
-      const result = loadFileChain(validateBabelrcFile(babelrcFile), context);
+      const result = yield* loadFileChain(
+        validateBabelrcFile(babelrcFile),
+        context,
+      );
       if (!result) return null;
 
       mergeChain(fileChain, result);
@@ -268,13 +277,15 @@ function babelrcLoadEnabled(
   });
 }
 
-const validateConfigFile = makeWeakCache((file: ConfigFile): ValidatedFile => ({
-  filepath: file.filepath,
-  dirname: file.dirname,
-  options: validate("configfile", file.options),
-}));
+const validateConfigFile = makeWeakCacheSync(
+  (file: ConfigFile): ValidatedFile => ({
+    filepath: file.filepath,
+    dirname: file.dirname,
+    options: validate("configfile", file.options),
+  }),
+);
 
-const validateBabelrcFile = makeWeakCache(
+const validateBabelrcFile = makeWeakCacheSync(
   (file: ConfigFile): ValidatedFile => ({
     filepath: file.filepath,
     dirname: file.dirname,
@@ -282,11 +293,13 @@ const validateBabelrcFile = makeWeakCache(
   }),
 );
 
-const validateExtendFile = makeWeakCache((file: ConfigFile): ValidatedFile => ({
-  filepath: file.filepath,
-  dirname: file.dirname,
-  options: validate("extendsfile", file.options),
-}));
+const validateExtendFile = makeWeakCacheSync(
+  (file: ConfigFile): ValidatedFile => ({
+    filepath: file.filepath,
+    dirname: file.dirname,
+    options: validate("extendsfile", file.options),
+  }),
+);
 
 /**
  * Build a config chain for just the programmatic options passed into Babel.
@@ -317,11 +330,11 @@ const loadFileChain = makeChainWalker({
   overridesEnv: (file, index, envName) =>
     loadFileOverridesEnvDescriptors(file)(index)(envName),
 });
-const loadFileDescriptors = makeWeakCache((file: ValidatedFile) =>
+const loadFileDescriptors = makeWeakCacheSync((file: ValidatedFile) =>
   buildRootDescriptors(file, file.filepath, createUncachedDescriptors),
 );
-const loadFileEnvDescriptors = makeWeakCache((file: ValidatedFile) =>
-  makeStrongCache((envName: string) =>
+const loadFileEnvDescriptors = makeWeakCacheSync((file: ValidatedFile) =>
+  makeStrongCacheSync((envName: string) =>
     buildEnvDescriptors(
       file,
       file.filepath,
@@ -330,8 +343,8 @@ const loadFileEnvDescriptors = makeWeakCache((file: ValidatedFile) =>
     ),
   ),
 );
-const loadFileOverridesDescriptors = makeWeakCache((file: ValidatedFile) =>
-  makeStrongCache((index: number) =>
+const loadFileOverridesDescriptors = makeWeakCacheSync((file: ValidatedFile) =>
+  makeStrongCacheSync((index: number) =>
     buildOverrideDescriptors(
       file,
       file.filepath,
@@ -340,18 +353,19 @@ const loadFileOverridesDescriptors = makeWeakCache((file: ValidatedFile) =>
     ),
   ),
 );
-const loadFileOverridesEnvDescriptors = makeWeakCache((file: ValidatedFile) =>
-  makeStrongCache((index: number) =>
-    makeStrongCache((envName: string) =>
-      buildOverrideEnvDescriptors(
-        file,
-        file.filepath,
-        createUncachedDescriptors,
-        index,
-        envName,
+const loadFileOverridesEnvDescriptors = makeWeakCacheSync(
+  (file: ValidatedFile) =>
+    makeStrongCacheSync((index: number) =>
+      makeStrongCacheSync((envName: string) =>
+        buildOverrideEnvDescriptors(
+          file,
+          file.filepath,
+          createUncachedDescriptors,
+          index,
+          envName,
+        ),
       ),
     ),
-  ),
 );
 
 function buildRootDescriptors({ dirname, options }, alias, descriptors) {
@@ -410,8 +424,12 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
   env: (ArgT, string) => OptionsAndDescriptors | null,
   overrides: (ArgT, number) => OptionsAndDescriptors,
   overridesEnv: (ArgT, number, string) => OptionsAndDescriptors | null,
-}): (ArgT, ConfigContext, Set<ConfigFile> | void) => ConfigChain | null {
-  return (input, context, files = new Set()) => {
+}): (
+  ArgT,
+  ConfigContext,
+  Set<ConfigFile> | void,
+) => Handler<ConfigChain | null> {
+  return function*(input, context, files = new Set()) {
     const { dirname } = input;
 
     const flattenedConfigs = [];
@@ -455,7 +473,9 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
     const chain = emptyChain();
 
     for (const op of flattenedConfigs) {
-      if (!mergeExtendsChain(chain, op.options, dirname, context, files)) {
+      if (
+        !(yield* mergeExtendsChain(chain, op.options, dirname, context, files))
+      ) {
         return null;
       }
 
@@ -465,16 +485,16 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
   };
 }
 
-function mergeExtendsChain(
+function* mergeExtendsChain(
   chain: ConfigChain,
   opts: ValidatedOptions,
   dirname: string,
   context: ConfigContext,
   files: Set<ConfigFile>,
-): boolean {
+): Handler<boolean> {
   if (opts.extends === undefined) return true;
 
-  const file = loadConfig(
+  const file = yield* loadConfig(
     opts.extends,
     dirname,
     context.envName,
@@ -490,7 +510,11 @@ function mergeExtendsChain(
   }
 
   files.add(file);
-  const fileChain = loadFileChain(validateExtendFile(file), context, files);
+  const fileChain = yield* loadFileChain(
+    validateExtendFile(file),
+    context,
+    files,
+  );
   files.delete(file);
 
   if (!fileChain) return false;

@@ -97,7 +97,14 @@ export function validatePluginObject(obj: {}): PluginObject {
     };
 
     if (validator) validator(optLoc, obj[key]);
-    else throw new Error(`.${key} is not a valid Plugin property`);
+    else {
+      const invalidPluginPropertyError = new Error(
+        `.${key} is not a valid Plugin property`,
+      );
+      // $FlowIgnore
+      invalidPluginPropertyError.code = "BABEL_UNKNOWN_PLUGIN_PROPERTY";
+      throw invalidPluginPropertyError;
+    }
   });
 
   return (obj: any);

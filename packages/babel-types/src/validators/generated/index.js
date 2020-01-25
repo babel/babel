@@ -781,11 +781,11 @@ export function isClassBody(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isClassDeclaration(node: ?Object, opts?: Object): boolean {
+export function isClassExpression(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
-  if (nodeType === "ClassDeclaration") {
+  if (nodeType === "ClassExpression") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -795,11 +795,11 @@ export function isClassDeclaration(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isClassExpression(node: ?Object, opts?: Object): boolean {
+export function isClassDeclaration(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
-  if (nodeType === "ClassExpression") {
+  if (nodeType === "ClassDeclaration") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -3499,8 +3499,8 @@ export function isScopable(node: ?Object, opts?: Object): boolean {
     "SwitchStatement" === nodeType ||
     "WhileStatement" === nodeType ||
     "ArrowFunctionExpression" === nodeType ||
-    "ClassDeclaration" === nodeType ||
     "ClassExpression" === nodeType ||
+    "ClassDeclaration" === nodeType ||
     "ForOfStatement" === nodeType ||
     "ClassMethod" === nodeType ||
     "ClassPrivateMethod" === nodeType ||
@@ -3847,8 +3847,8 @@ export function isPureish(node: ?Object, opts?: Object): boolean {
     "NullLiteral" === nodeType ||
     "BooleanLiteral" === nodeType ||
     "ArrowFunctionExpression" === nodeType ||
-    "ClassDeclaration" === nodeType ||
     "ClassExpression" === nodeType ||
+    "ClassDeclaration" === nodeType ||
     "BigIntLiteral" === nodeType ||
     (nodeType === "Placeholder" && "StringLiteral" === node.expectedNode)
   ) {
@@ -3887,6 +3887,7 @@ export function isDeclaration(node: ?Object, opts?: Object): boolean {
     "InterfaceDeclaration" === nodeType ||
     "OpaqueType" === nodeType ||
     "TypeAlias" === nodeType ||
+    "EnumDeclaration" === nodeType ||
     "TSDeclareFunction" === nodeType ||
     "TSInterfaceDeclaration" === nodeType ||
     "TSTypeAliasDeclaration" === nodeType ||
@@ -4149,8 +4150,8 @@ export function isClass(node: ?Object, opts?: Object): boolean {
   const nodeType = node.type;
   if (
     nodeType === "Class" ||
-    "ClassDeclaration" === nodeType ||
-    "ClassExpression" === nodeType
+    "ClassExpression" === nodeType ||
+    "ClassDeclaration" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;

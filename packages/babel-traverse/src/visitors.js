@@ -227,6 +227,11 @@ function wrapWithStateOrWrapper(oldVisitor, state, wrapper: ?Function) {
         newFn = wrapper(state.key, key, newFn);
       }
 
+      // Override toString in case this function is printed, we want to print the wrapped function, same as we do in `wrapCheck`
+      if (newFn !== fn) {
+        newFn.toString = () => fn.toString();
+      }
+
       return newFn;
     });
 

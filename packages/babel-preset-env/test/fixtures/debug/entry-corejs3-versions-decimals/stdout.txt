@@ -19,6 +19,17 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-nullish-coalescing-operator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  proposal-optional-chaining { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  proposal-json-strings { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  proposal-optional-catch-binding { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  proposal-async-generator-functions { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  proposal-object-rest-spread { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  transform-dotall-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  proposal-unicode-property-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  transform-named-capturing-groups-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  transform-async-to-generator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  transform-exponentiation-operator { "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-template-literals { "ie":"10" }
   transform-literals { "ie":"10" }
   transform-function-name { "electron":"0.36", "ie":"10", "node":"6.1" }
@@ -31,7 +42,6 @@ Using plugins:
   transform-computed-properties { "ie":"10" }
   transform-for-of { "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-sticky-regex { "electron":"0.36", "ie":"10" }
-  transform-dotall-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-unicode-regex { "electron":"0.36", "ie":"10" }
   transform-spread { "ie":"10" }
   transform-parameters { "electron":"0.36", "ie":"10" }
@@ -40,14 +50,6 @@ Using plugins:
   transform-typeof-symbol { "ie":"10" }
   transform-new-target { "ie":"10" }
   transform-regenerator { "electron":"0.36", "ie":"10" }
-  transform-exponentiation-operator { "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-async-to-generator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  proposal-async-generator-functions { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  proposal-object-rest-spread { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  proposal-unicode-property-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  proposal-json-strings { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  proposal-optional-catch-binding { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-named-capturing-groups-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-member-expression-literals { "electron":"0.36" }
   transform-property-literals { "electron":"0.36" }
   transform-modules-commonjs { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
@@ -72,21 +74,26 @@ Using polyfills with `entry` option:
   es.symbol.unscopables { "ie":"10" }
   es.array.concat { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.copy-within { "ie":"10" }
+  es.array.every { "electron":"0.36", "ie":"10" }
   es.array.fill { "ie":"10" }
   es.array.filter { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.find { "ie":"10" }
   es.array.find-index { "ie":"10" }
   es.array.flat { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.flat-map { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.for-each { "electron":"0.36", "ie":"10" }
   es.array.from { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.includes { "electron":"0.36", "ie":"10", "node":"6.1" }
-  es.array.index-of { "electron":"0.36", "node":"6.1" }
+  es.array.index-of { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.iterator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.join { "ie":"10" }
-  es.array.last-index-of { "electron":"0.36", "node":"6.1" }
+  es.array.last-index-of { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.map { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.of { "ie":"10" }
+  es.array.reduce { "electron":"0.36", "ie":"10" }
+  es.array.reduce-right { "electron":"0.36", "ie":"10" }
   es.array.slice { "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.array.some { "electron":"0.36", "ie":"10" }
   es.array.sort { "chrome":"54", "electron":"0.36", "node":"6.1" }
   es.array.species { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.array.splice { "electron":"0.36", "ie":"10", "node":"6.1" }

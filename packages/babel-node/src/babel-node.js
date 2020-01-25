@@ -92,7 +92,7 @@ getV8Flags(function(err, v8Flags) {
         if (signal) {
           process.kill(process.pid, signal);
         } else {
-          process.exit(code);
+          process.exitCode = code;
         }
       });
     });

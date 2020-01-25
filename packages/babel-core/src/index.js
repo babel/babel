@@ -15,7 +15,14 @@ export { default as template } from "@babel/template";
 
 export { createConfigItem } from "./config/item";
 
-export { loadPartialConfig, loadOptions } from "./config";
+export {
+  loadPartialConfig,
+  loadPartialConfigSync,
+  loadPartialConfigAsync,
+  loadOptions,
+  loadOptionsSync,
+  loadOptionsAsync,
+} from "./config";
 
 export { transform, transformSync, transformAsync } from "./transform";
 export {

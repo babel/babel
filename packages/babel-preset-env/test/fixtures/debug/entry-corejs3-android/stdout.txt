@@ -8,6 +8,17 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-nullish-coalescing-operator { "android":"4" }
+  proposal-optional-chaining { "android":"4" }
+  proposal-json-strings { "android":"4" }
+  proposal-optional-catch-binding { "android":"4" }
+  proposal-async-generator-functions { "android":"4" }
+  proposal-object-rest-spread { "android":"4" }
+  transform-dotall-regex { "android":"4" }
+  proposal-unicode-property-regex { "android":"4" }
+  transform-named-capturing-groups-regex { "android":"4" }
+  transform-async-to-generator { "android":"4" }
+  transform-exponentiation-operator { "android":"4" }
   transform-template-literals { "android":"4" }
   transform-literals { "android":"4" }
   transform-function-name { "android":"4" }
@@ -20,7 +31,6 @@ Using plugins:
   transform-computed-properties { "android":"4" }
   transform-for-of { "android":"4" }
   transform-sticky-regex { "android":"4" }
-  transform-dotall-regex { "android":"4" }
   transform-unicode-regex { "android":"4" }
   transform-spread { "android":"4" }
   transform-parameters { "android":"4" }
@@ -29,14 +39,6 @@ Using plugins:
   transform-typeof-symbol { "android":"4" }
   transform-new-target { "android":"4" }
   transform-regenerator { "android":"4" }
-  transform-exponentiation-operator { "android":"4" }
-  transform-async-to-generator { "android":"4" }
-  proposal-async-generator-functions { "android":"4" }
-  proposal-object-rest-spread { "android":"4" }
-  proposal-unicode-property-regex { "android":"4" }
-  proposal-json-strings { "android":"4" }
-  proposal-optional-catch-binding { "android":"4" }
-  transform-named-capturing-groups-regex { "android":"4" }
   transform-reserved-words { "android":"4" }
   transform-modules-commonjs { "android":"4" }
   proposal-dynamic-import { "android":"4" }
@@ -78,7 +80,6 @@ Using polyfills with `entry` option:
   es.array.of { "android":"4" }
   es.array.reduce { "android":"4" }
   es.array.reduce-right { "android":"4" }
-  es.array.reverse { "android":"4" }
   es.array.slice { "android":"4" }
   es.array.some { "android":"4" }
   es.array.sort { "android":"4" }
@@ -93,9 +94,7 @@ Using polyfills with `entry` option:
   es.date.to-iso-string { "android":"4" }
   es.date.to-json { "android":"4" }
   es.date.to-primitive { "android":"4" }
-  es.date.to-string { "android":"4" }
   es.function.has-instance { "android":"4" }
-  es.function.name { "android":"4" }
   es.json.to-string-tag { "android":"4" }
   es.map { "android":"4" }
   es.math.acosh { "android":"4" }
@@ -189,19 +188,6 @@ Using polyfills with `entry` option:
   es.string.trim { "android":"4" }
   es.string.trim-end { "android":"4" }
   es.string.trim-start { "android":"4" }
-  es.string.anchor { "android":"4" }
-  es.string.big { "android":"4" }
-  es.string.blink { "android":"4" }
-  es.string.bold { "android":"4" }
-  es.string.fixed { "android":"4" }
-  es.string.fontcolor { "android":"4" }
-  es.string.fontsize { "android":"4" }
-  es.string.italics { "android":"4" }
-  es.string.link { "android":"4" }
-  es.string.small { "android":"4" }
-  es.string.strike { "android":"4" }
-  es.string.sub { "android":"4" }
-  es.string.sup { "android":"4" }
   es.typed-array.float32-array { "android":"4" }
   es.typed-array.float64-array { "android":"4" }
   es.typed-array.int8-array { "android":"4" }

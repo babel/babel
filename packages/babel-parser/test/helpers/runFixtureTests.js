@@ -1,5 +1,3 @@
-/* global BigInt */
-
 import { multiple as getFixtures } from "@babel/helper-fixtures";
 import { codeFrameColumns } from "@babel/code-frame";
 import fs from "fs";

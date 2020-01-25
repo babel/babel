@@ -40,7 +40,7 @@
           },
           "end": {
             "line": 2,
-            "column": 17
+            "column": 8
           }
         },
         "expression": {
@@ -54,7 +54,7 @@
             },
             "end": {
               "line": 2,
-              "column": 15
+              "column": 6
             }
           },
           "extra": {

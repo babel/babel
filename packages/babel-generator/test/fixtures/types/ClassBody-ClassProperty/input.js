@@ -28,9 +28,9 @@ class Foo {
   foo = 0; bar = 1;
 
   #foo;
-  #foo = 1;
-  static #foo;
-  static #foo = Foo.#foo;
+  #foo2 = 1;
+  static #foo3;
+  static #foo4 = Foo.#foo;
 }
 
 class A1 {

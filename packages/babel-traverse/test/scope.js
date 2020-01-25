@@ -289,6 +289,20 @@ describe("scope", () => {
         column: 32,
       });
     });
+
+    it("class identifier available in class scope after crawl", function() {
+      const path = getPath("class a { build() { return new a(); } }");
+
+      path.scope.crawl();
+
+      let referencePaths = path.scope.bindings.a.referencePaths;
+      expect(referencePaths).toHaveLength(1);
+
+      referencePaths = path.get("body[0]").scope.bindings.a.referencePaths;
+      expect(referencePaths).toHaveLength(1);
+
+      expect(path.scope.bindings.a).toBe(path.get("body[0]").scope.bindings.a);
+    });
   });
 
   describe("duplicate bindings", () => {

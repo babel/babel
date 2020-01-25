@@ -108,4 +108,4 @@ console.log("Cleaning up");
 fs.removeSync(tempFolderPath);
 fs.removeSync(packPath);
 
-process.exit(errorOccurred ? 1 : 0);
+process.exitCode = errorOccurred ? 1 : 0;

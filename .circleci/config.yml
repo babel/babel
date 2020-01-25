@@ -48,6 +48,11 @@ executors:
     docker:
       - image: circleci/node:13
     working_directory: ~/babel
+  # e2e-vue-cli test requires chromium
+  node-browsers-executor:
+    docker:
+      - image: circleci/node:13-browsers
+    working_directory: ~/babel
 
 jobs:
   build-standalone:
@@ -153,6 +158,14 @@ jobs:
           at: /tmp/verdaccio-workspace
       - run: ./scripts/integration-tests/e2e-create-react-app.sh
 
+  e2e-vue-cli:
+    executor: node-browsers-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/verdaccio-workspace
+      - run: ./scripts/integration-tests/e2e-vue-cli.sh
+
 workflows:
   version: 2
   build-standalone:
@@ -189,3 +202,7 @@ workflows:
       - e2e-create-react-app:
           requires:
             - publish-verdaccio
+      - e2e-vue-cli:
+          requires:
+            - publish-verdaccio
+

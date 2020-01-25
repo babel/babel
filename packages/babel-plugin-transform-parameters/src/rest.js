@@ -155,6 +155,16 @@ const memberExpressionOptimisationVisitor = {
     }
   },
 };
+
+function getParamsCount(node) {
+  let count = node.params.length;
+  // skip the first parameter if it is a TypeScript 'this parameter'
+  if (count > 0 && t.isIdentifier(node.params[0], { name: "this" })) {
+    count -= 1;
+  }
+  return count;
+}
+
 function hasRest(node) {
   const length = node.params.length;
   return length > 0 && t.isRestElement(node.params[length - 1]);
@@ -244,10 +254,12 @@ export default function convertFunctionRest(path) {
     node.body.body.unshift(declar);
   }
 
+  const paramsCount = getParamsCount(node);
+
   // check and optimise for extremely common cases
   const state = {
     references: [],
-    offset: node.params.length,
+    offset: paramsCount,
 
     argumentsNode: argsId,
     outerBinding: scope.getBindingIdentifier(rest.name),
@@ -297,12 +309,12 @@ export default function convertFunctionRest(path) {
     state.candidates.map(({ path }) => path),
   );
 
-  const start = t.numericLiteral(node.params.length);
+  const start = t.numericLiteral(paramsCount);
   const key = scope.generateUidIdentifier("key");
   const len = scope.generateUidIdentifier("len");
 
   let arrKey, arrLen;
-  if (node.params.length) {
+  if (paramsCount) {
     // this method has additional params, so we need to subtract
     // the index of the current argument position from the
     // position in the array that we want to populate

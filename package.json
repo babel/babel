@@ -39,7 +39,6 @@
     "derequire": "^2.0.2",
     "enhanced-resolve": "^3.0.0",
     "eslint": "^6.0.1",
-    "eslint-config-babel": "^9.0.0",
     "eslint-import-resolver-node": "^0.3.2",
     "eslint-plugin-flowtype": "^3.8.2",
     "eslint-plugin-import": "^2.17.2",

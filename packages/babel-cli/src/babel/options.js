@@ -160,6 +160,15 @@ commander.option(
   "--delete-dir-on-start",
   "Delete the out directory before compilation.",
 );
+commander.option(
+  "--out-file-extension [string]",
+  "Use a specific extension for the output files",
+);
+
+commander.option(
+  "--copy-ignored",
+  "Include ignored files when copying non-compilable files.",
+);
 
 commander.version(pkg.version + " (@babel/core " + version + ")");
 commander.usage("[options] <files ...>");
@@ -237,6 +246,12 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     );
   }
 
+  if (commander.keepFileExtension && commander.outFileExtension) {
+    errors.push(
+      "--out-file-extension cannot be used with --keep-file-extension",
+    );
+  }
+
   if (errors.length) {
     console.error("babel:");
     errors.forEach(function(e) {
@@ -293,6 +308,7 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
       filenames,
       extensions: opts.extensions,
       keepFileExtension: opts.keepFileExtension,
+      outFileExtension: opts.outFileExtension,
       watch: opts.watch,
       skipInitialBuild: opts.skipInitialBuild,
       outFile: opts.outFile,
@@ -304,6 +320,7 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
       quiet: opts.quiet,
       deleteDirOnStart: opts.deleteDirOnStart,
       sourceMapTarget: opts.sourceMapTarget,
+      copyIgnored: opts.copyIgnored,
     },
   };
 }

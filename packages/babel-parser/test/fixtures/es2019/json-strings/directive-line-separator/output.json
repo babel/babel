@@ -41,7 +41,7 @@
           },
           "end": {
             "line": 2,
-            "column": 15
+            "column": 7
           }
         },
         "value": {
@@ -55,7 +55,7 @@
             },
             "end": {
               "line": 2,
-              "column": 14
+              "column": 6
             }
           },
           "value": "before after",

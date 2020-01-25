@@ -34,7 +34,7 @@ module.exports = {
     "no-inner-declarations": "off",
     "no-labels": "off",
     "no-loop-func": "off",
-    "no-process-exit": "off",
+    "no-process-exit": "error",
     "no-return-assign": "off",
     "no-shadow": "off",
     "no-underscore-dangle": "off",

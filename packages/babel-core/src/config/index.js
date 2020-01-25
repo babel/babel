@@ -1,6 +1,7 @@
 // @flow
 
-import loadFullConfig from "./full";
+import gensync from "gensync";
+
 export type {
   ResolvedConfig,
   InputOptions,
@@ -8,12 +9,29 @@ export type {
   Plugin,
 } from "./full";
 
+import loadFullConfig from "./full";
+import { loadPartialConfig as loadPartialConfigRunner } from "./partial";
+
 export { loadFullConfig as default };
-export { loadPartialConfig } from "./partial";
 export type { PartialConfig } from "./partial";
 
-export function loadOptions(opts: {}): Object | null {
-  const config = loadFullConfig(opts);
-
+const loadOptionsRunner = gensync<[mixed], Object | null>(function*(opts) {
+  const config = yield* loadFullConfig(opts);
   return config ? config.options : null;
-}
+});
+
+const maybeErrback = runner => (opts: mixed, callback: Function) => {
+  if (callback === undefined && typeof opts === "function") {
+    callback = opts;
+    opts = undefined;
+  }
+  return callback ? runner.errback(opts, callback) : runner.sync(opts);
+};
+
+export const loadPartialConfig = maybeErrback(loadPartialConfigRunner);
+export const loadPartialConfigSync = loadPartialConfigRunner.sync;
+export const loadPartialConfigAsync = loadPartialConfigRunner.async;
+
+export const loadOptions = maybeErrback(loadOptionsRunner);
+export const loadOptionsSync = loadOptionsRunner.sync;
+export const loadOptionsAsync = loadOptionsRunner.async;

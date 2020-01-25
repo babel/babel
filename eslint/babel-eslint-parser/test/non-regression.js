@@ -23,9 +23,8 @@ function verifyAndAssertMessagesWithSpecificESLint(
       sourceType,
       requireConfigFile: false,
       babelOptions: {
-        configFile: path.resolve(
-          __dirname,
-          "./fixtures/config/babel.config.js",
+        configFile: require.resolve(
+          "@babel/eslint-shared-fixtures/config/babel.config.js",
         ),
       },
       ...overrideConfig?.parserOptions,
@@ -1157,9 +1156,8 @@ describe("verify", () => {
         parserOptions: {
           sourceType,
           babelOptions: {
-            configFile: path.resolve(
-              __dirname,
-              "./fixtures/config/babel.config.decorators-legacy.js",
+            configFile: require.resolve(
+              "@babel/eslint-shared-fixtures/config/babel.config.decorators-legacy.js",
             ),
           },
         },
@@ -1763,27 +1761,77 @@ describe("verify", () => {
     );
   });
 
-  describe("private class properties", () => {
-    it("should not be undefined", () => {
-      verifyAndAssertMessages(
-        `
-            class C {
-              #d = 1;
-            }
-        `,
-        { "no-undef": 1 },
-      );
+  describe("class field declarations", () => {
+    describe("field declarations", () => {
+      it("should not be undefined", () => {
+        verifyAndAssertMessages(
+          `
+              class C {
+                d = 1;
+              }
+          `,
+          { "no-undef": 1 },
+        );
+      });
+
+      it("should not be unused", () => {
+        verifyAndAssertMessages(
+          `
+              export class C {
+                d = 1;
+              }
+          `,
+          { "no-unused-vars": 1 },
+        );
+      });
     });
 
-    it("should not be unused", () => {
-      verifyAndAssertMessages(
-        `
-            export class C {
-              #d = 1;
-            }
-        `,
-        { "no-unused-vars": 1 },
-      );
+    describe("private field declarations", () => {
+      it("should not be undefined", () => {
+        verifyAndAssertMessages(
+          `
+              class C {
+                #d = 1;
+              }
+          `,
+          { "no-undef": 1 },
+        );
+      });
+
+      it("should not be unused", () => {
+        verifyAndAssertMessages(
+          `
+              export class C {
+                #d = 1;
+              }
+          `,
+          { "no-unused-vars": 1 },
+        );
+      });
+    });
+
+    describe("private methods", () => {
+      it("should not be undefined", () => {
+        verifyAndAssertMessages(
+          `
+              class C {
+                #d() {};
+              }
+          `,
+          { "no-undef": 1 },
+        );
+      });
+
+      it("should not be unused", () => {
+        verifyAndAssertMessages(
+          `
+              export class C {
+                #d() {};
+              }
+          `,
+          { "no-unused-vars": 1 },
+        );
+      });
     });
   });
 
@@ -1849,6 +1897,22 @@ describe("verify", () => {
     verifyAndAssertMessages(
       `
         class A { #a = 1; }
+      `,
+    );
+  });
+
+  it("works with classPrivateMethods", () => {
+    verifyAndAssertMessages(
+      `
+        class A { #a(b, c) {} }
+      `,
+    );
+  });
+
+  it("works with arrow function classPrivateProperties", () => {
+    verifyAndAssertMessages(
+      `
+        class A { #a = (a, b) => {}; }
       `,
     );
   });

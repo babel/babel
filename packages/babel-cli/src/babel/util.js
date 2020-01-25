@@ -127,12 +127,7 @@ export function requireChokidar(): Object {
   }
 }
 
-export function adjustRelative(
-  relative: string,
-  keepFileExtension: boolean,
-): string {
-  if (keepFileExtension) {
-    return relative;
-  }
-  return relative.replace(/\.(\w*?)$/, "") + ".js";
+export function withExtension(filename: string, ext: string = ".js") {
+  const newBasename = path.basename(filename, path.extname(filename)) + ext;
+  return path.join(path.dirname(filename), newBasename);
 }

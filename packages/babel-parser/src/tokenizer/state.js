@@ -5,7 +5,6 @@ import * as N from "../types";
 import { Position } from "../util/location";
 
 import { types as ct, type TokContext } from "./context";
-import type { Token } from "./index";
 import { types as tt, type TokenType } from "./types";
 
 type TopicContextState = {
@@ -77,9 +76,6 @@ export default class State {
   soloAwait: boolean = false;
   inFSharpPipelineDirectBody: boolean = false;
 
-  // Check whether we are in a (nested) class or not.
-  classLevel: number = 0;
-
   // Labels in scope.
   labels: Array<{
     kind: ?("loop" | "switch"),
@@ -95,9 +91,6 @@ export default class State {
   // Positions to delayed-check that yield/await does not exist in default parameters.
   yieldPos: number = -1;
   awaitPos: number = -1;
-
-  // Token store.
-  tokens: Array<Token | N.Comment> = [];
 
   // Comment store.
   comments: Array<N.Comment> = [];
@@ -155,6 +148,9 @@ export default class State {
   // Names of exports store. `default` is stored as a name for both
   // `export default foo;` and `export { foo as default };`.
   exportedIdentifiers: Array<string> = [];
+
+  // Tokens length in token store
+  tokensLength: number = 0;
 
   curPosition(): Position {
     return new Position(this.curLine, this.pos - this.lineStart);

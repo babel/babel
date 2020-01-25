@@ -14,6 +14,10 @@ module.exports = function(api) {
 
   let convertESM = true;
   let ignoreLib = true;
+  let includeRegeneratorRuntime = false;
+
+  let transformRuntimeOptions;
+
   const nodeVersion = "6.9";
   // The vast majority of our src files are modules, but we use
   // unambiguous to keep things simple until we get around to renaming
@@ -29,27 +33,19 @@ module.exports = function(api) {
 
   switch (env) {
     // Configs used during bundling builds.
+    case "standalone":
+      includeRegeneratorRuntime = true;
+      unambiguousSources.push("packages/babel-runtime/regenerator");
     case "rollup":
       convertESM = false;
       ignoreLib = false;
       // rollup-commonjs will converts node_modules to ESM
       unambiguousSources.push(
         "**/node_modules",
-        // todo: remove this after it is rewritten into ESM
-        "packages/babel-preset-env/data"
+        "packages/babel-preset-env/data",
+        "packages/babel-compat-data"
       );
-      envOpts.targets = {
-        node: nodeVersion,
-      };
-      break;
-    case "standalone":
-      convertESM = false;
-      ignoreLib = false;
-      unambiguousSources.push(
-        "**/node_modules",
-        "packages/babel-preset-env/data"
-      );
-      // targets to browserslists: defaults
+      if (env === "rollup") envOpts.targets = { node: nodeVersion };
       break;
     case "production":
       // Config during builds before publish.
@@ -68,6 +64,16 @@ module.exports = function(api) {
         node: "current",
       };
       break;
+  }
+
+  if (includeRegeneratorRuntime) {
+    const babelRuntimePkgPath = require.resolve("@babel/runtime/package.json");
+
+    transformRuntimeOptions = {
+      helpers: false, // Helpers are handled by rollup when needed
+      regenerator: true,
+      version: require(babelRuntimePkgPath).version,
+    };
   }
 
   const config = {
@@ -101,6 +107,10 @@ module.exports = function(api) {
       ["@babel/plugin-proposal-nullish-coalescing-operator", { loose: true }],
 
       convertESM ? "@babel/transform-modules-commonjs" : null,
+      // Until Jest supports native mjs, we must simulate it 🤷
+      env === "test" || env === "development"
+        ? "@babel/plugin-proposal-dynamic-import"
+        : null,
     ].filter(Boolean),
     overrides: [
       {
@@ -126,6 +136,10 @@ module.exports = function(api) {
       {
         test: unambiguousSources,
         sourceType: "unambiguous",
+      },
+      includeRegeneratorRuntime && {
+        exclude: /regenerator-runtime/,
+        plugins: [["@babel/transform-runtime", transformRuntimeOptions]],
       },
     ].filter(Boolean),
   };
