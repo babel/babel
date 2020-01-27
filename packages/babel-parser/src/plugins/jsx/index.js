@@ -115,7 +115,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               this.state.pos,
               `Unexpected token \`${
                 this.input[this.state.pos]
-              }\`. Did you mean \`${htmlEntity}\`, or \`{'${
+              }\`. Did you mean \`${htmlEntity}\` or \`{'${
                 this.input[this.state.pos]
               }'}\`?`,
             );
