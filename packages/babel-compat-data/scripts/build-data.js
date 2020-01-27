@@ -234,12 +234,8 @@ const getLowestImplementedVersion = ({ features }, env) => {
   }
 
   return envFiltered.reduce((a, b) => {
-    if (
-      a.semver === unreleasedLabelForEnv ||
-      b.semver === unreleasedLabelForEnv
-    ) {
-      return unreleasedLabelForEnv;
-    }
+    if (a.semver === unreleasedLabelForEnv) return a;
+    if (b.semver === unreleasedLabelForEnv) return b;
 
     return semver.lt(a.semver, b.semver) ? b : a;
   });
