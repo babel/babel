@@ -19,6 +19,10 @@
   },
   "devDependencies": {
     "@babel/core": "^7.8.3",
-    "@babel/helper-plugin-test-runner": "^7.8.3"
+    "@babel/helper-plugin-test-runner": "^7.8.3",
+    "@babel/runtime": "^7.8.3",
+    "@babel/runtime-corejs2": "^7.8.3",
+    "@babel/runtime-corejs3": "^7.8.3",
+    "resolve": "^1.15.0"
   }
 }

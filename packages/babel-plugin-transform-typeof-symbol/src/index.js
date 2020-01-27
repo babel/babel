@@ -36,8 +36,23 @@ export default declare(api => {
           }
         }
 
+        let isUnderHelper = path.findParent(path => {
+          if (path.isFunction()) {
+            return (
+              path.get("body.directives.0")?.node.value.value ===
+              "@babel/helpers - typeof"
+            );
+          }
+        });
+
+        if (isUnderHelper) return;
+
         const helper = this.addHelper("typeof");
-        const isUnderHelper = path.findParent(path => {
+
+        // TODO: This is needed for backward compatibility with
+        // @babel/helpers <= 7.8.3.
+        // Remove in Babel 8
+        isUnderHelper = path.findParent(path => {
           return (
             (path.isVariableDeclarator() && path.node.id === helper) ||
             (path.isFunctionDeclaration() &&
