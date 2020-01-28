@@ -66,7 +66,7 @@
     "browserslist": "^4.8.5",
     "core-js-compat": "^3.6.2",
     "invariant": "^2.2.2",
-    "levenary": "^1.1.0",
+    "levenary": "^1.1.1",
     "semver": "^5.5.0"
   },
   "peerDependencies": {
