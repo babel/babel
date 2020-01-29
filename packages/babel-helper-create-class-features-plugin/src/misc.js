@@ -25,22 +25,23 @@ const referenceVisitor = {
     }
   },
 };
+function handleClassTDZ(path) {
+  if (
+    this.classBinding &&
+    this.classBinding === path.scope.getBinding(path.node.name)
+  ) {
+    const classNameTDZError = this.file.addHelper("classNameTDZError");
+    const throwNode = t.callExpression(classNameTDZError, [
+      t.stringLiteral(path.node.name),
+    ]);
+
+    path.replaceWith(t.sequenceExpression([throwNode, path.node]));
+    path.skip();
+  }
+}
 
 const classFieldDefinitionEvaluationTDZVisitor = {
-  ReferencedIdentifier(path) {
-    if (
-      this.classBinding &&
-      this.classBinding === path.scope.getBinding(path.node.name)
-    ) {
-      const classNameTDZError = this.file.addHelper("classNameTDZError");
-      const throwNode = t.callExpression(classNameTDZError, [
-        t.stringLiteral(path.node.name),
-      ]);
-
-      path.replaceWith(t.sequenceExpression([throwNode, path.node]));
-      path.skip();
-    }
-  },
+  ReferencedIdentifier: handleClassTDZ,
 };
 
 export function injectInitialization(path, constructor, nodes, renamer) {
@@ -81,19 +82,17 @@ export function injectInitialization(path, constructor, nodes, renamer) {
 
 export function extractComputedKeys(ref, path, computedPaths, file) {
   const declarations = [];
-
   for (const computedPath of computedPaths) {
     if (computedPath.get("key").isReferencedIdentifier()) {
-      classFieldDefinitionEvaluationTDZVisitor.ReferencedIdentifier.call(
-        computedPath.get("key"),
-        {
-          classBinding:
-            path.node.id && path.scope.getBinding(path.node.id.name),
-          file,
-        },
-      );
+      handleClassTDZ(computedPath.get("key"), {
+        classBinding: path.node.id && path.scope.getBinding(path.node.id.name),
+        file,
+      });
     }
-    computedPath.get("key").traverse(classFieldDefinitionEvaluationTDZVisitor);
+    computedPath.get("key").traverse(classFieldDefinitionEvaluationTDZVisitor, {
+      classBinding: path.node.id && path.scope.getBinding(path.node.id.name),
+      file,
+    });
 
     const computedNode = computedPath.node;
     // Make sure computed property names are only evaluated once (upon class definition)
