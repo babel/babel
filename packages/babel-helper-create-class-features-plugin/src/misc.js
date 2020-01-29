@@ -25,12 +25,12 @@ const referenceVisitor = {
     }
   },
 };
-function handleClassTDZ(path) {
+function handleClassTDZ(path, state) {
   if (
-    this.classBinding &&
-    this.classBinding === path.scope.getBinding(path.node.name)
+    state.classBinding &&
+    state.classBinding === path.scope.getBinding(path.node.name)
   ) {
-    const classNameTDZError = this.file.addHelper("classNameTDZError");
+    const classNameTDZError = state.file.addHelper("classNameTDZError");
     const throwNode = t.callExpression(classNameTDZError, [
       t.stringLiteral(path.node.name),
     ]);
