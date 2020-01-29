@@ -81,6 +81,14 @@ getBindingIdentifiers.keys = {
   TypeAlias: ["id"],
   OpaqueType: ["id"],
 
+  TSDeclareFunction: ["id"],
+  TSEnumDeclaration: ["id"],
+  TSImportEqualsDeclaration: ["id"],
+  TSInterfaceDeclaration: ["id"],
+  TSModuleDeclaration: ["id"],
+  TSNamespaceExportDeclaration: ["id"],
+  TSTypeAliasDeclaration: ["id"],
+
   CatchClause: ["param"],
   LabeledStatement: ["label"],
   UnaryExpression: ["argument"],

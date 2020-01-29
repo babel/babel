@@ -188,6 +188,64 @@ describe("scope", () => {
       ).toBe("ImportSpecifier");
     });
 
+    it("typescript declare function", function() {
+      expect(
+        getPath("declare function test(): void", {
+          plugins: ["typescript"],
+        }).scope.getBinding("test").path.type,
+      ).toBe("TSDeclareFunction");
+    });
+
+    it("typescript enum", function() {
+      expect(
+        getPath("enum Foo {a, b}", {
+          plugins: ["typescript"],
+        }).scope.getBinding("Foo").path.type,
+      ).toBe("TSEnumDeclaration");
+    });
+
+    it("typescript import equals", function() {
+      expect(
+        getPath("import foo = require('foo')", {
+          plugins: ["typescript"],
+          sourceType: "module",
+        }).scope.getBinding("foo").path.type,
+      ).toBe("TSImportEqualsDeclaration");
+    });
+
+    it("typescript interface declarations", function() {
+      expect(
+        getPath("interface Foo { a: string }", {
+          plugins: ["typescript"],
+        }).scope.getBinding("Foo").path.type,
+      ).toBe("TSInterfaceDeclaration");
+    });
+
+    it("typescript module declarations", function() {
+      expect(
+        getPath("module foo {}", {
+          plugins: ["typescript"],
+        }).scope.getBinding("foo").path.type,
+      ).toBe("TSModuleDeclaration");
+    });
+
+    it("typescript namespace exports", function() {
+      expect(
+        getPath("export as namespace Foo", {
+          plugins: ["typescript"],
+          sourceType: "module",
+        }).scope.getBinding("Foo").path.type,
+      ).toBe("TSNamespaceExportDeclaration");
+    });
+
+    it("typescript type aliases", function() {
+      expect(
+        getPath("type Foo = string", {
+          plugins: ["typescript"],
+        }).scope.getBinding("Foo").path.type,
+      ).toBe("TSTypeAliasDeclaration");
+    });
+
     it("variable constantness", function() {
       expect(getPath("var a = 1;").scope.getBinding("a").constant).toBe(true);
       expect(getPath("var a = 1; a = 2;").scope.getBinding("a").constant).toBe(
