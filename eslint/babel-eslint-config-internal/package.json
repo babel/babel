@@ -9,7 +9,7 @@
   "repository": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-config-internal",
   "main": "lib/index.js",
   "peerDependencies": {
-    "babel-eslint": "^10.0.0 || ^11.0.0-0",
+    "@babel/eslint-parser": "0.0.0",
     "eslint-plugin-flowtype": "^3.0.0"
   }
 }

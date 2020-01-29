@@ -15,7 +15,7 @@
   },
   "main": "lib/index.js",
   "devDependencies": {
-    "eslint": "^5.9.0"
+    "eslint": "^6.0.0"
   },
   "engines": {
     "node": ">=10.9"
