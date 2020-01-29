@@ -595,6 +595,7 @@
     "android": "4.1",
     "ios": "9",
     "samsung": "1.5",
+    "opera": "15",
     "electron": "0.2"
   },
   "es6.number.is-integer": {
@@ -617,6 +618,7 @@
     "android": "4.1",
     "ios": "9",
     "samsung": "1.5",
+    "opera": "15",
     "electron": "0.2"
   },
   "es6.number.is-safe-integer": {
@@ -868,6 +870,7 @@
     "android": "4.1",
     "ios": "9",
     "samsung": "1.5",
+    "opera": "15",
     "electron": "0.2"
   },
   "es6.object.is-frozen": {
@@ -1233,6 +1236,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
+    "opera": "15",
     "electron": "1.1"
   },
   "es6.string.big": {
@@ -1245,6 +1249,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
+    "opera": "15",
     "electron": "1.1"
   },
   "es6.string.blink": {
@@ -1257,6 +1262,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
+    "opera": "15",
     "electron": "1.1"
   },
   "es6.string.bold": {
@@ -1269,6 +1275,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
+    "opera": "15",
     "electron": "1.1"
   },
   "es6.string.code-point-at": {
@@ -1303,6 +1310,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
+    "opera": "15",
     "electron": "1.1"
   },
   "es6.string.fontcolor": {
@@ -1315,6 +1323,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
+    "opera": "15",
     "electron": "1.1"
   },
   "es6.string.fontsize": {
@@ -1327,6 +1336,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
+    "opera": "15",
     "electron": "1.1"
   },
   "es6.string.from-code-point": {
@@ -1361,6 +1371,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
+    "opera": "15",
     "electron": "1.1"
   },
   "es6.string.iterator": {
@@ -1384,6 +1395,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
+    "opera": "15",
     "electron": "1.1"
   },
   "es7.string.pad-start": {
@@ -1440,6 +1452,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
+    "opera": "15",
     "electron": "1.1"
   },
   "es6.string.starts-with": {
@@ -1463,6 +1476,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
+    "opera": "15",
     "electron": "1.1"
   },
   "es6.string.sub": {
@@ -1475,6 +1489,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
+    "opera": "15",
     "electron": "1.1"
   },
   "es6.string.sup": {
@@ -1487,6 +1502,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
+    "opera": "15",
     "electron": "1.1"
   },
   "es6.string.trim": {
