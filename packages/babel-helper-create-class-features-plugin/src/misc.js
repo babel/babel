@@ -26,25 +26,22 @@ const referenceVisitor = {
   },
 };
 
-const classFieldDefinitionEvaluationTDZVisitor = traverse.visitors.merge([
-  {
-    ReferencedIdentifier(path) {
-      if (
-        this.classBinding &&
-        this.classBinding === path.scope.getBinding(path.node.name)
-      ) {
-        const classNameTDZError = this.file.addHelper("classNameTDZError");
-        const throwNode = t.callExpression(classNameTDZError, [
-          t.stringLiteral(path.node.name),
-        ]);
+const classFieldDefinitionEvaluationTDZVisitor = {
+  ReferencedIdentifier(path) {
+    if (
+      this.classBinding &&
+      this.classBinding === path.scope.getBinding(path.node.name)
+    ) {
+      const classNameTDZError = this.file.addHelper("classNameTDZError");
+      const throwNode = t.callExpression(classNameTDZError, [
+        t.stringLiteral(path.node.name),
+      ]);
 
-        path.replaceWith(t.sequenceExpression([throwNode, path.node]));
-        path.skip();
-      }
-    },
+      path.replaceWith(t.sequenceExpression([throwNode, path.node]));
+      path.skip();
+    }
   },
-  environmentVisitor,
-]);
+};
 
 export function injectInitialization(path, constructor, nodes, renamer) {
   if (!nodes.length) return;
@@ -86,10 +83,17 @@ export function extractComputedKeys(ref, path, computedPaths, file) {
   const declarations = [];
 
   for (const computedPath of computedPaths) {
-    computedPath.traverse(classFieldDefinitionEvaluationTDZVisitor, {
-      classBinding: path.node.id && path.scope.getBinding(path.node.id.name),
-      file,
-    });
+    if (computedPath.get("key").isReferencedIdentifier()) {
+      classFieldDefinitionEvaluationTDZVisitor.ReferencedIdentifier.call(
+        computedPath.get("key"),
+        {
+          classBinding:
+            path.node.id && path.scope.getBinding(path.node.id.name),
+          file,
+        },
+      );
+    }
+    computedPath.get("key").traverse(classFieldDefinitionEvaluationTDZVisitor);
 
     const computedNode = computedPath.node;
     // Make sure computed property names are only evaluated once (upon class definition)
