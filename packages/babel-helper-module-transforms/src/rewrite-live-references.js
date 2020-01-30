@@ -306,4 +306,32 @@ const rewriteReferencesVisitor = {
       }
     },
   },
+  ForOfStatement(path) {
+    const { scope, node } = path;
+    const { body } = node
+    const { exported } = this
+
+    //TODO: Handle case where the loop identifier has the same name as the exported variable but is actually different
+    // Example:
+    // export let foo = 3;
+    // while(true) {
+    //   let foo = 3;
+    //   // don't transpile this
+    //   for (foo of [1, 2, 3]) {}
+    // }
+    if (node.left.type === 'Identifier' && exported.get(node.left.name)) {
+      const oldLoopVarName = node.left.name
+      const newLoopVarId = scope.generateUidIdentifier(oldLoopVarName)
+      const assign = t.assignmentExpression('=', node.left, newLoopVarId)
+      const block = t.toBlock(body)
+      block.body.unshift(assign)
+      path.replaceWith(
+        t.forOfStatement(
+          t.variableDeclaration('let', [t.variableDeclarator(newLoopVarId)]),
+          node.right,
+          block
+        )
+      )
+    }
+  }
 };
