@@ -21,6 +21,8 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 <!-- insert-new-changelog-here -->
 ## v7.8.4 (2020-01-30)
 
+> :warning: In Babel 7.8.0 we introduced the `--copy-ignored` option for `@babel/cli`, defaulting to `false`. However, previous versions behaved as if that option was present: for this reason, we changed its default value to `true` (when `--copy-files` is provided) and introduced a `--no-copy-ignored` option to disable it.
+
 #### :eyeglasses: Spec Compliance
 * `babel-parser`
   * [#11031](https://github.com/babel/babel/pull/11031) fix: properly parse member expression after property initializer ([@vedantroy](https://github.com/vedantroy))
