@@ -4,9 +4,9 @@
     "--out-dir",
     "lib",
     "--copy-files",
-    "--ignore",
-    "src/foo",
-    "--copy-ignored",
+    "--only",
+    "src/foo/*",
+    "--no-copy-ignored",
     "--verbose"
   ]
 }
