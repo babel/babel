@@ -308,30 +308,40 @@ const rewriteReferencesVisitor = {
   },
   ForOfStatement(path) {
     const { scope, node } = path;
-    const { body } = node
-    const { exported } = this
+    const { body } = node;
+    const { exported, scope: programScope, metadata } = this;
 
-    //TODO: Handle case where the loop identifier has the same name as the exported variable but is actually different
-    // Example:
-    // export let foo = 3;
-    // while(true) {
-    //   let foo = 3;
-    //   // don't transpile this
-    //   for (foo of [1, 2, 3]) {}
-    // }
-    if (node.left.type === 'Identifier' && exported.get(node.left.name)) {
-      const oldLoopVarName = node.left.name
-      const newLoopVarId = scope.generateUidIdentifier(oldLoopVarName)
-      const assign = t.assignmentExpression('=', node.left, newLoopVarId)
-      const block = t.toBlock(body)
-      block.body.unshift(assign)
+    if (
+      t.isIdentifier(path.node.left) &&
+      exported.get(node.left.name) &&
+      // Ensure the exported variable is not re-declared in this scope
+      programScope.getBinding(path.node.left.name) ===
+        scope.getBinding(path.node.left.name)
+    ) {
+      const oldLoopVarName = node.left.name;
+      const newLoopVarId = scope.generateUidIdentifier(oldLoopVarName);
+      let assignmentExpr;
+      if (path.get("body").scope.hasOwnBinding(oldLoopVarName)) {
+        // exported variable is re-declared in loop body, we need to manually build the exported assignment
+        assignmentExpr = buildBindingExportAssignmentExpression(
+          metadata,
+          exported.get(oldLoopVarName),
+          newLoopVarId,
+        );
+      } else {
+        // transform for "(foo of []) {}" into "(_foo of []) {foo = _foo}", babel will handle exporting later
+        assignmentExpr = t.assignmentExpression("=", node.left, newLoopVarId);
+      }
+
+      const block = t.toBlock(body);
+      block.body.unshift(assignmentExpr);
       path.replaceWith(
         t.forOfStatement(
-          t.variableDeclaration('let', [t.variableDeclarator(newLoopVarId)]),
+          t.variableDeclaration("let", [t.variableDeclarator(newLoopVarId)]),
           node.right,
-          block
-        )
-      )
+          block,
+        ),
+      );
     }
-  }
+  },
 };
