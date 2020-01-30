@@ -469,6 +469,10 @@ export function StringTypeAnnotation(...args: Array<any>): Object {
   return builder("StringTypeAnnotation", ...args);
 }
 export { StringTypeAnnotation as stringTypeAnnotation };
+export function SymbolTypeAnnotation(...args: Array<any>): Object {
+  return builder("SymbolTypeAnnotation", ...args);
+}
+export { SymbolTypeAnnotation as symbolTypeAnnotation };
 export function ThisTypeAnnotation(...args: Array<any>): Object {
   return builder("ThisTypeAnnotation", ...args);
 }

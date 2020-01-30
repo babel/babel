@@ -524,6 +524,12 @@ export function assertStringTypeAnnotation(
 ): void {
   assert("StringTypeAnnotation", node, opts);
 }
+export function assertSymbolTypeAnnotation(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("SymbolTypeAnnotation", node, opts);
+}
 export function assertThisTypeAnnotation(
   node: Object,
   opts?: Object = {},
