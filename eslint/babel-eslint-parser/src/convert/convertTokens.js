@@ -1,6 +1,97 @@
 import { tokTypes as tt } from "@babel/core";
 
-export default function(token, source) {
+function convertTemplateType(tokens) {
+  let curlyBrace = null;
+  let templateTokens = [];
+  const result = [];
+
+  function addTemplateType() {
+    const start = templateTokens[0];
+    const end = templateTokens[templateTokens.length - 1];
+
+    const value = templateTokens.reduce((result, token) => {
+      if (token.value) {
+        result += token.value;
+      } else if (token.type !== tt.template) {
+        result += token.type.label;
+      }
+
+      return result;
+    }, "");
+
+    result.push({
+      type: "Template",
+      value: value,
+      start: start.start,
+      end: end.end,
+      loc: {
+        start: start.loc.start,
+        end: end.loc.end,
+      },
+    });
+
+    templateTokens = [];
+  }
+
+  tokens.forEach(token => {
+    switch (token.type) {
+      case tt.backQuote:
+        if (curlyBrace) {
+          result.push(curlyBrace);
+          curlyBrace = null;
+        }
+
+        templateTokens.push(token);
+
+        if (templateTokens.length > 1) {
+          addTemplateType();
+        }
+
+        break;
+
+      case tt.dollarBraceL:
+        templateTokens.push(token);
+        addTemplateType();
+        break;
+
+      case tt.braceR:
+        if (curlyBrace) {
+          result.push(curlyBrace);
+        }
+
+        curlyBrace = token;
+        break;
+
+      case tt.template:
+        if (curlyBrace) {
+          templateTokens.push(curlyBrace);
+          curlyBrace = null;
+        }
+
+        templateTokens.push(token);
+        break;
+
+      case tt.eof:
+        if (curlyBrace) {
+          result.push(curlyBrace);
+        }
+
+        break;
+
+      default:
+        if (curlyBrace) {
+          result.push(curlyBrace);
+          curlyBrace = null;
+        }
+
+        result.push(token);
+    }
+  });
+
+  return result;
+}
+
+function convertToken(token, source) {
   const type = token.type;
   token.range = [token.start, token.end];
 
@@ -85,4 +176,10 @@ export default function(token, source) {
   }
 
   return token;
+}
+
+export default function convertTokens(tokens, code) {
+  return convertTemplateType(tokens)
+    .filter(t => t.type !== "CommentLine" && t.type !== "CommentBlock")
+    .map(t => convertToken(t, code));
 }

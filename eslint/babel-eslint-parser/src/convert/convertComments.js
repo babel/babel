@@ -1,4 +1,4 @@
-export default function(comments) {
+export default function convertComments(comments) {
   for (let i = 0; i < comments.length; i++) {
     const comment = comments[i];
     if (comment.type === "CommentBlock") {
