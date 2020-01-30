@@ -308,7 +308,6 @@ const rewriteReferencesVisitor = {
   },
   ForOfStatement(path) {
     const { scope, node } = path;
-    const { body } = node;
     const { exported, scope: programScope, metadata } = this;
 
     if (
@@ -333,15 +332,12 @@ const rewriteReferencesVisitor = {
         assignmentExpr = t.assignmentExpression("=", node.left, newLoopVarId);
       }
 
-      const block = t.toBlock(body);
-      block.body.unshift(assignmentExpr);
-      path.replaceWith(
-        t.forOfStatement(
+      path
+        .get("left")
+        .replaceWith(
           t.variableDeclaration("let", [t.variableDeclarator(newLoopVarId)]),
-          node.right,
-          block,
-        ),
-      );
+        );
+      path.get("body").unshiftContainer("body", assignmentExpr);
     }
   },
 };
