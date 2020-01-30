@@ -19,6 +19,65 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.8.4 (2020-01-30)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#11031](https://github.com/babel/babel/pull/11031) fix: properly parse member expression after property initializer ([@vedantroy](https://github.com/vedantroy))
+  * [#11017](https://github.com/babel/babel/pull/11017) Update coalesce precedence ([@JLHwung](https://github.com/JLHwung))
+  * [#11009](https://github.com/babel/babel/pull/11009) fix: triple `__proto__` in object patterns should be allowed ([@JLHwung](https://github.com/JLHwung))
+  * [#10987](https://github.com/babel/babel/pull/10987) Duplicate `__proto__` key should be allowed in object patterns ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-cli`
+  * [#11063](https://github.com/babel/babel/pull/11063) [@babel/cli] Copy ignored files by default ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-compat-data`
+  * [#11066](https://github.com/babel/babel/pull/11066) Fix core-js 2 builtin data for opera ([@danez](https://github.com/danez))
+* `babel-helpers`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-classes`, `babel-plugin-transform-parameters`, `babel-plugin-transform-typeof-symbol`, `babel-preset-env`
+  * [#11049](https://github.com/babel/babel/pull/11049) Avoid compiling the _typeof helper with itself ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-traverse`
+  * [#11011](https://github.com/babel/babel/pull/11011) Bug/missing references after crawl ([@regiontog](https://github.com/regiontog))
+* `babel-plugin-transform-parameters`
+  * [#9714](https://github.com/babel/babel/pull/9714) Fix rest parameters indexing with TypeScript 'this parameter' ([@BenoitZugmeyer](https://github.com/BenoitZugmeyer))
+* `babel-plugin-transform-for-of`
+  * [#11023](https://github.com/babel/babel/pull/11023) fix: for-of transform should skip for-await-of ([@JLHwung](https://github.com/JLHwung))
+* `babel-compat-data`, `babel-preset-env`
+  * [#11016](https://github.com/babel/babel/pull/11016) Re-generate preset-env fixtures ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`
+  * [#11014](https://github.com/babel/babel/pull/11014) Fix parentheses removal in nullish-coalescing operation ([@sidntrivedi012](https://github.com/sidntrivedi012))
+* `babel-helper-compilation-targets`
+  * [#11006](https://github.com/babel/babel/pull/11006) fix: supply '.' subpath for backward compatibility with node.js 13.0-13.1 ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-core`
+  * [#10969](https://github.com/babel/babel/pull/10969) polish: throw human-friendly error when item-option pair is incorrectly unwrapped ([@JLHwung](https://github.com/JLHwung))
+
+#### :memo: Documentation
+* `babel-parser`
+  * [#11015](https://github.com/babel/babel/pull/11015) add AST for the module attribute proposal ([@xtuc](https://github.com/xtuc))
+
+#### :house: Internal
+* `babel-compat-data`
+  * [#11039](https://github.com/babel/babel/pull/11039) Update compat table ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#11041](https://github.com/babel/babel/pull/11041) Delete duplicated file in `@babel/compat-data` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#10814](https://github.com/babel/babel/pull/10814) chore: map mobile browser data to their desktop version ([@JLHwung](https://github.com/JLHwung))
+  * [#11024](https://github.com/babel/babel/pull/11024) Check that generated compat-data is up to date on CI ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#11032](https://github.com/babel/babel/pull/11032) refactor: simplify toAssignable routine ([@JLHwung](https://github.com/JLHwung))
+  * [#11026](https://github.com/babel/babel/pull/11026) chore: use @babel/eslint-config-internal ([@JLHwung](https://github.com/JLHwung))
+* `babel-preset-env`
+  * [#11030](https://github.com/babel/babel/pull/11030) update compat-data related docs/config [skip ci] ([@JLHwung](https://github.com/JLHwung))
+* `babel-compat-data`, `babel-node`, `babel-parser`, `babel-preset-env`
+  * [#11025](https://github.com/babel/babel/pull/11025) Enable `no-process-exit` ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#11021](https://github.com/babel/babel/pull/11021) chore: replace yarn-upgrade by bump-babel-dependencies in vuejs e2e tests ([@JLHwung](https://github.com/JLHwung))
+  * [#11004](https://github.com/babel/babel/pull/11004) chore: test against @vue/babel-preset-app ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#10995](https://github.com/babel/babel/pull/10995) Exclude `import()` tests from pubilsh build ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-parser`
+  * [#11029](https://github.com/babel/babel/pull/11029) fix(babel-parser): avoid state.clone() to clone the whole token store ([@3cp](https://github.com/3cp))
 ## v7.8.3 (2020-01-13)
 
 #### :bug: Bug Fix
