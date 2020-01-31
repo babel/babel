@@ -21,6 +21,10 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 <!-- insert-new-changelog-here -->
 ## v7.8.5 (2020-01-31)
 
+#### :bug: Bug Fix
+* `babel-compat-data`
+  * [#11078](https://github.com/babel/babel/pull/11078) Do not publish build directory of compat-data ([@danez](https://github.com/danez))
+
 #### :house: Internal
 * [#11071](https://github.com/babel/babel/pull/11071) Further refactoring of @babel/eslint-parser ([@kaicataldo](https://github.com/kaicataldo))
 ## v7.8.4 (2020-01-30)
