@@ -19,6 +19,10 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.8.5 (2020-01-31)
+
+#### :house: Internal
+* [#11071](https://github.com/babel/babel/pull/11071) Further refactoring of @babel/eslint-parser ([@kaicataldo](https://github.com/kaicataldo))
 ## v7.8.4 (2020-01-30)
 
 > :warning: In Babel 7.8.0 we introduced the `--copy-ignored` option for `@babel/cli`, defaulting to `false`. However, previous versions behaved as if that option was present: for this reason, we changed its default value to `true` (when `--copy-files` is provided) and introduced a `--no-copy-ignored` option to disable it.
