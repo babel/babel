@@ -306,38 +306,70 @@ const rewriteReferencesVisitor = {
       }
     },
   },
-  ForOfStatement(path) {
+  "ForOfStatement|ForInStatement"(path) {
     const { scope, node } = path;
+    const { left } = node;
     const { exported, scope: programScope, metadata } = this;
-
+    let newLoopVarExpr;
+    const oldNameNewIdPairs = [];
     if (
-      t.isIdentifier(path.node.left) &&
-      exported.get(node.left.name) &&
+      t.isIdentifier(left) &&
+      exported.get(left.name) &&
       // Ensure the exported variable is not re-declared in this scope
-      programScope.getBinding(path.node.left.name) ===
-        scope.getBinding(path.node.left.name)
+      programScope.getBinding(left.name) === scope.getBinding(left.name)
     ) {
-      const oldLoopVarName = node.left.name;
+      const oldLoopVarName = left.name;
       const newLoopVarId = scope.generateUidIdentifier(oldLoopVarName);
-      let assignmentExpr;
-      if (path.get("body").scope.hasOwnBinding(oldLoopVarName)) {
+      newLoopVarExpr = newLoopVarId;
+      //TODO: is cloneNode needed?
+      oldNameNewIdPairs.push([oldLoopVarName, t.cloneNode(newLoopVarId)]);
+    } else if (t.isObjectPattern(left)) {
+      // TODO: Do I need to handle computed properties?
+      const newProps = [];
+      for (const prop of left.properties) {
+        if (
+          t.isIdentifier(prop.key) &&
+          exported.get(prop.key.name) &&
+          programScope.getBinding(prop.key.name) ===
+            scope.getBinding(prop.key.name)
+        ) {
+          const oldLoopVarName = prop.key.name;
+          const id = scope.generateUidIdentifier(oldLoopVarName);
+          newProps.push(t.objectProperty(t.identifier(oldLoopVarName), id));
+          //TODO: is cloneNode needed?
+          oldNameNewIdPairs.push([oldLoopVarName, t.cloneNode(id)]);
+        } else {
+          newProps.push(prop);
+        }
+      }
+      const newObjectPattern = t.objectPattern(newProps);
+      newLoopVarExpr = newObjectPattern;
+    } else {
+      return;
+    }
+    path
+      .get("left")
+      .replaceWith(
+        t.variableDeclaration("let", [t.variableDeclarator(newLoopVarExpr)]),
+      );
+    const assignExprs = [];
+    for (const [name, newId] of oldNameNewIdPairs) {
+      if (path.get("body").scope.hasOwnBinding(name)) {
         // exported variable is re-declared in loop body, we need to manually build the exported assignment
-        assignmentExpr = buildBindingExportAssignmentExpression(
-          metadata,
-          exported.get(oldLoopVarName),
-          newLoopVarId,
+        assignExprs.push(
+          buildBindingExportAssignmentExpression(
+            metadata,
+            exported.get(name),
+            newId,
+          ),
         );
       } else {
         // transform for "(foo of []) {}" into "(_foo of []) {foo = _foo}", babel will handle exporting later
-        assignmentExpr = t.assignmentExpression("=", node.left, newLoopVarId);
-      }
-
-      path
-        .get("left")
-        .replaceWith(
-          t.variableDeclaration("let", [t.variableDeclarator(newLoopVarId)]),
+        assignExprs.push(
+          t.assignmentExpression("=", t.identifier(name), newId),
         );
-      path.get("body").unshiftContainer("body", assignmentExpr);
+      }
     }
+    path.get("body").unshiftContainer("body", assignExprs);
   },
 };
