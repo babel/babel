@@ -268,10 +268,8 @@ bootstrap: bootstrap-only
 	$(MAKE) build
 
 clean-lib:
-	# TODO: Don't delete eslint/*/lib when they use src
 	$(foreach source, $(SOURCES), \
-		$(if $(filter-out $(source), eslint), \
-			$(call clean-source-lib, $(source))))
+		$(call clean-source-lib, $(source)))
 
 clean-runtime-helpers:
 	rm -f packages/babel-runtime/helpers/**/*.js
@@ -307,8 +305,7 @@ define clean-source-test
 endef
 
 define clean-source-all
-	# TODO: Don't delete eslint/*/lib when they use src
-	$(if $(filter-out $1, eslint), $(call clean-source-lib, $1))
+	$(call clean-source-lib, $1)
 	rm -rf $(1)/*/node_modules
 	rm -rf $(1)/*/package-lock.json
 
