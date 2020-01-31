@@ -40,6 +40,7 @@ function skipAllButComputedKey(path) {
   }
 }
 
+// environmentVisitor should be used when traversing the whole class and not for specific class elements/methods.
 export const environmentVisitor = {
   TypeAnnotation(path) {
     path.skip();
