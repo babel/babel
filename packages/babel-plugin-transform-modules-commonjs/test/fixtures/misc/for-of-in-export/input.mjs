@@ -3,29 +3,23 @@ export {foo as bar}
 
 for (foo of []) {}
 
-for (foo of []) {
-    let foo = 3;
-}
 
 for (foo of []) {
-    foo = 3;
+    let foo;
 }
 
-for (foo in {}) {}
-
-for ({foo} of {}) {}
-
-for ({foo, bar} of {}) {
-    let bar = 3;
+for ({foo} of []) {}
+for ({test: {foo}} of []) {
+    let foo;
 }
-
-{
-    let foo = 3;
-    for (foo of []) {}
-}
+for ({foo: bar} of []) {}
 
 let qux;
+for([foo, [...foo], qux] of []) {}
 
-for ([foo] of []) {}
-
-for ([foo, qux, [...foo]] of []) {}
+{
+    for ({foo} of []) {}
+    for({test: {foo}, qux} of []) {}
+    let foo;
+    for({foo} of []) {}
+}

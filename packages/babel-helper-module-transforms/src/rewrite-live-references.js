@@ -309,126 +309,33 @@ const rewriteReferencesVisitor = {
   "ForOfStatement|ForInStatement"(path) {
     const { scope, node } = path;
     const { left } = node;
-    const { exported, scope: programScope, metadata } = this;
-    const oldNameNewIdPairs = [];
-    if (
-      t.isIdentifier(left) &&
-      exported.get(left.name) &&
-      // Ensure the exported variable is not re-declared in this scope
-      programScope.getBinding(left.name) === scope.getBinding(left.name)
-    ) {
-      const oldLoopVarName = left.name;
-      const newLoopVarId = scope.generateUidIdentifier(oldLoopVarName);
-      //TODO: is cloneNode needed?
-      oldNameNewIdPairs.push([oldLoopVarName, t.cloneNode(newLoopVarId)]);
+    const { exported, scope: programScope } = this;
+
+    // if it's a variable declaration, such as for (let {foo} of []) {}
+    // then no transformation is needed
+    if (!t.isVariableDeclaration(left)) {
+      const bodyPath = path.get("body");
+      const loopBodyScope = bodyPath.scope;
+      for (const name of Object.keys(t.getOuterBindingIdentifiers(left))) {
+        if (
+          exported.get(name) &&
+          programScope.getBinding(name) === scope.getBinding(name)
+        ) {
+          if (loopBodyScope.hasOwnBinding(name)) {
+            loopBodyScope.rename(name);
+          }
+        }
+      }
+      const newLoopId = scope.generateUidIdentifier();
+      bodyPath.unshiftContainer(
+        "body",
+        t.expressionStatement(t.assignmentExpression("=", left, newLoopId)),
+      );
       path
         .get("left")
         .replaceWith(
-          t.variableDeclaration("let", [t.variableDeclarator(newLoopVarId)]),
+          t.variableDeclaration("let", [t.variableDeclarator(newLoopId)]),
         );
-    } else if (t.isObjectPattern(left)) {
-      // TODO: Do I need to handle computed properties?
-      let didTransform = false;
-      const newProps = [];
-      for (const prop of left.properties) {
-        if (
-          t.isIdentifier(prop.key) &&
-          exported.get(prop.key.name) &&
-          programScope.getBinding(prop.key.name) ===
-            scope.getBinding(prop.key.name)
-        ) {
-          didTransform = true;
-          const oldLoopVarName = prop.key.name;
-          const id = scope.generateUidIdentifier(oldLoopVarName);
-          newProps.push(t.objectProperty(t.identifier(oldLoopVarName), id));
-          //TODO: is cloneNode needed?
-          oldNameNewIdPairs.push([oldLoopVarName, t.cloneNode(id)]);
-          // necessary so "for ({x : _x} of []) {}" doesn't throw "_x" undefined error
-          path.insertBefore(
-            t.variableDeclaration("let", [t.variableDeclarator(id)]),
-          );
-        } else {
-          newProps.push(prop);
-        }
-      }
-      if (!didTransform) {
-        return;
-      }
-      path.get("left").replaceWith(t.objectPattern(newProps));
-    } else if (t.isArrayPattern(left)) {
-      const renamedVars = new Map();
-      // array patterns are tricky since "[foo, [foo, ...foo]]" is valid
-      // and will update "foo", if it is exported. To solve this, we have a separate recursive function.
-      transformArrayPattern(left, scope, programScope, exported, renamedVars);
-      for (const [oldName, newId] of renamedVars.entries()) {
-        path.insertBefore(
-          t.variableDeclaration("let", [t.variableDeclarator(newId)]),
-        );
-        oldNameNewIdPairs.push([oldName, newId]);
-      }
-    } else {
-      return;
     }
-    const assignExprs = [];
-    for (const [name, newId] of oldNameNewIdPairs) {
-      if (path.get("body").scope.hasOwnBinding(name)) {
-        // exported variable is re-declared in loop body, we need to manually build the exported assignment
-        // example: for(foo of []) { let foo = 42 }
-        assignExprs.push(
-          buildBindingExportAssignmentExpression(
-            metadata,
-            exported.get(name),
-            newId,
-          ),
-        );
-      } else {
-        // transform for "(foo of []) {}" into "(_foo of []) {foo = _foo}", babel will handle exporting later
-        assignExprs.push(
-          t.assignmentExpression("=", t.identifier(name), newId),
-        );
-      }
-    }
-    path.get("body").unshiftContainer("body", assignExprs);
   },
 };
-
-function transformArrayPattern(
-  pattern,
-  scope,
-  programScope,
-  exported,
-  renamedVars, // example: for the pattern [foo, [foo, ...foo]], we want to rename each "foo" to "_foo"
-  // key: the original name "foo", value: identifier object with name "_foo"
-) {
-  for (const element of pattern.elements) {
-    if (t.isArrayPattern(element)) {
-      transformArrayPattern(
-        element,
-        scope,
-        programScope,
-        exported,
-        renamedVars,
-      );
-    } else {
-      const base = t.isIdentifier(element)
-        ? element
-        : t.isRestElement(element)
-        ? element.argument
-        : null;
-      if (base === null) {
-        continue;
-      }
-      const oldName = base.name;
-      if (renamedVars.get(oldName)) {
-        base.name = renamedVars.get(oldName).name;
-      } else if (
-        exported.get(oldName) &&
-        programScope.getBinding(oldName) === scope.getBinding(oldName)
-      ) {
-        const id = scope.generateUidIdentifier(oldName);
-        base.name = id.name;
-        renamedVars.set(oldName, id);
-      }
-    }
-  }
-}
