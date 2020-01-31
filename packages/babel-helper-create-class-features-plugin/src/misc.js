@@ -89,10 +89,11 @@ export function extractComputedKeys(ref, path, computedPaths, file) {
   for (const computedPath of computedPaths) {
     if (computedPath.get("key").isReferencedIdentifier()) {
       handleClassTDZ(computedPath.get("key"), state);
+    } else {
+      computedPath
+        .get("key")
+        .traverse(classFieldDefinitionEvaluationTDZVisitor, state);
     }
-    computedPath
-      .get("key")
-      .traverse(classFieldDefinitionEvaluationTDZVisitor, state);
 
     const computedNode = computedPath.node;
     // Make sure computed property names are only evaluated once (upon class definition)
