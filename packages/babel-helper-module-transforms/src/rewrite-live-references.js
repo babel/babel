@@ -314,6 +314,7 @@ const rewriteReferencesVisitor = {
     // if it's a variable declaration, such as for (let {foo} of []) {}
     // then no transformation is needed
     if (!t.isVariableDeclaration(left)) {
+      let didTransform = false;
       const bodyPath = path.get("body");
       const loopBodyScope = bodyPath.scope;
       for (const name of Object.keys(t.getOuterBindingIdentifiers(left))) {
@@ -321,10 +322,14 @@ const rewriteReferencesVisitor = {
           exported.get(name) &&
           programScope.getBinding(name) === scope.getBinding(name)
         ) {
+          didTransform = true;
           if (loopBodyScope.hasOwnBinding(name)) {
             loopBodyScope.rename(name);
           }
         }
+      }
+      if (!didTransform) {
+        return;
       }
       const newLoopId = scope.generateUidIdentifier();
       bodyPath.unshiftContainer(

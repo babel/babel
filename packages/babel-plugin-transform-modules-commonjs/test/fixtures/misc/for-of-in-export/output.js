@@ -11,64 +11,55 @@ for (let _temp of []) {
   exports.bar = exports.foo = foo = _temp;
 }
 
-for (let _temp2 of []) {
+for (let _temp2 in []) {
   exports.bar = exports.foo = foo = _temp2;
+}
+
+for (let _temp3 of []) {
+  exports.bar = exports.foo = foo = _temp3;
 
   let _foo;
 }
 
-for (let _temp3 of []) {
+for (let _temp4 of []) {
   ({
     foo
-  } = _temp3);
+  } = _temp4);
   exports.bar = exports.foo = foo;
 }
 
-for (let _temp4 of []) {
+for (let _temp5 of []) {
   ({
-    test: {
-      foo
-    }
-  } = _temp4);
+    foo
+  } = _temp5);
   exports.bar = exports.foo = foo;
 
   let _foo2;
 }
 
-for (let _temp5 of []) {
-  ({
-    foo: bar
-  } = _temp5);
-}
-
-let qux;
-
 for (let _temp6 of []) {
-  [foo, [...foo], qux] = _temp6;
+  ({
+    test: {
+      foo
+    }
+  } = _temp6);
   exports.bar = exports.foo = foo;
 }
 
+for (let _temp7 of []) {
+  [foo, [...foo]] = _temp7;
+  exports.bar = exports.foo = foo;
+}
+
+for (let _temp8 of []) {
+  [foo, [...foo]] = _temp8;
+  exports.bar = exports.foo = foo;
+
+  let _foo3;
+}
+
 {
-  for (let _temp7 of []) {
-    ({
-      foo
-    } = _temp7);
-  }
-
-  for (let _temp8 of []) {
-    ({
-      test: {
-        foo
-      },
-      qux
-    } = _temp8);
-  }
-
   let foo;
 
-  for (let _temp9 of []) {
-    ({
-      foo
-    } = _temp9);
-  }
+  for (foo of []) {}
 }
