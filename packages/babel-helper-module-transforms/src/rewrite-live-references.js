@@ -310,7 +310,6 @@ const rewriteReferencesVisitor = {
     const { scope, node } = path;
     const { left } = node;
     const { exported, scope: programScope, metadata } = this;
-    let newLoopVarExpr;
     const oldNameNewIdPairs = [];
     if (
       t.isIdentifier(left) &&
@@ -320,11 +319,16 @@ const rewriteReferencesVisitor = {
     ) {
       const oldLoopVarName = left.name;
       const newLoopVarId = scope.generateUidIdentifier(oldLoopVarName);
-      newLoopVarExpr = newLoopVarId;
       //TODO: is cloneNode needed?
       oldNameNewIdPairs.push([oldLoopVarName, t.cloneNode(newLoopVarId)]);
+      path
+        .get("left")
+        .replaceWith(
+          t.variableDeclaration("let", [t.variableDeclarator(newLoopVarId)]),
+        );
     } else if (t.isObjectPattern(left)) {
       // TODO: Do I need to handle computed properties?
+      let didTransform = false;
       const newProps = [];
       for (const prop of left.properties) {
         if (
@@ -333,29 +337,43 @@ const rewriteReferencesVisitor = {
           programScope.getBinding(prop.key.name) ===
             scope.getBinding(prop.key.name)
         ) {
+          didTransform = true;
           const oldLoopVarName = prop.key.name;
           const id = scope.generateUidIdentifier(oldLoopVarName);
           newProps.push(t.objectProperty(t.identifier(oldLoopVarName), id));
           //TODO: is cloneNode needed?
           oldNameNewIdPairs.push([oldLoopVarName, t.cloneNode(id)]);
+          // necessary so "for ({x : _x} of []) {}" doesn't throw "_x" undefined error
+          path.insertBefore(
+            t.variableDeclaration("let", [t.variableDeclarator(id)]),
+          );
         } else {
           newProps.push(prop);
         }
       }
-      const newObjectPattern = t.objectPattern(newProps);
-      newLoopVarExpr = newObjectPattern;
+      if (!didTransform) {
+        return;
+      }
+      path.get("left").replaceWith(t.objectPattern(newProps));
+    } else if (t.isArrayPattern(left)) {
+      const renamedVars = new Map();
+      // array patterns are tricky since "[foo, [foo, ...foo]]" is valid
+      // and will update "foo", if it is exported. To solve this, we have a separate recursive function.
+      transformArrayPattern(left, scope, programScope, exported, renamedVars);
+      for (const [oldName, newId] of renamedVars.entries()) {
+        path.insertBefore(
+          t.variableDeclaration("let", [t.variableDeclarator(newId)]),
+        );
+        oldNameNewIdPairs.push([oldName, newId]);
+      }
     } else {
       return;
     }
-    path
-      .get("left")
-      .replaceWith(
-        t.variableDeclaration("let", [t.variableDeclarator(newLoopVarExpr)]),
-      );
     const assignExprs = [];
     for (const [name, newId] of oldNameNewIdPairs) {
       if (path.get("body").scope.hasOwnBinding(name)) {
         // exported variable is re-declared in loop body, we need to manually build the exported assignment
+        // example: for(foo of []) { let foo = 42 }
         assignExprs.push(
           buildBindingExportAssignmentExpression(
             metadata,
@@ -373,3 +391,44 @@ const rewriteReferencesVisitor = {
     path.get("body").unshiftContainer("body", assignExprs);
   },
 };
+
+function transformArrayPattern(
+  pattern,
+  scope,
+  programScope,
+  exported,
+  renamedVars, // example: for the pattern [foo, [foo, ...foo]], we want to rename each "foo" to "_foo"
+  // key: the original name "foo", value: identifier object with name "_foo"
+) {
+  for (const element of pattern.elements) {
+    if (t.isArrayPattern(element)) {
+      transformArrayPattern(
+        element,
+        scope,
+        programScope,
+        exported,
+        renamedVars,
+      );
+    } else {
+      const base = t.isIdentifier(element)
+        ? element
+        : t.isRestElement(element)
+        ? element.argument
+        : null;
+      if (base === null) {
+        continue;
+      }
+      const oldName = base.name;
+      if (renamedVars.get(oldName)) {
+        base.name = renamedVars.get(oldName).name;
+      } else if (
+        exported.get(oldName) &&
+        programScope.getBinding(oldName) === scope.getBinding(oldName)
+      ) {
+        const id = scope.generateUidIdentifier(oldName);
+        base.name = id.name;
+        renamedVars.set(oldName, id);
+      }
+    }
+  }
+}
