@@ -7,55 +7,55 @@ exports.bar = exports.foo = void 0;
 let foo;
 exports.bar = exports.foo = foo;
 
-for (let _temp of []) {
-  exports.bar = exports.foo = foo = _temp;
+for (let _foo of []) {
+  exports.bar = exports.foo = foo = _foo;
 }
 
-for (let _temp2 in []) {
-  exports.bar = exports.foo = foo = _temp2;
+for (let _foo2 in []) {
+  exports.bar = exports.foo = foo = _foo2;
 }
 
-for (let _temp3 of []) {
-  exports.bar = exports.foo = foo = _temp3;
+for (let _foo4 of []) {
+  exports.bar = exports.foo = foo = _foo4;
 
-  let _foo;
+  let _foo3;
 }
 
-for (let _temp4 of []) {
+for (let _foo5 of []) {
   ({
     foo
-  } = _temp4);
+  } = _foo5);
   exports.bar = exports.foo = foo;
 }
 
-for (let _temp5 of []) {
+for (let _foo7 of []) {
   ({
     foo
-  } = _temp5);
+  } = _foo7);
   exports.bar = exports.foo = foo;
 
-  let _foo2;
+  let _foo6;
 }
 
-for (let _temp6 of []) {
+for (let _test of []) {
   ({
     test: {
       foo
     }
-  } = _temp6);
+  } = _test);
   exports.bar = exports.foo = foo;
 }
 
-for (let _temp7 of []) {
-  [foo, [...foo]] = _temp7;
+for (let _ref of []) {
+  [foo, [...foo]] = _ref;
   exports.bar = exports.foo = foo;
 }
 
-for (let _temp8 of []) {
-  [foo, [...foo]] = _temp8;
+for (let _ref2 of []) {
+  [foo, [...foo]] = _ref2;
   exports.bar = exports.foo = foo;
 
-  let _foo3;
+  let _foo8;
 }
 
 {

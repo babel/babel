@@ -331,7 +331,7 @@ const rewriteReferencesVisitor = {
       if (!didTransform) {
         return;
       }
-      const newLoopId = scope.generateUidIdentifier();
+      const newLoopId = t.identifier(scope.generateUidBasedOnNode(left));
       bodyPath.unshiftContainer(
         "body",
         t.expressionStatement(t.assignmentExpression("=", left, newLoopId)),
