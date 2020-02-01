@@ -19,8 +19,8 @@ Using plugins:
   transform-named-capturing-groups-regex { "edge":"14" }
   transform-async-to-generator { "edge":"14" }
   transform-for-of { "edge":"14" }
+  transform-parameters { "edge":"14" }
   transform-destructuring { "edge":"14" }
-  bugfix/transform-edge-default-parameters { "edge":"14" }
   bugfix/transform-edge-function-name { "edge":"14" }
   transform-modules-commonjs { "edge":"14" }
   proposal-dynamic-import { "edge":"14" }

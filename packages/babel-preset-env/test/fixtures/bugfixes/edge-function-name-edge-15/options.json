@@ -5,9 +5,8 @@
       "debug": true,
       "bugfixes": true,
       "targets": {
-        "edge": "13"
-      },
-      "exclude": ["transform-destructuring", "transform-arrow-functions"]
+        "edge": "15"
+      }
     }]
   ]
 }

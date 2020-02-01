@@ -1,5 +1,5 @@
 var a = function a() {};
 
 ({
-  obj: function obj() {}
+  obj: function () {}
 });
