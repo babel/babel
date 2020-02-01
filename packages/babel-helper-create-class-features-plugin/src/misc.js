@@ -87,18 +87,17 @@ export function extractComputedKeys(ref, path, computedPaths, file) {
     file,
   };
   for (const computedPath of computedPaths) {
-    if (computedPath.get("key").isReferencedIdentifier()) {
-      handleClassTDZ(computedPath.get("key"), state);
+    const computedKey = computedPath.get("key");
+    if (computedKey.isReferencedIdentifier()) {
+      handleClassTDZ(computedKey, state);
     } else {
-      computedPath
-        .get("key")
-        .traverse(classFieldDefinitionEvaluationTDZVisitor, state);
+      computedKey.traverse(classFieldDefinitionEvaluationTDZVisitor, state);
     }
 
     const computedNode = computedPath.node;
     // Make sure computed property names are only evaluated once (upon class definition)
     // and in the right order in combination with static properties
-    if (!computedPath.get("key").isConstantExpression()) {
+    if (!computedKey.isConstantExpression()) {
       const ident = path.scope.generateUidIdentifierBasedOnNode(
         computedNode.key,
       );
