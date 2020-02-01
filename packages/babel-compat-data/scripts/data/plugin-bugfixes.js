@@ -15,6 +15,13 @@ module.exports = {
     features: ['function "name" property / variables (function)'],
     replaces: "transform-function-name",
   },
+  "bugfix/transform-safari-for-shadowing": {
+    features: [
+      "let / for-in loop binding shadowing parameter",
+      "let / for-in loop binding shadowing parameter (strict mode)",
+    ],
+    replaces: "transform-block-scoping",
+  },
   "bugfix/transform-tagged-template-caching": {
     features: ["template literals / TemplateStrings permanent caching"],
     replaces: "transform-template-literals",

@@ -8,6 +8,9 @@
   "transform-function-name": [
     "bugfix/transform-edge-function-name"
   ],
+  "transform-block-scoping": [
+    "bugfix/transform-safari-for-shadowing"
+  ],
   "transform-template-literals": [
     "bugfix/transform-tagged-template-caching"
   ]
