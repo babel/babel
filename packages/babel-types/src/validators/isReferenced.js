@@ -67,7 +67,7 @@ export default function isReferenced(
       if (parent.value === node) {
         return !grandparent || grandparent.type !== "ObjectPattern";
       }
-      if (parent.params && parent.params.indexOf(node) !== -1) {
+      if (parent.params.includes(node)) {
         return false;
       }
       return true;
