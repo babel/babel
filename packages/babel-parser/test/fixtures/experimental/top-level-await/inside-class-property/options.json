@@ -3,6 +3,5 @@
     "topLevelAwait",
     "classProperties"
   ],
-  "sourceType": "module",
-  "throws": "Unexpected token, expected \";\" (2:12)"
+  "sourceType": "module"
 }

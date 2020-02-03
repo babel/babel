@@ -3,6 +3,5 @@
   "plugins": [
     "typescript",
     "topLevelAwait"
-  ],
-  "throws": "Unexpected token, expected \";\" (2:20)"
+  ]
 }

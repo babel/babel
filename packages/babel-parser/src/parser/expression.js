@@ -463,8 +463,13 @@ export default class ExpressionParser extends LValParser {
   // Parse unary operators, both prefix and postfix.
 
   parseMaybeUnary(refExpressionErrors: ?ExpressionErrors): N.Expression {
-    if (this.isContextual("await") && this.isAwaitAllowed()) {
-      return this.parseAwait();
+    const startPos = this.state.start;
+    const startLoc = this.state.startLoc;
+    const isAwait = this.isContextual("await");
+
+    if (isAwait && this.isAwaitAllowed()) {
+      this.next();
+      return this.parseAwait(startPos, startLoc);
     } else if (this.state.type.prefix) {
       const node = this.startNode();
       const update = this.match(tt.incDec);
@@ -501,8 +506,6 @@ export default class ExpressionParser extends LValParser {
       );
     }
 
-    const startPos = this.state.start;
-    const startLoc = this.state.startLoc;
     let expr = this.parseExprSubscripts(refExpressionErrors);
     if (this.checkExpressionErrors(refExpressionErrors, false)) return expr;
     while (this.state.type.postfix && !this.canInsertSemicolon()) {
@@ -514,6 +517,29 @@ export default class ExpressionParser extends LValParser {
       this.next();
       expr = this.finishNode(node, "UpdateExpression");
     }
+
+    if (
+      isAwait &&
+      expr.type === "Identifier" &&
+      // RegExps are ambiguous, because they could be a division.
+      // ( and [ are also ambiguous.
+      (this.match(tt.name) ||
+        this.match(tt.num) ||
+        this.match(tt.bigint) ||
+        this.match(tt.string) ||
+        (this.state.type.keyword && !this.state.type.binop)) &&
+      !this.hasPrecedingLineBreak()
+    ) {
+      this.raise(
+        startPos,
+        this.hasPlugin("topLevelAwait")
+          ? "Await expressions are only allowed inside async functions or modules."
+          : "Await expressions are only allowed inside async functions.",
+      );
+
+      return this.parseAwait(startPos, startLoc);
+    }
+
     return expr;
   }
 
@@ -2207,10 +2233,8 @@ export default class ExpressionParser extends LValParser {
 
   // Parses await expression inside async function.
 
-  parseAwait(): N.AwaitExpression {
-    const node = this.startNode();
-
-    this.next();
+  parseAwait(pos: number, loc: Position): N.AwaitExpression {
+    const node = this.startNodeAt(pos, loc);
 
     if (this.state.inParameters) {
       this.raise(
