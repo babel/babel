@@ -57,6 +57,7 @@ export default function isReferenced(
     case "ClassPrivateProperty":
     // no: class { NODE() {} }
     // yes: class { [NODE]() {} }
+    // no: class { foo(NODE) {} }
     case "ClassMethod":
     case "ClassPrivateMethod":
     case "ObjectMethod":
@@ -65,6 +66,13 @@ export default function isReferenced(
       }
       if (parent.value === node) {
         return !grandparent || grandparent.type !== "ObjectPattern";
+      }
+      if (parent.params) {
+        for (const param of parent.params) {
+          if (param === node) {
+            return false;
+          }
+        }
       }
       return true;
 
