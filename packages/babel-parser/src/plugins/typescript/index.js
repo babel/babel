@@ -1532,7 +1532,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
       const oldYieldPos = this.state.yieldPos;
       const oldAwaitPos = this.state.awaitPos;
-      this.state.maybeInArrowParameters = false;
+      this.state.maybeInArrowParameters = true;
       this.state.yieldPos = -1;
       this.state.awaitPos = -1;
 
