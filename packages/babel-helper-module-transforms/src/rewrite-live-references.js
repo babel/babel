@@ -339,6 +339,7 @@ const rewriteReferencesVisitor = {
         .replaceWith(
           t.variableDeclaration("let", [t.variableDeclarator(newLoopId)]),
         );
+      scope.registerDeclaration(path.get("left"));
     }
   },
 };
