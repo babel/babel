@@ -344,9 +344,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.match(tt.braceR)) {
         node.expression = this.jsxParseEmptyExpression();
       } else {
-        node.expression = this.parseExpression();
+        node.expression = this.parseMaybeAssign();
       }
       this.expect(tt.braceR);
+
       return this.finishNode(node, "JSXExpressionContainer");
     }
 
