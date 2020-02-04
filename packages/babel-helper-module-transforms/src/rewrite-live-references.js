@@ -311,8 +311,6 @@ const rewriteReferencesVisitor = {
     const { left } = node;
     const { exported, scope: programScope } = this;
 
-    // if it's a variable declaration, such as for (let {foo} of []) {}
-    // then no transformation is needed
     if (!t.isVariableDeclaration(left)) {
       let didTransform = false;
       const bodyPath = path.get("body");
@@ -331,7 +329,7 @@ const rewriteReferencesVisitor = {
       if (!didTransform) {
         return;
       }
-      const newLoopId = t.identifier(scope.generateUidBasedOnNode(left));
+      const newLoopId = scope.generateUidIdentifierBasedOnNode(left);
       bodyPath.unshiftContainer(
         "body",
         t.expressionStatement(t.assignmentExpression("=", left, newLoopId)),
