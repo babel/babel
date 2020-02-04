@@ -1,0 +1,4 @@
+{
+  "plugins": ["jsx", "flow"],
+  "throws": "Unexpected token `}`. Did you mean `&rbrace;` or `{'}'}`? (1:5)"
+}

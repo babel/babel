@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "jsx",
+    "flow"
+  ],
+  "throws": "Unexpected token `>`. Did you mean `&gt;` or `{'>'}`? (1:5)"
+}

@@ -1,7 +1,5 @@
 ES6/modules/export_default_class_implements.js
 ES6/modules/migrated_0020.js
-JSX/invalid_unpaired_gt.js
-JSX/invalid_unpaired_rcurly.js
 JSX_invalid/migrated_0000.js
 arrow_function/object_return_type.js
 arrow_function_invalid/migrated_0002.js
