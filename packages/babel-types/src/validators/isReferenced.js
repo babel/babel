@@ -54,16 +54,18 @@ export default function isReferenced(
       if (parent.params.includes(node)) {
         return false;
       }
-    // Fall-through to next case clause to check whether the node is the method's name.
+    // fall through
 
     // yes: { [NODE]: "" }
     // no: { NODE: "" }
     // depends: { NODE }
     // depends: { key: NODE }
+    // fall through
     case "ObjectProperty":
     // no: class { NODE = value; }
     // yes: class { [NODE] = value; }
     // yes: class { key = NODE; }
+    // fall through
     case "ClassProperty":
     case "ClassPrivateProperty":
       if (parent.key === node) {

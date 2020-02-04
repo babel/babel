@@ -1441,7 +1441,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             );
           }
 
-          this.unexpected();
+          throw this.unexpected();
         case tt.num:
           return this.parseLiteral(
             this.state.value,
