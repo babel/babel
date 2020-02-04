@@ -54,6 +54,8 @@ export default function isReferenced(
       if (parent.params.includes(node)) {
         return false;
       }
+    // Fall-through to next case clause to check whether the node is the method's name.
+
     // yes: { [NODE]: "" }
     // no: { NODE: "" }
     // depends: { NODE }
