@@ -242,18 +242,6 @@ export default declare((api, opts) => {
     corejs: { version: corejs, proposals },
     browserslistEnv,
   } = normalizeOptions(opts);
-  // TODO: remove this in next major
-  let hasUglifyTarget = false;
-
-  if (optionsTargets?.uglify) {
-    hasUglifyTarget = true;
-    delete optionsTargets.uglify;
-
-    console.log("");
-    console.log("The uglify target has been deprecated. Set the top level");
-    console.log("option `forceAllTransforms: true` instead.");
-    console.log("");
-  }
 
   if (optionsTargets?.esmodules && optionsTargets.browsers) {
     console.log("");
@@ -275,7 +263,7 @@ export default declare((api, opts) => {
   const include = transformIncludesAndExcludes(optionsInclude);
   const exclude = transformIncludesAndExcludes(optionsExclude);
 
-  const transformTargets = forceAllTransforms || hasUglifyTarget ? {} : targets;
+  const transformTargets = forceAllTransforms ? {} : targets;
 
   const compatData = getPluginList(shippedProposals, bugfixes);
   const shouldSkipExportNamespaceFrom =
