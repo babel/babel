@@ -14,7 +14,4 @@ export const TargetNames = {
   android: "android",
   electron: "electron",
   samsung: "samsung",
-
-  // deprecated
-  uglify: "uglify",
 };
