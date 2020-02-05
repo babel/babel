@@ -16,8 +16,7 @@ const rollupBabel = require("rollup-plugin-babel");
 const rollupBabelSource = require("./scripts/rollup-plugin-babel-source");
 const rollupCommonJs = require("rollup-plugin-commonjs");
 const rollupJson = require("@rollup/plugin-json");
-const rollupNodeBuiltins = require("rollup-plugin-node-builtins");
-const rollupNodeGlobals = require("rollup-plugin-node-globals");
+const rollupNodePolyfills = require("rollup-plugin-node-polyfills");
 const rollupNodeResolve = require("rollup-plugin-node-resolve");
 const rollupReplace = require("rollup-plugin-replace");
 const { terser: rollupTerser } = require("rollup-plugin-terser");
@@ -197,8 +196,10 @@ function buildRollup(packages) {
                 },
               }),
               rollupJson(),
-              rollupNodeBuiltins(),
-              rollupNodeGlobals({ sourceMap: sourcemap }),
+              rollupNodePolyfills({
+                sourceMap: sourcemap,
+                include: "**/*.js",
+              }),
             ],
           })
           .then(bundle => {
