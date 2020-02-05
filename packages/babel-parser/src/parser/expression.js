@@ -45,6 +45,7 @@ import { ExpressionErrors } from "./util";
 
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
+  /*::
   +parseBlock: (
     allowDirectives?: boolean,
     createNewLexicalScope?: boolean,
@@ -63,6 +64,7 @@ export default class ExpressionParser extends LValParser {
   ) => T;
   +parseFunctionParams: (node: N.Function, allowModifiers?: boolean) => void;
   +takeDecorators: (node: N.HasDecorators) => void;
+  */
 
   // Check if property __proto__ has been used more than once.
   // If the expression is a destructuring assignment, then __proto__ may appear
