@@ -1,7 +1,6 @@
 "use strict";
 const definitions = require("../../lib/definitions");
 const formatBuilderName = require("../utils/formatBuilderName");
-const lowerFirst = require("../utils/lowerFirst");
 
 module.exports = function generateBuilders() {
   let output = `// @flow
@@ -11,30 +10,9 @@ module.exports = function generateBuilders() {
  */
 import builder from "../builder";\n\n`;
 
-  const reservedNames = new Set(["super", "import"]);
   Object.keys(definitions.BUILDER_KEYS).forEach(type => {
-    const formatedBuilderName = formatBuilderName(type);
-    const formatedBuilderNameLocal = reservedNames.has(formatedBuilderName)
-      ? `_${formatedBuilderName}`
-      : formatedBuilderName;
-    output += `${
-      formatedBuilderNameLocal === formatedBuilderName ? "export " : ""
-    }function ${formatedBuilderNameLocal}(...args: Array<any>): Object { return builder("${type}", ...args); }\n`;
-    // This is needed for backwards compatibility.
-    // arrayExpression -> ArrayExpression
-    output += `export { ${formatedBuilderNameLocal} as ${type} };\n`;
-    if (formatedBuilderNameLocal !== formatedBuilderName) {
-      output += `export { ${formatedBuilderNameLocal} as ${formatedBuilderName} };\n`;
-    }
-
-    // This is needed for backwards compatibility.
-    // It should be removed in the next major version.
-    // JSXIdentifier -> jSXIdentifier
-    if (/^[A-Z]{2}/.test(type)) {
-      output += `export { ${formatedBuilderNameLocal} as ${lowerFirst(
-        type
-      )} }\n`;
-    }
+    output += `export function ${type}(...args: Array<any>): Object { return builder("${type}", ...args); }
+export { ${type} as ${formatBuilderName(type)} };\n`;
   });
 
   Object.keys(definitions.DEPRECATED_KEYS).forEach(type => {
@@ -44,13 +22,6 @@ import builder from "../builder";\n\n`;
   return builder("${type}", ...args);
 }
 export { ${type} as ${formatBuilderName(type)} };\n`;
-
-    // This is needed for backwards compatibility.
-    // It should be removed in the next major version.
-    // JSXIdentifier -> jSXIdentifier
-    if (/^[A-Z]{2}/.test(type)) {
-      output += `export { ${type} as ${lowerFirst(type)} }\n`;
-    }
   });
 
   return output;
