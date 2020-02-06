@@ -1819,13 +1819,6 @@
   dependencies:
     "@types/node" ">= 8"
 
-"@rollup/plugin-alias@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@rollup/plugin-alias/-/plugin-alias-2.2.0.tgz#3ac52ece8b39583249884adb90fb316484389fe5"
-  integrity sha512-//6zmlHGbmousaatu4pBlC61gqZykLbH0c2GESBO4JgK5xFZgb/ih0zlg/5/BmTAczX5R/xsHRnsYsu4KyHV5w==
-  dependencies:
-    slash "^3.0.0"
-
 "@rollup/plugin-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-json/-/plugin-json-4.0.0.tgz#4462e83c7ad5544bef4a601a6e8450daedc4b69b"

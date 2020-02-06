@@ -27,7 +27,6 @@
     "@babel/preset-flow": "^7.8.3",
     "@babel/register": "^7.8.3",
     "@babel/runtime": "^7.8.4",
-    "@rollup/plugin-alias": "^2.2.0",
     "@rollup/plugin-json": "^4.0.0",
     "babel-eslint": "^11.0.0-beta.2",
     "babel-jest": "^24.9.0",

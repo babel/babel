@@ -41,14 +41,12 @@ module.exports = {
   transformIgnorePatterns: [
     "/node_modules/",
     "<rootDir>/packages/babel-standalone/babel(\\.min)?\\.js",
-    "<rootDir>/packages/babel-preset-env-standalone/babel-preset-env(\\.min)?\\.js",
     "/test/(fixtures|tmp|__data__)/",
     "<rootDir>/(packages|codemods|eslint)/[^/]+/lib/",
   ],
   coveragePathIgnorePatterns: [
     "/node_modules/",
     "<rootDir>/packages/babel-standalone/babel(\\.min)?\\.js",
-    "<rootDir>/packages/babel-preset-env-standalone/babel-preset-env(\\.min)?\\.js",
     "/test/(fixtures|tmp|__data__)/",
   ],
   modulePathIgnorePatterns: [

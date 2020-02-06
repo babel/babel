@@ -179,6 +179,74 @@ describe("validators", function() {
         expect(t.isReferenced(node, parent)).toBe(true);
       });
     });
+
+    describe("ObjectMethod", function() {
+      it("returns false if node is method key", function() {
+        const node = t.identifier("A");
+        const parent = t.objectMethod("method", node, [], t.blockStatement([]));
+
+        expect(t.isReferenced(node, parent)).toBe(false);
+      });
+
+      it("returns true if node is computed method key", function() {
+        const node = t.identifier("A");
+        const parent = t.objectMethod(
+          "method",
+          node,
+          [],
+          t.blockStatement([]),
+          true,
+        );
+
+        expect(t.isReferenced(node, parent)).toBe(true);
+      });
+
+      it("returns false if node is method param", function() {
+        const node = t.identifier("A");
+        const parent = t.objectMethod(
+          "method",
+          t.identifier("foo"),
+          [node],
+          t.blockStatement([]),
+        );
+
+        expect(t.isReferenced(node, parent)).toBe(false);
+      });
+    });
+
+    describe("ClassMethod", function() {
+      it("returns false if node is method key", function() {
+        const node = t.identifier("A");
+        const parent = t.classMethod("method", node, [], t.blockStatement([]));
+
+        expect(t.isReferenced(node, parent)).toBe(false);
+      });
+
+      it("returns true if node is computed method key", function() {
+        const node = t.identifier("A");
+        const parent = t.classMethod(
+          "method",
+          node,
+          [],
+          t.blockStatement([]),
+          true,
+        );
+
+        expect(t.isReferenced(node, parent)).toBe(true);
+      });
+
+      it("returns false if node is method param", function() {
+        const node = t.identifier("A");
+        const parent = t.classMethod(
+          "method",
+          t.identifier("foo"),
+          [node],
+          t.blockStatement([]),
+        );
+
+        expect(t.isReferenced(node, parent)).toBe(false);
+      });
+    });
   });
 
   describe("isBinding", function() {

@@ -89,7 +89,6 @@ module.exports = function(api) {
       "packages/*/test/fixtures",
       ignoreLib ? "packages/*/lib" : null,
       "packages/babel-standalone/babel.js",
-      "packages/babel-preset-env-standalone/babel-preset-env.js",
     ].filter(Boolean),
     presets: [["@babel/env", envOpts]],
     plugins: [
