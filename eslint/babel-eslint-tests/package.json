@@ -1,0 +1,15 @@
+{
+  "name": "@babel/eslint-tests",
+  "version": "0.0.0",
+  "description": "Tests for babel/eslint-* packages",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@babel/eslint-parser": "*",
+    "@babel/eslint-plugin": "*",
+    "@babel/eslint-shared-fixtures": "*",
+    "dedent": "^0.7.0",
+    "eslint": "^6.0.0",
+    "eslint-plugin-import": "^2.20.1"
+  }
+}

@@ -1,23 +1,23 @@
 import eslint from "eslint";
 import fs from "fs";
 import path from "path";
-import * as parser from "../src";
+import * as parser from "@babel/eslint-parser";
 
-eslint.linter.defineParser("current-babel-eslint", parser);
+eslint.linter.defineParser("@babel/eslint-parser", parser);
 
 const paths = {
-  fixtures: path.join(__dirname, "fixtures", "rules"),
+  fixtures: path.join(__dirname, "../../..", "fixtures", "rules"),
 };
 
 const encoding = "utf8";
 const errorLevel = 2;
 
 const baseEslintOpts = {
-  parser: "current-babel-eslint",
+  parser: "@babel/eslint-parser",
   parserOptions: {
     sourceType: "script",
     requireConfigFile: false,
-    babelOptions: { configFile: false }
+    babelOptions: { configFile: false },
   },
 };
 
@@ -49,7 +49,6 @@ function readFixture(id, done) {
 describe("Rules:", () => {
   describe("`strict`", strictSuite);
 });
-// describe
 
 function strictSuite() {
   const ruleId = "strict";
@@ -74,10 +73,8 @@ function strictSuite() {
           },
         );
       });
-      // it
     });
   });
-  // describe
 
   describe("when set to 'global'", () => {
     const eslintOpts = Object.assign({}, baseEslintOpts, {
@@ -98,7 +95,6 @@ function strictSuite() {
         },
       );
     });
-    // it
 
     it("should error twice on global directive: no and function directive: yes", done => {
       lint(
@@ -115,7 +111,6 @@ function strictSuite() {
         },
       );
     });
-    // it
 
     it("should error on function directive", done => {
       lint(
@@ -135,7 +130,6 @@ function strictSuite() {
         },
       );
     });
-    // it
 
     it("should error on no directive", done => {
       lint(
@@ -150,9 +144,7 @@ function strictSuite() {
         },
       );
     });
-    // it
   });
-  // describe
 
   describe("when set to 'function'", () => {
     const eslintOpts = Object.assign({}, baseEslintOpts, {
@@ -173,7 +165,6 @@ function strictSuite() {
         },
       );
     });
-    // it
 
     it("should error twice on function directive: no and global directive: yes", done => {
       lint(
@@ -190,7 +181,6 @@ function strictSuite() {
         },
       );
     });
-    // it
 
     it("should error on only global directive", done => {
       lint(
@@ -205,7 +195,6 @@ function strictSuite() {
         },
       );
     });
-    // it
 
     it("should error on extraneous global directive", done => {
       lint(
@@ -221,17 +210,5 @@ function strictSuite() {
         },
       );
     });
-    // it
   });
 }
-
-describe("https://github.com/babel/babel-eslint/issues/558", () => {
-  it("doesn't crash with eslint-plugin-import", () => {
-    const engine = new eslint.CLIEngine({ ignore: false });
-    const files = ["a.js", "b.js", "c.js"];
-    let fileWithPath = files.map(file =>
-      path.resolve(__dirname, `./fixtures/eslint-plugin-import/${file}`),
-    );
-    engine.executeOnFiles(fileWithPath);
-  });
-});
