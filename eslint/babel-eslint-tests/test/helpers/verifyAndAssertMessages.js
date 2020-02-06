@@ -1,4 +1,3 @@
-import path from "path";
 import eslint from "eslint";
 import unpad from "dedent";
 import * as parser from "@babel/eslint-parser";

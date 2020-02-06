@@ -104,9 +104,7 @@ function strictSuite() {
         },
         (err, report) => {
           if (err) return done(err);
-          [0, 1].forEach(i => {
-            expect(report[0].ruleId).toBe(ruleId);
-          });
+          expect(report[0].ruleId).toBe(ruleId);
           done();
         },
       );
