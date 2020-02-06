@@ -1,10 +1,10 @@
 var _ref2 =
 /*#__PURE__*/
-<div>child</div>;
+(() => <div>child</div>)();
 
 var _ref3 =
 /*#__PURE__*/
-<p>Parent</p>;
+(() => <p>Parent</p>)();
 
 (function () {
   class App extends React.Component {
@@ -17,10 +17,13 @@ var _ref3 =
   const AppItem = () => {
     return _ref2;
   },
+        _ref4 =
+  /*#__PURE__*/
+  (() => <AppItem />)(),
         _ref =
   /*#__PURE__*/
-  <div>
+  (() => <div>
           {_ref3}
-          <AppItem />
-        </div>;
+          {_ref4}
+        </div>)();
 });

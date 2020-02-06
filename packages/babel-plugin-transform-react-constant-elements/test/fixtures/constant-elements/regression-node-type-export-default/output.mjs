@@ -9,4 +9,4 @@ export default class B {}
 
 var _ref =
 /*#__PURE__*/
-React.createElement(B, null);
+(() => React.createElement(B, null))();

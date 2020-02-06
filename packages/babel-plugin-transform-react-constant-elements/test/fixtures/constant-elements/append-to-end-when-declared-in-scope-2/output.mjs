@@ -1,6 +1,6 @@
 var _ref =
 /*#__PURE__*/
-<div>child</div>;
+(() => <div>child</div>)();
 
 const AppItem = () => {
   return _ref;
@@ -8,10 +8,10 @@ const AppItem = () => {
 
 var _ref2 =
 /*#__PURE__*/
-<div>
+(() => <div>
         <p>Parent</p>
         <AppItem />
-      </div>;
+      </div>)();
 
 export default class App extends React.Component {
   render() {

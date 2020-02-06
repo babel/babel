@@ -3,7 +3,7 @@ function render() {
 
   var _ref =
   /*#__PURE__*/
-  <Component title={title} />;
+  (() => <Component title={title} />)();
 
   return () => _ref;
 }

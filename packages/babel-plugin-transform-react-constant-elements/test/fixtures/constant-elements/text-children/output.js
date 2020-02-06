@@ -1,8 +1,8 @@
 var _ref =
 /*#__PURE__*/
-<div className="class-name">
+(() => <div className="class-name">
       Text
-    </div>;
+    </div>)();
 
 var Foo = React.createClass({
   render: function () {

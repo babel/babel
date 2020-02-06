@@ -3,7 +3,7 @@ function render() {
 
   var _ref =
   /*#__PURE__*/
-  <foo>{text}</foo>;
+  (() => <foo>{text}</foo>)();
 
   return function () {
     return _ref;

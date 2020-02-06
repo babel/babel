@@ -2,7 +2,7 @@ import React from 'react'; // Regression test for https://github.com/babel/babel
 
 var _ref =
 /*#__PURE__*/
-<div />;
+(() => <div />)();
 
 class BugReport extends React.Component {
   constructor(...args) {

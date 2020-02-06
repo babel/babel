@@ -2,7 +2,7 @@ var Foo = require("Foo");
 
 var _ref =
 /*#__PURE__*/
-<Foo />;
+(() => <Foo />)();
 
 function render() {
   return _ref;
