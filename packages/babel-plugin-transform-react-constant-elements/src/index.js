@@ -16,7 +16,10 @@ export default declare((api, options) => {
     );
   }
 
+  // Track the hoisted JSX elements to avoid infinite traverse queue
   const HOISTED = new WeakSet();
+  // Track the scope of JSX elements that are hoisted to top level
+  const HOISTED_TOP_SCOPE = new WeakSet();
 
   const immutabilityVisitor = {
     enter(path, state) {
@@ -83,8 +86,9 @@ export default declare((api, options) => {
 
     visitor: {
       JSXElement(path) {
-        if (HOISTED.has(path.node)) return;
-        HOISTED.add(path.node);
+        if (HOISTED.has(path.node) || HOISTED_TOP_SCOPE.has(path.scope)) {
+          return;
+        }
 
         const state = { isImmutable: true };
 
@@ -111,6 +115,20 @@ export default declare((api, options) => {
           const hoisted = path.hoist();
 
           if (hoisted) {
+            HOISTED.add(hoisted.node);
+            // PURE annotation only works with call expression,
+            // here we wrap hoisted JSX element into IIArrowFE
+            hoisted.replaceWith(
+              t.callExpression(
+                t.arrowFunctionExpression([], hoisted.node, /* async */ false),
+                [],
+              ),
+            );
+            // If the JSX element is hoisted to top level, record the scope
+            // so its children elements can skip hoisting
+            if (hoisted.scope.path.isProgram()) {
+              HOISTED_TOP_SCOPE.add(hoisted.get("callee.body").scope);
+            }
             annotateAsPure(hoisted);
           }
         }
