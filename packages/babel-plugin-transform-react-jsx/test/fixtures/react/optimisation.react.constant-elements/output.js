@@ -1,10 +1,18 @@
+var _ref3 =
+/*#__PURE__*/
+(() => <img src="/img/logo/logo-96x36.png" />)();
+
+var _ref2 =
+/*#__PURE__*/
+(() => <a className="navbar-brand" href="/">
+        {_ref3}
+      </a>)();
+
 var _ref =
 /*#__PURE__*/
-<div className="navbar-header">
-      <a className="navbar-brand" href="/">
-        <img src="/img/logo/logo-96x36.png" />
-      </a>
-    </div>;
+(() => <div className="navbar-header">
+      {_ref2}
+    </div>)();
 
 let App =
 /*#__PURE__*/

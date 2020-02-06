@@ -6,9 +6,9 @@ function action() {
 
 var _ref =
 /*#__PURE__*/
-React.createElement(Contact, {
+(() => React.createElement(Contact, {
   title: title
-});
+}))();
 
 function _action() {
   _action = babelHelpers.asyncToGenerator(function* () {
