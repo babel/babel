@@ -1078,6 +1078,7 @@ describe("verify", () => {
     ) {
       const overrideConfig = {
         parserOptions: {
+          sourceType,
           babelOptions: {
             configFile: require.resolve(
               "@babel/eslint-shared-fixtures/config/babel.config.decorators-legacy.js",
