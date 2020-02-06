@@ -1,6 +1,6 @@
 var _ref =
 /*#__PURE__*/
-<span>Sub Component</span>;
+(() => <span>Sub Component</span>)();
 
 class Component extends React.Component {
   constructor(...args) {
@@ -10,7 +10,7 @@ class Component extends React.Component {
 
     var _ref2 =
     /*#__PURE__*/
-    <this.subComponent />;
+    (() => <this.subComponent />)();
 
     this.render = () => _ref2;
   }

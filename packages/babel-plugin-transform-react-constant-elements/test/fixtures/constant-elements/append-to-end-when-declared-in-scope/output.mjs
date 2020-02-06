@@ -7,14 +7,21 @@ export default class App extends React.Component {
 
 var _ref2 =
 /*#__PURE__*/
-<div>child</div>;
+(() => <div>child</div>)();
+
+var _ref3 =
+/*#__PURE__*/
+(() => <p>Parent</p>)();
 
 const AppItem = () => {
   return _ref2;
 },
+      _ref4 =
+/*#__PURE__*/
+(() => <AppItem />)(),
       _ref =
 /*#__PURE__*/
-<div>
-        <p>Parent</p>
-        <AppItem />
-      </div>;
+(() => <div>
+        {_ref3}
+        {_ref4}
+      </div>)();

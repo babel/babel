@@ -4,7 +4,7 @@ function _jsx(type, props, key, children) { if (!REACT_ELEMENT_TYPE) { REACT_ELE
 
 var _ref =
 /*#__PURE__*/
-_jsx("foo", {});
+(() => _jsx("foo", {}))();
 
 function render() {
   return _ref;
@@ -15,7 +15,7 @@ function render() {
 
   var _ref2 =
   /*#__PURE__*/
-  _jsx("foo", {}, void 0, text);
+  (() => _jsx("foo", {}, void 0, text))();
 
   return function () {
     return _ref2;

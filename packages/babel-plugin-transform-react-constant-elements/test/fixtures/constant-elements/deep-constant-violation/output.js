@@ -1,10 +1,10 @@
 var _ref =
 /*#__PURE__*/
-<b></b>;
+(() => <b></b>)();
 
 var _ref2 =
 /*#__PURE__*/
-<span></span>;
+(() => <span></span>)();
 
 function render() {
   var children = _ref;

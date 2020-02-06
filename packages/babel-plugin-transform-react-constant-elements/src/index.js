@@ -111,7 +111,14 @@ export default declare((api, options) => {
           const hoisted = path.hoist();
 
           if (hoisted) {
-            annotateAsPure(hoisted);
+            const iife = t.callExpression(
+              t.arrowFunctionExpression([], hoisted.node),
+              [],
+            );
+
+            annotateAsPure(iife);
+
+            hoisted.replaceWith(iife);
           }
         }
       },

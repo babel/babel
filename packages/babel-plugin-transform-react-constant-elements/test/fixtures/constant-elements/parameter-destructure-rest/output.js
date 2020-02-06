@@ -6,7 +6,7 @@ function render(_ref) {
 
   var _ref2 =
   /*#__PURE__*/
-  <Component text={text} className={className} id={id} />;
+  (() => <Component text={text} className={className} id={id} />)();
 
   // intentionally ignoring props
   return () => _ref2;
