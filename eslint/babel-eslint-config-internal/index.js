@@ -30,7 +30,6 @@ module.exports = {
     "no-console": "off",
     "no-constant-condition": "off",
     "no-empty": "off",
-    "no-fallthrough": "off",
     "no-inner-declarations": "off",
     "no-labels": "off",
     "no-loop-func": "off",

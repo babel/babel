@@ -332,7 +332,7 @@ export default class Tokenizer extends LocationParser {
           ) {
             ++this.state.pos;
           }
-
+        // fall through
         case charCodes.lineFeed:
         case charCodes.lineSeparator:
         case charCodes.paragraphSeparator:
@@ -736,7 +736,7 @@ export default class Tokenizer extends LocationParser {
         }
       }
       // Anything else beginning with a digit is an integer, octal
-      // number, or float.
+      // number, or float. (fall through)
       case charCodes.digit1:
       case charCodes.digit2:
       case charCodes.digit3:
@@ -1221,6 +1221,7 @@ export default class Tokenizer extends LocationParser {
             if (this.input.charCodeAt(this.state.pos) === charCodes.lineFeed) {
               ++this.state.pos;
             }
+          // fall through
           case charCodes.lineFeed:
             out += "\n";
             break;
@@ -1268,9 +1269,11 @@ export default class Tokenizer extends LocationParser {
         if (this.input.charCodeAt(this.state.pos) === charCodes.lineFeed) {
           ++this.state.pos;
         }
+      // fall through
       case charCodes.lineFeed:
         this.state.lineStart = this.state.pos;
         ++this.state.curLine;
+      // fall through
       case charCodes.lineSeparator:
       case charCodes.paragraphSeparator:
         return "";
@@ -1279,6 +1282,7 @@ export default class Tokenizer extends LocationParser {
         if (inTemplate) {
           return null;
         }
+      // fall through
       default:
         if (ch >= charCodes.digit0 && ch <= charCodes.digit7) {
           const codePos = this.state.pos - 1;

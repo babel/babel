@@ -36,6 +36,7 @@ module.exports = function(api) {
     case "standalone":
       includeRegeneratorRuntime = true;
       unambiguousSources.push("packages/babel-runtime/regenerator");
+    // fall through
     case "rollup":
       convertESM = false;
       ignoreLib = false;

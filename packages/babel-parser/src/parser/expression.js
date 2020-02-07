@@ -1058,7 +1058,7 @@ export default class ExpressionParser extends LValParser {
 
       case tt.at:
         this.parseDecorators();
-
+      // fall through
       case tt._class:
         node = this.startNode();
         this.takeDecorators(node);
@@ -1111,7 +1111,7 @@ export default class ExpressionParser extends LValParser {
           return this.finishNode(node, "PipelinePrimaryTopicReference");
         }
       }
-
+      // fall through
       default:
         throw this.unexpected();
     }
