@@ -1,5 +1,3 @@
-import { classMethod } from "@babel/types";
-
 export default function rewriteThis(programPath: NodePath) {
   // Rewrite "this" to be "undefined".
   programPath.traverse(rewriteThisVisitor);
@@ -17,8 +15,12 @@ const rewriteThisVisitor = {
     if (!path.isArrowFunctionExpression()) path.skip();
   },
   ClassProperty(path) {
-    classMethod(path);
     path.skip();
+  },
+  ClassMethod(path) {
+    if (path.node.computed) {
+      //requeue the key child of classProperty here
+    }
   },
   ClassPrivateProperty(path) {
     path.skip();

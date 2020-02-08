@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "external-helpers",
+    "transform-modules-commonjs",
+    "@babel/plugin-proposal-class-properties"
+  ]
+}
