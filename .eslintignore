@@ -26,5 +26,4 @@ packages/babel-parser/test/expressions
 
 eslint/*/lib
 eslint/*/node_modules
-eslint/*/test
-eslint/*/tests
+eslint/*/test/fixtures
