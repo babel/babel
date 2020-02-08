@@ -12,8 +12,8 @@
 /// <reference lib="dom" />
 
 import {
-  transformFromAst as babelTransformFromAst,
-  transform as babelTransform,
+  transformFromAstSync as babelTransformFromAstSync,
+  transformSync as babelTransformSync,
   buildExternalHelpers as babelBuildExternalHelpers,
 } from "@babel/core";
 import { all } from "./generated/plugins";
@@ -101,11 +101,11 @@ function processOptions(options) {
 }
 
 export function transform(code: string, options: any) {
-  return babelTransform(code, processOptions(options));
+  return babelTransformSync(code, processOptions(options));
 }
 
 export function transformFromAst(ast: any, code: string, options: any) {
-  return babelTransformFromAst(ast, code, processOptions(options));
+  return babelTransformFromAstSync(ast, code, processOptions(options));
 }
 export const availablePlugins = {};
 export const availablePresets = {};

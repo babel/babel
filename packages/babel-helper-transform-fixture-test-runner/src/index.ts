@@ -34,7 +34,7 @@ const sharedTestContext = createContext();
 // default. Tests can still set `configFile: true | string`
 // to re-enable config loading.
 function transformWithoutConfigFile(code, opts) {
-  return babel.transform(code, {
+  return babel.transformSync(code, {
     configFile: false,
     babelrc: false,
     ...opts,
@@ -257,7 +257,7 @@ function run(task) {
     // Ignore Babel logs of exec.js files.
     // They will be validated in input/output files.
     ({ result } = maybeMockConsole(validateLogs, () =>
-      babel.transform(execCode, execOpts),
+      babel.transformSync(execCode, execOpts),
     ));
 
     checkDuplicateNodes(result.ast);
@@ -279,7 +279,7 @@ function run(task) {
     let actualLogs;
 
     ({ result, actualLogs } = maybeMockConsole(validateLogs, () =>
-      babel.transform(inputCode, getOpts(actual)),
+      babel.transformSync(inputCode, getOpts(actual)),
     ));
 
     const outputCode = normalizeOutput(result.code);

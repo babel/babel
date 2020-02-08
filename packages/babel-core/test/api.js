@@ -25,8 +25,16 @@ function parse(code, opts) {
   return babel.parse(code, { cwd, configFile: false, ...opts });
 }
 
+function parseSync(code, opts) {
+  return babel.parseSync(code, { cwd, configFile: false, ...opts });
+}
+
 function transform(code, opts) {
   return babel.transform(code, { cwd, configFile: false, ...opts });
+}
+
+function transformSync(code, opts) {
+  return babel.transformSync(code, { cwd, configFile: false, ...opts });
 }
 
 function transformFile(filename, opts, cb) {
@@ -51,6 +59,14 @@ function transformFromAst(ast, code, opts) {
   return babel.transformFromAst(ast, code, { cwd, configFile: false, ...opts });
 }
 
+function transformFromAstSync(ast, code, opts) {
+  return babel.transformFromAstSync(ast, code, {
+    cwd,
+    configFile: false,
+    ...opts,
+  });
+}
+
 describe("parser and generator options", function () {
   const recast = {
     parse: function (code, opts) {
@@ -62,7 +78,7 @@ describe("parser and generator options", function () {
   };
 
   function newTransform(string) {
-    return transform(string, {
+    return transformSync(string, {
       ast: true,
       parserOpts: {
         parser: recast.parse,
@@ -78,7 +94,7 @@ describe("parser and generator options", function () {
   it("options", function () {
     const string = "original;";
     expect(newTransform(string).ast).toEqual(
-      transform(string, { ast: true }).ast,
+      transformSync(string, { ast: true }).ast,
     );
     expect(newTransform(string).code).toBe(string);
   });
@@ -87,7 +103,7 @@ describe("parser and generator options", function () {
     const experimental = "var a: number = 1;";
 
     expect(newTransform(experimental).ast).toEqual(
-      transform(experimental, {
+      transformSync(experimental, {
         ast: true,
         parserOpts: {
           plugins: ["flow"],
@@ -97,7 +113,7 @@ describe("parser and generator options", function () {
     expect(newTransform(experimental).code).toBe(experimental);
 
     function newTransformWithPlugins(string) {
-      return transform(string, {
+      return transformSync(string, {
         ast: true,
         plugins: [cwd + "/../../babel-plugin-syntax-flow"],
         parserOpts: {
@@ -110,7 +126,7 @@ describe("parser and generator options", function () {
     }
 
     expect(newTransformWithPlugins(experimental).ast).toEqual(
-      transform(experimental, {
+      transformSync(experimental, {
         ast: true,
         parserOpts: {
           plugins: ["flow"],
@@ -124,7 +140,7 @@ describe("parser and generator options", function () {
     const experimental = "if (true) {\n  import a from 'a';\n}";
 
     expect(newTransform(experimental).ast).not.toBe(
-      transform(experimental, {
+      transformSync(experimental, {
         ast: true,
         parserOpts: {
           allowImportExportEverywhere: true,
@@ -155,6 +171,27 @@ describe("api", function () {
   it("exposes the parser's token types", function () {
     expect(babel.tokTypes).toBeDefined();
   });
+
+  (process.env.BABEL_8_BREAKING ? it : it.skip)(
+    "parse throws on undefined callback",
+    () => {
+      expect(() => parse("", {})).toThrowErrorMatchingInlineSnapshot(
+        `"Starting from Babel 8.0.0, the 'parse' function expects a callback. If you need to call it synchronously, please use 'parseSync'."`,
+      );
+    },
+  );
+
+  (process.env.BABEL_8_BREAKING ? it : it.skip)(
+    "transform throws on undefined callback",
+    () => {
+      const options = {
+        filename: "example.js",
+      };
+      expect(() => transform("", options)).toThrowErrorMatchingInlineSnapshot(
+        `"Starting from Babel 8.0.0, the 'transform' function expects a callback. If you need to call it synchronously, please use 'transformSync'."`,
+      );
+    },
+  );
 
   it("transformFile", function () {
     const options = {
@@ -189,6 +226,16 @@ describe("api", function () {
     // keep user options untouched
     expect(options).toEqual({ babelrc: false });
   });
+  it("transformFile throws on undefined callback", () => {
+    const options = {
+      babelrc: false,
+    };
+    expect(() =>
+      transformFile(cwd + "/fixtures/api/file.js", options),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"Asynchronous function called without callback"`,
+    );
+  });
 
   it("transformFileSync", function () {
     const options = {
@@ -201,10 +248,23 @@ describe("api", function () {
     expect(options).toEqual({ babelrc: false });
   });
 
-  it("transformFromAst should not mutate the AST", function () {
+  (process.env.BABEL_8_BREAKING ? it : it.skip)(
+    "transformFromAst throws on undefined callback",
+    () => {
+      const program = "const identifier = 1";
+      const node = parseSync(program);
+      expect(() =>
+        transformFromAst(node, program),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"Starting from Babel 8.0.0, the 'transformFromAst' function expects a callback. If you need to call it synchronously, please use 'transformFromAstSync'."`,
+      );
+    },
+  );
+
+  it("transformFromAstSync should not mutate the AST", function () {
     const program = "const identifier = 1";
-    const node = parse(program);
-    const { code } = transformFromAst(node, program, {
+    const node = parseSync(program);
+    const { code } = transformFromAstSync(node, program, {
       plugins: [
         function () {
           return {
@@ -225,10 +285,10 @@ describe("api", function () {
     );
   });
 
-  it("transformFromAst should mutate the AST when cloneInputAst is false", function () {
+  it("transformFromAstSync should mutate the AST when cloneInputAst is false", function () {
     const program = "const identifier = 1";
-    const node = parse(program);
-    const { code } = transformFromAst(node, program, {
+    const node = parseSync(program);
+    const { code } = transformFromAstSync(node, program, {
       cloneInputAst: false,
       plugins: [
         function () {
@@ -252,7 +312,7 @@ describe("api", function () {
 
   it("options throw on falsy true", function () {
     return expect(function () {
-      transform("", {
+      transformSync("", {
         plugins: [cwd + "/../../babel-plugin-syntax-jsx", false],
       });
     }).toThrow(/.plugins\[1\] must be a string, object, function/);
@@ -273,7 +333,7 @@ describe("api", function () {
     let calledRaw = 0;
     let calledIntercept = 0;
 
-    transform("function foo() { bar(foobar); }", {
+    transformSync("function foo() { bar(foobar); }", {
       wrapPluginVisitorMethod: function (pluginAlias, visitorType, callback) {
         if (pluginAlias !== "foobar") {
           return callback;
@@ -307,7 +367,7 @@ describe("api", function () {
     let aliasBaseType = null;
 
     function execTest(passPerPreset) {
-      return transform("type Foo = number; let x = (y): Foo => y;", {
+      return transformSync("type Foo = number; let x = (y): Foo => y;", {
         sourceType: "script",
         passPerPreset: passPerPreset,
         presets: [
@@ -390,7 +450,7 @@ describe("api", function () {
     const oldEnv = process.env.BABEL_ENV;
     process.env.BABEL_ENV = "development";
 
-    const result = transform("", {
+    const result = transformSync("", {
       cwd: path.join(cwd, "fixtures", "config", "complex-plugin-config"),
       filename: path.join(
         cwd,
@@ -448,7 +508,7 @@ describe("api", function () {
 
   it("interpreter directive backward-compat", function () {
     function doTransform(code, preHandler) {
-      return transform(code, {
+      return transformSync(code, {
         plugins: [
           {
             pre: preHandler,
@@ -501,7 +561,7 @@ describe("api", function () {
   });
 
   it("source map merging", function () {
-    const result = transform(
+    const result = transformSync(
       [
         /* eslint-disable max-len */
         'function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }',
@@ -710,7 +770,7 @@ describe("api", function () {
     });
 
     it("default", function () {
-      const result = transform("foo;", {
+      const result = transformSync("foo;", {
         env: {
           development: { comments: false },
         },
@@ -721,7 +781,7 @@ describe("api", function () {
 
     it("BABEL_ENV", function () {
       process.env.BABEL_ENV = "foo";
-      const result = transform("foo;", {
+      const result = transformSync("foo;", {
         env: {
           foo: { comments: false },
         },
@@ -731,7 +791,7 @@ describe("api", function () {
 
     it("NODE_ENV", function () {
       process.env.NODE_ENV = "foo";
-      const result = transform("foo;", {
+      const result = transformSync("foo;", {
         env: {
           foo: { comments: false },
         },
@@ -847,7 +907,7 @@ describe("api", function () {
             },
           ],
         }),
-      ).toThrow();
+      ).toThrowErrorMatchingInlineSnapshot(`"unknown: Unknown helper fooBar"`);
     });
   });
 });

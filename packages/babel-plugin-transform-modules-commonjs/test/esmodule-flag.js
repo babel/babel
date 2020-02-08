@@ -22,7 +22,7 @@ test("Re-export doesn't overwrite __esModule flag", function () {
   };
   context.exports = context.module.exports;
 
-  code = babel.transform(code, {
+  code = babel.transformSync(code, {
     cwd: path.dirname(fileURLToPath(import.meta.url)),
     plugins: [[transformCommonJS, { loose: true }]],
     ast: false,

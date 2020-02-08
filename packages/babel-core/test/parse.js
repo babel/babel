@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { parse } from "../lib/index.js";
+import { parseSync } from "../lib/index.js";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 
@@ -15,12 +15,12 @@ function fixture(...args) {
   );
 }
 
-describe("parse", function () {
+describe("parseSync", function () {
   it("should parse using configuration from .babelrc when a filename is provided", function () {
     const input = fs.readFileSync(fixture("input.js"), "utf8");
     const output = require(fixture("output"));
 
-    const result = parse(input, {
+    const result = parseSync(input, {
       filename: fixture("input.js"),
       cwd: fixture(),
     });
@@ -31,7 +31,7 @@ describe("parse", function () {
     const input = fs.readFileSync(fixture("input.js"), "utf8");
     const output = require(fixture("output.json"));
 
-    const result = parse(input, {
+    const result = parseSync(input, {
       parserOpts: {
         plugins: [["decorators", { decoratorsBeforeExport: false }]],
       },
