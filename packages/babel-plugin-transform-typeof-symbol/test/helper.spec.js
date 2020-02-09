@@ -1,13 +1,8 @@
 import * as babel from "@babel/core";
-import resolvePath from "resolve";
 import fs from "fs";
 
 import transformTypeofSymbol from "..";
 
-const resolve = path =>
-  new Promise((resolve, reject) =>
-    resolvePath(path, (err, path) => (err ? reject(err) : resolve(path))),
-  );
 const readFile = path =>
   new Promise((resolve, reject) =>
     fs.readFile(path, "utf8", (err, contents) => {
@@ -28,7 +23,7 @@ describe("@babel/plugin-transform-typeof-symbol", () => {
   `(
     "shouldn't transpile the $type $runtime helper",
     async ({ type, runtime }) => {
-      const path = await resolve(
+      const path = require.resolve(
         `${runtime}/helpers${type === "esm" ? "/esm/" : "/"}typeof`,
       );
       const src = await readFile(path);
