@@ -101,8 +101,6 @@ export default declare((api, opts) => {
 
             if (node.declare) {
               child.remove();
-            } else if (!allowDeclareFields && !node.value && !node.decorators) {
-              child.remove();
             } else {
               node.variance = null;
               node.typeAnnotation = null;
