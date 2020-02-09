@@ -7,7 +7,6 @@ export default declare((api, opts) => {
 
   const {
     allExtensions,
-    allowDeclareFields,
     allowNamespaces,
     isTSX,
     jsxPragma,
@@ -15,14 +14,22 @@ export default declare((api, opts) => {
     onlyRemoveTypeImports,
   } = normalizeOptions(opts);
 
-  const pluginOptions = isTSX => ({
-    allowDeclareFields,
-    allowNamespaces,
-    isTSX,
-    jsxPragma,
-    jsxPragmaFrag,
-    onlyRemoveTypeImports,
-  });
+  const pluginOptions = process.env.BABEL_8_BREAKING
+    ? isTSX => ({
+        allowNamespaces,
+        isTSX,
+        jsxPragma,
+        jsxPragmaFrag,
+        onlyRemoveTypeImports,
+      })
+    : isTSX => ({
+        allowDeclareFields: opts.allowDeclareFields,
+        allowNamespaces,
+        isTSX,
+        jsxPragma,
+        jsxPragmaFrag,
+        onlyRemoveTypeImports,
+      });
 
   return {
     overrides: allExtensions

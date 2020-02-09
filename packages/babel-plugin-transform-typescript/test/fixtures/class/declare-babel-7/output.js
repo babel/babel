@@ -1,4 +1,4 @@
 class A {
-  declare x;
+  @foo
   y;
 }
