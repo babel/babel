@@ -12,13 +12,13 @@ import { types as tc } from "../tokenizer/context";
 import * as charCodes from "charcodes";
 import { isIteratorStart } from "../util/identifier";
 import {
-  functionFlags,
   type BindingTypes,
   BIND_NONE,
   BIND_LEXICAL,
   BIND_VAR,
   BIND_FUNCTION,
   SCOPE_ARROW,
+  SCOPE_FUNCTION,
   SCOPE_OTHER,
 } from "../util/scopeflags";
 import type { ExpressionErrors } from "../parser/util";
@@ -1889,7 +1889,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.extra?.trailingComma,
       );
       // Enter scope, as checkParams defines bindings
-      this.scope.enter(functionFlags(false, false) | SCOPE_ARROW);
+      this.scope.enter(SCOPE_FUNCTION | SCOPE_ARROW);
       // Use super's method to force the parameters to be checked
       super.checkParams(node, false, true);
       this.scope.exit();
