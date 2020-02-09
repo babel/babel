@@ -10,7 +10,6 @@ import escapeRegExp from "lodash/escapeRegExp";
 import * as helpers from "./helpers";
 import extend from "lodash/extend";
 import merge from "lodash/merge";
-import resolve from "resolve";
 import assert from "assert";
 import fs from "fs";
 import path from "path";
@@ -44,8 +43,8 @@ runCodeInTestContext(buildExternalHelpers(), {
  * This allows us to run our unittests
  */
 function runModuleInTestContext(id: string, relativeFilename: string) {
-  const filename = resolve.sync(id, {
-    basedir: path.dirname(relativeFilename),
+  const filename = require.resolve(id, {
+    paths: [path.dirname(relativeFilename)],
   });
 
   // Expose Node-internal modules if the tests want them. Note, this will not execute inside

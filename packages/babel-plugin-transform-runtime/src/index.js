@@ -1,5 +1,4 @@
 import path from "path";
-import resolve from "resolve";
 import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
@@ -11,7 +10,9 @@ import { typeAnnotationToString } from "./helpers";
 function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
   try {
     return path.dirname(
-      resolve.sync(`${moduleName}/package.json`, { basedir: dirname }),
+      require.resolve(`${moduleName}/package.json`, {
+        paths: [dirname],
+      }),
     );
   } catch (err) {
     if (err.code !== "MODULE_NOT_FOUND") throw err;
