@@ -33,6 +33,9 @@
     "charcodes": "^0.2.0",
     "unicode-12.0.0": "^0.7.9"
   },
+  "dependencies": {
+    "@babel/types": "^7.8.3"
+  },
   "bin": {
     "parser": "./bin/babel-parser.js"
   }
