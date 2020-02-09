@@ -111,7 +111,9 @@ export class Token {
 export default class Tokenizer extends LocationParser {
   // Forward-declarations
   // parser/util.js
+  /*::
   +unexpected: (pos?: ?number, messageOrType?: string | TokenType) => empty;
+  */
 
   isLookahead: boolean;
 

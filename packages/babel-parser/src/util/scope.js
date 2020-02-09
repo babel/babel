@@ -92,7 +92,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     return new Scope(flags);
   }
   // This method will be overwritten by subclasses
-  +createScope: (flags: ScopeFlags) => IScope;
+  /*:: +createScope: (flags: ScopeFlags) => IScope; */
 
   enter(flags: ScopeFlags) {
     this.scopeStack.push(this.createScope(flags));
