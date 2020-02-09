@@ -1,81 +1,4 @@
-import eslint from "eslint";
-import path from "path";
-import unpad from "dedent";
-import * as parser from "../src";
-
-function verifyAndAssertMessagesWithSpecificESLint(
-  code,
-  rules,
-  expectedMessages,
-  sourceType,
-  overrideConfig,
-  linter,
-) {
-  const config = {
-    parser: "current-babel-eslint",
-    rules,
-    env: {
-      node: true,
-      es6: true,
-    },
-    ...overrideConfig,
-    parserOptions: {
-      sourceType,
-      requireConfigFile: false,
-      babelOptions: {
-        configFile: require.resolve(
-          "@babel/eslint-shared-fixtures/config/babel.config.js",
-        ),
-      },
-      ...overrideConfig?.parserOptions,
-    },
-  };
-
-  const messages = linter.verify(code, config);
-
-  if (messages.length !== expectedMessages.length) {
-    throw new Error(
-      `Expected ${expectedMessages.length} message(s), got ${
-        messages.length
-      }\n${JSON.stringify(messages, null, 2)}`,
-    );
-  }
-
-  messages.forEach((message, i) => {
-    const formatedMessage = `${message.line}:${message.column} ${
-      message.message
-    }${message.ruleId ? ` ${message.ruleId}` : ""}`;
-    if (formatedMessage !== expectedMessages[i]) {
-      throw new Error(
-        `
-          Message ${i} does not match:
-          Expected: ${expectedMessages[i]}
-          Actual:   ${formatedMessage}
-        `,
-      );
-    }
-  });
-}
-
-function verifyAndAssertMessages(
-  code,
-  rules,
-  expectedMessages,
-  sourceType,
-  overrideConfig,
-) {
-  const linter = new eslint.Linter();
-  linter.defineParser("current-babel-eslint", parser);
-
-  verifyAndAssertMessagesWithSpecificESLint(
-    unpad(`${code}`),
-    rules || {},
-    expectedMessages || [],
-    sourceType,
-    overrideConfig,
-    linter,
-  );
-}
+import verifyAndAssertMessages from "../../helpers/verifyAndAssertMessages";
 
 describe("verify", () => {
   it("arrow function support (issue #1)", () => {
@@ -90,9 +13,9 @@ describe("verify", () => {
     );
   });
 
-  xit("Readable error messages (issue #3)", () => {
+  it("Readable error messages (issue #3)", () => {
     verifyAndAssertMessages("{ , res }", {}, [
-      "1:3 Parsing error: Unexpected token",
+      /1:2 Parsing error:.*Unexpected token \(1:2\)/,
     ]);
   });
 
@@ -150,6 +73,7 @@ describe("verify", () => {
       { strict: [1, "global"] },
       [],
       "script",
+      { sourceType: "script" },
     );
   });
 

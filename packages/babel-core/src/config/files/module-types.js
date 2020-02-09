@@ -21,6 +21,7 @@ export default function* loadCjsOrMjsDefault(
       } catch (e) {
         if (e.code !== "ERR_REQUIRE_ESM") throw e;
       }
+    // fall through
     case "mjs":
       if (yield* isAsync()) {
         return yield* waitFor(loadMjsDefault(filepath));

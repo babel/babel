@@ -1,9 +1,5 @@
 root: true
-
-# babel-eslint
-parser: ../../../lib/index.js
-
-# use eslint-plugin-import
+parser: "@babel/eslint-parser"
 plugins:
   - import
 rules:

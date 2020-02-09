@@ -10,7 +10,10 @@ import CommentsParser from "./comments";
 // message.
 
 export default class LocationParser extends CommentsParser {
+  // Forward-declaration: defined in tokenizer/index.js
+  /*::
   +isLookahead: boolean;
+  */
 
   getLocationForPosition(pos: number): Position {
     let loc;
