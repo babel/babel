@@ -6,7 +6,6 @@ export default declare(
     api,
     {
       allExtensions = false,
-      allowDeclareFields,
       allowNamespaces,
       jsxPragma,
       jsxPragmaFrag = "React.Fragment",
@@ -33,7 +32,6 @@ export default declare(
     }
 
     const pluginOptions = isTSX => ({
-      allowDeclareFields,
       allowNamespaces,
       isTSX,
       jsxPragma,
