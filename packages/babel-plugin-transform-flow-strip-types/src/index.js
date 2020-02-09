@@ -78,7 +78,6 @@ export default declare(api => {
         if (skipStrip) return;
         path.node.variance = null;
         path.node.typeAnnotation = null;
-        if (!path.node.value) path.remove();
       },
 
       ClassPrivateProperty(path) {
@@ -95,7 +94,6 @@ export default declare(api => {
         path.get("body.body").forEach(child => {
           if (child.isClassProperty()) {
             child.node.typeAnnotation = null;
-            if (!child.node.value) child.remove();
           }
         });
       },
