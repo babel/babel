@@ -106,7 +106,7 @@ lint-ts-ci: bootstrap-flowcheck
 lint: lint-js lint-ts
 
 lint-js:
-	$(YARN) eslint scripts $(SOURCES) '*.js' --format=codeframe
+	BABEL_ENV=test $(YARN) eslint scripts $(SOURCES) '*.js' --format=codeframe
 
 lint-ts:
 	scripts/lint-ts-typings.sh
