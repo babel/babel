@@ -12,6 +12,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@babel/helper-module-imports": "^7.8.3",
+    "@babel/helper-replace-supers": "^7.8.3",
     "@babel/helper-simple-access": "^7.8.3",
     "@babel/helper-split-export-declaration": "^7.8.3",
     "@babel/template": "^7.8.3",

@@ -1,3 +1,4 @@
+import { skipAllButComputedKey } from "@babel/helper-replace-supers";
 export default function rewriteThis(programPath: NodePath) {
   // Rewrite "this" to be "undefined".
   programPath.traverse(rewriteThisVisitor);
@@ -13,14 +14,10 @@ const rewriteThisVisitor = {
   },
   Function(path) {
     if (!path.isArrowFunctionExpression()) path.skip();
+    skipAllButComputedKey(path);
   },
   ClassProperty(path) {
-    path.skip();
-  },
-  ClassMethod(path) {
-    if (path.node.computed) {
-      //requeue the key child of classProperty here
-    }
+    skipAllButComputedKey(path);
   },
   ClassPrivateProperty(path) {
     path.skip();

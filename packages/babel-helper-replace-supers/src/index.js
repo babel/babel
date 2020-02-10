@@ -25,7 +25,7 @@ function getPrototypeOfExpression(objectRef, isStatic, file, isPrivateMethod) {
   return t.callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
 }
 
-function skipAllButComputedKey(path) {
+export function skipAllButComputedKey(path) {
   // If the path isn't computed, just skip everything.
   if (!path.node.computed) {
     path.skip();
