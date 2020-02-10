@@ -283,10 +283,12 @@ describe("babylon-to-espree", () => {
     assert.strictEqual(babylonAST.tokens[3].value, "#");
   });
 
+  // eslint-disable-next-line jest/no-disabled-tests
   it.skip("empty program with line comment", () => {
     parseAndAssertSame("// single comment");
   });
 
+  // eslint-disable-next-line jest/no-disabled-tests
   it.skip("empty program with block comment", () => {
     parseAndAssertSame("  /* multiline\n * comment\n*/");
   });

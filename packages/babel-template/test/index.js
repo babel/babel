@@ -219,7 +219,7 @@ describe("@babel/template", function() {
     });
   });
 
-  describe.only(".syntacticPlaceholders", () => {
+  describe(".syntacticPlaceholders", () => {
     it("works in function body", () => {
       const output = template(`function f() %%A%%`)({
         A: t.blockStatement([]),
@@ -302,12 +302,10 @@ describe("@babel/template", function() {
         });
 
         it("replaces identifiers", () => {
-          expect(() => {
-            const output = template(`FOO`)({
-              FOO: t.numericLiteral(1),
-            });
-            expect(generator(output).code).toMatchInlineSnapshot(`"1;"`);
+          const output = template(`FOO`)({
+            FOO: t.numericLiteral(1),
           });
+          expect(generator(output).code).toMatchInlineSnapshot(`"1;"`);
         });
 
         it("doesn't mix placeholder styles", () => {

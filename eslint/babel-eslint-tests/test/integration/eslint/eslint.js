@@ -1252,6 +1252,7 @@ describe("verify", () => {
   // This two tests are disabled, as the feature to visit properties when
   // there is a spread/rest operator has been removed as it caused problems
   // with other rules #249
+  // eslint-disable-next-line jest/no-disabled-tests
   it.skip("visits excluded properties left of spread #95", () => {
     verifyAndAssertMessages(
       "var originalObject = {}; var {field1, field2, ...clone} = originalObject;",
@@ -1259,6 +1260,7 @@ describe("verify", () => {
     );
   });
 
+  // eslint-disable-next-line jest/no-disabled-tests
   it.skip("visits excluded properties left of spread #210", () => {
     verifyAndAssertMessages(
       "const props = { yo: 'yo' }; const { ...otherProps } = props;",
@@ -1569,9 +1571,9 @@ describe("verify", () => {
     verifyAndAssertMessages("with (arguments) { length; }", {}, [], "script");
   });
 
-  xit("with does crash parsing in module mode (strict on) #171", () => {
+  it("with does crash parsing in module mode (strict on) #171", () => {
     verifyAndAssertMessages("with (arguments) { length; }", {}, [
-      "1:1 Parsing error: 'with' in strict mode",
+      /'with' in strict mode/,
     ]);
   });
 
