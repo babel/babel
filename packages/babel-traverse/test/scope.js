@@ -422,7 +422,11 @@ describe("scope", () => {
           }
         });
 
-        /*if (kind1 !== kind2) {
+        if (kind1 !== kind2) {
+          //todo: remove the if whitelist
+          if (kind1 === "const" && (kind2 === "function" || kind2 === "var")) {
+            continue;
+          }
           it(`${kind2}/${kind1}`, () => {
             const ast = createAST(kind2, kind1);
 
@@ -432,7 +436,7 @@ describe("scope", () => {
               expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
             }
           });
-        }*/
+        }
       }
     });
   });
