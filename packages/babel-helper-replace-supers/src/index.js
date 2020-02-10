@@ -1,6 +1,5 @@
 // @flow
-
-import type { NodePath } from "@babel/traverse";
+import type { HubInterface, NodePath } from "@babel/traverse";
 import traverse from "@babel/traverse";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
@@ -27,7 +26,7 @@ function getPrototypeOfExpression(objectRef, isStatic, file, isPrivateMethod) {
   return t.callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
 }
 
-function skipAllButComputedKey(path) {
+function skipAllButComputedKey(path: NodePath) {
   // If the path isn't computed, just skip everything.
   if (!path.node.computed) {
     path.skip();
@@ -43,10 +42,11 @@ function skipAllButComputedKey(path) {
 }
 
 export const environmentVisitor = {
-  TypeAnnotation(path) {
+  TypeAnnotation(path: NodePath) {
     path.skip();
   },
-  Function(path) {
+
+  Function(path: NodePath) {
     // Methods will be handled by the Method visit
     if (path.isMethod()) return;
     // Arrow functions inherit their parent's environment
@@ -54,7 +54,7 @@ export const environmentVisitor = {
     path.skip();
   },
 
-  "Method|ClassProperty|ClassPrivateProperty"(path) {
+  "Method|ClassProperty|ClassPrivateProperty"(path: NodePath) {
     skipAllButComputedKey(path);
   },
 };
@@ -191,8 +191,25 @@ const looseHandlers = {
   },
 };
 
+type ReplaceSupersOptionsBase = {|
+  methodPath: NodePath,
+  superRef: Object,
+  isLoose: boolean,
+  file: any,
+|};
+
+type ReplaceSupersOptions =
+  | {|
+      ...ReplaceSupersOptionsBase,
+      getObjectRef: () => BabelNode,
+    |}
+  | {|
+      ...ReplaceSupersOptionsBase,
+      objectRef: BabelNode,
+    |};
+
 export default class ReplaceSupers {
-  constructor(opts: Object) {
+  constructor(opts: ReplaceSupersOptions) {
     const path = opts.methodPath;
 
     this.methodPath = path;
@@ -205,18 +222,13 @@ export default class ReplaceSupers {
     this.opts = opts;
   }
 
-  methodPath: NodePath;
-  superRef: Object;
-  isStatic: boolean;
+  file: HubInterface;
   isLoose: boolean;
-  file;
-  opts: {
-    getObjectRef: Function,
-    methodPath: NodePath,
-    superRef: Object,
-    isLoose: boolean,
-    file: any,
-  };
+  isPrivateMethod: boolean;
+  isStatic: boolean;
+  methodPath: NodePath;
+  opts: ReplaceSupersOptions;
+  superRef: Object;
 
   getObjectRef() {
     return t.cloneNode(this.opts.objectRef || this.opts.getObjectRef());
