@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = {
   root: true,
-  plugins: ["prettier", "@babel/development", "import"],
+  plugins: ["prettier", "@babel/development", "import", "jest"],
   // replace it by `@babel/internal` when `@babel/eslint-config-internal` is published
   extends: path.resolve(__dirname, "eslint/babel-eslint-config-internal"),
   rules: {
@@ -38,6 +38,14 @@ module.exports = {
       env: {
         jest: true,
       },
+      extends: "plugin:jest/recommended",
+      rules: {
+        "jest/expect-expect": "off",
+        "jest/no-identical-title": "off",
+        "jest/no-standalone-expect": "off",
+        "jest/no-test-callback": "off",
+        "jest/valid-describe": "off"
+      }
     },
     {
       files: ["packages/babel-plugin-*/src/index.js"],
