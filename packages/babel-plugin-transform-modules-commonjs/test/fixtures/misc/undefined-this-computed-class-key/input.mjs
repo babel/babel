@@ -1,1 +1,1 @@
-export class C { [this.name] = 42 }
+export class C { [this.name]() {} }
