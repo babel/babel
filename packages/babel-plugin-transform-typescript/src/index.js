@@ -234,7 +234,18 @@ export default declare(
         },
 
         ExportNamedDeclaration(path) {
+          if (path.node.exportKind === "type") {
+            path.remove();
+            return;
+          }
+
           // remove export declaration if it's exporting only types
+          // This logic is needed when exportKind is "value", because
+          // currently the "type" keyword is optional.
+          // TODO:
+          // Also, currently @babel/parser sets exportKind to "value" for
+          //   export interface A {}
+          //   etc.
           if (
             !path.node.source &&
             path.node.specifiers.length > 0 &&

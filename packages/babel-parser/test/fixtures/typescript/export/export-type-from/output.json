@@ -1,29 +1,29 @@
 {
   "type": "File",
   "start": 0,
-  "end": 40,
+  "end": 31,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 3,
-      "column": 12
+      "line": 1,
+      "column": 31
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 40,
+    "end": 31,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 3,
-        "column": 12
+        "line": 1,
+        "column": 31
       }
     },
     "sourceType": "module",
@@ -32,7 +32,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 0,
-        "end": 26,
+        "end": 31,
         "loc": {
           "start": {
             "line": 1,
@@ -40,96 +40,82 @@
           },
           "end": {
             "line": 1,
-            "column": 26
+            "column": 31
           }
         },
-        "exportKind": "value",
+        "exportKind": "type",
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 9,
-            "end": 24,
+            "start": 14,
+            "end": 15,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 9
+                "column": 14
               },
               "end": {
                 "line": 1,
-                "column": 24
+                "column": 15
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 9,
-              "end": 13,
+              "start": 14,
+              "end": 15,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 9
+                  "column": 14
                 },
                 "end": {
                   "line": 1,
-                  "column": 13
+                  "column": 15
                 },
-                "identifierName": "Test"
+                "identifierName": "T"
               },
-              "name": "Test"
+              "name": "T"
             },
             "exported": {
               "type": "Identifier",
-              "start": 17,
-              "end": 24,
+              "start": 14,
+              "end": 15,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 17
+                  "column": 14
                 },
                 "end": {
                   "line": 1,
-                  "column": 24
+                  "column": 15
                 },
-                "identifierName": "default"
+                "identifierName": "T"
               },
-              "name": "default"
+              "name": "T"
             }
           }
         ],
-        "source": null,
-        "declaration": null
-      },
-      {
-        "type": "TSEnumDeclaration",
-        "start": 28,
-        "end": 40,
-        "loc": {
-          "start": {
-            "line": 3,
-            "column": 0
-          },
-          "end": {
-            "line": 3,
-            "column": 12
-          }
-        },
-        "id": {
-          "type": "Identifier",
-          "start": 33,
-          "end": 37,
+        "source": {
+          "type": "StringLiteral",
+          "start": 23,
+          "end": 30,
           "loc": {
             "start": {
-              "line": 3,
-              "column": 5
+              "line": 1,
+              "column": 23
             },
             "end": {
-              "line": 3,
-              "column": 9
-            },
-            "identifierName": "Test"
+              "line": 1,
+              "column": 30
+            }
           },
-          "name": "Test"
+          "extra": {
+            "rawValue": "./mod",
+            "raw": "'./mod'"
+          },
+          "value": "./mod"
         },
-        "members": []
+        "declaration": null
       }
     ],
     "directives": []
