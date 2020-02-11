@@ -1,6 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
-import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 export default declare((api, options) => {
   api.assertVersion(7);
@@ -107,13 +106,7 @@ export default declare((api, options) => {
         // Traverse all props passed to this element for immutability.
         path.traverse(immutabilityVisitor, state);
 
-        if (state.isImmutable) {
-          const hoisted = path.hoist();
-
-          if (hoisted) {
-            annotateAsPure(hoisted);
-          }
-        }
+        if (state.isImmutable) path.hoist();
       },
     },
   };
