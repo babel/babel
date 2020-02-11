@@ -189,7 +189,8 @@ export default function getTargets(
   // Parse browsers target via browserslist
   const browsersquery = validateBrowsers(targets.browsers);
 
-  const hasTargets = Object.keys(targets).length > 0;
+  const hasTargets = targets.esmodules ||
+    Object.keys(targets).filter(value => value !== TargetNames.esmodules).length > 0;
   const shouldParseBrowsers = !!targets.browsers;
   const shouldSearchForConfig =
     !options.ignoreBrowserslistConfig && !hasTargets;
