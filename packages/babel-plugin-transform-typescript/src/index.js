@@ -74,7 +74,9 @@ export default declare(
             );
           }
 
-          path.remove();
+          if (!node.decorators) {
+            path.remove();
+          }
         } else if (!allowDeclareFields && !node.value && !node.decorators) {
           path.remove();
         }
@@ -84,6 +86,7 @@ export default declare(
         if (node.readonly) node.readonly = null;
         if (node.optional) node.optional = null;
         if (node.typeAnnotation) node.typeAnnotation = null;
+        if (node.definite) node.definite = null;
       },
       method({ node }) {
         if (node.accessibility) node.accessibility = null;
