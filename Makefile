@@ -2,7 +2,7 @@ FLOW_COMMIT = a1f9a4c709dcebb27a5084acf47755fbae699c25
 TEST262_COMMIT = 28b4fcca4b1b1d278dfe0cc0e69c7d9d59b31aab
 TYPESCRIPT_COMMIT = 5fc917be2e4dd64c8e9504d36615cd7fbfdd4cd3
 
-FORCE_PUBLISH = "@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@babel/standalone,@babel/preset-env-standalone"
+FORCE_PUBLISH = "@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@babel/standalone"
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
@@ -50,7 +50,7 @@ build-flow-typings:
 build-typescript-typings:
 	$(NODE) packages/babel-types/scripts/generators/typescript.js > packages/babel-types/lib/index.d.ts
 
-build-standalone: build-babel-standalone build-preset-env-standalone
+build-standalone: build-babel-standalone
 
 build-standalone-ci: build-bundle-ci
 	$(MAKE) build-standalone
@@ -58,14 +58,8 @@ build-standalone-ci: build-bundle-ci
 build-babel-standalone:
 	$(YARN) gulp build-babel-standalone
 
-build-preset-env-standalone:
-	$(YARN) gulp build-babel-preset-env-standalone
-
 prepublish-build-standalone:
 	BABEL_ENV=production IS_PUBLISH=true $(YARN) gulp build-babel-standalone
-
-prepublish-build-preset-env-standalone:
-	BABEL_ENV=production IS_PUBLISH=true $(YARN) gulp build-babel-preset-env-standalone
 
 build-dist: build-polyfill-dist build-plugin-transform-runtime-dist
 
@@ -112,7 +106,7 @@ lint-ts-ci: bootstrap-flowcheck
 lint: lint-js lint-ts
 
 lint-js:
-	$(YARN) eslint scripts $(SOURCES) '*.js' --format=codeframe
+	BABEL_ENV=test $(YARN) eslint scripts $(SOURCES) '*.js' --format=codeframe
 
 lint-ts:
 	scripts/lint-ts-typings.sh
@@ -268,10 +262,8 @@ bootstrap: bootstrap-only
 	$(MAKE) build
 
 clean-lib:
-	# TODO: Don't delete eslint/*/lib when they use src
 	$(foreach source, $(SOURCES), \
-		$(if $(filter-out $(source), eslint), \
-			$(call clean-source-lib, $(source))))
+		$(call clean-source-lib, $(source)))
 
 clean-runtime-helpers:
 	rm -f packages/babel-runtime/helpers/**/*.js
@@ -307,8 +299,7 @@ define clean-source-test
 endef
 
 define clean-source-all
-	# TODO: Don't delete eslint/*/lib when they use src
-	$(if $(filter-out $1, eslint), $(call clean-source-lib, $1))
+	$(call clean-source-lib, $1)
 	rm -rf $(1)/*/node_modules
 	rm -rf $(1)/*/package-lock.json
 

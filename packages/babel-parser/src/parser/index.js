@@ -1,21 +1,27 @@
 // @flow
 
 import type { Options } from "../options";
-import type { File, JSXOpeningElement } from "../types";
+import type { File /*::, JSXOpeningElement */ } from "../types";
 import type { PluginList } from "../plugin-utils";
 import { getOptions } from "../options";
 import StatementParser from "./statement";
-import { SCOPE_ASYNC, SCOPE_PROGRAM } from "../util/scopeflags";
+import { SCOPE_PROGRAM } from "../util/scopeflags";
 import ScopeHandler from "../util/scope";
 import ClassScopeHandler from "../util/class-scope";
+import ProductionParameterHandler, {
+  PARAM_AWAIT,
+  PARAM,
+} from "../util/production-parameter";
 
 export type PluginsMap = Map<string, { [string]: any }>;
 
 export default class Parser extends StatementParser {
   // Forward-declaration so typescript plugin can override jsx plugin
+  /*::
   +jsxParseOpeningElementAfterName: (
     node: JSXOpeningElement,
   ) => JSXOpeningElement;
+  */
 
   constructor(options: ?Options, input: string) {
     options = getOptions(options);
@@ -26,6 +32,7 @@ export default class Parser extends StatementParser {
     this.options = options;
     this.inModule = this.options.sourceType === "module";
     this.scope = new ScopeHandler(this.raise.bind(this), this.inModule);
+    this.prodParam = new ProductionParameterHandler();
     this.classScope = new ClassScopeHandler(this.raise.bind(this));
     this.plugins = pluginsMap(this.options.plugins);
     this.filename = options.sourceFilename;
@@ -37,11 +44,12 @@ export default class Parser extends StatementParser {
   }
 
   parse(): File {
-    let scopeFlags = SCOPE_PROGRAM;
+    let paramFlags = PARAM;
     if (this.hasPlugin("topLevelAwait") && this.inModule) {
-      scopeFlags |= SCOPE_ASYNC;
+      paramFlags |= PARAM_AWAIT;
     }
-    this.scope.enter(scopeFlags);
+    this.scope.enter(SCOPE_PROGRAM);
+    this.prodParam.enter(paramFlags);
     const file = this.startNode();
     const program = this.startNode();
     this.nextToken();

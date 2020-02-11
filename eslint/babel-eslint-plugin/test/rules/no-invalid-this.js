@@ -77,11 +77,6 @@ function extractPatterns(patterns, type) {
 // Tests
 //------------------------------------------------------------------------------
 
-const errors = [
-  { message: "Unexpected 'this'.", type: "ThisExpression" },
-  { message: "Unexpected 'this'.", type: "ThisExpression" },
-];
-
 const patterns = [
   // Class private fields
   {

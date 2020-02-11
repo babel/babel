@@ -6,13 +6,13 @@ import type {
   TSParameterProperty,
   Decorator,
   Expression,
-  Identifier,
   Node,
-  ObjectExpression,
-  ObjectPattern,
   Pattern,
   RestElement,
   SpreadElement,
+  /*:: Identifier, */
+  /*:: ObjectExpression, */
+  /*:: ObjectPattern, */
 } from "../types";
 import type { Pos, Position } from "../util/location";
 import {
@@ -31,6 +31,7 @@ const unwrapParenthesizedExpression = (node: Node) => {
 
 export default class LValParser extends NodeUtils {
   // Forward-declaration: defined in expression.js
+  /*::
   +parseIdentifier: (liberal?: boolean) => Identifier;
   +parseMaybeAssign: (
     noIn?: ?boolean,
@@ -42,8 +43,11 @@ export default class LValParser extends NodeUtils {
     isPattern: boolean,
     refExpressionErrors?: ?ExpressionErrors,
   ) => T;
+  */
   // Forward-declaration: defined in statement.js
+  /*::
   +parseDecorator: () => Decorator;
+  */
 
   // Convert existing expression atom to assignable pattern
   // if possible.
