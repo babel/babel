@@ -13,8 +13,8 @@ const rewriteThisVisitor = {
     path.replaceWith(path.scope.buildUndefinedNode());
   },
   Function(path) {
-    if (!path.isArrowFunctionExpression()) path.skip();
     if (path.isMethod()) skipAllButComputedKey(path);
+    if (!path.isArrowFunctionExpression() && !path.isMethod()) path.skip();
   },
   ClassProperty(path) {
     skipAllButComputedKey(path);
