@@ -14,7 +14,7 @@ const rewriteThisVisitor = {
   },
   Function(path) {
     if (path.isMethod()) skipAllButComputedKey(path);
-    if (!path.isArrowFunctionExpression() && !path.isMethod()) path.skip();
+    else if (!path.isArrowFunctionExpression()) path.skip();
   },
   ClassProperty(path) {
     skipAllButComputedKey(path);
