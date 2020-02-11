@@ -6,8 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.C = void 0;
 
 class C {
-  [this.name]() {}
-
+  [(void 0).name] = 42;
 }
 
 exports.C = C;
