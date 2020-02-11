@@ -318,7 +318,7 @@ class Referencer extends OriginalReferencer {
   }
 }
 
-export default function(ast, parserOptions) {
+export default function analyzeScope(ast, parserOptions) {
   const options = {
     ignoreEval: true,
     optimistic: false,

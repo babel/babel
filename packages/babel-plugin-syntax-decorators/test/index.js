@@ -33,7 +33,7 @@ describe("'decoratorsBeforeExport' option", function() {
     expect(makeParser("", { decoratorsBeforeExport: "before" })).toThrow();
   });
 
-  test.skip("is required", function() {
+  test("is required", function() {
     expect(makeParser("", { legacy: false })).toThrow(/decoratorsBeforeExport/);
   });
 

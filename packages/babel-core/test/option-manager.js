@@ -94,8 +94,8 @@ describe("option-manager", () => {
       expect(() => {
         loadOptions({
           plugins: [[plugin, null]],
-        }).toThrow(/.plugins[0][1] must be an object, false, or undefined/);
-      });
+        });
+      }).toThrow(".plugins[0][1] must be an object, false, or undefined");
 
       expect(calls).toEqual([]);
     });
@@ -140,8 +140,8 @@ describe("option-manager", () => {
       expect(() => {
         loadOptions({
           presets: [preset, preset],
-        }).toThrow(/Duplicate plugin\/preset detected/);
-      });
+        });
+      }).toThrow(/Duplicate plugin\/preset detected/);
       expect(calls).toEqual([]);
     });
 
