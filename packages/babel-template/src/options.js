@@ -131,7 +131,7 @@ export function validate(opts: mixed): TemplateOpts {
     placeholderWhitelist: placeholderWhitelist || undefined,
     placeholderPattern:
       placeholderPattern == null ? undefined : placeholderPattern,
-    preserveComments: preserveComments == null ? false : preserveComments,
+    preserveComments: preserveComments == null ? undefined : preserveComments,
     syntacticPlaceholders:
       syntacticPlaceholders == null ? undefined : syntacticPlaceholders,
   };
