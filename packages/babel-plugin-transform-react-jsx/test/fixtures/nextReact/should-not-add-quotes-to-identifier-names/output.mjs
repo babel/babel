@@ -1,6 +1,6 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 
-var e = _jsx(F, {
+var e = /*#__PURE__*/_jsx(F, {
   aaa: true,
   new: true,
   const: true,

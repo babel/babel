@@ -1,3 +1,3 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 
-var x = _jsx("div", {});
+var x = /*#__PURE__*/_jsx("div", {});

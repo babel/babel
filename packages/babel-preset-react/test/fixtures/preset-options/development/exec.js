@@ -5,6 +5,8 @@ const actual = transform(
 
 const expected = multiline([
   'var _jsxFileName = "/fake/path/mock.js";',
+  '',
+  '/*#__PURE__*/',
   'React.createElement(Foo, {',
   '  bar: "baz",',
   '  __source: {',

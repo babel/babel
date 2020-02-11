@@ -1,4 +1,4 @@
 /** @jsxRuntime classic */
-var div = React.createElement(Component, { ...props,
+var div = /*#__PURE__*/React.createElement(Component, { ...props,
   foo: "bar"
 });

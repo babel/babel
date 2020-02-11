@@ -1,3 +1,4 @@
+/*#__PURE__*/
 React.createElement("div", {
-  attr: React.createElement("div", null)
+  attr: /*#__PURE__*/React.createElement("div", null)
 });

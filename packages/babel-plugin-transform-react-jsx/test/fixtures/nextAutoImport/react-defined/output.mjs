@@ -6,10 +6,10 @@ var y = react.createElement("div", {
   foo: 1
 });
 
-var x = _jsxs("div", {
-  children: [_jsx("div", {}, "1"), _jsx("div", {
+var x = /*#__PURE__*/_jsxs("div", {
+  children: [/*#__PURE__*/_jsx("div", {}, "1"), /*#__PURE__*/_jsx("div", {
     meow: "wolf"
-  }, "2"), _jsx("div", {}, "3"), _createElement("div", { ...props,
+  }, "2"), /*#__PURE__*/_jsx("div", {}, "3"), /*#__PURE__*/_createElement("div", { ...props,
     key: "4"
   })]
 });
