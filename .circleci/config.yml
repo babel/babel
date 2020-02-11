@@ -88,8 +88,8 @@ jobs:
           command: |
             git clone --recurse-submodules https://github.com/babel/babel-test262-runner
             cd babel-test262-runner
-            yarn
-            yarn add tap-mocha-reporter --dev
+            npm ci
+            npm i tap-mocha-reporter --save-dev
             node lib/download-node
       - run:
           name: Download master branch Test262 artifact

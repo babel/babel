@@ -26,6 +26,7 @@ import {
 import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util";
+import { PARAM } from "../../util/production-parameter";
 
 type TsModifier =
   | "readonly"
@@ -1265,7 +1266,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.body = inner;
       } else {
         this.scope.enter(SCOPE_TS_MODULE);
+        this.prodParam.enter(PARAM);
         node.body = this.tsParseModuleBlock();
+        this.prodParam.exit();
         this.scope.exit();
       }
       return this.finishNode(node, "TSModuleDeclaration");
@@ -1284,7 +1287,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
       if (this.match(tt.braceL)) {
         this.scope.enter(SCOPE_TS_MODULE);
+        this.prodParam.enter(PARAM);
         node.body = this.tsParseModuleBlock();
+        this.prodParam.exit();
         this.scope.exit();
       } else {
         this.semicolon();
@@ -1439,11 +1444,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           // Would like to use tsParseAmbientExternalModuleDeclaration here, but already ran past "global".
           if (this.match(tt.braceL)) {
             this.scope.enter(SCOPE_TS_MODULE);
+            this.prodParam.enter(PARAM);
             const mod: N.TsModuleDeclaration = node;
             mod.global = true;
             mod.id = expr;
             mod.body = this.tsParseModuleBlock();
             this.scope.exit();
+            this.prodParam.exit();
             return this.finishNode(mod, "TSModuleDeclaration");
           }
           break;
