@@ -1,14 +1,10 @@
 import { types as t, traverse } from "@babel/core";
 
 function convertNodes(ast, code) {
-  const state = { source: code };
   const astTransformVisitor = {
     noScope: true,
     enter(path) {
-      const node = path.node;
-
-      // private var to track original node type
-      node._babelType = node.type;
+      const { node } = path;
 
       if (node.innerComments) {
         delete node.innerComments;
@@ -23,7 +19,15 @@ function convertNodes(ast, code) {
       }
     },
     exit(path) {
-      const node = path.node;
+      const { node } = path;
+
+      if (Object.hasOwnProperty.call(node, "extra")) {
+        delete node.extra;
+      }
+
+      if (node.loc && Object.hasOwnProperty.call(node.loc, "identifierName")) {
+        delete node.loc.identifierName;
+      }
 
       if (path.isTypeParameter()) {
         node.type = "Identifier";
@@ -74,6 +78,7 @@ function convertNodes(ast, code) {
       }
     },
   };
+  const state = { source: code };
 
   // Monkey patch visitor keys in order to be able to traverse the estree nodes
   t.VISITOR_KEYS.Property = t.VISITOR_KEYS.ObjectProperty;
@@ -95,9 +100,9 @@ function convertNodes(ast, code) {
 function convertProgramNode(ast) {
   ast.type = "Program";
   ast.sourceType = ast.program.sourceType;
-  ast.directives = ast.program.directives;
   ast.body = ast.program.body;
   delete ast.program;
+  delete ast.errors;
 
   if (ast.comments.length) {
     const lastComment = ast.comments[ast.comments.length - 1];

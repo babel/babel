@@ -1,19 +1,41 @@
-import assert from "assert";
 import espree from "espree";
 import escope from "eslint-scope";
 import unpad from "dedent";
 import { parseForESLint } from "../src";
-import assertImplementsAST from "./helpers/assert-implements-ast";
 
-const babelOptions = {
+const BABEL_OPTIONS = {
   configFile: require.resolve(
     "@babel/eslint-shared-fixtures/config/babel.config.js",
   ),
 };
+const ALLOWED_PROPERTIES = [
+  "importKind",
+  "exportKind",
+  "variance",
+  "typeArguments",
+];
+
+function deeplyRemoveProperties(obj, props) {
+  for (const [k, v] of Object.entries(obj)) {
+    if (typeof v === "object") {
+      if (Array.isArray(v)) {
+        for (const el of v) {
+          if (el != null) deeplyRemoveProperties(el, props);
+        }
+      }
+
+      if (props.includes(k)) delete obj[k];
+      else if (v != null) deeplyRemoveProperties(v, props);
+      continue;
+    }
+
+    if (props.includes(k)) delete obj[k];
+  }
+}
 
 function parseAndAssertSame(code) {
   code = unpad(code);
-  const esAST = espree.parse(code, {
+  const espreeAST = espree.parse(code, {
     ecmaFeatures: {
       // enable JSX parsing
       jsx: true,
@@ -31,21 +53,22 @@ function parseAndAssertSame(code) {
     ecmaVersion: 2020,
     sourceType: "module",
   });
-  const babylonAST = parseForESLint(code, {
+  const babelAST = parseForESLint(code, {
     eslintVisitorKeys: true,
     eslintScopeManager: true,
-    babelOptions,
+    babelOptions: BABEL_OPTIONS,
   }).ast;
-  assertImplementsAST(esAST, babylonAST);
+  deeplyRemoveProperties(babelAST, ALLOWED_PROPERTIES);
+  expect(babelAST).toEqual(espreeAST);
 }
 
-describe("babylon-to-espree", () => {
+describe("Babel and Espree", () => {
   describe("compatibility", () => {
     it("should allow ast.analyze to be called without options", function() {
       const esAST = parseForESLint("`test`", {
         eslintScopeManager: true,
         eslintVisitorKeys: true,
-        babelOptions,
+        babelOptions: BABEL_OPTIONS,
       }).ast;
       expect(() => {
         escope.analyze(esAST);
@@ -244,9 +267,9 @@ describe("babylon-to-espree", () => {
     const babylonAST = parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
-      babelOptions,
+      babelOptions: BABEL_OPTIONS,
     }).ast;
-    assert.strictEqual(babylonAST.tokens[1].type, "Punctuator");
+    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
   });
 
   // Espree doesn't support the nullish coalescing operator yet
@@ -255,9 +278,9 @@ describe("babylon-to-espree", () => {
     const babylonAST = parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
-      babelOptions,
+      babelOptions: BABEL_OPTIONS,
     }).ast;
-    assert.strictEqual(babylonAST.tokens[1].type, "Punctuator");
+    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
   });
 
   // Espree doesn't support the pipeline operator yet
@@ -266,9 +289,9 @@ describe("babylon-to-espree", () => {
     const babylonAST = parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
-      babelOptions,
+      babelOptions: BABEL_OPTIONS,
     }).ast;
-    assert.strictEqual(babylonAST.tokens[1].type, "Punctuator");
+    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
   });
 
   // Espree doesn't support private fields yet
@@ -277,10 +300,10 @@ describe("babylon-to-espree", () => {
     const babylonAST = parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
-      babelOptions,
+      babelOptions: BABEL_OPTIONS,
     }).ast;
-    assert.strictEqual(babylonAST.tokens[3].type, "Punctuator");
-    assert.strictEqual(babylonAST.tokens[3].value, "#");
+    expect(babylonAST.tokens[3].type).toEqual("Punctuator");
+    expect(babylonAST.tokens[3].value).toEqual("#");
   });
 
   // eslint-disable-next-line jest/no-disabled-tests
@@ -448,9 +471,13 @@ describe("babylon-to-espree", () => {
     });
 
     it("do not allow import export everywhere", () => {
-      assert.throws(() => {
+      expect(() => {
         parseAndAssertSame('function F() { import a from "a"; }');
-      }, /SyntaxError: 'import' and 'export' may only appear at the top level/);
+      }).toThrow(
+        new SyntaxError(
+          "'import' and 'export' may only appear at the top level",
+        ),
+      );
     });
 
     it("return outside function", () => {
@@ -458,9 +485,9 @@ describe("babylon-to-espree", () => {
     });
 
     it("super outside method", () => {
-      assert.throws(() => {
+      expect(() => {
         parseAndAssertSame("function F() { super(); }");
-      }, /SyntaxError: 'super' keyword outside a method/);
+      }).toThrow(new SyntaxError("'super' keyword outside a method"));
     });
 
     it("StringLiteral", () => {
