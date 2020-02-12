@@ -25,26 +25,24 @@ const referenceVisitor = {
     }
   },
 };
+function handleClassTDZ(path, state) {
+  if (
+    state.classBinding &&
+    state.classBinding === path.scope.getBinding(path.node.name)
+  ) {
+    const classNameTDZError = state.file.addHelper("classNameTDZError");
+    const throwNode = t.callExpression(classNameTDZError, [
+      t.stringLiteral(path.node.name),
+    ]);
 
-const classFieldDefinitionEvaluationTDZVisitor = traverse.visitors.merge([
-  {
-    ReferencedIdentifier(path) {
-      if (
-        this.classBinding &&
-        this.classBinding === path.scope.getBinding(path.node.name)
-      ) {
-        const classNameTDZError = this.file.addHelper("classNameTDZError");
-        const throwNode = t.callExpression(classNameTDZError, [
-          t.stringLiteral(path.node.name),
-        ]);
+    path.replaceWith(t.sequenceExpression([throwNode, path.node]));
+    path.skip();
+  }
+}
 
-        path.replaceWith(t.sequenceExpression([throwNode, path.node]));
-        path.skip();
-      }
-    },
-  },
-  environmentVisitor,
-]);
+const classFieldDefinitionEvaluationTDZVisitor = {
+  ReferencedIdentifier: handleClassTDZ,
+};
 
 export function injectInitialization(path, constructor, nodes, renamer) {
   if (!nodes.length) return;
@@ -84,17 +82,22 @@ export function injectInitialization(path, constructor, nodes, renamer) {
 
 export function extractComputedKeys(ref, path, computedPaths, file) {
   const declarations = [];
-
+  const state = {
+    classBinding: path.node.id && path.scope.getBinding(path.node.id.name),
+    file,
+  };
   for (const computedPath of computedPaths) {
-    computedPath.traverse(classFieldDefinitionEvaluationTDZVisitor, {
-      classBinding: path.node.id && path.scope.getBinding(path.node.id.name),
-      file,
-    });
+    const computedKey = computedPath.get("key");
+    if (computedKey.isReferencedIdentifier()) {
+      handleClassTDZ(computedKey, state);
+    } else {
+      computedKey.traverse(classFieldDefinitionEvaluationTDZVisitor, state);
+    }
 
     const computedNode = computedPath.node;
     // Make sure computed property names are only evaluated once (upon class definition)
     // and in the right order in combination with static properties
-    if (!computedPath.get("key").isConstantExpression()) {
+    if (!computedKey.isConstantExpression()) {
       const ident = path.scope.generateUidIdentifierBasedOnNode(
         computedNode.key,
       );
