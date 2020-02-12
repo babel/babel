@@ -20,7 +20,7 @@ var CustomElement = /*#__PURE__*/function (_HTMLElement) {
   }
 
   return CustomElement;
-}(babelHelpers.wrapNativeSuper(HTMLElement));
+}( /*#__PURE__*/babelHelpers.wrapNativeSuper(HTMLElement));
 
 ;
 new CustomElement();

@@ -32,6 +32,6 @@ var MyDate = /*#__PURE__*/function (_Date) {
   }
 
   return MyDate;
-}(_wrapNativeSuper(Date));
+}( /*#__PURE__*/_wrapNativeSuper(Date));
 
 var myDate = new MyDate();
