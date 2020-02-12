@@ -14,7 +14,6 @@
   "dependencies": {
     "@babel/helper-module-imports": "^7.8.3",
     "@babel/helper-plugin-utils": "^7.8.3",
-    "resolve": "^1.8.1",
     "semver": "^5.5.1"
   },
   "peerDependencies": {
