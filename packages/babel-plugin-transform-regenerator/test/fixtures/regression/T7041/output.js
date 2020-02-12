@@ -1,8 +1,6 @@
 var _regeneratorRuntime = require("@babel/runtime/regenerator");
 
-var _marked =
-/*#__PURE__*/
-_regeneratorRuntime.mark(fn);
+var _marked = /*#__PURE__*/_regeneratorRuntime.mark(fn);
 
 Object.keys({});
 

@@ -6,9 +6,7 @@ var A = function A() {
 
 babelHelpers.defineProperty(A, "prop", 1);
 
-var B =
-/*#__PURE__*/
-function (_A) {
+var B = /*#__PURE__*/function (_A) {
   "use strict";
 
   babelHelpers.inherits(B, _A);

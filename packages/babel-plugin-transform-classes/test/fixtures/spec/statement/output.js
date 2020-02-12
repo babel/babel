@@ -12,9 +12,7 @@ var BaseView = function BaseView() {
   this.autoRender = true;
 };
 
-var BaseView =
-/*#__PURE__*/
-function () {
+var BaseView = /*#__PURE__*/function () {
   "use strict";
 
   function BaseView() {

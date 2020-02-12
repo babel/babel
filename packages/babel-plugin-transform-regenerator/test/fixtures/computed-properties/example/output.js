@@ -1,8 +1,6 @@
 var o = {
   foo() {
-    return (
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee() {
+    return (/*#__PURE__*/regeneratorRuntime.mark(function _callee() {
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
