@@ -9,6 +9,7 @@ import * as generatorFunctions from "./generators";
 const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
 const NON_DECIMAL_LITERAL = /^0[box]/;
+const PURE_ANNOTATION_RE = /^\s*[@#]__PURE__\s*$/;
 
 export type Format = {
   shouldPrintComment: (comment: string) => boolean,
@@ -477,7 +478,11 @@ export default class Printer {
   }
 
   _printLeadingComments(node) {
-    this._printComments(this._getComments(true, node));
+    this._printComments(
+      this._getComments(true, node),
+      // Don't add leading/trailing new lines to #__PURE__ annotations
+      true,
+    );
   }
 
   printInnerComments(node, indent = true) {
@@ -532,7 +537,7 @@ export default class Printer {
     );
   }
 
-  _printComment(comment) {
+  _printComment(comment, skipNewLines?: boolean) {
     if (!this.format.shouldPrintComment(comment.value)) return;
 
     // Some plugins use this to mark comments as removed using the AST-root 'comments' property,
@@ -549,12 +554,12 @@ export default class Printer {
 
     const isBlockComment = comment.type === "CommentBlock";
 
-    // Always add a newline before a block comment
-    this.newline(
-      this._buf.hasContent() && !this._noLineTerminator && isBlockComment
-        ? 1
-        : 0,
-    );
+    // Add a newline before and after a block comment, unless explicitly
+    // disallowed
+    const printNewLines =
+      isBlockComment && !skipNewLines && !this._noLineTerminator;
+
+    if (printNewLines && this._buf.hasContent()) this.newline(1);
 
     if (!this.endsWith("[") && !this.endsWith("{")) this.space();
 
@@ -584,15 +589,26 @@ export default class Printer {
       this._append(val);
     });
 
-    // Always add a newline after a block comment
-    this.newline(isBlockComment && !this._noLineTerminator ? 1 : 0);
+    if (printNewLines) this.newline(1);
   }
 
-  _printComments(comments?: Array<Object>) {
+  _printComments(comments?: Array<Object>, inlinePureAnnotation?: boolean) {
     if (!comments || !comments.length) return;
 
-    for (const comment of comments) {
-      this._printComment(comment);
+    if (
+      inlinePureAnnotation &&
+      comments.length === 1 &&
+      PURE_ANNOTATION_RE.test(comments[0].value)
+    ) {
+      this._printComment(
+        comments[0],
+        // Keep newlines if the comment marks a standalone call
+        this._buf.hasContent() && !this.endsWith("\n"),
+      );
+    } else {
+      for (const comment of comments) {
+        this._printComment(comment);
+      }
     }
   }
 }
