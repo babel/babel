@@ -137,7 +137,6 @@ __metadata:
     gensync: ^1.0.0-beta.1
     json5: ^2.1.2
     lodash: ^4.17.19
-    resolve: ^1.3.2
     semver: ^5.4.1
     source-map: ^0.5.0
   languageName: unknown
@@ -760,7 +759,6 @@ __metadata:
     jest-diff: ^24.8.0
     lodash: ^4.17.19
     quick-lru: 5.1.0
-    resolve: ^1.3.2
     source-map: ^0.5.0
   languageName: unknown
   linkType: soft
@@ -874,7 +872,6 @@ __metadata:
     fs-readdir-recursive: ^1.0.0
     lodash: ^4.17.19
     regenerator-runtime: ^0.13.4
-    resolve: ^1.13.1
     rimraf: ^3.0.0
     v8flags: ^3.1.1
   peerDependencies:
@@ -2656,7 +2653,6 @@ __metadata:
     "@babel/template": "workspace:*"
     "@babel/types": "workspace:*"
     make-dir: ^2.1.0
-    resolve: ^1.8.1
     semver: ^5.5.1
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -2793,7 +2789,6 @@ __metadata:
     "@babel/runtime": "workspace:*"
     "@babel/runtime-corejs2": "workspace:*"
     "@babel/runtime-corejs3": "workspace:*"
-    resolve: ^1.15.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -11492,7 +11487,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"resolve@^1.1.4, resolve@^1.1.6, resolve@^1.1.7, resolve@^1.10.0, resolve@^1.11.0, resolve@^1.13.1, resolve@^1.15.0, resolve@^1.17.0, resolve@^1.18.1, resolve@^1.3.2, resolve@^1.4.0, resolve@^1.8.1":
+"resolve@^1.1.4, resolve@^1.1.6, resolve@^1.1.7, resolve@^1.10.0, resolve@^1.11.0, resolve@^1.13.1, resolve@^1.17.0, resolve@^1.18.1, resolve@^1.3.2, resolve@^1.4.0, resolve@^1.8.1":
   version: 1.18.1
   resolution: "resolve@npm:1.18.1"
   dependencies:
@@ -11502,7 +11497,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@^1.1.4#builtin<compat/resolve>, resolve@patch:resolve@^1.1.6#builtin<compat/resolve>, resolve@patch:resolve@^1.1.7#builtin<compat/resolve>, resolve@patch:resolve@^1.10.0#builtin<compat/resolve>, resolve@patch:resolve@^1.11.0#builtin<compat/resolve>, resolve@patch:resolve@^1.13.1#builtin<compat/resolve>, resolve@patch:resolve@^1.15.0#builtin<compat/resolve>, resolve@patch:resolve@^1.17.0#builtin<compat/resolve>, resolve@patch:resolve@^1.18.1#builtin<compat/resolve>, resolve@patch:resolve@^1.3.2#builtin<compat/resolve>, resolve@patch:resolve@^1.4.0#builtin<compat/resolve>, resolve@patch:resolve@^1.8.1#builtin<compat/resolve>":
+"resolve@patch:resolve@^1.1.4#builtin<compat/resolve>, resolve@patch:resolve@^1.1.6#builtin<compat/resolve>, resolve@patch:resolve@^1.1.7#builtin<compat/resolve>, resolve@patch:resolve@^1.10.0#builtin<compat/resolve>, resolve@patch:resolve@^1.11.0#builtin<compat/resolve>, resolve@patch:resolve@^1.13.1#builtin<compat/resolve>, resolve@patch:resolve@^1.17.0#builtin<compat/resolve>, resolve@patch:resolve@^1.18.1#builtin<compat/resolve>, resolve@patch:resolve@^1.3.2#builtin<compat/resolve>, resolve@patch:resolve@^1.4.0#builtin<compat/resolve>, resolve@patch:resolve@^1.8.1#builtin<compat/resolve>":
   version: 1.18.1
   resolution: "resolve@patch:resolve@npm%3A1.18.1#builtin<compat/resolve>::version=1.18.1&hash=3388aa"
   dependencies:

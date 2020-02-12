@@ -15,7 +15,7 @@ let functionPath;
 transform(code, {
   configFile: false,
   plugins: [
-    "../../../../lib",
+    __dirname + "/../../../../lib",
     {
       post({ path }) {
         programPath = path;
