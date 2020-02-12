@@ -144,13 +144,13 @@ describe("parser and generator options", function () {
 describe("api", function () {
   it("exposes the resolvePlugin method", function () {
     expect(() => babel.resolvePlugin("nonexistent-plugin")).toThrow(
-      /Cannot find module 'babel-plugin-nonexistent-plugin'/,
+      /Cannot resolve module 'babel-plugin-nonexistent-plugin'/,
     );
   });
 
   it("exposes the resolvePreset method", function () {
     expect(() => babel.resolvePreset("nonexistent-preset")).toThrow(
-      /Cannot find module 'babel-preset-nonexistent-preset'/,
+      /Cannot resolve module 'babel-preset-nonexistent-preset'/,
     );
   });
 

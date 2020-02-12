@@ -6,12 +6,11 @@ declare module "debug" {
   declare export default (namespace: string) => (formatter: string, ...args: any[]) => void;
 }
 
-declare module "resolve" {
-  declare export default {
-    (string, {| basedir: string |}, (err: ?Error, res: string) => void): void;
-    sync: (string, {| basedir: string |}) => string;
-  };
-}
+declare var require: {
+  resolve(specifier: string, opts?: {
+    paths: string[]
+  }): string,
+};
 
 declare module "json5" {
   declare export default {
