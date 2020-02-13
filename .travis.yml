@@ -41,6 +41,7 @@ matrix:
         yarn: true
         directories:
           - $HOME/AppData/Local/Temp/chocolatey
+          - .yarn/cache
     # Continue node_js matrix
     - node_js: "10"
     - node_js: "node"
