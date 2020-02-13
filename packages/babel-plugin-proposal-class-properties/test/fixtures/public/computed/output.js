@@ -15,9 +15,7 @@ _ref3 = /regex/;
 _baz = baz;
 _ref4 = `template${expression}`;
 
-var MyClass =
-/*#__PURE__*/
-function () {
+var MyClass = /*#__PURE__*/function () {
   "use strict";
 
   function MyClass() {

@@ -10,9 +10,7 @@ let Base = function Base() {};
 
 let value = 2;
 
-let Obj =
-/*#__PURE__*/
-function (_Base) {
+let Obj = /*#__PURE__*/function (_Base) {
   _inheritsLoose(Obj, _Base);
 
   function Obj() {

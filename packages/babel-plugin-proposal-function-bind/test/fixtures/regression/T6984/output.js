@@ -8,9 +8,7 @@ function _one() {}
 
 function _two() {}
 
-let Test1 =
-/*#__PURE__*/
-function () {
+let Test1 = /*#__PURE__*/function () {
   "use strict";
 
   function Test1() {
