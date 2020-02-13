@@ -1,4 +1,4 @@
-import espree from "espree";
+import path from "path";
 import escope from "eslint-scope";
 import unpad from "dedent";
 import { parseForESLint } from "../src";
@@ -33,36 +33,47 @@ function deeplyRemoveProperties(obj, props) {
   }
 }
 
-function parseAndAssertSame(code) {
-  code = unpad(code);
-  const espreeAST = espree.parse(code, {
-    ecmaFeatures: {
-      // enable JSX parsing
-      jsx: true,
-      // enable return in global scope
-      globalReturn: true,
-      // enable implied strict mode (if ecmaVersion >= 5)
-      impliedStrict: true,
-      // allow experimental object rest/spread
-      experimentalObjectRestSpread: true,
-    },
-    tokens: true,
-    loc: true,
-    range: true,
-    comment: true,
-    ecmaVersion: 2020,
-    sourceType: "module",
-  });
-  const babelAST = parseForESLint(code, {
-    eslintVisitorKeys: true,
-    eslintScopeManager: true,
-    babelOptions: BABEL_OPTIONS,
-  }).ast;
-  deeplyRemoveProperties(babelAST, ALLOWED_PROPERTIES);
-  expect(babelAST).toEqual(espreeAST);
-}
-
 describe("Babel and Espree", () => {
+  let espree;
+
+  function parseAndAssertSame(code) {
+    code = unpad(code);
+    const espreeAST = espree.parse(code, {
+      ecmaFeatures: {
+        // enable JSX parsing
+        jsx: true,
+        // enable return in global scope
+        globalReturn: true,
+        // enable implied strict mode (if ecmaVersion >= 5)
+        impliedStrict: true,
+        // allow experimental object rest/spread
+        experimentalObjectRestSpread: true,
+      },
+      tokens: true,
+      loc: true,
+      range: true,
+      comment: true,
+      ecmaVersion: 2020,
+      sourceType: "module",
+    });
+    const babelAST = parseForESLint(code, {
+      eslintVisitorKeys: true,
+      eslintScopeManager: true,
+      babelOptions: BABEL_OPTIONS,
+    }).ast;
+    deeplyRemoveProperties(babelAST, ALLOWED_PROPERTIES);
+    expect(babelAST).toEqual(espreeAST);
+  }
+
+  beforeAll(async () => {
+    // Use the version of Espree that is a dependency of
+    // the version of ESLint we are testing against.
+    const espreePath = require.resolve("espree", {
+      paths: [path.dirname(require.resolve("eslint"))],
+    });
+    espree = await import(espreePath);
+  });
+
   describe("compatibility", () => {
     it("should allow ast.analyze to be called without options", function() {
       const esAST = parseForESLint("`test`", {
