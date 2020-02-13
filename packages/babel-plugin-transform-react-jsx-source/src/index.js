@@ -1,7 +1,7 @@
 /**
- * This adds {fileName, lineNumber} annotations to React component definitions
- * and to jsx tag literals.
+ * This adds {fileName, lineNumber, column} annotations to JSX tags.
  *
+ * NOTE: lineNumber is 1-based and column is 0-based.
  *
  * == JSX Literals ==
  *
@@ -10,7 +10,7 @@
  * becomes:
  *
  * var __jsxFileName = 'this/file.js';
- * <sometag __source={{fileName: __jsxFileName, lineNumber: 10}}/>
+ * <sometag __source={{fileName: __jsxFileName, lineNumber: 10, column: 0}}/>
  */
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
@@ -21,9 +21,11 @@ const FILE_NAME_VAR = "_jsxFileName";
 export default declare(api => {
   api.assertVersion(7);
 
-  function makeTrace(fileNameIdentifier, lineNumber) {
+  function makeTrace(fileNameIdentifier, lineNumber, column) {
     const fileLineLiteral =
       lineNumber != null ? t.numericLiteral(lineNumber) : t.nullLiteral();
+    const fileColumnLiteral =
+      column != null ? t.numericLiteral(column) : t.nullLiteral();
     const fileNameProperty = t.objectProperty(
       t.identifier("fileName"),
       fileNameIdentifier,
@@ -32,7 +34,15 @@ export default declare(api => {
       t.identifier("lineNumber"),
       fileLineLiteral,
     );
-    return t.objectExpression([fileNameProperty, lineNumberProperty]);
+    const columnProperty = t.objectProperty(
+      t.identifier("column"),
+      fileColumnLiteral,
+    );
+    return t.objectExpression([
+      fileNameProperty,
+      lineNumberProperty,
+      columnProperty,
+    ]);
   }
 
   const visitor = {
@@ -69,7 +79,11 @@ export default declare(api => {
         state.fileNameIdentifier = fileNameIdentifier;
       }
 
-      const trace = makeTrace(state.fileNameIdentifier, location.start.line);
+      const trace = makeTrace(
+        state.fileNameIdentifier,
+        location.start.line,
+        location.start.column,
+      );
       attributes.push(t.jsxAttribute(id, t.jsxExpressionContainer(trace)));
     },
   };
