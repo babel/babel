@@ -8,9 +8,7 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 
 var _foo = _interopRequireDefault(require("foo"));
 
-let Example =
-/*#__PURE__*/
-function () {
+let Example = /*#__PURE__*/function () {
   function Example() {
     (0, _classCallCheck2.default)(this, Example);
   }

@@ -2,9 +2,7 @@
 
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
-let Base =
-/*#__PURE__*/
-function () {
+let Base = /*#__PURE__*/function () {
   function Base() {}
 
   var _proto = Base.prototype;
@@ -18,9 +16,7 @@ function () {
   return Base;
 }();
 
-let Obj =
-/*#__PURE__*/
-function (_Base) {
+let Obj = /*#__PURE__*/function (_Base) {
   _inheritsLoose(Obj, _Base);
 
   function Obj() {

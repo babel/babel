@@ -1,9 +1,7 @@
 function f() {
   var _this = this;
 
-  let g =
-  /*#__PURE__*/
-  function () {
+  let g = /*#__PURE__*/function () {
     var _ref = babelHelpers.asyncToGenerator(function* () {
       _this;
     });
@@ -19,9 +17,7 @@ class Class {
     var _this2 = this;
 
     return babelHelpers.asyncToGenerator(function* () {
-      var c =
-      /*#__PURE__*/
-      function () {
+      var c = /*#__PURE__*/function () {
         var _ref2 = babelHelpers.asyncToGenerator(function* (b) {
           _this2;
         });

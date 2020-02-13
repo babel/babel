@@ -6,9 +6,7 @@ var _getPrototypeOf = require("@babel/runtime/helpers/getPrototypeOf");
 
 var _inherits = require("@babel/runtime/helpers/inherits");
 
-let Foo =
-/*#__PURE__*/
-function (_Bar) {
+let Foo = /*#__PURE__*/function (_Bar) {
   "use strict";
 
   _inherits(Foo, _Bar);

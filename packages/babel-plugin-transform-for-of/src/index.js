@@ -19,7 +19,7 @@ export default declare((api, options) => {
       visitor: {
         ForOfStatement(path) {
           const { scope } = path;
-          const { left, right, body, await: isAwait } = path.node;
+          const { left, right, await: isAwait } = path.node;
           if (isAwait) {
             return;
           }
@@ -48,8 +48,19 @@ export default declare((api, options) => {
             );
           }
 
-          const block = t.toBlock(body);
-          block.body.unshift(assignment);
+          let blockBody;
+          const body = path.get("body");
+          if (
+            body.isBlockStatement() &&
+            Object.keys(path.getBindingIdentifiers()).some(id =>
+              body.scope.hasOwnBinding(id),
+            )
+          ) {
+            blockBody = t.blockStatement([assignment, body.node]);
+          } else {
+            blockBody = t.toBlock(body.node);
+            blockBody.body.unshift(assignment);
+          }
 
           path.replaceWith(
             t.forStatement(
@@ -60,7 +71,7 @@ export default declare((api, options) => {
                 t.memberExpression(t.cloneNode(array), t.identifier("length")),
               ),
               t.updateExpression("++", t.cloneNode(i)),
-              block,
+              blockBody,
             ),
           );
         },

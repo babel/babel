@@ -11,9 +11,7 @@ var Foo = function Foo() {
 
 var _prop = new WeakMap();
 
-var Bar =
-/*#__PURE__*/
-function (_Foo) {
+var Bar = /*#__PURE__*/function (_Foo) {
   "use strict";
 
   babelHelpers.inherits(Bar, _Foo);

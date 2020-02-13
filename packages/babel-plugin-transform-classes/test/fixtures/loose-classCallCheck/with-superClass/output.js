@@ -6,9 +6,7 @@ let B = function B() {
   "use strict";
 };
 
-let A =
-/*#__PURE__*/
-function (_B) {
+let A = /*#__PURE__*/function (_B) {
   "use strict";
 
   _inheritsLoose(A, _B);

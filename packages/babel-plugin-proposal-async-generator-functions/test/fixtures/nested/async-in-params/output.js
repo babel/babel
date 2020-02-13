@@ -3,9 +3,7 @@ function g() {
 }
 
 function _g() {
-  _g = babelHelpers.wrapAsyncGenerator(function* (x =
-  /*#__PURE__*/
-  babelHelpers.asyncToGenerator(function* () {
+  _g = babelHelpers.wrapAsyncGenerator(function* (x = /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
     yield 1;
   })) {
     yield babelHelpers.awaitAsyncGenerator(2);

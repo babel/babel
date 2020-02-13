@@ -6,9 +6,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-let Base =
-/*#__PURE__*/
-function () {
+let Base = /*#__PURE__*/function () {
   function Base() {}
 
   _createClass(Base, [{
@@ -24,9 +22,7 @@ function () {
   return Base;
 }();
 
-let Obj =
-/*#__PURE__*/
-function (_Base) {
+let Obj = /*#__PURE__*/function (_Base) {
   _inheritsLoose(Obj, _Base);
 
   function Obj() {
