@@ -18,7 +18,8 @@ function startLocalRegistry {
 
   # Set registry to local registry
   npm set registry "$custom_registry_url"
-  yarn config set registry "$custom_registry_url"
+  yarn config set npmPublishRegistry "$custom_registry_url"
+  yarn config set npmRegistryServer  "$custom_registry_url"
 }
 
 function loginLocalRegistry {
@@ -30,5 +31,6 @@ function stopLocalRegistry {
   # Restore the original NPM and Yarn registry URLs and stop Verdaccio
   fuser -k 4873/tcp
   npm set registry "$original_npm_registry_url"
-  yarn config set registry "$original_yarn_registry_url"
+  yarn config set npmPublishRegistry "$original_yarn_registry_url"
+  yarn config set npmRegistryServer "$original_yarn_registry_url"
 }
