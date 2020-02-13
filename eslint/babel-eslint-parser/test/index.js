@@ -306,13 +306,11 @@ describe("Babel and Espree", () => {
     expect(babylonAST.tokens[3].value).toEqual("#");
   });
 
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip("empty program with line comment", () => {
+  it("empty program with line comment", () => {
     parseAndAssertSame("// single comment");
   });
 
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip("empty program with block comment", () => {
+  it("empty program with block comment", () => {
     parseAndAssertSame("  /* multiline\n * comment\n*/");
   });
 

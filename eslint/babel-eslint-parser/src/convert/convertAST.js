@@ -107,12 +107,7 @@ function convertProgramNode(ast) {
   if (ast.comments.length) {
     const lastComment = ast.comments[ast.comments.length - 1];
 
-    if (!ast.tokens.length) {
-      // if no tokens, the program starts at the end of the last comment
-      ast.start = lastComment.end;
-      ast.loc.start.line = lastComment.loc.end.line;
-      ast.loc.start.column = lastComment.loc.end.column;
-    } else {
+    if (ast.tokens.length) {
       const lastToken = ast.tokens[ast.tokens.length - 1];
 
       if (lastComment.end > lastToken.end) {
