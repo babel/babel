@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-node="yarn --silent node"
+node="yarn node"
 jestArgs="--coverage"
 
 if [ -n "$CI" ]; then

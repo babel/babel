@@ -14,7 +14,7 @@ EMPTY :=
 SPACE := $(EMPTY) $(EMPTY)
 COMMA_SEPARATED_SOURCES = $(subst $(SPACE),$(COMMA),$(SOURCES))
 
-YARN := yarn --silent
+YARN := yarn
 NODE := $(YARN) node
 
 
@@ -33,7 +33,7 @@ build-bundle: clean clean-lib
 	$(MAKE) build-typings
 	$(MAKE) build-dist
 
-build-bundle-ci: bootstrap-only
+build-bundle-ci: yarn-install
 	$(MAKE) build-bundle
 
 generate-standalone:
@@ -91,13 +91,13 @@ code-quality: flow lint
 flow:
 	$(YARN) flow check --strip-root
 
-bootstrap-flowcheck: bootstrap-only
+bootstrap-flowcheck: yarn-install
 	$(YARN) gulp build-babel-types
 	$(MAKE) build-typings
 
 lint-ci: lint-js-ci lint-ts-ci check-compat-data-ci
 
-lint-js-ci: bootstrap-only
+lint-js-ci: yarn-install
 	$(MAKE) lint-js
 
 lint-ts-ci: bootstrap-flowcheck
@@ -213,7 +213,7 @@ prepublish-build: clean-lib clean-runtime-helpers
 	$(MAKE) clone-license
 
 prepublish:
-	$(MAKE) bootstrap-only
+	$(MAKE) yarn-install
 	$(MAKE) prepublish-build
 	IS_PUBLISH=true $(MAKE) test
 
@@ -252,16 +252,10 @@ publish-eslint:
 	cd eslint/$(PKG); yarn publish
 	$(call set-json-field, ./eslint/$(PKG)/package.json, private, true)
 
-bootstrap-only: lerna-bootstrap
-
 yarn-install: clean-all
-	yarn --ignore-engines
+	yarn
 
-lerna-bootstrap: yarn-install
-# todo: remove `-- -- --ignore-engines` in Babel 8
-	$(YARN) lerna bootstrap -- -- --ignore-engines
-
-bootstrap: bootstrap-only
+bootstrap: yarn-install
 	$(MAKE) build
 
 clean-lib:
