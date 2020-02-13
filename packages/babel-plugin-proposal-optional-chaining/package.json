@@ -12,15 +12,15 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.8.3",
+    "@babel/helper-plugin-utils": "workspace:^7.8.3",
     "@babel/plugin-syntax-optional-chaining": "^7.8.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.3",
-    "@babel/helper-plugin-test-runner": "^7.8.3",
-    "@babel/plugin-transform-block-scoping": "^7.8.3"
+    "@babel/core": "workspace:^7.8.3",
+    "@babel/helper-plugin-test-runner": "workspace:^7.8.3",
+    "@babel/plugin-transform-block-scoping": "workspace:^7.8.3"
   }
 }

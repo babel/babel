@@ -9,10 +9,10 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-annotate-as-pure": "^7.8.3",
-    "@babel/helper-wrap-function": "^7.8.3",
-    "@babel/template": "^7.8.3",
-    "@babel/traverse": "^7.8.3",
-    "@babel/types": "^7.8.3"
+    "@babel/helper-annotate-as-pure": "workspace:^7.8.3",
+    "@babel/helper-wrap-function": "workspace:^7.8.3",
+    "@babel/template": "workspace:^7.8.3",
+    "@babel/traverse": "workspace:^7.8.3",
+    "@babel/types": "workspace:^7.8.3"
   }
 }

@@ -9,9 +9,9 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-call-delegate": "^7.8.3",
-    "@babel/helper-get-function-arity": "^7.8.3",
-    "@babel/helper-plugin-utils": "^7.8.3"
+    "@babel/helper-call-delegate": "workspace:^7.8.3",
+    "@babel/helper-get-function-arity": "workspace:^7.8.3",
+    "@babel/helper-plugin-utils": "workspace:^7.8.3"
   },
   "keywords": [
     "babel-plugin"
@@ -20,7 +20,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/helper-plugin-test-runner": "^7.8.3"
+    "@babel/core": "workspace:^7.8.4",
+    "@babel/helper-plugin-test-runner": "workspace:^7.8.3"
   }
 }

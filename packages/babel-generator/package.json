@@ -14,13 +14,13 @@
     "lib"
   ],
   "dependencies": {
-    "@babel/types": "^7.8.3",
+    "@babel/types": "workspace:^7.8.3",
     "jsesc": "^2.5.1",
     "lodash": "^4.17.13",
     "source-map": "^0.5.0"
   },
   "devDependencies": {
-    "@babel/helper-fixtures": "^7.8.3",
-    "@babel/parser": "^7.8.4"
+    "@babel/helper-fixtures": "workspace:^7.8.3",
+    "@babel/parser": "workspace:^7.8.4"
   }
 }

@@ -39,13 +39,13 @@
     "./src/transform-file.js": "./src/transform-file-browser.js"
   },
   "dependencies": {
-    "@babel/code-frame": "^7.8.3",
-    "@babel/generator": "^7.8.4",
-    "@babel/helpers": "^7.8.4",
-    "@babel/parser": "^7.8.4",
-    "@babel/template": "^7.8.3",
-    "@babel/traverse": "^7.8.4",
-    "@babel/types": "^7.8.3",
+    "@babel/code-frame": "workspace:^7.8.3",
+    "@babel/generator": "workspace:^7.8.4",
+    "@babel/helpers": "workspace:^7.8.4",
+    "@babel/parser": "workspace:^7.8.4",
+    "@babel/template": "workspace:^7.8.3",
+    "@babel/traverse": "workspace:^7.8.4",
+    "@babel/types": "workspace:^7.8.3",
     "convert-source-map": "^1.7.0",
     "debug": "^4.1.0",
     "gensync": "^1.0.0-beta.1",
@@ -55,6 +55,6 @@
     "source-map": "^0.5.0"
   },
   "devDependencies": {
-    "@babel/helper-transform-fixture-test-runner": "^7.8.3"
+    "@babel/helper-transform-fixture-test-runner": "workspace:^7.8.3"
   }
 }

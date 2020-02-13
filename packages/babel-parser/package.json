@@ -28,12 +28,10 @@
     "node": ">=10.13.0"
   },
   "devDependencies": {
-    "@babel/code-frame": "^7.8.3",
-    "@babel/helper-fixtures": "^7.8.3",
+    "@babel/code-frame": "workspace:^7.8.3",
+    "@babel/helper-fixtures": "workspace:^7.8.3",
     "charcodes": "^0.2.0",
     "unicode-12.0.0": "^0.7.9"
   },
-  "bin": {
-    "parser": "./bin/babel-parser.js"
-  }
+  "bin": "./bin/babel-parser.js"
 }
