@@ -186,7 +186,7 @@ export default function getTargets(
       .join(", ");
   } else {
     // remove falsy esmodules to fix `hasTargets` below
-    delete targets.esmodules
+    delete targets.esmodules;
   }
 
   // Parse browsers target via browserslist
