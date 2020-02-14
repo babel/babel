@@ -2,7 +2,8 @@ git:
   depth: 5
 language: node_js
 cache:
-  - .yarn/cache
+  directories:
+    - .yarn/cache
 
 os: linux
 
@@ -32,8 +33,9 @@ matrix:
     - os: windows
       node_js: "node"
       cache:
-        - $HOME/AppData/Local/Temp/chocolatey
-        - .yarn/cache
+        directories:
+          - $HOME/AppData/Local/Temp/chocolatey
+          - .yarn/cache
     # Continue node_js matrix
     - node_js: "10"
     - node_js: "node"
