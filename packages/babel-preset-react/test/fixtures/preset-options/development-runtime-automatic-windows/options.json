@@ -1,0 +1,4 @@
+{
+  "presets": [["react", { "runtime": "automatic", "development": true }]],
+  "os": ["win32"]
+}

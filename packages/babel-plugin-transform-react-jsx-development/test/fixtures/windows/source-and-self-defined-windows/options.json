@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "transform-react-jsx-development",
+    "transform-react-jsx-source",
+    "transform-react-jsx-self"
+  ],
+  "sourceType": "module",
+  "os": ["windows"],
+  "throws": "__source and __self should not be defined in props. You are most likely using the deprecated transform-react-jsx-self or transform-react-jsx-source Babel plugins. __source and __self will be set automatically in automatic runtime. Please remove transform-react-jsx-self or transform-react-jsx-source from your Babel config."
+}

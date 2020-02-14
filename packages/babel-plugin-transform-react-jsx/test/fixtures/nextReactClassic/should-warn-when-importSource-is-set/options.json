@@ -1,0 +1,13 @@
+{
+  "plugins": [
+    [
+      "transform-react-jsx",
+      {
+        "runtime": "automatic",
+        "importSource": "foo"
+      }
+    ]
+  ],
+  "sourceType": "module",
+  "throws": "importSource cannot be set when runtime is classic."
+}

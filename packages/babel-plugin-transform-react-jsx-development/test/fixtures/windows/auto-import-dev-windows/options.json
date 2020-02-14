@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-react-jsx-development"],
+  "sourceType": "module"
+}

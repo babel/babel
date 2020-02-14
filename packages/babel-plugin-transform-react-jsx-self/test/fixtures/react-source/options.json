@@ -1,3 +1,4 @@
 {
-  "plugins": ["syntax-jsx", "transform-react-jsx-self"]
+  "plugins": ["syntax-jsx", "transform-react-jsx-self"],
+  "sourceType": "script"
 }

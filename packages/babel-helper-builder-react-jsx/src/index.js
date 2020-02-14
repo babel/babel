@@ -15,7 +15,7 @@ export default function(opts) {
     if (opts.throwIfNamespace) {
       throw path.buildCodeFrameError(
         `Namespace tags are not supported by default. React's JSX doesn't support namespace tags. \
-You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
+You can set \`throwIfNamespace: false\` to bypass this warning.`,
       );
     }
   };

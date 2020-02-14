@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    ["transform-react-jsx-development", { "runtime": "classic" }],
+    "transform-react-jsx-source",
+    "transform-react-jsx-self"
+  ]
+}
