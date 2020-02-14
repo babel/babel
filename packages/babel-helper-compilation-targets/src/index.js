@@ -184,13 +184,15 @@ export default function getTargets(
     targets.browsers = Object.keys(supportsESModules)
       .map(browser => `${browser} ${supportsESModules[browser]}`)
       .join(", ");
+  } else {
+    // remove falsy esmodules to fix `hasTargets` below
+    delete targets.esmodules
   }
 
   // Parse browsers target via browserslist
   const browsersquery = validateBrowsers(targets.browsers);
 
-  const hasTargets = targets.esmodules ||
-    Object.keys(targets).filter(value => value !== TargetNames.esmodules).length > 0;
+  const hasTargets = Object.keys(targets).length > 0;
   const shouldParseBrowsers = !!targets.browsers;
   const shouldSearchForConfig =
     !options.ignoreBrowserslistConfig && !hasTargets;
