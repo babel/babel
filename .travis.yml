@@ -2,18 +2,16 @@ git:
   depth: 5
 language: node_js
 cache:
-  yarn: true
+  - .yarn/cache
 
 os: linux
 
 env:
   global:
-    - PATH=$HOME/.yarn/bin:$PATH
     - JOB=test
 
-install: skip
-before_script:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
+install:
+  - yarn
   - if [ "$TRAVIS_OS_NAME" = "windows" ]; then choco install make; fi
 
 script:
@@ -33,15 +31,9 @@ matrix:
     # Move `windows` build to be the third since it is slow
     - os: windows
       node_js: "node"
-      env:
-        - JOB=test
-        # https://travis-ci.community/t/build-doesnt-finish-after-completing-tests/288/9
-        - YARN_GPG=no
       cache:
-        yarn: true
-        directories:
-          - $HOME/AppData/Local/Temp/chocolatey
-          - .yarn/cache
+        - $HOME/AppData/Local/Temp/chocolatey
+        - .yarn/cache
     # Continue node_js matrix
     - node_js: "10"
     - node_js: "node"

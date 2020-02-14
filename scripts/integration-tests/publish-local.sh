@@ -30,7 +30,7 @@ initializeE2Egit
 #                                 PUBLISH                                      #
 #==============================================================================#
 
-make -j yarn-install
+yarn
 
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 loginLocalRegistry

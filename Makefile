@@ -33,7 +33,7 @@ build-bundle: clean clean-lib
 	$(MAKE) build-typings
 	$(MAKE) build-dist
 
-build-bundle-ci: yarn-install
+build-bundle-ci:
 	$(MAKE) build-bundle
 
 generate-standalone:
@@ -91,13 +91,13 @@ code-quality: flow lint
 flow:
 	$(YARN) flow check --strip-root
 
-bootstrap-flowcheck: yarn-install
+bootstrap-flowcheck:
 	$(YARN) gulp build-babel-types
 	$(MAKE) build-typings
 
 lint-ci: lint-js-ci lint-ts-ci check-compat-data-ci
 
-lint-js-ci: yarn-install
+lint-js-ci:
 	$(MAKE) lint-js
 
 lint-ts-ci: bootstrap-flowcheck
@@ -213,7 +213,8 @@ prepublish-build: clean-lib clean-runtime-helpers
 	$(MAKE) clone-license
 
 prepublish:
-	$(MAKE) yarn-install
+	$(MAKE) clean-all
+	yarn
 	$(MAKE) prepublish-build
 	IS_PUBLISH=true $(MAKE) test
 
@@ -252,10 +253,8 @@ publish-eslint:
 	cd eslint/$(PKG); yarn publish
 	$(call set-json-field, ./eslint/$(PKG)/package.json, private, true)
 
-yarn-install: clean-all
+bootstrap: clean-all
 	yarn
-
-bootstrap: yarn-install
 	$(MAKE) build
 
 clean-lib:
