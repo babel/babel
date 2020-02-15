@@ -139,7 +139,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
      *    this.tsParseModifiers(node, ["abstract", "readonly"]);
      */
     tsParseModifiers<T: TsModifier>(
-      modified: N.ClassMember,
+      modified: { [key: TsModifier]: ?true },
       allowedModifiers: T[],
     ): void {
       while (true) {
