@@ -15,6 +15,15 @@ module.exports = {
     features: ['function "name" property / variables (function)'],
     replaces: "transform-function-name",
   },
+  "bugfix/transform-safari-block-shadowing": {
+    features: [
+      "const / scope shadow resolution",
+      "const / scope shadow resolution (strict mode)",
+      "let / scope shadow resolution",
+      "let / scope shadow resolution (strict mode)",
+    ],
+    replaces: "transform-block-scoping",
+  },
   "bugfix/transform-safari-for-shadowing": {
     features: [
       "let / for-in loop binding shadowing parameter",

@@ -1,0 +1,38 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "safari": "9"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-nullish-coalescing-operator { "safari":"9" }
+  proposal-optional-chaining { "safari":"9" }
+  proposal-json-strings { "safari":"9" }
+  proposal-optional-catch-binding { "safari":"9" }
+  proposal-async-generator-functions { "safari":"9" }
+  proposal-object-rest-spread { "safari":"9" }
+  transform-dotall-regex { "safari":"9" }
+  proposal-unicode-property-regex { "safari":"9" }
+  transform-named-capturing-groups-regex { "safari":"9" }
+  transform-async-to-generator { "safari":"9" }
+  transform-exponentiation-operator { "safari":"9" }
+  transform-function-name { "safari":"9" }
+  transform-block-scoped-functions { "safari":"9" }
+  transform-classes { "safari":"9" }
+  transform-object-super { "safari":"9" }
+  transform-sticky-regex { "safari":"9" }
+  transform-unicode-regex { "safari":"9" }
+  transform-spread { "safari":"9" }
+  transform-parameters { "safari":"9" }
+  transform-destructuring { "safari":"9" }
+  transform-block-scoping { "safari":"9" }
+  transform-new-target { "safari":"9" }
+  transform-regenerator { "safari":"9" }
+  bugfix/transform-tagged-template-caching { "safari":"9" }
+  transform-modules-commonjs { "safari":"9" }
+  proposal-dynamic-import { "safari":"9" }
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

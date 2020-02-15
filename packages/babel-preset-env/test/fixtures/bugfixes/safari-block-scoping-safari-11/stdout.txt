@@ -1,0 +1,25 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "safari": "11"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-nullish-coalescing-operator { "safari":"11" }
+  proposal-optional-chaining { "safari":"11" }
+  proposal-json-strings { "safari":"11" }
+  proposal-optional-catch-binding { "safari":"11" }
+  proposal-async-generator-functions { "safari":"11" }
+  proposal-object-rest-spread { "safari":"11" }
+  transform-dotall-regex { "safari":"11" }
+  proposal-unicode-property-regex { "safari":"11" }
+  transform-named-capturing-groups-regex { "safari":"11" }
+  transform-unicode-regex { "safari":"11" }
+  bugfix/transform-tagged-template-caching { "safari":"11" }
+  transform-modules-commonjs { "safari":"11" }
+  proposal-dynamic-import { "safari":"11" }
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

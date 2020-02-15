@@ -53,12 +53,14 @@ import bugfixAsyncArrowsInClass from "@babel/preset-modules/lib/plugins/transfor
 import bugfixEdgeDefaultParameters from "@babel/preset-modules/lib/plugins/transform-edge-default-parameters";
 import bugfixEdgeFunctionName from "@babel/preset-modules/lib/plugins/transform-edge-function-name";
 import bugfixTaggedTemplateCaching from "@babel/preset-modules/lib/plugins/transform-tagged-template-caching";
+import bugfixSafariBlockShadowing from "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing";
 import bugfixSafariForShadowing from "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing";
 
 export default {
   "bugfix/transform-async-arrows-in-class": bugfixAsyncArrowsInClass,
   "bugfix/transform-edge-default-parameters": bugfixEdgeDefaultParameters,
   "bugfix/transform-edge-function-name": bugfixEdgeFunctionName,
+  "bugfix/transform-safari-block-shadowing": bugfixSafariBlockShadowing,
   "bugfix/transform-safari-for-shadowing": bugfixSafariForShadowing,
   "bugfix/transform-tagged-template-caching": bugfixTaggedTemplateCaching,
   "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,
