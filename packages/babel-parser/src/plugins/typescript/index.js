@@ -135,27 +135,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     /** Parses a list of modifiers, in any order.
      *  If you need a specific order, you must call this function multiple times:
-     *    this.tsParseModifiers(["public"]);
-     *    this.tsParseModifiers(["abstract", "readonly"]);
+     *    this.tsParseModifiers(node, ["public"]);
+     *    this.tsParseModifiers(node, ["abstract", "readonly"]);
      */
     tsParseModifiers<T: TsModifier>(
+      modified: N.ClassMember,
       allowedModifiers: T[],
-    ): { [key: TsModifier]: ?true, __proto__: null } {
-      const modifiers = Object.create(null);
-
+    ): void {
       while (true) {
         const startPos = this.state.start;
         const modifier: ?T = this.tsParseModifier(allowedModifiers);
 
         if (!modifier) break;
 
-        if (Object.hasOwnProperty.call(modifiers, modifier)) {
+        if (Object.hasOwnProperty.call(modified, modifier)) {
           this.raise(startPos, `Duplicate modifier: '${modifier}'`);
         }
-        modifiers[modifier] = true;
+        modified[modifier] = true;
       }
-
-      return modifiers;
     }
 
     tsIsListTerminator(kind: ParsingContext): boolean {
@@ -1922,16 +1919,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       state: { hadConstructor: boolean },
       constructorAllowsSuper: boolean,
     ): void {
-      const preDeclare = this.tsParseModifier(["declare"]);
+      this.tsParseModifiers(member, ["declare"]);
       const accessibility = this.parseAccessModifier();
       if (accessibility) member.accessibility = accessibility;
-      const startPos = this.state.start;
-      const postDeclare = this.tsParseModifier(["declare"]);
-      if (preDeclare && postDeclare) {
-        this.raise(startPos, "Duplicate modifier: 'declare'");
-      } else if (preDeclare || postDeclare) {
-        member.declare = true;
-      }
+      this.tsParseModifiers(member, ["declare"]);
 
       super.parseClassMember(classBody, member, state, constructorAllowsSuper);
     }
@@ -1943,19 +1934,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isStatic: boolean,
       constructorAllowsSuper: boolean,
     ): void {
-      const modifiers = this.tsParseModifiers([
-        "abstract",
-        "readonly",
-        "declare",
-      ]);
-
-      Object.assign(member, modifiers);
+      this.tsParseModifiers(member, ["abstract", "readonly", "declare"]);
 
       const idx = this.tsTryParseIndexSignature(member);
       if (idx) {
         classBody.body.push(idx);
 
-        if (modifiers.abstract) {
+        if ((member: any).abstract) {
           this.raise(
             member.start,
             "Index signatures cannot have the 'abstract' modifier",
