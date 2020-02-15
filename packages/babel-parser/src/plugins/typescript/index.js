@@ -1922,8 +1922,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       state: { hadConstructor: boolean },
       constructorAllowsSuper: boolean,
     ): void {
+      const preDeclare = this.tsParseModifier(["declare"]);
       const accessibility = this.parseAccessModifier();
       if (accessibility) member.accessibility = accessibility;
+      const startPos = this.state.start;
+      const postDeclare = this.tsParseModifier(["declare"]);
+      if (preDeclare && postDeclare) {
+        this.raise(startPos, "Duplicate modifier: 'declare'");
+      } else if (preDeclare || postDeclare) {
+        member.declare = true;
+      }
 
       super.parseClassMember(classBody, member, state, constructorAllowsSuper);
     }
