@@ -12,7 +12,7 @@ env:
     - JOB=test
 
 install:
-  - yarn
+  - yarn --inline-builds
   - if [ "$TRAVIS_OS_NAME" = "windows" ]; then choco install make; fi
 
 script:
