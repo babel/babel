@@ -97,5 +97,10 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "dependenciesMeta": {
+    "core-js": {
+      "built": false
+    }
   }
 }
