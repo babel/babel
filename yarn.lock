@@ -5529,6 +5529,11 @@ __metadata:
     test262-stream: ^1.3.0
     through2: ^2.0.0
     typescript: ^3.6.3
+  dependenciesMeta:
+    core-js:
+      built: false
+    core-js-pure:
+      built: false
   languageName: unknown
   linkType: soft
 
