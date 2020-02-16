@@ -101,6 +101,9 @@
   "dependenciesMeta": {
     "core-js": {
       "built": false
+    },
+    "core-js-pure": {
+      "built": false
     }
   }
 }
