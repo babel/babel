@@ -10,7 +10,7 @@ const expected = multiline([
   '  __source: {',
   '    fileName: _jsxFileName,',
   '    lineNumber: 1,',
-  '    column: 0',
+  '    columnNumber: 1',
   '  },',
   '  __self: this',
   '});',

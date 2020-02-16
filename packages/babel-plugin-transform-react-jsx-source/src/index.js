@@ -1,7 +1,7 @@
 /**
- * This adds {fileName, lineNumber, column} annotations to JSX tags.
+ * This adds {fileName, lineNumber, columnNumber} annotations to JSX tags.
  *
- * NOTE: lineNumber is 1-based and column is 0-based.
+ * NOTE: lineNumber and columnNumber are both 1-based.
  *
  * == JSX Literals ==
  *
@@ -10,7 +10,7 @@
  * becomes:
  *
  * var __jsxFileName = 'this/file.js';
- * <sometag __source={{fileName: __jsxFileName, lineNumber: 10, column: 0}}/>
+ * <sometag __source={{fileName: __jsxFileName, lineNumber: 10, columnNumber: 1}}/>
  */
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
@@ -21,11 +21,13 @@ const FILE_NAME_VAR = "_jsxFileName";
 export default declare(api => {
   api.assertVersion(7);
 
-  function makeTrace(fileNameIdentifier, lineNumber, column) {
+  function makeTrace(fileNameIdentifier, lineNumber, column0Based) {
     const fileLineLiteral =
       lineNumber != null ? t.numericLiteral(lineNumber) : t.nullLiteral();
     const fileColumnLiteral =
-      column != null ? t.numericLiteral(column) : t.nullLiteral();
+      column0Based != null
+        ? t.numericLiteral(column0Based + 1)
+        : t.nullLiteral();
     const fileNameProperty = t.objectProperty(
       t.identifier("fileName"),
       fileNameIdentifier,
@@ -34,14 +36,14 @@ export default declare(api => {
       t.identifier("lineNumber"),
       fileLineLiteral,
     );
-    const columnProperty = t.objectProperty(
-      t.identifier("column"),
+    const columnNumberProperty = t.objectProperty(
+      t.identifier("columnNumber"),
       fileColumnLiteral,
     );
     return t.objectExpression([
       fileNameProperty,
       lineNumberProperty,
-      columnProperty,
+      columnNumberProperty,
     ]);
   }
 

@@ -8,7 +8,7 @@ var expected = multiline([
   'var x = <sometag __source={{',
   '  fileName: _jsxFileName,',
   '  lineNumber: 1,',
-  '  column: 8',
+  '  columnNumber: 9',
   '}} />;',
 ]);
 
