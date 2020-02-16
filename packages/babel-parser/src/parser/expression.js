@@ -560,10 +560,15 @@ export default class ExpressionParser extends LValParser {
       stop: false,
     };
     do {
+      const oldMaybeInAsyncArrowHead = this.state.maybeInAsyncArrowHead;
+      if (state.maybeAsyncArrow) {
+        this.state.maybeInAsyncArrowHead = true;
+      }
       base = this.parseSubscript(base, startPos, startLoc, noCalls, state);
 
       // After parsing a subscript, this isn't "async" for sure.
       state.maybeAsyncArrow = false;
+      this.state.maybeInAsyncArrowHead = oldMaybeInAsyncArrowHead;
     } while (!state.stop);
     return base;
   }
@@ -953,15 +958,18 @@ export default class ExpressionParser extends LValParser {
           !this.canInsertSemicolon()
         ) {
           const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
+          const oldMaybeInAsyncArrowHead = this.state.maybeInAsyncArrowHead;
           const oldYieldPos = this.state.yieldPos;
           const oldAwaitPos = this.state.awaitPos;
           this.state.maybeInArrowParameters = true;
+          this.state.maybeInAsyncArrowHead = true;
           this.state.yieldPos = -1;
           this.state.awaitPos = -1;
           const params = [this.parseIdentifier()];
           this.expect(tt.arrow);
           this.checkYieldAwaitInDefaultParams();
           this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
+          this.state.maybeInAsyncArrowHead = oldMaybeInAsyncArrowHead;
           this.state.yieldPos = oldYieldPos;
           this.state.awaitPos = oldAwaitPos;
           // let foo = async bar => {};
@@ -1296,6 +1304,9 @@ export default class ExpressionParser extends LValParser {
       this.shouldParseArrow() &&
       (arrowNode = this.parseArrow(arrowNode))
     ) {
+      if (!this.isAwaitAllowed() && !this.state.maybeInAsyncArrowHead) {
+        this.state.awaitPos = oldAwaitPos;
+      }
       this.checkYieldAwaitInDefaultParams();
       this.state.yieldPos = oldYieldPos;
       this.state.awaitPos = oldAwaitPos;
@@ -2128,7 +2139,7 @@ export default class ExpressionParser extends LValParser {
       }
       if (
         this.state.awaitPos === -1 &&
-        (this.state.maybeInArrowParameters || this.isAwaitAllowed())
+        (this.state.maybeInAsyncArrowHead || this.isAwaitAllowed())
       ) {
         this.state.awaitPos = this.state.start;
       }

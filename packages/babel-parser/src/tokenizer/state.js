@@ -59,6 +59,11 @@ export default class State {
   // Flags to track
   inParameters: boolean = false;
   maybeInArrowParameters: boolean = false;
+  // This flag is used to track async arrow head across function declarations.
+  // e.g. async (foo = function (await) {}) => {}
+  // When parsing `await` in this expression, `maybeInAsyncArrowHead` is true
+  // but `maybeInArrowParameters` is false
+  maybeInAsyncArrowHead: boolean = false;
   inPipeline: boolean = false;
   inType: boolean = false;
   noAnonFunctionType: boolean = false;
