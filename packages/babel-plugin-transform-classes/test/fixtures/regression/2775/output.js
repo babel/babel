@@ -7,9 +7,7 @@ exports["default"] = void 0;
 
 var _react = babelHelpers.interopRequireDefault(require("react"));
 
-var RandomComponent =
-/*#__PURE__*/
-function (_Component) {
+var RandomComponent = /*#__PURE__*/function (_Component) {
   babelHelpers.inherits(RandomComponent, _Component);
 
   function RandomComponent() {

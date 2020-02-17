@@ -234,12 +234,8 @@ const getLowestImplementedVersion = ({ features }, env) => {
   }
 
   return envFiltered.reduce((a, b) => {
-    if (
-      a.semver === unreleasedLabelForEnv ||
-      b.semver === unreleasedLabelForEnv
-    ) {
-      return unreleasedLabelForEnv;
-    }
+    if (a.semver === unreleasedLabelForEnv) return a;
+    if (b.semver === unreleasedLabelForEnv) return b;
 
     return semver.lt(a.semver, b.semver) ? b : a;
   });
@@ -274,8 +270,12 @@ const generateData = (environments, features) => {
       // add opera
       if (plugin.chrome >= 28) {
         plugin.opera = (plugin.chrome - 13).toString();
-      } else if (plugin.chrome === 5) {
-        plugin.opera = "12";
+      } else if (!plugin.opera) {
+        if (plugin.chrome <= 23) {
+          plugin.opera = "15";
+        } else if (plugin.chrome <= 27) {
+          plugin.opera = "16";
+        }
       }
 
       // add electron

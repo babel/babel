@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-env",
-  "version": "7.8.3",
+  "version": "7.8.4",
   "description": "A Babel preset for each environment.",
   "author": "Henry Zhu <hi@henryzoo.com>",
   "homepage": "https://babeljs.io/",
@@ -11,8 +11,8 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-env",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/compat-data": "^7.8.0",
-    "@babel/helper-compilation-targets": "^7.8.3",
+    "@babel/compat-data": "^7.8.4",
+    "@babel/helper-compilation-targets": "^7.8.4",
     "@babel/helper-module-imports": "^7.8.3",
     "@babel/helper-plugin-utils": "^7.8.3",
     "@babel/plugin-proposal-async-generator-functions": "^7.8.3",
@@ -41,7 +41,7 @@
     "@babel/plugin-transform-dotall-regex": "^7.8.3",
     "@babel/plugin-transform-duplicate-keys": "^7.8.3",
     "@babel/plugin-transform-exponentiation-operator": "^7.8.3",
-    "@babel/plugin-transform-for-of": "^7.8.3",
+    "@babel/plugin-transform-for-of": "^7.8.4",
     "@babel/plugin-transform-function-name": "^7.8.3",
     "@babel/plugin-transform-literals": "^7.8.3",
     "@babel/plugin-transform-member-expression-literals": "^7.8.3",
@@ -52,7 +52,7 @@
     "@babel/plugin-transform-named-capturing-groups-regex": "^7.8.3",
     "@babel/plugin-transform-new-target": "^7.8.3",
     "@babel/plugin-transform-object-super": "^7.8.3",
-    "@babel/plugin-transform-parameters": "^7.8.3",
+    "@babel/plugin-transform-parameters": "^7.8.4",
     "@babel/plugin-transform-property-literals": "^7.8.3",
     "@babel/plugin-transform-regenerator": "^7.8.3",
     "@babel/plugin-transform-reserved-words": "^7.8.3",
@@ -60,21 +60,21 @@
     "@babel/plugin-transform-spread": "^7.8.3",
     "@babel/plugin-transform-sticky-regex": "^7.8.3",
     "@babel/plugin-transform-template-literals": "^7.8.3",
-    "@babel/plugin-transform-typeof-symbol": "^7.8.3",
+    "@babel/plugin-transform-typeof-symbol": "^7.8.4",
     "@babel/plugin-transform-unicode-regex": "^7.8.3",
     "@babel/types": "^7.8.3",
-    "browserslist": "^4.8.2",
+    "browserslist": "^4.8.5",
     "core-js-compat": "^3.6.2",
     "invariant": "^2.2.2",
-    "levenary": "^1.1.0",
+    "levenary": "^1.1.1",
     "semver": "^5.5.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.3",
-    "@babel/core": "^7.8.3",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
     "@babel/helper-fixtures": "^7.8.3",
     "@babel/helper-plugin-test-runner": "^7.8.3",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0"

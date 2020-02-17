@@ -26,18 +26,16 @@ function transformCode(transformFn, script) {
     }
   }
 
-  return transformFn(script.content, {
-    filename: source,
-    ...buildBabelOptions(script),
-  }).code;
+  return transformFn(script.content, buildBabelOptions(script, source)).code;
 }
 
 /**
  * Builds the Babel options for transforming the specified script, using some
  * sensible default presets and plugins if none were explicitly provided.
  */
-function buildBabelOptions(script) {
+function buildBabelOptions(script, filename) {
   return {
+    filename,
     presets: script.presets || ["react", "es2015"],
     plugins: script.plugins || [
       "proposal-class-properties",
@@ -45,6 +43,7 @@ function buildBabelOptions(script) {
       "transform-flow-strip-types",
     ],
     sourceMaps: "inline",
+    sourceFileName: filename,
   };
 }
 

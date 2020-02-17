@@ -5,6 +5,7 @@ import type State from "../tokenizer/state";
 import type { PluginsMap } from "./index";
 import type ScopeHandler from "../util/scope";
 import type ClassScopeHandler from "../util/class-scope";
+import type ProductionParameterHandler from "../util/production-parameter";
 
 export default class BaseParser {
   // Properties set by constructor in index.js
@@ -12,6 +13,7 @@ export default class BaseParser {
   inModule: boolean;
   scope: ScopeHandler<*>;
   classScope: ClassScopeHandler;
+  prodParam: ProductionParameterHandler;
   plugins: PluginsMap;
   filename: ?string;
   sawUnambiguousESM: boolean = false;

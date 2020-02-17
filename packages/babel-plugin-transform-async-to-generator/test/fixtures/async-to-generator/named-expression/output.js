@@ -1,6 +1,4 @@
-var foo =
-/*#__PURE__*/
-function () {
+var foo = /*#__PURE__*/function () {
   var _bar = babelHelpers.asyncToGenerator(function* () {
     console.log(bar);
   });

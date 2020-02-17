@@ -28,6 +28,18 @@ describe("@babel/template", function() {
     expect(generator(output).code).toBe(comments);
   });
 
+  it("should preserve comments with a flag", function() {
+    const output = template(comments, { preserveComments: true })();
+    expect(generator(output).code).toBe(comments);
+  });
+
+  it("should preserve comments with a flag when using .ast", function() {
+    const output1 = template.ast(comments, { preserveComments: true });
+    const output2 = template({ preserveComments: true }).ast(comments);
+    expect(generator(output1).code).toBe(comments);
+    expect(generator(output2).code).toBe(comments);
+  });
+
   describe("string-based", () => {
     it("should handle replacing values from an object", () => {
       const value = t.stringLiteral("some string value");
@@ -219,7 +231,7 @@ describe("@babel/template", function() {
     });
   });
 
-  describe.only(".syntacticPlaceholders", () => {
+  describe(".syntacticPlaceholders", () => {
     it("works in function body", () => {
       const output = template(`function f() %%A%%`)({
         A: t.blockStatement([]),
@@ -302,12 +314,10 @@ describe("@babel/template", function() {
         });
 
         it("replaces identifiers", () => {
-          expect(() => {
-            const output = template(`FOO`)({
-              FOO: t.numericLiteral(1),
-            });
-            expect(generator(output).code).toMatchInlineSnapshot(`"1;"`);
+          const output = template(`FOO`)({
+            FOO: t.numericLiteral(1),
           });
+          expect(generator(output).code).toMatchInlineSnapshot(`"1;"`);
         });
 
         it("doesn't mix placeholder styles", () => {

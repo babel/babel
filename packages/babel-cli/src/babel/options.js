@@ -140,6 +140,7 @@ commander.option(
   "--relative",
   "Compile into an output directory relative to input directory or file. Requires --out-dir [out]",
 );
+
 commander.option(
   "-D, --copy-files",
   "When compiling a directory copy over non-compilable files.",
@@ -148,6 +149,11 @@ commander.option(
   "--include-dotfiles",
   "Include dotfiles when compiling and copying non-compilable files.",
 );
+commander.option(
+  "--no-copy-ignored",
+  "Exclude ignored files when copying non-compilable files.",
+);
+
 commander.option(
   "--verbose",
   "Log everything. This option conflicts with --quiet",
@@ -163,11 +169,6 @@ commander.option(
 commander.option(
   "--out-file-extension [string]",
   "Use a specific extension for the output files",
-);
-
-commander.option(
-  "--copy-ignored",
-  "Include ignored files when copying non-compilable files.",
 );
 
 commander.option("--show-config", "show config");
@@ -317,12 +318,12 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
       outDir: opts.outDir,
       relative: opts.relative,
       copyFiles: opts.copyFiles,
+      copyIgnored: opts.copyFiles && opts.copyIgnored,
       includeDotfiles: opts.includeDotfiles,
       verbose: opts.verbose,
       quiet: opts.quiet,
       deleteDirOnStart: opts.deleteDirOnStart,
       sourceMapTarget: opts.sourceMapTarget,
-      copyIgnored: opts.copyIgnored,
     },
   };
 }

@@ -1,5 +1,5 @@
 import { parseSync as babelParse } from "@babel/core";
-import babylonToEspree from "./babylon-to-espree";
+import convert from "./convert";
 import { normalizeBabelParseConfig } from "./configuration";
 
 export default function parse(code, options) {
@@ -17,7 +17,7 @@ export default function parse(code, options) {
     throw err;
   }
 
-  babylonToEspree(ast, code);
+  convert(ast, code);
 
   return ast;
 }

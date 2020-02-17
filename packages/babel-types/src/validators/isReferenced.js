@@ -45,21 +45,29 @@ export default function isReferenced(
     case "PrivateName":
       return false;
 
+    // no: class { NODE() {} }
+    // yes: class { [NODE]() {} }
+    // no: class { foo(NODE) {} }
+    case "ClassMethod":
+    case "ClassPrivateMethod":
+    case "ObjectMethod":
+      if (parent.params.includes(node)) {
+        return false;
+      }
+    // fall through
+
     // yes: { [NODE]: "" }
     // no: { NODE: "" }
     // depends: { NODE }
     // depends: { key: NODE }
+    // fall through
     case "ObjectProperty":
     // no: class { NODE = value; }
     // yes: class { [NODE] = value; }
     // yes: class { key = NODE; }
+    // fall through
     case "ClassProperty":
     case "ClassPrivateProperty":
-    // no: class { NODE() {} }
-    // yes: class { [NODE]() {} }
-    case "ClassMethod":
-    case "ClassPrivateMethod":
-    case "ObjectMethod":
       if (parent.key === node) {
         return !!parent.computed;
       }

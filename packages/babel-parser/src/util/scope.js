@@ -1,10 +1,8 @@
 // @flow
 import {
   SCOPE_ARROW,
-  SCOPE_ASYNC,
   SCOPE_DIRECT_SUPER,
   SCOPE_FUNCTION,
-  SCOPE_GENERATOR,
   SCOPE_SIMPLE_CATCH,
   SCOPE_SUPER,
   SCOPE_PROGRAM,
@@ -53,25 +51,6 @@ export default class ScopeHandler<IScope: Scope = Scope> {
   get inFunction() {
     return (this.currentVarScope().flags & SCOPE_FUNCTION) > 0;
   }
-  get inGenerator() {
-    return (this.currentVarScope().flags & SCOPE_GENERATOR) > 0;
-  }
-  // the following loop always exit because SCOPE_PROGRAM is SCOPE_VAR
-  // $FlowIgnore
-  get inAsync() {
-    for (let i = this.scopeStack.length - 1; ; i--) {
-      const scope = this.scopeStack[i];
-      const isVarScope = scope.flags & SCOPE_VAR;
-      const isClassScope = scope.flags & SCOPE_CLASS;
-      if (isClassScope && !isVarScope) {
-        // If it meets a class scope before a var scope, it means it is a class property initializer
-        // which does not have an [Await] parameter in its grammar
-        return false;
-      } else if (isVarScope) {
-        return (scope.flags & SCOPE_ASYNC) > 0;
-      }
-    }
-  }
   get allowSuper() {
     return (this.currentThisScope().flags & SCOPE_SUPER) > 0;
   }
@@ -92,7 +71,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     return new Scope(flags);
   }
   // This method will be overwritten by subclasses
-  +createScope: (flags: ScopeFlags) => IScope;
+  /*:: +createScope: (flags: ScopeFlags) => IScope; */
 
   enter(flags: ScopeFlags) {
     this.scopeStack.push(this.createScope(flags));
