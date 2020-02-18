@@ -1885,6 +1885,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.semicolon();
         return this.finishNode(decl, "TSNamespaceExportDeclaration");
       } else {
+        if (this.isContextual("type") && this.lookahead().type === tt.braceL) {
+          this.next();
+          node.exportKind = "type";
+        } else {
+          node.exportKind = "value";
+        }
+
         return super.parseExport(node);
       }
     }
