@@ -3984,6 +3984,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lerna/package-graph@patch:@lerna/package-graph@npm:3.18.5#.yarn-patches/@lerna/package-graph.patch::locator=babel%40workspace%3A.":
+  version: 3.18.5
+  resolution: "@lerna/package-graph@patch:@lerna/package-graph@npm%3A3.18.5#.yarn-patches/@lerna/package-graph.patch::version=3.18.5&hash=172170&locator=babel%40workspace%3A."
+  dependencies:
+    "@lerna/prerelease-id-from-version": 3.16.0
+    "@lerna/validation-error": 3.13.0
+    npm-package-arg: ^6.1.0
+    npmlog: ^4.1.2
+    semver: ^6.2.0
+  checksum: 2/7ea6ab2e8db72ecd8ca072c3f83afc2cca88a2f2739f1ef50f1089bb6b7971ca116bc7cf023d296decaf122a82edc7331214e09b5dca38bb17fc5ef827e454ac
+  languageName: node
+  linkType: hard
+
 "@lerna/package@npm:3.16.0":
   version: 3.16.0
   resolution: "@lerna/package@npm:3.16.0"
@@ -3992,6 +4005,17 @@ __metadata:
     npm-package-arg: ^6.1.0
     write-pkg: ^3.1.0
   checksum: 2/98e6254a3121d3eb4be4045a9709d37bda462a87bd680d6a0da0e114502489c8698577da3e254a08333b24c5cb9e2c25c4bd9fb0a45fba44dcf938acecfaea66
+  languageName: node
+  linkType: hard
+
+"@lerna/package@patch:@lerna/package@npm:3.16.0#.yarn-patches/@lerna/package.patch::locator=babel%40workspace%3A.":
+  version: 3.16.0
+  resolution: "@lerna/package@patch:@lerna/package@npm%3A3.16.0#.yarn-patches/@lerna/package.patch::version=3.16.0&hash=59c3e4&locator=babel%40workspace%3A."
+  dependencies:
+    load-json-file: ^5.3.0
+    npm-package-arg: ^6.1.0
+    write-pkg: ^3.1.0
+  checksum: 2/04c2f24f117c759bc34d88603a572e983c90aa80e0069751cd94aff73f032764f2d0e4d37494331adf9609c7834be8bf6d4144a6785b70095b600e277bea9f23
   languageName: node
   linkType: hard
 
