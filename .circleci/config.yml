@@ -55,6 +55,7 @@ jobs:
       - checkout
       - restore_cache: *restore-yarn-cache
       - restore_cache: *restore-node-modules-cache
+      - run: yarn --inline-builds
         # Builds babel-standalone with the regular Babel config
         # test-ci-coverage doesn't test babel-standalone, as trying to gather coverage
       - run: IS_PUBLISH=true make -j build-standalone-ci
