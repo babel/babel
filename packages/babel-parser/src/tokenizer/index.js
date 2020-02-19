@@ -405,10 +405,19 @@ export default class Tokenizer extends LocationParser {
     }
 
     if (
-      this.getPluginOption("recordAndTuple", "syntaxType") === "hash" &&
+      this.hasPlugin("recordAndTuple") &&
       (next === charCodes.leftCurlyBrace ||
         next === charCodes.leftSquareBracket)
     ) {
+      if (this.getPluginOption("recordAndTuple", "syntaxType") !== "hash") {
+        this.unexpected(
+          this.state.pos,
+          next === charCodes.leftCurlyBrace
+            ? "Record expressions starting with '#{' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'hash'"
+            : "Tuple expressions starting with '#[' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'hash'",
+        );
+      }
+
       if (next === charCodes.leftCurlyBrace) {
         // #{
         this.finishToken(tt.braceHashL);
@@ -529,18 +538,32 @@ export default class Tokenizer extends LocationParser {
       }
       // '|}'
       if (
-        this.getPluginOption("recordAndTuple", "syntaxType") === "bar" &&
+        this.hasPlugin("recordAndTuple") &&
         next === charCodes.rightCurlyBrace
       ) {
+        if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
+          this.unexpected(
+            this.state.pos,
+            "Record expressions ending with '|}' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'",
+          );
+        }
+
         this.finishOp(tt.braceBarR, 2);
         return;
       }
 
       // '|]'
       if (
-        this.getPluginOption("recordAndTuple", "syntaxType") == "bar" &&
+        this.hasPlugin("recordAndTuple") &&
         next === charCodes.rightSquareBracket
       ) {
+        if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
+          this.unexpected(
+            this.state.pos,
+            "Tuple expressions ending with '|]' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'",
+          );
+        }
+
         this.finishOp(tt.bracketBarR, 2);
         return;
       }
@@ -713,9 +736,16 @@ export default class Tokenizer extends LocationParser {
         return;
       case charCodes.leftSquareBracket:
         if (
-          this.getPluginOption("recordAndTuple", "syntaxType") === "bar" &&
+          this.hasPlugin("recordAndTuple") &&
           this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
         ) {
+          if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
+            this.unexpected(
+              this.state.pos,
+              "Tuple expressions starting with '[|' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'",
+            );
+          }
+
           // [|
           this.finishToken(tt.bracketBarL);
           this.state.pos += 2;
@@ -730,9 +760,16 @@ export default class Tokenizer extends LocationParser {
         return;
       case charCodes.leftCurlyBrace:
         if (
-          this.getPluginOption("recordAndTuple", "syntaxType") === "bar" &&
+          this.hasPlugin("recordAndTuple") &&
           this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
         ) {
+          if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
+            this.unexpected(
+              this.state.pos,
+              "Record expressions starting with '{|' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'",
+            );
+          }
+
           // {|
           this.finishToken(tt.braceBarL);
           this.state.pos += 2;
