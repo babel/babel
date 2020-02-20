@@ -1,14 +1,10 @@
 import { types as t, traverse } from "@babel/core";
 
 function convertNodes(ast, code) {
-  const state = { source: code };
   const astTransformVisitor = {
     noScope: true,
     enter(path) {
-      const node = path.node;
-
-      // private var to track original node type
-      node._babelType = node.type;
+      const { node } = path;
 
       if (node.innerComments) {
         delete node.innerComments;
@@ -23,7 +19,16 @@ function convertNodes(ast, code) {
       }
     },
     exit(path) {
-      const node = path.node;
+      const { node } = path;
+
+      // Used internally by @babel/parser.
+      if (node.extra) {
+        delete node.extra;
+      }
+
+      if (node?.loc.identifierName) {
+        delete node.loc.identifierName;
+      }
 
       if (path.isTypeParameter()) {
         node.type = "Identifier";
@@ -74,6 +79,7 @@ function convertNodes(ast, code) {
       }
     },
   };
+  const state = { source: code };
 
   // Monkey patch visitor keys in order to be able to traverse the estree nodes
   t.VISITOR_KEYS.Property = t.VISITOR_KEYS.ObjectProperty;
@@ -95,19 +101,14 @@ function convertNodes(ast, code) {
 function convertProgramNode(ast) {
   ast.type = "Program";
   ast.sourceType = ast.program.sourceType;
-  ast.directives = ast.program.directives;
   ast.body = ast.program.body;
   delete ast.program;
+  delete ast.errors;
 
   if (ast.comments.length) {
     const lastComment = ast.comments[ast.comments.length - 1];
 
-    if (!ast.tokens.length) {
-      // if no tokens, the program starts at the end of the last comment
-      ast.start = lastComment.end;
-      ast.loc.start.line = lastComment.loc.end.line;
-      ast.loc.start.column = lastComment.loc.end.column;
-    } else {
+    if (ast.tokens.length) {
       const lastToken = ast.tokens[ast.tokens.length - 1];
 
       if (lastComment.end > lastToken.end) {
