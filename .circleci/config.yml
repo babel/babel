@@ -127,7 +127,6 @@ jobs:
     executor: node-executor
     steps:
       - checkout
-      - run: yarn install
       - run: ./scripts/integration-tests/publish-local.sh
       - persist_to_workspace:
           root: /tmp/verdaccio-workspace

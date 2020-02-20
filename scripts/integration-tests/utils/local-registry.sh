@@ -31,6 +31,5 @@ function stopLocalRegistry {
   # Restore the original NPM and Yarn registry URLs and stop Verdaccio
   fuser -k 4873/tcp
   npm set registry "$original_npm_registry_url"
-  yarn config set npmPublishRegistry "$original_yarn_registry_url"
-  yarn config set npmRegistryServer "$original_yarn_registry_url"
+  git checkout HEAD -- .yarnrc.yml
 }
