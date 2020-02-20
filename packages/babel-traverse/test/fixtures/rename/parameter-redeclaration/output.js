@@ -1,9 +1,9 @@
-function f(z, b) {
+function f(a, b) {
   var z = "redeclared";
   return b;
 }
 
-function g(z) {
+function g(a) {
   function z() {
     return "function, redeclared";
   }

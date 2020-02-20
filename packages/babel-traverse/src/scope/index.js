@@ -531,8 +531,14 @@ export default class Scope {
 
         parent.references[name] = true;
 
-        // A redeclaration of an existing variable is a modification
-        if (local) {
+        // A redeclaration of an existing variable is a modification.
+        // However, a var or function declaration
+        // with the same name as a function parameter
+        // is valid, and should take precedence.
+        if (
+          local &&
+          !(local.kind === "param" && (kind === "var" || kind === "hoisted"))
+        ) {
           this.registerConstantViolation(bindingPath);
         } else {
           this.bindings[name] = new Binding({

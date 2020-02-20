@@ -59,10 +59,27 @@ export default function convertFunctionParams(path, loose) {
   const body = [];
   const params = path.get("params");
 
+  const bindings = scope.bindings;
+
+  function isRedeclaredVarOrFunction(name) {
+    const kind = bindings[name]?.kind;
+    return kind === "var" || kind === "hoisted";
+  }
+
   let firstOptionalIndex = null;
 
   for (let i = 0; i < params.length; i++) {
     const param = params[i];
+
+    // If a parameter's binding shows that its kind is var or hoisted,
+    // this name was legally redeclared in the function body,
+    // and we need to wrap the function body in an IIFE.
+    if (
+      !state.iife &&
+      Object.keys(param.getBindingIdentifiers()).some(isRedeclaredVarOrFunction)
+    ) {
+      state.iife = true;
+    }
 
     const paramIsAssignmentPattern = param.isAssignmentPattern();
     if (paramIsAssignmentPattern && (loose || node.kind === "set")) {
@@ -146,7 +163,8 @@ export default function convertFunctionParams(path, loose) {
   path.ensureBlock();
 
   if (state.iife) {
-    body.push(callDelegate(path, scope));
+    // we don't want to hoist the inner declarations up
+    body.push(callDelegate(path, scope, false));
     path.set("body", t.blockStatement(body));
   } else {
     path.get("body").unshiftContainer("body", body);
