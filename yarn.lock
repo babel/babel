@@ -162,7 +162,6 @@ __metadata:
     eslint: ^6.0.1
     eslint-scope: 5.0.0
     eslint-visitor-keys: ^1.1.0
-    espree: ^6.0.0
     lodash.clonedeep: ^4.5.0
     semver: ^6.3.0
   peerDependencies:
@@ -8013,7 +8012,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"espree@npm:^6.0.0, espree@npm:^6.1.2":
+"espree@npm:^6.1.2":
   version: 6.1.2
   resolution: "espree@npm:6.1.2"
   dependencies:
