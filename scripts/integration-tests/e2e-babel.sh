@@ -21,8 +21,8 @@ cd ../..
 #==============================================================================#
 
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
-node "$PWD"/../../utils/bump-babel-dependencies.js
-yarn lerna exec -- node "$PWD"/../../utils/bump-babel-dependencies.js
+node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
+yarn lerna exec -- node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 
 # Test
 make test-ci
