@@ -21,11 +21,12 @@ function convertNodes(ast, code) {
     exit(path) {
       const { node } = path;
 
-      if (Object.hasOwnProperty.call(node, "extra")) {
+      // Used internally by @babel/parser.
+      if (node.extra) {
         delete node.extra;
       }
 
-      if (node.loc && Object.hasOwnProperty.call(node.loc, "identifierName")) {
+      if (node?.loc.identifierName) {
         delete node.loc.identifierName;
       }
 

@@ -76,13 +76,13 @@ describe("Babel and Espree", () => {
 
   describe("compatibility", () => {
     it("should allow ast.analyze to be called without options", function() {
-      const esAST = parseForESLint("`test`", {
+      const ast = parseForESLint("`test`", {
         eslintScopeManager: true,
         eslintVisitorKeys: true,
         babelOptions: BABEL_OPTIONS,
       }).ast;
       expect(() => {
-        escope.analyze(esAST);
+        escope.analyze(ast);
       }).not.toThrow(new TypeError("Should allow no options argument."));
     });
   });
