@@ -105,14 +105,14 @@ const buildTest = function(binName, testName, opts) {
   return function(callback) {
     saveInFiles(opts.inFiles);
 
-    let args = [binLoc];
+    let args = ["node", binLoc];
 
     args.push("--presets", presetLocs, "--plugins", pluginLocs);
     args.push("--only", "../../../../packages/*/test");
 
     args = args.concat(opts.args);
 
-    const spawn = child.spawn(process.execPath, args);
+    const spawn = child.spawn("yarn", args);
 
     let stderr = "";
     let stdout = "";
