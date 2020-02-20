@@ -4,7 +4,6 @@
 
 custom_registry_url=http://localhost:4873
 original_npm_registry_url=`npm get registry`
-original_yarn_registry_url=`yarn config get registry`
 default_verdaccio_package=verdaccio@~4.3.3
 
 function startLocalRegistry {
@@ -18,8 +17,8 @@ function startLocalRegistry {
 
   # Set registry to local registry
   npm set registry "$custom_registry_url"
-  yarn config set npmPublishRegistry "$custom_registry_url"
-  yarn config set npmRegistryServer  "$custom_registry_url"
+  export YARN_NPM_PUBLISH_REGISTRY="$custom_registry_url"
+  export YARN_NPM_REGISTRY_SERVER="$custom_registry_url"
 }
 
 function loginLocalRegistry {
@@ -31,5 +30,6 @@ function stopLocalRegistry {
   # Restore the original NPM and Yarn registry URLs and stop Verdaccio
   fuser -k 4873/tcp
   npm set registry "$original_npm_registry_url"
-  git checkout HEAD -- .yarnrc.yml
+  unset YARN_NPM_PUBLISH_REGISTRY
+  unset YARN_NPM_REGISTRY_SERVER
 }
