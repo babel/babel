@@ -19,11 +19,11 @@ function startLocalRegistry {
   npm set registry "$custom_registry_url"
   export YARN_NPM_PUBLISH_REGISTRY="$custom_registry_url"
   export YARN_NPM_REGISTRY_SERVER="$custom_registry_url"
+  export YARN_NPM_AUTH_IDENT="username:password"
 }
 
 function loginLocalRegistry {
-  # Login so we can publish packages
-  (cd && npx npm-auth-to-token@1.0.0 -u user -p password -e user@example.com -r "$custom_registry_url")
+  export YARN_NPM_AUTH_IDENT="username:password"
 }
 
 function stopLocalRegistry {
