@@ -13,7 +13,7 @@ source utils/cleanup.sh
 
 function publishESLintPkg {
   cd eslint/$1
-  npm version --patch --no-git-tag-version
+  npm version patch --no-git-tag-version
   cd ../..
   make -j publish-eslint PKG=$1
 }
