@@ -3,7 +3,6 @@
 # Copied from https://github.com/facebook/create-react-app/blob/053f9774d3f592c17741d2a86de66a7ca58f90c0/tasks/local-registry.sh
 
 custom_registry_url=http://localhost:4873
-original_npm_registry_url=`npm get registry`
 default_verdaccio_package=verdaccio@~4.3.3
 
 function startLocalRegistry {
@@ -16,7 +15,7 @@ function startLocalRegistry {
   grep -q "http address" <(tail -f $tmp_registry_log)
 
   # Set registry to local registry
-  npm set registry "$custom_registry_url"
+  export NPM_CONFIG_REGISTRY="$custom_registry_url"
   export YARN_NPM_PUBLISH_REGISTRY="$custom_registry_url"
   export YARN_NPM_REGISTRY_SERVER="$custom_registry_url"
   export YARN_NPM_AUTH_IDENT="username:password"
@@ -29,7 +28,7 @@ function loginLocalRegistry {
 function stopLocalRegistry {
   # Restore the original NPM and Yarn registry URLs and stop Verdaccio
   fuser -k 4873/tcp
-  npm set registry "$original_npm_registry_url"
+  unset NPM_CONFIG_REGISTRY
   unset YARN_NPM_PUBLISH_REGISTRY
   unset YARN_NPM_REGISTRY_SERVER
 }
