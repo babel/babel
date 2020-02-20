@@ -250,7 +250,7 @@ endif
 
 publish-eslint:
 	$(call set-json-field, ./eslint/$(PKG)/package.json, private, false)
-	cd eslint/$(PKG); yarn publish
+	cd eslint/$(PKG); yarn npm publish
 	$(call set-json-field, ./eslint/$(PKG)/package.json, private, true)
 
 bootstrap: clean-all
