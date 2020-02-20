@@ -123,7 +123,7 @@ const buildTest = function(binName, testName, opts) {
   return function(callback) {
     saveInFiles(opts.inFiles);
 
-    let args = [binLoc];
+    let args = ["node", binLoc];
 
     if (binName !== "babel-external-helpers") {
       args.push("--presets", presetLocs, "--plugins", pluginLocs);
@@ -131,7 +131,7 @@ const buildTest = function(binName, testName, opts) {
 
     args = args.concat(opts.args);
 
-    const spawn = child.spawn(process.execPath, args);
+    const spawn = child.spawn("yarn", args);
 
     let stderr = "";
     let stdout = "";
