@@ -33,4 +33,16 @@ describe("removal", function() {
       expect(generateCode(rootPath)).toBe("x = () => {};");
     });
   });
+
+  it("remove with noScope", function() {
+    const ast = parse("a=1");
+    traverse(ast, {
+      AssignmentExpression: function(path) {
+        path.remove();
+      },
+      noScope: true,
+    });
+
+    expect(generate(ast).code).toBe("");
+  });
 });
