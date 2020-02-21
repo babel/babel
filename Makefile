@@ -95,13 +95,16 @@ bootstrap-flowcheck: bootstrap-only
 	$(YARN) gulp build-babel-types
 	$(MAKE) build-typings
 
-lint-ci: lint-js-ci lint-ts-ci check-compat-data
+lint-ci: lint-js-ci lint-ts-ci check-compat-data-ci
 
 lint-js-ci: bootstrap-only
 	$(MAKE) lint-js
 
 lint-ts-ci: bootstrap-flowcheck
 	$(MAKE) lint-ts
+
+check-compat-data-ci: bootstrap-only
+	$(MAKE) check-compat-data
 
 lint: lint-js lint-ts
 
