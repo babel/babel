@@ -59,26 +59,34 @@ export default function convertFunctionParams(path, loose) {
   const body = [];
   const params = path.get("params");
 
-  const bindings = scope.bindings;
-
-  function isRedeclaredVarOrFunction(name) {
-    const kind = bindings[name]?.kind;
-    return kind === "var" || kind === "hoisted";
-  }
-
   let firstOptionalIndex = null;
 
   for (let i = 0; i < params.length; i++) {
     const param = params[i];
 
-    // If a parameter's binding shows that its kind is var or hoisted,
-    // this name was legally redeclared in the function body,
-    // and we need to wrap the function body in an IIFE.
-    if (
-      !state.iife &&
-      Object.keys(param.getBindingIdentifiers()).some(isRedeclaredVarOrFunction)
-    ) {
-      state.iife = true;
+    for (const name of Object.keys(param.getBindingIdentifiers())) {
+      const constantViolations = scope.bindings[name]?.constantViolations;
+      if (constantViolations) {
+        for (const redeclarator of constantViolations) {
+          const node = redeclarator.node;
+          // If a constant violation is a var or a function declaration,
+          // we first check to see if it's a var without an init.
+          // If so, we remove that declarator.
+          // Otherwise, we have to wrap it in an IIFE.
+          switch (node.type) {
+            case "VariableDeclarator":
+              if (node.init === null) {
+                redeclarator.remove();
+              } else {
+                state.iife = true;
+              }
+              break;
+            case "FunctionDeclaration":
+              state.iife = true;
+              break;
+          }
+        }
+      }
     }
 
     const paramIsAssignmentPattern = param.isAssignmentPattern();
