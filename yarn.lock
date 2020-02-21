@@ -3972,7 +3972,7 @@ __metadata:
 
 "@lerna/pack-directory@patch:@lerna/pack-directory@npm:3.16.4#.yarn-patches/@lerna/pack-directory.patch::locator=babel%40workspace%3A.":
   version: 3.16.4
-  resolution: "@lerna/pack-directory@patch:@lerna/pack-directory@npm%3A3.16.4#.yarn-patches/@lerna/pack-directory.patch::version=3.16.4&hash=c19dcc&locator=babel%40workspace%3A."
+  resolution: "@lerna/pack-directory@patch:@lerna/pack-directory@npm%3A3.16.4#.yarn-patches/@lerna/pack-directory.patch::version=3.16.4&hash=ce53a8&locator=babel%40workspace%3A."
   dependencies:
     "@lerna/get-packed": 3.16.0
     "@lerna/package": 3.16.0
@@ -3982,7 +3982,7 @@ __metadata:
     npmlog: ^4.1.2
     tar: ^4.4.10
     temp-write: ^3.4.0
-  checksum: 2/b02b8983c89e06d4d008c10c5a8282316536e5e0eb6534d3b11e4174a6eaee9555b393fc5c1477320d4fe8a0a7dba95659743c24484c8bbb28c985ce77365f33
+  checksum: 2/d4de0b09f042a31b1f944731f4c76c03397477e0ac4546aa8f8f9c38b8a04d179f52c3575b929fe4eb2881d17f53ddc162de3efec646f3f39cd5afe6f6a033f0
   languageName: node
   linkType: hard
 

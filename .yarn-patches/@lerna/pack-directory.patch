@@ -1,5 +1,5 @@
 diff --git a/lib/pack-directory.js b/lib/pack-directory.js
-index d46069c78..074abe2fa 100644
+index d46069c78..2ba6bfea1 100644
 --- a/lib/pack-directory.js
 +++ b/lib/pack-directory.js
 @@ -2,13 +2,13 @@
@@ -18,7 +18,7 @@ index d46069c78..074abe2fa 100644
  
  module.exports = packDirectory;
  
-@@ -40,34 +40,14 @@ function packDirectory(_pkg, dir, _opts) {
+@@ -40,34 +40,23 @@ function packDirectory(_pkg, dir, _opts) {
      chain = chain.then(() => pkg.refresh());
    }
  
@@ -41,27 +41,33 @@ index d46069c78..074abe2fa 100644
 -      //       and any such future "features" by prepending `./`
 -      files.map(f => `./${f}`)
 -    )
--  );
++  // We need to call "yarn pack" to remove the "workspace:" protocol from
++  // package.json before publishing
++  chain = chain.then(() => tempWrite("", getTarballName(pkg)));
++  chain = chain.then(tarFilePath =>
++    exec("yarn pack --out " + tarFilePath, { cwd: pkg.location })
++      .then(({ stdout, stderr }) => {
++        const err = stderr.toString();
++        if (err) console.log(err);
++      })
++      .then(() => tarFilePath)
+   );
 -  chain = chain.then(stream => tempWrite(stream, getTarballName(pkg)));
--  chain = chain.then(tarFilePath =>
+   chain = chain.then(tarFilePath =>
 -    getPacked(pkg, tarFilePath).then(packed =>
 -      Promise.resolve()
 -        .then(() => runLifecycle(pkg, "postpack", opts))
 -        .then(() => packed)
 -    )
--  );
-+  // We need to call "yarn pack" to remove the "workspace:" protocol from
-+  // package.json before publishing
-+  chain = chain.then(() => tempWrite(stream, getTarballName(pkg)));
-+  chain = chain.then(tap(
-+    tarFilePath => exec("yarn pack --out " + tarFilePath, { cwd: pkg.location })
-+  ));
-+  chain = chain.then(tap(() => pkg.refresh()));
++    Promise.resolve()
++      .then(() => pkg.refresh())
++      .then(() => tarFilePath)
+   );
 +  chain = chain.then(tarFilePath => getPacked(pkg, tarFilePath));
  
    return chain;
  }
-@@ -81,3 +61,7 @@ function getTarballName(pkg) {
+@@ -81,3 +70,7 @@ function getTarballName(pkg) {
  
    return `${name}-${pkg.version}.tgz`;
  }
