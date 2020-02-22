@@ -14,7 +14,6 @@ Using plugins:
   syntax-optional-catch-binding { "chrome":"71" }
   syntax-async-generators { "chrome":"71" }
   syntax-object-rest-spread { "chrome":"71" }
-  proposal-numeric-separator { "chrome":"71" }
   transform-modules-commonjs { "chrome":"71" }
   proposal-dynamic-import { "chrome":"71" }
 

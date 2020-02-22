@@ -37,7 +37,6 @@ Using plugins:
   transform-typeof-symbol {}
   transform-new-target {}
   transform-regenerator {}
-  proposal-numeric-separator {}
   transform-member-expression-literals {}
   transform-property-literals {}
   transform-reserved-words {}
