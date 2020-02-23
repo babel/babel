@@ -417,6 +417,7 @@ __metadata:
   resolution: "@babel/helper-create-regexp-features-plugin@workspace:packages/babel-helper-create-regexp-features-plugin"
   dependencies:
     "@babel/core": "workspace:^7.8.3"
+    "@babel/helper-annotate-as-pure": "workspace:^7.8.3"
     "@babel/helper-plugin-test-runner": "workspace:^7.8.3"
     "@babel/helper-regex": "workspace:^7.8.3"
     regexpu-core: ^4.6.0
