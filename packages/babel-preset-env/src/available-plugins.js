@@ -56,6 +56,7 @@ export default {
   "proposal-dynamic-import": proposalDynamicImport,
   "proposal-json-strings": proposalJsonStrings,
   "proposal-nullish-coalescing-operator": proposalNullishCoalescingOperator,
+  "proposal-numeric-separator": proposalNumericSeparator,
   "proposal-object-rest-spread": proposalObjectRestSpread,
   "proposal-optional-catch-binding": proposalOptionalCatchBinding,
   "proposal-optional-chaining": proposalOptionalChaining,
@@ -100,5 +101,4 @@ export default {
   "transform-template-literals": transformTemplateLiterals,
   "transform-typeof-symbol": transformTypeofSymbol,
   "transform-unicode-regex": transformUnicodeRegex,
-  "proposal-numeric-separator": proposalNumericSeparator,
 };
