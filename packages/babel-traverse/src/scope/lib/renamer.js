@@ -62,6 +62,7 @@ export default class Renamer {
 
     // retain the `name` of a class/function declaration
 
+    // eslint-disable-next-line no-unreachable
     if (!path.isFunctionDeclaration() && !path.isClassDeclaration()) return;
     if (this.binding.kind !== "hoisted") return;
 
@@ -83,6 +84,7 @@ export default class Renamer {
 
     // retain the `name` of a class/function expression
 
+    // eslint-disable-next-line no-unreachable
     if (!path.isFunctionExpression() && !path.isClassExpression()) return;
     if (this.binding.kind !== "local") return;
 

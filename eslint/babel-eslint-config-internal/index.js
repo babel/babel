@@ -36,7 +36,6 @@ module.exports = {
     "no-return-assign": "off",
     "no-shadow": "off",
     "no-underscore-dangle": "off",
-    "no-unreachable": "off",
     "no-use-before-define": "off",
     "no-var": "error",
     "prefer-const": "error",
