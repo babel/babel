@@ -22,4 +22,4 @@ var List = /*#__PURE__*/function (_Array) {
   }
 
   return List;
-}(_wrapNativeSuper(Array));
+}( /*#__PURE__*/_wrapNativeSuper(Array));
