@@ -28,7 +28,6 @@ module.exports = {
     "no-cond-assign": "off",
     "no-confusing-arrow": "error",
     "no-console": "off",
-    "no-constant-condition": "off",
     "no-empty": "off",
     "no-inner-declarations": "off",
     "no-labels": "off",
