@@ -82,6 +82,7 @@
   ],
   "resolutions": {
     "@lerna/collect-updates": "https://github.com/babel/lerna.git#babel-collect-updates",
+    "@lerna/npm-publish": "patch:@lerna/npm-publish@npm:3.18.5#.yarn-patches/@lerna/npm-publish.patch",
     "@lerna/package": "patch:@lerna/package@npm:3.16.0#.yarn-patches/@lerna/package.patch",
     "@lerna/package-graph": "patch:@lerna/package-graph@npm:3.18.5#.yarn-patches/@lerna/package-graph.patch",
     "@lerna/pack-directory": "patch:@lerna/pack-directory@npm:3.16.4#.yarn-patches/@lerna/pack-directory.patch"
