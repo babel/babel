@@ -27,7 +27,7 @@ startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 
 # Test
-yarn
+yarn install --inline-builds
 make test-ci
 
 cleanup
