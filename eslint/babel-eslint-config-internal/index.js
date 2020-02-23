@@ -25,7 +25,6 @@ module.exports = {
     "linebreak-style": ["error", "unix"],
     "new-cap": "off",
     "no-case-declarations": "error",
-    "no-cond-assign": "off",
     "no-confusing-arrow": "error",
     "no-console": "off",
     "no-empty": ["error", { allowEmptyCatch: true }],
