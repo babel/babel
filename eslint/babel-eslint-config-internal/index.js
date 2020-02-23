@@ -28,7 +28,6 @@ module.exports = {
     "no-confusing-arrow": "error",
     "no-console": "off",
     "no-empty": ["error", { allowEmptyCatch: true }],
-    "no-inner-declarations": "off",
     "no-labels": "off",
     "no-loop-func": "off",
     "no-process-exit": "error",
