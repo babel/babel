@@ -7,6 +7,15 @@ export default declare((api, options) => {
 
   const { loose = false } = options;
 
+  function isSimpleMemberExpression(expression) {
+    return (
+      t.isIdentifier(expression) ||
+      (t.isMemberExpression(expression) &&
+        !expression.computed &&
+        isSimpleMemberExpression(expression.object))
+    );
+  }
+
   return {
     name: "proposal-optional-chaining",
     inherits: syntaxOptionalChaining,
@@ -50,9 +59,10 @@ export default declare((api, options) => {
 
           let ref;
           let check;
-          if (loose && isCall) {
+          if (loose && isCall && isSimpleMemberExpression(node.callee)) {
             // If we are using a loose transform (avoiding a Function#call) and we are at the call,
-            // we can avoid a needless memoize.
+            // we can avoid a needless memoize. We only do this if the callee is a simple member
+            // expression, to avoid multiple calls to nested call expressions.
             check = ref = chain;
           } else {
             ref = scope.maybeGenerateMemoised(chain);

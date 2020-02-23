@@ -7,6 +7,8 @@ function test(foo) {
 
   foo?.bar()
 
+  foo.get(bar)?.()
+
   foo.bar?.(foo.bar, false)
 
   foo?.bar?.(foo.bar, true)
