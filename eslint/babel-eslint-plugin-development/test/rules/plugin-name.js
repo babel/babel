@@ -5,7 +5,7 @@ const missingPluginError = "This file does not export a Babel plugin.";
 const missingNameError = "This Babel plugin doesn't have a 'name' property.";
 
 const ruleTester = new RuleTester({
-  parserOptions: { sourceType: "module" },
+  parserOptions: { sourceType: "module", ecmaVersion: 2018 },
 });
 
 ruleTester.run("plugin-name", rule, {
