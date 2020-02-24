@@ -276,7 +276,7 @@ export default function get(entryLoc): Array<Suite> {
     if (suiteOptsLoc) suite.options = require(suiteOptsLoc);
 
     for (const taskName of fs.readdirSync(suite.filename)) {
-      pushTask(taskName, suite.filename + "/" + taskName, suiteName, suites);
+      pushTask(taskName, suite.filename + "/" + taskName, suite, suiteName);
     }
   }
 
