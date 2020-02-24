@@ -184,10 +184,10 @@ export default function getTargets(
     targets.browsers = Object.keys(supportsESModules)
       .map(browser => `${browser} ${supportsESModules[browser]}`)
       .join(", ");
-  } else {
-    // remove falsy esmodules to fix `hasTargets` below
-    delete targets.esmodules;
   }
+
+  // Remove esmodules after being consumed to fix `hasTargets` below
+  delete targets.esmodules;
 
   // Parse browsers target via browserslist
   const browsersquery = validateBrowsers(targets.browsers);
