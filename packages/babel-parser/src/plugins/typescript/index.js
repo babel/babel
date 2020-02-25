@@ -142,7 +142,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       modified: { [key: TsModifier]: ?true },
       allowedModifiers: T[],
     ): void {
-      while (true) {
+      for (;;) {
         const startPos = this.state.start;
         const modifier: ?T = this.tsParseModifier(allowedModifiers);
 
@@ -204,7 +204,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): ?(T[]) {
       const result = [];
 
-      while (true) {
+      for (;;) {
         if (this.tsIsListTerminator(kind)) {
           break;
         }
