@@ -2,7 +2,7 @@
   "plugins": [[
     "transform-typescript",
     {
-      "onlyExplicitTypeImports": true
+      "onlyRemoveTypeImports": true
     }
   ]]
 }

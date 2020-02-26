@@ -50,7 +50,7 @@ export default declare(
       jsxPragma = "React",
       allowNamespaces = false,
       allowDeclareFields = false,
-      onlyExplicitTypeImports = false,
+      onlyRemoveTypeImports = false,
     },
   ) => {
     api.assertVersion(7);
@@ -169,9 +169,9 @@ export default declare(
                 continue;
               }
 
-              // If onlyExplicitTypeImports is `true`, only remove type-only imports
+              // If onlyRemoveTypeImports is `true`, only remove type-only imports
               // and exports introduced in TypeScript 3.8.
-              if (!onlyExplicitTypeImports) {
+              if (!onlyRemoveTypeImports) {
                 // Note: this will allow both `import { } from "m"` and `import "m";`.
                 // In TypeScript, the former would be elided.
                 if (stmt.node.specifiers.length === 0) {
