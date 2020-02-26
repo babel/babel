@@ -2127,6 +2127,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (!declaration) {
         declaration = super.parseExportDeclaration(node);
       }
+      if (
+        declaration &&
+        (declaration.type === "TSInterfaceDeclaration" ||
+          declaration.type === "TSTypeAliasDeclaration" ||
+          isDeclare)
+      ) {
+        node.exportKind = "type";
+      }
 
       if (declaration && isDeclare) {
         // Reset location to include `declare` in range

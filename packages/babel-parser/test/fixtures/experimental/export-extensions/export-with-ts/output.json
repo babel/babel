@@ -111,7 +111,7 @@
             "column": 29
           }
         },
-        "exportKind": "value",
+        "exportKind": "type",
         "specifiers": [],
         "source": null,
         "declaration": {
@@ -229,7 +229,7 @@
             "column": 21
           }
         },
-        "exportKind": "value",
+        "exportKind": "type",
         "specifiers": [],
         "source": null,
         "declaration": {
@@ -427,7 +427,7 @@
             "column": 27
           }
         },
-        "exportKind": "value",
+        "exportKind": "type",
         "specifiers": [],
         "source": null,
         "declaration": {
