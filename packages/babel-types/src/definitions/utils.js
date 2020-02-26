@@ -73,7 +73,7 @@ export function assertEach(callback: Validator): Validator {
       const subkey = `${key}[${i}]`;
       const v = val[i];
       callback(node, subkey, v);
-      if (process.env.BABEL_TYPES_8_BREAKING) validateChild(node, subkey, v);
+      validateChild(node, subkey, v);
     }
   }
   validator.each = callback;
