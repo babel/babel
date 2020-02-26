@@ -5,7 +5,6 @@ const through = require("through2");
 const chalk = require("chalk");
 const newer = require("gulp-newer");
 const babel = require("gulp-babel");
-const gulpWatch = require("gulp-watch");
 const fancyLog = require("fancy-log");
 const filter = require("gulp-filter");
 const gulp = require("gulp");
@@ -239,10 +238,6 @@ gulp.task("build-no-bundle", () => buildBabel());
 gulp.task(
   "watch",
   gulp.series("build-no-bundle", function watch() {
-    gulpWatch(
-      defaultSourcesGlob,
-      { debounceDelay: 200 },
-      gulp.task("build-no-bundle")
-    );
+    gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle"));
   })
 );
