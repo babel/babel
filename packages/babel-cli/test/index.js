@@ -131,7 +131,7 @@ const buildTest = function(binName, testName, opts) {
 
     args = args.concat(opts.args);
 
-    const spawn = child.spawn(process.execPath, args);
+    const spawn = child.spawn("node", args);
 
     let stderr = "";
     let stdout = "";
