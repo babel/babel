@@ -51,7 +51,7 @@
     "gulp-filter": "^5.1.0",
     "gulp-newer": "^1.0.0",
     "gulp-plumber": "^1.2.1",
-    "husky": "^3.0.0",
+    "husky": "^4.2.3",
     "jest": "^25.1.0",
     "lerna": "^3.19.0",
     "lerna-changelog": "^0.5.0",
