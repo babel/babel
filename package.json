@@ -72,6 +72,11 @@
     "through2": "^2.0.0",
     "typescript": "^3.6.3"
   },
+  "workspaces": [
+    "codemods/*",
+    "eslint/*",
+    "packages/*"
+  ],
   "resolutions": {
     "@lerna/collect-updates": "https://github.com/babel/lerna.git#babel-collect-updates"
   },
@@ -88,6 +93,14 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
+    }
+  },
+  "dependenciesMeta": {
+    "core-js": {
+      "built": false
+    },
+    "core-js-pure": {
+      "built": false
     }
   }
 }
