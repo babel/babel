@@ -1245,50 +1245,59 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(classBody, "ClassBody");
   }
 
+  // returns true if the current identifier is a method/field name,
+  // false if it is a modifier
+  parseClassMemberFromModifier(
+    classBody: N.ClassBody,
+    member: N.ClassMember,
+  ): boolean {
+    const containsEsc = this.state.containsEsc;
+    const key = this.parseIdentifier(true); // eats the modifier
+
+    if (this.isClassMethod()) {
+      const method: N.ClassMethod = (member: any);
+
+      // a method named like the modifier
+      method.kind = "method";
+      method.computed = false;
+      method.key = key;
+      method.static = false;
+      this.pushClassMethod(
+        classBody,
+        method,
+        false,
+        false,
+        /* isConstructor */ false,
+        false,
+      );
+      return true;
+    } else if (this.isClassProperty()) {
+      const prop: N.ClassProperty = (member: any);
+
+      // a property named like the modifier
+      prop.computed = false;
+      prop.key = key;
+      prop.static = false;
+      classBody.body.push(this.parseClassProperty(prop));
+      return true;
+    } else if (containsEsc) {
+      throw this.unexpected();
+    }
+
+    return false;
+  }
+
   parseClassMember(
     classBody: N.ClassBody,
     member: N.ClassMember,
     state: { hadConstructor: boolean },
     constructorAllowsSuper: boolean,
   ): void {
-    let isStatic = false;
-    const containsEsc = this.state.containsEsc;
+    const isStatic = this.isContextual("static");
 
-    if (this.match(tt.name) && this.state.value === "static") {
-      const key = this.parseIdentifier(true); // eats 'static'
-
-      if (this.isClassMethod()) {
-        const method: N.ClassMethod = (member: any);
-
-        // a method named 'static'
-        method.kind = "method";
-        method.computed = false;
-        method.key = key;
-        method.static = false;
-        this.pushClassMethod(
-          classBody,
-          method,
-          false,
-          false,
-          /* isConstructor */ false,
-          false,
-        );
-        return;
-      } else if (this.isClassProperty()) {
-        const prop: N.ClassProperty = (member: any);
-
-        // a property named 'static'
-        prop.computed = false;
-        prop.key = key;
-        prop.static = false;
-        classBody.body.push(this.parseClassProperty(prop));
-        return;
-      } else if (containsEsc) {
-        throw this.unexpected();
-      }
-
-      // otherwise something static
-      isStatic = true;
+    if (isStatic && this.parseClassMemberFromModifier(classBody, member)) {
+      // a class element named 'static'
+      return;
     }
 
     this.parseClassMemberWithIsStatic(
