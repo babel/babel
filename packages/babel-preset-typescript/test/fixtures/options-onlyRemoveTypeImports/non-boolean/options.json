@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "presets": [["typescript", { "onlyRemoveTypeImports": "not a boolean" }]],
+  "throws": ".onlyRemoveTypeImports must be a boolean, or undefined"
+}

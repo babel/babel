@@ -8,6 +8,7 @@ export default declare(
       jsxPragma,
       allExtensions = false,
       isTSX = false,
+      onlyRemoveTypeImports = false,
       allowNamespaces,
       allowDeclareFields,
     },
@@ -22,6 +23,10 @@ export default declare(
       throw new Error(".isTSX must be a boolean, or undefined");
     }
 
+    if (typeof onlyRemoveTypeImports !== "boolean") {
+      throw new Error(".onlyRemoveTypeImports must be a boolean, or undefined");
+    }
+
     if (isTSX && !allExtensions) {
       throw new Error("isTSX:true requires allExtensions:true");
     }
@@ -31,6 +36,7 @@ export default declare(
       isTSX,
       allowNamespaces,
       allowDeclareFields,
+      onlyRemoveTypeImports,
     });
 
     return {
