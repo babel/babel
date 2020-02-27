@@ -14,7 +14,7 @@ EMPTY :=
 SPACE := $(EMPTY) $(EMPTY)
 COMMA_SEPARATED_SOURCES = $(subst $(SPACE),$(COMMA),$(SOURCES))
 
-YARN := yarn --silent
+YARN := yarn
 NODE := $(YARN) node
 
 
@@ -33,7 +33,7 @@ build-bundle: clean clean-lib
 	$(MAKE) build-typings
 	$(MAKE) build-dist
 
-build-bundle-ci: bootstrap-only
+build-bundle-ci: bootstrap-only-ci
 	$(MAKE) build-bundle
 
 generate-standalone:
@@ -50,13 +50,11 @@ build-flow-typings:
 build-typescript-typings:
 	$(NODE) packages/babel-types/scripts/generators/typescript.js > packages/babel-types/lib/index.d.ts
 
-build-standalone: build-babel-standalone
+build-standalone:
+	$(YARN) gulp build-babel-standalone
 
 build-standalone-ci: build-bundle-ci
 	$(MAKE) build-standalone
-
-build-babel-standalone:
-	$(YARN) gulp build-babel-standalone
 
 prepublish-build-standalone:
 	BABEL_ENV=production IS_PUBLISH=true $(YARN) gulp build-babel-standalone
@@ -78,34 +76,30 @@ build-no-bundle: clean clean-lib
 	$(MAKE) generate-type-helpers
 	$(MAKE) build-typings
 
-build-no-bundle-ci: bootstrap-only
+build-no-bundle-ci: bootstrap-only-ci
 	$(MAKE) build-no-bundle
 
 watch: build-no-bundle
 	BABEL_ENV=development $(YARN) gulp watch
 
-code-quality-ci: flowcheck-ci lint-ci
+code-quality-ci: flowcheck-ci lint-js-ci lint-ts-ci check-compat-data-ci
 
-flowcheck-ci: bootstrap-flowcheck
+flowcheck-ci: build-no-bundle-ci
 	$(MAKE) flow
+
+lint-js-ci: bootstrap-only-ci
+	$(MAKE) lint-js
+
+lint-ts-ci: build-no-bundle-ci
+	$(MAKE) lint-ts
+
+check-compat-data-ci: build-no-bundle-ci
+	$(MAKE) check-compat-data
 
 code-quality: flow lint
 
 flow:
 	$(YARN) flow check --strip-root
-
-bootstrap-flowcheck: build-no-bundle-ci
-
-lint-ci: lint-js-ci lint-ts-ci check-compat-data-ci
-
-lint-js-ci: bootstrap-only
-	$(MAKE) lint-js
-
-lint-ts-ci: bootstrap-flowcheck
-	$(MAKE) lint-ts
-
-check-compat-data-ci: build-no-bundle-ci
-	$(MAKE) check-compat-data
 
 lint: lint-js lint-ts
 
@@ -147,9 +141,7 @@ test-only:
 
 test: lint test-only
 
-test-ci: jest-ci
-
-jest-ci: build-standalone-ci
+test-ci: build-standalone-ci
 	BABEL_ENV=test $(YARN) jest --maxWorkers=4 --ci
 	$(MAKE) test-clean
 
@@ -218,9 +210,10 @@ prepublish:
 	$(MAKE) prepublish-build
 	IS_PUBLISH=true $(MAKE) test
 
+# --exclude-dependents support is added by .yarn-patches/@lerna/version
 new-version:
 	git pull --rebase
-	$(YARN) lerna version --force-publish=$(FORCE_PUBLISH)
+	$(YARN) lerna version --exclude-dependents --force-publish=$(FORCE_PUBLISH)
 
 # NOTE: Run make new-version first
 publish: prepublish
@@ -244,24 +237,20 @@ ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 	exit 1
 endif
 	$(MAKE) prepublish-build
-	$(YARN) lerna version $(VERSION) --force-publish=$(FORCE_PUBLISH)  --no-push --yes --tag-version-prefix="version-e2e-test-"
+	$(YARN) lerna version $(VERSION) --exclude-dependents --force-publish=$(FORCE_PUBLISH)  --no-push --yes --tag-version-prefix="version-e2e-test-"
 	$(YARN) lerna publish from-git --registry http://localhost:4873 --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
 
 publish-eslint:
 	$(call set-json-field, ./eslint/$(PKG)/package.json, private, false)
-	cd eslint/$(PKG); yarn publish
+	cd eslint/$(PKG); $(YARN) npm publish
 	$(call set-json-field, ./eslint/$(PKG)/package.json, private, true)
 
-bootstrap-only: lerna-bootstrap
+bootstrap-only: clean-all
+	$(YARN)
 
-yarn-install: clean-all
-	# Gitpod prebuilds have a slow network connection, so we need more time
-	yarn --ignore-engines --network-timeout 100000
-
-lerna-bootstrap: yarn-install
-# todo: remove `-- -- --ignore-engines` in Babel 8
-	$(YARN) lerna bootstrap -- -- --ignore-engines --network-timeout 100000
+bootstrap-only-ci:
+	$(YARN) --inline-builds
 
 bootstrap: bootstrap-only
 	$(MAKE) build

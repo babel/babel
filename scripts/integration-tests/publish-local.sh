@@ -13,7 +13,7 @@ source utils/cleanup.sh
 
 function publishESLintPkg {
   cd eslint/$1
-  yarn version --new-version $2 --no-git-tag-version
+  npm version $2 --no-git-tag-version
   cd ../..
   make -j publish-eslint PKG=$1
 }
@@ -30,7 +30,7 @@ initializeE2Egit
 #                                 PUBLISH                                      #
 #==============================================================================#
 
-make -j bootstrap-only
+yarn
 
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 loginLocalRegistry

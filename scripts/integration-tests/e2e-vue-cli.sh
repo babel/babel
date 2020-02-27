@@ -21,6 +21,9 @@ cd tmp/vue-cli || exit
 #                                   TEST                                       #
 #==============================================================================#
 
+# Don't use Yarn 2
+export YARN_IGNORE_PATH=1
+
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
 yarn install
 node "$PWD"/../../utils/bump-babel-dependencies.js
@@ -30,4 +33,5 @@ yarn install
 # Test
 CI=true yarn test -p babel,babel-preset-app
 
+unset YARN_IGNORE_PATH
 cleanup

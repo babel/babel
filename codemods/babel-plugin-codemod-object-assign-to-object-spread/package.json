@@ -3,8 +3,8 @@
   "version": "7.7.4",
   "description": "Transforms Object.assign into object spread syntax",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/babel/babel.git",
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
     "directory": "codemods/babel-plugin-codemod-object-assign-to-object-spread"
   },
   "license": "MIT",

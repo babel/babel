@@ -21,9 +21,13 @@ cd ../..
 #==============================================================================#
 
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
-yarn upgrade --scope @babel
+# We only bump dependencies in the top-level package.json, because workspaces
+# already use the workspace: protocol so will get the version in the monorepo
+# and not from npm.
+node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 
 # Test
+yarn install --inline-builds
 make test-ci
 
 cleanup
