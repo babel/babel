@@ -5,4 +5,5 @@ class C {
     @foo d: number;
     @foo e: number = 3;
     f!: number;
+    @foo g!: number;
 }

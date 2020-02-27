@@ -6,4 +6,6 @@ class C {
   d;
   @foo
   e = 3;
+  @foo
+  g;
 }

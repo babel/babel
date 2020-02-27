@@ -186,6 +186,9 @@ export default function getTargets(
       .join(", ");
   }
 
+  // Remove esmodules after being consumed to fix `hasTargets` below
+  delete targets.esmodules;
+
   // Parse browsers target via browserslist
   const browsersquery = validateBrowsers(targets.browsers);
 

@@ -20,10 +20,9 @@ export function shareCommentsWithSiblings() {
   const next = this.getSibling(this.key + 1);
   const hasPrev = Boolean(prev.node);
   const hasNext = Boolean(next.node);
-  if (hasPrev && hasNext) {
-  } else if (hasPrev) {
+  if (hasPrev && !hasNext) {
     prev.addComments("trailing", trailing);
-  } else if (hasNext) {
+  } else if (hasNext && !hasPrev) {
     next.addComments("leading", leading);
   }
 }

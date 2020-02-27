@@ -19,6 +19,74 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.8.6 (2020-02-27)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helper-module-transforms`, `babel-helper-replace-supers`, `babel-plugin-transform-modules-commonjs`
+  * [#11109](https://github.com/babel/babel/pull/11109) Fix rewriteThis in helper-module-transforms for computed class elements ([@sidntrivedi012](https://github.com/sidntrivedi012))
+* `babel-parser`
+  * [#10956](https://github.com/babel/babel/pull/10956) Refactor await/yield production parameter tracking ([@JLHwung](https://github.com/JLHwung))
+
+#### :boom: Breaking Change
+* [#11137](https://github.com/babel/babel/pull/11137) Breaking: align babel-eslint-parser & espree ([@kaicataldo](https://github.com/kaicataldo))
+
+#### :rocket: New Feature
+* `babel-helper-create-regexp-features-plugin`, `babel-plugin-transform-classes`, `babel-plugin-transform-named-capturing-groups-regex`, `babel-preset-env`
+  * [#11134](https://github.com/babel/babel/pull/11134) Mark `wrapNativeSuper` and `wrapRegExp` as pure ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-helper-compilation-targets`
+  * [#11124](https://github.com/babel/babel/pull/11124) fix: search for browserslist if esmodules is falsy ([@fengzilong](https://github.com/fengzilong))
+* `babel-register`
+  * [#11160](https://github.com/babel/babel/pull/11160) fix: workaround misleading node.js ENOENT error ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#11146](https://github.com/babel/babel/pull/11146) Parse declare modifier around accessibility modifiers ([@JLHwung](https://github.com/JLHwung))
+  * [#11092](https://github.com/babel/babel/pull/11092) Fix Async Generic After Await Parsing Error ([@liamfd](https://github.com/liamfd))
+* Other
+  * [#11137](https://github.com/babel/babel/pull/11137) Breaking: align babel-eslint-parser & espree ([@kaicataldo](https://github.com/kaicataldo))
+* `babel-compat-data`, `babel-preset-env`
+  * [#10929](https://github.com/babel/babel/pull/10929) Update preset-env builtin-definitions ([@JLHwung](https://github.com/JLHwung))
+* `babel-traverse`
+  * [#11136](https://github.com/babel/babel/pull/11136) fix @babel/traverse can't use path.remove() with noScope ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-create-class-features-plugin`, `babel-helper-replace-supers`
+  * [#11068](https://github.com/babel/babel/pull/11068) Fix classNameTDZError in computed prototype methods with class fields  ([@sidntrivedi012](https://github.com/sidntrivedi012))
+* `babel-template`
+  * [#11112](https://github.com/babel/babel/pull/11112) Respect preserveComments option in tempate.ast() ([@dentrado](https://github.com/dentrado))
+* `babel-plugin-transform-for-of`
+  * [#11088](https://github.com/babel/babel/pull/11088) Allow redeclaration of loop variable in body ([@openorclose](https://github.com/openorclose))
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-commonjs`
+  * [#11074](https://github.com/babel/babel/pull/11074) Fix export bindings not updated by 'for ... in' and 'for ... of' ([@vedantroy](https://github.com/vedantroy))
+* `babel-standalone`
+  * [#10797](https://github.com/babel/babel/pull/10797) fix: specify sourceFileName when generating inline sourcemaps ([@JLHwung](https://github.com/JLHwung))
+* `babel-types`
+  * [#11089](https://github.com/babel/babel/pull/11089) Make `isReferenced` return false for method parameter name ([@brokensandals](https://github.com/brokensandals))
+
+#### :nail_care: Polish
+* `babel-core`, `babel-generator`, `babel-plugin-external-helpers`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-function-bind`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-classes`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`, `babel-plugin-transform-function-name`, `babel-plugin-transform-parameters`, `babel-plugin-transform-react-constant-elements`, `babel-plugin-transform-react-jsx`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-runtime`, `babel-plugin-transform-typescript`, `babel-preset-env`
+  * [#11133](https://github.com/babel/babel/pull/11133) Skip newlines around inline `#__PURE__` annotations ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* Other
+  * [#11175](https://github.com/babel/babel/pull/11175) replace `gulp-watch` by `gulp.watch` ([@JLHwung](https://github.com/JLHwung))
+  * [#11163](https://github.com/babel/babel/pull/11163) chore: migrate lock threads to github actions ([@JLHwung](https://github.com/JLHwung))
+  * [#11164](https://github.com/babel/babel/pull/11164) chore: specify dependency rule of check-compat-data-ci ([@JLHwung](https://github.com/JLHwung))
+  * [#11106](https://github.com/babel/babel/pull/11106) Centralize @babel/eslint-* tests ([@kaicataldo](https://github.com/kaicataldo))
+  * [#11072](https://github.com/babel/babel/pull/11072) Update @babel deps ([@existentialism](https://github.com/existentialism))
+  * [#11070](https://github.com/babel/babel/pull/11070) Clean babel-eslint-*/**/lib ([@kaicataldo](https://github.com/kaicataldo))
+* `babel-generator`, `babel-helper-fixtures`, `babel-parser`, `babel-traverse`
+  * [#11168](https://github.com/babel/babel/pull/11168) Enable more eslint recommended rules ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-replace-supers`
+  * [#11121](https://github.com/babel/babel/pull/11121) Fix typing of ReplaceSupers options ([@existentialism](https://github.com/existentialism))
+* `babel-core`, `babel-plugin-syntax-decorators`, `babel-template`, `babel-traverse`
+  * [#11119](https://github.com/babel/babel/pull/11119) Add eslint-plugin-jest ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#11096](https://github.com/babel/babel/pull/11096) Wrap type-only class fields in flow comments ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-parser`, `babel-types`
+  * [#11093](https://github.com/babel/babel/pull/11093) Turn on no-fallthrough rule ([@JLHwung](https://github.com/JLHwung))
+* `babel-preset-stage-0`, `babel-preset-stage-1`, `babel-preset-stage-2`, `babel-preset-stage-3`
+  * [#11101](https://github.com/babel/babel/pull/11101) Remove stage presets from the monorepo ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-preset-env-standalone`
+  * [#10993](https://github.com/babel/babel/pull/10993) Archive @babel/preset-env-standalone ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.8.5 (2020-01-31)
 
 #### :bug: Bug Fix
