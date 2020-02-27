@@ -1,0 +1,31 @@
+diff --git a/npm-publish.js b/npm-publish.js
+index ee6ad133e..6a31d1775 100644
+--- a/npm-publish.js
++++ b/npm-publish.js
+@@ -32,6 +32,15 @@ const PublishConfig = figgyPudding(
+   }
+ );
+ 
++function stripWorkspaceProtocolFromDeps(deps) {
++  if (!deps) return;
++  for (const [name, version] of Object.entries(deps)) {
++    if (version.startsWith("workspace:")) {
++      deps[name] = version.slice(10);
++    }
++  }
++}
++
+ function npmPublish(pkg, tarFilePath, _opts, otpCache) {
+   const { scope } = npa(pkg.name);
+   // pass only the package scope to libnpmpublish
+@@ -67,6 +76,10 @@ function npmPublish(pkg, tarFilePath, _opts, otpCache) {
+         manifest.publishConfig.tag = opts.tag;
+       }
+ 
++      stripWorkspaceProtocolFromDeps(manifest.dependencies);
++      stripWorkspaceProtocolFromDeps(manifest.peerDependencies);
++      stripWorkspaceProtocolFromDeps(manifest.devDependencies);
++
+       return otplease(innerOpts => publish(manifest, tarData, innerOpts), opts, otpCache).catch(err => {
+         opts.log.silly("", err);
+         opts.log.error(err.code, (err.body && err.body.error) || err.message);

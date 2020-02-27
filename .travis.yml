@@ -1,14 +1,16 @@
 git:
   depth: 5
 language: node_js
+
 cache:
-  yarn: true
+  npm: false
+  directories:
+    - .yarn/cache
 
 os: linux
 
 env:
   global:
-    - PATH=$HOME/.yarn/bin:$PATH
     - JOB=test
 
 install: skip
@@ -37,9 +39,10 @@ matrix:
         # https://travis-ci.community/t/build-doesnt-finish-after-completing-tests/288/9
         - YARN_GPG=no
       cache:
-        yarn: true
+        npm: false
         directories:
           - $HOME/AppData/Local/Temp/chocolatey
+          - .yarn/cache
     # Continue node_js matrix
     - node_js: "12"
     - node_js: "10"
