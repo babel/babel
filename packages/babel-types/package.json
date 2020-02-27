@@ -16,12 +16,12 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@babel/helper-validator-identifier": "^7.10.3",
+    "@babel/helper-validator-identifier": "workspace:^7.10.3",
     "lodash": "^4.17.13",
     "to-fast-properties": "^2.0.0"
   },
   "devDependencies": {
-    "@babel/generator": "^7.10.3",
-    "@babel/parser": "^7.10.3"
+    "@babel/generator": "workspace:^7.10.3",
+    "@babel/parser": "workspace:^7.10.3"
   }
 }

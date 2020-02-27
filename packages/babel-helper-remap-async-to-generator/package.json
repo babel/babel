@@ -13,10 +13,10 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-annotate-as-pure": "^7.10.1",
-    "@babel/helper-wrap-function": "^7.10.1",
-    "@babel/template": "^7.10.3",
-    "@babel/traverse": "^7.10.3",
-    "@babel/types": "^7.10.3"
+    "@babel/helper-annotate-as-pure": "workspace:^7.10.1",
+    "@babel/helper-wrap-function": "workspace:^7.10.1",
+    "@babel/template": "workspace:^7.10.3",
+    "@babel/traverse": "workspace:^7.10.3",
+    "@babel/types": "workspace:^7.10.3"
   }
 }

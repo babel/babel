@@ -13,13 +13,13 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-annotate-as-pure": "^7.10.1",
-    "@babel/helper-define-map": "^7.10.3",
-    "@babel/helper-function-name": "^7.10.3",
-    "@babel/helper-optimise-call-expression": "^7.10.3",
-    "@babel/helper-plugin-utils": "^7.10.3",
-    "@babel/helper-replace-supers": "^7.10.1",
-    "@babel/helper-split-export-declaration": "^7.10.1",
+    "@babel/helper-annotate-as-pure": "workspace:^7.10.1",
+    "@babel/helper-define-map": "workspace:^7.10.3",
+    "@babel/helper-function-name": "workspace:^7.10.3",
+    "@babel/helper-optimise-call-expression": "workspace:^7.10.3",
+    "@babel/helper-plugin-utils": "workspace:^7.10.3",
+    "@babel/helper-replace-supers": "workspace:^7.10.1",
+    "@babel/helper-split-export-declaration": "workspace:^7.10.1",
     "globals": "^12.3.0"
   },
   "keywords": [
@@ -29,7 +29,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.3",
-    "@babel/helper-plugin-test-runner": "^7.10.3"
+    "@babel/core": "workspace:^7.10.3",
+    "@babel/helper-plugin-test-runner": "workspace:^7.10.3"
   }
 }

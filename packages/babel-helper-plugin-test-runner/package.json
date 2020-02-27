@@ -13,6 +13,6 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-transform-fixture-test-runner": "^7.10.3"
+    "@babel/helper-transform-fixture-test-runner": "workspace:^7.10.3"
   }
 }

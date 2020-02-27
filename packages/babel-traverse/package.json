@@ -15,17 +15,17 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/code-frame": "^7.10.3",
-    "@babel/generator": "^7.10.3",
-    "@babel/helper-function-name": "^7.10.3",
-    "@babel/helper-split-export-declaration": "^7.10.1",
-    "@babel/parser": "^7.10.3",
-    "@babel/types": "^7.10.3",
+    "@babel/code-frame": "workspace:^7.10.3",
+    "@babel/generator": "workspace:^7.10.3",
+    "@babel/helper-function-name": "workspace:^7.10.3",
+    "@babel/helper-split-export-declaration": "workspace:^7.10.1",
+    "@babel/parser": "workspace:^7.10.3",
+    "@babel/types": "workspace:^7.10.3",
     "debug": "^4.1.0",
     "globals": "^12.3.0",
     "lodash": "^4.17.13"
   },
   "devDependencies": {
-    "@babel/helper-plugin-test-runner": "^7.10.3"
+    "@babel/helper-plugin-test-runner": "workspace:^7.10.3"
   }
 }

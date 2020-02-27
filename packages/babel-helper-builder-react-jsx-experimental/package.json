@@ -13,8 +13,8 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-annotate-as-pure": "^7.10.1",
-    "@babel/helper-module-imports": "^7.10.1",
-    "@babel/types": "^7.10.1"
+    "@babel/helper-annotate-as-pure": "workspace:^7.10.1",
+    "@babel/helper-module-imports": "workspace:^7.10.1",
+    "@babel/types": "workspace:^7.10.1"
   }
 }

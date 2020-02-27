@@ -13,8 +13,8 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-bindify-decorators": "^7.10.1",
-    "@babel/traverse": "^7.10.3",
-    "@babel/types": "^7.10.3"
+    "@babel/helper-bindify-decorators": "workspace:^7.10.1",
+    "@babel/traverse": "workspace:^7.10.3",
+    "@babel/types": "workspace:^7.10.3"
   }
 }

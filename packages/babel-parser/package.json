@@ -32,9 +32,9 @@
     "node": ">=10.13.0"
   },
   "devDependencies": {
-    "@babel/code-frame": "^7.10.3",
-    "@babel/helper-fixtures": "^7.10.1",
-    "@babel/helper-validator-identifier": "^7.10.3",
+    "@babel/code-frame": "workspace:^7.10.3",
+    "@babel/helper-fixtures": "workspace:^7.10.1",
+    "@babel/helper-validator-identifier": "workspace:^7.10.3",
     "charcodes": "^0.2.0"
   },
   "bin": {
