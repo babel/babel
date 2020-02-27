@@ -9,8 +9,8 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-module-transforms": "^7.9.0",
-    "@babel/helper-plugin-utils": "^7.8.3"
+    "@babel/helper-module-transforms": "workspace:^7.9.0",
+    "@babel/helper-plugin-utils": "workspace:^7.8.3"
   },
   "keywords": [
     "babel-plugin"
@@ -19,7 +19,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/helper-plugin-test-runner": "^7.8.3"
+    "@babel/core": "workspace:^7.9.0",
+    "@babel/helper-plugin-test-runner": "workspace:^7.8.3"
   }
 }

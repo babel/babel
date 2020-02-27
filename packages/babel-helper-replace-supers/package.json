@@ -9,9 +9,9 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-member-expression-to-functions": "^7.8.3",
-    "@babel/helper-optimise-call-expression": "^7.8.3",
-    "@babel/traverse": "^7.8.6",
-    "@babel/types": "^7.8.6"
+    "@babel/helper-member-expression-to-functions": "workspace:^7.8.3",
+    "@babel/helper-optimise-call-expression": "workspace:^7.8.3",
+    "@babel/traverse": "workspace:^7.8.6",
+    "@babel/types": "workspace:^7.8.6"
   }
 }

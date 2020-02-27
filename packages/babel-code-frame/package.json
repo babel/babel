@@ -11,7 +11,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-code-frame",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/highlight": "^7.8.3"
+    "@babel/highlight": "workspace:^7.8.3"
   },
   "devDependencies": {
     "chalk": "^2.0.0",

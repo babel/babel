@@ -12,16 +12,16 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.8.3",
-    "@babel/plugin-syntax-logical-assignment-operators": "^7.8.3"
+    "@babel/helper-plugin-utils": "workspace:^7.8.3",
+    "@babel/plugin-syntax-logical-assignment-operators": "workspace:^7.8.3"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.3",
-    "@babel/helper-plugin-test-runner": "^7.8.3",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
+    "@babel/core": "workspace:^7.8.3",
+    "@babel/helper-plugin-test-runner": "workspace:^7.8.3",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "workspace:^7.8.3",
     "@babel/plugin-syntax-nullish-coalescing-operator": "^7.8.0"
   }
 }
