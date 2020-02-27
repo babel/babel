@@ -2,15 +2,9 @@ import { NODE_FIELDS } from "../definitions";
 
 const has = Function.call.bind(Object.prototype.hasOwnProperty);
 
+// This function will never be called for comments, only for real nodes.
 function cloneIfNode(obj, deep, withoutLoc) {
-  if (
-    obj &&
-    typeof obj.type === "string" &&
-    // CommentLine and CommentBlock are used in File#comments, but they are
-    // not defined in babel-types
-    obj.type !== "CommentLine" &&
-    obj.type !== "CommentBlock"
-  ) {
+  if (obj && typeof obj.type === "string") {
     return cloneNode(obj, deep, withoutLoc);
   }
 
@@ -57,9 +51,14 @@ export default function cloneNode<T: Object>(
   } else {
     for (const field of Object.keys(NODE_FIELDS[type])) {
       if (has(node, field)) {
-        newNode[field] = deep
-          ? cloneIfNodeOrArray(node[field], true, withoutLoc)
-          : node[field];
+        if (deep) {
+          newNode[field] =
+            type === "File" && field === "comments"
+              ? maybeCloneComments(node.comments, deep, withoutLoc)
+              : cloneIfNodeOrArray(node[field], true, withoutLoc);
+        } else {
+          newNode[field] = node[field];
+        }
       }
     }
   }
@@ -72,22 +71,25 @@ export default function cloneNode<T: Object>(
     }
   }
   if (has(node, "leadingComments")) {
-    newNode.leadingComments =
-      deep && withoutLoc
-        ? cloneIfNodeOrArray(node.leadingComments, true, true)
-        : node.leadingComments;
+    newNode.leadingComments = maybeCloneComments(
+      node.leadingComments,
+      deep,
+      withoutLoc,
+    );
   }
   if (has(node, "innerComments")) {
-    newNode.innerComments =
-      deep && withoutLoc
-        ? cloneIfNodeOrArray(node.innerComments, true, true)
-        : node.innerComments;
+    newNode.innerComments = maybeCloneComments(
+      node.innerComments,
+      deep,
+      withoutLoc,
+    );
   }
   if (has(node, "trailingComments")) {
-    newNode.trailingComments =
-      deep && withoutLoc
-        ? cloneIfNodeOrArray(node.trailingComments, true, true)
-        : node.trailingComments;
+    newNode.trailingComments = maybeCloneComments(
+      node.trailingComments,
+      deep,
+      withoutLoc,
+    );
   }
   if (has(node, "extra")) {
     newNode.extra = {
@@ -96,4 +98,12 @@ export default function cloneNode<T: Object>(
   }
 
   return newNode;
+}
+
+function cloneCommentsWithoutLoc<T: Object>(comments: T[]): T {
+  return comments.map(({ type, value }) => ({ type, value, loc: null }));
+}
+
+function maybeCloneComments(comments, deep, withoutLoc) {
+  return deep && withoutLoc ? cloneCommentsWithoutLoc(comments) : comments;
 }

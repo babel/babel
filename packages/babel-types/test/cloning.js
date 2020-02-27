@@ -99,26 +99,45 @@ describe("cloneNode", function() {
     expect(cloned.declarations[0].id.loc).toBeNull();
   });
 
-  it("should support deep cloning for leadingComments, innerComments and trailingComments", function() {
+  it("should support deep cloning for comments", function() {
     const node = t.variableDeclaration("let", [
       t.variableDeclarator({
         ...t.identifier("value"),
-        typeAnnotation: t.anyTypeAnnotation(),
+        leadingComments: [{ loc: {} }],
+        innerComments: [{ loc: {} }],
+        trailingComments: [{ loc: {} }],
       }),
     ]);
     node.loc = {};
     node.declarations[0].id.loc = {};
+
+    const cloned = t.cloneNode(node, /* deep */ true, /* withoutLoc */ false);
+    expect(cloned.declarations[0].id.leadingComments[0].loc).toBe(
+      node.declarations[0].id.leadingComments[0].loc,
+    );
+    expect(cloned.declarations[0].id.innerComments[0].loc).toBe(
+      node.declarations[0].id.innerComments[0].loc,
+    );
+    expect(cloned.declarations[0].id.trailingComments[0].loc).toBe(
+      node.declarations[0].id.trailingComments[0].loc,
+    );
+  });
+
+  it("should support deep cloning for comments without loc", function() {
+    const node = t.variableDeclaration("let", [
+      t.variableDeclarator({
+        ...t.identifier("value"),
+        leadingComments: [{ loc: {} }],
+        innerComments: [{ loc: {} }],
+        trailingComments: [{ loc: {} }],
+      }),
+    ]);
+    node.loc = {};
+    node.declarations[0].id.loc = {};
+
     const cloned = t.cloneNode(node, /* deep */ true, /* withoutLoc */ true);
-    expect(cloned.loc).toBeNull();
-    expect(cloned.declarations[0].id.loc).toBeNull();
-    expect(cloned.declarations[0].id.leadingComments).toEqual(
-      node.declarations[0].id.leadingComments,
-    );
-    expect(cloned.declarations[0].id.innerComments).toEqual(
-      node.declarations[0].id.innerComments,
-    );
-    expect(cloned.declarations[0].id.trailingComments).toEqual(
-      node.declarations[0].id.trailingComments,
-    );
+    expect(cloned.declarations[0].id.leadingComments[0].loc).toBe(null);
+    expect(cloned.declarations[0].id.innerComments[0].loc).toBe(null);
+    expect(cloned.declarations[0].id.trailingComments[0].loc).toBe(null);
   });
 });
