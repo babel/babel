@@ -14,7 +14,7 @@ EMPTY :=
 SPACE := $(EMPTY) $(EMPTY)
 COMMA_SEPARATED_SOURCES = $(subst $(SPACE),$(COMMA),$(SOURCES))
 
-YARN := yarn --silent
+YARN := yarn
 NODE := $(YARN) node
 
 
@@ -33,9 +33,6 @@ build-bundle: clean clean-lib
 	$(MAKE) build-typings
 	$(MAKE) build-dist
 
-build-bundle-ci: bootstrap-only
-	$(MAKE) build-bundle
-
 generate-standalone:
 	$(NODE) packages/babel-standalone/scripts/generate.js
 
@@ -50,12 +47,10 @@ build-flow-typings:
 build-typescript-typings:
 	$(NODE) packages/babel-types/scripts/generators/typescript.js > packages/babel-types/lib/index.d.ts
 
-build-standalone: build-babel-standalone
-
-build-standalone-ci: build-bundle-ci
+build-standalone-ci: build-bundle
 	$(MAKE) build-standalone
 
-build-babel-standalone:
+build-standalone:
 	$(YARN) gulp build-babel-standalone
 
 prepublish-build-standalone:
@@ -81,7 +76,7 @@ build-no-bundle: clean clean-lib
 watch: build-no-bundle
 	BABEL_ENV=development $(YARN) gulp watch
 
-code-quality-ci: flowcheck-ci lint-ci
+code-quality-ci: flowcheck-ci lint-js lint-ts-ci check-compat-data-ci
 
 flowcheck-ci: bootstrap-flowcheck
 	$(MAKE) flow
@@ -91,20 +86,12 @@ code-quality: flow lint
 flow:
 	$(YARN) flow check --strip-root
 
-bootstrap-flowcheck: bootstrap-only
+bootstrap-flowcheck:
 	$(YARN) gulp build-babel-types
 	$(MAKE) build-typings
 
-lint-ci: lint-js-ci lint-ts-ci check-compat-data-ci
-
-lint-js-ci: bootstrap-only
-	$(MAKE) lint-js
-
 lint-ts-ci: bootstrap-flowcheck
 	$(MAKE) lint-ts
-
-check-compat-data-ci: bootstrap-only
-	$(MAKE) check-compat-data
 
 lint: lint-js lint-ts
 
@@ -124,6 +111,9 @@ fix-json:
 
 check-compat-data:
 	cd packages/babel-compat-data; CHECK_COMPAT_DATA=true $(YARN) run build-data
+
+check-compat-data-ci: build-bundle
+	$(MAKE) check-compat-data
 
 build-compat-data:
 	cd packages/babel-compat-data; $(YARN) run build-data
@@ -146,9 +136,7 @@ test-only:
 
 test: lint test-only
 
-test-ci: jest-ci
-
-jest-ci: build-standalone-ci
+test-ci: build-standalone-ci
 	BABEL_ENV=test $(YARN) jest --maxWorkers=4 --ci
 	$(MAKE) test-clean
 
@@ -168,7 +156,7 @@ bootstrap-flow:
 test-flow:
 	$(NODE) scripts/parser-tests/flow
 
-test-flow-ci: build-bundle-ci bootstrap-flow
+test-flow-ci: build-bundle bootstrap-flow
 	$(MAKE) test-flow
 
 test-flow-update-whitelist:
@@ -183,7 +171,7 @@ bootstrap-typescript:
 test-typescript:
 	$(NODE) scripts/parser-tests/typescript
 
-test-typescript-ci: build-bundle-ci bootstrap-typescript
+test-typescript-ci: build-bundle bootstrap-typescript
 	$(MAKE) test-typescript
 
 test-typescript-update-whitelist:
@@ -198,7 +186,7 @@ bootstrap-test262:
 test-test262:
 	$(NODE) scripts/parser-tests/test262
 
-test-test262-ci: build-bundle-ci bootstrap-test262
+test-test262-ci: build-bundle bootstrap-test262
 	$(MAKE) test-test262
 
 test-test262-update-whitelist:
@@ -213,13 +201,15 @@ prepublish-build: clean-lib clean-runtime-helpers
 	$(MAKE) clone-license
 
 prepublish:
-	$(MAKE) bootstrap-only
+	$(MAKE) clean-all
+	yarn
 	$(MAKE) prepublish-build
 	IS_PUBLISH=true $(MAKE) test
 
+# --exclude-dependents support is added by .yarn-patches/@lerna/version
 new-version:
 	git pull --rebase
-	$(YARN) lerna version --force-publish=$(FORCE_PUBLISH)
+	$(YARN) lerna version --exclude-dependents --force-publish=$(FORCE_PUBLISH)
 
 # NOTE: Run make new-version first
 publish: prepublish
@@ -243,25 +233,17 @@ ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 	exit 1
 endif
 	$(MAKE) prepublish-build
-	$(YARN) lerna version $(VERSION) --force-publish=$(FORCE_PUBLISH)  --no-push --yes --tag-version-prefix="version-e2e-test-"
+	$(YARN) lerna version $(VERSION) --exclude-dependents --force-publish=$(FORCE_PUBLISH)  --no-push --yes --tag-version-prefix="version-e2e-test-"
 	$(YARN) lerna publish from-git --registry http://localhost:4873 --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
 
 publish-eslint:
 	$(call set-json-field, ./eslint/$(PKG)/package.json, private, false)
-	cd eslint/$(PKG); yarn publish
+	cd eslint/$(PKG); yarn npm publish
 	$(call set-json-field, ./eslint/$(PKG)/package.json, private, true)
 
-bootstrap-only: lerna-bootstrap
-
-yarn-install: clean-all
-	yarn --ignore-engines
-
-lerna-bootstrap: yarn-install
-# todo: remove `-- -- --ignore-engines` in Babel 8
-	$(YARN) lerna bootstrap -- -- --ignore-engines
-
-bootstrap: bootstrap-only
+bootstrap: clean-all
+	yarn
 	$(MAKE) build
 
 clean-lib:
