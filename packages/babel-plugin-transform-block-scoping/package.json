@@ -13,7 +13,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.10.1",
+    "@babel/helper-plugin-utils": "workspace:^7.10.1",
     "lodash": "^4.17.13"
   },
   "keywords": [
@@ -23,7 +23,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/helper-plugin-test-runner": "^7.10.1"
+    "@babel/core": "workspace:^7.10.1",
+    "@babel/helper-plugin-test-runner": "workspace:^7.10.1"
   }
 }

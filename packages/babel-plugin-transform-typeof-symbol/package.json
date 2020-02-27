@@ -16,16 +16,16 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.10.1"
+    "@babel/helper-plugin-utils": "workspace:^7.10.1"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/helper-plugin-test-runner": "^7.10.1",
-    "@babel/runtime": "^7.10.1",
-    "@babel/runtime-corejs2": "^7.10.1",
-    "@babel/runtime-corejs3": "^7.10.1"
+    "@babel/core": "workspace:^7.10.1",
+    "@babel/helper-plugin-test-runner": "workspace:^7.10.1",
+    "@babel/runtime": "workspace:^7.10.1",
+    "@babel/runtime-corejs2": "workspace:^7.10.1",
+    "@babel/runtime-corejs3": "workspace:^7.10.1"
   }
 }

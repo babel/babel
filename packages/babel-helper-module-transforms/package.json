@@ -15,12 +15,12 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-module-imports": "^7.10.1",
-    "@babel/helper-replace-supers": "^7.10.1",
-    "@babel/helper-simple-access": "^7.10.1",
-    "@babel/helper-split-export-declaration": "^7.10.1",
-    "@babel/template": "^7.10.1",
-    "@babel/types": "^7.10.1",
+    "@babel/helper-module-imports": "workspace:^7.10.1",
+    "@babel/helper-replace-supers": "workspace:^7.10.1",
+    "@babel/helper-simple-access": "workspace:^7.10.1",
+    "@babel/helper-split-export-declaration": "workspace:^7.10.1",
+    "@babel/template": "workspace:^7.10.1",
+    "@babel/types": "workspace:^7.10.1",
     "lodash": "^4.17.13"
   }
 }

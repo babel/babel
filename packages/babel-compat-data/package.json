@@ -34,7 +34,7 @@
     "semver": "^5.5.0"
   },
   "devDependencies": {
-    "@babel/helper-compilation-targets": "^7.10.1",
+    "@babel/helper-compilation-targets": "workspace:^7.10.1",
     "caniuse-db": "1.0.30001035",
     "electron-to-chromium": "1.3.377",
     "lodash": "^4.17.15"

@@ -26,8 +26,8 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.3",
-    "@babel/plugin-transform-modules-commonjs": "^7.10.1",
+    "@babel/core": "workspace:^7.10.3",
+    "@babel/plugin-transform-modules-commonjs": "workspace:^7.10.1",
     "browserify": "16.5.0",
     "default-require-extensions": "^2.0.0"
   }
