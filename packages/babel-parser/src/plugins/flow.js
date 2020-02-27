@@ -2082,6 +2082,32 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
+    parseClassMember(
+      classBody: N.ClassBody,
+      member: any,
+      state: { hadConstructor: boolean },
+      constructorAllowsSuper: boolean,
+    ): void {
+      const pos = this.state.start;
+      if (this.isContextual("declare")) {
+        if (this.parseClassMemberFromModifier(classBody, member)) {
+          // 'declare' is a class element name
+          return;
+        }
+
+        member.declare = true;
+      }
+
+      super.parseClassMember(classBody, member, state, constructorAllowsSuper);
+
+      if (member.declare && (member.type === "ClassMethod" || member.value)) {
+        this.raise(
+          pos,
+          "'declare' is only allowed on uninitialized class fields.",
+        );
+      }
+    }
+
     // ensure that inside flow types, we bypass the jsx parser plugin
     getTokenFromCode(code: number): void {
       const next = this.input.charCodeAt(this.state.pos + 1);
