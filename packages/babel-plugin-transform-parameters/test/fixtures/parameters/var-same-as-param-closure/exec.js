@@ -2,7 +2,7 @@ var x = 1
 function foo(x, y = function () { x = 2 }) {
   var x = 3
   y()
-  console.log(x);
+  expect(x).toBe(3);
 }
 foo()
-console.log(x);
+expect(x).toBe(1);

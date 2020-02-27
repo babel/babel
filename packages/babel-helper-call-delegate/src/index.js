@@ -35,7 +35,6 @@ export default function(
   let callee = container;
   let args = [];
 
-  // todo: only hoist if necessary
   if (shouldHoistVariables) {
     hoistVariables(path, id => scope.push({ id }));
   }
