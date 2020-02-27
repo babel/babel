@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.8.4",
+  "version": "7.8.6",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "babel.js",
   "files": [
@@ -11,7 +11,7 @@
     "prepublishOnly": "cd ../.. && make prepublish-build-standalone"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.4",
+    "@babel/core": "^7.8.6",
     "@babel/helper-plugin-utils": "^7.8.3",
     "@babel/plugin-external-helpers": "^7.8.3",
     "@babel/plugin-proposal-async-generator-functions": "^7.8.3",
@@ -55,7 +55,7 @@
     "@babel/plugin-transform-async-to-generator": "^7.8.3",
     "@babel/plugin-transform-block-scoped-functions": "^7.8.3",
     "@babel/plugin-transform-block-scoping": "^7.8.3",
-    "@babel/plugin-transform-classes": "^7.8.3",
+    "@babel/plugin-transform-classes": "^7.8.6",
     "@babel/plugin-transform-computed-properties": "^7.8.3",
     "@babel/plugin-transform-destructuring": "^7.8.3",
     "@babel/plugin-transform-dotall-regex": "^7.8.3",
@@ -63,7 +63,7 @@
     "@babel/plugin-transform-exponentiation-operator": "^7.8.3",
     "@babel/plugin-transform-flow-comments": "^7.8.3",
     "@babel/plugin-transform-flow-strip-types": "^7.8.3",
-    "@babel/plugin-transform-for-of": "^7.8.4",
+    "@babel/plugin-transform-for-of": "^7.8.6",
     "@babel/plugin-transform-function-name": "^7.8.3",
     "@babel/plugin-transform-instanceof": "^7.8.3",
     "@babel/plugin-transform-jscript": "^7.8.3",
@@ -100,7 +100,7 @@
     "@babel/plugin-transform-typeof-symbol": "^7.8.4",
     "@babel/plugin-transform-typescript": "^7.8.3",
     "@babel/plugin-transform-unicode-regex": "^7.8.3",
-    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-env": "^7.8.6",
     "@babel/preset-flow": "^7.8.3",
     "@babel/preset-react": "^7.8.3",
     "@babel/preset-typescript": "^7.8.3"

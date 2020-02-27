@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-create-regexp-features-plugin",
-  "version": "7.8.3",
+  "version": "7.8.6",
   "author": "The Babel Team (https://babeljs.io/team)",
   "license": "MIT",
   "description": "Compile ESNext Regular Expressions to ES5",
@@ -26,7 +26,7 @@
     "@babel/core": "^7.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.3",
+    "@babel/core": "^7.8.6",
     "@babel/helper-plugin-test-runner": "^7.8.3"
   }
 }
