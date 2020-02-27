@@ -1,23 +1,13 @@
 version: 2.1
 
 aliases:
-  - &restore-node-modules-cache
-    keys:
-      - v1-yarn-deps-{{ checksum "yarn.lock" }}
-
   - &restore-yarn-cache
-    keys:
-      - v1-yarn-cache
-
-  - &save-node-modules-cache
-    paths:
-      - node_modules
-    key: v1-yarn-deps-{{ checksum "yarn.lock" }}
+    key: v2-yarn-cache-{{ checksum "yarn.lock" }}
 
   - &save-yarn-cache
     paths:
-      - ~/.yarn-cache
-    key: v1-yarn-cache
+      - .yarn/cache
+    key: v2-yarn-cache-{{ checksum "yarn.lock" }}
 
   - &artifact_babel
     path: ~/babel/packages/babel-standalone/babel.js
@@ -54,7 +44,7 @@ jobs:
     steps:
       - checkout
       - restore_cache: *restore-yarn-cache
-      - restore_cache: *restore-node-modules-cache
+      - run: yarn --inline-builds
         # Builds babel-standalone with the regular Babel config
         # test-ci-coverage doesn't test babel-standalone, as trying to gather coverage
       - run: IS_PUBLISH=true make -j build-standalone-ci
@@ -63,7 +53,6 @@ jobs:
       - run: yarn jest "\-standalone/test"
       - store_artifacts: *artifact_babel
       - store_artifacts: *artifact_babel_min
-      - save_cache: *save-node-modules-cache
       - save_cache: *save-yarn-cache
 
   test262:
@@ -79,7 +68,6 @@ jobs:
               git checkout -qf FETCH_HEAD
             fi
       - restore_cache: *restore-yarn-cache
-      - restore_cache: *restore-node-modules-cache
       - run:
           name: Build Babel
           command: BABEL_ENV=test make bootstrap
@@ -119,20 +107,20 @@ jobs:
             cat ~/diff.tap | $(npm bin)/tap-merge | $(npm bin)/tap-mocha-reporter xunit | tee ~/test-results/test262/results.xml
           <<: *test262_workdir
       - store_test_results: *artifact_test262_xunit
-      - save_cache: *save-node-modules-cache
       - save_cache: *save-yarn-cache
 
   publish-verdaccio:
     executor: node-executor
     steps:
       - checkout
-      - run: yarn install
+      - restore_cache: *restore-yarn-cache
       - run: ./scripts/integration-tests/publish-local.sh
       - persist_to_workspace:
           root: /tmp/verdaccio-workspace
           paths:
             - storage
             - htpasswd
+      - save_cache: *save-yarn-cache
 
   e2e-babel:
     executor: node-executor
