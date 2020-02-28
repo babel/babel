@@ -4,12 +4,10 @@ import { types as tt, type TokenType } from "../tokenizer/types";
 import Tokenizer from "../tokenizer";
 import State from "../tokenizer/state";
 import type { Node } from "../types";
-import { lineBreak, skipWhiteSpace } from "../util/whitespace";
+import { lineBreak } from "../util/whitespace";
 import { isIdentifierChar } from "../util/identifier";
 import * as charCodes from "charcodes";
 import { Errors } from "./location";
-
-const literal = /^('|")((?:\\?.)*?)\1/;
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
   node: Node,
@@ -191,29 +189,6 @@ export default class UtilParser extends Tokenizer {
         "Await cannot be used as name inside an async function",
       );
     }
-  }
-
-  strictDirective(start: number): boolean {
-    for (;;) {
-      // Try to find string literal.
-      skipWhiteSpace.lastIndex = start;
-      // $FlowIgnore
-      start += skipWhiteSpace.exec(this.input)[0].length;
-      const match = literal.exec(this.input.slice(start));
-      if (!match) break;
-      if (match[2] === "use strict") return true;
-      start += match[0].length;
-
-      // Skip semicolon, if any.
-      skipWhiteSpace.lastIndex = start;
-      // $FlowIgnore
-      start += skipWhiteSpace.exec(this.input)[0].length;
-      if (this.input[start] === ";") {
-        start++;
-      }
-    }
-
-    return false;
   }
 
   // tryParse will clone parser state.
