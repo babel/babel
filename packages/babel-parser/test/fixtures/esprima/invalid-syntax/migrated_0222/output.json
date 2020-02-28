@@ -13,8 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Octal literal in strict mode (1:36)",
-    "SyntaxError: Octal literal in strict mode (1:57)"
+    "SyntaxError: Octal literal in strict mode (1:36)"
   ],
   "program": {
     "type": "Program",

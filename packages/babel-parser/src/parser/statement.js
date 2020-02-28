@@ -795,13 +795,20 @@ export default class StatementParser extends ExpressionParser {
   parseBlock(
     allowDirectives?: boolean = false,
     createNewLexicalScope?: boolean = true,
+    afterBlockParse?: Function,
   ): N.BlockStatement {
     const node = this.startNode();
     this.expect(tt.braceL);
     if (createNewLexicalScope) {
       this.scope.enter(SCOPE_OTHER);
     }
-    this.parseBlockBody(node, allowDirectives, false, tt.braceR);
+    this.parseBlockBody(
+      node,
+      allowDirectives,
+      false,
+      tt.braceR,
+      afterBlockParse,
+    );
     if (createNewLexicalScope) {
       this.scope.exit();
     }
@@ -821,6 +828,7 @@ export default class StatementParser extends ExpressionParser {
     allowDirectives: ?boolean,
     topLevel: boolean,
     end: TokenType,
+    afterBlockParse?: Function,
   ): void {
     const body = (node.body = []);
     const directives = (node.directives = []);
@@ -829,6 +837,7 @@ export default class StatementParser extends ExpressionParser {
       allowDirectives ? directives : undefined,
       topLevel,
       end,
+      afterBlockParse,
     );
   }
 
@@ -838,6 +847,7 @@ export default class StatementParser extends ExpressionParser {
     directives: ?(N.Directive[]),
     topLevel: boolean,
     end: TokenType,
+    afterBlockParse?: Function,
   ): void {
     let parsedNonDirective = false;
     let oldStrict;
@@ -868,6 +878,10 @@ export default class StatementParser extends ExpressionParser {
 
       parsedNonDirective = true;
       body.push(stmt);
+    }
+
+    if (afterBlockParse) {
+      afterBlockParse.call(this, typeof oldStrict !== "undefined");
     }
 
     if (oldStrict === false) {

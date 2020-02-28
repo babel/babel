@@ -55,6 +55,7 @@ export default class ExpressionParser extends LValParser {
   +parseBlock: (
     allowDirectives?: boolean,
     createNewLexicalScope?: boolean,
+    afterBlockParse?: Function,
   ) => N.BlockStatement;
   +parseClass: (
     node: N.Class,
@@ -1877,9 +1878,6 @@ export default class ExpressionParser extends LValParser {
     isMethod?: boolean = false,
   ): void {
     const isExpression = allowExpression && !this.match(tt.braceL);
-    const oldStrict = this.state.strict;
-    let useStrict = false;
-
     const oldInParameters = this.state.inParameters;
     this.state.inParameters = false;
 
@@ -1887,58 +1885,63 @@ export default class ExpressionParser extends LValParser {
       node.body = this.parseMaybeAssign();
       this.checkParams(node, false, allowExpression, false);
     } else {
-      const nonSimple = !this.isSimpleParamList(node.params);
-      if (!oldStrict || nonSimple) {
-        useStrict = this.strictDirective(this.state.end);
-        // If this is a strict mode function, verify that argument names
-        // are not repeated, and it does not try to bind the words `eval`
-        // or `arguments`.
-        if (useStrict && nonSimple) {
-          // This logic is here to align the error location with the estree plugin
-          const errorPos =
-            // $FlowIgnore
-            (node.kind === "method" || node.kind === "constructor") &&
-            // $FlowIgnore
-            !!node.key
-              ? node.key.end
-              : node.start;
-          this.raise(errorPos, Errors.IllegalLanguageModeDirective);
-        }
-      }
+      const oldStrict = this.state.strict;
       // Start a new scope with regard to labels
       // flag (restore them to their old value afterwards).
       const oldLabels = this.state.labels;
       this.state.labels = [];
-      if (useStrict) this.state.strict = true;
-      // Add the params to varDeclaredNames to ensure that an error is thrown
-      // if a let/const declaration in the function clashes with one of the params.
-      this.checkParams(
-        node,
-        !oldStrict && !useStrict && !allowExpression && !isMethod && !nonSimple,
-        allowExpression,
-        !oldStrict && useStrict,
-      );
+
       // FunctionBody[Yield, Await]:
       //   StatementList[?Yield, ?Await, +Return] opt
       this.prodParam.enter(this.prodParam.currentFlags() | PARAM_RETURN);
-      node.body = this.parseBlock(true, false);
+      node.body = this.parseBlock(
+        true,
+        false,
+        // Strict mode function checks after we parse the statements in the function body.
+        (hasStrictModeDirective: boolean) => {
+          const nonSimple = !this.isSimpleParamList(node.params);
+
+          if (hasStrictModeDirective && nonSimple) {
+            // This logic is here to align the error location with the ESTree plugin.
+            const errorPos =
+              // $FlowIgnore
+              (node.kind === "method" || node.kind === "constructor") &&
+              // $FlowIgnore
+              !!node.key
+                ? node.key.end
+                : node.start;
+            this.raise(errorPos, Errors.IllegalLanguageModeDirective);
+          }
+
+          const strictModeChanged = !oldStrict && this.state.strict;
+
+          // Add the params to varDeclaredNames to ensure that an error is thrown
+          // if a let/const declaration in the function clashes with one of the params.
+          this.checkParams(
+            node,
+            !this.state.strict && !allowExpression && !isMethod && !nonSimple,
+            allowExpression,
+            strictModeChanged,
+          );
+
+          // Ensure the function name isn't a forbidden identifier in strict mode, e.g. 'eval'
+          if (this.state.strict && node.id) {
+            this.checkLVal(
+              node.id,
+              BIND_OUTSIDE,
+              undefined,
+              "function name",
+              undefined,
+              strictModeChanged,
+            );
+          }
+        },
+      );
       this.prodParam.exit();
       this.state.labels = oldLabels;
     }
 
     this.state.inParameters = oldInParameters;
-    // Ensure the function name isn't a forbidden identifier in strict mode, e.g. 'eval'
-    if (this.state.strict && node.id) {
-      this.checkLVal(
-        node.id,
-        BIND_OUTSIDE,
-        undefined,
-        "function name",
-        undefined,
-        !oldStrict && useStrict,
-      );
-    }
-    this.state.strict = oldStrict;
   }
 
   isSimpleParamList(
