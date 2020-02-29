@@ -152,10 +152,10 @@ export default class UtilParser extends Tokenizer {
 
   expectPlugin(name: string, pos?: ?number): true {
     if (!this.hasPlugin(name)) {
-      throw this.raise(
+      throw this.raiseWithData(
         pos != null ? pos : this.state.start,
-        `This experimental syntax requires enabling the parser plugin: '${name}'`,
         { missingPluginNames: [name] },
+        `This experimental syntax requires enabling the parser plugin: '${name}'`,
       );
     }
 
@@ -164,12 +164,12 @@ export default class UtilParser extends Tokenizer {
 
   expectOnePlugin(names: Array<string>, pos?: ?number): void {
     if (!names.some(n => this.hasPlugin(n))) {
-      throw this.raise(
+      throw this.raiseWithData(
         pos != null ? pos : this.state.start,
+        { missingPluginNames: names },
         `This experimental syntax requires enabling one of the following parser plugin(s): '${names.join(
           ", ",
         )}'`,
-        { missingPluginNames: names },
       );
     }
   }

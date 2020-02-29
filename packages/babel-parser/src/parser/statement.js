@@ -308,12 +308,12 @@ export default class StatementParser extends ExpressionParser {
 
   assertModuleNodeAllowed(node: N.Node): void {
     if (!this.options.allowImportExportEverywhere && !this.inModule) {
-      this.raise(
+      this.raiseWithData(
         node.start,
-        `'import' and 'export' may appear only with 'sourceType: "module"'`,
         {
           code: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED",
         },
+        `'import' and 'export' may appear only with 'sourceType: "module"'`,
       );
     }
   }

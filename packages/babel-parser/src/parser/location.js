@@ -1,5 +1,5 @@
 // @flow
-
+/* eslint sort-keys: "error" */
 import { getLineInfo, type Position } from "../util/location";
 import CommentsParser from "./comments";
 
@@ -8,6 +8,15 @@ import CommentsParser from "./comments";
 // the location of the error, attaches the position to the end
 // of the error message, and then raises a `SyntaxError` with that
 // message.
+
+type ErrorContext = {
+  pos: number,
+  loc: Position,
+  missingPluginNames?: Array<string>,
+  code?: string,
+};
+
+export const Errors = {};
 
 export default class LocationParser extends CommentsParser {
   // Forward-declaration: defined in tokenizer/index.js
@@ -26,33 +35,39 @@ export default class LocationParser extends CommentsParser {
     return loc;
   }
 
-  raise(
+  raise(pos: number, errorTemplate: string, ...params: any): Error | empty {
+    return this.raiseWithData(pos, undefined, errorTemplate, ...params);
+  }
+
+  raiseWithData(
     pos: number,
-    message: string,
-    {
-      missingPluginNames,
-      code,
-    }: {
+    data: {
       missingPluginNames?: Array<string>,
       code?: string,
-    } = {},
+    },
+    errorTemplate: string,
+    ...params: any
   ): Error | empty {
     const loc = this.getLocationForPosition(pos);
-
-    message += ` (${loc.line}:${loc.column})`;
-    // $FlowIgnore
-    const err: SyntaxError & { pos: number, loc: Position } = new SyntaxError(
+    const message =
+      errorTemplate.replace(/%(\d+)/g, (_, i: number) => params[i]) +
+      ` (${loc.line}:${loc.column})`;
+    return this._raise(
+      Object.assign(
+        {
+          loc,
+          pos,
+        },
+        data,
+      ),
       message,
     );
-    err.pos = pos;
-    err.loc = loc;
-    if (missingPluginNames) {
-      err.missingPlugin = missingPluginNames;
-    }
-    if (code !== undefined) {
-      err.code = code;
-    }
+  }
 
+  _raise(errorContext: ErrorContext, message: string): Error | empty {
+    // $FlowIgnore
+    const err: SyntaxError & ErrorContext = new SyntaxError(message);
+    Object.assign(err, errorContext);
     if (this.options.errorRecovery) {
       if (!this.isLookahead) this.state.errors.push(err);
       return err;

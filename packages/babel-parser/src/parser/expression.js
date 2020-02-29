@@ -1217,10 +1217,10 @@ export default class ExpressionParser extends LValParser {
       this.expectPlugin("importMeta");
 
       if (!this.inModule) {
-        this.raise(
+        this.raiseWithData(
           id.start,
-          `import.meta may appear only with 'sourceType: "module"'`,
           { code: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED" },
+          `import.meta may appear only with 'sourceType: "module"'`,
         );
       }
       this.sawUnambiguousESM = true;
