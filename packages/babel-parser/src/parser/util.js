@@ -155,7 +155,7 @@ export default class UtilParser extends Tokenizer {
     if (!this.hasPlugin(name)) {
       throw this.raiseWithData(
         pos != null ? pos : this.state.start,
-        { missingPluginNames: [name] },
+        { missingPlugin: [name] },
         `This experimental syntax requires enabling the parser plugin: '${name}'`,
       );
     }
@@ -167,7 +167,7 @@ export default class UtilParser extends Tokenizer {
     if (!names.some(n => this.hasPlugin(n))) {
       throw this.raiseWithData(
         pos != null ? pos : this.state.start,
-        { missingPluginNames: names },
+        { missingPlugin: names },
         `This experimental syntax requires enabling one of the following parser plugin(s): '${names.join(
           ", ",
         )}'`,

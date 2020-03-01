@@ -12,7 +12,7 @@ import CommentsParser from "./comments";
 type ErrorContext = {
   pos: number,
   loc: Position,
-  missingPluginNames?: Array<string>,
+  missingPlugin?: Array<string>,
   code?: string,
 };
 
@@ -214,7 +214,7 @@ export default class LocationParser extends CommentsParser {
   raiseWithData(
     pos: number,
     data: {
-      missingPluginNames?: Array<string>,
+      missingPlugin?: Array<string>,
       code?: string,
     },
     errorTemplate: string,
