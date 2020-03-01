@@ -16,6 +16,7 @@ import {
   type BindingTypes,
 } from "./scopeflags";
 import * as N from "../types";
+import { Errors } from "../parser/location";
 
 // Start an AST node, attaching a start offset.
 export class Scope {
@@ -133,7 +134,7 @@ export default class ScopeHandler<IScope: Scope = Scope> {
     pos: number,
   ) {
     if (this.isRedeclaredInScope(scope, name, bindingType)) {
-      this.raise(pos, `Identifier '${name}' has already been declared`);
+      this.raise(pos, Errors.VarRedeclaration, name);
     }
   }
 

@@ -7,6 +7,7 @@ import type { Node } from "../types";
 import { lineBreak, skipWhiteSpace } from "../util/whitespace";
 import { isIdentifierChar } from "../util/identifier";
 import * as charCodes from "charcodes";
+import { Errors } from "./location";
 
 const literal = /^('|")((?:\\?.)*?)\1/;
 
@@ -280,7 +281,7 @@ export default class UtilParser extends Tokenizer {
       this.unexpected(shorthandAssign);
     }
     if (doubleProto >= 0) {
-      this.raise(doubleProto, "Redefinition of __proto__ property");
+      this.raise(doubleProto, Errors.DuplicateProto);
     }
   }
 }

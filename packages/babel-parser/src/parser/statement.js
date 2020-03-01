@@ -3,6 +3,7 @@
 import * as N from "../types";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import ExpressionParser from "./expression";
+import { Errors } from "./location";
 import {
   isIdentifierChar,
   isIdentifierStart,
@@ -61,7 +62,7 @@ export default class StatementParser extends ExpressionParser {
       for (const [name] of Array.from(this.scope.undefinedExports)) {
         const pos = this.scope.undefinedExports.get(name);
         // $FlowIssue
-        this.raise(pos, `Export '${name}' is not defined`);
+        this.raise(pos, Errors.ModuleExportUndefined, name);
       }
     }
 
@@ -177,16 +178,9 @@ export default class StatementParser extends ExpressionParser {
         if (this.lookaheadCharCode() === charCodes.dot) break;
         if (context) {
           if (this.state.strict) {
-            this.raise(
-              this.state.start,
-              "In strict mode code, functions can only be declared at top level or inside a block",
-            );
+            this.raise(this.state.start, Errors.StrictFunction);
           } else if (context !== "if" && context !== "label") {
-            this.raise(
-              this.state.start,
-              "In non-strict mode code, functions can only be declared at top level, " +
-                "inside a block, or as the body of an if statement",
-            );
+            this.raise(this.state.start, Errors.SloppyFunction);
           }
         }
         return this.parseFunctionStatement(node, false, !context);
@@ -210,10 +204,7 @@ export default class StatementParser extends ExpressionParser {
       case tt._var:
         kind = kind || this.state.value;
         if (context && kind !== "var") {
-          this.raise(
-            this.state.start,
-            "Lexical declaration cannot appear in a single-statement context",
-          );
+          this.raise(this.state.start, Errors.UnexpectedLexicalDeclaration);
         }
         return this.parseVarStatement(node, kind);
 
@@ -236,10 +227,7 @@ export default class StatementParser extends ExpressionParser {
         }
 
         if (!this.options.allowImportExportEverywhere && !topLevel) {
-          this.raise(
-            this.state.start,
-            "'import' and 'export' may only appear at the top level",
-          );
+          this.raise(this.state.start, Errors.UnexpectedImportExport);
         }
 
         this.next();
@@ -278,7 +266,7 @@ export default class StatementParser extends ExpressionParser {
           if (context) {
             this.raise(
               this.state.start,
-              "Async functions can only be declared at the top level or inside a block",
+              Errors.AsyncFunctionInSingleStatementContext,
             );
           }
           this.next();
@@ -313,7 +301,7 @@ export default class StatementParser extends ExpressionParser {
         {
           code: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED",
         },
-        `'import' and 'export' may appear only with 'sourceType: "module"'`,
+        Errors.ImportOutsideModule,
       );
     }
   }
@@ -351,17 +339,10 @@ export default class StatementParser extends ExpressionParser {
         this.hasPlugin("decorators") &&
         !this.getPluginOption("decorators", "decoratorsBeforeExport")
       ) {
-        this.raise(
-          this.state.start,
-          "Using the export keyword between a decorator and a class is not allowed. " +
-            "Please use `export @dec class` instead.",
-        );
+        this.raise(this.state.start, Errors.DecoratorExportClass);
       }
     } else if (!this.canHaveLeadingDecorator()) {
-      throw this.raise(
-        this.state.start,
-        "Leading decorators must be attached to a class declaration",
-      );
+      throw this.raise(this.state.start, Errors.UnexpectedLeadingDecorator);
     }
   }
 
@@ -451,7 +432,7 @@ export default class StatementParser extends ExpressionParser {
       }
     }
     if (i === this.state.labels.length) {
-      this.raise(node.start, "Unsyntactic " + keyword);
+      this.raise(node.start, Errors.IllegalBreakContinue, keyword);
     }
   }
 
@@ -576,7 +557,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseReturnStatement(node: N.ReturnStatement): N.ReturnStatement {
     if (!this.prodParam.hasReturn && !this.options.allowReturnOutsideFunction) {
-      this.raise(this.state.start, "'return' outside of function");
+      this.raise(this.state.start, Errors.IllegalReturn);
     }
 
     this.next();
@@ -619,7 +600,10 @@ export default class StatementParser extends ExpressionParser {
           cur.test = this.parseExpression();
         } else {
           if (sawDefault) {
-            this.raise(this.state.lastTokStart, "Multiple default clauses");
+            this.raise(
+              this.state.lastTokStart,
+              Errors.MultipleDefaultsInSwitch,
+            );
           }
           sawDefault = true;
           cur.test = null;
@@ -645,7 +629,7 @@ export default class StatementParser extends ExpressionParser {
     if (
       lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start))
     ) {
-      this.raise(this.state.lastTokEnd, "Illegal newline after throw");
+      this.raise(this.state.lastTokEnd, Errors.NewlineAfterThrow);
     }
     node.argument = this.parseExpression();
     this.semicolon();
@@ -690,7 +674,7 @@ export default class StatementParser extends ExpressionParser {
     node.finalizer = this.eat(tt._finally) ? this.parseBlock() : null;
 
     if (!node.handler && !node.finalizer) {
-      this.raise(node.start, "Missing catch or finally clause");
+      this.raise(node.start, Errors.NoCatchOrFinally);
     }
 
     return this.finishNode(node, "TryStatement");
@@ -727,7 +711,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseWithStatement(node: N.WithStatement): N.WithStatement {
     if (this.state.strict) {
-      this.raise(this.state.start, "'with' in strict mode");
+      this.raise(this.state.start, Errors.StrictWith);
     }
     this.next();
     node.object = this.parseHeaderExpression();
@@ -758,7 +742,7 @@ export default class StatementParser extends ExpressionParser {
   ): N.LabeledStatement {
     for (const label of this.state.labels) {
       if (label.name === maybeName) {
-        this.raise(expr.start, `Label '${maybeName}' is already declared`);
+        this.raise(expr.start, Errors.LabelRedeclaration, maybeName);
       }
     }
 
@@ -875,7 +859,7 @@ export default class StatementParser extends ExpressionParser {
           this.setStrict(true);
 
           if (octalPosition) {
-            this.raise(octalPosition, "Octal literal in strict mode");
+            this.raise(octalPosition, Errors.StrictOctalLiteral);
           }
         }
 
@@ -948,12 +932,11 @@ export default class StatementParser extends ExpressionParser {
     ) {
       this.raise(
         init.start,
-        `${
-          isForIn ? "for-in" : "for-of"
-        } loop variable declaration may not have an initializer`,
+        Errors.ForInOfLoopInitializer,
+        isForIn ? "for-in" : "for-of",
       );
     } else if (init.type === "AssignmentPattern") {
-      this.raise(init.start, "Invalid left-hand side in for-loop");
+      this.raise(init.start, Errors.InvalidLhs, "for-loop");
     }
 
     node.left = init;
@@ -1006,7 +989,8 @@ export default class StatementParser extends ExpressionParser {
         ) {
           this.raise(
             this.state.lastTokEnd,
-            "Complex binding patterns require an initialization value",
+            Errors.DeclarationMissingInitializer,
+            "Complex binding patterns",
           );
         }
         decl.init = null;
@@ -1043,10 +1027,7 @@ export default class StatementParser extends ExpressionParser {
     this.initFunction(node, isAsync);
 
     if (this.match(tt.star) && isHangingStatement) {
-      this.raise(
-        this.state.start,
-        "Generators can only be declared at the top level or inside a block",
-      );
+      this.raise(this.state.start, Errors.GeneratorInSingleStatementContext);
     }
     node.generator = this.eat(tt.star);
 
@@ -1196,10 +1177,7 @@ export default class StatementParser extends ExpressionParser {
       while (!this.eat(tt.braceR)) {
         if (this.eat(tt.semi)) {
           if (decorators.length > 0) {
-            throw this.raise(
-              this.state.lastTokEnd,
-              "Decorators must not be followed by a semicolon",
-            );
+            throw this.raise(this.state.lastTokEnd, Errors.DecoratorSemicolon);
           }
           continue;
         }
@@ -1225,19 +1203,13 @@ export default class StatementParser extends ExpressionParser {
           member.decorators &&
           member.decorators.length > 0
         ) {
-          this.raise(
-            member.start,
-            "Decorators can't be used with a constructor. Did you mean '@dec class { ... }'?",
-          );
+          this.raise(member.start, Errors.DecoratorConstructor);
         }
       }
     });
 
     if (decorators.length) {
-      throw this.raise(
-        this.state.start,
-        "You have trailing decorators with no method",
-      );
+      throw this.raise(this.state.start, Errors.TrailingDecorator);
     }
 
     this.classScope.exit();
@@ -1329,7 +1301,7 @@ export default class StatementParser extends ExpressionParser {
       }
 
       if (this.isNonstaticConstructor(publicMethod)) {
-        this.raise(publicMethod.key.start, "Constructor can't be a generator");
+        this.raise(publicMethod.key.start, Errors.ConstructorIsGenerator);
       }
 
       this.pushClassMethod(
@@ -1369,7 +1341,7 @@ export default class StatementParser extends ExpressionParser {
 
         // TypeScript allows multiple overloaded constructor declarations.
         if (state.hadConstructor && !this.hasPlugin("typescript")) {
-          this.raise(key.start, "Duplicate constructor in the same class");
+          this.raise(key.start, Errors.DuplicateConstructor);
         }
         state.hadConstructor = true;
         allowsDirectSuper = constructorAllowsSuper;
@@ -1417,10 +1389,7 @@ export default class StatementParser extends ExpressionParser {
         );
       } else {
         if (this.isNonstaticConstructor(publicMethod)) {
-          this.raise(
-            publicMethod.key.start,
-            "Constructor can't be an async function",
-          );
+          this.raise(publicMethod.key.start, Errors.ConstructorIsAsync);
         }
 
         this.pushClassMethod(
@@ -1449,10 +1418,7 @@ export default class StatementParser extends ExpressionParser {
         this.pushClassPrivateMethod(classBody, privateMethod, false, false);
       } else {
         if (this.isNonstaticConstructor(publicMethod)) {
-          this.raise(
-            publicMethod.key.start,
-            "Constructor can't have get/set modifier",
-          );
+          this.raise(publicMethod.key.start, Errors.ConstructorIsAccessor);
         }
         this.pushClassMethod(
           classBody,
@@ -1486,17 +1452,11 @@ export default class StatementParser extends ExpressionParser {
       ((key: $FlowSubtype<N.Identifier>).name === "prototype" ||
         (key: $FlowSubtype<N.StringLiteral>).value === "prototype")
     ) {
-      this.raise(
-        key.start,
-        "Classes may not have static property named prototype",
-      );
+      this.raise(key.start, Errors.StaticPrototype);
     }
 
     if (key.type === "PrivateName" && key.id.name === "constructor") {
-      this.raise(
-        key.start,
-        "Classes may not have a private field named '#constructor'",
-      );
+      this.raise(key.start, Errors.ConstructorClassPrivateField);
     }
 
     return key;
@@ -1509,10 +1469,7 @@ export default class StatementParser extends ExpressionParser {
     ) {
       // Non-computed field, which is either an identifier named "constructor"
       // or a string literal named "constructor"
-      this.raise(
-        prop.key.start,
-        "Classes may not have a field named 'constructor'",
-      );
+      this.raise(prop.key.start, Errors.ConstructorClassField);
     }
 
     classBody.body.push(this.parseClassProperty(prop));
@@ -1653,7 +1610,7 @@ export default class StatementParser extends ExpressionParser {
       if (optionalId || !isStatement) {
         node.id = null;
       } else {
-        this.unexpected(null, "A class name is required");
+        this.unexpected(null, Errors.MissingClassName);
       }
     }
   }
@@ -1771,7 +1728,7 @@ export default class StatementParser extends ExpressionParser {
 
         // export async;
         if (!this.isUnparsedContextual(next, "function")) {
-          this.unexpected(next, `Unexpected token, expected "function"`);
+          this.unexpected(next, { label: "function" });
         }
       }
 
@@ -1816,20 +1773,12 @@ export default class StatementParser extends ExpressionParser {
         this.hasPlugin("decorators") &&
         this.getPluginOption("decorators", "decoratorsBeforeExport")
       ) {
-        this.raise(
-          this.state.start,
-          "Decorators must be placed *before* the 'export' keyword." +
-            " You can set the 'decoratorsBeforeExport' option to false to use" +
-            " the 'export @decorator class {}' syntax",
-        );
+        this.raise(this.state.start, Errors.DecoratorBeforeExport);
       }
       this.parseDecorators(false);
       return this.parseClass(expr, true, true);
     } else if (this.match(tt._const) || this.match(tt._var) || this.isLet()) {
-      throw this.raise(
-        this.state.start,
-        "Only expressions, functions or classes are allowed as the `default` export.",
-      );
+      throw this.raise(this.state.start, Errors.UnsupportedDefaultExport);
     } else {
       const res = this.parseMaybeAssign();
       this.semicolon();
@@ -1878,12 +1827,7 @@ export default class StatementParser extends ExpressionParser {
       this.expectOnePlugin(["decorators", "decorators-legacy"]);
       if (this.hasPlugin("decorators")) {
         if (this.getPluginOption("decorators", "decoratorsBeforeExport")) {
-          this.unexpected(
-            this.state.start,
-            "Decorators must be placed *before* the 'export' keyword." +
-              " You can set the 'decoratorsBeforeExport' option to false to use" +
-              " the 'export @decorator class {}' syntax",
-          );
+          this.unexpected(this.state.start, Errors.DecoratorBeforeExport);
         } else {
           return true;
         }
@@ -1956,10 +1900,7 @@ export default class StatementParser extends ExpressionParser {
         (node.declaration.type === "ClassDeclaration" ||
           node.declaration.type === "ClassExpression");
       if (!node.declaration || !isClass) {
-        throw this.raise(
-          node.start,
-          "You can only use decorators on an export when exporting a class",
-        );
+        throw this.raise(node.start, Errors.UnsupportedDecoratorExport);
       }
       this.takeDecorators(node.declaration);
     }
@@ -1999,8 +1940,9 @@ export default class StatementParser extends ExpressionParser {
       this.raise(
         node.start,
         name === "default"
-          ? "Only one default export allowed per module."
-          : `\`${name}\` has already been exported. Exported identifiers must be unique.`,
+          ? Errors.DuplicateDefaultExport
+          : Errors.DuplicateExport,
+        name,
       );
     }
     this.state.exportedIdentifiers.push(name);
@@ -2117,11 +2059,7 @@ export default class StatementParser extends ExpressionParser {
       } else {
         // Detect an attempt to deep destructure
         if (this.eat(tt.colon)) {
-          throw this.raise(
-            this.state.start,
-            "ES2015 named imports do not destructure. " +
-              "Use another statement for destructuring after the import.",
-          );
+          throw this.raise(this.state.start, Errors.DestructureNamedImport);
         }
 
         this.expect(tt.comma);

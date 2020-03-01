@@ -47,6 +47,7 @@ import {
   PARAM,
   functionFlags,
 } from "../util/production-parameter";
+import { Errors } from "./location";
 
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
@@ -103,7 +104,7 @@ export default class ExpressionParser extends LValParser {
             refExpressionErrors.doubleProto = key.start;
           }
         } else {
-          this.raise(key.start, "Redefinition of __proto__ property");
+          this.raise(key.start, Errors.DuplicateProto);
         }
       }
 
@@ -352,7 +353,7 @@ export default class ExpressionParser extends LValParser {
         ) {
           this.raise(
             left.argument.start,
-            "Illegal expression. Wrap left hand side or entire exponentiation in parentheses.",
+            Errors.UnexpectedTokenUnaryExponentiation,
           );
         }
 
@@ -383,7 +384,7 @@ export default class ExpressionParser extends LValParser {
           ) {
             throw this.raise(
               this.state.start,
-              `Unexpected "await" after pipeline body; await must have parentheses in minimal proposal`,
+              Errors.UnexpectedAwaitAfterPipelineBody,
             );
           }
         }
@@ -403,10 +404,7 @@ export default class ExpressionParser extends LValParser {
           (coalesce && (nextOp === tt.logicalOR || nextOp === tt.logicalAND)) ||
           (logical && nextOp === tt.nullishCoalescing)
         ) {
-          throw this.raise(
-            this.state.start,
-            `Nullish coalescing operator(??) requires parens when mixing with logical operators`,
-          );
+          throw this.raise(this.state.start, Errors.MixingCoalesceWithLogical);
         }
 
         return this.parseExprOp(
@@ -500,12 +498,12 @@ export default class ExpressionParser extends LValParser {
         const arg = node.argument;
 
         if (arg.type === "Identifier") {
-          this.raise(node.start, "Deleting local variable in strict mode");
+          this.raise(node.start, Errors.StrictDelete);
         } else if (
           arg.type === "MemberExpression" &&
           arg.property.type === "PrivateName"
         ) {
-          this.raise(node.start, "Deleting a private field is not allowed");
+          this.raise(node.start, Errors.DeletePrivateField);
         }
       }
 
@@ -618,7 +616,7 @@ export default class ExpressionParser extends LValParser {
 
       if (node.property.type === "PrivateName") {
         if (node.object.type === "Super") {
-          this.raise(startPos, "Private fields can't be accessed on super");
+          this.raise(startPos, Errors.SuperPrivateField);
         }
         this.classScope.usePrivateName(
           node.property.id.name,
@@ -739,10 +737,7 @@ export default class ExpressionParser extends LValParser {
     node.quasi = this.parseTemplate(true);
     if (typeArguments) node.typeParameters = typeArguments;
     if (state.optionalChainMember) {
-      this.raise(
-        startPos,
-        "Tagged Template Literals are not allowed in optionalChain",
-      );
+      this.raise(startPos, Errors.OptionalChainingNoTemplate);
     }
     return this.finishNode(node, "TaggedTemplateExpression");
   }
@@ -763,11 +758,11 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     if (node.callee.type === "Import") {
       if (node.arguments.length !== 1) {
-        this.raise(node.start, "import() requires exactly one argument");
+        this.raise(node.start, Errors.ImportCallArity);
       } else {
         const importArg = node.arguments[0];
         if (importArg && importArg.type === "SpreadElement") {
-          this.raise(importArg.start, "... is not allowed in import()");
+          this.raise(importArg.start, Errors.ImportCallSpreadArgument);
         }
       }
     }
@@ -799,7 +794,7 @@ export default class ExpressionParser extends LValParser {
           if (dynamicImport) {
             this.raise(
               this.state.lastTokStart,
-              "Trailing comma is disallowed inside import(...) arguments",
+              Errors.ImportCallArgumentTrailingComma,
             );
           }
           if (nodeForExtra) {
@@ -888,19 +883,12 @@ export default class ExpressionParser extends LValParser {
           !this.scope.allowDirectSuper &&
           !this.options.allowSuperOutsideMethod
         ) {
-          this.raise(
-            node.start,
-            "super() is only valid inside a class constructor of a subclass. " +
-              "Maybe a typo in the method name ('constructor') or not extending another class?",
-          );
+          this.raise(node.start, Errors.SuperNotAllowed);
         } else if (
           !this.scope.allowSuper &&
           !this.options.allowSuperOutsideMethod
         ) {
-          this.raise(
-            node.start,
-            "super is only allowed in object methods and classes",
-          );
+          this.raise(node.start, Errors.UnexpectedSuper);
         }
 
         if (
@@ -908,11 +896,7 @@ export default class ExpressionParser extends LValParser {
           !this.match(tt.bracketL) &&
           !this.match(tt.dot)
         ) {
-          this.raise(
-            node.start,
-            "super can only be used with function calls (i.e. super()) or " +
-              "in property accesses (i.e. super.prop or super[prop])",
-          );
+          this.raise(node.start, Errors.UnsupportedSuper);
         }
 
         return this.finishNode(node, "Super");
@@ -926,10 +910,7 @@ export default class ExpressionParser extends LValParser {
         }
 
         if (!this.match(tt.parenL)) {
-          this.raise(
-            this.state.lastTokStart,
-            "import can only be used in import() or import.meta",
-          );
+          this.raise(this.state.lastTokStart, Errors.UnsupportedImport);
         }
         return this.finishNode(node, "Import");
       case tt._this:
@@ -1092,10 +1073,7 @@ export default class ExpressionParser extends LValParser {
         if (callee.type === "MemberExpression") {
           return this.finishNode(node, "BindExpression");
         } else {
-          throw this.raise(
-            callee.start,
-            "Binding should be performed on object property.",
-          );
+          throw this.raise(callee.start, Errors.UnsupportedBind);
         }
       }
 
@@ -1106,19 +1084,13 @@ export default class ExpressionParser extends LValParser {
           if (
             this.getPluginOption("pipelineOperator", "proposal") !== "smart"
           ) {
-            this.raise(
-              node.start,
-              "Primary Topic Reference found but pipelineOperator not passed 'smart' for 'proposal' option.",
-            );
+            this.raise(node.start, Errors.PrimaryTopicRequiresSmartPipeline);
           }
 
           this.next();
 
           if (!this.primaryTopicReferenceIsAllowedInCurrentTopicContext()) {
-            this.raise(
-              node.start,
-              `Topic reference was used in a lexical context without topic binding`,
-            );
+            this.raise(node.start, Errors.PrimaryTopicNotAllowed);
           }
 
           this.registerTopicReference();
@@ -1146,10 +1118,7 @@ export default class ExpressionParser extends LValParser {
     if (isPrivate) {
       this.expectOnePlugin(["classPrivateProperties", "classPrivateMethods"]);
       if (!isPrivateNameAllowed) {
-        this.raise(
-          this.state.pos,
-          "Private names can only be used as the name of a class element (i.e. class C { #p = 42; #m() {} } )\n or a property of member expression (i.e. this.#p).",
-        );
+        this.raise(this.state.pos, Errors.UnexpectedPrivateField);
       }
       const node = this.startNode();
       this.next();
@@ -1202,7 +1171,9 @@ export default class ExpressionParser extends LValParser {
     if (node.property.name !== propertyName || containsEsc) {
       this.raise(
         node.property.start,
-        `The only valid meta property for ${meta.name} is ${meta.name}.${propertyName}`,
+        Errors.UnsupportedMetaProperty,
+        meta.name,
+        propertyName,
       );
     }
 
@@ -1220,15 +1191,12 @@ export default class ExpressionParser extends LValParser {
         this.raiseWithData(
           id.start,
           { code: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED" },
-          `import.meta may appear only with 'sourceType: "module"'`,
+          Errors.ImportMetaOutsideModule,
         );
       }
       this.sawUnambiguousESM = true;
     } else if (!this.hasPlugin("importMeta")) {
-      this.raise(
-        id.start,
-        `Dynamic imports require a parameter: import('a.js')`,
-      );
+      this.raise(id.start, Errors.ImportCallArityLtOne);
     }
 
     return this.parseMetaProperty(node, id, "meta");
@@ -1409,7 +1377,7 @@ export default class ExpressionParser extends LValParser {
       const metaProp = this.parseMetaProperty(node, meta, "target");
 
       if (!this.scope.inNonArrowFunction && !this.scope.inClass) {
-        let error = "new.target can only be used in functions";
+        let error = Errors.UnexpectedNewTarget;
 
         if (this.hasPlugin("classProperties")) {
           error += " or class properties";
@@ -1424,20 +1392,14 @@ export default class ExpressionParser extends LValParser {
     node.callee = this.parseNoCallExpr();
 
     if (node.callee.type === "Import") {
-      this.raise(node.callee.start, "Cannot use new with import(...)");
+      this.raise(node.callee.start, Errors.ImportCallNotNewExpression);
     } else if (
       node.callee.type === "OptionalMemberExpression" ||
       node.callee.type === "OptionalCallExpression"
     ) {
-      this.raise(
-        this.state.lastTokEnd,
-        "constructors in/after an Optional Chain are not allowed",
-      );
+      this.raise(this.state.lastTokEnd, Errors.OptionalChainingNoNew);
     } else if (this.eat(tt.questionDot)) {
-      this.raise(
-        this.state.start,
-        "constructors in/after an Optional Chain are not allowed",
-      );
+      this.raise(this.state.start, Errors.OptionalChainingNoNew);
     }
 
     this.parseNewArguments(node);
@@ -1461,7 +1423,7 @@ export default class ExpressionParser extends LValParser {
     const elem = this.startNode();
     if (this.state.value === null) {
       if (!isTagged) {
-        this.raise(this.state.start + 1, "Invalid escape sequence in template");
+        this.raise(this.state.start + 1, Errors.InvalidEscapeSequenceTemplate);
       }
     }
     elem.value = {
@@ -1558,10 +1520,7 @@ export default class ExpressionParser extends LValParser {
     let decorators = [];
     if (this.match(tt.at)) {
       if (this.hasPlugin("decorators")) {
-        this.raise(
-          this.state.start,
-          "Stage 2 decorators disallow object literal property decorators",
-        );
+        this.raise(this.state.start, Errors.UnsupportedPropertyDecorator);
       }
 
       // we needn't check if decorators (stage 0) plugin is enabled since it's checked by
@@ -1658,9 +1617,9 @@ export default class ExpressionParser extends LValParser {
     const start = method.start;
     if (method.params.length !== paramCount) {
       if (method.kind === "get") {
-        this.raise(start, "getter must not have any formal parameters");
+        this.raise(start, Errors.BadGetterArity);
       } else {
-        this.raise(start, "setter must have exactly one formal parameter");
+        this.raise(start, Errors.BadSetterArity);
       }
     }
 
@@ -1668,10 +1627,7 @@ export default class ExpressionParser extends LValParser {
       method.kind === "set" &&
       method.params[method.params.length - 1].type === "RestElement"
     ) {
-      this.raise(
-        start,
-        "setter function argument must not be a rest parameter",
-      );
+      this.raise(start, Errors.BadSetterRestParameter);
     }
   }
 
@@ -1946,10 +1902,7 @@ export default class ExpressionParser extends LValParser {
             !!node.key
               ? node.key.end
               : node.start;
-          this.raise(
-            errorPos,
-            "Illegal 'use strict' directive in function with non-simple parameter list",
-          );
+          this.raise(errorPos, Errors.IllegalLanguageModeDirective);
         }
       }
       // Start a new scope with regard to labels
@@ -2076,7 +2029,7 @@ export default class ExpressionParser extends LValParser {
     } else if (this.match(tt.question)) {
       this.expectPlugin("partialApplication");
       if (!allowPlaceholder) {
-        this.raise(this.state.start, "Unexpected argument placeholder");
+        this.raise(this.state.start, Errors.UnexpectedArgumentPlaceholder);
       }
       const node = this.startNode();
       this.next();
@@ -2161,19 +2114,13 @@ export default class ExpressionParser extends LValParser {
     isBinding: boolean,
   ): void {
     if (this.prodParam.hasYield && word === "yield") {
-      this.raise(
-        startLoc,
-        "Can not use 'yield' as identifier inside a generator",
-      );
+      this.raise(startLoc, Errors.YieldBindingIdentifier);
       return;
     }
 
     if (word === "await") {
       if (this.prodParam.hasAwait) {
-        this.raise(
-          startLoc,
-          "Can not use 'await' as identifier inside an async function",
-        );
+        this.raise(startLoc, Errors.AwaitBindingIdentifier);
         return;
       }
       if (
@@ -2189,14 +2136,11 @@ export default class ExpressionParser extends LValParser {
       !this.scope.inNonArrowFunction &&
       word === "arguments"
     ) {
-      this.raise(
-        startLoc,
-        "'arguments' is not allowed in class field initializer",
-      );
+      this.raise(startLoc, Errors.ArgumentsDisallowedInInitializer);
       return;
     }
     if (checkKeywords && isKeyword(word)) {
-      this.raise(startLoc, `Unexpected keyword '${word}'`);
+      this.raise(startLoc, Errors.UnexpectedKeyword, word);
       return;
     }
 
@@ -2208,12 +2152,9 @@ export default class ExpressionParser extends LValParser {
 
     if (reservedTest(word, this.inModule)) {
       if (!this.prodParam.hasAwait && word === "await") {
-        this.raise(
-          startLoc,
-          "Can not use keyword 'await' outside an async function",
-        );
+        this.raise(startLoc, Errors.AwaitNotInAsyncFunction);
       } else {
-        this.raise(startLoc, `Unexpected reserved word '${word}'`);
+        this.raise(startLoc, Errors.UnexpectedReservedWord, word);
       }
     }
   }
@@ -2235,18 +2176,12 @@ export default class ExpressionParser extends LValParser {
     this.next();
 
     if (this.state.inParameters) {
-      this.raise(
-        node.start,
-        "await is not allowed in async function parameters",
-      );
+      this.raise(node.start, Errors.AwaitExpressionFormalParameter);
     } else if (this.state.awaitPos === -1) {
       this.state.awaitPos = node.start;
     }
     if (this.eat(tt.star)) {
-      this.raise(
-        node.start,
-        "await* has been removed from the async functions proposal. Use Promise.all() instead.",
-      );
+      this.raise(node.start, Errors.ObsoleteAwaitStar);
     }
 
     if (!this.scope.inFunction && !this.options.allowAwaitOutsideFunction) {
@@ -2285,7 +2220,7 @@ export default class ExpressionParser extends LValParser {
     const node = this.startNode();
 
     if (this.state.inParameters) {
-      this.raise(node.start, "yield is not allowed in generator parameters");
+      this.raise(node.start, Errors.YieldInParameter);
     } else if (this.state.yieldPos === -1) {
       this.state.yieldPos = node.start;
     }
@@ -2313,10 +2248,7 @@ export default class ExpressionParser extends LValParser {
       if (left.type === "SequenceExpression") {
         // Ensure that the pipeline head is not a comma-delimited
         // sequence expression.
-        this.raise(
-          leftStartPos,
-          `Pipeline head should not be a comma-separated sequence expression`,
-        );
+        this.raise(leftStartPos, Errors.PipelineHeadSequenceExpression);
       }
     }
   }
@@ -2350,18 +2282,12 @@ export default class ExpressionParser extends LValParser {
     if (this.match(tt.arrow)) {
       // If the following token is invalidly `=>`, then throw a human-friendly error
       // instead of something like 'Unexpected token, expected ";"'.
-      throw this.raise(
-        this.state.start,
-        `Unexpected arrow "=>" after pipeline body; arrow function in pipeline body must be parenthesized`,
-      );
+      throw this.raise(this.state.start, Errors.PipelineBodyNoArrow);
     } else if (
       pipelineStyle === "PipelineTopicExpression" &&
       childExpression.type === "SequenceExpression"
     ) {
-      this.raise(
-        startPos,
-        `Pipeline body may not be a comma-separated sequence expression`,
-      );
+      this.raise(startPos, Errors.PipelineBodySequenceExpression);
     }
   }
 
@@ -2384,10 +2310,7 @@ export default class ExpressionParser extends LValParser {
         break;
       case "PipelineTopicExpression":
         if (!this.topicReferenceWasUsedInCurrentTopicContext()) {
-          this.raise(
-            startPos,
-            `Pipeline is in topic style but does not use topic reference`,
-          );
+          this.raise(startPos, Errors.PipelineTopicUnused);
         }
         bodyNode.expression = childExpression;
         break;
