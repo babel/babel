@@ -26,13 +26,17 @@ cd tmp/create-react-app || exit
 # removed in Babel 8.0.0. Comment it out until they upgrade their Babel version.
 sed -i 's/useBuiltIns: true/\/\/ useBuiltIns: true/' packages/babel-preset-react-app/create.js
 
+bump_deps="$PWD/../../utils/bump-babel-dependencies.js"
+node "$bump_deps"
+for d in ./packages/*/
+do
+  (cd "$d"; node "$bump_deps")
+done
+
 # Don't use Yarn 2
 export YARN_IGNORE_PATH=1
 
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
-yarn install
-node "$PWD"/../../utils/bump-babel-dependencies.js
-yarn lerna exec -- node "$PWD"/../../utils/bump-babel-dependencies.js
 yarn install
 
 # Test
