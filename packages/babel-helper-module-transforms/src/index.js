@@ -12,6 +12,8 @@ import normalizeAndLoadModuleMetadata, {
   isSideEffectImport,
 } from "./normalize-and-load-metadata";
 
+export { default as getModuleName } from "./get-module-name";
+
 export { hasExports, isSideEffectImport, isModule, rewriteThis };
 
 /**
