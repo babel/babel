@@ -64,6 +64,31 @@ export default function convertFunctionParams(path, loose) {
   for (let i = 0; i < params.length; i++) {
     const param = params[i];
 
+    for (const name of Object.keys(param.getBindingIdentifiers())) {
+      const constantViolations = scope.bindings[name]?.constantViolations;
+      if (constantViolations) {
+        for (const redeclarator of constantViolations) {
+          const node = redeclarator.node;
+          // If a constant violation is a var or a function declaration,
+          // we first check to see if it's a var without an init.
+          // If so, we remove that declarator.
+          // Otherwise, we have to wrap it in an IIFE.
+          switch (node.type) {
+            case "VariableDeclarator":
+              if (node.init === null) {
+                redeclarator.remove();
+              } else {
+                state.iife = true;
+              }
+              break;
+            case "FunctionDeclaration":
+              state.iife = true;
+              break;
+          }
+        }
+      }
+    }
+
     const paramIsAssignmentPattern = param.isAssignmentPattern();
     if (paramIsAssignmentPattern && (loose || node.kind === "set")) {
       const left = param.get("left");
@@ -146,7 +171,8 @@ export default function convertFunctionParams(path, loose) {
   path.ensureBlock();
 
   if (state.iife) {
-    body.push(callDelegate(path, scope));
+    // we don't want to hoist the inner declarations up
+    body.push(callDelegate(path, scope, false));
     path.set("body", t.blockStatement(body));
   } else {
     path.get("body").unshiftContainer("body", body);
