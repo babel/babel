@@ -12,6 +12,8 @@ module.exports = function(api) {
   };
   const envOpts = Object.assign({}, envOptsNoTargets);
 
+  const compileDynamicImport = env === "test" || env === "development";
+
   let convertESM = true;
   let ignoreLib = true;
   let includeRegeneratorRuntime = false;
@@ -106,11 +108,10 @@ module.exports = function(api) {
       ["@babel/plugin-proposal-optional-chaining", { loose: true }],
       ["@babel/plugin-proposal-nullish-coalescing-operator", { loose: true }],
 
+      compileDynamicImport ? dynamicImportUrlToPath : null,
+      compileDynamicImport ? "@babel/plugin-proposal-dynamic-import" : null,
+
       convertESM ? "@babel/transform-modules-commonjs" : null,
-      // Until Jest supports native mjs, we must simulate it 🤷
-      env === "test" || env === "development"
-        ? "@babel/plugin-proposal-dynamic-import"
-        : null,
     ].filter(Boolean),
     overrides: [
       {
@@ -152,3 +153,24 @@ module.exports = function(api) {
 
   return config;
 };
+
+// import() uses file:// URLs for absolute imports, while require() uses
+// file paths.
+// Since this isn't handled by @babel/plugin-transform-modules-commonjs,
+// we must handle it here.
+// NOTE: This plugin must run before @babel/plugin-transform-modules-commonjs
+function dynamicImportUrlToPath({ template }) {
+  return {
+    visitor: {
+      CallExpression(path) {
+        if (path.get("callee").isImport()) {
+          path.get("arguments.0").replaceWith(
+            template.expression.ast`
+              require("url").fileURLToPath(${path.node.arguments[0]})
+            `
+          );
+        }
+      },
+    },
+  };
+}
