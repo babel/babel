@@ -72,7 +72,18 @@ describe("Babel and Espree", () => {
     const espreePath = require.resolve("espree", {
       paths: [path.dirname(require.resolve("eslint"))],
     });
-    espree = await import(pathToFileURL(espreePath));
+
+    // Dynamic import on Node.js needs a file URL, not a path.
+    // However, pathToFileURL is only supported starting from Node.js 10.
+    // In older versions, we can pass an absolute path to import() and configure
+    // babel.config.js so that import() is transpiled to something that works
+    // with absolute paths.
+    if (!pathToFileURL) {
+      // TODO: Remove in Babel 8
+      espree = await import(espreePath);
+    } else {
+      espree = await import(pathToFileURL(espreePath));
+    }
   });
 
   describe("compatibility", () => {

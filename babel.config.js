@@ -1,5 +1,7 @@
 "use strict";
 
+const currentNodeSupportsURL = !!require("url").pathToFileURL;
+
 module.exports = function(api) {
   const env = api.env();
 
@@ -108,7 +110,11 @@ module.exports = function(api) {
       ["@babel/plugin-proposal-optional-chaining", { loose: true }],
       ["@babel/plugin-proposal-nullish-coalescing-operator", { loose: true }],
 
-      compileDynamicImport ? dynamicImportUrlToPath : null,
+      // See eslint/babel-eslint-parser/test/index.js#L80 to understand why
+      // we need the currentNodeSupportsURL check.
+      compileDynamicImport && currentNodeSupportsURL
+        ? dynamicImportUrlToPath
+        : null,
       compileDynamicImport ? "@babel/plugin-proposal-dynamic-import" : null,
 
       convertESM ? "@babel/transform-modules-commonjs" : null,
