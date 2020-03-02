@@ -19,7 +19,7 @@ export class ClassScope {
   undefinedPrivateNames: Map<string, number> = new Map();
 }
 
-type raiseFunction = (number, string) => void;
+type raiseFunction = (number, string, ...any) => void;
 
 export default class ClassScopeHandler {
   stack: Array<ClassScope> = [];

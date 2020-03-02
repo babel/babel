@@ -1728,7 +1728,7 @@ export default class StatementParser extends ExpressionParser {
 
         // export async;
         if (!this.isUnparsedContextual(next, "function")) {
-          this.unexpected(next, { label: "function" });
+          this.unexpected(next, tt._function);
         }
       }
 

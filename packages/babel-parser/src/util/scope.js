@@ -33,7 +33,7 @@ export class Scope {
   }
 }
 
-type raiseFunction = (number, string) => void;
+type raiseFunction = (number, string, ...any) => void;
 
 // The functions in this module keep track of declared variables in the
 // current scope in order to detect duplicate variable names.

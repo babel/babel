@@ -213,7 +213,7 @@ export default class LocationParser extends CommentsParser {
 
   raiseWithData(
     pos: number,
-    data: {
+    data?: {
       missingPlugin?: Array<string>,
       code?: string,
     },
@@ -226,6 +226,7 @@ export default class LocationParser extends CommentsParser {
       ` (${loc.line}:${loc.column})`;
     return this._raise(
       Object.assign(
+        {},
         {
           loc,
           pos,
