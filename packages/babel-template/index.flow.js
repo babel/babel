@@ -21,7 +21,10 @@ declare module "@babel/template" {
     (code: string, opts?: Options): Template<BabelNode>,
     smart(code: string, opts?: Options): Template<BabelNode>,
     statement(code: string, opts?: Options): Template<BabelNodeStatement>,
-    statements(code: string, opts?: Options): Template<Array<BabelNodeStatement>>,
+    statements(
+      code: string,
+      opts?: Options
+    ): Template<Array<BabelNodeStatement>>,
     expression(code: string, opts?: Options): Template<BabelNodeExpression>,
     program(code: string, opts?: Options): Template<BabelNodeProgram>,
     ast(code: string): string,

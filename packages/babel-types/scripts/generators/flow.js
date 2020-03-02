@@ -75,6 +75,11 @@ for (const type in t.NODE_FIELDS) {
 
       if (type === "ClassDeclaration" && fieldName === "id") {
         typeAnnotation = "?BabelNodeIdentifier";
+      } else if (type === "ObjectProperty" && fieldName === "key") {
+        typeAnnotation =
+          "BabelNodeExpression | BabelNodeIdentifier | BabelNodeLiteral";
+      } else if (type === "MemberExpression" && fieldName === "property") {
+        typeAnnotation = "BabelNodeExpression | BabelNodeIdentifier";
       }
 
       let suffix = "",

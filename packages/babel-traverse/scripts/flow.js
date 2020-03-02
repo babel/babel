@@ -95,6 +95,9 @@ declare module "@babel/traverse" {
     scope: Scope;
     parent: BabelNode;
     parentPath: NodePath<BabelNode>;
+    removed: boolean;
+    key: string;
+    container: ?NodePath<BabelNode> | Array<NodePath<BabelNode>>;
     get<U: NodePath<BabelNode> | $ReadOnlyArray<NodePath<BabelNode>>>(string): U;
     getStatementParent(): NodePath<Statement>;
     findParent(cb: (NodePath<BabelNode>) => boolean): ?NodePath<BabelNode>;
