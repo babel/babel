@@ -38,16 +38,29 @@ export function isPluginRequired(targets: Targets, support: Targets) {
   });
 }
 
-// getPluginList[proposals: boolean][bugfixes: boolean]
-const getPluginList = { true: {}, false: {} };
+const pluginLists = {
+  withProposals: {
+    withoutBugfixes: pluginList,
+    withBugfixes: Object.assign({}, pluginList, bugfixPluginList),
+  },
+  withoutProposals: {
+    withoutBugfixes: filterStageFromList(pluginList, proposalPlugins),
+    withBugfixes: filterStageFromList(
+      Object.assign({}, pluginList, bugfixPluginList),
+      proposalPlugins,
+    ),
+  },
+};
 
-getPluginList[true][false] = pluginList;
-getPluginList[false][false] = filterStageFromList(pluginList, proposalPlugins);
-getPluginList[true][true] = Object.assign({}, pluginList, bugfixPluginList);
-getPluginList[false][true] = filterStageFromList(
-  Object.assign({}, pluginList, bugfixPluginList),
-  proposalPlugins,
-);
+function getPluginList(proposals: boolean, bugfixes: boolean) {
+  if (proposals) {
+    if (bugfixes) return pluginLists.withProposals.withBugfixes;
+    else return pluginLists.withProposals.withoutBugfixes;
+  } else {
+    if (bugfixes) return pluginLists.withoutProposals.withBugfixes;
+    else return pluginLists.withoutProposals.withoutBugfixes;
+  }
+}
 
 const getPlugin = (pluginName: string) => {
   const plugin = availablePlugins[pluginName];
@@ -259,7 +272,7 @@ export default declare((api, opts) => {
   });
 
   const pluginNames = filterItems(
-    getPluginList[shippedProposals][bugfixes],
+    getPluginList(shippedProposals, bugfixes),
     include.plugins,
     exclude.plugins,
     transformTargets,
