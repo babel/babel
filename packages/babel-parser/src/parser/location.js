@@ -16,6 +16,7 @@ type ErrorContext = {
   code?: string,
 };
 
+// The Errors key follows https://cs.chromium.org/chromium/src/v8/src/common/message-template.h unless it does not exist
 export const Errors = Object.freeze({
   ArgumentsDisallowedInInitializer:
     "'arguments' is not allowed in class field initializer",
