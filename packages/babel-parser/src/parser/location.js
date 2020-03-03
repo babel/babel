@@ -225,17 +225,7 @@ export default class LocationParser extends CommentsParser {
     const message =
       errorTemplate.replace(/%(\d+)/g, (_, i: number) => params[i]) +
       ` (${loc.line}:${loc.column})`;
-    return this._raise(
-      Object.assign(
-        {},
-        {
-          loc,
-          pos,
-        },
-        data,
-      ),
-      message,
-    );
+    return this._raise(Object.assign(({ loc, pos }: Object), data), message);
   }
 
   _raise(errorContext: ErrorContext, message: string): Error | empty {
