@@ -3613,6 +3613,7 @@ export function isStatement(node: ?Object, opts?: Object): boolean {
     "InterfaceDeclaration" === nodeType ||
     "OpaqueType" === nodeType ||
     "TypeAlias" === nodeType ||
+    "EnumDeclaration" === nodeType ||
     "TSDeclareFunction" === nodeType ||
     "TSInterfaceDeclaration" === nodeType ||
     "TSTypeAliasDeclaration" === nodeType ||

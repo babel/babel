@@ -18,7 +18,11 @@ const visitor = {
   },
 };
 
-export default function(path: NodePath, scope = path.scope) {
+export default function(
+  path: NodePath,
+  scope = path.scope,
+  shouldHoistVariables = true,
+) {
   const { node } = path;
   const container = t.functionExpression(
     null,
@@ -31,8 +35,9 @@ export default function(path: NodePath, scope = path.scope) {
   let callee = container;
   let args = [];
 
-  // todo: only hoist if necessary
-  hoistVariables(path, id => scope.push({ id }));
+  if (shouldHoistVariables) {
+    hoistVariables(path, id => scope.push({ id }));
+  }
 
   const state = {
     foundThis: false,

@@ -1,4 +1,5 @@
 import path from "path";
+import { pathToFileURL } from "url";
 import escope from "eslint-scope";
 import unpad from "dedent";
 import { parseForESLint } from "../src";
@@ -71,7 +72,8 @@ describe("Babel and Espree", () => {
     const espreePath = require.resolve("espree", {
       paths: [path.dirname(require.resolve("eslint"))],
     });
-    espree = await import(espreePath);
+
+    espree = await import(pathToFileURL(espreePath));
   });
 
   describe("compatibility", () => {

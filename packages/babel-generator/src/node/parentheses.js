@@ -255,7 +255,17 @@ export function OptionalMemberExpression(
   node: Object,
   parent: Object,
 ): boolean {
-  return t.isCallExpression(parent) || t.isMemberExpression(parent);
+  return (
+    t.isCallExpression(parent, { callee: node }) ||
+    t.isMemberExpression(parent, { object: node })
+  );
+}
+
+export function OptionalCallExpression(node: Object, parent: Object): boolean {
+  return (
+    t.isCallExpression(parent, { callee: node }) ||
+    t.isMemberExpression(parent, { object: node })
+  );
 }
 
 export function AssignmentExpression(node: Object): boolean {
