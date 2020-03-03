@@ -12,6 +12,8 @@ module.exports = function(api) {
   };
   const envOpts = Object.assign({}, envOptsNoTargets);
 
+  const compileDynamicImport = env === "test" || env === "development";
+
   let convertESM = true;
   let ignoreLib = true;
   let includeRegeneratorRuntime = false;
@@ -106,11 +108,10 @@ module.exports = function(api) {
       ["@babel/plugin-proposal-optional-chaining", { loose: true }],
       ["@babel/plugin-proposal-nullish-coalescing-operator", { loose: true }],
 
+      compileDynamicImport ? dynamicImportUrlToPath : null,
+      compileDynamicImport ? "@babel/plugin-proposal-dynamic-import" : null,
+
       convertESM ? "@babel/transform-modules-commonjs" : null,
-      // Until Jest supports native mjs, we must simulate it 🤷
-      env === "test" || env === "development"
-        ? "@babel/plugin-proposal-dynamic-import"
-        : null,
     ].filter(Boolean),
     overrides: [
       {
@@ -152,3 +153,45 @@ module.exports = function(api) {
 
   return config;
 };
+
+// !!! WARNING !!! Hacks are coming
+
+// import() uses file:// URLs for absolute imports, while require() uses
+// file paths.
+// Since this isn't handled by @babel/plugin-transform-modules-commonjs,
+// we must handle it here.
+// However, fileURLToPath is only supported starting from Node.js 10.
+// In older versions, we can remove the pathToFileURL call so that it keeps
+// the original absolute path.
+// NOTE: This plugin must run before @babel/plugin-transform-modules-commonjs,
+// and assumes that the target is the current node version.
+function dynamicImportUrlToPath({ template }) {
+  const currentNodeSupportsURL = !!require("url").pathToFileURL;
+
+  if (currentNodeSupportsURL) {
+    return {
+      visitor: {
+        CallExpression(path) {
+          if (path.get("callee").isImport()) {
+            path.get("arguments.0").replaceWith(
+              template.expression.ast`
+              require("url").fileURLToPath(${path.node.arguments[0]})
+            `
+            );
+          }
+        },
+      },
+    };
+  } else {
+    // TODO: Remove in Babel 8 (it's not needed when using Node 10)
+    return {
+      visitor: {
+        CallExpression(path) {
+          if (path.get("callee").isIdentifier({ name: "pathToFileURL" })) {
+            path.replaceWith(path.get("arguments.0"));
+          }
+        },
+      },
+    };
+  }
+}

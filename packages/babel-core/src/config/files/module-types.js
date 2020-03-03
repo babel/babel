@@ -1,6 +1,7 @@
 import { isAsync, waitFor } from "../../gensync-utils/async";
 import type { Handler } from "gensync";
 import path from "path";
+import { pathToFileURL } from "url";
 
 let import_;
 try {
@@ -55,6 +56,8 @@ async function loadMjsDefault(filepath: string) {
     );
   }
 
-  const module = await import_(filepath);
+  // import() expects URLs, not file paths.
+  // https://github.com/nodejs/node/issues/31710
+  const module = await import_(pathToFileURL(filepath));
   return module.default;
 }
