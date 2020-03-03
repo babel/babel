@@ -7,6 +7,7 @@ import type { Node } from "../types";
 import { lineBreak, skipWhiteSpace } from "../util/whitespace";
 import { isIdentifierChar } from "../util/identifier";
 import * as charCodes from "charcodes";
+import { Errors } from "./location";
 
 const literal = /^('|")((?:\\?.)*?)\1/;
 
@@ -152,10 +153,10 @@ export default class UtilParser extends Tokenizer {
 
   expectPlugin(name: string, pos?: ?number): true {
     if (!this.hasPlugin(name)) {
-      throw this.raise(
+      throw this.raiseWithData(
         pos != null ? pos : this.state.start,
+        { missingPlugin: [name] },
         `This experimental syntax requires enabling the parser plugin: '${name}'`,
-        { missingPluginNames: [name] },
       );
     }
 
@@ -164,12 +165,12 @@ export default class UtilParser extends Tokenizer {
 
   expectOnePlugin(names: Array<string>, pos?: ?number): void {
     if (!names.some(n => this.hasPlugin(n))) {
-      throw this.raise(
+      throw this.raiseWithData(
         pos != null ? pos : this.state.start,
+        { missingPlugin: names },
         `This experimental syntax requires enabling one of the following parser plugin(s): '${names.join(
           ", ",
         )}'`,
-        { missingPluginNames: names },
       );
     }
   }
@@ -280,7 +281,7 @@ export default class UtilParser extends Tokenizer {
       this.unexpected(shorthandAssign);
     }
     if (doubleProto >= 0) {
-      this.raise(doubleProto, "Redefinition of __proto__ property");
+      this.raise(doubleProto, Errors.DuplicateProto);
     }
   }
 }
