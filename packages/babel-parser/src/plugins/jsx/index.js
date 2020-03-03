@@ -16,7 +16,7 @@ import { Errors } from "../../parser/location";
 const HEX_NUMBER = /^[\da-fA-F]+$/;
 const DECIMAL_NUMBER = /^\d+$/;
 
-const jsxErrors = Object.freeze({
+const JsxErrors = Object.freeze({
   AttributeIsEmpty:
     "JSX attributes must only be assigned a non-empty expression",
   MissingClosingTagFragment: "Expected corresponding JSX closing tag for <>",
@@ -96,7 +96,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let chunkStart = this.state.pos;
       for (;;) {
         if (this.state.pos >= this.length) {
-          throw this.raise(this.state.start, jsxErrors.UnterminatedJsxContent);
+          throw this.raise(this.state.start, JsxErrors.UnterminatedJsxContent);
         }
 
         const ch = this.input.charCodeAt(this.state.pos);
@@ -293,7 +293,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.next();
           node = this.jsxParseExpressionContainer(node);
           if (node.expression.type === "JSXEmptyExpression") {
-            this.raise(node.start, jsxErrors.AttributeIsEmpty);
+            this.raise(node.start, JsxErrors.AttributeIsEmpty);
           }
           return node;
 
@@ -302,7 +302,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.parseExprAtom();
 
         default:
-          throw this.raise(this.state.start, jsxErrors.UnsupportedJsxValue);
+          throw this.raise(this.state.start, JsxErrors.UnsupportedJsxValue);
       }
     }
 
@@ -457,13 +457,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.raise(
             // $FlowIgnore
             closingElement.start,
-            jsxErrors.MissingClosingTagFragment,
+            JsxErrors.MissingClosingTagFragment,
           );
         } else if (!isFragment(openingElement) && isFragment(closingElement)) {
           this.raise(
             // $FlowIgnore
             closingElement.start,
-            jsxErrors.MissingClosingTagElement,
+            JsxErrors.MissingClosingTagElement,
             getQualifiedJSXName(openingElement.name),
           );
         } else if (!isFragment(openingElement) && !isFragment(closingElement)) {
@@ -475,7 +475,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             this.raise(
               // $FlowIgnore
               closingElement.start,
-              jsxErrors.MissingClosingTagElement,
+              JsxErrors.MissingClosingTagElement,
               getQualifiedJSXName(openingElement.name),
             );
           }
@@ -493,7 +493,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.isRelational("<")) {
         throw this.raise(
           this.state.start,
-          jsxErrors.UnwrappedAdjacentJSXElements,
+          JsxErrors.UnwrappedAdjacentJSXElements,
         );
       }
 

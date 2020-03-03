@@ -45,7 +45,7 @@ const reservedTypes = new Set([
 
 /* eslint sort-keys: "error" */
 // The Errors key follows https://github.com/facebook/flow/blob/master/src/parser/parse_error.ml unless it does not exist
-const flowErrors = Object.freeze({
+const FlowErrors = Object.freeze({
   AmbiguousConditionalArrow:
     "Ambiguous expression: wrap the arrow functions in parentheses to disambiguate.",
   AmbiguousDeclareModuleKind:
@@ -245,7 +245,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         moduloLoc.line !== checksLoc.line ||
         moduloLoc.column !== checksLoc.column - 1
       ) {
-        this.raise(moduloPos, flowErrors.UnexpectedSpaceBetweenModuloChecks);
+        this.raise(moduloPos, FlowErrors.UnexpectedSpaceBetweenModuloChecks);
       }
       if (this.eat(tt.parenL)) {
         node.value = this.parseExpression();
@@ -338,7 +338,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.flowParseDeclareModuleExports(node);
         } else {
           if (insideModule) {
-            this.raise(this.state.lastTokStart, flowErrors.NestedDeclareModule);
+            this.raise(this.state.lastTokStart, FlowErrors.NestedDeclareModule);
           }
           return this.flowParseDeclareModule(node);
         }
@@ -387,14 +387,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (!this.isContextual("type") && !this.match(tt._typeof)) {
             this.raise(
               this.state.lastTokStart,
-              flowErrors.InvalidNonTypeImportInDeclareModule,
+              FlowErrors.InvalidNonTypeImportInDeclareModule,
             );
           }
           this.parseImport(bodyNode);
         } else {
           this.expectContextual(
             "declare",
-            flowErrors.UnsupportedStatementInDeclareModule,
+            FlowErrors.UnsupportedStatementInDeclareModule,
           );
 
           bodyNode = this.flowParseDeclare(bodyNode, true);
@@ -416,7 +416,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (kind === "CommonJS") {
             this.raise(
               bodyElement.start,
-              flowErrors.AmbiguousDeclareModuleKind,
+              FlowErrors.AmbiguousDeclareModuleKind,
             );
           }
           kind = "ES";
@@ -424,13 +424,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (hasModuleExport) {
             this.raise(
               bodyElement.start,
-              flowErrors.DuplicateDeclareModuleExports,
+              FlowErrors.DuplicateDeclareModuleExports,
             );
           }
           if (kind === "ES") {
             this.raise(
               bodyElement.start,
-              flowErrors.AmbiguousDeclareModuleKind,
+              FlowErrors.AmbiguousDeclareModuleKind,
             );
           }
           kind = "CommonJS";
@@ -472,7 +472,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           const suggestion = exportSuggestions[label];
           throw this.raise(
             this.state.start,
-            flowErrors.UnsupportedDeclareExportKind,
+            FlowErrors.UnsupportedDeclareExportKind,
             label,
             suggestion,
           );
@@ -630,7 +630,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkNotUnderscore(word: string) {
       if (word === "_") {
-        this.raise(this.state.start, flowErrors.UnexpectedReservedUnderscore);
+        this.raise(this.state.start, FlowErrors.UnexpectedReservedUnderscore);
       }
     }
 
@@ -640,8 +640,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.raise(
         startLoc,
         declaration
-          ? flowErrors.AssignReservedType
-          : flowErrors.UnexpectedReservedType,
+          ? FlowErrors.AssignReservedType
+          : FlowErrors.UnexpectedReservedType,
         word,
       );
     }
@@ -726,7 +726,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.default = this.flowParseType();
       } else {
         if (requireDefault) {
-          this.raise(nodeStart, flowErrors.MissingTypeParamDefault);
+          this.raise(nodeStart, FlowErrors.MissingTypeParamDefault);
         }
       }
 
@@ -1061,7 +1061,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         ) {
           this.raise(
             inexactStart,
-            flowErrors.UnexpectedExplicitInexactInObject,
+            FlowErrors.UnexpectedExplicitInexactInObject,
           );
         }
       }
@@ -1104,26 +1104,26 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (!allowSpread) {
             this.raise(
               this.state.lastTokStart,
-              flowErrors.InexactInsideNonObject,
+              FlowErrors.InexactInsideNonObject,
             );
           } else if (!allowInexact) {
-            this.raise(this.state.lastTokStart, flowErrors.InexactInsideExact);
+            this.raise(this.state.lastTokStart, FlowErrors.InexactInsideExact);
           }
           if (variance) {
-            this.raise(variance.start, flowErrors.InexactVariance);
+            this.raise(variance.start, FlowErrors.InexactVariance);
           }
 
           return null;
         }
 
         if (!allowSpread) {
-          this.raise(this.state.lastTokStart, flowErrors.UnexpectedSpreadType);
+          this.raise(this.state.lastTokStart, FlowErrors.UnexpectedSpreadType);
         }
         if (protoStart != null) {
           this.unexpected(protoStart);
         }
         if (variance) {
-          this.raise(variance.start, flowErrors.SpreadVariance);
+          this.raise(variance.start, FlowErrors.SpreadVariance);
         }
 
         node.argument = this.flowParseType();
@@ -1495,7 +1495,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
             throw this.raise(
               this.state.start,
-              flowErrors.UnexpectedSubtractionOperand,
+              FlowErrors.UnexpectedSubtractionOperand,
             );
           }
 
@@ -1858,7 +1858,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           // e.g.   Source: a ? (b): c => (d): e => f
           //      Result 1: a ? b : (c => ((d): e => f))
           //      Result 2: a ? ((b): c => d) : (e => f)
-          this.raise(state.start, flowErrors.AmbiguousConditionalArrow);
+          this.raise(state.start, FlowErrors.AmbiguousConditionalArrow);
         }
 
         if (failed && valid.length === 1) {
@@ -2180,7 +2180,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           (!expr.extra || !expr.extra.parenthesized) &&
           (exprList.length > 1 || !isParenthesizedExpr)
         ) {
-          this.raise(expr.typeAnnotation.start, flowErrors.TypeCastInPattern);
+          this.raise(expr.typeAnnotation.start, FlowErrors.TypeCastInPattern);
         }
       }
 
@@ -2355,7 +2355,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseAssignableListItemTypes(param: N.Pattern): N.Pattern {
       if (this.eat(tt.question)) {
         if (param.type !== "Identifier") {
-          this.raise(param.start, flowErrors.OptionalBindingPattern);
+          this.raise(param.start, FlowErrors.OptionalBindingPattern);
         }
 
         ((param: any): N.Identifier).optional = true;
@@ -2379,7 +2379,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.typeAnnotation &&
         node.right.start < node.typeAnnotation.start
       ) {
-        this.raise(node.typeAnnotation.start, flowErrors.TypeBeforeInitializer);
+        this.raise(node.typeAnnotation.start, FlowErrors.TypeBeforeInitializer);
       }
 
       return node;
@@ -2503,7 +2503,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (nodeIsTypeImport && specifierIsTypeImport) {
         this.raise(
           firstIdentLoc,
-          flowErrors.ImportTypeShorthandOnlyInPureImport,
+          FlowErrors.ImportTypeShorthandOnlyInPureImport,
         );
       }
 
@@ -2681,7 +2681,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         /*:: invariant(typeParameters) */
         throw this.raise(
           typeParameters.start,
-          flowErrors.UnexpectedTokenAfterTypeParameter,
+          FlowErrors.UnexpectedTokenAfterTypeParameter,
         );
       }
 
@@ -2940,7 +2940,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseTopLevel(file: N.File, program: N.Program): N.File {
       const fileNode = super.parseTopLevel(file, program);
       if (this.state.hasFlowComment) {
-        this.raise(this.state.pos, flowErrors.UnterminatedFlowComment);
+        this.raise(this.state.pos, FlowErrors.UnterminatedFlowComment);
       }
       return fileNode;
     }
@@ -2948,7 +2948,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     skipBlockComment(): void {
       if (this.hasPlugin("flowComments") && this.skipFlowComment()) {
         if (this.state.hasFlowComment) {
-          this.unexpected(null, flowErrors.NestedFlowComment);
+          this.unexpected(null, FlowErrors.NestedFlowComment);
         }
         this.hasFlowCommentCompletion();
         this.state.pos += this.skipFlowComment();
@@ -3014,7 +3014,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): void {
       this.raise(
         pos,
-        flowErrors.EnumBooleanMemberNotInitialized,
+        FlowErrors.EnumBooleanMemberNotInitialized,
         memberName,
         enumName,
       );
@@ -3027,7 +3027,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const suggestion = memberName[0].toUpperCase() + memberName.slice(1);
       this.raise(
         pos,
-        flowErrors.EnumInvalidMemberName,
+        FlowErrors.EnumInvalidMemberName,
         memberName,
         suggestion,
         enumName,
@@ -3038,14 +3038,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       pos: number,
       { enumName, memberName }: { enumName: string, memberName: string },
     ): void {
-      this.raise(pos, flowErrors.EnumDuplicateMemberName, memberName, enumName);
+      this.raise(pos, FlowErrors.EnumDuplicateMemberName, memberName, enumName);
     }
 
     flowEnumErrorInconsistentMemberValues(
       pos: number,
       { enumName }: { enumName: string },
     ): void {
-      this.raise(pos, flowErrors.EnumInconsistentMemberValues, enumName);
+      this.raise(pos, FlowErrors.EnumInconsistentMemberValues, enumName);
     }
 
     flowEnumErrorInvalidExplicitType(
@@ -3058,8 +3058,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.raise(
         pos,
         suppliedType === null
-          ? flowErrors.EnumInvalidExplicitTypeUnknownSupplied
-          : flowErrors.EnumInvalidExplicitType,
+          ? FlowErrors.EnumInvalidExplicitTypeUnknownSupplied
+          : FlowErrors.EnumInvalidExplicitType,
         enumName,
         suppliedType,
       );
@@ -3074,14 +3074,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "boolean":
         case "number":
         case "string":
-          message = flowErrors.EnumInvalidMemberInitializerPrimaryType;
+          message = FlowErrors.EnumInvalidMemberInitializerPrimaryType;
           break;
         case "symbol":
-          message = flowErrors.EnumInvalidMemberInitializerSymbolType;
+          message = FlowErrors.EnumInvalidMemberInitializerSymbolType;
           break;
         default:
           // null
-          message = flowErrors.EnumInvalidMemberInitializerUnknownType;
+          message = FlowErrors.EnumInvalidMemberInitializerUnknownType;
       }
       return this.raise(pos, message, enumName, memberName, explicitType);
     }
@@ -3092,7 +3092,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): void {
       this.raise(
         pos,
-        flowErrors.EnumNumberMemberNotInitialized,
+        FlowErrors.EnumNumberMemberNotInitialized,
         enumName,
         memberName,
       );
@@ -3104,7 +3104,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): void {
       this.raise(
         pos,
-        flowErrors.EnumStringMemberInconsistentlyInitailized,
+        FlowErrors.EnumStringMemberInconsistentlyInitailized,
         enumName,
       );
     }

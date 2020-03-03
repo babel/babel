@@ -59,7 +59,7 @@ type ParsingContext =
   | "TypeMembers"
   | "TypeParametersOrArguments";
 
-const tsErrors = Object.freeze({
+const TSErrors = Object.freeze({
   ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier",
   ClassMethodHasReadonly: "Class methods cannot have the 'readonly' modifier",
   DeclareClassFieldHasInitializer:
@@ -186,7 +186,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (!modifier) break;
 
         if (Object.hasOwnProperty.call(modified, modifier)) {
-          this.raise(startPos, tsErrors.DuplicateModifier, modifier);
+          this.raise(startPos, TSErrors.DuplicateModifier, modifier);
         }
         modified[modifier] = true;
       }
@@ -300,7 +300,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.expect(tt._import);
       this.expect(tt.parenL);
       if (!this.match(tt.string)) {
-        this.raise(this.state.start, tsErrors.UnsupportedImportTypeArgument);
+        this.raise(this.state.start, TSErrors.UnsupportedImportTypeArgument);
       }
 
       // For compatibility to estree we cannot call parseLiteral directly here
@@ -436,7 +436,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           ) {
             this.raise(
               pattern.start,
-              tsErrors.UnsupportedSignatureParameterKind,
+              TSErrors.UnsupportedSignatureParameterKind,
               pattern.type,
             );
           }
@@ -635,7 +635,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (elementNode.type === "TSOptionalType") {
           seenOptionalElement = true;
         } else if (seenOptionalElement && elementNode.type !== "TSRestType") {
-          this.raise(elementNode.start, tsErrors.OptionalTypeBeforeRequired);
+          this.raise(elementNode.start, TSErrors.OptionalTypeBeforeRequired);
         }
       });
 
@@ -709,7 +709,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (templateNode.expressions.length > 0) {
         this.raise(
           templateNode.expressions[0].start,
-          tsErrors.TemplateTypeHasSubstitution,
+          TSErrors.TemplateTypeHasSubstitution,
         );
       }
       node.literal = templateNode;
@@ -821,7 +821,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "TSArrayType":
           return;
         default:
-          this.raise(node.start, tsErrors.UnexpectedReadonly);
+          this.raise(node.start, TSErrors.UnexpectedReadonly);
       }
     }
 
@@ -1127,7 +1127,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
 
       if (!delimitedList.length) {
-        this.raise(originalStart, tsErrors.EmptyHeritageClauseType, descriptor);
+        this.raise(originalStart, TSErrors.EmptyHeritageClauseType, descriptor);
       }
 
       return delimitedList;
@@ -1668,7 +1668,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (accessibility) pp.accessibility = accessibility;
         if (readonly) pp.readonly = readonly;
         if (elt.type !== "Identifier" && elt.type !== "AssignmentPattern") {
-          this.raise(pp.start, tsErrors.UnsupportedParameterPropertyKind);
+          this.raise(pp.start, TSErrors.UnsupportedParameterPropertyKind);
         }
         pp.parameter = ((elt: any): N.Identifier | N.AssignmentPattern);
         return this.finishNode(pp, "TSParameterProperty");
@@ -1967,15 +1967,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         classBody.body.push(idx);
 
         if ((member: any).abstract) {
-          this.raise(member.start, tsErrors.IndexSignatureHasAbstract);
+          this.raise(member.start, TSErrors.IndexSignatureHasAbstract);
         }
         if (isStatic) {
-          this.raise(member.start, tsErrors.IndexSignatureHasStatic);
+          this.raise(member.start, TSErrors.IndexSignatureHasStatic);
         }
         if ((member: any).accessibility) {
           this.raise(
             member.start,
-            tsErrors.IndexSignatureHasAccessibility,
+            TSErrors.IndexSignatureHasAccessibility,
             (member: any).accessibility,
           );
         }
@@ -2001,11 +2001,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (optional) methodOrProp.optional = true;
 
       if ((methodOrProp: any).readonly && this.match(tt.parenL)) {
-        this.raise(methodOrProp.start, tsErrors.ClassMethodHasReadonly);
+        this.raise(methodOrProp.start, TSErrors.ClassMethodHasReadonly);
       }
 
       if ((methodOrProp: any).declare && this.match(tt.parenL)) {
-        this.raise(methodOrProp.start, tsErrors.ClassMethodHasDeclare);
+        this.raise(methodOrProp.start, TSErrors.ClassMethodHasDeclare);
       }
     }
 
@@ -2155,7 +2155,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.parseClassPropertyAnnotation(node);
 
       if (node.declare && this.match(tt.equal)) {
-        this.raise(this.state.start, tsErrors.DeclareClassFieldHasInitializer);
+        this.raise(this.state.start, TSErrors.DeclareClassFieldHasInitializer);
       }
 
       return super.parseClassProperty(node);
@@ -2166,14 +2166,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.ClassPrivateProperty {
       // $FlowIgnore
       if (node.abstract) {
-        this.raise(node.start, tsErrors.PrivateElementHasAbstract);
+        this.raise(node.start, TSErrors.PrivateElementHasAbstract);
       }
 
       // $FlowIgnore
       if (node.accessibility) {
         this.raise(
           node.start,
-          tsErrors.PrivateElementHasAccessibility,
+          TSErrors.PrivateElementHasAccessibility,
           node.accessibility,
         );
       }
@@ -2397,7 +2397,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseAssignableListItemTypes(param: N.Pattern) {
       if (this.eat(tt.question)) {
         if (param.type !== "Identifier") {
-          this.raise(param.start, tsErrors.PatternIsOptional);
+          this.raise(param.start, TSErrors.PatternIsOptional);
         }
 
         ((param: any): N.Identifier).optional = true;
@@ -2512,7 +2512,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       ) {
         this.raise(
           node.typeAnnotation.start,
-          tsErrors.TypeAnnotationAfterAssign,
+          TSErrors.TypeAnnotationAfterAssign,
         );
       }
 
@@ -2541,7 +2541,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             if (!this.state.maybeInArrowParameters) {
               exprList[i] = this.typeCastToParameter(expr);
             } else {
-              this.raise(expr.start, tsErrors.UnexpectedTypeCastInParameter);
+              this.raise(expr.start, TSErrors.UnexpectedTypeCastInParameter);
             }
             break;
         }
@@ -2568,7 +2568,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
         if (expr && expr.type === "TSTypeCastExpression") {
-          this.raise(expr.start, tsErrors.UnexpectedTypeAnnotation);
+          this.raise(expr.start, TSErrors.UnexpectedTypeAnnotation);
         }
       }
 
