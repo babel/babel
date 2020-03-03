@@ -233,8 +233,9 @@ export default class Tokenizer extends LocationParser {
       return;
     }
 
-    if (curContext?.override) {
-      curContext.override(this);
+    const override = curContext?.override;
+    if (override) {
+      override(this);
     } else {
       this.getTokenFromCode(this.input.codePointAt(this.state.pos));
     }
