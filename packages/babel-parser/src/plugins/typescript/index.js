@@ -773,6 +773,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case tt.bracketL:
           return this.tsParseTupleType();
         case tt.parenL:
+          if (!this.options.createParenthesizedExpressions) {
+            this.expect(tt.parenL);
+            const type = this.tsParseType();
+            this.expect(tt.parenR);
+            return type;
+          }
+
           return this.tsParseParenthesizedType();
         case tt.backQuote:
           return this.tsParseTemplateLiteralType();

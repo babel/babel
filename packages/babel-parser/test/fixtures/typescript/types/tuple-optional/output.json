@@ -150,12 +150,12 @@
                     },
                     {
                       "type": "TSOptionalType",
-                      "start": 25,
+                      "start": 26,
                       "end": 43,
                       "loc": {
                         "start": {
                           "line": 1,
-                          "column": 25
+                          "column": 26
                         },
                         "end": {
                           "line": 1,
@@ -163,66 +163,51 @@
                         }
                       },
                       "typeAnnotation": {
-                        "type": "TSParenthesizedType",
-                        "start": 25,
-                        "end": 42,
+                        "type": "TSUnionType",
+                        "start": 26,
+                        "end": 41,
                         "loc": {
                           "start": {
                             "line": 1,
-                            "column": 25
+                            "column": 26
                           },
                           "end": {
                             "line": 1,
-                            "column": 42
+                            "column": 41
                           }
                         },
-                        "typeAnnotation": {
-                          "type": "TSUnionType",
-                          "start": 26,
-                          "end": 41,
-                          "loc": {
-                            "start": {
-                              "line": 1,
-                              "column": 26
-                            },
-                            "end": {
-                              "line": 1,
-                              "column": 41
+                        "types": [
+                          {
+                            "type": "TSStringKeyword",
+                            "start": 26,
+                            "end": 32,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 26
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 32
+                              }
                             }
                           },
-                          "types": [
-                            {
-                              "type": "TSStringKeyword",
-                              "start": 26,
-                              "end": 32,
-                              "loc": {
-                                "start": {
-                                  "line": 1,
-                                  "column": 26
-                                },
-                                "end": {
-                                  "line": 1,
-                                  "column": 32
-                                }
-                              }
-                            },
-                            {
-                              "type": "TSNumberKeyword",
-                              "start": 35,
-                              "end": 41,
-                              "loc": {
-                                "start": {
-                                  "line": 1,
-                                  "column": 35
-                                },
-                                "end": {
-                                  "line": 1,
-                                  "column": 41
-                                }
+                          {
+                            "type": "TSNumberKeyword",
+                            "start": 35,
+                            "end": 41,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 35
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 41
                               }
                             }
-                          ]
-                        }
+                          }
+                        ]
                       }
                     }
                   ]
