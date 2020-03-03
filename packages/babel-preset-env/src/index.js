@@ -6,7 +6,7 @@ import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
 import { removeUnnecessaryItems } from "./filter-items";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options";
-import pluginList from "@babel/compat-data/plugins";
+import pluginList from "./plugins-compat-data";
 import { proposalPlugins, pluginSyntaxMap } from "../data/shipped-proposals";
 import overlappingPlugins from "@babel/compat-data/overlapping-plugins";
 
