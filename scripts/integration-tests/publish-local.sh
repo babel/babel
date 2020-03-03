@@ -13,7 +13,7 @@ source utils/cleanup.sh
 
 function publishESLintPkg {
   cd eslint/$1
-  yarn version --patch --no-git-tag-version
+  yarn version --minor --no-git-tag-version
   cd ../..
   make -j publish-eslint PKG=$1
 }
