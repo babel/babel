@@ -44,6 +44,7 @@ const reservedTypes = new Set([
 ]);
 
 /* eslint sort-keys: "error" */
+// The Errors key follows https://github.com/facebook/flow/blob/master/src/parser/parse_error.ml unless it does not exist
 const flowErrors = Object.freeze({
   AmbiguousConditionalArrow:
     "Ambiguous expression: wrap the arrow functions in parentheses to disambiguate.",
