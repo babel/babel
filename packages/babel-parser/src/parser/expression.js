@@ -55,7 +55,7 @@ export default class ExpressionParser extends LValParser {
   +parseBlock: (
     allowDirectives?: boolean,
     createNewLexicalScope?: boolean,
-    afterBlockParse?: Function,
+    afterBlockParse?: (hasStrictModeDirective: boolean) => void,
   ) => N.BlockStatement;
   +parseClass: (
     node: N.Class,

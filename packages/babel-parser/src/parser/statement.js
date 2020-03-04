@@ -795,7 +795,7 @@ export default class StatementParser extends ExpressionParser {
   parseBlock(
     allowDirectives?: boolean = false,
     createNewLexicalScope?: boolean = true,
-    afterBlockParse?: Function,
+    afterBlockParse?: (hasStrictModeDirective: boolean) => void,
   ): N.BlockStatement {
     const node = this.startNode();
     this.expect(tt.braceL);
@@ -828,7 +828,7 @@ export default class StatementParser extends ExpressionParser {
     allowDirectives: ?boolean,
     topLevel: boolean,
     end: TokenType,
-    afterBlockParse?: Function,
+    afterBlockParse?: (hasStrictModeDirective: boolean) => void,
   ): void {
     const body = (node.body = []);
     const directives = (node.directives = []);
@@ -847,7 +847,7 @@ export default class StatementParser extends ExpressionParser {
     directives: ?(N.Directive[]),
     topLevel: boolean,
     end: TokenType,
-    afterBlockParse?: Function,
+    afterBlockParse?: (hasStrictModeDirective: boolean) => void,
   ): void {
     let parsedNonDirective = false;
     let oldStrict;
