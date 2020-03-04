@@ -850,7 +850,7 @@ export default class StatementParser extends ExpressionParser {
     afterBlockParse?: (hasStrictModeDirective: boolean) => void,
   ): void {
     let parsedNonDirective = false;
-    let oldStrict;
+    let oldStrict = null;
     let octalPosition;
 
     while (!this.eat(end)) {
@@ -864,7 +864,7 @@ export default class StatementParser extends ExpressionParser {
         const directive = this.stmtToDirective(stmt);
         directives.push(directive);
 
-        if (oldStrict === undefined && directive.value.value === "use strict") {
+        if (oldStrict === null && directive.value.value === "use strict") {
           oldStrict = this.state.strict;
           this.setStrict(true);
 
@@ -881,7 +881,7 @@ export default class StatementParser extends ExpressionParser {
     }
 
     if (afterBlockParse) {
-      afterBlockParse.call(this, typeof oldStrict !== "undefined");
+      afterBlockParse.call(this, oldStrict !== null);
     }
 
     if (oldStrict === false) {
