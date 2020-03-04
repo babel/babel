@@ -1,7 +1,7 @@
 // @flow
 
 declare module "@babel/core" {
-  import type { BabelNode, BabelNodeFile } from "@babel/types";
+  import type { Node, File } from "@babel/types";
   import type { Options as ParserOptions } from "@babel/parser";
   import type {
     Options as GeneratorOptions,
@@ -74,7 +74,7 @@ declare module "@babel/core" {
     getModuleId?: (name: string) => string,
     moduleRoot?: string,
   |};
-  declare type Result = {| code: string, map: ?SourceMap, ast: BabelNodeFile |};
+  declare type Result = {| code: string, map: ?SourceMap, ast: File |};
 
   declare export function transform(
     code: string,
@@ -115,7 +115,7 @@ declare module "@babel/core" {
   ): Promise<Result>;
 
   declare export function transformFromAst(
-    ast: BabelNode,
+    ast: Node,
     code?: string,
     options?: Options,
     callback: (
@@ -125,13 +125,13 @@ declare module "@babel/core" {
   ): void;
 
   declare export function transformFromAstSync(
-    ast: BabelNode,
+    ast: Node,
     code?: string,
     options?: Options
   ): Result;
 
   declare export function transformFromAstAsync(
-    ast: BabelNode,
+    ast: Node,
     code?: string,
     options?: Options
   ): Promise<Result>;
@@ -142,18 +142,15 @@ declare module "@babel/core" {
     callback: (
       Error,
       typeof undefined
-    ) => void | ((typeof undefined, BabelNodeFile) => void)
+    ) => void | ((typeof undefined, File) => void)
   ): void;
 
-  declare export function parseSync(
-    code: string,
-    options?: Options
-  ): BabelNodeFile;
+  declare export function parseSync(code: string, options?: Options): File;
 
   declare export function parseAsync(
     code: string,
     options?: Options
-  ): Promise<BabelNodeFile>;
+  ): Promise<File>;
 
   declare type ConfigItem = {|
     value: { ... } | Function,

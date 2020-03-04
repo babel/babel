@@ -1,12 +1,7 @@
 // @flow strict-local
 
 declare module "@babel/template" {
-  import type {
-    BabelNodeProgram,
-    BabelNodeExpression,
-    BabelNodeStatement,
-    BabelNode,
-  } from "@babel/types";
+  import type { Program, Expression, Statement, Node } from "@babel/types";
   import type { Options as ParserOptions } from "@babel/parser";
 
   declare type Options = {|
@@ -15,18 +10,20 @@ declare module "@babel/template" {
     preserveComments?: boolean,
   |};
 
-  declare type Template<T> = (replacements?: { [string]: mixed, ... }) => T;
+  // (R === null) ? () => T : (R) => T
+  declare type Template<
+    R: null | { +[string]: BabelNode | $ReadOnlyArray<BabelNode>, ... },
+    T: BabelNode | Array<Statement>
+  > = $Call<(null => () => T) & (({ ... }) => (replacements: R) => T), R>;
 
   declare module.exports: {|
-    (code: string, opts?: Options): Template<BabelNode>,
-    smart(code: string, opts?: Options): Template<BabelNode>,
-    statement(code: string, opts?: Options): Template<BabelNodeStatement>,
-    statements(
-      code: string,
-      opts?: Options
-    ): Template<Array<BabelNodeStatement>>,
-    expression(code: string, opts?: Options): Template<BabelNodeExpression>,
-    program(code: string, opts?: Options): Template<BabelNodeProgram>,
+    <R, T>(code: string, opts?: Options): Template<R, T>,
+    smart<R, T>(code: string, opts?: Options): Template<R, T>,
+    statement<R, T: Statement>(code: string, opts?: Options): Template<R, T>,
+    statements<R>(code: string, opts?: Options): Template<R, Array<Statement>>,
+    expression<R, T: Expression>(code: string, opts?: Options): Template<R, T>,
+    program<R, T: Program>(code: string, opts?: Options): Template<R, T>,
+
     ast(code: string): string,
     ast(callSite: Array<string>, ...substitutions: Array<string>): string,
   |};

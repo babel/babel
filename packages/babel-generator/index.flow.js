@@ -1,7 +1,7 @@
 // @flow strict-local
 
 declare module "@babel/generator" {
-  import type { BabelNode } from "@babel/types";
+  import type { Node } from "@babel/types";
 
   declare export type SourceMap = {|
     version: number,
@@ -29,7 +29,7 @@ declare module "@babel/generator" {
   |};
 
   declare export default (
-    ast: BabelNode,
+    ast: Node,
     opts?: Options,
     source?: string
   ) => {| code: string, map: ?any, rawMappings: ?any |};

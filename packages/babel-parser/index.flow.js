@@ -1,7 +1,7 @@
 // @flow strict-local
 
 declare module "@babel/parser" {
-  import type { BabelNodeFile, BabelNodeExpression } from "@babel/types";
+  import type { File, Expression } from "@babel/types";
 
   declare export type ParserPlugin =
     | "estree"
@@ -51,9 +51,9 @@ declare module "@babel/parser" {
     tokens?: boolean,
   |};
 
-  declare export function parse(code: string, opts?: Options): BabelNodeFile;
+  declare export function parse(code: string, opts?: Options): File;
   declare export function parseExpression(
     code: string,
     opts?: Options
-  ): BabelNodeExpression;
+  ): Expression;
 }

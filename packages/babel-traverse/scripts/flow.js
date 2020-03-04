@@ -1,15 +1,13 @@
 const t = require("@babel/types");
-const NODE_PREFIX = "BabelNode";
 
-const types = Object.keys(t.NODE_FIELDS).concat(
-  t.TYPES.filter(v => !(v in t.NODE_FIELDS))
-);
+const types = t.TYPES.filter(v => v !== "Class" && v !== "Function");
 
 const code = `// @flow
 declare module "@babel/traverse" {
-  import type { BabelNode, ${types
-    .map(v => NODE_PREFIX + v)
-    .join(",\n                ")} } from "@babel/types";
+  import type { Node,
+                Function as BabelFunction,
+                Class as BabelClass,
+                ${types.join(",\n                ")} } from "@babel/types";
 
   declare type VariableDeclarationKind =
     | "var"
@@ -19,33 +17,33 @@ declare module "@babel/traverse" {
     | "hoisted";
 
   declare export interface Binding {
-    block: BabelNode;
+    block: Node;
     path: NodePath<
-      | BabelNodeVariableDeclarator
-      | BabelNodeClassDeclaration
-      | BabelNodeFunctionDeclaration
-      | BabelNodeModuleSpecifier
+      | VariableDeclarator
+      | ClassDeclaration
+      | FunctionDeclaration
+      | ModuleSpecifier
     >;
-    referencePaths: Array<NodePath<BabelNodeIdentifier>>;
+    referencePaths: Array<NodePath<Identifier>>;
     constantViolations: Array<
-      NodePath<BabelNodeAssignmentExpression | BabelNodeUpdateExpression>
+      NodePath<AssignmentExpression | UpdateExpression>
     >;
-    identifier: BabelNodeIdentifier;
+    identifier: Identifier;
     scope: Scope;
     kind: VariableDeclarationKind;
     referenced: boolean;
     references: number;
     constant: boolean;
     reference(NodePath<Identifier>): void;
-    reassign(NodePath<BabelNodeAssignmentExpression | BabelNodeUpdateExpression>): void;
+    reassign(NodePath<AssignmentExpression | UpdateExpression>): void;
     dereference(): void;
   }
 
   declare export interface Scope {
     parent: Scope;
-    path: NodePath<BabelNode>;
+    path: NodePath<Node>;
     references: { [string]: boolean, ... };
-    generateUidIdentifier(name?: string): BabelNodeIdentifier;
+    generateUidIdentifier(name?: string): Identifier;
     generateUid(name?: string): string;
     rename(oldName: string, newName?: string): void;
 
@@ -55,8 +53,8 @@ declare module "@babel/traverse" {
 
     getBinding(name: string): ?Binding;
     getOwnBinding(name: string): ?Binding;
-    getBindingIdentifier(name: string): ?BabelNodeIdentifier;
-    getOwnBindingIdentifier(name: string): ?BabelNodeIdentifier;
+    getBindingIdentifier(name: string): ?Identifier;
+    getOwnBindingIdentifier(name: string): ?Identifier;
     hasOwnBinding(name: string): ?Binding;
     hasBinding(name: string, noGlobals?: boolean): boolean;
     parentHasBinding(name: string, noGlobals?: boolean): boolean;
@@ -64,25 +62,25 @@ declare module "@babel/traverse" {
 
     removeOwnBinding(string): boolean;
     removeBinding(string): boolean;
-    registerDeclaration(path: NodePath<BabelDeclaration>): void;
+    registerDeclaration(path: NodePath<Declaration>): void;
     registerBinding(
       kind: VariableDeclarationKind,
-      path: NodePath<BabelNodeVariableDeclaration | BabelNodeVariableDeclarator>
+      path: NodePath<VariableDeclaration | VariableDeclarator>
     ): void;
     bindings: {[name: string]: Binding, ...};
     getAllBindings(): {[name: string]: Binding, ...};
     getAllBindingsOfKind(...kinds: Array<string>): {[name: string]: Binding, ...};
     push(opts: {|
-      id: BabelNodeLVal,
-      init?: BabelNodeExpression | null,
+      id: LVal,
+      init?: Expression | null,
       unique?: boolean,
       kind?: VariableDeclarationKind
     |}): void;
 
-    addGlobal(node: BabelNode): void;
+    addGlobal(node: Node): void;
     hasGlobal(name: string): boolean;
     hasReference(name: string): boolean;
-    isPure(node: BabelNode, constantsOnly?: boolean): boolean;
+    isPure(node: Node, constantsOnly?: boolean): boolean;
 
     crawl(): void;
     getProgramParent(): Scope;
@@ -90,37 +88,37 @@ declare module "@babel/traverse" {
     getBlockParent(): Scope;
   }
 
-  declare export interface NodePath<+T: BabelNode> {
+  declare export interface NodePath<+T: Node> {
     node: T;
     scope: Scope;
-    parent: BabelNode;
-    parentPath: NodePath<BabelNode>;
+    parent: Node;
+    parentPath: NodePath<Node>;
     removed: boolean;
     key: string;
-    container: ?NodePath<BabelNode> | Array<NodePath<BabelNode>>;
-    get<U: NodePath<BabelNode> | $ReadOnlyArray<NodePath<BabelNode>>>(string): U;
+    container: ?NodePath<Node> | Array<NodePath<Node>>;
+    get<U: NodePath<Node> | $ReadOnlyArray<NodePath<Node>>>(string): U;
     getStatementParent(): NodePath<Statement>;
-    findParent(cb: (NodePath<BabelNode>) => boolean): ?NodePath<BabelNode>;
-    find(cb: (NodePath<BabelNode>) => boolean): ?NodePath<BabelNode>;
+    findParent(cb: (NodePath<Node>) => boolean): ?NodePath<Node>;
+    find(cb: (NodePath<Node>) => boolean): ?NodePath<Node>;
     getFunctionParent(): NodePath<BabelFunction>;
-    getAncestry(): Array<NodePath<BabelNode>>;
-    isAncestor(NodePath<BabelNode>): boolean;
-    isDescendant(NodePath<BabelNode>): boolean;
+    getAncestry(): Array<NodePath<Node>>;
+    isAncestor(NodePath<Node>): boolean;
+    isDescendant(NodePath<Node>): boolean;
 
     remove(): void;
-    replaceWith<U: BabelNode>(U): NodePath<U>;
-    replaceWithMultiple<U: BabelNode>(Array<U>): $ReadOnlyArray<NodePath<U>>;
-    insertBefore<U: BabelNode>(
+    replaceWith<U: Node>(U): NodePath<U>;
+    replaceWithMultiple<U: Node>(Array<U>): $ReadOnlyArray<NodePath<U>>;
+    insertBefore<U: Node>(
       Array<U> | U
     ): $ReadOnlyArray<NodePath<U>>;
-    insertAfter<U: BabelNode>(
+    insertAfter<U: Node>(
       Array<U> | U
     ): $ReadOnlyArray<NodePath<U>>;
-    unshiftContainer<U: BabelNode>(
+    unshiftContainer<U: Node>(
       string,
       Array<U> | U
     ): $ReadOnlyArray<NodePath<U>>;
-    pushContainer<U: BabelNode>(
+    pushContainer<U: Node>(
       string,
       Array<U> | U
     ): $ReadOnlyArray<NodePath<U>>;
@@ -129,24 +127,24 @@ declare module "@babel/traverse" {
       allowPartial?: boolean
     ): boolean;
 
-    getPrevSibling(): NodePath<BabelNode>;
-    getNextSibling(): NodePath<BabelNode>;
-    getAllNextSiblings(): $ReadOnlyArray<NodePath<BabelNode>>;
-    getAllPrevSiblings(): $ReadOnlyArray<NodePath<BabelNode>>;
+    getPrevSibling(): NodePath<Node>;
+    getNextSibling(): NodePath<Node>;
+    getAllNextSiblings(): $ReadOnlyArray<NodePath<Node>>;
+    getAllPrevSiblings(): $ReadOnlyArray<NodePath<Node>>;
 
     getBindingIdentifiers(
       duplicates?: boolean
-    ): { [string]: BabelNodeIdentifier, ... };
+    ): { [string]: Identifier, ... };
     getOuterBindingIdentifiers(
       duplicates?: boolean
-    ): { [string]: BabelNodeIdentifier, ... };
+    ): { [string]: Identifier, ... };
     getBindingIdentifierPaths(
       duplicates?: boolean,
       outer?: boolean
-    ): { [string]: NodePath<BabelNodeIdentifier>, ... };
+    ): { [string]: NodePath<Identifier>, ... };
     getOuterBindingIdentifierPaths(
       duplicates?: boolean
-    ): { [string]: NodePath<BabelNodeIdentifier>, ... };
+    ): { [string]: NodePath<Identifier>, ... };
 
     evaluateTruthy(): ?boolean;
     evaluate(): {| confident: boolean, value: any |};
@@ -176,7 +174,7 @@ declare module "@babel/traverse" {
     traverse<S>(visitor: Visitor<S>, state?: S): void;
     stop(): void;
     skip(): void;
-    requeue(pathToQueue?: NodePath<BabelNode>): void;
+    requeue(pathToQueue?: NodePath<Node>): void;
 
     ${types
       .map(v => `is${v.charAt(0).toUpperCase() + v.slice(1)}(): boolean;`)
@@ -184,11 +182,11 @@ declare module "@babel/traverse" {
   }
   declare export default {|
     <S>(
-      node: BabelNode,
+      node: Node,
       visitor: Visitor<S>,
       scope?: Object,
       state?: S,
-      parentPath?: BabelNode
+      parentPath?: Node
     ): void,
     cache: {|
       clear(): void,
@@ -197,8 +195,8 @@ declare module "@babel/traverse" {
     |}
   |};
 
-  declare type VisitorFunc<N: BabelNode, S> = (NodePath<N>, S) => void;
-  declare type SingleVisitor<N: BabelNode, S> =
+  declare type VisitorFunc<N: Node, S> = (NodePath<N>, S) => void;
+  declare type SingleVisitor<N: Node, S> =
     | VisitorFunc<N, S>
     | {|
         enter?: VisitorFunc<N, S>,
@@ -208,11 +206,11 @@ declare module "@babel/traverse" {
   declare export type Visitor<S> = {|
     noScope?: boolean,
     blacklist?: Array<string>,
-    shouldSkip?: (NodePath<BabelNode>) => boolean,
-    ReferencedIdentifier?: SingleVisitor<BabelNodeIdentifier, S>,
-    ${types
-      .map(v => `${v}?: SingleVisitor<${NODE_PREFIX + v}, S>,`)
-      .join("\n    ")}
+    shouldSkip?: (NodePath<Node>) => boolean,
+    ReferencedIdentifier?: SingleVisitor<Identifier, S>,
+    Function?: SingleVisitor<BabelFunction, S>,
+    Class?: SingleVisitor<BabelClass, S>,
+    ${types.map(v => `${v}?: SingleVisitor<${v}, S>,`).join("\n    ")}
   |};
 }
 `;
