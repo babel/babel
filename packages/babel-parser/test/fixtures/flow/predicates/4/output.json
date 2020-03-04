@@ -13,7 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Spaces between ´%´ and ´checks´ are not allowed here. (1:20)"
+    "SyntaxError: Spaces between `%` and `checks` are not allowed here. (1:20)"
   ],
   "program": {
     "type": "Program",
