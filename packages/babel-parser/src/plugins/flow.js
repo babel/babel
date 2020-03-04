@@ -104,9 +104,8 @@ const FlowErrors = Object.freeze({
   UnexpectedReservedType: "Unexpected reserved type %0",
   UnexpectedReservedUnderscore:
     "`_` is only allowed as a type argument to call or new",
-  //todo: replace ´ by `
   UnexpectedSpaceBetweenModuloChecks:
-    "Spaces between ´%´ and ´checks´ are not allowed here.",
+    "Spaces between `%` and `checks` are not allowed here.",
   UnexpectedSpreadType:
     "Spread operator cannot appear in class or interface definitions",
   UnexpectedSubtractionOperand:

@@ -35,8 +35,7 @@ export const Errors = Object.freeze({
   ConstructorClassField: "Classes may not have a field named 'constructor'",
   ConstructorClassPrivateField:
     "Classes may not have a private field named '#constructor'",
-  // todo: rephrase to get/set accessor
-  ConstructorIsAccessor: "Constructor can't have get/set modifier",
+  ConstructorIsAccessor: "Constructor can't have get/set accessor",
   ConstructorIsAsync: "Constructor can't be an async function",
   ConstructorIsGenerator: "Constructor can't be a generator",
   DeclarationMissingInitializer: "%0 require an initialization value",
@@ -147,8 +146,7 @@ export const Errors = Object.freeze({
   SuperNotAllowed:
     "super() is only valid inside a class constructor of a subclass. Maybe a typo in the method name ('constructor') or not extending another class?",
   SuperPrivateField: "Private fields can't be accessed on super",
-  //todo: rephrase this error message as it is too subjective
-  TrailingDecorator: "You have trailing decorators with no method",
+  TrailingDecorator: "Decorators must be attached to a class element",
   TupleExpressionBarIncorrectEndSyntaxType:
     "Tuple expressions ending with '|]' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'",
   TupleExpressionBarIncorrectStartSyntaxType:
@@ -177,18 +175,16 @@ export const Errors = Object.freeze({
   UnexpectedTokenUnaryExponentiation:
     "Illegal expression. Wrap left hand side or entire exponentiation in parentheses.",
   UnsupportedBind: "Binding should be performed on object property.",
-  //todo: rephrase this error message as it is too subjective
   UnsupportedDecoratorExport:
-    "You can only use decorators on an export when exporting a class",
+    "A decorated export must export a class declaration",
   UnsupportedDefaultExport:
     "Only expressions, functions or classes are allowed as the `default` export.",
   UnsupportedImport: "import can only be used in import() or import.meta",
   UnsupportedMetaProperty: "The only valid meta property for %0 is %0.%1",
-  //todo: remove Stage 2 as we are likely to forget updating when it progressed
   UnsupportedParameterDecorator:
-    "Stage 2 decorators cannot be used to decorate parameters",
+    "Decorators cannot be used to decorate parameters",
   UnsupportedPropertyDecorator:
-    "Stage 2 decorators disallow object literal property decorators",
+    "Decorators cannot be used to decorate object literal properties",
   UnsupportedSuper:
     "super can only be used with function calls (i.e. super()) or in property accesses (i.e. super.prop or super[prop])",
   UnterminatedComment: "Unterminated comment",
