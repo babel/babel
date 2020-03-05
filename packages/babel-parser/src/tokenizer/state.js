@@ -144,7 +144,7 @@ export default class State {
   // This property is used to throw an error for an octal
   // literal which occurs in a directive which occurs prior
   // to a "use strict" directive.
-  octalPosition: number | null = null;
+  octalPositions: number[] = [];
 
   // Names of exports store. `default` is stored as a name for both
   // `export default foo;` and `export { foo as default };`.

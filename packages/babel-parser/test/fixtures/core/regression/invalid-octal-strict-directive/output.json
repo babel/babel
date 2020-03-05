@@ -1,37 +1,43 @@
 {
   "type": "File",
   "start": 0,
-  "end": 62,
+  "end": 96,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 10,
-      "column": 5
+      "line": 14,
+      "column": 22
     }
   },
   "errors": [
-    "SyntaxError: Octal literal in strict mode (6:4)",
-    "SyntaxError: Octal literal in strict mode (7:4)",
+    "SyntaxError: Octal literal in strict mode (8:2)",
     "SyntaxError: Octal literal in strict mode (9:2)",
-    "SyntaxError: Octal literal in strict mode (10:2)",
-    "SyntaxError: Octal literal in strict mode (1:4)",
-    "SyntaxError: Octal literal in strict mode (2:4)"
+    "SyntaxError: Octal literal in strict mode (11:0)",
+    "SyntaxError: Octal literal in strict mode (12:0)",
+    "SyntaxError: Octal literal in strict mode (14:2)",
+    "SyntaxError: Octal literal in strict mode (14:10)",
+    "SyntaxError: Octal literal in strict mode (14:18)",
+    "SyntaxError: Octal literal in strict mode (1:2)",
+    "SyntaxError: Octal literal in strict mode (1:10)",
+    "SyntaxError: Octal literal in strict mode (1:18)",
+    "SyntaxError: Octal literal in strict mode (3:2)",
+    "SyntaxError: Octal literal in strict mode (4:2)"
   ],
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 62,
+    "end": 96,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 10,
-        "column": 5
+        "line": 14,
+        "column": 22
       }
     },
     "sourceType": "script",
@@ -39,30 +45,30 @@
     "body": [
       {
         "type": "ExpressionStatement",
-        "start": 53,
-        "end": 56,
+        "start": 65,
+        "end": 68,
         "loc": {
           "start": {
-            "line": 9,
-            "column": 2
+            "line": 11,
+            "column": 0
           },
           "end": {
-            "line": 9,
-            "column": 5
+            "line": 11,
+            "column": 3
           }
         },
         "expression": {
           "type": "NumericLiteral",
-          "start": 53,
-          "end": 55,
+          "start": 65,
+          "end": 67,
           "loc": {
             "start": {
-              "line": 9,
-              "column": 2
+              "line": 11,
+              "column": 0
             },
             "end": {
-              "line": 9,
-              "column": 4
+              "line": 11,
+              "column": 2
             }
           },
           "extra": {
@@ -74,30 +80,30 @@
       },
       {
         "type": "ExpressionStatement",
-        "start": 59,
-        "end": 62,
+        "start": 69,
+        "end": 72,
         "loc": {
           "start": {
-            "line": 10,
-            "column": 2
+            "line": 12,
+            "column": 0
           },
           "end": {
-            "line": 10,
-            "column": 5
+            "line": 12,
+            "column": 3
           }
         },
         "expression": {
           "type": "NumericLiteral",
-          "start": 59,
-          "end": 61,
+          "start": 69,
+          "end": 71,
           "loc": {
             "start": {
-              "line": 10,
-              "column": 2
+              "line": 12,
+              "column": 0
             },
             "end": {
-              "line": 10,
-              "column": 4
+              "line": 12,
+              "column": 2
             }
           },
           "extra": {
@@ -106,35 +112,105 @@
           },
           "value": 5
         }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 74,
+        "end": 96,
+        "loc": {
+          "start": {
+            "line": 14,
+            "column": 0
+          },
+          "end": {
+            "line": 14,
+            "column": 22
+          }
+        },
+        "expression": {
+          "type": "StringLiteral",
+          "start": 74,
+          "end": 95,
+          "loc": {
+            "start": {
+              "line": 14,
+              "column": 0
+            },
+            "end": {
+              "line": 14,
+              "column": 21
+            }
+          },
+          "extra": {
+            "rawValue": "\u0004 foo \u0005 bar \u0006",
+            "raw": "\"\\04 foo \\05 bar \\06\""
+          },
+          "value": "\u0004 foo \u0005 bar \u0006"
+        }
       }
     ],
     "directives": [
       {
         "type": "Directive",
-        "start": 2,
-        "end": 7,
+        "start": 0,
+        "end": 22,
         "loc": {
           "start": {
             "line": 1,
-            "column": 2
+            "column": 0
           },
           "end": {
             "line": 1,
-            "column": 7
+            "column": 22
           }
         },
         "value": {
           "type": "DirectiveLiteral",
-          "start": 2,
-          "end": 6,
+          "start": 0,
+          "end": 21,
           "loc": {
             "start": {
               "line": 1,
-              "column": 2
+              "column": 0
             },
             "end": {
               "line": 1,
-              "column": 6
+              "column": 21
+            }
+          },
+          "value": "\\01 foo \\02 bar \\03",
+          "extra": {
+            "raw": "\"\\01 foo \\02 bar \\03\"",
+            "rawValue": "\\01 foo \\02 bar \\03"
+          }
+        }
+      },
+      {
+        "type": "Directive",
+        "start": 24,
+        "end": 29,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 5
+          }
+        },
+        "value": {
+          "type": "DirectiveLiteral",
+          "start": 24,
+          "end": 28,
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 0
+            },
+            "end": {
+              "line": 3,
+              "column": 4
             }
           },
           "value": "\\4",
@@ -146,30 +222,30 @@
       },
       {
         "type": "Directive",
-        "start": 10,
-        "end": 15,
+        "start": 30,
+        "end": 35,
         "loc": {
           "start": {
-            "line": 2,
-            "column": 2
+            "line": 4,
+            "column": 0
           },
           "end": {
-            "line": 2,
-            "column": 7
+            "line": 4,
+            "column": 5
           }
         },
         "value": {
           "type": "DirectiveLiteral",
-          "start": 10,
-          "end": 14,
+          "start": 30,
+          "end": 34,
           "loc": {
             "start": {
-              "line": 2,
-              "column": 2
+              "line": 4,
+              "column": 0
             },
             "end": {
-              "line": 2,
-              "column": 6
+              "line": 4,
+              "column": 4
             }
           },
           "value": "\\5",
@@ -181,30 +257,30 @@
       },
       {
         "type": "Directive",
-        "start": 19,
-        "end": 32,
+        "start": 37,
+        "end": 50,
         "loc": {
           "start": {
-            "line": 4,
-            "column": 2
+            "line": 6,
+            "column": 0
           },
           "end": {
-            "line": 4,
-            "column": 15
+            "line": 6,
+            "column": 13
           }
         },
         "value": {
           "type": "DirectiveLiteral",
-          "start": 19,
-          "end": 31,
+          "start": 37,
+          "end": 49,
           "loc": {
             "start": {
-              "line": 4,
-              "column": 2
+              "line": 6,
+              "column": 0
             },
             "end": {
-              "line": 4,
-              "column": 14
+              "line": 6,
+              "column": 12
             }
           },
           "value": "use strict",
@@ -216,30 +292,30 @@
       },
       {
         "type": "Directive",
-        "start": 36,
-        "end": 41,
+        "start": 52,
+        "end": 57,
         "loc": {
           "start": {
-            "line": 6,
-            "column": 2
+            "line": 8,
+            "column": 0
           },
           "end": {
-            "line": 6,
-            "column": 7
+            "line": 8,
+            "column": 5
           }
         },
         "value": {
           "type": "DirectiveLiteral",
-          "start": 36,
-          "end": 40,
+          "start": 52,
+          "end": 56,
           "loc": {
             "start": {
-              "line": 6,
-              "column": 2
+              "line": 8,
+              "column": 0
             },
             "end": {
-              "line": 6,
-              "column": 6
+              "line": 8,
+              "column": 4
             }
           },
           "value": "\\4",
@@ -251,30 +327,30 @@
       },
       {
         "type": "Directive",
-        "start": 44,
-        "end": 49,
+        "start": 58,
+        "end": 63,
         "loc": {
           "start": {
-            "line": 7,
-            "column": 2
+            "line": 9,
+            "column": 0
           },
           "end": {
-            "line": 7,
-            "column": 7
+            "line": 9,
+            "column": 5
           }
         },
         "value": {
           "type": "DirectiveLiteral",
-          "start": 44,
-          "end": 48,
+          "start": 58,
+          "end": 62,
           "loc": {
             "start": {
-              "line": 7,
-              "column": 2
+              "line": 9,
+              "column": 0
             },
             "end": {
-              "line": 7,
-              "column": 6
+              "line": 9,
+              "column": 4
             }
           },
           "value": "\\5",

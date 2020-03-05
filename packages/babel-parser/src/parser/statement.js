@@ -855,8 +855,8 @@ export default class StatementParser extends ExpressionParser {
 
     while (!this.eat(end)) {
       // Track octal literals that occur before a "use strict" directive.
-      if (!parsedNonDirective && this.state.octalPosition) {
-        octalPositions.push(this.state.octalPosition);
+      if (!parsedNonDirective && this.state.octalPositions.length) {
+        octalPositions.push(this.state.octalPositions);
       }
 
       const stmt = this.parseStatement(null, topLevel);
@@ -881,7 +881,7 @@ export default class StatementParser extends ExpressionParser {
     // "use strict" directive. Strict mode will be set at parse
     // time for any literals that occur after the directive.
     if (this.state.strict && octalPositions.length) {
-      for (const pos of octalPositions) {
+      for (const pos of octalPositions.flat()) {
         this.raise(pos, Errors.StrictOctalLiteral);
       }
     }
