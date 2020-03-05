@@ -15,6 +15,9 @@ const removeRegeneratorEntryPlugin = require("../lib/polyfills/regenerator/entry
   .default;
 const transformations = require("../lib/module-transformations").default;
 
+const compatData = require("@babel/compat-data/plugins");
+const availablePlugins = require("../lib/available-plugins").default;
+
 describe("babel-preset-env", () => {
   describe("transformIncludesAndExcludes", () => {
     it("should return in transforms array", () => {
@@ -247,5 +250,12 @@ describe("babel-preset-env", () => {
         });
       });
     });
+  });
+
+  it("available-plugins is in sync with @babel/compat-data", () => {
+    const arrAvailablePlugins = Object.keys(availablePlugins).sort();
+    const arrCompatData = Object.keys(compatData).sort();
+
+    expect(arrAvailablePlugins).toEqual(expect.arrayContaining(arrCompatData));
   });
 });
