@@ -1,0 +1,289 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 62,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 10,
+      "column": 5
+    }
+  },
+  "errors": [
+    "SyntaxError: Octal literal in strict mode (6:4)",
+    "SyntaxError: Octal literal in strict mode (7:4)",
+    "SyntaxError: Octal literal in strict mode (9:2)",
+    "SyntaxError: Octal literal in strict mode (10:2)",
+    "SyntaxError: Octal literal in strict mode (1:4)",
+    "SyntaxError: Octal literal in strict mode (2:4)"
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 62,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 10,
+        "column": 5
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 53,
+        "end": 56,
+        "loc": {
+          "start": {
+            "line": 9,
+            "column": 2
+          },
+          "end": {
+            "line": 9,
+            "column": 5
+          }
+        },
+        "expression": {
+          "type": "NumericLiteral",
+          "start": 53,
+          "end": 55,
+          "loc": {
+            "start": {
+              "line": 9,
+              "column": 2
+            },
+            "end": {
+              "line": 9,
+              "column": 4
+            }
+          },
+          "extra": {
+            "rawValue": 4,
+            "raw": "04"
+          },
+          "value": 4
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 59,
+        "end": 62,
+        "loc": {
+          "start": {
+            "line": 10,
+            "column": 2
+          },
+          "end": {
+            "line": 10,
+            "column": 5
+          }
+        },
+        "expression": {
+          "type": "NumericLiteral",
+          "start": 59,
+          "end": 61,
+          "loc": {
+            "start": {
+              "line": 10,
+              "column": 2
+            },
+            "end": {
+              "line": 10,
+              "column": 4
+            }
+          },
+          "extra": {
+            "rawValue": 5,
+            "raw": "05"
+          },
+          "value": 5
+        }
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start": 2,
+        "end": 7,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 2
+          },
+          "end": {
+            "line": 1,
+            "column": 7
+          }
+        },
+        "value": {
+          "type": "DirectiveLiteral",
+          "start": 2,
+          "end": 6,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 2
+            },
+            "end": {
+              "line": 1,
+              "column": 6
+            }
+          },
+          "value": "\\4",
+          "extra": {
+            "raw": "\"\\4\"",
+            "rawValue": "\\4"
+          }
+        }
+      },
+      {
+        "type": "Directive",
+        "start": 10,
+        "end": 15,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 2
+          },
+          "end": {
+            "line": 2,
+            "column": 7
+          }
+        },
+        "value": {
+          "type": "DirectiveLiteral",
+          "start": 10,
+          "end": 14,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 2
+            },
+            "end": {
+              "line": 2,
+              "column": 6
+            }
+          },
+          "value": "\\5",
+          "extra": {
+            "raw": "\"\\5\"",
+            "rawValue": "\\5"
+          }
+        }
+      },
+      {
+        "type": "Directive",
+        "start": 19,
+        "end": 32,
+        "loc": {
+          "start": {
+            "line": 4,
+            "column": 2
+          },
+          "end": {
+            "line": 4,
+            "column": 15
+          }
+        },
+        "value": {
+          "type": "DirectiveLiteral",
+          "start": 19,
+          "end": 31,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 2
+            },
+            "end": {
+              "line": 4,
+              "column": 14
+            }
+          },
+          "value": "use strict",
+          "extra": {
+            "raw": "\"use strict\"",
+            "rawValue": "use strict"
+          }
+        }
+      },
+      {
+        "type": "Directive",
+        "start": 36,
+        "end": 41,
+        "loc": {
+          "start": {
+            "line": 6,
+            "column": 2
+          },
+          "end": {
+            "line": 6,
+            "column": 7
+          }
+        },
+        "value": {
+          "type": "DirectiveLiteral",
+          "start": 36,
+          "end": 40,
+          "loc": {
+            "start": {
+              "line": 6,
+              "column": 2
+            },
+            "end": {
+              "line": 6,
+              "column": 6
+            }
+          },
+          "value": "\\4",
+          "extra": {
+            "raw": "\"\\4\"",
+            "rawValue": "\\4"
+          }
+        }
+      },
+      {
+        "type": "Directive",
+        "start": 44,
+        "end": 49,
+        "loc": {
+          "start": {
+            "line": 7,
+            "column": 2
+          },
+          "end": {
+            "line": 7,
+            "column": 7
+          }
+        },
+        "value": {
+          "type": "DirectiveLiteral",
+          "start": 44,
+          "end": 48,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 2
+            },
+            "end": {
+              "line": 7,
+              "column": 6
+            }
+          },
+          "value": "\\5",
+          "extra": {
+            "raw": "\"\\5\"",
+            "rawValue": "\\5"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1032,11 +1032,7 @@ export default class Tokenizer extends LocationParser {
       this.input.charCodeAt(start) === charCodes.digit0;
     if (octal) {
       if (this.state.strict) {
-        this.raise(
-          start,
-          // todo: merge with Errors.StrictOctalLiteral
-          "Legacy octal literals are not allowed in strict mode",
-        );
+        this.raise(start, Errors.StrictOctalLiteral);
       }
       if (/[89]/.test(this.input.slice(start, this.state.pos))) {
         octal = false;

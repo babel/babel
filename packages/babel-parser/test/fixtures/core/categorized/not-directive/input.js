@@ -111,3 +111,8 @@ function f(){
   (bar);
   "\5";
 }
+
+function f(){
+  05;
+  "use strict";
+}
