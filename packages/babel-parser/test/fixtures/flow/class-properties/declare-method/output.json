@@ -13,7 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: 'declare' is only allowed on uninitialized class fields. (2:2)"
+    "SyntaxError: The `declare` modifier can only appear on class fields. (2:2)"
   ],
   "program": {
     "type": "Program",

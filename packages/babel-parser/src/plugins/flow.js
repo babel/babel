@@ -51,6 +51,10 @@ const FlowErrors = Object.freeze({
   AmbiguousDeclareModuleKind:
     "Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module",
   AssignReservedType: "Cannot overwrite reserved type %0",
+  DeclareClassElement:
+    "The `declare` modifier can only appear on class fields.",
+  DeclareClassFieldInitializer:
+    "Initializers are not allowed in fields with the `declare` modifier.",
   DuplicateDeclareModuleExports: "Duplicate `declare module.exports` statement",
   EnumBooleanMemberNotInitialized:
     "Boolean enum members need to be initialized. Use either `%0 = true,` or `%0 = false,` in enum `%1`.",
@@ -2100,11 +2104,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       super.parseClassMember(classBody, member, state, constructorAllowsSuper);
 
-      if (member.declare && (member.type === "ClassMethod" || member.value)) {
-        this.raise(
-          pos,
-          "'declare' is only allowed on uninitialized class fields.",
-        );
+      if (member.declare) {
+        if (
+          member.type !== "ClassProperty" &&
+          member.type !== "ClassPrivateProperty"
+        ) {
+          this.raise(pos, FlowErrors.DeclareClassElement);
+        } else if (member.value) {
+          this.raise(
+            member.value.start,
+            FlowErrors.DeclareClassFieldInitializer,
+          );
+        }
       }
     }
 
