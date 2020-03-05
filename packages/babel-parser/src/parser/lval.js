@@ -457,24 +457,13 @@ export default class LValParser extends NodeUtils {
         break;
 
       default: {
-        if (contextDescription) {
-          this.raise(
-            expr.start,
-            bindingType === BIND_NONE
-              ? Errors.InvalidLhs
-              : Errors.InvalidLhsBinding,
-            contextDescription,
-          );
-        } else {
-          // todo: check if contextDescription is never empty
-          const message =
-            (bindingType === BIND_NONE
-              ? "Invalid"
-              : /* istanbul ignore next */ "Binding invalid") +
-            " left-hand side expression";
-
-          this.raise(expr.start, message);
-        }
+        this.raise(
+          expr.start,
+          bindingType === BIND_NONE
+            ? Errors.InvalidLhs
+            : Errors.InvalidLhsBinding,
+          contextDescription,
+        );
       }
     }
   }
