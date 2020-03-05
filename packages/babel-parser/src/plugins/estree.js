@@ -6,6 +6,7 @@ import type { ExpressionErrors } from "../parser/util";
 import * as N from "../types";
 import type { Position } from "../util/location";
 import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
+import { Errors } from "../parser/location";
 
 function isSimpleProperty(node: N.Node): boolean {
   return (
@@ -99,19 +100,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const paramCount = prop.kind === "get" ? 0 : 1;
       const start = prop.start;
       if (prop.value.params.length !== paramCount) {
-        if (prop.kind === "get") {
-          this.raise(start, "getter must not have any formal parameters");
+        if (method.kind === "get") {
+          this.raise(start, Errors.BadGetterArity);
         } else {
-          this.raise(start, "setter must have exactly one formal parameter");
+          this.raise(start, Errors.BadSetterArity);
         }
       } else if (
         prop.kind === "set" &&
         prop.value.params[0].type === "RestElement"
       ) {
-        this.raise(
-          start,
-          "setter function argument must not be a rest parameter",
-        );
+        this.raise(start, Errors.BadSetterRestParameter);
       }
     }
 
@@ -170,7 +168,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (refExpressionErrors && refExpressionErrors.doubleProto === -1) {
             refExpressionErrors.doubleProto = key.start;
           } else {
-            this.raise(key.start, "Redefinition of __proto__ property");
+            this.raise(key.start, Errors.DuplicateProto);
           }
         }
 
@@ -374,15 +372,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     toAssignableObjectExpressionProp(prop: N.Node, isLast: boolean) {
       if (prop.kind === "get" || prop.kind === "set") {
-        throw this.raise(
-          prop.key.start,
-          "Object pattern can't contain getter or setter",
-        );
+        throw this.raise(prop.key.start, Errors.PatternHasAccessor);
       } else if (prop.method) {
-        throw this.raise(
-          prop.key.start,
-          "Object pattern can't contain methods",
-        );
+        throw this.raise(prop.key.start, Errors.PatternHasMethod);
       } else {
         super.toAssignableObjectExpressionProp(prop, isLast);
       }

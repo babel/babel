@@ -11,9 +11,22 @@ import * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
+import { Errors } from "../../parser/location";
 
 const HEX_NUMBER = /^[\da-fA-F]+$/;
 const DECIMAL_NUMBER = /^\d+$/;
+
+const JsxErrors = Object.freeze({
+  AttributeIsEmpty:
+    "JSX attributes must only be assigned a non-empty expression",
+  MissingClosingTagFragment: "Expected corresponding JSX closing tag for <>",
+  MissingClosingTagElement: "Expected corresponding JSX closing tag for <%0>",
+  UnsupportedJsxValue:
+    "JSX value should be either an expression or a quoted JSX text",
+  UnterminatedJsxContent: "Unterminated JSX contents",
+  UnwrappedAdjacentJSXElements:
+    "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
+});
 
 // Be aware that this file is always executed and not only when the plugin is enabled.
 // Therefore this contexts and tokens do always exist.
@@ -83,7 +96,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let chunkStart = this.state.pos;
       for (;;) {
         if (this.state.pos >= this.length) {
-          throw this.raise(this.state.start, "Unterminated JSX contents");
+          throw this.raise(this.state.start, JsxErrors.UnterminatedJsxContent);
         }
 
         const ch = this.input.charCodeAt(this.state.pos);
@@ -157,7 +170,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let chunkStart = ++this.state.pos;
       for (;;) {
         if (this.state.pos >= this.length) {
-          throw this.raise(this.state.start, "Unterminated string constant");
+          throw this.raise(this.state.start, Errors.UnterminatedString);
         }
 
         const ch = this.input.charCodeAt(this.state.pos);
@@ -294,10 +307,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.next();
           node = this.jsxParseExpressionContainer(node);
           if (node.expression.type === "JSXEmptyExpression") {
-            this.raise(
-              node.start,
-              "JSX attributes must only be assigned a non-empty expression",
-            );
+            this.raise(node.start, JsxErrors.AttributeIsEmpty);
           }
           return node;
 
@@ -306,10 +316,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.parseExprAtom();
 
         default:
-          throw this.raise(
-            this.state.start,
-            "JSX value should be either an expression or a quoted JSX text",
-          );
+          throw this.raise(this.state.start, JsxErrors.UnsupportedJsxValue);
       }
     }
 
@@ -465,15 +472,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.raise(
             // $FlowIgnore
             closingElement.start,
-            "Expected corresponding JSX closing tag for <>",
+            JsxErrors.MissingClosingTagFragment,
           );
         } else if (!isFragment(openingElement) && isFragment(closingElement)) {
           this.raise(
             // $FlowIgnore
             closingElement.start,
-            "Expected corresponding JSX closing tag for <" +
-              getQualifiedJSXName(openingElement.name) +
-              ">",
+            JsxErrors.MissingClosingTagElement,
+            getQualifiedJSXName(openingElement.name),
           );
         } else if (!isFragment(openingElement) && !isFragment(closingElement)) {
           if (
@@ -484,9 +490,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             this.raise(
               // $FlowIgnore
               closingElement.start,
-              "Expected corresponding JSX closing tag for <" +
-                getQualifiedJSXName(openingElement.name) +
-                ">",
+              JsxErrors.MissingClosingTagElement,
+              getQualifiedJSXName(openingElement.name),
             );
           }
         }
@@ -503,8 +508,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.isRelational("<")) {
         throw this.raise(
           this.state.start,
-          "Adjacent JSX elements must be wrapped in an enclosing tag. " +
-            "Did you want a JSX fragment <>...</>?",
+          JsxErrors.UnwrappedAdjacentJSXElements,
         );
       }
 

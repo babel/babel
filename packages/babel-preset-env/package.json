@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-env",
-  "version": "7.8.6",
+  "version": "7.8.7",
   "description": "A Babel preset for each environment.",
   "author": "Henry Zhu <hi@henryzoo.com>",
   "homepage": "https://babeljs.io/",
@@ -12,7 +12,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@babel/compat-data": "^7.8.6",
-    "@babel/helper-compilation-targets": "^7.8.6",
+    "@babel/helper-compilation-targets": "^7.8.7",
     "@babel/helper-module-imports": "^7.8.3",
     "@babel/helper-plugin-utils": "^7.8.3",
     "@babel/plugin-proposal-async-generator-functions": "^7.8.3",
@@ -52,9 +52,9 @@
     "@babel/plugin-transform-named-capturing-groups-regex": "^7.8.3",
     "@babel/plugin-transform-new-target": "^7.8.3",
     "@babel/plugin-transform-object-super": "^7.8.3",
-    "@babel/plugin-transform-parameters": "^7.8.4",
+    "@babel/plugin-transform-parameters": "^7.8.7",
     "@babel/plugin-transform-property-literals": "^7.8.3",
-    "@babel/plugin-transform-regenerator": "^7.8.3",
+    "@babel/plugin-transform-regenerator": "^7.8.7",
     "@babel/plugin-transform-reserved-words": "^7.8.3",
     "@babel/plugin-transform-shorthand-properties": "^7.8.3",
     "@babel/plugin-transform-spread": "^7.8.3",
@@ -62,7 +62,7 @@
     "@babel/plugin-transform-template-literals": "^7.8.3",
     "@babel/plugin-transform-typeof-symbol": "^7.8.4",
     "@babel/plugin-transform-unicode-regex": "^7.8.3",
-    "@babel/types": "^7.8.6",
+    "@babel/types": "^7.8.7",
     "browserslist": "^4.8.5",
     "core-js-compat": "^3.6.2",
     "invariant": "^2.2.2",
@@ -74,7 +74,7 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.6",
+    "@babel/core": "^7.8.7",
     "@babel/helper-fixtures": "^7.8.6",
     "@babel/helper-plugin-test-runner": "^7.8.3",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0"

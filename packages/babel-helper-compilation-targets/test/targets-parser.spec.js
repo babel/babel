@@ -39,6 +39,13 @@ describe("getTargets", () => {
     expect(browserslist.defaults).toEqual(browserslistDefaults);
   });
 
+  it("supports region browserslists query", () => {
+    const actual = getTargets({ browsers: "> 0.5% in GB" });
+    // chrome 4 is the first release of chrome,
+    // it should never be included in this query
+    expect(parseFloat(actual.chrome)).toBeGreaterThan(4);
+  });
+
   describe("validation", () => {
     it("throws on invalid target name", () => {
       const invalidTargetName = () => {
