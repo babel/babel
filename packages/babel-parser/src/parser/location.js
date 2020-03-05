@@ -35,7 +35,7 @@ export const Errors = Object.freeze({
   ConstructorClassField: "Classes may not have a field named 'constructor'",
   ConstructorClassPrivateField:
     "Classes may not have a private field named '#constructor'",
-  ConstructorIsAccessor: "Constructor can't have get/set accessor",
+  ConstructorIsAccessor: "Constructor may not be a get/set accessor",
   ConstructorIsAsync: "Constructor can't be an async function",
   ConstructorIsGenerator: "Constructor can't be a generator",
   DeclarationMissingInitializer: "%0 require an initialization value",
