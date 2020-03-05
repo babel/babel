@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-call-delegate",
-  "version": "7.8.3",
+  "version": "7.8.7",
   "description": "Helper function to call delegate",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-call-delegate",
   "license": "MIT",
@@ -11,6 +11,6 @@
   "dependencies": {
     "@babel/helper-hoist-variables": "^7.8.3",
     "@babel/traverse": "^7.8.3",
-    "@babel/types": "^7.8.3"
+    "@babel/types": "^7.8.7"
   }
 }

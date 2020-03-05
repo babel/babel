@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.8.6",
+  "version": "7.8.7",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "babel.js",
   "files": [
@@ -11,7 +11,7 @@
     "prepublishOnly": "cd ../.. && make prepublish-build-standalone"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.6",
+    "@babel/core": "^7.8.7",
     "@babel/helper-plugin-utils": "^7.8.3",
     "@babel/plugin-external-helpers": "^7.8.3",
     "@babel/plugin-proposal-async-generator-functions": "^7.8.3",
@@ -78,7 +78,7 @@
     "@babel/plugin-transform-object-assign": "^7.8.3",
     "@babel/plugin-transform-object-set-prototype-of-to-assign": "^7.8.3",
     "@babel/plugin-transform-object-super": "^7.8.3",
-    "@babel/plugin-transform-parameters": "^7.8.4",
+    "@babel/plugin-transform-parameters": "^7.8.7",
     "@babel/plugin-transform-property-literals": "^7.8.3",
     "@babel/plugin-transform-property-mutators": "^7.8.3",
     "@babel/plugin-transform-proto-to-assign": "^7.8.3",
@@ -89,7 +89,7 @@
     "@babel/plugin-transform-react-jsx-compat": "^7.8.3",
     "@babel/plugin-transform-react-jsx-self": "^7.8.3",
     "@babel/plugin-transform-react-jsx-source": "^7.8.3",
-    "@babel/plugin-transform-regenerator": "^7.8.3",
+    "@babel/plugin-transform-regenerator": "^7.8.7",
     "@babel/plugin-transform-reserved-words": "^7.8.3",
     "@babel/plugin-transform-runtime": "^7.8.3",
     "@babel/plugin-transform-shorthand-properties": "^7.8.3",
@@ -98,9 +98,9 @@
     "@babel/plugin-transform-strict-mode": "^7.8.3",
     "@babel/plugin-transform-template-literals": "^7.8.3",
     "@babel/plugin-transform-typeof-symbol": "^7.8.4",
-    "@babel/plugin-transform-typescript": "^7.8.3",
+    "@babel/plugin-transform-typescript": "^7.8.7",
     "@babel/plugin-transform-unicode-regex": "^7.8.3",
-    "@babel/preset-env": "^7.8.6",
+    "@babel/preset-env": "^7.8.7",
     "@babel/preset-flow": "^7.8.3",
     "@babel/preset-react": "^7.8.3",
     "@babel/preset-typescript": "^7.8.3"
