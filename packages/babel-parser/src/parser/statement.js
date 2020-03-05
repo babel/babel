@@ -891,7 +891,10 @@ export default class StatementParser extends ExpressionParser {
     }
 
     if (afterBlockParse) {
-      afterBlockParse.call(this, oldStrict !== null);
+      afterBlockParse.call(
+        this,
+        /* hasStrictModeDirective */ oldStrict !== null,
+      );
     }
 
     if (oldStrict === false) {
