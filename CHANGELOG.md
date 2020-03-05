@@ -19,6 +19,29 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.8.7 (2020-03-05)
+
+#### :bug: Bug Fix
+* `babel-preset-env`
+  * [#11201](https://github.com/babel/babel/pull/11201) Allow using `preset-env` with newer versions of `compat-data` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`
+  * [#11193](https://github.com/babel/babel/pull/11193) Pass URLs to import() rather than paths ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#11198](https://github.com/babel/babel/pull/11198) fix(babel-parser): chain off optionally chained keys named class and function ([@Vages](https://github.com/Vages))
+* `babel-helper-call-delegate`, `babel-plugin-transform-parameters`
+  * [#11158](https://github.com/babel/babel/pull/11158) Fix scope of function body when var redeclares param ([@openorclose](https://github.com/openorclose))
+* `babel-generator`
+  * [#11190](https://github.com/babel/babel/pull/11190) Fix printing parentheses around optional chains ([@sag1v](https://github.com/sag1v))
+* `babel-types`
+  * [#11184](https://github.com/babel/babel/pull/11184) Add "Statement" as alias to Flow enum declaration ([@gkz](https://github.com/gkz))
+* `babel-plugin-transform-typescript`
+  * [#11129](https://github.com/babel/babel/pull/11129) Typescript: Preserve decorated definite class properties ([@jamescdavis](https://github.com/jamescdavis))
+
+#### :house: Internal
+* `babel-parser`
+  * [#11192](https://github.com/babel/babel/pull/11192) Refactor: add parser message template ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#11181](https://github.com/babel/babel/pull/11181) Set correct version for @babel/eslint-plugin-development ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.8.6 (2020-02-27)
 
 #### :eyeglasses: Spec Compliance
