@@ -881,9 +881,9 @@ export default class StatementParser extends ExpressionParser {
       body.push(stmt);
     }
 
-    // Throw an error for any octal literals found before
-    // a "use strict" directive. Strict mode will be set
-    // for any literals that occur after the directive.
+    // Throw an error for any octal literals found before a
+    // "use strict" directive. Strict mode will be set at parse
+    // time for any literals that occur after the directive.
     if (this.state.strict && octalPositions.length) {
       for (const pos of octalPositions) {
         this.raise(pos, Errors.StrictOctalLiteral);
