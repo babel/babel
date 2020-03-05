@@ -410,11 +410,11 @@ export default class Tokenizer extends LocationParser {
         next === charCodes.leftSquareBracket)
     ) {
       if (this.getPluginOption("recordAndTuple", "syntaxType") !== "hash") {
-        this.unexpected(
+        throw this.raise(
           this.state.pos,
           next === charCodes.leftCurlyBrace
-            ? "Record expressions starting with '#{' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'hash'"
-            : "Tuple expressions starting with '#[' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'hash'",
+            ? Errors.RecordExpressionHashIncorrectStartSyntaxType
+            : Errors.TupleExpressionHashIncorrectStartSyntaxType,
         );
       }
 
@@ -542,9 +542,9 @@ export default class Tokenizer extends LocationParser {
         next === charCodes.rightCurlyBrace
       ) {
         if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
-          this.unexpected(
+          throw this.raise(
             this.state.pos,
-            "Record expressions ending with '|}' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'",
+            Errors.RecordExpressionBarIncorrectEndSyntaxType,
           );
         }
 
@@ -558,9 +558,9 @@ export default class Tokenizer extends LocationParser {
         next === charCodes.rightSquareBracket
       ) {
         if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
-          this.unexpected(
+          throw this.raise(
             this.state.pos,
-            "Tuple expressions ending with '|]' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'",
+            Errors.TupleExpressionBarIncorrectEndSyntaxType,
           );
         }
 
@@ -740,9 +740,9 @@ export default class Tokenizer extends LocationParser {
           this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
         ) {
           if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
-            this.unexpected(
+            throw this.raise(
               this.state.pos,
-              "Tuple expressions starting with '[|' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'",
+              Errors.TupleExpressionBarIncorrectStartSyntaxType,
             );
           }
 
@@ -764,9 +764,9 @@ export default class Tokenizer extends LocationParser {
           this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
         ) {
           if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
-            this.unexpected(
+            throw this.raise(
               this.state.pos,
-              "Record expressions starting with '{|' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'",
+              Errors.RecordExpressionBarIncorrectStartSyntaxType,
             );
           }
 

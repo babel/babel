@@ -127,6 +127,12 @@ export const Errors = Object.freeze({
   PrimaryTopicRequiresSmartPipeline:
     "Primary Topic Reference found but pipelineOperator not passed 'smart' for 'proposal' option.",
   PrivateNameRedeclaration: "Duplicate private name #%0",
+  RecordExpressionBarIncorrectEndSyntaxType:
+    "Record expressions ending with '|}' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'",
+  RecordExpressionBarIncorrectStartSyntaxType:
+    "Record expressions starting with '{|' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'",
+  RecordExpressionHashIncorrectStartSyntaxType:
+    "Record expressions starting with '#{' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'hash'",
   RestTrailingComma: "Unexpected trailing comma after rest element",
   SloppyFunction:
     "In non-strict mode code, functions can only be declared at top level, inside a block, or as the body of an if statement",
@@ -143,6 +149,12 @@ export const Errors = Object.freeze({
   SuperPrivateField: "Private fields can't be accessed on super",
   //todo: rephrase this error message as it is too subjective
   TrailingDecorator: "You have trailing decorators with no method",
+  TupleExpressionBarIncorrectEndSyntaxType:
+    "Tuple expressions ending with '|]' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'",
+  TupleExpressionBarIncorrectStartSyntaxType:
+    "Tuple expressions starting with '[|' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'",
+  TupleExpressionHashIncorrectStartSyntaxType:
+    "Tuple expressions starting with '#[' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'hash'",
   UnexpectedArgumentPlaceholder: "Unexpected argument placeholder",
   UnexpectedAwaitAfterPipelineBody:
     'Unexpected "await" after pipeline body; await must have parentheses in minimal proposal',
