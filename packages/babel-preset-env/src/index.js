@@ -7,8 +7,10 @@ import { removeUnnecessaryItems } from "./filter-items";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options";
 import { proposalPlugins, pluginSyntaxMap } from "../data/shipped-proposals";
-import pluginList from "./plugins-compat-data";
-import bugfixPluginList from "@babel/compat-data/plugin-bugfixes";
+import {
+  plugins as pluginsList,
+  pluginsBugfixes as pluginsBugfixesList,
+} from "./plugins-compat-data";
 import overlappingPlugins from "@babel/compat-data/overlapping-plugins";
 
 import addCoreJS2UsagePlugin from "./polyfills/corejs2/usage-plugin";
@@ -40,13 +42,13 @@ export function isPluginRequired(targets: Targets, support: Targets) {
 
 const pluginLists = {
   withProposals: {
-    withoutBugfixes: pluginList,
-    withBugfixes: Object.assign({}, pluginList, bugfixPluginList),
+    withoutBugfixes: pluginsList,
+    withBugfixes: Object.assign({}, pluginsList, pluginsBugfixesList),
   },
   withoutProposals: {
-    withoutBugfixes: filterStageFromList(pluginList, proposalPlugins),
+    withoutBugfixes: filterStageFromList(pluginsList, proposalPlugins),
     withBugfixes: filterStageFromList(
-      Object.assign({}, pluginList, bugfixPluginList),
+      Object.assign({}, pluginsList, pluginsBugfixesList),
       proposalPlugins,
     ),
   },
@@ -309,7 +311,7 @@ export default declare((api, opts) => {
     console.log(`\nUsing modules transform: ${modules.toString()}`);
     console.log("\nUsing plugins:");
     pluginNames.forEach(pluginName => {
-      logPluginOrPolyfill(pluginName, targets, pluginList);
+      logPluginOrPolyfill(pluginName, targets, pluginsList);
     });
 
     if (!useBuiltIns) {

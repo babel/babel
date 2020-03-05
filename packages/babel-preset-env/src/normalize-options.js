@@ -4,7 +4,7 @@ import findSuggestion from "levenary";
 import invariant from "invariant";
 import { coerce, SemVer } from "semver";
 import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
-import pluginsList from "./plugins-compat-data";
+import { plugins as pluginsList } from "./plugins-compat-data";
 import moduleTransformations from "./module-transformations";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
 import { defaultWebIncludes } from "./polyfills/corejs2/get-platform-specific-default";
