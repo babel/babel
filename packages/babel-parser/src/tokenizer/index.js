@@ -224,7 +224,6 @@ export default class Tokenizer extends LocationParser {
     const curContext = this.curContext();
     if (!curContext || !curContext.preserveSpace) this.skipSpace();
 
-    this.state.containsOctal = false;
     this.state.octalPosition = null;
     this.state.start = this.state.pos;
     this.state.startLoc = this.state.curPosition();
@@ -1292,10 +1291,9 @@ export default class Tokenizer extends LocationParser {
               return null;
             } else if (this.state.strict) {
               this.raise(codePos, Errors.StrictOctalLiteral);
-            } else if (!this.state.containsOctal) {
-              // These properties are only used to throw an error for an octal which occurs
+            } else {
+              // This properties are only used to throw an error for an octal which occurs
               // in a directive which occurs prior to a "use strict" directive.
-              this.state.containsOctal = true;
               this.state.octalPosition = codePos;
             }
           }

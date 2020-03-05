@@ -141,8 +141,9 @@ export default class State {
   // escape sequences must not be interpreted as keywords.
   containsEsc: boolean = false;
 
-  // TODO
-  containsOctal: boolean = false;
+  // This property is used to throw an error for an octal
+  // literal which occurs in a directive which occurs prior
+  // to a "use strict" directive.
   octalPosition: number | null = null;
 
   // Names of exports store. `default` is stored as a name for both
