@@ -1,4 +1,5 @@
 // @flow
+/*:: declare var invariant; */
 
 import * as N from "../types";
 import { types as tt, type TokenType } from "../tokenizer/types";
@@ -856,10 +857,8 @@ export default class StatementParser extends ExpressionParser {
     while (!this.eat(end)) {
       // Track octal literals that occur before a "use strict" directive.
       if (!parsedNonDirective && this.state.containsOctal) {
-        // This octal literal will always occur in a directive and will
-        // therefore be escaped. Subtract two from the current position to
-        // account for the "\" character.
-        octalPositions.push(this.state.pos - 2);
+        /*:: invariant(this.state.octalPosition !== null) */
+        octalPositions.push(this.state.octalPosition);
       }
 
       const stmt = this.parseStatement(null, topLevel);
