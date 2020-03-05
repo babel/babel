@@ -313,6 +313,6 @@ exports.writeFile = function(data, dataPath, name) {
     }
   } else {
     fs.writeFileSync(dataPath, stringified);
-    return true;
   }
+  return true;
 };
