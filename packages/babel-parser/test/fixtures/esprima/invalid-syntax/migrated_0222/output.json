@@ -13,8 +13,8 @@
     }
   },
   "errors": [
-    "SyntaxError: Octal literal in strict mode (1:36)",
-    "SyntaxError: Octal literal in strict mode (1:57)"
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (1:36)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (1:57)"
   ],
   "program": {
     "type": "Program",

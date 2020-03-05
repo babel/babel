@@ -141,7 +141,7 @@ export const Errors = Object.freeze({
   StrictEvalArgumentsBinding: "Binding '%0' in strict mode",
   StrictFunction:
     "In strict mode code, functions can only be declared at top level or inside a block",
-  StrictOctalLiteral: "Octal literal in strict mode",
+  StrictOctalLiteral: "Legacy octal literals are not allowed in strict mode",
   StrictWith: "'with' in strict mode",
   SuperNotAllowed:
     "super() is only valid inside a class constructor of a subclass. Maybe a typo in the method name ('constructor') or not extending another class?",

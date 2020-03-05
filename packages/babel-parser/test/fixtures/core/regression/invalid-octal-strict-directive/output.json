@@ -13,18 +13,18 @@
     }
   },
   "errors": [
-    "SyntaxError: Octal literal in strict mode (8:2)",
-    "SyntaxError: Octal literal in strict mode (9:2)",
-    "SyntaxError: Octal literal in strict mode (11:0)",
-    "SyntaxError: Octal literal in strict mode (12:0)",
-    "SyntaxError: Octal literal in strict mode (14:2)",
-    "SyntaxError: Octal literal in strict mode (14:10)",
-    "SyntaxError: Octal literal in strict mode (14:18)",
-    "SyntaxError: Octal literal in strict mode (1:2)",
-    "SyntaxError: Octal literal in strict mode (1:10)",
-    "SyntaxError: Octal literal in strict mode (1:18)",
-    "SyntaxError: Octal literal in strict mode (3:2)",
-    "SyntaxError: Octal literal in strict mode (4:2)"
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (8:2)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (9:2)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (11:0)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (12:0)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (14:2)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (14:10)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (14:18)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (1:2)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (1:10)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (1:18)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (3:2)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (4:2)"
   ],
   "program": {
     "type": "Program",
