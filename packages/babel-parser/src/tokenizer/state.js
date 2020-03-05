@@ -143,7 +143,7 @@ export default class State {
 
   // TODO
   containsOctal: boolean = false;
-  octalPosition: ?number = null;
+  octalPosition: number | null = null;
 
   // Names of exports store. `default` is stored as a name for both
   // `export default foo;` and `export { foo as default };`.
