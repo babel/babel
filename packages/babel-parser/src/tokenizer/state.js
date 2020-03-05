@@ -141,8 +141,8 @@ export default class State {
   // escape sequences must not be interpreted as keywords.
   containsEsc: boolean = false;
 
-  // This property is used to throw an error for an octal
-  // literal which occurs in a directive which occurs prior
+  // This property is used to throw an error for
+  // an octal literal in a directive that occurs prior
   // to a "use strict" directive.
   octalPositions: number[] = [];
 

@@ -1292,8 +1292,9 @@ export default class Tokenizer extends LocationParser {
             } else if (this.state.strict) {
               this.raise(codePos, Errors.StrictOctalLiteral);
             } else {
-              // This properties are only used to throw an error for an octal which occurs
-              // in a directive which occurs prior to a "use strict" directive.
+              // This property is used to throw an error for
+              // an octal literal in a directive that occurs prior
+              // to a "use strict" directive.
               this.state.octalPositions.push(codePos);
             }
           }
