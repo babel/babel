@@ -795,13 +795,20 @@ export default class StatementParser extends ExpressionParser {
   parseBlock(
     allowDirectives?: boolean = false,
     createNewLexicalScope?: boolean = true,
+    afterBlockParse?: (hasStrictModeDirective: boolean) => void,
   ): N.BlockStatement {
     const node = this.startNode();
     this.expect(tt.braceL);
     if (createNewLexicalScope) {
       this.scope.enter(SCOPE_OTHER);
     }
-    this.parseBlockBody(node, allowDirectives, false, tt.braceR);
+    this.parseBlockBody(
+      node,
+      allowDirectives,
+      false,
+      tt.braceR,
+      afterBlockParse,
+    );
     if (createNewLexicalScope) {
       this.scope.exit();
     }
@@ -821,6 +828,7 @@ export default class StatementParser extends ExpressionParser {
     allowDirectives: ?boolean,
     topLevel: boolean,
     end: TokenType,
+    afterBlockParse?: (hasStrictModeDirective: boolean) => void,
   ): void {
     const body = (node.body = []);
     const directives = (node.directives = []);
@@ -829,6 +837,7 @@ export default class StatementParser extends ExpressionParser {
       allowDirectives ? directives : undefined,
       topLevel,
       end,
+      afterBlockParse,
     );
   }
 
@@ -838,14 +847,16 @@ export default class StatementParser extends ExpressionParser {
     directives: ?(N.Directive[]),
     topLevel: boolean,
     end: TokenType,
+    afterBlockParse?: (hasStrictModeDirective: boolean) => void,
   ): void {
+    const octalPositions = [];
     let parsedNonDirective = false;
-    let oldStrict;
-    let octalPosition;
+    let oldStrict = null;
 
     while (!this.eat(end)) {
-      if (!parsedNonDirective && this.state.containsOctal && !octalPosition) {
-        octalPosition = this.state.octalPosition;
+      // Track octal literals that occur before a "use strict" directive.
+      if (!parsedNonDirective && this.state.octalPositions.length) {
+        octalPositions.push(...this.state.octalPositions);
       }
 
       const stmt = this.parseStatement(null, topLevel);
@@ -854,13 +865,9 @@ export default class StatementParser extends ExpressionParser {
         const directive = this.stmtToDirective(stmt);
         directives.push(directive);
 
-        if (oldStrict === undefined && directive.value.value === "use strict") {
+        if (oldStrict === null && directive.value.value === "use strict") {
           oldStrict = this.state.strict;
           this.setStrict(true);
-
-          if (octalPosition) {
-            this.raise(octalPosition, Errors.StrictOctalLiteral);
-          }
         }
 
         continue;
@@ -868,6 +875,22 @@ export default class StatementParser extends ExpressionParser {
 
       parsedNonDirective = true;
       body.push(stmt);
+    }
+
+    // Throw an error for any octal literals found before a
+    // "use strict" directive. Strict mode will be set at parse
+    // time for any literals that occur after the directive.
+    if (this.state.strict && octalPositions.length) {
+      for (const pos of octalPositions) {
+        this.raise(pos, Errors.StrictOctalLiteral);
+      }
+    }
+
+    if (afterBlockParse) {
+      afterBlockParse.call(
+        this,
+        /* hasStrictModeDirective */ oldStrict !== null,
+      );
     }
 
     if (oldStrict === false) {
