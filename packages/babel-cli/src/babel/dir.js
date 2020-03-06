@@ -161,6 +161,9 @@ export default async function({
     makeDirSync(cliOptions.outDir);
 
     for (const filename of cliOptions.filenames) {
+      // compiledFiles is just incremented without reading its value, so we
+      // don't risk race conditions.
+      // eslint-disable-next-line require-atomic-updates
       compiledFiles += await handle(filename);
     }
 
@@ -188,7 +191,7 @@ export default async function({
       let processing = 0;
 
       ["add", "change"].forEach(function(type: string): void {
-        watcher.on(type, async function(filename: string): void {
+        watcher.on(type, async function(filename: string) {
           processing++;
 
           try {
