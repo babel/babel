@@ -1,6 +1,7 @@
 // @flow
 
 import defaults from "lodash/defaults";
+import debounce from "lodash/debounce";
 import { sync as makeDirSync } from "make-dir";
 import slash from "slash";
 import path from "path";
@@ -138,6 +139,20 @@ export default async function({
     }
   }
 
+  let compiledFiles = 0;
+  const logSuccess = debounce(
+    function() {
+      console.log(
+        `Successfully compiled ${compiledFiles} ${
+          compiledFiles !== 1 ? "files" : "file"
+        } with Babel.`,
+      );
+      compiledFiles = 0;
+    },
+    100,
+    { trailing: true },
+  );
+
   if (!cliOptions.skipInitialBuild) {
     if (cliOptions.deleteDirOnStart) {
       util.deleteDir(cliOptions.outDir);
@@ -145,17 +160,13 @@ export default async function({
 
     makeDirSync(cliOptions.outDir);
 
-    let compiledFiles = 0;
     for (const filename of cliOptions.filenames) {
       compiledFiles += await handle(filename);
     }
 
     if (!cliOptions.quiet) {
-      console.log(
-        `Successfully compiled ${compiledFiles} ${
-          compiledFiles !== 1 ? "files" : "file"
-        } with Babel.`,
-      );
+      logSuccess();
+      logSuccess.flush();
     }
   }
 
@@ -172,16 +183,29 @@ export default async function({
         },
       });
 
+      // This, alongside with debounce, allows us to only log
+      // when we are sure that all the files have been compiled.
+      let processing = 0;
+
       ["add", "change"].forEach(function(type: string): void {
-        watcher.on(type, function(filename: string): void {
-          handleFile(
-            filename,
-            filename === filenameOrDir
-              ? path.dirname(filenameOrDir)
-              : filenameOrDir,
-          ).catch(err => {
+        watcher.on(type, async function(filename: string): void {
+          processing++;
+
+          try {
+            await handleFile(
+              filename,
+              filename === filenameOrDir
+                ? path.dirname(filenameOrDir)
+                : filenameOrDir,
+            );
+
+            compiledFiles++;
+          } catch (err) {
             console.error(err);
-          });
+          }
+
+          processing--;
+          if (processing === 0 && !cliOptions.quiet) logSuccess();
         });
       });
     });
