@@ -224,8 +224,7 @@ export default class Tokenizer extends LocationParser {
     const curContext = this.curContext();
     if (!curContext || !curContext.preserveSpace) this.skipSpace();
 
-    this.state.containsOctal = false;
-    this.state.octalPosition = null;
+    this.state.octalPositions = [];
     this.state.start = this.state.pos;
     this.state.startLoc = this.state.curPosition();
     if (this.state.pos >= this.length) {
@@ -1033,11 +1032,7 @@ export default class Tokenizer extends LocationParser {
       this.input.charCodeAt(start) === charCodes.digit0;
     if (octal) {
       if (this.state.strict) {
-        this.raise(
-          start,
-          // todo: merge with Errors.StrictOctalLiteral
-          "Legacy octal literals are not allowed in strict mode",
-        );
+        this.raise(start, Errors.StrictOctalLiteral);
       }
       if (/[89]/.test(this.input.slice(start, this.state.pos))) {
         octal = false;
@@ -1296,11 +1291,11 @@ export default class Tokenizer extends LocationParser {
               return null;
             } else if (this.state.strict) {
               this.raise(codePos, Errors.StrictOctalLiteral);
-            } else if (!this.state.containsOctal) {
-              // These properties are only used to throw an error for an octal which occurs
-              // in a directive which occurs prior to a "use strict" directive.
-              this.state.containsOctal = true;
-              this.state.octalPosition = codePos;
+            } else {
+              // This property is used to throw an error for
+              // an octal literal in a directive that occurs prior
+              // to a "use strict" directive.
+              this.state.octalPositions.push(codePos);
             }
           }
 
