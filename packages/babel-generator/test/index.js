@@ -295,6 +295,15 @@ describe("generation", function() {
     expect(generated).toHaveProperty("map");
     expect(typeof generated.map).toBe("object");
   });
+
+  it("wraps around infer inside an array type", () => {
+    const type = t.tsArrayType(
+      t.tsInferType(t.tsTypeParameter(null, null, "T")),
+    );
+
+    const output = generate(type).code;
+    expect(output).toBe("(infer T)[]");
+  });
 });
 
 describe("programmatic generation", function() {
