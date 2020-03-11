@@ -2068,7 +2068,7 @@ export default class StatementParser extends ExpressionParser {
     }
     this.expectPlugin("moduleAttributes");
     const attrs = [];
-    let hasTypeAttribute = false;
+    const attributeMap = {};
     do {
       // we are trying to parse a node which has the following syntax
       // with type: "json"
@@ -2076,17 +2076,16 @@ export default class StatementParser extends ExpressionParser {
       const node = this.startNode();
       node.key = this.parseIdentifier(true);
 
-      // check if we have a type attribute
-      if (node.key.name === "type") {
-        // check if we do not have two duplicate type attributes defined
-        if (hasTypeAttribute) {
-          throw this.raise(
-            this.state.start,
-            Errors.ModuleAttributesWithRepeatedType,
-          );
-        }
-        hasTypeAttribute = true;
+      // check if we already have an entry for an attribute
+      // if a duplicate entry found, throw an error
+      if (attributeMap[node.key.name]) {
+        throw this.raise(
+          this.state.start,
+          Errors.ModuleAttributesWithDuplicateKeys,
+        );
       }
+      // set the attribute name entry in the attributeMap to true
+      attributeMap[node.key.name] = true;
       // check for colon
       this.expect(tt.colon);
       // check if the value set to the module attribute is a string as we only allow string literals
@@ -2102,7 +2101,7 @@ export default class StatementParser extends ExpressionParser {
     } while (this.eat(tt.comma));
 
     // check if module attributes do not contain any type key and throw an error
-    if (!hasTypeAttribute) {
+    if (!attributeMap["type"]) {
       throw this.raise(this.state.start, Errors.ModuleAttributesWithoutType);
     }
     return attrs;

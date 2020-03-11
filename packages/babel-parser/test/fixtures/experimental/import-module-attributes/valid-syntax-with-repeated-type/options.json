@@ -3,5 +3,5 @@
     "moduleAttributes"
   ],
   "sourceType": "module",
-  "throws": "Module attributes should include only one type (1:64)"
+  "throws": "Module attributes should not include duplicate keys (1:64)"
 }
