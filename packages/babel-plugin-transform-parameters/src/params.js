@@ -76,9 +76,14 @@ export default function convertFunctionParams(path, loose) {
           switch (node.type) {
             case "VariableDeclarator":
               if (node.init === null) {
-                // for (var x in {}); should not be removed
                 const declaration = redeclarator.parentPath;
-                if (!declaration.parentPath.isFor({ left: declaration.node })) {
+                // The following uninitialized var declarators should not be removed
+                // for (var x in {})
+                // for (var x;;)
+                if (
+                  !declaration.parentPath.isFor() ||
+                  declaration.parentPath.get("body") === declaration
+                ) {
                   redeclarator.remove();
                   break;
                 }
