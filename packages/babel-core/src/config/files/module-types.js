@@ -1,6 +1,7 @@
 import { isAsync, waitFor } from "../../gensync-utils/async";
 import type { Handler } from "gensync";
 import path from "path";
+import { pathToFileURL } from "url";
 
 let import_;
 try {
@@ -21,6 +22,7 @@ export default function* loadCjsOrMjsDefault(
       } catch (e) {
         if (e.code !== "ERR_REQUIRE_ESM") throw e;
       }
+    // fall through
     case "mjs":
       if (yield* isAsync()) {
         return yield* waitFor(loadMjsDefault(filepath));
@@ -54,6 +56,8 @@ async function loadMjsDefault(filepath: string) {
     );
   }
 
-  const module = await import_(filepath);
+  // import() expects URLs, not file paths.
+  // https://github.com/nodejs/node/issues/31710
+  const module = await import_(pathToFileURL(filepath));
   return module.default;
 }

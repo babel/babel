@@ -468,7 +468,7 @@ defineType("VoidTypeAnnotation", {
 
 // Enums
 defineType("EnumDeclaration", {
-  aliases: ["Declaration"],
+  aliases: ["Statement", "Declaration"],
   visitor: ["id", "body"],
   fields: {
     id: validateType("Identifier"),

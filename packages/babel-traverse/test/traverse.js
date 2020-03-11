@@ -196,7 +196,8 @@ describe("traverse", function() {
       expect(skipped).toBe(true);
     });
 
-    // Skipped: see the comment in the `NodePath.requque` method.
+    // Skipped: see the comment in the `NodePath.requeue` method.
+    // eslint-disable-next-line jest/no-disabled-tests
     it.skip("skipped and requeued paths should be visited", function() {
       const ast = parse("id");
 

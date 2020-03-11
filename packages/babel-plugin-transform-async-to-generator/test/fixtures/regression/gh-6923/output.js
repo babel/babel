@@ -3,17 +3,13 @@ function foo() {
 }
 
 function _foo() {
-  _foo = babelHelpers.asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee2() {
+  _foo = babelHelpers.asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
           /*#__PURE__*/
           (function () {
-            var _ref = babelHelpers.asyncToGenerator(
-            /*#__PURE__*/
-            regeneratorRuntime.mark(function _callee(number) {
+            var _ref = babelHelpers.asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(number) {
               var tmp;
               return regeneratorRuntime.wrap(function _callee$(_context) {
                 while (1) switch (_context.prev = _context.next) {

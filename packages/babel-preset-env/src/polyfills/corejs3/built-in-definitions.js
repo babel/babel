@@ -158,7 +158,7 @@ export const BuiltIns: ObjectMap<string[]> = {
   compositeKey: ["esnext.composite-key"],
   compositeSymbol: ["esnext.composite-symbol", ...SymbolDependencies],
   fetch: PromiseDependencies,
-  globalThis: ["esnext.global-this"],
+  globalThis: ["es.global-this", "esnext.global-this"],
   parseFloat: ["es.parse-float"],
   parseInt: ["es.parse-int"],
   queueMicrotask: ["web.queue-microtask"],
@@ -205,7 +205,7 @@ export const InstanceProperties: ObjectMap<string[]> = {
   lastItem: ["esnext.array.last-item"],
   link: ["es.string.link"],
   match: ["es.string.match", "es.regexp.exec"],
-  matchAll: ["esnext.string.match-all"],
+  matchAll: ["es.string.match-all", "esnext.string.match-all"],
   map: ["es.array.map"],
   name: ["es.function.name"],
   padEnd: ["es.string.pad-end"],
@@ -355,6 +355,7 @@ export const StaticProperties: ObjectMap<ObjectMap<string | string[]>> = {
   Promise: {
     all: PromiseDependenciesWithIterators,
     allSettled: [
+      "es.promise.all-settled",
       "esnext.promise.all-settled",
       ...PromiseDependenciesWithIterators,
     ],

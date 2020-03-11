@@ -7,7 +7,7 @@ import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
 import { types as tt, keywords as keywordTypes, type TokenType } from "./types";
 import { type TokContext, types as ct } from "./context";
-import LocationParser from "../parser/location";
+import LocationParser, { Errors } from "../parser/location";
 import { SourceLocation } from "../util/location";
 import {
   lineBreak,
@@ -111,7 +111,9 @@ export class Token {
 export default class Tokenizer extends LocationParser {
   // Forward-declarations
   // parser/util.js
+  /*::
   +unexpected: (pos?: ?number, messageOrType?: string | TokenType) => empty;
+  */
 
   isLookahead: boolean;
 
@@ -222,8 +224,7 @@ export default class Tokenizer extends LocationParser {
     const curContext = this.curContext();
     if (!curContext || !curContext.preserveSpace) this.skipSpace();
 
-    this.state.containsOctal = false;
-    this.state.octalPosition = null;
+    this.state.octalPositions = [];
     this.state.start = this.state.pos;
     this.state.startLoc = this.state.curPosition();
     if (this.state.pos >= this.length) {
@@ -231,8 +232,9 @@ export default class Tokenizer extends LocationParser {
       return;
     }
 
-    if (curContext.override) {
-      curContext.override(this);
+    const override = curContext?.override;
+    if (override) {
+      override(this);
     } else {
       this.getTokenFromCode(this.input.codePointAt(this.state.pos));
     }
@@ -263,7 +265,7 @@ export default class Tokenizer extends LocationParser {
     const startLoc = this.state.curPosition();
     const start = this.state.pos;
     const end = this.input.indexOf("*/", this.state.pos + 2);
-    if (end === -1) throw this.raise(start, "Unterminated comment");
+    if (end === -1) throw this.raise(start, Errors.UnterminatedComment);
 
     this.state.pos = end + 2;
     lineBreakG.lastIndex = start;
@@ -332,7 +334,7 @@ export default class Tokenizer extends LocationParser {
           ) {
             ++this.state.pos;
           }
-
+        // fall through
         case charCodes.lineFeed:
         case charCodes.lineSeparator:
         case charCodes.paragraphSeparator:
@@ -399,7 +401,7 @@ export default class Tokenizer extends LocationParser {
     const nextPos = this.state.pos + 1;
     const next = this.input.charCodeAt(nextPos);
     if (next >= charCodes.digit0 && next <= charCodes.digit9) {
-      throw this.raise(this.state.pos, "Unexpected digit after hash token");
+      throw this.raise(this.state.pos, Errors.UnexpectedDigitAfterHash);
     }
 
     if (
@@ -409,7 +411,7 @@ export default class Tokenizer extends LocationParser {
     ) {
       this.finishOp(tt.hash, 1);
     } else {
-      throw this.raise(this.state.pos, "Unexpected character '#'");
+      throw this.raise(this.state.pos, Errors.InvalidOrUnexpectedToken, "#");
     }
   }
 
@@ -736,7 +738,7 @@ export default class Tokenizer extends LocationParser {
         }
       }
       // Anything else beginning with a digit is an integer, octal
-      // number, or float.
+      // number, or float. (fall through)
       case charCodes.digit1:
       case charCodes.digit2:
       case charCodes.digit3:
@@ -819,7 +821,8 @@ export default class Tokenizer extends LocationParser {
 
     throw this.raise(
       this.state.pos,
-      `Unexpected character '${String.fromCodePoint(code)}'`,
+      Errors.InvalidOrUnexpectedToken,
+      String.fromCodePoint(code),
     );
   }
 
@@ -834,11 +837,11 @@ export default class Tokenizer extends LocationParser {
     let escaped, inClass;
     for (;;) {
       if (this.state.pos >= this.length) {
-        throw this.raise(start, "Unterminated regular expression");
+        throw this.raise(start, Errors.UnterminatedRegExp);
       }
       const ch = this.input.charAt(this.state.pos);
       if (lineBreak.test(ch)) {
-        throw this.raise(start, "Unterminated regular expression");
+        throw this.raise(start, Errors.UnterminatedRegExp);
       }
       if (escaped) {
         escaped = false;
@@ -865,13 +868,13 @@ export default class Tokenizer extends LocationParser {
 
       if (VALID_REGEX_FLAGS.has(char)) {
         if (mods.indexOf(char) > -1) {
-          this.raise(this.state.pos + 1, "Duplicate regular expression flag");
+          this.raise(this.state.pos + 1, Errors.DuplicateRegExpFlags);
         }
       } else if (
         isIdentifierChar(charCode) ||
         charCode === charCodes.backslash
       ) {
-        this.raise(this.state.pos + 1, "Invalid regular expression flag");
+        this.raise(this.state.pos + 1, Errors.MalformedRegExpFlags);
       } else {
         break;
       }
@@ -927,26 +930,17 @@ export default class Tokenizer extends LocationParser {
           const prev = this.input.charCodeAt(this.state.pos - 1);
           const next = this.input.charCodeAt(this.state.pos + 1);
           if (allowedSiblings.indexOf(next) === -1) {
-            this.raise(
-              this.state.pos,
-              "A numeric separator is only allowed between two digits",
-            );
+            this.raise(this.state.pos, Errors.UnexpectedNumericSeparator);
           } else if (
             forbiddenSiblings.indexOf(prev) > -1 ||
             forbiddenSiblings.indexOf(next) > -1 ||
             Number.isNaN(next)
           ) {
-            this.raise(
-              this.state.pos,
-              "A numeric separator is only allowed between two digits",
-            );
+            this.raise(this.state.pos, Errors.UnexpectedNumericSeparator);
           }
 
           if (!allowNumSeparator) {
-            this.raise(
-              this.state.pos,
-              "Numeric separators are not allowed inside unicode escape sequences or hex escape sequences",
-            );
+            this.raise(this.state.pos, Errors.NumericSeparatorInEscapeSequence);
           }
 
           // Ignore this _ character
@@ -970,10 +964,7 @@ export default class Tokenizer extends LocationParser {
 
         if (this.options.errorRecovery && val <= 9) {
           val = 0;
-          this.raise(
-            this.state.start + i + 2,
-            "Expected number in radix " + radix,
-          );
+          this.raise(this.state.start + i + 2, Errors.InvalidDigit, radix);
         } else if (forceLen) {
           val = 0;
           invalid = true;
@@ -1002,7 +993,7 @@ export default class Tokenizer extends LocationParser {
     this.state.pos += 2; // 0x
     const val = this.readInt(radix);
     if (val == null) {
-      this.raise(this.state.start + 2, "Expected number in radix " + radix);
+      this.raise(this.state.start + 2, Errors.InvalidDigit, radix);
     }
 
     if (this.hasPlugin("bigInt")) {
@@ -1013,7 +1004,7 @@ export default class Tokenizer extends LocationParser {
     }
 
     if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {
-      throw this.raise(this.state.pos, "Identifier directly after number");
+      throw this.raise(this.state.pos, Errors.NumberIdentifier);
     }
 
     if (isBigInt) {
@@ -1034,17 +1025,14 @@ export default class Tokenizer extends LocationParser {
     let isNonOctalDecimalInt = false;
 
     if (!startsWithDot && this.readInt(10) === null) {
-      this.raise(start, "Invalid number");
+      this.raise(start, Errors.InvalidNumber);
     }
     let octal =
       this.state.pos - start >= 2 &&
       this.input.charCodeAt(start) === charCodes.digit0;
     if (octal) {
       if (this.state.strict) {
-        this.raise(
-          start,
-          "Legacy octal literals are not allowed in strict mode",
-        );
+        this.raise(start, Errors.StrictOctalLiteral);
       }
       if (/[89]/.test(this.input.slice(start, this.state.pos))) {
         octal = false;
@@ -1079,10 +1067,7 @@ export default class Tokenizer extends LocationParser {
         .slice(start, this.state.pos)
         .indexOf("_");
       if (underscorePos > 0) {
-        this.raise(
-          underscorePos + start,
-          "Numeric separator can not be used after leading 0",
-        );
+        this.raise(underscorePos + start, Errors.ZeroDigitNumericSeparator);
       }
     }
 
@@ -1099,7 +1084,7 @@ export default class Tokenizer extends LocationParser {
     }
 
     if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {
-      throw this.raise(this.state.pos, "Identifier directly after number");
+      throw this.raise(this.state.pos, Errors.NumberIdentifier);
     }
 
     // remove "_" for numeric literal separator, and "n" for BigInts
@@ -1130,7 +1115,7 @@ export default class Tokenizer extends LocationParser {
       ++this.state.pos;
       if (code !== null && code > 0x10ffff) {
         if (throwOnInvalid) {
-          this.raise(codePos, "Code point out of bounds");
+          this.raise(codePos, Errors.InvalidCodePoint);
         } else {
           return null;
         }
@@ -1146,7 +1131,7 @@ export default class Tokenizer extends LocationParser {
       chunkStart = ++this.state.pos;
     for (;;) {
       if (this.state.pos >= this.length) {
-        throw this.raise(this.state.start, "Unterminated string constant");
+        throw this.raise(this.state.start, Errors.UnterminatedString);
       }
       const ch = this.input.charCodeAt(this.state.pos);
       if (ch === quote) break;
@@ -1163,7 +1148,7 @@ export default class Tokenizer extends LocationParser {
         ++this.state.curLine;
         this.state.lineStart = this.state.pos;
       } else if (isNewLine(ch)) {
-        throw this.raise(this.state.start, "Unterminated string constant");
+        throw this.raise(this.state.start, Errors.UnterminatedString);
       } else {
         ++this.state.pos;
       }
@@ -1180,7 +1165,7 @@ export default class Tokenizer extends LocationParser {
       containsInvalid = false;
     for (;;) {
       if (this.state.pos >= this.length) {
-        throw this.raise(this.state.start, "Unterminated template");
+        throw this.raise(this.state.start, Errors.UnterminatedTemplate);
       }
       const ch = this.input.charCodeAt(this.state.pos);
       if (
@@ -1221,6 +1206,7 @@ export default class Tokenizer extends LocationParser {
             if (this.input.charCodeAt(this.state.pos) === charCodes.lineFeed) {
               ++this.state.pos;
             }
+          // fall through
           case charCodes.lineFeed:
             out += "\n";
             break;
@@ -1268,9 +1254,11 @@ export default class Tokenizer extends LocationParser {
         if (this.input.charCodeAt(this.state.pos) === charCodes.lineFeed) {
           ++this.state.pos;
         }
+      // fall through
       case charCodes.lineFeed:
         this.state.lineStart = this.state.pos;
         ++this.state.curLine;
+      // fall through
       case charCodes.lineSeparator:
       case charCodes.paragraphSeparator:
         return "";
@@ -1279,6 +1267,7 @@ export default class Tokenizer extends LocationParser {
         if (inTemplate) {
           return null;
         }
+      // fall through
       default:
         if (ch >= charCodes.digit0 && ch <= charCodes.digit7) {
           const codePos = this.state.pos - 1;
@@ -1301,12 +1290,12 @@ export default class Tokenizer extends LocationParser {
             if (inTemplate) {
               return null;
             } else if (this.state.strict) {
-              this.raise(codePos, "Octal literal in strict mode");
-            } else if (!this.state.containsOctal) {
-              // These properties are only used to throw an error for an octal which occurs
-              // in a directive which occurs prior to a "use strict" directive.
-              this.state.containsOctal = true;
-              this.state.octalPosition = codePos;
+              this.raise(codePos, Errors.StrictOctalLiteral);
+            } else {
+              // This property is used to throw an error for
+              // an octal literal in a directive that occurs prior
+              // to a "use strict" directive.
+              this.state.octalPositions.push(codePos);
             }
           }
 
@@ -1328,7 +1317,7 @@ export default class Tokenizer extends LocationParser {
     const n = this.readInt(16, len, forceLen, false);
     if (n === null) {
       if (throwOnInvalid) {
-        this.raise(codePos, "Bad character escape sequence");
+        this.raise(codePos, Errors.InvalidEscapeSequence);
       } else {
         this.state.pos = codePos - 1;
       }
@@ -1363,10 +1352,7 @@ export default class Tokenizer extends LocationParser {
           this.state.pos === start ? isIdentifierStart : isIdentifierChar;
 
         if (this.input.charCodeAt(++this.state.pos) !== charCodes.lowercaseU) {
-          this.raise(
-            this.state.pos,
-            "Expecting Unicode escape sequence \\uXXXX",
-          );
+          this.raise(this.state.pos, Errors.MissingUnicodeEscape);
           continue;
         }
 
@@ -1374,7 +1360,7 @@ export default class Tokenizer extends LocationParser {
         const esc = this.readCodePoint(true);
         if (esc !== null) {
           if (!identifierCheck(esc)) {
-            this.raise(escStart, "Invalid Unicode escape");
+            this.raise(escStart, Errors.EscapedCharNotAnIdentifier);
           }
 
           word += String.fromCodePoint(esc);
@@ -1403,7 +1389,7 @@ export default class Tokenizer extends LocationParser {
       this.state.isIterator &&
       (!this.isIterator(word) || !this.state.inType)
     ) {
-      this.raise(this.state.pos, `Invalid identifier ${word}`);
+      this.raise(this.state.pos, Errors.InvalidIdentifier, word);
     }
 
     this.finishToken(type, word);
@@ -1412,7 +1398,7 @@ export default class Tokenizer extends LocationParser {
   checkKeywordEscapes(): void {
     const kw = this.state.type.keyword;
     if (kw && this.state.containsEsc) {
-      this.raise(this.state.start, `Escape sequence in keyword ${kw}`);
+      this.raise(this.state.start, Errors.InvalidEscapedReservedWord, kw);
     }
   }
 

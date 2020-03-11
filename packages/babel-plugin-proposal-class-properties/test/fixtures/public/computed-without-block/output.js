@@ -3,9 +3,7 @@ var createClass = k => {
 
   var _k;
 
-  return _temp = (_k = k(),
-  /*#__PURE__*/
-  function () {
+  return _temp = (_k = k(), /*#__PURE__*/function () {
     "use strict";
 
     function _class2() {

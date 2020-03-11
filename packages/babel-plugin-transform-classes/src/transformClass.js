@@ -6,6 +6,7 @@ import ReplaceSupers, {
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import * as defineMap from "@babel/helper-define-map";
 import { traverse, template, types as t } from "@babel/core";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 type ReadonlySet<T> = Set<T> | { has(val: T): boolean };
 
@@ -565,11 +566,14 @@ export default function transformClass(
     const closureArgs = [];
 
     if (classState.isDerived) {
-      const arg = classState.extendsNative
-        ? t.callExpression(classState.file.addHelper("wrapNativeSuper"), [
-            t.cloneNode(superName),
-          ])
-        : t.cloneNode(superName);
+      let arg = t.cloneNode(superName);
+      if (classState.extendsNative) {
+        arg = t.callExpression(classState.file.addHelper("wrapNativeSuper"), [
+          arg,
+        ]);
+        annotateAsPure(arg);
+      }
+
       const param = classState.scope.generateUidIdentifierBasedOnNode(
         superName,
       );

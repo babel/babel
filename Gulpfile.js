@@ -5,13 +5,11 @@ const through = require("through2");
 const chalk = require("chalk");
 const newer = require("gulp-newer");
 const babel = require("gulp-babel");
-const gulpWatch = require("gulp-watch");
 const fancyLog = require("fancy-log");
 const filter = require("gulp-filter");
 const gulp = require("gulp");
 const path = require("path");
 const rollup = require("rollup");
-const rollupAlias = require("@rollup/plugin-alias");
 const rollupBabel = require("rollup-plugin-babel");
 const rollupBabelSource = require("./scripts/rollup-plugin-babel-source");
 const rollupCommonJs = require("rollup-plugin-commonjs");
@@ -88,9 +86,7 @@ function buildRollup(packages) {
     packages.map(
       ({ src, format, dest, name, filename, version = babelVersion }) => {
         const extraPlugins = [];
-        let inputExternal = undefined,
-          outputGlobals = undefined,
-          nodeResolveBrowser = false,
+        let nodeResolveBrowser = false,
           babelEnvName = "rollup";
         switch (src) {
           case "packages/babel-standalone":
@@ -103,39 +99,6 @@ function buildRollup(packages) {
                 })
               );
             }
-            break;
-          case "packages/babel-preset-env-standalone":
-            nodeResolveBrowser = true;
-            babelEnvName = "standalone";
-            if (minify) {
-              extraPlugins.push(
-                rollupTerser({
-                  include: /^.+\.min\.js$/,
-                })
-              );
-            }
-            inputExternal = ["@babel/standalone"];
-            outputGlobals = {
-              "@babel/standalone": "Babel",
-            };
-            extraPlugins.push(
-              rollupAlias({
-                entries: [
-                  {
-                    find: "./available-plugins",
-                    replacement: require.resolve(
-                      path.join(__dirname, src, "./src/available-plugins")
-                    ),
-                  },
-                  {
-                    find: "caniuse-lite/data/regions",
-                    replacement: require.resolve(
-                      path.join(__dirname, src, "./src/caniuse-lite-regions")
-                    ),
-                  },
-                ],
-              })
-            );
             break;
         }
         // If this build is part of a pull request, include the pull request number in
@@ -150,7 +113,6 @@ function buildRollup(packages) {
         return rollup
           .rollup({
             input,
-            external: inputExternal,
             plugins: [
               ...extraPlugins,
               rollupBabelSource(),
@@ -208,7 +170,6 @@ function buildRollup(packages) {
                 file: outputFile,
                 format,
                 name,
-                globals: outputGlobals,
                 sourcemap: sourcemap,
               })
               .then(() => {
@@ -232,7 +193,6 @@ function buildRollup(packages) {
                   file: outputFile.replace(/\.js$/, ".min.js"),
                   format,
                   name,
-                  globals: outputGlobals,
                   sourcemap: sourcemap,
                 });
               });
@@ -262,23 +222,8 @@ const standaloneBundle = [
   },
 ];
 
-const presetEnvStandaloneBundle = [
-  {
-    src: "packages/babel-preset-env-standalone",
-    format: "umd",
-    name: "BabelPresetEnv",
-    filename: "babel-preset-env.js",
-    dest: "",
-    version: require("./packages/babel-preset-env/package").version,
-  },
-];
-
 gulp.task("build-rollup", () => buildRollup(libBundles));
 gulp.task("build-babel-standalone", () => buildRollup(standaloneBundle));
-
-gulp.task("build-babel-preset-env-standalone", () =>
-  buildRollup(presetEnvStandaloneBundle)
-);
 
 gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
 gulp.task("build-babel-types", () =>
@@ -293,10 +238,6 @@ gulp.task("build-no-bundle", () => buildBabel());
 gulp.task(
   "watch",
   gulp.series("build-no-bundle", function watch() {
-    gulpWatch(
-      defaultSourcesGlob,
-      { debounceDelay: 200 },
-      gulp.task("build-no-bundle")
-    );
+    gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle"));
   })
 );

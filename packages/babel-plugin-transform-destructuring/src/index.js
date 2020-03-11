@@ -599,6 +599,7 @@ export default declare((api, options) => {
         }
 
         path.replaceWithMultiple(nodes);
+        path.scope.crawl();
       },
 
       VariableDeclaration(path) {

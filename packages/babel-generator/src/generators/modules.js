@@ -99,7 +99,7 @@ function ExportDeclaration(node: Object) {
 
     // print "special" specifiers first
     let hasSpecial = false;
-    while (true) {
+    for (;;) {
       const first = specifiers[0];
       if (
         t.isExportDefaultSpecifier(first) ||
@@ -149,7 +149,7 @@ export function ImportDeclaration(node: Object) {
   const specifiers = node.specifiers.slice(0);
   if (specifiers && specifiers.length) {
     // print "special" specifiers first
-    while (true) {
+    for (;;) {
       const first = specifiers[0];
       if (
         t.isImportDefaultSpecifier(first) ||

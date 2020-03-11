@@ -1,7 +1,7 @@
 // @flow
 
 import corejs3Polyfills from "core-js-compat/data";
-import corejs3ShippedProposalsList from "./shipped-proposals";
+import corejs3ShippedProposalsList from "@babel/compat-data/corejs3-shipped-proposals";
 import getModulesListForTargetVersion from "core-js-compat/get-modules-list-for-target-version";
 import { filterItems } from "@babel/helper-compilation-targets";
 import {
@@ -39,7 +39,7 @@ const corejs3PolyfillsWithoutProposals = Object.keys(corejs3Polyfills)
     return memo;
   }, {});
 
-const corejs3PolyfillsWithShippedProposals = corejs3ShippedProposalsList.reduce(
+const corejs3PolyfillsWithShippedProposals = (corejs3ShippedProposalsList: string[]).reduce(
   (memo, key) => {
     memo[key] = corejs3Polyfills[key];
     return memo;

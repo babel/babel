@@ -4,11 +4,10 @@ import { types as tt, type TokenType } from "../tokenizer/types";
 import Tokenizer from "../tokenizer";
 import State from "../tokenizer/state";
 import type { Node } from "../types";
-import { lineBreak, skipWhiteSpace } from "../util/whitespace";
+import { lineBreak } from "../util/whitespace";
 import { isIdentifierChar } from "../util/identifier";
 import * as charCodes from "charcodes";
-
-const literal = /^('|")((?:\\?.)*?)\1/;
+import { Errors } from "./location";
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
   node: Node,
@@ -152,10 +151,10 @@ export default class UtilParser extends Tokenizer {
 
   expectPlugin(name: string, pos?: ?number): true {
     if (!this.hasPlugin(name)) {
-      throw this.raise(
+      throw this.raiseWithData(
         pos != null ? pos : this.state.start,
+        { missingPlugin: [name] },
         `This experimental syntax requires enabling the parser plugin: '${name}'`,
-        { missingPluginNames: [name] },
       );
     }
 
@@ -164,12 +163,12 @@ export default class UtilParser extends Tokenizer {
 
   expectOnePlugin(names: Array<string>, pos?: ?number): void {
     if (!names.some(n => this.hasPlugin(n))) {
-      throw this.raise(
+      throw this.raiseWithData(
         pos != null ? pos : this.state.start,
+        { missingPlugin: names },
         `This experimental syntax requires enabling one of the following parser plugin(s): '${names.join(
           ", ",
         )}'`,
-        { missingPluginNames: names },
       );
     }
   }
@@ -190,29 +189,6 @@ export default class UtilParser extends Tokenizer {
         "Await cannot be used as name inside an async function",
       );
     }
-  }
-
-  strictDirective(start: number): boolean {
-    for (;;) {
-      // Try to find string literal.
-      skipWhiteSpace.lastIndex = start;
-      // $FlowIgnore
-      start += skipWhiteSpace.exec(this.input)[0].length;
-      const match = literal.exec(this.input.slice(start));
-      if (!match) break;
-      if (match[2] === "use strict") return true;
-      start += match[0].length;
-
-      // Skip semicolon, if any.
-      skipWhiteSpace.lastIndex = start;
-      // $FlowIgnore
-      start += skipWhiteSpace.exec(this.input)[0].length;
-      if (this.input[start] === ";") {
-        start++;
-      }
-    }
-
-    return false;
   }
 
   // tryParse will clone parser state.
@@ -280,7 +256,7 @@ export default class UtilParser extends Tokenizer {
       this.unexpected(shorthandAssign);
     }
     if (doubleProto >= 0) {
-      this.raise(doubleProto, "Redefinition of __proto__ property");
+      this.raise(doubleProto, Errors.DuplicateProto);
     }
   }
 }

@@ -11,6 +11,7 @@ import { generateRegexpuOptions } from "./util";
 import pkg from "../package.json";
 import { types as t } from "@babel/core";
 import { pullFlag } from "@babel/helper-regex";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 // Note: Versions are represented as an integer. e.g. 7.1.5 is represented
 //       as 70000100005. This method is easier than using a semver-parsing
@@ -68,12 +69,13 @@ export function createRegExpFeaturePlugin({ name, feature, options = {} }) {
           runtime &&
           !isRegExpTest(path)
         ) {
-          path.replaceWith(
-            t.callExpression(this.addHelper("wrapRegExp"), [
-              node,
-              t.valueToNode(namedCaptureGroups),
-            ]),
-          );
+          const call = t.callExpression(this.addHelper("wrapRegExp"), [
+            node,
+            t.valueToNode(namedCaptureGroups),
+          ]);
+          annotateAsPure(call);
+
+          path.replaceWith(call);
         }
         if (hasFeature(features, FEATURES.unicodeFlag)) {
           pullFlag(node, "u");

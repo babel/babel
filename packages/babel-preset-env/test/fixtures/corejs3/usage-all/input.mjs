@@ -24,3 +24,6 @@ const foo = new Promise((resolve) => {
 queueMicrotask(() => globalThis);
 
 Observable.from(10);
+
+Promise.allSettled([]);
+S.matchAll();

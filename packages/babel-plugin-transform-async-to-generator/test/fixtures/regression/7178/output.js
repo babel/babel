@@ -4,9 +4,7 @@ function action() {
   return _action.apply(this, arguments);
 }
 
-var _ref =
-/*#__PURE__*/
-React.createElement(Contact, {
+var _ref = /*#__PURE__*/React.createElement(Contact, {
   title: title
 });
 

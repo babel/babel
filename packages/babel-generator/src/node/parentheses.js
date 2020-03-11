@@ -157,6 +157,10 @@ export function TSUnionType(node: Object, parent: Object): boolean {
 
 export { TSUnionType as TSIntersectionType };
 
+export function TSInferType(node: Object, parent: Object): boolean {
+  return t.isTSArrayType(parent) || t.isTSOptionalType(parent);
+}
+
 export function BinaryExpression(node: Object, parent: Object): boolean {
   // let i = (1 in []);
   // for ((1 in []);;);
@@ -255,7 +259,17 @@ export function OptionalMemberExpression(
   node: Object,
   parent: Object,
 ): boolean {
-  return t.isCallExpression(parent) || t.isMemberExpression(parent);
+  return (
+    t.isCallExpression(parent, { callee: node }) ||
+    t.isMemberExpression(parent, { object: node })
+  );
+}
+
+export function OptionalCallExpression(node: Object, parent: Object): boolean {
+  return (
+    t.isCallExpression(parent, { callee: node }) ||
+    t.isMemberExpression(parent, { object: node })
+  );
 }
 
 export function AssignmentExpression(node: Object): boolean {

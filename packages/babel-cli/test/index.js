@@ -94,20 +94,21 @@ const assertTest = function(stdout, stderr, opts, cwd) {
     const actualFiles = readDir(tmpLoc, fileFilter);
 
     Object.keys(actualFiles).forEach(function(filename) {
-      if (
-        // saveInFiles always creates an empty .babelrc, so lets exclude for now
-        filename !== ".babelrc" &&
-        filename !== ".babelignore" &&
-        !Object.prototype.hasOwnProperty.call(opts.inFiles, filename)
-      ) {
-        const expected = opts.outFiles[filename];
-        const actual = actualFiles[filename];
+      try {
+        if (
+          // saveInFiles always creates an empty .babelrc, so lets exclude for now
+          filename !== ".babelrc" &&
+          filename !== ".babelignore" &&
+          !Object.prototype.hasOwnProperty.call(opts.inFiles, filename)
+        ) {
+          const expected = opts.outFiles[filename];
+          const actual = actualFiles[filename];
 
-        expect(expected).not.toBeUndefined();
-
-        if (expected) {
-          expect(actual).toBe(expected);
+          expect(actual).toBe(expected ?? "");
         }
+      } catch (e) {
+        e.message += "\n at " + filename;
+        throw e;
       }
     });
 

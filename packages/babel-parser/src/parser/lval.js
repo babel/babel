@@ -6,13 +6,13 @@ import type {
   TSParameterProperty,
   Decorator,
   Expression,
-  Identifier,
   Node,
-  ObjectExpression,
-  ObjectPattern,
   Pattern,
   RestElement,
   SpreadElement,
+  /*:: Identifier, */
+  /*:: ObjectExpression, */
+  /*:: ObjectPattern, */
 } from "../types";
 import type { Pos, Position } from "../util/location";
 import {
@@ -22,6 +22,7 @@ import {
 import { NodeUtils } from "./node";
 import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
+import { Errors } from "./location";
 
 const unwrapParenthesizedExpression = (node: Node) => {
   return node.type === "ParenthesizedExpression"
@@ -31,6 +32,7 @@ const unwrapParenthesizedExpression = (node: Node) => {
 
 export default class LValParser extends NodeUtils {
   // Forward-declaration: defined in expression.js
+  /*::
   +parseIdentifier: (liberal?: boolean) => Identifier;
   +parseMaybeAssign: (
     noIn?: ?boolean,
@@ -42,8 +44,11 @@ export default class LValParser extends NodeUtils {
     isPattern: boolean,
     refExpressionErrors?: ?ExpressionErrors,
   ) => T;
+  */
   // Forward-declaration: defined in statement.js
+  /*::
   +parseDecorator: () => Decorator;
+  */
 
   // Convert existing expression atom to assignable pattern
   // if possible.
@@ -58,7 +63,7 @@ export default class LValParser extends NodeUtils {
         parenthesized.type !== "Identifier" &&
         parenthesized.type !== "MemberExpression"
       ) {
-        this.raise(node.start, "Invalid parenthesized assignment pattern");
+        this.raise(node.start, Errors.InvalidParenthesizedAssignment);
       }
     }
 
@@ -110,10 +115,7 @@ export default class LValParser extends NodeUtils {
 
       case "AssignmentExpression":
         if (node.operator !== "=") {
-          this.raise(
-            node.left.end,
-            "Only '=' operator can be used for specifying default value.",
-          );
+          this.raise(node.left.end, Errors.MissingEqInAssignment);
         }
 
         node.type = "AssignmentPattern";
@@ -136,8 +138,8 @@ export default class LValParser extends NodeUtils {
     if (prop.type === "ObjectMethod") {
       const error =
         prop.kind === "get" || prop.kind === "set"
-          ? "Object pattern can't contain getter or setter"
-          : "Object pattern can't contain methods";
+          ? Errors.PatternHasAccessor
+          : Errors.PatternHasMethod;
 
       this.raise(prop.key.start, error);
     } else if (prop.type === "SpreadElement" && !isLast) {
@@ -284,10 +286,7 @@ export default class LValParser extends NodeUtils {
       } else {
         const decorators = [];
         if (this.match(tt.at) && this.hasPlugin("decorators")) {
-          this.raise(
-            this.state.start,
-            "Stage 2 decorators cannot be used to decorate parameters",
-          );
+          this.raise(this.state.start, Errors.UnsupportedParameterDecorator);
         }
         while (this.match(tt.at)) {
           decorators.push(this.parseDecorator());
@@ -357,9 +356,10 @@ export default class LValParser extends NodeUtils {
         ) {
           this.raise(
             expr.start,
-            `${bindingType === BIND_NONE ? "Assigning to" : "Binding"} '${
-              expr.name
-            }' in strict mode`,
+            bindingType === BIND_NONE
+              ? Errors.StrictEvalArguments
+              : Errors.StrictEvalArgumentsBinding,
+            expr.name,
           );
         }
 
@@ -378,16 +378,13 @@ export default class LValParser extends NodeUtils {
           const key = `_${expr.name}`;
 
           if (checkClashes[key]) {
-            this.raise(expr.start, "Argument name clash");
+            this.raise(expr.start, Errors.ParamDupe);
           } else {
             checkClashes[key] = true;
           }
         }
         if (disallowLetBinding && expr.name === "let") {
-          this.raise(
-            expr.start,
-            "'let' is not allowed to be used as a name in 'let' or 'const' declarations.",
-          );
+          this.raise(expr.start, Errors.LetInLexicalBinding);
         }
         if (!(bindingType & BIND_NONE)) {
           this.scope.declareName(expr.name, bindingType, expr.start);
@@ -396,7 +393,7 @@ export default class LValParser extends NodeUtils {
 
       case "MemberExpression":
         if (bindingType !== BIND_NONE) {
-          this.raise(expr.start, "Binding member expression");
+          this.raise(expr.start, Errors.InvalidPropertyBindingPattern);
         }
         break;
 
@@ -460,15 +457,13 @@ export default class LValParser extends NodeUtils {
         break;
 
       default: {
-        const message =
-          (bindingType === BIND_NONE
-            ? "Invalid"
-            : /* istanbul ignore next */ "Binding invalid") +
-          " left-hand side" +
-          (contextDescription
-            ? " in " + contextDescription
-            : /* istanbul ignore next */ "expression");
-        this.raise(expr.start, message);
+        this.raise(
+          expr.start,
+          bindingType === BIND_NONE
+            ? Errors.InvalidLhs
+            : Errors.InvalidLhsBinding,
+          contextDescription,
+        );
       }
     }
   }
@@ -478,7 +473,7 @@ export default class LValParser extends NodeUtils {
       node.argument.type !== "Identifier" &&
       node.argument.type !== "MemberExpression"
     ) {
-      this.raise(node.argument.start, "Invalid rest operator's argument");
+      this.raise(node.argument.start, Errors.InvalidRestAssignmentPattern);
     }
   }
 
@@ -493,10 +488,10 @@ export default class LValParser extends NodeUtils {
   }
 
   raiseRestNotLast(pos: number) {
-    throw this.raise(pos, `Rest element must be last element`);
+    throw this.raise(pos, Errors.ElementAfterRest);
   }
 
   raiseTrailingCommaAfterRest(pos: number) {
-    this.raise(pos, `Unexpected trailing comma after rest element`);
+    this.raise(pos, Errors.RestTrailingComma);
   }
 }

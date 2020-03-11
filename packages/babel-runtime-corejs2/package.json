@@ -1,6 +1,6 @@
 {
   "name": "@babel/runtime-corejs2",
-  "version": "7.8.3",
+  "version": "7.8.7",
   "description": "babel's modular runtime helpers with core-js@2 polyfilling",
   "license": "MIT",
   "publishConfig": {
@@ -10,9 +10,9 @@
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "dependencies": {
     "core-js": "^2.6.5",
-    "regenerator-runtime": "^0.13.2"
+    "regenerator-runtime": "^0.13.4"
   },
   "devDependencies": {
-    "@babel/helpers": "^7.8.3"
+    "@babel/helpers": "^7.8.4"
   }
 }

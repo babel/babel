@@ -6,9 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports["default"] = _default;
 
 function _default() {
-  return (
-    /*#__PURE__*/
-    function () {
+  return (/*#__PURE__*/function () {
       function Select() {
         babelHelpers.classCallCheck(this, Select);
       }

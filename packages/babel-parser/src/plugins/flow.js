@@ -12,16 +12,17 @@ import { types as tc } from "../tokenizer/context";
 import * as charCodes from "charcodes";
 import { isIteratorStart } from "../util/identifier";
 import {
-  functionFlags,
   type BindingTypes,
   BIND_NONE,
   BIND_LEXICAL,
   BIND_VAR,
   BIND_FUNCTION,
   SCOPE_ARROW,
+  SCOPE_FUNCTION,
   SCOPE_OTHER,
 } from "../util/scopeflags";
 import type { ExpressionErrors } from "../parser/util";
+import { Errors } from "../parser/location";
 
 const reservedTypes = new Set([
   "_",
@@ -41,6 +42,80 @@ const reservedTypes = new Set([
   "typeof",
   "void",
 ]);
+
+/* eslint sort-keys: "error" */
+// The Errors key follows https://github.com/facebook/flow/blob/master/src/parser/parse_error.ml unless it does not exist
+const FlowErrors = Object.freeze({
+  AmbiguousConditionalArrow:
+    "Ambiguous expression: wrap the arrow functions in parentheses to disambiguate.",
+  AmbiguousDeclareModuleKind:
+    "Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module",
+  AssignReservedType: "Cannot overwrite reserved type %0",
+  DuplicateDeclareModuleExports: "Duplicate `declare module.exports` statement",
+  EnumBooleanMemberNotInitialized:
+    "Boolean enum members need to be initialized. Use either `%0 = true,` or `%0 = false,` in enum `%1`.",
+  EnumDuplicateMemberName:
+    "Enum member names need to be unique, but the name `%0` has already been used before in enum `%1`.",
+  EnumInconsistentMemberValues:
+    "Enum `%0` has inconsistent member initializers. Either use no initializers, or consistently use literals (either booleans, numbers, or strings) for all member initializers.",
+  EnumInvalidExplicitType:
+    "Enum type `%1` is not valid. Use one of `boolean`, `number`, `string`, or `symbol` in enum `%0`.",
+  EnumInvalidExplicitTypeUnknownSupplied:
+    "Supplied enum type is not valid. Use one of `boolean`, `number`, `string`, or `symbol` in enum `%0`.",
+  EnumInvalidMemberInitializerPrimaryType:
+    "Enum `%0` has type `%2`, so the initializer of `%1` needs to be a %2 literal.",
+  EnumInvalidMemberInitializerSymbolType:
+    "Symbol enum members cannot be initialized. Use `%1,` in enum `%0`.",
+  EnumInvalidMemberInitializerUnknownType:
+    "The enum member initializer for `%1` needs to be a literal (either a boolean, number, or string) in enum `%0`.",
+  EnumInvalidMemberName:
+    "Enum member names cannot start with lowercase 'a' through 'z'. Instead of using `%0`, consider using `%1`, in enum `%2`.",
+  EnumNumberMemberNotInitialized:
+    "Number enum members need to be initialized, e.g. `%1 = 1` in enum `%0`.",
+  EnumStringMemberInconsistentlyInitailized:
+    "String enum members need to consistently either all use initializers, or use no initializers, in enum `%0`.",
+  ImportTypeShorthandOnlyInPureImport:
+    "The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements",
+  InexactInsideExact:
+    "Explicit inexact syntax cannot appear inside an explicit exact object type",
+  InexactInsideNonObject:
+    "Explicit inexact syntax cannot appear in class or interface definitions",
+  InexactVariance: "Explicit inexact syntax cannot have variance",
+  InvalidNonTypeImportInDeclareModule:
+    "Imports within a `declare module` body must always be `import type` or `import typeof`",
+  MissingTypeParamDefault:
+    "Type parameter declaration needs a default, since a preceding type parameter declaration has a default.",
+  NestedDeclareModule:
+    "`declare module` cannot be used inside another `declare module`",
+  NestedFlowComment: "Cannot have a flow comment inside another flow comment",
+  OptionalBindingPattern:
+    "A binding pattern parameter cannot be optional in an implementation signature.",
+  SpreadVariance: "Spread properties cannot have variance",
+  TypeBeforeInitializer:
+    "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`",
+  TypeCastInPattern:
+    "The type cast expression is expected to be wrapped with parenthesis",
+  UnexpectedExplicitInexactInObject:
+    "Explicit inexact syntax must appear at the end of an inexact object",
+  UnexpectedReservedType: "Unexpected reserved type %0",
+  UnexpectedReservedUnderscore:
+    "`_` is only allowed as a type argument to call or new",
+  //todo: replace ´ by `
+  UnexpectedSpaceBetweenModuloChecks:
+    "Spaces between ´%´ and ´checks´ are not allowed here.",
+  UnexpectedSpreadType:
+    "Spread operator cannot appear in class or interface definitions",
+  UnexpectedSubtractionOperand:
+    'Unexpected token, expected "number" or "bigint"',
+  UnexpectedTokenAfterTypeParameter:
+    "Expected an arrow function after this type parameter declaration",
+  UnsupportedDeclareExportKind:
+    "`declare export %0` is not supported. Use `%1` instead",
+  UnsupportedStatementInDeclareModule:
+    "Only declares and type imports are allowed inside declare module",
+  UnterminatedFlowComment: "Unterminated flow-comment",
+});
+/* eslint-disable sort-keys */
 
 function isEsModuleType(bodyElement: N.Node): boolean {
   return (
@@ -170,10 +245,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         moduloLoc.line !== checksLoc.line ||
         moduloLoc.column !== checksLoc.column - 1
       ) {
-        this.raise(
-          moduloPos,
-          "Spaces between ´%´ and ´checks´ are not allowed here.",
-        );
+        this.raise(moduloPos, FlowErrors.UnexpectedSpaceBetweenModuloChecks);
       }
       if (this.eat(tt.parenL)) {
         node.value = this.parseExpression();
@@ -266,10 +338,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.flowParseDeclareModuleExports(node);
         } else {
           if (insideModule) {
-            this.raise(
-              this.state.lastTokStart,
-              "`declare module` cannot be used inside another `declare module`",
-            );
+            this.raise(this.state.lastTokStart, FlowErrors.NestedDeclareModule);
           }
           return this.flowParseDeclareModule(node);
         }
@@ -318,14 +387,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (!this.isContextual("type") && !this.match(tt._typeof)) {
             this.raise(
               this.state.lastTokStart,
-              "Imports within a `declare module` body must always be `import type` or `import typeof`",
+              FlowErrors.InvalidNonTypeImportInDeclareModule,
             );
           }
           this.parseImport(bodyNode);
         } else {
           this.expectContextual(
             "declare",
-            "Only declares and type imports are allowed inside declare module",
+            FlowErrors.UnsupportedStatementInDeclareModule,
           );
 
           bodyNode = this.flowParseDeclare(bodyNode, true);
@@ -342,23 +411,28 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       let kind = null;
       let hasModuleExport = false;
-      const errorMessage =
-        "Found both `declare module.exports` and `declare export` in the same module. " +
-        "Modules can only have 1 since they are either an ES module or they are a CommonJS module";
       body.forEach(bodyElement => {
         if (isEsModuleType(bodyElement)) {
           if (kind === "CommonJS") {
-            this.raise(bodyElement.start, errorMessage);
+            this.raise(
+              bodyElement.start,
+              FlowErrors.AmbiguousDeclareModuleKind,
+            );
           }
           kind = "ES";
         } else if (bodyElement.type === "DeclareModuleExports") {
           if (hasModuleExport) {
             this.raise(
               bodyElement.start,
-              "Duplicate `declare module.exports` statement",
+              FlowErrors.DuplicateDeclareModuleExports,
             );
           }
-          if (kind === "ES") this.raise(bodyElement.start, errorMessage);
+          if (kind === "ES") {
+            this.raise(
+              bodyElement.start,
+              FlowErrors.AmbiguousDeclareModuleKind,
+            );
+          }
           kind = "CommonJS";
           hasModuleExport = true;
         }
@@ -396,9 +470,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         ) {
           const label = this.state.value;
           const suggestion = exportSuggestions[label];
-          this.unexpected(
+          throw this.raise(
             this.state.start,
-            `\`declare export ${label}\` is not supported. Use \`${suggestion}\` instead`,
+            FlowErrors.UnsupportedDeclareExportKind,
+            label,
+            suggestion,
           );
         }
 
@@ -554,22 +630,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkNotUnderscore(word: string) {
       if (word === "_") {
-        this.raise(
-          this.state.start,
-          "`_` is only allowed as a type argument to call or new",
-        );
+        this.raise(this.state.start, FlowErrors.UnexpectedReservedUnderscore);
       }
     }
 
     checkReservedType(word: string, startLoc: number, declaration?: boolean) {
       if (!reservedTypes.has(word)) return;
 
-      if (declaration) {
-        this.raise(startLoc, `Cannot overwrite reserved type ${word}`);
-        return;
-      }
-
-      this.raise(startLoc, `Unexpected reserved type ${word}`);
+      this.raise(
+        startLoc,
+        declaration
+          ? FlowErrors.AssignReservedType
+          : FlowErrors.UnexpectedReservedType,
+        word,
+      );
     }
 
     flowParseRestrictedIdentifier(
@@ -652,11 +726,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.default = this.flowParseType();
       } else {
         if (requireDefault) {
-          this.raise(
-            nodeStart,
-            // eslint-disable-next-line max-len
-            "Type parameter declaration needs a default, since a preceding type parameter declaration has a default.",
-          );
+          this.raise(nodeStart, FlowErrors.MissingTypeParamDefault);
         }
       }
 
@@ -991,7 +1061,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         ) {
           this.raise(
             inexactStart,
-            "Explicit inexact syntax must appear at the end of an inexact object",
+            FlowErrors.UnexpectedExplicitInexactInObject,
           );
         }
       }
@@ -1034,35 +1104,26 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (!allowSpread) {
             this.raise(
               this.state.lastTokStart,
-              "Explicit inexact syntax cannot appear in class or interface definitions",
+              FlowErrors.InexactInsideNonObject,
             );
           } else if (!allowInexact) {
-            this.raise(
-              this.state.lastTokStart,
-              "Explicit inexact syntax cannot appear inside an explicit exact object type",
-            );
+            this.raise(this.state.lastTokStart, FlowErrors.InexactInsideExact);
           }
           if (variance) {
-            this.raise(
-              variance.start,
-              "Explicit inexact syntax cannot have variance",
-            );
+            this.raise(variance.start, FlowErrors.InexactVariance);
           }
 
           return null;
         }
 
         if (!allowSpread) {
-          this.raise(
-            this.state.lastTokStart,
-            "Spread operator cannot appear in class or interface definitions",
-          );
+          this.raise(this.state.lastTokStart, FlowErrors.UnexpectedSpreadType);
         }
         if (protoStart != null) {
           this.unexpected(protoStart);
         }
         if (variance) {
-          this.raise(variance.start, "Spread properties cannot have variance");
+          this.raise(variance.start, FlowErrors.SpreadVariance);
         }
 
         node.argument = this.flowParseType();
@@ -1120,17 +1181,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         property.value.params.length + (property.value.rest ? 1 : 0);
       if (length !== paramCount) {
         if (property.kind === "get") {
-          this.raise(start, "getter must not have any formal parameters");
+          this.raise(start, Errors.BadGetterArity);
         } else {
-          this.raise(start, "setter must have exactly one formal parameter");
+          this.raise(start, Errors.BadSetterArity);
         }
       }
 
       if (property.kind === "set" && property.value.rest) {
-        this.raise(
-          start,
-          "setter function argument must not be a rest parameter",
-        );
+        this.raise(start, Errors.BadSetterRestParameter);
       }
     }
 
@@ -1437,11 +1495,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
             throw this.raise(
               this.state.start,
-              `Unexpected token, expected "number" or "bigint"`,
+              FlowErrors.UnexpectedSubtractionOperand,
             );
           }
 
-          this.unexpected();
+          throw this.unexpected();
         case tt.num:
           return this.parseLiteral(
             this.state.value,
@@ -1800,10 +1858,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           // e.g.   Source: a ? (b): c => (d): e => f
           //      Result 1: a ? b : (c => ((d): e => f))
           //      Result 2: a ? ((b): c => d) : (e => f)
-          this.raise(
-            state.start,
-            "Ambiguous expression: wrap the arrow functions in parentheses to disambiguate.",
-          );
+          this.raise(state.start, FlowErrors.AmbiguousConditionalArrow);
         }
 
         if (failed && valid.length === 1) {
@@ -1889,7 +1944,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.extra?.trailingComma,
       );
       // Enter scope, as checkParams defines bindings
-      this.scope.enter(functionFlags(false, false) | SCOPE_ARROW);
+      this.scope.enter(SCOPE_FUNCTION | SCOPE_ARROW);
       // Use super's method to force the parameters to be checked
       super.checkParams(node, false, true);
       this.scope.exit();
@@ -2125,10 +2180,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           (!expr.extra || !expr.extra.parenthesized) &&
           (exprList.length > 1 || !isParenthesizedExpr)
         ) {
-          this.raise(
-            expr.typeAnnotation.start,
-            "The type cast expression is expected to be wrapped with parenthesis",
-          );
+          this.raise(expr.typeAnnotation.start, FlowErrors.TypeCastInPattern);
         }
       }
 
@@ -2303,10 +2355,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseAssignableListItemTypes(param: N.Pattern): N.Pattern {
       if (this.eat(tt.question)) {
         if (param.type !== "Identifier") {
-          this.raise(
-            param.start,
-            "A binding pattern parameter cannot be optional in an implementation signature.",
-          );
+          this.raise(param.start, FlowErrors.OptionalBindingPattern);
         }
 
         ((param: any): N.Identifier).optional = true;
@@ -2330,11 +2379,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.typeAnnotation &&
         node.right.start < node.typeAnnotation.start
       ) {
-        this.raise(
-          node.typeAnnotation.start,
-          "Type annotations must come before default assignments, " +
-            "e.g. instead of `age = 25: number` use `age: number = 25`",
-        );
+        this.raise(node.typeAnnotation.start, FlowErrors.TypeBeforeInitializer);
       }
 
       return node;
@@ -2458,8 +2503,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (nodeIsTypeImport && specifierIsTypeImport) {
         this.raise(
           firstIdentLoc,
-          "The `type` and `typeof` keywords on named imports can only be used on regular " +
-            "`import` statements. It cannot be used with `import type` or `import typeof` statements",
+          FlowErrors.ImportTypeShorthandOnlyInPureImport,
         );
       }
 
@@ -2637,7 +2681,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         /*:: invariant(typeParameters) */
         throw this.raise(
           typeParameters.start,
-          "Expected an arrow function after this type parameter declaration",
+          FlowErrors.UnexpectedTokenAfterTypeParameter,
         );
       }
 
@@ -2896,7 +2940,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseTopLevel(file: N.File, program: N.Program): N.File {
       const fileNode = super.parseTopLevel(file, program);
       if (this.state.hasFlowComment) {
-        this.raise(this.state.pos, "Unterminated flow-comment");
+        this.raise(this.state.pos, FlowErrors.UnterminatedFlowComment);
       }
       return fileNode;
     }
@@ -2904,10 +2948,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     skipBlockComment(): void {
       if (this.hasPlugin("flowComments") && this.skipFlowComment()) {
         if (this.state.hasFlowComment) {
-          this.unexpected(
-            null,
-            "Cannot have a flow comment inside another flow comment",
-          );
+          this.unexpected(null, FlowErrors.NestedFlowComment);
         }
         this.hasFlowCommentCompletion();
         this.state.pos += this.skipFlowComment();
@@ -2918,7 +2959,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.state.hasFlowComment) {
         const end = this.input.indexOf("*-/", (this.state.pos += 2));
         if (end === -1) {
-          throw this.raise(this.state.pos - 2, "Unterminated comment");
+          throw this.raise(this.state.pos - 2, Errors.UnterminatedComment);
         }
         this.state.pos = end + 3;
         return;
@@ -2961,7 +3002,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     hasFlowCommentCompletion(): void {
       const end = this.input.indexOf("*/", this.state.pos);
       if (end === -1) {
-        throw this.raise(this.state.pos, "Unterminated comment");
+        throw this.raise(this.state.pos, Errors.UnterminatedComment);
       }
     }
 
@@ -2973,8 +3014,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): void {
       this.raise(
         pos,
-        `Boolean enum members need to be initialized. Use either \`${memberName} = true,\` ` +
-          `or \`${memberName} = false,\` in enum \`${enumName}\`.`,
+        FlowErrors.EnumBooleanMemberNotInitialized,
+        memberName,
+        enumName,
       );
     }
 
@@ -2985,8 +3027,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const suggestion = memberName[0].toUpperCase() + memberName.slice(1);
       this.raise(
         pos,
-        `Enum member names cannot start with lowercase 'a' through 'z'. Instead of using ` +
-          `\`${memberName}\`, consider using \`${suggestion}\`, in enum \`${enumName}\`.`,
+        FlowErrors.EnumInvalidMemberName,
+        memberName,
+        suggestion,
+        enumName,
       );
     }
 
@@ -2994,22 +3038,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       pos: number,
       { enumName, memberName }: { enumName: string, memberName: string },
     ): void {
-      this.raise(
-        pos,
-        `Enum member names need to be unique, but the name \`${memberName}\` has already been used ` +
-          `before in enum \`${enumName}\`.`,
-      );
+      this.raise(pos, FlowErrors.EnumDuplicateMemberName, memberName, enumName);
     }
 
     flowEnumErrorInconsistentMemberValues(
       pos: number,
       { enumName }: { enumName: string },
     ): void {
-      this.raise(
-        pos,
-        `Enum \`${enumName}\` has inconsistent member initializers. Either use no initializers, or ` +
-          `consistently use literals (either booleans, numbers, or strings) for all member initializers.`,
-      );
+      this.raise(pos, FlowErrors.EnumInconsistentMemberValues, enumName);
     }
 
     flowEnumErrorInvalidExplicitType(
@@ -3019,14 +3055,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         suppliedType,
       }: { enumName: string, suppliedType: null | string },
     ) {
-      const suggestion =
-        `Use one of \`boolean\`, \`number\`, \`string\`, or \`symbol\` in ` +
-        `enum \`${enumName}\`.`;
-      const message =
+      return this.raise(
+        pos,
         suppliedType === null
-          ? `Supplied enum type is not valid. ${suggestion}`
-          : `Enum type \`${suppliedType}\` is not valid. ${suggestion}`;
-      return this.raise(pos, message);
+          ? FlowErrors.EnumInvalidExplicitTypeUnknownSupplied
+          : FlowErrors.EnumInvalidExplicitType,
+        enumName,
+        suppliedType,
+      );
     }
 
     flowEnumErrorInvalidMemberInitializer(
@@ -3038,22 +3074,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "boolean":
         case "number":
         case "string":
-          message =
-            `Enum \`${enumName}\` has type \`${explicitType}\`, so the initializer of ` +
-            `\`${memberName}\` needs to be a ${explicitType} literal.`;
+          message = FlowErrors.EnumInvalidMemberInitializerPrimaryType;
           break;
         case "symbol":
-          message =
-            `Symbol enum members cannot be initialized. Use \`${memberName},\` in ` +
-            `enum \`${enumName}\`.`;
+          message = FlowErrors.EnumInvalidMemberInitializerSymbolType;
           break;
         default:
           // null
-          message =
-            `The enum member initializer for \`${memberName}\` needs to be a literal (either ` +
-            `a boolean, number, or string) in enum \`${enumName}\`.`;
+          message = FlowErrors.EnumInvalidMemberInitializerUnknownType;
       }
-      return this.raise(pos, message);
+      return this.raise(pos, message, enumName, memberName, explicitType);
     }
 
     flowEnumErrorNumberMemberNotInitialized(
@@ -3062,7 +3092,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): void {
       this.raise(
         pos,
-        `Number enum members need to be initialized, e.g. \`${memberName} = 1\` in enum \`${enumName}\`.`,
+        FlowErrors.EnumNumberMemberNotInitialized,
+        enumName,
+        memberName,
       );
     }
 
@@ -3072,8 +3104,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): void {
       this.raise(
         pos,
-        `String enum members need to consistently either all use initializers, or use no initializers, ` +
-          `in enum \`${enumName}\`.`,
+        FlowErrors.EnumStringMemberInconsistentlyInitailized,
+        enumName,
       );
     }
 

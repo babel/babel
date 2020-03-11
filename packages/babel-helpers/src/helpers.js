@@ -12,6 +12,8 @@ const helper = (minVersion: string) => tpl => ({
 
 helpers.typeof = helper("7.0.0-beta.0")`
   export default function _typeof(obj) {
+    "@babel/helpers - typeof";
+
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
       _typeof = function (obj) { return typeof obj; };
     } else {

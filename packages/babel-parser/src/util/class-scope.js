@@ -5,6 +5,7 @@ import {
   CLASS_ELEMENT_FLAG_STATIC,
   type ClassElementTypes,
 } from "./scopeflags";
+import { Errors } from "../parser/location";
 
 export class ClassScope {
   // A list of private named declared in the current class
@@ -18,7 +19,7 @@ export class ClassScope {
   undefinedPrivateNames: Map<string, number> = new Map();
 }
 
-type raiseFunction = (number, string) => void;
+type raiseFunction = (number, string, ...any) => void;
 
 export default class ClassScopeHandler {
   stack: Array<ClassScope> = [];
@@ -52,7 +53,7 @@ export default class ClassScopeHandler {
           current.undefinedPrivateNames.set(name, pos);
         }
       } else {
-        this.raiseUndeclaredPrivateName(name, pos);
+        this.raise(pos, Errors.InvalidPrivateFieldResolution, name);
       }
     }
   }
@@ -86,7 +87,7 @@ export default class ClassScopeHandler {
     }
 
     if (redefined) {
-      this.raise(pos, `Duplicate private name #${name}`);
+      this.raise(pos, Errors.PrivateNameRedeclaration, name);
     }
 
     classScope.privateNames.add(name);
@@ -103,11 +104,7 @@ export default class ClassScopeHandler {
       classScope.undefinedPrivateNames.set(name, pos);
     } else {
       // top-level
-      this.raiseUndeclaredPrivateName(name, pos);
+      this.raise(pos, Errors.InvalidPrivateFieldResolution, name);
     }
-  }
-
-  raiseUndeclaredPrivateName(name: string, pos: number) {
-    this.raise(pos, `Private name #${name} is not defined`);
   }
 }
