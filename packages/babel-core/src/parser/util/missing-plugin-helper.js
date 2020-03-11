@@ -41,16 +41,6 @@ const pluginNameMap = {
       url: "https://git.io/vb4yH",
     },
   },
-  exportNamespaceFrom: {
-    syntax: {
-      name: "@babel/plugin-syntax-export-namespace-from",
-      url: "https://git.io/vb4Sf",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-export-namespace-from",
-      url: "https://git.io/vb4SG",
-    },
-  },
   flow: {
     syntax: {
       name: "@babel/plugin-syntax-flow",
