@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "moduleAttributes"
+  ],
+  "sourceType": "module",
+  "throws": "Module attributes should include only one type (1:64)"
+}

@@ -2026,7 +2026,7 @@ export default class StatementParser extends ExpressionParser {
     node.source = this.parseImportSource();
     // new proposal
     // https://github.com/tc39/proposal-module-attributes
-    // parse module attributes if the next token is with or ignore and finish the ImportDeclaration node.
+    // parse module attributes if the next token is `with` or ignore and finish the ImportDeclaration node.
     const attributes = this.maybeParseModuleAttributes();
     if (attributes) {
       node.attributes = attributes;
@@ -2068,13 +2068,28 @@ export default class StatementParser extends ExpressionParser {
     }
     this.expectPlugin("moduleAttributes");
     const attrs = [];
+    let hasTypeAttribute = false;
     do {
       // we are trying to parse a node which has the following syntax
       // with type: "json"
       // [with -> keyword], [type -> Identifier], [":" -> token for colon], ["json" -> StringLiteral]
       const node = this.startNode();
-      node.key = this.parseIdentifier();
+      node.key = this.parseIdentifier(true);
+
+      // check if we have a type attribute
+      if (node.key.name === "type") {
+        // check if we do not have two duplicate type attributes defined
+        if (hasTypeAttribute) {
+          throw this.raise(
+            this.state.start,
+            Errors.ModuleAttributesWithRepeatedType,
+          );
+        }
+        hasTypeAttribute = true;
+      }
+      // check for colon
       this.expect(tt.colon);
+      // check if the value set to the module attribute is a string as we only allow string literals
       if (!this.match(tt.string)) {
         return this.unexpected(
           this.state.start,
@@ -2085,6 +2100,11 @@ export default class StatementParser extends ExpressionParser {
       this.finishNode(node, "ImportAttribute");
       attrs.push(node);
     } while (this.eat(tt.comma));
+
+    // check if module attributes do not contain any type key and throw an error
+    if (!hasTypeAttribute) {
+      throw this.raise(this.state.start, Errors.ModuleAttributesWithoutType);
+    }
     return attrs;
   }
 
