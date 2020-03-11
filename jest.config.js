@@ -8,6 +8,7 @@ const externalBabelPackages = [
   "plugin-syntax-object-rest-spread",
   "plugin-syntax-optional-catch-binding",
   "plugin-syntax-optional-chaining",
+  "plugin-syntax-export-namespace-from",
 ];
 
 // prettier-ignore
