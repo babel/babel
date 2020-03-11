@@ -31,12 +31,6 @@ const pluginNameMap = {
       url: "https://git.io/vb4S3",
     },
   },
-  dynamicImport: {
-    syntax: {
-      name: "@babel/plugin-syntax-dynamic-import",
-      url: "https://git.io/vb4Sv",
-    },
-  },
   exportDefaultFrom: {
     syntax: {
       name: "@babel/plugin-syntax-export-default-from",
@@ -45,16 +39,6 @@ const pluginNameMap = {
     transform: {
       name: "@babel/plugin-proposal-export-default-from",
       url: "https://git.io/vb4yH",
-    },
-  },
-  exportNamespaceFrom: {
-    syntax: {
-      name: "@babel/plugin-syntax-export-namespace-from",
-      url: "https://git.io/vb4Sf",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-export-namespace-from",
-      url: "https://git.io/vb4SG",
     },
   },
   flow: {
@@ -123,16 +107,6 @@ const pluginNameMap = {
       url: "https://git.io/vb4yS",
     },
   },
-  optionalChaining: {
-    syntax: {
-      name: "@babel/plugin-syntax-optional-chaining",
-      url: "https://git.io/vb4Sc",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-optional-chaining",
-      url: "https://git.io/vb4Sk",
-    },
-  },
   pipelineOperator: {
     syntax: {
       name: "@babel/plugin-syntax-pipeline-operator",
@@ -164,50 +138,10 @@ const pluginNameMap = {
     },
   },
 
-  // TODO: This plugins are now supported by default by @babel/parser: they can
+  // TODO: These plugins are now supported by default by @babel/parser: they can
   // be removed from this list. Although removing them isn't a breaking change,
   // it's better to keep a nice error message for users using older versions of
-  // the parser. They can be removed in Babel 8.
-  asyncGenerators: {
-    syntax: {
-      name: "@babel/plugin-syntax-async-generators",
-      url: "https://git.io/vb4SY",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-async-generator-functions",
-      url: "https://git.io/vb4yp",
-    },
-  },
-  nullishCoalescingOperator: {
-    syntax: {
-      name: "@babel/plugin-syntax-nullish-coalescing-operator",
-      url: "https://git.io/vb4yx",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-nullish-coalescing-operator",
-      url: "https://git.io/vb4Se",
-    },
-  },
-  objectRestSpread: {
-    syntax: {
-      name: "@babel/plugin-syntax-object-rest-spread",
-      url: "https://git.io/vb4y5",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-object-rest-spread",
-      url: "https://git.io/vb4Ss",
-    },
-  },
-  optionalCatchBinding: {
-    syntax: {
-      name: "@babel/plugin-syntax-optional-catch-binding",
-      url: "https://git.io/vb4Sn",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-optional-catch-binding",
-      url: "https://git.io/vb4SI",
-    },
-  },
+  // the parser. They can be removed in Babel 9.
 };
 
 const getNameURLCombination = ({ name, url }) => `${name} (${url})`;
