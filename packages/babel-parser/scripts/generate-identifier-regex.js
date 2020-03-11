@@ -2,7 +2,7 @@
 
 // Always use the latest available version of Unicode!
 // https://tc39.github.io/ecma262/#sec-conformance
-const version = "12.0.0";
+const version = "13.0.0";
 
 const start = require("unicode-" +
   version +
