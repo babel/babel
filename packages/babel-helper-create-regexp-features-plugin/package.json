@@ -20,7 +20,7 @@
   "dependencies": {
     "@babel/helper-annotate-as-pure": "^7.8.3",
     "@babel/helper-regex": "^7.8.3",
-    "regexpu-core": "^4.6.0"
+    "regexpu-core": "^4.7.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
