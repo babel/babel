@@ -1,6 +1,11 @@
 {
   "plugins": [
-    "moduleAttributes"
+    [
+      "moduleAttributes",
+      {
+        "version": "feb-2020"
+      }
+    ]
   ],
   "sourceType": "module",
   "throws": "Module attributes should include a type (1:44)"

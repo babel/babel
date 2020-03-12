@@ -84,6 +84,20 @@ export function validatePlugins(plugins: PluginList) {
         PIPELINE_PROPOSALS.map(p => `'${p}'`).join(", "),
     );
   }
+
+  if (hasPlugin(plugins, "moduleAttributes")) {
+    const moduleAttributesVerionPluginOption = getPluginOption(
+      plugins,
+      "moduleAttributes",
+      "version",
+    );
+    if (moduleAttributesVerionPluginOption !== "feb-2020") {
+      throw new Error(
+        "The 'moduleAttributes' plugin requires a 'version' option," +
+          " whose value must be feb-2020.",
+      );
+    }
+  }
 }
 
 // These plugins are defined using a mixin which extends the parser class.
