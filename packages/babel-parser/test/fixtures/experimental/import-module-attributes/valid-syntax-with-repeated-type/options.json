@@ -1,7 +1,4 @@
 {
-  "plugins": [
-    "moduleAttributes"
-  ],
-  "sourceType": "module",
-  "throws": "Module attributes should not include duplicate keys (1:64)"
+  "plugins": ["moduleAttributes"],
+  "sourceType": "module"
 }

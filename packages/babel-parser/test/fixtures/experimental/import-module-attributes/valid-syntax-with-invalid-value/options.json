@@ -3,5 +3,5 @@
     "moduleAttributes"
   ],
   "sourceType": "module",
-  "throws": "Only string literal values are allowed (1:52)"
+  "throws": "Only string literals are allowed as module attributes values (1:52)"
 }
