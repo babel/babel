@@ -9,11 +9,17 @@ var Foo = /*#__PURE__*/function (_Bar) {
     babelHelpers.classCallCheck(this, Foo);
 
     if (condition) {
-      _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
-      babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "bar", "foo");
+      try {
+        _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
+      } finally {
+        babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "bar", "foo");
+      }
     } else {
-      _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
-      babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "bar", "foo");
+      try {
+        _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
+      } finally {
+        babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "bar", "foo");
+      }
     }
 
     return babelHelpers.possibleConstructorReturn(_this);

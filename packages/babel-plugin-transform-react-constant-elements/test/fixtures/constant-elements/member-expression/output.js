@@ -8,9 +8,11 @@ var _ref2 = /*#__PURE__*/<els.subComponent />;
 
 class Component extends React.Component {
   constructor(...args) {
-    super(...args);
-
-    this.render = () => _ref2;
+    try {
+      super(...args);
+    } finally {
+      this.render = () => _ref2;
+    }
   }
 
 }

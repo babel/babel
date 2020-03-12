@@ -1,18 +1,6 @@
 import { template, traverse, types as t } from "@babel/core";
 import { environmentVisitor } from "@babel/helper-replace-supers";
 
-const findBareSupers = traverse.visitors.merge([
-  {
-    Super(path) {
-      const { node, parentPath } = path;
-      if (parentPath.isCallExpression({ callee: node })) {
-        this.push(parentPath);
-      }
-    },
-  },
-  environmentVisitor,
-]);
-
 const referenceVisitor = {
   "TSTypeAnnotation|TypeAnnotation"(path) {
     path.skip();
@@ -71,10 +59,28 @@ export function injectInitialization(path, constructor, nodes, renamer) {
 
   if (isDerived) {
     const bareSupers = [];
-    constructor.traverse(findBareSupers, bareSupers);
-    for (const bareSuper of bareSupers) {
-      bareSuper.insertAfter(nodes);
-    }
+    const visitor = traverse.visitors.merge([
+      {
+        Super(path) {
+          if (path.parentPath.type !== "CallExpression") return;
+          if (path.parentPath.parentPath.type !== "ExpressionStatement") return;
+
+          const expStmtPath = path.parentPath.parentPath;
+          this.push(expStmtPath);
+        },
+      },
+      environmentVisitor,
+    ]);
+    constructor.traverse(visitor, bareSupers);
+    bareSupers.forEach(bareSuper => {
+      bareSuper.replaceWith(
+        t.tryStatement(
+          t.blockStatement([t.cloneNode(bareSuper.node)]),
+          null,
+          t.blockStatement(nodes),
+        ),
+      );
+    });
   } else {
     constructor.get("body").unshiftContainer("body", nodes);
   }

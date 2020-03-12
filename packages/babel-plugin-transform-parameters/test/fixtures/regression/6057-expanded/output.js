@@ -33,19 +33,21 @@ var App = /*#__PURE__*/function (_Component) {
   _inherits(App, _Component);
 
   function App() {
-    var _getPrototypeOf2;
-
     var _this;
 
     _classCallCheck(this, App);
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
+    try {
+      var _getPrototypeOf2;
+
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(App)).call.apply(_getPrototypeOf2, [this].concat(args)));
+    } finally {
+      _defineProperty(_assertThisInitialized(_this), "exportType", '');
     }
-
-    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(App)).call.apply(_getPrototypeOf2, [this].concat(args)));
-
-    _defineProperty(_assertThisInitialized(_this), "exportType", '');
 
     return _this;
   }

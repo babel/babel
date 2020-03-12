@@ -4,9 +4,11 @@ function* g() {
 
     class A extends _super {
       constructor(...args) {
-        super(...args);
-
-        _initialize(this);
+        try {
+          super(...args);
+        } finally {
+          _initialize(this);
+        }
       }
 
     }
