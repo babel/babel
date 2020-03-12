@@ -21,7 +21,7 @@ following styles will work:
 require("regenerator-runtime/runtime");
 
 // ECMAScript 2015
-import "regenerator-runtime/runtime";
+import "regenerator-runtime/runtime.js";
 ```
 
 To get the absolute file system path of `runtime.js`, evaluate the
