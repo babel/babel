@@ -186,6 +186,33 @@ export function assertShape(shape: { [string]: FieldOptions }): Validator {
   return validate;
 }
 
+export function assertOptionalChainStart(): Validator {
+  function validate(node) {
+    for (let current = node; current; ) {
+      const { type } = current;
+      if (type === "OptionalCallExpression") {
+        if (current.optional) return;
+        current = current.callee;
+        continue;
+      }
+
+      if (type === "OptionalMemberExpression") {
+        if (current.optional) return;
+        current = current.object;
+        continue;
+      }
+
+      break;
+    }
+
+    throw new TypeError(
+      `Non-optional ${node.type} must chain from an optional OptionalMemberExpression or OptionalCallExpression`,
+    );
+  }
+
+  return validate;
+}
+
 export function chain(...fns: Array<Validator>): Validator {
   function validate(...args) {
     for (const fn of fns) {

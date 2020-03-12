@@ -1,5 +1,6 @@
 // @flow
 import defineType, {
+  assertOptionalChainStart,
   assertEach,
   assertNodeType,
   assertValueType,
@@ -104,7 +105,9 @@ defineType("OptionalMemberExpression", {
       default: false,
     },
     optional: {
-      validate: assertValueType("boolean"),
+      validate: !process.env.BABEL_TYPES_8_BREAKING
+        ? assertValueType("boolean")
+        : chain(assertValueType("boolean"), assertOptionalChainStart()),
     },
   },
 });
@@ -150,7 +153,9 @@ defineType("OptionalCallExpression", {
       ),
     },
     optional: {
-      validate: assertValueType("boolean"),
+      validate: !process.env.BABEL_TYPES_8_BREAKING
+        ? assertValueType("boolean")
+        : chain(assertValueType("boolean"), assertOptionalChainStart()),
     },
     typeArguments: {
       validate: assertNodeType("TypeParameterInstantiation"),
