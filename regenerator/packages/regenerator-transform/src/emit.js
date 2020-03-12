@@ -995,13 +995,13 @@ Ep.explodeExpression = function(path, ignoreResult) {
     let argsPath = path.get("arguments");
 
     let newCallee;
-    let newArgs = [];
+    let newArgs;
 
-    let hasLeapingArgs = false;
-    argsPath.forEach(function(argPath) {
-      hasLeapingArgs = hasLeapingArgs ||
-        meta.containsLeap(argPath.node);
-    });
+    let hasLeapingArgs = argsPath.some(
+      argPath => meta.containsLeap(argPath.node)
+    );
+
+    let injectFirstArg = null;
 
     if (t.isMemberExpression(calleePath.node)) {
       if (hasLeapingArgs) {
@@ -1022,7 +1022,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
           ? explodeViaTempVar(null, calleePath.get("property"))
           : calleePath.node.property;
 
-        newArgs.unshift(newObject);
+        injectFirstArg = newObject;
 
         newCallee = t.memberExpression(
           t.memberExpression(
@@ -1057,14 +1057,16 @@ Ep.explodeExpression = function(path, ignoreResult) {
       }
     }
 
-    argsPath.forEach(function(argPath) {
-      newArgs.push(explodeViaTempVar(null, argPath));
-    });
+    if (hasLeapingArgs) {
+      newArgs = argsPath.map(argPath => explodeViaTempVar(null, argPath));
+      if (injectFirstArg) newArgs.unshift(injectFirstArg);
 
-    return finish(t.callExpression(
-      newCallee,
-      newArgs.map(arg => t.cloneDeep(arg))
-    ));
+      newArgs = newArgs.map(arg => t.cloneDeep(arg));
+    } else {
+      newArgs = path.node.arguments;
+    }
+
+    return finish(t.callExpression(newCallee, newArgs));
 
   case "NewExpression":
     return finish(t.newExpression(

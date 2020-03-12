@@ -893,14 +893,11 @@ describe("yield chain", function() {
   });
 });
 
-describe("call expression ordering (#244)", function test() {
-  function *gen() {
-    return (yield 1)(yield 2)(yield 3);
-  }
-
-  it("should be correct", function () {
-    var g = gen();
-    var order = [];
+describe("call expression ordering", function test() {
+  it("should be correct with chained calls (#244)", function () {
+    var g = (function *gen() {
+      return (yield 1)(yield 2)(yield 3);
+    })();
 
     assert.deepEqual(g.next(), { value: 1, done: false });
 
@@ -915,6 +912,82 @@ describe("call expression ordering (#244)", function test() {
 
     assert.deepEqual(g.next("sent 2"), { value: 3, done: false });
     assert.deepEqual(g.next("sent 3"), { value: "done", done: true });
+  });
+
+  describe("when the callee is a member expression", function() {
+    it("should allow vars assigned in the callee to be used in the args (#379)", function() {
+      var g = (function* fn() {
+        var _ref;
+        (_ref = yield).method(_ref);
+      })();
+  
+      var res;
+      var obj = {
+        method(arg) {
+          res = arg;
+        }
+      };
+      
+      g.next();
+      g.next(obj);
+  
+      assert.strictEqual(obj, res);
+    });
+
+    it("should be correct when only the callee contains yield", function() {
+      var order = [];
+
+      function step(n) {
+        order.push(n);
+        return { method() {} }
+      }
+
+      var g = (function* fn() {
+        (yield, step(1)).method(step(2));
+      })();
+
+      g.next();
+      g.next();
+
+      assert.deepStrictEqual(order, [1, 2]);
+    });
+
+    it("should be correct when only the arguments contains yield", function() {
+      var order = [];
+
+      function step(n) {
+        order.push(n);
+        return { method() {} }
+      }
+
+      var g = (function* fn() {
+        (step(1)).method(step(2), yield, step(3));
+      })();
+
+      g.next();
+      g.next();
+
+      assert.deepStrictEqual(order, [1, 2, 3]);
+    });
+
+    it("should be correct when the callee and the arguments contain yield", function() {
+      var order = [];
+
+      function step(n) {
+        order.push(n);
+        return { method() {} }
+      }
+
+      var g = (function* fn() {
+        (yield, step(1)).method(step(2), yield, step(3));
+      })();
+
+      g.next();
+      g.next();
+      g.next();
+
+      assert.deepStrictEqual(order, [1, 2, 3]);
+    });
   });
 });
 
