@@ -37,9 +37,113 @@ const handle = {
   handle(member) {
     const { node, parent, parentPath } = member;
 
+    if (member.isOptionalMemberExpression()) {
+      const root = member.find(({ node, parent, parentPath }) => {
+        if (parentPath.isOptionalMemberExpression()) {
+          return parent.optional || parent.object !== node;
+        }
+        if (parentPath.isOptionalCallExpression()) {
+          return parent.optional || parent.callee !== node;
+        }
+        return true;
+      });
+
+      const rootParentPath = root.parentPath;
+      if (
+        rootParentPath.isUpdateExpression({ argument: node }) ||
+        rootParentPath.isAssignmentExpression({ left: node })
+      ) {
+        throw member.buildCodeFrameError(`can't handle assignment`);
+      }
+      if (rootParentPath.isUnaryExpression({ operator: "delete" })) {
+        throw member.buildCodeFrameError(`can't handle delete`);
+      }
+
+      if (node.optional) {
+        throw member.buildCodeFrameError(
+          `can't handle '?.' directly before ${node.property.type}`,
+        );
+      }
+
+      let nearestOptional = member;
+      for (;;) {
+        if (nearestOptional.isOptionalMemberExpression()) {
+          if (nearestOptional.node.optional) break;
+          nearestOptional = nearestOptional.get("object");
+          continue;
+        } else if (nearestOptional.isOptionalCallExpression()) {
+          if (nearestOptional.node.optional) break;
+          nearestOptional = nearestOptional.get("object");
+          continue;
+        }
+
+        throw nearestOptional.buildCodeFrameError(
+          "failed to find nearest optional",
+        );
+      }
+
+      const { scope } = member;
+      const { object } = node;
+      const baseRef = scope.generateUidIdentifierBasedOnNode(
+        nearestOptional.node.object,
+      );
+      const valueRef = scope.generateUidIdentifierBasedOnNode(object);
+      scope.push({ id: baseRef });
+      scope.push({ id: valueRef });
+
+      nearestOptional
+        .get("object")
+        .replaceWith(
+          t.assignmentExpression("=", baseRef, nearestOptional.node.object),
+        );
+      member.replaceWith(t.memberExpression(valueRef, node.property));
+
+      if (parentPath.isOptionalCallExpression({ callee: node })) {
+        parentPath.replaceWith(this.call(member, parent.arguments));
+      } else {
+        member.replaceWith(this.get(member));
+      }
+
+      let regular = member.node;
+      for (let current = member; current !== root; ) {
+        const { parentPath, parent } = current;
+        if (parentPath.isOptionalMemberExpression()) {
+          regular = t.memberExpression(
+            regular,
+            parent.property,
+            parent.computed,
+          );
+        } else {
+          regular = t.callExpression(regular, parent.arguments);
+        }
+        current = parentPath;
+      }
+
+      root.replaceWith(
+        t.conditionalExpression(
+          t.sequenceExpression([
+            t.assignmentExpression("=", valueRef, object),
+            t.logicalExpression(
+              "||",
+              t.binaryExpression("===", baseRef, scope.buildUndefinedNode()),
+              t.binaryExpression("===", baseRef, t.nullLiteral()),
+            ),
+          ]),
+          scope.buildUndefinedNode(),
+          regular,
+        ),
+      );
+      return;
+    }
+
     // MEMBER++   ->   _set(MEMBER, (_ref = (+_get(MEMBER))) + 1), _ref
     // ++MEMBER   ->   _set(MEMBER, (+_get(MEMBER)) + 1)
     if (parentPath.isUpdateExpression({ argument: node })) {
+      if (this.simpleSet) {
+        member.replaceWith(this.simpleSet(member));
+        return;
+      }
+
       const { operator, prefix } = parent;
 
       // Give the state handler a chance to memoise the member, since we'll
@@ -72,6 +176,11 @@ const handle = {
     // MEMBER = VALUE   ->   _set(MEMBER, VALUE)
     // MEMBER += VALUE   ->   _set(MEMBER, _get(MEMBER) + VALUE)
     if (parentPath.isAssignmentExpression({ left: node })) {
+      if (this.simpleSet) {
+        member.replaceWith(this.simpleSet(member));
+        return;
+      }
+
       const { operator, right } = parent;
       let value = right;
 
@@ -92,11 +201,9 @@ const handle = {
       return;
     }
 
-    // MEMBER(ARGS)   ->   _call(MEMBER, ARGS)
+    // MEMBER(ARGS) -> _call(MEMBER, ARGS)
     if (parentPath.isCallExpression({ callee: node })) {
-      const { arguments: args } = parent;
-
-      parentPath.replaceWith(this.call(member, args));
+      parentPath.replaceWith(this.call(member, parent.arguments));
       return;
     }
 

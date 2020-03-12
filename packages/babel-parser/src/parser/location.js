@@ -108,6 +108,8 @@ export const Errors = Object.freeze({
     "await* has been removed from the async functions proposal. Use Promise.all() instead.",
   OptionalChainingNoNew:
     "constructors in/after an Optional Chain are not allowed",
+  OptionalChainingNoPrivate:
+    "Private property access cannot immediately follow an optional chain's `?.`",
   OptionalChainingNoTemplate:
     "Tagged Template Literals are not allowed in optionalChain",
   ParamDupe: "Argument name clash",

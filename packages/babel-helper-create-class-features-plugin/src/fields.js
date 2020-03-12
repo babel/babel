@@ -128,8 +128,12 @@ const privateNameVisitor = privateNameVisitorFactory({
     const { privateNamesMap, redeclared } = this;
     const { node, parentPath } = path;
 
-    if (!parentPath.isMemberExpression({ property: node })) return;
-
+    if (
+      !parentPath.isMemberExpression({ property: node }) &&
+      !parentPath.isOptionalMemberExpression({ property: node })
+    ) {
+      return;
+    }
     const { name } = node.id;
     if (!privateNamesMap.has(name)) return;
     if (redeclared && redeclared.includes(name)) return;
@@ -301,18 +305,28 @@ const privateNameHandlerSpec = {
 };
 
 const privateNameHandlerLoose = {
-  handle(member) {
+  get(member) {
     const { privateNamesMap, file } = this;
     const { object } = member.node;
     const { name } = member.node.property.id;
 
-    member.replaceWith(
-      template.expression`BASE(REF, PROP)[PROP]`({
-        BASE: file.addHelper("classPrivateFieldLooseBase"),
-        REF: object,
-        PROP: privateNamesMap.get(name).id,
-      }),
-    );
+    return template.expression`BASE(REF, PROP)[PROP]`({
+      BASE: file.addHelper("classPrivateFieldLooseBase"),
+      REF: object,
+      PROP: privateNamesMap.get(name).id,
+    });
+  },
+
+  simpleSet(member) {
+    return this.get(member);
+  },
+
+  destructureSet(member) {
+    return this.get(member);
+  },
+
+  call(member, args) {
+    return t.callExpression(this.get(member), args);
   },
 };
 
@@ -326,26 +340,13 @@ export function transformPrivateNamesUsage(
   if (!privateNamesMap.size) return;
 
   const body = path.get("body");
+  const handler = loose ? privateNameHandlerLoose : privateNameHandlerSpec;
 
-  if (loose) {
-    body.traverse(privateNameVisitor, {
-      privateNamesMap,
-      file: state,
-      ...privateNameHandlerLoose,
-    });
-  } else {
-    memberExpressionToFunctions(body, privateNameVisitor, {
-      privateNamesMap,
-      classRef: ref,
-      file: state,
-      ...privateNameHandlerSpec,
-    });
-  }
-  body.traverse(privateInVisitor, {
+  memberExpressionToFunctions(body, privateNameVisitor, {
     privateNamesMap,
     classRef: ref,
     file: state,
-    loose,
+    ...handler,
   });
 }
 

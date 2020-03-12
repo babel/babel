@@ -616,14 +616,15 @@ export default class ExpressionParser extends LValParser {
       node.object = base;
       node.property = computed
         ? this.parseExpression()
-        : optional
-        ? this.parseIdentifier(true)
         : this.parseMaybePrivateName(true);
       node.computed = computed;
 
       if (node.property.type === "PrivateName") {
         if (node.object.type === "Super") {
           this.raise(startPos, Errors.SuperPrivateField);
+        }
+        if (optional) {
+          this.raise(node.property.start, Errors.OptionalChainingNoPrivate);
         }
         this.classScope.usePrivateName(
           node.property.id.name,
