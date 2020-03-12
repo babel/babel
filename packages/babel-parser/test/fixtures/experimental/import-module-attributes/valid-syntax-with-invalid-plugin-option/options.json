@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    [
+      "moduleAttributes",
+      {
+        "version": "jan-2020"
+      }
+    ]
+  ],
+  "sourceType": "module",
+  "throws": "The 'moduleAttributes' plugin requires a 'version' option, whose value must be feb-2020."
+}
