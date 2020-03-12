@@ -2098,13 +2098,15 @@ export default class StatementParser extends ExpressionParser {
   }
 
   maybeParseModuleAttributes() {
-    if (!this.eat(tt._with)) {
+    if (this.match(tt._with)) {
+      this.expectPlugin("moduleAttributes");
+      this.next();
+    } else {
       if (this.hasPlugin("moduleAttributes")) return [];
       return null;
     }
-    this.expectPlugin("moduleAttributes");
     const attrs = [];
-    const attributeMap = {};
+    const attributeMap = Object.create(null);
     do {
       // we are trying to parse a node which has the following syntax
       // with type: "json"
@@ -2115,9 +2117,10 @@ export default class StatementParser extends ExpressionParser {
       // check if we already have an entry for an attribute
       // if a duplicate entry found, throw an error
       if (attributeMap[node.key.name]) {
-        throw this.raise(
+        this.raise(
           this.state.start,
           Errors.ModuleAttributesWithDuplicateKeys,
+          node.key.name,
         );
       }
       // set the attribute name entry in the attributeMap to true
@@ -2126,9 +2129,9 @@ export default class StatementParser extends ExpressionParser {
       this.expect(tt.colon);
       // check if the value set to the module attribute is a string as we only allow string literals
       if (!this.match(tt.string)) {
-        return this.unexpected(
+        throw this.unexpected(
           this.state.start,
-          "Only string literal values are allowed",
+          Errors.ModuleAttributesIncorrectValue,
         );
       }
       node.value = this.parseLiteral(this.state.value, "StringLiteral");
