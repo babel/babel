@@ -44,7 +44,6 @@
     "@babel/parser": "^7.8.4",
     "@babel/plugin-transform-modules-commonjs": "^7.8.3",
     "@babel/plugin-transform-parameters": "^7.8.4",
-    "@babel/plugin-transform-spread": "^7.8.3",
     "babel-check-duplicated-nodes": "^1.0.0",
     "browserify": "^16.5.0",
     "mocha": "^7.0.1",

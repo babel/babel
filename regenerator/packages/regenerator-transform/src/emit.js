@@ -1094,7 +1094,13 @@ Ep.explodeExpression = function(path, ignoreResult) {
   case "ArrayExpression":
     return finish(t.arrayExpression(
       path.get("elements").map(function(elemPath) {
-        return explodeViaTempVar(null, elemPath);
+        if (elemPath.isSpreadElement()) {
+          return t.spreadElement(
+            explodeViaTempVar(null, elemPath.get("argument"))
+          );
+        } else {
+          return explodeViaTempVar(null, elemPath);
+        }
       })
     ));
 

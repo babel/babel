@@ -2815,4 +2815,22 @@ describe("expressions containing yield subexpressions", function() {
       done: true
     });
   });
+
+  it("should work when yield is in an array spread", function() {
+    function *gen() {
+      return [0, ...(yield "foo"), 3];
+    }
+
+    var g = gen();
+
+    assert.deepEqual(g.next(), {
+      value: "foo",
+      done: false,
+    });
+
+    assert.deepEqual(g.next([1, 2]), {
+      value: [0, 1, 2, 3],
+      done: true,
+    });
+  });
 });

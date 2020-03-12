@@ -165,11 +165,10 @@ enqueue(convert, [
   "./test/class.es5.js"
 ]);
 
-function convertWithSpread(es6File, es5File, callback) {
+function convertWithParamsTransform(es6File, es5File, callback) {
   var transformOptions = {
     presets:[require("regenerator-preset")],
     plugins: [
-      require("@babel/plugin-transform-spread"),
       require("@babel/plugin-transform-parameters")
     ],
     parserOpts: {
@@ -200,7 +199,7 @@ function convertWithSpread(es6File, es5File, callback) {
   });
 }
 
-enqueue(convertWithSpread, [
+enqueue(convertWithParamsTransform, [
   "./test/regression.js",
   "./test/regression.es5.js"
 ]);
