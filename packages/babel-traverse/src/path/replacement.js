@@ -49,6 +49,11 @@ export function replaceWithMultiple(nodes: Array<Object>) {
   nodes = this._verifyNodeList(nodes);
   t.inheritLeadingComments(nodes[0], this.node);
   t.inheritTrailingComments(nodes[nodes.length - 1], this.node);
+
+  if (!this.opts || !this.opts.noScope) {
+    this._removeFromScope();
+  }
+
   this.node = this.container[this.key] = null;
   const paths = this.insertAfter(nodes);
 
