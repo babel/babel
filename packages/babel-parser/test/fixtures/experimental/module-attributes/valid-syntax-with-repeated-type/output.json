@@ -13,7 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Duplicate key \"type\" is not allowed in module attributes (1:64)"
+    "SyntaxError: Duplicate key \"type\" is not allowed in module attributes (1:60)"
   ],
   "program": {
     "type": "Program",

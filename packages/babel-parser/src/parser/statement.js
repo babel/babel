@@ -2082,7 +2082,7 @@ export default class StatementParser extends ExpressionParser {
       // if a duplicate entry is found, throw an error
       if (attributes.has(node.key.name)) {
         this.raise(
-          this.state.start,
+          node.key.start,
           Errors.ModuleAttributesWithDuplicateKeys,
           node.key.name,
         );
