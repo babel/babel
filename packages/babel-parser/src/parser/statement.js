@@ -2070,7 +2070,7 @@ export default class StatementParser extends ExpressionParser {
       return null;
     }
     const attrs = [];
-    const attributeMap = Object.create(null);
+    const attributes = new Set();
     do {
       // we are trying to parse a node which has the following syntax
       // with type: "json"
@@ -2080,22 +2080,22 @@ export default class StatementParser extends ExpressionParser {
 
       // check if we already have an entry for an attribute
       // if a duplicate entry found, throw an error
-      if (attributeMap[node.key.name]) {
+      if (attributes.has(node.key.name)) {
         this.raise(
           this.state.start,
           Errors.ModuleAttributesWithDuplicateKeys,
           node.key.name,
         );
       }
-      // set the attribute name entry in the attributeMap to true
-      attributeMap[node.key.name] = true;
+      // set the attribute name entry in the attributeMap
+      attributes.add(node.key.name);
       // check for colon
       this.expect(tt.colon);
       // check if the value set to the module attribute is a string as we only allow string literals
       if (!this.match(tt.string)) {
         throw this.unexpected(
           this.state.start,
-          Errors.ModuleAttributesIncorrectValue,
+          Errors.ModuleAttributeInvalidValue,
         );
       }
       node.value = this.parseLiteral(this.state.value, "StringLiteral");
@@ -2104,7 +2104,7 @@ export default class StatementParser extends ExpressionParser {
     } while (this.eat(tt.comma));
 
     // check if module attributes do not contain any type key and throw an error
-    if (!attributeMap["type"]) {
+    if (!attributes.has("type")) {
       throw this.raise(this.state.start, Errors.ModuleAttributesWithoutType);
     }
     return attrs;

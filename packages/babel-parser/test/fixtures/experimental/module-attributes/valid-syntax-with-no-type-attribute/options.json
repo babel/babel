@@ -8,5 +8,5 @@
     ]
   ],
   "sourceType": "module",
-  "throws": "Module attributes should include a type (1:44)"
+  "throws": "Module attributes should include a \"type\" key (1:44)"
 }
