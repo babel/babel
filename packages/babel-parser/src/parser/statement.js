@@ -2123,9 +2123,7 @@ export default class StatementParser extends ExpressionParser {
           node.key.name,
         );
       }
-      // set the attribute name entry in the attributeMap
       attributes.add(node.key.name);
-      // check for colon
       this.expect(tt.colon);
       // check if the value set to the module attribute is a string as we only allow string literals
       if (!this.match(tt.string)) {
