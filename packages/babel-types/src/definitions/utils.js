@@ -188,7 +188,8 @@ export function assertShape(shape: { [string]: FieldOptions }): Validator {
 
 export function assertOptionalChainStart(): Validator {
   function validate(node) {
-    for (let current = node; current; ) {
+    let current = node;
+    while (node) {
       const { type } = current;
       if (type === "OptionalCallExpression") {
         if (current.optional) return;
@@ -206,7 +207,7 @@ export function assertOptionalChainStart(): Validator {
     }
 
     throw new TypeError(
-      `Non-optional ${node.type} must chain from an optional OptionalMemberExpression or OptionalCallExpression`,
+      `Non-optional ${node.type} must chain from an optional OptionalMemberExpression or OptionalCallExpression. Found chain from ${current?.type}`,
     );
   }
 
