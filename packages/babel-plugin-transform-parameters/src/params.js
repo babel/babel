@@ -76,11 +76,19 @@ export default function convertFunctionParams(path, loose) {
           switch (node.type) {
             case "VariableDeclarator":
               if (node.init === null) {
-                redeclarator.remove();
-              } else {
-                state.iife = true;
+                const declaration = redeclarator.parentPath;
+                // The following uninitialized var declarators should not be removed
+                // for (var x in {})
+                // for (var x;;)
+                if (
+                  !declaration.parentPath.isFor() ||
+                  declaration.parentPath.get("body") === declaration
+                ) {
+                  redeclarator.remove();
+                  break;
+                }
               }
-              break;
+            // fall through
             case "FunctionDeclaration":
               state.iife = true;
               break;
