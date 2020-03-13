@@ -38,17 +38,31 @@ const handle = {
     const { node, parent, parentPath } = member;
 
     if (member.isOptionalMemberExpression()) {
-      const root = member.find(({ node, parent, parentPath }) => {
+      // We're looking for the end of _this_ optional chain, which is actually
+      // the "rightmost" property access of the chain. This is because
+      // everything up to that property access is "optional".
+      //
+      // Let's take the case of `FOO?.BAR.baz?.qux`, with `FOO?.BAR` being our
+      // member. The "end" to most users would be `qux` property access.
+      // Everything up to it could be skipped if it `FOO` were nullish. But
+      // actually, we can consider the `baz` access to be the end. So we're
+      // looking for the nearest optional chain that is `optional: true`.
+      const endPath = member.find(({ node, parent, parentPath }) => {
         if (parentPath.isOptionalMemberExpression()) {
+          // We need to check `parent.object` since we could be inside the
+          // computed expression of a `bad?.[FOO?.BAR]`. In this case, the
+          // endPath is the `FOO?.BAR` member itself.
           return parent.optional || parent.object !== node;
         }
         if (parentPath.isOptionalCallExpression()) {
+          // Checking `parent.callee` since we could be in the arguments, eg
+          // `bad?.(FOO?.BAR)`.
           return parent.optional || parent.callee !== node;
         }
         return true;
       });
 
-      const rootParentPath = root.parentPath;
+      const rootParentPath = endPath.parentPath;
       if (
         rootParentPath.isUpdateExpression({ argument: node }) ||
         rootParentPath.isAssignmentExpression({ left: node })
@@ -65,37 +79,41 @@ const handle = {
         );
       }
 
-      let nearestOptional = member;
+      // Now, we're looking for the start of this optional chain, which is
+      // optional to the left of this member.
+      //
+      // Let's take the case of `foo?.bar?.baz.QUX?.BAM`, with `QUX?.BAM` being
+      // our member. The "start" to most users would be `foo` object access.
+      // But actually, we can consider the `bar` access to be the start. So
+      // we're looking for the nearest optional chain that is `optional: true`,
+      // which is guaranteed to be somewhere in the object/callee tree.
+      let startingOptional = member;
       for (;;) {
-        if (nearestOptional.isOptionalMemberExpression()) {
-          if (nearestOptional.node.optional) break;
-          nearestOptional = nearestOptional.get("object");
+        if (startingOptional.isOptionalMemberExpression()) {
+          if (startingOptional.node.optional) break;
+          startingOptional = startingOptional.get("object");
           continue;
-        } else if (nearestOptional.isOptionalCallExpression()) {
-          if (nearestOptional.node.optional) break;
-          nearestOptional = nearestOptional.get("object");
+        } else if (startingOptional.isOptionalCallExpression()) {
+          if (startingOptional.node.optional) break;
+          startingOptional = startingOptional.get("callee");
           continue;
         }
-
-        throw nearestOptional.buildCodeFrameError(
-          "failed to find nearest optional",
-        );
       }
 
       const { scope } = member;
       const { object } = node;
-      const baseRef = scope.generateUidIdentifierBasedOnNode(
-        nearestOptional.node.object,
-      );
+      const startingProp = startingOptional.isOptionalMemberExpression()
+        ? "object"
+        : "callee";
+      const startingNode = startingOptional.node[startingProp];
+      const baseRef = scope.generateUidIdentifierBasedOnNode(startingNode);
       const valueRef = scope.generateUidIdentifierBasedOnNode(object);
       scope.push({ id: baseRef });
       scope.push({ id: valueRef });
 
-      nearestOptional
-        .get("object")
-        .replaceWith(
-          t.assignmentExpression("=", baseRef, nearestOptional.node.object),
-        );
+      startingOptional
+        .get(startingProp)
+        .replaceWith(t.assignmentExpression("=", baseRef, startingNode));
       member.replaceWith(t.memberExpression(valueRef, node.property));
 
       if (parentPath.isOptionalCallExpression({ callee: node })) {
@@ -105,7 +123,7 @@ const handle = {
       }
 
       let regular = member.node;
-      for (let current = member; current !== root; ) {
+      for (let current = member; current !== endPath; ) {
         const { parentPath, parent } = current;
         if (parentPath.isOptionalMemberExpression()) {
           regular = t.memberExpression(
@@ -119,7 +137,7 @@ const handle = {
         current = parentPath;
       }
 
-      root.replaceWith(
+      endPath.replaceWith(
         t.conditionalExpression(
           t.sequenceExpression([
             t.assignmentExpression("=", valueRef, object),
