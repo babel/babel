@@ -12,7 +12,7 @@ class A6 extends class {} {}
 
 class A7 extends (B ? C : D) {}
 
-class A8 extends (new B()) {}
+class A8 extends new B() {}
 
 class A9 extends (B, C) {}
 
