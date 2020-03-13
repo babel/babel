@@ -2079,7 +2079,7 @@ export default class StatementParser extends ExpressionParser {
       node.key = this.parseIdentifier(true);
 
       // check if we already have an entry for an attribute
-      // if a duplicate entry found, throw an error
+      // if a duplicate entry is found, throw an error
       if (attributes.has(node.key.name)) {
         this.raise(
           this.state.start,
