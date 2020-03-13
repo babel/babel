@@ -774,9 +774,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.tsParseTupleType();
         case tt.parenL:
           if (!this.options.createParenthesizedExpressions) {
+            const startPos = this.state.start;
             this.expect(tt.parenL);
             const type = this.tsParseType();
             this.expect(tt.parenR);
+            this.addExtra(type, "parenthesized", true);
+            this.addExtra(type, "parenStart", startPos);
             return type;
           }
 
