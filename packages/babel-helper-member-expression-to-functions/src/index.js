@@ -29,6 +29,32 @@ class AssignmentMemoiser {
   }
 }
 
+function toNonOptional(path, base) {
+  const { node } = path;
+  if (path.isOptionalMemberExpression()) {
+    return t.memberExpression(base, node.property, node.computed);
+  }
+
+  if (path.isOptionalCallExpression()) {
+    const callee = path.get("callee");
+    if (path.node.optional && callee.isOptionalMemberExpression()) {
+      const { object } = callee.node;
+      const context = path.scope.maybeGenerateMemoised(object) || object;
+      callee
+        .get("object")
+        .replaceWith(t.assignmentExpression("=", context, object));
+
+      return t.callExpression(t.memberExpression(base, t.identifier("call")), [
+        context,
+        ...node.arguments,
+      ]);
+    }
+
+    return t.callExpression(base, node.arguments);
+  }
+  throw path.buildCodeFrameError(`Cannot make ${path.type} non-optional`);
+}
+
 const handle = {
   memoise() {
     // noop.
@@ -98,31 +124,17 @@ const handle = {
           startingOptional = startingOptional.get("callee");
           continue;
         }
-
-        debugger;
-        console.error(startingOptional.toString());
-        // throw startingOptional.buildCodeFrameError(
-          // "failed to find nearest optional",
-        // );
       }
 
-      debugger;
       const { scope } = member;
-      const { object } = node;
       const startingProp = startingOptional.isOptionalMemberExpression()
         ? "object"
         : "callee";
       const startingNode = startingOptional.node[startingProp];
       const baseRef = scope.generateUidIdentifierBasedOnNode(startingNode);
-      const valueRef = scope.generateUidIdentifierBasedOnNode(object);
       scope.push({ id: baseRef });
-      scope.push({ id: valueRef });
 
-      startingOptional
-        .get(startingProp)
-        .replaceWith(t.assignmentExpression("=", baseRef, startingNode));
-      member.replaceWith(t.memberExpression(valueRef, node.property));
-
+      startingOptional.replaceWith(toNonOptional(startingOptional, baseRef));
       if (parentPath.isOptionalCallExpression({ callee: node })) {
         parentPath.replaceWith(this.call(member, parent.arguments));
       } else {
@@ -131,33 +143,59 @@ const handle = {
 
       let regular = member.node;
       for (let current = member; current !== endPath; ) {
-        const { parentPath, parent } = current;
-        if (parentPath.isOptionalMemberExpression()) {
-          regular = t.memberExpression(
-            regular,
-            parent.property,
-            parent.computed,
-          );
-        } else {
-          regular = t.callExpression(regular, parent.arguments);
-        }
+        const { parentPath } = current;
+        regular = toNonOptional(parentPath, regular);
         current = parentPath;
+      }
+
+      let context;
+      const endParentPath = endPath.parentPath;
+      if (
+        t.isMemberExpression(regular) &&
+        endParentPath.isOptionalCallExpression({
+          callee: endPath.node,
+          optional: true,
+        })
+      ) {
+        const { object } = regular;
+        context = member.scope.maybeGenerateMemoised(object);
+        if (context) {
+          regular.object = t.assignmentExpression("=", context, object);
+        }
       }
 
       endPath.replaceWith(
         t.conditionalExpression(
-          t.sequenceExpression([
-            t.assignmentExpression("=", valueRef, object),
-            t.logicalExpression(
-              "||",
-              t.binaryExpression("===", baseRef, scope.buildUndefinedNode()),
-              t.binaryExpression("===", baseRef, t.nullLiteral()),
+          t.logicalExpression(
+            "||",
+            t.binaryExpression(
+              "===",
+              t.assignmentExpression("=", baseRef, startingNode),
+              t.nullLiteral(),
             ),
-          ]),
+            t.binaryExpression("===", baseRef, scope.buildUndefinedNode()),
+          ),
           scope.buildUndefinedNode(),
           regular,
         ),
       );
+
+      if (context) {
+        const endParent = endParentPath.node;
+        endParentPath.replaceWith(
+          t.optionalCallExpression(
+            t.optionalMemberExpression(
+              endParent.callee,
+              t.identifier("call"),
+              endParent.computed,
+              true,
+            ),
+            [context, ...endParent.arguments],
+            false,
+          ),
+        );
+      }
+
       return;
     }
 

@@ -59,6 +59,7 @@ class Foo {
     fn?.().Foo.#self.getSelf?.()?.self.#x;
     fn?.().Foo.#self?.getSelf()?.self.#x;
     fn?.().Foo.#self?.getSelf?.()?.self.#x;
+
   }
 }
 
