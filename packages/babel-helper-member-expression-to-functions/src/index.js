@@ -52,7 +52,8 @@ function toNonOptional(path, base) {
 
     return t.callExpression(base, node.arguments);
   }
-  throw path.buildCodeFrameError(`Cannot make ${path.type} non-optional`);
+
+  return path.node;
 }
 
 const handle = {

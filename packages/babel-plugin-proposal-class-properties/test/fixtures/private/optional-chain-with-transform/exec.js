@@ -117,5 +117,5 @@ class Foo {
   }
 }
 
-// Foo.test();
+Foo.test();
 Foo.testNull();
