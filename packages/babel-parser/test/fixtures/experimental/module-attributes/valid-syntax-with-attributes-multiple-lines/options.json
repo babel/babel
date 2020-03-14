@@ -7,5 +7,6 @@
       }
     ]
   ],
-  "sourceType": "module"
+  "sourceType": "module",
+  "throws": "Unexpected token, expected \"(\" (3:0)"
 }

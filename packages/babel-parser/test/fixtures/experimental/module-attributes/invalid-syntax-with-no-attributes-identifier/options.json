@@ -8,6 +8,5 @@
     ],
     "estree"
   ],
-  "sourceType": "module",
-  "throws": "Unexpected token (2:5)"
+  "sourceType": "module"
 }

@@ -2062,7 +2062,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   maybeParseModuleAttributes() {
-    if (this.match(tt._with)) {
+    if (this.match(tt._with) && !this.isLineTerminator()) {
       this.expectPlugin("moduleAttributes");
       this.next();
     } else {
