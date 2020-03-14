@@ -98,8 +98,15 @@ const handle = {
           startingOptional = startingOptional.get("callee");
           continue;
         }
+
+        debugger;
+        console.error(startingOptional.toString());
+        // throw startingOptional.buildCodeFrameError(
+          // "failed to find nearest optional",
+        // );
       }
 
+      debugger;
       const { scope } = member;
       const { object } = node;
       const startingProp = startingOptional.isOptionalMemberExpression()

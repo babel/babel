@@ -27,6 +27,15 @@ class Foo {
     o?.Foo.#self.self?.self.#x;
     o?.Foo.#self?.self?.self.#x;
 
+    o?.Foo.#self.getSelf().#x;
+    o?.Foo.#self.getSelf?.().#x;
+    o?.Foo.#self?.getSelf().#x;
+    o?.Foo.#self?.getSelf?.().#x;
+    o?.Foo.#self.getSelf()?.self.#x;
+    o?.Foo.#self.getSelf?.()?.self.#x;
+    o?.Foo.#self?.getSelf()?.self.#x;
+    o?.Foo.#self?.getSelf?.()?.self.#x;
+
     fn?.().Foo.#x;
     fn?.().Foo.#x.toString;
     fn?.().Foo.#x.toString();
@@ -40,6 +49,15 @@ class Foo {
     fn?.().Foo.#self?.self.#x;
     fn?.().Foo.#self.self?.self.#x;
     fn?.().Foo.#self?.self?.self.#x;
+
+    fn?.().Foo.#self.getSelf().#x;
+    fn?.().Foo.#self.getSelf?.().#x;
+    fn?.().Foo.#self?.getSelf().#x;
+    fn?.().Foo.#self?.getSelf?.().#x;
+    fn?.().Foo.#self.getSelf()?.self.#x;
+    fn?.().Foo.#self.getSelf?.()?.self.#x;
+    fn?.().Foo.#self?.getSelf()?.self.#x;
+    fn?.().Foo.#self?.getSelf?.()?.self.#x;
   }
 }
 
