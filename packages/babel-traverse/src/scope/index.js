@@ -493,7 +493,8 @@ export default class Scope {
     console.log(sep);
   }
 
-  toArray(node: Object, i?: number) {
+  // TODO: (Babel 8) Split i in two parameters, and use an object of flags
+  toArray(node: Object, i?: number | boolean, allowArrayLike?: boolean) {
     if (t.isIdentifier(node)) {
       const binding = this.getBinding(node.name);
       if (binding && binding.constant && binding.path.isGenericType("Array")) {
@@ -536,6 +537,12 @@ export default class Scope {
       // Used in array-rest to create an array
       helperName = "toArray";
     }
+
+    if (allowArrayLike) {
+      args.unshift(this.hub.addHelper(helperName));
+      helperName = "maybeArrayLike";
+    }
+
     return t.callExpression(this.hub.addHelper(helperName), args);
   }
 
