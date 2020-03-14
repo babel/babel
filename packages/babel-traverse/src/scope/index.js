@@ -49,8 +49,22 @@ function gatherNodeParts(node: Object, parts: Array) {
     case "ObjectExpression":
     case "ObjectPattern":
       for (const e of node.properties) {
-        gatherNodeParts(e.key || e.argument, parts);
+        gatherNodeParts(e, parts);
       }
+      break;
+
+    case "SpreadElement":
+    case "RestElement":
+      gatherNodeParts(node.argument, parts);
+      break;
+
+    case "ObjectProperty":
+    case "ObjectMethod":
+    case "ClassProperty":
+    case "ClassMethod":
+    case "ClassPrivateProperty":
+    case "ClassPrivateMethod":
+      gatherNodeParts(node.key, parts);
       break;
 
     case "ThisExpression":
@@ -83,10 +97,17 @@ function gatherNodeParts(node: Object, parts: Array) {
       gatherNodeParts(node.left, parts);
       break;
 
+    case "VariableDeclarator":
+      gatherNodeParts(node.id, parts);
+      break;
+
     case "FunctionExpression":
     case "FunctionDeclaration":
     case "ClassExpression":
     case "ClassDeclaration":
+      gatherNodeParts(node.id, parts);
+      break;
+
     case "PrivateName":
       gatherNodeParts(node.id, parts);
       break;
@@ -350,17 +371,7 @@ export default class Scope {
     return `_${id}`;
   }
 
-  generateUidBasedOnNode(parent: Object, defaultName?: String) {
-    let node = parent;
-
-    if (t.isAssignmentExpression(parent)) {
-      node = parent.left;
-    } else if (t.isVariableDeclarator(parent)) {
-      node = parent.id;
-    } else if (t.isObjectProperty(node) || t.isObjectMethod(node)) {
-      node = node.key;
-    }
-
+  generateUidBasedOnNode(node: Object, defaultName?: String) {
     const parts = [];
     gatherNodeParts(node, parts);
 
@@ -374,11 +385,8 @@ export default class Scope {
    * Generate a unique identifier based on a node.
    */
 
-  generateUidIdentifierBasedOnNode(
-    parent: Object,
-    defaultName?: String,
-  ): Object {
-    return t.identifier(this.generateUidBasedOnNode(parent, defaultName));
+  generateUidIdentifierBasedOnNode(node: Object, defaultName?: String): Object {
+    return t.identifier(this.generateUidBasedOnNode(node, defaultName));
   }
 
   /**
