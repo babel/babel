@@ -1076,15 +1076,15 @@ helpers.createForOfIteratorHelperLoose = helper("7.9.0")`
   export default function _createForOfIteratorHelperLoose(o) {
     var i = 0;
 
-    if (Array.isArray(o)) {
-      return function() {
-        if (i >= o.length) return { done: true };
-        return { done: false, value: o[i++] };
-      }
-    }
+    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+      if (Array.isArray(o))
+        return function() {
+          if (i >= o.length) return { done: true };
+          return { done: false, value: o[i++] };
+        }
 
-    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null)
       throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+    }
 
     i = o[Symbol.iterator]();
     return i.next.bind(i);
