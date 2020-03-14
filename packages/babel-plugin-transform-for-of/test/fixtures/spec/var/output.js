@@ -1,22 +1,12 @@
-var _iteratorNormalCompletion = true;
-var _didIteratorError = false;
-var _iteratorError = undefined;
+var _iteratorHelper = babelHelpers.createForOfIteratorHelper(arr),
+    _step;
 
 try {
-  for (var _iterator = arr[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+  for (_iteratorHelper.s(); !(_step = _iteratorHelper.n()).done;) {
     var i = _step.value;
   }
 } catch (err) {
-  _didIteratorError = true;
-  _iteratorError = err;
+  _iteratorHelper.e(err);
 } finally {
-  try {
-    if (!_iteratorNormalCompletion && _iterator.return != null) {
-      _iterator.return();
-    }
-  } finally {
-    if (_didIteratorError) {
-      throw _iteratorError;
-    }
-  }
+  _iteratorHelper.f();
 }

@@ -87,46 +87,19 @@ export default declare((api, options) => {
     for (var KEY = 0, NAME = ARR; KEY < NAME.length; KEY++) BODY;
   `);
 
-  const buildForOfLoose = template(`
-    for (var LOOP_OBJECT = OBJECT,
-             IS_ARRAY = Array.isArray(LOOP_OBJECT),
-             INDEX = 0,
-             LOOP_OBJECT = IS_ARRAY ? LOOP_OBJECT : LOOP_OBJECT[Symbol.iterator]();;) {
-      INTERMEDIATE;
-      if (IS_ARRAY) {
-        if (INDEX >= LOOP_OBJECT.length) break;
-        ID = LOOP_OBJECT[INDEX++];
-      } else {
-        INDEX = LOOP_OBJECT.next();
-        if (INDEX.done) break;
-        ID = INDEX.value;
-      }
-    }
+  const buildForOfLoose = template.statements(`
+    for (var ITERATOR_HELPER = CREATE_ITERATOR_HELPER(OBJECT), STEP_KEY;
+        !(STEP_KEY = ITERATOR_HELPER()).done;) {}
   `);
 
-  const buildForOf = template(`
-    var ITERATOR_COMPLETION = true;
-    var ITERATOR_HAD_ERROR_KEY = false;
-    var ITERATOR_ERROR_KEY = undefined;
+  const buildForOf = template.statements(`
+    var ITERATOR_HELPER = CREATE_ITERATOR_HELPER(OBJECT), STEP_KEY;
     try {
-      for (
-        var ITERATOR_KEY = OBJECT[Symbol.iterator](), STEP_KEY;
-        !(ITERATOR_COMPLETION = (STEP_KEY = ITERATOR_KEY.next()).done);
-        ITERATOR_COMPLETION = true
-      ) {}
+      for (ITERATOR_HELPER.s(); !(STEP_KEY = ITERATOR_HELPER.n()).done;) {}
     } catch (err) {
-      ITERATOR_HAD_ERROR_KEY = true;
-      ITERATOR_ERROR_KEY = err;
+      ITERATOR_HELPER.e(err);
     } finally {
-      try {
-        if (!ITERATOR_COMPLETION && ITERATOR_KEY.return != null) {
-          ITERATOR_KEY.return();
-        }
-      } finally {
-        if (ITERATOR_HAD_ERROR_KEY) {
-          throw ITERATOR_ERROR_KEY;
-        }
-      }
+      ITERATOR_HELPER.f();
     }
   `);
 
@@ -225,8 +198,14 @@ export default declare((api, options) => {
 
   function pushComputedPropsLoose(path, file) {
     const { node, scope, parent } = path;
-    const { left } = node;
-    let declar, id, intermediate;
+    const left = node.left;
+    let declar;
+
+    const stepKey = scope.generateUid("step");
+    const stepValue = t.memberExpression(
+      t.identifier(stepKey),
+      t.identifier("value"),
+    );
 
     if (
       t.isIdentifier(left) ||
@@ -234,16 +213,13 @@ export default declare((api, options) => {
       t.isMemberExpression(left)
     ) {
       // for (i of test), for ({ i } of test)
-      id = left;
-      intermediate = null;
+      declar = t.expressionStatement(
+        t.assignmentExpression("=", left, stepValue),
+      );
     } else if (t.isVariableDeclaration(left)) {
       // for (let i of test)
-      id = scope.generateUidIdentifier("ref");
       declar = t.variableDeclaration(left.kind, [
-        t.variableDeclarator(left.declarations[0].id, t.identifier(id.name)),
-      ]);
-      intermediate = t.variableDeclaration("var", [
-        t.variableDeclarator(t.identifier(id.name)),
+        t.variableDeclarator(left.declarations[0].id, stepValue),
       ]);
     } else {
       throw file.buildCodeFrameError(
@@ -252,31 +228,25 @@ export default declare((api, options) => {
       );
     }
 
-    const iteratorKey = scope.generateUidIdentifier("iterator");
-    const isArrayKey = scope.generateUidIdentifier("isArray");
-
-    const loop = buildForOfLoose({
-      LOOP_OBJECT: iteratorKey,
-      IS_ARRAY: isArrayKey,
+    const template = buildForOfLoose({
+      CREATE_ITERATOR_HELPER: file.addHelper("createForOfIteratorHelperLoose"),
+      ITERATOR_HELPER: scope.generateUidIdentifier("iteratorHelper"),
+      STEP_KEY: t.identifier(stepKey),
       OBJECT: node.right,
-      INDEX: scope.generateUidIdentifier("i"),
-      ID: id,
-      INTERMEDIATE: intermediate,
     });
+    const loop = template[0];
 
-    //
     const isLabeledParent = t.isLabeledStatement(parent);
-    let labeled;
 
     if (isLabeledParent) {
-      labeled = t.labeledStatement(parent.label, loop);
+      template[0] = t.labeledStatement(parent.label, loop);
     }
 
     return {
       replaceParent: isLabeledParent,
-      declar: declar,
-      node: labeled || loop,
-      loop: loop,
+      declar,
+      loop,
+      node: template,
     };
   }
 
@@ -313,19 +283,15 @@ export default declare((api, options) => {
     }
 
     const template = buildForOf({
-      ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
-      ITERATOR_COMPLETION: scope.generateUidIdentifier(
-        "iteratorNormalCompletion",
-      ),
-      ITERATOR_ERROR_KEY: scope.generateUidIdentifier("iteratorError"),
-      ITERATOR_KEY: scope.generateUidIdentifier("iterator"),
+      CREATE_ITERATOR_HELPER: file.addHelper("createForOfIteratorHelper"),
+      ITERATOR_HELPER: scope.generateUidIdentifier("iteratorHelper"),
       STEP_KEY: t.identifier(stepKey),
       OBJECT: node.right,
     });
 
     const isLabeledParent = t.isLabeledStatement(parent);
 
-    const tryBody = template[3].block.body;
+    const tryBody = template[1].block.body;
     const loop = tryBody[0];
 
     if (isLabeledParent) {

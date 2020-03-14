@@ -6,10 +6,11 @@ function _iterableToArrayLimit(arr, i) { if ((typeof Symbol === "undefined" || !
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+function _createForOfIteratorHelper(o) { if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); var it, normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e) { didErr = true; err = _e; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
 // https://github.com/babel/babel/issues/7557
-var _iteratorNormalCompletion = true;
-var _didIteratorError = false;
-var _iteratorError = undefined;
+var _iteratorHelper = _createForOfIteratorHelper(c),
+    _step;
 
 try {
   var _loop = function _loop() {
@@ -23,20 +24,11 @@ try {
     });
   };
 
-  for (var _iterator = c[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+  for (_iteratorHelper.s(); !(_step = _iteratorHelper.n()).done;) {
     _loop();
   }
 } catch (err) {
-  _didIteratorError = true;
-  _iteratorError = err;
+  _iteratorHelper.e(err);
 } finally {
-  try {
-    if (!_iteratorNormalCompletion && _iterator["return"] != null) {
-      _iterator["return"]();
-    }
-  } finally {
-    if (_didIteratorError) {
-      throw _iteratorError;
-    }
-  }
+  _iteratorHelper.f();
 }
