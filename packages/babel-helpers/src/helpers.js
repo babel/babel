@@ -936,7 +936,7 @@ helpers.iterableToArray = helper("7.0.0-beta.0")`
     if (
       typeof iter === 'string'
       || Object.prototype.toString.call(iter) === "[object Arguments]"
-      || Symbol.iterator in Object(iter)
+      || (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter))
     ) return Array.from(iter);
   }
 `;
@@ -952,9 +952,12 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
     // _e = _iteratorError
     // _i = _iterator
     // _s = _step
-    if (!(
-      Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]"
-    )) { return }
+
+    if (
+      (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) &&
+      Object.prototype.toString.call(arr) !== "[object Arguments]"
+    ) return;
+
     var _arr = [];
     var _n = true;
     var _d = false;
@@ -980,9 +983,11 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
 
 helpers.iterableToArrayLimitLoose = helper("7.0.0-beta.0")`
   export default function _iterableToArrayLimitLoose(arr, i) {
-    if (!(
-      Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]"
-    )) { return }
+    if (
+      (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) &&
+      Object.prototype.toString.call(arr) !== "[object Arguments]"
+    ) return;
+
     var _arr = [];
     for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
       _arr.push(_step.value);
@@ -994,13 +999,17 @@ helpers.iterableToArrayLimitLoose = helper("7.0.0-beta.0")`
 
 helpers.nonIterableSpread = helper("7.0.0-beta.0")`
   export default function _nonIterableSpread() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance");
+    throw new TypeError(
+      "Invalid attempt to spread non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."
+    );
   }
 `;
 
 helpers.nonIterableRest = helper("7.0.0-beta.0")`
   export default function _nonIterableRest() {
-    throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    throw new TypeError(
+      "Invalid attempt to destructure non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."
+    );
   }
 `;
 
