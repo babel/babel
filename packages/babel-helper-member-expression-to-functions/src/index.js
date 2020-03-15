@@ -56,6 +56,28 @@ function toNonOptional(path, base) {
   return path.node;
 }
 
+// Determines if the current path is in a detached tree. This can happen when
+// we are iterating on a path, and replace an ancestor with a new node. Babel
+// doesn't always stop traversing the old node tree, and that can cause
+// inconsistencies.
+function isInDetachedTree(path) {
+  while (path) {
+    if (path.isProgram()) break;
+
+    const { parentPath, container, listKey } = path;
+    const parentNode = parentPath.node;
+    if (listKey) {
+      if (container !== parentNode[listKey]) return true;
+    } else {
+      if (container !== parentNode) return true;
+    }
+
+    path = parentPath;
+  }
+
+  return false;
+}
+
 const handle = {
   memoise() {
     // noop.
@@ -65,6 +87,9 @@ const handle = {
     const { node, parent, parentPath } = member;
 
     if (member.isOptionalMemberExpression()) {
+      // Transforming optional chaining requires we replace ancestors.
+      if (isInDetachedTree(member)) return;
+
       // We're looking for the end of _this_ optional chain, which is actually
       // the "rightmost" property access of the chain. This is because
       // everything up to that property access is "optional".
