@@ -2111,11 +2111,6 @@ export default class StatementParser extends ExpressionParser {
       attrs.push(node);
     } while (this.eat(tt.comma));
 
-    // check if module attributes do not contain any type key and throw an error
-    if (!attributes.has("type")) {
-      throw this.raise(this.state.start, Errors.ModuleAttributesWithoutType);
-    }
-
     return attrs;
   }
 
