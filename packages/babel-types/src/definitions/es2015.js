@@ -124,7 +124,7 @@ defineType("ClassExpression", {
     "implements",
     "decorators",
   ],
-  aliases: ["Scopable", "Class", "Expression", "Pureish"],
+  aliases: ["Scopable", "Class", "Expression"],
   fields: {
     id: {
       validate: assertNodeType("Identifier"),
@@ -175,7 +175,7 @@ defineType("ClassExpression", {
 
 defineType("ClassDeclaration", {
   inherits: "ClassExpression",
-  aliases: ["Scopable", "Class", "Statement", "Declaration", "Pureish"],
+  aliases: ["Scopable", "Class", "Statement", "Declaration"],
   fields: {
     declare: {
       validate: assertValueType("boolean"),
