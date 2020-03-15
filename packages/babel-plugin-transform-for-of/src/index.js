@@ -1,6 +1,8 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { template, types as t } from "@babel/core";
 
+import transformWithoutHelper from "./no-helper-implementation";
+
 export default declare((api, options) => {
   api.assertVersion(7);
 
@@ -159,6 +161,12 @@ export default declare((api, options) => {
           t.isArrayTypeAnnotation(right.getTypeAnnotation())
         ) {
           path.replaceWith(_ForOfStatementArray(path));
+          return;
+        }
+
+        if (!state.availableHelper(builder.helper)) {
+          // Babel <7.9.0 doesn't support this helper
+          transformWithoutHelper(loose, path, state);
           return;
         }
 
