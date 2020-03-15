@@ -7,6 +7,5 @@
       }
     ]
   ],
-  "sourceType": "module",
-  "throws": "The only accepted module attribute is `type` (1:46)"
+  "sourceType": "module"
 }

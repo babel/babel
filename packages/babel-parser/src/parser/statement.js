@@ -2080,7 +2080,7 @@ export default class StatementParser extends ExpressionParser {
 
       // for now we are only allowing `type` as the only allowed module attribute
       if (node.key.name !== "type") {
-        throw this.raise(
+        this.raise(
           node.key.start,
           Errors.ModuleAttributeDifferentFromType,
           node.key.name,
@@ -2115,6 +2115,7 @@ export default class StatementParser extends ExpressionParser {
     if (!attributes.has("type")) {
       throw this.raise(this.state.start, Errors.ModuleAttributesWithoutType);
     }
+
     return attrs;
   }
 

@@ -8,5 +8,5 @@
     ]
   ],
   "sourceType": "module",
-  "throws": "The only accepted module attribute is `type` (1:32)"
+  "throws": "Module attributes should include a \"type\" key (1:44)"
 }
