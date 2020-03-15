@@ -19,6 +19,32 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.8.8 (2020-03-12)
+
+#### :rocket: New Feature
+* `babel-helper-create-regexp-features-plugin`, `babel-plugin-proposal-unicode-property-regex`, `babel-plugin-transform-dotall-regex`
+  * [#11244](https://github.com/babel/babel/pull/11244) Add support for Unicode 13 in regexps (update `regexpu-core`) ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-parameters`
+  * [#11242](https://github.com/babel/babel/pull/11242) fix: do not remove shadowed for-loop declarators ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`
+  * [#11227](https://github.com/babel/babel/pull/11227) Force parentheses around array and conditional infer ([@smelukov](https://github.com/smelukov))
+* `babel-parser`
+  * [#11188](https://github.com/babel/babel/pull/11188) fix: non-directive "use strict" should not enable parsing in strict mode ([@kaicataldo](https://github.com/kaicataldo))
+* `babel-preset-env`
+  * [#11218](https://github.com/babel/babel/pull/11218) update: preset-env-fixtures ([@kaicataldo](https://github.com/kaicataldo))
+
+#### :house: Internal
+* `babel-plugin-syntax-export-namespace-from`
+  * [#11236](https://github.com/babel/babel/pull/11236) Archive @babel/plugin-syntax-export-namespace-from ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* Other
+  * [#11235](https://github.com/babel/babel/pull/11235) chore: pin `@rollup/plugin-json` to 4.0.1 ([@JLHwung](https://github.com/JLHwung))
+  * [#11230](https://github.com/babel/babel/pull/11230) chore: update acorn to latest version ([@JLHwung](https://github.com/JLHwung))
+* `babel-preset-env`
+  * [#11225](https://github.com/babel/babel/pull/11225) Update @babel deps ([@existentialism](https://github.com/existentialism))
+* `babel-parser`
+  * [#11219](https://github.com/babel/babel/pull/11219) refactor: remove redundant contextDescription empty check ([@JLHwung](https://github.com/JLHwung))
 ## v7.8.7 (2020-03-05)
 
 #### :bug: Bug Fix

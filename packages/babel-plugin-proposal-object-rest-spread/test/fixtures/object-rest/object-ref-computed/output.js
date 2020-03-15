@@ -2,9 +2,9 @@ var key, x, y, z; // impure
 
 key = 1;
 
-var _ref = key++,
+var _key = key++,
     {
-  [_ref]: {
+  [_key]: {
     y
   }
 } = {
@@ -18,7 +18,7 @@ var _ref = key++,
     a: 1,
     y: 1
   }
-}[_ref], ["y"]);
+}[_key], ["y"]);
 
 expect(x).toEqual({
   a: 1
@@ -38,18 +38,18 @@ var _$ = {
     z: 3
   }
 },
-    _ref2 = ++key,
-    _ref3 = ++key,
+    _key2 = ++key,
+    _key3 = ++key,
     {
-  [_ref3]: {
+  [_key3]: {
     y
   },
-  [_ref2]: {
+  [_key2]: {
     z
   }
 } = _$,
-    rest_y = babelHelpers.objectWithoutProperties(_$[_ref3], ["y"]),
-    rest_z = babelHelpers.objectWithoutProperties(_$[_ref2], ["z"]);
+    rest_y = babelHelpers.objectWithoutProperties(_$[_key3], ["y"]),
+    rest_z = babelHelpers.objectWithoutProperties(_$[_key2], ["z"]);
 
 expect(y).toBe(2);
 expect(rest_y).toEqual({

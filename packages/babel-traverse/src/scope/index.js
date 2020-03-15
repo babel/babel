@@ -11,37 +11,141 @@ import { scope as scopeCache } from "../cache";
 
 // Recursively gathers the identifying names of a node.
 function gatherNodeParts(node: Object, parts: Array) {
-  if (t.isModuleDeclaration(node)) {
-    if (node.source) {
-      gatherNodeParts(node.source, parts);
-    } else if (node.specifiers && node.specifiers.length) {
-      for (const specifier of (node.specifiers: Array)) {
-        gatherNodeParts(specifier, parts);
+  switch (node?.type) {
+    default:
+      if (t.isModuleDeclaration(node)) {
+        if (node.source) {
+          gatherNodeParts(node.source, parts);
+        } else if (node.specifiers && node.specifiers.length) {
+          for (const e of node.specifiers) gatherNodeParts(e, parts);
+        } else if (node.declaration) {
+          gatherNodeParts(node.declaration, parts);
+        }
+      } else if (t.isModuleSpecifier(node)) {
+        gatherNodeParts(node.local, parts);
+      } else if (t.isLiteral(node)) {
+        parts.push(node.value);
       }
-    } else if (node.declaration) {
-      gatherNodeParts(node.declaration, parts);
-    }
-  } else if (t.isModuleSpecifier(node)) {
-    gatherNodeParts(node.local, parts);
-  } else if (t.isMemberExpression(node)) {
-    gatherNodeParts(node.object, parts);
-    gatherNodeParts(node.property, parts);
-  } else if (t.isIdentifier(node)) {
-    parts.push(node.name);
-  } else if (t.isLiteral(node)) {
-    parts.push(node.value);
-  } else if (t.isCallExpression(node)) {
-    gatherNodeParts(node.callee, parts);
-  } else if (t.isObjectExpression(node) || t.isObjectPattern(node)) {
-    for (const prop of (node.properties: Array)) {
-      gatherNodeParts(prop.key || prop.argument, parts);
-    }
-  } else if (t.isPrivateName(node)) {
-    gatherNodeParts(node.id, parts);
-  } else if (t.isThisExpression(node)) {
-    parts.push("this");
-  } else if (t.isSuper(node)) {
-    parts.push("super");
+      break;
+
+    case "MemberExpression":
+    case "OptionalMemberExpression":
+    case "JSXMemberExpression":
+      gatherNodeParts(node.object, parts);
+      gatherNodeParts(node.property, parts);
+      break;
+
+    case "Identifier":
+    case "JSXIdentifier":
+      parts.push(node.name);
+      break;
+
+    case "CallExpression":
+    case "OptionalCallExpression":
+    case "NewExpression":
+      gatherNodeParts(node.callee, parts);
+      break;
+
+    case "ObjectExpression":
+    case "ObjectPattern":
+      for (const e of node.properties) {
+        gatherNodeParts(e, parts);
+      }
+      break;
+
+    case "SpreadElement":
+    case "RestElement":
+      gatherNodeParts(node.argument, parts);
+      break;
+
+    case "ObjectProperty":
+    case "ObjectMethod":
+    case "ClassProperty":
+    case "ClassMethod":
+    case "ClassPrivateProperty":
+    case "ClassPrivateMethod":
+      gatherNodeParts(node.key, parts);
+      break;
+
+    case "ThisExpression":
+      parts.push("this");
+      break;
+
+    case "Super":
+      parts.push("super");
+      break;
+
+    case "Import":
+      parts.push("import");
+      break;
+
+    case "DoExpression":
+      parts.push("do");
+      break;
+
+    case "YieldExpression":
+      parts.push("yield");
+      gatherNodeParts(node.argument, parts);
+      break;
+
+    case "AwaitExpression":
+      parts.push("await");
+      gatherNodeParts(node.argument, parts);
+      break;
+
+    case "AssignmentExpression":
+      gatherNodeParts(node.left, parts);
+      break;
+
+    case "VariableDeclarator":
+      gatherNodeParts(node.id, parts);
+      break;
+
+    case "FunctionExpression":
+    case "FunctionDeclaration":
+    case "ClassExpression":
+    case "ClassDeclaration":
+      gatherNodeParts(node.id, parts);
+      break;
+
+    case "PrivateName":
+      gatherNodeParts(node.id, parts);
+      break;
+
+    case "ParenthesizedExpression":
+      gatherNodeParts(node.expression, parts);
+      break;
+
+    case "UnaryExpression":
+    case "UpdateExpression":
+      gatherNodeParts(node.argument, parts);
+      break;
+
+    case "MetaProperty":
+      gatherNodeParts(node.meta, parts);
+      gatherNodeParts(node.property, parts);
+      break;
+
+    case "JSXElement":
+      gatherNodeParts(node.openingElement, parts);
+      break;
+
+    case "JSXOpeningElement":
+      parts.push(node.name);
+      break;
+
+    case "JSXFragment":
+      gatherNodeParts(node.openingFragment, parts);
+      break;
+
+    case "JSXOpeningFragment":
+      parts.push("Fragment");
+      break;
+
+    case "JSXNamespacedName":
+      gatherNodeParts(node.namespace, parts);
+      gatherNodeParts(node.name, parts);
+      break;
   }
 }
 
@@ -267,17 +371,7 @@ export default class Scope {
     return `_${id}`;
   }
 
-  generateUidBasedOnNode(parent: Object, defaultName?: String) {
-    let node = parent;
-
-    if (t.isAssignmentExpression(parent)) {
-      node = parent.left;
-    } else if (t.isVariableDeclarator(parent)) {
-      node = parent.id;
-    } else if (t.isObjectProperty(node) || t.isObjectMethod(node)) {
-      node = node.key;
-    }
-
+  generateUidBasedOnNode(node: Object, defaultName?: String) {
     const parts = [];
     gatherNodeParts(node, parts);
 
@@ -291,11 +385,8 @@ export default class Scope {
    * Generate a unique identifier based on a node.
    */
 
-  generateUidIdentifierBasedOnNode(
-    parent: Object,
-    defaultName?: String,
-  ): Object {
-    return t.identifier(this.generateUidBasedOnNode(parent, defaultName));
+  generateUidIdentifierBasedOnNode(node: Object, defaultName?: String): Object {
+    return t.identifier(this.generateUidBasedOnNode(node, defaultName));
   }
 
   /**

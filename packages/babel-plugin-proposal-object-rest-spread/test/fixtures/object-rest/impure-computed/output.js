@@ -6,11 +6,11 @@ var _$a = {
   1: 1,
   a: 1
 },
-    _ref = key++,
+    _key = key++,
     {
-  [_ref]: y
+  [_key]: y
 } = _$a,
-    x = babelHelpers.objectWithoutProperties(_$a, [_ref].map(babelHelpers.toPropertyKey));
+    x = babelHelpers.objectWithoutProperties(_$a, [_key].map(babelHelpers.toPropertyKey));
 
 expect(x).toEqual({
   a: 1
@@ -24,13 +24,13 @@ var _$ = {
   2: 2,
   3: 3
 },
-    _ref2 = ++key,
-    _ref3 = ++key,
+    _key2 = ++key,
+    _key3 = ++key,
     {
-  [_ref2]: y,
-  [_ref3]: z
+  [_key2]: y,
+  [_key3]: z
 } = _$,
-    rest = babelHelpers.objectWithoutProperties(_$, [_ref2, _ref3].map(babelHelpers.toPropertyKey));
+    rest = babelHelpers.objectWithoutProperties(_$, [_key2, _key3].map(babelHelpers.toPropertyKey));
 
 expect(y).toBe(2);
 expect(z).toBe(3); // pure, computed property should remain as-is
