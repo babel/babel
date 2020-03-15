@@ -934,8 +934,9 @@ helpers.arrayWithHoles = helper("7.0.0-beta.0")`
 helpers.iterableToArray = helper("7.0.0-beta.0")`
   export default function _iterableToArray(iter) {
     if (
-      Symbol.iterator in Object(iter) ||
-      Object.prototype.toString.call(iter) === "[object Arguments]"
+      typeof iter === 'string'
+      || Object.prototype.toString.call(iter) === "[object Arguments]"
+      || Symbol.iterator in Object(iter)
     ) return Array.from(iter);
   }
 `;
