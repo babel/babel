@@ -9,6 +9,12 @@ function test(foo) {
 
   foo.get(bar)?.()
 
+  foo.bar()?.()
+  foo[bar]()?.()
+
+  foo.bar().baz?.()
+  foo[bar]().baz?.()
+
   foo.bar?.(foo.bar, false)
 
   foo?.bar?.(foo.bar, true)
