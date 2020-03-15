@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 73,
+  "end": 59,
   "loc": {
     "start": {
       "line": 1,
@@ -9,16 +9,16 @@
     },
     "end": {
       "line": 1,
-      "column": 73
+      "column": 59
     }
   },
   "errors": [
-    "SyntaxError: Duplicate key \"type\" is not allowed in module attributes (1:60)"
+    "SyntaxError: Duplicate key \"type\" is not allowed in module attributes (1:46)"
   ],
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 73,
+    "end": 59,
     "loc": {
       "start": {
         "line": 1,
@@ -26,7 +26,7 @@
       },
       "end": {
         "line": 1,
-        "column": 73
+        "column": 59
       }
     },
     "sourceType": "module",
@@ -35,7 +35,7 @@
       {
         "type": "ImportDeclaration",
         "start": 0,
-        "end": 73,
+        "end": 59,
         "loc": {
           "start": {
             "line": 1,
@@ -43,7 +43,7 @@
           },
           "end": {
             "line": 1,
-            "column": 73
+            "column": 59
           }
         },
         "specifiers": [
@@ -180,9 +180,9 @@
                   "line": 1,
                   "column": 50
                 },
-                "identifierName": "lazy"
+                "identifierName": "type"
               },
-              "name": "lazy"
+              "name": "type"
             },
             "value": {
               "type": "StringLiteral",
@@ -196,58 +196,6 @@
                 "end": {
                   "line": 1,
                   "column": 58
-                }
-              },
-              "extra": {
-                "rawValue": "true",
-                "raw": "\"true\""
-              },
-              "value": "true"
-            }
-          },
-          {
-            "type": "ImportAttribute",
-            "start": 60,
-            "end": 72,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 60
-              },
-              "end": {
-                "line": 1,
-                "column": 72
-              }
-            },
-            "key": {
-              "type": "Identifier",
-              "start": 60,
-              "end": 64,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 60
-                },
-                "end": {
-                  "line": 1,
-                  "column": 64
-                },
-                "identifierName": "type"
-              },
-              "name": "type"
-            },
-            "value": {
-              "type": "StringLiteral",
-              "start": 66,
-              "end": 72,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 66
-                },
-                "end": {
-                  "line": 1,
-                  "column": 72
                 }
               },
               "extra": {

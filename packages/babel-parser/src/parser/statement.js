@@ -2114,8 +2114,18 @@ export default class StatementParser extends ExpressionParser {
       const node = this.startNode();
       node.key = this.parseIdentifier(true);
 
+      // for now we are only allowing `type` as the only allowed module attribute
+      if (node.key.name !== "type") {
+        throw this.raise(
+          node.key.start,
+          Errors.ModuleAttributeDifferentFromType,
+          node.key.name,
+        );
+      }
+
       // check if we already have an entry for an attribute
       // if a duplicate entry is found, throw an error
+      // for now this logic will come into play only when someone declares `type` twice
       if (attributes.has(node.key.name)) {
         this.raise(
           node.key.start,

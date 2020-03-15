@@ -8,5 +8,5 @@
     ]
   ],
   "sourceType": "module",
-  "throws": "Only string literals are allowed as module attributes values (1:52)"
+  "throws": "The only accepted module attribute is `type` (1:46)"
 }

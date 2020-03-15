@@ -97,8 +97,10 @@ export const Errors = Object.freeze({
   MissingUnicodeEscape: "Expecting Unicode escape sequence \\uXXXX",
   MixingCoalesceWithLogical:
     "Nullish coalescing operator(??) requires parens when mixing with logical operators",
+  ModuleAttributeDifferentFromType:
+    "The only accepted module attribute is `type`",
   ModuleAttributeInvalidValue:
-    "Only string literals are allowed as module attributes values",
+    "Only string literals are allowed as module attribute values",
   ModuleAttributesWithDuplicateKeys:
     'Duplicate key "%0" is not allowed in module attributes',
   ModuleAttributesWithoutType: 'Module attributes should include a "type" key',
