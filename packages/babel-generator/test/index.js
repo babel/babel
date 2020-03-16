@@ -534,9 +534,9 @@ suites.forEach(function(testSuite) {
               sourceMaps: task.sourceMap ? true : task.options.sourceMaps,
             };
 
-            function run() {
+            const run = () => {
               return generate(actualAst, options, actualCode);
-            }
+            };
 
             const throwMsg = task.options.throws;
             if (throwMsg) {
