@@ -1,6 +1,6 @@
 # @babel/plugin-syntax-import-module-attributes
 
-> Allow parsing of the pipeline operator
+> Allow parsing of the module attributes in the import statements
 
 See our website [@babel/plugin-syntax-import-module-attributes](https://babeljs.io/docs/en/next/babel-plugin-syntax-import-module-attributes.html) for more information.
 
