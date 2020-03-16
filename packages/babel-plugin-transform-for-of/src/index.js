@@ -180,26 +180,16 @@ export default declare((api, options) => {
           t.identifier("value"),
         );
 
-        if (
-          t.isIdentifier(left) ||
-          t.isPattern(left) ||
-          t.isMemberExpression(left)
-        ) {
-          // for (i of test), for ({ i } of test)
-          declar = t.expressionStatement(
-            t.assignmentExpression("=", left, stepValue),
-          );
-        } else if (t.isVariableDeclaration(left)) {
+        if (t.isVariableDeclaration(left)) {
           // for (let i of test)
           declar = t.variableDeclaration(left.kind, [
             t.variableDeclarator(left.declarations[0].id, stepValue),
           ]);
         } else {
-          throw path
-            .get("left")
-            .buildCodeFrameError(
-              `Unknown node type ${left.type} in ForStatement`,
-            );
+          // for (i of test), for ({ i } of test)
+          declar = t.expressionStatement(
+            t.assignmentExpression("=", left, stepValue),
+          );
         }
 
         // ensure that it's a block so we can take all its statements
