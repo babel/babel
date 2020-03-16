@@ -154,7 +154,8 @@ lines.push(
   // clone/
   `export function clone<T extends Node>(n: T): T;`,
   `export function cloneDeep<T extends Node>(n: T): T;`,
-  `export function cloneNode<T extends Node>(n: T, deep?: boolean): T;`,
+  `export function cloneDeepWithoutLoc<T extends Node>(n: T): T;`,
+  `export function cloneNode<T extends Node>(n: T, deep?: boolean, withoutLoc?: boolean): T;`,
   `export function cloneWithoutLoc<T extends Node>(n: T): T;`,
 
   // comments/
