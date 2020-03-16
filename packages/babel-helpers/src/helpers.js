@@ -1036,6 +1036,61 @@ helpers.nonIterableRest = helper("7.0.0-beta.0")`
   }
 `;
 
+helpers.createForOfIteratorHelper = helper("7.9.0")`
+  // s: start (create the iterator)
+  // n: next
+  // e: error (called whenever something throws)
+  // f: finish (always called at the end)
+
+  export default function _createForOfIteratorHelper(o) {
+    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null)
+      throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+
+    var it, normalCompletion = true, didErr = false, err;
+
+    return {
+      s() {
+        it = o[Symbol.iterator]();
+      },
+      n() {
+        var step = it.next();
+        normalCompletion = step.done;
+        return step;
+      },
+      e(e) {
+        didErr = true;
+        err = e;
+      },
+      f() {
+        try {
+          if (!normalCompletion && it.return != null) it.return();
+        } finally {
+          if (didErr) throw err;
+        }
+      }
+    };
+  }
+`;
+
+helpers.createForOfIteratorHelperLoose = helper("7.9.0")`
+  export default function _createForOfIteratorHelperLoose(o) {
+    var i = 0;
+
+    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+      if (Array.isArray(o))
+        return function() {
+          if (i >= o.length) return { done: true };
+          return { done: false, value: o[i++] };
+        }
+
+      throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+    }
+
+    i = o[Symbol.iterator]();
+    return i.next.bind(i);
+  }
+`;
+
 helpers.skipFirstGeneratorNext = helper("7.0.0-beta.0")`
   export default function _skipFirstGeneratorNext(fn) {
     return function () {

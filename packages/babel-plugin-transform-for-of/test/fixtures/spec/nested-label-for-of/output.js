@@ -1,45 +1,26 @@
-var _iteratorNormalCompletion = true;
-var _didIteratorError = false;
-var _iteratorError = undefined;
+var _iterator = babelHelpers.createForOfIteratorHelper(d()),
+    _step;
 
 try {
-  b: for (var _iterator = d()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+  b: for (_iterator.s(); !(_step = _iterator.n()).done;) {
     let c = _step.value;
-    var _iteratorNormalCompletion2 = true;
-    var _didIteratorError2 = false;
-    var _iteratorError2 = undefined;
+
+    var _iterator2 = babelHelpers.createForOfIteratorHelper(f()),
+        _step2;
 
     try {
-      for (var _iterator2 = f()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
         let e = _step2.value;
         continue b;
       }
     } catch (err) {
-      _didIteratorError2 = true;
-      _iteratorError2 = err;
+      _iterator2.e(err);
     } finally {
-      try {
-        if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-          _iterator2.return();
-        }
-      } finally {
-        if (_didIteratorError2) {
-          throw _iteratorError2;
-        }
-      }
+      _iterator2.f();
     }
   }
 } catch (err) {
-  _didIteratorError = true;
-  _iteratorError = err;
+  _iterator.e(err);
 } finally {
-  try {
-    if (!_iteratorNormalCompletion && _iterator.return != null) {
-      _iterator.return();
-    }
-  } finally {
-    if (_didIteratorError) {
-      throw _iteratorError;
-    }
-  }
+  _iterator.f();
 }

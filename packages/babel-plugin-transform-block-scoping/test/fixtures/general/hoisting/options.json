@@ -4,6 +4,7 @@
     "syntax-jsx",
     "transform-react-jsx",
     "transform-block-scoped-functions",
-    "transform-for-of"
+    "transform-for-of",
+     ["external-helpers", { "helperVersion": "7.100.0" }]
   ]
 }
