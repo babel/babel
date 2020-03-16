@@ -996,11 +996,9 @@ export default class Tokenizer extends LocationParser {
       this.raise(this.state.start + 2, Errors.InvalidDigit, radix);
     }
 
-    if (this.hasPlugin("bigInt")) {
-      if (this.input.charCodeAt(this.state.pos) === charCodes.lowercaseN) {
-        ++this.state.pos;
-        isBigInt = true;
-      }
+    if (this.input.charCodeAt(this.state.pos) === charCodes.lowercaseN) {
+      ++this.state.pos;
+      isBigInt = true;
     }
 
     if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {
@@ -1071,16 +1069,14 @@ export default class Tokenizer extends LocationParser {
       }
     }
 
-    if (this.hasPlugin("bigInt")) {
-      if (next === charCodes.lowercaseN) {
-        // disallow floats, legacy octal syntax and non octal decimals
-        // new style octal ("0o") is handled in this.readRadixNumber
-        if (isFloat || octal || isNonOctalDecimalInt) {
-          this.raise(start, "Invalid BigIntLiteral");
-        }
-        ++this.state.pos;
-        isBigInt = true;
+    if (next === charCodes.lowercaseN) {
+      // disallow floats, legacy octal syntax and non octal decimals
+      // new style octal ("0o") is handled in this.readRadixNumber
+      if (isFloat || octal || isNonOctalDecimalInt) {
+        this.raise(start, "Invalid BigIntLiteral");
       }
+      ++this.state.pos;
+      isBigInt = true;
     }
 
     if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {
