@@ -104,7 +104,6 @@ export const Errors = Object.freeze({
     "Only string literals are allowed as module attribute values",
   ModuleAttributesWithDuplicateKeys:
     'Duplicate key "%0" is not allowed in module attributes',
-  ModuleAttributesWithoutType: 'Module attributes should include a "type" key',
   ModuleExportUndefined: "Export '%0' is not defined",
   MultipleDefaultsInSwitch: "Multiple default clauses",
   NewlineAfterThrow: "Illegal newline after throw",
