@@ -6,5 +6,6 @@ _reactJsxDevRuntime.jsxDEV(Foo, {
   bar: "baz"
 }, void 0, false, {
   fileName: _jsxFileName,
-  lineNumber: 1
+  lineNumber: 1,
+  columnNumber: 1
 }, this);

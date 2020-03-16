@@ -359,9 +359,15 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     };
   }
 
-  function makeTrace(fileNameIdentifier, lineNumber) {
+  function makeTrace(fileNameIdentifier, lineNumber, column0Based) {
     const fileLineLiteral =
       lineNumber != null ? t.numericLiteral(lineNumber) : t.nullLiteral();
+
+    const fileColumnLiteral =
+      column0Based != null
+        ? t.numericLiteral(column0Based + 1)
+        : t.nullLiteral();
+
     const fileNameProperty = t.objectProperty(
       t.identifier("fileName"),
       fileNameIdentifier,
@@ -370,7 +376,15 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       t.identifier("lineNumber"),
       fileLineLiteral,
     );
-    return t.objectExpression([fileNameProperty, lineNumberProperty]);
+    const columnNumberProperty = t.objectProperty(
+      t.identifier("columnNumber"),
+      fileColumnLiteral,
+    );
+    return t.objectExpression([
+      fileNameProperty,
+      lineNumberProperty,
+      columnNumberProperty,
+    ]);
   }
 
   function makeSource(path, state) {
@@ -396,7 +410,11 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       state.fileNameIdentifier = fileNameIdentifier;
     }
 
-    return makeTrace(state.fileNameIdentifier, location.start.line);
+    return makeTrace(
+      state.fileNameIdentifier,
+      location.start.line,
+      location.start.column,
+    );
   }
 
   function convertJSXIdentifier(node, parent) {

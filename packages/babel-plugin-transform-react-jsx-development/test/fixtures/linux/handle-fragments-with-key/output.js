@@ -4,5 +4,6 @@ var _jsxFileName = "<CWD>/packages/babel-plugin-transform-react-jsx-development/
 
 var x = _reactJsxDevRuntime.jsxDEV(React.Fragment, {}, "foo", false, {
   fileName: _jsxFileName,
-  lineNumber: 1
+  lineNumber: 1,
+  columnNumber: 9
 }, this);

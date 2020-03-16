@@ -5,6 +5,7 @@ var _jsxFileName = "<CWD>/packages/babel-plugin-transform-react-jsx-development/
 var x = _reactJsxDevRuntime.jsxDEV(_reactJsxDevRuntime.Fragment, {
   children: _reactJsxDevRuntime.jsxDEV("div", {}, void 0, false, {
     fileName: _jsxFileName,
-    lineNumber: 1
+    lineNumber: 1,
+    columnNumber: 11
   }, this)
 }, void 0, false);

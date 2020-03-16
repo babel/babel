@@ -7,25 +7,30 @@ var x = _jsxDEV(_Fragment, {
   children: _jsxDEV("div", {
     children: [_jsxDEV("div", {}, "1", false, {
       fileName: _jsxFileName,
-      lineNumber: 4
+      lineNumber: 4,
+      columnNumber: 7
     }, this), _jsxDEV("div", {
       meow: "wolf"
     }, "2", false, {
       fileName: _jsxFileName,
-      lineNumber: 5
+      lineNumber: 5,
+      columnNumber: 7
     }, this), _jsxDEV("div", {}, "3", false, {
       fileName: _jsxFileName,
-      lineNumber: 6
+      lineNumber: 6,
+      columnNumber: 7
     }, this), _createElement("div", { ...props,
       key: "4",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 7
+        lineNumber: 7,
+        columnNumber: 7
       },
       __self: this
     })]
   }, void 0, true, {
     fileName: _jsxFileName,
-    lineNumber: 3
+    lineNumber: 3,
+    columnNumber: 5
   }, this)
 }, void 0, false);
