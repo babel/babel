@@ -1,11 +1,6 @@
 {
   "plugins": [
-    [
-      "external-helpers",
-      {
-        "helperVersion": "7.0.2"
-      }
-    ],
+    ["external-helpers", { "helperVersion": "7.100.0" }],
     ["proposal-class-properties", { "loose": true }],
     "transform-classes",
     "transform-block-scoping",

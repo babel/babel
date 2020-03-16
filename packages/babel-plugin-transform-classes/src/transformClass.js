@@ -35,6 +35,7 @@ export default function transformClass(
 
     classId: undefined,
     classRef: undefined,
+    superFnId: undefined,
     superName: undefined,
     superReturns: [],
     isDerived: false,
@@ -257,7 +258,7 @@ export default function transformClass(
   }
 
   function wrapSuperCall(bareSuper, superRef, thisRef, body) {
-    let bareSuperNode = bareSuper.node;
+    const bareSuperNode = bareSuper.node;
     let call;
 
     if (classState.isLoose) {
@@ -284,17 +285,10 @@ export default function transformClass(
 
       call = t.logicalExpression("||", bareSuperNode, t.thisExpression());
     } else {
-      bareSuperNode = optimiseCall(
-        t.callExpression(classState.file.addHelper("getPrototypeOf"), [
-          t.cloneNode(classState.classRef),
-        ]),
+      call = optimiseCall(
+        t.cloneNode(classState.superFnId),
         t.thisExpression(),
         bareSuperNode.arguments,
-      );
-
-      call = t.callExpression(
-        classState.file.addHelper("possibleConstructorReturn"),
-        [t.thisExpression(), bareSuperNode],
       );
     }
 
@@ -544,7 +538,9 @@ export default function transformClass(
   function pushInheritsToBody() {
     if (!classState.isDerived || classState.pushedInherits) return;
 
-    setState({ pushedInherits: true });
+    const superFnId = path.scope.generateUidIdentifier("super");
+
+    setState({ pushedInherits: true, superFnId });
 
     // Unshift to ensure that the constructor inheritance is set up before
     // any properties can be assigned to the prototype.
@@ -557,6 +553,14 @@ export default function transformClass(
           [t.cloneNode(classState.classRef), t.cloneNode(classState.superName)],
         ),
       ),
+      t.variableDeclaration("var", [
+        t.variableDeclarator(
+          superFnId,
+          t.callExpression(classState.file.addHelper("createSuper"), [
+            t.cloneNode(classState.classRef),
+          ]),
+        ),
+      ]),
     );
   }
 

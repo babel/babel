@@ -16,11 +16,13 @@ var Bar = /*#__PURE__*/function (_Foo) {
 
   babelHelpers.inherits(Bar, _Foo);
 
+  var _super = babelHelpers.createSuper(Bar);
+
   function Bar(...args) {
     var _this;
 
     babelHelpers.classCallCheck(this, Bar);
-    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Bar).call(this, ...args));
+    _this = _super.call(this, ...args);
 
     _prop2.set(babelHelpers.assertThisInitialized(_this), {
       writable: true,
