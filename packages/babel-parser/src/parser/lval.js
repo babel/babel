@@ -41,7 +41,9 @@ export default class LValParser extends NodeUtils {
     refNeedsArrowPos?: ?Pos,
   ) => Expression;
   +parseObj: <T: ObjectPattern | ObjectExpression>(
+    close: TokenType,
     isPattern: boolean,
+    isRecord?: ?boolean,
     refExpressionErrors?: ?ExpressionErrors,
   ) => T;
   */
@@ -253,7 +255,7 @@ export default class LValParser extends NodeUtils {
       }
 
       case tt.braceL:
-        return this.parseObj(true);
+        return this.parseObj(tt.braceR, true);
     }
 
     return this.parseIdentifier();

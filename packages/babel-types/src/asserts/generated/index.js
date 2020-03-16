@@ -791,6 +791,12 @@ export function assertPrivateName(node: Object, opts?: Object = {}): void {
 export function assertBigIntLiteral(node: Object, opts?: Object = {}): void {
   assert("BigIntLiteral", node, opts);
 }
+export function assertRecordExpression(node: Object, opts?: Object = {}): void {
+  assert("RecordExpression", node, opts);
+}
+export function assertTupleExpression(node: Object, opts?: Object = {}): void {
+  assert("TupleExpression", node, opts);
+}
 export function assertTSParameterProperty(
   node: Object,
   opts?: Object = {},

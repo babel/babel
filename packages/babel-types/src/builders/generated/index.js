@@ -716,6 +716,14 @@ export function BigIntLiteral(...args: Array<any>): Object {
   return builder("BigIntLiteral", ...args);
 }
 export { BigIntLiteral as bigIntLiteral };
+export function RecordExpression(...args: Array<any>): Object {
+  return builder("RecordExpression", ...args);
+}
+export { RecordExpression as recordExpression };
+export function TupleExpression(...args: Array<any>): Object {
+  return builder("TupleExpression", ...args);
+}
+export { TupleExpression as tupleExpression };
 export function TSParameterProperty(...args: Array<any>): Object {
   return builder("TSParameterProperty", ...args);
 }

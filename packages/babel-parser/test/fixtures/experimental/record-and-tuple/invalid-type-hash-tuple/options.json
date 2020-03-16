@@ -1,0 +1,4 @@
+{
+  "plugins": [["recordAndTuple", { "syntaxType": "invalid" }]],
+  "throws": "'recordAndTuple' requires 'syntaxType' option whose value should be one of: 'hash', 'bar'"
+}

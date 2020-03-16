@@ -143,6 +143,12 @@ const pluginNameMap = {
       url: "https://git.io/vb4SU",
     },
   },
+  recordAndTuple: {
+    syntax: {
+      name: "@babel/plugin-syntax-record-and-tuple",
+      url: "https://git.io/JvKp3",
+    },
+  },
   throwExpressions: {
     syntax: {
       name: "@babel/plugin-syntax-throw-expressions",
