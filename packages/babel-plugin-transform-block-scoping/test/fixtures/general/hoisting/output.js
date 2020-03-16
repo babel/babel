@@ -10,11 +10,11 @@ var _loop = function (i) {
   });
 };
 
-var _iteratorHelper = babelHelpers.createForOfIteratorHelper(nums),
+var _iterator = babelHelpers.createForOfIteratorHelper(nums),
     _step;
 
 try {
-  for (_iteratorHelper.s(); !(_step = _iteratorHelper.n()).done;) {
+  for (_iterator.s(); !(_step = _iterator.n()).done;) {
     var i = _step.value;
     var x;
     var f;
@@ -22,7 +22,7 @@ try {
     _loop(i);
   }
 } catch (err) {
-  _iteratorHelper.e(err);
+  _iterator.e(err);
 } finally {
-  _iteratorHelper.f();
+  _iterator.f();
 }

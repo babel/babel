@@ -209,7 +209,7 @@ export default declare((api, options) => {
 
         const nodes = builder.build({
           CREATE_ITERATOR_HELPER: state.addHelper(builder.helper),
-          ITERATOR_HELPER: scope.generateUidIdentifier("iteratorHelper"),
+          ITERATOR_HELPER: scope.generateUidIdentifier("iterator"),
           STEP_KEY: t.identifier(stepKey),
           OBJECT: node.right,
           BODY: node.body,

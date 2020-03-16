@@ -1,14 +1,14 @@
-var _iteratorHelper = babelHelpers.createForOfIteratorHelper(b),
+var _iterator = babelHelpers.createForOfIteratorHelper(b),
     _step;
 
 try {
   myLabel: //woops
-  for (_iteratorHelper.s(); !(_step = _iteratorHelper.n()).done;) {
+  for (_iterator.s(); !(_step = _iterator.n()).done;) {
     let a = _step.value;
     continue myLabel;
   }
 } catch (err) {
-  _iteratorHelper.e(err);
+  _iterator.e(err);
 } finally {
-  _iteratorHelper.f();
+  _iterator.f();
 }

@@ -1,25 +1,25 @@
-var _iteratorHelper = babelHelpers.createForOfIteratorHelper(arr),
+var _iterator = babelHelpers.createForOfIteratorHelper(arr),
     _step;
 
 try {
-  for (_iteratorHelper.s(); !(_step = _iteratorHelper.n()).done;) {
+  for (_iterator.s(); !(_step = _iterator.n()).done;) {
     var i = _step.value;
   }
 } catch (err) {
-  _iteratorHelper.e(err);
+  _iterator.e(err);
 } finally {
-  _iteratorHelper.f();
+  _iterator.f();
 }
 
-var _iteratorHelper2 = babelHelpers.createForOfIteratorHelper(numbers),
+var _iterator2 = babelHelpers.createForOfIteratorHelper(numbers),
     _step2;
 
 try {
-  for (_iteratorHelper2.s(); !(_step2 = _iteratorHelper2.n()).done;) {
+  for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
     var i = _step2.value;
   }
 } catch (err) {
-  _iteratorHelper2.e(err);
+  _iterator2.e(err);
 } finally {
-  _iteratorHelper2.f();
+  _iterator2.f();
 }

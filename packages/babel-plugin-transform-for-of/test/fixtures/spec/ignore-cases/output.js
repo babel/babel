@@ -1,8 +1,8 @@
-var _iteratorHelper = babelHelpers.createForOfIteratorHelper(foo),
+var _iterator = babelHelpers.createForOfIteratorHelper(foo),
     _step;
 
 try {
-  for (_iteratorHelper.s(); !(_step = _iteratorHelper.n()).done;) {
+  for (_iterator.s(); !(_step = _iterator.n()).done;) {
     var i = _step.value;
 
     switch (i) {
@@ -11,7 +11,7 @@ try {
     }
   }
 } catch (err) {
-  _iteratorHelper.e(err);
+  _iterator.e(err);
 } finally {
-  _iteratorHelper.f();
+  _iterator.f();
 }

@@ -153,18 +153,18 @@ function forOf() {
     rest[_key16] = arguments[_key16];
   }
 
-  var _iteratorHelper = babelHelpers.createForOfIteratorHelper(this),
+  var _iterator = babelHelpers.createForOfIteratorHelper(this),
       _step;
 
   try {
-    for (_iteratorHelper.s(); !(_step = _iteratorHelper.n()).done;) {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
       rest[0] = _step.value;
       ;
     }
   } catch (err) {
-    _iteratorHelper.e(err);
+    _iterator.e(err);
   } finally {
-    _iteratorHelper.f();
+    _iterator.f();
   }
 }
 
