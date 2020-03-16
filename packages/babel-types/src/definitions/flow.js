@@ -372,6 +372,10 @@ defineType("StringTypeAnnotation", {
   aliases: ["Flow", "FlowType", "FlowBaseAnnotation"],
 });
 
+defineType("SymbolTypeAnnotation", {
+  aliases: ["Flow", "FlowType", "FlowBaseAnnotation"],
+});
+
 defineType("ThisTypeAnnotation", {
   aliases: ["Flow", "FlowType", "FlowBaseAnnotation"],
 });

@@ -1333,6 +1333,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "string":
           return this.finishNode(node, "StringTypeAnnotation");
 
+        case "symbol":
+          return this.finishNode(node, "SymbolTypeAnnotation");
+
         default:
           this.checkNotUnderscore(id.name);
           return this.flowParseGenericType(startPos, startLoc, id);
