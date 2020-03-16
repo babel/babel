@@ -267,12 +267,11 @@ export default function normalizeOptions(opts: Options) {
 
   checkDuplicateIncludeExcludes(include, exclude);
 
-  const shippedProposals =
-    validateBoolOption(
-      TopLevelOptions.shippedProposals,
-      opts.shippedProposals,
-      false,
-    ) || corejs.proposals;
+  const shippedProposals = validateBoolOption(
+    TopLevelOptions.shippedProposals,
+    opts.shippedProposals,
+    false,
+  );
 
   return {
     configPath: validateConfigPathOption(opts.configPath),

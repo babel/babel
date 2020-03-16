@@ -328,6 +328,14 @@
     "opera": "37",
     "electron": "1.1"
   },
+ "proposal-numeric-separator": {
+    "chrome": "75",
+    "firefox": "70",
+    "safari": "13",
+    "node": "12.5",
+    "ios": "13",
+    "opera": "62"
+  },
   "transform-member-expression-literals": {
     "chrome": "7",
     "opera": "12",

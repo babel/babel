@@ -116,9 +116,14 @@ const es2020 = {
   "proposal-optional-chaining": "optional chaining operator (?.)",
 };
 
+const shippedProposal = {
+  "proposal-numeric-separator": "numeric separator",
+};
+
 // Run plugins for modern features first
 module.exports = Object.assign(
   {},
+  shippedProposal,
   es2020,
   es2019,
   es2018,
