@@ -568,7 +568,7 @@ defineType("BooleanLiteral", {
 defineType("RegExpLiteral", {
   builder: ["pattern", "flags"],
   deprecatedAlias: "RegexLiteral",
-  aliases: ["Expression", "Literal"],
+  aliases: ["Expression", "Pureish", "Literal"],
   fields: {
     pattern: {
       validate: assertValueType("string"),

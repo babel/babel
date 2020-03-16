@@ -3847,9 +3847,8 @@ export function isPureish(node: ?Object, opts?: Object): boolean {
     "NumericLiteral" === nodeType ||
     "NullLiteral" === nodeType ||
     "BooleanLiteral" === nodeType ||
+    "RegExpLiteral" === nodeType ||
     "ArrowFunctionExpression" === nodeType ||
-    "ClassExpression" === nodeType ||
-    "ClassDeclaration" === nodeType ||
     "BigIntLiteral" === nodeType ||
     (nodeType === "Placeholder" && "StringLiteral" === node.expectedNode)
   ) {
