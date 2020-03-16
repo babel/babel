@@ -1,16 +1,19 @@
-var _react = require("react");
+var _reactJsxDevRuntime = require("react/jsx-dev-runtime");
 
 var _jsxFileName = "C:\\Users\\travis\\build\\babel\\babel\\packages\\babel-plugin-transform-react-jsx-development\\test\\fixtures\\windows\\handle-nonstatic-children-windows\\input.js";
 
-var x = _react.jsxDEV("div", {
-  children: [_react.jsxDEV("span", {}, '0', false, {
+var x = _reactJsxDevRuntime.jsxDEV("div", {
+  children: [_reactJsxDevRuntime.jsxDEV("span", {}, "0", false, {
     fileName: _jsxFileName,
-    lineNumber: 3
-  }, this), _react.jsxDEV("span", {}, '1', false, {
+    lineNumber: 1,
+    columnNumber: 16
+  }, this), _reactJsxDevRuntime.jsxDEV("span", {}, "1", false, {
     fileName: _jsxFileName,
-    lineNumber: 3
+    lineNumber: 1,
+    columnNumber: 36
   }, this)]
 }, void 0, false, {
   fileName: _jsxFileName,
-  lineNumber: 2
+  lineNumber: 1,
+  columnNumber: 9
 }, this);
