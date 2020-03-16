@@ -1,0 +1,9 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "flow",
+    "classProperties",
+    ["decorators", { "decoratorsBeforeExport": false }]
+  ],
+  "throws": "Unexpected token (2:10)"
+}
