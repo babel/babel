@@ -1,5 +1,5 @@
-var _react = require("react");
+var _reactJsxRuntime = require("react/jsx-runtime");
 
-_react.jsx(Foo, {
+_reactJsxRuntime.jsx(Foo, {
   bar: "baz"
 });
