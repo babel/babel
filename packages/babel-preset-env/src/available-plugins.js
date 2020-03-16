@@ -51,7 +51,20 @@ import transformTemplateLiterals from "@babel/plugin-transform-template-literals
 import transformTypeofSymbol from "@babel/plugin-transform-typeof-symbol";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
 
+import bugfixAsyncArrowsInClass from "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class";
+import bugfixEdgeDefaultParameters from "@babel/preset-modules/lib/plugins/transform-edge-default-parameters";
+import bugfixEdgeFunctionName from "@babel/preset-modules/lib/plugins/transform-edge-function-name";
+import bugfixTaggedTemplateCaching from "@babel/preset-modules/lib/plugins/transform-tagged-template-caching";
+import bugfixSafariBlockShadowing from "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing";
+import bugfixSafariForShadowing from "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing";
+
 export default {
+  "bugfix/transform-async-arrows-in-class": bugfixAsyncArrowsInClass,
+  "bugfix/transform-edge-default-parameters": bugfixEdgeDefaultParameters,
+  "bugfix/transform-edge-function-name": bugfixEdgeFunctionName,
+  "bugfix/transform-safari-block-shadowing": bugfixSafariBlockShadowing,
+  "bugfix/transform-safari-for-shadowing": bugfixSafariForShadowing,
+  "bugfix/transform-tagged-template-caching": bugfixTaggedTemplateCaching,
   "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,
   "proposal-dynamic-import": proposalDynamicImport,
   "proposal-json-strings": proposalJsonStrings,

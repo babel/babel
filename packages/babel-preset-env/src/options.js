@@ -1,6 +1,7 @@
 // @flow
 
 export const TopLevelOptions = {
+  bugfixes: "bugfixes",
   configPath: "configPath",
   corejs: "corejs",
   debug: "debug",
