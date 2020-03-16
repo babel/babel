@@ -5,6 +5,7 @@ import { NodePath, Scope, type HubInterface } from "@babel/traverse";
 import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "@babel/traverse";
 import * as t from "@babel/types";
+import { getModuleName } from "@babel/helper-module-transforms";
 import semver from "semver";
 
 import type { NormalizedFile } from "../normalize-file";
@@ -106,49 +107,7 @@ export default class File {
   }
 
   getModuleName(): ?string {
-    const {
-      filename,
-      filenameRelative = filename,
-
-      moduleId,
-      moduleIds = !!moduleId,
-
-      getModuleId,
-
-      sourceRoot: sourceRootTmp,
-      moduleRoot = sourceRootTmp,
-      sourceRoot = moduleRoot,
-    } = this.opts;
-
-    if (!moduleIds) return null;
-
-    // moduleId is n/a if a `getModuleId()` is provided
-    if (moduleId != null && !getModuleId) {
-      return moduleId;
-    }
-
-    let moduleName = moduleRoot != null ? moduleRoot + "/" : "";
-
-    if (filenameRelative) {
-      const sourceRootReplacer =
-        sourceRoot != null ? new RegExp("^" + sourceRoot + "/?") : "";
-
-      moduleName += filenameRelative
-        // remove sourceRoot from filename
-        .replace(sourceRootReplacer, "")
-        // remove extension
-        .replace(/\.(\w*?)$/, "");
-    }
-
-    // normalize path separators
-    moduleName = moduleName.replace(/\\/g, "/");
-
-    if (getModuleId) {
-      // If return is falsy, assume they want us to use our generated default name
-      return getModuleId(moduleName) || moduleName;
-    } else {
-      return moduleName;
-    }
+    return getModuleName(this.opts, this.opts);
   }
 
   addImport() {

@@ -7,6 +7,7 @@ import {
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
   wrapInterop,
+  getModuleName,
 } from "@babel/helper-module-transforms";
 import { template, types as t } from "@babel/core";
 import { getImportSource } from "babel-plugin-dynamic-import-node/utils";
@@ -96,7 +97,7 @@ export default declare((api, options) => {
             importNames.push(requireId);
           }
 
-          let moduleName = this.getModuleName();
+          let moduleName = getModuleName(this.file.opts, options);
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
           const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(

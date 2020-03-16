@@ -6,6 +6,7 @@ import {
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
   wrapInterop,
+  getModuleName,
 } from "@babel/helper-module-transforms";
 import simplifyAccess from "@babel/helper-simple-access";
 import { template, types as t } from "@babel/core";
@@ -161,7 +162,7 @@ export default declare((api, options) => {
             });
           }
 
-          let moduleName = this.getModuleName();
+          let moduleName = getModuleName(this.file.opts, options);
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
           const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
