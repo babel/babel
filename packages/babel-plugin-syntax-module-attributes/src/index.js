@@ -12,7 +12,7 @@ export default declare((api, { version }) => {
   }
 
   return {
-    name: "syntax-import-module-attributes",
+    name: "syntax-module-attributes",
 
     manipulateOptions(opts, parserOpts) {
       parserOpts.plugins.push(["moduleAttributes", { version }]);
