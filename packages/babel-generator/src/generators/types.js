@@ -120,8 +120,11 @@ export function NullLiteral() {
 
 export function NumericLiteral(node: Object) {
   const raw = this.getPossibleRaw(node);
+  const opts = this.format.jsescOption;
   const value = node.value + "";
-  if (raw == null) {
+  if (opts.numbers) {
+    this.number(jsesc(node.value, opts));
+  } else if (raw == null) {
     this.number(value); // normalize
   } else if (this.format.minified) {
     this.number(raw.length < value.length ? raw : value);
