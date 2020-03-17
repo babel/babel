@@ -11,7 +11,7 @@ var x = React.createElement(React.Fragment, null, React.createElement("div", {
   __source: {
     fileName: _jsxFileName,
     lineNumber: 4,
-    columnNumber: 9
+    columnNumber: 7
   },
   __self: this
 }), React.createElement("div", {
@@ -20,7 +20,7 @@ var x = React.createElement(React.Fragment, null, React.createElement("div", {
   __source: {
     fileName: _jsxFileName,
     lineNumber: 5,
-    columnNumber: 9
+    columnNumber: 7
   },
   __self: this
 }), React.createElement("div", {
@@ -28,7 +28,7 @@ var x = React.createElement(React.Fragment, null, React.createElement("div", {
   __source: {
     fileName: _jsxFileName,
     lineNumber: 6,
-    columnNumber: 9
+    columnNumber: 7
   },
   __self: this
 }), React.createElement("div", { ...props,
@@ -36,7 +36,7 @@ var x = React.createElement(React.Fragment, null, React.createElement("div", {
   __source: {
     fileName: _jsxFileName,
     lineNumber: 7,
-    columnNumber: 9
+    columnNumber: 7
   },
   __self: this
 })));

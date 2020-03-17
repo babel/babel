@@ -5,15 +5,19 @@ var _jsxFileName = "C:\\Users\\travis\\build\\babel\\babel\\packages\\babel-plug
 var x = _reactJsxDevRuntime.jsxDEV("div", {
   children: [_reactJsxDevRuntime.jsxDEV("span", {}, void 0, false, {
     fileName: _jsxFileName,
-    lineNumber: 3
+    lineNumber: 3,
+    columnNumber: 9
   }, this), [_reactJsxDevRuntime.jsxDEV("span", {}, '0', false, {
     fileName: _jsxFileName,
-    lineNumber: 4
+    lineNumber: 4,
+    columnNumber: 11
   }, this), _reactJsxDevRuntime.jsxDEV("span", {}, '1', false, {
     fileName: _jsxFileName,
-    lineNumber: 4
+    lineNumber: 4,
+    columnNumber: 31
   }, this)]]
 }, void 0, true, {
   fileName: _jsxFileName,
-  lineNumber: 2
+  lineNumber: 2,
+  columnNumber: 5
 }, this);
