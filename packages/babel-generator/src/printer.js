@@ -262,6 +262,8 @@ export default class Printer {
       if (i + 1 === str.length) return;
       const chaPost = str[i + 1];
       if (chaPost !== "/" && chaPost !== "*") return;
+      // We don't print newlines aroung /*#__PURE__*/ annotations
+      if (PURE_ANNOTATION_RE.test(str.slice(i + 2, str.length - 2))) return;
     }
     this.token("(");
     this.indent();
