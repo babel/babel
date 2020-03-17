@@ -902,49 +902,72 @@ helpers.temporalRef = helper("7.0.0-beta.0")`
 helpers.slicedToArray = helper("7.0.0-beta.0")`
   import arrayWithHoles from "arrayWithHoles";
   import iterableToArrayLimit from "iterableToArrayLimit";
+  import unsupportedIterableToArray from "unsupportedIterableToArray";
   import nonIterableRest from "nonIterableRest";
 
   export default function _slicedToArray(arr, i) {
-    return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || nonIterableRest();
+    return (
+      arrayWithHoles(arr) ||
+      iterableToArrayLimit(arr, i) ||
+      unsupportedIterableToArray(arr, i) ||
+      nonIterableRest()
+    );
   }
 `;
 
 helpers.slicedToArrayLoose = helper("7.0.0-beta.0")`
   import arrayWithHoles from "arrayWithHoles";
   import iterableToArrayLimitLoose from "iterableToArrayLimitLoose";
+  import unsupportedIterableToArray from "unsupportedIterableToArray";
   import nonIterableRest from "nonIterableRest";
 
   export default function _slicedToArrayLoose(arr, i) {
-    return arrayWithHoles(arr) || iterableToArrayLimitLoose(arr, i) || nonIterableRest();
+    return (
+      arrayWithHoles(arr) ||
+      iterableToArrayLimitLoose(arr, i) ||
+      unsupportedIterableToArray(arr, i) ||
+      nonIterableRest()
+    );
   }
 `;
 
 helpers.toArray = helper("7.0.0-beta.0")`
   import arrayWithHoles from "arrayWithHoles";
   import iterableToArray from "iterableToArray";
+  import unsupportedIterableToArray from "unsupportedIterableToArray";
   import nonIterableRest from "nonIterableRest";
 
   export default function _toArray(arr) {
-    return arrayWithHoles(arr) || iterableToArray(arr) || nonIterableRest();
+    return (
+      arrayWithHoles(arr) ||
+      iterableToArray(arr) ||
+      unsupportedIterableToArray(arr) ||
+      nonIterableRest()
+    );
   }
 `;
 
 helpers.toConsumableArray = helper("7.0.0-beta.0")`
   import arrayWithoutHoles from "arrayWithoutHoles";
   import iterableToArray from "iterableToArray";
+  import unsupportedIterableToArray from "unsupportedIterableToArray";
   import nonIterableSpread from "nonIterableSpread";
 
   export default function _toConsumableArray(arr) {
-    return arrayWithoutHoles(arr) || iterableToArray(arr) || nonIterableSpread();
+    return (
+      arrayWithoutHoles(arr) ||
+      iterableToArray(arr) ||
+      unsupportedIterableToArray(arr) ||
+      nonIterableSpread()
+    );
   }
 `;
 
 helpers.arrayWithoutHoles = helper("7.0.0-beta.0")`
+  import arrayLikeToArray from "arrayLikeToArray";
+
   export default function _arrayWithoutHoles(arr) {
-    if (Array.isArray(arr)) {
-      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-      return arr2;
-    }
+    if (Array.isArray(arr)) return arrayLikeToArray(arr);
   }
 `;
 
@@ -956,11 +979,7 @@ helpers.arrayWithHoles = helper("7.0.0-beta.0")`
 
 helpers.iterableToArray = helper("7.0.0-beta.0")`
   export default function _iterableToArray(iter) {
-    if (
-      typeof iter === 'string'
-      || Object.prototype.toString.call(iter) === "[object Arguments]"
-      || (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter))
-    ) return Array.from(iter);
+    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
   }
 `;
 
@@ -976,10 +995,7 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
     // _i = _iterator
     // _s = _step
 
-    if (
-      (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) &&
-      Object.prototype.toString.call(arr) !== "[object Arguments]"
-    ) return;
+    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
 
     var _arr = [];
     var _n = true;
@@ -1006,10 +1022,7 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
 
 helpers.iterableToArrayLimitLoose = helper("7.0.0-beta.0")`
   export default function _iterableToArrayLimitLoose(arr, i) {
-    if (
-      (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) &&
-      Object.prototype.toString.call(arr) !== "[object Arguments]"
-    ) return;
+    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
 
     var _arr = [];
     for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
@@ -1017,6 +1030,28 @@ helpers.iterableToArrayLimitLoose = helper("7.0.0-beta.0")`
       if (i && _arr.length === i) break;
     }
     return _arr;
+  }
+`;
+
+helpers.unsupportedIterableToArray = helper("7.9.0")`
+  import arrayLikeToArray from "arrayLikeToArray";
+
+  export default function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+      return arrayLikeToArray(o, minLen);
+  }
+`;
+
+helpers.arrayLikeToArray = helper("7.9.0")`
+  export default function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+    return arr2;
   }
 `;
 
