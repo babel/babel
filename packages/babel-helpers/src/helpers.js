@@ -909,7 +909,7 @@ helpers.slicedToArray = helper("7.0.0-beta.0")`
     return (
       arrayWithHoles(arr) ||
       iterableToArrayLimit(arr, i) ||
-      unsupportedIterableToArray(arr) ||
+      unsupportedIterableToArray(arr, i) ||
       nonIterableRest()
     );
   }
@@ -925,7 +925,7 @@ helpers.slicedToArrayLoose = helper("7.0.0-beta.0")`
     return (
       arrayWithHoles(arr) ||
       iterableToArrayLimitLoose(arr, i) ||
-      unsupportedIterableToArray(arr) ||
+      unsupportedIterableToArray(arr, i) ||
       nonIterableRest()
     );
   }
@@ -964,11 +964,10 @@ helpers.toConsumableArray = helper("7.0.0-beta.0")`
 `;
 
 helpers.arrayWithoutHoles = helper("7.0.0-beta.0")`
+  import arrayLikeToArray from "arrayLikeToArray";
+
   export default function _arrayWithoutHoles(arr) {
-    if (Array.isArray(arr)) {
-      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-      return arr2;
-    }
+    if (Array.isArray(arr)) return arrayLikeToArray(arr);
   }
 `;
 
@@ -1035,17 +1034,24 @@ helpers.iterableToArrayLimitLoose = helper("7.0.0-beta.0")`
 `;
 
 helpers.unsupportedIterableToArray = helper("7.9.0")`
-  export default function _unsupportedIterableToArray(o) {
+  import arrayLikeToArray from "arrayLikeToArray";
+
+  export default function _unsupportedIterableToArray(o, minLen) {
     if (!o) return;
-    if (typeof o === "string") return Array.from(o);
+    if (typeof o === "string") return arrayLikeToArray(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor) n = o.constructor.name;
-    if (
-      n === "Arguments" ||
-      n === "Map" ||
-      n === "Set" ||
-      /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)
-    ) return Array.from(o);
+    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+      return arrayLikeToArray(o, minLen);
+  }
+`;
+
+helpers.arrayLikeToArray = helper("7.9.0")`
+  export default function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+    return arr2;
   }
 `;
 
