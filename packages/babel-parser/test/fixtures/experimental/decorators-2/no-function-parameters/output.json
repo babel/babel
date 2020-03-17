@@ -13,7 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Stage 2 decorators cannot be used to decorate parameters (1:14)"
+    "SyntaxError: Decorators cannot be used to decorate parameters (1:14)"
   ],
   "program": {
     "type": "Program",

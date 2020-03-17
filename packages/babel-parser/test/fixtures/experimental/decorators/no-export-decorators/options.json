@@ -1,4 +1,7 @@
 {
-  "throws": "You can only use decorators on an export when exporting a class (2:0)",
+  "plugins": [
+    "decorators-legacy"
+  ],
+  "throws": "A decorated export must export a class declaration (2:0)",
   "sourceType": "module"
 }
