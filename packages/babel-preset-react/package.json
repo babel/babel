@@ -14,6 +14,7 @@
     "@babel/helper-plugin-utils": "^7.8.3",
     "@babel/plugin-transform-react-display-name": "^7.8.3",
     "@babel/plugin-transform-react-jsx": "^7.8.3",
+    "@babel/plugin-transform-react-jsx-development": "^7.8.3",
     "@babel/plugin-transform-react-jsx-self": "^7.8.3",
     "@babel/plugin-transform-react-jsx-source": "^7.8.3"
   },

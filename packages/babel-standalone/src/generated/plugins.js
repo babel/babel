@@ -77,6 +77,7 @@ import transformReactDisplayName from "@babel/plugin-transform-react-display-nam
 import transformReactInlineElements from "@babel/plugin-transform-react-inline-elements";
 import transformReactJsx from "@babel/plugin-transform-react-jsx";
 import transformReactJsxCompat from "@babel/plugin-transform-react-jsx-compat";
+import transformReactJsxDevelopment from "@babel/plugin-transform-react-jsx-development";
 import transformReactJsxSelf from "@babel/plugin-transform-react-jsx-self";
 import transformReactJsxSource from "@babel/plugin-transform-react-jsx-source";
 import transformRegenerator from "@babel/plugin-transform-regenerator";
@@ -166,6 +167,7 @@ export {
   transformReactInlineElements,
   transformReactJsx,
   transformReactJsxCompat,
+  transformReactJsxDevelopment,
   transformReactJsxSelf,
   transformReactJsxSource,
   transformRegenerator,
@@ -256,6 +258,7 @@ export const all = {
   "transform-react-inline-elements": transformReactInlineElements,
   "transform-react-jsx": transformReactJsx,
   "transform-react-jsx-compat": transformReactJsxCompat,
+  "transform-react-jsx-development": transformReactJsxDevelopment,
   "transform-react-jsx-self": transformReactJsxSelf,
   "transform-react-jsx-source": transformReactJsxSource,
   "transform-regenerator": transformRegenerator,

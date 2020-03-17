@@ -73,6 +73,7 @@
   "transform-react-inline-elements",
   "transform-react-jsx",
   "transform-react-jsx-compat",
+  "transform-react-jsx-development",
   "transform-react-jsx-self",
   "transform-react-jsx-source",
   "transform-regenerator",

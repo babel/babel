@@ -1,0 +1,4 @@
+{
+  "plugins": [["transform-react-jsx-development", { "runtime": "classic" }]],
+  "os": ["linux", "darwin"]
+}

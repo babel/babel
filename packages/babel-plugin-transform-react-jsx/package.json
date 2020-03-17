@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "@babel/helper-builder-react-jsx": "^7.8.3",
+    "@babel/helper-builder-react-jsx-experimental": "^7.8.3",
     "@babel/helper-plugin-utils": "^7.8.3",
     "@babel/plugin-syntax-jsx": "^7.8.3"
   },
