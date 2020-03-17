@@ -134,6 +134,7 @@ function buildHelper(
 
   if (!esm) {
     bindings = [];
+    helpers.ensure(helperName, babel.File);
     for (const dep of helpers.getDependencies(helperName)) {
       const id = (dependencies[dep] = t.identifier(t.toIdentifier(dep)));
       tree.body.push(template.statement.ast`
