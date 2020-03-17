@@ -264,10 +264,12 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         let importName;
         if (path.type === "JSXElement" && shouldUseCreateElement(path)) {
           importName = "createElement";
+        } else if (options.development) {
+          importName = "jsxDEV";
         } else if (validChildren.length > 1) {
-          importName = options.development ? "jsxDEV" : "jsxs";
+          importName = "jsxs";
         } else {
-          importName = options.development ? "jsxDEV" : "jsx";
+          importName = "jsx";
         }
         imports.add(importName);
 
