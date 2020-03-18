@@ -11,7 +11,6 @@ Using plugins:
   proposal-json-strings {}
   proposal-optional-catch-binding {}
   proposal-async-generator-functions {}
-  proposal-object-rest-spread {}
   transform-dotall-regex {}
   proposal-unicode-property-regex {}
   transform-named-capturing-groups-regex {}
@@ -32,6 +31,7 @@ Using plugins:
   transform-unicode-regex {}
   transform-spread {}
   transform-parameters {}
+  proposal-object-rest-spread {}
   transform-destructuring {}
   transform-block-scoping {}
   transform-typeof-symbol {}

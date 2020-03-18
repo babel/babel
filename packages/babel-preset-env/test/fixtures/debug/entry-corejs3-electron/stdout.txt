@@ -20,7 +20,6 @@ Using plugins:
   proposal-json-strings { "electron":"0.36" }
   proposal-optional-catch-binding { "electron":"0.36" }
   proposal-async-generator-functions { "electron":"0.36" }
-  proposal-object-rest-spread { "electron":"0.36" }
   transform-dotall-regex { "electron":"0.36" }
   proposal-unicode-property-regex { "electron":"0.36" }
   transform-named-capturing-groups-regex { "electron":"0.36" }
@@ -31,6 +30,7 @@ Using plugins:
   transform-sticky-regex { "electron":"0.36" }
   transform-unicode-regex { "electron":"0.36" }
   transform-parameters { "electron":"0.36" }
+  proposal-object-rest-spread { "electron":"0.36" }
   transform-destructuring { "electron":"0.36" }
   transform-block-scoping { "electron":"0.36" }
   transform-regenerator { "electron":"0.36" }

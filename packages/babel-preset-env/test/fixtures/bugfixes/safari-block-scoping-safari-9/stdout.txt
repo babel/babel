@@ -13,7 +13,6 @@ Using plugins:
   proposal-json-strings { "safari":"9" }
   proposal-optional-catch-binding { "safari":"9" }
   proposal-async-generator-functions { "safari":"9" }
-  proposal-object-rest-spread { "safari":"9" }
   transform-dotall-regex { "safari":"9" }
   proposal-unicode-property-regex { "safari":"9" }
   transform-named-capturing-groups-regex { "safari":"9" }
@@ -27,6 +26,7 @@ Using plugins:
   transform-unicode-regex { "safari":"9" }
   transform-spread { "safari":"9" }
   transform-parameters { "safari":"9" }
+  proposal-object-rest-spread { "safari":"9" }
   transform-destructuring { "safari":"9" }
   transform-block-scoping { "safari":"9" }
   transform-new-target { "safari":"9" }

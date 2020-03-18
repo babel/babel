@@ -13,7 +13,6 @@ Using plugins:
   proposal-json-strings { "chrome":"40" }
   proposal-optional-catch-binding { "chrome":"40" }
   proposal-async-generator-functions { "chrome":"40" }
-  proposal-object-rest-spread { "chrome":"40" }
   transform-dotall-regex { "chrome":"40" }
   proposal-unicode-property-regex { "chrome":"40" }
   transform-named-capturing-groups-regex { "chrome":"40" }
@@ -33,6 +32,7 @@ Using plugins:
   transform-unicode-regex { "chrome":"40" }
   transform-spread { "chrome":"40" }
   transform-parameters { "chrome":"40" }
+  proposal-object-rest-spread { "chrome":"40" }
   transform-block-scoping { "chrome":"40" }
   transform-new-target { "chrome":"40" }
   transform-regenerator { "chrome":"40" }

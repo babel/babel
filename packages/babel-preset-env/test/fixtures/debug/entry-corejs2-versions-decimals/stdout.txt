@@ -24,7 +24,6 @@ Using plugins:
   proposal-json-strings { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-optional-catch-binding { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-async-generator-functions { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  proposal-object-rest-spread { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-dotall-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-unicode-property-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-named-capturing-groups-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
@@ -45,6 +44,7 @@ Using plugins:
   transform-unicode-regex { "electron":"0.36", "ie":"10" }
   transform-spread { "ie":"10" }
   transform-parameters { "electron":"0.36", "ie":"10" }
+  proposal-object-rest-spread { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-destructuring { "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-block-scoping { "electron":"0.36", "ie":"10" }
   transform-typeof-symbol { "ie":"10" }

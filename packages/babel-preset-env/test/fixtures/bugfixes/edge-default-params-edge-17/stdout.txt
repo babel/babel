@@ -13,10 +13,10 @@ Using plugins:
   proposal-json-strings { "edge":"17" }
   proposal-optional-catch-binding { "edge":"17" }
   proposal-async-generator-functions { "edge":"17" }
-  proposal-object-rest-spread { "edge":"17" }
   transform-dotall-regex { "edge":"17" }
   proposal-unicode-property-regex { "edge":"17" }
   transform-named-capturing-groups-regex { "edge":"17" }
+  proposal-object-rest-spread { "edge":"17" }
   bugfix/transform-edge-default-parameters { "edge":"17" }
   bugfix/transform-edge-function-name { "edge":"17" }
   transform-modules-commonjs { "edge":"17" }

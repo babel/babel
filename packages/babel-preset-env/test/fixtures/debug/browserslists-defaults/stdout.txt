@@ -21,7 +21,6 @@ Using plugins:
   proposal-json-strings { "edge":"18", "ie":"11" }
   proposal-optional-catch-binding { "edge":"18", "ie":"11" }
   proposal-async-generator-functions { "edge":"18", "ie":"11" }
-  proposal-object-rest-spread { "edge":"18", "ie":"11" }
   transform-dotall-regex { "edge":"18", "firefox":"68", "ie":"11" }
   proposal-unicode-property-regex { "edge":"18", "firefox":"68", "ie":"11" }
   transform-named-capturing-groups-regex { "edge":"18", "firefox":"68", "ie":"11" }
@@ -41,6 +40,7 @@ Using plugins:
   transform-unicode-regex { "ie":"11" }
   transform-spread { "ie":"11" }
   transform-parameters { "ie":"11" }
+  proposal-object-rest-spread { "edge":"18", "ie":"11" }
   transform-destructuring { "ie":"11" }
   transform-block-scoping { "ie":"11" }
   transform-typeof-symbol { "ie":"11" }

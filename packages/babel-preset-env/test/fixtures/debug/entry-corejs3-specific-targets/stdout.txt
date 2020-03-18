@@ -18,7 +18,6 @@ Using plugins:
   proposal-json-strings { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   proposal-optional-catch-binding { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   proposal-async-generator-functions { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  proposal-object-rest-spread { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-dotall-regex { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   proposal-unicode-property-regex { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-named-capturing-groups-regex { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
@@ -39,6 +38,7 @@ Using plugins:
   transform-unicode-regex { "ie":"10", "ios":"9", "safari":"7" }
   transform-spread { "ie":"10", "ios":"9", "safari":"7" }
   transform-parameters { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  proposal-object-rest-spread { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-destructuring { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-block-scoping { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-typeof-symbol { "ie":"10", "safari":"7" }
