@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import child from "child_process";
 
 let currentHook;
 let currentOptions;
@@ -8,6 +9,10 @@ let sourceMapSupport = false;
 const registerFile = require.resolve("../lib/node");
 const testFile = require.resolve("./fixtures/babelrc/es2015");
 const testFileContent = fs.readFileSync(testFile);
+const sourceMapTestFile = require.resolve("./fixtures/source-map/index");
+const sourceMapNestedTestFile = require.resolve(
+  "./fixtures/source-map/foo/bar",
+);
 
 jest.mock("pirates", () => {
   return {
@@ -108,6 +113,45 @@ describe("@babel/register", function() {
     currentHook("const a = 1;", testFile);
 
     expect(sourceMapSupport).toBe(false);
+  });
+
+  it("returns concatenatable sourceRoot and sources", callback => {
+    // The Source Maps R3 standard https://sourcemaps.info/spec.html states
+    // that `sourceRoot` is “prepended to the individual entries in the
+    // ‘source’ field.” If `sources` contains file names, and `sourceRoot`
+    // is intended to refer to a directory but doesn’t end with a trailing
+    // slash, any consumers of the source map are in for a bad day.
+    //
+    // The underlying problem seems to only get triggered if one file
+    // requires() another with @babel/register active, and I couldn’t get
+    // that working inside a test, possibly because of jest’s mocking
+    // hooks, so we spawn a separate process.
+
+    const args = ["-r", registerFile, sourceMapTestFile];
+    const spawn = child.spawn(process.execPath, args, { cwd: __dirname });
+
+    let output = "";
+
+    for (const stream of [spawn.stderr, spawn.stdout]) {
+      stream.on("data", chunk => {
+        output += chunk;
+      });
+    }
+
+    spawn.on("close", function() {
+      let err;
+
+      try {
+        const sourceMap = JSON.parse(output);
+        expect(sourceMap.map.sourceRoot + sourceMap.map.sources[0]).toBe(
+          sourceMapNestedTestFile,
+        );
+      } catch (e) {
+        err = e;
+      }
+
+      callback(err);
+    });
   });
 
   test("hook transpiles with config", () => {

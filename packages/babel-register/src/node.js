@@ -41,7 +41,7 @@ function compile(code, filename) {
   const opts = new OptionManager().init(
     // sourceRoot can be overwritten
     {
-      sourceRoot: path.dirname(filename),
+      sourceRoot: path.dirname(filename) + path.sep,
       ...deepClone(transformOpts),
       filename,
     },
