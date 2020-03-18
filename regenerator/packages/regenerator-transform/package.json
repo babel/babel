@@ -16,7 +16,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "prepublish": "babel src/ --out-dir lib/"
+    "prepublish": "npx babel src/ --out-dir lib/"
   },
   "babel": {
     "plugins": [
