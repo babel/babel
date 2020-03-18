@@ -9,4 +9,4 @@ export var {
   bb,
   cc
 } = ads;
-export var [dd, ee] = ads;
+export var [dd, ee, ...ff] = ads;
