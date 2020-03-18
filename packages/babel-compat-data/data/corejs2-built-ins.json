@@ -80,7 +80,7 @@
     "ios": "12",
     "samsung": "10",
     "opera": "56",
-    "electron": "4"
+    "electron": "4.2"
   },
   "es6.array.for-each": {
     "chrome": "5",
