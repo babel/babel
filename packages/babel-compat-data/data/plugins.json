@@ -1,15 +1,29 @@
 {
+  "proposal-numeric-separator": {
+    "chrome": "75",
+    "edge": "79",
+    "firefox": "70",
+    "safari": "13",
+    "node": "12.5",
+    "ios": "13",
+    "opera": "62",
+    "electron": "6.1"
+  },
   "proposal-nullish-coalescing-operator": {
     "chrome": "80",
+    "edge": "80",
     "firefox": "72",
-    "safari": "tp",
-    "opera": "67"
+    "safari": "13.1",
+    "opera": "67",
+    "electron": "8.1"
   },
   "proposal-optional-chaining": {
     "chrome": "80",
+    "edge": "80",
     "firefox": "74",
-    "safari": "tp",
-    "opera": "67"
+    "safari": "13.1",
+    "opera": "67",
+    "electron": "8.1"
   },
   "proposal-json-strings": {
     "chrome": "66",
@@ -327,14 +341,6 @@
     "samsung": "5",
     "opera": "37",
     "electron": "1.1"
-  },
- "proposal-numeric-separator": {
-    "chrome": "75",
-    "firefox": "70",
-    "safari": "13",
-    "node": "12.5",
-    "ios": "13",
-    "opera": "62"
   },
   "transform-member-expression-literals": {
     "chrome": "7",
