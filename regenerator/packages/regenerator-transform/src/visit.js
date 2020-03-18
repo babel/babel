@@ -114,11 +114,9 @@ exports.getVisitor = ({ types: t }) => ({
 
       if (context.usesArguments) {
         vars = vars || t.variableDeclaration("var", []);
-        const argumentIdentifier = t.identifier("arguments");
-        // we need to do this as otherwise arguments in arrow functions gets hoisted
-        argumentIdentifier._shadowedFunctionLiteral = path;
         vars.declarations.push(t.variableDeclarator(
-          t.clone(argsId), argumentIdentifier
+          t.clone(argsId),
+          t.identifier("arguments"),
         ));
       }
 

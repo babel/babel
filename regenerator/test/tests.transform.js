@@ -7,6 +7,7 @@
 
 var assert = require("assert");
 var recast = require("recast");
+var v8 = require("v8");
 var types = recast.types;
 var n = types.namedTypes;
 var transform = require("..").transform;
@@ -331,3 +332,30 @@ context("functions", function() {
     });
   });
 });
+
+describe("ast serialization", function() {
+  function getAST() {
+    return require("@babel/core").transformSync(
+`function* foo() {
+  arguments;
+}`,
+      {
+        ast: true,
+        configFile: false,
+        plugins: [require("../packages/regenerator-transform")],
+      },
+    ).ast;
+  }
+
+  it("produces an ast that is JSON serializable", function() {
+    assert.doesNotThrow(function() {
+      JSON.stringify(getAST());
+    });
+  })
+
+  it("produces an ast that is serializable with v8's serializer", function() {
+    assert.doesNotThrow(function() {
+      v8.serialize(getAST());
+    });
+  })
+})
