@@ -13,6 +13,7 @@ Using plugins:
   proposal-json-strings { "node":"6" }
   proposal-optional-catch-binding { "node":"6" }
   proposal-async-generator-functions { "node":"6" }
+  proposal-object-rest-spread { "node":"6" }
   transform-dotall-regex { "node":"6" }
   proposal-unicode-property-regex { "node":"6" }
   transform-named-capturing-groups-regex { "node":"6" }
@@ -20,7 +21,6 @@ Using plugins:
   transform-exponentiation-operator { "node":"6" }
   transform-function-name { "node":"6" }
   transform-for-of { "node":"6" }
-  proposal-object-rest-spread { "node":"6" }
   transform-destructuring { "node":"6" }
   transform-modules-commonjs { "node":"6" }
   proposal-dynamic-import { "node":"6" }

@@ -12,14 +12,14 @@ Using plugins:
   proposal-optional-chaining { "edge":"14" }
   proposal-json-strings { "edge":"14" }
   proposal-optional-catch-binding { "edge":"14" }
+  transform-parameters { "edge":"14" }
   proposal-async-generator-functions { "edge":"14" }
+  proposal-object-rest-spread { "edge":"14" }
   transform-dotall-regex { "edge":"14" }
   proposal-unicode-property-regex { "edge":"14" }
   transform-named-capturing-groups-regex { "edge":"14" }
   transform-async-to-generator { "edge":"14" }
   transform-for-of { "edge":"14" }
-  transform-parameters { "edge":"14" }
-  proposal-object-rest-spread { "edge":"14" }
   transform-destructuring { "edge":"14" }
   bugfix/transform-edge-function-name { "edge":"14" }
   transform-modules-commonjs { "edge":"14" }

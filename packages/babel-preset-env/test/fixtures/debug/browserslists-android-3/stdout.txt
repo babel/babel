@@ -12,7 +12,9 @@ Using plugins:
   proposal-optional-chaining { "android":"3" }
   proposal-json-strings { "android":"3" }
   proposal-optional-catch-binding { "android":"3" }
+  transform-parameters { "android":"3" }
   proposal-async-generator-functions { "android":"3" }
+  proposal-object-rest-spread { "android":"3" }
   transform-dotall-regex { "android":"3" }
   proposal-unicode-property-regex { "android":"3" }
   transform-named-capturing-groups-regex { "android":"3" }
@@ -32,8 +34,6 @@ Using plugins:
   transform-sticky-regex { "android":"3" }
   transform-unicode-regex { "android":"3" }
   transform-spread { "android":"3" }
-  transform-parameters { "android":"3" }
-  proposal-object-rest-spread { "android":"3" }
   transform-destructuring { "android":"3" }
   transform-block-scoping { "android":"3" }
   transform-typeof-symbol { "android":"3" }

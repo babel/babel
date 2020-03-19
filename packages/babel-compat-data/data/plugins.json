@@ -47,6 +47,17 @@
     "opera": "53",
     "electron": "3.1"
   },
+  "transform-parameters": {
+    "chrome": "49",
+    "edge": "18",
+    "firefox": "53",
+    "safari": "10",
+    "node": "6",
+    "ios": "10",
+    "samsung": "5",
+    "opera": "36",
+    "electron": "1"
+  },
   "proposal-async-generator-functions": {
     "chrome": "63",
     "edge": "79",
@@ -57,6 +68,17 @@
     "samsung": "8",
     "opera": "50",
     "electron": "3.1"
+  },
+  "proposal-object-rest-spread": {
+    "chrome": "60",
+    "edge": "79",
+    "firefox": "55",
+    "safari": "11.1",
+    "node": "8.3",
+    "ios": "11.3",
+    "samsung": "8",
+    "opera": "47",
+    "electron": "2.1"
   },
   "transform-dotall-regex": {
     "chrome": "62",
@@ -264,28 +286,6 @@
     "samsung": "5",
     "opera": "33",
     "electron": "0.36"
-  },
-  "transform-parameters": {
-    "chrome": "49",
-    "edge": "18",
-    "firefox": "53",
-    "safari": "10",
-    "node": "6",
-    "ios": "10",
-    "samsung": "5",
-    "opera": "36",
-    "electron": "1"
-  },
-  "proposal-object-rest-spread": {
-    "chrome": "60",
-    "edge": "79",
-    "firefox": "55",
-    "safari": "11.1",
-    "node": "8.3",
-    "ios": "11.3",
-    "samsung": "8",
-    "opera": "47",
-    "electron": "2.1"
   },
   "transform-destructuring": {
     "chrome": "51",

@@ -20,12 +20,12 @@ Using plugins:
   proposal-json-strings { "edge":"18" }
   proposal-optional-catch-binding { "edge":"18" }
   proposal-async-generator-functions { "edge":"18" }
+  proposal-object-rest-spread { "edge":"18" }
   transform-dotall-regex { "edge":"18", "firefox":"68" }
   proposal-unicode-property-regex { "edge":"18", "firefox":"68" }
   transform-named-capturing-groups-regex { "edge":"18", "firefox":"68" }
   transform-template-literals { "ios":"12.2", "safari":"12.1" }
   transform-function-name { "edge":"18" }
-  proposal-object-rest-spread { "edge":"18" }
   transform-modules-commonjs { "android":"79", "chrome":"79", "edge":"18", "firefox":"68", "ios":"12.2", "opera":"65", "safari":"12.1", "samsung":"10.1" }
   proposal-dynamic-import { "android":"79", "chrome":"79", "edge":"18", "firefox":"68", "ios":"12.2", "opera":"65", "safari":"12.1", "samsung":"10.1" }
 
