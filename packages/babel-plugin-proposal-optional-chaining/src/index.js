@@ -83,8 +83,8 @@ export default declare((api, options) => {
 
           // Ensure call expressions have the proper `this`
           // `foo.bar()` has context `foo`.
-          if (isCall && isSimpleMemberExpression(chain)) {
-            if (loose) {
+          if (isCall) {
+            if (loose && isSimpleMemberExpression(chain)) {
               // To avoid a Function#call, we can instead re-grab the property from the context object.
               // `a.?b.?()` translates roughly to `_a.b != null && _a.b()`
               node.callee = chain;
