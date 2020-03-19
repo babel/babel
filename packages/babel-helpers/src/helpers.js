@@ -1078,8 +1078,24 @@ helpers.createForOfIteratorHelper = helper("7.9.0")`
   // f: finish (always called at the end)
 
   export default function _createForOfIteratorHelper(o) {
-    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null)
+    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+      // Fallback for engines without symbol support
+      if (Array.isArray(o)) {
+        var i = 0;
+        var F = function(){};
+        return {
+          s: F,
+          n: function() {
+            if (i >= o.length) return { done: true };
+            return { done: false, value: o[i++] };
+          },
+          e: function(e) { throw e; },
+          f: F,
+        };
+      }
+
       throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+    }
 
     var it, normalCompletion = true, didErr = false, err;
 
@@ -1112,6 +1128,7 @@ helpers.createForOfIteratorHelperLoose = helper("7.9.0")`
     var i = 0;
 
     if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+      // Fallback for engines without symbol support
       if (Array.isArray(o))
         return function() {
           if (i >= o.length) return { done: true };
