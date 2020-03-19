@@ -1072,6 +1072,8 @@ helpers.nonIterableRest = helper("7.0.0-beta.0")`
 `;
 
 helpers.createForOfIteratorHelper = helper("7.9.0")`
+  import unsupportedIterableToArray from "unsupportedIterableToArray";
+
   // s: start (create the iterator)
   // n: next
   // e: error (called whenever something throws)
@@ -1080,7 +1082,7 @@ helpers.createForOfIteratorHelper = helper("7.9.0")`
   export default function _createForOfIteratorHelper(o) {
     if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
       // Fallback for engines without symbol support
-      if (Array.isArray(o)) {
+      if (Array.isArray(o) || (o = unsupportedIterableToArray(o))) {
         var i = 0;
         var F = function(){};
         return {
@@ -1124,12 +1126,14 @@ helpers.createForOfIteratorHelper = helper("7.9.0")`
 `;
 
 helpers.createForOfIteratorHelperLoose = helper("7.9.0")`
+  import unsupportedIterableToArray from "unsupportedIterableToArray";
+
   export default function _createForOfIteratorHelperLoose(o) {
     var i = 0;
 
     if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
       // Fallback for engines without symbol support
-      if (Array.isArray(o))
+      if (Array.isArray(o) || (o = unsupportedIterableToArray(o)))
         return function() {
           if (i >= o.length) return { done: true };
           return { done: false, value: o[i++] };
