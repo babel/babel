@@ -30,6 +30,10 @@ export default declare(api => {
 
   return {
     name: "transform-react-jsx-self",
-    visitor,
+    visitor: {
+      Program(path) {
+        path.traverse(visitor);
+      },
+    },
   };
 });
