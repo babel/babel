@@ -20,6 +20,7 @@ Using plugins:
   proposal-optional-chaining { "android":"79", "chrome":"79", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"65", "safari":"12.1", "samsung":"10.1" }
   proposal-json-strings { "edge":"18", "ie":"11" }
   proposal-optional-catch-binding { "edge":"18", "ie":"11" }
+  transform-parameters { "ie":"11" }
   proposal-async-generator-functions { "edge":"18", "ie":"11" }
   proposal-object-rest-spread { "edge":"18", "ie":"11" }
   transform-dotall-regex { "edge":"18", "firefox":"68", "ie":"11" }
@@ -40,7 +41,6 @@ Using plugins:
   transform-sticky-regex { "ie":"11" }
   transform-unicode-regex { "ie":"11" }
   transform-spread { "ie":"11" }
-  transform-parameters { "ie":"11" }
   transform-destructuring { "ie":"11" }
   transform-block-scoping { "ie":"11" }
   transform-typeof-symbol { "ie":"11" }

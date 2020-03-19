@@ -47,6 +47,17 @@
     "opera": "53",
     "electron": "3.1"
   },
+  "transform-parameters": {
+    "chrome": "49",
+    "edge": "18",
+    "firefox": "53",
+    "safari": "10",
+    "node": "6",
+    "ios": "10",
+    "samsung": "5",
+    "opera": "36",
+    "electron": "1"
+  },
   "proposal-async-generator-functions": {
     "chrome": "63",
     "edge": "79",
@@ -275,17 +286,6 @@
     "samsung": "5",
     "opera": "33",
     "electron": "0.36"
-  },
-  "transform-parameters": {
-    "chrome": "49",
-    "edge": "18",
-    "firefox": "53",
-    "safari": "10",
-    "node": "6",
-    "ios": "10",
-    "samsung": "5",
-    "opera": "36",
-    "electron": "1"
   },
   "transform-destructuring": {
     "chrome": "51",

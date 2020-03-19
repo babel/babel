@@ -12,13 +12,13 @@ Using plugins:
   proposal-optional-chaining { "edge":"17" }
   proposal-json-strings { "edge":"17" }
   proposal-optional-catch-binding { "edge":"17" }
+  transform-parameters { "edge":"17" }
   proposal-async-generator-functions { "edge":"17" }
   proposal-object-rest-spread { "edge":"17" }
   transform-dotall-regex { "edge":"17" }
   proposal-unicode-property-regex { "edge":"17" }
   transform-named-capturing-groups-regex { "edge":"17" }
   transform-function-name { "edge":"17" }
-  transform-parameters { "edge":"17" }
   transform-modules-commonjs { "edge":"17" }
   proposal-dynamic-import { "edge":"17" }
 

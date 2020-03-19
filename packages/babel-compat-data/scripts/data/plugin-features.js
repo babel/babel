@@ -9,6 +9,19 @@ const es5 = {
   "transform-reserved-words": "Miscellaneous / Unreserved words",
 };
 
+// https://github.com/babel/babel/issues/11278
+// transform-parameters should run before object-rest-spread
+const es2015Parameter = {
+  "transform-parameters": {
+    features: [
+      "default function parameters",
+      "rest parameters",
+      "destructuring, parameters / aliased defaults, arrow function",
+      "destructuring, parameters / shorthand defaults, arrow function",
+    ],
+  },
+};
+
 const es2015 = {
   "transform-template-literals": {
     features: ["template literals"],
@@ -59,14 +72,6 @@ const es2015 = {
   },
   "transform-spread": {
     features: ["spread syntax for iterable objects"],
-  },
-  "transform-parameters": {
-    features: [
-      "default function parameters",
-      "rest parameters",
-      "destructuring, parameters / aliased defaults, arrow function",
-      "destructuring, parameters / shorthand defaults, arrow function",
-    ],
   },
   "transform-destructuring": {
     features: ["destructuring, assignment", "destructuring, declarations"],
@@ -126,6 +131,7 @@ module.exports = Object.assign(
   shippedProposal,
   es2020,
   es2019,
+  es2015Parameter,
   es2018,
   es2017,
   es2016,
