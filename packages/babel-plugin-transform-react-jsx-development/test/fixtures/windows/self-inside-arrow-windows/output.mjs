@@ -3,6 +3,7 @@ import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
 var _jsxFileName = "C:\\Users\\travis\\build\\babel\\babel\\packages\\babel-plugin-transform-react-jsx-development\\test\\fixtures\\windows\\self-inside-arrow\\input.mjs",
     _this = this;
 
+/*#__PURE__*/
 _jsxDEV("div", {}, void 0, false, {
   fileName: _jsxFileName,
   lineNumber: 1,
@@ -10,7 +11,7 @@ _jsxDEV("div", {}, void 0, false, {
 }, this);
 
 (function () {
-  return _jsxDEV("div", {}, void 0, false, {
+  return /*#__PURE__*/_jsxDEV("div", {}, void 0, false, {
     fileName: _jsxFileName,
     lineNumber: 2,
     columnNumber: 7
@@ -20,6 +21,7 @@ _jsxDEV("div", {}, void 0, false, {
 function fn() {
   var _this2 = this;
 
+  /*#__PURE__*/
   _jsxDEV("div", {}, void 0, false, {
     fileName: _jsxFileName,
     lineNumber: 5,
@@ -27,7 +29,7 @@ function fn() {
   }, this);
 
   (function () {
-    return _jsxDEV("div", {}, void 0, false, {
+    return /*#__PURE__*/_jsxDEV("div", {}, void 0, false, {
       fileName: _jsxFileName,
       lineNumber: 6,
       columnNumber: 9

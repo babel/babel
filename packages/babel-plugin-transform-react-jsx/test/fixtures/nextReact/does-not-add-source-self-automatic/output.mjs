@@ -3,11 +3,11 @@ import { jsxs as _jsxs } from "react/jsx-runtime";
 import { jsx as _jsx } from "react/jsx-runtime";
 import { Fragment as _Fragment } from "react/jsx-runtime";
 
-var x = _jsx(_Fragment, {
-  children: _jsxs("div", {
-    children: [_jsx("div", {}, "1"), _jsx("div", {
+var x = /*#__PURE__*/_jsx(_Fragment, {
+  children: /*#__PURE__*/_jsxs("div", {
+    children: [/*#__PURE__*/_jsx("div", {}, "1"), /*#__PURE__*/_jsx("div", {
       meow: "wolf"
-    }, "2"), _jsx("div", {}, "3"), _createElement("div", { ...props,
+    }, "2"), /*#__PURE__*/_jsx("div", {}, "3"), /*#__PURE__*/_createElement("div", { ...props,
       key: "4"
     })]
   })

@@ -1,11 +1,11 @@
 /** @jsxRuntime classic */
-var x = React.createElement(React.Fragment, null, React.createElement("div", null, React.createElement("div", {
+var x = /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
   key: "1"
-}), React.createElement("div", {
+}), /*#__PURE__*/React.createElement("div", {
   key: "2",
   meow: "wolf"
-}), React.createElement("div", {
+}), /*#__PURE__*/React.createElement("div", {
   key: "3"
-}), React.createElement("div", { ...props,
+}), /*#__PURE__*/React.createElement("div", { ...props,
   key: "4"
 })));
