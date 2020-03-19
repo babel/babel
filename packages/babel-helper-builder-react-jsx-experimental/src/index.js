@@ -517,19 +517,16 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       }
     }
 
-    try {
-      if (t.isJSXNamespacedName(node.name)) {
-        node.name = t.stringLiteral(
-          node.name.namespace.name + ":" + node.name.name.name,
-        );
-      } else if (esutils.keyword.isIdentifierNameES6(node.name.name)) {
-        node.name.type = "Identifier";
-      } else {
-        node.name = t.stringLiteral(node.name.name);
-      }
-    } catch (e) {
-      e.message += JSON.stringify(node);
+    if (t.isJSXNamespacedName(node.name)) {
+      node.name = t.stringLiteral(
+        node.name.namespace.name + ":" + node.name.name.name,
+      );
+    } else if (esutils.keyword.isIdentifierNameES6(node.name.name)) {
+      node.name.type = "Identifier";
+    } else {
+      node.name = t.stringLiteral(node.name.name);
     }
+
     return t.inherits(t.objectProperty(node.name, value), node);
   }
 
