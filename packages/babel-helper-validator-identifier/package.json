@@ -7,7 +7,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
+  "exports": "./lib/index.js",
   "dependencies": {},
   "devDependencies": {
     "charcodes": "^0.2.0",
