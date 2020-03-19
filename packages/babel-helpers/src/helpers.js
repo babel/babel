@@ -1054,7 +1054,7 @@ helpers.createForOfIteratorHelper = helper("7.9.0")`
             if (i >= o.length) return { done: true };
             return { done: false, value: o[i++] };
           },
-          e: F,
+          e: function(e) { throw e; },
           f: F,
         };
       }
