@@ -3,6 +3,6 @@ const props = {
   foo: true
 };
 
-var x = _createElement("div", { ...props,
+var x = /*#__PURE__*/_createElement("div", { ...props,
   key: undefined
 });

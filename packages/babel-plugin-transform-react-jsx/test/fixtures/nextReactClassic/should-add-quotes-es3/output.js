@@ -1,5 +1,5 @@
 /** @jsxRuntime classic */
-var es3 = React.createElement(F, {
+var es3 = /*#__PURE__*/React.createElement(F, {
   aaa: true,
   "new": true,
   "const": true,

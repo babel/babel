@@ -1,6 +1,14 @@
 import esutils from "esutils";
 import * as t from "@babel/types";
 import { addNamed, addNamespace, isModule } from "@babel/helper-module-imports";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
+
+const DEFAULT = {
+  importSource: "react",
+  runtime: "automatic",
+  pragma: "React.createElement",
+  pragmaFrag: "React.Fragment",
+};
 
 export function helper(babel, options) {
   const FILE_NAME_VAR = "_jsxFileName";
@@ -17,10 +25,10 @@ export function helper(babel, options) {
   const IMPORT_NAME_SIZE = options.development ? 3 : 4;
 
   const {
-    importSource: IMPORT_SOURCE_DEFAULT = "react",
-    runtime: RUNTIME_DEFAULT = "automatic",
-    pragma: PRAGMA_DEFAULT = "React.createElement",
-    pragmaFrag: PRAGMA_FRAG_DEFAULT = "React.Fragment",
+    importSource: IMPORT_SOURCE_DEFAULT = DEFAULT.importSource,
+    runtime: RUNTIME_DEFAULT = DEFAULT.runtime,
+    pragma: PRAGMA_DEFAULT = DEFAULT.pragma,
+    pragmaFrag: PRAGMA_FRAG_DEFAULT = DEFAULT.pragmaFrag,
   } = options;
 
   return {
@@ -142,8 +150,14 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
               createIdentifierParser(pragmaFrag),
             );
             state.set("@babel/plugin-react-jsx/usedFragment", false);
-            state.set("@babel/plugin-react-jsx/pragmaSet", pragmaSet);
-            state.set("@babel/plugin-react-jsx/pragmaFragSet", pragmaFragSet);
+            state.set(
+              "@babel/plugin-react-jsx/pragmaSet",
+              pragma !== DEFAULT.pragma,
+            );
+            state.set(
+              "@babel/plugin-react-jsx/pragmaFragSet",
+              pragmaFrag !== DEFAULT.pragmaFrag,
+            );
           } else if (runtime === "automatic") {
             if (pragmaSet || pragmaFragSet) {
               throw path.buildCodeFrameError(
@@ -189,6 +203,11 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
               createIdentifierParser(
                 createIdentifierName(path, "Fragment", importName),
               ),
+            );
+
+            state.set(
+              "@babel/plugin-react-jsx/importSourceSet",
+              source !== DEFAULT.importSource,
             );
           } else {
             throw path.buildCodeFrameError(
@@ -505,6 +524,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       tagExpr: tagExpr,
       tagName: tagName,
       args: args,
+      pure: false,
     };
 
     if (options.pre) {
@@ -577,13 +597,15 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       options.post(state, file);
     }
 
-    return (
+    const call =
       state.call ||
       t.callExpression(
         path.node.children.length > 1 ? state.jsxStaticCallee : state.jsxCallee,
         args,
-      )
-    );
+      );
+    if (state.pure) annotateAsPure(call);
+
+    return call;
   }
 
   // Builds props for React.jsx. This function adds children into the props
@@ -633,6 +655,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       tagExpr: tagExpr,
       tagName: tagName,
       args: args,
+      pure: false,
     };
 
     if (options.pre) {
@@ -667,13 +690,15 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       options.post(state, file);
     }
 
-    return (
+    const call =
       state.call ||
       t.callExpression(
         path.node.children.length > 1 ? state.jsxStaticCallee : state.jsxCallee,
         args,
-      )
-    );
+      );
+    if (state.pure) annotateAsPure(call);
+
+    return call;
   }
 
   function buildCreateElementFragmentCall(path, file) {
@@ -692,6 +717,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       tagExpr: tagExpr,
       tagName: tagName,
       args: args,
+      pure: false,
     };
 
     if (options.pre) {
@@ -706,7 +732,12 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     }
 
     file.set("@babel/plugin-react-jsx/usedFragment", true);
-    return state.call || t.callExpression(state.createElementCallee, args);
+
+    const call =
+      state.call || t.callExpression(state.createElementCallee, args);
+    if (state.pure) annotateAsPure(call);
+
+    return call;
   }
 
   // Builds JSX into:
@@ -733,6 +764,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       tagExpr: tagExpr,
       tagName: tagName,
       args: args,
+      pure: false,
     };
 
     if (options.pre) {
@@ -751,7 +783,11 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       options.post(state, file);
     }
 
-    return state.call || t.callExpression(state.createElementCallee, args);
+    const call =
+      state.call || t.callExpression(state.createElementCallee, args);
+    if (state.pure) annotateAsPure(call);
+
+    return call;
   }
 
   /**

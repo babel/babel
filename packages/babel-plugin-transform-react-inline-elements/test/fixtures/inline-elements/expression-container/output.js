@@ -1,6 +1,6 @@
 var TestComponent = React.createClass({
   render: function () {
-    return babelHelpers.jsx("span", {
+    return /*#__PURE__*/babelHelpers.jsx("span", {
       className: this.props.someProp
     });
   }

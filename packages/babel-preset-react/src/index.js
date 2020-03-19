@@ -8,15 +8,19 @@ import transformReactJSXSelf from "@babel/plugin-transform-react-jsx-self";
 export default declare((api, opts) => {
   api.assertVersion(7);
 
-  const pragma = opts.pragma;
-  const pragmaFrag = opts.pragmaFrag;
-  const throwIfNamespace =
-    opts.throwIfNamespace === undefined ? true : !!opts.throwIfNamespace;
+  const {
+    pragma,
+    pragmaFrag,
+    pure,
+    throwIfNamespace = true,
+    useSpread,
+    runtime = "classic",
+    importSource,
+  } = opts;
+
+  // TODO: (Babel 8) Don't cast these options but validate it
   const development = !!opts.development;
   const useBuiltIns = !!opts.useBuiltIns;
-  const { useSpread } = opts;
-  const runtime = opts.runtime || "classic";
-  const importSource = opts.importSource;
 
   if (typeof development !== "boolean") {
     throw new Error(
@@ -41,6 +45,7 @@ export default declare((api, opts) => {
           throwIfNamespace,
           useBuiltIns,
           useSpread,
+          pure,
         },
       ],
       transformReactDisplayName,

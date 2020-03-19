@@ -1,11 +1,13 @@
 import esutils from "esutils";
 import * as t from "@babel/types";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 type ElementState = {
   tagExpr: Object, // tag node
   tagName: ?string, // raw string tag name
   args: Array<Object>, // array of call arguments
   call?: Object, // optional call property that can be set to override the call expression returned
+  pure: boolean, // true if the element can be marked with a #__PURE__ annotation
 };
 
 export default function(opts) {
@@ -134,6 +136,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       tagExpr: tagExpr,
       tagName: tagName,
       args: args,
+      pure: false,
     };
 
     if (opts.pre) {
@@ -153,7 +156,10 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       opts.post(state, file);
     }
 
-    return state.call || t.callExpression(state.callee, args);
+    const call = state.call || t.callExpression(state.callee, args);
+    if (state.pure) annotateAsPure(call);
+
+    return call;
   }
 
   function pushProps(_props, objs) {
@@ -248,6 +254,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       tagExpr: tagExpr,
       tagName: tagName,
       args: args,
+      pure: false,
     };
 
     if (opts.pre) {
@@ -262,6 +269,10 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     }
 
     file.set("usedFragment", true);
-    return state.call || t.callExpression(state.callee, args);
+
+    const call = state.call || t.callExpression(state.callee, args);
+    if (state.pure) annotateAsPure(call);
+
+    return call;
   }
 }

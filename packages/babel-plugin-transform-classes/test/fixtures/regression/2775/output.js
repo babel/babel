@@ -24,9 +24,9 @@ var RandomComponent = /*#__PURE__*/function (_Component) {
   babelHelpers.createClass(RandomComponent, [{
     key: "render",
     value: function render() {
-      return _react["default"].createElement("div", {
+      return /*#__PURE__*/_react["default"].createElement("div", {
         className: "sui-RandomComponent"
-      }, _react["default"].createElement("h2", null, "Hi there!"));
+      }, /*#__PURE__*/_react["default"].createElement("h2", null, "Hi there!"));
     }
   }]);
   return RandomComponent;

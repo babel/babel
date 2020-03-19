@@ -15,11 +15,11 @@ const Bar = () => {
 
         var jsx = 1;
         var _jsx = 2;
-        return _reactJsxRuntime.jsx("div", {});
+        return /*#__PURE__*/_reactJsxRuntime.jsx("div", {});
       }
 
       ;
-      return _reactJsxRuntime.jsx("span", {});
+      return /*#__PURE__*/_reactJsxRuntime.jsx("span", {});
     };
   };
 };

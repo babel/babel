@@ -1,1 +1,1 @@
-var x = React.createElement("div", null, React.createElement("span", null));
+var x = /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null));

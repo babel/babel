@@ -2,7 +2,7 @@ function _createSuper(Derived) { return function () { var Super = babelHelpers.g
 
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
-var _ref = /*#__PURE__*/<div className="navbar-header">
+var _ref = <div className="navbar-header">
       <a className="navbar-brand" href="/">
         <img src="/img/logo/logo-96x36.png" />
       </a>

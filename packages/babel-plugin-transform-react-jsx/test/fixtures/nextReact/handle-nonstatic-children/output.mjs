@@ -1,5 +1,5 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 
-var x = _jsx("div", {
-  children: [_jsx("span", {}, '0'), _jsx("span", {}, '1')]
+var x = /*#__PURE__*/_jsx("div", {
+  children: [/*#__PURE__*/_jsx("span", {}, '0'), /*#__PURE__*/_jsx("span", {}, '1')]
 });

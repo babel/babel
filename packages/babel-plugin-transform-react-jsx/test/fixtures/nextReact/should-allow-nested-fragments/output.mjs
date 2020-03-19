@@ -2,18 +2,19 @@ import { jsxs as _jsxs } from "react/jsx-runtime";
 import { Fragment as _Fragment } from "react/jsx-runtime";
 import { jsx as _jsx } from "react/jsx-runtime";
 
+/*#__PURE__*/
 _jsx("div", {
-  children: _jsxs(_Fragment, {
-    children: [_jsxs(_Fragment, {
-      children: [_jsx("span", {
+  children: /*#__PURE__*/_jsxs(_Fragment, {
+    children: [/*#__PURE__*/_jsxs(_Fragment, {
+      children: [/*#__PURE__*/_jsx("span", {
         children: "Hello"
-      }), _jsx("span", {
+      }), /*#__PURE__*/_jsx("span", {
         children: "world"
       })]
-    }), _jsxs(_Fragment, {
-      children: [_jsx("span", {
+    }), /*#__PURE__*/_jsxs(_Fragment, {
+      children: [/*#__PURE__*/_jsx("span", {
         children: "Goodbye"
-      }), _jsx("span", {
+      }), /*#__PURE__*/_jsx("span", {
         children: "world"
       })]
     })]

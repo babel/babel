@@ -4,6 +4,8 @@ import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 
 export default declare((api, options) => {
+  const PURE_ANNOTATION = options.pure;
+
   const visitor = helper(api, {
     pre(state) {
       const tagName = state.tagName;
@@ -20,6 +22,9 @@ export default declare((api, options) => {
         state.createElementCallee = pass.get(
           "@babel/plugin-react-jsx/createElementIdentifier",
         )();
+
+        state.pure =
+          PURE_ANNOTATION ?? !pass.get("@babel/plugin-react-jsx/pragmaSet");
       } else {
         state.jsxCallee = pass.get("@babel/plugin-react-jsx/jsxIdentifier")();
         state.jsxStaticCallee = pass.get(
@@ -28,6 +33,10 @@ export default declare((api, options) => {
         state.createElementCallee = pass.get(
           "@babel/plugin-react-jsx/createElementIdentifier",
         )();
+
+        state.pure =
+          PURE_ANNOTATION ??
+          !pass.get("@babel/plugin-react-jsx/importSourceSet");
       }
     },
 

@@ -15,11 +15,11 @@ const Bar = () => {
 
         var jsx = 1;
         var _jsx = 2;
-        return _jsx2("div", {});
+        return /*#__PURE__*/_jsx2("div", {});
       }
 
       ;
-      return _jsx2("span", {});
+      return /*#__PURE__*/_jsx2("span", {});
     };
   };
 };

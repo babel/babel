@@ -62,6 +62,8 @@ export default declare(api => {
       if (!hasKey && state.args.length > 2) {
         state.args.splice(2, 0, t.unaryExpression("void", t.numericLiteral(0)));
       }
+
+      state.pure = true;
     },
   });
   return {

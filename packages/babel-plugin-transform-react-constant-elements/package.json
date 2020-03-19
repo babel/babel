@@ -12,7 +12,6 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-annotate-as-pure": "^7.8.3",
     "@babel/helper-plugin-utils": "^7.8.3"
   },
   "peerDependencies": {
