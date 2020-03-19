@@ -536,10 +536,6 @@ export default class ExpressionParser extends LValParser {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     const potentialArrowAt = this.state.potentialArrowAt;
-    // Issue: 11203. We are on the RHS of a binary operator that is not "|>".
-    // Thus, an async function declaration is not possible.
-    // Example: "2 + async() => 3" is invalid.
-    const asyncArrowFuncForbidden = !(potentialArrowAt === this.state.start);
     const expr = this.parseExprAtom(refExpressionErrors);
 
     if (
@@ -549,13 +545,7 @@ export default class ExpressionParser extends LValParser {
       return expr;
     }
 
-    return this.parseSubscripts(
-      expr,
-      startPos,
-      startLoc,
-      null,
-      asyncArrowFuncForbidden,
-    );
+    return this.parseSubscripts(expr, startPos, startLoc);
   }
 
   parseSubscripts(
@@ -563,11 +553,10 @@ export default class ExpressionParser extends LValParser {
     startPos: number,
     startLoc: Position,
     noCalls?: ?boolean,
-    asyncArrowFuncForbidden?: ?boolean,
   ): N.Expression {
     const state = {
       optionalChainMember: false,
-      maybeAsyncArrow: this.atPossibleAsync(base) && !asyncArrowFuncForbidden,
+      maybeAsyncArrow: this.atPossibleAsync(base),
       stop: false,
     };
     do {
@@ -759,13 +748,20 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "TaggedTemplateExpression");
   }
 
-  atPossibleAsync(base: N.Expression): boolean {
+  atPossibleAsyncArrow(base: N.Expression): boolean {
     return (
       base.type === "Identifier" &&
       base.name === "async" &&
       this.state.lastTokEnd === base.end &&
       !this.canInsertSemicolon() &&
       this.input.slice(base.start, base.end) === "async"
+    );
+  }
+
+  atPossibleAsync(base: N.Expression): boolean {
+    return (
+      this.atPossibleAsyncArrow(base) &&
+      base.start === this.state.potentialArrowAt
     );
   }
 
