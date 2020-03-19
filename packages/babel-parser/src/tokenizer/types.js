@@ -163,6 +163,8 @@ export const types: { [name: string]: TokenType } = {
   }),
 
   // Keywords
+  // Don't forget to update packages/babel-helper-validator-identifier/src/keyword.js
+  // when new keywords are added
   _break: createKeyword("break"),
   _case: createKeyword("case", { beforeExpr }),
   _catch: createKeyword("catch"),

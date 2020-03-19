@@ -1,5 +1,5 @@
 import jsTokens, { matchToToken } from "js-tokens";
-import esutils from "esutils";
+import { isReservedWord, isKeyword } from "@babel/helper-validator-identifier";
 import Chalk from "chalk";
 
 /**
@@ -43,7 +43,7 @@ function getTokenType(match) {
   const token = matchToToken(match);
 
   if (token.type === "name") {
-    if (esutils.keyword.isReservedWordES6(token.value)) {
+    if (isKeyword(token.value) || isReservedWord(token.value)) {
       return "keyword";
     }
 

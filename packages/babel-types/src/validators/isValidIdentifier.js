@@ -1,6 +1,9 @@
 // @flow
-import esutils from "esutils";
-import { isIdentifierName } from "@babel/helper-validator-identifier";
+import {
+  isIdentifierName,
+  isStrictReservedWord,
+  isKeyword,
+} from "@babel/helper-validator-identifier";
 
 /**
  * Check if the input `name` is a valid identifier name
@@ -13,7 +16,7 @@ export default function isValidIdentifier(
   if (typeof name !== "string") return false;
 
   if (reserved) {
-    if (esutils.keyword.isReservedWordES6(name, true)) {
+    if (isKeyword(name) || isStrictReservedWord(name)) {
       return false;
     } else if (name === "await") {
       // invalid in module, valid in script; better be safe (see #4952)

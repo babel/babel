@@ -1,9 +1,8 @@
 // @flow
 
-import esutils from "esutils";
-
 import is from "../validators/is";
 import isValidIdentifier from "../validators/isValidIdentifier";
+import { isKeyword, isReservedWord } from "@babel/helper-validator-identifier";
 
 import {
   BINARY_OPERATORS,
@@ -489,14 +488,15 @@ defineType("Identifier", {
     }
 
     if (
-      // Ideally this should be strict if this node is a descendant of a block
-      // in strict mode. Also, we should disallow "await" in modules.
-      esutils.keyword.isReservedWordES6(node.name, /* strict */ false) &&
+      // Ideally we should call isStrictReservedWord if this node is a descendant
+      // of a block in strict mode. Also, we should pass the inModule option so
+      // we can disable "await" in module.
+      (isKeyword(node.name) || isReservedWord(node.name)) &&
       // Even if "this" is a keyword, we are using the Identifier
       // node to represent it.
       node.name !== "this"
     ) {
-      throw new TypeError(`"${node.name}" is not a valid identifer`);
+      throw new TypeError(`"${node.name}" is not a valid identifier`);
     }
   },
 });
