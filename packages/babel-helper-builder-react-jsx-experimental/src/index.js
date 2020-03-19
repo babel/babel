@@ -835,7 +835,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     const pluginName = `transform-react-jsx-${name.slice(2)}`;
 
     return path.buildCodeFrameError(
-      `Duplicate ${name} prop found. You are most likely using the deprecated ${pluginName} Babel plugin. __source and __self will be set automatically in automatic runtime. Please remove transform-react-jsx-source and transform-react-jsx-self from your Babel config.`,
+      `Duplicate ${name} prop found. You are most likely using the deprecated ${pluginName} Babel plugin. Both __source and __self are automatically set when using the automatic runtime. Please remove transform-react-jsx-source and transform-react-jsx-self from your Babel config.`,
     );
   }
 }
