@@ -3,6 +3,7 @@
 import esutils from "esutils";
 
 import is from "../validators/is";
+import isValidIdentifier from "../validators/isValidIdentifier";
 
 import {
   BINARY_OPERATORS,
@@ -452,7 +453,7 @@ defineType("Identifier", {
       validate: chain(assertValueType("string"), function(node, key, val) {
         if (!process.env.BABEL_TYPES_8_BREAKING) return;
 
-        if (!esutils.keyword.isIdentifierNameES6(val)) {
+        if (!isValidIdentifier(val, false)) {
           throw new TypeError(`"${val}" is not a valid identifier name`);
         }
       }),

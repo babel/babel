@@ -1,4 +1,3 @@
-import esutils from "esutils";
 import * as t from "@babel/types";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
@@ -57,7 +56,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     if (t.isJSXIdentifier(node)) {
       if (node.name === "this" && t.isReferenced(node, parent)) {
         return t.thisExpression();
-      } else if (esutils.keyword.isIdentifierNameES6(node.name)) {
+      } else if (t.isValidIdentifier(node.name, false)) {
         node.type = "Identifier";
       } else {
         return t.stringLiteral(node.name);
@@ -104,7 +103,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       node.name = t.stringLiteral(
         node.name.namespace.name + ":" + node.name.name.name,
       );
-    } else if (esutils.keyword.isIdentifierNameES6(node.name.name)) {
+    } else if (t.isValidIdentifier(node.name.name, false)) {
       node.name.type = "Identifier";
     } else {
       node.name = t.stringLiteral(node.name.name);

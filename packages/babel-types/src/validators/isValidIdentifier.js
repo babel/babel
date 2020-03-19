@@ -1,5 +1,6 @@
 // @flow
 import esutils from "esutils";
+import { isIdentifierName } from "@babel/helper-validator-identifier";
 
 /**
  * Check if the input `name` is a valid identifier name
@@ -20,5 +21,5 @@ export default function isValidIdentifier(
     }
   }
 
-  return esutils.keyword.isIdentifierNameES6(name);
+  return isIdentifierName(name);
 }
