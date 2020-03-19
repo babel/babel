@@ -1,0 +1,38 @@
+import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
+
+var _jsxFileName = "C:\\Users\\travis\\build\\babel\\babel\\packages\\babel-plugin-transform-react-jsx-development\\test\\fixtures\\windows\\self-inside-arrow-windows\\input.mjs",
+    _this = this;
+
+/*#__PURE__*/
+_jsxDEV("div", {}, void 0, false, {
+  fileName: _jsxFileName,
+  lineNumber: 1,
+  columnNumber: 1
+}, this);
+
+(function () {
+  return /*#__PURE__*/_jsxDEV("div", {}, void 0, false, {
+    fileName: _jsxFileName,
+    lineNumber: 2,
+    columnNumber: 7
+  }, _this);
+});
+
+function fn() {
+  var _this2 = this;
+
+  /*#__PURE__*/
+  _jsxDEV("div", {}, void 0, false, {
+    fileName: _jsxFileName,
+    lineNumber: 5,
+    columnNumber: 3
+  }, this);
+
+  (function () {
+    return /*#__PURE__*/_jsxDEV("div", {}, void 0, false, {
+      fileName: _jsxFileName,
+      lineNumber: 6,
+      columnNumber: 9
+    }, _this2);
+  });
+}
