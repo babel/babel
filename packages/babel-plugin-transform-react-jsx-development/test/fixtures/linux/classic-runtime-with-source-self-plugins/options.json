@@ -5,5 +5,5 @@
     "transform-react-jsx-self"
   ],
   "os": ["linux", "darwin"],
-  "throws": "__source and __self should not be defined in props. You are most likely using the deprecated transform-react-jsx-self or transform-react-jsx-source Babel plugins. __source and __self will be set automatically in automatic runtime. Please remove transform-react-jsx-self or transform-react-jsx-source from your Babel config."
+  "throws": "Duplicate __self prop found. You are most likely using the deprecated transform-react-jsx-self Babel plugin. __source and __self will be set automatically in automatic runtime. Please remove transform-react-jsx-source and transform-react-jsx-self from your Babel config."
 }

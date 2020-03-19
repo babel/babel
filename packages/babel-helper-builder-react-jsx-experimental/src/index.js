@@ -31,6 +31,32 @@ export function helper(babel, options) {
     pragmaFrag: PRAGMA_FRAG_DEFAULT = DEFAULT.pragmaFrag,
   } = options;
 
+  const injectMetaPropertiesVisitor = {
+    JSXOpeningElement(path, state) {
+      for (const attr of path.get("attributes")) {
+        if (!attr.isJSXElement()) continue;
+
+        const { name } = attr.node.name;
+        if (name === "__source" || name === "__self") {
+          throw path.buildCodeFrameError(
+            `__source and __self should not be defined in props and are reserved for internal usage.`,
+          );
+        }
+      }
+
+      const source = t.jsxAttribute(
+        t.jsxIdentifier("__source"),
+        t.jsxExpressionContainer(makeSource(path, state)),
+      );
+      const self = t.jsxAttribute(
+        t.jsxIdentifier("__self"),
+        t.jsxExpressionContainer(t.thisExpression()),
+      );
+
+      path.pushContainer("attributes", [source, self]);
+    },
+  };
+
   return {
     JSXNamespacedName(path, state) {
       const throwIfNamespace =
@@ -213,6 +239,10 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             throw path.buildCodeFrameError(
               `Runtime must be either "classic" or "automatic".`,
             );
+          }
+
+          if (options.development) {
+            path.traverse(injectMetaPropertiesVisitor, state);
           }
         }
       },
@@ -409,7 +439,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
   }
 
   function makeSource(path, state) {
-    const location = path.node.openingElement.loc;
+    const location = path.node.loc;
     if (!location) {
       // the element was generated and doesn't have location information
       return;
@@ -487,16 +517,19 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       }
     }
 
-    if (t.isJSXNamespacedName(node.name)) {
-      node.name = t.stringLiteral(
-        node.name.namespace.name + ":" + node.name.name.name,
-      );
-    } else if (esutils.keyword.isIdentifierNameES6(node.name.name)) {
-      node.name.type = "Identifier";
-    } else {
-      node.name = t.stringLiteral(node.name.name);
+    try {
+      if (t.isJSXNamespacedName(node.name)) {
+        node.name = t.stringLiteral(
+          node.name.namespace.name + ":" + node.name.name.name,
+        );
+      } else if (esutils.keyword.isIdentifierNameES6(node.name.name)) {
+        node.name.type = "Identifier";
+      } else {
+        node.name = t.stringLiteral(node.name.name);
+      }
+    } catch (e) {
+      e.message += JSON.stringify(node);
     }
-
     return t.inherits(t.objectProperty(node.name, value), node);
   }
 
@@ -532,33 +565,28 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     }
 
     let attribs = [];
-    let key;
-    let source;
-    let self;
+    const extracted = Object.create(null);
 
     // for React.jsx, key, __source (dev), and __self (dev) is passed in as
     // a separate argument rather than in the args object. We go through the
     // props and filter out these three keywords so we can pass them in
     // as separate arguments later
-    for (let i = 0; i < openingPath.node.attributes.length; i++) {
-      const attr = openingPath.node.attributes[i];
-      if (t.isJSXAttribute(attr) && t.isJSXIdentifier(attr.name)) {
-        if (attr.name.name === "key") {
-          key = convertAttribute(attr).value;
-        } else if (
-          attr.name.name === "__source" ||
-          attr.name.name === "__self"
-        ) {
-          throw path.buildCodeFrameError(
-            `__source and __self should not be defined in props. You are most likely using the deprecated transform-react-jsx-self or transform-react-jsx-source Babel plugins. __source and __self will be set automatically in automatic runtime. Please remove transform-react-jsx-self or transform-react-jsx-source from your Babel config.`,
-          );
-        } else {
-          // If someone is still using the __source and __self Babel plugins
-          // filter the results out
-          attribs.push(attr);
+    for (const attr of openingPath.get("attributes")) {
+      if (attr.isJSXAttribute() && t.isJSXIdentifier(attr.node.name)) {
+        const { name } = attr.node.name;
+        switch (name) {
+          case "__source":
+          case "__self":
+            if (extracted[name]) throw sourceSelfError(path, name);
+          /* falls through */
+          case "key":
+            extracted[name] = convertAttributeValue(attr.node.value);
+            break;
+          default:
+            attribs.push(attr.node);
         }
       } else {
-        attribs.push(attr);
+        attribs.push(attr.node);
       }
     }
 
@@ -576,20 +604,18 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     args.push(attribs);
 
     if (!options.development) {
-      if (key !== undefined) {
-        args.push(key);
+      if (extracted.key !== undefined) {
+        args.push(extracted.key);
       }
     } else {
       // isStaticChildren, __source, and __self are only used in development
       // automatically include __source and __self in this plugin
       // so we can eliminate the need for separate Babel plugins in Babel 8
-      source = makeSource(path, file);
-      self = t.thisExpression();
       args.push(
-        key === undefined ? path.scope.buildUndefinedNode() : key,
+        extracted.key ?? path.scope.buildUndefinedNode(),
         t.booleanLiteral(path.node.children.length > 1),
-        source ?? path.scope.buildUndefinedNode(),
-        self,
+        extracted.__source ?? path.scope.buildUndefinedNode(),
+        extracted.__self ?? t.thisExpression(),
       );
     }
 
@@ -611,16 +637,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
   // Builds props for React.jsx. This function adds children into the props
   // and ensures that props is always an object
   function buildJSXOpeningElementAttributes(attribs, file, children) {
-    const _attribs = attribs.filter(
-      prop =>
-        !(
-          t.isJSXAttribute(prop) &&
-          prop.name &&
-          (prop.name.name === "__source" || prop.name.name === "__self")
-        ),
-    );
-
-    const props = _attribs.map(convertAttribute);
+    const props = attribs.map(convertAttribute);
 
     // In React.jsx, children is no longer a separate argument, but passed in
     // through the argument object
@@ -774,7 +791,6 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     const attribs = buildCreateElementOpeningElementAttributes(
       path,
       openingPath.node.attributes,
-      file,
     );
 
     args.push(attribs, ...path.node.children);
@@ -796,40 +812,33 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
    * breaking on spreads, we then push a new object containing
    * all prior attributes to an array for later processing.
    */
-  function buildCreateElementOpeningElementAttributes(path, attribs, file) {
-    // We want source and self to be automatically included in the future
-    // so we will error when we see it
+  function buildCreateElementOpeningElementAttributes(path, attribs) {
+    const props = [];
+    const found = Object.create(null);
 
-    const hasSourceSelf = attribs.some(
-      prop =>
-        t.isJSXAttribute(prop) &&
-        prop.name &&
-        (prop.name.name === "__source" || prop.name.name === "__self"),
-    );
+    for (const attr of attribs) {
+      const name =
+        t.isJSXAttribute(attr) &&
+        t.isJSXIdentifier(attr.name) &&
+        attr.name.name;
 
-    if (hasSourceSelf) {
-      throw path.buildCodeFrameError(
-        `__source and __self should not be defined in props. You are most likely using the deprecated transform-react-jsx-self or transform-react-jsx-source Babel plugins. __source and __self will be set automatically in automatic runtime. Please remove transform-react-jsx-self or transform-react-jsx-source from your Babel config.`,
-      );
+      if (name === "__source" || name === "__self") {
+        if (found[name]) throw sourceSelfError(path, name);
+        found[name] = true;
+        if (!options.development) continue;
+      }
+
+      props.push(convertAttribute(attr));
     }
-
-    if (options.development) {
-      attribs.push(
-        t.jsxAttribute(
-          t.jsxIdentifier("__source"),
-          t.jsxExpressionContainer(makeSource(path, file)),
-        ),
-      );
-      attribs.push(
-        t.jsxAttribute(
-          t.jsxIdentifier("__self"),
-          t.jsxExpressionContainer(t.thisExpression()),
-        ),
-      );
-    }
-
-    const props = attribs.map(convertAttribute);
 
     return props.length > 0 ? t.objectExpression(props) : t.nullLiteral();
+  }
+
+  function sourceSelfError(path, name) {
+    const pluginName = `transform-react-jsx-${name.slice(2)}`;
+
+    return path.buildCodeFrameError(
+      `Duplicate ${name} prop found. You are most likely using the deprecated ${pluginName} Babel plugin. __source and __self will be set automatically in automatic runtime. Please remove transform-react-jsx-source and transform-react-jsx-self from your Babel config.`,
+    );
   }
 }
