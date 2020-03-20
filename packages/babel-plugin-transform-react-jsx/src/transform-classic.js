@@ -53,16 +53,20 @@ export default declare((api, options) => {
 
       let pragma = PRAGMA_DEFAULT;
       let pragmaFrag = PRAGMA_FRAG_DEFAULT;
+      let pragmaSet = !!options.pragma;
+      let pragmaFragSet = !!options.pragma;
 
       if (file.ast.comments) {
         for (const comment of (file.ast.comments: Array<Object>)) {
           const jsxMatches = JSX_ANNOTATION_REGEX.exec(comment.value);
           if (jsxMatches) {
             pragma = jsxMatches[1];
+            pragmaSet = true;
           }
           const jsxFragMatches = JSX_FRAG_ANNOTATION_REGEX.exec(comment.value);
           if (jsxFragMatches) {
             pragmaFrag = jsxFragMatches[1];
+            pragmaFragSet = true;
           }
         }
       }
@@ -70,8 +74,8 @@ export default declare((api, options) => {
       state.set("jsxIdentifier", createIdentifierParser(pragma));
       state.set("jsxFragIdentifier", createIdentifierParser(pragmaFrag));
       state.set("usedFragment", false);
-      state.set("pragmaSet", pragma !== DEFAULT.pragma);
-      state.set("pragmaFragSet", pragmaFrag !== DEFAULT.pragmaFrag);
+      state.set("pragmaSet", pragmaSet);
+      state.set("pragmaFragSet", pragmaFragSet);
     },
     exit(path, state) {
       if (
