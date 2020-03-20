@@ -1,4 +1,4 @@
-var _jsxFileName = "C:\\Users\\travis\\build\\babel\\babel\\packages\\babel-plugin-transform-react-jsx-development\\test\\fixtures\\windows\\classic-runtime-windows\\input.js";
+var _jsxFileName = "<CWD>\\packages\\babel-plugin-transform-react-jsx-development\\test\\fixtures\\windows\\classic-runtime-windows\\input.js";
 var x = /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
   __source: {
     fileName: _jsxFileName,

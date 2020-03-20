@@ -1,6 +1,6 @@
 var _reactJsxDevRuntime = require("react/jsx-dev-runtime");
 
-var _jsxFileName = "C:\\Users\\travis\\build\\babel\\babel\\packages\\babel-preset-react\\test\\fixtures\\preset-options\\development-runtime-automatic-windows\\input.js";
+var _jsxFileName = "<CWD>\\packages\\babel-preset-react\\test\\fixtures\\preset-options\\development-runtime-automatic-windows\\input.js";
 
 /*#__PURE__*/
 _reactJsxDevRuntime.jsxDEV(Foo, {

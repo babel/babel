@@ -1,7 +1,7 @@
 import { createElement as _createElement } from "react";
 import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
 import { Fragment as _Fragment } from "react/jsx-dev-runtime";
-var _jsxFileName = "C:\\Users\\travis\\build\\babel\\babel\\packages\\babel-plugin-transform-react-jsx-development\\test\\fixtures\\windows\\auto-import-dev-windows\\input.js";
+var _jsxFileName = "<CWD>\\packages\\babel-plugin-transform-react-jsx-development\\test\\fixtures\\windows\\auto-import-dev-windows\\input.js";
 
 var x = /*#__PURE__*/_jsxDEV(_Fragment, {
   children: /*#__PURE__*/_jsxDEV("div", {
