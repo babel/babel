@@ -1866,7 +1866,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.tsParseImportEqualsDeclaration(node);
       }
 
-      if (this.eatContextual("type")) {
+      const ahead = this.lookahead();
+
+      if (
+        this.match(tt.name) &&
+        this.state.value === "type" &&
+        // import type, { a } from "b";
+        ahead.type !== tt.comma &&
+        // import type from "a";
+        !(ahead.type === tt.name && ahead.value === "from")
+      ) {
+        this.eatContextual("type");
         node.importKind = "type";
       } else {
         node.importKind = "value";

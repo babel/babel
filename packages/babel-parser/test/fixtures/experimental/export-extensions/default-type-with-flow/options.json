@@ -1,5 +1,8 @@
 {
-  "plugins": ["exportDefaultFrom", "flow"],
+  "plugins": [
+    "exportDefaultFrom",
+    "flow"
+  ],
   "sourceType": "module",
   "throws": "Unexpected token, expected \"=\" (1:17)"
 }
