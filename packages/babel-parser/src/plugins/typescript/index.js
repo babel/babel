@@ -1876,8 +1876,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           // import type from "a";
           !(ahead.type === tt.name && ahead.value === "from")
         ) {
-          this.eat(tt.name);
           node.importKind = "type";
+          this.next();
         } else {
           node.importKind = "value";
         }
