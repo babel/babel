@@ -31,7 +31,7 @@ export default function addCreateSuperHelper(file) {
 
 const helper = template.statement`
   function CREATE_SUPER(Derived) {
-    function _isNativeReflectConstruct() {
+    function isNativeReflectConstruct() {
       if (typeof Reflect === "undefined" || !Reflect.construct) return false;
 
       // core-js@3
