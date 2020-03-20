@@ -60,7 +60,7 @@ function buildBabel(exclude, sourcesGlob = defaultSourcesGlob) {
   let stream = gulp.src(sourcesGlob, { base: __dirname });
 
   if (exclude) {
-    const filters = exclude.map(p => `!**/${p}/**`);
+    const filters = exclude.map(p => `!**/${p.src}/**`);
     filters.unshift("**");
     stream = stream.pipe(filter(filters));
   }
