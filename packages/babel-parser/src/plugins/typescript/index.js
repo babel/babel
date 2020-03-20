@@ -1872,13 +1872,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
 
         if (
-          this.state.value === "type" &&
+          this.isContextual("type") &&
           // import type, { a } from "b";
           ahead.type !== tt.comma &&
           // import type from "a";
           !(ahead.type === tt.name && ahead.value === "from")
         ) {
-          this.eatContextual("type");
+          this.eat(tt.name);
           node.importKind = "type";
         }
       }
