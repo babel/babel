@@ -92,7 +92,6 @@
                   "column": 27
                 }
               },
-              "importKind": "value",
               "specifiers": [
                 {
                   "type": "ImportNamespaceSpecifier",

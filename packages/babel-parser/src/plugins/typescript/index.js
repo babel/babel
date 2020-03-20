@@ -1862,8 +1862,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     checkDuplicateExports() {}
 
     parseImport(node: N.Node): N.AnyImport {
-      node.importKind = "value";
-
       if (this.match(tt.name)) {
         const ahead = this.lookahead();
 
@@ -1880,6 +1878,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         ) {
           this.eat(tt.name);
           node.importKind = "type";
+        } else {
+          node.importKind = "value";
         }
       }
 
