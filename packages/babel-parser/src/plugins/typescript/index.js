@@ -1738,7 +1738,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // There are number of things we are going to "maybe" parse, like type arguments on
         // tagged template expressions. If any of them fail, walk it back and continue.
         const result = this.tsTryParseAndCatch(() => {
-          if (!noCalls && this.atPossibleAsync(base)) {
+          if (!noCalls && this.atPossibleAsyncArrow(base)) {
             // Almost certainly this is a generic async function `async <T>() => ...
             // But it might be a call with a type argument `async<T>();`
             const asyncArrowFn = this.tsTryParseGenericAsyncArrowFunction(
