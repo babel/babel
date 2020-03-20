@@ -1862,10 +1862,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     checkDuplicateExports() {}
 
     parseImport(node: N.Node): N.AnyImport {
-      if (this.match(tt.name)) {
+      if (this.match(tt.name) || this.match(tt.star) || this.match(tt.braceL)) {
         const ahead = this.lookahead();
 
-        if (ahead.type === tt.eq) {
+        if (this.match(tt.name) && ahead.type === tt.eq) {
           return this.tsParseImportEqualsDeclaration(node);
         }
 
