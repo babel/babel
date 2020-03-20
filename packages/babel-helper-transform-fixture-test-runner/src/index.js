@@ -297,20 +297,25 @@ function validateFile(actualCode, expectedLoc, expectedCode) {
 }
 
 function normalizeOutput(code) {
+  const projectRoot = path.resolve(__dirname, "../../../");
+  const cwdSymbol = "<CWD>";
   let result = code
     .trim()
-    .replace(
-      new RegExp(escapeRegExp(path.resolve(__dirname, "../../../")), "g"),
-      "<CWD>",
-    );
+    // (non-win32) /foo/babel/packages -> <CWD>/packages
+    // (win32) C:\foo\babel\packages -> <CWD>\packages
+    .replace(new RegExp(escapeRegExp(projectRoot), "g"), cwdSymbol);
   if (process.platform === "win32") {
-    result = result.replace(
-      new RegExp(
-        escapeRegExp(path.resolve(__dirname, "../../../").replace(/\\/g, "/")),
-        "g",
-      ),
-      "<CWD>",
-    );
+    result = result
+      // C:/foo/babel/packages -> <CWD>/packages
+      .replace(
+        new RegExp(escapeRegExp(projectRoot.replace(/\\/g, "/")), "g"),
+        cwdSymbol,
+      )
+      // C:\\foo\\babel\\packages -> <CWD>\\packages (in js string literal)
+      .replace(
+        new RegExp(escapeRegExp(projectRoot.replace(/\\/g, "\\\\")), "g"),
+        cwdSymbol,
+      );
   }
   return result;
 }
