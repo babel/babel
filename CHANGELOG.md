@@ -19,6 +19,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.9.1 (2020-03-20)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-react-jsx`, `babel-preset-react`
+  * [#11295](https://github.com/babel/babel/pull/11295) Consider jsxFrag as set when it's set to the default value ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.9.0 (2020-03-20)
 
 #### :rocket: New Feature
