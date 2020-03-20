@@ -1648,7 +1648,19 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseClassSuper(node: N.Class): void {
-    node.superClass = this.eat(tt._extends) ? this.parseExprSubscripts() : null;
+    const superClass = this.eat(tt._extends)
+      ? this.parseExprSubscripts()
+      : null;
+    if (superClass !== null) {
+      if (superClass.type == "FunctionExpression" && superClass.async) {
+        this.raise(
+          superClass.start,
+          Errors.ExtendsValueNotConstructor,
+          this.input.slice(superClass.start, superClass.end),
+        );
+      }
+    }
+    node.superClass = superClass;
   }
 
   // Parses module export declaration.

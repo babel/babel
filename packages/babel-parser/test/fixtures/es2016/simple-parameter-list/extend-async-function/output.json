@@ -1,0 +1,122 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 39,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 39
+    }
+  },
+  "errors": [
+    "SyntaxError: Class extends value async function () {} is not a constructor or null (1:16)"
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 39,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 39
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 39,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 39
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 7,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 7
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "superClass": {
+          "type": "FunctionExpression",
+          "start": 16,
+          "end": 36,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 16
+            },
+            "end": {
+              "line": 1,
+              "column": 36
+            }
+          },
+          "id": null,
+          "generator": false,
+          "async": true,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start": 34,
+            "end": 36,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 34
+              },
+              "end": {
+                "line": 1,
+                "column": 36
+              }
+            },
+            "body": [],
+            "directives": []
+          }
+        },
+        "body": {
+          "type": "ClassBody",
+          "start": 37,
+          "end": 39,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 37
+            },
+            "end": {
+              "line": 1,
+              "column": 39
+            }
+          },
+          "body": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}
