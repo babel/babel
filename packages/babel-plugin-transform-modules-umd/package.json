@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-modules-umd",
-  "version": "7.8.3",
+  "version": "7.9.0",
   "description": "This plugin transforms ES2015 modules to UMD",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-modules-umd",
   "license": "MIT",
@@ -9,7 +9,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-module-transforms": "^7.8.3",
+    "@babel/helper-module-transforms": "^7.9.0",
     "@babel/helper-plugin-utils": "^7.8.3"
   },
   "keywords": [
@@ -19,7 +19,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.3",
+    "@babel/core": "^7.9.0",
     "@babel/helper-plugin-test-runner": "^7.8.3"
   }
 }
