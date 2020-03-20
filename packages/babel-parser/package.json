@@ -30,8 +30,8 @@
   "devDependencies": {
     "@babel/code-frame": "^7.8.3",
     "@babel/helper-fixtures": "^7.8.6",
-    "charcodes": "^0.2.0",
-    "unicode-13.0.0": "^0.8.0"
+    "@babel/helper-validator-identifier": "^7.9.0",
+    "charcodes": "^0.2.0"
   },
   "bin": {
     "parser": "./bin/babel-parser.js"
