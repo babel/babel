@@ -1,6 +1,6 @@
 import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
 
-var _jsxFileName = "C:\\Users\\travis\\build\\babel\\babel\\packages\\babel-plugin-transform-react-jsx-development\\test\\fixtures\\windows\\self-inside-arrow-windows\\input.mjs",
+var _jsxFileName = "<CWD>\\packages\\babel-plugin-transform-react-jsx-development\\test\\fixtures\\windows\\self-inside-arrow-windows\\input.mjs",
     _this = this;
 
 /*#__PURE__*/
