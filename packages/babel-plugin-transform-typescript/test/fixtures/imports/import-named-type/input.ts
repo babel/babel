@@ -1,1 +1,1 @@
-import type from './mod';
+import type from 'foo';
