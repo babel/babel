@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-react",
-  "version": "7.9.0",
+  "version": "7.9.1",
   "description": "Babel preset for all React plugins.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -13,7 +13,7 @@
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.8.3",
     "@babel/plugin-transform-react-display-name": "^7.8.3",
-    "@babel/plugin-transform-react-jsx": "^7.9.0",
+    "@babel/plugin-transform-react-jsx": "^7.9.1",
     "@babel/plugin-transform-react-jsx-development": "^7.9.0",
     "@babel/plugin-transform-react-jsx-self": "^7.9.0",
     "@babel/plugin-transform-react-jsx-source": "^7.9.0"
