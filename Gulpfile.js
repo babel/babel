@@ -226,8 +226,18 @@ gulp.task("build-rollup", () => buildRollup(libBundles));
 gulp.task("build-babel-standalone", () => buildRollup(standaloneBundle));
 
 gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
-gulp.task("build-babel-types", () =>
+gulp.task("build-babel-types-deps", () =>
+  buildBabel(
+    /* exclude */ libBundles,
+    "packages/babel-helper-validator-identifier/src/**/*.js"
+  )
+);
+gulp.task("build-babel-types-self", () =>
   buildBabel(/* exclude */ libBundles, "packages/babel-types/src/**/*.js")
+);
+gulp.task(
+  "build-babel-types",
+  gulp.series("build-babel-types-deps", "build-babel-types-self")
 );
 gulp.task("build", gulp.parallel("build-rollup", "build-babel"));
 
