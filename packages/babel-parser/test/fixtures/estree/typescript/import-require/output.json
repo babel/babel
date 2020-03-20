@@ -43,6 +43,7 @@
             "column": 32
           }
         },
+        "importKind": "value",
         "isExport": false,
         "id": {
           "type": "Identifier",

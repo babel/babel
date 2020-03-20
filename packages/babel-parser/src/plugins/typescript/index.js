@@ -1862,24 +1862,25 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     checkDuplicateExports() {}
 
     parseImport(node: N.Node): N.AnyImport {
-      if (this.match(tt.name) && this.lookahead().type === tt.eq) {
-        return this.tsParseImportEqualsDeclaration(node);
-      }
+      node.importKind = "value";
 
-      const ahead = this.lookahead();
+      if (this.match(tt.name)) {
+        const ahead = this.lookahead();
 
-      if (
-        this.match(tt.name) &&
-        this.state.value === "type" &&
-        // import type, { a } from "b";
-        ahead.type !== tt.comma &&
-        // import type from "a";
-        !(ahead.type === tt.name && ahead.value === "from")
-      ) {
-        this.eatContextual("type");
-        node.importKind = "type";
-      } else {
-        node.importKind = "value";
+        if (ahead.type === tt.eq) {
+          return this.tsParseImportEqualsDeclaration(node);
+        }
+
+        if (
+          this.state.value === "type" &&
+          // import type, { a } from "b";
+          ahead.type !== tt.comma &&
+          // import type from "a";
+          !(ahead.type === tt.name && ahead.value === "from")
+        ) {
+          this.eatContextual("type");
+          node.importKind = "type";
+        }
       }
 
       const importNode = super.parseImport(node);
