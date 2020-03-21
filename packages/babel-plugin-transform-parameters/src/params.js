@@ -60,10 +60,7 @@ export default function convertFunctionParams(path, loose) {
   const body = [];
   const params = path.get("params");
 
-  let isSimpleParameterList = true;
-  for (const param of params) {
-    isSimpleParameterList = isSimpleParameterList && param.isIdentifier();
-  }
+  const isSimpleParameterList = params.every(param => param.isIdentifier());
   if (isSimpleParameterList) return false;
 
   for (const param of params) {
