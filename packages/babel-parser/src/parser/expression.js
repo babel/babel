@@ -556,7 +556,7 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     const state = {
       optionalChainMember: false,
-      maybeAsyncArrow: this.atPossibleAsync(base),
+      maybeAsyncArrow: this.atPossibleAsyncArrow(base),
       stop: false,
     };
     do {
@@ -748,13 +748,15 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "TaggedTemplateExpression");
   }
 
-  atPossibleAsync(base: N.Expression): boolean {
+  atPossibleAsyncArrow(base: N.Expression): boolean {
     return (
       base.type === "Identifier" &&
       base.name === "async" &&
       this.state.lastTokEnd === base.end &&
       !this.canInsertSemicolon() &&
-      this.input.slice(base.start, base.end) === "async"
+      // check there are no escape sequences, such as \u{61}sync
+      base.end - base.start === 5 &&
+      base.start === this.state.potentialArrowAt
     );
   }
 
