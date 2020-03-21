@@ -3,9 +3,9 @@ function foo(_ref) {
       a = _ref2[0],
       b = _ref2[1];
 
-  return function () {
+  return function (a) {
     var a = 3;
     var c = 2;
     var d = a + b + c;
-  }();
+  }(a);
 }

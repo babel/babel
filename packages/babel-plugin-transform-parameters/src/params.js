@@ -1,4 +1,3 @@
-import callDelegate from "@babel/helper-call-delegate";
 import { template, types as t } from "@babel/core";
 
 const buildDefaultParam = template(`
@@ -23,27 +22,27 @@ const buildSafeArgumentsAccess = template(`
   let $0 = arguments.length > $1 ? arguments[$1] : undefined;
 `);
 
-function isSafeBinding(scope, node) {
-  if (!scope.hasOwnBinding(node.name)) return true;
-  const { kind } = scope.getOwnBinding(node.name);
-  return kind === "param" || kind === "local";
-}
+const visitIdentifier = (path, state) => {
+  const { scope, node } = path;
+  const { name } = node;
+
+  if (
+    name === "eval" ||
+    (scope.getBinding(name) === state.scope.parent.getBinding(name) &&
+      state.scope.hasOwnBinding(name))
+  ) {
+    state.needsOuterBinding = true;
+    path.stop();
+  }
+};
 
 const iifeVisitor = {
-  ReferencedIdentifier(path, state) {
-    const { scope, node } = path;
-    if (
-      node.name === "eval" ||
-      !isSafeBinding(scope, node) ||
-      !isSafeBinding(state.scope, node)
-    ) {
-      state.iife = true;
-      path.stop();
-    }
-  },
-
-  Scope(path) {
-    // different bindings
+  ReferencedIdentifier: visitIdentifier,
+  Scope(path, state) {
+    path.traverse(
+      { "ReferencedIdentifier|BindingIdentifier": visitIdentifier },
+      state,
+    );
     path.skip();
   },
 };
@@ -52,18 +51,16 @@ export default function convertFunctionParams(path, loose) {
   const { node, scope } = path;
 
   const state = {
-    iife: false,
-    scope: scope,
+    stop: false,
+    needsOuterBinding: false,
+    shadowedParams: new Set(),
+    scope,
   };
 
   const body = [];
   const params = path.get("params");
 
-  let firstOptionalIndex = null;
-
-  for (let i = 0; i < params.length; i++) {
-    const param = params[i];
-
+  for (const param of params) {
     for (const name of Object.keys(param.getBindingIdentifiers())) {
       const constantViolations = scope.bindings[name]?.constantViolations;
       if (constantViolations) {
@@ -74,7 +71,7 @@ export default function convertFunctionParams(path, loose) {
           // If so, we remove that declarator.
           // Otherwise, we have to wrap it in an IIFE.
           switch (node.type) {
-            case "VariableDeclarator":
+            case "VariableDeclarator": {
               if (node.init === null) {
                 const declaration = redeclarator.parentPath;
                 // The following uninitialized var declarators should not be removed
@@ -88,14 +85,30 @@ export default function convertFunctionParams(path, loose) {
                   break;
                 }
               }
-            // fall through
+
+              state.shadowedParams.add(name);
+              break;
+            }
             case "FunctionDeclaration":
-              state.iife = true;
+              state.shadowedParams.add(name);
               break;
           }
         }
       }
     }
+  }
+
+  if (state.shadowedParams.size === 0) {
+    for (const param of params) {
+      if (!param.isIdentifier()) param.traverse(iifeVisitor, state);
+      if (state.needsOuterBinding) break;
+    }
+  }
+
+  let firstOptionalIndex = null;
+
+  for (let i = 0; i < params.length; i++) {
+    const param = params[i];
 
     const paramIsAssignmentPattern = param.isAssignmentPattern();
     if (paramIsAssignmentPattern && (loose || node.kind === "set")) {
@@ -131,15 +144,6 @@ export default function convertFunctionParams(path, loose) {
       const left = param.get("left");
       const right = param.get("right");
 
-      if (!state.iife) {
-        if (right.isIdentifier() && !isSafeBinding(scope, right.node)) {
-          // the right hand side references a parameter
-          state.iife = true;
-        } else {
-          right.traverse(iifeVisitor, state);
-        }
-      }
-
       const defNode = buildDefaultParam({
         VARIABLE_NAME: left.node,
         DEFAULT_VALUE: right.node,
@@ -162,10 +166,6 @@ export default function convertFunctionParams(path, loose) {
 
       param.replaceWith(t.cloneNode(uid));
     }
-
-    if (!state.iife && !param.isIdentifier()) {
-      param.traverse(iifeVisitor, state);
-    }
   }
 
   if (body.length === 0) return false;
@@ -178,13 +178,34 @@ export default function convertFunctionParams(path, loose) {
   // ensure it's a block, useful for arrow functions
   path.ensureBlock();
 
-  if (state.iife) {
-    // we don't want to hoist the inner declarations up
-    body.push(callDelegate(path, scope, false));
+  if (state.needsOuterBinding || state.shadowedParams.size > 0) {
+    body.push(buildScopeIIFE(state.shadowedParams, path.get("body").node));
+
     path.set("body", t.blockStatement(body));
+
+    // We inject an arrow and then transform it to a normal function, to be
+    // sure that we correctly handle this and arguments.
+    const bodyPath = path.get("body.body");
+    const arrowPath = bodyPath[bodyPath.length - 1].get("argument.callee");
+    arrowPath.arrowFunctionToExpression();
   } else {
     path.get("body").unshiftContainer("body", body);
   }
 
   return true;
+}
+
+function buildScopeIIFE(shadowedParams, body) {
+  const args = [];
+  const params = [];
+
+  for (const name of shadowedParams) {
+    // We create then twice; the other option is to use t.cloneNode
+    args.push(t.identifier(name));
+    params.push(t.identifier(name));
+  }
+
+  return t.returnStatement(
+    t.callExpression(t.arrowFunctionExpression(params, body), params),
+  );
 }
