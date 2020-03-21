@@ -22,46 +22,38 @@ const buildSafeArgumentsAccess = template(`
   let $0 = arguments.length > $1 ? arguments[$1] : undefined;
 `);
 
-const visitIdentifier = (path, state) => {
-  const { scope, node } = path;
-  const { name } = node;
-
-  if (
-    name === "eval" ||
-    (scope.getBinding(name) === state.scope.parent.getBinding(name) &&
-      state.scope.hasOwnBinding(name))
-  ) {
-    state.needsOuterBinding = true;
-    path.stop();
-  }
-};
-
 const iifeVisitor = {
-  ReferencedIdentifier: visitIdentifier,
-  Scope(path, state) {
-    path.traverse(
-      { "ReferencedIdentifier|BindingIdentifier": visitIdentifier },
-      state,
-    );
-    path.skip();
+  "ReferencedIdentifier|BindingIdentifier"(path, state) {
+    const { scope, node } = path;
+    const { name } = node;
+
+    if (
+      name === "eval" ||
+      (scope.getBinding(name) === state.scope.parent.getBinding(name) &&
+        state.scope.hasOwnBinding(name))
+    ) {
+      state.needsOuterBinding = true;
+      path.stop();
+    }
   },
 };
 
 export default function convertFunctionParams(path, loose) {
+  const params = path.get("params");
+
+  const isSimpleParameterList = params.every(param => param.isIdentifier());
+  if (isSimpleParameterList) return false;
+
   const { node, scope } = path;
 
   const state = {
     stop: false,
     needsOuterBinding: false,
-    shadowedParams: new Set(),
     scope,
   };
 
   const body = [];
-  const params = path.get("params");
-
-  const isSimpleParameterList = params.every(param => param.isIdentifier());
-  if (isSimpleParameterList) return false;
+  const shadowedParams = new Set();
 
   for (const param of params) {
     for (const name of Object.keys(param.getBindingIdentifiers())) {
@@ -89,11 +81,11 @@ export default function convertFunctionParams(path, loose) {
                 }
               }
 
-              state.shadowedParams.add(name);
+              shadowedParams.add(name);
               break;
             }
             case "FunctionDeclaration":
-              state.shadowedParams.add(name);
+              shadowedParams.add(name);
               break;
           }
         }
@@ -101,7 +93,7 @@ export default function convertFunctionParams(path, loose) {
     }
   }
 
-  if (state.shadowedParams.size === 0) {
+  if (shadowedParams.size === 0) {
     for (const param of params) {
       if (!param.isIdentifier()) param.traverse(iifeVisitor, state);
       if (state.needsOuterBinding) break;
@@ -179,8 +171,8 @@ export default function convertFunctionParams(path, loose) {
   // ensure it's a block, useful for arrow functions
   path.ensureBlock();
 
-  if (state.needsOuterBinding || state.shadowedParams.size > 0) {
-    body.push(buildScopeIIFE(state.shadowedParams, path.get("body").node));
+  if (state.needsOuterBinding || shadowedParams.size > 0) {
+    body.push(buildScopeIIFE(shadowedParams, path.get("body").node));
 
     path.set("body", t.blockStatement(body));
 
