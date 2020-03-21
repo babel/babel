@@ -190,8 +190,8 @@ describe("normalize-options", () => {
     });
   });
 
-  describe("checkDuplicateIncludeExcludes", function() {
-    it("should throw if duplicate names in both", function() {
+  describe("checkDuplicateIncludeExcludes", function () {
+    it("should throw if duplicate names in both", function () {
       expect(() => {
         checkDuplicateIncludeExcludes(
           ["transform-regenerator", "map"],
@@ -200,7 +200,7 @@ describe("normalize-options", () => {
       }).toThrow();
     });
 
-    it("should not throw if no duplicate names in both", function() {
+    it("should not throw if no duplicate names in both", function () {
       expect(() => {
         checkDuplicateIncludeExcludes(["transform-regenerator"], ["map"]);
       }).not.toThrow();

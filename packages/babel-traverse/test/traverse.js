@@ -3,7 +3,7 @@ import traverse from "../lib";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 
-describe("traverse", function() {
+describe("traverse", function () {
   const code = `
     var foo = "bar";
     this.test = "wow";
@@ -12,7 +12,7 @@ describe("traverse", function() {
   const program = ast.program;
   const body = program.body;
 
-  it("traverse replace", function() {
+  it("traverse replace", function () {
     const replacement = {
       type: "StringLiteral",
       value: "foo",
@@ -20,7 +20,7 @@ describe("traverse", function() {
     const ast2 = cloneDeep(program);
 
     traverse(ast2, {
-      enter: function(path) {
+      enter: function (path) {
         if (path.node.type === "ThisExpression") path.replaceWith(replacement);
       },
     });
@@ -28,7 +28,7 @@ describe("traverse", function() {
     expect(ast2.body[1].expression.left.object).toBe(replacement);
   });
 
-  it("traverse", function() {
+  it("traverse", function () {
     const expected = [
       body[0],
       body[0].declarations[0],
@@ -45,7 +45,7 @@ describe("traverse", function() {
     const actual = [];
 
     traverse(program, {
-      enter: function(path) {
+      enter: function (path) {
         actual.push(path.node);
       },
     });
@@ -53,15 +53,15 @@ describe("traverse", function() {
     expect(actual).toEqual(expected);
   });
 
-  it("traverse falsy parent", function() {
+  it("traverse falsy parent", function () {
     traverse(null, {
-      enter: function() {
+      enter: function () {
         throw new Error("should not be ran");
       },
     });
   });
 
-  it("traverse blacklistTypes", function() {
+  it("traverse blacklistTypes", function () {
     const expected = [
       body[0],
       body[0].declarations[0],
@@ -76,7 +76,7 @@ describe("traverse", function() {
 
     traverse(program, {
       blacklist: ["MemberExpression"],
-      enter: function(path) {
+      enter: function (path) {
         actual.push(path.node);
       },
     });
@@ -84,7 +84,7 @@ describe("traverse", function() {
     expect(actual).toEqual(expected);
   });
 
-  it("hasType", function() {
+  it("hasType", function () {
     expect(traverse.hasType(ast, "ThisExpression")).toBeTruthy();
     expect(
       traverse.hasType(ast, "ThisExpression", ["AssignmentExpression"]),
@@ -101,7 +101,7 @@ describe("traverse", function() {
     expect(traverse.hasType(ast, "ArrowFunctionExpression")).toBeFalsy();
   });
 
-  it("clearCache", function() {
+  it("clearCache", function () {
     const paths = [];
     const scopes = [];
     traverse(ast, {
@@ -124,13 +124,13 @@ describe("traverse", function() {
       },
     });
 
-    scopes2.forEach(function(_, i) {
+    scopes2.forEach(function (_, i) {
       expect(scopes[i]).not.toBe(scopes2[i]);
       expect(paths[i]).not.toBe(paths2[i]);
     });
   });
 
-  it("clearPath", function() {
+  it("clearPath", function () {
     const paths = [];
     traverse(ast, {
       enter(path) {
@@ -147,12 +147,12 @@ describe("traverse", function() {
       },
     });
 
-    paths2.forEach(function(p, i) {
+    paths2.forEach(function (p, i) {
       expect(p).not.toBe(paths[i]);
     });
   });
 
-  it("clearScope", function() {
+  it("clearScope", function () {
     const scopes = [];
     traverse(ast, {
       enter(path) {
@@ -171,13 +171,13 @@ describe("traverse", function() {
       },
     });
 
-    scopes2.forEach(function(p, i) {
+    scopes2.forEach(function (p, i) {
       expect(p).not.toBe(scopes[i]);
     });
   });
 
-  describe("path.skip()", function() {
-    it("replaced paths can be skipped", function() {
+  describe("path.skip()", function () {
+    it("replaced paths can be skipped", function () {
       const ast = parse("id");
 
       let skipped;
@@ -198,7 +198,7 @@ describe("traverse", function() {
 
     // Skipped: see the comment in the `NodePath.requeue` method.
     // eslint-disable-next-line jest/no-disabled-tests
-    it.skip("skipped and requeued paths should be visited", function() {
+    it.skip("skipped and requeued paths should be visited", function () {
       const ast = parse("id");
 
       let visited = false;

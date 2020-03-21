@@ -41,7 +41,7 @@ export const types: {
 
 // Token-specific context update code
 
-tt.parenR.updateContext = tt.braceR.updateContext = function() {
+tt.parenR.updateContext = tt.braceR.updateContext = function () {
   if (this.state.context.length === 1) {
     this.state.exprAllowed = true;
     return;
@@ -55,7 +55,7 @@ tt.parenR.updateContext = tt.braceR.updateContext = function() {
   this.state.exprAllowed = !out.isExpr;
 };
 
-tt.name.updateContext = function(prevType) {
+tt.name.updateContext = function (prevType) {
   let allowed = false;
   if (prevType !== tt.dot) {
     if (
@@ -72,19 +72,19 @@ tt.name.updateContext = function(prevType) {
   }
 };
 
-tt.braceL.updateContext = function(prevType) {
+tt.braceL.updateContext = function (prevType) {
   this.state.context.push(
     this.braceIsBlock(prevType) ? types.braceStatement : types.braceExpression,
   );
   this.state.exprAllowed = true;
 };
 
-tt.dollarBraceL.updateContext = function() {
+tt.dollarBraceL.updateContext = function () {
   this.state.context.push(types.templateQuasi);
   this.state.exprAllowed = true;
 };
 
-tt.parenL.updateContext = function(prevType) {
+tt.parenL.updateContext = function (prevType) {
   const statementParens =
     prevType === tt._if ||
     prevType === tt._for ||
@@ -96,11 +96,11 @@ tt.parenL.updateContext = function(prevType) {
   this.state.exprAllowed = true;
 };
 
-tt.incDec.updateContext = function() {
+tt.incDec.updateContext = function () {
   // tokExprAllowed stays unchanged
 };
 
-tt._function.updateContext = tt._class.updateContext = function(prevType) {
+tt._function.updateContext = tt._class.updateContext = function (prevType) {
   if (
     prevType.beforeExpr &&
     prevType !== tt.semi &&
@@ -122,7 +122,7 @@ tt._function.updateContext = tt._class.updateContext = function(prevType) {
   this.state.exprAllowed = false;
 };
 
-tt.backQuote.updateContext = function() {
+tt.backQuote.updateContext = function () {
   if (this.curContext() === types.template) {
     this.state.context.pop();
   } else {

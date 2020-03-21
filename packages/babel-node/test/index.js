@@ -11,11 +11,11 @@ const fs = require("fs");
 const fixtureLoc = path.join(__dirname, "fixtures");
 const tmpLoc = path.join(__dirname, "tmp");
 
-const fileFilter = function(x) {
+const fileFilter = function (x) {
   return x !== ".DS_Store";
 };
 
-const outputFileSync = function(filePath, data) {
+const outputFileSync = function (filePath, data) {
   makeDirSync(path.dirname(filePath));
   fs.writeFileSync(filePath, data);
 };
@@ -30,27 +30,27 @@ const pluginLocs = [
   path.join(__dirname, "/../../babel-plugin-transform-modules-commonjs"),
 ].join(",");
 
-const readDir = function(loc, filter) {
+const readDir = function (loc, filter) {
   const files = {};
   if (fs.existsSync(loc)) {
-    readdir(loc, filter).forEach(function(filename) {
+    readdir(loc, filter).forEach(function (filename) {
       files[filename] = helper.readFile(path.join(loc, filename));
     });
   }
   return files;
 };
 
-const saveInFiles = function(files) {
+const saveInFiles = function (files) {
   // Place an empty .babelrc in each test so tests won't unexpectedly get to repo-level config.
   outputFileSync(".babelrc", "{}");
 
-  Object.keys(files).forEach(function(filename) {
+  Object.keys(files).forEach(function (filename) {
     const content = files[filename];
     outputFileSync(filename, content);
   });
 };
 
-const assertTest = function(stdout, stderr, opts) {
+const assertTest = function (stdout, stderr, opts) {
   const expectStderr = opts.stderr.trim();
   stderr = stderr.trim();
 
@@ -81,7 +81,7 @@ const assertTest = function(stdout, stderr, opts) {
   if (opts.outFiles) {
     const actualFiles = readDir(path.join(tmpLoc));
 
-    Object.keys(actualFiles).forEach(function(filename) {
+    Object.keys(actualFiles).forEach(function (filename) {
       if (!Object.prototype.hasOwnProperty.call(opts.inFiles, filename)) {
         const expected = opts.outFiles[filename];
         const actual = actualFiles[filename];
@@ -94,16 +94,16 @@ const assertTest = function(stdout, stderr, opts) {
       }
     });
 
-    Object.keys(opts.outFiles).forEach(function(filename) {
+    Object.keys(opts.outFiles).forEach(function (filename) {
       expect(actualFiles).toHaveProperty(filename);
     });
   }
 };
 
-const buildTest = function(binName, testName, opts) {
+const buildTest = function (binName, testName, opts) {
   const binLoc = path.join(__dirname, "../lib", binName);
 
-  return function(callback) {
+  return function (callback) {
     saveInFiles(opts.inFiles);
 
     let args = [binLoc];
@@ -118,15 +118,15 @@ const buildTest = function(binName, testName, opts) {
     let stderr = "";
     let stdout = "";
 
-    spawn.stderr.on("data", function(chunk) {
+    spawn.stderr.on("data", function (chunk) {
       stderr += chunk;
     });
 
-    spawn.stdout.on("data", function(chunk) {
+    spawn.stdout.on("data", function (chunk) {
       stdout += chunk;
     });
 
-    spawn.on("close", function() {
+    spawn.on("close", function () {
       let err;
 
       try {
@@ -150,11 +150,11 @@ const buildTest = function(binName, testName, opts) {
   };
 };
 
-fs.readdirSync(fixtureLoc).forEach(function(binName) {
+fs.readdirSync(fixtureLoc).forEach(function (binName) {
   if (binName[0] === ".") return;
 
   const suiteLoc = path.join(fixtureLoc, binName);
-  describe("bin/" + binName, function() {
+  describe("bin/" + binName, function () {
     let cwd;
 
     beforeEach(() => {
@@ -175,7 +175,7 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
       process.chdir(cwd);
     });
 
-    fs.readdirSync(suiteLoc).forEach(function(testName) {
+    fs.readdirSync(suiteLoc).forEach(function (testName) {
       if (testName[0] === ".") return;
 
       const testLoc = path.join(suiteLoc, testName);
@@ -187,7 +187,7 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
       const optionsLoc = path.join(testLoc, "options.json");
       if (fs.existsSync(optionsLoc)) merge(opts, require(optionsLoc));
 
-      ["stdout", "stdin", "stderr"].forEach(function(key) {
+      ["stdout", "stdin", "stderr"].forEach(function (key) {
         const loc = path.join(testLoc, key + ".txt");
         if (fs.existsSync(loc)) {
           opts[key] = helper.readFile(loc);

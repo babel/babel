@@ -15,7 +15,7 @@ import { loadPartialConfig as loadPartialConfigRunner } from "./partial";
 export { loadFullConfig as default };
 export type { PartialConfig } from "./partial";
 
-const loadOptionsRunner = gensync<[mixed], Object | null>(function*(opts) {
+const loadOptionsRunner = gensync<[mixed], Object | null>(function* (opts) {
   const config = yield* loadFullConfig(opts);
   return config ? config.options : null;
 });

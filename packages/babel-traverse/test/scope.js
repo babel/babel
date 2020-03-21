@@ -7,7 +7,7 @@ function getPath(code, options) {
     typeof code === "string" ? parse(code, options) : createNode(code);
   let path;
   traverse(ast, {
-    Program: function(_path) {
+    Program: function (_path) {
       path = _path;
       _path.stop();
     },
@@ -19,7 +19,7 @@ function getIdentifierPath(code) {
   const ast = parse(code);
   let nodePath;
   traverse(ast, {
-    Identifier: function(path) {
+    Identifier: function (path) {
       nodePath = path;
       path.stop();
     },
@@ -49,13 +49,13 @@ function createNode(node) {
 
 describe("scope", () => {
   describe("binding paths", () => {
-    it("function declaration id", function() {
+    it("function declaration id", function () {
       expect(
         getPath("function foo() {}").scope.getBinding("foo").path.type,
       ).toBe("FunctionDeclaration");
     });
 
-    it("function expression id", function() {
+    it("function expression id", function () {
       expect(
         getPath("(function foo() {})")
           .get("body")[0]
@@ -64,7 +64,7 @@ describe("scope", () => {
       ).toBe("FunctionExpression");
     });
 
-    it("function param", function() {
+    it("function param", function () {
       expect(
         getPath("(function (foo) {})")
           .get("body")[0]
@@ -73,7 +73,7 @@ describe("scope", () => {
       ).toBe("Identifier");
     });
 
-    describe("function parameter expression", function() {
+    describe("function parameter expression", function () {
       it("should not have visibility of declarations inside function body", () => {
         expect(
           getPath(
@@ -92,7 +92,7 @@ describe("scope", () => {
       });
     });
 
-    it("variable declaration", function() {
+    it("variable declaration", function () {
       expect(getPath("var foo = null;").scope.getBinding("foo").path.type).toBe(
         "VariableDeclarator",
       );
@@ -108,7 +108,7 @@ describe("scope", () => {
       ).toBe("VariableDeclarator");
     });
 
-    it("declare var", function() {
+    it("declare var", function () {
       expect(
         getPath("declare var foo;", { plugins: ["flow"] }).scope.getBinding(
           "foo",
@@ -116,7 +116,7 @@ describe("scope", () => {
       ).toBe("DeclareVariable");
     });
 
-    it("declare function", function() {
+    it("declare function", function () {
       expect(
         getPath("declare function foo(): void;", {
           plugins: ["flow"],
@@ -124,7 +124,7 @@ describe("scope", () => {
       ).toBe("DeclareFunction");
     });
 
-    it("declare module", function() {
+    it("declare module", function () {
       expect(
         getPath("declare module foo {};", {
           plugins: ["flow"],
@@ -132,7 +132,7 @@ describe("scope", () => {
       ).toBe("DeclareModule");
     });
 
-    it("declare type alias", function() {
+    it("declare type alias", function () {
       expect(
         getPath("declare type foo = string;", {
           plugins: ["flow"],
@@ -140,7 +140,7 @@ describe("scope", () => {
       ).toBe("DeclareTypeAlias");
     });
 
-    it("declare opaque type", function() {
+    it("declare opaque type", function () {
       expect(
         getPath("declare opaque type foo;", {
           plugins: ["flow"],
@@ -148,7 +148,7 @@ describe("scope", () => {
       ).toBe("DeclareOpaqueType");
     });
 
-    it("declare interface", function() {
+    it("declare interface", function () {
       expect(
         getPath("declare interface Foo {};", {
           plugins: ["flow"],
@@ -156,7 +156,7 @@ describe("scope", () => {
       ).toBe("DeclareInterface");
     });
 
-    it("type alias", function() {
+    it("type alias", function () {
       expect(
         getPath("type foo = string;", {
           plugins: ["flow"],
@@ -164,7 +164,7 @@ describe("scope", () => {
       ).toBe("TypeAlias");
     });
 
-    it("opaque type alias", function() {
+    it("opaque type alias", function () {
       expect(
         getPath("opaque type foo = string;", {
           plugins: ["flow"],
@@ -172,7 +172,7 @@ describe("scope", () => {
       ).toBe("OpaqueType");
     });
 
-    it("interface", function() {
+    it("interface", function () {
       expect(
         getPath("interface Foo {};", {
           plugins: ["flow"],
@@ -180,7 +180,7 @@ describe("scope", () => {
       ).toBe("InterfaceDeclaration");
     });
 
-    it("import type", function() {
+    it("import type", function () {
       expect(
         getPath("import type {Foo} from 'foo';", {
           plugins: ["flow"],
@@ -188,7 +188,7 @@ describe("scope", () => {
       ).toBe("ImportSpecifier");
     });
 
-    it("variable constantness", function() {
+    it("variable constantness", function () {
       expect(getPath("var a = 1;").scope.getBinding("a").constant).toBe(true);
       expect(getPath("var a = 1; a = 2;").scope.getBinding("a").constant).toBe(
         false,
@@ -201,24 +201,15 @@ describe("scope", () => {
       ).toBe(false);
     });
 
-    it("purity", function() {
+    it("purity", function () {
       expect(
-        getPath("({ x: 1 })")
-          .get("body")[0]
-          .get("expression")
-          .isPure(),
+        getPath("({ x: 1 })").get("body")[0].get("expression").isPure(),
       ).toBeTruthy();
       expect(
-        getPath("`${a}`")
-          .get("body")[0]
-          .get("expression")
-          .isPure(),
+        getPath("`${a}`").get("body")[0].get("expression").isPure(),
       ).toBeFalsy();
       expect(
-        getPath("let a = 1; `${a}`")
-          .get("body")[1]
-          .get("expression")
-          .isPure(),
+        getPath("let a = 1; `${a}`").get("body")[1].get("expression").isPure(),
       ).toBeTruthy();
       expect(
         getPath("let a = 1; `${a++}`")
@@ -227,20 +218,14 @@ describe("scope", () => {
           .isPure(),
       ).toBeFalsy();
       expect(
-        getPath("tagged`foo`")
-          .get("body")[0]
-          .get("expression")
-          .isPure(),
+        getPath("tagged`foo`").get("body")[0].get("expression").isPure(),
       ).toBeFalsy();
       expect(
-        getPath("String.raw`foo`")
-          .get("body")[0]
-          .get("expression")
-          .isPure(),
+        getPath("String.raw`foo`").get("body")[0].get("expression").isPure(),
       ).toBeTruthy();
     });
 
-    test("label", function() {
+    test("label", function () {
       expect(getPath("foo: { }").scope.getBinding("foo")).toBeUndefined();
       expect(getPath("foo: { }").scope.getLabel("foo").type).toBe(
         "LabeledStatement",
@@ -256,7 +241,7 @@ describe("scope", () => {
       ).toBe("_foo");
     });
 
-    test("generateUid collision check with labels", function() {
+    test("generateUid collision check with labels", function () {
       expect(
         getPath(
           `
@@ -276,7 +261,7 @@ describe("scope", () => {
       ).toBe("_foo3");
     });
 
-    it("reference paths", function() {
+    it("reference paths", function () {
       const path = getIdentifierPath("function square(n) { return n * n}");
       const referencePaths = path.context.scope.bindings.n.referencePaths;
       expect(referencePaths).toHaveLength(2);
@@ -290,7 +275,7 @@ describe("scope", () => {
       });
     });
 
-    it("class identifier available in class scope after crawl", function() {
+    it("class identifier available in class scope after crawl", function () {
       const path = getPath("class a { build() { return new a(); } }");
 
       path.scope.crawl();
@@ -313,7 +298,7 @@ describe("scope", () => {
      */
     describe("catch", () => {
       // try {} catch (e) { let e; }
-      const createTryCatch = function(kind) {
+      const createTryCatch = function (kind) {
         return t.tryStatement(
           t.blockStatement([]),
           t.catchClause(
@@ -384,7 +369,7 @@ describe("scope", () => {
         ["class", "function", false],
       ];
 
-      const createNode = function(kind) {
+      const createNode = function (kind) {
         switch (kind) {
           case "let":
           case "const":
@@ -407,7 +392,7 @@ describe("scope", () => {
         }
       };
 
-      const createAST = function(kind1, kind2) {
+      const createAST = function (kind1, kind2) {
         return [createNode(kind1), createNode(kind2)];
       };
 

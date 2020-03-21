@@ -8,10 +8,7 @@ import type { Targets } from "@babel/helper-compilation-targets";
 export const has = Object.hasOwnProperty.call.bind(Object.hasOwnProperty);
 
 export function getType(target: any): string {
-  return Object.prototype.toString
-    .call(target)
-    .slice(8, -1)
-    .toLowerCase();
+  return Object.prototype.toString.call(target).slice(8, -1).toLowerCase();
 }
 
 export function intersection<T>(

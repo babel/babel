@@ -51,7 +51,7 @@ const blockHoistPlugin = {
         }
         if (!hasChange) return;
 
-        node.body = sortBy(node.body, function(bodyNode) {
+        node.body = sortBy(node.body, function (bodyNode) {
           let priority = bodyNode && bodyNode._blockHoist;
           if (priority == null) priority = 1;
           if (priority === true) priority = 2;

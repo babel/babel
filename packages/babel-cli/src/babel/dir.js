@@ -21,7 +21,7 @@ function outputFileSync(filePath: string, data: string | Buffer): void {
   fs.writeFileSync(filePath, data);
 }
 
-export default async function({
+export default async function ({
   cliOptions,
   babelOptions,
 }: CmdOptions): Promise<void> {
@@ -162,7 +162,7 @@ export default async function({
   if (cliOptions.watch) {
     const chokidar = util.requireChokidar();
 
-    filenames.forEach(function(filenameOrDir: string): void {
+    filenames.forEach(function (filenameOrDir: string): void {
       const watcher = chokidar.watch(filenameOrDir, {
         persistent: true,
         ignoreInitial: true,
@@ -172,8 +172,8 @@ export default async function({
         },
       });
 
-      ["add", "change"].forEach(function(type: string): void {
-        watcher.on(type, function(filename: string): void {
+      ["add", "change"].forEach(function (type: string): void {
+        watcher.on(type, function (filename: string): void {
           handleFile(
             filename,
             filename === filenameOrDir

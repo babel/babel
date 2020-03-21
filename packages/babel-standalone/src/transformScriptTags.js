@@ -69,7 +69,7 @@ function load(url, successCallback, errorCallback) {
   if ("overrideMimeType" in xhr) {
     xhr.overrideMimeType("text/plain");
   }
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (xhr.readyState === 4) {
       if (xhr.status === 0 || xhr.status === 200) {
         successCallback(xhr.responseText);

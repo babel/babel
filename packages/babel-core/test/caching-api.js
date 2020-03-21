@@ -421,7 +421,7 @@ describe("caching API", () => {
 
     it("should throw if the cache is configured asynchronously", async () => {
       const fn = gensync(
-        makeStrongCache(function*(arg, cache) {
+        makeStrongCache(function* (arg, cache) {
           yield* wait(1000);
           cache.never();
           return { arg };
@@ -435,7 +435,7 @@ describe("caching API", () => {
 
     it("should allow asynchronous cache invalidation functions", async () => {
       const fn = gensync(
-        makeStrongCache(function*(arg, cache) {
+        makeStrongCache(function* (arg, cache) {
           yield* waitFor(
             cache.using(async () => {
               await wait.async(50);
@@ -453,7 +453,7 @@ describe("caching API", () => {
 
     it("should allow synchronous yield before cache configuration", async () => {
       const fn = gensync(
-        makeStrongCache(function*(arg, cache) {
+        makeStrongCache(function* (arg, cache) {
           yield* gensync({
             sync: () => 2,
             errback: cb => cb(null, 2),

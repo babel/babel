@@ -48,7 +48,7 @@ function getPropRef(node, nodes, file, scope) {
   return temp;
 }
 
-export default function(
+export default function (
   node: Object,
   nodes: Array<Object>,
   file,

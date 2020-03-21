@@ -24,7 +24,7 @@ type TransformFile = {
 };
 
 const transformFileRunner = gensync<[string, ?InputOptions], FileResult | null>(
-  function*(filename, opts) {
+  function* (filename, opts) {
     let options;
     if (opts == null) {
       options = { filename };

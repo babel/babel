@@ -78,7 +78,7 @@ function writeCoreJS({
   }
 
   const runtimeRoot = proposals ? "core-js" : "core-js-stable";
-  paths.forEach(function(corejsPath) {
+  paths.forEach(function (corejsPath) {
     outputFile(
       path.join(pkgDirname, runtimeRoot, `${corejsPath}.js`),
       `module.exports = require("${corejsRoot}/${corejsPath}");`

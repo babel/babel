@@ -330,7 +330,7 @@ class CacheConfigurator<SideChannel = void> {
 
   validator(): SideChannel => Handler<boolean> {
     const pairs = this._pairs;
-    return function*(data: SideChannel) {
+    return function* (data: SideChannel) {
       for (const [key, fn] of pairs) {
         if (key !== (yield* fn(data))) return false;
       }
