@@ -1102,19 +1102,19 @@ helpers.createForOfIteratorHelper = helper("7.9.0")`
     var it, normalCompletion = true, didErr = false, err;
 
     return {
-      s() {
+      s: function() {
         it = o[Symbol.iterator]();
       },
-      n() {
+      n: function() {
         var step = it.next();
         normalCompletion = step.done;
         return step;
       },
-      e(e) {
+      e: function(e) {
         didErr = true;
         err = e;
       },
-      f() {
+      f: function() {
         try {
           if (!normalCompletion && it.return != null) it.return();
         } finally {
