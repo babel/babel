@@ -10,6 +10,7 @@ export default function addCreateSuperHelper(file) {
   }
 
   if (helperIDs.has(file)) {
+    // TODO: Only use t.cloneNode in Babel 8
     // t.cloneNode isn't supported in every version
     return (t.cloneNode || t.clone)(helperIDs.get(file));
   }

@@ -735,6 +735,7 @@ helpers.possibleConstructorReturn = helper("7.0.0-beta.0")`
   }
 `;
 
+// This is duplicated to packages/babel-plugin-transform-classes/src/inline-createSuper-helpers.js
 helpers.createSuper = helper("7.9.0")`
   import getPrototypeOf from "getPrototypeOf";
   import isNativeReflectConstruct from "isNativeReflectConstruct";
