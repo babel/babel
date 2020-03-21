@@ -19,6 +19,19 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.9.2 (2020-03-21)
+
+#### :bug: Bug Fix
+* `babel-helpers`, `babel-plugin-transform-classes`
+  * [#11298](https://github.com/babel/babel/pull/11298) Manually inline the createSuper helper on older Babel versions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`
+  * [#11302](https://github.com/babel/babel/pull/11302) Don't use ES6 in the for-of helper ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`, `babel-plugin-transform-typescript`
+  * [#11296](https://github.com/babel/babel/pull/11296) fix: parse value imports named type as values ([@kaicataldo](https://github.com/kaicataldo))
+
+#### :house: Internal
+* `babel-helper-transform-fixture-test-runner`, `babel-plugin-transform-react-jsx-development`, `babel-preset-react`
+  * [#11297](https://github.com/babel/babel/pull/11297) Transform cwd in string literal on win32 ([@JLHwung](https://github.com/JLHwung))
 ## v7.9.1 (2020-03-20)
 
 #### :bug: Bug Fix
