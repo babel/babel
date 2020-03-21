@@ -249,22 +249,57 @@ export default class Printer {
     // see startTerminatorless() instance method
     const parenPushNewlineState = this._parenPushNewlineState;
     if (!parenPushNewlineState) return;
-    this._parenPushNewlineState = null;
+
+    // This function does two things:
+    // - If needed, prints a parenthesis
+    // - If the currently printed string removes the need for the paren,
+    //   it resets the _parenPushNewlineState field.
+    //   Almost everything removes the need for a paren, except for
+    //   comments and whitespaces.
 
     let i;
     for (i = 0; i < str.length && str[i] === " "; i++) continue;
-    if (i === str.length) return;
+    if (i === str.length) {
+      // Whitespaces only, the parentheses might still be needed.
+      return;
+    }
 
     // Check for newline or comment.
     const cha = str[i];
     if (cha !== "\n") {
-      if (cha !== "/") return;
-      if (i + 1 === str.length) return;
+      if (
+        // This is not a comment (it doesn't start with /)
+        cha !== "/" ||
+        // This is not a comment (it's a / operator)
+        i + 1 === str.length
+      ) {
+        // After a normal token, the parentheses aren't needed anymore
+        this._parenPushNewlineState = null;
+        return;
+      }
+
       const chaPost = str[i + 1];
-      if (chaPost !== "/" && chaPost !== "*") return;
-      // We don't print newlines aroung /*#__PURE__*/ annotations
-      if (PURE_ANNOTATION_RE.test(str.slice(i + 2, str.length - 2))) return;
+
+      if (chaPost === "*") {
+        // This is a block comment
+
+        if (PURE_ANNOTATION_RE.test(str.slice(i + 2, str.length - 2))) {
+          // We avoid printing newlines after #__PURE__ comments (we treat
+          // then as unary operators), but we must keep the old
+          // parenPushNewlineState because, if a newline was forbidden, it is
+          // still forbidden after the comment.
+          return;
+        }
+
+        // NOTE: code flow continues from here to after these if/elses
+      } else if (chaPost !== "/") {
+        // This is neither a block comment, nor a line comment.
+        // After a normal token, the parentheses aren't needed anymore
+        this._parenPushNewlineState = null;
+        return;
+      }
     }
+
     this.token("(");
     this.indent();
     parenPushNewlineState.printed = true;
