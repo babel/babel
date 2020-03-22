@@ -1,5 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import convertFunctionParams from "./params";
+export { convertParam } from "./params";
 import convertFunctionRest from "./rest";
 
 export default declare((api, options) => {

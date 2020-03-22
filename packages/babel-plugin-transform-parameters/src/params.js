@@ -63,109 +63,15 @@ export default function convertFunctionParams(path, loose) {
 
   for (let i = 0; i < params.length; i++) {
     const param = params[i];
-
-    for (const name of Object.keys(param.getBindingIdentifiers())) {
-      const constantViolations = scope.bindings[name]?.constantViolations;
-      if (constantViolations) {
-        for (const redeclarator of constantViolations) {
-          const node = redeclarator.node;
-          // If a constant violation is a var or a function declaration,
-          // we first check to see if it's a var without an init.
-          // If so, we remove that declarator.
-          // Otherwise, we have to wrap it in an IIFE.
-          switch (node.type) {
-            case "VariableDeclarator":
-              if (node.init === null) {
-                const declaration = redeclarator.parentPath;
-                // The following uninitialized var declarators should not be removed
-                // for (var x in {})
-                // for (var x;;)
-                if (
-                  !declaration.parentPath.isFor() ||
-                  declaration.parentPath.get("body") === declaration
-                ) {
-                  redeclarator.remove();
-                  break;
-                }
-              }
-            // fall through
-            case "FunctionDeclaration":
-              state.iife = true;
-              break;
-          }
-        }
-      }
-    }
-
-    const paramIsAssignmentPattern = param.isAssignmentPattern();
-    if (paramIsAssignmentPattern && (loose || node.kind === "set")) {
-      const left = param.get("left");
-      const right = param.get("right");
-
-      const undefinedNode = scope.buildUndefinedNode();
-
-      if (left.isIdentifier()) {
-        body.push(
-          buildLooseDefaultParam({
-            ASSIGNMENT_IDENTIFIER: t.cloneNode(left.node),
-            DEFAULT_VALUE: right.node,
-            UNDEFINED: undefinedNode,
-          }),
-        );
-        param.replaceWith(left.node);
-      } else if (left.isObjectPattern() || left.isArrayPattern()) {
-        const paramName = scope.generateUidIdentifier();
-        body.push(
-          buildLooseDestructuredDefaultParam({
-            ASSIGNMENT_IDENTIFIER: left.node,
-            DEFAULT_VALUE: right.node,
-            PARAMETER_NAME: t.cloneNode(paramName),
-            UNDEFINED: undefinedNode,
-          }),
-        );
-        param.replaceWith(paramName);
-      }
-    } else if (paramIsAssignmentPattern) {
-      if (firstOptionalIndex === null) firstOptionalIndex = i;
-
-      const left = param.get("left");
-      const right = param.get("right");
-
-      if (!state.iife) {
-        if (right.isIdentifier() && !isSafeBinding(scope, right.node)) {
-          // the right hand side references a parameter
-          state.iife = true;
-        } else {
-          right.traverse(iifeVisitor, state);
-        }
-      }
-
-      const defNode = buildDefaultParam({
-        VARIABLE_NAME: left.node,
-        DEFAULT_VALUE: right.node,
-        ARGUMENT_KEY: t.numericLiteral(i),
-      });
-      body.push(defNode);
-    } else if (firstOptionalIndex !== null) {
-      const defNode = buildSafeArgumentsAccess([
-        param.node,
-        t.numericLiteral(i),
-      ]);
-      body.push(defNode);
-    } else if (param.isObjectPattern() || param.isArrayPattern()) {
-      const uid = path.scope.generateUidIdentifier("ref");
-
-      const defNode = t.variableDeclaration("let", [
-        t.variableDeclarator(param.node, uid),
-      ]);
-      body.push(defNode);
-
-      param.replaceWith(t.cloneNode(uid));
-    }
-
-    if (!state.iife && !param.isIdentifier()) {
-      param.traverse(iifeVisitor, state);
-    }
+    firstOptionalIndex = convertParam(
+      i,
+      param,
+      state,
+      firstOptionalIndex,
+      path,
+      body,
+      loose,
+    );
   }
 
   if (body.length === 0) return false;
@@ -187,4 +93,116 @@ export default function convertFunctionParams(path, loose) {
   }
 
   return true;
+}
+
+export function convertParam(
+  i,
+  param,
+  state,
+  firstOptionalIndex,
+  path,
+  body,
+  loose,
+) {
+  const { node, scope } = path;
+  for (const name of Object.keys(param.getBindingIdentifiers())) {
+    const constantViolations = scope.bindings[name]?.constantViolations;
+    if (constantViolations) {
+      for (const redeclarator of constantViolations) {
+        const node = redeclarator.node;
+        // If a constant violation is a var or a function declaration,
+        // we first check to see if it's a var without an init.
+        // If so, we remove that declarator.
+        // Otherwise, we have to wrap it in an IIFE.
+        switch (node.type) {
+          case "VariableDeclarator":
+            if (node.init === null) {
+              const declaration = redeclarator.parentPath;
+              // The following uninitialized var declarators should not be removed
+              // for (var x in {})
+              // for (var x;;)
+              if (
+                !declaration.parentPath.isFor() ||
+                declaration.parentPath.get("body") === declaration
+              ) {
+                redeclarator.remove();
+                break;
+              }
+            }
+          // fall through
+          case "FunctionDeclaration":
+            state.iife = true;
+            break;
+        }
+      }
+    }
+  }
+
+  const paramIsAssignmentPattern = param.isAssignmentPattern();
+  if (paramIsAssignmentPattern && (loose || node.kind === "set")) {
+    const left = param.get("left");
+    const right = param.get("right");
+
+    const undefinedNode = scope.buildUndefinedNode();
+
+    if (left.isIdentifier()) {
+      body.push(
+        buildLooseDefaultParam({
+          ASSIGNMENT_IDENTIFIER: t.cloneNode(left.node),
+          DEFAULT_VALUE: right.node,
+          UNDEFINED: undefinedNode,
+        }),
+      );
+      param.replaceWith(left.node);
+    } else if (left.isObjectPattern() || left.isArrayPattern()) {
+      const paramName = scope.generateUidIdentifier();
+      body.push(
+        buildLooseDestructuredDefaultParam({
+          ASSIGNMENT_IDENTIFIER: left.node,
+          DEFAULT_VALUE: right.node,
+          PARAMETER_NAME: t.cloneNode(paramName),
+          UNDEFINED: undefinedNode,
+        }),
+      );
+      param.replaceWith(paramName);
+    }
+  } else if (paramIsAssignmentPattern) {
+    if (firstOptionalIndex === null) firstOptionalIndex = i;
+
+    const left = param.get("left");
+    const right = param.get("right");
+
+    if (!state.iife) {
+      if (right.isIdentifier() && !isSafeBinding(scope, right.node)) {
+        // the right hand side references a parameter
+        state.iife = true;
+      } else {
+        right.traverse(iifeVisitor, state);
+      }
+    }
+
+    const defNode = buildDefaultParam({
+      VARIABLE_NAME: left.node,
+      DEFAULT_VALUE: right.node,
+      ARGUMENT_KEY: t.numericLiteral(i),
+    });
+    body.push(defNode);
+  } else if (firstOptionalIndex !== null) {
+    const defNode = buildSafeArgumentsAccess([param.node, t.numericLiteral(i)]);
+    body.push(defNode);
+  } else if (param.isObjectPattern() || param.isArrayPattern()) {
+    const uid = path.scope.generateUidIdentifier("ref");
+
+    const defNode = t.variableDeclaration("let", [
+      t.variableDeclarator(param.node, uid),
+    ]);
+    body.push(defNode);
+
+    param.replaceWith(t.cloneNode(uid));
+  }
+
+  if (!state.iife && !param.isIdentifier()) {
+    param.traverse(iifeVisitor, state);
+  }
+  return firstOptionalIndex;
 }
