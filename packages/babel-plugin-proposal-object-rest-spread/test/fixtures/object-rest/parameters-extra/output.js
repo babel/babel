@@ -21,3 +21,9 @@
   let b = babelHelpers.extends({}, _ref4);
   let a = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : b;
 });
+
+(function (_ref5, e, c = 2) {
+  let b = babelHelpers.extends({}, _ref5);
+  let a = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : b;
+  let f = arguments.length > 4 ? arguments[4] : undefined;
+});
