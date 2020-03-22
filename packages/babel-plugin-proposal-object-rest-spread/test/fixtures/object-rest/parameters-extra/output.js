@@ -27,3 +27,12 @@
   let a = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : b;
   let f = arguments.length > 4 ? arguments[4] : undefined;
 });
+
+(function (_ref6) {
+  let b = babelHelpers.extends({}, _ref6);
+  let a = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : b;
+  let c = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : d;
+  return function () {
+    let d;
+  }();
+});
