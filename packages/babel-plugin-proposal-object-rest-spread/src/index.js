@@ -246,9 +246,23 @@ export default declare((api, opts) => {
           const oldBodyLength = body.length;
           replaceRestElement(param.parentPath, param, body);
           let usesIdInRestParam = false;
-          outer: for (const bindingIdentifierPath of Object.values(
-            param.getBindingIdentifierPaths(),
-          )) {
+          // if there is a top-level initializer
+          // every identifier on the right must be checked
+          // this covers cases like f({...a}, {c} = a)
+          if (param.isAssignmentPattern()) {
+            for (const name of Object.keys(
+              param.get("right").getBindingIdentifiers(),
+            )) {
+              if (idsInRestParams.has(name)) {
+                usesIdInRestParam = true;
+              }
+            }
+          }
+          // even if there is no top-level initializer, code
+          // like f({...a}, {c = a}) must be transformed
+          const paths = Object.values(param.getBindingIdentifierPaths());
+          for (let j = 0; j < paths.length && !usesIdInRestParam; ++j) {
+            const bindingIdentifierPath = paths[j];
             const parent = bindingIdentifierPath.parentPath;
             if (parent.isAssignmentPattern()) {
               for (const name of Object.keys(
@@ -256,18 +270,16 @@ export default declare((api, opts) => {
               )) {
                 if (idsInRestParams.has(name)) {
                   usesIdInRestParam = true;
-                  break outer;
                 }
               }
             }
           }
-          // Transform the first default param that references an id declared
-          // in a object rest pattern, and transform all params after it.
           if (usesIdInRestParam || firstOptionalIndex !== null) {
             processedDefaultParam = true;
             // Order matters: We need to add the
             // transformation done by convertParam before
             // the transformation done by ReplaceRestElement
+            // (if such a transformation occurred)
             const oldBody = body.slice(0, oldBodyLength);
             const addedByReplaceRestElement = body.slice(
               oldBodyLength,
