@@ -33,7 +33,5 @@
     "@babel/helper-validator-identifier": "workspace:^7.9.0",
     "charcodes": "^0.2.0"
   },
-  "bin": {
-    "parser": "./bin/babel-parser.js"
-  }
+  "bin": "./bin/babel-parser.js"
 }
