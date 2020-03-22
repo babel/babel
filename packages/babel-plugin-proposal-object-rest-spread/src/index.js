@@ -215,16 +215,17 @@ export default declare((api, opts) => {
     inherits: syntaxObjectRestSpread,
 
     visitor: {
-      // taken from transform-parameters/src/destructuring.js
       // function a({ b, ...c }) {}
       Function(path) {
         const params = path.get("params");
-        // Record the names bound in all function param declarators that contain a RestElement
-        // Example: f({A, B = C, ...D}, {E}, F) records A, B, and D
+        const paramHasRestElement = [];
+        // Check for cases where default initializers reference id in rest element
+        // example: f({...R}, a = R)
         const idsInRestParams = new Set();
         for (let i = 0; i < params.length; ++i) {
           const param = params[i];
-          if (hasRestElement(param)) {
+          paramHasRestElement.push(hasRestElement(param));
+          if (paramHasRestElement[i]) {
             for (const name of Object.keys(param.getBindingIdentifiers())) {
               idsInRestParams.add(name);
             }
@@ -244,36 +245,35 @@ export default declare((api, opts) => {
         for (let i = 0; i < params.length; ++i) {
           const param = params[i];
           const oldBodyLength = body.length;
-          replaceRestElement(param.parentPath, param, body);
           let usesIdInRestParam = false;
-          // if there is a top-level initializer
-          // every identifier on the right must be checked
-          // this covers cases like f({...a}, {c} = a)
-          if (param.isAssignmentPattern()) {
-            for (const name of Object.keys(
-              param.get("right").getBindingIdentifiers(),
-            )) {
-              if (idsInRestParams.has(name)) {
+
+          if (paramHasRestElement[i]) {
+            replaceRestElement(param.parentPath, param, body);
+          } else {
+            const IdentifierHandler = function(identifierPath) {
+              if (
+                (identifierPath.parentKey === "right" ||
+                  identifierPath.parentKey === "value") &&
+                idsInRestParams.has(identifierPath.node.name)
+              ) {
                 usesIdInRestParam = true;
+                identifierPath.stop();
               }
+            };
+
+            const AssignmentPatternHandler = function(assignmentPath) {
+              const right = assignmentPath.get("right");
+              if (right.isIdentifier()) IdentifierHandler(right);
+              else right.traverse({ Identifier: IdentifierHandler });
+              if (usesIdInRestParam) assignmentPath.stop();
+            };
+
+            if (param.isAssignmentPattern()) AssignmentPatternHandler(param);
+            else {
+              param.traverse({ AssignmentPattern: AssignmentPatternHandler });
             }
           }
-          // even if there is no top-level initializer, code
-          // like f({...a}, {c = a}) must be transformed
-          const paths = Object.values(param.getBindingIdentifierPaths());
-          for (let j = 0; j < paths.length && !usesIdInRestParam; ++j) {
-            const bindingIdentifierPath = paths[j];
-            const parent = bindingIdentifierPath.parentPath;
-            if (parent.isAssignmentPattern()) {
-              for (const name of Object.keys(
-                parent.get("right").getBindingIdentifiers(),
-              )) {
-                if (idsInRestParams.has(name)) {
-                  usesIdInRestParam = true;
-                }
-              }
-            }
-          }
+
           if (usesIdInRestParam || firstOptionalIndex !== null) {
             processedADefaultParam = true;
             // Order matters: We need to add the
