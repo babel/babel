@@ -19,6 +19,18 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.9.3 (2020-03-22)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-parameters`
+  * [#11307](https://github.com/babel/babel/pull/11307) Define default value for vars shadowing params ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`
+  * [#11306](https://github.com/babel/babel/pull/11306) Fix logic to insert parens in return statements with comments ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#11284](https://github.com/babel/babel/pull/11284) fix: async arrow functions should not be allowed after binary operator. ([@vedantroy](https://github.com/vedantroy))
+
+#### :house: Internal
+* [#11293](https://github.com/babel/babel/pull/11293) chore: fix build-babel exclude in gulpfile ([@JLHwung](https://github.com/JLHwung))
 ## v7.9.2 (2020-03-21)
 
 #### :bug: Bug Fix
