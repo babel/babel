@@ -1,22 +1,14 @@
-var _iteratorNormalCompletion = true;
-var _didIteratorError = false;
-var _iteratorError = undefined;
+var _createForOfIteratorHelper = require("@babel/runtime/helpers/createForOfIteratorHelper");
+
+var _iterator = _createForOfIteratorHelper(arr),
+    _step;
 
 try {
-  for (var _iterator = arr[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+  for (_iterator.s(); !(_step = _iterator.n()).done;) {
     var i = _step.value;
   }
 } catch (err) {
-  _didIteratorError = true;
-  _iteratorError = err;
+  _iterator.e(err);
 } finally {
-  try {
-    if (!_iteratorNormalCompletion && _iterator.return != null) {
-      _iterator.return();
-    }
-  } finally {
-    if (_didIteratorError) {
-      throw _iteratorError;
-    }
-  }
+  _iterator.f();
 }

@@ -128,3 +128,4 @@ var a34: {| id<T>(x: T): T; |};
 function foo27(numVal: number = 2) {}
 function foo28(numVal?: number = 2) {}
 export type * from "foo";
+const foo29: symbol = Symbol();

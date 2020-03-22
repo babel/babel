@@ -6,10 +6,12 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator {}
   proposal-nullish-coalescing-operator {}
   proposal-optional-chaining {}
   proposal-json-strings {}
   proposal-optional-catch-binding {}
+  transform-parameters {}
   proposal-async-generator-functions {}
   proposal-object-rest-spread {}
   transform-dotall-regex {}
@@ -31,7 +33,6 @@ Using plugins:
   transform-sticky-regex {}
   transform-unicode-regex {}
   transform-spread {}
-  transform-parameters {}
   transform-destructuring {}
   transform-block-scoping {}
   transform-typeof-symbol {}

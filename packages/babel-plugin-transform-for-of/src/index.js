@@ -1,6 +1,8 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { template, types as t } from "@babel/core";
 
+import transformWithoutHelper from "./no-helper-implementation";
+
 export default declare((api, options) => {
   api.assertVersion(7);
 
@@ -79,56 +81,37 @@ export default declare((api, options) => {
     };
   }
 
-  const pushComputedProps = loose
-    ? pushComputedPropsLoose
-    : pushComputedPropsSpec;
-
   const buildForOfArray = template(`
     for (var KEY = 0, NAME = ARR; KEY < NAME.length; KEY++) BODY;
   `);
 
-  const buildForOfLoose = template(`
-    for (var LOOP_OBJECT = OBJECT,
-             IS_ARRAY = Array.isArray(LOOP_OBJECT),
-             INDEX = 0,
-             LOOP_OBJECT = IS_ARRAY ? LOOP_OBJECT : LOOP_OBJECT[Symbol.iterator]();;) {
-      INTERMEDIATE;
-      if (IS_ARRAY) {
-        if (INDEX >= LOOP_OBJECT.length) break;
-        ID = LOOP_OBJECT[INDEX++];
-      } else {
-        INDEX = LOOP_OBJECT.next();
-        if (INDEX.done) break;
-        ID = INDEX.value;
-      }
+  const buildForOfLoose = template.statements(`
+    for (var ITERATOR_HELPER = CREATE_ITERATOR_HELPER(OBJECT), STEP_KEY;
+        !(STEP_KEY = ITERATOR_HELPER()).done;) BODY;
+  `);
+
+  const buildForOf = template.statements(`
+    var ITERATOR_HELPER = CREATE_ITERATOR_HELPER(OBJECT), STEP_KEY;
+    try {
+      for (ITERATOR_HELPER.s(); !(STEP_KEY = ITERATOR_HELPER.n()).done;) BODY;
+    } catch (err) {
+      ITERATOR_HELPER.e(err);
+    } finally {
+      ITERATOR_HELPER.f();
     }
   `);
 
-  const buildForOf = template(`
-    var ITERATOR_COMPLETION = true;
-    var ITERATOR_HAD_ERROR_KEY = false;
-    var ITERATOR_ERROR_KEY = undefined;
-    try {
-      for (
-        var ITERATOR_KEY = OBJECT[Symbol.iterator](), STEP_KEY;
-        !(ITERATOR_COMPLETION = (STEP_KEY = ITERATOR_KEY.next()).done);
-        ITERATOR_COMPLETION = true
-      ) {}
-    } catch (err) {
-      ITERATOR_HAD_ERROR_KEY = true;
-      ITERATOR_ERROR_KEY = err;
-    } finally {
-      try {
-        if (!ITERATOR_COMPLETION && ITERATOR_KEY.return != null) {
-          ITERATOR_KEY.return();
-        }
-      } finally {
-        if (ITERATOR_HAD_ERROR_KEY) {
-          throw ITERATOR_ERROR_KEY;
-        }
+  const builder = loose
+    ? {
+        build: buildForOfLoose,
+        helper: "createForOfIteratorHelperLoose",
+        getContainer: nodes => nodes,
       }
-    }
-  `);
+    : {
+        build: buildForOf,
+        helper: "createForOfIteratorHelper",
+        getContainer: nodes => nodes[1].block.body,
+      };
 
   function _ForOfStatementArray(path) {
     const { node, scope } = path;
@@ -136,7 +119,7 @@ export default declare((api, options) => {
     const right = scope.generateUidIdentifierBasedOnNode(node.right, "arr");
     const iterationKey = scope.generateUidIdentifier("i");
 
-    let loop = buildForOfArray({
+    const loop = buildForOfArray({
       BODY: node.body,
       KEY: iterationKey,
       NAME: right,
@@ -164,19 +147,7 @@ export default declare((api, options) => {
       );
     }
 
-    if (path.parentPath.isLabeledStatement()) {
-      loop = t.labeledStatement(path.parentPath.node.label, loop);
-    }
-
-    return [loop];
-  }
-
-  function replaceWithArray(path) {
-    if (path.parentPath.isLabeledStatement()) {
-      path.parentPath.replaceWithMultiple(_ForOfStatementArray(path));
-    } else {
-      path.replaceWithMultiple(_ForOfStatementArray(path));
-    }
+    return loop;
   }
 
   return {
@@ -189,156 +160,64 @@ export default declare((api, options) => {
           right.isGenericType("Array") ||
           t.isArrayTypeAnnotation(right.getTypeAnnotation())
         ) {
-          replaceWithArray(path);
+          path.replaceWith(_ForOfStatementArray(path));
           return;
         }
 
-        const { node } = path;
-        const build = pushComputedProps(path, state);
-        const declar = build.declar;
-        const loop = build.loop;
-        const block = loop.body;
+        if (!state.availableHelper(builder.helper)) {
+          // Babel <7.9.0 doesn't support this helper
+          transformWithoutHelper(loose, path, state);
+          return;
+        }
+
+        const { node, parent, scope } = path;
+        const left = node.left;
+        let declar;
+
+        const stepKey = scope.generateUid("step");
+        const stepValue = t.memberExpression(
+          t.identifier(stepKey),
+          t.identifier("value"),
+        );
+
+        if (t.isVariableDeclaration(left)) {
+          // for (let i of test)
+          declar = t.variableDeclaration(left.kind, [
+            t.variableDeclarator(left.declarations[0].id, stepValue),
+          ]);
+        } else {
+          // for (i of test), for ({ i } of test)
+          declar = t.expressionStatement(
+            t.assignmentExpression("=", left, stepValue),
+          );
+        }
 
         // ensure that it's a block so we can take all its statements
         path.ensureBlock();
 
-        // add the value declaration to the new loop body
-        if (declar) {
-          block.body.push(declar);
-        }
+        node.body.body.unshift(declar);
 
-        // push the rest of the original loop body onto our new body
-        block.body = block.body.concat(node.body.body);
+        const nodes = builder.build({
+          CREATE_ITERATOR_HELPER: state.addHelper(builder.helper),
+          ITERATOR_HELPER: scope.generateUidIdentifier("iterator"),
+          STEP_KEY: t.identifier(stepKey),
+          OBJECT: node.right,
+          BODY: node.body,
+        });
+        const container = builder.getContainer(nodes);
 
-        t.inherits(loop, node);
-        t.inherits(loop.body, node.body);
+        t.inherits(container[0], node);
+        t.inherits(container[0].body, node.body);
 
-        if (build.replaceParent) {
-          path.parentPath.replaceWithMultiple(build.node);
+        if (t.isLabeledStatement(parent)) {
+          container[0] = t.labeledStatement(parent.label, container[0]);
+
+          path.parentPath.replaceWithMultiple(nodes);
           path.remove();
         } else {
-          path.replaceWithMultiple(build.node);
+          path.replaceWithMultiple(nodes);
         }
       },
     },
   };
-
-  function pushComputedPropsLoose(path, file) {
-    const { node, scope, parent } = path;
-    const { left } = node;
-    let declar, id, intermediate;
-
-    if (
-      t.isIdentifier(left) ||
-      t.isPattern(left) ||
-      t.isMemberExpression(left)
-    ) {
-      // for (i of test), for ({ i } of test)
-      id = left;
-      intermediate = null;
-    } else if (t.isVariableDeclaration(left)) {
-      // for (let i of test)
-      id = scope.generateUidIdentifier("ref");
-      declar = t.variableDeclaration(left.kind, [
-        t.variableDeclarator(left.declarations[0].id, t.identifier(id.name)),
-      ]);
-      intermediate = t.variableDeclaration("var", [
-        t.variableDeclarator(t.identifier(id.name)),
-      ]);
-    } else {
-      throw file.buildCodeFrameError(
-        left,
-        `Unknown node type ${left.type} in ForStatement`,
-      );
-    }
-
-    const iteratorKey = scope.generateUidIdentifier("iterator");
-    const isArrayKey = scope.generateUidIdentifier("isArray");
-
-    const loop = buildForOfLoose({
-      LOOP_OBJECT: iteratorKey,
-      IS_ARRAY: isArrayKey,
-      OBJECT: node.right,
-      INDEX: scope.generateUidIdentifier("i"),
-      ID: id,
-      INTERMEDIATE: intermediate,
-    });
-
-    //
-    const isLabeledParent = t.isLabeledStatement(parent);
-    let labeled;
-
-    if (isLabeledParent) {
-      labeled = t.labeledStatement(parent.label, loop);
-    }
-
-    return {
-      replaceParent: isLabeledParent,
-      declar: declar,
-      node: labeled || loop,
-      loop: loop,
-    };
-  }
-
-  function pushComputedPropsSpec(path, file) {
-    const { node, scope, parent } = path;
-    const left = node.left;
-    let declar;
-
-    const stepKey = scope.generateUid("step");
-    const stepValue = t.memberExpression(
-      t.identifier(stepKey),
-      t.identifier("value"),
-    );
-
-    if (
-      t.isIdentifier(left) ||
-      t.isPattern(left) ||
-      t.isMemberExpression(left)
-    ) {
-      // for (i of test), for ({ i } of test)
-      declar = t.expressionStatement(
-        t.assignmentExpression("=", left, stepValue),
-      );
-    } else if (t.isVariableDeclaration(left)) {
-      // for (let i of test)
-      declar = t.variableDeclaration(left.kind, [
-        t.variableDeclarator(left.declarations[0].id, stepValue),
-      ]);
-    } else {
-      throw file.buildCodeFrameError(
-        left,
-        `Unknown node type ${left.type} in ForStatement`,
-      );
-    }
-
-    const template = buildForOf({
-      ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
-      ITERATOR_COMPLETION: scope.generateUidIdentifier(
-        "iteratorNormalCompletion",
-      ),
-      ITERATOR_ERROR_KEY: scope.generateUidIdentifier("iteratorError"),
-      ITERATOR_KEY: scope.generateUidIdentifier("iterator"),
-      STEP_KEY: t.identifier(stepKey),
-      OBJECT: node.right,
-    });
-
-    const isLabeledParent = t.isLabeledStatement(parent);
-
-    const tryBody = template[3].block.body;
-    const loop = tryBody[0];
-
-    if (isLabeledParent) {
-      tryBody[0] = t.labeledStatement(parent.label, loop);
-    }
-
-    //
-
-    return {
-      replaceParent: isLabeledParent,
-      declar: declar,
-      loop: loop,
-      node: template,
-    };
-  }
 });

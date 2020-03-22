@@ -6,8 +6,11 @@ import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
 import { removeUnnecessaryItems } from "./filter-items";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options";
-import pluginList from "./plugins-compat-data";
 import { proposalPlugins, pluginSyntaxMap } from "../data/shipped-proposals";
+import {
+  plugins as pluginsList,
+  pluginsBugfixes as pluginsBugfixesList,
+} from "./plugins-compat-data";
 import overlappingPlugins from "@babel/compat-data/overlapping-plugins";
 
 import addCoreJS2UsagePlugin from "./polyfills/corejs2/usage-plugin";
@@ -37,10 +40,29 @@ export function isPluginRequired(targets: Targets, support: Targets) {
   });
 }
 
-const pluginListWithoutProposals = filterStageFromList(
-  pluginList,
-  proposalPlugins,
-);
+const pluginLists = {
+  withProposals: {
+    withoutBugfixes: pluginsList,
+    withBugfixes: Object.assign({}, pluginsList, pluginsBugfixesList),
+  },
+  withoutProposals: {
+    withoutBugfixes: filterStageFromList(pluginsList, proposalPlugins),
+    withBugfixes: filterStageFromList(
+      Object.assign({}, pluginsList, pluginsBugfixesList),
+      proposalPlugins,
+    ),
+  },
+};
+
+function getPluginList(proposals: boolean, bugfixes: boolean) {
+  if (proposals) {
+    if (bugfixes) return pluginLists.withProposals.withBugfixes;
+    else return pluginLists.withProposals.withoutBugfixes;
+  } else {
+    if (bugfixes) return pluginLists.withoutProposals.withBugfixes;
+    else return pluginLists.withoutProposals.withoutBugfixes;
+  }
+}
 
 const getPlugin = (pluginName: string) => {
   const plugin = availablePlugins[pluginName];
@@ -191,6 +213,7 @@ export default declare((api, opts) => {
   api.assertVersion(7);
 
   const {
+    bugfixes,
     configPath,
     debug,
     exclude: optionsExclude,
@@ -239,7 +262,7 @@ export default declare((api, opts) => {
   });
 
   const pluginNames = filterItems(
-    shippedProposals ? pluginList : pluginListWithoutProposals,
+    getPluginList(shippedProposals, bugfixes),
     include.plugins,
     exclude.plugins,
     transformTargets,
@@ -276,7 +299,7 @@ export default declare((api, opts) => {
     console.log(`\nUsing modules transform: ${modules.toString()}`);
     console.log("\nUsing plugins:");
     pluginNames.forEach(pluginName => {
-      logPluginOrPolyfill(pluginName, targets, pluginList);
+      logPluginOrPolyfill(pluginName, targets, pluginsList);
     });
 
     if (!useBuiltIns) {

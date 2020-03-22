@@ -1,5 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import transformReactJSX from "@babel/plugin-transform-react-jsx";
+import transformReactJSXDevelopment from "@babel/plugin-transform-react-jsx-development";
 import transformReactDisplayName from "@babel/plugin-transform-react-display-name";
 import transformReactJSXSource from "@babel/plugin-transform-react-jsx-source";
 import transformReactJSXSelf from "@babel/plugin-transform-react-jsx-self";
@@ -7,13 +8,19 @@ import transformReactJSXSelf from "@babel/plugin-transform-react-jsx-self";
 export default declare((api, opts) => {
   api.assertVersion(7);
 
-  const pragma = opts.pragma || "React.createElement";
-  const pragmaFrag = opts.pragmaFrag || "React.Fragment";
-  const throwIfNamespace =
-    opts.throwIfNamespace === undefined ? true : !!opts.throwIfNamespace;
+  const {
+    pragma,
+    pragmaFrag,
+    pure,
+    throwIfNamespace = true,
+    useSpread,
+    runtime = "classic",
+    importSource,
+  } = opts;
+
+  // TODO: (Babel 8) Don't cast these options but validate it
   const development = !!opts.development;
   const useBuiltIns = !!opts.useBuiltIns;
-  const { useSpread } = opts;
 
   if (typeof development !== "boolean") {
     throw new Error(
@@ -21,16 +28,30 @@ export default declare((api, opts) => {
     );
   }
 
+  const transformReactJSXPlugin =
+    runtime === "automatic" && development
+      ? transformReactJSXDevelopment
+      : transformReactJSX;
+
   return {
     plugins: [
       [
-        transformReactJSX,
-        { pragma, pragmaFrag, throwIfNamespace, useBuiltIns, useSpread },
+        transformReactJSXPlugin,
+        {
+          importSource,
+          pragma,
+          pragmaFrag,
+          runtime,
+          throwIfNamespace,
+          useBuiltIns,
+          useSpread,
+          pure,
+        },
       ],
       transformReactDisplayName,
 
-      development && transformReactJSXSource,
-      development && transformReactJSXSelf,
+      development && runtime === "classic" && transformReactJSXSource,
+      development && runtime === "classic" && transformReactJSXSelf,
     ].filter(Boolean),
   };
 });

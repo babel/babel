@@ -329,7 +329,7 @@ export default declare((api, opts) => {
 
         const hasRest = declaration
           .get("declarations")
-          .some(path => hasRestElement(path.get("id")));
+          .some(path => hasObjectPatternRestElement(path.get("id")));
         if (!hasRest) return;
 
         const specifiers = [];

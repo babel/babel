@@ -72,4 +72,72 @@ describe("cloneNode", function() {
       node.declarations[0].id.typeAnnotation,
     );
   });
+
+  it("should support shallow cloning without loc", function() {
+    const node = t.variableDeclaration("let", [
+      t.variableDeclarator({
+        ...t.identifier("value"),
+        typeAnnotation: t.anyTypeAnnotation(),
+      }),
+    ]);
+    node.loc = {};
+    const cloned = t.cloneNode(node, /* deep */ false, /* withoutLoc */ true);
+    expect(cloned.loc).toBeNull();
+  });
+
+  it("should support deep cloning without loc", function() {
+    const node = t.variableDeclaration("let", [
+      t.variableDeclarator({
+        ...t.identifier("value"),
+        typeAnnotation: t.anyTypeAnnotation(),
+      }),
+    ]);
+    node.loc = {};
+    node.declarations[0].id.loc = {};
+    const cloned = t.cloneNode(node, /* deep */ true, /* withoutLoc */ true);
+    expect(cloned.loc).toBeNull();
+    expect(cloned.declarations[0].id.loc).toBeNull();
+  });
+
+  it("should support deep cloning for comments", function() {
+    const node = t.variableDeclaration("let", [
+      t.variableDeclarator({
+        ...t.identifier("value"),
+        leadingComments: [{ loc: {} }],
+        innerComments: [{ loc: {} }],
+        trailingComments: [{ loc: {} }],
+      }),
+    ]);
+    node.loc = {};
+    node.declarations[0].id.loc = {};
+
+    const cloned = t.cloneNode(node, /* deep */ true, /* withoutLoc */ false);
+    expect(cloned.declarations[0].id.leadingComments[0].loc).toBe(
+      node.declarations[0].id.leadingComments[0].loc,
+    );
+    expect(cloned.declarations[0].id.innerComments[0].loc).toBe(
+      node.declarations[0].id.innerComments[0].loc,
+    );
+    expect(cloned.declarations[0].id.trailingComments[0].loc).toBe(
+      node.declarations[0].id.trailingComments[0].loc,
+    );
+  });
+
+  it("should support deep cloning for comments without loc", function() {
+    const node = t.variableDeclaration("let", [
+      t.variableDeclarator({
+        ...t.identifier("value"),
+        leadingComments: [{ loc: {} }],
+        innerComments: [{ loc: {} }],
+        trailingComments: [{ loc: {} }],
+      }),
+    ]);
+    node.loc = {};
+    node.declarations[0].id.loc = {};
+
+    const cloned = t.cloneNode(node, /* deep */ true, /* withoutLoc */ true);
+    expect(cloned.declarations[0].id.leadingComments[0].loc).toBe(null);
+    expect(cloned.declarations[0].id.innerComments[0].loc).toBe(null);
+    expect(cloned.declarations[0].id.trailingComments[0].loc).toBe(null);
+  });
 });

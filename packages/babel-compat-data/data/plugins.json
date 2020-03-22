@@ -1,15 +1,29 @@
 {
+  "proposal-numeric-separator": {
+    "chrome": "75",
+    "edge": "79",
+    "firefox": "70",
+    "safari": "13",
+    "node": "12.5",
+    "ios": "13",
+    "opera": "62",
+    "electron": "6.1"
+  },
   "proposal-nullish-coalescing-operator": {
     "chrome": "80",
+    "edge": "80",
     "firefox": "72",
-    "safari": "tp",
-    "opera": "67"
+    "safari": "13.1",
+    "opera": "67",
+    "electron": "8.1"
   },
   "proposal-optional-chaining": {
     "chrome": "80",
+    "edge": "80",
     "firefox": "74",
-    "safari": "tp",
-    "opera": "67"
+    "safari": "13.1",
+    "opera": "67",
+    "electron": "8.1"
   },
   "proposal-json-strings": {
     "chrome": "66",
@@ -32,6 +46,17 @@
     "samsung": "9",
     "opera": "53",
     "electron": "3.1"
+  },
+  "transform-parameters": {
+    "chrome": "49",
+    "edge": "18",
+    "firefox": "53",
+    "safari": "10",
+    "node": "6",
+    "ios": "10",
+    "samsung": "5",
+    "opera": "36",
+    "electron": "1"
   },
   "proposal-async-generator-functions": {
     "chrome": "63",
@@ -261,17 +286,6 @@
     "samsung": "5",
     "opera": "33",
     "electron": "0.36"
-  },
-  "transform-parameters": {
-    "chrome": "49",
-    "edge": "18",
-    "firefox": "53",
-    "safari": "10",
-    "node": "6",
-    "ios": "10",
-    "samsung": "5",
-    "opera": "36",
-    "electron": "1"
   },
   "transform-destructuring": {
     "chrome": "51",

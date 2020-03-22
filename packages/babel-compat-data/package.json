@@ -1,6 +1,6 @@
 {
   "name": "@babel/compat-data",
-  "version": "7.8.6",
+  "version": "7.9.0",
   "author": "The Babel Team (https://babeljs.io/team)",
   "license": "MIT",
   "description": "",
@@ -12,11 +12,12 @@
     "./plugins": "./data/plugins.json",
     "./native-modules": "./data/native-modules.json",
     "./corejs2-built-ins": "./data/corejs2-built-ins.json",
-    "./corejs3-shipped-proposals": "./data/corejs3-shipped-proposals",
-    "./overlapping-plugins": "./data/overlapping-plugins.json"
+    "./corejs3-shipped-proposals": "./data/corejs3-shipped-proposals.json",
+    "./overlapping-plugins": "./data/overlapping-plugins.json",
+    "./plugin-bugfixes": "./data/plugin-bugfixes.json"
   },
   "scripts": {
-    "build-data": "./scripts/download-compat-table.sh; node ./scripts/build-data.js; node ./scripts/build-modules-support.js; node ./scripts/build-overlapping-plugins.js; node ./scripts/build-corejs3-proposals.js"
+    "build-data": "./scripts/download-compat-table.sh; node ./scripts/build-data.js; node ./scripts/build-modules-support.js; node ./scripts/build-bugfixes-targets.js"
   },
   "keywords": [
     "babel",
@@ -24,14 +25,14 @@
     "compat-data"
   ],
   "dependencies": {
-    "browserslist": "^4.8.5",
+    "browserslist": "^4.9.1",
     "invariant": "^2.2.4",
     "semver": "^5.5.0"
   },
   "devDependencies": {
     "@babel/helper-compilation-targets": "^7.8.6",
-    "caniuse-db": "1.0.30001023",
-    "electron-to-chromium": "1.3.113",
+    "caniuse-db": "1.0.30001035",
+    "electron-to-chromium": "1.3.377",
     "lodash": "^4.17.15"
   }
 }

@@ -44,7 +44,14 @@ function registerGlobalType(programScope, name) {
 }
 
 export default declare(
-  (api, { jsxPragma = "React", allowNamespaces = false }) => {
+  (
+    api,
+    {
+      jsxPragma = "React",
+      allowNamespaces = false,
+      onlyRemoveTypeImports = false,
+    },
+  ) => {
     api.assertVersion(7);
 
     const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
@@ -151,43 +158,52 @@ export default declare(
           // remove type imports
           for (let stmt of path.get("body")) {
             if (t.isImportDeclaration(stmt)) {
-              // Note: this will allow both `import { } from "m"` and `import "m";`.
-              // In TypeScript, the former would be elided.
-              if (stmt.node.specifiers.length === 0) {
+              if (stmt.node.importKind === "type") {
+                stmt.remove();
                 continue;
               }
 
-              let allElided = true;
-              const importsToRemove: Path<Node>[] = [];
-
-              for (const specifier of stmt.node.specifiers) {
-                const binding = stmt.scope.getBinding(specifier.local.name);
-
-                // The binding may not exist if the import node was explicitly
-                // injected by another plugin. Currently core does not do a good job
-                // of keeping scope bindings synchronized with the AST. For now we
-                // just bail if there is no binding, since chances are good that if
-                // the import statement was injected then it wasn't a typescript type
-                // import anyway.
-                if (
-                  binding &&
-                  isImportTypeOnly({
-                    binding,
-                    programPath: path,
-                    jsxPragma: fileJsxPragma || jsxPragma,
-                  })
-                ) {
-                  importsToRemove.push(binding.path);
-                } else {
-                  allElided = false;
+              // If onlyRemoveTypeImports is `true`, only remove type-only imports
+              // and exports introduced in TypeScript 3.8.
+              if (!onlyRemoveTypeImports) {
+                // Note: this will allow both `import { } from "m"` and `import "m";`.
+                // In TypeScript, the former would be elided.
+                if (stmt.node.specifiers.length === 0) {
+                  continue;
                 }
-              }
 
-              if (allElided) {
-                stmt.remove();
-              } else {
-                for (const importPath of importsToRemove) {
-                  importPath.remove();
+                let allElided = true;
+                const importsToRemove: Path<Node>[] = [];
+
+                for (const specifier of stmt.node.specifiers) {
+                  const binding = stmt.scope.getBinding(specifier.local.name);
+
+                  // The binding may not exist if the import node was explicitly
+                  // injected by another plugin. Currently core does not do a good job
+                  // of keeping scope bindings synchronized with the AST. For now we
+                  // just bail if there is no binding, since chances are good that if
+                  // the import statement was injected then it wasn't a typescript type
+                  // import anyway.
+                  if (
+                    binding &&
+                    isImportTypeOnly({
+                      binding,
+                      programPath: path,
+                      jsxPragma: fileJsxPragma || jsxPragma,
+                    })
+                  ) {
+                    importsToRemove.push(binding.path);
+                  } else {
+                    allElided = false;
+                  }
+                }
+
+                if (allElided) {
+                  stmt.remove();
+                } else {
+                  for (const importPath of importsToRemove) {
+                    importPath.remove();
+                  }
                 }
               }
 
@@ -217,7 +233,18 @@ export default declare(
         },
 
         ExportNamedDeclaration(path) {
+          if (path.node.exportKind === "type") {
+            path.remove();
+            return;
+          }
+
           // remove export declaration if it's exporting only types
+          // This logic is needed when exportKind is "value", because
+          // currently the "type" keyword is optional.
+          // TODO:
+          // Also, currently @babel/parser sets exportKind to "value" for
+          //   export interface A {}
+          //   etc.
           if (
             !path.node.source &&
             path.node.specifiers.length > 0 &&

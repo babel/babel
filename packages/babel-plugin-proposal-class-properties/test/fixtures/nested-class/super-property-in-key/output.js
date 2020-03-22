@@ -17,13 +17,15 @@ let Hello = /*#__PURE__*/function () {
 let Outer = /*#__PURE__*/function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
 
+  var _super = babelHelpers.createSuper(Outer);
+
   function Outer() {
     let _babelHelpers$get$cal;
 
     var _this;
 
     babelHelpers.classCallCheck(this, Outer);
-    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Outer).call(this));
+    _this = _super.call(this);
     _babelHelpers$get$cal = babelHelpers.get(babelHelpers.getPrototypeOf(Outer.prototype), "toString", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this));
 
     let Inner = function Inner() {

@@ -115,7 +115,10 @@ module.exports = function(api) {
     ].filter(Boolean),
     overrides: [
       {
-        test: "packages/babel-parser",
+        test: [
+          "packages/babel-parser",
+          "packages/babel-helper-validator-identifier",
+        ],
         plugins: [
           "babel-plugin-transform-charcodes",
           ["@babel/transform-for-of", { assumeArray: true }],

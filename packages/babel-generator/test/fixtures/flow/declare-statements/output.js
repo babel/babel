@@ -42,3 +42,4 @@ declare opaque type Foo<T>: Bar<T>;
 declare opaque type ID;
 declare opaque type num: number;
 declare opaque type NumArray;
+declare var sym: symbol;

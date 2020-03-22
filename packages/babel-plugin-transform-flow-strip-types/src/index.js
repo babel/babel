@@ -2,12 +2,14 @@ import { declare } from "@babel/helper-plugin-utils";
 import syntaxFlow from "@babel/plugin-syntax-flow";
 import { types as t } from "@babel/core";
 
-export default declare(api => {
+export default declare((api, opts) => {
   api.assertVersion(7);
 
   const FLOW_DIRECTIVE = /(@flow(\s+(strict(-local)?|weak))?|@noflow)/;
 
   let skipStrip = false;
+
+  const { requireDirective = false, allowDeclareFields = false } = opts;
 
   return {
     name: "transform-flow-strip-types",
@@ -20,7 +22,6 @@ export default declare(api => {
           file: {
             ast: { comments },
           },
-          opts,
         },
       ) {
         skipStrip = false;
@@ -42,7 +43,7 @@ export default declare(api => {
           }
         }
 
-        if (!directiveFound && opts.requireDirective) {
+        if (!directiveFound && requireDirective) {
           skipStrip = true;
         }
       },
@@ -74,12 +75,6 @@ export default declare(api => {
         path.remove();
       },
 
-      ClassProperty(path) {
-        if (skipStrip) return;
-        path.node.variance = null;
-        path.node.typeAnnotation = null;
-      },
-
       ClassPrivateProperty(path) {
         if (skipStrip) return;
         path.node.typeAnnotation = null;
@@ -93,7 +88,23 @@ export default declare(api => {
         // would transform the class before we reached the class property.
         path.get("body.body").forEach(child => {
           if (child.isClassProperty()) {
-            child.node.typeAnnotation = null;
+            const { node } = child;
+
+            if (!allowDeclareFields && node.declare) {
+              throw child.buildCodeFrameError(
+                `The 'declare' modifier is only allowed when the ` +
+                  `'allowDeclareFields' option of ` +
+                  `@babel/plugin-transform-flow-strip-types or ` +
+                  `@babel/preset-flow is enabled.`,
+              );
+            }
+
+            if (node.declare) {
+              child.remove();
+            } else {
+              node.variance = null;
+              node.typeAnnotation = null;
+            }
           }
         });
       },

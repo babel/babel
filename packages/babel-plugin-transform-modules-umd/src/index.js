@@ -8,6 +8,7 @@ import {
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
   wrapInterop,
+  getModuleName,
 } from "@babel/helper-module-transforms";
 import { types as t, template } from "@babel/core";
 
@@ -140,7 +141,7 @@ export default declare((api, options) => {
 
           const browserGlobals = globals || {};
 
-          let moduleName = this.getModuleName();
+          let moduleName = getModuleName(this.file.opts, options);
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
           const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(

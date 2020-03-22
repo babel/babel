@@ -1,5 +1,10 @@
 {
   "sourceType": "module",
-  "moduleIds": true,
-  "plugins": ["external-helpers", ["transform-modules-amd", { "loose": true }]]
+  "plugins": [
+    "external-helpers",
+    ["transform-modules-amd", {
+      "loose": true,
+      "moduleIds": true
+    }]
+  ]
 }

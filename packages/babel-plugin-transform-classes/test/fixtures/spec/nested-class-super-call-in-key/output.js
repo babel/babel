@@ -13,6 +13,8 @@ var Hello = function Hello() {
 var Outer = /*#__PURE__*/function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
 
+  var _super = babelHelpers.createSuper(Outer);
+
   function Outer() {
     var _this2 = this;
 
@@ -26,7 +28,7 @@ var Outer = /*#__PURE__*/function (_Hello) {
       }
 
       babelHelpers.createClass(Inner, [{
-        key: _this = babelHelpers.possibleConstructorReturn(_this2, babelHelpers.getPrototypeOf(Outer).call(_this2)),
+        key: _this = _super.call(_this2),
         value: function value() {
           return 'hello';
         }

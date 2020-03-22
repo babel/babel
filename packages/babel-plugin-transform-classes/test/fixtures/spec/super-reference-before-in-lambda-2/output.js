@@ -3,6 +3,8 @@ var Foo = /*#__PURE__*/function (_Bar) {
 
   babelHelpers.inherits(Foo, _Bar);
 
+  var _super = babelHelpers.createSuper(Foo);
+
   function Foo() {
     var _this;
 
@@ -11,7 +13,7 @@ var Foo = /*#__PURE__*/function (_Bar) {
     var t = () => babelHelpers.get(babelHelpers.getPrototypeOf(Foo.prototype), "test", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this));
 
     babelHelpers.get(babelHelpers.getPrototypeOf(Foo.prototype), "foo", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this));
-    return _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
+    return _this = _super.call(this);
   }
 
   return Foo;

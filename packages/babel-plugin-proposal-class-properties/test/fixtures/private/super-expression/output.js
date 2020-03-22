@@ -3,11 +3,13 @@ var Foo = /*#__PURE__*/function (_Bar) {
 
   babelHelpers.inherits(Foo, _Bar);
 
+  var _super = babelHelpers.createSuper(Foo);
+
   function Foo() {
     var _temp, _this;
 
     babelHelpers.classCallCheck(this, Foo);
-    foo((_temp = _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this)), _bar.set(babelHelpers.assertThisInitialized(_this), {
+    foo((_temp = _this = _super.call(this), _bar.set(babelHelpers.assertThisInitialized(_this), {
       writable: true,
       value: "foo"
     }), _temp));

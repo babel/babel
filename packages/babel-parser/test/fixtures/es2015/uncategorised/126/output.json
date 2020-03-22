@@ -13,7 +13,7 @@
     }
   },
   "errors": [
-    "SyntaxError: Constructor can't have get/set modifier (1:14)"
+    "SyntaxError: Class constructor may not be an accessor (1:14)"
   ],
   "program": {
     "type": "Program",

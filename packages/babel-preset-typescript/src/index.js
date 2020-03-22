@@ -4,7 +4,13 @@ import transformTypeScript from "@babel/plugin-transform-typescript";
 export default declare(
   (
     api,
-    { jsxPragma, allExtensions = false, isTSX = false, allowNamespaces },
+    {
+      allExtensions = false,
+      allowNamespaces,
+      jsxPragma,
+      isTSX = false,
+      onlyRemoveTypeImports,
+    },
   ) => {
     api.assertVersion(7);
 
@@ -21,9 +27,10 @@ export default declare(
     }
 
     const pluginOptions = isTSX => ({
-      jsxPragma,
-      isTSX,
       allowNamespaces,
+      isTSX,
+      jsxPragma,
+      onlyRemoveTypeImports,
     });
 
     return {

@@ -469,6 +469,10 @@ export function StringTypeAnnotation(...args: Array<any>): Object {
   return builder("StringTypeAnnotation", ...args);
 }
 export { StringTypeAnnotation as stringTypeAnnotation };
+export function SymbolTypeAnnotation(...args: Array<any>): Object {
+  return builder("SymbolTypeAnnotation", ...args);
+}
+export { SymbolTypeAnnotation as symbolTypeAnnotation };
 export function ThisTypeAnnotation(...args: Array<any>): Object {
   return builder("ThisTypeAnnotation", ...args);
 }
@@ -697,6 +701,14 @@ export function BigIntLiteral(...args: Array<any>): Object {
   return builder("BigIntLiteral", ...args);
 }
 export { BigIntLiteral as bigIntLiteral };
+export function RecordExpression(...args: Array<any>): Object {
+  return builder("RecordExpression", ...args);
+}
+export { RecordExpression as recordExpression };
+export function TupleExpression(...args: Array<any>): Object {
+  return builder("TupleExpression", ...args);
+}
+export { TupleExpression as tupleExpression };
 export function TSParameterProperty(...args: Array<any>): Object {
   return builder("TSParameterProperty", ...args);
 }

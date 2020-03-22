@@ -122,8 +122,6 @@ export function Binary(node: Object, parent: Object): boolean {
       return true;
     }
   }
-
-  return false;
 }
 
 export function UnionTypeAnnotation(node: Object, parent: Object): boolean {
@@ -244,7 +242,8 @@ export function ConditionalExpression(node: Object, parent: Object): boolean {
     t.isBinary(parent) ||
     t.isConditionalExpression(parent, { test: node }) ||
     t.isAwaitExpression(parent) ||
-    t.isOptionalMemberExpression(parent) ||
+    t.isOptionalMemberExpression(parent, { object: node }) ||
+    t.isOptionalCallExpression(parent, { callee: node }) ||
     t.isTaggedTemplateExpression(parent) ||
     t.isTSTypeAssertion(parent) ||
     t.isTSAsExpression(parent)
@@ -272,16 +271,28 @@ export function OptionalCallExpression(node: Object, parent: Object): boolean {
   );
 }
 
-export function AssignmentExpression(node: Object): boolean {
+export function AssignmentExpression(
+  node: Object,
+  parent: Object,
+  printStack: Array<Object>,
+): boolean {
   if (t.isObjectPattern(node.left)) {
     return true;
   } else {
-    return ConditionalExpression(...arguments);
+    return ConditionalExpression(node, parent, printStack);
   }
 }
 
-export function NewExpression(node: Object, parent: Object): boolean {
-  return isClassExtendsClause(node, parent);
+export function LogicalExpression(node: Object, parent: Object): boolean {
+  switch (node.operator) {
+    case "||":
+      if (!t.isLogicalExpression(parent)) return false;
+      return parent.operator === "??" || parent.operator === "&&";
+    case "&&":
+      return t.isLogicalExpression(parent, { operator: "??" });
+    case "??":
+      return t.isLogicalExpression(parent) && parent.operator !== "??";
+  }
 }
 
 // Walk up the print stack to determine if our node can come first

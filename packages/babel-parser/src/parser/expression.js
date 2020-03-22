@@ -556,14 +556,19 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     const state = {
       optionalChainMember: false,
-      maybeAsyncArrow: this.atPossibleAsync(base),
+      maybeAsyncArrow: this.atPossibleAsyncArrow(base),
       stop: false,
     };
     do {
+      const oldMaybeInAsyncArrowHead = this.state.maybeInAsyncArrowHead;
+      if (state.maybeAsyncArrow) {
+        this.state.maybeInAsyncArrowHead = true;
+      }
       base = this.parseSubscript(base, startPos, startLoc, noCalls, state);
 
       // After parsing a subscript, this isn't "async" for sure.
       state.maybeAsyncArrow = false;
+      this.state.maybeInAsyncArrowHead = oldMaybeInAsyncArrowHead;
     } while (!state.stop);
     return base;
   }
@@ -743,13 +748,15 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "TaggedTemplateExpression");
   }
 
-  atPossibleAsync(base: N.Expression): boolean {
+  atPossibleAsyncArrow(base: N.Expression): boolean {
     return (
       base.type === "Identifier" &&
       base.name === "async" &&
       this.state.lastTokEnd === base.end &&
       !this.canInsertSemicolon() &&
-      this.input.slice(base.start, base.end) === "async"
+      // check there are no escape sequences, such as \u{61}sync
+      base.end - base.start === 5 &&
+      base.start === this.state.potentialArrowAt
     );
   }
 
@@ -953,15 +960,18 @@ export default class ExpressionParser extends LValParser {
           !this.canInsertSemicolon()
         ) {
           const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
+          const oldMaybeInAsyncArrowHead = this.state.maybeInAsyncArrowHead;
           const oldYieldPos = this.state.yieldPos;
           const oldAwaitPos = this.state.awaitPos;
           this.state.maybeInArrowParameters = true;
+          this.state.maybeInAsyncArrowHead = true;
           this.state.yieldPos = -1;
           this.state.awaitPos = -1;
           const params = [this.parseIdentifier()];
           this.expect(tt.arrow);
           this.checkYieldAwaitInDefaultParams();
           this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
+          this.state.maybeInAsyncArrowHead = oldMaybeInAsyncArrowHead;
           this.state.yieldPos = oldYieldPos;
           this.state.awaitPos = oldAwaitPos;
           // let foo = async bar => {};
@@ -1018,6 +1028,25 @@ export default class ExpressionParser extends LValParser {
       case tt.parenL:
         return this.parseParenAndDistinguishExpression(canBeArrow);
 
+      case tt.bracketBarL:
+      case tt.bracketHashL: {
+        this.expectPlugin("recordAndTuple");
+        const oldInFSharpPipelineDirectBody = this.state
+          .inFSharpPipelineDirectBody;
+        const close =
+          this.state.type === tt.bracketBarL ? tt.bracketBarR : tt.bracketR;
+        this.state.inFSharpPipelineDirectBody = false;
+        node = this.startNode();
+        this.next();
+        node.elements = this.parseExprList(
+          close,
+          true,
+          refExpressionErrors,
+          node,
+        );
+        this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
+        return this.finishNode(node, "TupleExpression");
+      }
       case tt.bracketL: {
         const oldInFSharpPipelineDirectBody = this.state
           .inFSharpPipelineDirectBody;
@@ -1041,11 +1070,23 @@ export default class ExpressionParser extends LValParser {
         this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
         return this.finishNode(node, "ArrayExpression");
       }
+      case tt.braceBarL:
+      case tt.braceHashL: {
+        this.expectPlugin("recordAndTuple");
+        const oldInFSharpPipelineDirectBody = this.state
+          .inFSharpPipelineDirectBody;
+        const close =
+          this.state.type === tt.braceBarL ? tt.braceBarR : tt.braceR;
+        this.state.inFSharpPipelineDirectBody = false;
+        const ret = this.parseObj(close, false, true, refExpressionErrors);
+        this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
+        return ret;
+      }
       case tt.braceL: {
         const oldInFSharpPipelineDirectBody = this.state
           .inFSharpPipelineDirectBody;
         this.state.inFSharpPipelineDirectBody = false;
-        const ret = this.parseObj(false, refExpressionErrors);
+        const ret = this.parseObj(tt.braceR, false, false, refExpressionErrors);
         this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
         return ret;
       }
@@ -1296,6 +1337,9 @@ export default class ExpressionParser extends LValParser {
       this.shouldParseArrow() &&
       (arrowNode = this.parseArrow(arrowNode))
     ) {
+      if (!this.isAwaitAllowed() && !this.state.maybeInAsyncArrowHead) {
+        this.state.awaitPos = oldAwaitPos;
+      }
       this.checkYieldAwaitInDefaultParams();
       this.state.yieldPos = oldYieldPos;
       this.state.awaitPos = oldAwaitPos;
@@ -1454,10 +1498,12 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "TemplateLiteral");
   }
 
-  // Parse an object literal or binding pattern.
+  // Parse an object literal, binding pattern, or record.
 
   parseObj<T: N.ObjectPattern | N.ObjectExpression>(
+    close: TokenType,
     isPattern: boolean,
+    isRecord?: ?boolean,
     refExpressionErrors?: ?ExpressionErrors,
   ): T {
     const propHash: any = Object.create(null);
@@ -1467,12 +1513,12 @@ export default class ExpressionParser extends LValParser {
     node.properties = [];
     this.next();
 
-    while (!this.eat(tt.braceR)) {
+    while (!this.eat(close)) {
       if (first) {
         first = false;
       } else {
         this.expect(tt.comma);
-        if (this.match(tt.braceR)) {
+        if (this.match(close)) {
           this.addExtra(node, "trailingComma", this.state.lastTokStart);
           this.next();
           break;
@@ -1493,10 +1539,13 @@ export default class ExpressionParser extends LValParser {
       node.properties.push(prop);
     }
 
-    return this.finishNode(
-      node,
-      isPattern ? "ObjectPattern" : "ObjectExpression",
-    );
+    let type = "ObjectExpression";
+    if (isPattern) {
+      type = "ObjectPattern";
+    } else if (isRecord) {
+      type = "RecordExpression";
+    }
+    return this.finishNode(node, type);
   }
 
   isAsyncProp(prop: N.ObjectProperty): boolean {
@@ -2128,7 +2177,7 @@ export default class ExpressionParser extends LValParser {
       }
       if (
         this.state.awaitPos === -1 &&
-        (this.state.maybeInArrowParameters || this.isAwaitAllowed())
+        (this.state.maybeInAsyncArrowHead || this.isAwaitAllowed())
       ) {
         this.state.awaitPos = this.state.start;
       }

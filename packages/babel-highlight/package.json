@@ -1,6 +1,6 @@
 {
   "name": "@babel/highlight",
-  "version": "7.8.3",
+  "version": "7.9.0",
   "description": "Syntax highlight JavaScript strings for output in terminals.",
   "author": "suchipi <me@suchipi.com>",
   "homepage": "https://babeljs.io/",
@@ -11,8 +11,8 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-highlight",
   "main": "lib/index.js",
   "dependencies": {
+    "@babel/helper-validator-identifier": "^7.9.0",
     "chalk": "^2.0.0",
-    "esutils": "^2.0.2",
     "js-tokens": "^4.0.0"
   },
   "devDependencies": {

@@ -407,4 +407,28 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       super.toReferencedListDeep(exprList, isParenthesizedExpr);
     }
+
+    parseExport(node: N.Node) {
+      super.parseExport(node);
+
+      switch (node.type) {
+        case "ExportAllDeclaration":
+          node.exported = null;
+          break;
+
+        case "ExportNamedDeclaration":
+          if (
+            node.specifiers.length === 1 &&
+            node.specifiers[0].type === "ExportNamespaceSpecifier"
+          ) {
+            node.type = "ExportAllDeclaration";
+            node.exported = node.specifiers[0].exported;
+            delete node.specifiers;
+          }
+
+          break;
+      }
+
+      return node;
+    }
   };

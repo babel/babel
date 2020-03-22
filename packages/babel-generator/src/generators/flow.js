@@ -596,6 +596,10 @@ export function QualifiedTypeIdentifier(node: Object) {
   this.print(node.id, node);
 }
 
+export function SymbolTypeAnnotation() {
+  this.word("symbol");
+}
+
 function orSeparator() {
   this.space();
   this.token("|");

@@ -57,6 +57,7 @@ function normalizeOptions(code, opts): Format {
       wrap: true,
       ...opts.jsescOption,
     },
+    recordAndTupleSyntaxType: opts.recordAndTupleSyntaxType,
   };
 
   if (format.minified) {

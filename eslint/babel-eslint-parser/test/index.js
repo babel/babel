@@ -9,28 +9,38 @@ const BABEL_OPTIONS = {
     "@babel/eslint-shared-fixtures/config/babel.config.js",
   ),
 };
-const ALLOWED_PROPERTIES = [
+const PROPS_TO_REMOVE = [
   "importKind",
   "exportKind",
   "variance",
   "typeArguments",
 ];
+// We can remove needing to drop "exported" if null once this lands:
+// https://github.com/acornjs/acorn/pull/889
+const PROPS_TO_REMOVE_IF_NULL = ["exported"];
 
-function deeplyRemoveProperties(obj, props) {
+function deeplyRemoveProperties(obj, props, propsIfNull) {
   for (const [k, v] of Object.entries(obj)) {
     if (typeof v === "object") {
       if (Array.isArray(v)) {
         for (const el of v) {
-          if (el != null) deeplyRemoveProperties(el, props);
+          if (el != null) {
+            deeplyRemoveProperties(el, props, propsIfNull);
+          }
         }
       }
 
-      if (props.includes(k)) delete obj[k];
-      else if (v != null) deeplyRemoveProperties(v, props);
+      if (props.includes(k) || (propsIfNull.includes(k) && v === null)) {
+        delete obj[k];
+      } else if (v != null) {
+        deeplyRemoveProperties(v, props, propsIfNull);
+      }
       continue;
     }
 
-    if (props.includes(k)) delete obj[k];
+    if (props.includes(k) || (propsIfNull.includes(k) && v === null)) {
+      delete obj[k];
+    }
   }
 }
 
@@ -62,7 +72,7 @@ describe("Babel and Espree", () => {
       eslintScopeManager: true,
       babelOptions: BABEL_OPTIONS,
     }).ast;
-    deeplyRemoveProperties(babelAST, ALLOWED_PROPERTIES);
+    deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE, PROPS_TO_REMOVE_IF_NULL);
     expect(babelAST).toEqual(espreeAST);
   }
 
@@ -264,6 +274,17 @@ describe("Babel and Espree", () => {
 
   it("export all", () => {
     parseAndAssertSame('export * from "foo";');
+  });
+
+  // Espree doesn't support `export * as ns` yet
+  it("export * as ns", () => {
+    const code = 'export * as Foo from "foo";';
+    const babylonAST = parseForESLint(code, {
+      eslintVisitorKeys: true,
+      eslintScopeManager: true,
+      babelOptions: BABEL_OPTIONS,
+    }).ast;
+    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
   });
 
   it("export named", () => {
