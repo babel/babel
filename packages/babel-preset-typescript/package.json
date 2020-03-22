@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.10.1",
+    "@babel/plugin-syntax-jsx": "^7.10.1",
     "@babel/plugin-transform-typescript": "^7.10.1"
   },
   "peerDependencies": {

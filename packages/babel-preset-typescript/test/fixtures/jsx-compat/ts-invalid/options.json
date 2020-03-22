@@ -1,3 +1,4 @@
 {
+  "presets": ["typescript"],
   "throws": "Unexpected token, expected \",\" (1:6)"
 }

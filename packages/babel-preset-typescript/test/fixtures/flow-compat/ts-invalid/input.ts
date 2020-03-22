@@ -1,3 +1,0 @@
-type Foo = {||};
-
-foo;

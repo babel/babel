@@ -23,7 +23,7 @@
     });
     it("handles the typescript preset", () => {
       const output = Babel.transform("var a: string;", {
-        presets: [["typescript", { allExtensions: true }]],
+        presets: ["typescript"],
       }).code;
       expect(output).toBe("var a;");
     });
