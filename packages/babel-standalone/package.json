@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.9.2",
+  "version": "7.9.3",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "babel.js",
   "files": [
@@ -78,7 +78,7 @@
     "@babel/plugin-transform-object-assign": "^7.8.3",
     "@babel/plugin-transform-object-set-prototype-of-to-assign": "^7.8.3",
     "@babel/plugin-transform-object-super": "^7.8.3",
-    "@babel/plugin-transform-parameters": "^7.8.8",
+    "@babel/plugin-transform-parameters": "^7.9.3",
     "@babel/plugin-transform-property-literals": "^7.8.3",
     "@babel/plugin-transform-property-mutators": "^7.8.3",
     "@babel/plugin-transform-proto-to-assign": "^7.8.3",
