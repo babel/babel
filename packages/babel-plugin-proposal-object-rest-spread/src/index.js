@@ -249,7 +249,10 @@ export default declare((api, opts) => {
 
           if (paramHasRestElement[i]) {
             replaceRestElement(param.parentPath, param, body);
-          } else {
+          } else if (firstOptionalIndex === null) {
+            // if the previous parameter was transformed
+            // this one must also be transformed, so no point
+            // doing the check
             const IdentifierHandler = function(identifierPath) {
               if (
                 (identifierPath.parentKey === "right" ||
