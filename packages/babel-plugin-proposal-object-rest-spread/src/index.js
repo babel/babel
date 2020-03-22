@@ -239,7 +239,7 @@ export default declare((api, opts) => {
         };
         let body = [];
         let firstOptionalIndex = null;
-        let processedDefaultParam = false;
+        let processedADefaultParam = false;
 
         for (let i = 0; i < params.length; ++i) {
           const param = params[i];
@@ -275,7 +275,7 @@ export default declare((api, opts) => {
             }
           }
           if (usesIdInRestParam || firstOptionalIndex !== null) {
-            processedDefaultParam = true;
+            processedADefaultParam = true;
             // Order matters: We need to add the
             // transformation done by convertParam before
             // the transformation done by ReplaceRestElement
@@ -299,7 +299,7 @@ export default declare((api, opts) => {
 
         if (body.length === 0) return;
 
-        if (processedDefaultParam && path.isArrowFunctionExpression()) {
+        if (processedADefaultParam && path.isArrowFunctionExpression()) {
           // default/rest visitors require access to `arguments`, so it cannot be an arrow
           path.arrowFunctionToExpression();
         }
