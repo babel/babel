@@ -193,7 +193,7 @@ function buildScopeIIFE(shadowedParams, body) {
   const params = [];
 
   for (const name of shadowedParams) {
-    // We create then twice; the other option is to use t.cloneNode
+    // We create them twice; the other option is to use t.cloneNode
     args.push(t.identifier(name));
     params.push(t.identifier(name));
   }
