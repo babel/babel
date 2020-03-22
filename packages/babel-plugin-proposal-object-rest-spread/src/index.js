@@ -1,6 +1,8 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import { types as t } from "@babel/core";
+import { convertParam } from "@babel/plugin-transform-parameters";
+import callDelegate from "@babel/helper-call-delegate";
 
 // TODO: Remove in Babel 8
 // @babel/types <=7.3.3 counts FOO as referenced in var { x: FOO }.
@@ -177,7 +179,7 @@ export default declare((api, opts) => {
     ];
   }
 
-  function replaceRestElement(parentPath, paramPath) {
+  function replaceRestElement(parentPath, paramPath, container) {
     if (paramPath.isAssignmentPattern()) {
       replaceRestElement(parentPath, paramPath.get("left"));
       return;
@@ -198,8 +200,12 @@ export default declare((api, opts) => {
         t.variableDeclarator(paramPath.node, uid),
       ]);
 
-      parentPath.ensureBlock();
-      parentPath.get("body").unshiftContainer("body", declar);
+      if (container) {
+        container.push(declar);
+      } else {
+        parentPath.ensureBlock();
+        parentPath.get("body").unshiftContainer("body", declar);
+      }
       paramPath.replaceWith(t.cloneNode(uid));
     }
   }
@@ -213,8 +219,93 @@ export default declare((api, opts) => {
       // function a({ b, ...c }) {}
       Function(path) {
         const params = path.get("params");
-        for (let i = params.length - 1; i >= 0; i--) {
-          replaceRestElement(params[i].parentPath, params[i]);
+        // Record the names bound in all function param declarators that contain a RestElement
+        // Example: f({A, B = C, ...D}, {E}, F) records A, B, and D
+        const idsInRestParams = new Set();
+        for (let i = 0; i < params.length; ++i) {
+          const param = params[i];
+          if (hasRestElement(param)) {
+            for (const name of Object.keys(param.getBindingIdentifiers())) {
+              idsInRestParams.add(name);
+            }
+          }
+        }
+
+        // adapted from transform-parameters/src/params.js#convertFunctionParams
+        const { node, scope } = path;
+        const state = {
+          iife: false,
+          scope: scope,
+        };
+        let body = [];
+        let firstOptionalIndex = null;
+        let processedDefaultParam = false;
+
+        for (let i = 0; i < params.length; ++i) {
+          const param = params[i];
+          const oldBodyLength = body.length;
+          replaceRestElement(param.parentPath, param, body);
+          let usesIdInRestParam = false;
+          outer: for (const bindingIdentifierPath of Object.values(
+            param.getBindingIdentifierPaths(),
+          )) {
+            const parent = bindingIdentifierPath.parentPath;
+            if (parent.isAssignmentPattern()) {
+              for (const name of Object.keys(
+                parent.get("right").getBindingIdentifiers(),
+              )) {
+                if (idsInRestParams.has(name)) {
+                  usesIdInRestParam = true;
+                  break outer;
+                }
+              }
+            }
+          }
+          // Transform the first default param that references an id declared
+          // in a object rest pattern, and transform all params after it.
+          if (usesIdInRestParam || firstOptionalIndex !== null) {
+            processedDefaultParam = true;
+            // Order matters: We need to add the
+            // transformation done by convertParam before
+            // the transformation done by ReplaceRestElement
+            const oldBody = body.slice(0, oldBodyLength);
+            const addedByReplaceRestElement = body.slice(
+              oldBodyLength,
+              body.length,
+            );
+            firstOptionalIndex = convertParam(
+              i,
+              param,
+              state,
+              firstOptionalIndex,
+              path,
+              oldBody,
+            );
+            body = oldBody.concat(addedByReplaceRestElement);
+          }
+        }
+
+        if (body.length === 0) return;
+
+        if (processedDefaultParam && path.isArrowFunctionExpression()) {
+          // default/rest visitors require access to `arguments`, so it cannot be an arrow
+          path.arrowFunctionToExpression();
+        }
+
+        // we need to cut off all trailing parameters
+        if (firstOptionalIndex !== null) {
+          node.params = node.params.slice(0, firstOptionalIndex);
+        }
+
+        // ensure it's a block, useful for arrow functions
+        path.ensureBlock();
+
+        if (state.iife) {
+          // we don't want to hoist the inner declarations up
+          body.push(callDelegate(path, scope, false));
+          path.set("body", t.blockStatement(body));
+        } else {
+          path.get("body").unshiftContainer("body", body);
         }
       },
       // adapted from transform-destructuring/src/index.js#pushObjectRest
