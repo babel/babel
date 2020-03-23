@@ -108,10 +108,23 @@ export function runThrowTestsWithEstree(fixturesPath, parseFunction) {
   });
 }
 
+// compact loc properties into a single line
+function compactFixture(jsonString) {
+  return jsonString.replace(
+    /"start": (\d+),\s+"end": (\d+),\s+"loc": \{\s+"start":\s\{\s+"line": (\d+),\s+"column": (\d+)\s+\},\s+"end":\s\{\s+"line": (\d+),\s+"column": (\d+)\s+\s+\}(?:,\s+"identifierName": "(\S+)")?\s+\}/gm,
+    (_, p1, p2, p3, p4, p5, p6, p7) => {
+      return (
+        `"start":${p1},"end":${p2},"loc":{"start":{"line":${p3},"column":${p4}},"end":{"line":${p5},"column":${p6}}` +
+        (p7 ? `,"identifierName":"${p7}"}` : "}")
+      );
+    },
+  );
+}
+
 function save(test, ast) {
   fs.writeFileSync(
     test.expect.loc,
-    JSON.stringify(ast, (k, v) => serialize(v), 2),
+    compactFixture(JSON.stringify(ast, (k, v) => serialize(v), 2)),
   );
 }
 
