@@ -1,121 +1,32 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 32,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 32
-    }
-  },
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":32}},
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 32,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 32
-      }
-    },
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":32}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "DeclareFunction",
-        "start": 0,
-        "end": 32,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 32
-          }
-        },
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":32}},
         "id": {
           "type": "Identifier",
-          "start": 17,
-          "end": 31,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 17
-            },
-            "end": {
-              "line": 1,
-              "column": 31
-            },
-            "identifierName": "foo"
-          },
+          "start":17,"end":31,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":31},"identifierName":"foo"},
           "name": "foo",
           "typeAnnotation": {
             "type": "TypeAnnotation",
-            "start": 20,
-            "end": 31,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 20
-              },
-              "end": {
-                "line": 1,
-                "column": 31
-              }
-            },
+            "start":20,"end":31,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":31}},
             "typeAnnotation": {
               "type": "FunctionTypeAnnotation",
-              "start": 20,
-              "end": 31,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 20
-                },
-                "end": {
-                  "line": 1,
-                  "column": 31
-                }
-              },
+              "start":20,"end":31,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":31}},
               "typeParameters": {
                 "type": "TypeParameterDeclaration",
-                "start": 20,
-                "end": 23,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 20
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 23
-                  }
-                },
+                "start":20,"end":23,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":23}},
                 "params": [
                   {
                     "type": "TypeParameter",
-                    "start": 21,
-                    "end": 22,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 21
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 22
-                      }
-                    },
+                    "start":21,"end":22,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":22}},
                     "name": "T",
                     "variance": null
                   }
@@ -125,18 +36,7 @@
               "rest": null,
               "returnType": {
                 "type": "VoidTypeAnnotation",
-                "start": 27,
-                "end": 31,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 27
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 31
-                  }
-                }
+                "start":27,"end":31,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":31}}
               }
             }
           }

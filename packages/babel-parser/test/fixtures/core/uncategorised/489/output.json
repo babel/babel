@@ -1,94 +1,27 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 41,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 41
-    }
-  },
+  "start":0,"end":41,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":41}},
   "errors": [
     "SyntaxError: Binding 'arguments' in strict mode (1:10)"
   ],
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 41,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 41
-      }
-    },
+    "start":0,"end":41,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":41}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start": 0,
-        "end": 41,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 41
-          }
-        },
+        "start":0,"end":41,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":41}},
         "expression": {
           "type": "CallExpression",
-          "start": 0,
-          "end": 41,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 0
-            },
-            "end": {
-              "line": 1,
-              "column": 41
-            }
-          },
+          "start":0,"end":41,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":41}},
           "callee": {
             "type": "FunctionExpression",
-            "start": 1,
-            "end": 38,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 1
-              },
-              "end": {
-                "line": 1,
-                "column": 38
-              }
-            },
+            "start":1,"end":38,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":38}},
             "id": {
               "type": "Identifier",
-              "start": 10,
-              "end": 19,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 10
-                },
-                "end": {
-                  "line": 1,
-                  "column": 19
-                },
-                "identifierName": "arguments"
-              },
+              "start":10,"end":19,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":19},"identifierName":"arguments"},
               "name": "arguments"
             },
             "generator": false,
@@ -96,48 +29,15 @@
             "params": [],
             "body": {
               "type": "BlockStatement",
-              "start": 22,
-              "end": 38,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 22
-                },
-                "end": {
-                  "line": 1,
-                  "column": 38
-                }
-              },
+              "start":22,"end":38,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":38}},
               "body": [],
               "directives": [
                 {
                   "type": "Directive",
-                  "start": 23,
-                  "end": 36,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 23
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 36
-                    }
-                  },
+                  "start":23,"end":36,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":36}},
                   "value": {
                     "type": "DirectiveLiteral",
-                    "start": 23,
-                    "end": 35,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 23
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 35
-                      }
-                    },
+                    "start":23,"end":35,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":35}},
                     "value": "use strict",
                     "extra": {
                       "raw": "'use strict'",

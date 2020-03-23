@@ -1,109 +1,30 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 42,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 42
-    }
-  },
+  "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":42}},
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 42,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 42
-      }
-    },
+    "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":42}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ImportDeclaration",
-        "start": 0,
-        "end": 42,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 42
-          }
-        },
+        "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":42}},
         "specifiers": [
           {
             "type": "ImportSpecifier",
-            "start": 9,
-            "end": 27,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 9
-              },
-              "end": {
-                "line": 1,
-                "column": 27
-              }
-            },
+            "start":9,"end":27,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":27}},
             "imported": {
               "type": "Identifier",
-              "start": 9,
-              "end": 14,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 9
-                },
-                "end": {
-                  "line": 1,
-                  "column": 14
-                },
-                "identifierName": "named"
-              },
+              "start":9,"end":14,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":14},"identifierName":"named"},
               "name": "named"
             },
             "local": {
               "type": "Placeholder",
-              "start": 18,
-              "end": 27,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 18
-                },
-                "end": {
-                  "line": 1,
-                  "column": 27
-                }
-              },
+              "start":18,"end":27,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":27}},
               "name": {
                 "type": "Identifier",
-                "start": 20,
-                "end": 25,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 20
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 25
-                  },
-                  "identifierName": "ALIAS"
-                },
+                "start":20,"end":25,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":25},"identifierName":"ALIAS"},
                 "name": "ALIAS"
               },
               "expectedNode": "Identifier"
@@ -112,18 +33,7 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 35,
-          "end": 41,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 35
-            },
-            "end": {
-              "line": 1,
-              "column": 41
-            }
-          },
+          "start":35,"end":41,"loc":{"start":{"line":1,"column":35},"end":{"line":1,"column":41}},
           "extra": {
             "rawValue": "file",
             "raw": "\"file\""

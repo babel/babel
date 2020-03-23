@@ -1,77 +1,21 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 34,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 34
-    }
-  },
+  "start":0,"end":34,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":34}},
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 34,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 34
-      }
-    },
+    "start":0,"end":34,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":34}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "DeclareExportDeclaration",
-        "start": 0,
-        "end": 33,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 33
-          }
-        },
+        "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":33}},
         "declaration": {
           "type": "DeclareClass",
-          "start": 23,
-          "end": 33,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 23
-            },
-            "end": {
-              "line": 1,
-              "column": 33
-            }
-          },
+          "start":23,"end":33,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":33}},
           "id": {
             "type": "Identifier",
-            "start": 29,
-            "end": 30,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 29
-              },
-              "end": {
-                "line": 1,
-                "column": 30
-              },
-              "identifierName": "A"
-            },
+            "start":29,"end":30,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":30},"identifierName":"A"},
             "name": "A"
           },
           "typeParameters": null,
@@ -80,18 +24,7 @@
           "mixins": [],
           "body": {
             "type": "ObjectTypeAnnotation",
-            "start": 31,
-            "end": 33,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 31
-              },
-              "end": {
-                "line": 1,
-                "column": 33
-              }
-            },
+            "start":31,"end":33,"loc":{"start":{"line":1,"column":31},"end":{"line":1,"column":33}},
             "callProperties": [],
             "properties": [],
             "indexers": [],
@@ -103,18 +36,7 @@
       },
       {
         "type": "EmptyStatement",
-        "start": 33,
-        "end": 34,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 33
-          },
-          "end": {
-            "line": 1,
-            "column": 34
-          }
-        }
+        "start":33,"end":34,"loc":{"start":{"line":1,"column":33},"end":{"line":1,"column":34}}
       }
     ],
     "directives": []

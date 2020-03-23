@@ -1,66 +1,21 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 63,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 63
-    }
-  },
+  "start":0,"end":63,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":63}},
   "errors": [
     "SyntaxError: Binding 'eval' in strict mode (1:47)"
   ],
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 63,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 63
-      }
-    },
+    "start":0,"end":63,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":63}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "FunctionDeclaration",
-        "start": 0,
-        "end": 63,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 63
-          }
-        },
+        "start":0,"end":63,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":63}},
         "id": {
           "type": "Identifier",
-          "start": 9,
-          "end": 14,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 9
-            },
-            "end": {
-              "line": 1,
-              "column": 14
-            },
-            "identifierName": "hello"
-          },
+          "start":9,"end":14,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":14},"identifierName":"hello"},
           "name": "hello"
         },
         "generator": false,
@@ -68,111 +23,32 @@
         "params": [],
         "body": {
           "type": "BlockStatement",
-          "start": 17,
-          "end": 63,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 17
-            },
-            "end": {
-              "line": 1,
-              "column": 63
-            }
-          },
+          "start":17,"end":63,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":63}},
           "body": [
             {
               "type": "ExpressionStatement",
-              "start": 32,
-              "end": 61,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 32
-                },
-                "end": {
-                  "line": 1,
-                  "column": 61
-                }
-              },
+              "start":32,"end":61,"loc":{"start":{"line":1,"column":32},"end":{"line":1,"column":61}},
               "expression": {
                 "type": "ObjectExpression",
-                "start": 33,
-                "end": 59,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 33
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 59
-                  }
-                },
+                "start":33,"end":59,"loc":{"start":{"line":1,"column":33},"end":{"line":1,"column":59}},
                 "properties": [
                   {
                     "type": "ObjectProperty",
-                    "start": 35,
-                    "end": 57,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 35
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 57
-                      }
-                    },
+                    "start":35,"end":57,"loc":{"start":{"line":1,"column":35},"end":{"line":1,"column":57}},
                     "method": false,
                     "key": {
                       "type": "Identifier",
-                      "start": 35,
-                      "end": 36,
-                      "loc": {
-                        "start": {
-                          "line": 1,
-                          "column": 35
-                        },
-                        "end": {
-                          "line": 1,
-                          "column": 36
-                        },
-                        "identifierName": "s"
-                      },
+                      "start":35,"end":36,"loc":{"start":{"line":1,"column":35},"end":{"line":1,"column":36},"identifierName":"s"},
                       "name": "s"
                     },
                     "computed": false,
                     "shorthand": false,
                     "value": {
                       "type": "FunctionExpression",
-                      "start": 38,
-                      "end": 57,
-                      "loc": {
-                        "start": {
-                          "line": 1,
-                          "column": 38
-                        },
-                        "end": {
-                          "line": 1,
-                          "column": 57
-                        }
-                      },
+                      "start":38,"end":57,"loc":{"start":{"line":1,"column":38},"end":{"line":1,"column":57}},
                       "id": {
                         "type": "Identifier",
-                        "start": 47,
-                        "end": 51,
-                        "loc": {
-                          "start": {
-                            "line": 1,
-                            "column": 47
-                          },
-                          "end": {
-                            "line": 1,
-                            "column": 51
-                          },
-                          "identifierName": "eval"
-                        },
+                        "start":47,"end":51,"loc":{"start":{"line":1,"column":47},"end":{"line":1,"column":51},"identifierName":"eval"},
                         "name": "eval"
                       },
                       "generator": false,
@@ -180,18 +56,7 @@
                       "params": [],
                       "body": {
                         "type": "BlockStatement",
-                        "start": 54,
-                        "end": 57,
-                        "loc": {
-                          "start": {
-                            "line": 1,
-                            "column": 54
-                          },
-                          "end": {
-                            "line": 1,
-                            "column": 57
-                          }
-                        },
+                        "start":54,"end":57,"loc":{"start":{"line":1,"column":54},"end":{"line":1,"column":57}},
                         "body": [],
                         "directives": []
                       }
@@ -208,32 +73,10 @@
           "directives": [
             {
               "type": "Directive",
-              "start": 18,
-              "end": 31,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 18
-                },
-                "end": {
-                  "line": 1,
-                  "column": 31
-                }
-              },
+              "start":18,"end":31,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":31}},
               "value": {
                 "type": "DirectiveLiteral",
-                "start": 18,
-                "end": 30,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 18
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 30
-                  }
-                },
+                "start":18,"end":30,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":30}},
                 "value": "use strict",
                 "extra": {
                   "raw": "'use strict'",

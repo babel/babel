@@ -1,66 +1,21 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 53,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 53
-    }
-  },
+  "start":0,"end":53,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":53}},
   "errors": [
     "SyntaxError: Binding 'arguments' in strict mode (1:36)"
   ],
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 53,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 53
-      }
-    },
+    "start":0,"end":53,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":53}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "FunctionDeclaration",
-        "start": 0,
-        "end": 53,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 53
-          }
-        },
+        "start":0,"end":53,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":53}},
         "id": {
           "type": "Identifier",
-          "start": 9,
-          "end": 14,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 9
-            },
-            "end": {
-              "line": 1,
-              "column": 14
-            },
-            "identifierName": "hello"
-          },
+          "start":9,"end":14,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":14},"identifierName":"hello"},
           "name": "hello"
         },
         "generator": false,
@@ -68,79 +23,23 @@
         "params": [],
         "body": {
           "type": "BlockStatement",
-          "start": 17,
-          "end": 53,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 17
-            },
-            "end": {
-              "line": 1,
-              "column": 53
-            }
-          },
+          "start":17,"end":53,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":53}},
           "body": [
             {
               "type": "VariableDeclaration",
-              "start": 32,
-              "end": 51,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 32
-                },
-                "end": {
-                  "line": 1,
-                  "column": 51
-                }
-              },
+              "start":32,"end":51,"loc":{"start":{"line":1,"column":32},"end":{"line":1,"column":51}},
               "declarations": [
                 {
                   "type": "VariableDeclarator",
-                  "start": 36,
-                  "end": 50,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 36
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 50
-                    }
-                  },
+                  "start":36,"end":50,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":50}},
                   "id": {
                     "type": "Identifier",
-                    "start": 36,
-                    "end": 45,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 36
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 45
-                      },
-                      "identifierName": "arguments"
-                    },
+                    "start":36,"end":45,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":45},"identifierName":"arguments"},
                     "name": "arguments"
                   },
                   "init": {
                     "type": "NumericLiteral",
-                    "start": 48,
-                    "end": 50,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 48
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 50
-                      }
-                    },
+                    "start":48,"end":50,"loc":{"start":{"line":1,"column":48},"end":{"line":1,"column":50}},
                     "extra": {
                       "rawValue": 10,
                       "raw": "10"
@@ -155,32 +54,10 @@
           "directives": [
             {
               "type": "Directive",
-              "start": 18,
-              "end": 31,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 18
-                },
-                "end": {
-                  "line": 1,
-                  "column": 31
-                }
-              },
+              "start":18,"end":31,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":31}},
               "value": {
                 "type": "DirectiveLiteral",
-                "start": 18,
-                "end": 30,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 18
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 30
-                  }
-                },
+                "start":18,"end":30,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":30}},
                 "value": "use strict",
                 "extra": {
                   "raw": "'use strict'",
