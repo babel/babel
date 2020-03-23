@@ -41,7 +41,7 @@ export default declare((api, options) => {
 
     post(state, pass) {
       state.callee = pass.get("jsxIdentifier")();
-      state.pure = PURE_ANNOTATION ?? !pass.get("pragmaSet");
+      state.pure = PURE_ANNOTATION ?? pass.get("pragma") === DEFAULT.pragma;
     },
 
     throwIfNamespace: THROW_IF_NAMESPACE,
@@ -74,6 +74,7 @@ export default declare((api, options) => {
       state.set("jsxIdentifier", createIdentifierParser(pragma));
       state.set("jsxFragIdentifier", createIdentifierParser(pragmaFrag));
       state.set("usedFragment", false);
+      state.set("pragma", pragma);
       state.set("pragmaSet", pragmaSet);
       state.set("pragmaFragSet", pragmaFragSet);
     },
