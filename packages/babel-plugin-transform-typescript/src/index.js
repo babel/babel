@@ -78,7 +78,12 @@ export default declare(
           if (!node.decorators) {
             path.remove();
           }
-        } else if (!allowDeclareFields && !node.value && !node.decorators) {
+        } else if (
+          !allowDeclareFields &&
+          !node.value &&
+          !node.decorators &&
+          !t.isClassPrivateProperty(node)
+        ) {
           path.remove();
         }
 
@@ -325,13 +330,16 @@ export default declare(
           // class transform would transform the class, causing more specific
           // visitors to not run.
           path.get("body.body").forEach(child => {
-            if (child.isClassMethod()) {
+            if (child.isClassMethod() || child.isClassPrivateMethod()) {
               if (child.node.kind === "constructor") {
                 classMemberVisitors.constructor(child, path);
               } else {
                 classMemberVisitors.method(child, path);
               }
-            } else if (child.isClassProperty()) {
+            } else if (
+              child.isClassProperty() ||
+              child.isClassPrivateProperty()
+            ) {
               classMemberVisitors.field(child, path);
             }
           });

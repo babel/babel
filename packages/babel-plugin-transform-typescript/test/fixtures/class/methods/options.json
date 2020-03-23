@@ -1,7 +1,6 @@
 {
   "plugins": [
     "transform-typescript",
-    ["syntax-decorators", { "legacy": true }],
     "syntax-class-properties"
   ]
 }
