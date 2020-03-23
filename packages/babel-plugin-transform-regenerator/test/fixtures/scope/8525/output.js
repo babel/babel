@@ -1,3 +1,4 @@
+/*#__PURE__*/
 React.createElement(Component, null, () => {
   const saveSession = () => {
     var newSessionId;
@@ -14,6 +15,6 @@ React.createElement(Component, null, () => {
         case "end":
           return _context.stop();
       }
-    });
+    }, null, null, null, Promise);
   };
 });
