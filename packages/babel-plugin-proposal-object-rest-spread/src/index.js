@@ -1,6 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import { types as t } from "@babel/core";
+import { convertFunctionParams } from "@babel/plugin-transform-parameters";
 
 // TODO: Remove in Babel 8
 // @babel/types <=7.3.3 counts FOO as referenced in var { x: FOO }.
@@ -177,9 +178,9 @@ export default declare((api, opts) => {
     ];
   }
 
-  function replaceRestElement(parentPath, paramPath) {
+  function replaceRestElement(parentPath, paramPath, container) {
     if (paramPath.isAssignmentPattern()) {
-      replaceRestElement(parentPath, paramPath.get("left"));
+      replaceRestElement(parentPath, paramPath.get("left"), container);
       return;
     }
 
@@ -187,7 +188,7 @@ export default declare((api, opts) => {
       const elements = paramPath.get("elements");
 
       for (let i = 0; i < elements.length; i++) {
-        replaceRestElement(parentPath, elements[i]);
+        replaceRestElement(parentPath, elements[i], container);
       }
     }
 
@@ -198,8 +199,12 @@ export default declare((api, opts) => {
         t.variableDeclarator(paramPath.node, uid),
       ]);
 
-      parentPath.ensureBlock();
-      parentPath.get("body").unshiftContainer("body", declar);
+      if (container) {
+        container.push(declar);
+      } else {
+        parentPath.ensureBlock();
+        parentPath.get("body").unshiftContainer("body", declar);
+      }
       paramPath.replaceWith(t.cloneNode(uid));
     }
   }
@@ -213,8 +218,67 @@ export default declare((api, opts) => {
       // function a({ b, ...c }) {}
       Function(path) {
         const params = path.get("params");
-        for (let i = params.length - 1; i >= 0; i--) {
-          replaceRestElement(params[i].parentPath, params[i]);
+        const paramHasRestElement = [];
+        const idsInRestParams = new Set();
+        for (let i = 0; i < params.length; ++i) {
+          const param = params[i];
+          paramHasRestElement.push(hasRestElement(param));
+          if (paramHasRestElement[i]) {
+            for (const name of Object.keys(param.getBindingIdentifiers())) {
+              idsInRestParams.add(name);
+            }
+          }
+        }
+
+        // if true, a parameter exists that has an id in its initializer
+        // that is also an id bound in a rest parameter
+        // example: f({...R}, a = R)
+        let idInRest = false;
+
+        const IdentifierHandler = function(idPath) {
+          if (
+            (idPath.parentKey === "right" || idPath.parentKey === "value") &&
+            idsInRestParams.has(idPath.node.name)
+          ) {
+            idInRest = true;
+            idPath.stop();
+          }
+        };
+
+        const AssignmentPatternHandler = function(assignPath) {
+          const right = assignPath.get("right");
+          if (right.isIdentifier()) IdentifierHandler(right);
+          else right.traverse({ Identifier: IdentifierHandler });
+          if (idInRest) assignPath.stop();
+        };
+
+        let i;
+        for (i = 0; i < params.length && !idInRest; ++i) {
+          const param = params[i];
+          if (!paramHasRestElement[i]) {
+            if (param.isAssignmentPattern()) AssignmentPatternHandler(param);
+            else {
+              param.traverse({ AssignmentPattern: AssignmentPatternHandler });
+            }
+          }
+        }
+
+        if (!idInRest) {
+          for (let i = 0; i < params.length; ++i) {
+            const param = params[i];
+            if (paramHasRestElement[i]) {
+              replaceRestElement(param.parentPath, param);
+            }
+          }
+        } else {
+          const shouldTransformParam = idx =>
+            idx >= i - 1 || paramHasRestElement[idx];
+          convertFunctionParams(
+            path,
+            false, // TODO: What should this value be?
+            shouldTransformParam,
+            replaceRestElement,
+          );
         }
       },
       // adapted from transform-destructuring/src/index.js#pushObjectRest

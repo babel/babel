@@ -38,7 +38,13 @@ const iifeVisitor = {
   },
 };
 
-export default function convertFunctionParams(path, loose) {
+// last 2 parameters are optional -- they are used by proposal-object-rest-spread/src/index.js
+export default function convertFunctionParams(
+  path,
+  loose,
+  shouldTransformParam,
+  replaceRestElement,
+) {
   const params = path.get("params");
 
   const isSimpleParameterList = params.every(param => param.isIdentifier());
@@ -105,6 +111,14 @@ export default function convertFunctionParams(path, loose) {
   for (let i = 0; i < params.length; i++) {
     const param = params[i];
 
+    if (shouldTransformParam && !shouldTransformParam(i)) {
+      continue;
+    }
+    const transformedRestNodes = [];
+    if (replaceRestElement) {
+      replaceRestElement(param.parentPath, param, transformedRestNodes);
+    }
+
     const paramIsAssignmentPattern = param.isAssignmentPattern();
     if (paramIsAssignmentPattern && (loose || node.kind === "set")) {
       const left = param.get("left");
@@ -160,6 +174,12 @@ export default function convertFunctionParams(path, loose) {
       body.push(defNode);
 
       param.replaceWith(t.cloneNode(uid));
+    }
+
+    if (transformedRestNodes) {
+      for (const transformedNode of transformedRestNodes) {
+        body.push(transformedNode);
+      }
     }
   }
 
