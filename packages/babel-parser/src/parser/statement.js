@@ -850,10 +850,11 @@ export default class StatementParser extends ExpressionParser {
     afterBlockParse?: (hasStrictModeDirective: boolean) => void,
   ): void {
     const octalPositions = [];
+    const oldStrict = this.state.strict;
+    let hasStrictModeDirective = false;
     let parsedNonDirective = false;
-    let oldStrict = null;
 
-    while (!this.eat(end)) {
+    while (!this.match(end)) {
       // Track octal literals that occur before a "use strict" directive.
       if (!parsedNonDirective && this.state.octalPositions.length) {
         octalPositions.push(...this.state.octalPositions);
@@ -865,8 +866,8 @@ export default class StatementParser extends ExpressionParser {
         const directive = this.stmtToDirective(stmt);
         directives.push(directive);
 
-        if (oldStrict === null && directive.value.value === "use strict") {
-          oldStrict = this.state.strict;
+        if (!hasStrictModeDirective && directive.value.value === "use strict") {
+          hasStrictModeDirective = true;
           this.setStrict(true);
         }
 
@@ -887,15 +888,14 @@ export default class StatementParser extends ExpressionParser {
     }
 
     if (afterBlockParse) {
-      afterBlockParse.call(
-        this,
-        /* hasStrictModeDirective */ oldStrict !== null,
-      );
+      afterBlockParse.call(this, hasStrictModeDirective);
     }
 
-    if (oldStrict === false) {
+    if (!oldStrict) {
       this.setStrict(false);
     }
+
+    this.next();
   }
 
   // Parse a regular `for` loop. The disambiguation code in
@@ -1156,7 +1156,7 @@ export default class StatementParser extends ExpressionParser {
 
     this.parseClassId(node, isStatement, optionalId);
     this.parseClassSuper(node);
-    node.body = this.parseClassBody(!!node.superClass);
+    node.body = this.parseClassBody(!!node.superClass, oldStrict);
 
     this.state.strict = oldStrict;
 
@@ -1183,7 +1183,10 @@ export default class StatementParser extends ExpressionParser {
     );
   }
 
-  parseClassBody(constructorAllowsSuper: boolean): N.ClassBody {
+  parseClassBody(
+    constructorAllowsSuper: boolean,
+    oldStrict?: boolean,
+  ): N.ClassBody {
     this.classScope.enter();
 
     const state = { hadConstructor: false };
@@ -1197,7 +1200,7 @@ export default class StatementParser extends ExpressionParser {
     // contexts within the class body. They are permitted in test expressions,
     // outside of the class body.
     this.withTopicForbiddingContext(() => {
-      while (!this.eat(tt.braceR)) {
+      while (!this.match(tt.braceR)) {
         if (this.eat(tt.semi)) {
           if (decorators.length > 0) {
             throw this.raise(this.state.lastTokEnd, Errors.DecoratorSemicolon);
@@ -1230,6 +1233,12 @@ export default class StatementParser extends ExpressionParser {
         }
       }
     });
+
+    if (!oldStrict) {
+      this.state.strict = false;
+    }
+
+    this.next();
 
     if (decorators.length) {
       throw this.raise(this.state.start, Errors.TrailingDecorator);
