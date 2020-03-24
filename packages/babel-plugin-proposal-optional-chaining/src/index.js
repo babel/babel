@@ -25,6 +25,7 @@ export default declare((api, options) => {
       "OptionalCallExpression|OptionalMemberExpression"(path) {
         const { parentPath, scope } = path;
         let isDeleteOperation = false;
+        let isCallExpression = false;
         const optionals = [];
 
         let optionalPath = path;
@@ -51,6 +52,16 @@ export default declare((api, options) => {
           replacementPath = parentPath;
           isDeleteOperation = true;
         }
+
+        const replacement = replacementPath.node;
+        if (
+          replacementPath.isMemberExpression() &&
+          replacementPath.node.extra?.parenthesized &&
+          replacementPath.parentPath.isCallExpression()
+        ) {
+          isCallExpression = true;
+        }
+
         for (let i = optionals.length - 1; i >= 0; i--) {
           const node = optionals[i];
 
@@ -128,6 +139,11 @@ export default declare((api, options) => {
                   ),
               isDeleteOperation
                 ? t.booleanLiteral(true)
+                : isCallExpression
+                ? t.callExpression(
+                    t.memberExpression(replacement, t.identifier("bind")),
+                    [t.cloneNode(replacementPath.get("object").node)],
+                  )
                 : scope.buildUndefinedNode(),
               replacementPath.node,
             ),
