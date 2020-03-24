@@ -1,66 +1,21 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 35,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 2,
-      "column": 17
-    }
-  },
+  "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":17}},
   "errors": [
     "SyntaxError: Identifier 'foo' has already been declared (2:9)"
   ],
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 35,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 2,
-        "column": 17
-      }
-    },
+    "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":17}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "FunctionDeclaration",
-        "start": 0,
-        "end": 17,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 17
-          }
-        },
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
         "id": {
           "type": "Identifier",
-          "start": 9,
-          "end": 12,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 9
-            },
-            "end": {
-              "line": 1,
-              "column": 12
-            },
-            "identifierName": "foo"
-          },
+          "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12},"identifierName":"foo"},
           "name": "foo"
         },
         "generator": false,
@@ -68,51 +23,17 @@
         "params": [],
         "body": {
           "type": "BlockStatement",
-          "start": 15,
-          "end": 17,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 15
-            },
-            "end": {
-              "line": 1,
-              "column": 17
-            }
-          },
+          "start":15,"end":17,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":17}},
           "body": [],
           "directives": []
         }
       },
       {
         "type": "FunctionDeclaration",
-        "start": 18,
-        "end": 35,
-        "loc": {
-          "start": {
-            "line": 2,
-            "column": 0
-          },
-          "end": {
-            "line": 2,
-            "column": 17
-          }
-        },
+        "start":18,"end":35,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":17}},
         "id": {
           "type": "Identifier",
-          "start": 27,
-          "end": 30,
-          "loc": {
-            "start": {
-              "line": 2,
-              "column": 9
-            },
-            "end": {
-              "line": 2,
-              "column": 12
-            },
-            "identifierName": "foo"
-          },
+          "start":27,"end":30,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":12},"identifierName":"foo"},
           "name": "foo"
         },
         "generator": false,
@@ -120,18 +41,7 @@
         "params": [],
         "body": {
           "type": "BlockStatement",
-          "start": 33,
-          "end": 35,
-          "loc": {
-            "start": {
-              "line": 2,
-              "column": 15
-            },
-            "end": {
-              "line": 2,
-              "column": 17
-            }
-          },
+          "start":33,"end":35,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":17}},
           "body": [],
           "directives": []
         }

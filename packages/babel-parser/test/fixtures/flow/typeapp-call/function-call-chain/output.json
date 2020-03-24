@@ -1,138 +1,37 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 23,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 2,
-      "column": 14
-    }
-  },
+  "start":0,"end":23,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":14}},
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 23,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 2,
-        "column": 14
-      }
-    },
+    "start":0,"end":23,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":14}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start": 9,
-        "end": 23,
-        "loc": {
-          "start": {
-            "line": 2,
-            "column": 0
-          },
-          "end": {
-            "line": 2,
-            "column": 14
-          }
-        },
+        "start":9,"end":23,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":14}},
         "expression": {
           "type": "CallExpression",
-          "start": 9,
-          "end": 22,
-          "loc": {
-            "start": {
-              "line": 2,
-              "column": 0
-            },
-            "end": {
-              "line": 2,
-              "column": 13
-            }
-          },
+          "start":9,"end":22,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":13}},
           "callee": {
             "type": "CallExpression",
-            "start": 9,
-            "end": 16,
-            "loc": {
-              "start": {
-                "line": 2,
-                "column": 0
-              },
-              "end": {
-                "line": 2,
-                "column": 7
-              }
-            },
+            "start":9,"end":16,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":7}},
             "callee": {
               "type": "Identifier",
-              "start": 9,
-              "end": 10,
-              "loc": {
-                "start": {
-                  "line": 2,
-                  "column": 0
-                },
-                "end": {
-                  "line": 2,
-                  "column": 1
-                },
-                "identifierName": "f"
-              },
+              "start":9,"end":10,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":1},"identifierName":"f"},
               "name": "f"
             },
             "typeArguments": {
               "type": "TypeParameterInstantiation",
-              "start": 10,
-              "end": 13,
-              "loc": {
-                "start": {
-                  "line": 2,
-                  "column": 1
-                },
-                "end": {
-                  "line": 2,
-                  "column": 4
-                }
-              },
+              "start":10,"end":13,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":4}},
               "params": [
                 {
                   "type": "GenericTypeAnnotation",
-                  "start": 11,
-                  "end": 12,
-                  "loc": {
-                    "start": {
-                      "line": 2,
-                      "column": 2
-                    },
-                    "end": {
-                      "line": 2,
-                      "column": 3
-                    }
-                  },
+                  "start":11,"end":12,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":3}},
                   "typeParameters": null,
                   "id": {
                     "type": "Identifier",
-                    "start": 11,
-                    "end": 12,
-                    "loc": {
-                      "start": {
-                        "line": 2,
-                        "column": 2
-                      },
-                      "end": {
-                        "line": 2,
-                        "column": 3
-                      },
-                      "identifierName": "T"
-                    },
+                    "start":11,"end":12,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":3},"identifierName":"T"},
                     "name": "T"
                   }
                 }
@@ -141,68 +40,22 @@
             "arguments": [
               {
                 "type": "Identifier",
-                "start": 14,
-                "end": 15,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 5
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 6
-                  },
-                  "identifierName": "x"
-                },
+                "start":14,"end":15,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":6},"identifierName":"x"},
                 "name": "x"
               }
             ]
           },
           "typeArguments": {
             "type": "TypeParameterInstantiation",
-            "start": 16,
-            "end": 19,
-            "loc": {
-              "start": {
-                "line": 2,
-                "column": 7
-              },
-              "end": {
-                "line": 2,
-                "column": 10
-              }
-            },
+            "start":16,"end":19,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":10}},
             "params": [
               {
                 "type": "GenericTypeAnnotation",
-                "start": 17,
-                "end": 18,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 8
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 9
-                  }
-                },
+                "start":17,"end":18,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":9}},
                 "typeParameters": null,
                 "id": {
                   "type": "Identifier",
-                  "start": 17,
-                  "end": 18,
-                  "loc": {
-                    "start": {
-                      "line": 2,
-                      "column": 8
-                    },
-                    "end": {
-                      "line": 2,
-                      "column": 9
-                    },
-                    "identifierName": "U"
-                  },
+                  "start":17,"end":18,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":9},"identifierName":"U"},
                   "name": "U"
                 }
               }
@@ -211,19 +64,7 @@
           "arguments": [
             {
               "type": "Identifier",
-              "start": 20,
-              "end": 21,
-              "loc": {
-                "start": {
-                  "line": 2,
-                  "column": 11
-                },
-                "end": {
-                  "line": 2,
-                  "column": 12
-                },
-                "identifierName": "y"
-              },
+              "start":20,"end":21,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":12},"identifierName":"y"},
               "name": "y"
             }
           ]
@@ -232,18 +73,7 @@
           {
             "type": "CommentLine",
             "value": " @flow",
-            "start": 0,
-            "end": 8,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 0
-              },
-              "end": {
-                "line": 1,
-                "column": 8
-              }
-            }
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
           }
         ]
       }
@@ -254,18 +84,7 @@
     {
       "type": "CommentLine",
       "value": " @flow",
-      "start": 0,
-      "end": 8,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 8
-        }
-      }
+      "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
     }
   ]
 }

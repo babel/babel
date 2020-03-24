@@ -1,126 +1,37 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 48,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 48
-    }
-  },
+  "start":0,"end":48,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":48}},
   "errors": [
     "SyntaxError: 'readonly' type modifier is only permitted on array and tuple literal types. (1:11)"
   ],
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 48,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 48
-      }
-    },
+    "start":0,"end":48,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":48}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "TSTypeAliasDeclaration",
-        "start": 0,
-        "end": 38,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 38
-          }
-        },
+        "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":38}},
         "id": {
           "type": "Identifier",
-          "start": 5,
-          "end": 8,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 5
-            },
-            "end": {
-              "line": 1,
-              "column": 8
-            },
-            "identifierName": "T32"
-          },
+          "start":5,"end":8,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":8},"identifierName":"T32"},
           "name": "T32"
         },
         "typeAnnotation": {
           "type": "TSTypeOperator",
-          "start": 11,
-          "end": 37,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 11
-            },
-            "end": {
-              "line": 1,
-              "column": 37
-            }
-          },
+          "start":11,"end":37,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":37}},
           "operator": "readonly",
           "typeAnnotation": {
             "type": "TSTypeOperator",
-            "start": 20,
-            "end": 37,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 20
-              },
-              "end": {
-                "line": 1,
-                "column": 37
-              }
-            },
+            "start":20,"end":37,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":37}},
             "operator": "readonly",
             "typeAnnotation": {
               "type": "TSArrayType",
-              "start": 29,
-              "end": 37,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 29
-                },
-                "end": {
-                  "line": 1,
-                  "column": 37
-                }
-              },
+              "start":29,"end":37,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":37}},
               "elementType": {
                 "type": "TSStringKeyword",
-                "start": 29,
-                "end": 35,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 29
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 35
-                  }
-                }
+                "start":29,"end":35,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":35}}
               }
             }
           }
@@ -129,18 +40,7 @@
           {
             "type": "CommentLine",
             "value": " Error",
-            "start": 40,
-            "end": 48,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 40
-              },
-              "end": {
-                "line": 1,
-                "column": 48
-              }
-            }
+            "start":40,"end":48,"loc":{"start":{"line":1,"column":40},"end":{"line":1,"column":48}}
           }
         ]
       }
@@ -151,18 +51,7 @@
     {
       "type": "CommentLine",
       "value": " Error",
-      "start": 40,
-      "end": 48,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 40
-        },
-        "end": {
-          "line": 1,
-          "column": 48
-        }
-      }
+      "start":40,"end":48,"loc":{"start":{"line":1,"column":40},"end":{"line":1,"column":48}}
     }
   ]
 }

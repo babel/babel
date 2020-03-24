@@ -1,81 +1,25 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 37,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 37
-    }
-  },
+  "start":0,"end":37,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":37}},
   "errors": [
     "SyntaxError: Cannot overwrite reserved type string (1:19)"
   ],
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 37,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 37
-      }
-    },
+    "start":0,"end":37,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":37}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ImportDeclaration",
-        "start": 0,
-        "end": 37,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 37
-          }
-        },
+        "start":0,"end":37,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":37}},
         "specifiers": [
           {
             "type": "ImportNamespaceSpecifier",
-            "start": 14,
-            "end": 25,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 14
-              },
-              "end": {
-                "line": 1,
-                "column": 25
-              }
-            },
+            "start":14,"end":25,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":25}},
             "local": {
               "type": "Identifier",
-              "start": 19,
-              "end": 25,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 19
-                },
-                "end": {
-                  "line": 1,
-                  "column": 25
-                },
-                "identifierName": "string"
-              },
+              "start":19,"end":25,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":25},"identifierName":"string"},
               "name": "string"
             }
           }
@@ -83,18 +27,7 @@
         "importKind": "typeof",
         "source": {
           "type": "StringLiteral",
-          "start": 31,
-          "end": 36,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 31
-            },
-            "end": {
-              "line": 1,
-              "column": 36
-            }
-          },
+          "start":31,"end":36,"loc":{"start":{"line":1,"column":31},"end":{"line":1,"column":36}},
           "extra": {
             "rawValue": "foo",
             "raw": "\"foo\""

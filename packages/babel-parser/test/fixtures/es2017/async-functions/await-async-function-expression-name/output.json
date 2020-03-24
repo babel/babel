@@ -1,80 +1,24 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 28,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 28
-    }
-  },
+  "start":0,"end":28,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":28}},
   "errors": [
     "SyntaxError: Can not use 'await' as identifier inside an async function (1:16)"
   ],
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 28,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 28
-      }
-    },
+    "start":0,"end":28,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":28}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start": 0,
-        "end": 28,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 28
-          }
-        },
+        "start":0,"end":28,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":28}},
         "expression": {
           "type": "FunctionExpression",
-          "start": 1,
-          "end": 26,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 1
-            },
-            "end": {
-              "line": 1,
-              "column": 26
-            }
-          },
+          "start":1,"end":26,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":26}},
           "id": {
             "type": "Identifier",
-            "start": 16,
-            "end": 21,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 16
-              },
-              "end": {
-                "line": 1,
-                "column": 21
-              },
-              "identifierName": "await"
-            },
+            "start":16,"end":21,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":21},"identifierName":"await"},
             "name": "await"
           },
           "generator": false,
@@ -82,18 +26,7 @@
           "params": [],
           "body": {
             "type": "BlockStatement",
-            "start": 24,
-            "end": 26,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 24
-              },
-              "end": {
-                "line": 1,
-                "column": 26
-              }
-            },
+            "start":24,"end":26,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":26}},
             "body": [],
             "directives": []
           },

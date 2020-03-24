@@ -1,62 +1,18 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 22,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 22
-    }
-  },
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 22,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 22
-      }
-    },
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start": 20,
-        "end": 22,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 20
-          },
-          "end": {
-            "line": 1,
-            "column": 22
-          }
-        },
+        "start":20,"end":22,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":22}},
         "expression": {
           "type": "NumericLiteral",
-          "start": 20,
-          "end": 22,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 20
-            },
-            "end": {
-              "line": 1,
-              "column": 22
-            }
-          },
+          "start":20,"end":22,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":22}},
           "extra": {
             "rawValue": 42,
             "raw": "42"
@@ -67,18 +23,7 @@
           {
             "type": "CommentBlock",
             "value": " block comment ",
-            "start": 0,
-            "end": 19,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 0
-              },
-              "end": {
-                "line": 1,
-                "column": 19
-              }
-            }
+            "start":0,"end":19,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":19}}
           }
         ]
       }
@@ -89,18 +34,7 @@
     {
       "type": "CommentBlock",
       "value": " block comment ",
-      "start": 0,
-      "end": 19,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 19
-        }
-      }
+      "start":0,"end":19,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":19}}
     }
   ]
 }

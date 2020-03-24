@@ -1,113 +1,34 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 396,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 21,
-      "column": 1
-    }
-  },
+  "start":0,"end":396,"loc":{"start":{"line":1,"column":0},"end":{"line":21,"column":1}},
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 396,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 21,
-        "column": 1
-      }
-    },
+    "start":0,"end":396,"loc":{"start":{"line":1,"column":0},"end":{"line":21,"column":1}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ClassDeclaration",
-        "start": 0,
-        "end": 396,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 21,
-            "column": 1
-          }
-        },
+        "start":0,"end":396,"loc":{"start":{"line":1,"column":0},"end":{"line":21,"column":1}},
         "abstract": true,
         "id": {
           "type": "Identifier",
-          "start": 15,
-          "end": 16,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 15
-            },
-            "end": {
-              "line": 1,
-              "column": 16
-            },
-            "identifierName": "C"
-          },
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":16},"identifierName":"C"},
           "name": "C"
         },
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start": 17,
-          "end": 396,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 17
-            },
-            "end": {
-              "line": 21,
-              "column": 1
-            }
-          },
+          "start":17,"end":396,"loc":{"start":{"line":1,"column":17},"end":{"line":21,"column":1}},
           "body": [
             {
               "type": "ClassProperty",
-              "start": 23,
-              "end": 34,
-              "loc": {
-                "start": {
-                  "line": 2,
-                  "column": 4
-                },
-                "end": {
-                  "line": 2,
-                  "column": 15
-                }
-              },
+              "start":23,"end":34,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":15}},
               "readonly": true,
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 32,
-                "end": 33,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 13
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 14
-                  },
-                  "identifierName": "r"
-                },
+                "start":32,"end":33,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":14},"identifierName":"r"},
                 "name": "r"
               },
               "computed": false,
@@ -115,102 +36,34 @@
             },
             {
               "type": "ClassProperty",
-              "start": 39,
-              "end": 60,
-              "loc": {
-                "start": {
-                  "line": 3,
-                  "column": 4
-                },
-                "end": {
-                  "line": 3,
-                  "column": 25
-                }
-              },
+              "start":39,"end":60,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":25}},
               "readonly": true,
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 48,
-                "end": 50,
-                "loc": {
-                  "start": {
-                    "line": 3,
-                    "column": 13
-                  },
-                  "end": {
-                    "line": 3,
-                    "column": 15
-                  },
-                  "identifierName": "r2"
-                },
+                "start":48,"end":50,"loc":{"start":{"line":3,"column":13},"end":{"line":3,"column":15},"identifierName":"r2"},
                 "name": "r2"
               },
               "computed": false,
               "optional": true,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
-                "start": 51,
-                "end": 59,
-                "loc": {
-                  "start": {
-                    "line": 3,
-                    "column": 16
-                  },
-                  "end": {
-                    "line": 3,
-                    "column": 24
-                  }
-                },
+                "start":51,"end":59,"loc":{"start":{"line":3,"column":16},"end":{"line":3,"column":24}},
                 "typeAnnotation": {
                   "type": "TSNumberKeyword",
-                  "start": 53,
-                  "end": 59,
-                  "loc": {
-                    "start": {
-                      "line": 3,
-                      "column": 18
-                    },
-                    "end": {
-                      "line": 3,
-                      "column": 24
-                    }
-                  }
+                  "start":53,"end":59,"loc":{"start":{"line":3,"column":18},"end":{"line":3,"column":24}}
                 }
               },
               "value": null
             },
             {
               "type": "ClassProperty",
-              "start": 65,
-              "end": 76,
-              "loc": {
-                "start": {
-                  "line": 4,
-                  "column": 4
-                },
-                "end": {
-                  "line": 4,
-                  "column": 15
-                }
-              },
+              "start":65,"end":76,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":15}},
               "abstract": true,
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 74,
-                "end": 75,
-                "loc": {
-                  "start": {
-                    "line": 4,
-                    "column": 13
-                  },
-                  "end": {
-                    "line": 4,
-                    "column": 14
-                  },
-                  "identifierName": "a"
-                },
+                "start":74,"end":75,"loc":{"start":{"line":4,"column":13},"end":{"line":4,"column":14},"identifierName":"a"},
                 "name": "a"
               },
               "computed": false,
@@ -218,34 +71,11 @@
             },
             {
               "type": "ClassProperty",
-              "start": 81,
-              "end": 90,
-              "loc": {
-                "start": {
-                  "line": 5,
-                  "column": 4
-                },
-                "end": {
-                  "line": 5,
-                  "column": 13
-                }
-              },
+              "start":81,"end":90,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":13}},
               "static": true,
               "key": {
                 "type": "Identifier",
-                "start": 88,
-                "end": 89,
-                "loc": {
-                  "start": {
-                    "line": 5,
-                    "column": 11
-                  },
-                  "end": {
-                    "line": 5,
-                    "column": 12
-                  },
-                  "identifierName": "s"
-                },
+                "start":88,"end":89,"loc":{"start":{"line":5,"column":11},"end":{"line":5,"column":12},"identifierName":"s"},
                 "name": "s"
               },
               "computed": false,
@@ -253,35 +83,12 @@
             },
             {
               "type": "ClassProperty",
-              "start": 96,
-              "end": 106,
-              "loc": {
-                "start": {
-                  "line": 7,
-                  "column": 4
-                },
-                "end": {
-                  "line": 7,
-                  "column": 14
-                }
-              },
+              "start":96,"end":106,"loc":{"start":{"line":7,"column":4},"end":{"line":7,"column":14}},
               "accessibility": "public",
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 103,
-                "end": 105,
-                "loc": {
-                  "start": {
-                    "line": 7,
-                    "column": 11
-                  },
-                  "end": {
-                    "line": 7,
-                    "column": 13
-                  },
-                  "identifierName": "pu"
-                },
+                "start":103,"end":105,"loc":{"start":{"line":7,"column":11},"end":{"line":7,"column":13},"identifierName":"pu"},
                 "name": "pu"
               },
               "computed": false,
@@ -289,35 +96,12 @@
             },
             {
               "type": "ClassProperty",
-              "start": 111,
-              "end": 124,
-              "loc": {
-                "start": {
-                  "line": 8,
-                  "column": 4
-                },
-                "end": {
-                  "line": 8,
-                  "column": 17
-                }
-              },
+              "start":111,"end":124,"loc":{"start":{"line":8,"column":4},"end":{"line":8,"column":17}},
               "accessibility": "protected",
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 121,
-                "end": 123,
-                "loc": {
-                  "start": {
-                    "line": 8,
-                    "column": 14
-                  },
-                  "end": {
-                    "line": 8,
-                    "column": 16
-                  },
-                  "identifierName": "po"
-                },
+                "start":121,"end":123,"loc":{"start":{"line":8,"column":14},"end":{"line":8,"column":16},"identifierName":"po"},
                 "name": "po"
               },
               "computed": false,
@@ -325,35 +109,12 @@
             },
             {
               "type": "ClassProperty",
-              "start": 129,
-              "end": 140,
-              "loc": {
-                "start": {
-                  "line": 9,
-                  "column": 4
-                },
-                "end": {
-                  "line": 9,
-                  "column": 15
-                }
-              },
+              "start":129,"end":140,"loc":{"start":{"line":9,"column":4},"end":{"line":9,"column":15}},
               "accessibility": "private",
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 137,
-                "end": 139,
-                "loc": {
-                  "start": {
-                    "line": 9,
-                    "column": 12
-                  },
-                  "end": {
-                    "line": 9,
-                    "column": 14
-                  },
-                  "identifierName": "pi"
-                },
+                "start":137,"end":139,"loc":{"start":{"line":9,"column":12},"end":{"line":9,"column":14},"identifierName":"pi"},
                 "name": "pi"
               },
               "computed": false,
@@ -361,36 +122,13 @@
             },
             {
               "type": "ClassProperty",
-              "start": 146,
-              "end": 167,
-              "loc": {
-                "start": {
-                  "line": 11,
-                  "column": 4
-                },
-                "end": {
-                  "line": 11,
-                  "column": 25
-                }
-              },
-              "abstract": true,
+              "start":146,"end":167,"loc":{"start":{"line":11,"column":4},"end":{"line":11,"column":25}},
               "readonly": true,
+              "abstract": true,
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 164,
-                "end": 166,
-                "loc": {
-                  "start": {
-                    "line": 11,
-                    "column": 22
-                  },
-                  "end": {
-                    "line": 11,
-                    "column": 24
-                  },
-                  "identifierName": "ra"
-                },
+                "start":164,"end":166,"loc":{"start":{"line":11,"column":22},"end":{"line":11,"column":24},"identifierName":"ra"},
                 "name": "ra"
               },
               "computed": false,
@@ -398,36 +136,13 @@
             },
             {
               "type": "ClassProperty",
-              "start": 172,
-              "end": 193,
-              "loc": {
-                "start": {
-                  "line": 12,
-                  "column": 4
-                },
-                "end": {
-                  "line": 12,
-                  "column": 25
-                }
-              },
+              "start":172,"end":193,"loc":{"start":{"line":12,"column":4},"end":{"line":12,"column":25}},
               "abstract": true,
               "readonly": true,
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 190,
-                "end": 192,
-                "loc": {
-                  "start": {
-                    "line": 12,
-                    "column": 22
-                  },
-                  "end": {
-                    "line": 12,
-                    "column": 24
-                  },
-                  "identifierName": "ar"
-                },
+                "start":190,"end":192,"loc":{"start":{"line":12,"column":22},"end":{"line":12,"column":24},"identifierName":"ar"},
                 "name": "ar"
               },
               "computed": false,
@@ -435,35 +150,12 @@
             },
             {
               "type": "ClassProperty",
-              "start": 198,
-              "end": 217,
-              "loc": {
-                "start": {
-                  "line": 13,
-                  "column": 4
-                },
-                "end": {
-                  "line": 13,
-                  "column": 23
-                }
-              },
+              "start":198,"end":217,"loc":{"start":{"line":13,"column":4},"end":{"line":13,"column":23}},
               "readonly": true,
               "static": true,
               "key": {
                 "type": "Identifier",
-                "start": 214,
-                "end": 216,
-                "loc": {
-                  "start": {
-                    "line": 13,
-                    "column": 20
-                  },
-                  "end": {
-                    "line": 13,
-                    "column": 22
-                  },
-                  "identifierName": "sr"
-                },
+                "start":214,"end":216,"loc":{"start":{"line":13,"column":20},"end":{"line":13,"column":22},"identifierName":"sr"},
                 "name": "sr"
               },
               "computed": false,
@@ -471,36 +163,13 @@
             },
             {
               "type": "ClassProperty",
-              "start": 223,
-              "end": 243,
-              "loc": {
-                "start": {
-                  "line": 15,
-                  "column": 4
-                },
-                "end": {
-                  "line": 15,
-                  "column": 24
-                }
-              },
+              "start":223,"end":243,"loc":{"start":{"line":15,"column":4},"end":{"line":15,"column":24}},
               "accessibility": "public",
               "readonly": true,
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 239,
-                "end": 242,
-                "loc": {
-                  "start": {
-                    "line": 15,
-                    "column": 20
-                  },
-                  "end": {
-                    "line": 15,
-                    "column": 23
-                  },
-                  "identifierName": "pur"
-                },
+                "start":239,"end":242,"loc":{"start":{"line":15,"column":20},"end":{"line":15,"column":23},"identifierName":"pur"},
                 "name": "pur"
               },
               "computed": false,
@@ -508,36 +177,13 @@
             },
             {
               "type": "ClassProperty",
-              "start": 248,
-              "end": 268,
-              "loc": {
-                "start": {
-                  "line": 16,
-                  "column": 4
-                },
-                "end": {
-                  "line": 16,
-                  "column": 24
-                }
-              },
+              "start":248,"end":268,"loc":{"start":{"line":16,"column":4},"end":{"line":16,"column":24}},
               "accessibility": "public",
               "abstract": true,
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 264,
-                "end": 267,
-                "loc": {
-                  "start": {
-                    "line": 16,
-                    "column": 20
-                  },
-                  "end": {
-                    "line": 16,
-                    "column": 23
-                  },
-                  "identifierName": "pua"
-                },
+                "start":264,"end":267,"loc":{"start":{"line":16,"column":20},"end":{"line":16,"column":23},"identifierName":"pua"},
                 "name": "pua"
               },
               "computed": false,
@@ -545,35 +191,12 @@
             },
             {
               "type": "ClassProperty",
-              "start": 273,
-              "end": 291,
-              "loc": {
-                "start": {
-                  "line": 17,
-                  "column": 4
-                },
-                "end": {
-                  "line": 17,
-                  "column": 22
-                }
-              },
+              "start":273,"end":291,"loc":{"start":{"line":17,"column":4},"end":{"line":17,"column":22}},
               "accessibility": "public",
               "static": true,
               "key": {
                 "type": "Identifier",
-                "start": 287,
-                "end": 290,
-                "loc": {
-                  "start": {
-                    "line": 17,
-                    "column": 18
-                  },
-                  "end": {
-                    "line": 17,
-                    "column": 21
-                  },
-                  "identifierName": "pus"
-                },
+                "start":287,"end":290,"loc":{"start":{"line":17,"column":18},"end":{"line":17,"column":21},"identifierName":"pus"},
                 "name": "pus"
               },
               "computed": false,
@@ -581,37 +204,14 @@
             },
             {
               "type": "ClassProperty",
-              "start": 296,
-              "end": 326,
-              "loc": {
-                "start": {
-                  "line": 18,
-                  "column": 4
-                },
-                "end": {
-                  "line": 18,
-                  "column": 34
-                }
-              },
+              "start":296,"end":326,"loc":{"start":{"line":18,"column":4},"end":{"line":18,"column":34}},
               "accessibility": "public",
-              "abstract": true,
               "readonly": true,
+              "abstract": true,
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 321,
-                "end": 325,
-                "loc": {
-                  "start": {
-                    "line": 18,
-                    "column": 29
-                  },
-                  "end": {
-                    "line": 18,
-                    "column": 33
-                  },
-                  "identifierName": "pura"
-                },
+                "start":321,"end":325,"loc":{"start":{"line":18,"column":29},"end":{"line":18,"column":33},"identifierName":"pura"},
                 "name": "pura"
               },
               "computed": false,
@@ -619,37 +219,14 @@
             },
             {
               "type": "ClassProperty",
-              "start": 331,
-              "end": 361,
-              "loc": {
-                "start": {
-                  "line": 19,
-                  "column": 4
-                },
-                "end": {
-                  "line": 19,
-                  "column": 34
-                }
-              },
+              "start":331,"end":361,"loc":{"start":{"line":19,"column":4},"end":{"line":19,"column":34}},
               "accessibility": "public",
               "abstract": true,
               "readonly": true,
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 356,
-                "end": 360,
-                "loc": {
-                  "start": {
-                    "line": 19,
-                    "column": 29
-                  },
-                  "end": {
-                    "line": 19,
-                    "column": 33
-                  },
-                  "identifierName": "puar"
-                },
+                "start":356,"end":360,"loc":{"start":{"line":19,"column":29},"end":{"line":19,"column":33},"identifierName":"puar"},
                 "name": "puar"
               },
               "computed": false,
@@ -657,36 +234,13 @@
             },
             {
               "type": "ClassProperty",
-              "start": 366,
-              "end": 394,
-              "loc": {
-                "start": {
-                  "line": 20,
-                  "column": 4
-                },
-                "end": {
-                  "line": 20,
-                  "column": 32
-                }
-              },
+              "start":366,"end":394,"loc":{"start":{"line":20,"column":4},"end":{"line":20,"column":32}},
               "accessibility": "public",
               "readonly": true,
               "static": true,
               "key": {
                 "type": "Identifier",
-                "start": 389,
-                "end": 393,
-                "loc": {
-                  "start": {
-                    "line": 20,
-                    "column": 27
-                  },
-                  "end": {
-                    "line": 20,
-                    "column": 31
-                  },
-                  "identifierName": "pusr"
-                },
+                "start":389,"end":393,"loc":{"start":{"line":20,"column":27},"end":{"line":20,"column":31},"identifierName":"pusr"},
                 "name": "pusr"
               },
               "computed": false,

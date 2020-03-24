@@ -1,67 +1,22 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 49,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 3,
-      "column": 1
-    }
-  },
+  "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
   "errors": [
     "SyntaxError: Dynamic imports require a parameter: import('a.js') (2:9)",
     "SyntaxError: The only valid meta property for import is import.meta (2:16)"
   ],
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 49,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 3,
-        "column": 1
-      }
-    },
+    "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "FunctionDeclaration",
-        "start": 0,
-        "end": 49,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 3,
-            "column": 1
-          }
-        },
+        "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
         "id": {
           "type": "Identifier",
-          "start": 9,
-          "end": 19,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 9
-            },
-            "end": {
-              "line": 1,
-              "column": 19
-            },
-            "identifierName": "failsParse"
-          },
+          "start":9,"end":19,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":19},"identifierName":"failsParse"},
           "name": "failsParse"
         },
         "generator": false,
@@ -69,93 +24,25 @@
         "params": [],
         "body": {
           "type": "BlockStatement",
-          "start": 22,
-          "end": 49,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 22
-            },
-            "end": {
-              "line": 3,
-              "column": 1
-            }
-          },
+          "start":22,"end":49,"loc":{"start":{"line":1,"column":22},"end":{"line":3,"column":1}},
           "body": [
             {
               "type": "ReturnStatement",
-              "start": 26,
-              "end": 47,
-              "loc": {
-                "start": {
-                  "line": 2,
-                  "column": 2
-                },
-                "end": {
-                  "line": 2,
-                  "column": 23
-                }
-              },
+              "start":26,"end":47,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":23}},
               "argument": {
                 "type": "CallExpression",
-                "start": 33,
-                "end": 46,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 9
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 22
-                  }
-                },
+                "start":33,"end":46,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":22}},
                 "callee": {
                   "type": "MetaProperty",
-                  "start": 33,
-                  "end": 44,
-                  "loc": {
-                    "start": {
-                      "line": 2,
-                      "column": 9
-                    },
-                    "end": {
-                      "line": 2,
-                      "column": 20
-                    }
-                  },
+                  "start":33,"end":44,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":20}},
                   "meta": {
                     "type": "Identifier",
-                    "start": 33,
-                    "end": 39,
-                    "loc": {
-                      "start": {
-                        "line": 2,
-                        "column": 9
-                      },
-                      "end": {
-                        "line": 2,
-                        "column": 15
-                      },
-                      "identifierName": "import"
-                    },
+                    "start":33,"end":39,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":15},"identifierName":"import"},
                     "name": "import"
                   },
                   "property": {
                     "type": "Identifier",
-                    "start": 40,
-                    "end": 44,
-                    "loc": {
-                      "start": {
-                        "line": 2,
-                        "column": 16
-                      },
-                      "end": {
-                        "line": 2,
-                        "column": 20
-                      },
-                      "identifierName": "then"
-                    },
+                    "start":40,"end":44,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":20},"identifierName":"then"},
                     "name": "then"
                   }
                 },
