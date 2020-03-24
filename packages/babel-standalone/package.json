@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.9.3",
+  "version": "7.9.4",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "babel.js",
   "files": [
@@ -85,7 +85,7 @@
     "@babel/plugin-transform-react-constant-elements": "^7.9.0",
     "@babel/plugin-transform-react-display-name": "^7.8.3",
     "@babel/plugin-transform-react-inline-elements": "^7.9.0",
-    "@babel/plugin-transform-react-jsx": "^7.9.1",
+    "@babel/plugin-transform-react-jsx": "^7.9.4",
     "@babel/plugin-transform-react-jsx-compat": "^7.8.3",
     "@babel/plugin-transform-react-jsx-development": "^7.9.0",
     "@babel/plugin-transform-react-jsx-self": "^7.9.0",
@@ -99,11 +99,11 @@
     "@babel/plugin-transform-strict-mode": "^7.8.3",
     "@babel/plugin-transform-template-literals": "^7.8.3",
     "@babel/plugin-transform-typeof-symbol": "^7.8.4",
-    "@babel/plugin-transform-typescript": "^7.9.0",
+    "@babel/plugin-transform-typescript": "^7.9.4",
     "@babel/plugin-transform-unicode-regex": "^7.8.3",
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-flow": "^7.9.0",
-    "@babel/preset-react": "^7.9.1",
+    "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0"
   },
   "keywords": [
