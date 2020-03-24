@@ -59,8 +59,12 @@ export function UpdateExpression(node: Object, parent: Object): boolean {
   return (
     // (foo++).test(), (foo++)[0]
     t.isMemberExpression(parent, { object: node }) ||
+    // (foo++)?.test(), (foo++)?.[0]
+    t.isOptionalMemberExpression(parent, { object: node }) ||
     // (foo++)()
     t.isCallExpression(parent, { callee: node }) ||
+    // (foo++)?.()
+    t.isOptionalCallExpression(parent, { callee: node }) ||
     // new (foo++)()
     t.isNewExpression(parent, { callee: node }) ||
     isClassExtendsClause(node, parent)
@@ -96,10 +100,13 @@ export function Binary(node: Object, parent: Object): boolean {
   }
 
   if (
-    ((t.isCallExpression(parent) || t.isNewExpression(parent)) &&
+    ((t.isCallExpression(parent) ||
+      t.isOptionalCallExpression(parent) ||
+      t.isNewExpression(parent)) &&
       parent.callee === node) ||
     t.isUnaryLike(parent) ||
-    (t.isMemberExpression(parent) && parent.object === node) ||
+    ((t.isMemberExpression(parent) || t.isOptionalMemberExpression(parent)) &&
+      parent.object === node) ||
     t.isAwaitExpression(parent)
   ) {
     return true;
@@ -196,7 +203,9 @@ export function YieldExpression(node: Object, parent: Object): boolean {
     t.isBinary(parent) ||
     t.isUnaryLike(parent) ||
     t.isCallExpression(parent) ||
+    t.isOptionalCallExpression(parent) ||
     t.isMemberExpression(parent) ||
+    t.isOptionalMemberExpression(parent) ||
     t.isNewExpression(parent) ||
     (t.isAwaitExpression(parent) && t.isYieldExpression(node)) ||
     (t.isConditionalExpression(parent) && node === parent.test) ||
@@ -216,9 +225,12 @@ export function ClassExpression(
 
 export function UnaryLike(node: Object, parent: Object): boolean {
   return (
-    t.isMemberExpression(parent, { object: node }) ||
-    t.isCallExpression(parent, { callee: node }) ||
-    t.isNewExpression(parent, { callee: node }) ||
+    ((t.isMemberExpression(parent) || t.isOptionalMemberExpression(parent)) &&
+      parent.object === node) ||
+    ((t.isCallExpression(parent) ||
+      t.isOptionalCallExpression(parent) ||
+      t.isNewExpression(parent)) &&
+      parent.callee === node) ||
     t.isBinaryExpression(parent, { operator: "**", left: node }) ||
     isClassExtendsClause(node, parent)
   );
@@ -317,9 +329,11 @@ function isFirstInStatement(
     }
 
     if (
-      t.isCallExpression(parent, { callee: node }) ||
+      ((t.isCallExpression(parent) || t.isOptionalCallExpression(parent)) &&
+        parent.callee === node) ||
       (t.isSequenceExpression(parent) && parent.expressions[0] === node) ||
-      t.isMemberExpression(parent, { object: node }) ||
+      ((t.isMemberExpression(parent) || t.isOptionalMemberExpression(parent)) &&
+        parent.object === node) ||
       t.isConditional(parent, { test: node }) ||
       t.isBinary(parent, { left: node }) ||
       t.isAssignmentExpression(parent, { left: node })
