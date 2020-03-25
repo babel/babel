@@ -280,7 +280,7 @@ export default declare((api, opts) => {
             idx >= i - 1 || paramsWithRestElement.has(idx);
           convertFunctionParams(
             path,
-            false, // TODO: What should this value be?
+            loose,
             shouldTransformParam,
             replaceRestElement,
           );
