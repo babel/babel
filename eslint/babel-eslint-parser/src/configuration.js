@@ -20,6 +20,8 @@ export function normalizeBabelParseConfig(options) {
     rootMode: options.babelOptions.rootMode,
     envName: options.babelOptions.envName,
     configFile: options.babelOptions.configFile,
+    presets: options.babelOptions.presets,
+    plugins: options.babelOptions.plugins,
     babelrc: options.babelOptions.babelrc,
     babelrcRoots: options.babelOptions.babelrcRoots,
     extends: options.babelOptions.extends,
