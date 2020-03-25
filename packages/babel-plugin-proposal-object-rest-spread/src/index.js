@@ -217,12 +217,12 @@ export default declare((api, opts) => {
       // function a({ b, ...c }) {}
       Function(path) {
         const params = path.get("params");
-        const paramHasRestElement = [];
+        const paramsWithRestElement = new Set();
         const idsInRestParams = new Set();
         for (let i = 0; i < params.length; ++i) {
           const param = params[i];
-          paramHasRestElement.push(hasRestElement(param));
-          if (paramHasRestElement[i]) {
+          if (hasRestElement(param)) {
+            paramsWithRestElement.add(i);
             for (const name of Object.keys(param.getBindingIdentifiers())) {
               idsInRestParams.add(name);
             }
@@ -254,7 +254,7 @@ export default declare((api, opts) => {
         let i;
         for (i = 0; i < params.length && !idInRest; ++i) {
           const param = params[i];
-          if (!paramHasRestElement[i]) {
+          if (!paramsWithRestElement.has(i)) {
             if (param.isAssignmentPattern()) AssignmentPatternHandler(param);
             else {
               param.traverse({ AssignmentPattern: AssignmentPatternHandler });
@@ -265,13 +265,13 @@ export default declare((api, opts) => {
         if (!idInRest) {
           for (let i = 0; i < params.length; ++i) {
             const param = params[i];
-            if (paramHasRestElement[i]) {
+            if (paramsWithRestElement.has(i)) {
               replaceRestElement(param.parentPath, param);
             }
           }
         } else {
           const shouldTransformParam = idx =>
-            idx >= i - 1 || paramHasRestElement[idx];
+            idx >= i - 1 || paramsWithRestElement.has(idx);
           convertFunctionParams(
             path,
             false, // TODO: What should this value be?
