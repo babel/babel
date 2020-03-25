@@ -214,7 +214,6 @@ export default declare((api, opts) => {
     inherits: syntaxObjectRestSpread,
 
     visitor: {
-      // taken from transform-parameters/src/destructuring.js
       // function a({ b, ...c }) {}
       Function(path) {
         const params = path.get("params");
