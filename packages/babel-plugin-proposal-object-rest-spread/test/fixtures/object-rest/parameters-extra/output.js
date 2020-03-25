@@ -75,14 +75,20 @@
 (_ref13, e, c = 2) => {
   let R = babelHelpers.extends({}, _ref13);
   let a = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : R;
-  let f = arguments.length > 4 ? arguments[4] : undefined;
+  let f = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : q;
+  return function () {
+    let q;
+  }();
 };
 
-(_ref14) => {
+(_ref14, f = R => R) => {
   let R = babelHelpers.extends({}, _ref14);
-  let a = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : R;
-  let c = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : d;
-  return function () {
-    let d;
-  }();
+};
+
+(_ref15, {
+  a = R => R
+} = {
+  b: R => R
+}) => {
+  let R = babelHelpers.extends({}, _ref15);
 };

@@ -257,7 +257,13 @@ export default declare((api, opts) => {
           if (!paramsWithRestElement.has(i)) {
             if (param.isAssignmentPattern()) AssignmentPatternHandler(param);
             else {
-              param.traverse({ AssignmentPattern: AssignmentPatternHandler });
+              param.traverse({
+                AssignmentPattern: AssignmentPatternHandler,
+                // don't transform in cases like f({...R}, f = R => R)
+                Scope(path) {
+                  path.skip();
+                },
+              });
             }
           }
         }
