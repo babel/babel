@@ -23,15 +23,12 @@ cd ../..
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 yarn upgrade --scope @babel
 
-# We use @babel/core 7.5.5 instead of 7.0.0 because without babel/babel#10208
-# our @babel/standalone build fails.
-
 node -e "\
   var pkg = require('./package.json');\
-  pkg.devDependencies['@babel/core'] = '7.5.5';\
+  pkg.devDependencies['@babel/core'] = '7.0.0';\
   Object.assign(pkg.resolutions, {\
-    '@babel/core': '7.5.5',\
-    '@babel/helpers': '7.5.5',\
+    '@babel/core': '7.0.0',\
+    '@babel/helpers': '7.0.0',\
     '@babel/traverse': '7.0.0'\
   });\
   fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));\
