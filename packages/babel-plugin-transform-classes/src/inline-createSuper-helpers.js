@@ -3,16 +3,16 @@ import { template, types as t } from "@babel/core";
 const helperIDs = new WeakMap();
 
 export default function addCreateSuperHelper(file) {
-  try {
-    return file.addHelper("createSuper");
-  } catch {
-    // Babel <7.9.0 doesn't support the helper.
-  }
-
   if (helperIDs.has(file)) {
     // TODO: Only use t.cloneNode in Babel 8
     // t.cloneNode isn't supported in every version
     return (t.cloneNode || t.clone)(helperIDs.get(file));
+  }
+
+  try {
+    return file.addHelper("createSuper");
+  } catch {
+    // Babel <7.9.0 doesn't support the helper.
   }
 
   const id = file.scope.generateUidIdentifier("createSuper");
