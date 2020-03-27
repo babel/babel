@@ -128,7 +128,9 @@ export function buildDecoratedClass(ref, path, elements, file) {
 
   const classDecorators = takeDecorators(node);
   const definitions = t.arrayExpression(
-    elements.map(extractElementDescriptor.bind(file, node.id, superId)),
+    elements
+      .filter(element => !element.node.abstract)
+      .map(extractElementDescriptor.bind(file, node.id, superId)),
   );
 
   let replacement = template.expression.ast`
