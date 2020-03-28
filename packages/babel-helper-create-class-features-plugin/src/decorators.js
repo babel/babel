@@ -129,6 +129,7 @@ export function buildDecoratedClass(ref, path, elements, file) {
   const classDecorators = takeDecorators(node);
   const definitions = t.arrayExpression(
     elements
+      // Ignore TypeScript's abstract methods (see #10514)
       .filter(element => !element.node.abstract)
       .map(extractElementDescriptor.bind(file, node.id, superId)),
   );
