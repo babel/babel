@@ -41,7 +41,7 @@ VERSION=$(
   node -p "'$(npm view @babel/standalone version)'.replace(/(?<=\\d+\\.\\d+\\.)\\d+/, x => ++x)"
 )
 
-I_AM_USING_VERDACCIO=I_AM_SURE make publish-test
+I_AM_USING_VERDACCIO=I_AM_SURE VERSION="$VERSION" make publish-test
 
 publishESLintPkg babel-eslint-config-internal VERSION
 publishESLintPkg babel-eslint-parser VERSION
