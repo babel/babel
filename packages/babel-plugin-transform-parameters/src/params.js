@@ -185,8 +185,9 @@ export default function convertFunctionParams(path, loose) {
     arrowPath.node.generator = path.node.generator;
     arrowPath.node.async = path.node.async;
 
+    // We don't reset "async" because if the default value of a parameter
+    // throws, it must reject asynchronously.
     path.node.generator = false;
-    path.node.async = false;
   } else {
     path.get("body").unshiftContainer("body", body);
   }

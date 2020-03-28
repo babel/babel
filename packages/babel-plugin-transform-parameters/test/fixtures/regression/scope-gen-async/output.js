@@ -6,7 +6,7 @@ function f() {
   }(a);
 }
 
-function g() {
+async function g() {
   let a = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
   return async function (a) {
     var a = await a;
@@ -14,7 +14,7 @@ function g() {
   }(a);
 }
 
-function h() {
+async function h() {
   let a = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
   return async function* (a) {
     var a = await (yield a);
