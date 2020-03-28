@@ -1,5 +1,8 @@
-import jsTokens, { matchToToken } from "js-tokens";
-import { isReservedWord, isKeyword } from "@babel/helper-validator-identifier";
+import jsTokens from "js-tokens";
+import {
+  isStrictReservedWord,
+  isKeyword,
+} from "@babel/helper-validator-identifier";
 import Chalk from "chalk";
 
 /**
@@ -9,9 +12,8 @@ function getDefs(chalk) {
   return {
     keyword: chalk.cyan,
     capitalized: chalk.yellow,
-    jsx_tag: chalk.yellow,
+    jsxIdentifier: chalk.yellow,
     punctuator: chalk.yellow,
-    // bracket:  intentionally omitted.
     number: chalk.magenta,
     string: chalk.green,
     regex: chalk.magenta,
@@ -26,11 +28,6 @@ function getDefs(chalk) {
 const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
 
 /**
- * RegExp to test for what seems to be a JSX tag name.
- */
-const JSX_TAG = /^[a-z][\w-]*$/i;
-
-/**
  * RegExp to test for the three types of brackets.
  */
 const BRACKET = /^[()[\]{}]$/;
@@ -38,20 +35,10 @@ const BRACKET = /^[()[\]{}]$/;
 /**
  * Get the type of token, specifying punctuator type.
  */
-function getTokenType(match) {
-  const [offset, text] = match.slice(-2);
-  const token = matchToToken(match);
-
-  if (token.type === "name") {
-    if (isKeyword(token.value) || isReservedWord(token.value)) {
+function getTokenType(token) {
+  if (token.type === "IdentifierName") {
+    if (isKeyword(token.value) || isStrictReservedWord(token.value, true)) {
       return "keyword";
-    }
-
-    if (
-      JSX_TAG.test(token.value) &&
-      (text[offset - 1] === "<" || text.substr(offset - 2, 2) == "</")
-    ) {
-      return "jsx_tag";
     }
 
     if (token.value[0] !== token.value[0].toLowerCase()) {
@@ -59,36 +46,96 @@ function getTokenType(match) {
     }
   }
 
-  if (token.type === "punctuator" && BRACKET.test(token.value)) {
-    return "bracket";
+  if (token.type === "Punctuator" && BRACKET.test(token.value)) {
+    return "uncolored";
   }
 
   if (
-    token.type === "invalid" &&
+    token.type === "Invalid" &&
     (token.value === "@" || token.value === "#")
   ) {
     return "punctuator";
   }
 
-  return token.type;
+  switch (token.type) {
+    case "NumericLiteral":
+      return "number";
+
+    case "StringLiteral":
+    case "JSXString":
+    case "NoSubstitutionTemplate":
+      return "string";
+
+    case "RegularExpressionLiteral":
+      return "regex";
+
+    case "Punctuator":
+    case "JSXPunctuator":
+      return "punctuator";
+
+    case "MultiLineComment":
+    case "SingleLineComment":
+      return "comment";
+
+    case "Invalid":
+    case "JSXInvalid":
+      return "invalid";
+
+    case "JSXIdentifier":
+      return "jsxIdentifier";
+
+    default:
+      return "uncolored";
+  }
+}
+
+/**
+ * Turn a string of JS into an array of objects.
+ */
+function* tokenize(text: string) {
+  for (const token of jsTokens(text, { jsx: true })) {
+    switch (token.type) {
+      case "TemplateHead":
+        yield { type: "string", value: token.value.slice(0, -2) };
+        yield { type: "punctuator", value: "${" };
+        break;
+
+      case "TemplateMiddle":
+        yield { type: "punctuator", value: "}" };
+        yield { type: "string", value: token.value.slice(1, -2) };
+        yield { type: "punctuator", value: "${" };
+        break;
+
+      case "TemplateTail":
+        yield { type: "punctuator", value: "}" };
+        yield { type: "string", value: token.value.slice(1) };
+        break;
+
+      default:
+        yield { type: getTokenType(token), value: token.value };
+    }
+  }
 }
 
 /**
  * Highlight `text` using the token definitions in `defs`.
  */
 function highlightTokens(defs: Object, text: string) {
-  return text.replace(jsTokens, function(...args) {
-    const type = getTokenType(args);
+  let highlighted = "";
+
+  for (const { type, value } of tokenize(text)) {
     const colorize = defs[type];
     if (colorize) {
-      return args[0]
+      highlighted += value
         .split(NEWLINE)
         .map(str => colorize(str))
         .join("\n");
     } else {
-      return args[0];
+      highlighted += value;
     }
-  });
+  }
+
+  return highlighted;
 }
 
 type Options = {
