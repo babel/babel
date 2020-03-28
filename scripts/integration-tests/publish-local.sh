@@ -43,9 +43,9 @@ VERSION=$(
 
 I_AM_USING_VERDACCIO=I_AM_SURE VERSION="$VERSION" make publish-test
 
-publishESLintPkg babel-eslint-config-internal VERSION
-publishESLintPkg babel-eslint-parser VERSION
-publishESLintPkg babel-eslint-plugin VERSION
-publishESLintPkg babel-eslint-plugin-development VERSION
+publishESLintPkg babel-eslint-config-internal "$VERSION"
+publishESLintPkg babel-eslint-parser "$VERSION"
+publishESLintPkg babel-eslint-plugin "$VERSION"
+publishESLintPkg babel-eslint-plugin-development "$VERSION"
 
 cleanup
