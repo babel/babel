@@ -181,6 +181,12 @@ export default function convertFunctionParams(path, loose) {
     const bodyPath = path.get("body.body");
     const arrowPath = bodyPath[bodyPath.length - 1].get("argument.callee");
     arrowPath.arrowFunctionToExpression();
+
+    arrowPath.node.generator = path.node.generator;
+    arrowPath.node.async = path.node.async;
+
+    path.node.generator = false;
+    path.node.async = false;
   } else {
     path.get("body").unshiftContainer("body", body);
   }
