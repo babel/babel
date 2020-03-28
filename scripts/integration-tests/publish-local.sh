@@ -13,7 +13,7 @@ source utils/cleanup.sh
 
 function publishESLintPkg {
   cd eslint/$1
-  yarn version --patch --no-git-tag-version
+  yarn version $2 --no-git-tag-version
   cd ../..
   make -j publish-eslint PKG=$1
 }
@@ -35,11 +35,17 @@ make -j bootstrap-only
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 loginLocalRegistry
 
+# This script gets the last @babel/standalone version (because it's always published),
+# and then increases by one the patch number
+VERSION=$(
+  node -p "'$(npm view @babel/standalone version)'.replace(/(?<=\\d+\\.\\d+\\.)\\d+/, x => ++x)"
+)
+
 I_AM_USING_VERDACCIO=I_AM_SURE make publish-test
 
-publishESLintPkg babel-eslint-config-internal
-publishESLintPkg babel-eslint-parser
-publishESLintPkg babel-eslint-plugin
-publishESLintPkg babel-eslint-plugin-development
+publishESLintPkg babel-eslint-config-internal VERSION
+publishESLintPkg babel-eslint-parser VERSION
+publishESLintPkg babel-eslint-plugin VERSION
+publishESLintPkg babel-eslint-plugin-development VERSION
 
 cleanup
