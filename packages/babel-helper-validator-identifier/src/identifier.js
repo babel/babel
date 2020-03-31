@@ -98,5 +98,5 @@ export function isIdentifierName(name: string): boolean {
       return false;
     }
   }
-  return true;
+  return !isFirst;
 }

@@ -303,6 +303,24 @@ describe("scope", () => {
 
       expect(path.scope.bindings.a).toBe(path.get("body[0]").scope.bindings.a);
     });
+
+    it("references after re-crawling", function() {
+      const path = getPath("function Foo() { var _jsx; }");
+
+      path.scope.crawl();
+      path.scope.crawl();
+
+      expect(path.scope.references._jsx).toBeTruthy();
+    });
+
+    test("generateUid collision check after re-crawling", function() {
+      const path = getPath("function Foo() { var _jsx; }");
+
+      path.scope.crawl();
+      path.scope.crawl();
+
+      expect(path.scope.generateUid("jsx")).toBe("_jsx2");
+    });
   });
 
   describe("duplicate bindings", () => {

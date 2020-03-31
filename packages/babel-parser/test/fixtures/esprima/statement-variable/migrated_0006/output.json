@@ -1,177 +1,52 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 38,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 38
-    }
-  },
+  "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":38}},
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 38,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 38
-      }
-    },
+    "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":38}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",
-        "start": 0,
-        "end": 38,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 38
-          }
-        },
+        "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":38}},
         "declarations": [
           {
             "type": "VariableDeclarator",
-            "start": 4,
-            "end": 11,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 4
-              },
-              "end": {
-                "line": 1,
-                "column": 11
-              }
-            },
+            "start":4,"end":11,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":11}},
             "id": {
               "type": "Identifier",
-              "start": 4,
-              "end": 11,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 4
-                },
-                "end": {
-                  "line": 1,
-                  "column": 11
-                },
-                "identifierName": "private"
-              },
+              "start":4,"end":11,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":11},"identifierName":"private"},
               "name": "private"
             },
             "init": null
           },
           {
             "type": "VariableDeclarator",
-            "start": 13,
-            "end": 22,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 13
-              },
-              "end": {
-                "line": 1,
-                "column": 22
-              }
-            },
+            "start":13,"end":22,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":22}},
             "id": {
               "type": "Identifier",
-              "start": 13,
-              "end": 22,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 13
-                },
-                "end": {
-                  "line": 1,
-                  "column": 22
-                },
-                "identifierName": "protected"
-              },
+              "start":13,"end":22,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":22},"identifierName":"protected"},
               "name": "protected"
             },
             "init": null
           },
           {
             "type": "VariableDeclarator",
-            "start": 24,
-            "end": 30,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 24
-              },
-              "end": {
-                "line": 1,
-                "column": 30
-              }
-            },
+            "start":24,"end":30,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":30}},
             "id": {
               "type": "Identifier",
-              "start": 24,
-              "end": 30,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 24
-                },
-                "end": {
-                  "line": 1,
-                  "column": 30
-                },
-                "identifierName": "public"
-              },
+              "start":24,"end":30,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":30},"identifierName":"public"},
               "name": "public"
             },
             "init": null
           },
           {
             "type": "VariableDeclarator",
-            "start": 32,
-            "end": 38,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 32
-              },
-              "end": {
-                "line": 1,
-                "column": 38
-              }
-            },
+            "start":32,"end":38,"loc":{"start":{"line":1,"column":32},"end":{"line":1,"column":38}},
             "id": {
               "type": "Identifier",
-              "start": 32,
-              "end": 38,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 32
-                },
-                "end": {
-                  "line": 1,
-                  "column": 38
-                },
-                "identifierName": "static"
-              },
+              "start":32,"end":38,"loc":{"start":{"line":1,"column":32},"end":{"line":1,"column":38},"identifierName":"static"},
               "name": "static"
             },
             "init": null

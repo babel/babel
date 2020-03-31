@@ -1,115 +1,36 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 29,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 29
-    }
-  },
+  "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":29}},
   "errors": [
     "SyntaxError: Constructor can't be a generator (1:11)"
   ],
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 29,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 29
-      }
-    },
+    "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":29}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ClassDeclaration",
-        "start": 0,
-        "end": 29,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 29
-          }
-        },
+        "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":29}},
         "id": {
           "type": "Identifier",
-          "start": 6,
-          "end": 7,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 6
-            },
-            "end": {
-              "line": 1,
-              "column": 7
-            },
-            "identifierName": "A"
-          },
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"A"},
           "name": "A"
         },
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start": 8,
-          "end": 29,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 8
-            },
-            "end": {
-              "line": 1,
-              "column": 29
-            }
-          },
+          "start":8,"end":29,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":29}},
           "body": [
             {
               "type": "ClassMethod",
-              "start": 10,
-              "end": 27,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 10
-                },
-                "end": {
-                  "line": 1,
-                  "column": 27
-                }
-              },
+              "start":10,"end":27,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":27}},
               "static": false,
               "kind": "method",
               "key": {
                 "type": "Identifier",
-                "start": 11,
-                "end": 22,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 11
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 22
-                  },
-                  "identifierName": "constructor"
-                },
+                "start":11,"end":22,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":22},"identifierName":"constructor"},
                 "name": "constructor"
               },
               "computed": false,
@@ -119,18 +40,7 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 25,
-                "end": 27,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 25
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 27
-                  }
-                },
+                "start":25,"end":27,"loc":{"start":{"line":1,"column":25},"end":{"line":1,"column":27}},
                 "body": [],
                 "directives": []
               }

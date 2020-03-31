@@ -1,63 +1,18 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 30,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 30
-    }
-  },
+  "start":0,"end":30,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":30}},
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 30,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 30
-      }
-    },
+    "start":0,"end":30,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":30}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "DeclareClass",
-        "start": 0,
-        "end": 30,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 30
-          }
-        },
+        "start":0,"end":30,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":30}},
         "id": {
           "type": "Identifier",
-          "start": 14,
-          "end": 15,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 14
-            },
-            "end": {
-              "line": 1,
-              "column": 15
-            },
-            "identifierName": "C"
-          },
+          "start":14,"end":15,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":15},"identifierName":"C"},
           "name": "C"
         },
         "typeParameters": null,
@@ -66,85 +21,28 @@
         "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
-          "start": 16,
-          "end": 30,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 16
-            },
-            "end": {
-              "line": 1,
-              "column": 30
-            }
-          },
+          "start":16,"end":30,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":30}},
           "callProperties": [],
           "properties": [],
           "indexers": [],
           "internalSlots": [
             {
               "type": "ObjectTypeInternalSlot",
-              "start": 18,
-              "end": 28,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 18
-                },
-                "end": {
-                  "line": 1,
-                  "column": 28
-                }
-              },
+              "start":18,"end":28,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":28}},
               "static": false,
               "id": {
                 "type": "Identifier",
-                "start": 20,
-                "end": 23,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 20
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 23
-                  },
-                  "identifierName": "foo"
-                },
+                "start":20,"end":23,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":23},"identifierName":"foo"},
                 "name": "foo"
               },
               "method": false,
               "value": {
                 "type": "GenericTypeAnnotation",
-                "start": 27,
-                "end": 28,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 27
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 28
-                  }
-                },
+                "start":27,"end":28,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":28}},
                 "typeParameters": null,
                 "id": {
                   "type": "Identifier",
-                  "start": 27,
-                  "end": 28,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 27
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 28
-                    },
-                    "identifierName": "T"
-                  },
+                  "start":27,"end":28,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":28},"identifierName":"T"},
                   "name": "T"
                 }
               }

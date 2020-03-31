@@ -1,67 +1,22 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 45,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 5,
-      "column": 1
-    }
-  },
+  "start":0,"end":45,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
   "errors": [
     "SyntaxError: Explicit inexact syntax cannot appear in class or interface definitions (3:2)",
     "SyntaxError: Explicit inexact syntax must appear at the end of an inexact object (3:2)"
   ],
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 45,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 5,
-        "column": 1
-      }
-    },
+    "start":0,"end":45,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "InterfaceDeclaration",
-        "start": 8,
-        "end": 45,
-        "loc": {
-          "start": {
-            "line": 2,
-            "column": 0
-          },
-          "end": {
-            "line": 5,
-            "column": 1
-          }
-        },
+        "start":8,"end":45,"loc":{"start":{"line":2,"column":0},"end":{"line":5,"column":1}},
         "id": {
           "type": "Identifier",
-          "start": 18,
-          "end": 19,
-          "loc": {
-            "start": {
-              "line": 2,
-              "column": 10
-            },
-            "end": {
-              "line": 2,
-              "column": 11
-            },
-            "identifierName": "G"
-          },
+          "start":18,"end":19,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11},"identifierName":"G"},
           "name": "G"
         },
         "typeParameters": null,
@@ -70,49 +25,15 @@
         "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
-          "start": 20,
-          "end": 45,
-          "loc": {
-            "start": {
-              "line": 2,
-              "column": 12
-            },
-            "end": {
-              "line": 5,
-              "column": 1
-            }
-          },
+          "start":20,"end":45,"loc":{"start":{"line":2,"column":12},"end":{"line":5,"column":1}},
           "callProperties": [],
           "properties": [
             {
               "type": "ObjectTypeProperty",
-              "start": 31,
-              "end": 42,
-              "loc": {
-                "start": {
-                  "line": 4,
-                  "column": 2
-                },
-                "end": {
-                  "line": 4,
-                  "column": 13
-                }
-              },
+              "start":31,"end":42,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":13}},
               "key": {
                 "type": "Identifier",
-                "start": 31,
-                "end": 34,
-                "loc": {
-                  "start": {
-                    "line": 4,
-                    "column": 2
-                  },
-                  "end": {
-                    "line": 4,
-                    "column": 5
-                  },
-                  "identifierName": "foo"
-                },
+                "start":31,"end":34,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":5},"identifierName":"foo"},
                 "name": "foo"
               },
               "static": false,
@@ -121,18 +42,7 @@
               "method": false,
               "value": {
                 "type": "NumberTypeAnnotation",
-                "start": 36,
-                "end": 42,
-                "loc": {
-                  "start": {
-                    "line": 4,
-                    "column": 7
-                  },
-                  "end": {
-                    "line": 4,
-                    "column": 13
-                  }
-                }
+                "start":36,"end":42,"loc":{"start":{"line":4,"column":7},"end":{"line":4,"column":13}}
               },
               "variance": null,
               "optional": false
@@ -146,18 +56,7 @@
           {
             "type": "CommentLine",
             "value": "@flow",
-            "start": 0,
-            "end": 7,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 0
-              },
-              "end": {
-                "line": 1,
-                "column": 7
-              }
-            }
+            "start":0,"end":7,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":7}}
           }
         ]
       }
@@ -168,18 +67,7 @@
     {
       "type": "CommentLine",
       "value": "@flow",
-      "start": 0,
-      "end": 7,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 7
-        }
-      }
+      "start":0,"end":7,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":7}}
     }
   ]
 }

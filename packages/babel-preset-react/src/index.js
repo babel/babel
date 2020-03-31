@@ -8,15 +8,21 @@ import transformReactJSXSelf from "@babel/plugin-transform-react-jsx-self";
 export default declare((api, opts) => {
   api.assertVersion(7);
 
+  let { pragma, pragmaFrag } = opts;
+
   const {
-    pragma,
-    pragmaFrag,
     pure,
     throwIfNamespace = true,
     useSpread,
     runtime = "classic",
     importSource,
   } = opts;
+
+  // TODO: (Babel 8) Remove setting these defaults
+  if (runtime === "classic") {
+    pragma = pragma || "React.createElement";
+    pragmaFrag = pragmaFrag || "React.Fragment";
+  }
 
   // TODO: (Babel 8) Don't cast these options but validate it
   const development = !!opts.development;

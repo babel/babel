@@ -1,77 +1,21 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 41,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 41
-    }
-  },
+  "start":0,"end":41,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":41}},
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 41,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 41
-      }
-    },
+    "start":0,"end":41,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":41}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start": 0,
-        "end": 41,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 41
-          }
-        },
+        "start":0,"end":41,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":41}},
         "expression": {
           "type": "CallExpression",
-          "start": 0,
-          "end": 25,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 0
-            },
-            "end": {
-              "line": 1,
-              "column": 25
-            }
-          },
+          "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":25}},
           "callee": {
             "type": "Identifier",
-            "start": 0,
-            "end": 2,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 0
-              },
-              "end": {
-                "line": 1,
-                "column": 2
-              },
-              "identifierName": "fn"
-            },
+            "start":0,"end":2,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":2},"identifierName":"fn"},
             "name": "fn"
           },
           "extra": {
@@ -80,53 +24,18 @@
           "arguments": [
             {
               "type": "Identifier",
-              "start": 3,
-              "end": 4,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 3
-                },
-                "end": {
-                  "line": 1,
-                  "column": 4
-                },
-                "identifierName": "a"
-              },
+              "start":3,"end":4,"loc":{"start":{"line":1,"column":3},"end":{"line":1,"column":4},"identifierName":"a"},
               "name": "a"
             },
             {
               "type": "Identifier",
-              "start": 6,
-              "end": 7,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 6
-                },
-                "end": {
-                  "line": 1,
-                  "column": 7
-                },
-                "identifierName": "b"
-              },
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"b"},
               "name": "b",
               "trailingComments": [
                 {
                   "type": "CommentBlock",
                   "value": " comment 1 ",
-                  "start": 9,
-                  "end": 24,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 9
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 24
-                    }
-                  }
+                  "start":9,"end":24,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":24}}
                 }
               ]
             }
@@ -135,18 +44,7 @@
             {
               "type": "CommentBlock",
               "value": " comment 2",
-              "start": 26,
-              "end": 40,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 26
-                },
-                "end": {
-                  "line": 1,
-                  "column": 40
-                }
-              }
+              "start":26,"end":40,"loc":{"start":{"line":1,"column":26},"end":{"line":1,"column":40}}
             }
           ]
         }
@@ -158,34 +56,12 @@
     {
       "type": "CommentBlock",
       "value": " comment 1 ",
-      "start": 9,
-      "end": 24,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 9
-        },
-        "end": {
-          "line": 1,
-          "column": 24
-        }
-      }
+      "start":9,"end":24,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":24}}
     },
     {
       "type": "CommentBlock",
       "value": " comment 2",
-      "start": 26,
-      "end": 40,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 26
-        },
-        "end": {
-          "line": 1,
-          "column": 40
-        }
-      }
+      "start":26,"end":40,"loc":{"start":{"line":1,"column":26},"end":{"line":1,"column":40}}
     }
   ]
 }

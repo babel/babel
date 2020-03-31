@@ -6,4 +6,6 @@ class C {
     @foo e: number = 3;
     f!: number;
     @foo g!: number;
+    #h: string;
+    #i: number = 10;
 }

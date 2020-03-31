@@ -19,6 +19,21 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.9.4 (2020-03-24)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#11186](https://github.com/babel/babel/pull/11186) fix: token after strict mode block is evaluated in strict mode ([@kaicataldo](https://github.com/kaicataldo))
+* `babel-generator`
+  * [#11325](https://github.com/babel/babel/pull/11325) fix: check parentheses between optional chain and other types ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-react-jsx`, `babel-preset-react`
+  * [#11324](https://github.com/babel/babel/pull/11324) Restore default pragmas in preset-react for classic runtime ([@existentialism](https://github.com/existentialism))
+* `babel-plugin-transform-typescript`
+  * [#11315](https://github.com/babel/babel/pull/11315) [preset-typescript] Fix private members type annotations ([@Lodin](https://github.com/Lodin))
+
+#### :house: Internal
+* `babel-parser`
+  * [#11322](https://github.com/babel/babel/pull/11322) Compact parser fixture loc info ([@JLHwung](https://github.com/JLHwung))
 ## v7.9.3 (2020-03-22)
 
 #### :bug: Bug Fix

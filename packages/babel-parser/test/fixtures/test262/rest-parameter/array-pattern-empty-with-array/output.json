@@ -1,63 +1,18 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 35,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 35
-    }
-  },
+  "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":35}},
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 35,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 35
-      }
-    },
+    "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":35}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "FunctionDeclaration",
-        "start": 0,
-        "end": 35,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 35
-          }
-        },
+        "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":35}},
         "id": {
           "type": "Identifier",
-          "start": 9,
-          "end": 23,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 9
-            },
-            "end": {
-              "line": 1,
-              "column": 23
-            },
-            "identifierName": "emptyWithArray"
-          },
+          "start":9,"end":23,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":23},"identifierName":"emptyWithArray"},
           "name": "emptyWithArray"
         },
         "generator": false,
@@ -65,47 +20,14 @@
         "params": [
           {
             "type": "RestElement",
-            "start": 24,
-            "end": 31,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 24
-              },
-              "end": {
-                "line": 1,
-                "column": 31
-              }
-            },
+            "start":24,"end":31,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":31}},
             "argument": {
               "type": "ArrayPattern",
-              "start": 27,
-              "end": 31,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 27
-                },
-                "end": {
-                  "line": 1,
-                  "column": 31
-                }
-              },
+              "start":27,"end":31,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":31}},
               "elements": [
                 {
                   "type": "ArrayPattern",
-                  "start": 28,
-                  "end": 30,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 28
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 30
-                    }
-                  },
+                  "start":28,"end":30,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":30}},
                   "elements": []
                 }
               ]
@@ -114,18 +36,7 @@
         ],
         "body": {
           "type": "BlockStatement",
-          "start": 33,
-          "end": 35,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 33
-            },
-            "end": {
-              "line": 1,
-              "column": 35
-            }
-          },
+          "start":33,"end":35,"loc":{"start":{"line":1,"column":33},"end":{"line":1,"column":35}},
           "body": [],
           "directives": []
         }

@@ -1,66 +1,21 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 36,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 36
-    }
-  },
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":36}},
   "errors": [
     "SyntaxError: Unexpected reserved word 'yield' (1:29)"
   ],
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 36,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 36
-      }
-    },
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":36}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "FunctionDeclaration",
-        "start": 14,
-        "end": 36,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 14
-          },
-          "end": {
-            "line": 1,
-            "column": 36
-          }
-        },
+        "start":14,"end":36,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":36}},
         "id": {
           "type": "Identifier",
-          "start": 23,
-          "end": 24,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 23
-            },
-            "end": {
-              "line": 1,
-              "column": 24
-            },
-            "identifierName": "f"
-          },
+          "start":23,"end":24,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":24},"identifierName":"f"},
           "name": "f"
         },
         "generator": false,
@@ -68,48 +23,14 @@
         "params": [],
         "body": {
           "type": "BlockStatement",
-          "start": 27,
-          "end": 36,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 27
-            },
-            "end": {
-              "line": 1,
-              "column": 36
-            }
-          },
+          "start":27,"end":36,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":36}},
           "body": [
             {
               "type": "ExpressionStatement",
-              "start": 29,
-              "end": 34,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 29
-                },
-                "end": {
-                  "line": 1,
-                  "column": 34
-                }
-              },
+              "start":29,"end":34,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":34}},
               "expression": {
                 "type": "Identifier",
-                "start": 29,
-                "end": 34,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 29
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 34
-                  },
-                  "identifierName": "yield"
-                },
+                "start":29,"end":34,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":34},"identifierName":"yield"},
                 "name": "yield"
               }
             }
@@ -121,32 +42,10 @@
     "directives": [
       {
         "type": "Directive",
-        "start": 0,
-        "end": 13,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 13
-          }
-        },
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
         "value": {
           "type": "DirectiveLiteral",
-          "start": 0,
-          "end": 12,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 0
-            },
-            "end": {
-              "line": 1,
-              "column": 12
-            }
-          },
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
           "value": "use strict",
           "extra": {
             "raw": "\"use strict\"",

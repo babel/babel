@@ -1,111 +1,32 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 53,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 9,
-      "column": 1
-    }
-  },
+  "start":0,"end":53,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":1}},
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 53,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 9,
-        "column": 1
-      }
-    },
+    "start":0,"end":53,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":1}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ClassDeclaration",
-        "start": 0,
-        "end": 21,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 4,
-            "column": 1
-          }
-        },
+        "start":0,"end":21,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
         "id": {
           "type": "Identifier",
-          "start": 6,
-          "end": 9,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 6
-            },
-            "end": {
-              "line": 1,
-              "column": 9
-            },
-            "identifierName": "Foo"
-          },
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":9},"identifierName":"Foo"},
           "name": "Foo"
         },
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start": 10,
-          "end": 21,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 10
-            },
-            "end": {
-              "line": 4,
-              "column": 1
-            }
-          },
+          "start":10,"end":21,"loc":{"start":{"line":1,"column":10},"end":{"line":4,"column":1}},
           "body": [
             {
               "type": "ClassProperty",
-              "start": 14,
-              "end": 15,
-              "loc": {
-                "start": {
-                  "line": 2,
-                  "column": 2
-                },
-                "end": {
-                  "line": 2,
-                  "column": 3
-                }
-              },
+              "start":14,"end":15,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":3}},
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 14,
-                "end": 15,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 2
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 3
-                  },
-                  "identifierName": "x"
-                },
+                "start":14,"end":15,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":3},"identifierName":"x"},
                 "name": "x"
               },
               "computed": false,
@@ -113,34 +34,11 @@
             },
             {
               "type": "ClassProperty",
-              "start": 18,
-              "end": 19,
-              "loc": {
-                "start": {
-                  "line": 3,
-                  "column": 2
-                },
-                "end": {
-                  "line": 3,
-                  "column": 3
-                }
-              },
+              "start":18,"end":19,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":3}},
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 18,
-                "end": 19,
-                "loc": {
-                  "start": {
-                    "line": 3,
-                    "column": 2
-                  },
-                  "end": {
-                    "line": 3,
-                    "column": 3
-                  },
-                  "identifierName": "y"
-                },
+                "start":18,"end":19,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":3},"identifierName":"y"},
                 "name": "y"
               },
               "computed": false,
@@ -151,81 +49,24 @@
       },
       {
         "type": "ClassDeclaration",
-        "start": 23,
-        "end": 53,
-        "loc": {
-          "start": {
-            "line": 6,
-            "column": 0
-          },
-          "end": {
-            "line": 9,
-            "column": 1
-          }
-        },
+        "start":23,"end":53,"loc":{"start":{"line":6,"column":0},"end":{"line":9,"column":1}},
         "id": {
           "type": "Identifier",
-          "start": 29,
-          "end": 33,
-          "loc": {
-            "start": {
-              "line": 6,
-              "column": 6
-            },
-            "end": {
-              "line": 6,
-              "column": 10
-            },
-            "identifierName": "Foo2"
-          },
+          "start":29,"end":33,"loc":{"start":{"line":6,"column":6},"end":{"line":6,"column":10},"identifierName":"Foo2"},
           "name": "Foo2"
         },
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start": 34,
-          "end": 53,
-          "loc": {
-            "start": {
-              "line": 6,
-              "column": 11
-            },
-            "end": {
-              "line": 9,
-              "column": 1
-            }
-          },
+          "start":34,"end":53,"loc":{"start":{"line":6,"column":11},"end":{"line":9,"column":1}},
           "body": [
             {
               "type": "ClassProperty",
-              "start": 38,
-              "end": 39,
-              "loc": {
-                "start": {
-                  "line": 7,
-                  "column": 2
-                },
-                "end": {
-                  "line": 7,
-                  "column": 3
-                }
-              },
+              "start":38,"end":39,"loc":{"start":{"line":7,"column":2},"end":{"line":7,"column":3}},
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 38,
-                "end": 39,
-                "loc": {
-                  "start": {
-                    "line": 7,
-                    "column": 2
-                  },
-                  "end": {
-                    "line": 7,
-                    "column": 3
-                  },
-                  "identifierName": "p"
-                },
+                "start":38,"end":39,"loc":{"start":{"line":7,"column":2},"end":{"line":7,"column":3},"identifierName":"p"},
                 "name": "p"
               },
               "computed": false,
@@ -233,35 +74,12 @@
             },
             {
               "type": "ClassMethod",
-              "start": 42,
-              "end": 51,
-              "loc": {
-                "start": {
-                  "line": 8,
-                  "column": 2
-                },
-                "end": {
-                  "line": 8,
-                  "column": 11
-                }
-              },
+              "start":42,"end":51,"loc":{"start":{"line":8,"column":2},"end":{"line":8,"column":11}},
               "static": false,
               "computed": true,
               "key": {
                 "type": "Identifier",
-                "start": 43,
-                "end": 44,
-                "loc": {
-                  "start": {
-                    "line": 8,
-                    "column": 3
-                  },
-                  "end": {
-                    "line": 8,
-                    "column": 4
-                  },
-                  "identifierName": "m"
-                },
+                "start":43,"end":44,"loc":{"start":{"line":8,"column":3},"end":{"line":8,"column":4},"identifierName":"m"},
                 "name": "m"
               },
               "kind": "method",
@@ -271,18 +89,7 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 49,
-                "end": 51,
-                "loc": {
-                  "start": {
-                    "line": 8,
-                    "column": 9
-                  },
-                  "end": {
-                    "line": 8,
-                    "column": 11
-                  }
-                },
+                "start":49,"end":51,"loc":{"start":{"line":8,"column":9},"end":{"line":8,"column":11}},
                 "body": [],
                 "directives": []
               }

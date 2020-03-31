@@ -609,6 +609,8 @@ export default class Scope {
     const ids = path.getOuterBindingIdentifiers(true);
 
     for (const name of Object.keys(ids)) {
+      parent.references[name] = true;
+
       for (const id of (ids[name]: Array<Object>)) {
         const local = this.getOwnBinding(name);
 
@@ -619,8 +621,6 @@ export default class Scope {
 
           this.checkBlockScopedCollisions(local, kind, name, id);
         }
-
-        parent.references[name] = true;
 
         // A redeclaration of an existing variable is a modification
         if (local) {

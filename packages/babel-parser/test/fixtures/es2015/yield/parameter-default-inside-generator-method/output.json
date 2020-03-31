@@ -1,96 +1,29 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 27,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 27
-    }
-  },
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":27}},
   "errors": [
     "SyntaxError: yield is not allowed in generator parameters (1:15)"
   ],
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 27,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 27
-      }
-    },
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":27}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start": 0,
-        "end": 27,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 27
-          }
-        },
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":27}},
         "expression": {
           "type": "ObjectExpression",
-          "start": 1,
-          "end": 26,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 1
-            },
-            "end": {
-              "line": 1,
-              "column": 26
-            }
-          },
+          "start":1,"end":26,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":26}},
           "properties": [
             {
               "type": "ObjectMethod",
-              "start": 3,
-              "end": 24,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 3
-                },
-                "end": {
-                  "line": 1,
-                  "column": 24
-                }
-              },
+              "start":3,"end":24,"loc":{"start":{"line":1,"column":3},"end":{"line":1,"column":24}},
               "method": true,
               "key": {
                 "type": "Identifier",
-                "start": 4,
-                "end": 10,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 4
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 10
-                  },
-                  "identifierName": "method"
-                },
+                "start":4,"end":10,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":10},"identifierName":"method"},
                 "name": "method"
               },
               "computed": false,
@@ -101,49 +34,15 @@
               "params": [
                 {
                   "type": "AssignmentPattern",
-                  "start": 11,
-                  "end": 20,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 11
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 20
-                    }
-                  },
+                  "start":11,"end":20,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":20}},
                   "left": {
                     "type": "Identifier",
-                    "start": 11,
-                    "end": 12,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 11
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 12
-                      },
-                      "identifierName": "x"
-                    },
+                    "start":11,"end":12,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":12},"identifierName":"x"},
                     "name": "x"
                   },
                   "right": {
                     "type": "YieldExpression",
-                    "start": 15,
-                    "end": 20,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 15
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 20
-                      }
-                    },
+                    "start":15,"end":20,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":20}},
                     "delegate": false,
                     "argument": null
                   }
@@ -151,18 +50,7 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 22,
-                "end": 24,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 22
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 24
-                  }
-                },
+                "start":22,"end":24,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":24}},
                 "body": [],
                 "directives": []
               }

@@ -1,94 +1,27 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 35,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 4,
-      "column": 1
-    }
-  },
+  "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 35,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 4,
-        "column": 1
-      }
-    },
+    "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "TSEnumDeclaration",
-        "start": 0,
-        "end": 35,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 4,
-            "column": 1
-          }
-        },
+        "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
         "id": {
           "type": "Identifier",
-          "start": 5,
-          "end": 6,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 5
-            },
-            "end": {
-              "line": 1,
-              "column": 6
-            },
-            "identifierName": "E"
-          },
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"E"},
           "name": "E"
         },
         "members": [
           {
             "type": "TSEnumMember",
-            "start": 13,
-            "end": 18,
-            "loc": {
-              "start": {
-                "line": 2,
-                "column": 4
-              },
-              "end": {
-                "line": 2,
-                "column": 9
-              }
-            },
+            "start":13,"end":18,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":9}},
             "id": {
               "type": "StringLiteral",
-              "start": 13,
-              "end": 18,
-              "loc": {
-                "start": {
-                  "line": 2,
-                  "column": 4
-                },
-                "end": {
-                  "line": 2,
-                  "column": 9
-                }
-              },
+              "start":13,"end":18,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":9}},
               "extra": {
                 "rawValue": "foo",
                 "raw": "\"foo\""
@@ -98,32 +31,10 @@
           },
           {
             "type": "TSEnumMember",
-            "start": 24,
-            "end": 33,
-            "loc": {
-              "start": {
-                "line": 3,
-                "column": 4
-              },
-              "end": {
-                "line": 3,
-                "column": 13
-              }
-            },
+            "start":24,"end":33,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":13}},
             "id": {
               "type": "StringLiteral",
-              "start": 24,
-              "end": 29,
-              "loc": {
-                "start": {
-                  "line": 3,
-                  "column": 4
-                },
-                "end": {
-                  "line": 3,
-                  "column": 9
-                }
-              },
+              "start":24,"end":29,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":9}},
               "extra": {
                 "rawValue": "bar",
                 "raw": "\"bar\""
@@ -132,18 +43,7 @@
             },
             "initializer": {
               "type": "NumericLiteral",
-              "start": 32,
-              "end": 33,
-              "loc": {
-                "start": {
-                  "line": 3,
-                  "column": 12
-                },
-                "end": {
-                  "line": 3,
-                  "column": 13
-                }
-              },
+              "start":32,"end":33,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":13}},
               "extra": {
                 "rawValue": 1,
                 "raw": "1"
