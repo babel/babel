@@ -234,36 +234,31 @@ export default declare((api, opts) => {
         // example: f({...R}, a = R)
         let idInRest = false;
 
-        const IdentifierHandler = function(idPath) {
+        const IdentifierHandler = function(path, functionScope) {
+          const name = path.node.name;
           if (
-            (idPath.parentKey === "right" || idPath.parentKey === "value") &&
-            idsInRestParams.has(idPath.node.name)
+            path.scope.getBinding(name) === functionScope.getBinding(name) &&
+            idsInRestParams.has(name)
           ) {
             idInRest = true;
-            idPath.stop();
+            path.stop();
           }
-        };
-
-        const AssignmentPatternHandler = function(assignPath) {
-          const right = assignPath.get("right");
-          if (right.isIdentifier()) IdentifierHandler(right);
-          else right.traverse({ Identifier: IdentifierHandler });
-          if (idInRest) assignPath.stop();
         };
 
         let i;
         for (i = 0; i < params.length && !idInRest; ++i) {
           const param = params[i];
           if (!paramsWithRestElement.has(i)) {
-            if (param.isAssignmentPattern()) AssignmentPatternHandler(param);
-            else {
-              param.traverse({
-                AssignmentPattern: AssignmentPatternHandler,
-                // don't transform in cases like f({...R}, f = R => R)
-                Scope(path) {
-                  path.skip();
+            if (param.isReferencedIdentifier() || param.isBindingIdentifier()) {
+              IdentifierHandler(path, path.scope);
+            } else {
+              param.traverse(
+                {
+                  "Scope|TypeAnnotation|TSTypeAnnotation": path => path.skip(),
+                  "ReferencedIdentifier|BindingIdentifier": IdentifierHandler,
                 },
-              });
+                path.scope,
+              );
             }
           }
         }
