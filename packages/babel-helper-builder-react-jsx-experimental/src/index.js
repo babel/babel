@@ -303,12 +303,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       "JSXElement|JSXFragment"(path) {
         if (path.type === "JSXFragment") imports.add("Fragment");
         const openingPath = path.get("openingElement");
-        const validChildren = openingPath.parent.children.filter(
-          child =>
-            !t.isJSXEmptyExpression(child) &&
-            !(t.isJSXText(child) && child.value.trim() === ""),
-        );
 
+        const validChildren = t.react.buildChildren(openingPath.parent);
         let importName;
         if (path.type === "JSXElement" && shouldUseCreateElement(path)) {
           importName = "createElement";
