@@ -45,6 +45,7 @@ export const ASSIGNMENT_OPERATORS = [
   "=",
   "+=",
   ...NUMBER_BINARY_OPERATORS.map(op => op + "="),
+  ...LOGICAL_OPERATORS.map(op => op + "="),
 ];
 
 export const BOOLEAN_UNARY_OPERATORS = ["delete", "!"];
