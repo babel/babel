@@ -546,6 +546,20 @@ export default function transformClass(
 
     // Unshift to ensure that the constructor inheritance is set up before
     // any properties can be assigned to the prototype.
+
+    if (!classState.isLoose) {
+      classState.body.unshift(
+        t.variableDeclaration("var", [
+          t.variableDeclarator(
+            superFnId,
+            t.callExpression(addCreateSuperHelper(classState.file), [
+              t.cloneNode(classState.classRef),
+            ]),
+          ),
+        ]),
+      );
+    }
+
     classState.body.unshift(
       t.expressionStatement(
         t.callExpression(
@@ -555,14 +569,6 @@ export default function transformClass(
           [t.cloneNode(classState.classRef), t.cloneNode(classState.superName)],
         ),
       ),
-      t.variableDeclaration("var", [
-        t.variableDeclarator(
-          superFnId,
-          t.callExpression(addCreateSuperHelper(classState.file), [
-            t.cloneNode(classState.classRef),
-          ]),
-        ),
-      ]),
     );
   }
 
