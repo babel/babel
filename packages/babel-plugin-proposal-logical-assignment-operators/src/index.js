@@ -39,11 +39,19 @@ export default declare(api => {
           }
         }
 
+        const isRHSAnonymousorArrowFunction =
+          t.isFunctionExpression(right, {
+            id: null,
+          }) || t.isArrowFunctionExpression(right);
+        const rightExpression = isRHSAnonymousorArrowFunction
+          ? t.sequenceExpression([t.numericLiteral(0), right])
+          : right;
+
         path.replaceWith(
           t.logicalExpression(
             operator.slice(0, -1),
             lhs,
-            t.assignmentExpression("=", left, right),
+            t.assignmentExpression("=", left, rightExpression),
           ),
         );
       },
