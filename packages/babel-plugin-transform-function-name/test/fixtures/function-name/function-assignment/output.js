@@ -23,3 +23,5 @@ bar = function (_bar) {
 }(function () {
   bar();
 });
+
+qux += function () {};

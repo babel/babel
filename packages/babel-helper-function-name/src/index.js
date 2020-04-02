@@ -179,7 +179,7 @@ export default function({ node, parent, scope, id }, localBinding = false) {
         return;
       }
     }
-  } else if (t.isAssignmentExpression(parent)) {
+  } else if (t.isAssignmentExpression(parent, { operator: "=" })) {
     // foo = function () {};
     id = parent.left;
   } else if (!id) {
