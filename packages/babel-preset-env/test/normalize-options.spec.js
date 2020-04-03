@@ -6,6 +6,7 @@ const {
   checkDuplicateIncludeExcludes,
   validateBoolOption,
   validateModulesOption,
+  validateUseBuiltInsOption,
   normalizePluginName,
 } = normalizeOptions;
 describe("normalize-options", () => {
@@ -242,9 +243,35 @@ describe("normalize-options", () => {
       }).toThrow();
     });
 
+    it("`'false'` option is invalid", () => {
+      expect(() => {
+        validateModulesOption("false");
+      }).toThrow();
+    });
+
     it("array option is invalid", () => {
       expect(() => {
         validateModulesOption([]);
+      }).toThrow();
+    });
+  });
+
+  describe("validateUseBuiltInsOptions", () => {
+    it("usage option is valid", () => {
+      expect(validateUseBuiltInsOption("usage")).toBe("usage");
+    });
+
+    it("entry option is valid", () => {
+      expect(validateUseBuiltInsOption("entry")).toBe("entry");
+    });
+
+    it("`false` option returns false", () => {
+      expect(validateUseBuiltInsOption(false)).toBe(false);
+    });
+
+    it("`'false'` option is invalid", () => {
+      expect(() => {
+        validateUseBuiltInsOption("false");
       }).toThrow();
     });
   });

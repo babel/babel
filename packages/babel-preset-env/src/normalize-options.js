@@ -167,8 +167,7 @@ export const validateModulesOption = (
   modulesOpt: ModuleOption = ModulesOption.auto,
 ) => {
   invariant(
-    ModulesOption[modulesOpt.toString()] ||
-      ModulesOption[modulesOpt.toString()] === ModulesOption.false,
+    ModulesOption[modulesOpt.toString()] || modulesOpt === ModulesOption.false,
     `Invalid Option: The 'modules' option must be one of \n` +
       ` - 'false' to indicate no module processing\n` +
       ` - a specific module type: 'commonjs', 'amd', 'umd', 'systemjs'` +
@@ -184,7 +183,7 @@ export const validateUseBuiltInsOption = (
 ) => {
   invariant(
     UseBuiltInsOption[builtInsOpt.toString()] ||
-      UseBuiltInsOption[builtInsOpt.toString()] === UseBuiltInsOption.false,
+      builtInsOpt === UseBuiltInsOption.false,
     `Invalid Option: The 'useBuiltIns' option must be either
     'false' (default) to indicate no polyfill,
     '"entry"' to indicate replacing the entry polyfill, or
