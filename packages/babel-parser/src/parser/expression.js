@@ -1138,6 +1138,9 @@ export default class ExpressionParser extends LValParser {
           this.registerTopicReference();
           return this.finishNode(node, "PipelinePrimaryTopicReference");
         }
+
+        this.expectPlugin("privateIn");
+        return this.parseMaybePrivateName(true);
       }
       // fall through
       default:
@@ -1158,7 +1161,11 @@ export default class ExpressionParser extends LValParser {
     const isPrivate = this.match(tt.hash);
 
     if (isPrivate) {
-      this.expectOnePlugin(["classPrivateProperties", "classPrivateMethods"]);
+      this.expectOnePlugin([
+        "classPrivateProperties",
+        "classPrivateMethods",
+        "privateIn",
+      ]);
       if (!isPrivateNameAllowed) {
         this.raise(this.state.pos, Errors.UnexpectedPrivateField);
       }

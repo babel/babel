@@ -118,6 +118,34 @@ const privateNameVisitor = {
   },
 };
 
+const privateInVisitor = {
+  BinaryExpression(path) {
+    const { operator, left, right } = path.node;
+    if (operator !== "in") return;
+    if (!path.get("left").isPrivateName()) return;
+
+    const { privateNamesMap } = this;
+    const { name } = left.id;
+
+    if (this.loose) {
+      const { id } = privateNamesMap.get(name);
+      path.replaceWith(template.expression.ast`
+        Object.prototype.hasOwnProperty.call(${right}, ${id})
+      `);
+      return;
+    }
+
+    const { id, static: isStatic } = privateNamesMap.get(name);
+
+    if (isStatic) {
+      path.replaceWith(template.expression.ast`${right} === ${this.classRef}`);
+      return;
+    }
+
+    path.replaceWith(template.expression.ast`${id}.has(${right})`);
+  },
+};
+
 // Traverses the outer portion of a class, without touching the class's inner
 // scope, for private names.
 const privateNameNestedVisitor = traverse.visitors.merge([
@@ -306,6 +334,12 @@ export function transformPrivateNamesUsage(
       ...privateNameHandlerSpec,
     });
   }
+  body.traverse(privateInVisitor, {
+    privateNamesMap,
+    classRef: ref,
+    file: state,
+    loose,
+  });
 }
 
 function buildPrivateFieldInitLoose(ref, prop, privateNamesMap) {
