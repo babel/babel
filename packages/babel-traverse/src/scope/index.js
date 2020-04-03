@@ -662,13 +662,7 @@ export default class Scope {
   }
 
   hasReference(name: string): boolean {
-    let scope = this;
-
-    do {
-      if (scope.references[name]) return true;
-    } while ((scope = scope.parent));
-
-    return false;
+    return !!this.getProgramParent().references[name];
   }
 
   isPure(node, constantsOnly?: boolean) {
