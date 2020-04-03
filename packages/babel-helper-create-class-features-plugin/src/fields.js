@@ -124,10 +124,10 @@ const privateInVisitor = {
     if (operator !== "in") return;
     if (!path.get("left").isPrivateName()) return;
 
-    const { privateNamesMap } = this;
+    const { loose, privateNamesMap } = this;
     const { name } = left.id;
 
-    if (this.loose) {
+    if (loose) {
       const { id } = privateNamesMap.get(name);
       path.replaceWith(template.expression.ast`
         Object.prototype.hasOwnProperty.call(${right}, ${id})
