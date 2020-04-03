@@ -1,4 +1,11 @@
 {
-  "plugins": [["pipelineOperator", { "proposal": "smart" }]],
-  "throws": "Unexpected token (1:4)"
+  "plugins": [
+    [
+      "pipelineOperator",
+      {
+        "proposal": "smart"
+      }
+    ]
+  ],
+  "throws": "This experimental syntax requires enabling the parser plugin: 'privateIn' (1:4)"
 }
