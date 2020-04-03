@@ -1,14 +1,15 @@
-import { RuleTester } from "eslint";
+const path = require("path");
+const { RuleTester } = require("eslint");
 
 RuleTester.setDefaultConfig({
   parser: require.resolve("@babel/eslint-parser"),
   parserOptions: {
     babelOptions: {
       configFile: require.resolve(
-        "@babel/eslint-shared-fixtures/config/babel.config.js",
+        path.join(__dirname, "../config/babel.config.js")
       ),
     },
   },
 });
 
-export default RuleTester;
+module.exports = RuleTester;

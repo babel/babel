@@ -1,12 +1,12 @@
 {
-  "name": "@babel/eslint-plugin",
+  "name": "@babel/eslint-plugin-internal",
   "version": "0.0.0",
-  "description": "Companion rules for @babel/eslint-parser",
+  "description": "The Babel Team's ESLint custom rules plugin. Since it's internal, it might not respect semver.",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/babel/babel.git",
-    "directory": "eslint/babel-eslint-plugin"
+    "url": "git+https://github.com/babel/babel.git",
+    "directory": "eslint/babel-eslint-plugin-internal"
   },
   "keywords": [
     "babel",
@@ -15,7 +15,7 @@
     "eslint-plugin",
     "babel-eslint"
   ],
-  "author": "Jason Quense @monasticpanic",
+  "author": "Kai Cataldo <kai@kaicataldo.com",
   "license": "MIT",
   "private": true,
   "engines": {
@@ -24,18 +24,14 @@
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
   },
-  "homepage": "https://babeljs.io/",
+  "homepage": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-plugin-internal",
   "peerDependencies": {
     "@babel/eslint-parser": "0.0.0",
     "eslint": ">=6.0.0"
   },
-  "dependencies": {
-    "eslint-rule-composer": "^0.3.0"
-  },
   "devDependencies": {
     "@babel/eslint-parser": "*",
     "@babel/eslint-shared-fixtures": "*",
-    "eslint": "^6.0.0",
-    "lodash.clonedeep": "^4.5.0"
+    "eslint": "^6.0.0"
   }
 }
