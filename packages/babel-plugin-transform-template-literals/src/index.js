@@ -65,7 +65,10 @@ export default declare((api, options) => {
               : t.stringLiteral(cooked);
 
           strings.push(value);
-          raws.push(t.stringLiteral(raw));
+
+          const rawValue = t.stringLiteral(raw);
+          rawValue.extra = { raw: raw.replace(/\\/g, "\\\\") };
+          raws.push(rawValue);
 
           if (raw !== cooked) {
             // false even if one of raw and cooked are not equal
@@ -89,7 +92,7 @@ export default declare((api, options) => {
             const data = ${t.callExpression(helperId, callExpressionInput)};
             ${templateObject} = function() { return data };
             return data;
-          } 
+          }
         `;
 
         scope.path.unshiftContainer("body", lazyLoad);
