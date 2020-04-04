@@ -39,7 +39,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\uD835\uDC9C\uD835\uDC9C\uD835\uDC9C"], ["𝒜\\ud835\\udc9c\\u{1d49c}"]);
+  const data = _taggedTemplateLiteral(["\uD835\uDC9C\uD835\uDC9C\uD835\uDC9C"], ["\uD835\uDC9C\\ud835\\udc9c\\u{1d49c}"]);
 
   _templateObject = function () {
     return data;
