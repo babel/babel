@@ -125,7 +125,7 @@ export const Errors = Object.freeze({
     "Topic reference was used in a lexical context without topic binding",
   PrimaryTopicRequiresSmartPipeline:
     "Primary Topic Reference found but pipelineOperator not passed 'smart' for 'proposal' option.",
-  PrivateInExpectedIn: "Expected `in` keyword to follow private name",
+  PrivateInExpectedIn: "Private names are only allowed in property accesses (`obj.#%0`) or in `in` expressions (`#%0 in obj`)",
   PrivateNameRedeclaration: "Duplicate private name #%0",
   RecordExpressionBarIncorrectEndSyntaxType:
     "Record expressions ending with '|}' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'",
