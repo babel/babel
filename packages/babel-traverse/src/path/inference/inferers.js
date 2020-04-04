@@ -89,7 +89,15 @@ export function LogicalExpression() {
   ]);
 }
 
-export function ConditionalExpression() {
+export function ConditionalExpression(node) {
+  console.log(node);
+  if (t.isTSTypeAnnotation(node)) {
+    return t.createTSUnionType([
+      this.get("consequent").getTypeAnnotation(),
+      this.get("alternate").getTypeAnnotation(),
+    ]);
+  }
+
   return t.createUnionTypeAnnotation([
     this.get("consequent").getTypeAnnotation(),
     this.get("alternate").getTypeAnnotation(),
