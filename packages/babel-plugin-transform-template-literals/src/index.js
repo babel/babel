@@ -67,7 +67,10 @@ export default declare((api, options) => {
           strings.push(value);
 
           const rawValue = t.stringLiteral(raw);
-          rawValue.extra = { raw: raw.replace(/\\/g, "\\\\") };
+          rawValue.extra = {
+            raw: `"${raw.replace(/\\|"/g, "\\$&")}"`,
+            rawValue: raw,
+          };
           raws.push(rawValue);
 
           if (raw !== cooked) {
