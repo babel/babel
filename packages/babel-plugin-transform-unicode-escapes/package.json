@@ -1,7 +1,7 @@
 {
   "name": "@babel/plugin-transform-unicode-escapes",
   "version": "7.8.3",
-  "description": "Compile ES2015 Unicode chars to ES5",
+  "description": "Compile ES2015 Unicode escapes to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-unicode-escapes",
   "license": "MIT",
   "publishConfig": {
