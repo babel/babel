@@ -3,11 +3,6 @@ import RuleTester from "@babel/eslint-shared-fixtures/utils/RuleTester";
 
 const ruleTester = new RuleTester();
 ruleTester.run("@babel/object-curly-spacing", rule, {
-  valid: [
-    {
-      code: 'export x from "mod";',
-    },
-  ],
-
+  valid: ['export x from "mod";'],
   invalid: [],
 });

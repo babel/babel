@@ -30,7 +30,6 @@
     "eslint": ">=6.0.0"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "*",
     "@babel/eslint-shared-fixtures": "*",
     "eslint": "^6.0.0"
   }
