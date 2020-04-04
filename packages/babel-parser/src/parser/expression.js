@@ -1139,12 +1139,17 @@ export default class ExpressionParser extends LValParser {
           return this.finishNode(node, "PipelinePrimaryTopicReference");
         }
 
-        this.expectPlugin("privateIn");
-        node = this.parseMaybePrivateName(true);
-        if (!this.match(tt._in)) {
-          this.raise(this.state.start, Errors.PrivateInExpectedIn);
+        if (this.hasPlugin("privateIn")) {
+          node = this.parseMaybePrivateName(true);
+          if (!this.match(tt._in)) {
+            this.raise(
+              this.state.start,
+              Errors.PrivateInExpectedIn,
+              node.id.name,
+            );
+          }
+          return node;
         }
-        return node;
       }
       // fall through
       default:

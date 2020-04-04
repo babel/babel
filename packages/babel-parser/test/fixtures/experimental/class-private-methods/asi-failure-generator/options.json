@@ -1,5 +1,5 @@
 {
-  "throws": "This experimental syntax requires enabling the parser plugin: 'privateIn' (3:3)",
+  "throws": "Unexpected token (3:3)",
   "plugins": [
     "classProperties",
     "classPrivateMethods"

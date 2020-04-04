@@ -7,5 +7,5 @@
       }
     ]
   ],
-  "throws": "This experimental syntax requires enabling the parser plugin: 'privateIn' (1:4)"
+  "throws": "Unexpected token (1:4)"
 }
