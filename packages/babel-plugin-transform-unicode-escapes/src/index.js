@@ -11,23 +11,15 @@ export default declare(api => {
     return "\\u" + code.toString(16).padStart(4, 0);
   }
   function replaceUnicodeEscapes(str, escapeCount = 1) {
-    return str.replace(unicodeEscape, (match, backslashes, codePoint) => {
+    return str.replace(unicodeEscape, (match, backslashes, code) => {
       if ((backslashes.length * escapeCount) % 2 === 0) {
         return match;
       }
 
-      let code = parseInt(codePoint, 16);
-      backslashes = backslashes.slice(0, -1);
+      const char = String.fromCodePoint(parseInt(code, 16));
+      const escaped = backslashes.slice(0, -1) + escape(char.charCodeAt(0));
 
-      // https://github.com/mathiasbynens/String.fromCodePoint/blob/880fb778/fromcodepoint.js#L36-L44
-      if (code <= 0xffff) {
-        return `${backslashes}${escape(code)}`;
-      }
-
-      code -= 0x10000;
-      const head = (code >> 10) + 0xd800;
-      const tail = (code % 0x400) + 0xdc00;
-      return `${backslashes}${escape(head)}${escape(tail)}`;
+      return char.length === 1 ? escaped : escaped + escape(char.charCodeAt(1));
     });
   }
 
