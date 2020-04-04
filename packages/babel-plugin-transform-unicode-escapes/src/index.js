@@ -10,17 +10,18 @@ export default declare(api => {
   function escape(code) {
     return "\\u" + code.toString(16).padStart(4, 0);
   }
-  function replaceUnicodeEscapes(str, escapeCount = 1) {
-    return str.replace(unicodeEscape, (match, backslashes, code) => {
-      if ((backslashes.length * escapeCount) % 2 === 0) {
-        return match;
-      }
+  function replacer(match, backslashes, code) {
+    if (backslashes.length % 2 === 0) {
+      return match;
+    }
 
-      const char = String.fromCodePoint(parseInt(code, 16));
-      const escaped = backslashes.slice(0, -1) + escape(char.charCodeAt(0));
+    const char = String.fromCodePoint(parseInt(code, 16));
+    const escaped = backslashes.slice(0, -1) + escape(char.charCodeAt(0));
 
-      return char.length === 1 ? escaped : escaped + escape(char.charCodeAt(1));
-    });
+    return char.length === 1 ? escaped : escaped + escape(char.charCodeAt(1));
+  }
+  function replaceUnicodeEscapes(str) {
+    return str.replace(unicodeEscape, replacer);
   }
 
   return {
@@ -29,17 +30,13 @@ export default declare(api => {
       Identifier(path) {
         const { node, key } = path;
         const { name } = node;
-        const replaced = name.replace(surrogate, c => {
-          c = c
-            .charCodeAt(0)
-            .toString(16)
-            .padStart(4);
-          return `\\u${c}`;
-        });
+        const replaced = name.replace(surrogate, escape);
         if (name === replaced) return;
 
+        const str = t.inherits(t.stringLiteral(name), node);
+
         if (key === "key") {
-          path.replaceWith(t.stringLiteral(name));
+          path.replaceWith(str);
           return;
         }
 
@@ -49,7 +46,7 @@ export default declare(api => {
           parentPath.isOptionalMemberExpression({ property: node })
         ) {
           parentPath.node.computed = true;
-          path.replaceWith(t.stringLiteral(name));
+          path.replaceWith(str);
           return;
         }
 
@@ -62,14 +59,7 @@ export default declare(api => {
         const { node } = path;
         const { extra } = node;
 
-        // A string's value is already parsed, which means a "\u{0061}" is
-        // already an "a", and a "\\u{0061}` is an "\u{0061}". So we don't want
-        // to find a "\u" in the value (because dev escaped the "u" and didn't
-        // write a unicode escape).
-        node.value = replaceUnicodeEscapes(node.value, 2);
-        if (extra?.raw) {
-          extra.raw = replaceUnicodeEscapes(extra.raw);
-        }
+        if (extra?.raw) extra.raw = replaceUnicodeEscapes(extra.raw);
       },
 
       TemplateElement(path) {
