@@ -2,7 +2,7 @@ var _ref, _;
 
 function then(fn) {
   return async value => {
-    return fn((await value));
+    return fn(await value);
   };
 }
 
