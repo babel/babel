@@ -1,7 +1,7 @@
 {
   "name": "@babel/plugin-proposal-private-property-in-object",
   "version": "7.8.3",
-  "description": "This plugin transforms static class properties as well as properties declared with the property initializer syntax",
+  "description": "This plugin transforms checks for a private property in an object",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-private-property-in-object",
   "license": "MIT",
   "publishConfig": {
