@@ -83,10 +83,16 @@ export function BinaryExpression(node) {
 }
 
 export function LogicalExpression() {
-  return t.createUnionTypeAnnotation([
+  const argumentTypes = [
     this.get("left").getTypeAnnotation(),
     this.get("right").getTypeAnnotation(),
-  ]);
+  ];
+
+  if (argumentTypes.every(t.isTSTypeAnnotation)) {
+    return t.createTSUnionType(argumentTypes);
+  }
+
+  return t.createUnionTypeAnnotation(argumentTypes);
 }
 
 export function ConditionalExpression() {

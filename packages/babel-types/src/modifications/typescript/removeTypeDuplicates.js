@@ -1,7 +1,18 @@
 import {
   isTSAnyKeyword,
   isTSUnionType,
-  isTSTypeParameter,
+  isTSBooleanKeyword,
+  isTSBigIntKeyword,
+  isTSNeverKeyword,
+  isTSNullKeyword,
+  isTSNumberKeyword,
+  isTSObjectKeyword,
+  isTSStringKeyword,
+  isTSUnknownKeyword,
+  isTSVoidKeyword,
+  isTSUndefinedKeyword,
+  isTSLiteralType,
+  isTSThisType,
 } from "../../validators/generated";
 
 /**
@@ -11,8 +22,7 @@ export default function removeTypeDuplicates(
   nodes: Array<Object>,
 ): Array<Object> {
   const generics = {};
-  // FIXME: I don't understand the purpose of bases for Flow (if it has an analogue for TS)
-  // const bases = {};
+  const bases = {};
 
   // store union type groups to circular references
   const typeGroups = [];
@@ -28,15 +38,29 @@ export default function removeTypeDuplicates(
       continue;
     }
 
-    if (isTSAnyKeyword(node)) {
+    // this type matches anything
+    if (isTSAnyKeyword(node.type)) {
       return [node];
     }
 
-    // FIXME: I don't understand the purpose of bases for Flow (if it has an analogue for TS)
-    // if (isFlowBaseAnnotation(node)) {
-    //   bases[node.type] = node;
-    //   continue;
-    // }
+    // Basic TS types, analogue of FlowBaseAnnotation
+    if (
+      isTSBooleanKeyword(node) ||
+      isTSBigIntKeyword(node) ||
+      isTSNeverKeyword(node) ||
+      isTSNullKeyword(node) ||
+      isTSNumberKeyword(node) ||
+      isTSObjectKeyword(node) ||
+      isTSStringKeyword(node) ||
+      isTSUndefinedKeyword(node) ||
+      isTSUnknownKeyword(node) ||
+      isTSVoidKeyword(node) ||
+      isTSThisType(node) ||
+      isTSLiteralType(node)
+    ) {
+      bases[node.type] = node;
+      continue;
+    }
 
     if (isTSUnionType(node)) {
       if (typeGroups.indexOf(node.types) < 0) {
@@ -46,24 +70,15 @@ export default function removeTypeDuplicates(
       continue;
     }
 
-    if (isTSTypeParameter(node)) {
-      const name = node.name;
-
-      if (!generics[name]) {
-        generics[name] = node;
-      }
-
-      continue;
-    }
+    // TODO: add generic types
 
     types.push(node);
   }
 
-  // FIXME: I don't understand the purpose of bases for Flow (if it has an analogue for TS)
   // add back in bases
-  // for (const type of Object.keys(bases)) {
-  //   types.push(bases[type]);
-  // }
+  for (const type of Object.keys(bases)) {
+    types.push(bases[type]);
+  }
 
   // add back in generics
   for (const name of Object.keys(generics)) {
