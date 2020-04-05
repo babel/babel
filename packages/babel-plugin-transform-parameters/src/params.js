@@ -36,6 +36,9 @@ const iifeVisitor = {
       path.stop();
     }
   },
+  // type annotations don't use or introduce "real" bindings
+  "TypeAnnotation|TSTypeAnnotation|TypeParameterDeclaration|TSTypeParameterDeclaration": path =>
+    path.skip(),
 };
 
 export default function convertFunctionParams(path, loose) {
