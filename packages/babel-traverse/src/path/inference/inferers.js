@@ -89,19 +89,17 @@ export function LogicalExpression() {
   ]);
 }
 
-export function ConditionalExpression(node) {
-  console.log(node);
-  if (t.isTSTypeAnnotation(node)) {
-    return t.createTSUnionType([
-      this.get("consequent").getTypeAnnotation(),
-      this.get("alternate").getTypeAnnotation(),
-    ]);
-  }
-
-  return t.createUnionTypeAnnotation([
+export function ConditionalExpression() {
+  const argumentTypes = [
     this.get("consequent").getTypeAnnotation(),
     this.get("alternate").getTypeAnnotation(),
-  ]);
+  ];
+
+  if (argumentTypes.every(t.isTSTypeAnnotation)) {
+    return t.createTSUnionType(argumentTypes);
+  }
+
+  return t.createUnionTypeAnnotation(argumentTypes);
 }
 
 export function SequenceExpression() {
