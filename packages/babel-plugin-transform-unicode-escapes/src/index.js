@@ -8,7 +8,10 @@ export default declare(api => {
   const unicodeEscape = /(\\+)u\{([0-9a-fA-F]+)\}/g;
 
   function escape(code) {
-    return "\\u" + code.toString(16).padStart(4, 0);
+    let str = code.toString(16);
+    // Sigh, node 6 doesn't have padStart
+    while (str.length < 4) str = "0" + str;
+    return "\\u" + str;
   }
   function replacer(match, backslashes, code) {
     if (backslashes.length % 2 === 0) {
