@@ -8,7 +8,7 @@ _jsx("div", {
 
 /*#__PURE__*/
 _jsx("div", {
-  children: "w\xF4w"
+  children: "wôw"
 });
 
 /*#__PURE__*/
@@ -23,7 +23,7 @@ _jsx("div", {
 
 /*#__PURE__*/
 _jsx("div", {
-  children: "w \xA0 w"
+  children: "w   w"
 });
 
 /*#__PURE__*/
@@ -33,7 +33,7 @@ _jsx("div", {
 
 /*#__PURE__*/
 _jsx("div", {
-  children: "this should parse as nbsp: \xA0 "
+  children: "this should parse as nbsp:   "
 });
 
 /*#__PURE__*/

@@ -55,10 +55,15 @@ function normalizeOptions(code, opts): Format {
     jsescOption: {
       quotes: "double",
       wrap: true,
+      minimal: true,
       ...opts.jsescOption,
     },
     recordAndTupleSyntaxType: opts.recordAndTupleSyntaxType,
   };
+
+  if (format.jsonCompatibleStrings) {
+    format.jsescOption.json = true;
+  }
 
   if (format.minified) {
     format.compact = true;

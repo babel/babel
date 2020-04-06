@@ -2,7 +2,7 @@
 React.createElement("div", null, "wow");
 
 /*#__PURE__*/
-React.createElement("div", null, "w\xF4w");
+React.createElement("div", null, "wôw");
 
 /*#__PURE__*/
 React.createElement("div", null, "w & w");
@@ -11,13 +11,13 @@ React.createElement("div", null, "w & w");
 React.createElement("div", null, "w & w");
 
 /*#__PURE__*/
-React.createElement("div", null, "w \xA0 w");
+React.createElement("div", null, "w   w");
 
 /*#__PURE__*/
 React.createElement("div", null, "this should not parse as unicode: \\u00a0");
 
 /*#__PURE__*/
-React.createElement("div", null, "this should parse as nbsp: \xA0 ");
+React.createElement("div", null, "this should parse as nbsp:   ");
 
 /*#__PURE__*/
 React.createElement("div", null, "this should parse as unicode: ", '\u00a0 ');
