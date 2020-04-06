@@ -15,6 +15,20 @@ function getPath(code, options) {
   return path;
 }
 
+function getPathHere(code, options) {
+  const ast = parse(code, options);
+  let result;
+  traverse(ast, {
+    Identifier: function(path) {
+      if (path.node.name === "HERE") {
+        result = path;
+        path.stop();
+      }
+    },
+  });
+  return result;
+}
+
 function getIdentifierPath(code) {
   const ast = parse(code);
   let nodePath;
@@ -240,7 +254,7 @@ describe("scope", () => {
       ).toBeTruthy();
     });
 
-    test("label", function() {
+    test("getLabel", function() {
       expect(getPath("foo: { }").scope.getBinding("foo")).toBeUndefined();
       expect(getPath("foo: { }").scope.getLabel("foo").type).toBe(
         "LabeledStatement",
@@ -257,23 +271,16 @@ describe("scope", () => {
     });
 
     test("generateUid collision check with labels", function() {
-      expect(
-        getPath(
-          `
-      _foo: { }
-    `,
-        ).scope.generateUid("foo"),
-      ).toBe("_foo2");
+      const gen = (id, path) => path.scope.generateUid(id);
 
+      expect(gen("foo", getPath("_foo: { }"))).toBe("_foo2");
       expect(
-        getPath(
-          `
-      _foo: { }
-      _foo1: { }
-      _foo2: { }
-    `,
-        ).scope.generateUid("foo"),
+        gen("foo", getPath("_foo: { } _foo1: { } _foo2: { }")), //
       ).toBe("_foo3");
+      expect(gen("foo", getPath("do { _foo: { } } while (0)"))).toBe("_foo2");
+      expect(
+        gen("foo", getPathHere("_foo: do { HERE } while (0)")), //
+      ).toBe("_foo2");
     });
 
     it("reference paths", function() {
