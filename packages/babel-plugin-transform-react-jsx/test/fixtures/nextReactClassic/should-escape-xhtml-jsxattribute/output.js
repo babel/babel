@@ -1,3 +1,5 @@
+/** @jsxRuntime classic */
+
 /*#__PURE__*/
 React.createElement("div", {
   id: "wôw"
