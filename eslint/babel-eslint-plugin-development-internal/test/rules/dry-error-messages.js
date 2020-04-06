@@ -17,6 +17,10 @@ ruleTester.run("dry-error-messages", rule, {
     "this.raise(() => { throw new Error('Uh oh') });",
     "throw new Error('Uh oh')",
     "throw this.createError('Uh oh')",
+    "throw this.error",
+    "throw this.raise",
+    "throw obj.error",
+    "throw obj.raise",
     {
       filename: FILENAME,
       code:

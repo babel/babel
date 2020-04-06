@@ -108,12 +108,10 @@ export default {
           }
         }
       },
-      "ThrowStatement[argument.type='CallExpression'] [callee.type='MemberExpression']"(
-        node,
-      ) {
+      "ThrowStatement > CallExpression[callee.type='MemberExpression']"(node) {
         if (
-          node.callee.object?.type !== "ThisExpression" ||
-          node.callee.property?.name !== "raise"
+          node.callee.object.type !== "ThisExpression" ||
+          node.callee.property.name !== "raise"
         ) {
           return;
         }
