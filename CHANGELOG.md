@@ -19,6 +19,45 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.9.5 (2020-04-07)
+
+#### :bug: Bug Fix
+* `babel-plugin-proposal-object-rest-spread`, `babel-plugin-transform-parameters`
+  * [#11326](https://github.com/babel/babel/pull/11326) Correctly transpile when default parameter initializer references binding in rest pattern ([@vedantroy](https://github.com/vedantroy))
+* `babel-traverse`
+  * [#11375](https://github.com/babel/babel/pull/11375) Fixed generateUid creating clashing ids after scope re-crawling ([@Andarist](https://github.com/Andarist))
+  * [#11323](https://github.com/babel/babel/pull/11323) Fixed issue with programPath.scope.references not being registered back correctly after scope re-crawling ([@Andarist](https://github.com/Andarist))
+* `babel-plugin-transform-destructuring`
+  * [#11360](https://github.com/babel/babel/pull/11360) fix Incorrect destructuring compilation of `for (let [[x] = [1]] = []… ([@Zzzen](https://github.com/Zzzen))
+* `babel-preset-env`
+  * [#11373](https://github.com/babel/babel/pull/11373) Fixed useBuiltIns and modules validation when using 'false' as option ([@JMarkoski](https://github.com/JMarkoski))
+* `babel-plugin-transform-classes`
+  * [#11341](https://github.com/babel/babel/pull/11341) Fix createSuper in Babel <7.5.5 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-function-name`, `babel-plugin-transform-function-name`
+  * [#11361](https://github.com/babel/babel/pull/11361) fix: do not add function name when parent's operator is not `=` ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-builder-react-jsx-experimental`, `babel-plugin-transform-react-jsx`
+  * [#11354](https://github.com/babel/babel/pull/11354) fix auto import error with whitespace JSXText ([@lunaruan](https://github.com/lunaruan))
+* `babel-types`
+  * [#11359](https://github.com/babel/babel/pull/11359) fix: allow logical assignment operators in AssignmentExpression ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-parameters`
+  * [#11346](https://github.com/babel/babel/pull/11346) Set correct async/generator in IIFE for params ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`
+  * [#11345](https://github.com/babel/babel/pull/11345) Ignore abstract methods when decorating class ([@oliverdunk](https://github.com/oliverdunk))
+
+#### :nail_care: Polish
+* `babel-plugin-transform-parameters`
+  * [#11349](https://github.com/babel/babel/pull/11349) Don't check type annotations when deciding params scope ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-traverse`
+  * [#11368](https://github.com/babel/babel/pull/11368) Simplify scope.hasReferences implementation ([@Andarist](https://github.com/Andarist))
+* `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-classes`, `babel-plugin-transform-parameters`, `babel-plugin-transform-runtime`, `babel-plugin-transform-typescript`, `babel-preset-env`
+  * [#11358](https://github.com/babel/babel/pull/11358) Don't call `createSuper` in loose mode (it was unused) ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`
+  * [#11328](https://github.com/babel/babel/pull/11328) polish: align optional chain whitespace behavior to their sibiling ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* [#11374](https://github.com/babel/babel/pull/11374) Bump handlebars dep ([@existentialism](https://github.com/existentialism))
+* [#11347](https://github.com/babel/babel/pull/11347) Fix e2e publish test when branching from an older version ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* [#11329](https://github.com/babel/babel/pull/11329) chore: remove unused graceful-fs ([@JLHwung](https://github.com/JLHwung))
 ## v7.9.4 (2020-03-24)
 
 #### :bug: Bug Fix
