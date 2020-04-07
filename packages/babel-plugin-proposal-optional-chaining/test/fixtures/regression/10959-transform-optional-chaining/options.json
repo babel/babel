@@ -1,6 +1,6 @@
 {
   "plugins": [
     "proposal-optional-chaining",
-    "../../../../../babel-plugin-syntax-typescript"
+    "syntax-typescript"
   ]
 }

@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    "../../../../../babel-plugin-syntax-optional-chaining",
-    "../../../../../babel-plugin-transform-typescript"
-  ]
-}
