@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-validator-identifier",
-  "version": "7.9.0",
+  "version": "7.9.5",
   "description": "Validate identifier/keywords name",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-validator-identifier",
   "license": "MIT",
