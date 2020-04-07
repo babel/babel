@@ -203,8 +203,6 @@ export function StringLiteral(node: Object) {
     return;
   }
 
-  // ensure the output is ASCII-safe
-
   const val = jsesc(
     node.value,
     process.env.BABEL_8_BREAKING
