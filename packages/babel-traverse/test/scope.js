@@ -321,6 +321,42 @@ describe("scope", () => {
 
       expect(path.scope.generateUid("jsx")).toBe("_jsx2");
     });
+
+    test("generateUid collision check after re-crawling (function expression local id)", function() {
+      const path = getPath("var fn = function _name(){}");
+
+      path.scope.crawl();
+      path.scope.crawl();
+
+      expect(path.scope.generateUid("name")).toBe("_name2");
+    });
+
+    test("generateUid collision check after re-crawling (function params)", function() {
+      const path = getPath("[].map(_unicorn => [_unicorn])");
+
+      path.scope.crawl();
+      path.scope.crawl();
+
+      expect(path.scope.generateUid("unicorn")).toBe("_unicorn2");
+    });
+
+    test("generateUid collision check after re-crawling (catch clause)", function() {
+      const path = getPath("try {} catch (_err) {}");
+
+      path.scope.crawl();
+      path.scope.crawl();
+
+      expect(path.scope.generateUid("err")).toBe("_err2");
+    });
+
+    test("generateUid collision check after re-crawling (class expression local id)", function() {
+      const path = getPath("var C = class _Cls{}");
+
+      path.scope.crawl();
+      path.scope.crawl();
+
+      expect(path.scope.generateUid("Cls")).toBe("_Cls2");
+    });
   });
 
   describe("duplicate bindings", () => {
