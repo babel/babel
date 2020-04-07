@@ -139,7 +139,7 @@ export default declare((api, opts) => {
       // { { foo, ...bar } = qux } = quux;
       const { scope } = path;
       const parentRight = path.parentPath.get("right");
-      const parentRightId = scope.maybeGenerateMemoised(parentRight.node);
+      const parentRightId = scope.maybeGenerateMemoised(parentRight.node, true);
       if (parentRightId) {
         nonStaticDefaultValueDeclarator = t.variableDeclarator(
           parentRightId,

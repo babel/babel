@@ -1,4 +1,4 @@
-var _foo, _props$InputProps;
+var _props$InputProps;
 
 const _foo = {
   foo: 1
