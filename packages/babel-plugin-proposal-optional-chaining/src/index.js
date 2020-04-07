@@ -47,7 +47,7 @@ export default declare((api, options) => {
 
           // unwrap a TSNonNullExpression if need
           if (optionalPath.isTSNonNullExpression()) {
-            optionalPath.replaceWith(optionalPath.node.expression);
+            optionalPath = optionalPath.get("expression");
           }
         }
 
