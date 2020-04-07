@@ -39,6 +39,7 @@ const isPostfixExpression = (node: Object, parent: Object) =>
     t.isOptionalCallExpression(parent) ||
     t.isNewExpression(parent)) &&
     parent.callee === node) ||
+  (t.isTaggedTemplateExpression(parent) && parent.tag === node) ||
   t.isTSNonNullExpression(parent);
 
 export function NullableTypeAnnotation(node: Object, parent: Object): boolean {
@@ -239,7 +240,6 @@ export function ConditionalExpression(node: Object, parent: Object): boolean {
     t.isBinary(parent) ||
     t.isConditionalExpression(parent, { test: node }) ||
     t.isAwaitExpression(parent) ||
-    t.isTaggedTemplateExpression(parent) ||
     t.isTSTypeAssertion(parent) ||
     t.isTSAsExpression(parent)
   ) {
@@ -298,7 +298,6 @@ function isFirstInStatement(
   while (i > 0) {
     if (
       t.isExpressionStatement(parent, { expression: node }) ||
-      t.isTaggedTemplateExpression(parent) ||
       (considerDefaultExports &&
         t.isExportDefaultDeclaration(parent, { declaration: node })) ||
       (considerArrow && t.isArrowFunctionExpression(parent, { body: node }))
