@@ -1,6 +1,8 @@
 import * as t from "@babel/types";
 import jsesc from "jsesc";
 
+const surrogates = /[\uD800-\uDBFF][\uDC00-\uDFFF]|([\uD800-\uDBFF]|[\uDC00-\uDFFF])/g;
+
 export function Identifier(node: Object) {
   this.exactSource(node.loc, () => {
     this.word(node.name);
@@ -203,9 +205,21 @@ export function StringLiteral(node: Object) {
     return;
   }
 
-  // ensure the output is ASCII-safe
   const opts = this.format.jsescOption;
-  const val = jsesc(node.value, opts);
+  let val = jsesc(node.value, opts);
+
+  // Until jsesc escapes lone surrogates in minimal mode, we need to manually
+  // do it.
+  val = val.replace(surrogates, (match, lone) => {
+    if (lone) {
+      const code = lone
+        .charCodeAt(0)
+        .toString(16)
+        .toUpperCase();
+      return `\\u${code}`;
+    }
+    return match;
+  });
 
   return this.token(val);
 }
