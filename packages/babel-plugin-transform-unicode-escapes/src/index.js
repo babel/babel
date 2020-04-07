@@ -10,9 +10,11 @@ export default declare(api => {
   function escape(code) {
     let str = code.toString(16);
     // Sigh, node 6 doesn't have padStart
+    // TODO: Remove in Babel 8, when we drop node 6.
     while (str.length < 4) str = "0" + str;
     return "\\u" + str;
   }
+
   function replacer(match, backslashes, code) {
     if (backslashes.length % 2 === 0) {
       return match;
@@ -23,8 +25,19 @@ export default declare(api => {
 
     return char.length === 1 ? escaped : escaped + escape(char.charCodeAt(1));
   }
+
   function replaceUnicodeEscapes(str) {
     return str.replace(unicodeEscape, replacer);
+  }
+
+  function getUnicodeEscape(str) {
+    let match;
+    while ((match = unicodeEscape.exec(str))) {
+      if (match[1].length % 2 === 0) continue;
+      unicodeEscape.lastIndex = 0;
+      return match[0];
+    }
+    return null;
   }
 
   return {
@@ -54,7 +67,7 @@ export default declare(api => {
         }
 
         throw path.buildCodeFrameError(
-          `Can't represent "${name}" as a bare identifier`,
+          `Can't represent '${name}' as a bare identifier`,
         );
       },
 
@@ -69,18 +82,17 @@ export default declare(api => {
         const { node, parentPath } = path;
         const { value } = node;
 
-        value.cooked = replaceUnicodeEscapes(value.cooked);
-
-        const raw = replaceUnicodeEscapes(value.raw);
-        if (raw === value.raw) return;
+        const firstEscape = getUnicodeEscape(value.raw);
+        if (!firstEscape) return;
 
         const grandParent = parentPath.parentPath;
         if (grandParent.isTaggedTemplateExpression()) {
           throw path.buildCodeFrameError(
-            `Can't replace Unicode escape inside tagged template literal`,
+            `Can't replace Unicode escape '${firstEscape}' inside tagged template literals. You can enable '@babel/plugin-transform-template-literals' to compile them to classic strings.`,
           );
         }
-        value.raw = raw;
+
+        value.raw = replaceUnicodeEscapes(value.raw);
       },
     },
   };
