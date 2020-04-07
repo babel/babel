@@ -32,7 +32,7 @@ const isClassExtendsClause = (node: Object, parent: Object): boolean =>
   (t.isClassDeclaration(parent) || t.isClassExpression(parent)) &&
   parent.superClass === node;
 
-const isPostfixExpression = (node: Object, parent: Object) =>
+const hasPostfixPart = (node: Object, parent: Object) =>
   ((t.isMemberExpression(parent) || t.isOptionalMemberExpression(parent)) &&
     parent.object === node) ||
   ((t.isCallExpression(parent) ||
@@ -66,9 +66,7 @@ export function FunctionTypeAnnotation(
 }
 
 export function UpdateExpression(node: Object, parent: Object): boolean {
-  return (
-    isPostfixExpression(node, parent) || isClassExtendsClause(node, parent)
-  );
+  return hasPostfixPart(node, parent) || isClassExtendsClause(node, parent);
 }
 
 export function ObjectExpression(
@@ -100,7 +98,7 @@ export function Binary(node: Object, parent: Object): boolean {
   }
 
   if (
-    isPostfixExpression(node, parent) ||
+    hasPostfixPart(node, parent) ||
     t.isUnaryLike(parent) ||
     t.isAwaitExpression(parent)
   ) {
@@ -197,7 +195,7 @@ export function YieldExpression(node: Object, parent: Object): boolean {
   return (
     t.isBinary(parent) ||
     t.isUnaryLike(parent) ||
-    isPostfixExpression(node, parent) ||
+    hasPostfixPart(node, parent) ||
     (t.isAwaitExpression(parent) && t.isYieldExpression(node)) ||
     (t.isConditionalExpression(parent) && node === parent.test) ||
     isClassExtendsClause(node, parent)
@@ -216,7 +214,7 @@ export function ClassExpression(
 
 export function UnaryLike(node: Object, parent: Object): boolean {
   return (
-    isPostfixExpression(node, parent) ||
+    hasPostfixPart(node, parent) ||
     t.isBinaryExpression(parent, { operator: "**", left: node }) ||
     isClassExtendsClause(node, parent)
   );
@@ -306,7 +304,7 @@ function isFirstInStatement(
     }
 
     if (
-      (isPostfixExpression(node, parent) && !t.isNewExpression(parent)) ||
+      (hasPostfixPart(node, parent) && !t.isNewExpression(parent)) ||
       (t.isSequenceExpression(parent) && parent.expressions[0] === node) ||
       t.isConditional(parent, { test: node }) ||
       t.isBinary(parent, { left: node }) ||
