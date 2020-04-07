@@ -1,6 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import convertFunctionParams from "./params";
 import convertFunctionRest from "./rest";
+export { convertFunctionParams };
 
 export default declare((api, options) => {
   api.assertVersion(7);
