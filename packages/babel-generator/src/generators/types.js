@@ -1,7 +1,7 @@
 import * as t from "@babel/types";
 import jsesc from "jsesc";
 
-const surrogates = /[\uD800-\uDBFF][\uDC00-\uDFFF]|([\uD800-\uDBFF]|[\uDC00-\uDFFF])/g;
+const loneSurrogates = /[\uD800-\uDFFF]/gu;
 
 export function Identifier(node: Object) {
   this.exactSource(node.loc, () => {
@@ -210,15 +210,12 @@ export function StringLiteral(node: Object) {
 
   // Until jsesc escapes lone surrogates in minimal mode, we need to manually
   // do it.
-  val = val.replace(surrogates, (match, lone) => {
-    if (lone) {
-      const code = lone
-        .charCodeAt(0)
-        .toString(16)
-        .toUpperCase();
-      return `\\u${code}`;
-    }
-    return match;
+  val = val.replace(loneSurrogates, lone => {
+    const code = lone
+      .charCodeAt(0)
+      .toString(16)
+      .toUpperCase();
+    return `\\u${code}`;
   });
 
   return this.token(val);
