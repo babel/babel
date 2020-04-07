@@ -1,0 +1,23 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "corejs": 3,
+        "useBuiltIns": "entry"
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "transform-runtime",
+      {
+        "regenerator": false,
+        "corejs": false,
+        "helpers": true,
+        "useESModules": true,
+        "absoluteRuntime": true
+      }
+    ]
+  ]
+}
