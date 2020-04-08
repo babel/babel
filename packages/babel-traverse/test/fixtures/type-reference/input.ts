@@ -1,4 +1,4 @@
-function bug() {
+function foo() {
   const x = 1 ? a() : b();
 
   return [...x];
