@@ -2129,7 +2129,10 @@ export default class ExpressionParser extends LValParser {
       // But there is no chance to pop the context if the keyword is consumed
       // as an identifier such as a property name.
       const context = this.state.context;
-      if (context[context.length - 1].token === "function") {
+      if (
+        (name === "class" || name === "function") &&
+        context[context.length - 1].token === "function"
+      ) {
         context.pop();
       }
     } else {
