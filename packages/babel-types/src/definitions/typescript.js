@@ -143,14 +143,14 @@ const tsKeywordTypes = [
 
 for (const type of tsKeywordTypes) {
   defineType(type, {
-    aliases: ["TSType"],
+    aliases: ["TSType", "TSBaseType"],
     visitor: [],
     fields: {},
   });
 }
 
 defineType("TSThisType", {
-  aliases: ["TSType"],
+  aliases: ["TSType", "TSBaseType"],
   visitor: [],
   fields: {},
 });
@@ -300,7 +300,7 @@ defineType("TSMappedType", {
 });
 
 defineType("TSLiteralType", {
-  aliases: ["TSType"],
+  aliases: ["TSType", "TSBaseType"],
   visitor: ["literal"],
   fields: {
     literal: validateType([

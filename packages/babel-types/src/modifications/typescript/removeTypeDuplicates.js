@@ -1,18 +1,7 @@
 import {
   isTSAnyKeyword,
   isTSUnionType,
-  isTSBooleanKeyword,
-  isTSBigIntKeyword,
-  isTSNeverKeyword,
-  isTSNullKeyword,
-  isTSNumberKeyword,
-  isTSObjectKeyword,
-  isTSStringKeyword,
-  isTSUnknownKeyword,
-  isTSVoidKeyword,
-  isTSUndefinedKeyword,
-  isTSLiteralType,
-  isTSThisType,
+  isTSBaseType,
 } from "../../validators/generated";
 
 /**
@@ -43,21 +32,8 @@ export default function removeTypeDuplicates(
       return [node];
     }
 
-    // Basic TS types, analogue of FlowBaseAnnotation
-    if (
-      isTSBooleanKeyword(node) ||
-      isTSBigIntKeyword(node) ||
-      isTSNeverKeyword(node) ||
-      isTSNullKeyword(node) ||
-      isTSNumberKeyword(node) ||
-      isTSObjectKeyword(node) ||
-      isTSStringKeyword(node) ||
-      isTSUndefinedKeyword(node) ||
-      isTSUnknownKeyword(node) ||
-      isTSVoidKeyword(node) ||
-      isTSThisType(node) ||
-      isTSLiteralType(node)
-    ) {
+    // Analogue of FlowBaseAnnotation
+    if (isTSBaseType(node)) {
       bases[node.type] = node;
       continue;
     }

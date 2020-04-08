@@ -1202,6 +1202,9 @@ export function assertTSTypeElement(node: Object, opts?: Object = {}): void {
 export function assertTSType(node: Object, opts?: Object = {}): void {
   assert("TSType", node, opts);
 }
+export function assertTSBaseType(node: Object, opts?: Object = {}): void {
+  assert("TSBaseType", node, opts);
+}
 export function assertNumberLiteral(node: Object, opts: Object): void {
   console.trace(
     "The node type NumberLiteral has been renamed to NumericLiteral",
