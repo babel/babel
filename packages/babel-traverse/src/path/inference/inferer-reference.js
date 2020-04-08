@@ -95,7 +95,7 @@ function getTypeAnnotationBindingConstantViolations(binding, path, name) {
     return;
   }
 
-  if (types.every(t.isTSTypeAnnotation)) {
+  if (t.isTSTypeAnnotation(types[0])) {
     return t.createTSUnionType(types);
   }
 
@@ -207,7 +207,7 @@ function getConditionalAnnotation(binding, path, name) {
   }
 
   if (types.length) {
-    if (types.every(t.isTSTypeAnnotation)) {
+    if (t.isTSTypeAnnotation(types[0])) {
       return {
         typeAnnotation: t.createTSUnionType(types),
         ifStatement,
