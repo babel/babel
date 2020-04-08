@@ -10,9 +10,9 @@ import { typeAnnotationToString } from "./helpers";
 
 function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
   try {
-    return path.dirname(
-      resolve.sync(`${moduleName}/package.json`, { basedir: dirname }),
-    );
+    return path
+      .dirname(resolve.sync(`${moduleName}/package.json`, { basedir: dirname }))
+      .replace(/\\/g, "/");
   } catch (err) {
     if (err.code !== "MODULE_NOT_FOUND") throw err;
 
