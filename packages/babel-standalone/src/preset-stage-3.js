@@ -10,12 +10,15 @@ export default (_: any, opts: Object) => {
 
   return {
     plugins: [
-      babelPlugins.syntaxDynamicImport,
       babelPlugins.syntaxImportMeta,
+      babelPlugins.syntaxTopLevelAwait,
+      babelPlugins.proposalExportNamespaceFrom,
+      babelPlugins.proposalLogicalAssignmentOperators,
       [babelPlugins.proposalOptionalChaining, { loose }],
       [babelPlugins.proposalNullishCoalescingOperator, { loose }],
       [babelPlugins.proposalClassProperties, { loose }],
       babelPlugins.proposalJsonStrings,
+      babelPlugins.proposalNumericSeparator,
       [babelPlugins.proposalPrivateMethods, { loose }],
     ],
   };
