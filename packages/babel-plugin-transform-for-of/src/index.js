@@ -20,6 +20,13 @@ export default declare((api, options) => {
     );
   }
 
+  // TODO: Remove in Babel 8
+  if (allowArrayLike && api.version.test(/^7\.\d\./)) {
+    throw new Error(
+      `The allowArrayLike is only supported when using @babel/core@^7.10.0`,
+    );
+  }
+
   if (assumeArray) {
     return {
       name: "transform-for-of",
