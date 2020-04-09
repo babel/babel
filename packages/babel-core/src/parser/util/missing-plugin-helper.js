@@ -11,6 +11,16 @@ const pluginNameMap = {
       url: "https://git.io/vb4SL",
     },
   },
+  classPrivateMethods: {
+    syntax: {
+      name: "@babel/plugin-syntax-class-properties",
+      url: "https://git.io/vb4yQ",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-private-methods",
+      url: "https://git.io/JvpRG",
+    },
+  },
   decorators: {
     syntax: {
       name: "@babel/plugin-syntax-decorators",
@@ -215,6 +225,7 @@ const pluginNameMap = {
     },
   },
 };
+pluginNameMap.classPrivateProperties = pluginNameMap.classProperties;
 
 const getNameURLCombination = ({ name, url }) => `${name} (${url})`;
 
