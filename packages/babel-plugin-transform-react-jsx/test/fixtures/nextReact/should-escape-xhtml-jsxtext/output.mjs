@@ -23,7 +23,7 @@ _jsx("div", {
 
 /*#__PURE__*/
 _jsx("div", {
-  children: "w   w"
+  children: "w \xA0 w"
 });
 
 /*#__PURE__*/
@@ -33,7 +33,7 @@ _jsx("div", {
 
 /*#__PURE__*/
 _jsx("div", {
-  children: "this should parse as nbsp:   "
+  children: "this should parse as nbsp: \xA0 "
 });
 
 /*#__PURE__*/
