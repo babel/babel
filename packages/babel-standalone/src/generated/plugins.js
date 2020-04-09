@@ -8,9 +8,7 @@ import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import syntaxDoExpressions from "@babel/plugin-syntax-do-expressions";
-import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
 import syntaxExportDefaultFrom from "@babel/plugin-syntax-export-default-from";
-import syntaxExportNamespaceFrom from "@babel/plugin-syntax-export-namespace-from";
 import syntaxFlow from "@babel/plugin-syntax-flow";
 import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
 import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
@@ -19,6 +17,7 @@ import syntaxJsx from "@babel/plugin-syntax-jsx";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-binding";
 import syntaxPipelineOperator from "@babel/plugin-syntax-pipeline-operator";
+import syntaxRecordAndTuple from "@babel/plugin-syntax-record-and-tuple";
 import syntaxTopLevelAwait from "@babel/plugin-syntax-top-level-await";
 import syntaxTypescript from "@babel/plugin-syntax-typescript";
 import proposalAsyncGeneratorFunctions from "@babel/plugin-proposal-async-generator-functions";
@@ -98,9 +97,7 @@ export {
   syntaxClassProperties,
   syntaxDecorators,
   syntaxDoExpressions,
-  syntaxDynamicImport,
   syntaxExportDefaultFrom,
-  syntaxExportNamespaceFrom,
   syntaxFlow,
   syntaxFunctionBind,
   syntaxFunctionSent,
@@ -109,6 +106,7 @@ export {
   syntaxObjectRestSpread,
   syntaxOptionalCatchBinding,
   syntaxPipelineOperator,
+  syntaxRecordAndTuple,
   syntaxTopLevelAwait,
   syntaxTypescript,
   proposalAsyncGeneratorFunctions,
@@ -189,9 +187,7 @@ export const all = {
   "syntax-class-properties": syntaxClassProperties,
   "syntax-decorators": syntaxDecorators,
   "syntax-do-expressions": syntaxDoExpressions,
-  "syntax-dynamic-import": syntaxDynamicImport,
   "syntax-export-default-from": syntaxExportDefaultFrom,
-  "syntax-export-namespace-from": syntaxExportNamespaceFrom,
   "syntax-flow": syntaxFlow,
   "syntax-function-bind": syntaxFunctionBind,
   "syntax-function-sent": syntaxFunctionSent,
@@ -200,6 +196,7 @@ export const all = {
   "syntax-object-rest-spread": syntaxObjectRestSpread,
   "syntax-optional-catch-binding": syntaxOptionalCatchBinding,
   "syntax-pipeline-operator": syntaxPipelineOperator,
+  "syntax-record-and-tuple": syntaxRecordAndTuple,
   "syntax-top-level-await": syntaxTopLevelAwait,
   "syntax-typescript": syntaxTypescript,
   "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,

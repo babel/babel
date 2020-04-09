@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-create-class-features-plugin",
-  "version": "7.8.6",
+  "version": "7.9.5",
   "author": "The Babel Team (https://babeljs.io/team)",
   "license": "MIT",
   "description": "Compile class public and private fields, private methods and decorators to ES6",
@@ -14,7 +14,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-function-name": "^7.8.3",
+    "@babel/helper-function-name": "^7.9.5",
     "@babel/helper-member-expression-to-functions": "^7.8.3",
     "@babel/helper-optimise-call-expression": "^7.8.3",
     "@babel/helper-plugin-utils": "^7.8.3",

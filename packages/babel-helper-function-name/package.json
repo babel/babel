@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-function-name",
-  "version": "7.8.3",
+  "version": "7.9.5",
   "description": "Helper function to change the property 'name' of every function",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-function-name",
   "license": "MIT",
@@ -11,6 +11,6 @@
   "dependencies": {
     "@babel/helper-get-function-arity": "^7.8.3",
     "@babel/template": "^7.8.3",
-    "@babel/types": "^7.8.3"
+    "@babel/types": "^7.9.5"
   }
 }

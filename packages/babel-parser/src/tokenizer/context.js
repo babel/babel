@@ -101,7 +101,10 @@ tt.incDec.updateContext = function() {
 };
 
 tt._function.updateContext = tt._class.updateContext = function(prevType) {
-  if (
+  if (prevType === tt.dot || prevType === tt.questionDot) {
+    // when function/class follows dot/questionDot, it is part of
+    // (optional)MemberExpression, then we don't need to push new token context
+  } else if (
     prevType.beforeExpr &&
     prevType !== tt.semi &&
     prevType !== tt._else &&

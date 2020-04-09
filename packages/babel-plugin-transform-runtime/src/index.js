@@ -9,11 +9,13 @@ import { typeAnnotationToString } from "./helpers";
 
 function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
   try {
-    return path.dirname(
-      require.resolve(`${moduleName}/package.json`, {
-        paths: [dirname],
-      }),
-    );
+    return path
+      .dirname(
+        require.resolve(`${moduleName}/package.json`, {
+          paths: [dirname],
+        }),
+      )
+      .replace(/\\/g, "/");
   } catch (err) {
     if (err.code !== "MODULE_NOT_FOUND") throw err;
 

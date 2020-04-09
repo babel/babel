@@ -2125,17 +2125,15 @@ export default class ExpressionParser extends LValParser {
     } else if (this.state.type.keyword) {
       name = this.state.type.keyword;
 
-      // `class` and `function` keywords push new context into this.context.
+      // `class` and `function` keywords push function-type token context into this.context.
       // But there is no chance to pop the context if the keyword is consumed
       // as an identifier such as a property name.
-      // If the previous token is a dot, this does not apply because the
-      // context-managing code already ignored the keyword
+      const context = this.state.context;
       if (
         (name === "class" || name === "function") &&
-        (this.state.lastTokEnd !== this.state.lastTokStart + 1 ||
-          this.input.charCodeAt(this.state.lastTokStart) !== charCodes.dot)
+        context[context.length - 1].token === "function"
       ) {
-        this.state.context.pop();
+        context.pop();
       }
     } else {
       throw this.unexpected();

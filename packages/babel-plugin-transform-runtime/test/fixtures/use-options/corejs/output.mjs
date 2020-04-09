@@ -1,8 +1,8 @@
 import _Reflect$construct from "@babel/runtime-corejs2/core-js/reflect/construct";
 import _classCallCheck from "@babel/runtime-corejs2/helpers/classCallCheck";
+import _inherits from "@babel/runtime-corejs2/helpers/inherits";
 import _possibleConstructorReturn from "@babel/runtime-corejs2/helpers/possibleConstructorReturn";
 import _getPrototypeOf from "@babel/runtime-corejs2/helpers/getPrototypeOf";
-import _inherits from "@babel/runtime-corejs2/helpers/inherits";
 
 function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 

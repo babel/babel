@@ -18,8 +18,6 @@ export default (_: any, opts: Object = {}) => {
         { legacy: decoratorsLegacy, decoratorsBeforeExport },
       ],
       babelPlugins.proposalFunctionSent,
-      babelPlugins.proposalExportNamespaceFrom,
-      babelPlugins.proposalNumericSeparator,
       babelPlugins.proposalThrowExpressions,
     ],
   };

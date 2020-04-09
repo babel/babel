@@ -155,6 +155,7 @@ const collectorVisitor = {
   For(path) {
     for (const key of (t.FOR_INIT_KEYS: Array)) {
       const declar = path.get(key);
+      // delegate block scope handling to the `BlockScoped` method
       if (declar.isVar()) {
         const parentScope =
           path.scope.getFunctionParent() || path.scope.getProgramParent();
@@ -253,6 +254,31 @@ const collectorVisitor = {
       }
     }
   },
+
+  CatchClause(path) {
+    path.scope.registerBinding("let", path);
+  },
+
+  Function(path) {
+    if (
+      path.isFunctionExpression() &&
+      path.has("id") &&
+      !path.get("id").node[t.NOT_LOCAL_BINDING]
+    ) {
+      path.scope.registerBinding("local", path.get("id"), path);
+    }
+
+    const params: Array<NodePath> = path.get("params");
+    for (const param of params) {
+      path.scope.registerBinding("param", param);
+    }
+  },
+
+  ClassExpression(path) {
+    if (path.has("id") && !path.get("id").node[t.NOT_LOCAL_BINDING]) {
+      path.scope.registerBinding("local", path);
+    }
+  },
 };
 
 let uid = 0;
@@ -279,6 +305,7 @@ export default class Scope {
     this.path = path;
 
     this.labels = new Map();
+    this.inited = false;
   }
 
   /**
@@ -662,13 +689,7 @@ export default class Scope {
   }
 
   hasReference(name: string): boolean {
-    let scope = this;
-
-    do {
-      if (scope.references[name]) return true;
-    } while ((scope = scope.parent));
-
-    return false;
+    return !!this.getProgramParent().references[name];
   }
 
   isPure(node, constantsOnly?: boolean) {
@@ -761,7 +782,10 @@ export default class Scope {
   }
 
   init() {
-    if (!this.references) this.crawl();
+    if (!this.inited) {
+      this.inited = true;
+      this.crawl();
+    }
   }
 
   crawl() {
@@ -773,50 +797,24 @@ export default class Scope {
     this.uids = Object.create(null);
     this.data = Object.create(null);
 
-    // ForStatement - left, init
-
-    if (path.isLoop()) {
-      for (const key of (t.FOR_INIT_KEYS: Array<string>)) {
-        const node = path.get(key);
-        if (node.isBlockScoped()) this.registerBinding(node.node.kind, node);
-      }
-    }
-
-    // FunctionExpression - id
-
-    if (path.isFunctionExpression() && path.has("id")) {
-      if (!path.get("id").node[t.NOT_LOCAL_BINDING]) {
+    // TODO: explore removing this as it should be covered by collectorVisitor
+    if (path.isFunction()) {
+      if (
+        path.isFunctionExpression() &&
+        path.has("id") &&
+        !path.get("id").node[t.NOT_LOCAL_BINDING]
+      ) {
         this.registerBinding("local", path.get("id"), path);
       }
-    }
 
-    // Class
-
-    if (path.isClassExpression() && path.has("id")) {
-      if (!path.get("id").node[t.NOT_LOCAL_BINDING]) {
-        this.registerBinding("local", path);
-      }
-    }
-
-    // Function - params, rest
-
-    if (path.isFunction()) {
       const params: Array<NodePath> = path.get("params");
       for (const param of params) {
         this.registerBinding("param", param);
       }
     }
 
-    // CatchClause - param
-
-    if (path.isCatchClause()) {
-      this.registerBinding("let", path);
-    }
-
-    // Program
-
-    const parent = this.getProgramParent();
-    if (parent.crawling) return;
+    const programParent = this.getProgramParent();
+    if (programParent.crawling) return;
 
     const state = {
       references: [],
@@ -832,11 +830,8 @@ export default class Scope {
     for (const path of state.assignments) {
       // register undeclared bindings as globals
       const ids = path.getBindingIdentifiers();
-      let programParent;
       for (const name of Object.keys(ids)) {
         if (path.scope.getBinding(name)) continue;
-
-        programParent = programParent || path.scope.getProgramParent();
         programParent.addGlobal(ids[name]);
       }
 
@@ -850,7 +845,7 @@ export default class Scope {
       if (binding) {
         binding.reference(ref);
       } else {
-        ref.scope.getProgramParent().addGlobal(ref.node);
+        programParent.addGlobal(ref.node);
       }
     }
 
