@@ -11,11 +11,11 @@
   "overrides": [{
     "files": [
       "**/codemods/*/src/**/*.{js,ts}",
-      "**/codemods/*/test/**/*.js",
+      "**/codemods/*/test/**/*.{js,ts}",
       "**/packages/*/src/**/*.{js,ts}",
-      "**/packages/*/test/**/*.js",
+      "**/packages/*/test/**/*.{js,ts}",
       "**/eslint/*/src/**/*.{js,ts}",
-      "**/eslint/*/test/**/*.js"
+      "**/eslint/*/test/**/*.{js,ts}"
     ],
     "options": {
       "trailingComma": "all"

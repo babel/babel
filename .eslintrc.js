@@ -47,11 +47,11 @@ module.exports = {
     },
     {
       files: [
-        "packages/*/test/**/*.js",
-        "codemods/*/test/**/*.js",
-        "eslint/*/test/**/*.js",
+        "packages/*/test/**/*.{js,ts}",
+        "codemods/*/test/**/*.{js,ts}",
+        "eslint/*/test/**/*.{js,ts}",
         "packages/babel-helper-transform-fixture-test-runner/src/helpers.{ts,js}",
-        "test/**/*.js",
+        "test/**/*.{js,ts}",
       ],
       env: {
         jest: true,
@@ -67,7 +67,9 @@ module.exports = {
     },
     {
       files: ["packages/babel-plugin-*/src/index.{js,ts}"],
-      excludedFiles: ["packages/babel-plugin-transform-regenerator/**/*.js"],
+      excludedFiles: [
+        "packages/babel-plugin-transform-regenerator/**/*.{js,ts}",
+      ],
       rules: {
         "@babel/development/plugin-name": "error",
         eqeqeq: ["error", "always", { null: "ignore" }],
