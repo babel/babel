@@ -562,7 +562,7 @@ export interface RegExpLiteral extends BaseNode {
 export interface RegexLiteral extends BaseNode {
   type: "RegexLiteral";
   pattern: string;
-  flags: any;
+  flags: string;
 }
 
 export interface LogicalExpression extends BaseNode {

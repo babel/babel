@@ -94,7 +94,9 @@ import type * as types from "../../types";\n\n`;
       formatedBuilderNameLocal === formatedBuilderName ? "export " : ""
     }function ${formatedBuilderNameLocal}(${defArgs.join(
       ", "
-    )}): any { return builder("${type}", ${callArgs.join(", ")}); }\n`;
+    )}): types.${type} { return builder("${type}", ${callArgs.join(
+      ", "
+    )}); }\n`;
     // This is needed for backwards compatibility.
     // arrayExpression -> ArrayExpression
     output += `export { ${formatedBuilderNameLocal} as ${type} };\n`;

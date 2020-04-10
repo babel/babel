@@ -7,7 +7,7 @@ import type * as types from "../../types";
 
 export function arrayExpression(
   elements?: Array<null | types.Expression | types.SpreadElement>,
-): any {
+): types.ArrayExpression {
   return builder("ArrayExpression", elements);
 }
 export { arrayExpression as ArrayExpression };
@@ -15,7 +15,7 @@ export function assignmentExpression(
   operator: string,
   left: types.LVal,
   right: types.Expression,
-): any {
+): types.AssignmentExpression {
   return builder("AssignmentExpression", operator, left, right);
 }
 export { assignmentExpression as AssignmentExpression };
@@ -45,30 +45,34 @@ export function binaryExpression(
     | "<=",
   left: types.Expression | types.PrivateName,
   right: types.Expression,
-): any {
+): types.BinaryExpression {
   return builder("BinaryExpression", operator, left, right);
 }
 export { binaryExpression as BinaryExpression };
-export function interpreterDirective(value: string): any {
+export function interpreterDirective(
+  value: string,
+): types.InterpreterDirective {
   return builder("InterpreterDirective", value);
 }
 export { interpreterDirective as InterpreterDirective };
-export function directive(value: types.DirectiveLiteral): any {
+export function directive(value: types.DirectiveLiteral): types.Directive {
   return builder("Directive", value);
 }
 export { directive as Directive };
-export function directiveLiteral(value: string): any {
+export function directiveLiteral(value: string): types.DirectiveLiteral {
   return builder("DirectiveLiteral", value);
 }
 export { directiveLiteral as DirectiveLiteral };
 export function blockStatement(
   body: Array<types.Statement>,
   directives?: Array<types.Directive>,
-): any {
+): types.BlockStatement {
   return builder("BlockStatement", body, directives);
 }
 export { blockStatement as BlockStatement };
-export function breakStatement(label?: types.Identifier | null): any {
+export function breakStatement(
+  label?: types.Identifier | null,
+): types.BreakStatement {
   return builder("BreakStatement", label);
 }
 export { breakStatement as BreakStatement };
@@ -80,7 +84,7 @@ export function callExpression(
     | types.JSXNamespacedName
     | types.ArgumentPlaceholder
   >,
-): any {
+): types.CallExpression {
   return builder("CallExpression", callee, _arguments);
 }
 export { callExpression as CallExpression };
@@ -92,7 +96,7 @@ export function catchClause(
     | null
     | undefined,
   body: types.BlockStatement,
-): any {
+): types.CatchClause {
   return builder("CatchClause", param, body);
 }
 export { catchClause as CatchClause };
@@ -100,30 +104,34 @@ export function conditionalExpression(
   test: types.Expression,
   consequent: types.Expression,
   alternate: types.Expression,
-): any {
+): types.ConditionalExpression {
   return builder("ConditionalExpression", test, consequent, alternate);
 }
 export { conditionalExpression as ConditionalExpression };
-export function continueStatement(label?: types.Identifier | null): any {
+export function continueStatement(
+  label?: types.Identifier | null,
+): types.ContinueStatement {
   return builder("ContinueStatement", label);
 }
 export { continueStatement as ContinueStatement };
-export function debuggerStatement(): any {
+export function debuggerStatement(): types.DebuggerStatement {
   return builder("DebuggerStatement");
 }
 export { debuggerStatement as DebuggerStatement };
 export function doWhileStatement(
   test: types.Expression,
   body: types.Statement,
-): any {
+): types.DoWhileStatement {
   return builder("DoWhileStatement", test, body);
 }
 export { doWhileStatement as DoWhileStatement };
-export function emptyStatement(): any {
+export function emptyStatement(): types.EmptyStatement {
   return builder("EmptyStatement");
 }
 export { emptyStatement as EmptyStatement };
-export function expressionStatement(expression: types.Expression): any {
+export function expressionStatement(
+  expression: types.Expression,
+): types.ExpressionStatement {
   return builder("ExpressionStatement", expression);
 }
 export { expressionStatement as ExpressionStatement };
@@ -131,7 +139,7 @@ export function file(
   program: types.Program,
   comments?: Array<types.CommentBlock | types.CommentLine> | null,
   tokens?: Array<any> | null,
-): any {
+): types.File {
   return builder("File", program, comments, tokens);
 }
 export { file as File };
@@ -139,7 +147,7 @@ export function forInStatement(
   left: types.VariableDeclaration | types.LVal,
   right: types.Expression,
   body: types.Statement,
-): any {
+): types.ForInStatement {
   return builder("ForInStatement", left, right, body);
 }
 export { forInStatement as ForInStatement };
@@ -148,7 +156,7 @@ export function forStatement(
   test: types.Expression | null | undefined,
   update: types.Expression | null | undefined,
   body: types.Statement,
-): any {
+): types.ForStatement {
   return builder("ForStatement", init, test, update, body);
 }
 export { forStatement as ForStatement };
@@ -163,7 +171,7 @@ export function functionDeclaration(
   body: types.BlockStatement,
   generator?: boolean,
   async?: boolean,
-): any {
+): types.FunctionDeclaration {
   return builder("FunctionDeclaration", id, params, body, generator, async);
 }
 export { functionDeclaration as FunctionDeclaration };
@@ -178,11 +186,11 @@ export function functionExpression(
   body: types.BlockStatement,
   generator?: boolean,
   async?: boolean,
-): any {
+): types.FunctionExpression {
   return builder("FunctionExpression", id, params, body, generator, async);
 }
 export { functionExpression as FunctionExpression };
-export function identifier(name: string): any {
+export function identifier(name: string): types.Identifier {
   return builder("Identifier", name);
 }
 export { identifier as Identifier };
@@ -190,34 +198,37 @@ export function ifStatement(
   test: types.Expression,
   consequent: types.Statement,
   alternate?: types.Statement | null,
-): any {
+): types.IfStatement {
   return builder("IfStatement", test, consequent, alternate);
 }
 export { ifStatement as IfStatement };
 export function labeledStatement(
   label: types.Identifier,
   body: types.Statement,
-): any {
+): types.LabeledStatement {
   return builder("LabeledStatement", label, body);
 }
 export { labeledStatement as LabeledStatement };
-export function stringLiteral(value: string): any {
+export function stringLiteral(value: string): types.StringLiteral {
   return builder("StringLiteral", value);
 }
 export { stringLiteral as StringLiteral };
-export function numericLiteral(value: number): any {
+export function numericLiteral(value: number): types.NumericLiteral {
   return builder("NumericLiteral", value);
 }
 export { numericLiteral as NumericLiteral };
-export function nullLiteral(): any {
+export function nullLiteral(): types.NullLiteral {
   return builder("NullLiteral");
 }
 export { nullLiteral as NullLiteral };
-export function booleanLiteral(value: boolean): any {
+export function booleanLiteral(value: boolean): types.BooleanLiteral {
   return builder("BooleanLiteral", value);
 }
 export { booleanLiteral as BooleanLiteral };
-export function regExpLiteral(pattern: string, flags?: string): any {
+export function regExpLiteral(
+  pattern: string,
+  flags?: string,
+): types.RegExpLiteral {
   return builder("RegExpLiteral", pattern, flags);
 }
 export { regExpLiteral as RegExpLiteral };
@@ -225,7 +236,7 @@ export function logicalExpression(
   operator: "||" | "&&" | "??",
   left: types.Expression,
   right: types.Expression,
-): any {
+): types.LogicalExpression {
   return builder("LogicalExpression", operator, left, right);
 }
 export { logicalExpression as LogicalExpression };
@@ -234,7 +245,7 @@ export function memberExpression(
   property: types.Expression | types.Identifier | types.PrivateName,
   computed?: boolean,
   optional?: true | false | null,
-): any {
+): types.MemberExpression {
   return builder("MemberExpression", object, property, computed, optional);
 }
 export { memberExpression as MemberExpression };
@@ -246,7 +257,7 @@ export function newExpression(
     | types.JSXNamespacedName
     | types.ArgumentPlaceholder
   >,
-): any {
+): types.NewExpression {
   return builder("NewExpression", callee, _arguments);
 }
 export { newExpression as NewExpression };
@@ -255,7 +266,7 @@ export function program(
   directives?: Array<types.Directive>,
   sourceType?: "script" | "module",
   interpreter?: types.InterpreterDirective | null,
-): any {
+): types.Program {
   return builder("Program", body, directives, sourceType, interpreter);
 }
 export { program as Program };
@@ -263,7 +274,7 @@ export function objectExpression(
   properties: Array<
     types.ObjectMethod | types.ObjectProperty | types.SpreadElement
   >,
-): any {
+): types.ObjectExpression {
   return builder("ObjectExpression", properties);
 }
 export { objectExpression as ObjectExpression };
@@ -284,7 +295,7 @@ export function objectMethod(
   computed?: boolean,
   generator?: boolean,
   async?: boolean,
-): any {
+): types.ObjectMethod {
   return builder(
     "ObjectMethod",
     kind,
@@ -307,45 +318,53 @@ export function objectProperty(
   computed?: boolean,
   shorthand?: boolean,
   decorators?: Array<types.Decorator> | null,
-): any {
+): types.ObjectProperty {
   return builder("ObjectProperty", key, value, computed, shorthand, decorators);
 }
 export { objectProperty as ObjectProperty };
-export function restElement(argument: types.LVal): any {
+export function restElement(argument: types.LVal): types.RestElement {
   return builder("RestElement", argument);
 }
 export { restElement as RestElement };
-export function returnStatement(argument?: types.Expression | null): any {
+export function returnStatement(
+  argument?: types.Expression | null,
+): types.ReturnStatement {
   return builder("ReturnStatement", argument);
 }
 export { returnStatement as ReturnStatement };
-export function sequenceExpression(expressions: Array<types.Expression>): any {
+export function sequenceExpression(
+  expressions: Array<types.Expression>,
+): types.SequenceExpression {
   return builder("SequenceExpression", expressions);
 }
 export { sequenceExpression as SequenceExpression };
-export function parenthesizedExpression(expression: types.Expression): any {
+export function parenthesizedExpression(
+  expression: types.Expression,
+): types.ParenthesizedExpression {
   return builder("ParenthesizedExpression", expression);
 }
 export { parenthesizedExpression as ParenthesizedExpression };
 export function switchCase(
   test: types.Expression | null | undefined,
   consequent: Array<types.Statement>,
-): any {
+): types.SwitchCase {
   return builder("SwitchCase", test, consequent);
 }
 export { switchCase as SwitchCase };
 export function switchStatement(
   discriminant: types.Expression,
   cases: Array<types.SwitchCase>,
-): any {
+): types.SwitchStatement {
   return builder("SwitchStatement", discriminant, cases);
 }
 export { switchStatement as SwitchStatement };
-export function thisExpression(): any {
+export function thisExpression(): types.ThisExpression {
   return builder("ThisExpression");
 }
 export { thisExpression as ThisExpression };
-export function throwStatement(argument: types.Expression): any {
+export function throwStatement(
+  argument: types.Expression,
+): types.ThrowStatement {
   return builder("ThrowStatement", argument);
 }
 export { throwStatement as ThrowStatement };
@@ -353,7 +372,7 @@ export function tryStatement(
   block: types.BlockStatement,
   handler?: types.CatchClause | null,
   finalizer?: types.BlockStatement | null,
-): any {
+): types.TryStatement {
   return builder("TryStatement", block, handler, finalizer);
 }
 export { tryStatement as TryStatement };
@@ -361,7 +380,7 @@ export function unaryExpression(
   operator: "void" | "throw" | "delete" | "!" | "+" | "-" | "~" | "typeof",
   argument: types.Expression,
   prefix?: boolean,
-): any {
+): types.UnaryExpression {
   return builder("UnaryExpression", operator, argument, prefix);
 }
 export { unaryExpression as UnaryExpression };
@@ -369,35 +388,35 @@ export function updateExpression(
   operator: "++" | "--",
   argument: types.Expression,
   prefix?: boolean,
-): any {
+): types.UpdateExpression {
   return builder("UpdateExpression", operator, argument, prefix);
 }
 export { updateExpression as UpdateExpression };
 export function variableDeclaration(
   kind: "var" | "let" | "const",
   declarations: Array<types.VariableDeclarator>,
-): any {
+): types.VariableDeclaration {
   return builder("VariableDeclaration", kind, declarations);
 }
 export { variableDeclaration as VariableDeclaration };
 export function variableDeclarator(
   id: types.LVal,
   init?: types.Expression | null,
-): any {
+): types.VariableDeclarator {
   return builder("VariableDeclarator", id, init);
 }
 export { variableDeclarator as VariableDeclarator };
 export function whileStatement(
   test: types.Expression,
   body: types.Statement,
-): any {
+): types.WhileStatement {
   return builder("WhileStatement", test, body);
 }
 export { whileStatement as WhileStatement };
 export function withStatement(
   object: types.Expression,
   body: types.Statement,
-): any {
+): types.WithStatement {
   return builder("WithStatement", object, body);
 }
 export { withStatement as WithStatement };
@@ -408,11 +427,13 @@ export function assignmentPattern(
     | types.ArrayPattern
     | types.MemberExpression,
   right: types.Expression,
-): any {
+): types.AssignmentPattern {
   return builder("AssignmentPattern", left, right);
 }
 export { assignmentPattern as AssignmentPattern };
-export function arrayPattern(elements: Array<null | types.PatternLike>): any {
+export function arrayPattern(
+  elements: Array<null | types.PatternLike>,
+): types.ArrayPattern {
   return builder("ArrayPattern", elements);
 }
 export { arrayPattern as ArrayPattern };
@@ -425,7 +446,7 @@ export function arrowFunctionExpression(
   >,
   body: types.BlockStatement | types.Expression,
   async?: boolean,
-): any {
+): types.ArrowFunctionExpression {
   return builder("ArrowFunctionExpression", params, body, async);
 }
 export { arrowFunctionExpression as ArrowFunctionExpression };
@@ -438,7 +459,7 @@ export function classBody(
     | types.TSDeclareMethod
     | types.TSIndexSignature
   >,
-): any {
+): types.ClassBody {
   return builder("ClassBody", body);
 }
 export { classBody as ClassBody };
@@ -447,7 +468,7 @@ export function classExpression(
   superClass: types.Expression | null | undefined,
   body: types.ClassBody,
   decorators?: Array<types.Decorator> | null,
-): any {
+): types.ClassExpression {
   return builder("ClassExpression", id, superClass, body, decorators);
 }
 export { classExpression as ClassExpression };
@@ -456,11 +477,13 @@ export function classDeclaration(
   superClass: types.Expression | null | undefined,
   body: types.ClassBody,
   decorators?: Array<types.Decorator> | null,
-): any {
+): types.ClassDeclaration {
   return builder("ClassDeclaration", id, superClass, body, decorators);
 }
 export { classDeclaration as ClassDeclaration };
-export function exportAllDeclaration(source: types.StringLiteral): any {
+export function exportAllDeclaration(
+  source: types.StringLiteral,
+): types.ExportAllDeclaration {
   return builder("ExportAllDeclaration", source);
 }
 export { exportAllDeclaration as ExportAllDeclaration };
@@ -470,7 +493,7 @@ export function exportDefaultDeclaration(
     | types.TSDeclareFunction
     | types.ClassDeclaration
     | types.Expression,
-): any {
+): types.ExportDefaultDeclaration {
   return builder("ExportDefaultDeclaration", declaration);
 }
 export { exportDefaultDeclaration as ExportDefaultDeclaration };
@@ -482,14 +505,14 @@ export function exportNamedDeclaration(
     | types.ExportNamespaceSpecifier
   >,
   source?: types.StringLiteral | null,
-): any {
+): types.ExportNamedDeclaration {
   return builder("ExportNamedDeclaration", declaration, specifiers, source);
 }
 export { exportNamedDeclaration as ExportNamedDeclaration };
 export function exportSpecifier(
   local: types.Identifier,
   exported: types.Identifier | types.StringLiteral,
-): any {
+): types.ExportSpecifier {
   return builder("ExportSpecifier", local, exported);
 }
 export { exportSpecifier as ExportSpecifier };
@@ -498,7 +521,7 @@ export function forOfStatement(
   right: types.Expression,
   body: types.Statement,
   _await?: boolean,
-): any {
+): types.ForOfStatement {
   return builder("ForOfStatement", left, right, body, _await);
 }
 export { forOfStatement as ForOfStatement };
@@ -509,29 +532,33 @@ export function importDeclaration(
     | types.ImportNamespaceSpecifier
   >,
   source: types.StringLiteral,
-): any {
+): types.ImportDeclaration {
   return builder("ImportDeclaration", specifiers, source);
 }
 export { importDeclaration as ImportDeclaration };
-export function importDefaultSpecifier(local: types.Identifier): any {
+export function importDefaultSpecifier(
+  local: types.Identifier,
+): types.ImportDefaultSpecifier {
   return builder("ImportDefaultSpecifier", local);
 }
 export { importDefaultSpecifier as ImportDefaultSpecifier };
-export function importNamespaceSpecifier(local: types.Identifier): any {
+export function importNamespaceSpecifier(
+  local: types.Identifier,
+): types.ImportNamespaceSpecifier {
   return builder("ImportNamespaceSpecifier", local);
 }
 export { importNamespaceSpecifier as ImportNamespaceSpecifier };
 export function importSpecifier(
   local: types.Identifier,
   imported: types.Identifier | types.StringLiteral,
-): any {
+): types.ImportSpecifier {
   return builder("ImportSpecifier", local, imported);
 }
 export { importSpecifier as ImportSpecifier };
 export function metaProperty(
   meta: types.Identifier,
   property: types.Identifier,
-): any {
+): types.MetaProperty {
   return builder("MetaProperty", meta, property);
 }
 export { metaProperty as MetaProperty };
@@ -553,7 +580,7 @@ export function classMethod(
   _static?: boolean,
   generator?: boolean,
   async?: boolean,
-): any {
+): types.ClassMethod {
   return builder(
     "ClassMethod",
     kind,
@@ -569,15 +596,15 @@ export function classMethod(
 export { classMethod as ClassMethod };
 export function objectPattern(
   properties: Array<types.RestElement | types.ObjectProperty>,
-): any {
+): types.ObjectPattern {
   return builder("ObjectPattern", properties);
 }
 export { objectPattern as ObjectPattern };
-export function spreadElement(argument: types.Expression): any {
+export function spreadElement(argument: types.Expression): types.SpreadElement {
   return builder("SpreadElement", argument);
 }
 export { spreadElement as SpreadElement };
-function _super(): any {
+function _super(): types.Super {
   return builder("Super");
 }
 export { _super as Super };
@@ -585,45 +612,49 @@ export { _super as super };
 export function taggedTemplateExpression(
   tag: types.Expression,
   quasi: types.TemplateLiteral,
-): any {
+): types.TaggedTemplateExpression {
   return builder("TaggedTemplateExpression", tag, quasi);
 }
 export { taggedTemplateExpression as TaggedTemplateExpression };
 export function templateElement(
   value: { raw: string; cooked?: string },
   tail?: boolean,
-): any {
+): types.TemplateElement {
   return builder("TemplateElement", value, tail);
 }
 export { templateElement as TemplateElement };
 export function templateLiteral(
   quasis: Array<types.TemplateElement>,
   expressions: Array<types.Expression | types.TSType>,
-): any {
+): types.TemplateLiteral {
   return builder("TemplateLiteral", quasis, expressions);
 }
 export { templateLiteral as TemplateLiteral };
 export function yieldExpression(
   argument?: types.Expression | null,
   delegate?: boolean,
-): any {
+): types.YieldExpression {
   return builder("YieldExpression", argument, delegate);
 }
 export { yieldExpression as YieldExpression };
-export function awaitExpression(argument: types.Expression): any {
+export function awaitExpression(
+  argument: types.Expression,
+): types.AwaitExpression {
   return builder("AwaitExpression", argument);
 }
 export { awaitExpression as AwaitExpression };
-function _import(): any {
+function _import(): types.Import {
   return builder("Import");
 }
 export { _import as Import };
 export { _import as import };
-export function bigIntLiteral(value: string): any {
+export function bigIntLiteral(value: string): types.BigIntLiteral {
   return builder("BigIntLiteral", value);
 }
 export { bigIntLiteral as BigIntLiteral };
-export function exportNamespaceSpecifier(exported: types.Identifier): any {
+export function exportNamespaceSpecifier(
+  exported: types.Identifier,
+): types.ExportNamespaceSpecifier {
   return builder("ExportNamespaceSpecifier", exported);
 }
 export { exportNamespaceSpecifier as ExportNamespaceSpecifier };
@@ -632,7 +663,7 @@ export function optionalMemberExpression(
   property: types.Expression | types.Identifier,
   computed: boolean | undefined,
   optional: boolean,
-): any {
+): types.OptionalMemberExpression {
   return builder(
     "OptionalMemberExpression",
     object,
@@ -648,34 +679,38 @@ export function optionalCallExpression(
     types.Expression | types.SpreadElement | types.JSXNamespacedName
   >,
   optional: boolean,
-): any {
+): types.OptionalCallExpression {
   return builder("OptionalCallExpression", callee, _arguments, optional);
 }
 export { optionalCallExpression as OptionalCallExpression };
-export function anyTypeAnnotation(): any {
+export function anyTypeAnnotation(): types.AnyTypeAnnotation {
   return builder("AnyTypeAnnotation");
 }
 export { anyTypeAnnotation as AnyTypeAnnotation };
-export function arrayTypeAnnotation(elementType: types.FlowType): any {
+export function arrayTypeAnnotation(
+  elementType: types.FlowType,
+): types.ArrayTypeAnnotation {
   return builder("ArrayTypeAnnotation", elementType);
 }
 export { arrayTypeAnnotation as ArrayTypeAnnotation };
-export function booleanTypeAnnotation(): any {
+export function booleanTypeAnnotation(): types.BooleanTypeAnnotation {
   return builder("BooleanTypeAnnotation");
 }
 export { booleanTypeAnnotation as BooleanTypeAnnotation };
-export function booleanLiteralTypeAnnotation(value: boolean): any {
+export function booleanLiteralTypeAnnotation(
+  value: boolean,
+): types.BooleanLiteralTypeAnnotation {
   return builder("BooleanLiteralTypeAnnotation", value);
 }
 export { booleanLiteralTypeAnnotation as BooleanLiteralTypeAnnotation };
-export function nullLiteralTypeAnnotation(): any {
+export function nullLiteralTypeAnnotation(): types.NullLiteralTypeAnnotation {
   return builder("NullLiteralTypeAnnotation");
 }
 export { nullLiteralTypeAnnotation as NullLiteralTypeAnnotation };
 export function classImplements(
   id: types.Identifier,
   typeParameters?: types.TypeParameterInstantiation | null,
-): any {
+): types.ClassImplements {
   return builder("ClassImplements", id, typeParameters);
 }
 export { classImplements as ClassImplements };
@@ -684,11 +719,11 @@ export function declareClass(
   typeParameters: types.TypeParameterDeclaration | null | undefined,
   _extends: Array<types.InterfaceExtends> | null | undefined,
   body: types.ObjectTypeAnnotation,
-): any {
+): types.DeclareClass {
   return builder("DeclareClass", id, typeParameters, _extends, body);
 }
 export { declareClass as DeclareClass };
-export function declareFunction(id: types.Identifier): any {
+export function declareFunction(id: types.Identifier): types.DeclareFunction {
   return builder("DeclareFunction", id);
 }
 export { declareFunction as DeclareFunction };
@@ -697,7 +732,7 @@ export function declareInterface(
   typeParameters: types.TypeParameterDeclaration | null | undefined,
   _extends: Array<types.InterfaceExtends> | null | undefined,
   body: types.ObjectTypeAnnotation,
-): any {
+): types.DeclareInterface {
   return builder("DeclareInterface", id, typeParameters, _extends, body);
 }
 export { declareInterface as DeclareInterface };
@@ -705,13 +740,13 @@ export function declareModule(
   id: types.Identifier | types.StringLiteral,
   body: types.BlockStatement,
   kind?: "CommonJS" | "ES" | null,
-): any {
+): types.DeclareModule {
   return builder("DeclareModule", id, body, kind);
 }
 export { declareModule as DeclareModule };
 export function declareModuleExports(
   typeAnnotation: types.TypeAnnotation,
-): any {
+): types.DeclareModuleExports {
   return builder("DeclareModuleExports", typeAnnotation);
 }
 export { declareModuleExports as DeclareModuleExports };
@@ -719,7 +754,7 @@ export function declareTypeAlias(
   id: types.Identifier,
   typeParameters: types.TypeParameterDeclaration | null | undefined,
   right: types.FlowType,
-): any {
+): types.DeclareTypeAlias {
   return builder("DeclareTypeAlias", id, typeParameters, right);
 }
 export { declareTypeAlias as DeclareTypeAlias };
@@ -727,11 +762,11 @@ export function declareOpaqueType(
   id: types.Identifier,
   typeParameters?: types.TypeParameterDeclaration | null,
   supertype?: types.FlowType | null,
-): any {
+): types.DeclareOpaqueType {
   return builder("DeclareOpaqueType", id, typeParameters, supertype);
 }
 export { declareOpaqueType as DeclareOpaqueType };
-export function declareVariable(id: types.Identifier): any {
+export function declareVariable(id: types.Identifier): types.DeclareVariable {
   return builder("DeclareVariable", id);
 }
 export { declareVariable as DeclareVariable };
@@ -741,19 +776,21 @@ export function declareExportDeclaration(
     types.ExportSpecifier | types.ExportNamespaceSpecifier
   > | null,
   source?: types.StringLiteral | null,
-): any {
+): types.DeclareExportDeclaration {
   return builder("DeclareExportDeclaration", declaration, specifiers, source);
 }
 export { declareExportDeclaration as DeclareExportDeclaration };
-export function declareExportAllDeclaration(source: types.StringLiteral): any {
+export function declareExportAllDeclaration(
+  source: types.StringLiteral,
+): types.DeclareExportAllDeclaration {
   return builder("DeclareExportAllDeclaration", source);
 }
 export { declareExportAllDeclaration as DeclareExportAllDeclaration };
-export function declaredPredicate(value: types.Flow): any {
+export function declaredPredicate(value: types.Flow): types.DeclaredPredicate {
   return builder("DeclaredPredicate", value);
 }
 export { declaredPredicate as DeclaredPredicate };
-export function existsTypeAnnotation(): any {
+export function existsTypeAnnotation(): types.ExistsTypeAnnotation {
   return builder("ExistsTypeAnnotation");
 }
 export { existsTypeAnnotation as ExistsTypeAnnotation };
@@ -762,7 +799,7 @@ export function functionTypeAnnotation(
   params: Array<types.FunctionTypeParam>,
   rest: types.FunctionTypeParam | null | undefined,
   returnType: types.FlowType,
-): any {
+): types.FunctionTypeAnnotation {
   return builder(
     "FunctionTypeAnnotation",
     typeParameters,
@@ -775,25 +812,25 @@ export { functionTypeAnnotation as FunctionTypeAnnotation };
 export function functionTypeParam(
   name: types.Identifier | null | undefined,
   typeAnnotation: types.FlowType,
-): any {
+): types.FunctionTypeParam {
   return builder("FunctionTypeParam", name, typeAnnotation);
 }
 export { functionTypeParam as FunctionTypeParam };
 export function genericTypeAnnotation(
   id: types.Identifier | types.QualifiedTypeIdentifier,
   typeParameters?: types.TypeParameterInstantiation | null,
-): any {
+): types.GenericTypeAnnotation {
   return builder("GenericTypeAnnotation", id, typeParameters);
 }
 export { genericTypeAnnotation as GenericTypeAnnotation };
-export function inferredPredicate(): any {
+export function inferredPredicate(): types.InferredPredicate {
   return builder("InferredPredicate");
 }
 export { inferredPredicate as InferredPredicate };
 export function interfaceExtends(
   id: types.Identifier | types.QualifiedTypeIdentifier,
   typeParameters?: types.TypeParameterInstantiation | null,
-): any {
+): types.InterfaceExtends {
   return builder("InterfaceExtends", id, typeParameters);
 }
 export { interfaceExtends as InterfaceExtends };
@@ -802,38 +839,44 @@ export function interfaceDeclaration(
   typeParameters: types.TypeParameterDeclaration | null | undefined,
   _extends: Array<types.InterfaceExtends> | null | undefined,
   body: types.ObjectTypeAnnotation,
-): any {
+): types.InterfaceDeclaration {
   return builder("InterfaceDeclaration", id, typeParameters, _extends, body);
 }
 export { interfaceDeclaration as InterfaceDeclaration };
 export function interfaceTypeAnnotation(
   _extends: Array<types.InterfaceExtends> | null | undefined,
   body: types.ObjectTypeAnnotation,
-): any {
+): types.InterfaceTypeAnnotation {
   return builder("InterfaceTypeAnnotation", _extends, body);
 }
 export { interfaceTypeAnnotation as InterfaceTypeAnnotation };
-export function intersectionTypeAnnotation(types: Array<types.FlowType>): any {
+export function intersectionTypeAnnotation(
+  types: Array<types.FlowType>,
+): types.IntersectionTypeAnnotation {
   return builder("IntersectionTypeAnnotation", types);
 }
 export { intersectionTypeAnnotation as IntersectionTypeAnnotation };
-export function mixedTypeAnnotation(): any {
+export function mixedTypeAnnotation(): types.MixedTypeAnnotation {
   return builder("MixedTypeAnnotation");
 }
 export { mixedTypeAnnotation as MixedTypeAnnotation };
-export function emptyTypeAnnotation(): any {
+export function emptyTypeAnnotation(): types.EmptyTypeAnnotation {
   return builder("EmptyTypeAnnotation");
 }
 export { emptyTypeAnnotation as EmptyTypeAnnotation };
-export function nullableTypeAnnotation(typeAnnotation: types.FlowType): any {
+export function nullableTypeAnnotation(
+  typeAnnotation: types.FlowType,
+): types.NullableTypeAnnotation {
   return builder("NullableTypeAnnotation", typeAnnotation);
 }
 export { nullableTypeAnnotation as NullableTypeAnnotation };
-export function numberLiteralTypeAnnotation(value: number): any {
+export function numberLiteralTypeAnnotation(
+  value: number,
+): types.NumberLiteralTypeAnnotation {
   return builder("NumberLiteralTypeAnnotation", value);
 }
 export { numberLiteralTypeAnnotation as NumberLiteralTypeAnnotation };
-export function numberTypeAnnotation(): any {
+export function numberTypeAnnotation(): types.NumberTypeAnnotation {
   return builder("NumberTypeAnnotation");
 }
 export { numberTypeAnnotation as NumberTypeAnnotation };
@@ -843,7 +886,7 @@ export function objectTypeAnnotation(
   callProperties?: Array<types.ObjectTypeCallProperty> | null,
   internalSlots?: Array<types.ObjectTypeInternalSlot> | null,
   exact?: boolean,
-): any {
+): types.ObjectTypeAnnotation {
   return builder(
     "ObjectTypeAnnotation",
     properties,
@@ -860,7 +903,7 @@ export function objectTypeInternalSlot(
   optional: boolean,
   _static: boolean,
   method: boolean,
-): any {
+): types.ObjectTypeInternalSlot {
   return builder(
     "ObjectTypeInternalSlot",
     id,
@@ -871,7 +914,9 @@ export function objectTypeInternalSlot(
   );
 }
 export { objectTypeInternalSlot as ObjectTypeInternalSlot };
-export function objectTypeCallProperty(value: types.FlowType): any {
+export function objectTypeCallProperty(
+  value: types.FlowType,
+): types.ObjectTypeCallProperty {
   return builder("ObjectTypeCallProperty", value);
 }
 export { objectTypeCallProperty as ObjectTypeCallProperty };
@@ -880,7 +925,7 @@ export function objectTypeIndexer(
   key: types.FlowType,
   value: types.FlowType,
   variance?: types.Variance | null,
-): any {
+): types.ObjectTypeIndexer {
   return builder("ObjectTypeIndexer", id, key, value, variance);
 }
 export { objectTypeIndexer as ObjectTypeIndexer };
@@ -888,11 +933,13 @@ export function objectTypeProperty(
   key: types.Identifier | types.StringLiteral,
   value: types.FlowType,
   variance?: types.Variance | null,
-): any {
+): types.ObjectTypeProperty {
   return builder("ObjectTypeProperty", key, value, variance);
 }
 export { objectTypeProperty as ObjectTypeProperty };
-export function objectTypeSpreadProperty(argument: types.FlowType): any {
+export function objectTypeSpreadProperty(
+  argument: types.FlowType,
+): types.ObjectTypeSpreadProperty {
   return builder("ObjectTypeSpreadProperty", argument);
 }
 export { objectTypeSpreadProperty as ObjectTypeSpreadProperty };
@@ -901,38 +948,44 @@ export function opaqueType(
   typeParameters: types.TypeParameterDeclaration | null | undefined,
   supertype: types.FlowType | null | undefined,
   impltype: types.FlowType,
-): any {
+): types.OpaqueType {
   return builder("OpaqueType", id, typeParameters, supertype, impltype);
 }
 export { opaqueType as OpaqueType };
 export function qualifiedTypeIdentifier(
   id: types.Identifier,
   qualification: types.Identifier | types.QualifiedTypeIdentifier,
-): any {
+): types.QualifiedTypeIdentifier {
   return builder("QualifiedTypeIdentifier", id, qualification);
 }
 export { qualifiedTypeIdentifier as QualifiedTypeIdentifier };
-export function stringLiteralTypeAnnotation(value: string): any {
+export function stringLiteralTypeAnnotation(
+  value: string,
+): types.StringLiteralTypeAnnotation {
   return builder("StringLiteralTypeAnnotation", value);
 }
 export { stringLiteralTypeAnnotation as StringLiteralTypeAnnotation };
-export function stringTypeAnnotation(): any {
+export function stringTypeAnnotation(): types.StringTypeAnnotation {
   return builder("StringTypeAnnotation");
 }
 export { stringTypeAnnotation as StringTypeAnnotation };
-export function symbolTypeAnnotation(): any {
+export function symbolTypeAnnotation(): types.SymbolTypeAnnotation {
   return builder("SymbolTypeAnnotation");
 }
 export { symbolTypeAnnotation as SymbolTypeAnnotation };
-export function thisTypeAnnotation(): any {
+export function thisTypeAnnotation(): types.ThisTypeAnnotation {
   return builder("ThisTypeAnnotation");
 }
 export { thisTypeAnnotation as ThisTypeAnnotation };
-export function tupleTypeAnnotation(types: Array<types.FlowType>): any {
+export function tupleTypeAnnotation(
+  types: Array<types.FlowType>,
+): types.TupleTypeAnnotation {
   return builder("TupleTypeAnnotation", types);
 }
 export { tupleTypeAnnotation as TupleTypeAnnotation };
-export function typeofTypeAnnotation(argument: types.FlowType): any {
+export function typeofTypeAnnotation(
+  argument: types.FlowType,
+): types.TypeofTypeAnnotation {
   return builder("TypeofTypeAnnotation", argument);
 }
 export { typeofTypeAnnotation as TypeofTypeAnnotation };
@@ -940,18 +993,20 @@ export function typeAlias(
   id: types.Identifier,
   typeParameters: types.TypeParameterDeclaration | null | undefined,
   right: types.FlowType,
-): any {
+): types.TypeAlias {
   return builder("TypeAlias", id, typeParameters, right);
 }
 export { typeAlias as TypeAlias };
-export function typeAnnotation(typeAnnotation: types.FlowType): any {
+export function typeAnnotation(
+  typeAnnotation: types.FlowType,
+): types.TypeAnnotation {
   return builder("TypeAnnotation", typeAnnotation);
 }
 export { typeAnnotation as TypeAnnotation };
 export function typeCastExpression(
   expression: types.Expression,
   typeAnnotation: types.TypeAnnotation,
-): any {
+): types.TypeCastExpression {
   return builder("TypeCastExpression", expression, typeAnnotation);
 }
 export { typeCastExpression as TypeCastExpression };
@@ -959,29 +1014,33 @@ export function typeParameter(
   bound?: types.TypeAnnotation | null,
   _default?: types.FlowType | null,
   variance?: types.Variance | null,
-): any {
+): types.TypeParameter {
   return builder("TypeParameter", bound, _default, variance);
 }
 export { typeParameter as TypeParameter };
 export function typeParameterDeclaration(
   params: Array<types.TypeParameter>,
-): any {
+): types.TypeParameterDeclaration {
   return builder("TypeParameterDeclaration", params);
 }
 export { typeParameterDeclaration as TypeParameterDeclaration };
-export function typeParameterInstantiation(params: Array<types.FlowType>): any {
+export function typeParameterInstantiation(
+  params: Array<types.FlowType>,
+): types.TypeParameterInstantiation {
   return builder("TypeParameterInstantiation", params);
 }
 export { typeParameterInstantiation as TypeParameterInstantiation };
-export function unionTypeAnnotation(types: Array<types.FlowType>): any {
+export function unionTypeAnnotation(
+  types: Array<types.FlowType>,
+): types.UnionTypeAnnotation {
   return builder("UnionTypeAnnotation", types);
 }
 export { unionTypeAnnotation as UnionTypeAnnotation };
-export function variance(kind: "minus" | "plus"): any {
+export function variance(kind: "minus" | "plus"): types.Variance {
   return builder("Variance", kind);
 }
 export { variance as Variance };
-export function voidTypeAnnotation(): any {
+export function voidTypeAnnotation(): types.VoidTypeAnnotation {
   return builder("VoidTypeAnnotation");
 }
 export { voidTypeAnnotation as VoidTypeAnnotation };
@@ -992,47 +1051,57 @@ export function enumDeclaration(
     | types.EnumNumberBody
     | types.EnumStringBody
     | types.EnumSymbolBody,
-): any {
+): types.EnumDeclaration {
   return builder("EnumDeclaration", id, body);
 }
 export { enumDeclaration as EnumDeclaration };
-export function enumBooleanBody(members: Array<types.EnumBooleanMember>): any {
+export function enumBooleanBody(
+  members: Array<types.EnumBooleanMember>,
+): types.EnumBooleanBody {
   return builder("EnumBooleanBody", members);
 }
 export { enumBooleanBody as EnumBooleanBody };
-export function enumNumberBody(members: Array<types.EnumNumberMember>): any {
+export function enumNumberBody(
+  members: Array<types.EnumNumberMember>,
+): types.EnumNumberBody {
   return builder("EnumNumberBody", members);
 }
 export { enumNumberBody as EnumNumberBody };
 export function enumStringBody(
   members: Array<types.EnumStringMember | types.EnumDefaultedMember>,
-): any {
+): types.EnumStringBody {
   return builder("EnumStringBody", members);
 }
 export { enumStringBody as EnumStringBody };
-export function enumSymbolBody(members: Array<types.EnumDefaultedMember>): any {
+export function enumSymbolBody(
+  members: Array<types.EnumDefaultedMember>,
+): types.EnumSymbolBody {
   return builder("EnumSymbolBody", members);
 }
 export { enumSymbolBody as EnumSymbolBody };
-export function enumBooleanMember(id: types.Identifier): any {
+export function enumBooleanMember(
+  id: types.Identifier,
+): types.EnumBooleanMember {
   return builder("EnumBooleanMember", id);
 }
 export { enumBooleanMember as EnumBooleanMember };
 export function enumNumberMember(
   id: types.Identifier,
   init: types.NumericLiteral,
-): any {
+): types.EnumNumberMember {
   return builder("EnumNumberMember", id, init);
 }
 export { enumNumberMember as EnumNumberMember };
 export function enumStringMember(
   id: types.Identifier,
   init: types.StringLiteral,
-): any {
+): types.EnumStringMember {
   return builder("EnumStringMember", id, init);
 }
 export { enumStringMember as EnumStringMember };
-export function enumDefaultedMember(id: types.Identifier): any {
+export function enumDefaultedMember(
+  id: types.Identifier,
+): types.EnumDefaultedMember {
   return builder("EnumDefaultedMember", id);
 }
 export { enumDefaultedMember as EnumDefaultedMember };
@@ -1044,7 +1113,7 @@ export function jsxAttribute(
     | types.StringLiteral
     | types.JSXExpressionContainer
     | null,
-): any {
+): types.JSXAttribute {
   return builder("JSXAttribute", name, value);
 }
 export { jsxAttribute as JSXAttribute };
@@ -1054,7 +1123,7 @@ export function jsxClosingElement(
     | types.JSXIdentifier
     | types.JSXMemberExpression
     | types.JSXNamespacedName,
-): any {
+): types.JSXClosingElement {
   return builder("JSXClosingElement", name);
 }
 export { jsxClosingElement as JSXClosingElement };
@@ -1070,7 +1139,7 @@ export function jsxElement(
     | types.JSXFragment
   >,
   selfClosing?: boolean | null,
-): any {
+): types.JSXElement {
   return builder(
     "JSXElement",
     openingElement,
@@ -1081,24 +1150,26 @@ export function jsxElement(
 }
 export { jsxElement as JSXElement };
 export { jsxElement as jSXElement };
-export function jsxEmptyExpression(): any {
+export function jsxEmptyExpression(): types.JSXEmptyExpression {
   return builder("JSXEmptyExpression");
 }
 export { jsxEmptyExpression as JSXEmptyExpression };
 export { jsxEmptyExpression as jSXEmptyExpression };
 export function jsxExpressionContainer(
   expression: types.Expression | types.JSXEmptyExpression,
-): any {
+): types.JSXExpressionContainer {
   return builder("JSXExpressionContainer", expression);
 }
 export { jsxExpressionContainer as JSXExpressionContainer };
 export { jsxExpressionContainer as jSXExpressionContainer };
-export function jsxSpreadChild(expression: types.Expression): any {
+export function jsxSpreadChild(
+  expression: types.Expression,
+): types.JSXSpreadChild {
   return builder("JSXSpreadChild", expression);
 }
 export { jsxSpreadChild as JSXSpreadChild };
 export { jsxSpreadChild as jSXSpreadChild };
-export function jsxIdentifier(name: string): any {
+export function jsxIdentifier(name: string): types.JSXIdentifier {
   return builder("JSXIdentifier", name);
 }
 export { jsxIdentifier as JSXIdentifier };
@@ -1106,7 +1177,7 @@ export { jsxIdentifier as jSXIdentifier };
 export function jsxMemberExpression(
   object: types.JSXMemberExpression | types.JSXIdentifier,
   property: types.JSXIdentifier,
-): any {
+): types.JSXMemberExpression {
   return builder("JSXMemberExpression", object, property);
 }
 export { jsxMemberExpression as JSXMemberExpression };
@@ -1114,7 +1185,7 @@ export { jsxMemberExpression as jSXMemberExpression };
 export function jsxNamespacedName(
   namespace: types.JSXIdentifier,
   name: types.JSXIdentifier,
-): any {
+): types.JSXNamespacedName {
   return builder("JSXNamespacedName", namespace, name);
 }
 export { jsxNamespacedName as JSXNamespacedName };
@@ -1126,17 +1197,19 @@ export function jsxOpeningElement(
     | types.JSXNamespacedName,
   attributes: Array<types.JSXAttribute | types.JSXSpreadAttribute>,
   selfClosing?: boolean,
-): any {
+): types.JSXOpeningElement {
   return builder("JSXOpeningElement", name, attributes, selfClosing);
 }
 export { jsxOpeningElement as JSXOpeningElement };
 export { jsxOpeningElement as jSXOpeningElement };
-export function jsxSpreadAttribute(argument: types.Expression): any {
+export function jsxSpreadAttribute(
+  argument: types.Expression,
+): types.JSXSpreadAttribute {
   return builder("JSXSpreadAttribute", argument);
 }
 export { jsxSpreadAttribute as JSXSpreadAttribute };
 export { jsxSpreadAttribute as jSXSpreadAttribute };
-export function jsxText(value: string): any {
+export function jsxText(value: string): types.JSXText {
   return builder("JSXText", value);
 }
 export { jsxText as JSXText };
@@ -1151,22 +1224,22 @@ export function jsxFragment(
     | types.JSXElement
     | types.JSXFragment
   >,
-): any {
+): types.JSXFragment {
   return builder("JSXFragment", openingFragment, closingFragment, children);
 }
 export { jsxFragment as JSXFragment };
 export { jsxFragment as jSXFragment };
-export function jsxOpeningFragment(): any {
+export function jsxOpeningFragment(): types.JSXOpeningFragment {
   return builder("JSXOpeningFragment");
 }
 export { jsxOpeningFragment as JSXOpeningFragment };
 export { jsxOpeningFragment as jSXOpeningFragment };
-export function jsxClosingFragment(): any {
+export function jsxClosingFragment(): types.JSXClosingFragment {
   return builder("JSXClosingFragment");
 }
 export { jsxClosingFragment as JSXClosingFragment };
 export { jsxClosingFragment as jSXClosingFragment };
-export function noop(): any {
+export function noop(): types.Noop {
   return builder("Noop");
 }
 export { noop as Noop };
@@ -1181,22 +1254,24 @@ export function placeholder(
     | "ClassBody"
     | "Pattern",
   name: types.Identifier,
-): any {
+): types.Placeholder {
   return builder("Placeholder", expectedNode, name);
 }
 export { placeholder as Placeholder };
-export function v8IntrinsicIdentifier(name: string): any {
+export function v8IntrinsicIdentifier(
+  name: string,
+): types.V8IntrinsicIdentifier {
   return builder("V8IntrinsicIdentifier", name);
 }
 export { v8IntrinsicIdentifier as V8IntrinsicIdentifier };
-export function argumentPlaceholder(): any {
+export function argumentPlaceholder(): types.ArgumentPlaceholder {
   return builder("ArgumentPlaceholder");
 }
 export { argumentPlaceholder as ArgumentPlaceholder };
 export function bindExpression(
   object: types.Expression,
   callee: types.Expression,
-): any {
+): types.BindExpression {
   return builder("BindExpression", object, callee);
 }
 export { bindExpression as BindExpression };
@@ -1215,7 +1290,7 @@ export function classProperty(
   decorators?: Array<types.Decorator> | null,
   computed?: boolean,
   _static?: boolean,
-): any {
+): types.ClassProperty {
   return builder(
     "ClassProperty",
     key,
@@ -1227,15 +1302,19 @@ export function classProperty(
   );
 }
 export { classProperty as ClassProperty };
-export function pipelineTopicExpression(expression: types.Expression): any {
+export function pipelineTopicExpression(
+  expression: types.Expression,
+): types.PipelineTopicExpression {
   return builder("PipelineTopicExpression", expression);
 }
 export { pipelineTopicExpression as PipelineTopicExpression };
-export function pipelineBareFunction(callee: types.Expression): any {
+export function pipelineBareFunction(
+  callee: types.Expression,
+): types.PipelineBareFunction {
   return builder("PipelineBareFunction", callee);
 }
 export { pipelineBareFunction as PipelineBareFunction };
-export function pipelinePrimaryTopicReference(): any {
+export function pipelinePrimaryTopicReference(): types.PipelinePrimaryTopicReference {
   return builder("PipelinePrimaryTopicReference");
 }
 export { pipelinePrimaryTopicReference as PipelinePrimaryTopicReference };
@@ -1244,7 +1323,7 @@ export function classPrivateProperty(
   value: types.Expression | null | undefined,
   decorators: Array<types.Decorator> | null | undefined,
   _static: any,
-): any {
+): types.ClassPrivateProperty {
   return builder("ClassPrivateProperty", key, value, decorators, _static);
 }
 export { classPrivateProperty as ClassPrivateProperty };
@@ -1259,56 +1338,58 @@ export function classPrivateMethod(
   >,
   body: types.BlockStatement,
   _static?: boolean,
-): any {
+): types.ClassPrivateMethod {
   return builder("ClassPrivateMethod", kind, key, params, body, _static);
 }
 export { classPrivateMethod as ClassPrivateMethod };
 export function importAttribute(
   key: types.Identifier | types.StringLiteral,
   value: types.StringLiteral,
-): any {
+): types.ImportAttribute {
   return builder("ImportAttribute", key, value);
 }
 export { importAttribute as ImportAttribute };
-export function decorator(expression: types.Expression): any {
+export function decorator(expression: types.Expression): types.Decorator {
   return builder("Decorator", expression);
 }
 export { decorator as Decorator };
-export function doExpression(body: types.BlockStatement): any {
+export function doExpression(body: types.BlockStatement): types.DoExpression {
   return builder("DoExpression", body);
 }
 export { doExpression as DoExpression };
-export function exportDefaultSpecifier(exported: types.Identifier): any {
+export function exportDefaultSpecifier(
+  exported: types.Identifier,
+): types.ExportDefaultSpecifier {
   return builder("ExportDefaultSpecifier", exported);
 }
 export { exportDefaultSpecifier as ExportDefaultSpecifier };
-export function privateName(id: types.Identifier): any {
+export function privateName(id: types.Identifier): types.PrivateName {
   return builder("PrivateName", id);
 }
 export { privateName as PrivateName };
 export function recordExpression(
   properties: Array<types.ObjectProperty | types.SpreadElement>,
-): any {
+): types.RecordExpression {
   return builder("RecordExpression", properties);
 }
 export { recordExpression as RecordExpression };
 export function tupleExpression(
   elements?: Array<types.Expression | types.SpreadElement>,
-): any {
+): types.TupleExpression {
   return builder("TupleExpression", elements);
 }
 export { tupleExpression as TupleExpression };
-export function decimalLiteral(value: string): any {
+export function decimalLiteral(value: string): types.DecimalLiteral {
   return builder("DecimalLiteral", value);
 }
 export { decimalLiteral as DecimalLiteral };
-export function staticBlock(body: Array<types.Statement>): any {
+export function staticBlock(body: Array<types.Statement>): types.StaticBlock {
   return builder("StaticBlock", body);
 }
 export { staticBlock as StaticBlock };
 export function tsParameterProperty(
   parameter: types.Identifier | types.AssignmentPattern,
-): any {
+): types.TSParameterProperty {
   return builder("TSParameterProperty", parameter);
 }
 export { tsParameterProperty as TSParameterProperty };
@@ -1327,7 +1408,7 @@ export function tsDeclareFunction(
     | types.TSParameterProperty
   >,
   returnType?: types.TSTypeAnnotation | types.Noop | null,
-): any {
+): types.TSDeclareFunction {
   return builder("TSDeclareFunction", id, typeParameters, params, returnType);
 }
 export { tsDeclareFunction as TSDeclareFunction };
@@ -1351,7 +1432,7 @@ export function tsDeclareMethod(
     | types.TSParameterProperty
   >,
   returnType?: types.TSTypeAnnotation | types.Noop | null,
-): any {
+): types.TSDeclareMethod {
   return builder(
     "TSDeclareMethod",
     decorators,
@@ -1366,7 +1447,7 @@ export { tsDeclareMethod as tSDeclareMethod };
 export function tsQualifiedName(
   left: types.TSEntityName,
   right: types.Identifier,
-): any {
+): types.TSQualifiedName {
   return builder("TSQualifiedName", left, right);
 }
 export { tsQualifiedName as TSQualifiedName };
@@ -1375,7 +1456,7 @@ export function tsCallSignatureDeclaration(
   typeParameters: types.TSTypeParameterDeclaration | null | undefined,
   parameters: Array<types.Identifier | types.RestElement>,
   typeAnnotation?: types.TSTypeAnnotation | null,
-): any {
+): types.TSCallSignatureDeclaration {
   return builder(
     "TSCallSignatureDeclaration",
     typeParameters,
@@ -1389,7 +1470,7 @@ export function tsConstructSignatureDeclaration(
   typeParameters: types.TSTypeParameterDeclaration | null | undefined,
   parameters: Array<types.Identifier | types.RestElement>,
   typeAnnotation?: types.TSTypeAnnotation | null,
-): any {
+): types.TSConstructSignatureDeclaration {
   return builder(
     "TSConstructSignatureDeclaration",
     typeParameters,
@@ -1403,7 +1484,7 @@ export function tsPropertySignature(
   key: types.Expression,
   typeAnnotation?: types.TSTypeAnnotation | null,
   initializer?: types.Expression | null,
-): any {
+): types.TSPropertySignature {
   return builder("TSPropertySignature", key, typeAnnotation, initializer);
 }
 export { tsPropertySignature as TSPropertySignature };
@@ -1413,7 +1494,7 @@ export function tsMethodSignature(
   typeParameters: types.TSTypeParameterDeclaration | null | undefined,
   parameters: Array<types.Identifier | types.RestElement>,
   typeAnnotation?: types.TSTypeAnnotation | null,
-): any {
+): types.TSMethodSignature {
   return builder(
     "TSMethodSignature",
     key,
@@ -1427,77 +1508,77 @@ export { tsMethodSignature as tSMethodSignature };
 export function tsIndexSignature(
   parameters: Array<types.Identifier>,
   typeAnnotation?: types.TSTypeAnnotation | null,
-): any {
+): types.TSIndexSignature {
   return builder("TSIndexSignature", parameters, typeAnnotation);
 }
 export { tsIndexSignature as TSIndexSignature };
 export { tsIndexSignature as tSIndexSignature };
-export function tsAnyKeyword(): any {
+export function tsAnyKeyword(): types.TSAnyKeyword {
   return builder("TSAnyKeyword");
 }
 export { tsAnyKeyword as TSAnyKeyword };
 export { tsAnyKeyword as tSAnyKeyword };
-export function tsBooleanKeyword(): any {
+export function tsBooleanKeyword(): types.TSBooleanKeyword {
   return builder("TSBooleanKeyword");
 }
 export { tsBooleanKeyword as TSBooleanKeyword };
 export { tsBooleanKeyword as tSBooleanKeyword };
-export function tsBigIntKeyword(): any {
+export function tsBigIntKeyword(): types.TSBigIntKeyword {
   return builder("TSBigIntKeyword");
 }
 export { tsBigIntKeyword as TSBigIntKeyword };
 export { tsBigIntKeyword as tSBigIntKeyword };
-export function tsIntrinsicKeyword(): any {
+export function tsIntrinsicKeyword(): types.TSIntrinsicKeyword {
   return builder("TSIntrinsicKeyword");
 }
 export { tsIntrinsicKeyword as TSIntrinsicKeyword };
 export { tsIntrinsicKeyword as tSIntrinsicKeyword };
-export function tsNeverKeyword(): any {
+export function tsNeverKeyword(): types.TSNeverKeyword {
   return builder("TSNeverKeyword");
 }
 export { tsNeverKeyword as TSNeverKeyword };
 export { tsNeverKeyword as tSNeverKeyword };
-export function tsNullKeyword(): any {
+export function tsNullKeyword(): types.TSNullKeyword {
   return builder("TSNullKeyword");
 }
 export { tsNullKeyword as TSNullKeyword };
 export { tsNullKeyword as tSNullKeyword };
-export function tsNumberKeyword(): any {
+export function tsNumberKeyword(): types.TSNumberKeyword {
   return builder("TSNumberKeyword");
 }
 export { tsNumberKeyword as TSNumberKeyword };
 export { tsNumberKeyword as tSNumberKeyword };
-export function tsObjectKeyword(): any {
+export function tsObjectKeyword(): types.TSObjectKeyword {
   return builder("TSObjectKeyword");
 }
 export { tsObjectKeyword as TSObjectKeyword };
 export { tsObjectKeyword as tSObjectKeyword };
-export function tsStringKeyword(): any {
+export function tsStringKeyword(): types.TSStringKeyword {
   return builder("TSStringKeyword");
 }
 export { tsStringKeyword as TSStringKeyword };
 export { tsStringKeyword as tSStringKeyword };
-export function tsSymbolKeyword(): any {
+export function tsSymbolKeyword(): types.TSSymbolKeyword {
   return builder("TSSymbolKeyword");
 }
 export { tsSymbolKeyword as TSSymbolKeyword };
 export { tsSymbolKeyword as tSSymbolKeyword };
-export function tsUndefinedKeyword(): any {
+export function tsUndefinedKeyword(): types.TSUndefinedKeyword {
   return builder("TSUndefinedKeyword");
 }
 export { tsUndefinedKeyword as TSUndefinedKeyword };
 export { tsUndefinedKeyword as tSUndefinedKeyword };
-export function tsUnknownKeyword(): any {
+export function tsUnknownKeyword(): types.TSUnknownKeyword {
   return builder("TSUnknownKeyword");
 }
 export { tsUnknownKeyword as TSUnknownKeyword };
 export { tsUnknownKeyword as tSUnknownKeyword };
-export function tsVoidKeyword(): any {
+export function tsVoidKeyword(): types.TSVoidKeyword {
   return builder("TSVoidKeyword");
 }
 export { tsVoidKeyword as TSVoidKeyword };
 export { tsVoidKeyword as tSVoidKeyword };
-export function tsThisType(): any {
+export function tsThisType(): types.TSThisType {
   return builder("TSThisType");
 }
 export { tsThisType as TSThisType };
@@ -1506,7 +1587,7 @@ export function tsFunctionType(
   typeParameters: types.TSTypeParameterDeclaration | null | undefined,
   parameters: Array<types.Identifier | types.RestElement>,
   typeAnnotation?: types.TSTypeAnnotation | null,
-): any {
+): types.TSFunctionType {
   return builder("TSFunctionType", typeParameters, parameters, typeAnnotation);
 }
 export { tsFunctionType as TSFunctionType };
@@ -1515,7 +1596,7 @@ export function tsConstructorType(
   typeParameters: types.TSTypeParameterDeclaration | null | undefined,
   parameters: Array<types.Identifier | types.RestElement>,
   typeAnnotation?: types.TSTypeAnnotation | null,
-): any {
+): types.TSConstructorType {
   return builder(
     "TSConstructorType",
     typeParameters,
@@ -1528,7 +1609,7 @@ export { tsConstructorType as tSConstructorType };
 export function tsTypeReference(
   typeName: types.TSEntityName,
   typeParameters?: types.TSTypeParameterInstantiation | null,
-): any {
+): types.TSTypeReference {
   return builder("TSTypeReference", typeName, typeParameters);
 }
 export { tsTypeReference as TSTypeReference };
@@ -1537,41 +1618,45 @@ export function tsTypePredicate(
   parameterName: types.Identifier | types.TSThisType,
   typeAnnotation?: types.TSTypeAnnotation | null,
   asserts?: boolean | null,
-): any {
+): types.TSTypePredicate {
   return builder("TSTypePredicate", parameterName, typeAnnotation, asserts);
 }
 export { tsTypePredicate as TSTypePredicate };
 export { tsTypePredicate as tSTypePredicate };
 export function tsTypeQuery(
   exprName: types.TSEntityName | types.TSImportType,
-): any {
+): types.TSTypeQuery {
   return builder("TSTypeQuery", exprName);
 }
 export { tsTypeQuery as TSTypeQuery };
 export { tsTypeQuery as tSTypeQuery };
-export function tsTypeLiteral(members: Array<types.TSTypeElement>): any {
+export function tsTypeLiteral(
+  members: Array<types.TSTypeElement>,
+): types.TSTypeLiteral {
   return builder("TSTypeLiteral", members);
 }
 export { tsTypeLiteral as TSTypeLiteral };
 export { tsTypeLiteral as tSTypeLiteral };
-export function tsArrayType(elementType: types.TSType): any {
+export function tsArrayType(elementType: types.TSType): types.TSArrayType {
   return builder("TSArrayType", elementType);
 }
 export { tsArrayType as TSArrayType };
 export { tsArrayType as tSArrayType };
 export function tsTupleType(
   elementTypes: Array<types.TSType | types.TSNamedTupleMember>,
-): any {
+): types.TSTupleType {
   return builder("TSTupleType", elementTypes);
 }
 export { tsTupleType as TSTupleType };
 export { tsTupleType as tSTupleType };
-export function tsOptionalType(typeAnnotation: types.TSType): any {
+export function tsOptionalType(
+  typeAnnotation: types.TSType,
+): types.TSOptionalType {
   return builder("TSOptionalType", typeAnnotation);
 }
 export { tsOptionalType as TSOptionalType };
 export { tsOptionalType as tSOptionalType };
-export function tsRestType(typeAnnotation: types.TSType): any {
+export function tsRestType(typeAnnotation: types.TSType): types.TSRestType {
   return builder("TSRestType", typeAnnotation);
 }
 export { tsRestType as TSRestType };
@@ -1580,17 +1665,19 @@ export function tsNamedTupleMember(
   label: types.Identifier,
   elementType: types.TSType,
   optional?: boolean,
-): any {
+): types.TSNamedTupleMember {
   return builder("TSNamedTupleMember", label, elementType, optional);
 }
 export { tsNamedTupleMember as TSNamedTupleMember };
 export { tsNamedTupleMember as tSNamedTupleMember };
-export function tsUnionType(types: Array<types.TSType>): any {
+export function tsUnionType(types: Array<types.TSType>): types.TSUnionType {
   return builder("TSUnionType", types);
 }
 export { tsUnionType as TSUnionType };
 export { tsUnionType as tSUnionType };
-export function tsIntersectionType(types: Array<types.TSType>): any {
+export function tsIntersectionType(
+  types: Array<types.TSType>,
+): types.TSIntersectionType {
   return builder("TSIntersectionType", types);
 }
 export { tsIntersectionType as TSIntersectionType };
@@ -1600,7 +1687,7 @@ export function tsConditionalType(
   extendsType: types.TSType,
   trueType: types.TSType,
   falseType: types.TSType,
-): any {
+): types.TSConditionalType {
   return builder(
     "TSConditionalType",
     checkType,
@@ -1611,17 +1698,23 @@ export function tsConditionalType(
 }
 export { tsConditionalType as TSConditionalType };
 export { tsConditionalType as tSConditionalType };
-export function tsInferType(typeParameter: types.TSTypeParameter): any {
+export function tsInferType(
+  typeParameter: types.TSTypeParameter,
+): types.TSInferType {
   return builder("TSInferType", typeParameter);
 }
 export { tsInferType as TSInferType };
 export { tsInferType as tSInferType };
-export function tsParenthesizedType(typeAnnotation: types.TSType): any {
+export function tsParenthesizedType(
+  typeAnnotation: types.TSType,
+): types.TSParenthesizedType {
   return builder("TSParenthesizedType", typeAnnotation);
 }
 export { tsParenthesizedType as TSParenthesizedType };
 export { tsParenthesizedType as tSParenthesizedType };
-export function tsTypeOperator(typeAnnotation: types.TSType): any {
+export function tsTypeOperator(
+  typeAnnotation: types.TSType,
+): types.TSTypeOperator {
   return builder("TSTypeOperator", typeAnnotation);
 }
 export { tsTypeOperator as TSTypeOperator };
@@ -1629,7 +1722,7 @@ export { tsTypeOperator as tSTypeOperator };
 export function tsIndexedAccessType(
   objectType: types.TSType,
   indexType: types.TSType,
-): any {
+): types.TSIndexedAccessType {
   return builder("TSIndexedAccessType", objectType, indexType);
 }
 export { tsIndexedAccessType as TSIndexedAccessType };
@@ -1638,7 +1731,7 @@ export function tsMappedType(
   typeParameter: types.TSTypeParameter,
   typeAnnotation?: types.TSType | null,
   nameType?: types.TSType | null,
-): any {
+): types.TSMappedType {
   return builder("TSMappedType", typeParameter, typeAnnotation, nameType);
 }
 export { tsMappedType as TSMappedType };
@@ -1649,7 +1742,7 @@ export function tsLiteralType(
     | types.StringLiteral
     | types.BooleanLiteral
     | types.BigIntLiteral,
-): any {
+): types.TSLiteralType {
   return builder("TSLiteralType", literal);
 }
 export { tsLiteralType as TSLiteralType };
@@ -1657,7 +1750,7 @@ export { tsLiteralType as tSLiteralType };
 export function tsExpressionWithTypeArguments(
   expression: types.TSEntityName,
   typeParameters?: types.TSTypeParameterInstantiation | null,
-): any {
+): types.TSExpressionWithTypeArguments {
   return builder("TSExpressionWithTypeArguments", expression, typeParameters);
 }
 export { tsExpressionWithTypeArguments as TSExpressionWithTypeArguments };
@@ -1667,12 +1760,14 @@ export function tsInterfaceDeclaration(
   typeParameters: types.TSTypeParameterDeclaration | null | undefined,
   _extends: Array<types.TSExpressionWithTypeArguments> | null | undefined,
   body: types.TSInterfaceBody,
-): any {
+): types.TSInterfaceDeclaration {
   return builder("TSInterfaceDeclaration", id, typeParameters, _extends, body);
 }
 export { tsInterfaceDeclaration as TSInterfaceDeclaration };
 export { tsInterfaceDeclaration as tSInterfaceDeclaration };
-export function tsInterfaceBody(body: Array<types.TSTypeElement>): any {
+export function tsInterfaceBody(
+  body: Array<types.TSTypeElement>,
+): types.TSInterfaceBody {
   return builder("TSInterfaceBody", body);
 }
 export { tsInterfaceBody as TSInterfaceBody };
@@ -1681,7 +1776,7 @@ export function tsTypeAliasDeclaration(
   id: types.Identifier,
   typeParameters: types.TSTypeParameterDeclaration | null | undefined,
   typeAnnotation: types.TSType,
-): any {
+): types.TSTypeAliasDeclaration {
   return builder("TSTypeAliasDeclaration", id, typeParameters, typeAnnotation);
 }
 export { tsTypeAliasDeclaration as TSTypeAliasDeclaration };
@@ -1689,7 +1784,7 @@ export { tsTypeAliasDeclaration as tSTypeAliasDeclaration };
 export function tsAsExpression(
   expression: types.Expression,
   typeAnnotation: types.TSType,
-): any {
+): types.TSAsExpression {
   return builder("TSAsExpression", expression, typeAnnotation);
 }
 export { tsAsExpression as TSAsExpression };
@@ -1697,7 +1792,7 @@ export { tsAsExpression as tSAsExpression };
 export function tsTypeAssertion(
   typeAnnotation: types.TSType,
   expression: types.Expression,
-): any {
+): types.TSTypeAssertion {
   return builder("TSTypeAssertion", typeAnnotation, expression);
 }
 export { tsTypeAssertion as TSTypeAssertion };
@@ -1705,7 +1800,7 @@ export { tsTypeAssertion as tSTypeAssertion };
 export function tsEnumDeclaration(
   id: types.Identifier,
   members: Array<types.TSEnumMember>,
-): any {
+): types.TSEnumDeclaration {
   return builder("TSEnumDeclaration", id, members);
 }
 export { tsEnumDeclaration as TSEnumDeclaration };
@@ -1713,7 +1808,7 @@ export { tsEnumDeclaration as tSEnumDeclaration };
 export function tsEnumMember(
   id: types.Identifier | types.StringLiteral,
   initializer?: types.Expression | null,
-): any {
+): types.TSEnumMember {
   return builder("TSEnumMember", id, initializer);
 }
 export { tsEnumMember as TSEnumMember };
@@ -1721,12 +1816,14 @@ export { tsEnumMember as tSEnumMember };
 export function tsModuleDeclaration(
   id: types.Identifier | types.StringLiteral,
   body: types.TSModuleBlock | types.TSModuleDeclaration,
-): any {
+): types.TSModuleDeclaration {
   return builder("TSModuleDeclaration", id, body);
 }
 export { tsModuleDeclaration as TSModuleDeclaration };
 export { tsModuleDeclaration as tSModuleDeclaration };
-export function tsModuleBlock(body: Array<types.Statement>): any {
+export function tsModuleBlock(
+  body: Array<types.Statement>,
+): types.TSModuleBlock {
   return builder("TSModuleBlock", body);
 }
 export { tsModuleBlock as TSModuleBlock };
@@ -1735,7 +1832,7 @@ export function tsImportType(
   argument: types.StringLiteral,
   qualifier?: types.TSEntityName | null,
   typeParameters?: types.TSTypeParameterInstantiation | null,
-): any {
+): types.TSImportType {
   return builder("TSImportType", argument, qualifier, typeParameters);
 }
 export { tsImportType as TSImportType };
@@ -1743,46 +1840,56 @@ export { tsImportType as tSImportType };
 export function tsImportEqualsDeclaration(
   id: types.Identifier,
   moduleReference: types.TSEntityName | types.TSExternalModuleReference,
-): any {
+): types.TSImportEqualsDeclaration {
   return builder("TSImportEqualsDeclaration", id, moduleReference);
 }
 export { tsImportEqualsDeclaration as TSImportEqualsDeclaration };
 export { tsImportEqualsDeclaration as tSImportEqualsDeclaration };
 export function tsExternalModuleReference(
   expression: types.StringLiteral,
-): any {
+): types.TSExternalModuleReference {
   return builder("TSExternalModuleReference", expression);
 }
 export { tsExternalModuleReference as TSExternalModuleReference };
 export { tsExternalModuleReference as tSExternalModuleReference };
-export function tsNonNullExpression(expression: types.Expression): any {
+export function tsNonNullExpression(
+  expression: types.Expression,
+): types.TSNonNullExpression {
   return builder("TSNonNullExpression", expression);
 }
 export { tsNonNullExpression as TSNonNullExpression };
 export { tsNonNullExpression as tSNonNullExpression };
-export function tsExportAssignment(expression: types.Expression): any {
+export function tsExportAssignment(
+  expression: types.Expression,
+): types.TSExportAssignment {
   return builder("TSExportAssignment", expression);
 }
 export { tsExportAssignment as TSExportAssignment };
 export { tsExportAssignment as tSExportAssignment };
-export function tsNamespaceExportDeclaration(id: types.Identifier): any {
+export function tsNamespaceExportDeclaration(
+  id: types.Identifier,
+): types.TSNamespaceExportDeclaration {
   return builder("TSNamespaceExportDeclaration", id);
 }
 export { tsNamespaceExportDeclaration as TSNamespaceExportDeclaration };
 export { tsNamespaceExportDeclaration as tSNamespaceExportDeclaration };
-export function tsTypeAnnotation(typeAnnotation: types.TSType): any {
+export function tsTypeAnnotation(
+  typeAnnotation: types.TSType,
+): types.TSTypeAnnotation {
   return builder("TSTypeAnnotation", typeAnnotation);
 }
 export { tsTypeAnnotation as TSTypeAnnotation };
 export { tsTypeAnnotation as tSTypeAnnotation };
-export function tsTypeParameterInstantiation(params: Array<types.TSType>): any {
+export function tsTypeParameterInstantiation(
+  params: Array<types.TSType>,
+): types.TSTypeParameterInstantiation {
   return builder("TSTypeParameterInstantiation", params);
 }
 export { tsTypeParameterInstantiation as TSTypeParameterInstantiation };
 export { tsTypeParameterInstantiation as tSTypeParameterInstantiation };
 export function tsTypeParameterDeclaration(
   params: Array<types.TSTypeParameter>,
-): any {
+): types.TSTypeParameterDeclaration {
   return builder("TSTypeParameterDeclaration", params);
 }
 export { tsTypeParameterDeclaration as TSTypeParameterDeclaration };
@@ -1791,7 +1898,7 @@ export function tsTypeParameter(
   constraint: types.TSType | null | undefined,
   _default: types.TSType | null | undefined,
   name: string,
-): any {
+): types.TSTypeParameter {
   return builder("TSTypeParameter", constraint, _default, name);
 }
 export { tsTypeParameter as TSTypeParameter };
