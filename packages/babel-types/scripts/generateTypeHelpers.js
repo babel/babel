@@ -12,18 +12,18 @@ const baseDir = path.join(__dirname, "../src");
 
 console.log("Generating @babel/types dynamic functions");
 
-const buildersFile = path.join(baseDir, "builders/generated/index.js");
+const buildersFile = path.join(baseDir, "builders/generated/index.ts");
 writeFile(buildersFile, format(generateBuilders(), buildersFile));
 console.log(`  ${chalk.green("✔")} Generated builders`);
 
-const validatorsFile = path.join(baseDir, "validators/generated/index.js");
+const validatorsFile = path.join(baseDir, "validators/generated/index.ts");
 writeFile(validatorsFile, format(generateValidators(), validatorsFile));
 console.log(`  ${chalk.green("✔")} Generated validators`);
 
-const assertsFile = path.join(baseDir, "asserts/generated/index.js");
+const assertsFile = path.join(baseDir, "asserts/generated/index.ts");
 writeFile(assertsFile, format(generateAsserts(), assertsFile));
 console.log(`  ${chalk.green("✔")} Generated asserts`);
 
-const constantsFile = path.join(baseDir, "constants/generated/index.js");
+const constantsFile = path.join(baseDir, "constants/generated/index.ts");
 writeFile(constantsFile, format(generateConstants(), constantsFile));
 console.log(`  ${chalk.green("✔")} Generated constants`);

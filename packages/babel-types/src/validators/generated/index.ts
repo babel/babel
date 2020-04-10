@@ -4,7 +4,7 @@
  */
 import shallowEqual from "../../utils/shallowEqual";
 
-export function isArrayExpression(node?: any | null, opts?: any): boolean {
+export function isArrayExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -18,7 +18,7 @@ export function isArrayExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isAssignmentExpression(node?: any | null, opts?: any): boolean {
+export function isAssignmentExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -32,7 +32,7 @@ export function isAssignmentExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isBinaryExpression(node?: any | null, opts?: any): boolean {
+export function isBinaryExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -46,7 +46,7 @@ export function isBinaryExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isInterpreterDirective(node?: any | null, opts?: any): boolean {
+export function isInterpreterDirective(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -60,7 +60,7 @@ export function isInterpreterDirective(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDirective(node?: any | null, opts?: any): boolean {
+export function isDirective(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -74,7 +74,7 @@ export function isDirective(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDirectiveLiteral(node?: any | null, opts?: any): boolean {
+export function isDirectiveLiteral(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -88,7 +88,7 @@ export function isDirectiveLiteral(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isBlockStatement(node?: any | null, opts?: any): boolean {
+export function isBlockStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -102,7 +102,7 @@ export function isBlockStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isBreakStatement(node?: any | null, opts?: any): boolean {
+export function isBreakStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -116,7 +116,7 @@ export function isBreakStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isCallExpression(node?: any | null, opts?: any): boolean {
+export function isCallExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -130,7 +130,7 @@ export function isCallExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isCatchClause(node?: any | null, opts?: any): boolean {
+export function isCatchClause(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -144,10 +144,7 @@ export function isCatchClause(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isConditionalExpression(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isConditionalExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -161,7 +158,7 @@ export function isConditionalExpression(
 
   return false;
 }
-export function isContinueStatement(node?: any | null, opts?: any): boolean {
+export function isContinueStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -175,7 +172,7 @@ export function isContinueStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDebuggerStatement(node?: any | null, opts?: any): boolean {
+export function isDebuggerStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -189,7 +186,7 @@ export function isDebuggerStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDoWhileStatement(node?: any | null, opts?: any): boolean {
+export function isDoWhileStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -203,7 +200,7 @@ export function isDoWhileStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isEmptyStatement(node?: any | null, opts?: any): boolean {
+export function isEmptyStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -217,7 +214,7 @@ export function isEmptyStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isExpressionStatement(node?: any | null, opts?: any): boolean {
+export function isExpressionStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -231,7 +228,7 @@ export function isExpressionStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isFile(node?: any | null, opts?: any): boolean {
+export function isFile(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -245,7 +242,7 @@ export function isFile(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isForInStatement(node?: any | null, opts?: any): boolean {
+export function isForInStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -259,7 +256,7 @@ export function isForInStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isForStatement(node?: any | null, opts?: any): boolean {
+export function isForStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -273,7 +270,7 @@ export function isForStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isFunctionDeclaration(node?: any | null, opts?: any): boolean {
+export function isFunctionDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -287,7 +284,7 @@ export function isFunctionDeclaration(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isFunctionExpression(node?: any | null, opts?: any): boolean {
+export function isFunctionExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -301,7 +298,7 @@ export function isFunctionExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isIdentifier(node?: any | null, opts?: any): boolean {
+export function isIdentifier(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -315,7 +312,7 @@ export function isIdentifier(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isIfStatement(node?: any | null, opts?: any): boolean {
+export function isIfStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -329,7 +326,7 @@ export function isIfStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isLabeledStatement(node?: any | null, opts?: any): boolean {
+export function isLabeledStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -343,7 +340,7 @@ export function isLabeledStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isStringLiteral(node?: any | null, opts?: any): boolean {
+export function isStringLiteral(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -357,7 +354,7 @@ export function isStringLiteral(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isNumericLiteral(node?: any | null, opts?: any): boolean {
+export function isNumericLiteral(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -371,7 +368,7 @@ export function isNumericLiteral(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isNullLiteral(node?: any | null, opts?: any): boolean {
+export function isNullLiteral(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -385,7 +382,7 @@ export function isNullLiteral(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isBooleanLiteral(node?: any | null, opts?: any): boolean {
+export function isBooleanLiteral(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -399,7 +396,7 @@ export function isBooleanLiteral(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isRegExpLiteral(node?: any | null, opts?: any): boolean {
+export function isRegExpLiteral(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -413,7 +410,7 @@ export function isRegExpLiteral(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isLogicalExpression(node?: any | null, opts?: any): boolean {
+export function isLogicalExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -427,7 +424,7 @@ export function isLogicalExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isMemberExpression(node?: any | null, opts?: any): boolean {
+export function isMemberExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -441,7 +438,7 @@ export function isMemberExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isNewExpression(node?: any | null, opts?: any): boolean {
+export function isNewExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -455,7 +452,7 @@ export function isNewExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isProgram(node?: any | null, opts?: any): boolean {
+export function isProgram(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -469,7 +466,7 @@ export function isProgram(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isObjectExpression(node?: any | null, opts?: any): boolean {
+export function isObjectExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -483,7 +480,7 @@ export function isObjectExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isObjectMethod(node?: any | null, opts?: any): boolean {
+export function isObjectMethod(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -497,7 +494,7 @@ export function isObjectMethod(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isObjectProperty(node?: any | null, opts?: any): boolean {
+export function isObjectProperty(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -511,7 +508,7 @@ export function isObjectProperty(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isRestElement(node?: any | null, opts?: any): boolean {
+export function isRestElement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -525,7 +522,7 @@ export function isRestElement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isReturnStatement(node?: any | null, opts?: any): boolean {
+export function isReturnStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -539,7 +536,7 @@ export function isReturnStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isSequenceExpression(node?: any | null, opts?: any): boolean {
+export function isSequenceExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -553,10 +550,7 @@ export function isSequenceExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isParenthesizedExpression(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isParenthesizedExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -570,7 +564,7 @@ export function isParenthesizedExpression(
 
   return false;
 }
-export function isSwitchCase(node?: any | null, opts?: any): boolean {
+export function isSwitchCase(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -584,7 +578,7 @@ export function isSwitchCase(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isSwitchStatement(node?: any | null, opts?: any): boolean {
+export function isSwitchStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -598,7 +592,7 @@ export function isSwitchStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isThisExpression(node?: any | null, opts?: any): boolean {
+export function isThisExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -612,7 +606,7 @@ export function isThisExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isThrowStatement(node?: any | null, opts?: any): boolean {
+export function isThrowStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -626,7 +620,7 @@ export function isThrowStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTryStatement(node?: any | null, opts?: any): boolean {
+export function isTryStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -640,7 +634,7 @@ export function isTryStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isUnaryExpression(node?: any | null, opts?: any): boolean {
+export function isUnaryExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -654,7 +648,7 @@ export function isUnaryExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isUpdateExpression(node?: any | null, opts?: any): boolean {
+export function isUpdateExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -668,7 +662,7 @@ export function isUpdateExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isVariableDeclaration(node?: any | null, opts?: any): boolean {
+export function isVariableDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -682,7 +676,7 @@ export function isVariableDeclaration(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isVariableDeclarator(node?: any | null, opts?: any): boolean {
+export function isVariableDeclarator(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -696,7 +690,7 @@ export function isVariableDeclarator(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isWhileStatement(node?: any | null, opts?: any): boolean {
+export function isWhileStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -710,7 +704,7 @@ export function isWhileStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isWithStatement(node?: any | null, opts?: any): boolean {
+export function isWithStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -724,7 +718,7 @@ export function isWithStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isAssignmentPattern(node?: any | null, opts?: any): boolean {
+export function isAssignmentPattern(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -738,7 +732,7 @@ export function isAssignmentPattern(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isArrayPattern(node?: any | null, opts?: any): boolean {
+export function isArrayPattern(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -752,10 +746,7 @@ export function isArrayPattern(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isArrowFunctionExpression(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isArrowFunctionExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -769,7 +760,7 @@ export function isArrowFunctionExpression(
 
   return false;
 }
-export function isClassBody(node?: any | null, opts?: any): boolean {
+export function isClassBody(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -783,7 +774,7 @@ export function isClassBody(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isClassExpression(node?: any | null, opts?: any): boolean {
+export function isClassExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -797,7 +788,7 @@ export function isClassExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isClassDeclaration(node?: any | null, opts?: any): boolean {
+export function isClassDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -811,7 +802,7 @@ export function isClassDeclaration(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isExportAllDeclaration(node?: any | null, opts?: any): boolean {
+export function isExportAllDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -825,10 +816,7 @@ export function isExportAllDeclaration(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isExportDefaultDeclaration(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isExportDefaultDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -842,10 +830,7 @@ export function isExportDefaultDeclaration(
 
   return false;
 }
-export function isExportNamedDeclaration(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isExportNamedDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -859,7 +844,7 @@ export function isExportNamedDeclaration(
 
   return false;
 }
-export function isExportSpecifier(node?: any | null, opts?: any): boolean {
+export function isExportSpecifier(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -873,7 +858,7 @@ export function isExportSpecifier(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isForOfStatement(node?: any | null, opts?: any): boolean {
+export function isForOfStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -887,7 +872,7 @@ export function isForOfStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isImportDeclaration(node?: any | null, opts?: any): boolean {
+export function isImportDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -901,10 +886,7 @@ export function isImportDeclaration(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isImportDefaultSpecifier(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isImportDefaultSpecifier(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -918,10 +900,7 @@ export function isImportDefaultSpecifier(
 
   return false;
 }
-export function isImportNamespaceSpecifier(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isImportNamespaceSpecifier(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -935,7 +914,7 @@ export function isImportNamespaceSpecifier(
 
   return false;
 }
-export function isImportSpecifier(node?: any | null, opts?: any): boolean {
+export function isImportSpecifier(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -949,7 +928,7 @@ export function isImportSpecifier(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isMetaProperty(node?: any | null, opts?: any): boolean {
+export function isMetaProperty(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -963,7 +942,7 @@ export function isMetaProperty(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isClassMethod(node?: any | null, opts?: any): boolean {
+export function isClassMethod(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -977,7 +956,7 @@ export function isClassMethod(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isObjectPattern(node?: any | null, opts?: any): boolean {
+export function isObjectPattern(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -991,7 +970,7 @@ export function isObjectPattern(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isSpreadElement(node?: any | null, opts?: any): boolean {
+export function isSpreadElement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1005,7 +984,7 @@ export function isSpreadElement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isSuper(node?: any | null, opts?: any): boolean {
+export function isSuper(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1019,10 +998,7 @@ export function isSuper(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTaggedTemplateExpression(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isTaggedTemplateExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1036,7 +1012,7 @@ export function isTaggedTemplateExpression(
 
   return false;
 }
-export function isTemplateElement(node?: any | null, opts?: any): boolean {
+export function isTemplateElement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1050,7 +1026,7 @@ export function isTemplateElement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTemplateLiteral(node?: any | null, opts?: any): boolean {
+export function isTemplateLiteral(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1064,7 +1040,7 @@ export function isTemplateLiteral(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isYieldExpression(node?: any | null, opts?: any): boolean {
+export function isYieldExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1078,7 +1054,7 @@ export function isYieldExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isAwaitExpression(node?: any | null, opts?: any): boolean {
+export function isAwaitExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1092,7 +1068,7 @@ export function isAwaitExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isImport(node?: any | null, opts?: any): boolean {
+export function isImport(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1106,7 +1082,7 @@ export function isImport(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isBigIntLiteral(node?: any | null, opts?: any): boolean {
+export function isBigIntLiteral(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1120,10 +1096,7 @@ export function isBigIntLiteral(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isExportNamespaceSpecifier(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isExportNamespaceSpecifier(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1137,10 +1110,7 @@ export function isExportNamespaceSpecifier(
 
   return false;
 }
-export function isOptionalMemberExpression(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isOptionalMemberExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1154,10 +1124,7 @@ export function isOptionalMemberExpression(
 
   return false;
 }
-export function isOptionalCallExpression(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isOptionalCallExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1171,7 +1138,7 @@ export function isOptionalCallExpression(
 
   return false;
 }
-export function isAnyTypeAnnotation(node?: any | null, opts?: any): boolean {
+export function isAnyTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1185,7 +1152,7 @@ export function isAnyTypeAnnotation(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isArrayTypeAnnotation(node?: any | null, opts?: any): boolean {
+export function isArrayTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1199,10 +1166,7 @@ export function isArrayTypeAnnotation(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isBooleanTypeAnnotation(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isBooleanTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1217,7 +1181,7 @@ export function isBooleanTypeAnnotation(
   return false;
 }
 export function isBooleanLiteralTypeAnnotation(
-  node?: any | null,
+  node?: any,
   opts?: any,
 ): boolean {
   if (!node) return false;
@@ -1233,10 +1197,7 @@ export function isBooleanLiteralTypeAnnotation(
 
   return false;
 }
-export function isNullLiteralTypeAnnotation(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isNullLiteralTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1250,7 +1211,7 @@ export function isNullLiteralTypeAnnotation(
 
   return false;
 }
-export function isClassImplements(node?: any | null, opts?: any): boolean {
+export function isClassImplements(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1264,7 +1225,7 @@ export function isClassImplements(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDeclareClass(node?: any | null, opts?: any): boolean {
+export function isDeclareClass(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1278,7 +1239,7 @@ export function isDeclareClass(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDeclareFunction(node?: any | null, opts?: any): boolean {
+export function isDeclareFunction(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1292,7 +1253,7 @@ export function isDeclareFunction(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDeclareInterface(node?: any | null, opts?: any): boolean {
+export function isDeclareInterface(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1306,7 +1267,7 @@ export function isDeclareInterface(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDeclareModule(node?: any | null, opts?: any): boolean {
+export function isDeclareModule(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1320,7 +1281,7 @@ export function isDeclareModule(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDeclareModuleExports(node?: any | null, opts?: any): boolean {
+export function isDeclareModuleExports(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1334,7 +1295,7 @@ export function isDeclareModuleExports(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDeclareTypeAlias(node?: any | null, opts?: any): boolean {
+export function isDeclareTypeAlias(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1348,7 +1309,7 @@ export function isDeclareTypeAlias(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDeclareOpaqueType(node?: any | null, opts?: any): boolean {
+export function isDeclareOpaqueType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1362,7 +1323,7 @@ export function isDeclareOpaqueType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDeclareVariable(node?: any | null, opts?: any): boolean {
+export function isDeclareVariable(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1376,10 +1337,7 @@ export function isDeclareVariable(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDeclareExportDeclaration(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isDeclareExportDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1393,10 +1351,7 @@ export function isDeclareExportDeclaration(
 
   return false;
 }
-export function isDeclareExportAllDeclaration(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isDeclareExportAllDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1410,7 +1365,7 @@ export function isDeclareExportAllDeclaration(
 
   return false;
 }
-export function isDeclaredPredicate(node?: any | null, opts?: any): boolean {
+export function isDeclaredPredicate(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1424,7 +1379,7 @@ export function isDeclaredPredicate(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isExistsTypeAnnotation(node?: any | null, opts?: any): boolean {
+export function isExistsTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1438,10 +1393,7 @@ export function isExistsTypeAnnotation(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isFunctionTypeAnnotation(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isFunctionTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1455,7 +1407,7 @@ export function isFunctionTypeAnnotation(
 
   return false;
 }
-export function isFunctionTypeParam(node?: any | null, opts?: any): boolean {
+export function isFunctionTypeParam(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1469,10 +1421,7 @@ export function isFunctionTypeParam(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isGenericTypeAnnotation(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isGenericTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1486,7 +1435,7 @@ export function isGenericTypeAnnotation(
 
   return false;
 }
-export function isInferredPredicate(node?: any | null, opts?: any): boolean {
+export function isInferredPredicate(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1500,7 +1449,7 @@ export function isInferredPredicate(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isInterfaceExtends(node?: any | null, opts?: any): boolean {
+export function isInterfaceExtends(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1514,7 +1463,7 @@ export function isInterfaceExtends(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isInterfaceDeclaration(node?: any | null, opts?: any): boolean {
+export function isInterfaceDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1528,10 +1477,7 @@ export function isInterfaceDeclaration(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isInterfaceTypeAnnotation(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isInterfaceTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1545,10 +1491,7 @@ export function isInterfaceTypeAnnotation(
 
   return false;
 }
-export function isIntersectionTypeAnnotation(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isIntersectionTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1562,7 +1505,7 @@ export function isIntersectionTypeAnnotation(
 
   return false;
 }
-export function isMixedTypeAnnotation(node?: any | null, opts?: any): boolean {
+export function isMixedTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1576,7 +1519,7 @@ export function isMixedTypeAnnotation(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isEmptyTypeAnnotation(node?: any | null, opts?: any): boolean {
+export function isEmptyTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1590,10 +1533,7 @@ export function isEmptyTypeAnnotation(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isNullableTypeAnnotation(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isNullableTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1607,10 +1547,7 @@ export function isNullableTypeAnnotation(
 
   return false;
 }
-export function isNumberLiteralTypeAnnotation(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isNumberLiteralTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1624,7 +1561,7 @@ export function isNumberLiteralTypeAnnotation(
 
   return false;
 }
-export function isNumberTypeAnnotation(node?: any | null, opts?: any): boolean {
+export function isNumberTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1638,7 +1575,7 @@ export function isNumberTypeAnnotation(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isObjectTypeAnnotation(node?: any | null, opts?: any): boolean {
+export function isObjectTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1652,10 +1589,7 @@ export function isObjectTypeAnnotation(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isObjectTypeInternalSlot(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isObjectTypeInternalSlot(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1669,10 +1603,7 @@ export function isObjectTypeInternalSlot(
 
   return false;
 }
-export function isObjectTypeCallProperty(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isObjectTypeCallProperty(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1686,7 +1617,7 @@ export function isObjectTypeCallProperty(
 
   return false;
 }
-export function isObjectTypeIndexer(node?: any | null, opts?: any): boolean {
+export function isObjectTypeIndexer(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1700,7 +1631,7 @@ export function isObjectTypeIndexer(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isObjectTypeProperty(node?: any | null, opts?: any): boolean {
+export function isObjectTypeProperty(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1714,10 +1645,7 @@ export function isObjectTypeProperty(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isObjectTypeSpreadProperty(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isObjectTypeSpreadProperty(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1731,7 +1659,7 @@ export function isObjectTypeSpreadProperty(
 
   return false;
 }
-export function isOpaqueType(node?: any | null, opts?: any): boolean {
+export function isOpaqueType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1745,10 +1673,7 @@ export function isOpaqueType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isQualifiedTypeIdentifier(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isQualifiedTypeIdentifier(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1762,10 +1687,7 @@ export function isQualifiedTypeIdentifier(
 
   return false;
 }
-export function isStringLiteralTypeAnnotation(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isStringLiteralTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1779,7 +1701,7 @@ export function isStringLiteralTypeAnnotation(
 
   return false;
 }
-export function isStringTypeAnnotation(node?: any | null, opts?: any): boolean {
+export function isStringTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1793,7 +1715,7 @@ export function isStringTypeAnnotation(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isSymbolTypeAnnotation(node?: any | null, opts?: any): boolean {
+export function isSymbolTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1807,7 +1729,7 @@ export function isSymbolTypeAnnotation(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isThisTypeAnnotation(node?: any | null, opts?: any): boolean {
+export function isThisTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1821,7 +1743,7 @@ export function isThisTypeAnnotation(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTupleTypeAnnotation(node?: any | null, opts?: any): boolean {
+export function isTupleTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1835,7 +1757,7 @@ export function isTupleTypeAnnotation(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTypeofTypeAnnotation(node?: any | null, opts?: any): boolean {
+export function isTypeofTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1849,7 +1771,7 @@ export function isTypeofTypeAnnotation(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTypeAlias(node?: any | null, opts?: any): boolean {
+export function isTypeAlias(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1863,7 +1785,7 @@ export function isTypeAlias(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTypeAnnotation(node?: any | null, opts?: any): boolean {
+export function isTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1877,7 +1799,7 @@ export function isTypeAnnotation(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTypeCastExpression(node?: any | null, opts?: any): boolean {
+export function isTypeCastExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1891,7 +1813,7 @@ export function isTypeCastExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTypeParameter(node?: any | null, opts?: any): boolean {
+export function isTypeParameter(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1905,10 +1827,7 @@ export function isTypeParameter(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTypeParameterDeclaration(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isTypeParameterDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1922,10 +1841,7 @@ export function isTypeParameterDeclaration(
 
   return false;
 }
-export function isTypeParameterInstantiation(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isTypeParameterInstantiation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1939,7 +1855,7 @@ export function isTypeParameterInstantiation(
 
   return false;
 }
-export function isUnionTypeAnnotation(node?: any | null, opts?: any): boolean {
+export function isUnionTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1953,7 +1869,7 @@ export function isUnionTypeAnnotation(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isVariance(node?: any | null, opts?: any): boolean {
+export function isVariance(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1967,7 +1883,7 @@ export function isVariance(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isVoidTypeAnnotation(node?: any | null, opts?: any): boolean {
+export function isVoidTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1981,7 +1897,7 @@ export function isVoidTypeAnnotation(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isEnumDeclaration(node?: any | null, opts?: any): boolean {
+export function isEnumDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -1995,7 +1911,7 @@ export function isEnumDeclaration(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isEnumBooleanBody(node?: any | null, opts?: any): boolean {
+export function isEnumBooleanBody(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2009,7 +1925,7 @@ export function isEnumBooleanBody(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isEnumNumberBody(node?: any | null, opts?: any): boolean {
+export function isEnumNumberBody(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2023,7 +1939,7 @@ export function isEnumNumberBody(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isEnumStringBody(node?: any | null, opts?: any): boolean {
+export function isEnumStringBody(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2037,7 +1953,7 @@ export function isEnumStringBody(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isEnumSymbolBody(node?: any | null, opts?: any): boolean {
+export function isEnumSymbolBody(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2051,7 +1967,7 @@ export function isEnumSymbolBody(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isEnumBooleanMember(node?: any | null, opts?: any): boolean {
+export function isEnumBooleanMember(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2065,7 +1981,7 @@ export function isEnumBooleanMember(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isEnumNumberMember(node?: any | null, opts?: any): boolean {
+export function isEnumNumberMember(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2079,7 +1995,7 @@ export function isEnumNumberMember(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isEnumStringMember(node?: any | null, opts?: any): boolean {
+export function isEnumStringMember(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2093,7 +2009,7 @@ export function isEnumStringMember(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isEnumDefaultedMember(node?: any | null, opts?: any): boolean {
+export function isEnumDefaultedMember(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2107,7 +2023,7 @@ export function isEnumDefaultedMember(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isJSXAttribute(node?: any | null, opts?: any): boolean {
+export function isJSXAttribute(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2121,7 +2037,7 @@ export function isJSXAttribute(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isJSXClosingElement(node?: any | null, opts?: any): boolean {
+export function isJSXClosingElement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2135,7 +2051,7 @@ export function isJSXClosingElement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isJSXElement(node?: any | null, opts?: any): boolean {
+export function isJSXElement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2149,7 +2065,7 @@ export function isJSXElement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isJSXEmptyExpression(node?: any | null, opts?: any): boolean {
+export function isJSXEmptyExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2163,10 +2079,7 @@ export function isJSXEmptyExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isJSXExpressionContainer(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isJSXExpressionContainer(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2180,7 +2093,7 @@ export function isJSXExpressionContainer(
 
   return false;
 }
-export function isJSXSpreadChild(node?: any | null, opts?: any): boolean {
+export function isJSXSpreadChild(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2194,7 +2107,7 @@ export function isJSXSpreadChild(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isJSXIdentifier(node?: any | null, opts?: any): boolean {
+export function isJSXIdentifier(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2208,7 +2121,7 @@ export function isJSXIdentifier(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isJSXMemberExpression(node?: any | null, opts?: any): boolean {
+export function isJSXMemberExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2222,7 +2135,7 @@ export function isJSXMemberExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isJSXNamespacedName(node?: any | null, opts?: any): boolean {
+export function isJSXNamespacedName(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2236,7 +2149,7 @@ export function isJSXNamespacedName(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isJSXOpeningElement(node?: any | null, opts?: any): boolean {
+export function isJSXOpeningElement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2250,7 +2163,7 @@ export function isJSXOpeningElement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isJSXSpreadAttribute(node?: any | null, opts?: any): boolean {
+export function isJSXSpreadAttribute(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2264,7 +2177,7 @@ export function isJSXSpreadAttribute(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isJSXText(node?: any | null, opts?: any): boolean {
+export function isJSXText(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2278,7 +2191,7 @@ export function isJSXText(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isJSXFragment(node?: any | null, opts?: any): boolean {
+export function isJSXFragment(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2292,7 +2205,7 @@ export function isJSXFragment(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isJSXOpeningFragment(node?: any | null, opts?: any): boolean {
+export function isJSXOpeningFragment(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2306,7 +2219,7 @@ export function isJSXOpeningFragment(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isJSXClosingFragment(node?: any | null, opts?: any): boolean {
+export function isJSXClosingFragment(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2320,7 +2233,7 @@ export function isJSXClosingFragment(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isNoop(node?: any | null, opts?: any): boolean {
+export function isNoop(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2334,7 +2247,7 @@ export function isNoop(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isPlaceholder(node?: any | null, opts?: any): boolean {
+export function isPlaceholder(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2348,10 +2261,7 @@ export function isPlaceholder(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isV8IntrinsicIdentifier(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isV8IntrinsicIdentifier(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2365,7 +2275,7 @@ export function isV8IntrinsicIdentifier(
 
   return false;
 }
-export function isArgumentPlaceholder(node?: any | null, opts?: any): boolean {
+export function isArgumentPlaceholder(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2379,7 +2289,7 @@ export function isArgumentPlaceholder(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isBindExpression(node?: any | null, opts?: any): boolean {
+export function isBindExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2393,7 +2303,7 @@ export function isBindExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isClassProperty(node?: any | null, opts?: any): boolean {
+export function isClassProperty(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2407,10 +2317,7 @@ export function isClassProperty(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isPipelineTopicExpression(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isPipelineTopicExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2424,7 +2331,7 @@ export function isPipelineTopicExpression(
 
   return false;
 }
-export function isPipelineBareFunction(node?: any | null, opts?: any): boolean {
+export function isPipelineBareFunction(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2439,7 +2346,7 @@ export function isPipelineBareFunction(node?: any | null, opts?: any): boolean {
   return false;
 }
 export function isPipelinePrimaryTopicReference(
-  node?: any | null,
+  node?: any,
   opts?: any,
 ): boolean {
   if (!node) return false;
@@ -2455,7 +2362,7 @@ export function isPipelinePrimaryTopicReference(
 
   return false;
 }
-export function isClassPrivateProperty(node?: any | null, opts?: any): boolean {
+export function isClassPrivateProperty(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2469,7 +2376,7 @@ export function isClassPrivateProperty(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isClassPrivateMethod(node?: any | null, opts?: any): boolean {
+export function isClassPrivateMethod(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2483,7 +2390,7 @@ export function isClassPrivateMethod(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isImportAttribute(node?: any | null, opts?: any): boolean {
+export function isImportAttribute(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2497,7 +2404,7 @@ export function isImportAttribute(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDecorator(node?: any | null, opts?: any): boolean {
+export function isDecorator(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2511,7 +2418,7 @@ export function isDecorator(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDoExpression(node?: any | null, opts?: any): boolean {
+export function isDoExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2525,10 +2432,7 @@ export function isDoExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isExportDefaultSpecifier(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isExportDefaultSpecifier(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2542,7 +2446,7 @@ export function isExportDefaultSpecifier(
 
   return false;
 }
-export function isPrivateName(node?: any | null, opts?: any): boolean {
+export function isPrivateName(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2556,7 +2460,7 @@ export function isPrivateName(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isRecordExpression(node?: any | null, opts?: any): boolean {
+export function isRecordExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2570,7 +2474,7 @@ export function isRecordExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTupleExpression(node?: any | null, opts?: any): boolean {
+export function isTupleExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2584,7 +2488,7 @@ export function isTupleExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDecimalLiteral(node?: any | null, opts?: any): boolean {
+export function isDecimalLiteral(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2598,7 +2502,7 @@ export function isDecimalLiteral(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isStaticBlock(node?: any | null, opts?: any): boolean {
+export function isStaticBlock(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2612,7 +2516,7 @@ export function isStaticBlock(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSParameterProperty(node?: any | null, opts?: any): boolean {
+export function isTSParameterProperty(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2626,7 +2530,7 @@ export function isTSParameterProperty(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSDeclareFunction(node?: any | null, opts?: any): boolean {
+export function isTSDeclareFunction(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2640,7 +2544,7 @@ export function isTSDeclareFunction(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSDeclareMethod(node?: any | null, opts?: any): boolean {
+export function isTSDeclareMethod(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2654,7 +2558,7 @@ export function isTSDeclareMethod(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSQualifiedName(node?: any | null, opts?: any): boolean {
+export function isTSQualifiedName(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2668,10 +2572,7 @@ export function isTSQualifiedName(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSCallSignatureDeclaration(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isTSCallSignatureDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2686,7 +2587,7 @@ export function isTSCallSignatureDeclaration(
   return false;
 }
 export function isTSConstructSignatureDeclaration(
-  node?: any | null,
+  node?: any,
   opts?: any,
 ): boolean {
   if (!node) return false;
@@ -2702,7 +2603,7 @@ export function isTSConstructSignatureDeclaration(
 
   return false;
 }
-export function isTSPropertySignature(node?: any | null, opts?: any): boolean {
+export function isTSPropertySignature(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2716,7 +2617,7 @@ export function isTSPropertySignature(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSMethodSignature(node?: any | null, opts?: any): boolean {
+export function isTSMethodSignature(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2730,7 +2631,7 @@ export function isTSMethodSignature(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSIndexSignature(node?: any | null, opts?: any): boolean {
+export function isTSIndexSignature(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2744,7 +2645,7 @@ export function isTSIndexSignature(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSAnyKeyword(node?: any | null, opts?: any): boolean {
+export function isTSAnyKeyword(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2758,7 +2659,7 @@ export function isTSAnyKeyword(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSBooleanKeyword(node?: any | null, opts?: any): boolean {
+export function isTSBooleanKeyword(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2772,7 +2673,7 @@ export function isTSBooleanKeyword(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSBigIntKeyword(node?: any | null, opts?: any): boolean {
+export function isTSBigIntKeyword(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2786,7 +2687,7 @@ export function isTSBigIntKeyword(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSIntrinsicKeyword(node?: any | null, opts?: any): boolean {
+export function isTSIntrinsicKeyword(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2800,7 +2701,7 @@ export function isTSIntrinsicKeyword(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSNeverKeyword(node?: any | null, opts?: any): boolean {
+export function isTSNeverKeyword(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2814,7 +2715,7 @@ export function isTSNeverKeyword(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSNullKeyword(node?: any | null, opts?: any): boolean {
+export function isTSNullKeyword(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2828,7 +2729,7 @@ export function isTSNullKeyword(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSNumberKeyword(node?: any | null, opts?: any): boolean {
+export function isTSNumberKeyword(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2842,7 +2743,7 @@ export function isTSNumberKeyword(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSObjectKeyword(node?: any | null, opts?: any): boolean {
+export function isTSObjectKeyword(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2856,7 +2757,7 @@ export function isTSObjectKeyword(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSStringKeyword(node?: any | null, opts?: any): boolean {
+export function isTSStringKeyword(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2870,7 +2771,7 @@ export function isTSStringKeyword(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSSymbolKeyword(node?: any | null, opts?: any): boolean {
+export function isTSSymbolKeyword(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2884,7 +2785,7 @@ export function isTSSymbolKeyword(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSUndefinedKeyword(node?: any | null, opts?: any): boolean {
+export function isTSUndefinedKeyword(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2898,7 +2799,7 @@ export function isTSUndefinedKeyword(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSUnknownKeyword(node?: any | null, opts?: any): boolean {
+export function isTSUnknownKeyword(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2912,7 +2813,7 @@ export function isTSUnknownKeyword(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSVoidKeyword(node?: any | null, opts?: any): boolean {
+export function isTSVoidKeyword(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2926,7 +2827,7 @@ export function isTSVoidKeyword(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSThisType(node?: any | null, opts?: any): boolean {
+export function isTSThisType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2940,7 +2841,7 @@ export function isTSThisType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSFunctionType(node?: any | null, opts?: any): boolean {
+export function isTSFunctionType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2954,7 +2855,7 @@ export function isTSFunctionType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSConstructorType(node?: any | null, opts?: any): boolean {
+export function isTSConstructorType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2968,7 +2869,7 @@ export function isTSConstructorType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSTypeReference(node?: any | null, opts?: any): boolean {
+export function isTSTypeReference(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2982,7 +2883,7 @@ export function isTSTypeReference(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSTypePredicate(node?: any | null, opts?: any): boolean {
+export function isTSTypePredicate(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -2996,7 +2897,7 @@ export function isTSTypePredicate(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSTypeQuery(node?: any | null, opts?: any): boolean {
+export function isTSTypeQuery(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3010,7 +2911,7 @@ export function isTSTypeQuery(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSTypeLiteral(node?: any | null, opts?: any): boolean {
+export function isTSTypeLiteral(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3024,7 +2925,7 @@ export function isTSTypeLiteral(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSArrayType(node?: any | null, opts?: any): boolean {
+export function isTSArrayType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3038,7 +2939,7 @@ export function isTSArrayType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSTupleType(node?: any | null, opts?: any): boolean {
+export function isTSTupleType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3052,7 +2953,7 @@ export function isTSTupleType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSOptionalType(node?: any | null, opts?: any): boolean {
+export function isTSOptionalType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3066,7 +2967,7 @@ export function isTSOptionalType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSRestType(node?: any | null, opts?: any): boolean {
+export function isTSRestType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3080,7 +2981,7 @@ export function isTSRestType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSNamedTupleMember(node?: any | null, opts?: any): boolean {
+export function isTSNamedTupleMember(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3094,7 +2995,7 @@ export function isTSNamedTupleMember(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSUnionType(node?: any | null, opts?: any): boolean {
+export function isTSUnionType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3108,7 +3009,7 @@ export function isTSUnionType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSIntersectionType(node?: any | null, opts?: any): boolean {
+export function isTSIntersectionType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3122,7 +3023,7 @@ export function isTSIntersectionType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSConditionalType(node?: any | null, opts?: any): boolean {
+export function isTSConditionalType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3136,7 +3037,7 @@ export function isTSConditionalType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSInferType(node?: any | null, opts?: any): boolean {
+export function isTSInferType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3150,7 +3051,7 @@ export function isTSInferType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSParenthesizedType(node?: any | null, opts?: any): boolean {
+export function isTSParenthesizedType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3164,7 +3065,7 @@ export function isTSParenthesizedType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSTypeOperator(node?: any | null, opts?: any): boolean {
+export function isTSTypeOperator(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3178,7 +3079,7 @@ export function isTSTypeOperator(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSIndexedAccessType(node?: any | null, opts?: any): boolean {
+export function isTSIndexedAccessType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3192,7 +3093,7 @@ export function isTSIndexedAccessType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSMappedType(node?: any | null, opts?: any): boolean {
+export function isTSMappedType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3206,7 +3107,7 @@ export function isTSMappedType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSLiteralType(node?: any | null, opts?: any): boolean {
+export function isTSLiteralType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3221,7 +3122,7 @@ export function isTSLiteralType(node?: any | null, opts?: any): boolean {
   return false;
 }
 export function isTSExpressionWithTypeArguments(
-  node?: any | null,
+  node?: any,
   opts?: any,
 ): boolean {
   if (!node) return false;
@@ -3237,10 +3138,7 @@ export function isTSExpressionWithTypeArguments(
 
   return false;
 }
-export function isTSInterfaceDeclaration(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isTSInterfaceDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3254,7 +3152,7 @@ export function isTSInterfaceDeclaration(
 
   return false;
 }
-export function isTSInterfaceBody(node?: any | null, opts?: any): boolean {
+export function isTSInterfaceBody(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3268,10 +3166,7 @@ export function isTSInterfaceBody(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSTypeAliasDeclaration(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isTSTypeAliasDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3285,7 +3180,7 @@ export function isTSTypeAliasDeclaration(
 
   return false;
 }
-export function isTSAsExpression(node?: any | null, opts?: any): boolean {
+export function isTSAsExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3299,7 +3194,7 @@ export function isTSAsExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSTypeAssertion(node?: any | null, opts?: any): boolean {
+export function isTSTypeAssertion(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3313,7 +3208,7 @@ export function isTSTypeAssertion(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSEnumDeclaration(node?: any | null, opts?: any): boolean {
+export function isTSEnumDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3327,7 +3222,7 @@ export function isTSEnumDeclaration(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSEnumMember(node?: any | null, opts?: any): boolean {
+export function isTSEnumMember(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3341,7 +3236,7 @@ export function isTSEnumMember(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSModuleDeclaration(node?: any | null, opts?: any): boolean {
+export function isTSModuleDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3355,7 +3250,7 @@ export function isTSModuleDeclaration(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSModuleBlock(node?: any | null, opts?: any): boolean {
+export function isTSModuleBlock(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3369,7 +3264,7 @@ export function isTSModuleBlock(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSImportType(node?: any | null, opts?: any): boolean {
+export function isTSImportType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3383,10 +3278,7 @@ export function isTSImportType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSImportEqualsDeclaration(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isTSImportEqualsDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3400,10 +3292,7 @@ export function isTSImportEqualsDeclaration(
 
   return false;
 }
-export function isTSExternalModuleReference(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isTSExternalModuleReference(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3417,7 +3306,7 @@ export function isTSExternalModuleReference(
 
   return false;
 }
-export function isTSNonNullExpression(node?: any | null, opts?: any): boolean {
+export function isTSNonNullExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3431,7 +3320,7 @@ export function isTSNonNullExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSExportAssignment(node?: any | null, opts?: any): boolean {
+export function isTSExportAssignment(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3446,7 +3335,7 @@ export function isTSExportAssignment(node?: any | null, opts?: any): boolean {
   return false;
 }
 export function isTSNamespaceExportDeclaration(
-  node?: any | null,
+  node?: any,
   opts?: any,
 ): boolean {
   if (!node) return false;
@@ -3462,7 +3351,7 @@ export function isTSNamespaceExportDeclaration(
 
   return false;
 }
-export function isTSTypeAnnotation(node?: any | null, opts?: any): boolean {
+export function isTSTypeAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3477,7 +3366,7 @@ export function isTSTypeAnnotation(node?: any | null, opts?: any): boolean {
   return false;
 }
 export function isTSTypeParameterInstantiation(
-  node?: any | null,
+  node?: any,
   opts?: any,
 ): boolean {
   if (!node) return false;
@@ -3493,10 +3382,7 @@ export function isTSTypeParameterInstantiation(
 
   return false;
 }
-export function isTSTypeParameterDeclaration(
-  node?: any | null,
-  opts?: any,
-): boolean {
+export function isTSTypeParameterDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3510,7 +3396,7 @@ export function isTSTypeParameterDeclaration(
 
   return false;
 }
-export function isTSTypeParameter(node?: any | null, opts?: any): boolean {
+export function isTSTypeParameter(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3524,7 +3410,7 @@ export function isTSTypeParameter(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isExpression(node?: any | null, opts?: any): boolean {
+export function isExpression(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3589,7 +3475,7 @@ export function isExpression(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isBinary(node?: any | null, opts?: any): boolean {
+export function isBinary(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3607,7 +3493,7 @@ export function isBinary(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isScopable(node?: any | null, opts?: any): boolean {
+export function isScopable(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3643,7 +3529,7 @@ export function isScopable(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isBlockParent(node?: any | null, opts?: any): boolean {
+export function isBlockParent(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3677,7 +3563,7 @@ export function isBlockParent(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isBlock(node?: any | null, opts?: any): boolean {
+export function isBlock(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3697,7 +3583,7 @@ export function isBlock(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isStatement(node?: any | null, opts?: any): boolean {
+export function isStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3764,7 +3650,7 @@ export function isStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTerminatorless(node?: any | null, opts?: any): boolean {
+export function isTerminatorless(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3786,7 +3672,7 @@ export function isTerminatorless(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isCompletionStatement(node?: any | null, opts?: any): boolean {
+export function isCompletionStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3806,7 +3692,7 @@ export function isCompletionStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isConditional(node?: any | null, opts?: any): boolean {
+export function isConditional(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3824,7 +3710,7 @@ export function isConditional(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isLoop(node?: any | null, opts?: any): boolean {
+export function isLoop(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3845,7 +3731,7 @@ export function isLoop(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isWhile(node?: any | null, opts?: any): boolean {
+export function isWhile(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3863,7 +3749,7 @@ export function isWhile(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isExpressionWrapper(node?: any | null, opts?: any): boolean {
+export function isExpressionWrapper(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3882,7 +3768,7 @@ export function isExpressionWrapper(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isFor(node?: any | null, opts?: any): boolean {
+export function isFor(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3901,7 +3787,7 @@ export function isFor(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isForXStatement(node?: any | null, opts?: any): boolean {
+export function isForXStatement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3919,7 +3805,7 @@ export function isForXStatement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isFunction(node?: any | null, opts?: any): boolean {
+export function isFunction(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3941,7 +3827,7 @@ export function isFunction(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isFunctionParent(node?: any | null, opts?: any): boolean {
+export function isFunctionParent(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3963,7 +3849,7 @@ export function isFunctionParent(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isPureish(node?: any | null, opts?: any): boolean {
+export function isPureish(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -3990,7 +3876,7 @@ export function isPureish(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isDeclaration(node?: any | null, opts?: any): boolean {
+export function isDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4033,7 +3919,7 @@ export function isDeclaration(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isPatternLike(node?: any | null, opts?: any): boolean {
+export function isPatternLike(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4056,7 +3942,7 @@ export function isPatternLike(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isLVal(node?: any | null, opts?: any): boolean {
+export function isLVal(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4081,7 +3967,7 @@ export function isLVal(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSEntityName(node?: any | null, opts?: any): boolean {
+export function isTSEntityName(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4100,7 +3986,7 @@ export function isTSEntityName(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isLiteral(node?: any | null, opts?: any): boolean {
+export function isLiteral(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4125,7 +4011,7 @@ export function isLiteral(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isImmutable(node?: any | null, opts?: any): boolean {
+export function isImmutable(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4158,7 +4044,7 @@ export function isImmutable(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isUserWhitespacable(node?: any | null, opts?: any): boolean {
+export function isUserWhitespacable(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4181,7 +4067,7 @@ export function isUserWhitespacable(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isMethod(node?: any | null, opts?: any): boolean {
+export function isMethod(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4200,7 +4086,7 @@ export function isMethod(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isObjectMember(node?: any | null, opts?: any): boolean {
+export function isObjectMember(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4218,7 +4104,7 @@ export function isObjectMember(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isProperty(node?: any | null, opts?: any): boolean {
+export function isProperty(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4237,7 +4123,7 @@ export function isProperty(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isUnaryLike(node?: any | null, opts?: any): boolean {
+export function isUnaryLike(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4255,7 +4141,7 @@ export function isUnaryLike(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isPattern(node?: any | null, opts?: any): boolean {
+export function isPattern(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4275,7 +4161,7 @@ export function isPattern(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isClass(node?: any | null, opts?: any): boolean {
+export function isClass(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4293,7 +4179,7 @@ export function isClass(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isModuleDeclaration(node?: any | null, opts?: any): boolean {
+export function isModuleDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4313,7 +4199,7 @@ export function isModuleDeclaration(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isExportDeclaration(node?: any | null, opts?: any): boolean {
+export function isExportDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4332,7 +4218,7 @@ export function isExportDeclaration(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isModuleSpecifier(node?: any | null, opts?: any): boolean {
+export function isModuleSpecifier(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4354,7 +4240,7 @@ export function isModuleSpecifier(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isFlow(node?: any | null, opts?: any): boolean {
+export function isFlow(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4424,7 +4310,7 @@ export function isFlow(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isFlowType(node?: any | null, opts?: any): boolean {
+export function isFlowType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4464,7 +4350,7 @@ export function isFlowType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isFlowBaseAnnotation(node?: any | null, opts?: any): boolean {
+export function isFlowBaseAnnotation(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4490,7 +4376,7 @@ export function isFlowBaseAnnotation(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isFlowDeclaration(node?: any | null, opts?: any): boolean {
+export function isFlowDeclaration(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4519,7 +4405,7 @@ export function isFlowDeclaration(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isFlowPredicate(node?: any | null, opts?: any): boolean {
+export function isFlowPredicate(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4537,7 +4423,7 @@ export function isFlowPredicate(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isEnumBody(node?: any | null, opts?: any): boolean {
+export function isEnumBody(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4557,7 +4443,7 @@ export function isEnumBody(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isEnumMember(node?: any | null, opts?: any): boolean {
+export function isEnumMember(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4577,7 +4463,7 @@ export function isEnumMember(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isJSX(node?: any | null, opts?: any): boolean {
+export function isJSX(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4608,7 +4494,7 @@ export function isJSX(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isPrivate(node?: any | null, opts?: any): boolean {
+export function isPrivate(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4627,7 +4513,7 @@ export function isPrivate(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSTypeElement(node?: any | null, opts?: any): boolean {
+export function isTSTypeElement(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4648,7 +4534,7 @@ export function isTSTypeElement(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSType(node?: any | null, opts?: any): boolean {
+export function isTSType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4699,7 +4585,7 @@ export function isTSType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isTSBaseType(node?: any | null, opts?: any): boolean {
+export function isTSBaseType(node?: any, opts?: any): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
@@ -4730,7 +4616,7 @@ export function isTSBaseType(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isNumberLiteral(node?: any | null, opts?: any): boolean {
+export function isNumberLiteral(node?: any, opts?: any): boolean {
   console.trace(
     "The node type NumberLiteral has been renamed to NumericLiteral",
   );
@@ -4747,7 +4633,7 @@ export function isNumberLiteral(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isRegexLiteral(node?: any | null, opts?: any): boolean {
+export function isRegexLiteral(node?: any, opts?: any): boolean {
   console.trace("The node type RegexLiteral has been renamed to RegExpLiteral");
   if (!node) return false;
 
@@ -4762,7 +4648,7 @@ export function isRegexLiteral(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isRestProperty(node?: any | null, opts?: any): boolean {
+export function isRestProperty(node?: any, opts?: any): boolean {
   console.trace("The node type RestProperty has been renamed to RestElement");
   if (!node) return false;
 
@@ -4777,7 +4663,7 @@ export function isRestProperty(node?: any | null, opts?: any): boolean {
 
   return false;
 }
-export function isSpreadProperty(node?: any | null, opts?: any): boolean {
+export function isSpreadProperty(node?: any, opts?: any): boolean {
   console.trace(
     "The node type SpreadProperty has been renamed to SpreadElement",
   );

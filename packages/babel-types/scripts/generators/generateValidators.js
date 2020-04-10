@@ -34,7 +34,7 @@ function addIsHelper(type, aliasKeys, deprecated) {
       ")";
   }
 
-  return `export function is${type}(node: ?Object, opts?: Object): boolean {
+  return `export function is${type}(node?: any, opts?: any): boolean {
     ${deprecated || ""}
     if (!node) return false;
 
@@ -53,8 +53,7 @@ function addIsHelper(type, aliasKeys, deprecated) {
 }
 
 module.exports = function generateValidators() {
-  let output = `// @flow
-/*
+  let output = `/*
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */

@@ -4,8 +4,7 @@ const formatBuilderName = require("../utils/formatBuilderName");
 const lowerFirst = require("../utils/lowerFirst");
 
 module.exports = function generateBuilders() {
-  let output = `// @flow
-/*
+  let output = `/*
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
@@ -19,7 +18,7 @@ import builder from "../builder";\n\n`;
       : formatedBuilderName;
     output += `${
       formatedBuilderNameLocal === formatedBuilderName ? "export " : ""
-    }function ${formatedBuilderNameLocal}(...args: Array<any>): Object { return builder("${type}", ...args); }\n`;
+    }function ${formatedBuilderNameLocal}(...args: Array<any>): any { return builder("${type}", ...args); }\n`;
     // This is needed for backwards compatibility.
     // arrayExpression -> ArrayExpression
     output += `export { ${formatedBuilderNameLocal} as ${type} };\n`;
@@ -39,7 +38,7 @@ import builder from "../builder";\n\n`;
 
   Object.keys(definitions.DEPRECATED_KEYS).forEach(type => {
     const newType = definitions.DEPRECATED_KEYS[type];
-    output += `export function ${type}(...args: Array<any>): Object {
+    output += `export function ${type}(...args: Array<any>): any {
   console.trace("The node type ${type} has been renamed to ${newType}");
   return builder("${type}", ...args);
 }

@@ -7,7 +7,7 @@ import is from "../../validators/is";
 function assert(type: string, node: any, opts?: any): void {
   if (!is(type, node, opts)) {
     throw new Error(
-      `Expected type "${type}" with option ${JSON.stringify(opts as any)}, ` +
+      `Expected type "${type}" with option ${JSON.stringify(opts)}, ` +
         `but instead got "${node.type}".`,
     );
   }

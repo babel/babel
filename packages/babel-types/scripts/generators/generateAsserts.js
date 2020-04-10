@@ -2,23 +2,22 @@
 const definitions = require("../../lib/definitions");
 
 function addAssertHelper(type) {
-  return `export function assert${type}(node: Object, opts?: Object = {}): void {
+  return `export function assert${type}(node: any, opts: any = {}): void {
     assert("${type}", node, opts) }
   `;
 }
 
 module.exports = function generateAsserts() {
-  let output = `// @flow
-/*
+  let output = `/*
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
 import is from "../../validators/is";
 
-function assert(type: string, node: Object, opts?: Object): void {
+function assert(type: string, node: any, opts?: any): void {
   if (!is(type, node, opts)) {
     throw new Error(
-      \`Expected type "\${type}" with option \${JSON.stringify((opts: any))}, \` +
+      \`Expected type "\${type}" with option \${JSON.stringify(opts)}, \` +
         \`but instead got "\${node.type}".\`,
     );
   }
@@ -34,7 +33,7 @@ function assert(type: string, node: Object, opts?: Object): void {
 
   Object.keys(definitions.DEPRECATED_KEYS).forEach(type => {
     const newType = definitions.DEPRECATED_KEYS[type];
-    output += `export function assert${type}(node: Object, opts: Object): void {
+    output += `export function assert${type}(node: any, opts: any): void {
   console.trace("The node type ${type} has been renamed to ${newType}");
   assert("${type}", node, opts);
 }\n`;
