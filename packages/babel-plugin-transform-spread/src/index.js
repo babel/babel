@@ -94,7 +94,14 @@ export default declare((api, options) => {
         const args = node.arguments;
         if (!hasSpread(args)) return;
 
-        const calleePath = path.get("callee");
+        let calleePath = path.get("callee");
+
+        if (calleePath.isTSAsExpression()) {
+          do {
+            calleePath = calleePath.get("expression");
+          } while (calleePath.isTSAsExpression());
+        }
+
         if (calleePath.isSuper()) return;
 
         let contextLiteral = scope.buildUndefinedNode();
@@ -120,7 +127,7 @@ export default declare((api, options) => {
           node.arguments.push(first);
         }
 
-        const callee = node.callee;
+        const callee = calleePath.node;
 
         if (calleePath.isMemberExpression()) {
           const temp = scope.maybeGenerateMemoised(callee.object);
@@ -132,7 +139,7 @@ export default declare((api, options) => {
           }
           t.appendToMemberExpression(callee, t.identifier("apply"));
         } else {
-          node.callee = t.memberExpression(node.callee, t.identifier("apply"));
+          node.callee = t.memberExpression(callee, t.identifier("apply"));
         }
 
         if (t.isSuper(contextLiteral)) {
