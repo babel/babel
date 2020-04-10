@@ -5,6 +5,7 @@ const generateBuilders = require("./generators/generateBuilders");
 const generateValidators = require("./generators/generateValidators");
 const generateAsserts = require("./generators/generateAsserts");
 const generateConstants = require("./generators/generateConstants");
+const generateTypes = require("./generators/generateTypes");
 const format = require("../../../scripts/utils/formatCode");
 const writeFile = require("../../../scripts/utils/writeFileAndMkDir");
 
@@ -27,3 +28,7 @@ console.log(`  ${chalk.green("✔")} Generated asserts`);
 const constantsFile = path.join(baseDir, "constants/generated/index.ts");
 writeFile(constantsFile, format(generateConstants(), constantsFile));
 console.log(`  ${chalk.green("✔")} Generated constants`);
+
+const typesFile = path.join(baseDir, "types.ts");
+writeFile(typesFile, format(generateTypes(), typesFile));
+console.log(`  ${chalk.green("✔")} Generated types`);

@@ -2,7 +2,14 @@
 const definitions = require("../../lib/definitions");
 
 function addAssertHelper(type) {
-  return `export function assert${type}(node: any, opts: any = {}): void {
+  const result =
+    definitions.NODE_FIELDS[type] || definitions.FLIPPED_ALIAS_KEYS[type]
+      ? `node is t.${type}`
+      : "boolean";
+
+  return `export function assert${type}(node: object | null | undefined, opts?: object | null): asserts ${
+    result === "boolean" ? "node" : result
+  } {
     assert("${type}", node, opts) }
   `;
 }
@@ -13,6 +20,7 @@ module.exports = function generateAsserts() {
  * To re-generate run 'make build'
  */
 import is from "../../validators/is";
+import type * as t from '../../types';
 
 function assert(type: string, node: any, opts?: any): void {
   if (!is(type, node, opts)) {
