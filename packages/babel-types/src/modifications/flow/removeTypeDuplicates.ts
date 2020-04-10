@@ -3,7 +3,15 @@ import {
   isGenericTypeAnnotation,
   isUnionTypeAnnotation,
   isFlowBaseAnnotation,
+  isIdentifier,
 } from "../../validators/generated";
+import type * as types from "../../types";
+
+function getQualificationName(node: types.GenericTypeAnnotation["id"]) {
+  return isIdentifier(node)
+    ? node.name
+    : `${node.id.name}.${getQualificationName(node.qualification)}`;
+}
 
 /**
  * Dedupe type annotations.
@@ -46,7 +54,7 @@ export default function removeTypeDuplicates(nodes: Array<any>): Array<any> {
 
     // find a matching generic type and merge and deduplicate the type parameters
     if (isGenericTypeAnnotation(node)) {
-      const name = node.id.name;
+      const name = getQualificationName(node.id);
 
       if (generics[name]) {
         let existing = generics[name];
