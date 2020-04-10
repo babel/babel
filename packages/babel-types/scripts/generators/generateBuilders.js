@@ -3,22 +3,98 @@ const definitions = require("../../lib/definitions");
 const formatBuilderName = require("../utils/formatBuilderName");
 const lowerFirst = require("../utils/lowerFirst");
 
+const t = require("../../");
+const stringifyValidator = require("../utils/stringifyValidator");
+
+function areAllRemainingFieldsNullable(fieldName, fieldNames, fields) {
+  const index = fieldNames.indexOf(fieldName);
+  return fieldNames.slice(index).every(_ => isNullable(fields[_]));
+}
+
+function hasDefault(field) {
+  return field.default != null;
+}
+
+function isNullable(field) {
+  return field.optional || hasDefault(field);
+}
+
+function sortFieldNames(fields, type) {
+  return fields.sort((fieldA, fieldB) => {
+    const indexA = t.BUILDER_KEYS[type].indexOf(fieldA);
+    const indexB = t.BUILDER_KEYS[type].indexOf(fieldB);
+    if (indexA === indexB) return fieldA < fieldB ? -1 : 1;
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  });
+}
+
+function generateBuilderArgs(type) {
+  const fields = t.NODE_FIELDS[type];
+  const fieldNames = sortFieldNames(Object.keys(t.NODE_FIELDS[type]), type);
+  const builderNames = t.BUILDER_KEYS[type];
+
+  const defArgs = [];
+  const callArgs = [];
+
+  fieldNames.forEach(fieldName => {
+    const field = fields[fieldName];
+    // Future / annoying TODO:
+    // MemberExpression.property, ObjectProperty.key and ObjectMethod.key need special cases; either:
+    // - convert the declaration to chain() like ClassProperty.key and ClassMethod.key,
+    // - declare an alias type for valid keys, detect the case and reuse it here,
+    // - declare a disjoint union with, for example, ObjectPropertyBase,
+    //   ObjectPropertyLiteralKey and ObjectPropertyComputedKey, and declare ObjectProperty
+    //   as "ObjectPropertyBase & (ObjectPropertyLiteralKey | ObjectPropertyComputedKey)"
+    let typeAnnotation = stringifyValidator(field.validate, "types.");
+
+    if (isNullable(field) && !hasDefault(field)) {
+      typeAnnotation += " | null";
+    }
+
+    if (builderNames.includes(fieldName)) {
+      const bindingIdentifierName = t.toBindingIdentifierName(fieldName);
+      callArgs.push(bindingIdentifierName);
+      if (areAllRemainingFieldsNullable(fieldName, builderNames, fields)) {
+        defArgs.push(
+          `${bindingIdentifierName}${
+            isNullable(field) ? "?:" : ":"
+          } ${typeAnnotation}`
+        );
+      } else {
+        defArgs.push(
+          `${bindingIdentifierName}: ${typeAnnotation}${
+            isNullable(field) ? " | undefined" : ""
+          }`
+        );
+      }
+    }
+  });
+
+  return [defArgs, callArgs];
+}
+
 module.exports = function generateBuilders() {
   let output = `/*
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
-import builder from "../builder";\n\n`;
+import builder from "../builder";
+import type * as types from "../../types";\n\n`;
 
   const reservedNames = new Set(["super", "import"]);
   Object.keys(definitions.BUILDER_KEYS).forEach(type => {
+    const [defArgs, callArgs] = generateBuilderArgs(type);
     const formatedBuilderName = formatBuilderName(type);
     const formatedBuilderNameLocal = reservedNames.has(formatedBuilderName)
       ? `_${formatedBuilderName}`
       : formatedBuilderName;
     output += `${
       formatedBuilderNameLocal === formatedBuilderName ? "export " : ""
-    }function ${formatedBuilderNameLocal}(...args: Array<any>): any { return builder("${type}", ...args); }\n`;
+    }function ${formatedBuilderNameLocal}(${defArgs.join(
+      ", "
+    )}): any { return builder("${type}", ${callArgs.join(", ")}); }\n`;
     // This is needed for backwards compatibility.
     // arrayExpression -> ArrayExpression
     output += `export { ${formatedBuilderNameLocal} as ${type} };\n`;

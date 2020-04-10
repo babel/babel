@@ -52,10 +52,7 @@ export type Node = ${t.TYPES.sort().join(" | ")};\n\n`;
 for (const type in t.NODE_FIELDS) {
   const fields = t.NODE_FIELDS[type];
   const fieldNames = sortFieldNames(Object.keys(t.NODE_FIELDS[type]), type);
-  const builderNames = t.BUILDER_KEYS[type];
-
   const struct = ['type: "' + type + '";'];
-  const args = [];
 
   fieldNames.forEach(fieldName => {
     const field = fields[fieldName];
@@ -70,22 +67,6 @@ for (const type in t.NODE_FIELDS) {
 
     if (isNullable(field) && !hasDefault(field)) {
       typeAnnotation += " | null";
-    }
-
-    if (builderNames.includes(fieldName)) {
-      if (areAllRemainingFieldsNullable(fieldName, builderNames, fields)) {
-        args.push(
-          `${t.toBindingIdentifierName(fieldName)}${
-            isNullable(field) ? "?:" : ":"
-          } ${typeAnnotation}`
-        );
-      } else {
-        args.push(
-          `${t.toBindingIdentifierName(fieldName)}: ${typeAnnotation}${
-            isNullable(field) ? " | undefined" : ""
-          }`
-        );
-      }
     }
 
     const alphaNumeric = /^\w+$/;
@@ -129,11 +110,6 @@ code += "}\n\n";
 module.exports = () => code;
 
 //
-
-function areAllRemainingFieldsNullable(fieldName, fieldNames, fields) {
-  const index = fieldNames.indexOf(fieldName);
-  return fieldNames.slice(index).every(_ => isNullable(fields[_]));
-}
 
 function hasDefault(field) {
   return field.default != null;
