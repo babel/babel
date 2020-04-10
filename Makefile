@@ -36,6 +36,7 @@ generate-tsconfig:
 
 generate-type-helpers:
 	$(YARN) gulp generate-type-helpers
+	node packages/babel-traverse/scripts/generateTypeHelpers.js
 
 build-flow-typings:
 	$(NODE) packages/babel-types/scripts/generators/flow.js > packages/babel-types/lib/index.js.flow

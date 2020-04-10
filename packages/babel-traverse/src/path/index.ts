@@ -20,6 +20,8 @@ import * as NodePath_removal from "./removal";
 import * as NodePath_modification from "./modification";
 import * as NodePath_family from "./family";
 import * as NodePath_comments from "./comments";
+import type { NodePathAssetions } from "./generated/assetions";
+import type { NodePathValidators } from "./generated/validators";
 
 const debug = buildDebug("babel");
 
@@ -27,7 +29,7 @@ export const REMOVED = 1 << 0;
 export const SHOULD_STOP = 1 << 1;
 export const SHOULD_SKIP = 1 << 2;
 
-export default class NodePath {
+class NodePath<T extends t.Node = t.Node> {
   constructor(hub: HubInterface, parent: any) {
     this.parent = parent;
     this.hub = hub;
@@ -104,8 +106,8 @@ export default class NodePath {
     return val;
   }
 
-  buildCodeFrameError(msg: string, Error: typeof Error = SyntaxError): Error {
-    return this.hub.buildError(this.node, msg, Error);
+  buildCodeFrameError(msg: string, _Error: typeof Error = SyntaxError): Error {
+    return this.hub.buildError(this.node, msg, _Error);
   }
 
   traverse(visitor: any, state?: any) {
@@ -227,3 +229,22 @@ for (const type of Object.keys(virtualTypes)) {
     return virtualType.checkPath(this, opts);
   };
 }
+
+type NodePathMixins = typeof NodePath_ancestry &
+  typeof NodePath_inference &
+  typeof NodePath_replacement &
+  typeof NodePath_evaluation &
+  typeof NodePath_conversion &
+  typeof NodePath_introspection &
+  typeof NodePath_context &
+  typeof NodePath_removal &
+  typeof NodePath_modification &
+  typeof NodePath_family &
+  typeof NodePath_comments;
+
+interface NodePath<T>
+  extends NodePathAssetions,
+    NodePathValidators,
+    NodePathMixins {}
+
+export default NodePath;
