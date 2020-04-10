@@ -32,7 +32,11 @@ function getType(val) {
 }
 
 // TODO: Import and use Node instead of any
-type Validator = (c: any, b: string, a: any) => void;
+type Validator = { chainOf?: Validator[] } & ((
+  c: any,
+  b: string,
+  a: any
+) => void);
 
 type FieldOptions = {
   default?: any;
@@ -226,11 +230,11 @@ export function assertOptionalChainStart(): Validator {
 }
 
 export function chain(...fns: Array<Validator>): Validator {
-  function validate(...args) {
+  const validate: Validator = function (...args) {
     for (const fn of fns) {
       fn(...args);
     }
-  }
+  };
   validate.chainOf = fns;
   return validate;
 }
@@ -267,7 +271,7 @@ export default function defineType(
     fields = {};
     if (inherits.fields) {
       const keys = Object.getOwnPropertyNames(inherits.fields);
-      for (const key of keys as Array<string>) {
+      for (const key of keys) {
         const field = inherits.fields[key];
         fields[key] = {
           default: field.default,
@@ -283,7 +287,7 @@ export default function defineType(
   const builder: Array<string> =
     opts.builder || inherits.builder || opts.visitor || [];
 
-  for (const k of Object.keys(opts) as Array<string>) {
+  for (const k of Object.keys(opts)) {
     if (validTypeOpts.indexOf(k) === -1) {
       throw new Error(`Unknown type option "${k}" on ${type}`);
     }
@@ -294,7 +298,7 @@ export default function defineType(
   }
 
   // ensure all field keys are represented in `fields`
-  for (const key of visitor.concat(builder) as Array<string>) {
+  for (const key of visitor.concat(builder)) {
     fields[key] = fields[key] || {};
   }
 
@@ -310,7 +314,7 @@ export default function defineType(
       field.validate = assertValueType(getType(field.default));
     }
 
-    for (const k of Object.keys(field) as Array<string>) {
+    for (const k of Object.keys(field)) {
       if (validFieldKeys.indexOf(k) === -1) {
         throw new Error(`Unknown field key "${k}" on ${type}.${key}`);
       }

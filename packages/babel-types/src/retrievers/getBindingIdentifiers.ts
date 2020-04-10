@@ -4,6 +4,7 @@ import {
   isDeclaration,
   isFunctionDeclaration,
   isFunctionExpression,
+  isExportAllDeclaration,
 } from "../validators/generated";
 
 /**
@@ -35,7 +36,7 @@ export default function getBindingIdentifiers(
       continue;
     }
 
-    if (isExportDeclaration(id)) {
+    if (isExportDeclaration(id) && !isExportAllDeclaration(id)) {
       if (isDeclaration(id.declaration)) {
         search.push(id.declaration);
       }

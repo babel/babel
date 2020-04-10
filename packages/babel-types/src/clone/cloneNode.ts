@@ -1,4 +1,5 @@
 import { NODE_FIELDS } from "../definitions";
+import type * as types from "../types";
 
 const has = Function.call.bind(Object.prototype.hasOwnProperty);
 
@@ -100,8 +101,15 @@ export default function cloneNode<T extends any>(
   return newNode;
 }
 
-function cloneCommentsWithoutLoc<T extends any>(comments: T[]): T {
-  return comments.map(({ type, value }) => ({ type, value, loc: null }));
+function cloneCommentsWithoutLoc<T extends types.Comment>(comments: T[]): T[] {
+  return comments.map(
+    ({ type, value }) =>
+      ({
+        type,
+        value,
+        loc: null,
+      } as T)
+  );
 }
 
 function maybeCloneComments(comments, deep, withoutLoc) {

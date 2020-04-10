@@ -1,4 +1,5 @@
 import { VISITOR_KEYS } from "../definitions";
+import type * as t from "../types";
 
 /**
  * A prefix AST traversal implementation meant for simple searching
@@ -6,7 +7,7 @@ import { VISITOR_KEYS } from "../definitions";
  */
 export default function traverseFast(
   node: any,
-  enter: (node: BabelNode, opts?: any) => void,
+  enter: (node: t.Node, opts?: any) => void,
   opts?: any,
 ): void {
   if (!node) return;

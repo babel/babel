@@ -1,12 +1,13 @@
 import { VISITOR_KEYS } from "../definitions";
+import type * as types from "../types";
 
 export type TraversalAncestors = Array<{
-  node: BabelNode;
+  node: types.Node;
   key: string;
   index?: number;
 }>;
 export type TraversalHandler<T> = (
-  c: BabelNode,
+  c: types.Node,
   b: TraversalAncestors,
   a: T,
 ) => void;
@@ -21,7 +22,7 @@ export type TraversalHandlers<T> = {
  * AST data can be taken into account.
  */
 export default function traverse<T>(
-  node: BabelNode,
+  node: types.Node,
   handlers: TraversalHandler<T> | TraversalHandlers<T>,
   state?: T,
 ): void {
