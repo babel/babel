@@ -37,9 +37,9 @@ Feel free to check out the `#discussion`/`#development` channels on our [Slack](
 
 ## Developing
 
-*Node*: Check that Node is [installed](https://nodejs.org/en/download/) with version 6 and up. You can check this with `node -v`.
+*Node*: Check that Node is [installed](https://nodejs.org/en/download/) with version 10 and up. You can check this with `node -v`.
 
-*Yarn*: Make sure that Yarn is [installed](https://classic.yarnpkg.com/en/docs/install) with version >= `0.28.0`.
+*Yarn*: Make sure that Yarn 1 is [installed](https://classic.yarnpkg.com/en/docs/install) with version >= `0.28.0`.
 
 ### Setup
 
@@ -104,9 +104,7 @@ If you just want to run all tests:
 $ make test-only
 ```
 
-Most likely you'll want to focus in on a specific issue.
-
-To run tests for a specific package in [packages](https://github.com/babel/babel/tree/master/packages), you can use the `TEST_ONLY` environment variable:
+Most likely you'll want to focus in on a specific issue. So to run tests for a specific package in [packages](https://github.com/babel/babel/tree/master/packages), you can use the `TEST_ONLY` environment variable:
 
 ```sh
 $ TEST_ONLY=babel-cli make test
