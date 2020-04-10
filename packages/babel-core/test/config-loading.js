@@ -40,7 +40,7 @@ describe("@babel/core config loading", () => {
 
   describe("loadPartialConfig", () => {
     it("should preserve disabled plugins in the partial config", () => {
-      const plugin = function() {
+      const plugin = function () {
         return {};
       };
 
@@ -59,7 +59,7 @@ describe("@babel/core config loading", () => {
     });
 
     it("should preserve disabled presets in the partial config", () => {
-      const preset = function() {
+      const preset = function () {
         return {};
       };
 

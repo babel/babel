@@ -1,6 +1,6 @@
 import * as t from "@babel/types";
 
-export default function(callee, thisNode, args, optional) {
+export default function (callee, thisNode, args, optional) {
   if (
     args.length === 1 &&
     t.isSpreadElement(args[0]) &&

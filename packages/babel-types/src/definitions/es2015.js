@@ -186,10 +186,10 @@ defineType("ClassDeclaration", {
       optional: true,
     },
   },
-  validate: (function() {
+  validate: (function () {
     const identifier = assertNodeType("Identifier");
 
-    return function(parent, key, node) {
+    return function (parent, key, node) {
       if (!process.env.BABEL_TYPES_8_BREAKING) return;
 
       if (!is("ExportDefaultDeclaration", parent)) {
@@ -247,7 +247,7 @@ defineType("ExportNamedDeclaration", {
       optional: true,
       validate: chain(
         assertNodeType("Declaration"),
-        function(node, key, val) {
+        function (node, key, val) {
           if (!process.env.BABEL_TYPES_8_BREAKING) return;
 
           // This validator isn't put at the top level because we can run it
@@ -259,7 +259,7 @@ defineType("ExportNamedDeclaration", {
             );
           }
         },
-        function(node, key, val) {
+        function (node, key, val) {
           if (!process.env.BABEL_TYPES_8_BREAKING) return;
 
           // This validator isn't put at the top level because we can run it
@@ -276,7 +276,7 @@ defineType("ExportNamedDeclaration", {
       validate: chain(
         assertValueType("array"),
         assertEach(
-          (function() {
+          (function () {
             const sourced = assertNodeType(
               "ExportSpecifier",
               "ExportDefaultSpecifier",
@@ -286,7 +286,7 @@ defineType("ExportNamedDeclaration", {
 
             if (!process.env.BABEL_TYPES_8_BREAKING) return sourced;
 
-            return function(node, key, val) {
+            return function (node, key, val) {
               const validator = node.source ? sourced : sourceless;
               validator(node, key, val);
             };
@@ -328,7 +328,7 @@ defineType("ForOfStatement", {
   ],
   fields: {
     left: {
-      validate: (function() {
+      validate: (function () {
         if (!process.env.BABEL_TYPES_8_BREAKING) {
           return assertNodeType("VariableDeclaration", "LVal");
         }
@@ -341,7 +341,7 @@ defineType("ForOfStatement", {
           "ObjectPattern",
         );
 
-        return function(node, key, val) {
+        return function (node, key, val) {
           if (is("VariableDeclaration", val)) {
             declaration(node, key, val);
           } else {
@@ -433,7 +433,7 @@ defineType("MetaProperty", {
   aliases: ["Expression"],
   fields: {
     meta: {
-      validate: chain(assertNodeType("Identifier"), function(node, key, val) {
+      validate: chain(assertNodeType("Identifier"), function (node, key, val) {
         if (!process.env.BABEL_TYPES_8_BREAKING) return;
 
         let property;
@@ -480,7 +480,7 @@ export const classMethodOrPropertyCommon = {
   },
   key: {
     validate: chain(
-      (function() {
+      (function () {
         const normal = assertNodeType(
           "Identifier",
           "StringLiteral",
@@ -488,7 +488,7 @@ export const classMethodOrPropertyCommon = {
         );
         const computed = assertNodeType("Expression");
 
-        return function(node: Object, key: string, val: any) {
+        return function (node: Object, key: string, val: any) {
           const validator = node.computed ? computed : normal;
           validator(node, key, val);
         };
@@ -643,13 +643,14 @@ defineType("TemplateLiteral", {
       validate: chain(
         assertValueType("array"),
         assertEach(assertNodeType("Expression")),
-        function(node, key, val) {
+        function (node, key, val) {
           if (node.quasis.length !== val.length + 1) {
             throw new TypeError(
               `Number of ${
                 node.type
-              } quasis should be exactly one more than the number of expressions.\nExpected ${val.length +
-                1} quasis but got ${node.quasis.length}`,
+              } quasis should be exactly one more than the number of expressions.\nExpected ${
+                val.length + 1
+              } quasis but got ${node.quasis.length}`,
             );
           }
         },
@@ -664,7 +665,7 @@ defineType("YieldExpression", {
   aliases: ["Expression", "Terminatorless"],
   fields: {
     delegate: {
-      validate: chain(assertValueType("boolean"), function(node, key, val) {
+      validate: chain(assertValueType("boolean"), function (node, key, val) {
         if (!process.env.BABEL_TYPES_8_BREAKING) return;
 
         if (val && !node.argument) {

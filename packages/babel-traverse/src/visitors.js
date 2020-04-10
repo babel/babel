@@ -214,11 +214,11 @@ function wrapWithStateOrWrapper(oldVisitor, state, wrapper: ?Function) {
     // not an enter/exit array of callbacks
     if (!Array.isArray(fns)) continue;
 
-    fns = fns.map(function(fn) {
+    fns = fns.map(function (fn) {
       let newFn = fn;
 
       if (state) {
-        newFn = function(path) {
+        newFn = function (path) {
           return fn.call(state, path, state);
         };
       }
@@ -258,7 +258,7 @@ function ensureCallbackArrays(obj) {
 }
 
 function wrapCheck(wrapper, fn) {
-  const newFn = function(path) {
+  const newFn = function (path) {
     if (wrapper.checkPath(path)) {
       return fn.apply(this, arguments);
     }

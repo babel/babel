@@ -429,7 +429,7 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
   ConfigContext,
   Set<ConfigFile> | void,
 ) => Handler<ConfigChain | null> {
-  return function*(input, context, files = new Set()) {
+  return function* (input, context, files = new Set()) {
     const { dirname } = input;
 
     const flattenedConfigs = [];

@@ -122,7 +122,7 @@ exports.generateData = (environments, features) => {
   });
 };
 
-exports.writeFile = function(data, dataPath, name) {
+exports.writeFile = function (data, dataPath, name) {
   const stringified = JSON.stringify(data, null, 2) + "\n";
   if (process.env.CHECK_COMPAT_DATA) {
     const currentData = fs.readFileSync(dataPath, "utf8");

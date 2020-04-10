@@ -5,7 +5,7 @@ function getPath(code, options = { sourceType: "script" }) {
   const ast = parse(code, options);
   let path;
   traverse(ast, {
-    Program: function(_path) {
+    Program: function (_path) {
       path = _path;
       _path.stop();
     },
@@ -13,10 +13,10 @@ function getPath(code, options = { sourceType: "script" }) {
   return path;
 }
 
-describe("path/introspection", function() {
-  describe("isInStrictMode", function() {
-    describe("classes", function() {
-      it("returns parent's strictness for class", function() {
+describe("path/introspection", function () {
+  describe("isInStrictMode", function () {
+    describe("classes", function () {
+      it("returns parent's strictness for class", function () {
         let program = getPath("class Test extends Super {}");
         let klass = program.get("body.0");
         expect(klass.isInStrictMode()).toBeFalsy();
@@ -26,28 +26,28 @@ describe("path/introspection", function() {
         expect(klass.isInStrictMode()).toBeTruthy();
       });
 
-      it("returns true for class id", function() {
+      it("returns true for class id", function () {
         const program = getPath("class Test extends Super {}");
         const id = program.get("body.0.id");
         expect(id.isInStrictMode()).toBeTruthy();
       });
 
-      it("returns true for superClass", function() {
+      it("returns true for superClass", function () {
         const program = getPath("class Test extends Super {}");
         const superClass = program.get("body.0.superClass");
         expect(superClass.isInStrictMode()).toBeTruthy();
       });
 
-      it("returns true for method", function() {
+      it("returns true for method", function () {
         const program = getPath("class Test { test() {} }");
         const method = program.get("body.0.body.body.0");
         expect(method.isInStrictMode()).toBeTruthy();
       });
     });
 
-    describe("program", function() {
-      describe("when script", function() {
-        it("returns true when strict", function() {
+    describe("program", function () {
+      describe("when script", function () {
+        it("returns true when strict", function () {
           let program = getPath(`test;`);
           expect(program.isInStrictMode()).toBeFalsy();
 
@@ -56,16 +56,16 @@ describe("path/introspection", function() {
         });
       });
 
-      describe("when module", function() {
-        it("returns true", function() {
+      describe("when module", function () {
+        it("returns true", function () {
           const program = getPath(`test;`, { sourceType: "module" });
           expect(program.isInStrictMode()).toBeTruthy();
         });
       });
     });
 
-    describe("function", function() {
-      it("returns parent's strictness for function", function() {
+    describe("function", function () {
+      it("returns parent's strictness for function", function () {
         let program = getPath("function test() {}");
         let fn = program.get("body.0");
         expect(fn.isInStrictMode()).toBeFalsy();
@@ -79,7 +79,7 @@ describe("path/introspection", function() {
         expect(fn.isInStrictMode()).toBeTruthy();
       });
 
-      it("returns function's strictness for id", function() {
+      it("returns function's strictness for id", function () {
         let program = getPath("function test(a) {}");
         let id = program.get("body.0.id");
         expect(id.isInStrictMode()).toBeFalsy();
@@ -89,7 +89,7 @@ describe("path/introspection", function() {
         expect(id.isInStrictMode()).toBeTruthy();
       });
 
-      it("returns function's strictness for parameters", function() {
+      it("returns function's strictness for parameters", function () {
         let program = getPath("function test(a) {}");
         let param = program.get("body.0.params.0");
         expect(param.isInStrictMode()).toBeFalsy();

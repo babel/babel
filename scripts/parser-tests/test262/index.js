@@ -187,9 +187,7 @@ runner
         "The following Features are not currently mapped or ignored:"
       );
       console.log(
-        Array.from(unmappedFeatures)
-          .join("\n")
-          .replace(/^/gm, "   ")
+        Array.from(unmappedFeatures).join("\n").replace(/^/gm, "   ")
       );
     }
   })

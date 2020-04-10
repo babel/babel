@@ -117,9 +117,7 @@ export function ConditionalExpression() {
 }
 
 export function SequenceExpression() {
-  return this.get("expressions")
-    .pop()
-    .getTypeAnnotation();
+  return this.get("expressions").pop().getTypeAnnotation();
 }
 
 export function ParenthesizedExpression() {

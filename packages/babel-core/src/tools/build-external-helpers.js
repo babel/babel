@@ -132,7 +132,7 @@ function buildHelpers(body, namespace, whitelist) {
   };
 
   const refs = {};
-  helpers.list.forEach(function(name) {
+  helpers.list.forEach(function (name) {
     if (whitelist && whitelist.indexOf(name) < 0) return;
 
     const ref = (refs[name] = getHelperReference(name));
@@ -144,7 +144,7 @@ function buildHelpers(body, namespace, whitelist) {
   });
   return refs;
 }
-export default function(
+export default function (
   whitelist?: Array<string>,
   outputType: "global" | "module" | "umd" | "var" = "global",
 ) {

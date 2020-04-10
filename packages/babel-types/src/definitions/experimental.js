@@ -92,11 +92,11 @@ defineType("OptionalMemberExpression", {
       validate: assertNodeType("Expression"),
     },
     property: {
-      validate: (function() {
+      validate: (function () {
         const normal = assertNodeType("Identifier");
         const computed = assertNodeType("Expression");
 
-        return function(node, key, val) {
+        return function (node, key, val) {
           const validator = node.computed ? computed : normal;
           validator(node, key, val);
         };

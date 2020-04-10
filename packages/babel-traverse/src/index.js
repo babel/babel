@@ -44,11 +44,11 @@ traverse.visitors = visitors;
 traverse.verify = visitors.verify;
 traverse.explode = visitors.explode;
 
-traverse.cheap = function(node, enter) {
+traverse.cheap = function (node, enter) {
   return t.traverseFast(node, enter);
 };
 
-traverse.node = function(
+traverse.node = function (
   node: Object,
   opts: Object,
   scope: Object,
@@ -66,13 +66,13 @@ traverse.node = function(
   }
 };
 
-traverse.clearNode = function(node, opts) {
+traverse.clearNode = function (node, opts) {
   t.removeProperties(node, opts);
 
   cache.path.delete(node);
 };
 
-traverse.removeProperties = function(tree, opts) {
+traverse.removeProperties = function (tree, opts) {
   t.traverseFast(tree, traverse.clearNode, opts);
   return tree;
 };
@@ -84,7 +84,7 @@ function hasBlacklistedType(path, state) {
   }
 }
 
-traverse.hasType = function(
+traverse.hasType = function (
   tree: Object,
   type: Object,
   blacklistTypes: Array<string>,

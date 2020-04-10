@@ -1,11 +1,11 @@
 import traverse from "../lib";
 import { parse } from "@babel/parser";
 
-describe("path/ancestry", function() {
-  describe("isAncestor", function() {
+describe("path/ancestry", function () {
+  describe("isAncestor", function () {
     const ast = parse("var a = 1; 'a';");
 
-    it("returns true if ancestor", function() {
+    it("returns true if ancestor", function () {
       const paths = [];
       traverse(ast, {
         "Program|NumericLiteral"(path) {
@@ -18,7 +18,7 @@ describe("path/ancestry", function() {
       expect(programPath.isAncestor(numberPath)).toBeTruthy();
     });
 
-    it("returns false if not ancestor", function() {
+    it("returns false if not ancestor", function () {
       const paths = [];
       traverse(ast, {
         "Program|NumericLiteral|StringLiteral"(path) {
@@ -32,10 +32,10 @@ describe("path/ancestry", function() {
     });
   });
 
-  describe("isDescendant", function() {
+  describe("isDescendant", function () {
     const ast = parse("var a = 1; 'a';");
 
-    it("returns true if descendant", function() {
+    it("returns true if descendant", function () {
       const paths = [];
       traverse(ast, {
         "Program|NumericLiteral"(path) {
@@ -48,7 +48,7 @@ describe("path/ancestry", function() {
       expect(numberPath.isDescendant(programPath)).toBeTruthy();
     });
 
-    it("returns false if not descendant", function() {
+    it("returns false if not descendant", function () {
       const paths = [];
       traverse(ast, {
         "Program|NumericLiteral|StringLiteral"(path) {
@@ -62,10 +62,10 @@ describe("path/ancestry", function() {
     });
   });
 
-  describe("getStatementParent", function() {
+  describe("getStatementParent", function () {
     const ast = parse("var a = 1;");
-    it("should throw", function() {
-      expect(function() {
+    it("should throw", function () {
+      expect(function () {
         traverse(ast, {
           Program(path) {
             path.getStatementParent();

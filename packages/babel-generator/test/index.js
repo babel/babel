@@ -6,24 +6,24 @@ import fs from "fs";
 import path from "path";
 import fixtures from "@babel/helper-fixtures";
 
-describe("generation", function() {
-  it("completeness", function() {
-    Object.keys(t.VISITOR_KEYS).forEach(function(type) {
+describe("generation", function () {
+  it("completeness", function () {
+    Object.keys(t.VISITOR_KEYS).forEach(function (type) {
       expect(Printer.prototype[type]).toBeTruthy();
     });
 
-    Object.keys(Printer.prototype).forEach(function(type) {
+    Object.keys(Printer.prototype).forEach(function (type) {
       if (!/[A-Z]/.test(type[0])) return;
       expect(t.VISITOR_KEYS[type]).toBeTruthy();
     });
   });
 
-  it("multiple sources", function() {
+  it("multiple sources", function () {
     const sources = {
       "a.js": "function hi (msg) { console.log(msg); }\n",
       "b.js": "hi('hello');\n",
     };
-    const parsed = Object.keys(sources).reduce(function(_parsed, filename) {
+    const parsed = Object.keys(sources).reduce(function (_parsed, filename) {
       _parsed[filename] = parse(sources[filename], {
         sourceFilename: filename,
       });
@@ -185,7 +185,7 @@ describe("generation", function() {
     );
   });
 
-  it("identifierName", function() {
+  it("identifierName", function () {
     const code = "function foo() { bar; }\n";
 
     const ast = parse(code, { filename: "inline" }).program;
@@ -277,7 +277,7 @@ describe("generation", function() {
     expect(generated.code).toBe("function foo2() {\n  bar2;\n}");
   });
 
-  it("lazy source map generation", function() {
+  it("lazy source map generation", function () {
     const code = "function hi (msg) { console.log(msg); }\n";
 
     const ast = parse(code, { filename: "a.js" }).program;
@@ -306,8 +306,8 @@ describe("generation", function() {
   });
 });
 
-describe("programmatic generation", function() {
-  it("should add parenthesis when NullishCoalescing is used along with ||", function() {
+describe("programmatic generation", function () {
+  it("should add parenthesis when NullishCoalescing is used along with ||", function () {
     // https://github.com/babel/babel/issues/10260
     const nullishCoalesc = t.logicalExpression(
       "??",
@@ -318,7 +318,7 @@ describe("programmatic generation", function() {
     expect(output).toBe(`(a || b) ?? c`);
   });
 
-  it("should add parenthesis when NullishCoalesing is used with &&", function() {
+  it("should add parenthesis when NullishCoalesing is used with &&", function () {
     const nullishCoalesc = t.logicalExpression(
       "??",
       t.identifier("a"),
@@ -332,7 +332,7 @@ describe("programmatic generation", function() {
     expect(output).toBe(`a ?? (b && c && d)`);
   });
 
-  it("numeric member expression", function() {
+  it("numeric member expression", function () {
     // Should not generate `0.foo`
     const mem = t.memberExpression(
       t.numericLiteral(60702),
@@ -341,7 +341,7 @@ describe("programmatic generation", function() {
     new Function(generate(mem).code);
   });
 
-  it("nested if statements needs block", function() {
+  it("nested if statements needs block", function () {
     const ifStatement = t.ifStatement(
       t.stringLiteral("top cond"),
       t.whileStatement(
@@ -358,7 +358,7 @@ describe("programmatic generation", function() {
     expect(ast.program.body[0].consequent.type).toBe("BlockStatement");
   });
 
-  it("prints directives in block with empty body", function() {
+  it("prints directives in block with empty body", function () {
     const blockStatement = t.blockStatement(
       [],
       [t.directive(t.directiveLiteral("use strict"))],
@@ -370,7 +370,7 @@ describe("programmatic generation", function() {
 }`);
   });
 
-  it("flow object indentation", function() {
+  it("flow object indentation", function () {
     const objectStatement = t.objectTypeAnnotation(
       [t.objectTypeProperty(t.identifier("bar"), t.stringTypeAnnotation())],
       null,
@@ -384,7 +384,7 @@ describe("programmatic generation", function() {
 }`);
   });
 
-  it("flow object exact", function() {
+  it("flow object exact", function () {
     const objectStatement = t.objectTypeAnnotation(
       [t.objectTypeProperty(t.identifier("bar"), t.stringTypeAnnotation())],
       null,
@@ -399,7 +399,7 @@ describe("programmatic generation", function() {
 |}`);
   });
 
-  it("flow object indentation with empty leading ObjectTypeProperty", function() {
+  it("flow object indentation with empty leading ObjectTypeProperty", function () {
     const objectStatement = t.objectTypeAnnotation(
       [],
       [
@@ -419,8 +419,8 @@ describe("programmatic generation", function() {
 }`);
   });
 
-  describe("directives", function() {
-    it("preserves escapes", function() {
+  describe("directives", function () {
+    it("preserves escapes", function () {
       const directive = t.directive(
         t.directiveLiteral(String.raw`us\x65 strict`),
       );
@@ -429,7 +429,7 @@ describe("programmatic generation", function() {
       expect(output).toBe(String.raw`"us\x65 strict";`);
     });
 
-    it("preserves escapes in minified output", function() {
+    it("preserves escapes in minified output", function () {
       // https://github.com/babel/babel/issues/4767
 
       const directive = t.directive(t.directiveLiteral(String.raw`foo\n\t\r`));
@@ -438,21 +438,21 @@ describe("programmatic generation", function() {
       expect(output).toBe(String.raw`"foo\n\t\r";`);
     });
 
-    it("unescaped single quote", function() {
+    it("unescaped single quote", function () {
       const directive = t.directive(t.directiveLiteral(String.raw`'\'\"`));
       const output = generate(directive).code;
 
       expect(output).toBe(String.raw`"'\'\"";`);
     });
 
-    it("unescaped double quote", function() {
+    it("unescaped double quote", function () {
       const directive = t.directive(t.directiveLiteral(String.raw`"\'\"`));
       const output = generate(directive).code;
 
       expect(output).toBe(String.raw`'"\'\"';`);
     });
 
-    it("unescaped single and double quotes together throw", function() {
+    it("unescaped single and double quotes together throw", function () {
       const directive = t.directive(t.directiveLiteral(String.raw`'"`));
 
       expect(() => {
@@ -461,7 +461,7 @@ describe("programmatic generation", function() {
     });
   });
 
-  describe("typescript generate parentheses if necessary", function() {
+  describe("typescript generate parentheses if necessary", function () {
     it("wraps around union for array", () => {
       const typeStatement = t.TSArrayType(
         t.TSUnionType([
@@ -496,8 +496,8 @@ describe("programmatic generation", function() {
   });
 });
 
-describe("CodeGenerator", function() {
-  it("generate", function() {
+describe("CodeGenerator", function () {
+  it("generate", function () {
     const codeGen = new CodeGenerator(t.numericLiteral(123));
     const code = codeGen.generate().code;
     expect(parse(code).program.body[0].expression.value).toBe(123);
@@ -506,15 +506,15 @@ describe("CodeGenerator", function() {
 
 const suites = fixtures(`${__dirname}/fixtures`);
 
-suites.forEach(function(testSuite) {
-  describe("generation/" + testSuite.title, function() {
-    testSuite.tests.forEach(function(task) {
+suites.forEach(function (testSuite) {
+  describe("generation/" + testSuite.title, function () {
+    testSuite.tests.forEach(function (task) {
       const testFn = task.disabled ? it.skip : it;
 
       testFn(
         task.title,
 
-        function() {
+        function () {
           const expected = task.expect;
           const actual = task.actual;
           const actualCode = actual.code;

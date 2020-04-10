@@ -33,7 +33,7 @@ const buildForAwait = template(`
   }
 `);
 
-export default function(path, { getAsyncIterator }) {
+export default function (path, { getAsyncIterator }) {
   const { node, scope, parent } = path;
 
   const stepKey = scope.generateUidIdentifier("step");

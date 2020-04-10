@@ -1,7 +1,7 @@
 import path from "path";
 import resolve from "resolve";
 
-export default function(moduleName, dirname, absoluteRuntime) {
+export default function (moduleName, dirname, absoluteRuntime) {
   if (absoluteRuntime === false) return moduleName;
 
   return resolveAbsoluteRuntime(
