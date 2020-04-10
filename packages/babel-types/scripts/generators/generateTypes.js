@@ -49,10 +49,14 @@ interface BaseNode {
 
 export type Node = ${t.TYPES.sort().join(" | ")};\n\n`;
 
+const deprecatedAlias = {};
+for (const type in t.DEPRECATED_KEYS) {
+  deprecatedAlias[t.DEPRECATED_KEYS[type]] = type;
+}
 for (const type in t.NODE_FIELDS) {
   const fields = t.NODE_FIELDS[type];
   const fieldNames = sortFieldNames(Object.keys(t.NODE_FIELDS[type]), type);
-  const struct = ['type: "' + type + '";'];
+  const struct = [];
 
   fieldNames.forEach(fieldName => {
     const field = fields[fieldName];
@@ -79,16 +83,20 @@ for (const type in t.NODE_FIELDS) {
   });
 
   code += `export interface ${type} extends BaseNode {
+  type: "${type}";
   ${struct.join("\n  ").trim()}
 }\n\n`;
-}
 
-for (const type in t.DEPRECATED_KEYS) {
-  code += `/**
- * @deprecated Use \`${t.DEPRECATED_KEYS[type]}\`
+  if (deprecatedAlias[type]) {
+    code += `/**
+ * @deprecated Use \`${type}\`
  */
-export type ${type} = ${t.DEPRECATED_KEYS[type]};\n
+export interface ${deprecatedAlias[type]} extends BaseNode {
+  type: "${deprecatedAlias[type]}";
+  ${struct.join("\n  ").trim()}
+}\n\n
 `;
+  }
 }
 
 for (const type in t.FLIPPED_ALIAS_KEYS) {

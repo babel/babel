@@ -533,6 +533,14 @@ export interface NumericLiteral extends BaseNode {
   value: number;
 }
 
+/**
+ * @deprecated Use `NumericLiteral`
+ */
+export interface NumberLiteral extends BaseNode {
+  type: "NumberLiteral";
+  value: number;
+}
+
 export interface NullLiteral extends BaseNode {
   type: "NullLiteral";
 }
@@ -546,6 +554,15 @@ export interface RegExpLiteral extends BaseNode {
   type: "RegExpLiteral";
   pattern: string;
   flags: string;
+}
+
+/**
+ * @deprecated Use `RegExpLiteral`
+ */
+export interface RegexLiteral extends BaseNode {
+  type: "RegexLiteral";
+  pattern: string;
+  flags: any;
 }
 
 export interface LogicalExpression extends BaseNode {
@@ -617,6 +634,16 @@ export interface ObjectProperty extends BaseNode {
 
 export interface RestElement extends BaseNode {
   type: "RestElement";
+  argument: LVal;
+  decorators: Array<Decorator> | null;
+  typeAnnotation: TypeAnnotation | TSTypeAnnotation | Noop | null;
+}
+
+/**
+ * @deprecated Use `RestElement`
+ */
+export interface RestProperty extends BaseNode {
+  type: "RestProperty";
   argument: LVal;
   decorators: Array<Decorator> | null;
   typeAnnotation: TypeAnnotation | TSTypeAnnotation | Noop | null;
@@ -889,6 +916,14 @@ export interface ObjectPattern extends BaseNode {
 
 export interface SpreadElement extends BaseNode {
   type: "SpreadElement";
+  argument: Expression;
+}
+
+/**
+ * @deprecated Use `SpreadElement`
+ */
+export interface SpreadProperty extends BaseNode {
+  type: "SpreadProperty";
   argument: Expression;
 }
 
@@ -1950,26 +1985,6 @@ export interface TSTypeParameter extends BaseNode {
   default: TSType | null;
   name: string;
 }
-
-/**
- * @deprecated Use `NumericLiteral`
- */
-export type NumberLiteral = NumericLiteral;
-
-/**
- * @deprecated Use `RegExpLiteral`
- */
-export type RegexLiteral = RegExpLiteral;
-
-/**
- * @deprecated Use `RestElement`
- */
-export type RestProperty = RestElement;
-
-/**
- * @deprecated Use `SpreadElement`
- */
-export type SpreadProperty = SpreadElement;
 
 export type Expression =
   | ArrayExpression
