@@ -16,9 +16,7 @@
 
 # Contributing
 
-Contributions are always welcome, no matter how large or small. Before
-contributing, please read the
-[code of conduct](https://github.com/babel/babel/blob/master/CODE_OF_CONDUCT.md).
+Contributions are always welcome, no matter how large or small! Before contributing, please read the [code of conduct](https://github.com/babel/babel/blob/master/CODE_OF_CONDUCT.md).
 
 ## Not sure where to start?
 
@@ -39,12 +37,8 @@ Feel free to check out the `#discussion`/`#development` channels on our [Slack](
 
 ## Developing
 
-**Note:** Versions `< 5.1.10` can't be built.
-
-Babel is built for Node 6 and up but we develop using Node 8 and yarn. You can check this with `node -v`.
-
-Make sure that Yarn is installed with version >= `0.28.0`.
-Installation instructions can be found here: https://yarnpkg.com/en/docs/install.
+*Node*: Check that Node is [installed](https://nodejs.org/en/download/) with version 6 and up. You can check this with `node -v`.
+*Yarn*: Make sure that Yarn is [installed](https://classic.yarnpkg.com/en/docs/install) with version >= `0.28.0`.
 
 ### Setup
 
@@ -72,7 +66,7 @@ $ make watch
 
 to have Babel build itself and incrementally build files on change.
 
-You can access the built files for individual packages from `packages/<package-name>/lib`.
+> You can access the built files for individual packages from `packages/<package-name>/lib`.
 
 If you wish to build a copy of Babel for distribution, then run:
 
