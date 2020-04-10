@@ -9,8 +9,12 @@ import {
   expressionStatement,
   blockStatement,
 } from "../builders/generated";
+import type * as types from "../types";
 
-export default function toBlock(node: any, parent: any): any {
+export default function toBlock(
+  node: types.Statement | types.Expression,
+  parent?: types.Node | null,
+): types.BlockStatement {
   if (isBlockStatement(node)) {
     return node;
   }

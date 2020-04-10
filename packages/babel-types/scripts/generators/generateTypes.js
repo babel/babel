@@ -47,6 +47,8 @@ interface BaseNode {
   extra?: Record<string, unknown>;
 }
 
+export type CommentTypeShorthand = "leading" | "inner" | "trailing";
+
 export type Node = ${t.TYPES.sort().join(" | ")};\n\n`;
 
 const deprecatedAlias = {};

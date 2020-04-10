@@ -4,8 +4,27 @@ import {
   isClass,
   isExpressionStatement,
 } from "../validators/generated";
+import type * as types from "../types";
 
-export default function toExpression(node: any): any {
+export default function toExpression(
+  node: types.Function,
+): types.FunctionExpression;
+export default function toExpression(node: types.Class): types.ClassExpression;
+export default function toExpression(
+  node:
+    | types.ExpressionStatement
+    | types.Expression
+    | types.Class
+    | types.Function,
+): types.Expression;
+
+export default function toExpression(
+  node:
+    | types.ExpressionStatement
+    | types.Expression
+    | types.Class
+    | types.Function,
+): types.Expression {
   if (isExpressionStatement(node)) {
     node = node.expression;
   }
@@ -24,8 +43,10 @@ export default function toExpression(node: any): any {
   // ClassDeclaration -> ClassExpression
   // FunctionDeclaration, ObjectMethod, ClassMethod -> FunctionExpression
   if (isClass(node)) {
+    // @ts-ignore
     node.type = "ClassExpression";
   } else if (isFunction(node)) {
+    // @ts-ignore
     node.type = "FunctionExpression";
   }
 

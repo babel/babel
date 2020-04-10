@@ -1,5 +1,6 @@
 import { NODE_FIELDS } from "../definitions";
 import type * as types from "../types";
+import { isFile, isIdentifier } from "../validators/generated";
 
 const has = Function.call.bind(Object.prototype.hasOwnProperty);
 
@@ -24,7 +25,7 @@ function cloneIfNodeOrArray(obj, deep, withoutLoc) {
  * If the second parameter is `false`, cloneNode performs a shallow clone.
  * If the third parameter is true, the cloned nodes exclude location properties.
  */
-export default function cloneNode<T extends any>(
+export default function cloneNode<T extends types.Node>(
   node: T,
   deep: boolean = true,
   withoutLoc: boolean = false,
@@ -32,10 +33,10 @@ export default function cloneNode<T extends any>(
   if (!node) return node;
 
   const { type } = node;
-  const newNode = ({ type } as any) as T;
+  const newNode: any = { type: node.type };
 
   // Special-case identifiers since they are the most cloned nodes.
-  if (type === "Identifier") {
+  if (isIdentifier(node)) {
     newNode.name = node.name;
 
     if (has(node, "optional") && typeof node.optional === "boolean") {
@@ -54,7 +55,7 @@ export default function cloneNode<T extends any>(
       if (has(node, field)) {
         if (deep) {
           newNode[field] =
-            type === "File" && field === "comments"
+            isFile(node) && field === "comments"
               ? maybeCloneComments(node.comments, deep, withoutLoc)
               : cloneIfNodeOrArray(node[field], true, withoutLoc);
         } else {
@@ -94,6 +95,7 @@ export default function cloneNode<T extends any>(
   }
   if (has(node, "extra")) {
     newNode.extra = {
+      // @ts-ignore
       ...node.extra,
     };
   }
@@ -108,7 +110,7 @@ function cloneCommentsWithoutLoc<T extends types.Comment>(comments: T[]): T[] {
         type,
         value,
         loc: null,
-      } as T)
+      } as T),
   );
 }
 

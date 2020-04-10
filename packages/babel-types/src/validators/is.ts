@@ -2,13 +2,40 @@ import shallowEqual from "../utils/shallowEqual";
 import isType from "./isType";
 import isPlaceholderType from "./isPlaceholderType";
 import { FLIPPED_ALIAS_KEYS } from "../definitions";
+import type * as types from "../types";
 
+export default function is<T extends types.Node["type"]>(
+  type: T,
+  node: types.Node | null | undefined,
+  opts?: undefined,
+): node is Extract<types.Node, { type: T }>;
+
+export default function is<
+  T extends types.Node["type"],
+  P extends Extract<types.Node, { type: T }>
+>(type: T, n: types.Node | null | undefined, required: Partial<P>): n is P;
+
+export default function is<P extends types.Node>(
+  type: string,
+  node: types.Node | null | undefined,
+  opts: Partial<P>,
+): node is P;
+
+export default function is(
+  type: string,
+  node: types.Node | null | undefined,
+  opts?: Partial<types.Node>,
+): node is types.Node;
 /**
  * Returns whether `node` is of given `type`.
  *
  * For better performance, use this instead of `is[Type]` when `type` is unknown.
  */
-export default function is(type: string, node: any, opts?: any): boolean {
+export default function is(
+  type: string,
+  node: types.Node | null | undefined,
+  opts?: Partial<types.Node>,
+): node is types.Node {
   if (!node) return false;
 
   const matches = isType(node.type, type);

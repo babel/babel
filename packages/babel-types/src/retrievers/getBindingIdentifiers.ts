@@ -6,17 +6,34 @@ import {
   isFunctionExpression,
   isExportAllDeclaration,
 } from "../validators/generated";
+import type * as types from "../types";
+
+export default function getBindingIdentifiers(
+  node: types.Node,
+  duplicates: true,
+  outerOnly?: boolean,
+): Record<string, Array<types.Identifier>>;
+
+export default function getBindingIdentifiers(
+  node: types.Node,
+  duplicates?: false,
+  outerOnly?: boolean,
+): Record<string, types.Identifier>;
+
+export default function getBindingIdentifiers(
+  node: types.Node,
+  duplicates?: boolean,
+  outerOnly?: boolean,
+): Record<string, types.Identifier | Array<types.Identifier>>;
 
 /**
  * Return a list of binding identifiers associated with the input `node`.
  */
 export default function getBindingIdentifiers(
-  node: any,
+  node: types.Node,
   duplicates?: boolean,
   outerOnly?: boolean,
-): {
-  [x: string]: any | Array<any>;
-} {
+): Record<string, types.Identifier | Array<types.Identifier>> {
   let search = [].concat(node);
   const ids = Object.create(null);
 

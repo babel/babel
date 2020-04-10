@@ -6,7 +6,7 @@ import type * as t from "../types";
  * and processing.
  */
 export default function traverseFast(
-  node: any,
+  node: t.Node | null | undefined,
   enter: (node: t.Node, opts?: any) => void,
   opts?: any,
 ): void {

@@ -1,11 +1,12 @@
 import getBindingIdentifiers from "../retrievers/getBindingIdentifiers";
+import type * as types from "../types";
 /**
  * Check if the input `node` is a binding identifier.
  */
 export default function isBinding(
-  node: any,
-  parent: any,
-  grandparent?: any,
+  node: types.Node,
+  parent: types.Node,
+  grandparent?: types.Node,
 ): boolean {
   if (
     grandparent &&

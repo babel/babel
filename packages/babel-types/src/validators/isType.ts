@@ -1,4 +1,15 @@
 import { FLIPPED_ALIAS_KEYS, ALIAS_KEYS } from "../definitions";
+import type * as types from "../types";
+
+export default function isType<T extends types.Node["type"]>(
+  nodeType: string,
+  targetType: T,
+): nodeType is T;
+
+export default function isType(
+  nodeType: string | null | undefined,
+  targetType: string,
+): boolean;
 
 /**
  * Test if a `nodeType` is a `targetType` or if `targetType` is an alias of `nodeType`.

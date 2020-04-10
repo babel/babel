@@ -5,8 +5,64 @@ import {
   isAssignmentExpression,
 } from "../validators/generated";
 import { expressionStatement } from "../builders/generated";
+import type * as types from "../types";
 
-export default function toStatement(node: any, ignore?: boolean) {
+export default function toStatement(
+  node: types.AssignmentExpression,
+  ignore?: boolean,
+): types.ExpressionStatement;
+
+export default function toStatement(
+  node: types.Statement | types.AssignmentExpression,
+  ignore?: boolean,
+): types.Statement;
+
+export default function toStatement(
+  node: types.Class,
+  ignore: true,
+): types.ClassDeclaration | undefined;
+
+export default function toStatement(
+  node: types.Class,
+  ignore?: boolean,
+): types.ClassDeclaration;
+
+export default function toStatement(
+  node: types.Function,
+  ignore: true,
+): types.FunctionDeclaration | undefined;
+
+export default function toStatement(
+  node: types.Function,
+  ignore?: boolean,
+): types.FunctionDeclaration;
+
+export default function toStatement(
+  node:
+    | types.Statement
+    | types.Class
+    | types.Function
+    | types.AssignmentExpression,
+  ignore: true,
+): types.Statement | undefined;
+
+export default function toStatement(
+  node:
+    | types.Statement
+    | types.Class
+    | types.Function
+    | types.AssignmentExpression,
+  ignore?: boolean,
+): types.Statement | false;
+
+export default function toStatement(
+  node:
+    | types.Statement
+    | types.Class
+    | types.Function
+    | types.AssignmentExpression,
+  ignore?: boolean,
+): types.Statement | false {
   if (isStatement(node)) {
     return node;
   }
@@ -24,6 +80,7 @@ export default function toStatement(node: any, ignore?: boolean) {
     return expressionStatement(node);
   }
 
+  // @ts-ignore
   if (mustHaveId && !node.id) {
     newType = false;
   }
@@ -36,7 +93,9 @@ export default function toStatement(node: any, ignore?: boolean) {
     }
   }
 
+  // @ts-ignore
   node.type = newType;
 
+  // @ts-ignore
   return node;
 }

@@ -5,11 +5,12 @@ import {
   isScopable,
   isPattern,
 } from "./generated";
+import type * as types from "../types";
 
 /**
  * Check if the input `node` is a scope.
  */
-export default function isScope(node: any, parent: any): boolean {
+export default function isScope(node: types.Node, parent: types.Node): boolean {
   // If a BlockStatement is an immediate descendent of a Function/CatchClause, it must be in the body.
   // Hence we skipped the parentKey === "params" check
   if (isBlockStatement(node) && (isFunction(parent) || isCatchClause(parent))) {

@@ -30,7 +30,7 @@ export default function builder(
   });
 
   for (const key of Object.keys(node)) {
-    validate(node, key, node[key]);
+    validate(node as types.Node, key, node[key]);
   }
 
   return node;

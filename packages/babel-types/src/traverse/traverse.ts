@@ -6,11 +6,14 @@ export type TraversalAncestors = Array<{
   key: string;
   index?: number;
 }>;
+
 export type TraversalHandler<T> = (
-  c: types.Node,
-  b: TraversalAncestors,
-  a: T,
+  this: undefined,
+  node: types.Node,
+  parent: TraversalAncestors,
+  type: T,
 ) => void;
+
 export type TraversalHandlers<T> = {
   enter?: TraversalHandler<T>;
   exit?: TraversalHandler<T>;

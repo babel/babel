@@ -14,8 +14,33 @@ import {
   unaryExpression,
   binaryExpression,
 } from "../builders/generated";
+import type * as types from "../types";
 
-export default function valueToNode(value: any): any {
+export default function valueToNode(value: undefined): types.Identifier; // (should this not be a types.UnaryExpression to avoid shadowing?)
+export default function valueToNode(value: boolean): types.BooleanLiteral;
+export default function valueToNode(value: null): types.NullLiteral;
+export default function valueToNode(value: string): types.StringLiteral;
+// Infinities and NaN need to use a types.BinaryExpression; negative values must be wrapped in types.UnaryExpression
+export default function valueToNode(
+  value: number,
+): types.NumericLiteral | types.BinaryExpression | types.UnaryExpression;
+export default function valueToNode(value: RegExp): types.RegExpLiteral;
+export default function valueToNode(
+  value: ReadonlyArray<
+    undefined | boolean | null | string | number | RegExp | object
+  >,
+): types.ArrayExpression;
+// this throws with objects that are not PlainObject according to lodash,
+// or if there are non-valueToNode-able values
+export default function valueToNode(value: object): types.ObjectExpression;
+
+export default function valueToNode(
+  value: undefined | boolean | null | string | number | RegExp | object,
+): types.Expression;
+
+export default function valueToNode(
+  value: undefined | boolean | null | string | number | RegExp | object,
+): types.Expression {
   // undefined
   if (value === undefined) {
     return identifier("undefined");
@@ -63,7 +88,8 @@ export default function valueToNode(value: any): any {
 
   // regexes
   if (isRegExp(value)) {
-    const pattern = value.source;
+    // todo: add @types/lodash
+    const pattern = (value as RegExp).source;
     const flags = value.toString().match(/\/([a-z]+|)$/)[1];
     return regExpLiteral(pattern, flags);
   }

@@ -1,4 +1,5 @@
-import type { Scope } from "@babel/traverse";
+// todo: update after converting traverse
+//import type { Scope } from "@babel/traverse";
 import getBindingIdentifiers from "../retrievers/getBindingIdentifiers";
 import {
   isExpression,
@@ -14,9 +15,17 @@ import {
   conditionalExpression,
 } from "../builders/generated";
 import cloneNode from "../clone/cloneNode";
+import type * as types from "../types";
+
+// NOTE: this actually uses Scope from @babel/traverse, but we can't add a dependency on its types,
+// as they live in @types. Declare the structural subset that is required.
+type Scope = {
+  push(value: { id: types.LVal; kind: "var"; init?: types.Expression }): void;
+  buildUndefinedNode(): types.Node;
+};
 
 export default function gatherSequenceExpressions(
-  nodes: Array<any>,
+  nodes: ReadonlyArray<types.Node>,
   scope: Scope,
   declars: Array<any>,
 ): any | undefined | null {

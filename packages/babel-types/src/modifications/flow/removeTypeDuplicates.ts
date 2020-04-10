@@ -16,7 +16,9 @@ function getQualificationName(node: types.GenericTypeAnnotation["id"]) {
 /**
  * Dedupe type annotations.
  */
-export default function removeTypeDuplicates(nodes: Array<any>): Array<any> {
+export default function removeTypeDuplicates(
+  nodes: ReadonlyArray<types.FlowType | false | null | undefined>,
+): types.FlowType[] {
   const generics = {};
   const bases = {};
 

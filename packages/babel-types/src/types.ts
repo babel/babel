@@ -41,6 +41,8 @@ interface BaseNode {
   type: Node["type"];
 }
 
+export type CommentTypeShorthand = "leading" | "inner" | "trailing";
+
 export type Node =
   | AnyTypeAnnotation
   | ArgumentPlaceholder

@@ -6,11 +6,26 @@ import {
   genericTypeAnnotation,
   identifier,
 } from "../generated";
+import type * as types from "../../types";
 
 /**
  * Create a type annotation based on typeof expression.
  */
-export default function createTypeAnnotationBasedOnTypeof(type: string): any {
+export default function createTypeAnnotationBasedOnTypeof(
+  type:
+    | "string"
+    | "number"
+    | "undefined"
+    | "boolean"
+    | "function"
+    | "object"
+    | "symbol",
+):
+  | types.StringTypeAnnotation
+  | types.VoidTypeAnnotation
+  | types.NumberTypeAnnotation
+  | types.BooleanTypeAnnotation
+  | types.GenericTypeAnnotation {
   if (type === "string") {
     return stringTypeAnnotation();
   } else if (type === "number") {

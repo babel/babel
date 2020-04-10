@@ -35,7 +35,7 @@ function getType(val) {
 type Validator = { chainOf?: Validator[] } & ((
   c: any,
   b: string,
-  a: any
+  a: any,
 ) => void);
 
 type FieldOptions = {

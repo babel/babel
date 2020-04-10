@@ -1,10 +1,12 @@
+import type * as types from "../types";
+
 /**
  * Add comments of certain type to a node.
  */
-export default function addComments<T extends any>(
+export default function addComments<T extends types.Node>(
   node: T,
-  type: string,
-  comments: Array<any>,
+  type: types.CommentTypeShorthand,
+  comments: ReadonlyArray<types.Comment>,
 ): T {
   if (!comments || !node) return node;
 
