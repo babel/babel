@@ -144,6 +144,8 @@ const privateInVisitor = {
 
     path.replaceWith(template.expression.ast`${id}.has(${right})`);
   },
+
+  Class: privateNameVisitor.Class,
 };
 
 // Traverses the outer portion of a class, without touching the class's inner
