@@ -15,7 +15,7 @@ jobs:
           token: ${{ secrets.BOT_TOKEN }}
           bot_name: babel-bot
           days_before_warning: 14
-          days_before_unassigning: 7
+          days_before_unassigning: 70
           comment: >
             Hi, @${username}! It has been 2 weeks since your last update: are
             you still working on this issue?
