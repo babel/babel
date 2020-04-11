@@ -55,6 +55,7 @@ function normalizeOptions(code, opts): Format {
     jsescOption: {
       quotes: "double",
       wrap: true,
+      minimal: true,
       ...opts.jsescOption,
     },
     recordAndTupleSyntaxType: opts.recordAndTupleSyntaxType,
