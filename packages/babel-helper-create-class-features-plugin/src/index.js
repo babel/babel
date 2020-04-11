@@ -30,6 +30,8 @@ export { FEATURES, injectInitialization };
 const version = pkg.version.split(".").reduce((v, x) => v * 1e5 + +x, 0);
 const versionKey = "@babel/plugin-class-features/version";
 
+const privateNamesStack = [new Map()];
+
 export function createClassFeaturePlugin({
   name,
   feature,
@@ -49,141 +51,158 @@ export function createClassFeaturePlugin({
     },
 
     visitor: {
-      Class(path, state) {
-        if (this.file.get(versionKey) !== version) return;
+      Class: {
+        enter(path, state) {
+          if (this.file.get(versionKey) !== version) return;
 
-        verifyUsedFeatures(path, this.file);
-
-        const loose = isLoose(this.file, feature);
-
-        let constructor;
-        let isDecorated = hasOwnDecorators(path.node);
-        const props = [];
-        const elements = [];
-        const computedPaths = [];
-        const privateNames = new Set();
-        const body = path.get("body");
-
-        for (const path of body.get("body")) {
           verifyUsedFeatures(path, this.file);
 
-          if (path.node.computed) {
-            computedPaths.push(path);
-          }
-
-          if (path.isPrivate()) {
-            const { name } = path.node.key.id;
-            const getName = `get ${name}`;
-            const setName = `set ${name}`;
-
-            if (path.node.kind === "get") {
-              if (
-                privateNames.has(getName) ||
-                (privateNames.has(name) && !privateNames.has(setName))
-              ) {
-                throw path.buildCodeFrameError("Duplicate private field");
-              }
-
-              privateNames.add(getName).add(name);
-            } else if (path.node.kind === "set") {
-              if (
-                privateNames.has(setName) ||
-                (privateNames.has(name) && !privateNames.has(getName))
-              ) {
-                throw path.buildCodeFrameError("Duplicate private field");
-              }
-
-              privateNames.add(setName).add(name);
-            } else {
-              if (
-                (privateNames.has(name) &&
-                  !privateNames.has(getName) &&
-                  !privateNames.has(setName)) ||
-                (privateNames.has(name) &&
-                  (privateNames.has(getName) || privateNames.has(setName)))
-              ) {
-                throw path.buildCodeFrameError("Duplicate private field");
-              }
-
-              privateNames.add(name);
-            }
-          }
-
-          if (path.isClassMethod({ kind: "constructor" })) {
-            constructor = path;
-          } else {
-            elements.push(path);
-            if (path.isProperty() || path.isPrivate()) {
-              props.push(path);
-            }
-          }
-
-          if (!isDecorated) isDecorated = hasOwnDecorators(path.node);
-        }
-
-        if (!props.length && !isDecorated) return;
-
-        let ref;
-
-        if (path.isClassExpression() || !path.node.id) {
-          nameFunction(path);
-          ref = path.scope.generateUidIdentifier("class");
-        } else {
-          ref = path.node.id;
-        }
-
-        // NODE: These three functions don't support decorators yet,
-        //       but verifyUsedFeatures throws if there are both
-        //       decorators and private fields.
-        const privateNamesMap = buildPrivateNamesMap(props);
-        const privateNamesNodes = buildPrivateNamesNodes(
-          privateNamesMap,
-          loose,
-          state,
-        );
-
-        transformPrivateNamesUsage(ref, path, privateNamesMap, loose, state);
-
-        let keysNodes, staticNodes, instanceNodes, wrapClass;
-
-        if (isDecorated) {
-          staticNodes = keysNodes = [];
-          ({ instanceNodes, wrapClass } = buildDecoratedClass(
-            ref,
-            path,
-            elements,
-            this.file,
-          ));
-        } else {
-          keysNodes = extractComputedKeys(ref, path, computedPaths, this.file);
-          ({ staticNodes, instanceNodes, wrapClass } = buildFieldsInitNodes(
-            ref,
-            path.node.superClass,
-            props,
-            privateNamesMap,
-            state,
-            loose,
-          ));
-        }
-
-        if (instanceNodes.length > 0) {
-          injectInitialization(
-            path,
-            constructor,
-            instanceNodes,
-            (referenceVisitor, state) => {
-              if (isDecorated) return;
-              for (const prop of props) {
-                if (prop.node.static) continue;
-                prop.traverse(referenceVisitor, state);
-              }
-            },
+          const loose = isLoose(this.file, feature);
+          const privateNamesMap = new Map(
+            privateNamesStack[privateNamesStack.length - 1],
           );
-        }
+          privateNamesStack.push(privateNamesMap);
 
-        path = wrapClass(path);
-        path.insertBefore(keysNodes);
-        path.insertAfter([...privateNamesNodes, ...staticNodes]);
+          let constructor;
+          let isDecorated = hasOwnDecorators(path.node);
+          const props = [];
+          const elements = [];
+          const computedPaths = [];
+          const privateNames = new Set();
+          const body = path.get("body");
+
+          for (const path of body.get("body")) {
+            verifyUsedFeatures(path, this.file);
+
+            if (path.node.computed) {
+              computedPaths.push(path);
+            }
+
+            if (path.isPrivate()) {
+              const { name } = path.node.key.id;
+              const getName = `get ${name}`;
+              const setName = `set ${name}`;
+
+              if (path.node.kind === "get") {
+                if (
+                  privateNames.has(getName) ||
+                  (privateNames.has(name) && !privateNames.has(setName))
+                ) {
+                  throw path.buildCodeFrameError("Duplicate private field");
+                }
+
+                privateNames.add(getName).add(name);
+              } else if (path.node.kind === "set") {
+                if (
+                  privateNames.has(setName) ||
+                  (privateNames.has(name) && !privateNames.has(getName))
+                ) {
+                  throw path.buildCodeFrameError("Duplicate private field");
+                }
+
+                privateNames.add(setName).add(name);
+              } else {
+                if (
+                  (privateNames.has(name) &&
+                    !privateNames.has(getName) &&
+                    !privateNames.has(setName)) ||
+                  (privateNames.has(name) &&
+                    (privateNames.has(getName) || privateNames.has(setName)))
+                ) {
+                  throw path.buildCodeFrameError("Duplicate private field");
+                }
+
+                privateNames.add(name);
+              }
+            }
+
+            if (path.isClassMethod({ kind: "constructor" })) {
+              constructor = path;
+            } else {
+              elements.push(path);
+              if (path.isProperty() || path.isPrivate()) {
+                props.push(path);
+              }
+            }
+
+            if (!isDecorated) isDecorated = hasOwnDecorators(path.node);
+          }
+
+          if (!props.length && !isDecorated) return;
+
+          let ref;
+
+          if (path.isClassExpression() || !path.node.id) {
+            nameFunction(path);
+            ref = path.scope.generateUidIdentifier("class");
+          } else {
+            ref = path.node.id;
+          }
+
+          // NODE: These three functions don't support decorators yet,
+          //       but verifyUsedFeatures throws if there are both
+          //       decorators and private fields.
+          const depth = privateNamesStack.length;
+          buildPrivateNamesMap(privateNamesMap, props, depth);
+          const privateNamesNodes = buildPrivateNamesNodes(
+            privateNamesMap,
+            loose,
+            state,
+            depth,
+          );
+
+          transformPrivateNamesUsage(ref, path, privateNamesMap, loose, state);
+
+          let keysNodes, staticNodes, instanceNodes, wrapClass;
+
+          if (isDecorated) {
+            staticNodes = keysNodes = [];
+            ({ instanceNodes, wrapClass } = buildDecoratedClass(
+              ref,
+              path,
+              elements,
+              this.file,
+            ));
+          } else {
+            keysNodes = extractComputedKeys(
+              ref,
+              path,
+              computedPaths,
+              this.file,
+            );
+            ({ staticNodes, instanceNodes, wrapClass } = buildFieldsInitNodes(
+              ref,
+              path.node.superClass,
+              props,
+              privateNamesMap,
+              state,
+              loose,
+            ));
+          }
+
+          if (instanceNodes.length > 0) {
+            injectInitialization(
+              path,
+              constructor,
+              instanceNodes,
+              (referenceVisitor, state) => {
+                if (isDecorated) return;
+                for (const prop of props) {
+                  if (prop.node.static) continue;
+                  prop.traverse(referenceVisitor, state);
+                }
+              },
+            );
+          }
+
+          path = wrapClass(path);
+          path.insertBefore(keysNodes);
+          path.insertAfter([...privateNamesNodes, ...staticNodes]);
+        },
+
+        exit() {
+          privateNamesStack.pop();
+        },
       },
 
       PrivateName(path) {

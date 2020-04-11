@@ -7,21 +7,24 @@ import optimiseCall from "@babel/helper-optimise-call-expression";
 
 import * as ts from "./typescript";
 
-export function buildPrivateNamesMap(props) {
-  const privateNamesMap = new Map();
+export function buildPrivateNamesMap(privateNamesMap, props, depth) {
   for (const prop of props) {
-    const isPrivate = prop.isPrivate();
-    const isMethod = !prop.isProperty();
-    const isInstance = !prop.node.static;
-    if (isPrivate) {
+    if (prop.isPrivate()) {
+      const isMethod = !prop.isProperty();
+      const isInstance = !prop.node.static;
       const { name } = prop.node.key.id;
-      const update = privateNamesMap.has(name)
-        ? privateNamesMap.get(name)
-        : {
-            id: prop.scope.generateUidIdentifier(name),
-            static: !isInstance,
-            method: isMethod,
-          };
+
+      let update = privateNamesMap.get(name);
+      if (!update || update.depth !== depth) {
+        update = {
+          id: prop.scope.generateUidIdentifier(name),
+          static: !isInstance,
+          method: isMethod,
+          depth,
+        };
+        privateNamesMap.set(name, update);
+      }
+
       if (prop.node.kind === "get") {
         update.getId = prop.scope.generateUidIdentifier(`get_${name}`);
       } else if (prop.node.kind === "set") {
@@ -29,13 +32,16 @@ export function buildPrivateNamesMap(props) {
       } else if (prop.node.kind === "method") {
         update.methodId = prop.scope.generateUidIdentifier(name);
       }
-      privateNamesMap.set(name, update);
     }
   }
-  return privateNamesMap;
 }
 
-export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
+export function buildPrivateNamesNodes(
+  privateNamesMap,
+  loose,
+  state,
+  privateDepth,
+) {
   const initNodes = [];
 
   for (const [name, value] of privateNamesMap) {
@@ -45,7 +51,16 @@ export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
     // In spec mode, only instance fields need a "private name" initializer
     // because static fields are directly assigned to a variable in the
     // buildPrivateStaticFieldInitSpec function.
-    const { id, static: isStatic, method: isMethod, getId, setId } = value;
+    const {
+      id,
+      static: isStatic,
+      method: isMethod,
+      getId,
+      setId,
+      depth,
+    } = value;
+    if (depth !== privateDepth) continue;
+
     const isAccessor = getId || setId;
     if (loose) {
       initNodes.push(
@@ -263,6 +278,7 @@ export function transformPrivateNamesUsage(
   loose,
   state,
 ) {
+  if (!privateNamesMap.size) return;
   const body = path.get("body");
 
   if (loose) {
