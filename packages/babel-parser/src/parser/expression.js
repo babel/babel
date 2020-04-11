@@ -1227,8 +1227,6 @@ export default class ExpressionParser extends LValParser {
     this.expect(tt.dot);
 
     if (this.isContextual("meta")) {
-      this.expectPlugin("importMeta");
-
       if (!this.inModule) {
         this.raiseWithData(
           id.start,
@@ -1237,8 +1235,6 @@ export default class ExpressionParser extends LValParser {
         );
       }
       this.sawUnambiguousESM = true;
-    } else if (!this.hasPlugin("importMeta")) {
-      this.raise(id.start, Errors.ImportCallArityLtOne);
     }
 
     return this.parseMetaProperty(node, id, "meta");
