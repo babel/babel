@@ -203,7 +203,6 @@ export function StringLiteral(node: Object) {
     return;
   }
 
-  // ensure the output is ASCII-safe
   const opts = this.format.jsescOption;
   const val = jsesc(node.value, opts);
 

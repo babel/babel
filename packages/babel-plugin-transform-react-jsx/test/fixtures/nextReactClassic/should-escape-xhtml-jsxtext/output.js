@@ -4,7 +4,7 @@
 React.createElement("div", null, "wow");
 
 /*#__PURE__*/
-React.createElement("div", null, "w\xF4w");
+React.createElement("div", null, "wôw");
 
 /*#__PURE__*/
 React.createElement("div", null, "w & w");

@@ -246,7 +246,7 @@ __metadata:
     "@babel/helper-fixtures": "workspace:*"
     "@babel/parser": "workspace:*"
     "@babel/types": "workspace:^7.12.1"
-    jsesc: ^2.5.1
+    jsesc: ^3.0.1
     source-map: ^0.5.0
   languageName: unknown
   linkType: soft
@@ -9122,6 +9122,15 @@ fsevents@^1.2.7:
   bin:
     jsesc: bin/jsesc
   checksum: ca91ec33d74c55959e4b6fdbfee2af5f38be74a752cf0a982702e3a16239f26c2abbe19f5f84b15592570dda01872e929a90738615bd445f7b9b859781cfcf68
+  languageName: node
+  linkType: hard
+
+"jsesc@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "jsesc@npm:3.0.1"
+  bin:
+    jsesc: bin/jsesc
+  checksum: a915daf0c74c86343bc91ac88030d20fd95cd433b451ad945585064855e6c66c7f1531196633dcad482effe42620af9fab4dd75af735cf41d180d8b515f7af77
   languageName: node
   linkType: hard
 
