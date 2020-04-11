@@ -61,10 +61,6 @@ function normalizeOptions(code, opts): Format {
     recordAndTupleSyntaxType: opts.recordAndTupleSyntaxType,
   };
 
-  if (opts.jsonCompatibleStrings) {
-    format.jsescOption.json = true;
-  }
-
   if (format.minified) {
     format.compact = true;
 
