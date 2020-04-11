@@ -104,7 +104,7 @@ If you just want to run all tests:
 $ make test-only
 ```
 
-Most likely you'll want to focus in on a specific issue. So to run tests for a specific package in [packages](https://github.com/babel/babel/tree/master/packages), you can use the `TEST_ONLY` environment variable:
+When working on an issue, you will most likely want to focus on a particular [packages](https://github.com/babel/babel/tree/master/packages). Using `TEST_ONLY` will only run tests for that specific package.
 
 ```sh
 $ TEST_ONLY=babel-cli make test
