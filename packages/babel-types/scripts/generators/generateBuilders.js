@@ -97,9 +97,6 @@ import type * as types from "../../types";\n\n`;
     )}): types.${type} { return builder("${type}", ${callArgs.join(
       ", "
     )}); }\n`;
-    // This is needed for backwards compatibility.
-    // arrayExpression -> ArrayExpression
-    output += `export { ${formatedBuilderNameLocal} as ${type} };\n`;
     if (formatedBuilderNameLocal !== formatedBuilderName) {
       output += `export { ${formatedBuilderNameLocal} as ${formatedBuilderName} };\n`;
     }
@@ -116,18 +113,38 @@ import type * as types from "../../types";\n\n`;
 
   Object.keys(definitions.DEPRECATED_KEYS).forEach(type => {
     const newType = definitions.DEPRECATED_KEYS[type];
-    output += `export function ${type}(...args: Array<any>): any {
+    const formatedBuilderName = formatBuilderName(type);
+    output += `/** @deprecated */
+function ${type}(...args: Array<any>): any {
   console.trace("The node type ${type} has been renamed to ${newType}");
   return builder("${type}", ...args);
 }
-export { ${type} as ${formatBuilderName(type)} };\n`;
-
+export { ${type} as ${formatedBuilderName} };\n`;
     // This is needed for backwards compatibility.
     // It should be removed in the next major version.
     // JSXIdentifier -> jSXIdentifier
     if (/^[A-Z]{2}/.test(type)) {
       output += `export { ${type} as ${lowerFirst(type)} }\n`;
     }
+  });
+
+  return output;
+};
+
+module.exports.legacy = function generateLegacyBuilders() {
+  let output = `/*
+ * This file is auto-generated! Do not modify it directly.
+ * To re-generate run 'make build'
+ */\n\n`;
+
+  Object.keys(definitions.BUILDER_KEYS).forEach(type => {
+    const formatedBuilderName = formatBuilderName(type);
+    output += `export { ${formatedBuilderName} as ${type} } from './index';\n`;
+  });
+
+  Object.keys(definitions.DEPRECATED_KEYS).forEach(type => {
+    const formatedBuilderName = formatBuilderName(type);
+    output += `export { ${formatedBuilderName} as ${type} } from './index';\n`;
   });
 
   return output;

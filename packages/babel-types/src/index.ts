@@ -12,6 +12,7 @@ export { default as createUnionTypeAnnotation } from "./builders/flow/createFlow
 export { default as createFlowUnionType } from "./builders/flow/createFlowUnionType";
 export { default as createTSUnionType } from "./builders/typescript/createTSUnionType";
 export * from "./builders/generated";
+export * from "./builders/generated/deprecated";
 
 // clone
 export { default as cloneNode } from "./clone/cloneNode";
@@ -95,3 +96,5 @@ export const react = {
   isCompatTag,
   buildChildren,
 };
+
+export * from "./types";

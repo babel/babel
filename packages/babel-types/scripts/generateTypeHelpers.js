@@ -17,6 +17,16 @@ const buildersFile = path.join(baseDir, "builders/generated/index.ts");
 writeFile(buildersFile, format(generateBuilders(), buildersFile));
 console.log(`  ${chalk.green("✔")} Generated builders`);
 
+const deprecatedBuildersFile = path.join(
+  baseDir,
+  "builders/generated/deprecated.js"
+);
+writeFile(
+  deprecatedBuildersFile,
+  format(generateBuilders.legacy(), deprecatedBuildersFile)
+);
+console.log(`  ${chalk.green("✔")} Generated deprecated builders`);
+
 const validatorsFile = path.join(baseDir, "validators/generated/index.ts");
 writeFile(validatorsFile, format(generateValidators(), validatorsFile));
 console.log(`  ${chalk.green("✔")} Generated validators`);
