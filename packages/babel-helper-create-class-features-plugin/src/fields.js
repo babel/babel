@@ -97,8 +97,8 @@ const privateNameVisitor = {
       return;
     }
 
-    // This class redeclares some private name. We need to process the outer
-    // environment with access to all the outer private, then we can process
+    // This class redeclares some private field. We need to process the outer
+    // environment with access to all the outer privates, then we can process
     // the inner environment with only the still-visible outer privates.
     path.traverse(privateNameNestedVisitor, this);
     path.traverse(privateNameVisitor, {
@@ -106,7 +106,7 @@ const privateNameVisitor = {
       privateNamesMap: visiblePrivateNames,
     });
 
-    // We'll eventually this this class node again with the overall Class
+    // We'll eventually hit this class node again with the overall Class
     // Features visitor, which'll process the redeclared privates.
     path.skip();
   },
