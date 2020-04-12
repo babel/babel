@@ -232,7 +232,7 @@ export function ArrowFunctionExpression(node: any, parent: any): boolean {
   return t.isExportDeclaration(parent) || ConditionalExpression(node, parent);
 }
 
-export function ConditionalExpression(node: any, parent: any): boolean {
+export function ConditionalExpression(node: any, parent?): boolean {
   if (
     t.isUnaryLike(parent) ||
     t.isBinary(parent) ||
@@ -264,6 +264,7 @@ export function AssignmentExpression(
   if (t.isObjectPattern(node.left)) {
     return true;
   } else {
+    // @ts-ignore todo: unused call argument printStack
     return ConditionalExpression(node, parent, printStack);
   }
 }

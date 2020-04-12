@@ -5,6 +5,13 @@ import sourceMap from "source-map";
  */
 
 export default class SourceMap {
+  private _cachedMap: sourceMap.SourceMapGenerator | null;
+  private _code: any;
+  private _opts: any;
+  private _rawMappings: any[];
+  private _lastGenLine: number;
+  private _lastSourceLine: number;
+  private _lastSourceColumn: number;
   constructor(opts, code) {
     this._cachedMap = null;
     this._code = code;
@@ -40,6 +47,7 @@ export default class SourceMap {
       this._rawMappings.forEach(mapping => map.addMapping(mapping), map);
     }
 
+    // @ts-ignore // todo:
     return this._cachedMap.toJSON();
   }
 

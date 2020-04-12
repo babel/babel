@@ -36,7 +36,7 @@ const expandedParens = expandAliases(parens);
 const expandedWhitespaceNodes = expandAliases(whitespace.nodes);
 const expandedWhitespaceList = expandAliases(whitespace.list);
 
-function find(obj, node, parent, printStack) {
+function find(obj, node, parent, printStack?) {
   const fn = obj[node.type];
   return fn ? fn(node, parent, printStack) : null;
 }
@@ -83,7 +83,7 @@ export function needsWhitespaceAfter(node, parent) {
   return needsWhitespace(node, parent, "after");
 }
 
-export function needsParens(node, parent, printStack) {
+export function needsParens(node, parent, printStack?) {
   if (!parent) return false;
 
   if (t.isNewExpression(parent) && parent.callee === node) {

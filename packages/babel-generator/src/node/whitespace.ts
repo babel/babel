@@ -13,7 +13,10 @@ type WhitespaceObject = {
  * // { hasCall: false, hasFunction: true, hasHelper: false }
  */
 
-function crawl(node, state = {}) {
+function crawl(
+  node: t.Node,
+  state: { hasCall?: boolean; hasFunction?: boolean; hasHelper?: boolean } = {},
+) {
   if (t.isMemberExpression(node) || t.isOptionalMemberExpression(node)) {
     crawl(node.object, state);
     if (node.computed) crawl(node.property, state);
@@ -26,6 +29,7 @@ function crawl(node, state = {}) {
   } else if (t.isFunction(node)) {
     state.hasFunction = true;
   } else if (t.isIdentifier(node)) {
+    // @ts-ignore todo: node.callee should not exist here
     state.hasHelper = state.hasHelper || isHelper(node.callee);
   }
 
@@ -36,7 +40,7 @@ function crawl(node, state = {}) {
  * Test if a node is or has a helper.
  */
 
-function isHelper(node) {
+function isHelper(node: t.Node): boolean {
   if (t.isMemberExpression(node)) {
     return isHelper(node.object) || isHelper(node.property);
   } else if (t.isIdentifier(node)) {
@@ -66,12 +70,22 @@ function isType(node) {
  * Tests for node types that need whitespace.
  */
 
-export const nodes = {
+export const nodes: {
+  [K in string]?: (
+    node: K extends t.Node["type"] ? Extract<t.Node, { type: K }> : t.Node,
+    // node: K extends keyof typeof t
+    //   ? Extract<typeof t[K], { type: "string" }>
+    //   : t.Node,
+    parent: t.Node,
+  ) => void;
+} = {
   /**
    * Test if AssignmentExpression needs whitespace.
    */
 
-  AssignmentExpression(node: any): WhitespaceObject | undefined | null {
+  AssignmentExpression(
+    node: t.AssignmentExpression,
+  ): WhitespaceObject | undefined | null {
     const state = crawl(node.right);
     if ((state.hasCall && state.hasHelper) || state.hasFunction) {
       return {
@@ -85,9 +99,9 @@ export const nodes = {
    * Test if SwitchCase needs whitespace.
    */
 
-  SwitchCase(node: any, parent: any): WhitespaceObject {
+  SwitchCase(node: t.SwitchCase, parent: t.SwitchStatement): WhitespaceObject {
     return {
-      before: node.consequent.length || parent.cases[0] === node,
+      before: !!node.consequent.length || parent.cases[0] === node,
       after:
         !node.consequent.length &&
         parent.cases[parent.cases.length - 1] === node,
@@ -98,7 +112,7 @@ export const nodes = {
    * Test if LogicalExpression needs whitespace.
    */
 
-  LogicalExpression(node: any): WhitespaceObject | undefined | null {
+  LogicalExpression(node: t.LogicalExpression): WhitespaceObject | undefined {
     if (t.isFunction(node.left) || t.isFunction(node.right)) {
       return {
         after: true,
@@ -110,8 +124,8 @@ export const nodes = {
    * Test if Literal needs whitespace.
    */
 
-  Literal(node: any): WhitespaceObject | undefined | null {
-    if (node.value === "use strict") {
+  Literal(node: t.Literal): WhitespaceObject | undefined | null {
+    if (t.isStringLiteral(node) && node.value === "use strict") {
       return {
         after: true,
       };
@@ -122,7 +136,7 @@ export const nodes = {
    * Test if CallExpressionish needs whitespace.
    */
 
-  CallExpression(node: any): WhitespaceObject | undefined | null {
+  CallExpression(node: t.CallExpression): WhitespaceObject | undefined | null {
     if (t.isFunction(node.callee) || isHelper(node)) {
       return {
         before: true,
@@ -131,7 +145,9 @@ export const nodes = {
     }
   },
 
-  OptionalCallExpression(node: any): WhitespaceObject | undefined | null {
+  OptionalCallExpression(
+    node: t.OptionalCallExpression,
+  ): WhitespaceObject | undefined | null {
     if (t.isFunction(node.callee)) {
       return {
         before: true,
@@ -144,7 +160,9 @@ export const nodes = {
    * Test if VariableDeclaration needs whitespace.
    */
 
-  VariableDeclaration(node: any): WhitespaceObject | undefined | null {
+  VariableDeclaration(
+    node: t.VariableDeclaration,
+  ): WhitespaceObject | undefined | null {
     for (let i = 0; i < node.declarations.length; i++) {
       const declar = node.declarations[i];
 
@@ -167,7 +185,7 @@ export const nodes = {
    * Test if IfStatement needs whitespace.
    */
 
-  IfStatement(node: any): WhitespaceObject | undefined | null {
+  IfStatement(node: t.IfStatement): WhitespaceObject | undefined | null {
     if (t.isBlockStatement(node.consequent)) {
       return {
         before: true,
@@ -182,8 +200,8 @@ export const nodes = {
  */
 
 nodes.ObjectProperty = nodes.ObjectTypeProperty = nodes.ObjectMethod = function (
-  node: any,
-  parent,
+  node: t.ObjectProperty | t.ObjectTypeProperty | t.ObjectMethod,
+  parent: any,
 ): WhitespaceObject | undefined | null {
   if (parent.properties[0] === node) {
     return {
@@ -193,8 +211,8 @@ nodes.ObjectProperty = nodes.ObjectTypeProperty = nodes.ObjectMethod = function 
 };
 
 nodes.ObjectTypeCallProperty = function (
-  node: any,
-  parent,
+  node: t.ObjectTypeCallProperty,
+  parent: any,
 ): WhitespaceObject | undefined | null {
   if (parent.callProperties[0] === node && !parent.properties?.length) {
     return {
@@ -204,8 +222,8 @@ nodes.ObjectTypeCallProperty = function (
 };
 
 nodes.ObjectTypeIndexer = function (
-  node: any,
-  parent,
+  node: t.ObjectTypeIndexer,
+  parent: any,
 ): WhitespaceObject | undefined | null {
   if (
     parent.indexers[0] === node &&
@@ -219,8 +237,8 @@ nodes.ObjectTypeIndexer = function (
 };
 
 nodes.ObjectTypeInternalSlot = function (
-  node: any,
-  parent,
+  node: t.ObjectTypeInternalSlot,
+  parent: any,
 ): WhitespaceObject | undefined | null {
   if (
     parent.internalSlots[0] === node &&
@@ -243,7 +261,7 @@ export const list = {
    * Return VariableDeclaration declarations init properties.
    */
 
-  VariableDeclaration(node: any): Array<any> {
+  VariableDeclaration(node: t.VariableDeclaration) {
     return node.declarations.map(decl => decl.init);
   },
 
@@ -251,7 +269,7 @@ export const list = {
    * Return VariableDeclaration elements.
    */
 
-  ArrayExpression(node: any): Array<any> {
+  ArrayExpression(node: t.ArrayExpression) {
     return node.elements;
   },
 
@@ -259,7 +277,7 @@ export const list = {
    * Return VariableDeclaration properties.
    */
 
-  ObjectExpression(node: any): Array<any> {
+  ObjectExpression(node: t.ObjectExpression) {
     return node.properties;
   },
 };
@@ -268,20 +286,22 @@ export const list = {
  * Add whitespace tests for nodes and their aliases.
  */
 
-[
+([
   ["Function", true],
   ["Class", true],
   ["Loop", true],
   ["LabeledStatement", true],
   ["SwitchStatement", true],
   ["TryStatement", true],
-].forEach(function ([type, amounts]) {
+] as Array<[string, any]>).forEach(function ([type, amounts]) {
   if (typeof amounts === "boolean") {
     amounts = { after: amounts, before: amounts };
   }
-  [type].concat(t.FLIPPED_ALIAS_KEYS[type] || []).forEach(function (type) {
-    nodes[type] = function () {
-      return amounts;
-    };
-  });
+  [type as string]
+    .concat(t.FLIPPED_ALIAS_KEYS[type] || [])
+    .forEach(function (type) {
+      nodes[type] = function () {
+        return amounts;
+      };
+    });
 });

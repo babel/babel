@@ -283,7 +283,11 @@ export function VariableDeclaration(node: any, parent: any) {
 
   if (t.isFor(parent)) {
     // don't give semicolons to these nodes since they'll be inserted in the parent generator
-    if (parent.left === node || parent.init === node) return;
+    if (t.isForStatement(parent)) {
+      if (parent.init === node) return;
+    } else {
+      if (parent.left === node) return;
+    }
   }
 
   this.semicolon();

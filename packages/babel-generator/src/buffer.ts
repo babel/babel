@@ -15,9 +15,18 @@ export default class Buffer {
   }
 
   _map: SourceMap = null;
-  _buf: Array = [];
+  _buf: Array<any> = [];
   _last: string = "";
-  _queue: Array = [];
+  _queue: Array<
+    [
+      string,
+      number,
+      number,
+      string | null | undefined,
+      string | null | undefined,
+      boolean | undefined,
+    ]
+  > = [];
 
   _position: any = {
     line: 1,
@@ -104,8 +113,17 @@ export default class Buffer {
   }
 
   _flush(): void {
-    let item;
-    while ((item = this._queue.pop())) this._append(...item);
+    let item: [
+      string,
+      number,
+      number,
+      string | null | undefined,
+      string | null | undefined,
+      boolean | undefined,
+    ];
+    while ((item = this._queue.pop())) {
+      this._append(...item);
+    }
   }
 
   _append(
@@ -315,7 +333,7 @@ export default class Buffer {
     this._disallowedPop = this._normalizePosition(prop, loc);
   }
 
-  _normalizePosition(prop: string, loc: any, targetObj: any, force?: boolean) {
+  _normalizePosition(prop: string, loc: any, targetObj?: any, force?: boolean) {
     const pos = loc ? loc[prop] : null;
 
     if (targetObj === undefined) {

@@ -181,7 +181,8 @@ export function TSConstructorType(node) {
 }
 
 export function tsPrintFunctionOrConstructorType(
-  node: FunctionOrConstructorType,
+  // todo: missing type FunctionOrConstructorType
+  node: any,
 ) {
   const { typeParameters, parameters } = node;
   this.print(typeParameters, node);

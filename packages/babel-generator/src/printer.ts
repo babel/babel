@@ -44,7 +44,7 @@ export default class Printer {
   _parenPushNewlineState: any = null;
   _noLineTerminator: boolean = false;
   _printAuxAfterOnNextUserNode: boolean = false;
-  _printedComments: WeakSet = new WeakSet();
+  _printedComments: WeakSet<any> = new WeakSet();
   _endsWithInteger = false;
   _endsWithWord = false;
 
@@ -365,7 +365,7 @@ export default class Printer {
     }
   }
 
-  print(node, parent) {
+  print(node, parent?) {
     if (!node) return;
 
     const oldConcise = this.format.concise;
@@ -417,7 +417,7 @@ export default class Printer {
     this._insideAux = oldInAux;
   }
 
-  _maybeAddAuxComment(enteredPositionlessNode) {
+  _maybeAddAuxComment(enteredPositionlessNode?) {
     if (enteredPositionlessNode) this._printAuxBeforeComment();
     if (!this._insideAux) this._printAuxAfterComment();
   }
@@ -460,7 +460,7 @@ export default class Printer {
     }
   }
 
-  printJoin(nodes: Array | undefined | null, parent: any, opts = {}) {
+  printJoin(nodes: Array<any> | undefined | null, parent: any, opts: any = {}) {
     if (!nodes?.length) return;
 
     if (opts.indent) this.indent();
@@ -527,12 +527,12 @@ export default class Printer {
     if (indent) this.dedent();
   }
 
-  printSequence(nodes, parent, opts = {}) {
+  printSequence(nodes, parent, opts: { statement?: boolean } = {}) {
     opts.statement = true;
     return this.printJoin(nodes, parent, opts);
   }
 
-  printList(items, parent, opts = {}) {
+  printList(items, parent, opts: { separator?: Function } = {}) {
     if (opts.separator == null) {
       opts.separator = commaSeparator;
     }
