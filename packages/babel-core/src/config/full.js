@@ -87,8 +87,9 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
   const pluginDescriptorsByPass = [[]];
   const passes = [];
 
-  try {
-    const ignored = yield* (function* recursePresetDescriptors(
+  const ignored = yield* enhanceError(
+    context,
+    function* recursePresetDescriptors(
       rawPresets: Array<UnloadedDescriptor>,
       pluginDescriptorsPass: Array<UnloadedDescriptor>,
     ) {
@@ -134,10 +135,15 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
           });
         }
       }
-    })(presetsDescriptors, pluginDescriptorsByPass[0]);
+    },
+  )(presetsDescriptors, pluginDescriptorsByPass[0]);
 
-    if (ignored) return null;
+  if (ignored) return null;
 
+  const opts: Object = optionDefaults;
+  mergeOptions(opts, options);
+
+  yield* enhanceError(context, function* loadPluginDescriptors() {
     pluginDescriptorsByPass[0].unshift(...initialPluginsDescriptors);
 
     for (const descs of pluginDescriptorsByPass) {
@@ -159,18 +165,7 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
         }
       }
     }
-  } catch (e) {
-    // There are a few case where thrown errors will try to annotate themselves multiple times, so
-    // to keep things simple we just bail out if re-wrapping the message.
-    if (!/^\[BABEL\]/.test(e.message)) {
-      e.message = `[BABEL] ${context.filename || "unknown"}: ${e.message}`;
-    }
-
-    throw e;
-  }
-
-  const opts: Object = optionDefaults;
-  mergeOptions(opts, options);
+  })();
 
   opts.plugins = passes[0];
   opts.presets = passes
@@ -184,6 +179,22 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
     passes: passes,
   };
 });
+
+function enhanceError<T: Function>(context, fn: T): T {
+  return (function*(arg1, arg2) {
+    try {
+      return yield* fn(arg1, arg2);
+    } catch (e) {
+      // There are a few case where thrown errors will try to annotate themselves multiple times, so
+      // to keep things simple we just bail out if re-wrapping the message.
+      if (!/^\[BABEL\]/.test(e.message)) {
+        e.message = `[BABEL] ${context.filename || "unknown"}: ${e.message}`;
+      }
+
+      throw e;
+    }
+  }: any);
+}
 
 /**
  * Load a generic plugin/preset from the given descriptor loaded from the config object.
