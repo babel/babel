@@ -275,6 +275,8 @@ export function transformPrivateNamesUsage(
   loose,
   state,
 ) {
+  if (!privateNamesMap.size) return;
+
   const body = path.get("body");
 
   if (loose) {
