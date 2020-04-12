@@ -151,11 +151,7 @@ export default async function({
         const dirname = filename;
 
         util
-          .readdirForCompilable(
-            filename,
-            cliOptions.includeDotfiles,
-            cliOptions.extensions,
-          )
+          .readdir(filename, cliOptions.includeDotfiles)
           .forEach(function(filename) {
             _filenames.push(path.join(dirname, filename));
           });
@@ -224,10 +220,7 @@ export default async function({
           },
         })
         .on("all", function(type: string, filename: string): void {
-          if (
-            !util.isCompilableExtension(filename, cliOptions.extensions) &&
-            !filenames.includes(filename)
-          ) {
+          if (!filenames.includes(filename)) {
             return;
           }
 

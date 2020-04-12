@@ -2,7 +2,6 @@
 
 import readdirRecursive from "fs-readdir-recursive";
 import * as babel from "@babel/core";
-import includes from "lodash/includes";
 import path from "path";
 import fs from "fs";
 
@@ -26,28 +25,6 @@ export function readdir(
       (includeDotfiles || filename[0] !== ".") && (!filter || filter(filename))
     );
   });
-}
-
-export function readdirForCompilable(
-  dirname: string,
-  includeDotfiles: boolean,
-  altExts?: Array<string>,
-): Array<string> {
-  return readdir(dirname, includeDotfiles, function(filename) {
-    return isCompilableExtension(filename, altExts);
-  });
-}
-
-/**
- * Test if a filename ends with a compilable extension.
- */
-export function isCompilableExtension(
-  filename: string,
-  altExts?: Array<string>,
-): boolean {
-  const exts = altExts || babel.DEFAULT_EXTENSIONS;
-  const ext = path.extname(filename);
-  return includes(exts, ext);
 }
 
 export function addSourceMappingUrl(code: string, loc: string): string {
@@ -130,4 +107,15 @@ export function requireChokidar(): Object {
 export function withExtension(filename: string, ext: string = ".js") {
   const newBasename = path.basename(filename, path.extname(filename)) + ext;
   return path.join(path.dirname(filename), newBasename);
+}
+
+export async function isIgnoredExtension(filename: string, options: Object) {
+  const tmpFilename = "./@babel-cli-internal-ext.js";
+
+  const config = await babel.loadOptionsAsync({
+    ...options,
+    filename: tmpFilename,
+  });
+  if (!config) return false;
+  return config.extensions.every(ext => ext !== "*" && !filename.endsWith(ext));
 }

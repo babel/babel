@@ -32,10 +32,6 @@ export default async function({
   ): Promise<$Keys<typeof FILE_TYPE>> {
     let relative = path.relative(base, src);
 
-    if (!util.isCompilableExtension(relative, cliOptions.extensions)) {
-      return FILE_TYPE.NON_COMPILABLE;
-    }
-
     relative = util.withExtension(
       relative,
       cliOptions.keepFileExtension
@@ -56,7 +52,10 @@ export default async function({
         ),
       );
 
-      if (!res) return FILE_TYPE.IGNORED;
+      if (!res) {
+        if (await util.isIgnoredExtension(src)) return FILE_TYPE.NON_COMPILABLE;
+        return FILE_TYPE.IGNORED;
+      }
 
       // we've requested explicit sourcemaps to be written to disk
       if (
