@@ -1,4 +1,5 @@
 {
+  "extensions": [".ts"],
   "presets": [
     ["typescript"]
   ],

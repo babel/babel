@@ -1,3 +1,4 @@
 {
+  "extensions": [".ts"],
   "plugins": ["transform-typescript"]
 }

@@ -14,7 +14,7 @@ export function normalizeESLintConfig(options) {
 export function normalizeBabelParseConfig(options) {
   const parseOptions = {
     sourceType: options.sourceType,
-    filename: options.filePath,
+    filename: options.filePath === "<input>" ? undefined : options.filePath,
     cwd: options.babelOptions.cwd,
     root: options.babelOptions.root,
     rootMode: options.babelOptions.rootMode,

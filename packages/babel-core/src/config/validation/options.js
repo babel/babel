@@ -14,6 +14,7 @@ import {
   assertCallerMetadata,
   assertInputSourceMap,
   assertIgnoreList,
+  assertExtensionsList,
   assertPluginList,
   assertConfigApplicableTest,
   assertConfigFileSearch,
@@ -110,6 +111,10 @@ const COMMON_VALIDATORS: ValidatorSet = {
     $PropertyType<ValidatedOptions, "exclude">,
   >),
 
+  extensions: (assertExtensionsList: Validator<
+    $PropertyType<ValidatedOptions, "extensions">,
+  >),
+
   retainLines: (assertBoolean: Validator<
     $PropertyType<ValidatedOptions, "retainLines">,
   >),
@@ -190,9 +195,12 @@ export type ValidatedOptions = {
 
   extends?: string,
   env?: EnvSet<ValidatedOptions>,
+  overrides?: OverridesList,
+
+  // Options to enable/disable processing of some files
   ignore?: IgnoreList,
   only?: IgnoreList,
-  overrides?: OverridesList,
+  extensions?: ExtensionsList,
 
   // Generally verify if a given config object should be applied to the given file.
   test?: ConfigApplicableTest,
@@ -246,6 +254,9 @@ export type EnvSet<T> = {
 };
 export type IgnoreItem = string | Function | RegExp;
 export type IgnoreList = $ReadOnlyArray<IgnoreItem>;
+
+export opaque type FileExtension = string;
+export type ExtensionsList = $ReadOnlyArray<FileExtension>;
 
 export type PluginOptions = {} | void | false;
 export type PluginTarget = string | {} | Function;

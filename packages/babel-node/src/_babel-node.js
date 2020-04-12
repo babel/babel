@@ -138,7 +138,7 @@ if (program.eval || program.print) {
   let code = program.eval;
   if (!code || code === true) code = program.print;
 
-  global.__filename = "[eval]";
+  global.__filename = "[eval].js";
   global.__dirname = process.cwd();
 
   const module = new Module(global.__filename);
