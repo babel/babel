@@ -3,6 +3,7 @@ import type TraversalContext from "../context";
 import * as virtualTypes from "./lib/virtual-types";
 import buildDebug from "debug";
 import traverse from "../index";
+import type { Visitor } from "../types";
 import Scope from "../scope";
 import * as t from "@babel/types";
 import { path as pathCache } from "../cache";
@@ -30,7 +31,7 @@ export const SHOULD_STOP = 1 << 1;
 export const SHOULD_SKIP = 1 << 2;
 
 class NodePath<T extends t.Node = t.Node> {
-  constructor(hub: HubInterface, parent: any) {
+  constructor(hub: HubInterface, parent: t.Node) {
     this.parent = parent;
     this.hub = hub;
     this.data = null;
@@ -39,9 +40,9 @@ class NodePath<T extends t.Node = t.Node> {
     this.scope = null;
   }
 
-  declare parent: any;
+  declare parent: t.Node;
   declare hub: HubInterface;
-  declare data: any;
+  declare data: object;
   declare context: TraversalContext;
   declare scope: Scope;
 
@@ -52,13 +53,27 @@ class NodePath<T extends t.Node = t.Node> {
   _traverseFlags: number = 0;
   skipKeys: any = null;
   parentPath: NodePath | undefined | null = null;
-  container: any | Array<any> = null;
+  container: object | undefined | null | Array<any> = null;
   listKey: string | undefined | null = null;
   key: string | undefined | null = null;
-  node: any = null;
+  node: T = null;
   type: string | undefined | null = null;
 
-  static get({ hub, parentPath, parent, container, listKey, key }): NodePath {
+  static get({
+    hub,
+    parentPath,
+    parent,
+    container,
+    listKey,
+    key,
+  }: {
+    hub?;
+    parentPath;
+    parent;
+    container;
+    listKey?;
+    key;
+  }): NodePath {
     if (!hub && parentPath) {
       hub = parentPath.hub;
     }
@@ -110,18 +125,20 @@ class NodePath<T extends t.Node = t.Node> {
     return this.hub.buildError(this.node, msg, _Error);
   }
 
+  traverse<T>(visitor: Visitor<T>, state: T): void;
+  traverse(visitor: Visitor): void;
   traverse(visitor: any, state?: any) {
     traverse(this.node, visitor, this.scope, state, this);
   }
 
-  set(key: string, node: any) {
+  set(key: string, node: t.Node) {
     t.validate(this.node, key, node);
     this.node[key] = node;
   }
 
   getPathLocation(): string {
     const parts = [];
-    let path = this;
+    let path: NodePath = this;
     do {
       let key = path.key;
       if (path.inList) key = `${path.listKey}[${key}]`;
@@ -136,6 +153,7 @@ class NodePath<T extends t.Node = t.Node> {
   }
 
   toString() {
+    // @ts-ignore todo: babel-generator types
     return generator(this.node).code;
   }
 
@@ -205,7 +223,7 @@ Object.assign(
   NodePath_comments,
 );
 
-for (const type of t.TYPES as Array<string>) {
+for (const type of t.TYPES) {
   const typeKey = `is${type}`;
   const fn = t[typeKey];
   NodePath.prototype[typeKey] = function (opts) {

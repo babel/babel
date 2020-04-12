@@ -1,8 +1,8 @@
 import type Scope from "./scope";
 
 export interface HubInterface {
-  getCode(): string | undefined | null;
-  getScope(): Scope | undefined | null;
+  getCode(): string | undefined | null | void;
+  getScope(): Scope | undefined | null | void;
   addHelper(name: string): any;
   buildError(
     node: any,

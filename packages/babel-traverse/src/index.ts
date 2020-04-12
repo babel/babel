@@ -2,7 +2,11 @@ import TraversalContext from "./context";
 import * as visitors from "./visitors";
 import * as t from "@babel/types";
 import * as cache from "./cache";
+import type NodePath from "./path";
+import type Scope from "./scope";
+import type { Visitor } from "./types";
 
+export type { Visitor };
 export { default as NodePath } from "./path";
 export { default as Scope } from "./scope";
 export { default as Hub } from "./hub";
@@ -10,15 +14,38 @@ export type { HubInterface } from "./hub";
 
 export { visitors };
 
+export type TraverseOptions<S = t.Node> =
+  | {
+      scope?: Scope;
+      noScope?: boolean;
+      blacklist?: string[];
+    }
+  | Visitor<S>;
+
+export default function traverse<S>(
+  parent: t.Node,
+  opts: TraverseOptions<S>,
+  scope: Scope | undefined,
+  state: S,
+  parentPath?: NodePath,
+): void;
+
 export default function traverse(
-  parent: any | Array<any>,
-  opts: any | undefined | null,
-  scope: any | undefined | null,
-  state: any,
-  parentPath: any,
+  parent: t.Node,
+  opts: TraverseOptions,
+  scope?: Scope,
+  state?: any,
+  parentPath?: NodePath,
+): void;
+
+export default function traverse(
+  parent: t.Node,
+  opts: TraverseOptions = {},
+  scope?: Scope,
+  state?: any,
+  parentPath?: NodePath,
 ) {
   if (!parent) return;
-  if (!opts) opts = {};
 
   if (!opts.noScope && !scope) {
     if (parent.type !== "Program" && parent.type !== "File") {
@@ -48,14 +75,14 @@ traverse.cheap = function (node, enter) {
 };
 
 traverse.node = function (
-  node: any,
-  opts: any,
-  scope: any,
-  state: any,
-  parentPath: any,
+  node: t.Node,
+  opts: TraverseOptions,
+  scope?: Scope,
+  state?: any,
+  parentPath?: NodePath,
   skipKeys?,
 ) {
-  const keys: Array = t.VISITOR_KEYS[node.type];
+  const keys = t.VISITOR_KEYS[node.type];
   if (!keys) return;
 
   const context = new TraversalContext(scope, opts, state, parentPath);
@@ -65,18 +92,18 @@ traverse.node = function (
   }
 };
 
-traverse.clearNode = function (node, opts) {
+traverse.clearNode = function (node: t.Node, opts?) {
   t.removeProperties(node, opts);
 
   cache.path.delete(node);
 };
 
-traverse.removeProperties = function (tree, opts) {
+traverse.removeProperties = function (tree, opts?) {
   t.traverseFast(tree, traverse.clearNode, opts);
   return tree;
 };
 
-function hasDenylistedType(path, state) {
+function hasDenylistedType(path: NodePath, state) {
   if (path.node.type === state.type) {
     state.has = true;
     path.stop();

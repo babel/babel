@@ -10,7 +10,9 @@ import NodePath from "./index";
  * truthy value.
  */
 
-export function findParent(callback): NodePath | undefined | null {
+export function findParent(
+  callback: (path: NodePath) => boolean,
+): NodePath | undefined | null {
   let path = this;
   while ((path = path.parentPath)) {
     if (callback(path)) return path;
@@ -24,7 +26,9 @@ export function findParent(callback): NodePath | undefined | null {
  * or `null` if the `callback` never returns a truthy value.
  */
 
-export function find(callback): NodePath | undefined | null {
+export function find(
+  callback: (path: NodePath) => boolean,
+): NodePath | undefined | null {
   let path = this;
   do {
     if (callback(path)) return path;
@@ -36,7 +40,7 @@ export function find(callback): NodePath | undefined | null {
  * Get the parent function of the current path.
  */
 
-export function getFunctionParent(): NodePath | undefined | null {
+export function getFunctionParent(): NodePath<t.Function> | undefined | null {
   return this.findParent(p => p.isFunction());
 }
 
@@ -44,7 +48,7 @@ export function getFunctionParent(): NodePath | undefined | null {
  * Walk up the tree until we hit a parent node path in a list.
  */
 
-export function getStatementParent(): NodePath {
+export function getStatementParent(): NodePath<t.Statement> {
   let path = this;
 
   do {
@@ -84,7 +88,7 @@ export function getEarliestCommonAncestorFrom(
       let earliest;
       const keys = t.VISITOR_KEYS[deepest.type];
 
-      for (const ancestry of ancestries as Array) {
+      for (const ancestry of ancestries) {
         const path = ancestry[i + 1];
 
         // first path
@@ -124,7 +128,7 @@ export function getEarliestCommonAncestorFrom(
 
 export function getDeepestCommonAncestorFrom(
   paths: Array<NodePath>,
-  filter?: Function,
+  filter?: (deepest: t.Node, i: number, ancestries: NodePath[][]) => NodePath,
 ): NodePath {
   if (!paths.length) {
     return this;
@@ -142,7 +146,7 @@ export function getDeepestCommonAncestorFrom(
 
   // get the ancestors of the path, breaking when the parent exceeds ourselves
   const ancestries = paths.map(path => {
-    const ancestry = [];
+    const ancestry: NodePath[] = [];
 
     do {
       ancestry.unshift(path);
@@ -163,7 +167,7 @@ export function getDeepestCommonAncestorFrom(
   depthLoop: for (let i = 0; i < minDepth; i++) {
     const shouldMatch = first[i];
 
-    for (const ancestry of ancestries as Array) {
+    for (const ancestry of ancestries) {
       if (ancestry[i] !== shouldMatch) {
         // we've hit a snag
         break depthLoop;
@@ -215,10 +219,10 @@ export function isDescendant(maybeAncestor: NodePath): boolean {
   return !!this.findParent(parent => parent === maybeAncestor);
 }
 
-export function inType(): boolean {
+export function inType(...candidateTypes: string[]): boolean {
   let path = this;
   while (path) {
-    for (const type of arguments as Array) {
+    for (const type of candidateTypes) {
       if (path.node.type === type) return true;
     }
     path = path.parentPath;

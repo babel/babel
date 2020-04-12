@@ -1,6 +1,6 @@
 // This file contains methods responsible for dealing with/retrieving children or siblings.
 
-import type TraversalContext from "../index";
+import type TraversalContext from "../context";
 import NodePath from "./index";
 import * as t from "@babel/types";
 
@@ -12,7 +12,10 @@ export function getOpposite(): NodePath | undefined | null {
   }
 }
 
-function addCompletionRecords(path, paths) {
+function addCompletionRecords(
+  path: NodePath | null | undefined,
+  paths: NodePath[],
+): NodePath[] {
   if (path) return paths.concat(path.getCompletionRecords());
   return paths;
 }
@@ -119,6 +122,7 @@ export function getCompletionRecords(): NodePath[] {
   return paths;
 }
 
+// todo: string | number
 export function getSibling(key: string): NodePath {
   return NodePath.get({
     parentPath: this.parentPath,
@@ -159,9 +163,20 @@ export function getAllPrevSiblings(): NodePath[] {
   return siblings;
 }
 
-export function get(
+function get<T extends t.Node, K extends keyof T>(
+  this: NodePath<T>,
+  key: K,
+  context?: boolean | TraversalContext,
+): T[K] extends Array<t.Node | null | undefined>
+  ? Array<NodePath<T[K][number]>>
+  : T[K] extends t.Node | null | undefined
+  ? NodePath<T[K]>
+  : never;
+
+function get<T extends t.Node>(
+  this: NodePath<T>,
   key: string,
-  context: boolean | TraversalContext = true,
+  context: true | TraversalContext = true,
 ): NodePath | NodePath[] {
   if (context === true) context = this.context;
   const parts = key.split(".");
@@ -174,7 +189,10 @@ export function get(
   }
 }
 
-export function _getKey(
+export { get };
+
+export function _getKey<T extends t.Node>(
+  this: NodePath<T>,
   key: string,
   context?: TraversalContext,
 ): NodePath | NodePath[] {
@@ -221,13 +239,41 @@ export function _getPattern(
   return path;
 }
 
-export function getBindingIdentifiers(duplicates?: boolean): any {
+function getBindingIdentifiers(
+  duplicates: true,
+): Record<string, t.Identifier[]>;
+function getBindingIdentifiers(
+  duplicates?: false,
+): Record<string, t.Identifier>;
+function getBindingIdentifiers(
+  duplicates: boolean,
+): Record<string, t.Identifier[] | t.Identifier>;
+
+function getBindingIdentifiers(
+  duplicates?: boolean,
+): Record<string, t.Identifier[] | t.Identifier> {
   return t.getBindingIdentifiers(this.node, duplicates);
 }
 
-export function getOuterBindingIdentifiers(duplicates?: boolean): any {
+export { getBindingIdentifiers };
+
+function getOuterBindingIdentifiers(
+  duplicates: true,
+): Record<string, t.Identifier[]>;
+function getOuterBindingIdentifiers(
+  duplicates?: false,
+): Record<string, t.Identifier>;
+function getOuterBindingIdentifiers(
+  duplicates: boolean,
+): Record<string, t.Identifier[] | t.Identifier>;
+
+function getOuterBindingIdentifiers(
+  duplicates?: boolean,
+): Record<string, t.Identifier[] | t.Identifier> {
   return t.getOuterBindingIdentifiers(this.node, duplicates);
 }
+
+export { getOuterBindingIdentifiers };
 
 // original source - https://github.com/babel/babel/blob/main/packages/babel-types/src/retrievers/getBindingIdentifiers.js
 // path.getBindingIdentifiers returns nodes where the following re-implementation

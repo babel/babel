@@ -2,8 +2,9 @@
 
 import traverse from "../index";
 import { SHOULD_SKIP, SHOULD_STOP } from "./index";
+import type TraversalContext from "../context";
 
-export function call(key): boolean {
+export function call(key: string): boolean {
   const opts = this.opts;
 
   this.debug(key);
@@ -101,7 +102,7 @@ export function skip() {
   this.shouldSkip = true;
 }
 
-export function skipKey(key) {
+export function skipKey(key: string) {
   if (this.skipKeys == null) {
     this.skipKeys = {};
   }
@@ -129,7 +130,7 @@ export function setScope() {
   if (this.scope) this.scope.init();
 }
 
-export function setContext(context) {
+export function setContext(context?: TraversalContext) {
   if (this.skipKeys != null) {
     this.skipKeys = {};
   }
@@ -223,7 +224,7 @@ export function popContext() {
   }
 }
 
-export function pushContext(context) {
+export function pushContext(context: TraversalContext) {
   this.contexts.push(context);
   this.setContext(context);
 }

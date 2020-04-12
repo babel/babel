@@ -1,5 +1,6 @@
 import NodePath from "./path";
 import * as t from "@babel/types";
+import type Scope from "./scope";
 
 const testing = process.env.NODE_ENV === "test";
 
@@ -12,10 +13,12 @@ export default class TraversalContext {
   }
 
   declare parentPath: NodePath;
-  declare scope;
+  declare scope: Scope;
   declare state;
   declare opts;
   queue: Array<NodePath> | undefined | null = null;
+  declare priorityQueue: Array<NodePath> | undefined | null;
+  declare trap?: boolean;
 
   /**
    * This method does a simple check to determine whether or not we really need to attempt
@@ -41,7 +44,7 @@ export default class TraversalContext {
     return false;
   }
 
-  create(node, obj, key, listKey): NodePath {
+  create(node, obj, key, listKey?): NodePath {
     // We don't need to `.setContext()` here, since `.visitQueue()` already
     // calls `.pushContext`.
     return NodePath.get({

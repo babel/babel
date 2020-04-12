@@ -2,20 +2,20 @@
 
 import * as t from "@babel/types";
 import nameFunction from "@babel/helper-function-name";
+import type NodePath from "./index";
 
-export function toComputedKey(): any {
-  const node = this.node;
-
+export function toComputedKey(this: NodePath) {
   let key;
   if (this.isMemberExpression()) {
-    key = node.property;
+    key = this.node.property;
   } else if (this.isProperty() || this.isMethod()) {
-    key = node.key;
+    key = this.node.key;
   } else {
     throw new ReferenceError("todo");
   }
 
-  if (!node.computed) {
+  // @ts-ignore
+  if (!this.node.computed) {
     if (t.isIdentifier(key)) key = t.stringLiteral(key.name);
   }
 
@@ -392,7 +392,7 @@ function standardizeSuperProperty(superProp) {
       ? superProp.scope.generateDeclaredUidIdentifier("prop")
       : null;
 
-    const parts = [
+    const parts: t.Expression[] = [
       t.assignmentExpression(
         "=",
         tmp,

@@ -27,7 +27,11 @@ export function shareCommentsWithSiblings() {
   }
 }
 
-export function addComment(type: string, content: string, line?: boolean) {
+export function addComment(
+  type: t.CommentTypeShorthand,
+  content: string,
+  line?: boolean,
+) {
   t.addComment(this.node, type, content, line);
 }
 
@@ -35,6 +39,9 @@ export function addComment(type: string, content: string, line?: boolean) {
  * Give node `comments` of the specified `type`.
  */
 
-export function addComments(type: string, comments: Array) {
+export function addComments(
+  type: t.CommentTypeShorthand,
+  comments: readonly t.Comment[],
+) {
   t.addComments(this.node, type, comments);
 }

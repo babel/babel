@@ -4,15 +4,16 @@ import { path as pathCache } from "../cache";
 import PathHoister from "./lib/hoister";
 import NodePath from "./index";
 import * as t from "@babel/types";
+import type Scope from "../scope";
 
 /**
  * Insert the provided nodes before the current one.
  */
 
-export function insertBefore(nodes) {
+export function insertBefore(nodes_: t.Node | t.Node[]) {
   this._assertUnremoved();
 
-  nodes = this._verifyNodeList(nodes);
+  const nodes = this._verifyNodeList(nodes_);
 
   const { parentPath } = this;
 
@@ -91,10 +92,10 @@ export function _containerInsertAfter(nodes) {
  * expression, ensure that the completion record is correct by pushing the current node.
  */
 
-export function insertAfter(nodes) {
+export function insertAfter(nodes_: t.Node | t.Node[]) {
   this._assertUnremoved();
 
-  nodes = this._verifyNodeList(nodes);
+  const nodes = this._verifyNodeList(nodes_);
 
   const { parentPath } = this;
   if (
@@ -159,7 +160,7 @@ export function insertAfter(nodes) {
  * Update all sibling node paths after `fromIndex` by `incrementBy`.
  */
 
-export function updateSiblingKeys(fromIndex, incrementBy) {
+export function updateSiblingKeys(fromIndex: number, incrementBy: number) {
   if (!this.parent) return;
 
   const paths = pathCache.get(this.parent);
@@ -170,12 +171,12 @@ export function updateSiblingKeys(fromIndex, incrementBy) {
   }
 }
 
-export function _verifyNodeList(nodes) {
+export function _verifyNodeList(nodes: t.Node | t.Node[]): t.Node[] {
   if (!nodes) {
     return [];
   }
 
-  if (nodes.constructor !== Array) {
+  if (!Array.isArray(nodes)) {
     nodes = [nodes];
   }
 
@@ -204,7 +205,11 @@ export function _verifyNodeList(nodes) {
   return nodes;
 }
 
-export function unshiftContainer(listKey, nodes) {
+export function unshiftContainer<Nodes extends t.Node | t.Node[]>(
+  listKey: string,
+  nodes: Nodes,
+): NodePath[] {
+  // todo: NodePaths<Nodes>
   this._assertUnremoved();
 
   nodes = this._verifyNodeList(nodes);
@@ -222,10 +227,10 @@ export function unshiftContainer(listKey, nodes) {
   return path._containerInsertBefore(nodes);
 }
 
-export function pushContainer(listKey, nodes) {
+export function pushContainer(listKey: string, nodes: t.Node | t.Node[]) {
   this._assertUnremoved();
 
-  nodes = this._verifyNodeList(nodes);
+  const verifiedNodes = this._verifyNodeList(nodes);
 
   // get an invisible path that represents the last node + 1 and replace it with our
   // nodes, effectively inlining it
@@ -239,15 +244,17 @@ export function pushContainer(listKey, nodes) {
     key: container.length,
   }).setContext(this.context);
 
-  return path.replaceWithMultiple(nodes);
+  return path.replaceWithMultiple(verifiedNodes);
 }
 
 /**
  * Hoist the current node to the highest scope possible and return a UID
  * referencing it.
  */
-
-export function hoist(scope = this.scope) {
-  const hoister = new PathHoister(this, scope);
+export function hoist<T extends t.Node>(
+  this: NodePath<T>,
+  scope: Scope = this.scope,
+) {
+  const hoister = new PathHoister<T>(this, scope);
   return hoister.run();
 }

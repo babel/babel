@@ -116,6 +116,7 @@ export const Flow = {
     } else if (t.isImportDeclaration(node)) {
       return node.importKind === "type" || node.importKind === "typeof";
     } else if (t.isExportDeclaration(node)) {
+      // @ts-ignore
       return node.exportKind === "type";
     } else if (t.isImportSpecifier(node)) {
       return node.importKind === "type" || node.importKind === "typeof";
@@ -150,7 +151,7 @@ export const NumericLiteralTypeAnnotation = {
 
 export const ForAwaitStatement = {
   types: ["ForOfStatement"],
-  checkPath({ node }: NodePath): boolean {
+  checkPath({ node }: NodePath<t.ForOfStatement>): boolean {
     return node.await === true;
   },
 };

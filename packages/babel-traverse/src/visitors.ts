@@ -50,7 +50,7 @@ export function explode(visitor) {
   ensureCallbackArrays(visitor);
 
   // add type wrappers
-  for (const nodeType of Object.keys(visitor) as Array) {
+  for (const nodeType of Object.keys(visitor)) {
     if (shouldIgnoreKey(nodeType)) continue;
 
     const wrapper = virtualTypes[nodeType];
@@ -66,7 +66,7 @@ export function explode(visitor) {
     delete visitor[nodeType];
 
     if (wrapper.types) {
-      for (const type of wrapper.types as Array<string>) {
+      for (const type of wrapper.types) {
         // merge the visitor if necessary or just put it back in
         if (visitor[type]) {
           mergePair(visitor[type], fns);
@@ -177,8 +177,8 @@ function validateVisitorMethods(path, val) {
 }
 
 export function merge(
-  visitors: Array,
-  states: Array = [],
+  visitors: any[],
+  states: any[] = [],
   wrapper?: Function | null,
 ) {
   const rootVisitor = {};

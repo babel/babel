@@ -44,7 +44,10 @@ const hoistVariablesVisitor = {
  *  - Remove the current node.
  */
 
-export function replaceWithMultiple(nodes: Array<any>) {
+export function replaceWithMultiple<Nodes extends Array<t.Node>>(
+  nodes: Nodes,
+): NodePath[] {
+  // todo NodePaths
   this.resync();
 
   nodes = this._verifyNodeList(nodes);
@@ -101,7 +104,7 @@ export function replaceWithSourceString(replacement) {
  * Replace the current node with another.
  */
 
-export function replaceWith(replacement) {
+export function replaceWith(replacement: t.Node | NodePath) {
   this.resync();
 
   if (this.removed) {
@@ -210,7 +213,7 @@ export function _replaceWith(node) {
  * extremely important to retain original semantics.
  */
 
-export function replaceExpressionWithStatements(nodes: Array<any>) {
+export function replaceExpressionWithStatements(nodes: Array<t.Statement>) {
   this.resync();
 
   const toSequenceExpression = t.toSequenceExpression(nodes, this.scope);
@@ -278,7 +281,7 @@ export function replaceExpressionWithStatements(nodes: Array<any>) {
   return callee.get("body.body");
 }
 
-export function replaceInline(nodes: any | Array<any>) {
+export function replaceInline(nodes: t.Node | Array<t.Node>) {
   this.resync();
 
   if (Array.isArray(nodes)) {

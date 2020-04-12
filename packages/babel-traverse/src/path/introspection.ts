@@ -22,7 +22,7 @@ export function matchesPattern(
  * if the array has any items, otherwise we just check if it's falsy.
  */
 
-export function has(key): boolean {
+export function has(key: string): boolean {
   const val = this.node && this.node[key];
   if (val && Array.isArray(val)) {
     return !!val.length;
@@ -35,7 +35,7 @@ export function has(key): boolean {
  * Description
  */
 
-export function isStatic() {
+export function isStatic(): boolean {
   return this.scope.isStatic(this.node);
 }
 
@@ -49,7 +49,7 @@ export const is = has;
  * Opposite of `has`.
  */
 
-export function isnt(key): boolean {
+export function isnt(key: string): boolean {
   return !this.has(key);
 }
 
@@ -57,7 +57,7 @@ export function isnt(key): boolean {
  * Check whether the path node `key` strict equals `value`.
  */
 
-export function equals(key, value): boolean {
+export function equals(key: string, value): boolean {
   return this.node[key] === value;
 }
 
@@ -94,7 +94,9 @@ export function canHaveVariableDeclarationOrExpression() {
  * is the same as containing a block statement.
  */
 
-export function canSwapBetweenExpressionAndStatement(replacement) {
+export function canSwapBetweenExpressionAndStatement(
+  replacement: t.Node,
+): boolean {
   if (this.key !== "body" || !this.parentPath.isArrowFunctionExpression()) {
     return false;
   }
@@ -112,7 +114,7 @@ export function canSwapBetweenExpressionAndStatement(replacement) {
  * Check whether the current path references a completion record
  */
 
-export function isCompletionRecord(allowInsideFunction?) {
+export function isCompletionRecord(allowInsideFunction?: boolean): boolean {
   let path = this;
   let first = true;
 
@@ -141,7 +143,7 @@ export function isCompletionRecord(allowInsideFunction?) {
  * so we can explode it if necessary.
  */
 
-export function isStatementOrBlock() {
+export function isStatementOrBlock(): boolean {
   if (
     this.parentPath.isLabeledStatement() ||
     t.isBlockStatement(this.container)
@@ -156,7 +158,10 @@ export function isStatementOrBlock() {
  * Check if the currently assigned path references the `importName` of `moduleSource`.
  */
 
-export function referencesImport(moduleSource, importName) {
+export function referencesImport(
+  moduleSource: string,
+  importName: string,
+): boolean {
   if (!this.isReferencedIdentifier()) return false;
 
   const binding = this.scope.getBinding(this.node.name);
@@ -192,7 +197,7 @@ export function referencesImport(moduleSource, importName) {
  * Get the source code associated with this node.
  */
 
-export function getSource() {
+export function getSource(): string {
   const node = this.node;
   if (node.end) {
     const code = this.hub.getCode();
@@ -201,7 +206,7 @@ export function getSource() {
   return "";
 }
 
-export function willIMaybeExecuteBefore(target) {
+export function willIMaybeExecuteBefore(target): boolean {
   return this._guessExecutionStatusRelativeTo(target) !== "after";
 }
 
@@ -423,12 +428,15 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
 /**
  * Resolve a "pointer" `NodePath` to it's absolute path.
  */
-
-export function resolve(dangerous, resolved) {
+export function resolve(this: NodePath, dangerous?, resolved?) {
   return this._resolve(dangerous, resolved) || this;
 }
 
-export function _resolve(dangerous?, resolved?): NodePath | undefined | null {
+export function _resolve(
+  this: NodePath,
+  dangerous?,
+  resolved?,
+): NodePath | undefined | null {
   // detect infinite recursion
   // todo: possibly have a max length on this just to be safe
   if (resolved && resolved.indexOf(this) >= 0) return;
@@ -438,7 +446,9 @@ export function _resolve(dangerous?, resolved?): NodePath | undefined | null {
   resolved.push(this);
 
   if (this.isVariableDeclarator()) {
+    // @ts-ignore todo: babel-types
     if (this.get("id").isIdentifier()) {
+      // @ts-ignore todo: babel-types
       return this.get("init").resolve(dangerous, resolved);
     } else {
       // otherwise it's a request for a pattern and that's a bit more tricky
@@ -460,6 +470,7 @@ export function _resolve(dangerous?, resolved?): NodePath | undefined | null {
       return ret;
     }
   } else if (this.isTypeCastExpression()) {
+    // @ts-ignore todo: babel-types
     return this.get("expression").resolve(dangerous, resolved);
   } else if (dangerous && this.isMemberExpression()) {
     // this is dangerous, as non-direct target assignments will mutate it's state
@@ -468,13 +479,15 @@ export function _resolve(dangerous?, resolved?): NodePath | undefined | null {
     const targetKey = this.toComputedKey();
     if (!t.isLiteral(targetKey)) return;
 
+    // @ts-ignore todo: NullLiteral
     const targetName = targetKey.value;
 
+    // @ts-ignore todo: babel-types
     const target = this.get("object").resolve(dangerous, resolved);
 
     if (target.isObjectExpression()) {
       const props = target.get("properties");
-      for (const prop of props as Array) {
+      for (const prop of props as any[]) {
         if (!prop.isProperty()) continue;
 
         const key = prop.get("key");
