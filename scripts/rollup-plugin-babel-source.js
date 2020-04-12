@@ -29,13 +29,32 @@ export default function () {
           typeof packageJson["browser"] === "object"
         ) {
           for (const nodeFile in packageJson["browser"]) {
-            const browserFile = packageJson["browser"][nodeFile].replace(
+            const browserFileAsJs = packageJson["browser"][nodeFile].replace(
               /^(\.\/)?lib\//,
               "src/"
             );
-            const nodeFileSrc = path.normalize(
+
+            const browserFileAsTs = browserFileAsJs.replace(/.js$/, ".ts");
+            let browserFile;
+            try {
+              fs.statSync(browserFileAsTs);
+              browserFile = browserFileAsTs;
+            } catch {
+              browserFile = browserFileAsJs;
+            }
+
+            const nodeFileSrcAsJs = path.normalize(
               nodeFile.replace(/^(\.\/)?lib\//, "src/")
             );
+            const nodeFileSrcAsTs = nodeFileSrcAsJs.replace(/.js$/, ".ts");
+            let nodeFileSrc;
+            try {
+              fs.statSync(nodeFileSrcAsTs);
+              nodeFileSrc = nodeFileSrcAsTs;
+            } catch {
+              nodeFileSrc = nodeFileSrcAsJs;
+            }
+
             if (id.endsWith(nodeFileSrc)) {
               if (browserFile === false) {
                 return "";
