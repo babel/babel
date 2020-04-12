@@ -256,7 +256,7 @@ export type IgnoreItem = string | Function | RegExp;
 export type IgnoreList = $ReadOnlyArray<IgnoreItem>;
 
 export opaque type FileExtension = string;
-export type ExtensionsList = $ReadOnlyArray<FileExtension>;
+export type ExtensionsList = $ReadOnlyArray<FileExtension | "*">;
 
 export type PluginOptions = {} | void | false;
 export type PluginTarget = string | {} | Function;

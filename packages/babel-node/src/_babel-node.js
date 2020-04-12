@@ -124,6 +124,7 @@ const _eval = function(code, filename) {
   if (!code) return undefined;
 
   code = babel.transform(code, {
+    extensions: ["*"],
     filename: filename,
     presets: program.presets,
     plugins: (program.plugins || []).concat([replPlugin]),
@@ -138,7 +139,7 @@ if (program.eval || program.print) {
   let code = program.eval;
   if (!code || code === true) code = program.print;
 
-  global.__filename = "[eval].js";
+  global.__filename = "[eval]";
   global.__dirname = process.cwd();
 
   const module = new Module(global.__filename);

@@ -241,7 +241,12 @@ export const assertIgnoreList = createArrayAssertion(function assertIgnoreItem(
 });
 
 export const assertExtensionsList = createArrayAssertion(
-  function assertExtension(loc: GeneralPath, value: mixed): FileExtension {
+  function assertExtension(
+    loc: GeneralPath,
+    value: mixed,
+  ): FileExtension | "*" {
+    if (value === "*") return value;
+
     if (typeof value !== "string") {
       throw new Error(
         `${msg(loc)} must be an array of string values, or undefined`,

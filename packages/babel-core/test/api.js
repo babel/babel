@@ -695,6 +695,26 @@ describe("api", function() {
         extensions: [".ts"],
         filename: "bar.js",
       }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: ["*"],
+        filename: "bar.ts",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: ["*"],
+        filename: "bar.js",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: ["*"],
+        filename: undefined,
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: ["*"],
+        filename: "bar",
+      }).then(assertNotIgnored),
     ]);
   });
 

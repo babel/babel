@@ -384,5 +384,5 @@ function chain(a, b) {
 
 function isCompilableFile(filename, extensions) {
   if (filename == null) return true;
-  return extensions.some(ext => filename.endsWith(ext));
+  return extensions.some(ext => ext === "*" || filename.endsWith(ext));
 }
