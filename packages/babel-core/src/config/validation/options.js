@@ -446,12 +446,16 @@ function assertOverridesList(loc: OptionPath, value: mixed): OverridesList {
 }
 
 export function checkNoUnwrappedItemOptionPairs(
-  lastItem: UnloadedDescriptor,
-  thisItem: UnloadedDescriptor,
-  type: "plugin" | "preset",
+  items: Array<UnloadedDescriptor>,
   index: number,
+  type: "plugin" | "preset",
   e: Error,
 ): void {
+  if (index === 0) return;
+
+  const lastItem = items[index - 1];
+  const thisItem = items[index];
+
   if (
     lastItem.file &&
     lastItem.options === undefined &&
