@@ -541,6 +541,7 @@ export default declare((api, opts) => {
       ObjectExpression(path, file) {
         if (!hasSpread(path.node)) return;
 
+        // a non-SpreadElement and SpreadElement striped array
         const args = [];
         let props = [];
 
@@ -579,8 +580,28 @@ export default declare((api, opts) => {
             helper = file.addHelper("objectSpread");
           }
         }
-
-        path.replaceWith(t.callExpression(helper, args));
+        // We cannot call _objectSpread with more than two elements directly, since any element could cause side effects. For
+        // example:
+        //      var k = { a: 1, b: 2 };
+        //      var o = { a: 3, ...k, b: k.a++ };
+        //      // expected: { a: 1, b: 1 }
+        // If we translate the above to `_objectSpread({ a: 3 }, k, { b: k.a++ })`, the `k.a++` will evaluate before
+        // `k` is spread and we end up with `{ a: 2, b: 1 }`.
+        // adapted from https://github.com/microsoft/TypeScript/blob/eb105efdcd6db8a73f5b983bf329cb7a5eee55e1/src/compiler/transformers/es2018.ts#L272
+        let exp = args[0];
+        for (let i = 1; i < args.length; i++) {
+          // reference: packages/babel-helpers/src/helpers.js#objectSpread2
+          if (i % 2) {
+            exp = t.callExpression(helper, [exp, args[i]]);
+          } else {
+            exp = t.callExpression(helper, [
+              exp,
+              t.objectExpression([]),
+              args[i],
+            ]);
+          }
+        }
+        path.replaceWith(exp);
       },
     },
   };
