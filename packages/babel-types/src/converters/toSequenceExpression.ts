@@ -1,5 +1,3 @@
-// todo: update once traverse is in TS
-// import type { Scope } from "@babel/traverse";
 import gatherSequenceExpressions from "./gatherSequenceExpressions";
 import type * as types from "../types";
 

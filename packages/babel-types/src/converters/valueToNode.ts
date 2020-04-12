@@ -88,8 +88,7 @@ export default function valueToNode(
 
   // regexes
   if (isRegExp(value)) {
-    // todo: add @types/lodash
-    const pattern = (value as RegExp).source;
+    const pattern = value.source;
     const flags = value.toString().match(/\/([a-z]+|)$/)[1];
     return regExpLiteral(pattern, flags);
   }

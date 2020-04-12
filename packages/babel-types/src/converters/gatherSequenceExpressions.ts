@@ -1,5 +1,3 @@
-// todo: update after converting traverse
-//import type { Scope } from "@babel/traverse";
 import getBindingIdentifiers from "../retrievers/getBindingIdentifiers";
 import {
   isExpression,
@@ -46,7 +44,7 @@ export default function gatherSequenceExpressions(
     } else if (isVariableDeclaration(node)) {
       if (node.kind !== "var") return; // bailed
 
-      for (const declar of node.declarations as Array<any>) {
+      for (const declar of node.declarations) {
         const bindings = getBindingIdentifiers(declar);
         for (const key of Object.keys(bindings)) {
           declars.push({

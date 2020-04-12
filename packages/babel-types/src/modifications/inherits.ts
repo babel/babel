@@ -12,7 +12,7 @@ export default function inherits<T extends types.Node | null | undefined>(
   if (!child || !parent) return child;
 
   // optionally inherit specific properties if not null
-  for (const key of INHERIT_KEYS.optional as Array<string>) {
+  for (const key of INHERIT_KEYS.optional) {
     if (child[key] == null) {
       child[key] = parent[key];
     }
@@ -24,7 +24,7 @@ export default function inherits<T extends types.Node | null | undefined>(
   }
 
   // force inherit select properties
-  for (const key of INHERIT_KEYS.force as Array<string>) {
+  for (const key of INHERIT_KEYS.force) {
     child[key] = parent[key];
   }
 

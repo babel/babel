@@ -8,19 +8,19 @@ import {
 } from "../validators/generated";
 import type * as types from "../types";
 
-export default function getBindingIdentifiers(
+function getBindingIdentifiers(
   node: types.Node,
   duplicates: true,
   outerOnly?: boolean,
 ): Record<string, Array<types.Identifier>>;
 
-export default function getBindingIdentifiers(
+function getBindingIdentifiers(
   node: types.Node,
   duplicates?: false,
   outerOnly?: boolean,
 ): Record<string, types.Identifier>;
 
-export default function getBindingIdentifiers(
+function getBindingIdentifiers(
   node: types.Node,
   duplicates?: boolean,
   outerOnly?: boolean,
@@ -29,7 +29,7 @@ export default function getBindingIdentifiers(
 /**
  * Return a list of binding identifiers associated with the input `node`.
  */
-export default function getBindingIdentifiers(
+function getBindingIdentifiers(
   node: types.Node,
   duplicates?: boolean,
   outerOnly?: boolean,
@@ -138,3 +138,5 @@ getBindingIdentifiers.keys = {
   VariableDeclaration: ["declarations"],
   VariableDeclarator: ["id"],
 };
+
+export default getBindingIdentifiers;
