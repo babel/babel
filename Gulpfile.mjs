@@ -190,7 +190,7 @@ function generateStandalone() {
 ${imports}
 export {${list}};
 export const all = {${allList}};`;
-        file.path = "plugins.js";
+        file.path = "plugins.ts";
         file.contents = Buffer.from(formatCode(fileContents, dest));
         callback(null, file);
       })
