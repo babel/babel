@@ -256,5 +256,5 @@ const entities: {
   clubs: "\u2663",
   hearts: "\u2665",
   diams: "\u2666",
-};
+} as const;
 export default entities;

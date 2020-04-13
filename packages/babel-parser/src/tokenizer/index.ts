@@ -82,7 +82,7 @@ export class Token {
 
 // ## Tokenizer
 
-export default class Tokenizer extends CommentsParser {
+export default abstract class Tokenizer extends CommentsParser {
   isLookahead: boolean;
 
   // Token store.

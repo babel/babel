@@ -1,4 +1,3 @@
-/*:: declare var invariant; */
 import * as charCodes from "charcodes";
 import { tt, type TokenType } from "../tokenizer/types";
 import type {
@@ -11,18 +10,17 @@ import type {
   Pattern,
   RestElement,
   SpreadElement,
-  /*:: ObjectOrClassMember, */
-  /*:: ClassMember, */
+  ObjectOrClassMember,
+  ClassMember,
   ObjectMember,
+  TsNamedTypeElementBase,
+  PrivateName,
   ObjectExpression,
+  ObjectPattern,
   ArrayExpression,
   ArrayPattern,
-  /*:: TsNamedTypeElementBase, */
-  /*:: PrivateName, */
-  /*:: ObjectExpression, */
-  /*:: ObjectPattern, */
 } from "../types";
-import type { Position } from "../util/location";
+import type { Pos, Position } from "../util/location";
 import {
   isStrictBindOnlyReservedWord,
   isStrictBindReservedWord,
@@ -46,39 +44,43 @@ const unwrapParenthesizedExpression = (node: Node): Node => {
     : node;
 };
 
-export default class LValParser extends NodeUtils {
+export default abstract class LValParser extends NodeUtils {
   // Forward-declaration: defined in expression.js
-  /*::
-  +parseIdentifier: (liberal?: boolean) => Identifier;
-  +parseMaybeAssignAllowIn: (
-    refExpressionErrors?: ?ExpressionErrors,
+  abstract parseIdentifier(liberal?: boolean): Identifier;
+  abstract parseMaybeAssign(
+    refExpressionErrors?: ExpressionErrors | null,
     afterLeftParse?: Function,
-  ) => Expression;
-  +parseObjectLike: <T: ObjectPattern | ObjectExpression>(
+    refNeedsArrowPos?: Pos | null,
+  ): Expression;
+
+  abstract parseMaybeAssignAllowIn(
+    refExpressionErrors?: ExpressionErrors | null,
+    afterLeftParse?: Function,
+    refNeedsArrowPos?: Pos | null,
+  ): Expression;
+
+  abstract parseObjectLike<T extends ObjectPattern | ObjectExpression>(
     close: TokenType,
     isPattern: boolean,
-    isRecord?: ?boolean,
-    refExpressionErrors?: ?ExpressionErrors,
-  ) => T;
-  +parseObjPropValue: (
+    isRecord?: boolean,
+    refExpressionErrors?: ExpressionErrors,
+  ): T;
+  abstract parseObjPropValue(
     prop: any,
-    startPos: ?number,
-    startLoc: ?Position,
+    startPos: number | null,
+    startLoc: Position | null,
     isGenerator: boolean,
     isAsync: boolean,
     isPattern: boolean,
     isAccessor: boolean,
-    refExpressionErrors?: ?ExpressionErrors,
-  ) => void;
-  +parsePropertyName: (
+    refExpressionErrors?: ExpressionErrors | null,
+  ): void;
+  abstract parsePropertyName(
     prop: ObjectOrClassMember | ClassMember | TsNamedTypeElementBase,
-  ) => Expression | Identifier;
-  +parsePrivateName: () => PrivateName
-  */
+  ): Expression | Identifier;
+  abstract parsePrivateName(): PrivateName;
   // Forward-declaration: defined in statement.js
-  /*::
-  +parseDecorator: () => Decorator;
-  */
+  abstract parseDecorator(): Decorator;
 
   /**
    * Convert existing expression atom to assignable pattern

@@ -98,7 +98,7 @@ export function cloneStringLiteral(node: any): any {
 
 export type Undone<T extends NodeType> = Omit<T, "type">;
 
-export class NodeUtils extends UtilParser {
+export abstract class NodeUtils extends UtilParser {
   startNode<T extends NodeType>(): Undone<T> {
     // @ts-expect-error
     return new Node(this, this.state.start, this.state.startLoc);
