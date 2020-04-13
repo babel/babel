@@ -45,7 +45,7 @@ export function readdirForCompilable(
  */
 export function isCompilableExtension(
   filename: string,
-  altExts?: Array<string>,
+  altExts?: readonly string[],
 ): boolean {
   const exts = altExts || babel.DEFAULT_EXTENSIONS;
   const ext = path.extname(filename);

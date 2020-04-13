@@ -35,7 +35,7 @@ export default async function ({
 
       if (result.map) {
         const consumer = new sourceMap.SourceMapConsumer(result.map);
-        const sources = new Set();
+        const sources = new Set<string>();
 
         consumer.eachMapping(function (mapping) {
           if (mapping.source != null) sources.add(mapping.source);
@@ -102,7 +102,7 @@ export default async function ({
   }
 
   function readStdin(): Promise<string> {
-    return new Promise((resolve: Function, reject: Function): void => {
+    return new Promise((resolve, reject): void => {
       let code = "";
 
       process.stdin.setEncoding("utf8");
