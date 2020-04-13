@@ -2,7 +2,7 @@ import getFunctionArity from "@babel/helper-get-function-arity";
 import template from "@babel/template";
 import * as t from "@babel/types";
 
-const buildPropertyMethodAssignmentWrapper = template(`
+const buildPropertyMethodAssignmentWrapper = template.statement(`
   (function (FUNCTION_KEY) {
     function FUNCTION_ID() {
       return FUNCTION_KEY.apply(this, arguments);
@@ -16,7 +16,7 @@ const buildPropertyMethodAssignmentWrapper = template(`
   })(FUNCTION)
 `);
 
-const buildGeneratorPropertyMethodAssignmentWrapper = template(`
+const buildGeneratorPropertyMethodAssignmentWrapper = template.statement(`
   (function (FUNCTION_KEY) {
     function* FUNCTION_ID() {
       return yield* FUNCTION_KEY.apply(this, arguments);
@@ -79,15 +79,18 @@ function wrap(state, method, id, scope) {
       if (method.generator) {
         build = buildGeneratorPropertyMethodAssignmentWrapper;
       }
-      const template = build({
+
+      const template = (build({
         FUNCTION: method,
         FUNCTION_ID: id,
         FUNCTION_KEY: scope.generateUidIdentifier(id.name),
-      }).expression;
+      }) as t.ExpressionStatement).expression as t.CallExpression;
 
       // shim in dummy params to retain function arity, if you try to read the
       // source then you'll get the original since it's proxied so it's all good
-      const params = template.callee.body.body[0].params;
+      const params = (((template.callee as t.FunctionExpression).body
+        .body[0] as any) as t.FunctionExpression).params;
+
       for (let i = 0, len = getFunctionArity(method); i < len; i++) {
         params.push(scope.generateUidIdentifier("x"));
       }
