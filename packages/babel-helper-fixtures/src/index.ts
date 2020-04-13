@@ -5,7 +5,7 @@ import fs from "fs";
 
 const nodeVersion = semver.clean(process.version.slice(1));
 
-function humanize(val, noext) {
+function humanize(val, noext?) {
   if (noext) val = path.basename(val, path.extname(val));
   return val.replace(/-/g, " ");
 }
@@ -23,6 +23,9 @@ type Test = {
   exec: TestFile;
   actual: TestFile;
   expected: TestFile;
+  // todo(flow->ts): improve types here
+  sourceMappings;
+  sourceMap;
 };
 
 type Suite = {
@@ -60,7 +63,7 @@ function shouldIgnore(name, ignore?: Array<string>) {
 
 const EXTENSIONS = [".js", ".mjs", ".ts", ".tsx"];
 
-function findFile(filepath: string, allowJSON: boolean) {
+function findFile(filepath: string, allowJSON?: boolean) {
   const matches = [];
 
   for (const ext of EXTENSIONS.concat(allowJSON ? ".json" : [])) {
@@ -119,7 +122,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
   const taskOptsLoc = tryResolve(taskDir + "/options");
   if (taskOptsLoc) Object.assign(taskOpts, require(taskOptsLoc));
 
-  const test = {
+  const test: any = {
     optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
     title: humanize(taskName, true),
     disabled:
