@@ -4,6 +4,7 @@ import {
   isKeyword,
 } from "@babel/helper-validator-identifier";
 import Chalk from "chalk";
+import type { Chalk as ChalkType } from "chalk";
 
 /**
  * Names that are always allowed as identifiers, but also appear as keywords
@@ -228,14 +229,14 @@ type Options = {
  * Whether the code should be highlighted given the passed options.
  */
 export function shouldHighlight(options: Options): boolean {
-  return Chalk.supportsColor || options.forceColor;
+  return !!Chalk.supportsColor || options.forceColor;
 }
 
 /**
  * The Chalk instance that should be used given the passed options.
  */
 export function getChalk(options: Options) {
-  let chalk = Chalk;
+  let chalk: ChalkType = Chalk;
   if (options.forceColor) {
     chalk = new Chalk.constructor({ enabled: true, level: 1 });
   }
