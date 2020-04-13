@@ -10,13 +10,13 @@ import type {
   Pattern,
   RestElement,
   SpreadElement,
-  /*:: ObjectOrClassMember, */
-  /*:: ClassMember, */
+  ObjectOrClassMember,
+  ClassMember,
   ObjectMember,
-  /*:: TsNamedTypeElementBase, */
-  /*:: PrivateName, */
-  /*:: ObjectExpression, */
-  /*:: ObjectPattern, */
+  TsNamedTypeElementBase,
+  PrivateName,
+  ObjectExpression,
+  ObjectPattern,
 } from "../types";
 import type { Pos, Position } from "../util/location";
 import {
@@ -41,40 +41,43 @@ const unwrapParenthesizedExpression = (node: Node): Node => {
     : node;
 };
 
-export default class LValParser extends NodeUtils {
+export default abstract class LValParser extends NodeUtils {
   // Forward-declaration: defined in expression.js
-  /*::
-  +parseIdentifier: (liberal?: boolean) => Identifier;
-  +parseMaybeAssignAllowIn: (
-    refExpressionErrors?: ?ExpressionErrors,
+  abstract parseIdentifier(liberal?: boolean): Identifier;
+  abstract parseMaybeAssign(
+    refExpressionErrors?: ExpressionErrors | null,
     afterLeftParse?: Function,
-    refNeedsArrowPos?: ?Pos,
-  ) => Expression;
-  +parseObjectLike: <T: ObjectPattern | ObjectExpression>(
+    refNeedsArrowPos?: Pos | null,
+  ): Expression;
+
+  abstract parseMaybeAssignAllowIn(
+    refExpressionErrors?: ExpressionErrors | null,
+    afterLeftParse?: Function,
+    refNeedsArrowPos?: Pos | null,
+  ): Expression;
+
+  abstract parseObjectLike<T extends ObjectPattern | ObjectExpression>(
     close: TokenType,
     isPattern: boolean,
     isRecord?: ?boolean,
     refExpressionErrors?: ?ExpressionErrors,
   ) => T;
-  +parseObjPropValue: (
+  abstract parseObjPropValue: (
     prop: any,
-    startPos: ?number,
-    startLoc: ?Position,
+    startPos: number | null,
+    startLoc: Position | null,
     isGenerator: boolean,
     isAsync: boolean,
     isPattern: boolean,
     isAccessor: boolean,
-    refExpressionErrors?: ?ExpressionErrors,
+    refExpressionErrors?: ExpressionErrors | null,
   ) => void;
-  +parsePropertyName: (
+  abstract parsePropertyName: (
     prop: ObjectOrClassMember | ClassMember | TsNamedTypeElementBase,
   ) => Expression | Identifier;
-  +parsePrivateName: () => PrivateName
-  */
+  abstract parsePrivateName: () => PrivateName;
   // Forward-declaration: defined in statement.js
-  /*::
-  +parseDecorator: () => Decorator;
-  */
+  abstract parseDecorator(): Decorator;
 
   /**
    * Convert existing expression atom to assignable pattern
@@ -366,6 +369,7 @@ export default class LValParser extends NodeUtils {
       }
 
       case tt.braceL:
+        // @ts-expect-error todo(flow->ts): better node types
         return this.parseObjectLike(tt.braceR, true);
     }
 

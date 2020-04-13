@@ -78,7 +78,7 @@ export class Token {
 
 // ## Tokenizer
 
-export default class Tokenizer extends CommentsParser {
+export default abstract class Tokenizer extends CommentsParser {
   isLookahead: boolean;
 
   // Token store.
@@ -437,7 +437,7 @@ export default class Tokenizer extends CommentsParser {
   // the token, so that the next one's `start` will point at the
   // right position.
 
-  finishToken(type: TokenType, val: any): void {
+  finishToken(type: TokenType, val?: any): void {
     this.state.end = this.state.pos;
     this.state.endLoc = this.state.curPosition();
     const prevType = this.state.type;

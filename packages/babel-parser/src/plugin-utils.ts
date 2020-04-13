@@ -218,9 +218,7 @@ import placeholders from "./plugins/placeholders";
 import v8intrinsic from "./plugins/v8intrinsic";
 
 // NOTE: order is important. estree must come first; placeholders must come last.
-export const mixinPlugins: {
-  [name: string]: MixinPlugin;
-} = {
+export const mixinPlugins = {
   estree,
   jsx,
   flow,

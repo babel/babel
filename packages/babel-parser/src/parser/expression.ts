@@ -60,6 +60,7 @@ import {
   PARAM_RETURN,
   functionFlags,
 } from "../util/production-parameter";
+import type { ParamKind } from "../util/production-parameter";
 import {
   newArrowHeadScope,
   newAsyncArrowScope,
@@ -70,44 +71,45 @@ import { UnparenthesizedPipeBodyDescriptions } from "../parse-error/pipeline-ope
 import { setInnerComments } from "./comments";
 import { cloneIdentifier } from "./node";
 
-/*::
 import type { SourceType } from "../options";
 declare var invariant;
-*/
 
-export default class ExpressionParser extends LValParser {
+export default abstract class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
-  /*::
-  +parseBlock: (
+  abstract parseBlock(
     allowDirectives?: boolean,
     createNewLexicalScope?: boolean,
     afterBlockParse?: (hasStrictModeDirective: boolean) => void,
-  ) => N.BlockStatement;
-  +parseClass: (
+  ): N.BlockStatement;
+  abstract parseClass(
     node: N.Class,
     isStatement: boolean,
     optionalId?: boolean,
-  ) => N.Class;
-  +parseDecorators: (allowExport?: boolean) => void;
-  +parseFunction: <T: N.NormalFunction>(
+  ): N.Class;
+  abstract parseDecorators(allowExport?: boolean): void;
+  abstract parseFunction<T extends N.NormalFunction>(
     node: T,
     statement?: number,
     allowExpressionBody?: boolean,
     isAsync?: boolean,
-  ) => T;
-  +parseFunctionParams: (node: N.Function, allowModifiers?: boolean) => void;
-  +takeDecorators: (node: N.HasDecorators) => void;
-  +parseBlockOrModuleBlockBody: (
+  ): T;
+  abstract parseFunctionParams(
+    node: N.Function,
+    allowModifiers?: boolean,
+  ): void;
+  abstract takeDecorators(node: N.HasDecorators): void;
+  abstract parseBlockOrModuleBlockBody(
     body: N.Statement[],
-    directives: ?(N.Directive[]),
+    directives: N.Directive[] | null | undefined,
     topLevel: boolean,
     end: TokenType,
-    afterBlockParse?: (hasStrictModeDirective: boolean) => void
-  ) => void
-  +parseProgram: (
-    program: N.Program, end: TokenType, sourceType?: SourceType
-  ) => N.Program
-  */
+    afterBlockParse?: (hasStrictModeDirective: boolean) => void,
+  ): void;
+  abstract parseProgram(
+    program: N.Program,
+    end: TokenType,
+    sourceType?: SourceType,
+  ): N.Program;
 
   // For object literal, check if property __proto__ has been used more than once.
   // If the expression is a destructuring assignment, then __proto__ may appear
@@ -2235,7 +2237,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   parseObjPropValue(
-    prop: any,
+    prop: N.ObjectMember,
     startPos: number | undefined | null,
     startLoc: Position | undefined | null,
     isGenerator: boolean,
@@ -2246,14 +2248,14 @@ export default class ExpressionParser extends LValParser {
   ): void {
     const node =
       this.parseObjectMethod(
-        prop,
+        prop as N.ObjectMethod,
         isGenerator,
         isAsync,
         isPattern,
         isAccessor,
       ) ||
       this.parseObjectProperty(
-        prop,
+        prop as N.ObjectProperty,
         startPos,
         startLoc,
         isPattern,
@@ -2274,7 +2276,7 @@ export default class ExpressionParser extends LValParser {
     refExpressionErrors?: ExpressionErrors | null,
   ): N.Expression | N.Identifier {
     if (this.eat(tt.bracketL)) {
-      (prop as $FlowSubtype<N.ObjectOrClassMember>).computed = true;
+      (prop as N.ObjectOrClassMember).computed = true;
       prop.key = this.parseMaybeAssignAllowIn();
       this.expect(tt.bracketR);
     } else {
@@ -2441,7 +2443,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   parseFunctionBodyAndFinish(
-    node: N.BodilessFunctionOrMethodBase,
+    node: N.FunctionBase,
     type: string,
     isMethod: boolean = false,
   ): void {
@@ -2472,7 +2474,9 @@ export default class ExpressionParser extends LValParser {
 
       // FunctionBody[Yield, Await]:
       //   StatementList[?Yield, ?Await, +Return] opt
-      this.prodParam.enter(this.prodParam.currentFlags() | PARAM_RETURN);
+      this.prodParam.enter(
+        (this.prodParam.currentFlags() | PARAM_RETURN) as ParamKind,
+      );
       node.body = this.parseBlock(
         true,
         false,
@@ -2536,7 +2540,7 @@ export default class ExpressionParser extends LValParser {
     isArrowFunction?: boolean | null,
     strictModeChanged: boolean = true,
   ): void {
-    const checkClashes = !allowDuplicates && new Set();
+    const checkClashes = !allowDuplicates && new Set<string>();
     // We create a fake node with the "ephemeral" type `FormalParameters`[1]
     // since we just store an array of parameters. Perhaps someday we can have
     // something like class FormalParameters extends Array { ... }, which would
@@ -2565,7 +2569,7 @@ export default class ExpressionParser extends LValParser {
     allowEmpty?: boolean,
     refExpressionErrors?: ExpressionErrors | null,
     nodeForExtra?: N.Node | null,
-  ): ReadonlyArray<N.Expression | undefined | null> {
+  ): Array<N.Expression | undefined | null> {
     const elts = [];
     let first = true;
 

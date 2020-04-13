@@ -94,7 +94,7 @@ export function cloneStringLiteral(node: any): any {
   return cloned;
 }
 
-export class NodeUtils extends UtilParser {
+export abstract class NodeUtils extends UtilParser {
   startNode<T extends NodeType>(): T {
     // @ts-expect-error todo(flow->ts) $FlowIgnore
     return new Node(this, this.state.start, this.state.startLoc);
@@ -106,7 +106,7 @@ export class NodeUtils extends UtilParser {
   }
 
   /** Start a new node with a previous node's location. */
-  startNodeAtNode<T extends NodeType>(type: NodeType): T {
+  startNodeAtNode<T extends NodeType>(type: T): T {
     return this.startNodeAt(type.start, type.loc.start);
   }
 

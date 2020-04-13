@@ -17,12 +17,8 @@ function toESTreeLocation(node: any) {
   return node;
 }
 
-export default (superClass: {
-  new (...args: any): Parser;
-}): {
-  new (...args: any): Parser;
-} =>
-  class extends superClass {
+export default (superClass: typeof Parser) =>
+  class ESTreeParserMixin extends superClass implements Parser {
     parse(): File {
       const file = toESTreeLocation(super.parse());
 
@@ -150,14 +146,18 @@ export default (superClass: {
 
     parseBlockBody(
       node: N.BlockStatementLike,
-      ...args: [
-        boolean | undefined | null,
-        boolean,
-        TokenType,
-        void | ((a: boolean) => void),
-      ]
+      allowDirectives: boolean | undefined | null,
+      topLevel: boolean,
+      end: TokenType,
+      afterBlockParse?: (hasStrictModeDirective: boolean) => void,
     ): void {
-      super.parseBlockBody(node, ...args);
+      super.parseBlockBody(
+        node,
+        allowDirectives,
+        topLevel,
+        end,
+        afterBlockParse,
+      );
 
       const directiveStatements = node.directives.map(d =>
         this.directiveToStmt(d),
@@ -378,13 +378,17 @@ export default (superClass: {
       }
     }
 
-    toAssignableObjectExpressionProp(prop: N.Node) {
+    toAssignableObjectExpressionProp(
+      prop: N.Node,
+      isLast: boolean,
+      isLHS: boolean,
+    ) {
       if (prop.kind === "get" || prop.kind === "set") {
         this.raise(Errors.PatternHasAccessor, { at: prop.key });
       } else if (prop.method) {
         this.raise(Errors.PatternHasMethod, { at: prop.key });
       } else {
-        super.toAssignableObjectExpressionProp(...arguments);
+        super.toAssignableObjectExpressionProp(prop, isLast, isLHS);
       }
     }
 
@@ -425,7 +429,7 @@ export default (superClass: {
       super.toReferencedArguments(node);
     }
 
-    parseExport(node: N.Node) {
+    parseExport(node: N.Node): N.AnyExport {
       super.parseExport(node);
 
       switch (node.type) {
@@ -446,7 +450,7 @@ export default (superClass: {
           break;
       }
 
-      return node;
+      return node as N.AnyExport;
     }
 
     parseSubscript(

@@ -25,10 +25,12 @@ import {
   SCOPE_ARROW,
   SCOPE_FUNCTION,
   SCOPE_OTHER,
+  BIND_NONE, BindingTypes,
 } from "../../util/scopeflags";
 import type { ExpressionErrors } from "../../parser/util";
 import { Errors, ParseErrorEnum } from "../../parse-error";
 import { cloneIdentifier } from "../../parser/node";
+import type { Expression } from "../../types";
 
 const reservedTypes = new Set([
   "_",
@@ -324,12 +326,8 @@ type EnumMemberInit =
       loc: Position;
     };
 
-export default (superClass: {
-  new (...args: any): Parser;
-}): {
-  new (...args: any): Parser;
-} =>
-  class extends superClass {
+export default (superClass: typeof Parser) =>
+  class FlowParserMixin extends superClass implements Parser {
     // The value of the @flow/@noflow pragma. Initially undefined, transitions
     // to "@flow" or "@noflow" if we see a pragma. Transitions to null if we are
     // past the initial comment.
@@ -2287,7 +2285,7 @@ export default (superClass: {
     }
 
     eatExportStar(node: N.Node): boolean {
-      if (super.eatExportStar(...arguments)) return true;
+      if (super.eatExportStar(node)) return true;
 
       if (this.isContextual(tt._type) && this.lookahead().type === tt.star) {
         node.exportKind = "type";
@@ -2478,8 +2476,11 @@ export default (superClass: {
       return node;
     }
 
-    isValidLVal(type: string, ...rest) {
-      return type === "TypeCastExpression" || super.isValidLVal(type, ...rest);
+    isValidLVal(type: string, isParenthesized: boolean, binding: BindingTypes) {
+      return (
+        type === "TypeCastExpression" ||
+        super.isValidLVal(type, isParenthesized, binding)
+      );
     }
 
     // parse class property type annotations
@@ -3101,6 +3102,7 @@ export default (superClass: {
       node: N.Function,
       allowDuplicates: boolean,
       isArrowFunction?: boolean | null,
+      strictModeChanged: boolean = true,
     ): void {
       if (
         isArrowFunction &&
@@ -3116,7 +3118,12 @@ export default (superClass: {
         }
       }
 
-      return super.checkParams(...arguments);
+      return super.checkParams(
+        node,
+        allowDuplicates,
+        isArrowFunction,
+        strictModeChanged,
+      );
     }
 
     parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {
@@ -3480,7 +3487,7 @@ export default (superClass: {
       const id = this.parseIdentifier(true);
       const init = this.eat(tt.eq)
         ? this.flowEnumMemberInit()
-        : { type: "none", loc };
+        : { type: "none" as const, loc };
       return { id, init };
     }
 

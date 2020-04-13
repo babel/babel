@@ -41,8 +41,9 @@ import { Token } from "../tokenizer";
 import { Position, createPositionWithColumnOffset } from "../util/location";
 import { cloneStringLiteral, cloneIdentifier } from "./node";
 
-const loopLabel = { kind: "loop" },
-  switchLabel = { kind: "switch" };
+// todo: export label type
+const loopLabel: any = { kind: "loop" },
+  switchLabel: any = { kind: "switch" };
 
 const FUNC_NO_FLAGS = 0b000,
   FUNC_STATEMENT = 0b001,
@@ -183,7 +184,7 @@ function babel7CompatTokens(tokens, input) {
   }
   return tokens;
 }
-export default class StatementParser extends ExpressionParser {
+export default abstract class StatementParser extends ExpressionParser {
   // ### Statement parsing
 
   // Parse a program. Initializes the parser, reads any number of
@@ -1532,11 +1533,11 @@ export default class StatementParser extends ExpressionParser {
     state: N.ParseClassMemberState,
     isStatic: boolean,
   ) {
-    const publicMethod: $FlowSubtype<N.ClassMethod> = member;
-    const privateMethod: $FlowSubtype<N.ClassPrivateMethod> = member;
-    const publicProp: $FlowSubtype<N.ClassProperty> = member;
-    const privateProp: $FlowSubtype<N.ClassPrivateProperty> = member;
-    const accessorProp: $FlowSubtype<N.ClassAccessorProperty> = member;
+    const publicMethod: N.ClassMethod = member;
+    const privateMethod: N.ClassPrivateMethod = member;
+    const publicProp: N.ClassProperty = member;
+    const privateProp: N.ClassPrivateProperty = member;
+    const accessorProp: N.ClassAccessorProperty = member;
 
     const method: typeof publicMethod | typeof privateMethod = publicMethod;
     const publicMember: typeof publicMethod | typeof publicProp = publicMethod;
