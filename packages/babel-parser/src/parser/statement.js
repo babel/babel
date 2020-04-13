@@ -1834,11 +1834,12 @@ export default class StatementParser extends ExpressionParser {
 
   isExportDefaultSpecifier(): boolean {
     if (this.match(tt.name)) {
-      if (this.state.value === "async" || this.state.value === "let") {
+      const value = this.state.value;
+      if (value === "async" || value === "let") {
         return false;
       }
       if (
-        (this.state.value === "type" || this.state.value === "interface") &&
+        (value === "type" || value === "interface") &&
         !this.state.containsEsc
       ) {
         const l = this.lookahead();
