@@ -3980,7 +3980,7 @@ __metadata:
 
 "@lerna/npm-publish@patch:@lerna/npm-publish@npm:3.18.5#.yarn-patches/@lerna/npm-publish.patch::locator=babel%40workspace%3A.":
   version: 3.18.5
-  resolution: "@lerna/npm-publish@patch:@lerna/npm-publish@npm%3A3.18.5#.yarn-patches/@lerna/npm-publish.patch::version=3.18.5&hash=d6356b&locator=babel%40workspace%3A."
+  resolution: "@lerna/npm-publish@patch:@lerna/npm-publish@npm%3A3.18.5#.yarn-patches/@lerna/npm-publish.patch::version=3.18.5&hash=61aeae&locator=babel%40workspace%3A."
   dependencies:
     "@evocateur/libnpmpublish": ^1.2.2
     "@lerna/otplease": 3.18.5
@@ -4043,7 +4043,7 @@ __metadata:
 
 "@lerna/pack-directory@patch:@lerna/pack-directory@npm:3.16.4#.yarn-patches/@lerna/pack-directory.patch::locator=babel%40workspace%3A.":
   version: 3.16.4
-  resolution: "@lerna/pack-directory@patch:@lerna/pack-directory@npm%3A3.16.4#.yarn-patches/@lerna/pack-directory.patch::version=3.16.4&hash=ce53a8&locator=babel%40workspace%3A."
+  resolution: "@lerna/pack-directory@patch:@lerna/pack-directory@npm%3A3.16.4#.yarn-patches/@lerna/pack-directory.patch::version=3.16.4&hash=29accd&locator=babel%40workspace%3A."
   dependencies:
     "@lerna/get-packed": 3.16.0
     "@lerna/package": 3.16.0
@@ -4072,7 +4072,7 @@ __metadata:
 
 "@lerna/package-graph@patch:@lerna/package-graph@npm:3.18.5#.yarn-patches/@lerna/package-graph.patch::locator=babel%40workspace%3A.":
   version: 3.18.5
-  resolution: "@lerna/package-graph@patch:@lerna/package-graph@npm%3A3.18.5#.yarn-patches/@lerna/package-graph.patch::version=3.18.5&hash=172170&locator=babel%40workspace%3A."
+  resolution: "@lerna/package-graph@patch:@lerna/package-graph@npm%3A3.18.5#.yarn-patches/@lerna/package-graph.patch::version=3.18.5&hash=f3c2d0&locator=babel%40workspace%3A."
   dependencies:
     "@lerna/prerelease-id-from-version": 3.16.0
     "@lerna/validation-error": 3.13.0
@@ -4096,7 +4096,7 @@ __metadata:
 
 "@lerna/package@patch:@lerna/package@npm:3.16.0#.yarn-patches/@lerna/package.patch::locator=babel%40workspace%3A.":
   version: 3.16.0
-  resolution: "@lerna/package@patch:@lerna/package@npm%3A3.16.0#.yarn-patches/@lerna/package.patch::version=3.16.0&hash=59c3e4&locator=babel%40workspace%3A."
+  resolution: "@lerna/package@patch:@lerna/package@npm%3A3.16.0#.yarn-patches/@lerna/package.patch::version=3.16.0&hash=4efa45&locator=babel%40workspace%3A."
   dependencies:
     load-json-file: ^5.3.0
     npm-package-arg: ^6.1.0
@@ -4355,7 +4355,7 @@ __metadata:
 
 "@lerna/version@patch:@lerna/version@npm:3.20.2#.yarn-patches/@lerna/version.patch::locator=babel%40workspace%3A.":
   version: 3.20.2
-  resolution: "@lerna/version@patch:@lerna/version@npm%3A3.20.2#.yarn-patches/@lerna/version.patch::version=3.20.2&hash=efa20a&locator=babel%40workspace%3A."
+  resolution: "@lerna/version@patch:@lerna/version@npm%3A3.20.2#.yarn-patches/@lerna/version.patch::version=3.20.2&hash=84463c&locator=babel%40workspace%3A."
   dependencies:
     "@lerna/check-working-tree": 3.16.5
     "@lerna/child-process": 3.16.5
