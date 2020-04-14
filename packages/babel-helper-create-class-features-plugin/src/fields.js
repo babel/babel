@@ -86,21 +86,28 @@ const privateNameVisitor = {
     const body = path.get("body.body");
 
     const visiblePrivateNames = new Map(privateNamesMap);
+    const redeclared = [];
     for (const prop of body) {
       if (!prop.isPrivate()) continue;
-      visiblePrivateNames.delete(prop.node.key.id.name);
+      const { name } = prop.node.key.id;
+      visiblePrivateNames.delete(name);
+      redeclared.push(name);
     }
 
     // If the class doesn't redeclare any private fields, we can continue with
     // our overall traversal.
-    if (visiblePrivateNames.size === privateNamesMap.size) {
+    if (!redeclared.length) {
       return;
     }
 
     // This class redeclares some private field. We need to process the outer
     // environment with access to all the outer privates, then we can process
     // the inner environment with only the still-visible outer privates.
-    path.traverse(privateNameNestedVisitor, this);
+    path.get("superClass").traverse(privateNameVisitor, this);
+    path.get("body").traverse(privateNameNestedVisitor, {
+      ...this,
+      redeclared,
+    });
     path.traverse(privateNameVisitor, {
       ...this,
       privateNamesMap: visiblePrivateNames,
@@ -115,6 +122,13 @@ const privateNameVisitor = {
 // Traverses the outer portion of a class, without touching the class's inner
 // scope, for private names.
 const privateNameNestedVisitor = traverse.visitors.merge([
+  {
+    PrivateName(path) {
+      const { redeclared } = this;
+      const { name } = path.node.id;
+      if (redeclared.includes(name)) path.skip();
+    },
+  },
   {
     PrivateName: privateNameVisitor.PrivateName,
   },
