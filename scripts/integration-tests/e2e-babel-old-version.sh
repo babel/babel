@@ -21,7 +21,18 @@ cd ../..
 #==============================================================================#
 
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
-yarn upgrade --scope @babel
+
+yarn up $(yarn constraints query --json "
+  % Get the workspace names and versions
+  workspace_ident(Cwd, Ident),
+  workspace_field(Cwd, 'version', Version),
+
+  % Only consider workspaces that are dependencies
+  once(workspace_has_dependency(_, Ident, _, _)),
+
+  % Filter out private workspaces
+  \+ workspace_field(Cwd, 'private', true)
+" | jq -r '.Ident + "@" + .Version')
 
 node -e "\
   var pkg = require('./package.json');\
