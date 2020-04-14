@@ -1845,7 +1845,7 @@ export default class StatementParser extends ExpressionParser {
         const l = this.lookahead();
         // If we see any variable name other than `from` after `type` keyword,
         // we consider it as flow/typescript type exports
-        // note that this approach may fail on some pedentic cases
+        // note that this approach may fail on some pedantic cases
         // export type from = number
         if (
           (l.type === tt.name && l.value !== "from") ||
