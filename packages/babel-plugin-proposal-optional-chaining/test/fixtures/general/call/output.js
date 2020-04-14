@@ -1,8 +1,9 @@
 "use strict";
 
 const foo = {
-  bar: function () {
-    console.log('hello');
+  bar() {
+    return this;
   }
+
 };
 (foo === null || foo === void 0 ? foo.bar.bind(foo) : foo.bar)();
