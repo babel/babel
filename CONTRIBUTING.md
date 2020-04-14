@@ -39,7 +39,7 @@ Feel free to check out the `#discussion`/`#development` channels on our [Slack](
 
 *Node*: Check that Node is [installed](https://nodejs.org/en/download/) with version 10 and up. You can check this with `node -v`.
 
-*Yarn*: Make sure that Yarn 1 is [installed](https://classic.yarnpkg.com/en/docs/install) with version >= `0.28.0`.
+*Yarn*: Make sure that Yarn 1 is [installed](https://classic.yarnpkg.com/en/docs/install) with version >= `1.19.0`.
 
 ### Setup
 
