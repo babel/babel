@@ -88,7 +88,7 @@ export function LogicalExpression() {
     this.get("right").getTypeAnnotation(),
   ];
 
-  if (t.isTSTypeAnnotation(argumentTypes[0])) {
+  if (t.isTSTypeAnnotation(argumentTypes[0]) && t.createTSUnionType) {
     return t.createTSUnionType(argumentTypes);
   }
 
@@ -101,7 +101,7 @@ export function ConditionalExpression() {
     this.get("alternate").getTypeAnnotation(),
   ];
 
-  if (t.isTSTypeAnnotation(argumentTypes[0])) {
+  if (t.isTSTypeAnnotation(argumentTypes[0]) && t.createTSUnionType) {
     return t.createTSUnionType(argumentTypes);
   }
 
