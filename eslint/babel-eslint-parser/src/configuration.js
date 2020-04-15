@@ -30,18 +30,34 @@ export function normalizeBabelParseConfig(options) {
     exclude: options.babelOptions.exclude,
     ignore: options.babelOptions.ignore,
     only: options.babelOptions.only,
-    parserOpts: {
-      allowImportExportEverywhere: options.allowImportExportEverywhere,
-      allowReturnOutsideFunction: true,
-      allowSuperOutsideMethod: true,
-      ranges: true,
-      tokens: true,
-      plugins: ["estree"],
-    },
+    parserOpts: normalizeBabelParserOptions(options),
     caller: {
       name: "@babel/eslint-parser",
     },
   };
+
+  function normalizeBabelParserOptions(options) {
+    const parserOpts = options.babelOptions.parserOpts || {};
+    const parserPlugins = parserOpts.plugins || [];
+
+    const normalizedParserOptions = Object.assign(
+      {
+        allowReturnOutsideFunction: true,
+        allowSuperOutsideMethod: true,
+        ranges: true,
+        tokens: true,
+      },
+      parserOpts,
+    );
+
+    normalizedParserOptions.plugins = ["estree", ...parserPlugins];
+    if (options.allowImportExportEverywhere !== undefined) {
+      normalizedParserOptions.allowImportExportEverywhere =
+        options.allowImportExportEverywhere;
+    }
+
+    return normalizedParserOptions;
+  }
 
   if (options.requireConfigFile !== false) {
     const config = loadPartialConfig(parseOptions);
