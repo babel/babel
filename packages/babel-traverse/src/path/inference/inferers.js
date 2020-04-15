@@ -83,17 +83,29 @@ export function BinaryExpression(node) {
 }
 
 export function LogicalExpression() {
-  return t.createUnionTypeAnnotation([
+  const argumentTypes = [
     this.get("left").getTypeAnnotation(),
     this.get("right").getTypeAnnotation(),
-  ]);
+  ];
+
+  if (t.isTSTypeAnnotation(argumentTypes[0]) && t.createTSUnionType) {
+    return t.createTSUnionType(argumentTypes);
+  }
+
+  return t.createUnionTypeAnnotation(argumentTypes);
 }
 
 export function ConditionalExpression() {
-  return t.createUnionTypeAnnotation([
+  const argumentTypes = [
     this.get("consequent").getTypeAnnotation(),
     this.get("alternate").getTypeAnnotation(),
-  ]);
+  ];
+
+  if (t.isTSTypeAnnotation(argumentTypes[0]) && t.createTSUnionType) {
+    return t.createTSUnionType(argumentTypes);
+  }
+
+  return t.createUnionTypeAnnotation(argumentTypes);
 }
 
 export function SequenceExpression() {
