@@ -203,6 +203,10 @@ describe("normalize-options", () => {
       expect(validateStringOption("test", "value", "default")).toBe("value");
     });
 
+    it("no default returns undefined", () => {
+      expect(validateStringOption("test", undefined)).toBe(undefined);
+    });
+
     it("array option is invalid", () => {
       expect(() => {
         validateStringOption("test", [], "default");
