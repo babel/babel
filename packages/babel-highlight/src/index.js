@@ -6,6 +6,17 @@ import {
 import Chalk from "chalk";
 
 /**
+ * Names that are always allowed as identifiers, but also appear as keywords
+ * within certain syntactic productions.
+ *
+ * https://tc39.es/ecma262/#sec-keywords-and-reserved-words
+ *
+ * `target` has been omitted since it is very likely going to be a false
+ * positive.
+ */
+const sometimesKeywords = new Set(["as", "async", "from", "get", "of", "set"]);
+
+/**
  * Chalk styles for token types.
  */
 function getDefs(chalk) {
@@ -37,7 +48,11 @@ const BRACKET = /^[()[\]{}]$/;
  */
 function getTokenType(token) {
   if (token.type === "IdentifierName") {
-    if (isKeyword(token.value) || isStrictReservedWord(token.value, true)) {
+    if (
+      isKeyword(token.value) ||
+      isStrictReservedWord(token.value, true) ||
+      sometimesKeywords.has(token.value)
+    ) {
       return "keyword";
     }
 
