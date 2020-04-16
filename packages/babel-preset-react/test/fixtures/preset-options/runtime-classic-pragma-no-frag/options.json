@@ -1,3 +1,6 @@
 {
-  "presets": ["react"]
+  "presets": [
+    ["react", { "runtime": "classic" }]
+  ],
+  "throws": "transform-react-jsx: pragma has been set but pragmaFrag has not been set"
 }
