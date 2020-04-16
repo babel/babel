@@ -17,7 +17,7 @@
     "@babel/plugin-transform-react-jsx-development": "^7.9.0",
     "@babel/plugin-transform-react-jsx-self": "^7.9.0",
     "@babel/plugin-transform-react-jsx-source": "^7.9.0",
-    "@babel/plugin-transform-react-pure": "^7.9.4"
+    "@babel/plugin-transform-react-pure-annotations": "^7.9.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

@@ -28,7 +28,7 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
-    name: "transform-react-pure",
+    name: "transform-react-pure-annotations",
     visitor: {
       CallExpression(path) {
         if (isReactCall(path)) {
