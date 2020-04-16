@@ -541,6 +541,8 @@ export default declare((api, opts) => {
       ObjectExpression(path, file) {
         if (!hasSpread(path.node)) return;
 
+        const { scope } = path;
+
         // a non-SpreadElement and SpreadElement striped array
         const args = [];
         let props = [];
@@ -588,19 +590,39 @@ export default declare((api, opts) => {
         // If we translate the above to `_objectSpread({ a: 3 }, k, { b: k.a++ })`, the `k.a++` will evaluate before
         // `k` is spread and we end up with `{ a: 2, b: 1 }`.
         // adapted from https://github.com/microsoft/TypeScript/blob/eb105efdcd6db8a73f5b983bf329cb7a5eee55e1/src/compiler/transformers/es2018.ts#L272
-        let exp = args[0];
-        for (let i = 1; i < args.length; i++) {
+        const chunks = [];
+        let currentChunk = [];
+        for (let i = 0; i < args.length; i++) {
+          currentChunk.push(args[i]);
+          // prevent current chunk from pollution
+          if (i < args.length - 1 && !scope.isPure(args[i + 1])) {
+            chunks.push(currentChunk);
+            currentChunk = [];
+          }
+        }
+
+        if (currentChunk.length) {
+          chunks.push(currentChunk);
+          currentChunk = [];
+        }
+
+        let exp = t.callExpression(helper, chunks[0]);
+        let nthArg = chunks[0].length;
+        for (let i = 1; i < chunks.length; i++) {
           // reference: packages/babel-helpers/src/helpers.js#objectSpread2
-          if (i % 2) {
-            exp = t.callExpression(helper, [exp, args[i]]);
+          if (nthArg % 2) {
+            exp = t.callExpression(helper, [exp, ...chunks[i]]);
           } else {
             exp = t.callExpression(helper, [
               exp,
               t.objectExpression([]),
-              args[i],
+              ...chunks[i],
             ]);
           }
+
+          nthArg += chunks[i].length;
         }
+
         path.replaceWith(exp);
       },
     },

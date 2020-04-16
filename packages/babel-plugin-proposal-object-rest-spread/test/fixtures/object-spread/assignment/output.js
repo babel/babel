@@ -4,10 +4,10 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-z = _objectSpread({
+z = _objectSpread(_objectSpread({
   x
-}, y);
+}), y);
 z = {
   x,
-  w: _objectSpread({}, y)
+  w: _objectSpread(_objectSpread({}), y)
 };

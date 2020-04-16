@@ -1,7 +1,7 @@
-z = Object.assign({
+z = Object.assign(Object.assign({
   x
-}, y);
+}), y);
 z = {
   x,
-  w: Object.assign({}, y)
+  w: Object.assign(Object.assign({}), y)
 };
