@@ -29,6 +29,15 @@ describe("getTargets", () => {
     expect(actual).toEqual(expected);
   });
 
+  it("allows custom browserslist env", () => {
+    const actual = getTargets(
+      {},
+      { configPath: __dirname, browserslistEnv: "custom" },
+    );
+
+    expect(actual).toEqual({ ie: "11.0.0" });
+  });
+
   it("does not clobber browserslists defaults", () => {
     const browserslistDefaults = browserslist.defaults;
 
