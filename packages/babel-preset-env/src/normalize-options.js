@@ -159,9 +159,7 @@ export const validateStringOption = (
 ) => {
   if (typeof value === "undefined") {
     value = defaultValue;
-  }
-
-  if (typeof value !== "string" && typeof value !== "undefined") {
+  } else if (typeof value !== "string") {
     throw new Error(`Preset env: '${name}' option must be a string.`);
   }
 
