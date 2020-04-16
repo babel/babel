@@ -70,10 +70,4 @@ packages/babel-standalone/babel.min.js
 /eslint/*/LICENSE
 !/packages/babel-eslint-plugin/LICENSE
 /.vscode
-
-/tsconfig.json
-/packages/*/tsconfig.json
-/packages/*/tsconfig.tsbuildinfo
-/packages/*/dts
-/codemods/*/dts
-/eslint/*/dts
+tsconfig.tsbuildinfo
