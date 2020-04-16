@@ -155,13 +155,13 @@ export const validateBoolOption = (
 export const validateStringOption = (
   name: string,
   value?: string,
-  defaultValue: string,
+  defaultValue?: string,
 ) => {
   if (typeof value === "undefined") {
     value = defaultValue;
   }
 
-  if (typeof value !== "string") {
+  if (typeof value !== "string" && typeof value !== "undefined") {
     throw new Error(`Preset env: '${name}' option must be a string.`);
   }
 
@@ -314,7 +314,6 @@ export default function normalizeOptions(opts: Options) {
     browserslistEnv: validateStringOption(
       TopLevelOptions.browserslistEnv,
       opts.browserslistEnv,
-      "production",
     ),
   };
 }
