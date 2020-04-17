@@ -1,0 +1,12 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "shippedProposals": true,
+        "useBuiltIns": "entry",
+        "corejs": 2
+      }
+    ]
+  ]
+}

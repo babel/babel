@@ -1,0 +1,91 @@
+{
+  "type": "File",
+  "start":0,"end":79,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":2}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":79,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":2}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":16,"end":76,"loc":{"start":{"line":2,"column":0},"end":{"line":6,"column":2}},
+        "id": {
+          "type": "Identifier",
+          "start":21,"end":24,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":8},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start":27,"end":75,"loc":{"start":{"line":2,"column":11},"end":{"line":6,"column":1}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":31,"end":42,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":13}},
+              "key": {
+                "type": "Identifier",
+                "start":31,"end":34,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":5},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": false,
+              "value": {
+                "type": "NumberTypeAnnotation",
+                "start":36,"end":42,"loc":{"start":{"line":3,"column":7},"end":{"line":3,"column":13}}
+              },
+              "variance": null,
+              "optional": false
+            },
+            {
+              "type": "ObjectTypeProperty",
+              "start":46,"end":58,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":14}},
+              "key": {
+                "type": "Identifier",
+                "start":46,"end":49,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":5},"identifierName":"bar"},
+                "name": "bar"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": false,
+              "value": {
+                "type": "BooleanTypeAnnotation",
+                "start":51,"end":58,"loc":{"start":{"line":4,"column":7},"end":{"line":4,"column":14}}
+              },
+              "variance": null,
+              "optional": false
+            },
+            {
+              "type": "ObjectTypeProperty",
+              "start":62,"end":73,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":13}},
+              "key": {
+                "type": "Identifier",
+                "start":62,"end":65,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":5},"identifierName":"baz"},
+                "name": "baz"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": false,
+              "value": {
+                "type": "StringTypeAnnotation",
+                "start":67,"end":73,"loc":{"start":{"line":5,"column":7},"end":{"line":5,"column":13}}
+              },
+              "variance": null,
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

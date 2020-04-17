@@ -1,0 +1,44 @@
+{
+  "type": "File",
+  "start":0,"end":21,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":14}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":21,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":14}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":6,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":6}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5},"identifierName":"A"},
+              "name": "A"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      },
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":7,"end":21,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":14}},
+        "id": {
+          "type": "Identifier",
+          "start":17,"end":18,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11},"identifierName":"A"},
+          "name": "A"
+        },
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":19,"end":21,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":14}},
+          "body": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

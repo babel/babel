@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    ["transform-typescript", { "allowDeclareFields": true }],
+    "proposal-class-properties"
+  ]
+}

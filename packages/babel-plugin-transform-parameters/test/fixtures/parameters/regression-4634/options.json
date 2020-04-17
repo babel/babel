@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    "syntax-flow",
+    "transform-flow-strip-types",
+    "transform-parameters",
+    "transform-destructuring",
+    "transform-arrow-functions"
+  ]
+}

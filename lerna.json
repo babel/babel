@@ -1,0 +1,42 @@
+{
+  "version": "7.9.5",
+  "changelog": {
+    "repo": "babel/babel",
+    "cacheDir": ".changelog",
+    "labels": {
+      "PR: Spec Compliance :eyeglasses:": ":eyeglasses: Spec Compliance",
+      "PR: Breaking Change :boom:": ":boom: Breaking Change",
+      "PR: New Feature :rocket:": ":rocket: New Feature",
+      "PR: Bug Fix :bug:": ":bug: Bug Fix",
+      "PR: Polish :nail_care:": ":nail_care: Polish",
+      "PR: Docs :memo:": ":memo: Documentation",
+      "PR: Internal :house:": ":house: Internal",
+      "PR: Performance :running_woman:": ":running_woman: Performance",
+      "PR: Revert :leftwards_arrow_with_hook:": ":leftwards_arrow_with_hook: Revert"
+    }
+  },
+  "command": {
+    "publish": {
+      "ignoreChanges": [
+        "*.md",
+        "*.txt",
+        "test/**",
+        "**/test/**",
+        "codemods/**",
+        "# We ignore every JSON file, except for native-modules, built-ins and plugins defined in babel-preset-env/data.",
+        "@(!(native-modules|built-ins|plugins|package)).json",
+        "# Until the ESLint packages version are aligned with Babel's, we ignore them",
+        "eslint/**"
+      ]
+    }
+  },
+  "packages": [
+    "codemods/*",
+    "eslint/*",
+    "packages/*"
+  ],
+  "npmClient": "yarn",
+  "npmClientArgs": [
+    "--no-lockfile"
+  ]
+}

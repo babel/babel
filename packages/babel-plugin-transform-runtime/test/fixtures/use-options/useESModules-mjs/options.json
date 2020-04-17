@@ -1,0 +1,10 @@
+{
+  "caller": {
+    "name": "babel-test",
+    "supportsStaticESM": true
+  },
+  "plugins": [
+    ["transform-runtime", { "useESModules": true }],
+    "transform-classes"
+  ]
+}

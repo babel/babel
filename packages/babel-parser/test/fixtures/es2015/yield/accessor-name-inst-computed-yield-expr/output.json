@@ -1,0 +1,190 @@
+{
+  "type": "File",
+  "start":0,"end":155,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":155,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":12,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":12}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":12,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":12},"identifierName":"yieldSet"},
+              "name": "yieldSet"
+            },
+            "init": null
+          },
+          {
+            "type": "VariableDeclarator",
+            "start":14,"end":15,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":15}},
+            "id": {
+              "type": "Identifier",
+              "start":14,"end":15,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":15},"identifierName":"C"},
+              "name": "C"
+            },
+            "init": null
+          },
+          {
+            "type": "VariableDeclarator",
+            "start":17,"end":21,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":21}},
+            "id": {
+              "type": "Identifier",
+              "start":17,"end":21,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":21},"identifierName":"iter"},
+              "name": "iter"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":23,"end":155,"loc":{"start":{"line":2,"column":0},"end":{"line":9,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":33,"end":34,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11},"identifierName":"g"},
+          "name": "g"
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":37,"end":155,"loc":{"start":{"line":2,"column":14},"end":{"line":9,"column":1}},
+          "body": [
+            {
+              "type": "ClassDeclaration",
+              "start":41,"end":142,"loc":{"start":{"line":3,"column":2},"end":{"line":6,"column":3}},
+              "id": {
+                "type": "Identifier",
+                "start":47,"end":49,"loc":{"start":{"line":3,"column":8},"end":{"line":3,"column":10},"identifierName":"C_"},
+                "name": "C_"
+              },
+              "superClass": null,
+              "body": {
+                "type": "ClassBody",
+                "start":50,"end":142,"loc":{"start":{"line":3,"column":11},"end":{"line":6,"column":3}},
+                "body": [
+                  {
+                    "type": "ClassMethod",
+                    "start":56,"end":93,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":41}},
+                    "static": false,
+                    "key": {
+                      "type": "YieldExpression",
+                      "start":61,"end":66,"loc":{"start":{"line":4,"column":9},"end":{"line":4,"column":14}},
+                      "delegate": false,
+                      "argument": null
+                    },
+                    "computed": true,
+                    "kind": "get",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":70,"end":93,"loc":{"start":{"line":4,"column":18},"end":{"line":4,"column":41}},
+                      "body": [
+                        {
+                          "type": "ReturnStatement",
+                          "start":72,"end":91,"loc":{"start":{"line":4,"column":20},"end":{"line":4,"column":39}},
+                          "argument": {
+                            "type": "StringLiteral",
+                            "start":79,"end":90,"loc":{"start":{"line":4,"column":27},"end":{"line":4,"column":38}},
+                            "extra": {
+                              "rawValue": "get yield",
+                              "raw": "'get yield'"
+                            },
+                            "value": "get yield"
+                          }
+                        }
+                      ],
+                      "directives": []
+                    }
+                  },
+                  {
+                    "type": "ClassMethod",
+                    "start":98,"end":138,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":44}},
+                    "static": false,
+                    "key": {
+                      "type": "YieldExpression",
+                      "start":103,"end":108,"loc":{"start":{"line":5,"column":9},"end":{"line":5,"column":14}},
+                      "delegate": false,
+                      "argument": null
+                    },
+                    "computed": true,
+                    "kind": "set",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [
+                      {
+                        "type": "Identifier",
+                        "start":110,"end":115,"loc":{"start":{"line":5,"column":16},"end":{"line":5,"column":21},"identifierName":"param"},
+                        "name": "param"
+                      }
+                    ],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":117,"end":138,"loc":{"start":{"line":5,"column":23},"end":{"line":5,"column":44}},
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "start":119,"end":136,"loc":{"start":{"line":5,"column":25},"end":{"line":5,"column":42}},
+                          "expression": {
+                            "type": "AssignmentExpression",
+                            "start":119,"end":135,"loc":{"start":{"line":5,"column":25},"end":{"line":5,"column":41}},
+                            "operator": "=",
+                            "left": {
+                              "type": "Identifier",
+                              "start":119,"end":127,"loc":{"start":{"line":5,"column":25},"end":{"line":5,"column":33},"identifierName":"yieldSet"},
+                              "name": "yieldSet"
+                            },
+                            "right": {
+                              "type": "Identifier",
+                              "start":130,"end":135,"loc":{"start":{"line":5,"column":36},"end":{"line":5,"column":41},"identifierName":"param"},
+                              "name": "param"
+                            }
+                          }
+                        }
+                      ],
+                      "directives": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start":146,"end":153,"loc":{"start":{"line":8,"column":2},"end":{"line":8,"column":9}},
+              "expression": {
+                "type": "AssignmentExpression",
+                "start":146,"end":152,"loc":{"start":{"line":8,"column":2},"end":{"line":8,"column":8}},
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "start":146,"end":147,"loc":{"start":{"line":8,"column":2},"end":{"line":8,"column":3},"identifierName":"C"},
+                  "name": "C"
+                },
+                "right": {
+                  "type": "Identifier",
+                  "start":150,"end":152,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":8},"identifierName":"C_"},
+                  "name": "C_"
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

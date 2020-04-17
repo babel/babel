@@ -1,0 +1,30 @@
+{
+  "type": "File",
+  "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":24}},
+  "errors": [
+    "SyntaxError: Cannot overwrite reserved type bool (1:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":24}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareTypeAlias",
+        "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":24}},
+        "id": {
+          "type": "Identifier",
+          "start":13,"end":17,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":17},"identifierName":"bool"},
+          "name": "bool"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "AnyTypeAnnotation",
+          "start":20,"end":23,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":23}}
+        }
+      }
+    ],
+    "directives": []
+  }
+}

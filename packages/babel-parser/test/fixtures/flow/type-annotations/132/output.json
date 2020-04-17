@@ -1,0 +1,41 @@
+{
+  "type": "File",
+  "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
+  "errors": [
+    "SyntaxError: Unexpected reserved type number (1:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":8,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":8},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start":8,"end":16,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":16}},
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start":9,"end":15,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":15}},
+              "name": "number",
+              "variance": null
+            }
+          ]
+        },
+        "right": {
+          "type": "StringTypeAnnotation",
+          "start":19,"end":25,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":25}}
+        }
+      }
+    ],
+    "directives": []
+  }
+}

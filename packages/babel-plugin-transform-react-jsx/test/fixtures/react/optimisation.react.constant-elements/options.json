@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "external-helpers",
+    "transform-react-constant-elements",
+    "transform-classes",
+    "syntax-jsx"
+  ]
+}

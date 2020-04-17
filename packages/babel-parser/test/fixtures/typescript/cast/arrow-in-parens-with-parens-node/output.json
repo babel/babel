@@ -1,0 +1,71 @@
+{
+  "type": "File",
+  "start":0,"end":44,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":44}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":44,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":44}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":44,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":44}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":43,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":43}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":13,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":13},"identifierName":"asserted1"},
+              "name": "asserted1"
+            },
+            "init": {
+              "type": "TSTypeAssertion",
+              "start":16,"end":43,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":43}},
+              "typeAnnotation": {
+                "type": "TSAnyKeyword",
+                "start":17,"end":20,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":20}}
+              },
+              "expression": {
+                "type": "ParenthesizedExpression",
+                "start":21,"end":43,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":43}},
+                "expression": {
+                  "type": "ArrowFunctionExpression",
+                  "start":22,"end":42,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":42}},
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "Identifier",
+                      "start":23,"end":24,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":24},"identifierName":"n"},
+                      "name": "n"
+                    }
+                  ],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":29,"end":42,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":42}},
+                    "body": [
+                      {
+                        "type": "ReturnStatement",
+                        "start":31,"end":40,"loc":{"start":{"line":1,"column":31},"end":{"line":1,"column":40}},
+                        "argument": {
+                          "type": "Identifier",
+                          "start":38,"end":39,"loc":{"start":{"line":1,"column":38},"end":{"line":1,"column":39},"identifierName":"n"},
+                          "name": "n"
+                        }
+                      }
+                    ],
+                    "directives": []
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "presets": [["env", { "loose": true }]],
+  "plugins": ["transform-flow-strip-types", "external-helpers"]
+}

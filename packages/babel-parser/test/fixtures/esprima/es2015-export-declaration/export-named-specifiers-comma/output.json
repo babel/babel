@@ -1,0 +1,83 @@
+{
+  "type": "File",
+  "start":0,"end":37,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":8}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":37,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":8}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":7,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":7}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":7,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":7},"identifierName":"bar"},
+              "name": "bar"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":9,"end":28,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":19}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":17,"end":20,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":11}},
+            "local": {
+              "type": "Identifier",
+              "start":17,"end":20,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":11},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":17,"end":20,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":11},"identifierName":"foo"},
+              "name": "foo"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start":22,"end":25,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":16}},
+            "local": {
+              "type": "Identifier",
+              "start":22,"end":25,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":16},"identifierName":"bar"},
+              "name": "bar"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":22,"end":25,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":16},"identifierName":"bar"},
+              "name": "bar"
+            }
+          }
+        ],
+        "source": null,
+        "declaration": null
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":29,"end":37,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":8}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":33,"end":36,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":7}},
+            "id": {
+              "type": "Identifier",
+              "start":33,"end":36,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":7},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

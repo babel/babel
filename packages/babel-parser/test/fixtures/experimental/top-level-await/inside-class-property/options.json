@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "topLevelAwait",
+    "classProperties"
+  ],
+  "sourceType": "module",
+  "throws": "Unexpected token, expected \";\" (2:12)"
+}

@@ -1,0 +1,93 @@
+{
+  "type": "File",
+  "start":0,"end":56,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":22}},
+  "errors": [
+    "SyntaxError: Identifier 'foo2' has already been declared (2:13)",
+    "SyntaxError: `foo2` has already been exported. Exported identifiers must be unique. (2:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":56,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":22}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":33}},
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "VariableDeclaration",
+          "start":7,"end":33,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":33}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":13,"end":32,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":32}},
+              "id": {
+                "type": "ObjectPattern",
+                "start":13,"end":26,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":26}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":15,"end":24,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":24}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":15,"end":18,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":18},"identifierName":"foo"},
+                      "name": "foo"
+                    },
+                    "computed": false,
+                    "shorthand": false,
+                    "value": {
+                      "type": "Identifier",
+                      "start":20,"end":24,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":24},"identifierName":"foo2"},
+                      "name": "foo2"
+                    }
+                  }
+                ]
+              },
+              "init": {
+                "type": "Identifier",
+                "start":29,"end":32,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":32},"identifierName":"bar"},
+                "name": "bar"
+              }
+            }
+          ],
+          "kind": "const"
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":34,"end":56,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":22}},
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "VariableDeclaration",
+          "start":41,"end":56,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":22}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":47,"end":55,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":21}},
+              "id": {
+                "type": "Identifier",
+                "start":47,"end":51,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":17},"identifierName":"foo2"},
+                "name": "foo2"
+              },
+              "init": {
+                "type": "NumericLiteral",
+                "start":54,"end":55,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":21}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            }
+          ],
+          "kind": "const"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

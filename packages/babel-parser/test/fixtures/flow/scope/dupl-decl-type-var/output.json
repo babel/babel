@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":23,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":10}},
+  "errors": [
+    "SyntaxError: Identifier 'A' has already been declared (2:4)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":23,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":10}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start":9,"end":11,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":11}},
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": false
+        }
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":13,"end":23,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":10}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":17,"end":22,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":9}},
+            "id": {
+              "type": "Identifier",
+              "start":17,"end":18,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":5},"identifierName":"A"},
+              "name": "A"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":21,"end":22,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":9}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

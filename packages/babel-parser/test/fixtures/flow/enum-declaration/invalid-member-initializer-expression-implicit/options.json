@@ -1,0 +1,4 @@
+{
+  "plugins": [["flow", { "enums": true }]],
+  "throws": "The enum member initializer for `A` needs to be a literal (either a boolean, number, or string) in enum `E`. (2:6)"
+}

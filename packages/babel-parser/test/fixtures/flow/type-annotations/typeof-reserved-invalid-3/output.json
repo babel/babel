@@ -1,0 +1,82 @@
+{
+  "type": "File",
+  "start":0,"end":45,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":36}},
+  "errors": [
+    "SyntaxError: Unexpected reserved type number (2:22)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":45,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":36}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":9,"end":45,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":36}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":15,"end":44,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":35}},
+            "id": {
+              "type": "Identifier",
+              "start":15,"end":37,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":28},"identifierName":"x"},
+              "name": "x",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":16,"end":37,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":28}},
+                "typeAnnotation": {
+                  "type": "TypeofTypeAnnotation",
+                  "start":18,"end":37,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":28}},
+                  "argument": {
+                    "type": "GenericTypeAnnotation",
+                    "start":25,"end":37,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":28}},
+                    "typeParameters": null,
+                    "id": {
+                      "type": "QualifiedTypeIdentifier",
+                      "start":25,"end":37,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":28}},
+                      "qualification": {
+                        "type": "Identifier",
+                        "start":25,"end":30,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":21},"identifierName":"stuff"},
+                        "name": "stuff"
+                      },
+                      "id": {
+                        "type": "Identifier",
+                        "start":31,"end":37,"loc":{"start":{"line":2,"column":22},"end":{"line":2,"column":28},"identifierName":"number"},
+                        "name": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":40,"end":44,"loc":{"start":{"line":2,"column":31},"end":{"line":2,"column":35}},
+              "extra": {
+                "rawValue": "hi",
+                "raw": "\"hi\""
+              },
+              "value": "hi"
+            }
+          }
+        ],
+        "kind": "const",
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow",
+      "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "File",
+  "start":0,"end":2,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":2}},
+  "errors": [
+    "SyntaxError: Expecting Unicode escape sequence \\uXXXX (1:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":2,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":2}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":2,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":2}},
+        "expression": {
+          "type": "Identifier",
+          "start":0,"end":2,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":2},"identifierName":"xx\\"},
+          "name": "xx\\"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

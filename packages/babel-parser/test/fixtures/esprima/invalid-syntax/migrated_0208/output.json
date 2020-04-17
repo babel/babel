@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":39}},
+  "errors": [
+    "SyntaxError: Binding 'package' in strict mode (1:10)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":39}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":39}},
+        "expression": {
+          "type": "CallExpression",
+          "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":39}},
+          "callee": {
+            "type": "FunctionExpression",
+            "start":1,"end":36,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":36}},
+            "id": {
+              "type": "Identifier",
+              "start":10,"end":17,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":17},"identifierName":"package"},
+              "name": "package"
+            },
+            "generator": false,
+            "async": false,
+            "params": [],
+            "body": {
+              "type": "BlockStatement",
+              "start":20,"end":36,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":36}},
+              "body": [],
+              "directives": [
+                {
+                  "type": "Directive",
+                  "start":21,"end":34,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":34}},
+                  "value": {
+                    "type": "DirectiveLiteral",
+                    "start":21,"end":33,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":33}},
+                    "value": "use strict",
+                    "extra": {
+                      "raw": "'use strict'",
+                      "rawValue": "use strict"
+                    }
+                  }
+                }
+              ]
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 0
+            }
+          },
+          "arguments": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

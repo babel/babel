@@ -1,0 +1,4 @@
+{
+  "args": ["--watch"],
+  "stderrContains": true
+}

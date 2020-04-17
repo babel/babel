@@ -1,0 +1,48 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "android": "3"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-nullish-coalescing-operator { "android":"3" }
+  proposal-optional-chaining { "android":"3" }
+  proposal-json-strings { "android":"3" }
+  proposal-optional-catch-binding { "android":"3" }
+  transform-parameters { "android":"3" }
+  proposal-async-generator-functions { "android":"3" }
+  proposal-object-rest-spread { "android":"3" }
+  transform-dotall-regex { "android":"3" }
+  proposal-unicode-property-regex { "android":"3" }
+  transform-named-capturing-groups-regex { "android":"3" }
+  transform-async-to-generator { "android":"3" }
+  transform-exponentiation-operator { "android":"3" }
+  transform-template-literals { "android":"3" }
+  transform-literals { "android":"3" }
+  transform-function-name { "android":"3" }
+  transform-arrow-functions { "android":"3" }
+  transform-block-scoped-functions { "android":"3" }
+  transform-classes { "android":"3" }
+  transform-object-super { "android":"3" }
+  transform-shorthand-properties { "android":"3" }
+  transform-duplicate-keys { "android":"3" }
+  transform-computed-properties { "android":"3" }
+  transform-for-of { "android":"3" }
+  transform-sticky-regex { "android":"3" }
+  transform-unicode-regex { "android":"3" }
+  transform-spread { "android":"3" }
+  transform-destructuring { "android":"3" }
+  transform-block-scoping { "android":"3" }
+  transform-typeof-symbol { "android":"3" }
+  transform-new-target { "android":"3" }
+  transform-regenerator { "android":"3" }
+  transform-member-expression-literals { "android":"3" }
+  transform-property-literals { "android":"3" }
+  transform-reserved-words { "android":"3" }
+  transform-modules-commonjs { "android":"3" }
+  proposal-dynamic-import { "android":"3" }
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

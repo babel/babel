@@ -1,0 +1,47 @@
+{
+  "type": "File",
+  "start":0,"end":34,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":34}},
+  "errors": [
+    "SyntaxError: Cannot overwrite reserved type string (1:14)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":34,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":34}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":34,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":34}},
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":14,"end":20,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":20}},
+            "imported": {
+              "type": "Identifier",
+              "start":14,"end":20,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":20},"identifierName":"string"},
+              "name": "string"
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start":14,"end":20,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":20},"identifierName":"string"},
+              "name": "string"
+            }
+          }
+        ],
+        "importKind": "type",
+        "source": {
+          "type": "StringLiteral",
+          "start":28,"end":33,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":33}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

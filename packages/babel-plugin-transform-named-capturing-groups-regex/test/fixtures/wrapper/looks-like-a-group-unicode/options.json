@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    ["external-helpers", { "helperVersion": "7.1000.0" }],
+    "transform-named-capturing-groups-regex",
+    "transform-unicode-regex"
+  ]
+}

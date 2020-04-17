@@ -1,0 +1,15 @@
+{
+  "name": "@babel/helper-builder-react-jsx",
+  "version": "7.9.0",
+  "description": "Helper function to build react jsx",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-builder-react-jsx",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "@babel/helper-annotate-as-pure": "^7.8.3",
+    "@babel/types": "^7.9.0"
+  }
+}

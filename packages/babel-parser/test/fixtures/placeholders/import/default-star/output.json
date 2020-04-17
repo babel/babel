@@ -1,0 +1,51 @@
+{
+  "type": "File",
+  "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":42}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":42}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":42}},
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start":7,"end":18,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":18}},
+            "local": {
+              "type": "Placeholder",
+              "start":7,"end":18,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":18}},
+              "name": {
+                "type": "Identifier",
+                "start":9,"end":16,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":16},"identifierName":"DEFAULT"},
+                "name": "DEFAULT"
+              },
+              "expectedNode": "Identifier"
+            }
+          },
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start":20,"end":29,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":29}},
+            "local": {
+              "type": "Identifier",
+              "start":25,"end":29,"loc":{"start":{"line":1,"column":25},"end":{"line":1,"column":29},"identifierName":"star"},
+              "name": "star"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":35,"end":41,"loc":{"start":{"line":1,"column":35},"end":{"line":1,"column":41}},
+          "extra": {
+            "rawValue": "file",
+            "raw": "\"file\""
+          },
+          "value": "file"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

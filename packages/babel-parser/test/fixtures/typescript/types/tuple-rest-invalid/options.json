@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "plugins": ["typescript"],
+  "throws": "Rest element must be last element (1:19)"
+}

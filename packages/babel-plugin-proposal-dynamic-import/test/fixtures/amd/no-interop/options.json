@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "proposal-dynamic-import",
+    ["transform-modules-amd", { "noInterop": true }],
+    "external-helpers"
+  ]
+}

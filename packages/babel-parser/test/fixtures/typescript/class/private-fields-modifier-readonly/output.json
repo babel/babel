@@ -1,0 +1,69 @@
+{
+  "type": "File",
+  "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":49,"loc":{"start":{"line":1,"column":8},"end":{"line":4,"column":1}},
+          "body": [
+            {
+              "type": "ClassPrivateProperty",
+              "start":12,"end":24,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":14}},
+              "readonly": true,
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":21,"end":23,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":13}},
+                "id": {
+                  "type": "Identifier",
+                  "start":22,"end":23,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":13},"identifierName":"a"},
+                  "name": "a"
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "ClassPrivateProperty",
+              "start":27,"end":47,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":22}},
+              "readonly": true,
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":36,"end":38,"loc":{"start":{"line":3,"column":11},"end":{"line":3,"column":13}},
+                "id": {
+                  "type": "Identifier",
+                  "start":37,"end":38,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":13},"identifierName":"b"},
+                  "name": "b"
+                }
+              },
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":38,"end":46,"loc":{"start":{"line":3,"column":13},"end":{"line":3,"column":21}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":40,"end":46,"loc":{"start":{"line":3,"column":15},"end":{"line":3,"column":21}}
+                }
+              },
+              "value": null
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

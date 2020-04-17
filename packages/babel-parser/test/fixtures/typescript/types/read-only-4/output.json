@@ -1,0 +1,63 @@
+{
+  "type": "File",
+  "start":0,"end":44,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":44}},
+  "errors": [
+    "SyntaxError: 'readonly' type modifier is only permitted on array and tuple literal types. (1:11)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":44,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":44}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":34,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":34}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":8,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":8},"identifierName":"T33"},
+          "name": "T33"
+        },
+        "typeAnnotation": {
+          "type": "TSTypeOperator",
+          "start":11,"end":33,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":33}},
+          "operator": "readonly",
+          "typeAnnotation": {
+            "type": "TSTypeReference",
+            "start":20,"end":33,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":33}},
+            "typeName": {
+              "type": "Identifier",
+              "start":20,"end":25,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":25},"identifierName":"Array"},
+              "name": "Array"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterInstantiation",
+              "start":25,"end":33,"loc":{"start":{"line":1,"column":25},"end":{"line":1,"column":33}},
+              "params": [
+                {
+                  "type": "TSStringKeyword",
+                  "start":26,"end":32,"loc":{"start":{"line":1,"column":26},"end":{"line":1,"column":32}}
+                }
+              ]
+            }
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Error",
+            "start":36,"end":44,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":44}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Error",
+      "start":36,"end":44,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":44}}
+    }
+  ]
+}

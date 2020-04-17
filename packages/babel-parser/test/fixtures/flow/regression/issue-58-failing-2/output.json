@@ -1,0 +1,126 @@
+{
+  "type": "File",
+  "start":0,"end":83,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":36}},
+  "errors": [
+    "SyntaxError: Binding invalid left-hand side in function parameter list (2:8)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":83,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":36}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":47,"end":83,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":36}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":47,"end":82,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":35}},
+          "test": {
+            "type": "Identifier",
+            "start":47,"end":48,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":1},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start":51,"end":73,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":26}},
+            "predicate": null,
+            "returnType": {
+              "type": "TypeAnnotation",
+              "start":63,"end":66,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":19}},
+              "typeAnnotation": {
+                "type": "GenericTypeAnnotation",
+                "start":65,"end":66,"loc":{"start":{"line":2,"column":18},"end":{"line":2,"column":19}},
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start":65,"end":66,"loc":{"start":{"line":2,"column":18},"end":{"line":2,"column":19},"identifierName":"d"},
+                  "name": "d"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "ArrowFunctionExpression",
+                "start":55,"end":61,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":14}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start":55,"end":56,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":9},"identifierName":"b"},
+                    "name": "b"
+                  }
+                ],
+                "body": {
+                  "type": "Identifier",
+                  "start":60,"end":61,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":14},"identifierName":"c"},
+                  "name": "c"
+                }
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start":71,"end":72,"loc":{"start":{"line":2,"column":24},"end":{"line":2,"column":25},"identifierName":"e"},
+              "name": "e",
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 70
+              }
+            },
+            "typeParameters": {
+              "type": "TypeParameterDeclaration",
+              "start":51,"end":54,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":7}},
+              "params": [
+                {
+                  "type": "TypeParameter",
+                  "start":52,"end":53,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":6}},
+                  "name": "T",
+                  "variance": null
+                }
+              ]
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start":76,"end":82,"loc":{"start":{"line":2,"column":29},"end":{"line":2,"column":35}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start":76,"end":77,"loc":{"start":{"line":2,"column":29},"end":{"line":2,"column":30},"identifierName":"f"},
+                "name": "f"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start":81,"end":82,"loc":{"start":{"line":2,"column":34},"end":{"line":2,"column":35},"identifierName":"g"},
+              "name": "g"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Invalid LHS parameter after type parameters",
+            "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":46}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Invalid LHS parameter after type parameters",
+      "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":46}}
+    }
+  ]
+}

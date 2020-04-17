@@ -1,0 +1,73 @@
+{
+  "type": "File",
+  "start":0,"end":40,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":10}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":40,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":10}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":30,"end":40,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":10}},
+        "expression": {
+          "type": "CallExpression",
+          "start":30,"end":39,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":9}},
+          "callee": {
+            "type": "Identifier",
+            "start":30,"end":33,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":3},"identifierName":"foo"},
+            "name": "foo"
+          },
+          "typeArguments": {
+            "type": "TypeParameterInstantiation",
+            "start":33,"end":36,"loc":{"start":{"line":3,"column":3},"end":{"line":3,"column":6}},
+            "params": [
+              {
+                "type": "GenericTypeAnnotation",
+                "start":34,"end":35,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":5}},
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start":34,"end":35,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":5},"identifierName":"x"},
+                  "name": "x"
+                }
+              }
+            ]
+          },
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start":37,"end":38,"loc":{"start":{"line":3,"column":7},"end":{"line":3,"column":8},"identifierName":"y"},
+              "name": "y"
+            }
+          ]
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " arbitrary comment",
+            "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":21,"end":29,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":8}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " arbitrary comment",
+      "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " @flow",
+      "start":21,"end":29,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":8}}
+    }
+  ]
+}

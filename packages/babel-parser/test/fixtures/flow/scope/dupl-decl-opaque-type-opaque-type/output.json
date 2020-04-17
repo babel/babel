@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":19}},
+  "errors": [
+    "SyntaxError: Identifier 'A' has already been declared (2:12)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":19}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "OpaqueType",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":19}},
+        "id": {
+          "type": "Identifier",
+          "start":12,"end":13,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":13},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeParameters": null,
+        "supertype": null,
+        "impltype": {
+          "type": "ObjectTypeAnnotation",
+          "start":16,"end":18,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":18}},
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": false
+        }
+      },
+      {
+        "type": "OpaqueType",
+        "start":20,"end":39,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":19}},
+        "id": {
+          "type": "Identifier",
+          "start":32,"end":33,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":13},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeParameters": null,
+        "supertype": null,
+        "impltype": {
+          "type": "ObjectTypeAnnotation",
+          "start":36,"end":38,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":18}},
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

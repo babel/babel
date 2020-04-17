@@ -1,0 +1,10 @@
+{
+  "caller": {
+    "name": "test-fixture",
+    "supportsStaticESM": true,
+    "supportsDynamicImport": true,
+    "supportsTopLevelAwait": false
+  },
+  "presets": ["env"],
+  "throws": "Can not use keyword 'await' outside an async function (1:0)"
+}

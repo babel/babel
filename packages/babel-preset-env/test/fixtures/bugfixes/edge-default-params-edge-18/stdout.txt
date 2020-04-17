@@ -1,0 +1,24 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "edge": "18"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-nullish-coalescing-operator { "edge":"18" }
+  proposal-optional-chaining { "edge":"18" }
+  proposal-json-strings { "edge":"18" }
+  proposal-optional-catch-binding { "edge":"18" }
+  proposal-async-generator-functions { "edge":"18" }
+  proposal-object-rest-spread { "edge":"18" }
+  transform-dotall-regex { "edge":"18" }
+  proposal-unicode-property-regex { "edge":"18" }
+  transform-named-capturing-groups-regex { "edge":"18" }
+  bugfix/transform-edge-function-name { "edge":"18" }
+  transform-modules-commonjs { "edge":"18" }
+  proposal-dynamic-import { "edge":"18" }
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

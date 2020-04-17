@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "transform-for-of",
+    ["transform-runtime", { "version": "7.100.0" }]
+  ]
+}

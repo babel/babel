@@ -1,0 +1,4 @@
+{
+  "throws": "This experimental syntax requires enabling the parser plugin: 'importMeta' (1:7)",
+  "plugins": []
+}

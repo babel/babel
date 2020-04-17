@@ -1,0 +1,9 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "external-helpers",
+    ["transform-modules-umd", {
+      "moduleIds": true
+    }]
+  ]
+}

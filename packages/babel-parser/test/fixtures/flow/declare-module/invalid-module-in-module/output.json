@@ -1,0 +1,47 @@
+{
+  "type": "File",
+  "start":0,"end":40,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":40}},
+  "errors": [
+    "SyntaxError: `declare module` cannot be used inside another `declare module` (1:27)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":40,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":40}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareModule",
+        "start":0,"end":40,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":40}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":16},"identifierName":"A"},
+          "name": "A"
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start":17,"end":40,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":40}},
+          "body": [
+            {
+              "type": "DeclareModule",
+              "start":19,"end":38,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":38}},
+              "id": {
+                "type": "Identifier",
+                "start":34,"end":35,"loc":{"start":{"line":1,"column":34},"end":{"line":1,"column":35},"identifierName":"B"},
+                "name": "B"
+              },
+              "body": {
+                "type": "BlockStatement",
+                "start":36,"end":38,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":38}},
+                "body": []
+              },
+              "kind": "CommonJS"
+            }
+          ]
+        },
+        "kind": "CommonJS"
+      }
+    ],
+    "directives": []
+  }
+}

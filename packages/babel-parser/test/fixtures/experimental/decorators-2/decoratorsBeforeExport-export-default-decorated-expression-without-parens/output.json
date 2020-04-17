@@ -1,0 +1,46 @@
+{
+  "type": "File",
+  "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":38}},
+  "errors": [
+    "SyntaxError: Decorators must be placed *before* the 'export' keyword. You can set the 'decoratorsBeforeExport' option to false to use the 'export @decorator class {}' syntax (1:15)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":38}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":38}},
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start":15,"end":38,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":38}},
+          "decorators": [
+            {
+              "type": "Decorator",
+              "start":15,"end":25,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":25}},
+              "expression": {
+                "type": "Identifier",
+                "start":16,"end":25,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":25},"identifierName":"decorator"},
+                "name": "decorator"
+              }
+            }
+          ],
+          "id": {
+            "type": "Identifier",
+            "start":32,"end":35,"loc":{"start":{"line":1,"column":32},"end":{"line":1,"column":35},"identifierName":"Foo"},
+            "name": "Foo"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":36,"end":38,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":38}},
+            "body": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

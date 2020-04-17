@@ -1,0 +1,55 @@
+{
+  "type": "File",
+  "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":14}},
+  "errors": [
+    "SyntaxError: JSX attributes must only be assigned a non-empty expression (1:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":14}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":14}},
+        "expression": {
+          "type": "JSXElement",
+          "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":14}},
+          "openingElement": {
+            "type": "JSXOpeningElement",
+            "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":14}},
+            "name": {
+              "type": "JSXIdentifier",
+              "start":1,"end":4,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":4}},
+              "name": "foo"
+            },
+            "attributes": [
+              {
+                "type": "JSXAttribute",
+                "start":5,"end":11,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":11}},
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start":5,"end":8,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":8}},
+                  "name": "bar"
+                },
+                "value": {
+                  "type": "JSXExpressionContainer",
+                  "start":9,"end":11,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":11}},
+                  "expression": {
+                    "type": "JSXEmptyExpression",
+                    "start":10,"end":10,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":10}}
+                  }
+                }
+              }
+            ],
+            "selfClosing": true
+          },
+          "closingElement": null,
+          "children": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

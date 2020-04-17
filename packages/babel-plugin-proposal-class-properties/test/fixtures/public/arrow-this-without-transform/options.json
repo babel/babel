@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "external-helpers",
+    "transform-arrow-functions",
+    "syntax-class-properties"
+  ],
+  "throws": "Unable to transform arrow inside class property"
+}

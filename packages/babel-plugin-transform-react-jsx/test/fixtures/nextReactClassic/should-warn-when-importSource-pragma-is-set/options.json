@@ -1,0 +1,3 @@
+{
+  "throws": "importSource cannot be set when runtime is classic."
+}

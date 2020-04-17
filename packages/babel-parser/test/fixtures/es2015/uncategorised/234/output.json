@@ -1,0 +1,71 @@
+{
+  "type": "File",
+  "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":38}},
+  "errors": [
+    "SyntaxError: Assigning to 'arguments' in strict mode (1:20)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":38}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":14,"end":38,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":38}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":15,"end":37,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":37}},
+          "operator": "=",
+          "left": {
+            "type": "ObjectPattern",
+            "start":15,"end":31,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":31}},
+            "properties": [
+              {
+                "type": "ObjectProperty",
+                "start":17,"end":29,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":29}},
+                "method": false,
+                "key": {
+                  "type": "Identifier",
+                  "start":17,"end":18,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":18},"identifierName":"v"},
+                  "name": "v"
+                },
+                "computed": false,
+                "shorthand": false,
+                "value": {
+                  "type": "Identifier",
+                  "start":20,"end":29,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":29},"identifierName":"arguments"},
+                  "name": "arguments"
+                }
+              }
+            ]
+          },
+          "right": {
+            "type": "Identifier",
+            "start":34,"end":37,"loc":{"start":{"line":1,"column":34},"end":{"line":1,"column":37},"identifierName":"obj"},
+            "name": "obj"
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 14
+          }
+        }
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
+          "value": "use strict",
+          "extra": {
+            "raw": "\"use strict\"",
+            "rawValue": "use strict"
+          }
+        }
+      }
+    ]
+  }
+}

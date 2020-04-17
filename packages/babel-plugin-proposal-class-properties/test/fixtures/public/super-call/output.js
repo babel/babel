@@ -1,0 +1,34 @@
+var A = /*#__PURE__*/function () {
+  "use strict";
+
+  function A() {
+    babelHelpers.classCallCheck(this, A);
+  }
+
+  babelHelpers.createClass(A, [{
+    key: "foo",
+    value: function foo() {
+      return "bar";
+    }
+  }]);
+  return A;
+}();
+
+var B = /*#__PURE__*/function (_A) {
+  "use strict";
+
+  babelHelpers.inherits(B, _A);
+
+  var _super = babelHelpers.createSuper(B);
+
+  function B(...args) {
+    var _this;
+
+    babelHelpers.classCallCheck(this, B);
+    _this = _super.call(this, ...args);
+    babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "foo", babelHelpers.get(babelHelpers.getPrototypeOf(B.prototype), "foo", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this)));
+    return _this;
+  }
+
+  return B;
+}(A);

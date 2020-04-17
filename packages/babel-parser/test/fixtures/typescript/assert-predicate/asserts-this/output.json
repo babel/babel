@@ -1,0 +1,64 @@
+{
+  "type": "File",
+  "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":35,"loc":{"start":{"line":1,"column":8},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":12,"end":32,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":22}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":12,"end":13,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":3},"identifierName":"m"},
+                "name": "m"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "returnType": {
+                "type": "TSTypeAnnotation",
+                "start":15,"end":29,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":19}},
+                "typeAnnotation": {
+                  "type": "TSTypePredicate",
+                  "start":15,"end":29,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":19}},
+                  "parameterName": {
+                    "type": "TSThisType",
+                    "start":25,"end":29,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":19}}
+                  },
+                  "asserts": true
+                }
+              },
+              "body": {
+                "type": "BlockStatement",
+                "start":30,"end":32,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":22}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

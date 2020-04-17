@@ -1,0 +1,2 @@
+do {} // LINE
+while (true);

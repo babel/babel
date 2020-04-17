@@ -1,0 +1,57 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":19}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":19}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":13,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":13},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":16,"end":18,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":18}},
+          "body": [],
+          "directives": []
+        }
+      },
+      {
+        "type": "EmptyStatement",
+        "start":18,"end":19,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":19}}
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":20,"end":38,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":18}},
+        "id": {
+          "type": "Identifier",
+          "start":30,"end":33,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":13},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":36,"end":38,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":18}},
+          "body": [],
+          "directives": []
+        }
+      },
+      {
+        "type": "EmptyStatement",
+        "start":38,"end":39,"loc":{"start":{"line":2,"column":18},"end":{"line":2,"column":19}}
+      }
+    ],
+    "directives": []
+  }
+}

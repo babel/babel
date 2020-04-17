@@ -1,0 +1,22 @@
+{
+  "name": "@babel/runtime",
+  "version": "7.9.2",
+  "description": "babel's modular runtime helpers",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-runtime"
+  },
+  "homepage": "https://babeljs.io/docs/en/next/babel-runtime",
+  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "dependencies": {
+    "regenerator-runtime": "^0.13.4"
+  },
+  "devDependencies": {
+    "@babel/helpers": "^7.9.2"
+  }
+}

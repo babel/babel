@@ -1,0 +1,62 @@
+{
+  "type": "File",
+  "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: setter must have exactly one formal parameter (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"B"},
+          "name": "B"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start":9,"end":29,"loc":{"start":{"line":1,"column":9},"end":{"line":3,"column":1}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":13,"end":26,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":15}},
+              "key": {
+                "type": "Identifier",
+                "start":17,"end":18,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":7},"identifierName":"a"},
+                "name": "a"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "set",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":13,"end":26,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":15}},
+                "params": [],
+                "rest": null,
+                "typeParameters": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start":22,"end":26,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":15}}
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

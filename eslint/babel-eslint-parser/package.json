@@ -1,0 +1,37 @@
+{
+  "name": "@babel/eslint-parser",
+  "version": "0.0.0",
+  "description": "ESLint parser that allows for linting of experimental syntax transformed by Babel",
+  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "eslint/babel-eslint-parser"
+  },
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
+  "homepage": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-parser",
+  "engines": {
+    "node": ">=10.9"
+  },
+  "main": "lib/index.js",
+  "peerDependencies": {
+    "@babel/core": ">=7.2.0",
+    "eslint": ">=6.0.0"
+  },
+  "dependencies": {
+    "eslint-scope": "5.0.0",
+    "eslint-visitor-keys": "^1.1.0",
+    "semver": "^6.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.0",
+    "@babel/eslint-shared-fixtures": "*",
+    "dedent": "^0.7.0",
+    "eslint": "^6.0.1",
+    "lodash.clonedeep": "^4.5.0"
+  }
+}

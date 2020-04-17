@@ -1,0 +1,51 @@
+{
+  "type": "File",
+  "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":2}},
+  "errors": [
+    "SyntaxError: Spread operator cannot appear in class or interface definitions (2:1)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":2}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "InterfaceDeclaration",
+        "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start":12,"end":24,"loc":{"start":{"line":1,"column":12},"end":{"line":3,"column":1}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeSpreadProperty",
+              "start":15,"end":21,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":7}},
+              "argument": {
+                "type": "AnyTypeAnnotation",
+                "start":18,"end":21,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":7}}
+              }
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      },
+      {
+        "type": "EmptyStatement",
+        "start":24,"end":25,"loc":{"start":{"line":3,"column":1},"end":{"line":3,"column":2}}
+      }
+    ],
+    "directives": []
+  }
+}

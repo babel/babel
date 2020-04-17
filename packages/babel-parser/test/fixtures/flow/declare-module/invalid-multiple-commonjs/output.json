@@ -1,0 +1,60 @@
+{
+  "type": "File",
+  "start":0,"end":88,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":88}},
+  "errors": [
+    "SyntaxError: Duplicate `declare module.exports` statement (1:55)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":88,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":88}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareModule",
+        "start":0,"end":88,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":88}},
+        "id": {
+          "type": "StringLiteral",
+          "start":15,"end":20,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":20}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start":21,"end":88,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":88}},
+          "body": [
+            {
+              "type": "DeclareModuleExports",
+              "start":23,"end":54,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":54}},
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":45,"end":53,"loc":{"start":{"line":1,"column":45},"end":{"line":1,"column":53}},
+                "typeAnnotation": {
+                  "type": "StringTypeAnnotation",
+                  "start":47,"end":53,"loc":{"start":{"line":1,"column":47},"end":{"line":1,"column":53}}
+                }
+              }
+            },
+            {
+              "type": "DeclareModuleExports",
+              "start":55,"end":86,"loc":{"start":{"line":1,"column":55},"end":{"line":1,"column":86}},
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":77,"end":85,"loc":{"start":{"line":1,"column":77},"end":{"line":1,"column":85}},
+                "typeAnnotation": {
+                  "type": "NumberTypeAnnotation",
+                  "start":79,"end":85,"loc":{"start":{"line":1,"column":79},"end":{"line":1,"column":85}}
+                }
+              }
+            }
+          ]
+        },
+        "kind": "CommonJS"
+      }
+    ],
+    "directives": []
+  }
+}

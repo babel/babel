@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "external-helpers",
+    "transform-duplicate-keys",
+    "transform-computed-properties"
+  ]
+}

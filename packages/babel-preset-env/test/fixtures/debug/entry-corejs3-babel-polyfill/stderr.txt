@@ -1,0 +1,2 @@
+`@babel/polyfill` is deprecated. Please, use required parts of `core-js`
+  and `regenerator-runtime/runtime` separately

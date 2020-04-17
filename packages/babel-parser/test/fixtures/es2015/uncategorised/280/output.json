@@ -1,0 +1,80 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":36}},
+  "errors": [
+    "SyntaxError: Argument name clash (1:30)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":36}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":14,"end":36,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":36}},
+        "id": {
+          "type": "Identifier",
+          "start":23,"end":24,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":24},"identifierName":"x"},
+          "name": "x"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start":25,"end":26,"loc":{"start":{"line":1,"column":25},"end":{"line":1,"column":26},"identifierName":"a"},
+            "name": "a"
+          },
+          {
+            "type": "ObjectPattern",
+            "start":28,"end":33,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":33}},
+            "properties": [
+              {
+                "type": "ObjectProperty",
+                "start":30,"end":31,"loc":{"start":{"line":1,"column":30},"end":{"line":1,"column":31}},
+                "method": false,
+                "key": {
+                  "type": "Identifier",
+                  "start":30,"end":31,"loc":{"start":{"line":1,"column":30},"end":{"line":1,"column":31},"identifierName":"a"},
+                  "name": "a"
+                },
+                "computed": false,
+                "shorthand": true,
+                "value": {
+                  "type": "Identifier",
+                  "start":30,"end":31,"loc":{"start":{"line":1,"column":30},"end":{"line":1,"column":31},"identifierName":"a"},
+                  "name": "a"
+                },
+                "extra": {
+                  "shorthand": true
+                }
+              }
+            ]
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":34,"end":36,"loc":{"start":{"line":1,"column":34},"end":{"line":1,"column":36}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
+          "value": "use strict",
+          "extra": {
+            "raw": "\"use strict\"",
+            "rawValue": "use strict"
+          }
+        }
+      }
+    ]
+  }
+}

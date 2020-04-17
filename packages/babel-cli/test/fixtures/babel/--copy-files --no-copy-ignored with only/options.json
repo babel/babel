@@ -1,0 +1,12 @@
+{
+  "args": [
+    "src",
+    "--out-dir",
+    "lib",
+    "--copy-files",
+    "--only",
+    "src/foo/*",
+    "--no-copy-ignored",
+    "--verbose"
+  ]
+}

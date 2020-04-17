@@ -1,0 +1,3 @@
+<Component
+  {...props}
+  sound="moo" />

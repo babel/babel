@@ -1,0 +1,4 @@
+{
+  "args": ["foo.json"],
+  "stderrContains": true
+}

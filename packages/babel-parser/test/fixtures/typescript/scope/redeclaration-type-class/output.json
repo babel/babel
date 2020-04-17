@@ -1,0 +1,44 @@
+{
+  "type": "File",
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":10}},
+  "errors": [
+    "SyntaxError: Identifier 'A' has already been declared (2:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":10}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":16,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":16}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeAnnotation": {
+          "type": "TSNumberKeyword",
+          "start":9,"end":15,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":15}}
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":17,"end":27,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":10}},
+        "id": {
+          "type": "Identifier",
+          "start":23,"end":24,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":25,"end":27,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":10}},
+          "body": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

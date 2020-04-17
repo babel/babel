@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":25}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'enum' (1:15)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":25}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":25}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "ObjectPattern",
+            "start":13,"end":21,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":21}},
+            "properties": [
+              {
+                "type": "ObjectProperty",
+                "start":15,"end":19,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":19}},
+                "method": false,
+                "key": {
+                  "type": "Identifier",
+                  "start":15,"end":19,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":19},"identifierName":"enum"},
+                  "name": "enum"
+                },
+                "computed": false,
+                "shorthand": true,
+                "value": {
+                  "type": "Identifier",
+                  "start":15,"end":19,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":19},"identifierName":"enum"},
+                  "name": "enum"
+                },
+                "extra": {
+                  "shorthand": true
+                }
+              }
+            ]
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":23,"end":25,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":25}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

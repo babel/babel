@@ -1,0 +1,72 @@
+{
+  "type": "File",
+  "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":49}},
+  "errors": [
+    "SyntaxError: Assigning to 'arguments' in strict mode (1:32)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":49}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":49}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":14,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":14},"identifierName":"hello"},
+          "name": "hello"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":17,"end":49,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":49}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":32,"end":47,"loc":{"start":{"line":1,"column":32},"end":{"line":1,"column":47}},
+              "expression": {
+                "type": "AssignmentExpression",
+                "start":32,"end":46,"loc":{"start":{"line":1,"column":32},"end":{"line":1,"column":46}},
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "start":32,"end":41,"loc":{"start":{"line":1,"column":32},"end":{"line":1,"column":41},"identifierName":"arguments"},
+                  "name": "arguments"
+                },
+                "right": {
+                  "type": "NumericLiteral",
+                  "start":44,"end":46,"loc":{"start":{"line":1,"column":44},"end":{"line":1,"column":46}},
+                  "extra": {
+                    "rawValue": 10,
+                    "raw": "10"
+                  },
+                  "value": 10
+                }
+              }
+            }
+          ],
+          "directives": [
+            {
+              "type": "Directive",
+              "start":18,"end":31,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":31}},
+              "value": {
+                "type": "DirectiveLiteral",
+                "start":18,"end":30,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":30}},
+                "value": "use strict",
+                "extra": {
+                  "raw": "'use strict'",
+                  "rawValue": "use strict"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

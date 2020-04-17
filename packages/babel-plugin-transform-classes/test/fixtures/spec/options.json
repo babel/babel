@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    ["external-helpers", { "helperVersion": "7.100.0" }],
+    "transform-function-name",
+    "transform-classes",
+    "transform-spread",
+    "transform-block-scoping"
+  ]
+}

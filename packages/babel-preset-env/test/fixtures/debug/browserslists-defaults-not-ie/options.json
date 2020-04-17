@@ -1,0 +1,19 @@
+{
+  "validateLogs": true,
+  "ignoreOutput": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "browsers": [
+            "defaults",
+            "not ie 11",
+            "not ie_mob 11"
+          ]
+        }
+      }
+    ]
+  ]
+}

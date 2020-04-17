@@ -1,0 +1,8 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "flow",
+    "classProperties",
+    ["decorators", { "decoratorsBeforeExport": false }]
+  ]
+}

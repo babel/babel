@@ -1,0 +1,59 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":18}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":18}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start":4,"end":15,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":13}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":8,"end":15,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":13}},
+                "id": {
+                  "type": "Identifier",
+                  "start":8,"end":15,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":13},"identifierName":"encrypt"},
+                  "name": "encrypt"
+                },
+                "init": null
+              }
+            ],
+            "kind": "var"
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":18,"end":36,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":18}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":27,"end":34,"loc":{"start":{"line":4,"column":9},"end":{"line":4,"column":16}},
+            "local": {
+              "type": "Identifier",
+              "start":27,"end":34,"loc":{"start":{"line":4,"column":9},"end":{"line":4,"column":16},"identifierName":"encrypt"},
+              "name": "encrypt"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":27,"end":34,"loc":{"start":{"line":4,"column":9},"end":{"line":4,"column":16},"identifierName":"encrypt"},
+              "name": "encrypt"
+            }
+          }
+        ],
+        "source": null,
+        "declaration": null
+      }
+    ],
+    "directives": []
+  }
+}

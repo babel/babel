@@ -1,0 +1,11 @@
+import "core-js/modules/es.object.from-entries";
+import "core-js/modules/esnext.reflect.define-metadata";
+import "core-js/modules/esnext.reflect.delete-metadata";
+import "core-js/modules/esnext.reflect.get-metadata";
+import "core-js/modules/esnext.reflect.get-metadata-keys";
+import "core-js/modules/esnext.reflect.get-own-metadata";
+import "core-js/modules/esnext.reflect.get-own-metadata-keys";
+import "core-js/modules/esnext.reflect.has-metadata";
+import "core-js/modules/esnext.reflect.has-own-metadata";
+import "core-js/modules/esnext.reflect.metadata";
+import 'core-js/something';

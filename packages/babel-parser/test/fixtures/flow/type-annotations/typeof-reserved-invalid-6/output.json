@@ -1,0 +1,82 @@
+{
+  "type": "File",
+  "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":40}},
+  "errors": [
+    "SyntaxError: Unexpected reserved type interface (2:18)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":40}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":9,"end":49,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":40}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":15,"end":48,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":39}},
+            "id": {
+              "type": "Identifier",
+              "start":15,"end":41,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":32},"identifierName":"x"},
+              "name": "x",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":16,"end":41,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":32}},
+                "typeAnnotation": {
+                  "type": "TypeofTypeAnnotation",
+                  "start":18,"end":41,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":32}},
+                  "argument": {
+                    "type": "GenericTypeAnnotation",
+                    "start":25,"end":41,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":32}},
+                    "typeParameters": null,
+                    "id": {
+                      "type": "QualifiedTypeIdentifier",
+                      "start":25,"end":41,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":32}},
+                      "qualification": {
+                        "type": "Identifier",
+                        "start":25,"end":26,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":17},"identifierName":"d"},
+                        "name": "d"
+                      },
+                      "id": {
+                        "type": "Identifier",
+                        "start":27,"end":41,"loc":{"start":{"line":2,"column":18},"end":{"line":2,"column":32},"identifierName":"interface"},
+                        "name": "interface"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":44,"end":48,"loc":{"start":{"line":2,"column":35},"end":{"line":2,"column":39}},
+              "extra": {
+                "rawValue": "hi",
+                "raw": "\"hi\""
+              },
+              "value": "hi"
+            }
+          }
+        ],
+        "kind": "const",
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow",
+      "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
+    }
+  ]
+}

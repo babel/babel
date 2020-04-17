@@ -1,0 +1,82 @@
+{
+  "type": "File",
+  "start":0,"end":73,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":34}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":73,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":34}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":21,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":21}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":16,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":16},"identifierName":"encrypt"},
+          "name": "encrypt"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":21,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":21}},
+          "body": [],
+          "directives": []
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":22,"end":38,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":16}},
+        "id": {
+          "type": "Identifier",
+          "start":28,"end":35,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":13},"identifierName":"decrypt"},
+          "name": "decrypt"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":36,"end":38,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":16}},
+          "body": []
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":39,"end":73,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":34}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":48,"end":55,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":16}},
+            "local": {
+              "type": "Identifier",
+              "start":48,"end":55,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":16},"identifierName":"encrypt"},
+              "name": "encrypt"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":48,"end":55,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":16},"identifierName":"encrypt"},
+              "name": "encrypt"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start":57,"end":71,"loc":{"start":{"line":3,"column":18},"end":{"line":3,"column":32}},
+            "local": {
+              "type": "Identifier",
+              "start":57,"end":64,"loc":{"start":{"line":3,"column":18},"end":{"line":3,"column":25},"identifierName":"decrypt"},
+              "name": "decrypt"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":68,"end":71,"loc":{"start":{"line":3,"column":29},"end":{"line":3,"column":32},"identifierName":"dec"},
+              "name": "dec"
+            }
+          }
+        ],
+        "source": null,
+        "declaration": null
+      }
+    ],
+    "directives": []
+  }
+}

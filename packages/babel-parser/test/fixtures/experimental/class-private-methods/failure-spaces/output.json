@@ -1,0 +1,72 @@
+{
+  "type": "File",
+  "start":0,"end":60,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+  "errors": [
+    "SyntaxError: Unexpected space between # and identifier (2:3)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":60,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":60,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":12,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":12},"identifierName":"Spaces"},
+          "name": "Spaces"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":13,"end":60,"loc":{"start":{"line":1,"column":13},"end":{"line":5,"column":1}},
+          "body": [
+            {
+              "type": "ClassPrivateMethod",
+              "start":17,"end":58,"loc":{"start":{"line":2,"column":2},"end":{"line":4,"column":3}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":17,"end":31,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":16}},
+                "id": {
+                  "type": "Identifier",
+                  "start":20,"end":31,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":16},"identifierName":"wrongSpaces"},
+                  "name": "wrongSpaces"
+                }
+              },
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":34,"end":58,"loc":{"start":{"line":2,"column":19},"end":{"line":4,"column":3}},
+                "body": [
+                  {
+                    "type": "ReturnStatement",
+                    "start":40,"end":54,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":18}},
+                    "argument": {
+                      "type": "CallExpression",
+                      "start":47,"end":53,"loc":{"start":{"line":3,"column":11},"end":{"line":3,"column":17}},
+                      "callee": {
+                        "type": "Identifier",
+                        "start":47,"end":51,"loc":{"start":{"line":3,"column":11},"end":{"line":3,"column":15},"identifierName":"fail"},
+                        "name": "fail"
+                      },
+                      "arguments": []
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

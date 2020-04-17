@@ -1,0 +1,83 @@
+{
+  "type": "File",
+  "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+  "errors": [
+    "SyntaxError: Duplicate private name #x (3:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":49,"loc":{"start":{"line":1,"column":8},"end":{"line":4,"column":1}},
+          "body": [
+            {
+              "type": "ClassPrivateMethod",
+              "start":12,"end":30,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":20}},
+              "static": true,
+              "key": {
+                "type": "PrivateName",
+                "start":23,"end":25,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":15}},
+                "id": {
+                  "type": "Identifier",
+                  "start":24,"end":25,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":15},"identifierName":"x"},
+                  "name": "x"
+                }
+              },
+              "computed": false,
+              "kind": "get",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":28,"end":30,"loc":{"start":{"line":2,"column":18},"end":{"line":2,"column":20}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassPrivateMethod",
+              "start":33,"end":47,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":16}},
+              "static": true,
+              "key": {
+                "type": "PrivateName",
+                "start":40,"end":42,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":11}},
+                "id": {
+                  "type": "Identifier",
+                  "start":41,"end":42,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":11},"identifierName":"x"},
+                  "name": "x"
+                }
+              },
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":45,"end":47,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":16}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

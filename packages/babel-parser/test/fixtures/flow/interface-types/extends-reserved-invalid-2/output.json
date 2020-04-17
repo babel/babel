@@ -1,0 +1,72 @@
+{
+  "type": "File",
+  "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":29}},
+  "errors": [
+    "SyntaxError: Unexpected reserved type bool (2:20)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":29}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "InterfaceDeclaration",
+        "start":9,"end":38,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":29}},
+        "id": {
+          "type": "Identifier",
+          "start":19,"end":20,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11},"identifierName":"I"},
+          "name": "I"
+        },
+        "typeParameters": null,
+        "extends": [
+          {
+            "type": "InterfaceExtends",
+            "start":29,"end":35,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":26}},
+            "id": {
+              "type": "QualifiedTypeIdentifier",
+              "start":29,"end":35,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":26}},
+              "qualification": {
+                "type": "Identifier",
+                "start":29,"end":33,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":24},"identifierName":"bool"},
+                "name": "bool"
+              },
+              "id": {
+                "type": "Identifier",
+                "start":34,"end":35,"loc":{"start":{"line":2,"column":25},"end":{"line":2,"column":26},"identifierName":"m"},
+                "name": "m"
+              }
+            },
+            "typeParameters": null
+          }
+        ],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start":36,"end":38,"loc":{"start":{"line":2,"column":27},"end":{"line":2,"column":29}},
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow",
+      "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
+    }
+  ]
+}

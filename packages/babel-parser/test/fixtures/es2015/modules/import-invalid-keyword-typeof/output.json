@@ -1,0 +1,45 @@
+{
+  "type": "File",
+  "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":29}},
+  "errors": [
+    "SyntaxError: Unexpected keyword 'typeof' (1:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":29}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":29}},
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":9,"end":15,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":15}},
+            "imported": {
+              "type": "Identifier",
+              "start":9,"end":15,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":15},"identifierName":"typeof"},
+              "name": "typeof"
+            },
+            "local": {
+              "type": "Identifier",
+              "start":9,"end":15,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":15},"identifierName":"typeof"},
+              "name": "typeof"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":23,"end":28,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":28}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

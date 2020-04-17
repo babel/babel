@@ -1,0 +1,145 @@
+{
+  "type": "File",
+  "start":0,"end":96,"loc":{"start":{"line":1,"column":0},"end":{"line":14,"column":22}},
+  "errors": [
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (8:2)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (9:2)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (11:0)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (12:0)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (14:2)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (14:10)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (14:18)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (1:2)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (1:10)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (1:18)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (3:2)",
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (4:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":96,"loc":{"start":{"line":1,"column":0},"end":{"line":14,"column":22}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":65,"end":68,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":3}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":65,"end":67,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":2}},
+          "extra": {
+            "rawValue": 4,
+            "raw": "04"
+          },
+          "value": 4
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":69,"end":72,"loc":{"start":{"line":12,"column":0},"end":{"line":12,"column":3}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":69,"end":71,"loc":{"start":{"line":12,"column":0},"end":{"line":12,"column":2}},
+          "extra": {
+            "rawValue": 5,
+            "raw": "05"
+          },
+          "value": 5
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":74,"end":96,"loc":{"start":{"line":14,"column":0},"end":{"line":14,"column":22}},
+        "expression": {
+          "type": "StringLiteral",
+          "start":74,"end":95,"loc":{"start":{"line":14,"column":0},"end":{"line":14,"column":21}},
+          "extra": {
+            "rawValue": "\u0004 foo \u0005 bar \u0006",
+            "raw": "\"\\04 foo \\05 bar \\06\""
+          },
+          "value": "\u0004 foo \u0005 bar \u0006"
+        }
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":21,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":21}},
+          "value": "\\01 foo \\02 bar \\03",
+          "extra": {
+            "raw": "\"\\01 foo \\02 bar \\03\"",
+            "rawValue": "\\01 foo \\02 bar \\03"
+          }
+        }
+      },
+      {
+        "type": "Directive",
+        "start":24,"end":29,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":5}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":24,"end":28,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":4}},
+          "value": "\\4",
+          "extra": {
+            "raw": "\"\\4\"",
+            "rawValue": "\\4"
+          }
+        }
+      },
+      {
+        "type": "Directive",
+        "start":30,"end":35,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":5}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":30,"end":34,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":4}},
+          "value": "\\5",
+          "extra": {
+            "raw": "\"\\5\"",
+            "rawValue": "\\5"
+          }
+        }
+      },
+      {
+        "type": "Directive",
+        "start":37,"end":50,"loc":{"start":{"line":6,"column":0},"end":{"line":6,"column":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":37,"end":49,"loc":{"start":{"line":6,"column":0},"end":{"line":6,"column":12}},
+          "value": "use strict",
+          "extra": {
+            "raw": "\"use strict\"",
+            "rawValue": "use strict"
+          }
+        }
+      },
+      {
+        "type": "Directive",
+        "start":52,"end":57,"loc":{"start":{"line":8,"column":0},"end":{"line":8,"column":5}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":52,"end":56,"loc":{"start":{"line":8,"column":0},"end":{"line":8,"column":4}},
+          "value": "\\4",
+          "extra": {
+            "raw": "\"\\4\"",
+            "rawValue": "\\4"
+          }
+        }
+      },
+      {
+        "type": "Directive",
+        "start":58,"end":63,"loc":{"start":{"line":9,"column":0},"end":{"line":9,"column":5}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":58,"end":62,"loc":{"start":{"line":9,"column":0},"end":{"line":9,"column":4}},
+          "value": "\\5",
+          "extra": {
+            "raw": "\"\\5\"",
+            "rawValue": "\\5"
+          }
+        }
+      }
+    ]
+  }
+}

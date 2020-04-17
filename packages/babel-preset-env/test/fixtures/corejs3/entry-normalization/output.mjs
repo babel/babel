@@ -1,0 +1,11 @@
+import "core-js/modules/es.symbol.async-iterator";
+import "core-js/modules/es.symbol.iterator";
+import "core-js/modules/es.array.from";
+import "core-js/modules/es.map";
+import "core-js/modules/es.object.to-string";
+import "core-js/modules/es.promise";
+import "core-js/modules/es.promise.finally";
+import "core-js/modules/es.set";
+import "core-js/modules/es.string.iterator";
+import "core-js/modules/web.dom-collections.iterator";
+import 'foo/index.js';

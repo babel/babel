@@ -1,0 +1,60 @@
+{
+  "type": "File",
+  "start":0,"end":41,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":20}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":41,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":20}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":19}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":18,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":18}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":14,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":14},"identifierName":"toString"},
+              "name": "toString"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":17,"end":18,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":18}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":21,"end":41,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":20}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":30,"end":38,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":17}},
+            "local": {
+              "type": "Identifier",
+              "start":30,"end":38,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":17},"identifierName":"toString"},
+              "name": "toString"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":30,"end":38,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":17},"identifierName":"toString"},
+              "name": "toString"
+            }
+          }
+        ],
+        "source": null,
+        "declaration": null
+      }
+    ],
+    "directives": []
+  }
+}

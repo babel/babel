@@ -1,0 +1,1 @@
+SyntaxError: <CWD>/test.js: Unexpected token, expected ";" (2:10)

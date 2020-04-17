@@ -1,0 +1,3 @@
+var g = function () {
+  doSmth();
+};

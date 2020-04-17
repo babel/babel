@@ -1,0 +1,3 @@
+{
+  "args": ["--source-maps", "--out-file", "test.js", "--no-babelrc"]
+}

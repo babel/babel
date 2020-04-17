@@ -1,0 +1,46 @@
+{
+  "name": "@babel/cli",
+  "version": "7.8.4",
+  "description": "Babel command line.",
+  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "homepage": "https://babeljs.io/",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-cli",
+  "keywords": [
+    "6to5",
+    "babel",
+    "es6",
+    "transpile",
+    "transpiler",
+    "babel-cli",
+    "compiler"
+  ],
+  "dependencies": {
+    "commander": "^4.0.1",
+    "convert-source-map": "^1.1.0",
+    "fs-readdir-recursive": "^1.1.0",
+    "glob": "^7.0.0",
+    "lodash": "^4.17.13",
+    "make-dir": "^2.1.0",
+    "slash": "^2.0.0",
+    "source-map": "^0.5.0"
+  },
+  "optionalDependencies": {
+    "chokidar": "^2.1.8"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/helper-fixtures": "^7.8.3",
+    "rimraf": "^3.0.0"
+  },
+  "bin": {
+    "babel": "./bin/babel.js",
+    "babel-external-helpers": "./bin/babel-external-helpers.js"
+  }
+}

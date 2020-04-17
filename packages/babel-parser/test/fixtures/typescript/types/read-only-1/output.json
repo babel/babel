@@ -1,0 +1,48 @@
+{
+  "type": "File",
+  "start":0,"end":37,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":37}},
+  "errors": [
+    "SyntaxError: 'readonly' type modifier is only permitted on array and tuple literal types. (1:11)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":37,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":37}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":27}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":8,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":8},"identifierName":"T30"},
+          "name": "T30"
+        },
+        "typeAnnotation": {
+          "type": "TSTypeOperator",
+          "start":11,"end":26,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":26}},
+          "operator": "readonly",
+          "typeAnnotation": {
+            "type": "TSStringKeyword",
+            "start":20,"end":26,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":26}}
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Error",
+            "start":29,"end":37,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":37}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Error",
+      "start":29,"end":37,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":37}}
+    }
+  ]
+}

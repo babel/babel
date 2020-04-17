@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-arrow-functions"],
+  "sourceMap": "inline"
+}

@@ -1,0 +1,3 @@
+arr.map(function () {
+  return $]!;
+});

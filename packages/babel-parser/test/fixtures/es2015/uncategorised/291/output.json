@@ -1,0 +1,45 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
+  "errors": [
+    "SyntaxError: 'import' and 'export' may only appear at the top level (1:7)",
+    "SyntaxError: 'import' and 'export' may appear only with 'sourceType: \"module\"' (1:7)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
+        "test": {
+          "type": "NumericLiteral",
+          "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5}},
+          "extra": {
+            "rawValue": 1,
+            "raw": "1"
+          },
+          "value": 1
+        },
+        "consequent": {
+          "type": "ImportDeclaration",
+          "start":7,"end":22,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":22}},
+          "specifiers": [],
+          "source": {
+            "type": "StringLiteral",
+            "start":14,"end":21,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":21}},
+            "extra": {
+              "rawValue": "acorn",
+              "raw": "\"acorn\""
+            },
+            "value": "acorn"
+          }
+        },
+        "alternate": null
+      }
+    ],
+    "directives": []
+  }
+}

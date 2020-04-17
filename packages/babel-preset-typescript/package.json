@@ -1,0 +1,26 @@
+{
+  "name": "@babel/preset-typescript",
+  "version": "7.9.0",
+  "description": "Babel preset for TypeScript.",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-typescript",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-preset",
+    "typescript"
+  ],
+  "dependencies": {
+    "@babel/helper-plugin-utils": "^7.8.3",
+    "@babel/plugin-transform-typescript": "^7.9.0"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/helper-plugin-test-runner": "^7.8.3"
+  }
+}

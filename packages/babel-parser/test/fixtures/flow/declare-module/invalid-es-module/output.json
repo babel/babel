@@ -1,0 +1,70 @@
+{
+  "type": "File",
+  "start":0,"end":86,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":86}},
+  "errors": [
+    "SyntaxError: Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module (1:53)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":86,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":86}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareModule",
+        "start":0,"end":86,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":86}},
+        "id": {
+          "type": "StringLiteral",
+          "start":15,"end":20,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":20}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start":21,"end":86,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":86}},
+          "body": [
+            {
+              "type": "DeclareExportDeclaration",
+              "start":23,"end":52,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":52}},
+              "declaration": {
+                "type": "DeclareVariable",
+                "start":38,"end":52,"loc":{"start":{"line":1,"column":38},"end":{"line":1,"column":52}},
+                "id": {
+                  "type": "Identifier",
+                  "start":42,"end":51,"loc":{"start":{"line":1,"column":42},"end":{"line":1,"column":51},"identifierName":"a"},
+                  "name": "a",
+                  "typeAnnotation": {
+                    "type": "TypeAnnotation",
+                    "start":43,"end":51,"loc":{"start":{"line":1,"column":43},"end":{"line":1,"column":51}},
+                    "typeAnnotation": {
+                      "type": "NumberTypeAnnotation",
+                      "start":45,"end":51,"loc":{"start":{"line":1,"column":45},"end":{"line":1,"column":51}}
+                    }
+                  }
+                }
+              },
+              "default": false
+            },
+            {
+              "type": "DeclareModuleExports",
+              "start":53,"end":84,"loc":{"start":{"line":1,"column":53},"end":{"line":1,"column":84}},
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":75,"end":83,"loc":{"start":{"line":1,"column":75},"end":{"line":1,"column":83}},
+                "typeAnnotation": {
+                  "type": "NumberTypeAnnotation",
+                  "start":77,"end":83,"loc":{"start":{"line":1,"column":77},"end":{"line":1,"column":83}}
+                }
+              }
+            }
+          ]
+        },
+        "kind": "CommonJS"
+      }
+    ],
+    "directives": []
+  }
+}

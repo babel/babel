@@ -1,0 +1,83 @@
+{
+  "type": "File",
+  "start":0,"end":78,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":78,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareModule",
+        "start":0,"end":78,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+        "id": {
+          "type": "StringLiteral",
+          "start":15,"end":18,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":18}},
+          "extra": {
+            "rawValue": "M",
+            "raw": "\"M\""
+          },
+          "value": "M"
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":78,"loc":{"start":{"line":1,"column":19},"end":{"line":4,"column":1}},
+          "body": [
+            {
+              "type": "ImportDeclaration",
+              "start":23,"end":47,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":26}},
+              "specifiers": [
+                {
+                  "type": "ImportDefaultSpecifier",
+                  "start":35,"end":36,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":15}},
+                  "local": {
+                    "type": "Identifier",
+                    "start":35,"end":36,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":15},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              ],
+              "importKind": "type",
+              "source": {
+                "type": "StringLiteral",
+                "start":42,"end":46,"loc":{"start":{"line":2,"column":21},"end":{"line":2,"column":25}},
+                "extra": {
+                  "rawValue": "TM",
+                  "raw": "\"TM\""
+                },
+                "value": "TM"
+              }
+            },
+            {
+              "type": "ImportDeclaration",
+              "start":50,"end":76,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":28}},
+              "specifiers": [
+                {
+                  "type": "ImportDefaultSpecifier",
+                  "start":64,"end":65,"loc":{"start":{"line":3,"column":16},"end":{"line":3,"column":17}},
+                  "local": {
+                    "type": "Identifier",
+                    "start":64,"end":65,"loc":{"start":{"line":3,"column":16},"end":{"line":3,"column":17},"identifierName":"U"},
+                    "name": "U"
+                  }
+                }
+              ],
+              "importKind": "typeof",
+              "source": {
+                "type": "StringLiteral",
+                "start":71,"end":75,"loc":{"start":{"line":3,"column":23},"end":{"line":3,"column":27}},
+                "extra": {
+                  "rawValue": "UM",
+                  "raw": "\"UM\""
+                },
+                "value": "UM"
+              }
+            }
+          ]
+        },
+        "kind": "CommonJS"
+      }
+    ],
+    "directives": []
+  }
+}

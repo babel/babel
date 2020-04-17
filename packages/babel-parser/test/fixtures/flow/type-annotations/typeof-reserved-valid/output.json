@@ -1,0 +1,526 @@
+{
+  "type": "File",
+  "start":0,"end":407,"loc":{"start":{"line":1,"column":0},"end":{"line":15,"column":28}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":407,"loc":{"start":{"line":1,"column":0},"end":{"line":15,"column":28}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":9,"end":40,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":31}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":15,"end":39,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":30}},
+            "id": {
+              "type": "Identifier",
+              "start":15,"end":32,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":23},"identifierName":"a"},
+              "name": "a",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":16,"end":32,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":23}},
+                "typeAnnotation": {
+                  "type": "TypeofTypeAnnotation",
+                  "start":18,"end":32,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":23}},
+                  "argument": {
+                    "type": "Identifier",
+                    "start":25,"end":32,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":23},"identifierName":"default"},
+                    "name": "default"
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":35,"end":39,"loc":{"start":{"line":2,"column":26},"end":{"line":2,"column":30}},
+              "extra": {
+                "rawValue": "hi",
+                "raw": "\"hi\""
+              },
+              "value": "hi"
+            }
+          }
+        ],
+        "kind": "const",
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @flow",
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
+          }
+        ]
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":41,"end":78,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":37}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":47,"end":77,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":36}},
+            "id": {
+              "type": "Identifier",
+              "start":47,"end":70,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":29},"identifierName":"b"},
+              "name": "b",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":48,"end":70,"loc":{"start":{"line":3,"column":7},"end":{"line":3,"column":29}},
+                "typeAnnotation": {
+                  "type": "TypeofTypeAnnotation",
+                  "start":50,"end":70,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":29}},
+                  "argument": {
+                    "type": "GenericTypeAnnotation",
+                    "start":57,"end":70,"loc":{"start":{"line":3,"column":16},"end":{"line":3,"column":29}},
+                    "typeParameters": null,
+                    "id": {
+                      "type": "QualifiedTypeIdentifier",
+                      "start":57,"end":70,"loc":{"start":{"line":3,"column":16},"end":{"line":3,"column":29}},
+                      "qualification": {
+                        "type": "Identifier",
+                        "start":57,"end":62,"loc":{"start":{"line":3,"column":16},"end":{"line":3,"column":21},"identifierName":"stuff"},
+                        "name": "stuff"
+                      },
+                      "id": {
+                        "type": "Identifier",
+                        "start":63,"end":70,"loc":{"start":{"line":3,"column":22},"end":{"line":3,"column":29},"identifierName":"default"},
+                        "name": "default"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":73,"end":77,"loc":{"start":{"line":3,"column":32},"end":{"line":3,"column":36}},
+              "extra": {
+                "rawValue": "hi",
+                "raw": "\"hi\""
+              },
+              "value": "hi"
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":80,"end":107,"loc":{"start":{"line":5,"column":0},"end":{"line":5,"column":27}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":86,"end":106,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":26}},
+            "id": {
+              "type": "Identifier",
+              "start":86,"end":99,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":19},"identifierName":"c"},
+              "name": "c",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":87,"end":99,"loc":{"start":{"line":5,"column":7},"end":{"line":5,"column":19}},
+                "typeAnnotation": {
+                  "type": "TypeofTypeAnnotation",
+                  "start":89,"end":99,"loc":{"start":{"line":5,"column":9},"end":{"line":5,"column":19}},
+                  "argument": {
+                    "type": "AnyTypeAnnotation",
+                    "start":96,"end":99,"loc":{"start":{"line":5,"column":16},"end":{"line":5,"column":19}}
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":102,"end":106,"loc":{"start":{"line":5,"column":22},"end":{"line":5,"column":26}},
+              "extra": {
+                "rawValue": "hi",
+                "raw": "\"hi\""
+              },
+              "value": "hi"
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":108,"end":136,"loc":{"start":{"line":6,"column":0},"end":{"line":6,"column":28}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":114,"end":135,"loc":{"start":{"line":6,"column":6},"end":{"line":6,"column":27}},
+            "id": {
+              "type": "Identifier",
+              "start":114,"end":128,"loc":{"start":{"line":6,"column":6},"end":{"line":6,"column":20},"identifierName":"d"},
+              "name": "d",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":115,"end":128,"loc":{"start":{"line":6,"column":7},"end":{"line":6,"column":20}},
+                "typeAnnotation": {
+                  "type": "TypeofTypeAnnotation",
+                  "start":117,"end":128,"loc":{"start":{"line":6,"column":9},"end":{"line":6,"column":20}},
+                  "argument": {
+                    "type": "BooleanTypeAnnotation",
+                    "start":124,"end":128,"loc":{"start":{"line":6,"column":16},"end":{"line":6,"column":20}}
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":131,"end":135,"loc":{"start":{"line":6,"column":23},"end":{"line":6,"column":27}},
+              "extra": {
+                "rawValue": "hi",
+                "raw": "\"hi\""
+              },
+              "value": "hi"
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":137,"end":168,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":31}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":143,"end":167,"loc":{"start":{"line":7,"column":6},"end":{"line":7,"column":30}},
+            "id": {
+              "type": "Identifier",
+              "start":143,"end":160,"loc":{"start":{"line":7,"column":6},"end":{"line":7,"column":23},"identifierName":"e"},
+              "name": "e",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":144,"end":160,"loc":{"start":{"line":7,"column":7},"end":{"line":7,"column":23}},
+                "typeAnnotation": {
+                  "type": "TypeofTypeAnnotation",
+                  "start":146,"end":160,"loc":{"start":{"line":7,"column":9},"end":{"line":7,"column":23}},
+                  "argument": {
+                    "type": "BooleanTypeAnnotation",
+                    "start":153,"end":160,"loc":{"start":{"line":7,"column":16},"end":{"line":7,"column":23}}
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":163,"end":167,"loc":{"start":{"line":7,"column":26},"end":{"line":7,"column":30}},
+              "extra": {
+                "rawValue": "hi",
+                "raw": "\"hi\""
+              },
+              "value": "hi"
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":169,"end":198,"loc":{"start":{"line":8,"column":0},"end":{"line":8,"column":29}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":175,"end":197,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":28}},
+            "id": {
+              "type": "Identifier",
+              "start":175,"end":190,"loc":{"start":{"line":8,"column":6},"end":{"line":8,"column":21},"identifierName":"f"},
+              "name": "f",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":176,"end":190,"loc":{"start":{"line":8,"column":7},"end":{"line":8,"column":21}},
+                "typeAnnotation": {
+                  "type": "TypeofTypeAnnotation",
+                  "start":178,"end":190,"loc":{"start":{"line":8,"column":9},"end":{"line":8,"column":21}},
+                  "argument": {
+                    "type": "EmptyTypeAnnotation",
+                    "start":185,"end":190,"loc":{"start":{"line":8,"column":16},"end":{"line":8,"column":21}}
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":193,"end":197,"loc":{"start":{"line":8,"column":24},"end":{"line":8,"column":28}},
+              "extra": {
+                "rawValue": "hi",
+                "raw": "\"hi\""
+              },
+              "value": "hi"
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":199,"end":228,"loc":{"start":{"line":9,"column":0},"end":{"line":9,"column":29}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":205,"end":227,"loc":{"start":{"line":9,"column":6},"end":{"line":9,"column":28}},
+            "id": {
+              "type": "Identifier",
+              "start":205,"end":220,"loc":{"start":{"line":9,"column":6},"end":{"line":9,"column":21},"identifierName":"g"},
+              "name": "g",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":206,"end":220,"loc":{"start":{"line":9,"column":7},"end":{"line":9,"column":21}},
+                "typeAnnotation": {
+                  "type": "TypeofTypeAnnotation",
+                  "start":208,"end":220,"loc":{"start":{"line":9,"column":9},"end":{"line":9,"column":21}},
+                  "argument": {
+                    "type": "BooleanLiteralTypeAnnotation",
+                    "start":215,"end":220,"loc":{"start":{"line":9,"column":16},"end":{"line":9,"column":21}},
+                    "value": false
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":223,"end":227,"loc":{"start":{"line":9,"column":24},"end":{"line":9,"column":28}},
+              "extra": {
+                "rawValue": "hi",
+                "raw": "\"hi\""
+              },
+              "value": "hi"
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":229,"end":258,"loc":{"start":{"line":10,"column":0},"end":{"line":10,"column":29}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":235,"end":257,"loc":{"start":{"line":10,"column":6},"end":{"line":10,"column":28}},
+            "id": {
+              "type": "Identifier",
+              "start":235,"end":250,"loc":{"start":{"line":10,"column":6},"end":{"line":10,"column":21},"identifierName":"h"},
+              "name": "h",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":236,"end":250,"loc":{"start":{"line":10,"column":7},"end":{"line":10,"column":21}},
+                "typeAnnotation": {
+                  "type": "TypeofTypeAnnotation",
+                  "start":238,"end":250,"loc":{"start":{"line":10,"column":9},"end":{"line":10,"column":21}},
+                  "argument": {
+                    "type": "MixedTypeAnnotation",
+                    "start":245,"end":250,"loc":{"start":{"line":10,"column":16},"end":{"line":10,"column":21}}
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":253,"end":257,"loc":{"start":{"line":10,"column":24},"end":{"line":10,"column":28}},
+              "extra": {
+                "rawValue": "hi",
+                "raw": "\"hi\""
+              },
+              "value": "hi"
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":259,"end":287,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":28}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":265,"end":286,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":27}},
+            "id": {
+              "type": "Identifier",
+              "start":265,"end":279,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":20},"identifierName":"i"},
+              "name": "i",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":266,"end":279,"loc":{"start":{"line":11,"column":7},"end":{"line":11,"column":20}},
+                "typeAnnotation": {
+                  "type": "TypeofTypeAnnotation",
+                  "start":268,"end":279,"loc":{"start":{"line":11,"column":9},"end":{"line":11,"column":20}},
+                  "argument": {
+                    "type": "NullLiteralTypeAnnotation",
+                    "start":275,"end":279,"loc":{"start":{"line":11,"column":16},"end":{"line":11,"column":20}}
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":282,"end":286,"loc":{"start":{"line":11,"column":23},"end":{"line":11,"column":27}},
+              "extra": {
+                "rawValue": "hi",
+                "raw": "\"hi\""
+              },
+              "value": "hi"
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":288,"end":318,"loc":{"start":{"line":12,"column":0},"end":{"line":12,"column":30}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":294,"end":317,"loc":{"start":{"line":12,"column":6},"end":{"line":12,"column":29}},
+            "id": {
+              "type": "Identifier",
+              "start":294,"end":310,"loc":{"start":{"line":12,"column":6},"end":{"line":12,"column":22},"identifierName":"j"},
+              "name": "j",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":295,"end":310,"loc":{"start":{"line":12,"column":7},"end":{"line":12,"column":22}},
+                "typeAnnotation": {
+                  "type": "TypeofTypeAnnotation",
+                  "start":297,"end":310,"loc":{"start":{"line":12,"column":9},"end":{"line":12,"column":22}},
+                  "argument": {
+                    "type": "NumberTypeAnnotation",
+                    "start":304,"end":310,"loc":{"start":{"line":12,"column":16},"end":{"line":12,"column":22}}
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":313,"end":317,"loc":{"start":{"line":12,"column":25},"end":{"line":12,"column":29}},
+              "extra": {
+                "rawValue": "hi",
+                "raw": "\"hi\""
+              },
+              "value": "hi"
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":319,"end":349,"loc":{"start":{"line":13,"column":0},"end":{"line":13,"column":30}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":325,"end":348,"loc":{"start":{"line":13,"column":6},"end":{"line":13,"column":29}},
+            "id": {
+              "type": "Identifier",
+              "start":325,"end":341,"loc":{"start":{"line":13,"column":6},"end":{"line":13,"column":22},"identifierName":"k"},
+              "name": "k",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":326,"end":341,"loc":{"start":{"line":13,"column":7},"end":{"line":13,"column":22}},
+                "typeAnnotation": {
+                  "type": "TypeofTypeAnnotation",
+                  "start":328,"end":341,"loc":{"start":{"line":13,"column":9},"end":{"line":13,"column":22}},
+                  "argument": {
+                    "type": "StringTypeAnnotation",
+                    "start":335,"end":341,"loc":{"start":{"line":13,"column":16},"end":{"line":13,"column":22}}
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":344,"end":348,"loc":{"start":{"line":13,"column":25},"end":{"line":13,"column":29}},
+              "extra": {
+                "rawValue": "hi",
+                "raw": "\"hi\""
+              },
+              "value": "hi"
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":350,"end":378,"loc":{"start":{"line":14,"column":0},"end":{"line":14,"column":28}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":356,"end":377,"loc":{"start":{"line":14,"column":6},"end":{"line":14,"column":27}},
+            "id": {
+              "type": "Identifier",
+              "start":356,"end":370,"loc":{"start":{"line":14,"column":6},"end":{"line":14,"column":20},"identifierName":"l"},
+              "name": "l",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":357,"end":370,"loc":{"start":{"line":14,"column":7},"end":{"line":14,"column":20}},
+                "typeAnnotation": {
+                  "type": "TypeofTypeAnnotation",
+                  "start":359,"end":370,"loc":{"start":{"line":14,"column":9},"end":{"line":14,"column":20}},
+                  "argument": {
+                    "type": "BooleanLiteralTypeAnnotation",
+                    "start":366,"end":370,"loc":{"start":{"line":14,"column":16},"end":{"line":14,"column":20}},
+                    "value": true
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":373,"end":377,"loc":{"start":{"line":14,"column":23},"end":{"line":14,"column":27}},
+              "extra": {
+                "rawValue": "hi",
+                "raw": "\"hi\""
+              },
+              "value": "hi"
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":379,"end":407,"loc":{"start":{"line":15,"column":0},"end":{"line":15,"column":28}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":385,"end":406,"loc":{"start":{"line":15,"column":6},"end":{"line":15,"column":27}},
+            "id": {
+              "type": "Identifier",
+              "start":385,"end":399,"loc":{"start":{"line":15,"column":6},"end":{"line":15,"column":20},"identifierName":"m"},
+              "name": "m",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":386,"end":399,"loc":{"start":{"line":15,"column":7},"end":{"line":15,"column":20}},
+                "typeAnnotation": {
+                  "type": "TypeofTypeAnnotation",
+                  "start":388,"end":399,"loc":{"start":{"line":15,"column":9},"end":{"line":15,"column":20}},
+                  "argument": {
+                    "type": "VoidTypeAnnotation",
+                    "start":395,"end":399,"loc":{"start":{"line":15,"column":16},"end":{"line":15,"column":20}}
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":402,"end":406,"loc":{"start":{"line":15,"column":23},"end":{"line":15,"column":27}},
+              "extra": {
+                "rawValue": "hi",
+                "raw": "\"hi\""
+              },
+              "value": "hi"
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @flow",
+      "start":0,"end":8,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":8}}
+    }
+  ]
+}

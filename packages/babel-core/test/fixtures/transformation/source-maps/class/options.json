@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "external-helpers",
+    "transform-classes",
+    "transform-block-scoping"
+  ]
+}

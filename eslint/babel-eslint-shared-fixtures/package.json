@@ -1,0 +1,25 @@
+{
+  "name": "@babel/eslint-shared-fixtures",
+  "version": "0.0.0",
+  "description": "Shared fixtures for testing @babel/eslint-* packages",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-decorators": "^7.1.2",
+    "@babel/plugin-proposal-do-expressions": "^7.7.4",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.0.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.0.0",
+    "@babel/plugin-proposal-pipeline-operator": "^7.0.0",
+    "@babel/plugin-proposal-private-methods": "^7.7.4",
+    "@babel/plugin-syntax-bigint": "^7.7.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-syntax-export-default-from": "^7.0.0",
+    "@babel/plugin-syntax-export-namespace-from": "^7.0.0",
+    "@babel/plugin-syntax-import-meta": "^7.0.0",
+    "@babel/plugin-syntax-numeric-separator": "^7.0.0",
+    "@babel/preset-env": "^7.1.5",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/preset-react": "^7.0.0"
+  }
+}

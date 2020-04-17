@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>babel-standalone example - Script tag</title>
+</head>
+<body>
+  Using Babel <strong id="version"></strong>:
+  <pre id="output">Loading...</pre>
+
+  <script src="../babel.js"></script>
+  <script type="text/javascript">
+    // just disable the auto transformation
+    Babel.disableScriptTags();
+
+    var script = document.createElement('script');
+    script.type = 'text/babel';
+    script.text = "const doStuff = () => {" + 
+                  "  const name = 'world';" +
+                  "  document.getElementById('output').innerHTML = `Hello ${name}`;" +
+                  "  document.getElementById('version').innerHTML = Babel.version;" +
+                  "};" +
+                  "doStuff();";
+    document.querySelector('head').appendChild(script)
+
+    // transform when you want to
+    Babel.transformScriptTags()
+  </script>
+</body>
+</html>

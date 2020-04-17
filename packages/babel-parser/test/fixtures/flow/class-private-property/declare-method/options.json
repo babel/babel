@@ -1,0 +1,8 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "flow",
+    "classPrivateProperties",
+    "classPrivateMethods"
+  ]
+}

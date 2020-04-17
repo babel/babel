@@ -1,0 +1,1881 @@
+{
+  "type": "File",
+  "start":0,"end":1127,"loc":{"start":{"line":1,"column":0},"end":{"line":39,"column":34}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":1127,"loc":{"start":{"line":1,"column":0},"end":{"line":39,"column":34}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":143,"end":167,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":24}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":147,"end":166,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":23}},
+            "id": {
+              "type": "Identifier",
+              "start":147,"end":149,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":6},"identifierName":"v1"},
+              "name": "v1"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":152,"end":166,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":23}},
+              "expression": {
+                "type": "StringLiteral",
+                "start":152,"end":157,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":14}},
+                "extra": {
+                  "rawValue": "abc",
+                  "raw": "'abc'"
+                },
+                "value": "abc"
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":161,"end":166,"loc":{"start":{"line":3,"column":18},"end":{"line":3,"column":23}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":161,"end":166,"loc":{"start":{"line":3,"column":18},"end":{"line":3,"column":23},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let",
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Copied over from TypeScript's test case",
+            "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":42}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " https://github.com/Microsoft/TypeScript/blob/master/tests/baselines/reference/constAssertions.js",
+            "start":43,"end":142,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":99}}
+          }
+        ]
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":168,"end":192,"loc":{"start":{"line":4,"column":0},"end":{"line":4,"column":24}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":172,"end":191,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":23}},
+            "id": {
+              "type": "Identifier",
+              "start":172,"end":174,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":6},"identifierName":"v2"},
+              "name": "v2"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":177,"end":191,"loc":{"start":{"line":4,"column":9},"end":{"line":4,"column":23}},
+              "expression": {
+                "type": "TemplateLiteral",
+                "start":177,"end":182,"loc":{"start":{"line":4,"column":9},"end":{"line":4,"column":14}},
+                "expressions": [],
+                "quasis": [
+                  {
+                    "type": "TemplateElement",
+                    "start":178,"end":181,"loc":{"start":{"line":4,"column":10},"end":{"line":4,"column":13}},
+                    "value": {
+                      "raw": "abc",
+                      "cooked": "abc"
+                    },
+                    "tail": true
+                  }
+                ]
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":186,"end":191,"loc":{"start":{"line":4,"column":18},"end":{"line":4,"column":23}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":186,"end":191,"loc":{"start":{"line":4,"column":18},"end":{"line":4,"column":23},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":193,"end":214,"loc":{"start":{"line":5,"column":0},"end":{"line":5,"column":21}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":197,"end":213,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":20}},
+            "id": {
+              "type": "Identifier",
+              "start":197,"end":199,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":6},"identifierName":"v3"},
+              "name": "v3"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":202,"end":213,"loc":{"start":{"line":5,"column":9},"end":{"line":5,"column":20}},
+              "expression": {
+                "type": "NumericLiteral",
+                "start":202,"end":204,"loc":{"start":{"line":5,"column":9},"end":{"line":5,"column":11}},
+                "extra": {
+                  "rawValue": 10,
+                  "raw": "10"
+                },
+                "value": 10
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":208,"end":213,"loc":{"start":{"line":5,"column":15},"end":{"line":5,"column":20}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":208,"end":213,"loc":{"start":{"line":5,"column":15},"end":{"line":5,"column":20},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":215,"end":237,"loc":{"start":{"line":6,"column":0},"end":{"line":6,"column":22}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":219,"end":236,"loc":{"start":{"line":6,"column":4},"end":{"line":6,"column":21}},
+            "id": {
+              "type": "Identifier",
+              "start":219,"end":221,"loc":{"start":{"line":6,"column":4},"end":{"line":6,"column":6},"identifierName":"v4"},
+              "name": "v4"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":224,"end":236,"loc":{"start":{"line":6,"column":9},"end":{"line":6,"column":21}},
+              "expression": {
+                "type": "UnaryExpression",
+                "start":224,"end":227,"loc":{"start":{"line":6,"column":9},"end":{"line":6,"column":12}},
+                "operator": "-",
+                "prefix": true,
+                "argument": {
+                  "type": "NumericLiteral",
+                  "start":225,"end":227,"loc":{"start":{"line":6,"column":10},"end":{"line":6,"column":12}},
+                  "extra": {
+                    "rawValue": 10,
+                    "raw": "10"
+                  },
+                  "value": 10
+                }
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":231,"end":236,"loc":{"start":{"line":6,"column":16},"end":{"line":6,"column":21}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":231,"end":236,"loc":{"start":{"line":6,"column":16},"end":{"line":6,"column":21},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":238,"end":260,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":22}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":242,"end":259,"loc":{"start":{"line":7,"column":4},"end":{"line":7,"column":21}},
+            "id": {
+              "type": "Identifier",
+              "start":242,"end":244,"loc":{"start":{"line":7,"column":4},"end":{"line":7,"column":6},"identifierName":"v5"},
+              "name": "v5"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":247,"end":259,"loc":{"start":{"line":7,"column":9},"end":{"line":7,"column":21}},
+              "expression": {
+                "type": "UnaryExpression",
+                "start":247,"end":250,"loc":{"start":{"line":7,"column":9},"end":{"line":7,"column":12}},
+                "operator": "+",
+                "prefix": true,
+                "argument": {
+                  "type": "NumericLiteral",
+                  "start":248,"end":250,"loc":{"start":{"line":7,"column":10},"end":{"line":7,"column":12}},
+                  "extra": {
+                    "rawValue": 10,
+                    "raw": "10"
+                  },
+                  "value": 10
+                }
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":254,"end":259,"loc":{"start":{"line":7,"column":16},"end":{"line":7,"column":21}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":254,"end":259,"loc":{"start":{"line":7,"column":16},"end":{"line":7,"column":21},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":261,"end":282,"loc":{"start":{"line":8,"column":0},"end":{"line":8,"column":21}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":265,"end":281,"loc":{"start":{"line":8,"column":4},"end":{"line":8,"column":20}},
+            "id": {
+              "type": "Identifier",
+              "start":265,"end":267,"loc":{"start":{"line":8,"column":4},"end":{"line":8,"column":6},"identifierName":"v6"},
+              "name": "v6"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":270,"end":281,"loc":{"start":{"line":8,"column":9},"end":{"line":8,"column":20}},
+              "expression": {
+                "type": "NumericLiteral",
+                "start":270,"end":272,"loc":{"start":{"line":8,"column":9},"end":{"line":8,"column":11}},
+                "extra": {
+                  "rawValue": 10,
+                  "raw": "10"
+                },
+                "value": 10
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":276,"end":281,"loc":{"start":{"line":8,"column":15},"end":{"line":8,"column":20}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":276,"end":281,"loc":{"start":{"line":8,"column":15},"end":{"line":8,"column":20},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":283,"end":305,"loc":{"start":{"line":9,"column":0},"end":{"line":9,"column":22}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":287,"end":304,"loc":{"start":{"line":9,"column":4},"end":{"line":9,"column":21}},
+            "id": {
+              "type": "Identifier",
+              "start":287,"end":289,"loc":{"start":{"line":9,"column":4},"end":{"line":9,"column":6},"identifierName":"v7"},
+              "name": "v7"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":292,"end":304,"loc":{"start":{"line":9,"column":9},"end":{"line":9,"column":21}},
+              "expression": {
+                "type": "UnaryExpression",
+                "start":292,"end":295,"loc":{"start":{"line":9,"column":9},"end":{"line":9,"column":12}},
+                "operator": "-",
+                "prefix": true,
+                "argument": {
+                  "type": "NumericLiteral",
+                  "start":293,"end":295,"loc":{"start":{"line":9,"column":10},"end":{"line":9,"column":12}},
+                  "extra": {
+                    "rawValue": 10,
+                    "raw": "10"
+                  },
+                  "value": 10
+                }
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":299,"end":304,"loc":{"start":{"line":9,"column":16},"end":{"line":9,"column":21}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":299,"end":304,"loc":{"start":{"line":9,"column":16},"end":{"line":9,"column":21},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":306,"end":329,"loc":{"start":{"line":10,"column":0},"end":{"line":10,"column":23}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":310,"end":328,"loc":{"start":{"line":10,"column":4},"end":{"line":10,"column":22}},
+            "id": {
+              "type": "Identifier",
+              "start":310,"end":312,"loc":{"start":{"line":10,"column":4},"end":{"line":10,"column":6},"identifierName":"v8"},
+              "name": "v8"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":315,"end":328,"loc":{"start":{"line":10,"column":9},"end":{"line":10,"column":22}},
+              "expression": {
+                "type": "BooleanLiteral",
+                "start":315,"end":319,"loc":{"start":{"line":10,"column":9},"end":{"line":10,"column":13}},
+                "value": true
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":323,"end":328,"loc":{"start":{"line":10,"column":17},"end":{"line":10,"column":22}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":323,"end":328,"loc":{"start":{"line":10,"column":17},"end":{"line":10,"column":22},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":330,"end":354,"loc":{"start":{"line":11,"column":0},"end":{"line":11,"column":24}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":334,"end":353,"loc":{"start":{"line":11,"column":4},"end":{"line":11,"column":23}},
+            "id": {
+              "type": "Identifier",
+              "start":334,"end":336,"loc":{"start":{"line":11,"column":4},"end":{"line":11,"column":6},"identifierName":"v9"},
+              "name": "v9"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":339,"end":353,"loc":{"start":{"line":11,"column":9},"end":{"line":11,"column":23}},
+              "expression": {
+                "type": "BooleanLiteral",
+                "start":339,"end":344,"loc":{"start":{"line":11,"column":9},"end":{"line":11,"column":14}},
+                "value": false
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":348,"end":353,"loc":{"start":{"line":11,"column":18},"end":{"line":11,"column":23}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":348,"end":353,"loc":{"start":{"line":11,"column":18},"end":{"line":11,"column":23},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":356,"end":377,"loc":{"start":{"line":13,"column":0},"end":{"line":13,"column":21}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":360,"end":376,"loc":{"start":{"line":13,"column":4},"end":{"line":13,"column":20}},
+            "id": {
+              "type": "Identifier",
+              "start":360,"end":362,"loc":{"start":{"line":13,"column":4},"end":{"line":13,"column":6},"identifierName":"a1"},
+              "name": "a1"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":365,"end":376,"loc":{"start":{"line":13,"column":9},"end":{"line":13,"column":20}},
+              "expression": {
+                "type": "ArrayExpression",
+                "start":365,"end":367,"loc":{"start":{"line":13,"column":9},"end":{"line":13,"column":11}},
+                "elements": []
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":371,"end":376,"loc":{"start":{"line":13,"column":15},"end":{"line":13,"column":20}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":371,"end":376,"loc":{"start":{"line":13,"column":15},"end":{"line":13,"column":20},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":378,"end":406,"loc":{"start":{"line":14,"column":0},"end":{"line":14,"column":28}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":382,"end":405,"loc":{"start":{"line":14,"column":4},"end":{"line":14,"column":27}},
+            "id": {
+              "type": "Identifier",
+              "start":382,"end":384,"loc":{"start":{"line":14,"column":4},"end":{"line":14,"column":6},"identifierName":"a2"},
+              "name": "a2"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":387,"end":405,"loc":{"start":{"line":14,"column":9},"end":{"line":14,"column":27}},
+              "expression": {
+                "type": "ArrayExpression",
+                "start":387,"end":396,"loc":{"start":{"line":14,"column":9},"end":{"line":14,"column":18}},
+                "elements": [
+                  {
+                    "type": "NumericLiteral",
+                    "start":388,"end":389,"loc":{"start":{"line":14,"column":10},"end":{"line":14,"column":11}},
+                    "extra": {
+                      "rawValue": 1,
+                      "raw": "1"
+                    },
+                    "value": 1
+                  },
+                  {
+                    "type": "NumericLiteral",
+                    "start":391,"end":392,"loc":{"start":{"line":14,"column":13},"end":{"line":14,"column":14}},
+                    "extra": {
+                      "rawValue": 2,
+                      "raw": "2"
+                    },
+                    "value": 2
+                  },
+                  {
+                    "type": "NumericLiteral",
+                    "start":394,"end":395,"loc":{"start":{"line":14,"column":16},"end":{"line":14,"column":17}},
+                    "extra": {
+                      "rawValue": 3,
+                      "raw": "3"
+                    },
+                    "value": 3
+                  }
+                ]
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":400,"end":405,"loc":{"start":{"line":14,"column":22},"end":{"line":14,"column":27}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":400,"end":405,"loc":{"start":{"line":14,"column":22},"end":{"line":14,"column":27},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":407,"end":445,"loc":{"start":{"line":15,"column":0},"end":{"line":15,"column":38}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":411,"end":444,"loc":{"start":{"line":15,"column":4},"end":{"line":15,"column":37}},
+            "id": {
+              "type": "Identifier",
+              "start":411,"end":413,"loc":{"start":{"line":15,"column":4},"end":{"line":15,"column":6},"identifierName":"a3"},
+              "name": "a3"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":416,"end":444,"loc":{"start":{"line":15,"column":9},"end":{"line":15,"column":37}},
+              "expression": {
+                "type": "ArrayExpression",
+                "start":416,"end":435,"loc":{"start":{"line":15,"column":9},"end":{"line":15,"column":28}},
+                "elements": [
+                  {
+                    "type": "NumericLiteral",
+                    "start":417,"end":419,"loc":{"start":{"line":15,"column":10},"end":{"line":15,"column":12}},
+                    "extra": {
+                      "rawValue": 10,
+                      "raw": "10"
+                    },
+                    "value": 10
+                  },
+                  {
+                    "type": "StringLiteral",
+                    "start":421,"end":428,"loc":{"start":{"line":15,"column":14},"end":{"line":15,"column":21}},
+                    "extra": {
+                      "rawValue": "hello",
+                      "raw": "'hello'"
+                    },
+                    "value": "hello"
+                  },
+                  {
+                    "type": "BooleanLiteral",
+                    "start":430,"end":434,"loc":{"start":{"line":15,"column":23},"end":{"line":15,"column":27}},
+                    "value": true
+                  }
+                ]
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":439,"end":444,"loc":{"start":{"line":15,"column":32},"end":{"line":15,"column":37}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":439,"end":444,"loc":{"start":{"line":15,"column":32},"end":{"line":15,"column":37},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":446,"end":479,"loc":{"start":{"line":16,"column":0},"end":{"line":16,"column":33}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":450,"end":478,"loc":{"start":{"line":16,"column":4},"end":{"line":16,"column":32}},
+            "id": {
+              "type": "Identifier",
+              "start":450,"end":452,"loc":{"start":{"line":16,"column":4},"end":{"line":16,"column":6},"identifierName":"a4"},
+              "name": "a4"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":455,"end":478,"loc":{"start":{"line":16,"column":9},"end":{"line":16,"column":32}},
+              "expression": {
+                "type": "ArrayExpression",
+                "start":455,"end":469,"loc":{"start":{"line":16,"column":9},"end":{"line":16,"column":23}},
+                "elements": [
+                  {
+                    "type": "SpreadElement",
+                    "start":456,"end":468,"loc":{"start":{"line":16,"column":10},"end":{"line":16,"column":22}},
+                    "argument": {
+                      "type": "ArrayExpression",
+                      "start":459,"end":468,"loc":{"start":{"line":16,"column":13},"end":{"line":16,"column":22}},
+                      "elements": [
+                        {
+                          "type": "NumericLiteral",
+                          "start":460,"end":461,"loc":{"start":{"line":16,"column":14},"end":{"line":16,"column":15}},
+                          "extra": {
+                            "rawValue": 1,
+                            "raw": "1"
+                          },
+                          "value": 1
+                        },
+                        {
+                          "type": "NumericLiteral",
+                          "start":463,"end":464,"loc":{"start":{"line":16,"column":17},"end":{"line":16,"column":18}},
+                          "extra": {
+                            "rawValue": 2,
+                            "raw": "2"
+                          },
+                          "value": 2
+                        },
+                        {
+                          "type": "NumericLiteral",
+                          "start":466,"end":467,"loc":{"start":{"line":16,"column":20},"end":{"line":16,"column":21}},
+                          "extra": {
+                            "rawValue": 3,
+                            "raw": "3"
+                          },
+                          "value": 3
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":473,"end":478,"loc":{"start":{"line":16,"column":27},"end":{"line":16,"column":32}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":473,"end":478,"loc":{"start":{"line":16,"column":27},"end":{"line":16,"column":32},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":480,"end":499,"loc":{"start":{"line":17,"column":0},"end":{"line":17,"column":19}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":484,"end":498,"loc":{"start":{"line":17,"column":4},"end":{"line":17,"column":18}},
+            "id": {
+              "type": "Identifier",
+              "start":484,"end":486,"loc":{"start":{"line":17,"column":4},"end":{"line":17,"column":6},"identifierName":"a5"},
+              "name": "a5"
+            },
+            "init": {
+              "type": "ArrayExpression",
+              "start":489,"end":498,"loc":{"start":{"line":17,"column":9},"end":{"line":17,"column":18}},
+              "elements": [
+                {
+                  "type": "NumericLiteral",
+                  "start":490,"end":491,"loc":{"start":{"line":17,"column":10},"end":{"line":17,"column":11}},
+                  "extra": {
+                    "rawValue": 1,
+                    "raw": "1"
+                  },
+                  "value": 1
+                },
+                {
+                  "type": "NumericLiteral",
+                  "start":493,"end":494,"loc":{"start":{"line":17,"column":13},"end":{"line":17,"column":14}},
+                  "extra": {
+                    "rawValue": 2,
+                    "raw": "2"
+                  },
+                  "value": 2
+                },
+                {
+                  "type": "NumericLiteral",
+                  "start":496,"end":497,"loc":{"start":{"line":17,"column":16},"end":{"line":17,"column":17}},
+                  "extra": {
+                    "rawValue": 3,
+                    "raw": "3"
+                  },
+                  "value": 3
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":500,"end":526,"loc":{"start":{"line":18,"column":0},"end":{"line":18,"column":26}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":504,"end":525,"loc":{"start":{"line":18,"column":4},"end":{"line":18,"column":25}},
+            "id": {
+              "type": "Identifier",
+              "start":504,"end":506,"loc":{"start":{"line":18,"column":4},"end":{"line":18,"column":6},"identifierName":"a6"},
+              "name": "a6"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":509,"end":525,"loc":{"start":{"line":18,"column":9},"end":{"line":18,"column":25}},
+              "expression": {
+                "type": "ArrayExpression",
+                "start":509,"end":516,"loc":{"start":{"line":18,"column":9},"end":{"line":18,"column":16}},
+                "elements": [
+                  {
+                    "type": "SpreadElement",
+                    "start":510,"end":515,"loc":{"start":{"line":18,"column":10},"end":{"line":18,"column":15}},
+                    "argument": {
+                      "type": "Identifier",
+                      "start":513,"end":515,"loc":{"start":{"line":18,"column":13},"end":{"line":18,"column":15},"identifierName":"a5"},
+                      "name": "a5"
+                    }
+                  }
+                ]
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":520,"end":525,"loc":{"start":{"line":18,"column":20},"end":{"line":18,"column":25}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":520,"end":525,"loc":{"start":{"line":18,"column":20},"end":{"line":18,"column":25},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":527,"end":560,"loc":{"start":{"line":19,"column":0},"end":{"line":19,"column":33}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":531,"end":559,"loc":{"start":{"line":19,"column":4},"end":{"line":19,"column":32}},
+            "id": {
+              "type": "Identifier",
+              "start":531,"end":533,"loc":{"start":{"line":19,"column":4},"end":{"line":19,"column":6},"identifierName":"a8"},
+              "name": "a8"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":536,"end":559,"loc":{"start":{"line":19,"column":9},"end":{"line":19,"column":32}},
+              "expression": {
+                "type": "ArrayExpression",
+                "start":536,"end":550,"loc":{"start":{"line":19,"column":9},"end":{"line":19,"column":23}},
+                "elements": [
+                  {
+                    "type": "StringLiteral",
+                    "start":537,"end":542,"loc":{"start":{"line":19,"column":10},"end":{"line":19,"column":15}},
+                    "extra": {
+                      "rawValue": "abc",
+                      "raw": "'abc'"
+                    },
+                    "value": "abc"
+                  },
+                  {
+                    "type": "SpreadElement",
+                    "start":544,"end":549,"loc":{"start":{"line":19,"column":17},"end":{"line":19,"column":22}},
+                    "argument": {
+                      "type": "Identifier",
+                      "start":547,"end":549,"loc":{"start":{"line":19,"column":20},"end":{"line":19,"column":22},"identifierName":"a7"},
+                      "name": "a7"
+                    }
+                  }
+                ]
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":554,"end":559,"loc":{"start":{"line":19,"column":27},"end":{"line":19,"column":32}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":554,"end":559,"loc":{"start":{"line":19,"column":27},"end":{"line":19,"column":32},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":562,"end":597,"loc":{"start":{"line":21,"column":0},"end":{"line":21,"column":35}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":566,"end":596,"loc":{"start":{"line":21,"column":4},"end":{"line":21,"column":34}},
+            "id": {
+              "type": "Identifier",
+              "start":566,"end":568,"loc":{"start":{"line":21,"column":4},"end":{"line":21,"column":6},"identifierName":"o1"},
+              "name": "o1"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":571,"end":596,"loc":{"start":{"line":21,"column":9},"end":{"line":21,"column":34}},
+              "expression": {
+                "type": "ObjectExpression",
+                "start":571,"end":587,"loc":{"start":{"line":21,"column":9},"end":{"line":21,"column":25}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":573,"end":578,"loc":{"start":{"line":21,"column":11},"end":{"line":21,"column":16}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":573,"end":574,"loc":{"start":{"line":21,"column":11},"end":{"line":21,"column":12},"identifierName":"x"},
+                      "name": "x"
+                    },
+                    "computed": false,
+                    "shorthand": false,
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start":576,"end":578,"loc":{"start":{"line":21,"column":14},"end":{"line":21,"column":16}},
+                      "extra": {
+                        "rawValue": 10,
+                        "raw": "10"
+                      },
+                      "value": 10
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start":580,"end":585,"loc":{"start":{"line":21,"column":18},"end":{"line":21,"column":23}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":580,"end":581,"loc":{"start":{"line":21,"column":18},"end":{"line":21,"column":19},"identifierName":"y"},
+                      "name": "y"
+                    },
+                    "computed": false,
+                    "shorthand": false,
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start":583,"end":585,"loc":{"start":{"line":21,"column":21},"end":{"line":21,"column":23}},
+                      "extra": {
+                        "rawValue": 20,
+                        "raw": "20"
+                      },
+                      "value": 20
+                    }
+                  }
+                ]
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":591,"end":596,"loc":{"start":{"line":21,"column":29},"end":{"line":21,"column":34}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":591,"end":596,"loc":{"start":{"line":21,"column":29},"end":{"line":21,"column":34},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":598,"end":666,"loc":{"start":{"line":22,"column":0},"end":{"line":22,"column":68}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":602,"end":665,"loc":{"start":{"line":22,"column":4},"end":{"line":22,"column":67}},
+            "id": {
+              "type": "Identifier",
+              "start":602,"end":604,"loc":{"start":{"line":22,"column":4},"end":{"line":22,"column":6},"identifierName":"o2"},
+              "name": "o2"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":607,"end":665,"loc":{"start":{"line":22,"column":9},"end":{"line":22,"column":67}},
+              "expression": {
+                "type": "ObjectExpression",
+                "start":607,"end":656,"loc":{"start":{"line":22,"column":9},"end":{"line":22,"column":58}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":609,"end":613,"loc":{"start":{"line":22,"column":11},"end":{"line":22,"column":15}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":609,"end":610,"loc":{"start":{"line":22,"column":11},"end":{"line":22,"column":12},"identifierName":"a"},
+                      "name": "a"
+                    },
+                    "computed": false,
+                    "shorthand": false,
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start":612,"end":613,"loc":{"start":{"line":22,"column":14},"end":{"line":22,"column":15}},
+                      "extra": {
+                        "rawValue": 1,
+                        "raw": "1"
+                      },
+                      "value": 1
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start":615,"end":621,"loc":{"start":{"line":22,"column":17},"end":{"line":22,"column":23}},
+                    "method": false,
+                    "key": {
+                      "type": "StringLiteral",
+                      "start":615,"end":618,"loc":{"start":{"line":22,"column":17},"end":{"line":22,"column":20}},
+                      "extra": {
+                        "rawValue": "b",
+                        "raw": "'b'"
+                      },
+                      "value": "b"
+                    },
+                    "computed": false,
+                    "shorthand": false,
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start":620,"end":621,"loc":{"start":{"line":22,"column":22},"end":{"line":22,"column":23}},
+                      "extra": {
+                        "rawValue": 2,
+                        "raw": "2"
+                      },
+                      "value": 2
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start":623,"end":631,"loc":{"start":{"line":22,"column":25},"end":{"line":22,"column":33}},
+                    "method": false,
+                    "computed": true,
+                    "key": {
+                      "type": "StringLiteral",
+                      "start":624,"end":627,"loc":{"start":{"line":22,"column":26},"end":{"line":22,"column":29}},
+                      "extra": {
+                        "rawValue": "c",
+                        "raw": "'c'"
+                      },
+                      "value": "c"
+                    },
+                    "shorthand": false,
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start":630,"end":631,"loc":{"start":{"line":22,"column":32},"end":{"line":22,"column":33}},
+                      "extra": {
+                        "rawValue": 3,
+                        "raw": "3"
+                      },
+                      "value": 3
+                    }
+                  },
+                  {
+                    "type": "ObjectMethod",
+                    "start":633,"end":639,"loc":{"start":{"line":22,"column":35},"end":{"line":22,"column":41}},
+                    "method": true,
+                    "key": {
+                      "type": "Identifier",
+                      "start":633,"end":634,"loc":{"start":{"line":22,"column":35},"end":{"line":22,"column":36},"identifierName":"d"},
+                      "name": "d"
+                    },
+                    "computed": false,
+                    "kind": "method",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":637,"end":639,"loc":{"start":{"line":22,"column":39},"end":{"line":22,"column":41}},
+                      "body": [],
+                      "directives": []
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start":641,"end":654,"loc":{"start":{"line":22,"column":43},"end":{"line":22,"column":56}},
+                    "method": false,
+                    "computed": true,
+                    "key": {
+                      "type": "BinaryExpression",
+                      "start":642,"end":650,"loc":{"start":{"line":22,"column":44},"end":{"line":22,"column":52}},
+                      "left": {
+                        "type": "StringLiteral",
+                        "start":642,"end":645,"loc":{"start":{"line":22,"column":44},"end":{"line":22,"column":47}},
+                        "extra": {
+                          "rawValue": "e",
+                          "raw": "'e'"
+                        },
+                        "value": "e"
+                      },
+                      "operator": "+",
+                      "right": {
+                        "type": "StringLiteral",
+                        "start":648,"end":650,"loc":{"start":{"line":22,"column":50},"end":{"line":22,"column":52}},
+                        "extra": {
+                          "rawValue": "",
+                          "raw": "''"
+                        },
+                        "value": ""
+                      }
+                    },
+                    "shorthand": false,
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start":653,"end":654,"loc":{"start":{"line":22,"column":55},"end":{"line":22,"column":56}},
+                      "extra": {
+                        "rawValue": 4,
+                        "raw": "4"
+                      },
+                      "value": 4
+                    }
+                  }
+                ]
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":660,"end":665,"loc":{"start":{"line":22,"column":62},"end":{"line":22,"column":67}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":660,"end":665,"loc":{"start":{"line":22,"column":62},"end":{"line":22,"column":67},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":667,"end":702,"loc":{"start":{"line":23,"column":0},"end":{"line":23,"column":35}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":671,"end":701,"loc":{"start":{"line":23,"column":4},"end":{"line":23,"column":34}},
+            "id": {
+              "type": "Identifier",
+              "start":671,"end":673,"loc":{"start":{"line":23,"column":4},"end":{"line":23,"column":6},"identifierName":"o3"},
+              "name": "o3"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":676,"end":701,"loc":{"start":{"line":23,"column":9},"end":{"line":23,"column":34}},
+              "expression": {
+                "type": "ObjectExpression",
+                "start":676,"end":692,"loc":{"start":{"line":23,"column":9},"end":{"line":23,"column":25}},
+                "properties": [
+                  {
+                    "type": "SpreadElement",
+                    "start":678,"end":683,"loc":{"start":{"line":23,"column":11},"end":{"line":23,"column":16}},
+                    "argument": {
+                      "type": "Identifier",
+                      "start":681,"end":683,"loc":{"start":{"line":23,"column":14},"end":{"line":23,"column":16},"identifierName":"o1"},
+                      "name": "o1"
+                    }
+                  },
+                  {
+                    "type": "SpreadElement",
+                    "start":685,"end":690,"loc":{"start":{"line":23,"column":18},"end":{"line":23,"column":23}},
+                    "argument": {
+                      "type": "Identifier",
+                      "start":688,"end":690,"loc":{"start":{"line":23,"column":21},"end":{"line":23,"column":23},"identifierName":"o2"},
+                      "name": "o2"
+                    }
+                  }
+                ]
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":696,"end":701,"loc":{"start":{"line":23,"column":29},"end":{"line":23,"column":34}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":696,"end":701,"loc":{"start":{"line":23,"column":29},"end":{"line":23,"column":34},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":703,"end":731,"loc":{"start":{"line":24,"column":0},"end":{"line":24,"column":28}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":707,"end":730,"loc":{"start":{"line":24,"column":4},"end":{"line":24,"column":27}},
+            "id": {
+              "type": "Identifier",
+              "start":707,"end":709,"loc":{"start":{"line":24,"column":4},"end":{"line":24,"column":6},"identifierName":"o5"},
+              "name": "o5"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":712,"end":730,"loc":{"start":{"line":24,"column":9},"end":{"line":24,"column":27}},
+              "expression": {
+                "type": "ObjectExpression",
+                "start":712,"end":721,"loc":{"start":{"line":24,"column":9},"end":{"line":24,"column":18}},
+                "properties": [
+                  {
+                    "type": "SpreadElement",
+                    "start":714,"end":719,"loc":{"start":{"line":24,"column":11},"end":{"line":24,"column":16}},
+                    "argument": {
+                      "type": "Identifier",
+                      "start":717,"end":719,"loc":{"start":{"line":24,"column":14},"end":{"line":24,"column":16},"identifierName":"o4"},
+                      "name": "o4"
+                    }
+                  }
+                ]
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":725,"end":730,"loc":{"start":{"line":24,"column":22},"end":{"line":24,"column":27}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":725,"end":730,"loc":{"start":{"line":24,"column":22},"end":{"line":24,"column":27},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":732,"end":759,"loc":{"start":{"line":25,"column":0},"end":{"line":25,"column":27}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":736,"end":758,"loc":{"start":{"line":25,"column":4},"end":{"line":25,"column":26}},
+            "id": {
+              "type": "Identifier",
+              "start":736,"end":738,"loc":{"start":{"line":25,"column":4},"end":{"line":25,"column":6},"identifierName":"o7"},
+              "name": "o7"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":741,"end":758,"loc":{"start":{"line":25,"column":9},"end":{"line":25,"column":26}},
+              "expression": {
+                "type": "ObjectExpression",
+                "start":741,"end":749,"loc":{"start":{"line":25,"column":9},"end":{"line":25,"column":17}},
+                "properties": [
+                  {
+                    "type": "SpreadElement",
+                    "start":743,"end":747,"loc":{"start":{"line":25,"column":11},"end":{"line":25,"column":15}},
+                    "argument": {
+                      "type": "Identifier",
+                      "start":746,"end":747,"loc":{"start":{"line":25,"column":14},"end":{"line":25,"column":15},"identifierName":"d"},
+                      "name": "d"
+                    }
+                  }
+                ]
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":753,"end":758,"loc":{"start":{"line":25,"column":21},"end":{"line":25,"column":26}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":753,"end":758,"loc":{"start":{"line":25,"column":21},"end":{"line":25,"column":26},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":760,"end":811,"loc":{"start":{"line":26,"column":0},"end":{"line":26,"column":51}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":764,"end":810,"loc":{"start":{"line":26,"column":4},"end":{"line":26,"column":50}},
+            "id": {
+              "type": "Identifier",
+              "start":764,"end":766,"loc":{"start":{"line":26,"column":4},"end":{"line":26,"column":6},"identifierName":"o9"},
+              "name": "o9"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":769,"end":810,"loc":{"start":{"line":26,"column":9},"end":{"line":26,"column":50}},
+              "expression": {
+                "type": "ObjectExpression",
+                "start":769,"end":801,"loc":{"start":{"line":26,"column":9},"end":{"line":26,"column":41}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":771,"end":776,"loc":{"start":{"line":26,"column":11},"end":{"line":26,"column":16}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":771,"end":772,"loc":{"start":{"line":26,"column":11},"end":{"line":26,"column":12},"identifierName":"x"},
+                      "name": "x"
+                    },
+                    "computed": false,
+                    "shorthand": false,
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start":774,"end":776,"loc":{"start":{"line":26,"column":14},"end":{"line":26,"column":16}},
+                      "extra": {
+                        "rawValue": 10,
+                        "raw": "10"
+                      },
+                      "value": 10
+                    }
+                  },
+                  {
+                    "type": "ObjectMethod",
+                    "start":778,"end":799,"loc":{"start":{"line":26,"column":18},"end":{"line":26,"column":39}},
+                    "method": true,
+                    "key": {
+                      "type": "Identifier",
+                      "start":778,"end":781,"loc":{"start":{"line":26,"column":18},"end":{"line":26,"column":21},"identifierName":"foo"},
+                      "name": "foo"
+                    },
+                    "computed": false,
+                    "kind": "method",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":784,"end":799,"loc":{"start":{"line":26,"column":24},"end":{"line":26,"column":39}},
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "start":786,"end":797,"loc":{"start":{"line":26,"column":26},"end":{"line":26,"column":37}},
+                          "expression": {
+                            "type": "AssignmentExpression",
+                            "start":786,"end":797,"loc":{"start":{"line":26,"column":26},"end":{"line":26,"column":37}},
+                            "operator": "=",
+                            "left": {
+                              "type": "MemberExpression",
+                              "start":786,"end":792,"loc":{"start":{"line":26,"column":26},"end":{"line":26,"column":32}},
+                              "object": {
+                                "type": "ThisExpression",
+                                "start":786,"end":790,"loc":{"start":{"line":26,"column":26},"end":{"line":26,"column":30}}
+                              },
+                              "property": {
+                                "type": "Identifier",
+                                "start":791,"end":792,"loc":{"start":{"line":26,"column":31},"end":{"line":26,"column":32},"identifierName":"x"},
+                                "name": "x"
+                              },
+                              "computed": false
+                            },
+                            "right": {
+                              "type": "NumericLiteral",
+                              "start":795,"end":797,"loc":{"start":{"line":26,"column":35},"end":{"line":26,"column":37}},
+                              "extra": {
+                                "rawValue": 20,
+                                "raw": "20"
+                              },
+                              "value": 20
+                            }
+                          }
+                        }
+                      ],
+                      "directives": []
+                    }
+                  }
+                ]
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":805,"end":810,"loc":{"start":{"line":26,"column":45},"end":{"line":26,"column":50}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":805,"end":810,"loc":{"start":{"line":26,"column":45},"end":{"line":26,"column":50},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let",
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Error",
+            "start":813,"end":821,"loc":{"start":{"line":26,"column":53},"end":{"line":26,"column":61}}
+          }
+        ]
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":823,"end":846,"loc":{"start":{"line":28,"column":0},"end":{"line":28,"column":23}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":827,"end":845,"loc":{"start":{"line":28,"column":4},"end":{"line":28,"column":22}},
+            "id": {
+              "type": "Identifier",
+              "start":827,"end":829,"loc":{"start":{"line":28,"column":4},"end":{"line":28,"column":6},"identifierName":"p1"},
+              "name": "p1"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":832,"end":845,"loc":{"start":{"line":28,"column":9},"end":{"line":28,"column":22}},
+              "expression": {
+                "type": "NumericLiteral",
+                "start":833,"end":835,"loc":{"start":{"line":28,"column":10},"end":{"line":28,"column":12}},
+                "extra": {
+                  "rawValue": 10,
+                  "raw": "10",
+                  "parenthesized": true,
+                  "parenStart": 832
+                },
+                "value": 10
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":840,"end":845,"loc":{"start":{"line":28,"column":17},"end":{"line":28,"column":22}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":840,"end":845,"loc":{"start":{"line":28,"column":17},"end":{"line":28,"column":22},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let",
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Error",
+            "start":813,"end":821,"loc":{"start":{"line":26,"column":53},"end":{"line":26,"column":61}}
+          }
+        ]
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":847,"end":873,"loc":{"start":{"line":29,"column":0},"end":{"line":29,"column":26}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":851,"end":872,"loc":{"start":{"line":29,"column":4},"end":{"line":29,"column":25}},
+            "id": {
+              "type": "Identifier",
+              "start":851,"end":853,"loc":{"start":{"line":29,"column":4},"end":{"line":29,"column":6},"identifierName":"p2"},
+              "name": "p2"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":856,"end":872,"loc":{"start":{"line":29,"column":9},"end":{"line":29,"column":25}},
+              "expression": {
+                "type": "UnaryExpression",
+                "start":858,"end":861,"loc":{"start":{"line":29,"column":11},"end":{"line":29,"column":14}},
+                "operator": "-",
+                "prefix": true,
+                "argument": {
+                  "type": "NumericLiteral",
+                  "start":859,"end":861,"loc":{"start":{"line":29,"column":12},"end":{"line":29,"column":14}},
+                  "extra": {
+                    "rawValue": 10,
+                    "raw": "10"
+                  },
+                  "value": 10
+                },
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 856
+                }
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":867,"end":872,"loc":{"start":{"line":29,"column":20},"end":{"line":29,"column":25}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":867,"end":872,"loc":{"start":{"line":29,"column":20},"end":{"line":29,"column":25},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":874,"end":901,"loc":{"start":{"line":30,"column":0},"end":{"line":30,"column":27}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":878,"end":900,"loc":{"start":{"line":30,"column":4},"end":{"line":30,"column":26}},
+            "id": {
+              "type": "Identifier",
+              "start":878,"end":880,"loc":{"start":{"line":30,"column":4},"end":{"line":30,"column":6},"identifierName":"p3"},
+              "name": "p3"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":883,"end":900,"loc":{"start":{"line":30,"column":9},"end":{"line":30,"column":26}},
+              "expression": {
+                "type": "ArrayExpression",
+                "start":884,"end":890,"loc":{"start":{"line":30,"column":10},"end":{"line":30,"column":16}},
+                "elements": [
+                  {
+                    "type": "NumericLiteral",
+                    "start":886,"end":888,"loc":{"start":{"line":30,"column":12},"end":{"line":30,"column":14}},
+                    "extra": {
+                      "rawValue": 10,
+                      "raw": "10",
+                      "parenthesized": true,
+                      "parenStart": 885
+                    },
+                    "value": 10
+                  }
+                ],
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 883
+                }
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":895,"end":900,"loc":{"start":{"line":30,"column":21},"end":{"line":30,"column":26}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":895,"end":900,"loc":{"start":{"line":30,"column":21},"end":{"line":30,"column":26},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":902,"end":931,"loc":{"start":{"line":31,"column":0},"end":{"line":31,"column":29}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":906,"end":930,"loc":{"start":{"line":31,"column":4},"end":{"line":31,"column":28}},
+            "id": {
+              "type": "Identifier",
+              "start":906,"end":908,"loc":{"start":{"line":31,"column":4},"end":{"line":31,"column":6},"identifierName":"p4"},
+              "name": "p4"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":911,"end":930,"loc":{"start":{"line":31,"column":9},"end":{"line":31,"column":28}},
+              "expression": {
+                "type": "ArrayExpression",
+                "start":911,"end":921,"loc":{"start":{"line":31,"column":9},"end":{"line":31,"column":19}},
+                "elements": [
+                  {
+                    "type": "ArrayExpression",
+                    "start":912,"end":920,"loc":{"start":{"line":31,"column":10},"end":{"line":31,"column":18}},
+                    "elements": [
+                      {
+                        "type": "ArrayExpression",
+                        "start":913,"end":919,"loc":{"start":{"line":31,"column":11},"end":{"line":31,"column":17}},
+                        "elements": [
+                          {
+                            "type": "ArrayExpression",
+                            "start":914,"end":918,"loc":{"start":{"line":31,"column":12},"end":{"line":31,"column":16}},
+                            "elements": [
+                              {
+                                "type": "NumericLiteral",
+                                "start":915,"end":917,"loc":{"start":{"line":31,"column":13},"end":{"line":31,"column":15}},
+                                "extra": {
+                                  "rawValue": 10,
+                                  "raw": "10"
+                                },
+                                "value": 10
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":925,"end":930,"loc":{"start":{"line":31,"column":23},"end":{"line":31,"column":28}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":925,"end":930,"loc":{"start":{"line":31,"column":23},"end":{"line":31,"column":28},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":933,"end":995,"loc":{"start":{"line":33,"column":0},"end":{"line":33,"column":62}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":937,"end":994,"loc":{"start":{"line":33,"column":4},"end":{"line":33,"column":61}},
+            "id": {
+              "type": "Identifier",
+              "start":937,"end":939,"loc":{"start":{"line":33,"column":4},"end":{"line":33,"column":6},"identifierName":"x1"},
+              "name": "x1"
+            },
+            "init": {
+              "type": "TSAsExpression",
+              "start":942,"end":994,"loc":{"start":{"line":33,"column":9},"end":{"line":33,"column":61}},
+              "expression": {
+                "type": "ObjectExpression",
+                "start":942,"end":985,"loc":{"start":{"line":33,"column":9},"end":{"line":33,"column":52}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":944,"end":949,"loc":{"start":{"line":33,"column":11},"end":{"line":33,"column":16}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":944,"end":945,"loc":{"start":{"line":33,"column":11},"end":{"line":33,"column":12},"identifierName":"x"},
+                      "name": "x"
+                    },
+                    "computed": false,
+                    "shorthand": false,
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start":947,"end":949,"loc":{"start":{"line":33,"column":14},"end":{"line":33,"column":16}},
+                      "extra": {
+                        "rawValue": 10,
+                        "raw": "10"
+                      },
+                      "value": 10
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start":951,"end":962,"loc":{"start":{"line":33,"column":18},"end":{"line":33,"column":29}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":951,"end":952,"loc":{"start":{"line":33,"column":18},"end":{"line":33,"column":19},"identifierName":"y"},
+                      "name": "y"
+                    },
+                    "computed": false,
+                    "shorthand": false,
+                    "value": {
+                      "type": "ArrayExpression",
+                      "start":954,"end":962,"loc":{"start":{"line":33,"column":21},"end":{"line":33,"column":29}},
+                      "elements": [
+                        {
+                          "type": "NumericLiteral",
+                          "start":955,"end":957,"loc":{"start":{"line":33,"column":22},"end":{"line":33,"column":24}},
+                          "extra": {
+                            "rawValue": 20,
+                            "raw": "20"
+                          },
+                          "value": 20
+                        },
+                        {
+                          "type": "NumericLiteral",
+                          "start":959,"end":961,"loc":{"start":{"line":33,"column":26},"end":{"line":33,"column":28}},
+                          "extra": {
+                            "rawValue": 30,
+                            "raw": "30"
+                          },
+                          "value": 30
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start":964,"end":983,"loc":{"start":{"line":33,"column":31},"end":{"line":33,"column":50}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":964,"end":965,"loc":{"start":{"line":33,"column":31},"end":{"line":33,"column":32},"identifierName":"z"},
+                      "name": "z"
+                    },
+                    "computed": false,
+                    "shorthand": false,
+                    "value": {
+                      "type": "ObjectExpression",
+                      "start":967,"end":983,"loc":{"start":{"line":33,"column":34},"end":{"line":33,"column":50}},
+                      "properties": [
+                        {
+                          "type": "ObjectProperty",
+                          "start":969,"end":981,"loc":{"start":{"line":33,"column":36},"end":{"line":33,"column":48}},
+                          "method": false,
+                          "key": {
+                            "type": "Identifier",
+                            "start":969,"end":970,"loc":{"start":{"line":33,"column":36},"end":{"line":33,"column":37},"identifierName":"a"},
+                            "name": "a"
+                          },
+                          "computed": false,
+                          "shorthand": false,
+                          "value": {
+                            "type": "ObjectExpression",
+                            "start":972,"end":981,"loc":{"start":{"line":33,"column":39},"end":{"line":33,"column":48}},
+                            "properties": [
+                              {
+                                "type": "ObjectProperty",
+                                "start":974,"end":979,"loc":{"start":{"line":33,"column":41},"end":{"line":33,"column":46}},
+                                "method": false,
+                                "key": {
+                                  "type": "Identifier",
+                                  "start":974,"end":975,"loc":{"start":{"line":33,"column":41},"end":{"line":33,"column":42},"identifierName":"b"},
+                                  "name": "b"
+                                },
+                                "computed": false,
+                                "shorthand": false,
+                                "value": {
+                                  "type": "NumericLiteral",
+                                  "start":977,"end":979,"loc":{"start":{"line":33,"column":44},"end":{"line":33,"column":46}},
+                                  "extra": {
+                                    "rawValue": 42,
+                                    "raw": "42"
+                                  },
+                                  "value": 42
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":989,"end":994,"loc":{"start":{"line":33,"column":56},"end":{"line":33,"column":61}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":989,"end":994,"loc":{"start":{"line":33,"column":56},"end":{"line":33,"column":61},"identifierName":"const"},
+                  "name": "const"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":997,"end":1017,"loc":{"start":{"line":35,"column":0},"end":{"line":35,"column":20}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":1001,"end":1016,"loc":{"start":{"line":35,"column":4},"end":{"line":35,"column":19}},
+            "id": {
+              "type": "Identifier",
+              "start":1001,"end":1003,"loc":{"start":{"line":35,"column":4},"end":{"line":35,"column":6},"identifierName":"q1"},
+              "name": "q1"
+            },
+            "init": {
+              "type": "TSTypeAssertion",
+              "start":1006,"end":1016,"loc":{"start":{"line":35,"column":9},"end":{"line":35,"column":19}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":1007,"end":1012,"loc":{"start":{"line":35,"column":10},"end":{"line":35,"column":15}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":1007,"end":1012,"loc":{"start":{"line":35,"column":10},"end":{"line":35,"column":15},"identifierName":"const"},
+                  "name": "const"
+                }
+              },
+              "expression": {
+                "type": "NumericLiteral",
+                "start":1014,"end":1016,"loc":{"start":{"line":35,"column":17},"end":{"line":35,"column":19}},
+                "extra": {
+                  "rawValue": 10,
+                  "raw": "10"
+                },
+                "value": 10
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":1018,"end":1041,"loc":{"start":{"line":36,"column":0},"end":{"line":36,"column":23}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":1022,"end":1040,"loc":{"start":{"line":36,"column":4},"end":{"line":36,"column":22}},
+            "id": {
+              "type": "Identifier",
+              "start":1022,"end":1024,"loc":{"start":{"line":36,"column":4},"end":{"line":36,"column":6},"identifierName":"q2"},
+              "name": "q2"
+            },
+            "init": {
+              "type": "TSTypeAssertion",
+              "start":1027,"end":1040,"loc":{"start":{"line":36,"column":9},"end":{"line":36,"column":22}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":1028,"end":1033,"loc":{"start":{"line":36,"column":10},"end":{"line":36,"column":15}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":1028,"end":1033,"loc":{"start":{"line":36,"column":10},"end":{"line":36,"column":15},"identifierName":"const"},
+                  "name": "const"
+                }
+              },
+              "expression": {
+                "type": "StringLiteral",
+                "start":1035,"end":1040,"loc":{"start":{"line":36,"column":17},"end":{"line":36,"column":22}},
+                "extra": {
+                  "rawValue": "abc",
+                  "raw": "'abc'"
+                },
+                "value": "abc"
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":1042,"end":1064,"loc":{"start":{"line":37,"column":0},"end":{"line":37,"column":22}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":1046,"end":1063,"loc":{"start":{"line":37,"column":4},"end":{"line":37,"column":21}},
+            "id": {
+              "type": "Identifier",
+              "start":1046,"end":1048,"loc":{"start":{"line":37,"column":4},"end":{"line":37,"column":6},"identifierName":"q3"},
+              "name": "q3"
+            },
+            "init": {
+              "type": "TSTypeAssertion",
+              "start":1051,"end":1063,"loc":{"start":{"line":37,"column":9},"end":{"line":37,"column":21}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":1052,"end":1057,"loc":{"start":{"line":37,"column":10},"end":{"line":37,"column":15}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":1052,"end":1057,"loc":{"start":{"line":37,"column":10},"end":{"line":37,"column":15},"identifierName":"const"},
+                  "name": "const"
+                }
+              },
+              "expression": {
+                "type": "BooleanLiteral",
+                "start":1059,"end":1063,"loc":{"start":{"line":37,"column":17},"end":{"line":37,"column":21}},
+                "value": true
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":1065,"end":1092,"loc":{"start":{"line":38,"column":0},"end":{"line":38,"column":27}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":1069,"end":1091,"loc":{"start":{"line":38,"column":4},"end":{"line":38,"column":26}},
+            "id": {
+              "type": "Identifier",
+              "start":1069,"end":1071,"loc":{"start":{"line":38,"column":4},"end":{"line":38,"column":6},"identifierName":"q4"},
+              "name": "q4"
+            },
+            "init": {
+              "type": "TSTypeAssertion",
+              "start":1074,"end":1091,"loc":{"start":{"line":38,"column":9},"end":{"line":38,"column":26}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":1075,"end":1080,"loc":{"start":{"line":38,"column":10},"end":{"line":38,"column":15}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":1075,"end":1080,"loc":{"start":{"line":38,"column":10},"end":{"line":38,"column":15},"identifierName":"const"},
+                  "name": "const"
+                }
+              },
+              "expression": {
+                "type": "ArrayExpression",
+                "start":1082,"end":1091,"loc":{"start":{"line":38,"column":17},"end":{"line":38,"column":26}},
+                "elements": [
+                  {
+                    "type": "NumericLiteral",
+                    "start":1083,"end":1084,"loc":{"start":{"line":38,"column":18},"end":{"line":38,"column":19}},
+                    "extra": {
+                      "rawValue": 1,
+                      "raw": "1"
+                    },
+                    "value": 1
+                  },
+                  {
+                    "type": "NumericLiteral",
+                    "start":1086,"end":1087,"loc":{"start":{"line":38,"column":21},"end":{"line":38,"column":22}},
+                    "extra": {
+                      "rawValue": 2,
+                      "raw": "2"
+                    },
+                    "value": 2
+                  },
+                  {
+                    "type": "NumericLiteral",
+                    "start":1089,"end":1090,"loc":{"start":{"line":38,"column":24},"end":{"line":38,"column":25}},
+                    "extra": {
+                      "rawValue": 3,
+                      "raw": "3"
+                    },
+                    "value": 3
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":1093,"end":1127,"loc":{"start":{"line":39,"column":0},"end":{"line":39,"column":34}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":1097,"end":1126,"loc":{"start":{"line":39,"column":4},"end":{"line":39,"column":33}},
+            "id": {
+              "type": "Identifier",
+              "start":1097,"end":1099,"loc":{"start":{"line":39,"column":4},"end":{"line":39,"column":6},"identifierName":"q5"},
+              "name": "q5"
+            },
+            "init": {
+              "type": "TSTypeAssertion",
+              "start":1102,"end":1126,"loc":{"start":{"line":39,"column":9},"end":{"line":39,"column":33}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":1103,"end":1108,"loc":{"start":{"line":39,"column":10},"end":{"line":39,"column":15}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":1103,"end":1108,"loc":{"start":{"line":39,"column":10},"end":{"line":39,"column":15},"identifierName":"const"},
+                  "name": "const"
+                }
+              },
+              "expression": {
+                "type": "ObjectExpression",
+                "start":1110,"end":1126,"loc":{"start":{"line":39,"column":17},"end":{"line":39,"column":33}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":1112,"end":1117,"loc":{"start":{"line":39,"column":19},"end":{"line":39,"column":24}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":1112,"end":1113,"loc":{"start":{"line":39,"column":19},"end":{"line":39,"column":20},"identifierName":"x"},
+                      "name": "x"
+                    },
+                    "computed": false,
+                    "shorthand": false,
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start":1115,"end":1117,"loc":{"start":{"line":39,"column":22},"end":{"line":39,"column":24}},
+                      "extra": {
+                        "rawValue": 10,
+                        "raw": "10"
+                      },
+                      "value": 10
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start":1119,"end":1124,"loc":{"start":{"line":39,"column":26},"end":{"line":39,"column":31}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":1119,"end":1120,"loc":{"start":{"line":39,"column":26},"end":{"line":39,"column":27},"identifierName":"y"},
+                      "name": "y"
+                    },
+                    "computed": false,
+                    "shorthand": false,
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start":1122,"end":1124,"loc":{"start":{"line":39,"column":29},"end":{"line":39,"column":31}},
+                      "extra": {
+                        "rawValue": 20,
+                        "raw": "20"
+                      },
+                      "value": 20
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Copied over from TypeScript's test case",
+      "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":42}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " https://github.com/Microsoft/TypeScript/blob/master/tests/baselines/reference/constAssertions.js",
+      "start":43,"end":142,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":99}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " Error",
+      "start":813,"end":821,"loc":{"start":{"line":26,"column":53},"end":{"line":26,"column":61}}
+    }
+  ]
+}

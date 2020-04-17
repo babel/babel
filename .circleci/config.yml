@@ -1,0 +1,211 @@
+version: 2.1
+
+aliases:
+  - &restore-node-modules-cache
+    keys:
+      - v1-yarn-deps-{{ checksum "yarn.lock" }}
+
+  - &restore-yarn-cache
+    keys:
+      - v1-yarn-cache
+
+  - &save-node-modules-cache
+    paths:
+      - node_modules
+    key: v1-yarn-deps-{{ checksum "yarn.lock" }}
+
+  - &save-yarn-cache
+    paths:
+      - ~/.yarn-cache
+    key: v1-yarn-cache
+
+  - &artifact_babel
+    path: ~/babel/packages/babel-standalone/babel.js
+
+  - &artifact_babel_min
+    path: ~/babel/packages/babel-standalone/babel.min.js
+
+  - &test262_workdir
+    working_directory: ~/babel/babel-test262-runner
+
+  - &artifact_test262_tap
+    path: ~/test262.tap
+
+  - &artifact_test262_xunit
+    path: ~/test-results
+
+  - &artifact_test262_diff_tap
+    path: ~/diff.tap
+
+executors:
+  node-executor:
+    docker:
+      - image: circleci/node:13
+    working_directory: ~/babel
+  # e2e-vue-cli test requires chromium
+  node-browsers-executor:
+    docker:
+      - image: circleci/node:13-browsers
+    working_directory: ~/babel
+
+jobs:
+  build-standalone:
+    executor: node-executor
+    steps:
+      - checkout
+      - restore_cache: *restore-yarn-cache
+      - restore_cache: *restore-node-modules-cache
+        # Builds babel-standalone with the regular Babel config
+        # test-ci-coverage doesn't test babel-standalone, as trying to gather coverage
+      - run: IS_PUBLISH=true make -j build-standalone-ci
+        # data for a JS file that's several megabytes large is bound to fail. Here,
+        # we just run the babel-standalone test separately.
+      - run: yarn jest "\-standalone/test"
+      - store_artifacts: *artifact_babel
+      - store_artifacts: *artifact_babel_min
+      - save_cache: *save-node-modules-cache
+      - save_cache: *save-yarn-cache
+
+  test262:
+    executor: node-executor
+    steps:
+      - checkout
+      - run:
+          name: Sync with latest master branch (only on PRs)
+          command: |
+            if [ -n "$CIRCLE_PULL_REQUEST" ]
+            then
+              git fetch origin refs/pull/$CIRCLE_PR_NUMBER/merge
+              git checkout -qf FETCH_HEAD
+            fi
+      - restore_cache: *restore-yarn-cache
+      - restore_cache: *restore-node-modules-cache
+      - run:
+          name: Build Babel
+          command: BABEL_ENV=test make bootstrap
+      - run:
+          name: Setup Test Runner
+          command: |
+            git clone --recurse-submodules https://github.com/babel/babel-test262-runner
+            cd babel-test262-runner
+            npm ci
+            npm i tap-mocha-reporter --save-dev
+            node lib/download-node
+      - run:
+          name: Download master branch Test262 artifact
+          command: node lib/download-master-artifact ~/master.tap
+          <<: *test262_workdir
+      - run:
+          name: Run Test262
+          command: BABEL_PATH=.. node lib/run-tests I_AM_SURE | tee ~/test262.tap
+          <<: *test262_workdir
+      - store_artifacts: *artifact_test262_tap
+      - run:
+          name: Output Test262 results
+          command: |
+            cat ~/test262.tap | $(npm bin)/tap-mocha-reporter spec || true
+          <<: *test262_workdir
+      - run:
+          name: Compare previous master branch & current job results
+          command: |
+            mkdir -p ~/test-results/test262
+            node lib/compare-results ~/master.tap ~/test262.tap | tee ~/diff.tap
+          <<: *test262_workdir
+      - store_artifacts: *artifact_test262_diff_tap
+      - run:
+          name: Output comparision results and report to CircleCI
+          command: |
+            mkdir -p ~/test-results/test262
+            cat ~/diff.tap | $(npm bin)/tap-merge | $(npm bin)/tap-mocha-reporter xunit | tee ~/test-results/test262/results.xml
+          <<: *test262_workdir
+      - store_test_results: *artifact_test262_xunit
+      - save_cache: *save-node-modules-cache
+      - save_cache: *save-yarn-cache
+
+  publish-verdaccio:
+    executor: node-executor
+    steps:
+      - checkout
+      - run: yarn install
+      - run: ./scripts/integration-tests/publish-local.sh
+      - persist_to_workspace:
+          root: /tmp/verdaccio-workspace
+          paths:
+            - storage
+            - htpasswd
+
+  e2e-babel:
+    executor: node-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/verdaccio-workspace
+      - run: ./scripts/integration-tests/e2e-babel.sh
+
+  e2e-babel-old-version:
+    executor: node-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/verdaccio-workspace
+      - run: ./scripts/integration-tests/e2e-babel-old-version.sh
+
+  e2e-create-react-app:
+    executor: node-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/verdaccio-workspace
+      - run: ./scripts/integration-tests/e2e-create-react-app.sh
+
+  e2e-vue-cli:
+    executor: node-browsers-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/verdaccio-workspace
+      - run: ./scripts/integration-tests/e2e-vue-cli.sh
+
+workflows:
+  version: 2
+  build-standalone:
+    jobs:
+      - build-standalone
+  test262-master:
+    jobs:
+      - test262:
+          filters:
+            branches:
+              only:
+                - master
+  test262:
+    jobs:
+      - approve-test262-run:
+          type: approval
+          filters:
+            branches:
+              ignore:
+                - master
+      - test262:
+          requires:
+            - approve-test262-run
+          filters:
+            branches:
+              ignore:
+                - master
+  e2e:
+    jobs:
+      - publish-verdaccio
+      - e2e-babel:
+          requires:
+            - publish-verdaccio
+      - e2e-babel-old-version:
+          requires:
+            - publish-verdaccio
+      - e2e-create-react-app:
+          requires:
+            - publish-verdaccio
+      - e2e-vue-cli:
+          requires:
+            - publish-verdaccio
+

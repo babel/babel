@@ -1,0 +1,53 @@
+{
+  "type": "File",
+  "start":0,"end":11,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":11}},
+  "errors": [
+    "SyntaxError: Did not expect a type annotation here. (1:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":11,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":11}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":11,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":11}},
+        "expression": {
+          "type": "CallExpression",
+          "start":0,"end":10,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":10}},
+          "callee": {
+            "type": "Identifier",
+            "start":0,"end":4,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":4},"identifierName":"func"},
+            "name": "func"
+          },
+          "arguments": [
+            {
+              "type": "TSTypeCastExpression",
+              "start":5,"end":9,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":9}},
+              "expression": {
+                "type": "Identifier",
+                "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"a"},
+                "name": "a"
+              },
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":6,"end":9,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":9}},
+                "typeAnnotation": {
+                  "type": "TSTypeReference",
+                  "start":8,"end":9,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":9}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":8,"end":9,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":9},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "type": "File",
+  "start":0,"end":67,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":24}},
+  "errors": [
+    "SyntaxError: Binding invalid left-hand side in function parameter list (2:11)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":67,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":24}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":43,"end":67,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":24}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":43,"end":66,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":23}},
+          "test": {
+            "type": "Identifier",
+            "start":43,"end":44,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":1},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "Identifier",
+            "start":48,"end":49,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":6},"identifierName":"b"},
+            "name": "b",
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 47
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start":53,"end":66,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":23}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "ArrowFunctionExpression",
+                "start":54,"end":60,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":17}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start":54,"end":55,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":12},"identifierName":"c"},
+                    "name": "c"
+                  }
+                ],
+                "body": {
+                  "type": "Identifier",
+                  "start":59,"end":60,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":17},"identifierName":"d"},
+                  "name": "d"
+                }
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start":65,"end":66,"loc":{"start":{"line":2,"column":22},"end":{"line":2,"column":23},"identifierName":"e"},
+              "name": "e"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Function which looks like a return type",
+            "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":42}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Function which looks like a return type",
+      "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":42}}
+    }
+  ]
+}

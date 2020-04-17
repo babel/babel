@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "transform-function-name",
+    "transform-shorthand-properties",
+    "transform-arrow-functions",
+    "transform-modules-systemjs"
+  ]
+}

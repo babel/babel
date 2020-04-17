@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "external-helpers",
+    "transform-modules-umd",
+    "transform-member-expression-literals"
+  ]
+}

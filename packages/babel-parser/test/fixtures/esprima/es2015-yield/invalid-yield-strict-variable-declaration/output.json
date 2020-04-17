@@ -1,0 +1,47 @@
+{
+  "type": "File",
+  "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":24}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'yield' (1:18)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":24}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":14,"end":24,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":24}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":18,"end":23,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":23}},
+            "id": {
+              "type": "Identifier",
+              "start":18,"end":23,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":23},"identifierName":"yield"},
+              "name": "yield"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
+          "value": "use strict",
+          "extra": {
+            "raw": "\"use strict\"",
+            "rawValue": "use strict"
+          }
+        }
+      }
+    ]
+  }
+}

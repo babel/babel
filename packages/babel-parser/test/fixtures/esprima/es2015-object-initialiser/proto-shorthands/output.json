@@ -1,0 +1,67 @@
+{
+  "type": "File",
+  "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
+        "expression": {
+          "type": "ObjectExpression",
+          "start":1,"end":25,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":25}},
+          "properties": [
+            {
+              "type": "ObjectProperty",
+              "start":3,"end":12,"loc":{"start":{"line":1,"column":3},"end":{"line":1,"column":12}},
+              "method": false,
+              "key": {
+                "type": "Identifier",
+                "start":3,"end":12,"loc":{"start":{"line":1,"column":3},"end":{"line":1,"column":12},"identifierName":"__proto__"},
+                "name": "__proto__"
+              },
+              "computed": false,
+              "shorthand": true,
+              "value": {
+                "type": "Identifier",
+                "start":3,"end":12,"loc":{"start":{"line":1,"column":3},"end":{"line":1,"column":12},"identifierName":"__proto__"},
+                "name": "__proto__"
+              },
+              "extra": {
+                "shorthand": true
+              }
+            },
+            {
+              "type": "ObjectProperty",
+              "start":14,"end":23,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":23}},
+              "method": false,
+              "key": {
+                "type": "Identifier",
+                "start":14,"end":23,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":23},"identifierName":"__proto__"},
+                "name": "__proto__"
+              },
+              "computed": false,
+              "shorthand": true,
+              "value": {
+                "type": "Identifier",
+                "start":14,"end":23,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":23},"identifierName":"__proto__"},
+                "name": "__proto__"
+              },
+              "extra": {
+                "shorthand": true
+              }
+            }
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

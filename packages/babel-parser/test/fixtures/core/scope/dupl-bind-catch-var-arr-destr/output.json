@@ -1,0 +1,66 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+  "errors": [
+    "SyntaxError: Identifier 'foo' has already been declared (3:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TryStatement",
+        "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+        "block": {
+          "type": "BlockStatement",
+          "start":4,"end":7,"loc":{"start":{"line":1,"column":4},"end":{"line":2,"column":1}},
+          "body": [],
+          "directives": []
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start":8,"end":36,"loc":{"start":{"line":2,"column":2},"end":{"line":4,"column":1}},
+          "param": {
+            "type": "ArrayPattern",
+            "start":15,"end":20,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":14}},
+            "elements": [
+              {
+                "type": "Identifier",
+                "start":16,"end":19,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":13},"identifierName":"foo"},
+                "name": "foo"
+              }
+            ]
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":22,"end":36,"loc":{"start":{"line":2,"column":16},"end":{"line":4,"column":1}},
+            "body": [
+              {
+                "type": "VariableDeclaration",
+                "start":26,"end":34,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":10}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":30,"end":33,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":9}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":30,"end":33,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":9},"identifierName":"foo"},
+                      "name": "foo"
+                    },
+                    "init": null
+                  }
+                ],
+                "kind": "var"
+              }
+            ],
+            "directives": []
+          }
+        },
+        "finalizer": null
+      }
+    ],
+    "directives": []
+  }
+}

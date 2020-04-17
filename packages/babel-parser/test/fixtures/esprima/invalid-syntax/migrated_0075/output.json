@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
+  "errors": [
+    "SyntaxError: setter must have exactly one formal parameter (1:3)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
+        "expression": {
+          "type": "ObjectExpression",
+          "start":1,"end":16,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":16}},
+          "properties": [
+            {
+              "type": "Property",
+              "start":3,"end":14,"loc":{"start":{"line":1,"column":3},"end":{"line":1,"column":14}},
+              "method": false,
+              "key": {
+                "type": "Identifier",
+                "start":7,"end":8,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":8},"identifierName":"s"},
+                "name": "s"
+              },
+              "computed": false,
+              "kind": "set",
+              "value": {
+                "type": "FunctionExpression",
+                "start":8,"end":14,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":14}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "expression": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":11,"end":14,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":14}},
+                  "body": []
+                }
+              },
+              "shorthand": false
+            }
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ]
+  }
+}

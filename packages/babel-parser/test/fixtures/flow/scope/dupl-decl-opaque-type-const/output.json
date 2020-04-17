@@ -1,0 +1,62 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":12}},
+  "errors": [
+    "SyntaxError: Identifier 'A' has already been declared (2:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":12}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "OpaqueType",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":19}},
+        "id": {
+          "type": "Identifier",
+          "start":12,"end":13,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":13},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeParameters": null,
+        "supertype": null,
+        "impltype": {
+          "type": "ObjectTypeAnnotation",
+          "start":16,"end":18,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":18}},
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": false
+        }
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":20,"end":32,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":12}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":26,"end":31,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":11}},
+            "id": {
+              "type": "Identifier",
+              "start":26,"end":27,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":7},"identifierName":"A"},
+              "name": "A"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":30,"end":31,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

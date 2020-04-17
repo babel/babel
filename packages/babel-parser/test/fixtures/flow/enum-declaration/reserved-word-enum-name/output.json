@@ -1,0 +1,31 @@
+{
+  "type": "File",
+  "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":1}},
+  "errors": [
+    "SyntaxError: Unexpected keyword 'class' (1:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "EnumDeclaration",
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":10,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":10},"identifierName":"class"},
+          "name": "class"
+        },
+        "body": {
+          "type": "EnumStringBody",
+          "start":11,"end":14,"loc":{"start":{"line":1,"column":11},"end":{"line":2,"column":1}},
+          "explicitType": false,
+          "members": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

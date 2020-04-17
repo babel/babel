@@ -1,0 +1,63 @@
+{
+  "type": "File",
+  "start":0,"end":31,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":18}},
+  "errors": [
+    "SyntaxError: Identifier 'A' has already been declared (2:14)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":31,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":18}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":11,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":11}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"A"},
+              "name": "A"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "DeclareClass",
+        "start":13,"end":31,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":18}},
+        "id": {
+          "type": "Identifier",
+          "start":27,"end":28,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":15},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start":29,"end":31,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":18}},
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

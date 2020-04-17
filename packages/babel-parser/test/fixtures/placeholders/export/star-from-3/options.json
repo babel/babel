@@ -1,0 +1,4 @@
+{
+  "plugins": ["placeholders"],
+  "sourceType": "module"
+}

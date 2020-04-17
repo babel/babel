@@ -1,0 +1,93 @@
+{
+  "type": "File",
+  "start":0,"end":53,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":27}},
+  "errors": [
+    "SyntaxError: Identifier 'foo' has already been declared (2:15)",
+    "SyntaxError: `foo` has already been exported. Exported identifiers must be unique. (2:15)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":53,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":27}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":24}},
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "FunctionDeclaration",
+          "start":7,"end":24,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":24}},
+          "id": {
+            "type": "Identifier",
+            "start":16,"end":19,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":19},"identifierName":"foo"},
+            "name": "foo"
+          },
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":22,"end":24,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":24}},
+            "body": [],
+            "directives": []
+          }
+        }
+      },
+      {
+        "type": "EmptyStatement",
+        "start":24,"end":25,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":25}}
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":26,"end":53,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":27}},
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "VariableDeclaration",
+          "start":33,"end":53,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":27}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":39,"end":52,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":26}},
+              "id": {
+                "type": "ObjectPattern",
+                "start":39,"end":46,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":20}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":41,"end":44,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":18}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":41,"end":44,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":18},"identifierName":"foo"},
+                      "name": "foo"
+                    },
+                    "computed": false,
+                    "shorthand": true,
+                    "value": {
+                      "type": "Identifier",
+                      "start":41,"end":44,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":18},"identifierName":"foo"},
+                      "name": "foo"
+                    },
+                    "extra": {
+                      "shorthand": true
+                    }
+                  }
+                ]
+              },
+              "init": {
+                "type": "Identifier",
+                "start":49,"end":52,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":26},"identifierName":"bar"},
+                "name": "bar"
+              }
+            }
+          ],
+          "kind": "const"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

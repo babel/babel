@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":23,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":12}},
+  "errors": [
+    "SyntaxError: Identifier 'A' has already been declared (2:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":23,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":12}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":10,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":10}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":9,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":9}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5},"identifierName":"A"},
+              "name": "A"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":8,"end":9,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":9}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          }
+        ],
+        "kind": "var"
+      },
+      {
+        "type": "TypeAlias",
+        "start":11,"end":23,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":12}},
+        "id": {
+          "type": "Identifier",
+          "start":16,"end":17,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":6},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start":20,"end":22,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":11}},
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "plugins": [["proposal-pipeline-operator", { "proposal": "smart" }]],
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  }
+}

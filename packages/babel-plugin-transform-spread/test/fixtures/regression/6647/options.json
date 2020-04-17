@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "external-helpers",
+    "transform-spread",
+    "transform-modules-commonjs"
+  ]
+}

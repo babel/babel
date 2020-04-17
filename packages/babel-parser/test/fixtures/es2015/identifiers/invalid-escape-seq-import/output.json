@@ -1,0 +1,57 @@
+{
+  "type": "File",
+  "start":0,"end":90,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":41}},
+  "errors": [
+    "SyntaxError: Unexpected keyword 'import' (1:4)",
+    "SyntaxError: Escape sequence in keyword import (1:4)",
+    "SyntaxError: Escape sequence in keyword import (3:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":90,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":41}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":47,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":47}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":46,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":46}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":40,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":40},"identifierName":"import"},
+              "name": "import"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":43,"end":46,"loc":{"start":{"line":1,"column":43},"end":{"line":1,"column":46}},
+              "extra": {
+                "rawValue": 123,
+                "raw": "123"
+              },
+              "value": 123
+            }
+          }
+        ],
+        "kind": "var"
+      },
+      {
+        "type": "ImportDeclaration",
+        "start":49,"end":90,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":41}},
+        "specifiers": [],
+        "source": {
+          "type": "StringLiteral",
+          "start":86,"end":89,"loc":{"start":{"line":3,"column":37},"end":{"line":3,"column":40}},
+          "extra": {
+            "rawValue": "x",
+            "raw": "\"x\""
+          },
+          "value": "x"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "type": "File",
+  "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+  "errors": [
+    "SyntaxError: Unterminated flow-comment (1:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [],
+    "directives": [],
+    "innerComments": [
+      {
+        "type": "CommentLine",
+        "value": "asd */",
+        "start":5,"end":13,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":13}}
+      }
+    ]
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": "asd */",
+      "start":5,"end":13,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":13}}
+    }
+  ]
+}

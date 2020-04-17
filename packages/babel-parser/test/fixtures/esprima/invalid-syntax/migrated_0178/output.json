@@ -1,0 +1,73 @@
+{
+  "type": "File",
+  "start":0,"end":47,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":47}},
+  "errors": [
+    "SyntaxError: Unsyntactic break (1:33)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":47,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":47}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "start":0,"end":47,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":47}},
+        "body": {
+          "type": "WhileStatement",
+          "start":3,"end":47,"loc":{"start":{"line":1,"column":3},"end":{"line":1,"column":47}},
+          "test": {
+            "type": "BooleanLiteral",
+            "start":10,"end":14,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":14}},
+            "value": true
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":16,"end":47,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":47}},
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start":18,"end":45,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":45}},
+                "expression": {
+                  "type": "FunctionExpression",
+                  "start":19,"end":43,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":43}},
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":31,"end":43,"loc":{"start":{"line":1,"column":31},"end":{"line":1,"column":43}},
+                    "body": [
+                      {
+                        "type": "BreakStatement",
+                        "start":33,"end":41,"loc":{"start":{"line":1,"column":33},"end":{"line":1,"column":41}},
+                        "label": {
+                          "type": "Identifier",
+                          "start":39,"end":40,"loc":{"start":{"line":1,"column":39},"end":{"line":1,"column":40},"identifierName":"x"},
+                          "name": "x"
+                        }
+                      }
+                    ],
+                    "directives": []
+                  },
+                  "extra": {
+                    "parenthesized": true,
+                    "parenStart": 18
+                  }
+                }
+              }
+            ],
+            "directives": []
+          }
+        },
+        "label": {
+          "type": "Identifier",
+          "start":0,"end":1,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":1},"identifierName":"x"},
+          "name": "x"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

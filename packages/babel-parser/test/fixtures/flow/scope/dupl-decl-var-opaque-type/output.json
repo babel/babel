@@ -1,0 +1,62 @@
+{
+  "type": "File",
+  "start":0,"end":30,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":19}},
+  "errors": [
+    "SyntaxError: Identifier 'A' has already been declared (2:12)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":30,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":19}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":10,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":10}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":9,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":9}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5},"identifierName":"A"},
+              "name": "A"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":8,"end":9,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":9}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          }
+        ],
+        "kind": "var"
+      },
+      {
+        "type": "OpaqueType",
+        "start":11,"end":30,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":19}},
+        "id": {
+          "type": "Identifier",
+          "start":23,"end":24,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":13},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeParameters": null,
+        "supertype": null,
+        "impltype": {
+          "type": "ObjectTypeAnnotation",
+          "start":27,"end":29,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":18}},
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

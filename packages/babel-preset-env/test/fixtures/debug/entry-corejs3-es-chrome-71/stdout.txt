@@ -1,0 +1,29 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "71"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-numeric-separator { "chrome":"71" }
+  proposal-nullish-coalescing-operator { "chrome":"71" }
+  proposal-optional-chaining { "chrome":"71" }
+  syntax-json-strings { "chrome":"71" }
+  syntax-optional-catch-binding { "chrome":"71" }
+  syntax-async-generators { "chrome":"71" }
+  syntax-object-rest-spread { "chrome":"71" }
+  transform-modules-commonjs { "chrome":"71" }
+  proposal-dynamic-import { "chrome":"71" }
+
+Using polyfills with `entry` option:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-es-chrome-71/input.mjs] Replaced core-js entries with the following polyfills:
+  es.array.unscopables.flat { "chrome":"71" }
+  es.array.unscopables.flat-map { "chrome":"71" }
+  es.math.hypot { "chrome":"71" }
+  es.object.from-entries { "chrome":"71" }
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-es-chrome-71/input.mjs] Based on your targets, regenerator-runtime import excluded.

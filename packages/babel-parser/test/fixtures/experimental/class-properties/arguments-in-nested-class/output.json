@@ -1,0 +1,107 @@
+{
+  "type": "File",
+  "start":0,"end":76,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":76,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":76,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":11,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":11},"identifierName":"fn"},
+          "name": "fn"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":14,"end":76,"loc":{"start":{"line":1,"column":14},"end":{"line":5,"column":1}},
+          "body": [
+            {
+              "type": "ClassDeclaration",
+              "start":18,"end":74,"loc":{"start":{"line":2,"column":2},"end":{"line":4,"column":3}},
+              "id": {
+                "type": "Identifier",
+                "start":24,"end":25,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":9},"identifierName":"A"},
+                "name": "A"
+              },
+              "superClass": null,
+              "body": {
+                "type": "ClassBody",
+                "start":26,"end":74,"loc":{"start":{"line":2,"column":10},"end":{"line":4,"column":3}},
+                "body": [
+                  {
+                    "type": "ClassProperty",
+                    "start":32,"end":70,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":42}},
+                    "static": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":32,"end":35,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":7},"identifierName":"foo"},
+                      "name": "foo"
+                    },
+                    "computed": false,
+                    "value": {
+                      "type": "ClassExpression",
+                      "start":38,"end":69,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":41}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":44,"end":45,"loc":{"start":{"line":3,"column":16},"end":{"line":3,"column":17},"identifierName":"B"},
+                        "name": "B"
+                      },
+                      "superClass": null,
+                      "body": {
+                        "type": "ClassBody",
+                        "start":46,"end":69,"loc":{"start":{"line":3,"column":18},"end":{"line":3,"column":41}},
+                        "body": [
+                          {
+                            "type": "ClassMethod",
+                            "start":48,"end":67,"loc":{"start":{"line":3,"column":20},"end":{"line":3,"column":39}},
+                            "static": false,
+                            "key": {
+                              "type": "Identifier",
+                              "start":48,"end":51,"loc":{"start":{"line":3,"column":20},"end":{"line":3,"column":23},"identifierName":"bar"},
+                              "name": "bar"
+                            },
+                            "computed": false,
+                            "kind": "method",
+                            "id": null,
+                            "generator": false,
+                            "async": false,
+                            "params": [],
+                            "body": {
+                              "type": "BlockStatement",
+                              "start":54,"end":67,"loc":{"start":{"line":3,"column":26},"end":{"line":3,"column":39}},
+                              "body": [
+                                {
+                                  "type": "ExpressionStatement",
+                                  "start":56,"end":65,"loc":{"start":{"line":3,"column":28},"end":{"line":3,"column":37}},
+                                  "expression": {
+                                    "type": "Identifier",
+                                    "start":56,"end":65,"loc":{"start":{"line":3,"column":28},"end":{"line":3,"column":37},"identifierName":"arguments"},
+                                    "name": "arguments"
+                                  }
+                                }
+                              ],
+                              "directives": []
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

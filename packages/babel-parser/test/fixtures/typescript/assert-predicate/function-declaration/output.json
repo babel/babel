@@ -1,0 +1,158 @@
+{
+  "type": "File",
+  "start":0,"end":163,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":46}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":163,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":46}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":62,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":62}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":17,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":17},"identifierName":"asserts1"},
+          "name": "asserts1"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start":19,"end":33,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":33},"identifierName":"value"},
+            "name": "value",
+            "typeAnnotation": {
+              "type": "TSTypeAnnotation",
+              "start":24,"end":33,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":33}},
+              "typeAnnotation": {
+                "type": "TSUnknownKeyword",
+                "start":26,"end":33,"loc":{"start":{"line":1,"column":26},"end":{"line":1,"column":33}}
+              }
+            }
+          }
+        ],
+        "returnType": {
+          "type": "TSTypeAnnotation",
+          "start":34,"end":59,"loc":{"start":{"line":1,"column":34},"end":{"line":1,"column":59}},
+          "typeAnnotation": {
+            "type": "TSTypePredicate",
+            "start":34,"end":59,"loc":{"start":{"line":1,"column":34},"end":{"line":1,"column":59}},
+            "parameterName": {
+              "type": "Identifier",
+              "start":44,"end":49,"loc":{"start":{"line":1,"column":44},"end":{"line":1,"column":49},"identifierName":"value"},
+              "name": "value"
+            },
+            "typeAnnotation": {
+              "type": "TSTypeAnnotation",
+              "start":53,"end":59,"loc":{"start":{"line":1,"column":53},"end":{"line":1,"column":59}},
+              "typeAnnotation": {
+                "type": "TSStringKeyword",
+                "start":53,"end":59,"loc":{"start":{"line":1,"column":53},"end":{"line":1,"column":59}}
+              }
+            },
+            "asserts": true
+          }
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start":60,"end":62,"loc":{"start":{"line":1,"column":60},"end":{"line":1,"column":62}},
+          "body": [],
+          "directives": []
+        }
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":64,"end":116,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":52}},
+        "id": {
+          "type": "Identifier",
+          "start":73,"end":81,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":17},"identifierName":"asserts2"},
+          "name": "asserts2"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start":83,"end":97,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":33},"identifierName":"value"},
+            "name": "value",
+            "typeAnnotation": {
+              "type": "TSTypeAnnotation",
+              "start":88,"end":97,"loc":{"start":{"line":2,"column":24},"end":{"line":2,"column":33}},
+              "typeAnnotation": {
+                "type": "TSUnknownKeyword",
+                "start":90,"end":97,"loc":{"start":{"line":2,"column":26},"end":{"line":2,"column":33}}
+              }
+            }
+          }
+        ],
+        "returnType": {
+          "type": "TSTypeAnnotation",
+          "start":98,"end":113,"loc":{"start":{"line":2,"column":34},"end":{"line":2,"column":49}},
+          "typeAnnotation": {
+            "type": "TSTypePredicate",
+            "start":98,"end":113,"loc":{"start":{"line":2,"column":34},"end":{"line":2,"column":49}},
+            "parameterName": {
+              "type": "Identifier",
+              "start":108,"end":113,"loc":{"start":{"line":2,"column":44},"end":{"line":2,"column":49},"identifierName":"value"},
+              "name": "value"
+            },
+            "asserts": true
+          }
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start":114,"end":116,"loc":{"start":{"line":2,"column":50},"end":{"line":2,"column":52}},
+          "body": [],
+          "directives": []
+        }
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":117,"end":163,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":46}},
+        "id": {
+          "type": "Identifier",
+          "start":126,"end":134,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":17},"identifierName":"asserts3"},
+          "name": "asserts3"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start":136,"end":150,"loc":{"start":{"line":3,"column":19},"end":{"line":3,"column":33},"identifierName":"value"},
+            "name": "value",
+            "typeAnnotation": {
+              "type": "TSTypeAnnotation",
+              "start":141,"end":150,"loc":{"start":{"line":3,"column":24},"end":{"line":3,"column":33}},
+              "typeAnnotation": {
+                "type": "TSUnknownKeyword",
+                "start":143,"end":150,"loc":{"start":{"line":3,"column":26},"end":{"line":3,"column":33}}
+              }
+            }
+          }
+        ],
+        "returnType": {
+          "type": "TSTypeAnnotation",
+          "start":151,"end":160,"loc":{"start":{"line":3,"column":34},"end":{"line":3,"column":43}},
+          "typeAnnotation": {
+            "type": "TSTypeReference",
+            "start":153,"end":160,"loc":{"start":{"line":3,"column":36},"end":{"line":3,"column":43}},
+            "typeName": {
+              "type": "Identifier",
+              "start":153,"end":160,"loc":{"start":{"line":3,"column":36},"end":{"line":3,"column":43},"identifierName":"asserts"},
+              "name": "asserts"
+            }
+          }
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start":161,"end":163,"loc":{"start":{"line":3,"column":44},"end":{"line":3,"column":46}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

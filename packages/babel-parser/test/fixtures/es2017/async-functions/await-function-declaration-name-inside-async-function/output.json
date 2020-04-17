@@ -1,0 +1,53 @@
+{
+  "type": "File",
+  "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: Can not use 'await' as identifier inside an async function (2:11)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":18,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":18},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":21,"end":46,"loc":{"start":{"line":1,"column":21},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "FunctionDeclaration",
+              "start":25,"end":44,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":21}},
+              "id": {
+                "type": "Identifier",
+                "start":34,"end":39,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":16},"identifierName":"await"},
+                "name": "await"
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":42,"end":44,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":21}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

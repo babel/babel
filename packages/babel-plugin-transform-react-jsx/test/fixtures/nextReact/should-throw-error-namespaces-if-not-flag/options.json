@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    [
+      "transform-react-jsx",
+      {
+        "throwIfNamespace": true,
+        "runtime": "automatic"
+      }
+    ]
+  ],
+  "throws": "Namespace tags are not supported by default. React's JSX doesn't support namespace tags. You can set `throwIfNamespace: false` to bypass this warning."
+}

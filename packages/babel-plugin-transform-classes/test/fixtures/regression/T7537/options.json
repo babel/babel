@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-exponentiation-operator"],
+  "presets": ["env"]
+}

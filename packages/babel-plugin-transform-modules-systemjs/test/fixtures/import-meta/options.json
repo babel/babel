@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "external-helpers",
+    "syntax-import-meta",
+    "transform-modules-systemjs"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "type": "File",
+  "start":0,"end":30,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: Initializers are not allowed in fields with the `declare` modifier. (2:17)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":30,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":30,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":30,"loc":{"start":{"line":1,"column":8},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "ClassPrivateProperty",
+              "start":12,"end":28,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":18}},
+              "declare": true,
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":20,"end":24,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":14}},
+                "id": {
+                  "type": "Identifier",
+                  "start":21,"end":24,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":14},"identifierName":"foo"},
+                  "name": "foo"
+                }
+              },
+              "variance": null,
+              "value": {
+                "type": "NumericLiteral",
+                "start":27,"end":28,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":18}},
+                "extra": {
+                  "rawValue": 2,
+                  "raw": "2"
+                },
+                "value": 2
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

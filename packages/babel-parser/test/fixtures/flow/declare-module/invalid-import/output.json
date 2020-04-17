@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":42}},
+  "errors": [
+    "SyntaxError: Imports within a `declare module` body must always be `import type` or `import typeof` (1:21)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":42}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareModule",
+        "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":42}},
+        "id": {
+          "type": "StringLiteral",
+          "start":15,"end":18,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":18}},
+          "extra": {
+            "rawValue": "M",
+            "raw": "\"M\""
+          },
+          "value": "M"
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":42,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":42}},
+          "body": [
+            {
+              "type": "ImportDeclaration",
+              "start":21,"end":40,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":40}},
+              "specifiers": [
+                {
+                  "type": "ImportDefaultSpecifier",
+                  "start":28,"end":29,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":29}},
+                  "local": {
+                    "type": "Identifier",
+                    "start":28,"end":29,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":29},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              ],
+              "importKind": "value",
+              "source": {
+                "type": "StringLiteral",
+                "start":35,"end":39,"loc":{"start":{"line":1,"column":35},"end":{"line":1,"column":39}},
+                "extra": {
+                  "rawValue": "TM",
+                  "raw": "\"TM\""
+                },
+                "value": "TM"
+              }
+            }
+          ]
+        },
+        "kind": "CommonJS"
+      }
+    ],
+    "directives": []
+  }
+}

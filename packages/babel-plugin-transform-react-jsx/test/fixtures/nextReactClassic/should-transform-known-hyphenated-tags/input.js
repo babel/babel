@@ -1,0 +1,3 @@
+/** @jsxRuntime classic */
+
+<font-face />;

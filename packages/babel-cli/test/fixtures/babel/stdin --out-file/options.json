@@ -1,0 +1,3 @@
+{
+  "args": ["--out-file", "script.js", "-f", "file.js"]
+}

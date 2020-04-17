@@ -1,0 +1,99 @@
+{
+  "type": "File",
+  "start":0,"end":76,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":29}},
+  "errors": [
+    "SyntaxError: Binding invalid left-hand side in function parameter list (2:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":76,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":29}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":47,"end":76,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":29}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":47,"end":75,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":28}},
+          "test": {
+            "type": "Identifier",
+            "start":47,"end":48,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":1},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start":51,"end":66,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":19}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "ArrowFunctionExpression",
+                "start":52,"end":58,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":11}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start":52,"end":53,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":6},"identifierName":"b"},
+                    "name": "b"
+                  }
+                ],
+                "body": {
+                  "type": "Identifier",
+                  "start":57,"end":58,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11},"identifierName":"c"},
+                  "name": "c"
+                }
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start":64,"end":65,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":18},"identifierName":"e"},
+              "name": "e",
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 63
+              }
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start":69,"end":75,"loc":{"start":{"line":2,"column":22},"end":{"line":2,"column":28}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start":69,"end":70,"loc":{"start":{"line":2,"column":22},"end":{"line":2,"column":23},"identifierName":"f"},
+                "name": "f"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start":74,"end":75,"loc":{"start":{"line":2,"column":27},"end":{"line":2,"column":28},"identifierName":"g"},
+              "name": "g"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Invalid LHS parameter after type parameters",
+            "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":46}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Invalid LHS parameter after type parameters",
+      "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":46}}
+    }
+  ]
+}
