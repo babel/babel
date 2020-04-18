@@ -51,3 +51,4 @@ export const JSX_TYPES = FLIPPED_ALIAS_KEYS["JSX"];
 export const PRIVATE_TYPES = FLIPPED_ALIAS_KEYS["Private"];
 export const TSTYPEELEMENT_TYPES = FLIPPED_ALIAS_KEYS["TSTypeElement"];
 export const TSTYPE_TYPES = FLIPPED_ALIAS_KEYS["TSType"];
+export const TSBASETYPE_TYPES = FLIPPED_ALIAS_KEYS["TSBaseType"];

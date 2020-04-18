@@ -16,9 +16,7 @@
 
 # Contributing
 
-Contributions are always welcome, no matter how large or small. Before
-contributing, please read the
-[code of conduct](https://github.com/babel/babel/blob/master/CODE_OF_CONDUCT.md).
+Contributions are always welcome, no matter how large or small! Before contributing, please read the [code of conduct](https://github.com/babel/babel/blob/master/CODE_OF_CONDUCT.md).
 
 ## Not sure where to start?
 
@@ -39,12 +37,9 @@ Feel free to check out the `#discussion`/`#development` channels on our [Slack](
 
 ## Developing
 
-**Note:** Versions `< 5.1.10` can't be built.
+*Node*: Check that Node is [installed](https://nodejs.org/en/download/) with version 10 and up. You can check this with `node -v`.
 
-Babel is built for Node 6 and up but we develop using Node 8 and yarn. You can check this with `node -v`.
-
-Make sure that Yarn is installed with version >= `0.28.0`.
-Installation instructions can be found here: https://yarnpkg.com/en/docs/install.
+*Yarn*: Make sure that Yarn 1 is [installed](https://classic.yarnpkg.com/en/docs/install) with version >= `1.19.0`.
 
 ### Setup
 
@@ -72,7 +67,7 @@ $ make watch
 
 to have Babel build itself and incrementally build files on change.
 
-You can access the built files for individual packages from `packages/<package-name>/lib`.
+> You can access the built files for individual packages from `packages/<package-name>/lib`.
 
 If you wish to build a copy of Babel for distribution, then run:
 
@@ -109,9 +104,7 @@ If you just want to run all tests:
 $ make test-only
 ```
 
-Most likely you'll want to focus in on a specific issue.
-
-To run tests for a specific package in [packages](https://github.com/babel/babel/tree/master/packages), you can use the `TEST_ONLY` environment variable:
+When working on an issue, you will most likely want to focus on a particular [packages](https://github.com/babel/babel/tree/master/packages). Using `TEST_ONLY` will only run tests for that specific package.
 
 ```sh
 $ TEST_ONLY=babel-cli make test
