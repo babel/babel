@@ -3,5 +3,5 @@ z = Object.assign(Object.assign({
 }), y);
 z = {
   x,
-  w: Object.assign(Object.assign({}), y)
+  w: Object.assign({}, y)
 };

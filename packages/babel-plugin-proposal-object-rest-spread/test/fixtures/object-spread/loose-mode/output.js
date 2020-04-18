@@ -7,7 +7,7 @@ z = _extends(_extends({
 }), y);
 z = {
   x,
-  w: _extends(_extends({}), y)
+  w: _extends({}, y)
 };
 
 const rest = _objectWithoutPropertiesLoose(z, ["q"]);

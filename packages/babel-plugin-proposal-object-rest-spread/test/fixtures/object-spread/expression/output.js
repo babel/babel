@@ -12,7 +12,7 @@ _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({
   c
 });
 
-_objectSpread(_objectSpread({}), Object.prototype);
+_objectSpread({}, Object.prototype);
 
 _objectSpread({}, {
   foo: 'bar'
@@ -24,7 +24,7 @@ _objectSpread({}, {
   bar: 'baz'
 });
 
-_objectSpread(_objectSpread({}), {
+_objectSpread({}, {
   get foo() {
     return 'foo';
   }

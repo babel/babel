@@ -9,5 +9,5 @@ z = _objectSpread(_objectSpread({
 }), y);
 z = {
   x,
-  w: _objectSpread(_objectSpread({}), y)
+  w: _objectSpread({}, y)
 };

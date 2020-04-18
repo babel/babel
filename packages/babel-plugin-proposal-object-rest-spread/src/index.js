@@ -594,8 +594,14 @@ export default declare((api, opts) => {
         let currentChunk = [];
         for (let i = 0; i < args.length; i++) {
           currentChunk.push(args[i]);
-          // prevent current chunk from pollution
-          if (i < args.length - 1 && !scope.isPure(args[i + 1])) {
+          const isCurrentChunkEmptyObject =
+            currentChunk.length === 1 &&
+            t.isObjectExpression(args[i]) &&
+            args[i].properties.length === 0;
+          const isNextArgEffectful =
+            i < args.length - 1 && !scope.isPure(args[i + 1]);
+          // prevent current chunk from pollution unless current chunk is an empty object
+          if (!isCurrentChunkEmptyObject && isNextArgEffectful) {
             chunks.push(currentChunk);
             currentChunk = [];
           }
