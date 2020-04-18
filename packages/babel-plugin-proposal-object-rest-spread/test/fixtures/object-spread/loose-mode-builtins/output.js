@@ -1,6 +1,9 @@
-z = Object.assign(Object.assign({
+var x;
+var y;
+var z;
+z = Object.assign({
   x
-}), y);
+}, y);
 z = {
   x,
   w: Object.assign({}, y)

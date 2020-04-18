@@ -1,3 +1,10 @@
+var a;
+var b;
+var c;
+var d;
+var x;
+var y;
+
 ({ x, ...y, a, ...b, c });
 
 ({ ...Object.prototype });
