@@ -201,8 +201,8 @@ registerPresets({
   flow: presetFlow,
 });
 
-// $FlowIgnore
-export const version = VERSION;
+// @ts-ignore VERSION is to be replaced by rollup
+export const version: string = VERSION;
 
 function onDOMContentLoaded() {
   transformScriptTags();

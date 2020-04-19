@@ -5,4 +5,5 @@
 
 /* global BABEL_VERSION */
 
+declare const BABEL_VERSION: string;
 export const version = BABEL_VERSION;
