@@ -5,6 +5,7 @@ import { injectInitialization } from "@babel/helper-create-class-features-plugin
 
 import transpileEnum from "./enum";
 import transpileNamespace from "./namespace";
+import type { NodePath, Visitor } from "@babel/traverse";
 
 function isInType(path) {
   switch (path.parent.type) {
@@ -225,7 +226,7 @@ export default declare((api, opts) => {
               }
 
               let allElided = true;
-              const importsToRemove: Path<Node>[] = [];
+              const importsToRemove: NodePath<t.Node>[] = [];
 
               for (const specifier of stmt.node.specifiers) {
                 const binding = stmt.scope.getBinding(specifier.local.name);

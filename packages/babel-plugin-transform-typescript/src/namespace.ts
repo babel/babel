@@ -97,7 +97,7 @@ function handleVariableDeclaration(
   return [node, t.expressionStatement(t.sequenceExpression(assignments))];
 }
 
-function handleNested(path, t, node, parentExport) {
+function handleNested(path, t, node, parentExport?) {
   const names = new Set();
   const realName = node.id;
   const name = path.scope.generateUid(realName.name);
