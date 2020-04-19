@@ -169,6 +169,7 @@ export default declare((api, options) => {
           }
 
           let moduleName = getModuleName(this.file.opts, options);
+          // @ts-expect-error todo(flow->ts): do not reuse variables
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
           const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
