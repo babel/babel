@@ -1,9 +1,11 @@
 import { basename, extname } from "path";
+import type * as t from "@babel/types";
 
 import { isIdentifierName } from "@babel/helper-validator-identifier";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
+import type { NodePath } from "@babel/traverse";
 
-export type ModuleMetadata = {
+export interface ModuleMetadata {
   exportName: string;
   // The name of the variable that will reference an object containing export names.
   exportNameListName: null | string;
@@ -17,14 +19,14 @@ export type ModuleMetadata = {
   // `stringSpecifiers` is Set(1) ["any unicode"]
   // In most cases `stringSpecifiers` is an empty Set
   stringSpecifiers: Set<string>;
-};
+}
 
 export type InteropType = "default" | "namespace" | "none";
 
-export type SourceModuleMetadata = {
+export interface SourceModuleMetadata {
   // A unique variable name to use for this namespace object. Centralized for simplicity.
   name: string;
-  loc: BabelNodeSourceLocation | undefined | null;
+  loc: t.SourceLocation | undefined | null;
   interop: InteropType;
   // Local binding to reference from this source namespace. Key: Local name, value: Import name
   imports: Map<string, string>;
@@ -36,14 +38,15 @@ export type SourceModuleMetadata = {
   reexportNamespace: Set<string>;
   // Tracks if the source should be re-exported.
   reexportAll: null | {
-    loc: BabelNodeSourceLocation | undefined | null;
+    loc: t.SourceLocation | undefined | null;
   };
-};
+  lazy?;
+}
 
-export type LocalExportMetadata = {
-  name: Array<string>; // names of exports,
+export interface LocalExportMetadata {
+  names: Array<string>; // names of exports,
   kind: "import" | "hoisted" | "block" | "var";
-};
+}
 
 /**
  * Check if the module has any exports that need handling.
@@ -70,7 +73,7 @@ export function isSideEffectImport(source: SourceModuleMetadata) {
  * needed to reconstruct the module's behavior.
  */
 export default function normalizeModuleAndLoadMetadata(
-  programPath: NodePath,
+  programPath: NodePath<t.Program>,
   exportName?: string,
   {
     noInterop = false,
@@ -82,7 +85,7 @@ export default function normalizeModuleAndLoadMetadata(
   if (!exportName) {
     exportName = programPath.scope.generateUidIdentifier("exports").name;
   }
-  const stringSpecifiers = new Set();
+  const stringSpecifiers = new Set<string>();
 
   nameAnonymousExports(programPath);
 
@@ -154,12 +157,13 @@ function getExportSpecifierName(
  * Get metadata about the imports and exports present in this module.
  */
 function getModuleMetadata(
-  programPath: NodePath,
+  programPath: NodePath<t.Program>,
   {
     lazy,
     initializeReexports,
   }: {
-    lazy: boolean;
+    // todo(flow-ts) changed from boolean, to match expected usage inside the function
+    lazy: boolean | string[] | Function;
     initializeReexports: boolean;
   },
   stringSpecifiers: Set<string>,
@@ -280,7 +284,9 @@ function getModuleMetadata(
         data.reexports.set(exportName, importName);
 
         if (exportName === "__esModule") {
-          throw exportName.buildCodeFrameError('Illegal export "__esModule".');
+          throw spec
+            .get("exported")
+            .buildCodeFrameError('Illegal export "__esModule".');
         }
       });
     } else if (
@@ -351,13 +357,13 @@ function getModuleMetadata(
  * Get metadata about local variables that are exported.
  */
 function getLocalExportMetadata(
-  programPath: NodePath,
+  programPath: NodePath<t.Program>,
   initializeReexports: boolean,
   stringSpecifiers: Set<string>,
 ): Map<string, LocalExportMetadata> {
   const bindingKindLookup = new Map();
 
-  programPath.get("body").forEach(child => {
+  programPath.get("body").forEach((child: any) => {
     let kind;
     if (child.isImportDeclaration()) {
       kind = "import";
@@ -425,7 +431,8 @@ function getLocalExportMetadata(
       (initializeReexports || !child.node.source)
     ) {
       if (child.node.declaration) {
-        const declaration = child.get("declaration");
+        // todo: flow->ts babel-types node field types
+        const declaration = child.get("declaration") as NodePath;
         const ids = declaration.getOuterBindingIdentifierPaths();
         Object.keys(ids).forEach(name => {
           if (name === "__esModule") {
@@ -454,6 +461,7 @@ function getLocalExportMetadata(
         declaration.isFunctionDeclaration() ||
         declaration.isClassDeclaration()
       ) {
+        // @ts-expect-error todo(flow->ts): improve babel-types
         getLocalMetadata(declaration.get("id")).names.push("default");
       } else {
         // These should have been removed by the nameAnonymousExports() call.
@@ -469,7 +477,7 @@ function getLocalExportMetadata(
 /**
  * Ensure that all exported values have local binding names.
  */
-function nameAnonymousExports(programPath: NodePath) {
+function nameAnonymousExports(programPath: NodePath<t.Program>) {
   // Name anonymous exported locals.
   programPath.get("body").forEach(child => {
     if (!child.isExportDefaultDeclaration()) return;
@@ -477,12 +485,13 @@ function nameAnonymousExports(programPath: NodePath) {
   });
 }
 
-function removeModuleDeclarations(programPath: NodePath) {
+function removeModuleDeclarations(programPath: NodePath<t.Program>) {
   programPath.get("body").forEach(child => {
     if (child.isImportDeclaration()) {
       child.remove();
     } else if (child.isExportNamedDeclaration()) {
       if (child.node.declaration) {
+        // @ts-expect-error todo(flow->ts): avoid mutations
         child.node.declaration._blockHoist = child.node._blockHoist;
         child.replaceWith(child.node.declaration);
       } else {
@@ -495,6 +504,7 @@ function removeModuleDeclarations(programPath: NodePath) {
         declaration.isFunctionDeclaration() ||
         declaration.isClassDeclaration()
       ) {
+        // @ts-expect-error todo(flow->ts): avoid mutations
         declaration._blockHoist = child.node._blockHoist;
         child.replaceWith(declaration);
       } else {
