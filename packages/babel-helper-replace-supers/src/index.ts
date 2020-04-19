@@ -25,8 +25,11 @@ function getPrototypeOfExpression(objectRef, isStatic, file, isPrivateMethod) {
   return t.callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
 }
 
-export function skipAllButComputedKey(path: NodePath) {
+export function skipAllButComputedKey(
+  path: NodePath<t.Method | t.ClassProperty | t.ClassPrivateProperty>,
+) {
   // If the path isn't computed, just skip everything.
+  // @ts-expect-error todo(flow->ts) check node type before cheking the property
   if (!path.node.computed) {
     path.skip();
     return;
@@ -59,7 +62,7 @@ export const environmentVisitor = {
     path.skip();
   },
 
-  "Method|ClassProperty"(path: NodePath) {
+  "Method|ClassProperty"(path: NodePath<t.Method | t.ClassProperty>) {
     skipAllButComputedKey(path);
   },
 };
@@ -252,21 +255,23 @@ const looseHandlers = {
 };
 
 type ReplaceSupersOptionsBase = {
-  methodPath: NodePath;
+  methodPath: NodePath<any>;
   superRef: any;
   constantSuper: boolean;
   file: any;
   // objectRef might have been shadowed in child scopes,
   // in that case, we need to rename related variables.
-  refToPreserve?: BabelNodeIdentifier;
+  refToPreserve?: t.Identifier;
 };
 
 type ReplaceSupersOptions =
   | ({
-      getObjectRef: () => BabelNode;
+      objectRef?: undefined;
+      getObjectRef: () => t.Node;
     } & ReplaceSupersOptionsBase)
   | ({
-      objectRef: BabelNode;
+      objectRef: t.Node;
+      getObjectRef?: () => t.Node;
     } & ReplaceSupersOptionsBase);
 
 export default class ReplaceSupers {
