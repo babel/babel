@@ -17,6 +17,9 @@
     "@babel/helper-annotate-as-pure": "workspace:^",
     "@babel/types": "workspace:^"
   },
+  "devDependencies": {
+    "@babel/traverse": "workspace:^"
+  },
   "engines": {
     "node": ">=6.9.0"
   },
