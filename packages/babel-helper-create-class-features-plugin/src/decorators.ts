@@ -73,7 +73,7 @@ function extractElementDescriptor(/* this: File, */ classRef, superRef, path) {
     true,
   ).replace();
 
-  const properties = [
+  const properties: t.ObjectExpression["properties"] = [
     prop("kind", t.stringLiteral(isMethod ? node.kind : "field")),
     prop("decorators", takeDecorators(node)),
     prop("static", node.static && t.booleanLiteral(true)),
@@ -135,7 +135,7 @@ export function buildDecoratedClass(ref, path, elements, file) {
       .map(extractElementDescriptor.bind(file, node.id, superId)),
   );
 
-  let replacement = template.expression.ast`
+  let replacement: any = template.expression.ast`
     ${addDecorateHelper(file)}(
       ${classDecorators || t.nullLiteral()},
       function (${initializeId}, ${superClass ? t.cloneNode(superId) : null}) {

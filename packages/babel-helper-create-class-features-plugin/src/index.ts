@@ -38,6 +38,12 @@ export function createClassFeaturePlugin({
   manipulateOptions,
   // TODO(Babel 8): Remove the default falue
   api = { assumption: () => {} },
+}: {
+  name;
+  feature;
+  loose?;
+  manipulateOptions;
+  api?;
 }) {
   const setPublicClassFields = api.assumption("setPublicClassFields");
   const privateFieldsAsProperties = api.assumption("privateFieldsAsProperties");

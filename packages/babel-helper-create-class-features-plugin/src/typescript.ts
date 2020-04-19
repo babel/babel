@@ -1,6 +1,6 @@
 import type { NodePath } from "@babel/traverse";
 
-export function assertFieldTransformed(path: NodePath) {
+export function assertFieldTransformed(path: NodePath<any>) {
   // TODO (Babel 8): Also check path.node.definite
 
   if (path.node.declare) {
