@@ -1,5 +1,6 @@
 import assert from "assert";
 import * as t from "@babel/types";
+import type { NodePath, Scope, HubInterface } from "@babel/traverse";
 
 import ImportBuilder from "./import-builder";
 import isModule from "./is-module";
@@ -90,6 +91,9 @@ export type ImportOptions = {
    * reliably pick the location _after_ require() calls but _before_ other code in CJS.
    */
   importPosition: "before" | "after";
+
+  nameHint?;
+  blockHoist?;
 };
 
 /**
@@ -99,17 +103,17 @@ export default class ImportInjector {
   /**
    * The path used for manipulation.
    */
-  declare _programPath: NodePath;
+  declare _programPath: NodePath<t.Program>;
 
   /**
    * The scope used to generate unique variable names.
    */
-  declare _programScope;
+  declare _programScope: Scope;
 
   /**
    * The file used to inject helpers and resolve paths.
    */
-  declare _hub;
+  declare _hub: HubInterface;
 
   /**
    * The default options to use with this instance when imports are added.
@@ -124,8 +128,8 @@ export default class ImportInjector {
     importPosition: "before",
   };
 
-  constructor(path, importedSource, opts) {
-    const programPath = path.find(p => p.isProgram());
+  constructor(path: NodePath, importedSource?, opts?) {
+    const programPath = path.find(p => p.isProgram()) as NodePath<t.Program>;
 
     this._programPath = programPath;
     this._programScope = programPath.scope;
@@ -172,7 +176,7 @@ export default class ImportInjector {
       optsList.push(importedSource);
     }
 
-    const newOpts = {
+    const newOpts: ImportOptions = {
       ...this._defaultOpts,
     };
     for (const opts of optsList) {
@@ -433,6 +437,7 @@ export default class ImportInjector {
       });
 
       const targetPath = body.find(p => {
+        // @ts-expect-error todo(flow->ts): avoid mutations
         const val = p.node._blockHoist;
         return Number.isFinite(val) && val < 4;
       });

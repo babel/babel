@@ -11,6 +11,7 @@ export default class ImportBuilder {
 
   _scope = null;
   _hub = null;
+  private _importedSource: any;
 
   constructor(importedSource, scope, hub) {
     this._scope = scope;
@@ -44,13 +45,13 @@ export default class ImportBuilder {
   }
 
   namespace(name = "namespace") {
-    name = this._scope.generateUidIdentifier(name);
+    const local = this._scope.generateUidIdentifier(name);
 
     const statement = this._statements[this._statements.length - 1];
     assert(statement.type === "ImportDeclaration");
     assert(statement.specifiers.length === 0);
-    statement.specifiers = [t.importNamespaceSpecifier(name)];
-    this._resultName = t.cloneNode(name);
+    statement.specifiers = [t.importNamespaceSpecifier(local)];
+    this._resultName = t.cloneNode(local);
     return this;
   }
   default(name) {
