@@ -14,6 +14,5 @@ export default function buildMatchMemberExpression(
 ) {
   const parts = match.split(".");
 
-  return (member: types.MemberExpression) =>
-    matchesPattern(member, parts, allowPartial);
+  return (member: types.Node) => matchesPattern(member, parts, allowPartial);
 }
