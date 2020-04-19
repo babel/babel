@@ -69,10 +69,12 @@ function createContext() {
 function runCacheableScriptInTestContext(
   filename: string,
   srcFn: () => string,
-  context: Context,
+  // todo(flow->ts) was Context type, but it is missing
+  context: any,
   moduleCache: any,
 ) {
-  let cached = cachedScripts.get(filename);
+  // todo(flow->ts) improve types
+  let cached: any = cachedScripts.get(filename);
   if (!cached) {
     const code = `(function (exports, require, module, __filename, __dirname) {\n${srcFn()}\n});`;
     cached = {
@@ -90,7 +92,9 @@ function runCacheableScriptInTestContext(
     produceCachedData: true,
   });
 
+  // @ts-expect-error todo(flow->ts) improve types
   if (script.cachedDataProduced) {
+    // @ts-expect-error todo(flow->ts) improve types
     cached.cachedData = script.cachedData;
   }
 
@@ -115,7 +119,8 @@ function runCacheableScriptInTestContext(
 function runModuleInTestContext(
   id: string,
   relativeFilename: string,
-  context: Context,
+  // todo(flow->ts) was Context type, but it is missing
+  context: any,
   moduleCache: any,
 ) {
   const filename = require.resolve(id, {
@@ -228,7 +233,7 @@ function run(task) {
     } catch (err) {
       // Pass empty location to include the whole file in the output.
       err.message =
-        `${exec.loc}: ${err.message}\n` + codeFrameColumns(execCode, {});
+        `${exec.loc}: ${err.message}\n` + codeFrameColumns(execCode, {} as any);
       throw err;
     }
   }
@@ -393,11 +398,20 @@ expect.extend({
   },
 });
 
+declare global {
+  // eslint-disable-next-line no-redeclare
+  namespace jest {
+    interface Matchers<R> {
+      toEqualFile({ filename, code }): jest.CustomMatcherResult;
+    }
+  }
+}
+
 export default function (
   fixturesLoc: string,
   name: string,
-  suiteOpts = {},
-  taskOpts = {},
+  suiteOpts: any = {},
+  taskOpts: any = {},
   dynamicOpts?: Function,
 ) {
   const suites = getFixtures(fixturesLoc);
