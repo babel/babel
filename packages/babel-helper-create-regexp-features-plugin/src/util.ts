@@ -47,7 +47,7 @@ export function generateRegexpuOptions(node, features) {
   }
   return {
     useUnicodeFlag,
-    onNamedGroup: () => {},
+    onNamedGroup: (name, index) => {},
     namedGroup,
     unicodePropertyEscape,
     dotAllFlag,

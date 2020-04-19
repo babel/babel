@@ -33,7 +33,11 @@ const version = PACKAGE_JSON.version
   .reduce((v, x) => v * 1e5 + +x, 0);
 const versionKey = "@babel/plugin-regexp-features/version";
 
-export function createRegExpFeaturePlugin({ name, feature, options = {} }) {
+export function createRegExpFeaturePlugin({
+  name,
+  feature,
+  options = {} as any,
+}) {
   return {
     name,
     pre() {
