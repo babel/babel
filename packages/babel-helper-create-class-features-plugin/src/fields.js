@@ -103,7 +103,6 @@ const privateNameVisitor = {
     // This class redeclares some private field. We need to process the outer
     // environment with access to all the outer privates, then we can process
     // the inner environment with only the still-visible outer privates.
-    path.get("superClass").traverse(privateNameVisitor, this);
     path.get("body").traverse(privateNameNestedVisitor, {
       ...this,
       redeclared,
@@ -115,7 +114,7 @@ const privateNameVisitor = {
 
     // We'll eventually hit this class node again with the overall Class
     // Features visitor, which'll process the redeclared privates.
-    path.skip();
+    path.skipKey("body");
   },
 };
 
