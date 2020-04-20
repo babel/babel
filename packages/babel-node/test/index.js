@@ -20,16 +20,6 @@ const outputFileSync = function(filePath, data) {
   fs.writeFileSync(filePath, data);
 };
 
-const presetLocs = [
-  path.join(__dirname, "../../babel-preset-env"),
-  path.join(__dirname, "../../babel-preset-react"),
-].join(",");
-
-const pluginLocs = [
-  path.join(__dirname, "/../../babel-plugin-transform-strict-mode"),
-  path.join(__dirname, "/../../babel-plugin-transform-modules-commonjs"),
-].join(",");
-
 const readDir = function(loc, filter) {
   const files = {};
   if (fs.existsSync(loc)) {
@@ -105,12 +95,8 @@ const buildTest = function(binName, testName, opts) {
 
   return function(callback) {
     saveInFiles(opts.inFiles);
-
     let args = [binLoc];
-
-    args.push("--presets", presetLocs, "--plugins", pluginLocs);
-    args.push("--only", "../../../../packages/*/test");
-
+    args.push("--config-file", "../config.json");
     args = args.concat(opts.args);
 
     const spawn = child.spawn(process.execPath, args);
