@@ -28,10 +28,10 @@ export function intersection<T>(
 
 export function filterStageFromList(
   list: { [feature: string]: Targets },
-  stageList: { [feature: string]: boolean },
+  stageList: Set<string>,
 ) {
   return Object.keys(list).reduce((result, item) => {
-    if (!stageList[item]) {
+    if (!stageList.has(item)) {
       result[item] = list[item];
     }
 
