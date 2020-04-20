@@ -133,3 +133,7 @@ tt.backQuote.updateContext = function() {
   }
   this.state.exprAllowed = false;
 };
+
+tt.star.updateContext = function() {
+  this.state.exprAllowed = false;
+};
