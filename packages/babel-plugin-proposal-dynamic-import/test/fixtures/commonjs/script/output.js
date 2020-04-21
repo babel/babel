@@ -1,1 +1,1 @@
-var modP = Promise.resolve("mod").then(s => babelHelpers.interopRequireWildcard(require(s)));
+var modP = Promise.resolve().then(() => babelHelpers.interopRequireWildcard(require("mod")));
