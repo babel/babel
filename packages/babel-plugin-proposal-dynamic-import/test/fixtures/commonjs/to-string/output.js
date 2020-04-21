@@ -1,1 +1,1 @@
-Promise.resolve().then(() => babelHelpers.interopRequireWildcard(require(`${2}`)));
+Promise.resolve(`${2}`).then(s => babelHelpers.interopRequireWildcard(require(s)));
