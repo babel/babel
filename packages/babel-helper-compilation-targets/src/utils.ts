@@ -48,6 +48,7 @@ export function getLowestUnreleased(a: string, b: string, env: string): string {
   const unreleasedLabel = unreleasedLabels[env];
   const hasUnreleased = [a, b].some(item => item === unreleasedLabel);
   if (hasUnreleased) {
+    // @ts-expect-error todo(flow->ts): probably a bug - types of a hasUnreleased to not overlap
     return a === hasUnreleased ? b : a || b;
   }
   return semverMin(a, b);
