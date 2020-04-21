@@ -59,7 +59,10 @@ tt.name.updateContext = function(prevType) {
   let allowed = false;
   if (prevType !== tt.dot) {
     if (
-      (this.state.value === "of" && !this.state.exprAllowed) ||
+      (this.state.value === "of" &&
+        !this.state.exprAllowed &&
+        prevType !== tt._function &&
+        prevType !== tt._class) ||
       (this.state.value === "yield" && this.prodParam.hasYield)
     ) {
       allowed = true;
@@ -131,5 +134,9 @@ tt.backQuote.updateContext = function() {
   } else {
     this.state.context.push(types.template);
   }
+  this.state.exprAllowed = false;
+};
+
+tt.star.updateContext = function() {
   this.state.exprAllowed = false;
 };
