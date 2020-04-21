@@ -1,4 +1,4 @@
-var _asyncToGenerator = require("<CWD>/packages/babel-plugin-transform-runtime/node_modules/@babel/runtime/helpers/asyncToGenerator");
+var _asyncToGenerator = require("<CWD>/packages/babel-runtime/helpers/asyncToGenerator");
 
 function test() {
   return _test.apply(this, arguments);
