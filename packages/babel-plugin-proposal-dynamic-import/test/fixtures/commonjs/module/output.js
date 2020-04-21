@@ -1,3 +1,3 @@
 "use strict";
 
-var modP = Promise.resolve().then(() => babelHelpers.interopRequireWildcard(require("mod")));
+var modP = Promise.resolve("mod").then(s => babelHelpers.interopRequireWildcard(require(s)));
