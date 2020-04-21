@@ -10,7 +10,7 @@ import {
 } from "./utils";
 
 export function targetsSupported(target: Targets, support: Targets) {
-  const targetEnvironments = Object.keys(target);
+  const targetEnvironments = Object.keys(target) as Array<keyof Targets>;
 
   if (targetEnvironments.length === 0) {
     return false;

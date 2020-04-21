@@ -47,7 +47,7 @@ export function isBrowsersQueryValid(browsers: unknown): boolean {
   );
 }
 
-function validateBrowsers(browsers: Browsers | void) {
+function validateBrowsers(browsers: Browsers | undefined) {
   v.invariant(
     browsers === undefined || isBrowsersQueryValid(browsers),
     `'${String(browsers)}' is not a valid browserslist query`,
@@ -173,7 +173,7 @@ type GetTargetsOption = {
 };
 
 export default function getTargets(
-  inputTargets: InputTargets = {},
+  inputTargets: InputTargets = {} as InputTargets,
   options: GetTargetsOption = {},
 ): Targets {
   let { browsers, esmodules } = inputTargets;
@@ -241,7 +241,7 @@ export default function getTargets(
   }
 
   // Parse remaining targets
-  const result: Targets = {};
+  const result: Targets = {} as Targets;
   const decimalWarnings = [];
   for (const target of Object.keys(targets).sort()) {
     const value = targets[target];

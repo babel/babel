@@ -5,7 +5,7 @@ import {
   isUnreleasedVersion,
   getLowestImplementedVersion,
 } from "./utils";
-import type { Targets } from "./types";
+import type { Target, Targets } from "./types";
 
 export function getInclusionReasons(
   item: string,
@@ -14,9 +14,9 @@ export function getInclusionReasons(
     [key: string]: Targets;
   },
 ) {
-  const minVersions = list[item] || {};
+  const minVersions = list[item] || ({} as Targets);
 
-  return Object.keys(targetVersions).reduce((result, env) => {
+  return (Object.keys(targetVersions) as Target[]).reduce((result, env) => {
     const minVersion = getLowestImplementedVersion(minVersions, env);
     const targetVersion = targetVersions[env];
 
