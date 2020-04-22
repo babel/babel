@@ -92,11 +92,7 @@ export function LogicalExpression() {
     return t.createTSUnionType(argumentTypes);
   }
 
-  if (t.createFlowUnionType) {
-    return t.createFlowUnionType(argumentTypes);
-  }
-
-  return t.createUnionTypeAnnotation(argumentTypes);
+  return t.createFlowUnionType(argumentTypes);
 }
 
 export function ConditionalExpression() {
@@ -109,11 +105,7 @@ export function ConditionalExpression() {
     return t.createTSUnionType(argumentTypes);
   }
 
-  if (t.createFlowUnionType) {
-    return t.createFlowUnionType(argumentTypes);
-  }
-
-  return t.createUnionTypeAnnotation(argumentTypes);
+  return t.createFlowUnionType(argumentTypes);
 }
 
 export function SequenceExpression() {

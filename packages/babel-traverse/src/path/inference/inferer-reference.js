@@ -99,11 +99,7 @@ function getTypeAnnotationBindingConstantViolations(binding, path, name) {
     return t.createTSUnionType(types);
   }
 
-  if (t.createFlowUnionType) {
-    return t.createFlowUnionType(types);
-  }
-
-  return t.createUnionTypeAnnotation(types);
+  return t.createFlowUnionType(types);
 }
 
 function getConstantViolationsBefore(binding, path, functions) {
@@ -218,15 +214,8 @@ function getConditionalAnnotation(binding, path, name) {
       };
     }
 
-    if (t.createFlowUnionType) {
-      return {
-        typeAnnotation: t.createFlowUnionType(types),
-        ifStatement,
-      };
-    }
-
     return {
-      typeAnnotation: t.createUnionTypeAnnotation(types),
+      typeAnnotation: t.createFlowUnionType(types),
       ifStatement,
     };
   }
