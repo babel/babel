@@ -92,6 +92,10 @@ export function LogicalExpression() {
     return t.createTSUnionType(argumentTypes);
   }
 
+  if (t.createFlowUnionType) {
+    return t.createFlowUnionType(argumentTypes);
+  }
+
   return t.createUnionTypeAnnotation(argumentTypes);
 }
 
@@ -103,6 +107,10 @@ export function ConditionalExpression() {
 
   if (t.isTSTypeAnnotation(argumentTypes[0]) && t.createTSUnionType) {
     return t.createTSUnionType(argumentTypes);
+  }
+
+  if (t.createFlowUnionType) {
+    return t.createFlowUnionType(argumentTypes);
   }
 
   return t.createUnionTypeAnnotation(argumentTypes);

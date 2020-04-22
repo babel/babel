@@ -144,9 +144,11 @@ lines.push(
   // eslint-disable-next-line max-len
   `export function createTypeAnnotationBasedOnTypeof(type: 'string' | 'number' | 'undefined' | 'boolean' | 'function' | 'object' | 'symbol'): StringTypeAnnotation | VoidTypeAnnotation | NumberTypeAnnotation | BooleanTypeAnnotation | GenericTypeAnnotation`,
   `export function createUnionTypeAnnotation<T extends FlowType>(types: [T]): T`,
+  `export function createFlowUnionType<T extends FlowType>(types: [T]): T`,
   // this probably misbehaves if there are 0 elements, and it's not a UnionTypeAnnotation if there's only 1
   // it is possible to require "2 or more" for this overload ([T, T, ...T[]]) but it requires typescript 3.0
   `export function createUnionTypeAnnotation(types: ReadonlyArray<FlowType>): UnionTypeAnnotation`,
+  `export function createFlowUnionType(types: ReadonlyArray<FlowType>): UnionTypeAnnotation`,
   // this smells like "internal API"
   // eslint-disable-next-line max-len
   `export function buildChildren(node: { children: ReadonlyArray<JSXText | JSXExpressionContainer | JSXSpreadChild | JSXElement | JSXFragment | JSXEmptyExpression> }): JSXElement['children']`,
