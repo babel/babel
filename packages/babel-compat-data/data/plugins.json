@@ -15,6 +15,7 @@
     "edge": "80",
     "firefox": "72",
     "safari": "13.1",
+    "node": "14",
     "electron": "8.1"
   },
   "proposal-optional-chaining": {
@@ -23,6 +24,7 @@
     "edge": "80",
     "firefox": "74",
     "safari": "13.1",
+    "node": "14",
     "electron": "8.1"
   },
   "proposal-json-strings": {
