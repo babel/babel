@@ -4,13 +4,36 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var x;
-var y;
-var z;
-z = _objectSpread({
-  x
-}, y);
-z = {
-  x,
-  w: _objectSpread({}, y)
+var k = {
+  a: 1,
+  b: 2
 };
+
+var o = _objectSpread(_objectSpread({
+  a: 3
+}, k), {}, {
+  b: k.a++
+});
+
+var pureA = {};
+var pureB = {};
+var pureC = {};
+var pureD = {};
+var pureE = {};
+
+function impureFunc() {
+  console.log('hello');
+}
+
+var output = _objectSpread(_objectSpread(_objectSpread({}, pureA), {}, {
+  get foo() {},
+
+  get bar() {}
+
+}, pureB, {}, pureC, {}), impureFunc(), {}, pureD, {
+  pureD
+});
+
+var simpleOutput = _objectSpread({}, pureA, {
+  test: '1'
+}, pureB);
