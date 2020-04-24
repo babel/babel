@@ -1,6 +1,6 @@
 {
   "installCommand": "codesandbox",
   "buildCommand": false,
-  "sandboxes": ["kypop", "hk4lv"],
+  "sandboxes": ["9d0wg"],
   "packages": ["packages/*"]
 }
