@@ -190,10 +190,6 @@ class PartialConfig {
 
   /**
    * Returns true if there is a config file in the filesystem for this config.
-   *
-   * While this only means .babelrc(.mjs)?/package.json#babel right now, it
-   * may well expand in the future, so using this is recommended vs checking
-   * this.babelrc directly.
    */
   hasFilesystemConfig(): boolean {
     return this.babelrc !== undefined || this.config !== undefined;
