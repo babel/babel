@@ -1,5 +1,5 @@
 {
-  "installCommand": "bootstrap",
+  "installCommand": "codesandbox",
   "buildCommand": false,
-  "sandboxes": ["kypop"]
+  "sandboxes": ["kypop", "hk4lv"]
 }
