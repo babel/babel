@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "bootstrap": "make bootstrap",
+    "standalone": "IS_PUBLISH=true make -j build-standalone-ci",
     "build": "make build",
     "fix": "make fix",
     "lint": "make lint",
