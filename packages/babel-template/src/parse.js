@@ -100,7 +100,7 @@ function placeholderVisitorHandler(
     !state.isLegacyRef.value &&
     (state.placeholderPattern != null || state.placeholderWhitelist != null)
   ) {
-    // This check is also in options.js. We need it there to handle the default
+    // This check is also in options.json. We need it there to handle the default
     // .syntacticPlaceholders behavior.
     throw new Error(
       "'.placeholderWhitelist' and '.placeholderPattern' aren't compatible" +
