@@ -281,6 +281,7 @@ export default declare((api, opts) => {
           );
         }
       },
+
       // adapted from transform-destructuring/src/index.js#pushObjectRest
       // const { a, ...b } = c;
       VariableDeclarator(path, file) {
@@ -385,6 +386,7 @@ export default declare((api, opts) => {
           }
         });
       },
+
       // taken from transform-destructuring/src/index.js#visitor
       // export var { a, ...b } = c;
       ExportNamedDeclaration(path) {
@@ -410,11 +412,13 @@ export default declare((api, opts) => {
         path.replaceWith(declaration.node);
         path.insertAfter(t.exportNamedDeclaration(null, specifiers));
       },
+
       // try {} catch ({a, ...b}) {}
       CatchClause(path) {
         const paramPath = path.get("param");
         replaceRestElement(paramPath.parentPath, paramPath);
       },
+
       // ({a, ...b} = c);
       AssignmentExpression(path, file) {
         const leftPath = path.get("left");
@@ -457,6 +461,7 @@ export default declare((api, opts) => {
           path.replaceWithMultiple(nodes);
         }
       },
+
       // taken from transform-destructuring/src/index.js#visitor
       ForXStatement(path) {
         const { node, scope } = path;
@@ -506,6 +511,7 @@ export default declare((api, opts) => {
           );
         }
       },
+
       // [{a, ...b}] = c;
       ArrayPattern(path) {
         const objectPatterns = [];
@@ -537,33 +543,10 @@ export default declare((api, opts) => {
           );
         }
       },
+
       // var a = { ...b, ...c }
       ObjectExpression(path, file) {
         if (!hasSpread(path.node)) return;
-
-        const { scope } = path;
-
-        // a non-SpreadElement and SpreadElement striped array
-        const args = [];
-        let props = [];
-
-        function push() {
-          args.push(t.objectExpression(props));
-          props = [];
-        }
-
-        for (const prop of (path.node.properties: Array)) {
-          if (t.isSpreadElement(prop)) {
-            push();
-            args.push(prop.argument);
-          } else {
-            props.push(prop);
-          }
-        }
-
-        if (props.length) {
-          push();
-        }
 
         let helper;
         if (loose) {
@@ -582,52 +565,39 @@ export default declare((api, opts) => {
             helper = file.addHelper("objectSpread");
           }
         }
-        // We cannot call _objectSpread with more than two elements directly, since any element could cause side effects. For
-        // example:
-        //      var k = { a: 1, b: 2 };
-        //      var o = { a: 3, ...k, b: k.a++ };
-        //      // expected: { a: 1, b: 1 }
-        // If we translate the above to `_objectSpread({ a: 3 }, k, { b: k.a++ })`, the `k.a++` will evaluate before
-        // `k` is spread and we end up with `{ a: 2, b: 1 }`.
-        // adapted from https://github.com/microsoft/TypeScript/blob/eb105efdcd6db8a73f5b983bf329cb7a5eee55e1/src/compiler/transformers/es2018.ts#L272
-        const chunks = [];
-        let currentChunk = [];
-        for (let i = 0; i < args.length; i++) {
-          currentChunk.push(args[i]);
-          const isCurrentChunkEmptyObject =
-            currentChunk.length === 1 &&
-            t.isObjectExpression(args[i]) &&
-            args[i].properties.length === 0;
-          const isNextArgEffectful =
-            i < args.length - 1 && !scope.isPure(args[i + 1]);
-          // prevent current chunk from pollution unless current chunk is an empty object
-          if (!isCurrentChunkEmptyObject && isNextArgEffectful) {
-            chunks.push(currentChunk);
-            currentChunk = [];
+
+        let exp = null;
+        let props = [];
+
+        function make() {
+          const hadProps = props.length > 0;
+          const obj = t.objectExpression(props);
+          props = [];
+
+          if (!exp) {
+            exp = t.callExpression(helper, [obj]);
+            return;
           }
+
+          exp = t.callExpression(t.cloneNode(helper), [
+            exp,
+            // If we have static props, we need to insert an empty object
+            // becuase the odd arguments are copied with [[Get]], not
+            // [[GetOwnProperty]]
+            ...(hadProps ? [t.objectExpression([]), obj] : []),
+          ]);
         }
 
-        if (currentChunk.length) {
-          chunks.push(currentChunk);
-          currentChunk = [];
-        }
-
-        let exp = t.callExpression(helper, chunks[0]);
-        let nthArg = chunks[0].length;
-        for (let i = 1; i < chunks.length; i++) {
-          // reference: packages/babel-helpers/src/helpers.js#objectSpread2
-          if (nthArg % 2) {
-            exp = t.callExpression(helper, [exp, ...chunks[i]]);
+        for (const prop of (path.node.properties: Array)) {
+          if (t.isSpreadElement(prop)) {
+            make();
+            exp.arguments.push(prop.argument);
           } else {
-            exp = t.callExpression(helper, [
-              exp,
-              t.objectExpression([]),
-              ...chunks[i],
-            ]);
+            props.push(prop);
           }
-
-          nthArg += chunks[i].length;
         }
+
+        if (props.length) make();
 
         path.replaceWith(exp);
       },

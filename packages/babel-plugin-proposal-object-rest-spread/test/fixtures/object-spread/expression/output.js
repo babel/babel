@@ -11,11 +11,11 @@ var d;
 var x;
 var y;
 
-_objectSpread({
+_objectSpread(_objectSpread(_objectSpread({
   x
-}, y, {
+}, y), {}, {
   a
-}, b, {
+}, b), {}, {
   c
 });
 
@@ -25,9 +25,9 @@ _objectSpread({}, {
   foo: 'bar'
 });
 
-_objectSpread({}, {
+_objectSpread(_objectSpread({}, {
   foo: 'bar'
-}, {}, {
+}), {
   bar: 'baz'
 });
 
