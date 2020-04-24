@@ -1,5 +1,5 @@
 {
   "installCommand": "standalone",
   "buildCommand": false,
-  "sandboxes": ["kypop"]
+  "sandboxes": ["kypop", "obv3m"]
 }
