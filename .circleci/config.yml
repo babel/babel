@@ -199,9 +199,9 @@ workflows:
       - e2e-babel:
           requires:
             - publish-verdaccio
-      - e2e-babel-old-version:
-          requires:
-            - publish-verdaccio
+      # - e2e-babel-old-version:
+      #     requires:
+      #       - publish-verdaccio
       - e2e-create-react-app:
           requires:
             - publish-verdaccio
