@@ -1078,8 +1078,13 @@ export default class Tokenizer extends LocationParser {
     if (val == null) {
       this.raise(this.state.start + 2, Errors.InvalidDigit, radix);
     }
+    const next = this.input.charCodeAt(this.state.pos);
 
-    if (this.input.charCodeAt(this.state.pos) === charCodes.lowercaseN) {
+    if (next === charCodes.underscore) {
+      this.expectPlugin("numericSeparator", this.state.pos);
+    }
+
+    if (next === charCodes.lowercaseN) {
       ++this.state.pos;
       isBigInt = true;
     }
@@ -1150,6 +1155,10 @@ export default class Tokenizer extends LocationParser {
       if (underscorePos > 0) {
         this.raise(underscorePos + start, Errors.ZeroDigitNumericSeparator);
       }
+    }
+
+    if (next === charCodes.underscore) {
+      this.expectPlugin("numericSeparator", this.state.pos);
     }
 
     if (next === charCodes.lowercaseN) {
