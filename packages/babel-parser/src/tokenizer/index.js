@@ -113,6 +113,7 @@ export default class Tokenizer extends LocationParser {
   // parser/util.js
   /*::
   +unexpected: (pos?: ?number, messageOrType?: string | TokenType) => empty;
+  +expectPlugin: (name: string, pos?: ?number) => true;
   */
 
   isLookahead: boolean;
