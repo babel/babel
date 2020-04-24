@@ -1,5 +1,5 @@
 {
-  "installCommand": "bootstrap",
+  "installCommand": "standalone",
   "buildCommand": false,
   "sandboxes": ["kypop"]
 }
