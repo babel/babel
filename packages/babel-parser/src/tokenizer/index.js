@@ -405,10 +405,14 @@ export default class Tokenizer extends LocationParser {
     }
 
     if (
-      this.hasPlugin("recordAndTuple") &&
-      (next === charCodes.leftCurlyBrace ||
-        next === charCodes.leftSquareBracket)
+      next === charCodes.leftCurlyBrace ||
+      (next === charCodes.leftSquareBracket && this.hasPlugin("recordAndTuple"))
     ) {
+      // When we see `#{`, it is likely to be a hash record.
+      // However we don't yell at `#[` since users may intend to use "computed private fields",
+      // which is not allowed in the spec. Throwing expecting recordAndTuple is
+      // misleading
+      this.expectPlugin("recordAndTuple");
       if (this.getPluginOption("recordAndTuple", "syntaxType") !== "hash") {
         throw this.raise(
           this.state.pos,
@@ -426,14 +430,8 @@ export default class Tokenizer extends LocationParser {
         this.finishToken(tt.bracketHashL);
       }
       this.state.pos += 2;
-    } else if (
-      this.hasPlugin("classPrivateProperties") ||
-      this.hasPlugin("classPrivateMethods") ||
-      this.getPluginOption("pipelineOperator", "proposal") === "smart"
-    ) {
-      this.finishOp(tt.hash, 1);
     } else {
-      throw this.raise(this.state.pos, Errors.InvalidOrUnexpectedToken, "#");
+      this.finishOp(tt.hash, 1);
     }
   }
 
