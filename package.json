@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "bootstrap": "make bootstrap",
+    "codesandbox": "make bootstrap-only; make build-no-bundle",
     "build": "make build",
     "fix": "make fix",
     "lint": "make lint",
