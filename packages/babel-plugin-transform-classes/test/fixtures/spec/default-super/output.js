@@ -2,14 +2,18 @@ var Test = /*#__PURE__*/function () {
   "use strict";
 
   function Test() {
+    var _thisSuper;
+
     babelHelpers.classCallCheck(this, Test);
-    return babelHelpers.get(babelHelpers.getPrototypeOf(Test.prototype), "constructor", this);
+    return babelHelpers.get((_thisSuper = this, babelHelpers.getPrototypeOf(Test.prototype)), "constructor", _thisSuper);
   }
 
   babelHelpers.createClass(Test, null, [{
     key: "test",
     value: function test() {
-      return babelHelpers.get(babelHelpers.getPrototypeOf(Test), "constructor", this);
+      var _thisSuper2;
+
+      return babelHelpers.get((_thisSuper2 = this, babelHelpers.getPrototypeOf(Test)), "constructor", _thisSuper2);
     }
   }]);
   return Test;

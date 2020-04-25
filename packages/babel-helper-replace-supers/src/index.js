@@ -101,29 +101,37 @@ const specHandlers = {
   },
 
   get(superMember) {
+    const thisRef = this.scope.generateDeclaredUidIdentifier("thisSuper");
     return t.callExpression(this.file.addHelper("get"), [
-      getPrototypeOfExpression(
-        this.getObjectRef(),
-        this.isStatic,
-        this.file,
-        this.isPrivateMethod,
-      ),
+      t.sequenceExpression([
+        t.assignmentExpression("=", thisRef, t.thisExpression()),
+        getPrototypeOfExpression(
+          this.getObjectRef(),
+          this.isStatic,
+          this.file,
+          this.isPrivateMethod,
+        ),
+      ]),
       this.prop(superMember),
-      t.thisExpression(),
+      t.cloneNode(thisRef),
     ]);
   },
 
   set(superMember, value) {
+    const thisRef = this.scope.generateDeclaredUidIdentifier("thisSuper");
     return t.callExpression(this.file.addHelper("set"), [
-      getPrototypeOfExpression(
-        this.getObjectRef(),
-        this.isStatic,
-        this.file,
-        this.isPrivateMethod,
-      ),
+      t.sequenceExpression([
+        t.assignmentExpression("=", thisRef, t.thisExpression()),
+        getPrototypeOfExpression(
+          this.getObjectRef(),
+          this.isStatic,
+          this.file,
+          this.isPrivateMethod,
+        ),
+      ]),
       this.prop(superMember),
       value,
-      t.thisExpression(),
+      t.cloneNode(thisRef),
       t.booleanLiteral(superMember.isInStrictMode()),
     ]);
   },
@@ -240,6 +248,7 @@ export default class ReplaceSupers {
 
     memberExpressionToFunctions(this.methodPath, visitor, {
       file: this.file,
+      scope: this.methodPath.scope,
       isStatic: this.isStatic,
       isPrivateMethod: this.isPrivateMethod,
       getObjectRef: this.getObjectRef.bind(this),

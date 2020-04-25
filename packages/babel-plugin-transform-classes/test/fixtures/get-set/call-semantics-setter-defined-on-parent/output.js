@@ -53,7 +53,9 @@ let Obj = /*#__PURE__*/function (_Base) {
   _createClass(Obj, [{
     key: "call",
     value: function call() {
-      return _get(_getPrototypeOf(Obj.prototype), "test", this).call(this);
+      var _thisSuper;
+
+      return _get((_thisSuper = this, _getPrototypeOf(Obj.prototype)), "test", _thisSuper).call(this);
     }
   }, {
     key: "test",

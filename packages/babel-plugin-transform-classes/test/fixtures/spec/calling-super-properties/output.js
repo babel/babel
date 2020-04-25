@@ -6,19 +6,21 @@ var Test = /*#__PURE__*/function (_Foo) {
   var _super = babelHelpers.createSuper(Test);
 
   function Test() {
-    var _this;
+    var _thisSuper, _thisSuper2, _this;
 
     babelHelpers.classCallCheck(this, Test);
     _this = _super.call(this);
-    babelHelpers.get(babelHelpers.getPrototypeOf(Test.prototype), "test", babelHelpers.assertThisInitialized(_this)).whatever();
-    babelHelpers.get(babelHelpers.getPrototypeOf(Test.prototype), "test", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this));
+    babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper).whatever();
+    babelHelpers.get((_thisSuper2 = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper2).call(babelHelpers.assertThisInitialized(_this));
     return _this;
   }
 
   babelHelpers.createClass(Test, null, [{
     key: "test",
     value: function test() {
-      return babelHelpers.get(babelHelpers.getPrototypeOf(Test), "wow", this).call(this);
+      var _thisSuper3;
+
+      return babelHelpers.get((_thisSuper3 = this, babelHelpers.getPrototypeOf(Test)), "wow", _thisSuper3).call(this);
     }
   }]);
   return Test;

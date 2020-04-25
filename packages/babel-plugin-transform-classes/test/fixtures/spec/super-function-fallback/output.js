@@ -1,6 +1,8 @@
 var Test = function Test() {
   "use strict";
 
+  var _thisSuper;
+
   babelHelpers.classCallCheck(this, Test);
-  babelHelpers.get(babelHelpers.getPrototypeOf(Test.prototype), "hasOwnProperty", this).call(this, "test");
+  babelHelpers.get((_thisSuper = this, babelHelpers.getPrototypeOf(Test.prototype)), "hasOwnProperty", _thisSuper).call(this, "test");
 };
