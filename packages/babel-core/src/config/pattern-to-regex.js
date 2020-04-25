@@ -1,6 +1,6 @@
 // @flow
 import path from "path";
-import escapeRegExp from "lodash/escapeRegExp";
+import escapeRegExp from "lodash-es/escapeRegExp";
 
 const sep = `\\${path.sep}`;
 const endSep = `(?:${sep}|$)`;

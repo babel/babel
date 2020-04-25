@@ -1,6 +1,6 @@
 import * as virtualTypes from "./path/lib/virtual-types";
 import * as t from "@babel/types";
-import clone from "lodash/clone";
+import clone from "lodash-es/clone";
 
 /**
  * explode() will take a visitor object with all of the various shorthands

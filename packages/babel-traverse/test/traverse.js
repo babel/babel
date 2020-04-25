@@ -1,4 +1,4 @@
-import cloneDeep from "lodash/cloneDeep";
+import cloneDeep from "lodash-es/cloneDeep";
 import traverse from "../lib";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";

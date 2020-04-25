@@ -1,5 +1,5 @@
 // @flow
-import loClone from "lodash/clone";
+import loClone from "lodash-es/clone";
 import { NODE_FIELDS, BUILDER_KEYS } from "../definitions";
 import validate from "../validators/validate";
 

@@ -1,5 +1,5 @@
-import isInteger from "lodash/isInteger";
-import repeat from "lodash/repeat";
+import isInteger from "lodash-es/isInteger";
+import repeat from "lodash-es/repeat";
 import Buffer from "./buffer";
 import * as n from "./node";
 import * as t from "@babel/types";
