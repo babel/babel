@@ -10,7 +10,7 @@ var Foo = /*#__PURE__*/function (_Bar) {
 
     babelHelpers.classCallCheck(this, Foo);
 
-    var t = () => babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Foo.prototype)), "test", _thisSuper).call(babelHelpers.assertThisInitialized(_this));
+    var t = () => babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Foo.prototype)), "test", _thisSuper).call(_thisSuper);
 
     return _this = _super.call(this);
   }

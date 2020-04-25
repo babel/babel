@@ -101,7 +101,13 @@ const specHandlers = {
   },
 
   get(superMember) {
-    const thisRef = this.scope.generateDeclaredUidIdentifier("thisSuper");
+    return this._get(
+      superMember,
+      this.scope.generateDeclaredUidIdentifier("thisSuper"),
+    );
+  },
+
+  _get(superMember, thisRef) {
     return t.callExpression(this.file.addHelper("get"), [
       t.sequenceExpression([
         t.assignmentExpression("=", thisRef, t.thisExpression()),
@@ -143,7 +149,12 @@ const specHandlers = {
   },
 
   call(superMember, args) {
-    return optimiseCall(this.get(superMember), t.thisExpression(), args);
+    const thisRef = this.scope.generateDeclaredUidIdentifier("thisSuper");
+    return optimiseCall(
+      this._get(superMember, thisRef),
+      t.cloneNode(thisRef),
+      args,
+    );
   },
 };
 
@@ -197,6 +208,10 @@ const looseHandlers = {
     const prop = this.prop(superMember);
 
     return t.memberExpression(t.thisExpression(), prop, computed);
+  },
+
+  call(superMember, args) {
+    return optimiseCall(this.get(superMember), t.thisExpression(), args);
   },
 };
 

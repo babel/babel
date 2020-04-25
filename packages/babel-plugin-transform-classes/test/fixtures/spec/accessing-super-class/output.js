@@ -13,12 +13,12 @@ var Test = /*#__PURE__*/function (_Foo) {
     babelHelpers.classCallCheck(this, Test);
     woops.super.test();
     _this = _super.call(this);
-    babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper).call(babelHelpers.assertThisInitialized(_this));
+    babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper).call(_thisSuper);
     _this = _super.apply(this, arguments);
     _this = _super.call.apply(_super, [this, "test"].concat(Array.prototype.slice.call(arguments)));
-    babelHelpers.get((_thisSuper2 = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper2).apply(babelHelpers.assertThisInitialized(_this), arguments);
+    babelHelpers.get((_thisSuper2 = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper2).apply(_thisSuper2, arguments);
 
-    (_babelHelpers$get = babelHelpers.get((_thisSuper3 = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper3)).call.apply(_babelHelpers$get, [babelHelpers.assertThisInitialized(_this), "test"].concat(Array.prototype.slice.call(arguments)));
+    (_babelHelpers$get = babelHelpers.get((_thisSuper3 = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper3)).call.apply(_babelHelpers$get, [_thisSuper3, "test"].concat(Array.prototype.slice.call(arguments)));
 
     return _this;
   }
@@ -30,10 +30,10 @@ var Test = /*#__PURE__*/function (_Foo) {
 
       var _thisSuper4, _thisSuper5, _thisSuper6;
 
-      babelHelpers.get((_thisSuper4 = this, babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper4).call(this);
-      babelHelpers.get((_thisSuper5 = this, babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper5).apply(this, arguments);
+      babelHelpers.get((_thisSuper4 = this, babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper4).call(_thisSuper4);
+      babelHelpers.get((_thisSuper5 = this, babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper5).apply(_thisSuper5, arguments);
 
-      (_babelHelpers$get2 = babelHelpers.get((_thisSuper6 = this, babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper6)).call.apply(_babelHelpers$get2, [this, "test"].concat(Array.prototype.slice.call(arguments)));
+      (_babelHelpers$get2 = babelHelpers.get((_thisSuper6 = this, babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper6)).call.apply(_babelHelpers$get2, [_thisSuper6, "test"].concat(Array.prototype.slice.call(arguments)));
     }
   }], [{
     key: "foo",
@@ -42,10 +42,10 @@ var Test = /*#__PURE__*/function (_Foo) {
 
       var _thisSuper7, _thisSuper8, _thisSuper9;
 
-      babelHelpers.get((_thisSuper7 = this, babelHelpers.getPrototypeOf(Test)), "foo", _thisSuper7).call(this);
-      babelHelpers.get((_thisSuper8 = this, babelHelpers.getPrototypeOf(Test)), "foo", _thisSuper8).apply(this, arguments);
+      babelHelpers.get((_thisSuper7 = this, babelHelpers.getPrototypeOf(Test)), "foo", _thisSuper7).call(_thisSuper7);
+      babelHelpers.get((_thisSuper8 = this, babelHelpers.getPrototypeOf(Test)), "foo", _thisSuper8).apply(_thisSuper8, arguments);
 
-      (_babelHelpers$get3 = babelHelpers.get((_thisSuper9 = this, babelHelpers.getPrototypeOf(Test)), "foo", _thisSuper9)).call.apply(_babelHelpers$get3, [this, "test"].concat(Array.prototype.slice.call(arguments)));
+      (_babelHelpers$get3 = babelHelpers.get((_thisSuper9 = this, babelHelpers.getPrototypeOf(Test)), "foo", _thisSuper9)).call.apply(_babelHelpers$get3, [_thisSuper9, "test"].concat(Array.prototype.slice.call(arguments)));
     }
   }]);
   return Test;

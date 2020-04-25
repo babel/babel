@@ -30,7 +30,7 @@ var Foo = /*#__PURE__*/function (_Bar) {
 
     _classCallCheck(this, Foo);
 
-    _get((_thisSuper = _assertThisInitialized(_this), _getPrototypeOf(Foo.prototype)), "foo", _thisSuper).call(_assertThisInitialized(_this));
+    _get((_thisSuper = _assertThisInitialized(_this), _getPrototypeOf(Foo.prototype)), "foo", _thisSuper).call(_thisSuper);
 
     return _this = _super.call(this);
   }

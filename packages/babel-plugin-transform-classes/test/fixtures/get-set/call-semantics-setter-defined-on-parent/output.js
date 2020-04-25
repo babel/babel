@@ -55,7 +55,7 @@ let Obj = /*#__PURE__*/function (_Base) {
     value: function call() {
       var _thisSuper;
 
-      return _get((_thisSuper = this, _getPrototypeOf(Obj.prototype)), "test", _thisSuper).call(this);
+      return _get((_thisSuper = this, _getPrototypeOf(Obj.prototype)), "test", _thisSuper).call(_thisSuper);
     }
   }, {
     key: "test",

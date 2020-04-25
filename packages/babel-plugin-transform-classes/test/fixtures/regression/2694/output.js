@@ -26,7 +26,7 @@ var SubFoo = /*#__PURE__*/function (_BaseFoo) {
     value: function talk() {
       var _thisSuper;
 
-      babelHelpers.get((_thisSuper = this, babelHelpers.getPrototypeOf(SubFoo)), "talk", _thisSuper).call(this);
+      babelHelpers.get((_thisSuper = this, babelHelpers.getPrototypeOf(SubFoo)), "talk", _thisSuper).call(_thisSuper);
       console.log('SubFoo.talk');
     }
   }]);

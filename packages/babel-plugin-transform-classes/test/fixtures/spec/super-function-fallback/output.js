@@ -4,5 +4,5 @@ var Test = function Test() {
   var _thisSuper;
 
   babelHelpers.classCallCheck(this, Test);
-  babelHelpers.get((_thisSuper = this, babelHelpers.getPrototypeOf(Test.prototype)), "hasOwnProperty", _thisSuper).call(this, "test");
+  babelHelpers.get((_thisSuper = this, babelHelpers.getPrototypeOf(Test.prototype)), "hasOwnProperty", _thisSuper).call(_thisSuper, "test");
 };
