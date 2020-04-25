@@ -9,8 +9,10 @@ const Hello = {
 };
 const Outer = _obj = {
   constructor: function () {
+    var _thisSuper;
+
     class Inner {
-      [babelHelpers.get(babelHelpers.getPrototypeOf(_obj), "toString", this).call(this)]() {
+      [babelHelpers.get((_thisSuper = this, babelHelpers.getPrototypeOf(_obj)), "toString", _thisSuper).call(_thisSuper)]() {
         return 'hello';
       }
 

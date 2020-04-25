@@ -2,6 +2,8 @@ var _obj;
 
 var o = _obj = {
   m: function () {
-    return babelHelpers.get(babelHelpers.getPrototypeOf(_obj), "x", this);
+    var _thisSuper;
+
+    return babelHelpers.get((_thisSuper = this, babelHelpers.getPrototypeOf(_obj)), "x", _thisSuper);
   }
 };
