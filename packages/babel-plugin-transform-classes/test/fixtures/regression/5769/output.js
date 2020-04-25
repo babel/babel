@@ -26,15 +26,15 @@ var ColorPoint = /*#__PURE__*/function (_Point) {
   var _super = _createSuper(ColorPoint);
 
   function ColorPoint() {
-    var _this;
+    var _thisSuper, _thisSuper2, _this;
 
     babelHelpers.classCallCheck(this, ColorPoint);
     _this = _super.call(this);
     _this.x = 2;
-    babelHelpers.set(babelHelpers.getPrototypeOf(ColorPoint.prototype), "x", 3, babelHelpers.assertThisInitialized(_this), true);
+    babelHelpers.set((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(ColorPoint.prototype)), "x", 3, _thisSuper, true);
     expect(_this.x).toBe(3); // A
 
-    expect(babelHelpers.get(babelHelpers.getPrototypeOf(ColorPoint.prototype), "x", babelHelpers.assertThisInitialized(_this))).toBeUndefined(); // B
+    expect(babelHelpers.get((_thisSuper2 = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(ColorPoint.prototype)), "x", _thisSuper2)).toBeUndefined(); // B
 
     return _this;
   }

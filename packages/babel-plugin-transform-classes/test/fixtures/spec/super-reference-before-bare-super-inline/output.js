@@ -26,11 +26,11 @@ var Foo = /*#__PURE__*/function (_Bar) {
   var _super = _createSuper(Foo);
 
   function Foo() {
-    var _this;
+    var _thisSuper, _this;
 
     _classCallCheck(this, Foo);
 
-    _get(_getPrototypeOf(Foo.prototype), "foo", _assertThisInitialized(_this)).call(_assertThisInitialized(_this), _this = _super.call(this));
+    _get((_thisSuper = _assertThisInitialized(_this), _getPrototypeOf(Foo.prototype)), "foo", _thisSuper).call(_thisSuper, _this = _super.call(this));
 
     return _this;
   }
