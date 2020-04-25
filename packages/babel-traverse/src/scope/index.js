@@ -723,7 +723,7 @@ export default class Scope {
         if (!this.isPure(prop, constantsOnly)) return false;
       }
       return true;
-    } else if (t.isClassMethod(node)) {
+    } else if (t.isMethod(node)) {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       if (node.kind === "get" || node.kind === "set") return false;
       return true;
