@@ -22,9 +22,7 @@ const obj = _obj = {
   test: 2,
 
   set() {
-    var _thisSuper;
-
-    return _set((_thisSuper = this, _getPrototypeOf(_obj)), "test", 3, _thisSuper, true);
+    return _set(_getPrototypeOf(_obj), "test", 3, this, true);
   }
 
 };

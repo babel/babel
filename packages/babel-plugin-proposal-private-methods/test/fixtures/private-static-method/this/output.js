@@ -21,9 +21,7 @@ var _getB = function _getB() {
 };
 
 var _getA = function _getA() {
-  var _thisSuper;
-
-  return babelHelpers.get((_thisSuper = this, babelHelpers.getPrototypeOf(B)), "a", _thisSuper);
+  return babelHelpers.get(babelHelpers.getPrototypeOf(B), "a", this);
 };
 
 var [getA, getB] = B.extract();

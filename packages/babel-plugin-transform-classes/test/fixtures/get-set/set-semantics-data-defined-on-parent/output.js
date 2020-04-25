@@ -52,9 +52,7 @@ let Obj = /*#__PURE__*/function (_Base) {
   _createClass(Obj, [{
     key: "set",
     value: function set() {
-      var _thisSuper;
-
-      return _set((_thisSuper = this, _getPrototypeOf(Obj.prototype)), "test", 3, _thisSuper, true);
+      return _set(_getPrototypeOf(Obj.prototype), "test", 3, this, true);
     }
   }]);
 

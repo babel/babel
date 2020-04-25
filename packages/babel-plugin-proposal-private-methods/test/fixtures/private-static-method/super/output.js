@@ -17,7 +17,5 @@ class Sub extends Base {
 }
 
 var _subStaticPrivateMethod = function _subStaticPrivateMethod() {
-  var _thisSuper;
-
-  return babelHelpers.get((_thisSuper = this, babelHelpers.getPrototypeOf(Sub)), "basePublicStaticMethod", _thisSuper).call(_thisSuper);
+  return babelHelpers.get(babelHelpers.getPrototypeOf(Sub), "basePublicStaticMethod", this).call(this);
 };

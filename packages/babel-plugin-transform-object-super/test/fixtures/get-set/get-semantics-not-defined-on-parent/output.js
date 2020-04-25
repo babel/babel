@@ -13,9 +13,7 @@ const obj = _obj = {
   test: 2,
 
   get() {
-    var _thisSuper;
-
-    return _get((_thisSuper = this, _getPrototypeOf(_obj)), "test", _thisSuper);
+    return _get(_getPrototypeOf(_obj), "test", this);
   }
 
 };

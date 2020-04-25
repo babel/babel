@@ -101,43 +101,47 @@ const specHandlers = {
   },
 
   get(superMember) {
-    return this._get(
-      superMember,
-      this.scope.generateDeclaredUidIdentifier("thisSuper"),
-    );
+    return this._get(superMember, this._getThisRefs());
   },
 
-  _get(superMember, thisRef) {
+  _get(superMember, thisRefs) {
+    const proto = getPrototypeOfExpression(
+      this.getObjectRef(),
+      this.isStatic,
+      this.file,
+      this.isPrivateMethod,
+    );
     return t.callExpression(this.file.addHelper("get"), [
-      t.sequenceExpression([
-        t.assignmentExpression("=", thisRef, t.thisExpression()),
-        getPrototypeOfExpression(
-          this.getObjectRef(),
-          this.isStatic,
-          this.file,
-          this.isPrivateMethod,
-        ),
-      ]),
+      thisRefs.memo ? t.sequenceExpression([thisRefs.memo, proto]) : proto,
       this.prop(superMember),
-      t.cloneNode(thisRef),
+      thisRefs.this,
     ]);
   },
 
-  set(superMember, value) {
+  _getThisRefs() {
+    if (!this.isDerivedConstructor) {
+      return { this: t.thisExpression() };
+    }
     const thisRef = this.scope.generateDeclaredUidIdentifier("thisSuper");
+    return {
+      memo: t.assignmentExpression("=", thisRef, t.thisExpression()),
+      this: t.cloneNode(thisRef),
+    };
+  },
+
+  set(superMember, value) {
+    const thisRefs = this._getThisRefs();
+    const proto = getPrototypeOfExpression(
+      this.getObjectRef(),
+      this.isStatic,
+      this.file,
+      this.isPrivateMethod,
+    );
     return t.callExpression(this.file.addHelper("set"), [
-      t.sequenceExpression([
-        t.assignmentExpression("=", thisRef, t.thisExpression()),
-        getPrototypeOfExpression(
-          this.getObjectRef(),
-          this.isStatic,
-          this.file,
-          this.isPrivateMethod,
-        ),
-      ]),
+      thisRefs.memo ? t.sequenceExpression([thisRefs.memo, proto]) : proto,
       this.prop(superMember),
       value,
-      t.cloneNode(thisRef),
+      thisRefs.this,
       t.booleanLiteral(superMember.isInStrictMode()),
     ]);
   },
@@ -149,10 +153,10 @@ const specHandlers = {
   },
 
   call(superMember, args) {
-    const thisRef = this.scope.generateDeclaredUidIdentifier("thisSuper");
+    const thisRefs = this._getThisRefs();
     return optimiseCall(
-      this._get(superMember, thisRef),
-      t.cloneNode(thisRef),
+      this._get(superMember, thisRefs),
+      t.cloneNode(thisRefs.this),
       args,
     );
   },
@@ -237,6 +241,8 @@ export default class ReplaceSupers {
     const path = opts.methodPath;
 
     this.methodPath = path;
+    this.isDerivedConstructor =
+      path.isClassMethod({ kind: "constructor" }) && !!opts.superRef;
     this.isStatic = path.isObjectMethod() || path.node.static;
     this.isPrivateMethod = path.isPrivate() && path.isMethod();
 
@@ -247,6 +253,7 @@ export default class ReplaceSupers {
   }
 
   file: HubInterface;
+  isDerivedConstructor: boolean;
   isLoose: boolean;
   isPrivateMethod: boolean;
   isStatic: boolean;
@@ -264,6 +271,7 @@ export default class ReplaceSupers {
     memberExpressionToFunctions(this.methodPath, visitor, {
       file: this.file,
       scope: this.methodPath.scope,
+      isDerivedConstructor: this.isDerivedConstructor,
       isStatic: this.isStatic,
       isPrivateMethod: this.isPrivateMethod,
       getObjectRef: this.getObjectRef.bind(this),

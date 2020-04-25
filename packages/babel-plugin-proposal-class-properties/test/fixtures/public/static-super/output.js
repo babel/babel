@@ -1,5 +1,3 @@
-var _thisSuper, _thisSuper2;
-
 var A = function A() {
   "use strict";
 
@@ -24,5 +22,5 @@ var B = /*#__PURE__*/function (_A) {
 }(A);
 
 babelHelpers.defineProperty(B, "prop", 2);
-babelHelpers.defineProperty(B, "propA", babelHelpers.get((_thisSuper = B, babelHelpers.getPrototypeOf(B)), "prop", _thisSuper));
-babelHelpers.defineProperty(B, "getPropA", () => babelHelpers.get((_thisSuper2 = B, babelHelpers.getPrototypeOf(B)), "prop", _thisSuper2));
+babelHelpers.defineProperty(B, "propA", babelHelpers.get(babelHelpers.getPrototypeOf(B), "prop", B));
+babelHelpers.defineProperty(B, "getPropA", () => babelHelpers.get(babelHelpers.getPrototypeOf(B), "prop", B));

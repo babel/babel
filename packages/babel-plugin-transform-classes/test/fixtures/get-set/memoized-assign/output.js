@@ -66,16 +66,16 @@ let Obj = /*#__PURE__*/function (_Base) {
   _createClass(Obj, [{
     key: "assign",
     value: function assign() {
-      var _proper$prop, _thisSuper, _thisSuper2;
+      var _proper$prop;
 
-      _set((_thisSuper2 = this, _getPrototypeOf(Obj.prototype)), _proper$prop = proper.prop, _get((_thisSuper = this, _getPrototypeOf(Obj.prototype)), _proper$prop, _thisSuper) + 1, _thisSuper2, true);
+      _set(_getPrototypeOf(Obj.prototype), _proper$prop = proper.prop, _get(_getPrototypeOf(Obj.prototype), _proper$prop, this) + 1, this, true);
     }
   }, {
     key: "assign2",
     value: function assign2() {
-      var _i, _thisSuper3, _thisSuper4;
+      var _i;
 
-      _set((_thisSuper4 = this, _getPrototypeOf(Obj.prototype)), _i = i, _get((_thisSuper3 = this, _getPrototypeOf(Obj.prototype)), _i, _thisSuper3) + 1, _thisSuper4, true);
+      _set(_getPrototypeOf(Obj.prototype), _i = i, _get(_getPrototypeOf(Obj.prototype), _i, this) + 1, this, true);
     }
   }]);
 

@@ -14,8 +14,6 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 foo = _obj = {
   bar: function () {
-    var _thisSuper, _thisSuper2;
-
-    return _set((_thisSuper2 = this, _getPrototypeOf(_obj)), "baz", _get((_thisSuper = this, _getPrototypeOf(_obj)), "baz", _thisSuper) ** 12, _thisSuper2, false);
+    return _set(_getPrototypeOf(_obj), "baz", _get(_getPrototypeOf(_obj), "baz", this) ** 12, this, false);
   }
 };

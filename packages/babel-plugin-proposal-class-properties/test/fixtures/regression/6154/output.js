@@ -25,8 +25,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Test = function Test() {
   "use strict";
 
-  var _thisSuper;
-
   _classCallCheck(this, Test);
 
   var Other = /*#__PURE__*/function (_Test) {
@@ -35,7 +33,7 @@ var Test = function Test() {
     var _super = _createSuper(Other);
 
     function Other() {
-      var _thisSuper2, _this;
+      var _thisSuper, _this;
 
       _classCallCheck(this, Other);
 
@@ -46,7 +44,7 @@ var Test = function Test() {
       _this = _super.call.apply(_super, [this].concat(args));
 
       _defineProperty(_assertThisInitialized(_this), "a", function () {
-        return _get((_thisSuper2 = _assertThisInitialized(_this), _getPrototypeOf(Other.prototype)), "test", _thisSuper2);
+        return _get((_thisSuper = _assertThisInitialized(_this), _getPrototypeOf(Other.prototype)), "test", _thisSuper);
       });
 
       return _this;
@@ -56,6 +54,6 @@ var Test = function Test() {
   }(Test);
 
   _defineProperty(Other, "a", function () {
-    return _get((_thisSuper = Other, _getPrototypeOf(Other)), "test", _thisSuper);
+    return _get(_getPrototypeOf(Other), "test", Other);
   });
 };

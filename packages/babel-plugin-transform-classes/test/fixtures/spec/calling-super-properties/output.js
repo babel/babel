@@ -18,9 +18,7 @@ var Test = /*#__PURE__*/function (_Foo) {
   babelHelpers.createClass(Test, null, [{
     key: "test",
     value: function test() {
-      var _thisSuper3;
-
-      return babelHelpers.get((_thisSuper3 = this, babelHelpers.getPrototypeOf(Test)), "wow", _thisSuper3).call(_thisSuper3);
+      return babelHelpers.get(babelHelpers.getPrototypeOf(Test), "wow", this).call(this);
     }
   }]);
   return Test;
