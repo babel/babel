@@ -1,5 +1,5 @@
 // @flow
-import uniq from "lodash/uniq";
+import uniq from "lodash-es/uniq";
 
 export default function inherit(
   key: string,
