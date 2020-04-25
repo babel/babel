@@ -78,6 +78,9 @@ build-no-bundle: clean clean-lib
 	$(MAKE) generate-type-helpers
 	$(MAKE) build-typings
 
+build-no-bundle-ci: bootstrap-only
+	$(MAKE) build-no-bundle
+
 watch: build-no-bundle
 	BABEL_ENV=development $(YARN) gulp watch
 
@@ -91,9 +94,7 @@ code-quality: flow lint
 flow:
 	$(YARN) flow check --strip-root
 
-bootstrap-flowcheck: bootstrap-only
-	$(YARN) gulp build-babel-types
-	$(MAKE) build-typings
+bootstrap-flowcheck: build-no-bundle-ci
 
 lint-ci: lint-js-ci lint-ts-ci check-compat-data-ci
 
@@ -103,7 +104,7 @@ lint-js-ci: bootstrap-only
 lint-ts-ci: bootstrap-flowcheck
 	$(MAKE) lint-ts
 
-check-compat-data-ci: bootstrap-only
+check-compat-data-ci: build-no-bundle-ci
 	$(MAKE) check-compat-data
 
 lint: lint-js lint-ts

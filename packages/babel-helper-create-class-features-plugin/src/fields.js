@@ -85,24 +85,49 @@ const privateNameVisitor = {
     const { privateNamesMap } = this;
     const body = path.get("body.body");
 
+    const visiblePrivateNames = new Map(privateNamesMap);
+    const redeclared = [];
     for (const prop of body) {
-      if (!prop.isPrivate()) {
-        continue;
-      }
-      if (!privateNamesMap.has(prop.node.key.id.name)) continue;
-
-      // This class redeclares the private name.
-      // So, we can only evaluate the things in the outer scope.
-      path.traverse(privateNameInnerVisitor, this);
-      path.skip();
-      break;
+      if (!prop.isPrivate()) continue;
+      const { name } = prop.node.key.id;
+      visiblePrivateNames.delete(name);
+      redeclared.push(name);
     }
+
+    // If the class doesn't redeclare any private fields, we can continue with
+    // our overall traversal.
+    if (!redeclared.length) {
+      return;
+    }
+
+    // This class redeclares some private field. We need to process the outer
+    // environment with access to all the outer privates, then we can process
+    // the inner environment with only the still-visible outer privates.
+    path.get("body").traverse(privateNameNestedVisitor, {
+      ...this,
+      redeclared,
+    });
+    path.traverse(privateNameVisitor, {
+      ...this,
+      privateNamesMap: visiblePrivateNames,
+    });
+
+    // We'll eventually hit this class node again with the overall Class
+    // Features visitor, which'll process the redeclared privates.
+    path.skipKey("body");
   },
 };
 
 // Traverses the outer portion of a class, without touching the class's inner
 // scope, for private names.
-const privateNameInnerVisitor = traverse.visitors.merge([
+const privateNameNestedVisitor = traverse.visitors.merge([
+  {
+    PrivateName(path) {
+      const { redeclared } = this;
+      const { name } = path.node.id;
+      if (redeclared.includes(name)) path.skip();
+    },
+  },
   {
     PrivateName: privateNameVisitor.PrivateName,
   },
@@ -263,6 +288,8 @@ export function transformPrivateNamesUsage(
   loose,
   state,
 ) {
+  if (!privateNamesMap.size) return;
+
   const body = path.get("body");
 
   if (loose) {

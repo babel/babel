@@ -1,0 +1,4 @@
+{
+  "sourceType": "module",
+  "throws": "This experimental syntax requires enabling one of the following parser plugin(s): 'flow, typescript' (2:7)"
+}
