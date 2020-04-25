@@ -113,6 +113,7 @@ export default class Tokenizer extends LocationParser {
   // parser/util.js
   /*::
   +unexpected: (pos?: ?number, messageOrType?: string | TokenType) => empty;
+  +expectPlugin: (name: string, pos?: ?number) => true;
   */
 
   isLookahead: boolean;
@@ -405,10 +406,14 @@ export default class Tokenizer extends LocationParser {
     }
 
     if (
-      this.hasPlugin("recordAndTuple") &&
-      (next === charCodes.leftCurlyBrace ||
-        next === charCodes.leftSquareBracket)
+      next === charCodes.leftCurlyBrace ||
+      (next === charCodes.leftSquareBracket && this.hasPlugin("recordAndTuple"))
     ) {
+      // When we see `#{`, it is likely to be a hash record.
+      // However we don't yell at `#[` since users may intend to use "computed private fields",
+      // which is not allowed in the spec. Throwing expecting recordAndTuple is
+      // misleading
+      this.expectPlugin("recordAndTuple");
       if (this.getPluginOption("recordAndTuple", "syntaxType") !== "hash") {
         throw this.raise(
           this.state.pos,
@@ -426,14 +431,8 @@ export default class Tokenizer extends LocationParser {
         this.finishToken(tt.bracketHashL);
       }
       this.state.pos += 2;
-    } else if (
-      this.hasPlugin("classPrivateProperties") ||
-      this.hasPlugin("classPrivateMethods") ||
-      this.getPluginOption("pipelineOperator", "proposal") === "smart"
-    ) {
-      this.finishOp(tt.hash, 1);
     } else {
-      throw this.raise(this.state.pos, Errors.InvalidOrUnexpectedToken, "#");
+      this.finishOp(tt.hash, 1);
     }
   }
 
@@ -1080,8 +1079,13 @@ export default class Tokenizer extends LocationParser {
     if (val == null) {
       this.raise(this.state.start + 2, Errors.InvalidDigit, radix);
     }
+    const next = this.input.charCodeAt(this.state.pos);
 
-    if (this.input.charCodeAt(this.state.pos) === charCodes.lowercaseN) {
+    if (next === charCodes.underscore) {
+      this.expectPlugin("numericSeparator", this.state.pos);
+    }
+
+    if (next === charCodes.lowercaseN) {
       ++this.state.pos;
       isBigInt = true;
     }
@@ -1152,6 +1156,10 @@ export default class Tokenizer extends LocationParser {
       if (underscorePos > 0) {
         this.raise(underscorePos + start, Errors.ZeroDigitNumericSeparator);
       }
+    }
+
+    if (next === charCodes.underscore) {
+      this.expectPlugin("numericSeparator", this.state.pos);
     }
 
     if (next === charCodes.lowercaseN) {
