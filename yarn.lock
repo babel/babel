@@ -854,7 +854,7 @@ __metadata:
   dependencies:
     "@babel/helper-validator-identifier": "workspace:^7.10.4"
     chalk: ^2.0.0
-    js-tokens: ^4.0.0
+    js-tokens: ^6.0.0
     strip-ansi: ^4.0.0
   languageName: unknown
   linkType: soft
@@ -9055,6 +9055,13 @@ fsevents@^1.2.7:
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
   checksum: 1fc4e4667ac2d972aba65148b9cbf9c17566b2394d3504238d8492bbd3e68f496c657eab06b26b40b17db5cac0a34d153a12130e2d2d2bb6dc2cdc8a4764eb1b
+  languageName: node
+  linkType: hard
+
+"js-tokens@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "js-tokens@npm:6.0.0"
+  checksum: 975859a4fd68cbaaabf106639df316e662b87b296afa9c6b00cfd25bc7642137433d18bf78e1e5578fc63c2a3e7334aad4fbed47f87c6c29f9a4f6760e79e322
   languageName: node
   linkType: hard
 
