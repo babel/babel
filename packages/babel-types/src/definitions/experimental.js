@@ -83,6 +83,31 @@ defineType("ClassProperty", {
   },
 });
 
+defineType("EventualMemberExpression", {
+  builder: ["object", "property", "computed"],
+  visitor: ["object", "property"],
+  aliases: ["Expression"],
+  fields: {
+    object: {
+      validate: assertNodeType("Expression"),
+    },
+    property: {
+      validate: (function() {
+        const normal = assertNodeType("Identifier");
+        const computed = assertNodeType("Expression");
+
+        return function(node, key, val) {
+          const validator = node.computed ? computed : normal;
+          validator(node, key, val);
+        };
+      })(),
+    },
+    computed: {
+      default: false,
+    },
+  },
+});
+
 defineType("OptionalMemberExpression", {
   builder: ["object", "property", "computed", "optional"],
   visitor: ["object", "property"],
@@ -135,6 +160,33 @@ defineType("PipelineBareFunction", {
 
 defineType("PipelinePrimaryTopicReference", {
   aliases: ["Expression"],
+});
+
+defineType("EventualCallExpression", {
+  visitor: ["callee", "arguments", "typeParameters", "typeArguments"],
+  builder: ["callee", "arguments"],
+  aliases: ["Expression"],
+  fields: {
+    callee: {
+      validate: assertNodeType("Expression"),
+    },
+    arguments: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(
+          assertNodeType("Expression", "SpreadElement", "JSXNamespacedName"),
+        ),
+      ),
+    },
+    typeArguments: {
+      validate: assertNodeType("TypeParameterInstantiation"),
+      optional: true,
+    },
+    typeParameters: {
+      validate: assertNodeType("TSTypeParameterInstantiation"),
+      optional: true,
+    },
+  },
 });
 
 defineType("OptionalCallExpression", {
