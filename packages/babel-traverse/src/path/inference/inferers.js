@@ -88,15 +88,11 @@ export function LogicalExpression() {
     this.get("right").getTypeAnnotation(),
   ];
 
-  if (t.isTSTypeAnnotation(argumentTypes[0]) && t.createTSUnionType) {
+  if (t.isTSTypeAnnotation(argumentTypes[0])) {
     return t.createTSUnionType(argumentTypes);
   }
 
-  if (t.createFlowUnionType) {
-    return t.createFlowUnionType(argumentTypes);
-  }
-
-  return t.createUnionTypeAnnotation(argumentTypes);
+  return t.createFlowUnionType(argumentTypes);
 }
 
 export function ConditionalExpression() {
@@ -105,15 +101,11 @@ export function ConditionalExpression() {
     this.get("alternate").getTypeAnnotation(),
   ];
 
-  if (t.isTSTypeAnnotation(argumentTypes[0]) && t.createTSUnionType) {
+  if (t.isTSTypeAnnotation(argumentTypes[0])) {
     return t.createTSUnionType(argumentTypes);
   }
 
-  if (t.createFlowUnionType) {
-    return t.createFlowUnionType(argumentTypes);
-  }
-
-  return t.createUnionTypeAnnotation(argumentTypes);
+  return t.createFlowUnionType(argumentTypes);
 }
 
 export function SequenceExpression() {
