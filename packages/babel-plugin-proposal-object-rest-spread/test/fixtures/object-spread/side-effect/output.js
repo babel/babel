@@ -25,15 +25,15 @@ function impureFunc() {
   console.log('hello');
 }
 
-var output = _objectSpread(_objectSpread(_objectSpread({}, pureA), {}, {
+var output = _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, pureA), {}, {
   get foo() {},
 
   get bar() {}
 
-}, pureB, {}, pureC, {}), impureFunc(), {}, pureD, {
+}, pureB), pureC), impureFunc()), pureD), {}, {
   pureD
 });
 
-var simpleOutput = _objectSpread({}, pureA, {
+var simpleOutput = _objectSpread(_objectSpread({}, pureA), {}, {
   test: '1'
 }, pureB);
