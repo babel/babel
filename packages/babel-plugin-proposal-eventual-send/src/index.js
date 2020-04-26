@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxEventualSend from "babel-plugin-syntax-eventual-send";
+import syntaxEventualSend from "@babel/plugin-syntax-eventual-send";
 import makeVisitor from "./makeVisitor";
 
 const DEFAULT_TARGET_GLOBAL = "HandledPromise";

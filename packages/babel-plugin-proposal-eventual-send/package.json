@@ -12,7 +12,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.9.0",
+    "@babel/helper-plugin-utils": "^7.8.3",
     "@babel/plugin-syntax-eventual-send": "^7.9.0"
   },
   "peerDependencies": {
@@ -20,6 +20,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
-    "@babel/helper-plugin-test-runner": "^7.9.0"
+    "@babel/helper-plugin-test-runner": "^7.8.3"
   }
 }
