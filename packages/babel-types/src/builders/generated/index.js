@@ -660,6 +660,10 @@ export function ClassProperty(...args: Array<any>): Object {
   return builder("ClassProperty", ...args);
 }
 export { ClassProperty as classProperty };
+export function EventualMemberExpression(...args: Array<any>): Object {
+  return builder("EventualMemberExpression", ...args);
+}
+export { EventualMemberExpression as eventualMemberExpression };
 export function OptionalMemberExpression(...args: Array<any>): Object {
   return builder("OptionalMemberExpression", ...args);
 }
@@ -676,6 +680,10 @@ export function PipelinePrimaryTopicReference(...args: Array<any>): Object {
   return builder("PipelinePrimaryTopicReference", ...args);
 }
 export { PipelinePrimaryTopicReference as pipelinePrimaryTopicReference };
+export function EventualCallExpression(...args: Array<any>): Object {
+  return builder("EventualCallExpression", ...args);
+}
+export { EventualCallExpression as eventualCallExpression };
 export function OptionalCallExpression(...args: Array<any>): Object {
   return builder("OptionalCallExpression", ...args);
 }
