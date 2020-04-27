@@ -728,6 +728,12 @@ export function assertEventualMemberExpression(
 ): void {
   assert("EventualMemberExpression", node, opts);
 }
+export function assertEventualMemberCallExpression(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("EventualMemberCallExpression", node, opts);
+}
 export function assertOptionalMemberExpression(
   node: Object,
   opts?: Object = {},

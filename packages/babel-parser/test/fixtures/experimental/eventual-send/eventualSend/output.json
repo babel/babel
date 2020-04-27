@@ -20,26 +20,16 @@
               "name": "v1"
             },
             "init": {
-              "type": "CallExpression",
+              "type": "EventualMemberCallExpression",
               "start":9,"end":33,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":33}},
               "callee": {
-                "type": "EventualMemberExpression",
-                "start":9,"end":21,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":21}},
-                "object": {
-                  "type": "StringLiteral",
-                  "start":9,"end":14,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":14}},
-                  "extra": {
-                    "rawValue": "abc",
-                    "raw": "'abc'"
-                  },
-                  "value": "abc"
+                "type": "StringLiteral",
+                "start":9,"end":14,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":14}},
+                "extra": {
+                  "rawValue": "abc",
+                  "raw": "'abc'"
                 },
-                "property": {
-                  "type": "Identifier",
-                  "start":16,"end":21,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":21},"identifierName":"func1"},
-                  "name": "func1"
-                },
-                "computed": false
+                "value": "abc"
               },
               "arguments": [
                 {
@@ -52,7 +42,13 @@
                   "start":28,"end":32,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":32},"identifierName":"arg2"},
                   "name": "arg2"
                 }
-              ]
+              ],
+              "property": {
+                "type": "Identifier",
+                "start":16,"end":21,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":21},"identifierName":"func1"},
+                "name": "func1"
+              },
+              "computed": false
             }
           }
         ],

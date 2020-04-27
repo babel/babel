@@ -2334,6 +2334,23 @@ export function isEventualMemberExpression(
 
   return false;
 }
+export function isEventualMemberCallExpression(
+  node: ?Object,
+  opts?: Object,
+): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "EventualMemberCallExpression") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isOptionalMemberExpression(
   node: ?Object,
   opts?: Object,
@@ -3531,6 +3548,7 @@ export function isExpression(node: ?Object, opts?: Object): boolean {
     "AwaitExpression" === nodeType ||
     "BindExpression" === nodeType ||
     "EventualMemberExpression" === nodeType ||
+    "EventualMemberCallExpression" === nodeType ||
     "OptionalMemberExpression" === nodeType ||
     "PipelinePrimaryTopicReference" === nodeType ||
     "EventualCallExpression" === nodeType ||

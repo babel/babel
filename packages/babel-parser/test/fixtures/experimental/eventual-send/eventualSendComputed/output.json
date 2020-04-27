@@ -20,26 +20,16 @@
               "name": "v1"
             },
             "init": {
-              "type": "CallExpression",
+              "type": "EventualMemberCallExpression",
               "start":9,"end":34,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":34}},
               "callee": {
-                "type": "EventualMemberExpression",
-                "start":9,"end":22,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":22}},
-                "object": {
-                  "type": "StringLiteral",
-                  "start":9,"end":14,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":14}},
-                  "extra": {
-                    "rawValue": "abc",
-                    "raw": "'abc'"
-                  },
-                  "value": "abc"
+                "type": "StringLiteral",
+                "start":9,"end":14,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":14}},
+                "extra": {
+                  "rawValue": "abc",
+                  "raw": "'abc'"
                 },
-                "property": {
-                  "type": "Identifier",
-                  "start":17,"end":21,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":21},"identifierName":"prop"},
-                  "name": "prop"
-                },
-                "computed": true
+                "value": "abc"
               },
               "arguments": [
                 {
@@ -52,7 +42,13 @@
                   "start":29,"end":33,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":33},"identifierName":"arg2"},
                   "name": "arg2"
                 }
-              ]
+              ],
+              "property": {
+                "type": "Identifier",
+                "start":17,"end":21,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":21},"identifierName":"prop"},
+                "name": "prop"
+              },
+              "computed": true
             }
           }
         ],

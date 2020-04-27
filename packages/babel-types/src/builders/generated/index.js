@@ -664,6 +664,10 @@ export function EventualMemberExpression(...args: Array<any>): Object {
   return builder("EventualMemberExpression", ...args);
 }
 export { EventualMemberExpression as eventualMemberExpression };
+export function EventualMemberCallExpression(...args: Array<any>): Object {
+  return builder("EventualMemberCallExpression", ...args);
+}
+export { EventualMemberCallExpression as eventualMemberCallExpression };
 export function OptionalMemberExpression(...args: Array<any>): Object {
   return builder("OptionalMemberExpression", ...args);
 }
