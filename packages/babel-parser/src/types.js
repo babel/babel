@@ -555,6 +555,11 @@ export type OptionalMemberExpression = NodeBase & {
 export type EventualCallExpression = CallOrNewBase & {
   type: "EventualCallExpression",
 };
+export type EventualMemberCallExpression = CallOrNewBase & {
+  type: "EventualMemberCallExpression",
+  property: Expression,
+  computed: boolean,
+};
 export type OptionalCallExpression = CallOrNewBase & {
   type: "OptionalCallExpression",
   optional: boolean,

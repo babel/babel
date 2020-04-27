@@ -783,7 +783,11 @@ export default class ExpressionParser extends LValParser {
   }
 
   finishCallExpression<
-    T: N.CallExpression | N.OptionalCallExpression | N.EventualCallExpression,
+    T:
+      | N.CallExpression
+      | N.OptionalCallExpression
+      | N.EventualCallExpression
+      | N.EventualMemberCallExpression,
   >(node: T, optional: boolean, eventual: boolean): N.Expression {
     if (node.callee.type === "Import") {
       if (node.arguments.length === 2) {
