@@ -1,30 +1,67 @@
 function makeVisitor(t, targetGlobal = "HandledPromise") {
+  const isSendOnlyExpression = path => {
+    const ourParent = path.parent;
+    switch (ourParent.type) {
+      case "ExpressionStatement": {
+        if (ourParent.parent.type === "Program") {
+          const program = ourParent.parent;
+          // If our expression statement is not the completion value,
+          // we're sendOnly.
+          return program.body[program.body.length - 1] !== ourParent;
+        }
+        // A statement elsewhere in the program.
+        return true;
+      }
+      case "UnaryExpression": {
+        // Void operator explicitly throws away the value.
+        return ourParent.operator === "void";
+      }
+      default:
+        // Any other non-statement parent cannot be send-only.
+        return false;
+    }
+  };
+
+  const fullTarget = (path, id) => {
+    switch (targetGlobal) {
+      case "HandledPromise": {
+        const sfx = isSendOnlyExpression(path) ? "SendOnly" : "";
+        let targetMember;
+        switch (id) {
+          case "eventualGet":
+            targetMember = `get${sfx}`;
+            break;
+          case "eventualSend":
+            targetMember = `applyMethod${sfx}`;
+            break;
+          case "eventualApply":
+            targetMember = `applyFunction${sfx}`;
+            break;
+        }
+        return t.memberExpression(
+          t.identifier(targetGlobal),
+          t.identifier(targetMember),
+        );
+      }
+      case "Promise": {
+        const sfx = isSendOnlyExpression(path) ? "Only" : "";
+        const targetMember = `${id}${sfx}`;
+        return t.memberExpression(
+          t.identifier(targetGlobal),
+          t.identifier(targetMember),
+        );
+      }
+      default:
+      // TODO
+    }
+  };
+
   return {
     EventualMemberExpression(path) {
       const { node } = path;
-      if (path.parent.type === "CallExpression") {
-        // Allow rewriting call expressions to eventualCalls.
-        return;
-      }
       const { object, computed, property } = node;
 
-      let targetMember;
-      switch (targetGlobal) {
-        case "Promise":
-          targetMember = t.identifier("eventualGet");
-          break;
-        case "HandledPromise":
-          targetMember = t.identifier("get");
-          break;
-        default:
-        // FIXME: What to do?
-      }
-
-      const target = t.memberExpression(
-        t.identifier(targetGlobal),
-        targetMember,
-      );
-
+      const target = fullTarget(path, "eventualGet");
       const targs = [];
       targs.push(object);
       if (computed) {
@@ -34,46 +71,6 @@ function makeVisitor(t, targetGlobal = "HandledPromise") {
         // Make a literal from the name.
         targs.push(t.stringLiteral(property.name));
       }
-
-      path.replaceWith(t.callExpression(target, targs));
-    },
-    CallExpression(path) {
-      const { node } = path;
-      const { callee, arguments: args } = node;
-      const { type, object, computed, property } = callee;
-      if (type !== "EventualMemberExpression") {
-        return;
-      }
-
-      let targetMember;
-      switch (targetGlobal) {
-        case "Promise":
-          targetMember = t.identifier("eventualSend");
-          break;
-        case "HandledPromise":
-          targetMember = t.identifier("applyMethod");
-          break;
-        default:
-        // FIXME: What to do?
-      }
-
-      const target = t.memberExpression(
-        t.identifier(targetGlobal),
-        targetMember,
-      );
-
-      // The arguments to our target.
-      const targs = [];
-      targs.push(object);
-      if (computed) {
-        // Just use the computed property.
-        targs.push(property);
-      } else {
-        // Make a literal from the name.
-        targs.push(t.stringLiteral(property.name));
-      }
-      // Add the method arguments.
-      targs.push(t.arrayExpression(args));
 
       path.replaceWith(t.callExpression(target, targs));
     },
@@ -81,25 +78,27 @@ function makeVisitor(t, targetGlobal = "HandledPromise") {
       const { node } = path;
       const { callee, arguments: args } = node;
 
-      let targetMember;
-      switch (targetGlobal) {
-        case "Promise":
-          targetMember = t.identifier("eventualApply");
-          break;
-        case "HandledPromise":
-          targetMember = t.identifier("applyFunction");
-          break;
-        default:
-        // FIXME: What to do?
-      }
-
-      const target = t.memberExpression(
-        t.identifier(targetGlobal),
-        targetMember,
-      );
-
+      const target = fullTarget(path, "eventualApply");
       const targs = [];
       targs.push(callee);
+      targs.push(t.arrayExpression(args));
+
+      path.replaceWith(t.callExpression(target, targs));
+    },
+    EventualMemberCallExpression(path) {
+      const { node } = path;
+      const { callee, property, computed, arguments: args } = node;
+
+      const target = fullTarget(path, "eventualSend");
+      const targs = [];
+      targs.push(callee);
+      if (computed) {
+        // Just use the computed property.
+        targs.push(property);
+      } else {
+        // Make a literal from the name.
+        targs.push(t.stringLiteral(property.name));
+      }
       targs.push(t.arrayExpression(args));
 
       path.replaceWith(t.callExpression(target, targs));
