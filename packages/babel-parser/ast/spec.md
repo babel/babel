@@ -1034,7 +1034,7 @@ interface ParenthesizedExpression <: Expression {
 }
 ```
 
-An expression wrapped by parentheses. By default `@babel/parser` does not create this node, unless passed by the `createParenthesizedExpressions: true` option.
+An expression wrapped by parentheses. By default `@babel/parser` does not create this node, unless the `createParenthesizedExpressions: true` option is passed.
 
 ## DoExpression
 
