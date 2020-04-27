@@ -3,11 +3,11 @@ function makeVisitor(t, targetGlobal = "HandledPromise") {
     const ourParent = path.parent;
     switch (ourParent.type) {
       case "ExpressionStatement": {
-        if (ourParent.parent.type === "Program") {
-          const program = ourParent.parent;
+        const maybeProgram = path.parentPath.parent;
+        if (maybeProgram.type === "Program") {
           // If our expression statement is not the completion value,
           // we're sendOnly.
-          return program.body[program.body.length - 1] !== ourParent;
+          return maybeProgram.body[maybeProgram.body.length - 1] !== ourParent;
         }
         // A statement elsewhere in the program.
         return true;
