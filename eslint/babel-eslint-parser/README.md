@@ -1,5 +1,8 @@
 # @babel/eslint-parser [![npm](https://img.shields.io/npm/v/@babel/eslint-parser.svg)](https://www.npmjs.com/package/@babel/eslint-parser) [![travis](https://img.shields.io/travis/babel/@babel/eslint-parser/master.svg)](https://travis-ci.org/babel/@babel/eslint-parser) [![npm-downloads](https://img.shields.io/npm/dm/@babel/eslint-parser.svg)](https://www.npmjs.com/package/@babel/eslint-parser)
 
+
+## This project is still experimental and will be released with Babel v8. You can track our progress [here](https://github.com/babel/babel/issues/10752)! Please use [babel-eslint](https://github.com/babel/babel-eslint) in the meantime.
+
 **@babel/eslint-parser** allows you to lint **ALL** valid Babel code with the fantastic
 [ESLint](https://github.com/eslint/eslint).
 
