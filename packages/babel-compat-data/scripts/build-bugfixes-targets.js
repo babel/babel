@@ -7,7 +7,6 @@ const path = require("path");
 const {
   getLowestImplementedVersion,
   environments,
-  addOperaAndElectron,
   writeFile,
 } = require("./utils-build-data");
 
@@ -58,10 +57,6 @@ for (const [replaced, features] of Object.entries(allReplacedFeatures)) {
       generatedTargets[replaced][env] = stillNotSupported;
     }
   }
-}
-
-for (const plugin of Object.values(generatedTargets)) {
-  addOperaAndElectron(plugin);
 }
 
 for (const [filename, data] of [
