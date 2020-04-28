@@ -1,6 +1,6 @@
 {
   "installCommand": "codesandbox",
   "buildCommand": false,
-  "sandboxes": ["9d0wg"],
+  "sandboxes": ["9d0wg", "7s08o"],
   "packages": ["packages/*"]
 }
