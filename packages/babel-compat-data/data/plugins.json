@@ -7,7 +7,8 @@
     "safari": "13",
     "node": "12.5",
     "ios": "13",
-    "electron": "6.1"
+    "samsung": "11",
+    "electron": "6"
   },
   "proposal-nullish-coalescing-operator": {
     "chrome": "80",
@@ -36,7 +37,7 @@
     "node": "10",
     "ios": "12",
     "samsung": "9",
-    "electron": "3.1"
+    "electron": "3"
   },
   "proposal-optional-catch-binding": {
     "chrome": "66",
@@ -47,7 +48,7 @@
     "node": "10",
     "ios": "11.3",
     "samsung": "9",
-    "electron": "3.1"
+    "electron": "3"
   },
   "transform-parameters": {
     "chrome": "49",
@@ -58,7 +59,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "proposal-async-generator-functions": {
     "chrome": "63",
@@ -69,7 +70,7 @@
     "node": "10",
     "ios": "12",
     "samsung": "8",
-    "electron": "3.1"
+    "electron": "3"
   },
   "proposal-object-rest-spread": {
     "chrome": "60",
@@ -80,7 +81,7 @@
     "node": "8.3",
     "ios": "11.3",
     "samsung": "8",
-    "electron": "2.1"
+    "electron": "2"
   },
   "transform-dotall-regex": {
     "chrome": "62",
@@ -90,7 +91,7 @@
     "node": "8.10",
     "ios": "11.3",
     "samsung": "8",
-    "electron": "3.1"
+    "electron": "3"
   },
   "proposal-unicode-property-regex": {
     "chrome": "64",
@@ -100,7 +101,7 @@
     "node": "10",
     "ios": "11.3",
     "samsung": "9",
-    "electron": "3.1"
+    "electron": "3"
   },
   "transform-named-capturing-groups-regex": {
     "chrome": "64",
@@ -110,7 +111,7 @@
     "node": "10",
     "ios": "11.3",
     "samsung": "9",
-    "electron": "3.1"
+    "electron": "3"
   },
   "transform-async-to-generator": {
     "chrome": "55",
@@ -143,7 +144,7 @@
     "node": "4",
     "ios": "13",
     "samsung": "3.4",
-    "electron": "0.24"
+    "electron": "0.22"
   },
   "transform-literals": {
     "chrome": "44",
@@ -154,7 +155,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "4",
-    "electron": "0.31"
+    "electron": "0.30"
   },
   "transform-function-name": {
     "chrome": "51",
@@ -188,7 +189,7 @@
     "ie": "11",
     "ios": "10",
     "samsung": "3.4",
-    "electron": "0.24"
+    "electron": "0.22"
   },
   "transform-classes": {
     "chrome": "46",
@@ -221,7 +222,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "4",
-    "electron": "0.29"
+    "electron": "0.28"
   },
   "transform-duplicate-keys": {
     "chrome": "42",
@@ -232,7 +233,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.27"
+    "electron": "0.25"
   },
   "transform-computed-properties": {
     "chrome": "44",
@@ -243,7 +244,7 @@
     "node": "4",
     "ios": "8",
     "samsung": "4",
-    "electron": "0.31"
+    "electron": "0.30"
   },
   "transform-for-of": {
     "chrome": "51",
@@ -265,7 +266,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "transform-unicode-regex": {
     "chrome": "50",
@@ -309,7 +310,7 @@
     "node": "6",
     "ios": "11",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "transform-typeof-symbol": {
     "chrome": "38",
@@ -320,7 +321,7 @@
     "node": "0.12",
     "ios": "9",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "transform-new-target": {
     "chrome": "46",
@@ -356,7 +357,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "5"
+    "electron": "0.20"
   },
   "transform-property-literals": {
     "chrome": "7",
@@ -370,7 +371,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "5"
+    "electron": "0.20"
   },
   "transform-reserved-words": {
     "chrome": "13",
@@ -384,6 +385,6 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "0.2"
+    "electron": "0.20"
   }
 }
