@@ -27,6 +27,7 @@ import {
   isReservedWord,
   isStrictReservedWord,
   isStrictBindReservedWord,
+  isIdentifierStart,
 } from "../util/identifier";
 import type { Pos, Position } from "../util/location";
 import * as charCodes from "charcodes";
@@ -1139,17 +1140,23 @@ export default class ExpressionParser extends LValParser {
           return this.finishNode(node, "PipelinePrimaryTopicReference");
         }
 
-        if (this.hasPlugin("privateIn")) {
+        if (isIdentifierStart(this.input.codePointAt(this.state.end))) {
+          const start = this.state.start;
           node = (this.parseMaybePrivateName(true): N.PrivateName);
-          this.classScope.usePrivateName(node.id.name, node.start);
-          if (!this.match(tt._in)) {
+          if (this.match(tt._in)) {
+            this.expectPlugin("privateIn");
+            this.classScope.usePrivateName(node.id.name, node.start);
+            return node;
+          } else if (this.hasPlugin("privateIn")) {
             this.raise(
               this.state.start,
               Errors.PrivateInExpectedIn,
               node.id.name,
             );
+            return node;
+          } else {
+            throw this.unexpected(start);
           }
-          return node;
         }
       }
       // fall through
@@ -1171,11 +1178,7 @@ export default class ExpressionParser extends LValParser {
     const isPrivate = this.match(tt.hash);
 
     if (isPrivate) {
-      this.expectOnePlugin([
-        "classPrivateProperties",
-        "classPrivateMethods",
-        "privateIn",
-      ]);
+      this.expectOnePlugin(["classPrivateProperties", "classPrivateMethods"]);
       if (!isPrivateNameAllowed) {
         this.raise(this.state.pos, Errors.UnexpectedPrivateField);
       }
