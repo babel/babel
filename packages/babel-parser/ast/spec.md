@@ -10,6 +10,7 @@ These are the core @babel/parser (babylon) AST node types.
   - [StringLiteral](#stringliteral)
   - [BooleanLiteral](#booleanliteral)
   - [NumericLiteral](#numericliteral)
+  - [BigIntLiteral](#bigintliteral)
 - [Programs](#programs)
 - [Functions](#functions)
 - [Statements](#statements)
@@ -240,6 +241,17 @@ interface NumericLiteral <: Literal {
 }
 ```
 
+## BigIntLiteral
+
+```js
+interface BigIntLiteral <: Literal {
+  type: "BigIntLiteral";
+  value: string;
+}
+```
+
+The `value` property is the string representation of the `BigInt` value. It doesn't include the suffix `n`.
+
 # Programs
 
 ```js
@@ -450,7 +462,7 @@ A `try` statement. If `handler` is `null` then `finalizer` must be a `BlockState
 ```js
 interface CatchClause <: Node {
   type: "CatchClause";
-  param: Pattern | null;
+  param?: Pattern;
   body: BlockStatement;
 }
 ```
@@ -839,7 +851,7 @@ interface AssignmentExpression <: Expression {
 }
 ```
 
-An assignment operator expression.
+An assignment operator expression. It has short-circuiting behaviour if the `operator` is one of `"||="`, `"&&="`, and `"??="`.
 
 #### AssignmentOperator
 
@@ -848,6 +860,7 @@ enum AssignmentOperator {
   "=" | "+=" | "-=" | "*=" | "/=" | "%=" | "**="
     | "<<=" | ">>=" | ">>>="
     | "|=" | "^=" | "&="
+    | "||=" | "&&=" | "??="
 }
 ```
 
@@ -901,11 +914,10 @@ interface MemberExpression <: Expression, Pattern {
   object: Expression | Super;
   property: Expression;
   computed: boolean;
-  optional: boolean | null;
 }
 ```
 
-A member expression. If `computed` is `true`, the node corresponds to a computed (`a[b]`) member expression and `property` is an `Expression`. If `computed` is `false`, the node corresponds to a static (`a.b`) member expression and `property` is an `Identifier`. The `optional` flags indicates that the member expression can be called even if the object is null or undefined. If this is the object value (null/undefined) should be returned.
+A member expression. If `computed` is `true`, the node corresponds to a computed (`a[b]`) member expression and `property` is an `Expression`. If `computed` is `false`, the node corresponds to a static (`a.b`) member expression and `property` is an `Identifier` or a `PrivateName`.
 
 ### BindExpression
 
@@ -987,18 +999,16 @@ interface CallExpression <: Expression {
   type: "CallExpression";
   callee: Expression | Super | Import;
   arguments: [ Expression | SpreadElement ];
-  optional: boolean | null;
 }
 ```
 
-A function or method call expression.
+A function or method call expression. When the `callee` is `Import`, the `arguments` must have only one `Expression` element.
 
 ## NewExpression
 
 ```js
 interface NewExpression <: CallExpression {
   type: "NewExpression";
-  optional: boolean | null;
 }
 ```
 
@@ -1024,7 +1034,7 @@ interface ParenthesizedExpression <: Expression {
 }
 ```
 
-An expression wrapped by parentheses.
+An expression wrapped by parentheses. By default `@babel/parser` does not create this node, unless the `createParenthesizedExpressions: true` option is passed.
 
 ## DoExpression
 
@@ -1316,6 +1326,7 @@ _Note: Having `declaration` populated with non-empty `specifiers` or non-null `s
 interface ExportSpecifier <: ModuleSpecifier {
   type: "ExportSpecifier";
   exported: Identifier;
+  local?: Identifier;
 }
 ```
 
