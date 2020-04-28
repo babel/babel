@@ -16,5 +16,5 @@ fi
 
 rm -rf build/compat-table
 mkdir -p build
-git clone --branch=gh-pages --single-branch --shallow-since=2020-04-20 https://github.com/kangax/compat-table.git build/compat-table
+git clone --branch=gh-pages --single-branch --shallow-since=2020-04-01 https://github.com/kangax/compat-table.git build/compat-table
 cd build/compat-table && git checkout -qf $COMPAT_TABLE_COMMIT
