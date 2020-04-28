@@ -1499,6 +1499,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   // Parse an object literal, binding pattern, or record.
+
   parseObj<T: N.ObjectPattern | N.ObjectExpression>(
     close: TokenType,
     isPattern: boolean,
