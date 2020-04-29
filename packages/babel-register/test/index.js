@@ -41,7 +41,7 @@ jest.mock("source-map-support", () => {
 });
 
 const defaultOptions = {
-  exts: [".js", ".jsx", ".es6", ".es", ".mjs"],
+  exts: [".js", ".jsx", ".es6", ".es", ".mjs", ".cjs"],
   ignoreNodeModules: false,
 };
 
