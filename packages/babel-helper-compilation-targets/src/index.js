@@ -195,7 +195,7 @@ export default function getTargets(
   let targets = (inputTargets: Targets);
 
   const hasTargets = Object.keys(targets).length > 0;
-  const shouldParseBrowsers = !!inputTargets.browsers;
+  const shouldParseBrowsers = !!browsersquery;
   const shouldSearchForConfig =
     !options.ignoreBrowserslistConfig && !hasTargets;
 
