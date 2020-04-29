@@ -144,6 +144,12 @@ export default async function({
 
   const logSuccess = debounce(
     function() {
+      if (startTime === null) {
+        // This should never happen, but just in case it's better
+        // to ignore the log message rather than making @babel/cli crash.
+        return;
+      }
+
       const diff = process.hrtime(startTime);
 
       console.log(
