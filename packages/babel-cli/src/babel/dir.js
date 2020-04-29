@@ -140,14 +140,19 @@ export default async function({
   }
 
   let compiledFiles = 0;
+  let startTime = null;
+
   const logSuccess = debounce(
     function() {
+      const diff = process.hrtime(startTime);
+
       console.log(
         `Successfully compiled ${compiledFiles} ${
           compiledFiles !== 1 ? "files" : "file"
-        } with Babel.`,
+        } with Babel (${diff[0] * 1e3 + Math.round(diff[1] / 1e6)}ms).`,
       );
       compiledFiles = 0;
+      startTime = null;
     },
     100,
     { trailing: true },
@@ -159,6 +164,8 @@ export default async function({
     }
 
     makeDirSync(cliOptions.outDir);
+
+    startTime = process.hrtime();
 
     for (const filename of cliOptions.filenames) {
       // compiledFiles is just incremented without reading its value, so we
@@ -193,6 +200,7 @@ export default async function({
       ["add", "change"].forEach(function(type: string): void {
         watcher.on(type, async function(filename: string) {
           processing++;
+          if (startTime === null) startTime = process.hrtime();
 
           try {
             await handleFile(
