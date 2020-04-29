@@ -13,6 +13,10 @@ declare class A {
   static x: string,
 }
 declare class A {
+  set fooProp(value: number): void,
+  get fooProp(): number,
+}
+declare class A {
   static [indexer: number]: string
 }
 declare class A {
