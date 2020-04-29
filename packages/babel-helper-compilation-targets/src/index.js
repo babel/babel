@@ -13,7 +13,7 @@ import {
 } from "./utils";
 import { browserNameMap } from "./targets";
 import { TargetNames } from "./options";
-import type { Targets, InputTargets, Browsers } from "./types";
+import type { Target, Targets, InputTargets, Browsers } from "./types";
 
 export type { Targets, InputTargets };
 
@@ -39,7 +39,7 @@ function objectToBrowserslist(object: Targets): Array<string> {
   }, []);
 }
 
-function validateTargetNames(targets: InputTargets): void {
+function validateTargetNames(targets: InputTargets): Targets {
   const validTargets = Object.keys(TargetNames);
   for (const target in targets) {
     if (!TargetNames[target]) {
@@ -49,6 +49,9 @@ function validateTargetNames(targets: InputTargets): void {
       );
     }
   }
+
+  // $FlowIgnore
+  return targets;
 }
 
 export function isBrowsersQueryValid(browsers: Browsers | Targets): boolean {
@@ -62,15 +65,6 @@ function validateBrowsers(browsers: Browsers | void) {
   );
 
   return browsers;
-}
-
-function mergeBrowsers(fromQuery: Targets, fromTarget: Targets) {
-  return Object.keys(fromTarget).reduce((queryObj, targKey) => {
-    if (targKey !== TargetNames.browsers) {
-      queryObj[targKey] = fromTarget[targKey];
-    }
-    return queryObj;
-  }, fromQuery);
 }
 
 function getLowestVersions(browsers: Array<string>): Targets {
@@ -173,8 +167,6 @@ export default function getTargets(
 ): Targets {
   const targetOpts: Targets = {};
 
-  validateTargetNames(inputTargets);
-
   // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
   // These values OVERRIDE the `browsers` field.
   if (inputTargets.esmodules) {
@@ -191,11 +183,10 @@ export default function getTargets(
   const browsersquery = validateBrowsers(inputTargets.browsers);
   delete inputTargets.browsers;
 
-  // $FlowIgnore
-  let targets = (inputTargets: Targets);
+  let targets: Targets = validateTargetNames(inputTargets);
 
-  const hasTargets = Object.keys(targets).length > 0;
   const shouldParseBrowsers = !!browsersquery;
+  const hasTargets = shouldParseBrowsers || Object.keys(targets).length > 0;
   const shouldSearchForConfig =
     !options.ignoreBrowserslistConfig && !hasTargets;
 
@@ -217,44 +208,39 @@ export default function getTargets(
     });
 
     const queryBrowsers = getLowestVersions(browsers);
-    targets = mergeBrowsers(queryBrowsers, targets);
+    targets = Object.assign(queryBrowsers, targets);
 
     // Reset browserslist defaults
     browserslist.defaults = browserslistDefaults;
   }
 
   // Parse remaining targets
-  const parsed = Object.keys(targets)
-    .filter(value => value !== TargetNames.esmodules)
-    .sort()
-    .reduce(
-      (results: ParsedResult, target: $Keys<Targets>): ParsedResult => {
-        if (target !== TargetNames.browsers) {
-          const value = targets[target];
+  const parsed = (Object.keys(targets): Array<Target>).sort().reduce(
+    (results: ParsedResult, target: $Keys<Targets>): ParsedResult => {
+      const value = targets[target];
 
-          // Warn when specifying minor/patch as a decimal
-          if (typeof value === "number" && value % 1 !== 0) {
-            results.decimalWarnings.push({ target, value });
-          }
+      // Warn when specifying minor/patch as a decimal
+      if (typeof value === "number" && value % 1 !== 0) {
+        results.decimalWarnings.push({ target, value });
+      }
 
-          // Check if we have a target parser?
-          // $FlowIgnore - Flow doesn't like that some targetParserMap[target] might be missing
-          const parser = targetParserMap[target] ?? targetParserMap.__default;
-          const [parsedTarget, parsedValue] = parser(target, value);
+      // Check if we have a target parser?
+      // $FlowIgnore - Flow doesn't like that some targetParserMap[target] might be missing
+      const parser = targetParserMap[target] ?? targetParserMap.__default;
+      const [parsedTarget, parsedValue] = parser(target, value);
 
-          if (parsedValue) {
-            // Merge (lowest wins)
-            results.targets[parsedTarget] = parsedValue;
-          }
-        }
+      if (parsedValue) {
+        // Merge (lowest wins)
+        results.targets[parsedTarget] = parsedValue;
+      }
 
-        return results;
-      },
-      {
-        targets: targetOpts,
-        decimalWarnings: [],
-      },
-    );
+      return results;
+    },
+    {
+      targets: targetOpts,
+      decimalWarnings: [],
+    },
+  );
 
   outputDecimalWarning(parsed.decimalWarnings);
 

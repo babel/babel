@@ -1,9 +1,6 @@
 // @flow
 
 export const TargetNames = {
-  esmodules: "esmodules",
-  browsers: "browsers",
-
   node: "node",
   chrome: "chrome",
   opera: "opera",
