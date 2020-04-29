@@ -1,5 +1,7 @@
 // @flow
 
+/*:: declare var invariant; */
+
 import type { Options } from "../options";
 import * as N from "../types";
 import type { Position } from "../util/location";
@@ -1360,10 +1362,14 @@ export default class Tokenizer extends LocationParser {
       default:
         if (ch >= charCodes.digit0 && ch <= charCodes.digit7) {
           const codePos = this.state.pos - 1;
-          // $FlowFixMe
-          let octalStr = this.input
+          const match = this.input
             .substr(this.state.pos - 1, 3)
-            .match(/^[0-7]+/)[0];
+            .match(/^[0-7]+/);
+
+          // This is never null, because of the if condition above.
+          /*:: invariant(match !== null) */
+          let octalStr = match[0];
+
           let octal = parseInt(octalStr, 8);
           if (octal > 255) {
             octalStr = octalStr.slice(0, -1);

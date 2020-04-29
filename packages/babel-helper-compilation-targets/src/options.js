@@ -2,8 +2,9 @@
 
 export const TargetNames = {
   esmodules: "esmodules",
-  node: "node",
   browsers: "browsers",
+
+  node: "node",
   chrome: "chrome",
   opera: "opera",
   edge: "edge",
@@ -14,7 +15,4 @@ export const TargetNames = {
   android: "android",
   electron: "electron",
   samsung: "samsung",
-
-  // deprecated
-  uglify: "uglify",
 };

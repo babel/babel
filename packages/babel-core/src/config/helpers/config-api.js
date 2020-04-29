@@ -17,13 +17,14 @@ type EnvFunction = {
   (Array<string>): boolean,
 };
 
-export type PluginAPI = {
+export type PluginAPI = {|
   version: string,
   cache: SimpleCacheConfigurator,
   env: EnvFunction,
   async: () => boolean,
   assertVersion: typeof assertVersion,
-};
+  caller?: any,
+|};
 
 export default function makeAPI(
   cache: CacheConfigurator<{ envName: string, caller: CallerMetadata | void }>,
@@ -55,7 +56,6 @@ export default function makeAPI(
     async: () => false,
     caller,
     assertVersion,
-    tokTypes: undefined,
   };
 }
 
