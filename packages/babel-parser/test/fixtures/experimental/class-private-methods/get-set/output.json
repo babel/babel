@@ -1,125 +1,35 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 99,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 8,
-      "column": 1
-    }
-  },
+  "start":0,"end":99,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":1}},
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 99,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 8,
-        "column": 1
-      }
-    },
+    "start":0,"end":99,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":1}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ClassDeclaration",
-        "start": 0,
-        "end": 99,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 8,
-            "column": 1
-          }
-        },
+        "start":0,"end":99,"loc":{"start":{"line":1,"column":0},"end":{"line":8,"column":1}},
         "id": {
           "type": "Identifier",
-          "start": 6,
-          "end": 11,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 6
-            },
-            "end": {
-              "line": 1,
-              "column": 11
-            },
-            "identifierName": "Hotel"
-          },
+          "start":6,"end":11,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":11},"identifierName":"Hotel"},
           "name": "Hotel"
         },
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start": 12,
-          "end": 99,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 12
-            },
-            "end": {
-              "line": 8,
-              "column": 1
-            }
-          },
+          "start":12,"end":99,"loc":{"start":{"line":1,"column":12},"end":{"line":8,"column":1}},
           "body": [
             {
               "type": "ClassPrivateMethod",
-              "start": 16,
-              "end": 52,
-              "loc": {
-                "start": {
-                  "line": 2,
-                  "column": 2
-                },
-                "end": {
-                  "line": 4,
-                  "column": 3
-                }
-              },
+              "start":16,"end":52,"loc":{"start":{"line":2,"column":2},"end":{"line":4,"column":3}},
               "static": false,
               "key": {
                 "type": "PrivateName",
-                "start": 20,
-                "end": 25,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 6
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 11
-                  }
-                },
+                "start":20,"end":25,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":11}},
                 "id": {
                   "type": "Identifier",
-                  "start": 21,
-                  "end": 25,
-                  "loc": {
-                    "start": {
-                      "line": 2,
-                      "column": 7
-                    },
-                    "end": {
-                      "line": 2,
-                      "column": 11
-                    },
-                    "identifierName": "evil"
-                  },
+                  "start":21,"end":25,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":11},"identifierName":"evil"},
                   "name": "evil"
                 }
               },
@@ -131,62 +41,17 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 28,
-                "end": 52,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 14
-                  },
-                  "end": {
-                    "line": 4,
-                    "column": 3
-                  }
-                },
+                "start":28,"end":52,"loc":{"start":{"line":2,"column":14},"end":{"line":4,"column":3}},
                 "body": [
                   {
                     "type": "ReturnStatement",
-                    "start": 34,
-                    "end": 48,
-                    "loc": {
-                      "start": {
-                        "line": 3,
-                        "column": 4
-                      },
-                      "end": {
-                        "line": 3,
-                        "column": 18
-                      }
-                    },
+                    "start":34,"end":48,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":18}},
                     "argument": {
                       "type": "CallExpression",
-                      "start": 41,
-                      "end": 47,
-                      "loc": {
-                        "start": {
-                          "line": 3,
-                          "column": 11
-                        },
-                        "end": {
-                          "line": 3,
-                          "column": 17
-                        }
-                      },
+                      "start":41,"end":47,"loc":{"start":{"line":3,"column":11},"end":{"line":3,"column":17}},
                       "callee": {
                         "type": "Identifier",
-                        "start": 41,
-                        "end": 45,
-                        "loc": {
-                          "start": {
-                            "line": 3,
-                            "column": 11
-                          },
-                          "end": {
-                            "line": 3,
-                            "column": 15
-                          },
-                          "identifierName": "ohNo"
-                        },
+                        "start":41,"end":45,"loc":{"start":{"line":3,"column":11},"end":{"line":3,"column":15},"identifierName":"ohNo"},
                         "name": "ohNo"
                       },
                       "arguments": []
@@ -198,48 +63,14 @@
             },
             {
               "type": "ClassPrivateMethod",
-              "start": 55,
-              "end": 97,
-              "loc": {
-                "start": {
-                  "line": 5,
-                  "column": 2
-                },
-                "end": {
-                  "line": 7,
-                  "column": 3
-                }
-              },
+              "start":55,"end":97,"loc":{"start":{"line":5,"column":2},"end":{"line":7,"column":3}},
               "static": false,
               "key": {
                 "type": "PrivateName",
-                "start": 59,
-                "end": 64,
-                "loc": {
-                  "start": {
-                    "line": 5,
-                    "column": 6
-                  },
-                  "end": {
-                    "line": 5,
-                    "column": 11
-                  }
-                },
+                "start":59,"end":64,"loc":{"start":{"line":5,"column":6},"end":{"line":5,"column":11}},
                 "id": {
                   "type": "Identifier",
-                  "start": 60,
-                  "end": 64,
-                  "loc": {
-                    "start": {
-                      "line": 5,
-                      "column": 7
-                    },
-                    "end": {
-                      "line": 5,
-                      "column": 11
-                    },
-                    "identifierName": "evil"
-                  },
+                  "start":60,"end":64,"loc":{"start":{"line":5,"column":7},"end":{"line":5,"column":11},"identifierName":"evil"},
                   "name": "evil"
                 }
               },
@@ -251,98 +82,29 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 65,
-                  "end": 66,
-                  "loc": {
-                    "start": {
-                      "line": 5,
-                      "column": 12
-                    },
-                    "end": {
-                      "line": 5,
-                      "column": 13
-                    },
-                    "identifierName": "x"
-                  },
+                  "start":65,"end":66,"loc":{"start":{"line":5,"column":12},"end":{"line":5,"column":13},"identifierName":"x"},
                   "name": "x"
                 }
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 68,
-                "end": 97,
-                "loc": {
-                  "start": {
-                    "line": 5,
-                    "column": 15
-                  },
-                  "end": {
-                    "line": 7,
-                    "column": 3
-                  }
-                },
+                "start":68,"end":97,"loc":{"start":{"line":5,"column":15},"end":{"line":7,"column":3}},
                 "body": [
                   {
                     "type": "ReturnStatement",
-                    "start": 74,
-                    "end": 93,
-                    "loc": {
-                      "start": {
-                        "line": 6,
-                        "column": 4
-                      },
-                      "end": {
-                        "line": 6,
-                        "column": 23
-                      }
-                    },
+                    "start":74,"end":93,"loc":{"start":{"line":6,"column":4},"end":{"line":6,"column":23}},
                     "argument": {
                       "type": "CallExpression",
-                      "start": 81,
-                      "end": 92,
-                      "loc": {
-                        "start": {
-                          "line": 6,
-                          "column": 11
-                        },
-                        "end": {
-                          "line": 6,
-                          "column": 22
-                        }
-                      },
+                      "start":81,"end":92,"loc":{"start":{"line":6,"column":11},"end":{"line":6,"column":22}},
                       "callee": {
                         "type": "Identifier",
-                        "start": 81,
-                        "end": 89,
-                        "loc": {
-                          "start": {
-                            "line": 6,
-                            "column": 11
-                          },
-                          "end": {
-                            "line": 6,
-                            "column": 19
-                          },
-                          "identifierName": "makeEvil"
-                        },
+                        "start":81,"end":89,"loc":{"start":{"line":6,"column":11},"end":{"line":6,"column":19},"identifierName":"makeEvil"},
                         "name": "makeEvil"
                       },
                       "arguments": [
                         {
                           "type": "Identifier",
-                          "start": 90,
-                          "end": 91,
-                          "loc": {
-                            "start": {
-                              "line": 6,
-                              "column": 20
-                            },
-                            "end": {
-                              "line": 6,
-                              "column": 21
-                            },
-                            "identifierName": "x"
-                          },
+                          "start":90,"end":91,"loc":{"start":{"line":6,"column":20},"end":{"line":6,"column":21},"identifierName":"x"},
                           "name": "x"
                         }
                       ]

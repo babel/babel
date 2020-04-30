@@ -1,66 +1,21 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 39,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 39
-    }
-  },
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":39}},
   "errors": [
-    "SyntaxError: Octal literal in strict mode (1:33)"
+    "SyntaxError: Legacy octal literals are not allowed in strict mode (1:33)"
   ],
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 39,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 39
-      }
-    },
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":39}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "FunctionDeclaration",
-        "start": 0,
-        "end": 39,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 39
-          }
-        },
+        "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":39}},
         "id": {
           "type": "Identifier",
-          "start": 9,
-          "end": 14,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 9
-            },
-            "end": {
-              "line": 1,
-              "column": 14
-            },
-            "identifierName": "hello"
-          },
+          "start":9,"end":14,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":14},"identifierName":"hello"},
           "name": "hello"
         },
         "generator": false,
@@ -68,47 +23,14 @@
         "params": [],
         "body": {
           "type": "BlockStatement",
-          "start": 17,
-          "end": 39,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 17
-            },
-            "end": {
-              "line": 1,
-              "column": 39
-            }
-          },
+          "start":17,"end":39,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":39}},
           "body": [
             {
               "type": "ExpressionStatement",
-              "start": 33,
-              "end": 37,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 33
-                },
-                "end": {
-                  "line": 1,
-                  "column": 37
-                }
-              },
+              "start":33,"end":37,"loc":{"start":{"line":1,"column":33},"end":{"line":1,"column":37}},
               "expression": {
                 "type": "NumericLiteral",
-                "start": 33,
-                "end": 36,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 33
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 36
-                  }
-                },
+                "start":33,"end":36,"loc":{"start":{"line":1,"column":33},"end":{"line":1,"column":36}},
                 "extra": {
                   "rawValue": 17,
                   "raw": "021"
@@ -120,32 +42,10 @@
           "directives": [
             {
               "type": "Directive",
-              "start": 19,
-              "end": 32,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 19
-                },
-                "end": {
-                  "line": 1,
-                  "column": 32
-                }
-              },
+              "start":19,"end":32,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":32}},
               "value": {
                 "type": "DirectiveLiteral",
-                "start": 19,
-                "end": 31,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 19
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 31
-                  }
-                },
+                "start":19,"end":31,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":31}},
                 "value": "use strict",
                 "extra": {
                   "raw": "'use strict'",

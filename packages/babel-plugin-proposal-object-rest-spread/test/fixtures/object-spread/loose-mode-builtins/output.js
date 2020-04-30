@@ -1,3 +1,6 @@
+var x;
+var y;
+var z;
 z = Object.assign({
   x
 }, y);

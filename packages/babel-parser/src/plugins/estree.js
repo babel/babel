@@ -208,6 +208,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.directiveToStmt(d),
       );
       node.body = directiveStatements.concat(node.body);
+      // $FlowIgnore - directives isn't optional in the type definition
       delete node.directives;
     }
 
@@ -389,7 +390,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (node.callee.type === "Import") {
         ((node: N.Node): N.EstreeImportExpression).type = "ImportExpression";
         ((node: N.Node): N.EstreeImportExpression).source = node.arguments[0];
+        // $FlowIgnore - arguments isn't optional in the type definition
         delete node.arguments;
+        // $FlowIgnore - callee isn't optional in the type definition
         delete node.callee;
       }
 
@@ -406,5 +409,29 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       super.toReferencedListDeep(exprList, isParenthesizedExpr);
+    }
+
+    parseExport(node: N.Node) {
+      super.parseExport(node);
+
+      switch (node.type) {
+        case "ExportAllDeclaration":
+          node.exported = null;
+          break;
+
+        case "ExportNamedDeclaration":
+          if (
+            node.specifiers.length === 1 &&
+            node.specifiers[0].type === "ExportNamespaceSpecifier"
+          ) {
+            node.type = "ExportAllDeclaration";
+            node.exported = node.specifiers[0].exported;
+            delete node.specifiers;
+          }
+
+          break;
+      }
+
+      return node;
     }
   };

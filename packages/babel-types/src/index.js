@@ -9,13 +9,16 @@ export * from "./asserts/generated";
 
 // builders
 export { default as createTypeAnnotationBasedOnTypeof } from "./builders/flow/createTypeAnnotationBasedOnTypeof";
-export { default as createUnionTypeAnnotation } from "./builders/flow/createUnionTypeAnnotation";
+export { default as createUnionTypeAnnotation } from "./builders/flow/createFlowUnionType";
+export { default as createFlowUnionType } from "./builders/flow/createFlowUnionType";
+export { default as createTSUnionType } from "./builders/typescript/createTSUnionType";
 export * from "./builders/generated";
 
 // clone
 export { default as cloneNode } from "./clone/cloneNode";
 export { default as clone } from "./clone/clone";
 export { default as cloneDeep } from "./clone/cloneDeep";
+export { default as cloneDeepWithoutLoc } from "./clone/cloneDeepWithoutLoc";
 export { default as cloneWithoutLoc } from "./clone/cloneWithoutLoc";
 
 // comments

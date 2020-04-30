@@ -93,9 +93,13 @@ export const types: { [name: string]: TokenType } = {
 
   // Punctuation token types.
   bracketL: new TokenType("[", { beforeExpr, startsExpr }),
+  bracketHashL: new TokenType("#[", { beforeExpr, startsExpr }),
+  bracketBarL: new TokenType("[|", { beforeExpr, startsExpr }),
   bracketR: new TokenType("]"),
+  bracketBarR: new TokenType("|]"),
   braceL: new TokenType("{", { beforeExpr, startsExpr }),
   braceBarL: new TokenType("{|", { beforeExpr, startsExpr }),
+  braceHashL: new TokenType("#{", { beforeExpr, startsExpr }),
   braceR: new TokenType("}"),
   braceBarR: new TokenType("|}"),
   parenL: new TokenType("(", { beforeExpr, startsExpr }),
@@ -159,6 +163,8 @@ export const types: { [name: string]: TokenType } = {
   }),
 
   // Keywords
+  // Don't forget to update packages/babel-helper-validator-identifier/src/keyword.js
+  // when new keywords are added
   _break: createKeyword("break"),
   _case: createKeyword("case", { beforeExpr }),
   _catch: createKeyword("catch"),

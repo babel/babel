@@ -1,0 +1,43 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":32,"loc":{"start":{"line":1,"column":8},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":12,"end":30,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":20}},
+              "declare": true,
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start":27,"end":30,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":20},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "variance": null,
+              "value": null
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

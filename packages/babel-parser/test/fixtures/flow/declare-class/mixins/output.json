@@ -1,63 +1,18 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 27,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 27
-    }
-  },
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":27}},
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 27,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 27
-      }
-    },
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":27}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "DeclareClass",
-        "start": 0,
-        "end": 27,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 27
-          }
-        },
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":27}},
         "id": {
           "type": "Identifier",
-          "start": 14,
-          "end": 15,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 14
-            },
-            "end": {
-              "line": 1,
-              "column": 15
-            },
-            "identifierName": "A"
-          },
+          "start":14,"end":15,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":15},"identifierName":"A"},
           "name": "A"
         },
         "typeParameters": null,
@@ -66,33 +21,10 @@
         "mixins": [
           {
             "type": "InterfaceExtends",
-            "start": 23,
-            "end": 24,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 23
-              },
-              "end": {
-                "line": 1,
-                "column": 24
-              }
-            },
+            "start":23,"end":24,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":24}},
             "id": {
               "type": "Identifier",
-              "start": 23,
-              "end": 24,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 23
-                },
-                "end": {
-                  "line": 1,
-                  "column": 24
-                },
-                "identifierName": "B"
-              },
+              "start":23,"end":24,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":24},"identifierName":"B"},
               "name": "B"
             },
             "typeParameters": null
@@ -100,18 +32,7 @@
         ],
         "body": {
           "type": "ObjectTypeAnnotation",
-          "start": 25,
-          "end": 27,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 25
-            },
-            "end": {
-              "line": 1,
-              "column": 27
-            }
-          },
+          "start":25,"end":27,"loc":{"start":{"line":1,"column":25},"end":{"line":1,"column":27}},
           "callProperties": [],
           "properties": [],
           "indexers": [],

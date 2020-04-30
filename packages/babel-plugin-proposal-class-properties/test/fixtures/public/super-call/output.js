@@ -19,12 +19,14 @@ var B = /*#__PURE__*/function (_A) {
 
   babelHelpers.inherits(B, _A);
 
+  var _super = babelHelpers.createSuper(B);
+
   function B(...args) {
-    var _this;
+    var _thisSuper, _this;
 
     babelHelpers.classCallCheck(this, B);
-    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(B).call(this, ...args));
-    babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "foo", babelHelpers.get(babelHelpers.getPrototypeOf(B.prototype), "foo", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this)));
+    _this = _super.call(this, ...args);
+    babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "foo", babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(B.prototype)), "foo", _thisSuper).call(_thisSuper));
     return _this;
   }
 

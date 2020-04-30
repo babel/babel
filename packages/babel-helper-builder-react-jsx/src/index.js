@@ -1,11 +1,12 @@
-import esutils from "esutils";
 import * as t from "@babel/types";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 type ElementState = {
   tagExpr: Object, // tag node
   tagName: ?string, // raw string tag name
   args: Array<Object>, // array of call arguments
   call?: Object, // optional call property that can be set to override the call expression returned
+  pure: boolean, // true if the element can be marked with a #__PURE__ annotation
 };
 
 export default function(opts) {
@@ -15,7 +16,7 @@ export default function(opts) {
     if (opts.throwIfNamespace) {
       throw path.buildCodeFrameError(
         `Namespace tags are not supported by default. React's JSX doesn't support namespace tags. \
-You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
+You can set \`throwIfNamespace: false\` to bypass this warning.`,
       );
     }
   };
@@ -55,7 +56,7 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
     if (t.isJSXIdentifier(node)) {
       if (node.name === "this" && t.isReferenced(node, parent)) {
         return t.thisExpression();
-      } else if (esutils.keyword.isIdentifierNameES6(node.name)) {
+      } else if (t.isValidIdentifier(node.name, false)) {
         node.type = "Identifier";
       } else {
         return t.stringLiteral(node.name);
@@ -102,7 +103,7 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
       node.name = t.stringLiteral(
         node.name.namespace.name + ":" + node.name.name.name,
       );
-    } else if (esutils.keyword.isIdentifierNameES6(node.name.name)) {
+    } else if (t.isValidIdentifier(node.name.name, false)) {
       node.name.type = "Identifier";
     } else {
       node.name = t.stringLiteral(node.name.name);
@@ -134,6 +135,7 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
       tagExpr: tagExpr,
       tagName: tagName,
       args: args,
+      pure: false,
     };
 
     if (opts.pre) {
@@ -153,7 +155,10 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
       opts.post(state, file);
     }
 
-    return state.call || t.callExpression(state.callee, args);
+    const call = state.call || t.callExpression(state.callee, args);
+    if (state.pure) annotateAsPure(call);
+
+    return call;
   }
 
   function pushProps(_props, objs) {
@@ -248,6 +253,7 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
       tagExpr: tagExpr,
       tagName: tagName,
       args: args,
+      pure: false,
     };
 
     if (opts.pre) {
@@ -262,6 +268,10 @@ You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
     }
 
     file.set("usedFragment", true);
-    return state.call || t.callExpression(state.callee, args);
+
+    const call = state.call || t.callExpression(state.callee, args);
+    if (state.pure) annotateAsPure(call);
+
+    return call;
   }
 }

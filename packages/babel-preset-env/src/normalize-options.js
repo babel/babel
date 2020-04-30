@@ -4,7 +4,7 @@ import findSuggestion from "levenary";
 import invariant from "invariant";
 import { coerce, SemVer } from "semver";
 import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
-import pluginsList from "./plugins-compat-data";
+import { plugins as pluginsList } from "./plugins-compat-data";
 import moduleTransformations from "./module-transformations";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
 import { defaultWebIncludes } from "./polyfills/corejs2/get-platform-specific-default";
@@ -123,9 +123,7 @@ const normalizeTargets = targets => {
   if (typeof targets === "string" || Array.isArray(targets)) {
     return { browsers: targets };
   }
-  return {
-    ...targets,
-  };
+  return { ...targets };
 };
 
 export const validateConfigPathOption = (
@@ -167,8 +165,7 @@ export const validateModulesOption = (
   modulesOpt: ModuleOption = ModulesOption.auto,
 ) => {
   invariant(
-    ModulesOption[modulesOpt.toString()] ||
-      ModulesOption[modulesOpt.toString()] === ModulesOption.false,
+    ModulesOption[modulesOpt.toString()] || modulesOpt === ModulesOption.false,
     `Invalid Option: The 'modules' option must be one of \n` +
       ` - 'false' to indicate no module processing\n` +
       ` - a specific module type: 'commonjs', 'amd', 'umd', 'systemjs'` +
@@ -184,7 +181,7 @@ export const validateUseBuiltInsOption = (
 ) => {
   invariant(
     UseBuiltInsOption[builtInsOpt.toString()] ||
-      UseBuiltInsOption[builtInsOpt.toString()] === UseBuiltInsOption.false,
+      builtInsOpt === UseBuiltInsOption.false,
     `Invalid Option: The 'useBuiltIns' option must be either
     'false' (default) to indicate no polyfill,
     '"entry"' to indicate replacing the entry polyfill, or
@@ -267,14 +264,18 @@ export default function normalizeOptions(opts: Options) {
 
   checkDuplicateIncludeExcludes(include, exclude);
 
-  const shippedProposals =
-    validateBoolOption(
-      TopLevelOptions.shippedProposals,
-      opts.shippedProposals,
-      false,
-    ) || corejs.proposals;
+  const shippedProposals = validateBoolOption(
+    TopLevelOptions.shippedProposals,
+    opts.shippedProposals,
+    false,
+  );
 
   return {
+    bugfixes: validateBoolOption(
+      TopLevelOptions.bugfixes,
+      opts.bugfixes,
+      false,
+    ),
     configPath: validateConfigPathOption(opts.configPath),
     corejs,
     debug: validateBoolOption(TopLevelOptions.debug, opts.debug, false),

@@ -1,9 +1,22 @@
-expect(
-  () => {
-    var [foo, bar] = undefined;
-  }).toThrow("Invalid attempt to destructure non-iterable instance");
+var foo, bar;
 
 expect(
-  () => {
-    var foo = [ ...undefined ];
-  }).toThrow("Invalid attempt to spread non-iterable instance");
+  () => [foo, bar] = undefined
+).toThrow(/destructure non-iterable/);
+
+expect(
+  () => [foo, bar] = {}
+).toThrow(/destructure non-iterable/);
+
+// Simulate old browser
+let _Symbol = Symbol;
+Symbol = void 0;
+try {
+
+  expect(
+    () => [foo, bar] = {}
+  ).toThrow(/destructure non-iterable/);
+
+} finally {
+  Symbol = _Symbol;
+}

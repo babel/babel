@@ -91,9 +91,19 @@ function getTypeAnnotationBindingConstantViolations(binding, path, name) {
     }
   }
 
-  if (types.length) {
-    return t.createUnionTypeAnnotation(types);
+  if (!types.length) {
+    return;
   }
+
+  if (t.isTSTypeAnnotation(types[0]) && t.createTSUnionType) {
+    return t.createTSUnionType(types);
+  }
+
+  if (t.createFlowUnionType) {
+    return t.createFlowUnionType(types);
+  }
+
+  return t.createUnionTypeAnnotation(types);
 }
 
 function getConstantViolationsBefore(binding, path, functions) {
@@ -201,6 +211,20 @@ function getConditionalAnnotation(binding, path, name) {
   }
 
   if (types.length) {
+    if (t.isTSTypeAnnotation(types[0]) && t.createTSUnionType) {
+      return {
+        typeAnnotation: t.createTSUnionType(types),
+        ifStatement,
+      };
+    }
+
+    if (t.createFlowUnionType) {
+      return {
+        typeAnnotation: t.createFlowUnionType(types),
+        ifStatement,
+      };
+    }
+
     return {
       typeAnnotation: t.createUnionTypeAnnotation(types),
       ifStatement,

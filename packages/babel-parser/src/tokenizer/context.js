@@ -59,7 +59,10 @@ tt.name.updateContext = function(prevType) {
   let allowed = false;
   if (prevType !== tt.dot) {
     if (
-      (this.state.value === "of" && !this.state.exprAllowed) ||
+      (this.state.value === "of" &&
+        !this.state.exprAllowed &&
+        prevType !== tt._function &&
+        prevType !== tt._class) ||
       (this.state.value === "yield" && this.prodParam.hasYield)
     ) {
       allowed = true;
@@ -101,7 +104,10 @@ tt.incDec.updateContext = function() {
 };
 
 tt._function.updateContext = tt._class.updateContext = function(prevType) {
-  if (
+  if (prevType === tt.dot || prevType === tt.questionDot) {
+    // when function/class follows dot/questionDot, it is part of
+    // (optional)MemberExpression, then we don't need to push new token context
+  } else if (
     prevType.beforeExpr &&
     prevType !== tt.semi &&
     prevType !== tt._else &&
@@ -128,5 +134,9 @@ tt.backQuote.updateContext = function() {
   } else {
     this.state.context.push(types.template);
   }
+  this.state.exprAllowed = false;
+};
+
+tt.star.updateContext = function() {
   this.state.exprAllowed = false;
 };

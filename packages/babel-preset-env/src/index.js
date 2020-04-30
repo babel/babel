@@ -6,8 +6,11 @@ import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
 import { removeUnnecessaryItems } from "./filter-items";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options";
-import pluginList from "./plugins-compat-data";
 import { proposalPlugins, pluginSyntaxMap } from "../data/shipped-proposals";
+import {
+  plugins as pluginsList,
+  pluginsBugfixes as pluginsBugfixesList,
+} from "./plugins-compat-data";
 import overlappingPlugins from "@babel/compat-data/overlapping-plugins";
 
 import addCoreJS2UsagePlugin from "./polyfills/corejs2/usage-plugin";
@@ -22,6 +25,7 @@ import getTargets, {
   filterItems,
   isRequired,
   type Targets,
+  type InputTargets,
 } from "@babel/helper-compilation-targets";
 import availablePlugins from "./available-plugins";
 import { filterStageFromList } from "./utils";
@@ -37,10 +41,29 @@ export function isPluginRequired(targets: Targets, support: Targets) {
   });
 }
 
-const pluginListWithoutProposals = filterStageFromList(
-  pluginList,
-  proposalPlugins,
-);
+const pluginLists = {
+  withProposals: {
+    withoutBugfixes: pluginsList,
+    withBugfixes: Object.assign({}, pluginsList, pluginsBugfixesList),
+  },
+  withoutProposals: {
+    withoutBugfixes: filterStageFromList(pluginsList, proposalPlugins),
+    withBugfixes: filterStageFromList(
+      Object.assign({}, pluginsList, pluginsBugfixesList),
+      proposalPlugins,
+    ),
+  },
+};
+
+function getPluginList(proposals: boolean, bugfixes: boolean) {
+  if (proposals) {
+    if (bugfixes) return pluginLists.withProposals.withBugfixes;
+    else return pluginLists.withProposals.withoutBugfixes;
+  } else {
+    if (bugfixes) return pluginLists.withoutProposals.withBugfixes;
+    else return pluginLists.withoutProposals.withoutBugfixes;
+  }
+}
 
 const getPlugin = (pluginName: string) => {
   const plugin = availablePlugins[pluginName];
@@ -191,6 +214,7 @@ export default declare((api, opts) => {
   api.assertVersion(7);
 
   const {
+    bugfixes,
     configPath,
     debug,
     exclude: optionsExclude,
@@ -224,15 +248,17 @@ export default declare((api, opts) => {
       "@babel/preset-env: esmodules and browsers targets have been specified together.",
     );
     console.log(
+      // $FlowIgnore
       `\`browsers\` target, \`${optionsTargets.browsers}\` will be ignored.`,
     );
     console.log("");
   }
 
-  const targets = getTargets(optionsTargets, {
-    ignoreBrowserslistConfig,
-    configPath,
-  });
+  const targets = getTargets(
+    // $FlowIgnore optionsTargets doesn't have an "uglify" property anymore
+    (optionsTargets: InputTargets),
+    { ignoreBrowserslistConfig, configPath },
+  );
   const include = transformIncludesAndExcludes(optionsInclude);
   const exclude = transformIncludesAndExcludes(optionsExclude);
 
@@ -251,7 +277,7 @@ export default declare((api, opts) => {
   });
 
   const pluginNames = filterItems(
-    shippedProposals ? pluginList : pluginListWithoutProposals,
+    getPluginList(shippedProposals, bugfixes),
     include.plugins,
     exclude.plugins,
     transformTargets,
@@ -288,7 +314,7 @@ export default declare((api, opts) => {
     console.log(`\nUsing modules transform: ${modules.toString()}`);
     console.log("\nUsing plugins:");
     pluginNames.forEach(pluginName => {
-      logPluginOrPolyfill(pluginName, targets, pluginList);
+      logPluginOrPolyfill(pluginName, targets, pluginsList);
     });
 
     if (!useBuiltIns) {

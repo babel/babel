@@ -1,114 +1,35 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 39,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 2,
-      "column": 31
-    }
-  },
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":31}},
   "errors": [
     "SyntaxError: Explicit inexact syntax must appear at the end of an inexact object (2:21)"
   ],
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 39,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 2,
-        "column": 31
-      }
-    },
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":31}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "TypeAlias",
-        "start": 8,
-        "end": 39,
-        "loc": {
-          "start": {
-            "line": 2,
-            "column": 0
-          },
-          "end": {
-            "line": 2,
-            "column": 31
-          }
-        },
+        "start":8,"end":39,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":31}},
         "id": {
           "type": "Identifier",
-          "start": 13,
-          "end": 14,
-          "loc": {
-            "start": {
-              "line": 2,
-              "column": 5
-            },
-            "end": {
-              "line": 2,
-              "column": 6
-            },
-            "identifierName": "U"
-          },
+          "start":13,"end":14,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":6},"identifierName":"U"},
           "name": "U"
         },
         "typeParameters": null,
         "right": {
           "type": "ObjectTypeAnnotation",
-          "start": 17,
-          "end": 38,
-          "loc": {
-            "start": {
-              "line": 2,
-              "column": 9
-            },
-            "end": {
-              "line": 2,
-              "column": 30
-            }
-          },
+          "start":17,"end":38,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":30}},
           "callProperties": [],
           "properties": [
             {
               "type": "ObjectTypeProperty",
-              "start": 18,
-              "end": 27,
-              "loc": {
-                "start": {
-                  "line": 2,
-                  "column": 10
-                },
-                "end": {
-                  "line": 2,
-                  "column": 19
-                }
-              },
+              "start":18,"end":27,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":19}},
               "key": {
                 "type": "Identifier",
-                "start": 18,
-                "end": 19,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 10
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 11
-                  },
-                  "identifierName": "x"
-                },
+                "start":18,"end":19,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11},"identifierName":"x"},
                 "name": "x"
               },
               "static": false,
@@ -117,18 +38,7 @@
               "method": false,
               "value": {
                 "type": "NumberTypeAnnotation",
-                "start": 21,
-                "end": 27,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 13
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 19
-                  }
-                }
+                "start":21,"end":27,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":19}}
               },
               "variance": null,
               "optional": false
@@ -143,18 +53,7 @@
           {
             "type": "CommentLine",
             "value": "@flow",
-            "start": 0,
-            "end": 7,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 0
-              },
-              "end": {
-                "line": 1,
-                "column": 7
-              }
-            }
+            "start":0,"end":7,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":7}}
           }
         ]
       }
@@ -165,18 +64,7 @@
     {
       "type": "CommentLine",
       "value": "@flow",
-      "start": 0,
-      "end": 7,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 7
-        }
-      }
+      "start":0,"end":7,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":7}}
     }
   ]
 }

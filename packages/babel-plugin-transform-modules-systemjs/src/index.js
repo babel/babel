@@ -2,7 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import hoistVariables from "@babel/helper-hoist-variables";
 import { template, types as t } from "@babel/core";
 import { getImportSource } from "babel-plugin-dynamic-import-node/utils";
-import { rewriteThis } from "@babel/helper-module-transforms";
+import { rewriteThis, getModuleName } from "@babel/helper-module-transforms";
 
 const buildTemplate = template(`
   SYSTEM_REGISTER(MODULE_NAME, SOURCES, function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
@@ -501,7 +501,7 @@ export default declare((api, options) => {
             );
           });
 
-          let moduleName = this.getModuleName();
+          let moduleName = getModuleName(this.file.opts, options);
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
           hoistVariables(

@@ -2,33 +2,32 @@ import { NODE_FIELDS } from "../definitions";
 
 const has = Function.call.bind(Object.prototype.hasOwnProperty);
 
-function cloneIfNode(obj, deep) {
-  if (
-    obj &&
-    typeof obj.type === "string" &&
-    // CommentLine and CommentBlock are used in File#comments, but they are
-    // not defined in babel-types
-    obj.type !== "CommentLine" &&
-    obj.type !== "CommentBlock"
-  ) {
-    return cloneNode(obj, deep);
+// This function will never be called for comments, only for real nodes.
+function cloneIfNode(obj, deep, withoutLoc) {
+  if (obj && typeof obj.type === "string") {
+    return cloneNode(obj, deep, withoutLoc);
   }
 
   return obj;
 }
 
-function cloneIfNodeOrArray(obj, deep) {
+function cloneIfNodeOrArray(obj, deep, withoutLoc) {
   if (Array.isArray(obj)) {
-    return obj.map(node => cloneIfNode(node, deep));
+    return obj.map(node => cloneIfNode(node, deep, withoutLoc));
   }
-  return cloneIfNode(obj, deep);
+  return cloneIfNode(obj, deep, withoutLoc);
 }
 
 /**
  * Create a clone of a `node` including only properties belonging to the node.
  * If the second parameter is `false`, cloneNode performs a shallow clone.
+ * If the third parameter is true, the cloned nodes exclude location properties.
  */
-export default function cloneNode<T: Object>(node: T, deep: boolean = true): T {
+export default function cloneNode<T: Object>(
+  node: T,
+  deep: boolean = true,
+  withoutLoc: boolean = false,
+): T {
   if (!node) return node;
 
   const { type } = node;
@@ -44,7 +43,7 @@ export default function cloneNode<T: Object>(node: T, deep: boolean = true): T {
 
     if (has(node, "typeAnnotation")) {
       newNode.typeAnnotation = deep
-        ? cloneIfNodeOrArray(node.typeAnnotation, true)
+        ? cloneIfNodeOrArray(node.typeAnnotation, true, withoutLoc)
         : node.typeAnnotation;
     }
   } else if (!has(NODE_FIELDS, type)) {
@@ -52,24 +51,45 @@ export default function cloneNode<T: Object>(node: T, deep: boolean = true): T {
   } else {
     for (const field of Object.keys(NODE_FIELDS[type])) {
       if (has(node, field)) {
-        newNode[field] = deep
-          ? cloneIfNodeOrArray(node[field], true)
-          : node[field];
+        if (deep) {
+          newNode[field] =
+            type === "File" && field === "comments"
+              ? maybeCloneComments(node.comments, deep, withoutLoc)
+              : cloneIfNodeOrArray(node[field], true, withoutLoc);
+        } else {
+          newNode[field] = node[field];
+        }
       }
     }
   }
 
   if (has(node, "loc")) {
-    newNode.loc = node.loc;
+    if (withoutLoc) {
+      newNode.loc = null;
+    } else {
+      newNode.loc = node.loc;
+    }
   }
   if (has(node, "leadingComments")) {
-    newNode.leadingComments = node.leadingComments;
+    newNode.leadingComments = maybeCloneComments(
+      node.leadingComments,
+      deep,
+      withoutLoc,
+    );
   }
   if (has(node, "innerComments")) {
-    newNode.innerComments = node.innerComments;
+    newNode.innerComments = maybeCloneComments(
+      node.innerComments,
+      deep,
+      withoutLoc,
+    );
   }
   if (has(node, "trailingComments")) {
-    newNode.trailingComments = node.trailingComments;
+    newNode.trailingComments = maybeCloneComments(
+      node.trailingComments,
+      deep,
+      withoutLoc,
+    );
   }
   if (has(node, "extra")) {
     newNode.extra = {
@@ -78,4 +98,12 @@ export default function cloneNode<T: Object>(node: T, deep: boolean = true): T {
   }
 
   return newNode;
+}
+
+function cloneCommentsWithoutLoc<T: Object>(comments: T[]): T {
+  return comments.map(({ type, value }) => ({ type, value, loc: null }));
+}
+
+function maybeCloneComments(comments, deep, withoutLoc) {
+  return deep && withoutLoc ? cloneCommentsWithoutLoc(comments) : comments;
 }

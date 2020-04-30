@@ -7,7 +7,7 @@ exports["default"] = void 0;
 
 var _default = function _default(_ref) {
   var _onClick = _ref.onClick;
-  return React.createElement("div", {
+  return /*#__PURE__*/React.createElement("div", {
     onClick: function onClick() {
       return _onClick();
     }

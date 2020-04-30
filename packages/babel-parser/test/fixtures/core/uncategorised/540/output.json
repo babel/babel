@@ -1,94 +1,28 @@
 {
   "type": "File",
-  "start": 0,
-  "end": 20,
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
-    },
-    "end": {
-      "line": 1,
-      "column": 20
-    }
-  },
+  "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}},
   "program": {
     "type": "Program",
-    "start": 0,
-    "end": 20,
-    "loc": {
-      "start": {
-        "line": 1,
-        "column": 0
-      },
-      "end": {
-        "line": 1,
-        "column": 20
-      }
-    },
+    "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start": 0,
-        "end": 20,
-        "loc": {
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 1,
-            "column": 20
-          }
-        },
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}},
         "expression": {
           "type": "BinaryExpression",
-          "start": 1,
-          "end": 19,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 1
-            },
-            "end": {
-              "line": 1,
-              "column": 19
-            }
-          },
+          "start":1,"end":19,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":19}},
           "left": {
             "type": "FunctionExpression",
-            "start": 1,
-            "end": 15,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 1
-              },
-              "end": {
-                "line": 1,
-                "column": 15
-              }
-            },
+            "start":1,"end":15,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":15}},
             "id": null,
             "generator": false,
             "async": false,
             "params": [],
             "body": {
               "type": "BlockStatement",
-              "start": 13,
-              "end": 15,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 13
-                },
-                "end": {
-                  "line": 1,
-                  "column": 15
-                }
-              },
+              "start":13,"end":15,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":15}},
               "body": [],
               "directives": []
             }
@@ -96,18 +30,7 @@
           "operator": "/",
           "right": {
             "type": "NumericLiteral",
-            "start": 18,
-            "end": 19,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 18
-              },
-              "end": {
-                "line": 1,
-                "column": 19
-              }
-            },
+            "start":18,"end":19,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":19}},
             "extra": {
               "rawValue": 1,
               "raw": "1"

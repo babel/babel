@@ -1,24 +1,14 @@
-var _getIterator = require("@babel/runtime-corejs2/core-js/get-iterator");
+var _createForOfIteratorHelper = require("@babel/runtime-corejs2/helpers/createForOfIteratorHelper");
 
-var _iteratorNormalCompletion = true;
-var _didIteratorError = false;
-var _iteratorError = undefined;
+var _iterator = _createForOfIteratorHelper(arr),
+    _step;
 
 try {
-  for (var _iterator = _getIterator(arr), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+  for (_iterator.s(); !(_step = _iterator.n()).done;) {
     var i = _step.value;
   }
 } catch (err) {
-  _didIteratorError = true;
-  _iteratorError = err;
+  _iterator.e(err);
 } finally {
-  try {
-    if (!_iteratorNormalCompletion && _iterator.return != null) {
-      _iterator.return();
-    }
-  } finally {
-    if (_didIteratorError) {
-      throw _iteratorError;
-    }
-  }
+  _iterator.f();
 }

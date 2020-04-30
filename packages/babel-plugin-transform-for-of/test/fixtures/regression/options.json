@@ -1,3 +1,6 @@
 {
-  "plugins": ["transform-for-of"]
+  "plugins": [
+    "transform-for-of",
+    ["external-helpers", { "helperVersion": "7.100.0" }]
+  ]
 }

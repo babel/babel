@@ -575,6 +575,10 @@ export function ObjectTypeProperty(node: Object) {
     this.word("static");
     this.space();
   }
+  if (node.kind === "get" || node.kind === "set") {
+    this.word(node.kind);
+    this.space();
+  }
   this._variance(node);
   this.print(node.key, node);
   if (node.optional) this.token("?");
@@ -594,6 +598,10 @@ export function QualifiedTypeIdentifier(node: Object) {
   this.print(node.qualification, node);
   this.token(".");
   this.print(node.id, node);
+}
+
+export function SymbolTypeAnnotation() {
+  this.word("symbol");
 }
 
 function orSeparator() {

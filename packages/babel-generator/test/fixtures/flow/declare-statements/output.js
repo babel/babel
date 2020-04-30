@@ -13,6 +13,10 @@ declare class A {
   static x: string,
 }
 declare class A {
+  set fooProp(value: number): void,
+  get fooProp(): number,
+}
+declare class A {
   static [indexer: number]: string
 }
 declare class A {
@@ -42,3 +46,4 @@ declare opaque type Foo<T>: Bar<T>;
 declare opaque type ID;
 declare opaque type num: number;
 declare opaque type NumArray;
+declare var sym: symbol;

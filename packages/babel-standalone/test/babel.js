@@ -68,7 +68,7 @@
         },
       ).code;
       expect(output).toBe(
-        'const someDiv = React.createElement("div", null, getMessage());',
+        'const someDiv = /*#__PURE__*/React.createElement("div", null, getMessage());',
       );
     });
 

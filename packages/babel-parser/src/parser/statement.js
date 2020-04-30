@@ -850,10 +850,11 @@ export default class StatementParser extends ExpressionParser {
     afterBlockParse?: (hasStrictModeDirective: boolean) => void,
   ): void {
     const octalPositions = [];
+    const oldStrict = this.state.strict;
+    let hasStrictModeDirective = false;
     let parsedNonDirective = false;
-    let oldStrict = null;
 
-    while (!this.eat(end)) {
+    while (!this.match(end)) {
       // Track octal literals that occur before a "use strict" directive.
       if (!parsedNonDirective && this.state.octalPositions.length) {
         octalPositions.push(...this.state.octalPositions);
@@ -865,8 +866,8 @@ export default class StatementParser extends ExpressionParser {
         const directive = this.stmtToDirective(stmt);
         directives.push(directive);
 
-        if (oldStrict === null && directive.value.value === "use strict") {
-          oldStrict = this.state.strict;
+        if (!hasStrictModeDirective && directive.value.value === "use strict") {
+          hasStrictModeDirective = true;
           this.setStrict(true);
         }
 
@@ -887,15 +888,14 @@ export default class StatementParser extends ExpressionParser {
     }
 
     if (afterBlockParse) {
-      afterBlockParse.call(
-        this,
-        /* hasStrictModeDirective */ oldStrict !== null,
-      );
+      afterBlockParse.call(this, hasStrictModeDirective);
     }
 
-    if (oldStrict === false) {
+    if (!oldStrict) {
       this.setStrict(false);
     }
+
+    this.next();
   }
 
   // Parse a regular `for` loop. The disambiguation code in
@@ -1156,7 +1156,7 @@ export default class StatementParser extends ExpressionParser {
 
     this.parseClassId(node, isStatement, optionalId);
     this.parseClassSuper(node);
-    node.body = this.parseClassBody(!!node.superClass);
+    node.body = this.parseClassBody(!!node.superClass, oldStrict);
 
     this.state.strict = oldStrict;
 
@@ -1183,7 +1183,10 @@ export default class StatementParser extends ExpressionParser {
     );
   }
 
-  parseClassBody(constructorAllowsSuper: boolean): N.ClassBody {
+  parseClassBody(
+    constructorAllowsSuper: boolean,
+    oldStrict?: boolean,
+  ): N.ClassBody {
     this.classScope.enter();
 
     const state = { hadConstructor: false };
@@ -1197,7 +1200,7 @@ export default class StatementParser extends ExpressionParser {
     // contexts within the class body. They are permitted in test expressions,
     // outside of the class body.
     this.withTopicForbiddingContext(() => {
-      while (!this.eat(tt.braceR)) {
+      while (!this.match(tt.braceR)) {
         if (this.eat(tt.semi)) {
           if (decorators.length > 0) {
             throw this.raise(this.state.lastTokEnd, Errors.DecoratorSemicolon);
@@ -1231,6 +1234,12 @@ export default class StatementParser extends ExpressionParser {
       }
     });
 
+    if (!oldStrict) {
+      this.state.strict = false;
+    }
+
+    this.next();
+
     if (decorators.length) {
       throw this.raise(this.state.start, Errors.TrailingDecorator);
     }
@@ -1240,50 +1249,59 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(classBody, "ClassBody");
   }
 
+  // returns true if the current identifier is a method/field name,
+  // false if it is a modifier
+  parseClassMemberFromModifier(
+    classBody: N.ClassBody,
+    member: N.ClassMember,
+  ): boolean {
+    const containsEsc = this.state.containsEsc;
+    const key = this.parseIdentifier(true); // eats the modifier
+
+    if (this.isClassMethod()) {
+      const method: N.ClassMethod = (member: any);
+
+      // a method named like the modifier
+      method.kind = "method";
+      method.computed = false;
+      method.key = key;
+      method.static = false;
+      this.pushClassMethod(
+        classBody,
+        method,
+        false,
+        false,
+        /* isConstructor */ false,
+        false,
+      );
+      return true;
+    } else if (this.isClassProperty()) {
+      const prop: N.ClassProperty = (member: any);
+
+      // a property named like the modifier
+      prop.computed = false;
+      prop.key = key;
+      prop.static = false;
+      classBody.body.push(this.parseClassProperty(prop));
+      return true;
+    } else if (containsEsc) {
+      throw this.unexpected();
+    }
+
+    return false;
+  }
+
   parseClassMember(
     classBody: N.ClassBody,
     member: N.ClassMember,
     state: { hadConstructor: boolean },
     constructorAllowsSuper: boolean,
   ): void {
-    let isStatic = false;
-    const containsEsc = this.state.containsEsc;
+    const isStatic = this.isContextual("static");
 
-    if (this.match(tt.name) && this.state.value === "static") {
-      const key = this.parseIdentifier(true); // eats 'static'
-
-      if (this.isClassMethod()) {
-        const method: N.ClassMethod = (member: any);
-
-        // a method named 'static'
-        method.kind = "method";
-        method.computed = false;
-        method.key = key;
-        method.static = false;
-        this.pushClassMethod(
-          classBody,
-          method,
-          false,
-          false,
-          /* isConstructor */ false,
-          false,
-        );
-        return;
-      } else if (this.isClassProperty()) {
-        const prop: N.ClassProperty = (member: any);
-
-        // a property named 'static'
-        prop.computed = false;
-        prop.key = key;
-        prop.static = false;
-        classBody.body.push(this.parseClassProperty(prop));
-        return;
-      } else if (containsEsc) {
-        throw this.unexpected();
-      }
-
-      // otherwise something static
-      isStatic = true;
+    if (isStatic && this.parseClassMemberFromModifier(classBody, member)) {
+      // a class element named 'static'
+      return;
     }
 
     this.parseClassMemberWithIsStatic(
@@ -1816,10 +1834,28 @@ export default class StatementParser extends ExpressionParser {
 
   isExportDefaultSpecifier(): boolean {
     if (this.match(tt.name)) {
-      return this.state.value !== "async" && this.state.value !== "let";
-    }
-
-    if (!this.match(tt._default)) {
+      const value = this.state.value;
+      if (value === "async" || value === "let") {
+        return false;
+      }
+      if (
+        (value === "type" || value === "interface") &&
+        !this.state.containsEsc
+      ) {
+        const l = this.lookahead();
+        // If we see any variable name other than `from` after `type` keyword,
+        // we consider it as flow/typescript type exports
+        // note that this approach may fail on some pedantic cases
+        // export type from = number
+        if (
+          (l.type === tt.name && l.value !== "from") ||
+          l.type === tt.braceL
+        ) {
+          this.expectOnePlugin(["flow", "typescript"]);
+          return false;
+        }
+      }
+    } else if (!this.match(tt._default)) {
       return false;
     }
 

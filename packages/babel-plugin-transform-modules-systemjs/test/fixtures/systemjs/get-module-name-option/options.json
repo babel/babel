@@ -1,4 +1,9 @@
 {
-  "moduleIds": true,
-  "moduleId": "my custom module name"
+  "plugins": [
+    "external-helpers",
+    ["transform-modules-systemjs", {
+      "moduleIds": true,
+      "moduleId": "my custom module name"
+    }]
+  ]
 }

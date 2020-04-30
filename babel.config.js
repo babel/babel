@@ -8,6 +8,7 @@ module.exports = function(api) {
   const envOptsNoTargets = {
     loose: true,
     modules: false,
+    shippedProposals: true,
     exclude: ["transform-typeof-symbol"],
   };
   const envOpts = Object.assign({}, envOptsNoTargets);
@@ -100,14 +101,10 @@ module.exports = function(api) {
       "@babel/plugin-transform-flow-strip-types",
       ["@babel/proposal-class-properties", { loose: true }],
       "@babel/proposal-export-namespace-from",
-      "@babel/proposal-numeric-separator",
       [
         "@babel/proposal-object-rest-spread",
         { useBuiltIns: true, loose: true },
       ],
-      ["@babel/plugin-proposal-optional-chaining", { loose: true }],
-      ["@babel/plugin-proposal-nullish-coalescing-operator", { loose: true }],
-
       compileDynamicImport ? dynamicImportUrlToPath : null,
       compileDynamicImport ? "@babel/plugin-proposal-dynamic-import" : null,
 
@@ -115,7 +112,10 @@ module.exports = function(api) {
     ].filter(Boolean),
     overrides: [
       {
-        test: "packages/babel-parser",
+        test: [
+          "packages/babel-parser",
+          "packages/babel-helper-validator-identifier",
+        ],
         plugins: [
           "babel-plugin-transform-charcodes",
           ["@babel/transform-for-of", { assumeArray: true }],

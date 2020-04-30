@@ -1,6 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import { types as t } from "@babel/core";
+import { convertFunctionParams } from "@babel/plugin-transform-parameters";
 
 // TODO: Remove in Babel 8
 // @babel/types <=7.3.3 counts FOO as referenced in var { x: FOO }.
@@ -177,9 +178,9 @@ export default declare((api, opts) => {
     ];
   }
 
-  function replaceRestElement(parentPath, paramPath) {
+  function replaceRestElement(parentPath, paramPath, container) {
     if (paramPath.isAssignmentPattern()) {
-      replaceRestElement(parentPath, paramPath.get("left"));
+      replaceRestElement(parentPath, paramPath.get("left"), container);
       return;
     }
 
@@ -187,7 +188,7 @@ export default declare((api, opts) => {
       const elements = paramPath.get("elements");
 
       for (let i = 0; i < elements.length; i++) {
-        replaceRestElement(parentPath, elements[i]);
+        replaceRestElement(parentPath, elements[i], container);
       }
     }
 
@@ -198,8 +199,12 @@ export default declare((api, opts) => {
         t.variableDeclarator(paramPath.node, uid),
       ]);
 
-      parentPath.ensureBlock();
-      parentPath.get("body").unshiftContainer("body", declar);
+      if (container) {
+        container.push(declar);
+      } else {
+        parentPath.ensureBlock();
+        parentPath.get("body").unshiftContainer("body", declar);
+      }
       paramPath.replaceWith(t.cloneNode(uid));
     }
   }
@@ -209,14 +214,74 @@ export default declare((api, opts) => {
     inherits: syntaxObjectRestSpread,
 
     visitor: {
-      // taken from transform-parameters/src/destructuring.js
       // function a({ b, ...c }) {}
       Function(path) {
         const params = path.get("params");
-        for (let i = params.length - 1; i >= 0; i--) {
-          replaceRestElement(params[i].parentPath, params[i]);
+        const paramsWithRestElement = new Set();
+        const idsInRestParams = new Set();
+        for (let i = 0; i < params.length; ++i) {
+          const param = params[i];
+          if (hasRestElement(param)) {
+            paramsWithRestElement.add(i);
+            for (const name of Object.keys(param.getBindingIdentifiers())) {
+              idsInRestParams.add(name);
+            }
+          }
+        }
+
+        // if true, a parameter exists that has an id in its initializer
+        // that is also an id bound in a rest parameter
+        // example: f({...R}, a = R)
+        let idInRest = false;
+
+        const IdentifierHandler = function(path, functionScope) {
+          const name = path.node.name;
+          if (
+            path.scope.getBinding(name) === functionScope.getBinding(name) &&
+            idsInRestParams.has(name)
+          ) {
+            idInRest = true;
+            path.stop();
+          }
+        };
+
+        let i;
+        for (i = 0; i < params.length && !idInRest; ++i) {
+          const param = params[i];
+          if (!paramsWithRestElement.has(i)) {
+            if (param.isReferencedIdentifier() || param.isBindingIdentifier()) {
+              IdentifierHandler(path, path.scope);
+            } else {
+              param.traverse(
+                {
+                  "Scope|TypeAnnotation|TSTypeAnnotation": path => path.skip(),
+                  "ReferencedIdentifier|BindingIdentifier": IdentifierHandler,
+                },
+                path.scope,
+              );
+            }
+          }
+        }
+
+        if (!idInRest) {
+          for (let i = 0; i < params.length; ++i) {
+            const param = params[i];
+            if (paramsWithRestElement.has(i)) {
+              replaceRestElement(param.parentPath, param);
+            }
+          }
+        } else {
+          const shouldTransformParam = idx =>
+            idx >= i - 1 || paramsWithRestElement.has(idx);
+          convertFunctionParams(
+            path,
+            loose,
+            shouldTransformParam,
+            replaceRestElement,
+          );
         }
       },
+
       // adapted from transform-destructuring/src/index.js#pushObjectRest
       // const { a, ...b } = c;
       VariableDeclarator(path, file) {
@@ -321,6 +386,7 @@ export default declare((api, opts) => {
           }
         });
       },
+
       // taken from transform-destructuring/src/index.js#visitor
       // export var { a, ...b } = c;
       ExportNamedDeclaration(path) {
@@ -329,7 +395,7 @@ export default declare((api, opts) => {
 
         const hasRest = declaration
           .get("declarations")
-          .some(path => hasRestElement(path.get("id")));
+          .some(path => hasObjectPatternRestElement(path.get("id")));
         if (!hasRest) return;
 
         const specifiers = [];
@@ -346,11 +412,13 @@ export default declare((api, opts) => {
         path.replaceWith(declaration.node);
         path.insertAfter(t.exportNamedDeclaration(null, specifiers));
       },
+
       // try {} catch ({a, ...b}) {}
       CatchClause(path) {
         const paramPath = path.get("param");
         replaceRestElement(paramPath.parentPath, paramPath);
       },
+
       // ({a, ...b} = c);
       AssignmentExpression(path, file) {
         const leftPath = path.get("left");
@@ -393,6 +461,7 @@ export default declare((api, opts) => {
           path.replaceWithMultiple(nodes);
         }
       },
+
       // taken from transform-destructuring/src/index.js#visitor
       ForXStatement(path) {
         const { node, scope } = path;
@@ -442,6 +511,7 @@ export default declare((api, opts) => {
           );
         }
       },
+
       // [{a, ...b}] = c;
       ArrayPattern(path) {
         const objectPatterns = [];
@@ -473,30 +543,10 @@ export default declare((api, opts) => {
           );
         }
       },
+
       // var a = { ...b, ...c }
       ObjectExpression(path, file) {
         if (!hasSpread(path.node)) return;
-
-        const args = [];
-        let props = [];
-
-        function push() {
-          args.push(t.objectExpression(props));
-          props = [];
-        }
-
-        for (const prop of (path.node.properties: Array)) {
-          if (t.isSpreadElement(prop)) {
-            push();
-            args.push(prop.argument);
-          } else {
-            props.push(prop);
-          }
-        }
-
-        if (props.length) {
-          push();
-        }
 
         let helper;
         if (loose) {
@@ -516,7 +566,40 @@ export default declare((api, opts) => {
           }
         }
 
-        path.replaceWith(t.callExpression(helper, args));
+        let exp = null;
+        let props = [];
+
+        function make() {
+          const hadProps = props.length > 0;
+          const obj = t.objectExpression(props);
+          props = [];
+
+          if (!exp) {
+            exp = t.callExpression(helper, [obj]);
+            return;
+          }
+
+          exp = t.callExpression(t.cloneNode(helper), [
+            exp,
+            // If we have static props, we need to insert an empty object
+            // becuase the odd arguments are copied with [[Get]], not
+            // [[GetOwnProperty]]
+            ...(hadProps ? [t.objectExpression([]), obj] : []),
+          ]);
+        }
+
+        for (const prop of (path.node.properties: Array)) {
+          if (t.isSpreadElement(prop)) {
+            make();
+            exp.arguments.push(prop.argument);
+          } else {
+            props.push(prop);
+          }
+        }
+
+        if (props.length) make();
+
+        path.replaceWith(exp);
       },
     },
   };

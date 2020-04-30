@@ -10,11 +10,13 @@ var Test = /*#__PURE__*/function () {
   babelHelpers.createClass(Test, [{
     key: "invite",
     value: function invite() {
+      var _this = this;
+
       var p = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : a;
       return function () {
         var a;
-        this;
-      }.apply(this);
+        _this;
+      }();
     }
   }]);
   return Test;

@@ -60,7 +60,7 @@ function buildBabel(exclude, sourcesGlob = defaultSourcesGlob) {
   let stream = gulp.src(sourcesGlob, { base: __dirname });
 
   if (exclude) {
-    const filters = exclude.map(p => `!**/${p}/**`);
+    const filters = exclude.map(p => `!**/${p.src}/**`);
     filters.unshift("**");
     stream = stream.pipe(filter(filters));
   }
@@ -226,9 +226,6 @@ gulp.task("build-rollup", () => buildRollup(libBundles));
 gulp.task("build-babel-standalone", () => buildRollup(standaloneBundle));
 
 gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
-gulp.task("build-babel-types", () =>
-  buildBabel(/* exclude */ libBundles, "packages/babel-types/src/**/*.js")
-);
 gulp.task("build", gulp.parallel("build-rollup", "build-babel"));
 
 gulp.task("default", gulp.series("build"));

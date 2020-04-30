@@ -32,6 +32,16 @@ const isClassExtendsClause = (node: Object, parent: Object): boolean =>
   (t.isClassDeclaration(parent) || t.isClassExpression(parent)) &&
   parent.superClass === node;
 
+const hasPostfixPart = (node: Object, parent: Object) =>
+  ((t.isMemberExpression(parent) || t.isOptionalMemberExpression(parent)) &&
+    parent.object === node) ||
+  ((t.isCallExpression(parent) ||
+    t.isOptionalCallExpression(parent) ||
+    t.isNewExpression(parent)) &&
+    parent.callee === node) ||
+  (t.isTaggedTemplateExpression(parent) && parent.tag === node) ||
+  t.isTSNonNullExpression(parent);
+
 export function NullableTypeAnnotation(node: Object, parent: Object): boolean {
   return t.isArrayTypeAnnotation(parent);
 }
@@ -56,15 +66,7 @@ export function FunctionTypeAnnotation(
 }
 
 export function UpdateExpression(node: Object, parent: Object): boolean {
-  return (
-    // (foo++).test(), (foo++)[0]
-    t.isMemberExpression(parent, { object: node }) ||
-    // (foo++)()
-    t.isCallExpression(parent, { callee: node }) ||
-    // new (foo++)()
-    t.isNewExpression(parent, { callee: node }) ||
-    isClassExtendsClause(node, parent)
-  );
+  return hasPostfixPart(node, parent) || isClassExtendsClause(node, parent);
 }
 
 export function ObjectExpression(
@@ -96,10 +98,8 @@ export function Binary(node: Object, parent: Object): boolean {
   }
 
   if (
-    ((t.isCallExpression(parent) || t.isNewExpression(parent)) &&
-      parent.callee === node) ||
+    hasPostfixPart(node, parent) ||
     t.isUnaryLike(parent) ||
-    (t.isMemberExpression(parent) && parent.object === node) ||
     t.isAwaitExpression(parent)
   ) {
     return true;
@@ -195,9 +195,7 @@ export function YieldExpression(node: Object, parent: Object): boolean {
   return (
     t.isBinary(parent) ||
     t.isUnaryLike(parent) ||
-    t.isCallExpression(parent) ||
-    t.isMemberExpression(parent) ||
-    t.isNewExpression(parent) ||
+    hasPostfixPart(node, parent) ||
     (t.isAwaitExpression(parent) && t.isYieldExpression(node)) ||
     (t.isConditionalExpression(parent) && node === parent.test) ||
     isClassExtendsClause(node, parent)
@@ -216,9 +214,7 @@ export function ClassExpression(
 
 export function UnaryLike(node: Object, parent: Object): boolean {
   return (
-    t.isMemberExpression(parent, { object: node }) ||
-    t.isCallExpression(parent, { callee: node }) ||
-    t.isNewExpression(parent, { callee: node }) ||
+    hasPostfixPart(node, parent) ||
     t.isBinaryExpression(parent, { operator: "**", left: node }) ||
     isClassExtendsClause(node, parent)
   );
@@ -242,9 +238,6 @@ export function ConditionalExpression(node: Object, parent: Object): boolean {
     t.isBinary(parent) ||
     t.isConditionalExpression(parent, { test: node }) ||
     t.isAwaitExpression(parent) ||
-    t.isOptionalMemberExpression(parent, { object: node }) ||
-    t.isOptionalCallExpression(parent, { callee: node }) ||
-    t.isTaggedTemplateExpression(parent) ||
     t.isTSTypeAssertion(parent) ||
     t.isTSAsExpression(parent)
   ) {
@@ -264,12 +257,7 @@ export function OptionalMemberExpression(
   );
 }
 
-export function OptionalCallExpression(node: Object, parent: Object): boolean {
-  return (
-    t.isCallExpression(parent, { callee: node }) ||
-    t.isMemberExpression(parent, { object: node })
-  );
-}
+export { OptionalMemberExpression as OptionalCallExpression };
 
 export function AssignmentExpression(
   node: Object,
@@ -308,7 +296,6 @@ function isFirstInStatement(
   while (i > 0) {
     if (
       t.isExpressionStatement(parent, { expression: node }) ||
-      t.isTaggedTemplateExpression(parent) ||
       (considerDefaultExports &&
         t.isExportDefaultDeclaration(parent, { declaration: node })) ||
       (considerArrow && t.isArrowFunctionExpression(parent, { body: node }))
@@ -317,9 +304,8 @@ function isFirstInStatement(
     }
 
     if (
-      t.isCallExpression(parent, { callee: node }) ||
+      (hasPostfixPart(node, parent) && !t.isNewExpression(parent)) ||
       (t.isSequenceExpression(parent) && parent.expressions[0] === node) ||
-      t.isMemberExpression(parent, { object: node }) ||
       t.isConditional(parent, { test: node }) ||
       t.isBinary(parent, { left: node }) ||
       t.isAssignmentExpression(parent, { left: node })

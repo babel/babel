@@ -2,6 +2,7 @@ import * as helpers from "@babel/helpers";
 import generator from "@babel/generator";
 import template from "@babel/template";
 import * as t from "@babel/types";
+import File from "../transformation/file/file";
 
 // Wrapped to avoid wasting time parsing this when almost no-one uses
 // build-external-helpers.
@@ -136,6 +137,7 @@ function buildHelpers(body, namespace, whitelist) {
 
     const ref = (refs[name] = getHelperReference(name));
 
+    helpers.ensure(name, File);
     const { nodes } = helpers.get(name, getHelperReference, ref);
 
     body.push(...nodes);

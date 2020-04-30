@@ -17,14 +17,16 @@ let Hello = /*#__PURE__*/function () {
 let Outer = /*#__PURE__*/function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
 
+  var _super = babelHelpers.createSuper(Outer);
+
   function Outer() {
     let _babelHelpers$get$cal;
 
-    var _this;
+    var _thisSuper, _this;
 
     babelHelpers.classCallCheck(this, Outer);
-    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Outer).call(this));
-    _babelHelpers$get$cal = babelHelpers.get(babelHelpers.getPrototypeOf(Outer.prototype), "toString", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this));
+    _this = _super.call(this);
+    _babelHelpers$get$cal = babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper);
 
     let Inner = function Inner() {
       babelHelpers.classCallCheck(this, Inner);

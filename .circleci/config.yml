@@ -40,12 +40,12 @@ aliases:
 executors:
   node-executor:
     docker:
-      - image: circleci/node:13
+      - image: circleci/node:latest
     working_directory: ~/babel
   # e2e-vue-cli test requires chromium
   node-browsers-executor:
     docker:
-      - image: circleci/node:13-browsers
+      - image: circleci/node:latest-browsers
     working_directory: ~/babel
 
 jobs:
@@ -142,6 +142,14 @@ jobs:
           at: /tmp/verdaccio-workspace
       - run: ./scripts/integration-tests/e2e-babel.sh
 
+  e2e-babel-old-version:
+    executor: node-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/verdaccio-workspace
+      - run: ./scripts/integration-tests/e2e-babel-old-version.sh
+
   e2e-create-react-app:
     executor: node-executor
     steps:
@@ -189,6 +197,9 @@ workflows:
     jobs:
       - publish-verdaccio
       - e2e-babel:
+          requires:
+            - publish-verdaccio
+      - e2e-babel-old-version:
           requires:
             - publish-verdaccio
       - e2e-create-react-app:

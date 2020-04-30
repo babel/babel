@@ -3,9 +3,11 @@ var TestEmpty = /*#__PURE__*/function (_ref) {
 
   babelHelpers.inherits(TestEmpty, _ref);
 
+  var _super = babelHelpers.createSuper(TestEmpty);
+
   function TestEmpty() {
     babelHelpers.classCallCheck(this, TestEmpty);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(TestEmpty).apply(this, arguments));
+    return _super.apply(this, arguments);
   }
 
   return TestEmpty;
@@ -24,9 +26,11 @@ var TestConstructorOnly = /*#__PURE__*/function (_ref2) {
 
   babelHelpers.inherits(TestConstructorOnly, _ref2);
 
+  var _super2 = babelHelpers.createSuper(TestConstructorOnly);
+
   function TestConstructorOnly() {
     babelHelpers.classCallCheck(this, TestConstructorOnly);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(TestConstructorOnly).apply(this, arguments));
+    return _super2.apply(this, arguments);
   }
 
   return TestConstructorOnly;
@@ -45,9 +49,11 @@ var TestMethodOnly = /*#__PURE__*/function (_ref3) {
 
   babelHelpers.inherits(TestMethodOnly, _ref3);
 
+  var _super3 = babelHelpers.createSuper(TestMethodOnly);
+
   function TestMethodOnly() {
     babelHelpers.classCallCheck(this, TestMethodOnly);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(TestMethodOnly).apply(this, arguments));
+    return _super3.apply(this, arguments);
   }
 
   return TestMethodOnly;
@@ -70,9 +76,11 @@ var TestConstructorAndMethod = /*#__PURE__*/function (_ref4) {
 
   babelHelpers.inherits(TestConstructorAndMethod, _ref4);
 
+  var _super4 = babelHelpers.createSuper(TestConstructorAndMethod);
+
   function TestConstructorAndMethod() {
     babelHelpers.classCallCheck(this, TestConstructorAndMethod);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(TestConstructorAndMethod).apply(this, arguments));
+    return _super4.apply(this, arguments);
   }
 
   return TestConstructorAndMethod;
@@ -95,9 +103,11 @@ var TestMultipleMethods = /*#__PURE__*/function (_ref5) {
 
   babelHelpers.inherits(TestMultipleMethods, _ref5);
 
+  var _super5 = babelHelpers.createSuper(TestMultipleMethods);
+
   function TestMultipleMethods() {
     babelHelpers.classCallCheck(this, TestMultipleMethods);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(TestMultipleMethods).apply(this, arguments));
+    return _super5.apply(this, arguments);
   }
 
   return TestMultipleMethods;

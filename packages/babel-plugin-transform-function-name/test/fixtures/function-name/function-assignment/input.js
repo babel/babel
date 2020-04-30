@@ -11,3 +11,5 @@ baz = 12;
 bar = function() {
   bar();
 };
+
+qux += function() {}

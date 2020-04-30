@@ -4,7 +4,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 (function () {
   var _poll = _asyncToGenerator(function* () {
-    console.log((yield Promise.resolve('Hello')));
+    console.log(yield Promise.resolve('Hello'));
     setTimeout(poll, 1000);
   });
 

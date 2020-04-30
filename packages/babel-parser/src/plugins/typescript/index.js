@@ -1738,7 +1738,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // There are number of things we are going to "maybe" parse, like type arguments on
         // tagged template expressions. If any of them fail, walk it back and continue.
         const result = this.tsTryParseAndCatch(() => {
-          if (!noCalls && this.atPossibleAsync(base)) {
+          if (!noCalls && this.atPossibleAsyncArrow(base)) {
             // Almost certainly this is a generic async function `async <T>() => ...
             // But it might be a call with a type argument `async<T>();`
             const asyncArrowFn = this.tsTryParseGenericAsyncArrowFunction(
@@ -1862,10 +1862,44 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     checkDuplicateExports() {}
 
     parseImport(node: N.Node): N.AnyImport {
-      if (this.match(tt.name) && this.lookahead().type === tt.eq) {
-        return this.tsParseImportEqualsDeclaration(node);
+      if (this.match(tt.name) || this.match(tt.star) || this.match(tt.braceL)) {
+        const ahead = this.lookahead();
+
+        if (this.match(tt.name) && ahead.type === tt.eq) {
+          return this.tsParseImportEqualsDeclaration(node);
+        }
+
+        if (
+          this.isContextual("type") &&
+          // import type, { a } from "b";
+          ahead.type !== tt.comma &&
+          // import type from "a";
+          !(ahead.type === tt.name && ahead.value === "from")
+        ) {
+          node.importKind = "type";
+          this.next();
+        } else {
+          node.importKind = "value";
+        }
       }
-      return super.parseImport(node);
+
+      const importNode = super.parseImport(node);
+      /*:: invariant(importNode.type !== "TSImportEqualsDeclaration") */
+
+      // `import type` can only be used on imports with named imports or with a
+      // default import - but not both
+      if (
+        importNode.importKind === "type" &&
+        importNode.specifiers.length > 1 &&
+        importNode.specifiers[0].type === "ImportDefaultSpecifier"
+      ) {
+        this.raise(
+          importNode.start,
+          "A type-only import can specify a default import or named bindings, but not both.",
+        );
+      }
+
+      return importNode;
     }
 
     parseExport(node: N.Node): N.AnyExport {
@@ -1888,6 +1922,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.semicolon();
         return this.finishNode(decl, "TSNamespaceExportDeclaration");
       } else {
+        if (this.isContextual("type") && this.lookahead().type === tt.braceL) {
+          this.next();
+          node.exportKind = "type";
+        } else {
+          node.exportKind = "value";
+        }
+
         return super.parseExport(node);
       }
     }
@@ -2109,6 +2150,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
       if (!declaration) {
         declaration = super.parseExportDeclaration(node);
+      }
+      if (
+        declaration &&
+        (declaration.type === "TSInterfaceDeclaration" ||
+          declaration.type === "TSTypeAliasDeclaration" ||
+          isDeclare)
+      ) {
+        node.exportKind = "type";
       }
 
       if (declaration && isDeclare) {

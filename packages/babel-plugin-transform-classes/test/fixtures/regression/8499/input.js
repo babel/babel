@@ -1,17 +1,26 @@
-// Pretend that `Reflect.construct` isn't supported.
-this.Reflect = undefined;
+const oldReflect = this.Reflect;
+const oldHTMLElement = this.HTMLElement;
 
-this.HTMLElement = function() {
-  // Here, `this.HTMLElement` is this function, not the original HTMLElement
-  // constructor. `this.constructor` should be this function too, but isn't.
-  constructor = this.constructor;
-};
+try {
+  // Pretend that `Reflect.construct` isn't supported.
+  this.Reflect = undefined;
 
-var constructor;
+  this.HTMLElement = function() {
+    // Here, `this.HTMLElement` is this function, not the original HTMLElement
+    // constructor. `this.constructor` should be this function too, but isn't.
+    constructor = this.constructor;
+  };
 
-class CustomElement extends HTMLElement {};
-new CustomElement();
+  var constructor;
 
-expect(constructor).toBe(CustomElement);
+  class CustomElement extends HTMLElement {};
+  new CustomElement();
+
+  expect(constructor).toBe(CustomElement);
+} finally {
+  // Restore original env
+  this.Reflect = oldReflect;
+  this.HTMLElement = oldHTMLElement;
+}
 
 

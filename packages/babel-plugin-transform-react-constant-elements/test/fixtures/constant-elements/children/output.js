@@ -1,4 +1,4 @@
-var _ref = /*#__PURE__*/<span />;
+var _ref = <span />;
 
 var Foo = React.createClass({
   render: function () {

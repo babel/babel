@@ -10,10 +10,12 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-nullish-coalescing-operator { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-optional-chaining { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-json-strings { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-optional-catch-binding { "chrome":"52", "firefox":"50", "ie":"11" }
+  transform-parameters { "firefox":"50", "ie":"11" }
   proposal-async-generator-functions { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-object-rest-spread { "chrome":"52", "firefox":"50", "ie":"11" }
   transform-dotall-regex { "chrome":"52", "firefox":"50", "ie":"11" }
@@ -34,7 +36,6 @@ Using plugins:
   transform-sticky-regex { "ie":"11" }
   transform-unicode-regex { "ie":"11" }
   transform-spread { "ie":"11" }
-  transform-parameters { "firefox":"50", "ie":"11" }
   transform-destructuring { "firefox":"50", "ie":"11" }
   transform-block-scoping { "firefox":"50", "ie":"11" }
   transform-typeof-symbol { "ie":"11" }

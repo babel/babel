@@ -203,11 +203,17 @@ describe("scope", () => {
 
     it("purity", function() {
       expect(
-        getPath("({ x: 1 })")
+        getPath("({ x: 1, foo() { return 1 } })")
           .get("body")[0]
           .get("expression")
           .isPure(),
       ).toBeTruthy();
+      expect(
+        getPath("class X { get foo() { return 1 } }")
+          .get("body")[0]
+          .get("expression")
+          .isPure(),
+      ).toBeFalsy();
       expect(
         getPath("`${a}`")
           .get("body")[0]
@@ -302,6 +308,60 @@ describe("scope", () => {
       expect(referencePaths).toHaveLength(1);
 
       expect(path.scope.bindings.a).toBe(path.get("body[0]").scope.bindings.a);
+    });
+
+    it("references after re-crawling", function() {
+      const path = getPath("function Foo() { var _jsx; }");
+
+      path.scope.crawl();
+      path.scope.crawl();
+
+      expect(path.scope.references._jsx).toBeTruthy();
+    });
+
+    test("generateUid collision check after re-crawling", function() {
+      const path = getPath("function Foo() { var _jsx; }");
+
+      path.scope.crawl();
+      path.scope.crawl();
+
+      expect(path.scope.generateUid("jsx")).toBe("_jsx2");
+    });
+
+    test("generateUid collision check after re-crawling (function expression local id)", function() {
+      const path = getPath("var fn = function _name(){}");
+
+      path.scope.crawl();
+      path.scope.crawl();
+
+      expect(path.scope.generateUid("name")).toBe("_name2");
+    });
+
+    test("generateUid collision check after re-crawling (function params)", function() {
+      const path = getPath("[].map(_unicorn => [_unicorn])");
+
+      path.scope.crawl();
+      path.scope.crawl();
+
+      expect(path.scope.generateUid("unicorn")).toBe("_unicorn2");
+    });
+
+    test("generateUid collision check after re-crawling (catch clause)", function() {
+      const path = getPath("try {} catch (_err) {}");
+
+      path.scope.crawl();
+      path.scope.crawl();
+
+      expect(path.scope.generateUid("err")).toBe("_err2");
+    });
+
+    test("generateUid collision check after re-crawling (class expression local id)", function() {
+      const path = getPath("var C = class _Cls{}");
+
+      path.scope.crawl();
+      path.scope.crawl();
+
+      expect(path.scope.generateUid("Cls")).toBe("_Cls2");
     });
   });
 

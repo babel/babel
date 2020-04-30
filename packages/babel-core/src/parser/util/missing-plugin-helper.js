@@ -11,6 +11,26 @@ const pluginNameMap = {
       url: "https://git.io/vb4SL",
     },
   },
+  classPrivateProperties: {
+    syntax: {
+      name: "@babel/plugin-syntax-class-properties",
+      url: "https://git.io/vb4yQ",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-class-properties",
+      url: "https://git.io/vb4SL",
+    },
+  },
+  classPrivateMethods: {
+    syntax: {
+      name: "@babel/plugin-syntax-class-properties",
+      url: "https://git.io/vb4yQ",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-private-methods",
+      url: "https://git.io/JvpRG",
+    },
+  },
   decorators: {
     syntax: {
       name: "@babel/plugin-syntax-decorators",
@@ -63,8 +83,8 @@ const pluginNameMap = {
       url: "https://git.io/vb4yb",
     },
     transform: {
-      name: "@babel/plugin-transform-flow-strip-types",
-      url: "https://git.io/vb49g",
+      name: "@babel/preset-flow",
+      url: "https://git.io/JfeDn",
     },
   },
   functionBind: {
@@ -99,8 +119,8 @@ const pluginNameMap = {
       url: "https://git.io/vb4yA",
     },
     transform: {
-      name: "@babel/plugin-transform-react-jsx",
-      url: "https://git.io/vb4yd",
+      name: "@babel/preset-react",
+      url: "https://git.io/JfeDR",
     },
   },
   logicalAssignment: {
@@ -143,6 +163,12 @@ const pluginNameMap = {
       url: "https://git.io/vb4SU",
     },
   },
+  recordAndTuple: {
+    syntax: {
+      name: "@babel/plugin-syntax-record-and-tuple",
+      url: "https://git.io/JvKp3",
+    },
+  },
   throwExpressions: {
     syntax: {
       name: "@babel/plugin-syntax-throw-expressions",
@@ -159,8 +185,8 @@ const pluginNameMap = {
       url: "https://git.io/vb4SC",
     },
     transform: {
-      name: "@babel/plugin-transform-typescript",
-      url: "https://git.io/vb4Sm",
+      name: "@babel/preset-typescript",
+      url: "https://git.io/JfeDz",
     },
   },
 
@@ -234,13 +260,15 @@ export default function generateMissingPluginMessage(
   if (pluginInfo) {
     const { syntax: syntaxPlugin, transform: transformPlugin } = pluginInfo;
     if (syntaxPlugin) {
+      const syntaxPluginInfo = getNameURLCombination(syntaxPlugin);
       if (transformPlugin) {
         const transformPluginInfo = getNameURLCombination(transformPlugin);
-        helpMessage +=
-          `\n\nAdd ${transformPluginInfo} to the 'plugins' section of your Babel config ` +
-          `to enable transformation.`;
+        const sectionType = transformPlugin.name.startsWith("@babel/plugin")
+          ? "plugins"
+          : "presets";
+        helpMessage += `\n\nAdd ${transformPluginInfo} to the '${sectionType}' section of your Babel config to enable transformation.
+If you want to leave it as-is, add ${syntaxPluginInfo} to the 'plugins' section to enable parsing.`;
       } else {
-        const syntaxPluginInfo = getNameURLCombination(syntaxPlugin);
         helpMessage +=
           `\n\nAdd ${syntaxPluginInfo} to the 'plugins' section of your Babel config ` +
           `to enable parsing.`;

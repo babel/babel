@@ -3,6 +3,8 @@ var Foo = /*#__PURE__*/function (_Bar) {
 
   babelHelpers.inherits(Foo, _Bar);
 
+  var _super = babelHelpers.createSuper(Foo);
+
   function Foo() {
     var _this;
 
@@ -11,7 +13,7 @@ var Foo = /*#__PURE__*/function (_Bar) {
     var fn = () => babelHelpers.assertThisInitialized(_this);
 
     fn();
-    return _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
+    return _this = _super.call(this);
   }
 
   return Foo;

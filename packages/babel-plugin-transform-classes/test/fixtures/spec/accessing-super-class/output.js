@@ -3,20 +3,22 @@ var Test = /*#__PURE__*/function (_Foo) {
 
   babelHelpers.inherits(Test, _Foo);
 
-  function Test() {
-    var _babelHelpers$getProt, _babelHelpers$get;
+  var _super = babelHelpers.createSuper(Test);
 
-    var _this;
+  function Test() {
+    var _babelHelpers$get;
+
+    var _thisSuper, _thisSuper2, _thisSuper3, _this;
 
     babelHelpers.classCallCheck(this, Test);
     woops.super.test();
-    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Test).call(this));
-    babelHelpers.get(babelHelpers.getPrototypeOf(Test.prototype), "test", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this));
-    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Test).apply(this, arguments));
-    _this = babelHelpers.possibleConstructorReturn(this, (_babelHelpers$getProt = babelHelpers.getPrototypeOf(Test)).call.apply(_babelHelpers$getProt, [this, "test"].concat(Array.prototype.slice.call(arguments))));
-    babelHelpers.get(babelHelpers.getPrototypeOf(Test.prototype), "test", babelHelpers.assertThisInitialized(_this)).apply(babelHelpers.assertThisInitialized(_this), arguments);
+    _this = _super.call(this);
+    babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper).call(_thisSuper);
+    _this = _super.apply(this, arguments);
+    _this = _super.call.apply(_super, [this, "test"].concat(Array.prototype.slice.call(arguments)));
+    babelHelpers.get((_thisSuper2 = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper2).apply(_thisSuper2, arguments);
 
-    (_babelHelpers$get = babelHelpers.get(babelHelpers.getPrototypeOf(Test.prototype), "test", babelHelpers.assertThisInitialized(_this))).call.apply(_babelHelpers$get, [babelHelpers.assertThisInitialized(_this), "test"].concat(Array.prototype.slice.call(arguments)));
+    (_babelHelpers$get = babelHelpers.get((_thisSuper3 = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper3)).call.apply(_babelHelpers$get, [_thisSuper3, "test"].concat(Array.prototype.slice.call(arguments)));
 
     return _this;
   }

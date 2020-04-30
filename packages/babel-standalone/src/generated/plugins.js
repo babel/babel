@@ -8,9 +8,7 @@ import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import syntaxDoExpressions from "@babel/plugin-syntax-do-expressions";
-import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
 import syntaxExportDefaultFrom from "@babel/plugin-syntax-export-default-from";
-import syntaxExportNamespaceFrom from "@babel/plugin-syntax-export-namespace-from";
 import syntaxFlow from "@babel/plugin-syntax-flow";
 import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
 import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
@@ -19,6 +17,7 @@ import syntaxJsx from "@babel/plugin-syntax-jsx";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-binding";
 import syntaxPipelineOperator from "@babel/plugin-syntax-pipeline-operator";
+import syntaxRecordAndTuple from "@babel/plugin-syntax-record-and-tuple";
 import syntaxTopLevelAwait from "@babel/plugin-syntax-top-level-await";
 import syntaxTypescript from "@babel/plugin-syntax-typescript";
 import proposalAsyncGeneratorFunctions from "@babel/plugin-proposal-async-generator-functions";
@@ -77,6 +76,7 @@ import transformReactDisplayName from "@babel/plugin-transform-react-display-nam
 import transformReactInlineElements from "@babel/plugin-transform-react-inline-elements";
 import transformReactJsx from "@babel/plugin-transform-react-jsx";
 import transformReactJsxCompat from "@babel/plugin-transform-react-jsx-compat";
+import transformReactJsxDevelopment from "@babel/plugin-transform-react-jsx-development";
 import transformReactJsxSelf from "@babel/plugin-transform-react-jsx-self";
 import transformReactJsxSource from "@babel/plugin-transform-react-jsx-source";
 import transformRegenerator from "@babel/plugin-transform-regenerator";
@@ -97,9 +97,7 @@ export {
   syntaxClassProperties,
   syntaxDecorators,
   syntaxDoExpressions,
-  syntaxDynamicImport,
   syntaxExportDefaultFrom,
-  syntaxExportNamespaceFrom,
   syntaxFlow,
   syntaxFunctionBind,
   syntaxFunctionSent,
@@ -108,6 +106,7 @@ export {
   syntaxObjectRestSpread,
   syntaxOptionalCatchBinding,
   syntaxPipelineOperator,
+  syntaxRecordAndTuple,
   syntaxTopLevelAwait,
   syntaxTypescript,
   proposalAsyncGeneratorFunctions,
@@ -166,6 +165,7 @@ export {
   transformReactInlineElements,
   transformReactJsx,
   transformReactJsxCompat,
+  transformReactJsxDevelopment,
   transformReactJsxSelf,
   transformReactJsxSource,
   transformRegenerator,
@@ -187,9 +187,7 @@ export const all = {
   "syntax-class-properties": syntaxClassProperties,
   "syntax-decorators": syntaxDecorators,
   "syntax-do-expressions": syntaxDoExpressions,
-  "syntax-dynamic-import": syntaxDynamicImport,
   "syntax-export-default-from": syntaxExportDefaultFrom,
-  "syntax-export-namespace-from": syntaxExportNamespaceFrom,
   "syntax-flow": syntaxFlow,
   "syntax-function-bind": syntaxFunctionBind,
   "syntax-function-sent": syntaxFunctionSent,
@@ -198,6 +196,7 @@ export const all = {
   "syntax-object-rest-spread": syntaxObjectRestSpread,
   "syntax-optional-catch-binding": syntaxOptionalCatchBinding,
   "syntax-pipeline-operator": syntaxPipelineOperator,
+  "syntax-record-and-tuple": syntaxRecordAndTuple,
   "syntax-top-level-await": syntaxTopLevelAwait,
   "syntax-typescript": syntaxTypescript,
   "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,
@@ -256,6 +255,7 @@ export const all = {
   "transform-react-inline-elements": transformReactInlineElements,
   "transform-react-jsx": transformReactJsx,
   "transform-react-jsx-compat": transformReactJsxCompat,
+  "transform-react-jsx-development": transformReactJsxDevelopment,
   "transform-react-jsx-self": transformReactJsxSelf,
   "transform-react-jsx-source": transformReactJsxSource,
   "transform-regenerator": transformRegenerator,

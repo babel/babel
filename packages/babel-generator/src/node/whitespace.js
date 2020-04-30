@@ -14,13 +14,13 @@ type WhitespaceObject = {
  */
 
 function crawl(node, state = {}) {
-  if (t.isMemberExpression(node)) {
+  if (t.isMemberExpression(node) || t.isOptionalMemberExpression(node)) {
     crawl(node.object, state);
     if (node.computed) crawl(node.property, state);
   } else if (t.isBinary(node) || t.isAssignmentExpression(node)) {
     crawl(node.left, state);
     crawl(node.right, state);
-  } else if (t.isCallExpression(node)) {
+  } else if (t.isCallExpression(node) || t.isOptionalCallExpression(node)) {
     state.hasCall = true;
     crawl(node.callee, state);
   } else if (t.isFunction(node)) {
@@ -119,11 +119,20 @@ export const nodes = {
   },
 
   /**
-   * Test if CallExpression needs whitespace.
+   * Test if CallExpressionish needs whitespace.
    */
 
   CallExpression(node: Object): ?WhitespaceObject {
     if (t.isFunction(node.callee) || isHelper(node)) {
+      return {
+        before: true,
+        after: true,
+      };
+    }
+  },
+
+  OptionalCallExpression(node: Object): ?WhitespaceObject {
+    if (t.isFunction(node.callee)) {
       return {
         before: true,
         after: true,

@@ -5,9 +5,11 @@ function broken(x) {
 
       babelHelpers.inherits(Foo, _Bar);
 
+      var _super = babelHelpers.createSuper(Foo);
+
       function Foo() {
         babelHelpers.classCallCheck(this, Foo);
-        return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).apply(this, arguments));
+        return _super.apply(this, arguments);
       }
 
       return Foo;

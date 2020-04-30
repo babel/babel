@@ -1,7 +1,9 @@
 // @flow
 import defineType, {
+  assertOptionalChainStart,
   assertEach,
   assertNodeType,
+  assertNodeOrValueType,
   assertValueType,
   chain,
 } from "./utils";
@@ -104,7 +106,9 @@ defineType("OptionalMemberExpression", {
       default: false,
     },
     optional: {
-      validate: assertValueType("boolean"),
+      validate: !process.env.BABEL_TYPES_8_BREAKING
+        ? assertValueType("boolean")
+        : chain(assertValueType("boolean"), assertOptionalChainStart()),
     },
   },
 });
@@ -150,7 +154,9 @@ defineType("OptionalCallExpression", {
       ),
     },
     optional: {
-      validate: assertValueType("boolean"),
+      validate: !process.env.BABEL_TYPES_8_BREAKING
+        ? assertValueType("boolean")
+        : chain(assertValueType("boolean"), assertOptionalChainStart()),
     },
     typeArguments: {
       validate: assertNodeType("TypeParameterInstantiation"),
@@ -275,4 +281,35 @@ defineType("BigIntLiteral", {
     },
   },
   aliases: ["Expression", "Pureish", "Literal", "Immutable"],
+});
+
+defineType("RecordExpression", {
+  visitor: ["properties"],
+  aliases: ["Expression"],
+  fields: {
+    properties: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(
+          assertNodeType("ObjectProperty", "ObjectMethod", "SpreadElement"),
+        ),
+      ),
+    },
+  },
+});
+
+defineType("TupleExpression", {
+  fields: {
+    elements: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(
+          assertNodeOrValueType("null", "Expression", "SpreadElement"),
+        ),
+      ),
+      default: [],
+    },
+  },
+  visitor: ["elements"],
+  aliases: ["Expression"],
 });
