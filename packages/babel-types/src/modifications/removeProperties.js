@@ -24,7 +24,7 @@ export default function removeProperties(
     if (key[0] === "_" && node[key] != null) node[key] = undefined;
   }
 
-  const symbols: Array<Symbol> = Object.getOwnPropertySymbols(node);
+  const symbols: Array<symbol> = Object.getOwnPropertySymbols(node);
   for (const sym of symbols) {
     node[sym] = null;
   }
