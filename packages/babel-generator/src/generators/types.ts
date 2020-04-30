@@ -1,24 +1,25 @@
+import type Printer from "../printer";
 import * as t from "@babel/types";
 import jsesc from "jsesc";
 
-export function Identifier(node: any) {
+export function Identifier(this: Printer, node: any) {
   this.exactSource(node.loc, () => {
     this.word(node.name);
   });
 }
 
-export function ArgumentPlaceholder() {
+export function ArgumentPlaceholder(this: Printer) {
   this.token("?");
 }
 
-export function RestElement(node: any) {
+export function RestElement(this: Printer, node: any) {
   this.token("...");
   this.print(node.argument, node);
 }
 
 export { RestElement as SpreadElement };
 
-export function ObjectExpression(node: any) {
+export function ObjectExpression(this: Printer, node: any) {
   const props = node.properties;
 
   this.token("{");
@@ -35,14 +36,14 @@ export function ObjectExpression(node: any) {
 
 export { ObjectExpression as ObjectPattern };
 
-export function ObjectMethod(node: any) {
+export function ObjectMethod(this: Printer, node: any) {
   this.printJoin(node.decorators, node);
   this._methodHead(node);
   this.space();
   this.print(node.body, node);
 }
 
-export function ObjectProperty(node: any) {
+export function ObjectProperty(this: Printer, node: any) {
   this.printJoin(node.decorators, node);
 
   if (node.computed) {
@@ -78,7 +79,7 @@ export function ObjectProperty(node: any) {
   this.print(node.value, node);
 }
 
-export function ArrayExpression(node: any) {
+export function ArrayExpression(this: Printer, node: any) {
   const elems = node.elements;
   const len = elems.length;
 
@@ -106,7 +107,7 @@ export function ArrayExpression(node: any) {
 
 export { ArrayExpression as ArrayPattern };
 
-export function RecordExpression(node: any) {
+export function RecordExpression(this: Printer, node: any) {
   const props = node.properties;
 
   let startToken;
@@ -136,7 +137,7 @@ export function RecordExpression(node: any) {
   this.token(endToken);
 }
 
-export function TupleExpression(node: any) {
+export function TupleExpression(this: Printer, node: any) {
   const elems = node.elements;
   const len = elems.length;
 
@@ -169,19 +170,19 @@ export function TupleExpression(node: any) {
   this.token(endToken);
 }
 
-export function RegExpLiteral(node: any) {
+export function RegExpLiteral(this: Printer, node: any) {
   this.word(`/${node.pattern}/${node.flags}`);
 }
 
-export function BooleanLiteral(node: any) {
+export function BooleanLiteral(this: Printer, node: any) {
   this.word(node.value ? "true" : "false");
 }
 
-export function NullLiteral() {
+export function NullLiteral(this: Printer) {
   this.word("null");
 }
 
-export function NumericLiteral(node: any) {
+export function NumericLiteral(this: Printer, node: any) {
   const raw = this.getPossibleRaw(node);
   const opts = this.format.jsescOption;
   const value = node.value + "";
@@ -196,7 +197,7 @@ export function NumericLiteral(node: any) {
   }
 }
 
-export function StringLiteral(node: any) {
+export function StringLiteral(this: Printer, node: any) {
   const raw = this.getPossibleRaw(node);
   if (!this.format.minified && raw != null) {
     this.token(raw);
@@ -216,7 +217,7 @@ export function StringLiteral(node: any) {
   return this.token(val);
 }
 
-export function BigIntLiteral(node: any) {
+export function BigIntLiteral(this: Printer, node: any) {
   const raw = this.getPossibleRaw(node);
   if (!this.format.minified && raw != null) {
     this.word(raw);
@@ -225,7 +226,7 @@ export function BigIntLiteral(node: any) {
   this.word(node.value + "n");
 }
 
-export function DecimalLiteral(node: any) {
+export function DecimalLiteral(this: Printer, node: any) {
   const raw = this.getPossibleRaw(node);
   if (!this.format.minified && raw != null) {
     this.word(raw);
@@ -234,14 +235,14 @@ export function DecimalLiteral(node: any) {
   this.word(node.value + "m");
 }
 
-export function PipelineTopicExpression(node: any) {
+export function PipelineTopicExpression(this: Printer, node: any) {
   this.print(node.expression, node);
 }
 
-export function PipelineBareFunction(node: any) {
+export function PipelineBareFunction(this: Printer, node: any) {
   this.print(node.callee, node);
 }
 
-export function PipelinePrimaryTopicReference() {
+export function PipelinePrimaryTopicReference(this: Printer) {
   this.token("#");
 }

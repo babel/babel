@@ -1,6 +1,7 @@
+import type Printer from "../printer";
 import * as t from "@babel/types";
 
-export function WithStatement(node: any) {
+export function WithStatement(this: Printer, node: any) {
   this.word("with");
   this.space();
   this.token("(");
@@ -9,7 +10,7 @@ export function WithStatement(node: any) {
   this.printBlock(node);
 }
 
-export function IfStatement(node: any) {
+export function IfStatement(this: Printer, node: any) {
   this.word("if");
   this.space();
   this.token("(");
@@ -47,7 +48,7 @@ function getLastStatement(statement) {
   return getLastStatement(statement.body);
 }
 
-export function ForStatement(node: any) {
+export function ForStatement(this: Printer, node: any) {
   this.word("for");
   this.space();
   this.token("(");
@@ -72,7 +73,7 @@ export function ForStatement(node: any) {
   this.printBlock(node);
 }
 
-export function WhileStatement(node: any) {
+export function WhileStatement(this: Printer, node: any) {
   this.word("while");
   this.space();
   this.token("(");
@@ -103,7 +104,7 @@ const buildForXStatement = function (op) {
 export const ForInStatement = buildForXStatement("in");
 export const ForOfStatement = buildForXStatement("of");
 
-export function DoWhileStatement(node: any) {
+export function DoWhileStatement(this: Printer, node: any) {
   this.word("do");
   this.space();
   this.print(node.body, node);
@@ -138,14 +139,14 @@ export const ReturnStatement = buildLabelStatement("return", "argument");
 export const BreakStatement = buildLabelStatement("break");
 export const ThrowStatement = buildLabelStatement("throw", "argument");
 
-export function LabeledStatement(node: any) {
+export function LabeledStatement(this: Printer, node: any) {
   this.print(node.label, node);
   this.token(":");
   this.space();
   this.print(node.body, node);
 }
 
-export function TryStatement(node: any) {
+export function TryStatement(this: Printer, node: any) {
   this.word("try");
   this.space();
   this.print(node.block, node);
@@ -168,7 +169,7 @@ export function TryStatement(node: any) {
   }
 }
 
-export function CatchClause(node: any) {
+export function CatchClause(this: Printer, node: any) {
   this.word("catch");
   this.space();
   if (node.param) {
@@ -181,7 +182,7 @@ export function CatchClause(node: any) {
   this.print(node.body, node);
 }
 
-export function SwitchStatement(node: any) {
+export function SwitchStatement(this: Printer, node: any) {
   this.word("switch");
   this.space();
   this.token("(");
@@ -200,7 +201,7 @@ export function SwitchStatement(node: any) {
   this.token("}");
 }
 
-export function SwitchCase(node: any) {
+export function SwitchCase(this: Printer, node: any) {
   if (node.test) {
     this.word("case");
     this.space();
@@ -217,7 +218,7 @@ export function SwitchCase(node: any) {
   }
 }
 
-export function DebuggerStatement() {
+export function DebuggerStatement(this: Printer) {
   this.word("debugger");
   this.semicolon();
 }
@@ -236,7 +237,7 @@ function constDeclarationIndent() {
   if (this.endsWith("\n")) for (let i = 0; i < 6; i++) this.space(true);
 }
 
-export function VariableDeclaration(node: any, parent: any) {
+export function VariableDeclaration(this: Printer, node: any, parent: any) {
   if (node.declare) {
     // TS
     this.word("declare");
@@ -293,7 +294,7 @@ export function VariableDeclaration(node: any, parent: any) {
   this.semicolon();
 }
 
-export function VariableDeclarator(node: any) {
+export function VariableDeclarator(this: Printer, node: any) {
   this.print(node.id, node);
   if (node.definite) this.token("!"); // TS
   this.print(node.id.typeAnnotation, node);

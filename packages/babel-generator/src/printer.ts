@@ -3,6 +3,7 @@ import * as n from "./node";
 import * as t from "@babel/types";
 
 import * as generatorFunctions from "./generators";
+import type SourceMap from "./source-map";
 
 const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
@@ -25,11 +26,14 @@ export type Format = {
     base: number;
   };
   decoratorsBeforeExport: boolean;
+  recordAndTupleSyntaxType: "bar" | "hash";
+  jsescOption;
+  jsonCompatibleStrings;
 };
 
-export default class Printer {
-  constructor(format, map) {
-    this.format = format || {};
+class Printer {
+  constructor(format: Format, map: SourceMap) {
+    this.format = format;
     this._buf = new Buffer(map);
   }
 
@@ -356,7 +360,7 @@ export default class Printer {
    * Print an ending parentheses if a starting one has been printed.
    */
 
-  endTerminatorless(state: any) {
+  endTerminatorless(state?: any) {
     this._noLineTerminator = false;
     if (state?.printed) {
       this.dedent();
@@ -527,12 +531,24 @@ export default class Printer {
     if (indent) this.dedent();
   }
 
-  printSequence(nodes, parent, opts: { statement?: boolean } = {}) {
+  printSequence(
+    nodes,
+    parent,
+    opts: {
+      statement?: boolean;
+      indent?: boolean;
+      addNewlines?: Function;
+    } = {},
+  ) {
     opts.statement = true;
     return this.printJoin(nodes, parent, opts);
   }
 
-  printList(items, parent, opts: { separator?: Function } = {}) {
+  printList(
+    items,
+    parent,
+    opts: { separator?: Function; indent?: boolean; statement?: boolean } = {},
+  ) {
     if (opts.separator == null) {
       opts.separator = commaSeparator;
     }
@@ -663,6 +679,10 @@ export default class Printer {
 
 // Expose the node type functions and helpers on the prototype for easy usage.
 Object.assign(Printer.prototype, generatorFunctions);
+
+type GeneratorFunctions = typeof generatorFunctions;
+interface Printer extends GeneratorFunctions {}
+export default Printer;
 
 function commaSeparator() {
   this.token(",");

@@ -1,6 +1,7 @@
+import type Printer from "../printer";
 import * as t from "@babel/types";
 
-export function ImportSpecifier(node: any) {
+export function ImportSpecifier(this: Printer, node: any) {
   if (node.importKind === "type" || node.importKind === "typeof") {
     this.word(node.importKind);
     this.space();
@@ -15,15 +16,15 @@ export function ImportSpecifier(node: any) {
   }
 }
 
-export function ImportDefaultSpecifier(node: any) {
+export function ImportDefaultSpecifier(this: Printer, node: any) {
   this.print(node.local, node);
 }
 
-export function ExportDefaultSpecifier(node: any) {
+export function ExportDefaultSpecifier(this: Printer, node: any) {
   this.print(node.exported, node);
 }
 
-export function ExportSpecifier(node: any) {
+export function ExportSpecifier(this: Printer, node: any) {
   this.print(node.local, node);
   if (node.exported && node.local.name !== node.exported.name) {
     this.space();
@@ -33,7 +34,7 @@ export function ExportSpecifier(node: any) {
   }
 }
 
-export function ExportNamespaceSpecifier(node: any) {
+export function ExportNamespaceSpecifier(this: Printer, node: any) {
   this.token("*");
   this.space();
   this.word("as");
@@ -41,7 +42,7 @@ export function ExportNamespaceSpecifier(node: any) {
   this.print(node.exported, node);
 }
 
-export function ExportAllDeclaration(node: any) {
+export function ExportAllDeclaration(this: Printer, node: any) {
   this.word("export");
   this.space();
   if (node.exportKind === "type") {
@@ -57,7 +58,7 @@ export function ExportAllDeclaration(node: any) {
   this.semicolon();
 }
 
-export function ExportNamedDeclaration(node: any) {
+export function ExportNamedDeclaration(this: Printer, node: any) {
   if (
     this.format.decoratorsBeforeExport &&
     t.isClassDeclaration(node.declaration)
@@ -70,7 +71,7 @@ export function ExportNamedDeclaration(node: any) {
   ExportDeclaration.apply(this, arguments);
 }
 
-export function ExportDefaultDeclaration(node: any) {
+export function ExportDefaultDeclaration(this: Printer, node: any) {
   if (
     this.format.decoratorsBeforeExport &&
     t.isClassDeclaration(node.declaration)
@@ -139,7 +140,7 @@ function ExportDeclaration(node: any) {
   }
 }
 
-export function ImportDeclaration(node: any) {
+export function ImportDeclaration(this: Printer, node: any) {
   this.word("import");
   this.space();
 
@@ -195,14 +196,14 @@ export function ImportDeclaration(node: any) {
   this.semicolon();
 }
 
-export function ImportAttribute(node: any) {
+export function ImportAttribute(this: Printer, node: any) {
   this.print(node.key);
   this.token(":");
   this.space();
   this.print(node.value);
 }
 
-export function ImportNamespaceSpecifier(node: any) {
+export function ImportNamespaceSpecifier(this: Printer, node: any) {
   this.token("*");
   this.space();
   this.word("as");

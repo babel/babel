@@ -1,10 +1,11 @@
-export function TaggedTemplateExpression(node: any) {
+import type Printer from "../printer";
+export function TaggedTemplateExpression(this: Printer, node: any) {
   this.print(node.tag, node);
   this.print(node.typeParameters, node); // TS
   this.print(node.quasi, node);
 }
 
-export function TemplateElement(node: any, parent: any) {
+export function TemplateElement(this: Printer, node: any, parent: any) {
   const isFirst = parent.quasis[0] === node;
   const isLast = parent.quasis[parent.quasis.length - 1] === node;
 
@@ -13,7 +14,7 @@ export function TemplateElement(node: any, parent: any) {
   this.token(value);
 }
 
-export function TemplateLiteral(node: any) {
+export function TemplateLiteral(this: Printer, node: any) {
   const quasis = node.quasis;
 
   for (let i = 0; i < quasis.length; i++) {
