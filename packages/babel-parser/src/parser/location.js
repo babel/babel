@@ -68,7 +68,7 @@ export const Errors = Object.freeze({
   IllegalReturn: "'return' outside of function",
   ImportCallArgumentTrailingComma:
     "Trailing comma is disallowed inside import(...) arguments",
-  ImportCallArity: "import() requires exactly one argument",
+  ImportCallArity: "import() requires exactly %0",
   ImportCallArityLtOne: "Dynamic imports require a parameter: import('a.js')",
   ImportCallNotNewExpression: "Cannot use new with import(...)",
   ImportCallSpreadArgument: "... is not allowed in import()",

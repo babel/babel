@@ -758,8 +758,13 @@ export default class ExpressionParser extends LValParser {
     optional: boolean,
   ): N.Expression {
     if (node.callee.type === "Import") {
-      if (node.arguments.length !== 1) {
-        this.raise(node.start, Errors.ImportCallArity);
+      const maxArity = this.hasPlugin("moduleAttributes") ? 2 : 1;
+      if (node.arguments.length === 0 || node.arguments.length > maxArity) {
+        this.raise(
+          node.start,
+          Errors.ImportCallArity,
+          this.hasPlugin("moduleAttributes") ? "two arguments" : "one argument",
+        );
       } else {
         const importArg = node.arguments[0];
         if (importArg && importArg.type === "SpreadElement") {
