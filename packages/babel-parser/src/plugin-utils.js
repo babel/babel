@@ -92,7 +92,7 @@ export function validatePlugins(plugins: PluginList) {
       "moduleAttributes",
       "version",
     );
-    if (moduleAttributesVerionPluginOption !== "feb-2020") {
+    if (moduleAttributesVerionPluginOption !== "apr-2020") {
       throw new Error(
         "The 'moduleAttributes' plugin requires a 'version' option," +
           " representing the last proposal update. Currently, the" +
