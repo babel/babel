@@ -13,6 +13,12 @@ import normalizeFile from "./normalize-file";
 import generateCode from "./file/generate";
 import type File from "./file/file";
 
+import {
+  getCachePath,
+  getMaybeCached,
+  setMaybeCached,
+} from "./persistent-cache";
+
 export type FileResultCallback = {
   (Error, null): any,
   (null, FileResult | null): any,
@@ -31,14 +37,14 @@ export function* run(
   code: string,
   ast: ?(BabelNodeFile | BabelNodeProgram),
 ): Handler<FileResult> {
-  const file = yield* normalizeFile(
-    config.passes,
-    normalizeOptions(config),
-    code,
-    ast,
-  );
+  const opts: Object = normalizeOptions(config);
 
-  const opts = file.opts;
+  const cachePath = getCachePath(opts, code);
+  const cached = yield* getMaybeCached(cachePath);
+  if (cached) return cached;
+
+  const file = yield* normalizeFile(config.passes, opts, code, ast);
+
   try {
     yield* transformFile(file, config.passes);
   } catch (e) {
@@ -62,7 +68,7 @@ export function* run(
     throw e;
   }
 
-  return {
+  const result = {
     metadata: file.metadata,
     options: opts,
     ast: opts.ast === true ? file.ast : null,
@@ -70,6 +76,9 @@ export function* run(
     map: outputMap === undefined ? null : outputMap,
     sourceType: file.ast.program.sourceType,
   };
+
+  yield* setMaybeCached(cachePath, result);
+  return result;
 }
 
 function* transformFile(file: File, pluginPasses: PluginPasses): Handler<void> {

@@ -16,6 +16,7 @@ import type {
   NestingPath,
   CallerMetadata,
   RootMode,
+  PersistentCacheConfig,
 } from "./options";
 
 export type ValidatorSet = {
@@ -148,6 +149,45 @@ export function assertCallerMetadata(
             propLoc,
           )} must be null, undefined, a boolean, a string, or a number.`,
         );
+      }
+    }
+  }
+  return (value: any);
+}
+
+export function assertPersistentCacheConfig(
+  loc: OptionPath,
+  value: mixed,
+): PersistentCacheConfig | void {
+  const obj = assertObject(loc, value);
+  if (obj) {
+    if (typeof obj[("path": string)] !== "string") {
+      throw new Error(
+        `${msg(loc)} set but does not contain "path" property string`,
+      );
+    }
+
+    const saltLoc = access(loc, "salt");
+    const salt = assertObject(saltLoc, obj[("salt": any)]);
+    if (salt) {
+      for (const prop of Object.keys(salt)) {
+        const propLoc = access(saltLoc, prop);
+        const value = salt[prop];
+        if (
+          value != null &&
+          typeof value !== "boolean" &&
+          typeof value !== "string" &&
+          typeof value !== "number"
+        ) {
+          // NOTE(logan): I'm limiting the type here so that we can guarantee that
+          // the "caller" value will serialize to JSON nicely. We can always
+          // allow more complex structures later though.
+          throw new Error(
+            `${msg(
+              propLoc,
+            )} must be null, undefined, a boolean, a string, or a number.`,
+          );
+        }
       }
     }
   }

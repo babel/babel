@@ -83,18 +83,18 @@ export function makeStrongCacheSync<ArgT, ResultT, SideChannel>(
  * The implemented logic (only when gensync is run asynchronously) is the following:
  *   1. If there is a valid cache associated to the current "arg" parameter,
  *       a. RETURN the cached value
- *   3. If there is a FinishLock associated to the current "arg" parameter representing a valid cache,
+ *   2. If there is a FinishLock associated to the current "arg" parameter representing a valid cache,
  *       a. Wait for that lock to be released
  *       b. RETURN the value associated with that lock
- *   5. Start executing the function to be cached
+ *   3. Start executing the function to be cached
  *       a. If it pauses on a promise, then
  *           i. Let FinishLock be a new lock
  *          ii. Store FinishLock as associated to the current "arg" parameter
  *         iii. Wait for the function to finish executing
  *          iv. Release FinishLock
  *           v. Send the function result to anyone waiting on FinishLock
- *   6. Store the result in the cache
- *   7. RETURN the result
+ *   4. Store the result in the cache
+ *   5. RETURN the result
  */
 function makeCachedFunction<ArgT, ResultT, SideChannel, Cache: *>(
   CallCache: Class<Cache>,
