@@ -15,8 +15,8 @@ export const writeFile = gensync<[string, string], void>({
 });
 
 export const mkdirp = gensync<[string], void>({
-  sync: (path: string) => mkdir.sync(path),
-  async: (path: string) => mkdir(path),
+  sync: mkdir.sync,
+  async: mkdir,
 });
 
 export const exists = gensync<[string], boolean>({
