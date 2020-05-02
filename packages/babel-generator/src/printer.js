@@ -310,7 +310,7 @@ export default class Printer {
 
     // catch up to this nodes newline if we're behind
     const pos = loc ? loc[prop] : null;
-    if (pos?.line !== null) {
+    if (pos?.line != null) {
       const count = pos.line - this._buf.getCurrentLine();
 
       for (let i = 0; i < count; i++) {
