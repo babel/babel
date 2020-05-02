@@ -769,7 +769,7 @@ export default class ExpressionParser extends LValParser {
         this.raise(node.start, Errors.ImportCallArity);
       } else {
         const importArg = node.arguments[0];
-        if (importArg && importArg.type === "SpreadElement") {
+        if (importArg?.type === "SpreadElement") {
           this.raise(importArg.start, Errors.ImportCallSpreadArgument);
         }
       }

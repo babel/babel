@@ -17,7 +17,7 @@ export type { PartialConfig } from "./partial";
 
 const loadOptionsRunner = gensync<[mixed], Object | null>(function*(opts) {
   const config = yield* loadFullConfig(opts);
-  return config ? config.options : null;
+  return config?.options;
 });
 
 const maybeErrback = runner => (opts: mixed, callback: Function) => {

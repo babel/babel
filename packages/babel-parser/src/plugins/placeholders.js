@@ -261,7 +261,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkExport(node: N.ExportNamedDeclaration): void {
       const { specifiers } = node;
-      if (specifiers && specifiers.length) {
+      if (specifiers?.length) {
         node.specifiers = specifiers.filter(
           node => node.exported.type === "Placeholder",
         );

@@ -20,7 +20,7 @@ export default declare(api => {
     comments = generateComment(ofPath, optional),
     keepType = false,
   }) {
-    if (!toPath || !toPath.node) {
+    if (!toPath?.node) {
       toPath = ofPath.getPrevSibling();
       where = "trailing";
     }
@@ -36,7 +36,7 @@ export default declare(api => {
       comments = [comments];
     }
     comments = comments.map(commentFromString);
-    if (!keepType && ofPath && ofPath.node) {
+    if (!keepType && ofPath?.node) {
       // Removes the node at `ofPath` while conserving the comments attached
       // to it.
       const node = ofPath.node;

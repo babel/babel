@@ -2340,7 +2340,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      if (!(jsx && jsx.error) && !this.isRelational("<")) {
+      if (!jsx?.error && !this.isRelational("<")) {
         return super.parseMaybeAssign(...args);
       }
 
@@ -2362,7 +2362,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
 
         // Correct TypeScript code should have at least 1 type parameter, but don't crash on bad code.
-        if (typeParameters && typeParameters.params.length !== 0) {
+        if (typeParameters?.params.length !== 0) {
           this.resetStartLocationFromNode(expr, typeParameters);
         }
         expr.typeParameters = typeParameters;
@@ -2384,7 +2384,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (!typeCast.error) return typeCast.node;
       }
 
-      if (jsx && jsx.node) {
+      if (jsx?.node) {
         /*:: invariant(jsx.failState) */
         this.state = jsx.failState;
         return jsx.node;
@@ -2396,17 +2396,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return arrow.node;
       }
 
-      if (typeCast && typeCast.node) {
+      if (typeCast?.node) {
         /*:: invariant(typeCast.failState) */
         this.state = typeCast.failState;
         return typeCast.node;
       }
 
-      if (jsx && jsx.thrown) throw jsx.error;
+      if (jsx?.thrown) throw jsx.error;
       if (arrow.thrown) throw arrow.error;
-      if (typeCast && typeCast.thrown) throw typeCast.error;
+      if (typeCast?.thrown) throw typeCast.error;
 
-      throw (jsx && jsx.error) || arrow.error || (typeCast && typeCast.error);
+      throw jsx?.error || arrow.error || typeCast?.error;
     }
 
     // Handle type assertions
@@ -2616,7 +2616,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): $ReadOnlyArray<?N.Expression> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
-        if (expr && expr.type === "TSTypeCastExpression") {
+        if (expr?.type === "TSTypeCastExpression") {
           this.raise(expr.start, TSErrors.UnexpectedTypeAnnotation);
         }
       }

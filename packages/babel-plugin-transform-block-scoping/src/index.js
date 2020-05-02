@@ -127,7 +127,7 @@ function isInLoop(path) {
     path => path.isLoop() || path.isFunction(),
   );
 
-  return loopOrFunctionParent && loopOrFunctionParent.isLoop();
+  return loopOrFunctionParent?.isLoop();
 }
 
 function convertBlockScopedToVar(

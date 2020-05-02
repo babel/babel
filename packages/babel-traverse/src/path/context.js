@@ -236,7 +236,7 @@ export function setup(parentPath, container, listKey, key) {
 export function setKey(key) {
   this.key = key;
   this.node = this.container[this.key];
-  this.type = this.node && this.node.type;
+  this.type = this.node?.type;
 }
 
 export function requeue(pathToQueue = this) {

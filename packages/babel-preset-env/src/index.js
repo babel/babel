@@ -199,15 +199,15 @@ export const getPolyfillPlugins = ({
 };
 
 function supportsStaticESM(caller) {
-  return !!(caller && caller.supportsStaticESM);
+  return !!caller?.supportsStaticESM;
 }
 
 function supportsDynamicImport(caller) {
-  return !!(caller && caller.supportsDynamicImport);
+  return !!caller?.supportsDynamicImport;
 }
 
 function supportsTopLevelAwait(caller) {
-  return !!(caller && caller.supportsTopLevelAwait);
+  return !!caller?.supportsTopLevelAwait;
 }
 
 export default declare((api, opts) => {
@@ -232,7 +232,7 @@ export default declare((api, opts) => {
   // TODO: remove this in next major
   let hasUglifyTarget = false;
 
-  if (optionsTargets && optionsTargets.uglify) {
+  if (optionsTargets?.uglify) {
     hasUglifyTarget = true;
     delete optionsTargets.uglify;
 
@@ -242,7 +242,7 @@ export default declare((api, opts) => {
     console.log("");
   }
 
-  if (optionsTargets && optionsTargets.esmodules && optionsTargets.browsers) {
+  if (optionsTargets?.esmodules && optionsTargets.browsers) {
     console.log("");
     console.log(
       "@babel/preset-env: esmodules and browsers targets have been specified together.",
@@ -269,10 +269,9 @@ export default declare((api, opts) => {
     transformations: moduleTransformations,
     // TODO: Remove the 'api.caller' check eventually. Just here to prevent
     // unnecessary breakage in the short term for users on older betas/RCs.
-    shouldTransformESM:
-      modules !== "auto" || !api.caller || !api.caller(supportsStaticESM),
+    shouldTransformESM: modules !== "auto" || !api.caller?.(supportsStaticESM),
     shouldTransformDynamicImport:
-      modules !== "auto" || !api.caller || !api.caller(supportsDynamicImport),
+      modules !== "auto" || !api.caller?.(supportsDynamicImport),
     shouldParseTopLevelAwait: !api.caller || api.caller(supportsTopLevelAwait),
   });
 
