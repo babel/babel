@@ -39,11 +39,8 @@ export default declare(api => {
           }
         }
 
-        const isRHSAnonymousorArrowFunction =
-          t.isFunctionExpression(right, {
-            id: null,
-          }) || t.isArrowFunctionExpression(right);
-        const rightExpression = isRHSAnonymousorArrowFunction
+        const isRHSAnonymousFunction = t.isFunction(right, { id: null });
+        const rightExpression = isRHSAnonymousFunction
           ? t.sequenceExpression([t.numericLiteral(0), right])
           : right;
 
