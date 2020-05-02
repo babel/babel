@@ -72,7 +72,8 @@ export function* findRelativeConfig(
         envName,
         caller,
         packageData.pkg?.dirname === loc
-          ? packageToBabelConfig(packageData.pkg)
+          ? // $FlowIgnore - packageData.pkg is not null
+            packageToBabelConfig((packageData.pkg: ConfigFile))
           : null,
       );
     }
