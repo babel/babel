@@ -1,0 +1,14 @@
+{
+  "name": "@babel/helper-get-call-context",
+  "version": "7.9.6",
+  "description": "Helper function to get call context",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-get-call-context",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "@babel/traverse": "^7.9.6"
+  }
+}

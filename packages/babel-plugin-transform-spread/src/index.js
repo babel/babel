@@ -1,4 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
+import getCallContext from "@babel/helper-get-call-context";
 import { types as t } from "@babel/core";
 
 export default declare((api, options) => {
@@ -94,13 +95,7 @@ export default declare((api, options) => {
         const args = node.arguments;
         if (!hasSpread(args)) return;
 
-        let calleePath = path.get("callee");
-
-        if (calleePath.isTSAsExpression()) {
-          do {
-            calleePath = calleePath.get("expression");
-          } while (calleePath.isTSAsExpression());
-        }
+        const calleePath = getCallContext(path);
 
         if (calleePath.isSuper()) return;
 

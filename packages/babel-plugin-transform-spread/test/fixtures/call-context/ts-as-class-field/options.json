@@ -1,0 +1,12 @@
+{
+  "presets": [
+    [
+      "typescript"
+    ]
+  ],
+  "plugins": [
+    [
+      "proposal-class-properties"
+    ]
+  ]
+}
