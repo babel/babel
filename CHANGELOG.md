@@ -19,6 +19,76 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.9.6 (2020-04-29)
+
+#### :eyeglasses: Spec Compliance
+* `babel-plugin-proposal-object-rest-spread`
+  * [#11471](https://github.com/babel/babel/pull/11471) Fix evaluation order with object spread, 2 ([@jridgewell](https://github.com/jridgewell))
+  * [#11412](https://github.com/babel/babel/pull/11412) Fix evaluation order with object spread ([@Zzzen](https://github.com/Zzzen))
+* `babel-helper-replace-supers`, `babel-plugin-proposal-class-properties`, `babel-plugin-transform-classes`
+  * [#11480](https://github.com/babel/babel/pull/11480) Super property eval order ([@jridgewell](https://github.com/jridgewell))
+
+#### :rocket: New Feature
+* `babel-traverse`, `babel-types`
+  * [#11448](https://github.com/babel/babel/pull/11448) Adding createFlowUnionType in place of createUnionTypeAnnotation without breaking change ([@Beraliv](https://github.com/Beraliv))
+
+#### :bug: Bug Fix
+* `babel-helper-create-class-features-plugin`, `babel-helpers`, `babel-plugin-transform-modules-commonjs`, `babel-preset-env`
+  * [#11495](https://github.com/babel/babel/pull/11495) Fix helpers.unsupportedIterableToArray for Map and Set ([@ChintanAcharya](https://github.com/ChintanAcharya))
+* `babel-traverse`
+  * [#11482](https://github.com/babel/babel/pull/11482) handle objectMethod in scope.isPure ([@Zzzen](https://github.com/Zzzen))
+* `babel-plugin-transform-typescript`
+  * [#11410](https://github.com/babel/babel/pull/11410) Throw error for TypeScript `declare const enum` ([@dosentmatter](https://github.com/dosentmatter))
+* `babel-compat-data`
+  * [#11462](https://github.com/babel/babel/pull/11462) chore: add node.js 14 support data ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#11449](https://github.com/babel/babel/pull/11449) Set exprAllowed to false for star token ([@existentialism](https://github.com/existentialism))
+  * [#11355](https://github.com/babel/babel/pull/11355) fix: disallow expression after binding identifier `of` ([@JLHwung](https://github.com/JLHwung))
+  * [#11417](https://github.com/babel/babel/pull/11417) fix: report missing plugins on type exports ([@JLHwung](https://github.com/JLHwung))
+  * [#11388](https://github.com/babel/babel/pull/11388) fix: do not push new token context when function is following dot/questionDot ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-class-properties`
+  * [#11424](https://github.com/babel/babel/pull/11424)  Fix redeclaring private in nested class's superClass ([@jridgewell](https://github.com/jridgewell))
+  * [#11405](https://github.com/babel/babel/pull/11405) Fix nested classes reference private fields ([@jridgewell](https://github.com/jridgewell))
+* `babel-traverse`, `babel-types`
+  * [#11378](https://github.com/babel/babel/pull/11378) transform-spread: create TS types (not Flow) when using TS ([@Beraliv](https://github.com/Beraliv))
+* `babel-standalone`
+  * [#11395](https://github.com/babel/babel/pull/11395) chore: update stage preset in babel-standalone ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-runtime`
+  * [#11366](https://github.com/babel/babel/pull/11366) fix: replace backslashes with forward slashes from resolved path for … ([@johannes-z](https://github.com/johannes-z))
+* `babel-generator`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-proposal-throw-expressions`, `babel-plugin-transform-async-to-generator`
+  * [#11382](https://github.com/babel/babel/pull/11382) Unify parens printing for postfix-like expressions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-parser`
+  * [#11478](https://github.com/babel/babel/pull/11478) Add some parser missing plugins errors ([@JLHwung](https://github.com/JLHwung))
+  * [#11417](https://github.com/babel/babel/pull/11417) fix: report missing plugins on type exports ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#11421](https://github.com/babel/babel/pull/11421) polish: recommend preset for js extensions ([@JLHwung](https://github.com/JLHwung))
+  * [#11397](https://github.com/babel/babel/pull/11397) fix: add classPrivateProperties and classPrivateMethods to missing plugin helper ([@JLHwung](https://github.com/JLHwung))
+
+#### :memo: Documentation
+* `babel-parser`
+  * [#11492](https://github.com/babel/babel/pull/11492) docs: update AST spec ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#11493](https://github.com/babel/babel/pull/11493) Add note about experimental nature of @babel/eslint-* packages ([@kaicataldo](https://github.com/kaicataldo))
+  * [#11403](https://github.com/babel/babel/pull/11403) contributing.md updates [skip ci] ([@hzoo](https://github.com/hzoo))
+
+#### :house: Internal
+* `babel-compat-data`, `babel-preset-env`
+  * [#11496](https://github.com/babel/babel/pull/11496) Update compat table script ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#11450](https://github.com/babel/babel/pull/11450) Update compat data ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#11479](https://github.com/babel/babel/pull/11479) Canary build of packages using CodeSandbox CI + mini repl ([@hzoo](https://github.com/hzoo))
+  * [#11467](https://github.com/babel/babel/pull/11467) chore: test against node.js 14 ([@JLHwung](https://github.com/JLHwung))
+  * [#11456](https://github.com/babel/babel/pull/11456) remove `< x.y.z` engines specification ([@JLHwung](https://github.com/JLHwung))
+  * [#11433](https://github.com/babel/babel/pull/11433) chore: remove included proposal plugins ([@JLHwung](https://github.com/JLHwung))
+  * [#11422](https://github.com/babel/babel/pull/11422) chore: upgrade @babel/* deps ([@JLHwung](https://github.com/JLHwung))
+* `babel-node`
+  * [#11440](https://github.com/babel/babel/pull/11440) refactor(babel-node): Refactor babel-node tests configuration ([@arku](https://github.com/arku))
+
+#### :running_woman: Performance
+* `babel-helpers`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-classes`, `babel-plugin-transform-function-name`, `babel-plugin-transform-parameters`, `babel-plugin-transform-react-jsx`, `babel-plugin-transform-runtime`, `babel-plugin-transform-typescript`, `babel-preset-env`
+  * [#11401](https://github.com/babel/babel/pull/11401) Speed up the createSuper helper ([@jridgewell](https://github.com/jridgewell))
 ## v7.9.5 (2020-04-07)
 
 #### :bug: Bug Fix

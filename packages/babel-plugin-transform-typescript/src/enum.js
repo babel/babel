@@ -3,13 +3,13 @@ import { template } from "@babel/core";
 
 export default function transpileEnum(path, t) {
   const { node } = path;
+  if (node.const) {
+    throw path.buildCodeFrameError("'const' enums are not supported.");
+  }
+
   if (node.declare) {
     path.remove();
     return;
-  }
-
-  if (node.const) {
-    throw path.buildCodeFrameError("'const' enums are not supported.");
   }
 
   const name = node.id.name;

@@ -22,11 +22,11 @@ let Outer = /*#__PURE__*/function (_Hello) {
   function Outer() {
     let _babelHelpers$get$cal;
 
-    var _this;
+    var _thisSuper, _this;
 
     babelHelpers.classCallCheck(this, Outer);
     _this = _super.call(this);
-    _babelHelpers$get$cal = babelHelpers.get(babelHelpers.getPrototypeOf(Outer.prototype), "toString", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this));
+    _babelHelpers$get$cal = babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper);
 
     let Inner = function Inner() {
       babelHelpers.classCallCheck(this, Inner);

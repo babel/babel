@@ -25,6 +25,7 @@ import getTargets, {
   filterItems,
   isRequired,
   type Targets,
+  type InputTargets,
 } from "@babel/helper-compilation-targets";
 import availablePlugins from "./available-plugins";
 import { filterStageFromList } from "./utils";
@@ -247,15 +248,17 @@ export default declare((api, opts) => {
       "@babel/preset-env: esmodules and browsers targets have been specified together.",
     );
     console.log(
+      // $FlowIgnore
       `\`browsers\` target, \`${optionsTargets.browsers}\` will be ignored.`,
     );
     console.log("");
   }
 
-  const targets = getTargets(optionsTargets, {
-    ignoreBrowserslistConfig,
-    configPath,
-  });
+  const targets = getTargets(
+    // $FlowIgnore optionsTargets doesn't have an "uglify" property anymore
+    (optionsTargets: InputTargets),
+    { ignoreBrowserslistConfig, configPath },
+  );
   const include = transformIncludesAndExcludes(optionsInclude);
   const exclude = transformIncludesAndExcludes(optionsExclude);
 

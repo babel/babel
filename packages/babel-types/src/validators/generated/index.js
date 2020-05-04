@@ -4611,6 +4611,36 @@ export function isTSType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
+export function isTSBaseType(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (
+    nodeType === "TSBaseType" ||
+    "TSAnyKeyword" === nodeType ||
+    "TSBooleanKeyword" === nodeType ||
+    "TSBigIntKeyword" === nodeType ||
+    "TSNeverKeyword" === nodeType ||
+    "TSNullKeyword" === nodeType ||
+    "TSNumberKeyword" === nodeType ||
+    "TSObjectKeyword" === nodeType ||
+    "TSStringKeyword" === nodeType ||
+    "TSSymbolKeyword" === nodeType ||
+    "TSUndefinedKeyword" === nodeType ||
+    "TSUnknownKeyword" === nodeType ||
+    "TSVoidKeyword" === nodeType ||
+    "TSThisType" === nodeType ||
+    "TSLiteralType" === nodeType
+  ) {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isNumberLiteral(node: ?Object, opts?: Object): boolean {
   console.trace(
     "The node type NumberLiteral has been renamed to NumericLiteral",

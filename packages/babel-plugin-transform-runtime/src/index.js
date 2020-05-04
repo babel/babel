@@ -1,5 +1,3 @@
-import path from "path";
-import resolve from "resolve";
 import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
@@ -7,25 +5,7 @@ import { types as t } from "@babel/core";
 import getCoreJS2Definitions from "./runtime-corejs2-definitions";
 import getCoreJS3Definitions from "./runtime-corejs3-definitions";
 import { typeAnnotationToString } from "./helpers";
-
-function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
-  try {
-    return path
-      .dirname(resolve.sync(`${moduleName}/package.json`, { basedir: dirname }))
-      .replace(/\\/g, "/");
-  } catch (err) {
-    if (err.code !== "MODULE_NOT_FOUND") throw err;
-
-    throw Object.assign(
-      new Error(`Failed to resolve "${moduleName}" relative to "${dirname}"`),
-      {
-        code: "BABEL_RUNTIME_NOT_FOUND",
-        runtime: moduleName,
-        dirname,
-      },
-    );
-  }
-}
+import getRuntimePath from "./get-runtime-path";
 
 function supportsStaticESM(caller) {
   return !!(caller && caller.supportsStaticESM);
@@ -196,13 +176,7 @@ export default declare((api, options, dirname) => {
 
   const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 
-  let modulePath = moduleName;
-  if (absoluteRuntime !== false) {
-    modulePath = resolveAbsoluteRuntime(
-      moduleName,
-      path.resolve(dirname, absoluteRuntime === true ? "." : absoluteRuntime),
-    );
-  }
+  const modulePath = getRuntimePath(moduleName, dirname, absoluteRuntime);
 
   return {
     name: "transform-runtime",

@@ -268,7 +268,6 @@ export function createDescriptor(
   let value = pair;
   if (Array.isArray(value)) {
     if (value.length === 3) {
-      // $FlowIgnore - Flow doesn't like the multiple tuple types.
       [value, options, name] = value;
     } else {
       [value, options] = value;

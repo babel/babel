@@ -1834,10 +1834,28 @@ export default class StatementParser extends ExpressionParser {
 
   isExportDefaultSpecifier(): boolean {
     if (this.match(tt.name)) {
-      return this.state.value !== "async" && this.state.value !== "let";
-    }
-
-    if (!this.match(tt._default)) {
+      const value = this.state.value;
+      if (value === "async" || value === "let") {
+        return false;
+      }
+      if (
+        (value === "type" || value === "interface") &&
+        !this.state.containsEsc
+      ) {
+        const l = this.lookahead();
+        // If we see any variable name other than `from` after `type` keyword,
+        // we consider it as flow/typescript type exports
+        // note that this approach may fail on some pedantic cases
+        // export type from = number
+        if (
+          (l.type === tt.name && l.value !== "from") ||
+          l.type === tt.braceL
+        ) {
+          this.expectOnePlugin(["flow", "typescript"]);
+          return false;
+        }
+      }
+    } else if (!this.match(tt._default)) {
       return false;
     }
 

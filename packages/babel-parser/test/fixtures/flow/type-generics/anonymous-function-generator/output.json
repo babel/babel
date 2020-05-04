@@ -1,0 +1,118 @@
+{
+  "type": "File",
+  "start":0,"end":68,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":68,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":68,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":68,"loc":{"start":{"line":1,"column":6},"end":{"line":3,"column":1}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":8,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":8},"identifierName":"fn"},
+              "name": "fn"
+            },
+            "init": {
+              "type": "FunctionExpression",
+              "start":11,"end":68,"loc":{"start":{"line":1,"column":11},"end":{"line":3,"column":1}},
+              "id": null,
+              "generator": true,
+              "async": false,
+              "typeParameters": {
+                "type": "TypeParameterDeclaration",
+                "start":21,"end":24,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":24}},
+                "params": [
+                  {
+                    "type": "TypeParameter",
+                    "start":22,"end":23,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":23}},
+                    "name": "T",
+                    "variance": null
+                  }
+                ]
+              },
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":25,"end":33,"loc":{"start":{"line":1,"column":25},"end":{"line":1,"column":33},"identifierName":"input"},
+                  "name": "input",
+                  "typeAnnotation": {
+                    "type": "TypeAnnotation",
+                    "start":30,"end":33,"loc":{"start":{"line":1,"column":30},"end":{"line":1,"column":33}},
+                    "typeAnnotation": {
+                      "type": "GenericTypeAnnotation",
+                      "start":32,"end":33,"loc":{"start":{"line":1,"column":32},"end":{"line":1,"column":33}},
+                      "typeParameters": null,
+                      "id": {
+                        "type": "Identifier",
+                        "start":32,"end":33,"loc":{"start":{"line":1,"column":32},"end":{"line":1,"column":33},"identifierName":"T"},
+                        "name": "T"
+                      }
+                    }
+                  }
+                }
+              ],
+              "predicate": null,
+              "returnType": {
+                "type": "TypeAnnotation",
+                "start":34,"end":53,"loc":{"start":{"line":1,"column":34},"end":{"line":1,"column":53}},
+                "typeAnnotation": {
+                  "type": "GenericTypeAnnotation",
+                  "start":36,"end":53,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":53}},
+                  "typeParameters": {
+                    "type": "TypeParameterInstantiation",
+                    "start":45,"end":53,"loc":{"start":{"line":1,"column":45},"end":{"line":1,"column":53}},
+                    "params": [
+                      {
+                        "type": "NumberTypeAnnotation",
+                        "start":46,"end":52,"loc":{"start":{"line":1,"column":46},"end":{"line":1,"column":52}}
+                      }
+                    ]
+                  },
+                  "id": {
+                    "type": "Identifier",
+                    "start":36,"end":45,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":45},"identifierName":"Generator"},
+                    "name": "Generator"
+                  }
+                }
+              },
+              "body": {
+                "type": "BlockStatement",
+                "start":54,"end":68,"loc":{"start":{"line":1,"column":54},"end":{"line":3,"column":1}},
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start":58,"end":66,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":10}},
+                    "expression": {
+                      "type": "YieldExpression",
+                      "start":58,"end":65,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":9}},
+                      "delegate": false,
+                      "argument": {
+                        "type": "NumericLiteral",
+                        "start":64,"end":65,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":9}},
+                        "extra": {
+                          "rawValue": 2,
+                          "raw": "2"
+                        },
+                        "value": 2
+                      }
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

@@ -203,11 +203,17 @@ describe("scope", () => {
 
     it("purity", function() {
       expect(
-        getPath("({ x: 1 })")
+        getPath("({ x: 1, foo() { return 1 } })")
           .get("body")[0]
           .get("expression")
           .isPure(),
       ).toBeTruthy();
+      expect(
+        getPath("class X { get foo() { return 1 } }")
+          .get("body")[0]
+          .get("expression")
+          .isPure(),
+      ).toBeFalsy();
       expect(
         getPath("`${a}`")
           .get("body")[0]

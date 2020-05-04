@@ -33,7 +33,7 @@ var Test = function Test() {
     var _super = _createSuper(Other);
 
     function Other() {
-      var _this;
+      var _thisSuper, _this;
 
       _classCallCheck(this, Other);
 
@@ -44,7 +44,7 @@ var Test = function Test() {
       _this = _super.call.apply(_super, [this].concat(args));
 
       _defineProperty(_assertThisInitialized(_this), "a", function () {
-        return _get(_getPrototypeOf(Other.prototype), "test", _assertThisInitialized(_this));
+        return _get((_thisSuper = _assertThisInitialized(_this), _getPrototypeOf(Other.prototype)), "test", _thisSuper);
       });
 
       return _this;

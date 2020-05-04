@@ -123,9 +123,7 @@ const normalizeTargets = targets => {
   if (typeof targets === "string" || Array.isArray(targets)) {
     return { browsers: targets };
   }
-  return {
-    ...targets,
-  };
+  return { ...targets };
 };
 
 export const validateConfigPathOption = (
