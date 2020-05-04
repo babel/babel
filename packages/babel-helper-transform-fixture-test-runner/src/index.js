@@ -20,30 +20,44 @@ import checkDuplicatedNodes from "babel-check-duplicated-nodes";
 import diff from "jest-diff";
 
 const moduleCache = {};
-const testContext = vm.createContext({
-  ...helpers,
-  process: process,
-  transform: babel.transform,
-  setTimeout: setTimeout,
-  setImmediate: setImmediate,
-  expect,
-});
-testContext.global = testContext;
+const sharedTestContext = createContext();
 
-// Initialize the test context with the polyfill, and then freeze the global to prevent implicit
-// global creation in tests, which could cause things to bleed between tests.
-runModuleInTestContext("@babel/polyfill", __filename);
+function createContext() {
+  const context = vm.createContext({
+    ...helpers,
+    process: process,
+    transform: babel.transform,
+    setTimeout: setTimeout,
+    setImmediate: setImmediate,
+    expect,
+  });
+  context.global = context;
 
-// Populate the "babelHelpers" global with Babel's helper utilities.
-runCodeInTestContext(buildExternalHelpers(), {
-  filename: path.join(__dirname, "babel-helpers-in-memory.js"),
-});
+  // Initialize the test context with the polyfill, and then freeze the global to prevent implicit
+  // global creation in tests, which could cause things to bleed between tests.
+  runModuleInTestContext("@babel/polyfill", __filename, context);
+
+  // Populate the "babelHelpers" global with Babel's helper utilities.
+  runCodeInTestContext(
+    buildExternalHelpers(),
+    {
+      filename: path.join(__dirname, "babel-helpers-in-memory.js"),
+    },
+    context,
+  );
+
+  return context;
+}
 
 /**
  * A basic implementation of CommonJS so we can execute `@babel/polyfill` inside our test context.
  * This allows us to run our unittests
  */
-function runModuleInTestContext(id: string, relativeFilename: string) {
+function runModuleInTestContext(
+  id: string,
+  relativeFilename: string,
+  context = sharedTestContext,
+) {
   const filename = resolve.sync(id, {
     basedir: path.dirname(relativeFilename),
   });
@@ -59,12 +73,12 @@ function runModuleInTestContext(id: string, relativeFilename: string) {
     exports: {},
   });
   const dirname = path.dirname(filename);
-  const req = id => runModuleInTestContext(id, filename);
+  const req = id => runModuleInTestContext(id, filename, context);
 
   const src = fs.readFileSync(filename, "utf8");
   const code = `(function (exports, require, module, __filename, __dirname) {\n${src}\n});`;
 
-  vm.runInContext(code, testContext, {
+  vm.runInContext(code, context, {
     filename,
     displayErrors: true,
     lineOffset: -1,
@@ -78,10 +92,14 @@ function runModuleInTestContext(id: string, relativeFilename: string) {
  *
  * Exposed for unit tests, not for use as an API.
  */
-export function runCodeInTestContext(code: string, opts: { filename: string }) {
+export function runCodeInTestContext(
+  code: string,
+  opts: { filename: string },
+  context = sharedTestContext,
+) {
   const filename = opts.filename;
   const dirname = path.dirname(filename);
-  const req = id => runModuleInTestContext(id, filename);
+  const req = id => runModuleInTestContext(id, filename, context);
 
   const module = {
     id: filename,
@@ -96,7 +114,7 @@ export function runCodeInTestContext(code: string, opts: { filename: string }) {
     // Note: This isn't doing .call(module.exports, ...) because some of our tests currently
     // rely on 'this === global'.
     const src = `(function(exports, require, module, __filename, __dirname, opts) {\n${code}\n});`;
-    return vm.runInContext(src, testContext, {
+    return vm.runInContext(src, context, {
       filename,
       displayErrors: true,
       lineOffset: -1,
@@ -184,13 +202,14 @@ function run(task) {
   let resultExec;
 
   if (execCode) {
+    const context = createContext();
     const execOpts = getOpts(exec);
     result = babel.transform(execCode, execOpts);
     checkDuplicatedNodes(babel, result.ast);
     execCode = result.code;
 
     try {
-      resultExec = runCodeInTestContext(execCode, execOpts);
+      resultExec = runCodeInTestContext(execCode, execOpts, context);
     } catch (err) {
       // Pass empty location to include the whole file in the output.
       err.message =

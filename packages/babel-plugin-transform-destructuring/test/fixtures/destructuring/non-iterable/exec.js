@@ -8,15 +8,8 @@ expect(
   () => [foo, bar] = {}
 ).toThrow(/destructure non-iterable/);
 
-// Simulate old browser
-let _Symbol = Symbol;
-Symbol = void 0;
-try {
+global.Symbol = void 0;
 
-  expect(
-    () => [foo, bar] = {}
-  ).toThrow(/destructure non-iterable/);
-
-} finally {
-  Symbol = _Symbol;
-}
+expect(
+  () => [foo, bar] = {}
+).toThrow(/destructure non-iterable/);
