@@ -744,7 +744,7 @@ helpers.createSuper = helper("7.9.0")`
   export default function _createSuper(Derived) {
     var hasNativeReflectConstruct = isNativeReflectConstruct();
 
-    return function () {
+    return function _createSuperInternal() {
       var Super = getPrototypeOf(Derived), result;
       if (hasNativeReflectConstruct) {
         // NOTE: This doesn't work if this.__proto__.constructor has been modified.
