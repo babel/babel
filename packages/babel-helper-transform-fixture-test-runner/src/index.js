@@ -19,7 +19,7 @@ import checkDuplicatedNodes from "babel-check-duplicated-nodes";
 
 import diff from "jest-diff";
 
-const moduleCache = {};
+const contextModuleCache = new WeakMap();
 const sharedTestContext = createContext();
 
 function createContext() {
@@ -32,6 +32,8 @@ function createContext() {
     expect,
   });
   context.global = context;
+
+  contextModuleCache.set(context, Object.create(null));
 
   // Initialize the test context with the polyfill, and then freeze the global to prevent implicit
   // global creation in tests, which could cause things to bleed between tests.
@@ -66,6 +68,7 @@ function runModuleInTestContext(
   // the context's global scope.
   if (filename === id) return require(id);
 
+  const moduleCache = contextModuleCache.get(context);
   if (moduleCache[filename]) return moduleCache[filename].exports;
 
   const module = (moduleCache[filename] = {
