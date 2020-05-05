@@ -208,7 +208,7 @@ export default declare(
                     isImportTypeOnly({
                       binding,
                       programPath: path,
-                      jsxPragma: fileJsxPragma || jsxPragma,
+                      jsxPragma: pragmaImportName,
                     })
                   ) {
                     importsToRemove.push(binding.path);
