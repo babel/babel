@@ -169,6 +169,11 @@ export default declare(
             }
           }
 
+          let pragmaImportName = fileJsxPragma || jsxPragma;
+          if (pragmaImportName) {
+            [pragmaImportName] = pragmaImportName.split(".");
+          }
+
           // remove type imports
           for (let stmt of path.get("body")) {
             if (t.isImportDeclaration(stmt)) {
