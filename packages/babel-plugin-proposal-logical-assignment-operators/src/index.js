@@ -39,11 +39,16 @@ export default declare(api => {
           }
         }
 
+        const isRHSAnonymousFunction = t.isFunction(right, { id: null });
+        const rightExpression = isRHSAnonymousFunction
+          ? t.sequenceExpression([t.numericLiteral(0), right])
+          : right;
+
         path.replaceWith(
           t.logicalExpression(
             operator.slice(0, -1),
             lhs,
-            t.assignmentExpression("=", left, right),
+            t.assignmentExpression("=", left, rightExpression),
           ),
         );
       },
