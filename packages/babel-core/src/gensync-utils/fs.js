@@ -2,7 +2,7 @@
 
 import fs from "fs";
 import gensync from "gensync";
-import mkdir from "mkdirp";
+import mkdir from "make-dir";
 
 export const readFile = gensync<[string, "utf8"], string>({
   sync: fs.readFileSync,
