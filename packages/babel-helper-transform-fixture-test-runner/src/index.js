@@ -35,17 +35,19 @@ function createContext() {
   });
   context.global = context;
 
-  contextModuleCache.set(context, Object.create(null));
+  const moduleCache = Object.create(null);
+  contextModuleCache.set(context, moduleCache);
 
   // Initialize the test context with the polyfill, and then freeze the global to prevent implicit
   // global creation in tests, which could cause things to bleed between tests.
-  runModuleInTestContext("@babel/polyfill", __filename, context);
+  runModuleInTestContext("@babel/polyfill", __filename, context, moduleCache);
 
   // Populate the "babelHelpers" global with Babel's helper utilities.
   runCacheableScriptInTestContext(
     path.join(__dirname, "babel-helpers-in-memory.js"),
     buildExternalHelpers,
     context,
+    moduleCache,
   );
 
   return context;
@@ -55,6 +57,7 @@ function runCacheableScriptInTestContext(
   filename: string,
   srcFn: () => string,
   context: Context,
+  moduleCache: Object,
 ) {
   let cached = cachedScripts.get(filename);
   if (!cached) {
@@ -82,7 +85,7 @@ function runCacheableScriptInTestContext(
     id: filename,
     exports: {},
   };
-  const req = id => runModuleInTestContext(id, filename, context);
+  const req = id => runModuleInTestContext(id, filename, context, moduleCache);
   const dirname = path.dirname(filename);
 
   script
@@ -96,7 +99,12 @@ function runCacheableScriptInTestContext(
  * A basic implementation of CommonJS so we can execute `@babel/polyfill` inside our test context.
  * This allows us to run our unittests
  */
-function runModuleInTestContext(id: string, relativeFilename: string, context) {
+function runModuleInTestContext(
+  id: string,
+  relativeFilename: string,
+  context: Context,
+  moduleCache: Object,
+) {
   const filename = resolve.sync(id, {
     basedir: path.dirname(relativeFilename),
   });
@@ -107,13 +115,13 @@ function runModuleInTestContext(id: string, relativeFilename: string, context) {
 
   // Modules can only evaluate once per context, so the moduleCache is a
   // stronger cache guarantee than the LRU's Script cache.
-  const moduleCache = contextModuleCache.get(context);
   if (moduleCache[filename]) return moduleCache[filename].exports;
 
   const module = runCacheableScriptInTestContext(
     filename,
     () => fs.readFileSync(filename, "utf8"),
     context,
+    moduleCache,
   );
   moduleCache[filename] = module;
 
@@ -132,7 +140,8 @@ export function runCodeInTestContext(
 ) {
   const filename = opts.filename;
   const dirname = path.dirname(filename);
-  const req = id => runModuleInTestContext(id, filename, context);
+  const moduleCache = contextModuleCache.get(context);
+  const req = id => runModuleInTestContext(id, filename, context, moduleCache);
 
   const module = {
     id: filename,
