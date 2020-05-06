@@ -16,9 +16,11 @@ import fs from "fs";
 import path from "path";
 import vm from "vm";
 import checkDuplicatedNodes from "babel-check-duplicated-nodes";
+import QuickLRU from "quick-lru";
 
 import diff from "jest-diff";
 
+const cachedScripts = new QuickLRU({ maxSize: 512 });
 const contextModuleCache = new WeakMap();
 const sharedTestContext = createContext();
 
@@ -40,26 +42,61 @@ function createContext() {
   runModuleInTestContext("@babel/polyfill", __filename, context);
 
   // Populate the "babelHelpers" global with Babel's helper utilities.
-  runCodeInTestContext(
-    buildExternalHelpers(),
-    {
-      filename: path.join(__dirname, "babel-helpers-in-memory.js"),
-    },
+  runCacheableScriptInTestContext(
+    path.join(__dirname, "babel-helpers-in-memory.js"),
+    buildExternalHelpers,
     context,
   );
 
   return context;
 }
 
+function runCacheableScriptInTestContext(
+  filename: string,
+  srcFn: () => string,
+  context: Context,
+) {
+  let cached = cachedScripts.get(filename);
+  if (!cached) {
+    const code = `(function (exports, require, module, __filename, __dirname) {\n${srcFn()}\n});`;
+    cached = {
+      code,
+      cachedData: undefined,
+    };
+    cachedScripts.set(filename, cached);
+  }
+
+  const script = new vm.Script(cached.code, {
+    filename,
+    displayErrors: true,
+    lineOffset: -1,
+    cachedData: cached.cachedData,
+    produceCachedData: true,
+  });
+
+  if (script.cachedDataProduced) {
+    cached.cachedData = script.cachedData;
+  }
+
+  const module = {
+    id: filename,
+    exports: {},
+  };
+  const req = id => runModuleInTestContext(id, filename, context);
+  const dirname = path.dirname(filename);
+
+  script
+    .runInContext(context)
+    .call(module.exports, module.exports, req, module, filename, dirname);
+
+  return module;
+}
+
 /**
  * A basic implementation of CommonJS so we can execute `@babel/polyfill` inside our test context.
  * This allows us to run our unittests
  */
-function runModuleInTestContext(
-  id: string,
-  relativeFilename: string,
-  context = sharedTestContext,
-) {
+function runModuleInTestContext(id: string, relativeFilename: string, context) {
   const filename = resolve.sync(id, {
     basedir: path.dirname(relativeFilename),
   });
@@ -68,24 +105,17 @@ function runModuleInTestContext(
   // the context's global scope.
   if (filename === id) return require(id);
 
+  // Modules can only evaluate once per context, so the moduleCache is a
+  // stronger cache guarantee than the LRU's Script cache.
   const moduleCache = contextModuleCache.get(context);
   if (moduleCache[filename]) return moduleCache[filename].exports;
 
-  const module = (moduleCache[filename] = {
-    id: filename,
-    exports: {},
-  });
-  const dirname = path.dirname(filename);
-  const req = id => runModuleInTestContext(id, filename, context);
-
-  const src = fs.readFileSync(filename, "utf8");
-  const code = `(function (exports, require, module, __filename, __dirname) {\n${src}\n});`;
-
-  vm.runInContext(code, context, {
+  const module = runCacheableScriptInTestContext(
     filename,
-    displayErrors: true,
-    lineOffset: -1,
-  }).call(module.exports, module.exports, req, module, filename, dirname);
+    () => fs.readFileSync(filename, "utf8"),
+    context,
+  );
+  moduleCache[filename] = module;
 
   return module.exports;
 }
