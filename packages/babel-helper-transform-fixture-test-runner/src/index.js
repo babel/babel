@@ -20,7 +20,7 @@ import QuickLRU from "quick-lru";
 
 import diff from "jest-diff";
 
-const cachedScripts = new QuickLRU({ maxSize: 512 });
+const cachedScripts = new QuickLRU({ maxSize: 10 });
 const contextModuleCache = new WeakMap();
 const sharedTestContext = createContext();
 
