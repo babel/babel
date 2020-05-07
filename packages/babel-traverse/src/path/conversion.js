@@ -70,6 +70,21 @@ export function ensureBlock() {
 }
 
 /**
+ * Ensure that the path is inside a scope where it's possible to inject new
+ * variable declarations.
+ * In practice, this function replaces a path inside a default value of a
+ * parameter with an IIFE.
+ */
+export function ensureHasInjectionScope() {
+  if (!this.isExpression() || !this.scope.path.isPattern()) return this;
+
+  this.replaceWith(
+    t.callExpression(t.arrowFunctionExpression([], this.node), []),
+  );
+  return this.get("callee.body");
+}
+
+/**
  * Keeping this for backward-compatibility. You should use arrowFunctionToExpression() for >=7.x.
  */
 export function arrowFunctionToShadowed() {

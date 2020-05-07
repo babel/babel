@@ -98,7 +98,13 @@ export default declare((api, options) => {
             // expression, to avoid multiple calls to nested call expressions.
             check = ref = chainWithTypes;
           } else {
-            ref = scope.maybeGenerateMemoised(chain);
+            ref = scope.maybeGenerateMemoised(
+              chain,
+              null,
+              // Note: This won't be called when using @babel/traverse <7.9.7
+              () =>
+                (replacementPath = replacementPath.ensureHasInjectionScope()),
+            );
             if (ref) {
               check = t.assignmentExpression(
                 "=",
@@ -126,7 +132,13 @@ export default declare((api, options) => {
               // Otherwise, we need to memoize the context object, and change the call into a Function#call.
               // `a.?b.?()` translates roughly to `(_b = _a.b) != null && _b.call(_a)`
               const { object } = chain;
-              let context = scope.maybeGenerateMemoised(object);
+              let context = scope.maybeGenerateMemoised(
+                object,
+                null,
+                // Note: This won't be called when using @babel/traverse <7.9.7
+                () =>
+                  (replacementPath = replacementPath.ensureHasInjectionScope()),
+              );
               if (context) {
                 chain.object = t.assignmentExpression("=", context, object);
               } else if (t.isSuper(object)) {

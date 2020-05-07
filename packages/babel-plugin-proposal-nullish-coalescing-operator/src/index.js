@@ -16,7 +16,12 @@ export default declare((api, { loose = false }) => {
           return;
         }
 
-        let ref = scope.maybeGenerateMemoised(node.left);
+        let ref = scope.maybeGenerateMemoised(
+          node.left,
+          null,
+          // Note: This won't be called when using @babel/traverse <7.9.7
+          () => (path = path.ensureHasInjectionScope()),
+        );
         let assignment;
         // skip creating extra reference when `left` is static
         if (ref === null) {

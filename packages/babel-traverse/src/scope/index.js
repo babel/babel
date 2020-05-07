@@ -445,13 +445,17 @@ export default class Scope {
    * Possibly generate a memoised identifier if it is not static and has consequences.
    */
 
-  maybeGenerateMemoised(node: Object, dontPush?: boolean): ?Object {
+  maybeGenerateMemoised(
+    node: Object,
+    dontPush?: boolean,
+    getInjectionPath?: NodePath => void,
+  ): ?Object {
     if (this.isStatic(node)) {
       return null;
     } else {
       const id = this.generateUidIdentifierBasedOnNode(node);
       if (!dontPush) {
-        this.push({ id });
+        (getInjectionPath?.().scope ?? this).push({ id });
         return t.cloneNode(id);
       }
       return id;
@@ -868,6 +872,14 @@ export default class Scope {
     kind: "var" | "let",
   }) {
     let path = this.path;
+
+    if (path.isPattern()) {
+      // We are inside some function parameters
+      throw path.buildCodeFrameError(
+        "[Internal error] It's not possible to inject a variable in function parameters. " +
+          "Please check in the stack trace of this error which plugin is causing it.",
+      );
+    }
 
     if (!path.isBlockStatement() && !path.isProgram()) {
       path = this.getBlockParent().path;
