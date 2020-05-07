@@ -1,16 +1,16 @@
 #!/bin/sh
 set -ex
 
-BROWSERIFY_CMD="../../node_modules/browserify/bin/cmd.js"
-UGLIFY_CMD="../../node_modules/uglify-js/bin/uglifyjs"
+ROLLUP_CMD="../../node_modules/.bin/rollup"
+UGLIFY_CMD="../../node_modules/.bin/uglifyjs"
 
 mkdir -p dist
 
-node $BROWSERIFY_CMD lib/index.js \
-  --insert-global-vars 'global' \
-  --plugin bundle-collapser/plugin \
-  --plugin derequire/plugin \
-  >dist/polyfill.js
+node $ROLLUP_CMD lib/index.js \
+  --format iife \
+  --plugin rollup-plugin-commonjs \
+  --plugin rollup-plugin-node-resolve \
+  --file dist/polyfill.js
 node $UGLIFY_CMD dist/polyfill.js \
   --compress keep_fnames,keep_fargs \
   --mangle keep_fnames \
