@@ -4,12 +4,12 @@ var actual = transform(
 ).code;
 
 var expected = `
-  var _jsxFileName = "/fake/path/mock.js";
-  var x = <sometag __source={{
-    fileName: _jsxFileName,
-    lineNumber: 1,
-    columnNumber: 9
-  }} />;
+var _jsxFileName = "/fake/path/mock.js";
+var x = <sometag __source={{
+  fileName: _jsxFileName,
+  lineNumber: 1,
+  columnNumber: 9
+}} />;
 `;
 
 expect(actual).toBe(expected);
