@@ -40,7 +40,12 @@ function createContext() {
 
   // Initialize the test context with the polyfill, and then freeze the global to prevent implicit
   // global creation in tests, which could cause things to bleed between tests.
-  runModuleInTestContext("@babel/polyfill", __filename, context, moduleCache);
+  runModuleInTestContext(
+    "@babel/polyfill/dist/polyfill.min",
+    __filename,
+    context,
+    moduleCache,
+  );
 
   // Populate the "babelHelpers" global with Babel's helper utilities.
   runCacheableScriptInTestContext(
