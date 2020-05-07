@@ -3,13 +3,13 @@ var actual = transform(
   Object.assign({}, opts, { filename: '/fake/path/mock.js' })
 ).code;
 
-var expected = multiline([
-  'var _jsxFileName = "/fake/path/mock.js";',
-  'var x = <sometag __source={{',
-  '  fileName: _jsxFileName,',
-  '  lineNumber: 1,',
-  '  columnNumber: 9',
-  '}} />;',
-]);
+var expected = `
+  var _jsxFileName = "/fake/path/mock.js";
+  var x = <sometag __source={{
+    fileName: _jsxFileName,
+    lineNumber: 1,
+    columnNumber: 9
+  }} />;
+`;
 
 expect(actual).toBe(expected);

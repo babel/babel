@@ -1,8 +1,8 @@
-var code = multiline([
-  "function foo() {",
-  "  var a = a ? a : a;",
-  "}",
-]);
+var code = `
+  function foo() {
+    var a = a ? a : a;
+  }
+`;
 
 transform(code, {
   plugins: [
