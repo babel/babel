@@ -1,3 +1,8 @@
+const oldGOPDs = Object.getOwnPropertyDescriptors;
 Object.getOwnPropertyDescriptors = null;
 
-({ ...{ a: 1 }, b: 1, ...{} });
+try {
+  ({ ...{ a: 1 }, b: 1, ...{} });
+} finally {
+  Object.getOwnPropertyDescriptors = oldGOPDs;
+}
