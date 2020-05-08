@@ -1140,7 +1140,8 @@ export default class ExpressionParser extends LValParser {
           return this.finishNode(node, "PipelinePrimaryTopicReference");
         }
 
-        if (isIdentifierStart(this.input.codePointAt(this.state.end))) {
+        const nextCh = this.input.codePointAt(this.state.end);
+        if (isIdentifierStart(nextCh) || nextCh === charCodes.backslash) {
           const start = this.state.start;
           node = (this.parseMaybePrivateName(true): N.PrivateName);
           if (this.match(tt._in)) {
