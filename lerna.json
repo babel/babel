@@ -37,6 +37,6 @@
   ],
   "npmClient": "yarn",
   "npmClientArgs": [
-    "--no-lockfile"
+    "--pure-lockfile"
   ]
 }
