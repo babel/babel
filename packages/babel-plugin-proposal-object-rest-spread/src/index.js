@@ -579,6 +579,16 @@ export default declare((api, opts) => {
             return;
           }
 
+          // In loose mode, we don't want to make multiple calls. We're assuming
+          // that the spread objects either don't use getters, or that the
+          // getters are pure and don't depend on the order of evaluation.
+          if (loose) {
+            if (hadProps) {
+              exp.arguments.push(obj);
+            }
+            return;
+          }
+
           exp = t.callExpression(t.cloneNode(helper), [
             exp,
             // If we have static props, we need to insert an empty object

@@ -6,4 +6,3 @@ try {
 } finally {
   Object.getOwnPropertyDescriptors = oldGOPDs;
 }
-
