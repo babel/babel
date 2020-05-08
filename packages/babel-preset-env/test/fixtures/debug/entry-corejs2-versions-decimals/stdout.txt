@@ -50,8 +50,6 @@ Using plugins:
   transform-typeof-symbol { "ie":"10" }
   transform-new-target { "ie":"10" }
   transform-regenerator { "electron":"0.36", "ie":"10" }
-  transform-member-expression-literals { "electron":"0.36" }
-  transform-property-literals { "electron":"0.36" }
   transform-modules-commonjs { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-dynamic-import { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
 
@@ -59,34 +57,19 @@ Using polyfills with `entry` option:
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs2-versions-decimals/input.mjs] Replaced @babel/polyfill entries with the following polyfills:
   es6.array.copy-within { "ie":"10" }
-  es6.array.every { "electron":"0.36" }
   es6.array.fill { "ie":"10" }
-  es6.array.filter { "electron":"0.36" }
   es6.array.find { "ie":"10" }
   es6.array.find-index { "ie":"10" }
   es7.array.flat-map { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  es6.array.for-each { "electron":"0.36" }
   es6.array.from { "electron":"0.36", "ie":"10", "node":"6.1" }
   es7.array.includes { "ie":"10" }
-  es6.array.index-of { "electron":"0.36" }
-  es6.array.is-array { "electron":"0.36" }
   es6.array.iterator { "ie":"10" }
-  es6.array.last-index-of { "electron":"0.36" }
-  es6.array.map { "electron":"0.36" }
   es6.array.of { "ie":"10" }
-  es6.array.reduce { "electron":"0.36" }
-  es6.array.reduce-right { "electron":"0.36" }
-  es6.array.some { "electron":"0.36" }
   es6.array.sort { "chrome":"54", "electron":"0.36", "node":"6.1" }
   es6.array.species { "electron":"0.36", "ie":"10", "node":"6.1" }
-  es6.date.now { "electron":"0.36" }
-  es6.date.to-iso-string { "electron":"0.36" }
-  es6.date.to-json { "electron":"0.36" }
   es6.date.to-primitive { "ie":"10" }
-  es6.date.to-string { "electron":"0.36" }
-  es6.function.bind { "electron":"0.36" }
   es6.function.has-instance { "electron":"0.36", "ie":"10", "node":"6.1" }
-  es6.function.name { "electron":"0.36", "ie":"10" }
+  es6.function.name { "ie":"10" }
   es6.map { "electron":"0.36", "ie":"10", "node":"6.1" }
   es6.math.acosh { "ie":"10" }
   es6.math.asinh { "ie":"10" }
@@ -116,11 +99,8 @@ Using polyfills with `entry` option:
   es6.number.parse-float { "ie":"10" }
   es6.number.parse-int { "ie":"10" }
   es6.object.assign { "electron":"0.36", "ie":"10" }
-  es6.object.create { "electron":"0.36" }
   es7.object.define-getter { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es7.object.define-setter { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  es6.object.define-property { "electron":"0.36" }
-  es6.object.define-properties { "electron":"0.36" }
   es7.object.entries { "electron":"0.36", "ie":"10", "node":"6.1" }
   es6.object.freeze { "ie":"10" }
   es6.object.get-own-property-descriptor { "ie":"10" }
@@ -164,34 +144,32 @@ Using polyfills with `entry` option:
   es6.set { "electron":"0.36", "ie":"10", "node":"6.1" }
   es6.symbol { "electron":"0.36", "ie":"10", "node":"6.1" }
   es7.symbol.async-iterator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  es6.string.anchor { "electron":"0.36", "ie":"10" }
-  es6.string.big { "electron":"0.36", "ie":"10" }
-  es6.string.blink { "electron":"0.36", "ie":"10" }
-  es6.string.bold { "electron":"0.36", "ie":"10" }
+  es6.string.anchor { "ie":"10" }
+  es6.string.big { "ie":"10" }
+  es6.string.blink { "ie":"10" }
+  es6.string.bold { "ie":"10" }
   es6.string.code-point-at { "ie":"10" }
   es6.string.ends-with { "ie":"10" }
-  es6.string.fixed { "electron":"0.36", "ie":"10" }
-  es6.string.fontcolor { "electron":"0.36", "ie":"10" }
-  es6.string.fontsize { "electron":"0.36", "ie":"10" }
+  es6.string.fixed { "ie":"10" }
+  es6.string.fontcolor { "ie":"10" }
+  es6.string.fontsize { "ie":"10" }
   es6.string.from-code-point { "ie":"10" }
   es6.string.includes { "ie":"10" }
-  es6.string.italics { "electron":"0.36", "ie":"10" }
+  es6.string.italics { "ie":"10" }
   es6.string.iterator { "ie":"10" }
-  es6.string.link { "electron":"0.36", "ie":"10" }
+  es6.string.link { "ie":"10" }
   es7.string.pad-start { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es7.string.pad-end { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es6.string.raw { "ie":"10" }
   es6.string.repeat { "ie":"10" }
-  es6.string.small { "electron":"0.36", "ie":"10" }
+  es6.string.small { "ie":"10" }
   es6.string.starts-with { "ie":"10" }
-  es6.string.strike { "electron":"0.36", "ie":"10" }
-  es6.string.sub { "electron":"0.36", "ie":"10" }
-  es6.string.sup { "electron":"0.36", "ie":"10" }
-  es6.string.trim { "electron":"0.36" }
+  es6.string.strike { "ie":"10" }
+  es6.string.sub { "ie":"10" }
+  es6.string.sup { "ie":"10" }
   es7.string.trim-left { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es7.string.trim-right { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es6.typed.array-buffer { "electron":"0.36", "ie":"10", "node":"6.1" }
-  es6.typed.data-view { "electron":"0.36" }
   es6.typed.int8-array { "electron":"0.36", "ie":"10", "node":"6.1" }
   es6.typed.uint8-array { "electron":"0.36", "ie":"10", "node":"6.1" }
   es6.typed.uint8-clamped-array { "electron":"0.36", "ie":"10", "node":"6.1" }

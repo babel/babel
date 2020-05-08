@@ -744,7 +744,7 @@ helpers.createSuper = helper("7.9.0")`
   export default function _createSuper(Derived) {
     var hasNativeReflectConstruct = isNativeReflectConstruct();
 
-    return function () {
+    return function _createSuperInternal() {
       var Super = getPrototypeOf(Derived), result;
       if (hasNativeReflectConstruct) {
         // NOTE: This doesn't work if this.__proto__.constructor has been modified.
@@ -1044,7 +1044,7 @@ helpers.unsupportedIterableToArray = helper("7.9.0")`
     if (typeof o === "string") return arrayLikeToArray(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor) n = o.constructor.name;
-    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Map" || n === "Set") return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
       return arrayLikeToArray(o, minLen);
   }

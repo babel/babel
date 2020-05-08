@@ -358,6 +358,8 @@ export default declare((api, options, dirname) => {
         enter(path) {
           if (!injectCoreJS) return;
           if (!path.isReferenced()) return;
+          // skip transforming `delete something.includes`
+          if (path.parentPath.isUnaryExpression({ operator: "delete" })) return;
 
           const { node } = path;
           const { object } = node;

@@ -13,9 +13,9 @@ import {
 } from "./utils";
 import { browserNameMap } from "./targets";
 import { TargetNames } from "./options";
-import type { Targets } from "./types";
+import type { Target, Targets, InputTargets, Browsers } from "./types";
 
-export type { Targets };
+export type { Targets, InputTargets };
 
 export { prettifyTargets } from "./pretty";
 export { getInclusionReasons } from "./debug";
@@ -39,7 +39,7 @@ function objectToBrowserslist(object: Targets): Array<string> {
   }, []);
 }
 
-function validateTargetNames(targets: Targets): void {
+function validateTargetNames(targets: InputTargets): Targets {
   const validTargets = Object.keys(TargetNames);
   for (const target in targets) {
     if (!TargetNames[target]) {
@@ -49,30 +49,22 @@ function validateTargetNames(targets: Targets): void {
       );
     }
   }
+
+  // $FlowIgnore
+  return targets;
 }
 
-export function isBrowsersQueryValid(
-  browsers: string | Array<string> | Targets,
-): boolean {
+export function isBrowsersQueryValid(browsers: Browsers | Targets): boolean {
   return typeof browsers === "string" || Array.isArray(browsers);
 }
 
-function validateBrowsers(browsers) {
+function validateBrowsers(browsers: Browsers | void) {
   invariant(
     typeof browsers === "undefined" || isBrowsersQueryValid(browsers),
-    `Invalid Option: '${browsers}' is not a valid browserslist query`,
+    `Invalid Option: '${String(browsers)}' is not a valid browserslist query`,
   );
 
   return browsers;
-}
-
-function mergeBrowsers(fromQuery: Targets, fromTarget: Targets) {
-  return Object.keys(fromTarget).reduce((queryObj, targKey) => {
-    if (targKey !== TargetNames.browsers) {
-      queryObj[targKey] = fromTarget[targKey];
-    }
-    return queryObj;
-  }, fromQuery);
 }
 
 function getLowestVersions(browsers: Array<string>): Targets {
@@ -170,30 +162,31 @@ type ParsedResult = {
 };
 
 export default function getTargets(
-  targets: Object = {},
+  inputTargets: InputTargets = {},
   options: Object = {},
 ): Targets {
   const targetOpts: Targets = {};
 
-  validateTargetNames(targets);
-
   // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
   // These values OVERRIDE the `browsers` field.
-  if (targets.esmodules) {
+  if (inputTargets.esmodules) {
     const supportsESModules = browserModulesData["es6.module"];
-    targets.browsers = Object.keys(supportsESModules)
+    inputTargets.browsers = Object.keys(supportsESModules)
       .map(browser => `${browser} ${supportsESModules[browser]}`)
       .join(", ");
   }
 
   // Remove esmodules after being consumed to fix `hasTargets` below
-  delete targets.esmodules;
+  delete inputTargets.esmodules;
 
   // Parse browsers target via browserslist
-  const browsersquery = validateBrowsers(targets.browsers);
+  const browsersquery = validateBrowsers(inputTargets.browsers);
+  delete inputTargets.browsers;
 
-  const hasTargets = Object.keys(targets).length > 0;
-  const shouldParseBrowsers = !!targets.browsers;
+  let targets: Targets = validateTargetNames(inputTargets);
+
+  const shouldParseBrowsers = !!browsersquery;
+  const hasTargets = shouldParseBrowsers || Object.keys(targets).length > 0;
   const shouldSearchForConfig =
     !options.ignoreBrowserslistConfig && !hasTargets;
 
@@ -215,43 +208,39 @@ export default function getTargets(
     });
 
     const queryBrowsers = getLowestVersions(browsers);
-    targets = mergeBrowsers(queryBrowsers, targets);
+    targets = Object.assign(queryBrowsers, targets);
 
     // Reset browserslist defaults
     browserslist.defaults = browserslistDefaults;
   }
 
   // Parse remaining targets
-  const parsed = Object.keys(targets)
-    .filter(value => value !== TargetNames.esmodules)
-    .sort()
-    .reduce(
-      (results: ParsedResult, target: string): ParsedResult => {
-        if (target !== TargetNames.browsers) {
-          const value = targets[target];
+  const parsed = (Object.keys(targets): Array<Target>).sort().reduce(
+    (results: ParsedResult, target: $Keys<Targets>): ParsedResult => {
+      const value = targets[target];
 
-          // Warn when specifying minor/patch as a decimal
-          if (typeof value === "number" && value % 1 !== 0) {
-            results.decimalWarnings.push({ target, value });
-          }
+      // Warn when specifying minor/patch as a decimal
+      if (typeof value === "number" && value % 1 !== 0) {
+        results.decimalWarnings.push({ target, value });
+      }
 
-          // Check if we have a target parser?
-          const parser = targetParserMap[target] || targetParserMap.__default;
-          const [parsedTarget, parsedValue] = parser(target, value);
+      // Check if we have a target parser?
+      // $FlowIgnore - Flow doesn't like that some targetParserMap[target] might be missing
+      const parser = targetParserMap[target] ?? targetParserMap.__default;
+      const [parsedTarget, parsedValue] = parser(target, value);
 
-          if (parsedValue) {
-            // Merge (lowest wins)
-            results.targets[parsedTarget] = parsedValue;
-          }
-        }
+      if (parsedValue) {
+        // Merge (lowest wins)
+        results.targets[parsedTarget] = parsedValue;
+      }
 
-        return results;
-      },
-      {
-        targets: targetOpts,
-        decimalWarnings: [],
-      },
-    );
+      return results;
+    },
+    {
+      targets: targetOpts,
+      decimalWarnings: [],
+    },
+  );
 
   outputDecimalWarning(parsed.decimalWarnings);
 

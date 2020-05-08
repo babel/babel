@@ -8,7 +8,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "5",
-    "electron": "0.35"
+    "electron": "0.32"
   },
   "es6.array.every": {
     "chrome": "5",
@@ -22,7 +22,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.array.fill": {
     "chrome": "45",
@@ -33,7 +33,7 @@
     "node": "4",
     "ios": "8",
     "samsung": "5",
-    "electron": "0.35"
+    "electron": "0.32"
   },
   "es6.array.filter": {
     "chrome": "5",
@@ -47,7 +47,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.array.find": {
     "chrome": "45",
@@ -58,7 +58,7 @@
     "node": "4",
     "ios": "8",
     "samsung": "5",
-    "electron": "0.35"
+    "electron": "0.32"
   },
   "es6.array.find-index": {
     "chrome": "45",
@@ -69,7 +69,7 @@
     "node": "4",
     "ios": "8",
     "samsung": "5",
-    "electron": "0.35"
+    "electron": "0.32"
   },
   "es7.array.flat-map": {
     "chrome": "69",
@@ -80,7 +80,7 @@
     "node": "11",
     "ios": "12",
     "samsung": "10",
-    "electron": "4.2"
+    "electron": "4"
   },
   "es6.array.for-each": {
     "chrome": "5",
@@ -94,7 +94,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.array.from": {
     "chrome": "51",
@@ -130,7 +130,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.array.is-array": {
     "chrome": "5",
@@ -144,7 +144,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.array.iterator": {
     "chrome": "38",
@@ -155,7 +155,7 @@
     "node": "0.12",
     "ios": "8",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.array.last-index-of": {
     "chrome": "5",
@@ -169,7 +169,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.array.map": {
     "chrome": "5",
@@ -183,7 +183,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.array.of": {
     "chrome": "45",
@@ -194,7 +194,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "5",
-    "electron": "0.35"
+    "electron": "0.32"
   },
   "es6.array.reduce": {
     "chrome": "5",
@@ -208,7 +208,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.array.reduce-right": {
     "chrome": "5",
@@ -222,7 +222,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.array.some": {
     "chrome": "5",
@@ -236,7 +236,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.array.sort": {
     "chrome": "63",
@@ -248,7 +248,7 @@
     "ie": "9",
     "ios": "12",
     "samsung": "8",
-    "electron": "3.1"
+    "electron": "3"
   },
   "es6.array.species": {
     "chrome": "51",
@@ -273,7 +273,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.date.to-iso-string": {
     "chrome": "5",
@@ -287,7 +287,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.date.to-json": {
     "chrome": "5",
@@ -300,7 +300,7 @@
     "android": "4",
     "ios": "10",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.date.to-primitive": {
     "chrome": "47",
@@ -325,7 +325,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.function.bind": {
     "chrome": "7",
@@ -339,7 +339,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "5"
+    "electron": "0.20"
   },
   "es6.function.has-instance": {
     "chrome": "51",
@@ -363,7 +363,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.map": {
     "chrome": "51",
@@ -385,7 +385,7 @@
     "node": "0.12",
     "ios": "8",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.math.asinh": {
     "chrome": "38",
@@ -396,7 +396,7 @@
     "node": "0.12",
     "ios": "8",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.math.atanh": {
     "chrome": "38",
@@ -407,7 +407,7 @@
     "node": "0.12",
     "ios": "8",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.math.cbrt": {
     "chrome": "38",
@@ -418,7 +418,7 @@
     "node": "0.12",
     "ios": "8",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.math.clz32": {
     "chrome": "38",
@@ -429,7 +429,7 @@
     "node": "0.12",
     "ios": "9",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.math.cosh": {
     "chrome": "38",
@@ -440,7 +440,7 @@
     "node": "0.12",
     "ios": "8",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.math.expm1": {
     "chrome": "38",
@@ -451,7 +451,7 @@
     "node": "0.12",
     "ios": "8",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.math.fround": {
     "chrome": "38",
@@ -462,7 +462,7 @@
     "node": "0.12",
     "ios": "8",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.math.hypot": {
     "chrome": "38",
@@ -473,7 +473,7 @@
     "node": "0.12",
     "ios": "8",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.math.imul": {
     "chrome": "30",
@@ -485,7 +485,7 @@
     "android": "4.4",
     "ios": "7",
     "samsung": "2",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.math.log1p": {
     "chrome": "38",
@@ -496,7 +496,7 @@
     "node": "0.12",
     "ios": "8",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.math.log10": {
     "chrome": "38",
@@ -507,7 +507,7 @@
     "node": "0.12",
     "ios": "8",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.math.log2": {
     "chrome": "38",
@@ -518,7 +518,7 @@
     "node": "0.12",
     "ios": "8",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.math.sign": {
     "chrome": "38",
@@ -529,7 +529,7 @@
     "node": "0.12",
     "ios": "9",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.math.sinh": {
     "chrome": "38",
@@ -540,7 +540,7 @@
     "node": "0.12",
     "ios": "8",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.math.tanh": {
     "chrome": "38",
@@ -551,7 +551,7 @@
     "node": "0.12",
     "ios": "8",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.math.trunc": {
     "chrome": "38",
@@ -562,7 +562,7 @@
     "node": "0.12",
     "ios": "8",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.number.constructor": {
     "chrome": "41",
@@ -573,7 +573,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.24"
+    "electron": "0.22"
   },
   "es6.number.epsilon": {
     "chrome": "34",
@@ -584,7 +584,7 @@
     "node": "0.12",
     "ios": "9",
     "samsung": "2",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.number.is-finite": {
     "chrome": "19",
@@ -596,7 +596,7 @@
     "android": "4.1",
     "ios": "9",
     "samsung": "1.5",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.number.is-integer": {
     "chrome": "34",
@@ -607,7 +607,7 @@
     "node": "0.12",
     "ios": "9",
     "samsung": "2",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.number.is-nan": {
     "chrome": "19",
@@ -619,7 +619,7 @@
     "android": "4.1",
     "ios": "9",
     "samsung": "1.5",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.number.is-safe-integer": {
     "chrome": "34",
@@ -630,7 +630,7 @@
     "node": "0.12",
     "ios": "9",
     "samsung": "2",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.number.max-safe-integer": {
     "chrome": "34",
@@ -641,7 +641,7 @@
     "node": "0.12",
     "ios": "9",
     "samsung": "2",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.number.min-safe-integer": {
     "chrome": "34",
@@ -652,7 +652,7 @@
     "node": "0.12",
     "ios": "9",
     "samsung": "2",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.number.parse-float": {
     "chrome": "34",
@@ -663,7 +663,7 @@
     "node": "0.12",
     "ios": "9",
     "samsung": "2",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.number.parse-int": {
     "chrome": "34",
@@ -674,7 +674,7 @@
     "node": "0.12",
     "ios": "9",
     "samsung": "2",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.object.assign": {
     "chrome": "49",
@@ -685,7 +685,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "es6.object.create": {
     "chrome": "5",
@@ -699,7 +699,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es7.object.define-getter": {
     "chrome": "62",
@@ -710,7 +710,7 @@
     "node": "8.10",
     "ios": "9",
     "samsung": "8",
-    "electron": "3.1"
+    "electron": "3"
   },
   "es7.object.define-setter": {
     "chrome": "62",
@@ -721,7 +721,7 @@
     "node": "8.10",
     "ios": "9",
     "samsung": "8",
-    "electron": "3.1"
+    "electron": "3"
   },
   "es6.object.define-property": {
     "chrome": "5",
@@ -735,7 +735,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.object.define-properties": {
     "chrome": "5",
@@ -749,7 +749,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es7.object.entries": {
     "chrome": "54",
@@ -771,7 +771,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "4",
-    "electron": "0.31"
+    "electron": "0.30"
   },
   "es6.object.get-own-property-descriptor": {
     "chrome": "44",
@@ -782,7 +782,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "4",
-    "electron": "0.31"
+    "electron": "0.30"
   },
   "es7.object.get-own-property-descriptors": {
     "chrome": "54",
@@ -815,7 +815,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "4",
-    "electron": "0.31"
+    "electron": "0.30"
   },
   "es7.object.lookup-getter": {
     "chrome": "62",
@@ -826,7 +826,7 @@
     "node": "8.10",
     "ios": "9",
     "samsung": "8",
-    "electron": "3.1"
+    "electron": "3"
   },
   "es7.object.lookup-setter": {
     "chrome": "62",
@@ -837,7 +837,7 @@
     "node": "8.10",
     "ios": "9",
     "samsung": "8",
-    "electron": "3.1"
+    "electron": "3"
   },
   "es6.object.prevent-extensions": {
     "chrome": "44",
@@ -848,7 +848,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "4",
-    "electron": "0.31"
+    "electron": "0.30"
   },
   "es6.object.to-string": {
     "chrome": "57",
@@ -871,7 +871,7 @@
     "android": "4.1",
     "ios": "9",
     "samsung": "1.5",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.object.is-frozen": {
     "chrome": "44",
@@ -882,7 +882,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "4",
-    "electron": "0.31"
+    "electron": "0.30"
   },
   "es6.object.is-sealed": {
     "chrome": "44",
@@ -893,7 +893,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "4",
-    "electron": "0.31"
+    "electron": "0.30"
   },
   "es6.object.is-extensible": {
     "chrome": "44",
@@ -904,7 +904,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "4",
-    "electron": "0.31"
+    "electron": "0.30"
   },
   "es6.object.keys": {
     "chrome": "40",
@@ -926,7 +926,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "4",
-    "electron": "0.31"
+    "electron": "0.30"
   },
   "es6.object.set-prototype-of": {
     "chrome": "34",
@@ -938,7 +938,7 @@
     "ie": "11",
     "ios": "9",
     "samsung": "2",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es7.object.values": {
     "chrome": "54",
@@ -971,7 +971,7 @@
     "node": "10",
     "ios": "11.3",
     "samsung": "8",
-    "electron": "3.1"
+    "electron": "3"
   },
   "es6.reflect.apply": {
     "chrome": "49",
@@ -982,7 +982,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "es6.reflect.construct": {
     "chrome": "49",
@@ -993,7 +993,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "es6.reflect.define-property": {
     "chrome": "49",
@@ -1004,7 +1004,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "es6.reflect.delete-property": {
     "chrome": "49",
@@ -1015,7 +1015,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "es6.reflect.get": {
     "chrome": "49",
@@ -1026,7 +1026,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "es6.reflect.get-own-property-descriptor": {
     "chrome": "49",
@@ -1037,7 +1037,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "es6.reflect.get-prototype-of": {
     "chrome": "49",
@@ -1048,7 +1048,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "es6.reflect.has": {
     "chrome": "49",
@@ -1059,7 +1059,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "es6.reflect.is-extensible": {
     "chrome": "49",
@@ -1070,7 +1070,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "es6.reflect.own-keys": {
     "chrome": "49",
@@ -1081,7 +1081,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "es6.reflect.prevent-extensions": {
     "chrome": "49",
@@ -1092,7 +1092,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "es6.reflect.set": {
     "chrome": "49",
@@ -1103,7 +1103,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "es6.reflect.set-prototype-of": {
     "chrome": "49",
@@ -1114,7 +1114,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "es6.regexp.constructor": {
     "chrome": "50",
@@ -1136,7 +1136,7 @@
     "node": "6",
     "ios": "9",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "es6.regexp.match": {
     "chrome": "50",
@@ -1224,7 +1224,7 @@
     "node": "10",
     "ios": "12",
     "samsung": "8",
-    "electron": "3.1"
+    "electron": "3"
   },
   "es6.string.anchor": {
     "chrome": "5",
@@ -1237,7 +1237,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.string.big": {
     "chrome": "5",
@@ -1250,7 +1250,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.string.blink": {
     "chrome": "5",
@@ -1263,7 +1263,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.string.bold": {
     "chrome": "5",
@@ -1276,7 +1276,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.string.code-point-at": {
     "chrome": "41",
@@ -1287,7 +1287,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.24"
+    "electron": "0.22"
   },
   "es6.string.ends-with": {
     "chrome": "41",
@@ -1298,7 +1298,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.24"
+    "electron": "0.22"
   },
   "es6.string.fixed": {
     "chrome": "5",
@@ -1311,7 +1311,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.string.fontcolor": {
     "chrome": "5",
@@ -1324,7 +1324,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.string.fontsize": {
     "chrome": "5",
@@ -1337,7 +1337,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.string.from-code-point": {
     "chrome": "41",
@@ -1348,7 +1348,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.24"
+    "electron": "0.22"
   },
   "es6.string.includes": {
     "chrome": "41",
@@ -1359,7 +1359,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.24"
+    "electron": "0.22"
   },
   "es6.string.italics": {
     "chrome": "5",
@@ -1372,7 +1372,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.string.iterator": {
     "chrome": "38",
@@ -1383,7 +1383,7 @@
     "node": "0.12",
     "ios": "9",
     "samsung": "3",
-    "electron": "0.2"
+    "electron": "0.20"
   },
   "es6.string.link": {
     "chrome": "5",
@@ -1396,7 +1396,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es7.string.pad-start": {
     "chrome": "57",
@@ -1429,7 +1429,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.24"
+    "electron": "0.22"
   },
   "es6.string.repeat": {
     "chrome": "41",
@@ -1440,7 +1440,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.24"
+    "electron": "0.22"
   },
   "es6.string.small": {
     "chrome": "5",
@@ -1453,7 +1453,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.string.starts-with": {
     "chrome": "41",
@@ -1464,7 +1464,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.24"
+    "electron": "0.22"
   },
   "es6.string.strike": {
     "chrome": "5",
@@ -1477,7 +1477,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.string.sub": {
     "chrome": "5",
@@ -1490,7 +1490,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.string.sup": {
     "chrome": "5",
@@ -1503,7 +1503,7 @@
     "ios": "7",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.string.trim": {
     "chrome": "5",
@@ -1517,7 +1517,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es7.string.trim-left": {
     "chrome": "66",
@@ -1528,7 +1528,7 @@
     "node": "10",
     "ios": "12",
     "samsung": "9",
-    "electron": "3.1"
+    "electron": "3"
   },
   "es7.string.trim-right": {
     "chrome": "66",
@@ -1539,7 +1539,7 @@
     "node": "10",
     "ios": "12",
     "samsung": "9",
-    "electron": "3.1"
+    "electron": "3"
   },
   "es6.typed.array-buffer": {
     "chrome": "51",
@@ -1564,7 +1564,7 @@
     "ios": "6",
     "phantom": "2",
     "samsung": "1",
-    "electron": "1.1"
+    "electron": "0.20"
   },
   "es6.typed.int8-array": {
     "chrome": "51",

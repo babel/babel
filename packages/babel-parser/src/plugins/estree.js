@@ -208,6 +208,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.directiveToStmt(d),
       );
       node.body = directiveStatements.concat(node.body);
+      // $FlowIgnore - directives isn't optional in the type definition
       delete node.directives;
     }
 
@@ -389,7 +390,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (node.callee.type === "Import") {
         ((node: N.Node): N.EstreeImportExpression).type = "ImportExpression";
         ((node: N.Node): N.EstreeImportExpression).source = node.arguments[0];
+        // $FlowIgnore - arguments isn't optional in the type definition
         delete node.arguments;
+        // $FlowIgnore - callee isn't optional in the type definition
         delete node.callee;
       }
 

@@ -1,6 +1,5 @@
 import "core-js/modules/es7.array.flat-map";
 import "core-js/modules/es6.array.sort";
-import "core-js/modules/es6.function.bind";
 import "core-js/modules/es7.object.define-getter";
 import "core-js/modules/es7.object.define-setter";
 import "core-js/modules/es7.object.entries";
