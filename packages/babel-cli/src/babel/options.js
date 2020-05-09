@@ -272,6 +272,7 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     sourceType: opts.sourceType,
     ignore: opts.ignore,
     only: opts.only,
+    extensions: opts.extensions,
     retainLines: opts.retainLines,
     compact: opts.compact,
     minified: opts.minified,
@@ -307,7 +308,6 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     cliOptions: {
       filename: opts.filename,
       filenames,
-      extensions: opts.extensions,
       keepFileExtension: opts.keepFileExtension,
       outFileExtension: opts.outFileExtension,
       watch: opts.watch,

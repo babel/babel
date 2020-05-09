@@ -1,3 +1,4 @@
 {
+  "extensions": [".ts", ".tsx"],
   "presets": [["flow", {}, "before"], "typescript", ["flow", {}, "after"]]
 }

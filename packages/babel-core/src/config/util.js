@@ -15,6 +15,8 @@ export function mergeOptions(
       const generatorOpts = source.generatorOpts;
       const targetObj = (target.generatorOpts = target.generatorOpts || {});
       mergeDefaultFields(targetObj, generatorOpts);
+    } else if (k === "extensions" && target.extensions && source.extensions) {
+      target.extensions = target.extensions.concat(source.extensions);
     } else {
       const val = source[k];
       if (val !== undefined) target[k] = (val: any);

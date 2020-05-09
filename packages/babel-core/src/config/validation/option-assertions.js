@@ -3,7 +3,7 @@
 import type {
   ConfigFileSearch,
   BabelrcSearch,
-  IgnoreList,
+  FileExtension,
   IgnoreItem,
   PluginList,
   PluginItem,
@@ -212,17 +212,20 @@ export function assertArray(
   return value;
 }
 
-export function assertIgnoreList(
-  loc: OptionPath,
-  value: mixed,
-): IgnoreList | void {
-  const arr = assertArray(loc, value);
-  if (arr) {
-    arr.forEach((item, i) => assertIgnoreItem(access(loc, i), item));
-  }
-  return (arr: any);
+function createArrayAssertion<T>(
+  assertValid: (loc: GeneralPath, value: mixed) => T,
+): (loc: GeneralPath, value: mixed) => $ReadOnlyArray<T> | void {
+  return (loc, value) => {
+    const arr = assertArray(loc, value);
+    if (arr) arr.forEach((item, i) => assertValid(access(loc, i), item));
+    return (arr: any);
+  };
 }
-function assertIgnoreItem(loc: GeneralPath, value: mixed): IgnoreItem {
+
+export const assertIgnoreList = createArrayAssertion(function assertIgnoreItem(
+  loc: GeneralPath,
+  value: mixed,
+): IgnoreItem {
   if (
     typeof value !== "string" &&
     typeof value !== "function" &&
@@ -235,7 +238,26 @@ function assertIgnoreItem(loc: GeneralPath, value: mixed): IgnoreItem {
     );
   }
   return value;
-}
+});
+
+export const assertExtensionsList = createArrayAssertion(
+  function assertExtension(
+    loc: GeneralPath,
+    value: mixed,
+  ): FileExtension | "*" {
+    if (value === "*") return value;
+
+    if (typeof value !== "string") {
+      throw new Error(
+        `${msg(loc)} must be an array of string values, or undefined`,
+      );
+    }
+    if (!value.startsWith(".")) {
+      throw new Error(`${msg(loc)} must start with a '.' (dot)`);
+    }
+    return (value: any);
+  },
+);
 
 export function assertConfigApplicableTest(
   loc: OptionPath,

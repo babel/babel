@@ -585,35 +585,38 @@ describe("api", function() {
     return Promise.all([
       transformAsync("", {
         ignore: ["/foo"],
-        filename: "/foo/node_modules/bar",
+        filename: "/foo/node_modules/bar.js",
       }).then(assertIgnored),
 
       transformAsync("", {
         ignore: ["/foo/node_modules"],
-        filename: "/foo/node_modules/bar",
+        filename: "/foo/node_modules/bar.js",
       }).then(assertIgnored),
 
       transformAsync("", {
         ignore: ["/foo/node_modules/*"],
-        filename: "/foo/node_modules/bar",
+        filename: "/foo/node_modules/bar.js",
       }).then(assertIgnored),
 
       transformAsync("", {
         ignore: ["/foo/**/*"],
-        filename: "/foo/node_modules/bar",
+        filename: "/foo/node_modules/bar.js",
       }).then(assertIgnored),
 
       transformAsync("", {
+        extensions: [".foo", ".bar"],
         ignore: ["/foo/node_modules/*.bar"],
         filename: "/foo/node_modules/foo.bar",
       }).then(assertIgnored),
 
       transformAsync("", {
+        extensions: [".foo", ".bar"],
         ignore: ["/foo/node_modules/*.foo"],
         filename: "/foo/node_modules/foo.bar",
       }).then(assertNotIgnored),
 
       transformAsync("", {
+        extensions: [".foo", ".bar"],
         ignore: ["/bar/**/*"],
         filename: "/foo/node_modules/foo.bar",
       }).then(assertNotIgnored),
@@ -624,38 +627,94 @@ describe("api", function() {
     return Promise.all([
       transformAsync("", {
         only: ["/foo"],
-        filename: "/foo/node_modules/bar",
+        filename: "/foo/node_modules/bar.js",
       }).then(assertNotIgnored),
 
       transformAsync("", {
         only: ["/foo/*"],
-        filename: "/foo/node_modules/bar",
+        filename: "/foo/node_modules/bar.js",
       }).then(assertNotIgnored),
 
       transformAsync("", {
         only: ["/foo/node_modules"],
-        filename: "/foo/node_modules/bar",
+        filename: "/foo/node_modules/bar.js",
       }).then(assertNotIgnored),
 
       transformAsync("", {
+        extensions: [".foo", ".bar"],
         only: ["/foo/node_modules/*.bar"],
         filename: "/foo/node_modules/foo.bar",
       }).then(assertNotIgnored),
 
       transformAsync("", {
         only: ["/foo/node_modules"],
-        filename: "/foo/node_module/bar",
+        filename: "/foo/node_module/bar.js",
       }).then(assertIgnored),
 
       transformAsync("", {
         only: ["/foo/node_modules"],
-        filename: "/bar/node_modules/foo",
+        filename: "/bar/node_modules/foo.js",
       }).then(assertIgnored),
 
       transformAsync("", {
+        extensions: [".foo", ".bar"],
         only: ["/foo/node_modules/*.bar"],
         filename: "/foo/node_modules/bar.foo",
       }).then(assertIgnored),
+    ]);
+  });
+
+  it("extensions option", function() {
+    return Promise.all([
+      transformAsync("", {
+        filename: "bar.js",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        filename: "bar.mjs",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        filename: "bar.jsx",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        filename: undefined,
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        filename: "bar.ts",
+      }).then(assertIgnored),
+
+      transformAsync("", {
+        extensions: [".ts"],
+        filename: "bar.ts",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: [".ts"],
+        filename: "bar.js",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: ["*"],
+        filename: "bar.ts",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: ["*"],
+        filename: "bar.js",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: ["*"],
+        filename: undefined,
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: ["*"],
+        filename: "bar",
+      }).then(assertNotIgnored),
     ]);
   });
 

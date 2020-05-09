@@ -1,3 +1,4 @@
 {
+  "extensions": [".ts", ".tsx"],
   "presets": [["react", {}, "before"], "typescript", ["react", {}, "after"]]
 }

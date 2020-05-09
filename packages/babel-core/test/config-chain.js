@@ -951,6 +951,7 @@ describe("buildConfigChain", function() {
       passPerPreset: false,
       plugins: [],
       presets: [],
+      extensions: [".js", ".jsx", ".es6", ".es", ".mjs"],
     });
     const realEnv = process.env.NODE_ENV;
     const realBabelEnv = process.env.BABEL_ENV;
