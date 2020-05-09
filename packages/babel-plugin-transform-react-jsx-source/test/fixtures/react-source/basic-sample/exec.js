@@ -10,6 +10,6 @@ var x = <sometag __source={{
   lineNumber: 1,
   columnNumber: 9
 }} />;
-`;
+`.trim();
 
 expect(actual).toBe(expected);
