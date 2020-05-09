@@ -95,7 +95,7 @@ function applyMethodDecorators(path, state) {
 }
 
 function hasMethodDecorators(body) {
-  return body.some(node => node.decorators && node.decorators.length);
+  return body.some(node => node.decorators?.length);
 }
 
 /**

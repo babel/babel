@@ -310,7 +310,7 @@ export default class Printer {
 
     // catch up to this nodes newline if we're behind
     const pos = loc ? loc[prop] : null;
-    if (pos && pos.line !== null) {
+    if (pos?.line != null) {
       const count = pos.line - this._buf.getCurrentLine();
 
       for (let i = 0; i < count; i++) {
@@ -360,7 +360,7 @@ export default class Printer {
 
   endTerminatorless(state: Object) {
     this._noLineTerminator = false;
-    if (state && state.printed) {
+    if (state?.printed) {
       this.dedent();
       this.newline();
       this.token(")");
@@ -380,7 +380,7 @@ export default class Printer {
       throw new ReferenceError(
         `unknown node of type ${JSON.stringify(
           node.type,
-        )} with constructor ${JSON.stringify(node && node.constructor.name)}`,
+        )} with constructor ${JSON.stringify(node?.constructor.name)}`,
       );
     }
 
@@ -463,7 +463,7 @@ export default class Printer {
   }
 
   printJoin(nodes: ?Array, parent: Object, opts = {}) {
-    if (!nodes || !nodes.length) return;
+    if (!nodes?.length) return;
 
     if (opts.indent) this.indent();
 
@@ -523,7 +523,7 @@ export default class Printer {
   }
 
   printInnerComments(node, indent = true) {
-    if (!node.innerComments || !node.innerComments.length) return;
+    if (!node.innerComments?.length) return;
     if (indent) this.indent();
     this._printComments(node.innerComments);
     if (indent) this.dedent();
@@ -606,7 +606,7 @@ export default class Printer {
         : `/*${comment.value}*/`;
 
     if (isBlockComment && this.format.indent.adjustMultilineComment) {
-      const offset = comment.loc && comment.loc.start.column;
+      const offset = comment.loc?.start.column;
       if (offset) {
         const newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
         val = val.replace(newlineRegex, "\n");
@@ -630,7 +630,7 @@ export default class Printer {
   }
 
   _printComments(comments?: Array<Object>, inlinePureAnnotation?: boolean) {
-    if (!comments || !comments.length) return;
+    if (!comments?.length) return;
 
     if (
       inlinePureAnnotation &&

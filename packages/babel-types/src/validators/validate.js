@@ -18,7 +18,7 @@ export function validateField(
   val: any,
   field: any,
 ): void {
-  if (!field || !field.validate) return;
+  if (!field?.validate) return;
   if (field.optional && val == null) return;
 
   field.validate(node, key, val);

@@ -108,7 +108,7 @@ function getHelperMetadata(file) {
 
       const binding = child.scope.getBinding(exportName);
 
-      if (binding && binding.scope.path.isProgram()) {
+      if (binding?.scope.path.isProgram()) {
         exportBindingAssignments.push(makePath(child));
       }
     },

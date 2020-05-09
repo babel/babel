@@ -165,7 +165,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (name === "__proto__" && prop.kind === "init") {
         // Store the first redefinition's position
         if (protoRef.used) {
-          if (refExpressionErrors && refExpressionErrors.doubleProto === -1) {
+          if (refExpressionErrors?.doubleProto === -1) {
             refExpressionErrors.doubleProto = key.start;
           } else {
             this.raise(key.start, Errors.DuplicateProto);
@@ -181,7 +181,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         stmt.type === "ExpressionStatement" &&
         stmt.expression.type === "Literal" &&
         typeof stmt.expression.value === "string" &&
-        (!stmt.expression.extra || !stmt.expression.extra.parenthesized)
+        !stmt.expression.extra?.parenthesized
       );
     }
 
