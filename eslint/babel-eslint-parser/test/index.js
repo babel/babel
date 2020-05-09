@@ -15,30 +15,27 @@ const PROPS_TO_REMOVE = [
   "variance",
   "typeArguments",
 ];
-// We can remove needing to drop "exported" if null once this lands:
-// https://github.com/acornjs/acorn/pull/889
-const PROPS_TO_REMOVE_IF_NULL = ["exported"];
 
-function deeplyRemoveProperties(obj, props, propsIfNull) {
+function deeplyRemoveProperties(obj, props) {
   for (const [k, v] of Object.entries(obj)) {
     if (typeof v === "object") {
       if (Array.isArray(v)) {
         for (const el of v) {
           if (el != null) {
-            deeplyRemoveProperties(el, props, propsIfNull);
+            deeplyRemoveProperties(el, props);
           }
         }
       }
 
-      if (props.includes(k) || (propsIfNull.includes(k) && v === null)) {
+      if (props.includes(k)) {
         delete obj[k];
       } else if (v != null) {
-        deeplyRemoveProperties(v, props, propsIfNull);
+        deeplyRemoveProperties(v, props);
       }
       continue;
     }
 
-    if (props.includes(k) || (propsIfNull.includes(k) && v === null)) {
+    if (props.includes(k)) {
       delete obj[k];
     }
   }
@@ -72,7 +69,7 @@ describe("Babel and Espree", () => {
       eslintScopeManager: true,
       babelOptions: BABEL_OPTIONS,
     }).ast;
-    deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE, PROPS_TO_REMOVE_IF_NULL);
+    deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
     expect(babelAST).toEqual(espreeAST);
   }
 
