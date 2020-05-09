@@ -877,7 +877,7 @@ export default class Scope {
       // We are inside some function parameters
       throw path.buildCodeFrameError(
         "[Internal error] It's not possible to inject a variable in function parameters. " +
-          "Please check in the stack trace of this error which plugin is causing it.",
+          "Please check this error's stack track to see which plugin is causing it.",
       );
     }
 
