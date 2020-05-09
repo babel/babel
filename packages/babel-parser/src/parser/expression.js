@@ -1143,6 +1143,7 @@ export default class ExpressionParser extends LValParser {
         const nextCh = this.input.codePointAt(this.state.end);
         if (isIdentifierStart(nextCh) || nextCh === charCodes.backslash) {
           const start = this.state.start;
+          // $FlowIgnore It'll either parse a PrivateName or throw.
           node = (this.parseMaybePrivateName(true): N.PrivateName);
           if (this.match(tt._in)) {
             this.expectPlugin("privateIn");
