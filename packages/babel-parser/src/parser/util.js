@@ -259,6 +259,22 @@ export default class UtilParser extends Tokenizer {
       this.raise(doubleProto, Errors.DuplicateProto);
     }
   }
+
+  /**
+   * Test if current token is a literal property name
+   * LiteralPropertyName:
+   *   IdentifierName
+   *   StringLiteral
+   *   NumericLiteral
+   */
+  isLiteralPropertyName(): boolean {
+    return (
+      this.match(tt.name) ||
+      this.match(tt.string) ||
+      this.match(tt.num) ||
+      this.match(tt.bigint)
+    );
+  }
 }
 
 /**
