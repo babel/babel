@@ -276,7 +276,7 @@ export type OptionsSource =
   | "preset"
   | "plugin";
 
-type RootPath = $ReadOnly<{
+export type RootPath = $ReadOnly<{
   type: "root",
   source: OptionsSource,
 }>;

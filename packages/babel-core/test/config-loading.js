@@ -335,9 +335,22 @@ describe("@babel/core config loading", () => {
         plugins: [fooPlugin],
       };
 
-      expect(() => loadConfig(opts)).toThrow(
-        /\.inherits must be a function, or undefined/,
-      );
+      expect(() => loadConfig(opts)).toThrowErrorMatchingSnapshot();
+    });
+
+    it("should throw when plugin contains `enter` handler", () => {
+      const fooPlugin = {
+        visitor: {
+          enter() {},
+        },
+      };
+      const opts = {
+        cwd: path.dirname(FILEPATH),
+        filename: FILEPATH,
+        plugins: [fooPlugin],
+      };
+
+      expect(() => loadConfig(opts)).toThrowErrorMatchingSnapshot();
     });
   });
 

@@ -1,9 +1,13 @@
+// @flow
 import {
   assertString,
   assertFunction,
   assertObject,
+  msg,
   type ValidatorSet,
   type Validator,
+  type OptionPath,
+  type RootPath,
 } from "./option-assertions";
 
 // Note: The casts here are just meant to be static assertions to make sure
@@ -31,14 +35,16 @@ const VALIDATORS: ValidatorSet = {
   >),
 };
 
-function assertVisitorMap(key: string, value: mixed): VisitorMap {
-  const obj = assertObject(key, value);
+function assertVisitorMap(loc: OptionPath, value: mixed): VisitorMap {
+  const obj = assertObject(loc, value);
   if (obj) {
     Object.keys(obj).forEach(prop => assertVisitorHandler(prop, obj[prop]));
 
     if (obj.enter || obj.exit) {
       throw new Error(
-        `.${key} cannot contain catch-all "enter" or "exit" handlers. Please target individual nodes.`,
+        `${msg(
+          loc,
+        )} cannot contain catch-all "enter" or "exit" handlers. Please target individual nodes.`,
       );
     }
   }
@@ -50,7 +56,7 @@ function assertVisitorHandler(
   value: mixed,
 ): VisitorHandler | void {
   if (value && typeof value === "object") {
-    Object.keys(value).forEach(handler => {
+    Object.keys(value).forEach((handler: string) => {
       if (handler !== "enter" && handler !== "exit") {
         throw new Error(
           `.visitor["${key}"] may only have .enter and/or .exit handlers.`,
@@ -88,16 +94,17 @@ export function validatePluginObject(obj: {}): PluginObject {
     type: "root",
     source: "plugin",
   };
-  Object.keys(obj).forEach(key => {
+  Object.keys(obj).forEach((key: string) => {
     const validator = VALIDATORS[key];
-    const optLoc = {
-      type: "option",
-      name: key,
-      parent: rootPath,
-    };
 
-    if (validator) validator(optLoc, obj[key]);
-    else {
+    if (validator) {
+      const optLoc: OptionPath = {
+        type: "option",
+        name: key,
+        parent: rootPath,
+      };
+      validator(optLoc, obj[key]);
+    } else {
       const invalidPluginPropertyError = new Error(
         `.${key} is not a valid Plugin property`,
       );
