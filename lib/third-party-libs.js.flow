@@ -2,6 +2,10 @@
  * Basic declarations for the npm modules we use.
  */
 
+declare module "debug" {
+  declare export default (namespace: string) => (formatter: string) => void;
+}
+
 declare module "resolve" {
   declare export default {
     (string, {| basedir: string |}, (err: ?Error, res: string) => void): void;
