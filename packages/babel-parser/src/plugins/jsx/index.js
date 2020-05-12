@@ -96,7 +96,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let chunkStart = this.state.pos;
       for (;;) {
         if (this.state.pos >= this.length) {
+          /* eslint-disable @babel/development-internal/dry-error-messages */
           throw this.raise(this.state.start, JsxErrors.UnterminatedJsxContent);
+          /* eslint-enable @babel/development-internal/dry-error-messages */
         }
 
         const ch = this.input.charCodeAt(this.state.pos);
@@ -302,7 +304,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.parseExprAtom();
 
         default:
+          /* eslint-disable @babel/development-internal/dry-error-messages */
           throw this.raise(this.state.start, JsxErrors.UnsupportedJsxValue);
+        /* eslint-enable @babel/development-internal/dry-error-messages */
       }
     }
 
@@ -491,10 +495,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
       node.children = children;
       if (this.isRelational("<")) {
+        /* eslint-disable @babel/development-internal/dry-error-messages */
         throw this.raise(
           this.state.start,
           JsxErrors.UnwrappedAdjacentJSXElements,
         );
+        /* eslint-enable @babel/development-internal/dry-error-messages */
       }
 
       return isFragment(openingElement)

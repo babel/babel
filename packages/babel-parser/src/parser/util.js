@@ -146,7 +146,9 @@ export default class UtilParser extends Tokenizer {
     if (typeof messageOrType !== "string") {
       messageOrType = `Unexpected token, expected "${messageOrType.label}"`;
     }
+    /* eslint-disable @babel/development-internal/dry-error-messages */
     throw this.raise(pos != null ? pos : this.state.start, messageOrType);
+    /* eslint-enable @babel/development-internal/dry-error-messages */
   }
 
   expectPlugin(name: string, pos?: ?number): true {
