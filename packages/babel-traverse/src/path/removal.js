@@ -23,7 +23,7 @@ export function remove() {
 
 export function _removeFromScope() {
   const bindings = this.getBindingIdentifiers();
-  Object.keys(bindings).forEach(name => this.scope.removeBinding(name));
+  Object.keys(bindings).forEach(name => this.scope.removeOwnBinding(name));
 }
 
 export function _callRemovalHooks() {
