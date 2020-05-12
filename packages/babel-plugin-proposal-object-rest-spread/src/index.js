@@ -349,7 +349,7 @@ export default declare((api, opts) => {
             ref = t.memberExpression(
               ref,
               t.cloneNode(node.key),
-              t.isLiteral(node.key) || node.computed,
+              node.computed || t.isLiteral(node.key),
             );
           });
 
