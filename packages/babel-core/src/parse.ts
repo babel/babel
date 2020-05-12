@@ -7,6 +7,8 @@ import type { ParseResult } from "./parser";
 import normalizeOptions from "./transformation/normalize-opts";
 import type { ValidatedOptions } from "./config/validation/options";
 
+import { beginHiddenCallStack } from "./errors/rewrite-stack-trace";
+
 type FileParseCallback = {
   (err: Error, ast: null): void;
   (err: null, ast: ParseResult | null): void;
@@ -54,12 +56,16 @@ export const parse: Parse = function parse(
       // console.warn(
       //   "Starting from Babel 8.0.0, the 'parse' function will expect a callback. If you need to call it synchronously, please use 'parseSync'.",
       // );
-      return parseRunner.sync(code, opts);
+      return parseSync(code, opts);
     }
   }
 
-  parseRunner.errback(code, opts, callback);
+  beginHiddenCallStack(parseRunner.errback)(code, opts, callback);
 };
 
-export const parseSync = parseRunner.sync;
-export const parseAsync = parseRunner.async;
+export function parseSync(...args: Parameters<typeof parseRunner.sync>) {
+  return beginHiddenCallStack(parseRunner.sync)(...args);
+}
+export function parseAsync(...args: Parameters<typeof parseRunner.async>) {
+  return beginHiddenCallStack(parseRunner.async)(...args);
+}
