@@ -262,10 +262,12 @@ export default class UtilParser extends Tokenizer {
 
   /**
    * Test if current token is a literal property name
+   * https://tc39.es/ecma262/#prod-LiteralPropertyName
    * LiteralPropertyName:
    *   IdentifierName
    *   StringLiteral
    *   NumericLiteral
+   *   BigIntLiteral
    */
   isLiteralPropertyName(): boolean {
     return (
