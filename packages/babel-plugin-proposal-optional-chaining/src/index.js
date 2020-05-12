@@ -108,7 +108,32 @@ export default declare((api, options) => {
               );
             }
           }
-
+          let replacement = replacementPath.node;
+          // Ensure (a?.b)() has proper `this`
+          if (
+            t.isMemberExpression(replacement) &&
+            replacement.extra?.parenthesized &&
+            replacementPath.parentPath.isCallExpression()
+          ) {
+            // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
+            const { object, property } = replacement;
+            let memoisedObject;
+            if (!loose) {
+              // memoize the context object in non-loose mode
+              // `(a?.b.c)()` to `(a == null ? undefined : (_a$b = a.b).c.bind(_a$b))()`
+              const context = scope.maybeGenerateMemoised(object);
+              if (context) {
+                memoisedObject = t.assignmentExpression("=", context, object);
+              }
+            }
+            replacement = t.callExpression(
+              t.memberExpression(
+                t.memberExpression(memoisedObject ?? object, property),
+                t.identifier("bind"),
+              ),
+              [t.cloneNode(memoisedObject?.left ?? object)],
+            );
+          }
           replacementPath.replaceWith(
             t.conditionalExpression(
               loose
@@ -129,7 +154,7 @@ export default declare((api, options) => {
               isDeleteOperation
                 ? t.booleanLiteral(true)
                 : scope.buildUndefinedNode(),
-              replacementPath.node,
+              replacement,
             ),
           );
 
