@@ -12,8 +12,9 @@ or
 $ yarn add --save-dev @babel/eslint-plugin-development-internal
 ```
 
+## Usage
 
-Then, load the plugin in your `.eslintrc.*` configuration file (note that you can omit the `eslint-plugin-` prefix):
+The plugin can be loaded in your `.eslintrc.*` configuration file as follows: (note that you can omit the `eslint-plugin-` prefix):
 
 ```json
 {
@@ -36,3 +37,34 @@ Accepts an object configuration option:
 ```
 
 `errorModule` (required): The rule expects either an absolute path or a module name (for a module in `node_modules`). Please note that the rule will not check anything if` errorModule` is not given.
+
+Example configuration:
+
+```js
+{
+  rules: {
+    "@babel/development-internal/dry-error-messages": [
+      "error",
+      {
+        errorModule: "@babel/shared-error-messages"
+      }
+    ]
+  }
+}
+```
+and
+```js
+{
+  rules: {
+    "@babel/development-internal/dry-error-messages": [
+      "error",
+      {
+        errorModule: path.resolve(
+          __dirname,
+          "packages/shared-error-messages/lib/index.js"
+        )
+      }
+    ]
+  }
+}
+```
