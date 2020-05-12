@@ -3,7 +3,7 @@
  */
 
 declare module "debug" {
-  declare export default (namespace: string) => (formatter: string) => void;
+  declare export default (namespace: string) => (formatter: string, ...args: any[]) => void;
 }
 
 declare module "resolve" {
@@ -29,6 +29,10 @@ declare module "lodash/clone" {
 
 declare module "lodash/merge" {
   declare export default <T: Object>(T, Object) => T;
+}
+
+declare module "lodash/escapeRegExp" {
+  declare export default (toEscape?: string) => string;
 }
 
 declare module "semver" {

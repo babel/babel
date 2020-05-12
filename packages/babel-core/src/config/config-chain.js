@@ -76,7 +76,6 @@ export const buildPresetChainWalker: (
   arg: PresetInstance,
   context: *,
 ) => * = makeChainWalker({
-  init: arg => arg,
   root: preset => loadPresetDescriptors(preset),
   env: (preset, envName) => loadPresetEnvDescriptors(preset)(envName),
   overrides: (preset, index) => loadPresetOverridesDescriptors(preset)(index),
@@ -419,12 +418,12 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
   env,
   overrides,
   overridesEnv,
-}: {
+}: {|
   root: ArgT => OptionsAndDescriptors,
   env: (ArgT, string) => OptionsAndDescriptors | null,
   overrides: (ArgT, number) => OptionsAndDescriptors,
   overridesEnv: (ArgT, number, string) => OptionsAndDescriptors | null,
-}): (
+|}): (
   ArgT,
   ConfigContext,
   Set<ConfigFile> | void,

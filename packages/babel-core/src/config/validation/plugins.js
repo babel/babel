@@ -77,7 +77,7 @@ export type VisitorMap = {
 
 export type PluginObject = {
   name?: string,
-  manipulateOptions?: Function,
+  manipulateOptions?: (options: mixed, parserOpts: mixed) => void,
 
   pre?: Function,
   post?: Function,
