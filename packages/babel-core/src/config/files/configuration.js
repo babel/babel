@@ -299,7 +299,7 @@ const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
   };
 });
 
-function throwConfigError(): void {
+function throwConfigError(): empty {
   throw new Error(`\
 Caching was left unconfigured. Babel's plugins, presets, and .babelrc.js files can be configured
 for various types of caching, using the first param of their handler functions:
