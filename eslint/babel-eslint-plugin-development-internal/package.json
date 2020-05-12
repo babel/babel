@@ -15,7 +15,7 @@
     "eslint-plugin",
     "babel-eslint"
   ],
-  "author": "Kai Cataldo <kai@kaicataldo.com",
+  "author": "Kai Cataldo <kai@kaicataldo.com>",
   "license": "MIT",
   "private": true,
   "engines": {
