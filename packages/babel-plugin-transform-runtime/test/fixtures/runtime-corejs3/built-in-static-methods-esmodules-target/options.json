@@ -1,0 +1,5 @@
+{
+  "plugins": [
+    ["transform-runtime", { "corejs": 3, "targets": { "esmodules": true } }]
+  ]
+}

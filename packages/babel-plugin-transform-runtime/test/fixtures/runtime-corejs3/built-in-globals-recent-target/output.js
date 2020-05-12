@@ -1,0 +1,35 @@
+var _setImmediate = require("@babel/runtime-corejs3/core-js-stable/set-immediate");
+
+var _clearImmediate = require("@babel/runtime-corejs3/core-js-stable/clear-immediate");
+
+AggregateError;
+Map;
+Observable;
+Promise;
+Set;
+Symbol;
+URL;
+URLSearchParams;
+WeakMap;
+WeakSet;
+_clearImmediate;
+compositeKey;
+compositeSymbol;
+globalThis;
+parseFloat;
+parseInt;
+queueMicrotask;
+_setImmediate;
+setInterval;
+setTimeout;
+Array;
+Boolean;
+Date;
+Infinity;
+JSON;
+NaN;
+Number;
+Object;
+clearInterval;
+clearTimeout;
+something;

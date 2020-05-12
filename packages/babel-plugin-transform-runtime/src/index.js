@@ -1,11 +1,37 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
+import getTargets, {
+  filterItems,
+  isRequired,
+} from "@babel/helper-compilation-targets";
+import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
+import corejs3Polyfills from "core-js-compat/data";
 
 import getCoreJS2Definitions from "./runtime-corejs2-definitions";
 import getCoreJS3Definitions from "./runtime-corejs3-definitions";
 import { typeAnnotationToString } from "./helpers";
 import getRuntimePath from "./get-runtime-path";
+
+// corejs sometimes lumps multiple functions/identifiers under one name
+corejs3Polyfills["web.set-immediate"] = corejs3Polyfills["web.immediate"];
+corejs3Polyfills["web.clear-immediate"] = corejs3Polyfills["web.immediate"];
+corejs3Polyfills["web.set-interval"] = corejs3Polyfills["web.timers"];
+corejs3Polyfills["web.clear-interval"] = corejs3Polyfills["web.timers"];
+corejs3Polyfills["web.set-timeout"] = corejs3Polyfills["web.timers"];
+corejs3Polyfills["web.clear-timeout"] = corejs3Polyfills["web.timers"];
+corejs3Polyfills["es.array.entries"] = corejs3Polyfills["es.array.iterator"];
+corejs3Polyfills["es.array.keys"] = corejs3Polyfills["es.array.iterator"];
+corejs3Polyfills["es.array.values"] = corejs3Polyfills["es.array.iterator"];
+corejs3Polyfills["es.string.trim-left"] =
+  corejs3Polyfills["es.string.trim-start"];
+corejs3Polyfills["es.string.trim-right"] =
+  corejs3Polyfills["es.string.trim-end"];
+corejs3Polyfills["es.symbol.for"] = corejs3Polyfills["es.symbol"];
+corejs3Polyfills["es.symbol.key-for"] = corejs3Polyfills["es.symbol"];
+corejs3Polyfills["es.object.get-own-property-symbols"] =
+  corejs3Polyfills["es.symbol"];
+corejs2Polyfills["es6.symbol.iterator"] = corejs2Polyfills["es6.symbol"];
 
 function supportsStaticESM(caller) {
   return !!caller?.supportsStaticESM;
@@ -17,11 +43,36 @@ export default declare((api, options, dirname) => {
   const {
     corejs,
     helpers: useRuntimeHelpers = true,
-    regenerator: useRuntimeRegenerator = true,
+    regenerator = true,
     useESModules = false,
     version: runtimeVersion = "7.0.0-beta.0",
     absoluteRuntime = false,
+    targets: optionsTargets = {},
+    configPath = process.cwd(),
+    ignoreBrowserslistConfig = false,
   } = options;
+
+  if (typeof configPath !== "string") {
+    throw new Error("The 'configPath' option must be undefined, or a string.");
+  }
+
+  if (typeof ignoreBrowserslistConfig !== "boolean") {
+    throw new Error(
+      "The 'ignoreBrowserslistConfig' option must be undefined, or a boolean.",
+    );
+  }
+
+  const targets = getTargets(
+    typeof optionsTargets === "string" || Array.isArray(optionsTargets)
+      ? { browsers: optionsTargets }
+      : { ...optionsTargets },
+    {
+      ignoreBrowserslistConfig: true,
+    },
+  );
+
+  const useRuntimeRegenerator =
+    regenerator && isRequired("transform-regenerator", targets);
 
   let proposals = false;
   let rawVersion;
@@ -83,7 +134,14 @@ export default declare((api, options, dirname) => {
   }
 
   function hasMapping(methods, name) {
-    return has(methods, name) && (proposals || methods[name].stable);
+    return (
+      has(methods, name) &&
+      (proposals || methods[name].stable) &&
+      (polyfillPaths.has(methods[name].path) ||
+        methods[name]?.types?.some(type =>
+          polyfillPaths.has(`${type}/${methods[name].path}`),
+        ))
+    );
   }
 
   function hasStaticMapping(object, method) {
@@ -173,6 +231,19 @@ export default declare((api, options, dirname) => {
   const { BuiltIns, StaticProperties, InstanceProperties } = (injectCoreJS2
     ? getCoreJS2Definitions
     : getCoreJS3Definitions)(runtimeVersion);
+
+  const corejsPolyfills = injectCoreJS3 ? corejs3Polyfills : corejs2Polyfills;
+
+  const polyfillPaths = new Set(
+    Array.from(
+      filterItems(corejsPolyfills, new Set(), new Set(), targets, null),
+      name =>
+        name
+          .split(".")
+          .slice(1)
+          .join("/"),
+    ),
+  );
 
   const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 
@@ -324,6 +395,8 @@ export default declare((api, options, dirname) => {
           return;
         }
 
+        if (!polyfillPaths.has("symbol/iterator")) return;
+
         // transform `something[Symbol.iterator]()` to calling `getIterator(something)` helper
         path.replaceWith(
           t.callExpression(
@@ -341,6 +414,7 @@ export default declare((api, options, dirname) => {
         if (!injectCoreJS) return;
         if (path.node.operator !== "in") return;
         if (!path.get("left").matchesPattern("Symbol.iterator")) return;
+        if (!polyfillPaths.has("symbol/iterator")) return;
 
         path.replaceWith(
           t.callExpression(
@@ -370,7 +444,8 @@ export default declare((api, options, dirname) => {
           if (
             !injectCoreJS2 &&
             node.computed &&
-            path.get("property").matchesPattern("Symbol.iterator")
+            path.get("property").matchesPattern("Symbol.iterator") &&
+            polyfillPaths.has("symbol/iterator")
           ) {
             path.replaceWith(
               t.callExpression(
