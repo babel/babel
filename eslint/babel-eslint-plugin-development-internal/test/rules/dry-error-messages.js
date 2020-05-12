@@ -11,16 +11,57 @@ const ruleTester = new RuleTester();
 
 ruleTester.run("dry-error-messages", rule, {
   valid: [
-    "this.raise(loc);", // Ignores malformed `this.raise` invocations.
-    "this.notRaise(loc, 'Uh oh');",
-    "throw new Error(this.raise('Uh oh'));",
-    "this.raise(() => { throw new Error('Uh oh') });",
-    "throw new Error('Uh oh')",
-    "throw this.createError('Uh oh')",
-    "throw this.error",
-    "throw this.raise",
-    "throw obj.error",
-    "throw obj.raise",
+    // Ignores malformed `this.raise` invocations.
+    {
+      filename: FILENAME,
+      code: "this.raise(loc);",
+      options: [{ errorModule: ERRORS_MODULE }],
+    },
+    {
+      filename: FILENAME,
+      code: "this.notRaise(loc, 'Uh oh');",
+      options: [{ errorModule: ERRORS_MODULE }],
+    },
+    {
+      filename: FILENAME,
+      code: "throw new Error(this.raise('Uh oh'));",
+      options: [{ errorModule: ERRORS_MODULE }],
+    },
+    {
+      filename: FILENAME,
+      code: "this.raise(() => { throw new Error('Uh oh') });",
+      options: [{ errorModule: ERRORS_MODULE }],
+    },
+    {
+      filename: FILENAME,
+      code: "throw new Error('Uh oh')",
+      options: [{ errorModule: ERRORS_MODULE }],
+    },
+    {
+      filename: FILENAME,
+      code: "throw this.createError('Uh oh')",
+      options: [{ errorModule: ERRORS_MODULE }],
+    },
+    {
+      filename: FILENAME,
+      code: "throw this.error",
+      options: [{ errorModule: ERRORS_MODULE }],
+    },
+    {
+      filename: FILENAME,
+      code: "throw this.raise",
+      options: [{ errorModule: ERRORS_MODULE }],
+    },
+    {
+      filename: FILENAME,
+      code: "throw obj.error",
+      options: [{ errorModule: ERRORS_MODULE }],
+    },
+    {
+      filename: FILENAME,
+      code: "throw obj.raise",
+      options: [{ errorModule: ERRORS_MODULE }],
+    },
     {
       filename: FILENAME,
       code:
@@ -200,6 +241,25 @@ ruleTester.run("dry-error-messages", rule, {
       code:
         "import NotErrors, { Errors } from '../errorsModule'; function fn() { throw this.raise(loc, Errors.someErrorMessage); }",
       options: [{ errorModule: MODULE_PARENT_DIR }],
+    },
+
+    // Do not warn when file linted is error module.
+    {
+      filename: FILENAME,
+      code: "throw this.raise(loc, 'Oh no!');",
+      options: [{ errorModule: FILENAME }],
+    },
+    {
+      filename: MODULE_SAME_DIR,
+      code: "throw this.raise(loc, 'Oh no!');",
+      options: [{ errorModule: MODULE_SAME_DIR }],
+    },
+
+    // Do not warn if second argument is missing
+    {
+      filename: FILENAME,
+      code: "throw this.raise(loc);",
+      options: [{ errorModule: ERRORS_MODULE }],
     },
   ],
   invalid: [

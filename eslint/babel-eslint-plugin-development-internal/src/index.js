@@ -1,6 +1,6 @@
 import dryErrorMessages from "./rules/dry-error-messages";
 
-export default {
+module.exports = {
   rules: {
     "dry-error-messages": dryErrorMessages,
   },

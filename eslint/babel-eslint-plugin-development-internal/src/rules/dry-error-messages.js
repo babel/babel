@@ -10,17 +10,26 @@ function normalizeSrcExt(source) {
   return !path.extname(source) ? `${source}.js` : source;
 }
 
-function isErrorModule(targetModulePath, currentFilePath, src) {
-  if (isRelativePath(src)) {
-    return (
-      path.normalize(targetModulePath) ===
-      path.normalize(
-        normalizeSrcExt(path.resolve(path.dirname(currentFilePath), src)),
-      )
-    );
-  }
+function resolveErrorModule(errorModule, currentFilePath) {
+  return isRelativePath(errorModule)
+    ? path.resolve(path.dirname(currentFilePath), normalizeSrcExt(errorModule))
+    : errorModule;
+}
 
-  return targetModulePath === src;
+function isCurrentFileErrorModule(errorModule, currentFilePath) {
+  return (
+    path.normalize(currentFilePath) ===
+    path.normalize(
+      path.resolve(resolveErrorModule(errorModule, currentFilePath)),
+    )
+  );
+}
+
+function isSourceErrorModule(targetModulePath, currentFilePath, src) {
+  return (
+    path.normalize(resolveErrorModule(targetModulePath, currentFilePath)) ===
+    path.normalize(resolveErrorModule(src, currentFilePath))
+  );
 }
 
 function findIdNode(node) {
@@ -88,6 +97,7 @@ export default {
           errorModule: { type: "string" },
         },
         additionalProperties: false,
+        required: ["errorModule"],
       },
     ],
     messages: {
@@ -95,14 +105,23 @@ export default {
     },
   },
   create({ options, report, getFilename, getScope }) {
-    const [{ errorModule } = {}] = options;
+    const [{ errorModule = "" } = {}] = options;
     const filename = getFilename();
     const importedBindings = new Set();
+
+    if (
+      // Do not run check if errorModule config option is not given.
+      !errorModule.length ||
+      // Do not check the target error module file.
+      isCurrentFileErrorModule(errorModule, filename)
+    ) {
+      return {};
+    }
 
     return {
       // Check imports up front so that we don't have to check them for every ThrowStatement.
       ImportDeclaration(node) {
-        if (isErrorModule(errorModule, filename, node.source.value)) {
+        if (isSourceErrorModule(errorModule, filename, node.source.value)) {
           for (const spec of node.specifiers) {
             importedBindings.add(spec);
           }
