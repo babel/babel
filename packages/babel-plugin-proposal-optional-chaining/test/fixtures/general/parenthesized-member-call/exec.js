@@ -5,7 +5,7 @@ const foo = {
     count++;
     return {
       b() {
-        return "b" in this;
+        return "b" in this && !("a" in this);
       }
     }
   },
