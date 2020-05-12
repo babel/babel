@@ -1,5 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`@babel/core config loading programmatic plugins/presets should throw when plugin contains \`enter\` handler 1`] = `"[BABEL] /Users/jh/code/babel/packages/babel-core/test/fixtures/config-loading/folder/example.js: .visitor cannot contain catch-all \\"enter\\" or \\"exit\\" handlers. Please target individual nodes."`;
-
-exports[`@babel/core config loading programmatic plugins/presets should thrown when plugin is not valid 1`] = `"[BABEL] /Users/jh/code/babel/packages/babel-core/test/fixtures/config-loading/folder/example.js: .inherits must be a function, or undefined"`;

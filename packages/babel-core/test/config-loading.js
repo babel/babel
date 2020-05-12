@@ -335,7 +335,9 @@ describe("@babel/core config loading", () => {
         plugins: [fooPlugin],
       };
 
-      expect(() => loadConfig(opts)).toThrowErrorMatchingSnapshot();
+      expect(() => loadConfig(opts)).toThrow(
+        /\.inherits must be a function, or undefined/,
+      );
     });
 
     it("should throw when plugin contains `enter` handler", () => {
@@ -350,7 +352,9 @@ describe("@babel/core config loading", () => {
         plugins: [fooPlugin],
       };
 
-      expect(() => loadConfig(opts)).toThrowErrorMatchingSnapshot();
+      expect(() => loadConfig(opts)).toThrow(
+        /\.visitor cannot contain catch-all "enter" or "exit" handlers\. Please target individual nodes\./,
+      );
     });
   });
 
