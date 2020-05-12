@@ -1555,7 +1555,6 @@ export default class ExpressionParser extends LValParser {
       prop.key.name === "async" &&
       (this.isLiteralPropertyName() ||
         this.match(tt.bracketL) ||
-        this.state.type.keyword ||
         this.match(tt.star)) &&
       !this.hasPrecedingLineBreak()
     );
@@ -1645,8 +1644,7 @@ export default class ExpressionParser extends LValParser {
       prop.key.type === "Identifier" &&
       (prop.key.name === "get" || prop.key.name === "set") &&
       (this.isLiteralPropertyName() || // get foo() {}
-      this.match(tt.bracketL) || // get ["string"]() {}
-        !!this.state.type.keyword) // get debugger() {}
+        this.match(tt.bracketL)) // get ["string"]() {}
     );
   }
 

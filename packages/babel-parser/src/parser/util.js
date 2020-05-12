@@ -272,6 +272,7 @@ export default class UtilParser extends Tokenizer {
   isLiteralPropertyName(): boolean {
     return (
       this.match(tt.name) ||
+      !!this.state.type.keyword ||
       this.match(tt.string) ||
       this.match(tt.num) ||
       this.match(tt.bigint)
