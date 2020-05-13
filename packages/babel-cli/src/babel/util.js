@@ -116,7 +116,10 @@ process.on("uncaughtException", function (err) {
 
 export function requireChokidar(): Object {
   try {
-    return require("chokidar");
+    // todo(babel 8): revert `chokidarAt2` hack
+    return parseInt(process.version) >= 8
+      ? require("chokidar")
+      : require("chokidarAt2");
   } catch (err) {
     console.error(
       "The optional dependency chokidar failed to install and is required for " +
