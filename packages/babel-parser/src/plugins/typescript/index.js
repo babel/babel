@@ -691,6 +691,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.literal = (() => {
         switch (this.state.type) {
           case tt.num:
+          case tt.bigint:
           case tt.string:
           case tt._true:
           case tt._false:
@@ -747,13 +748,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
         case tt.string:
         case tt.num:
+        case tt.bigint:
         case tt._true:
         case tt._false:
           return this.tsParseLiteralTypeNode();
         case tt.plusMin:
           if (this.state.value === "-") {
             const node: N.TsLiteralType = this.startNode();
-            if (this.lookahead().type !== tt.num) {
+            const nextToken = this.lookahead();
+            if (nextToken.type !== tt.num && nextToken.type !== tt.bigint) {
               throw this.unexpected();
             }
             node.literal = this.parseMaybeUnary();

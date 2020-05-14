@@ -47,9 +47,7 @@ augmentedTypesEnum2.ts
 augmentedTypesFunction.ts
 augmentedTypesInterface.ts
 augmentedTypesVar.ts
-bigIntWithTargetES3.ts
 bigintIndex.ts
-bigintWithLib.ts
 cacheResolutions.ts
 cachedModuleResolution1.ts
 cachedModuleResolution2.ts
@@ -320,7 +318,6 @@ nodeResolution4.ts
 nodeResolution6.ts
 nodeResolution8.ts
 nonMergedOverloads.ts
-numberVsBigIntOperations.ts
 objectLiteralMemberWithoutBlock1.ts
 outModuleConcatAmd.ts
 outModuleConcatCommonjs.ts
