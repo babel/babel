@@ -8,6 +8,7 @@ const {
   validateModulesOption,
   validateUseBuiltInsOption,
   normalizePluginName,
+  validateIncludeExcludeOption,
 } = normalizeOptions;
 describe("normalize-options", () => {
   describe("normalizeOptions", () => {
@@ -187,6 +188,32 @@ describe("normalize-options", () => {
     it("array option is invalid", () => {
       expect(() => {
         validateBoolOption("test", [], false);
+      }).toThrow();
+    });
+  });
+
+  describe("validateIncludeExcludeOption", () => {
+    it("should not throw if supplied include option is array ", () => {
+      expect(() => {
+        validateIncludeExcludeOption(["transform-spread"], "include");
+      }).not.toThrow();
+    });
+
+    it("should not throw if supplied exclude option is array ", () => {
+      expect(() => {
+        validateIncludeExcludeOption(["transform-spread"], "exclude");
+      }).not.toThrow();
+    });
+
+    it("should throw if include is not an array", () => {
+      expect(() => {
+        validateIncludeExcludeOption("transform-spread", "include");
+      }).toThrow();
+    });
+
+    it("should throw if exclude is not an array", () => {
+      expect(() => {
+        validateIncludeExcludeOption("transform-spread", "exclude");
       }).toThrow();
     });
   });

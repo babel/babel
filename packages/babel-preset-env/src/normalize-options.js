@@ -152,6 +152,19 @@ export const validateBoolOption = (
   return value;
 };
 
+export const validateIncludeExcludeOption = (
+  includeExcludeOption: PluginListOption,
+  type: "include" | "exclude",
+) => {
+  invariant(
+    Array.isArray(includeExcludeOption) ||
+      typeof includeExcludeOption === "undefined",
+    `Invalid Option '${type}': Expected an array but got ${typeof includeExcludeOption}`,
+  );
+
+  return includeExcludeOption;
+};
+
 export const validateIgnoreBrowserslistConfig = (
   ignoreBrowserslistConfig: boolean,
 ) =>
@@ -250,14 +263,24 @@ export default function normalizeOptions(opts: Options) {
 
   const corejs = normalizeCoreJSOption(opts.corejs, useBuiltIns);
 
-  const include = expandIncludesAndExcludes(
+  let include = validateIncludeExcludeOption(
     opts.include,
+    TopLevelOptions.include,
+  );
+
+  let exclude = validateIncludeExcludeOption(
+    opts.exclude,
+    TopLevelOptions.exclude,
+  );
+
+  include = expandIncludesAndExcludes(
+    include,
     TopLevelOptions.include,
     !!corejs.version && corejs.version.major,
   );
 
-  const exclude = expandIncludesAndExcludes(
-    opts.exclude,
+  exclude = expandIncludesAndExcludes(
+    exclude,
     TopLevelOptions.exclude,
     !!corejs.version && corejs.version.major,
   );
