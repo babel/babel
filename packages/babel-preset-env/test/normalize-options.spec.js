@@ -199,7 +199,19 @@ describe("normalize-options", () => {
       }).not.toThrow();
     });
 
-    it("should not throw if supplied exclude option is array ", () => {
+    it("should not throw if include option is undefined ", () => {
+      expect(() => {
+        validateIncludeExcludeOption(["transform-spread"], "include");
+      }).not.toThrow();
+    });
+
+    it("should not throw if exclude option is array ", () => {
+      expect(() => {
+        validateIncludeExcludeOption(["transform-spread"], "exclude");
+      }).not.toThrow();
+    });
+
+    it("should not throw if exclude option is undefined ", () => {
       expect(() => {
         validateIncludeExcludeOption(["transform-spread"], "exclude");
       }).not.toThrow();
