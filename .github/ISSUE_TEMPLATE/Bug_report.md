@@ -20,8 +20,9 @@ assignees: ''
 **Current Behavior**
 A clear and concise description of the behavior.
 
+- [REPL](babeljs.io/repl), [Codesandbox](https://codesandbox.io/s/babel-repl-custom-plugin-7s08o?file=/src/index.js), or GitHub Repo link if applicable:
+
 **Input Code**
-- REPL or Repo link if applicable:
 
 ```js
 var your => (code) => here;

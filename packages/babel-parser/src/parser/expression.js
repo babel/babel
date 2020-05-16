@@ -769,7 +769,7 @@ export default class ExpressionParser extends LValParser {
         this.raise(node.start, Errors.ImportCallArity);
       } else {
         const importArg = node.arguments[0];
-        if (importArg && importArg.type === "SpreadElement") {
+        if (importArg?.type === "SpreadElement") {
           this.raise(importArg.start, Errors.ImportCallSpreadArgument);
         }
       }
@@ -1553,11 +1553,8 @@ export default class ExpressionParser extends LValParser {
       !prop.computed &&
       prop.key.type === "Identifier" &&
       prop.key.name === "async" &&
-      (this.match(tt.name) ||
-        this.match(tt.num) ||
-        this.match(tt.string) ||
+      (this.isLiteralPropertyName() ||
         this.match(tt.bracketL) ||
-        this.state.type.keyword ||
         this.match(tt.star)) &&
       !this.hasPrecedingLineBreak()
     );
@@ -1646,11 +1643,8 @@ export default class ExpressionParser extends LValParser {
       !prop.computed &&
       prop.key.type === "Identifier" &&
       (prop.key.name === "get" || prop.key.name === "set") &&
-      (this.match(tt.string) || // get "string"() {}
-      this.match(tt.num) || // get 1() {}
-      this.match(tt.bracketL) || // get ["string"]() {}
-      this.match(tt.name) || // get foo() {}
-        !!this.state.type.keyword) // get debugger() {}
+      (this.isLiteralPropertyName() || // get foo() {}
+        this.match(tt.bracketL)) // get ["string"]() {}
     );
   }
 

@@ -111,7 +111,7 @@ function getLowestVersions(browsers: Array<string>): Targets {
 }
 
 function outputDecimalWarning(decimalTargets: Array<Object>): void {
-  if (!decimalTargets || !decimalTargets.length) {
+  if (!decimalTargets?.length) {
     return;
   }
 

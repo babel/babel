@@ -275,3 +275,4 @@ Date.something;
 JSON.parse;
 Math.pow;
 _Symbol.something;
+delete Array.from;

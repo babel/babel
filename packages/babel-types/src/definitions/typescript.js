@@ -307,6 +307,7 @@ defineType("TSLiteralType", {
       "NumericLiteral",
       "StringLiteral",
       "BooleanLiteral",
+      "BigIntLiteral",
     ]),
   },
 });

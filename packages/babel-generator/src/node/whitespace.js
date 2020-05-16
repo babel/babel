@@ -196,10 +196,7 @@ nodes.ObjectTypeCallProperty = function(
   node: Object,
   parent,
 ): ?WhitespaceObject {
-  if (
-    parent.callProperties[0] === node &&
-    (!parent.properties || !parent.properties.length)
-  ) {
+  if (parent.callProperties[0] === node && !parent.properties?.length) {
     return {
       before: true,
     };
@@ -209,8 +206,8 @@ nodes.ObjectTypeCallProperty = function(
 nodes.ObjectTypeIndexer = function(node: Object, parent): ?WhitespaceObject {
   if (
     parent.indexers[0] === node &&
-    (!parent.properties || !parent.properties.length) &&
-    (!parent.callProperties || !parent.callProperties.length)
+    !parent.properties?.length &&
+    !parent.callProperties?.length
   ) {
     return {
       before: true,
@@ -224,9 +221,9 @@ nodes.ObjectTypeInternalSlot = function(
 ): ?WhitespaceObject {
   if (
     parent.internalSlots[0] === node &&
-    (!parent.properties || !parent.properties.length) &&
-    (!parent.callProperties || !parent.callProperties.length) &&
-    (!parent.indexers || !parent.indexers.length)
+    !parent.properties?.length &&
+    !parent.callProperties?.length &&
+    !parent.indexers?.length
   ) {
     return {
       before: true,

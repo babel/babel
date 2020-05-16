@@ -346,7 +346,11 @@ export default declare((api, opts) => {
           );
           refPropertyPath.forEach(prop => {
             const { node } = prop;
-            ref = t.memberExpression(ref, t.cloneNode(node.key), node.computed);
+            ref = t.memberExpression(
+              ref,
+              t.cloneNode(node.key),
+              node.computed || t.isLiteral(node.key),
+            );
           });
 
           const objectPatternPath = path.findParent(path =>
@@ -576,6 +580,16 @@ export default declare((api, opts) => {
 
           if (!exp) {
             exp = t.callExpression(helper, [obj]);
+            return;
+          }
+
+          // In loose mode, we don't want to make multiple calls. We're assuming
+          // that the spread objects either don't use getters, or that the
+          // getters are pure and don't depend on the order of evaluation.
+          if (loose) {
+            if (hadProps) {
+              exp.arguments.push(obj);
+            }
             return;
           }
 

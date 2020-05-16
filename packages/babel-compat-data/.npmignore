@@ -3,3 +3,4 @@ scripts
 src
 test
 *.log
+yarn.lock
