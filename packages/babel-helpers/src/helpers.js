@@ -1268,6 +1268,9 @@ helpers.classPrivateFieldLooseBase = helper("7.0.0-beta.0")`
 
 helpers.classPrivateFieldGet = helper("7.0.0-beta.0")`
   export default function _classPrivateFieldGet(receiver, privateMap) {
+    if(!privateMap) {
+      throw new TypeError("attempted to get private field on non-instance")
+    }
     var descriptor = privateMap.get(receiver);
     if (!descriptor) {
       throw new TypeError("attempted to get private field on non-instance");
