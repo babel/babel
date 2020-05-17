@@ -67,7 +67,8 @@ export default declare((api, options, dirname) => {
       ? { browsers: optionsTargets }
       : { ...optionsTargets },
     {
-      ignoreBrowserslistConfig: true,
+      configPath,
+      ignoreBrowserslistConfig,
     },
   );
 
