@@ -1,12 +1,12 @@
 export default (param => {
-  var _class, _temp, _props;
+  var _class, _props, _temp;
 
-  return _temp = _class = class App {
+  return _temp = (_props = babelHelpers.classPrivateFieldLooseKey("props"), _class = class App {
     getParam() {
       return param;
     }
 
-  }, _props = babelHelpers.classPrivateFieldLooseKey("props"), Object.defineProperty(_class, _props, {
+  }), Object.defineProperty(_class, _props, {
     writable: true,
     value: {
       prop1: 'prop1',

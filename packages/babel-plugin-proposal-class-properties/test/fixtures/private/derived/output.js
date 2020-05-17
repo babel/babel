@@ -1,3 +1,5 @@
+var _prop = new WeakMap();
+
 var Foo = function Foo() {
   "use strict";
 
@@ -9,7 +11,7 @@ var Foo = function Foo() {
   });
 };
 
-var _prop = new WeakMap();
+var _prop2 = new WeakMap();
 
 var Bar = /*#__PURE__*/function (_Foo) {
   "use strict";
@@ -34,5 +36,3 @@ var Bar = /*#__PURE__*/function (_Foo) {
 
   return Bar;
 }(Foo);
-
-var _prop2 = new WeakMap();
