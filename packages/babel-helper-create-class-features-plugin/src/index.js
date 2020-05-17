@@ -182,8 +182,8 @@ export function createClassFeaturePlugin({
         }
 
         path = wrapClass(path);
-        path.insertAfter([...privateNamesNodes, ...staticNodes]);
-        path.insertBefore(keysNodes);
+        path.insertBefore([...privateNamesNodes, ...keysNodes]);
+        path.insertAfter(staticNodes);
       },
 
       PrivateName(path) {
