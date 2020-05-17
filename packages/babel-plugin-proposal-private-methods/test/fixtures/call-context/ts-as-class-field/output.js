@@ -9,7 +9,7 @@ class A {
   }
 
   fn() {
-    _classPrivateFieldGet(this, _x)(...args);
+    _classPrivateFieldGet(this, _x)();
   }
 
 }

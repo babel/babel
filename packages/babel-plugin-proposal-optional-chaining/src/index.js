@@ -1,4 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
+import getCallContext from "@babel/helper-get-call-context";
 import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
 import { types as t } from "@babel/core";
 
@@ -26,6 +27,7 @@ export default declare((api, options) => {
         const { parentPath, scope } = path;
         let isDeleteOperation = false;
         const optionals = [];
+        const chains = [];
 
         let optionalPath = path;
         while (
@@ -35,6 +37,11 @@ export default declare((api, options) => {
           const { node } = optionalPath;
           if (node.optional) {
             optionals.push(node);
+            chains.push(
+              optionalPath.isOptionalCallExpression()
+                ? getCallContext(optionalPath)["node"]
+                : node["object"],
+            );
           }
 
           if (optionalPath.isOptionalMemberExpression()) {
@@ -56,7 +63,7 @@ export default declare((api, options) => {
 
           const isCall = t.isCallExpression(node);
           const replaceKey = isCall ? "callee" : "object";
-          const chain = node[replaceKey];
+          const chain = chains[i];
 
           let ref;
           let check;
