@@ -49,6 +49,7 @@ import transformSpread from "@babel/plugin-transform-spread";
 import transformStickyRegex from "@babel/plugin-transform-sticky-regex";
 import transformTemplateLiterals from "@babel/plugin-transform-template-literals";
 import transformTypeofSymbol from "@babel/plugin-transform-typeof-symbol";
+import transformUnicodeEscapes from "@babel/plugin-transform-unicode-escapes";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
 
 import bugfixAsyncArrowsInClass from "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class";
@@ -113,5 +114,6 @@ export default {
   "transform-sticky-regex": transformStickyRegex,
   "transform-template-literals": transformTemplateLiterals,
   "transform-typeof-symbol": transformTypeofSymbol,
+  "transform-unicode-escapes": transformUnicodeEscapes,
   "transform-unicode-regex": transformUnicodeRegex,
 };

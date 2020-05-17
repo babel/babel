@@ -89,6 +89,7 @@ import transformStrictMode from "@babel/plugin-transform-strict-mode";
 import transformTemplateLiterals from "@babel/plugin-transform-template-literals";
 import transformTypeofSymbol from "@babel/plugin-transform-typeof-symbol";
 import transformTypescript from "@babel/plugin-transform-typescript";
+import transformUnicodeEscapes from "@babel/plugin-transform-unicode-escapes";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
 
 export {
@@ -178,6 +179,7 @@ export {
   transformTemplateLiterals,
   transformTypeofSymbol,
   transformTypescript,
+  transformUnicodeEscapes,
   transformUnicodeRegex,
 };
 
@@ -268,5 +270,6 @@ export const all = {
   "transform-template-literals": transformTemplateLiterals,
   "transform-typeof-symbol": transformTypeofSymbol,
   "transform-typescript": transformTypescript,
+  "transform-unicode-escapes": transformUnicodeEscapes,
   "transform-unicode-regex": transformUnicodeRegex,
 };

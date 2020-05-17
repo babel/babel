@@ -268,6 +268,17 @@
     "samsung": "5",
     "electron": "0.37"
   },
+  "transform-unicode-escapes": {
+    "chrome": "44",
+    "edge": "12",
+    "firefox": "53",
+    "safari": "9",
+    "node": "4",
+    "ios": "9",
+    "samsung": "4",
+    "opera": "31",
+    "electron": "0.31"
+  },
   "transform-unicode-regex": {
     "chrome": "50",
     "opera": "37",

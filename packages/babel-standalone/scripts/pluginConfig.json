@@ -85,5 +85,6 @@
   "transform-template-literals",
   "transform-typeof-symbol",
   "transform-typescript",
+  "transform-unicode-escapes",
   "transform-unicode-regex"
 ]

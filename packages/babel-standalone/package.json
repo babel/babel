@@ -99,6 +99,7 @@
     "@babel/plugin-transform-template-literals": "^7.8.3",
     "@babel/plugin-transform-typeof-symbol": "^7.8.4",
     "@babel/plugin-transform-typescript": "^7.9.6",
+    "@babel/plugin-transform-unicode-escapes": "^7.8.3",
     "@babel/plugin-transform-unicode-regex": "^7.8.3",
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-flow": "^7.9.0",
