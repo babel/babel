@@ -13,7 +13,11 @@ import getCoreJS3Definitions from "./runtime-corejs3-definitions";
 import { typeAnnotationToString } from "./helpers";
 import getRuntimePath from "./get-runtime-path";
 
-// corejs sometimes lumps multiple functions/identifiers under one name
+/* TODO: use `packages/babel-preset-env/src/polyfills/corejs3/built-in-definitions.js`
+ * instead of `core-js-compat` after moving to `@babel/compat-data`
+ *
+ * corejs sometimes lumps multiple functions/identifiers under one name
+ */
 corejs3Polyfills["web.set-immediate"] = corejs3Polyfills["web.immediate"];
 corejs3Polyfills["web.clear-immediate"] = corejs3Polyfills["web.immediate"];
 corejs3Polyfills["web.set-interval"] = corejs3Polyfills["web.timers"];
