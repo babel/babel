@@ -1039,23 +1039,23 @@ export function NumberLiteral(...args: Array<any>): Object {
   console.trace(
     "The node type NumberLiteral has been renamed to NumericLiteral",
   );
-  return NumberLiteral("NumberLiteral", ...args);
+  return builder("NumberLiteral", ...args);
 }
 export { NumberLiteral as numberLiteral };
 export function RegexLiteral(...args: Array<any>): Object {
   console.trace("The node type RegexLiteral has been renamed to RegExpLiteral");
-  return RegexLiteral("RegexLiteral", ...args);
+  return builder("RegexLiteral", ...args);
 }
 export { RegexLiteral as regexLiteral };
 export function RestProperty(...args: Array<any>): Object {
   console.trace("The node type RestProperty has been renamed to RestElement");
-  return RestProperty("RestProperty", ...args);
+  return builder("RestProperty", ...args);
 }
 export { RestProperty as restProperty };
 export function SpreadProperty(...args: Array<any>): Object {
   console.trace(
     "The node type SpreadProperty has been renamed to SpreadElement",
   );
-  return SpreadProperty("SpreadProperty", ...args);
+  return builder("SpreadProperty", ...args);
 }
 export { SpreadProperty as spreadProperty };

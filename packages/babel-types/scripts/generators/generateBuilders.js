@@ -42,7 +42,7 @@ import builder from "../builder";\n\n`;
     const newType = definitions.DEPRECATED_KEYS[type];
     output += `export function ${type}(...args: Array<any>): Object {
   console.trace("The node type ${type} has been renamed to ${newType}");
-  return ${type}("${type}", ...args);
+  return builder("${type}", ...args);
 }
 export { ${type} as ${formatBuilderName(type)} };\n`;
 
