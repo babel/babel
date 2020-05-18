@@ -5,6 +5,7 @@ export const FEATURES = Object.freeze({
   fields: 1 << 1,
   privateMethods: 1 << 2,
   decorators: 1 << 3,
+  privateIn: 1 << 4,
 });
 
 // We can't use a symbol because this needs to always be the same, even if
@@ -27,6 +28,39 @@ export function enableFeature(file, feature, loose) {
   if (!hasFeature(file, feature)) {
     file.set(featuresKey, file.get(featuresKey) | feature);
     if (loose) file.set(looseKey, file.get(looseKey) | feature);
+  }
+
+  if (
+    hasFeature(file, FEATURES.fields) &&
+    hasFeature(file, FEATURES.privateMethods) &&
+    isLoose(file, FEATURES.fields) !== isLoose(file, FEATURES.privateMethods)
+  ) {
+    throw new Error(
+      "'loose' mode configuration must be the same for both @babel/plugin-proposal-class-properties " +
+        "and @babel/plugin-proposal-private-methods",
+    );
+  }
+
+  if (
+    hasFeature(file, FEATURES.fields) &&
+    hasFeature(file, FEATURES.privateIn) &&
+    isLoose(file, FEATURES.fields) !== isLoose(file, FEATURES.privateIn)
+  ) {
+    throw new Error(
+      "'loose' mode configuration must be the same for both @babel/plugin-proposal-class-properties " +
+        "and @babel/plugin-proposal-private-property-in-object",
+    );
+  }
+
+  if (
+    hasFeature(file, FEATURES.privateMethods) &&
+    hasFeature(file, FEATURES.privateIn) &&
+    isLoose(file, FEATURES.privateMethods) !== isLoose(file, FEATURES.privateIn)
+  ) {
+    throw new Error(
+      "'loose' mode configuration must be the same for both @babel/plugin-proposal-private-methods " +
+        "and @babel/plugin-proposal-private-property-in-object",
+    );
   }
 }
 
@@ -69,14 +103,17 @@ export function verifyUsedFeatures(path, file) {
   }
 
   if (
-    hasFeature(file, FEATURES.privateMethods) &&
-    hasFeature(file, FEATURES.fields) &&
-    isLoose(file, FEATURES.privateMethods) !== isLoose(file, FEATURES.fields)
+    path.isPrivateName() &&
+    path.parentPath.isBinaryExpression({
+      operator: "in",
+      left: path.node,
+    })
   ) {
-    throw path.buildCodeFrameError(
-      "'loose' mode configuration must be the same for both @babel/plugin-proposal-class-properties " +
-        "and @babel/plugin-proposal-private-methods",
-    );
+    if (!hasFeature(file, FEATURES.privateIn)) {
+      throw path.buildCodeFrameError(
+        "Private property in checks are not enabled.",
+      );
+    }
   }
 
   if (path.isProperty()) {

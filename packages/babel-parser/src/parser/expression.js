@@ -27,6 +27,7 @@ import {
   isReservedWord,
   isStrictReservedWord,
   isStrictBindReservedWord,
+  isIdentifierStart,
 } from "../util/identifier";
 import type { Pos, Position } from "../util/location";
 import * as charCodes from "charcodes";
@@ -1147,6 +1148,26 @@ export default class ExpressionParser extends LValParser {
 
           this.registerTopicReference();
           return this.finishNode(node, "PipelinePrimaryTopicReference");
+        }
+
+        const nextCh = this.input.codePointAt(this.state.end);
+        if (isIdentifierStart(nextCh) || nextCh === charCodes.backslash) {
+          const start = this.state.start;
+          // $FlowIgnore It'll either parse a PrivateName or throw.
+          node = (this.parseMaybePrivateName(true): N.PrivateName);
+          if (this.match(tt._in)) {
+            this.expectPlugin("privateIn");
+            this.classScope.usePrivateName(node.id.name, node.start);
+          } else if (this.hasPlugin("privateIn")) {
+            this.raise(
+              this.state.start,
+              Errors.PrivateInExpectedIn,
+              node.id.name,
+            );
+          } else {
+            throw this.unexpected(start);
+          }
+          return node;
         }
       }
       // fall through

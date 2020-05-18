@@ -123,6 +123,7 @@ export type ParserPlugin =
     'partialApplication' |
     'pipelineOperator' |
     'placeholders' |
+    'privateIn' |
     'throwExpressions' |
     'topLevelAwait' |
     'typescript' |

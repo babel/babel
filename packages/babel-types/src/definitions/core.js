@@ -80,7 +80,15 @@ defineType("BinaryExpression", {
       validate: assertOneOf(...BINARY_OPERATORS),
     },
     left: {
-      validate: assertNodeType("Expression"),
+      validate: (function() {
+        const expression = assertNodeType("Expression");
+        const inOp = assertNodeType("Expression", "PrivateName");
+
+        return function(node, key, val) {
+          const validator = node.operator === "in" ? inOp : expression;
+          validator(node, key, val);
+        };
+      })(),
     },
     right: {
       validate: assertNodeType("Expression"),
