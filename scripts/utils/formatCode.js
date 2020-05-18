@@ -4,7 +4,7 @@
 // Prettier only supports Node.js 10+, so we can fallback to not formatting
 // o CI on older Node.js versions
 
-if (process.env.CI && parseInt(process.version.node, 10) < 10) {
+if (process.env.CI && parseInt(process.versions.node, 10) < 10) {
   module.exports = function formatCode(code) {
     return code;
   };
