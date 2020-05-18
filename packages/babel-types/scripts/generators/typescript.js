@@ -128,9 +128,8 @@ for (const typeName of t.TYPES) {
 
   lines.push(
     `export function is${typeName}(node: object | null | undefined, opts?: object | null): ${result};`,
-    // TypeScript 3.7: https://github.com/microsoft/TypeScript/pull/32695 will allow assert declarations
     // eslint-disable-next-line max-len
-    `// export function assert${typeName}(node: object | null | undefined, opts?: object | null): asserts ${
+    `export function assert${typeName}(node: object | null | undefined, opts?: object | null): asserts ${
       result === "boolean" ? "node" : result
     };`
   );
@@ -138,8 +137,7 @@ for (const typeName of t.TYPES) {
 
 lines.push(
   // assert/
-  // Commented out as this declaration requires TypeScript 3.7 (what do?)
-  `// export function assertNode(obj: any): asserts obj is Node`,
+  `export function assertNode(obj: any): asserts obj is Node`,
 
   // builders/
   // eslint-disable-next-line max-len
@@ -304,9 +302,8 @@ lines.push(
   // the MemberExpression implication is incidental, but it follows from the implementation
   // eslint-disable-next-line max-len
   `export function matchesPattern(node: Node | null | undefined, match: string | ReadonlyArray<string>, allowPartial?: boolean): node is MemberExpression`,
-  // TypeScript 3.7: ": asserts n is T"
   // eslint-disable-next-line max-len
-  `export function validate<T extends Node, K extends keyof T>(n: Node | null | undefined, key: K, value: T[K]): void`,
+  `export function validate<T extends Node, K extends keyof T>(n: Node | null | undefined, key: K, value: T[K]): asserts n is T`,
   `export function validate(n: Node, key: string, value: any): void;`
 );
 
