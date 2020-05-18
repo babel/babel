@@ -308,6 +308,7 @@ module.exports = {
       "well-known symbols / Symbol.unscopables",
     ],
   },
+  "es6.symbol.iterator": "well-known symbols / Symbol.iterator",
   "es7.symbol.async-iterator": "Asynchronous Iterators",
 
   "es6.string.anchor": "String.prototype HTML methods",
