@@ -20,7 +20,7 @@ assignees: ''
 **Current behavior**
 A clear and concise description of the behavior.
 
-- [REPL](babeljs.io/repl), [Codesandbox](https://codesandbox.io/s/babel-repl-custom-plugin-7s08o?file=/src/index.js), GitHub Repo, or screenshot if applicable:
+- [REPL](babeljs.io/repl), [Codesandbox](https://codesandbox.io/s/babel-repl-custom-plugin-7s08o?file=/src/index.js), or GitHub Repo helps!
 
 **Input Code**
 
@@ -55,4 +55,4 @@ A clear and concise description of what you expected to happen (or code).
 <!--- If you have suggestions on a fix for the bug -->
 
 **Additional context**
-Add any other context about the problem here.
+Add any other context about the problem here. Or a screenshot if applicable
