@@ -52,27 +52,14 @@ export default declare((api, options, dirname) => {
     version: runtimeVersion = "7.0.0-beta.0",
     absoluteRuntime = false,
     targets: optionsTargets = {},
-    configPath = process.cwd(),
-    ignoreBrowserslistConfig = false,
   } = options;
-
-  if (typeof configPath !== "string") {
-    throw new Error("The 'configPath' option must be undefined, or a string.");
-  }
-
-  if (typeof ignoreBrowserslistConfig !== "boolean") {
-    throw new Error(
-      "The 'ignoreBrowserslistConfig' option must be undefined, or a boolean.",
-    );
-  }
 
   const targets = getTargets(
     typeof optionsTargets === "string" || Array.isArray(optionsTargets)
       ? { browsers: optionsTargets }
       : { ...optionsTargets },
     {
-      configPath,
-      ignoreBrowserslistConfig,
+      ignoreBrowserslistConfig: true,
     },
   );
 
