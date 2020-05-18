@@ -139,7 +139,7 @@ export default declare((api, options, dirname) => {
       has(methods, name) &&
       (proposals || methods[name].stable) &&
       (polyfillPaths.has(methods[name].path) ||
-        methods[name]?.types?.some(type =>
+        methods[name].types?.some(type =>
           polyfillPaths.has(`${type}/${methods[name].path}`),
         ))
     );
