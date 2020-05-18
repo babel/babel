@@ -153,6 +153,7 @@ function _evaluate(path: NodePath, state) {
   }
 
   if (path.isReferencedIdentifier()) {
+    // @ts-ignore todo: improve type refinements
     const binding = path.scope.getBinding(path.node.name);
 
     if (binding && binding.constantViolations.length > 0) {
@@ -166,10 +167,13 @@ function _evaluate(path: NodePath, state) {
     if (binding?.hasValue) {
       return binding.value;
     } else {
+      // @ts-ignore todo: improve type refinements
       if (path.node.name === "undefined") {
         return binding ? deopt(binding.path, state) : undefined;
+        // @ts-ignore todo: improve type refinements
       } else if (path.node.name === "Infinity") {
         return binding ? deopt(binding.path, state) : Infinity;
+        // @ts-ignore todo: improve type refinements
       } else if (path.node.name === "NaN") {
         return binding ? deopt(binding.path, state) : NaN;
       }

@@ -454,6 +454,7 @@ export function _resolve(
       // otherwise it's a request for a pattern and that's a bit more tricky
     }
   } else if (this.isReferencedIdentifier()) {
+    // @ts-ignore todo: improve type refinements
     const binding = this.scope.getBinding(this.node.name);
     if (!binding) return;
 
