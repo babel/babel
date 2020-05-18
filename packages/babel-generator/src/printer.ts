@@ -37,7 +37,7 @@ export default class Printer {
   inForStatementInitCounter: number = 0;
 
   declare _buf: Buffer;
-  _printStack: Array<Node> = [];
+  _printStack: Array<t.Node> = [];
   _indent: number = 0;
   _insideAux: boolean = false;
   _printedCommentStarts: any = {};

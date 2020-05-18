@@ -1,4 +1,5 @@
 import type SourceMap from "./source-map";
+import type * as t from "@babel/types";
 
 const SPACES_RE = /^[ \t]+$/;
 
@@ -273,7 +274,7 @@ export default class Buffer {
    * will be given this position in the sourcemap.
    */
 
-  source(prop: string, loc: Location, force?: boolean): void {
+  source(prop: string, loc: t.SourceLocation, force?: boolean): void {
     if (prop && !loc) return;
 
     // Since this is called extremely often, we re-use the same _sourcePosition
@@ -285,7 +286,7 @@ export default class Buffer {
    * Call a callback with a specific source location and restore on completion.
    */
 
-  withSource(prop: string, loc: Location, cb: () => void): void {
+  withSource(prop: string, loc: t.SourceLocation, cb: () => void): void {
     if (!this._map) return cb();
 
     // Use the call stack to manage a stack of "source location" data because
@@ -327,7 +328,7 @@ export default class Buffer {
    * sourcemap output, so that certain printers can be sure that the
    * "end" location that they set is actually treated as the end position.
    */
-  _disallowPop(prop: string, loc: Location) {
+  _disallowPop(prop: string, loc: t.SourceLocation) {
     if (prop && !loc) return;
 
     this._disallowedPop = this._normalizePosition(prop, loc);
