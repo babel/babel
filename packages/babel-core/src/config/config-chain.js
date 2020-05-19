@@ -53,6 +53,13 @@ export type ConfigContext = {
   root: string,
   envName: string,
   caller: CallerMetadata | void,
+  showConfig: boolean,
+};
+
+// todo: Use flow enums when @babel/transform-flow-types supports it
+const ChainFormatter = {
+  Programmatic: 0,
+  Config: 1,
 };
 
 /**
@@ -134,6 +141,7 @@ export function* buildRootChain(
   opts: ValidatedOptions,
   context: ConfigContext,
 ): Handler<RootConfigChain | null> {
+  let configReport, babelRcReport;
   const programmaticChain = yield* loadProgrammaticChain(
     {
       options: opts,
@@ -142,6 +150,11 @@ export function* buildRootChain(
     context,
   );
   if (!programmaticChain) return null;
+  const programmaticReport = printChain(
+    programmaticChain,
+    ChainFormatter.Programmatic,
+    context,
+  );
 
   let configFile;
   if (typeof opts.configFile === "string") {
@@ -167,6 +180,12 @@ export function* buildRootChain(
     const validatedFile = validateConfigFile(configFile);
     const result = yield* loadFileChain(validatedFile, context);
     if (!result) return null;
+    configReport = printChain(
+      result,
+      ChainFormatter.Config,
+      context,
+      validatedFile,
+    );
 
     // Allow config files to toggle `.babelrc` resolution on and off and
     // specify where the roots are.
@@ -208,16 +227,29 @@ export function* buildRootChain(
     }
 
     if (babelrcFile) {
-      const result = yield* loadFileChain(
-        validateBabelrcFile(babelrcFile),
-        context,
-      );
+      const validatedFile = validateBabelrcFile(babelrcFile);
+      const result = yield* loadFileChain(validatedFile, context);
       if (!result) return null;
+      babelRcReport = printChain(
+        result,
+        ChainFormatter.Config,
+        context,
+        validatedFile,
+      );
 
       mergeChain(fileChain, result);
     }
   }
 
+  if (context.showConfig) {
+    console.log(
+      // print config by the order of descending priority
+      [programmaticReport, babelRcReport, configReport]
+        .filter(x => !!x)
+        .join("\n\n"),
+    );
+    return null;
+  }
   // Insert file chain in front so programmatic options have priority
   // over configuration file chain items.
   const chain = mergeChain(
@@ -710,4 +742,34 @@ function matchPattern(
     pattern = pathPatternToRegex(pattern, dirname);
   }
   return pattern.test(pathToTest);
+}
+
+function printChain(
+  chain: ConfigChain,
+  formatter: $Values<typeof ChainFormatter>,
+  context: ConfigContext,
+  validatedFile?: ValidatedFile,
+): string {
+  function formatHeading(type, context, validatedFile) {
+    let heading = "";
+    if (type === ChainFormatter.Programmatic) {
+      heading = "programmatic options";
+      if (context.caller?.name) {
+        heading += " from " + context.caller.name;
+      }
+    } else {
+      // $FlowIgnore
+      heading = "config " + validatedFile.filepath;
+    }
+    return heading;
+  }
+  function formatChain(chain: ConfigChain) {
+    return JSON.stringify(chain.options, undefined, 2);
+  }
+  if (!context.showConfig) {
+    return "";
+  }
+  return (
+    formatHeading(formatter, context, validatedFile) + "\n" + formatChain(chain)
+  );
 }

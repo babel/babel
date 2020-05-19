@@ -54,6 +54,10 @@ const ROOT_VALIDATORS: ValidatorSet = {
   envName: (assertString: Validator<
     $PropertyType<ValidatedOptions, "envName">,
   >),
+
+  showConfig: (assertBoolean: Validator<
+    $PropertyType<ValidatedOptions, "showConfig">,
+  >),
 };
 
 const BABELRC_VALIDATORS: ValidatorSet = {
@@ -187,6 +191,7 @@ export type ValidatedOptions = {
   inputSourceMap?: RootInputSourceMapOption,
   envName?: string,
   caller?: CallerMetadata,
+  showConfig?: boolean,
 
   extends?: string,
   env?: EnvSet<ValidatedOptions>,
