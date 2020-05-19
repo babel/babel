@@ -46,7 +46,9 @@ export default declare(api => {
       Identifier(path) {
         const { node, key } = path;
         const { name } = node;
-        const replaced = name.replace(surrogate, escape);
+        const replaced = name.replace(surrogate, c => {
+          return `_u${c.charCodeAt(0).toString(16)}`;
+        });
         if (name === replaced) return;
 
         const str = t.inherits(t.stringLiteral(name), node);
@@ -56,7 +58,7 @@ export default declare(api => {
           return;
         }
 
-        const { parentPath } = path;
+        const { parentPath, scope } = path;
         if (
           parentPath.isMemberExpression({ property: node }) ||
           parentPath.isOptionalMemberExpression({ property: node })
@@ -66,8 +68,14 @@ export default declare(api => {
           return;
         }
 
+        const binding = scope.getBinding(name);
+        if (binding) {
+          scope.rename(name, scope.generateUid(replaced));
+          return;
+        }
+
         throw path.buildCodeFrameError(
-          `Can't represent '${name}' as a bare identifier`,
+          `Can't reference '${name}' as a bare identifier`,
         );
       },
 
