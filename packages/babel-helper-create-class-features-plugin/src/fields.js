@@ -348,6 +348,12 @@ export function transformPrivateNamesUsage(
     file: state,
     ...handler,
   });
+  body.traverse(privateInVisitor, {
+    privateNamesMap,
+    classRef: ref,
+    file: state,
+    loose,
+  });
 }
 
 function buildPrivateFieldInitLoose(ref, prop, privateNamesMap) {
