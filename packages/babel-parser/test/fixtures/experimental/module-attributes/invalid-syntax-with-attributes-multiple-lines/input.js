@@ -1,3 +1,2 @@
-import "x"
-with
+import "x" with
 type: "json"

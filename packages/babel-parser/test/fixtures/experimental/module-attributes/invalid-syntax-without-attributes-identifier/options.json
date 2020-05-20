@@ -1,4 +1,5 @@
 {
+  "throws": "Unexpected token (1:15)",
   "plugins": [
     [
       "moduleAttributes",
