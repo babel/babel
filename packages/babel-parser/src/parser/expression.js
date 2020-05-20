@@ -806,7 +806,7 @@ export default class ExpressionParser extends LValParser {
       } else {
         this.expect(tt.comma);
         if (this.match(close)) {
-          if (dynamicImport) {
+          if (dynamicImport && !this.hasPlugin("moduleAttributes")) {
             this.raise(
               this.state.lastTokStart,
               Errors.ImportCallArgumentTrailingComma,
