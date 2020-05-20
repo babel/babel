@@ -770,7 +770,9 @@ export default class ExpressionParser extends LValParser {
         this.raise(
           node.start,
           Errors.ImportCallArity,
-          this.hasPlugin("moduleAttributes") ? "two arguments" : "one argument",
+          this.hasPlugin("moduleAttributes")
+            ? "one or two arguments"
+            : "one argument",
         );
       } else {
         const importArg = node.arguments[0];
