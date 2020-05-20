@@ -766,6 +766,9 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     if (node.callee.type === "Import") {
       const maxArity = this.hasPlugin("moduleAttributes") ? 2 : 1;
+      if (node.arguments.length === 2) {
+        this.expectPlugin("moduleAttributes");
+      }
       if (node.arguments.length === 0 || node.arguments.length > maxArity) {
         this.raise(
           node.start,
@@ -775,9 +778,14 @@ export default class ExpressionParser extends LValParser {
             : "one argument",
         );
       } else {
-        const importArg = node.arguments[0];
-        if (importArg && importArg.type === "SpreadElement") {
-          this.raise(importArg.start, Errors.ImportCallSpreadArgument);
+        const importArgSpreadElement = node.arguments.find(
+          arg => arg.type === "SpreadElement",
+        );
+        if (importArgSpreadElement) {
+          this.raise(
+            importArgSpreadElement.start,
+            Errors.ImportCallSpreadArgument,
+          );
         }
       }
     }

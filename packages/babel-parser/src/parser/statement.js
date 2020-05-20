@@ -2060,7 +2060,6 @@ export default class StatementParser extends ExpressionParser {
       this.expectContextual("from");
     }
     node.source = this.parseImportSource();
-    // new proposal
     // https://github.com/tc39/proposal-module-attributes
     // parse module attributes if the next token is `with` or ignore and finish the ImportDeclaration node.
     const attributes = this.maybeParseModuleAttributes();
