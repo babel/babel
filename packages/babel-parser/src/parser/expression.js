@@ -623,9 +623,6 @@ export default class ExpressionParser extends LValParser {
         if (node.object.type === "Super") {
           this.raise(startPos, Errors.SuperPrivateField);
         }
-        if (optional) {
-          this.raise(node.property.start, Errors.OptionalChainingNoPrivate);
-        }
         this.classScope.usePrivateName(
           node.property.id.name,
           node.property.start,
