@@ -225,7 +225,7 @@ export default class Tokenizer extends LocationParser {
 
   nextToken(): void {
     const curContext = this.curContext();
-    if (!curContext || !curContext.preserveSpace) this.skipSpace();
+    if (!curContext?.preserveSpace) this.skipSpace();
 
     this.state.octalPositions = [];
     this.state.start = this.state.pos;

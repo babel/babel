@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a Question
+    url: https://github.com/babel/babel/discussions
+    about: Ask any questions with the community!
+  - name: Support the Team!
+    url: https://github.com/sponsors/babel
+    about: Support the Babel project financially!

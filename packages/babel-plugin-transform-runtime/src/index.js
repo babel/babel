@@ -8,7 +8,7 @@ import { typeAnnotationToString } from "./helpers";
 import getRuntimePath from "./get-runtime-path";
 
 function supportsStaticESM(caller) {
-  return !!(caller && caller.supportsStaticESM);
+  return !!caller?.supportsStaticESM;
 }
 
 export default declare((api, options, dirname) => {
@@ -358,6 +358,8 @@ export default declare((api, options, dirname) => {
         enter(path) {
           if (!injectCoreJS) return;
           if (!path.isReferenced()) return;
+          // skip transforming `delete something.includes`
+          if (path.parentPath.isUnaryExpression({ operator: "delete" })) return;
 
           const { node } = path;
           const { object } = node;

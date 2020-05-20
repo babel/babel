@@ -196,5 +196,13 @@
 }`);
       });
     });
+
+    describe("regressions", () => {
+      it("#11534 - supports quantifiers in unicode regexps", () => {
+        expect(() =>
+          Babel.transform("/a*/u", { presets: ["es2015"] }),
+        ).not.toThrow();
+      });
+    });
   },
 );

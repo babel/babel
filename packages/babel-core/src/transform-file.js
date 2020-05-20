@@ -25,15 +25,7 @@ type TransformFile = {
 
 const transformFileRunner = gensync<[string, ?InputOptions], FileResult | null>(
   function*(filename, opts) {
-    let options;
-    if (opts == null) {
-      options = { filename };
-    } else if (opts && typeof opts === "object") {
-      options = {
-        ...opts,
-        filename,
-      };
-    }
+    const options = { ...opts, filename };
 
     const config: ResolvedConfig | null = yield* loadConfig(options);
     if (config === null) return null;

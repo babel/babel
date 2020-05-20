@@ -44,7 +44,7 @@ export default class Buffer {
       // source string since it may be arbitrarily large after all transformations
       code: this._buf.join("").trimRight(),
       map: null,
-      rawMappings: map && map.getRawMappings(),
+      rawMappings: map?.getRawMappings(),
     };
 
     if (map) {
@@ -315,10 +315,10 @@ export default class Buffer {
     const origFilename = targetObj.filename;
 
     targetObj.identifierName =
-      (prop === "start" && loc && loc.identifierName) || null;
-    targetObj.line = pos ? pos.line : null;
-    targetObj.column = pos ? pos.column : null;
-    targetObj.filename = (loc && loc.filename) || null;
+      (prop === "start" && loc?.identifierName) || null;
+    targetObj.line = pos?.line;
+    targetObj.column = pos?.column;
+    targetObj.filename = loc?.filename;
 
     // We want to skip reassigning `force` if we're re-setting the same position.
     if (

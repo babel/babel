@@ -240,3 +240,4 @@ _valuesInstanceProperty(object).call(object, arg);
 _bindInstanceProperty(Function);
 
 object.something(arg);
+delete object.bind;

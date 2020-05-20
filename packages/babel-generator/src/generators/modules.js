@@ -147,7 +147,7 @@ export function ImportDeclaration(node: Object) {
   }
 
   const specifiers = node.specifiers.slice(0);
-  if (specifiers && specifiers.length) {
+  if (specifiers?.length) {
     // print "special" specifiers first
     for (;;) {
       const first = specifiers[0];

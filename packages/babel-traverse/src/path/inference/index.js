@@ -53,7 +53,7 @@ export function _getTypeAnnotation(): ?Object {
   }
 
   inferer = inferers[this.parentPath.type];
-  if (inferer && inferer.validParent) {
+  if (inferer?.validParent) {
     return this.parentPath.getTypeAnnotation();
   }
 }
