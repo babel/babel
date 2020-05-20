@@ -2097,7 +2097,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   maybeParseModuleAttributes() {
-    if (this.match(tt._with) && !this.isLineTerminator()) {
+    if (this.match(tt._with) && !this.hasPrecedingLineBreak()) {
       this.expectPlugin("moduleAttributes");
       this.next();
     } else {

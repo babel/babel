@@ -765,11 +765,10 @@ export default class ExpressionParser extends LValParser {
     optional: boolean,
   ): N.Expression {
     if (node.callee.type === "Import") {
-      const maxArity = this.hasPlugin("moduleAttributes") ? 2 : 1;
       if (node.arguments.length === 2) {
         this.expectPlugin("moduleAttributes");
       }
-      if (node.arguments.length === 0 || node.arguments.length > maxArity) {
+      if (node.arguments.length === 0 || node.arguments.length > 2) {
         this.raise(
           node.start,
           Errors.ImportCallArity,
