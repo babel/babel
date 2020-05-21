@@ -777,14 +777,10 @@ export default class ExpressionParser extends LValParser {
             : "one argument",
         );
       } else {
-        const importArgSpreadElement = node.arguments.find(
-          arg => arg.type === "SpreadElement",
-        );
-        if (importArgSpreadElement) {
-          this.raise(
-            importArgSpreadElement.start,
-            Errors.ImportCallSpreadArgument,
-          );
+        for (const arg of node.arguments) {
+          if (arg.type === "SpreadElement") {
+            this.raise(arg.start, Errors.ImportCallSpreadArgument);
+          }
         }
       }
     }
