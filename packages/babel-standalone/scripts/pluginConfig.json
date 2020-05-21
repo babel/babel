@@ -34,6 +34,7 @@
   "proposal-optional-chaining",
   "proposal-pipeline-operator",
   "proposal-private-methods",
+  "proposal-private-property-in-object",
   "proposal-throw-expressions",
   "proposal-unicode-property-regex",
   "transform-async-to-generator",
