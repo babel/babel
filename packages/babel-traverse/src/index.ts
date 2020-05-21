@@ -22,7 +22,7 @@ export type TraverseOptions<S = t.Node> =
     }
   | Visitor<S>;
 
-export default function traverse<S>(
+function traverse<S>(
   parent: t.Node,
   opts: TraverseOptions<S>,
   scope: Scope | undefined,
@@ -30,7 +30,7 @@ export default function traverse<S>(
   parentPath?: NodePath,
 ): void;
 
-export default function traverse(
+function traverse(
   parent: t.Node,
   opts: TraverseOptions,
   scope?: Scope,
@@ -38,7 +38,7 @@ export default function traverse(
   parentPath?: NodePath,
 ): void;
 
-export default function traverse(
+function traverse(
   parent: t.Node,
   opts: TraverseOptions = {},
   scope?: Scope,
@@ -65,6 +65,8 @@ export default function traverse(
 
   traverse.node(parent, opts, scope, state, parentPath);
 }
+
+export default traverse;
 
 traverse.visitors = visitors;
 traverse.verify = visitors.verify;
