@@ -7,6 +7,10 @@ assignees: ''
 
 ---
 
+<!---
+If this feature introduces a new option, or if significantly changes how Babel is currently used in other ways, we may ask you to open an RFC in the https://github.com/babel/rfcs repository.
+-->
+
 ## Feature Request
 
 <!-- Check this if you would like to implement a PR, we are more than happy to help you go through the process !-->
