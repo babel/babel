@@ -98,7 +98,19 @@ function getPluginsOrPresetsFromScript(script, attributeName) {
     // setting, and should use the default.
     return null;
   }
-  return rawValue.split(",").map(item => item.trim());
+  return rawValue.split(",").map(function (item) {
+    var value = item.trim();
+    // Allow options to be specified as 'plugin-name{opt1=v1,opt2=v2}'.
+    if (/\{.*\}$/.test(value)) {
+      const optionsRaw = value.replace(/^.*\{|\}$/g, "");
+      var options = {};
+      optionsRaw.split(",").forEach(function(opt) {
+        options[opt.split("=")[0]] = opt.split("=")[1];
+      })
+      value = [value.replace(/\{.*\}$/, ""), options];
+    }
+    return value;
+  });
 }
 
 /**
