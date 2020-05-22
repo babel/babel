@@ -35,6 +35,7 @@ corejs3Polyfills["es.symbol.for"] = corejs3Polyfills["es.symbol"];
 corejs3Polyfills["es.symbol.key-for"] = corejs3Polyfills["es.symbol"];
 corejs3Polyfills["es.object.get-own-property-symbols"] =
   corejs3Polyfills["es.symbol"];
+corejs2Polyfills["es6.symbol.iterator"] = corejs2Polyfills["es6.symbol"];
 
 function supportsStaticESM(caller) {
   return !!caller?.supportsStaticESM;
