@@ -125,12 +125,6 @@ const handle = {
         throw member.buildCodeFrameError(`can't handle delete`);
       }
 
-      if (node.optional) {
-        throw member.buildCodeFrameError(
-          `can't handle '?.' directly before ${node.property.type}`,
-        );
-      }
-
       // Now, we're looking for the start of this optional chain, which is
       // optional to the left of this member.
       //
@@ -150,6 +144,8 @@ const handle = {
           startingOptional = startingOptional.get("callee");
           continue;
         }
+        // prevent infinite loop: unreachable if the AST is well-formed
+        throw new Error("Internal error");
       }
 
       const { scope } = member;
@@ -160,8 +156,13 @@ const handle = {
       const baseRef = scope.generateUidIdentifierBasedOnNode(startingNode);
       scope.push({ id: baseRef });
 
+      // Compute parentIsOptionalCall before `startingOptional` is replaced
+      // as `node` may refer to `startingOptional.node` before replaced.
+      const parentIsOptionalCall = parentPath.isOptionalCallExpression({
+        callee: node,
+      });
       startingOptional.replaceWith(toNonOptional(startingOptional, baseRef));
-      if (parentPath.isOptionalCallExpression({ callee: node })) {
+      if (parentIsOptionalCall) {
         parentPath.replaceWith(this.call(member, parent.arguments));
       } else {
         member.replaceWith(this.get(member));
