@@ -12,13 +12,8 @@ jobs:
         uses: actions/setup-node@v2-beta
         with:
           node-version: "*"
-      - name: Environment log
-        id: env
-        run: |
-          yarn --version
       - name: Generate coverage report
         run: |
-          yarn --version
           make -j test-ci-coverage
       - name: Upload coverage report
         uses: codecov/codecov-action@v1
