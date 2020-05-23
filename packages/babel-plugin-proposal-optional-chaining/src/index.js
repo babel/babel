@@ -39,8 +39,8 @@ export default declare((api, options) => {
             optionals.push(node);
             chains.push(
               optionalPath.isOptionalCallExpression()
-                ? getCallContext(optionalPath)["node"]
-                : node["object"],
+                ? getCallContext(optionalPath).node
+                : node.object,
             );
           }
 
