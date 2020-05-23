@@ -8,7 +8,7 @@
     "access": "public"
   },
   "main": "lib/index.js",
-  "dependencies": {
+  "devDependencies": {
     "@babel/traverse": "^7.9.6"
   }
 }
