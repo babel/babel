@@ -23,6 +23,7 @@ export default (_: any, opts: Object = {}) => {
       [babelPlugins.syntaxRecordAndTuple, { syntaxType: recordAndTupleSyntax }],
       babelPlugins.proposalExportDefaultFrom,
       [babelPlugins.proposalPipelineOperator, { proposal: pipelineProposal }],
+      babelPlugins.proposalPrivatePropertyInObject,
       babelPlugins.proposalDoExpressions,
     ],
   };
