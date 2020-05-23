@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import getCallContext from "@babel/helper-get-call-context";
+import { getCallContext } from "@babel/helper-skip-transparent-expr-wrappers";
 import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
 import { types as t } from "@babel/core";
 
