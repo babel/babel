@@ -39,6 +39,7 @@ import proposalOptionalCatchBinding from "@babel/plugin-proposal-optional-catch-
 import proposalOptionalChaining from "@babel/plugin-proposal-optional-chaining";
 import proposalPipelineOperator from "@babel/plugin-proposal-pipeline-operator";
 import proposalPrivateMethods from "@babel/plugin-proposal-private-methods";
+import proposalPrivatePropertyInObject from "@babel/plugin-proposal-private-property-in-object";
 import proposalThrowExpressions from "@babel/plugin-proposal-throw-expressions";
 import proposalUnicodePropertyRegex from "@babel/plugin-proposal-unicode-property-regex";
 import transformAsyncToGenerator from "@babel/plugin-transform-async-to-generator";
@@ -130,6 +131,7 @@ export {
   proposalOptionalChaining,
   proposalPipelineOperator,
   proposalPrivateMethods,
+  proposalPrivatePropertyInObject,
   proposalThrowExpressions,
   proposalUnicodePropertyRegex,
   transformAsyncToGenerator,
@@ -222,6 +224,7 @@ export const all = {
   "proposal-optional-chaining": proposalOptionalChaining,
   "proposal-pipeline-operator": proposalPipelineOperator,
   "proposal-private-methods": proposalPrivateMethods,
+  "proposal-private-property-in-object": proposalPrivatePropertyInObject,
   "proposal-throw-expressions": proposalThrowExpressions,
   "proposal-unicode-property-regex": proposalUnicodePropertyRegex,
   "transform-async-to-generator": transformAsyncToGenerator,
