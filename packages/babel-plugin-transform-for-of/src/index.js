@@ -6,13 +6,37 @@ import transformWithoutHelper from "./no-helper-implementation";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { loose, assumeArray } = options;
+  const { loose, assumeArray, allowArrayLike } = options;
 
   if (loose === true && assumeArray === true) {
     throw new Error(
       `The loose and assumeArray options cannot be used together in @babel/plugin-transform-for-of`,
     );
   }
+
+  if (assumeArray === true && allowArrayLike === true) {
+    throw new Error(
+      `The assumeArray and allowArrayLike options cannot be used together in @babel/plugin-transform-for-of`,
+    );
+  }
+
+  // TODO: Remove in Babel 8
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // TODO: Enable before releasing 7.10.0
+  /*if (allowArrayLike && /^7\.\d\./.test(api.version)) {
+    throw new Error(
+      `The allowArrayLike is only supported when using @babel/core@^7.10.0`,
+    );
+  }*/
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   if (assumeArray) {
     return {
@@ -86,12 +110,12 @@ export default declare((api, options) => {
   `);
 
   const buildForOfLoose = template.statements(`
-    for (var ITERATOR_HELPER = CREATE_ITERATOR_HELPER(OBJECT), STEP_KEY;
+    for (var ITERATOR_HELPER = CREATE_ITERATOR_HELPER(OBJECT, ALLOW_ARRAY_LIKE), STEP_KEY;
         !(STEP_KEY = ITERATOR_HELPER()).done;) BODY;
   `);
 
   const buildForOf = template.statements(`
-    var ITERATOR_HELPER = CREATE_ITERATOR_HELPER(OBJECT), STEP_KEY;
+    var ITERATOR_HELPER = CREATE_ITERATOR_HELPER(OBJECT, ALLOW_ARRAY_LIKE), STEP_KEY;
     try {
       for (ITERATOR_HELPER.s(); !(STEP_KEY = ITERATOR_HELPER.n()).done;) BODY;
     } catch (err) {
@@ -200,6 +224,7 @@ export default declare((api, options) => {
         const nodes = builder.build({
           CREATE_ITERATOR_HELPER: state.addHelper(builder.helper),
           ITERATOR_HELPER: scope.generateUidIdentifier("iterator"),
+          ALLOW_ARRAY_LIKE: allowArrayLike ? t.booleanLiteral(true) : null,
           STEP_KEY: t.identifier(stepKey),
           OBJECT: node.right,
           BODY: node.body,
