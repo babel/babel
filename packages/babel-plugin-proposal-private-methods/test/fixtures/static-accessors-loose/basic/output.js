@@ -1,3 +1,7 @@
+var _PRIVATE_STATIC_FIELD = babelHelpers.classPrivateFieldLooseKey("PRIVATE_STATIC_FIELD");
+
+var _privateStaticFieldValue = babelHelpers.classPrivateFieldLooseKey("privateStaticFieldValue");
+
 class Cl {
   static getValue() {
     return babelHelpers.classPrivateFieldLooseBase(Cl, _privateStaticFieldValue)[_privateStaticFieldValue];
@@ -8,10 +12,6 @@ class Cl {
   }
 
 }
-
-var _PRIVATE_STATIC_FIELD = babelHelpers.classPrivateFieldLooseKey("PRIVATE_STATIC_FIELD");
-
-var _privateStaticFieldValue = babelHelpers.classPrivateFieldLooseKey("privateStaticFieldValue");
 
 var _set_privateStaticFieldValue = function (newValue) {
   babelHelpers.classPrivateFieldLooseBase(Cl, _PRIVATE_STATIC_FIELD)[_PRIVATE_STATIC_FIELD] = `Updated: ${newValue}`;
