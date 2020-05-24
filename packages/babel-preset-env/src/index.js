@@ -228,6 +228,7 @@ export default declare((api, opts) => {
     targets: optionsTargets,
     useBuiltIns,
     corejs: { version: corejs, proposals },
+    browserslistEnv,
   } = normalizeOptions(opts);
   // TODO: remove this in next major
   let hasUglifyTarget = false;
@@ -257,7 +258,7 @@ export default declare((api, opts) => {
   const targets = getTargets(
     // $FlowIgnore optionsTargets doesn't have an "uglify" property anymore
     (optionsTargets: InputTargets),
-    { ignoreBrowserslistConfig, configPath },
+    { ignoreBrowserslistConfig, configPath, browserslistEnv },
   );
   const include = transformIncludesAndExcludes(optionsInclude);
   const exclude = transformIncludesAndExcludes(optionsExclude);

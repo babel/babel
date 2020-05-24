@@ -205,6 +205,7 @@ export default function getTargets(
     const browsers = browserslist(browsersquery, {
       path: options.configPath,
       mobileToDesktop: true,
+      env: options.browserslistEnv,
     });
 
     const queryBrowsers = getLowestVersions(browsers);
