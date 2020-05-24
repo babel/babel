@@ -12,14 +12,14 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.8.3"
+    "@babel/helper-plugin-utils": "^7.8.3",
+    "@babel/helper-skip-transparent-expr-wrappers": "7.9.6"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.3",
-    "@babel/helper-plugin-test-runner": "^7.8.3",
-    "@babel/helper-skip-transparent-expr-wrappers": "7.9.6"
+    "@babel/helper-plugin-test-runner": "^7.8.3"
   }
 }
