@@ -1,3 +1,4 @@
+import * as t from "@babel/types";
 import type { NodePath } from "@babel/traverse";
 
 export function getCallContext(callPath: NodePath): NodePath {
@@ -12,13 +13,17 @@ export function getCallContext(callPath: NodePath): NodePath {
   return skipTransparentExprWrappers(calleePath);
 }
 
+export function isTransparentExprWrapper(node: Node) {
+  return (
+    t.isTSAsExpression(node) ||
+    t.isTypeCastExpression(node) ||
+    t.isTSTypeAssertion(node) ||
+    t.isParenthesizedExpression(node)
+  );
+}
+
 export default function skipTransparentExprWrappers(path: NodePath): NodePath {
-  while (
-    path.isTSAsExpression() ||
-    path.isTypeCastExpression() ||
-    path.isTSTypeAssertion() ||
-    path.isParenthesizedExpression()
-  ) {
+  while (isTransparentExprWrapper(path.node)) {
     path = path.get("expression");
   }
 

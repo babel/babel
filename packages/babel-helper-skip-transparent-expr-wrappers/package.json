@@ -8,6 +8,9 @@
     "access": "public"
   },
   "main": "lib/index.js",
+  "dependencies": {
+    "@babel/types": "^7.9.6"
+  },
   "devDependencies": {
     "@babel/traverse": "^7.9.6"
   }
