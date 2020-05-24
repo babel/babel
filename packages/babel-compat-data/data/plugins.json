@@ -10,6 +10,17 @@
     "samsung": "11",
     "electron": "6"
   },
+  "proposal-class-properties": {
+    "chrome": "74",
+    "opera": "61",
+    "edge": "79",
+    "node": "12",
+    "electron": "6.1"
+  },
+  "proposal-private-methods": {
+    "chrome": "84",
+    "opera": "71"
+  },
   "proposal-nullish-coalescing-operator": {
     "chrome": "80",
     "opera": "67",

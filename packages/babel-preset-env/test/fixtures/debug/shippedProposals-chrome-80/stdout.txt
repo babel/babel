@@ -1,0 +1,23 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "80"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  syntax-numeric-separator { "chrome":"80" }
+  syntax-class-properties { "chrome":"80" }
+  proposal-private-methods { "chrome":"80" }
+  syntax-nullish-coalescing-operator { "chrome":"80" }
+  syntax-optional-chaining { "chrome":"80" }
+  syntax-json-strings { "chrome":"80" }
+  syntax-optional-catch-binding { "chrome":"80" }
+  syntax-async-generators { "chrome":"80" }
+  syntax-object-rest-spread { "chrome":"80" }
+  transform-modules-commonjs { "chrome":"80" }
+  proposal-dynamic-import { "chrome":"80" }
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

@@ -123,6 +123,10 @@ const es2020 = {
 
 const shippedProposal = {
   "proposal-numeric-separator": "numeric separator",
+  "proposal-class-properties": {
+    features: ["static class fields", "instance class fields"],
+  },
+  "proposal-private-methods": "private class methods",
 };
 
 // Run plugins for modern features first
