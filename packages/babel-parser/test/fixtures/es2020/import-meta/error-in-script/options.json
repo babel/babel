@@ -1,4 +1,3 @@
 {
-  "plugins": ["importMeta"],
   "sourceType": "script"
 }
