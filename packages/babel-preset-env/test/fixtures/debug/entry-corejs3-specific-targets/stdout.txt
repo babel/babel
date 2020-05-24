@@ -37,6 +37,7 @@ Using plugins:
   transform-computed-properties { "ie":"10", "safari":"7" }
   transform-for-of { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-sticky-regex { "ie":"10", "ios":"9", "safari":"7" }
+  transform-unicode-escapes { "firefox":"49", "ie":"10", "safari":"7" }
   transform-unicode-regex { "ie":"10", "ios":"9", "safari":"7" }
   transform-spread { "ie":"10", "ios":"9", "safari":"7" }
   transform-destructuring { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }

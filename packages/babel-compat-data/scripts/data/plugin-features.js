@@ -62,6 +62,7 @@ const es2015 = {
       'RegExp "y" and "u" flags / "y" flag',
     ],
   },
+  "transform-unicode-escapes": "Unicode code point escapes",
   "transform-unicode-regex": {
     features: [
       'RegExp "y" and "u" flags / "u" flag, case folding',

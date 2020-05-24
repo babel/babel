@@ -32,6 +32,7 @@ Using plugins:
   transform-computed-properties { "android":"3" }
   transform-for-of { "android":"3" }
   transform-sticky-regex { "android":"3" }
+  transform-unicode-escapes { "android":"3" }
   transform-unicode-regex { "android":"3" }
   transform-spread { "android":"3" }
   transform-destructuring { "android":"3" }

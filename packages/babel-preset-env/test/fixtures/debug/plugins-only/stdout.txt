@@ -28,6 +28,7 @@ Using plugins:
   transform-literals { "firefox":"52" }
   transform-function-name { "firefox":"52" }
   transform-for-of { "firefox":"52" }
+  transform-unicode-escapes { "firefox":"52" }
   transform-destructuring { "firefox":"52" }
   transform-modules-commonjs { "firefox":"52", "node":"7.4" }
   proposal-dynamic-import { "firefox":"52", "node":"7.4" }
