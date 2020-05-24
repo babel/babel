@@ -1,13 +1,41 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
+import escapeRegExp from "lodash/escapeRegExp";
+
+function checkNameMatchesSelectiveLoose(name, selectiveLoose) {
+  for (let i = 0; i < selectiveLoose.length; i++) {
+    if (selectiveLoose[i].test(name)) {
+      return true;
+    }
+  }
+  return false;
+}
 
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { loose = false, useBuiltIns = false } = options;
+  const {
+    loose = false,
+    useBuiltIns = false,
+    selectiveLoose = false,
+  } = options;
 
   if (typeof loose !== "boolean") {
     throw new Error(`.loose must be a boolean or undefined`);
+  }
+
+  // Format selectiveLoose entries to RegExp expressions that can
+  // match generated babel names, i.e. `_x`, `_x2`, `_x3`, etc.
+  if (selectiveLoose) {
+    if (selectiveLoose instanceof Array) {
+      for (let i = 0; i < selectiveLoose.length; i++) {
+        selectiveLoose[i] = new RegExp(
+          `^_${escapeRegExp(selectiveLoose[i])}\\d*$`,
+        );
+      }
+    } else {
+      throw new Error(`.selectiveLoose must be an array or undefined`);
+    }
   }
 
   const arrayOnlySpread = loose;
@@ -86,6 +114,7 @@ export default declare((api, options) => {
       this.kind = opts.kind;
       this.arrayOnlySpread = opts.arrayOnlySpread;
       this.addHelper = opts.addHelper;
+      this.selectiveLoose = opts.selectiveLoose;
     }
 
     buildVariableAssignment(id, init) {
@@ -229,8 +258,11 @@ export default declare((api, options) => {
           );
         }
 
+        const isLoose = this.selectiveLoose
+          ? checkNameMatchesSelectiveLoose(objRef.name, this.selectiveLoose)
+          : loose;
         value = t.callExpression(
-          this.addHelper(`objectWithoutProperties${loose ? "Loose" : ""}`),
+          this.addHelper(`objectWithoutProperties${isLoose ? "Loose" : ""}`),
           [t.cloneNode(objRef), keyExpression],
         );
       }
@@ -523,6 +555,7 @@ export default declare((api, options) => {
           scope: scope,
           nodes: nodes,
           arrayOnlySpread,
+          selectiveLoose,
           addHelper: name => this.addHelper(name),
         });
 
@@ -548,6 +581,7 @@ export default declare((api, options) => {
           scope: scope,
           nodes: nodes,
           arrayOnlySpread,
+          selectiveLoose,
           addHelper: name => this.addHelper(name),
         });
         destructuring.init(pattern, ref);
@@ -566,6 +600,7 @@ export default declare((api, options) => {
           scope: scope,
           nodes: nodes,
           arrayOnlySpread,
+          selectiveLoose,
           addHelper: name => this.addHelper(name),
         });
 
@@ -624,6 +659,7 @@ export default declare((api, options) => {
             scope: scope,
             kind: node.kind,
             arrayOnlySpread,
+            selectiveLoose,
             addHelper: name => this.addHelper(name),
           });
 
