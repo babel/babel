@@ -63,7 +63,7 @@ module.exports = function() {
           path.join(packageFolder, "package.json")
         );
       } catch (e) {
-        // Some Babel packahes aren't in this repository, but in
+        // Some Babel packages aren't in this repository
         return null;
       }
 
@@ -76,7 +76,7 @@ module.exports = function() {
 
       return path.join(
         packageFolder,
-        // replace lib with src in the pkg.json entry
+        // replace lib with src in the package.json entry
         filename.replace(/^(\.\/)?lib\//, "src/")
       );
     },

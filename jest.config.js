@@ -1,4 +1,4 @@
-// These packages undet the @babel namespace aren't in this monorepo.
+// These packages under the @babel namespace aren't in this monorepo.
 const externalBabelPackages = [
   "plugin-syntax-async-generators",
   "plugin-syntax-bigint",
