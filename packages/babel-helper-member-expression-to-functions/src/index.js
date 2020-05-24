@@ -153,8 +153,8 @@ const handle = {
         ? "object"
         : "callee";
       const startingNode = startingOptional.node[startingProp];
-      const baseRef = scope.generateUidIdentifierBasedOnNode(startingNode);
-      scope.push({ id: baseRef });
+      const baseNeedsMemoised = scope.maybeGenerateMemoised(startingNode);
+      const baseRef = baseNeedsMemoised ?? startingNode;
 
       // Compute parentIsOptionalCall before `startingOptional` is replaced
       // as `node` may refer to `startingOptional.node` before replaced.
@@ -197,7 +197,9 @@ const handle = {
             "||",
             t.binaryExpression(
               "===",
-              t.assignmentExpression("=", baseRef, startingNode),
+              baseNeedsMemoised
+                ? t.assignmentExpression("=", baseRef, startingNode)
+                : baseRef,
               t.nullLiteral(),
             ),
             t.binaryExpression("===", baseRef, scope.buildUndefinedNode()),
