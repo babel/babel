@@ -7,6 +7,8 @@ Using modules transform: auto
 
 Using plugins:
   proposal-numeric-separator {}
+  proposal-class-properties {}
+  proposal-private-methods {}
   proposal-nullish-coalescing-operator {}
   proposal-optional-chaining {}
   proposal-json-strings {}

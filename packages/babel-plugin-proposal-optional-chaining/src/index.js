@@ -44,6 +44,11 @@ export default declare((api, options) => {
             optionalPath.node.type = "CallExpression";
             optionalPath = optionalPath.get("callee");
           }
+
+          // unwrap a TSNonNullExpression if need
+          if (optionalPath.isTSNonNullExpression()) {
+            optionalPath = optionalPath.get("expression");
+          }
         }
 
         let replacementPath = path;

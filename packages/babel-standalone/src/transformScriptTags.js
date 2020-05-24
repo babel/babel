@@ -53,6 +53,9 @@ function buildBabelOptions(script, filename) {
  */
 function run(transformFn, script) {
   const scriptEl = document.createElement("script");
+  if (typeof script.type !== "undefined") {
+    scriptEl.setAttribute("type", script.type);
+  }
   scriptEl.text = transformCode(transformFn, script);
   headEl.appendChild(scriptEl);
 }
@@ -129,6 +132,7 @@ function loadScripts(transformFn, scripts) {
     const scriptData = {
       // script.async is always true for non-JavaScript script tags
       async: script.hasAttribute("async"),
+      type: script.getAttribute("data-type"),
       error: false,
       executed: false,
       plugins: getPluginsOrPresetsFromScript(script, "data-plugins"),

@@ -659,9 +659,7 @@ export default class StatementParser extends ExpressionParser {
 
       clause.body =
         // For the smartPipelines plugin: Disable topic references from outer
-        // contexts within the function body. They are permitted in function
-        // default-parameter expressions, which are part of the outer context,
-        // outside of the function body.
+        // contexts within the catch clause's body.
         this.withTopicForbiddingContext(() =>
           // Parse the catch clause's body.
           this.parseBlock(false, false),
@@ -718,9 +716,9 @@ export default class StatementParser extends ExpressionParser {
 
     node.body =
       // For the smartPipelines plugin:
-      // Disable topic references from outer contexts within the function body.
+      // Disable topic references from outer contexts within the with statement's body.
       // They are permitted in function default-parameter expressions, which are
-      // part of the outer context, outside of the function body.
+      // part of the outer context, outside of the with statement's body.
       this.withTopicForbiddingContext(() =>
         // Parse the statement body.
         this.parseStatement("with"),
@@ -1074,8 +1072,8 @@ export default class StatementParser extends ExpressionParser {
     this.parseFunctionParams(node);
 
     // For the smartPipelines plugin: Disable topic references from outer
-    // contexts within the function body. They are permitted in test
-    // expressions, outside of the function body.
+    // contexts within the function body. They are permitted in function
+    // default-parameter expressions, outside of the function body.
     this.withTopicForbiddingContext(() => {
       // Parse the function body.
       this.parseFunctionBodyAndFinish(
@@ -1197,8 +1195,7 @@ export default class StatementParser extends ExpressionParser {
     this.expect(tt.braceL);
 
     // For the smartPipelines plugin: Disable topic references from outer
-    // contexts within the class body. They are permitted in test expressions,
-    // outside of the class body.
+    // contexts within the class body.
     this.withTopicForbiddingContext(() => {
       while (!this.match(tt.braceR)) {
         if (this.eat(tt.semi)) {

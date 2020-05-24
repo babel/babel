@@ -49,19 +49,19 @@ const saveInFiles = function(files) {
   });
 };
 
-const replacePaths = function(str, cwd) {
+const normalizeOutput = function(str, cwd) {
   let prev;
   do {
     prev = str;
     str = str.replace(cwd, "<CWD>");
   } while (str !== prev);
 
-  return str;
+  return str.replace(/\(\d+ms\)/g, "(123ms)");
 };
 
 const assertTest = function(stdout, stderr, opts, cwd) {
-  stdout = replacePaths(stdout, cwd);
-  stderr = replacePaths(stderr, cwd);
+  stdout = normalizeOutput(stdout, cwd);
+  stderr = normalizeOutput(stderr, cwd);
 
   const expectStderr = opts.stderr.trim();
   stderr = stderr.trim();
@@ -84,6 +84,7 @@ const assertTest = function(stdout, stderr, opts, cwd) {
     if (opts.stdoutContains) {
       expect(stdout).toContain(expectStdout);
     } else {
+      fs.writeFileSync(opts.stdoutPath, stdout + "\n");
       expect(stdout).toBe(expectStdout);
     }
   } else if (stdout) {
@@ -230,6 +231,7 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
 
       ["stdout", "stdin", "stderr"].forEach(function(key) {
         const loc = path.join(testLoc, key + ".txt");
+        opts[key + "Path"] = loc;
         if (fs.existsSync(loc)) {
           opts[key] = helper.readFile(loc);
         } else {

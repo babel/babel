@@ -1,1 +1,4 @@
-
+language/expressions/class/elements/grammar-private-field-optional-chaining.js(default)
+language/expressions/class/elements/grammar-private-field-optional-chaining.js(strict mode)
+language/statements/class/elements/grammar-private-field-optional-chaining.js(default)
+language/statements/class/elements/grammar-private-field-optional-chaining.js(strict mode)
