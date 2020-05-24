@@ -44,6 +44,7 @@
     "@babel/plugin-syntax-function-sent": "^7.8.3",
     "@babel/plugin-syntax-import-meta": "^7.8.3",
     "@babel/plugin-syntax-jsx": "^7.8.3",
+    "@babel/plugin-syntax-module-attributes": "^7.8.3",
     "@babel/plugin-syntax-object-rest-spread": "^7.8.0",
     "@babel/plugin-syntax-optional-catch-binding": "^7.8.0",
     "@babel/plugin-syntax-pipeline-operator": "^7.8.3",

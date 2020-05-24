@@ -765,12 +765,22 @@ export default class ExpressionParser extends LValParser {
     optional: boolean,
   ): N.Expression {
     if (node.callee.type === "Import") {
-      if (node.arguments.length !== 1) {
-        this.raise(node.start, Errors.ImportCallArity);
+      if (node.arguments.length === 2) {
+        this.expectPlugin("moduleAttributes");
+      }
+      if (node.arguments.length === 0 || node.arguments.length > 2) {
+        this.raise(
+          node.start,
+          Errors.ImportCallArity,
+          this.hasPlugin("moduleAttributes")
+            ? "one or two arguments"
+            : "one argument",
+        );
       } else {
-        const importArg = node.arguments[0];
-        if (importArg?.type === "SpreadElement") {
-          this.raise(importArg.start, Errors.ImportCallSpreadArgument);
+        for (const arg of node.arguments) {
+          if (arg.type === "SpreadElement") {
+            this.raise(arg.start, Errors.ImportCallSpreadArgument);
+          }
         }
       }
     }
@@ -799,7 +809,7 @@ export default class ExpressionParser extends LValParser {
       } else {
         this.expect(tt.comma);
         if (this.match(close)) {
-          if (dynamicImport) {
+          if (dynamicImport && !this.hasPlugin("moduleAttributes")) {
             this.raise(
               this.state.lastTokStart,
               Errors.ImportCallArgumentTrailingComma,
