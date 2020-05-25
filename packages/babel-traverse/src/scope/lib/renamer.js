@@ -21,6 +21,7 @@ const renameVisitor = {
   },
 
   "AssignmentExpression|Declaration|VariableDeclarator"(path, state) {
+    if (path.isVariableDeclaration()) return;
     const ids = path.getOuterBindingIdentifiers();
 
     for (const name in ids) {
