@@ -231,7 +231,7 @@ const handle = {
             t.optionalMemberExpression(
               endParent.callee,
               t.identifier("call"),
-              endParent.computed,
+              false,
               true,
             ),
             [context, ...endParent.arguments],
