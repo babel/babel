@@ -300,7 +300,13 @@ const privateNameHandlerSpec = {
     // The first access (the get) should do the memo assignment.
     this.memoise(member, 1);
 
-    return optimiseCall(this.get(member), this.receiver(member), args);
+    return optimiseCall(this.get(member), this.receiver(member), args, false);
+  },
+
+  optionalCall(member, args) {
+    this.memoise(member, 1);
+
+    return optimiseCall(this.get(member), this.receiver(member), args, true);
   },
 };
 
@@ -327,6 +333,10 @@ const privateNameHandlerLoose = {
 
   call(member, args) {
     return t.callExpression(this.get(member), args);
+  },
+
+  optionalCall(member, args) {
+    return t.optionalCallExpression(this.get(member), args, true);
   },
 };
 

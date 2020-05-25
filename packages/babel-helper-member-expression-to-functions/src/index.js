@@ -109,7 +109,11 @@ const handle = {
         if (parentPath.isOptionalCallExpression()) {
           // Checking `parent.callee` since we could be in the arguments, eg
           // `bad?.(FOO?.BAR)`.
-          return parent.optional || parent.callee !== node;
+          // Also skip `FOO?.BAR` in `FOO?.BAR?.()` since we need to transform the optional call to ensure proper this
+          return (
+            // In FOO?.#BAR?.(), endPath points the optional call expression so we skip FOO?.#BAR
+            (node !== member.node && parent.optional) || parent.callee !== node
+          );
         }
         return true;
       });
@@ -145,7 +149,9 @@ const handle = {
           continue;
         }
         // prevent infinite loop: unreachable if the AST is well-formed
-        throw new Error("Internal error");
+        throw new Error(
+          `Internal error: unexpected ${startingOptional.node.type}`,
+        );
       }
 
       const { scope } = member;
@@ -163,7 +169,11 @@ const handle = {
       });
       startingOptional.replaceWith(toNonOptional(startingOptional, baseRef));
       if (parentIsOptionalCall) {
-        parentPath.replaceWith(this.call(member, parent.arguments));
+        if (parent.optional) {
+          parentPath.replaceWith(this.optionalCall(member, parent.arguments));
+        } else {
+          parentPath.replaceWith(this.call(member, parent.arguments));
+        }
       } else {
         member.replaceWith(this.get(member));
       }
@@ -171,6 +181,11 @@ const handle = {
       let regular = member.node;
       for (let current = member; current !== endPath; ) {
         const { parentPath } = current;
+        // skip transforming `Foo.#BAR?.call(FOO)`
+        if (parentPath === endPath && parentIsOptionalCall && parent.optional) {
+          regular = parentPath.node;
+          break;
+        }
         regular = toNonOptional(parentPath, regular);
         current = parentPath;
       }
@@ -296,6 +311,12 @@ const handle = {
     // MEMBER(ARGS) -> _call(MEMBER, ARGS)
     if (parentPath.isCallExpression({ callee: node })) {
       parentPath.replaceWith(this.call(member, parent.arguments));
+      return;
+    }
+
+    // MEMBER?.(ARGS) -> _optionalCall(MEMBER, ARGS)
+    if (parentPath.isOptionalCallExpression({ callee: node })) {
+      parentPath.replaceWith(this.optionalCall(member, parent.arguments));
       return;
     }
 

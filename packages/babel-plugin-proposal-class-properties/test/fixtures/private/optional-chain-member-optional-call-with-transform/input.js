@@ -66,9 +66,6 @@ class Foo {
     fn?.().Foo.#self?.getSelf?.()?.self.#m?.();
   }
 
-  static testtest() {
-    fn?.().Foo.#self.getSelf?.().#m?.();
-  }
 }
 
 Foo.test();
