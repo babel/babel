@@ -217,7 +217,11 @@ const handle = {
                 : baseRef,
               t.nullLiteral(),
             ),
-            t.binaryExpression("===", baseRef, scope.buildUndefinedNode()),
+            t.binaryExpression(
+              "===",
+              t.cloneNode(baseRef),
+              scope.buildUndefinedNode(),
+            ),
           ),
           scope.buildUndefinedNode(),
           regular,
