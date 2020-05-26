@@ -14,6 +14,7 @@ import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
 import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
 import syntaxImportMeta from "@babel/plugin-syntax-import-meta";
 import syntaxJsx from "@babel/plugin-syntax-jsx";
+import syntaxModuleAttributes from "@babel/plugin-syntax-module-attributes";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-binding";
 import syntaxPipelineOperator from "@babel/plugin-syntax-pipeline-operator";
@@ -89,6 +90,7 @@ import transformStrictMode from "@babel/plugin-transform-strict-mode";
 import transformTemplateLiterals from "@babel/plugin-transform-template-literals";
 import transformTypeofSymbol from "@babel/plugin-transform-typeof-symbol";
 import transformTypescript from "@babel/plugin-transform-typescript";
+import transformUnicodeEscapes from "@babel/plugin-transform-unicode-escapes";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
 
 export {
@@ -103,6 +105,7 @@ export {
   syntaxFunctionSent,
   syntaxImportMeta,
   syntaxJsx,
+  syntaxModuleAttributes,
   syntaxObjectRestSpread,
   syntaxOptionalCatchBinding,
   syntaxPipelineOperator,
@@ -178,6 +181,7 @@ export {
   transformTemplateLiterals,
   transformTypeofSymbol,
   transformTypescript,
+  transformUnicodeEscapes,
   transformUnicodeRegex,
 };
 
@@ -193,6 +197,7 @@ export const all = {
   "syntax-function-sent": syntaxFunctionSent,
   "syntax-import-meta": syntaxImportMeta,
   "syntax-jsx": syntaxJsx,
+  "syntax-module-attributes": syntaxModuleAttributes,
   "syntax-object-rest-spread": syntaxObjectRestSpread,
   "syntax-optional-catch-binding": syntaxOptionalCatchBinding,
   "syntax-pipeline-operator": syntaxPipelineOperator,
@@ -268,5 +273,6 @@ export const all = {
   "transform-template-literals": transformTemplateLiterals,
   "transform-typeof-symbol": transformTypeofSymbol,
   "transform-typescript": transformTypescript,
+  "transform-unicode-escapes": transformUnicodeEscapes,
   "transform-unicode-regex": transformUnicodeRegex,
 };

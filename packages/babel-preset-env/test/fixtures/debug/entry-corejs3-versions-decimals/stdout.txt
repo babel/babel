@@ -43,6 +43,7 @@ Using plugins:
   transform-computed-properties { "ie":"10" }
   transform-for-of { "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-sticky-regex { "electron":"0.36", "ie":"10" }
+  transform-unicode-escapes { "ie":"10" }
   transform-unicode-regex { "electron":"0.36", "ie":"10" }
   transform-spread { "ie":"10" }
   transform-destructuring { "electron":"0.36", "ie":"10", "node":"6.1" }
@@ -50,8 +51,6 @@ Using plugins:
   transform-typeof-symbol { "ie":"10" }
   transform-new-target { "ie":"10" }
   transform-regenerator { "electron":"0.36", "ie":"10" }
-  transform-member-expression-literals { "electron":"0.36" }
-  transform-property-literals { "electron":"0.36" }
   transform-modules-commonjs { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-dynamic-import { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
 

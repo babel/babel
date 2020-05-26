@@ -30,7 +30,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "bugfix/transform-edge-default-parameters": {
     "chrome": "49",
@@ -41,7 +41,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "transform-function-name": {
     "chrome": "51",
@@ -74,7 +74,7 @@
     "node": "6",
     "ios": "10",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "bugfix/transform-safari-block-shadowing": {
     "chrome": "49",
@@ -86,7 +86,7 @@
     "ie": "11",
     "ios": "11",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "bugfix/transform-safari-for-shadowing": {
     "chrome": "49",
@@ -98,7 +98,7 @@
     "ie": "11",
     "ios": "11",
     "samsung": "5",
-    "electron": "1"
+    "electron": "0.37"
   },
   "transform-template-literals": {
     "chrome": "41",
@@ -109,7 +109,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.24"
+    "electron": "0.22"
   },
   "bugfix/transform-tagged-template-caching": {
     "chrome": "41",
@@ -120,6 +120,6 @@
     "node": "4",
     "ios": "13",
     "samsung": "3.4",
-    "electron": "0.24"
+    "electron": "0.22"
   }
 }

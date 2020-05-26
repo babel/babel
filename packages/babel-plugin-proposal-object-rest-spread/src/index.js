@@ -281,6 +281,7 @@ export default declare((api, opts) => {
           );
         }
       },
+
       // adapted from transform-destructuring/src/index.js#pushObjectRest
       // const { a, ...b } = c;
       VariableDeclarator(path, file) {
@@ -345,7 +346,11 @@ export default declare((api, opts) => {
           );
           refPropertyPath.forEach(prop => {
             const { node } = prop;
-            ref = t.memberExpression(ref, t.cloneNode(node.key), node.computed);
+            ref = t.memberExpression(
+              ref,
+              t.cloneNode(node.key),
+              node.computed || t.isLiteral(node.key),
+            );
           });
 
           const objectPatternPath = path.findParent(path =>
@@ -385,6 +390,7 @@ export default declare((api, opts) => {
           }
         });
       },
+
       // taken from transform-destructuring/src/index.js#visitor
       // export var { a, ...b } = c;
       ExportNamedDeclaration(path) {
@@ -410,11 +416,13 @@ export default declare((api, opts) => {
         path.replaceWith(declaration.node);
         path.insertAfter(t.exportNamedDeclaration(null, specifiers));
       },
+
       // try {} catch ({a, ...b}) {}
       CatchClause(path) {
         const paramPath = path.get("param");
         replaceRestElement(paramPath.parentPath, paramPath);
       },
+
       // ({a, ...b} = c);
       AssignmentExpression(path, file) {
         const leftPath = path.get("left");
@@ -457,6 +465,7 @@ export default declare((api, opts) => {
           path.replaceWithMultiple(nodes);
         }
       },
+
       // taken from transform-destructuring/src/index.js#visitor
       ForXStatement(path) {
         const { node, scope } = path;
@@ -506,6 +515,7 @@ export default declare((api, opts) => {
           );
         }
       },
+
       // [{a, ...b}] = c;
       ArrayPattern(path) {
         const objectPatterns = [];
@@ -537,30 +547,10 @@ export default declare((api, opts) => {
           );
         }
       },
+
       // var a = { ...b, ...c }
       ObjectExpression(path, file) {
         if (!hasSpread(path.node)) return;
-
-        const args = [];
-        let props = [];
-
-        function push() {
-          args.push(t.objectExpression(props));
-          props = [];
-        }
-
-        for (const prop of (path.node.properties: Array)) {
-          if (t.isSpreadElement(prop)) {
-            push();
-            args.push(prop.argument);
-          } else {
-            props.push(prop);
-          }
-        }
-
-        if (props.length) {
-          push();
-        }
 
         let helper;
         if (loose) {
@@ -580,7 +570,50 @@ export default declare((api, opts) => {
           }
         }
 
-        path.replaceWith(t.callExpression(helper, args));
+        let exp = null;
+        let props = [];
+
+        function make() {
+          const hadProps = props.length > 0;
+          const obj = t.objectExpression(props);
+          props = [];
+
+          if (!exp) {
+            exp = t.callExpression(helper, [obj]);
+            return;
+          }
+
+          // In loose mode, we don't want to make multiple calls. We're assuming
+          // that the spread objects either don't use getters, or that the
+          // getters are pure and don't depend on the order of evaluation.
+          if (loose) {
+            if (hadProps) {
+              exp.arguments.push(obj);
+            }
+            return;
+          }
+
+          exp = t.callExpression(t.cloneNode(helper), [
+            exp,
+            // If we have static props, we need to insert an empty object
+            // becuase the odd arguments are copied with [[Get]], not
+            // [[GetOwnProperty]]
+            ...(hadProps ? [t.objectExpression([]), obj] : []),
+          ]);
+        }
+
+        for (const prop of (path.node.properties: Array)) {
+          if (t.isSpreadElement(prop)) {
+            make();
+            exp.arguments.push(prop.argument);
+          } else {
+            props.push(prop);
+          }
+        }
+
+        if (props.length) make();
+
+        path.replaceWith(exp);
       },
     },
   };

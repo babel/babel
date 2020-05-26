@@ -20,7 +20,7 @@ var Outer = /*#__PURE__*/function (_Hello) {
   var _super = babelHelpers.createSuper(Outer);
 
   function Outer() {
-    var _this;
+    var _thisSuper, _this;
 
     babelHelpers.classCallCheck(this, Outer);
     _this = _super.call(this);
@@ -31,7 +31,7 @@ var Outer = /*#__PURE__*/function (_Hello) {
       }
 
       babelHelpers.createClass(Inner, [{
-        key: babelHelpers.get(babelHelpers.getPrototypeOf(Outer.prototype), "toString", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this)),
+        key: babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper),
         value: function value() {
           return 'hello';
         }

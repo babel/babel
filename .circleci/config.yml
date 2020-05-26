@@ -40,12 +40,12 @@ aliases:
 executors:
   node-executor:
     docker:
-      - image: circleci/node:13
+      - image: circleci/node:latest
     working_directory: ~/babel
   # e2e-vue-cli test requires chromium
   node-browsers-executor:
     docker:
-      - image: circleci/node:13-browsers
+      - image: circleci/node:latest-browsers
     working_directory: ~/babel
 
 jobs:

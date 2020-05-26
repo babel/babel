@@ -160,9 +160,9 @@ export default class LValParser extends NodeUtils {
     let end = exprList.length;
     if (end) {
       const last = exprList[end - 1];
-      if (last && last.type === "RestElement") {
+      if (last?.type === "RestElement") {
         --end;
-      } else if (last && last.type === "SpreadElement") {
+      } else if (last?.type === "SpreadElement") {
         last.type = "RestElement";
         const arg = last.argument;
         this.toAssignable(arg);
@@ -210,7 +210,7 @@ export default class LValParser extends NodeUtils {
     this.toReferencedList(exprList, isParenthesizedExpr);
 
     for (const expr of exprList) {
-      if (expr && expr.type === "ArrayExpression") {
+      if (expr?.type === "ArrayExpression") {
         this.toReferencedListDeep(expr.elements);
       }
     }

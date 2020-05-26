@@ -1,5 +1,6 @@
 {
-  "installCommand": "bootstrap",
+  "installCommand": "codesandbox",
   "buildCommand": false,
-  "sandboxes": ["kypop"]
+  "sandboxes": ["7s08o", "vhm64"],
+  "packages": ["packages/*"]
 }

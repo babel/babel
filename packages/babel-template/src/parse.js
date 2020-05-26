@@ -112,7 +112,7 @@ function placeholderVisitorHandler(
     state.isLegacyRef.value &&
     (state.placeholderPattern === false ||
       !(state.placeholderPattern || PATTERN).test(name)) &&
-    (!state.placeholderWhitelist || !state.placeholderWhitelist.has(name))
+    !state.placeholderWhitelist?.has(name)
   ) {
     return;
   }

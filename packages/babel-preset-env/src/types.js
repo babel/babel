@@ -2,7 +2,7 @@
 
 import { ModulesOption, UseBuiltInsOption } from "./options";
 import type { NormalizedCorejsOption } from "./normalize-options";
-import type { Targets } from "@babel/helper-compilation-targets";
+import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
 
 // Options
 // Use explicit modules to prevent typo errors.
@@ -32,8 +32,9 @@ export type Options = {
   modules: ModuleOption,
   shippedProposals: boolean,
   spec: boolean,
-  targets: Targets,
+  targets: { ...InputTargets, uglify?: boolean },
   useBuiltIns: BuiltInsOption,
+  browserslistEnv: string,
 };
 
 // Babel

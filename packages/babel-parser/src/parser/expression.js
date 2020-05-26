@@ -765,12 +765,22 @@ export default class ExpressionParser extends LValParser {
     optional: boolean,
   ): N.Expression {
     if (node.callee.type === "Import") {
-      if (node.arguments.length !== 1) {
-        this.raise(node.start, Errors.ImportCallArity);
+      if (node.arguments.length === 2) {
+        this.expectPlugin("moduleAttributes");
+      }
+      if (node.arguments.length === 0 || node.arguments.length > 2) {
+        this.raise(
+          node.start,
+          Errors.ImportCallArity,
+          this.hasPlugin("moduleAttributes")
+            ? "one or two arguments"
+            : "one argument",
+        );
       } else {
-        const importArg = node.arguments[0];
-        if (importArg && importArg.type === "SpreadElement") {
-          this.raise(importArg.start, Errors.ImportCallSpreadArgument);
+        for (const arg of node.arguments) {
+          if (arg.type === "SpreadElement") {
+            this.raise(arg.start, Errors.ImportCallSpreadArgument);
+          }
         }
       }
     }
@@ -799,7 +809,7 @@ export default class ExpressionParser extends LValParser {
       } else {
         this.expect(tt.comma);
         if (this.match(close)) {
-          if (dynamicImport) {
+          if (dynamicImport && !this.hasPlugin("moduleAttributes")) {
             this.raise(
               this.state.lastTokStart,
               Errors.ImportCallArgumentTrailingComma,
@@ -1227,8 +1237,6 @@ export default class ExpressionParser extends LValParser {
     this.expect(tt.dot);
 
     if (this.isContextual("meta")) {
-      this.expectPlugin("importMeta");
-
       if (!this.inModule) {
         this.raiseWithData(
           id.start,
@@ -1237,8 +1245,6 @@ export default class ExpressionParser extends LValParser {
         );
       }
       this.sawUnambiguousESM = true;
-    } else if (!this.hasPlugin("importMeta")) {
-      this.raise(id.start, Errors.ImportCallArityLtOne);
     }
 
     return this.parseMetaProperty(node, id, "meta");
@@ -1553,11 +1559,8 @@ export default class ExpressionParser extends LValParser {
       !prop.computed &&
       prop.key.type === "Identifier" &&
       prop.key.name === "async" &&
-      (this.match(tt.name) ||
-        this.match(tt.num) ||
-        this.match(tt.string) ||
+      (this.isLiteralPropertyName() ||
         this.match(tt.bracketL) ||
-        this.state.type.keyword ||
         this.match(tt.star)) &&
       !this.hasPrecedingLineBreak()
     );
@@ -1646,11 +1649,8 @@ export default class ExpressionParser extends LValParser {
       !prop.computed &&
       prop.key.type === "Identifier" &&
       (prop.key.name === "get" || prop.key.name === "set") &&
-      (this.match(tt.string) || // get "string"() {}
-      this.match(tt.num) || // get 1() {}
-      this.match(tt.bracketL) || // get ["string"]() {}
-      this.match(tt.name) || // get foo() {}
-        !!this.state.type.keyword) // get debugger() {}
+      (this.isLiteralPropertyName() || // get foo() {}
+        this.match(tt.bracketL)) // get ["string"]() {}
     );
   }
 

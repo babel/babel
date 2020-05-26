@@ -165,7 +165,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (name === "__proto__" && prop.kind === "init") {
         // Store the first redefinition's position
         if (protoRef.used) {
-          if (refExpressionErrors && refExpressionErrors.doubleProto === -1) {
+          if (refExpressionErrors?.doubleProto === -1) {
             refExpressionErrors.doubleProto = key.start;
           } else {
             this.raise(key.start, Errors.DuplicateProto);
@@ -181,7 +181,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         stmt.type === "ExpressionStatement" &&
         stmt.expression.type === "Literal" &&
         typeof stmt.expression.value === "string" &&
-        (!stmt.expression.extra || !stmt.expression.extra.parenthesized)
+        !stmt.expression.extra?.parenthesized
       );
     }
 
@@ -208,6 +208,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.directiveToStmt(d),
       );
       node.body = directiveStatements.concat(node.body);
+      // $FlowIgnore - directives isn't optional in the type definition
       delete node.directives;
     }
 
@@ -389,7 +390,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (node.callee.type === "Import") {
         ((node: N.Node): N.EstreeImportExpression).type = "ImportExpression";
         ((node: N.Node): N.EstreeImportExpression).source = node.arguments[0];
+        // $FlowIgnore - arguments isn't optional in the type definition
         delete node.arguments;
+        // $FlowIgnore - callee isn't optional in the type definition
         delete node.callee;
       }
 

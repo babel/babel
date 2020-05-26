@@ -67,8 +67,7 @@ export const Errors = Object.freeze({
   IllegalReturn: "'return' outside of function",
   ImportCallArgumentTrailingComma:
     "Trailing comma is disallowed inside import(...) arguments",
-  ImportCallArity: "import() requires exactly one argument",
-  ImportCallArityLtOne: "Dynamic imports require a parameter: import('a.js')",
+  ImportCallArity: "import() requires exactly %0",
   ImportCallNotNewExpression: "Cannot use new with import(...)",
   ImportCallSpreadArgument: "... is not allowed in import()",
   ImportMetaOutsideModule: `import.meta may appear only with 'sourceType: "module"'`,
@@ -97,6 +96,12 @@ export const Errors = Object.freeze({
   MissingUnicodeEscape: "Expecting Unicode escape sequence \\uXXXX",
   MixingCoalesceWithLogical:
     "Nullish coalescing operator(??) requires parens when mixing with logical operators",
+  ModuleAttributeDifferentFromType:
+    "The only accepted module attribute is `type`",
+  ModuleAttributeInvalidValue:
+    "Only string literals are allowed as module attribute values",
+  ModuleAttributesWithDuplicateKeys:
+    'Duplicate key "%0" is not allowed in module attributes',
   ModuleExportUndefined: "Export '%0' is not defined",
   MultipleDefaultsInSwitch: "Multiple default clauses",
   NewlineAfterThrow: "Illegal newline after throw",

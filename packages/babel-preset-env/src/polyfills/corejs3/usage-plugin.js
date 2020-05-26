@@ -94,7 +94,7 @@ export default function(
         const { deopt, value } = path.evaluate();
         if (value !== undefined) {
           instanceType = getType(value);
-        } else if (deopt && deopt.isIdentifier()) {
+        } else if (deopt?.isIdentifier()) {
           builtIn = deopt.node.name;
         }
       }

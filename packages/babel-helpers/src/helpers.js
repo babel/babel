@@ -744,7 +744,7 @@ helpers.createSuper = helper("7.9.0")`
   export default function _createSuper(Derived) {
     var hasNativeReflectConstruct = isNativeReflectConstruct();
 
-    return function () {
+    return function _createSuperInternal() {
       var Super = getPrototypeOf(Derived), result;
       if (hasNativeReflectConstruct) {
         // NOTE: This doesn't work if this.__proto__.constructor has been modified.
@@ -980,6 +980,18 @@ helpers.arrayWithHoles = helper("7.0.0-beta.0")`
   }
 `;
 
+helpers.maybeArrayLike = helper("7.9.0")`
+  import arrayLikeToArray from "arrayLikeToArray";
+
+  export default function _maybeArrayLike(next, arr, i) {
+    if (arr && !Array.isArray(arr) && typeof arr.length === "number") {
+      var len = arr.length;
+      return arrayLikeToArray(arr, i !== void 0 && i < len ? i : len);
+    }
+    return next(arr, i);
+  }
+`;
+
 helpers.iterableToArray = helper("7.0.0-beta.0")`
   export default function _iterableToArray(iter) {
     if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
@@ -1044,7 +1056,7 @@ helpers.unsupportedIterableToArray = helper("7.9.0")`
     if (typeof o === "string") return arrayLikeToArray(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor) n = o.constructor.name;
-    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Map" || n === "Set") return Array.from(o);
     if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
       return arrayLikeToArray(o, minLen);
   }
@@ -1082,10 +1094,16 @@ helpers.createForOfIteratorHelper = helper("7.9.0")`
   // e: error (called whenever something throws)
   // f: finish (always called at the end)
 
-  export default function _createForOfIteratorHelper(o) {
+  export default function _createForOfIteratorHelper(o, allowArrayLike) {
+    var it;
     if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
       // Fallback for engines without symbol support
-      if (Array.isArray(o) || (o = unsupportedIterableToArray(o))) {
+      if (
+        Array.isArray(o) ||
+        (it = unsupportedIterableToArray(o)) ||
+        (allowArrayLike && o && typeof o.length === "number")
+      ) {
+        if (it) o = it;
         var i = 0;
         var F = function(){};
         return {
@@ -1102,7 +1120,7 @@ helpers.createForOfIteratorHelper = helper("7.9.0")`
       throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
     }
 
-    var it, normalCompletion = true, didErr = false, err;
+    var normalCompletion = true, didErr = false, err;
 
     return {
       s: function() {
@@ -1131,22 +1149,29 @@ helpers.createForOfIteratorHelper = helper("7.9.0")`
 helpers.createForOfIteratorHelperLoose = helper("7.9.0")`
   import unsupportedIterableToArray from "unsupportedIterableToArray";
 
-  export default function _createForOfIteratorHelperLoose(o) {
-    var i = 0;
+  export default function _createForOfIteratorHelperLoose(o, allowArrayLike) {
+    var it;
 
     if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
       // Fallback for engines without symbol support
-      if (Array.isArray(o) || (o = unsupportedIterableToArray(o)))
+      if (
+        Array.isArray(o) ||
+        (it = unsupportedIterableToArray(o)) ||
+        (allowArrayLike && o && typeof o.length === "number")
+      ) {
+        if (it) o = it;
+        var i = 0;
         return function() {
           if (i >= o.length) return { done: true };
           return { done: false, value: o[i++] };
         }
+      }
 
       throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
     }
 
-    i = o[Symbol.iterator]();
-    return i.next.bind(i);
+    it = o[Symbol.iterator]();
+    return it.next.bind(it);
   }
 `;
 

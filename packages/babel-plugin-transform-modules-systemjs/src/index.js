@@ -381,7 +381,7 @@ export default declare((api, options) => {
                 }
               } else {
                 const specifiers = path.node.specifiers;
-                if (specifiers && specifiers.length) {
+                if (specifiers?.length) {
                   if (path.node.source) {
                     pushModule(path.node.source.value, "exports", specifiers);
                     path.remove();

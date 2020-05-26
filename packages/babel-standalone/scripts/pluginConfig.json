@@ -10,6 +10,7 @@
   "syntax-function-sent",
   "syntax-import-meta",
   "syntax-jsx",
+  "syntax-module-attributes",
   "syntax-object-rest-spread",
   "syntax-optional-catch-binding",
   "syntax-pipeline-operator",
@@ -85,5 +86,6 @@
   "transform-template-literals",
   "transform-typeof-symbol",
   "transform-typescript",
+  "transform-unicode-escapes",
   "transform-unicode-regex"
 ]

@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-compilation-targets",
-  "version": "7.8.7",
+  "version": "7.9.6",
   "author": "The Babel Team (https://babeljs.io/team)",
   "license": "MIT",
   "description": "Engine compat data used in @babel/preset-env",
@@ -17,8 +17,8 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/compat-data": "^7.8.6",
-    "browserslist": "^4.11.1",
+    "@babel/compat-data": "^7.9.6",
+    "browserslist": "^4.12.0",
     "invariant": "^2.2.4",
     "levenary": "^1.1.1",
     "semver": "^5.5.0"
@@ -27,7 +27,7 @@
     "@babel/core": "^7.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.7",
+    "@babel/core": "^7.9.6",
     "@babel/helper-plugin-test-runner": "^7.8.3"
   }
 }

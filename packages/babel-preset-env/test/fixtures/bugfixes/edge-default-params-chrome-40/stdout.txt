@@ -31,6 +31,7 @@ Using plugins:
   transform-computed-properties { "chrome":"40" }
   transform-for-of { "chrome":"40" }
   transform-sticky-regex { "chrome":"40" }
+  transform-unicode-escapes { "chrome":"40" }
   transform-unicode-regex { "chrome":"40" }
   transform-spread { "chrome":"40" }
   transform-block-scoping { "chrome":"40" }

@@ -86,3 +86,4 @@ object.values(arg);
 Function.bind
 
 object.something(arg);
+delete object.bind;

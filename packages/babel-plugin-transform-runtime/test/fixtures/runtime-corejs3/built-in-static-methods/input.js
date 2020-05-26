@@ -121,3 +121,4 @@ JSON.parse
 Math.pow
 
 Symbol.something
+delete Array.from

@@ -1,5 +1,7 @@
 // @flow
 
+/*:: declare var invariant; */
+
 import type { Options } from "../options";
 import * as N from "../types";
 import type { Position } from "../util/location";
@@ -113,6 +115,7 @@ export default class Tokenizer extends LocationParser {
   // parser/util.js
   /*::
   +unexpected: (pos?: ?number, messageOrType?: string | TokenType) => empty;
+  +expectPlugin: (name: string, pos?: ?number) => true;
   */
 
   isLookahead: boolean;
@@ -222,7 +225,7 @@ export default class Tokenizer extends LocationParser {
 
   nextToken(): void {
     const curContext = this.curContext();
-    if (!curContext || !curContext.preserveSpace) this.skipSpace();
+    if (!curContext?.preserveSpace) this.skipSpace();
 
     this.state.octalPositions = [];
     this.state.start = this.state.pos;
@@ -405,10 +408,14 @@ export default class Tokenizer extends LocationParser {
     }
 
     if (
-      this.hasPlugin("recordAndTuple") &&
-      (next === charCodes.leftCurlyBrace ||
-        next === charCodes.leftSquareBracket)
+      next === charCodes.leftCurlyBrace ||
+      (next === charCodes.leftSquareBracket && this.hasPlugin("recordAndTuple"))
     ) {
+      // When we see `#{`, it is likely to be a hash record.
+      // However we don't yell at `#[` since users may intend to use "computed private fields",
+      // which is not allowed in the spec. Throwing expecting recordAndTuple is
+      // misleading
+      this.expectPlugin("recordAndTuple");
       if (this.getPluginOption("recordAndTuple", "syntaxType") !== "hash") {
         throw this.raise(
           this.state.pos,
@@ -426,14 +433,8 @@ export default class Tokenizer extends LocationParser {
         this.finishToken(tt.bracketHashL);
       }
       this.state.pos += 2;
-    } else if (
-      this.hasPlugin("classPrivateProperties") ||
-      this.hasPlugin("classPrivateMethods") ||
-      this.getPluginOption("pipelineOperator", "proposal") === "smart"
-    ) {
-      this.finishOp(tt.hash, 1);
     } else {
-      throw this.raise(this.state.pos, Errors.InvalidOrUnexpectedToken, "#");
+      this.finishOp(tt.hash, 1);
     }
   }
 
@@ -1080,8 +1081,13 @@ export default class Tokenizer extends LocationParser {
     if (val == null) {
       this.raise(this.state.start + 2, Errors.InvalidDigit, radix);
     }
+    const next = this.input.charCodeAt(this.state.pos);
 
-    if (this.input.charCodeAt(this.state.pos) === charCodes.lowercaseN) {
+    if (next === charCodes.underscore) {
+      this.expectPlugin("numericSeparator", this.state.pos);
+    }
+
+    if (next === charCodes.lowercaseN) {
       ++this.state.pos;
       isBigInt = true;
     }
@@ -1152,6 +1158,10 @@ export default class Tokenizer extends LocationParser {
       if (underscorePos > 0) {
         this.raise(underscorePos + start, Errors.ZeroDigitNumericSeparator);
       }
+    }
+
+    if (next === charCodes.underscore) {
+      this.expectPlugin("numericSeparator", this.state.pos);
     }
 
     if (next === charCodes.lowercaseN) {
@@ -1352,10 +1362,14 @@ export default class Tokenizer extends LocationParser {
       default:
         if (ch >= charCodes.digit0 && ch <= charCodes.digit7) {
           const codePos = this.state.pos - 1;
-          // $FlowFixMe
-          let octalStr = this.input
+          const match = this.input
             .substr(this.state.pos - 1, 3)
-            .match(/^[0-7]+/)[0];
+            .match(/^[0-7]+/);
+
+          // This is never null, because of the if condition above.
+          /*:: invariant(match !== null) */
+          let octalStr = match[0];
+
           let octal = parseInt(octalStr, 8);
           if (octal > 255) {
             octalStr = octalStr.slice(0, -1);

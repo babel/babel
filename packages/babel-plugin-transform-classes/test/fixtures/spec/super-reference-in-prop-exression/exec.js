@@ -1,20 +1,18 @@
 let called = false;
 
 class A {
-  method() {
+  get prop() {
     called = true;
-  }
-
-  get methodName() {
-    return "method";
   }
 }
 
 class B extends A {
   constructor() {
-    super[super().methodName]()
+    super[super().prop]
   }
 }
 
-new B();
-expect(called).toBe(true);
+expect(() => {
+  new B();
+}).toThrow();
+expect(called).toBe(false);
