@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-object-rest-spread",
-  "version": "7.9.6",
+  "version": "7.10.0",
   "description": "Compile object rest and spread to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-object-rest-spread",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.6",
+    "@babel/core": "^7.10.0",
     "@babel/helper-plugin-test-runner": "^7.8.3"
   }
 }
