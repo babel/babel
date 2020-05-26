@@ -1,14 +1,15 @@
 ---
-
 name: "\U0001F680 Feature Request"
 about: "I have a specific suggestion for Babel!"
-title: ""
-labels: "i: enhancement, i: needs triage"
-assignees: ""
----## Feature Request
+title: ''
+labels: 'i: enhancement, i: needs triage'
+assignees: ''
+
+---
+
+## Feature Request
 
 <!-- Check this if you would like to implement a PR, we are more than happy to help you go through the process !-->
-
 - [ ] I would like to work on this feature!
 
 **Is your feature request related to a problem?**
