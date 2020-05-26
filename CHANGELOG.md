@@ -19,6 +19,78 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.10.0 (2020-05-26)
+
+#### :eyeglasses: Spec Compliance
+* `babel-plugin-proposal-logical-assignment-operators`
+  * [#11370](https://github.com/babel/babel/pull/11370) logical-assignment: Do not assign names to anonymous functions ([@arku](https://github.com/arku))
+
+#### :rocket: New Feature
+* `babel-helper-create-class-features-plugin`, `babel-helper-member-expression-to-functions`, `babel-helper-optimise-call-expression`, `babel-helper-replace-supers`, `babel-parser`, `babel-plugin-proposal-class-properties`
+  * [#11248](https://github.com/babel/babel/pull/11248) Handle private access chained on an optional chain ([@jridgewell](https://github.com/jridgewell))
+* `babel-standalone`
+  * [#11593](https://github.com/babel/babel/pull/11593) feat: add privatePropertyInObject to babel-standalone ([@JLHwung](https://github.com/JLHwung))
+  * [#11466](https://github.com/babel/babel/pull/11466) Support data-type="module" to generate native <script type="module"> ([@dfabulich](https://github.com/dfabulich))
+* `babel-cli`, `babel-helper-create-class-features-plugin`, `babel-parser`, `babel-plugin-proposal-private-property-in-object`, `babel-types`
+  * [#11372](https://github.com/babel/babel/pull/11372) Add private-property-in-object support ([@jridgewell](https://github.com/jridgewell))
+* `babel-compat-data`, `babel-plugin-transform-template-literals`, `babel-plugin-transform-unicode-escapes`, `babel-preset-env`, `babel-standalone`
+  * [#11377](https://github.com/babel/babel/pull/11377) Transform ES2015 Unicode Escapes to ES5 ([@jridgewell](https://github.com/jridgewell))
+* `babel-parser`, `babel-plugin-syntax-module-attributes`, `babel-standalone`
+  * [#10962](https://github.com/babel/babel/pull/10962) added basic support for module attributes and tests updated ([@vivek12345](https://github.com/vivek12345))
+* `babel-helper-compilation-targets`, `babel-preset-env`
+  * [#11434](https://github.com/babel/babel/pull/11434) [`preset-env`] Add `browserslistEnv` option ([@AndrewLeedham](https://github.com/AndrewLeedham))
+* `babel-cli`
+  * [#11220](https://github.com/babel/babel/pull/11220) Log after subsequent compilations in --watch mode ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-spread`, `babel-traverse`
+  * [#11265](https://github.com/babel/babel/pull/11265) Add "allowArrayLike" option to the destructuring and spread transforms ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-plugin-transform-for-of`, `babel-preset-env`
+  * [#11266](https://github.com/babel/babel/pull/11266) Add "allowArrayLike" support to the for-of transform ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#11406](https://github.com/babel/babel/pull/11406) Enable import.meta by default in @babel/parser (#11364) ([@kik-o](https://github.com/kik-o))
+* `babel-plugin-transform-react-pure-annotations`, `babel-preset-react`
+  * [#11428](https://github.com/babel/babel/pull/11428) Implement `plugin-transform-react-pure-annotations `and add to `preset-react` ([@devongovett](https://github.com/devongovett))
+* `babel-compat-data`, `babel-preset-env`
+  * [#11451](https://github.com/babel/babel/pull/11451) Add class proposals to shipped proposals ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-traverse`
+  * [#11595](https://github.com/babel/babel/pull/11595) scope.rename() missing identifier in VariableDeclarator ([@yulanggong](https://github.com/yulanggong))
+* `babel-plugin-proposal-optional-chaining`
+  * [#10961](https://github.com/babel/babel/pull/10961) fix: optional-chaining should work correctly with ts non-null operator ([@macabeus](https://github.com/macabeus))
+* `babel-parser`, `babel-types`
+  * [#11547](https://github.com/babel/babel/pull/11547) refactor: add isLiteralPropertyName to parser utils ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-typescript`
+  * [#11523](https://github.com/babel/babel/pull/11523) fix: don't elide jsx pragma import namespaces ([@jquense](https://github.com/jquense))
+* `babel-plugin-proposal-object-rest-spread`
+  * [#11550](https://github.com/babel/babel/pull/11550) fix(plugin-proposal-object-rest-spread): use computed memberExpression for literal keys ([@kitos](https://github.com/kitos))
+* `babel-plugin-transform-runtime`
+  * [#11530](https://github.com/babel/babel/pull/11530) fix: skip transforming `delete something.includes` ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`
+  * [#11502](https://github.com/babel/babel/pull/11502) getters and setters support in generator for declare class statement ([@zxbodya](https://github.com/zxbodya))
+
+#### :nail_care: Polish
+* `babel-helpers`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-classes`, `babel-plugin-transform-function-name`, `babel-plugin-transform-parameters`, `babel-plugin-transform-react-jsx`, `babel-plugin-transform-runtime`, `babel-plugin-transform-typescript`, `babel-preset-env`
+  * [#11514](https://github.com/babel/babel/pull/11514) [helpers] Add a private function name within `createSuper` ([@cpojer](https://github.com/cpojer))
+
+#### :house: Internal
+* Other
+  * [#11603](https://github.com/babel/babel/pull/11603) Fix typo ([@fisker](https://github.com/fisker))
+  * [#11598](https://github.com/babel/babel/pull/11598) chore: use latest node in GitHub actions ([@JLHwung](https://github.com/JLHwung))
+  * [#11590](https://github.com/babel/babel/pull/11590) chore: update test262 ([@JLHwung](https://github.com/JLHwung))
+  * [#11522](https://github.com/babel/babel/pull/11522) chore: pin windows node.js version ([@JLHwung](https://github.com/JLHwung))
+  * [#11504](https://github.com/babel/babel/pull/11504) chore: update babel deps ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#11597](https://github.com/babel/babel/pull/11597) Fix comments for smartPipeline topic-forbidding contexts ([@lazytype](https://github.com/lazytype))
+* `babel-core`, `babel-generator`, `babel-helper-compilation-targets`, `babel-helpers`, `babel-parser`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-json-strings`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-react-jsx-source`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-standalone`, `babel-template`, `babel-traverse`, `babel-types`
+  * [#11512](https://github.com/babel/babel/pull/11512) Use ?. where it represents the intended semantics ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-plugin-proposal-object-rest-spread`
+  * [#11520](https://github.com/babel/babel/pull/11520) Use single object spread call in loose mode ([@jridgewell](https://github.com/jridgewell))
+
+#### :leftwards_arrow_with_hook: Revert
+* `babel-standalone`
+  * [#11538](https://github.com/babel/babel/pull/11538) Downgrade rollup to 1.27.9 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.9.6 (2020-04-29)
 
 #### :eyeglasses: Spec Compliance
