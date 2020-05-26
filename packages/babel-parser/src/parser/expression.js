@@ -502,7 +502,8 @@ export default class ExpressionParser extends LValParser {
         if (arg.type === "Identifier") {
           this.raise(node.start, Errors.StrictDelete);
         } else if (
-          arg.type === "MemberExpression" &&
+          (arg.type === "MemberExpression" ||
+            arg.type === "OptionalMemberExpression") &&
           arg.property.type === "PrivateName"
         ) {
           this.raise(node.start, Errors.DeletePrivateField);
@@ -616,8 +617,6 @@ export default class ExpressionParser extends LValParser {
       node.object = base;
       node.property = computed
         ? this.parseExpression()
-        : optional
-        ? this.parseIdentifier(true)
         : this.parseMaybePrivateName(true);
       node.computed = computed;
 
