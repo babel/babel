@@ -219,14 +219,6 @@ prepublish:
 	IS_PUBLISH=true $(MAKE) test
 
 new-version:
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@echo "!!!!!!                                        !!!!!!"
-	@echo "!!!!!!  Enable the check in transform-for-of  !!!!!!"
-	@echo "!!!!!!                                        !!!!!!"
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@exit 1
 	git pull --rebase
 	$(YARN) lerna version --force-publish=$(FORCE_PUBLISH)
 
