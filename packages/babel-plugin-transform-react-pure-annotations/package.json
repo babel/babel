@@ -2,7 +2,7 @@
   "name": "@babel/plugin-transform-react-pure-annotations",
   "version": "7.10.0",
   "description": "Mark top-level React method calls as pure for tree shaking",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-pure",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-pure-annotations",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
