@@ -207,7 +207,7 @@ describe("@babel/core errors", function () {
         root: fixture("use-exclude-in-preset"),
       });
     }).toMatchInlineSnapshot(`
-      "Error: [BABEL] unknown: Preset /* your preset */ requires a filename to be set when babel is called directly,
+      "Error: [BABEL] unknown file: Preset /* your preset */ requires a filename to be set when babel is called directly,
       \`\`\`
       babel.transformSync(code, { filename: 'file.ts', presets: [/* your preset */] });
       \`\`\`

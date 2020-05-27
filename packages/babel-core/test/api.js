@@ -947,7 +947,9 @@ describe("api", function () {
             },
           ],
         }),
-      ).toThrowErrorMatchingInlineSnapshot(`"unknown: Unknown helper fooBar"`);
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"unknown file: Unknown helper fooBar"`,
+      );
     });
   });
 });
