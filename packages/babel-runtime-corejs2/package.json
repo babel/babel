@@ -6,7 +6,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-runtime-corejs2",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-runtime-corejs2"
+  },
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "dependencies": {
     "core-js": "^2.6.5",

@@ -2,7 +2,11 @@
   "name": "@babel/helper-replace-supers",
   "version": "7.10.0",
   "description": "Helper function to replace supers",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-replace-supers",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-helper-replace-supers"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

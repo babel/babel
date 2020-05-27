@@ -2,7 +2,11 @@
   "name": "@babel/plugin-transform-parameters",
   "version": "7.9.5",
   "description": "Compile ES2015 default and rest parameters to ES5",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-parameters",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-transform-parameters"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

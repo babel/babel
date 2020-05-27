@@ -4,7 +4,11 @@
   "author": "The Babel Team (https://babeljs.io/team)",
   "license": "MIT",
   "description": "",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-compat-data",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-compat-data"
+  },
   "publishConfig": {
     "access": "public"
   },

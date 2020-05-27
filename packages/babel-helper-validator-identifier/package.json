@@ -2,7 +2,11 @@
   "name": "@babel/helper-validator-identifier",
   "version": "7.9.5",
   "description": "Validate identifier/keywords name",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-validator-identifier",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-helper-validator-identifier"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

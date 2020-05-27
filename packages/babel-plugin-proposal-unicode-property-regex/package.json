@@ -19,7 +19,11 @@
     "unicode properties",
     "unicode"
   ],
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-unicode-property-regex",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-proposal-unicode-property-regex"
+  },
   "bugs": "https://github.com/babel/babel/issues",
   "dependencies": {
     "@babel/helper-create-regexp-features-plugin": "^7.8.8",

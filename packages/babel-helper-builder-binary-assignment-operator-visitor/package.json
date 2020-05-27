@@ -2,7 +2,11 @@
   "name": "@babel/helper-builder-binary-assignment-operator-visitor",
   "version": "7.8.3",
   "description": "Helper function to build binary assignment operator visitors",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-builder-binary-assignment-operator-visitor",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-helper-builder-binary-assignment-operator-visitor"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

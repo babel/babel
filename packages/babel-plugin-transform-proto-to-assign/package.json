@@ -2,7 +2,11 @@
   "name": "@babel/plugin-transform-proto-to-assign",
   "version": "7.8.3",
   "description": "Babel plugin for turning __proto__ into a shallow property clone",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-proto-to-assign",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-transform-proto-to-assign"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

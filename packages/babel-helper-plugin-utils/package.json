@@ -8,6 +8,10 @@
   "publishConfig": {
     "access": "public"
   },
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-plugin-utils",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-helper-plugin-utils"
+  },
   "main": "lib/index.js"
 }

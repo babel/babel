@@ -3,7 +3,11 @@
   "version": "7.9.0",
   "description": "Babel preset for all Flow plugins.",
   "author": "James Kyle <me@thejameskyle.com>",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-flow",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-preset-flow"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

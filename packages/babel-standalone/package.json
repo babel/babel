@@ -123,5 +123,10 @@
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
   },
-  "homepage": "https://github.com/babel/babel/tree/master/packages/babel-standalone"
+  "homepage": "https://github.com/babel/babel/tree/master/packages/babel-standalone",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-standalone"
+  }
 }

@@ -2,7 +2,11 @@
   "name": "@babel/plugin-proposal-logical-assignment-operators",
   "version": "7.10.0",
   "description": "Transforms logical assignment operators into short-circuited assignments",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-logical-assignment-operators",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-proposal-logical-assignment-operators"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

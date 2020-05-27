@@ -2,7 +2,11 @@
   "name": "@babel/plugin-transform-unicode-escapes",
   "version": "7.10.0",
   "description": "Compile ES2015 Unicode escapes to ES5",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-unicode-escapes",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-transform-unicode-escapes"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

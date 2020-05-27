@@ -2,7 +2,11 @@
   "name": "@babel/helper-hoist-variables",
   "version": "7.8.3",
   "description": "Helper function to hoist variables",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-hoist-variables",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-helper-hoist-variables"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
