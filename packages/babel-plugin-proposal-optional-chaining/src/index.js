@@ -121,7 +121,7 @@ export default declare((api, options) => {
             replacementPath.parentPath.isCallExpression()
           ) {
             // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
-            const { object, property } = replacement;
+            const { object, property, computed } = replacement;
             let memoisedObject;
             if (!loose) {
               // memoize the context object in non-loose mode
@@ -133,7 +133,11 @@ export default declare((api, options) => {
             }
             replacement = t.callExpression(
               t.memberExpression(
-                t.memberExpression(memoisedObject ?? object, property),
+                t.memberExpression(
+                  memoisedObject ?? object,
+                  property,
+                  computed,
+                ),
                 t.identifier("bind"),
               ),
               [t.cloneNode(memoisedObject?.left ?? object)],
