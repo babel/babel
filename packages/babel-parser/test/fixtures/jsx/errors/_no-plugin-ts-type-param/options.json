@@ -1,0 +1,4 @@
+{
+  "throws": "This experimental syntax requires enabling the parser plugin: 'jsx' (1:0)",
+  "plugins": []
+}
