@@ -9,7 +9,7 @@ Using modules transform: auto
 
 Using plugins:
   syntax-numeric-separator { "chrome":"80" }
-  syntax-class-properties { "chrome":"80" }
+  proposal-class-properties { "chrome":"80" }
   proposal-private-methods { "chrome":"80" }
   syntax-nullish-coalescing-operator { "chrome":"80" }
   syntax-optional-chaining { "chrome":"80" }
