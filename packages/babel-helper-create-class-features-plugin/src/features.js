@@ -74,7 +74,7 @@ export function enableFeature(file, feature, loose) {
       throw new Error(
         "'loose' mode configuration must be the same for @babel/plugin-proposal-class-properties, " +
           "@babel/plugin-proposal-private-methods and " +
-          "@babel/plugin-proposal-private-property-in-object (whe they are enabled).",
+          "@babel/plugin-proposal-private-property-in-object (when they are enabled).",
       );
     } else {
       resolvedLoose = loose;
