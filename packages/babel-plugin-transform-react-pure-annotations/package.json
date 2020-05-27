@@ -5,7 +5,7 @@
   "repository": {
     "type" : "git",
     "url" : "https://github.com/babel/babel.git",
-    "directory": "packages/babel-plugin-transform-react-pure"
+    "directory": "packages/babel-plugin-transform-react-pure-annotations"
   },
   "license": "MIT",
   "publishConfig": {
