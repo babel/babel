@@ -1,0 +1,8 @@
+{
+  "presets": [
+    ["env", {
+      "targets": { "node": 12 },
+      "shippedProposals": true
+    }]
+  ]
+}
