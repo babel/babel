@@ -2,7 +2,11 @@
   "name": "@babel/plugin-transform-classes",
   "version": "7.9.5",
   "description": "Compile ES2015 classes to ES5",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-classes",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-transform-classes"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

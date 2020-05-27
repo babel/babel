@@ -2,7 +2,11 @@
   "name": "@babel/plugin-transform-block-scoped-functions",
   "version": "7.8.3",
   "description": "Babel plugin to ensure function declarations at the block level are block scoped",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-block-scoped-functions",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-transform-block-scoped-functions"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

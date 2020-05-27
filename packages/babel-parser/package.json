@@ -16,7 +16,11 @@
     "ecmascript",
     "@babel/parser"
   ],
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-parser",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-parser"
+  },
   "main": "lib/index.js",
   "types": "typings/babel-parser.d.ts",
   "files": [

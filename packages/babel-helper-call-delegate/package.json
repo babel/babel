@@ -2,7 +2,11 @@
   "name": "@babel/helper-call-delegate",
   "version": "7.8.7",
   "description": "Helper function to call delegate",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-call-delegate",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-helper-call-delegate"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

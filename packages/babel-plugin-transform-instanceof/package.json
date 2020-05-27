@@ -2,7 +2,11 @@
   "name": "@babel/plugin-transform-instanceof",
   "version": "7.8.3",
   "description": "This plugin transforms all the ES2015 'instanceof' methods",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-instanceof",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-transform-instanceof"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

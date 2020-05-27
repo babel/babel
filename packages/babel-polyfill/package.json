@@ -12,7 +12,11 @@
     "prepublishOnly": "cp dist/polyfill.min.js browser.js",
     "postpublish": "rm browser.js"
   },
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-polyfill",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-polyfill"
+  },
   "main": "lib/index.js",
   "dependencies": {
     "core-js": "^2.6.5",

@@ -8,7 +8,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-traverse",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-traverse"
+  },
   "main": "lib/index.js",
   "dependencies": {
     "@babel/code-frame": "^7.8.3",

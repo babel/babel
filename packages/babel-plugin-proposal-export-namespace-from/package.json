@@ -2,7 +2,11 @@
   "name": "@babel/plugin-proposal-export-namespace-from",
   "version": "7.8.3",
   "description": "Compile export namespace to ES2015",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-export-namespace-from",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-proposal-export-namespace-from"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

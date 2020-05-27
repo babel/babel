@@ -2,7 +2,11 @@
   "name": "@babel/plugin-transform-function-name",
   "version": "7.8.3",
   "description": "Apply ES2015 function.name semantics to all functions",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-function-name",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-transform-function-name"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

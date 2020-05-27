@@ -2,7 +2,11 @@
   "name": "@babel/plugin-syntax-module-attributes",
   "version": "7.10.0",
   "description": "Allow parsing of the module attributes in the import statement",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-module-attributes",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-syntax-module-attributes"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

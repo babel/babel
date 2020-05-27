@@ -2,7 +2,11 @@
   "name": "@babel/plugin-syntax-export-default-from",
   "version": "7.8.3",
   "description": "Allow parsing of export default from",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-export-default-from",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-syntax-export-default-from"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

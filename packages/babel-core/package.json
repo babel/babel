@@ -9,7 +9,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-core",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-core"
+  },
   "keywords": [
     "6to5",
     "babel",

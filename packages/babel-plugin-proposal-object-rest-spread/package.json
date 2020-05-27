@@ -2,7 +2,11 @@
   "name": "@babel/plugin-proposal-object-rest-spread",
   "version": "7.10.0",
   "description": "Compile object rest and spread to ES5",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-object-rest-spread",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-proposal-object-rest-spread"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

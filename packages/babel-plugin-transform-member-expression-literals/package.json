@@ -2,7 +2,11 @@
   "name": "@babel/plugin-transform-member-expression-literals",
   "version": "7.8.3",
   "description": "Ensure that reserved words are quoted in property accesses",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-member-expression-literals",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-transform-member-expression-literals"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
