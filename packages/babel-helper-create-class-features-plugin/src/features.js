@@ -23,6 +23,15 @@ const featuresSameLoose = [
 //        - @babel-plugin-class-features
 const featuresKey = "@babel/plugin-class-features/featuresKey";
 const looseKey = "@babel/plugin-class-features/looseKey";
+
+// See https://github.com/babel/babel/issues/11622.
+// Since preset-env sets loose for the fields and private methods plugins, it can
+// cause conflicts with the loose mode set by an explicit plugin in the config.
+// To solve this problem, we ignore preset-env's loose mode if another plugin
+// explicitly sets it
+// The code to handle this logic doesn't check that "low priority loose" is always
+// the same. However, it is only set by the preset and not directly by users:
+// unless someone _wants_ to break it, it shouldn't be a problem.
 const looseLowPriorityKey =
   "@babel/plugin-class-features/looseLowPriorityKey/#__internal__@babel/preset-env__please-overwrite-loose-instead-of-throwing";
 
@@ -52,17 +61,15 @@ export function enableFeature(file, feature, loose) {
     }
   }
 
-  let resolvedLooseLowPriority: void | true | false;
   let resolvedLoose: void | true | false;
 
   for (const mask of featuresSameLoose) {
     if (!hasFeature(file, mask)) continue;
 
     const loose = isLoose(file, mask);
-    const lowPriority = canIgnoreLoose(file, mask);
 
-    if (lowPriority) {
-      resolvedLooseLowPriority = resolvedLooseLowPriority ?? loose;
+    if (canIgnoreLoose(file, mask)) {
+      continue;
     } else if (resolvedLoose === !loose) {
       throw new Error(
         "'loose' mode configuration must be the same for @babel/plugin-proposal-class-properties, " +
@@ -74,7 +81,7 @@ export function enableFeature(file, feature, loose) {
     }
   }
 
-  if (resolvedLooseLowPriority !== undefined && resolvedLoose !== undefined) {
+  if (resolvedLoose !== undefined) {
     for (const mask of featuresSameLoose) {
       if (hasFeature(file, mask)) setLoose(file, mask, resolvedLoose);
     }
