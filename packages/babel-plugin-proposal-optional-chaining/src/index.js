@@ -23,14 +23,23 @@ export default declare((api, options) => {
 
     visitor: {
       "OptionalCallExpression|OptionalMemberExpression"(path) {
-        const { parentPath, scope } = path;
+        const { scope } = path;
+        let parentPath;
+        // unwrap parenthesis around parent path
+        for (
+          { parentPath } = path;
+          parentPath.type === "ParenthesizedExpression";
+          { parentPath } = parentPath
+        );
         let isDeleteOperation = false;
         const optionals = [];
 
         let optionalPath = path;
         while (
           optionalPath.isOptionalMemberExpression() ||
-          optionalPath.isOptionalCallExpression()
+          optionalPath.isOptionalCallExpression() ||
+          optionalPath.isParenthesizedExpression() ||
+          optionalPath.isTSNonNullExpression()
         ) {
           const { node } = optionalPath;
           if (node.optional) {
@@ -43,10 +52,8 @@ export default declare((api, options) => {
           } else if (optionalPath.isOptionalCallExpression()) {
             optionalPath.node.type = "CallExpression";
             optionalPath = optionalPath.get("callee");
-          }
-
-          // unwrap a TSNonNullExpression if need
-          if (optionalPath.isTSNonNullExpression()) {
+          } else {
+            // unwrap TSNonNullExpression/ParenthesizedExpression if needed
             optionalPath = optionalPath.get("expression");
           }
         }
@@ -117,8 +124,11 @@ export default declare((api, options) => {
           // Ensure (a?.b)() has proper `this`
           if (
             t.isMemberExpression(replacement) &&
-            replacement.extra?.parenthesized &&
-            replacementPath.parentPath.isCallExpression()
+            (replacement.extra?.parenthesized ||
+              // if replacementPath.parentPath does not equal parentPath,
+              // it must be unwrapped from parenthesized expression.
+              replacementPath.parentPath !== parentPath) &&
+            parentPath.isCallExpression()
           ) {
             // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
             const { object } = replacement;
