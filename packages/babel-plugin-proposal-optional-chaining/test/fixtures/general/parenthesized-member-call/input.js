@@ -1,7 +1,26 @@
-(foo?.bar)();
+class Foo {
+  constructor() {
+    this.x = 1;
+    this.self = this;
+  }
+  m() { return this.x; };
+  getSelf() { return this }
 
-(foo?.bar)?.();
+  test() {
+    const Foo = this;
+    const o = { Foo: Foo };
 
-(foo?.bar.baz)();
+    (Foo?.["m"])();
+    (Foo?.["m"])().toString;
+    (Foo?.["m"])().toString();
 
-(foo?.bar.baz)?.();
+    (o?.Foo.m)();
+    (o?.Foo.m)().toString;
+    (o?.Foo.m)().toString();
+
+    (((o.Foo?.self.getSelf)())?.m)();
+    (((o.Foo.self?.getSelf)())?.m)();
+  }
+}
+
+(new Foo).test();
