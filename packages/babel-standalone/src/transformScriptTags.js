@@ -53,7 +53,7 @@ function buildBabelOptions(script, filename) {
  */
 function run(transformFn, script) {
   const scriptEl = document.createElement("script");
-  if (typeof script.type !== "undefined") {
+  if (script.type) {
     scriptEl.setAttribute("type", script.type);
   }
   scriptEl.text = transformCode(transformFn, script);
