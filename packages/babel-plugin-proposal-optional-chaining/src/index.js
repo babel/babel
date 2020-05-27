@@ -121,26 +121,23 @@ export default declare((api, options) => {
             replacementPath.parentPath.isCallExpression()
           ) {
             // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
-            const { object, property, computed } = replacement;
-            let memoisedObject;
+            const { object } = replacement;
+            let baseRef;
             if (!loose) {
               // memoize the context object in non-loose mode
               // `(a?.b.c)()` to `(a == null ? undefined : (_a$b = a.b).c.bind(_a$b))()`
-              const context = scope.maybeGenerateMemoised(object);
-              if (context) {
-                memoisedObject = t.assignmentExpression("=", context, object);
+              baseRef = scope.maybeGenerateMemoised(object);
+              if (baseRef) {
+                replacement.object = t.assignmentExpression(
+                  "=",
+                  baseRef,
+                  object,
+                );
               }
             }
             replacement = t.callExpression(
-              t.memberExpression(
-                t.memberExpression(
-                  memoisedObject ?? object,
-                  property,
-                  computed,
-                ),
-                t.identifier("bind"),
-              ),
-              [t.cloneNode(memoisedObject?.left ?? object)],
+              t.memberExpression(replacement, t.identifier("bind")),
+              [t.cloneNode(baseRef ?? object)],
             );
           }
           replacementPath.replaceWith(
