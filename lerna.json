@@ -1,5 +1,5 @@
 {
-  "version": "7.10.0",
+  "version": "7.10.1",
   "changelog": {
     "repo": "babel/babel",
     "cacheDir": ".changelog",

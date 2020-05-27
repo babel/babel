@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-plugin-utils",
-  "version": "7.8.3",
+  "version": "7.10.1",
   "description": "General utilities for plugins to use",
   "author": "Logan Smyth <loganfsmyth@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -9,8 +9,8 @@
     "access": "public"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/babel/babel.git",
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-plugin-utils"
   },
   "main": "lib/index.js"

@@ -1,6 +1,6 @@
 {
   "name": "@babel/polyfill",
-  "version": "7.8.7",
+  "version": "7.10.1",
   "description": "Provides polyfills necessary for a full ES2015+ environment",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -13,8 +13,8 @@
     "postpublish": "rm browser.js"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/babel/babel.git",
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-polyfill"
   },
   "main": "lib/index.js",

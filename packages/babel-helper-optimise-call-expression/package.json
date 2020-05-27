@@ -1,10 +1,10 @@
 {
   "name": "@babel/helper-optimise-call-expression",
-  "version": "7.10.0",
+  "version": "7.10.1",
   "description": "Helper function to optimise call expression",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/babel/babel.git",
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-optimise-call-expression"
   },
   "license": "MIT",
@@ -13,6 +13,6 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/types": "^7.10.0"
+    "@babel/types": "^7.10.1"
   }
 }
