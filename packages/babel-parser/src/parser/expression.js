@@ -1032,6 +1032,9 @@ export default class ExpressionParser extends LValParser {
       case tt.bigint:
         return this.parseLiteral(this.state.value, "BigIntLiteral");
 
+      case tt.decimal:
+        return this.parseLiteral(this.state.value, "DecimalLiteral");
+
       case tt.string:
         return this.parseLiteral(this.state.value, "StringLiteral");
 
@@ -1859,7 +1862,10 @@ export default class ExpressionParser extends LValParser {
       this.state.inPropertyName = true;
       // We check if it's valid for it to be a private name when we push it.
       (prop: $FlowFixMe).key =
-        this.match(tt.num) || this.match(tt.string) || this.match(tt.bigint)
+        this.match(tt.num) ||
+        this.match(tt.string) ||
+        this.match(tt.bigint) ||
+        this.match(tt.decimal)
           ? this.parseExprAtom()
           : this.parseMaybePrivateName(isPrivateNameAllowed);
 

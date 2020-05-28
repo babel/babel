@@ -1095,6 +1095,8 @@ export default class Tokenizer extends ParserErrors {
     if (next === charCodes.lowercaseN) {
       ++this.state.pos;
       isBigInt = true;
+    } else if (next === charCodes.lowercaseM) {
+      throw this.raise(this.state.pos, Errors.InvalidDecimal);
     }
 
     if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {
@@ -1116,6 +1118,8 @@ export default class Tokenizer extends ParserErrors {
     const start = this.state.pos;
     let isFloat = false;
     let isBigInt = false;
+    let isDecimal = false;
+    let hasExponent = false;
     let isOctal = false;
 
     if (!startsWithDot && this.readInt(10) === null) {
@@ -1157,6 +1161,7 @@ export default class Tokenizer extends ParserErrors {
       }
       if (this.readInt(10) === null) this.raise(start, Errors.InvalidNumber);
       isFloat = true;
+      hasExponent = true;
       next = this.input.charCodeAt(this.state.pos);
     }
 
@@ -1174,15 +1179,29 @@ export default class Tokenizer extends ParserErrors {
       isBigInt = true;
     }
 
+    if (next === charCodes.lowercaseM) {
+      this.expectPlugin("decimal", this.state.pos);
+      if (hasExponent || hasLeadingZero) {
+        this.raise(start, Errors.InvalidDecimal);
+      }
+      ++this.state.pos;
+      isDecimal = true;
+    }
+
     if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {
       throw this.raise(this.state.pos, Errors.NumberIdentifier);
     }
 
-    // remove "_" for numeric literal separator, and "n" for BigInts
-    const str = this.input.slice(start, this.state.pos).replace(/[_n]/g, "");
+    // remove "_" for numeric literal separator, and trailing `m` or `n`
+    const str = this.input.slice(start, this.state.pos).replace(/[_mn]/g, "");
 
     if (isBigInt) {
       this.finishToken(tt.bigint, str);
+      return;
+    }
+
+    if (isDecimal) {
+      this.finishToken(tt.decimal, str);
       return;
     }
 
