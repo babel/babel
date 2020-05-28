@@ -241,6 +241,13 @@ const privateNameHandlerSpec = {
     ]);
   },
 
+  boundGet(member) {
+    return t.callExpression(
+      t.memberExpression(this.get(member), t.identifier("bind")),
+      [this.receiver(member)],
+    );
+  },
+
   set(member, value) {
     const { classRef, privateNamesMap, file } = this;
     const { name } = member.node.property.id;
@@ -321,6 +328,13 @@ const privateNameHandlerLoose = {
       REF: object,
       PROP: privateNamesMap.get(name).id,
     });
+  },
+
+  boundGet(member) {
+    return t.callExpression(
+      t.memberExpression(this.get(member), t.identifier("bind")),
+      [member.node.object],
+    );
   },
 
   simpleSet(member) {
