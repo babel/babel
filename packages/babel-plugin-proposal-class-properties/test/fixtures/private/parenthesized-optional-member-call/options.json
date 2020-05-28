@@ -1,8 +1,7 @@
 {
   "plugins": [
     ["external-helpers", { "helperVersion": "7.100.0" }],
-    "proposal-class-properties",
-    "transform-classes",
-    "transform-block-scoping"
-  ]
+    "proposal-class-properties"
+  ],
+  "minNodeVersion": "14.0.0"
 }
