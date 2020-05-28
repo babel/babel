@@ -304,7 +304,10 @@ export default declare((api, opts) => {
     .map(pluginName => {
       if (
         pluginName === "proposal-class-properties" ||
-        pluginName === "proposal-private-methods"
+        pluginName === "proposal-private-methods" ||
+        // This is not included in preset-env yet, but let's keep it here so we
+        // don't forget about it in the future.
+        pluginName === "proposal-private-property-in-object"
       ) {
         return [
           getPlugin(pluginName),
