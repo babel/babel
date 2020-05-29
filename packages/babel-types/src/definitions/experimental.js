@@ -224,6 +224,10 @@ defineType("Import", {
   aliases: ["Expression"],
 });
 
+defineType("ImportAttribute", {
+  visitor: ["key", "value"],
+});
+
 defineType("Decorator", {
   visitor: ["expression"],
   fields: {
