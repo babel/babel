@@ -26,11 +26,10 @@ function baseParse(code, options) {
     );
   }
 
-  const parseOptions = normalizeBabelParseConfig(options);
   let ast;
 
   try {
-    ast = babelParse(code, parseOptions);
+    ast = babelParse(code, normalizeBabelParseConfig(options));
   } catch (err) {
     if (err instanceof SyntaxError) {
       err.lineNumber = err.loc.line;
