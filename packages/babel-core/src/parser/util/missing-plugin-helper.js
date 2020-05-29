@@ -31,6 +31,12 @@ const pluginNameMap = {
       url: "https://git.io/JvpRG",
     },
   },
+  decimal: {
+    syntax: {
+      name: "@babel/plugin-syntax-decimal",
+      url: "https://git.io/JfKOH",
+    },
+  },
   decorators: {
     syntax: {
       name: "@babel/plugin-syntax-decorators",
