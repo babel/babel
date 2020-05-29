@@ -65,8 +65,9 @@ export function enableFeature(file, feature, loose) {
   }
 
   let resolvedLoose: void | true | false;
+  let higherPriorityPluginName: void | string;
 
-  for (const [mask] of featuresSameLoose) {
+  for (const [mask, name] of featuresSameLoose) {
     if (!hasFeature(file, mask)) continue;
 
     const loose = isLoose(file, mask);
@@ -81,6 +82,7 @@ export function enableFeature(file, feature, loose) {
       );
     } else {
       resolvedLoose = loose;
+      higherPriorityPluginName = name;
     }
   }
 
@@ -89,12 +91,14 @@ export function enableFeature(file, feature, loose) {
       if (hasFeature(file, mask) && isLoose(file, mask) !== resolvedLoose) {
         setLoose(file, mask, resolvedLoose);
         console.warn(
-          "'loose' mode configuration must be the same for @babel/plugin-proposal-class-properties, " +
-            "@babel/plugin-proposal-private-methods and " +
-            "@babel/plugin-proposal-private-property-in-object (when they are enabled).\n" +
-            `${name} has been set to \`"loose": ${!resolvedLoose}\` by @babel/preset-env, but it ` +
-            `will be handled with \`"loose": ${resolvedLoose}\` in order to be compatible with the ` +
-            "other class features plugins.",
+          `Though the "loose" option was set to "${!resolvedLoose}" in your @babel/preset-env ` +
+            `config, it will not be used for ${name} since the "loose" mode option was set to ` +
+            `"${resolvedLoose}" for ${higherPriorityPluginName}.\nThe "loose" option must be the ` +
+            `same for @babel/plugin-proposal-class-properties, @babel/plugin-proposal-private-methods ` +
+            `and @babel/plugin-proposal-private-property-in-object (when they are enabled): you can ` +
+            `silence this warning by explicitly adding\n` +
+            `\t["${name}", { "loose": ${resolvedLoose} }]\n` +
+            `to the "plugins" section of your Babel config.`,
         );
       }
     }
