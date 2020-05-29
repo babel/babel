@@ -1,4 +1,4 @@
-(process.env.TEST_TYPE === "cov" ? describe : describe.skip)(
+(process.env.TEST_TYPE === "cov" ? describe.skip : describe)(
   "stage-1 preset",
   () => {
     const Babel = require("../babel");
