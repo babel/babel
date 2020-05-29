@@ -8,6 +8,7 @@
     }]
   ],
   "plugins": [
-    ["proposal-class-properties", { "loose": true }]
+    ["proposal-class-properties", { "loose": false }],
+    ["proposal-private-methods", { "loose": false }]
   ]
 }

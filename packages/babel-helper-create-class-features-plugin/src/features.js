@@ -8,11 +8,14 @@ export const FEATURES = Object.freeze({
   privateIn: 1 << 4,
 });
 
-const featuresSameLoose = [
-  FEATURES.fields,
-  FEATURES.privateMethods,
-  FEATURES.privateIn,
-];
+const featuresSameLoose = new Map([
+  [FEATURES.fields, "@babel/plugin-proposal-class-properties"],
+  [FEATURES.privateMethods, "@babel/plugin-proposal-private-methods"],
+  [
+    FEATURES.privateIn,
+    "@babel/plugin-proposal-private-private-property-in-object",
+  ],
+]);
 
 // We can't use a symbol because this needs to always be the same, even if
 // this package isn't deduped by npm. e.g.
@@ -63,7 +66,7 @@ export function enableFeature(file, feature, loose) {
 
   let resolvedLoose: void | true | false;
 
-  for (const mask of featuresSameLoose) {
+  for (const [mask] of featuresSameLoose) {
     if (!hasFeature(file, mask)) continue;
 
     const loose = isLoose(file, mask);
@@ -82,8 +85,18 @@ export function enableFeature(file, feature, loose) {
   }
 
   if (resolvedLoose !== undefined) {
-    for (const mask of featuresSameLoose) {
-      if (hasFeature(file, mask)) setLoose(file, mask, resolvedLoose);
+    for (const [mask, name] of featuresSameLoose) {
+      if (hasFeature(file, mask) && isLoose(file, mask) !== resolvedLoose) {
+        setLoose(file, mask, resolvedLoose);
+        console.warn(
+          "'loose' mode configuration must be the same for @babel/plugin-proposal-class-properties, " +
+            "@babel/plugin-proposal-private-methods and " +
+            "@babel/plugin-proposal-private-property-in-object (when they are enabled).\n" +
+            `${name} has been set to \`"loose": ${!resolvedLoose}\` by @babel/preset-env, but it ` +
+            `will be handled with \`"loose": ${resolvedLoose}\` in order to be compatible with the ` +
+            "other class features plugins.",
+        );
+      }
     }
   }
 }
