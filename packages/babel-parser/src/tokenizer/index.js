@@ -1096,7 +1096,7 @@ export default class Tokenizer extends ParserErrors {
       ++this.state.pos;
       isBigInt = true;
     } else if (next === charCodes.lowercaseM) {
-      throw this.raise(this.state.pos, Errors.InvalidDecimal);
+      throw this.raise(start, Errors.InvalidDecimal);
     }
 
     if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {

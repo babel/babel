@@ -2,5 +2,5 @@
   "plugins": [
     "decimal"
   ],
-  "throws": "Invalid decimal (1:7)"
+  "throws": "Invalid decimal (1:0)"
 }
