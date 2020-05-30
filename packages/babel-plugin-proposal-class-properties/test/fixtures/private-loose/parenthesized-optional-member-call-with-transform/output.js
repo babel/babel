@@ -4,7 +4,7 @@ class Foo {
   }
 
   test() {
-    var _o$Foo$self$getSelf, _o$Foo$self$getSelf2, _fn$Foo$self$getSelf, _fn$Foo$self$getSelf2, _o$Foo, _o$Foo$self, _fn, _fn$Foo, _fn$Foo$self;
+    var _o$Foo$self$getSelf, _o$Foo$self$getSelf2, _fn$Foo$self$getSelf, _fn$Foo$self$getSelf2, _o$Foo, _o$Foo$self, _fn, _fn$Foo, _fn$Foo$self, _fn$Foo$self2;
 
     const o = {
       Foo: Foo
@@ -23,7 +23,7 @@ class Foo {
     ((_o$Foo$self$getSelf = ((_o$Foo = o.Foo) == null ? void 0 : _o$Foo.self.getSelf.bind(_o$Foo.self))()) === null || _o$Foo$self$getSelf === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(_o$Foo$self$getSelf, _m)[_m].bind(_o$Foo$self$getSelf))();
     ((_o$Foo$self$getSelf2 = ((_o$Foo$self = o.Foo.self) == null ? void 0 : _o$Foo$self.getSelf.bind(_o$Foo$self))()) === null || _o$Foo$self$getSelf2 === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(_o$Foo$self$getSelf2, _m)[_m].bind(_o$Foo$self$getSelf2))();
     ((_fn$Foo$self$getSelf = ((_fn = fn()) == null ? void 0 : (_fn$Foo = _fn.Foo) == null ? void 0 : _fn$Foo.self.getSelf.bind(_fn.Foo.self))()) === null || _fn$Foo$self$getSelf === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(_fn$Foo$self$getSelf, _m)[_m].bind(_fn$Foo$self$getSelf))();
-    ((_fn$Foo$self$getSelf2 = (fn == null ? void 0 : (_fn$Foo$self = fn().Foo.self) == null ? void 0 : _fn$Foo$self.getSelf.bind(fn().Foo.self))()) === null || _fn$Foo$self$getSelf2 === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(_fn$Foo$self$getSelf2, _m)[_m].bind(_fn$Foo$self$getSelf2))();
+    ((_fn$Foo$self$getSelf2 = (fn == null ? void 0 : (_fn$Foo$self2 = _fn$Foo$self = fn().Foo.self) == null ? void 0 : _fn$Foo$self2.getSelf.bind(_fn$Foo$self))()) === null || _fn$Foo$self$getSelf2 === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(_fn$Foo$self$getSelf2, _m)[_m].bind(_fn$Foo$self$getSelf2))();
   }
 
 }
