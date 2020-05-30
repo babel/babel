@@ -70,6 +70,8 @@ export const ErrorMessages = Object.freeze({
   InvalidParenthesizedAssignment: "Invalid parenthesized assignment pattern",
   InvalidPrivateFieldResolution: "Private name #%0 is not defined",
   InvalidPropertyBindingPattern: "Binding member expression",
+  InvalidRecordProperty:
+    "Only properties and spread elements are allowed in record definitions",
   InvalidRestAssignmentPattern: "Invalid rest operator's argument",
   LabelRedeclaration: "Label '%0' is already declared",
   LetInLexicalBinding:

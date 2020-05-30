@@ -1050,7 +1050,7 @@ export default class ExpressionParser extends LValParser {
         this.next();
         node.elements = this.parseExprList(
           close,
-          true,
+          false,
           refExpressionErrors,
           node,
         );
@@ -1555,6 +1555,14 @@ export default class ExpressionParser extends LValParser {
       if (!isPattern) {
         // $FlowIgnore RestElement will never be returned if !isPattern
         this.checkDuplicatedProto(prop, propHash, refExpressionErrors);
+      }
+
+      if (
+        isRecord &&
+        prop.type !== "ObjectProperty" &&
+        prop.type !== "SpreadElement"
+      ) {
+        this.raise(prop.start, Errors.InvalidRecordProperty);
       }
 
       // $FlowIgnore
