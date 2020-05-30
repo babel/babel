@@ -19,6 +19,30 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.10.2 (2020-05-30)
+
+#### :rocket: New Feature
+* [#11639](https://github.com/babel/babel/pull/11639) feature: babel-eslint-parser passes through config options ([@kaicataldo](https://github.com/kaicataldo))
+
+#### :bug: Bug Fix
+* `babel-helper-compilation-targets`
+  * [#11648](https://github.com/babel/babel/pull/11648) fix: don't mutate InputTarget's passed to  @babel/helper-compilation-targets ([@fivetanley](https://github.com/fivetanley))
+* `babel-helper-create-class-features-plugin`, `babel-preset-env`
+  * [#11634](https://github.com/babel/babel/pull/11634) Class features loose should have precedence over preset-env ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`
+  * [#11645](https://github.com/babel/babel/pull/11645) fix: add bigIntSuffix to minified output ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-types`
+  * [#11641](https://github.com/babel/babel/pull/11641) Add support for printing ImportAttribute ([@existentialism](https://github.com/existentialism))
+* `babel-plugin-syntax-module-attributes`, `babel-standalone`
+  * [#11631](https://github.com/babel/babel/pull/11631) Fix moduleAttributesVersion errors with stage-0 preset in babel standalone ([@hamlim](https://github.com/hamlim))
+
+#### :nail_care: Polish
+* `babel-core`
+  * [#11643](https://github.com/babel/babel/pull/11643) fix: add new plugin names to missing plugin helpers ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-parser`
+  * [#11653](https://github.com/babel/babel/pull/11653) refactor: split locationParser into ParserErrors and error message ([@JLHwung](https://github.com/JLHwung))
 ## v7.10.1 (2020-05-27)
 
 #### :bug: Bug Fix
