@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-compilation-targets",
-  "version": "7.10.1",
+  "version": "7.10.2",
   "author": "The Babel Team (https://babeljs.io/team)",
   "license": "MIT",
   "description": "Engine compat data used in @babel/preset-env",
@@ -31,7 +31,7 @@
     "@babel/core": "^7.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
+    "@babel/core": "^7.10.2",
     "@babel/helper-plugin-test-runner": "^7.10.1"
   }
 }

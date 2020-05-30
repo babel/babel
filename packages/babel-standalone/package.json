@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.10.1",
+  "version": "7.10.2",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "babel.js",
   "files": [
@@ -11,7 +11,7 @@
     "prepublishOnly": "cd ../.. && make prepublish-build-standalone"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
+    "@babel/core": "^7.10.2",
     "@babel/helper-plugin-utils": "^7.10.1",
     "@babel/plugin-external-helpers": "^7.10.1",
     "@babel/plugin-proposal-async-generator-functions": "^7.10.1",
@@ -45,7 +45,7 @@
     "@babel/plugin-syntax-function-sent": "^7.10.1",
     "@babel/plugin-syntax-import-meta": "^7.10.1",
     "@babel/plugin-syntax-jsx": "^7.10.1",
-    "@babel/plugin-syntax-module-attributes": "^7.10.1",
+    "@babel/plugin-syntax-module-attributes": "^7.10.2",
     "@babel/plugin-syntax-object-rest-spread": "^7.8.0",
     "@babel/plugin-syntax-optional-catch-binding": "^7.8.0",
     "@babel/plugin-syntax-pipeline-operator": "^7.10.1",
@@ -103,7 +103,7 @@
     "@babel/plugin-transform-typescript": "^7.10.1",
     "@babel/plugin-transform-unicode-escapes": "^7.10.1",
     "@babel/plugin-transform-unicode-regex": "^7.10.1",
-    "@babel/preset-env": "^7.10.1",
+    "@babel/preset-env": "^7.10.2",
     "@babel/preset-flow": "^7.10.1",
     "@babel/preset-react": "^7.10.1",
     "@babel/preset-typescript": "^7.10.1"

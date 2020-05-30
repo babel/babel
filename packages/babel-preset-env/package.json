@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-env",
-  "version": "7.10.1",
+  "version": "7.10.2",
   "description": "A Babel preset for each environment.",
   "author": "Henry Zhu <hi@henryzoo.com>",
   "homepage": "https://babeljs.io/",
@@ -16,7 +16,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@babel/compat-data": "^7.10.1",
-    "@babel/helper-compilation-targets": "^7.10.1",
+    "@babel/helper-compilation-targets": "^7.10.2",
     "@babel/helper-module-imports": "^7.10.1",
     "@babel/helper-plugin-utils": "^7.10.1",
     "@babel/plugin-proposal-async-generator-functions": "^7.10.1",
@@ -73,7 +73,7 @@
     "@babel/plugin-transform-unicode-escapes": "^7.10.1",
     "@babel/plugin-transform-unicode-regex": "^7.10.1",
     "@babel/preset-modules": "^0.1.3",
-    "@babel/types": "^7.10.1",
+    "@babel/types": "^7.10.2",
     "browserslist": "^4.12.0",
     "core-js-compat": "^3.6.2",
     "invariant": "^2.2.2",
@@ -85,7 +85,7 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.10.1",
-    "@babel/core": "^7.10.1",
+    "@babel/core": "^7.10.2",
     "@babel/helper-fixtures": "^7.10.1",
     "@babel/helper-plugin-test-runner": "^7.10.1",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0"
