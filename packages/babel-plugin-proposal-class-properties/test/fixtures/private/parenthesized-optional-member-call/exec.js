@@ -7,6 +7,9 @@ class Foo {
 
   test() {
     const o = { Foo: Foo };
+    const fn = function () {
+      return o;
+    };
 
     expect((Foo?.#m)()).toEqual(1);
     expect((Foo?.#m)().toString).toEqual(1..toString);
@@ -18,10 +21,16 @@ class Foo {
 
     expect((((o.Foo?.self.getSelf)())?.#m)()).toEqual(1);
     expect((((o.Foo.self?.getSelf)())?.#m)()).toEqual(1);
+
+    expect((((fn()?.Foo?.self.getSelf)())?.#m)()).toEqual(1);
+    expect((((fn?.().Foo.self?.getSelf)())?.#m)()).toEqual(1);
   }
 
   testNull() {
     const o = null;
+    const fn = function () {
+      return { o };
+    }
 
     expect(() => { (o?.Foo.#m)() }).toThrow();
     expect(() => { (o?.Foo.#m)().toString }).toThrow();
@@ -29,6 +38,9 @@ class Foo {
 
     expect(() => { (((o.Foo?.self.getSelf)())?.#m)() }).toThrow();
     expect(() => { (((o.Foo.self?.getSelf)())?.#m)() }).toThrow();
+
+    expect(() => (((fn()?.Foo?.self.getSelf)())?.#m)()).toThrow();
+    expect(() => (((fn?.().Foo.self?.getSelf)())?.#m)()).toThrow();
   }
 }
 

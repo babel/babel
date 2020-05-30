@@ -242,6 +242,8 @@ const privateNameHandlerSpec = {
   },
 
   boundGet(member) {
+    this.memoise(member, 1);
+
     return t.callExpression(
       t.memberExpression(this.get(member), t.identifier("bind")),
       [this.receiver(member)],
@@ -333,7 +335,7 @@ const privateNameHandlerLoose = {
   boundGet(member) {
     return t.callExpression(
       t.memberExpression(this.get(member), t.identifier("bind")),
-      [member.node.object],
+      [t.cloneNode(member.node.object)],
     );
   },
 

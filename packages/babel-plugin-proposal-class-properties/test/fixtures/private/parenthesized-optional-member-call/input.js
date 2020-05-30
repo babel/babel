@@ -7,6 +7,9 @@ class Foo {
 
   test() {
     const o = { Foo: Foo };
+    const fn = function () {
+      return o;
+    };
 
     (Foo?.#m)();
     (Foo?.#m)().toString;
@@ -18,6 +21,9 @@ class Foo {
 
     (((o.Foo?.self.getSelf)())?.#m)();
     (((o.Foo.self?.getSelf)())?.#m)();
+
+    (((fn()?.Foo?.self.getSelf)())?.#m)();
+    (((fn?.().Foo.self?.getSelf)())?.#m)();
   }
 }
 

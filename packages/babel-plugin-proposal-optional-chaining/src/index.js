@@ -127,7 +127,7 @@ export default declare((api, options) => {
             // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
             const { object } = replacement;
             let baseRef;
-            if (!loose) {
+            if (!loose || !isSimpleMemberExpression(object)) {
               // memoize the context object in non-loose mode
               // `(a?.b.c)()` to `(a == null ? undefined : (_a$b = a.b).c.bind(_a$b))()`
               baseRef = scope.maybeGenerateMemoised(object);
