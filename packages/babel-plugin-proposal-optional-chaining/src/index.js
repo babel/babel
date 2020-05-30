@@ -24,13 +24,7 @@ export default declare((api, options) => {
     visitor: {
       "OptionalCallExpression|OptionalMemberExpression"(path) {
         const { scope } = path;
-        let parentPath;
-        // unwrap parenthesis around parent path
-        for (
-          { parentPath } = path;
-          parentPath.type === "ParenthesizedExpression";
-          { parentPath } = parentPath
-        );
+        const parentPath = path.findParent(p => !p.isParenthesizedExpression());
         let isDeleteOperation = false;
         const optionals = [];
 
