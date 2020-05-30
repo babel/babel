@@ -1,3 +1,5 @@
+var _outer = new WeakMap();
+
 var Outer = function Outer() {
   "use strict";
 
@@ -21,5 +23,3 @@ var Outer = function Outer() {
     return Test;
   }(babelHelpers.classPrivateFieldGet(this, _outer));
 };
-
-var _outer = new WeakMap();

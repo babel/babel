@@ -1,3 +1,5 @@
+var _client = new WeakMap();
+
 var Foo = function Foo(props) {
   "use strict";
 
@@ -15,5 +17,3 @@ var Foo = function Foo(props) {
     z: this.z = babelHelpers.classPrivateFieldGet(this, _client)
   } = props);
 };
-
-var _client = new WeakMap();

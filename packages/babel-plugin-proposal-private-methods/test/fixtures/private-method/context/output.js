@@ -1,3 +1,5 @@
+var _getStatus = new WeakSet();
+
 class Foo {
   constructor(status) {
     _getStatus.add(this);
@@ -30,8 +32,6 @@ class Foo {
   }
 
 }
-
-var _getStatus = new WeakSet();
 
 var _getStatus2 = function _getStatus2() {
   return this.status;

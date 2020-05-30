@@ -1,3 +1,5 @@
+var _foo = babelHelpers.classPrivateFieldLooseKey("foo");
+
 var Foo = /*#__PURE__*/function () {
   "use strict";
 
@@ -13,6 +15,8 @@ var Foo = /*#__PURE__*/function () {
     key: "test",
     value: function test() {
       var _babelHelpers$classPr;
+
+      var _foo2 = babelHelpers.classPrivateFieldLooseKey("foo");
 
       _babelHelpers$classPr = babelHelpers.classPrivateFieldLooseBase(this, _foo2)[_foo2];
 
@@ -32,12 +36,8 @@ var Foo = /*#__PURE__*/function () {
         return Nested;
       }();
 
-      var _foo2 = babelHelpers.classPrivateFieldLooseKey("foo");
-
       babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo];
     }
   }]);
   return Foo;
 }();
-
-var _foo = babelHelpers.classPrivateFieldLooseKey("foo");
