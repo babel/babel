@@ -22,7 +22,7 @@ import {
 import { NodeUtils } from "./node";
 import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
-import { Errors } from "./location";
+import { Errors } from "./error";
 
 const unwrapParenthesizedExpression = (node: Node) => {
   return node.type === "ParenthesizedExpression"

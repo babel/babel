@@ -48,7 +48,7 @@ import {
   PARAM,
   functionFlags,
 } from "../util/production-parameter";
-import { Errors } from "./location";
+import { Errors } from "./error";
 
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js

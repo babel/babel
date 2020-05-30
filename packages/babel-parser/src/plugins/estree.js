@@ -6,7 +6,7 @@ import type { ExpressionErrors } from "../parser/util";
 import * as N from "../types";
 import type { Position } from "../util/location";
 import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
-import { Errors } from "../parser/location";
+import { Errors } from "../parser/error";
 
 function isSimpleProperty(node: N.Node): boolean {
   return (

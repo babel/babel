@@ -22,7 +22,7 @@ import {
   SCOPE_OTHER,
 } from "../util/scopeflags";
 import type { ExpressionErrors } from "../parser/util";
-import { Errors } from "../parser/location";
+import { Errors } from "../parser/error";
 
 const reservedTypes = new Set([
   "_",
