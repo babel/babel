@@ -27,7 +27,7 @@ import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util";
 import { PARAM } from "../../util/production-parameter";
-import { Errors } from "../../parser/location";
+import { Errors } from "../../parser/error";
 
 type TsModifier =
   | "readonly"

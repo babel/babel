@@ -3,7 +3,7 @@
 import * as N from "../types";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import ExpressionParser from "./expression";
-import { Errors } from "./location";
+import { Errors } from "./error";
 import {
   isIdentifierChar,
   isIdentifierStart,

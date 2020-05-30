@@ -9,7 +9,7 @@ import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
 import { types as tt, keywords as keywordTypes, type TokenType } from "./types";
 import { type TokContext, types as ct } from "./context";
-import LocationParser, { Errors } from "../parser/location";
+import ParserErrors, { Errors } from "../parser/error";
 import { SourceLocation } from "../util/location";
 import {
   lineBreak,
@@ -110,7 +110,7 @@ export class Token {
 
 // ## Tokenizer
 
-export default class Tokenizer extends LocationParser {
+export default class Tokenizer extends ParserErrors {
   // Forward-declarations
   // parser/util.js
   /*::
