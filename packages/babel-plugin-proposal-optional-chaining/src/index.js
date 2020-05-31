@@ -1,5 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
-import skipTransparentExprWrappers, {
+import {
+  skipTransparentExprWrappers,
   getCallContext,
 } from "@babel/helper-skip-transparent-expr-wrappers";
 import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";

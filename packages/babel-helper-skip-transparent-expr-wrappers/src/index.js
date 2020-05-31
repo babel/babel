@@ -23,7 +23,7 @@ export function isTransparentExprWrapper(node: Node) {
   );
 }
 
-export default function skipTransparentExprWrappers(path: NodePath): NodePath {
+export function skipTransparentExprWrappers(path: NodePath): NodePath {
   while (isTransparentExprWrapper(path.node)) {
     path = path.get("expression");
   }
