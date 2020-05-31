@@ -1,3 +1,5 @@
+var _foo = new WeakSet();
+
 let Foo = /*#__PURE__*/function () {
   "use strict";
 
@@ -15,7 +17,5 @@ let Foo = /*#__PURE__*/function () {
   }]);
   return Foo;
 }();
-
-var _foo = new WeakSet();
 
 var _foo2 = function _foo2() {};

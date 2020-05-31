@@ -4,6 +4,12 @@ var id = 0;
 
 function _classPrivateFieldLooseKey(name) { return "__private_" + id++ + "_" + name; }
 
+var _x = _classPrivateFieldLooseKey("x");
+
+var _m = _classPrivateFieldLooseKey("m");
+
+var _self = _classPrivateFieldLooseKey("self");
+
 class Foo {
   static getSelf() {
     return this;
@@ -73,12 +79,6 @@ class Foo {
   }
 
 }
-
-var _x = _classPrivateFieldLooseKey("x");
-
-var _m = _classPrivateFieldLooseKey("m");
-
-var _self = _classPrivateFieldLooseKey("self");
 
 Object.defineProperty(Foo, _x, {
   writable: true,
