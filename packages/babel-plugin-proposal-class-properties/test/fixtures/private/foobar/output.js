@@ -1,3 +1,5 @@
+var _scopedFunctionWithThis = new WeakMap();
+
 var Child = /*#__PURE__*/function (_Parent) {
   "use strict";
 
@@ -23,5 +25,3 @@ var Child = /*#__PURE__*/function (_Parent) {
 
   return Child;
 }(Parent);
-
-var _scopedFunctionWithThis = new WeakMap();

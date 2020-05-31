@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/babel/babel.git",
+    "url": "https://github.com/babel/babel.git",
     "directory": "eslint/babel-eslint-plugin"
   },
   "keywords": [

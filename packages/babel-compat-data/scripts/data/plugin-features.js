@@ -62,6 +62,7 @@ const es2015 = {
       'RegExp "y" and "u" flags / "y" flag',
     ],
   },
+  "transform-unicode-escapes": "Unicode code point escapes",
   "transform-unicode-regex": {
     features: [
       'RegExp "y" and "u" flags / "u" flag, case folding',
@@ -123,6 +124,10 @@ const es2020 = {
 
 const shippedProposal = {
   "proposal-numeric-separator": "numeric separator",
+  "proposal-class-properties": {
+    features: ["static class fields", "instance class fields"],
+  },
+  "proposal-private-methods": "private class methods",
 };
 
 // Run plugins for modern features first

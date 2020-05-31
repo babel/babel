@@ -166,24 +166,26 @@ export default function getTargets(
   options: Object = {},
 ): Targets {
   const targetOpts: Targets = {};
+  let { browsers } = inputTargets;
 
   // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
   // These values OVERRIDE the `browsers` field.
   if (inputTargets.esmodules) {
     const supportsESModules = browserModulesData["es6.module"];
-    inputTargets.browsers = Object.keys(supportsESModules)
+    browsers = Object.keys(supportsESModules)
       .map(browser => `${browser} ${supportsESModules[browser]}`)
       .join(", ");
   }
 
-  // Remove esmodules after being consumed to fix `hasTargets` below
-  delete inputTargets.esmodules;
-
   // Parse browsers target via browserslist
-  const browsersquery = validateBrowsers(inputTargets.browsers);
-  delete inputTargets.browsers;
+  const browsersquery = validateBrowsers(browsers);
 
-  let targets: Targets = validateTargetNames(inputTargets);
+  // Remove esmodules after being consumed to fix `hasTargets` below
+  const input = { ...inputTargets };
+  delete input.esmodules;
+  delete input.browsers;
+
+  let targets: Targets = validateTargetNames(input);
 
   const shouldParseBrowsers = !!browsersquery;
   const hasTargets = shouldParseBrowsers || Object.keys(targets).length > 0;
@@ -205,6 +207,7 @@ export default function getTargets(
     const browsers = browserslist(browsersquery, {
       path: options.configPath,
       mobileToDesktop: true,
+      env: options.browserslistEnv,
     });
 
     const queryBrowsers = getLowestVersions(browsers);

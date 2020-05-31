@@ -56,7 +56,7 @@ Additional configuration options can be set in your ESLint configuration under t
 - `sourceType` can be set to `"module"`(default) or `"script"` if your code isn't using ECMAScript modules.
 - `allowImportExportEverywhere` (default `false`) can be set to `true` to allow import and export declarations to appear anywhere a statement is allowed if your build environment supports that. Otherwise import and export declarations can only appear at a program's top level.
 - `ecmaFeatures.globalReturn` (default `false`) allow return statements in the global scope when used with `sourceType: "script"`.
-- `babelOptions` passes through Babel's configuration [loading](https://babeljs.io/docs/en/options#config-loading-options) and [merging](https://babeljs.io/docs/en/options#config-merging-options) options (for instance, in case of a monorepo). When not defined, @babel/eslint-parser will use Babel's default configuration file resolution logic.
+- `babelOptions` is an object containing Babel configuration [options](https://babeljs.io/docs/en/options) that are passed to Babel's parser at runtime.  For cases where users might not want to use a Babel configuration file or are running Babel through another tool (such as Webpack with `babel-loader`).
 
 **.eslintrc.js**
 

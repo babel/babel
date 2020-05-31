@@ -1,3 +1,5 @@
+var _bar = babelHelpers.classPrivateFieldLooseKey("bar");
+
 class Foo {
   static test() {
     return babelHelpers.classPrivateFieldLooseBase(Foo, _bar)[_bar];
@@ -8,8 +10,6 @@ class Foo {
   }
 
 }
-
-var _bar = babelHelpers.classPrivateFieldLooseKey("bar");
 
 Object.defineProperty(Foo, _bar, {
   writable: true,

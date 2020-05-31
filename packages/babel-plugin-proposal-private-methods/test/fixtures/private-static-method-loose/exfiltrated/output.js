@@ -1,5 +1,7 @@
 var exfiltrated;
 
+var _privateStaticMethod = babelHelpers.classPrivateFieldLooseKey("privateStaticMethod");
+
 class Cl {
   constructor() {
     if (exfiltrated === undefined) {
@@ -8,8 +10,6 @@ class Cl {
   }
 
 }
-
-var _privateStaticMethod = babelHelpers.classPrivateFieldLooseKey("privateStaticMethod");
 
 var _privateStaticMethod2 = function _privateStaticMethod2() {
   return 1017;

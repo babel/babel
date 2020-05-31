@@ -1,1 +1,1 @@
-Successfully compiled 0 files with Babel.
+Successfully compiled 0 files with Babel (123ms).

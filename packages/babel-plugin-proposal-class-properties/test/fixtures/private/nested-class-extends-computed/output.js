@@ -1,3 +1,5 @@
+var _foo = new WeakMap();
+
 var Foo = /*#__PURE__*/function () {
   "use strict";
 
@@ -16,6 +18,8 @@ var Foo = /*#__PURE__*/function () {
       var _temp;
 
       var _babelHelpers$classPr;
+
+      var _foo2 = new WeakMap();
 
       var Nested = /*#__PURE__*/function (_ref) {
         babelHelpers.inherits(Nested, _ref);
@@ -45,11 +49,7 @@ var Foo = /*#__PURE__*/function () {
 
         return _class2;
       }()), _temp));
-
-      var _foo2 = new WeakMap();
     }
   }]);
   return Foo;
 }();
-
-var _foo = new WeakMap();

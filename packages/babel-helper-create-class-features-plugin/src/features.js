@@ -5,7 +5,17 @@ export const FEATURES = Object.freeze({
   fields: 1 << 1,
   privateMethods: 1 << 2,
   decorators: 1 << 3,
+  privateIn: 1 << 4,
 });
+
+const featuresSameLoose = new Map([
+  [FEATURES.fields, "@babel/plugin-proposal-class-properties"],
+  [FEATURES.privateMethods, "@babel/plugin-proposal-private-methods"],
+  [
+    FEATURES.privateIn,
+    "@babel/plugin-proposal-private-private-property-in-object",
+  ],
+]);
 
 // We can't use a symbol because this needs to always be the same, even if
 // this package isn't deduped by npm. e.g.
@@ -17,6 +27,17 @@ export const FEATURES = Object.freeze({
 const featuresKey = "@babel/plugin-class-features/featuresKey";
 const looseKey = "@babel/plugin-class-features/looseKey";
 
+// See https://github.com/babel/babel/issues/11622.
+// Since preset-env sets loose for the fields and private methods plugins, it can
+// cause conflicts with the loose mode set by an explicit plugin in the config.
+// To solve this problem, we ignore preset-env's loose mode if another plugin
+// explicitly sets it
+// The code to handle this logic doesn't check that "low priority loose" is always
+// the same. However, it is only set by the preset and not directly by users:
+// unless someone _wants_ to break it, it shouldn't be a problem.
+const looseLowPriorityKey =
+  "@babel/plugin-class-features/looseLowPriorityKey/#__internal__@babel/preset-env__please-overwrite-loose-instead-of-throwing";
+
 export function enableFeature(file, feature, loose) {
   // We can't blindly enable the feature because, if it was already set,
   // "loose" can't be changed, so that
@@ -24,9 +45,63 @@ export function enableFeature(file, feature, loose) {
   //   @babel/plugin-class-properties { loose: false }
   // is transformed in loose mode.
   // We only enabled the feature if it was previously disabled.
-  if (!hasFeature(file, feature)) {
+  if (!hasFeature(file, feature) || canIgnoreLoose(file, feature)) {
     file.set(featuresKey, file.get(featuresKey) | feature);
-    if (loose) file.set(looseKey, file.get(looseKey) | feature);
+    if (
+      loose ===
+      "#__internal__@babel/preset-env__prefer-true-but-false-is-ok-if-it-prevents-an-error"
+    ) {
+      setLoose(file, feature, true);
+      file.set(looseLowPriorityKey, file.get(looseLowPriorityKey) | feature);
+    } else if (
+      loose ===
+      "#__internal__@babel/preset-env__prefer-false-but-true-is-ok-if-it-prevents-an-error"
+    ) {
+      setLoose(file, feature, false);
+      file.set(looseLowPriorityKey, file.get(looseLowPriorityKey) | feature);
+    } else {
+      setLoose(file, feature, loose);
+    }
+  }
+
+  let resolvedLoose: void | true | false;
+  let higherPriorityPluginName: void | string;
+
+  for (const [mask, name] of featuresSameLoose) {
+    if (!hasFeature(file, mask)) continue;
+
+    const loose = isLoose(file, mask);
+
+    if (canIgnoreLoose(file, mask)) {
+      continue;
+    } else if (resolvedLoose === !loose) {
+      throw new Error(
+        "'loose' mode configuration must be the same for @babel/plugin-proposal-class-properties, " +
+          "@babel/plugin-proposal-private-methods and " +
+          "@babel/plugin-proposal-private-property-in-object (when they are enabled).",
+      );
+    } else {
+      resolvedLoose = loose;
+      higherPriorityPluginName = name;
+    }
+  }
+
+  if (resolvedLoose !== undefined) {
+    for (const [mask, name] of featuresSameLoose) {
+      if (hasFeature(file, mask) && isLoose(file, mask) !== resolvedLoose) {
+        setLoose(file, mask, resolvedLoose);
+        console.warn(
+          `Though the "loose" option was set to "${!resolvedLoose}" in your @babel/preset-env ` +
+            `config, it will not be used for ${name} since the "loose" mode option was set to ` +
+            `"${resolvedLoose}" for ${higherPriorityPluginName}.\nThe "loose" option must be the ` +
+            `same for @babel/plugin-proposal-class-properties, @babel/plugin-proposal-private-methods ` +
+            `and @babel/plugin-proposal-private-property-in-object (when they are enabled): you can ` +
+            `silence this warning by explicitly adding\n` +
+            `\t["${name}", { "loose": ${resolvedLoose} }]\n` +
+            `to the "plugins" section of your Babel config.`,
+        );
+      }
+    }
   }
 }
 
@@ -36,6 +111,17 @@ function hasFeature(file, feature) {
 
 export function isLoose(file, feature) {
   return !!(file.get(looseKey) & feature);
+}
+
+function setLoose(file, feature, loose) {
+  if (loose) file.set(looseKey, file.get(looseKey) | feature);
+  else file.set(looseKey, file.get(looseKey) & ~feature);
+
+  file.set(looseLowPriorityKey, file.get(looseLowPriorityKey) & ~feature);
+}
+
+function canIgnoreLoose(file, feature) {
+  return !!(file.get(looseLowPriorityKey) & feature);
 }
 
 export function verifyUsedFeatures(path, file) {
@@ -69,14 +155,17 @@ export function verifyUsedFeatures(path, file) {
   }
 
   if (
-    hasFeature(file, FEATURES.privateMethods) &&
-    hasFeature(file, FEATURES.fields) &&
-    isLoose(file, FEATURES.privateMethods) !== isLoose(file, FEATURES.fields)
+    path.isPrivateName() &&
+    path.parentPath.isBinaryExpression({
+      operator: "in",
+      left: path.node,
+    })
   ) {
-    throw path.buildCodeFrameError(
-      "'loose' mode configuration must be the same for both @babel/plugin-proposal-class-properties " +
-        "and @babel/plugin-proposal-private-methods",
-    );
+    if (!hasFeature(file, FEATURES.privateIn)) {
+      throw path.buildCodeFrameError(
+        "Private property in checks are not enabled.",
+      );
+    }
   }
 
   if (path.isProperty()) {

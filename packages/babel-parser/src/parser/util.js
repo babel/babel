@@ -7,7 +7,7 @@ import type { Node } from "../types";
 import { lineBreak } from "../util/whitespace";
 import { isIdentifierChar } from "../util/identifier";
 import * as charCodes from "charcodes";
-import { Errors } from "./location";
+import { Errors } from "./error";
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
   node: Node,

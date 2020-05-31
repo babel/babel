@@ -126,6 +126,7 @@ const featuresToPlugins = {
   "dynamic-import": "dynamicImport",
   "export-star-as-namespace-from-module": "exportNamespaceFrom",
   "import.meta": "importMeta",
+  "logical-assignment-operators": "logicalAssignment",
   "numeric-separator-literal": "numericSeparator",
   "optional-chaining": "optionalChaining",
   "top-level-await": "topLevelAwait",

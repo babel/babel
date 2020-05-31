@@ -152,6 +152,20 @@ export const validateBoolOption = (
   return value;
 };
 
+export const validateStringOption = (
+  name: string,
+  value?: string,
+  defaultValue?: string,
+) => {
+  if (typeof value === "undefined") {
+    value = defaultValue;
+  } else if (typeof value !== "string") {
+    throw new Error(`Preset env: '${name}' option must be a string.`);
+  }
+
+  return value;
+};
+
 export const validateIgnoreBrowserslistConfig = (
   ignoreBrowserslistConfig: boolean,
 ) =>
@@ -295,5 +309,9 @@ export default function normalizeOptions(opts: Options) {
     spec: validateBoolOption(TopLevelOptions.spec, opts.spec, false),
     targets: normalizeTargets(opts.targets),
     useBuiltIns: useBuiltIns,
+    browserslistEnv: validateStringOption(
+      TopLevelOptions.browserslistEnv,
+      opts.browserslistEnv,
+    ),
   };
 }

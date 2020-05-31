@@ -1,3 +1,5 @@
+var _client = babelHelpers.classPrivateFieldLooseKey("client");
+
 var Foo = function Foo(props) {
   "use strict";
 
@@ -13,5 +15,3 @@ var Foo = function Foo(props) {
     z: this.z = babelHelpers.classPrivateFieldLooseBase(this, _client)[_client]
   } = props);
 };
-
-var _client = babelHelpers.classPrivateFieldLooseKey("client");

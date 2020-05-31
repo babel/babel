@@ -10,6 +10,7 @@
   "syntax-function-sent",
   "syntax-import-meta",
   "syntax-jsx",
+  "syntax-module-attributes",
   "syntax-object-rest-spread",
   "syntax-optional-catch-binding",
   "syntax-pipeline-operator",
@@ -34,6 +35,7 @@
   "proposal-optional-chaining",
   "proposal-pipeline-operator",
   "proposal-private-methods",
+  "proposal-private-property-in-object",
   "proposal-throw-expressions",
   "proposal-unicode-property-regex",
   "transform-async-to-generator",
@@ -85,5 +87,6 @@
   "transform-template-literals",
   "transform-typeof-symbol",
   "transform-typescript",
+  "transform-unicode-escapes",
   "transform-unicode-regex"
 ]

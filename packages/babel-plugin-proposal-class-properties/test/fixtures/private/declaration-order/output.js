@@ -1,3 +1,5 @@
+var _x = new WeakMap();
+
 var C = function C() {
   "use strict";
 
@@ -9,8 +11,6 @@ var C = function C() {
     value: void 0
   });
 };
-
-var _x = new WeakMap();
 
 expect(() => {
   new C();
