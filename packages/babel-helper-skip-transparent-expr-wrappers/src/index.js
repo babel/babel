@@ -16,8 +16,9 @@ export function getCallContext(callPath: NodePath): NodePath {
 export function isTransparentExprWrapper(node: Node) {
   return (
     t.isTSAsExpression(node) ||
-    t.isTypeCastExpression(node) ||
     t.isTSTypeAssertion(node) ||
+    t.isTSNonNullExpression(node) ||
+    t.isTypeCastExpression(node) ||
     t.isParenthesizedExpression(node)
   );
 }
