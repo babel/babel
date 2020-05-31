@@ -1,3 +1,5 @@
+var _foo = new WeakMap();
+
 let Foo = /*#__PURE__*/function () {
   "use strict";
 
@@ -18,7 +20,5 @@ let Foo = /*#__PURE__*/function () {
   }]);
   return Foo;
 }();
-
-var _foo = new WeakMap();
 
 var _get_foo = function () {};

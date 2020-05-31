@@ -1,3 +1,5 @@
+var _foo = babelHelpers.classPrivateFieldLooseKey("foo");
+
 let Foo = /*#__PURE__*/function () {
   "use strict";
 
@@ -17,7 +19,5 @@ let Foo = /*#__PURE__*/function () {
   }]);
   return Foo;
 }();
-
-var _foo = babelHelpers.classPrivateFieldLooseKey("foo");
 
 var _get_foo = function () {};
