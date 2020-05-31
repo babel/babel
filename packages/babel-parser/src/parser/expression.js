@@ -74,12 +74,15 @@ export default class ExpressionParser extends LValParser {
   +takeDecorators: (node: N.HasDecorators) => void;
   */
 
-  // Check if property __proto__ has been used more than once.
+  // For object literal, check if property __proto__ has been used more than once.
   // If the expression is a destructuring assignment, then __proto__ may appear
   // multiple times. Otherwise, __proto__ is a duplicated key.
 
-  checkDuplicatedProto(
+  // For record expression, check if property __proto__ exists but allows "__proto__"
+
+  checkProto(
     prop: N.ObjectMember | N.SpreadElement,
+    isRecord: boolean,
     protoRef: { used: boolean },
     refExpressionErrors: ?ExpressionErrors,
   ): void {
@@ -95,9 +98,13 @@ export default class ExpressionParser extends LValParser {
 
     const key = prop.key;
     // It is either an Identifier or a String/NumericLiteral
-    const name = key.type === "Identifier" ? key.name : String(key.value);
+    const name = key.type === "Identifier" ? key.name : key.value;
 
     if (name === "__proto__") {
+      if (isRecord) {
+        this.raise(key.start, Errors.RecordNoProto);
+        return;
+      }
       if (protoRef.used) {
         if (refExpressionErrors) {
           // Store the first redefinition's position, otherwise ignore because
@@ -1554,7 +1561,7 @@ export default class ExpressionParser extends LValParser {
       const prop = this.parseObjectMember(isPattern, refExpressionErrors);
       if (!isPattern) {
         // $FlowIgnore RestElement will never be returned if !isPattern
-        this.checkDuplicatedProto(prop, propHash, refExpressionErrors);
+        this.checkProto(prop, isRecord, propHash, refExpressionErrors);
       }
 
       if (

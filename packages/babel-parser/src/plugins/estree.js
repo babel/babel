@@ -143,8 +143,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    checkDuplicatedProto(
+    checkProto(
       prop: N.ObjectMember | N.SpreadElement,
+      isRecord: boolean,
       protoRef: { used: boolean },
       refExpressionErrors: ?ExpressionErrors,
     ): void {
@@ -152,7 +153,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (prop.method) {
         return;
       }
-      super.checkDuplicatedProto(prop, protoRef, refExpressionErrors);
+      super.checkProto(prop, isRecord, protoRef, refExpressionErrors);
     }
 
     isValidDirective(stmt: N.Statement): boolean {

@@ -126,6 +126,7 @@ export const ErrorMessages = Object.freeze({
     "Record expressions starting with '{|' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'",
   RecordExpressionHashIncorrectStartSyntaxType:
     "Record expressions starting with '#{' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'hash'",
+  RecordNoProto: "'__proto__' is not allowed in Record expressions",
   RestTrailingComma: "Unexpected trailing comma after rest element",
   SloppyFunction:
     "In non-strict mode code, functions can only be declared at top level, inside a block, or as the body of an if statement",
