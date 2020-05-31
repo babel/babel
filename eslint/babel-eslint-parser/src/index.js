@@ -1,6 +1,6 @@
 import semver from "semver";
 import {
-  version as CURRENT_BABEL_VERSION,
+  version as babelCoreVersion,
   parseSync as babelParse,
 } from "@babel/core";
 import packageJson from "../package.json";
@@ -12,17 +12,19 @@ import convert from "./convert";
 import analyzeScope from "./analyze-scope";
 import visitorKeys from "./visitor-keys";
 
-const SUPPORTED_BABEL_VERSION_RANGE =
-  packageJson.peerDependencies["@babel/core"];
-const IS_RUNNING_SUPPORTED_VERSION = semver.satisfies(
-  CURRENT_BABEL_VERSION,
-  SUPPORTED_BABEL_VERSION_RANGE,
-);
+let isRunningSupportedVersion;
 
 function baseParse(code, options) {
-  if (!IS_RUNNING_SUPPORTED_VERSION) {
+  if (typeof isRunningSupportedVersion !== "boolean") {
+    isRunningSupportedVersion = semver.satisfies(
+      babelCoreVersion,
+      packageJson.peerDependencies["@babel/core"],
+    );
+  }
+
+  if (!isRunningSupportedVersion) {
     throw new Error(
-      `babel-eslint@${packageJson.version} does not support @babel/core@${CURRENT_BABEL_VERSION}. Please downgrade to babel-eslint@^10 or upgrade to @babel/core@${SUPPORTED_BABEL_VERSION_RANGE}`,
+      `@babel/eslint-parser@${packageJson.version} does not support @babel/core@${babelCoreVersion}. Please upgrade to @babel/core@${packageJson.peerDependencies["@babel/core"]}`,
     );
   }
 
