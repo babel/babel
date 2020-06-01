@@ -167,6 +167,9 @@ const handle = {
       const parentIsOptionalCall = parentPath.isOptionalCallExpression({
         callee: node,
       });
+      const isParenthesizedMemberCall =
+        parentPath.isCallExpression({ callee: node }) &&
+        node.extra?.parenthesized;
       startingOptional.replaceWith(toNonOptional(startingOptional, baseRef));
       if (parentIsOptionalCall) {
         if (parent.optional) {
@@ -174,6 +177,9 @@ const handle = {
         } else {
           parentPath.replaceWith(this.call(member, parent.arguments));
         }
+      } else if (isParenthesizedMemberCall) {
+        // `(a?.#b)()` to `(a == null ? void 0 : a.#b.bind(a))()`
+        member.replaceWith(this.boundGet(member));
       } else {
         member.replaceWith(this.get(member));
       }
