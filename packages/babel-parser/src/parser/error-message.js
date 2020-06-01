@@ -166,7 +166,7 @@ export const ErrorMessages = Object.freeze({
     "Private names can only be used as the name of a class element (i.e. class C { #p = 42; #m() {} } )\n or a property of member expression (i.e. this.#p).",
   UnexpectedReservedWord: "Unexpected reserved word '%0'",
   UnexpectedSuper: "super is only allowed in object methods and classes",
-  UnexpectedToken: "Unexpected token '%'",
+  UnexpectedToken: "Unexpected token '%0'",
   UnexpectedTokenUnaryExponentiation:
     "Illegal expression. Wrap left hand side or entire exponentiation in parentheses.",
   UnsupportedBind: "Binding should be performed on object property.",

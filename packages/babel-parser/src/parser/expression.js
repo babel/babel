@@ -78,7 +78,7 @@ export default class ExpressionParser extends LValParser {
   // If the expression is a destructuring assignment, then __proto__ may appear
   // multiple times. Otherwise, __proto__ is a duplicated key.
 
-  // For record expression, check if property __proto__ exists but allows "__proto__"
+  // For record expression, check if property __proto__ exists
 
   checkProto(
     prop: N.ObjectMember | N.SpreadElement,
@@ -2103,7 +2103,10 @@ export default class ExpressionParser extends LValParser {
     allowPlaceholder: ?boolean,
   ): ?N.Expression {
     let elt;
-    if (allowEmpty && this.match(tt.comma)) {
+    if (this.match(tt.comma)) {
+      if (!allowEmpty) {
+        this.raise(this.state.pos, Errors.UnexpectedToken, ",");
+      }
       elt = null;
     } else if (this.match(tt.ellipsis)) {
       const spreadNodeStartPos = this.state.start;
