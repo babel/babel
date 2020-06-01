@@ -1,7 +1,8 @@
 import { declare } from "@babel/helper-plugin-utils";
 import {
-  skipTransparentExprWrappers,
   getCallContext,
+  isTransparentExprWrapper,
+  skipTransparentExprWrappers,
 } from "@babel/helper-skip-transparent-expr-wrappers";
 import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
 import { types as t } from "@babel/core";
@@ -12,6 +13,7 @@ export default declare((api, options) => {
   const { loose = false } = options;
 
   function isSimpleMemberExpression(expression) {
+    expression = skipTransparentExprWrappers(expression);
     return (
       t.isIdentifier(expression) ||
       t.isSuper(expression) ||
@@ -27,10 +29,10 @@ export default declare((api, options) => {
 
     visitor: {
       "OptionalCallExpression|OptionalMemberExpression"(path) {
-        const { parentPath, scope } = path;
+        const { scope } = path;
+        const parentPath = path.findParent(p => !isTransparentExprWrapper(p));
         let isDeleteOperation = false;
         const optionals = [];
-        const chains = [];
 
         let optionalPath = path;
         while (
@@ -40,16 +42,6 @@ export default declare((api, options) => {
           const { node } = optionalPath;
           if (node.optional) {
             optionals.push(node);
-
-            chains.push(
-              optionalPath.isOptionalCallExpression()
-                ? [getCallContext(optionalPath).node, node.callee]
-                : [
-                    skipTransparentExprWrappers(optionalPath.get("object"))
-                      .node,
-                    node.object,
-                  ],
-            );
           }
 
           if (optionalPath.isOptionalMemberExpression()) {
@@ -73,7 +65,13 @@ export default declare((api, options) => {
 
           const isCall = t.isCallExpression(node);
           const replaceKey = isCall ? "callee" : "object";
-          const [chain, chainWithTypes] = chains[i];
+
+          const chainWithTypes = node[replaceKey];
+          let chain = chainWithTypes;
+
+          while (isTransparentExprWrapper(chain)) {
+            chain = chain.expression;
+          }
 
           let ref;
           let check;
@@ -127,7 +125,38 @@ export default declare((api, options) => {
               );
             }
           }
-
+          let replacement = replacementPath.node;
+          // Ensure (a?.b)() has proper `this`
+          if (
+            t.isMemberExpression(replacement) &&
+            (replacement.extra?.parenthesized ||
+              // if replacementPath.parentPath does not equal parentPath,
+              // it must be unwrapped from parenthesized expression.
+              replacementPath.parentPath !== parentPath) &&
+            parentPath.isCallExpression()
+          ) {
+            // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
+            const { object } = replacement;
+            let baseRef;
+            if (!loose || !isSimpleMemberExpression(object)) {
+              // memoize the context object in non-loose mode
+              // `(a?.b.c)()` to `(a == null ? undefined : (_a$b = a.b).c.bind(_a$b))()`
+              baseRef = scope.maybeGenerateMemoised(
+                skipTransparentExprWrappers(object),
+              );
+              if (baseRef) {
+                replacement.object = t.assignmentExpression(
+                  "=",
+                  baseRef,
+                  skipTransparentExprWrappers(object),
+                );
+              }
+            }
+            replacement = t.callExpression(
+              t.memberExpression(replacement, t.identifier("bind")),
+              [t.cloneNode(baseRef ?? object)],
+            );
+          }
           replacementPath.replaceWith(
             t.conditionalExpression(
               loose
@@ -148,7 +177,7 @@ export default declare((api, options) => {
               isDeleteOperation
                 ? t.booleanLiteral(true)
                 : scope.buildUndefinedNode(),
-              replacementPath.node,
+              replacement,
             ),
           );
 
