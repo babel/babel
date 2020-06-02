@@ -82,6 +82,7 @@ helpers.jsx = helper("7.0.0-beta.0")`
 `;
 
 helpers.asyncIterator = helper("7.0.0-beta.0")`
+  import extractIteratorMethod from "extractIteratorMethod";
   export default function _asyncIterator(iterable) {
     var method
     if (typeof Symbol !== "undefined") {
@@ -89,10 +90,8 @@ helpers.asyncIterator = helper("7.0.0-beta.0")`
         method = iterable[Symbol.asyncIterator]
         if (method != null) return method.call(iterable);
       }
-      if (Symbol.iterator) {
-        method = iterable[Symbol.iterator]
-        if (method != null) return method.call(iterable);
-      }
+      method = extractIteratorMethod(iterable);
+      if (method != null) return method.call(iterable);
     }
     throw new TypeError("Object is not async iterable");
   }
@@ -992,9 +991,18 @@ helpers.maybeArrayLike = helper("7.9.0")`
   }
 `;
 
+helpers.extractIteratorMethod = helper("7.0.0-beta.0")`
+  export default function _extractIteratorMethod(iter) {
+    if ("_es6-shim iterator_" in Object(iter)) return iter["_es6-shim iterator_"];
+    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter))
+      return iter[Symbol.iterator];
+  }
+`;
+
 helpers.iterableToArray = helper("7.0.0-beta.0")`
+  import extractIteratorMethod from 'extractIteratorMethod';
   export default function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+    if (extractIteratorMethod(iter)) return Array.from(iter);
   }
 `;
 
@@ -1008,16 +1016,18 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
     // _d = _didIteratorError
     // _e = _iteratorError
     // _i = _iterator
+    // _m = _iteratorMethod
     // _s = _step
 
-    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+    var _m = extractIteratorMethod(arr);
+    if (!_m) return;
 
     var _arr = [];
     var _n = true;
     var _d = false;
     var _e = undefined;
     try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      for (var _i = _m.call(arr), _s; !(_n = (_s = _i.next()).done); _n = true) {
         _arr.push(_s.value);
         if (i && _arr.length === i) break;
       }
@@ -1037,10 +1047,11 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
 
 helpers.iterableToArrayLimitLoose = helper("7.0.0-beta.0")`
   export default function _iterableToArrayLimitLoose(arr, i) {
-    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+    var _m = extractIteratorMethod(arr);
+    if (!_m) return;
 
     var _arr = [];
-    for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
+    for (var _iterator = _m.call(arr), _step; !(_step = _iterator.next()).done;) {
       _arr.push(_step.value);
       if (i && _arr.length === i) break;
     }
@@ -1088,6 +1099,7 @@ helpers.nonIterableRest = helper("7.0.0-beta.0")`
 
 helpers.createForOfIteratorHelper = helper("7.9.0")`
   import unsupportedIterableToArray from "unsupportedIterableToArray";
+  import extractIteratorMethod from "extractIteratorMethod";
 
   // s: start (create the iterator)
   // n: next
@@ -1096,7 +1108,8 @@ helpers.createForOfIteratorHelper = helper("7.9.0")`
 
   export default function _createForOfIteratorHelper(o, allowArrayLike) {
     var it;
-    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    var itM = extractIteratorMethod(o);
+    if (!itM) {
       // Fallback for engines without symbol support
       if (
         Array.isArray(o) ||
@@ -1124,7 +1137,7 @@ helpers.createForOfIteratorHelper = helper("7.9.0")`
 
     return {
       s: function() {
-        it = o[Symbol.iterator]();
+        it = itM.call(o);
       },
       n: function() {
         var step = it.next();
@@ -1148,11 +1161,13 @@ helpers.createForOfIteratorHelper = helper("7.9.0")`
 
 helpers.createForOfIteratorHelperLoose = helper("7.9.0")`
   import unsupportedIterableToArray from "unsupportedIterableToArray";
+  import extractIteratorMethod from "extractIteratorMethod";
 
   export default function _createForOfIteratorHelperLoose(o, allowArrayLike) {
     var it;
+    var itM = extractIteratorMethod(o);
 
-    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    if (!itM) {
       // Fallback for engines without symbol support
       if (
         Array.isArray(o) ||
@@ -1170,7 +1185,7 @@ helpers.createForOfIteratorHelperLoose = helper("7.9.0")`
       throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
     }
 
-    it = o[Symbol.iterator]();
+    it = itM.call(o);
     return it.next.bind(it);
   }
 `;
