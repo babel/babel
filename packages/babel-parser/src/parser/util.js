@@ -7,7 +7,7 @@ import type { Node } from "../types";
 import { lineBreak } from "../util/whitespace";
 import { isIdentifierChar } from "../util/identifier";
 import * as charCodes from "charcodes";
-import { Errors } from "./location";
+import { Errors } from "./error";
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
   node: Node,
@@ -258,6 +258,25 @@ export default class UtilParser extends Tokenizer {
     if (doubleProto >= 0) {
       this.raise(doubleProto, Errors.DuplicateProto);
     }
+  }
+
+  /**
+   * Test if current token is a literal property name
+   * https://tc39.es/ecma262/#prod-LiteralPropertyName
+   * LiteralPropertyName:
+   *   IdentifierName
+   *   StringLiteral
+   *   NumericLiteral
+   *   BigIntLiteral
+   */
+  isLiteralPropertyName(): boolean {
+    return (
+      this.match(tt.name) ||
+      !!this.state.type.keyword ||
+      this.match(tt.string) ||
+      this.match(tt.num) ||
+      this.match(tt.bigint)
+    );
   }
 }
 

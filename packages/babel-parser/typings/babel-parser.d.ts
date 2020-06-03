@@ -114,6 +114,7 @@ export type ParserPlugin =
     'importMeta' |
     'jsx' |
     'logicalAssignment' |
+    'moduleAttributes' |
     'nullishCoalescingOperator' |
     'numericSeparator' |
     'objectRestSpread' |
@@ -122,6 +123,7 @@ export type ParserPlugin =
     'partialApplication' |
     'pipelineOperator' |
     'placeholders' |
+    'privateIn' |
     'throwExpressions' |
     'topLevelAwait' |
     'typescript' |

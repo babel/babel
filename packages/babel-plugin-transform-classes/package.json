@@ -1,21 +1,25 @@
 {
   "name": "@babel/plugin-transform-classes",
-  "version": "7.9.5",
+  "version": "7.10.1",
   "description": "Compile ES2015 classes to ES5",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-classes",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-transform-classes"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-annotate-as-pure": "^7.8.3",
-    "@babel/helper-define-map": "^7.8.3",
-    "@babel/helper-function-name": "^7.9.5",
-    "@babel/helper-optimise-call-expression": "^7.8.3",
-    "@babel/helper-plugin-utils": "^7.8.3",
-    "@babel/helper-replace-supers": "^7.8.6",
-    "@babel/helper-split-export-declaration": "^7.8.3",
+    "@babel/helper-annotate-as-pure": "^7.10.1",
+    "@babel/helper-define-map": "^7.10.1",
+    "@babel/helper-function-name": "^7.10.1",
+    "@babel/helper-optimise-call-expression": "^7.10.1",
+    "@babel/helper-plugin-utils": "^7.10.1",
+    "@babel/helper-replace-supers": "^7.10.1",
+    "@babel/helper-split-export-declaration": "^7.10.1",
     "globals": "^11.1.0"
   },
   "keywords": [
@@ -25,7 +29,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/helper-plugin-test-runner": "^7.8.3"
+    "@babel/core": "^7.10.1",
+    "@babel/helper-plugin-test-runner": "^7.10.1"
   }
 }

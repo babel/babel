@@ -1,3 +1,5 @@
+var _privateStaticMethod = babelHelpers.classPrivateFieldLooseKey("privateStaticMethod");
+
 class Cl {
   static staticMethod2() {
     return babelHelpers.classPrivateFieldLooseBase(Cl, _privateStaticMethod)[_privateStaticMethod]();
@@ -20,8 +22,6 @@ class Cl {
   }
 
 }
-
-var _privateStaticMethod = babelHelpers.classPrivateFieldLooseKey("privateStaticMethod");
 
 var _privateStaticMethod2 = function _privateStaticMethod2() {
   return 1017;

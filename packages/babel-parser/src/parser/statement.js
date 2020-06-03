@@ -3,7 +3,7 @@
 import * as N from "../types";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import ExpressionParser from "./expression";
-import { Errors } from "./location";
+import { Errors } from "./error";
 import {
   isIdentifierChar,
   isIdentifierStart,
@@ -659,9 +659,7 @@ export default class StatementParser extends ExpressionParser {
 
       clause.body =
         // For the smartPipelines plugin: Disable topic references from outer
-        // contexts within the function body. They are permitted in function
-        // default-parameter expressions, which are part of the outer context,
-        // outside of the function body.
+        // contexts within the catch clause's body.
         this.withTopicForbiddingContext(() =>
           // Parse the catch clause's body.
           this.parseBlock(false, false),
@@ -718,9 +716,9 @@ export default class StatementParser extends ExpressionParser {
 
     node.body =
       // For the smartPipelines plugin:
-      // Disable topic references from outer contexts within the function body.
+      // Disable topic references from outer contexts within the with statement's body.
       // They are permitted in function default-parameter expressions, which are
-      // part of the outer context, outside of the function body.
+      // part of the outer context, outside of the with statement's body.
       this.withTopicForbiddingContext(() =>
         // Parse the statement body.
         this.parseStatement("with"),
@@ -1074,8 +1072,8 @@ export default class StatementParser extends ExpressionParser {
     this.parseFunctionParams(node);
 
     // For the smartPipelines plugin: Disable topic references from outer
-    // contexts within the function body. They are permitted in test
-    // expressions, outside of the function body.
+    // contexts within the function body. They are permitted in function
+    // default-parameter expressions, outside of the function body.
     this.withTopicForbiddingContext(() => {
       // Parse the function body.
       this.parseFunctionBodyAndFinish(
@@ -1197,8 +1195,7 @@ export default class StatementParser extends ExpressionParser {
     this.expect(tt.braceL);
 
     // For the smartPipelines plugin: Disable topic references from outer
-    // contexts within the class body. They are permitted in test expressions,
-    // outside of the class body.
+    // contexts within the class body.
     this.withTopicForbiddingContext(() => {
       while (!this.match(tt.braceR)) {
         if (this.eat(tt.semi)) {
@@ -2041,13 +2038,31 @@ export default class StatementParser extends ExpressionParser {
     // import '...'
     node.specifiers = [];
     if (!this.match(tt.string)) {
+      // check if we have a default import like
+      // import React from "react";
       const hasDefault = this.maybeParseDefaultImportSpecifier(node);
+      /* we are checking if we do not have a default import, then it is obvious that we need named imports
+       * import { get } from "axios";
+       * but if we do have a default import
+       * we need to check if we have a comma after that and
+       * that is where this `|| this.eat` condition comes into play
+       */
       const parseNext = !hasDefault || this.eat(tt.comma);
+      // if we do have to parse the next set of specifiers, we first check for star imports
+      // import React, * from "react";
       const hasStar = parseNext && this.maybeParseStarImportSpecifier(node);
+      // now we check if we need to parse the next imports
+      // but only if they are not importing * (everything)
       if (parseNext && !hasStar) this.parseNamedImportSpecifiers(node);
       this.expectContextual("from");
     }
     node.source = this.parseImportSource();
+    // https://github.com/tc39/proposal-module-attributes
+    // parse module attributes if the next token is `with` or ignore and finish the ImportDeclaration node.
+    const attributes = this.maybeParseModuleAttributes();
+    if (attributes) {
+      node.attributes = attributes;
+    }
     this.semicolon();
     return this.finishNode(node, "ImportDeclaration");
   }
@@ -2076,6 +2091,59 @@ export default class StatementParser extends ExpressionParser {
       contextDescription,
     );
     node.specifiers.push(this.finishNode(specifier, type));
+  }
+
+  maybeParseModuleAttributes() {
+    if (this.match(tt._with) && !this.hasPrecedingLineBreak()) {
+      this.expectPlugin("moduleAttributes");
+      this.next();
+    } else {
+      if (this.hasPlugin("moduleAttributes")) return [];
+      return null;
+    }
+    const attrs = [];
+    const attributes = new Set();
+    do {
+      // we are trying to parse a node which has the following syntax
+      // with type: "json"
+      // [with -> keyword], [type -> Identifier], [":" -> token for colon], ["json" -> StringLiteral]
+      const node = this.startNode();
+      node.key = this.parseIdentifier(true);
+
+      // for now we are only allowing `type` as the only allowed module attribute
+      if (node.key.name !== "type") {
+        this.raise(
+          node.key.start,
+          Errors.ModuleAttributeDifferentFromType,
+          node.key.name,
+        );
+      }
+
+      // check if we already have an entry for an attribute
+      // if a duplicate entry is found, throw an error
+      // for now this logic will come into play only when someone declares `type` twice
+      if (attributes.has(node.key.name)) {
+        this.raise(
+          node.key.start,
+          Errors.ModuleAttributesWithDuplicateKeys,
+          node.key.name,
+        );
+      }
+      attributes.add(node.key.name);
+      this.expect(tt.colon);
+      // check if the value set to the module attribute is a string as we only allow string literals
+      if (!this.match(tt.string)) {
+        throw this.unexpected(
+          this.state.start,
+          Errors.ModuleAttributeInvalidValue,
+        );
+      }
+      node.value = this.parseLiteral(this.state.value, "StringLiteral");
+      this.finishNode(node, "ImportAttribute");
+      attrs.push(node);
+    } while (this.eat(tt.comma));
+
+    return attrs;
   }
 
   maybeParseDefaultImportSpecifier(node: N.ImportDeclaration): boolean {

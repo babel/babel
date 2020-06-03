@@ -346,7 +346,11 @@ export default declare((api, opts) => {
           );
           refPropertyPath.forEach(prop => {
             const { node } = prop;
-            ref = t.memberExpression(ref, t.cloneNode(node.key), node.computed);
+            ref = t.memberExpression(
+              ref,
+              t.cloneNode(node.key),
+              node.computed || t.isLiteral(node.key),
+            );
           });
 
           const objectPatternPath = path.findParent(path =>

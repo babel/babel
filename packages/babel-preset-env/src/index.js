@@ -228,6 +228,7 @@ export default declare((api, opts) => {
     targets: optionsTargets,
     useBuiltIns,
     corejs: { version: corejs, proposals },
+    browserslistEnv,
   } = normalizeOptions(opts);
   // TODO: remove this in next major
   let hasUglifyTarget = false;
@@ -257,7 +258,7 @@ export default declare((api, opts) => {
   const targets = getTargets(
     // $FlowIgnore optionsTargets doesn't have an "uglify" property anymore
     (optionsTargets: InputTargets),
-    { ignoreBrowserslistConfig, configPath },
+    { ignoreBrowserslistConfig, configPath, browserslistEnv },
   );
   const include = transformIncludesAndExcludes(optionsInclude);
   const exclude = transformIncludesAndExcludes(optionsExclude);
@@ -300,10 +301,28 @@ export default declare((api, opts) => {
 
   const pluginUseBuiltIns = useBuiltIns !== false;
   const plugins = Array.from(pluginNames)
-    .map(pluginName => [
-      getPlugin(pluginName),
-      { spec, loose, useBuiltIns: pluginUseBuiltIns },
-    ])
+    .map(pluginName => {
+      if (
+        pluginName === "proposal-class-properties" ||
+        pluginName === "proposal-private-methods" ||
+        // This is not included in preset-env yet, but let's keep it here so we
+        // don't forget about it in the future.
+        pluginName === "proposal-private-property-in-object"
+      ) {
+        return [
+          getPlugin(pluginName),
+          {
+            loose: loose
+              ? "#__internal__@babel/preset-env__prefer-true-but-false-is-ok-if-it-prevents-an-error"
+              : "#__internal__@babel/preset-env__prefer-false-but-true-is-ok-if-it-prevents-an-error",
+          },
+        ];
+      }
+      return [
+        getPlugin(pluginName),
+        { spec, loose, useBuiltIns: pluginUseBuiltIns },
+      ];
+    })
     .concat(polyfillPlugins);
 
   if (debug) {

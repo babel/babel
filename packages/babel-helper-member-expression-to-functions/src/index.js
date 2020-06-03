@@ -29,6 +29,55 @@ class AssignmentMemoiser {
   }
 }
 
+function toNonOptional(path, base) {
+  const { node } = path;
+  if (path.isOptionalMemberExpression()) {
+    return t.memberExpression(base, node.property, node.computed);
+  }
+
+  if (path.isOptionalCallExpression()) {
+    const callee = path.get("callee");
+    if (path.node.optional && callee.isOptionalMemberExpression()) {
+      const { object } = callee.node;
+      const context = path.scope.maybeGenerateMemoised(object) || object;
+      callee
+        .get("object")
+        .replaceWith(t.assignmentExpression("=", context, object));
+
+      return t.callExpression(t.memberExpression(base, t.identifier("call")), [
+        context,
+        ...node.arguments,
+      ]);
+    }
+
+    return t.callExpression(base, node.arguments);
+  }
+
+  return path.node;
+}
+
+// Determines if the current path is in a detached tree. This can happen when
+// we are iterating on a path, and replace an ancestor with a new node. Babel
+// doesn't always stop traversing the old node tree, and that can cause
+// inconsistencies.
+function isInDetachedTree(path) {
+  while (path) {
+    if (path.isProgram()) break;
+
+    const { parentPath, container, listKey } = path;
+    const parentNode = parentPath.node;
+    if (listKey) {
+      if (container !== parentNode[listKey]) return true;
+    } else {
+      if (container !== parentNode) return true;
+    }
+
+    path = parentPath;
+  }
+
+  return false;
+}
+
 const handle = {
   memoise() {
     // noop.
@@ -37,9 +86,181 @@ const handle = {
   handle(member) {
     const { node, parent, parentPath } = member;
 
+    if (member.isOptionalMemberExpression()) {
+      // Transforming optional chaining requires we replace ancestors.
+      if (isInDetachedTree(member)) return;
+
+      // We're looking for the end of _this_ optional chain, which is actually
+      // the "rightmost" property access of the chain. This is because
+      // everything up to that property access is "optional".
+      //
+      // Let's take the case of `FOO?.BAR.baz?.qux`, with `FOO?.BAR` being our
+      // member. The "end" to most users would be `qux` property access.
+      // Everything up to it could be skipped if it `FOO` were nullish. But
+      // actually, we can consider the `baz` access to be the end. So we're
+      // looking for the nearest optional chain that is `optional: true`.
+      const endPath = member.find(({ node, parent, parentPath }) => {
+        if (parentPath.isOptionalMemberExpression()) {
+          // We need to check `parent.object` since we could be inside the
+          // computed expression of a `bad?.[FOO?.BAR]`. In this case, the
+          // endPath is the `FOO?.BAR` member itself.
+          return parent.optional || parent.object !== node;
+        }
+        if (parentPath.isOptionalCallExpression()) {
+          // Checking `parent.callee` since we could be in the arguments, eg
+          // `bad?.(FOO?.BAR)`.
+          // Also skip `FOO?.BAR` in `FOO?.BAR?.()` since we need to transform the optional call to ensure proper this
+          return (
+            // In FOO?.#BAR?.(), endPath points the optional call expression so we skip FOO?.#BAR
+            (node !== member.node && parent.optional) || parent.callee !== node
+          );
+        }
+        return true;
+      });
+
+      const rootParentPath = endPath.parentPath;
+      if (
+        rootParentPath.isUpdateExpression({ argument: node }) ||
+        rootParentPath.isAssignmentExpression({ left: node })
+      ) {
+        throw member.buildCodeFrameError(`can't handle assignment`);
+      }
+      if (rootParentPath.isUnaryExpression({ operator: "delete" })) {
+        throw member.buildCodeFrameError(`can't handle delete`);
+      }
+
+      // Now, we're looking for the start of this optional chain, which is
+      // optional to the left of this member.
+      //
+      // Let's take the case of `foo?.bar?.baz.QUX?.BAM`, with `QUX?.BAM` being
+      // our member. The "start" to most users would be `foo` object access.
+      // But actually, we can consider the `bar` access to be the start. So
+      // we're looking for the nearest optional chain that is `optional: true`,
+      // which is guaranteed to be somewhere in the object/callee tree.
+      let startingOptional = member;
+      for (;;) {
+        if (startingOptional.isOptionalMemberExpression()) {
+          if (startingOptional.node.optional) break;
+          startingOptional = startingOptional.get("object");
+          continue;
+        } else if (startingOptional.isOptionalCallExpression()) {
+          if (startingOptional.node.optional) break;
+          startingOptional = startingOptional.get("callee");
+          continue;
+        }
+        // prevent infinite loop: unreachable if the AST is well-formed
+        throw new Error(
+          `Internal error: unexpected ${startingOptional.node.type}`,
+        );
+      }
+
+      const { scope } = member;
+      const startingProp = startingOptional.isOptionalMemberExpression()
+        ? "object"
+        : "callee";
+      const startingNode = startingOptional.node[startingProp];
+      const baseNeedsMemoised = scope.maybeGenerateMemoised(startingNode);
+      const baseRef = baseNeedsMemoised ?? startingNode;
+
+      // Compute parentIsOptionalCall before `startingOptional` is replaced
+      // as `node` may refer to `startingOptional.node` before replaced.
+      const parentIsOptionalCall = parentPath.isOptionalCallExpression({
+        callee: node,
+      });
+      const isParenthesizedMemberCall =
+        parentPath.isCallExpression({ callee: node }) &&
+        node.extra?.parenthesized;
+      startingOptional.replaceWith(toNonOptional(startingOptional, baseRef));
+      if (parentIsOptionalCall) {
+        if (parent.optional) {
+          parentPath.replaceWith(this.optionalCall(member, parent.arguments));
+        } else {
+          parentPath.replaceWith(this.call(member, parent.arguments));
+        }
+      } else if (isParenthesizedMemberCall) {
+        // `(a?.#b)()` to `(a == null ? void 0 : a.#b.bind(a))()`
+        member.replaceWith(this.boundGet(member));
+      } else {
+        member.replaceWith(this.get(member));
+      }
+
+      let regular = member.node;
+      for (let current = member; current !== endPath; ) {
+        const { parentPath } = current;
+        // skip transforming `Foo.#BAR?.call(FOO)`
+        if (parentPath === endPath && parentIsOptionalCall && parent.optional) {
+          regular = parentPath.node;
+          break;
+        }
+        regular = toNonOptional(parentPath, regular);
+        current = parentPath;
+      }
+
+      let context;
+      const endParentPath = endPath.parentPath;
+      if (
+        t.isMemberExpression(regular) &&
+        endParentPath.isOptionalCallExpression({
+          callee: endPath.node,
+          optional: true,
+        })
+      ) {
+        const { object } = regular;
+        context = member.scope.maybeGenerateMemoised(object);
+        if (context) {
+          regular.object = t.assignmentExpression("=", context, object);
+        }
+      }
+
+      endPath.replaceWith(
+        t.conditionalExpression(
+          t.logicalExpression(
+            "||",
+            t.binaryExpression(
+              "===",
+              baseNeedsMemoised
+                ? t.assignmentExpression("=", baseRef, startingNode)
+                : baseRef,
+              t.nullLiteral(),
+            ),
+            t.binaryExpression(
+              "===",
+              t.cloneNode(baseRef),
+              scope.buildUndefinedNode(),
+            ),
+          ),
+          scope.buildUndefinedNode(),
+          regular,
+        ),
+      );
+
+      if (context) {
+        const endParent = endParentPath.node;
+        endParentPath.replaceWith(
+          t.optionalCallExpression(
+            t.optionalMemberExpression(
+              endParent.callee,
+              t.identifier("call"),
+              false,
+              true,
+            ),
+            [context, ...endParent.arguments],
+            false,
+          ),
+        );
+      }
+
+      return;
+    }
+
     // MEMBER++   ->   _set(MEMBER, (_ref = (+_get(MEMBER))) + 1), _ref
     // ++MEMBER   ->   _set(MEMBER, (+_get(MEMBER)) + 1)
     if (parentPath.isUpdateExpression({ argument: node })) {
+      if (this.simpleSet) {
+        member.replaceWith(this.simpleSet(member));
+        return;
+      }
+
       const { operator, prefix } = parent;
 
       // Give the state handler a chance to memoise the member, since we'll
@@ -72,6 +293,11 @@ const handle = {
     // MEMBER = VALUE   ->   _set(MEMBER, VALUE)
     // MEMBER += VALUE   ->   _set(MEMBER, _get(MEMBER) + VALUE)
     if (parentPath.isAssignmentExpression({ left: node })) {
+      if (this.simpleSet) {
+        member.replaceWith(this.simpleSet(member));
+        return;
+      }
+
       const { operator, right } = parent;
       let value = right;
 
@@ -92,11 +318,15 @@ const handle = {
       return;
     }
 
-    // MEMBER(ARGS)   ->   _call(MEMBER, ARGS)
+    // MEMBER(ARGS) -> _call(MEMBER, ARGS)
     if (parentPath.isCallExpression({ callee: node })) {
-      const { arguments: args } = parent;
+      parentPath.replaceWith(this.call(member, parent.arguments));
+      return;
+    }
 
-      parentPath.replaceWith(this.call(member, args));
+    // MEMBER?.(ARGS) -> _optionalCall(MEMBER, ARGS)
+    if (parentPath.isOptionalCallExpression({ callee: node })) {
+      parentPath.replaceWith(this.optionalCall(member, parent.arguments));
       return;
     }
 

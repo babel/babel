@@ -5,6 +5,7 @@ const normalizeOptions = require("../lib/normalize-options.js");
 const {
   checkDuplicateIncludeExcludes,
   validateBoolOption,
+  validateStringOption,
   validateModulesOption,
   validateUseBuiltInsOption,
   normalizePluginName,
@@ -187,6 +188,28 @@ describe("normalize-options", () => {
     it("array option is invalid", () => {
       expect(() => {
         validateBoolOption("test", [], false);
+      }).toThrow();
+    });
+  });
+
+  describe("validateStringOption", () => {
+    it("`undefined` option default", () => {
+      expect(validateStringOption("test", undefined, "default")).toBe(
+        "default",
+      );
+    });
+
+    it("`value` option returns value", () => {
+      expect(validateStringOption("test", "value", "default")).toBe("value");
+    });
+
+    it("no default returns undefined", () => {
+      expect(validateStringOption("test", undefined)).toBe(undefined);
+    });
+
+    it("array option is invalid", () => {
+      expect(() => {
+        validateStringOption("test", [], "default");
       }).toThrow();
     });
   });

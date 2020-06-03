@@ -33,6 +33,7 @@ Using plugins:
   transform-computed-properties { "ie":"11" }
   transform-for-of { "firefox":"50", "ie":"11" }
   transform-sticky-regex { "ie":"11" }
+  transform-unicode-escapes { "firefox":"50", "ie":"11" }
   transform-unicode-regex { "ie":"11" }
   transform-spread { "ie":"11" }
   transform-destructuring { "firefox":"50", "ie":"11" }

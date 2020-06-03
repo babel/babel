@@ -39,6 +39,7 @@ Using plugins:
   transform-computed-properties { "ie":"11" }
   transform-for-of { "ie":"11" }
   transform-sticky-regex { "ie":"11" }
+  transform-unicode-escapes { "ie":"11" }
   transform-unicode-regex { "ie":"11" }
   transform-spread { "ie":"11" }
   transform-destructuring { "ie":"11" }

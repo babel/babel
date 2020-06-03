@@ -179,7 +179,22 @@ export function ImportDeclaration(node: Object) {
   }
 
   this.print(node.source, node);
+
+  if (node.attributes?.length) {
+    this.space();
+    this.word("with");
+    this.space();
+    this.printList(node.attributes, node);
+  }
+
   this.semicolon();
+}
+
+export function ImportAttribute(node: Object) {
+  this.print(node.key);
+  this.token(":");
+  this.space();
+  this.print(node.value);
 }
 
 export function ImportNamespaceSpecifier(node: Object) {
