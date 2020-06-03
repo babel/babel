@@ -125,8 +125,19 @@ const handle = {
       ) {
         throw member.buildCodeFrameError(`can't handle assignment`);
       }
-      if (rootParentPath.isUnaryExpression({ operator: "delete" })) {
-        throw member.buildCodeFrameError(`can't handle delete`);
+      const isDeleteOperation = rootParentPath.isUnaryExpression({
+        operator: "delete",
+      });
+      if (
+        isDeleteOperation &&
+        endPath.isOptionalMemberExpression() &&
+        endPath.get("property").isPrivateName()
+      ) {
+        // @babel/parser will throw error on `delete obj?.#x`.
+        // This error serves as fallback when `delete obj?.#x` is constructed from babel types
+        throw member.buildCodeFrameError(
+          `can't delete a private class element`,
+        );
       }
 
       // Now, we're looking for the start of this optional chain, which is
@@ -211,7 +222,13 @@ const handle = {
         }
       }
 
-      endPath.replaceWith(
+      let replacementPath = endPath;
+      if (isDeleteOperation) {
+        replacementPath = endParentPath;
+        regular = endParentPath.node;
+      }
+
+      replacementPath.replaceWith(
         t.conditionalExpression(
           t.logicalExpression(
             "||",
@@ -228,11 +245,14 @@ const handle = {
               scope.buildUndefinedNode(),
             ),
           ),
-          scope.buildUndefinedNode(),
+          isDeleteOperation
+            ? t.booleanLiteral(true)
+            : scope.buildUndefinedNode(),
           regular,
         ),
       );
 
+      // context and isDeleteOperation can not be both truthy
       if (context) {
         const endParent = endParentPath.node;
         endParentPath.replaceWith(
