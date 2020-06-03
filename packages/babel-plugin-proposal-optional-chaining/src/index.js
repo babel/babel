@@ -27,9 +27,10 @@ export default declare((api, options) => {
         // maybeParenthesized points to the outermost parenthesizedExpression
         // or the path itself
         let maybeParenthesized = path;
-        const parentPath = path.findParent(
-          p => !(p.isParenthesizedExpression() && (maybeParenthesized = p)),
-        );
+        const parentPath = path.findParent(p => {
+          if (!p.isParenthesizedExpression()) return true;
+          maybeParenthesized = p;
+        });
         let isDeleteOperation = false;
         const parentIsCall =
           parentPath.isCallExpression({ callee: maybeParenthesized.node }) &&
