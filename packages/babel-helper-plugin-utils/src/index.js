@@ -90,6 +90,6 @@ function throwVersionError(range, version) {
       code: "BABEL_VERSION_UNSUPPORTED",
       version,
       range,
-    }: any),
+    }),
   );
 }
