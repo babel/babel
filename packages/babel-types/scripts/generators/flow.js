@@ -146,7 +146,7 @@ lines.push(
   `declare export function cloneWithoutLoc<T>(n: T): T;`,
 
   // comments/
-  `declare type CommentTypeShorthand = 'leading' | 'inner' | 'trailing'`,
+  `declare export type CommentTypeShorthand = 'leading' | 'inner' | 'trailing'`,
   // eslint-disable-next-line max-len
   `declare export function addComment<T: BabelNode>(node: T, type: CommentTypeShorthand, content: string, line?: boolean): T`,
   // eslint-disable-next-line max-len
@@ -193,13 +193,13 @@ lines.push(
   `declare export function getOuterBindingIdentifiers(node: BabelNode, duplicates: boolean): { [key: string]: ${NODE_PREFIX}Identifier | Array<${NODE_PREFIX}Identifier> }`,
 
   // traverse/
-  `declare type TraversalAncestors = Array<{
+  `declare export type TraversalAncestors = Array<{
     node: BabelNode,
     key: string,
     index?: number,
   }>;
-  declare type TraversalHandler<T> = (BabelNode, TraversalAncestors, T) => void;
-  declare type TraversalHandlers<T> = {
+  declare export type TraversalHandler<T> = (BabelNode, TraversalAncestors, T) => void;
+  declare export type TraversalHandlers<T> = {
     enter?: TraversalHandler<T>,
     exit?: TraversalHandler<T>,
   };`.replace(/(^|\n) {2}/g, "$1"),
