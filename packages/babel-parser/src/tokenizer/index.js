@@ -190,11 +190,14 @@ export default class Tokenizer extends ParserErrors {
   }
 
   nextTokenStart(): number {
-    const thisTokEnd = this.state.pos;
-    skipWhiteSpace.lastIndex = thisTokEnd;
+    return this.nextTokenStartSince(this.state.pos);
+  }
+
+  nextTokenStartSince(pos: number): number {
+    skipWhiteSpace.lastIndex = pos;
     const skip = skipWhiteSpace.exec(this.input);
     // $FlowIgnore: The skipWhiteSpace ensures to match any string
-    return thisTokEnd + skip[0].length;
+    return pos + skip[0].length;
   }
 
   lookaheadCharCode(): number {
