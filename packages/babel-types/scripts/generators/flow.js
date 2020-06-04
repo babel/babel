@@ -129,7 +129,7 @@ for (let i = 0; i < t.TYPES.length; i++) {
 lines.push(
   // builders/
   // eslint-disable-next-line max-len
-  `declare export function createTypeAnnotationBasedOnTypeof(type: 'string' | 'number' | 'undefined' | 'boolean' | 'function' | 'object' | 'symbol'): ${NODE_PREFIX}TypeAnnotation`,
+  `declare export function createTypeAnnotationBasedOnTypeof(type: 'string' | 'number' | 'void' | 'boolean' | 'function' | 'object' | 'symbol'): ${NODE_PREFIX}TypeAnnotation`,
   // eslint-disable-next-line max-len
   `declare export function createUnionTypeAnnotation(types: Array<${NODE_PREFIX}FlowType>): ${NODE_PREFIX}UnionTypeAnnotation`,
   // eslint-disable-next-line max-len
@@ -227,7 +227,6 @@ lines.push(
   `declare export function isScope(node: BabelNode, parent: BabelNode): boolean`,
   `declare export function isSpecifierDefault(specifier: BabelNodeModuleSpecifier): boolean`,
   `declare export function isType(nodetype: ?string, targetType: string): boolean`,
-  `declare export function isValidES3Identifier(name: string): boolean`,
   `declare export function isValidES3Identifier(name: string): boolean`,
   `declare export function isValidIdentifier(name: string): boolean`,
   `declare export function isVar(node: BabelNode): boolean`,
