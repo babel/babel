@@ -1925,6 +1925,17 @@ export default class StatementParser extends ExpressionParser {
       if (isDefault) {
         // Default exports
         this.checkDuplicateExports(node, "default");
+        if (this.hasPlugin("exportDefaultFrom")) {
+          const declaration = ((node: any): N.ExportDefaultDeclaration)
+            .declaration;
+          if (
+            declaration.type === "Identifier" &&
+            declaration.name === "from" &&
+            declaration.end - declaration.start === 4 // does not contain escape
+          ) {
+            this.raise(declaration.start, Errors.ExportDefaultFromAsIdentifier);
+          }
+        }
       } else if (node.specifiers && node.specifiers.length) {
         // Named exports
         for (const specifier of node.specifiers) {

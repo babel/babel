@@ -42,6 +42,8 @@ export const ErrorMessages = Object.freeze({
   DuplicateRegExpFlags: "Duplicate regular expression flag",
   ElementAfterRest: "Rest element must be last element",
   EscapedCharNotAnIdentifier: "Invalid Unicode escape",
+  ExportDefaultFromAsIdentifier:
+    "'from' is not allowed as an identifier after 'export default'",
   ForInOfLoopInitializer:
     "%0 loop variable declaration may not have an initializer",
   GeneratorInSingleStatementContext:
