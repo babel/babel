@@ -1931,7 +1931,8 @@ export default class StatementParser extends ExpressionParser {
           if (
             declaration.type === "Identifier" &&
             declaration.name === "from" &&
-            declaration.end - declaration.start === 4 // does not contain escape
+            declaration.end - declaration.start === 4 && // does not contain escape
+            !declaration.extra?.parenthesized
           ) {
             this.raise(declaration.start, Errors.ExportDefaultFromAsIdentifier);
           }
