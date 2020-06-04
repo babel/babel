@@ -251,6 +251,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.parseExport(node);
     }
 
+    isExportDefaultSpecifier(): boolean {
+      if (this.match(tt._default)) {
+        const next = this.nextTokenStart();
+        if (this.isUnparsedContextual(next, "from")) {
+          if (
+            this.input.substr(this.nextTokenStartSince(next + 4), 2) ===
+            tt.placeholder.label
+          ) {
+            return true;
+          }
+        }
+      }
+      return super.isExportDefaultSpecifier();
+    }
+
     maybeParseExportDefaultSpecifier(node: N.Node): boolean {
       if (node.specifiers && node.specifiers.length > 0) {
         // "export %%NAME%%" has already been parsed by #parseExport.

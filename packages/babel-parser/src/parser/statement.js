@@ -1857,10 +1857,24 @@ export default class StatementParser extends ExpressionParser {
     }
 
     const next = this.nextTokenStart();
-    return (
+    const hasFrom = this.isUnparsedContextual(next, "from");
+    if (
       this.input.charCodeAt(next) === charCodes.comma ||
-      this.isUnparsedContextual(next, "from")
-    );
+      (this.match(tt.name) && hasFrom)
+    ) {
+      return true;
+    }
+    // lookahead again when `export default from` is seen
+    if (this.match(tt._default) && hasFrom) {
+      const nextAfterFrom = this.input.charCodeAt(
+        this.nextTokenStartSince(next + 4),
+      );
+      return (
+        nextAfterFrom === charCodes.quotationMark ||
+        nextAfterFrom === charCodes.apostrophe
+      );
+    }
+    return false;
   }
 
   parseExportFrom(node: N.ExportNamedDeclaration, expect?: boolean): void {
