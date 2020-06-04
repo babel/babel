@@ -256,8 +256,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const next = this.nextTokenStart();
         if (this.isUnparsedContextual(next, "from")) {
           if (
-            this.input.substr(this.nextTokenStartSince(next + 4), 2) ===
-            tt.placeholder.label
+            this.input.startsWith(
+              tt.placeholder.label,
+              this.nextTokenStartSince(next + 4),
+            )
           ) {
             return true;
           }
