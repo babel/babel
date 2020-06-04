@@ -128,6 +128,9 @@ export default declare((api, options) => {
           }
           let replacement = replacementPath.node;
           // Ensure (a?.b)() has proper `this`
+          // The `parentIsCall` is constant within loop, we should check i === 0
+          // to ensure that it is only applied to the first optional chain element
+          // i.e. `?.b` in `(a?.b.c)()`
           if (i === 0 && parentIsCall) {
             // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
             const { object } = replacement;
