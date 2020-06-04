@@ -24,8 +24,20 @@ export default declare((api, options) => {
     visitor: {
       "OptionalCallExpression|OptionalMemberExpression"(path) {
         const { scope } = path;
-        const parentPath = path.findParent(p => !p.isParenthesizedExpression());
+        // maybeParenthesized points to the outermost parenthesizedExpression
+        // or the path itself
+        let maybeParenthesized = path;
+        const parentPath = path.findParent(p => {
+          if (!p.isParenthesizedExpression()) return true;
+          maybeParenthesized = p;
+        });
         let isDeleteOperation = false;
+        const parentIsCall =
+          parentPath.isCallExpression({ callee: maybeParenthesized.node }) &&
+          // note that the first condition must implies that `path.optional` is `true`,
+          // otherwise the parentPath should be an OptionalCallExpressioin
+          path.isOptionalMemberExpression();
+
         const optionals = [];
 
         let optionalPath = path;
@@ -116,14 +128,10 @@ export default declare((api, options) => {
           }
           let replacement = replacementPath.node;
           // Ensure (a?.b)() has proper `this`
-          if (
-            t.isMemberExpression(replacement) &&
-            (replacement.extra?.parenthesized ||
-              // if replacementPath.parentPath does not equal parentPath,
-              // it must be unwrapped from parenthesized expression.
-              replacementPath.parentPath !== parentPath) &&
-            parentPath.isCallExpression()
-          ) {
+          // The `parentIsCall` is constant within loop, we should check i === 0
+          // to ensure that it is only applied to the first optional chain element
+          // i.e. `?.b` in `(a?.b.c)()`
+          if (i === 0 && parentIsCall) {
             // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
             const { object } = replacement;
             let baseRef;

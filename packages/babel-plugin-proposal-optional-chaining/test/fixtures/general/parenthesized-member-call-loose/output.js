@@ -13,7 +13,7 @@ class Foo {
   }
 
   test() {
-    var _o$Foo$self$getSelf, _o$Foo, _o$Foo$self$getSelf2, _o$Foo$self, _fn$Foo$self$getSelf, _fn, _fn$Foo, _fn$Foo$self$getSelf2, _fn$Foo$self, _fn$Foo$self2;
+    var _o$Foo$self$getSelf, _o$Foo, _o$Foo$self$getSelf2, _o$Foo$self, _fn$Foo$self$getSelf, _fn, _fn$Foo, _fn$Foo$self$getSelf2, _fn$Foo$self;
 
     const Foo = this;
     const o = {
@@ -32,8 +32,8 @@ class Foo {
     (o == null ? void 0 : o.Foo.m.bind(o.Foo))().toString();
     ((_o$Foo$self$getSelf = ((_o$Foo = o.Foo) == null ? void 0 : _o$Foo.self.getSelf.bind(_o$Foo.self))()) == null ? void 0 : _o$Foo$self$getSelf.m.bind(_o$Foo$self$getSelf))();
     ((_o$Foo$self$getSelf2 = ((_o$Foo$self = o.Foo.self) == null ? void 0 : _o$Foo$self.getSelf.bind(_o$Foo$self))()) == null ? void 0 : _o$Foo$self$getSelf2.m.bind(_o$Foo$self$getSelf2))();
-    ((_fn$Foo$self$getSelf = ((_fn = fn()) == null ? void 0 : (_fn$Foo = _fn.Foo) == null ? void 0 : _fn$Foo.self.getSelf.bind(_fn.Foo.self))()) == null ? void 0 : _fn$Foo$self$getSelf.m.bind(_fn$Foo$self$getSelf))();
-    ((_fn$Foo$self$getSelf2 = (fn == null ? void 0 : (_fn$Foo$self2 = _fn$Foo$self = fn().Foo.self) == null ? void 0 : _fn$Foo$self2.getSelf.bind(_fn$Foo$self))()) == null ? void 0 : _fn$Foo$self$getSelf2.m.bind(_fn$Foo$self$getSelf2))();
+    ((_fn$Foo$self$getSelf = ((_fn = fn()) == null ? void 0 : (_fn$Foo = _fn.Foo) == null ? void 0 : _fn$Foo.self.getSelf.bind(_fn$Foo.self))()) == null ? void 0 : _fn$Foo$self$getSelf.m.bind(_fn$Foo$self$getSelf))();
+    ((_fn$Foo$self$getSelf2 = (fn == null ? void 0 : (_fn$Foo$self = fn().Foo.self) == null ? void 0 : _fn$Foo$self.getSelf.bind(_fn$Foo$self))()) == null ? void 0 : _fn$Foo$self$getSelf2.m.bind(_fn$Foo$self$getSelf2))();
   }
 
 }
