@@ -32,12 +32,12 @@ defineType("BindExpression", {
   fields: !process.env.BABEL_TYPES_8_BREAKING
     ? {
         object: {
-          validate: Object.assign(() => true, {
+          validate: Object.assign(() => {}, {
             oneOfNodeTypes: ["Expression"],
           }),
         },
         callee: {
-          validate: Object.assign(() => true, {
+          validate: Object.assign(() => {}, {
             oneOfNodeTypes: ["Expression"],
           }),
         },

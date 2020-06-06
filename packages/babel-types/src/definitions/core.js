@@ -285,7 +285,7 @@ defineType("File", {
     },
     tokens: {
       // todo(ts): add Token type
-      validate: assertEach(Object.assign(() => true, { type: "any" })),
+      validate: assertEach(Object.assign(() => {}, { type: "any" })),
       optional: true,
     },
   },
