@@ -1,4 +1,7 @@
-// todo generate this
+/*
+ * This file is auto-generated! Do not modify it directly.
+ * To re-generate run 'make build'
+ */
 import * as t from "@babel/types";
 
 export interface VirtualTypeAliases {
