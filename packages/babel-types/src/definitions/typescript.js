@@ -421,7 +421,7 @@ defineType("TSImportType", {
 });
 
 defineType("TSImportEqualsDeclaration", {
-  aliases: ["Statement"],
+  aliases: ["Statement", "Declaration"],
   visitor: ["id", "moduleReference"],
   fields: {
     isExport: validate(bool),
@@ -457,7 +457,7 @@ defineType("TSExportAssignment", {
 });
 
 defineType("TSNamespaceExportDeclaration", {
-  aliases: ["Statement"],
+  aliases: ["Statement", "Declaration"],
   visitor: ["id"],
   fields: {
     id: validateType("Identifier"),
