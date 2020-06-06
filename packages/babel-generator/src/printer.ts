@@ -28,7 +28,7 @@ export type Format = {
   decoratorsBeforeExport: boolean;
   recordAndTupleSyntaxType: "bar" | "hash";
   jsescOption;
-  jsonCompatibleStrings;
+  jsonCompatibleStrings?;
 };
 
 class Printer {
