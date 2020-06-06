@@ -281,10 +281,12 @@ defineType("File", {
     },
     comments: {
       validate: assertEach(assertNodeType("Comment")),
+      optional: true,
     },
     tokens: {
       // todo(ts): add Token type
       validate: assertEach(Object.assign(() => true, { type: "any" })),
+      optional: true,
     },
   },
 });
