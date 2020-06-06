@@ -5,7 +5,7 @@ import type * as types from "../types";
  * Append a node to a member expression.
  */
 export default function appendToMemberExpression<
-  T extends Pick<types.MemberExpression, "object" | "property">
+  T extends types.MemberExpression
 >(
   member: T,
   append: types.MemberExpression["property"],
@@ -14,11 +14,9 @@ export default function appendToMemberExpression<
   member.object = memberExpression(
     member.object,
     member.property,
-    // @ts-ignore
     member.computed,
   );
   member.property = append;
-  // @ts-ignore
   member.computed = !!computed;
 
   return member;

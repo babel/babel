@@ -26,7 +26,6 @@ export default function removeProperties(
 
   const symbols: Array<symbol> = Object.getOwnPropertySymbols(node);
   for (const sym of symbols) {
-    // @ts-ignore
     node[sym] = null;
   }
 }

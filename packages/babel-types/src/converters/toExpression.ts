@@ -43,10 +43,10 @@ export default function toExpression(
   // ClassDeclaration -> ClassExpression
   // FunctionDeclaration, ObjectMethod, ClassMethod -> FunctionExpression
   if (isClass(node)) {
-    // @ts-ignore
+    // @ts-expect-error todo(flow->ts): avoid type unsafe mutations
     node.type = "ClassExpression";
   } else if (isFunction(node)) {
-    // @ts-ignore
+    // @ts-expect-error todo(flow->ts): avoid type unsafe mutations
     node.type = "FunctionExpression";
   }
 

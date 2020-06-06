@@ -131,7 +131,7 @@ export { ${type} as ${formatedBuilderName} };\n`;
   return output;
 };
 
-module.exports.legacy = function generateLegacyBuilders() {
+module.exports.generateDeprecatedBuilders = function generateDeprecatedBuilders() {
   let output = `/*
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'

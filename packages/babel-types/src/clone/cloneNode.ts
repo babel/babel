@@ -95,7 +95,6 @@ export default function cloneNode<T extends types.Node>(
   }
   if (has(node, "extra")) {
     newNode.extra = {
-      // @ts-ignore
       ...node.extra,
     };
   }

@@ -14,13 +14,7 @@ import {
 } from "../builders/generated";
 import cloneNode from "../clone/cloneNode";
 import type * as types from "../types";
-
-// NOTE: this actually uses Scope from @babel/traverse, but we can't add a dependency on its types,
-// as they live in @types. Declare the structural subset that is required.
-type Scope = {
-  push(value: { id: types.LVal; kind: "var"; init?: types.Expression }): void;
-  buildUndefinedNode(): types.Node;
-};
+import type { Scope } from "./Scope";
 
 export default function gatherSequenceExpressions(
   nodes: ReadonlyArray<types.Node>,

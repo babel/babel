@@ -23,7 +23,7 @@ const deprecatedBuildersFile = path.join(
 );
 writeFile(
   deprecatedBuildersFile,
-  format(generateBuilders.legacy(), deprecatedBuildersFile)
+  format(generateBuilders.generateDeprecatedBuilders(), deprecatedBuildersFile)
 );
 console.log(`  ${chalk.green("✔")} Generated deprecated builders`);
 

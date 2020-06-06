@@ -9,7 +9,7 @@ export default function isSpecifierDefault(
 ): boolean {
   return (
     isImportDefaultSpecifier(specifier) ||
-    // @ts-ignore
+    // @ts-expect-error todo(flow->ts): stricter type for specifier
     isIdentifier(specifier.imported || specifier.exported, {
       name: "default",
     })

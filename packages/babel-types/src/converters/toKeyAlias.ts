@@ -9,7 +9,7 @@ export default function toKeyAlias(
 ): string {
   let alias;
 
-  // @ts-ignore
+  // @ts-expect-error todo(flow->ts): maybe add node type check before checking `.kind`
   if (node.kind === "method") {
     return toKeyAlias.increment() + "";
   } else if (isIdentifier(key)) {
@@ -20,12 +20,12 @@ export default function toKeyAlias(
     alias = JSON.stringify(removePropertiesDeep(cloneNode(key)));
   }
 
-  // @ts-ignore
+  // @ts-expect-error todo(flow->ts): maybe add node type check before checking `.computed`
   if (node.computed) {
     alias = `[${alias}]`;
   }
 
-  // @ts-ignore
+  // @ts-expect-error todo(flow->ts): maybe add node type check before checking `.static`
   if (node.static) {
     alias = `static:${alias}`;
   }

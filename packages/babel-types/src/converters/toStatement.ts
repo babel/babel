@@ -80,7 +80,7 @@ export default function toStatement(
     return expressionStatement(node);
   }
 
-  // @ts-ignore
+  // @ts-expect-error todo(flow->ts): node.id might be missing
   if (mustHaveId && !node.id) {
     newType = false;
   }
@@ -93,9 +93,8 @@ export default function toStatement(
     }
   }
 
-  // @ts-ignore
   node.type = newType;
 
-  // @ts-ignore
+  // @ts-expect-error todo(flow->ts) refactor to avoid type unsafe mutations like reassigning node type above
   return node;
 }

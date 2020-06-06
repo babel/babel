@@ -7,7 +7,7 @@ import type * as types from "../../types";
  * returns a `UnionTypeAnnotation` node containing them.
  */
 export default function createFlowUnionType<T extends types.FlowType>(
-  types: [T] | Array<types.FlowType>,
+  types: [T] | Array<T>,
 ): T | types.UnionTypeAnnotation {
   const flattened = removeTypeDuplicates(types);
 
