@@ -29,7 +29,6 @@ defineType("AwaitExpression", {
 defineType("BindExpression", {
   visitor: ["object", "callee"],
   aliases: ["Expression"],
-  // todo(ts): if this is breaking change - what node types should be here for old version?
   fields: !process.env.BABEL_TYPES_8_BREAKING
     ? {
         object: {
