@@ -58,7 +58,7 @@ function evaluateCached(path: NodePath, state) {
       return;
     }
   } else {
-    // todo: move type annotation to state
+    // todo: create type annotation for state instead
     const item: { resolved: boolean; value?: any } = { resolved: false };
     seen.set(node, item);
 
@@ -101,7 +101,7 @@ function _evaluate(path: NodePath, state) {
   ) {
     const object = path.get("tag.object") as NodePath;
     const {
-      // @ts-ignore todo: improve babel-types
+      // @ts-expect-error todo(flow->ts): possible bug, object is can be any expression and so name might be undefined
       node: { name },
     } = object;
     const property = path.get("tag.property") as NodePath;
@@ -109,9 +109,7 @@ function _evaluate(path: NodePath, state) {
     if (
       object.isIdentifier() &&
       name === "String" &&
-      // todo: backport removed unused argument
       !path.scope.getBinding(name) &&
-      // todo: bug fixed a bug
       property.isIdentifier() &&
       property.node.name === "raw"
     ) {
@@ -143,7 +141,7 @@ function _evaluate(path: NodePath, state) {
     const object = path.get("object") as NodePath;
 
     if (object.isLiteral() && property.isIdentifier()) {
-      // @ts-ignore todo: instead of typeof - why not check type of ast node?
+      // @ts-expect-error todo(flow->ts): instead of typeof - would it be better to check type of ast node?
       const value = object.node.value;
       const type = typeof value;
       if (type === "number" || type === "string") {
@@ -153,7 +151,7 @@ function _evaluate(path: NodePath, state) {
   }
 
   if (path.isReferencedIdentifier()) {
-    // @ts-ignore todo: improve type refinements
+    // @ts-expect-error todo(flow->ts): consider separating type refinement and check for reference
     const binding = path.scope.getBinding(path.node.name);
 
     if (binding && binding.constantViolations.length > 0) {
@@ -167,13 +165,13 @@ function _evaluate(path: NodePath, state) {
     if (binding?.hasValue) {
       return binding.value;
     } else {
-      // @ts-ignore todo: improve type refinements
+      // @ts-expect-error todo(flow->ts): consider separating type refinement and check for reference
       if (path.node.name === "undefined") {
         return binding ? deopt(binding.path, state) : undefined;
-        // @ts-ignore todo: improve type refinements
+        // @ts-expect-error todo(flow->ts): consider separating type refinement and check for reference
       } else if (path.node.name === "Infinity") {
         return binding ? deopt(binding.path, state) : Infinity;
-        // @ts-ignore todo: improve type refinements
+        // @ts-expect-error todo(flow->ts): consider separating type refinement and check for reference
       } else if (path.node.name === "NaN") {
         return binding ? deopt(binding.path, state) : NaN;
       }
@@ -239,8 +237,9 @@ function _evaluate(path: NodePath, state) {
       if (prop.isObjectMethod() || prop.isSpreadElement()) {
         return deopt(prop, state);
       }
-      const keyPath = prop.get("key");
+      const keyPath: any = prop.get("key");
       let key = keyPath;
+      // @ts-expect-error todo(flow->ts): type refinement issues ObjectMethod and SpreadElement somehow not excluded
       if (prop.node.computed) {
         key = key.evaluate();
         if (!key.confident) {
@@ -252,7 +251,8 @@ function _evaluate(path: NodePath, state) {
       } else {
         key = key.node.value;
       }
-      const valuePath = prop.get("value");
+      // todo(flow->ts): remove typecast
+      const valuePath = prop.get("value") as NodePath;
       let value = valuePath.evaluate();
       if (!value.confident) {
         return deopt(value.deopt, state);
@@ -347,7 +347,6 @@ function _evaluate(path: NodePath, state) {
     // Number(1);
     if (
       callee.isIdentifier() &&
-      // todo: backport removed unnecessary argument
       !path.scope.getBinding(callee.node.name) &&
       VALID_CALLEES.indexOf(callee.node.name) >= 0
     ) {
@@ -372,10 +371,10 @@ function _evaluate(path: NodePath, state) {
 
       // "abc".charCodeAt(4)
       if (object.isLiteral() && property.isIdentifier()) {
-        // @ts-ignore todo: use ast node types instead
+        // @ts-expect-error todo(flow->ts): consider checking ast node type instead of value type (StringLiteral and NumberLiteral)
         const type = typeof object.node.value;
         if (type === "string" || type === "number") {
-          // @ts-ignore todo:
+          // @ts-expect-error todo(flow->ts): consider checking ast node type instead of value type
           context = object.node.value;
           func = context[property.node.name];
         }

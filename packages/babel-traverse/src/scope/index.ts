@@ -33,19 +33,25 @@ function gatherNodeParts(node: t.Node, parts: any[]) {
         ) {
           gatherNodeParts(node.declaration, parts);
         }
-      } else if (
-        t.isExportSpecifier(node) ||
-        t.isImportDefaultSpecifier(node) ||
-        t.isImportNamespaceSpecifier(node) ||
-        t.isImportSpecifier(node)
-      ) {
+      } else if (t.isModuleSpecifier(node)) {
+        // todo(flow->ts): should condition instead be:
+        //    ```
+        //    t.isExportSpecifier(node) ||
+        //    t.isImportDefaultSpecifier(node) ||
+        //    t.isImportNamespaceSpecifier(node) ||
+        //    t.isImportSpecifier(node)
+        //    ```
+        //    allowing only nodes with `.local`?
+        // @ts-expect-error todo(flow->ts)
         gatherNodeParts(node.local, parts);
-      } else if (
-        t.isLiteral(node) &&
-        !t.isNullLiteral(node) &&
-        !t.isRegExpLiteral(node) &&
-        !t.isTemplateLiteral(node)
-      ) {
+      } else if (t.isLiteral(node)) {
+        // todo(flow->ts): should condition be stricter to ensure value is there
+        //   ```
+        //   !t.isNullLiteral(node) &&
+        //   !t.isRegExpLiteral(node) &&
+        //   !t.isTemplateLiteral(node)
+        //   ```
+        // @ts-expect-error todo(flow->ts)
         parts.push(node.value);
       }
       break;
@@ -197,7 +203,7 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     if (path.isBlockScoped()) return;
 
     // this will be hit again once we traverse into it after this iteration
-    // @ts-ignore todo: babel-types + export all declaration
+    // @ts-expect-error todo(flow->ts): might be not correct for export all declaration
     if (path.isExportDeclaration() && path.get("declaration").isDeclaration()) {
       return;
     }
@@ -222,7 +228,7 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
   ExportDeclaration: {
     exit(path) {
       const { node, scope } = path;
-      // @ts-ignore todo declaration is not present on ExportAllDeclaration
+      // @ts-expect-error todo(flow->ts) declaration is not present on ExportAllDeclaration
       const declar = node.declaration;
       if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar)) {
         const id = declar.id;
@@ -242,6 +248,7 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
   },
 
   LabeledStatement(path) {
+    // @ts-expect-error todo(flow->ts): possible bug - statement might not have name and so should not be added as global
     path.scope.getProgramParent().addGlobal(path.node);
     path.scope.getBlockParent().registerDeclaration(path);
   },
@@ -624,7 +631,7 @@ export default class Scope {
       helperName = "maybeArrayLike";
     }
 
-    // @ts-ignore todo: node is not valid to use in args, or it should have more narrow type
+    // @ts-expect-error todo(flow->ts): t.Node is not valid to use in args, function argument typeneeds to be clarified
     return t.callExpression(this.hub.addHelper(helperName), args);
   }
 
@@ -705,8 +712,7 @@ export default class Scope {
     for (const name of Object.keys(ids)) {
       parent.references[name] = true;
 
-      //todo:
-      for (const id of ids[name] as Array<any>) {
+      for (const id of ids[name]) {
         const local = this.getOwnBinding(name);
 
         if (local) {
@@ -732,8 +738,8 @@ export default class Scope {
     }
   }
 
-  addGlobal(node: t.Node) {
-    // @ts-ignore todo: stricted node type annotation
+  // todo: flow->ts maybe add more specific type
+  addGlobal(node: Extract<t.Node, { name: string }>) {
     this.globals[node.name] = node;
   }
 
@@ -797,7 +803,7 @@ export default class Scope {
       if (node.kind === "get" || node.kind === "set") return false;
       return true;
     } else if (t.isProperty(node)) {
-      // @ts-ignore todo: computed in not present on private properties
+      // @ts-expect-error todo(flow->ts): computed in not present on private properties
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       return this.isPure(node.value, constantsOnly);
     } else if (t.isUnaryExpression(node)) {
@@ -944,7 +950,7 @@ export default class Scope {
 
     if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
       path.ensureBlock();
-      // @ts-ignore todo: improve types
+      // @ts-expect-error todo(flow->ts): improve types
       path = path.get("body");
     }
 
@@ -957,7 +963,7 @@ export default class Scope {
 
     if (!declarPath) {
       const declar = t.variableDeclaration(kind, []);
-      // @ts-ignore todo: avoid modifying nodes
+      // @ts-expect-error todo(flow->ts): avoid modifying nodes
       declar._blockHoist = blockHoist;
 
       [declarPath] = path.unshiftContainer("body", [declar]);
@@ -1088,11 +1094,12 @@ export default class Scope {
     return this.bindings[name];
   }
 
-  // todo: can be  undefined undefined?
+  // todo: return probably can be undefined…
   getBindingIdentifier(name: string): t.Identifier {
     return this.getBinding(name)?.identifier;
   }
 
+  // todo: flow->ts return probably can be undefined
   getOwnBindingIdentifier(name: string): t.Identifier {
     const binding = this.bindings[name];
     return binding?.identifier;

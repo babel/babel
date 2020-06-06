@@ -14,7 +14,7 @@ export function toComputedKey(this: NodePath) {
     throw new ReferenceError("todo");
   }
 
-  // @ts-ignore
+  // @ts-expect-error todo(flow->ts) computed does not exist in ClassPrivateProperty
   if (!this.node.computed) {
     if (t.isIdentifier(key)) key = t.stringLiteral(key.name);
   }

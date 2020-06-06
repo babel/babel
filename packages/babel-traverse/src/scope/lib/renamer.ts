@@ -88,7 +88,6 @@ export default class Renamer {
 
     // eslint-disable-next-line no-unreachable
     if (!path.isFunctionExpression() && !path.isClassExpression()) return;
-    // @ts-ignore todo: ^^^
     if (this.binding.kind !== "local") return;
 
     path.node.id = t.identifier(this.oldName);
@@ -135,12 +134,6 @@ export default class Renamer {
       scope.removeOwnBinding(oldName);
       scope.bindings[newName] = binding;
       this.binding.identifier.name = newName;
-    }
-
-    // @ts-ignore todo: dead code
-    if (binding.type === "hoisted") {
-      // https://github.com/babel/babel/issues/2435
-      // todo: hoist and convert function to a let
     }
 
     if (parentDeclar) {

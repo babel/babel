@@ -172,7 +172,7 @@ export default class PathHoister<T extends t.Node = t.Node> {
         for (let i = 0; i < bodies.length; i++) {
           // Don't attach to something that's going to get hoisted,
           // like a default parameter
-          // @ts-ignore todo: avoid mutating the node
+          // @ts-expect-error todo(flow->ts): avoid mutating the node, introducing new fields
           if (bodies[i].node._blockHoist) continue;
           return bodies[i];
         }
@@ -234,7 +234,7 @@ export default class PathHoister<T extends t.Node = t.Node> {
     // generate declaration and insert it to our point
     let uid = attachTo.scope.generateUidIdentifier("ref");
 
-    // @ts-ignore todo: better type for this.path
+    // @ts-expect-error todo(flow->ts): more specific type for this.path
     const declarator = t.variableDeclarator(uid, this.path.node);
 
     const insertFn = this.attachAfter ? "insertAfter" : "insertBefore";

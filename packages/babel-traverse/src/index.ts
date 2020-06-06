@@ -18,7 +18,7 @@ export type TraverseOptions<S = t.Node> =
   | {
       scope?: Scope;
       noScope?: boolean;
-      blacklist?: string[];
+      denylist?: string[];
     }
   | Visitor<S>;
 

@@ -65,6 +65,7 @@ function completionRecordForSwitch(cases, paths) {
 
     if (breakStatement) {
       while (
+        // @ts-expect-error todo(flow->ts) looks incorrect
         breakStatement.key === 0 &&
         breakStatement.parentPath.isBlockStatement()
       ) {
@@ -73,6 +74,7 @@ function completionRecordForSwitch(cases, paths) {
 
       const prevSibling = breakStatement.getPrevSibling();
       if (
+        // @ts-expect-error todo(flow->ts) looks incorrect
         breakStatement.key > 0 &&
         (prevSibling.isExpressionStatement() || prevSibling.isBlockStatement())
       ) {
@@ -122,7 +124,6 @@ export function getCompletionRecords(): NodePath[] {
   return paths;
 }
 
-// todo: string | number
 export function getSibling(key: string): NodePath {
   return NodePath.get({
     parentPath: this.parentPath,

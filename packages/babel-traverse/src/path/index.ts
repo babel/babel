@@ -153,7 +153,6 @@ class NodePath<T extends t.Node = t.Node> {
   }
 
   toString() {
-    // @ts-ignore todo: babel-generator types
     return generator(this.node).code;
   }
 

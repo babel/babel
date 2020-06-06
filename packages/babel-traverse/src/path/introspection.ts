@@ -446,15 +446,13 @@ export function _resolve(
   resolved.push(this);
 
   if (this.isVariableDeclarator()) {
-    // @ts-ignore todo: babel-types
     if (this.get("id").isIdentifier()) {
-      // @ts-ignore todo: babel-types
       return this.get("init").resolve(dangerous, resolved);
     } else {
       // otherwise it's a request for a pattern and that's a bit more tricky
     }
   } else if (this.isReferencedIdentifier()) {
-    // @ts-ignore todo: improve type refinements
+    // @ts-expect-error todo(flow->ts): think about options to improve type refinements
     const binding = this.scope.getBinding(this.node.name);
     if (!binding) return;
 
@@ -471,7 +469,7 @@ export function _resolve(
       return ret;
     }
   } else if (this.isTypeCastExpression()) {
-    // @ts-ignore todo: babel-types
+    // @ ts-ignore todo: babel-types
     return this.get("expression").resolve(dangerous, resolved);
   } else if (dangerous && this.isMemberExpression()) {
     // this is dangerous, as non-direct target assignments will mutate it's state
@@ -480,10 +478,9 @@ export function _resolve(
     const targetKey = this.toComputedKey();
     if (!t.isLiteral(targetKey)) return;
 
-    // @ts-ignore todo: NullLiteral
+    // @ts-expect-error todo(flow->ts): NullLiteral
     const targetName = targetKey.value;
 
-    // @ts-ignore todo: babel-types
     const target = this.get("object").resolve(dangerous, resolved);
 
     if (target.isObjectExpression()) {
