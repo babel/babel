@@ -256,16 +256,11 @@ export function OptionalMemberExpression(node: any, parent: any): boolean {
 
 export { OptionalMemberExpression as OptionalCallExpression };
 
-export function AssignmentExpression(
-  node: any,
-  parent: any,
-  printStack: Array<any>,
-): boolean {
+export function AssignmentExpression(node: any, parent: any): boolean {
   if (t.isObjectPattern(node.left)) {
     return true;
   } else {
-    // @ts-ignore todo: unused call argument printStack
-    return ConditionalExpression(node, parent, printStack);
+    return ConditionalExpression(node, parent);
   }
 }
 

@@ -47,7 +47,6 @@ export default class SourceMap {
       this._rawMappings.forEach(mapping => map.addMapping(mapping), map);
     }
 
-    // @ts-ignore // todo:
     return this._cachedMap.toJSON();
   }
 

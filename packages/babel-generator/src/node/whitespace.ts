@@ -29,7 +29,7 @@ function crawl(
   } else if (t.isFunction(node)) {
     state.hasFunction = true;
   } else if (t.isIdentifier(node)) {
-    // @ts-ignore todo: node.callee should not exist here
+    // @ts-expect-error todo(flow->ts): node.callee is not really expected here…
     state.hasHelper = state.hasHelper || isHelper(node.callee);
   }
 
@@ -73,6 +73,7 @@ function isType(node) {
 export const nodes: {
   [K in string]?: (
     node: K extends t.Node["type"] ? Extract<t.Node, { type: K }> : t.Node,
+    // todo:
     // node: K extends keyof typeof t
     //   ? Extract<typeof t[K], { type: "string" }>
     //   : t.Node,
