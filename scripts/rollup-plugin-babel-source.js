@@ -2,7 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const dirname = path.join(__dirname, "..");
 
-module.exports = function() {
+module.exports = function () {
   return {
     name: "babel-source",
     load(id) {

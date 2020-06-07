@@ -107,7 +107,7 @@ export function runCodeInTestContext(code: string, opts: { filename: string }) {
 }
 
 function wrapPackagesArray(type, names, optionsDir) {
-  return (names || []).map(function(val) {
+  return (names || []).map(function (val) {
     if (typeof val === "string") val = [val];
 
     // relative path (outside of monorepo)
@@ -164,7 +164,7 @@ function run(task) {
       "preset",
       newOpts.presets,
       optionsDir,
-    ).map(function(val) {
+    ).map(function (val) {
       if (val.length > 3) {
         throw new Error(
           "Unexpected extra options " +
@@ -269,7 +269,7 @@ function run(task) {
   if (task.sourceMappings) {
     const consumer = new sourceMap.SourceMapConsumer(result.map);
 
-    task.sourceMappings.forEach(function(mapping) {
+    task.sourceMappings.forEach(function (mapping) {
       const actual = mapping.original;
 
       const expected = consumer.originalPositionFor(mapping.generated);
@@ -342,7 +342,7 @@ const toEqualFile = () => ({
   },
 });
 
-export default function(
+export default function (
   fixturesLoc: string,
   name: string,
   suiteOpts = {},
@@ -354,7 +354,7 @@ export default function(
   for (const testSuite of suites) {
     if (includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
 
-    describe(name + "/" + testSuite.title, function() {
+    describe(name + "/" + testSuite.title, function () {
       jest.addMatchers({
         toEqualFile,
       });
@@ -372,7 +372,7 @@ export default function(
         testFn(
           task.title,
 
-          function() {
+          function () {
             function runTask() {
               run(task);
             }
@@ -391,7 +391,7 @@ export default function(
               // the options object with useless options
               delete task.options.throws;
 
-              assert.throws(runTask, function(err) {
+              assert.throws(runTask, function (err) {
                 return throwMsg === true || err.message.indexOf(throwMsg) >= 0;
               });
             } else {

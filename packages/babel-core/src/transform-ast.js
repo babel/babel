@@ -28,7 +28,7 @@ type TransformFromAst = {
 const transformFromAstRunner = gensync<
   [AstRoot, string, ?InputOptions],
   FileResult | null,
->(function*(ast, code, opts) {
+>(function* (ast, code, opts) {
   const config: ResolvedConfig | null = yield* loadConfig(opts);
   if (config === null) return null;
 

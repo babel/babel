@@ -7,9 +7,9 @@ function parseCode(string) {
   }).program.body[0];
 }
 
-describe("misc helpers", function() {
-  describe("matchesPattern", function() {
-    it("matches explicitly", function() {
+describe("misc helpers", function () {
+  describe("matchesPattern", function () {
+    it("matches explicitly", function () {
       const ast = parseCode("a.b.c.d").expression;
       expect(t.matchesPattern(ast, "a.b.c.d")).toBeTruthy();
       expect(t.matchesPattern(ast, "a.b.c")).toBe(false);
@@ -17,7 +17,7 @@ describe("misc helpers", function() {
       expect(t.matchesPattern(ast, "a.b.c.d.e")).toBe(false);
     });
 
-    it("matches partially", function() {
+    it("matches partially", function () {
       const ast = parseCode("a.b.c.d").expression;
       expect(t.matchesPattern(ast, "a.b.c.d", true)).toBeTruthy();
       expect(t.matchesPattern(ast, "a.b.c", true)).toBeTruthy();
@@ -25,7 +25,7 @@ describe("misc helpers", function() {
       expect(t.matchesPattern(ast, "a.b.c.d.e", true)).toBe(false);
     });
 
-    it("matches string literal expressions", function() {
+    it("matches string literal expressions", function () {
       const ast = parseCode("a['b'].c.d").expression;
       expect(t.matchesPattern(ast, "a.b.c.d")).toBeTruthy();
       expect(t.matchesPattern(ast, "a.b.c")).toBe(false);
@@ -33,7 +33,7 @@ describe("misc helpers", function() {
       expect(t.matchesPattern(ast, "a.b.c.d.e")).toBe(false);
     });
 
-    it("matches string literal expressions partially", function() {
+    it("matches string literal expressions partially", function () {
       const ast = parseCode("a['b'].c.d").expression;
       expect(t.matchesPattern(ast, "a.b.c.d", true)).toBeTruthy();
       expect(t.matchesPattern(ast, "a.b.c", true)).toBeTruthy();

@@ -234,7 +234,7 @@ export default declare((api, opts) => {
         // example: f({...R}, a = R)
         let idInRest = false;
 
-        const IdentifierHandler = function(path, functionScope) {
+        const IdentifierHandler = function (path, functionScope) {
           const name = path.node.name;
           if (
             path.scope.getBinding(name) === functionScope.getBinding(name) &&

@@ -15,7 +15,7 @@ function test(sourceType, opts, initializer, expectedCode) {
     filename: "example" + (sourceType === "module" ? ".mjs" : ".js"),
     babelrc: false,
     plugins: [
-      function({ types: t }) {
+      function ({ types: t }) {
         return {
           pre(file) {
             file.set("helperGenerator", name =>

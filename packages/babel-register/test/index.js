@@ -41,7 +41,7 @@ const defaultOptions = {
   ignoreNodeModules: false,
 };
 
-describe("@babel/register", function() {
+describe("@babel/register", function () {
   let babelRegister;
 
   function setupRegister(config = { babelrc: false }) {
@@ -138,7 +138,7 @@ describe("@babel/register", function() {
       });
     }
 
-    spawn.on("close", function() {
+    spawn.on("close", function () {
       let err;
 
       try {

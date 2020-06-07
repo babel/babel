@@ -22,7 +22,7 @@ function outputFileSync(filePath: string, data: string | Buffer): void {
   fs.writeFileSync(filePath, data);
 }
 
-export default async function({
+export default async function ({
   cliOptions,
   babelOptions,
 }: CmdOptions): Promise<void> {
@@ -143,7 +143,7 @@ export default async function({
   let startTime = null;
 
   const logSuccess = debounce(
-    function() {
+    function () {
       if (startTime === null) {
         // This should never happen, but just in case it's better
         // to ignore the log message rather than making @babel/cli crash.
@@ -189,7 +189,7 @@ export default async function({
   if (cliOptions.watch) {
     const chokidar = util.requireChokidar();
 
-    filenames.forEach(function(filenameOrDir: string): void {
+    filenames.forEach(function (filenameOrDir: string): void {
       const watcher = chokidar.watch(filenameOrDir, {
         persistent: true,
         ignoreInitial: true,
@@ -203,8 +203,8 @@ export default async function({
       // when we are sure that all the files have been compiled.
       let processing = 0;
 
-      ["add", "change"].forEach(function(type: string): void {
-        watcher.on(type, async function(filename: string) {
+      ["add", "change"].forEach(function (type: string): void {
+        watcher.on(type, async function (filename: string) {
           processing++;
           if (startTime === null) startTime = process.hrtime();
 

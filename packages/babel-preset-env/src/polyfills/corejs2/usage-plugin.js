@@ -26,7 +26,7 @@ const NO_DIRECT_POLYFILL_IMPORT = `
   When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
   Please remove the \`import '@babel/polyfill'\` call or use \`useBuiltIns: 'entry'\` instead.`;
 
-export default function(
+export default function (
   { types: t }: { types: Object },
   { include, exclude, polyfillTargets, debug }: InternalPluginOptions,
 ) {
@@ -191,14 +191,14 @@ export default function(
     pre({ path }: { path: NodePath }) {
       this.polyfillsSet = new Set();
 
-      this.addImport = function(builtIn) {
+      this.addImport = function (builtIn) {
         if (!this.polyfillsSet.has(builtIn)) {
           this.polyfillsSet.add(builtIn);
           createImport(path, builtIn);
         }
       };
 
-      this.addUnsupported = function(builtIn) {
+      this.addUnsupported = function (builtIn) {
         const modules = Array.isArray(builtIn) ? builtIn : [builtIn];
         for (const module of modules) {
           if (polyfills.has(module)) {

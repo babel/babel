@@ -124,13 +124,13 @@ export function toComputedObjectFromClass(obj: Object): Object {
 export function toClassObject(mutatorMap: Object): Object {
   const objExpr = t.objectExpression([]);
 
-  Object.keys(mutatorMap).forEach(function(mutatorMapKey) {
+  Object.keys(mutatorMap).forEach(function (mutatorMapKey) {
     const map = mutatorMap[mutatorMapKey];
     const mapNode = t.objectExpression([]);
 
     const propNode = t.objectProperty(map._key, mapNode, map._computed);
 
-    Object.keys(map).forEach(function(key) {
+    Object.keys(map).forEach(function (key) {
       const node = map[key];
       if (key[0] === "_") return;
 
@@ -148,7 +148,7 @@ export function toClassObject(mutatorMap: Object): Object {
 }
 
 export function toDefineObject(mutatorMap: Object): Object {
-  Object.keys(mutatorMap).forEach(function(key) {
+  Object.keys(mutatorMap).forEach(function (key) {
     const map = mutatorMap[key];
     if (map.value) map.writable = t.booleanLiteral(true);
     map.configurable = t.booleanLiteral(true);

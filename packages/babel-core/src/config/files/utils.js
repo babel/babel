@@ -9,7 +9,7 @@ import nodeFs from "fs";
 export function makeStaticFileCache<T>(
   fn: (string, string) => T,
 ): Gensync<[string], T | null> {
-  return (makeStrongCache(function*(
+  return (makeStrongCache(function* (
     filepath: string,
     cache: CacheConfigurator<?void>,
   ): Handler<null | T> {

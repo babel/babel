@@ -211,7 +211,7 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
 /**
  * Load a generic plugin/preset from the given descriptor loaded from the config object.
  */
-const loadDescriptor = makeWeakCache(function*(
+const loadDescriptor = makeWeakCache(function* (
   { value, options, dirname, alias }: UnloadedDescriptor,
   cache: CacheConfigurator<SimpleContext>,
 ): Handler<LoadedDescriptor> {
@@ -277,7 +277,7 @@ function* loadPluginDescriptor(
   );
 }
 
-const instantiatePlugin = makeWeakCache(function*(
+const instantiatePlugin = makeWeakCache(function* (
   { value, options, dirname, alias }: LoadedDescriptor,
   cache: CacheConfigurator<SimpleContext>,
 ): Handler<Plugin> {
@@ -383,7 +383,7 @@ function chain(a, b) {
   const fns = [a, b].filter(Boolean);
   if (fns.length <= 1) return fns[0];
 
-  return function(...args) {
+  return function (...args) {
     for (const fn of fns) {
       fn.apply(this, args);
     }

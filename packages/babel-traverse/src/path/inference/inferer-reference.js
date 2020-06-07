@@ -1,7 +1,7 @@
 import type NodePath from "../index";
 import * as t from "@babel/types";
 
-export default function(node: Object) {
+export default function (node: Object) {
   if (!this.isReferenced()) return;
 
   // check if a binding exists of this value and if so then return a union type of all
