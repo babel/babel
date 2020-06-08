@@ -170,6 +170,10 @@ defineType("ClassExpression", {
       ),
       optional: true,
     },
+    mixins: {
+      validate: assertNodeType("InterfaceExtends"),
+      optional: true,
+    },
   },
 });
 
@@ -177,6 +181,51 @@ defineType("ClassDeclaration", {
   inherits: "ClassExpression",
   aliases: ["Scopable", "Class", "Statement", "Declaration"],
   fields: {
+    id: {
+      validate: assertNodeType("Identifier"),
+    },
+    typeParameters: {
+      validate: assertNodeType(
+        "TypeParameterDeclaration",
+        "TSTypeParameterDeclaration",
+        "Noop",
+      ),
+      optional: true,
+    },
+    body: {
+      validate: assertNodeType("ClassBody"),
+    },
+    superClass: {
+      optional: true,
+      validate: assertNodeType("Expression"),
+    },
+    superTypeParameters: {
+      validate: assertNodeType(
+        "TypeParameterInstantiation",
+        "TSTypeParameterInstantiation",
+      ),
+      optional: true,
+    },
+    implements: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(
+          assertNodeType("TSExpressionWithTypeArguments", "ClassImplements"),
+        ),
+      ),
+      optional: true,
+    },
+    decorators: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Decorator")),
+      ),
+      optional: true,
+    },
+    mixins: {
+      validate: assertNodeType("InterfaceExtends"),
+      optional: true,
+    },
     declare: {
       validate: assertValueType("boolean"),
       optional: true,
@@ -247,18 +296,21 @@ defineType("ExportNamedDeclaration", {
       optional: true,
       validate: chain(
         assertNodeType("Declaration"),
-        function (node, key, val) {
-          if (!process.env.BABEL_TYPES_8_BREAKING) return;
+        Object.assign(
+          function (node, key, val) {
+            if (!process.env.BABEL_TYPES_8_BREAKING) return;
 
-          // This validator isn't put at the top level because we can run it
-          // even if this node doesn't have a parent.
+            // This validator isn't put at the top level because we can run it
+            // even if this node doesn't have a parent.
 
-          if (val && node.specifiers.length) {
-            throw new TypeError(
-              "Only declaration or specifiers is allowed on ExportNamedDeclaration",
-            );
-          }
-        },
+            if (val && node.specifiers.length) {
+              throw new TypeError(
+                "Only declaration or specifiers is allowed on ExportNamedDeclaration",
+              );
+            }
+          },
+          { oneOfNodeTypes: ["Declaration"] },
+        ),
         function (node, key, val) {
           if (!process.env.BABEL_TYPES_8_BREAKING) return;
 
@@ -433,25 +485,31 @@ defineType("MetaProperty", {
   aliases: ["Expression"],
   fields: {
     meta: {
-      validate: chain(assertNodeType("Identifier"), function (node, key, val) {
-        if (!process.env.BABEL_TYPES_8_BREAKING) return;
+      validate: chain(
+        assertNodeType("Identifier"),
+        Object.assign(
+          function (node, key, val) {
+            if (!process.env.BABEL_TYPES_8_BREAKING) return;
 
-        let property;
-        switch (val.name) {
-          case "function":
-            property = "sent";
-            break;
-          case "new":
-            property = "target";
-            break;
-          case "import":
-            property = "meta";
-            break;
-        }
-        if (!is("Identifier", node.property, { name: property })) {
-          throw new TypeError("Unrecognised MetaProperty");
-        }
-      }),
+            let property;
+            switch (val.name) {
+              case "function":
+                property = "sent";
+                break;
+              case "new":
+                property = "target";
+                break;
+              case "import":
+                property = "meta";
+                break;
+            }
+            if (!is("Identifier", node.property, { name: property })) {
+              throw new TypeError("Unrecognised MetaProperty");
+            }
+          },
+          { oneOfNodeTypes: ["Identifier"] },
+        ),
+      ),
     },
     property: {
       validate: assertNodeType("Identifier"),
@@ -665,15 +723,21 @@ defineType("YieldExpression", {
   aliases: ["Expression", "Terminatorless"],
   fields: {
     delegate: {
-      validate: chain(assertValueType("boolean"), function (node, key, val) {
-        if (!process.env.BABEL_TYPES_8_BREAKING) return;
+      validate: chain(
+        assertValueType("boolean"),
+        Object.assign(
+          function (node, key, val) {
+            if (!process.env.BABEL_TYPES_8_BREAKING) return;
 
-        if (val && !node.argument) {
-          throw new TypeError(
-            "Property delegate of YieldExpression cannot be true if there is no argument",
-          );
-        }
-      }),
+            if (val && !node.argument) {
+              throw new TypeError(
+                "Property delegate of YieldExpression cannot be true if there is no argument",
+              );
+            }
+          },
+          { type: "boolean" },
+        ),
+      ),
       default: false,
     },
     argument: {

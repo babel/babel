@@ -11,6 +11,7 @@ import {
   classMethodOrPropertyCommon,
   classMethodOrDeclareMethodCommon,
 } from "./es2015";
+import { functionTypeAnnotationCommon } from "./core";
 
 defineType("ArgumentPlaceholder", {});
 
@@ -29,7 +30,18 @@ defineType("BindExpression", {
   visitor: ["object", "callee"],
   aliases: ["Expression"],
   fields: !process.env.BABEL_TYPES_8_BREAKING
-    ? {}
+    ? {
+        object: {
+          validate: Object.assign(() => {}, {
+            oneOfNodeTypes: ["Expression"],
+          }),
+        },
+        callee: {
+          validate: Object.assign(() => {}, {
+            oneOfNodeTypes: ["Expression"],
+          }),
+        },
+      }
     : {
         object: {
           validate: assertNodeType("Expression"),
@@ -96,10 +108,13 @@ defineType("OptionalMemberExpression", {
         const normal = assertNodeType("Identifier");
         const computed = assertNodeType("Expression");
 
-        return function (node, key, val) {
+        const validator = function (node, key, val) {
           const validator = node.computed ? computed : normal;
           validator(node, key, val);
         };
+        // todo(ts): can be discriminated union by `computed` property
+        validator.oneOfNodeTypes = ["Expression", "Identifier"];
+        return validator;
       })(),
     },
     computed: {
@@ -211,6 +226,7 @@ defineType("ClassPrivateMethod", {
   ],
   fields: {
     ...classMethodOrDeclareMethodCommon,
+    ...functionTypeAnnotationCommon,
     key: {
       validate: assertNodeType("PrivateName"),
     },
@@ -226,6 +242,14 @@ defineType("Import", {
 
 defineType("ImportAttribute", {
   visitor: ["key", "value"],
+  fields: {
+    key: {
+      validate: assertNodeType("Identifier"),
+    },
+    value: {
+      validate: assertNodeType("StringLiteral"),
+    },
+  },
 });
 
 defineType("Decorator", {

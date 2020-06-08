@@ -84,10 +84,13 @@ defineType("BinaryExpression", {
         const expression = assertNodeType("Expression");
         const inOp = assertNodeType("Expression", "PrivateName");
 
-        return function (node, key, val) {
+        const validator = function (node, key, val) {
           const validator = node.operator === "in" ? inOp : expression;
           validator(node, key, val);
         };
+        // todo(ts): can be discriminated union by `operator` property
+        validator.oneOfNodeTypes = ["Expression", "PrivateName"];
+        return validator;
       })(),
     },
     right: {
@@ -276,6 +279,15 @@ defineType("File", {
     program: {
       validate: assertNodeType("Program"),
     },
+    comments: {
+      validate: assertEach(assertNodeType("Comment")),
+      optional: true,
+    },
+    tokens: {
+      // todo(ts): add Token type
+      validate: assertEach(Object.assign(() => {}, { type: "any" })),
+      optional: true,
+    },
   },
 });
 
@@ -457,13 +469,19 @@ defineType("Identifier", {
   fields: {
     ...patternLikeCommon,
     name: {
-      validate: chain(assertValueType("string"), function (node, key, val) {
-        if (!process.env.BABEL_TYPES_8_BREAKING) return;
+      validate: chain(
+        assertValueType("string"),
+        Object.assign(
+          function (node, key, val) {
+            if (!process.env.BABEL_TYPES_8_BREAKING) return;
 
-        if (!isValidIdentifier(val, false)) {
-          throw new TypeError(`"${val}" is not a valid identifier name`);
-        }
-      }),
+            if (!isValidIdentifier(val, false)) {
+              throw new TypeError(`"${val}" is not a valid identifier name`);
+            }
+          },
+          { type: "string" },
+        ),
+      ),
     },
     optional: {
       validate: assertValueType("boolean"),
@@ -583,14 +601,20 @@ defineType("RegExpLiteral", {
       validate: assertValueType("string"),
     },
     flags: {
-      validate: chain(assertValueType("string"), function (node, key, val) {
-        if (!process.env.BABEL_TYPES_8_BREAKING) return;
+      validate: chain(
+        assertValueType("string"),
+        Object.assign(
+          function (node, key, val) {
+            if (!process.env.BABEL_TYPES_8_BREAKING) return;
 
-        const invalid = /[^gimsuy]/.exec(val);
-        if (invalid) {
-          throw new TypeError(`"${invalid[0]}" is not a valid RegExp flag`);
-        }
-      }),
+            const invalid = /[^gimsuy]/.exec(val);
+            if (invalid) {
+              throw new TypeError(`"${invalid[0]}" is not a valid RegExp flag`);
+            }
+          },
+          { type: "string" },
+        ),
+      ),
       default: "",
     },
   },
@@ -626,10 +650,13 @@ defineType("MemberExpression", {
         const normal = assertNodeType("Identifier", "PrivateName");
         const computed = assertNodeType("Expression");
 
-        return function (node, key, val) {
+        const validator = function (node, key, val) {
           const validator = node.computed ? computed : normal;
           validator(node, key, val);
         };
+        // todo(ts): can be discriminated union by `computed` property
+        validator.oneOfNodeTypes = ["Expression", "Identifier", "PrivateName"];
+        return validator;
       })(),
     },
     computed: {
@@ -719,10 +746,18 @@ defineType("ObjectMethod", {
         );
         const computed = assertNodeType("Expression");
 
-        return function (node, key, val) {
+        const validator = function (node, key, val) {
           const validator = node.computed ? computed : normal;
           validator(node, key, val);
         };
+        // todo(ts): can be discriminated union by `computed` property
+        validator.oneOfNodeTypes = [
+          "Expression",
+          "Identifier",
+          "StringLiteral",
+          "NumericLiteral",
+        ];
+        return validator;
       })(),
     },
     decorators: {
@@ -776,10 +811,18 @@ defineType("ObjectProperty", {
         );
         const computed = assertNodeType("Expression");
 
-        return function (node, key, val) {
+        const validator = function (node, key, val) {
           const validator = node.computed ? computed : normal;
           validator(node, key, val);
         };
+        // todo(ts): can be discriminated union by `computed` property
+        validator.oneOfNodeTypes = [
+          "Expression",
+          "Identifier",
+          "StringLiteral",
+          "NumericLiteral",
+        ];
+        return validator;
       })(),
     },
     value: {
@@ -790,15 +833,18 @@ defineType("ObjectProperty", {
     shorthand: {
       validate: chain(
         assertValueType("boolean"),
-        function (node, key, val) {
-          if (!process.env.BABEL_TYPES_8_BREAKING) return;
+        Object.assign(
+          function (node, key, val) {
+            if (!process.env.BABEL_TYPES_8_BREAKING) return;
 
-          if (val && node.computed) {
-            throw new TypeError(
-              "Property shorthand of ObjectProperty cannot be true if computed is true",
-            );
-          }
-        },
+            if (val && node.computed) {
+              throw new TypeError(
+                "Property shorthand of ObjectProperty cannot be true if computed is true",
+              );
+            }
+          },
+          { type: "boolean" },
+        ),
         function (node, key, val) {
           if (!process.env.BABEL_TYPES_8_BREAKING) return;
 
@@ -945,18 +991,26 @@ defineType("TryStatement", {
   aliases: ["Statement"],
   fields: {
     block: {
-      validate: chain(assertNodeType("BlockStatement"), function (node) {
-        if (!process.env.BABEL_TYPES_8_BREAKING) return;
+      validate: chain(
+        assertNodeType("BlockStatement"),
+        Object.assign(
+          function (node) {
+            if (!process.env.BABEL_TYPES_8_BREAKING) return;
 
-        // This validator isn't put at the top level because we can run it
-        // even if this node doesn't have a parent.
+            // This validator isn't put at the top level because we can run it
+            // even if this node doesn't have a parent.
 
-        if (!node.handler && !node.finalizer) {
-          throw new TypeError(
-            "TryStatement expects either a handler or finalizer, or both",
-          );
-        }
-      }),
+            if (!node.handler && !node.finalizer) {
+              throw new TypeError(
+                "TryStatement expects either a handler or finalizer, or both",
+              );
+            }
+          },
+          {
+            oneOfNodeTypes: ["BlockStatement"],
+          },
+        ),
+      ),
     },
     handler: {
       optional: true,
