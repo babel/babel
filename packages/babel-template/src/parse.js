@@ -27,14 +27,14 @@ export default function parseAndBuildMetadata<T>(
   code: string,
   opts: TemplateOpts,
 ): Metadata {
-  const ast = parseWithCodeFrame(code, opts.parser);
-
   const {
     placeholderWhitelist,
     placeholderPattern,
     preserveComments,
     syntacticPlaceholders,
   } = opts;
+
+  const ast = parseWithCodeFrame(code, opts.parser, syntacticPlaceholders);
 
   t.removePropertiesDeep(ast, {
     preserveComments,
@@ -191,14 +191,19 @@ type MetadataState = {
 function parseWithCodeFrame(
   code: string,
   parserOpts: ParserOpts,
+  syntacticPlaceholders: boolean,
 ): BabelNodeFile {
   parserOpts = {
     allowReturnOutsideFunction: true,
     allowSuperOutsideMethod: true,
     sourceType: "module",
     ...parserOpts,
-    plugins: (parserOpts.plugins || []).concat("placeholders"),
+    plugins: parserOpts.plugins || [],
   };
+
+  if (syntacticPlaceholders !== false) {
+    parserOpts.plugins.push("placeholders");
+  }
 
   try {
     // $FlowFixMe - The parser AST is not the same type as the babel-types type.

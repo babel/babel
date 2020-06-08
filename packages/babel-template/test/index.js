@@ -4,36 +4,36 @@ import * as t from "@babel/types";
 
 const comments = "// Sum two numbers\nconst add = (a, b) => a + b;";
 
-describe("@babel/template", function () {
-  it("import statements are allowed by default", function () {
-    expect(function () {
+describe("@babel/template", function() {
+  it("import statements are allowed by default", function() {
+    expect(function() {
       template("import foo from 'foo'")({});
     }).not.toThrow();
   });
 
-  it("with statements are allowed with sourceType: script", function () {
-    expect(function () {
+  it("with statements are allowed with sourceType: script", function() {
+    expect(function() {
       template("with({}){}", { sourceType: "script" })({});
     }).not.toThrow();
   });
 
-  it("should strip comments by default", function () {
+  it("should strip comments by default", function() {
     const code = "const add = (a, b) => a + b;";
     const output = template(comments)();
     expect(generator(output).code).toBe(code);
   });
 
-  it("should preserve comments with a flag", function () {
+  it("should preserve comments with a flag", function() {
     const output = template(comments, { preserveComments: true })();
     expect(generator(output).code).toBe(comments);
   });
 
-  it("should preserve comments with a flag", function () {
+  it("should preserve comments with a flag", function() {
     const output = template(comments, { preserveComments: true })();
     expect(generator(output).code).toBe(comments);
   });
 
-  it("should preserve comments with a flag when using .ast", function () {
+  it("should preserve comments with a flag when using .ast", function() {
     const output1 = template.ast(comments, { preserveComments: true });
     const output2 = template({ preserveComments: true }).ast(comments);
     expect(generator(output1).code).toBe(comments);
@@ -294,6 +294,17 @@ describe("@babel/template", function () {
             template(`%%FOO%%`, { syntacticPlaceholders: false })({
               FOO: t.numericLiteral(1),
             });
+          }).toThrow(/Unexpected token.*/);
+        });
+
+        it("disallow manually enabled placeholders", () => {
+          expect(() => {
+            template(`%%FOO%%`, {
+              syntacticPlaceholders: false,
+              plugins: ["placeholders"],
+            })({
+              FOO: t.numericLiteral(1),
+            });
           }).toThrow(/%%.*placeholders can't be used/);
         });
 
@@ -302,6 +313,16 @@ describe("@babel/template", function () {
             FOO: t.numericLiteral(1),
           });
           expect(generator(output).code).toMatchInlineSnapshot(`"1;"`);
+        });
+
+        it("allows v8intrinsics", () => {
+          const output = template(`%DebugPrint(1)`, {
+            syntacticPlaceholders: false,
+            plugins: ["v8intrinsic"],
+          })();
+          expect(generator(output).code).toMatchInlineSnapshot(
+            `"%DebugPrint(1);"`,
+          );
         });
       });
 
