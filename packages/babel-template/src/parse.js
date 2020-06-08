@@ -191,19 +191,20 @@ type MetadataState = {
 function parseWithCodeFrame(
   code: string,
   parserOpts: ParserOpts,
-  syntacticPlaceholders: boolean,
+  syntacticPlaceholders?: boolean,
 ): BabelNodeFile {
+  const plugins = (parserOpts.plugins || []).slice();
+  if (syntacticPlaceholders !== false) {
+    plugins.push("placeholders");
+  }
+
   parserOpts = {
     allowReturnOutsideFunction: true,
     allowSuperOutsideMethod: true,
     sourceType: "module",
     ...parserOpts,
-    plugins: parserOpts.plugins || [],
+    plugins,
   };
-
-  if (syntacticPlaceholders !== false) {
-    parserOpts.plugins.push("placeholders");
-  }
 
   try {
     // $FlowFixMe - The parser AST is not the same type as the babel-types type.
