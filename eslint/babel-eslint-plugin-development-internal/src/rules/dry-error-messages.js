@@ -6,30 +6,27 @@ function isRelativePath(filePath) {
   return REL_PATH_REGEX.test(filePath);
 }
 
-function normalizeSrcExt(source) {
-  return !path.extname(source) ? `${source}.js` : source;
+function resolveAbsolutePath(currentFilePath, moduleToResolve) {
+  return isRelativePath(moduleToResolve)
+    ? path.resolve(path.dirname(currentFilePath), moduleToResolve)
+    : moduleToResolve;
 }
 
-function resolveErrorModule(errorModule, currentFilePath) {
-  return isRelativePath(errorModule)
-    ? path.resolve(path.dirname(currentFilePath), normalizeSrcExt(errorModule))
-    : errorModule;
+function isSourceErrorModule(currentFilePath, targetModulePath, src) {
+  for (const srcPath of [src, `${src}.js`, `${src}/index`, `${src}/index.js`]) {
+    if (
+      path.normalize(resolveAbsolutePath(currentFilePath, targetModulePath)) ===
+      path.normalize(resolveAbsolutePath(currentFilePath, srcPath))
+    ) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
-function isCurrentFileErrorModule(errorModule, currentFilePath) {
-  return (
-    path.normalize(currentFilePath) ===
-    path.normalize(
-      path.resolve(resolveErrorModule(errorModule, currentFilePath)),
-    )
-  );
-}
-
-function isSourceErrorModule(targetModulePath, currentFilePath, src) {
-  return (
-    path.normalize(resolveErrorModule(targetModulePath, currentFilePath)) ===
-    path.normalize(resolveErrorModule(src, currentFilePath))
-  );
+function isCurrentFileErrorModule(currentFilePath, errorModule) {
+  return currentFilePath === errorModule;
 }
 
 function findIdNode(node) {
@@ -45,16 +42,16 @@ function findIdNode(node) {
 }
 
 function findReference(scope, node) {
-  let currScope = scope;
+  let currentScope = scope;
 
-  while (currScope) {
-    const ref = currScope.set.get(node.name);
+  while (currentScope) {
+    const ref = currentScope.set.get(node.name);
 
     if (ref) {
       return ref;
     }
 
-    currScope = currScope.upper;
+    currentScope = currentScope.upper;
   }
 
   return null;
@@ -113,7 +110,7 @@ export default {
       // Do not run check if errorModule config option is not given.
       !errorModule.length ||
       // Do not check the target error module file.
-      isCurrentFileErrorModule(errorModule, filename)
+      isCurrentFileErrorModule(filename, errorModule)
     ) {
       return {};
     }
@@ -121,7 +118,7 @@ export default {
     return {
       // Check imports up front so that we don't have to check them for every ThrowStatement.
       ImportDeclaration(node) {
-        if (isSourceErrorModule(errorModule, filename, node.source.value)) {
+        if (isSourceErrorModule(filename, errorModule, node.source.value)) {
           for (const spec of node.specifiers) {
             importedBindings.add(spec);
           }
