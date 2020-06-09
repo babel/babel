@@ -264,7 +264,17 @@ export default class CommentsParser extends BaseParser {
       ) {
         node.innerComments = trailingComments;
       } else {
-        node.trailingComments = trailingComments;
+        // TrailingComments maybe contain innerComments
+        const findIndex = trailingComments.findIndex(
+          comment => comment.end >= node.end,
+        );
+
+        if (findIndex !== -1 && findIndex !== 0) {
+          node.innerComments = trailingComments.slice(0, findIndex);
+          node.trailingComments = trailingComments.slice(findIndex);
+        } else {
+          node.trailingComments = trailingComments;
+        }
       }
     }
 
