@@ -13,7 +13,10 @@
   "devDependencies": {
     "@babel/cli": "^7.10.1",
     "@babel/core": "^7.10.2",
-    "@babel/eslint-plugin-development": "^1.0.1",
+    "@babel/eslint-config-internal": "link:./eslint/babel-eslint-config-internal",
+    "@babel/eslint-parser": "link:./eslint/babel-eslint-parser",
+    "@babel/eslint-plugin-development": "link:./eslint/babel-eslint-plugin-development",
+    "@babel/eslint-plugin-development-internal": "link:./eslint/babel-eslint-plugin-development-internal",
     "@babel/plugin-proposal-class-properties": "^7.10.1",
     "@babel/plugin-proposal-dynamic-import": "^7.10.1",
     "@babel/plugin-proposal-export-namespace-from": "^7.10.1",

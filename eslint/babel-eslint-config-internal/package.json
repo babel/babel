@@ -13,7 +13,7 @@
   },
   "main": "index.js",
   "peerDependencies": {
-    "babel-eslint": "^10.0.0 || ^11.0.0-0",
+    "@babel/eslint-parser": "*",
     "eslint-plugin-flowtype": "^3.0.0"
   }
 }

@@ -1,3 +1,5 @@
+"use strict";
+
 const path = require("path");
 
 module.exports = {
@@ -9,8 +11,7 @@ module.exports = {
     "@babel/development",
     "@babel/development-internal",
   ],
-  // replace it by `@babel/internal` when `@babel/eslint-config-internal` is published
-  extends: path.resolve(__dirname, "eslint/babel-eslint-config-internal"),
+  extends: "@babel/internal",
   rules: {
     "prettier/prettier": "error",
     // TODO: remove after babel-eslint-config-internal is fully integrated into this repository.
@@ -69,7 +70,7 @@ module.exports = {
           {
             errorModule: path.resolve(
               __dirname,
-              "packages/babel-parser/src/parser/location.js"
+              "packages/babel-parser/src/parser/error.js"
             ),
           },
         ],

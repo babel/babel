@@ -124,19 +124,9 @@ export default {
           }
         }
       },
-      "ThrowStatement > CallExpression[callee.type='MemberExpression']"(node) {
-        if (
-          node.callee.object.type !== "ThisExpression" ||
-          node.callee.property.name !== "raise"
-        ) {
-          return;
-        }
-
-        // Ignore malformed `this.raise()` calls.
-        if (node.arguments.length < 2) {
-          return;
-        }
-
+      "CallExpression[callee.type='MemberExpression'][callee.object.type='ThisExpression'][callee.property.name='raise'][arguments.length>=2]"(
+        node,
+      ) {
         const [, errorMsgNode] = node.arguments;
         const nodeToCheck = findIdNode(errorMsgNode);
 

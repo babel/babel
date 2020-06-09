@@ -56,10 +56,21 @@
     semver "^5.4.1"
     source-map "^0.5.0"
 
-"@babel/eslint-plugin-development@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@babel/eslint-plugin-development/-/eslint-plugin-development-1.0.1.tgz#1f5206ae95795db09b65e7dbc2b158d66497a44c"
-  integrity sha512-ioEhN8HgKr4Yx8ef+XryNpKN4FimSFceb0qVVxvoUzpFn3xyq17MlY5AquEqtXObE7Nu7WKq7QL9INzjCrugyw==
+"@babel/eslint-config-internal@link:./eslint/babel-eslint-config-internal":
+  version "0.0.0"
+  uid ""
+
+"@babel/eslint-parser@link:./eslint/babel-eslint-parser":
+  version "0.0.0"
+  uid ""
+
+"@babel/eslint-plugin-development-internal@link:./eslint/babel-eslint-plugin-development-internal":
+  version "0.0.0"
+  uid ""
+
+"@babel/eslint-plugin-development@link:./eslint/babel-eslint-plugin-development":
+  version "0.0.0"
+  uid ""
 
 "@babel/generator@^7.10.1", "@babel/generator@^7.10.2", "@babel/generator@^7.4.0":
   version "7.10.2"
