@@ -294,6 +294,17 @@ describe("@babel/template", function () {
             template(`%%FOO%%`, { syntacticPlaceholders: false })({
               FOO: t.numericLiteral(1),
             });
+          }).toThrow(/Unexpected token.*/);
+        });
+
+        it("disallow manually enabled placeholders", () => {
+          expect(() => {
+            template(`%%FOO%%`, {
+              syntacticPlaceholders: false,
+              plugins: ["placeholders"],
+            })({
+              FOO: t.numericLiteral(1),
+            });
           }).toThrow(/%%.*placeholders can't be used/);
         });
 
@@ -302,6 +313,16 @@ describe("@babel/template", function () {
             FOO: t.numericLiteral(1),
           });
           expect(generator(output).code).toMatchInlineSnapshot(`"1;"`);
+        });
+
+        it("allows v8intrinsics", () => {
+          const output = template(`%DebugPrint(1)`, {
+            syntacticPlaceholders: false,
+            plugins: ["v8intrinsic"],
+          })();
+          expect(generator(output).code).toMatchInlineSnapshot(
+            `"%DebugPrint(1);"`,
+          );
         });
       });
 
