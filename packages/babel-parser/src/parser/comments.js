@@ -265,13 +265,21 @@ export default class CommentsParser extends BaseParser {
         node.innerComments = trailingComments;
       } else {
         // TrailingComments maybe contain innerComments
-        const findIndex = trailingComments.findIndex(
+        const firstTrailingCommentIndex = trailingComments.findIndex(
           comment => comment.end >= node.end,
         );
 
-        if (findIndex !== -1 && findIndex !== 0) {
-          node.innerComments = trailingComments.slice(0, findIndex);
-          node.trailingComments = trailingComments.slice(findIndex);
+        if (
+          firstTrailingCommentIndex !== -1 &&
+          firstTrailingCommentIndex !== 0
+        ) {
+          node.innerComments = trailingComments.slice(
+            0,
+            firstTrailingCommentIndex,
+          );
+          node.trailingComments = trailingComments.slice(
+            firstTrailingCommentIndex,
+          );
         } else {
           node.trailingComments = trailingComments;
         }
