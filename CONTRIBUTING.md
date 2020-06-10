@@ -18,7 +18,7 @@
 
 Contributions are always welcome, no matter how large or small! Before contributing, please read the [code of conduct](https://github.com/babel/babel/blob/master/CODE_OF_CONDUCT.md).
 
-If you want an already configured online IDE to contirbute to Babel, you can use Gitpod! [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/babel/babel)
+If you want an already configured online IDE to contribute to Babel, you can use Gitpod! [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/babel/babel)
 
 ## Not sure where to start?
 
