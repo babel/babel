@@ -337,7 +337,8 @@ const handle = {
     // [MEMBER = _VALUE] = ARR -> [_destructureSet(MEMBER) = _VALUE] = ARR
     // [...MEMBER] -> [..._destructureSet(MEMBER)]
     if (
-      parentPath.isForXStatement() ||
+      (parentPath.isForXStatement() &&
+        parentPath.parentPath.isAssignmentPattern({ left: node })) ||
       // { KEY: MEMBER } = OBJ
       (parentPath.isObjectProperty({ value: node }) &&
         parentPath.parentPath.isObjectPattern()) ||
