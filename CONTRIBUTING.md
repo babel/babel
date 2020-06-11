@@ -311,15 +311,22 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
 
 ## Creating a new plugin (`spec-new`)
 
-> Example: https://github.com/babel/babylon/pull/541
+> Example: https://github.com/babel/babel/pull/11640
 
-- Create a new issue that describes the proposal (ex: [#538](https://github.com/babel/babylon/issues/538)). Include any relevant information like proposal repo/author, examples, parsing approaches, meeting notes, presentation slides, and more.
-- The pull request should include:
-  - [ ] An update to the [plugins](https://github.com/babel/babel/tree/main/packages/babel-parser#plugins) part of the readme. Add a new entry to that list for the new plugin flag (and link to the proposal)
-  - [ ] If any new nodes or modifications need to be added to the AST, update [ast/spec.md](https://github.com/babel/babel/blob/main/packages/babel-parser/ast/spec.md)
-  - [ ] Make sure you use the `this.hasPlugin("plugin-name-here")` check in the babel parser so that your new plugin code only runs when that flag is turned on (not default behavior)
+- Create a new PR that describes the proposed AST shape in [ESTree](https://github.com/estree/estree) (ex: [Decimal AST](https://github.com/estree/estree/pull/220)). The new AST should follows ESTree's [design philosophy](https://github.com/estree/estree#philosophy).
+- After the ESTree PR is accepted, update [ast/spec.md](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md). Note that there are differences between Babel AST and ESTree. In these cases, consistency with current Babel AST outweighs alignment to ESTree. Otherwise it should follow ESTree.
+
+- [ ] Implement parser plugins based on the new AST. Name parser plugin by camelizing the unprefixed slug of the TC39 proposal URL. i.e. `exportDefaultFrom` from `https://github.com/tc39/proposal-export-default-from`.
+  - [ ] Use the `this.expectPlugin("newSyntax")` check in `@babel/parser` so that your new plugin code only runs when that flag is turned on (not default behavior), and it will throw friendly errors when users forget to enable a plugin.
   - [ ] Add failing/passing tests according to spec behavior
-- Start working about the Babel transform itself!
+  - [ ] Add `@babel/syntax-new-syntax` package. You can copy `packages/babel-plugin-syntax-decimal` and replace `decimal` to `new-syntax`.
+  - [ ] Add `@babel/syntax-new-syntax` to `@babel/standalone`.
+    - [ ] Add `@babel/syntax-new-syntax` to `package.json`
+    - [ ] Add `@babel/syntax-new-syntax` to [`pluginsConfig.json`](https://github.com/babel/babel/blob/master/packages/babel-standalone/scripts/pluginConfig.json), run `make generate-standalone`.
+    - [ ] Add `@babel/syntax-new-syntax` to `src/preset-stage-x`.
+  - [ ] Add `"newSyntax"` to parser [typings](https://github.com/babel/babel/blob/master/packages/babel-parser/typings/babel-parser.d.ts)
+- [ ] Implement generator support in `packages/babel-generator/src/generators`. The generator converts AST to source code.
+- [ ] If this feature can be transpiled, start working about the Babel transform.
 
 ## Internals
 
