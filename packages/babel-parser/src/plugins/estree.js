@@ -394,6 +394,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         delete node.arguments;
         // $FlowIgnore - callee isn't optional in the type definition
         delete node.callee;
+      } else if (node.type === "CallExpression") {
+        (node: N.Node).optional = false;
       }
 
       return node;
@@ -430,6 +432,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
 
           break;
+      }
+
+      return node;
+    }
+
+    parseSubscript(...args) {
+      const node = super.parseSubscript(...args);
+
+      if (node.type === "MemberExpression") {
+        node.optional = false;
       }
 
       return node;
