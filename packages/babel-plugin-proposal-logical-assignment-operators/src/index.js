@@ -13,7 +13,8 @@ export default declare(api => {
       AssignmentExpression(path) {
         const { node, scope } = path;
         const { operator, left, right } = node;
-        if (operator !== "||=" && operator !== "&&=" && operator !== "??=") {
+        const operatorTrunc = operator.slice(0, -1);
+        if (!t.LOGICAL_OPERATORS.includes(operatorTrunc)) {
           return;
         }
 
@@ -41,7 +42,7 @@ export default declare(api => {
 
         path.replaceWith(
           t.logicalExpression(
-            operator.slice(0, -1),
+            operatorTrunc,
             lhs,
             t.assignmentExpression("=", left, right),
           ),
