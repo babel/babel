@@ -192,6 +192,7 @@ export default async function ({
     filenames.forEach(function (filenameOrDir: string): void {
       const watcher = chokidar.watch(filenameOrDir, {
         persistent: true,
+        ignored: babelOptions.ignore,
         ignoreInitial: true,
         awaitWriteFinish: {
           stabilityThreshold: 50,
