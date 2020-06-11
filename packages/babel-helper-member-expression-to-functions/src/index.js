@@ -329,7 +329,8 @@ const handle = {
       return;
     }
 
-    // for ( MEMBER of ARR) && for ( MEMBER in ARR)
+    // for (MEMBER of ARR)
+    // for (MEMBER in ARR)
     // { KEY: MEMBER } = OBJ -> { KEY: _destructureSet(MEMBER) } = OBJ
     // { KEY: MEMBER = _VALUE } = OBJ -> { KEY: _destructureSet(MEMBER) = _VALUE } = OBJ
     // {...MEMBER} -> {..._destructureSet(MEMBER)}
