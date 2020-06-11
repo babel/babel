@@ -1,10 +1,6 @@
 {
   "type": "File",
   "start":0,"end":193,"loc":{"start":{"line":1,"column":0},"end":{"line":18,"column":1}},
-  "errors": [
-    "SyntaxError: Identifier 'A' has already been declared (9:6)",
-    "SyntaxError: Identifier 'A' has already been declared (15:6)"
-  ],
   "program": {
     "type": "Program",
     "start":0,"end":193,"loc":{"start":{"line":1,"column":0},"end":{"line":18,"column":1}},
@@ -68,8 +64,8 @@
         "start":84,"end":140,"loc":{"start":{"line":9,"column":0},"end":{"line":13,"column":1}},
         "id": {
           "type": "Identifier",
-          "start":90,"end":91,"loc":{"start":{"line":9,"column":6},"end":{"line":9,"column":7},"identifierName":"A"},
-          "name": "A"
+          "start":90,"end":91,"loc":{"start":{"line":9,"column":6},"end":{"line":9,"column":7},"identifierName":"B"},
+          "name": "B"
         },
         "superClass": null,
         "body": {
@@ -113,8 +109,8 @@
         "start":142,"end":193,"loc":{"start":{"line":15,"column":0},"end":{"line":18,"column":1}},
         "id": {
           "type": "Identifier",
-          "start":148,"end":149,"loc":{"start":{"line":15,"column":6},"end":{"line":15,"column":7},"identifierName":"A"},
-          "name": "A"
+          "start":148,"end":149,"loc":{"start":{"line":15,"column":6},"end":{"line":15,"column":7},"identifierName":"C"},
+          "name": "C"
         },
         "superClass": null,
         "body": {

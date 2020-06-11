@@ -269,10 +269,7 @@ export default class CommentsParser extends BaseParser {
           comment => comment.end >= node.end,
         );
 
-        if (
-          firstTrailingCommentIndex !== -1 &&
-          firstTrailingCommentIndex !== 0
-        ) {
+        if (firstTrailingCommentIndex > 0) {
           node.innerComments = trailingComments.slice(
             0,
             firstTrailingCommentIndex,

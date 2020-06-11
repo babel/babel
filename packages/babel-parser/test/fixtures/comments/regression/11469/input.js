@@ -6,13 +6,13 @@ class A {
   /* Trailing comment */
 }
 
-class A {
+class B {
   test() {
     // this.member = 'value';
   }
 }
 
-class A {
+class C {
   test() {}
   // this.member = 'value';
 }
