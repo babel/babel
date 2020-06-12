@@ -71,7 +71,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Sync with latest master branch (only on PRs)
+          name: Sync with latest main branch (only on PRs)
           command: |
             if [ -n "$CIRCLE_PULL_REQUEST" ]
             then
@@ -92,8 +92,8 @@ jobs:
             npm i tap-mocha-reporter --save-dev
             node lib/download-node
       - run:
-          name: Download master branch Test262 artifact
-          command: node lib/download-master-artifact ~/master.tap
+          name: Download main branch Test262 artifact
+          command: node lib/download-main-artifact ~/test262-main.tap
           <<: *test262_workdir
       - run:
           name: Run Test262
@@ -106,10 +106,10 @@ jobs:
             cat ~/test262.tap | $(npm bin)/tap-mocha-reporter spec || true
           <<: *test262_workdir
       - run:
-          name: Compare previous master branch & current job results
+          name: Compare previous main branch & current job results
           command: |
             mkdir -p ~/test-results/test262
-            node lib/compare-results ~/master.tap ~/test262.tap | tee ~/diff.tap
+            node lib/compare-results ~/test262-main.tap ~/test262.tap | tee ~/diff.tap
           <<: *test262_workdir
       - store_artifacts: *artifact_test262_diff_tap
       - run:
@@ -171,28 +171,36 @@ workflows:
   build-standalone:
     jobs:
       - build-standalone
-  test262-master:
+  test262:
     jobs:
       - test262:
           filters:
             branches:
               only:
-                - master
-  test262:
+                - main
+                - next-8-dev
+                - next-8-rebased
+  test262-pr:
     jobs:
       - approve-test262-run:
           type: approval
           filters:
             branches:
               ignore:
+                - main
                 - master
+                - next-8-dev
+                - next-8-rebased
       - test262:
           requires:
             - approve-test262-run
           filters:
             branches:
               ignore:
+                - main
                 - master
+                - next-8-dev
+                - next-8-rebased
   e2e:
     jobs:
       - publish-verdaccio
