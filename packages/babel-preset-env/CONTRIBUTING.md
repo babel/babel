@@ -2,7 +2,7 @@
 
 ## Adding a new plugin or polyfill to support (when approved in the next ECMAScript version)
 
-### Update [`plugin-features.js`](https://github.com/babel/babel/blob/master/packages/babel-compat-data/scripts/data/plugin-features.js)
+### Update [`plugin-features.js`](https://github.com/babel/babel/blob/main/packages/babel-compat-data/scripts/data/plugin-features.js)
 
 *Example:*
 
@@ -42,7 +42,7 @@ Find the corresponding module on [`core-js@2`](https://github.com/zloirock/core-
 
 `es7.object.values.js`
 
-Find required ES version in [`corejs2-built-in-features.js`](https://github.com/babel/babel/blob/master/packages/babel-preset-env/data/corejs2-built-in-features.js) and add the new feature:
+Find required ES version in [`corejs2-built-in-features.js`](https://github.com/babel/babel/blob/main/packages/babel-preset-env/data/corejs2-built-in-features.js) and add the new feature:
 
 ```js
 const es = {
@@ -51,17 +51,17 @@ const es = {
 }
 ```
 
-If you wan to transform a new built-in by `useBuiltIns: 'usage'`, add mapping to related `core-js` modules to [this file](https://github.com/babel/babel/blob/master/packages/babel-preset-env/polyfills/corejs2/built-in-definitions.js).
+If you wan to transform a new built-in by `useBuiltIns: 'usage'`, add mapping to related `core-js` modules to [this file](https://github.com/babel/babel/blob/main/packages/babel-preset-env/polyfills/corejs2/built-in-definitions.js).
 
 ### Update data for `core-js@3` polyfilling
 
-Just update the version of [`core-js-compat`](https://github.com/zloirock/core-js/tree/master/packages/core-js-compat) in dependencies.
+Just update the version of [`core-js-compat`](https://github.com/zloirock/core-js/tree/main/packages/core-js-compat) in dependencies.
 
-If you wan to transform a new built-in by `useBuiltIns: 'usage'`, add mapping to related [`core-js`](https://github.com/zloirock/core-js/tree/master/packages/core-js/modules) modules to [this file](https://github.com/babel/babel/blob/master/packages/babel-preset-env/polyfills/corejs3/built-in-definitions.js).
+If you wan to transform a new built-in by `useBuiltIns: 'usage'`, add mapping to related [`core-js`](https://github.com/zloirock/core-js/tree/main/packages/core-js/modules) modules to [this file](https://github.com/babel/babel/blob/main/packages/babel-preset-env/polyfills/corejs3/built-in-definitions.js).
 
-If you want to mark a new proposal as shipped, add it to [this list](https://github.com/babel/babel/blob/master/packages/babel-preset-env/polyfills/corejs3/shipped-proposals.js).
+If you want to mark a new proposal as shipped, add it to [this list](https://github.com/babel/babel/blob/main/packages/babel-preset-env/polyfills/corejs3/shipped-proposals.js).
 
-### Update [`plugins.json`](https://github.com/babel/babel/blob/master/packages/babel-preset-env/data/plugins.json)
+### Update [`plugins.json`](https://github.com/babel/babel/blob/main/packages/babel-preset-env/data/plugins.json)
 
 Until `compat-table` is a standalone npm module for data we are using the git commit in `packages/babel-compat-data/scripts/download-compat-table.sh`
 
@@ -72,7 +72,7 @@ So we update and then run `npm run build-data`. If there are no changes, then `p
 ## Tests
 
 ### Running tests
-See general [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md#running-lintingtests).
+See general [CONTRIBUTING.md](https://github.com/babel/babel/blob/main/CONTRIBUTING.md#running-lintingtests).
 
 ### Writing tests
 
@@ -80,7 +80,7 @@ See general [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIB
 
 All the tests for `@babel/preset-env` exist in the `test/fixtures` folder. The
 test setup and conventions are exactly the same as testing a Babel plugin, so
-please read our [documentation on writing tests](https://github.com/babel/babel/blob/master/CONTRIBUTING.md#babel-plugin-x).
+please read our [documentation on writing tests](https://github.com/babel/babel/blob/main/CONTRIBUTING.md#babel-plugin-x).
 
 #### Testing the `debug` option
 
