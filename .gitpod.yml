@@ -8,7 +8,7 @@ tasks:
       Welcome to Gitpod!
 
       If you haven'\''t forked Babel yet and you want to prepare a PR, you can use
-      the Ctrl+P (or Cmd+P) shortcut, type `Fork` and press ENTER: Gitpod\ will
+      the Ctrl+P (or Cmd+P) shortcut, type `>Fork` and press ENTER: Gitpod\ will
       create the fork for you.
 
       <-- The other terminal is building Babel. It should automatically rebuild
