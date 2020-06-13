@@ -59,6 +59,7 @@ export const ErrorMessages = Object.freeze({
   ImportCallSpreadArgument: "... is not allowed in import()",
   ImportMetaOutsideModule: `import.meta may appear only with 'sourceType: "module"'`,
   ImportOutsideModule: `'import' and 'export' may appear only with 'sourceType: "module"'`,
+  InvalidBigIntLiteral: "Invalid BigIntLiteral",
   InvalidCodePoint: "Code point out of bounds",
   InvalidDigit: "Expected number in radix %0",
   InvalidEscapeSequence: "Bad character escape sequence",

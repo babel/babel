@@ -2,6 +2,9 @@
 
 /*:: declare var invariant; */
 
+// Error messages are colocated with the plugin.
+/* eslint-disable @babel/development-internal/dry-error-messages */
+
 import type Parser from "../parser";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import * as N from "../types";
@@ -474,14 +477,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           const label = this.state.value;
           const suggestion = exportSuggestions[label];
 
-          /* eslint-disable @babel/development-internal/dry-error-messages */
           throw this.raise(
             this.state.start,
             FlowErrors.UnsupportedDeclareExportKind,
             label,
             suggestion,
           );
-          /* eslint-enable @babel/development-internal/dry-error-messages */
         }
 
         if (
@@ -1502,12 +1503,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               );
             }
 
-            /* eslint-disable @babel/development-internal/dry-error-messages */
             throw this.raise(
               this.state.start,
               FlowErrors.UnexpectedSubtractionOperand,
             );
-            /* eslint-enable @babel/development-internal/dry-error-messages */
           }
 
           throw this.unexpected();
@@ -2720,13 +2719,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (jsx?.thrown) throw jsx.error;
         if (arrow.thrown) throw arrow.error;
 
-        /* eslint-disable @babel/development-internal/dry-error-messages */
         /*:: invariant(typeParameters) */
         throw this.raise(
           typeParameters.start,
           FlowErrors.UnexpectedTokenAfterTypeParameter,
         );
-        /* eslint-enable @babel/development-internal/dry-error-messages */
       }
 
       return super.parseMaybeAssign(

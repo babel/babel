@@ -41,7 +41,7 @@ function findIdNode(node) {
   return null;
 }
 
-function findReference(scope, node) {
+function findReference(node, scope) {
   let currentScope = scope;
 
   while (currentScope) {
@@ -58,7 +58,7 @@ function findReference(scope, node) {
 }
 
 function referencesImportedBinding(node, scope, bindings) {
-  const ref = findReference(scope, node);
+  const ref = findReference(node, scope);
 
   if (ref) {
     const topLevelDef = ref.defs[0];

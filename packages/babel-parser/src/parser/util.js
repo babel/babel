@@ -132,7 +132,9 @@ export default class UtilParser extends Tokenizer {
   // Throws if the current token and the prev one are separated by a space.
   assertNoSpace(message: string = "Unexpected space."): void {
     if (this.state.start > this.state.lastTokEnd) {
+      /* eslint-disable @babel/development-internal/dry-error-messages */
       this.raise(this.state.lastTokEnd, message);
+      /* eslint-enable @babel/development-internal/dry-error-messages */
     }
   }
 
@@ -180,16 +182,10 @@ export default class UtilParser extends Tokenizer {
       this.state.yieldPos !== -1 &&
       (this.state.awaitPos === -1 || this.state.yieldPos < this.state.awaitPos)
     ) {
-      this.raise(
-        this.state.yieldPos,
-        "Yield cannot be used as name inside a generator function",
-      );
+      this.raise(this.state.yieldPos, Errors.YieldBindingIdentifier);
     }
     if (this.state.awaitPos !== -1) {
-      this.raise(
-        this.state.awaitPos,
-        "Await cannot be used as name inside an async function",
-      );
+      this.raise(this.state.awaitPos, Errors.AwaitBindingIdentifier);
     }
   }
 
