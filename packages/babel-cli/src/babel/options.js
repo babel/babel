@@ -170,6 +170,11 @@ commander.option(
   "Use a specific extension for the output files",
 );
 
+commander.option(
+  "--show-config",
+  "print babel config for the first compiled input",
+);
+
 commander.version(pkg.version + " (@babel/core " + version + ")");
 commander.usage("[options] <files ...>");
 // register an empty action handler so that commander.js can throw on
@@ -268,6 +273,7 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     rootMode: opts.rootMode,
     configFile: opts.configFile,
     envName: opts.envName,
+    showConfig: opts.showConfig,
     sourceType: opts.sourceType,
     ignore: opts.ignore,
     only: opts.only,

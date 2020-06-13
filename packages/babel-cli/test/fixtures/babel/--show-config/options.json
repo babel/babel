@@ -1,0 +1,9 @@
+{
+  "args": [
+    "--config-file",
+    "./my-config.js",
+    "-f",
+    "./src/index.js",
+    "--show-config"
+  ]
+}

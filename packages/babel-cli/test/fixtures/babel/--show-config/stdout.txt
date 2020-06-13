@@ -1,0 +1,44 @@
+programmatic options from @babel/cli
+[
+  {
+    "sourceFileName": "stdin",
+    "presets": [
+      "/Users/jh/code/babel/packages/babel-preset-react"
+    ],
+    "plugins": [
+      "/Users/jh/code/babel/packages/babel-plugin-transform-arrow-functions",
+      "/Users/jh/code/babel/packages/babel-plugin-transform-strict-mode",
+      "/Users/jh/code/babel/packages/babel-plugin-transform-modules-commonjs"
+    ],
+    "configFile": "./my-config.js",
+    "showConfig": true,
+    "caller": {
+      "name": "@babel/cli"
+    },
+    "filename": "./src/index.js"
+  }
+]
+
+config <CWD>/my-config.js
+[
+  {
+    "babelrc": false,
+    "plugins": [
+      {
+        "name": "@foo/babel-plugin",
+        "visitor": {}
+      }
+    ],
+    "overrides": [
+      {
+        "test": "./src/index",
+        "plugins": [
+          "@foo/babel-plugin-2",
+          {
+            "noDocumentAll": true
+          }
+        ]
+      }
+    ]
+  }
+]
