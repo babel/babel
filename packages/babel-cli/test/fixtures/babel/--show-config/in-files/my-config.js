@@ -3,8 +3,16 @@ module.exports = {
   plugins: [require("@foo/babel-plugin-1")],
   overrides: [
     {
-      test: "./src/index",
+      test: "src/index.js",
       plugins: ["@foo/babel-plugin-2", { noDocumentAll: true }],
     },
   ],
+  env: {
+    test: {
+      plugins: [["@foo/babel-plugin-3", { noDocumentAll: true }]],
+    },
+    development: {
+      plugins: ["@foo/babel-plugin-4"],
+    },
+  },
 };

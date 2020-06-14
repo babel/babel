@@ -24,20 +24,53 @@ config <CWD>/my-config.js
   {
     "babelrc": false,
     "plugins": [
-      {
-        "name": "@foo/babel-plugin",
-        "visitor": {}
-      }
+      null
     ],
     "overrides": [
       {
-        "test": "./src/index",
+        "test": "src/index.js",
         "plugins": [
           "@foo/babel-plugin-2",
           {
             "noDocumentAll": true
           }
         ]
+      }
+    ],
+    "env": {
+      "test": {
+        "plugins": [
+          [
+            "@foo/babel-plugin-3",
+            {
+              "noDocumentAll": true
+            }
+          ]
+        ]
+      },
+      "development": {
+        "plugins": [
+          "@foo/babel-plugin-4"
+        ]
+      }
+    }
+  },
+  {
+    "plugins": [
+      [
+        "@foo/babel-plugin-3",
+        {
+          "noDocumentAll": true
+        }
+      ]
+    ]
+  },
+  {
+    "test": "src/index.js",
+    "plugins": [
+      "@foo/babel-plugin-2",
+      {
+        "noDocumentAll": true
       }
     ]
   }
