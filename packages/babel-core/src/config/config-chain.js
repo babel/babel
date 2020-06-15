@@ -510,7 +510,7 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
       const envOpts = env(input, context.envName);
       if (envOpts && configIsApplicable(envOpts, dirname, context)) {
         flattenedConfigs.push(envOpts);
-        logger(rootOpts, undefined, context.envName);
+        logger(envOpts, undefined, context.envName);
       }
 
       (rootOpts.options.overrides || []).forEach((_, index) => {

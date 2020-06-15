@@ -17,29 +17,61 @@ programmatic options from @babel/cli
   "filename": "./src/index.js"
 }
 
+config <CWD>/.babelrc
+{
+  "presets": []
+}
+
 config <CWD>/my-config.js
 {
-  "babelrc": false,
+  "sourceType": "script",
   "plugins": [
-    null
-  ]
+    "[Function: (api) => ({/n  name: /"@foo//" + __dirname,/n  visitor ... ]"
+  ],
+  "presets": []
 }
 
 config <CWD>/my-config.js .env["test"]
 {
-  "babelrc": false,
   "plugins": [
-    null
-  ]
+    [
+      "@foo/babel-plugin-3",
+      {
+        "noDocumentAll": true
+      },
+      "@foo/babel-plugin-three"
+    ]
+  ],
+  "presets": []
 }
 
 config <CWD>/my-config.js .overrides[0]
 {
   "test": "src/index.js",
   "plugins": [
-    "@foo/babel-plugin-2",
-    {
-      "noDocumentAll": true
-    }
-  ]
+    [
+      "@foo/babel-plugin-2",
+      {
+        "noDocumentAll": true
+      }
+    ]
+  ],
+  "presets": []
+}
+
+config <CWD>/my-config.js .overrides[0].env["test"]
+{
+  "plugins": [
+    "@foo/babel-plugin-1",
+    [
+      {
+        "name": "@foo/inline-babel-plugin-1",
+        "visitor": {}
+      },
+      {
+        "noDocumentAll": true
+      }
+    ]
+  ],
+  "presets": []
 }

@@ -1,6 +1,9 @@
 // @flow
 
-import type { OptionsAndDescriptors } from "./config-descriptors";
+import type {
+  OptionsAndDescriptors,
+  UnloadedDescriptor,
+} from "./config-descriptors";
 
 // todo: Use flow enums when @babel/transform-flow-types supports it
 export const ChainFormatter = {
@@ -45,14 +48,48 @@ const Formatter = {
     }
     return loc;
   },
+
   optionsAndDescriptors(opt: OptionsAndDescriptors) {
     const content = { ...opt.options };
     // overrides and env will be printed as separated config items
     delete content.overrides;
     delete content.env;
+    // resolve to descriptors
+    const pluginDescriptors = [...opt.plugins()];
+    if (pluginDescriptors.length) {
+      content.plugins = pluginDescriptors.map(d => descriptorToConfig(d));
+    }
+    const presetDescriptors = [...opt.presets()];
+    if (presetDescriptors) {
+      content.presets = [...presetDescriptors].map(d => descriptorToConfig(d));
+    }
     return JSON.stringify(content, undefined, 2);
   },
 };
+
+function descriptorToConfig(d: UnloadedDescriptor): string | {} | Array<mixed> {
+  let name = d.file?.request;
+  if (name == null) {
+    if (typeof d.value === "object") {
+      name = d.value;
+    } else if (typeof d.value === "function") {
+      // If the unloaded descriptor is a function, i.e. `plugins: [ require("my-plugin") ]`,
+      // we print the first 50 characters of the function source code and hopefully we can see
+      // `name: 'my-plugin'` in the source
+      name = `[Function: ${d.value.toString().substr(0, 50)} ... ]`;
+    }
+  }
+  if (name == null) {
+    name = "[Unknown]";
+  }
+  if (d.options === undefined) {
+    return name;
+  } else if (d.name == null) {
+    return [name, d.options];
+  } else {
+    return [name, d.options, d.name];
+  }
+}
 
 export class ConfigPrinter {
   _stack: Array<PrintableConfig> = [];
