@@ -9,6 +9,7 @@ const fs = require("fs");
 
 const fixtureLoc = path.join(__dirname, "fixtures");
 const tmpLoc = path.join(__dirname, "tmp");
+const rootDir = path.resolve(__dirname, "../../..");
 
 const fileFilter = function (x) {
   return x !== ".DS_Store";
@@ -19,12 +20,12 @@ const outputFileSync = function (filePath, data) {
   fs.writeFileSync(filePath, data);
 };
 
-const presetLocs = [path.join(__dirname, "../../babel-preset-react")];
+const presetLocs = [path.join(rootDir, "./packages/babel-preset-react")];
 
 const pluginLocs = [
-  path.join(__dirname, "/../../babel-plugin-transform-arrow-functions"),
-  path.join(__dirname, "/../../babel-plugin-transform-strict-mode"),
-  path.join(__dirname, "/../../babel-plugin-transform-modules-commonjs"),
+  path.join(rootDir, "./packages/babel-plugin-transform-arrow-functions"),
+  path.join(rootDir, "./packages/babel-plugin-transform-strict-mode"),
+  path.join(rootDir, "./packages/babel-plugin-transform-modules-commonjs"),
 ].join(",");
 
 const readDir = function (loc, filter) {
@@ -49,19 +50,19 @@ const saveInFiles = function (files) {
   });
 };
 
-const normalizeOutput = function (str, cwd) {
+const normalizeOutput = function (str, cwd, root) {
   let prev;
   do {
     prev = str;
-    str = str.replace(cwd, "<CWD>");
+    str = str.replace(cwd, "<CWD>").replace(root, "<ROOTDIR>");
   } while (str !== prev);
 
   return str.replace(/\(\d+ms\)/g, "(123ms)");
 };
 
 const assertTest = function (stdout, stderr, opts, cwd) {
-  stdout = normalizeOutput(stdout, cwd);
-  stderr = normalizeOutput(stderr, cwd);
+  stdout = normalizeOutput(stdout, cwd, rootDir);
+  stderr = normalizeOutput(stderr, cwd, rootDir);
 
   const expectStderr = opts.stderr.trim();
   stderr = stderr.trim();

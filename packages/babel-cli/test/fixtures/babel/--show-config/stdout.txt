@@ -1,77 +1,45 @@
 programmatic options from @babel/cli
-[
-  {
-    "sourceFileName": "stdin",
-    "presets": [
-      "/Users/jh/code/babel/packages/babel-preset-react"
-    ],
-    "plugins": [
-      "/Users/jh/code/babel/packages/babel-plugin-transform-arrow-functions",
-      "/Users/jh/code/babel/packages/babel-plugin-transform-strict-mode",
-      "/Users/jh/code/babel/packages/babel-plugin-transform-modules-commonjs"
-    ],
-    "configFile": "./my-config.js",
-    "showConfig": true,
-    "caller": {
-      "name": "@babel/cli"
-    },
-    "filename": "./src/index.js"
-  }
-]
+{
+  "sourceFileName": "stdin",
+  "presets": [
+    "<ROOTDIR>/packages/babel-preset-react"
+  ],
+  "plugins": [
+    "<ROOTDIR>/packages/babel-plugin-transform-arrow-functions",
+    "<ROOTDIR>/packages/babel-plugin-transform-strict-mode",
+    "<ROOTDIR>/packages/babel-plugin-transform-modules-commonjs"
+  ],
+  "configFile": "./my-config.js",
+  "showConfig": true,
+  "caller": {
+    "name": "@babel/cli"
+  },
+  "filename": "./src/index.js"
+}
 
 config <CWD>/my-config.js
-[
-  {
-    "babelrc": false,
-    "plugins": [
-      null
-    ],
-    "overrides": [
-      {
-        "test": "src/index.js",
-        "plugins": [
-          "@foo/babel-plugin-2",
-          {
-            "noDocumentAll": true
-          }
-        ]
-      }
-    ],
-    "env": {
-      "test": {
-        "plugins": [
-          [
-            "@foo/babel-plugin-3",
-            {
-              "noDocumentAll": true
-            }
-          ]
-        ]
-      },
-      "development": {
-        "plugins": [
-          "@foo/babel-plugin-4"
-        ]
-      }
+{
+  "babelrc": false,
+  "plugins": [
+    null
+  ]
+}
+
+config <CWD>/my-config.js .env["test"]
+{
+  "babelrc": false,
+  "plugins": [
+    null
+  ]
+}
+
+config <CWD>/my-config.js .overrides[0]
+{
+  "test": "src/index.js",
+  "plugins": [
+    "@foo/babel-plugin-2",
+    {
+      "noDocumentAll": true
     }
-  },
-  {
-    "plugins": [
-      [
-        "@foo/babel-plugin-3",
-        {
-          "noDocumentAll": true
-        }
-      ]
-    ]
-  },
-  {
-    "test": "src/index.js",
-    "plugins": [
-      "@foo/babel-plugin-2",
-      {
-        "noDocumentAll": true
-      }
-    ]
-  }
-]
+  ]
+}

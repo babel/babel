@@ -12,6 +12,7 @@ import {
   type CallerMetadata,
 } from "./validation/options";
 import pathPatternToRegex from "./pattern-to-regex";
+import { ConfigPrinter } from "./printer";
 
 const debug = buildDebug("babel:config:config-chain");
 
@@ -88,6 +89,7 @@ export const buildPresetChainWalker: (
   overrides: (preset, index) => loadPresetOverridesDescriptors(preset)(index),
   overridesEnv: (preset, index, envName) =>
     loadPresetOverridesEnvDescriptors(preset)(index)(envName),
+  createLogger: () => () => {}, // Currently we don't support logging how preset is expanded
 });
 const loadPresetDescriptors = makeWeakCacheSync((preset: PresetInstance) =>
   buildRootDescriptors(preset, preset.alias, createUncachedDescriptors),
@@ -142,19 +144,18 @@ export function* buildRootChain(
   context: ConfigContext,
 ): Handler<RootConfigChain | null> {
   let configReport, babelRcReport;
+  const programmaticLogger = new ConfigPrinter();
   const programmaticChain = yield* loadProgrammaticChain(
     {
       options: opts,
       dirname: context.cwd,
     },
     context,
+    undefined,
+    programmaticLogger,
   );
   if (!programmaticChain) return null;
-  const programmaticReport = printChain(
-    programmaticChain,
-    ChainFormatter.Programmatic,
-    context,
-  );
+  const programmaticReport = programmaticLogger.output();
 
   let configFile;
   if (typeof opts.configFile === "string") {
@@ -176,16 +177,17 @@ export function* buildRootChain(
   let babelrcRootsDirectory = context.cwd;
 
   const configFileChain = emptyChain();
+  const configFileLogger = new ConfigPrinter();
   if (configFile) {
     const validatedFile = validateConfigFile(configFile);
-    const result = yield* loadFileChain(validatedFile, context);
-    if (!result) return null;
-    configReport = printChain(
-      result,
-      ChainFormatter.Config,
-      context,
+    const result = yield* loadFileChain(
       validatedFile,
+      context,
+      undefined,
+      configFileLogger,
     );
+    if (!result) return null;
+    configReport = configFileLogger.output();
 
     // Allow config files to toggle `.babelrc` resolution on and off and
     // specify where the roots are.
@@ -228,14 +230,15 @@ export function* buildRootChain(
 
     if (babelrcFile) {
       const validatedFile = validateBabelrcFile(babelrcFile);
-      const result = yield* loadFileChain(validatedFile, context);
-      if (!result) return null;
-      babelRcReport = printChain(
-        result,
-        ChainFormatter.Config,
-        context,
+      const babelrcLogger = new ConfigPrinter();
+      const result = yield* loadFileChain(
         validatedFile,
+        context,
+        undefined,
+        babelrcLogger,
       );
+      if (!result) return null;
+      babelRcReport = babelrcLogger.output();
 
       mergeChain(fileChain, result);
     }
@@ -349,6 +352,8 @@ const loadProgrammaticChain = makeChainWalker({
       index,
       envName,
     ),
+  createLogger: (input, context, baseLogger) =>
+    buildProgrammaticLogger(input, context, baseLogger),
 });
 
 /**
@@ -360,6 +365,8 @@ const loadFileChain = makeChainWalker({
   overrides: (file, index) => loadFileOverridesDescriptors(file)(index),
   overridesEnv: (file, index, envName) =>
     loadFileOverridesEnvDescriptors(file)(index)(envName),
+  createLogger: (file, context, baseLogger) =>
+    buildFileLogger(file.filepath, context, baseLogger),
 });
 const loadFileDescriptors = makeWeakCacheSync((file: ValidatedFile) =>
   buildRootDescriptors(file, file.filepath, createUncachedDescriptors),
@@ -399,8 +406,30 @@ const loadFileOverridesEnvDescriptors = makeWeakCacheSync(
     ),
 );
 
+function buildFileLogger(
+  filepath: string,
+  context: ConfigContext,
+  baseLogger: ?ConfigPrinter,
+) {
+  if (!baseLogger) {
+    return () => {};
+  }
+  return baseLogger.configure(context.showConfig, ChainFormatter.Config, {
+    filepath,
+  });
+}
+
 function buildRootDescriptors({ dirname, options }, alias, descriptors) {
   return descriptors(dirname, options, alias);
+}
+
+function buildProgrammaticLogger(_, context, baseLogger: ?ConfigPrinter) {
+  if (!baseLogger) {
+    return () => {};
+  }
+  return baseLogger.configure(context.showConfig, ChainFormatter.Programmatic, {
+    callerName: context.caller?.name,
+  });
 }
 
 function buildEnvDescriptors(
@@ -450,34 +479,45 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
   env,
   overrides,
   overridesEnv,
+  createLogger,
 }: {|
   root: ArgT => OptionsAndDescriptors,
   env: (ArgT, string) => OptionsAndDescriptors | null,
   overrides: (ArgT, number) => OptionsAndDescriptors,
   overridesEnv: (ArgT, number, string) => OptionsAndDescriptors | null,
+  createLogger: (
+    ArgT,
+    ConfigContext,
+    ?ConfigPrinter,
+  ) => (OptionsAndDescriptors, ?number, ?string) => void,
 |}): (
   ArgT,
   ConfigContext,
-  Set<ConfigFile> | void,
+  files?: Set<ConfigFile> | void,
+  baseLogger?: ConfigPrinter,
 ) => Handler<ConfigChain | null> {
-  return function* (input, context, files = new Set()) {
+  return function* (input, context, files = new Set(), baseLogger) {
     const { dirname } = input;
 
     const flattenedConfigs = [];
+    const logger = createLogger(input, context, baseLogger);
 
     const rootOpts = root(input);
     if (configIsApplicable(rootOpts, dirname, context)) {
       flattenedConfigs.push(rootOpts);
+      logger(rootOpts);
 
       const envOpts = env(input, context.envName);
       if (envOpts && configIsApplicable(envOpts, dirname, context)) {
         flattenedConfigs.push(envOpts);
+        logger(rootOpts, undefined, context.envName);
       }
 
       (rootOpts.options.overrides || []).forEach((_, index) => {
         const overrideOps = overrides(input, index);
         if (configIsApplicable(overrideOps, dirname, context)) {
           flattenedConfigs.push(overrideOps);
+          logger(overrideOps, index);
 
           const overrideEnvOpts = overridesEnv(input, index, context.envName);
           if (
@@ -485,6 +525,7 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
             configIsApplicable(overrideEnvOpts, dirname, context)
           ) {
             flattenedConfigs.push(overrideEnvOpts);
+            logger(overrideEnvOpts, index, context.envName);
           }
         }
       });
@@ -505,7 +546,14 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
 
     for (const op of flattenedConfigs) {
       if (
-        !(yield* mergeExtendsChain(chain, op.options, dirname, context, files))
+        !(yield* mergeExtendsChain(
+          chain,
+          op.options,
+          dirname,
+          context,
+          files,
+          baseLogger,
+        ))
       ) {
         return null;
       }
@@ -522,6 +570,7 @@ function* mergeExtendsChain(
   dirname: string,
   context: ConfigContext,
   files: Set<ConfigFile>,
+  baseLogger: ?ConfigPrinter,
 ): Handler<boolean> {
   if (opts.extends === undefined) return true;
 
@@ -545,6 +594,7 @@ function* mergeExtendsChain(
     validateExtendFile(file),
     context,
     files,
+    baseLogger,
   );
   files.delete(file);
 
@@ -742,34 +792,4 @@ function matchPattern(
     pattern = pathPatternToRegex(pattern, dirname);
   }
   return pattern.test(pathToTest);
-}
-
-function printChain(
-  chain: ConfigChain,
-  formatter: $Values<typeof ChainFormatter>,
-  context: ConfigContext,
-  validatedFile?: ValidatedFile,
-): string {
-  function formatHeading(type, context, validatedFile) {
-    let heading = "";
-    if (type === ChainFormatter.Programmatic) {
-      heading = "programmatic options";
-      if (context.caller?.name) {
-        heading += " from " + context.caller.name;
-      }
-    } else {
-      // $FlowIgnore
-      heading = "config " + validatedFile.filepath;
-    }
-    return heading;
-  }
-  function formatChain(chain: ConfigChain) {
-    return JSON.stringify(chain.options, undefined, 2);
-  }
-  if (!context.showConfig) {
-    return "";
-  }
-  return (
-    formatHeading(formatter, context, validatedFile) + "\n" + formatChain(chain)
-  );
 }
