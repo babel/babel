@@ -256,11 +256,12 @@ publish-eslint:
 bootstrap-only: lerna-bootstrap
 
 yarn-install: clean-all
-	yarn --ignore-engines
+	# Gitpod prebuilds have a slow network connection, so we need more time
+	yarn --ignore-engines --network-timeout 100000
 
 lerna-bootstrap: yarn-install
 # todo: remove `-- -- --ignore-engines` in Babel 8
-	$(YARN) lerna bootstrap -- -- --ignore-engines
+	$(YARN) lerna bootstrap -- -- --ignore-engines --network-timeout 100000
 
 bootstrap: bootstrap-only
 	$(MAKE) build
