@@ -63,7 +63,7 @@ export default declare(
         if (node.definite || node.declare) {
           if (node.value) {
             throw path.buildCodeFrameError(
-              `Definietly assigned fields and fields with the 'declare' modifier cannot` +
+              `Definitely assigned fields and fields with the 'declare' modifier cannot` +
                 ` be initialized here, but only in the constructor`,
             );
           }
@@ -155,6 +155,11 @@ export default declare(
             }
           }
 
+          let pragmaImportName = fileJsxPragma || jsxPragma;
+          if (pragmaImportName) {
+            [pragmaImportName] = pragmaImportName.split(".");
+          }
+
           // remove type imports
           for (let stmt of path.get("body")) {
             if (t.isImportDeclaration(stmt)) {
@@ -189,7 +194,7 @@ export default declare(
                     isImportTypeOnly({
                       binding,
                       programPath: path,
-                      jsxPragma: fileJsxPragma || jsxPragma,
+                      jsxPragma: pragmaImportName,
                     })
                   ) {
                     importsToRemove.push(binding.path);

@@ -36,7 +36,7 @@ async function getTemp(name) {
   return { cwd, tmp, config };
 }
 
-describe("buildConfigChain", function() {
+describe("buildConfigChain", function () {
   describe("test", () => {
     describe("single", () => {
       it("should process matching string values", () => {
@@ -669,8 +669,8 @@ describe("buildConfigChain", function() {
     });
   });
 
-  describe("caching", function() {
-    describe("programmatic options", function() {
+  describe("caching", function () {
+    describe("programmatic options", function () {
       const plugins1 = [() => ({})];
       const plugins2 = [() => ({})];
 
@@ -774,7 +774,7 @@ describe("buildConfigChain", function() {
       });
     });
 
-    describe("config file options", function() {
+    describe("config file options", function () {
       function touch(filepath) {
         const s = fs.statSync(filepath);
         fs.utimesSync(

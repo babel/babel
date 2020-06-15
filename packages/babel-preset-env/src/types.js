@@ -34,6 +34,7 @@ export type Options = {
   spec: boolean,
   targets: { ...InputTargets, uglify?: boolean },
   useBuiltIns: BuiltInsOption,
+  browserslistEnv: string,
 };
 
 // Babel

@@ -53,6 +53,9 @@ function buildBabelOptions(script, filename) {
  */
 function run(transformFn, script) {
   const scriptEl = document.createElement("script");
+  if (script.type) {
+    scriptEl.setAttribute("type", script.type);
+  }
   scriptEl.text = transformCode(transformFn, script);
   headEl.appendChild(scriptEl);
 }
@@ -69,7 +72,7 @@ function load(url, successCallback, errorCallback) {
   if ("overrideMimeType" in xhr) {
     xhr.overrideMimeType("text/plain");
   }
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (xhr.readyState === 4) {
       if (xhr.status === 0 || xhr.status === 200) {
         successCallback(xhr.responseText);
@@ -129,6 +132,7 @@ function loadScripts(transformFn, scripts) {
     const scriptData = {
       // script.async is always true for non-JavaScript script tags
       async: script.hasAttribute("async"),
+      type: script.getAttribute("data-type"),
       error: false,
       executed: false,
       plugins: getPluginsOrPresetsFromScript(script, "data-plugins"),

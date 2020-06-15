@@ -71,7 +71,7 @@ function applyClassDecorators(classPath) {
   return decorators
     .map(dec => dec.expression)
     .reverse()
-    .reduce(function(acc, decorator) {
+    .reduce(function (acc, decorator) {
       return buildClassDecorator({
         CLASS_REF: t.cloneNode(name),
         DECORATOR: t.cloneNode(decorator),
@@ -95,7 +95,7 @@ function applyMethodDecorators(path, state) {
 }
 
 function hasMethodDecorators(body) {
-  return body.some(node => node.decorators && node.decorators.length);
+  return body.some(node => node.decorators?.length);
 }
 
 /**
@@ -116,7 +116,7 @@ function applyTargetDecorators(path, state, decoratedProps) {
     path.isClass() ? "class" : "obj",
   );
 
-  const exprs = decoratedProps.reduce(function(acc, node) {
+  const exprs = decoratedProps.reduce(function (acc, node) {
     const decorators = node.decorators || [];
     node.decorators = null;
 

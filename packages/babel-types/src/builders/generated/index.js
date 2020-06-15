@@ -677,6 +677,10 @@ export function Import(...args: Array<any>): Object {
   return builder("Import", ...args);
 }
 export { Import as import };
+export function ImportAttribute(...args: Array<any>): Object {
+  return builder("ImportAttribute", ...args);
+}
+export { ImportAttribute as importAttribute };
 export function Decorator(...args: Array<any>): Object {
   return builder("Decorator", ...args);
 }

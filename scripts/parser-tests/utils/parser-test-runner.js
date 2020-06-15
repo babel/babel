@@ -121,7 +121,7 @@ class TestRunner {
       count: results.length,
     };
 
-    results.forEach(function(result) {
+    results.forEach(function (result) {
       let classification, isAllowed;
       const inWhitelist = whitelist.has(result.id);
       whitelist.delete(result.id);
@@ -200,7 +200,7 @@ class TestRunner {
         tests: summary.unrecognized,
         label: "non-existent programs specified in the whitelist file",
       },
-    ].forEach(function({ tests, label }) {
+    ].forEach(function ({ tests, label }) {
       if (!tests.length) {
         return;
       }

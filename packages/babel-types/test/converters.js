@@ -11,13 +11,13 @@ function generateCode(node) {
   return generate(node).code;
 }
 
-describe("converters", function() {
-  it("toIdentifier", function() {
+describe("converters", function () {
+  it("toIdentifier", function () {
     expect(t.toIdentifier("swag-lord")).toBe("swagLord");
   });
 
-  describe("valueToNode", function() {
-    it("number", function() {
+  describe("valueToNode", function () {
+    it("number", function () {
       expect(t.valueToNode(Math.PI)).toEqual(t.numericLiteral(Math.PI));
       expect(t.valueToNode(-Math.PI)).toEqual(
         t.unaryExpression("-", t.numericLiteral(Math.PI)),
@@ -43,30 +43,30 @@ describe("converters", function() {
         ),
       );
     });
-    it("string", function() {
+    it("string", function () {
       expect(t.valueToNode('This is a "string"')).toEqual(
         t.stringLiteral('This is a "string"'),
       );
     });
-    it("boolean", function() {
+    it("boolean", function () {
       expect(t.valueToNode(true)).toEqual(t.booleanLiteral(true));
       expect(t.valueToNode(false)).toEqual(t.booleanLiteral(false));
     });
-    it("null", function() {
+    it("null", function () {
       expect(t.valueToNode(null)).toEqual(t.nullLiteral());
     });
-    it("undefined", function() {
+    it("undefined", function () {
       expect(t.valueToNode(undefined)).toEqual(t.identifier("undefined"));
     });
-    it("RegExp", function() {
+    it("RegExp", function () {
       expect(t.valueToNode(/abc.+/gm)).toEqual(t.regExpLiteral("abc.+", "gm"));
     });
-    it("array", function() {
+    it("array", function () {
       expect(t.valueToNode([1, "a"])).toEqual(
         t.arrayExpression([t.numericLiteral(1), t.stringLiteral("a")]),
       );
     });
-    it("object", function() {
+    it("object", function () {
       expect(
         t.valueToNode({
           a: 1,
@@ -79,26 +79,26 @@ describe("converters", function() {
         ]),
       );
     });
-    it("throws if cannot convert", function() {
-      expect(function() {
+    it("throws if cannot convert", function () {
+      expect(function () {
         t.valueToNode(Object);
       }).toThrow();
-      expect(function() {
+      expect(function () {
         t.valueToNode(Symbol());
       }).toThrow();
     });
   });
-  describe("toKeyAlias", function() {
-    beforeEach(function() {
+  describe("toKeyAlias", function () {
+    beforeEach(function () {
       // make tests deterministic
       t.toKeyAlias.uid = 0;
     });
-    it("doesn't change string literals", function() {
+    it("doesn't change string literals", function () {
       expect(
         t.toKeyAlias(t.objectProperty(t.stringLiteral("a"), t.nullLiteral())),
       ).toBe('"a"');
     });
-    it("wraps around at Number.MAX_SAFE_INTEGER", function() {
+    it("wraps around at Number.MAX_SAFE_INTEGER", function () {
       expect(
         t.toKeyAlias(
           t.objectMethod("method", t.identifier("a"), [], t.blockStatement([])),
@@ -106,13 +106,13 @@ describe("converters", function() {
       ).toBe("0");
     });
   });
-  describe("toStatement", function() {
-    it("noop on statements", function() {
+  describe("toStatement", function () {
+    it("noop on statements", function () {
       const node = t.emptyStatement();
       expect(t.toStatement(node)).toEqual(node);
       t.assertEmptyStatement(node);
     });
-    it("mutate class expression to declaration", function() {
+    it("mutate class expression to declaration", function () {
       const node = t.classExpression(
         t.identifier("A"),
         null,
@@ -122,15 +122,15 @@ describe("converters", function() {
       t.toStatement(node);
       t.assertClassDeclaration(node);
     });
-    it("fail if class expression has no id", function() {
+    it("fail if class expression has no id", function () {
       const node = t.classExpression(null, null, t.classBody([]), []);
-      expect(function() {
+      expect(function () {
         t.toStatement(node);
       }).toThrow(Error);
       expect(t.toStatement(node, /* ignore = */ true)).toBe(false);
       t.assertClassExpression(node);
     });
-    it("mutate function expression to declaration", function() {
+    it("mutate function expression to declaration", function () {
       const node = t.functionExpression(
         t.identifier("A"),
         [],
@@ -139,15 +139,15 @@ describe("converters", function() {
       t.toStatement(node);
       t.assertFunctionDeclaration(node);
     });
-    it("fail if function expression has no id", function() {
+    it("fail if function expression has no id", function () {
       const node = t.functionExpression(null, [], t.blockStatement([]));
-      expect(function() {
+      expect(function () {
         t.toStatement(node);
       }).toThrow(Error);
       expect(t.toStatement(node, /* ignore = */ true)).toBe(false);
       t.assertFunctionExpression(node);
     });
-    it("assignment expression", function() {
+    it("assignment expression", function () {
       const node = t.assignmentExpression(
         "+=",
         t.identifier("x"),
@@ -156,22 +156,22 @@ describe("converters", function() {
       t.assertExpressionStatement(t.toStatement(node));
       t.assertAssignmentExpression(node);
     });
-    it("fail if cannot convert node type", function() {
+    it("fail if cannot convert node type", function () {
       const node = t.yieldExpression(t.identifier("foo"));
-      expect(function() {
+      expect(function () {
         t.toStatement(node);
       }).toThrow(Error);
       expect(t.toStatement(node, /* ignore = */ true)).toBe(false);
       t.assertYieldExpression(node);
     });
   });
-  describe("toExpression", function() {
-    it("noop on expressions", function() {
+  describe("toExpression", function () {
+    it("noop on expressions", function () {
       const node = t.identifier("a");
       expect(t.toExpression(node)).toEqual(node);
       t.assertIdentifier(node);
     });
-    it("mutate class declaration to expression", function() {
+    it("mutate class declaration to expression", function () {
       const node = t.classDeclaration(
         t.identifier("A"),
         null,
@@ -181,7 +181,7 @@ describe("converters", function() {
       t.toExpression(node);
       t.assertClassExpression(node);
     });
-    it("mutate function declaration to expression", function() {
+    it("mutate function declaration to expression", function () {
       const node = t.functionDeclaration(
         t.identifier("A"),
         [],
@@ -190,7 +190,7 @@ describe("converters", function() {
       t.toExpression(node);
       t.assertFunctionExpression(node);
     });
-    it("mutate object method to expression", function() {
+    it("mutate object method to expression", function () {
       const node = t.objectMethod(
         "method",
         t.identifier("A"),
@@ -200,7 +200,7 @@ describe("converters", function() {
       t.toExpression(node);
       t.assertFunctionExpression(node);
     });
-    it("mutate class method to expression", function() {
+    it("mutate class method to expression", function () {
       const node = t.classMethod(
         "constructor",
         t.identifier("A"),
@@ -210,31 +210,31 @@ describe("converters", function() {
       t.toExpression(node);
       t.assertFunctionExpression(node);
     });
-    it("expression statement", function() {
+    it("expression statement", function () {
       const inner = t.yieldExpression(t.identifier("foo"));
       const node = t.expressionStatement(inner);
       t.assertYieldExpression(t.toExpression(node));
       expect(t.toExpression(node)).toEqual(inner);
       t.assertExpressionStatement(node);
     });
-    it("fail if cannot convert node type", function() {
+    it("fail if cannot convert node type", function () {
       const node = t.program([]);
-      expect(function() {
+      expect(function () {
         t.toExpression(node);
       }).toThrow(Error);
       t.assertProgram(node);
     });
   });
-  describe("toSequenceExpression", function() {
+  describe("toSequenceExpression", function () {
     let scope;
     const undefinedNode = t.identifier("undefined");
-    beforeEach(function() {
+    beforeEach(function () {
       scope = [];
-      scope.buildUndefinedNode = function() {
+      scope.buildUndefinedNode = function () {
         return undefinedNode;
       };
     });
-    it("gathers nodes into sequence", function() {
+    it("gathers nodes into sequence", function () {
       const node = t.identifier("a");
       const sequence = t.toSequenceExpression([undefinedNode, node], scope);
       t.assertSequenceExpression(sequence);
@@ -242,7 +242,7 @@ describe("converters", function() {
       expect(sequence.expressions[1]).toBe(node);
       t.assertIdentifier(node);
     });
-    it("avoids sequence for single node", function() {
+    it("avoids sequence for single node", function () {
       const node = t.identifier("a");
       let sequence = t.toSequenceExpression([node], scope);
       expect(sequence).toBe(node);
@@ -251,17 +251,17 @@ describe("converters", function() {
       sequence = t.toSequenceExpression([block], scope);
       expect(sequence).toBe(node);
     });
-    it("gathers expression", function() {
+    it("gathers expression", function () {
       const node = t.identifier("a");
       const sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(sequence.expressions[1]).toBe(node);
     });
-    it("gathers expression statement", function() {
+    it("gathers expression statement", function () {
       const node = t.expressionStatement(t.identifier("a"));
       const sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(sequence.expressions[1]).toBe(node.expression);
     });
-    it("gathers var declarations", function() {
+    it("gathers var declarations", function () {
       const node = parseCode("var a, b = 1;");
       const sequence = t.toSequenceExpression([undefinedNode, node], scope);
       t.assertIdentifier(scope[0].id, { name: "a" });
@@ -269,12 +269,12 @@ describe("converters", function() {
       expect(generateCode(sequence.expressions[1])).toBe("b = 1");
       expect(generateCode(sequence.expressions[2])).toBe("undefined");
     });
-    it("skips undefined if expression after var declaration", function() {
+    it("skips undefined if expression after var declaration", function () {
       const node = parseCode("{ var a, b = 1; true }");
       const sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(generateCode(sequence.expressions[1])).toBe("b = 1, true");
     });
-    it("bails on let and const declarations", function() {
+    it("bails on let and const declarations", function () {
       let node = parseCode("let a, b = 1;");
       let sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(sequence).toBeUndefined();
@@ -283,7 +283,7 @@ describe("converters", function() {
       sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(sequence).toBeUndefined();
     });
-    it("gathers if statements", function() {
+    it("gathers if statements", function () {
       let node = parseCode("if (true) { true }");
       let sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(generateCode(sequence.expressions[1])).toBe(
@@ -294,7 +294,7 @@ describe("converters", function() {
       sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(generateCode(sequence.expressions[1])).toBe("true ? true : b");
     });
-    it("bails in if statements if recurse bails", function() {
+    it("bails in if statements if recurse bails", function () {
       let node = parseCode("if (true) { return }");
       let sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(sequence).toBeUndefined();
@@ -303,7 +303,7 @@ describe("converters", function() {
       sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(sequence).toBeUndefined();
     });
-    it("gathers block statements", function() {
+    it("gathers block statements", function () {
       let node = parseCode("{ a }");
       let sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(generateCode(sequence.expressions[1])).toBe("a");
@@ -312,17 +312,17 @@ describe("converters", function() {
       sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(generateCode(sequence.expressions[1])).toBe("a, b");
     });
-    it("bails in block statements if recurse bails", function() {
+    it("bails in block statements if recurse bails", function () {
       const node = parseCode("{ return }");
       const sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(sequence).toBeUndefined();
     });
-    it("gathers empty statements", function() {
+    it("gathers empty statements", function () {
       const node = parseCode(";");
       const sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(generateCode(sequence.expressions[1])).toBe("undefined");
     });
-    it("skips empty statement if expression afterwards", function() {
+    it("skips empty statement if expression afterwards", function () {
       const node = parseCode("{ ; true }");
       const sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(generateCode(sequence.expressions[1])).toBe("true");

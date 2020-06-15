@@ -1,8 +1,12 @@
 {
   "name": "@babel/plugin-transform-flow-comments",
-  "version": "7.8.3",
+  "version": "7.10.1",
   "description": "Turn flow type annotations into comments",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-flow-comments",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-transform-flow-comments"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -12,15 +16,15 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/generator": "^7.8.3",
-    "@babel/helper-plugin-utils": "^7.8.3",
-    "@babel/plugin-syntax-flow": "^7.8.3"
+    "@babel/generator": "^7.10.1",
+    "@babel/helper-plugin-utils": "^7.10.1",
+    "@babel/plugin-syntax-flow": "^7.10.1"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.3",
-    "@babel/helper-plugin-test-runner": "^7.8.3"
+    "@babel/core": "^7.10.1",
+    "@babel/helper-plugin-test-runner": "^7.10.1"
   }
 }

@@ -1,3 +1,5 @@
+var _foo = new WeakSet();
+
 class Cl {
   constructor() {
     _foo.add(this);
@@ -8,8 +10,6 @@ class Cl {
   }
 
 }
-
-var _foo = new WeakSet();
 
 var _foo2 = async function _foo2() {
   return 2;

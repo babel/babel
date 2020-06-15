@@ -294,7 +294,7 @@ export default class Scope {
     const cached = scopeCache.get(node);
     // Sometimes, a scopable path is placed higher in the AST tree.
     // In these cases, have to create a new Scope.
-    if (cached && cached.path === path) {
+    if (cached?.path === path) {
       return cached;
     }
     scopeCache.set(node, this);
@@ -322,7 +322,7 @@ export default class Scope {
 
   get parent() {
     const parent = this.path.findParent(p => p.isScope());
-    return parent && parent.scope;
+    return parent?.scope;
   }
 
   get parentBlock() {
@@ -520,10 +520,11 @@ export default class Scope {
     console.log(sep);
   }
 
-  toArray(node: Object, i?: number) {
+  // TODO: (Babel 8) Split i in two parameters, and use an object of flags
+  toArray(node: Object, i?: number | boolean, allowArrayLike?: boolean) {
     if (t.isIdentifier(node)) {
       const binding = this.getBinding(node.name);
-      if (binding && binding.constant && binding.path.isGenericType("Array")) {
+      if (binding?.constant && binding.path.isGenericType("Array")) {
         return node;
       }
     }
@@ -563,6 +564,12 @@ export default class Scope {
       // Used in array-rest to create an array
       helperName = "toArray";
     }
+
+    if (allowArrayLike) {
+      args.unshift(this.hub.addHelper(helperName));
+      helperName = "maybeArrayLike";
+    }
+
     return t.callExpression(this.hub.addHelper(helperName), args);
   }
 
@@ -1014,13 +1021,12 @@ export default class Scope {
   }
 
   getBindingIdentifier(name: string) {
-    const info = this.getBinding(name);
-    return info && info.identifier;
+    return this.getBinding(name)?.identifier;
   }
 
   getOwnBindingIdentifier(name: string) {
     const binding = this.bindings[name];
-    return binding && binding.identifier;
+    return binding?.identifier;
   }
 
   hasOwnBinding(name: string) {
@@ -1038,7 +1044,7 @@ export default class Scope {
   }
 
   parentHasBinding(name: string, noGlobals?) {
-    return this.parent && this.parent.hasBinding(name, noGlobals);
+    return this.parent?.hasBinding(name, noGlobals);
   }
 
   /**
@@ -1060,10 +1066,7 @@ export default class Scope {
 
   removeBinding(name: string) {
     // clear literal binding
-    const info = this.getBinding(name);
-    if (info) {
-      info.scope.removeOwnBinding(name);
-    }
+    this.getBinding(name)?.scope.removeOwnBinding(name);
 
     // clear uids with this name - https://github.com/babel/babel/issues/2101
     let scope = this;

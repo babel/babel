@@ -4,7 +4,11 @@ import { types as t } from "@babel/core";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { loose = false, useBuiltIns = false } = options;
+  const {
+    loose = false,
+    useBuiltIns = false,
+    allowArrayLike = false,
+  } = options;
 
   if (typeof loose !== "boolean") {
     throw new Error(`.loose must be a boolean or undefined`);
@@ -85,6 +89,7 @@ export default declare((api, options) => {
       this.scope = opts.scope;
       this.kind = opts.kind;
       this.arrayOnlySpread = opts.arrayOnlySpread;
+      this.allowArrayLike = opts.allowArrayLike;
       this.addHelper = opts.addHelper;
     }
 
@@ -141,7 +146,7 @@ export default declare((api, options) => {
       ) {
         return node;
       } else {
-        return this.scope.toArray(node, count);
+        return this.scope.toArray(node, count, this.allowArrayLike);
       }
     }
 
@@ -523,6 +528,7 @@ export default declare((api, options) => {
           scope: scope,
           nodes: nodes,
           arrayOnlySpread,
+          allowArrayLike,
           addHelper: name => this.addHelper(name),
         });
 
@@ -548,6 +554,7 @@ export default declare((api, options) => {
           scope: scope,
           nodes: nodes,
           arrayOnlySpread,
+          allowArrayLike,
           addHelper: name => this.addHelper(name),
         });
         destructuring.init(pattern, ref);
@@ -566,6 +573,7 @@ export default declare((api, options) => {
           scope: scope,
           nodes: nodes,
           arrayOnlySpread,
+          allowArrayLike,
           addHelper: name => this.addHelper(name),
         });
 
@@ -624,6 +632,7 @@ export default declare((api, options) => {
             scope: scope,
             kind: node.kind,
             arrayOnlySpread,
+            allowArrayLike,
             addHelper: name => this.addHelper(name),
           });
 

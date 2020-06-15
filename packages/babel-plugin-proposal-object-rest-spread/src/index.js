@@ -234,7 +234,7 @@ export default declare((api, opts) => {
         // example: f({...R}, a = R)
         let idInRest = false;
 
-        const IdentifierHandler = function(path, functionScope) {
+        const IdentifierHandler = function (path, functionScope) {
           const name = path.node.name;
           if (
             path.scope.getBinding(name) === functionScope.getBinding(name) &&
@@ -346,7 +346,11 @@ export default declare((api, opts) => {
           );
           refPropertyPath.forEach(prop => {
             const { node } = prop;
-            ref = t.memberExpression(ref, t.cloneNode(node.key), node.computed);
+            ref = t.memberExpression(
+              ref,
+              t.cloneNode(node.key),
+              node.computed || t.isLiteral(node.key),
+            );
           });
 
           const objectPatternPath = path.findParent(path =>

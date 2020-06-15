@@ -9,7 +9,7 @@ import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
 import { types as tt, keywords as keywordTypes, type TokenType } from "./types";
 import { type TokContext, types as ct } from "./context";
-import LocationParser, { Errors } from "../parser/location";
+import ParserErrors, { Errors } from "../parser/error";
 import { SourceLocation } from "../util/location";
 import {
   lineBreak,
@@ -110,7 +110,7 @@ export class Token {
 
 // ## Tokenizer
 
-export default class Tokenizer extends LocationParser {
+export default class Tokenizer extends ParserErrors {
   // Forward-declarations
   // parser/util.js
   /*::
@@ -190,11 +190,14 @@ export default class Tokenizer extends LocationParser {
   }
 
   nextTokenStart(): number {
-    const thisTokEnd = this.state.pos;
-    skipWhiteSpace.lastIndex = thisTokEnd;
+    return this.nextTokenStartSince(this.state.pos);
+  }
+
+  nextTokenStartSince(pos: number): number {
+    skipWhiteSpace.lastIndex = pos;
     const skip = skipWhiteSpace.exec(this.input);
     // $FlowIgnore: The skipWhiteSpace ensures to match any string
-    return thisTokEnd + skip[0].length;
+    return pos + skip[0].length;
   }
 
   lookaheadCharCode(): number {
@@ -225,7 +228,7 @@ export default class Tokenizer extends LocationParser {
 
   nextToken(): void {
     const curContext = this.curContext();
-    if (!curContext || !curContext.preserveSpace) this.skipSpace();
+    if (!curContext?.preserveSpace) this.skipSpace();
 
     this.state.octalPositions = [];
     this.state.start = this.state.pos;

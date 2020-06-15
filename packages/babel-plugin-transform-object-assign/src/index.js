@@ -7,7 +7,7 @@ export default declare(api => {
     name: "transform-object-assign",
 
     visitor: {
-      CallExpression: function(path, file) {
+      CallExpression: function (path, file) {
         if (path.get("callee").matchesPattern("Object.assign")) {
           path.node.callee = file.addHelper("extends");
         }

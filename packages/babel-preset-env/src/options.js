@@ -15,6 +15,7 @@ export const TopLevelOptions = {
   spec: "spec",
   targets: "targets",
   useBuiltIns: "useBuiltIns",
+  browserslistEnv: "browserslistEnv",
 };
 
 export const ModulesOption = {

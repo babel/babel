@@ -9,11 +9,11 @@ const fs = require("fs");
 const fixtureLoc = path.join(__dirname, "fixtures");
 const tmpLoc = path.join(__dirname, "tmp");
 
-const fileFilter = function(x) {
+const fileFilter = function (x) {
   return x !== ".DS_Store";
 };
 
-const outputFileSync = function(filePath, data) {
+const outputFileSync = function (filePath, data) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, data);
 };
@@ -26,41 +26,41 @@ const pluginLocs = [
   path.join(__dirname, "/../../babel-plugin-transform-modules-commonjs"),
 ].join(",");
 
-const readDir = function(loc, filter) {
+const readDir = function (loc, filter) {
   const files = {};
   if (fs.existsSync(loc)) {
-    readdir(loc, filter).forEach(function(filename) {
+    readdir(loc, filter).forEach(function (filename) {
       files[filename] = helper.readFile(path.join(loc, filename));
     });
   }
   return files;
 };
 
-const saveInFiles = function(files) {
+const saveInFiles = function (files) {
   // Place an empty .babelrc in each test so tests won't unexpectedly get to repo-level config.
   if (!fs.existsSync(".babelrc")) {
     outputFileSync(".babelrc", "{}");
   }
 
-  Object.keys(files).forEach(function(filename) {
+  Object.keys(files).forEach(function (filename) {
     const content = files[filename];
     outputFileSync(filename, content);
   });
 };
 
-const replacePaths = function(str, cwd) {
+const normalizeOutput = function (str, cwd) {
   let prev;
   do {
     prev = str;
     str = str.replace(cwd, "<CWD>");
   } while (str !== prev);
 
-  return str;
+  return str.replace(/\(\d+ms\)/g, "(123ms)");
 };
 
-const assertTest = function(stdout, stderr, opts, cwd) {
-  stdout = replacePaths(stdout, cwd);
-  stderr = replacePaths(stderr, cwd);
+const assertTest = function (stdout, stderr, opts, cwd) {
+  stdout = normalizeOutput(stdout, cwd);
+  stderr = normalizeOutput(stderr, cwd);
 
   const expectStderr = opts.stderr.trim();
   stderr = stderr.trim();
@@ -83,6 +83,7 @@ const assertTest = function(stdout, stderr, opts, cwd) {
     if (opts.stdoutContains) {
       expect(stdout).toContain(expectStdout);
     } else {
+      fs.writeFileSync(opts.stdoutPath, stdout + "\n");
       expect(stdout).toBe(expectStdout);
     }
   } else if (stdout) {
@@ -92,7 +93,7 @@ const assertTest = function(stdout, stderr, opts, cwd) {
   if (opts.outFiles) {
     const actualFiles = readDir(tmpLoc, fileFilter);
 
-    Object.keys(actualFiles).forEach(function(filename) {
+    Object.keys(actualFiles).forEach(function (filename) {
       try {
         if (
           // saveInFiles always creates an empty .babelrc, so lets exclude for now
@@ -111,16 +112,16 @@ const assertTest = function(stdout, stderr, opts, cwd) {
       }
     });
 
-    Object.keys(opts.outFiles).forEach(function(filename) {
+    Object.keys(opts.outFiles).forEach(function (filename) {
       expect(actualFiles).toHaveProperty([filename]);
     });
   }
 };
 
-const buildTest = function(binName, testName, opts) {
+const buildTest = function (binName, testName, opts) {
   const binLoc = path.join(__dirname, "../lib", binName);
 
-  return function(callback) {
+  return function (callback) {
     saveInFiles(opts.inFiles);
 
     let args = [binLoc];
@@ -136,15 +137,15 @@ const buildTest = function(binName, testName, opts) {
     let stderr = "";
     let stdout = "";
 
-    spawn.stderr.on("data", function(chunk) {
+    spawn.stderr.on("data", function (chunk) {
       stderr += chunk;
     });
 
-    spawn.stdout.on("data", function(chunk) {
+    spawn.stdout.on("data", function (chunk) {
       stdout += chunk;
     });
 
-    spawn.on("close", function() {
+    spawn.on("close", function () {
       let err;
 
       try {
@@ -168,11 +169,11 @@ const buildTest = function(binName, testName, opts) {
   };
 };
 
-fs.readdirSync(fixtureLoc).forEach(function(binName) {
+fs.readdirSync(fixtureLoc).forEach(function (binName) {
   if (binName.startsWith(".")) return;
 
   const suiteLoc = path.join(fixtureLoc, binName);
-  describe("bin/" + binName, function() {
+  describe("bin/" + binName, function () {
     let cwd;
 
     beforeEach(() => {
@@ -193,7 +194,7 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
       process.chdir(cwd);
     });
 
-    fs.readdirSync(suiteLoc).forEach(function(testName) {
+    fs.readdirSync(suiteLoc).forEach(function (testName) {
       if (testName.startsWith(".")) return;
 
       const testLoc = path.join(suiteLoc, testName);
@@ -227,8 +228,9 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
         merge(opts, taskOpts);
       }
 
-      ["stdout", "stdin", "stderr"].forEach(function(key) {
+      ["stdout", "stdin", "stderr"].forEach(function (key) {
         const loc = path.join(testLoc, key + ".txt");
+        opts[key + "Path"] = loc;
         if (fs.existsSync(loc)) {
           opts[key] = helper.readFile(loc);
         } else {

@@ -9,10 +9,10 @@ type ElementState = {
   pure: boolean, // true if the element can be marked with a #__PURE__ annotation
 };
 
-export default function(opts) {
+export default function (opts) {
   const visitor = {};
 
-  visitor.JSXNamespacedName = function(path) {
+  visitor.JSXNamespacedName = function (path) {
     if (opts.throwIfNamespace) {
       throw path.buildCodeFrameError(
         `Namespace tags are not supported by default. React's JSX doesn't support namespace tags. \
@@ -21,7 +21,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     }
   };
 
-  visitor.JSXSpreadChild = function(path) {
+  visitor.JSXSpreadChild = function (path) {
     throw path.buildCodeFrameError(
       "Spread children are not supported in React.",
     );

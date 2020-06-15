@@ -78,7 +78,7 @@ export default declare(api => {
         let id;
 
         // crawl up the ancestry looking for possible candidates for displayName inference
-        path.find(function(path) {
+        path.find(function (path) {
           if (path.isAssignmentExpression()) {
             id = path.node.left;
           } else if (path.isObjectProperty()) {

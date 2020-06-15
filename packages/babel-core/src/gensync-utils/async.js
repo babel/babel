@@ -6,7 +6,7 @@ type MaybePromise<T> = T | Promise<T>;
 
 const id = x => x;
 
-const runGenerator = gensync(function*(item) {
+const runGenerator = gensync(function* (item) {
   return yield* item;
 });
 
@@ -76,10 +76,10 @@ export function forwardAsync<ActionArgs: mixed[], ActionReturn, Return>(
 export const onFirstPause = (gensync<[any, any], any>({
   name: "onFirstPause",
   arity: 2,
-  sync: function(item) {
+  sync: function (item) {
     return runGenerator.sync(item);
   },
-  errback: function(item, firstPause, cb) {
+  errback: function (item, firstPause, cb) {
     let completed = false;
 
     runGenerator.errback(item, (err, value) => {

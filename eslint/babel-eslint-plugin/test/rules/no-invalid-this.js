@@ -50,8 +50,8 @@ function MODULES(pattern) {
  */
 function extractPatterns(patterns, type) {
   // Clone and apply the pattern environment.
-  const patternsList = patterns.map(function(pattern) {
-    return pattern[type].map(function(applyCondition) {
+  const patternsList = patterns.map(function (pattern) {
+    return pattern[type].map(function (applyCondition) {
       const thisPattern = cloneDeep(pattern);
 
       applyCondition(thisPattern);

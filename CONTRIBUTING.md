@@ -18,6 +18,8 @@
 
 Contributions are always welcome, no matter how large or small! Before contributing, please read the [code of conduct](https://github.com/babel/babel/blob/master/CODE_OF_CONDUCT.md).
 
+If you want an already configured online IDE to contribute to Babel, you can use [Gitpod](https://gitpod.io/#https://github.com/babel/babel)!
+
 ## Not sure where to start?
 
 - If you aren't just making a documentation change, you'll probably want to learn a bit about a few topics.

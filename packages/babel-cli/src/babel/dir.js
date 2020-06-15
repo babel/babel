@@ -1,6 +1,7 @@
 // @flow
 
 import defaults from "lodash/defaults";
+import debounce from "lodash/debounce";
 import slash from "slash";
 import path from "path";
 import fs from "fs";
@@ -20,7 +21,7 @@ function outputFileSync(filePath: string, data: string | Buffer): void {
   fs.writeFileSync(filePath, data);
 }
 
-export default async function({
+export default async function ({
   cliOptions,
   babelOptions,
 }: CmdOptions): Promise<void> {
@@ -137,6 +138,31 @@ export default async function({
     }
   }
 
+  let compiledFiles = 0;
+  let startTime = null;
+
+  const logSuccess = debounce(
+    function () {
+      if (startTime === null) {
+        // This should never happen, but just in case it's better
+        // to ignore the log message rather than making @babel/cli crash.
+        return;
+      }
+
+      const diff = process.hrtime(startTime);
+
+      console.log(
+        `Successfully compiled ${compiledFiles} ${
+          compiledFiles !== 1 ? "files" : "file"
+        } with Babel (${diff[0] * 1e3 + Math.round(diff[1] / 1e6)}ms).`,
+      );
+      compiledFiles = 0;
+      startTime = null;
+    },
+    100,
+    { trailing: true },
+  );
+
   if (!cliOptions.skipInitialBuild) {
     if (cliOptions.deleteDirOnStart) {
       util.deleteDir(cliOptions.outDir);
@@ -144,24 +170,25 @@ export default async function({
 
     fs.mkdirSync(cliOptions.outDir, { recursive: true });
 
-    let compiledFiles = 0;
+    startTime = process.hrtime();
+
     for (const filename of cliOptions.filenames) {
+      // compiledFiles is just incremented without reading its value, so we
+      // don't risk race conditions.
+      // eslint-disable-next-line require-atomic-updates
       compiledFiles += await handle(filename);
     }
 
     if (!cliOptions.quiet) {
-      console.log(
-        `Successfully compiled ${compiledFiles} ${
-          compiledFiles !== 1 ? "files" : "file"
-        } with Babel.`,
-      );
+      logSuccess();
+      logSuccess.flush();
     }
   }
 
   if (cliOptions.watch) {
     const chokidar = util.requireChokidar();
 
-    filenames.forEach(function(filenameOrDir: string): void {
+    filenames.forEach(function (filenameOrDir: string): void {
       const watcher = chokidar.watch(filenameOrDir, {
         persistent: true,
         ignoreInitial: true,
@@ -171,16 +198,30 @@ export default async function({
         },
       });
 
-      ["add", "change"].forEach(function(type: string): void {
-        watcher.on(type, function(filename: string): void {
-          handleFile(
-            filename,
-            filename === filenameOrDir
-              ? path.dirname(filenameOrDir)
-              : filenameOrDir,
-          ).catch(err => {
+      // This, alongside with debounce, allows us to only log
+      // when we are sure that all the files have been compiled.
+      let processing = 0;
+
+      ["add", "change"].forEach(function (type: string): void {
+        watcher.on(type, async function (filename: string) {
+          processing++;
+          if (startTime === null) startTime = process.hrtime();
+
+          try {
+            await handleFile(
+              filename,
+              filename === filenameOrDir
+                ? path.dirname(filenameOrDir)
+                : filenameOrDir,
+            );
+
+            compiledFiles++;
+          } catch (err) {
             console.error(err);
-          });
+          }
+
+          processing--;
+          if (processing === 0 && !cliOptions.quiet) logSuccess();
         });
       });
     });

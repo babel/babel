@@ -207,7 +207,7 @@ function onDOMContentLoaded() {
 
 // Listen for load event if we're in a browser and then kick off finding and
 // running of scripts with "text/babel" type.
-if (typeof window !== "undefined" && window && window.addEventListener) {
+if (typeof window !== "undefined" && window?.addEventListener) {
   window.addEventListener("DOMContentLoaded", onDOMContentLoaded, false);
 }
 

@@ -57,13 +57,13 @@ function report(context, node, missing) {
   if (!missing) {
     message = "Missing semicolon.";
     loc = loc.end;
-    fix = function(fixer) {
+    fix = function (fixer) {
       return fixer.insertTextAfter(lastToken, ";");
     };
   } else {
     message = "Extra semicolon.";
     loc = loc.start;
-    fix = function(fixer) {
+    fix = function (fixer) {
       return fixer.remove(lastToken);
     };
   }

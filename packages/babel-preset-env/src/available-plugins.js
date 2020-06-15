@@ -2,6 +2,7 @@
 /* eslint sort-keys: "error" */
 
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
+import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
 import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
 import syntaxJsonStrings from "@babel/plugin-syntax-json-strings";
 import syntaxNullishCoalescingOperator from "@babel/plugin-syntax-nullish-coalescing-operator";
@@ -11,6 +12,7 @@ import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-bind
 import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
 import syntaxTopLevelAwait from "@babel/plugin-syntax-top-level-await";
 import proposalAsyncGeneratorFunctions from "@babel/plugin-proposal-async-generator-functions";
+import proposalClassProperties from "@babel/plugin-proposal-class-properties";
 import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";
 import proposalJsonStrings from "@babel/plugin-proposal-json-strings";
 import proposalNullishCoalescingOperator from "@babel/plugin-proposal-nullish-coalescing-operator";
@@ -18,6 +20,7 @@ import proposalNumericSeparator from "@babel/plugin-proposal-numeric-separator";
 import proposalObjectRestSpread from "@babel/plugin-proposal-object-rest-spread";
 import proposalOptionalCatchBinding from "@babel/plugin-proposal-optional-catch-binding";
 import proposalOptionalChaining from "@babel/plugin-proposal-optional-chaining";
+import proposalPrivateMethods from "@babel/plugin-proposal-private-methods";
 import proposalUnicodePropertyRegex from "@babel/plugin-proposal-unicode-property-regex";
 import transformAsyncToGenerator from "@babel/plugin-transform-async-to-generator";
 import transformArrowFunctions from "@babel/plugin-transform-arrow-functions";
@@ -49,6 +52,7 @@ import transformSpread from "@babel/plugin-transform-spread";
 import transformStickyRegex from "@babel/plugin-transform-sticky-regex";
 import transformTemplateLiterals from "@babel/plugin-transform-template-literals";
 import transformTypeofSymbol from "@babel/plugin-transform-typeof-symbol";
+import transformUnicodeEscapes from "@babel/plugin-transform-unicode-escapes";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
 
 import bugfixAsyncArrowsInClass from "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class";
@@ -66,6 +70,7 @@ export default {
   "bugfix/transform-safari-for-shadowing": bugfixSafariForShadowing,
   "bugfix/transform-tagged-template-caching": bugfixTaggedTemplateCaching,
   "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,
+  "proposal-class-properties": proposalClassProperties,
   "proposal-dynamic-import": proposalDynamicImport,
   "proposal-json-strings": proposalJsonStrings,
   "proposal-nullish-coalescing-operator": proposalNullishCoalescingOperator,
@@ -73,8 +78,10 @@ export default {
   "proposal-object-rest-spread": proposalObjectRestSpread,
   "proposal-optional-catch-binding": proposalOptionalCatchBinding,
   "proposal-optional-chaining": proposalOptionalChaining,
+  "proposal-private-methods": proposalPrivateMethods,
   "proposal-unicode-property-regex": proposalUnicodePropertyRegex,
   "syntax-async-generators": syntaxAsyncGenerators,
+  "syntax-class-properties": syntaxClassProperties,
   "syntax-dynamic-import": syntaxDynamicImport,
   "syntax-json-strings": syntaxJsonStrings,
   "syntax-nullish-coalescing-operator": syntaxNullishCoalescingOperator,
@@ -113,5 +120,6 @@ export default {
   "transform-sticky-regex": transformStickyRegex,
   "transform-template-literals": transformTemplateLiterals,
   "transform-typeof-symbol": transformTypeofSymbol,
+  "transform-unicode-escapes": transformUnicodeEscapes,
   "transform-unicode-regex": transformUnicodeRegex,
 };

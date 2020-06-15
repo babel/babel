@@ -41,7 +41,7 @@ const aliases = new Map([
   ["-gc", "--expose-gc"],
 ]);
 
-getV8Flags(function(err, v8Flags) {
+getV8Flags(function (err, v8Flags) {
   for (let i = 0; i < babelArgs.length; i++) {
     const arg = babelArgs[i];
     const flag = arg.split("=")[0];
@@ -83,8 +83,8 @@ getV8Flags(function(err, v8Flags) {
     const proc = child_process.spawn(process.argv[0], args, {
       stdio: "inherit",
     });
-    proc.on("exit", function(code, signal) {
-      process.on("exit", function() {
+    proc.on("exit", function (code, signal) {
+      process.on("exit", function () {
         if (signal) {
           process.kill(process.pid, signal);
         } else {

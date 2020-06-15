@@ -15,7 +15,7 @@ type CompilationOutput = {
   map: Object,
 };
 
-export default async function({
+export default async function ({
   cliOptions,
   babelOptions,
 }: CmdOptions): Promise<void> {
@@ -40,7 +40,7 @@ export default async function({
         const consumer = new sourceMap.SourceMapConsumer(result.map);
         const sources = new Set();
 
-        consumer.eachMapping(function(mapping) {
+        consumer.eachMapping(function (mapping) {
           if (mapping.source != null) sources.add(mapping.source);
 
           map.addMapping({
@@ -110,13 +110,13 @@ export default async function({
 
       process.stdin.setEncoding("utf8");
 
-      process.stdin.on("readable", function() {
+      process.stdin.on("readable", function () {
         const chunk = process.stdin.read();
         // $FlowIgnore
         if (chunk !== null) code += chunk;
       });
 
-      process.stdin.on("end", function() {
+      process.stdin.on("end", function () {
         resolve(code);
       });
       process.stdin.on("error", reject);
@@ -143,7 +143,7 @@ export default async function({
   async function walk(filenames: Array<string>): Promise<void> {
     const _filenames = [];
 
-    filenames.forEach(function(filename) {
+    filenames.forEach(function (filename) {
       if (!fs.existsSync(filename)) return;
 
       const stat = fs.statSync(filename);
@@ -156,7 +156,7 @@ export default async function({
             cliOptions.includeDotfiles,
             cliOptions.extensions,
           )
-          .forEach(function(filename) {
+          .forEach(function (filename) {
             _filenames.push(path.join(dirname, filename));
           });
       } else {
@@ -165,7 +165,7 @@ export default async function({
     });
 
     const results = await Promise.all(
-      _filenames.map(async function(filename: string): Promise<Object> {
+      _filenames.map(async function (filename: string): Promise<Object> {
         let sourceFilename = filename;
         if (cliOptions.outFile) {
           sourceFilename = path.relative(
@@ -223,7 +223,7 @@ export default async function({
             pollInterval: 10,
           },
         })
-        .on("all", function(type: string, filename: string): void {
+        .on("all", function (type: string, filename: string): void {
           if (
             !util.isCompilableExtension(filename, cliOptions.extensions) &&
             !filenames.includes(filename)

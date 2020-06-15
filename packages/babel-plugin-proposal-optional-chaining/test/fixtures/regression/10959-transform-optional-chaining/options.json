@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "proposal-optional-chaining",
+    "syntax-typescript"
+  ]
+}

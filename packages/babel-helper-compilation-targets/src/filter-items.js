@@ -70,8 +70,8 @@ export function isRequired(
     excludes?: Set<string>,
   } = {},
 ) {
-  if (excludes && excludes.has(name)) return false;
-  if (includes && includes.has(name)) return true;
+  if (excludes?.has(name)) return false;
+  if (includes?.has(name)) return true;
   return !targetsSupported(targets, compatData[name]);
 }
 

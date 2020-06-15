@@ -11,7 +11,7 @@ import * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
-import { Errors } from "../../parser/location";
+import { Errors } from "../../parser/error";
 
 const HEX_NUMBER = /^[\da-fA-F]+$/;
 const DECIMAL_NUMBER = /^\d+$/;
@@ -39,13 +39,13 @@ tt.jsxText = new TokenType("jsxText", { beforeExpr: true });
 tt.jsxTagStart = new TokenType("jsxTagStart", { startsExpr: true });
 tt.jsxTagEnd = new TokenType("jsxTagEnd");
 
-tt.jsxTagStart.updateContext = function() {
+tt.jsxTagStart.updateContext = function () {
   this.state.context.push(tc.j_expr); // treat as beginning of JSX expression
   this.state.context.push(tc.j_oTag); // start opening tag context
   this.state.exprAllowed = false;
 };
 
-tt.jsxTagEnd.updateContext = function(prevType) {
+tt.jsxTagEnd.updateContext = function (prevType) {
   const out = this.state.context.pop();
   if ((out === tc.j_oTag && prevType === tt.slash) || out === tc.j_cTag) {
     this.state.context.pop();

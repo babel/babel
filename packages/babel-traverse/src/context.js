@@ -31,7 +31,7 @@ export default class TraversalContext {
 
     // check if we're going to traverse into this node
     const keys: ?Array<string> = t.VISITOR_KEYS[node.type];
-    if (!keys || !keys.length) return false;
+    if (!keys?.length) return false;
 
     // we need to traverse into this node so ensure that it has children to traverse into!
     for (const key of keys) {

@@ -12,7 +12,7 @@ const transformRuntime = require("../");
 const runtimeVersion = require("@babel/runtime/package.json").version;
 const corejs2Definitions = require("../lib/runtime-corejs2-definitions").default();
 const corejs3Definitions = require("../lib/runtime-corejs3-definitions").default();
-const outputFileSync = function(filePath, data) {
+const outputFileSync = function (filePath, data) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, data);
 };
@@ -82,7 +82,7 @@ function writeCoreJS({
   }
 
   const runtimeRoot = proposals ? "core-js" : "core-js-stable";
-  paths.forEach(function(corejsPath) {
+  paths.forEach(function (corejsPath) {
     outputFileSync(
       path.join(pkgDirname, runtimeRoot, `${corejsPath}.js`),
       `module.exports = require("${corejsRoot}/${corejsPath}");`

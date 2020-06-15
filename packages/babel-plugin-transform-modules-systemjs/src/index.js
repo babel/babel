@@ -253,7 +253,7 @@ export default declare((api, options) => {
 
           function pushModule(source, key, specifiers) {
             let module;
-            modules.forEach(function(m) {
+            modules.forEach(function (m) {
               if (m.key === source) {
                 module = m;
               }
@@ -381,7 +381,7 @@ export default declare((api, options) => {
                 }
               } else {
                 const specifiers = path.node.specifiers;
-                if (specifiers && specifiers.length) {
+                if (specifiers?.length) {
                   if (path.node.source) {
                     pushModule(path.node.source.value, "exports", specifiers);
                     path.remove();
@@ -424,7 +424,7 @@ export default declare((api, options) => {
             }
           }
 
-          modules.forEach(function(specifiers) {
+          modules.forEach(function (specifiers) {
             let setterBody = [];
             const target = path.scope.generateUid(specifiers.key);
 

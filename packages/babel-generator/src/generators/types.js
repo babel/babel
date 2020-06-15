@@ -215,7 +215,7 @@ export function BigIntLiteral(node: Object) {
     this.token(raw);
     return;
   }
-  this.token(node.value);
+  this.token(node.value + "n");
 }
 
 export function PipelineTopicExpression(node: Object) {

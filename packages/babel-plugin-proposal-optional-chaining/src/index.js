@@ -23,14 +23,29 @@ export default declare((api, options) => {
 
     visitor: {
       "OptionalCallExpression|OptionalMemberExpression"(path) {
-        const { parentPath, scope } = path;
+        const { scope } = path;
+        // maybeParenthesized points to the outermost parenthesizedExpression
+        // or the path itself
+        let maybeParenthesized = path;
+        const parentPath = path.findParent(p => {
+          if (!p.isParenthesizedExpression()) return true;
+          maybeParenthesized = p;
+        });
         let isDeleteOperation = false;
+        const parentIsCall =
+          parentPath.isCallExpression({ callee: maybeParenthesized.node }) &&
+          // note that the first condition must implies that `path.optional` is `true`,
+          // otherwise the parentPath should be an OptionalCallExpressioin
+          path.isOptionalMemberExpression();
+
         const optionals = [];
 
         let optionalPath = path;
         while (
           optionalPath.isOptionalMemberExpression() ||
-          optionalPath.isOptionalCallExpression()
+          optionalPath.isOptionalCallExpression() ||
+          optionalPath.isParenthesizedExpression() ||
+          optionalPath.isTSNonNullExpression()
         ) {
           const { node } = optionalPath;
           if (node.optional) {
@@ -43,6 +58,9 @@ export default declare((api, options) => {
           } else if (optionalPath.isOptionalCallExpression()) {
             optionalPath.node.type = "CallExpression";
             optionalPath = optionalPath.get("callee");
+          } else {
+            // unwrap TSNonNullExpression/ParenthesizedExpression if needed
+            optionalPath = optionalPath.get("expression");
           }
         }
 
@@ -108,7 +126,32 @@ export default declare((api, options) => {
               );
             }
           }
-
+          let replacement = replacementPath.node;
+          // Ensure (a?.b)() has proper `this`
+          // The `parentIsCall` is constant within loop, we should check i === 0
+          // to ensure that it is only applied to the first optional chain element
+          // i.e. `?.b` in `(a?.b.c)()`
+          if (i === 0 && parentIsCall) {
+            // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
+            const { object } = replacement;
+            let baseRef;
+            if (!loose || !isSimpleMemberExpression(object)) {
+              // memoize the context object in non-loose mode
+              // `(a?.b.c)()` to `(a == null ? undefined : (_a$b = a.b).c.bind(_a$b))()`
+              baseRef = scope.maybeGenerateMemoised(object);
+              if (baseRef) {
+                replacement.object = t.assignmentExpression(
+                  "=",
+                  baseRef,
+                  object,
+                );
+              }
+            }
+            replacement = t.callExpression(
+              t.memberExpression(replacement, t.identifier("bind")),
+              [t.cloneNode(baseRef ?? object)],
+            );
+          }
           replacementPath.replaceWith(
             t.conditionalExpression(
               loose
@@ -129,7 +172,7 @@ export default declare((api, options) => {
               isDeleteOperation
                 ? t.booleanLiteral(true)
                 : scope.buildUndefinedNode(),
-              replacementPath.node,
+              replacement,
             ),
           );
 

@@ -33,7 +33,7 @@ export function readdirForCompilable(
   includeDotfiles: boolean,
   altExts?: Array<string>,
 ): Array<string> {
-  return readdir(dirname, includeDotfiles, function(filename) {
+  return readdir(dirname, includeDotfiles, function (filename) {
     return isCompilableExtension(filename, altExts);
   });
 }
@@ -96,7 +96,7 @@ export function compile(
 
 export function deleteDir(path: string): void {
   if (fs.existsSync(path)) {
-    fs.readdirSync(path).forEach(function(file) {
+    fs.readdirSync(path).forEach(function (file) {
       const curPath = path + "/" + file;
       if (fs.lstatSync(curPath).isDirectory()) {
         // recurse
@@ -110,7 +110,7 @@ export function deleteDir(path: string): void {
   }
 }
 
-process.on("uncaughtException", function(err) {
+process.on("uncaughtException", function (err) {
   console.error(err);
   process.exitCode = 1;
 });

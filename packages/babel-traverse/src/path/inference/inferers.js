@@ -10,7 +10,7 @@ export function VariableDeclarator() {
 
   let type = init.getTypeAnnotation();
 
-  if (type && type.type === "AnyTypeAnnotation") {
+  if (type?.type === "AnyTypeAnnotation") {
     // Detect "var foo = Array()" calls so we can optimize for arrays vs iterables.
     if (
       init.isCallExpression() &&
@@ -109,9 +109,7 @@ export function ConditionalExpression() {
 }
 
 export function SequenceExpression() {
-  return this.get("expressions")
-    .pop()
-    .getTypeAnnotation();
+  return this.get("expressions").pop().getTypeAnnotation();
 }
 
 export function ParenthesizedExpression() {

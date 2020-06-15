@@ -32,6 +32,7 @@ Using plugins:
   transform-computed-properties { "android":"4" }
   transform-for-of { "android":"4" }
   transform-sticky-regex { "android":"4" }
+  transform-unicode-escapes { "android":"4" }
   transform-unicode-regex { "android":"4" }
   transform-spread { "android":"4" }
   transform-destructuring { "android":"4" }

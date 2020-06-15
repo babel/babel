@@ -15,9 +15,10 @@ import { loadPartialConfig as loadPartialConfigRunner } from "./partial";
 export { loadFullConfig as default };
 export type { PartialConfig } from "./partial";
 
-const loadOptionsRunner = gensync<[mixed], Object | null>(function*(opts) {
+const loadOptionsRunner = gensync<[mixed], Object | null>(function* (opts) {
   const config = yield* loadFullConfig(opts);
-  return config ? config.options : null;
+  // NOTE: We want to return "null" explicitly, while ?. alone returns undefined
+  return config?.options ?? null;
 });
 
 const maybeErrback = runner => (opts: mixed, callback: Function) => {

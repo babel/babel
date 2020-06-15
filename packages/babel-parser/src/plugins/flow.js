@@ -22,7 +22,7 @@ import {
   SCOPE_OTHER,
 } from "../util/scopeflags";
 import type { ExpressionErrors } from "../parser/util";
-import { Errors } from "../parser/location";
+import { Errors } from "../parser/error";
 
 const reservedTypes = new Set([
   "_",
@@ -2198,7 +2198,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): $ReadOnlyArray<N.Pattern> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
-        if (expr && expr.type === "TypeCastExpression") {
+        if (expr?.type === "TypeCastExpression") {
           exprList[i] = this.typeCastToParameter(expr);
         }
       }
@@ -2216,7 +2216,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (
           expr &&
           expr.type === "TypeCastExpression" &&
-          (!expr.extra || !expr.extra.parenthesized) &&
+          !expr.extra?.parenthesized &&
           (exprList.length > 1 || !isParenthesizedExpr)
         ) {
           this.raise(expr.typeAnnotation.start, FlowErrors.TypeCastInPattern);
@@ -2665,7 +2665,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      if ((jsx && jsx.error) || this.isRelational("<")) {
+      if (jsx?.error || this.isRelational("<")) {
         state = state || this.state.clone();
 
         let typeParameters;
@@ -2690,9 +2690,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }, state);
 
         const arrowExpression: ?N.ArrowFunctionExpression =
-          arrow.node && arrow.node.type === "ArrowFunctionExpression"
-            ? arrow.node
-            : null;
+          arrow.node?.type === "ArrowFunctionExpression" ? arrow.node : null;
 
         if (!arrow.error && arrowExpression) return arrowExpression;
 
@@ -2702,7 +2700,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // If the error is recoverable, we can only re-report it if there is
         // a node we can return.
 
-        if (jsx && jsx.node) {
+        if (jsx?.node) {
           /*:: invariant(jsx.failState) */
           this.state = jsx.failState;
           return jsx.node;
@@ -2714,7 +2712,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return arrowExpression;
         }
 
-        if (jsx && jsx.thrown) throw jsx.error;
+        if (jsx?.thrown) throw jsx.error;
         if (arrow.thrown) throw arrow.error;
 
         /*:: invariant(typeParameters) */

@@ -1,3 +1,7 @@
+var _x = new WeakMap();
+
+var _y = new WeakMap();
+
 var Point = /*#__PURE__*/function () {
   "use strict";
 
@@ -47,7 +51,3 @@ var Point = /*#__PURE__*/function () {
   }]);
   return Point;
 }();
-
-var _x = new WeakMap();
-
-var _y = new WeakMap();

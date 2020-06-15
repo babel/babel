@@ -9,7 +9,7 @@ assignees: ''
 
 ## Bug Report
 
-<!-- Check this if you would like to implement a PR, we are more than happy to help you go through the process !-->
+<!-- If you would like to implement a PR, we are more than happy to help you go through the process!-->
 - [ ] I would like to work on a fix!
 
 <!--
@@ -17,10 +17,10 @@ assignees: ''
   If you are having issues with JSX you might want to check out eslint-plugin-react. If there's an issue with new experimental syntax you might need check if it's supported by @babel/eslint-plugin.
 -->
 
-**Current Behavior**
+**Current behavior**
 A clear and concise description of the behavior.
 
-- [REPL](babeljs.io/repl), [Codesandbox](https://codesandbox.io/s/babel-repl-custom-plugin-7s08o?file=/src/index.js), or GitHub Repo link if applicable:
+- [REPL](babeljs.io/repl), [Codesandbox](https://codesandbox.io/s/babel-repl-custom-plugin-7s08o?file=/src/index.js), or GitHub Repo helps!
 
 **Input Code**
 
@@ -28,7 +28,7 @@ A clear and concise description of the behavior.
 var your => (code) => here;
 ```
 
-**Expected behavior/code**
+**Expected behavior**
 A clear and concise description of what you expected to happen (or code).
 
 **Babel Configuration (babel.config.js, .babelrc, package.json#babel, cli command, .eslintrc)**
@@ -54,5 +54,5 @@ A clear and concise description of what you expected to happen (or code).
 **Possible Solution**
 <!--- If you have suggestions on a fix for the bug -->
 
-**Additional context/Screenshots**
-Add any other context about the problem here. If applicable, add screenshots to help explain.
+**Additional context**
+Add any other context about the problem here. Or a screenshot if applicable

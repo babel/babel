@@ -1,6 +1,6 @@
 import path from "path";
 
-export default function(moduleName, dirname, absoluteRuntime) {
+export default function (moduleName, dirname, absoluteRuntime) {
   if (absoluteRuntime === false) return moduleName;
 
   return resolveAbsoluteRuntime(

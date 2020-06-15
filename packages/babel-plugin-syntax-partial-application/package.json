@@ -1,8 +1,12 @@
 {
   "name": "@babel/plugin-syntax-partial-application",
-  "version": "7.8.3",
+  "version": "7.10.1",
   "description": "Allow parsing of partial application syntax",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-partial-application",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-syntax-partial-application"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -12,12 +16,12 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.8.3"
+    "@babel/helper-plugin-utils": "^7.10.1"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.3"
+    "@babel/core": "^7.10.1"
   }
 }

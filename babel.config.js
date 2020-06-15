@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function(api) {
+module.exports = function (api) {
   const env = api.env();
 
   const includeCoverage = process.env.BABEL_COVERAGE === "true";

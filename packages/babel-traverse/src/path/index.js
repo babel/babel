@@ -226,11 +226,11 @@ Object.assign(
 for (const type of (t.TYPES: Array<string>)) {
   const typeKey = `is${type}`;
   const fn = t[typeKey];
-  NodePath.prototype[typeKey] = function(opts) {
+  NodePath.prototype[typeKey] = function (opts) {
     return fn(this.node, opts);
   };
 
-  NodePath.prototype[`assert${type}`] = function(opts) {
+  NodePath.prototype[`assert${type}`] = function (opts) {
     if (!fn(this.node, opts)) {
       throw new TypeError(`Expected node path of type ${type}`);
     }
@@ -243,7 +243,7 @@ for (const type of Object.keys(virtualTypes)) {
 
   const virtualType = virtualTypes[type];
 
-  NodePath.prototype[`is${type}`] = function(opts) {
+  NodePath.prototype[`is${type}`] = function (opts) {
     return virtualType.checkPath(this, opts);
   };
 }

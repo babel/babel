@@ -8,7 +8,7 @@ import { typeAnnotationToString } from "./helpers";
 import getRuntimePath from "./get-runtime-path";
 
 function supportsStaticESM(caller) {
-  return !!(caller && caller.supportsStaticESM);
+  return !!caller?.supportsStaticESM;
 }
 
 export default declare((api, options, dirname) => {

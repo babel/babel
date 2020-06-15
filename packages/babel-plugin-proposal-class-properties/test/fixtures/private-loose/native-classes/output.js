@@ -1,3 +1,7 @@
+var _foo = babelHelpers.classPrivateFieldLooseKey("foo");
+
+var _bar = babelHelpers.classPrivateFieldLooseKey("bar");
+
 class Foo {
   constructor() {
     Object.defineProperty(this, _bar, {
@@ -15,10 +19,6 @@ class Foo {
   }
 
 }
-
-var _foo = babelHelpers.classPrivateFieldLooseKey("foo");
-
-var _bar = babelHelpers.classPrivateFieldLooseKey("bar");
 
 Object.defineProperty(Foo, _foo, {
   writable: true,

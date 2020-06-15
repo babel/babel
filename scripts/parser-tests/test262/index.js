@@ -126,6 +126,7 @@ const featuresToPlugins = {
   "dynamic-import": "dynamicImport",
   "export-star-as-namespace-from-module": "exportNamespaceFrom",
   "import.meta": "importMeta",
+  "logical-assignment-operators": "logicalAssignment",
   "numeric-separator-literal": "numericSeparator",
   "optional-chaining": "optionalChaining",
   "top-level-await": "topLevelAwait",
@@ -186,9 +187,7 @@ runner
         "The following Features are not currently mapped or ignored:"
       );
       console.log(
-        Array.from(unmappedFeatures)
-          .join("\n")
-          .replace(/^/gm, "   ")
+        Array.from(unmappedFeatures).join("\n").replace(/^/gm, "   ")
       );
     }
   })

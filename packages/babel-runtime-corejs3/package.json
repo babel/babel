@@ -1,12 +1,16 @@
 {
   "name": "@babel/runtime-corejs3",
-  "version": "7.9.6",
+  "version": "7.10.2",
   "description": "babel's modular runtime helpers with core-js@3 polyfilling",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-runtime-corejs3",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-runtime-corejs3"
+  },
   "author": "Denis Pushkarev <zloirock@zloirock.ru>",
   "dependencies": {
     "core-js-pure": "^3.0.0",

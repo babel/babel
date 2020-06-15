@@ -1,8 +1,12 @@
 {
   "name": "@babel/plugin-syntax-record-and-tuple",
-  "version": "7.9.0",
+  "version": "7.10.1",
   "description": "Allow parsing of records and tuples.",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-record-and-tuple",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-syntax-record-and-tuple"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -12,12 +16,12 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.0.0"
+    "@babel/helper-plugin-utils": "^7.10.1"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0"
+    "@babel/core": "^7.10.1"
   }
 }

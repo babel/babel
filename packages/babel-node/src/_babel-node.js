@@ -119,7 +119,7 @@ const replPlugin = ({ types: t }) => ({
   },
 });
 
-const _eval = function(code, filename) {
+const _eval = function (code, filename) {
   code = code.trim();
   if (!code) return undefined;
 
@@ -161,7 +161,7 @@ if (program.eval || program.print) {
 
     let i = 0;
     let ignoreNext = false;
-    args.some(function(arg, i2) {
+    args.some(function (arg, i2) {
       if (ignoreNext) {
         ignoreNext = false;
         return;
