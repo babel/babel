@@ -1,4 +1,4 @@
 {
   "args": ["-f", "./src", "--show-config"],
-  "os": ["darwin", "linux"]
+  "os": ["win32"]
 }

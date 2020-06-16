@@ -9,5 +9,5 @@
   "env": {
     "BABEL_ENV": "test"
   },
-  "os": ["darwin", "linux"]
+  "os": ["win32"]
 }
