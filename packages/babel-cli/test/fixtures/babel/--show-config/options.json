@@ -5,5 +5,8 @@
     "-f",
     "./src/index.js",
     "--show-config"
-  ]
+  ],
+  "env": {
+    "BABEL_ENV": "test"
+  }
 }

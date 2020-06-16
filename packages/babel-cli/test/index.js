@@ -142,8 +142,9 @@ const buildTest = function (binName, testName, opts) {
     }
 
     args = args.concat(opts.args);
+    const env = { ...process.env, ...opts.env };
 
-    const spawn = child.spawn(process.execPath, args);
+    const spawn = child.spawn(process.execPath, args, { env });
 
     let stderr = "";
     let stdout = "";
