@@ -60,7 +60,7 @@ const Formatter = {
       content.plugins = pluginDescriptors.map(d => descriptorToConfig(d));
     }
     const presetDescriptors = [...opt.presets()];
-    if (presetDescriptors) {
+    if (presetDescriptors.length) {
       content.presets = [...presetDescriptors].map(d => descriptorToConfig(d));
     }
     return JSON.stringify(content, undefined, 2);

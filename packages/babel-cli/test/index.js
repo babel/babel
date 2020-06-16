@@ -3,6 +3,7 @@ const helper = require("@babel/helper-fixtures");
 const rimraf = require("rimraf");
 const { sync: makeDirSync } = require("make-dir");
 const child = require("child_process");
+const escapeRegExp = require("lodash/escapeRegExp");
 const merge = require("lodash/merge");
 const path = require("path");
 const fs = require("fs");
@@ -50,19 +51,27 @@ const saveInFiles = function (files) {
   });
 };
 
-const normalizeOutput = function (str, cwd, root) {
-  let prev;
-  do {
-    prev = str;
-    str = str.replace(cwd, "<CWD>").replace(root, "<ROOTDIR>");
-  } while (str !== prev);
-
-  return str.replace(/\(\d+ms\)/g, "(123ms)");
+const normalizeOutput = function (str, cwd) {
+  let result = str
+    .replace(/\(\d+ms\)/g, "(123ms)")
+    .replace(new RegExp(escapeRegExp(cwd), "g"), "<CWD>")
+    // (non-win32) /foo/babel/packages -> <CWD>/packages
+    // (win32) C:\foo\babel\packages -> <CWD>\packages
+    .replace(new RegExp(escapeRegExp(rootDir), "g"), "<ROOTDIR>");
+  if (process.platform === "win32") {
+    result = result
+      // C:\\foo\\babel\\packages -> <CWD>\\packages (in js string literal)
+      .replace(
+        new RegExp(escapeRegExp(rootDir.replace(/\\/g, "\\\\")), "g"),
+        "<ROOTDIR>",
+      );
+  }
+  return result;
 };
 
 const assertTest = function (stdout, stderr, opts, cwd) {
-  stdout = normalizeOutput(stdout, cwd, rootDir);
-  stderr = normalizeOutput(stderr, cwd, rootDir);
+  stdout = normalizeOutput(stdout, cwd);
+  stderr = normalizeOutput(stderr, cwd);
 
   const expectStderr = opts.stderr.trim();
   stderr = stderr.trim();

@@ -18,9 +18,7 @@ programmatic options from @babel/cli
 }
 
 config <CWD>/.babelrc
-{
-  "presets": []
-}
+{}
 
 config <CWD>/my-config.js
 {
@@ -28,8 +26,7 @@ config <CWD>/my-config.js
   "plugins": [
     "[Function: (api) => ({/n  name: /"@foo//" + __dirname,/n  visitor ... ]"
   ],
-  "extends": "./my-extended.js",
-  "presets": []
+  "extends": "./my-extended.js"
 }
 
 config <CWD>/my-config.js .env["test"]
@@ -42,8 +39,7 @@ config <CWD>/my-config.js .env["test"]
       },
       "@foo/babel-plugin-three"
     ]
-  ],
-  "presets": []
+  ]
 }
 
 config <CWD>/my-config.js .overrides[0]
@@ -56,8 +52,7 @@ config <CWD>/my-config.js .overrides[0]
         "noDocumentAll": true
       }
     ]
-  ],
-  "presets": []
+  ]
 }
 
 config <CWD>/my-config.js .overrides[0].env["test"]
@@ -73,11 +68,10 @@ config <CWD>/my-config.js .overrides[0].env["test"]
         "noDocumentAll": true
       }
     ]
-  ],
-  "presets": []
+  ]
 }
 
-config <ROOTDIR>/packages/babel-cli/test/tmp/my-extended.js
+config <CWD>/my-extended.js
 {
   "sourceMaps": false,
   "presets": [
@@ -98,7 +92,7 @@ config <CWD>/my-extended.js .env["test"]
   ]
 }
 
-config <ROOTDIR>/packages/babel-cli/test/tmp/my-extended.js .overrides[0]
+config <CWD>/my-extended.js .overrides[0]
 {
   "test": "src/index.js",
   "presets": [
