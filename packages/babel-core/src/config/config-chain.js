@@ -409,7 +409,7 @@ const loadFileOverridesEnvDescriptors = makeWeakCacheSync(
 function buildFileLogger(
   filepath: string,
   context: ConfigContext,
-  baseLogger: ?ConfigPrinter,
+  baseLogger: ConfigPrinter | void,
 ) {
   if (!baseLogger) {
     return () => {};
@@ -423,7 +423,7 @@ function buildRootDescriptors({ dirname, options }, alias, descriptors) {
   return descriptors(dirname, options, alias);
 }
 
-function buildProgrammaticLogger(_, context, baseLogger: ?ConfigPrinter) {
+function buildProgrammaticLogger(_, context, baseLogger: ConfigPrinter | void) {
   if (!baseLogger) {
     return () => {};
   }
@@ -488,13 +488,13 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
   createLogger: (
     ArgT,
     ConfigContext,
-    ?ConfigPrinter,
+    ConfigPrinter | void,
   ) => (OptionsAndDescriptors, ?number, ?string) => void,
 |}): (
   ArgT,
   ConfigContext,
   files?: Set<ConfigFile> | void,
-  baseLogger?: ConfigPrinter,
+  baseLogger: ConfigPrinter | void,
 ) => Handler<ConfigChain | null> {
   return function* (input, context, files = new Set(), baseLogger) {
     const { dirname } = input;
@@ -570,7 +570,7 @@ function* mergeExtendsChain(
   dirname: string,
   context: ConfigContext,
   files: Set<ConfigFile>,
-  baseLogger: ?ConfigPrinter,
+  baseLogger: ConfigPrinter | void,
 ): Handler<boolean> {
   if (opts.extends === undefined) return true;
 
