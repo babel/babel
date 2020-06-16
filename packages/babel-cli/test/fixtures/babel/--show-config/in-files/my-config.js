@@ -1,6 +1,7 @@
 module.exports = {
   sourceType: "script",
   plugins: [require("@foo/babel-plugin-1")],
+  extends: "./my-extended.js",
   overrides: [
     {
       test: "src/index.js",
