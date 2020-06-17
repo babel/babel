@@ -81,7 +81,14 @@ export function getCompletionRecords(): NodePath[] {
     paths = addCompletionRecords(this.get("alternate"), paths);
   } else if (this.isDoExpression() || this.isFor() || this.isWhile()) {
     paths = addCompletionRecords(this.get("body"), paths);
-  } else if (this.isProgram() || this.isBlockStatement()) {
+  } else if (this.isProgram()) {
+    paths = addCompletionRecords(this.get("body").pop(), paths);
+  } else if (this.isBlockStatement()) {
+    const body = this.get("body");
+    const last = body[body.length - 1];
+    if (last.isBreakStatement()) {
+      last.remove();
+    }
     paths = addCompletionRecords(this.get("body").pop(), paths);
   } else if (this.isFunction()) {
     return this.get("body").getCompletionRecords();
