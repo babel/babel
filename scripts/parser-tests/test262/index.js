@@ -148,9 +148,9 @@ function* getPlugins(features) {
 
 const runner = new TestRunner({
   testDir: path.join(__dirname, "../../../build/test262"),
-  whitelist: path.join(__dirname, "whitelist.txt"),
+  allowlist: path.join(__dirname, "allowlist.txt"),
   logInterval: 500,
-  shouldUpdate: process.argv.includes("--update-whitelist"),
+  shouldUpdate: process.argv.includes("--update-allowlist"),
 
   async *getTests() {
     const stream = new TestStream(this.testDir, {

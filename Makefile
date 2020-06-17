@@ -172,8 +172,8 @@ test-flow:
 test-flow-ci: build-bundle-ci bootstrap-flow
 	$(MAKE) test-flow
 
-test-flow-update-whitelist:
-	$(NODE) scripts/parser-tests/flow --update-whitelist
+test-flow-update-allowlist:
+	$(NODE) scripts/parser-tests/flow --update-allowlist
 
 bootstrap-typescript:
 	rm -rf ./build/typescript
@@ -187,8 +187,8 @@ test-typescript:
 test-typescript-ci: build-bundle-ci bootstrap-typescript
 	$(MAKE) test-typescript
 
-test-typescript-update-whitelist:
-	$(NODE) scripts/parser-tests/typescript --update-whitelist
+test-typescript-update-allowlist:
+	$(NODE) scripts/parser-tests/typescript --update-allowlist
 
 bootstrap-test262:
 	rm -rf build/test262
@@ -202,8 +202,8 @@ test-test262:
 test-test262-ci: build-bundle-ci bootstrap-test262
 	$(MAKE) test-test262
 
-test-test262-update-whitelist:
-	$(NODE) scripts/parser-tests/test262 --update-whitelist
+test-test262-update-allowlist:
+	$(NODE) scripts/parser-tests/test262 --update-allowlist
 
 # Does not work on Windows
 clone-license:

@@ -9,14 +9,14 @@ const dot = chalk.gray(".");
 class TestRunner {
   constructor({
     testDir,
-    whitelist,
+    allowlist,
     logInterval = 1,
     shouldUpdate,
     getTests,
     parse = this.parse,
   }) {
     this.testDir = testDir;
-    this.whitelist = whitelist;
+    this.allowlist = allowlist;
     this.logInterval = logInterval;
     this.shouldUpdate = shouldUpdate;
     this.getTests = getTests;
@@ -24,7 +24,7 @@ class TestRunner {
   }
 
   async run() {
-    const whitelistP = this.getWhitelist();
+    const allowlistP = this.getAllowlist();
 
     console.log(`Now running tests...`);
 
@@ -35,7 +35,7 @@ class TestRunner {
     }
     process.stdout.write("\n");
 
-    const summary = this.interpret(results, await whitelistP);
+    const summary = this.interpret(results, await allowlistP);
 
     await this.output(summary);
   }
@@ -66,8 +66,8 @@ class TestRunner {
     });
   }
 
-  async getWhitelist() {
-    const contents = await fs.readFile(this.whitelist, "utf-8");
+  async getAllowlist() {
+    const contents = await fs.readFile(this.allowlist, "utf-8");
     const table = new Set();
 
     for (const line of contents.split("\n")) {
@@ -78,8 +78,8 @@ class TestRunner {
     return table;
   }
 
-  async updateWhitelist(summary) {
-    const contents = await fs.readFile(this.whitelist, "utf-8");
+  async updateAllowlist(summary) {
+    const contents = await fs.readFile(this.allowlist, "utf-8");
 
     const toRemove = summary.disallowed.success
       .concat(summary.disallowed.failure)
@@ -99,10 +99,10 @@ class TestRunner {
 
     updated.sort();
 
-    await fs.writeFile(this.whitelist, updated.join("\n") + "\n", "utf8");
+    await fs.writeFile(this.allowlist, updated.join("\n") + "\n", "utf8");
   }
 
-  interpret(results, whitelist) {
+  interpret(results, allowlist) {
     const summary = {
       passed: true,
       allowed: {
@@ -123,24 +123,24 @@ class TestRunner {
 
     results.forEach(function (result) {
       let classification, isAllowed;
-      const inWhitelist = whitelist.has(result.id);
-      whitelist.delete(result.id);
+      const inAllowlist = allowlist.has(result.id);
+      allowlist.delete(result.id);
 
       if (!result.expectedError) {
         if (!result.actualError) {
           classification = "success";
-          isAllowed = !inWhitelist;
+          isAllowed = !inAllowlist;
         } else {
           classification = "falseNegative";
-          isAllowed = inWhitelist;
+          isAllowed = inAllowlist;
         }
       } else {
         if (!result.actualError) {
           classification = "falsePositive";
-          isAllowed = inWhitelist;
+          isAllowed = inAllowlist;
         } else {
           classification = "failure";
-          isAllowed = !inWhitelist;
+          isAllowed = !inAllowlist;
         }
       }
 
@@ -150,7 +150,7 @@ class TestRunner {
       );
     });
 
-    summary.unrecognized = Array.from(whitelist);
+    summary.unrecognized = Array.from(allowlist);
     summary.passed = !!summary.passed && summary.unrecognized.length === 0;
 
     return summary;
@@ -163,10 +163,10 @@ class TestRunner {
         " invalid programs produced a parsing error",
       summary.allowed.falsePositive.length +
         " invalid programs did not produce a parsing error" +
-        " (and allowed by the whitelist file)",
+        " (and allowed by the allowlist file)",
       summary.allowed.falseNegative.length +
         " valid programs produced a parsing error" +
-        " (and allowed by the whitelist file)",
+        " (and allowed by the allowlist file)",
     ];
     const badnews = [];
     const badnewsDetails = [];
@@ -176,29 +176,29 @@ class TestRunner {
         tests: summary.disallowed.success,
         label:
           "valid programs parsed without error" +
-          " (in violation of the whitelist file)",
+          " (in violation of the allowlist file)",
       },
       {
         tests: summary.disallowed.failure,
         label:
           "invalid programs produced a parsing error" +
-          " (in violation of the whitelist file)",
+          " (in violation of the allowlist file)",
       },
       {
         tests: summary.disallowed.falsePositive,
         label:
           "invalid programs did not produce a parsing error" +
-          " (without a corresponding entry in the whitelist file)",
+          " (without a corresponding entry in the allowlist file)",
       },
       {
         tests: summary.disallowed.falseNegative,
         label:
           "valid programs produced a parsing error" +
-          " (without a corresponding entry in the whitelist file)",
+          " (without a corresponding entry in the allowlist file)",
       },
       {
         tests: summary.unrecognized,
-        label: "non-existent programs specified in the whitelist file",
+        label: "non-existent programs specified in the allowlist file",
       },
     ].forEach(function ({ tests, label }) {
       if (!tests.length) {
@@ -225,9 +225,9 @@ class TestRunner {
     }
 
     if (this.shouldUpdate) {
-      await this.updateWhitelist(summary);
+      await this.updateAllowlist(summary);
       console.log("");
-      console.log("Whitelist file updated.");
+      console.log("Allowlist file updated.");
     } else {
       process.exitCode = summary.passed ? 0 : 1;
     }
