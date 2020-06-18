@@ -4,6 +4,5 @@ const x = (n) => do {
       if (true) {
         break;
       }
-      
    }
 }
