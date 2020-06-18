@@ -12,7 +12,7 @@ import {
   type CallerMetadata,
 } from "./validation/options";
 import pathPatternToRegex from "./pattern-to-regex";
-import { ConfigPrinter } from "./printer";
+import { ConfigPrinter, ChainFormatter } from "./printer";
 
 const debug = buildDebug("babel:config:config-chain");
 
@@ -55,12 +55,6 @@ export type ConfigContext = {
   envName: string,
   caller: CallerMetadata | void,
   showConfig: boolean,
-};
-
-// todo: Use flow enums when @babel/transform-flow-types supports it
-const ChainFormatter = {
-  Programmatic: 0,
-  Config: 1,
 };
 
 /**
