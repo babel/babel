@@ -1,3 +1,0 @@
-{
-  "plugins": ["transform-block-scoping", "proposal-do-expressions"]
-}
