@@ -90,7 +90,7 @@ export function getCompletionRecords(): NodePath[] {
   } else if (this.isTryStatement()) {
     paths = addCompletionRecords(this.get("block"), paths);
     paths = addCompletionRecords(this.get("handler"), paths);
-  } else if (this.isCatchClause() || this.isLabeledStatement()) {
+  } else if (this.isCatchClause()) {
     paths = addCompletionRecords(this.get("body"), paths);
   } else if (this.isSwitchStatement()) {
     paths = completionRecordForSwitch(this.get("cases"), paths);
