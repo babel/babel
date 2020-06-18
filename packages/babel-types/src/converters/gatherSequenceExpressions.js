@@ -23,7 +23,6 @@ export default function gatherSequenceExpressions(
 ): ?Object {
   const exprs = [];
   let ensureLastUndefined = true;
-  let multiColons = 0;
 
   for (const node of nodes) {
     ensureLastUndefined = false;
@@ -67,9 +66,11 @@ export default function gatherSequenceExpressions(
       exprs.push(body);
     } else if (isEmptyStatement(node)) {
       // empty statement so ensure the last item is undefined if we're last
-      ensureLastUndefined = true;
-      if (nodes.length !== 2) {
-        multiColons++;
+      // checks if node is first
+      // checks if input is `;` or `;;` which will return `()` in where
+      // the length will always be 2
+      if (nodes.indexOf(node) === 0 || nodes.length === 2) {
+        ensureLastUndefined = true;
       }
     } else {
       // bailed, we can't turn this statement into an expression
@@ -77,7 +78,7 @@ export default function gatherSequenceExpressions(
     }
   }
 
-  if (ensureLastUndefined && multiColons == 0) {
+  if (ensureLastUndefined) {
     exprs.push(scope.buildUndefinedNode());
   }
 
