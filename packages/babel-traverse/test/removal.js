@@ -42,4 +42,28 @@ describe("removal", function () {
 
     expect(generate(ast).code).toBe("");
   });
+
+  test("remove ensures the right binding gets removed", function() {
+    // Checks fix of https://github.com/babel/babel/issues/11551
+    const program = getPath(`
+    const a = '1'
+    const main = () => {
+      const a = 2
+    }
+    `);
+    program.traverse({
+      VariableDeclarator(path) {
+        const variableDeclaration = path.parentPath;
+        if (variableDeclaration.parentPath.isBlockStatement()) {
+          expect(Object.keys(program.scope.bindings)).toEqual(["a", "main"]);
+          expect(Object.keys(path.scope.bindings)).toEqual(["a"]);
+          path.remove();
+          expect(Object.keys(program.scope.bindings)).toEqual(["a", "main"]);
+          expect(Object.keys(path.scope.bindings)).toEqual([]);
+        }
+      },
+    });
+
+    expect.assertions(4);
+  });
 });
