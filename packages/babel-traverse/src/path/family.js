@@ -84,11 +84,6 @@ export function getCompletionRecords(): NodePath[] {
   } else if (this.isProgram()) {
     paths = addCompletionRecords(this.get("body").pop(), paths);
   } else if (this.isBlockStatement()) {
-    const body = this.get("body");
-    const last = body[body.length - 1];
-    if (last.isBreakStatement()) {
-      last.remove();
-    }
     paths = addCompletionRecords(this.get("body").pop(), paths);
   } else if (this.isFunction()) {
     return this.get("body").getCompletionRecords();
