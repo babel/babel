@@ -23,6 +23,7 @@ import {
   assertSourceMaps,
   assertCompact,
   assertSourceType,
+  assertPersistentCacheConfig,
   type ValidatorSet,
   type Validator,
   type OptionPath,
@@ -95,6 +96,10 @@ const COMMON_VALIDATORS: ValidatorSet = {
   env: (assertEnvSet: Validator<$PropertyType<ValidatedOptions, "env">>),
   overrides: (assertOverridesList: Validator<
     $PropertyType<ValidatedOptions, "overrides">,
+  >),
+
+  persistentCache: (assertPersistentCacheConfig: Validator<
+    $PropertyType<ValidatedOptions, "persistentCache">,
   >),
 
   // We could limit these to 'overrides' blocks, but it's not clear why we'd
@@ -187,6 +192,7 @@ export type ValidatedOptions = {
   inputSourceMap?: RootInputSourceMapOption,
   envName?: string,
   caller?: CallerMetadata,
+  persistentCache?: PersistentCacheConfig,
 
   extends?: string,
   env?: EnvSet<ValidatedOptions>,
@@ -291,6 +297,11 @@ type EnvPath = $ReadOnly<{
   parent: RootPath | OverridesPath,
 }>;
 export type NestingPath = RootPath | OverridesPath | EnvPath;
+
+export type PersistentCacheConfig = {
+  path: string,
+  salt: any,
+};
 
 function getSource(loc: NestingPath): OptionsSource {
   return loc.type === "root" ? loc.source : getSource(loc.parent);
