@@ -1,0 +1,34 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mocha Tests</title>
+  <link href="vendor/mocha-5.0.0/mocha.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div id="mocha">translating...</div>
+
+  <script src="vendor/chai-4.1.2/chai.min.js"></script>
+  <script src="vendor/mocha-5.0.0/mocha.min.js"></script>
+  <script>mocha.setup('bdd')</script>
+
+  <script src="js/glue.js"></script>
+
+  <script src="../dist/babel.min.js"></script>
+  <script src="../../../packages/babel-standalone/test/babel.js" type="text/babel"></script>
+
+  <script>
+    window.document.addEventListener(
+      'BabelScriptsRun',
+      function (e) {
+        window.document.getElementById('mocha').innerText = '...complete!'
+
+        setTimeout( () => {
+          mocha.checkLeaks();
+          mocha.run();
+        }, 0)
+      },
+      false
+    )
+  </script>
+</body>
+</html>
