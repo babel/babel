@@ -2,7 +2,7 @@
   "name": "@babel/plugin-transform-regenerator",
   "author": "Ben Newman <bn@cs.stanford.edu>",
   "description": "Explode async and generator functions into a state machine.",
-  "version": "7.10.1",
+  "version": "7.10.3",
   "homepage": "https://babeljs.io/",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/helper-plugin-test-runner": "^7.10.1"
+    "@babel/core": "^7.10.3",
+    "@babel/helper-plugin-test-runner": "^7.10.3"
   }
 }
