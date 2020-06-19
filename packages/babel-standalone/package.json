@@ -123,7 +123,7 @@
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
   },
-  "homepage": "https://github.com/babel/babel/tree/master/packages/babel-standalone",
+  "homepage": "https://babeljs.io/",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
