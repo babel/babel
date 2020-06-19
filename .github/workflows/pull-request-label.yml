@@ -1,0 +1,12 @@
+name: Pull Request Label
+on: [pull_request]
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: csi-lk/package-labeler@v1.0.1
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          workspace: "packages"
+          prefix: "pkg: "
