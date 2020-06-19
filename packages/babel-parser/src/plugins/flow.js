@@ -798,21 +798,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     flowParseTypeParameterInstantiationCallOrNew(): N.TypeParameterInstantiation {
       const node = this.startNode();
-      const oldInType = this.state.inType;
       node.params = [];
-
-      this.state.inType = true;
-
-      this.expectRelational("<");
-      while (!this.isRelational(">")) {
-        node.params.push(this.flowParseTypeOrImplicitInstantiation());
-        if (!this.isRelational(">")) {
-          this.expect(tt.comma);
-        }
-      }
+      this.flowInType(() => {
+        this.flowInNoContext(() => {
+          this.expectRelational("<");
+          while (!this.isRelational(">")) {
+            node.params.push(this.flowParseTypeOrImplicitInstantiation());
+            if (!this.isRelational(">")) {
+              this.expect(tt.comma);
+            }
+          }
+        });
+      });
+      this.state.exprAllowed = false;
       this.expectRelational(">");
-
-      this.state.inType = oldInType;
 
       return this.finishNode(node, "TypeParameterInstantiation");
     }
@@ -1543,7 +1542,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             return super.createIdentifier(node, label);
           }
       }
-
       throw this.unexpected();
     }
 
@@ -1680,9 +1678,38 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return variance;
     }
 
+    flowInType<T>(cb: () => T): T {
+      const oldInType = this.state.inType;
+      this.state.inType = true;
+      try {
+        return cb();
+      } finally {
+        this.state.inType = oldInType;
+      }
+    }
+
+    flowInNoContext<T>(cb: () => T): T {
+      const oldContext = this.state.context;
+      this.state.context = [oldContext[0]];
+      try {
+        return cb();
+      } finally {
+        this.state.context = oldContext;
+      }
+    }
+
     // ==================================
     // Overrides
     // ==================================
+
+    jsxParseOpeningElementAfterName(
+      node: N.JSXOpeningElement,
+    ): N.JSXOpeningElement {
+      if (this.isRelational("<")) {
+        node.typeArguments = this.flowParseTypeParameterInstantiationCallOrNew();
+      }
+      return super.jsxParseOpeningElementAfterName(node);
+    }
 
     parseFunctionBody(
       node: N.Function,
