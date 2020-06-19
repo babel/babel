@@ -38,7 +38,16 @@ export function hasMinVersion(minVersion, runtimeVersion) {
 export function typeAnnotationToString(node) {
   switch (node.type) {
     case "GenericTypeAnnotation":
-      if (t.isIdentifier(node.id, { name: "Array" })) return "array";
+      if (t.isIdentifier(node.id)) {
+        switch (node.id.name) {
+          case "Array":
+            return "array";
+          case "RegExp":
+            return "regexp";
+          case "Function":
+            return "function";
+        }
+      }
       break;
     case "StringTypeAnnotation":
       return "string";
