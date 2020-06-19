@@ -40,7 +40,7 @@ export function createConfigItem(
 }
 
 export function getItemDescriptor(item: mixed): UnloadedDescriptor | void {
-  if (item instanceof ConfigItem) {
+  if (item instanceof ConfigItem || item._isConfigItem === true) {
     return item._descriptor;
   }
 
@@ -63,6 +63,11 @@ class ConfigItem {
    * If you access this, you are a bad person.
    */
   _descriptor: UnloadedDescriptor;
+
+  /**
+   * Used to detect ConfigItem instances from other Babel instances.
+   */
+  _isConfigItem: true;
 
   /**
    * The resolved value of the item itself.
@@ -104,6 +109,9 @@ class ConfigItem {
     // pass the item through JSON.stringify, it doesn't show up.
     this._descriptor = descriptor;
     Object.defineProperty(this, "_descriptor", { enumerable: false });
+
+    this._isConfigItem = true;
+    Object.defineProperty(this, "_isConfigItem", { enumerable: false });
 
     this.value = this._descriptor.value;
     this.options = this._descriptor.options;
