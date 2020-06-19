@@ -41,8 +41,6 @@ function findBreak(statements): ?NodePath {
       breakStatement =
         findBreak(statement.get("block")) ??
         findBreak(statement.get("handler"));
-    } else if (statement.isFunction()) {
-      return findBreak(statement.get("body"));
     } else if (statement.isBreakStatement()) {
       breakStatement = statement;
     }
