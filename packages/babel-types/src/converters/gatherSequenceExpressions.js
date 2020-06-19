@@ -67,9 +67,9 @@ export default function gatherSequenceExpressions(
     } else if (isEmptyStatement(node)) {
       // empty statement so ensure the last item is undefined if we're last
       // checks if node is first
-      // checks if input is `;` or `;;` which will return `()` in where
-      // the length will always be 2
-      if (nodes.indexOf(node) === 0 || nodes.length === 2) {
+      // checks if input is `;` or `;;` which will return `()`
+      // in where the length will always be 2
+      if (nodes.indexOf(node) === 0) {
         ensureLastUndefined = true;
       }
     } else {

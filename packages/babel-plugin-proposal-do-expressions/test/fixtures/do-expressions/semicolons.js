@@ -9,5 +9,3 @@ expect(do {
 expect(do {
   w = (do { 1;;;; });
 }).toBe(1);
-
-expect(do { ;; }).toBe(undefined);
