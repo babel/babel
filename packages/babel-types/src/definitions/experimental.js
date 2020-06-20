@@ -3,7 +3,6 @@ import defineType, {
   assertOptionalChainStart,
   assertEach,
   assertNodeType,
-  assertNodeOrValueType,
   assertValueType,
   chain,
 } from "./utils";
@@ -318,9 +317,7 @@ defineType("RecordExpression", {
     properties: {
       validate: chain(
         assertValueType("array"),
-        assertEach(
-          assertNodeType("ObjectProperty", "ObjectMethod", "SpreadElement"),
-        ),
+        assertEach(assertNodeType("ObjectProperty", "SpreadElement")),
       ),
     },
   },
@@ -331,9 +328,7 @@ defineType("TupleExpression", {
     elements: {
       validate: chain(
         assertValueType("array"),
-        assertEach(
-          assertNodeOrValueType("null", "Expression", "SpreadElement"),
-        ),
+        assertEach(assertNodeType("Expression", "SpreadElement")),
       ),
       default: [],
     },
