@@ -1,0 +1,8 @@
+{
+  "sourceType": "module",
+  "presets": [
+    ["flow", { "ignoreExtensions": true }],
+    "typescript"
+  ],
+  "throws": "Cannot combine flow and typescript plugins."
+}

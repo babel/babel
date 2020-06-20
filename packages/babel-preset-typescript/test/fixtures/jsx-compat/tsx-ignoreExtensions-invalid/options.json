@@ -1,0 +1,6 @@
+{
+  "presets": [
+    ["typescript", { "ignoreExtensions": true }]
+  ],
+  "throws": "Unexpected token, expected \",\" (1:6)"
+}

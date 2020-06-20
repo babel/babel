@@ -1,59 +1,61 @@
 import { declare } from "@babel/helper-plugin-utils";
 import transformTypeScript from "@babel/plugin-transform-typescript";
+import syntaxJSX from "@babel/plugin-syntax-jsx";
 
 export default declare(
   (
     api,
     {
-      allExtensions = false,
+      ignoreExtensions = false,
       allowNamespaces,
       jsxPragma,
-      isTSX = false,
       onlyRemoveTypeImports,
+
+      // Removed
+      allExtensions,
+      isTSX,
     },
   ) => {
     api.assertVersion(7);
 
-    if (typeof allExtensions !== "boolean") {
-      throw new Error(".allExtensions must be a boolean, or undefined");
+    if (typeof allExtensions !== "undefined" || typeof isTSX !== "undefined") {
+      throw new Error(
+        "The .allExtensions and .isTSX options have been removed.\n" +
+          "If you want to disable file extension-based JSX detection, " +
+          "you can set the .ignoreExtensions option to true.\n" +
+          "If you want to force JSX parsing, you can enable the " +
+          "@babel/plugin-syntax-jsx plugin.",
+      );
     }
 
-    if (typeof isTSX !== "boolean") {
-      throw new Error(".isTSX must be a boolean, or undefined");
+    if (typeof ignoreExtensions !== "boolean") {
+      throw new Error("The .ignoreExtensions option must be a boolean.");
     }
 
-    if (isTSX && !allExtensions) {
-      throw new Error("isTSX:true requires allExtensions:true");
-    }
-
-    const pluginOptions = isTSX => ({
+    const pluginOptions = {
       allowNamespaces,
-      isTSX,
       jsxPragma,
       onlyRemoveTypeImports,
-    });
+    };
+
+    const tsPlugins = [[transformTypeScript, pluginOptions]];
+    const tsxPlugins = [[transformTypeScript, pluginOptions], syntaxJSX];
+
+    if (ignoreExtensions) {
+      return { plugins: tsPlugins };
+    }
 
     return {
-      overrides: allExtensions
-        ? [
-            {
-              plugins: [[transformTypeScript, pluginOptions(isTSX)]],
-            },
-          ]
-        : [
-            {
-              // Only set 'test' if explicitly requested, since it requires that
-              // Babel is being called`
-              test: /\.ts$/,
-              plugins: [[transformTypeScript, pluginOptions(false)]],
-            },
-            {
-              // Only set 'test' if explicitly requested, since it requires that
-              // Babel is being called`
-              test: /\.tsx$/,
-              plugins: [[transformTypeScript, pluginOptions(true)]],
-            },
-          ],
+      overrides: [
+        {
+          test: filename => filename == null || filename.endsWith(".ts"),
+          plugins: tsPlugins,
+        },
+        {
+          test: filename => filename?.endsWith(".tsx"),
+          plugins: tsxPlugins,
+        },
+      ],
     };
   },
 );
