@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-classes",
-  "version": "7.10.1",
+  "version": "7.10.3",
   "description": "Compile ES2015 classes to ES5",
   "repository": {
     "type": "git",
@@ -14,10 +14,10 @@
   "main": "lib/index.js",
   "dependencies": {
     "@babel/helper-annotate-as-pure": "^7.10.1",
-    "@babel/helper-define-map": "^7.10.1",
-    "@babel/helper-function-name": "^7.10.1",
-    "@babel/helper-optimise-call-expression": "^7.10.1",
-    "@babel/helper-plugin-utils": "^7.10.1",
+    "@babel/helper-define-map": "^7.10.3",
+    "@babel/helper-function-name": "^7.10.3",
+    "@babel/helper-optimise-call-expression": "^7.10.3",
+    "@babel/helper-plugin-utils": "^7.10.3",
     "@babel/helper-replace-supers": "^7.10.1",
     "@babel/helper-split-export-declaration": "^7.10.1",
     "globals": "^12.3.0"
@@ -29,7 +29,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/helper-plugin-test-runner": "^7.10.1"
+    "@babel/core": "^7.10.3",
+    "@babel/helper-plugin-test-runner": "^7.10.3"
   }
 }

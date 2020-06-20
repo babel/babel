@@ -1,4 +1,4 @@
-# @babel/eslint-parser [![npm](https://img.shields.io/npm/v/@babel/eslint-parser.svg)](https://www.npmjs.com/package/@babel/eslint-parser) [![travis](https://img.shields.io/travis/babel/@babel/eslint-parser/master.svg)](https://travis-ci.org/babel/@babel/eslint-parser) [![npm-downloads](https://img.shields.io/npm/dm/@babel/eslint-parser.svg)](https://www.npmjs.com/package/@babel/eslint-parser)
+# @babel/eslint-parser [![npm](https://img.shields.io/npm/v/@babel/eslint-parser.svg)](https://www.npmjs.com/package/@babel/eslint-parser) [![travis](https://img.shields.io/travis/babel/@babel/eslint-parser/main.svg)](https://travis-ci.org/babel/@babel/eslint-parser) [![npm-downloads](https://img.shields.io/npm/dm/@babel/eslint-parser.svg)](https://www.npmjs.com/package/@babel/eslint-parser)
 
 
 ## This project is still experimental and will be released with Babel v8. You can track our progress [here](https://github.com/babel/babel/issues/10752)! Please use [babel-eslint](https://github.com/babel/babel-eslint) in the meantime.
@@ -18,7 +18,7 @@ ESLint allows for the use of [custom parsers](https://eslint.org/docs/developer-
 transformed into an [ESTree](https://github.com/estree/estree)-compliant structure that ESLint can understand. All location info such as line numbers,
 columns is also retained so you can track down errors with ease.
 
-**Note:** ESLint's core rules do not support experimental syntax and may therefore not work as expected when using `@babel/eslint-parser`. Please use the companion [`@babel/eslint-plugin`](https://github.com/babel/babel/tree/master/eslint/babel-eslint-plugin) plugin for core rules that you have issues with.
+**Note:** ESLint's core rules do not support experimental syntax and may therefore not work as expected when using `@babel/eslint-parser`. Please use the companion [`@babel/eslint-plugin`](https://github.com/babel/babel/tree/main/eslint/babel-eslint-plugin) plugin for core rules that you have issues with.
 
 ## Usage
 

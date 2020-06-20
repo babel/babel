@@ -13,7 +13,7 @@
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
   },
-  "homepage": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-parser",
+  "homepage": "https://babeljs.io/",
   "engines": {
     "node": ">=10.13.0"
   },
