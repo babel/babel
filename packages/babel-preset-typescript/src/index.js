@@ -21,7 +21,7 @@ export default declare(
     if (typeof allExtensions !== "undefined" || typeof isTSX !== "undefined") {
       throw new Error(
         "The .allExtensions and .isTSX options have been removed.\n" +
-          "If you want to disable JSX detection based on the file extension, " +
+          "If you want to disable file extension-based JSX detection, " +
           "you can set the .ignoreExtensions option to true.\n" +
           "If you want to force JSX parsing, you can enable the " +
           "@babel/plugin-syntax-jsx plugin.",
