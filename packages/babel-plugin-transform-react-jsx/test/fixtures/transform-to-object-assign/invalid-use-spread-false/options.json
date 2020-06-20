@@ -1,0 +1,4 @@
+{
+  "plugins": [["transform-react-jsx", { "useSpread": false }]],
+  "throws": "transform-react-jsx: \"useSpread\" is always enabled in Babel 8, please remove it from the config."
+}
