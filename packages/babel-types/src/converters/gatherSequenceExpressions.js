@@ -25,7 +25,11 @@ export default function gatherSequenceExpressions(
   let ensureLastUndefined = true;
 
   for (const node of nodes) {
-    ensureLastUndefined = false;
+    // if we encounter emptyStatement before a non-emptyStatement
+    // we want to disregard that
+    if (!isEmptyStatement(node)) {
+      ensureLastUndefined = false;
+    }
 
     if (isExpression(node)) {
       exprs.push(node);
@@ -66,9 +70,7 @@ export default function gatherSequenceExpressions(
       exprs.push(body);
     } else if (isEmptyStatement(node)) {
       // empty statement so ensure the last item is undefined if we're last
-      // checks if node is first
-      // checks if input is `;` or `;;` which will return `()`
-      // in where the length will always be 2
+      // checks if emptyStatement is first
       if (nodes.indexOf(node) === 0) {
         ensureLastUndefined = true;
       }
