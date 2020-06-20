@@ -2,7 +2,8 @@
   "plugins": [
     [
       "transform-typescript",
-      { "jsxPragma": "h", "jsxPragmaFrag": "Fragment", "isTSX": true }
-    ]
+      { "jsxPragma": "h", "jsxPragmaFrag": "Fragment" }
+    ],
+    "syntax-jsx"
   ]
 }

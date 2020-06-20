@@ -1,0 +1,6 @@
+{
+  "presets": [
+    ["typescript", { "ignoreExtensions": true }]
+  ],
+  "plugins": ["syntax-jsx"]
+}

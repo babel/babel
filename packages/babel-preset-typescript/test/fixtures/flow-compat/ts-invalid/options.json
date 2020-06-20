@@ -1,4 +1,0 @@
-{
-  "presets": [["flow", {}, "before"], "typescript", ["flow", {}, "after"]],
-  "throws": "Unexpected token (1:12)"
-}

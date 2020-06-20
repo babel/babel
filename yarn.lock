@@ -1600,7 +1600,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-jsx@workspace:*, @babel/plugin-syntax-jsx@workspace:^7.12.1, @babel/plugin-syntax-jsx@workspace:packages/babel-plugin-syntax-jsx":
+"@babel/plugin-syntax-jsx@workspace:*, @babel/plugin-syntax-jsx@workspace:^7.10.4, @babel/plugin-syntax-jsx@workspace:^7.12.1, @babel/plugin-syntax-jsx@workspace:packages/babel-plugin-syntax-jsx":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-jsx@workspace:packages/babel-plugin-syntax-jsx"
   dependencies:
@@ -3088,6 +3088,7 @@ __metadata:
     "@babel/core": "workspace:*"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.10.4"
+    "@babel/plugin-syntax-jsx": "workspace:^7.10.4"
     "@babel/plugin-transform-typescript": "workspace:^7.12.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
