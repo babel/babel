@@ -28,3 +28,4 @@ esproposal.export_star_as=enable
 esproposal.optional_chaining=enable
 esproposal.nullish_coalescing=enable
 module.name_mapper='^@babel\/\([a-zA-Z0-9_\-]+\)$' -> '<PROJECT_ROOT>/packages/babel-\1/src/index'
+module.ignore_non_literal_requires=true
