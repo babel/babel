@@ -29,7 +29,7 @@ export default declare((api, opts) => {
 
   if ("useSpread" in opts) {
     throw new Error(
-      '@babel/preset-react: Since "useSpread" is enabled by default in Babel 8, you can remove it from your config.\n',
+      '@babel/preset-react: Since "useSpread" is always enabled in Babel 8, you must remove it from your config.',
     );
   }
 

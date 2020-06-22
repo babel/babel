@@ -21,14 +21,14 @@ export default declare((api, options) => {
 
   if ("useSpread" in options) {
     throw new Error(
-      'transform-react-jsx: Since "useSpread" is enabled by default in Babel 8, you can remove it from your config.\n',
+      'transform-react-jsx: Since "useSpread" is always enabled in Babel 8, you must remove it from your config.',
     );
   }
 
   if ("useBuiltIns" in options) {
     const useBuiltInsFormatted = JSON.stringify(options.useBuiltIns);
     throw new Error(
-      `transform-react-jsx: Since "useBuiltIns" is removed in Babel 8, you can remove it from the config.
+      `transform-react-jsx: Since "useBuiltIns" is removed in Babel 8, you must remove it from your config.
 - Babel 8 now transforms JSX spread to object spread. If you need to transpile object spread with
 \`useBuiltIns: ${useBuiltInsFormatted}\`, you can use the following config
 {
