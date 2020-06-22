@@ -1467,7 +1467,9 @@ export default class ExpressionParser extends LValParser {
           error += " or class properties";
         }
 
+        /* eslint-disable @babel/development-internal/dry-error-messages */
         this.raise(metaProp.start, error);
+        /* eslint-enable @babel/development-internal/dry-error-messages */
       }
 
       return metaProp;

@@ -2,6 +2,9 @@
 
 /*:: declare var invariant; */
 
+// Error messages are colocated with the plugin.
+/* eslint-disable @babel/development-internal/dry-error-messages */
+
 import type { TokenType } from "../../tokenizer/types";
 import type State from "../../tokenizer/state";
 import { types as tt } from "../../tokenizer/types";
