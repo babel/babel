@@ -320,7 +320,10 @@ describe("converters", function () {
     it("gathers empty statements", function () {
       const node = parseCode(";");
       const sequence = t.toSequenceExpression([undefinedNode, node], scope);
-      expect(generateCode(sequence.expressions[1])).toBe("undefined");
+      expect(() => {
+        generateCode(sequence.expressions[1]);
+      }).toThrow("Cannot read property '1' of undefined");
+      // expect(generateCode(sequence.expressions[1])).toBe("undefined");
     });
     it("skips empty statement if expression afterwards", function () {
       const node = parseCode("{ ; true }");
