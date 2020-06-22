@@ -236,6 +236,7 @@ function buildNamespaceReexport(metadata, namespace, loose) {
         Object.keys(NAMESPACE).forEach(function(key) {
           if (key === "default" || key === "__esModule") return;
           VERIFY_NAME_LIST;
+          if (key in EXPORTS && EXPORTS[key] === NAMESPACE[key]) return;
 
           EXPORTS[key] = NAMESPACE[key];
         });
@@ -244,6 +245,7 @@ function buildNamespaceReexport(metadata, namespace, loose) {
         Object.keys(NAMESPACE).forEach(function(key) {
           if (key === "default" || key === "__esModule") return;
           VERIFY_NAME_LIST;
+          if (key in EXPORTS && EXPORTS[key] === NAMESPACE[key]) return;
 
           Object.defineProperty(EXPORTS, key, {
             enumerable: true,
