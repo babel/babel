@@ -28,6 +28,7 @@ var _mod = require("mod");
 _forEachInstanceProperty(_context = _Object$keys(_mod)).call(_context, function (key) {
   if (key === "default" || key === "__esModule") return;
   if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === _mod[key]) return;
 
   _Object$defineProperty(exports, key, {
     enumerable: true,

@@ -10,6 +10,7 @@ var _bar = require("bar");
 
 Object.keys(_bar).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _bar[key]) return;
   Object.defineProperty(exports, key, {
     enumerable: true,
     get: function () {
