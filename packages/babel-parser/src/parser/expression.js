@@ -1177,6 +1177,12 @@ export default class ExpressionParser extends LValParser {
         }
       }
       // fall through
+      case tt.relational: {
+        if (this.state.value === "<") {
+          throw this.expectOnePlugin(["jsx", "flow", "typescript"]);
+        }
+      }
+      // fall through
       default:
         throw this.unexpected();
     }
