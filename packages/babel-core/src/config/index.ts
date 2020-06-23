@@ -60,3 +60,4 @@ export function createConfigItem(
     return createConfigItemRunner.sync(target, options);
   }
 }
+export { getExternalDependencies } from "./full";
