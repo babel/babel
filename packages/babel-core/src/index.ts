@@ -27,6 +27,7 @@ export {
   loadOptions,
   loadOptionsSync,
   loadOptionsAsync,
+  getExternalDependencies,
 } from "./config";
 
 export { transform, transformSync, transformAsync } from "./transform";
