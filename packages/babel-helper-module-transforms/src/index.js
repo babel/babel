@@ -241,7 +241,13 @@ function buildNamespaceReexport(metadata, namespace, loose) {
           EXPORTS[key] = NAMESPACE[key];
         });
       `
-    : template.statement`
+    : // Also skip already assigned bindings if they are strictly equal
+      // to be somewhat more spec-compliant when a file has multiple
+      // namespace re-exports that would cause a binding to be exported
+      // multiple times. However, multiple bindings of the same name that
+      // export the same primitive value are silently skipped
+      // (the spec requires an "ambigous bindings" early error here).
+      template.statement`
         Object.keys(NAMESPACE).forEach(function(key) {
           if (key === "default" || key === "__esModule") return;
           VERIFY_NAME_LIST;
