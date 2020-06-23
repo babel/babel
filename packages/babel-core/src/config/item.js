@@ -49,6 +49,8 @@ export function getItemDescriptor(item: mixed): UnloadedDescriptor | void {
 
 export type { ConfigItem };
 
+const CONFIG_ITEM_BRAND = Symbol.for("@babel/core@7 - ConfigItem");
+
 /**
  * A public representation of a plugin/preset that will _eventually_ be load.
  * Users can use this to interact with the results of a loaded Babel
@@ -67,7 +69,7 @@ class ConfigItem {
   /**
    * Used to detect ConfigItem instances from other Babel instances.
    */
-  [Symbol.for("@babel/core@7 - ConfigItem")] = true;
+  [CONFIG_ITEM_BRAND] = true;
 
   /**
    * The resolved value of the item itself.
@@ -110,8 +112,7 @@ class ConfigItem {
     this._descriptor = descriptor;
     Object.defineProperty(this, "_descriptor", { enumerable: false });
 
-    this._isConfigItem = true;
-    Object.defineProperty(this, "_isConfigItem", { enumerable: false });
+    Object.defineProperty(this, CONFIG_ITEM_BRAND, { enumerable: false });
 
     this.value = this._descriptor.value;
     this.options = this._descriptor.options;
