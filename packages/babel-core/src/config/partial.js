@@ -82,7 +82,6 @@ export default function* loadPrivatePartialConfig(
     root: rootDir = ".",
     rootMode = "root",
     caller,
-    showConfig = false,
   } = args;
   const absoluteCwd = path.resolve(cwd);
   const absoluteRootDir = yield* resolveRootMode(
@@ -103,7 +102,7 @@ export default function* loadPrivatePartialConfig(
     root: absoluteRootDir,
     envName,
     caller,
-    showConfig: showConfig || showConfigPath === filename,
+    showConfig: showConfigPath === filename,
   };
 
   const configChain = yield* buildRootChain(args, context);

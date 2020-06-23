@@ -1,4 +1,0 @@
-{
-  "args": ["-f", "./src", "--show-config"],
-  "os": ["win32"]
-}

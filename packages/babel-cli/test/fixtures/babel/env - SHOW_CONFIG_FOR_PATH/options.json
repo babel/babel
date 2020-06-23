@@ -1,7 +1,8 @@
 {
-  "args": ["./src", "-d", "lib"],
+  "args": ["--config-file", "./my-config.js", "-f", "./src/index.js"],
   "env": {
-    "BABEL_SHOW_CONFIG_FOR_PATH": "./src/foo.js"
+    "BABEL_ENV": "test",
+    "BABEL_SHOW_CONFIG_FOR_PATH": "./src/index.js"
   },
   "os": ["darwin", "linux"]
 }

@@ -1,0 +1,7 @@
+{
+  "args": ["-f", "./src"],
+  "os": ["win32"],
+  "env": {
+    "BABEL_SHOW_CONFIG_FOR_PATH": "./src/foo.js"
+  }
+}

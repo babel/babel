@@ -2,14 +2,13 @@ programmatic options from @babel/cli
 {
   "sourceFileName": "stdin",
   "presets": [
-    "<ROOTDIR>/packages/babel-preset-react"
+    "<ROOTDIR>//packages//babel-preset-react"
   ],
   "plugins": [
-    "<ROOTDIR>/packages/babel-plugin-transform-arrow-functions",
-    "<ROOTDIR>/packages/babel-plugin-transform-strict-mode",
-    "<ROOTDIR>/packages/babel-plugin-transform-modules-commonjs"
+    "<ROOTDIR>//packages//babel-plugin-transform-arrow-functions",
+    "<ROOTDIR>//packages//babel-plugin-transform-strict-mode",
+    "<ROOTDIR>//packages//babel-plugin-transform-modules-commonjs"
   ],
-  "showConfig": true,
   "caller": {
     "name": "@babel/cli"
   },
