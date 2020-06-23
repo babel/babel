@@ -15,6 +15,7 @@ import {
 
 import {
   findConfigUpwards,
+  resolveShowConfigPath,
   ROOT_CONFIG_FILENAMES,
   type ConfigFile,
   type IgnoreFile,
@@ -94,16 +95,15 @@ export default function* loadPrivatePartialConfig(
       ? path.resolve(cwd, args.filename)
       : undefined;
 
+  const showConfigPath = yield* resolveShowConfigPath(absoluteCwd);
+
   const context: ConfigContext = {
     filename,
     cwd: absoluteCwd,
     root: absoluteRootDir,
     envName,
     caller,
-    showConfig:
-      showConfig ||
-      path.resolve(cwd, process.env.BABEL_SHOW_CONFIG_FOR_PATH ?? "") ===
-        filename,
+    showConfig: showConfig || showConfigPath === filename,
   };
 
   const configChain = yield* buildRootChain(args, context);
