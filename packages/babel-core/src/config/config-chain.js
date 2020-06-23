@@ -726,22 +726,28 @@ function shouldIgnore(
   dirname: string,
 ): boolean {
   if (ignore && matchesPatterns(context, ignore, dirname)) {
-    debug(
-      "Ignored %o because it matched one of %O from %o",
-      context.filename,
+    const message = `No config is applied on "${
+      context.filename ?? "(unknown)"
+    }" because it matches one of \`ignore: ${JSON.stringify(
       ignore,
-      dirname,
-    );
+    )}\` from "${dirname}"`;
+    debug(message);
+    if (context.showConfig) {
+      console.log(message);
+    }
     return true;
   }
 
   if (only && !matchesPatterns(context, only, dirname)) {
-    debug(
-      "Ignored %o because it failed to match one of %O from %o",
-      context.filename,
+    const message = `No config is applied on "${
+      context.filename ?? "(unknown)"
+    }" because it fails to match one of \`only: ${JSON.stringify(
       only,
-      dirname,
-    );
+    )}\` from "${dirname}"`;
+    debug(message);
+    if (context.showConfig) {
+      console.log(message);
+    }
     return true;
   }
 

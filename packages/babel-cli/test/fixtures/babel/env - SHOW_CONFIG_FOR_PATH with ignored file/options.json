@@ -1,0 +1,7 @@
+{
+  "args": ["./src/index.js"],
+  "env": {
+    "BABEL_SHOW_CONFIG_FOR_PATH": "./src/index.js"
+  },
+  "os": ["darwin", "linux"]
+}
