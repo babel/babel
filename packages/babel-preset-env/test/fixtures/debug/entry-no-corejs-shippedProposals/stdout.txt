@@ -1,386 +1,373 @@
 @babel/preset-env: `DEBUG` option
 
 Using targets:
-{}
+{
+  "android": "80",
+  "chrome": "80",
+  "edge": "18",
+  "firefox": "68",
+  "ie": "11",
+  "ios": "12.2",
+  "opera": "67",
+  "safari": "13",
+  "samsung": "10.1"
+}
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-numeric-separator {}
-  proposal-class-properties {}
-  proposal-private-methods {}
-  proposal-nullish-coalescing-operator {}
-  proposal-optional-chaining {}
-  proposal-json-strings {}
-  proposal-optional-catch-binding {}
-  transform-parameters {}
-  proposal-async-generator-functions {}
-  proposal-object-rest-spread {}
-  transform-dotall-regex {}
-  proposal-unicode-property-regex {}
-  transform-named-capturing-groups-regex {}
-  transform-async-to-generator {}
-  transform-exponentiation-operator {}
-  transform-template-literals {}
-  transform-literals {}
-  transform-function-name {}
-  transform-arrow-functions {}
-  transform-block-scoped-functions {}
-  transform-classes {}
-  transform-object-super {}
-  transform-shorthand-properties {}
-  transform-duplicate-keys {}
-  transform-computed-properties {}
-  transform-for-of {}
-  transform-sticky-regex {}
-  transform-unicode-escapes {}
-  transform-unicode-regex {}
-  transform-spread {}
-  transform-destructuring {}
-  transform-block-scoping {}
-  transform-typeof-symbol {}
-  transform-new-target {}
-  transform-regenerator {}
-  transform-member-expression-literals {}
-  transform-property-literals {}
-  transform-reserved-words {}
-  transform-modules-commonjs {}
-  proposal-dynamic-import {}
+  proposal-numeric-separator { "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "samsung":"10.1" }
+  proposal-class-properties { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  proposal-private-methods { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  proposal-nullish-coalescing-operator { "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "safari":"13", "samsung":"10.1" }
+  proposal-optional-chaining { "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "safari":"13", "samsung":"10.1" }
+  proposal-json-strings { "edge":"18", "ie":"11" }
+  proposal-optional-catch-binding { "edge":"18", "ie":"11" }
+  transform-parameters { "ie":"11" }
+  proposal-async-generator-functions { "edge":"18", "ie":"11" }
+  proposal-object-rest-spread { "edge":"18", "ie":"11" }
+  transform-dotall-regex { "edge":"18", "firefox":"68", "ie":"11" }
+  proposal-unicode-property-regex { "edge":"18", "firefox":"68", "ie":"11" }
+  transform-named-capturing-groups-regex { "edge":"18", "firefox":"68", "ie":"11" }
+  transform-async-to-generator { "ie":"11" }
+  transform-exponentiation-operator { "ie":"11" }
+  transform-template-literals { "ie":"11", "ios":"12.2" }
+  transform-literals { "ie":"11" }
+  transform-function-name { "edge":"18", "ie":"11" }
+  transform-arrow-functions { "ie":"11" }
+  transform-classes { "ie":"11" }
+  transform-object-super { "ie":"11" }
+  transform-shorthand-properties { "ie":"11" }
+  transform-duplicate-keys { "ie":"11" }
+  transform-computed-properties { "ie":"11" }
+  transform-for-of { "ie":"11" }
+  transform-sticky-regex { "ie":"11" }
+  transform-unicode-escapes { "ie":"11" }
+  transform-unicode-regex { "ie":"11" }
+  transform-spread { "ie":"11" }
+  transform-destructuring { "ie":"11" }
+  transform-block-scoping { "ie":"11" }
+  transform-typeof-symbol { "ie":"11" }
+  transform-new-target { "ie":"11" }
+  transform-regenerator { "ie":"11" }
+  transform-modules-commonjs { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  proposal-dynamic-import { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
 
 Using polyfills with `entry` option:
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-no-corejs-shippedProposals/input.mjs] Replaced core-js entries with the following polyfills:
-  es.symbol {}
-  es.symbol.description {}
-  es.symbol.async-iterator {}
-  es.symbol.has-instance {}
-  es.symbol.is-concat-spreadable {}
-  es.symbol.iterator {}
-  es.symbol.match {}
-  es.symbol.match-all {}
-  es.symbol.replace {}
-  es.symbol.search {}
-  es.symbol.species {}
-  es.symbol.split {}
-  es.symbol.to-primitive {}
-  es.symbol.to-string-tag {}
-  es.symbol.unscopables {}
-  es.array.concat {}
-  es.array.copy-within {}
-  es.array.every {}
-  es.array.fill {}
-  es.array.filter {}
-  es.array.find {}
-  es.array.find-index {}
-  es.array.flat {}
-  es.array.flat-map {}
-  es.array.for-each {}
-  es.array.from {}
-  es.array.includes {}
-  es.array.index-of {}
-  es.array.is-array {}
-  es.array.iterator {}
-  es.array.join {}
-  es.array.last-index-of {}
-  es.array.map {}
-  es.array.of {}
-  es.array.reduce {}
-  es.array.reduce-right {}
-  es.array.reverse {}
-  es.array.slice {}
-  es.array.some {}
-  es.array.sort {}
-  es.array.species {}
-  es.array.splice {}
-  es.array.unscopables.flat {}
-  es.array.unscopables.flat-map {}
-  es.array-buffer.constructor {}
-  es.array-buffer.is-view {}
-  es.array-buffer.slice {}
-  es.data-view {}
-  es.date.now {}
-  es.date.to-iso-string {}
-  es.date.to-json {}
-  es.date.to-primitive {}
-  es.date.to-string {}
-  es.function.bind {}
-  es.function.has-instance {}
-  es.function.name {}
-  es.global-this {}
-  es.json.stringify {}
-  es.json.to-string-tag {}
-  es.map {}
-  es.math.acosh {}
-  es.math.asinh {}
-  es.math.atanh {}
-  es.math.cbrt {}
-  es.math.clz32 {}
-  es.math.cosh {}
-  es.math.expm1 {}
-  es.math.fround {}
-  es.math.hypot {}
-  es.math.imul {}
-  es.math.log10 {}
-  es.math.log1p {}
-  es.math.log2 {}
-  es.math.sign {}
-  es.math.sinh {}
-  es.math.tanh {}
-  es.math.to-string-tag {}
-  es.math.trunc {}
-  es.number.constructor {}
-  es.number.epsilon {}
-  es.number.is-finite {}
-  es.number.is-integer {}
-  es.number.is-nan {}
-  es.number.is-safe-integer {}
-  es.number.max-safe-integer {}
-  es.number.min-safe-integer {}
-  es.number.parse-float {}
-  es.number.parse-int {}
-  es.number.to-fixed {}
-  es.number.to-precision {}
-  es.object.assign {}
-  es.object.create {}
-  es.object.define-getter {}
-  es.object.define-properties {}
-  es.object.define-property {}
-  es.object.define-setter {}
-  es.object.entries {}
-  es.object.freeze {}
-  es.object.from-entries {}
-  es.object.get-own-property-descriptor {}
-  es.object.get-own-property-descriptors {}
-  es.object.get-own-property-names {}
-  es.object.get-prototype-of {}
-  es.object.is {}
-  es.object.is-extensible {}
-  es.object.is-frozen {}
-  es.object.is-sealed {}
-  es.object.keys {}
-  es.object.lookup-getter {}
-  es.object.lookup-setter {}
-  es.object.prevent-extensions {}
-  es.object.seal {}
-  es.object.set-prototype-of {}
-  es.object.to-string {}
-  es.object.values {}
-  es.parse-float {}
-  es.parse-int {}
-  es.promise {}
-  es.promise.all-settled {}
-  es.promise.finally {}
-  es.reflect.apply {}
-  es.reflect.construct {}
-  es.reflect.define-property {}
-  es.reflect.delete-property {}
-  es.reflect.get {}
-  es.reflect.get-own-property-descriptor {}
-  es.reflect.get-prototype-of {}
-  es.reflect.has {}
-  es.reflect.is-extensible {}
-  es.reflect.own-keys {}
-  es.reflect.prevent-extensions {}
-  es.reflect.set {}
-  es.reflect.set-prototype-of {}
-  es.regexp.constructor {}
-  es.regexp.exec {}
-  es.regexp.flags {}
-  es.regexp.sticky {}
-  es.regexp.test {}
-  es.regexp.to-string {}
-  es.set {}
-  es.string.code-point-at {}
-  es.string.ends-with {}
-  es.string.from-code-point {}
-  es.string.includes {}
-  es.string.iterator {}
-  es.string.match {}
-  es.string.match-all {}
-  es.string.pad-end {}
-  es.string.pad-start {}
-  es.string.raw {}
-  es.string.repeat {}
-  es.string.replace {}
-  es.string.search {}
-  es.string.split {}
-  es.string.starts-with {}
-  es.string.trim {}
-  es.string.trim-end {}
-  es.string.trim-start {}
-  es.string.anchor {}
-  es.string.big {}
-  es.string.blink {}
-  es.string.bold {}
-  es.string.fixed {}
-  es.string.fontcolor {}
-  es.string.fontsize {}
-  es.string.italics {}
-  es.string.link {}
-  es.string.small {}
-  es.string.strike {}
-  es.string.sub {}
-  es.string.sup {}
-  es.typed-array.float32-array {}
-  es.typed-array.float64-array {}
-  es.typed-array.int8-array {}
-  es.typed-array.int16-array {}
-  es.typed-array.int32-array {}
-  es.typed-array.uint8-array {}
-  es.typed-array.uint8-clamped-array {}
-  es.typed-array.uint16-array {}
-  es.typed-array.uint32-array {}
-  es.typed-array.copy-within {}
-  es.typed-array.every {}
-  es.typed-array.fill {}
-  es.typed-array.filter {}
-  es.typed-array.find {}
-  es.typed-array.find-index {}
-  es.typed-array.for-each {}
-  es.typed-array.from {}
-  es.typed-array.includes {}
-  es.typed-array.index-of {}
-  es.typed-array.iterator {}
-  es.typed-array.join {}
-  es.typed-array.last-index-of {}
-  es.typed-array.map {}
-  es.typed-array.of {}
-  es.typed-array.reduce {}
-  es.typed-array.reduce-right {}
-  es.typed-array.reverse {}
-  es.typed-array.set {}
-  es.typed-array.slice {}
-  es.typed-array.some {}
-  es.typed-array.sort {}
-  es.typed-array.subarray {}
-  es.typed-array.to-locale-string {}
-  es.typed-array.to-string {}
-  es.weak-map {}
-  es.weak-set {}
-  esnext.aggregate-error {}
-  esnext.array.is-template-object {}
-  esnext.array.last-index {}
-  esnext.array.last-item {}
-  esnext.async-iterator.constructor {}
-  esnext.async-iterator.as-indexed-pairs {}
-  esnext.async-iterator.drop {}
-  esnext.async-iterator.every {}
-  esnext.async-iterator.filter {}
-  esnext.async-iterator.find {}
-  esnext.async-iterator.flat-map {}
-  esnext.async-iterator.for-each {}
-  esnext.async-iterator.from {}
-  esnext.async-iterator.map {}
-  esnext.async-iterator.reduce {}
-  esnext.async-iterator.some {}
-  esnext.async-iterator.take {}
-  esnext.async-iterator.to-array {}
-  esnext.composite-key {}
-  esnext.composite-symbol {}
-  esnext.global-this {}
-  esnext.iterator.constructor {}
-  esnext.iterator.as-indexed-pairs {}
-  esnext.iterator.drop {}
-  esnext.iterator.every {}
-  esnext.iterator.filter {}
-  esnext.iterator.find {}
-  esnext.iterator.flat-map {}
-  esnext.iterator.for-each {}
-  esnext.iterator.from {}
-  esnext.iterator.map {}
-  esnext.iterator.reduce {}
-  esnext.iterator.some {}
-  esnext.iterator.take {}
-  esnext.iterator.to-array {}
-  esnext.map.delete-all {}
-  esnext.map.every {}
-  esnext.map.filter {}
-  esnext.map.find {}
-  esnext.map.find-key {}
-  esnext.map.from {}
-  esnext.map.group-by {}
-  esnext.map.includes {}
-  esnext.map.key-by {}
-  esnext.map.key-of {}
-  esnext.map.map-keys {}
-  esnext.map.map-values {}
-  esnext.map.merge {}
-  esnext.map.of {}
-  esnext.map.reduce {}
-  esnext.map.some {}
-  esnext.map.update {}
-  esnext.map.update-or-insert {}
-  esnext.map.upsert {}
-  esnext.math.clamp {}
-  esnext.math.deg-per-rad {}
-  esnext.math.degrees {}
-  esnext.math.fscale {}
-  esnext.math.iaddh {}
-  esnext.math.imulh {}
-  esnext.math.isubh {}
-  esnext.math.rad-per-deg {}
-  esnext.math.radians {}
-  esnext.math.scale {}
-  esnext.math.seeded-prng {}
-  esnext.math.signbit {}
-  esnext.math.umulh {}
-  esnext.number.from-string {}
-  esnext.object.iterate-entries {}
-  esnext.object.iterate-keys {}
-  esnext.object.iterate-values {}
-  esnext.observable {}
-  esnext.promise.all-settled {}
-  esnext.promise.any {}
-  esnext.promise.try {}
-  esnext.reflect.define-metadata {}
-  esnext.reflect.delete-metadata {}
-  esnext.reflect.get-metadata {}
-  esnext.reflect.get-metadata-keys {}
-  esnext.reflect.get-own-metadata {}
-  esnext.reflect.get-own-metadata-keys {}
-  esnext.reflect.has-metadata {}
-  esnext.reflect.has-own-metadata {}
-  esnext.reflect.metadata {}
-  esnext.set.add-all {}
-  esnext.set.delete-all {}
-  esnext.set.difference {}
-  esnext.set.every {}
-  esnext.set.filter {}
-  esnext.set.find {}
-  esnext.set.from {}
-  esnext.set.intersection {}
-  esnext.set.is-disjoint-from {}
-  esnext.set.is-subset-of {}
-  esnext.set.is-superset-of {}
-  esnext.set.join {}
-  esnext.set.map {}
-  esnext.set.of {}
-  esnext.set.reduce {}
-  esnext.set.some {}
-  esnext.set.symmetric-difference {}
-  esnext.set.union {}
-  esnext.string.at {}
-  esnext.string.code-points {}
-  esnext.string.match-all {}
-  esnext.string.replace-all {}
-  esnext.symbol.async-dispose {}
-  esnext.symbol.dispose {}
-  esnext.symbol.observable {}
-  esnext.symbol.pattern-match {}
-  esnext.symbol.replace-all {}
-  esnext.weak-map.delete-all {}
-  esnext.weak-map.from {}
-  esnext.weak-map.of {}
-  esnext.weak-map.upsert {}
-  esnext.weak-set.add-all {}
-  esnext.weak-set.delete-all {}
-  esnext.weak-set.from {}
-  esnext.weak-set.of {}
-  web.dom-collections.for-each {}
-  web.dom-collections.iterator {}
-  web.immediate {}
-  web.queue-microtask {}
-  web.timers {}
-  web.url {}
-  web.url.to-json {}
-  web.url-search-params {}
+  es.symbol { "ie":"11" }
+  es.symbol.description { "edge":"18", "ie":"11" }
+  es.symbol.async-iterator { "edge":"18", "ie":"11" }
+  es.symbol.has-instance { "ie":"11" }
+  es.symbol.is-concat-spreadable { "ie":"11" }
+  es.symbol.iterator { "ie":"11" }
+  es.symbol.match { "edge":"18", "ie":"11" }
+  es.symbol.match-all { "edge":"18", "ie":"11", "ios":"12.2", "samsung":"10.1" }
+  es.symbol.replace { "edge":"18", "ie":"11" }
+  es.symbol.search { "edge":"18", "ie":"11" }
+  es.symbol.species { "ie":"11" }
+  es.symbol.split { "edge":"18", "ie":"11" }
+  es.symbol.to-primitive { "ie":"11" }
+  es.symbol.to-string-tag { "ie":"11" }
+  es.symbol.unscopables { "ie":"11" }
+  es.array.concat { "ie":"11" }
+  es.array.copy-within { "ie":"11" }
+  es.array.every { "ie":"11" }
+  es.array.fill { "ie":"11" }
+  es.array.filter { "ie":"11" }
+  es.array.find { "ie":"11" }
+  es.array.find-index { "ie":"11" }
+  es.array.flat { "edge":"18", "ie":"11" }
+  es.array.flat-map { "edge":"18", "ie":"11" }
+  es.array.for-each { "ie":"11" }
+  es.array.from { "ie":"11" }
+  es.array.includes { "ie":"11" }
+  es.array.index-of { "ie":"11" }
+  es.array.iterator { "ie":"11" }
+  es.array.join { "ie":"11" }
+  es.array.last-index-of { "ie":"11" }
+  es.array.map { "ie":"11" }
+  es.array.of { "ie":"11" }
+  es.array.reduce { "ie":"11" }
+  es.array.reduce-right { "ie":"11" }
+  es.array.slice { "ie":"11" }
+  es.array.some { "ie":"11" }
+  es.array.species { "ie":"11" }
+  es.array.splice { "ie":"11" }
+  es.array.unscopables.flat { "edge":"18", "ie":"11", "ios":"12.2", "samsung":"10.1" }
+  es.array.unscopables.flat-map { "edge":"18", "ie":"11", "ios":"12.2", "samsung":"10.1" }
+  es.array-buffer.constructor { "ie":"11" }
+  es.date.to-primitive { "ie":"11" }
+  es.function.has-instance { "ie":"11" }
+  es.function.name { "ie":"11" }
+  es.global-this { "edge":"18", "ie":"11" }
+  es.json.stringify { "edge":"18", "ie":"11", "samsung":"10.1" }
+  es.json.to-string-tag { "ie":"11" }
+  es.map { "ie":"11" }
+  es.math.acosh { "ie":"11" }
+  es.math.asinh { "ie":"11" }
+  es.math.atanh { "ie":"11" }
+  es.math.cbrt { "ie":"11" }
+  es.math.clz32 { "ie":"11" }
+  es.math.cosh { "ie":"11" }
+  es.math.expm1 { "ie":"11" }
+  es.math.fround { "ie":"11" }
+  es.math.hypot { "ie":"11", "samsung":"10.1" }
+  es.math.imul { "ie":"11" }
+  es.math.log10 { "ie":"11" }
+  es.math.log1p { "ie":"11" }
+  es.math.log2 { "ie":"11" }
+  es.math.sign { "ie":"11" }
+  es.math.sinh { "ie":"11" }
+  es.math.tanh { "ie":"11" }
+  es.math.to-string-tag { "ie":"11" }
+  es.math.trunc { "ie":"11" }
+  es.number.constructor { "ie":"11" }
+  es.number.epsilon { "ie":"11" }
+  es.number.is-finite { "ie":"11" }
+  es.number.is-integer { "ie":"11" }
+  es.number.is-nan { "ie":"11" }
+  es.number.is-safe-integer { "ie":"11" }
+  es.number.max-safe-integer { "ie":"11" }
+  es.number.min-safe-integer { "ie":"11" }
+  es.number.parse-float { "ie":"11" }
+  es.number.parse-int { "ie":"11" }
+  es.number.to-fixed { "edge":"18", "ie":"11" }
+  es.object.assign { "edge":"18", "ie":"11" }
+  es.object.define-getter { "ie":"11" }
+  es.object.define-setter { "ie":"11" }
+  es.object.entries { "ie":"11" }
+  es.object.freeze { "ie":"11" }
+  es.object.from-entries { "edge":"18", "ie":"11", "samsung":"10.1" }
+  es.object.get-own-property-descriptor { "ie":"11" }
+  es.object.get-own-property-descriptors { "ie":"11" }
+  es.object.get-own-property-names { "ie":"11" }
+  es.object.get-prototype-of { "ie":"11" }
+  es.object.is { "ie":"11" }
+  es.object.is-extensible { "ie":"11" }
+  es.object.is-frozen { "ie":"11" }
+  es.object.is-sealed { "ie":"11" }
+  es.object.keys { "ie":"11" }
+  es.object.lookup-getter { "ie":"11" }
+  es.object.lookup-setter { "ie":"11" }
+  es.object.prevent-extensions { "ie":"11" }
+  es.object.seal { "ie":"11" }
+  es.object.to-string { "ie":"11" }
+  es.object.values { "ie":"11" }
+  es.promise { "edge":"18", "firefox":"68", "ie":"11" }
+  es.promise.all-settled { "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "samsung":"10.1" }
+  es.promise.finally { "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "safari":"13" }
+  es.reflect.apply { "ie":"11" }
+  es.reflect.construct { "ie":"11" }
+  es.reflect.define-property { "ie":"11" }
+  es.reflect.delete-property { "ie":"11" }
+  es.reflect.get { "ie":"11" }
+  es.reflect.get-own-property-descriptor { "ie":"11" }
+  es.reflect.get-prototype-of { "ie":"11" }
+  es.reflect.has { "ie":"11" }
+  es.reflect.is-extensible { "ie":"11" }
+  es.reflect.own-keys { "ie":"11" }
+  es.reflect.prevent-extensions { "ie":"11" }
+  es.reflect.set { "edge":"18", "ie":"11" }
+  es.reflect.set-prototype-of { "ie":"11" }
+  es.regexp.constructor { "edge":"18", "ie":"11" }
+  es.regexp.exec { "ie":"11" }
+  es.regexp.flags { "edge":"18", "ie":"11" }
+  es.regexp.sticky { "ie":"11" }
+  es.regexp.test { "edge":"18", "ie":"11" }
+  es.regexp.to-string { "edge":"18", "ie":"11" }
+  es.set { "ie":"11" }
+  es.string.code-point-at { "ie":"11" }
+  es.string.ends-with { "edge":"18", "ie":"11" }
+  es.string.from-code-point { "ie":"11" }
+  es.string.includes { "edge":"18", "ie":"11" }
+  es.string.iterator { "ie":"11" }
+  es.string.match { "edge":"18", "ie":"11" }
+  es.string.match-all { "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "safari":"13", "samsung":"10.1" }
+  es.string.pad-end { "ie":"11" }
+  es.string.pad-start { "ie":"11" }
+  es.string.raw { "ie":"11" }
+  es.string.repeat { "ie":"11" }
+  es.string.replace { "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "safari":"13" }
+  es.string.search { "edge":"18", "ie":"11" }
+  es.string.split { "edge":"18", "ie":"11" }
+  es.string.starts-with { "edge":"18", "ie":"11" }
+  es.string.trim { "ie":"11" }
+  es.string.trim-end { "edge":"18", "ie":"11" }
+  es.string.trim-start { "edge":"18", "ie":"11" }
+  es.string.anchor { "ie":"11" }
+  es.string.big { "ie":"11" }
+  es.string.blink { "ie":"11" }
+  es.string.bold { "ie":"11" }
+  es.string.fixed { "ie":"11" }
+  es.string.fontcolor { "ie":"11" }
+  es.string.fontsize { "ie":"11" }
+  es.string.italics { "ie":"11" }
+  es.string.link { "ie":"11" }
+  es.string.small { "ie":"11" }
+  es.string.strike { "ie":"11" }
+  es.string.sub { "ie":"11" }
+  es.string.sup { "ie":"11" }
+  es.typed-array.float32-array { "ie":"11", "ios":"12.2", "safari":"13" }
+  es.typed-array.float64-array { "ie":"11", "ios":"12.2", "safari":"13" }
+  es.typed-array.int8-array { "ie":"11", "ios":"12.2", "safari":"13" }
+  es.typed-array.int16-array { "ie":"11", "ios":"12.2", "safari":"13" }
+  es.typed-array.int32-array { "ie":"11", "ios":"12.2", "safari":"13" }
+  es.typed-array.uint8-array { "ie":"11", "ios":"12.2", "safari":"13" }
+  es.typed-array.uint8-clamped-array { "ie":"11", "ios":"12.2", "safari":"13" }
+  es.typed-array.uint16-array { "ie":"11", "ios":"12.2", "safari":"13" }
+  es.typed-array.uint32-array { "ie":"11", "ios":"12.2", "safari":"13" }
+  es.typed-array.copy-within { "ie":"11" }
+  es.typed-array.every { "ie":"11" }
+  es.typed-array.fill { "ie":"11" }
+  es.typed-array.filter { "ie":"11" }
+  es.typed-array.find { "ie":"11" }
+  es.typed-array.find-index { "ie":"11" }
+  es.typed-array.for-each { "ie":"11" }
+  es.typed-array.from { "ie":"11", "ios":"12.2", "safari":"13" }
+  es.typed-array.includes { "ie":"11" }
+  es.typed-array.index-of { "ie":"11" }
+  es.typed-array.iterator { "ie":"11" }
+  es.typed-array.join { "ie":"11" }
+  es.typed-array.last-index-of { "ie":"11" }
+  es.typed-array.map { "ie":"11" }
+  es.typed-array.of { "ie":"11", "ios":"12.2", "safari":"13" }
+  es.typed-array.reduce { "ie":"11" }
+  es.typed-array.reduce-right { "ie":"11" }
+  es.typed-array.reverse { "ie":"11" }
+  es.typed-array.set { "ie":"11" }
+  es.typed-array.slice { "ie":"11" }
+  es.typed-array.some { "ie":"11" }
+  es.typed-array.sort { "ie":"11" }
+  es.typed-array.subarray { "ie":"11" }
+  es.typed-array.to-locale-string { "edge":"18", "ie":"11" }
+  es.typed-array.to-string { "ie":"11" }
+  es.weak-map { "ie":"11" }
+  es.weak-set { "ie":"11" }
+  esnext.aggregate-error { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.array.is-template-object { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.array.last-index { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.array.last-item { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.async-iterator.constructor { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.async-iterator.as-indexed-pairs { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.async-iterator.drop { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.async-iterator.every { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.async-iterator.filter { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.async-iterator.find { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.async-iterator.flat-map { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.async-iterator.for-each { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.async-iterator.from { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.async-iterator.map { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.async-iterator.reduce { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.async-iterator.some { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.async-iterator.take { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.async-iterator.to-array { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.composite-key { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.composite-symbol { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.global-this { "edge":"18", "ie":"11" }
+  esnext.iterator.constructor { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.iterator.as-indexed-pairs { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.iterator.drop { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.iterator.every { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.iterator.filter { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.iterator.find { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.iterator.flat-map { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.iterator.for-each { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.iterator.from { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.iterator.map { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.iterator.reduce { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.iterator.some { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.iterator.take { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.iterator.to-array { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.delete-all { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.every { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.filter { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.find { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.find-key { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.from { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.group-by { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.includes { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.key-by { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.key-of { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.map-keys { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.map-values { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.merge { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.of { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.reduce { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.some { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.update { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.update-or-insert { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.map.upsert { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.math.clamp { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.math.deg-per-rad { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.math.degrees { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.math.fscale { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.math.iaddh { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.math.imulh { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.math.isubh { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.math.rad-per-deg { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.math.radians { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.math.scale { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.math.seeded-prng { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.math.signbit { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.math.umulh { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.number.from-string { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.object.iterate-entries { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.object.iterate-keys { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.object.iterate-values { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.observable { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.promise.all-settled { "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "samsung":"10.1" }
+  esnext.promise.any { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.promise.try { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.reflect.define-metadata { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.reflect.delete-metadata { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.reflect.get-metadata { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.reflect.get-metadata-keys { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.reflect.get-own-metadata { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.reflect.get-own-metadata-keys { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.reflect.has-metadata { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.reflect.has-own-metadata { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.reflect.metadata { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.add-all { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.delete-all { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.difference { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.every { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.filter { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.find { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.from { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.intersection { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.is-disjoint-from { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.is-subset-of { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.is-superset-of { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.join { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.map { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.of { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.reduce { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.some { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.symmetric-difference { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.set.union { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.string.at { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.string.code-points { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.string.match-all { "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "safari":"13", "samsung":"10.1" }
+  esnext.string.replace-all { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.symbol.async-dispose { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.symbol.dispose { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.symbol.observable { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.symbol.pattern-match { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.symbol.replace-all { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.weak-map.delete-all { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.weak-map.from { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.weak-map.of { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.weak-map.upsert { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.weak-set.add-all { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.weak-set.delete-all { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.weak-set.from { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  esnext.weak-set.of { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  web.dom-collections.for-each { "ie":"11" }
+  web.dom-collections.iterator { "edge":"18", "ie":"11", "ios":"12.2", "safari":"13" }
+  web.immediate { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  web.queue-microtask { "edge":"18", "firefox":"68", "ie":"11" }
+  web.url { "edge":"18", "ie":"11", "ios":"12.2", "safari":"13" }
+  web.url.to-json { "edge":"18", "ie":"11", "ios":"12.2", "safari":"13" }
+  web.url-search-params { "edge":"18", "ie":"11", "ios":"12.2", "safari":"13" }

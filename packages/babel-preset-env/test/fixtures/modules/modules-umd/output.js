@@ -15,5 +15,5 @@
 
   _a = _interopRequireDefault(_a);
 
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 });

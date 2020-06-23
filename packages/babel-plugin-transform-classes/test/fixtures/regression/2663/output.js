@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports.default = void 0;
 
 var _net = babelHelpers.interopRequireDefault(require("net"));
 
@@ -35,7 +35,7 @@ var Connection = /*#__PURE__*/function (_EventEmitter) {
   babelHelpers.createClass(Connection, [{
     key: "send",
     value: function send(message) {
-      this.sock.write(_binarySerializer["default"].serializeMessage(message));
+      this.sock.write(_binarySerializer.default.serializeMessage(message));
     }
   }, {
     key: "disconnect",
@@ -46,4 +46,4 @@ var Connection = /*#__PURE__*/function (_EventEmitter) {
   return Connection;
 }(_events.EventEmitter);
 
-exports["default"] = Connection;
+exports.default = Connection;

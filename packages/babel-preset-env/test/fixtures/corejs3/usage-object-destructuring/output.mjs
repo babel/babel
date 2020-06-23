@@ -3,8 +3,6 @@ import "core-js/modules/es.array.for-each";
 import "core-js/modules/es.array.from";
 import "core-js/modules/es.array.iterator";
 import "core-js/modules/es.array.of";
-import "core-js/modules/es.date.to-string";
-import "core-js/modules/es.function.bind";
 import "core-js/modules/es.object.entries";
 import "core-js/modules/es.object.to-string";
 import "core-js/modules/es.regexp.exec";

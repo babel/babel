@@ -5,7 +5,6 @@ import "core-js/modules/es.array.find-index";
 import "core-js/modules/es.array.from";
 import "core-js/modules/es.array.includes";
 import "core-js/modules/es.array.iterator";
-import "core-js/modules/es.function.bind";
 import "core-js/modules/es.map";
 import "core-js/modules/es.object.to-string";
 import "core-js/modules/es.regexp.exec";

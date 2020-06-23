@@ -8,10 +8,12 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  syntax-async-generators { "node":"13.4" }
-  syntax-object-rest-spread { "node":"13.4" }
+  proposal-nullish-coalescing-operator { "node":"13.4" }
+  proposal-optional-chaining { "node":"13.4" }
   syntax-json-strings { "node":"13.4" }
   syntax-optional-catch-binding { "node":"13.4" }
+  syntax-async-generators { "node":"13.4" }
+  syntax-object-rest-spread { "node":"13.4" }
   transform-modules-commonjs { "node":"13.4" }
   proposal-dynamic-import { "node":"13.4" }
 

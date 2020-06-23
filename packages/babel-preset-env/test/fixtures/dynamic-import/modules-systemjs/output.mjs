@@ -4,7 +4,7 @@ System.register([], function (_export, _context) {
   return {
     setters: [],
     execute: function () {
-      _context["import"]("foo");
+      _context.import("foo");
     }
   };
 });

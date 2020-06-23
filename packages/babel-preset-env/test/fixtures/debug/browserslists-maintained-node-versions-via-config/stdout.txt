@@ -2,19 +2,19 @@
 
 Using targets:
 {
-  "node": "8.17"
+  "node": "10.20"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-async-generator-functions { "node":"8.17" }
-  syntax-object-rest-spread { "node":"8.17" }
-  proposal-unicode-property-regex { "node":"8.17" }
-  proposal-json-strings { "node":"8.17" }
-  proposal-optional-catch-binding { "node":"8.17" }
-  transform-named-capturing-groups-regex { "node":"8.17" }
-  transform-modules-commonjs { "node":"8.17" }
-  proposal-dynamic-import { "node":"8.17" }
+  proposal-nullish-coalescing-operator { "node":"10.20" }
+  proposal-optional-chaining { "node":"10.20" }
+  syntax-json-strings { "node":"10.20" }
+  syntax-optional-catch-binding { "node":"10.20" }
+  syntax-async-generators { "node":"10.20" }
+  syntax-object-rest-spread { "node":"10.20" }
+  transform-modules-commonjs { "node":"10.20" }
+  proposal-dynamic-import { "node":"10.20" }
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
