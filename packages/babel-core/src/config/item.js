@@ -67,7 +67,7 @@ class ConfigItem {
   /**
    * Used to detect ConfigItem instances from other Babel instances.
    */
-  _isConfigItem: true;
+  [Symbol.for("@babel/core@7 - ConfigItem")] = true;
 
   /**
    * The resolved value of the item itself.
