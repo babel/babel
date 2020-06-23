@@ -317,7 +317,7 @@ describe("converters", function () {
       const sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(sequence).toBeUndefined();
     });
-    it("gathers empty statements", function () {
+    it("gathers empty statements if first element", function () {
       const node = parseCode(";");
       const sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(generateCode(sequence)).toBe("undefined");
