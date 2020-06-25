@@ -228,6 +228,7 @@ function run(task) {
         !expected.code &&
         outputCode &&
         !opts.throws &&
+        !opts.rejects &&
         fs.statSync(path.dirname(expected.loc)).isDirectory() &&
         !process.env.CI
       ) {
@@ -385,13 +386,22 @@ export default function (
             if (dynamicOpts) dynamicOpts(task.options, task);
 
             const throwMsg = task.options.throws;
+            const rejectMsg = task.options.rejects;
             if (throwMsg) {
               // internal api doesn't have this option but it's best not to pollute
               // the options object with useless options
               delete task.options.throws;
 
-              assert.throws(runTask, function (err) {
-                return throwMsg === true || err.message.indexOf(throwMsg) >= 0;
+              return assert.throws(runTask, function (err) {
+                assert.ok(err.message.includes(throwMsg));
+                return true;
+              });
+            } else if (rejectMsg) {
+              delete task.options.rejects;
+
+              return assert.rejects(runTask, function (err) {
+                assert.ok(err.message.includes(rejectMsg));
+                return true;
               });
             } else {
               if (task.exec.code) {
