@@ -1,0 +1,6 @@
+{
+  "plugins": ["transform-react-jsx", ["proposal-object-rest-spread", {
+    "loose": true,
+    "useBuiltIns": false
+  }], "external-helpers"]
+}

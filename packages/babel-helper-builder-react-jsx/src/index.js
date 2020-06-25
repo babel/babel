@@ -144,7 +144,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
     let attribs = openingPath.node.attributes;
     if (attribs.length) {
-      attribs = buildOpeningElementAttributes(attribs, file);
+      attribs = buildOpeningElementAttributes(attribs);
     } else {
       attribs = t.nullLiteral();
     }
@@ -161,82 +161,9 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     return call;
   }
 
-  function pushProps(_props, objs) {
-    if (!_props.length) return _props;
-
-    objs.push(t.objectExpression(_props));
-    return [];
-  }
-
-  /**
-   * The logic for this is quite terse. It's because we need to
-   * support spread elements. We loop over all attributes,
-   * breaking on spreads, we then push a new object containing
-   * all prior attributes to an array for later processing.
-   */
-
-  function buildOpeningElementAttributes(attribs, file) {
-    let _props = [];
-    const objs = [];
-
-    const { useSpread = false } = file.opts;
-    if (typeof useSpread !== "boolean") {
-      throw new Error(
-        "transform-react-jsx currently only accepts a boolean option for " +
-          "useSpread (defaults to false)",
-      );
-    }
-
-    const useBuiltIns = file.opts.useBuiltIns || false;
-    if (typeof useBuiltIns !== "boolean") {
-      throw new Error(
-        "transform-react-jsx currently only accepts a boolean option for " +
-          "useBuiltIns (defaults to false)",
-      );
-    }
-
-    if (useSpread && useBuiltIns) {
-      throw new Error(
-        "transform-react-jsx currently only accepts useBuiltIns or useSpread " +
-          "but not both",
-      );
-    }
-
-    if (useSpread) {
-      const props = attribs.map(convertAttribute);
-      return t.objectExpression(props);
-    }
-
-    while (attribs.length) {
-      const prop = attribs.shift();
-      if (t.isJSXSpreadAttribute(prop)) {
-        _props = pushProps(_props, objs);
-        objs.push(prop.argument);
-      } else {
-        _props.push(convertAttribute(prop));
-      }
-    }
-
-    pushProps(_props, objs);
-
-    if (objs.length === 1) {
-      // only one object
-      attribs = objs[0];
-    } else {
-      // looks like we have multiple objects
-      if (!t.isObjectExpression(objs[0])) {
-        objs.unshift(t.objectExpression([]));
-      }
-
-      const helper = useBuiltIns
-        ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
-        : file.addHelper("extends");
-
-      // spread it
-      attribs = t.callExpression(helper, objs);
-    }
-
-    return attribs;
+  function buildOpeningElementAttributes(attribs) {
+    const props = attribs.map(attrib => convertAttribute(attrib));
+    return t.objectExpression(props);
   }
 
   function buildFragmentCall(path, file) {

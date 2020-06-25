@@ -1,0 +1,4 @@
+{
+  "plugins": [["transform-react-jsx", { "useBuiltIns": true }]],
+  "rejects": "transform-react-jsx: Since \"useBuiltIns\" is removed in Babel 8, you must remove it from your config.\n- Babel 8 now transforms JSX spread to object spread. If you need to transpile object spread with\n`useBuiltIns: true`, you can use the following config\n{\n  \"plugins\": [\n    \"@babel/plugin-transform-react-jsx\",\n    [\"@babel/plugin-proposal-object-rest-spread\", { \"loose\": true, \"useBuiltIns\": true }]\n  ]\n}"
+}
