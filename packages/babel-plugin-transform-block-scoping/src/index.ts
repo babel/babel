@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type { NodePath, Visitor, Scope } from "@babel/traverse";
+import type { NodePath, Visitor, Scope, Binding } from "@babel/traverse";
 import { visitor as tdzVisitor } from "./tdz";
 import type { TDZVisitorState } from "./tdz";
 import { traverse, template, types as t } from "@babel/core";
@@ -487,13 +487,21 @@ class BlockScoping {
   }
 
   checkConstants() {
-    const scope = this.scope;
-    const state = this.state;
+    const constBindings = new Map<string, Binding>();
 
-    for (const name of Object.keys(scope.bindings)) {
-      const binding = scope.bindings[name];
-      if (binding.kind !== "const") continue;
+    // In some cases, there are two different scopes: for example,
+    // for (const x of y) {} has a scope for the loop head and one
+    // for the body.
+    for (const scope of new Set([this.scope, this.blockPath.scope])) {
+      for (const name of Object.keys(scope.bindings)) {
+        const binding = scope.bindings[name];
+        if (binding.kind === "const") constBindings.set(name, binding);
+      }
+    }
 
+    const { state } = this;
+
+    for (const [name, binding] of constBindings) {
       for (const violation of binding.constantViolations) {
         const readOnlyError = state.addHelper("readOnlyError");
         const throwNode = t.callExpression(readOnlyError, [
