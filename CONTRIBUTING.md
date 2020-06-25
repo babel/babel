@@ -274,6 +274,8 @@ A common approach to debugging JavaScript code is to walk through the code using
 For illustration purposes, we are going to assume that we need to get a better understanding of [`Generator.generate()`](https://github.com/babel/babel/blob/b5246994b57f06af871be6a63dcc4c6fd41d94d6/packages/babel-generator/src/index.js#L32), which is responsible for generating code for a given AST.
 To get a better understanding of what is actually going on for this particular piece of code, we are going to make use of breakpoints.
 
+> Note that VSCode breakpoints will not work properly. The native `debugger` statement must be used.
+
 ```diff
 generate() {
 + debugger; // breakpoint
