@@ -377,6 +377,10 @@ export default function (
               run(task);
             }
 
+            async function runTaskAsync() {
+              run(task);
+            }
+
             defaults(task.options, {
               sourceMap: !!(task.sourceMappings || task.sourceMap),
             });
@@ -399,7 +403,7 @@ export default function (
             } else if (rejectMsg) {
               delete task.options.rejects;
 
-              return assert.rejects(runTask, function (err) {
+              return assert.rejects(runTaskAsync, function (err) {
                 assert.ok(err.message.includes(rejectMsg));
                 return true;
               });
