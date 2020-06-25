@@ -393,14 +393,14 @@ export default function (
               delete task.options.throws;
 
               return assert.throws(runTask, function (err) {
-                assert.ok(err.message.indexOf(throwMsg) >= 0);
+                assert.ok(err.message.includes(throwMsg));
                 return true;
               });
             } else if (rejectMsg) {
               delete task.options.rejects;
 
               return assert.rejects(runTask, function (err) {
-                assert.ok(err.message.indexOf(rejectMsg) >= 0);
+                assert.ok(err.message.includes(rejectMsg));
                 return true;
               });
             } else {
