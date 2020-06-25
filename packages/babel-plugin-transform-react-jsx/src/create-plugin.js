@@ -30,10 +30,6 @@ export default function createPlugin({ name, development }) {
       // TODO (Babel 8): It should throw if this option is used with the automatic runtime
       filter,
 
-      // TODO (Babel 8): Remove `useBuiltIns` & `useSpread`
-      useSpread = false,
-      useBuiltIns = false,
-
       runtime: RUNTIME_DEFAULT = development ? "automatic" : "classic",
 
       importSource: IMPORT_SOURCE_DEFAULT = DEFAULT.importSource,
@@ -41,27 +37,52 @@ export default function createPlugin({ name, development }) {
       pragmaFrag: PRAGMA_FRAG_DEFAULT = DEFAULT.pragmaFrag,
     } = options;
 
-    // TOOD(Babel 8): If the runtime is 'automatic', we should throw when useSpread/useBuiltIns are set
-    if (RUNTIME_DEFAULT === "classic") {
-      if (typeof useSpread !== "boolean") {
+    if (process.env.BABEL_8_BREAKING) {
+      if ("useSpread" in options) {
         throw new Error(
-          "transform-react-jsx currently only accepts a boolean option for " +
-            "useSpread (defaults to false)",
+          '@babel/plugin-transform-react-jsx: Since Babel 8, an inline object with spread elements is always used, and the "useSpread" option is no longer available. Please remove it from your config.',
         );
       }
 
-      if (typeof useBuiltIns !== "boolean") {
+      if ("useBuiltIns" in options) {
+        const useBuiltInsFormatted = JSON.stringify(options.useBuiltIns);
         throw new Error(
-          "transform-react-jsx currently only accepts a boolean option for " +
-            "useBuiltIns (defaults to false)",
+          `@babel/plugin-transform-react-jsx: Since "useBuiltIns" is removed in Babel 8, you can remove it from the config.
+- Babel 8 now transforms JSX spread to object spread. If you need to transpile object spread with
+\`useBuiltIns: ${useBuiltInsFormatted}\`, you can use the following config
+{
+  "plugins": [
+    "@babel/plugin-transform-react-jsx"
+    ["@babel/plugin-proposal-object-rest-spread", { "loose": true, "useBuiltIns": ${useBuiltInsFormatted} }]
+  ]
+}`,
         );
       }
+    } else {
+      // eslint-disable-next-line no-var
+      var { useSpread = false, useBuiltIns = false } = options;
 
-      if (useSpread && useBuiltIns) {
-        throw new Error(
-          "transform-react-jsx currently only accepts useBuiltIns or useSpread " +
-            "but not both",
-        );
+      if (RUNTIME_DEFAULT === "classic") {
+        if (typeof useSpread !== "boolean") {
+          throw new Error(
+            "transform-react-jsx currently only accepts a boolean option for " +
+              "useSpread (defaults to false)",
+          );
+        }
+
+        if (typeof useBuiltIns !== "boolean") {
+          throw new Error(
+            "transform-react-jsx currently only accepts a boolean option for " +
+              "useBuiltIns (defaults to false)",
+          );
+        }
+
+        if (useSpread && useBuiltIns) {
+          throw new Error(
+            "transform-react-jsx currently only accepts useBuiltIns or useSpread " +
+              "but not both",
+          );
+        }
       }
     }
 
@@ -519,72 +540,78 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
      * all prior attributes to an array for later processing.
      */
     function buildCreateElementOpeningElementAttributes(file, path, attribs) {
-      // TODO (Babel 8): Only leave this branch of the code and remove the rest
-      if (
-        RUNTIME_DEFAULT === "automatic" ||
-        get(file, "runtime") === "automatic"
-      ) {
-        const props = [];
-        const found = Object.create(null);
+      const runtime = get(file, "runtime");
+      if (!process.env.BABEL_8_BREAKING) {
+        if (runtime !== "automatic") {
+          const objs = [];
+          const props = attribs.reduce(accumulateAttribute, []);
 
-        for (const attr of attribs) {
-          const name =
-            t.isJSXAttribute(attr) &&
-            t.isJSXIdentifier(attr.name) &&
-            attr.name.name;
-
-          if (name === "__source" || name === "__self") {
-            if (found[name]) throw sourceSelfError(path, name);
-            found[name] = true;
-          }
-
-          accumulateAttribute(props, attr);
-        }
-
-        return props.length > 0 ? t.objectExpression(props) : t.nullLiteral();
-      }
-
-      const objs = [];
-      const props = attribs.reduce(accumulateAttribute, []);
-
-      if (!useSpread) {
-        // Convert syntax to use multiple objects instead of spread
-        let start = 0;
-        props.forEach((prop, i) => {
-          if (t.isSpreadElement(prop)) {
-            if (i > start) {
-              objs.push(t.objectExpression(props.slice(start, i)));
+          if (!useSpread) {
+            // Convert syntax to use multiple objects instead of spread
+            let start = 0;
+            props.forEach((prop, i) => {
+              if (t.isSpreadElement(prop)) {
+                if (i > start) {
+                  objs.push(t.objectExpression(props.slice(start, i)));
+                }
+                objs.push(prop.argument);
+                start = i + 1;
+              }
+            });
+            if (props.length > start) {
+              objs.push(t.objectExpression(props.slice(start)));
             }
-            objs.push(prop.argument);
-            start = i + 1;
+          } else if (props.length) {
+            objs.push(t.objectExpression(props));
           }
-        });
-        if (props.length > start) {
-          objs.push(t.objectExpression(props.slice(start)));
+
+          if (!objs.length) {
+            return t.nullLiteral();
+          }
+
+          if (objs.length === 1) {
+            return objs[0];
+          }
+
+          // looks like we have multiple objects
+          if (!t.isObjectExpression(objs[0])) {
+            objs.unshift(t.objectExpression([]));
+          }
+
+          const helper = useBuiltIns
+            ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
+            : file.addHelper("extends");
+
+          // spread it
+          return t.callExpression(helper, objs);
         }
-      } else if (props.length) {
-        objs.push(t.objectExpression(props));
       }
 
-      if (!objs.length) {
-        return t.nullLiteral();
+      const props = [];
+      const found = Object.create(null);
+
+      for (const attr of attribs) {
+        const name =
+          t.isJSXAttribute(attr) &&
+          t.isJSXIdentifier(attr.name) &&
+          attr.name.name;
+
+        if (
+          runtime === "automatic" &&
+          (name === "__source" || name === "__self")
+        ) {
+          if (found[name]) throw sourceSelfError(path, name);
+          found[name] = true;
+        }
+
+        accumulateAttribute(props, attr);
       }
 
-      if (objs.length === 1) {
-        return objs[0];
-      }
-
-      // looks like we have multiple objects
-      if (!t.isObjectExpression(objs[0])) {
-        objs.unshift(t.objectExpression([]));
-      }
-
-      const helper = useBuiltIns
-        ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
-        : file.addHelper("extends");
-
-      // spread it
-      return t.callExpression(helper, objs);
+      return props.length === 1 && t.isSpreadElement(props[0])
+        ? props[0].argument
+        : props.length > 0
+        ? t.objectExpression(props)
+        : t.nullLiteral();
     }
   });
 
