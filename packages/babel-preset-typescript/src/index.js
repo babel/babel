@@ -14,28 +14,28 @@ export default declare((api, opts) => {
   } = normalizeOptions(opts);
 
   const pluginOptions = {
-      allowNamespaces,
-      jsxPragma,
-      onlyRemoveTypeImports,
-    };
+    allowNamespaces,
+    jsxPragma,
+    onlyRemoveTypeImports,
+  };
 
   const tsPlugins = [[transformTypeScript, pluginOptions]];
-    const tsxPlugins = [[transformTypeScript, pluginOptions], syntaxJSX];
+  const tsxPlugins = [[transformTypeScript, pluginOptions], syntaxJSX];
 
-    if (ignoreExtensions) {
-      return { plugins: tsPlugins };
-    }
+  if (ignoreExtensions) {
+    return { plugins: tsPlugins };
+  }
 
-    return {
-      overrides: [
-        {
-          test: filename => filename == null || filename.endsWith(".ts"),
-          plugins: tsPlugins,
-        },
-        {
-          test: filename => filename?.endsWith(".tsx"),
-          plugins: tsxPlugins,
-        },
-      ],
-    };
+  return {
+    overrides: [
+      {
+        test: filename => filename == null || filename.endsWith(".ts"),
+        plugins: tsPlugins,
+      },
+      {
+        test: filename => filename?.endsWith(".tsx"),
+        plugins: tsxPlugins,
+      },
+    ],
+  };
 });

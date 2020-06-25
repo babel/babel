@@ -7,7 +7,7 @@ function loadPresetWithOptions(options: any) {
     presets: [[presetFlow, options]],
   });
 }
-describe("preset-flow", () => {
+(process.platform === "win32" ? describe.skip : describe)("preset-flow", () => {
   it("should throw when top level options are invalid", () => {
     expect(() => {
       loadPresetWithOptions({ All: true });

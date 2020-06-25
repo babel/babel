@@ -7,20 +7,23 @@ function loadPresetWithOptions(options: any) {
     presets: [[presetReact, options]],
   });
 }
-describe("preset-react", () => {
-  it("should throw when top level options are invalid", () => {
-    expect(() => {
-      loadPresetWithOptions({ useBuiltins: true });
-    }).toThrowErrorMatchingSnapshot();
-  });
-  it("should throw when boolean options are not provided with boolean values", () => {
-    expect(() => {
-      loadPresetWithOptions({ useBuiltIns: "true" });
-    }).toThrowErrorMatchingSnapshot();
-  });
-  it("should throw when string options are not provided with string values", () => {
-    expect(() => {
-      loadPresetWithOptions({ pragma: 0 });
-    }).toThrowErrorMatchingSnapshot();
-  });
-});
+(process.platform === "win32" ? describe.skip : describe)(
+  "preset-react",
+  () => {
+    it("should throw when top level options are invalid", () => {
+      expect(() => {
+        loadPresetWithOptions({ useBuiltins: true });
+      }).toThrowErrorMatchingSnapshot();
+    });
+    it("should throw when boolean options are not provided with boolean values", () => {
+      expect(() => {
+        loadPresetWithOptions({ useBuiltIns: "true" });
+      }).toThrowErrorMatchingSnapshot();
+    });
+    it("should throw when string options are not provided with string values", () => {
+      expect(() => {
+        loadPresetWithOptions({ pragma: 0 });
+      }).toThrowErrorMatchingSnapshot();
+    });
+  },
+);
