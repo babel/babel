@@ -438,7 +438,7 @@ export default function (
 
           function () {
             function runTask() {
-              run(task);
+              return run(task);
             }
 
             if ("sourceMap" in task.options === false) {
