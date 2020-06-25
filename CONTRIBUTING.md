@@ -281,7 +281,7 @@ generate() {
 }
 ```
 
-> Note that VSCode breakpoints will not work properly. The native `debugger` statement must be used.
+> Note that VS Code IDE based breakpoints will not work properly. The native `debugger` statement must be used.
 
 To include the changes, we have to make sure to build Babel:
 
