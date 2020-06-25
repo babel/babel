@@ -239,8 +239,6 @@ defineType("ClassDeclaration", {
     const identifier = assertNodeType("Identifier");
 
     return function (parent, key, node) {
-      if (!process.env.BABEL_TYPES_8_BREAKING) return;
-
       if (!is("ExportDefaultDeclaration", parent)) {
         identifier(node, "id", node.id);
       }
@@ -298,8 +296,6 @@ defineType("ExportNamedDeclaration", {
         assertNodeType("Declaration"),
         Object.assign(
           function (node, key, val) {
-            if (!process.env.BABEL_TYPES_8_BREAKING) return;
-
             // This validator isn't put at the top level because we can run it
             // even if this node doesn't have a parent.
 
@@ -308,19 +304,13 @@ defineType("ExportNamedDeclaration", {
                 "Only declaration or specifiers is allowed on ExportNamedDeclaration",
               );
             }
+
+            if (val && node.source) {
+              throw new TypeError("Cannot export a declaration from a source");
+            }
           },
           { oneOfNodeTypes: ["Declaration"] },
         ),
-        function (node, key, val) {
-          if (!process.env.BABEL_TYPES_8_BREAKING) return;
-
-          // This validator isn't put at the top level because we can run it
-          // even if this node doesn't have a parent.
-
-          if (val && node.source) {
-            throw new TypeError("Cannot export a declaration from a source");
-          }
-        },
       ),
     },
     specifiers: {
@@ -335,8 +325,6 @@ defineType("ExportNamedDeclaration", {
               "ExportNamespaceSpecifier",
             );
             const sourceless = assertNodeType("ExportSpecifier");
-
-            if (!process.env.BABEL_TYPES_8_BREAKING) return sourced;
 
             return function (node, key, val) {
               const validator = node.source ? sourced : sourceless;
@@ -381,10 +369,6 @@ defineType("ForOfStatement", {
   fields: {
     left: {
       validate: (function () {
-        if (!process.env.BABEL_TYPES_8_BREAKING) {
-          return assertNodeType("VariableDeclaration", "LVal");
-        }
-
         const declaration = assertNodeType("VariableDeclaration");
         const lval = assertNodeType(
           "Identifier",
@@ -489,8 +473,6 @@ defineType("MetaProperty", {
         assertNodeType("Identifier"),
         Object.assign(
           function (node, key, val) {
-            if (!process.env.BABEL_TYPES_8_BREAKING) return;
-
             let property;
             switch (val.name) {
               case "function":
@@ -727,8 +709,6 @@ defineType("YieldExpression", {
         assertValueType("boolean"),
         Object.assign(
           function (node, key, val) {
-            if (!process.env.BABEL_TYPES_8_BREAKING) return;
-
             if (val && !node.argument) {
               throw new TypeError(
                 "Property delegate of YieldExpression cannot be true if there is no argument",
