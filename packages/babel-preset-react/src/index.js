@@ -29,7 +29,7 @@ export default declare((api, opts) => {
 
   if ("useSpread" in opts) {
     throw new Error(
-      '@babel/preset-react: Since "useSpread" is always enabled in Babel 8, you must remove it from your config.',
+      '@babel/preset-react: Since Babel 8, an inline object with spread elements is always used, and the "useSpread" option is no longer available. Please remove it from your config.',
     );
   }
 
