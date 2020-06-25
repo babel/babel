@@ -21,7 +21,7 @@ export default declare((api, options) => {
 
   if ("useSpread" in options) {
     throw new Error(
-      'transform-react-jsx: Since "useSpread" is always enabled in Babel 8, you must remove it from your config.',
+      'transform-react-jsx: Since Babel 8, an inline object with spread elements is always used, and the "useSpread" option is no longer available. Please remove it from your config.',
     );
   }
 
