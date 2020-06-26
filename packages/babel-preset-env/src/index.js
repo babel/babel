@@ -13,10 +13,8 @@ import {
 } from "./plugins-compat-data";
 import overlappingPlugins from "@babel/compat-data/overlapping-plugins";
 
-import addCoreJS2UsagePlugin from "./polyfills/corejs2/usage-plugin";
 import addCoreJS3UsagePlugin from "./polyfills/corejs3/usage-plugin";
 import addRegeneratorUsagePlugin from "./polyfills/regenerator/usage-plugin";
-import replaceCoreJS2EntryPlugin from "./polyfills/corejs2/entry-plugin";
 import replaceCoreJS3EntryPlugin from "./polyfills/corejs3/entry-plugin";
 import removeRegeneratorEntryPlugin from "./polyfills/regenerator/entry-plugin";
 
@@ -175,22 +173,14 @@ export const getPolyfillPlugins = ({
 
     if (corejs) {
       if (useBuiltIns === "usage") {
-        if (corejs.major === 2) {
-          polyfillPlugins.push([addCoreJS2UsagePlugin, pluginOptions]);
-        } else {
-          polyfillPlugins.push([addCoreJS3UsagePlugin, pluginOptions]);
-        }
+        polyfillPlugins.push([addCoreJS3UsagePlugin, pluginOptions]);
         if (regenerator) {
           polyfillPlugins.push([addRegeneratorUsagePlugin, pluginOptions]);
         }
       } else {
-        if (corejs.major === 2) {
-          polyfillPlugins.push([replaceCoreJS2EntryPlugin, pluginOptions]);
-        } else {
-          polyfillPlugins.push([replaceCoreJS3EntryPlugin, pluginOptions]);
-          if (!regenerator) {
-            polyfillPlugins.push([removeRegeneratorEntryPlugin, pluginOptions]);
-          }
+        polyfillPlugins.push([replaceCoreJS3EntryPlugin, pluginOptions]);
+        if (!regenerator) {
+          polyfillPlugins.push([removeRegeneratorEntryPlugin, pluginOptions]);
         }
       }
     }
