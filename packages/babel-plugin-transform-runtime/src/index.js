@@ -2,7 +2,6 @@ import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
 
-import getCoreJS2Definitions from "./runtime-corejs2-definitions";
 import getCoreJS3Definitions from "./runtime-corejs3-definitions";
 import { typeAnnotationToString } from "./helpers";
 import getRuntimePath from "./get-runtime-path";
@@ -35,15 +34,21 @@ export default declare((api, options, dirname) => {
 
   const corejsVersion = rawVersion ? Number(rawVersion) : false;
 
-  if (![false, 2, 3].includes(corejsVersion)) {
+  if (corejsVersion === 2) {
     throw new Error(
-      `The \`core-js\` version must be false, 2 or 3, but got ${JSON.stringify(
+      "Since Babel 8, the core-js 2 support has been dropped. Please use 'corejs: 3'.",
+    );
+  }
+
+  if (![false, 3].includes(corejsVersion)) {
+    throw new Error(
+      `The \`core-js\` version must be false or 3, but got ${JSON.stringify(
         rawVersion,
       )}.`,
     );
   }
 
-  if (proposals && (!corejsVersion || corejsVersion < 3)) {
+  if (proposals && !corejsVersion) {
     throw new Error(
       "The 'proposals' option is only supported when using 'corejs: 3'",
     );
@@ -158,21 +163,17 @@ export default declare((api, options, dirname) => {
   const esModules =
     useESModules === "auto" ? api.caller(supportsStaticESM) : useESModules;
 
-  const injectCoreJS2 = corejsVersion === 2;
-  const injectCoreJS3 = corejsVersion === 3;
   const injectCoreJS = corejsVersion !== false;
 
-  const moduleName = injectCoreJS3
-    ? "@babel/runtime-corejs3"
-    : injectCoreJS2
-    ? "@babel/runtime-corejs2"
-    : "@babel/runtime";
+  const moduleName = injectCoreJS ? "@babel/runtime-corejs3" : "@babel/runtime";
 
-  const corejsRoot = injectCoreJS3 && !proposals ? "core-js-stable" : "core-js";
+  const corejsRoot = injectCoreJS && !proposals ? "core-js-stable" : "core-js";
 
-  const { BuiltIns, StaticProperties, InstanceProperties } = (injectCoreJS2
-    ? getCoreJS2Definitions
-    : getCoreJS3Definitions)(runtimeVersion);
+  const {
+    BuiltIns,
+    StaticProperties,
+    InstanceProperties,
+  } = getCoreJS3Definitions(runtimeVersion);
 
   const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 
@@ -286,7 +287,7 @@ export default declare((api, options, dirname) => {
         );
 
         // transform calling instance methods like `something.includes()`
-        if (injectCoreJS3 && !hasStaticMapping(object.name, propertyName)) {
+        if (injectCoreJS && !hasStaticMapping(object.name, propertyName)) {
           if (
             hasMapping(InstanceProperties, propertyName) &&
             maybeNeedsPolyfill(
@@ -368,7 +369,6 @@ export default declare((api, options, dirname) => {
 
           // transform `something[Symbol.iterator]` to calling `getIteratorMethod(something)` helper
           if (
-            !injectCoreJS2 &&
             node.computed &&
             path.get("property").matchesPattern("Symbol.iterator")
           ) {
@@ -396,7 +396,6 @@ export default declare((api, options, dirname) => {
           ) {
             // transform getting of instance methods like `method = something.includes`
             if (
-              injectCoreJS3 &&
               hasMapping(InstanceProperties, propertyName) &&
               maybeNeedsPolyfill(path, InstanceProperties, propertyName)
             ) {
