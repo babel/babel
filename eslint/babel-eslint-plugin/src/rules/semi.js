@@ -76,30 +76,38 @@ function report(context, node, missing) {
   });
 }
 
+function checkForSemicolon(node, context) {
+  const options = context.options[1];
+  const exceptOneLine = options && options.omitLastInOneLineBlock === true;
+
+  const sourceCode = context.getSourceCode();
+  const lastToken = sourceCode.getLastToken(node);
+
+  if (context.options[0] === "never") {
+    if (isUnnecessarySemicolon(context, lastToken)) {
+      report(context, node, true);
+    }
+  } else {
+    if (!isSemicolon(lastToken)) {
+      if (!exceptOneLine || !isOneLinerBlock(context, node)) {
+        report(context, node);
+      }
+    } else {
+      if (exceptOneLine && isOneLinerBlock(context, node)) {
+        report(context, node, true);
+      }
+    }
+  }
+}
+
 export default ruleComposer.joinReports([
   rule,
   context => ({
     ClassProperty(node) {
-      const options = context.options[1];
-      const exceptOneLine = options && options.omitLastInOneLineBlock === true;
-      const sourceCode = context.getSourceCode();
-      const lastToken = sourceCode.getLastToken(node);
-
-      if (context.options[0] === "never") {
-        if (isUnnecessarySemicolon(context, lastToken)) {
-          report(context, node, true);
-        }
-      } else {
-        if (!isSemicolon(lastToken)) {
-          if (!exceptOneLine || !isOneLinerBlock(context, node)) {
-            report(context, node);
-          }
-        } else {
-          if (exceptOneLine && isOneLinerBlock(context, node)) {
-            report(context, node, true);
-          }
-        }
-      }
+      checkForSemicolon(node, context);
+    },
+    ClassPrivateProperty(node) {
+      checkForSemicolon(node, context);
     },
   }),
 ]);
