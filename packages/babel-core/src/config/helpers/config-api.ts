@@ -9,6 +9,8 @@ import type {
   SimpleType,
 } from "../caching";
 
+import path from "path";
+
 import type { CallerMetadata } from "../validation/options";
 
 import * as Context from "../cache-contexts";
@@ -33,6 +35,10 @@ export type ConfigAPI = {
   async: () => boolean;
   assertVersion: typeof assertVersion;
   caller?: CallerFactory;
+  addExternalDependency: (
+    externalDependencyFileName: string,
+    dependentFileName: string,
+  ) => void;
 };
 
 export type PresetAPI = {
@@ -42,6 +48,64 @@ export type PresetAPI = {
 export type PluginAPI = {
   assumption: AssumptionFunction;
 } & PresetAPI;
+
+/**
+ * "dependencies" are source files that are directly compiled as part of the
+ * normal compilation process.
+ *
+ * "externalDependencies" are non-source files that should trigger a recompilation
+ * of some source file when they are changed. An example is a markdown file that
+ * is inlined into a source file as part of a Babel plugin.
+ */
+
+const dependencies = new Map<string, Set<string>>();
+const externalDependencies = new Map<string, Set<string>>();
+/**
+ * @returns a map of source file paths to their external dependencies.
+ */
+export const getDependencies = () => dependencies;
+/**
+ * @returns a map of external dependencies to the source file paths
+ * that depend on them.
+ */
+export const getExternalDependencies = () => externalDependencies;
+
+/**
+ * Indicate that Babel should recompile the file at @param dependentFilePath when
+ * the file at @param externalDependencyPath changes. @param externalDependencyPath can
+ * be any arbitrary file. NOTE: This currently only works with @babel/cli's --watch flag.
+ * @param externalDependencyPath Must be either
+ * absolute or relative to @param currentFilePath.
+ * @param dependentFilePath Must be absolute or relative to the directory Babel was launched from.
+ * For plugin authors, this is usually the current file being processed by Babel/your plugin.
+ * It can be found at: "state.file.opts.filename".
+ */
+function addExternalDependency(
+  externalDependencyPath: string,
+  dependentFilePath: string,
+): void {
+  /**
+   * Inside the dependency maps we want to store all paths as absolute because we can
+   * derive a relative path from an absolute path but not vice-versa. Also, Webpack's
+   * `addDependency` requires absolute paths.
+   */
+  const currentFileAbsolutePath = path.resolve(dependentFilePath);
+  const currentFileDir = path.dirname(currentFileAbsolutePath);
+  const externalDependencyAbsolutePath = path.isAbsolute(externalDependencyPath)
+    ? externalDependencyPath
+    : path.join(currentFileDir, externalDependencyPath);
+
+  if (!dependencies.has(currentFileAbsolutePath)) {
+    dependencies.set(currentFileAbsolutePath, new Set());
+  }
+  if (!externalDependencies.has(externalDependencyAbsolutePath)) {
+    externalDependencies.set(externalDependencyAbsolutePath, new Set());
+  }
+  dependencies.get(currentFileAbsolutePath).add(externalDependencyAbsolutePath);
+  externalDependencies
+    .get(externalDependencyAbsolutePath)
+    .add(currentFileAbsolutePath);
+}
 
 export function makeConfigAPI<SideChannel extends Context.SimpleConfig>(
   cache: CacheConfigurator<SideChannel>,
@@ -72,6 +136,7 @@ export function makeConfigAPI<SideChannel extends Context.SimpleConfig>(
     async: () => false,
     caller,
     assertVersion,
+    addExternalDependency,
   };
 }
 
