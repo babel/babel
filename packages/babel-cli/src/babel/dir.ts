@@ -152,6 +152,9 @@ export default async function ({
     startTime = null;
   }, 100);
 
+  // Look at corresponding comment in file.js
+  if (cliOptions.watch) util.watchMode();
+
   if (!cliOptions.skipInitialBuild) {
     if (cliOptions.deleteDirOnStart) {
       util.deleteDir(cliOptions.outDir);
