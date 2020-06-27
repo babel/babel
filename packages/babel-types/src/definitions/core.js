@@ -280,7 +280,9 @@ defineType("File", {
       validate: assertNodeType("Program"),
     },
     comments: {
-      validate: assertEach(assertNodeType("Comment")),
+      validate: !process.env.BABEL_TYPES_8_BREAKING
+        ? Object.assign(() => {}, { each: { type: "Comment" } })
+        : assertEach(assertNodeType("Comment")),
       optional: true,
     },
     tokens: {
