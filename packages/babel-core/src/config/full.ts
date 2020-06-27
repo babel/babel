@@ -226,9 +226,6 @@ function enhanceError<T extends Function>(context, fn: T): T {
   } as any;
 }
 
-const dependencies = new Set<string>();
-export const getExternalDependencies = () => dependencies;
-
 /**
  * Load a generic plugin/preset from the given descriptor loaded from the config object.
  */
@@ -255,7 +252,6 @@ const makeDescriptorLoader = <Context, API>(
         ...context,
         ...apiFactory(cache),
       };
-      api.addExternalDependency = fileName => dependencies.add(fileName);
       try {
         item = yield* factory(api, options, dirname);
       } catch (e) {
