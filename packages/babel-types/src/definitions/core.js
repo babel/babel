@@ -281,8 +281,10 @@ defineType("File", {
     },
     comments: {
       validate: !process.env.BABEL_TYPES_8_BREAKING
-        ? Object.assign(() => {}, { each: { type: "Comment" } })
-        : assertEach(assertNodeType("Comment")),
+        ? Object.assign(() => {}, {
+            each: { oneOfNodeTypes: ["CommentBlock", "CommentLine"] },
+          })
+        : assertEach(assertNodeType("CommentBlock", "CommentLine")),
       optional: true,
     },
     tokens: {
