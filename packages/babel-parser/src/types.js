@@ -1264,7 +1264,14 @@ export type TsArrayType = TsTypeBase & {
 
 export type TsTupleType = TsTypeBase & {
   type: "TSTupleType",
-  elementTypes: $ReadOnlyArray<TsType>,
+  elementTypes: $ReadOnlyArray<TsType | TsTupleElementType>,
+};
+
+export type TsTupleElementType = TsTypeBase & {
+  type: "TSTupleElementType",
+  label: Identifier,
+  optional: boolean,
+  elementType: TsType,
 };
 
 export type TsOptionalType = TsTypeBase & {

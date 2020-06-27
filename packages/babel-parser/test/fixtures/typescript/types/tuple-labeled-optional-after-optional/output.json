@@ -1,0 +1,60 @@
+{
+  "type": "File",
+  "start":0,"end":21,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":21}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":21,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":21}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":21,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":21}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeAnnotation": {
+          "type": "TSTupleType",
+          "start":9,"end":20,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":20}},
+          "elementTypes": [
+            {
+              "type": "TSOptionalType",
+              "start":10,"end":12,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":12}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11},"identifierName":"A"},
+                  "name": "A"
+                }
+              }
+            },
+            {
+              "type": "TSTupleElementType",
+              "start":14,"end":19,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":19}},
+              "optional": true,
+              "label": {
+                "type": "Identifier",
+                "start":14,"end":15,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":15},"identifierName":"y"},
+                "name": "y"
+              },
+              "elementType": {
+                "type": "TSTypeReference",
+                "start":18,"end":19,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":19}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":18,"end":19,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":19},"identifierName":"B"},
+                  "name": "B"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

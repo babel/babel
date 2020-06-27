@@ -76,6 +76,8 @@ const TSErrors = Object.freeze({
   IndexSignatureHasStatic: "Index signatures cannot have the 'static' modifier",
   OptionalTypeBeforeRequired:
     "A required element cannot follow an optional element.",
+  LabeledElementBeforeUnlabeled:
+    "An unlabeled element cannot follow a labeled element.",
   PatternIsOptional:
     "A binding pattern parameter cannot be optional in an implementation signature.",
   PrivateElementHasAbstract:
@@ -633,18 +635,38 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // Validate the elementTypes to ensure that no mandatory elements
       // follow optional elements
       let seenOptionalElement = false;
+      let seenLabeledElement = false;
       node.elementTypes.forEach(elementNode => {
-        if (elementNode.type === "TSOptionalType") {
-          seenOptionalElement = true;
-        } else if (seenOptionalElement && elementNode.type !== "TSRestType") {
+        const { type } = elementNode;
+
+        if (
+          seenOptionalElement &&
+          type !== "TSRestType" &&
+          type !== "TSOptionalType" &&
+          !(type === "TSTupleElementType" && elementNode.optional)
+        ) {
           this.raise(elementNode.start, TSErrors.OptionalTypeBeforeRequired);
+        }
+
+        if (
+          seenLabeledElement &&
+          !(type === "TSTupleElementType" && elementNode.label)
+        ) {
+          this.raise(elementNode.start, TSErrors.LabeledElementBeforeUnlabeled);
+        }
+
+        if (type === "TSTupleElementType") {
+          if (elementNode.label) seenLabeledElement = true;
+          if (elementNode.optional) seenOptionalElement = true;
+        } else if (type === "TSOptionalType") {
+          seenOptionalElement = true;
         }
       });
 
       return this.finishNode(node, "TSTupleType");
     }
 
-    tsParseTupleElementType(): N.TsType {
+    tsParseTupleElementType(): N.TsType | N.TsTupleElementType {
       // parses `...TsType[]`
       if (this.match(tt.ellipsis)) {
         const restNode: N.TsRestType = this.startNode();
@@ -654,12 +676,44 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       const type = this.tsParseType();
+
+      const maybeLabeledElement =
+        type.type === "TSTypeReference" &&
+        !type.typeParameters &&
+        type.typeName.type === "Identifier";
+
+      const optional = this.eat(tt.question);
+
+      if (maybeLabeledElement && this.eat(tt.colon)) {
+        const labeledNode: N.TsTupleElementType = this.startNodeAtNode(type);
+        labeledNode.optional = optional;
+        labeledNode.label = type.typeName;
+        labeledNode.elementType = this.tsParseType();
+        return this.finishNode(labeledNode, "TSTupleElementType");
+      }
+
       // parses `TsType?`
-      if (this.eat(tt.question)) {
+      if (optional) {
+        // TODO(breaking): In this case, we should return a TSTupleElementType:
+        // {
+        //   type: "TSTupleElementType",
+        //   label: null,
+        //   optional: true,
+        //   elementType: ...
+        // }
+
         const optionalTypeNode: N.TsOptionalType = this.startNodeAtNode(type);
         optionalTypeNode.typeAnnotation = type;
         return this.finishNode(optionalTypeNode, "TSOptionalType");
       }
+
+      // TODO(breaking): In this case, we should return a TSTupleElementType:
+      // {
+      //   type: "TSTupleElement",
+      //   label: null,
+      //   optional: false,
+      //   elementType: ...
+      // }
       return type;
     }
 
