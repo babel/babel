@@ -76,8 +76,8 @@ const TSErrors = Object.freeze({
   IndexSignatureHasStatic: "Index signatures cannot have the 'static' modifier",
   OptionalTypeBeforeRequired:
     "A required element cannot follow an optional element.",
-  LabeledElementBeforeUnlabeled:
-    "An unlabeled element cannot follow a labeled element.",
+  MixedLabeledAndUnlabeledElements:
+    "Tuple members must all have names or all not have names.",
   PatternIsOptional:
     "A binding pattern parameter cannot be optional in an implementation signature.",
   PrivateElementHasAbstract:
@@ -635,7 +635,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // Validate the elementTypes to ensure that no mandatory elements
       // follow optional elements
       let seenOptionalElement = false;
-      let seenLabeledElement = false;
+      let labeledElements = null;
       node.elementTypes.forEach(elementNode => {
         const { type } = elementNode;
 
@@ -648,19 +648,32 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.raise(elementNode.start, TSErrors.OptionalTypeBeforeRequired);
         }
 
-        if (
-          seenLabeledElement &&
-          !(type === "TSTupleElementType" && elementNode.label)
-        ) {
-          this.raise(elementNode.start, TSErrors.LabeledElementBeforeUnlabeled);
+        // Flow doesn't support ||=
+        seenOptionalElement =
+          seenOptionalElement ||
+          (type === "TSTupleElementType" && elementNode.optional) ||
+          type === "TSOptionalType";
+
+        // Don't check labels on spread elements
+        if (type === "TSRestType") return;
+
+        const isLabeled = type === "TSTupleElementType" && !!elementNode.label;
+
+        if (labeledElements === false && isLabeled) {
+          this.raise(
+            elementNode.start,
+            TSErrors.MixedLabeledAndUnlabeledElements,
+          );
+        } else if (labeledElements === true && !isLabeled) {
+          this.raise(
+            elementNode.start,
+            TSErrors.MixedLabeledAndUnlabeledElements,
+          );
         }
 
-        if (type === "TSTupleElementType") {
-          if (elementNode.label) seenLabeledElement = true;
-          if (elementNode.optional) seenOptionalElement = true;
-        } else if (type === "TSOptionalType") {
-          seenOptionalElement = true;
-        }
+        labeledElements =
+          labeledElements ??
+          (type === "TSTupleElementType" && !!elementNode.label);
       });
 
       return this.finishNode(node, "TSTupleType");

@@ -1,6 +1,9 @@
 {
   "type": "File",
   "start":0,"end":19,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":19}},
+  "errors": [
+    "SyntaxError: Tuple members must all have names or all not have names. (1:13)"
+  ],
   "program": {
     "type": "Program",
     "start":0,"end":19,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":19}},
