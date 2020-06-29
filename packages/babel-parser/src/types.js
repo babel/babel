@@ -1267,8 +1267,8 @@ export type TsTupleType = TsTypeBase & {
   elementTypes: $ReadOnlyArray<TsType | TsTupleElementType>,
 };
 
-export type TsTupleElementType = TsTypeBase & {
-  type: "TSTupleElementType",
+export type TsNamedTupleMember = TsTypeBase & {
+  type: "TSNamedTupleMember",
   label: Identifier,
   optional: boolean,
   elementType: TsType,

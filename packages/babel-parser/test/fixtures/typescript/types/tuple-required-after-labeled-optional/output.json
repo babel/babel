@@ -23,7 +23,7 @@
           "start":9,"end":22,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":22}},
           "elementTypes": [
             {
-              "type": "TSTupleElementType",
+              "type": "TSNamedTupleMember",
               "start":10,"end":15,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":15}},
               "optional": true,
               "label": {
@@ -42,7 +42,7 @@
               }
             },
             {
-              "type": "TSTupleElementType",
+              "type": "TSNamedTupleMember",
               "start":17,"end":21,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":21}},
               "optional": false,
               "label": {

@@ -32,7 +32,7 @@
               }
             },
             {
-              "type": "TSTupleElementType",
+              "type": "TSNamedTupleMember",
               "start":13,"end":17,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":17}},
               "optional": false,
               "label": {

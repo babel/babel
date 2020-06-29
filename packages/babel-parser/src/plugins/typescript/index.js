@@ -643,7 +643,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           seenOptionalElement &&
           type !== "TSRestType" &&
           type !== "TSOptionalType" &&
-          !(type === "TSTupleElementType" && elementNode.optional)
+          !(type === "TSNamedTupleMember" && elementNode.optional)
         ) {
           this.raise(elementNode.start, TSErrors.OptionalTypeBeforeRequired);
         }
@@ -651,13 +651,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // Flow doesn't support ||=
         seenOptionalElement =
           seenOptionalElement ||
-          (type === "TSTupleElementType" && elementNode.optional) ||
+          (type === "TSNamedTupleMember" && elementNode.optional) ||
           type === "TSOptionalType";
 
         // Don't check labels on spread elements
         if (type === "TSRestType") return;
 
-        const isLabeled = type === "TSTupleElementType" && !!elementNode.label;
+        const isLabeled = type === "TSNamedTupleMember";
 
         if (labeledElements === false && isLabeled) {
           this.raise(
@@ -671,15 +671,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           );
         }
 
-        labeledElements =
-          labeledElements ??
-          (type === "TSTupleElementType" && !!elementNode.label);
+        // Flow doesn't support ??=
+        labeledElements = labeledElements ?? isLabeled;
       });
 
       return this.finishNode(node, "TSTupleType");
     }
 
-    tsParseTupleElementType(): N.TsType | N.TsTupleElementType {
+    tsParseTupleElementType(): N.TsType {
       // parses `...TsType[]`
       if (this.match(tt.ellipsis)) {
         const restNode: N.TsRestType = this.startNode();
@@ -698,35 +697,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const optional = this.eat(tt.question);
 
       if (maybeLabeledElement && this.eat(tt.colon)) {
-        const labeledNode: N.TsTupleElementType = this.startNodeAtNode(type);
+        const labeledNode: N.TsNamedTupleMember = this.startNodeAtNode(type);
         labeledNode.optional = optional;
         labeledNode.label = type.typeName;
         labeledNode.elementType = this.tsParseType();
-        return this.finishNode(labeledNode, "TSTupleElementType");
+        return this.finishNode(labeledNode, "TSNamedTupleMember");
       }
 
       // parses `TsType?`
       if (optional) {
-        // TODO(breaking): In this case, we should return a TSTupleElementType:
-        // {
-        //   type: "TSTupleElementType",
-        //   label: null,
-        //   optional: true,
-        //   elementType: ...
-        // }
-
         const optionalTypeNode: N.TsOptionalType = this.startNodeAtNode(type);
         optionalTypeNode.typeAnnotation = type;
         return this.finishNode(optionalTypeNode, "TSOptionalType");
       }
 
-      // TODO(breaking): In this case, we should return a TSTupleElementType:
-      // {
-      //   type: "TSTupleElement",
-      //   label: null,
-      //   optional: false,
-      //   elementType: ...
-      // }
       return type;
     }
 
