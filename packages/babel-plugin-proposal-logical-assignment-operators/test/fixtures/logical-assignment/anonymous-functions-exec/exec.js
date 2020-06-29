@@ -4,6 +4,6 @@ a ||= function () {};
 b &&= function () {};
 c ??= function () {};
 
-expect(a.name).toBe("");
-expect(b.name).toBe("");
-expect(c.name).toBe("");
+expect(a.name).toBe("a");
+expect(b.name).toBe("b");
+expect(c.name).toBe("c");

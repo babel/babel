@@ -39,7 +39,7 @@ const customTypes = {
 };
 Object.keys(types.BUILDER_KEYS)
   .sort()
-  .forEach(function(key) {
+  .forEach(function (key) {
     readme.push("### " + key[0].toLowerCase() + key.substr(1));
     readme.push("```javascript");
     readme.push(
@@ -63,7 +63,7 @@ Object.keys(types.BUILDER_KEYS)
       readme.push(
         "Aliases: " +
           types.ALIAS_KEYS[key]
-            .map(function(key) {
+            .map(function (key) {
               return "`" + key + "`";
             })
             .join(", ")
@@ -71,7 +71,7 @@ Object.keys(types.BUILDER_KEYS)
       readme.push("");
     }
     Object.keys(types.NODE_FIELDS[key])
-      .sort(function(fieldA, fieldB) {
+      .sort(function (fieldA, fieldB) {
         const indexA = types.BUILDER_KEYS[key].indexOf(fieldA);
         const indexB = types.BUILDER_KEYS[key].indexOf(fieldB);
         if (indexA === indexB) return fieldA < fieldB ? -1 : 1;
@@ -79,7 +79,7 @@ Object.keys(types.BUILDER_KEYS)
         if (indexB === -1) return -1;
         return indexA - indexB;
       })
-      .forEach(function(field) {
+      .forEach(function (field) {
         const defaultValue = types.NODE_FIELDS[key][field].default;
         const fieldDescription = ["`" + field + "`"];
         const validator = types.NODE_FIELDS[key][field].validate;

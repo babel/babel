@@ -8,7 +8,7 @@ function expandAliases(obj) {
   function add(type, func) {
     const fn = newObj[type];
     newObj[type] = fn
-      ? function(node, parent, stack) {
+      ? function (node, parent, stack) {
           const result = fn(node, parent, stack);
 
           return result == null ? func(node, parent, stack) : result;

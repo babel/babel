@@ -27,14 +27,14 @@ export default function parseAndBuildMetadata<T>(
   code: string,
   opts: TemplateOpts,
 ): Metadata {
-  const ast = parseWithCodeFrame(code, opts.parser);
-
   const {
     placeholderWhitelist,
     placeholderPattern,
     preserveComments,
     syntacticPlaceholders,
   } = opts;
+
+  const ast = parseWithCodeFrame(code, opts.parser, syntacticPlaceholders);
 
   t.removePropertiesDeep(ast, {
     preserveComments,
@@ -191,13 +191,19 @@ type MetadataState = {
 function parseWithCodeFrame(
   code: string,
   parserOpts: ParserOpts,
+  syntacticPlaceholders?: boolean,
 ): BabelNodeFile {
+  const plugins = (parserOpts.plugins || []).slice();
+  if (syntacticPlaceholders !== false) {
+    plugins.push("placeholders");
+  }
+
   parserOpts = {
     allowReturnOutsideFunction: true,
     allowSuperOutsideMethod: true,
     sourceType: "module",
     ...parserOpts,
-    plugins: (parserOpts.plugins || []).concat("placeholders"),
+    plugins,
   };
 
   try {

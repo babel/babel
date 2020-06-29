@@ -40,7 +40,7 @@ describe("@babel/core config loading", () => {
 
   describe("loadPartialConfig", () => {
     it("should preserve disabled plugins in the partial config", () => {
-      const plugin = function() {
+      const plugin = function () {
         return {};
       };
 
@@ -59,7 +59,7 @@ describe("@babel/core config loading", () => {
     });
 
     it("should preserve disabled presets in the partial config", () => {
-      const preset = function() {
+      const preset = function () {
         return {};
       };
 
@@ -337,6 +337,23 @@ describe("@babel/core config loading", () => {
 
       expect(() => loadConfig(opts)).toThrow(
         /\.inherits must be a function, or undefined/,
+      );
+    });
+
+    it("should throw when plugin contains `enter` handler", () => {
+      const fooPlugin = {
+        visitor: {
+          enter() {},
+        },
+      };
+      const opts = {
+        cwd: path.dirname(FILEPATH),
+        filename: FILEPATH,
+        plugins: [fooPlugin],
+      };
+
+      expect(() => loadConfig(opts)).toThrow(
+        /\.visitor cannot contain catch-all "enter" or "exit" handlers\. Please target individual nodes\./,
       );
     });
   });

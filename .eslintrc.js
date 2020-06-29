@@ -1,10 +1,17 @@
+"use strict";
+
 const path = require("path");
 
 module.exports = {
   root: true,
-  plugins: ["prettier", "@babel/development", "import", "jest"],
-  // replace it by `@babel/internal` when `@babel/eslint-config-internal` is published
-  extends: path.resolve(__dirname, "eslint/babel-eslint-config-internal"),
+  plugins: [
+    "import",
+    "jest",
+    "prettier",
+    "@babel/development",
+    "@babel/development-internal",
+  ],
+  extends: "@babel/internal",
   rules: {
     "prettier/prettier": "error",
     // TODO: remove after babel-eslint-config-internal is fully integrated into this repository.
@@ -44,8 +51,8 @@ module.exports = {
         "jest/no-identical-title": "off",
         "jest/no-standalone-expect": "off",
         "jest/no-test-callback": "off",
-        "jest/valid-describe": "off"
-      }
+        "jest/valid-describe": "off",
+      },
     },
     {
       files: ["packages/babel-plugin-*/src/index.js"],
@@ -53,6 +60,20 @@ module.exports = {
       rules: {
         "@babel/development/plugin-name": "error",
         eqeqeq: ["error", "always", { null: "ignore" }],
+      },
+    },
+    {
+      files: ["packages/babel-parser/src/**/*.js"],
+      rules: {
+        "@babel/development-internal/dry-error-messages": [
+          "error",
+          {
+            errorModule: path.resolve(
+              __dirname,
+              "packages/babel-parser/src/parser/error.js"
+            ),
+          },
+        ],
       },
     },
   ],

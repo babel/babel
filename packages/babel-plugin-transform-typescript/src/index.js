@@ -70,7 +70,7 @@ export default declare(
         if (node.definite || node.declare) {
           if (node.value) {
             throw path.buildCodeFrameError(
-              `Definietly assigned fields and fields with the 'declare' modifier cannot` +
+              `Definitely assigned fields and fields with the 'declare' modifier cannot` +
                 ` be initialized here, but only in the constructor`,
             );
           }

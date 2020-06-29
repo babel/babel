@@ -42,6 +42,8 @@ export const ErrorMessages = Object.freeze({
   DuplicateRegExpFlags: "Duplicate regular expression flag",
   ElementAfterRest: "Rest element must be last element",
   EscapedCharNotAnIdentifier: "Invalid Unicode escape",
+  ExportDefaultFromAsIdentifier:
+    "'from' is not allowed as an identifier after 'export default'",
   ForInOfLoopInitializer:
     "%0 loop variable declaration may not have an initializer",
   GeneratorInSingleStatementContext:
@@ -57,6 +59,7 @@ export const ErrorMessages = Object.freeze({
   ImportCallSpreadArgument: "... is not allowed in import()",
   ImportMetaOutsideModule: `import.meta may appear only with 'sourceType: "module"'`,
   ImportOutsideModule: `'import' and 'export' may appear only with 'sourceType: "module"'`,
+  InvalidBigIntLiteral: "Invalid BigIntLiteral",
   InvalidCodePoint: "Code point out of bounds",
   InvalidDigit: "Expected number in radix %0",
   InvalidEscapeSequence: "Bad character escape sequence",
@@ -70,6 +73,8 @@ export const ErrorMessages = Object.freeze({
   InvalidParenthesizedAssignment: "Invalid parenthesized assignment pattern",
   InvalidPrivateFieldResolution: "Private name #%0 is not defined",
   InvalidPropertyBindingPattern: "Binding member expression",
+  InvalidRecordProperty:
+    "Only properties and spread elements are allowed in record definitions",
   InvalidRestAssignmentPattern: "Invalid rest operator's argument",
   LabelRedeclaration: "Label '%0' is already declared",
   LetInLexicalBinding:
@@ -124,6 +129,7 @@ export const ErrorMessages = Object.freeze({
     "Record expressions starting with '{|' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'",
   RecordExpressionHashIncorrectStartSyntaxType:
     "Record expressions starting with '#{' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'hash'",
+  RecordNoProto: "'__proto__' is not allowed in Record expressions",
   RestTrailingComma: "Unexpected trailing comma after rest element",
   SloppyFunction:
     "In non-strict mode code, functions can only be declared at top level, inside a block, or as the body of an if statement",
@@ -163,7 +169,7 @@ export const ErrorMessages = Object.freeze({
     "Private names can only be used as the name of a class element (i.e. class C { #p = 42; #m() {} } )\n or a property of member expression (i.e. this.#p).",
   UnexpectedReservedWord: "Unexpected reserved word '%0'",
   UnexpectedSuper: "super is only allowed in object methods and classes",
-  UnexpectedToken: "Unexpected token '%'",
+  UnexpectedToken: "Unexpected token '%0'",
   UnexpectedTokenUnaryExponentiation:
     "Illegal expression. Wrap left hand side or entire exponentiation in parentheses.",
   UnsupportedBind: "Binding should be performed on object property.",

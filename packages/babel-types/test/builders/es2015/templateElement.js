@@ -1,9 +1,9 @@
 import * as t from "../../..";
 
-describe("builders", function() {
-  describe("es2015", function() {
-    describe("templateElement", function() {
-      it("should validate", function() {
+describe("builders", function () {
+  describe("es2015", function () {
+    describe("templateElement", function () {
+      it("should validate", function () {
         expect(
           t.templateElement({ raw: "foo", cooked: "foo" }),
         ).toMatchSnapshot();
@@ -21,8 +21,8 @@ describe("builders", function() {
         expect(() => t.templateElement("foo")).toThrowErrorMatchingSnapshot();
       });
     });
-    describe("templateLiteral", function() {
-      it("should validate", function() {
+    describe("templateLiteral", function () {
+      it("should validate", function () {
         const foo = t.templateElement({ raw: "foo" });
         const bar = t.templateElement({ raw: "bar" });
 

@@ -125,8 +125,19 @@ const handle = {
       ) {
         throw member.buildCodeFrameError(`can't handle assignment`);
       }
-      if (rootParentPath.isUnaryExpression({ operator: "delete" })) {
-        throw member.buildCodeFrameError(`can't handle delete`);
+      const isDeleteOperation = rootParentPath.isUnaryExpression({
+        operator: "delete",
+      });
+      if (
+        isDeleteOperation &&
+        endPath.isOptionalMemberExpression() &&
+        endPath.get("property").isPrivateName()
+      ) {
+        // @babel/parser will throw error on `delete obj?.#x`.
+        // This error serves as fallback when `delete obj?.#x` is constructed from babel types
+        throw member.buildCodeFrameError(
+          `can't delete a private class element`,
+        );
       }
 
       // Now, we're looking for the start of this optional chain, which is
@@ -167,9 +178,8 @@ const handle = {
       const parentIsOptionalCall = parentPath.isOptionalCallExpression({
         callee: node,
       });
-      const isParenthesizedMemberCall =
-        parentPath.isCallExpression({ callee: node }) &&
-        node.extra?.parenthesized;
+      // if parentIsCall is true, it implies that node.extra.parenthesized is always true
+      const parentIsCall = parentPath.isCallExpression({ callee: node });
       startingOptional.replaceWith(toNonOptional(startingOptional, baseRef));
       if (parentIsOptionalCall) {
         if (parent.optional) {
@@ -177,7 +187,7 @@ const handle = {
         } else {
           parentPath.replaceWith(this.call(member, parent.arguments));
         }
-      } else if (isParenthesizedMemberCall) {
+      } else if (parentIsCall) {
         // `(a?.#b)()` to `(a == null ? void 0 : a.#b.bind(a))()`
         member.replaceWith(this.boundGet(member));
       } else {
@@ -212,7 +222,13 @@ const handle = {
         }
       }
 
-      endPath.replaceWith(
+      let replacementPath = endPath;
+      if (isDeleteOperation) {
+        replacementPath = endParentPath;
+        regular = endParentPath.node;
+      }
+
+      replacementPath.replaceWith(
         t.conditionalExpression(
           t.logicalExpression(
             "||",
@@ -229,11 +245,14 @@ const handle = {
               scope.buildUndefinedNode(),
             ),
           ),
-          scope.buildUndefinedNode(),
+          isDeleteOperation
+            ? t.booleanLiteral(true)
+            : scope.buildUndefinedNode(),
           regular,
         ),
       );
 
+      // context and isDeleteOperation can not be both truthy
       if (context) {
         const endParent = endParentPath.node;
         endParentPath.replaceWith(
@@ -330,6 +349,8 @@ const handle = {
       return;
     }
 
+    // for (MEMBER of ARR)
+    // for (MEMBER in ARR)
     // { KEY: MEMBER } = OBJ -> { KEY: _destructureSet(MEMBER) } = OBJ
     // { KEY: MEMBER = _VALUE } = OBJ -> { KEY: _destructureSet(MEMBER) = _VALUE } = OBJ
     // {...MEMBER} -> {..._destructureSet(MEMBER)}
@@ -338,6 +359,9 @@ const handle = {
     // [MEMBER = _VALUE] = ARR -> [_destructureSet(MEMBER) = _VALUE] = ARR
     // [...MEMBER] -> [..._destructureSet(MEMBER)]
     if (
+      // for (MEMBER of ARR)
+      // for (MEMBER in ARR)
+      parentPath.isForXStatement({ left: node }) ||
       // { KEY: MEMBER } = OBJ
       (parentPath.isObjectProperty({ value: node }) &&
         parentPath.parentPath.isObjectPattern()) ||

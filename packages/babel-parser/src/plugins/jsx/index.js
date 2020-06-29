@@ -1,5 +1,8 @@
 // @flow
 
+// Error messages are colocated with the plugin.
+/* eslint-disable @babel/development-internal/dry-error-messages */
+
 import * as charCodes from "charcodes";
 
 import XHTMLEntities from "./xhtml";
@@ -39,13 +42,13 @@ tt.jsxText = new TokenType("jsxText", { beforeExpr: true });
 tt.jsxTagStart = new TokenType("jsxTagStart", { startsExpr: true });
 tt.jsxTagEnd = new TokenType("jsxTagEnd");
 
-tt.jsxTagStart.updateContext = function() {
+tt.jsxTagStart.updateContext = function () {
   this.state.context.push(tc.j_expr); // treat as beginning of JSX expression
   this.state.context.push(tc.j_oTag); // start opening tag context
   this.state.exprAllowed = false;
 };
 
-tt.jsxTagEnd.updateContext = function(prevType) {
+tt.jsxTagEnd.updateContext = function (prevType) {
   const out = this.state.context.pop();
   if ((out === tc.j_oTag && prevType === tt.slash) || out === tc.j_cTag) {
     this.state.context.pop();

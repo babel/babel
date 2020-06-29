@@ -294,10 +294,7 @@ export default class ImportInjector {
             builder.var(importedSource).read(importName);
           }
         } else if (isDefault) {
-          builder
-            .var(name)
-            .defaultInterop()
-            .prop(importName);
+          builder.var(name).defaultInterop().prop(importName);
         } else if (isNamed) {
           builder.var(name).prop(importName);
         }

@@ -21,7 +21,7 @@ const buildUmdWrapper = replacements =>
     });
   `(replacements);
 
-function buildGlobal(whitelist) {
+function buildGlobal(allowlist) {
   const namespace = t.identifier("babelHelpers");
 
   const body = [];
@@ -60,14 +60,14 @@ function buildGlobal(whitelist) {
     ]),
   );
 
-  buildHelpers(body, namespace, whitelist);
+  buildHelpers(body, namespace, allowlist);
 
   return tree;
 }
 
-function buildModule(whitelist) {
+function buildModule(allowlist) {
   const body = [];
-  const refs = buildHelpers(body, null, whitelist);
+  const refs = buildHelpers(body, null, allowlist);
 
   body.unshift(
     t.exportNamedDeclaration(
@@ -81,7 +81,7 @@ function buildModule(whitelist) {
   return t.program(body, [], "module");
 }
 
-function buildUmd(whitelist) {
+function buildUmd(allowlist) {
   const namespace = t.identifier("babelHelpers");
 
   const body = [];
@@ -91,7 +91,7 @@ function buildUmd(whitelist) {
     ]),
   );
 
-  buildHelpers(body, namespace, whitelist);
+  buildHelpers(body, namespace, allowlist);
 
   return t.program([
     buildUmdWrapper({
@@ -109,7 +109,7 @@ function buildUmd(whitelist) {
   ]);
 }
 
-function buildVar(whitelist) {
+function buildVar(allowlist) {
   const namespace = t.identifier("babelHelpers");
 
   const body = [];
@@ -119,12 +119,12 @@ function buildVar(whitelist) {
     ]),
   );
   const tree = t.program(body);
-  buildHelpers(body, namespace, whitelist);
+  buildHelpers(body, namespace, allowlist);
   body.push(t.expressionStatement(namespace));
   return tree;
 }
 
-function buildHelpers(body, namespace, whitelist) {
+function buildHelpers(body, namespace, allowlist) {
   const getHelperReference = name => {
     return namespace
       ? t.memberExpression(namespace, t.identifier(name))
@@ -132,8 +132,8 @@ function buildHelpers(body, namespace, whitelist) {
   };
 
   const refs = {};
-  helpers.list.forEach(function(name) {
-    if (whitelist && whitelist.indexOf(name) < 0) return;
+  helpers.list.forEach(function (name) {
+    if (allowlist && allowlist.indexOf(name) < 0) return;
 
     const ref = (refs[name] = getHelperReference(name));
 
@@ -144,8 +144,8 @@ function buildHelpers(body, namespace, whitelist) {
   });
   return refs;
 }
-export default function(
-  whitelist?: Array<string>,
+export default function (
+  allowlist?: Array<string>,
   outputType: "global" | "module" | "umd" | "var" = "global",
 ) {
   let tree;
@@ -158,7 +158,7 @@ export default function(
   }[outputType];
 
   if (build) {
-    tree = build(whitelist);
+    tree = build(allowlist);
   } else {
     throw new Error(`Unsupported output type ${outputType}`);
   }

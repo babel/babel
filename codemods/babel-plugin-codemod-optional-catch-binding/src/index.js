@@ -1,6 +1,6 @@
 import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-binding";
 
-export default function({ types: t }) {
+export default function ({ types: t }) {
   return {
     inherits: syntaxOptionalCatchBinding,
 

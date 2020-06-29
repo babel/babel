@@ -135,30 +135,32 @@ export default function* loadPrivatePartialConfig(
   };
 }
 
-export const loadPartialConfig = gensync<[any], PartialConfig | null>(function*(
-  inputOpts: mixed,
-): Handler<PartialConfig | null> {
-  const result: ?PrivPartialConfig = yield* loadPrivatePartialConfig(inputOpts);
-  if (!result) return null;
+export const loadPartialConfig = gensync<[any], PartialConfig | null>(
+  function* (inputOpts: mixed): Handler<PartialConfig | null> {
+    const result: ?PrivPartialConfig = yield* loadPrivatePartialConfig(
+      inputOpts,
+    );
+    if (!result) return null;
 
-  const { options, babelrc, ignore, config } = result;
+    const { options, babelrc, ignore, config } = result;
 
-  (options.plugins || []).forEach(item => {
-    if (item.value instanceof Plugin) {
-      throw new Error(
-        "Passing cached plugin instances is not supported in " +
-          "babel.loadPartialConfig()",
-      );
-    }
-  });
+    (options.plugins || []).forEach(item => {
+      if (item.value instanceof Plugin) {
+        throw new Error(
+          "Passing cached plugin instances is not supported in " +
+            "babel.loadPartialConfig()",
+        );
+      }
+    });
 
-  return new PartialConfig(
-    options,
-    babelrc ? babelrc.filepath : undefined,
-    ignore ? ignore.filepath : undefined,
-    config ? config.filepath : undefined,
-  );
-});
+    return new PartialConfig(
+      options,
+      babelrc ? babelrc.filepath : undefined,
+      ignore ? ignore.filepath : undefined,
+      config ? config.filepath : undefined,
+    );
+  },
+);
 
 export type { PartialConfig };
 

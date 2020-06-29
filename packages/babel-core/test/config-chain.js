@@ -16,12 +16,12 @@ const pfs =
         return function copyFile(source, target) {
           const rd = fs.createReadStream(source);
           const wr = fs.createWriteStream(target);
-          return new Promise(function(resolve, reject) {
+          return new Promise(function (resolve, reject) {
             rd.on("error", reject);
             wr.on("error", reject);
             wr.on("finish", resolve);
             rd.pipe(wr);
-          }).catch(function(error) {
+          }).catch(function (error) {
             rd.destroy();
             wr.end();
             throw error;
@@ -69,7 +69,7 @@ async function getTemp(name) {
   return { cwd, tmp, config };
 }
 
-describe("buildConfigChain", function() {
+describe("buildConfigChain", function () {
   describe("test", () => {
     describe("single", () => {
       it("should process matching string values", () => {
@@ -702,8 +702,8 @@ describe("buildConfigChain", function() {
     });
   });
 
-  describe("caching", function() {
-    describe("programmatic options", function() {
+  describe("caching", function () {
+    describe("programmatic options", function () {
       const plugins1 = [() => ({})];
       const plugins2 = [() => ({})];
 
@@ -807,7 +807,7 @@ describe("buildConfigChain", function() {
       });
     });
 
-    describe("config file options", function() {
+    describe("config file options", function () {
       function touch(filepath) {
         const s = fs.statSync(filepath);
         fs.utimesSync(

@@ -12,6 +12,7 @@ const PURE_CALLS = new Map([
     "react",
     [
       "cloneElement",
+      "createContext",
       "createElement",
       "createFactory",
       "createRef",

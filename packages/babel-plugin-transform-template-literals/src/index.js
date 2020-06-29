@@ -25,7 +25,7 @@ export default declare((api, options) => {
    */
   function buildConcatCallExpressions(items) {
     let avail = true;
-    return items.reduce(function(left, right) {
+    return items.reduce(function (left, right) {
       let canBeInserted = t.isLiteral(right);
 
       if (!canBeInserted && avail) {

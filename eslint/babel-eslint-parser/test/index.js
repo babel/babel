@@ -84,7 +84,7 @@ describe("Babel and Espree", () => {
   });
 
   describe("compatibility", () => {
-    it("should allow ast.analyze to be called without options", function() {
+    it("should allow ast.analyze to be called without options", function () {
       const ast = parseForESLint("`test`", {
         eslintScopeManager: true,
         eslintVisitorKeys: true,

@@ -57,12 +57,12 @@ function transformFromAst(ast, code, opts) {
   });
 }
 
-describe("parser and generator options", function() {
+describe("parser and generator options", function () {
   const recast = {
-    parse: function(code, opts) {
+    parse: function (code, opts) {
       return opts.parser.parse(code);
     },
-    print: function(ast) {
+    print: function (ast) {
       return generator(ast);
     },
   };
@@ -81,7 +81,7 @@ describe("parser and generator options", function() {
     });
   }
 
-  it("options", function() {
+  it("options", function () {
     const string = "original;";
     expect(newTransform(string).ast).toEqual(
       transform(string, { ast: true }).ast,
@@ -89,7 +89,7 @@ describe("parser and generator options", function() {
     expect(newTransform(string).code).toBe(string);
   });
 
-  it("experimental syntax", function() {
+  it("experimental syntax", function () {
     const experimental = "var a: number = 1;";
 
     expect(newTransform(experimental).ast).toEqual(
@@ -126,7 +126,7 @@ describe("parser and generator options", function() {
     expect(newTransformWithPlugins(experimental).code).toBe(experimental);
   });
 
-  it("other options", function() {
+  it("other options", function () {
     const experimental = "if (true) {\n  import a from 'a';\n}";
 
     expect(newTransform(experimental).ast).not.toBe(
@@ -141,33 +141,33 @@ describe("parser and generator options", function() {
   });
 });
 
-describe("api", function() {
-  it("exposes the resolvePlugin method", function() {
+describe("api", function () {
+  it("exposes the resolvePlugin method", function () {
     expect(() => babel.resolvePlugin("nonexistent-plugin")).toThrow(
       /Cannot find module 'babel-plugin-nonexistent-plugin'/,
     );
   });
 
-  it("exposes the resolvePreset method", function() {
+  it("exposes the resolvePreset method", function () {
     expect(() => babel.resolvePreset("nonexistent-preset")).toThrow(
       /Cannot find module 'babel-preset-nonexistent-preset'/,
     );
   });
 
-  it("exposes types", function() {
+  it("exposes types", function () {
     expect(babel.types).toBeDefined();
   });
 
-  it("exposes the parser's token types", function() {
+  it("exposes the parser's token types", function () {
     expect(babel.tokTypes).toBeDefined();
   });
 
-  it("transformFile", function(done) {
+  it("transformFile", function (done) {
     const options = {
       babelrc: false,
     };
     Object.freeze(options);
-    transformFile(__dirname + "/fixtures/api/file.js", options, function(
+    transformFile(__dirname + "/fixtures/api/file.js", options, function (
       err,
       res,
     ) {
@@ -179,7 +179,7 @@ describe("api", function() {
     });
   });
 
-  it("transformFileSync", function() {
+  it("transformFileSync", function () {
     const options = {
       babelrc: false,
     };
@@ -190,15 +190,15 @@ describe("api", function() {
     expect(options).toEqual({ babelrc: false });
   });
 
-  it("transformFromAst should not mutate the AST", function() {
+  it("transformFromAst should not mutate the AST", function () {
     const program = "const identifier = 1";
     const node = parse(program);
     const { code } = transformFromAst(node, program, {
       plugins: [
-        function() {
+        function () {
           return {
             visitor: {
-              Identifier: function(path) {
+              Identifier: function (path) {
                 path.node.name = "replaced";
               },
             },
@@ -214,38 +214,38 @@ describe("api", function() {
     );
   });
 
-  it("options throw on falsy true", function() {
-    return expect(function() {
+  it("options throw on falsy true", function () {
+    return expect(function () {
       transform("", {
         plugins: [__dirname + "/../../babel-plugin-syntax-jsx", false],
       });
     }).toThrow(/.plugins\[1\] must be a string, object, function/);
   });
 
-  it("options merge backwards", function() {
+  it("options merge backwards", function () {
     return transformAsync("", {
       presets: [__dirname + "/../../babel-preset-env"],
       plugins: [__dirname + "/../../babel-plugin-syntax-jsx"],
-    }).then(function(result) {
+    }).then(function (result) {
       expect(result.options.plugins[0].manipulateOptions.toString()).toEqual(
         expect.stringContaining("jsx"),
       );
     });
   });
 
-  it("option wrapPluginVisitorMethod", function() {
+  it("option wrapPluginVisitorMethod", function () {
     let calledRaw = 0;
     let calledIntercept = 0;
 
     transform("function foo() { bar(foobar); }", {
-      wrapPluginVisitorMethod: function(pluginAlias, visitorType, callback) {
+      wrapPluginVisitorMethod: function (pluginAlias, visitorType, callback) {
         if (pluginAlias !== "foobar") {
           return callback;
         }
 
         expect(visitorType).toBe("enter");
 
-        return function() {
+        return function () {
           calledIntercept++;
           return callback.apply(this, arguments);
         };
@@ -255,7 +255,7 @@ describe("api", function() {
         new Plugin({
           name: "foobar",
           visitor: {
-            "Program|Identifier": function() {
+            "Program|Identifier": function () {
               calledRaw++;
             },
           },
@@ -267,7 +267,7 @@ describe("api", function() {
     expect(calledIntercept).toBe(4);
   });
 
-  it("pass per preset", function() {
+  it("pass per preset", function () {
     let aliasBaseType = null;
 
     function execTest(passPerPreset) {
@@ -276,12 +276,12 @@ describe("api", function() {
         passPerPreset: passPerPreset,
         presets: [
           // First preset with our plugin, "before"
-          function() {
+          function () {
             return {
               plugins: [
                 new Plugin({
                   visitor: {
-                    Function: function(path) {
+                    Function: function (path) {
                       const alias = path.scope
                         .getProgramParent()
                         .path.get("body")[0].node;
@@ -307,7 +307,7 @@ describe("api", function() {
           require(__dirname + "/../../babel-preset-env"),
 
           // Third preset for Flow.
-          function() {
+          function () {
             return {
               plugins: [
                 require(__dirname + "/../../babel-plugin-syntax-flow"),
@@ -339,7 +339,7 @@ describe("api", function() {
     expect(result.code).toBe("var x = function x(y) {\n  return y;\n};");
   });
 
-  it("complex plugin and preset ordering", function() {
+  it("complex plugin and preset ordering", function () {
     function pushPlugin(str) {
       return {
         visitor: {
@@ -414,7 +414,7 @@ describe("api", function() {
     );
   });
 
-  it("interpreter directive backward-compat", function() {
+  it("interpreter directive backward-compat", function () {
     function doTransform(code, preHandler) {
       return transform(code, {
         plugins: [
@@ -468,7 +468,7 @@ describe("api", function() {
     ).toBe(`#!env node3`);
   });
 
-  it("source map merging", function() {
+  it("source map merging", function () {
     const result = transform(
       [
         /* eslint-disable max-len */
@@ -515,52 +515,54 @@ describe("api", function() {
     });
   });
 
-  it("default source map filename", function() {
+  it("default source map filename", function () {
     return transformAsync("var a = 10;", {
       cwd: "/some/absolute",
       filename: "/some/absolute/file/path.js",
       sourceMaps: true,
-    }).then(function(result) {
+    }).then(function (result) {
       expect(result.map.sources).toEqual(["path.js"]);
     });
   });
 
-  it("code option false", function() {
-    return transformAsync("foo('bar');", { code: false }).then(function(
+  it("code option false", function () {
+    return transformAsync("foo('bar');", { code: false }).then(function (
       result,
     ) {
       expect(result.code).toBeFalsy();
     });
   });
 
-  it("ast option false", function() {
-    return transformAsync("foo('bar');", { ast: false }).then(function(result) {
+  it("ast option false", function () {
+    return transformAsync("foo('bar');", { ast: false }).then(function (
+      result,
+    ) {
       expect(result.ast).toBeFalsy();
     });
   });
 
-  it("ast option true", function() {
-    return transformAsync("foo('bar');", { ast: true }).then(function(result) {
+  it("ast option true", function () {
+    return transformAsync("foo('bar');", { ast: true }).then(function (result) {
       expect(result.ast).toBeTruthy();
     });
   });
 
-  it("ast option default", function() {
-    return transformAsync("foo('bar');").then(function(result) {
+  it("ast option default", function () {
+    return transformAsync("foo('bar');").then(function (result) {
       expect(result.ast).toBeFalsy();
     });
   });
 
-  it("auxiliaryComment option", function() {
+  it("auxiliaryComment option", function () {
     return transformAsync("class Foo {}", {
       auxiliaryCommentBefore: "before",
       auxiliaryCommentAfter: "after",
       plugins: [
-        function(babel) {
+        function (babel) {
           const t = babel.types;
           return {
             visitor: {
-              Program: function(path) {
+              Program: function (path) {
                 path.unshiftContainer(
                   "body",
                   t.expressionStatement(t.identifier("start")),
@@ -574,14 +576,14 @@ describe("api", function() {
           };
         },
       ],
-    }).then(function(result) {
+    }).then(function (result) {
       expect(result.code).toBe(
         "/*before*/\nstart;\n\n/*after*/\nclass Foo {}\n\n/*before*/\nend;\n\n/*after*/",
       );
     });
   });
 
-  it("ignore option", function() {
+  it("ignore option", function () {
     return Promise.all([
       transformAsync("", {
         ignore: ["/foo"],
@@ -620,7 +622,7 @@ describe("api", function() {
     ]);
   });
 
-  it("only option", function() {
+  it("only option", function () {
     return Promise.all([
       transformAsync("", {
         only: ["/foo"],
@@ -659,23 +661,23 @@ describe("api", function() {
     ]);
   });
 
-  describe("env option", function() {
+  describe("env option", function () {
     const oldBabelEnv = process.env.BABEL_ENV;
     const oldNodeEnv = process.env.NODE_ENV;
 
-    beforeEach(function() {
+    beforeEach(function () {
       // Tests need to run with the default and specific values for these. They
       // need to be cleared for each test.
       delete process.env.BABEL_ENV;
       delete process.env.NODE_ENV;
     });
 
-    afterAll(function() {
+    afterAll(function () {
       process.env.BABEL_ENV = oldBabelEnv;
       process.env.NODE_ENV = oldNodeEnv;
     });
 
-    it("default", function() {
+    it("default", function () {
       const result = transform("foo;", {
         env: {
           development: { comments: false },
@@ -685,7 +687,7 @@ describe("api", function() {
       expect(result.options.comments).toBe(false);
     });
 
-    it("BABEL_ENV", function() {
+    it("BABEL_ENV", function () {
       process.env.BABEL_ENV = "foo";
       const result = transform("foo;", {
         env: {
@@ -695,7 +697,7 @@ describe("api", function() {
       expect(result.options.comments).toBe(false);
     });
 
-    it("NODE_ENV", function() {
+    it("NODE_ENV", function () {
       process.env.NODE_ENV = "foo";
       const result = transform("foo;", {
         env: {
@@ -706,59 +708,59 @@ describe("api", function() {
     });
   });
 
-  describe("buildExternalHelpers", function() {
-    describe("smoke tests", function() {
-      it("builds external helpers in global output type", function() {
+  describe("buildExternalHelpers", function () {
+    describe("smoke tests", function () {
+      it("builds external helpers in global output type", function () {
         babel.buildExternalHelpers(null, "global");
       });
 
-      it("builds external helpers in module output type", function() {
+      it("builds external helpers in module output type", function () {
         babel.buildExternalHelpers(null, "module");
       });
 
-      it("builds external helpers in umd output type", function() {
+      it("builds external helpers in umd output type", function () {
         babel.buildExternalHelpers(null, "umd");
       });
 
-      it("builds external helpers in var output type", function() {
+      it("builds external helpers in var output type", function () {
         babel.buildExternalHelpers(null, "var");
       });
     });
 
-    it("all", function() {
+    it("all", function () {
       const script = babel.buildExternalHelpers();
       expect(script).toEqual(expect.stringContaining("classCallCheck"));
       expect(script).toEqual(expect.stringContaining("inherits"));
     });
 
-    it("whitelist", function() {
+    it("allowlist", function () {
       const script = babel.buildExternalHelpers(["inherits"]);
       expect(script).not.toEqual(expect.stringContaining("classCallCheck"));
       expect(script).toEqual(expect.stringContaining("inherits"));
     });
 
-    it("empty whitelist", function() {
+    it("empty allowlist", function () {
       const script = babel.buildExternalHelpers([]);
       expect(script).not.toEqual(expect.stringContaining("classCallCheck"));
       expect(script).not.toEqual(expect.stringContaining("inherits"));
     });
 
-    it("underscored", function() {
+    it("underscored", function () {
       const script = babel.buildExternalHelpers(["typeof"]);
       expect(script).toEqual(expect.stringContaining("typeof"));
     });
   });
 
-  describe("handle parsing errors", function() {
+  describe("handle parsing errors", function () {
     const options = {
       babelrc: false,
     };
 
-    it("only syntax plugin available", function(done) {
+    it("only syntax plugin available", function (done) {
       transformFile(
         __dirname + "/fixtures/api/parsing-errors/only-syntax/file.js",
         options,
-        function(err) {
+        function (err) {
           expect(err.message).toMatch(
             "Support for the experimental syntax 'pipelineOperator' isn't currently enabled (1:3):",
           );
@@ -771,11 +773,11 @@ describe("api", function() {
       );
     });
 
-    it("both syntax and transform plugin available", function(done) {
+    it("both syntax and transform plugin available", function (done) {
       transformFile(
         __dirname + "/fixtures/api/parsing-errors/syntax-and-transform/file.js",
         options,
-        function(err) {
+        function (err) {
           expect(err.message).toMatch(
             "Support for the experimental syntax 'logicalAssignment' isn't currently enabled (1:3):",
           );
@@ -789,13 +791,13 @@ describe("api", function() {
     });
   });
 
-  describe("missing helpers", function() {
-    it("should always throw", function() {
+  describe("missing helpers", function () {
+    it("should always throw", function () {
       expect(() =>
         babel.transformSync(``, {
           configFile: false,
           plugins: [
-            function() {
+            function () {
               return {
                 visitor: {
                   Program(path) {

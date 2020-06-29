@@ -1,6 +1,6 @@
 import cloneDeep from "lodash.clonedeep";
 import rule from "../../src/rules/no-invalid-this";
-import RuleTester from "../helpers/RuleTester";
+import RuleTester from "@babel/eslint-shared-fixtures/utils/RuleTester";
 
 /**
  * A constant value for non strict mode environment.
@@ -50,8 +50,8 @@ function MODULES(pattern) {
  */
 function extractPatterns(patterns, type) {
   // Clone and apply the pattern environment.
-  const patternsList = patterns.map(function(pattern) {
-    return pattern[type].map(function(applyCondition) {
+  const patternsList = patterns.map(function (pattern) {
+    return pattern[type].map(function (applyCondition) {
       const thisPattern = cloneDeep(pattern);
 
       applyCondition(thisPattern);

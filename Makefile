@@ -84,9 +84,11 @@ build-no-bundle-ci: bootstrap-only
 watch: build-no-bundle
 	BABEL_ENV=development $(YARN) gulp watch
 
-code-quality-ci: flowcheck-ci lint-ci
+code-quality-ci: build-no-bundle-ci
+	$(MAKE) flowcheck-ci & $(MAKE) lint-ci
 
-flowcheck-ci: bootstrap-flowcheck
+
+flowcheck-ci:
 	$(MAKE) flow
 
 code-quality: flow lint
@@ -94,17 +96,15 @@ code-quality: flow lint
 flow:
 	$(YARN) flow check --strip-root
 
-bootstrap-flowcheck: build-no-bundle-ci
-
 lint-ci: lint-js-ci lint-ts-ci check-compat-data-ci
 
-lint-js-ci: bootstrap-only
+lint-js-ci:
 	$(MAKE) lint-js
 
-lint-ts-ci: bootstrap-flowcheck
+lint-ts-ci:
 	$(MAKE) lint-ts
 
-check-compat-data-ci: build-no-bundle-ci
+check-compat-data-ci:
 	$(MAKE) check-compat-data
 
 lint: lint-js lint-ts
@@ -172,8 +172,8 @@ test-flow:
 test-flow-ci: build-bundle-ci bootstrap-flow
 	$(MAKE) test-flow
 
-test-flow-update-whitelist:
-	$(NODE) scripts/parser-tests/flow --update-whitelist
+test-flow-update-allowlist:
+	$(NODE) scripts/parser-tests/flow --update-allowlist
 
 bootstrap-typescript:
 	rm -rf ./build/typescript
@@ -187,8 +187,8 @@ test-typescript:
 test-typescript-ci: build-bundle-ci bootstrap-typescript
 	$(MAKE) test-typescript
 
-test-typescript-update-whitelist:
-	$(NODE) scripts/parser-tests/typescript --update-whitelist
+test-typescript-update-allowlist:
+	$(NODE) scripts/parser-tests/typescript --update-allowlist
 
 bootstrap-test262:
 	rm -rf build/test262
@@ -202,8 +202,8 @@ test-test262:
 test-test262-ci: build-bundle-ci bootstrap-test262
 	$(MAKE) test-test262
 
-test-test262-update-whitelist:
-	$(NODE) scripts/parser-tests/test262 --update-whitelist
+test-test262-update-allowlist:
+	$(NODE) scripts/parser-tests/test262 --update-allowlist
 
 # Does not work on Windows
 clone-license:
@@ -256,11 +256,12 @@ publish-eslint:
 bootstrap-only: lerna-bootstrap
 
 yarn-install: clean-all
-	yarn --ignore-engines
+	# Gitpod prebuilds have a slow network connection, so we need more time
+	yarn --ignore-engines --network-timeout 100000
 
 lerna-bootstrap: yarn-install
 # todo: remove `-- -- --ignore-engines` in Babel 8
-	$(YARN) lerna bootstrap -- -- --ignore-engines
+	$(YARN) lerna bootstrap -- -- --ignore-engines --network-timeout 100000
 
 bootstrap: bootstrap-only
 	$(MAKE) build

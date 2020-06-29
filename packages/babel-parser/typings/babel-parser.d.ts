@@ -1,5 +1,5 @@
 // Type definitions for @babel/parser
-// Project: https://github.com/babel/babel/tree/master/packages/babel-parser
+// Project: https://github.com/babel/babel/tree/main/packages/babel-parser
 // Definitions by: Troy Gerwien <https://github.com/yortus>
 //                 Marvin Hagemeister <https://github.com/marvinhagemeister>
 //                 Avi Vahl <https://github.com/AviVahl>

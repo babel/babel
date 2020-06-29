@@ -320,7 +320,7 @@ export default function transformClass(
 
     path.traverse(findThisesVisitor);
 
-    let thisRef = function() {
+    let thisRef = function () {
       const ref = path.scope.generateDeclaredUidIdentifier("this");
       thisRef = () => t.cloneNode(ref);
       return ref;
@@ -360,7 +360,7 @@ export default function transformClass(
       wrapSuperCall(bareSuper, classState.superName, thisRef, body);
 
       if (guaranteedSuperBeforeFinish) {
-        bareSuper.find(function(parentPath) {
+        bareSuper.find(function (parentPath) {
           // hit top so short circuit
           if (parentPath === path) {
             return true;

@@ -1,7 +1,7 @@
 import { runCodeInTestContext } from "..";
 
-describe("helper-transform-fixture-test-runner", function() {
-  it("should not execute code in Node's global context", function() {
+describe("helper-transform-fixture-test-runner", function () {
+  it("should not execute code in Node's global context", function () {
     try {
       global.foo = "outer";
       runCodeInTestContext(

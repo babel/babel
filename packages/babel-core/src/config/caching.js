@@ -108,7 +108,7 @@ function makeCachedFunction<ArgT, ResultT, SideChannel, Cache: *>(
     const asyncContext = yield* isAsync();
     const callCache = asyncContext ? callCacheAsync : callCacheSync;
 
-    const cached = yield* getCachedValueOrWait(
+    const cached = yield* getCachedValueOrWait<ArgT, ResultT, SideChannel>(
       asyncContext,
       callCache,
       futureCache,
@@ -119,7 +119,7 @@ function makeCachedFunction<ArgT, ResultT, SideChannel, Cache: *>(
 
     const cache = new CacheConfigurator(data);
 
-    const handlerResult = handler(arg, cache);
+    const handlerResult: Handler<ResultT> | ResultT = handler(arg, cache);
 
     let finishLock: ?Lock<ResultT>;
     let value: ResultT;
@@ -313,7 +313,7 @@ class CacheConfigurator<SideChannel = void> {
     );
 
     if (isThenable(key)) {
-      return key.then(key => {
+      return key.then((key: mixed) => {
         this._pairs.push([key, fn]);
         return key;
       });
@@ -330,7 +330,7 @@ class CacheConfigurator<SideChannel = void> {
 
   validator(): SideChannel => Handler<boolean> {
     const pairs = this._pairs;
-    return function*(data: SideChannel) {
+    return function* (data: SideChannel) {
       for (const [key, fn] of pairs) {
         if (key !== (yield* fn(data))) return false;
       }
@@ -369,7 +369,13 @@ function makeSimpleConfigurator(
 
 // Types are limited here so that in the future these values can be used
 // as part of Babel's caching logic.
-type SimpleType = string | boolean | number | null | void | Promise<SimpleType>;
+export type SimpleType =
+  | string
+  | boolean
+  | number
+  | null
+  | void
+  | Promise<SimpleType>;
 export function assertSimpleType(value: mixed): SimpleType {
   if (isThenable(value)) {
     throw new Error(

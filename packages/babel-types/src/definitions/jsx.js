@@ -65,6 +65,10 @@ defineType("JSXElement", {
         ),
       ),
     },
+    selfClosing: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
   },
 });
 
