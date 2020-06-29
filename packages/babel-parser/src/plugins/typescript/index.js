@@ -630,9 +630,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         /* skipFirstToken */ false,
       );
 
-      // Validate the elementTypes to ensure:
-      //   No mandatory elements may follow optional elements
-      //   If there's a rest element, it must be at the end of the tuple
+      // Validate the elementTypes to ensure that no mandatory elements
+      // follow optional elements
       let seenOptionalElement = false;
       node.elementTypes.forEach(elementNode => {
         if (elementNode.type === "TSOptionalType") {
@@ -651,12 +650,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const restNode: N.TsRestType = this.startNode();
         this.next(); // skips ellipsis
         restNode.typeAnnotation = this.tsParseType();
-        if (
-          this.match(tt.comma) &&
-          this.lookaheadCharCode() !== charCodes.rightSquareBracket
-        ) {
-          this.raiseRestNotLast(this.state.start);
-        }
         return this.finishNode(restNode, "TSRestType");
       }
 
