@@ -132,10 +132,10 @@ export default declare((api, options) => {
           } else {
             contextLiteral = t.cloneNode(callee.object);
           }
-          t.appendToMemberExpression(callee, t.identifier("apply"));
-        } else {
-          node.callee = t.memberExpression(callee, t.identifier("apply"));
         }
+
+        // We use the original callee here, to preserve any types/parentheses
+        node.callee = t.memberExpression(node.callee, t.identifier("apply"));
 
         if (t.isSuper(contextLiteral)) {
           contextLiteral = t.thisExpression();
