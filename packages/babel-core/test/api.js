@@ -733,13 +733,13 @@ describe("api", function () {
       expect(script).toEqual(expect.stringContaining("inherits"));
     });
 
-    it("whitelist", function () {
+    it("allowlist", function () {
       const script = babel.buildExternalHelpers(["inherits"]);
       expect(script).not.toEqual(expect.stringContaining("classCallCheck"));
       expect(script).toEqual(expect.stringContaining("inherits"));
     });
 
-    it("empty whitelist", function () {
+    it("empty allowlist", function () {
       const script = babel.buildExternalHelpers([]);
       expect(script).not.toEqual(expect.stringContaining("classCallCheck"));
       expect(script).not.toEqual(expect.stringContaining("inherits"));
