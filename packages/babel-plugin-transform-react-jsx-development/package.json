@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-react-jsx-development",
-  "version": "7.10.1",
+  "version": "7.10.4",
   "description": "Turn JSX into React function calls in development",
   "repository": {
     "type": "git",
@@ -16,15 +16,15 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-builder-react-jsx-experimental": "^7.10.1",
-    "@babel/helper-plugin-utils": "^7.10.1",
-    "@babel/plugin-syntax-jsx": "^7.10.1"
+    "@babel/helper-builder-react-jsx-experimental": "^7.10.4",
+    "@babel/helper-plugin-utils": "^7.10.4",
+    "@babel/plugin-syntax-jsx": "^7.10.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/helper-plugin-test-runner": "^7.10.1"
+    "@babel/core": "^7.10.4",
+    "@babel/helper-plugin-test-runner": "^7.10.4"
   }
 }

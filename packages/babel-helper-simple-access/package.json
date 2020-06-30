@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-simple-access",
-  "version": "7.10.1",
+  "version": "7.10.4",
   "description": "Babel helper for ensuring that access to a given value is performed through simple accesses",
   "author": "Logan Smyth <loganfsmyth@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -15,7 +15,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/template": "^7.10.1",
-    "@babel/types": "^7.10.1"
+    "@babel/template": "^7.10.4",
+    "@babel/types": "^7.10.4"
   }
 }

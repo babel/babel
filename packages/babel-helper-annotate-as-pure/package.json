@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-annotate-as-pure",
-  "version": "7.10.1",
+  "version": "7.10.4",
   "description": "Helper function to annotate paths and nodes with #__PURE__ comment",
   "repository": {
     "type": "git",
@@ -13,6 +13,6 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/types": "^7.10.1"
+    "@babel/types": "^7.10.4"
   }
 }

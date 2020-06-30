@@ -1,14 +1,14 @@
 {
   "name": "@babel/eslint-config-internal",
-  "version": "0.0.0",
+  "version": "7.10.4",
   "description": "The Babel Team's ESLint configuration. Since it's internal, it might not respect semver.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "private": true,
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/babel/babel.git",
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
     "directory": "eslint/babel-eslint-config-internal"
   },
   "main": "index.js",

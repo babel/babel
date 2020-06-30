@@ -79,7 +79,7 @@ function report(context, node, missing) {
 export default ruleComposer.joinReports([
   rule,
   context => ({
-    ClassProperty(node) {
+    "ClassProperty, ClassPrivateProperty"(node) {
       const options = context.options[1];
       const exceptOneLine = options && options.omitLastInOneLineBlock === true;
       const sourceCode = context.getSourceCode();
