@@ -43,6 +43,11 @@ Feel free to check out the `#discussion`/`#development` channels on our [Slack](
 
 *Yarn*: Make sure that Yarn 1 is [installed](https://classic.yarnpkg.com/en/docs/install) with version >= `1.19.0`.
 
+*Make*: If you are running Windows 10, you'll need to do one of the following:
+
+* Clone the repository and run the commands inside [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+* Install [Make for Windows](http://gnuwin32.sourceforge.net/packages/make.htm).
+
 ### Setup
 
 Fork the `babel` repository to your GitHub Account.
