@@ -174,6 +174,7 @@ export function CatchClause(node: Object) {
   if (node.param) {
     this.token("(");
     this.print(node.param, node);
+    this.print(node.param.typeAnnotation, node);
     this.token(")");
     this.space();
   }
