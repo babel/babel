@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-hoist-variables",
-  "version": "7.10.3",
+  "version": "7.10.4",
   "description": "Helper function to hoist variables",
   "repository": {
     "type": "git",
@@ -13,6 +13,6 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/types": "^7.10.3"
+    "@babel/types": "^7.10.4"
   }
 }

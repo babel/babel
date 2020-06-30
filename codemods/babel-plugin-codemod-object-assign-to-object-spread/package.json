@@ -1,10 +1,10 @@
 {
   "name": "@babel/plugin-codemod-object-assign-to-object-spread",
-  "version": "7.7.4",
+  "version": "7.10.4",
   "description": "Transforms Object.assign into object spread syntax",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/babel/babel.git",
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
     "directory": "codemods/babel-plugin-codemod-object-assign-to-object-spread"
   },
   "license": "MIT",
@@ -23,7 +23,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.4",
-    "@babel/helper-plugin-test-runner": "^7.7.4"
+    "@babel/core": "^7.10.4",
+    "@babel/helper-plugin-test-runner": "^7.10.4"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-typescript",
-  "version": "7.10.1",
+  "version": "7.10.4",
   "description": "Babel preset for TypeScript.",
   "repository": {
     "type": "git",
@@ -17,14 +17,14 @@
     "typescript"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.10.1",
-    "@babel/plugin-transform-typescript": "^7.10.1"
+    "@babel/helper-plugin-utils": "^7.10.4",
+    "@babel/plugin-transform-typescript": "^7.10.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/helper-plugin-test-runner": "^7.10.1"
+    "@babel/core": "^7.10.4",
+    "@babel/helper-plugin-test-runner": "^7.10.4"
   }
 }
