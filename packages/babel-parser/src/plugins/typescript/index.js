@@ -2666,7 +2666,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const type = this.tsTryParseTypeAnnotation();
 
       if (type) {
-        param.type = type;
+        param.typeAnnotation = type;
       }
 
       return param;
