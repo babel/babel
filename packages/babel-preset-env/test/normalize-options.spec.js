@@ -90,11 +90,11 @@ describe("normalize-options", () => {
     it("should throw removed option if corejs version is 2", () => {
       [2, 2.1].forEach(corejs => {
         ["entry", "usage"].forEach(useBuiltIns => {
-          expect(() =>
-            normalizeOptions.default({ useBuiltIns, corejs }),
-          ).toThrowError(
-            /Since Babel 8, the core-js@2 support has been dropped. Please use `corejs: "3.6"`/,
-          );
+          expect(() => normalizeOptions.default({ useBuiltIns, corejs }))
+            .toThrowError(`Since Babel 8, the core-js@2 support has been dropped. Please use \`corejs: "3.6"\`.
+- If you really want to use obsolete core-js@2, please install \`babel-plugin-polyfill-corejs2\` and add to the "plugins" config
+  npm install --save-dev babel-plugin-polyfill-corejs2
+  yarn add --dev babel-plugin-polyfill-corejs2`);
         });
       });
     });

@@ -36,7 +36,10 @@ export default declare((api, options, dirname) => {
 
   if (corejsVersion === 2) {
     throw new Error(
-      "Since Babel 8, the core-js 2 support has been dropped. Please use 'corejs: 3'.",
+      `Since Babel 8, the core-js 2 support has been dropped. Please use 'corejs: 3'.
+- If you really want to use obsolete core-js@2, please install \`babel-plugin-polyfill-corejs2\` and add to the "plugins" config
+  npm install --save-dev babel-plugin-polyfill-corejs2
+  yarn add --dev babel-plugin-polyfill-corejs2`,
     );
   }
 
