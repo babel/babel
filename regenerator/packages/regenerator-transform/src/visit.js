@@ -12,7 +12,6 @@ import { hoist } from "./hoist";
 import { Emitter } from "./emit";
 import replaceShorthandObjectMethod from "./replaceShorthandObjectMethod";
 import * as util from "./util";
-import { makeAccessor } from "private";
 
 exports.getVisitor = ({ types: t }) => ({
   Method(path, state) {
@@ -255,7 +254,14 @@ function getOuterFnExpr(funPath) {
   return t.clone(node.id);
 }
 
-const getMarkInfo = makeAccessor();
+const markInfo = new WeakMap();
+
+function getMarkInfo(node) {
+  if (!markInfo.has(node)) {
+    markInfo.set(node, {});
+  }
+  return markInfo.get(node);
+}
 
 function getMarkedFunctionId(funPath) {
   const t = util.getTypes();

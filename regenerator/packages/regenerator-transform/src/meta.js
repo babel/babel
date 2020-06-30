@@ -7,10 +7,16 @@
 
 import assert from "assert";
 import { getTypes } from "./util.js";
-import { makeAccessor } from "private";
 
-let m = makeAccessor();
-let hasOwn = Object.prototype.hasOwnProperty;
+const mMap = new WeakMap();
+function m(node) {
+  if (!mMap.has(node)) {
+    mMap.set(node, {});
+  }
+  return mMap.get(node);
+}
+
+const hasOwn = Object.prototype.hasOwnProperty;
 
 function makePredicate(propertyName, knownTypes) {
   function onlyChildren(node) {
