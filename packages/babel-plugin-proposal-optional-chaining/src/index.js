@@ -144,19 +144,19 @@ export default declare((api, options) => {
           // i.e. `?.b` in `(a?.b.c)()`
           if (i === 0 && parentIsCall) {
             // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
-            const { object } = replacement;
+            const object = skipTransparentExprWrappers(
+              replacementPath.get("object"),
+            ).node;
             let baseRef;
             if (!loose || !isSimpleMemberExpression(object)) {
               // memoize the context object in non-loose mode
               // `(a?.b.c)()` to `(a == null ? undefined : (_a$b = a.b).c.bind(_a$b))()`
-              baseRef = scope.maybeGenerateMemoised(
-                skipTransparentExprWrappers(object),
-              );
+              baseRef = scope.maybeGenerateMemoised(object);
               if (baseRef) {
                 replacement.object = t.assignmentExpression(
                   "=",
                   baseRef,
-                  skipTransparentExprWrappers(object),
+                  object,
                 );
               }
             }
