@@ -636,6 +636,16 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(node, "ThrowStatement");
   }
 
+  parseCatchClauseParam(): N.Identifier {
+    const param = this.parseBindingAtom();
+
+    const simple = param.type === "Identifier";
+    this.scope.enter(simple ? SCOPE_SIMPLE_CATCH : 0);
+    this.checkLVal(param, BIND_LEXICAL, null, "catch clause");
+
+    return param;
+  }
+
   parseTryStatement(node: N.TryStatement): N.TryStatement {
     this.next();
 
@@ -647,10 +657,7 @@ export default class StatementParser extends ExpressionParser {
       this.next();
       if (this.match(tt.parenL)) {
         this.expect(tt.parenL);
-        clause.param = this.parseBindingAtom();
-        const simple = clause.param.type === "Identifier";
-        this.scope.enter(simple ? SCOPE_SIMPLE_CATCH : 0);
-        this.checkLVal(clause.param, BIND_LEXICAL, null, "catch clause");
+        clause.param = this.parseCatchClauseParam();
         this.expect(tt.parenR);
       } else {
         clause.param = null;
