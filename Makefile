@@ -1,6 +1,6 @@
 FLOW_COMMIT = a1f9a4c709dcebb27a5084acf47755fbae699c25
 TEST262_COMMIT = 058adfed86b1d4129996faaf50a85ea55379a66a
-TYPESCRIPT_COMMIT = 5fc917be2e4dd64c8e9504d36615cd7fbfdd4cd3
+TYPESCRIPT_COMMIT = ffa35d3272647fe48ddf173e1f0928f772c18630
 
 FORCE_PUBLISH = "@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@babel/standalone"
 
