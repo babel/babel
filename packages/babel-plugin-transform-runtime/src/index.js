@@ -53,7 +53,7 @@ export default declare((api, options, dirname) => {
 
   if (proposals && !corejsVersion) {
     throw new Error(
-      "The 'proposals' option is only supported when using 'corejs: 3'",
+      "The 'proposals' option is only supported when using core-js",
     );
   }
 
