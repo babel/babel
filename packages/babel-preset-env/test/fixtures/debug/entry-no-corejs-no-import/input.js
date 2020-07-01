@@ -1,1 +1,1 @@
-function hasAnyoneSeenImportBabelPolyfill() { return false };
+function hasAnyoneSeenImportCoreJS() { return false };

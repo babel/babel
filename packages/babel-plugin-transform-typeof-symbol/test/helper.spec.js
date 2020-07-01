@@ -16,8 +16,6 @@ describe("@babel/plugin-transform-typeof-symbol", () => {
     runtime                     | type
     ${"@babel/runtime"}         | ${"esm"}
     ${"@babel/runtime"}         | ${"cjs"}
-    ${"@babel/runtime-corejs2"} | ${"esm"}
-    ${"@babel/runtime-corejs2"} | ${"cjs"}
     ${"@babel/runtime-corejs3"} | ${"esm"}
     ${"@babel/runtime-corejs3"} | ${"cjs"}
   `(

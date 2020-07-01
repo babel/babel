@@ -15,7 +15,6 @@
   "exports": {
     "./plugins": "./data/plugins.json",
     "./native-modules": "./data/native-modules.json",
-    "./corejs2-built-ins": "./data/corejs2-built-ins.json",
     "./corejs3-shipped-proposals": "./data/corejs3-shipped-proposals.json",
     "./overlapping-plugins": "./data/overlapping-plugins.json",
     "./plugin-bugfixes": "./data/plugin-bugfixes.json"

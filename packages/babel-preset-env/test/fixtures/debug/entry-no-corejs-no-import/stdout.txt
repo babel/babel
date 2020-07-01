@@ -27,4 +27,4 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-no-corejs-no-import/input.js] Import of @babel/polyfill was not found.
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-no-corejs-no-import/input.js] Import of core-js was not found.

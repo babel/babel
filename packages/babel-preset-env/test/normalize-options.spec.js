@@ -68,7 +68,7 @@ describe("normalize-options", () => {
     );
 
     it("should not throw if corejs version is valid", () => {
-      [2, 2.1, 3, 3.5].forEach(corejs => {
+      [3, 3.5].forEach(corejs => {
         ["entry", "usage"].forEach(useBuiltIns => {
           expect(() =>
             normalizeOptions.default({ useBuiltIns, corejs }),
@@ -83,6 +83,18 @@ describe("normalize-options", () => {
           expect(() =>
             normalizeOptions.default({ useBuiltIns, corejs }),
           ).toThrowError(/The version passed to `corejs` is invalid./);
+        });
+      });
+    });
+
+    it("should throw removed option if corejs version is 2", () => {
+      [2, 2.1].forEach(corejs => {
+        ["entry", "usage"].forEach(useBuiltIns => {
+          expect(() => normalizeOptions.default({ useBuiltIns, corejs }))
+            .toThrowError(`Since Babel 8, the core-js@2 support has been dropped. Please use \`corejs: "3.6"\`.
+- If you really want to use obsolete core-js@2, please install \`babel-plugin-polyfill-corejs2\` and add to the "plugins" config
+  npm install --save-dev babel-plugin-polyfill-corejs2
+  yarn add --dev babel-plugin-polyfill-corejs2`);
         });
       });
     });
