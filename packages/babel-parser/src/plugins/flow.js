@@ -115,6 +115,8 @@ const FlowErrors = Object.freeze({
     'Unexpected token, expected "number" or "bigint"',
   UnexpectedTokenAfterTypeParameter:
     "Expected an arrow function after this type parameter declaration",
+  UnexpectedTypeParameterBeforeAsyncArrowFunction:
+    "Type parameters must come after the async keyword, e.g. instead of `<T> async () => {}`, use `async <T>() => {}`",
   UnsupportedDeclareExportKind:
     "`declare export %0` is not supported. Use `%1` instead",
   UnsupportedStatementInDeclareModule:
@@ -2720,6 +2722,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             "ArrowFunctionExpression"
         ) {
           if (!arrow.error && !arrow.aborted) {
+            // <T> async () => {}
+            if (arrow.node.async) {
+              /*:: invariant(typeParameters) */
+              this.raise(
+                typeParameters.start,
+                FlowErrors.UnexpectedTypeParameterBeforeAsyncArrowFunction,
+              );
+            }
+
             return arrow.node;
           }
 
