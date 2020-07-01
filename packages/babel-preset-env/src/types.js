@@ -9,7 +9,7 @@ import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
 export type ModuleOption = $Values<typeof ModulesOption>;
 export type BuiltInsOption = $Values<typeof UseBuiltInsOption>;
 
-type CorejsVersion = 2 | 3 | string;
+type CorejsVersion = 3 | string;
 
 export type CorejsOption =
   | false

@@ -2,7 +2,7 @@ FLOW_COMMIT = a1f9a4c709dcebb27a5084acf47755fbae699c25
 TEST262_COMMIT = d9740c172652d36194ceae3ed3d0484e9968ebc3
 TYPESCRIPT_COMMIT = da8633212023517630de5f3620a23736b63234b1
 
-FORCE_PUBLISH = -f @babel/runtime -f @babel/runtime-corejs2 -f @babel/runtime-corejs3 -f @babel/standalone
+FORCE_PUBLISH = -f @babel/runtime -f @babel/runtime-corejs3 -f @babel/standalone
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
@@ -267,9 +267,7 @@ clean-lib:
 
 clean-runtime-helpers:
 	rm -f packages/babel-runtime/helpers/**/*.js
-	rm -f packages/babel-runtime-corejs2/helpers/**/*.js
 	rm -f packages/babel-runtime-corejs3/helpers/**/*.js
-	rm -rf packages/babel-runtime-corejs2/core-js
 
 clean-all:
 	rm -rf node_modules
