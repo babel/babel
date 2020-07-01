@@ -7,6 +7,7 @@ let currentOptions;
 let sourceMapSupport = false;
 
 const registerFile = require.resolve("../lib/node");
+const testCacheFilename = path.join(__dirname, ".babel");
 const testFile = require.resolve("./fixtures/babelrc/es2015");
 const testFileContent = fs.readFileSync(testFile);
 const sourceMapTestFile = require.resolve("./fixtures/source-map/index");
@@ -41,10 +42,23 @@ const defaultOptions = {
   ignoreNodeModules: false,
 };
 
+function cleanCache() {
+  try {
+    fs.unlinkSync(testCacheFilename);
+  } catch (e) {
+    // It is convenient to always try to clear
+  }
+}
+
+function resetCache() {
+  process.env.BABEL_CACHE_PATH = null;
+}
+
 describe("@babel/register", function () {
   let babelRegister;
 
   function setupRegister(config = { babelrc: false }) {
+    process.env.BABEL_CACHE_PATH = testCacheFilename;
     config = {
       cwd: path.dirname(testFile),
       ...config,
@@ -60,6 +74,7 @@ describe("@babel/register", function () {
       delete require.cache[registerFile];
       babelRegister = null;
     }
+    cleanCache();
   }
 
   afterEach(() => {
@@ -68,6 +83,10 @@ describe("@babel/register", function () {
     currentOptions = null;
     sourceMapSupport = false;
     jest.resetModules();
+  });
+
+  afterAll(() => {
+    resetCache();
   });
 
   test("registers hook correctly", () => {
