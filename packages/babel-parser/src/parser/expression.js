@@ -1184,7 +1184,7 @@ export default class ExpressionParser extends LValParser {
             isIdentifierStart(lookaheadCh) || // Element/Type Parameter <foo>
             lookaheadCh === charCodes.greaterThan // Fragment <>
           ) {
-            throw this.expectOnePlugin(["jsx", "flow", "typescript"]);
+            this.expectOnePlugin(["jsx", "flow", "typescript"]);
           }
         }
       }
