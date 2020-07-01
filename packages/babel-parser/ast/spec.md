@@ -77,9 +77,11 @@ These are the core @babel/parser (babylon) AST node types.
     - [SpreadElement](#spreadelement)
     - [ArgumentPlaceholder](#argumentplaceholder)
     - [MemberExpression](#memberexpression)
+    - [OptionalMemberExpression](#optionalmemberexpression)
     - [BindExpression](#bindexpression)
   - [ConditionalExpression](#conditionalexpression)
   - [CallExpression](#callexpression)
+  - [OptionalCallExpression](#optionalcallexpression)
   - [NewExpression](#newexpression)
   - [SequenceExpression](#sequenceexpression)
   - [ParenthesizedExpression](#parenthesizedexpression)
@@ -176,17 +178,16 @@ interface Identifier <: Expression, Pattern {
 
 An identifier. Note that an identifier may be an expression or a destructuring pattern.
 
-
 # PrivateName
 
 ```js
-interface PrivateName <: Expression, Pattern {
+interface PrivateName <: Node {
   type: "PrivateName";
   id: Identifier;
 }
 ```
-A Private Name Identifier.
 
+A Private Name Identifier.
 
 # Literals
 
@@ -817,12 +818,12 @@ An update (increment or decrement) operator token.
 interface BinaryExpression <: Expression {
   type: "BinaryExpression";
   operator: BinaryOperator;
-  left: Expression;
+  left: Expression | PrivateName;
   right: Expression;
 }
 ```
 
-A binary operator expression.
+A binary operator expression. When `operator` is `in`, the `left` can be a `PrivateName`.
 
 #### BinaryOperator
 
@@ -912,12 +913,26 @@ interface ArgumentPlaceholder <: Node {
 interface MemberExpression <: Expression, Pattern {
   type: "MemberExpression";
   object: Expression | Super;
-  property: Expression;
+  property: Expression | PrivateName;
   computed: boolean;
 }
 ```
 
 A member expression. If `computed` is `true`, the node corresponds to a computed (`a[b]`) member expression and `property` is an `Expression`. If `computed` is `false`, the node corresponds to a static (`a.b`) member expression and `property` is an `Identifier` or a `PrivateName`.
+
+### OptionalMemberExpression
+
+```js
+interface OptionalMemberExpression <: Expression {
+  type: "OptionalMemberExpression";
+  object: Expression;
+  property: Expression | PrivateName;
+  computed: boolean;
+  optional: boolean;
+}
+```
+
+An optional member expression is a part of the optional chain. When `optional` is `true`, it is the starting element of the optional chain. i.e. In `a?.b.c`, `?.b` is an optional member expression with `optional: true`, `.c` is an optional member expression. See this [gist](https://gist.github.com/JLHwung/567fb29fa2b82bbe164ad9067ff3290f) for more AST examples.
 
 ### BindExpression
 
@@ -1003,6 +1018,19 @@ interface CallExpression <: Expression {
 ```
 
 A function or method call expression. When the `callee` is `Import`, the `arguments` must have only one `Expression` element.
+
+## OptionalCallExpression
+
+```js
+interface OptionalCallExpression <: Expression {
+  type: "OptionalCallExpression";
+  callee: Expression;
+  arguments: [ Expression | SpreadElement ];
+  optional: boolean;
+}
+```
+
+An optional call expression is a part of the optional chain. When `optional` is `true`, it is the starting element of the optional chain. i.e. In `f?.()()`, `?.()` is an optional call expression with `optional: true`, `()` is an optional call expression with `optional: false`. See this [gist](https://gist.github.com/JLHwung/567fb29fa2b82bbe164ad9067ff3290f) for more AST examples.
 
 ## NewExpression
 
