@@ -1,2 +1,31 @@
-// empty
+programmatic options from @babel/cli
+{
+  "sourceFileName": "src/foo.js",
+  "presets": [
+    "<ROOTDIR>/packages/babel-preset-react"
+  ],
+  "plugins": [
+    "<ROOTDIR>/packages/babel-plugin-transform-arrow-functions",
+    "<ROOTDIR>/packages/babel-plugin-transform-strict-mode",
+    "<ROOTDIR>/packages/babel-plugin-transform-modules-commonjs"
+  ],
+  "caller": {
+    "name": "@babel/cli"
+  },
+  "filename": "src/foo.js"
+}
+
+config <CWD>/.babelrc
+{}
+
+config <CWD>/babel.config.json
+{
+  "sourceType": "script"
+}
+
+config <CWD>/babel.config.json .overrides[0]
+{
+  "test": "src/foo.js",
+  "sourceType": "module"
+}
 "use strict";

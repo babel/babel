@@ -1,5 +1,5 @@
 {
-  "args": ["-f", "./src"],
+  "args": ["./src"],
   "os": ["darwin", "linux"],
   "env": {
     "BABEL_SHOW_CONFIG_FOR": "./src/foo.js"

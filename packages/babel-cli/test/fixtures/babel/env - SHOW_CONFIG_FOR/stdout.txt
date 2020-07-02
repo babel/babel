@@ -1,6 +1,6 @@
 programmatic options from @babel/cli
 {
-  "sourceFileName": "stdin",
+  "sourceFileName": "./src/index.js",
   "presets": [
     "<ROOTDIR>/packages/babel-preset-react"
   ],
