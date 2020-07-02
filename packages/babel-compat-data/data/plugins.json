@@ -15,11 +15,11 @@
     "opera": "61",
     "edge": "79",
     "node": "12",
-    "electron": "6.1"
+    "samsung": "11",
+    "electron": "6"
   },
   "proposal-private-methods": {
-    "chrome": "84",
-    "opera": "71"
+    "chrome": "84"
   },
   "proposal-nullish-coalescing-operator": {
     "chrome": "80",

@@ -125,7 +125,12 @@ const es2020 = {
 const shippedProposal = {
   "proposal-numeric-separator": "numeric separator",
   "proposal-class-properties": {
-    features: ["static class fields", "instance class fields"],
+    features: [
+      "static class fields",
+      "instance class fields, public instance class fields",
+      "instance class fields, private instance class fields basic support",
+      "instance class fields, computed instance class fields",
+    ],
   },
   "proposal-private-methods": "private class methods",
 };
