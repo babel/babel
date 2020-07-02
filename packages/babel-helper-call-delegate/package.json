@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-call-delegate",
-  "version": "7.10.3",
+  "version": "7.10.4",
   "description": "Helper function to call delegate",
   "repository": {
     "type": "git",
@@ -13,8 +13,8 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-hoist-variables": "workspace:^7.10.3",
-    "@babel/traverse": "workspace:^7.10.3",
-    "@babel/types": "workspace:^7.10.3"
+    "@babel/helper-hoist-variables": "workspace:^7.10.4",
+    "@babel/traverse": "workspace:^7.10.4",
+    "@babel/types": "workspace:^7.10.4"
   }
 }

@@ -47,8 +47,8 @@ function assertDirectory(loc) {
   }
 }
 
-function shouldIgnore(name, blacklist?: Array<string>) {
-  if (blacklist && blacklist.indexOf(name) >= 0) {
+function shouldIgnore(name, ignore?: Array<string>) {
+  if (ignore && ignore.indexOf(name) >= 0) {
     return true;
   }
 

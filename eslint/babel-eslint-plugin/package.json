@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-plugin",
-  "version": "0.0.0",
+  "version": "7.10.4",
   "description": "Companion rules for @babel/eslint-parser",
   "main": "lib/index.js",
   "repository": {

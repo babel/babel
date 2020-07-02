@@ -19,6 +19,78 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.10.4 (2020-06-30)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helper-member-expression-to-functions`, `babel-plugin-proposal-class-properties`
+  * [#11669](https://github.com/babel/babel/pull/11669) Add `delete obj?.#x.a` support ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`, `babel-types`
+  * [#11652](https://github.com/babel/babel/pull/11652) fix: implement early errors for record and tuple ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-types`
+  * [#11752](https://github.com/babel/babel/pull/11752) [regression] Don't validate file.comments in `@babel/types` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-proposal-do-expressions`, `babel-types`
+  * [#11724](https://github.com/babel/babel/pull/11724) fix: do-statementlist behavior ([@wlawt](https://github.com/wlawt))
+
+#### :nail_care: Polish
+* `babel-parser`
+  * [#11722](https://github.com/babel/babel/pull/11722) Add better parser error when using jsx ([@penguingovernor](https://github.com/penguingovernor))
+* `babel-core`
+  * [#11544](https://github.com/babel/babel/pull/11544) Refine babel core types ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-core`, `babel-helper-fixtures`, `babel-standalone`, `babel-traverse`
+  * [#11758](https://github.com/babel/babel/pull/11758) Replace non-inclusive "whitelist" and "blacklist" terms with "allowlist" etc. ([@wojtekmaj](https://github.com/wojtekmaj))
+* `babel-parser`
+  * [#11376](https://github.com/babel/babel/pull/11376) Add @babel/eslint-plugin-development-internal ([@kaicataldo](https://github.com/kaicataldo))
+* `babel-core`
+  * [#11544](https://github.com/babel/babel/pull/11544) Refine babel core types ([@JLHwung](https://github.com/JLHwung))
+
+## v7.10.3 (2020-06-19)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#11676](https://github.com/babel/babel/pull/11676) Properly parse `export default from` when `exportDefaultFrom` is not enabled ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-member-expression-to-functions`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-optional-chaining`
+  * [#11662](https://github.com/babel/babel/pull/11662) refactor: do not rely on AST extra properties in plugins ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-proposal-logical-assignment-operators`
+  * [#11658](https://github.com/babel/babel/pull/11658) Perform NamedEvaluation of Anonymous Functions in Logical Assignment ([@jridgewell](https://github.com/jridgewell))
+* `babel-helper-create-class-features-plugin`, `babel-helper-member-expression-to-functions`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-optional-chaining`
+  * [#11623](https://github.com/babel/babel/pull/11623) fix: ensure (a?.b)() has proper this ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-parser`, `babel-plugin-transform-flow-comments`
+  * [#11697](https://github.com/babel/babel/pull/11697) Fix innercomments ([@shaodahong](https://github.com/shaodahong))
+* `babel-helper-member-expression-to-functions`, `babel-plugin-proposal-class-properties`
+  * [#11703](https://github.com/babel/babel/pull/11703) fix:added check for forXstatement pattern ([@wlawt](https://github.com/wlawt))
+* `babel-template`
+  * [#11695](https://github.com/babel/babel/pull/11695) Allow templates to parse v8intrinsics ([@jridgewell](https://github.com/jridgewell))
+* `babel-types`
+  * [#11687](https://github.com/babel/babel/pull/11687) improve node type definitions to avoid any's in generated types ([@zxbodya](https://github.com/zxbodya))
+* `babel-plugin-transform-react-pure-annotations`
+  * [#11685](https://github.com/babel/babel/pull/11685) Add React.createContext to @babel/plugin-transform-react-pure-annotat… ([@jessethomson](https://github.com/jessethomson))
+* `babel-parser`
+  * [#11676](https://github.com/babel/babel/pull/11676) Properly parse `export default from` when `exportDefaultFrom` is not enabled ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-private-methods`
+  * [#11571](https://github.com/babel/babel/pull/11571) Add a check for privateMap's existence ([@AjayPoshak](https://github.com/AjayPoshak))
+
+#### :nail_care: Polish
+* `babel-plugin-transform-typescript`
+  * [#11682](https://github.com/babel/babel/pull/11682) Fix small typo ([@sajadtorkamani](https://github.com/sajadtorkamani))
+
+#### :house: Internal
+* Other
+  * [#11730](https://github.com/babel/babel/pull/11730) Revert "chore: pin windows node.js version (#11522)" ([@JLHwung](https://github.com/JLHwung))
+  * [#11727](https://github.com/babel/babel/pull/11727) replace whitelist by allowlist in parser-tests ([@JLHwung](https://github.com/JLHwung))
+  * [#11677](https://github.com/babel/babel/pull/11677) Bump @babel/* deps ([@existentialism](https://github.com/existentialism))
+  * [#11672](https://github.com/babel/babel/pull/11672) chore: output ascii only standalone minified bundle ([@JLHwung](https://github.com/JLHwung))
+  * [#11647](https://github.com/babel/babel/pull/11647) chore: check version lazily in babel-eslint-parser ([@kaicataldo](https://github.com/kaicataldo))
+* `babel-helper-plugin-utils`
+  * [#11674](https://github.com/babel/babel/pull/11674) chore: add npmignore to babel-helper-plugin-utils ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-private-property-in-object`, `babel-preset-env`
+  * [#11655](https://github.com/babel/babel/pull/11655) Fix some test fixtures ([@existentialism](https://github.com/existentialism))
+
 ## v7.10.2 (2020-05-30)
 
 #### :rocket: New Feature

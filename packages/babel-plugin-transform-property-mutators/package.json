@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-property-mutators",
-  "version": "7.10.3",
+  "version": "7.10.4",
   "description": "Compile ES5 property mutator shorthand syntax to Object.defineProperty",
   "repository": {
     "type": "git",
@@ -16,14 +16,14 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-define-map": "workspace:^7.10.3",
-    "@babel/helper-plugin-utils": "workspace:^7.10.3"
+    "@babel/helper-define-map": "workspace:^7.10.4",
+    "@babel/helper-plugin-utils": "workspace:^7.10.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^7.10.3",
-    "@babel/helper-plugin-test-runner": "workspace:^7.10.3"
+    "@babel/core": "workspace:^7.10.4",
+    "@babel/helper-plugin-test-runner": "workspace:^7.10.4"
   }
 }

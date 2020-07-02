@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-codemod-object-assign-to-object-spread",
-  "version": "7.7.4",
+  "version": "7.10.4",
   "description": "Transforms Object.assign into object spread syntax",
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^7.7.4",
-    "@babel/helper-plugin-test-runner": "workspace:^7.7.4"
+    "@babel/core": "workspace:^7.10.4",
+    "@babel/helper-plugin-test-runner": "workspace:^7.10.4"
   }
 }

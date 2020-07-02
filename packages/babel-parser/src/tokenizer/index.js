@@ -420,12 +420,14 @@ export default class Tokenizer extends ParserErrors {
       // misleading
       this.expectPlugin("recordAndTuple");
       if (this.getPluginOption("recordAndTuple", "syntaxType") !== "hash") {
+        /* eslint-disable @babel/development-internal/dry-error-messages */
         throw this.raise(
           this.state.pos,
           next === charCodes.leftCurlyBrace
             ? Errors.RecordExpressionHashIncorrectStartSyntaxType
             : Errors.TupleExpressionHashIncorrectStartSyntaxType,
         );
+        /* eslint-enable @babel/development-internal/dry-error-messages */
       }
 
       if (next === charCodes.leftCurlyBrace) {
@@ -1148,7 +1150,7 @@ export default class Tokenizer extends ParserErrors {
       if (next === charCodes.plusSign || next === charCodes.dash) {
         ++this.state.pos;
       }
-      if (this.readInt(10) === null) this.raise(start, "Invalid number");
+      if (this.readInt(10) === null) this.raise(start, Errors.InvalidNumber);
       isFloat = true;
       next = this.input.charCodeAt(this.state.pos);
     }
@@ -1171,7 +1173,7 @@ export default class Tokenizer extends ParserErrors {
       // disallow floats, legacy octal syntax and non octal decimals
       // new style octal ("0o") is handled in this.readRadixNumber
       if (isFloat || octal || isNonOctalDecimalInt) {
-        this.raise(start, "Invalid BigIntLiteral");
+        this.raise(start, Errors.InvalidBigIntLiteral);
       }
       ++this.state.pos;
       isBigInt = true;

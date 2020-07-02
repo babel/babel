@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-runtime",
-  "version": "7.10.3",
+  "version": "7.10.4",
   "description": "Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals",
   "repository": {
     "type": "git",
@@ -20,21 +20,21 @@
     "./src/get-runtime-path/index.js": "./src/get-runtime-path/browser.js"
   },
   "dependencies": {
-    "@babel/helper-module-imports": "workspace:^7.10.3",
-    "@babel/helper-plugin-utils": "workspace:^7.10.3",
+    "@babel/helper-module-imports": "workspace:^7.10.4",
+    "@babel/helper-plugin-utils": "workspace:^7.10.4",
     "semver": "^5.5.1"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^7.10.3",
-    "@babel/helper-plugin-test-runner": "workspace:^7.10.3",
-    "@babel/helpers": "workspace:^7.10.1",
-    "@babel/plugin-transform-typeof-symbol": "workspace:^7.10.1",
-    "@babel/preset-env": "workspace:^7.10.3",
-    "@babel/runtime": "workspace:^7.10.3",
-    "@babel/template": "workspace:^7.10.3",
-    "@babel/types": "workspace:^7.10.3"
+    "@babel/core": "workspace:^7.10.4",
+    "@babel/helper-plugin-test-runner": "workspace:^7.10.4",
+    "@babel/helpers": "workspace:^7.10.4",
+    "@babel/plugin-transform-typeof-symbol": "workspace:^7.10.4",
+    "@babel/preset-env": "workspace:^7.10.4",
+    "@babel/runtime": "workspace:^7.10.4",
+    "@babel/template": "workspace:^7.10.4",
+    "@babel/types": "workspace:^7.10.4"
   }
 }

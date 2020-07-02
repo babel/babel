@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-function-name",
-  "version": "7.10.3",
+  "version": "7.10.4",
   "description": "Helper function to change the property 'name' of every function",
   "repository": {
     "type": "git",
@@ -13,8 +13,8 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-get-function-arity": "workspace:^7.10.3",
-    "@babel/template": "workspace:^7.10.3",
-    "@babel/types": "workspace:^7.10.3"
+    "@babel/helper-get-function-arity": "workspace:^7.10.4",
+    "@babel/template": "workspace:^7.10.4",
+    "@babel/types": "workspace:^7.10.4"
   }
 }

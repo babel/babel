@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-bindify-decorators",
-  "version": "7.10.1",
+  "version": "7.10.4",
   "description": "Helper function to bindify decorators",
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/traverse": "workspace:^7.10.1",
-    "@babel/types": "workspace:^7.10.1"
+    "@babel/traverse": "workspace:^7.10.4",
+    "@babel/types": "workspace:^7.10.4"
   }
 }

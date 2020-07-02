@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-flow",
-  "version": "7.10.1",
+  "version": "7.10.4",
   "description": "Babel preset for all Flow plugins.",
   "author": "James Kyle <me@thejameskyle.com>",
   "repository": {
@@ -20,14 +20,14 @@
     "types"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.10.1",
-    "@babel/plugin-transform-flow-strip-types": "workspace:^7.10.1"
+    "@babel/helper-plugin-utils": "workspace:^7.10.4",
+    "@babel/plugin-transform-flow-strip-types": "workspace:^7.10.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^7.10.1",
-    "@babel/helper-plugin-test-runner": "workspace:^7.10.1"
+    "@babel/core": "workspace:^7.10.4",
+    "@babel/helper-plugin-test-runner": "workspace:^7.10.4"
   }
 }

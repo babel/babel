@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-split-export-declaration",
-  "version": "7.10.1",
+  "version": "7.10.4",
   "description": "",
   "repository": {
     "type": "git",
@@ -13,6 +13,6 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/types": "workspace:^7.10.1"
+    "@babel/types": "workspace:^7.10.4"
   }
 }

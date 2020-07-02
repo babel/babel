@@ -129,6 +129,7 @@ clean: test-clean
 	rm -rf packages/babel-polyfill/dist
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*
+	rm -rf node_modules/.cache
 
 test-clean:
 	$(foreach source, $(SOURCES), \

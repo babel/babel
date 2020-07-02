@@ -150,7 +150,7 @@ export function* loadConfig(
  * Read the given config file, returning the result. Returns null if no config was found, but will
  * throw if there are parsing errors while loading a config.
  */
-function readConfig(filepath, envName, caller) {
+function readConfig(filepath, envName, caller): Handler<ConfigFile | null> {
   const ext = path.extname(filepath);
   return ext === ".js" || ext === ".cjs" || ext === ".mjs"
     ? readConfigJS(filepath, { envName, caller })
@@ -235,7 +235,7 @@ const readConfigJS = makeStrongCache(function* readConfigJS(
 
 const packageToBabelConfig = makeWeakCacheSync(
   (file: ConfigFile): ConfigFile | null => {
-    const babel = file.options[("babel": string)];
+    const babel: mixed = file.options[("babel": string)];
 
     if (typeof babel === "undefined") return null;
 
@@ -251,7 +251,7 @@ const packageToBabelConfig = makeWeakCacheSync(
   },
 );
 
-const readConfigJSON5 = makeStaticFileCache((filepath, content) => {
+const readConfigJSON5 = makeStaticFileCache((filepath, content): ConfigFile => {
   let options;
   try {
     options = json5.parse(content);
@@ -280,7 +280,7 @@ const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
   const ignoreDir = path.dirname(filepath);
   const ignorePatterns = content
     .split("\n")
-    .map(line => line.replace(/#(.*?)$/, "").trim())
+    .map<string>(line => line.replace(/#(.*?)$/, "").trim())
     .filter(line => !!line);
 
   for (const pattern of ignorePatterns) {
@@ -298,7 +298,7 @@ const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
   };
 });
 
-function throwConfigError() {
+function throwConfigError(): empty {
   throw new Error(`\
 Caching was left unconfigured. Babel's plugins, presets, and .babelrc.js files can be configured
 for various types of caching, using the first param of their handler functions:

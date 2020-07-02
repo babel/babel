@@ -2,6 +2,10 @@
  * Basic declarations for the npm modules we use.
  */
 
+declare module "debug" {
+  declare export default (namespace: string) => (formatter: string, ...args: any[]) => void;
+}
+
 declare var require: {
   resolve(specifier: string, opts?: {
     paths: string[]
@@ -24,6 +28,10 @@ declare module "lodash/clone" {
 
 declare module "lodash/merge" {
   declare export default <T: Object>(T, Object) => T;
+}
+
+declare module "lodash/escapeRegExp" {
+  declare export default (toEscape?: string) => string;
 }
 
 declare module "semver" {

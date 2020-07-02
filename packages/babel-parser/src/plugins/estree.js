@@ -143,37 +143,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    checkDuplicatedProto(
+    checkProto(
       prop: N.ObjectMember | N.SpreadElement,
+      isRecord: boolean,
       protoRef: { used: boolean },
       refExpressionErrors: ?ExpressionErrors,
     ): void {
-      if (
-        prop.type === "SpreadElement" ||
-        prop.computed ||
-        prop.method ||
-        // $FlowIgnore
-        prop.shorthand
-      ) {
+      // $FlowIgnore: check prop.method and fallback to super method
+      if (prop.method) {
         return;
       }
-
-      const key = prop.key;
-      // It is either an Identifier or a String/NumericLiteral
-      const name = key.type === "Identifier" ? key.name : String(key.value);
-
-      if (name === "__proto__" && prop.kind === "init") {
-        // Store the first redefinition's position
-        if (protoRef.used) {
-          if (refExpressionErrors?.doubleProto === -1) {
-            refExpressionErrors.doubleProto = key.start;
-          } else {
-            this.raise(key.start, Errors.DuplicateProto);
-          }
-        }
-
-        protoRef.used = true;
-      }
+      super.checkProto(prop, isRecord, protoRef, refExpressionErrors);
     }
 
     isValidDirective(stmt: N.Statement): boolean {

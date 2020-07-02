@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-create-class-features-plugin",
-  "version": "7.10.3",
+  "version": "7.10.4",
   "author": "The Babel Team (https://babeljs.io/team)",
   "license": "MIT",
   "description": "Compile class public and private fields, private methods and decorators to ES6",
@@ -18,18 +18,18 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-function-name": "workspace:^7.10.3",
-    "@babel/helper-member-expression-to-functions": "workspace:^7.10.3",
-    "@babel/helper-optimise-call-expression": "workspace:^7.10.3",
-    "@babel/helper-plugin-utils": "workspace:^7.10.3",
-    "@babel/helper-replace-supers": "workspace:^7.10.1",
-    "@babel/helper-split-export-declaration": "workspace:^7.10.1"
+    "@babel/helper-function-name": "workspace:^7.10.4",
+    "@babel/helper-member-expression-to-functions": "workspace:^7.10.4",
+    "@babel/helper-optimise-call-expression": "workspace:^7.10.4",
+    "@babel/helper-plugin-utils": "workspace:^7.10.4",
+    "@babel/helper-replace-supers": "workspace:^7.10.4",
+    "@babel/helper-split-export-declaration": "workspace:^7.10.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^7.10.3",
-    "@babel/helper-plugin-test-runner": "workspace:^7.10.3"
+    "@babel/core": "workspace:^7.10.4",
+    "@babel/helper-plugin-test-runner": "workspace:^7.10.4"
   }
 }

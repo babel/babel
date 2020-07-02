@@ -2,6 +2,9 @@
 
 /*:: declare var invariant; */
 
+// Error messages are colocated with the plugin.
+/* eslint-disable @babel/development-internal/dry-error-messages */
+
 import type Parser from "../parser";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import * as N from "../types";
@@ -473,6 +476,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         ) {
           const label = this.state.value;
           const suggestion = exportSuggestions[label];
+
           throw this.raise(
             this.state.start,
             FlowErrors.UnsupportedDeclareExportKind,

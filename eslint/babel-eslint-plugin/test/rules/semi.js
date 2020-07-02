@@ -1,11 +1,12 @@
 import rule from "../../src/rules/semi";
-import RuleTester from "../helpers/RuleTester";
+import RuleTester from "@babel/eslint-shared-fixtures/utils/RuleTester";
 
 const ruleTester = new RuleTester();
 
 ruleTester.run("semi", rule, {
   valid: [
     "class Foo { bar = 'example'; }",
+    "class Foo { #bar = 'example'; }",
     "class Foo { static bar = 'example'; }",
     {
       code: "class Foo { bar = () => {}; }",
@@ -14,12 +15,17 @@ ruleTester.run("semi", rule, {
 
     // never
     { code: "class Foo { bar = 'example' }", options: ["never"] },
+    { code: "class Foo { #bar = 'example' }", options: ["never"] },
     { code: "class Foo { static bar = 'example' }", options: ["never"] },
     { code: "class Foo { bar = () => {} }", options: ["never"] },
   ],
   invalid: [
     {
       code: "class Foo { bar = 'example' }",
+      errors: [{ message: "Missing semicolon." }],
+    },
+    {
+      code: "class Foo { #bar = 'example' }",
       errors: [{ message: "Missing semicolon." }],
     },
     {
@@ -35,6 +41,11 @@ ruleTester.run("semi", rule, {
     // "never"
     {
       code: "class Foo { bar = 'example'; }",
+      options: ["never"],
+      errors: [{ message: "Extra semicolon." }],
+    },
+    {
+      code: "class Foo { #bar = 'example'; }",
       options: ["never"],
       errors: [{ message: "Extra semicolon." }],
     },

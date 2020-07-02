@@ -143,7 +143,9 @@ export default class LValParser extends NodeUtils {
           ? Errors.PatternHasAccessor
           : Errors.PatternHasMethod;
 
+      /* eslint-disable @babel/development-internal/dry-error-messages */
       this.raise(prop.key.start, error);
+      /* eslint-enable @babel/development-internal/dry-error-messages */
     } else if (prop.type === "SpreadElement" && !isLast) {
       this.raiseRestNotLast(prop.start);
     } else {
@@ -356,6 +358,7 @@ export default class LValParser extends NodeUtils {
             ? isStrictBindReservedWord(expr.name, this.inModule)
             : isStrictBindOnlyReservedWord(expr.name))
         ) {
+          /* eslint-disable @babel/development-internal/dry-error-messages */
           this.raise(
             expr.start,
             bindingType === BIND_NONE
@@ -363,6 +366,7 @@ export default class LValParser extends NodeUtils {
               : Errors.StrictEvalArgumentsBinding,
             expr.name,
           );
+          /* eslint-enable @babel/development-internal/dry-error-messages */
         }
 
         if (checkClashes) {
@@ -459,6 +463,7 @@ export default class LValParser extends NodeUtils {
         break;
 
       default: {
+        /* eslint-disable @babel/development-internal/dry-error-messages */
         this.raise(
           expr.start,
           bindingType === BIND_NONE
@@ -466,6 +471,7 @@ export default class LValParser extends NodeUtils {
             : Errors.InvalidLhsBinding,
           contextDescription,
         );
+        /* eslint-enable @babel/development-internal/dry-error-messages */
       }
     }
   }

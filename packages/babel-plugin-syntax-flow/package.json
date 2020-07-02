@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-flow",
-  "version": "7.10.1",
+  "version": "7.10.4",
   "description": "Allow parsing of the flow syntax",
   "repository": {
     "type": "git",
@@ -16,12 +16,12 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^7.10.1"
+    "@babel/helper-plugin-utils": "workspace:^7.10.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^7.10.1"
+    "@babel/core": "workspace:^7.10.4"
   }
 }
