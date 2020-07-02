@@ -8,8 +8,8 @@ aliases:
 
   - &restore-yarn-cache
     keys:
-      - v1-yarn-cache-{{ checksum "yarn.lock" }}
-      - v1-yarn-cache-
+      - v1-1-yarn-cache-{{ checksum "yarn.lock" }}
+      - v1-1-yarn-cache-
 
   - &save-node-modules-cache
     paths:
@@ -19,7 +19,7 @@ aliases:
   - &save-yarn-cache
     paths:
       - ~/.cache/yarn
-    key: v1-yarn-cache-{{ checksum "yarn.lock" }}
+    key: v1-1-yarn-cache-{{ checksum "yarn.lock" }}
 
   - &artifact_babel
     path: ~/babel/packages/babel-standalone/babel.js
