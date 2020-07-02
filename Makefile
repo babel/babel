@@ -87,7 +87,7 @@ code-quality-ci: flowcheck-ci lint-js-ci lint-ts-ci check-compat-data-ci
 flowcheck-ci: build-no-bundle-ci
 	$(MAKE) flow
 
-lint-js-ci: bootstrap-only-ci
+lint-js-ci: build-no-bundle-ci
 	$(MAKE) lint-js
 
 lint-ts-ci: build-no-bundle-ci
