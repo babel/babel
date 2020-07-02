@@ -31,7 +31,6 @@ function resetCache() {
 describe("@babel/register - caching", () => {
   describe("cache", () => {
     let load, get, save;
-    let stderr = "";
     let consoleWarnSpy;
 
     beforeEach(() => {
@@ -43,9 +42,7 @@ describe("@babel/register - caching", () => {
       get = cache.get;
       save = cache.save;
 
-      consoleWarnSpy = jest
-        .spyOn(console, "warn")
-        .mockImplementation(err => (stderr += err));
+      consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
     });
 
     afterEach(() => {
