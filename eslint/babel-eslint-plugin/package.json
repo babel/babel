@@ -26,7 +26,7 @@
   },
   "homepage": "https://babeljs.io/",
   "peerDependencies": {
-    "@babel/eslint-parser": "0.0.0",
+    "@babel/eslint-parser": "^7.10.4",
     "eslint": ">=6.0.0"
   },
   "dependencies": {

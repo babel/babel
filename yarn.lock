@@ -260,7 +260,7 @@ __metadata:
     eslint-rule-composer: ^0.3.0
     lodash.clonedeep: ^4.5.0
   peerDependencies:
-    "@babel/eslint-parser": 0.0.0
+    "@babel/eslint-parser": ^7.10.4
     eslint: ">=6.0.0"
   languageName: unknown
   linkType: soft
@@ -269,6 +269,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-shared-fixtures@workspace:eslint/babel-eslint-shared-fixtures"
   dependencies:
+    "@babel/core": "workspace:^7.10.4"
     "@babel/eslint-parser": "workspace:^7.10.4"
     "@babel/plugin-proposal-class-properties": "workspace:^7.10.4"
     "@babel/plugin-proposal-decorators": "workspace:^7.10.4"

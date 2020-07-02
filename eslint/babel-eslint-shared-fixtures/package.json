@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@babel/core": "workspace:^7.10.4",
     "@babel/eslint-parser": "workspace:^7.10.4",
     "@babel/plugin-proposal-class-properties": "workspace:^7.10.4",
     "@babel/plugin-proposal-decorators": "workspace:^7.10.4",
