@@ -417,68 +417,32 @@ class BlockScoping {
     for (const name of Object.keys(letRefs)) {
       const ref = letRefs[name];
       const binding = blockScope.getBinding(ref.name);
-      if (binding.kind !== "const") continue;
+      if (binding !== undefined) {
+        if (binding.kind !== "const") continue;
 
-      for (const violation of (binding.constantViolations: Array)) {
-        const readOnlyError = state.addHelper("readOnlyError");
-        const throwNode = t.callExpression(readOnlyError, [
-          t.stringLiteral(name),
-        ]);
+        for (const violation of (binding.constantViolations: Array)) {
+          const readOnlyError = state.addHelper("readOnlyError");
+          const throwNode = t.callExpression(readOnlyError, [
+            t.stringLiteral(name),
+          ]);
 
-        if (violation.isAssignmentExpression()) {
-          violation
-            .get("right")
-            .replaceWith(
-              t.sequenceExpression([throwNode, violation.get("right").node]),
+          if (violation.isAssignmentExpression()) {
+            violation
+              .get("right")
+              .replaceWith(
+                t.sequenceExpression([throwNode, violation.get("right").node]),
+              );
+          } else if (violation.isUpdateExpression()) {
+            violation.replaceWith(
+              t.sequenceExpression([throwNode, violation.node]),
             );
-        } else if (violation.isUpdateExpression()) {
-          violation.replaceWith(
-            t.sequenceExpression([throwNode, violation.node]),
-          );
-        } else if (violation.isForXStatement()) {
-          violation.ensureBlock();
-          violation.node.body.body.unshift(t.expressionStatement(throwNode));
+          } else if (violation.isForXStatement()) {
+            violation.ensureBlock();
+            violation.node.body.body.unshift(t.expressionStatement(throwNode));
+          }
         }
       }
     }
-
-    // for (const name of Object.keys(scope.bindings)) {
-    //   const binding = scope.bindings[name];
-    //   if (binding.kind !== "const") continue;
-    //   // if (this.scope.uid == 996)
-    //   //   console.log(scope)
-    //   // if (this.scope.uid == 996) {
-    //   //   console.log(binding);
-    //   // }
-
-    //   for (const violation of (binding.constantViolations: Array)) {
-    //     const readOnlyError = state.addHelper("readOnlyError");
-    //     const throwNode = t.callExpression(readOnlyError, [
-    //       t.stringLiteral(name),
-    //     ]);
-
-    //     if (this.scope.uid == 996) {
-    //         console.log(violation);
-    //       }
-    //     if (violation.isAssignmentExpression()) {
-    //       violation
-    //         .get("right")
-    //         .replaceWith(
-    //           t.sequenceExpression([throwNode, violation.get("right").node]),
-    //         );
-    //     } else if (violation.isUpdateExpression()) {
-    //       // if (this.scope.uid == 996) {
-    //       //   console.log("UpdateError");
-    //       // }
-    //       violation.replaceWith(
-    //         t.sequenceExpression([throwNode, violation.node]),
-    //       );
-    //     } else if (violation.isForXStatement()) {
-    //       violation.ensureBlock();
-    //       violation.node.body.body.unshift(t.expressionStatement(throwNode));
-    //     }
-    //   }
-    // }
   }
 
   updateScopeInfo(wrappedInClosure) {
