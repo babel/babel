@@ -302,7 +302,7 @@ const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
 export function* resolveShowConfigPath(
   dirname: string,
 ): Handler<string | null> {
-  const targetPath = process.env.BABEL_SHOW_CONFIG_FOR_PATH;
+  const targetPath = process.env.BABEL_SHOW_CONFIG_FOR;
   if (targetPath != null) {
     const absolutePath = path.resolve(dirname, targetPath);
     if (yield* fs.exists(absolutePath)) {
