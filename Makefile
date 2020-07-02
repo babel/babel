@@ -84,8 +84,7 @@ build-no-bundle-ci: bootstrap-only
 watch: build-no-bundle
 	BABEL_ENV=development $(YARN) gulp watch
 
-code-quality-ci: build-no-bundle-ci
-	$(MAKE) flowcheck-ci lint-ci
+code-quality-ci: flowcheck-ci lint-ci
 
 flowcheck-ci:
 	$(MAKE) flow
@@ -97,7 +96,7 @@ flow:
 
 lint-ci: lint-js-ci lint-ts-ci check-compat-data-ci
 
-lint-js-ci:
+lint-js-ci: build-no-bundle-ci
 	$(MAKE) lint-js
 
 lint-ts-ci:
