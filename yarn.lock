@@ -195,7 +195,7 @@ __metadata:
     eslint-rule-composer: ^0.3.0
     lodash.clonedeep: ^4.5.0
   peerDependencies:
-    "@babel/eslint-parser": ">=7.11.0"
+    "@babel/eslint-parser": ^7.11.0
     eslint: ">=7.5.0"
   languageName: unknown
   linkType: soft
@@ -205,12 +205,20 @@ __metadata:
   resolution: "@babel/eslint-shared-fixtures@workspace:eslint/babel-eslint-shared-fixtures"
   dependencies:
     "@babel/core": "workspace:^7.12.1"
+    "@babel/eslint-parser": "workspace:^7.12.1"
     "@babel/plugin-proposal-class-properties": "workspace:^7.12.1"
     "@babel/plugin-proposal-decorators": "workspace:^7.12.1"
     "@babel/plugin-proposal-do-expressions": "workspace:^7.12.1"
+    "@babel/plugin-proposal-nullish-coalescing-operator": "workspace:^7.12.1"
+    "@babel/plugin-proposal-optional-chaining": "workspace:^7.11.0"
     "@babel/plugin-proposal-pipeline-operator": "workspace:^7.12.1"
     "@babel/plugin-proposal-private-methods": "workspace:^7.12.1"
+    "@babel/plugin-syntax-bigint": ^7.7.4
+    "@babel/plugin-syntax-dynamic-import": ^7.0.0
     "@babel/plugin-syntax-export-default-from": "workspace:^7.12.1"
+    "@babel/plugin-syntax-export-namespace-from": ^7.0.0
+    "@babel/plugin-syntax-import-meta": ^7.10.4
+    "@babel/plugin-syntax-numeric-separator": ^7.10.4
     "@babel/preset-env": "workspace:^7.12.1"
     "@babel/preset-flow": "workspace:^7.12.1"
     "@babel/preset-react": "workspace:^7.12.1"
@@ -1287,7 +1295,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-optional-chaining@workspace:*, @babel/plugin-proposal-optional-chaining@workspace:^7.12.1, @babel/plugin-proposal-optional-chaining@workspace:packages/babel-plugin-proposal-optional-chaining":
+"@babel/plugin-proposal-optional-chaining@workspace:*, @babel/plugin-proposal-optional-chaining@workspace:^7.11.0, @babel/plugin-proposal-optional-chaining@workspace:^7.12.1, @babel/plugin-proposal-optional-chaining@workspace:packages/babel-plugin-proposal-optional-chaining":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-optional-chaining@workspace:packages/babel-plugin-proposal-optional-chaining"
   dependencies:
@@ -1415,7 +1423,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-bigint@npm:^7.8.3":
+"@babel/plugin-syntax-bigint@npm:^7.7.4, @babel/plugin-syntax-bigint@npm:^7.8.3":
   version: 7.8.3
   resolution: "@babel/plugin-syntax-bigint@npm:7.8.3"
   dependencies:
@@ -1490,7 +1498,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-dynamic-import@npm:^7.2.0, @babel/plugin-syntax-dynamic-import@npm:^7.8.0":
+"@babel/plugin-syntax-dynamic-import@npm:^7.0.0, @babel/plugin-syntax-dynamic-import@npm:^7.2.0, @babel/plugin-syntax-dynamic-import@npm:^7.8.0":
   version: 7.8.3
   resolution: "@babel/plugin-syntax-dynamic-import@npm:7.8.3"
   dependencies:
@@ -1512,7 +1520,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-export-namespace-from@npm:^7.8.3":
+"@babel/plugin-syntax-export-namespace-from@npm:^7.0.0, @babel/plugin-syntax-export-namespace-from@npm:^7.8.3":
   version: 7.8.3
   resolution: "@babel/plugin-syntax-export-namespace-from@npm:7.8.3"
   dependencies:

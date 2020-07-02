@@ -33,7 +33,7 @@
   },
   "homepage": "https://babeljs.io/",
   "peerDependencies": {
-    "@babel/eslint-parser": ">=7.11.0",
+    "@babel/eslint-parser": "^7.11.0",
     "eslint": ">=7.5.0"
   },
   "dependencies": {
