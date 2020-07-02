@@ -4,10 +4,12 @@ aliases:
   - &restore-node-modules-cache
     keys:
       - v1-yarn-deps-{{ checksum "yarn.lock" }}
+      - v1-yarn-deps-
 
   - &restore-yarn-cache
     keys:
-      - v1-yarn-cache
+      - v1-yarn-cache-{{ checksum "yarn.lock" }}
+      - v1-yarn-cache-
 
   - &save-node-modules-cache
     paths:
@@ -16,8 +18,8 @@ aliases:
 
   - &save-yarn-cache
     paths:
-      - ~/.yarn-cache
-    key: v1-yarn-cache
+      - "{{ .Environment.YARN_CACHE_FOLDER }}"
+    key: v1-yarn-cache-{{ checksum "yarn.lock" }}
 
   - &artifact_babel
     path: ~/babel/packages/babel-standalone/babel.js
@@ -61,6 +63,7 @@ jobs:
         # data for a JS file that's several megabytes large is bound to fail. Here,
         # we just run the babel-standalone test separately.
       - run: yarn jest "\-standalone/test"
+      - run: export YARN_CACHE_FOLDER=$(yarn cache dir)
       - store_artifacts: *artifact_babel
       - store_artifacts: *artifact_babel_min
       - save_cache: *save-node-modules-cache
@@ -119,13 +122,13 @@ jobs:
             cat ~/diff.tap | $(npm bin)/tap-merge | $(npm bin)/tap-mocha-reporter xunit | tee ~/test-results/test262/results.xml
           <<: *test262_workdir
       - store_test_results: *artifact_test262_xunit
-      - save_cache: *save-node-modules-cache
-      - save_cache: *save-yarn-cache
 
   publish-verdaccio:
     executor: node-executor
     steps:
       - checkout
+      - restore_cache: *restore-yarn-cache
+      - restore_cache: *restore-node-modules-cache
       - run: yarn install
       - run: ./scripts/integration-tests/publish-local.sh
       - persist_to_workspace:
@@ -216,4 +219,3 @@ workflows:
       - e2e-vue-cli:
           requires:
             - publish-verdaccio
-
