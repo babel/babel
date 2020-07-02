@@ -7,7 +7,7 @@ const content = JSON.parse(fs.readFileSync(packageJSONPath));
 let bumped = false;
 function bumpBabelDependency(dependencies) {
   for (const dep of Object.keys(dependencies)) {
-    if (dep.startsWith("@babel/")) {
+    if (dep.startsWith("@babel/") && !dependencies[dep].startsWith("link:")) {
       dependencies[dep] = "latest";
       bumped = true;
     }
