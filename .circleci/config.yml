@@ -63,7 +63,6 @@ jobs:
         # data for a JS file that's several megabytes large is bound to fail. Here,
         # we just run the babel-standalone test separately.
       - run: yarn jest "\-standalone/test"
-      - run: yarn cache dir
       - store_artifacts: *artifact_babel
       - store_artifacts: *artifact_babel_min
       - save_cache: *save-node-modules-cache
