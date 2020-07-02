@@ -1,4 +1,7 @@
 {
-  "plugins": ["jsx"],
-  "throws": "Unexpected token (1:13)"
+  "plugins": [
+    "jsx",
+    "estree"
+  ],
+  "throws": "Unexpected token `>`. Did you mean `&gt;` or `{'>'}`? (1:9)"
 }

@@ -1,4 +1,4 @@
 {
   "presets": ["typescript"],
-  "throws": "Unexpected token (1:1)"
+  "throws": "Support for the experimental syntax 'jsx' isn't currently enabled (1:2)"
 }
