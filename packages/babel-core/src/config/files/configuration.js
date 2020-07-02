@@ -305,10 +305,13 @@ export function* resolveShowConfigPath(
   const targetPath = process.env.BABEL_SHOW_CONFIG_FOR;
   if (targetPath != null) {
     const absolutePath = path.resolve(dirname, targetPath);
-    if (yield* fs.exists(absolutePath)) {
-      return absolutePath;
+    const stats = yield* fs.stat(absolutePath);
+    if (!stats.isFile()) {
+      throw new Error(
+        `${absolutePath}: BABEL_SHOW_CONFIG_FOR must refers to a regular file, directory is not supported.`,
+      );
     }
-    throw new Error(`${absolutePath}: The show config path does not exist.`);
+    return absolutePath;
   }
   return null;
 }

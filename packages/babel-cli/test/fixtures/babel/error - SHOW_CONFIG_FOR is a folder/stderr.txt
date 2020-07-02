@@ -1,0 +1,1 @@
+Error: <CWD>/src: BABEL_SHOW_CONFIG_FOR must refers to a regular file, directory is not supported.
