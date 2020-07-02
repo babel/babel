@@ -18,7 +18,7 @@ aliases:
 
   - &save-yarn-cache
     paths:
-      - "{{ .Environment.YARN_CACHE_FOLDER }}"
+      - ~/.cache/yarn
     key: v1-yarn-cache-{{ checksum "yarn.lock" }}
 
   - &artifact_babel
@@ -63,7 +63,7 @@ jobs:
         # data for a JS file that's several megabytes large is bound to fail. Here,
         # we just run the babel-standalone test separately.
       - run: yarn jest "\-standalone/test"
-      - run: export YARN_CACHE_FOLDER=$(yarn cache dir)
+      - run: yarn cache dir
       - store_artifacts: *artifact_babel
       - store_artifacts: *artifact_babel_min
       - save_cache: *save-node-modules-cache
