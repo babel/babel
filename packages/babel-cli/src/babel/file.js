@@ -1,7 +1,7 @@
 // @flow
 
 import convertSourceMap from "convert-source-map";
-import defaults from "lodash/defaults";
+import defaults from "lodash.defaults";
 import sourceMap from "source-map";
 import slash from "slash";
 import { sync as makeDirSync } from "make-dir";

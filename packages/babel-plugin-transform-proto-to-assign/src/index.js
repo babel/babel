@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import pull from "lodash/pull";
+import pull from "lodash.pull";
 import { types as t } from "@babel/core";
 
 export default declare(api => {

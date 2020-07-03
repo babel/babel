@@ -1,9 +1,9 @@
-import includes from "lodash/includes";
-import repeat from "lodash/repeat";
+import includes from "lodash.includes";
+import repeat from "lodash.repeat";
 import Renamer from "./lib/renamer";
 import type NodePath from "../path";
 import traverse from "../index";
-import defaults from "lodash/defaults";
+import defaults from "lodash.defaults";
 import Binding from "./binding";
 import globals from "globals";
 import * as t from "@babel/types";

@@ -1,7 +1,7 @@
-import deepClone from "lodash/cloneDeep";
+import deepClone from "lodash.clonedeep";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
-import escapeRegExp from "lodash/escapeRegExp";
+import escapeRegExp from "lodash.escaperegexp";
 import * as babel from "@babel/core";
 import { OptionManager, DEFAULT_EXTENSIONS } from "@babel/core";
 import { addHook } from "pirates";

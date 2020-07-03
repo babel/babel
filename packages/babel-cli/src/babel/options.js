@@ -4,7 +4,7 @@ import fs from "fs";
 
 import commander from "commander";
 import { version } from "@babel/core";
-import uniq from "lodash/uniq";
+import uniq from "lodash.uniq";
 import glob from "glob";
 
 import pkg from "../../package.json";

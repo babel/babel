@@ -1,7 +1,7 @@
 // @flow
 
-import defaults from "lodash/defaults";
-import debounce from "lodash/debounce";
+import defaults from "lodash.defaults";
+import debounce from "lodash.debounce";
 import { sync as makeDirSync } from "make-dir";
 import slash from "slash";
 import path from "path";

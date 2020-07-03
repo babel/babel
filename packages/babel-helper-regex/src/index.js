@@ -1,4 +1,4 @@
-import pull from "lodash/pull";
+import pull from "lodash.pull";
 
 export function is(node: Object, flag: string): boolean {
   return node.type === "RegExpLiteral" && node.flags.indexOf(flag) >= 0;

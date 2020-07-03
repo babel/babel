@@ -3,7 +3,7 @@
 import fs from "fs";
 import path from "path";
 import buildDebug from "debug";
-import cloneDeep from "lodash/cloneDeep";
+import cloneDeep from "lodash.clonedeep";
 import type { Handler } from "gensync";
 import * as t from "@babel/types";
 import type { PluginPasses } from "../config";

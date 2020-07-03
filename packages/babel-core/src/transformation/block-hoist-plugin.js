@@ -1,6 +1,6 @@
 // @flow
 
-import sortBy from "lodash/sortBy";
+import sortBy from "lodash.sortby";
 
 import loadConfig, { type Plugin } from "../config";
 

@@ -2,7 +2,7 @@
 
 import readdirRecursive from "fs-readdir-recursive";
 import * as babel from "@babel/core";
-import includes from "lodash/includes";
+import includes from "lodash.includes";
 import path from "path";
 import fs from "fs";
 
