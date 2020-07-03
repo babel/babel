@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { getCallContext } from "@babel/helper-skip-transparent-expression-wrappers";
+import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
 import { types as t } from "@babel/core";
 
 export default declare((api, options) => {
@@ -95,7 +95,7 @@ export default declare((api, options) => {
         const args = node.arguments;
         if (!hasSpread(args)) return;
 
-        const calleePath = getCallContext(path);
+        const calleePath = skipTransparentExprWrappers(path.get("callee"));
 
         if (calleePath.isSuper()) return;
 

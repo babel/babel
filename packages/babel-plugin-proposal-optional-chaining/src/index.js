@@ -1,6 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
 import {
-  getCallContext,
   isTransparentExprWrapper,
   skipTransparentExprWrappers,
 } from "@babel/helper-skip-transparent-expression-wrappers";
@@ -63,7 +62,9 @@ export default declare((api, options) => {
             );
           } else if (optionalPath.isOptionalCallExpression()) {
             optionalPath.node.type = "CallExpression";
-            optionalPath = getCallContext(optionalPath);
+            optionalPath = skipTransparentExprWrappers(
+              optionalPath.get("callee"),
+            );
           }
         }
 

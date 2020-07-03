@@ -1,17 +1,7 @@
+// @flow
+
 import * as t from "@babel/types";
 import type { NodePath } from "@babel/traverse";
-
-export function getCallContext(callPath: NodePath): NodePath {
-  if (!callPath.isCallExpression() && !callPath.isOptionalCallExpression()) {
-    throw new Error(
-      `Expected type "CallExpression" or "OptionalCallExpression" ` +
-        `but instead got "${callPath.type}".`,
-    );
-  }
-
-  const calleePath = callPath.get("callee");
-  return skipTransparentExprWrappers(calleePath);
-}
 
 // A transparent expression wrapper is an AST node that most plugins will wish
 // to skip, as its presence does not affect the behaviour of the code. This
