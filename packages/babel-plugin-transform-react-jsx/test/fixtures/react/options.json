@@ -2,7 +2,7 @@
   "plugins": [
     "external-helpers",
     "syntax-jsx",
-    "transform-react-jsx",
+    ["transform-react-jsx", { "runtime": "classic" }],
     "transform-react-display-name",
     "transform-arrow-functions"
   ]
