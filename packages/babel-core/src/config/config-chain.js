@@ -726,7 +726,7 @@ function shouldIgnore(
   dirname: string,
 ): boolean {
   if (ignore && matchesPatterns(context, ignore, dirname)) {
-    const message = `No config is applied on "${
+    const message = `No config is applied to "${
       context.filename ?? "(unknown)"
     }" because it matches one of \`ignore: ${JSON.stringify(
       ignore,
@@ -739,7 +739,7 @@ function shouldIgnore(
   }
 
   if (only && !matchesPatterns(context, only, dirname)) {
-    const message = `No config is applied on "${
+    const message = `No config is applied to "${
       context.filename ?? "(unknown)"
     }" because it fails to match one of \`only: ${JSON.stringify(
       only,
