@@ -64,7 +64,7 @@
       const output = Babel.transform(
         "const someDiv = <div>{getMessage()}</div>",
         {
-          presets: ["react"],
+          presets: [["react", { runtime: "classic" }]],
         },
       ).code;
       expect(output).toBe(

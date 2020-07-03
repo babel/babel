@@ -23,8 +23,10 @@ cd tmp/create-react-app || exit
 
 # !!! WARNING !!!
 # create-react-app uses the useBuiltIns: true option of @babel/preset-react,
-# removed in Babel 8.0.0. Comment it out until they upgrade their Babel version.
-sed -i 's/useBuiltIns: true/\/\/ useBuiltIns: true/' packages/babel-preset-react-app/create.js
+# removed in Babel 8.0.0. And it does not specify runtime option. The test will break on
+# runtime: "automatic", default of Babel 8.
+# This change replaces useBuiltIns: true with runtime: "classic"
+sed -i 's/useBuiltIns: true/runtime: "classic"/' packages/babel-preset-react-app/create.js
 
 bump_deps="$PWD/../../utils/bump-babel-dependencies.js"
 node "$bump_deps"
