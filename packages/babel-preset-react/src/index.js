@@ -7,23 +7,23 @@ import transformReactPure from "@babel/plugin-transform-react-pure-annotations";
 export default declare((api, opts) => {
   api.assertVersion(7);
 
-  let { pragma, pragmaFrag } = opts;
+  let { pragma, pragmaFrag, development = false } = opts;
 
   const {
     pure,
     throwIfNamespace = true,
-    runtime = "classic",
+    runtime = process.env.BABEL_8_BREAKING ? "automatic" : "classic",
     importSource,
   } = opts;
 
-  // TODO: (Babel 8) Remove setting these defaults
-  if (runtime === "classic") {
-    pragma = pragma || "React.createElement";
-    pragmaFrag = pragmaFrag || "React.Fragment";
-  }
+  if (!process.env.BABEL_8_BREAKING) {
+    if (runtime === "classic") {
+      pragma = pragma || "React.createElement";
+      pragmaFrag = pragmaFrag || "React.Fragment";
+    }
 
-  // TODO: (Babel 8) Don't cast this option but validate it
-  const development = !!opts.development;
+    development = !!development;
+  }
 
   if (process.env.BABEL_8_BREAKING) {
     if ("useSpread" in opts) {
