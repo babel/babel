@@ -14,7 +14,7 @@
   "main": "./lib/index.js",
   "exports": {
     ".": "./lib/index.js",
-    "package.json": "./package.json"
+    "./package.json": "./package.json"
   },
   "dependencies": {
     "@babel/types": "^7.9.6"
