@@ -308,7 +308,7 @@ export function* resolveShowConfigPath(
     const stats = yield* fs.stat(absolutePath);
     if (!stats.isFile()) {
       throw new Error(
-        `${absolutePath}: BABEL_SHOW_CONFIG_FOR must refers to a regular file, directory is not supported.`,
+        `${absolutePath}: BABEL_SHOW_CONFIG_FOR must refer to a regular file, directories are not supported.`,
       );
     }
     return absolutePath;
