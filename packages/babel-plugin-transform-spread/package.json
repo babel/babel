@@ -17,7 +17,7 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.10.4",
-    "@babel/helper-skip-transparent-expr-wrappers": "7.9.6"
+    "@babel/helper-skip-transparent-expression-wrappers": "7.9.6"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

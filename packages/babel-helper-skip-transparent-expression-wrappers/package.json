@@ -1,8 +1,8 @@
 {
-  "name": "@babel/helper-skip-transparent-expr-wrappers",
+  "name": "@babel/helper-skip-transparent-expression-wrappers",
   "version": "7.9.6",
   "description": "Helper which skips types and parentheses",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel/helper-skip-transparent-expr-wrappers",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel/helper-skip-transparent-expression-wrappers",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

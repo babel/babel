@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { getCallContext } from "@babel/helper-skip-transparent-expr-wrappers";
+import { getCallContext } from "@babel/helper-skip-transparent-expression-wrappers";
 import { types as t } from "@babel/core";
 
 export default declare((api, options) => {

@@ -3,7 +3,7 @@ import {
   getCallContext,
   isTransparentExprWrapper,
   skipTransparentExprWrappers,
-} from "@babel/helper-skip-transparent-expr-wrappers";
+} from "@babel/helper-skip-transparent-expression-wrappers";
 import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
 import { types as t } from "@babel/core";
 
