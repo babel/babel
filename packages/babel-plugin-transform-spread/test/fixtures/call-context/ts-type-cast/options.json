@@ -1,7 +1,10 @@
 {
-  "presets": [
+  "plugins": [
     [
-      "typescript"
+      "transform-spread"
+    ],
+    [
+      "syntax-typescript"
     ]
   ]
 }

@@ -1,7 +1,10 @@
 {
-  "presets": [
+  "plugins": [
     [
-      "flow"
+      "transform-spread"
+    ],
+    [
+      "syntax-flow"
     ]
   ]
 }
