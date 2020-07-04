@@ -1,4 +1,3 @@
-import isInteger from "lodash/isInteger";
 import Buffer from "./buffer";
 import * as n from "./node";
 import * as t from "@babel/types";
@@ -137,7 +136,7 @@ export default class Printer {
     // Integer tokens need special handling because they cannot have '.'s inserted
     // immediately after them.
     this._endsWithInteger =
-      isInteger(+str) &&
+      Number.isInteger(+str) &&
       !NON_DECIMAL_LITERAL.test(str) &&
       !SCIENTIFIC_NOTATION.test(str) &&
       !ZERO_DECIMAL_INTEGER.test(str) &&
