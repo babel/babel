@@ -1,6 +1,5 @@
 import TraversalContext from "./context";
 import * as visitors from "./visitors";
-import includes from "lodash/includes";
 import * as t from "@babel/types";
 import * as cache from "./cache";
 
@@ -90,7 +89,7 @@ traverse.hasType = function (
   blacklistTypes: Array<string>,
 ): boolean {
   // the node we're searching in is blacklisted
-  if (includes(blacklistTypes, tree.type)) return false;
+  if (blacklistTypes.includes(tree.type)) return false;
 
   // the type we're looking for is the same as the passed node
   if (tree.type === type) return true;

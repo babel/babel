@@ -1,4 +1,3 @@
-import includes from "lodash/includes";
 import repeat from "lodash/repeat";
 import Renamer from "./lib/renamer";
 import type NodePath from "../path";
@@ -1038,8 +1037,8 @@ export default class Scope {
     if (this.hasOwnBinding(name)) return true;
     if (this.parentHasBinding(name, noGlobals)) return true;
     if (this.hasUid(name)) return true;
-    if (!noGlobals && includes(Scope.globals, name)) return true;
-    if (!noGlobals && includes(Scope.contextVariables, name)) return true;
+    if (!noGlobals && Scope.globals.includes(name)) return true;
+    if (!noGlobals && Scope.contextVariables.includes(name)) return true;
     return false;
   }
 
