@@ -77,7 +77,7 @@ traverse.removeProperties = function (tree, opts) {
   return tree;
 };
 
-function hasBlacklistedType(path, state) {
+function hasDenylistedType(path, state) {
   if (path.node.type === state.type) {
     state.has = true;
     path.stop();
@@ -87,10 +87,10 @@ function hasBlacklistedType(path, state) {
 traverse.hasType = function (
   tree: Object,
   type: Object,
-  blacklistTypes: Array<string>,
+  denylistTypes: Array<string>,
 ): boolean {
-  // the node we're searching in is blacklisted
-  if (includes(blacklistTypes, tree.type)) return false;
+  // the node we're searching in is denylisted
+  if (includes(denylistTypes, tree.type)) return false;
 
   // the type we're looking for is the same as the passed node
   if (tree.type === type) return true;
@@ -104,8 +104,8 @@ traverse.hasType = function (
     tree,
     {
       noScope: true,
-      blacklist: blacklistTypes,
-      enter: hasBlacklistedType,
+      denylist: denylistTypes,
+      enter: hasDenylistedType,
     },
     null,
     state,

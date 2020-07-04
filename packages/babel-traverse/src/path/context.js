@@ -51,9 +51,9 @@ export function _call(fns?: Array<Function>): boolean {
   return false;
 }
 
-export function isBlacklisted(): boolean {
-  const blacklist = this.opts.blacklist;
-  return blacklist && blacklist.indexOf(this.node.type) > -1;
+export function isDenylisted(): boolean {
+  const denylist = this.opts.denylist;
+  return denylist && denylist.indexOf(this.node.type) > -1;
 }
 
 export function visit(): boolean {
@@ -61,7 +61,7 @@ export function visit(): boolean {
     return false;
   }
 
-  if (this.isBlacklisted()) {
+  if (this.isDenylisted()) {
     return false;
   }
 
