@@ -1,5 +1,4 @@
 import isInteger from "lodash/isInteger";
-import repeat from "lodash/repeat";
 import Buffer from "./buffer";
 import * as n from "./node";
 import * as t from "@babel/types";
@@ -324,7 +323,7 @@ export default class Printer {
    */
 
   _getIndent(): string {
-    return repeat(this.format.indent.style, this._indent);
+    return this.format.indent.style.repeat(this._indent);
   }
 
   /**
@@ -616,7 +615,7 @@ export default class Printer {
         this._getIndent().length,
         this._buf.getCurrentColumn(),
       );
-      val = val.replace(/\n(?!$)/g, `\n${repeat(" ", indentSize)}`);
+      val = val.replace(/\n(?!$)/g, `\n${" ".repeat(indentSize)}`);
     }
 
     // Avoid creating //* comments

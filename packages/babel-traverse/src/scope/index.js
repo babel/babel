@@ -1,4 +1,3 @@
-import repeat from "lodash/repeat";
 import Renamer from "./lib/renamer";
 import type NodePath from "../path";
 import traverse from "../index";
@@ -501,7 +500,7 @@ export default class Scope {
   }
 
   dump() {
-    const sep = repeat("-", 60);
+    const sep = "-".repeat(60);
     console.log(sep);
     let scope = this;
     do {
