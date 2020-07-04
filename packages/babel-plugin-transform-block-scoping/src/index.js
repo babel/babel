@@ -2,7 +2,6 @@ import { declare } from "@babel/helper-plugin-utils";
 import type NodePath from "@babel/traverse";
 import type Scope from "@babel/traverse";
 import { visitor as tdzVisitor } from "./tdz";
-import values from "lodash/values";
 import extend from "lodash/extend";
 import { traverse, template, types as t } from "@babel/core";
 
@@ -545,7 +544,7 @@ class BlockScoping {
     this.hoistVarDeclarations();
 
     // turn outsideLetReferences into an array
-    const args = values(outsideRefs).map(id => t.cloneNode(id));
+    const args = Object.values(outsideRefs).map(id => t.cloneNode(id));
     const params = args.map(id => t.cloneNode(id));
 
     const isSwitch = this.blockPath.isSwitchStatement();
