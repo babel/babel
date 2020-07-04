@@ -89,7 +89,7 @@ traverse.hasType = function (
   blacklistTypes: Array<string>,
 ): boolean {
   // the node we're searching in is blacklisted
-  if (blacklistTypes.includes(tree.type)) return false;
+  if (blacklistTypes && blacklistTypes.includes(tree.type)) return false;
 
   // the type we're looking for is the same as the passed node
   if (tree.type === type) return true;
