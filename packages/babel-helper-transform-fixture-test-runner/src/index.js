@@ -353,7 +353,7 @@ export default function (
   for (const testSuite of suites) {
     if (
       suiteOpts.ignoreSuites &&
-      suiteOpts.ignoreSuites.includes(testSuite.title)
+      suiteOpts.ignoreSuites?.includes(testSuite.title)
     ) {
       continue;
     }
