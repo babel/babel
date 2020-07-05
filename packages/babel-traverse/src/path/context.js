@@ -52,9 +52,12 @@ export function _call(fns?: Array<Function>): boolean {
 }
 
 export function isDenylisted(): boolean {
-  const denylist = this.opts.denylist;
+  const denylist = this.opts.denylist ?? this.opts.blacklist;
   return denylist && denylist.indexOf(this.node.type) > -1;
 }
+
+// TODO: Remove in Babel 8
+export { isDenylisted as isBlacklisted };
 
 export function visit(): boolean {
   if (!this.node) {
