@@ -351,12 +351,7 @@ export default function (
   const suites = getFixtures(fixturesLoc);
 
   for (const testSuite of suites) {
-    if (
-      suiteOpts.ignoreSuites &&
-      suiteOpts.ignoreSuites?.includes(testSuite.title)
-    ) {
-      continue;
-    }
+    if (suiteOpts.ignoreSuites?.includes(testSuite.title)) continue;
 
     describe(name + "/" + testSuite.title, function () {
       jest.addMatchers({
@@ -365,9 +360,8 @@ export default function (
 
       for (const task of testSuite.tests) {
         if (
-          suiteOpts.ignoreTasks &&
-          (suiteOpts.ignoreTasks.includes(task.title) ||
-            suiteOpts.ignoreTasks.includes(testSuite.title + "/" + task.title))
+          suiteOpts.ignoreTasks?.includes(task.title) ||
+          suiteOpts.ignoreTasks?.includes(testSuite.title + "/" + task.title)
         ) {
           continue;
         }
