@@ -1267,7 +1267,7 @@ export type TsTupleType = TsTypeBase & {
   elementTypes: $ReadOnlyArray<TsType | TsTupleElementType>,
 };
 
-export type TsNamedTupleMember = TsTypeBase & {
+export type TsNamedTupleMember = NodeBase & {
   type: "TSNamedTupleMember",
   label: Identifier,
   optional: boolean,
@@ -1281,7 +1281,7 @@ export type TsOptionalType = TsTypeBase & {
 
 export type TsRestType = TsTypeBase & {
   type: "TSRestType",
-  typeAnnotation: TsType,
+  typeAnnotation: TsType | TsNamedTupleMember,
 };
 
 export type TsUnionOrIntersectionType = TsUnionType | TsIntersectionType;

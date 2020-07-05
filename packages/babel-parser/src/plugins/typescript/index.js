@@ -74,10 +74,12 @@ const TSErrors = Object.freeze({
   IndexSignatureHasAccessibility:
     "Index signatures cannot have an accessibility modifier ('%0')",
   IndexSignatureHasStatic: "Index signatures cannot have the 'static' modifier",
-  OptionalTypeBeforeRequired:
-    "A required element cannot follow an optional element.",
+  InvalidTupleMemberLabel:
+    "Tuple members must be labeled with a simple identifier.",
   MixedLabeledAndUnlabeledElements:
     "Tuple members must all have names or all not have names.",
+  OptionalTypeBeforeRequired:
+    "A required element cannot follow an optional element.",
   PatternIsOptional:
     "A binding pattern parameter cannot be optional in an implementation signature.",
   PrivateElementHasAbstract:
@@ -637,7 +639,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let seenOptionalElement = false;
       let labeledElements = null;
       node.elementTypes.forEach(elementNode => {
-        const { type } = elementNode;
+        let { type } = elementNode;
 
         if (
           seenOptionalElement &&
@@ -654,8 +656,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           (type === "TSNamedTupleMember" && elementNode.optional) ||
           type === "TSOptionalType";
 
-        // Don't check labels on spread elements
-        if (type === "TSRestType") return;
+        // When checking labels, check the argument of the spread operator
+        if (type === "TSRestType") {
+          elementNode = elementNode.typeAnnotation;
+          type = elementNode.type;
+        }
 
         const isLabeled = type === "TSNamedTupleMember";
 
@@ -678,37 +683,45 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSTupleType");
     }
 
-    tsParseTupleElementType(): N.TsType {
+    tsParseTupleElementType(): N.TsType | N.TsNamedTupleMember {
       // parses `...TsType[]`
-      if (this.match(tt.ellipsis)) {
-        const restNode: N.TsRestType = this.startNode();
-        this.next(); // skips ellipsis
-        restNode.typeAnnotation = this.tsParseType();
-        return this.finishNode(restNode, "TSRestType");
-      }
 
-      const type = this.tsParseType();
+      const { start: startPos, startLoc } = this.state;
 
-      const maybeLabeledElement =
+      const rest = this.eat(tt.ellipsis);
+      let type = this.tsParseType();
+
+      const isValidLabel =
         type.type === "TSTypeReference" &&
         !type.typeParameters &&
         type.typeName.type === "Identifier";
 
       const optional = this.eat(tt.question);
+      const labeled = this.eat(tt.colon);
 
-      if (maybeLabeledElement && this.eat(tt.colon)) {
+      if (labeled) {
         const labeledNode: N.TsNamedTupleMember = this.startNodeAtNode(type);
         labeledNode.optional = optional;
-        labeledNode.label = type.typeName;
-        labeledNode.elementType = this.tsParseType();
-        return this.finishNode(labeledNode, "TSNamedTupleMember");
-      }
 
-      // parses `TsType?`
-      if (optional) {
+        if (isValidLabel) {
+          labeledNode.label = type.typeName;
+        } else {
+          this.raise(type.start, TSErrors.InvalidTupleMemberLabel);
+          labeledNode.label = type;
+        }
+
+        labeledNode.elementType = this.tsParseType();
+        type = this.finishNode(labeledNode, "TSNamedTupleMember");
+      } else if (optional) {
         const optionalTypeNode: N.TsOptionalType = this.startNodeAtNode(type);
         optionalTypeNode.typeAnnotation = type;
-        return this.finishNode(optionalTypeNode, "TSOptionalType");
+        type = this.finishNode(optionalTypeNode, "TSOptionalType");
+      }
+
+      if (rest) {
+        const restNode: N.TsRestType = this.startNodeAt(startPos, startLoc);
+        restNode.typeAnnotation = type;
+        type = this.finishNode(restNode, "TSRestType");
       }
 
       return type;
