@@ -86,7 +86,7 @@ function hasBlacklistedType(path, state) {
 traverse.hasType = function (
   tree: Object,
   type: Object,
-  blacklistTypes: Array<string>,
+  blacklistTypes?: Array<string>,
 ): boolean {
   // the node we're searching in is blacklisted
   if (blacklistTypes?.includes(tree.type)) return false;
