@@ -21,7 +21,6 @@ import builder from "../builder";\n\n`;
       formatedBuilderNameLocal === formatedBuilderName ? "export " : ""
     }function ${formatedBuilderNameLocal}(...args: Array<any>): Object { return builder("${type}", ...args); }\n`;
     // This is needed for backwards compatibility.
-    // It should be removed in the next major version.
     // arrayExpression -> ArrayExpression
     output += `export { ${formatedBuilderNameLocal} as ${type} };\n`;
     if (formatedBuilderNameLocal !== formatedBuilderName) {
