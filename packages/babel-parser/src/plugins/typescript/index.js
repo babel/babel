@@ -690,12 +690,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       const rest = this.eat(tt.ellipsis);
       let type = this.tsParseType();
-
-      const isValidLabel =
-        type.type === "TSTypeReference" &&
-        !type.typeParameters &&
-        type.typeName.type === "Identifier";
-
       const optional = this.eat(tt.question);
       const labeled = this.eat(tt.colon);
 
@@ -703,10 +697,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const labeledNode: N.TsNamedTupleMember = this.startNodeAtNode(type);
         labeledNode.optional = optional;
 
-        if (isValidLabel) {
-          labeledNode.label = type.typeName;
+        if (
+          type.type === "TSTypeReference" &&
+          !type.typeParameters &&
+          type.typeName.type === "Identifier"
+        ) {
+          labeledNode.label = (type.typeName: N.Identifier);
         } else {
           this.raise(type.start, TSErrors.InvalidTupleMemberLabel);
+          // This produces an invalid AST, but at least we don't drop
+          // nodes representing the invalid source.
+          // $FlowIgnore
           labeledNode.label = type;
         }
 

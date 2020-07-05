@@ -1264,7 +1264,7 @@ export type TsArrayType = TsTypeBase & {
 
 export type TsTupleType = TsTypeBase & {
   type: "TSTupleType",
-  elementTypes: $ReadOnlyArray<TsType | TsTupleElementType>,
+  elementTypes: $ReadOnlyArray<TsType | TsNamedTupleMember>,
 };
 
 export type TsNamedTupleMember = NodeBase & {
