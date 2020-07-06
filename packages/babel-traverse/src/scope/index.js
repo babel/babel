@@ -1,7 +1,6 @@
 import Renamer from "./lib/renamer";
 import type NodePath from "../path";
 import traverse from "../index";
-import defaults from "lodash/defaults";
 import Binding from "./binding";
 import globals from "globals";
 import * as t from "@babel/types";
@@ -952,11 +951,11 @@ export default class Scope {
    */
 
   getAllBindings(): Object {
-    const ids = Object.create(null);
+    let ids = Object.create(null);
 
     let scope = this;
     do {
-      defaults(ids, scope.bindings);
+      ids = { ...scope.bindings, ...ids };
       scope = scope.parent;
     } while (scope);
 
