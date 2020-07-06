@@ -193,7 +193,7 @@ const letReferenceBlockVisitor = traverse.visitors.merge([
 const letReferenceFunctionVisitor = traverse.visitors.merge([
   {
     ReferencedIdentifier(path, state) {
-      const ref = state.letReferences[path.node.name];
+      const ref = state.letReferences.get(path.node.name);
 
       // not a part of our scope
       if (!ref) return;
@@ -248,7 +248,7 @@ const continuationVisitor = {
     if (path.isAssignmentExpression() || path.isUpdateExpression()) {
       for (const name of Object.keys(path.getBindingIdentifiers())) {
         if (
-          state.outsideReferences[name] !==
+          state.outsideReferences.get(name) !==
           path.scope.getBindingIdentifier(name)
         ) {
           continue;
@@ -446,7 +446,7 @@ class BlockScoping {
     const letRefs = this.letReferences;
 
     for (const key of letRefs.keys()) {
-      const ref = letRefs[key];
+      const ref = letRefs.get(key);
       const binding = blockScope.getBinding(ref.name);
       if (!binding) continue;
       if (binding.kind === "let" || binding.kind === "const") {
@@ -477,7 +477,7 @@ class BlockScoping {
     for (const key of letRefs.keys()) {
       // just an Identifier node we collected in `getLetReferences`
       // this is the defining identifier of a declaration
-      const ref = letRefs[key];
+      const ref = letRefs.get(key);
 
       // todo: could skip this if the colliding binding is in another function
       if (scope.parentHasBinding(key) || scope.hasGlobal(key)) {
