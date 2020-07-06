@@ -171,6 +171,7 @@ export default async function ({
 
         try {
           return await util.compile(filename, {
+            ...babelOptions,
             sourceFileName: sourceFilename,
             // Since we're compiling everything to be merged together,
             // "inline" applies to the final output file, but not to the individual
@@ -179,7 +180,6 @@ export default async function ({
               babelOptions.sourceMaps === "inline"
                 ? true
                 : babelOptions.sourceMaps,
-            ...babelOptions,
           });
         } catch (err) {
           if (!cliOptions.watch) {

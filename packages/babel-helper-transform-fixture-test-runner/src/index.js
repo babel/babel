@@ -376,8 +376,8 @@ export default function (
             }
 
             task.options = {
-              ...task.options,
               sourceMap: !!(task.sourceMappings || task.sourceMap),
+              ...task.options,
             };
 
             extend(task.options, taskOpts);
