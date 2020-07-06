@@ -1,6 +1,6 @@
 programmatic options from @babel/cli
 {
-  "sourceFileName": "stdin",
+  "sourceFileName": "src/foo.js",
   "presets": [
     "<ROOTDIR>//packages//babel-preset-react"
   ],
@@ -12,7 +12,7 @@ programmatic options from @babel/cli
   "caller": {
     "name": "@babel/cli"
   },
-  "filename": "./src"
+  "filename": "src//foo.js"
 }
 
 config <CWD>/.babelrc
@@ -22,3 +22,10 @@ config <CWD>/babel.config.json
 {
   "sourceType": "script"
 }
+
+config <CWD>/babel.config.json .overrides[0]
+{
+  "test": "src/foo.js",
+  "sourceType": "module"
+}
+"use strict";
