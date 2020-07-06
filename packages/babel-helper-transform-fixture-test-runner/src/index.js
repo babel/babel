@@ -4,6 +4,7 @@ import { buildExternalHelpers } from "@babel/core";
 import getFixtures from "@babel/helper-fixtures";
 import sourceMap from "source-map";
 import { codeFrameColumns } from "@babel/code-frame";
+import defaults from "lodash/defaults";
 import escapeRegExp from "lodash/escapeRegExp";
 import * as helpers from "./helpers";
 import extend from "lodash/extend";
@@ -375,10 +376,9 @@ export default function (
               run(task);
             }
 
-            task.options = {
-              ...task.options,
+            defaults(task.options, {
               sourceMap: !!(task.sourceMappings || task.sourceMap),
-            };
+            });
 
             extend(task.options, taskOpts);
 
