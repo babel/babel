@@ -525,9 +525,11 @@ class BlockScoping {
           this.scope.parentHasBinding(id.name)
         ) {
           outsideRefs.delete(id.name);
+          this.letReferences.delete(id.name);
 
           this.scope.rename(id.name);
 
+          this.letReferences.set(id.name, id);
           outsideRefs.set(id.name, id);
         }
       }
