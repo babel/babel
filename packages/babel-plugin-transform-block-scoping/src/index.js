@@ -528,7 +528,7 @@ class BlockScoping {
 
           this.scope.rename(id.name);
 
-          outsideRefs.put(id.name, id);
+          outsideRefs.set(id.name, id);
         }
       }
     }
