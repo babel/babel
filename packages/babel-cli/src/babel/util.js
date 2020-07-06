@@ -2,7 +2,6 @@
 
 import readdirRecursive from "fs-readdir-recursive";
 import * as babel from "@babel/core";
-import includes from "lodash.includes";
 import path from "path";
 import fs from "fs";
 
@@ -47,7 +46,7 @@ export function isCompilableExtension(
 ): boolean {
   const exts = altExts || babel.DEFAULT_EXTENSIONS;
   const ext = path.extname(filename);
-  return includes(exts, ext);
+  return exts.includes(ext);
 }
 
 export function addSourceMappingUrl(code: string, loc: string): string {

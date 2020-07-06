@@ -20,8 +20,6 @@
   "dependencies": {
     "@babel/types": "^7.10.4",
     "jsesc": "^2.5.1",
-    "lodash.isinteger": "^4.0.4",
-    "lodash.repeat": "^4.1.0",
     "source-map": "^0.5.0"
   },
   "devDependencies": {

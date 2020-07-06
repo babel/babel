@@ -5,7 +5,6 @@ import getFixtures from "@babel/helper-fixtures";
 import sourceMap from "source-map";
 import { codeFrameColumns } from "@babel/code-frame";
 import defaults from "lodash.defaults";
-import includes from "lodash.includes";
 import escapeRegExp from "lodash.escaperegexp";
 import * as helpers from "./helpers";
 import extend from "lodash.assignin";
@@ -352,7 +351,7 @@ export default function (
   const suites = getFixtures(fixturesLoc);
 
   for (const testSuite of suites) {
-    if (includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
+    if (suiteOpts.ignoreSuites?.includes(testSuite.title)) continue;
 
     describe(name + "/" + testSuite.title, function () {
       jest.addMatchers({
@@ -361,8 +360,8 @@ export default function (
 
       for (const task of testSuite.tests) {
         if (
-          includes(suiteOpts.ignoreTasks, task.title) ||
-          includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)
+          suiteOpts.ignoreTasks?.includes(task.title) ||
+          suiteOpts.ignoreTasks?.includes(testSuite.title + "/" + task.title)
         ) {
           continue;
         }

@@ -1,5 +1,3 @@
-import includes from "lodash.includes";
-import repeat from "lodash.repeat";
 import Renamer from "./lib/renamer";
 import type NodePath from "../path";
 import traverse from "../index";
@@ -502,7 +500,7 @@ export default class Scope {
   }
 
   dump() {
-    const sep = repeat("-", 60);
+    const sep = "-".repeat(60);
     console.log(sep);
     let scope = this;
     do {
@@ -1038,8 +1036,8 @@ export default class Scope {
     if (this.hasOwnBinding(name)) return true;
     if (this.parentHasBinding(name, noGlobals)) return true;
     if (this.hasUid(name)) return true;
-    if (!noGlobals && includes(Scope.globals, name)) return true;
-    if (!noGlobals && includes(Scope.contextVariables, name)) return true;
+    if (!noGlobals && Scope.globals.includes(name)) return true;
+    if (!noGlobals && Scope.contextVariables.includes(name)) return true;
     return false;
   }
 
