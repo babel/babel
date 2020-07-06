@@ -2,7 +2,6 @@ import { declare } from "@babel/helper-plugin-utils";
 import type NodePath from "@babel/traverse";
 import type Scope from "@babel/traverse";
 import { visitor as tdzVisitor } from "./tdz";
-import extend from "lodash/extend";
 import { traverse, template, types as t } from "@babel/core";
 
 const DONE = new WeakSet();
@@ -358,9 +357,9 @@ class BlockScoping {
     this.blockPath = blockPath;
     this.block = blockPath.node;
 
-    this.outsideLetReferences = Object.create(null);
+    this.outsideLetReferences = new Map();
     this.hasLetReferences = false;
-    this.letReferences = Object.create(null);
+    this.letReferences = new Map();
     this.body = [];
 
     if (loopPath) {
@@ -446,7 +445,7 @@ class BlockScoping {
       blockScope.getFunctionParent() || blockScope.getProgramParent();
     const letRefs = this.letReferences;
 
-    for (const key of Object.keys(letRefs)) {
+    for (const key of letRefs.keys()) {
       const ref = letRefs[key];
       const binding = blockScope.getBinding(ref.name);
       if (!binding) continue;
@@ -475,7 +474,7 @@ class BlockScoping {
     // those in upper scopes and then if they do, generate a uid
     // for them and replace all references with it
 
-    for (const key of Object.keys(letRefs)) {
+    for (const key of letRefs.keys()) {
       // just an Identifier node we collected in `getLetReferences`
       // this is the defining identifier of a declaration
       const ref = letRefs[key];
@@ -495,8 +494,8 @@ class BlockScoping {
       }
     }
 
-    for (const key of Object.keys(outsideLetRefs)) {
-      const ref = letRefs[key];
+    for (const key of outsideLetRefs.keys()) {
+      const ref = letRefs.get(key);
       // check for collisions with a for loop's init variable and the enclosing scope's bindings
       // https://github.com/babel/babel/issues/8498
       if (isInLoop(this.blockPath) && blockPathScope.hasOwnBinding(key)) {
@@ -518,20 +517,18 @@ class BlockScoping {
 
     // remap loop heads with colliding variables
     if (this.loop) {
-      for (const name of Object.keys(outsideRefs)) {
-        const id = outsideRefs[name];
+      for (const name of outsideRefs.keys()) {
+        const id = outsideRefs.get(name);
 
         if (
           this.scope.hasGlobal(id.name) ||
           this.scope.parentHasBinding(id.name)
         ) {
-          delete outsideRefs[id.name];
-          delete this.letReferences[id.name];
+          outsideRefs.delete(id.name);
 
           this.scope.rename(id.name);
 
-          this.letReferences[id.name] = id;
-          outsideRefs[id.name] = id;
+          outsideRefs.put(id.name, id);
         }
       }
     }
@@ -544,9 +541,7 @@ class BlockScoping {
     this.hoistVarDeclarations();
 
     // turn outsideLetReferences into an array
-    const args = Object.keys(outsideRefs).map(ref =>
-      t.cloneNode(outsideRefs[ref]),
-    );
+    const args = outsideRefs.values().map(node => t.cloneNode(node));
     const params = args.map(id => t.cloneNode(id));
 
     const isSwitch = this.blockPath.isSwitchStatement();
@@ -703,7 +698,10 @@ class BlockScoping {
       const init = this.loop.left || this.loop.init;
       if (isBlockScoped(init)) {
         declarators.push(init);
-        extend(this.outsideLetReferences, t.getBindingIdentifiers(init));
+        const names = t.getBindingIdentifiers(init);
+        for (const name of Object.keys(names)) {
+          this.outsideLetReferences.set(name, names[name]);
+        }
       }
     }
 
@@ -752,7 +750,9 @@ class BlockScoping {
       // declaration, rather than (for example) mistakenly including the
       // parameters of a function declaration. Fixes #4880.
       const keys = t.getBindingIdentifiers(declar, false, true);
-      extend(this.letReferences, keys);
+      for (const key of keys) {
+        this.letReferences.set(key, keys[key]);
+      }
       this.hasLetReferences = true;
     }
 
