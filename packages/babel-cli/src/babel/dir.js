@@ -1,6 +1,5 @@
 // @flow
 
-import defaults from "lodash/defaults";
 import debounce from "lodash/debounce";
 import { sync as makeDirSync } from "make-dir";
 import slash from "slash";
@@ -48,15 +47,10 @@ export default async function ({
     const dest = getDest(relative, base);
 
     try {
-      const res = await util.compile(
-        src,
-        defaults(
-          {
-            sourceFileName: slash(path.relative(dest + "/..", src)),
-          },
-          babelOptions,
-        ),
-      );
+      const res = await util.compile(src, {
+        sourceFileName: slash(path.relative(dest + "/..", src)),
+        ...babelOptions,
+      });
 
       if (!res) return FILE_TYPE.IGNORED;
 
