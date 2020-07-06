@@ -750,7 +750,7 @@ class BlockScoping {
       // declaration, rather than (for example) mistakenly including the
       // parameters of a function declaration. Fixes #4880.
       const keys = t.getBindingIdentifiers(declar, false, true);
-      for (const key of keys) {
+      for (const key of Object.keys(keys)) {
         this.letReferences.set(key, keys[key]);
       }
       this.hasLetReferences = true;
