@@ -541,7 +541,7 @@ class BlockScoping {
     this.hoistVarDeclarations();
 
     // turn outsideLetReferences into an array
-    const args = outsideRefs.values().map(node => t.cloneNode(node));
+    const args = [...outsideRefs.values()].map(node => t.cloneNode(node));
     const params = args.map(id => t.cloneNode(id));
 
     const isSwitch = this.blockPath.isSwitchStatement();
