@@ -1,7 +1,6 @@
 // @flow
 
 import convertSourceMap from "convert-source-map";
-import defaults from "lodash/defaults";
 import sourceMap from "source-map";
 import slash from "slash";
 import { sync as makeDirSync } from "make-dir";
@@ -171,22 +170,17 @@ export default async function ({
         sourceFilename = slash(sourceFilename);
 
         try {
-          return await util.compile(
-            filename,
-            defaults(
-              {
-                sourceFileName: sourceFilename,
-                // Since we're compiling everything to be merged together,
-                // "inline" applies to the final output file, but not to the individual
-                // files being concatenated.
-                sourceMaps:
-                  babelOptions.sourceMaps === "inline"
-                    ? true
-                    : babelOptions.sourceMaps,
-              },
-              babelOptions,
-            ),
-          );
+          return await util.compile(filename, {
+            sourceFileName: sourceFilename,
+            // Since we're compiling everything to be merged together,
+            // "inline" applies to the final output file, but not to the individual
+            // files being concatenated.
+            sourceMaps:
+              babelOptions.sourceMaps === "inline"
+                ? true
+                : babelOptions.sourceMaps,
+            ...babelOptions,
+          });
         } catch (err) {
           if (!cliOptions.watch) {
             throw err;
