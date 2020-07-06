@@ -128,8 +128,8 @@ export default async function ({
     const code = await readStdin();
 
     const res = await util.transform(cliOptions.filename, code, {
-      sourceFileName: "stdin",
       ...babelOptions,
+      sourceFileName: "stdin",
     });
 
     output([res]);

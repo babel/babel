@@ -48,8 +48,8 @@ export default async function ({
 
     try {
       const res = await util.compile(src, {
-        sourceFileName: slash(path.relative(dest + "/..", src)),
         ...babelOptions,
+        sourceFileName: slash(path.relative(dest + "/..", src)),
       });
 
       if (!res) return FILE_TYPE.IGNORED;
