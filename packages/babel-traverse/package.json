@@ -24,9 +24,7 @@
     "debug": "^4.1.0",
     "globals": "^11.1.0",
     "lodash.clone": "^4.5.0",
-    "lodash.defaults": "^4.2.0",
-    "lodash.includes": "^4.3.0",
-    "lodash.repeat": "^4.1.0"
+    "lodash.defaults": "^4.2.0"
   },
   "devDependencies": {
     "@babel/helper-plugin-test-runner": "^7.10.4"

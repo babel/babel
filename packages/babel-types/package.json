@@ -20,7 +20,6 @@
     "lodash.clone": "^4.5.0",
     "lodash.isplainobject": "^4.0.6",
     "lodash.isregexp": "^4.0.1",
-    "lodash.uniq": "^4.5.0",
     "to-fast-properties": "^2.0.0"
   },
   "devDependencies": {
