@@ -1,7 +1,6 @@
 // This file contains methods responsible for introspecting the current path for certain values.
 
 import type NodePath from "./index";
-import includes from "lodash/includes";
 import * as t from "@babel/types";
 
 /**
@@ -149,7 +148,7 @@ export function isStatementOrBlock() {
   ) {
     return false;
   } else {
-    return includes(t.STATEMENT_OR_BLOCK_KEYS, this.key);
+    return t.STATEMENT_OR_BLOCK_KEYS.includes(this.key);
   }
 }
 
