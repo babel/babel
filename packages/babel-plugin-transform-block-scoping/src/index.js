@@ -844,55 +844,26 @@ class BlockScoping {
 
   buildHas(ret: string) {
     const body = this.body;
-
-    let retCheck;
     const has = this.has;
-    const cases = [];
-
-    if (has.hasReturn) {
-      // typeof ret === "object"
-      retCheck = buildRetCheck({
-        RETURN: t.identifier(ret),
-      });
-    }
 
     if (has.hasBreakContinue) {
       for (const key of Object.keys(has.map)) {
-        cases.push(t.switchCase(t.stringLiteral(key), [has.map[key]]));
-      }
-
-      if (has.hasReturn) {
-        cases.push(t.switchCase(null, [retCheck]));
-      }
-
-      if (cases.length === 1) {
-        const single = cases[0];
         body.push(
           t.ifStatement(
-            t.binaryExpression("===", t.identifier(ret), single.test),
-            single.consequent[0],
+            t.binaryExpression("===", t.identifier(ret), t.stringLiteral(key)),
+            has.map[key],
           ),
         );
-      } else {
-        if (this.loop) {
-          // https://github.com/babel/babel/issues/998
-          for (let i = 0; i < cases.length; i++) {
-            const caseConsequent = cases[i].consequent[0];
-            if (t.isBreakStatement(caseConsequent) && !caseConsequent.label) {
-              if (!this.loopLabel) {
-                this.loopLabel = this.scope.generateUidIdentifier("loop");
-              }
-              caseConsequent.label = t.cloneNode(this.loopLabel);
-            }
-          }
-        }
+      }
+    }
 
-        body.push(t.switchStatement(t.identifier(ret), cases));
-      }
-    } else {
-      if (has.hasReturn) {
-        body.push(retCheck);
-      }
+    // typeof ret === "object"
+    if (has.hasReturn) {
+      body.push(
+        buildRetCheck({
+          RETURN: t.identifier(ret),
+        }),
+      );
     }
   }
 }

@@ -1,5 +1,5 @@
 (function () {
-  var _loop2 = function (i) {
+  var _loop = function (i) {
     fns.push(function () {
       return i;
     });
@@ -15,18 +15,11 @@
     }
   };
 
-  _loop: for (var i in nums) {
-    var _ret = _loop2(i);
+  for (var i in nums) {
+    var _ret = _loop(i);
 
-    switch (_ret) {
-      case "continue":
-        continue;
-
-      case "break":
-        break _loop;
-
-      default:
-        if (typeof _ret === "object") return _ret.v;
-    }
+    if (_ret === "continue") continue;
+    if (_ret === "break") break;
+    if (typeof _ret === "object") return _ret.v;
   }
 })();
