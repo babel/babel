@@ -844,16 +844,7 @@ class BlockScoping {
 
   buildHas(ret: string) {
     const body = this.body;
-
-    let retCheck;
     const has = this.has;
-
-    if (has.hasReturn) {
-      // typeof ret === "object"
-      retCheck = buildRetCheck({
-        RETURN: t.identifier(ret),
-      });
-    }
 
     if (has.hasBreakContinue) {
       for (const key of Object.keys(has.map)) {
@@ -866,8 +857,13 @@ class BlockScoping {
       }
     }
 
+    // typeof ret === "object"
     if (has.hasReturn) {
-      body.push(retCheck);
+      body.push(
+        buildRetCheck({
+          RETURN: t.identifier(ret),
+        }),
+      );
     }
   }
 }
