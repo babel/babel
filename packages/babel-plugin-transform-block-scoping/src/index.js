@@ -338,12 +338,6 @@ const loopVisitor = {
   },
 };
 
-function extendMap(map, obj) {
-  for (const key of Object.keys(obj)) {
-    map.set(key, obj[key]);
-  }
-}
-
 class BlockScoping {
   constructor(
     loopPath?: NodePath,
@@ -707,7 +701,10 @@ class BlockScoping {
       const init = this.loop.left || this.loop.init;
       if (isBlockScoped(init)) {
         declarators.push(init);
-        extendMap(this.outsideLetReferences, t.getBindingIdentifiers(init));
+        const names = t.getBindingIdentifiers(init);
+        for (const name of Object.keys(names)) {
+          this.outsideLetReferences.set(name, names[name]);
+        }
       }
     }
 
@@ -756,7 +753,9 @@ class BlockScoping {
       // declaration, rather than (for example) mistakenly including the
       // parameters of a function declaration. Fixes #4880.
       const keys = t.getBindingIdentifiers(declar, false, true);
-      extendMap(this.letReferences, keys);
+      for (const key of Object.keys(keys)) {
+        this.letReferences.set(key, keys[key]);
+      }
       this.hasLetReferences = true;
     }
 
