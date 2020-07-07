@@ -63,19 +63,21 @@ Babel is a tool that helps you write code in the latest version of JavaScript. W
 **In**
 
 ```js
-// ES2015 arrow function
-[1, 2, 3].map((n) => n + 1);
+// ES2020 nullish coalescing
+function greet(input) {
+  return input ?? "Hello world";
+}
 ```
 
 **Out**
 
 ```js
-[1, 2, 3].map(function(n) {
-  return n + 1;
-});
+function greet(input) {
+  return input != null ? input : "Hello world";
+}
 ```
 
-Try it out at our [REPL](https://babeljs.io/repl/build/main#?code_lz=NoRgNATGDMC6B0BbAhgBwBQDsAEBeAfNjgNTYgCUA3EA&lineWrap=true&presets=es2015%2Ces2016%2Ces2017&version=7.0.0-beta.2).
+Try it out at our [REPL](https://babel.dev/repl#?browsers=defaults%2C%20not%20ie%2011&loose=true&code_lz=GYVwdgxgLglg9mABAcwE4FN1QBQzABxCgEpEBvAKEUQyhFST0KkQH5XEAiACXQBs-cRAHc4qPgBNOAbgoBfIA&shippedProposals=true&sourceType=script&lineWrap=true&presets=env%2Cenv&prettier=true).
 
 ## FAQ
 
