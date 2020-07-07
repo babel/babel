@@ -340,7 +340,7 @@ const loopVisitor = {
 
 function extendMap(map, obj) {
   for (const key of Object.keys(obj)) {
-    map.set(key, String(obj[key]));
+    map.set(String(key), obj[key]);
   }
 }
 
