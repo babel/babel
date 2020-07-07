@@ -340,9 +340,7 @@ const loopVisitor = {
 
 function extendMap(map, obj) {
   for (const key of Object.keys(obj)) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      map.set(key, obj[key]);
-    }
+    map.set(key, obj[key]);
   }
 }
 
