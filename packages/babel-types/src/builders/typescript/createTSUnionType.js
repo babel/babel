@@ -1,4 +1,4 @@
-import { TSUnionType } from "../generated";
+import { tsUnionType } from "../generated";
 import removeTypeDuplicates from "../../modifications/typescript/removeTypeDuplicates";
 
 /**
@@ -14,6 +14,6 @@ export default function createTSUnionType(
   if (flattened.length === 1) {
     return flattened[0];
   } else {
-    return TSUnionType(flattened);
+    return tsUnionType(flattened);
   }
 }
