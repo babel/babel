@@ -523,7 +523,8 @@ class BlockScoping {
 
     // remap loop heads with colliding variables
     if (this.loop) {
-      for (const name of outsideRefs.keys()) {
+      // nb: clone outsideRefs keys since the map is modified within the loop
+      for (const name of [...outsideRefs.keys()]) {
         const id = outsideRefs.get(name);
 
         if (
