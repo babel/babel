@@ -483,6 +483,27 @@ class BlockScoping {
 
       // todo: could skip this if the colliding binding is in another function
       if (scope.parentHasBinding(key) || scope.hasGlobal(key)) {
+        const binding = scope.getOwnBinding(key);
+        const parentFnScope =
+          scope.getFunctionParent() || scope.getProgramParent();
+        const collideBinding = parentFnScope.getOwnBinding(key);
+        const collideBindingIsVar =
+          collideBinding && collideBinding.path
+            ? isVar(collideBinding.path.parent)
+            : false;
+
+        /*
+          rename if its not a function declaration or, if it is,
+          should not be a global and should not collide with an upper variable declaration of kind 'var'
+         */
+        const shouldRename =
+          (binding && binding.path && !binding.path.isFunctionDeclaration()) ||
+          (!scope.hasGlobal(key) && !collideBindingIsVar);
+
+        if (!shouldRename) {
+          continue;
+        }
+
         // The same identifier might have been bound separately in the block scope and
         // the enclosing scope (e.g. loop or catch statement), so we should handle both
         // individually
