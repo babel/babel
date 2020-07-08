@@ -30,7 +30,7 @@ const buildOptimizedSequenceExpression = ({ assign, call, path }) => {
 
     call.callee = evalSequence;
 
-    path.scope.push({ id: placeholderNode });
+    path.scope.push({ id: t.cloneNode(placeholderNode) });
 
     return t.sequenceExpression([assign, call]);
   }
@@ -40,7 +40,7 @@ const buildOptimizedSequenceExpression = ({ assign, call, path }) => {
     return t.sequenceExpression([pipelineLeft, calledExpression.body]);
   }
 
-  path.scope.push({ id: placeholderNode });
+  path.scope.push({ id: t.cloneNode(placeholderNode) });
 
   if (param) {
     path.get("right").scope.rename(param.name, placeholderNode.name);

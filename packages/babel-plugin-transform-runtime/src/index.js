@@ -301,7 +301,11 @@ export default declare((api, options, dirname) => {
               context2 = t.cloneNode(object);
             } else {
               context1 = path.scope.generateDeclaredUidIdentifier("context");
-              context2 = t.assignmentExpression("=", context1, object);
+              context2 = t.assignmentExpression(
+                "=",
+                t.cloneNode(context1),
+                object,
+              );
             }
             node.callee = t.memberExpression(
               t.callExpression(

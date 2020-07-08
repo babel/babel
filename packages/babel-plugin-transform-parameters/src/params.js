@@ -229,6 +229,6 @@ function buildScopeIIFE(shadowedParams, body) {
   }
 
   return t.returnStatement(
-    t.callExpression(t.arrowFunctionExpression(params, body), params),
+    t.callExpression(t.arrowFunctionExpression(args, body), params),
   );
 }

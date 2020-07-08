@@ -2,7 +2,7 @@ import { types as t } from "@babel/core";
 
 const updateTopicReferenceVisitor = {
   PipelinePrimaryTopicReference(path) {
-    path.replaceWith(this.topicId);
+    path.replaceWith(t.cloneNode(this.topicId));
   },
   PipelineTopicExpression(path) {
     path.skip();

@@ -33,7 +33,7 @@ export default declare((api, opts) => {
             const decl = node.declarations[i];
             const assign = t.assignmentExpression(
               "=",
-              decl.id,
+              t.cloneNode(decl.id),
               decl.init || scope.buildUndefinedNode(),
             );
             assign._ignoreBlockScopingTDZ = true;

@@ -157,8 +157,10 @@ function handleNested(path, t, node, parentExport) {
 
   if (parentExport) {
     fallthroughValue = template.expression.ast`
-      ${parentExport}.${realName} || (
-        ${parentExport}.${realName} = ${fallthroughValue}
+      ${parentExport}.${t.cloneNode(realName)} || (
+        ${t.cloneNode(parentExport)}.${t.cloneNode(
+      realName,
+    )} = ${fallthroughValue}
       )
     `;
   }
@@ -166,6 +168,6 @@ function handleNested(path, t, node, parentExport) {
   return template.statement.ast`
     (function (${t.identifier(name)}) {
       ${namespaceTopLevel}
-    })(${realName} || (${realName} = ${fallthroughValue}));
+    })(${realName} || (${t.cloneNode(realName)} = ${fallthroughValue}));
   `;
 }
