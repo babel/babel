@@ -13,9 +13,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.10.4",
-    "lodash.assignin": "^4.2.0",
-    "lodash.values": "^4.3.0"
+    "@babel/helper-plugin-utils": "^7.10.4"
   },
   "keywords": [
     "babel-plugin"
