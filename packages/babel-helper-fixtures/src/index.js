@@ -1,5 +1,4 @@
 import cloneDeep from "lodash.clonedeep";
-import clone from "lodash.clone";
 import semver from "semver";
 import path from "path";
 import fs from "fs";
@@ -262,7 +261,7 @@ export default function get(entryLoc): Array<Suite> {
     if (shouldIgnore(suiteName)) continue;
 
     const suite = {
-      options: clone(rootOpts),
+      options: { ...rootOpts },
       tests: [],
       title: humanize(suiteName),
       filename: entryLoc + "/" + suiteName,
