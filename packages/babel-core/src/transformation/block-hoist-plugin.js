@@ -47,7 +47,6 @@ const blockHoistPlugin = {
         const stabilityMap = new Map(
           sortIsUnstable ? node.body.map((n, idx) => [n, idx]) : null,
         );
-
         const priority = node => {
           if (node?._blockHoist == null) return -1;
           if (node?._blockHoist === true) return -2;
