@@ -22,7 +22,6 @@
     "babel-check-duplicated-nodes": "^1.0.0",
     "jest": "^24.8.0",
     "jest-diff": "^24.8.0",
-    "lodash.assignin": "^4.2.0",
     "lodash.defaults": "^4.2.0",
     "lodash.escaperegexp": "^4.1.2",
     "lodash.merge": "^4.6.2",
