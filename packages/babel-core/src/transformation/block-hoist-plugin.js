@@ -43,9 +43,9 @@ const blockHoistPlugin = {
         // TODO: Babel 9 (?) - remove stabilityMap once Node >= 12 is guaranteed
         // Array sorting is not stable in earlier Node releases
         // See: https://v8.dev/blog/array-sort for details
-        const sortIsUnstable = process.versions.node.split(".")[0] < 12 || null;
+        const sortIsUnstable = process.versions.node.split(".")[0] < 12;
         const stabilityMap = new Map(
-          sortIsUnstable && node.body.map((n, idx) => [n, idx]),
+          sortIsUnstable ? node.body.map((n, idx) => [n, idx]) : null,
         );
 
         const priority = node => {
