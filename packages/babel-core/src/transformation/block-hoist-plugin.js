@@ -39,7 +39,7 @@ const blockHoistPlugin = {
   visitor: {
     Block: {
       exit({ node }) {
-        if (node.body.every(node => node?._blockHoist == null)) return;
+        if (!node.body.find(node => node?._blockHoist != null)) return;
         const priority = node => {
           if (node?._blockHoist == null) return -1;
           if (node?._blockHoist === true) return -2;
