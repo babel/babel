@@ -45,7 +45,7 @@ const blockHoistPlugin = {
           if (node?._blockHoist === true) return -2;
           return -1 * node?._blockHoist;
         };
-        node.body.sort((a, b) => priority(b) - priority(a));
+        node.body.sort((a, b) => priority(a) - priority(b));
       },
     },
   },
