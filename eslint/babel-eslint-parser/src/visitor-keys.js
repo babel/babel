@@ -5,6 +5,7 @@ const { VISITOR_KEYS: BABEL_VISITOR_KEYS } = t;
 
 export default Object.assign(
   {
+    ChainExpression: ESLINT_VISITOR_KEYS.ChainExpression,
     Literal: ESLINT_VISITOR_KEYS.Literal,
     MethodDefinition: ["decorators"].concat(
       ESLINT_VISITOR_KEYS.MethodDefinition,

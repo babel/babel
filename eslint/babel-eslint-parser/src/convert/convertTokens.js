@@ -115,7 +115,6 @@ function convertToken(token, source) {
     type === tt.incDec ||
     type === tt.colon ||
     type === tt.question ||
-    type === tt.questionDot ||
     type === tt.template ||
     type === tt.backQuote ||
     type === tt.dollarBraceL ||
@@ -173,6 +172,12 @@ function convertToken(token, source) {
   } else if (type === tt.bigint) {
     token.type = "Numeric";
     token.value = `${token.value}n`;
+  } else if (type === tt.questionDot) {
+    token.value = type.label;
+  }
+  if (typeof token.type !== "string") {
+    // Acorn does not have rightAssociative
+    delete token.type.rightAssociative;
   }
 
   return token;

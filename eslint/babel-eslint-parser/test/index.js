@@ -292,15 +292,30 @@ describe("Babel and Espree", () => {
     parseAndAssertSame("var foo = 1;export { foo as bar };");
   });
 
-  // Espree doesn't support the optional chaining operator yet
-  it("optional chaining operator (token)", () => {
-    const code = "foo?.bar";
-    const babylonAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: BABEL_OPTIONS,
-    }).ast;
-    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
+  describe("optional chaining operator", () => {
+    it("optional member", () => {
+      parseAndAssertSame("foo?.bar");
+    });
+    it("nested optional member", () => {
+      parseAndAssertSame("foo?.bar.qux");
+      parseAndAssertSame("foo?.bar?.qux");
+    });
+    it("optional call", () => {
+      parseAndAssertSame("foo?.()");
+    });
+    it("nested optional call", () => {
+      parseAndAssertSame("foo?.()()");
+      parseAndAssertSame("foo?.()?.()");
+    });
+    it("optional member optional call", () => {
+      parseAndAssertSame("foo?.bar()");
+    });
+    it("optional member call", () => {
+      parseAndAssertSame("(foo?.bar)()");
+    });
+    it("optional call member", () => {
+      parseAndAssertSame("(foo?.()).bar");
+    });
   });
 
   it("nullish coalescing operator", () => {
