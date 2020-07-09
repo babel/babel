@@ -22,7 +22,7 @@ export default function loadBlockHoistPlugin(): Plugin {
 
 const blockHoistPlugin = {
   /**
-   * When hoisted blocks are present, return node elements in sorted order
+   * When hoisted blocks are present, sort node elements by priority order
    * (highest priority first)
    *
    * Priority:
