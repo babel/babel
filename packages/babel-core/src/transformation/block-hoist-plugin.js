@@ -40,13 +40,12 @@ const blockHoistPlugin = {
     Block: {
       exit({ node }) {
         if (node.body.every(node => node?._blockHoist == null)) return;
-        node.body
-          .filter(node => node?._blockHoist == null)
-          .forEach(node => (node.priority = 1));
-        node.body
-          .filter(node => node?._blockHoist === true)
-          .forEach(node => (node.priority = 2));
-        node.body.sort((a, b) => b.priority - a.priority);
+        const priority = node => {
+          if (node?._blockHoist == null) return 1;
+          if (node?._blockHoist === true) return 2;
+          return -1 * node?._blockHoist;
+        };
+        node.body.sort((a, b) => priority(b) - priority(a));
       },
     },
   },
