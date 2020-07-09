@@ -41,8 +41,8 @@ const blockHoistPlugin = {
       exit({ node }) {
         if (node.body.every(node => node?._blockHoist == null)) return;
         const priority = node => {
-          if (node?._blockHoist == null) return 1;
-          if (node?._blockHoist === true) return 2;
+          if (node?._blockHoist == null) return -1;
+          if (node?._blockHoist === true) return -2;
           return -1 * node?._blockHoist;
         };
         node.body.sort((a, b) => priority(b) - priority(a));
