@@ -1,6 +1,5 @@
 import cloneDeep from "lodash.clonedeep";
 import clone from "lodash.clone";
-import extend from "lodash.assignin";
 import semver from "semver";
 import path from "path";
 import fs from "fs";
@@ -119,7 +118,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
   const taskOpts = cloneDeep(suite.options);
 
   const taskOptsLoc = tryResolve(taskDir + "/options");
-  if (taskOptsLoc) extend(taskOpts, require(taskOptsLoc));
+  if (taskOptsLoc) Object.assign(taskOpts, require(taskOptsLoc));
 
   const test = {
     optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
