@@ -54,8 +54,10 @@ const blockHoistPlugin = {
         };
         node.body.sort((a, b) => {
           const result = priority(a) - priority(b);
-          if (result) return result;
-          if (stabilityMap) return stabilityMap.get(a) - stabilityMap.get(b);
+          if (stabilityMap) {
+            return result || stabilityMap.get(a) - stabilityMap.get(b);
+          }
+          return result;
         });
       },
     },
