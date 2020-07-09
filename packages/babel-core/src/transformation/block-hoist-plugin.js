@@ -1,7 +1,4 @@
 // @flow
-
-import sortBy from "lodash/sortBy";
-
 import loadConfig, { type Plugin } from "../config";
 
 let LOADED_PLUGIN: Plugin | void;
@@ -25,7 +22,8 @@ export default function loadBlockHoistPlugin(): Plugin {
 
 const blockHoistPlugin = {
   /**
-   * [Please add a description.]
+   * When hoisted blocks are present, return node elements in sorted order
+   * (highest priority first)
    *
    * Priority:
    *
@@ -41,24 +39,14 @@ const blockHoistPlugin = {
   visitor: {
     Block: {
       exit({ node }) {
-        let hasChange = false;
-        for (let i = 0; i < node.body.length; i++) {
-          const bodyNode = node.body[i];
-          if (bodyNode?._blockHoist != null) {
-            hasChange = true;
-            break;
-          }
-        }
-        if (!hasChange) return;
-
-        node.body = sortBy(node.body, function (bodyNode) {
-          let priority = bodyNode?._blockHoist;
-          if (priority == null) priority = 1;
-          if (priority === true) priority = 2;
-
-          // Higher priorities should move toward the top.
-          return -1 * priority;
-        });
+        if (node.body.every(node => node?._blockHoist == null)) return;
+        node.body
+          .filter(node => node?._blockHoist == null)
+          .forEach(node => (node.priority = 1));
+        node.body
+          .filter(node => node?._blockHoist === true)
+          .forEach(node => (node.priority = 2));
+        node.body.sort((a, b) => b.priority - a.priority);
       },
     },
   },
