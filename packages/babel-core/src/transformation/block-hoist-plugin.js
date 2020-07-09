@@ -54,10 +54,13 @@ const blockHoistPlugin = {
           return -1 * node?._blockHoist;
         };
         node.body.sort(
-          (a, b) =>
-            priority(a) - priority(b) ||
-            stabilityMap.get(a) - stabilityMap.get(b),
-        );
+          (a, b) => {
+            const result = priority(a) - priority(b);
+            if (!result && sortIsUnstable) {
+              return stabilityMap.get(a) - stabilityMap.get(b);
+            }
+            return result;
+        });
       },
     },
   },
