@@ -419,6 +419,10 @@ export default declare(
           path.node.typeParameters = null;
         },
 
+        OptionalCallExpression(path) {
+          path.node.typeParameters = null;
+        },
+
         NewExpression(path) {
           path.node.typeParameters = null;
         },
