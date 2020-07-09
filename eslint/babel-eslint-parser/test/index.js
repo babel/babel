@@ -303,15 +303,8 @@ describe("Babel and Espree", () => {
     expect(babylonAST.tokens[1].type).toEqual("Punctuator");
   });
 
-  // Espree doesn't support the nullish coalescing operator yet
-  it("nullish coalescing operator (token)", () => {
-    const code = "foo ?? bar";
-    const babylonAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: BABEL_OPTIONS,
-    }).ast;
-    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
+  it("nullish coalescing operator", () => {
+    parseAndAssertSame("foo ?? bar");
   });
 
   // Espree doesn't support the pipeline operator yet
