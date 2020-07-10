@@ -10,7 +10,6 @@ const t = require("@babel/types");
 const transformRuntime = require("../");
 
 const runtimeVersion = require("@babel/runtime/package.json").version;
-const corejs3Definitions = require("../lib/runtime-corejs3-definitions").default();
 const outputFileSync = function (filePath, data) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, data);
@@ -20,59 +19,6 @@ writeHelpers("@babel/runtime");
 writeHelpers("@babel/runtime-corejs3", {
   corejs: { version: 3, proposals: true },
 });
-
-writeCoreJS({
-  corejs: 3,
-  proposals: false,
-  definitions: corejs3Definitions,
-  paths: [],
-  corejsRoot: "core-js-pure/stable",
-});
-writeCoreJS({
-  corejs: 3,
-  proposals: true,
-  definitions: corejs3Definitions,
-  paths: ["is-iterable", "get-iterator", "get-iterator-method"],
-  corejsRoot: "core-js-pure/features",
-});
-
-function writeCoreJS({
-  corejs,
-  proposals,
-  definitions: { BuiltIns, StaticProperties, InstanceProperties },
-  paths,
-  corejsRoot,
-}) {
-  const pkgDirname = getRuntimeRoot(`@babel/runtime-corejs${corejs}`);
-
-  Object.keys(BuiltIns).forEach(name => {
-    const { stable, path } = BuiltIns[name];
-    if (stable || proposals) paths.push(path);
-  });
-
-  Object.keys(StaticProperties).forEach(builtin => {
-    const props = StaticProperties[builtin];
-    Object.keys(props).forEach(name => {
-      const { stable, path } = props[name];
-      if (stable || proposals) paths.push(path);
-    });
-  });
-
-  if (InstanceProperties) {
-    Object.keys(InstanceProperties).forEach(name => {
-      const { stable, path } = InstanceProperties[name];
-      if (stable || proposals) paths.push(`instance/${path}`);
-    });
-  }
-
-  const runtimeRoot = proposals ? "core-js" : "core-js-stable";
-  paths.forEach(function (corejsPath) {
-    outputFileSync(
-      path.join(pkgDirname, runtimeRoot, `${corejsPath}.js`),
-      `module.exports = require("${corejsRoot}/${corejsPath}");`
-    );
-  });
-}
 
 function writeHelpers(runtimeName, { corejs } = {}) {
   writeHelperFiles(runtimeName, { corejs, esm: false });
