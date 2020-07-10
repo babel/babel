@@ -1,5 +1,5 @@
-import "core-js/modules/es.array.find";
-import "core-js/modules/es.array.includes";
+import "core-js/modules/es.array.includes.js";
+import "core-js/modules/es.array.find.js";
 var arrayInstance = [];
 var inclidesStr = "includes";
 var findStr = "find"; // Allow instance methods be assigned to variables.
