@@ -253,6 +253,10 @@ describe("Babel and Espree", () => {
     parseAndAssertSame('import "foo";');
   });
 
+  it("import meta", () => {
+    parseAndAssertSame("const url = import.meta.url");
+  });
+
   it("export default class declaration", () => {
     parseAndAssertSame("export default class Foo {}");
   });
@@ -273,15 +277,8 @@ describe("Babel and Espree", () => {
     parseAndAssertSame('export * from "foo";');
   });
 
-  // Espree doesn't support `export * as ns` yet
   it("export * as ns", () => {
-    const code = 'export * as Foo from "foo";';
-    const babylonAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: BABEL_OPTIONS,
-    }).ast;
-    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
+    parseAndAssertSame('export * as Foo from "foo";');
   });
 
   it("export named", () => {
