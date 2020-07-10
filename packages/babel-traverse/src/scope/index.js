@@ -955,7 +955,11 @@ export default class Scope {
 
     let scope = this;
     do {
-      ids = { ...scope.bindings, ...ids };
+      for (const key of Object.keys(scope.bindings)) {
+        if (key in ids === false) {
+          ids[key] = scope.bindings[key];
+        }
+      }
       scope = scope.parent;
     } while (scope);
 
