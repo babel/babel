@@ -82,11 +82,18 @@ function convertNodes(ast, code) {
   };
   const state = { source: code };
 
+  const oldExportAllDeclarationKeys = t.VISITOR_KEYS.ExportAllDeclaration;
+
   try {
     // Monkey patch visitor keys in order to be able to traverse the estree nodes
     t.VISITOR_KEYS.ChainExpression = VISITOR_KEYS.ChainExpression;
     t.VISITOR_KEYS.Property = VISITOR_KEYS.Property;
     t.VISITOR_KEYS.MethodDefinition = VISITOR_KEYS.MethodDefinition;
+
+    // Make sure we visit `exported` key to remove `identifierName` from loc node
+    t.VISITOR_KEYS.ExportAllDeclaration = t.VISITOR_KEYS.ExportAllDeclaration.concat(
+      "exported",
+    );
 
     traverse(ast, astTransformVisitor, null, state);
   } finally {
@@ -94,6 +101,8 @@ function convertNodes(ast, code) {
     delete t.VISITOR_KEYS.ChainExpression;
     delete t.VISITOR_KEYS.MethodDefinition;
     delete t.VISITOR_KEYS.Property;
+
+    t.VISITOR_KEYS.ExportAllDeclaration = oldExportAllDeclarationKeys;
   }
 }
 
