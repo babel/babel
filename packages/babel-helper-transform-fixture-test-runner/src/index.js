@@ -375,10 +375,11 @@ export default function (
               run(task);
             }
 
-            task.options = {
-              sourceMap: !!(task.sourceMappings || task.sourceMap),
-              ...task.options,
-            };
+            if ("sourceMap" in task.options === false) {
+              task.options.sourceMap = !!(
+                task.sourceMappings || task.sourceMap
+              );
+            }
 
             extend(task.options, taskOpts);
 
