@@ -45,198 +45,207 @@ Using plugins:
   transform-modules-commonjs { "chrome":"54", "ie":"10", "node":"6.10" }
   proposal-dynamic-import { "chrome":"54", "ie":"10", "node":"6.10" }
 
-Using polyfills with `entry` option:
+corejs3: `DEBUG` option
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-versions-strings-minor-3.0/input.mjs] Replaced core-js entries with the following polyfills:
-  es.symbol { "ie":"10" }
+Using targets: {
+  "chrome": "54",
+  "ie": "10",
+  "node": "6.10"
+}
+
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-versions-strings-minor-3.0/input.mjs]
+The corejs3 polyfill entry has been replaced with the following polyfills:
+  es.symbol { "chrome":"54", "ie":"10", "node":"6.10" }
   es.symbol.description { "chrome":"54", "ie":"10", "node":"6.10" }
   es.symbol.async-iterator { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.symbol.has-instance { "ie":"10" }
-  es.symbol.is-concat-spreadable { "ie":"10" }
-  es.symbol.iterator { "ie":"10" }
-  es.symbol.match { "ie":"10" }
-  es.symbol.replace { "ie":"10" }
-  es.symbol.search { "ie":"10" }
-  es.symbol.species { "ie":"10" }
-  es.symbol.split { "ie":"10" }
-  es.symbol.to-primitive { "ie":"10" }
-  es.symbol.to-string-tag { "ie":"10" }
-  es.symbol.unscopables { "ie":"10" }
-  es.array.concat { "ie":"10" }
-  es.array.copy-within { "ie":"10" }
-  es.array.every { "ie":"10" }
-  es.array.fill { "ie":"10" }
-  es.array.filter { "ie":"10" }
-  es.array.find { "ie":"10" }
-  es.array.find-index { "ie":"10" }
+  es.symbol.has-instance { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.symbol.is-concat-spreadable { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.symbol.iterator { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.symbol.match { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.symbol.replace { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.symbol.search { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.symbol.species { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.symbol.split { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.symbol.to-primitive { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.symbol.to-string-tag { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.symbol.unscopables { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.concat { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.copy-within { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.every { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.fill { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.filter { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.find { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.find-index { "chrome":"54", "ie":"10", "node":"6.10" }
   es.array.flat { "chrome":"54", "ie":"10", "node":"6.10" }
   es.array.flat-map { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.array.for-each { "ie":"10" }
-  es.array.from { "ie":"10" }
-  es.array.includes { "ie":"10", "node":"6.10" }
-  es.array.index-of { "ie":"10" }
+  es.array.for-each { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.from { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.includes { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.index-of { "chrome":"54", "ie":"10", "node":"6.10" }
   es.array.iterator { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.array.join { "ie":"10" }
-  es.array.last-index-of { "ie":"10" }
-  es.array.map { "ie":"10" }
-  es.array.of { "ie":"10" }
-  es.array.reduce { "ie":"10" }
-  es.array.reduce-right { "ie":"10" }
-  es.array.slice { "ie":"10" }
-  es.array.some { "ie":"10" }
-  es.array.sort { "chrome":"54", "node":"6.10" }
-  es.array.species { "ie":"10" }
-  es.array.splice { "ie":"10" }
+  es.array.join { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.last-index-of { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.map { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.of { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.reduce { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.reduce-right { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.slice { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.some { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.sort { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.species { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array.splice { "chrome":"54", "ie":"10", "node":"6.10" }
   es.array.unscopables.flat { "chrome":"54", "ie":"10", "node":"6.10" }
   es.array.unscopables.flat-map { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.array-buffer.constructor { "ie":"10" }
-  es.array-buffer.is-view { "ie":"10" }
-  es.array-buffer.slice { "ie":"10" }
-  es.date.to-primitive { "ie":"10" }
-  es.function.has-instance { "ie":"10" }
-  es.function.name { "ie":"10" }
-  es.json.to-string-tag { "ie":"10" }
-  es.map { "ie":"10" }
-  es.math.acosh { "ie":"10", "node":"6.10" }
-  es.math.asinh { "ie":"10" }
-  es.math.atanh { "ie":"10" }
-  es.math.cbrt { "ie":"10" }
-  es.math.clz32 { "ie":"10" }
-  es.math.cosh { "ie":"10" }
-  es.math.expm1 { "ie":"10" }
-  es.math.fround { "ie":"10" }
+  es.array-buffer.constructor { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array-buffer.is-view { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.array-buffer.slice { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.date.to-primitive { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.function.has-instance { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.function.name { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.json.to-string-tag { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.map { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.math.acosh { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.math.asinh { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.math.atanh { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.math.cbrt { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.math.clz32 { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.math.cosh { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.math.expm1 { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.math.fround { "chrome":"54", "ie":"10", "node":"6.10" }
   es.math.hypot { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.math.imul { "ie":"10" }
-  es.math.log10 { "ie":"10" }
-  es.math.log1p { "ie":"10" }
-  es.math.log2 { "ie":"10" }
-  es.math.sign { "ie":"10" }
-  es.math.sinh { "ie":"10" }
-  es.math.tanh { "ie":"10" }
-  es.math.to-string-tag { "ie":"10" }
-  es.math.trunc { "ie":"10" }
-  es.number.constructor { "ie":"10" }
-  es.number.epsilon { "ie":"10" }
-  es.number.is-finite { "ie":"10" }
-  es.number.is-integer { "ie":"10" }
-  es.number.is-nan { "ie":"10" }
-  es.number.is-safe-integer { "ie":"10" }
-  es.number.max-safe-integer { "ie":"10" }
-  es.number.min-safe-integer { "ie":"10" }
-  es.number.parse-float { "ie":"10" }
-  es.number.parse-int { "ie":"10" }
-  es.number.to-fixed { "ie":"10" }
-  es.object.assign { "ie":"10" }
+  es.math.imul { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.math.log10 { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.math.log1p { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.math.log2 { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.math.sign { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.math.sinh { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.math.tanh { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.math.to-string-tag { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.math.trunc { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.number.constructor { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.number.epsilon { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.number.is-finite { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.number.is-integer { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.number.is-nan { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.number.is-safe-integer { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.number.max-safe-integer { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.number.min-safe-integer { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.number.parse-float { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.number.parse-int { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.number.to-fixed { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.assign { "chrome":"54", "ie":"10", "node":"6.10" }
   es.object.define-getter { "chrome":"54", "ie":"10", "node":"6.10" }
   es.object.define-setter { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.object.entries { "ie":"10", "node":"6.10" }
-  es.object.freeze { "ie":"10" }
+  es.object.entries { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.freeze { "chrome":"54", "ie":"10", "node":"6.10" }
   es.object.from-entries { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.object.get-own-property-descriptor { "ie":"10" }
-  es.object.get-own-property-descriptors { "ie":"10", "node":"6.10" }
-  es.object.get-own-property-names { "ie":"10" }
-  es.object.get-prototype-of { "ie":"10" }
-  es.object.is { "ie":"10" }
-  es.object.is-extensible { "ie":"10" }
-  es.object.is-frozen { "ie":"10" }
-  es.object.is-sealed { "ie":"10" }
-  es.object.keys { "ie":"10" }
+  es.object.get-own-property-descriptor { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.get-own-property-descriptors { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.get-own-property-names { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.get-prototype-of { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.is { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.is-extensible { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.is-frozen { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.is-sealed { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.keys { "chrome":"54", "ie":"10", "node":"6.10" }
   es.object.lookup-getter { "chrome":"54", "ie":"10", "node":"6.10" }
   es.object.lookup-setter { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.object.prevent-extensions { "ie":"10" }
-  es.object.seal { "ie":"10" }
-  es.object.set-prototype-of { "ie":"10" }
-  es.object.to-string { "ie":"10" }
-  es.object.values { "ie":"10", "node":"6.10" }
+  es.object.prevent-extensions { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.seal { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.set-prototype-of { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.to-string { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.values { "chrome":"54", "ie":"10", "node":"6.10" }
   es.promise { "chrome":"54", "ie":"10", "node":"6.10" }
   es.promise.finally { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.reflect.apply { "ie":"10" }
-  es.reflect.construct { "ie":"10" }
-  es.reflect.define-property { "ie":"10" }
-  es.reflect.delete-property { "ie":"10" }
-  es.reflect.get { "ie":"10" }
-  es.reflect.get-own-property-descriptor { "ie":"10" }
-  es.reflect.get-prototype-of { "ie":"10" }
-  es.reflect.has { "ie":"10" }
-  es.reflect.is-extensible { "ie":"10" }
-  es.reflect.own-keys { "ie":"10" }
-  es.reflect.prevent-extensions { "ie":"10" }
-  es.reflect.set { "ie":"10" }
-  es.reflect.set-prototype-of { "ie":"10" }
-  es.regexp.constructor { "ie":"10" }
-  es.regexp.exec { "ie":"10" }
-  es.regexp.flags { "ie":"10" }
-  es.regexp.to-string { "ie":"10" }
-  es.set { "ie":"10" }
-  es.string.code-point-at { "ie":"10" }
-  es.string.ends-with { "ie":"10" }
-  es.string.from-code-point { "ie":"10" }
-  es.string.includes { "ie":"10" }
-  es.string.iterator { "ie":"10" }
-  es.string.match { "ie":"10" }
+  es.reflect.apply { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.reflect.construct { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.reflect.define-property { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.reflect.delete-property { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.reflect.get { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.reflect.get-own-property-descriptor { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.reflect.get-prototype-of { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.reflect.has { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.reflect.is-extensible { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.reflect.own-keys { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.reflect.prevent-extensions { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.reflect.set { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.reflect.set-prototype-of { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.regexp.constructor { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.regexp.exec { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.regexp.flags { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.regexp.to-string { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.set { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.code-point-at { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.ends-with { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.from-code-point { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.includes { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.iterator { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.match { "chrome":"54", "ie":"10", "node":"6.10" }
   es.string.pad-end { "chrome":"54", "ie":"10", "node":"6.10" }
   es.string.pad-start { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.string.raw { "ie":"10" }
-  es.string.repeat { "ie":"10" }
+  es.string.raw { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.repeat { "chrome":"54", "ie":"10", "node":"6.10" }
   es.string.replace { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.string.search { "ie":"10" }
-  es.string.split { "ie":"10", "node":"6.10" }
-  es.string.starts-with { "ie":"10" }
+  es.string.search { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.split { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.starts-with { "chrome":"54", "ie":"10", "node":"6.10" }
   es.string.trim { "chrome":"54", "ie":"10", "node":"6.10" }
   es.string.trim-end { "chrome":"54", "ie":"10", "node":"6.10" }
   es.string.trim-start { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.string.anchor { "ie":"10" }
-  es.string.big { "ie":"10" }
-  es.string.blink { "ie":"10" }
-  es.string.bold { "ie":"10" }
-  es.string.fixed { "ie":"10" }
-  es.string.fontcolor { "ie":"10" }
-  es.string.fontsize { "ie":"10" }
-  es.string.italics { "ie":"10" }
-  es.string.link { "ie":"10" }
-  es.string.small { "ie":"10" }
-  es.string.strike { "ie":"10" }
-  es.string.sub { "ie":"10" }
-  es.string.sup { "ie":"10" }
-  es.typed-array.float32-array { "ie":"10", "node":"6.10" }
-  es.typed-array.float64-array { "ie":"10", "node":"6.10" }
-  es.typed-array.int8-array { "ie":"10", "node":"6.10" }
-  es.typed-array.int16-array { "ie":"10", "node":"6.10" }
-  es.typed-array.int32-array { "ie":"10", "node":"6.10" }
-  es.typed-array.uint8-array { "ie":"10", "node":"6.10" }
-  es.typed-array.uint8-clamped-array { "ie":"10", "node":"6.10" }
-  es.typed-array.uint16-array { "ie":"10", "node":"6.10" }
-  es.typed-array.uint32-array { "ie":"10", "node":"6.10" }
-  es.typed-array.copy-within { "ie":"10" }
-  es.typed-array.every { "ie":"10" }
-  es.typed-array.fill { "ie":"10" }
-  es.typed-array.filter { "ie":"10" }
-  es.typed-array.find { "ie":"10" }
-  es.typed-array.find-index { "ie":"10" }
-  es.typed-array.for-each { "ie":"10" }
-  es.typed-array.from { "ie":"10", "node":"6.10" }
-  es.typed-array.includes { "ie":"10" }
-  es.typed-array.index-of { "ie":"10" }
-  es.typed-array.iterator { "ie":"10" }
-  es.typed-array.join { "ie":"10" }
-  es.typed-array.last-index-of { "ie":"10" }
-  es.typed-array.map { "ie":"10" }
-  es.typed-array.of { "ie":"10", "node":"6.10" }
-  es.typed-array.reduce { "ie":"10" }
-  es.typed-array.reduce-right { "ie":"10" }
-  es.typed-array.reverse { "ie":"10" }
-  es.typed-array.set { "ie":"10" }
-  es.typed-array.slice { "ie":"10" }
-  es.typed-array.some { "ie":"10" }
-  es.typed-array.sort { "ie":"10" }
-  es.typed-array.subarray { "ie":"10" }
-  es.typed-array.to-locale-string { "ie":"10" }
-  es.typed-array.to-string { "ie":"10" }
-  es.weak-map { "ie":"10" }
-  es.weak-set { "ie":"10" }
-  web.dom-collections.for-each { "chrome":"54", "ie":"10" }
-  web.dom-collections.iterator { "chrome":"54", "ie":"10" }
-  web.immediate { "chrome":"54" }
+  es.string.anchor { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.big { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.blink { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.bold { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.fixed { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.fontcolor { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.fontsize { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.italics { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.link { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.small { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.strike { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.sub { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.sup { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.float32-array { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.float64-array { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.int8-array { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.int16-array { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.int32-array { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.uint8-array { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.uint8-clamped-array { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.uint16-array { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.uint32-array { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.copy-within { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.every { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.fill { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.filter { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.find { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.find-index { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.for-each { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.from { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.includes { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.index-of { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.iterator { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.join { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.last-index-of { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.map { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.of { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.reduce { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.reduce-right { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.reverse { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.set { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.slice { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.some { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.sort { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.subarray { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.to-locale-string { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.typed-array.to-string { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.weak-map { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.weak-set { "chrome":"54", "ie":"10", "node":"6.10" }
+  web.dom-collections.for-each { "chrome":"54", "ie":"10", "node":"6.10" }
+  web.dom-collections.iterator { "chrome":"54", "ie":"10", "node":"6.10" }
+  web.immediate { "chrome":"54", "ie":"10", "node":"6.10" }
   web.queue-microtask { "chrome":"54", "ie":"10", "node":"6.10" }
   web.url { "chrome":"54", "ie":"10", "node":"6.10" }
   web.url.to-json { "chrome":"54", "ie":"10", "node":"6.10" }

@@ -47,11 +47,20 @@ Using plugins:
   transform-modules-commonjs { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-dynamic-import { "chrome":"52", "firefox":"50", "ie":"11" }
 
-Using polyfills with `usage` option:
+corejs3: `DEBUG` option
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs3-shippedProposals-2/input.js] Added following core-js polyfills:
+Using targets: {
+  "chrome": "52",
+  "firefox": "50",
+  "ie": "11"
+}
+
+Using polyfills with `usage-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs3-shippedProposals-2/input.js]
+The corejs3 polyfill added the following polyfills:
+  es.string.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
   es.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
-  es.string.iterator { "ie":"11" }
   web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs3-shippedProposals-2/input.js] Based on your code and targets, added regenerator-runtime.

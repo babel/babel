@@ -46,4 +46,4 @@ Using plugins:
   transform-modules-commonjs {}
   proposal-dynamic-import {}
 
-Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
+No polyfills were added, since the `useBuiltIns` option was not set.

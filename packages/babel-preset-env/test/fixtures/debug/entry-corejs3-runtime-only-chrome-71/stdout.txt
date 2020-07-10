@@ -20,8 +20,15 @@ Using plugins:
   transform-modules-commonjs { "chrome":"71" }
   proposal-dynamic-import { "chrome":"71" }
 
-Using polyfills with `entry` option:
+corejs3: `DEBUG` option
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-runtime-only-chrome-71/input.mjs] Import of core-js was not found.
+Using targets: {
+  "chrome": "71"
+}
+
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-runtime-only-chrome-71/input.mjs]
+The entry point for the corejs3 polyfill has not been found.
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-runtime-only-chrome-71/input.mjs] Based on your targets, regenerator-runtime import excluded.

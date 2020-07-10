@@ -37,9 +37,16 @@ Using plugins:
   transform-modules-commonjs { "electron":"0.36" }
   proposal-dynamic-import { "electron":"0.36" }
 
-Using polyfills with `entry` option:
+corejs3: `DEBUG` option
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-electron/input.mjs] Replaced core-js entries with the following polyfills:
+Using targets: {
+  "electron": "0.36"
+}
+
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-electron/input.mjs]
+The corejs3 polyfill entry has been replaced with the following polyfills:
   es.symbol { "electron":"0.36" }
   es.symbol.description { "electron":"0.36" }
   es.symbol.async-iterator { "electron":"0.36" }

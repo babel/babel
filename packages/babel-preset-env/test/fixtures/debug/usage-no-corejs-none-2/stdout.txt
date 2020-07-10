@@ -44,6 +44,15 @@ Using plugins:
   transform-modules-commonjs { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-dynamic-import { "chrome":"52", "firefox":"50", "ie":"11" }
 
-Using polyfills with `usage` option:
+corejs3: `DEBUG` option
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-no-corejs-none-2/input.js] Based on your code and targets, core-js polyfills were not added.
+Using targets: {
+  "chrome": "52",
+  "firefox": "50",
+  "ie": "11"
+}
+
+Using polyfills with `usage-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-no-corejs-none-2/input.js]
+Based on your code and targets, the corejs3 polyfill did not add any polyfill.

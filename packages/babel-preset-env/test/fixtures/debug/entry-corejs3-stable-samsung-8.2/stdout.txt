@@ -22,9 +22,16 @@ Using plugins:
   transform-modules-commonjs { "samsung":"8.2" }
   proposal-dynamic-import { "samsung":"8.2" }
 
-Using polyfills with `entry` option:
+corejs3: `DEBUG` option
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-stable-samsung-8.2/input.mjs] Replaced core-js entries with the following polyfills:
+Using targets: {
+  "samsung": "8.2"
+}
+
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-stable-samsung-8.2/input.mjs]
+The corejs3 polyfill entry has been replaced with the following polyfills:
   es.symbol.description { "samsung":"8.2" }
   es.array.flat { "samsung":"8.2" }
   es.array.flat-map { "samsung":"8.2" }

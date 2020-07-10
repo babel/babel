@@ -47,9 +47,14 @@ Using plugins:
   transform-modules-commonjs {}
   proposal-dynamic-import {}
 
-Using polyfills with `entry` option:
+corejs3: `DEBUG` option
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-es/input.mjs] Replaced core-js entries with the following polyfills:
+Using targets: {}
+
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-es/input.mjs]
+The corejs3 polyfill entry has been replaced with the following polyfills:
   es.symbol {}
   es.symbol.description {}
   es.symbol.async-iterator {}

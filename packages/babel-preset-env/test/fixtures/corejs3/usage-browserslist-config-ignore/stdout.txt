@@ -32,8 +32,22 @@ Using plugins:
   transform-block-scoping { "ios":"10.3", "safari":"10.1" }
   syntax-dynamic-import { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1", "samsung":"8.2" }
 
-Using polyfills with `usage` option:
+corejs3: `DEBUG` option
 
-[<CWD>/packages/babel-preset-env/test/fixtures/corejs3/usage-browserslist-config-ignore/input.mjs] Added following core-js polyfills:
-  es.array.iterator { "android":"61", "chrome":"61", "opera":"48", "samsung":"8.2" }
-  web.dom-collections.iterator { "android":"61", "chrome":"61", "edge":"16", "ios":"10.3", "opera":"48", "safari":"10.1", "samsung":"8.2" }
+Using targets: {
+  "android": "61",
+  "chrome": "61",
+  "edge": "16",
+  "firefox": "60",
+  "ios": "10.3",
+  "opera": "48",
+  "safari": "10.1",
+  "samsung": "8.2"
+}
+
+Using polyfills with `usage-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/corejs3/usage-browserslist-config-ignore/input.mjs]
+The corejs3 polyfill added the following polyfills:
+  es.array.iterator { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1", "samsung":"8.2" }
+  web.dom-collections.iterator { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1", "samsung":"8.2" }

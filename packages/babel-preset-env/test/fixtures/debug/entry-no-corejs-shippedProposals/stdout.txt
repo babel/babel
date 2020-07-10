@@ -47,9 +47,14 @@ Using plugins:
   transform-modules-commonjs {}
   proposal-dynamic-import {}
 
-Using polyfills with `entry` option:
+corejs3: `DEBUG` option
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-no-corejs-shippedProposals/input.mjs] Replaced core-js entries with the following polyfills:
+Using targets: {}
+
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-no-corejs-shippedProposals/input.mjs]
+The corejs3 polyfill entry has been replaced with the following polyfills:
   es.symbol {}
   es.symbol.description {}
   es.symbol.async-iterator {}
@@ -57,7 +62,6 @@ Using polyfills with `entry` option:
   es.symbol.is-concat-spreadable {}
   es.symbol.iterator {}
   es.symbol.match {}
-  es.symbol.match-all {}
   es.symbol.replace {}
   es.symbol.search {}
   es.symbol.species {}
@@ -106,8 +110,6 @@ Using polyfills with `entry` option:
   es.function.bind {}
   es.function.has-instance {}
   es.function.name {}
-  es.global-this {}
-  es.json.stringify {}
   es.json.to-string-tag {}
   es.map {}
   es.math.acosh {}
@@ -168,7 +170,6 @@ Using polyfills with `entry` option:
   es.parse-float {}
   es.parse-int {}
   es.promise {}
-  es.promise.all-settled {}
   es.promise.finally {}
   es.reflect.apply {}
   es.reflect.construct {}
@@ -186,8 +187,6 @@ Using polyfills with `entry` option:
   es.regexp.constructor {}
   es.regexp.exec {}
   es.regexp.flags {}
-  es.regexp.sticky {}
-  es.regexp.test {}
   es.regexp.to-string {}
   es.set {}
   es.string.code-point-at {}
@@ -196,7 +195,6 @@ Using polyfills with `entry` option:
   es.string.includes {}
   es.string.iterator {}
   es.string.match {}
-  es.string.match-all {}
   es.string.pad-end {}
   es.string.pad-start {}
   es.string.raw {}
@@ -258,40 +256,11 @@ Using polyfills with `entry` option:
   es.weak-map {}
   es.weak-set {}
   esnext.aggregate-error {}
-  esnext.array.is-template-object {}
   esnext.array.last-index {}
   esnext.array.last-item {}
-  esnext.async-iterator.constructor {}
-  esnext.async-iterator.as-indexed-pairs {}
-  esnext.async-iterator.drop {}
-  esnext.async-iterator.every {}
-  esnext.async-iterator.filter {}
-  esnext.async-iterator.find {}
-  esnext.async-iterator.flat-map {}
-  esnext.async-iterator.for-each {}
-  esnext.async-iterator.from {}
-  esnext.async-iterator.map {}
-  esnext.async-iterator.reduce {}
-  esnext.async-iterator.some {}
-  esnext.async-iterator.take {}
-  esnext.async-iterator.to-array {}
   esnext.composite-key {}
   esnext.composite-symbol {}
   esnext.global-this {}
-  esnext.iterator.constructor {}
-  esnext.iterator.as-indexed-pairs {}
-  esnext.iterator.drop {}
-  esnext.iterator.every {}
-  esnext.iterator.filter {}
-  esnext.iterator.find {}
-  esnext.iterator.flat-map {}
-  esnext.iterator.for-each {}
-  esnext.iterator.from {}
-  esnext.iterator.map {}
-  esnext.iterator.reduce {}
-  esnext.iterator.some {}
-  esnext.iterator.take {}
-  esnext.iterator.to-array {}
   esnext.map.delete-all {}
   esnext.map.every {}
   esnext.map.filter {}
@@ -309,8 +278,6 @@ Using polyfills with `entry` option:
   esnext.map.reduce {}
   esnext.map.some {}
   esnext.map.update {}
-  esnext.map.update-or-insert {}
-  esnext.map.upsert {}
   esnext.math.clamp {}
   esnext.math.deg-per-rad {}
   esnext.math.degrees {}
@@ -325,9 +292,6 @@ Using polyfills with `entry` option:
   esnext.math.signbit {}
   esnext.math.umulh {}
   esnext.number.from-string {}
-  esnext.object.iterate-entries {}
-  esnext.object.iterate-keys {}
-  esnext.object.iterate-values {}
   esnext.observable {}
   esnext.promise.all-settled {}
   esnext.promise.any {}
@@ -363,15 +327,12 @@ Using polyfills with `entry` option:
   esnext.string.code-points {}
   esnext.string.match-all {}
   esnext.string.replace-all {}
-  esnext.symbol.async-dispose {}
   esnext.symbol.dispose {}
   esnext.symbol.observable {}
   esnext.symbol.pattern-match {}
-  esnext.symbol.replace-all {}
   esnext.weak-map.delete-all {}
   esnext.weak-map.from {}
   esnext.weak-map.of {}
-  esnext.weak-map.upsert {}
   esnext.weak-set.add-all {}
   esnext.weak-set.delete-all {}
   esnext.weak-set.from {}

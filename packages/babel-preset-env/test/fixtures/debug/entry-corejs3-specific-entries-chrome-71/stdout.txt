@@ -20,9 +20,16 @@ Using plugins:
   transform-modules-commonjs { "chrome":"71" }
   proposal-dynamic-import { "chrome":"71" }
 
-Using polyfills with `entry` option:
+corejs3: `DEBUG` option
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-specific-entries-chrome-71/input.mjs] Replaced core-js entries with the following polyfills:
+Using targets: {
+  "chrome": "71"
+}
+
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-specific-entries-chrome-71/input.mjs]
+The corejs3 polyfill entry has been replaced with the following polyfills:
   es.object.from-entries { "chrome":"71" }
   esnext.reflect.define-metadata { "chrome":"71" }
   esnext.reflect.delete-metadata { "chrome":"71" }

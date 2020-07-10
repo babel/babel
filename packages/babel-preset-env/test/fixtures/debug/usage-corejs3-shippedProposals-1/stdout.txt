@@ -47,14 +47,23 @@ Using plugins:
   transform-modules-commonjs { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-dynamic-import { "chrome":"52", "firefox":"50", "ie":"11" }
 
-Using polyfills with `usage` option:
+corejs3: `DEBUG` option
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs3-shippedProposals-1/input.js] Added following core-js polyfills:
-  es.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
-  es.map { "firefox":"50", "ie":"11" }
-  es.object.to-string { "firefox":"50", "ie":"11" }
+Using targets: {
+  "chrome": "52",
+  "firefox": "50",
+  "ie": "11"
+}
+
+Using polyfills with `usage-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs3-shippedProposals-1/input.js]
+The corejs3 polyfill added the following polyfills:
   es.promise { "chrome":"52", "firefox":"50", "ie":"11" }
-  es.string.iterator { "ie":"11" }
+  es.object.to-string { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.map { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.string.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
   web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
   web.queue-microtask { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.global-this { "chrome":"52", "firefox":"50", "ie":"11" }

@@ -22,4 +22,4 @@ Using plugins:
   transform-modules-commonjs { "safari":"11" }
   proposal-dynamic-import { "safari":"11" }
 
-Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
+No polyfills were added, since the `useBuiltIns` option was not set.

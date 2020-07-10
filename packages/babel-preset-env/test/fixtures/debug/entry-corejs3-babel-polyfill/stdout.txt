@@ -47,6 +47,11 @@ Using plugins:
   transform-modules-commonjs {}
   proposal-dynamic-import {}
 
-Using polyfills with `entry` option:
+corejs3: `DEBUG` option
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-babel-polyfill/input.mjs] Import of core-js was not found.
+Using targets: {}
+
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-babel-polyfill/input.mjs]
+The entry point for the corejs3 polyfill has not been found.

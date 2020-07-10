@@ -17,9 +17,16 @@ Using plugins:
   transform-modules-commonjs { "chrome":"71" }
   proposal-dynamic-import { "chrome":"71" }
 
-Using polyfills with `usage` option:
+corejs3: `DEBUG` option
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs3-proposals-chrome-71-1/input.js] Added following core-js polyfills:
+Using targets: {
+  "chrome": "71"
+}
+
+Using polyfills with `usage-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs3-proposals-chrome-71-1/input.js]
+The corejs3 polyfill added the following polyfills:
   esnext.map.delete-all { "chrome":"71" }
   esnext.map.every { "chrome":"71" }
   esnext.map.filter { "chrome":"71" }

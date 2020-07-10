@@ -29,4 +29,4 @@ Using plugins:
   transform-modules-commonjs { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
   proposal-dynamic-import { "android":"80", "chrome":"80", "edge":"18", "firefox":"68", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
 
-Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
+No polyfills were added, since the `useBuiltIns` option was not set.

@@ -40,4 +40,4 @@ Using plugins:
   transform-modules-commonjs { "chrome":"40" }
   proposal-dynamic-import { "chrome":"40" }
 
-Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
+No polyfills were added, since the `useBuiltIns` option was not set.

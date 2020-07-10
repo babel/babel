@@ -20,6 +20,13 @@ Using plugins:
   transform-modules-commonjs { "chrome":"55" }
   proposal-dynamic-import { "chrome":"55" }
 
-Using polyfills with `usage` option:
+corejs3: `DEBUG` option
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs3-with-import/input.mjs] Based on your code and targets, core-js polyfills were not added.
+Using targets: {
+  "chrome": "55"
+}
+
+Using polyfills with `usage-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs3-with-import/input.mjs]
+Based on your code and targets, the corejs3 polyfill did not add any polyfill.
