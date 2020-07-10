@@ -91,11 +91,19 @@ function convertNodes(ast, code) {
     "typeParameters",
   ];
 
+  // Make sure we visit `exported` key to remove `identifierName` from loc node
+  const oldExportAllDeclarationKeys = t.VISITOR_KEYS.ExportAllDeclaration;
+  t.VISITOR_KEYS.ExportAllDeclaration = t.VISITOR_KEYS.ExportAllDeclaration.concat(
+    "exported",
+  );
+
   traverse(ast, astTransformVisitor, null, state);
 
   // These can be safely deleted because they are not defined in the original visitor keys.
   delete t.VISITOR_KEYS.Property;
   delete t.VISITOR_KEYS.MethodDefinition;
+
+  t.VISITOR_KEYS.ExportAllDeclaration = oldExportAllDeclarationKeys;
 }
 
 function convertProgramNode(ast) {

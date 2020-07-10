@@ -249,7 +249,7 @@ defineType("ClassDeclaration", {
 });
 
 defineType("ExportAllDeclaration", {
-  visitor: ["source", "exported"],
+  visitor: ["source"],
   aliases: [
     "Statement",
     "Declaration",
