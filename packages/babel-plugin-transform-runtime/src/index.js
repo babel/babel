@@ -1,9 +1,8 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
+import pluginPolyfillCoreJS3 from "babel-plugin-polyfill-corejs3";
 
-import getCoreJS3Definitions from "./runtime-corejs3-definitions";
-import { typeAnnotationToString } from "./helpers";
 import getRuntimePath from "./get-runtime-path";
 
 function supportsStaticESM(caller) {
@@ -90,42 +89,6 @@ export default declare((api, options, dirname) => {
     return Object.prototype.hasOwnProperty.call(obj, key);
   }
 
-  function hasMapping(methods, name) {
-    return has(methods, name) && (proposals || methods[name].stable);
-  }
-
-  function hasStaticMapping(object, method) {
-    return (
-      has(StaticProperties, object) &&
-      hasMapping(StaticProperties[object], method)
-    );
-  }
-
-  function isNamespaced(path) {
-    const binding = path.scope.getBinding(path.node.name);
-    if (!binding) return false;
-    return binding.path.isImportNamespaceSpecifier();
-  }
-
-  function maybeNeedsPolyfill(path, methods, name) {
-    if (isNamespaced(path.get("object"))) return false;
-    if (!methods[name].types) return true;
-
-    const typeAnnotation = path.get("object").getTypeAnnotation();
-    const type = typeAnnotationToString(typeAnnotation);
-    if (!type) return true;
-
-    return methods[name].types.some(name => name === type);
-  }
-
-  function resolvePropertyName(path, computed) {
-    const { node } = path;
-    if (!computed) return node.name;
-    if (path.isStringLiteral()) return node.value;
-    const result = path.evaluate();
-    return result.value;
-  }
-
   if (has(options, "useBuiltIns")) {
     if (options.useBuiltIns) {
       throw new Error(
@@ -170,20 +133,27 @@ export default declare((api, options, dirname) => {
 
   const moduleName = injectCoreJS ? "@babel/runtime-corejs3" : "@babel/runtime";
 
-  const corejsRoot = injectCoreJS && !proposals ? "core-js-stable" : "core-js";
-
-  const {
-    BuiltIns,
-    StaticProperties,
-    InstanceProperties,
-  } = getCoreJS3Definitions(runtimeVersion);
-
   const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 
   const modulePath = getRuntimePath(moduleName, dirname, absoluteRuntime);
 
   return {
     name: "transform-runtime",
+
+    inherits:
+      corejsVersion === false
+        ? undefined
+        : function runtimeInjectCoreJS3(babel, options, dirname) {
+            return pluginPolyfillCoreJS3(
+              babel,
+              {
+                proposals,
+                method: "usage-pure",
+                missingDependencies: { log: "per-file" },
+              },
+              dirname,
+            );
+          },
 
     pre(file) {
       if (useRuntimeHelpers) {
@@ -245,206 +215,17 @@ export default declare((api, options, dirname) => {
     },
 
     visitor: {
+      // transform `regeneratorRuntime`
       ReferencedIdentifier(path) {
-        const { node, parent, scope } = path;
-        const { name } = node;
+        if (!useRuntimeRegenerator) return;
+        if (path.node.name !== "regeneratorRuntime") return;
 
-        // transform `regeneratorRuntime`
-        if (name === "regeneratorRuntime" && useRuntimeRegenerator) {
-          path.replaceWith(
-            this.addDefaultImport(
-              `${modulePath}/regenerator`,
-              "regeneratorRuntime",
-            ),
-          );
-          return;
-        }
-
-        if (!injectCoreJS) return;
-
-        if (t.isMemberExpression(parent)) return;
-        if (!hasMapping(BuiltIns, name)) return;
-        if (scope.getBindingIdentifier(name)) return;
-
-        // transform global built-ins like `Symbol()`, `new Promise`
         path.replaceWith(
           this.addDefaultImport(
-            `${modulePath}/${corejsRoot}/${BuiltIns[name].path}`,
-            name,
+            `${modulePath}/regenerator`,
+            "regeneratorRuntime",
           ),
         );
-      },
-
-      CallExpression(path) {
-        if (!injectCoreJS) return;
-
-        const { node } = path;
-        const { callee } = node;
-
-        if (!t.isMemberExpression(callee)) return;
-
-        const { object } = callee;
-        const propertyName = resolvePropertyName(
-          path.get("callee.property"),
-          callee.computed,
-        );
-
-        // transform calling instance methods like `something.includes()`
-        if (injectCoreJS && !hasStaticMapping(object.name, propertyName)) {
-          if (
-            hasMapping(InstanceProperties, propertyName) &&
-            maybeNeedsPolyfill(
-              path.get("callee"),
-              InstanceProperties,
-              propertyName,
-            )
-          ) {
-            let context1, context2;
-            if (t.isIdentifier(object)) {
-              context1 = object;
-              context2 = t.cloneNode(object);
-            } else {
-              context1 = path.scope.generateDeclaredUidIdentifier("context");
-              context2 = t.assignmentExpression("=", context1, object);
-            }
-            node.callee = t.memberExpression(
-              t.callExpression(
-                this.addDefaultImport(
-                  `${moduleName}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
-                  `${propertyName}InstanceProperty`,
-                ),
-                [context2],
-              ),
-              t.identifier("call"),
-            );
-            node.arguments.unshift(context1);
-            return;
-          }
-        }
-        // we can't compile this
-        if (node.arguments.length) return;
-        if (!callee.computed) return;
-        if (!path.get("callee.property").matchesPattern("Symbol.iterator")) {
-          return;
-        }
-
-        // transform `something[Symbol.iterator]()` to calling `getIterator(something)` helper
-        path.replaceWith(
-          t.callExpression(
-            this.addDefaultImport(
-              `${modulePath}/core-js/get-iterator`,
-              "getIterator",
-            ),
-            [object],
-          ),
-        );
-      },
-
-      // transform `Symbol.iterator in something` to calling `isIterable(something)` helper
-      BinaryExpression(path) {
-        if (!injectCoreJS) return;
-        if (path.node.operator !== "in") return;
-        if (!path.get("left").matchesPattern("Symbol.iterator")) return;
-
-        path.replaceWith(
-          t.callExpression(
-            this.addDefaultImport(
-              `${modulePath}/core-js/is-iterable`,
-              "isIterable",
-            ),
-            [path.node.right],
-          ),
-        );
-      },
-
-      // transform static built-ins methods like `Array.from`
-      MemberExpression: {
-        enter(path) {
-          if (!injectCoreJS) return;
-          if (!path.isReferenced()) return;
-          // skip transforming `delete something.includes`
-          if (path.parentPath.isUnaryExpression({ operator: "delete" })) return;
-
-          const { node } = path;
-          const { object } = node;
-
-          if (!t.isReferenced(object, node)) return;
-
-          // transform `something[Symbol.iterator]` to calling `getIteratorMethod(something)` helper
-          if (
-            node.computed &&
-            path.get("property").matchesPattern("Symbol.iterator")
-          ) {
-            path.replaceWith(
-              t.callExpression(
-                this.addDefaultImport(
-                  `${moduleName}/core-js/get-iterator-method`,
-                  "getIteratorMethod",
-                ),
-                [object],
-              ),
-            );
-            return;
-          }
-
-          const objectName = object.name;
-          const propertyName = resolvePropertyName(
-            path.get("property"),
-            node.computed,
-          );
-          // doesn't reference the global
-          if (
-            path.scope.getBindingIdentifier(objectName) ||
-            !hasStaticMapping(objectName, propertyName)
-          ) {
-            // transform getting of instance methods like `method = something.includes`
-            if (
-              hasMapping(InstanceProperties, propertyName) &&
-              maybeNeedsPolyfill(path, InstanceProperties, propertyName)
-            ) {
-              path.replaceWith(
-                t.callExpression(
-                  this.addDefaultImport(
-                    `${moduleName}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
-                    `${propertyName}InstanceProperty`,
-                  ),
-                  [object],
-                ),
-              );
-            }
-            return;
-          }
-
-          path.replaceWith(
-            this.addDefaultImport(
-              `${modulePath}/${corejsRoot}/${StaticProperties[objectName][propertyName].path}`,
-              `${objectName}$${propertyName}`,
-            ),
-          );
-        },
-
-        exit(path) {
-          if (!injectCoreJS) return;
-          if (!path.isReferenced()) return;
-          if (path.node.computed) return;
-
-          const { node } = path;
-          const { object } = node;
-          const { name } = object;
-
-          if (!hasMapping(BuiltIns, name)) return;
-          if (path.scope.getBindingIdentifier(name)) return;
-
-          path.replaceWith(
-            t.memberExpression(
-              this.addDefaultImport(
-                `${modulePath}/${corejsRoot}/${BuiltIns[name].path}`,
-                name,
-              ),
-              node.property,
-            ),
-          );
-        },
       },
     },
   };

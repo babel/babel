@@ -22,6 +22,7 @@
   "dependencies": {
     "@babel/helper-module-imports": "workspace:^7.10.4",
     "@babel/helper-plugin-utils": "workspace:^7.10.4",
+    "babel-plugin-polyfill-corejs3": "^0.0.3",
     "semver": "^5.5.1"
   },
   "peerDependencies": {

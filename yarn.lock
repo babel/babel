@@ -2915,6 +2915,7 @@ __metadata:
     "@babel/runtime": "workspace:^7.10.4"
     "@babel/template": "workspace:^7.10.4"
     "@babel/types": "workspace:^7.10.4"
+    babel-plugin-polyfill-corejs3: ^0.0.3
     semver: ^5.5.1
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -3397,7 +3398,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/runtime-corejs3@workspace:packages/babel-runtime-corejs3"
   dependencies:
-    core-js-pure: ^3.0.0
+    core-js-pure: ^3.6.5
     regenerator-runtime: ^0.13.4
   languageName: unknown
   linkType: soft
@@ -7487,7 +7488,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-pure@npm:^3.0.0, core-js-pure@npm:^3.2.1":
+"core-js-pure@npm:^3.2.1, core-js-pure@npm:^3.6.5":
   version: 3.6.5
   resolution: "core-js-pure@npm:3.6.5"
   checksum: 91fc8e0b699d5bcb11f265ad4544d08c98096b86ad6c9b4c00109616db0aa992ceb58ea82d0dbae2a16658a7aaf2922aa6f9fc1107dc3b0055270799d0414a3f
