@@ -5,1055 +5,1057 @@
  */
 import builder from "../builder";
 
-export function ArrayExpression(...args: Array<any>): Object {
+export function arrayExpression(...args: Array<any>): Object {
   return builder("ArrayExpression", ...args);
 }
-export { ArrayExpression as arrayExpression };
-export function AssignmentExpression(...args: Array<any>): Object {
+export { arrayExpression as ArrayExpression };
+export function assignmentExpression(...args: Array<any>): Object {
   return builder("AssignmentExpression", ...args);
 }
-export { AssignmentExpression as assignmentExpression };
-export function BinaryExpression(...args: Array<any>): Object {
+export { assignmentExpression as AssignmentExpression };
+export function binaryExpression(...args: Array<any>): Object {
   return builder("BinaryExpression", ...args);
 }
-export { BinaryExpression as binaryExpression };
-export function InterpreterDirective(...args: Array<any>): Object {
+export { binaryExpression as BinaryExpression };
+export function interpreterDirective(...args: Array<any>): Object {
   return builder("InterpreterDirective", ...args);
 }
-export { InterpreterDirective as interpreterDirective };
-export function Directive(...args: Array<any>): Object {
+export { interpreterDirective as InterpreterDirective };
+export function directive(...args: Array<any>): Object {
   return builder("Directive", ...args);
 }
-export { Directive as directive };
-export function DirectiveLiteral(...args: Array<any>): Object {
+export { directive as Directive };
+export function directiveLiteral(...args: Array<any>): Object {
   return builder("DirectiveLiteral", ...args);
 }
-export { DirectiveLiteral as directiveLiteral };
-export function BlockStatement(...args: Array<any>): Object {
+export { directiveLiteral as DirectiveLiteral };
+export function blockStatement(...args: Array<any>): Object {
   return builder("BlockStatement", ...args);
 }
-export { BlockStatement as blockStatement };
-export function BreakStatement(...args: Array<any>): Object {
+export { blockStatement as BlockStatement };
+export function breakStatement(...args: Array<any>): Object {
   return builder("BreakStatement", ...args);
 }
-export { BreakStatement as breakStatement };
-export function CallExpression(...args: Array<any>): Object {
+export { breakStatement as BreakStatement };
+export function callExpression(...args: Array<any>): Object {
   return builder("CallExpression", ...args);
 }
-export { CallExpression as callExpression };
-export function CatchClause(...args: Array<any>): Object {
+export { callExpression as CallExpression };
+export function catchClause(...args: Array<any>): Object {
   return builder("CatchClause", ...args);
 }
-export { CatchClause as catchClause };
-export function ConditionalExpression(...args: Array<any>): Object {
+export { catchClause as CatchClause };
+export function conditionalExpression(...args: Array<any>): Object {
   return builder("ConditionalExpression", ...args);
 }
-export { ConditionalExpression as conditionalExpression };
-export function ContinueStatement(...args: Array<any>): Object {
+export { conditionalExpression as ConditionalExpression };
+export function continueStatement(...args: Array<any>): Object {
   return builder("ContinueStatement", ...args);
 }
-export { ContinueStatement as continueStatement };
-export function DebuggerStatement(...args: Array<any>): Object {
+export { continueStatement as ContinueStatement };
+export function debuggerStatement(...args: Array<any>): Object {
   return builder("DebuggerStatement", ...args);
 }
-export { DebuggerStatement as debuggerStatement };
-export function DoWhileStatement(...args: Array<any>): Object {
+export { debuggerStatement as DebuggerStatement };
+export function doWhileStatement(...args: Array<any>): Object {
   return builder("DoWhileStatement", ...args);
 }
-export { DoWhileStatement as doWhileStatement };
-export function EmptyStatement(...args: Array<any>): Object {
+export { doWhileStatement as DoWhileStatement };
+export function emptyStatement(...args: Array<any>): Object {
   return builder("EmptyStatement", ...args);
 }
-export { EmptyStatement as emptyStatement };
-export function ExpressionStatement(...args: Array<any>): Object {
+export { emptyStatement as EmptyStatement };
+export function expressionStatement(...args: Array<any>): Object {
   return builder("ExpressionStatement", ...args);
 }
-export { ExpressionStatement as expressionStatement };
-export function File(...args: Array<any>): Object {
+export { expressionStatement as ExpressionStatement };
+export function file(...args: Array<any>): Object {
   return builder("File", ...args);
 }
-export { File as file };
-export function ForInStatement(...args: Array<any>): Object {
+export { file as File };
+export function forInStatement(...args: Array<any>): Object {
   return builder("ForInStatement", ...args);
 }
-export { ForInStatement as forInStatement };
-export function ForStatement(...args: Array<any>): Object {
+export { forInStatement as ForInStatement };
+export function forStatement(...args: Array<any>): Object {
   return builder("ForStatement", ...args);
 }
-export { ForStatement as forStatement };
-export function FunctionDeclaration(...args: Array<any>): Object {
+export { forStatement as ForStatement };
+export function functionDeclaration(...args: Array<any>): Object {
   return builder("FunctionDeclaration", ...args);
 }
-export { FunctionDeclaration as functionDeclaration };
-export function FunctionExpression(...args: Array<any>): Object {
+export { functionDeclaration as FunctionDeclaration };
+export function functionExpression(...args: Array<any>): Object {
   return builder("FunctionExpression", ...args);
 }
-export { FunctionExpression as functionExpression };
-export function Identifier(...args: Array<any>): Object {
+export { functionExpression as FunctionExpression };
+export function identifier(...args: Array<any>): Object {
   return builder("Identifier", ...args);
 }
-export { Identifier as identifier };
-export function IfStatement(...args: Array<any>): Object {
+export { identifier as Identifier };
+export function ifStatement(...args: Array<any>): Object {
   return builder("IfStatement", ...args);
 }
-export { IfStatement as ifStatement };
-export function LabeledStatement(...args: Array<any>): Object {
+export { ifStatement as IfStatement };
+export function labeledStatement(...args: Array<any>): Object {
   return builder("LabeledStatement", ...args);
 }
-export { LabeledStatement as labeledStatement };
-export function StringLiteral(...args: Array<any>): Object {
+export { labeledStatement as LabeledStatement };
+export function stringLiteral(...args: Array<any>): Object {
   return builder("StringLiteral", ...args);
 }
-export { StringLiteral as stringLiteral };
-export function NumericLiteral(...args: Array<any>): Object {
+export { stringLiteral as StringLiteral };
+export function numericLiteral(...args: Array<any>): Object {
   return builder("NumericLiteral", ...args);
 }
-export { NumericLiteral as numericLiteral };
-export function NullLiteral(...args: Array<any>): Object {
+export { numericLiteral as NumericLiteral };
+export function nullLiteral(...args: Array<any>): Object {
   return builder("NullLiteral", ...args);
 }
-export { NullLiteral as nullLiteral };
-export function BooleanLiteral(...args: Array<any>): Object {
+export { nullLiteral as NullLiteral };
+export function booleanLiteral(...args: Array<any>): Object {
   return builder("BooleanLiteral", ...args);
 }
-export { BooleanLiteral as booleanLiteral };
-export function RegExpLiteral(...args: Array<any>): Object {
+export { booleanLiteral as BooleanLiteral };
+export function regExpLiteral(...args: Array<any>): Object {
   return builder("RegExpLiteral", ...args);
 }
-export { RegExpLiteral as regExpLiteral };
-export function LogicalExpression(...args: Array<any>): Object {
+export { regExpLiteral as RegExpLiteral };
+export function logicalExpression(...args: Array<any>): Object {
   return builder("LogicalExpression", ...args);
 }
-export { LogicalExpression as logicalExpression };
-export function MemberExpression(...args: Array<any>): Object {
+export { logicalExpression as LogicalExpression };
+export function memberExpression(...args: Array<any>): Object {
   return builder("MemberExpression", ...args);
 }
-export { MemberExpression as memberExpression };
-export function NewExpression(...args: Array<any>): Object {
+export { memberExpression as MemberExpression };
+export function newExpression(...args: Array<any>): Object {
   return builder("NewExpression", ...args);
 }
-export { NewExpression as newExpression };
-export function Program(...args: Array<any>): Object {
+export { newExpression as NewExpression };
+export function program(...args: Array<any>): Object {
   return builder("Program", ...args);
 }
-export { Program as program };
-export function ObjectExpression(...args: Array<any>): Object {
+export { program as Program };
+export function objectExpression(...args: Array<any>): Object {
   return builder("ObjectExpression", ...args);
 }
-export { ObjectExpression as objectExpression };
-export function ObjectMethod(...args: Array<any>): Object {
+export { objectExpression as ObjectExpression };
+export function objectMethod(...args: Array<any>): Object {
   return builder("ObjectMethod", ...args);
 }
-export { ObjectMethod as objectMethod };
-export function ObjectProperty(...args: Array<any>): Object {
+export { objectMethod as ObjectMethod };
+export function objectProperty(...args: Array<any>): Object {
   return builder("ObjectProperty", ...args);
 }
-export { ObjectProperty as objectProperty };
-export function RestElement(...args: Array<any>): Object {
+export { objectProperty as ObjectProperty };
+export function restElement(...args: Array<any>): Object {
   return builder("RestElement", ...args);
 }
-export { RestElement as restElement };
-export function ReturnStatement(...args: Array<any>): Object {
+export { restElement as RestElement };
+export function returnStatement(...args: Array<any>): Object {
   return builder("ReturnStatement", ...args);
 }
-export { ReturnStatement as returnStatement };
-export function SequenceExpression(...args: Array<any>): Object {
+export { returnStatement as ReturnStatement };
+export function sequenceExpression(...args: Array<any>): Object {
   return builder("SequenceExpression", ...args);
 }
-export { SequenceExpression as sequenceExpression };
-export function ParenthesizedExpression(...args: Array<any>): Object {
+export { sequenceExpression as SequenceExpression };
+export function parenthesizedExpression(...args: Array<any>): Object {
   return builder("ParenthesizedExpression", ...args);
 }
-export { ParenthesizedExpression as parenthesizedExpression };
-export function SwitchCase(...args: Array<any>): Object {
+export { parenthesizedExpression as ParenthesizedExpression };
+export function switchCase(...args: Array<any>): Object {
   return builder("SwitchCase", ...args);
 }
-export { SwitchCase as switchCase };
-export function SwitchStatement(...args: Array<any>): Object {
+export { switchCase as SwitchCase };
+export function switchStatement(...args: Array<any>): Object {
   return builder("SwitchStatement", ...args);
 }
-export { SwitchStatement as switchStatement };
-export function ThisExpression(...args: Array<any>): Object {
+export { switchStatement as SwitchStatement };
+export function thisExpression(...args: Array<any>): Object {
   return builder("ThisExpression", ...args);
 }
-export { ThisExpression as thisExpression };
-export function ThrowStatement(...args: Array<any>): Object {
+export { thisExpression as ThisExpression };
+export function throwStatement(...args: Array<any>): Object {
   return builder("ThrowStatement", ...args);
 }
-export { ThrowStatement as throwStatement };
-export function TryStatement(...args: Array<any>): Object {
+export { throwStatement as ThrowStatement };
+export function tryStatement(...args: Array<any>): Object {
   return builder("TryStatement", ...args);
 }
-export { TryStatement as tryStatement };
-export function UnaryExpression(...args: Array<any>): Object {
+export { tryStatement as TryStatement };
+export function unaryExpression(...args: Array<any>): Object {
   return builder("UnaryExpression", ...args);
 }
-export { UnaryExpression as unaryExpression };
-export function UpdateExpression(...args: Array<any>): Object {
+export { unaryExpression as UnaryExpression };
+export function updateExpression(...args: Array<any>): Object {
   return builder("UpdateExpression", ...args);
 }
-export { UpdateExpression as updateExpression };
-export function VariableDeclaration(...args: Array<any>): Object {
+export { updateExpression as UpdateExpression };
+export function variableDeclaration(...args: Array<any>): Object {
   return builder("VariableDeclaration", ...args);
 }
-export { VariableDeclaration as variableDeclaration };
-export function VariableDeclarator(...args: Array<any>): Object {
+export { variableDeclaration as VariableDeclaration };
+export function variableDeclarator(...args: Array<any>): Object {
   return builder("VariableDeclarator", ...args);
 }
-export { VariableDeclarator as variableDeclarator };
-export function WhileStatement(...args: Array<any>): Object {
+export { variableDeclarator as VariableDeclarator };
+export function whileStatement(...args: Array<any>): Object {
   return builder("WhileStatement", ...args);
 }
-export { WhileStatement as whileStatement };
-export function WithStatement(...args: Array<any>): Object {
+export { whileStatement as WhileStatement };
+export function withStatement(...args: Array<any>): Object {
   return builder("WithStatement", ...args);
 }
-export { WithStatement as withStatement };
-export function AssignmentPattern(...args: Array<any>): Object {
+export { withStatement as WithStatement };
+export function assignmentPattern(...args: Array<any>): Object {
   return builder("AssignmentPattern", ...args);
 }
-export { AssignmentPattern as assignmentPattern };
-export function ArrayPattern(...args: Array<any>): Object {
+export { assignmentPattern as AssignmentPattern };
+export function arrayPattern(...args: Array<any>): Object {
   return builder("ArrayPattern", ...args);
 }
-export { ArrayPattern as arrayPattern };
-export function ArrowFunctionExpression(...args: Array<any>): Object {
+export { arrayPattern as ArrayPattern };
+export function arrowFunctionExpression(...args: Array<any>): Object {
   return builder("ArrowFunctionExpression", ...args);
 }
-export { ArrowFunctionExpression as arrowFunctionExpression };
-export function ClassBody(...args: Array<any>): Object {
+export { arrowFunctionExpression as ArrowFunctionExpression };
+export function classBody(...args: Array<any>): Object {
   return builder("ClassBody", ...args);
 }
-export { ClassBody as classBody };
-export function ClassExpression(...args: Array<any>): Object {
+export { classBody as ClassBody };
+export function classExpression(...args: Array<any>): Object {
   return builder("ClassExpression", ...args);
 }
-export { ClassExpression as classExpression };
-export function ClassDeclaration(...args: Array<any>): Object {
+export { classExpression as ClassExpression };
+export function classDeclaration(...args: Array<any>): Object {
   return builder("ClassDeclaration", ...args);
 }
-export { ClassDeclaration as classDeclaration };
-export function ExportAllDeclaration(...args: Array<any>): Object {
+export { classDeclaration as ClassDeclaration };
+export function exportAllDeclaration(...args: Array<any>): Object {
   return builder("ExportAllDeclaration", ...args);
 }
-export { ExportAllDeclaration as exportAllDeclaration };
-export function ExportDefaultDeclaration(...args: Array<any>): Object {
+export { exportAllDeclaration as ExportAllDeclaration };
+export function exportDefaultDeclaration(...args: Array<any>): Object {
   return builder("ExportDefaultDeclaration", ...args);
 }
-export { ExportDefaultDeclaration as exportDefaultDeclaration };
-export function ExportNamedDeclaration(...args: Array<any>): Object {
+export { exportDefaultDeclaration as ExportDefaultDeclaration };
+export function exportNamedDeclaration(...args: Array<any>): Object {
   return builder("ExportNamedDeclaration", ...args);
 }
-export { ExportNamedDeclaration as exportNamedDeclaration };
-export function ExportSpecifier(...args: Array<any>): Object {
+export { exportNamedDeclaration as ExportNamedDeclaration };
+export function exportSpecifier(...args: Array<any>): Object {
   return builder("ExportSpecifier", ...args);
 }
-export { ExportSpecifier as exportSpecifier };
-export function ForOfStatement(...args: Array<any>): Object {
+export { exportSpecifier as ExportSpecifier };
+export function forOfStatement(...args: Array<any>): Object {
   return builder("ForOfStatement", ...args);
 }
-export { ForOfStatement as forOfStatement };
-export function ImportDeclaration(...args: Array<any>): Object {
+export { forOfStatement as ForOfStatement };
+export function importDeclaration(...args: Array<any>): Object {
   return builder("ImportDeclaration", ...args);
 }
-export { ImportDeclaration as importDeclaration };
-export function ImportDefaultSpecifier(...args: Array<any>): Object {
+export { importDeclaration as ImportDeclaration };
+export function importDefaultSpecifier(...args: Array<any>): Object {
   return builder("ImportDefaultSpecifier", ...args);
 }
-export { ImportDefaultSpecifier as importDefaultSpecifier };
-export function ImportNamespaceSpecifier(...args: Array<any>): Object {
+export { importDefaultSpecifier as ImportDefaultSpecifier };
+export function importNamespaceSpecifier(...args: Array<any>): Object {
   return builder("ImportNamespaceSpecifier", ...args);
 }
-export { ImportNamespaceSpecifier as importNamespaceSpecifier };
-export function ImportSpecifier(...args: Array<any>): Object {
+export { importNamespaceSpecifier as ImportNamespaceSpecifier };
+export function importSpecifier(...args: Array<any>): Object {
   return builder("ImportSpecifier", ...args);
 }
-export { ImportSpecifier as importSpecifier };
-export function MetaProperty(...args: Array<any>): Object {
+export { importSpecifier as ImportSpecifier };
+export function metaProperty(...args: Array<any>): Object {
   return builder("MetaProperty", ...args);
 }
-export { MetaProperty as metaProperty };
-export function ClassMethod(...args: Array<any>): Object {
+export { metaProperty as MetaProperty };
+export function classMethod(...args: Array<any>): Object {
   return builder("ClassMethod", ...args);
 }
-export { ClassMethod as classMethod };
-export function ObjectPattern(...args: Array<any>): Object {
+export { classMethod as ClassMethod };
+export function objectPattern(...args: Array<any>): Object {
   return builder("ObjectPattern", ...args);
 }
-export { ObjectPattern as objectPattern };
-export function SpreadElement(...args: Array<any>): Object {
+export { objectPattern as ObjectPattern };
+export function spreadElement(...args: Array<any>): Object {
   return builder("SpreadElement", ...args);
 }
-export { SpreadElement as spreadElement };
-export function Super(...args: Array<any>): Object {
+export { spreadElement as SpreadElement };
+function _super(...args: Array<any>): Object {
   return builder("Super", ...args);
 }
-export { Super as super };
-export function TaggedTemplateExpression(...args: Array<any>): Object {
+export { _super as Super };
+export { _super as super };
+export function taggedTemplateExpression(...args: Array<any>): Object {
   return builder("TaggedTemplateExpression", ...args);
 }
-export { TaggedTemplateExpression as taggedTemplateExpression };
-export function TemplateElement(...args: Array<any>): Object {
+export { taggedTemplateExpression as TaggedTemplateExpression };
+export function templateElement(...args: Array<any>): Object {
   return builder("TemplateElement", ...args);
 }
-export { TemplateElement as templateElement };
-export function TemplateLiteral(...args: Array<any>): Object {
+export { templateElement as TemplateElement };
+export function templateLiteral(...args: Array<any>): Object {
   return builder("TemplateLiteral", ...args);
 }
-export { TemplateLiteral as templateLiteral };
-export function YieldExpression(...args: Array<any>): Object {
+export { templateLiteral as TemplateLiteral };
+export function yieldExpression(...args: Array<any>): Object {
   return builder("YieldExpression", ...args);
 }
-export { YieldExpression as yieldExpression };
-export function AnyTypeAnnotation(...args: Array<any>): Object {
+export { yieldExpression as YieldExpression };
+export function anyTypeAnnotation(...args: Array<any>): Object {
   return builder("AnyTypeAnnotation", ...args);
 }
-export { AnyTypeAnnotation as anyTypeAnnotation };
-export function ArrayTypeAnnotation(...args: Array<any>): Object {
+export { anyTypeAnnotation as AnyTypeAnnotation };
+export function arrayTypeAnnotation(...args: Array<any>): Object {
   return builder("ArrayTypeAnnotation", ...args);
 }
-export { ArrayTypeAnnotation as arrayTypeAnnotation };
-export function BooleanTypeAnnotation(...args: Array<any>): Object {
+export { arrayTypeAnnotation as ArrayTypeAnnotation };
+export function booleanTypeAnnotation(...args: Array<any>): Object {
   return builder("BooleanTypeAnnotation", ...args);
 }
-export { BooleanTypeAnnotation as booleanTypeAnnotation };
-export function BooleanLiteralTypeAnnotation(...args: Array<any>): Object {
+export { booleanTypeAnnotation as BooleanTypeAnnotation };
+export function booleanLiteralTypeAnnotation(...args: Array<any>): Object {
   return builder("BooleanLiteralTypeAnnotation", ...args);
 }
-export { BooleanLiteralTypeAnnotation as booleanLiteralTypeAnnotation };
-export function NullLiteralTypeAnnotation(...args: Array<any>): Object {
+export { booleanLiteralTypeAnnotation as BooleanLiteralTypeAnnotation };
+export function nullLiteralTypeAnnotation(...args: Array<any>): Object {
   return builder("NullLiteralTypeAnnotation", ...args);
 }
-export { NullLiteralTypeAnnotation as nullLiteralTypeAnnotation };
-export function ClassImplements(...args: Array<any>): Object {
+export { nullLiteralTypeAnnotation as NullLiteralTypeAnnotation };
+export function classImplements(...args: Array<any>): Object {
   return builder("ClassImplements", ...args);
 }
-export { ClassImplements as classImplements };
-export function DeclareClass(...args: Array<any>): Object {
+export { classImplements as ClassImplements };
+export function declareClass(...args: Array<any>): Object {
   return builder("DeclareClass", ...args);
 }
-export { DeclareClass as declareClass };
-export function DeclareFunction(...args: Array<any>): Object {
+export { declareClass as DeclareClass };
+export function declareFunction(...args: Array<any>): Object {
   return builder("DeclareFunction", ...args);
 }
-export { DeclareFunction as declareFunction };
-export function DeclareInterface(...args: Array<any>): Object {
+export { declareFunction as DeclareFunction };
+export function declareInterface(...args: Array<any>): Object {
   return builder("DeclareInterface", ...args);
 }
-export { DeclareInterface as declareInterface };
-export function DeclareModule(...args: Array<any>): Object {
+export { declareInterface as DeclareInterface };
+export function declareModule(...args: Array<any>): Object {
   return builder("DeclareModule", ...args);
 }
-export { DeclareModule as declareModule };
-export function DeclareModuleExports(...args: Array<any>): Object {
+export { declareModule as DeclareModule };
+export function declareModuleExports(...args: Array<any>): Object {
   return builder("DeclareModuleExports", ...args);
 }
-export { DeclareModuleExports as declareModuleExports };
-export function DeclareTypeAlias(...args: Array<any>): Object {
+export { declareModuleExports as DeclareModuleExports };
+export function declareTypeAlias(...args: Array<any>): Object {
   return builder("DeclareTypeAlias", ...args);
 }
-export { DeclareTypeAlias as declareTypeAlias };
-export function DeclareOpaqueType(...args: Array<any>): Object {
+export { declareTypeAlias as DeclareTypeAlias };
+export function declareOpaqueType(...args: Array<any>): Object {
   return builder("DeclareOpaqueType", ...args);
 }
-export { DeclareOpaqueType as declareOpaqueType };
-export function DeclareVariable(...args: Array<any>): Object {
+export { declareOpaqueType as DeclareOpaqueType };
+export function declareVariable(...args: Array<any>): Object {
   return builder("DeclareVariable", ...args);
 }
-export { DeclareVariable as declareVariable };
-export function DeclareExportDeclaration(...args: Array<any>): Object {
+export { declareVariable as DeclareVariable };
+export function declareExportDeclaration(...args: Array<any>): Object {
   return builder("DeclareExportDeclaration", ...args);
 }
-export { DeclareExportDeclaration as declareExportDeclaration };
-export function DeclareExportAllDeclaration(...args: Array<any>): Object {
+export { declareExportDeclaration as DeclareExportDeclaration };
+export function declareExportAllDeclaration(...args: Array<any>): Object {
   return builder("DeclareExportAllDeclaration", ...args);
 }
-export { DeclareExportAllDeclaration as declareExportAllDeclaration };
-export function DeclaredPredicate(...args: Array<any>): Object {
+export { declareExportAllDeclaration as DeclareExportAllDeclaration };
+export function declaredPredicate(...args: Array<any>): Object {
   return builder("DeclaredPredicate", ...args);
 }
-export { DeclaredPredicate as declaredPredicate };
-export function ExistsTypeAnnotation(...args: Array<any>): Object {
+export { declaredPredicate as DeclaredPredicate };
+export function existsTypeAnnotation(...args: Array<any>): Object {
   return builder("ExistsTypeAnnotation", ...args);
 }
-export { ExistsTypeAnnotation as existsTypeAnnotation };
-export function FunctionTypeAnnotation(...args: Array<any>): Object {
+export { existsTypeAnnotation as ExistsTypeAnnotation };
+export function functionTypeAnnotation(...args: Array<any>): Object {
   return builder("FunctionTypeAnnotation", ...args);
 }
-export { FunctionTypeAnnotation as functionTypeAnnotation };
-export function FunctionTypeParam(...args: Array<any>): Object {
+export { functionTypeAnnotation as FunctionTypeAnnotation };
+export function functionTypeParam(...args: Array<any>): Object {
   return builder("FunctionTypeParam", ...args);
 }
-export { FunctionTypeParam as functionTypeParam };
-export function GenericTypeAnnotation(...args: Array<any>): Object {
+export { functionTypeParam as FunctionTypeParam };
+export function genericTypeAnnotation(...args: Array<any>): Object {
   return builder("GenericTypeAnnotation", ...args);
 }
-export { GenericTypeAnnotation as genericTypeAnnotation };
-export function InferredPredicate(...args: Array<any>): Object {
+export { genericTypeAnnotation as GenericTypeAnnotation };
+export function inferredPredicate(...args: Array<any>): Object {
   return builder("InferredPredicate", ...args);
 }
-export { InferredPredicate as inferredPredicate };
-export function InterfaceExtends(...args: Array<any>): Object {
+export { inferredPredicate as InferredPredicate };
+export function interfaceExtends(...args: Array<any>): Object {
   return builder("InterfaceExtends", ...args);
 }
-export { InterfaceExtends as interfaceExtends };
-export function InterfaceDeclaration(...args: Array<any>): Object {
+export { interfaceExtends as InterfaceExtends };
+export function interfaceDeclaration(...args: Array<any>): Object {
   return builder("InterfaceDeclaration", ...args);
 }
-export { InterfaceDeclaration as interfaceDeclaration };
-export function InterfaceTypeAnnotation(...args: Array<any>): Object {
+export { interfaceDeclaration as InterfaceDeclaration };
+export function interfaceTypeAnnotation(...args: Array<any>): Object {
   return builder("InterfaceTypeAnnotation", ...args);
 }
-export { InterfaceTypeAnnotation as interfaceTypeAnnotation };
-export function IntersectionTypeAnnotation(...args: Array<any>): Object {
+export { interfaceTypeAnnotation as InterfaceTypeAnnotation };
+export function intersectionTypeAnnotation(...args: Array<any>): Object {
   return builder("IntersectionTypeAnnotation", ...args);
 }
-export { IntersectionTypeAnnotation as intersectionTypeAnnotation };
-export function MixedTypeAnnotation(...args: Array<any>): Object {
+export { intersectionTypeAnnotation as IntersectionTypeAnnotation };
+export function mixedTypeAnnotation(...args: Array<any>): Object {
   return builder("MixedTypeAnnotation", ...args);
 }
-export { MixedTypeAnnotation as mixedTypeAnnotation };
-export function EmptyTypeAnnotation(...args: Array<any>): Object {
+export { mixedTypeAnnotation as MixedTypeAnnotation };
+export function emptyTypeAnnotation(...args: Array<any>): Object {
   return builder("EmptyTypeAnnotation", ...args);
 }
-export { EmptyTypeAnnotation as emptyTypeAnnotation };
-export function NullableTypeAnnotation(...args: Array<any>): Object {
+export { emptyTypeAnnotation as EmptyTypeAnnotation };
+export function nullableTypeAnnotation(...args: Array<any>): Object {
   return builder("NullableTypeAnnotation", ...args);
 }
-export { NullableTypeAnnotation as nullableTypeAnnotation };
-export function NumberLiteralTypeAnnotation(...args: Array<any>): Object {
+export { nullableTypeAnnotation as NullableTypeAnnotation };
+export function numberLiteralTypeAnnotation(...args: Array<any>): Object {
   return builder("NumberLiteralTypeAnnotation", ...args);
 }
-export { NumberLiteralTypeAnnotation as numberLiteralTypeAnnotation };
-export function NumberTypeAnnotation(...args: Array<any>): Object {
+export { numberLiteralTypeAnnotation as NumberLiteralTypeAnnotation };
+export function numberTypeAnnotation(...args: Array<any>): Object {
   return builder("NumberTypeAnnotation", ...args);
 }
-export { NumberTypeAnnotation as numberTypeAnnotation };
-export function ObjectTypeAnnotation(...args: Array<any>): Object {
+export { numberTypeAnnotation as NumberTypeAnnotation };
+export function objectTypeAnnotation(...args: Array<any>): Object {
   return builder("ObjectTypeAnnotation", ...args);
 }
-export { ObjectTypeAnnotation as objectTypeAnnotation };
-export function ObjectTypeInternalSlot(...args: Array<any>): Object {
+export { objectTypeAnnotation as ObjectTypeAnnotation };
+export function objectTypeInternalSlot(...args: Array<any>): Object {
   return builder("ObjectTypeInternalSlot", ...args);
 }
-export { ObjectTypeInternalSlot as objectTypeInternalSlot };
-export function ObjectTypeCallProperty(...args: Array<any>): Object {
+export { objectTypeInternalSlot as ObjectTypeInternalSlot };
+export function objectTypeCallProperty(...args: Array<any>): Object {
   return builder("ObjectTypeCallProperty", ...args);
 }
-export { ObjectTypeCallProperty as objectTypeCallProperty };
-export function ObjectTypeIndexer(...args: Array<any>): Object {
+export { objectTypeCallProperty as ObjectTypeCallProperty };
+export function objectTypeIndexer(...args: Array<any>): Object {
   return builder("ObjectTypeIndexer", ...args);
 }
-export { ObjectTypeIndexer as objectTypeIndexer };
-export function ObjectTypeProperty(...args: Array<any>): Object {
+export { objectTypeIndexer as ObjectTypeIndexer };
+export function objectTypeProperty(...args: Array<any>): Object {
   return builder("ObjectTypeProperty", ...args);
 }
-export { ObjectTypeProperty as objectTypeProperty };
-export function ObjectTypeSpreadProperty(...args: Array<any>): Object {
+export { objectTypeProperty as ObjectTypeProperty };
+export function objectTypeSpreadProperty(...args: Array<any>): Object {
   return builder("ObjectTypeSpreadProperty", ...args);
 }
-export { ObjectTypeSpreadProperty as objectTypeSpreadProperty };
-export function OpaqueType(...args: Array<any>): Object {
+export { objectTypeSpreadProperty as ObjectTypeSpreadProperty };
+export function opaqueType(...args: Array<any>): Object {
   return builder("OpaqueType", ...args);
 }
-export { OpaqueType as opaqueType };
-export function QualifiedTypeIdentifier(...args: Array<any>): Object {
+export { opaqueType as OpaqueType };
+export function qualifiedTypeIdentifier(...args: Array<any>): Object {
   return builder("QualifiedTypeIdentifier", ...args);
 }
-export { QualifiedTypeIdentifier as qualifiedTypeIdentifier };
-export function StringLiteralTypeAnnotation(...args: Array<any>): Object {
+export { qualifiedTypeIdentifier as QualifiedTypeIdentifier };
+export function stringLiteralTypeAnnotation(...args: Array<any>): Object {
   return builder("StringLiteralTypeAnnotation", ...args);
 }
-export { StringLiteralTypeAnnotation as stringLiteralTypeAnnotation };
-export function StringTypeAnnotation(...args: Array<any>): Object {
+export { stringLiteralTypeAnnotation as StringLiteralTypeAnnotation };
+export function stringTypeAnnotation(...args: Array<any>): Object {
   return builder("StringTypeAnnotation", ...args);
 }
-export { StringTypeAnnotation as stringTypeAnnotation };
-export function SymbolTypeAnnotation(...args: Array<any>): Object {
+export { stringTypeAnnotation as StringTypeAnnotation };
+export function symbolTypeAnnotation(...args: Array<any>): Object {
   return builder("SymbolTypeAnnotation", ...args);
 }
-export { SymbolTypeAnnotation as symbolTypeAnnotation };
-export function ThisTypeAnnotation(...args: Array<any>): Object {
+export { symbolTypeAnnotation as SymbolTypeAnnotation };
+export function thisTypeAnnotation(...args: Array<any>): Object {
   return builder("ThisTypeAnnotation", ...args);
 }
-export { ThisTypeAnnotation as thisTypeAnnotation };
-export function TupleTypeAnnotation(...args: Array<any>): Object {
+export { thisTypeAnnotation as ThisTypeAnnotation };
+export function tupleTypeAnnotation(...args: Array<any>): Object {
   return builder("TupleTypeAnnotation", ...args);
 }
-export { TupleTypeAnnotation as tupleTypeAnnotation };
-export function TypeofTypeAnnotation(...args: Array<any>): Object {
+export { tupleTypeAnnotation as TupleTypeAnnotation };
+export function typeofTypeAnnotation(...args: Array<any>): Object {
   return builder("TypeofTypeAnnotation", ...args);
 }
-export { TypeofTypeAnnotation as typeofTypeAnnotation };
-export function TypeAlias(...args: Array<any>): Object {
+export { typeofTypeAnnotation as TypeofTypeAnnotation };
+export function typeAlias(...args: Array<any>): Object {
   return builder("TypeAlias", ...args);
 }
-export { TypeAlias as typeAlias };
-export function TypeAnnotation(...args: Array<any>): Object {
+export { typeAlias as TypeAlias };
+export function typeAnnotation(...args: Array<any>): Object {
   return builder("TypeAnnotation", ...args);
 }
-export { TypeAnnotation as typeAnnotation };
-export function TypeCastExpression(...args: Array<any>): Object {
+export { typeAnnotation as TypeAnnotation };
+export function typeCastExpression(...args: Array<any>): Object {
   return builder("TypeCastExpression", ...args);
 }
-export { TypeCastExpression as typeCastExpression };
-export function TypeParameter(...args: Array<any>): Object {
+export { typeCastExpression as TypeCastExpression };
+export function typeParameter(...args: Array<any>): Object {
   return builder("TypeParameter", ...args);
 }
-export { TypeParameter as typeParameter };
-export function TypeParameterDeclaration(...args: Array<any>): Object {
+export { typeParameter as TypeParameter };
+export function typeParameterDeclaration(...args: Array<any>): Object {
   return builder("TypeParameterDeclaration", ...args);
 }
-export { TypeParameterDeclaration as typeParameterDeclaration };
-export function TypeParameterInstantiation(...args: Array<any>): Object {
+export { typeParameterDeclaration as TypeParameterDeclaration };
+export function typeParameterInstantiation(...args: Array<any>): Object {
   return builder("TypeParameterInstantiation", ...args);
 }
-export { TypeParameterInstantiation as typeParameterInstantiation };
-export function UnionTypeAnnotation(...args: Array<any>): Object {
+export { typeParameterInstantiation as TypeParameterInstantiation };
+export function unionTypeAnnotation(...args: Array<any>): Object {
   return builder("UnionTypeAnnotation", ...args);
 }
-export { UnionTypeAnnotation as unionTypeAnnotation };
-export function Variance(...args: Array<any>): Object {
+export { unionTypeAnnotation as UnionTypeAnnotation };
+export function variance(...args: Array<any>): Object {
   return builder("Variance", ...args);
 }
-export { Variance as variance };
-export function VoidTypeAnnotation(...args: Array<any>): Object {
+export { variance as Variance };
+export function voidTypeAnnotation(...args: Array<any>): Object {
   return builder("VoidTypeAnnotation", ...args);
 }
-export { VoidTypeAnnotation as voidTypeAnnotation };
-export function EnumDeclaration(...args: Array<any>): Object {
+export { voidTypeAnnotation as VoidTypeAnnotation };
+export function enumDeclaration(...args: Array<any>): Object {
   return builder("EnumDeclaration", ...args);
 }
-export { EnumDeclaration as enumDeclaration };
-export function EnumBooleanBody(...args: Array<any>): Object {
+export { enumDeclaration as EnumDeclaration };
+export function enumBooleanBody(...args: Array<any>): Object {
   return builder("EnumBooleanBody", ...args);
 }
-export { EnumBooleanBody as enumBooleanBody };
-export function EnumNumberBody(...args: Array<any>): Object {
+export { enumBooleanBody as EnumBooleanBody };
+export function enumNumberBody(...args: Array<any>): Object {
   return builder("EnumNumberBody", ...args);
 }
-export { EnumNumberBody as enumNumberBody };
-export function EnumStringBody(...args: Array<any>): Object {
+export { enumNumberBody as EnumNumberBody };
+export function enumStringBody(...args: Array<any>): Object {
   return builder("EnumStringBody", ...args);
 }
-export { EnumStringBody as enumStringBody };
-export function EnumSymbolBody(...args: Array<any>): Object {
+export { enumStringBody as EnumStringBody };
+export function enumSymbolBody(...args: Array<any>): Object {
   return builder("EnumSymbolBody", ...args);
 }
-export { EnumSymbolBody as enumSymbolBody };
-export function EnumBooleanMember(...args: Array<any>): Object {
+export { enumSymbolBody as EnumSymbolBody };
+export function enumBooleanMember(...args: Array<any>): Object {
   return builder("EnumBooleanMember", ...args);
 }
-export { EnumBooleanMember as enumBooleanMember };
-export function EnumNumberMember(...args: Array<any>): Object {
+export { enumBooleanMember as EnumBooleanMember };
+export function enumNumberMember(...args: Array<any>): Object {
   return builder("EnumNumberMember", ...args);
 }
-export { EnumNumberMember as enumNumberMember };
-export function EnumStringMember(...args: Array<any>): Object {
+export { enumNumberMember as EnumNumberMember };
+export function enumStringMember(...args: Array<any>): Object {
   return builder("EnumStringMember", ...args);
 }
-export { EnumStringMember as enumStringMember };
-export function EnumDefaultedMember(...args: Array<any>): Object {
+export { enumStringMember as EnumStringMember };
+export function enumDefaultedMember(...args: Array<any>): Object {
   return builder("EnumDefaultedMember", ...args);
 }
-export { EnumDefaultedMember as enumDefaultedMember };
-export function JSXAttribute(...args: Array<any>): Object {
+export { enumDefaultedMember as EnumDefaultedMember };
+export function jsxAttribute(...args: Array<any>): Object {
   return builder("JSXAttribute", ...args);
 }
-export { JSXAttribute as jsxAttribute };
-export { JSXAttribute as jSXAttribute };
-export function JSXClosingElement(...args: Array<any>): Object {
+export { jsxAttribute as JSXAttribute };
+export { jsxAttribute as jSXAttribute };
+export function jsxClosingElement(...args: Array<any>): Object {
   return builder("JSXClosingElement", ...args);
 }
-export { JSXClosingElement as jsxClosingElement };
-export { JSXClosingElement as jSXClosingElement };
-export function JSXElement(...args: Array<any>): Object {
+export { jsxClosingElement as JSXClosingElement };
+export { jsxClosingElement as jSXClosingElement };
+export function jsxElement(...args: Array<any>): Object {
   return builder("JSXElement", ...args);
 }
-export { JSXElement as jsxElement };
-export { JSXElement as jSXElement };
-export function JSXEmptyExpression(...args: Array<any>): Object {
+export { jsxElement as JSXElement };
+export { jsxElement as jSXElement };
+export function jsxEmptyExpression(...args: Array<any>): Object {
   return builder("JSXEmptyExpression", ...args);
 }
-export { JSXEmptyExpression as jsxEmptyExpression };
-export { JSXEmptyExpression as jSXEmptyExpression };
-export function JSXExpressionContainer(...args: Array<any>): Object {
+export { jsxEmptyExpression as JSXEmptyExpression };
+export { jsxEmptyExpression as jSXEmptyExpression };
+export function jsxExpressionContainer(...args: Array<any>): Object {
   return builder("JSXExpressionContainer", ...args);
 }
-export { JSXExpressionContainer as jsxExpressionContainer };
-export { JSXExpressionContainer as jSXExpressionContainer };
-export function JSXSpreadChild(...args: Array<any>): Object {
+export { jsxExpressionContainer as JSXExpressionContainer };
+export { jsxExpressionContainer as jSXExpressionContainer };
+export function jsxSpreadChild(...args: Array<any>): Object {
   return builder("JSXSpreadChild", ...args);
 }
-export { JSXSpreadChild as jsxSpreadChild };
-export { JSXSpreadChild as jSXSpreadChild };
-export function JSXIdentifier(...args: Array<any>): Object {
+export { jsxSpreadChild as JSXSpreadChild };
+export { jsxSpreadChild as jSXSpreadChild };
+export function jsxIdentifier(...args: Array<any>): Object {
   return builder("JSXIdentifier", ...args);
 }
-export { JSXIdentifier as jsxIdentifier };
-export { JSXIdentifier as jSXIdentifier };
-export function JSXMemberExpression(...args: Array<any>): Object {
+export { jsxIdentifier as JSXIdentifier };
+export { jsxIdentifier as jSXIdentifier };
+export function jsxMemberExpression(...args: Array<any>): Object {
   return builder("JSXMemberExpression", ...args);
 }
-export { JSXMemberExpression as jsxMemberExpression };
-export { JSXMemberExpression as jSXMemberExpression };
-export function JSXNamespacedName(...args: Array<any>): Object {
+export { jsxMemberExpression as JSXMemberExpression };
+export { jsxMemberExpression as jSXMemberExpression };
+export function jsxNamespacedName(...args: Array<any>): Object {
   return builder("JSXNamespacedName", ...args);
 }
-export { JSXNamespacedName as jsxNamespacedName };
-export { JSXNamespacedName as jSXNamespacedName };
-export function JSXOpeningElement(...args: Array<any>): Object {
+export { jsxNamespacedName as JSXNamespacedName };
+export { jsxNamespacedName as jSXNamespacedName };
+export function jsxOpeningElement(...args: Array<any>): Object {
   return builder("JSXOpeningElement", ...args);
 }
-export { JSXOpeningElement as jsxOpeningElement };
-export { JSXOpeningElement as jSXOpeningElement };
-export function JSXSpreadAttribute(...args: Array<any>): Object {
+export { jsxOpeningElement as JSXOpeningElement };
+export { jsxOpeningElement as jSXOpeningElement };
+export function jsxSpreadAttribute(...args: Array<any>): Object {
   return builder("JSXSpreadAttribute", ...args);
 }
-export { JSXSpreadAttribute as jsxSpreadAttribute };
-export { JSXSpreadAttribute as jSXSpreadAttribute };
-export function JSXText(...args: Array<any>): Object {
+export { jsxSpreadAttribute as JSXSpreadAttribute };
+export { jsxSpreadAttribute as jSXSpreadAttribute };
+export function jsxText(...args: Array<any>): Object {
   return builder("JSXText", ...args);
 }
-export { JSXText as jsxText };
-export { JSXText as jSXText };
-export function JSXFragment(...args: Array<any>): Object {
+export { jsxText as JSXText };
+export { jsxText as jSXText };
+export function jsxFragment(...args: Array<any>): Object {
   return builder("JSXFragment", ...args);
 }
-export { JSXFragment as jsxFragment };
-export { JSXFragment as jSXFragment };
-export function JSXOpeningFragment(...args: Array<any>): Object {
+export { jsxFragment as JSXFragment };
+export { jsxFragment as jSXFragment };
+export function jsxOpeningFragment(...args: Array<any>): Object {
   return builder("JSXOpeningFragment", ...args);
 }
-export { JSXOpeningFragment as jsxOpeningFragment };
-export { JSXOpeningFragment as jSXOpeningFragment };
-export function JSXClosingFragment(...args: Array<any>): Object {
+export { jsxOpeningFragment as JSXOpeningFragment };
+export { jsxOpeningFragment as jSXOpeningFragment };
+export function jsxClosingFragment(...args: Array<any>): Object {
   return builder("JSXClosingFragment", ...args);
 }
-export { JSXClosingFragment as jsxClosingFragment };
-export { JSXClosingFragment as jSXClosingFragment };
-export function Noop(...args: Array<any>): Object {
+export { jsxClosingFragment as JSXClosingFragment };
+export { jsxClosingFragment as jSXClosingFragment };
+export function noop(...args: Array<any>): Object {
   return builder("Noop", ...args);
 }
-export { Noop as noop };
-export function Placeholder(...args: Array<any>): Object {
+export { noop as Noop };
+export function placeholder(...args: Array<any>): Object {
   return builder("Placeholder", ...args);
 }
-export { Placeholder as placeholder };
-export function V8IntrinsicIdentifier(...args: Array<any>): Object {
+export { placeholder as Placeholder };
+export function v8IntrinsicIdentifier(...args: Array<any>): Object {
   return builder("V8IntrinsicIdentifier", ...args);
 }
-export { V8IntrinsicIdentifier as v8IntrinsicIdentifier };
-export function ArgumentPlaceholder(...args: Array<any>): Object {
+export { v8IntrinsicIdentifier as V8IntrinsicIdentifier };
+export function argumentPlaceholder(...args: Array<any>): Object {
   return builder("ArgumentPlaceholder", ...args);
 }
-export { ArgumentPlaceholder as argumentPlaceholder };
-export function AwaitExpression(...args: Array<any>): Object {
+export { argumentPlaceholder as ArgumentPlaceholder };
+export function awaitExpression(...args: Array<any>): Object {
   return builder("AwaitExpression", ...args);
 }
-export { AwaitExpression as awaitExpression };
-export function BindExpression(...args: Array<any>): Object {
+export { awaitExpression as AwaitExpression };
+export function bindExpression(...args: Array<any>): Object {
   return builder("BindExpression", ...args);
 }
-export { BindExpression as bindExpression };
-export function ClassProperty(...args: Array<any>): Object {
+export { bindExpression as BindExpression };
+export function classProperty(...args: Array<any>): Object {
   return builder("ClassProperty", ...args);
 }
-export { ClassProperty as classProperty };
-export function OptionalMemberExpression(...args: Array<any>): Object {
+export { classProperty as ClassProperty };
+export function optionalMemberExpression(...args: Array<any>): Object {
   return builder("OptionalMemberExpression", ...args);
 }
-export { OptionalMemberExpression as optionalMemberExpression };
-export function PipelineTopicExpression(...args: Array<any>): Object {
+export { optionalMemberExpression as OptionalMemberExpression };
+export function pipelineTopicExpression(...args: Array<any>): Object {
   return builder("PipelineTopicExpression", ...args);
 }
-export { PipelineTopicExpression as pipelineTopicExpression };
-export function PipelineBareFunction(...args: Array<any>): Object {
+export { pipelineTopicExpression as PipelineTopicExpression };
+export function pipelineBareFunction(...args: Array<any>): Object {
   return builder("PipelineBareFunction", ...args);
 }
-export { PipelineBareFunction as pipelineBareFunction };
-export function PipelinePrimaryTopicReference(...args: Array<any>): Object {
+export { pipelineBareFunction as PipelineBareFunction };
+export function pipelinePrimaryTopicReference(...args: Array<any>): Object {
   return builder("PipelinePrimaryTopicReference", ...args);
 }
-export { PipelinePrimaryTopicReference as pipelinePrimaryTopicReference };
-export function OptionalCallExpression(...args: Array<any>): Object {
+export { pipelinePrimaryTopicReference as PipelinePrimaryTopicReference };
+export function optionalCallExpression(...args: Array<any>): Object {
   return builder("OptionalCallExpression", ...args);
 }
-export { OptionalCallExpression as optionalCallExpression };
-export function ClassPrivateProperty(...args: Array<any>): Object {
+export { optionalCallExpression as OptionalCallExpression };
+export function classPrivateProperty(...args: Array<any>): Object {
   return builder("ClassPrivateProperty", ...args);
 }
-export { ClassPrivateProperty as classPrivateProperty };
-export function ClassPrivateMethod(...args: Array<any>): Object {
+export { classPrivateProperty as ClassPrivateProperty };
+export function classPrivateMethod(...args: Array<any>): Object {
   return builder("ClassPrivateMethod", ...args);
 }
-export { ClassPrivateMethod as classPrivateMethod };
-export function Import(...args: Array<any>): Object {
+export { classPrivateMethod as ClassPrivateMethod };
+function _import(...args: Array<any>): Object {
   return builder("Import", ...args);
 }
-export { Import as import };
-export function ImportAttribute(...args: Array<any>): Object {
+export { _import as Import };
+export { _import as import };
+export function importAttribute(...args: Array<any>): Object {
   return builder("ImportAttribute", ...args);
 }
-export { ImportAttribute as importAttribute };
-export function Decorator(...args: Array<any>): Object {
+export { importAttribute as ImportAttribute };
+export function decorator(...args: Array<any>): Object {
   return builder("Decorator", ...args);
 }
-export { Decorator as decorator };
-export function DoExpression(...args: Array<any>): Object {
+export { decorator as Decorator };
+export function doExpression(...args: Array<any>): Object {
   return builder("DoExpression", ...args);
 }
-export { DoExpression as doExpression };
-export function ExportDefaultSpecifier(...args: Array<any>): Object {
+export { doExpression as DoExpression };
+export function exportDefaultSpecifier(...args: Array<any>): Object {
   return builder("ExportDefaultSpecifier", ...args);
 }
-export { ExportDefaultSpecifier as exportDefaultSpecifier };
-export function ExportNamespaceSpecifier(...args: Array<any>): Object {
+export { exportDefaultSpecifier as ExportDefaultSpecifier };
+export function exportNamespaceSpecifier(...args: Array<any>): Object {
   return builder("ExportNamespaceSpecifier", ...args);
 }
-export { ExportNamespaceSpecifier as exportNamespaceSpecifier };
-export function PrivateName(...args: Array<any>): Object {
+export { exportNamespaceSpecifier as ExportNamespaceSpecifier };
+export function privateName(...args: Array<any>): Object {
   return builder("PrivateName", ...args);
 }
-export { PrivateName as privateName };
-export function BigIntLiteral(...args: Array<any>): Object {
+export { privateName as PrivateName };
+export function bigIntLiteral(...args: Array<any>): Object {
   return builder("BigIntLiteral", ...args);
 }
-export { BigIntLiteral as bigIntLiteral };
-export function RecordExpression(...args: Array<any>): Object {
+export { bigIntLiteral as BigIntLiteral };
+export function recordExpression(...args: Array<any>): Object {
   return builder("RecordExpression", ...args);
 }
-export { RecordExpression as recordExpression };
-export function TupleExpression(...args: Array<any>): Object {
+export { recordExpression as RecordExpression };
+export function tupleExpression(...args: Array<any>): Object {
   return builder("TupleExpression", ...args);
 }
-export { TupleExpression as tupleExpression };
-export function TSParameterProperty(...args: Array<any>): Object {
+export { tupleExpression as TupleExpression };
+export function tsParameterProperty(...args: Array<any>): Object {
   return builder("TSParameterProperty", ...args);
 }
-export { TSParameterProperty as tsParameterProperty };
-export { TSParameterProperty as tSParameterProperty };
-export function TSDeclareFunction(...args: Array<any>): Object {
+export { tsParameterProperty as TSParameterProperty };
+export { tsParameterProperty as tSParameterProperty };
+export function tsDeclareFunction(...args: Array<any>): Object {
   return builder("TSDeclareFunction", ...args);
 }
-export { TSDeclareFunction as tsDeclareFunction };
-export { TSDeclareFunction as tSDeclareFunction };
-export function TSDeclareMethod(...args: Array<any>): Object {
+export { tsDeclareFunction as TSDeclareFunction };
+export { tsDeclareFunction as tSDeclareFunction };
+export function tsDeclareMethod(...args: Array<any>): Object {
   return builder("TSDeclareMethod", ...args);
 }
-export { TSDeclareMethod as tsDeclareMethod };
-export { TSDeclareMethod as tSDeclareMethod };
-export function TSQualifiedName(...args: Array<any>): Object {
+export { tsDeclareMethod as TSDeclareMethod };
+export { tsDeclareMethod as tSDeclareMethod };
+export function tsQualifiedName(...args: Array<any>): Object {
   return builder("TSQualifiedName", ...args);
 }
-export { TSQualifiedName as tsQualifiedName };
-export { TSQualifiedName as tSQualifiedName };
-export function TSCallSignatureDeclaration(...args: Array<any>): Object {
+export { tsQualifiedName as TSQualifiedName };
+export { tsQualifiedName as tSQualifiedName };
+export function tsCallSignatureDeclaration(...args: Array<any>): Object {
   return builder("TSCallSignatureDeclaration", ...args);
 }
-export { TSCallSignatureDeclaration as tsCallSignatureDeclaration };
-export { TSCallSignatureDeclaration as tSCallSignatureDeclaration };
-export function TSConstructSignatureDeclaration(...args: Array<any>): Object {
+export { tsCallSignatureDeclaration as TSCallSignatureDeclaration };
+export { tsCallSignatureDeclaration as tSCallSignatureDeclaration };
+export function tsConstructSignatureDeclaration(...args: Array<any>): Object {
   return builder("TSConstructSignatureDeclaration", ...args);
 }
-export { TSConstructSignatureDeclaration as tsConstructSignatureDeclaration };
-export { TSConstructSignatureDeclaration as tSConstructSignatureDeclaration };
-export function TSPropertySignature(...args: Array<any>): Object {
+export { tsConstructSignatureDeclaration as TSConstructSignatureDeclaration };
+export { tsConstructSignatureDeclaration as tSConstructSignatureDeclaration };
+export function tsPropertySignature(...args: Array<any>): Object {
   return builder("TSPropertySignature", ...args);
 }
-export { TSPropertySignature as tsPropertySignature };
-export { TSPropertySignature as tSPropertySignature };
-export function TSMethodSignature(...args: Array<any>): Object {
+export { tsPropertySignature as TSPropertySignature };
+export { tsPropertySignature as tSPropertySignature };
+export function tsMethodSignature(...args: Array<any>): Object {
   return builder("TSMethodSignature", ...args);
 }
-export { TSMethodSignature as tsMethodSignature };
-export { TSMethodSignature as tSMethodSignature };
-export function TSIndexSignature(...args: Array<any>): Object {
+export { tsMethodSignature as TSMethodSignature };
+export { tsMethodSignature as tSMethodSignature };
+export function tsIndexSignature(...args: Array<any>): Object {
   return builder("TSIndexSignature", ...args);
 }
-export { TSIndexSignature as tsIndexSignature };
-export { TSIndexSignature as tSIndexSignature };
-export function TSAnyKeyword(...args: Array<any>): Object {
+export { tsIndexSignature as TSIndexSignature };
+export { tsIndexSignature as tSIndexSignature };
+export function tsAnyKeyword(...args: Array<any>): Object {
   return builder("TSAnyKeyword", ...args);
 }
-export { TSAnyKeyword as tsAnyKeyword };
-export { TSAnyKeyword as tSAnyKeyword };
-export function TSBooleanKeyword(...args: Array<any>): Object {
+export { tsAnyKeyword as TSAnyKeyword };
+export { tsAnyKeyword as tSAnyKeyword };
+export function tsBooleanKeyword(...args: Array<any>): Object {
   return builder("TSBooleanKeyword", ...args);
 }
-export { TSBooleanKeyword as tsBooleanKeyword };
-export { TSBooleanKeyword as tSBooleanKeyword };
-export function TSBigIntKeyword(...args: Array<any>): Object {
+export { tsBooleanKeyword as TSBooleanKeyword };
+export { tsBooleanKeyword as tSBooleanKeyword };
+export function tsBigIntKeyword(...args: Array<any>): Object {
   return builder("TSBigIntKeyword", ...args);
 }
-export { TSBigIntKeyword as tsBigIntKeyword };
-export { TSBigIntKeyword as tSBigIntKeyword };
-export function TSNeverKeyword(...args: Array<any>): Object {
+export { tsBigIntKeyword as TSBigIntKeyword };
+export { tsBigIntKeyword as tSBigIntKeyword };
+export function tsNeverKeyword(...args: Array<any>): Object {
   return builder("TSNeverKeyword", ...args);
 }
-export { TSNeverKeyword as tsNeverKeyword };
-export { TSNeverKeyword as tSNeverKeyword };
-export function TSNullKeyword(...args: Array<any>): Object {
+export { tsNeverKeyword as TSNeverKeyword };
+export { tsNeverKeyword as tSNeverKeyword };
+export function tsNullKeyword(...args: Array<any>): Object {
   return builder("TSNullKeyword", ...args);
 }
-export { TSNullKeyword as tsNullKeyword };
-export { TSNullKeyword as tSNullKeyword };
-export function TSNumberKeyword(...args: Array<any>): Object {
+export { tsNullKeyword as TSNullKeyword };
+export { tsNullKeyword as tSNullKeyword };
+export function tsNumberKeyword(...args: Array<any>): Object {
   return builder("TSNumberKeyword", ...args);
 }
-export { TSNumberKeyword as tsNumberKeyword };
-export { TSNumberKeyword as tSNumberKeyword };
-export function TSObjectKeyword(...args: Array<any>): Object {
+export { tsNumberKeyword as TSNumberKeyword };
+export { tsNumberKeyword as tSNumberKeyword };
+export function tsObjectKeyword(...args: Array<any>): Object {
   return builder("TSObjectKeyword", ...args);
 }
-export { TSObjectKeyword as tsObjectKeyword };
-export { TSObjectKeyword as tSObjectKeyword };
-export function TSStringKeyword(...args: Array<any>): Object {
+export { tsObjectKeyword as TSObjectKeyword };
+export { tsObjectKeyword as tSObjectKeyword };
+export function tsStringKeyword(...args: Array<any>): Object {
   return builder("TSStringKeyword", ...args);
 }
-export { TSStringKeyword as tsStringKeyword };
-export { TSStringKeyword as tSStringKeyword };
-export function TSSymbolKeyword(...args: Array<any>): Object {
+export { tsStringKeyword as TSStringKeyword };
+export { tsStringKeyword as tSStringKeyword };
+export function tsSymbolKeyword(...args: Array<any>): Object {
   return builder("TSSymbolKeyword", ...args);
 }
-export { TSSymbolKeyword as tsSymbolKeyword };
-export { TSSymbolKeyword as tSSymbolKeyword };
-export function TSUndefinedKeyword(...args: Array<any>): Object {
+export { tsSymbolKeyword as TSSymbolKeyword };
+export { tsSymbolKeyword as tSSymbolKeyword };
+export function tsUndefinedKeyword(...args: Array<any>): Object {
   return builder("TSUndefinedKeyword", ...args);
 }
-export { TSUndefinedKeyword as tsUndefinedKeyword };
-export { TSUndefinedKeyword as tSUndefinedKeyword };
-export function TSUnknownKeyword(...args: Array<any>): Object {
+export { tsUndefinedKeyword as TSUndefinedKeyword };
+export { tsUndefinedKeyword as tSUndefinedKeyword };
+export function tsUnknownKeyword(...args: Array<any>): Object {
   return builder("TSUnknownKeyword", ...args);
 }
-export { TSUnknownKeyword as tsUnknownKeyword };
-export { TSUnknownKeyword as tSUnknownKeyword };
-export function TSVoidKeyword(...args: Array<any>): Object {
+export { tsUnknownKeyword as TSUnknownKeyword };
+export { tsUnknownKeyword as tSUnknownKeyword };
+export function tsVoidKeyword(...args: Array<any>): Object {
   return builder("TSVoidKeyword", ...args);
 }
-export { TSVoidKeyword as tsVoidKeyword };
-export { TSVoidKeyword as tSVoidKeyword };
-export function TSThisType(...args: Array<any>): Object {
+export { tsVoidKeyword as TSVoidKeyword };
+export { tsVoidKeyword as tSVoidKeyword };
+export function tsThisType(...args: Array<any>): Object {
   return builder("TSThisType", ...args);
 }
-export { TSThisType as tsThisType };
-export { TSThisType as tSThisType };
-export function TSFunctionType(...args: Array<any>): Object {
+export { tsThisType as TSThisType };
+export { tsThisType as tSThisType };
+export function tsFunctionType(...args: Array<any>): Object {
   return builder("TSFunctionType", ...args);
 }
-export { TSFunctionType as tsFunctionType };
-export { TSFunctionType as tSFunctionType };
-export function TSConstructorType(...args: Array<any>): Object {
+export { tsFunctionType as TSFunctionType };
+export { tsFunctionType as tSFunctionType };
+export function tsConstructorType(...args: Array<any>): Object {
   return builder("TSConstructorType", ...args);
 }
-export { TSConstructorType as tsConstructorType };
-export { TSConstructorType as tSConstructorType };
-export function TSTypeReference(...args: Array<any>): Object {
+export { tsConstructorType as TSConstructorType };
+export { tsConstructorType as tSConstructorType };
+export function tsTypeReference(...args: Array<any>): Object {
   return builder("TSTypeReference", ...args);
 }
-export { TSTypeReference as tsTypeReference };
-export { TSTypeReference as tSTypeReference };
-export function TSTypePredicate(...args: Array<any>): Object {
+export { tsTypeReference as TSTypeReference };
+export { tsTypeReference as tSTypeReference };
+export function tsTypePredicate(...args: Array<any>): Object {
   return builder("TSTypePredicate", ...args);
 }
-export { TSTypePredicate as tsTypePredicate };
-export { TSTypePredicate as tSTypePredicate };
-export function TSTypeQuery(...args: Array<any>): Object {
+export { tsTypePredicate as TSTypePredicate };
+export { tsTypePredicate as tSTypePredicate };
+export function tsTypeQuery(...args: Array<any>): Object {
   return builder("TSTypeQuery", ...args);
 }
-export { TSTypeQuery as tsTypeQuery };
-export { TSTypeQuery as tSTypeQuery };
-export function TSTypeLiteral(...args: Array<any>): Object {
+export { tsTypeQuery as TSTypeQuery };
+export { tsTypeQuery as tSTypeQuery };
+export function tsTypeLiteral(...args: Array<any>): Object {
   return builder("TSTypeLiteral", ...args);
 }
-export { TSTypeLiteral as tsTypeLiteral };
-export { TSTypeLiteral as tSTypeLiteral };
-export function TSArrayType(...args: Array<any>): Object {
+export { tsTypeLiteral as TSTypeLiteral };
+export { tsTypeLiteral as tSTypeLiteral };
+export function tsArrayType(...args: Array<any>): Object {
   return builder("TSArrayType", ...args);
 }
-export { TSArrayType as tsArrayType };
-export { TSArrayType as tSArrayType };
-export function TSTupleType(...args: Array<any>): Object {
+export { tsArrayType as TSArrayType };
+export { tsArrayType as tSArrayType };
+export function tsTupleType(...args: Array<any>): Object {
   return builder("TSTupleType", ...args);
 }
-export { TSTupleType as tsTupleType };
-export { TSTupleType as tSTupleType };
-export function TSOptionalType(...args: Array<any>): Object {
+export { tsTupleType as TSTupleType };
+export { tsTupleType as tSTupleType };
+export function tsOptionalType(...args: Array<any>): Object {
   return builder("TSOptionalType", ...args);
 }
-export { TSOptionalType as tsOptionalType };
-export { TSOptionalType as tSOptionalType };
-export function TSRestType(...args: Array<any>): Object {
+export { tsOptionalType as TSOptionalType };
+export { tsOptionalType as tSOptionalType };
+export function tsRestType(...args: Array<any>): Object {
   return builder("TSRestType", ...args);
 }
-export { TSRestType as tsRestType };
-export { TSRestType as tSRestType };
-export function TSUnionType(...args: Array<any>): Object {
+export { tsRestType as TSRestType };
+export { tsRestType as tSRestType };
+export function tsUnionType(...args: Array<any>): Object {
   return builder("TSUnionType", ...args);
 }
-export { TSUnionType as tsUnionType };
-export { TSUnionType as tSUnionType };
-export function TSIntersectionType(...args: Array<any>): Object {
+export { tsUnionType as TSUnionType };
+export { tsUnionType as tSUnionType };
+export function tsIntersectionType(...args: Array<any>): Object {
   return builder("TSIntersectionType", ...args);
 }
-export { TSIntersectionType as tsIntersectionType };
-export { TSIntersectionType as tSIntersectionType };
-export function TSConditionalType(...args: Array<any>): Object {
+export { tsIntersectionType as TSIntersectionType };
+export { tsIntersectionType as tSIntersectionType };
+export function tsConditionalType(...args: Array<any>): Object {
   return builder("TSConditionalType", ...args);
 }
-export { TSConditionalType as tsConditionalType };
-export { TSConditionalType as tSConditionalType };
-export function TSInferType(...args: Array<any>): Object {
+export { tsConditionalType as TSConditionalType };
+export { tsConditionalType as tSConditionalType };
+export function tsInferType(...args: Array<any>): Object {
   return builder("TSInferType", ...args);
 }
-export { TSInferType as tsInferType };
-export { TSInferType as tSInferType };
-export function TSParenthesizedType(...args: Array<any>): Object {
+export { tsInferType as TSInferType };
+export { tsInferType as tSInferType };
+export function tsParenthesizedType(...args: Array<any>): Object {
   return builder("TSParenthesizedType", ...args);
 }
-export { TSParenthesizedType as tsParenthesizedType };
-export { TSParenthesizedType as tSParenthesizedType };
-export function TSTypeOperator(...args: Array<any>): Object {
+export { tsParenthesizedType as TSParenthesizedType };
+export { tsParenthesizedType as tSParenthesizedType };
+export function tsTypeOperator(...args: Array<any>): Object {
   return builder("TSTypeOperator", ...args);
 }
-export { TSTypeOperator as tsTypeOperator };
-export { TSTypeOperator as tSTypeOperator };
-export function TSIndexedAccessType(...args: Array<any>): Object {
+export { tsTypeOperator as TSTypeOperator };
+export { tsTypeOperator as tSTypeOperator };
+export function tsIndexedAccessType(...args: Array<any>): Object {
   return builder("TSIndexedAccessType", ...args);
 }
-export { TSIndexedAccessType as tsIndexedAccessType };
-export { TSIndexedAccessType as tSIndexedAccessType };
-export function TSMappedType(...args: Array<any>): Object {
+export { tsIndexedAccessType as TSIndexedAccessType };
+export { tsIndexedAccessType as tSIndexedAccessType };
+export function tsMappedType(...args: Array<any>): Object {
   return builder("TSMappedType", ...args);
 }
-export { TSMappedType as tsMappedType };
-export { TSMappedType as tSMappedType };
-export function TSLiteralType(...args: Array<any>): Object {
+export { tsMappedType as TSMappedType };
+export { tsMappedType as tSMappedType };
+export function tsLiteralType(...args: Array<any>): Object {
   return builder("TSLiteralType", ...args);
 }
-export { TSLiteralType as tsLiteralType };
-export { TSLiteralType as tSLiteralType };
-export function TSExpressionWithTypeArguments(...args: Array<any>): Object {
+export { tsLiteralType as TSLiteralType };
+export { tsLiteralType as tSLiteralType };
+export function tsExpressionWithTypeArguments(...args: Array<any>): Object {
   return builder("TSExpressionWithTypeArguments", ...args);
 }
-export { TSExpressionWithTypeArguments as tsExpressionWithTypeArguments };
-export { TSExpressionWithTypeArguments as tSExpressionWithTypeArguments };
-export function TSInterfaceDeclaration(...args: Array<any>): Object {
+export { tsExpressionWithTypeArguments as TSExpressionWithTypeArguments };
+export { tsExpressionWithTypeArguments as tSExpressionWithTypeArguments };
+export function tsInterfaceDeclaration(...args: Array<any>): Object {
   return builder("TSInterfaceDeclaration", ...args);
 }
-export { TSInterfaceDeclaration as tsInterfaceDeclaration };
-export { TSInterfaceDeclaration as tSInterfaceDeclaration };
-export function TSInterfaceBody(...args: Array<any>): Object {
+export { tsInterfaceDeclaration as TSInterfaceDeclaration };
+export { tsInterfaceDeclaration as tSInterfaceDeclaration };
+export function tsInterfaceBody(...args: Array<any>): Object {
   return builder("TSInterfaceBody", ...args);
 }
-export { TSInterfaceBody as tsInterfaceBody };
-export { TSInterfaceBody as tSInterfaceBody };
-export function TSTypeAliasDeclaration(...args: Array<any>): Object {
+export { tsInterfaceBody as TSInterfaceBody };
+export { tsInterfaceBody as tSInterfaceBody };
+export function tsTypeAliasDeclaration(...args: Array<any>): Object {
   return builder("TSTypeAliasDeclaration", ...args);
 }
-export { TSTypeAliasDeclaration as tsTypeAliasDeclaration };
-export { TSTypeAliasDeclaration as tSTypeAliasDeclaration };
-export function TSAsExpression(...args: Array<any>): Object {
+export { tsTypeAliasDeclaration as TSTypeAliasDeclaration };
+export { tsTypeAliasDeclaration as tSTypeAliasDeclaration };
+export function tsAsExpression(...args: Array<any>): Object {
   return builder("TSAsExpression", ...args);
 }
-export { TSAsExpression as tsAsExpression };
-export { TSAsExpression as tSAsExpression };
-export function TSTypeAssertion(...args: Array<any>): Object {
+export { tsAsExpression as TSAsExpression };
+export { tsAsExpression as tSAsExpression };
+export function tsTypeAssertion(...args: Array<any>): Object {
   return builder("TSTypeAssertion", ...args);
 }
-export { TSTypeAssertion as tsTypeAssertion };
-export { TSTypeAssertion as tSTypeAssertion };
-export function TSEnumDeclaration(...args: Array<any>): Object {
+export { tsTypeAssertion as TSTypeAssertion };
+export { tsTypeAssertion as tSTypeAssertion };
+export function tsEnumDeclaration(...args: Array<any>): Object {
   return builder("TSEnumDeclaration", ...args);
 }
-export { TSEnumDeclaration as tsEnumDeclaration };
-export { TSEnumDeclaration as tSEnumDeclaration };
-export function TSEnumMember(...args: Array<any>): Object {
+export { tsEnumDeclaration as TSEnumDeclaration };
+export { tsEnumDeclaration as tSEnumDeclaration };
+export function tsEnumMember(...args: Array<any>): Object {
   return builder("TSEnumMember", ...args);
 }
-export { TSEnumMember as tsEnumMember };
-export { TSEnumMember as tSEnumMember };
-export function TSModuleDeclaration(...args: Array<any>): Object {
+export { tsEnumMember as TSEnumMember };
+export { tsEnumMember as tSEnumMember };
+export function tsModuleDeclaration(...args: Array<any>): Object {
   return builder("TSModuleDeclaration", ...args);
 }
-export { TSModuleDeclaration as tsModuleDeclaration };
-export { TSModuleDeclaration as tSModuleDeclaration };
-export function TSModuleBlock(...args: Array<any>): Object {
+export { tsModuleDeclaration as TSModuleDeclaration };
+export { tsModuleDeclaration as tSModuleDeclaration };
+export function tsModuleBlock(...args: Array<any>): Object {
   return builder("TSModuleBlock", ...args);
 }
-export { TSModuleBlock as tsModuleBlock };
-export { TSModuleBlock as tSModuleBlock };
-export function TSImportType(...args: Array<any>): Object {
+export { tsModuleBlock as TSModuleBlock };
+export { tsModuleBlock as tSModuleBlock };
+export function tsImportType(...args: Array<any>): Object {
   return builder("TSImportType", ...args);
 }
-export { TSImportType as tsImportType };
-export { TSImportType as tSImportType };
-export function TSImportEqualsDeclaration(...args: Array<any>): Object {
+export { tsImportType as TSImportType };
+export { tsImportType as tSImportType };
+export function tsImportEqualsDeclaration(...args: Array<any>): Object {
   return builder("TSImportEqualsDeclaration", ...args);
 }
-export { TSImportEqualsDeclaration as tsImportEqualsDeclaration };
-export { TSImportEqualsDeclaration as tSImportEqualsDeclaration };
-export function TSExternalModuleReference(...args: Array<any>): Object {
+export { tsImportEqualsDeclaration as TSImportEqualsDeclaration };
+export { tsImportEqualsDeclaration as tSImportEqualsDeclaration };
+export function tsExternalModuleReference(...args: Array<any>): Object {
   return builder("TSExternalModuleReference", ...args);
 }
-export { TSExternalModuleReference as tsExternalModuleReference };
-export { TSExternalModuleReference as tSExternalModuleReference };
-export function TSNonNullExpression(...args: Array<any>): Object {
+export { tsExternalModuleReference as TSExternalModuleReference };
+export { tsExternalModuleReference as tSExternalModuleReference };
+export function tsNonNullExpression(...args: Array<any>): Object {
   return builder("TSNonNullExpression", ...args);
 }
-export { TSNonNullExpression as tsNonNullExpression };
-export { TSNonNullExpression as tSNonNullExpression };
-export function TSExportAssignment(...args: Array<any>): Object {
+export { tsNonNullExpression as TSNonNullExpression };
+export { tsNonNullExpression as tSNonNullExpression };
+export function tsExportAssignment(...args: Array<any>): Object {
   return builder("TSExportAssignment", ...args);
 }
-export { TSExportAssignment as tsExportAssignment };
-export { TSExportAssignment as tSExportAssignment };
-export function TSNamespaceExportDeclaration(...args: Array<any>): Object {
+export { tsExportAssignment as TSExportAssignment };
+export { tsExportAssignment as tSExportAssignment };
+export function tsNamespaceExportDeclaration(...args: Array<any>): Object {
   return builder("TSNamespaceExportDeclaration", ...args);
 }
-export { TSNamespaceExportDeclaration as tsNamespaceExportDeclaration };
-export { TSNamespaceExportDeclaration as tSNamespaceExportDeclaration };
-export function TSTypeAnnotation(...args: Array<any>): Object {
+export { tsNamespaceExportDeclaration as TSNamespaceExportDeclaration };
+export { tsNamespaceExportDeclaration as tSNamespaceExportDeclaration };
+export function tsTypeAnnotation(...args: Array<any>): Object {
   return builder("TSTypeAnnotation", ...args);
 }
-export { TSTypeAnnotation as tsTypeAnnotation };
-export { TSTypeAnnotation as tSTypeAnnotation };
-export function TSTypeParameterInstantiation(...args: Array<any>): Object {
+export { tsTypeAnnotation as TSTypeAnnotation };
+export { tsTypeAnnotation as tSTypeAnnotation };
+export function tsTypeParameterInstantiation(...args: Array<any>): Object {
   return builder("TSTypeParameterInstantiation", ...args);
 }
-export { TSTypeParameterInstantiation as tsTypeParameterInstantiation };
-export { TSTypeParameterInstantiation as tSTypeParameterInstantiation };
-export function TSTypeParameterDeclaration(...args: Array<any>): Object {
+export { tsTypeParameterInstantiation as TSTypeParameterInstantiation };
+export { tsTypeParameterInstantiation as tSTypeParameterInstantiation };
+export function tsTypeParameterDeclaration(...args: Array<any>): Object {
   return builder("TSTypeParameterDeclaration", ...args);
 }
-export { TSTypeParameterDeclaration as tsTypeParameterDeclaration };
-export { TSTypeParameterDeclaration as tSTypeParameterDeclaration };
-export function TSTypeParameter(...args: Array<any>): Object {
+export { tsTypeParameterDeclaration as TSTypeParameterDeclaration };
+export { tsTypeParameterDeclaration as tSTypeParameterDeclaration };
+export function tsTypeParameter(...args: Array<any>): Object {
   return builder("TSTypeParameter", ...args);
 }
-export { TSTypeParameter as tsTypeParameter };
-export { TSTypeParameter as tSTypeParameter };
+export { tsTypeParameter as TSTypeParameter };
+export { tsTypeParameter as tSTypeParameter };
 export function NumberLiteral(...args: Array<any>): Object {
   console.trace(
     "The node type NumberLiteral has been renamed to NumericLiteral",
   );
-  return NumberLiteral("NumberLiteral", ...args);
+  return builder("NumberLiteral", ...args);
 }
 export { NumberLiteral as numberLiteral };
 export function RegexLiteral(...args: Array<any>): Object {
   console.trace("The node type RegexLiteral has been renamed to RegExpLiteral");
-  return RegexLiteral("RegexLiteral", ...args);
+  return builder("RegexLiteral", ...args);
 }
 export { RegexLiteral as regexLiteral };
 export function RestProperty(...args: Array<any>): Object {
   console.trace("The node type RestProperty has been renamed to RestElement");
-  return RestProperty("RestProperty", ...args);
+  return builder("RestProperty", ...args);
 }
 export { RestProperty as restProperty };
 export function SpreadProperty(...args: Array<any>): Object {
   console.trace(
     "The node type SpreadProperty has been renamed to SpreadElement",
   );
-  return SpreadProperty("SpreadProperty", ...args);
+  return builder("SpreadProperty", ...args);
 }
 export { SpreadProperty as spreadProperty };

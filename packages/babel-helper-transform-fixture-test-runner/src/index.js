@@ -6,7 +6,6 @@ import sourceMap from "source-map";
 import { codeFrameColumns } from "@babel/code-frame";
 import escapeRegExp from "lodash/escapeRegExp";
 import * as helpers from "./helpers";
-import extend from "lodash/extend";
 import merge from "lodash/merge";
 import resolve from "resolve";
 import assert from "assert";
@@ -381,7 +380,7 @@ export default function (
               );
             }
 
-            extend(task.options, taskOpts);
+            Object.assign(task.options, taskOpts);
 
             if (dynamicOpts) dynamicOpts(task.options, task);
 

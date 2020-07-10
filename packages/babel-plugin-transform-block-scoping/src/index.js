@@ -2,8 +2,6 @@ import { declare } from "@babel/helper-plugin-utils";
 import type NodePath from "@babel/traverse";
 import type Scope from "@babel/traverse";
 import { visitor as tdzVisitor } from "./tdz";
-import values from "lodash/values";
-import extend from "lodash/extend";
 import { traverse, template, types as t } from "@babel/core";
 
 const DONE = new WeakSet();
@@ -195,7 +193,7 @@ const letReferenceBlockVisitor = traverse.visitors.merge([
 const letReferenceFunctionVisitor = traverse.visitors.merge([
   {
     ReferencedIdentifier(path, state) {
-      const ref = state.letReferences[path.node.name];
+      const ref = state.letReferences.get(path.node.name);
 
       // not a part of our scope
       if (!ref) return;
@@ -250,7 +248,7 @@ const continuationVisitor = {
     if (path.isAssignmentExpression() || path.isUpdateExpression()) {
       for (const name of Object.keys(path.getBindingIdentifiers())) {
         if (
-          state.outsideReferences[name] !==
+          state.outsideReferences.get(name) !==
           path.scope.getBindingIdentifier(name)
         ) {
           continue;
@@ -359,9 +357,9 @@ class BlockScoping {
     this.blockPath = blockPath;
     this.block = blockPath.node;
 
-    this.outsideLetReferences = Object.create(null);
+    this.outsideLetReferences = new Map();
     this.hasLetReferences = false;
-    this.letReferences = Object.create(null);
+    this.letReferences = new Map();
     this.body = [];
 
     if (loopPath) {
@@ -447,8 +445,8 @@ class BlockScoping {
       blockScope.getFunctionParent() || blockScope.getProgramParent();
     const letRefs = this.letReferences;
 
-    for (const key of Object.keys(letRefs)) {
-      const ref = letRefs[key];
+    for (const key of letRefs.keys()) {
+      const ref = letRefs.get(key);
       const binding = blockScope.getBinding(ref.name);
       if (!binding) continue;
       if (binding.kind === "let" || binding.kind === "const") {
@@ -476,10 +474,10 @@ class BlockScoping {
     // those in upper scopes and then if they do, generate a uid
     // for them and replace all references with it
 
-    for (const key of Object.keys(letRefs)) {
+    for (const key of letRefs.keys()) {
       // just an Identifier node we collected in `getLetReferences`
       // this is the defining identifier of a declaration
-      const ref = letRefs[key];
+      const ref = letRefs.get(key);
 
       // todo: could skip this if the colliding binding is in another function
       if (scope.parentHasBinding(key) || scope.hasGlobal(key)) {
@@ -496,8 +494,8 @@ class BlockScoping {
       }
     }
 
-    for (const key of Object.keys(outsideLetRefs)) {
-      const ref = letRefs[key];
+    for (const key of outsideLetRefs.keys()) {
+      const ref = letRefs.get(key);
       // check for collisions with a for loop's init variable and the enclosing scope's bindings
       // https://github.com/babel/babel/issues/8498
       if (isInLoop(this.blockPath) && blockPathScope.hasOwnBinding(key)) {
@@ -519,20 +517,21 @@ class BlockScoping {
 
     // remap loop heads with colliding variables
     if (this.loop) {
-      for (const name of Object.keys(outsideRefs)) {
-        const id = outsideRefs[name];
+      // nb: clone outsideRefs keys since the map is modified within the loop
+      for (const name of [...outsideRefs.keys()]) {
+        const id = outsideRefs.get(name);
 
         if (
           this.scope.hasGlobal(id.name) ||
           this.scope.parentHasBinding(id.name)
         ) {
-          delete outsideRefs[id.name];
-          delete this.letReferences[id.name];
+          outsideRefs.delete(id.name);
+          this.letReferences.delete(id.name);
 
           this.scope.rename(id.name);
 
-          this.letReferences[id.name] = id;
-          outsideRefs[id.name] = id;
+          this.letReferences.set(id.name, id);
+          outsideRefs.set(id.name, id);
         }
       }
     }
@@ -545,7 +544,7 @@ class BlockScoping {
     this.hoistVarDeclarations();
 
     // turn outsideLetReferences into an array
-    const args = values(outsideRefs).map(id => t.cloneNode(id));
+    const args = Array.from(outsideRefs.values(), node => t.cloneNode(node));
     const params = args.map(id => t.cloneNode(id));
 
     const isSwitch = this.blockPath.isSwitchStatement();
@@ -702,7 +701,10 @@ class BlockScoping {
       const init = this.loop.left || this.loop.init;
       if (isBlockScoped(init)) {
         declarators.push(init);
-        extend(this.outsideLetReferences, t.getBindingIdentifiers(init));
+        const names = t.getBindingIdentifiers(init);
+        for (const name of Object.keys(names)) {
+          this.outsideLetReferences.set(name, names[name]);
+        }
       }
     }
 
@@ -751,7 +753,9 @@ class BlockScoping {
       // declaration, rather than (for example) mistakenly including the
       // parameters of a function declaration. Fixes #4880.
       const keys = t.getBindingIdentifiers(declar, false, true);
-      extend(this.letReferences, keys);
+      for (const key of Object.keys(keys)) {
+        this.letReferences.set(key, keys[key]);
+      }
       this.hasLetReferences = true;
     }
 
@@ -844,55 +848,26 @@ class BlockScoping {
 
   buildHas(ret: string) {
     const body = this.body;
-
-    let retCheck;
     const has = this.has;
-    const cases = [];
-
-    if (has.hasReturn) {
-      // typeof ret === "object"
-      retCheck = buildRetCheck({
-        RETURN: t.identifier(ret),
-      });
-    }
 
     if (has.hasBreakContinue) {
       for (const key of Object.keys(has.map)) {
-        cases.push(t.switchCase(t.stringLiteral(key), [has.map[key]]));
-      }
-
-      if (has.hasReturn) {
-        cases.push(t.switchCase(null, [retCheck]));
-      }
-
-      if (cases.length === 1) {
-        const single = cases[0];
         body.push(
           t.ifStatement(
-            t.binaryExpression("===", t.identifier(ret), single.test),
-            single.consequent[0],
+            t.binaryExpression("===", t.identifier(ret), t.stringLiteral(key)),
+            has.map[key],
           ),
         );
-      } else {
-        if (this.loop) {
-          // https://github.com/babel/babel/issues/998
-          for (let i = 0; i < cases.length; i++) {
-            const caseConsequent = cases[i].consequent[0];
-            if (t.isBreakStatement(caseConsequent) && !caseConsequent.label) {
-              if (!this.loopLabel) {
-                this.loopLabel = this.scope.generateUidIdentifier("loop");
-              }
-              caseConsequent.label = t.cloneNode(this.loopLabel);
-            }
-          }
-        }
+      }
+    }
 
-        body.push(t.switchStatement(t.identifier(ret), cases));
-      }
-    } else {
-      if (has.hasReturn) {
-        body.push(retCheck);
-      }
+    // typeof ret === "object"
+    if (has.hasReturn) {
+      body.push(
+        buildRetCheck({
+          RETURN: t.identifier(ret),
+        }),
+      );
     }
   }
 }

@@ -1,6 +1,5 @@
 import * as virtualTypes from "./path/lib/virtual-types";
 import * as t from "@babel/types";
-import clone from "lodash/clone";
 
 /**
  * explode() will take a visitor object with all of the various shorthands
@@ -106,7 +105,7 @@ export function explode(visitor) {
       if (existing) {
         mergePair(existing, fns);
       } else {
-        visitor[alias] = clone(fns);
+        visitor[alias] = { ...fns };
       }
     }
   }
