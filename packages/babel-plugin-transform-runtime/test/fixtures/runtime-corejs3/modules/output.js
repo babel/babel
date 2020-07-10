@@ -1,14 +1,14 @@
 "use strict";
 
-var _Object$keys = require("@babel/runtime-corejs3/core-js-stable/object/keys");
-
-var _forEachInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/for-each");
-
 var _context;
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _Object$defineProperty = require("core-js-pure/stable/object/define-property.js");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+var _forEachInstanceProperty = require("core-js-pure/stable/instance/for-each.js");
+
+var _Object$keys = require("core-js-pure/stable/object/keys.js");
+
+var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
 
 _Object$defineProperty(exports, "__esModule", {
   value: true

@@ -1,42 +1,42 @@
-var _setTimeout = require("@babel/runtime-corejs3/core-js/set-timeout");
+var _AggregateError = require("core-js-pure/features/aggregate-error.js");
 
-var _setInterval = require("@babel/runtime-corejs3/core-js/set-interval");
+var _Map = require("core-js-pure/features/map.js");
 
-var _setImmediate = require("@babel/runtime-corejs3/core-js/set-immediate");
+var _Observable = require("core-js-pure/features/observable.js");
 
-var _queueMicrotask = require("@babel/runtime-corejs3/core-js/queue-microtask");
+var _Promise = require("core-js-pure/features/promise.js");
 
-var _parseInt = require("@babel/runtime-corejs3/core-js/parse-int");
+var _Set = require("core-js-pure/features/set.js");
 
-var _parseFloat = require("@babel/runtime-corejs3/core-js/parse-float");
+var _Symbol = require("core-js-pure/features/symbol.js");
 
-var _globalThis = require("@babel/runtime-corejs3/core-js/global-this");
+var _URL = require("core-js-pure/features/url.js");
 
-var _compositeSymbol = require("@babel/runtime-corejs3/core-js/composite-symbol");
+var _URLSearchParams = require("core-js-pure/features/url-search-params.js");
 
-var _compositeKey = require("@babel/runtime-corejs3/core-js/composite-key");
+var _WeakMap = require("core-js-pure/features/weak-map.js");
 
-var _clearImmediate = require("@babel/runtime-corejs3/core-js/clear-immediate");
+var _WeakSet = require("core-js-pure/features/weak-set.js");
 
-var _WeakSet = require("@babel/runtime-corejs3/core-js/weak-set");
+var _clearImmediate = require("core-js-pure/features/clear-immediate.js");
 
-var _WeakMap = require("@babel/runtime-corejs3/core-js/weak-map");
+var _compositeKey = require("core-js-pure/features/composite-key.js");
 
-var _URLSearchParams = require("@babel/runtime-corejs3/core-js/url-search-params");
+var _compositeSymbol = require("core-js-pure/features/composite-symbol.js");
 
-var _URL = require("@babel/runtime-corejs3/core-js/url");
+var _globalThis = require("core-js-pure/features/global-this.js");
 
-var _Symbol = require("@babel/runtime-corejs3/core-js/symbol");
+var _parseFloat = require("core-js-pure/features/parse-float.js");
 
-var _Set = require("@babel/runtime-corejs3/core-js/set");
+var _parseInt = require("core-js-pure/features/parse-int.js");
 
-var _Promise = require("@babel/runtime-corejs3/core-js/promise");
+var _queueMicrotask = require("core-js-pure/features/queue-microtask.js");
 
-var _Observable = require("@babel/runtime-corejs3/core-js/observable");
+var _setImmediate = require("core-js-pure/features/set-immediate.js");
 
-var _Map = require("@babel/runtime-corejs3/core-js/map");
+var _setInterval = require("core-js-pure/features/set-interval.js");
 
-var _AggregateError = require("@babel/runtime-corejs3/core-js/aggregate-error");
+var _setTimeout = require("core-js-pure/features/set-timeout.js");
 
 _AggregateError;
 _Map;

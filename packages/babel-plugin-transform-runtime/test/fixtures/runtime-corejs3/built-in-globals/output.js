@@ -1,32 +1,32 @@
-var _setTimeout = require("@babel/runtime-corejs3/core-js-stable/set-timeout");
+var _Map = require("core-js-pure/stable/map.js");
 
-var _setInterval = require("@babel/runtime-corejs3/core-js-stable/set-interval");
+var _Promise = require("core-js-pure/stable/promise.js");
 
-var _setImmediate = require("@babel/runtime-corejs3/core-js-stable/set-immediate");
+var _Set = require("core-js-pure/stable/set.js");
 
-var _queueMicrotask = require("@babel/runtime-corejs3/core-js-stable/queue-microtask");
+var _Symbol = require("core-js-pure/stable/symbol.js");
 
-var _parseInt = require("@babel/runtime-corejs3/core-js-stable/parse-int");
+var _URL = require("core-js-pure/stable/url.js");
 
-var _parseFloat = require("@babel/runtime-corejs3/core-js-stable/parse-float");
+var _URLSearchParams = require("core-js-pure/stable/url-search-params.js");
 
-var _clearImmediate = require("@babel/runtime-corejs3/core-js-stable/clear-immediate");
+var _WeakMap = require("core-js-pure/stable/weak-map.js");
 
-var _WeakSet = require("@babel/runtime-corejs3/core-js-stable/weak-set");
+var _WeakSet = require("core-js-pure/stable/weak-set.js");
 
-var _WeakMap = require("@babel/runtime-corejs3/core-js-stable/weak-map");
+var _clearImmediate = require("core-js-pure/stable/clear-immediate.js");
 
-var _URLSearchParams = require("@babel/runtime-corejs3/core-js-stable/url-search-params");
+var _parseFloat = require("core-js-pure/stable/parse-float.js");
 
-var _URL = require("@babel/runtime-corejs3/core-js-stable/url");
+var _parseInt = require("core-js-pure/stable/parse-int.js");
 
-var _Symbol = require("@babel/runtime-corejs3/core-js-stable/symbol");
+var _queueMicrotask = require("core-js-pure/stable/queue-microtask.js");
 
-var _Set = require("@babel/runtime-corejs3/core-js-stable/set");
+var _setImmediate = require("core-js-pure/stable/set-immediate.js");
 
-var _Promise = require("@babel/runtime-corejs3/core-js-stable/promise");
+var _setInterval = require("core-js-pure/stable/set-interval.js");
 
-var _Map = require("@babel/runtime-corejs3/core-js-stable/map");
+var _setTimeout = require("core-js-pure/stable/set-timeout.js");
 
 AggregateError;
 _Map;

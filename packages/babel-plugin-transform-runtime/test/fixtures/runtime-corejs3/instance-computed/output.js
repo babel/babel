@@ -1,3 +1,3 @@
-var _filterInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/filter");
+var _filterInstanceProperty = require("core-js-pure/stable/instance/filter.js");
 
 _filterInstanceProperty(bar).call(bar);
