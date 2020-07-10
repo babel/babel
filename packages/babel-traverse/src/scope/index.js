@@ -951,7 +951,7 @@ export default class Scope {
    */
 
   getAllBindings(): Object {
-    let ids = Object.create(null);
+    const ids = Object.create(null);
 
     let scope = this;
     do {
