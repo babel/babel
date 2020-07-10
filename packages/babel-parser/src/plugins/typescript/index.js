@@ -665,7 +665,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const isLabeled = type === "TSNamedTupleMember";
         // Flow doesn't support ??=
         labeledElements = labeledElements ?? isLabeled;
-        
         if (labeledElements !== isLabeled) {
           this.raise(
             elementNode.start,
