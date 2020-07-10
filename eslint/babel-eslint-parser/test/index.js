@@ -292,30 +292,8 @@ describe("Babel and Espree", () => {
     parseAndAssertSame("var foo = 1;export { foo as bar };");
   });
 
-  describe("optional chaining operator", () => {
-    it("optional member", () => {
-      parseAndAssertSame("foo?.bar");
-    });
-    it("nested optional member", () => {
-      parseAndAssertSame("foo?.bar.qux");
-      parseAndAssertSame("foo?.bar?.qux");
-    });
-    it("optional call", () => {
-      parseAndAssertSame("foo?.()");
-    });
-    it("nested optional call", () => {
-      parseAndAssertSame("foo?.()()");
-      parseAndAssertSame("foo?.()?.()");
-    });
-    it("optional member optional call", () => {
-      parseAndAssertSame("foo?.bar()");
-    });
-    it("optional member call", () => {
-      parseAndAssertSame("(foo?.bar)()");
-    });
-    it("optional call member", () => {
-      parseAndAssertSame("(foo?.()).bar");
-    });
+  it("optional chaining operator", () => {
+    parseAndAssertSame("foo?.bar?.().qux()");
   });
 
   it("nullish coalescing operator", () => {
