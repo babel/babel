@@ -23,7 +23,7 @@
     "@babel/types": "^7.10.4",
     "debug": "^4.1.0",
     "globals": "^11.1.0",
-    "lodash": "^4.17.13"
+    "lodash": "^4.17.19"
   },
   "devDependencies": {
     "@babel/helper-plugin-test-runner": "^7.10.4"

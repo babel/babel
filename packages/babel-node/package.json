@@ -26,7 +26,7 @@
     "@babel/register": "^7.10.4",
     "commander": "^4.0.1",
     "core-js": "^3.2.1",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "node-environment-flags": "^1.0.5",
     "regenerator-runtime": "^0.13.4",
     "resolve": "^1.13.1",
