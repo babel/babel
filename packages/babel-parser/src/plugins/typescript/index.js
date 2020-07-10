@@ -663,21 +663,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
 
         const isLabeled = type === "TSNamedTupleMember";
-
-        if (labeledElements === false && isLabeled) {
-          this.raise(
-            elementNode.start,
-            TSErrors.MixedLabeledAndUnlabeledElements,
-          );
-        } else if (labeledElements === true && !isLabeled) {
+        // Flow doesn't support ??=
+        labeledElements = labeledElements ?? isLabeled;
+        
+        if (labeledElements !== isLabeled) {
           this.raise(
             elementNode.start,
             TSErrors.MixedLabeledAndUnlabeledElements,
           );
         }
-
-        // Flow doesn't support ??=
-        labeledElements = labeledElements ?? isLabeled;
       });
 
       return this.finishNode(node, "TSTupleType");
