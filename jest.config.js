@@ -1,5 +1,6 @@
 // These packages under the @babel namespace aren't in this monorepo.
 const externalBabelPackages = [
+  "helper-define-polyfill-provider",
   "plugin-syntax-async-generators",
   "plugin-syntax-bigint",
   "plugin-syntax-dynamic-import",

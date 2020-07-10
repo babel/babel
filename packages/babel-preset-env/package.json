@@ -74,6 +74,7 @@
     "@babel/plugin-transform-unicode-regex": "workspace:^7.10.4",
     "@babel/preset-modules": "^0.1.3",
     "@babel/types": "workspace:^7.10.4",
+    "babel-plugin-polyfill-corejs3": "^0.0.3",
     "browserslist": "^4.12.0",
     "core-js-compat": "^3.6.2",
     "invariant": "^2.2.2",

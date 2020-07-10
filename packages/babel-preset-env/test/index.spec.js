@@ -1,11 +1,8 @@
 "use strict";
 
 const babelPresetEnv = require("../lib/index");
-const addCoreJS3UsagePlugin = require("../lib/polyfills/corejs3/usage-plugin")
-  .default;
+const pluginCoreJS3 = require("babel-plugin-polyfill-corejs3").default;
 const addRegeneratorUsagePlugin = require("../lib/polyfills/regenerator/usage-plugin")
-  .default;
-const replaceCoreJS3EntryPlugin = require("../lib/polyfills/corejs3/entry-plugin")
   .default;
 const removeRegeneratorEntryPlugin = require("../lib/polyfills/regenerator/entry-plugin")
   .default;
@@ -150,7 +147,7 @@ describe("babel-preset-env", () => {
                 ),
               );
               expect(polyfillPlugins.length).toBe(1);
-              expect(polyfillPlugins[0][0]).toEqual(addCoreJS3UsagePlugin);
+              expect(polyfillPlugins[0][0]).toEqual(pluginCoreJS3);
             });
           });
 
@@ -167,7 +164,7 @@ describe("babel-preset-env", () => {
                 ),
               );
               expect(polyfillPlugins.length).toBe(2);
-              expect(polyfillPlugins[0][0]).toEqual(addCoreJS3UsagePlugin);
+              expect(polyfillPlugins[0][0]).toEqual(pluginCoreJS3);
               expect(polyfillPlugins[1][0]).toEqual(addRegeneratorUsagePlugin);
             });
           });
@@ -188,7 +185,7 @@ describe("babel-preset-env", () => {
                 ),
               );
               expect(polyfillPlugins.length).toBe(1);
-              expect(polyfillPlugins[0][0]).toEqual(replaceCoreJS3EntryPlugin);
+              expect(polyfillPlugins[0][0]).toEqual(pluginCoreJS3);
             });
           });
 
@@ -205,7 +202,7 @@ describe("babel-preset-env", () => {
                 ),
               );
               expect(polyfillPlugins.length).toBe(2);
-              expect(polyfillPlugins[0][0]).toEqual(replaceCoreJS3EntryPlugin);
+              expect(polyfillPlugins[0][0]).toEqual(pluginCoreJS3);
               expect(polyfillPlugins[1][0]).toEqual(
                 removeRegeneratorEntryPlugin,
               );

@@ -13,10 +13,10 @@ import {
 } from "./plugins-compat-data";
 import overlappingPlugins from "@babel/compat-data/overlapping-plugins";
 
-import addCoreJS3UsagePlugin from "./polyfills/corejs3/usage-plugin";
 import addRegeneratorUsagePlugin from "./polyfills/regenerator/usage-plugin";
-import replaceCoreJS3EntryPlugin from "./polyfills/corejs3/entry-plugin";
 import removeRegeneratorEntryPlugin from "./polyfills/regenerator/entry-plugin";
+
+import pluginPolyfillCoreJS3 from "babel-plugin-polyfill-corejs3";
 
 import getTargets, {
   prettifyTargets,
@@ -172,16 +172,28 @@ export const getPolyfillPlugins = ({
     };
 
     if (corejs) {
-      if (useBuiltIns === "usage") {
-        polyfillPlugins.push([addCoreJS3UsagePlugin, pluginOptions]);
-        if (regenerator) {
-          polyfillPlugins.push([addRegeneratorUsagePlugin, pluginOptions]);
-        }
-      } else {
-        polyfillPlugins.push([replaceCoreJS3EntryPlugin, pluginOptions]);
-        if (!regenerator) {
-          polyfillPlugins.push([removeRegeneratorEntryPlugin, pluginOptions]);
-        }
+      polyfillPlugins.push([
+        pluginPolyfillCoreJS3,
+        {
+          targets: polyfillTargets,
+          include,
+          exclude,
+          proposals,
+          shippedProposals,
+          debug,
+          method: useBuiltIns === "usage" ? "usage-global" : "entry-global",
+          missingDependencies: { log: "per-file" },
+        },
+      ]);
+    }
+
+    if (useBuiltIns === "usage") {
+      if (regenerator) {
+        polyfillPlugins.push([addRegeneratorUsagePlugin, pluginOptions]);
+      }
+    } else {
+      if (!regenerator) {
+        polyfillPlugins.push([removeRegeneratorEntryPlugin, pluginOptions]);
       }
     }
   }
@@ -312,14 +324,12 @@ export default declare((api, opts) => {
     pluginNames.forEach(pluginName => {
       logPluginOrPolyfill(pluginName, targets, pluginsList);
     });
+    console.log("");
 
     if (!useBuiltIns) {
       console.log(
-        "\nUsing polyfills: No polyfills were added, since the `useBuiltIns` option was not set.",
+        "No polyfills were added, since the `useBuiltIns` option was not set.",
       );
-    } else {
-      // NOTE: Polyfill plugins are outputting debug info internally
-      console.log(`\nUsing polyfills with \`${useBuiltIns}\` option:`);
     }
   }
 

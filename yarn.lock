@@ -424,7 +424,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-compilation-targets@npm:^7.10.2":
+"@babel/helper-compilation-targets@npm:^7.10.2, @babel/helper-compilation-targets@npm:^7.8.7":
   version: 7.10.2
   resolution: "@babel/helper-compilation-targets@npm:7.10.2"
   dependencies:
@@ -548,6 +548,24 @@ __metadata:
     lodash: ^4.17.13
   languageName: unknown
   linkType: soft
+
+"@babel/helper-define-polyfill-provider@npm:^0.0.2":
+  version: 0.0.2
+  resolution: "@babel/helper-define-polyfill-provider@npm:0.0.2"
+  dependencies:
+    "@babel/helper-compilation-targets": ^7.8.7
+    "@babel/helper-module-imports": ^7.8.3
+    "@babel/helper-plugin-utils": ^7.8.3
+    "@babel/traverse": ^7.0.0
+    debug: ^4.1.1
+    lodash.debounce: ^4.0.8
+    resolve: ^1.14.2
+    semver: ^6.1.2
+  peerDependencies:
+    "@babel/core": ^7.4.0-0
+  checksum: de22bf47cc38562bde61f3b1cf54c6baefdbc3b596f8c4ddfe391c90421141e230bfb1fc16a81ab5ac561dacaa2466fa8bfbd6c818ae0e63d5ea4eba29b9c332
+  languageName: node
+  linkType: hard
 
 "@babel/helper-explode-assignable-expression@npm:^7.10.3":
   version: 7.10.3
@@ -3249,6 +3267,7 @@ __metadata:
     "@babel/plugin-transform-unicode-regex": "workspace:^7.10.4"
     "@babel/preset-modules": ^0.1.3
     "@babel/types": "workspace:^7.10.4"
+    babel-plugin-polyfill-corejs3: ^0.0.3
     browserslist: ^4.12.0
     core-js-compat: ^3.6.2
     invariant: ^2.2.2
@@ -6009,6 +6028,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-plugin-polyfill-corejs3@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "babel-plugin-polyfill-corejs3@npm:0.0.3"
+  dependencies:
+    "@babel/helper-define-polyfill-provider": ^0.0.2
+    core-js-compat: ^3.6.4
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: cd5465f7bdb1413d732cb0af5281c1f297dc47a7103deb718e24558c742cc4717b30fce182ba7dce5c55dbaa757ecba9f5ac1e26fd2f3f3cb31fc86121877bba
+  languageName: node
+  linkType: hard
+
 "babel-plugin-transform-charcodes@npm:^0.2.0":
   version: 0.2.0
   resolution: "babel-plugin-transform-charcodes@npm:0.2.0"
@@ -7446,7 +7477,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:^3.6.2":
+"core-js-compat@npm:^3.6.2, core-js-compat@npm:^3.6.4":
   version: 3.6.5
   resolution: "core-js-compat@npm:3.6.5"
   dependencies:
@@ -11991,6 +12022,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"lodash.debounce@npm:^4.0.8":
+  version: 4.0.8
+  resolution: "lodash.debounce@npm:4.0.8"
+  checksum: b6042bd8c09ff1961c9127d32266316bc21f946ece5e3464a663ec61fadb98e7d56ec0ef7e23b47d393695310c19cf24e651c1756be6da91ac02c72be7f79465
+  languageName: node
+  linkType: hard
+
 "lodash.get@npm:^4.4.2":
   version: 4.4.2
   resolution: "lodash.get@npm:4.4.2"
@@ -14657,7 +14695,7 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"resolve@^1.1.4, resolve@^1.1.6, resolve@^1.1.7, resolve@^1.10.0, resolve@^1.11.0, resolve@^1.11.1, resolve@^1.12.0, resolve@^1.13.1, resolve@^1.17.0, resolve@^1.3.2, resolve@^1.4.0, resolve@^1.8.1":
+"resolve@^1.1.4, resolve@^1.1.6, resolve@^1.1.7, resolve@^1.10.0, resolve@^1.11.0, resolve@^1.11.1, resolve@^1.12.0, resolve@^1.13.1, resolve@^1.14.2, resolve@^1.17.0, resolve@^1.3.2, resolve@^1.4.0, resolve@^1.8.1":
   version: 1.17.0
   resolution: "resolve@npm:1.17.0"
   dependencies:
@@ -14673,7 +14711,7 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@^1.1.4#builtin<compat/resolve>, resolve@patch:resolve@^1.1.6#builtin<compat/resolve>, resolve@patch:resolve@^1.1.7#builtin<compat/resolve>, resolve@patch:resolve@^1.10.0#builtin<compat/resolve>, resolve@patch:resolve@^1.11.0#builtin<compat/resolve>, resolve@patch:resolve@^1.11.1#builtin<compat/resolve>, resolve@patch:resolve@^1.12.0#builtin<compat/resolve>, resolve@patch:resolve@^1.13.1#builtin<compat/resolve>, resolve@patch:resolve@^1.17.0#builtin<compat/resolve>, resolve@patch:resolve@^1.3.2#builtin<compat/resolve>, resolve@patch:resolve@^1.4.0#builtin<compat/resolve>, resolve@patch:resolve@^1.8.1#builtin<compat/resolve>":
+"resolve@patch:resolve@^1.1.4#builtin<compat/resolve>, resolve@patch:resolve@^1.1.6#builtin<compat/resolve>, resolve@patch:resolve@^1.1.7#builtin<compat/resolve>, resolve@patch:resolve@^1.10.0#builtin<compat/resolve>, resolve@patch:resolve@^1.11.0#builtin<compat/resolve>, resolve@patch:resolve@^1.11.1#builtin<compat/resolve>, resolve@patch:resolve@^1.12.0#builtin<compat/resolve>, resolve@patch:resolve@^1.13.1#builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#builtin<compat/resolve>, resolve@patch:resolve@^1.17.0#builtin<compat/resolve>, resolve@patch:resolve@^1.3.2#builtin<compat/resolve>, resolve@patch:resolve@^1.4.0#builtin<compat/resolve>, resolve@patch:resolve@^1.8.1#builtin<compat/resolve>":
   version: 1.17.0
   resolution: "resolve@patch:resolve@npm%3A1.17.0#builtin<compat/resolve>::version=1.17.0&hash=3388aa"
   dependencies:
