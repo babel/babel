@@ -105,7 +105,8 @@ export function explode(visitor) {
       if (existing) {
         mergePair(existing, fns);
       } else {
-        visitor[alias] = { ...fns };
+        visitor[alias] = Object.create(Object.getPrototypeOf(fns));
+        Object.assign(visitor[alias], fns);
       }
     }
   }
