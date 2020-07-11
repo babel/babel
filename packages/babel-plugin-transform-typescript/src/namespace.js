@@ -156,12 +156,10 @@ function handleNested(path, t, node, parentExport) {
   let fallthroughValue = t.objectExpression([]);
 
   if (parentExport) {
+    const memberExpr = t.memberExpression(parentExport, realName);
     fallthroughValue = template.expression.ast`
-      ${parentExport}.${t.cloneNode(realName)} || (
-        ${t.cloneNode(parentExport)}.${t.cloneNode(
-      realName,
-    )} = ${fallthroughValue}
-      )
+      ${t.cloneNode(memberExpr)} ||
+        (${t.cloneNode(memberExpr)} = ${fallthroughValue})
     `;
   }
 

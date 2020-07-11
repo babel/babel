@@ -134,9 +134,8 @@ export default declare(
               );
             }
 
-            return template.statement.ast`this.${t.cloneNode(
-              id,
-            )} = ${t.cloneNode(id)}`;
+            return template.statement.ast`
+              this.${t.cloneNode(id)} = ${t.cloneNode(id)}`;
           });
 
           injectInitialization(classPath, path, assigns);
