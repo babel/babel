@@ -219,7 +219,7 @@ function _evaluate(path, state) {
       if (elemValue.confident) {
         arr.push(elemValue.value);
       } else {
-        return deopt(elem, state);
+        return deopt(elemValue.deopt, state);
       }
     }
     return arr;
@@ -237,7 +237,7 @@ function _evaluate(path, state) {
       if (prop.node.computed) {
         key = key.evaluate();
         if (!key.confident) {
-          return deopt(keyPath, state);
+          return deopt(key.deopt, state);
         }
         key = key.value;
       } else if (key.isIdentifier()) {
@@ -248,7 +248,7 @@ function _evaluate(path, state) {
       const valuePath = prop.get("value");
       let value = valuePath.evaluate();
       if (!value.confident) {
-        return deopt(valuePath, state);
+        return deopt(value.deopt, state);
       }
       value = value.value;
       obj[key] = value;
