@@ -164,8 +164,8 @@ test-ci-coverage:
 bootstrap-flow:
 	rm -rf build/flow
 	mkdir -p build
-	git clone --branch=master --single-branch --shallow-since=2018-11-01 https://github.com/facebook/flow.git build/flow
-	cd build/flow && git checkout $(FLOW_COMMIT)
+	git clone --single-branch --shallow-since=2018-11-01 https://github.com/facebook/flow.git build/flow
+	cd build/flow && git checkout -q $(FLOW_COMMIT)
 
 test-flow:
 	$(NODE) scripts/parser-tests/flow
@@ -179,8 +179,8 @@ test-flow-update-allowlist:
 bootstrap-typescript:
 	rm -rf ./build/typescript
 	mkdir -p ./build
-	git clone --branch=master --single-branch --shallow-since=2019-09-01 https://github.com/microsoft/TypeScript.git ./build/typescript
-	cd build/typescript && git checkout $(TYPESCRIPT_COMMIT)
+	git clone --single-branch --shallow-since=2019-09-01 https://github.com/microsoft/TypeScript.git ./build/typescript
+	cd build/typescript && git checkout -q $(TYPESCRIPT_COMMIT)
 
 test-typescript:
 	$(NODE) scripts/parser-tests/typescript
@@ -194,8 +194,8 @@ test-typescript-update-allowlist:
 bootstrap-test262:
 	rm -rf build/test262
 	mkdir -p build
-	git clone --branch=master --single-branch --shallow-since=2019-12-01 https://github.com/tc39/test262.git build/test262
-	cd build/test262 && git checkout $(TEST262_COMMIT)
+	git clone --single-branch --shallow-since=2019-12-01 https://github.com/tc39/test262.git build/test262
+	cd build/test262 && git checkout -q $(TEST262_COMMIT)
 
 test-test262:
 	$(NODE) scripts/parser-tests/test262
