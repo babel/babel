@@ -235,8 +235,12 @@ const handle = {
             t.binaryExpression(
               "===",
               baseNeedsMemoised
-                ? t.assignmentExpression("=", baseRef, startingNode)
-                : baseRef,
+                ? t.assignmentExpression(
+                    "=",
+                    t.cloneNode(baseRef),
+                    t.cloneNode(startingNode),
+                  )
+                : t.cloneNode(baseRef),
               t.nullLiteral(),
             ),
             t.binaryExpression(
@@ -263,7 +267,7 @@ const handle = {
               false,
               true,
             ),
-            [context, ...endParent.arguments],
+            [t.cloneNode(context), ...endParent.arguments],
             false,
           ),
         );

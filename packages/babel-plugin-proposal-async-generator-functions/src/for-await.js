@@ -61,7 +61,7 @@ export default function (path, { getAsyncIterator }) {
     ITERATOR_KEY: scope.generateUidIdentifier("iterator"),
     GET_ITERATOR: getAsyncIterator,
     OBJECT: node.right,
-    STEP_VALUE: stepValue,
+    STEP_VALUE: t.cloneNode(stepValue),
     STEP_KEY: stepKey,
   });
 

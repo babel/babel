@@ -337,7 +337,9 @@ const rewriteReferencesVisitor = {
       path
         .get("left")
         .replaceWith(
-          t.variableDeclaration("let", [t.variableDeclarator(newLoopId)]),
+          t.variableDeclaration("let", [
+            t.variableDeclarator(t.cloneNode(newLoopId)),
+          ]),
         );
       scope.registerDeclaration(path.get("left"));
     }
