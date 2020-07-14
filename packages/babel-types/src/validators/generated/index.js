@@ -3041,6 +3041,20 @@ export function isTSRestType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
+export function isTSNamedTupleMember(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "TSNamedTupleMember") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTSUnionType(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
