@@ -890,6 +890,11 @@ export function tsRestType(...args: Array<any>): Object {
 }
 export { tsRestType as TSRestType };
 export { tsRestType as tSRestType };
+export function tsNamedTupleMember(...args: Array<any>): Object {
+  return builder("TSNamedTupleMember", ...args);
+}
+export { tsNamedTupleMember as TSNamedTupleMember };
+export { tsNamedTupleMember as tSNamedTupleMember };
 export function tsUnionType(...args: Array<any>): Object {
   return builder("TSUnionType", ...args);
 }

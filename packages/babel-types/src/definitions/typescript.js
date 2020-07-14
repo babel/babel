@@ -212,7 +212,7 @@ defineType("TSTupleType", {
   aliases: ["TSType"],
   visitor: ["elementTypes"],
   fields: {
-    elementTypes: validateArrayOfType("TSType"),
+    elementTypes: validateArrayOfType(["TSType", "TSNamedTupleMember"]),
   },
 });
 
@@ -229,6 +229,19 @@ defineType("TSRestType", {
   visitor: ["typeAnnotation"],
   fields: {
     typeAnnotation: validateType("TSType"),
+  },
+});
+
+defineType("TSNamedTupleMember", {
+  visitor: ["label", "elementType"],
+  builder: ["label", "elementType", "optional"],
+  fields: {
+    label: validateType("Identifier"),
+    optional: {
+      validate: bool,
+      default: false,
+    },
+    elementType: validateType("TSType"),
   },
 });
 

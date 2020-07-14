@@ -74,6 +74,10 @@ const TSErrors = Object.freeze({
   IndexSignatureHasAccessibility:
     "Index signatures cannot have an accessibility modifier ('%0')",
   IndexSignatureHasStatic: "Index signatures cannot have the 'static' modifier",
+  InvalidTupleMemberLabel:
+    "Tuple members must be labeled with a simple identifier.",
+  MixedLabeledAndUnlabeledElements:
+    "Tuple members must all have names or all not have names.",
   OptionalTypeBeforeRequired:
     "A required element cannot follow an optional element.",
   PatternIsOptional:
@@ -633,33 +637,87 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // Validate the elementTypes to ensure that no mandatory elements
       // follow optional elements
       let seenOptionalElement = false;
+      let labeledElements = null;
       node.elementTypes.forEach(elementNode => {
-        if (elementNode.type === "TSOptionalType") {
-          seenOptionalElement = true;
-        } else if (seenOptionalElement && elementNode.type !== "TSRestType") {
+        let { type } = elementNode;
+
+        if (
+          seenOptionalElement &&
+          type !== "TSRestType" &&
+          type !== "TSOptionalType" &&
+          !(type === "TSNamedTupleMember" && elementNode.optional)
+        ) {
           this.raise(elementNode.start, TSErrors.OptionalTypeBeforeRequired);
+        }
+
+        // Flow doesn't support ||=
+        seenOptionalElement =
+          seenOptionalElement ||
+          (type === "TSNamedTupleMember" && elementNode.optional) ||
+          type === "TSOptionalType";
+
+        // When checking labels, check the argument of the spread operator
+        if (type === "TSRestType") {
+          elementNode = elementNode.typeAnnotation;
+          type = elementNode.type;
+        }
+
+        const isLabeled = type === "TSNamedTupleMember";
+        // Flow doesn't support ??=
+        labeledElements = labeledElements ?? isLabeled;
+        if (labeledElements !== isLabeled) {
+          this.raise(
+            elementNode.start,
+            TSErrors.MixedLabeledAndUnlabeledElements,
+          );
         }
       });
 
       return this.finishNode(node, "TSTupleType");
     }
 
-    tsParseTupleElementType(): N.TsType {
+    tsParseTupleElementType(): N.TsType | N.TsNamedTupleMember {
       // parses `...TsType[]`
-      if (this.match(tt.ellipsis)) {
-        const restNode: N.TsRestType = this.startNode();
-        this.next(); // skips ellipsis
-        restNode.typeAnnotation = this.tsParseType();
-        return this.finishNode(restNode, "TSRestType");
-      }
 
-      const type = this.tsParseType();
-      // parses `TsType?`
-      if (this.eat(tt.question)) {
+      const { start: startPos, startLoc } = this.state;
+
+      const rest = this.eat(tt.ellipsis);
+      let type = this.tsParseType();
+      const optional = this.eat(tt.question);
+      const labeled = this.eat(tt.colon);
+
+      if (labeled) {
+        const labeledNode: N.TsNamedTupleMember = this.startNodeAtNode(type);
+        labeledNode.optional = optional;
+
+        if (
+          type.type === "TSTypeReference" &&
+          !type.typeParameters &&
+          type.typeName.type === "Identifier"
+        ) {
+          labeledNode.label = (type.typeName: N.Identifier);
+        } else {
+          this.raise(type.start, TSErrors.InvalidTupleMemberLabel);
+          // This produces an invalid AST, but at least we don't drop
+          // nodes representing the invalid source.
+          // $FlowIgnore
+          labeledNode.label = type;
+        }
+
+        labeledNode.elementType = this.tsParseType();
+        type = this.finishNode(labeledNode, "TSNamedTupleMember");
+      } else if (optional) {
         const optionalTypeNode: N.TsOptionalType = this.startNodeAtNode(type);
         optionalTypeNode.typeAnnotation = type;
-        return this.finishNode(optionalTypeNode, "TSOptionalType");
+        type = this.finishNode(optionalTypeNode, "TSOptionalType");
       }
+
+      if (rest) {
+        const restNode: N.TsRestType = this.startNodeAt(startPos, startLoc);
+        restNode.typeAnnotation = type;
+        type = this.finishNode(restNode, "TSRestType");
+      }
+
       return type;
     }
 
