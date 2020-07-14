@@ -109,7 +109,8 @@ export function ArrowFunctionExpression(node: Object) {
   if (
     node.params.length === 1 &&
     t.isIdentifier(firstParam) &&
-    !hasTypes(node, firstParam)
+    !hasTypes(node, firstParam) &&
+    !node.async
   ) {
     if (
       this.format.retainLines &&
