@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-regex",
-  "version": "7.10.4",
+  "version": "7.10.5",
   "description": "Helper function to check for literal RegEx",
   "repository": {
     "type": "git",

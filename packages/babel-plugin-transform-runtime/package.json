@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-runtime",
-  "version": "7.10.4",
+  "version": "7.10.5",
   "description": "Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals",
   "repository": {
     "type": "git",
@@ -29,13 +29,13 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.4",
+    "@babel/core": "^7.10.5",
     "@babel/helper-plugin-test-runner": "^7.10.4",
     "@babel/helpers": "^7.10.4",
     "@babel/plugin-transform-typeof-symbol": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
-    "@babel/runtime": "^7.10.4",
+    "@babel/runtime": "^7.10.5",
     "@babel/template": "^7.10.4",
-    "@babel/types": "^7.10.4"
+    "@babel/types": "^7.10.5"
   }
 }
