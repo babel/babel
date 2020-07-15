@@ -12,8 +12,10 @@ import defineType, {
   validateOptionalType,
   validateType,
 } from "./utils";
-import { functionDeclarationCommon } from "./core";
-import { classMethodOrDeclareMethodCommon } from "./es2015";
+import {
+  functionDeclarationCommon,
+  classMethodOrDeclareMethodCommon,
+} from "./core";
 
 const bool = assertValueType("boolean");
 
