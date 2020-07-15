@@ -53,6 +53,7 @@
     "@babel/types": "workspace:^7.10.4",
     "convert-source-map": "^1.7.0",
     "debug": "^4.1.0",
+    "escape-string-regexp": "^4.0.0",
     "gensync": "^1.0.0-beta.1",
     "json5": "^2.1.2",
     "lodash": "^4.17.13",
