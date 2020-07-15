@@ -1076,6 +1076,99 @@ export function isYieldExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
+export function isAwaitExpression(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "AwaitExpression") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isImport(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "Import") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isBigIntLiteral(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "BigIntLiteral") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isExportNamespaceSpecifier(
+  node: ?Object,
+  opts?: Object,
+): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "ExportNamespaceSpecifier") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isOptionalMemberExpression(
+  node: ?Object,
+  opts?: Object,
+): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "OptionalMemberExpression") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isOptionalCallExpression(
+  node: ?Object,
+  opts?: Object,
+): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "OptionalCallExpression") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isAnyTypeAnnotation(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -2275,20 +2368,6 @@ export function isArgumentPlaceholder(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isAwaitExpression(node: ?Object, opts?: Object): boolean {
-  if (!node) return false;
-
-  const nodeType = node.type;
-  if (nodeType === "AwaitExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
 export function isBindExpression(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -2308,23 +2387,6 @@ export function isClassProperty(node: ?Object, opts?: Object): boolean {
 
   const nodeType = node.type;
   if (nodeType === "ClassProperty") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
-export function isOptionalMemberExpression(
-  node: ?Object,
-  opts?: Object,
-): boolean {
-  if (!node) return false;
-
-  const nodeType = node.type;
-  if (nodeType === "OptionalMemberExpression") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -2382,23 +2444,6 @@ export function isPipelinePrimaryTopicReference(
 
   return false;
 }
-export function isOptionalCallExpression(
-  node: ?Object,
-  opts?: Object,
-): boolean {
-  if (!node) return false;
-
-  const nodeType = node.type;
-  if (nodeType === "OptionalCallExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
 export function isClassPrivateProperty(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -2418,20 +2463,6 @@ export function isClassPrivateMethod(node: ?Object, opts?: Object): boolean {
 
   const nodeType = node.type;
   if (nodeType === "ClassPrivateMethod") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
-export function isImport(node: ?Object, opts?: Object): boolean {
-  if (!node) return false;
-
-  const nodeType = node.type;
-  if (nodeType === "Import") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -2500,42 +2531,11 @@ export function isExportDefaultSpecifier(
 
   return false;
 }
-export function isExportNamespaceSpecifier(
-  node: ?Object,
-  opts?: Object,
-): boolean {
-  if (!node) return false;
-
-  const nodeType = node.type;
-  if (nodeType === "ExportNamespaceSpecifier") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
 export function isPrivateName(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
   const nodeType = node.type;
   if (nodeType === "PrivateName") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
-export function isBigIntLiteral(node: ?Object, opts?: Object): boolean {
-  if (!node) return false;
-
-  const nodeType = node.type;
-  if (nodeType === "BigIntLiteral") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -3491,17 +3491,17 @@ export function isExpression(node: ?Object, opts?: Object): boolean {
     "TaggedTemplateExpression" === nodeType ||
     "TemplateLiteral" === nodeType ||
     "YieldExpression" === nodeType ||
+    "AwaitExpression" === nodeType ||
+    "Import" === nodeType ||
+    "BigIntLiteral" === nodeType ||
+    "OptionalMemberExpression" === nodeType ||
+    "OptionalCallExpression" === nodeType ||
     "TypeCastExpression" === nodeType ||
     "JSXElement" === nodeType ||
     "JSXFragment" === nodeType ||
-    "AwaitExpression" === nodeType ||
     "BindExpression" === nodeType ||
-    "OptionalMemberExpression" === nodeType ||
     "PipelinePrimaryTopicReference" === nodeType ||
-    "OptionalCallExpression" === nodeType ||
-    "Import" === nodeType ||
     "DoExpression" === nodeType ||
-    "BigIntLiteral" === nodeType ||
     "RecordExpression" === nodeType ||
     "TupleExpression" === nodeType ||
     "TSAsExpression" === nodeType ||
@@ -4063,6 +4063,7 @@ export function isImmutable(node: ?Object, opts?: Object): boolean {
     "NumericLiteral" === nodeType ||
     "NullLiteral" === nodeType ||
     "BooleanLiteral" === nodeType ||
+    "BigIntLiteral" === nodeType ||
     "JSXAttribute" === nodeType ||
     "JSXClosingElement" === nodeType ||
     "JSXElement" === nodeType ||
@@ -4073,7 +4074,6 @@ export function isImmutable(node: ?Object, opts?: Object): boolean {
     "JSXFragment" === nodeType ||
     "JSXOpeningFragment" === nodeType ||
     "JSXClosingFragment" === nodeType ||
-    "BigIntLiteral" === nodeType ||
     (nodeType === "Placeholder" && "StringLiteral" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
@@ -4269,8 +4269,8 @@ export function isModuleSpecifier(node: ?Object, opts?: Object): boolean {
     "ImportDefaultSpecifier" === nodeType ||
     "ImportNamespaceSpecifier" === nodeType ||
     "ImportSpecifier" === nodeType ||
-    "ExportDefaultSpecifier" === nodeType ||
-    "ExportNamespaceSpecifier" === nodeType
+    "ExportNamespaceSpecifier" === nodeType ||
+    "ExportDefaultSpecifier" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;

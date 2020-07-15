@@ -306,6 +306,31 @@ export function yieldExpression(...args: Array<any>): Object {
   return builder("YieldExpression", ...args);
 }
 export { yieldExpression as YieldExpression };
+export function awaitExpression(...args: Array<any>): Object {
+  return builder("AwaitExpression", ...args);
+}
+export { awaitExpression as AwaitExpression };
+function _import(...args: Array<any>): Object {
+  return builder("Import", ...args);
+}
+export { _import as Import };
+export { _import as import };
+export function bigIntLiteral(...args: Array<any>): Object {
+  return builder("BigIntLiteral", ...args);
+}
+export { bigIntLiteral as BigIntLiteral };
+export function exportNamespaceSpecifier(...args: Array<any>): Object {
+  return builder("ExportNamespaceSpecifier", ...args);
+}
+export { exportNamespaceSpecifier as ExportNamespaceSpecifier };
+export function optionalMemberExpression(...args: Array<any>): Object {
+  return builder("OptionalMemberExpression", ...args);
+}
+export { optionalMemberExpression as OptionalMemberExpression };
+export function optionalCallExpression(...args: Array<any>): Object {
+  return builder("OptionalCallExpression", ...args);
+}
+export { optionalCallExpression as OptionalCallExpression };
 export function anyTypeAnnotation(...args: Array<any>): Object {
   return builder("AnyTypeAnnotation", ...args);
 }
@@ -649,10 +674,6 @@ export function argumentPlaceholder(...args: Array<any>): Object {
   return builder("ArgumentPlaceholder", ...args);
 }
 export { argumentPlaceholder as ArgumentPlaceholder };
-export function awaitExpression(...args: Array<any>): Object {
-  return builder("AwaitExpression", ...args);
-}
-export { awaitExpression as AwaitExpression };
 export function bindExpression(...args: Array<any>): Object {
   return builder("BindExpression", ...args);
 }
@@ -661,10 +682,6 @@ export function classProperty(...args: Array<any>): Object {
   return builder("ClassProperty", ...args);
 }
 export { classProperty as ClassProperty };
-export function optionalMemberExpression(...args: Array<any>): Object {
-  return builder("OptionalMemberExpression", ...args);
-}
-export { optionalMemberExpression as OptionalMemberExpression };
 export function pipelineTopicExpression(...args: Array<any>): Object {
   return builder("PipelineTopicExpression", ...args);
 }
@@ -677,10 +694,6 @@ export function pipelinePrimaryTopicReference(...args: Array<any>): Object {
   return builder("PipelinePrimaryTopicReference", ...args);
 }
 export { pipelinePrimaryTopicReference as PipelinePrimaryTopicReference };
-export function optionalCallExpression(...args: Array<any>): Object {
-  return builder("OptionalCallExpression", ...args);
-}
-export { optionalCallExpression as OptionalCallExpression };
 export function classPrivateProperty(...args: Array<any>): Object {
   return builder("ClassPrivateProperty", ...args);
 }
@@ -689,11 +702,6 @@ export function classPrivateMethod(...args: Array<any>): Object {
   return builder("ClassPrivateMethod", ...args);
 }
 export { classPrivateMethod as ClassPrivateMethod };
-function _import(...args: Array<any>): Object {
-  return builder("Import", ...args);
-}
-export { _import as Import };
-export { _import as import };
 export function importAttribute(...args: Array<any>): Object {
   return builder("ImportAttribute", ...args);
 }
@@ -710,18 +718,10 @@ export function exportDefaultSpecifier(...args: Array<any>): Object {
   return builder("ExportDefaultSpecifier", ...args);
 }
 export { exportDefaultSpecifier as ExportDefaultSpecifier };
-export function exportNamespaceSpecifier(...args: Array<any>): Object {
-  return builder("ExportNamespaceSpecifier", ...args);
-}
-export { exportNamespaceSpecifier as ExportNamespaceSpecifier };
 export function privateName(...args: Array<any>): Object {
   return builder("PrivateName", ...args);
 }
 export { privateName as PrivateName };
-export function bigIntLiteral(...args: Array<any>): Object {
-  return builder("BigIntLiteral", ...args);
-}
-export { bigIntLiteral as BigIntLiteral };
 export function recordExpression(...args: Array<any>): Object {
   return builder("RecordExpression", ...args);
 }

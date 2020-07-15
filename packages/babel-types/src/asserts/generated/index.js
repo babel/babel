@@ -305,6 +305,33 @@ export function assertTemplateLiteral(node: Object, opts?: Object = {}): void {
 export function assertYieldExpression(node: Object, opts?: Object = {}): void {
   assert("YieldExpression", node, opts);
 }
+export function assertAwaitExpression(node: Object, opts?: Object = {}): void {
+  assert("AwaitExpression", node, opts);
+}
+export function assertImport(node: Object, opts?: Object = {}): void {
+  assert("Import", node, opts);
+}
+export function assertBigIntLiteral(node: Object, opts?: Object = {}): void {
+  assert("BigIntLiteral", node, opts);
+}
+export function assertExportNamespaceSpecifier(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("ExportNamespaceSpecifier", node, opts);
+}
+export function assertOptionalMemberExpression(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("OptionalMemberExpression", node, opts);
+}
+export function assertOptionalCallExpression(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("OptionalCallExpression", node, opts);
+}
 export function assertAnyTypeAnnotation(
   node: Object,
   opts?: Object = {},
@@ -713,20 +740,11 @@ export function assertArgumentPlaceholder(
 ): void {
   assert("ArgumentPlaceholder", node, opts);
 }
-export function assertAwaitExpression(node: Object, opts?: Object = {}): void {
-  assert("AwaitExpression", node, opts);
-}
 export function assertBindExpression(node: Object, opts?: Object = {}): void {
   assert("BindExpression", node, opts);
 }
 export function assertClassProperty(node: Object, opts?: Object = {}): void {
   assert("ClassProperty", node, opts);
-}
-export function assertOptionalMemberExpression(
-  node: Object,
-  opts?: Object = {},
-): void {
-  assert("OptionalMemberExpression", node, opts);
 }
 export function assertPipelineTopicExpression(
   node: Object,
@@ -746,12 +764,6 @@ export function assertPipelinePrimaryTopicReference(
 ): void {
   assert("PipelinePrimaryTopicReference", node, opts);
 }
-export function assertOptionalCallExpression(
-  node: Object,
-  opts?: Object = {},
-): void {
-  assert("OptionalCallExpression", node, opts);
-}
 export function assertClassPrivateProperty(
   node: Object,
   opts?: Object = {},
@@ -763,9 +775,6 @@ export function assertClassPrivateMethod(
   opts?: Object = {},
 ): void {
   assert("ClassPrivateMethod", node, opts);
-}
-export function assertImport(node: Object, opts?: Object = {}): void {
-  assert("Import", node, opts);
 }
 export function assertImportAttribute(node: Object, opts?: Object = {}): void {
   assert("ImportAttribute", node, opts);
@@ -782,17 +791,8 @@ export function assertExportDefaultSpecifier(
 ): void {
   assert("ExportDefaultSpecifier", node, opts);
 }
-export function assertExportNamespaceSpecifier(
-  node: Object,
-  opts?: Object = {},
-): void {
-  assert("ExportNamespaceSpecifier", node, opts);
-}
 export function assertPrivateName(node: Object, opts?: Object = {}): void {
   assert("PrivateName", node, opts);
-}
-export function assertBigIntLiteral(node: Object, opts?: Object = {}): void {
-  assert("BigIntLiteral", node, opts);
 }
 export function assertRecordExpression(node: Object, opts?: Object = {}): void {
   assert("RecordExpression", node, opts);

@@ -1,7 +1,6 @@
 // @flow
 import toFastProperties from "to-fast-properties";
 import "./core";
-import "./es2015";
 import "./flow";
 import "./jsx";
 import "./misc";
