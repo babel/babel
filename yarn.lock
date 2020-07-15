@@ -172,6 +172,7 @@ __metadata:
     "@babel/types": "workspace:^7.10.4"
     convert-source-map: ^1.7.0
     debug: ^4.1.0
+    escape-string-regexp: ^4.0.0
     gensync: ^1.0.0-beta.1
     json5: ^2.1.2
     lodash: ^4.17.13
@@ -963,6 +964,7 @@ __metadata:
     "@babel/helper-fixtures": "workspace:^7.10.4"
     "@babel/polyfill": "workspace:^7.10.4"
     babel-check-duplicated-nodes: ^1.0.0
+    escape-string-regexp: ^4.0.0
     jest: ^25.1.0
     jest-diff: ^25.1.0
     lodash: ^4.17.13
@@ -3355,6 +3357,7 @@ __metadata:
     "@babel/plugin-transform-modules-commonjs": "workspace:^7.10.4"
     browserify: 16.5.0
     default-require-extensions: ^2.0.0
+    escape-string-regexp: ^4.0.0
     find-cache-dir: ^3.2.0
     lodash: ^4.17.13
     pirates: ^4.0.0
@@ -8365,6 +8368,13 @@ __metadata:
   version: 1.0.5
   resolution: "escape-string-regexp@npm:1.0.5"
   checksum: f9484b8b4c8827d816e0fd905c25ed4b561376a9c220e1430403ea84619bf680c76a883a48cff8b8e091daf55d6a497e37479f9787b9f15f3c421b6054289744
+  languageName: node
+  linkType: hard
+
+"escape-string-regexp@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "escape-string-regexp@npm:4.0.0"
+  checksum: c747be8d5ff7873127e3e0cffe7d2206a37208077fa9c30a3c1bb4f26bebd081c8c24d5fba7a99449f9d20670bea3dc5e1b6098b0f074b099bd38766271a272f
   languageName: node
   linkType: hard
 
