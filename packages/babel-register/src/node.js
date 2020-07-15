@@ -1,13 +1,16 @@
 import deepClone from "lodash/cloneDeep";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
-import escapeRegExp from "lodash/escapeRegExp";
 import * as babel from "@babel/core";
 import { OptionManager, DEFAULT_EXTENSIONS } from "@babel/core";
 import { addHook } from "pirates";
 import fs from "fs";
 import path from "path";
 import Module from "module";
+
+const escapeRegExp = process.env.BABEL_8_BREAKING
+  ? require("escape-string-regexp")
+  : require("lodash/escapeRegExp");
 
 const maps = {};
 let transformOpts = {};

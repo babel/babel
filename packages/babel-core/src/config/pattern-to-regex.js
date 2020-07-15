@@ -1,6 +1,9 @@
 // @flow
 import path from "path";
-import escapeRegExp from "lodash/escapeRegExp";
+
+const escapeRegExp = process.env.BABEL_8_BREAKING
+  ? require("escape-string-regexp")
+  : require("lodash/escapeRegExp");
 
 const sep = `\\${path.sep}`;
 const endSep = `(?:${sep}|$)`;
