@@ -1,5 +1,5 @@
 const x = async ( // some comment
-a) => {
+  a) => {
   return foo(await a);
 };
 

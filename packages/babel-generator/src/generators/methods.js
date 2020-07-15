@@ -112,10 +112,7 @@ export function ArrowFunctionExpression(node: Object) {
     !hasTypes(node, firstParam)
   ) {
     if (
-      (
-        this.format.retainLines ||
-        node.async
-      ) &&
+      (this.format.retainLines || node.async) &&
       node.loc &&
       node.body.loc &&
       node.loc.start.line < node.body.loc.start.line
