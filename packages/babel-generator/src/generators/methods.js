@@ -109,11 +109,13 @@ export function ArrowFunctionExpression(node: Object) {
   if (
     node.params.length === 1 &&
     t.isIdentifier(firstParam) &&
-    !hasTypes(node, firstParam) &&
-    !node.async
+    !hasTypes(node, firstParam)
   ) {
     if (
-      this.format.retainLines &&
+      (
+        this.format.retainLines ||
+        node.async
+      ) &&
       node.loc &&
       node.body.loc &&
       node.loc.start.line < node.body.loc.start.line
