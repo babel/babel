@@ -21,25 +21,6 @@ describe("evaluation", function () {
     });
   }
 
-  function addDeoptTest(code, type, expectedType) {
-    it(type + " deopt: " + code, function () {
-      const visitor = {};
-
-      visitor[type] = function (path) {
-        const evaluate = path.evaluate();
-        expect(evaluate.confident).toBeFalsy();
-        expect(evaluate.deopt.type).toEqual(expectedType);
-      };
-
-      traverse(
-        parse(code, {
-          plugins: ["*"],
-        }),
-        visitor,
-      );
-    });
-  }
-
   addTest("void 0", "UnaryExpression", undefined);
   addTest("!true", "UnaryExpression", false);
   addTest("+'2'", "UnaryExpression", 2);
@@ -112,8 +93,4 @@ describe("evaluation", function () {
     ab: 200,
     z: [1, 2, 3],
   });
-
-  addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
-  addDeoptTest("({[a + 'b']: 1})", "ObjectExpression", "Identifier");
-  addDeoptTest("[{a}]", "ArrayExpression", "Identifier");
 });
