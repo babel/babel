@@ -1371,8 +1371,8 @@ export default class ExpressionParser extends LValParser {
       }
     }
 
-    const innerEndPos = this.state.start;
-    const innerEndLoc = this.state.startLoc;
+    const innerEndPos = this.state.lastTokEnd;
+    const innerEndLoc = this.state.lastTokEndLoc;
     this.expect(tt.parenR);
 
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
