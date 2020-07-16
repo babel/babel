@@ -16,6 +16,6 @@ const obj = new Obj();
 expect(() => {
   obj.call();
 
-  // Asser that this throws, but that it's not
+  // Assert that this throws, but that it's not
   // Obj.p.test's error that is thrown
 }).toThrowError(TypeError)
