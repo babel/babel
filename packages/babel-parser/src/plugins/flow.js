@@ -1077,7 +1077,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       /* The inexact flag should only be added on ObjectTypeAnnotations that
        * are not the body of an interface, declare interface, or declare class.
-       * Since spreads are only allowed in objec types, checking that is
+       * Since spreads are only allowed in object types, checking that is
        * sufficient here.
        */
       if (allowSpread) {
@@ -2698,7 +2698,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         if (!arrow.error && arrowExpression) return arrowExpression;
 
-        // If we are here, both JSX and Flow parsing attemps failed.
+        // If we are here, both JSX and Flow parsing attempts failed.
         // Give the precedence to the JSX error, except if JSX had an
         // unrecoverable error while Flow didn't.
         // If the error is recoverable, we can only re-report it if there is

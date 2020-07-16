@@ -596,7 +596,7 @@ export default declare((api, opts) => {
           exp = t.callExpression(t.cloneNode(helper), [
             exp,
             // If we have static props, we need to insert an empty object
-            // becuase the odd arguments are copied with [[Get]], not
+            // because the odd arguments are copied with [[Get]], not
             // [[GetOwnProperty]]
             ...(hadProps ? [t.objectExpression([]), obj] : []),
           ]);
