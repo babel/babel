@@ -313,7 +313,7 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
 
 > Example: https://github.com/babel/babel/pull/11640
 
-- Create a new PR that describes the proposed AST shape in [ESTree](https://github.com/estree/estree) (ex: [Decimal AST](https://github.com/estree/estree/pull/220)). The new AST should follows ESTree's [design philosophy](https://github.com/estree/estree#philosophy).
+- Create a new PR that describes the proposed AST shape in [ESTree](https://github.com/estree/estree) (ex: [Decimal AST](https://github.com/estree/estree/pull/220)). The new AST should follow ESTree's [design philosophy](https://github.com/estree/estree#philosophy).
 - After the ESTree PR is accepted, update [ast/spec.md](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md). Note that there are differences between Babel AST and ESTree. In these cases, consistency with current Babel AST outweighs alignment to ESTree. Otherwise it should follow ESTree.
 
 - [ ] Implement parser plugins based on the new AST. Name parser plugin by camelizing the unprefixed slug of the TC39 proposal URL. i.e. `exportDefaultFrom` from `https://github.com/tc39/proposal-export-default-from`.
