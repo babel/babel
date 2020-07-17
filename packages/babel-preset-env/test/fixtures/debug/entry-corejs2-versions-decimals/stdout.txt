@@ -51,6 +51,7 @@ Using plugins:
   transform-typeof-symbol { "ie":"10" }
   transform-new-target { "ie":"10" }
   transform-regenerator { "electron":"0.36", "ie":"10" }
+  proposal-export-namespace-from { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-modules-commonjs { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-dynamic-import { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
 

@@ -18,5 +18,6 @@ Using plugins:
   syntax-object-rest-spread { "chrome":"84" }
   transform-modules-commonjs { "chrome":"84" }
   proposal-dynamic-import { "chrome":"84" }
+  proposal-export-namespace-from {}
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

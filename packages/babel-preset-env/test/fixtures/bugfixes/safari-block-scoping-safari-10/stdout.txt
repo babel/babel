@@ -20,6 +20,7 @@ Using plugins:
   transform-async-to-generator { "safari":"10" }
   transform-exponentiation-operator { "safari":"10" }
   transform-unicode-regex { "safari":"10" }
+  proposal-export-namespace-from { "safari":"10" }
   bugfix/transform-safari-block-shadowing { "safari":"10" }
   bugfix/transform-safari-for-shadowing { "safari":"10" }
   bugfix/transform-tagged-template-caching { "safari":"10" }

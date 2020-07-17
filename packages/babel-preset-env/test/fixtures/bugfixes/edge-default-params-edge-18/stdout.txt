@@ -17,6 +17,7 @@ Using plugins:
   transform-dotall-regex { "edge":"18" }
   proposal-unicode-property-regex { "edge":"18" }
   transform-named-capturing-groups-regex { "edge":"18" }
+  proposal-export-namespace-from { "edge":"18" }
   bugfix/transform-edge-function-name { "edge":"18" }
   transform-modules-commonjs { "edge":"18" }
   proposal-dynamic-import { "edge":"18" }

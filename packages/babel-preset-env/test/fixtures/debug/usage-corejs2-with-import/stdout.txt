@@ -17,6 +17,7 @@ Using plugins:
   transform-dotall-regex { "chrome":"55" }
   proposal-unicode-property-regex { "chrome":"55" }
   transform-named-capturing-groups-regex { "chrome":"55" }
+  proposal-export-namespace-from { "chrome":"55" }
   transform-modules-commonjs { "chrome":"55" }
   proposal-dynamic-import { "chrome":"55" }
 

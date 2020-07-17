@@ -31,6 +31,7 @@ Using plugins:
   transform-block-scoping { "safari":"9" }
   transform-new-target { "safari":"9" }
   transform-regenerator { "safari":"9" }
+  proposal-export-namespace-from { "safari":"9" }
   bugfix/transform-tagged-template-caching { "safari":"9" }
   transform-modules-commonjs { "safari":"9" }
   proposal-dynamic-import { "safari":"9" }
