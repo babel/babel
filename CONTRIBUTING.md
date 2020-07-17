@@ -316,7 +316,7 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
 - Create a new PR that describes the proposed AST shape in [ESTree](https://github.com/estree/estree) (ex: [Decimal AST](https://github.com/estree/estree/pull/220)). The new AST should follow ESTree's [design philosophy](https://github.com/estree/estree#philosophy).
 - After the ESTree PR is accepted, update [ast/spec.md](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md). Note that there are differences between Babel AST and ESTree. In these cases, consistency with current Babel AST outweighs alignment to ESTree. Otherwise it should follow ESTree.
 
-- [ ] Implement parser plugins based on the new AST. Name parser plugin by camelizing the unprefixed slug of the TC39 proposal URL. i.e. `exportDefaultFrom` from `https://github.com/tc39/proposal-export-default-from`.
+- [ ] Implement parser plugins based on the new AST. The parser plugin name should be the unprefixed slug of the TC39 proposal URL in _camelcase_, i.e. `exportDefaultFrom` from `https://github.com/tc39/proposal-export-default-from`.
   - [ ] Use the `this.expectPlugin("newSyntax")` check within `@babel/parser` to ensure your new plugin code only runs when that flag is turned on (not default behavior), and a friendly error is thrown if users forget to enable a plugin.
   - [ ] Add failing/passing tests according to spec behavior
   - [ ] Add `@babel/syntax-new-syntax` package. You can copy `packages/babel-plugin-syntax-decimal` and replace `decimal` to `new-syntax`.
@@ -326,7 +326,7 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
     - [ ] Add `@babel/syntax-new-syntax` to `src/preset-stage-x`.
   - [ ] Add `"newSyntax"` to parser [typings](https://github.com/babel/babel/blob/master/packages/babel-parser/typings/babel-parser.d.ts)
 - [ ] Implement generator support in `packages/babel-generator/src/generators`. The generator converts AST to source code.
-- [ ] If this feature can be transpiled, start working about the Babel transform.
+- [ ] If this feature can be transpiled, start working on the Babel transform.
 
 ## Internals
 
