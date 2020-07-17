@@ -317,7 +317,7 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
 - After the ESTree PR is accepted, update [ast/spec.md](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md). Note that there are differences between Babel AST and ESTree. In these cases, consistency with current Babel AST outweighs alignment to ESTree. Otherwise it should follow ESTree.
 
 - [ ] Implement parser plugins based on the new AST. Name parser plugin by camelizing the unprefixed slug of the TC39 proposal URL. i.e. `exportDefaultFrom` from `https://github.com/tc39/proposal-export-default-from`.
-  - [ ] Use the `this.expectPlugin("newSyntax")` check in `@babel/parser` so that your new plugin code only runs when that flag is turned on (not default behavior), and it will throw friendly errors when users forget to enable a plugin.
+  - [ ] Use the `this.expectPlugin("newSyntax")` check within `@babel/parser` to ensure your new plugin code only runs when that flag is turned on (not default behavior), and a friendly error is thrown if users forget to enable a plugin.
   - [ ] Add failing/passing tests according to spec behavior
   - [ ] Add `@babel/syntax-new-syntax` package. You can copy `packages/babel-plugin-syntax-decimal` and replace `decimal` to `new-syntax`.
   - [ ] Add `@babel/syntax-new-syntax` to `@babel/standalone`.
