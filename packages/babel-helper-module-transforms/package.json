@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-module-transforms",
-  "version": "7.10.4",
+  "version": "7.10.5",
   "description": "Babel helper functions for implementing ES6 module transformations",
   "author": "Logan Smyth <loganfsmyth@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -20,7 +20,7 @@
     "@babel/helper-simple-access": "^7.10.4",
     "@babel/helper-split-export-declaration": "^7.10.4",
     "@babel/template": "^7.10.4",
-    "@babel/types": "^7.10.4",
+    "@babel/types": "^7.10.5",
     "lodash.chunk": "^4.2.0"
   }
 }

@@ -160,7 +160,7 @@ function applyTargetDecorators(path, state, decoratedProps) {
       acc = acc.concat([
         t.assignmentExpression(
           "=",
-          descriptor,
+          t.cloneNode(descriptor),
           t.callExpression(state.addHelper("applyDecoratedDescriptor"), [
             t.cloneNode(target),
             t.cloneNode(property),

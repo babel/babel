@@ -88,7 +88,7 @@ jobs:
       - run:
           name: Setup Test Runner
           command: |
-            git clone --recurse-submodules https://github.com/babel/babel-test262-runner
+            git clone --depth=1 --recurse-submodules https://github.com/babel/babel-test262-runner
             cd babel-test262-runner
             npm ci
             npm i tap-mocha-reporter --save-dev
@@ -115,7 +115,7 @@ jobs:
           <<: *test262_workdir
       - store_artifacts: *artifact_test262_diff_tap
       - run:
-          name: Output comparision results and report to CircleCI
+          name: Output comparison results and report to CircleCI
           command: |
             mkdir -p ~/test-results/test262
             cat ~/diff.tap | $(npm bin)/tap-merge | $(npm bin)/tap-mocha-reporter xunit | tee ~/test-results/test262/results.xml

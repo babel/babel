@@ -1,6 +1,6 @@
 {
   "name": "@babel/compat-data",
-  "version": "7.10.4",
+  "version": "7.10.5",
   "author": "The Babel Team (https://babeljs.io/team)",
   "license": "MIT",
   "description": "",
@@ -37,6 +37,6 @@
     "@babel/helper-compilation-targets": "^7.10.4",
     "caniuse-db": "1.0.30001035",
     "electron-to-chromium": "1.3.377",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.19"
   }
 }

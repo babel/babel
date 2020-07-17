@@ -660,8 +660,10 @@ export default class ExpressionParser extends LValParser {
       let node = this.startNodeAt(startPos, startLoc);
       node.callee = base;
 
+      if (state.optionalChainMember) {
+        node.optional = optional;
+      }
       if (optional) {
-        node.optional = true;
         node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
       } else {
         node.arguments = this.parseCallExpressionArguments(
@@ -1369,8 +1371,8 @@ export default class ExpressionParser extends LValParser {
       }
     }
 
-    const innerEndPos = this.state.start;
-    const innerEndLoc = this.state.startLoc;
+    const innerEndPos = this.state.lastTokEnd;
+    const innerEndLoc = this.state.lastTokEndLoc;
     this.expect(tt.parenR);
 
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
