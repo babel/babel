@@ -14,8 +14,6 @@ module.exports = {
   extends: "@babel/internal",
   rules: {
     "prettier/prettier": "error",
-    // TODO: remove after babel-eslint-config-internal is fully integrated into this repository.
-    "max-len": "off",
   },
   env: {
     node: true,
