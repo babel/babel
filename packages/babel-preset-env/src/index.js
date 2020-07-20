@@ -278,6 +278,14 @@ export default declare((api, opts) => {
   const transformTargets = forceAllTransforms || hasUglifyTarget ? {} : targets;
 
   const compatData = getPluginList(shippedProposals, bugfixes);
+  const shouldSkipExportNamespaceFrom =
+    (modules === "auto" && api.caller?.(supportsExportNamespaceFrom)) ||
+    (modules === false &&
+      !isRequired("proposal-export-namespace-from", transformTargets, {
+        compatData,
+        includes: include.plugins,
+        excludes: exclude.plugins,
+      }));
   const modulesPluginNames = getModulesPluginNames({
     modules,
     transformations: moduleTransformations,
@@ -286,15 +294,7 @@ export default declare((api, opts) => {
     shouldTransformESM: modules !== "auto" || !api.caller?.(supportsStaticESM),
     shouldTransformDynamicImport:
       modules !== "auto" || !api.caller?.(supportsDynamicImport),
-    shouldTransformExportNamespaceFrom: !(
-      (modules === "auto" && api.caller?.(supportsExportNamespaceFrom)) ||
-      (modules === false &&
-        !isRequired("proposal-export-namespace-from", transformTargets, {
-          compatData,
-          includes: include.plugins,
-          excludes: exclude.plugins,
-        }))
-    ),
+    shouldTransformExportNamespaceFrom: !shouldSkipExportNamespaceFrom,
     shouldParseTopLevelAwait: !api.caller || api.caller(supportsTopLevelAwait),
   });
 
