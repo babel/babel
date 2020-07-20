@@ -9,7 +9,7 @@
     "@babel/eslint-plugin": "^7.10.4",
     "@babel/eslint-shared-fixtures": "^7.10.4",
     "dedent": "^0.7.0",
-    "eslint": "^6.0.0",
-    "eslint-plugin-import": "^2.20.1"
+    "eslint": "^7.5.0",
+    "eslint-plugin-import": "^2.22.0"
   }
 }

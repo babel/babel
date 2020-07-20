@@ -26,15 +26,15 @@
   },
   "homepage": "https://babeljs.io/",
   "peerDependencies": {
-    "@babel/eslint-parser": "0.0.0",
-    "eslint": ">=6.0.0"
+    "@babel/eslint-parser": ">=7.10.4",
+    "eslint": ">=7.5.0"
   },
   "dependencies": {
     "eslint-rule-composer": "^0.3.0"
   },
   "devDependencies": {
     "@babel/eslint-shared-fixtures": "^7.10.4",
-    "eslint": "^6.0.0",
+    "eslint": "^7.5.0",
     "lodash.clonedeep": "^4.5.0"
   }
 }

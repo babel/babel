@@ -26,11 +26,11 @@
   },
   "homepage": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-plugin-development-internal",
   "peerDependencies": {
-    "@babel/eslint-parser": "0.0.0",
-    "eslint": ">=6.0.0"
+    "@babel/eslint-parser": ">=7.10.4",
+    "eslint": ">=7.5.0"
   },
   "devDependencies": {
     "@babel/eslint-shared-fixtures": "^7.10.4",
-    "eslint": "^6.0.0"
+    "eslint": "^7.5.0"
   }
 }
