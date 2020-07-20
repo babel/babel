@@ -78,7 +78,11 @@ export default declare((api, options) => {
 
           let ref;
           let check;
-          if (loose && isCall && isSimpleMemberExpression(chain)) {
+          if (isCall && t.isIdentifier(chain, { name: "eval" })) {
+            check = ref = chain;
+            // `eval?.()` is an indirect eval call transformed to `(0,eval)()`
+            node[replaceKey] = t.sequenceExpression([t.numericLiteral(0), ref]);
+          } else if (loose && isCall && isSimpleMemberExpression(chain)) {
             // If we are using a loose transform (avoiding a Function#call) and we are at the call,
             // we can avoid a needless memoize. We only do this if the callee is a simple member
             // expression, to avoid multiple calls to nested call expressions.
