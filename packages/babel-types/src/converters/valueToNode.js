@@ -1,5 +1,5 @@
 // @flow
-import isPlainObject from "lodash/isPlainObject";
+import isPlainObject from "is-plain-obj";
 import isRegExp from "lodash/isRegExp";
 import isValidIdentifier from "../validators/isValidIdentifier";
 import {
