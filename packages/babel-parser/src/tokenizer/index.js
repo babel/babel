@@ -1362,6 +1362,8 @@ export default class Tokenizer extends ParserErrors {
       case charCodes.digit9:
         if (inTemplate) {
           return null;
+        } else if (this.state.strict) {
+          this.raise(this.state.pos - 1, Errors.StrictNumericEscape);
         }
       // fall through
       default:
@@ -1390,7 +1392,7 @@ export default class Tokenizer extends ParserErrors {
             if (inTemplate) {
               return null;
             } else if (this.state.strict) {
-              this.raise(codePos, Errors.StrictOctalLiteral);
+              this.raise(codePos, Errors.StrictNumericEscape);
             } else {
               // This property is used to throw an error for
               // an octal literal in a directive that occurs prior
