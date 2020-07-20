@@ -6,7 +6,7 @@ import sourceMap from "source-map";
 import { codeFrameColumns } from "@babel/code-frame";
 import defaults from "lodash/defaults";
 import includes from "lodash/includes";
-import escapeRegExp from "lodash/escapeRegExp";
+import escapeRegExp from "escape-string-regexp";
 import * as helpers from "./helpers";
 import extend from "lodash/extend";
 import merge from "lodash/merge";
