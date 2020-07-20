@@ -14,9 +14,6 @@
     "url": "https://github.com/nicolo-ribaudo"
   },
   "main": "lib/index.js",
-  "devDependencies": {
-    "eslint": "^7.5.0"
-  },
   "engines": {
     "node": ">=10.9"
   },
@@ -32,5 +29,9 @@
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
   },
-  "homepage": "https://babeljs.io/"
+  "homepage": "https://babeljs.io/",
+  "devDependencies": {
+    "@babel/eslint-shared-fixtures": "^7.10.4",
+    "eslint": "^7.5.0"
+  }
 }

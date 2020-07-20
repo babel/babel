@@ -1,5 +1,5 @@
 import rule from "../../src/rules/no-undefined-identifier";
-import { RuleTester } from "eslint";
+import RuleTester from "@babel/eslint-shared-fixtures/utils/RuleTester";
 
 const error =
   "Use path.scope.buildUndefinedNode() to create an undefined identifier directly.";
