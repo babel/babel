@@ -1127,19 +1127,16 @@ export default class Tokenizer extends ParserErrors {
 
     // disallow numeric separators in non octal decimals and legacy octal likes
     if (hasLeadingZero) {
-      if (this.hasPlugin("numericSeparator")) {
-        const underscorePos = this.input
-          .slice(start, this.state.pos)
-          .indexOf("_");
+      const integer = this.input.slice(start, this.state.pos);
+      if (this.state.strict) {
+        this.raise(start, Errors.StrictOctalLiteral);
+      } else if (this.hasPlugin("numericSeparator")) {
+        const underscorePos = integer.indexOf("_");
         if (underscorePos > 0) {
           this.raise(underscorePos + start, Errors.ZeroDigitNumericSeparator);
         }
       }
-      if (this.state.strict) {
-        this.raise(start, Errors.StrictOctalLiteral);
-      }
-      isOctal =
-        hasLeadingZero && !/[89]/.test(this.input.slice(start, this.state.pos));
+      isOctal = hasLeadingZero && !/[89]/.test(integer);
     }
 
     let next = this.input.charCodeAt(this.state.pos);
