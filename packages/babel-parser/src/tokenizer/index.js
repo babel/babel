@@ -1116,26 +1116,31 @@ export default class Tokenizer extends ParserErrors {
     const start = this.state.pos;
     let isFloat = false;
     let isBigInt = false;
-    let isNonOctalDecimalInt = false;
+    let isOctal = false;
 
     if (!startsWithDot && this.readInt(10) === null) {
       this.raise(start, Errors.InvalidNumber);
     }
-    let octal =
+    const hasLeadingZero =
       this.state.pos - start >= 2 &&
       this.input.charCodeAt(start) === charCodes.digit0;
-    if (octal) {
+
+    if (hasLeadingZero) {
+      const integer = this.input.slice(start, this.state.pos);
       if (this.state.strict) {
         this.raise(start, Errors.StrictOctalLiteral);
+      } else if (this.hasPlugin("numericSeparator")) {
+        // disallow numeric separators in non octal decimals and legacy octal likes
+        const underscorePos = integer.indexOf("_");
+        if (underscorePos > 0) {
+          this.raise(underscorePos + start, Errors.ZeroDigitNumericSeparator);
+        }
       }
-      if (/[89]/.test(this.input.slice(start, this.state.pos))) {
-        octal = false;
-        isNonOctalDecimalInt = true;
-      }
+      isOctal = hasLeadingZero && !/[89]/.test(integer);
     }
 
     let next = this.input.charCodeAt(this.state.pos);
-    if (next === charCodes.dot && !octal) {
+    if (next === charCodes.dot && !isOctal) {
       ++this.state.pos;
       this.readInt(10);
       isFloat = true;
@@ -1144,7 +1149,7 @@ export default class Tokenizer extends ParserErrors {
 
     if (
       (next === charCodes.uppercaseE || next === charCodes.lowercaseE) &&
-      !octal
+      !isOctal
     ) {
       next = this.input.charCodeAt(++this.state.pos);
       if (next === charCodes.plusSign || next === charCodes.dash) {
@@ -1155,16 +1160,6 @@ export default class Tokenizer extends ParserErrors {
       next = this.input.charCodeAt(this.state.pos);
     }
 
-    // disallow numeric separators in non octal decimals and legacy octal likes
-    if (this.hasPlugin("numericSeparator") && (octal || isNonOctalDecimalInt)) {
-      const underscorePos = this.input
-        .slice(start, this.state.pos)
-        .indexOf("_");
-      if (underscorePos > 0) {
-        this.raise(underscorePos + start, Errors.ZeroDigitNumericSeparator);
-      }
-    }
-
     if (next === charCodes.underscore) {
       this.expectPlugin("numericSeparator", this.state.pos);
     }
@@ -1172,7 +1167,7 @@ export default class Tokenizer extends ParserErrors {
     if (next === charCodes.lowercaseN) {
       // disallow floats, legacy octal syntax and non octal decimals
       // new style octal ("0o") is handled in this.readRadixNumber
-      if (isFloat || octal || isNonOctalDecimalInt) {
+      if (isFloat || hasLeadingZero) {
         this.raise(start, Errors.InvalidBigIntLiteral);
       }
       ++this.state.pos;
@@ -1191,7 +1186,7 @@ export default class Tokenizer extends ParserErrors {
       return;
     }
 
-    const val = octal ? parseInt(str, 8) : parseFloat(str);
+    const val = isOctal ? parseInt(str, 8) : parseFloat(str);
     this.finishToken(tt.num, val);
   }
 
