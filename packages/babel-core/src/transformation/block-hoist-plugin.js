@@ -39,7 +39,7 @@ const blockHoistPlugin = {
   visitor: {
     Block: {
       exit({ node }) {
-        if (!node.body.find(node => node?._blockHoist != null)) return;
+        if (!node.body.some(node => node?._blockHoist != null)) return;
         // TODO: Babel 9 (?) - remove stabilityMap once Node >= 12 is guaranteed
         // Array sorting is not stable in earlier Node releases
         // See: https://v8.dev/blog/array-sort for details
