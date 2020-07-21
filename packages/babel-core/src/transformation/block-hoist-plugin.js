@@ -48,7 +48,7 @@ const blockHoistPlugin = {
             ? process.versions.node.split(".")[0]
             : undefined;
         const stabilityMap =
-          nodeVersion && nodeVersion < 12
+          !nodeVersion || nodeVersion < 12
             ? new Map(node.body.map((n, idx) => [n, idx]))
             : null;
         const priority = node => {
