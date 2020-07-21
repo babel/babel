@@ -133,6 +133,14 @@ if (semver.gte(process.version, "4.0.0")) {
   ]);
 }
 
+if (semver.gte(process.version, "4.0.0")) {
+  enqueue("mocha", [
+    "--harmony",
+    "--reporter", "spec",
+    "./test/non-writable-tostringtag-property.js",
+  ]);
+}
+
 enqueue(convert, [
   "./test/tests.es6.js",
   "./test/tests.es5.js"
