@@ -2568,15 +2568,6 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.9.0.tgz#24390e6ad61386b0a747265754d2a17219de862c"
   integrity sha512-Uvq6hVe90D0B2WEnUqtdgY1bATGz3mw33nH9Y+dmA+w5DHvUmBgkr5rM/KCHpCsiFNRUfokW/szpPPgMK2hm4A==
 
-babel-eslint@^11.0.0-beta.2:
-  version "11.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/babel-eslint/-/babel-eslint-11.0.0-beta.2.tgz#de1f06795aa0d8cedcf6ac943e63056f5b4a7048"
-  integrity sha512-D2tunrOu04XloEdU2XVUminUu25FILlGruZmffqH5OSnLDhCheKNvUoM1ihrexdUvhizlix8bjqRnsss4V/UIQ==
-  dependencies:
-    eslint-scope "5.0.0"
-    eslint-visitor-keys "^1.1.0"
-    semver "^6.3.0"
-
 babel-jest@^24.9.0:
   version "24.9.0"
   resolved "https://registry.yarnpkg.com/babel-jest/-/babel-jest-24.9.0.tgz#3fc327cb8467b89d14d7bc70e315104a783ccd54"
