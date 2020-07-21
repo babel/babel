@@ -1788,7 +1788,7 @@ export default class ExpressionParser extends LValParser {
     }
 
     if (!prop.computed && prop.key.type === "Identifier") {
-      this.checkReservedWord(prop.key.name, prop.key.start, true, true);
+      this.checkReservedWord(prop.key.name, prop.key.start, true, false);
 
       if (isPattern) {
         prop.value = this.parseMaybeDefault(
