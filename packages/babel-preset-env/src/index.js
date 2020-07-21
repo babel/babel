@@ -99,14 +99,16 @@ export const getModulesPluginNames = ({
   transformations,
   shouldTransformESM,
   shouldTransformDynamicImport,
+  shouldTransformExportNamespaceFrom,
   shouldParseTopLevelAwait,
-}: {
+}: {|
   modules: ModuleOption,
   transformations: ModuleTransformationsType,
   shouldTransformESM: boolean,
   shouldTransformDynamicImport: boolean,
+  shouldTransformExportNamespaceFrom: boolean,
   shouldParseTopLevelAwait: boolean,
-}) => {
+|}) => {
   const modulesPluginNames = [];
   if (modules !== false && transformations[modules]) {
     if (shouldTransformESM) {
@@ -130,6 +132,12 @@ export const getModulesPluginNames = ({
     }
   } else {
     modulesPluginNames.push("syntax-dynamic-import");
+  }
+
+  if (shouldTransformExportNamespaceFrom) {
+    modulesPluginNames.push("proposal-export-namespace-from");
+  } else {
+    modulesPluginNames.push("syntax-export-namespace-from");
   }
 
   if (shouldParseTopLevelAwait) {
@@ -206,6 +214,10 @@ function supportsDynamicImport(caller) {
   return !!caller?.supportsDynamicImport;
 }
 
+function supportsExportNamespaceFrom(caller) {
+  return !!caller?.supportsExportNamespaceFrom;
+}
+
 function supportsTopLevelAwait(caller) {
   return !!caller?.supportsTopLevelAwait;
 }
@@ -265,6 +277,15 @@ export default declare((api, opts) => {
 
   const transformTargets = forceAllTransforms || hasUglifyTarget ? {} : targets;
 
+  const compatData = getPluginList(shippedProposals, bugfixes);
+  const shouldSkipExportNamespaceFrom =
+    (modules === "auto" && api.caller?.(supportsExportNamespaceFrom)) ||
+    (modules === false &&
+      !isRequired("proposal-export-namespace-from", transformTargets, {
+        compatData,
+        includes: include.plugins,
+        excludes: exclude.plugins,
+      }));
   const modulesPluginNames = getModulesPluginNames({
     modules,
     transformations: moduleTransformations,
@@ -273,11 +294,12 @@ export default declare((api, opts) => {
     shouldTransformESM: modules !== "auto" || !api.caller?.(supportsStaticESM),
     shouldTransformDynamicImport:
       modules !== "auto" || !api.caller?.(supportsDynamicImport),
+    shouldTransformExportNamespaceFrom: !shouldSkipExportNamespaceFrom,
     shouldParseTopLevelAwait: !api.caller || api.caller(supportsTopLevelAwait),
   });
 
   const pluginNames = filterItems(
-    getPluginList(shippedProposals, bugfixes),
+    compatData,
     include.plugins,
     exclude.plugins,
     transformTargets,

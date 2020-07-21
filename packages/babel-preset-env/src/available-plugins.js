@@ -4,6 +4,7 @@
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
 import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
+import syntaxExportNamespaceFrom from "@babel/plugin-syntax-export-namespace-from";
 import syntaxJsonStrings from "@babel/plugin-syntax-json-strings";
 import syntaxNullishCoalescingOperator from "@babel/plugin-syntax-nullish-coalescing-operator";
 import syntaxNumericSeparator from "@babel/plugin-syntax-numeric-separator";
@@ -14,6 +15,7 @@ import syntaxTopLevelAwait from "@babel/plugin-syntax-top-level-await";
 import proposalAsyncGeneratorFunctions from "@babel/plugin-proposal-async-generator-functions";
 import proposalClassProperties from "@babel/plugin-proposal-class-properties";
 import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";
+import proposalExportNamespaceFrom from "@babel/plugin-proposal-export-namespace-from";
 import proposalJsonStrings from "@babel/plugin-proposal-json-strings";
 import proposalNullishCoalescingOperator from "@babel/plugin-proposal-nullish-coalescing-operator";
 import proposalNumericSeparator from "@babel/plugin-proposal-numeric-separator";
@@ -72,6 +74,7 @@ export default {
   "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,
   "proposal-class-properties": proposalClassProperties,
   "proposal-dynamic-import": proposalDynamicImport,
+  "proposal-export-namespace-from": proposalExportNamespaceFrom,
   "proposal-json-strings": proposalJsonStrings,
   "proposal-nullish-coalescing-operator": proposalNullishCoalescingOperator,
   "proposal-numeric-separator": proposalNumericSeparator,
@@ -83,6 +86,7 @@ export default {
   "syntax-async-generators": syntaxAsyncGenerators,
   "syntax-class-properties": syntaxClassProperties,
   "syntax-dynamic-import": syntaxDynamicImport,
+  "syntax-export-namespace-from": syntaxExportNamespaceFrom,
   "syntax-json-strings": syntaxJsonStrings,
   "syntax-nullish-coalescing-operator": syntaxNullishCoalescingOperator,
   "syntax-numeric-separator": syntaxNumericSeparator,

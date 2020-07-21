@@ -26,6 +26,7 @@ Using plugins:
   transform-named-capturing-groups-regex { "edge":"18", "firefox":"68" }
   transform-template-literals { "ios":"12.2" }
   transform-function-name { "edge":"18" }
+  proposal-export-namespace-from { "edge":"18", "firefox":"68", "ios":"12.2", "safari":"13", "samsung":"10.1" }
   transform-modules-commonjs { "android":"80", "chrome":"79", "edge":"18", "firefox":"68", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
   proposal-dynamic-import { "android":"80", "chrome":"79", "edge":"18", "firefox":"68", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
 

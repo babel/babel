@@ -43,6 +43,7 @@ Using plugins:
   transform-member-expression-literals {}
   transform-property-literals {}
   transform-reserved-words {}
+  proposal-export-namespace-from {}
   transform-modules-commonjs {}
   proposal-dynamic-import {}
 

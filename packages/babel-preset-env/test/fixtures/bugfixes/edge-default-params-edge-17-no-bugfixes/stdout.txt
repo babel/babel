@@ -19,6 +19,7 @@ Using plugins:
   proposal-unicode-property-regex { "edge":"17" }
   transform-named-capturing-groups-regex { "edge":"17" }
   transform-function-name { "edge":"17" }
+  proposal-export-namespace-from { "edge":"17" }
   transform-modules-commonjs { "edge":"17" }
   proposal-dynamic-import { "edge":"17" }
 
