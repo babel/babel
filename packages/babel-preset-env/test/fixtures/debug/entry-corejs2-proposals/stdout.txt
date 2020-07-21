@@ -6,6 +6,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator {}
   proposal-nullish-coalescing-operator {}
   proposal-optional-chaining {}
   proposal-json-strings {}

@@ -15,6 +15,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "samsung":"10.1" }
   proposal-nullish-coalescing-operator { "ios":"13.3", "safari":"13", "samsung":"10.1" }
   proposal-optional-chaining { "ios":"13.3", "safari":"13", "samsung":"10.1" }
   syntax-json-strings { "android":"80", "chrome":"80", "edge":"80", "firefox":"75", "ios":"13.3", "opera":"67", "safari":"13", "samsung":"10.1" }

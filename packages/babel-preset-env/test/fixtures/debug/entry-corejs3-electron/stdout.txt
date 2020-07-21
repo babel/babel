@@ -15,6 +15,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "electron":"0.36" }
   proposal-nullish-coalescing-operator { "electron":"0.36" }
   proposal-optional-chaining { "electron":"0.36" }
   proposal-json-strings { "electron":"0.36" }

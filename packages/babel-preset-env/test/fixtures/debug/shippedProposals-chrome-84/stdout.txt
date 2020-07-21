@@ -8,8 +8,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  syntax-numeric-separator { "chrome":"84" }
   syntax-class-properties { "chrome":"84" }
+  syntax-numeric-separator { "chrome":"84" }
   syntax-nullish-coalescing-operator { "chrome":"84" }
   syntax-optional-chaining { "chrome":"84" }
   syntax-json-strings { "chrome":"84" }

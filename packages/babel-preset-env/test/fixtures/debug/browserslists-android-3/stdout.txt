@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "android":"3" }
   proposal-nullish-coalescing-operator { "android":"3" }
   proposal-optional-chaining { "android":"3" }
   proposal-json-strings { "android":"3" }
