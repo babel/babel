@@ -22,6 +22,7 @@ Using plugins:
   transform-function-name { "node":"6" }
   transform-for-of { "node":"6" }
   transform-destructuring { "node":"6" }
+  proposal-export-namespace-from { "node":"6" }
   transform-modules-commonjs { "node":"6" }
   proposal-dynamic-import { "node":"6" }
 

@@ -37,6 +37,7 @@ Using plugins:
   transform-block-scoping { "chrome":"40" }
   transform-new-target { "chrome":"40" }
   transform-regenerator { "chrome":"40" }
+  proposal-export-namespace-from { "chrome":"40" }
   transform-modules-commonjs { "chrome":"40" }
   proposal-dynamic-import { "chrome":"40" }
 

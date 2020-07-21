@@ -43,6 +43,7 @@ Using plugins:
   transform-member-expression-literals {}
   transform-property-literals {}
   transform-reserved-words {}
+  proposal-export-namespace-from { "chrome":"55" }
   syntax-dynamic-import { "chrome":"55" }
 
 Using polyfills with `entry` option:

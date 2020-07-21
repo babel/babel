@@ -31,6 +31,7 @@ Using plugins:
   transform-function-name { "edge":"16" }
   transform-unicode-regex { "ios":"10.3", "safari":"10.1" }
   transform-block-scoping { "ios":"10.3", "safari":"10.1" }
+  proposal-export-namespace-from { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1", "samsung":"8.2" }
   syntax-dynamic-import { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "node":"13.2", "opera":"48", "safari":"10.1", "samsung":"8.2" }
 
 Using polyfills with `usage` option:

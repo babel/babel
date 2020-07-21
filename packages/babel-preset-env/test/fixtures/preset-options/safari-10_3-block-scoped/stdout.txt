@@ -22,6 +22,7 @@ Using plugins:
   transform-template-literals { "safari":"10" }
   transform-unicode-regex { "safari":"10" }
   transform-block-scoping { "safari":"10" }
+  proposal-export-namespace-from { "safari":"10" }
   transform-modules-commonjs { "safari":"10" }
   proposal-dynamic-import { "safari":"10" }
 

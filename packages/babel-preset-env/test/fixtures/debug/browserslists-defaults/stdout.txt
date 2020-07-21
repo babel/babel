@@ -47,6 +47,7 @@ Using plugins:
   transform-typeof-symbol { "ie":"11" }
   transform-new-target { "ie":"11" }
   transform-regenerator { "ie":"11" }
+  proposal-export-namespace-from { "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "safari":"13", "samsung":"10.1" }
   transform-modules-commonjs { "android":"80", "chrome":"79", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
   proposal-dynamic-import { "android":"80", "chrome":"79", "edge":"18", "firefox":"68", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
 

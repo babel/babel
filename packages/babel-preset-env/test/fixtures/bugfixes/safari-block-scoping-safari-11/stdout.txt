@@ -18,6 +18,7 @@ Using plugins:
   proposal-unicode-property-regex { "safari":"11" }
   transform-named-capturing-groups-regex { "safari":"11" }
   transform-unicode-regex { "safari":"11" }
+  proposal-export-namespace-from { "safari":"11" }
   bugfix/transform-tagged-template-caching { "safari":"11" }
   transform-modules-commonjs { "safari":"11" }
   proposal-dynamic-import { "safari":"11" }

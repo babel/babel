@@ -43,6 +43,7 @@ Using plugins:
   transform-member-expression-literals { "android":"3" }
   transform-property-literals { "android":"3" }
   transform-reserved-words { "android":"3" }
+  proposal-export-namespace-from { "android":"3" }
   transform-modules-commonjs { "android":"3" }
   proposal-dynamic-import { "android":"3" }
 

@@ -39,6 +39,7 @@ Using plugins:
   transform-typeof-symbol { "ie":"11" }
   transform-new-target { "ie":"11" }
   transform-regenerator { "ie":"11" }
+  proposal-export-namespace-from { "ie":"11" }
   transform-modules-commonjs { "ie":"11" }
   proposal-dynamic-import { "ie":"11" }
 

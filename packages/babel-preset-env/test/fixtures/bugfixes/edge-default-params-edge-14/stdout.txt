@@ -21,6 +21,7 @@ Using plugins:
   transform-async-to-generator { "edge":"14" }
   transform-for-of { "edge":"14" }
   transform-destructuring { "edge":"14" }
+  proposal-export-namespace-from { "edge":"14" }
   bugfix/transform-edge-function-name { "edge":"14" }
   transform-modules-commonjs { "edge":"14" }
   proposal-dynamic-import { "edge":"14" }
