@@ -1,15 +1,4 @@
 {
-  "proposal-numeric-separator": {
-    "chrome": "75",
-    "opera": "62",
-    "edge": "79",
-    "firefox": "70",
-    "safari": "13",
-    "node": "12.5",
-    "ios": "13",
-    "samsung": "11",
-    "electron": "6"
-  },
   "proposal-class-properties": {
     "chrome": "74",
     "opera": "61",
@@ -20,6 +9,17 @@
   },
   "proposal-private-methods": {
     "chrome": "84"
+  },
+  "proposal-numeric-separator": {
+    "chrome": "75",
+    "opera": "62",
+    "edge": "79",
+    "firefox": "70",
+    "safari": "13",
+    "node": "12.5",
+    "ios": "13",
+    "samsung": "11",
+    "electron": "6"
   },
   "proposal-nullish-coalescing-operator": {
     "chrome": "80",
