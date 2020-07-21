@@ -49,7 +49,7 @@ const blockHoistPlugin = {
             : undefined;
         const stabilityMap =
           !nodeVersion || nodeVersion < 12
-            ? new Map(node.body.map((n, idx) => [n, idx]))
+            ? new Map(node.body.entries())
             : null;
         const priority = node => {
           if (node?._blockHoist == null) return -1;
