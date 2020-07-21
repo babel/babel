@@ -17,7 +17,7 @@
   "types": "lib/index.d.ts",
   "dependencies": {
     "@babel/helper-validator-identifier": "^7.10.4",
-    "is-plain-object": "^3.0.1",
+    "is-plain-object": "^4.0.0",
     "lodash": "^4.17.19",
     "to-fast-properties": "^2.0.0"
   },
