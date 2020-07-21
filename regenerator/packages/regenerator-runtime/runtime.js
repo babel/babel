@@ -86,8 +86,10 @@ var runtime = (function (exports) {
     Generator.prototype = Object.create(IteratorPrototype);
   GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
   GeneratorFunctionPrototype.constructor = GeneratorFunction;
-  GeneratorFunctionPrototype[toStringTagSymbol] =
-    GeneratorFunction.displayName = "GeneratorFunction";
+  if (!(toStringTagSymbol in GeneratorFunctionPrototype)) {
+    GeneratorFunctionPrototype[toStringTagSymbol] = "GeneratorFunction";
+  }
+  GeneratorFunction.displayName = GeneratorFunctionPrototype[toStringTagSymbol];
 
   // Helper for defining the .next, .throw, and .return methods of the
   // Iterator interface in terms of a single ._invoke method.
@@ -386,7 +388,9 @@ var runtime = (function (exports) {
   // unified ._invoke helper method.
   defineIteratorMethods(Gp);
 
-  Gp[toStringTagSymbol] = "Generator";
+  if (!(toStringTagSymbol in Gp)) {
+    Gp[toStringTagSymbol] = "Generator";
+  }
 
   // A Generator should always return itself as the iterator object when the
   // @@iterator function is called on it. Some browsers' implementations of the
