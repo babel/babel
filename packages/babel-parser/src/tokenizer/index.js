@@ -1016,28 +1016,26 @@ export default class Tokenizer extends ParserErrors {
       const code = this.input.charCodeAt(this.state.pos);
       let val;
 
-      if (this.hasPlugin("numericSeparator")) {
-        if (code === charCodes.underscore) {
-          const prev = this.input.charCodeAt(this.state.pos - 1);
-          const next = this.input.charCodeAt(this.state.pos + 1);
-          if (allowedSiblings.indexOf(next) === -1) {
-            this.raise(this.state.pos, Errors.UnexpectedNumericSeparator);
-          } else if (
-            forbiddenSiblings.indexOf(prev) > -1 ||
-            forbiddenSiblings.indexOf(next) > -1 ||
-            Number.isNaN(next)
-          ) {
-            this.raise(this.state.pos, Errors.UnexpectedNumericSeparator);
-          }
-
-          if (!allowNumSeparator) {
-            this.raise(this.state.pos, Errors.NumericSeparatorInEscapeSequence);
-          }
-
-          // Ignore this _ character
-          ++this.state.pos;
-          continue;
+      if (code === charCodes.underscore) {
+        const prev = this.input.charCodeAt(this.state.pos - 1);
+        const next = this.input.charCodeAt(this.state.pos + 1);
+        if (allowedSiblings.indexOf(next) === -1) {
+          this.raise(this.state.pos, Errors.UnexpectedNumericSeparator);
+        } else if (
+          forbiddenSiblings.indexOf(prev) > -1 ||
+          forbiddenSiblings.indexOf(next) > -1 ||
+          Number.isNaN(next)
+        ) {
+          this.raise(this.state.pos, Errors.UnexpectedNumericSeparator);
         }
+
+        if (!allowNumSeparator) {
+          this.raise(this.state.pos, Errors.NumericSeparatorInEscapeSequence);
+        }
+
+        // Ignore this _ character
+        ++this.state.pos;
+        continue;
       }
 
       if (code >= charCodes.lowercaseA) {
@@ -1088,10 +1086,6 @@ export default class Tokenizer extends ParserErrors {
     }
     const next = this.input.charCodeAt(this.state.pos);
 
-    if (next === charCodes.underscore) {
-      this.expectPlugin("numericSeparator", this.state.pos);
-    }
-
     if (next === charCodes.lowercaseN) {
       ++this.state.pos;
       isBigInt = true;
@@ -1133,7 +1127,7 @@ export default class Tokenizer extends ParserErrors {
       const integer = this.input.slice(start, this.state.pos);
       if (this.state.strict) {
         this.raise(start, Errors.StrictOctalLiteral);
-      } else if (this.hasPlugin("numericSeparator")) {
+      } else {
         // disallow numeric separators in non octal decimals and legacy octal likes
         const underscorePos = integer.indexOf("_");
         if (underscorePos > 0) {
@@ -1163,10 +1157,6 @@ export default class Tokenizer extends ParserErrors {
       isFloat = true;
       hasExponent = true;
       next = this.input.charCodeAt(this.state.pos);
-    }
-
-    if (next === charCodes.underscore) {
-      this.expectPlugin("numericSeparator", this.state.pos);
     }
 
     if (next === charCodes.lowercaseN) {
