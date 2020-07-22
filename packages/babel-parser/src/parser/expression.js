@@ -1223,6 +1223,9 @@ export default class ExpressionParser extends LValParser {
     this.state.yieldPos = -1;
     this.state.awaitPos = -1;
     const params = [this.parseIdentifier()];
+    if (this.hasPrecedingLineBreak()) {
+      this.raise(this.state.pos, Errors.LineTerminatorBeforeArrow);
+    }
     this.expect(tt.arrow);
     this.checkYieldAwaitInDefaultParams();
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;

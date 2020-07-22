@@ -80,6 +80,7 @@ export const ErrorMessages = Object.freeze({
   LabelRedeclaration: "Label '%0' is already declared",
   LetInLexicalBinding:
     "'let' is not allowed to be used as a name in 'let' or 'const' declarations.",
+  LineTerminatorBeforeArrow: "No line break is allowed before '=>'",
   MalformedRegExpFlags: "Invalid regular expression flag",
   MissingClassName: "A class name is required",
   MissingEqInAssignment:
