@@ -1017,14 +1017,7 @@ export default class ExpressionParser extends LValParser {
       }
 
       case tt._do: {
-        this.expectPlugin("doExpressions");
-        const node = this.startNode();
-        this.next();
-        const oldLabels = this.state.labels;
-        this.state.labels = [];
-        node.body = this.parseBlock();
-        this.state.labels = oldLabels;
-        return this.finishNode(node, "DoExpression");
+        return this.parseDo();
       }
 
       case tt.regexp: {
@@ -1232,6 +1225,18 @@ export default class ExpressionParser extends LValParser {
     // let foo = async bar => {};
     this.parseArrowExpression(node, params, true);
     return node;
+  }
+
+  // https://github.com/tc39/proposal-do-expressions
+  parseDo(): N.DoExpression {
+    this.expectPlugin("doExpressions");
+    const node = this.startNode();
+    this.next(); // eat `do`
+    const oldLabels = this.state.labels;
+    this.state.labels = [];
+    node.body = this.parseBlock();
+    this.state.labels = oldLabels;
+    return this.finishNode(node, "DoExpression");
   }
 
   // Parse the `super` keyword

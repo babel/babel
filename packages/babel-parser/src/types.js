@@ -389,6 +389,11 @@ export type ArrayExpression = NodeBase & {
   elements: $ReadOnlyArray<?(Expression | SpreadElement)>,
 };
 
+export type DoExpression = NodeBase & {
+  type: "DoExpression",
+  body: ?BlockStatement,
+};
+
 export type TupleExpression = NodeBase & {
   type: "TupleExpression",
   elements: $ReadOnlyArray<?(Expression | SpreadElement)>,
