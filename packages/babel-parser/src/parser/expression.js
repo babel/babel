@@ -937,10 +937,14 @@ export default class ExpressionParser extends LValParser {
   // expression, an expression started by a keyword like `function` or
   // `new`, or an expression wrapped in punctuation like `()`, `[]`,
   // or `{}`.
+
   // https://tc39.es/ecma262/#prod-PrimaryExpression
+  // https://tc39.es/ecma262/#prod-AsyncArrowFunction
   // PrimaryExpression
   // Super
   // Import
+  // AsyncArrowFunction
+
   parseExprAtom(refExpressionErrors?: ?ExpressionErrors): N.Expression {
     // If a division operator appears in an expression position, the
     // tokenizer got confused, and we force it to read a regexp instead.
@@ -1003,24 +1007,7 @@ export default class ExpressionParser extends LValParser {
           this.match(tt.name) &&
           !this.canInsertSemicolon()
         ) {
-          const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-          const oldMaybeInAsyncArrowHead = this.state.maybeInAsyncArrowHead;
-          const oldYieldPos = this.state.yieldPos;
-          const oldAwaitPos = this.state.awaitPos;
-          this.state.maybeInArrowParameters = true;
-          this.state.maybeInAsyncArrowHead = true;
-          this.state.yieldPos = -1;
-          this.state.awaitPos = -1;
-          const params = [this.parseIdentifier()];
-          this.expect(tt.arrow);
-          this.checkYieldAwaitInDefaultParams();
-          this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
-          this.state.maybeInAsyncArrowHead = oldMaybeInAsyncArrowHead;
-          this.state.yieldPos = oldYieldPos;
-          this.state.awaitPos = oldAwaitPos;
-          // let foo = async bar => {};
-          this.parseArrowExpression(node, params, true);
-          return node;
+          return this.parseAsyncArrowUnaryFunction(id);
         }
 
         if (canBeArrow && this.match(tt.arrow) && !this.canInsertSemicolon()) {
@@ -1222,6 +1209,29 @@ export default class ExpressionParser extends LValParser {
       default:
         throw this.unexpected();
     }
+  }
+
+  // async [no LineTerminator here] AsyncArrowBindingIdentifier[?Yield] [no LineTerminator here] => AsyncConciseBody[?In]
+  parseAsyncArrowUnaryFunction(id: N.Expression): N.ArrowFunctionExpression {
+    const node = this.startNodeAtNode(id);
+    const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
+    const oldMaybeInAsyncArrowHead = this.state.maybeInAsyncArrowHead;
+    const oldYieldPos = this.state.yieldPos;
+    const oldAwaitPos = this.state.awaitPos;
+    this.state.maybeInArrowParameters = true;
+    this.state.maybeInAsyncArrowHead = true;
+    this.state.yieldPos = -1;
+    this.state.awaitPos = -1;
+    const params = [this.parseIdentifier()];
+    this.expect(tt.arrow);
+    this.checkYieldAwaitInDefaultParams();
+    this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
+    this.state.maybeInAsyncArrowHead = oldMaybeInAsyncArrowHead;
+    this.state.yieldPos = oldYieldPos;
+    this.state.awaitPos = oldAwaitPos;
+    // let foo = async bar => {};
+    this.parseArrowExpression(node, params, true);
+    return node;
   }
 
   // Parse the `super` keyword
