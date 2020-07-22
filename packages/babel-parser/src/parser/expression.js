@@ -597,16 +597,7 @@ export default class ExpressionParser extends LValParser {
     state: N.ParseSubscriptState,
   ): N.Expression {
     if (!noCalls && this.eat(tt.doubleColon)) {
-      const node = this.startNodeAt(startPos, startLoc);
-      node.object = base;
-      node.callee = this.parseNoCallExpr();
-      state.stop = true;
-      return this.parseSubscripts(
-        this.finishNode(node, "BindExpression"),
-        startPos,
-        startLoc,
-        noCalls,
-      );
+      return this.parseBind(base, startPos, startLoc, noCalls, state);
     }
     let optional = false;
     if (this.match(tt.questionDot)) {
@@ -669,6 +660,26 @@ export default class ExpressionParser extends LValParser {
       state.stop = true;
       return base;
     }
+  }
+
+  // https://github.com/tc39/proposal-bind-operator#syntax
+  parseBind(
+    base: N.Expression,
+    startPos: number,
+    startLoc: Position,
+    noCalls: ?boolean,
+    state: N.ParseSubscriptState,
+  ): N.Expression {
+    const node = this.startNodeAt(startPos, startLoc);
+    node.object = base;
+    node.callee = this.parseNoCallExpr();
+    state.stop = true;
+    return this.parseSubscripts(
+      this.finishNode(node, "BindExpression"),
+      startPos,
+      startLoc,
+      noCalls,
+    );
   }
 
   // https://tc39.es/ecma262/#prod-CoverCallExpressionAndAsyncArrowHead
