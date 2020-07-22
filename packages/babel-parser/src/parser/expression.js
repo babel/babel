@@ -340,15 +340,20 @@ export default class ExpressionParser extends LValParser {
     let prec = this.state.type.binop;
     if (prec != null && (!noIn || !this.match(tt._in))) {
       if (prec > minPrec) {
-        const operator = this.state.value;
-        if (operator === "|>" && this.state.inFSharpPipelineDirectBody) {
-          return left;
+        const op = this.state.type;
+        if (op === tt.pipeline) {
+          this.expectPlugin("pipelineOperator");
+          if (this.state.inFSharpPipelineDirectBody) {
+            return left;
+          }
+          this.state.inPipeline = true;
+          this.checkPipelineAtInfixOperator(left, leftStartPos);
         }
         const node = this.startNodeAt(leftStartPos, leftStartLoc);
         node.left = left;
-        node.operator = operator;
+        node.operator = this.state.value;
         if (
-          operator === "**" &&
+          op === tt.exponent &&
           left.type === "UnaryExpression" &&
           (this.options.createParenthesizedExpressions ||
             !(left.extra && left.extra.parenthesized))
@@ -359,15 +364,10 @@ export default class ExpressionParser extends LValParser {
           );
         }
 
-        const op = this.state.type;
         const logical = op === tt.logicalOR || op === tt.logicalAND;
         const coalesce = op === tt.nullishCoalescing;
 
-        if (op === tt.pipeline) {
-          this.expectPlugin("pipelineOperator");
-          this.state.inPipeline = true;
-          this.checkPipelineAtInfixOperator(left, leftStartPos);
-        } else if (coalesce) {
+        if (coalesce) {
           // Handle the precedence of `tt.coalesce` as equal to the range of logical expressions.
           // In other words, `node.right` shouldn't contain logical expressions in order to check the mixed error.
           prec = ((tt.logicalAND: any): { binop: number }).binop;
