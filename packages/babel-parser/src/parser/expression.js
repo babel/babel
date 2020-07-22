@@ -479,24 +479,24 @@ export default class ExpressionParser extends LValParser {
   parseUnary(refExpressionErrors: ?ExpressionErrors): N.Expression {
     if (this.isContextual("await") && this.isAwaitAllowed()) {
       return this.parseAwait();
-    } else if (this.state.type.prefix) {
-      const node = this.startNode();
-      const update = this.match(tt.incDec);
+    }
+    const update = this.match(tt.incDec);
+    const node = this.startNode();
+    if (this.state.type.prefix) {
       node.operator = this.state.value;
       node.prefix = true;
 
-      if (node.operator === "throw") {
+      if (this.match(tt._throw)) {
         this.expectPlugin("throwExpressions");
       }
+      const isDelete = this.match(tt._delete);
       this.next();
 
       node.argument = this.parseUnary();
 
       this.checkExpressionErrors(refExpressionErrors, true);
 
-      if (update) {
-        this.checkLVal(node.argument, undefined, undefined, "prefix operation");
-      } else if (this.state.strict && node.operator === "delete") {
+      if (this.state.strict && isDelete) {
         const arg = node.argument;
 
         if (arg.type === "Identifier") {
@@ -510,10 +510,23 @@ export default class ExpressionParser extends LValParser {
         }
       }
 
-      return this.finishNode(
-        node,
-        update ? "UpdateExpression" : "UnaryExpression",
-      );
+      if (!update) {
+        return this.finishNode(node, "UnaryExpression");
+      }
+    }
+
+    return this.parseUpdate(node, update, refExpressionErrors);
+  }
+
+  // https://tc39.es/ecma262/#prod-UpdateExpression
+  parseUpdate(
+    node: N.Expression,
+    update: boolean,
+    refExpressionErrors: ?ExpressionErrors,
+  ): N.Expression {
+    if (update) {
+      this.checkLVal(node.argument, undefined, undefined, "prefix operation");
+      return this.finishNode(node, "UpdateExpression");
     }
 
     const startPos = this.state.start;
@@ -533,7 +546,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   // Parse call, dot, and `[]`-subscript expressions.
-
+  // https://tc39.es/ecma262/#prod-LeftHandSideExpression
   parseExprSubscripts(refExpressionErrors: ?ExpressionErrors): N.Expression {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
