@@ -779,10 +779,10 @@ describe("api", function () {
         options,
         function (err) {
           expect(err.message).toMatch(
-            "Support for the experimental syntax 'logicalAssignment' isn't currently enabled (1:3):",
+            "Support for the experimental syntax 'doExpressions' isn't currently enabled (1:2):",
           );
           expect(err.message).toMatch(
-            "Add @babel/plugin-proposal-logical-assignment-operators (https://git.io/vAlRe) to the " +
+            "Add @babel/plugin-proposal-do-expressions (https://git.io/vb4S3) to the " +
               "'plugins' section of your Babel config to enable transformation.",
           );
           done();
