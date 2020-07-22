@@ -5,7 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-var hasOwn = Object.prototype.hasOwnProperty;
+var assert = require("assert");
+
 var getProto = Object.getPrototypeOf;
 var NativeIteratorPrototype =
   typeof Symbol === "function" &&
@@ -20,8 +21,16 @@ Object.defineProperty(NativeIteratorPrototype, Symbol.toStringTag, {
   value: "Iterator",
 });
 
-describe("Symbol.toStringTag safety (#399, #400)", function () {
+(NativeIteratorPrototype ? describe : describe.skip)("Symbol.toStringTag safety (#399, #400)", function () {
   it("regenerator-runtime doesn't fail to initialize when native iterator prototype has a non-writable @@toStringTag property", function() {
     require("./runtime.js");
+  });
+
+  it("regenerator-runtime's polyfilled generator prototype has the correct @@toStringTag value", function() {
+    require("./runtime.js");
+    function foo() {}
+    regeneratorRuntime.mark(foo);
+
+    assert.strictEqual(foo.prototype[Symbol.toStringTag], "Generator");
   });
 });

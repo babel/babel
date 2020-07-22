@@ -8,6 +8,7 @@
 var runtime = (function (exports) {
   "use strict";
 
+  var define = Object.defineProperty;
   var Op = Object.prototype;
   var hasOwn = Op.hasOwnProperty;
   var undefined; // More compressible than void 0.
@@ -15,6 +16,15 @@ var runtime = (function (exports) {
   var iteratorSymbol = $Symbol.iterator || "@@iterator";
   var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
   var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+  if (define) {
+    try {
+      // IE 8 has a broken Object.defineProperty that only works on DOM objects
+      define({}, '', {});
+    } catch (err) {
+      define = undefined;
+    }
+  }
 
   function wrap(innerFn, outerFn, self, tryLocsList) {
     // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
@@ -85,7 +95,13 @@ var runtime = (function (exports) {
   function ensureDefaultToStringTag(object, defaultValue) {
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1644581#c6
     return toStringTagSymbol in object
-      ? object[toStringTagSymbol]
+      ? (define && define(object, toStringTagSymbol, {
+          value: defaultValue,
+          enumerable: true,
+          configurable: true,
+          writable: true
+        }),
+        defaultValue)
       : object[toStringTagSymbol] = defaultValue;
   }
 
