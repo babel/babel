@@ -1127,7 +1127,7 @@ export default class ExpressionParser extends LValParser {
         return this.parseClass(node, false);
 
       case tt._new:
-        return this.parseNew();
+        return this.parseNewOrNewTarget();
 
       case tt.backQuote:
         return this.parseTemplate(false);
@@ -1458,20 +1458,13 @@ export default class ExpressionParser extends LValParser {
     return node;
   }
 
-  // New's precedence is slightly tricky. It must allow its argument to
-  // be a `[]` or dot subscript expression, but not a call — at least,
-  // not without wrapping it in parentheses. Thus, it uses the noCalls
-  // argument to parseSubscripts to prevent it from consuming the
-  // argument list.
-
-  parseNew(): N.NewExpression | N.MetaProperty {
+  parseNewOrNewTarget(): N.NewExpression | N.MetaProperty {
     const node = this.startNode();
-
-    let meta = this.startNode();
     this.next();
-    meta = this.createIdentifier(meta, "new");
-
-    if (this.eat(tt.dot)) {
+    if (this.match(tt.dot)) {
+      // https://tc39.es/ecma262/#prod-NewTarget
+      const meta = this.createIdentifier(this.startNodeAtNode(node), "new");
+      this.next();
       const metaProp = this.parseMetaProperty(node, meta, "target");
 
       if (!this.scope.inNonArrowFunction && !this.scope.inClass) {
@@ -1489,6 +1482,16 @@ export default class ExpressionParser extends LValParser {
       return metaProp;
     }
 
+    return this.parseNew(node);
+  }
+
+  // New's precedence is slightly tricky. It must allow its argument to
+  // be a `[]` or dot subscript expression, but not a call — at least,
+  // not without wrapping it in parentheses. Thus, it uses the noCalls
+  // argument to parseSubscripts to prevent it from consuming the
+  // argument list.
+  // https://tc39.es/ecma262/#prod-NewExpression
+  parseNew(node: N.Expression): N.NewExpression {
     node.callee = this.parseNoCallExpr();
 
     if (node.callee.type === "Import") {
