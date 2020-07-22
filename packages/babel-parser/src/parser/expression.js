@@ -651,82 +651,13 @@ export default class ExpressionParser extends LValParser {
         return this.finishNode(node, "MemberExpression");
       }
     } else if (!noCalls && this.match(tt.parenL)) {
-      const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-      const oldYieldPos = this.state.yieldPos;
-      const oldAwaitPos = this.state.awaitPos;
-      this.state.maybeInArrowParameters = true;
-      this.state.yieldPos = -1;
-      this.state.awaitPos = -1;
-
-      this.next();
-
-      let node = this.startNodeAt(startPos, startLoc);
-      node.callee = base;
-
-      if (state.optionalChainMember) {
-        node.optional = optional;
-      }
-      if (optional) {
-        node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
-      } else {
-        node.arguments = this.parseCallExpressionArguments(
-          tt.parenR,
-          state.maybeAsyncArrow,
-          base.type === "Import",
-          base.type !== "Super",
-          node,
-        );
-      }
-      this.finishCallExpression(node, state.optionalChainMember);
-
-      if (state.maybeAsyncArrow && this.shouldParseAsyncArrow() && !optional) {
-        state.stop = true;
-
-        node = this.parseAsyncArrowFromCallExpression(
-          this.startNodeAt(startPos, startLoc),
-          node,
-        );
-        this.checkYieldAwaitInDefaultParams();
-        this.state.yieldPos = oldYieldPos;
-        this.state.awaitPos = oldAwaitPos;
-      } else {
-        this.toReferencedListDeep(node.arguments);
-
-        // We keep the old value if it isn't null, for cases like
-        //   (x = async(yield)) => {}
-        //
-        // Hi developer of the future :) If you are implementing generator
-        // arrow functions, please read the note below about "await" and
-        // verify if the same logic is needed for yield.
-        if (oldYieldPos !== -1) this.state.yieldPos = oldYieldPos;
-
-        // Await is trickier than yield. When parsing a possible arrow function
-        // (e.g. something starting with `async(`) we don't know if its possible
-        // parameters will actually be inside an async arrow function or if it is
-        // a normal call expression.
-        // If it ended up being a call expression, if we are in a context where
-        // await expression are disallowed (and thus "await" is an identifier)
-        // we must be careful not to leak this.state.awaitPos to an even outer
-        // context, where "await" could not be an identifier.
-        // For example, this code is valid because "await" isn't directly inside
-        // an async function:
-        //
-        //     async function a() {
-        //       function b(param = async (await)) {
-        //       }
-        //     }
-        //
-        if (
-          (!this.isAwaitAllowed() && !oldMaybeInArrowParameters) ||
-          oldAwaitPos !== -1
-        ) {
-          this.state.awaitPos = oldAwaitPos;
-        }
-      }
-
-      this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
-
-      return node;
+      return this.parseCoverCallAndAsyncArrowHead(
+        base,
+        startPos,
+        startLoc,
+        state,
+        optional,
+      );
     } else if (this.match(tt.backQuote)) {
       return this.parseTaggedTemplateExpression(
         startPos,
@@ -738,6 +669,95 @@ export default class ExpressionParser extends LValParser {
       state.stop = true;
       return base;
     }
+  }
+
+  // https://tc39.es/ecma262/#prod-CoverCallExpressionAndAsyncArrowHead
+  // CoverCallExpressionAndAsyncArrowHead
+  // CallExpression[?Yield, ?Await] Arguments[?Yield, ?Await]
+  // OptionalChain[?Yield, ?Await] Arguments[?Yield, ?Await]
+  parseCoverCallAndAsyncArrowHead(
+    base: N.Expression,
+    startPos: number,
+    startLoc: Position,
+    state: N.ParseSubscriptState,
+    optional: boolean,
+  ): N.Expression {
+    const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
+    const oldYieldPos = this.state.yieldPos;
+    const oldAwaitPos = this.state.awaitPos;
+    this.state.maybeInArrowParameters = true;
+    this.state.yieldPos = -1;
+    this.state.awaitPos = -1;
+
+    this.next(); // eat `(`
+
+    let node = this.startNodeAt(startPos, startLoc);
+    node.callee = base;
+
+    if (state.optionalChainMember) {
+      node.optional = optional;
+    }
+    if (optional) {
+      node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+    } else {
+      node.arguments = this.parseCallExpressionArguments(
+        tt.parenR,
+        state.maybeAsyncArrow,
+        base.type === "Import",
+        base.type !== "Super",
+        node,
+      );
+    }
+    this.finishCallExpression(node, state.optionalChainMember);
+
+    if (state.maybeAsyncArrow && this.shouldParseAsyncArrow() && !optional) {
+      state.stop = true;
+
+      node = this.parseAsyncArrowFromCallExpression(
+        this.startNodeAt(startPos, startLoc),
+        node,
+      );
+      this.checkYieldAwaitInDefaultParams();
+      this.state.yieldPos = oldYieldPos;
+      this.state.awaitPos = oldAwaitPos;
+    } else {
+      this.toReferencedListDeep(node.arguments);
+
+      // We keep the old value if it isn't null, for cases like
+      //   (x = async(yield)) => {}
+      //
+      // Hi developer of the future :) If you are implementing generator
+      // arrow functions, please read the note below about "await" and
+      // verify if the same logic is needed for yield.
+      if (oldYieldPos !== -1) this.state.yieldPos = oldYieldPos;
+
+      // Await is trickier than yield. When parsing a possible arrow function
+      // (e.g. something starting with `async(`) we don't know if its possible
+      // parameters will actually be inside an async arrow function or if it is
+      // a normal call expression.
+      // If it ended up being a call expression, if we are in a context where
+      // await expression are disallowed (and thus "await" is an identifier)
+      // we must be careful not to leak this.state.awaitPos to an even outer
+      // context, where "await" could not be an identifier.
+      // For example, this code is valid because "await" isn't directly inside
+      // an async function:
+      //
+      //     async function a() {
+      //       function b(param = async (await)) {
+      //       }
+      //     }
+      //
+      if (
+        (!this.isAwaitAllowed() && !oldMaybeInArrowParameters) ||
+        oldAwaitPos !== -1
+      ) {
+        this.state.awaitPos = oldAwaitPos;
+      }
+    }
+
+    this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
+
+    return node;
   }
 
   parseTaggedTemplateExpression(
@@ -884,7 +904,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   // Parse a no-call expression (like argument of `new` or `::` operators).
-
+  // https://tc39.es/ecma262/#prod-MemberExpression
   parseNoCallExpr(): N.Expression {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
