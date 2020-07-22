@@ -121,6 +121,12 @@ export default class ExpressionParser extends LValParser {
     }
   }
 
+  shouldExitDescending(expr: N.Expression, potentialArrowAt: number): boolean {
+    return (
+      expr.type === "ArrowFunctionExpression" && expr.start === potentialArrowAt
+    );
+  }
+
   // Convenience method to parse an Expression only
   getExpression(): N.Expression {
     let paramFlags = PARAM;
@@ -160,6 +166,7 @@ export default class ExpressionParser extends LValParser {
   //   and object pattern might appear (so it's possible to raise
   //   delayed syntax error at correct position).
 
+  // https://tc39.es/ecma262/#prod-Expression
   parseExpression(
     noIn?: boolean,
     refExpressionErrors?: ExpressionErrors,
@@ -253,6 +260,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   // Parse a ternary conditional (`?:`) operator.
+  // https://tc39.es/ecma262/#prod-ConditionalExpression
 
   parseMaybeConditional(
     noIn: ?boolean,
@@ -264,13 +272,9 @@ export default class ExpressionParser extends LValParser {
     const potentialArrowAt = this.state.potentialArrowAt;
     const expr = this.parseExprOps(noIn, refExpressionErrors);
 
-    if (
-      expr.type === "ArrowFunctionExpression" &&
-      expr.start === potentialArrowAt
-    ) {
+    if (this.shouldExitDescending(expr, potentialArrowAt)) {
       return expr;
     }
-    if (this.checkExpressionErrors(refExpressionErrors, false)) return expr;
 
     return this.parseConditional(
       expr,
@@ -302,6 +306,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   // Start the precedence parser.
+  // https://tc39.es/ecma262/#prod-ShortCircuitExpression
 
   parseExprOps(
     noIn: ?boolean,
@@ -312,13 +317,7 @@ export default class ExpressionParser extends LValParser {
     const potentialArrowAt = this.state.potentialArrowAt;
     const expr = this.parseUnary(refExpressionErrors);
 
-    if (
-      expr.type === "ArrowFunctionExpression" &&
-      expr.start === potentialArrowAt
-    ) {
-      return expr;
-    }
-    if (this.checkExpressionErrors(refExpressionErrors, false)) {
+    if (this.shouldExitDescending(expr, potentialArrowAt)) {
       return expr;
     }
 
@@ -541,10 +540,7 @@ export default class ExpressionParser extends LValParser {
     const potentialArrowAt = this.state.potentialArrowAt;
     const expr = this.parseExprAtom(refExpressionErrors);
 
-    if (
-      expr.type === "ArrowFunctionExpression" &&
-      expr.start === potentialArrowAt
-    ) {
+    if (this.shouldExitDescending(expr, potentialArrowAt)) {
       return expr;
     }
 
