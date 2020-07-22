@@ -310,7 +310,7 @@ export default class ExpressionParser extends LValParser {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     const potentialArrowAt = this.state.potentialArrowAt;
-    const expr = this.parseMaybeUnary(refExpressionErrors);
+    const expr = this.parseUnary(refExpressionErrors);
 
     if (
       expr.type === "ArrowFunctionExpression" &&
@@ -467,7 +467,7 @@ export default class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
 
     return this.parseExprOp(
-      this.parseMaybeUnary(),
+      this.parseUnary(),
       startPos,
       startLoc,
       op.rightAssociative ? prec - 1 : prec,
@@ -476,8 +476,8 @@ export default class ExpressionParser extends LValParser {
   }
 
   // Parse unary operators, both prefix and postfix.
-
-  parseMaybeUnary(refExpressionErrors: ?ExpressionErrors): N.Expression {
+  // https://tc39.es/ecma262/#prod-UnaryExpression
+  parseUnary(refExpressionErrors: ?ExpressionErrors): N.Expression {
     if (this.isContextual("await") && this.isAwaitAllowed()) {
       return this.parseAwait();
     } else if (this.state.type.prefix) {
@@ -491,7 +491,7 @@ export default class ExpressionParser extends LValParser {
       }
       this.next();
 
-      node.argument = this.parseMaybeUnary();
+      node.argument = this.parseUnary();
 
       this.checkExpressionErrors(refExpressionErrors, true);
 
@@ -2312,7 +2312,7 @@ export default class ExpressionParser extends LValParser {
     }
 
     if (!this.state.soloAwait) {
-      node.argument = this.parseMaybeUnary();
+      node.argument = this.parseUnary();
     }
 
     return this.finishNode(node, "AwaitExpression");
@@ -2530,7 +2530,7 @@ export default class ExpressionParser extends LValParser {
     this.state.inFSharpPipelineDirectBody = true;
 
     const ret = this.parseExprOp(
-      this.parseMaybeUnary(),
+      this.parseUnary(),
       startPos,
       startLoc,
       prec,
