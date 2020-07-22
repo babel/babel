@@ -19,7 +19,8 @@
     "electron": "6"
   },
   "proposal-private-methods": {
-    "chrome": "84"
+    "chrome": "84",
+    "edge": "84"
   },
   "proposal-nullish-coalescing-operator": {
     "chrome": "80",
@@ -28,6 +29,7 @@
     "firefox": "72",
     "safari": "13.1",
     "node": "14",
+    "ios": "13.4",
     "electron": "8.1"
   },
   "proposal-optional-chaining": {
@@ -37,6 +39,7 @@
     "firefox": "74",
     "safari": "13.1",
     "node": "14",
+    "ios": "13.4",
     "electron": "8.1"
   },
   "proposal-json-strings": {
@@ -120,6 +123,7 @@
     "chrome": "64",
     "opera": "51",
     "edge": "79",
+    "firefox": "78",
     "safari": "11.1",
     "node": "10",
     "ios": "11.3",
