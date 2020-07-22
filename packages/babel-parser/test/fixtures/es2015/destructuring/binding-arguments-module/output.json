@@ -1,40 +1,40 @@
 {
   "type": "File",
-  "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":28}},
+  "start":0,"end":28,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":28}},
   "errors": [
-    "SyntaxError: Binding 'arguments' in strict mode (2:8)"
+    "SyntaxError: Binding 'arguments' in strict mode (1:8)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":28}},
-    "sourceType": "script",
+    "start":0,"end":28,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":28}},
+    "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",
-        "start":14,"end":42,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":28}},
+        "start":0,"end":28,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":28}},
         "declarations": [
           {
             "type": "VariableDeclarator",
-            "start":20,"end":41,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":27}},
+            "start":6,"end":27,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":27}},
             "id": {
               "type": "ObjectPattern",
-              "start":20,"end":33,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":19}},
+              "start":6,"end":19,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":19}},
               "properties": [
                 {
                   "type": "ObjectProperty",
-                  "start":22,"end":31,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":17}},
+                  "start":8,"end":17,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":17}},
                   "method": false,
                   "key": {
                     "type": "Identifier",
-                    "start":22,"end":31,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":17},"identifierName":"arguments"},
+                    "start":8,"end":17,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":17},"identifierName":"arguments"},
                     "name": "arguments"
                   },
                   "computed": false,
                   "shorthand": true,
                   "value": {
                     "type": "Identifier",
-                    "start":22,"end":31,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":17},"identifierName":"arguments"},
+                    "start":8,"end":17,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":17},"identifierName":"arguments"},
                     "name": "arguments"
                   },
                   "extra": {
@@ -45,10 +45,10 @@
             },
             "init": {
               "type": "CallExpression",
-              "start":36,"end":41,"loc":{"start":{"line":2,"column":22},"end":{"line":2,"column":27}},
+              "start":22,"end":27,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":27}},
               "callee": {
                 "type": "Identifier",
-                "start":36,"end":39,"loc":{"start":{"line":2,"column":22},"end":{"line":2,"column":25},"identifierName":"foo"},
+                "start":22,"end":25,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":25},"identifierName":"foo"},
                 "name": "foo"
               },
               "arguments": []
@@ -58,20 +58,6 @@
         "kind": "const"
       }
     ],
-    "directives": [
-      {
-        "type": "Directive",
-        "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
-        "value": {
-          "type": "DirectiveLiteral",
-          "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
-          "value": "use strict",
-          "extra": {
-            "raw": "\"use strict\"",
-            "rawValue": "use strict"
-          }
-        }
-      }
-    ]
+    "directives": []
   }
 }
