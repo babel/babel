@@ -229,12 +229,6 @@ export default class ExpressionParser extends LValParser {
       const operator = this.state.value;
       node.operator = operator;
 
-      if (operator === "??=") {
-        this.expectPlugin("logicalAssignment");
-      }
-      if (operator === "||=" || operator === "&&=") {
-        this.expectPlugin("logicalAssignment");
-      }
       if (this.match(tt.eq)) {
         node.left = this.toAssignable(left);
         refExpressionErrors.doubleProto = -1; // reset because double __proto__ is valid in assignment expression
