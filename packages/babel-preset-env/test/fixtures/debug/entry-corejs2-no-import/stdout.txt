@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "node":"6" }
   proposal-nullish-coalescing-operator { "node":"6" }
   proposal-optional-chaining { "node":"6" }
   proposal-json-strings { "node":"6" }

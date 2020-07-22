@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "edge":"17" }
   proposal-nullish-coalescing-operator { "edge":"17" }
   proposal-optional-chaining { "edge":"17" }
   proposal-json-strings { "edge":"17" }
