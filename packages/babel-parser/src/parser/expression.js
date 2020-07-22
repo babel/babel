@@ -651,9 +651,9 @@ export default class ExpressionParser extends LValParser {
       );
     } else if (this.match(tt.backQuote)) {
       return this.parseTaggedTemplateExpression(
+        base,
         startPos,
         startLoc,
-        base,
         state,
       );
     } else {
@@ -771,12 +771,13 @@ export default class ExpressionParser extends LValParser {
     return node;
   }
 
+  // MemberExpression [?Yield, ?Await] TemplateLiteral[?Yield, ?Await, +Tagged]
+  // CallExpression [?Yield, ?Await] TemplateLiteral[?Yield, ?Await, +Tagged]
   parseTaggedTemplateExpression(
+    base: N.Expression,
     startPos: number,
     startLoc: Position,
-    base: N.Expression,
     state: N.ParseSubscriptState,
-    typeArguments?: ?N.TsTypeParameterInstantiation,
   ): N.TaggedTemplateExpression {
     const node: N.TaggedTemplateExpression = this.startNodeAt(
       startPos,
@@ -784,7 +785,6 @@ export default class ExpressionParser extends LValParser {
     );
     node.tag = base;
     node.quasi = this.parseTemplate(true);
-    if (typeArguments) node.typeParameters = typeArguments;
     if (state.optionalChainMember) {
       this.raise(startPos, Errors.OptionalChainingNoTemplate);
     }
@@ -1571,6 +1571,7 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(elem, "TemplateElement");
   }
 
+  // https://tc39.es/ecma262/#prod-TemplateLiteral
   parseTemplate(isTagged: boolean): N.TemplateLiteral {
     const node = this.startNode();
     this.next();

@@ -1823,13 +1823,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               node.typeParameters = typeArguments;
               return this.finishCallExpression(node, state.optionalChainMember);
             } else if (this.match(tt.backQuote)) {
-              return this.parseTaggedTemplateExpression(
+              const result = this.parseTaggedTemplateExpression(
+                base,
                 startPos,
                 startLoc,
-                base,
                 state,
-                typeArguments,
               );
+              result.typeParameters = typeArguments;
+              return result;
             }
           }
 
