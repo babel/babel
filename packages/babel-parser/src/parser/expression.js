@@ -598,57 +598,6 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     if (!noCalls && this.eat(tt.doubleColon)) {
       return this.parseBind(base, startPos, startLoc, noCalls, state);
-    }
-    let optional = false;
-    if (this.match(tt.questionDot)) {
-      state.optionalChainMember = optional = true;
-      if (noCalls && this.lookaheadCharCode() === charCodes.leftParenthesis) {
-        state.stop = true;
-        return base;
-      }
-      this.next();
-    }
-    const computed = this.eat(tt.bracketL);
-    if (
-      (optional && !this.match(tt.parenL) && !this.match(tt.backQuote)) ||
-      computed ||
-      this.eat(tt.dot)
-    ) {
-      const node = this.startNodeAt(startPos, startLoc);
-      node.object = base;
-      node.property = computed
-        ? this.parseExpression()
-        : this.parseMaybePrivateName(true);
-      node.computed = computed;
-
-      if (node.property.type === "PrivateName") {
-        if (node.object.type === "Super") {
-          this.raise(startPos, Errors.SuperPrivateField);
-        }
-        this.classScope.usePrivateName(
-          node.property.id.name,
-          node.property.start,
-        );
-      }
-
-      if (computed) {
-        this.expect(tt.bracketR);
-      }
-
-      if (state.optionalChainMember) {
-        node.optional = optional;
-        return this.finishNode(node, "OptionalMemberExpression");
-      } else {
-        return this.finishNode(node, "MemberExpression");
-      }
-    } else if (!noCalls && this.match(tt.parenL)) {
-      return this.parseCoverCallAndAsyncArrowHead(
-        base,
-        startPos,
-        startLoc,
-        state,
-        optional,
-      );
     } else if (this.match(tt.backQuote)) {
       return this.parseTaggedTemplateExpression(
         base,
@@ -656,9 +605,71 @@ export default class ExpressionParser extends LValParser {
         startLoc,
         state,
       );
+    }
+
+    let optional = false;
+    if (this.match(tt.questionDot)) {
+      state.optionalChainMember = optional = true;
+      if (noCalls && this.lookaheadCharCode() === charCodes.leftParenthesis) {
+        // stop at `?.` when parsing `new a?.()`
+        state.stop = true;
+        return base;
+      }
+      this.next();
+    }
+
+    if (!noCalls && this.match(tt.parenL)) {
+      return this.parseCoverCallAndAsyncArrowHead(
+        base,
+        startPos,
+        startLoc,
+        state,
+        optional,
+      );
+    } else if (optional || this.match(tt.bracketL) || this.eat(tt.dot)) {
+      return this.parseMember(base, startPos, startLoc, state, optional);
     } else {
       state.stop = true;
       return base;
+    }
+  }
+
+  // base[?Yield, ?Await] [ Expression[+In, ?Yield, ?Await] ]
+  // base[?Yield, ?Await] . IdentifierName
+  // base[?Yield, ?Await] . PrivateIdentifier
+  //   where `base` is one of CallExpression, MemberExpression and OptionalChain
+  parseMember(
+    base: N.Expression,
+    startPos: number,
+    startLoc: Position,
+    state: N.ParseSubscriptState,
+    optional: boolean,
+  ): N.OptionalMemberExpression | N.MemberExpression {
+    const node = this.startNodeAt(startPos, startLoc);
+    const computed = this.eat(tt.bracketL);
+    node.object = base;
+    node.computed = computed;
+    const property = computed
+      ? this.parseExpression()
+      : this.parseMaybePrivateName(true);
+
+    if (property.type === "PrivateName") {
+      if (node.object.type === "Super") {
+        this.raise(startPos, Errors.SuperPrivateField);
+      }
+      this.classScope.usePrivateName(property.id.name, property.start);
+    }
+    node.property = property;
+
+    if (computed) {
+      this.expect(tt.bracketR);
+    }
+
+    if (state.optionalChainMember) {
+      node.optional = optional;
+      return this.finishNode(node, "OptionalMemberExpression");
+    } else {
+      return this.finishNode(node, "MemberExpression");
     }
   }
 
