@@ -10,6 +10,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "chrome":"54", "ie":"10", "node":"6.10" }
   proposal-nullish-coalescing-operator { "chrome":"54", "ie":"10", "node":"6.10" }
   proposal-optional-chaining { "chrome":"54", "ie":"10", "node":"6.10" }
   proposal-json-strings { "chrome":"54", "ie":"10", "node":"6.10" }

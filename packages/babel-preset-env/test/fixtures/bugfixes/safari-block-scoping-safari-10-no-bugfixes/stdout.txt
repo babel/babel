@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "safari":"10" }
   proposal-nullish-coalescing-operator { "safari":"10" }
   proposal-optional-chaining { "safari":"10" }
   proposal-json-strings { "safari":"10" }
