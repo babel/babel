@@ -937,7 +937,10 @@ export default class ExpressionParser extends LValParser {
   // expression, an expression started by a keyword like `function` or
   // `new`, or an expression wrapped in punctuation like `()`, `[]`,
   // or `{}`.
-
+  // https://tc39.es/ecma262/#prod-PrimaryExpression
+  // PrimaryExpression
+  // Super
+  // Import
   parseExprAtom(refExpressionErrors?: ?ExpressionErrors): N.Expression {
     // If a division operator appears in an expression position, the
     // tokenizer got confused, and we force it to read a regexp instead.
@@ -948,30 +951,7 @@ export default class ExpressionParser extends LValParser {
 
     switch (this.state.type) {
       case tt._super:
-        node = this.startNode();
-        this.next();
-        if (
-          this.match(tt.parenL) &&
-          !this.scope.allowDirectSuper &&
-          !this.options.allowSuperOutsideMethod
-        ) {
-          this.raise(node.start, Errors.SuperNotAllowed);
-        } else if (
-          !this.scope.allowSuper &&
-          !this.options.allowSuperOutsideMethod
-        ) {
-          this.raise(node.start, Errors.UnexpectedSuper);
-        }
-
-        if (
-          !this.match(tt.parenL) &&
-          !this.match(tt.bracketL) &&
-          !this.match(tt.dot)
-        ) {
-          this.raise(node.start, Errors.UnsupportedSuper);
-        }
-
-        return this.finishNode(node, "Super");
+        return this.parseSuper();
 
       case tt._import:
         node = this.startNode();
@@ -1242,6 +1222,34 @@ export default class ExpressionParser extends LValParser {
       default:
         throw this.unexpected();
     }
+  }
+
+  // Parse the `super` keyword
+  parseSuper(): N.Super {
+    const node = this.startNode();
+    this.next(); // eat `super`
+    if (
+      this.match(tt.parenL) &&
+      !this.scope.allowDirectSuper &&
+      !this.options.allowSuperOutsideMethod
+    ) {
+      this.raise(node.start, Errors.SuperNotAllowed);
+    } else if (
+      !this.scope.allowSuper &&
+      !this.options.allowSuperOutsideMethod
+    ) {
+      this.raise(node.start, Errors.UnexpectedSuper);
+    }
+
+    if (
+      !this.match(tt.parenL) &&
+      !this.match(tt.bracketL) &&
+      !this.match(tt.dot)
+    ) {
+      this.raise(node.start, Errors.UnsupportedSuper);
+    }
+
+    return this.finishNode(node, "Super");
   }
 
   parseBooleanLiteral(): N.BooleanLiteral {
