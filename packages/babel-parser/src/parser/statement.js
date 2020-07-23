@@ -1161,9 +1161,8 @@ export default class StatementParser extends ExpressionParser {
 
     this.parseClassId(node, isStatement, optionalId);
     this.parseClassSuper(node);
+    // this.state.strict is restored in parseClassBody
     node.body = this.parseClassBody(!!node.superClass, oldStrict);
-
-    this.state.strict = oldStrict;
 
     return this.finishNode(
       node,
@@ -1238,11 +1237,9 @@ export default class StatementParser extends ExpressionParser {
       }
     });
 
-    if (!oldStrict) {
-      this.state.strict = false;
-    }
+    this.state.strict = oldStrict;
 
-    this.next();
+    this.next(); // eat `}`
 
     if (decorators.length) {
       throw this.raise(this.state.start, Errors.TrailingDecorator);
@@ -1259,7 +1256,6 @@ export default class StatementParser extends ExpressionParser {
     classBody: N.ClassBody,
     member: N.ClassMember,
   ): boolean {
-    const containsEsc = this.state.containsEsc;
     const key = this.parseIdentifier(true); // eats the modifier
 
     if (this.isClassMethod()) {
@@ -1288,10 +1284,7 @@ export default class StatementParser extends ExpressionParser {
       prop.static = false;
       classBody.body.push(this.parseClassProperty(prop));
       return true;
-    } else if (containsEsc) {
-      throw this.unexpected();
     }
-
     return false;
   }
 
