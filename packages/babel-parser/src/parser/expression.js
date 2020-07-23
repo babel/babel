@@ -2008,8 +2008,8 @@ export default class ExpressionParser extends LValParser {
     const node = this.startNode();
     this.next();
     node.elements = this.parseExprList(
-      tt.bracketR,
-      !isTuple,
+      close,
+      /* allowEmpty */ !isTuple,
       refExpressionErrors,
       node,
     );
