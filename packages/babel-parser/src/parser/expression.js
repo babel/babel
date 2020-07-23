@@ -1053,45 +1053,20 @@ export default class ExpressionParser extends LValParser {
 
       case tt.bracketBarL:
       case tt.bracketHashL: {
-        this.expectPlugin("recordAndTuple");
-        const oldInFSharpPipelineDirectBody = this.state
-          .inFSharpPipelineDirectBody;
-        const close =
-          this.state.type === tt.bracketBarL ? tt.bracketBarR : tt.bracketR;
-        this.state.inFSharpPipelineDirectBody = false;
-        node = this.startNode();
-        this.next();
-        node.elements = this.parseExprList(
-          close,
-          false,
+        return this.parseArrayLike(
+          this.state.type === tt.bracketBarL ? tt.bracketBarR : tt.bracketR,
+          /* isTuple */ true,
+          /* canBePattern */ false,
           refExpressionErrors,
-          node,
         );
-        this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
-        return this.finishNode(node, "TupleExpression");
       }
       case tt.bracketL: {
-        const oldInFSharpPipelineDirectBody = this.state
-          .inFSharpPipelineDirectBody;
-        this.state.inFSharpPipelineDirectBody = false;
-        node = this.startNode();
-        this.next();
-        node.elements = this.parseExprList(
+        return this.parseArrayLike(
           tt.bracketR,
-          true,
+          /* isTuple */ false,
+          /* canBePattern */ true,
           refExpressionErrors,
-          node,
         );
-        if (!this.state.maybeInArrowParameters) {
-          // This could be an array pattern:
-          //   ([a: string, b: string]) => {}
-          // In this case, we don't have to call toReferencedList. We will
-          // call it, if needed, when we are sure that it is a parenthesized
-          // expression by calling toReferencedListDeep.
-          this.toReferencedList(node.elements);
-        }
-        this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
-        return this.finishNode(node, "ArrayExpression");
       }
       case tt.braceBarL:
       case tt.braceHashL: {
@@ -2011,6 +1986,43 @@ export default class ExpressionParser extends LValParser {
     this.state.awaitPos = oldAwaitPos;
 
     return node;
+  }
+
+  // parse an array literal or tuple literal
+  // https://tc39.es/ecma262/#prod-ArrayLiteral
+  // https://tc39.es/proposal-record-tuple/#prod-TupleLiteral
+  parseArrayLike(
+    close: TokenType,
+    isTuple: boolean,
+    canBePattern: boolean,
+    refExpressionErrors: ?ExpressionErrors,
+  ): N.ArrayExpression | N.TupleExpression {
+    if (isTuple) {
+      this.expectPlugin("recordAndTuple");
+    }
+    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
+    this.state.inFSharpPipelineDirectBody = false;
+    const node = this.startNode();
+    this.next();
+    node.elements = this.parseExprList(
+      tt.bracketR,
+      !isTuple,
+      refExpressionErrors,
+      node,
+    );
+    if (canBePattern && !this.state.maybeInArrowParameters) {
+      // This could be an array pattern:
+      //   ([a: string, b: string]) => {}
+      // In this case, we don't have to call toReferencedList. We will
+      // call it, if needed, when we are sure that it is a parenthesized
+      // expression by calling toReferencedListDeep.
+      this.toReferencedList(node.elements);
+    }
+    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
+    return this.finishNode(
+      node,
+      isTuple ? "TupleExpression" : "ArrayExpression",
+    );
   }
 
   // Parse arrow function expression.
