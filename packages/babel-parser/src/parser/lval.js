@@ -260,7 +260,7 @@ export default class LValParser extends NodeUtils {
       }
 
       case tt.braceL:
-        return this.parseObj(tt.braceR, true);
+        return this.parseObjectLike(tt.braceR, true);
     }
 
     // https://tc39.es/ecma262/#prod-BindingIdentifier

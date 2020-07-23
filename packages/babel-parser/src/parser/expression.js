@@ -1070,23 +1070,20 @@ export default class ExpressionParser extends LValParser {
       }
       case tt.braceBarL:
       case tt.braceHashL: {
-        this.expectPlugin("recordAndTuple");
-        const oldInFSharpPipelineDirectBody = this.state
-          .inFSharpPipelineDirectBody;
-        const close =
-          this.state.type === tt.braceBarL ? tt.braceBarR : tt.braceR;
-        this.state.inFSharpPipelineDirectBody = false;
-        const ret = this.parseObj(close, false, true, refExpressionErrors);
-        this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
-        return ret;
+        return this.parseObjectLike(
+          this.state.type === tt.braceBarL ? tt.braceBarR : tt.braceR,
+          /* isPattern */ false,
+          /* isRecord */ true,
+          refExpressionErrors,
+        );
       }
       case tt.braceL: {
-        const oldInFSharpPipelineDirectBody = this.state
-          .inFSharpPipelineDirectBody;
-        this.state.inFSharpPipelineDirectBody = false;
-        const ret = this.parseObj(tt.braceR, false, false, refExpressionErrors);
-        this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
-        return ret;
+        return this.parseObjectLike(
+          tt.braceR,
+          /* isPattern */ false,
+          /* isRecord */ false,
+          refExpressionErrors,
+        );
       }
       case tt._function:
         return this.parseFunctionExpression();
@@ -1606,12 +1603,17 @@ export default class ExpressionParser extends LValParser {
 
   // Parse an object literal, binding pattern, or record.
 
-  parseObj<T: N.ObjectPattern | N.ObjectExpression>(
+  parseObjectLike<T: N.ObjectPattern | N.ObjectExpression>(
     close: TokenType,
     isPattern: boolean,
     isRecord?: ?boolean,
     refExpressionErrors?: ?ExpressionErrors,
   ): T {
+    if (isRecord) {
+      this.expectPlugin("recordAndTuple");
+    }
+    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
+    this.state.inFSharpPipelineDirectBody = false;
     const propHash: any = Object.create(null);
     let first = true;
     const node = this.startNode();
@@ -1653,6 +1655,7 @@ export default class ExpressionParser extends LValParser {
       node.properties.push(prop);
     }
 
+    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
     let type = "ObjectExpression";
     if (isPattern) {
       type = "ObjectPattern";
