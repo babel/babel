@@ -2362,8 +2362,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isGenerator: boolean,
       isAsync: boolean,
       isPattern: boolean,
+      isAccessor: boolean,
       refExpressionErrors: ?ExpressionErrors,
-      containsEsc: boolean,
     ): void {
       if ((prop: $FlowFixMe).variance) {
         this.unexpected((prop: $FlowFixMe).variance.start);
@@ -2373,7 +2373,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let typeParameters;
 
       // method shorthand
-      if (this.isRelational("<")) {
+      if (this.isRelational("<") && !isAccessor) {
         typeParameters = this.flowParseTypeParameterDeclaration();
         if (!this.match(tt.parenL)) this.unexpected();
       }
@@ -2385,8 +2385,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isGenerator,
         isAsync,
         isPattern,
+        isAccessor,
         refExpressionErrors,
-        containsEsc,
       );
 
       // add typeParameters if we found them

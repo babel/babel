@@ -90,7 +90,6 @@ export default class ExpressionParser extends LValParser {
       prop.type === "SpreadElement" ||
       prop.type === "ObjectMethod" ||
       prop.computed ||
-      // $FlowIgnore
       prop.shorthand
     ) {
       return;
@@ -1688,17 +1687,19 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, type);
   }
 
-  isAsyncProp(prop: N.ObjectProperty): boolean {
+  // Check grammar production:
+  //   IdentifierName *_opt PropertyName
+  // It is used in `parsePropertyDefinition` to detect AsyncMethod and Accessors
+  maybeAsyncOrAccessorProp(prop: N.ObjectProperty): boolean {
     return (
       !prop.computed &&
       prop.key.type === "Identifier" &&
-      prop.key.name === "async" &&
       (this.isLiteralPropertyName() ||
         this.match(tt.bracketL) ||
-        this.match(tt.star)) &&
-      !this.hasPrecedingLineBreak()
+        this.match(tt.star))
     );
   }
+
   // https://tc39.es/ecma262/#prod-PropertyDefinition
   parsePropertyDefinition(
     isPattern: boolean,
@@ -1720,6 +1721,7 @@ export default class ExpressionParser extends LValParser {
     const prop = this.startNode();
     let isGenerator = false;
     let isAsync = false;
+    let isAccessor = false;
     let startPos;
     let startLoc;
 
@@ -1755,12 +1757,27 @@ export default class ExpressionParser extends LValParser {
     const containsEsc = this.state.containsEsc;
     this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
 
-    if (!isPattern && !containsEsc && !isGenerator && this.isAsyncProp(prop)) {
-      isAsync = true;
-      isGenerator = this.eat(tt.star);
-      this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
-    } else {
-      isAsync = false;
+    if (
+      !isPattern &&
+      !isGenerator &&
+      !containsEsc &&
+      this.maybeAsyncOrAccessorProp(prop)
+    ) {
+      // https://tc39.es/ecma262/#prod-AsyncMethod
+      // https://tc39.es/ecma262/#prod-AsyncGeneratorMethod
+      if (prop.key.name === "async" && !this.hasPrecedingLineBreak()) {
+        isAsync = true;
+        isGenerator = this.eat(tt.star);
+        this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
+      }
+      // get PropertyName[?Yield, ?Await] () { FunctionBody[~Yield, ~Await] }
+      // set PropertyName[?Yield, ?Await] ( PropertySetParameterList ) { FunctionBody[~Yield, ~Await] }
+      if (prop.key.name === "get" || prop.key.name === "set") {
+        isAccessor = true;
+        isGenerator = this.eat(tt.star); // tt.star is allowed in `maybeAsyncOrAccessorProp`, we will throw in `parseObjectMethod` later
+        prop.kind = prop.key.name;
+        this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
+      }
     }
 
     this.parseObjPropValue(
@@ -1770,22 +1787,11 @@ export default class ExpressionParser extends LValParser {
       isGenerator,
       isAsync,
       isPattern,
+      isAccessor,
       refExpressionErrors,
-      containsEsc,
     );
 
     return prop;
-  }
-
-  isGetterOrSetterMethod(prop: N.ObjectMethod, isPattern: boolean): boolean {
-    return (
-      !isPattern &&
-      !prop.computed &&
-      prop.key.type === "Identifier" &&
-      (prop.key.name === "get" || prop.key.name === "set") &&
-      (this.isLiteralPropertyName() || // get foo() {}
-        this.match(tt.bracketL)) // get ["string"]() {}
-    );
   }
 
   getGetterSetterExpectedParamCount(
@@ -1820,8 +1826,23 @@ export default class ExpressionParser extends LValParser {
     isGenerator: boolean,
     isAsync: boolean,
     isPattern: boolean,
-    containsEsc: boolean,
+    isAccessor: boolean,
   ): ?N.ObjectMethod {
+    if (isAccessor) {
+      // isAccessor implies isAsync: false, isPattern: false
+      if (isGenerator) this.unexpected();
+      this.parseMethod(
+        prop,
+        /* isGenerator */ false,
+        /* isAsync */ false,
+        /* isConstructor */ false,
+        false,
+        "ObjectMethod",
+      );
+      this.checkGetterSetterParams(prop);
+      return prop;
+    }
+
     if (isAsync || isGenerator || this.match(tt.parenL)) {
       if (isPattern) this.unexpected();
       prop.kind = "method";
@@ -1834,22 +1855,6 @@ export default class ExpressionParser extends LValParser {
         false,
         "ObjectMethod",
       );
-    }
-
-    if (!containsEsc && this.isGetterOrSetterMethod(prop, isPattern)) {
-      if (isGenerator || isAsync) this.unexpected();
-      prop.kind = prop.key.name;
-      this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
-      this.parseMethod(
-        prop,
-        /* isGenerator */ false,
-        /* isAsync */ false,
-        /* isConstructor */ false,
-        false,
-        "ObjectMethod",
-      );
-      this.checkGetterSetterParams(prop);
-      return prop;
     }
   }
 
@@ -1904,8 +1909,8 @@ export default class ExpressionParser extends LValParser {
     isGenerator: boolean,
     isAsync: boolean,
     isPattern: boolean,
+    isAccessor: boolean,
     refExpressionErrors?: ?ExpressionErrors,
-    containsEsc: boolean,
   ): void {
     const node =
       this.parseObjectMethod(
@@ -1913,7 +1918,7 @@ export default class ExpressionParser extends LValParser {
         isGenerator,
         isAsync,
         isPattern,
-        containsEsc,
+        isAccessor,
       ) ||
       this.parseObjectProperty(
         prop,

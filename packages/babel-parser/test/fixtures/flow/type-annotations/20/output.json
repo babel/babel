@@ -34,7 +34,6 @@
                 },
                 "computed": false,
                 "kind": "set",
-                "variance": null,
                 "id": null,
                 "generator": false,
                 "async": false,
