@@ -1657,7 +1657,7 @@ export default class ExpressionParser extends LValParser {
         }
       }
 
-      const prop = this.parseObjectMember(isPattern, refExpressionErrors);
+      const prop = this.parsePropertyDefinition(isPattern, refExpressionErrors);
       if (!isPattern) {
         // $FlowIgnore RestElement will never be returned if !isPattern
         this.checkProto(prop, isRecord, propHash, refExpressionErrors);
@@ -1699,8 +1699,8 @@ export default class ExpressionParser extends LValParser {
       !this.hasPrecedingLineBreak()
     );
   }
-
-  parseObjectMember(
+  // https://tc39.es/ecma262/#prod-PropertyDefinition
+  parsePropertyDefinition(
     isPattern: boolean,
     refExpressionErrors?: ?ExpressionErrors,
   ): N.ObjectMember | N.SpreadElement | N.RestElement {

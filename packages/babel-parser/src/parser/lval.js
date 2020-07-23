@@ -244,6 +244,7 @@ export default class LValParser extends NodeUtils {
 
   // Parses lvalue (assignable) atom.
   parseBindingAtom(): Pattern {
+    // https://tc39.es/ecma262/#prod-BindingPattern
     switch (this.state.type) {
       case tt.bracketL: {
         const node = this.startNode();
@@ -260,6 +261,7 @@ export default class LValParser extends NodeUtils {
         return this.parseObj(tt.braceR, true);
     }
 
+    // https://tc39.es/ecma262/#prod-BindingIdentifier
     return this.parseIdentifier();
   }
 
