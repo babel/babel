@@ -1680,6 +1680,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   // Parses module export declaration.
+  // https://tc39.es/ecma262/#prod-ExportDeclaration
 
   parseExport(node: N.Node): N.AnyExport {
     const hasDefault = this.maybeParseExportDefaultSpecifier(node);
@@ -1854,7 +1855,7 @@ export default class StatementParser extends ExpressionParser {
   isExportDefaultSpecifier(): boolean {
     if (this.match(tt.name)) {
       const value = this.state.value;
-      if (value === "async" || value === "let") {
+      if ((value === "async" && !this.state.containsEsc) || value === "let") {
         return false;
       }
       if (
@@ -2083,6 +2084,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   // Parses import declaration.
+  // https://tc39.es/ecma262/#prod-ImportDeclaration
 
   parseImport(node: N.Node): N.AnyImport {
     // import '...'
@@ -2247,6 +2249,7 @@ export default class StatementParser extends ExpressionParser {
     }
   }
 
+  // https://tc39.es/ecma262/#prod-ImportSpecifier
   parseImportSpecifier(node: N.ImportDeclaration): void {
     const specifier = this.startNode();
     specifier.imported = this.parseIdentifier(true);
