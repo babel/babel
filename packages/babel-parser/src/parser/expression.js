@@ -1131,6 +1131,8 @@ export default class ExpressionParser extends LValParser {
       case tt.backQuote:
         return this.parseTemplate(false);
 
+      // BindExpression[Yield]
+      //   :: MemberExpression[?Yield]
       case tt.doubleColon: {
         node = this.startNode();
         this.next();
@@ -1163,6 +1165,9 @@ export default class ExpressionParser extends LValParser {
           return this.finishNode(node, "PipelinePrimaryTopicReference");
         }
 
+        // https://tc39.es/proposal-private-fields-in-in
+        // RelationalExpression [In, Yield, Await]
+        //   [+In] PrivateIdentifier in ShiftExpression[?Yield, ?Await]
         const nextCh = this.input.codePointAt(this.state.end);
         if (isIdentifierStart(nextCh) || nextCh === charCodes.backslash) {
           const start = this.state.start;
@@ -1320,6 +1325,7 @@ export default class ExpressionParser extends LValParser {
     node.meta = meta;
 
     if (meta.name === "function" && propertyName === "sent") {
+      // https://github.com/tc39/proposal-function.sent#syntax-1
       if (this.isContextual(propertyName)) {
         this.expectPlugin("functionSent");
       } else if (!this.hasPlugin("functionSent")) {
@@ -1344,6 +1350,7 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "MetaProperty");
   }
 
+  // https://tc39.es/ecma262/#prod-ImportMeta
   parseImportMetaProperty(node: N.MetaProperty): N.MetaProperty {
     const id = this.createIdentifier(this.startNodeAtNode(node), "import");
     this.expect(tt.dot);
@@ -1379,12 +1386,13 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, type);
   }
 
+  // https://tc39.es/ecma262/#prod-CoverParenthesizedExpressionAndArrowParameterList
   parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
 
     let val;
-    this.expect(tt.parenL);
+    this.next(); // eat `(`
 
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
     const oldYieldPos = this.state.yieldPos;
