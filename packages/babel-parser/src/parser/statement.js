@@ -1187,6 +1187,7 @@ export default class StatementParser extends ExpressionParser {
     );
   }
 
+  // https://tc39.es/ecma262/#prod-ClassBody
   parseClassBody(
     constructorAllowsSuper: boolean,
     oldStrict?: boolean,
@@ -1248,6 +1249,20 @@ export default class StatementParser extends ExpressionParser {
     this.classScope.exit();
 
     return this.finishNode(classBody, "ClassBody");
+  }
+
+  // Check grammar production:
+  //   IdentifierName *_opt ClassElementName
+  // It is used in `parsePropertyDefinition` to detect AsyncMethod and Accessors
+  maybeClassModifier(prop: N.ObjectProperty): boolean {
+    return (
+      !prop.computed &&
+      prop.key.type === "Identifier" &&
+      (this.isLiteralPropertyName() ||
+        this.match(tt.bracketL) ||
+        this.match(tt.star) ||
+        this.match(tt.hash))
+    );
   }
 
   // returns true if the current identifier is a method/field name,
@@ -1330,7 +1345,7 @@ export default class StatementParser extends ExpressionParser {
     if (this.eat(tt.star)) {
       // a generator
       method.kind = "method";
-      this.parseClassPropertyName(method);
+      this.parseClassElementName(method);
 
       if (method.key.type === "PrivateName") {
         // Private generator method
@@ -1355,7 +1370,7 @@ export default class StatementParser extends ExpressionParser {
     }
 
     const containsEsc = this.state.containsEsc;
-    const key = this.parseClassPropertyName(member);
+    const key = this.parseClassElementName(member);
     const isPrivate = key.type === "PrivateName";
     // Check the key is not a computed expression or string literal.
     const isSimple = key.type === "Identifier";
@@ -1414,7 +1429,7 @@ export default class StatementParser extends ExpressionParser {
 
       method.kind = "method";
       // The so-called parsed name would have been "async": get the real name.
-      this.parseClassPropertyName(method);
+      this.parseClassElementName(method);
       this.parsePostMemberNameModifiers(publicMember);
 
       if (method.key.type === "PrivateName") {
@@ -1449,7 +1464,7 @@ export default class StatementParser extends ExpressionParser {
       // a getter or setter
       method.kind = key.name;
       // The so-called parsed name would have been "get/set": get the real name.
-      this.parseClassPropertyName(publicMethod);
+      this.parseClassElementName(publicMethod);
 
       if (method.key.type === "PrivateName") {
         // private getter/setter
@@ -1481,7 +1496,8 @@ export default class StatementParser extends ExpressionParser {
     }
   }
 
-  parseClassPropertyName(member: N.ClassMember): N.Expression | N.Identifier {
+  // https://tc39.es/proposal-class-fields/#prod-ClassElementName
+  parseClassElementName(member: N.ClassMember): N.Expression | N.Identifier {
     const key = this.parsePropertyName(member, /* isPrivateNameAllowed */ true);
 
     if (
@@ -1653,6 +1669,7 @@ export default class StatementParser extends ExpressionParser {
     }
   }
 
+  // https://tc39.es/ecma262/#prod-ClassHeritage
   parseClassSuper(node: N.Class): void {
     node.superClass = this.eat(tt._extends) ? this.parseExprSubscripts() : null;
   }
