@@ -1821,6 +1821,7 @@ export default class ExpressionParser extends LValParser {
     }
   }
 
+  // https://tc39.es/ecma262/#prod-MethodDefinition
   parseObjectMethod(
     prop: N.ObjectMethod,
     isGenerator: boolean,
@@ -1858,6 +1859,8 @@ export default class ExpressionParser extends LValParser {
     }
   }
 
+  // if `isPattern` is true, parse https://tc39.es/ecma262/#prod-BindingProperty
+  // else https://tc39.es/ecma262/#prod-PropertyDefinition
   parseObjectProperty(
     prop: N.ObjectProperty,
     startPos: ?number,
