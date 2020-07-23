@@ -1086,7 +1086,7 @@ export default class ExpressionParser extends LValParser {
         );
       }
       case tt._function:
-        return this.parseFunctionExpression();
+        return this.parseFunctionOrFunctionSent();
 
       case tt.at:
         this.parseDecorators();
@@ -1270,19 +1270,22 @@ export default class ExpressionParser extends LValParser {
     }
   }
 
-  parseFunctionExpression(): N.FunctionExpression | N.MetaProperty {
+  parseFunctionOrFunctionSent(): N.FunctionExpression | N.MetaProperty {
     const node = this.startNode();
 
-    // We do not do parseIdentifier here because when parseFunctionExpression
+    // We do not do parseIdentifier here because when parseFunctionOrFunctionSent
     // is called we already know that the current token is a "name" with the value "function"
     // This will improve perf a tiny little bit as we do not do validation but more importantly
     // here is that parseIdentifier will remove an item from the expression stack
     // if "function" or "class" is parsed as identifier (in objects e.g.), which should not happen here.
-    let meta = this.startNode();
-    this.next();
-    meta = this.createIdentifier(meta, "function");
+    this.next(); // eat `function`
 
-    if (this.prodParam.hasYield && this.eat(tt.dot)) {
+    if (this.prodParam.hasYield && this.match(tt.dot)) {
+      const meta = this.createIdentifier(
+        this.startNodeAtNode(node),
+        "function",
+      );
+      this.next(); // eat `.`
       return this.parseMetaProperty(node, meta, "sent");
     }
     return this.parseFunction(node);
@@ -1324,7 +1327,7 @@ export default class ExpressionParser extends LValParser {
   // https://tc39.es/ecma262/#prod-ImportMeta
   parseImportMetaProperty(node: N.MetaProperty): N.MetaProperty {
     const id = this.createIdentifier(this.startNodeAtNode(node), "import");
-    this.expect(tt.dot);
+    this.next(); // eat `.`
 
     if (this.isContextual("meta")) {
       if (!this.inModule) {
