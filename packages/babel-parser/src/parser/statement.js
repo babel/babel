@@ -141,7 +141,9 @@ export default class StatementParser extends ExpressionParser {
   // regular expression literal. This is to handle cases like
   // `if (foo) /blah/.exec(foo)`, where looking at the previous token
   // does not help.
-
+  // https://tc39.es/ecma262/#prod-Statement
+  // ImportDeclaration and ExportDeclaration are also handled here so we can throw recoverable errors
+  // when they are not at the top level
   parseStatement(context: ?string, topLevel?: boolean): N.Statement {
     if (this.match(tt.at)) {
       this.parseDecorators(true);
@@ -216,21 +218,22 @@ export default class StatementParser extends ExpressionParser {
         return this.parseBlock();
       case tt.semi:
         return this.parseEmptyStatement(node);
-      case tt._export:
       case tt._import: {
         const nextTokenCharCode = this.lookaheadCharCode();
         if (
-          nextTokenCharCode === charCodes.leftParenthesis ||
-          nextTokenCharCode === charCodes.dot
+          nextTokenCharCode === charCodes.leftParenthesis || // import()
+          nextTokenCharCode === charCodes.dot // import.meta
         ) {
           break;
         }
-
+      }
+      // fall through
+      case tt._export: {
         if (!this.options.allowImportExportEverywhere && !topLevel) {
           this.raise(this.state.start, Errors.UnexpectedImportExport);
         }
 
-        this.next();
+        this.next(); // eat `import`/`export`
 
         let result;
         if (starttype === tt._import) {
@@ -847,6 +850,8 @@ export default class StatementParser extends ExpressionParser {
   }
 
   // Undefined directives means that directives are not allowed.
+  // https://tc39.es/ecma262/#prod-Block
+  // https://tc39.es/ecma262/#prod-ModuleBody
   parseBlockOrModuleBlockBody(
     body: N.Statement[],
     directives: ?(N.Directive[]),
