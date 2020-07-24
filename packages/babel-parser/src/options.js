@@ -23,6 +23,7 @@ export type Options = {
   createParenthesizedExpressions: boolean,
   errorRecovery: boolean,
   localizedKeywords: Object,
+  emoji: boolean,
 };
 
 export const defaultOptions: Options = {
@@ -69,6 +70,8 @@ export const defaultOptions: Options = {
   errorRecovery: false,
   // map of localized keywords (e.g. maybe -> if)
   localizedKeywords: {},
+  // enable emojis as valid identifiers
+  emoji: false,
 };
 
 // Interpret and default an options object

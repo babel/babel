@@ -4,9 +4,12 @@
 
 import type { Options } from "../options";
 import * as N from "../types";
-import type { Position } from "../util/location";
+import type { Position } from "../util/charCodes";
 import * as charCodes from "charcodes";
-import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
+import {
+  isIdentifierStart as oldisIdentifierStart,
+  isIdentifierChar as oldisIdentifierChar,
+} from "../util/identifier";
 import { types as tt, keywords as keywordTypes, type TokenType } from "./types";
 import { type TokContext, types as ct } from "./context";
 import ParserErrors, { Errors } from "../parser/error";
@@ -19,6 +22,9 @@ import {
   skipWhiteSpace,
 } from "../util/whitespace";
 import State from "./state";
+
+let isIdentifierStart = oldisIdentifierStart;
+let isIdentifierChar = oldisIdentifierChar;
 
 const VALID_REGEX_FLAGS = new Set(["g", "m", "s", "i", "y", "u"]);
 
@@ -136,6 +142,21 @@ export default class Tokenizer extends ParserErrors {
         keyword.label = value;
         keywordTypes.set(value, keyword);
       }
+    }
+
+    if (options.emoji) {
+      isIdentifierStart = function (code) {
+        return (
+          String.fromCodePoint(code).match(/\p{Emoji}/u) ||
+          oldisIdentifierStart(code)
+        );
+      };
+      isIdentifierChar = function (code) {
+        return (
+          String.fromCodePoint(code).match(/\p{Emoji}/u) ||
+          oldisIdentifierChar(code)
+        );
+      };
     }
 
     this.input = input;

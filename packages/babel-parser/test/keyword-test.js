@@ -13,4 +13,16 @@ describe("keyword test", function () {
       }),
     ).toMatchSnapshot();
   });
+  it("emoji identifier", function () {
+    expect(run("var 😁 = 1;", { emoji: true })).toMatchSnapshot();
+  });
+  it("emoji keyword", function () {
+    expect(
+      run("😁 (true) {}", {
+        localizedKeywords: {
+          if: "😁",
+        },
+      }),
+    ).toMatchSnapshot();
+  });
 });
