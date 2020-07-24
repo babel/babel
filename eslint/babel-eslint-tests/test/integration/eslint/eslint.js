@@ -1081,7 +1081,7 @@ describe("verify", () => {
           sourceType,
           babelOptions: {
             configFile: require.resolve(
-              "@babel/eslint-shared-fixtures/config/babel.config.decorators-legacy.js",
+              "../../../../babel-eslint-shared-fixtures/config/babel.config.decorators-legacy.js",
             ),
           },
         },

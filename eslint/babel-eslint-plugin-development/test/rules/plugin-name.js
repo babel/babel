@@ -1,5 +1,5 @@
 import rule from "../../src/rules/plugin-name";
-import RuleTester from "@babel/eslint-shared-fixtures/utils/RuleTester";
+import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester";
 
 const missingPluginError = "This file does not export a Babel plugin.";
 const missingNameError = "This Babel plugin doesn't have a 'name' property.";

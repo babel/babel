@@ -31,7 +31,6 @@
   },
   "homepage": "https://babeljs.io/",
   "devDependencies": {
-    "@babel/eslint-shared-fixtures": "^7.10.4",
     "eslint": "^7.5.0"
   }
 }

@@ -257,6 +257,7 @@ publish-eslint:
 bootstrap-only: lerna-bootstrap
 
 yarn-install: clean-all
+	for package in eslint/*/; do yarn --production --cwd $$package; done
 	# Gitpod prebuilds have a slow network connection, so we need more time
 	yarn --ignore-engines --network-timeout 100000
 
