@@ -1,0 +1,90 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`keyword test switch if keyword 1`] = `
+Node {
+  "comments": Array [],
+  "end": 15,
+  "errors": Array [],
+  "loc": SourceLocation {
+    "end": Position {
+      "column": 15,
+      "line": 1,
+    },
+    "start": Position {
+      "column": 0,
+      "line": 1,
+    },
+  },
+  "program": Node {
+    "body": Array [
+      Node {
+        "alternate": null,
+        "consequent": Node {
+          "body": Array [],
+          "directives": Array [],
+          "end": 15,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 15,
+              "line": 1,
+            },
+            "start": Position {
+              "column": 13,
+              "line": 1,
+            },
+          },
+          "start": 13,
+          "type": "BlockStatement",
+        },
+        "end": 15,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 15,
+            "line": 1,
+          },
+          "start": Position {
+            "column": 0,
+            "line": 1,
+          },
+        },
+        "start": 0,
+        "test": Node {
+          "end": 11,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 11,
+              "line": 1,
+            },
+            "start": Position {
+              "column": 7,
+              "line": 1,
+            },
+          },
+          "start": 7,
+          "type": "BooleanLiteral",
+          "value": true,
+        },
+        "type": "IfStatement",
+      },
+    ],
+    "directives": Array [],
+    "end": 15,
+    "interpreter": null,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 15,
+        "line": 1,
+      },
+      "start": Position {
+        "column": 0,
+        "line": 1,
+      },
+    },
+    "sourceType": "module",
+    "start": 0,
+    "type": "Program",
+  },
+  "start": 0,
+  "type": "File",
+}
+`;

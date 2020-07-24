@@ -127,6 +127,17 @@ export default class Tokenizer extends ParserErrors {
     super();
     this.state = new State();
     this.state.init(options);
+
+    // process localizedKeywords
+    // key is if, value is maybe
+    for (const [key, value] of Object.entries(options.localizedKeywords)) {
+      if (keywordTypes.has(key)) {
+        const keyword = keywordTypes.get(key);
+        keyword.label = value;
+        keywordTypes.set(value, keyword);
+      }
+    }
+
     this.input = input;
     this.length = input.length;
     this.isLookahead = false;
