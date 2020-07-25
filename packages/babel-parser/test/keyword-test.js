@@ -4,7 +4,16 @@ function run(code, options) {
   return parse(code, { sourceType: "module", ...options });
 }
 describe("keyword test", function () {
-  it("switch if keyword", function () {
+  it("change if keyword", function () {
+    expect(
+      run("if (true) {} otherwise {}", {
+        localizedKeywords: {
+          else: "otherwise",
+        },
+      }),
+    ).toMatchSnapshot();
+  });
+  it("change if keyword to another language", function () {
     expect(
       run("如果 (true) {}", {
         localizedKeywords: {
@@ -13,14 +22,25 @@ describe("keyword test", function () {
       }),
     ).toMatchSnapshot();
   });
+  it("change with array of keywords", function () {
+    expect(
+      run("如果 (true) {} si (true) {}", {
+        localizedKeywords: {
+          if: ["如果", "si"],
+        },
+      }),
+    ).toMatchSnapshot();
+  });
   it("emoji identifier", function () {
     expect(run("var 😁 = 1;", { emoji: true })).toMatchSnapshot();
   });
-  it("emoji keyword", function () {
+  it("emoji keywords", function () {
     expect(
-      run("😁 (true) {}", {
+      run(`🤞 { await fetch('/api') } 😱 (e) {}`, {
+        plugins: ["topLevelAwait"],
         localizedKeywords: {
-          if: "😁",
+          try: "🤞",
+          catch: "😱",
         },
       }),
     ).toMatchSnapshot();
