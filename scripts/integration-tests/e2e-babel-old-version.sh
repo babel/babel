@@ -23,7 +23,8 @@ cd ../..
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 
 # Install dependencies in individual packages so that we can link them at the top level.
-for package in eslint/*/; do yarn --cwd $package; done
+# todo: remove `-- -- --ignore-engines` in Babel 8
+for package in eslint/*/; do yarn --ignore-engines --cwd $package; done
 
 yarn upgrade --scope @babel
 

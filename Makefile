@@ -258,7 +258,7 @@ bootstrap-only: lerna-bootstrap
 
 yarn-install: clean-all
 	# Install dependencies in individual packages so that we can link them at the top level.
-	for package in eslint/*/; do yarn --cwd $$package; done
+	for package in eslint/*/; do yarn --ignore-engines --cwd $$package; done
 	# Gitpod prebuilds have a slow network connection, so we need more time
 	yarn --ignore-engines --network-timeout 100000
 
