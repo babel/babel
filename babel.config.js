@@ -7,9 +7,7 @@ module.exports = function (api) {
 
   const envOptsNoTargets = {
     loose: true,
-    modules: false,
     shippedProposals: true,
-    exclude: ["transform-typeof-symbol"],
   };
   const envOpts = Object.assign({}, envOptsNoTargets);
 
@@ -39,6 +37,7 @@ module.exports = function (api) {
     case "standalone":
       includeRegeneratorRuntime = true;
       unambiguousSources.push("packages/babel-runtime/regenerator");
+      envOpts.exclude = ["transform-typeof-symbol"]; // exclude slow plugins
     // fall through
     case "rollup":
       convertESM = false;
