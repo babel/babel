@@ -1055,16 +1055,16 @@ export default class ExpressionParser extends LValParser {
       case tt.bracketHashL: {
         return this.parseArrayLike(
           this.state.type === tt.bracketBarL ? tt.bracketBarR : tt.bracketR,
-          /* isTuple */ true,
           /* canBePattern */ false,
+          /* isTuple */ true,
           refExpressionErrors,
         );
       }
       case tt.bracketL: {
         return this.parseArrayLike(
           tt.bracketR,
-          /* isTuple */ false,
           /* canBePattern */ true,
+          /* isTuple */ false,
           refExpressionErrors,
         );
       }
@@ -1999,8 +1999,8 @@ export default class ExpressionParser extends LValParser {
   // https://tc39.es/proposal-record-tuple/#prod-TupleLiteral
   parseArrayLike(
     close: TokenType,
-    isTuple: boolean,
     canBePattern: boolean,
+    isTuple: boolean,
     refExpressionErrors: ?ExpressionErrors,
   ): N.ArrayExpression | N.TupleExpression {
     if (isTuple) {
