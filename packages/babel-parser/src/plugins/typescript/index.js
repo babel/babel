@@ -813,7 +813,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             if (nextToken.type !== tt.num && nextToken.type !== tt.bigint) {
               throw this.unexpected();
             }
-            node.literal = this.parseUnary();
+            node.literal = this.parseMaybeUnary();
             return this.finishNode(node, "TSLiteralType");
           }
           break;
@@ -1169,7 +1169,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const _const = this.tsTryNextParseConstantContext();
       node.typeAnnotation = _const || this.tsNextThenParseType();
       this.expectRelational(">");
-      node.expression = this.parseUnary();
+      node.expression = this.parseMaybeUnary();
       return this.finishNode(node, "TSTypeAssertion");
     }
 
@@ -2435,7 +2435,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // (Because in JSX the '<' should be a jsxTagStart and not a relational.
         assert(!this.hasPlugin("jsx"));
 
-        // This will start with a type assertion (via parseUnary).
+        // This will start with a type assertion (via parseMaybeUnary).
         // But don't directly call `this.tsParseTypeAssertion` because we want to handle any binary after it.
         typeCast = this.tryParse(() => super.parseMaybeAssign(...args), state);
         /*:: invariant(!typeCast.aborted) */
@@ -2468,11 +2468,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // Handle type assertions
-    parseUnary(refExpressionErrors?: ?ExpressionErrors): N.Expression {
+    parseMaybeUnary(refExpressionErrors?: ?ExpressionErrors): N.Expression {
       if (!this.hasPlugin("jsx") && this.isRelational("<")) {
         return this.tsParseTypeAssertion();
       } else {
-        return super.parseUnary(refExpressionErrors);
+        return super.parseMaybeUnary(refExpressionErrors);
       }
     }
 

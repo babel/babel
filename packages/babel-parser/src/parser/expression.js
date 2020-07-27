@@ -188,6 +188,7 @@ export default class ExpressionParser extends LValParser {
   // Parse an assignment expression. This includes applications of
   // operators like `+=`.
 
+  // https://tc39.es/ecma262/#prod-AssignmentExpression
   parseMaybeAssign(
     noIn?: ?boolean,
     refExpressionErrors?: ?ExpressionErrors,
@@ -314,7 +315,7 @@ export default class ExpressionParser extends LValParser {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     const potentialArrowAt = this.state.potentialArrowAt;
-    const expr = this.parseUnary(refExpressionErrors);
+    const expr = this.parseMaybeUnary(refExpressionErrors);
 
     if (this.shouldExitDescending(expr, potentialArrowAt)) {
       return expr;
@@ -465,7 +466,7 @@ export default class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
 
     return this.parseExprOp(
-      this.parseUnary(),
+      this.parseMaybeUnary(),
       startPos,
       startLoc,
       op.rightAssociative ? prec - 1 : prec,
@@ -475,7 +476,7 @@ export default class ExpressionParser extends LValParser {
 
   // Parse unary operators, both prefix and postfix.
   // https://tc39.es/ecma262/#prod-UnaryExpression
-  parseUnary(refExpressionErrors: ?ExpressionErrors): N.Expression {
+  parseMaybeUnary(refExpressionErrors: ?ExpressionErrors): N.Expression {
     if (this.isContextual("await") && this.isAwaitAllowed()) {
       return this.parseAwait();
     }
@@ -491,7 +492,7 @@ export default class ExpressionParser extends LValParser {
       const isDelete = this.match(tt._delete);
       this.next();
 
-      node.argument = this.parseUnary();
+      node.argument = this.parseMaybeUnary();
 
       this.checkExpressionErrors(refExpressionErrors, true);
 
@@ -2424,7 +2425,7 @@ export default class ExpressionParser extends LValParser {
     }
 
     if (!this.state.soloAwait) {
-      node.argument = this.parseUnary();
+      node.argument = this.parseMaybeUnary();
     }
 
     return this.finishNode(node, "AwaitExpression");
@@ -2642,7 +2643,7 @@ export default class ExpressionParser extends LValParser {
     this.state.inFSharpPipelineDirectBody = true;
 
     const ret = this.parseExprOp(
-      this.parseUnary(),
+      this.parseMaybeUnary(),
       startPos,
       startLoc,
       prec,
