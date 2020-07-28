@@ -1,3 +1,18 @@
+Babel configs on "<CWD>/src/foo.js" (ascending priority):
+config <CWD>/babel.config.json
+{
+  "sourceType": "script"
+}
+
+config <CWD>/babel.config.json .overrides[0]
+{
+  "test": "src/foo.js",
+  "sourceType": "module"
+}
+
+config <CWD>/.babelrc
+{}
+
 programmatic options from @babel/cli
 {
   "sourceFileName": "src/foo.js",
@@ -14,18 +29,3 @@ programmatic options from @babel/cli
   },
   "filename": "src//foo.js"
 }
-
-config <CWD>/.babelrc
-{}
-
-config <CWD>/babel.config.json
-{
-  "sourceType": "script"
-}
-
-config <CWD>/babel.config.json .overrides[0]
-{
-  "test": "src/foo.js",
-  "sourceType": "module"
-}
-"use strict";

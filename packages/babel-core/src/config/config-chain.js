@@ -240,10 +240,12 @@ export function* buildRootChain(
 
   if (context.showConfig) {
     console.log(
-      // print config by the order of descending priority
-      [programmaticReport, babelRcReport, configReport]
-        .filter(x => !!x)
-        .join("\n\n"),
+      // $FlowIgnore: context.showConfig implies context.filename is not null
+      `Babel configs on "${context.filename}" (ascending priority):\n` +
+        // print config by the order of ascending priority
+        [configReport, babelRcReport, programmaticReport]
+          .filter(x => !!x)
+          .join("\n\n"),
     );
     return null;
   }
@@ -493,33 +495,48 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
   return function* (input, context, files = new Set(), baseLogger) {
     const { dirname } = input;
 
-    const flattenedConfigs = [];
-    const logger = createLogger(input, context, baseLogger);
+    const flattenedConfigs: Array<{|
+      config: OptionsAndDescriptors,
+      index: ?number,
+      envName: ?string,
+    |}> = [];
 
     const rootOpts = root(input);
     if (configIsApplicable(rootOpts, dirname, context)) {
-      flattenedConfigs.push(rootOpts);
-      logger(rootOpts);
+      flattenedConfigs.push({
+        config: rootOpts,
+        envName: undefined,
+        index: undefined,
+      });
 
       const envOpts = env(input, context.envName);
       if (envOpts && configIsApplicable(envOpts, dirname, context)) {
-        flattenedConfigs.push(envOpts);
-        logger(envOpts, undefined, context.envName);
+        flattenedConfigs.push({
+          config: envOpts,
+          envName: context.envName,
+          index: undefined,
+        });
       }
 
       (rootOpts.options.overrides || []).forEach((_, index) => {
         const overrideOps = overrides(input, index);
         if (configIsApplicable(overrideOps, dirname, context)) {
-          flattenedConfigs.push(overrideOps);
-          logger(overrideOps, index);
+          flattenedConfigs.push({
+            config: overrideOps,
+            index,
+            envName: undefined,
+          });
 
           const overrideEnvOpts = overridesEnv(input, index, context.envName);
           if (
             overrideEnvOpts &&
             configIsApplicable(overrideEnvOpts, dirname, context)
           ) {
-            flattenedConfigs.push(overrideEnvOpts);
-            logger(overrideEnvOpts, index, context.envName);
+            flattenedConfigs.push({
+              config: overrideEnvOpts,
+              index,
+              envName: context.envName,
+            });
           }
         }
       });
@@ -529,7 +546,7 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
     // that we don't do extra work loading extended configs if a file is
     // ignored.
     if (
-      flattenedConfigs.some(({ options: { ignore, only } }) =>
+      flattenedConfigs.some(({ config: { options: { ignore, only } } }) =>
         shouldIgnore(context, ignore, only, dirname),
       )
     ) {
@@ -537,12 +554,13 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
     }
 
     const chain = emptyChain();
+    const logger = createLogger(input, context, baseLogger);
 
-    for (const op of flattenedConfigs) {
+    for (const { config, index, envName } of flattenedConfigs) {
       if (
         !(yield* mergeExtendsChain(
           chain,
-          op.options,
+          config.options,
           dirname,
           context,
           files,
@@ -552,7 +570,8 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
         return null;
       }
 
-      mergeChainOpts(chain, op);
+      logger(config, index, envName);
+      mergeChainOpts(chain, config);
     }
     return chain;
   };
