@@ -37,7 +37,6 @@ module.exports = function (api) {
     case "standalone":
       includeRegeneratorRuntime = true;
       unambiguousSources.push("packages/babel-runtime/regenerator");
-      envOpts.exclude = ["transform-typeof-symbol"]; // exclude slow plugins
     // fall through
     case "rollup":
       convertESM = false;
