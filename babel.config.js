@@ -7,9 +7,7 @@ module.exports = function (api) {
 
   const envOptsNoTargets = {
     loose: true,
-    modules: false,
     shippedProposals: true,
-    exclude: ["transform-typeof-symbol"],
   };
   const envOpts = Object.assign({}, envOptsNoTargets);
 
