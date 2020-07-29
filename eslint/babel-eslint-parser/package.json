@@ -19,8 +19,8 @@
   },
   "main": "lib/index.js",
   "peerDependencies": {
-    "@babel/core": ">=7.2.0",
-    "eslint": ">=6.0.0"
+    "@babel/core": ">=7.10.4",
+    "eslint": ">=7.5.0"
   },
   "dependencies": {
     "eslint-scope": "5.1.0",
@@ -29,9 +29,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
-    "@babel/eslint-shared-fixtures": "^7.10.4",
     "dedent": "^0.7.0",
-    "eslint": "^6.0.1",
+    "eslint": "^7.5.0",
     "lodash.clonedeep": "^4.5.0"
   }
 }

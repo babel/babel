@@ -6,7 +6,7 @@ import { parseForESLint } from "../src";
 
 const BABEL_OPTIONS = {
   configFile: require.resolve(
-    "@babel/eslint-shared-fixtures/config/babel.config.js",
+    "../../babel-eslint-shared-fixtures/config/babel.config.js",
   ),
 };
 const PROPS_TO_REMOVE = [
