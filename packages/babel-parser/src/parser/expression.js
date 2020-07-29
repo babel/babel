@@ -1785,7 +1785,11 @@ export default class ExpressionParser extends LValParser {
     }
 
     if (!prop.computed && prop.key.type === "Identifier") {
-      this.checkReservedWord(prop.key.name, prop.key.start, true, true);
+      // PropertyDefinition:
+      //   IdentifierReference
+      //   CoveredInitializedName
+      // Note: `{ eval } = {}` will be checked in `checkLVal` later.
+      this.checkReservedWord(prop.key.name, prop.key.start, true, false);
 
       if (isPattern) {
         prop.value = this.parseMaybeDefault(

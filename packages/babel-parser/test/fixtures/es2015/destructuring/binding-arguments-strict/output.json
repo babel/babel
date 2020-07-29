@@ -2,7 +2,6 @@
   "type": "File",
   "start":0,"end":42,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":28}},
   "errors": [
-    "SyntaxError: Unexpected reserved word 'arguments' (2:8)",
     "SyntaxError: Binding 'arguments' in strict mode (2:8)"
   ],
   "program": {
