@@ -5,7 +5,6 @@
   "author": "The Babel Team (https://babeljs.io/team)",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
-  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
