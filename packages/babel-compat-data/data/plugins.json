@@ -21,6 +21,7 @@
     "samsung": "11",
     "electron": "6"
   },
+  "proposal-logical-assignment-operators": {},
   "proposal-nullish-coalescing-operator": {
     "chrome": "80",
     "opera": "67",

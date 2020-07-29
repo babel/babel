@@ -124,6 +124,7 @@ const es2020 = {
 
 const es2021 = {
   "proposal-numeric-separator": "numeric separator",
+  "proposal-logical-assignment-operators": "Logical Assignment",
 };
 
 const shippedProposal = {

@@ -9,6 +9,7 @@ Using modules transform: auto
 
 Using plugins:
   proposal-numeric-separator { "chrome":"40" }
+  proposal-logical-assignment-operators { "chrome":"40" }
   proposal-nullish-coalescing-operator { "chrome":"40" }
   proposal-optional-chaining { "chrome":"40" }
   proposal-json-strings { "chrome":"40" }

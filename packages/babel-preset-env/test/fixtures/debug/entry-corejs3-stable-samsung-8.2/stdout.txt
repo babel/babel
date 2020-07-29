@@ -11,6 +11,7 @@ Using plugins:
   proposal-class-properties { "samsung":"8.2" }
   proposal-private-methods { "samsung":"8.2" }
   proposal-numeric-separator { "samsung":"8.2" }
+  proposal-logical-assignment-operators { "samsung":"8.2" }
   proposal-nullish-coalescing-operator { "samsung":"8.2" }
   proposal-optional-chaining { "samsung":"8.2" }
   proposal-json-strings { "samsung":"8.2" }
