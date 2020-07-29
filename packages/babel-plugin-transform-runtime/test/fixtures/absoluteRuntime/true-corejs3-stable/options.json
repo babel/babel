@@ -1,6 +1,7 @@
 {
   "presets": ["env"],
   "plugins": [
-    ["transform-runtime", { "absoluteRuntime": true, "corejs": { "version": 3, "proposals": false } }]
+    ["transform-runtime", { "absoluteRuntime": true, "corejs": { "version": 3, "proposals": false } }],
+    ["external-helpers", { "helperVersion": "7.100.0" }]
   ]
 }
