@@ -17,16 +17,15 @@
   ],
   "author": "Jason Quense @monasticpanic",
   "license": "MIT",
-  "private": true,
   "engines": {
-    "node": ">=10.9"
+    "node": "^10.13.0 || ^12.13.0 || >=14.0.0"
   },
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
   },
   "homepage": "https://babeljs.io/",
   "peerDependencies": {
-    "@babel/eslint-parser": ">=7.10.4",
+    "@babel/eslint-parser": ">=7.11.0",
     "eslint": ">=7.5.0"
   },
   "dependencies": {

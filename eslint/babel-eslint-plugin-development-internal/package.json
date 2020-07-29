@@ -18,15 +18,12 @@
   "author": "Kai Cataldo <kai@kaicataldo.com>",
   "license": "MIT",
   "private": true,
-  "engines": {
-    "node": ">=10.9"
-  },
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
   },
   "homepage": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-plugin-development-internal",
   "peerDependencies": {
-    "@babel/eslint-parser": ">=7.10.4",
+    "@babel/eslint-parser": ">=7.11.0",
     "eslint": ">=7.5.0"
   },
   "devDependencies": {

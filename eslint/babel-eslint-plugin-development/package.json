@@ -2,7 +2,6 @@
   "name": "@babel/eslint-plugin-development",
   "version": "7.10.4",
   "description": "ESLint rules that enforce best practices in the development of Babel plugins.",
-  "private": true,
   "keywords": [
     "eslint",
     "eslintplugin",
@@ -15,7 +14,7 @@
   },
   "main": "lib/index.js",
   "engines": {
-    "node": ">=10.9"
+    "node": "^10.13.0 || ^12.13.0 || >=14.0.0"
   },
   "publishConfig": {
     "access": "public"

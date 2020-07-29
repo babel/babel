@@ -2,7 +2,7 @@
   "name": "@babel/eslint-config-internal",
   "version": "7.10.4",
   "description": "The Babel Team's ESLint configuration. Since it's internal, it might not respect semver.",
-  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "author": "The Babel Team (https://babeljs.io/team)",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "private": true,
