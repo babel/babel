@@ -2573,6 +2573,20 @@ export function isTupleExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
+export function isDecimalLiteral(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "DecimalLiteral") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTSParameterProperty(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -3504,6 +3518,7 @@ export function isExpression(node: ?Object, opts?: Object): boolean {
     "DoExpression" === nodeType ||
     "RecordExpression" === nodeType ||
     "TupleExpression" === nodeType ||
+    "DecimalLiteral" === nodeType ||
     "TSAsExpression" === nodeType ||
     "TSTypeAssertion" === nodeType ||
     "TSNonNullExpression" === nodeType ||
@@ -3908,6 +3923,7 @@ export function isPureish(node: ?Object, opts?: Object): boolean {
     "RegExpLiteral" === nodeType ||
     "ArrowFunctionExpression" === nodeType ||
     "BigIntLiteral" === nodeType ||
+    "DecimalLiteral" === nodeType ||
     (nodeType === "Placeholder" && "StringLiteral" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
@@ -4042,6 +4058,7 @@ export function isLiteral(node: ?Object, opts?: Object): boolean {
     "RegExpLiteral" === nodeType ||
     "TemplateLiteral" === nodeType ||
     "BigIntLiteral" === nodeType ||
+    "DecimalLiteral" === nodeType ||
     (nodeType === "Placeholder" && "StringLiteral" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {
@@ -4074,6 +4091,7 @@ export function isImmutable(node: ?Object, opts?: Object): boolean {
     "JSXFragment" === nodeType ||
     "JSXOpeningFragment" === nodeType ||
     "JSXClosingFragment" === nodeType ||
+    "DecimalLiteral" === nodeType ||
     (nodeType === "Placeholder" && "StringLiteral" === node.expectedNode)
   ) {
     if (typeof opts === "undefined") {

@@ -43,6 +43,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
+    estreeParseDecimalLiteral(value: any): N.Node {
+      // https://github.com/estree/estree/blob/master/experimental/decimal.md
+      // $FlowIgnore
+      // todo: use BigDecimal when node supports it.
+      const decimal = null;
+      const node = this.estreeParseLiteral(decimal);
+      node.decimal = String(node.value || value);
+
+      return node;
+    }
+
     estreeParseLiteral(value: any): N.Node {
       return this.parseLiteral(value, "Literal");
     }
@@ -228,6 +239,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         case tt.bigint:
           return this.estreeParseBigIntLiteral(this.state.value);
+
+        case tt.decimal:
+          return this.estreeParseDecimalLiteral(this.state.value);
 
         case tt._null:
           return this.estreeParseLiteral(null);

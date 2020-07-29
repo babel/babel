@@ -730,6 +730,10 @@ export function tupleExpression(...args: Array<any>): Object {
   return builder("TupleExpression", ...args);
 }
 export { tupleExpression as TupleExpression };
+export function decimalLiteral(...args: Array<any>): Object {
+  return builder("DecimalLiteral", ...args);
+}
+export { decimalLiteral as DecimalLiteral };
 export function tsParameterProperty(...args: Array<any>): Object {
   return builder("TSParameterProperty", ...args);
 }
