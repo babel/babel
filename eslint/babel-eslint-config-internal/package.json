@@ -10,7 +10,12 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "eslint/babel-eslint-config-internal"
   },
-  "main": "index.js",
+  "main": "./index.js",
+  "type": "commonjs",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
   "peerDependencies": {
     "@babel/eslint-parser": "^7.10.4",
     "eslint-plugin-flowtype": "^3.0.0"
