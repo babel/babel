@@ -61,7 +61,7 @@ describe("traverse", function () {
     });
   });
 
-  it("traverse blacklistTypes", function () {
+  it("traverse denylistTypes", function () {
     const expected = [
       body[0],
       body[0].declarations[0],
@@ -75,7 +75,7 @@ describe("traverse", function () {
     const actual = [];
 
     traverse(program, {
-      blacklist: ["MemberExpression"],
+      denylist: ["MemberExpression"],
       enter: function (path) {
         actual.push(path.node);
       },
