@@ -9,6 +9,7 @@ Using modules transform: auto
 
 Using plugins:
   proposal-numeric-separator { "edge":"18" }
+  proposal-logical-assignment-operators { "edge":"18" }
   proposal-nullish-coalescing-operator { "edge":"18" }
   proposal-optional-chaining { "edge":"18" }
   proposal-json-strings { "edge":"18" }

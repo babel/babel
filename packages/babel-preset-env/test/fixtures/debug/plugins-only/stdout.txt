@@ -17,6 +17,7 @@ Using modules transform: auto
 
 Using plugins:
   proposal-numeric-separator { "firefox":"52", "node":"7.4" }
+  proposal-logical-assignment-operators { "firefox":"52", "node":"7.4" }
   proposal-nullish-coalescing-operator { "firefox":"52", "node":"7.4" }
   proposal-optional-chaining { "firefox":"52", "node":"7.4" }
   proposal-json-strings { "firefox":"52", "node":"7.4" }
