@@ -16,7 +16,12 @@
   "engines": {
     "node": "^10.13.0 || ^12.13.0 || >=14.0.0"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
+  "type": "commonjs",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
   "peerDependencies": {
     "@babel/core": ">=7.11.0",
     "eslint": ">=7.5.0"

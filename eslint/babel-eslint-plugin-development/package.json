@@ -12,7 +12,12 @@
     "email": "nicolo.ribaudo@gmail.com",
     "url": "https://github.com/nicolo-ribaudo"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
+  "type": "commonjs",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
   "engines": {
     "node": "^10.13.0 || ^12.13.0 || >=14.0.0"
   },
