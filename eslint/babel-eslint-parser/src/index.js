@@ -27,7 +27,7 @@ function baseParse(code, options) {
 
   if (!isRunningMinSupportedCoreVersion) {
     throw new Error(
-      `@babel/eslint-parser@${packageJson.version} does not support @babel/core@${babelCoreVersion}. Please upgrade to @babel/core@${minSupportedCoreVersion}`,
+      `@babel/eslint-parser@${packageJson.version} does not support @babel/core@${babelCoreVersion}. Please upgrade to @babel/core@${minSupportedCoreVersion}.`,
     );
   }
 
