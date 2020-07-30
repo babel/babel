@@ -14,6 +14,7 @@ export {
   findRelativeConfig,
   findRootConfig,
   loadConfig,
+  resolveShowConfigPath,
   ROOT_CONFIG_FILENAMES,
 } from "./configuration";
 export type {

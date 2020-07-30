@@ -58,6 +58,13 @@ export function* loadConfig(
   throw new Error(`Cannot load ${name} relative to ${dirname} in a browser`);
 }
 
+// eslint-disable-next-line require-yield
+export function* resolveShowConfigPath(
+  dirname: string, // eslint-disable-line no-unused-vars
+): Handler<string | null> {
+  return null;
+}
+
 export const ROOT_CONFIG_FILENAMES = [];
 
 // eslint-disable-next-line no-unused-vars
