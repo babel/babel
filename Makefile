@@ -249,11 +249,6 @@ endif
 	$(YARN) lerna publish from-git --registry http://localhost:4873 --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
 
-publish-eslint:
-	$(call set-json-field, ./eslint/$(PKG)/package.json, private, false)
-	cd eslint/$(PKG); yarn publish
-	$(call set-json-field, ./eslint/$(PKG)/package.json, private, true)
-
 bootstrap-only: lerna-bootstrap
 
 yarn-install: clean-all
@@ -311,11 +306,4 @@ define clean-source-all
 	rm -rf $(1)/*/node_modules
 	rm -rf $(1)/*/package-lock.json
 
-endef
-
-define set-json-field
-	$(NODE) -e "\
-		require('fs').writeFileSync('$1'.trim(), \
-			JSON.stringify({ ...require('$1'.trim()), $2: $3 }, null, 2) + '\\n' \
-		)"
 endef
