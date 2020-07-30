@@ -35,6 +35,7 @@
     "@babel/plugin-transform-typeof-symbol": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
     "@babel/runtime": "^7.10.5",
+    "@babel/runtime-corejs3": "^7.10.5",
     "@babel/template": "^7.10.4",
     "@babel/types": "^7.10.5"
   }
