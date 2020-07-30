@@ -1,6 +1,6 @@
-var _regeneratorRuntime = require("<CWD>/node_modules/@babel/runtime-corejs3/regenerator");
+var _regeneratorRuntime = require("<CWD>/packages/babel-plugin-transform-runtime/node_modules/@babel/runtime-corejs3/regenerator");
 
-var _mapInstanceProperty = require("<CWD>/node_modules/@babel/runtime-corejs3/core-js/instance/map");
+var _mapInstanceProperty = require("<CWD>/packages/babel-plugin-transform-runtime/node_modules/@babel/runtime-corejs3/core-js/instance/map");
 
 var _marked = /*#__PURE__*/_regeneratorRuntime.mark(makeIterator);
 
