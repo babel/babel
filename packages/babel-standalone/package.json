@@ -7,9 +7,6 @@
     "babel.js",
     "babel.min.js"
   ],
-  "scripts": {
-    "prepublishOnly": "cd ../.. && make prepublish-build-standalone"
-  },
   "devDependencies": {
     "@babel/core": "^7.10.5",
     "@babel/helper-plugin-utils": "^7.10.4",
