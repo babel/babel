@@ -1,6 +1,7 @@
 {
   "plugins": [
     ["transform-typescript", { "allowDeclareFields": true }],
-    ["syntax-decorators", { "legacy": true }]
+    ["proposal-decorators", { "legacy": true }],
+    ["proposal-class-properties"]
   ]
 }
