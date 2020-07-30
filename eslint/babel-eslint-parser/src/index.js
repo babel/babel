@@ -15,7 +15,8 @@ import visitorKeys from "./visitor-keys";
 let isRunningMinSupportedCoreVersion = null;
 
 function baseParse(code, options) {
-  const minSupportedCoreVersion = ">=7.0.0";
+  // Ensure we're using a version of `@babel/core` that includes `parse()` and `tokTypes`.
+  const minSupportedCoreVersion = ">=7.2.0";
 
   if (typeof isRunningMinSupportedCoreVersion !== "boolean") {
     isRunningMinSupportedCoreVersion = semver.satisfies(
@@ -24,7 +25,6 @@ function baseParse(code, options) {
     );
   }
 
-  // Ensure we're using a version of `@babel/core` that includes the `parse()` API.
   if (!isRunningMinSupportedCoreVersion) {
     throw new Error(
       `@babel/eslint-parser@${packageJson.version} does not support @babel/core@${babelCoreVersion}. Please upgrade to @babel/core@${minSupportedCoreVersion}`,
