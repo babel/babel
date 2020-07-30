@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-skip-transparent-expression-wrappers",
-  "version": "7.9.6",
+  "version": "7.11.0",
   "description": "Helper which skips types and parentheses",
   "repository": {
     "type": "git",
@@ -17,9 +17,9 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@babel/types": "^7.9.6"
+    "@babel/types": "^7.11.0"
   },
   "devDependencies": {
-    "@babel/traverse": "^7.9.6"
+    "@babel/traverse": "^7.11.0"
   }
 }

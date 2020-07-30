@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-plugin-development-internal",
-  "version": "7.10.4",
+  "version": "7.11.0",
   "description": "The Babel Team's ESLint custom rules plugin. Since it's internal, it might not respect semver.",
   "main": "lib/index.js",
   "repository": {

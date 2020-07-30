@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-tests",
-  "version": "7.10.4",
+  "version": "7.11.0",
   "description": "Tests for babel/eslint-* packages",
   "license": "MIT",
   "private": true,

@@ -1,12 +1,15 @@
 {
   "name": "@babel/eslint-plugin",
-  "version": "7.10.4",
+  "version": "7.11.0",
   "description": "Companion rules for @babel/eslint-parser",
   "main": "./lib/index.js",
   "type": "commonjs",
   "exports": {
     ".": "./lib/index.js",
     "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",

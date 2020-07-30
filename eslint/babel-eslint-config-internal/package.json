@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-config-internal",
-  "version": "7.10.4",
+  "version": "7.11.0",
   "description": "The Babel Team's ESLint configuration. Since it's internal, it might not respect semver.",
   "author": "The Babel Team (https://babeljs.io/team)",
   "homepage": "https://babeljs.io/",
@@ -10,6 +10,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "eslint/babel-eslint-config-internal"
   },
+  "private": true,
   "main": "./index.js",
   "type": "commonjs",
   "exports": {
