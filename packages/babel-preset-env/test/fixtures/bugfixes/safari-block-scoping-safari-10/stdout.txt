@@ -8,6 +8,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "safari":"10" }
+  proposal-logical-assignment-operators { "safari":"10" }
   proposal-nullish-coalescing-operator { "safari":"10" }
   proposal-optional-chaining { "safari":"10" }
   proposal-json-strings { "safari":"10" }
@@ -20,6 +22,7 @@ Using plugins:
   transform-async-to-generator { "safari":"10" }
   transform-exponentiation-operator { "safari":"10" }
   transform-unicode-regex { "safari":"10" }
+  proposal-export-namespace-from { "safari":"10" }
   bugfix/transform-safari-block-shadowing { "safari":"10" }
   bugfix/transform-safari-for-shadowing { "safari":"10" }
   bugfix/transform-tagged-template-caching { "safari":"10" }

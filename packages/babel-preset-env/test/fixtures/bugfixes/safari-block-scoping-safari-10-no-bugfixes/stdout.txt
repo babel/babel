@@ -8,6 +8,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "safari":"10" }
+  proposal-logical-assignment-operators { "safari":"10" }
   proposal-nullish-coalescing-operator { "safari":"10" }
   proposal-optional-chaining { "safari":"10" }
   proposal-json-strings { "safari":"10" }
@@ -22,6 +24,7 @@ Using plugins:
   transform-template-literals { "safari":"10" }
   transform-unicode-regex { "safari":"10" }
   transform-block-scoping { "safari":"10" }
+  proposal-export-namespace-from { "safari":"10" }
   transform-modules-commonjs { "safari":"10" }
   proposal-dynamic-import { "safari":"10" }
 

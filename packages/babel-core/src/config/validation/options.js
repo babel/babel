@@ -51,6 +51,10 @@ const ROOT_VALIDATORS: ValidatorSet = {
   code: (assertBoolean: Validator<$PropertyType<ValidatedOptions, "code">>),
   ast: (assertBoolean: Validator<$PropertyType<ValidatedOptions, "ast">>),
 
+  cloneInputAst: (assertBoolean: Validator<
+    $PropertyType<ValidatedOptions, "cloneInputAst">,
+  >),
+
   envName: (assertString: Validator<
     $PropertyType<ValidatedOptions, "envName">,
   >),
@@ -184,6 +188,7 @@ export type ValidatedOptions = {
   rootMode?: RootMode,
   code?: boolean,
   ast?: boolean,
+  cloneInputAst?: boolean,
   inputSourceMap?: RootInputSourceMapOption,
   envName?: string,
   caller?: CallerMetadata,

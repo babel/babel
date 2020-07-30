@@ -1,6 +1,6 @@
 import path from "path";
 import rule from "../../src/rules/dry-error-messages";
-import RuleTester from "@babel/eslint-shared-fixtures/utils/RuleTester";
+import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester";
 
 const FILENAME = path.resolve(__dirname, "test/lib/index.js");
 const ERRORS_MODULE = "errorsModule";

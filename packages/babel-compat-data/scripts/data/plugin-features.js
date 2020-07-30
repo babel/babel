@@ -122,8 +122,12 @@ const es2020 = {
   "proposal-optional-chaining": "optional chaining operator (?.)",
 };
 
-const shippedProposal = {
+const es2021 = {
   "proposal-numeric-separator": "numeric separator",
+  "proposal-logical-assignment-operators": "Logical Assignment",
+};
+
+const shippedProposal = {
   "proposal-class-properties": {
     features: [
       "static class fields",
@@ -139,6 +143,7 @@ const shippedProposal = {
 module.exports = Object.assign(
   {},
   shippedProposal,
+  es2021,
   es2020,
   es2019,
   es2015Parameter,

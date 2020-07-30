@@ -10,9 +10,10 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-numeric-separator { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-class-properties { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-private-methods { "chrome":"52", "firefox":"50", "ie":"11" }
+  proposal-numeric-separator { "chrome":"52", "firefox":"50", "ie":"11" }
+  proposal-logical-assignment-operators { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-nullish-coalescing-operator { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-optional-chaining { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-json-strings { "chrome":"52", "firefox":"50", "ie":"11" }
@@ -44,6 +45,7 @@ Using plugins:
   transform-typeof-symbol { "ie":"11" }
   transform-new-target { "ie":"11" }
   transform-regenerator { "firefox":"50", "ie":"11" }
+  proposal-export-namespace-from { "chrome":"52", "firefox":"50", "ie":"11" }
   transform-modules-commonjs { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-dynamic-import { "chrome":"52", "firefox":"50", "ie":"11" }
 

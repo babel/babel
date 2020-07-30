@@ -229,12 +229,6 @@ export default class ExpressionParser extends LValParser {
       const operator = this.state.value;
       node.operator = operator;
 
-      if (operator === "??=") {
-        this.expectPlugin("logicalAssignment");
-      }
-      if (operator === "||=" || operator === "&&=") {
-        this.expectPlugin("logicalAssignment");
-      }
       if (this.match(tt.eq)) {
         node.left = this.toAssignable(left);
         refExpressionErrors.doubleProto = -1; // reset because double __proto__ is valid in assignment expression
@@ -1032,6 +1026,9 @@ export default class ExpressionParser extends LValParser {
       case tt.bigint:
         return this.parseLiteral(this.state.value, "BigIntLiteral");
 
+      case tt.decimal:
+        return this.parseLiteral(this.state.value, "DecimalLiteral");
+
       case tt.string:
         return this.parseLiteral(this.state.value, "StringLiteral");
 
@@ -1788,7 +1785,11 @@ export default class ExpressionParser extends LValParser {
     }
 
     if (!prop.computed && prop.key.type === "Identifier") {
-      this.checkReservedWord(prop.key.name, prop.key.start, true, true);
+      // PropertyDefinition:
+      //   IdentifierReference
+      //   CoveredInitializedName
+      // Note: `{ eval } = {}` will be checked in `checkLVal` later.
+      this.checkReservedWord(prop.key.name, prop.key.start, true, false);
 
       if (isPattern) {
         prop.value = this.parseMaybeDefault(
@@ -1859,7 +1860,10 @@ export default class ExpressionParser extends LValParser {
       this.state.inPropertyName = true;
       // We check if it's valid for it to be a private name when we push it.
       (prop: $FlowFixMe).key =
-        this.match(tt.num) || this.match(tt.string) || this.match(tt.bigint)
+        this.match(tt.num) ||
+        this.match(tt.string) ||
+        this.match(tt.bigint) ||
+        this.match(tt.decimal)
           ? this.parseExprAtom()
           : this.parseMaybePrivateName(isPrivateNameAllowed);
 

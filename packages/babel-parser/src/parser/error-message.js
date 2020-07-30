@@ -61,6 +61,7 @@ export const ErrorMessages = Object.freeze({
   ImportOutsideModule: `'import' and 'export' may appear only with 'sourceType: "module"'`,
   InvalidBigIntLiteral: "Invalid BigIntLiteral",
   InvalidCodePoint: "Code point out of bounds",
+  InvalidDecimal: "Invalid decimal",
   InvalidDigit: "Expected number in radix %0",
   InvalidEscapeSequence: "Bad character escape sequence",
   InvalidEscapeSequenceTemplate: "Invalid escape sequence in template",
@@ -139,6 +140,7 @@ export const ErrorMessages = Object.freeze({
   StrictEvalArgumentsBinding: "Binding '%0' in strict mode",
   StrictFunction:
     "In strict mode code, functions can only be declared at top level or inside a block",
+  StrictNumericEscape: "The only valid numeric escape in strict mode is '\\0'",
   StrictOctalLiteral: "Legacy octal literals are not allowed in strict mode",
   StrictWith: "'with' in strict mode",
   SuperNotAllowed:

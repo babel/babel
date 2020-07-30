@@ -310,7 +310,7 @@ export default declare((api, options, dirname) => {
             node.callee = t.memberExpression(
               t.callExpression(
                 this.addDefaultImport(
-                  `${moduleName}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
+                  `${modulePath}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
                   `${propertyName}InstanceProperty`,
                 ),
                 [context2],
@@ -379,7 +379,7 @@ export default declare((api, options, dirname) => {
             path.replaceWith(
               t.callExpression(
                 this.addDefaultImport(
-                  `${moduleName}/core-js/get-iterator-method`,
+                  `${modulePath}/core-js/get-iterator-method`,
                   "getIteratorMethod",
                 ),
                 [object],
@@ -407,7 +407,7 @@ export default declare((api, options, dirname) => {
               path.replaceWith(
                 t.callExpression(
                   this.addDefaultImport(
-                    `${moduleName}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
+                    `${modulePath}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
                     `${propertyName}InstanceProperty`,
                   ),
                   [object],

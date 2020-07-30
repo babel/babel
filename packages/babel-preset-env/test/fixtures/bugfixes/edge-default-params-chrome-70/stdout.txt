@@ -8,12 +8,15 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "chrome":"70" }
+  proposal-logical-assignment-operators { "chrome":"70" }
   proposal-nullish-coalescing-operator { "chrome":"70" }
   proposal-optional-chaining { "chrome":"70" }
   syntax-json-strings { "chrome":"70" }
   syntax-optional-catch-binding { "chrome":"70" }
   syntax-async-generators { "chrome":"70" }
   syntax-object-rest-spread { "chrome":"70" }
+  proposal-export-namespace-from { "chrome":"70" }
   transform-modules-commonjs { "chrome":"70" }
   proposal-dynamic-import { "chrome":"70" }
 

@@ -8,6 +8,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "ie":"11" }
+  proposal-logical-assignment-operators { "ie":"11" }
   proposal-nullish-coalescing-operator { "ie":"11" }
   proposal-optional-chaining { "ie":"11" }
   proposal-json-strings { "ie":"11" }
@@ -39,6 +41,7 @@ Using plugins:
   transform-typeof-symbol { "ie":"11" }
   transform-new-target { "ie":"11" }
   transform-regenerator { "ie":"11" }
+  proposal-export-namespace-from { "ie":"11" }
   transform-modules-commonjs { "ie":"11" }
   proposal-dynamic-import { "ie":"11" }
 

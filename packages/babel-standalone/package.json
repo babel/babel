@@ -7,9 +7,6 @@
     "babel.js",
     "babel.min.js"
   ],
-  "scripts": {
-    "prepublishOnly": "cd ../.. && make prepublish-build-standalone"
-  },
   "devDependencies": {
     "@babel/core": "^7.10.5",
     "@babel/helper-plugin-utils": "^7.10.4",
@@ -37,6 +34,7 @@
     "@babel/plugin-proposal-unicode-property-regex": "^7.10.4",
     "@babel/plugin-syntax-async-generators": "^7.8.0",
     "@babel/plugin-syntax-class-properties": "^7.10.4",
+    "@babel/plugin-syntax-decimal": "^7.10.1",
     "@babel/plugin-syntax-decorators": "^7.10.4",
     "@babel/plugin-syntax-do-expressions": "^7.10.4",
     "@babel/plugin-syntax-export-default-from": "^7.10.4",

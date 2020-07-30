@@ -1,7 +1,7 @@
 import eslint from "eslint";
 import fs from "fs";
 import path from "path";
-import * as parser from "@babel/eslint-parser";
+import * as parser from "../../../../../babel-eslint-parser";
 
 eslint.linter.defineParser("@babel/eslint-parser", parser);
 

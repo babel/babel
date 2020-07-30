@@ -34,7 +34,11 @@ export default function* normalizeFile(
     } else if (ast.type !== "File") {
       throw new Error("AST root must be a Program or File node");
     }
-    ast = cloneDeep(ast);
+
+    const { cloneInputAst } = options;
+    if (cloneInputAst) {
+      ast = cloneDeep(ast);
+    }
   } else {
     ast = yield* parser(pluginPasses, options, code);
   }

@@ -9,6 +9,19 @@ for (const target of ["plugin", "corejs2-built-in"]) {
     environments,
     require(`./data/${target}-features`)
   );
+  if (target === "plugin") {
+    // add export-namespace-from from mdn-browser-compat-data
+    // todo: replace the hardcoded compat data to mdn-browser-compat-data
+    // after https://github.com/mdn/browser-compat-data/pull/6394 is published
+    newData["proposal-export-namespace-from"] = {
+      chrome: "72",
+      edge: "79",
+      opera: "60",
+      firefox: "80",
+      node: "13.2",
+      samsung: "11.0",
+    };
+  }
   const dataPath = path.join(__dirname, `../data/${target}s.json`);
 
   if (!writeFile(newData, dataPath, target)) {

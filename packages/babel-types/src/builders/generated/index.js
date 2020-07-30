@@ -730,6 +730,10 @@ export function tupleExpression(...args: Array<any>): Object {
   return builder("TupleExpression", ...args);
 }
 export { tupleExpression as TupleExpression };
+export function decimalLiteral(...args: Array<any>): Object {
+  return builder("DecimalLiteral", ...args);
+}
+export { decimalLiteral as DecimalLiteral };
 export function tsParameterProperty(...args: Array<any>): Object {
   return builder("TSParameterProperty", ...args);
 }
@@ -890,6 +894,11 @@ export function tsRestType(...args: Array<any>): Object {
 }
 export { tsRestType as TSRestType };
 export { tsRestType as tSRestType };
+export function tsNamedTupleMember(...args: Array<any>): Object {
+  return builder("TSNamedTupleMember", ...args);
+}
+export { tsNamedTupleMember as TSNamedTupleMember };
+export { tsNamedTupleMember as tSNamedTupleMember };
 export function tsUnionType(...args: Array<any>): Object {
   return builder("TSUnionType", ...args);
 }

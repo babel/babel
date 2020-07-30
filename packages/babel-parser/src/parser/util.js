@@ -273,7 +273,8 @@ export default class UtilParser extends Tokenizer {
       !!this.state.type.keyword ||
       this.match(tt.string) ||
       this.match(tt.num) ||
-      this.match(tt.bigint)
+      this.match(tt.bigint) ||
+      this.match(tt.decimal)
     );
   }
 }

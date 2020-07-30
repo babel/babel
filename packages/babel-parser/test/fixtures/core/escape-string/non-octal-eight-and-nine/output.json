@@ -1,0 +1,106 @@
+{
+  "type": "File",
+  "start":0,"end":50,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+  "errors": [
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0' (4:4)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0' (4:10)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":50,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":10,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":10}},
+        "expression": {
+          "type": "SequenceExpression",
+          "start":0,"end":9,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":9}},
+          "expressions": [
+            {
+              "type": "StringLiteral",
+              "start":0,"end":4,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":4}},
+              "extra": {
+                "rawValue": "8",
+                "raw": "\"\\8\""
+              },
+              "value": "8"
+            },
+            {
+              "type": "StringLiteral",
+              "start":5,"end":9,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":9}},
+              "extra": {
+                "rawValue": "9",
+                "raw": "\"\\9\""
+              },
+              "value": "9"
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":11,"end":50,"loc":{"start":{"line":2,"column":0},"end":{"line":5,"column":1}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":11,"end":50,"loc":{"start":{"line":2,"column":0},"end":{"line":5,"column":1}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":17,"end":50,"loc":{"start":{"line":2,"column":6},"end":{"line":5,"column":1}},
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start":37,"end":48,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":13}},
+                "expression": {
+                  "type": "SequenceExpression",
+                  "start":37,"end":47,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":12}},
+                  "expressions": [
+                    {
+                      "type": "StringLiteral",
+                      "start":37,"end":41,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":6}},
+                      "extra": {
+                        "rawValue": "8",
+                        "raw": "\"\\8\""
+                      },
+                      "value": "8"
+                    },
+                    {
+                      "type": "StringLiteral",
+                      "start":43,"end":47,"loc":{"start":{"line":4,"column":8},"end":{"line":4,"column":12}},
+                      "extra": {
+                        "rawValue": "9",
+                        "raw": "\"\\9\""
+                      },
+                      "value": "9"
+                    }
+                  ]
+                }
+              }
+            ],
+            "directives": [
+              {
+                "type": "Directive",
+                "start":21,"end":34,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":15}},
+                "value": {
+                  "type": "DirectiveLiteral",
+                  "start":21,"end":33,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":14}},
+                  "value": "use strict",
+                  "extra": {
+                    "raw": "\"use strict\"",
+                    "rawValue": "use strict"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

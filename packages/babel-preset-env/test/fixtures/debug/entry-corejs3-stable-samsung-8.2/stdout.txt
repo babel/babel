@@ -8,9 +8,10 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-numeric-separator { "samsung":"8.2" }
   proposal-class-properties { "samsung":"8.2" }
   proposal-private-methods { "samsung":"8.2" }
+  proposal-numeric-separator { "samsung":"8.2" }
+  proposal-logical-assignment-operators { "samsung":"8.2" }
   proposal-nullish-coalescing-operator { "samsung":"8.2" }
   proposal-optional-chaining { "samsung":"8.2" }
   proposal-json-strings { "samsung":"8.2" }
@@ -19,6 +20,7 @@ Using plugins:
   syntax-object-rest-spread { "samsung":"8.2" }
   proposal-unicode-property-regex { "samsung":"8.2" }
   transform-named-capturing-groups-regex { "samsung":"8.2" }
+  proposal-export-namespace-from { "samsung":"8.2" }
   transform-modules-commonjs { "samsung":"8.2" }
   proposal-dynamic-import { "samsung":"8.2" }
 

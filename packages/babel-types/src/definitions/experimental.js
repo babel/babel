@@ -235,3 +235,13 @@ defineType("TupleExpression", {
   visitor: ["elements"],
   aliases: ["Expression"],
 });
+
+defineType("DecimalLiteral", {
+  builder: ["value"],
+  fields: {
+    value: {
+      validate: assertValueType("string"),
+    },
+  },
+  aliases: ["Expression", "Pureish", "Literal", "Immutable"],
+});
