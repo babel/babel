@@ -12,19 +12,22 @@ import convert from "./convert";
 import analyzeScope from "./analyze-scope";
 import visitorKeys from "./visitor-keys";
 
-let isRunningSupportedVersion;
+let isRunningMinSupportedCoreVersion = null;
 
 function baseParse(code, options) {
-  if (typeof isRunningSupportedVersion !== "boolean") {
-    isRunningSupportedVersion = semver.satisfies(
+  const minSupportedCoreVersion = ">=7.0.0";
+
+  if (typeof isRunningMinSupportedCoreVersion !== "boolean") {
+    isRunningMinSupportedCoreVersion = semver.satisfies(
       babelCoreVersion,
-      packageJson.peerDependencies["@babel/core"],
+      minSupportedCoreVersion,
     );
   }
 
-  if (!isRunningSupportedVersion) {
+  // Ensure we're using a version of `@babel/core` that includes the `parse()` API.
+  if (!isRunningMinSupportedCoreVersion) {
     throw new Error(
-      `@babel/eslint-parser@${packageJson.version} does not support @babel/core@${babelCoreVersion}. Please upgrade to @babel/core@${packageJson.peerDependencies["@babel/core"]}`,
+      `@babel/eslint-parser@${packageJson.version} does not support @babel/core@${babelCoreVersion}. Please upgrade to @babel/core@${minSupportedCoreVersion}`,
     );
   }
 
