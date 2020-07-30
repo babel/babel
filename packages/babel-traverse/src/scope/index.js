@@ -874,8 +874,8 @@ export default class Scope {
     let path = this.path;
 
     if (path.isPattern()) {
-      // We are inside some function parameters.
-      // When using a destructuring outside of funtion parameters (e.g. in a variable
+      // We are inside a function's parameters.
+      // When using destructuring outside of function's parameters (e.g. in a variable
       // declaration), the scope refers to a block/function and not to the pattern.
       throw path.buildCodeFrameError(
         "[Internal error] It's not possible to inject a variable in function parameters. " +
