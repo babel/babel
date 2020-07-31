@@ -22,7 +22,9 @@ try {
 } catch {}
 
 const isRegExp = value =>
-  nodeUtilTypes ? nodeUtilTypes.isRegExp(value) : Object.prototype.toString.call(value) === '[object RegExp]';
+  nodeUtilTypes
+    ? nodeUtilTypes.isRegExp(value)
+    : Object.prototype.toString.call(value) === '[object RegExp]';
 
 export default function valueToNode(value: any): Object {
   // undefined
