@@ -1,12 +1,10 @@
 # @babel/eslint-plugin
 
-## This project is still experimental and will be released with Babel v8. You can track our progress [here](https://github.com/babel/babel/issues/10752)! Please use [eslint-plugin-babel](https://github.com/babel/eslint-plugin-babel) in the meantime.
-
 Companion rules for `@babel/eslint-parser`. `@babel/eslint-parser` does a great job at adapting `eslint`
 for use with Babel, but it can't change the built-in rules to support experimental features.
 `@babel/eslint-plugin` re-implements problematic rules so they do not give false positives or negatives.
 
-> Requires Node 10.9 or greater
+> Requires Node 10.13 or greater
 
 ### Install
 
@@ -18,7 +16,7 @@ Load the plugin in your `.eslintrc.json` file:
 
 ```json
 {
-  "plugins": ["@babel/eslint-plugin"]
+  "plugins": ["@babel"]
 }
 ```
 
@@ -32,10 +30,11 @@ original ones as well!).
     "babel/no-invalid-this": "error",
     "babel/no-unused-expressions": "error",
     "babel/object-curly-spacing": "error",
-    "babel/semi": "error",
+    "babel/semi": "error"
   }
 }
 ```
+
 ### Rules
 
 Each rule corresponds to a core `eslint` rule and has the same options.
