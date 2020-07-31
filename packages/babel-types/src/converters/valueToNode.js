@@ -21,10 +21,11 @@ try {
   nodeUtilTypes = util.types || util;
 } catch {}
 
-const isRegExp = value =>
-  nodeUtilTypes
+const isRegExp = value => {
+  return nodeUtilTypes
     ? nodeUtilTypes.isRegExp(value)
     : Object.prototype.toString.call(value) === '[object RegExp]';
+};
 
 export default function valueToNode(value: any): Object {
   // undefined
