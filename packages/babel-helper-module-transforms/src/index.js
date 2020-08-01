@@ -67,7 +67,8 @@ export function rewriteModuleStatementsAndPrepareHeader(
 
   const headers = [];
   const defaultExportOnly = hasDefaultExportOnly(meta);
-  const doLegacyDefaultOnlyExport = legacyDefaultOnlyExport && defaultExportOnly;
+  const doLegacyDefaultOnlyExport =
+    legacyDefaultOnlyExport && defaultExportOnly;
 
   if (hasExports(meta) && !strict && !doLegacyDefaultOnlyExport) {
     headers.push(buildESModuleHeader(meta, loose /* enumerable */));
@@ -81,7 +82,14 @@ export function rewriteModuleStatementsAndPrepareHeader(
   }
 
   // Create all of the statically known named exports.
-  headers.push(...buildExportInitializationStatements(path, meta, loose, doLegacyDefaultOnlyExport));
+  headers.push(
+    ...buildExportInitializationStatements(
+      path,
+      meta,
+      loose,
+      doLegacyDefaultOnlyExport,
+    ),
+  );
 
   return { meta, headers };
 }
@@ -151,7 +159,14 @@ export function buildNamespaceInitStatements(
     );
   }
   if (loose) {
-    statements.push(...buildReexportsFromMeta(metadata, sourceMetadata, loose, legacyDefaultOnlyExport && hasDefaultExportOnly(metadata)));
+    statements.push(
+      ...buildReexportsFromMeta(
+        metadata,
+        sourceMetadata,
+        loose,
+        legacyDefaultOnlyExport && hasDefaultExportOnly(metadata),
+      ),
+    );
   }
   for (const exportName of sourceMetadata.reexportNamespace) {
     // Assign export to namespace object.
@@ -199,17 +214,24 @@ const getTemplateForReexport = loose => {
     `;
 };
 
-const buildReexportsFromMeta = (meta, metadata, loose, legacyDefaultOnlyExport) => {
+const buildReexportsFromMeta = (
+  meta,
+  metadata,
+  loose,
+  legacyDefaultOnlyExport,
+) => {
   const namespace = metadata.lazy
     ? t.callExpression(t.identifier(metadata.name), [])
     : t.identifier(metadata.name);
 
   if (legacyDefaultOnlyExport) {
-    return [template.statement`EXPORTS = NAMESPACE.IMPORT_NAME;`({
-      EXPORTS: meta.exportName,
-      NAMESPACE: t.cloneNode(namespace),
-      IMPORT_NAME: metadata.reexports.values().next().value
-    })];
+    return [
+      template.statement`EXPORTS = NAMESPACE.IMPORT_NAME;`({
+        EXPORTS: meta.exportName,
+        NAMESPACE: t.cloneNode(namespace),
+        IMPORT_NAME: metadata.reexports.values().next().value,
+      }),
+    ];
   }
 
   const templateForCurrentMode = getTemplateForReexport(loose);
@@ -337,7 +359,12 @@ function buildExportInitializationStatements(
       // No-open since these are explicitly set with the "reexports" block.
     } else if (data.kind === "hoisted") {
       initStatements.push(
-        buildInitStatement(metadata, data.names, t.identifier(localName), legacyDefaultOnlyExport),
+        buildInitStatement(
+          metadata,
+          data.names,
+          t.identifier(localName),
+          legacyDefaultOnlyExport,
+        ),
       );
     } else {
       exportNames.push(...data.names);
@@ -346,7 +373,14 @@ function buildExportInitializationStatements(
 
   for (const data of metadata.source.values()) {
     if (!loose) {
-      initStatements.push(...buildReexportsFromMeta(metadata, data, loose, legacyDefaultOnlyExport));
+      initStatements.push(
+        ...buildReexportsFromMeta(
+          metadata,
+          data,
+          loose,
+          legacyDefaultOnlyExport,
+        ),
+      );
     }
     for (const exportName of data.reexportNamespace) {
       exportNames.push(exportName);
@@ -372,13 +406,19 @@ function buildExportInitializationStatements(
  * Given a set of export names, create a set of nested assignments to
  * initialize them all to a given expression.
  */
-function buildInitStatement(metadata, exportNames, initExpr, legacyDefaultOnlyExport) {
-
+function buildInitStatement(
+  metadata,
+  exportNames,
+  initExpr,
+  legacyDefaultOnlyExport,
+) {
   if (legacyDefaultOnlyExport) {
-    return t.expressionStatement(template.expression`EXPORTS = VALUE`({
-      EXPORTS: metadata.exportName,
-      VALUE: initExpr
-    }));
+    return t.expressionStatement(
+      template.expression`EXPORTS = VALUE`({
+        EXPORTS: metadata.exportName,
+        VALUE: initExpr,
+      }),
+    );
   }
 
   return t.expressionStatement(

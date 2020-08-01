@@ -1,7 +1,7 @@
 {
   "plugins": [
     "proposal-class-properties",
-     ["external-helpers", { "helperVersion": "7.100.0" }],
+    ["external-helpers", { "helperVersion": "7.100.0" }],
     "syntax-typescript",
     "syntax-flow",
     "transform-parameters",

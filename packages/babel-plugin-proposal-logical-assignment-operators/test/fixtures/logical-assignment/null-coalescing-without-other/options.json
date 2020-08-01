@@ -1,5 +1,3 @@
 {
-  "plugins": [
-    "proposal-logical-assignment-operators"
-  ]
+  "plugins": ["proposal-logical-assignment-operators"]
 }

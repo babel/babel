@@ -1,7 +1,5 @@
 {
-  "plugins": [
-    "transform-parameters"
-  ],
+  "plugins": ["transform-parameters"],
   "parserOpts": {
     "allowReturnOutsideFunction": true
   },

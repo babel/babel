@@ -1,13 +1,16 @@
 {
   "validateLogs": true,
   "presets": [
-    ["env", {
-      "debug": true,
-      "bugfixes": true,
-      "targets": {
-        "safari": "9"
-      },
-      "exclude": ["transform-for-of", "transform-arrow-functions"]
-    }]
+    [
+      "env",
+      {
+        "debug": true,
+        "bugfixes": true,
+        "targets": {
+          "safari": "9"
+        },
+        "exclude": ["transform-for-of", "transform-arrow-functions"]
+      }
+    ]
   ]
 }

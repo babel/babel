@@ -62,26 +62,32 @@ export function hasExports(metadata: ModuleMetadata) {
  */
 export function hasDefaultExportOnly(metadata: ModuleMetadata) {
   const { local, source } = metadata;
-  
-  if(local.size === 0) {
+
+  if (local.size === 0) {
     const sourceReexports = new Map();
     for (const [, srcMetadata] of source) {
       const { reexports } = srcMetadata;
-      if(reexports) {
+      if (reexports) {
         for (const [exportName, importName] of reexports) {
           sourceReexports.set(exportName, importName);
         }
       }
     }
 
-    return sourceReexports.size === 1 && sourceReexports.keys().next().value === 'default';
+    return (
+      sourceReexports.size === 1 &&
+      sourceReexports.keys().next().value === "default"
+    );
   }
 
   const localFirst = local.values().next().value;
   const localFirstNames = localFirst && localFirst.names;
-  return local.size === 1 && localFirstNames.length === 1 && localFirstNames[0] === 'default';
+  return (
+    local.size === 1 &&
+    localFirstNames.length === 1 &&
+    localFirstNames[0] === "default"
+  );
 }
-
 
 /**
  * Check if a given source is an anonymous import, e.g. "import 'foo';"

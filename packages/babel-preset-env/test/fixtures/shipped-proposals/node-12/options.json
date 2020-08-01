@@ -1,8 +1,11 @@
 {
   "presets": [
-    ["env", {
-      "targets": { "node": 12 },
-      "shippedProposals": true
-    }]
+    [
+      "env",
+      {
+        "targets": { "node": 12 },
+        "shippedProposals": true
+      }
+    ]
   ]
 }

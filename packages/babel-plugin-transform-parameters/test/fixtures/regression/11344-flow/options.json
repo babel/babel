@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "transform-parameters",
-    "syntax-flow"
-  ]
+  "plugins": ["transform-parameters", "syntax-flow"]
 }

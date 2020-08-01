@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "transform-typescript",
-    "syntax-class-properties"
-  ]
+  "plugins": ["transform-typescript", "syntax-class-properties"]
 }

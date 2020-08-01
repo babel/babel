@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "transform-modules-commonjs",
-    "external-helpers"
-  ]
+  "plugins": ["transform-modules-commonjs", "external-helpers"]
 }

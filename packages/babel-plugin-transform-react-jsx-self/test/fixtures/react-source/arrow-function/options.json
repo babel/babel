@@ -1,3 +1,7 @@
 {
-  "plugins": ["syntax-jsx", "transform-react-jsx-self", "transform-arrow-functions"]
+  "plugins": [
+    "syntax-jsx",
+    "transform-react-jsx-self",
+    "transform-arrow-functions"
+  ]
 }

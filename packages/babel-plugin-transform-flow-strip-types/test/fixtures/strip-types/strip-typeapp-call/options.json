@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "syntax-jsx",
-    "transform-flow-strip-types"
-  ]
+  "plugins": ["syntax-jsx", "transform-flow-strip-types"]
 }

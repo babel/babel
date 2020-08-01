@@ -1,10 +1,13 @@
 {
   "validateLogs": true,
   "presets": [
-    ["env", {
-      "targets": { "node": 10 },
-      "shippedProposals": true,
-      "loose": true
-    }]
+    [
+      "env",
+      {
+        "targets": { "node": 10 },
+        "shippedProposals": true,
+        "loose": true
+      }
+    ]
   ]
 }

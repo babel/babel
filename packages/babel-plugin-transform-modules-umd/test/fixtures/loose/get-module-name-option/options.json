@@ -2,10 +2,13 @@
   "sourceType": "module",
   "plugins": [
     "external-helpers",
-    ["transform-modules-umd", {
-      "loose": true,
-      "moduleIds": true,
-      "moduleId": "my custom module name"
-    }]
+    [
+      "transform-modules-umd",
+      {
+        "loose": true,
+        "moduleIds": true,
+        "moduleId": "my custom module name"
+      }
+    ]
   ]
 }

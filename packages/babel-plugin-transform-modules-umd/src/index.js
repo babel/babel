@@ -203,7 +203,12 @@ export default declare((api, options) => {
             }
 
             headers.push(
-              ...buildNamespaceInitStatements(meta, metadata, loose, legacyDefaultOnlyExport),
+              ...buildNamespaceInitStatements(
+                meta,
+                metadata,
+                loose,
+                legacyDefaultOnlyExport,
+              ),
             );
           }
 

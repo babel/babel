@@ -1,10 +1,13 @@
 {
   "validateLogs": true,
   "presets": [
-    ["env", {
-      "targets": { "node": 10 },
-      "shippedProposals": true
-    }]
+    [
+      "env",
+      {
+        "targets": { "node": 10 },
+        "shippedProposals": true
+      }
+    ]
   ],
   "plugins": [
     ["proposal-class-properties", { "loose": true }],

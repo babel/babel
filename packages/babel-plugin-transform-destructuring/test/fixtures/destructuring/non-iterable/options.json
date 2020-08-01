@@ -1,5 +1,3 @@
 {
-  "plugins": [
-    "transform-destructuring"
-  ]
+  "plugins": ["transform-destructuring"]
 }

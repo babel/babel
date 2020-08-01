@@ -13,7 +13,8 @@ export default function rewriteLiveReferences(
 ) {
   const imported = new Map();
   const exported = new Map();
-  const doLegacyDefaultOnlyExport = legacyDefaultOnlyExport && hasDefaultExportOnly(metadata);
+  const doLegacyDefaultOnlyExport =
+    legacyDefaultOnlyExport && hasDefaultExportOnly(metadata);
 
   const requeueInParent = path => {
     // Manually re-queue `exports.default =` expressions so that the ES3
@@ -90,7 +91,12 @@ const rewriteBindingInitVisitor = {
     path.skip();
   },
   ClassDeclaration(path) {
-    const { requeueInParent, exported, metadata, legacyDefaultOnlyExport } = this;
+    const {
+      requeueInParent,
+      exported,
+      metadata,
+      legacyDefaultOnlyExport,
+    } = this;
 
     const { id } = path.node;
     if (!id) throw new Error("Expected class to have a name");
@@ -112,7 +118,12 @@ const rewriteBindingInitVisitor = {
     }
   },
   VariableDeclaration(path) {
-    const { requeueInParent, exported, metadata, legacyDefaultOnlyExport } = this;
+    const {
+      requeueInParent,
+      exported,
+      metadata,
+      legacyDefaultOnlyExport,
+    } = this;
 
     Object.keys(path.getOuterBindingIdentifiers()).forEach(localName => {
       const exportNames = exported.get(localName) || [];
@@ -141,7 +152,11 @@ const buildBindingExportAssignmentExpression = (
   legacyDefaultOnlyExport,
 ) => {
   if (legacyDefaultOnlyExport) {
-    return t.assignmentExpression("=", t.identifier(metadata.exportName), localExpr);
+    return t.assignmentExpression(
+      "=",
+      t.identifier(metadata.exportName),
+      localExpr,
+    );
   }
 
   return (exportNames || []).reduce((expr, exportName) => {
