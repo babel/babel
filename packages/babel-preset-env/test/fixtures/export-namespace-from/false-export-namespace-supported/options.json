@@ -1,0 +1,7 @@
+{
+  "caller": {
+    "name": "test-fixture",
+    "supportsExportNamespaceFrom": false
+  },
+  "presets": [["env", { "modules": false, "targets": "chrome 72" }]]
+}

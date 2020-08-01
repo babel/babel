@@ -1,0 +1,83 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":39}},
+  "errors": [
+    "SyntaxError: Assigning to 'eval' in strict mode (1:16)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":39}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":14,"end":39,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":39}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":15,"end":38,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":38}},
+          "operator": "=",
+          "left": {
+            "type": "ObjectPattern",
+            "start":15,"end":32,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":32}},
+            "properties": [
+              {
+                "type": "ObjectProperty",
+                "start":16,"end":31,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":31}},
+                "method": false,
+                "key": {
+                  "type": "Identifier",
+                  "start":16,"end":20,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":20},"identifierName":"eval"},
+                  "name": "eval"
+                },
+                "computed": false,
+                "shorthand": true,
+                "value": {
+                  "type": "AssignmentPattern",
+                  "start":16,"end":31,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":31}},
+                  "left": {
+                    "type": "Identifier",
+                    "start":16,"end":20,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":20},"identifierName":"eval"},
+                    "name": "eval"
+                  },
+                  "right": {
+                    "type": "Identifier",
+                    "start":23,"end":31,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":31},"identifierName":"defValue"},
+                    "name": "defValue"
+                  }
+                },
+                "extra": {
+                  "shorthand": true
+                }
+              }
+            ]
+          },
+          "right": {
+            "type": "Identifier",
+            "start":35,"end":38,"loc":{"start":{"line":1,"column":35},"end":{"line":1,"column":38},"identifierName":"obj"},
+            "name": "obj"
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 14
+          }
+        }
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
+          "value": "use strict",
+          "extra": {
+            "raw": "'use strict'",
+            "rawValue": "use strict"
+          }
+        }
+      }
+    ]
+  }
+}

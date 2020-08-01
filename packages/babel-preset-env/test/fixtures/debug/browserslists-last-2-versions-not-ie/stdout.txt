@@ -15,6 +15,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "samsung":"10.1" }
+  proposal-logical-assignment-operators { "android":"80", "chrome":"80", "edge":"80", "firefox":"75", "ios":"13.3", "opera":"67", "safari":"13", "samsung":"10.1" }
   proposal-nullish-coalescing-operator { "ios":"13.3", "safari":"13", "samsung":"10.1" }
   proposal-optional-chaining { "ios":"13.3", "safari":"13", "samsung":"10.1" }
   syntax-json-strings { "android":"80", "chrome":"80", "edge":"80", "firefox":"75", "ios":"13.3", "opera":"67", "safari":"13", "samsung":"10.1" }
@@ -24,6 +26,7 @@ Using plugins:
   transform-dotall-regex { "firefox":"75" }
   proposal-unicode-property-regex { "firefox":"75" }
   transform-named-capturing-groups-regex { "firefox":"75" }
+  proposal-export-namespace-from { "firefox":"75", "ios":"13.3", "safari":"13", "samsung":"10.1" }
   transform-modules-commonjs { "android":"80", "chrome":"80", "edge":"80", "firefox":"75", "ios":"13.3", "opera":"67", "safari":"13", "samsung":"10.1" }
   proposal-dynamic-import { "android":"80", "chrome":"80", "edge":"80", "firefox":"75", "ios":"13.3", "opera":"67", "safari":"13", "samsung":"10.1" }
 

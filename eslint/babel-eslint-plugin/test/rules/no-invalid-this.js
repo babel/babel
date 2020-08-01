@@ -1,6 +1,6 @@
 import cloneDeep from "lodash.clonedeep";
 import rule from "../../src/rules/no-invalid-this";
-import RuleTester from "@babel/eslint-shared-fixtures/utils/RuleTester";
+import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester";
 
 /**
  * A constant value for non strict mode environment.

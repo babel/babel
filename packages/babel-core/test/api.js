@@ -214,6 +214,31 @@ describe("api", function () {
     );
   });
 
+  it("transformFromAst should mutate the AST when cloneInputAst is false", function () {
+    const program = "const identifier = 1";
+    const node = parse(program);
+    const { code } = transformFromAst(node, program, {
+      cloneInputAst: false,
+      plugins: [
+        function () {
+          return {
+            visitor: {
+              Identifier: function (path) {
+                path.node.name = "replaced";
+              },
+            },
+          };
+        },
+      ],
+    });
+
+    expect(code).toBe("const replaced = 1;");
+    expect(node.program.body[0].declarations[0].id.name).toBe(
+      "replaced",
+      "original ast should have been mutated",
+    );
+  });
+
   it("options throw on falsy true", function () {
     return expect(function () {
       transform("", {
@@ -779,10 +804,10 @@ describe("api", function () {
         options,
         function (err) {
           expect(err.message).toMatch(
-            "Support for the experimental syntax 'logicalAssignment' isn't currently enabled (1:3):",
+            "Support for the experimental syntax 'doExpressions' isn't currently enabled (1:2):",
           );
           expect(err.message).toMatch(
-            "Add @babel/plugin-proposal-logical-assignment-operators (https://git.io/vAlRe) to the " +
+            "Add @babel/plugin-proposal-do-expressions (https://git.io/vb4S3) to the " +
               "'plugins' section of your Babel config to enable transformation.",
           );
           done();

@@ -1,19 +1,24 @@
 {
   "name": "@babel/eslint-config-internal",
-  "version": "7.10.4",
+  "version": "7.11.0",
   "description": "The Babel Team's ESLint configuration. Since it's internal, it might not respect semver.",
-  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "author": "The Babel Team (https://babeljs.io/team)",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
-  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
     "directory": "eslint/babel-eslint-config-internal"
   },
-  "main": "index.js",
+  "private": true,
+  "main": "./index.js",
+  "type": "commonjs",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
   "peerDependencies": {
-    "@babel/eslint-parser": "*",
+    "@babel/eslint-parser": "^7.10.4",
     "eslint-plugin-flowtype": "^3.0.0"
   }
 }

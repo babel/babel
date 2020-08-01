@@ -389,6 +389,11 @@ export type ArrayExpression = NodeBase & {
   elements: $ReadOnlyArray<?(Expression | SpreadElement)>,
 };
 
+export type DoExpression = NodeBase & {
+  type: "DoExpression",
+  body: ?BlockStatement,
+};
+
 export type TupleExpression = NodeBase & {
   type: "TupleExpression",
   elements: $ReadOnlyArray<?(Expression | SpreadElement)>,
@@ -1264,7 +1269,14 @@ export type TsArrayType = TsTypeBase & {
 
 export type TsTupleType = TsTypeBase & {
   type: "TSTupleType",
-  elementTypes: $ReadOnlyArray<TsType>,
+  elementTypes: $ReadOnlyArray<TsType | TsNamedTupleMember>,
+};
+
+export type TsNamedTupleMember = NodeBase & {
+  type: "TSNamedTupleMember",
+  label: Identifier,
+  optional: boolean,
+  elementType: TsType,
 };
 
 export type TsOptionalType = TsTypeBase & {
@@ -1274,7 +1286,7 @@ export type TsOptionalType = TsTypeBase & {
 
 export type TsRestType = TsTypeBase & {
   type: "TSRestType",
-  typeAnnotation: TsType,
+  typeAnnotation: TsType | TsNamedTupleMember,
 };
 
 export type TsUnionOrIntersectionType = TsUnionType | TsIntersectionType;

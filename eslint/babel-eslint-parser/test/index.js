@@ -6,7 +6,7 @@ import { parseForESLint } from "../src";
 
 const BABEL_OPTIONS = {
   configFile: require.resolve(
-    "@babel/eslint-shared-fixtures/config/babel.config.js",
+    "../../babel-eslint-shared-fixtures/config/babel.config.js",
   ),
 };
 const PROPS_TO_REMOVE = [
@@ -253,6 +253,10 @@ describe("Babel and Espree", () => {
     parseAndAssertSame('import "foo";');
   });
 
+  it("import meta", () => {
+    parseAndAssertSame("const url = import.meta.url");
+  });
+
   it("export default class declaration", () => {
     parseAndAssertSame("export default class Foo {}");
   });
@@ -273,15 +277,8 @@ describe("Babel and Espree", () => {
     parseAndAssertSame('export * from "foo";');
   });
 
-  // Espree doesn't support `export * as ns` yet
   it("export * as ns", () => {
-    const code = 'export * as Foo from "foo";';
-    const babylonAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: BABEL_OPTIONS,
-    }).ast;
-    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
+    parseAndAssertSame('export * as Foo from "foo";');
   });
 
   it("export named", () => {
@@ -292,26 +289,12 @@ describe("Babel and Espree", () => {
     parseAndAssertSame("var foo = 1;export { foo as bar };");
   });
 
-  // Espree doesn't support the optional chaining operator yet
-  it("optional chaining operator (token)", () => {
-    const code = "foo?.bar";
-    const babylonAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: BABEL_OPTIONS,
-    }).ast;
-    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
+  it("optional chaining operator", () => {
+    parseAndAssertSame("foo?.bar?.().qux()");
   });
 
-  // Espree doesn't support the nullish coalescing operator yet
-  it("nullish coalescing operator (token)", () => {
-    const code = "foo ?? bar";
-    const babylonAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: BABEL_OPTIONS,
-    }).ast;
-    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
+  it("nullish coalescing operator", () => {
+    parseAndAssertSame("foo ?? bar");
   });
 
   // Espree doesn't support the pipeline operator yet

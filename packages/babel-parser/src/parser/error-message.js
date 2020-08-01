@@ -61,6 +61,7 @@ export const ErrorMessages = Object.freeze({
   ImportOutsideModule: `'import' and 'export' may appear only with 'sourceType: "module"'`,
   InvalidBigIntLiteral: "Invalid BigIntLiteral",
   InvalidCodePoint: "Code point out of bounds",
+  InvalidDecimal: "Invalid decimal",
   InvalidDigit: "Expected number in radix %0",
   InvalidEscapeSequence: "Bad character escape sequence",
   InvalidEscapeSequenceTemplate: "Invalid escape sequence in template",
@@ -79,6 +80,7 @@ export const ErrorMessages = Object.freeze({
   LabelRedeclaration: "Label '%0' is already declared",
   LetInLexicalBinding:
     "'let' is not allowed to be used as a name in 'let' or 'const' declarations.",
+  LineTerminatorBeforeArrow: "No line break is allowed before '=>'",
   MalformedRegExpFlags: "Invalid regular expression flag",
   MissingClassName: "A class name is required",
   MissingEqInAssignment:

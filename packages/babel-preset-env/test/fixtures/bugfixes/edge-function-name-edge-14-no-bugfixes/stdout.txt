@@ -8,6 +8,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "edge":"14" }
+  proposal-logical-assignment-operators { "edge":"14" }
   proposal-nullish-coalescing-operator { "edge":"14" }
   proposal-optional-chaining { "edge":"14" }
   proposal-json-strings { "edge":"14" }
@@ -22,6 +24,7 @@ Using plugins:
   transform-function-name { "edge":"14" }
   transform-for-of { "edge":"14" }
   transform-destructuring { "edge":"14" }
+  proposal-export-namespace-from { "edge":"14" }
   transform-modules-commonjs { "edge":"14" }
   proposal-dynamic-import { "edge":"14" }
 

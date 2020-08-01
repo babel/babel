@@ -1,5 +1,5 @@
 {
-  "version": "7.10.5",
+  "version": "7.11.0",
   "changelog": {
     "repo": "babel/babel",
     "cacheDir": ".changelog",
@@ -24,9 +24,7 @@
         "**/test/**",
         "codemods/**",
         "# We ignore every JSON file, except for native-modules, built-ins and plugins defined in babel-preset-env/data.",
-        "@(!(native-modules|built-ins|plugins|package)).json",
-        "# Until the ESLint packages version are aligned with Babel's, we ignore them",
-        "eslint/**"
+        "@(!(native-modules|built-ins|plugins|package)).json"
       ]
     }
   },

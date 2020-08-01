@@ -1,6 +1,6 @@
 FLOW_COMMIT = a1f9a4c709dcebb27a5084acf47755fbae699c25
 TEST262_COMMIT = 058adfed86b1d4129996faaf50a85ea55379a66a
-TYPESCRIPT_COMMIT = 5fc917be2e4dd64c8e9504d36615cd7fbfdd4cd3
+TYPESCRIPT_COMMIT = ffa35d3272647fe48ddf173e1f0928f772c18630
 
 FORCE_PUBLISH = "@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@babel/standalone"
 
@@ -211,8 +211,8 @@ clone-license:
 	./scripts/clone-license.sh
 
 prepublish-build: clean-lib clean-runtime-helpers
-	NODE_ENV=production BABEL_ENV=production $(MAKE) build
-	$(MAKE) clone-license
+	NODE_ENV=production BABEL_ENV=production $(MAKE) build-bundle
+	$(MAKE) prepublish-build-standalone clone-license
 
 prepublish:
 	$(MAKE) bootstrap-only
@@ -248,11 +248,6 @@ endif
 	$(YARN) lerna version $(VERSION) --force-publish=$(FORCE_PUBLISH)  --no-push --yes --tag-version-prefix="version-e2e-test-"
 	$(YARN) lerna publish from-git --registry http://localhost:4873 --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
-
-publish-eslint:
-	$(call set-json-field, ./eslint/$(PKG)/package.json, private, false)
-	cd eslint/$(PKG); yarn publish
-	$(call set-json-field, ./eslint/$(PKG)/package.json, private, true)
 
 bootstrap-only: lerna-bootstrap
 
@@ -309,11 +304,4 @@ define clean-source-all
 	rm -rf $(1)/*/node_modules
 	rm -rf $(1)/*/package-lock.json
 
-endef
-
-define set-json-field
-	$(NODE) -e "\
-		require('fs').writeFileSync('$1'.trim(), \
-			JSON.stringify({ ...require('$1'.trim()), $2: $3 }, null, 2) + '\\n' \
-		)"
 endef

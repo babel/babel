@@ -6,9 +6,10 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-numeric-separator {}
   proposal-class-properties {}
   proposal-private-methods {}
+  proposal-numeric-separator {}
+  proposal-logical-assignment-operators {}
   proposal-nullish-coalescing-operator {}
   proposal-optional-chaining {}
   proposal-json-strings {}
@@ -44,6 +45,7 @@ Using plugins:
   transform-member-expression-literals {}
   transform-property-literals {}
   transform-reserved-words {}
+  proposal-export-namespace-from {}
   transform-modules-commonjs {}
   proposal-dynamic-import {}
 

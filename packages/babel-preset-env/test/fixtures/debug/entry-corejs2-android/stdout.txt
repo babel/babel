@@ -8,6 +8,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "android":"4" }
+  proposal-logical-assignment-operators { "android":"4" }
   proposal-nullish-coalescing-operator { "android":"4" }
   proposal-optional-chaining { "android":"4" }
   proposal-json-strings { "android":"4" }
@@ -41,6 +43,7 @@ Using plugins:
   transform-new-target { "android":"4" }
   transform-regenerator { "android":"4" }
   transform-reserved-words { "android":"4" }
+  proposal-export-namespace-from { "android":"4" }
   transform-modules-commonjs { "android":"4" }
   proposal-dynamic-import { "android":"4" }
 

@@ -15,6 +15,7 @@ import {
 
 import {
   findConfigUpwards,
+  resolveShowConfigPath,
   ROOT_CONFIG_FILENAMES,
   type ConfigFile,
   type IgnoreFile,
@@ -81,6 +82,7 @@ export default function* loadPrivatePartialConfig(
     root: rootDir = ".",
     rootMode = "root",
     caller,
+    cloneInputAst = true,
   } = args;
   const absoluteCwd = path.resolve(cwd);
   const absoluteRootDir = yield* resolveRootMode(
@@ -88,15 +90,20 @@ export default function* loadPrivatePartialConfig(
     rootMode,
   );
 
+  const filename =
+    typeof args.filename === "string"
+      ? path.resolve(cwd, args.filename)
+      : undefined;
+
+  const showConfigPath = yield* resolveShowConfigPath(absoluteCwd);
+
   const context: ConfigContext = {
-    filename:
-      typeof args.filename === "string"
-        ? path.resolve(cwd, args.filename)
-        : undefined,
+    filename,
     cwd: absoluteCwd,
     root: absoluteRootDir,
     envName,
     caller,
+    showConfig: showConfigPath === filename,
   };
 
   const configChain = yield* buildRootChain(args, context);
@@ -110,6 +117,7 @@ export default function* loadPrivatePartialConfig(
   // Tack the passes onto the object itself so that, if this object is
   // passed back to Babel a second time, it will be in the right structure
   // to not change behavior.
+  options.cloneInputAst = cloneInputAst;
   options.babelrc = false;
   options.configFile = false;
   options.passPerPreset = false;

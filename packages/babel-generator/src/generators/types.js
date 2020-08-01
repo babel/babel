@@ -222,6 +222,15 @@ export function BigIntLiteral(node: Object) {
   this.token(node.value + "n");
 }
 
+export function DecimalLiteral(node: Object) {
+  const raw = this.getPossibleRaw(node);
+  if (!this.format.minified && raw != null) {
+    this.token(raw);
+    return;
+  }
+  this.token(node.value + "m");
+}
+
 export function PipelineTopicExpression(node: Object) {
   this.print(node.expression, node);
 }
