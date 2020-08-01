@@ -49,6 +49,7 @@ export default declare((api, options) => {
     strict,
     strictMode,
     noInterop,
+    legacyDefaultOnlyExport,
   } = options;
 
   /**
@@ -152,6 +153,7 @@ export default declare((api, options) => {
               strictMode,
               allowTopLevelThis,
               noInterop,
+              legacyDefaultOnlyExport,
             },
           );
 
@@ -201,7 +203,7 @@ export default declare((api, options) => {
             }
 
             headers.push(
-              ...buildNamespaceInitStatements(meta, metadata, loose),
+              ...buildNamespaceInitStatements(meta, metadata, loose, legacyDefaultOnlyExport),
             );
           }
 

@@ -8,6 +8,7 @@ import { isModule } from "@babel/helper-module-imports";
 import rewriteThis from "./rewrite-this";
 import rewriteLiveReferences from "./rewrite-live-references";
 import normalizeAndLoadModuleMetadata, {
+  hasDefaultExportOnly,
   hasExports,
   isSideEffectImport,
 } from "./normalize-and-load-metadata";
@@ -33,6 +34,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     noInterop,
     lazy,
     esNamespaceOnly,
+    legacyDefaultOnlyExport,
   },
 ) {
   assert(isModule(path), "Cannot process module statements in a script");
@@ -49,7 +51,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     rewriteThis(path);
   }
 
-  rewriteLiveReferences(path, meta);
+  rewriteLiveReferences(path, meta, legacyDefaultOnlyExport);
 
   if (strictMode !== false) {
     const hasStrict = path.node.directives.some(directive => {
@@ -64,7 +66,10 @@ export function rewriteModuleStatementsAndPrepareHeader(
   }
 
   const headers = [];
-  if (hasExports(meta) && !strict) {
+  const defaultExportOnly = hasDefaultExportOnly(meta);
+  const doLegacyDefaultOnlyExport = legacyDefaultOnlyExport && defaultExportOnly;
+
+  if (hasExports(meta) && !strict && !doLegacyDefaultOnlyExport) {
     headers.push(buildESModuleHeader(meta, loose /* enumerable */));
   }
 
@@ -76,7 +81,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
   }
 
   // Create all of the statically known named exports.
-  headers.push(...buildExportInitializationStatements(path, meta, loose));
+  headers.push(...buildExportInitializationStatements(path, meta, loose, doLegacyDefaultOnlyExport));
 
   return { meta, headers };
 }
@@ -127,6 +132,7 @@ export function buildNamespaceInitStatements(
   metadata: ModuleMetadata,
   sourceMetadata: SourceModuleMetadata,
   loose: boolean = false,
+  legacyDefaultOnlyExport: boolean = false,
 ) {
   const statements = [];
 
@@ -145,7 +151,7 @@ export function buildNamespaceInitStatements(
     );
   }
   if (loose) {
-    statements.push(...buildReexportsFromMeta(metadata, sourceMetadata, loose));
+    statements.push(...buildReexportsFromMeta(metadata, sourceMetadata, loose, legacyDefaultOnlyExport && hasDefaultExportOnly(metadata)));
   }
   for (const exportName of sourceMetadata.reexportNamespace) {
     // Assign export to namespace object.
@@ -193,10 +199,18 @@ const getTemplateForReexport = loose => {
     `;
 };
 
-const buildReexportsFromMeta = (meta, metadata, loose) => {
+const buildReexportsFromMeta = (meta, metadata, loose, legacyDefaultOnlyExport) => {
   const namespace = metadata.lazy
     ? t.callExpression(t.identifier(metadata.name), [])
     : t.identifier(metadata.name);
+
+  if (legacyDefaultOnlyExport) {
+    return [template.statement`EXPORTS = NAMESPACE.IMPORT_NAME;`({
+      EXPORTS: meta.exportName,
+      NAMESPACE: t.cloneNode(namespace),
+      IMPORT_NAME: metadata.reexports.values().next().value
+    })];
+  }
 
   const templateForCurrentMode = getTemplateForReexport(loose);
   return Array.from(metadata.reexports, ([exportName, importName]) =>
@@ -313,6 +327,7 @@ function buildExportInitializationStatements(
   programPath: NodePath,
   metadata: ModuleMetadata,
   loose: boolean = false,
+  legacyDefaultOnlyExport: boolean = false,
 ) {
   const initStatements = [];
 
@@ -322,7 +337,7 @@ function buildExportInitializationStatements(
       // No-open since these are explicitly set with the "reexports" block.
     } else if (data.kind === "hoisted") {
       initStatements.push(
-        buildInitStatement(metadata, data.names, t.identifier(localName)),
+        buildInitStatement(metadata, data.names, t.identifier(localName), legacyDefaultOnlyExport),
       );
     } else {
       exportNames.push(...data.names);
@@ -331,22 +346,24 @@ function buildExportInitializationStatements(
 
   for (const data of metadata.source.values()) {
     if (!loose) {
-      initStatements.push(...buildReexportsFromMeta(metadata, data, loose));
+      initStatements.push(...buildReexportsFromMeta(metadata, data, loose, legacyDefaultOnlyExport));
     }
     for (const exportName of data.reexportNamespace) {
       exportNames.push(exportName);
     }
   }
 
-  initStatements.push(
-    ...chunk(exportNames, 100).map(members => {
-      return buildInitStatement(
-        metadata,
-        members,
-        programPath.scope.buildUndefinedNode(),
-      );
-    }),
-  );
+  if (!legacyDefaultOnlyExport) {
+    initStatements.push(
+      ...chunk(exportNames, 100).map(members => {
+        return buildInitStatement(
+          metadata,
+          members,
+          programPath.scope.buildUndefinedNode(),
+        );
+      }),
+    );
+  }
 
   return initStatements;
 }
@@ -355,7 +372,15 @@ function buildExportInitializationStatements(
  * Given a set of export names, create a set of nested assignments to
  * initialize them all to a given expression.
  */
-function buildInitStatement(metadata, exportNames, initExpr) {
+function buildInitStatement(metadata, exportNames, initExpr, legacyDefaultOnlyExport) {
+
+  if (legacyDefaultOnlyExport) {
+    return t.expressionStatement(template.expression`EXPORTS = VALUE`({
+      EXPORTS: metadata.exportName,
+      VALUE: initExpr
+    }));
+  }
+
   return t.expressionStatement(
     exportNames.reduce(
       (acc, exportName) =>

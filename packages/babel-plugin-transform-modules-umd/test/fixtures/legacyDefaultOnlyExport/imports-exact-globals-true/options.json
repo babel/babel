@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    "external-helpers",
+    [
+      "transform-modules-umd",
+      {
+        "exactGlobals": true,
+        "legacyDefaultOnlyExport": true
+      }
+    ]
+  ]
+}

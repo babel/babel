@@ -58,6 +58,32 @@ export function hasExports(metadata: ModuleMetadata) {
 }
 
 /**
+ * Check if the module has a default export (or reexport) and no other named exports (or reexports).
+ */
+export function hasDefaultExportOnly(metadata: ModuleMetadata) {
+  const { local, source } = metadata;
+  
+  if(local.size === 0) {
+    const sourceReexports = new Map();
+    for (const [, srcMetadata] of source) {
+      const { reexports } = srcMetadata;
+      if(reexports) {
+        for (const [exportName, importName] of reexports) {
+          sourceReexports.set(exportName, importName);
+        }
+      }
+    }
+
+    return sourceReexports.size === 1 && sourceReexports.keys().next().value === 'default';
+  }
+
+  const localFirst = local.values().next().value;
+  const localFirstNames = localFirst && localFirst.names;
+  return local.size === 1 && localFirstNames.length === 1 && localFirstNames[0] === 'default';
+}
+
+
+/**
  * Check if a given source is an anonymous import, e.g. "import 'foo';"
  */
 export function isSideEffectImport(source: SourceModuleMetadata) {

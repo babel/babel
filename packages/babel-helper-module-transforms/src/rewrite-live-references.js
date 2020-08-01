@@ -2,15 +2,19 @@ import assert from "assert";
 import * as t from "@babel/types";
 import template from "@babel/template";
 import simplifyAccess from "@babel/helper-simple-access";
+import { hasDefaultExportOnly } from "./normalize-and-load-metadata";
 
 import type { ModuleMetadata } from "./";
 
 export default function rewriteLiveReferences(
   programPath: NodePath,
   metadata: ModuleMetadata,
+  legacyDefaultOnlyExport: boolean,
 ) {
   const imported = new Map();
   const exported = new Map();
+  const doLegacyDefaultOnlyExport = legacyDefaultOnlyExport && hasDefaultExportOnly(metadata);
+
   const requeueInParent = path => {
     // Manually re-queue `exports.default =` expressions so that the ES3
     // transform has an opportunity to convert them. Ideally this would
@@ -44,6 +48,7 @@ export default function rewriteLiveReferences(
     requeueInParent,
     scope: programPath.scope,
     exported, // local name => exported name list
+    legacyDefaultOnlyExport: doLegacyDefaultOnlyExport,
   });
 
   simplifyAccess(
@@ -60,6 +65,7 @@ export default function rewriteLiveReferences(
     scope: programPath.scope,
     imported, // local / import
     exported, // local name => exported name list
+    legacyDefaultOnlyExport: doLegacyDefaultOnlyExport,
     buildImportReference: ([source, importName, localName], identNode) => {
       const meta = metadata.source.get(source);
 
@@ -84,7 +90,7 @@ const rewriteBindingInitVisitor = {
     path.skip();
   },
   ClassDeclaration(path) {
-    const { requeueInParent, exported, metadata } = this;
+    const { requeueInParent, exported, metadata, legacyDefaultOnlyExport } = this;
 
     const { id } = path.node;
     if (!id) throw new Error("Expected class to have a name");
@@ -97,6 +103,7 @@ const rewriteBindingInitVisitor = {
           metadata,
           exportNames,
           t.identifier(localName),
+          legacyDefaultOnlyExport,
         ),
       );
       statement._blockHoist = path.node._blockHoist;
@@ -105,7 +112,7 @@ const rewriteBindingInitVisitor = {
     }
   },
   VariableDeclaration(path) {
-    const { requeueInParent, exported, metadata } = this;
+    const { requeueInParent, exported, metadata, legacyDefaultOnlyExport } = this;
 
     Object.keys(path.getOuterBindingIdentifiers()).forEach(localName => {
       const exportNames = exported.get(localName) || [];
@@ -116,6 +123,7 @@ const rewriteBindingInitVisitor = {
             metadata,
             exportNames,
             t.identifier(localName),
+            legacyDefaultOnlyExport,
           ),
         );
         statement._blockHoist = path.node._blockHoist;
@@ -130,7 +138,12 @@ const buildBindingExportAssignmentExpression = (
   metadata,
   exportNames,
   localExpr,
+  legacyDefaultOnlyExport,
 ) => {
+  if (legacyDefaultOnlyExport) {
+    return t.assignmentExpression("=", t.identifier(metadata.exportName), localExpr);
+  }
+
   return (exportNames || []).reduce((expr, exportName) => {
     // class Foo {} export { Foo, Foo as Bar };
     // as
@@ -217,6 +230,7 @@ const rewriteReferencesVisitor = {
         exported,
         requeueInParent,
         buildImportReference,
+        legacyDefaultOnlyExport,
       } = this;
 
       if (seen.has(path.node)) return;
@@ -258,6 +272,7 @@ const rewriteReferencesVisitor = {
               this.metadata,
               exportedNames,
               assignment,
+              legacyDefaultOnlyExport,
             ),
           );
           requeueInParent(path);
@@ -288,6 +303,7 @@ const rewriteReferencesVisitor = {
                 this.metadata,
                 exportedNames,
                 t.identifier(localName),
+                legacyDefaultOnlyExport,
               ),
             );
           }
