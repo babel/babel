@@ -1,8 +1,6 @@
 {
   "plugins": [
-    [
-      "syntax-typescript"
-    ],
+    ["syntax-typescript"],
     [
       "proposal-optional-chaining",
       {
