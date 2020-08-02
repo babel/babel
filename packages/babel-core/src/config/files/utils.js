@@ -16,7 +16,6 @@ export function makeStaticFileCache<T>(
     const cached = cache.invalidate(() => fileMtime(filepath));
 
     if (cached === null) {
-      cache.forever();
       return null;
     }
 
