@@ -63,7 +63,11 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
   if (!result) {
     return null;
   }
-  const { options, context } = result;
+  const { options, context, isIgnored } = result;
+
+  if (isIgnored) {
+    return null;
+  }
 
   const optionDefaults = {};
   const passes: Array<Array<Plugin>> = [[]];

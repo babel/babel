@@ -59,9 +59,11 @@ function* resolveRootMode(
 type PrivPartialConfig = {
   options: ValidatedOptions,
   context: ConfigContext,
+  isIgnored: boolean,
   ignore: IgnoreFile | void,
   babelrc: ConfigFile | void,
   config: ConfigFile | void,
+  files: Array<string>,
 };
 
 export default function* loadPrivatePartialConfig(
@@ -137,20 +139,30 @@ export default function* loadPrivatePartialConfig(
   return {
     options,
     context,
+    isIgnored: configChain.isIgnored,
     ignore: configChain.ignore,
     babelrc: configChain.babelrc,
     config: configChain.config,
+    files: configChain.files,
   };
 }
 
+type LoadPartialConfigOpts = {
+  showIgnoredFiles?: boolean,
+  ...
+};
+
 export const loadPartialConfig = gensync<[any], PartialConfig | null>(
-  function* (inputOpts: mixed): Handler<PartialConfig | null> {
-    const result: ?PrivPartialConfig = yield* loadPrivatePartialConfig(
-      inputOpts,
-    );
+  function* (inputOpts: LoadPartialConfigOpts): Handler<PartialConfig | null> {
+    const { showIgnoredFiles, ...opts } = inputOpts;
+    const result: ?PrivPartialConfig = yield* loadPrivatePartialConfig(opts);
     if (!result) return null;
 
-    const { options, babelrc, ignore, config } = result;
+    const { options, babelrc, ignore, config, isIgnored, files } = result;
+
+    if (isIgnored && !showIgnoredFiles) {
+      return null;
+    }
 
     (options.plugins || []).forEach(item => {
       if (item.value instanceof Plugin) {
@@ -166,6 +178,8 @@ export const loadPartialConfig = gensync<[any], PartialConfig | null>(
       babelrc ? babelrc.filepath : undefined,
       ignore ? ignore.filepath : undefined,
       config ? config.filepath : undefined,
+      isIgnored,
+      files,
     );
   },
 );
@@ -181,17 +195,23 @@ class PartialConfig {
   babelrc: string | void;
   babelignore: string | void;
   config: string | void;
+  isIgnored: boolean;
+  files: Array<string>;
 
   constructor(
     options: ValidatedOptions,
     babelrc: string | void,
     ignore: string | void,
     config: string | void,
+    isIgnored: boolean,
+    files: Array<string>,
   ) {
     this.options = options;
     this.babelignore = ignore;
     this.babelrc = babelrc;
     this.config = config;
+    this.isIgnored = isIgnored;
+    this.files = files;
 
     // Freeze since this is a public API and it should be extremely obvious that
     // reassigning properties on here does nothing.

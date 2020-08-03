@@ -1222,6 +1222,63 @@ describe("buildConfigChain", function () {
           loadOptionsAsync({ filename, cwd: path.dirname(filename) }),
         ).rejects.toThrow(error);
       });
+
+      it("loadPartialConfig should return a list of files that were extended", () => {
+        const filename = fixture("config-files", "babelrc-extended", "src.js");
+
+        expect(
+          babel.loadPartialConfig({ filename, cwd: path.dirname(filename) }),
+        ).toEqual({
+          babelignore: fixture("config-files", ".babelignore"),
+          babelrc: fixture("config-files", "babelrc-extended", ".babelrc"),
+          config: undefined,
+          isIgnored: false,
+          options: {
+            ...getDefaults(),
+            filename: filename,
+            cwd: path.dirname(filename),
+            root: path.dirname(filename),
+            comments: true,
+          },
+          files: [
+            fixture("config-files", ".babelignore"),
+            fixture("config-files", "babelrc-extended", ".babelrc-extended"),
+            fixture("config-files", "babelrc-extended", ".babelrc"),
+          ],
+        });
+      });
+
+      it("loadPartialConfig should return null when ignored", () => {
+        const filename = fixture("config-files", "babelignore", "src.js");
+
+        expect(
+          babel.loadPartialConfig({ filename, cwd: path.dirname(filename) }),
+        ).toBeNull();
+      });
+
+      it("loadPartialConfig should return a list of files when ignored with showIgnoredFiles option", () => {
+        const filename = fixture("config-files", "babelignore", "src.js");
+
+        expect(
+          babel.loadPartialConfig({
+            filename,
+            cwd: path.dirname(filename),
+            showIgnoredFiles: true,
+          }),
+        ).toEqual({
+          babelignore: fixture("config-files", "babelignore", ".babelignore"),
+          babelrc: undefined,
+          config: undefined,
+          isIgnored: true,
+          options: {
+            ...getDefaults(),
+            filename: filename,
+            cwd: path.dirname(filename),
+            root: path.dirname(filename),
+          },
+          files: [fixture("config-files", "babelignore", ".babelignore")],
+        });
+      });
     });
 
     it("should throw when `test` presents but `filename` is not passed", () => {
