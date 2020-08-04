@@ -2135,6 +2135,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         (code === charCodes.greaterThan || code === charCodes.lessThan)
       ) {
         return this.finishOp(tt.relational, 1);
+      } else if (this.state.inType && code === charCodes.questionMark) {
+        // allow double nullable types in Flow: ??string
+        return this.finishOp(tt.question, 1);
       } else if (isIteratorStart(code, next)) {
         this.state.isIterator = true;
         return super.readWord();
