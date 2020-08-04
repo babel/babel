@@ -1884,6 +1884,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           node.typeAnnotation = this.tsNextThenParseType();
         }
         this.finishNode(node, "TSAsExpression");
+        // rescan `<`, `>` because they were scanned when this.state.inType was true
+        this.reScan_lt_gt();
         return this.parseExprOp(
           node,
           leftStartPos,
@@ -2635,6 +2637,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.finishOp(tt.relational, 1);
       } else {
         return super.getTokenFromCode(code);
+      }
+    }
+
+    // used after we have finished parsing types
+    reScan_lt_gt() {
+      if (this.match(tt.relational)) {
+        const code = this.input.charCodeAt(this.state.start);
+        if (code === charCodes.lessThan || code === charCodes.greaterThan) {
+          this.state.pos -= 1;
+          this.readToken_lt_gt(code);
+        }
       }
     }
 
