@@ -80,8 +80,8 @@
     "@babel/types": "^7.11.0",
     "browserslist": "^4.12.0",
     "core-js-compat": "^3.6.2",
+    "fastest-levenshtein": "^1.0.10",
     "invariant": "^2.2.2",
-    "levenary": "^1.1.1",
     "semver": "^5.5.0"
   },
   "peerDependencies": {

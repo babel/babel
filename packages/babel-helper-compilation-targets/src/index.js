@@ -1,7 +1,7 @@
 // @flow
 
 import browserslist from "browserslist";
-import findSuggestion from "levenary";
+import { closest as findSuggestion } from "fastest-levenshtein";
 import invariant from "invariant";
 import browserModulesData from "@babel/compat-data/native-modules";
 

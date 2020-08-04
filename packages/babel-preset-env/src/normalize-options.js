@@ -1,6 +1,6 @@
 // @flow
 import corejs3Polyfills from "core-js-compat/data";
-import findSuggestion from "levenary";
+import { closest as findSuggestion } from "fastest-levenshtein";
 import invariant from "invariant";
 import { coerce, SemVer } from "semver";
 import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
