@@ -2628,7 +2628,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // ensure that inside types, we bypass the jsx parser plugin
     getTokenFromCode(code: number): void {
-      if (this.state.inType && (code === 62 || code === 60)) {
+      if (
+        this.state.inType &&
+        (code === charCodes.greaterThan || code === charCodes.lessThan)
+      ) {
         return this.finishOp(tt.relational, 1);
       } else {
         return super.getTokenFromCode(code);
