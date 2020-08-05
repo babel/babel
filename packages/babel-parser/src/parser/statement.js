@@ -1597,11 +1597,6 @@ export default class StatementParser extends ExpressionParser {
     methodOrProp: N.ClassMethod | N.ClassProperty,
   ): void {}
 
-  // Overridden in typescript.js
-  parseAccessModifier(): ?N.Accessibility {
-    return undefined;
-  }
-
   parseClassPrivateProperty(
     node: N.ClassPrivateProperty,
   ): N.ClassPrivateProperty {
