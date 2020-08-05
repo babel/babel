@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":58,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":2}},
   "errors": [
-    "SyntaxError: A getter can not be a generator (2:9)",
-    "SyntaxError: A setter can not be a generator (3:9)"
+    "SyntaxError: A getter cannot be a generator (2:9)",
+    "SyntaxError: A setter cannot be a generator (3:9)"
   ],
   "program": {
     "type": "Program",
