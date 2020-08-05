@@ -1757,8 +1757,11 @@ export default class ExpressionParser extends LValParser {
       // set PropertyName[?Yield, ?Await] ( PropertySetParameterList ) { FunctionBody[~Yield, ~Await] }
       if (keyName === "get" || keyName === "set") {
         isAccessor = true;
-        isGenerator = this.eat(tt.star); // tt.star is allowed in `maybeAsyncOrAccessorProp`, we will throw in `parseObjectMethod` later
         prop.kind = keyName;
+        if (this.match(tt.star)) {
+          this.raise(this.state.pos, Errors.AccessorIsGenerator, keyName);
+          this.next();
+        }
         this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
       }
     }
@@ -1813,8 +1816,7 @@ export default class ExpressionParser extends LValParser {
     isAccessor: boolean,
   ): ?N.ObjectMethod {
     if (isAccessor) {
-      // isAccessor implies isAsync: false, isPattern: false
-      if (isGenerator) this.unexpected();
+      // isAccessor implies isAsync: false, isPattern: false, isGenerator: false
       this.parseMethod(
         prop,
         /* isGenerator */ false,
