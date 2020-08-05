@@ -3475,4 +3475,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         super.updateContext(prevType);
       }
     }
+
+    isLookaheadRelational(op: "<" | ">"): boolean {
+      const next = this.nextTokenStart();
+      if (this.input.charAt(next) === op) {
+        if (next + 1 === this.input.length) {
+          return true;
+        }
+        const afterNext = this.input.charCodeAt(next + 1);
+        return (
+          afterNext !== op.charCodeAt(0) && afterNext !== charCodes.equalsTo
+        );
+      }
+      return false;
+    }
   };
