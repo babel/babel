@@ -2873,7 +2873,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       noCalls: ?boolean,
       subscriptState: N.ParseSubscriptState,
     ): N.Expression {
-      if (this.match(tt.questionDot) && this.isLookaheadRelational("<")) {
+      if (this.match(tt.questionDot) && this.isLookaheadToken_lt()) {
         subscriptState.optionalChainMember = true;
         if (noCalls) {
           subscriptState.stop = true;
@@ -3476,15 +3476,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    isLookaheadRelational(op: "<" | ">"): boolean {
+    // check if the next token is a tt.relation("<")
+    isLookaheadToken_lt(): boolean {
       const next = this.nextTokenStart();
-      if (this.input.charAt(next) === op) {
-        if (next + 1 === this.input.length) {
-          return true;
-        }
+      if (this.input.charCodeAt(next) === charCodes.lessThan) {
         const afterNext = this.input.charCodeAt(next + 1);
         return (
-          afterNext !== op.charCodeAt(0) && afterNext !== charCodes.equalsTo
+          afterNext !== charCodes.lessThan && afterNext !== charCodes.equalsTo
         );
       }
       return false;
