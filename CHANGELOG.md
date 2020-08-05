@@ -19,6 +19,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.11.2 (2020-08-05)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#11916](https://github.com/babel/babel/pull/11916) fix: do not eat get/set after async is parsed ([@JLHwung](https://github.com/JLHwung))
 ## v7.11.1 (2020-08-04)
 
 #### :bug: Bug Fix
