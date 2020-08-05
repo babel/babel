@@ -1737,7 +1737,7 @@ export default class ExpressionParser extends LValParser {
     }
 
     const containsEsc = this.state.containsEsc;
-    this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
+    const key = this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
 
     if (
       !isPattern &&
@@ -1745,19 +1745,20 @@ export default class ExpressionParser extends LValParser {
       !containsEsc &&
       this.maybeAsyncOrAccessorProp(prop)
     ) {
+      const keyName = key.name;
       // https://tc39.es/ecma262/#prod-AsyncMethod
       // https://tc39.es/ecma262/#prod-AsyncGeneratorMethod
-      if (prop.key.name === "async" && !this.hasPrecedingLineBreak()) {
+      if (keyName === "async" && !this.hasPrecedingLineBreak()) {
         isAsync = true;
         isGenerator = this.eat(tt.star);
         this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
       }
       // get PropertyName[?Yield, ?Await] () { FunctionBody[~Yield, ~Await] }
       // set PropertyName[?Yield, ?Await] ( PropertySetParameterList ) { FunctionBody[~Yield, ~Await] }
-      else if (prop.key.name === "get" || prop.key.name === "set") {
+      else if (keyName === "get" || keyName === "set") {
         isAccessor = true;
         isGenerator = this.eat(tt.star); // tt.star is allowed in `maybeAsyncOrAccessorProp`, we will throw in `parseObjectMethod` later
-        prop.kind = prop.key.name;
+        prop.kind = keyName;
         this.parsePropertyName(prop, /* isPrivateNameAllowed */ false);
       }
     }
