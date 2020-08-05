@@ -1258,20 +1258,6 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(classBody, "ClassBody");
   }
 
-  // Check grammar production:
-  //   IdentifierName *_opt ClassElementName
-  // It is used in `parsePropertyDefinition` to detect AsyncMethod and Accessors
-  maybeClassModifier(prop: N.ObjectProperty): boolean {
-    return (
-      !prop.computed &&
-      prop.key.type === "Identifier" &&
-      (this.isLiteralPropertyName() ||
-        this.match(tt.bracketL) ||
-        this.match(tt.star) ||
-        this.match(tt.hash))
-    );
-  }
-
   // returns true if the current identifier is a method/field name,
   // false if it is a modifier
   parseClassMemberFromModifier(
