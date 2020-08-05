@@ -2042,7 +2042,6 @@ export default class StatementParser extends ExpressionParser {
     name: string,
   ): void {
     if (this.state.exportedIdentifiers.indexOf(name) > -1) {
-      /* eslint-disable @babel/development-internal/dry-error-messages */
       this.raise(
         node.start,
         name === "default"
@@ -2050,7 +2049,6 @@ export default class StatementParser extends ExpressionParser {
           : Errors.DuplicateExport,
         name,
       );
-      /* eslint-enable @babel/development-internal/dry-error-messages */
     }
     this.state.exportedIdentifiers.push(name);
   }
