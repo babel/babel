@@ -2479,17 +2479,10 @@ export default class ExpressionParser extends LValParser {
     startPos: number,
     startLoc: Position,
   ): N.PipelineBody {
-    const pipelineStyle = this.checkSmartPipelineBodyStyle(childExpression);
-
-    this.checkSmartPipelineBodyEarlyErrors(
-      childExpression,
-      pipelineStyle,
-      startPos,
-    );
+    this.checkSmartPipelineBodyEarlyErrors(childExpression, startPos);
 
     return this.parseSmartPipelineBodyInStyle(
       childExpression,
-      pipelineStyle,
       startPos,
       startLoc,
     );
@@ -2497,59 +2490,36 @@ export default class ExpressionParser extends LValParser {
 
   checkSmartPipelineBodyEarlyErrors(
     childExpression: N.Expression,
-    pipelineStyle: N.PipelineStyle,
     startPos: number,
   ): void {
     if (this.match(tt.arrow)) {
       // If the following token is invalidly `=>`, then throw a human-friendly error
       // instead of something like 'Unexpected token, expected ";"'.
       throw this.raise(this.state.start, Errors.PipelineBodyNoArrow);
-    } else if (
-      pipelineStyle === "PipelineTopicExpression" &&
-      childExpression.type === "SequenceExpression"
-    ) {
+    } else if (childExpression.type === "SequenceExpression") {
       this.raise(startPos, Errors.PipelineBodySequenceExpression);
     }
   }
 
   parseSmartPipelineBodyInStyle(
     childExpression: N.Expression,
-    pipelineStyle: N.PipelineStyle,
     startPos: number,
     startLoc: Position,
   ): N.PipelineBody {
     const bodyNode = this.startNodeAt(startPos, startLoc);
-    switch (pipelineStyle) {
-      case "PipelineBareFunction":
-        bodyNode.callee = childExpression;
-        break;
-      case "PipelineBareConstructor":
-        bodyNode.callee = childExpression.callee;
-        break;
-      case "PipelineBareAwaitedFunction":
-        bodyNode.callee = childExpression.argument;
-        break;
-      case "PipelineTopicExpression":
-        if (!this.topicReferenceWasUsedInCurrentTopicContext()) {
-          this.raise(startPos, Errors.PipelineTopicUnused);
-        }
-        bodyNode.expression = childExpression;
-        break;
-      default:
-        throw new Error(
-          `Internal @babel/parser error: Unknown pipeline style (${pipelineStyle})`,
-        );
+    const isSimpleReference = this.isSimpleReference(childExpression);
+    if (isSimpleReference) {
+      bodyNode.callee = childExpression;
+    } else {
+      if (!this.topicReferenceWasUsedInCurrentTopicContext()) {
+        this.raise(startPos, Errors.PipelineTopicUnused);
+      }
+      bodyNode.expression = childExpression;
     }
-    return this.finishNode(bodyNode, pipelineStyle);
-  }
-
-  checkSmartPipelineBodyStyle(expression: N.Expression): N.PipelineStyle {
-    switch (expression.type) {
-      default:
-        return this.isSimpleReference(expression)
-          ? "PipelineBareFunction"
-          : "PipelineTopicExpression";
-    }
+    return this.finishNode(
+      bodyNode,
+      isSimpleReference ? "PipelineBareFunction" : "PipelineTopicExpression",
+    );
   }
 
   isSimpleReference(expression: N.Expression): boolean {
