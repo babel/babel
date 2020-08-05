@@ -1754,7 +1754,7 @@ export default class ExpressionParser extends LValParser {
       }
       // get PropertyName[?Yield, ?Await] () { FunctionBody[~Yield, ~Await] }
       // set PropertyName[?Yield, ?Await] ( PropertySetParameterList ) { FunctionBody[~Yield, ~Await] }
-      if (prop.key.name === "get" || prop.key.name === "set") {
+      else if (prop.key.name === "get" || prop.key.name === "set") {
         isAccessor = true;
         isGenerator = this.eat(tt.star); // tt.star is allowed in `maybeAsyncOrAccessorProp`, we will throw in `parseObjectMethod` later
         prop.kind = prop.key.name;
