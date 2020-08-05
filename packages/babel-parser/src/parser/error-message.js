@@ -3,7 +3,7 @@
 
 // The Errors key follows https://cs.chromium.org/chromium/src/v8/src/common/message-template.h unless it does not exist
 export const ErrorMessages = Object.freeze({
-  AccessorIsGenerator: "A %0ter can not be a generator",
+  AccessorIsGenerator: "A %0ter cannot be a generator",
   ArgumentsDisallowedInInitializer:
     "'arguments' is not allowed in class field initializer",
   AsyncFunctionInSingleStatementContext:
