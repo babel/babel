@@ -6,7 +6,6 @@ import State from "../tokenizer/state";
 import type { Node } from "../types";
 import { lineBreak } from "../util/whitespace";
 import { isIdentifierChar } from "../util/identifier";
-import * as charCodes from "charcodes";
 import { Errors } from "./error";
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
@@ -33,18 +32,6 @@ export default class UtilParser extends Tokenizer {
 
   isRelational(op: "<" | ">"): boolean {
     return this.match(tt.relational) && this.state.value === op;
-  }
-
-  isLookaheadRelational(op: "<" | ">"): boolean {
-    const next = this.nextTokenStart();
-    if (this.input.charAt(next) === op) {
-      if (next + 1 === this.input.length) {
-        return true;
-      }
-      const afterNext = this.input.charCodeAt(next + 1);
-      return afterNext !== op.charCodeAt(0) && afterNext !== charCodes.equalsTo;
-    }
-    return false;
   }
 
   // TODO
