@@ -1970,15 +1970,10 @@ export default class StatementParser extends ExpressionParser {
     const currentContextDecorators = this.state.decoratorStack[
       this.state.decoratorStack.length - 1
     ];
+    // If node.declration is a class, it will take all decorators in the current context.
+    // Thus we should throw if we see non-empty decorators here.
     if (currentContextDecorators.length) {
-      const isClass =
-        node.declaration &&
-        (node.declaration.type === "ClassDeclaration" ||
-          node.declaration.type === "ClassExpression");
-      if (!node.declaration || !isClass) {
-        throw this.raise(node.start, Errors.UnsupportedDecoratorExport);
-      }
-      this.takeDecorators(node.declaration);
+      throw this.raise(node.start, Errors.UnsupportedDecoratorExport);
     }
   }
 
