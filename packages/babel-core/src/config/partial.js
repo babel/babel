@@ -5,7 +5,11 @@ import gensync, { type Handler } from "gensync";
 import Plugin from "./plugin";
 import { mergeOptions } from "./util";
 import { createItemFromDescriptor } from "./item";
-import { buildRootChain, type ConfigContext } from "./config-chain";
+import {
+  buildRootChain,
+  type ConfigContext,
+  type FileHandling,
+} from "./config-chain";
 import { getEnv } from "./helpers/environment";
 import {
   validate,
@@ -59,7 +63,7 @@ function* resolveRootMode(
 type PrivPartialConfig = {
   options: ValidatedOptions,
   context: ConfigContext,
-  isIgnored: boolean,
+  fileHandling: FileHandling,
   ignore: IgnoreFile | void,
   babelrc: ConfigFile | void,
   config: ConfigFile | void,
@@ -139,7 +143,7 @@ export default function* loadPrivatePartialConfig(
   return {
     options,
     context,
-    isIgnored: configChain.isIgnored,
+    fileHandling: configChain.fileHandling,
     ignore: configChain.ignore,
     babelrc: configChain.babelrc,
     config: configChain.config,
@@ -158,9 +162,9 @@ export const loadPartialConfig = gensync<[any], PartialConfig | null>(
     const result: ?PrivPartialConfig = yield* loadPrivatePartialConfig(opts);
     if (!result) return null;
 
-    const { options, babelrc, ignore, config, isIgnored, files } = result;
+    const { options, babelrc, ignore, config, fileHandling, files } = result;
 
-    if (isIgnored && !showIgnoredFiles) {
+    if (fileHandling === "ignored" && !showIgnoredFiles) {
       return null;
     }
 
@@ -178,7 +182,7 @@ export const loadPartialConfig = gensync<[any], PartialConfig | null>(
       babelrc ? babelrc.filepath : undefined,
       ignore ? ignore.filepath : undefined,
       config ? config.filepath : undefined,
-      isIgnored,
+      fileHandling,
       files,
     );
   },
@@ -195,7 +199,7 @@ class PartialConfig {
   babelrc: string | void;
   babelignore: string | void;
   config: string | void;
-  isIgnored: boolean;
+  fileHandling: FileHandling;
   files: Set<string>;
 
   constructor(
@@ -203,14 +207,14 @@ class PartialConfig {
     babelrc: string | void,
     ignore: string | void,
     config: string | void,
-    isIgnored: boolean,
+    fileHandling: FileHandling,
     files: Set<string>,
   ) {
     this.options = options;
     this.babelignore = ignore;
     this.babelrc = babelrc;
     this.config = config;
-    this.isIgnored = isIgnored;
+    this.fileHandling = fileHandling;
     this.files = files;
 
     // Freeze since this is a public API and it should be extremely obvious that

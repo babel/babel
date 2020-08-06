@@ -126,11 +126,12 @@ const loadPresetOverridesEnvDescriptors = makeWeakCacheSync(
     ),
 );
 
+export type FileHandling = "transpile" | "ignored" | "unsupported";
 export type RootConfigChain = ConfigChain & {
   babelrc: ConfigFile | void,
   config: ConfigFile | void,
   ignore: IgnoreFile | void,
-  isIgnored: boolean,
+  fileHandling: FileHandling,
   files: Set<string>,
 };
 
@@ -275,7 +276,7 @@ export function* buildRootChain(
     plugins: isIgnored ? [] : dedupDescriptors(chain.plugins),
     presets: isIgnored ? [] : dedupDescriptors(chain.presets),
     options: isIgnored ? [] : chain.options.map(o => normalizeOptions(o)),
-    isIgnored,
+    fileHandling: isIgnored ? "ignored" : "transpile",
     ignore: ignoreFile || undefined,
     babelrc: babelrcFile || undefined,
     config: configFile || undefined,

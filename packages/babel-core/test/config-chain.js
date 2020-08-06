@@ -1232,7 +1232,7 @@ describe("buildConfigChain", function () {
           babelignore: fixture("config-files", ".babelignore"),
           babelrc: fixture("config-files", "babelrc-extended", ".babelrc"),
           config: undefined,
-          isIgnored: false,
+          fileHandling: "transpile",
           options: {
             ...getDefaults(),
             filename: filename,
@@ -1269,7 +1269,7 @@ describe("buildConfigChain", function () {
           babelignore: fixture("config-files", "babelignore", ".babelignore"),
           babelrc: undefined,
           config: undefined,
-          isIgnored: true,
+          fileHandling: "ignored",
           options: {
             ...getDefaults(),
             filename: filename,

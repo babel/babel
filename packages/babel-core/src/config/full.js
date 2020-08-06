@@ -63,9 +63,9 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
   if (!result) {
     return null;
   }
-  const { options, context, isIgnored } = result;
+  const { options, context, fileHandling } = result;
 
-  if (isIgnored) {
+  if (fileHandling === "ignored") {
     return null;
   }
 
