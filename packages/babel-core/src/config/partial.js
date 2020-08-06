@@ -63,7 +63,7 @@ type PrivPartialConfig = {
   ignore: IgnoreFile | void,
   babelrc: ConfigFile | void,
   config: ConfigFile | void,
-  files: Array<string>,
+  files: Set<string>,
 };
 
 export default function* loadPrivatePartialConfig(
@@ -196,7 +196,7 @@ class PartialConfig {
   babelignore: string | void;
   config: string | void;
   isIgnored: boolean;
-  files: Array<string>;
+  files: Set<string>;
 
   constructor(
     options: ValidatedOptions,
@@ -204,7 +204,7 @@ class PartialConfig {
     ignore: string | void,
     config: string | void,
     isIgnored: boolean,
-    files: Array<string>,
+    files: Set<string>,
   ) {
     this.options = options;
     this.babelignore = ignore;

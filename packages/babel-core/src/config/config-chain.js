@@ -40,7 +40,7 @@ export type ConfigChain = {
   plugins: Array<UnloadedDescriptor>,
   presets: Array<UnloadedDescriptor>,
   options: Array<ValidatedOptions>,
-  files: Array<string>,
+  files: Set<string>,
 };
 
 export type PresetInstance = {
@@ -72,7 +72,7 @@ export function* buildPresetChain(
     plugins: dedupDescriptors(chain.plugins),
     presets: dedupDescriptors(chain.presets),
     options: chain.options.map(o => normalizeOptions(o)),
-    files: [],
+    files: new Set(),
   };
 }
 
@@ -131,7 +131,7 @@ export type RootConfigChain = ConfigChain & {
   config: ConfigFile | void,
   ignore: IgnoreFile | void,
   isIgnored: boolean,
-  files: Array<string>,
+  files: Set<string>,
 };
 
 /**
@@ -221,7 +221,7 @@ export function* buildRootChain(
     ));
 
     if (ignoreFile) {
-      fileChain.files.push(ignoreFile.filepath);
+      fileChain.files.add(ignoreFile.filepath);
     }
 
     if (
@@ -249,7 +249,7 @@ export function* buildRootChain(
     }
 
     if (babelrcFile && isIgnored) {
-      fileChain.files.push(babelrcFile.filepath);
+      fileChain.files.add(babelrcFile.filepath);
     }
   }
 
@@ -385,7 +385,7 @@ const loadFileChainWalker = makeChainWalker({
 function* loadFileChain(input, context, files, baseLogger) {
   const chain = yield* loadFileChainWalker(input, context, files, baseLogger);
   if (chain) {
-    chain.files.push(input.filepath);
+    chain.files.add(input.filepath);
   }
 
   return chain;
@@ -649,7 +649,9 @@ function mergeChain(target: ConfigChain, source: ConfigChain): ConfigChain {
   target.options.push(...source.options);
   target.plugins.push(...source.plugins);
   target.presets.push(...source.presets);
-  target.files.push(...source.files);
+  for (const file of source.files) {
+    target.files.add(file);
+  }
 
   return target;
 }
@@ -670,7 +672,7 @@ function emptyChain(): ConfigChain {
     options: [],
     presets: [],
     plugins: [],
-    files: [],
+    files: new Set(),
   };
 }
 

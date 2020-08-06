@@ -1240,11 +1240,11 @@ describe("buildConfigChain", function () {
             root: path.dirname(filename),
             comments: true,
           },
-          files: [
+          files: new Set([
             fixture("config-files", ".babelignore"),
             fixture("config-files", "babelrc-extended", ".babelrc-extended"),
             fixture("config-files", "babelrc-extended", ".babelrc"),
-          ],
+          ]),
         });
       });
 
@@ -1276,7 +1276,9 @@ describe("buildConfigChain", function () {
             cwd: path.dirname(filename),
             root: path.dirname(filename),
           },
-          files: [fixture("config-files", "babelignore", ".babelignore")],
+          files: new Set([
+            fixture("config-files", "babelignore", ".babelignore"),
+          ]),
         });
       });
     });
