@@ -1765,19 +1765,9 @@ export default class StatementParser extends ExpressionParser {
 
   maybeParseExportDeclaration(node: N.Node): boolean {
     if (this.shouldParseExportDeclaration()) {
-      if (this.isContextual("async")) {
-        const next = this.nextTokenStart();
-
-        // export async;
-        if (!this.isUnparsedContextual(next, "function")) {
-          this.unexpected(next, tt._function);
-        }
-      }
-
       node.specifiers = [];
       node.source = null;
       node.declaration = this.parseExportDeclaration(node);
-
       return true;
     }
     return false;
