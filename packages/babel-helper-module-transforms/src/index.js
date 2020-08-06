@@ -66,9 +66,8 @@ export function rewriteModuleStatementsAndPrepareHeader(
   }
 
   const headers = [];
-  const defaultExportOnly = hasDefaultExportOnly(meta);
   const doLegacyDefaultOnlyExport =
-    legacyDefaultOnlyExport && defaultExportOnly;
+    legacyDefaultOnlyExport && hasDefaultExportOnly(meta);
 
   if (hasExports(meta) && !strict && !doLegacyDefaultOnlyExport) {
     headers.push(buildESModuleHeader(meta, loose /* enumerable */));

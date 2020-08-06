@@ -64,20 +64,21 @@ export function hasDefaultExportOnly(metadata: ModuleMetadata) {
   const { local, source } = metadata;
 
   if (local.size === 0) {
-    const sourceReexports = new Map();
+    let hasDefaultReexport = false;
     for (const [, srcMetadata] of source) {
       const { reexports } = srcMetadata;
       if (reexports) {
-        for (const [exportName, importName] of reexports) {
-          sourceReexports.set(exportName, importName);
+        for (const [exportName] of reexports) {
+          if (exportName === "default") {
+            hasDefaultReexport = true;
+          } else {
+            return false;
+          }
         }
       }
     }
 
-    return (
-      sourceReexports.size === 1 &&
-      sourceReexports.keys().next().value === "default"
-    );
+    return hasDefaultReexport;
   }
 
   const localFirst = local.values().next().value;
