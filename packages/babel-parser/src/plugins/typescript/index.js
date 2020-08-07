@@ -1285,7 +1285,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         ? this.parseExprAtom()
         : this.parseIdentifier(/* liberal */ true);
       if (this.eat(tt.eq)) {
-        node.initializer = this.parseMaybeAssign();
+        node.initializer = this.parseMaybeAssignAllowIn();
       }
       return this.finishNode(node, "TSEnumMember");
     }
@@ -1865,7 +1865,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       leftStartPos: number,
       leftStartLoc: Position,
       minPrec: number,
-      noIn: ?boolean,
     ) {
       if (
         nonNull(tt._in.binop) > minPrec &&
@@ -1886,16 +1885,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.finishNode(node, "TSAsExpression");
         // rescan `<`, `>` because they were scanned when this.state.inType was true
         this.reScan_lt_gt();
-        return this.parseExprOp(
-          node,
-          leftStartPos,
-          leftStartLoc,
-          minPrec,
-          noIn,
-        );
+        return this.parseExprOp(node, leftStartPos, leftStartLoc, minPrec);
       }
 
-      return super.parseExprOp(left, leftStartPos, leftStartLoc, minPrec, noIn);
+      return super.parseExprOp(left, leftStartPos, leftStartLoc, minPrec);
     }
 
     checkReservedWord(
@@ -2135,7 +2128,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // An apparent conditional expression could actually be an optional parameter in an arrow function.
     parseConditional(
       expr: N.Expression,
-      noIn: ?boolean,
       startPos: number,
       startLoc: Position,
       refNeedsArrowPos?: ?Pos,
@@ -2145,7 +2137,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (!refNeedsArrowPos || !this.match(tt.question)) {
         return super.parseConditional(
           expr,
-          noIn,
           startPos,
           startLoc,
           refNeedsArrowPos,
@@ -2153,7 +2144,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       const result = this.tryParse(() =>
-        super.parseConditional(expr, noIn, startPos, startLoc),
+        super.parseConditional(expr, startPos, startLoc),
       );
 
       if (!result.node) {
