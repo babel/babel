@@ -20,7 +20,7 @@
   "dependencies": {
     "@babel/types": "^7.10.2",
     "jsesc": "^2.5.1",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "source-map": "^0.5.0"
   },
   "devDependencies": {
