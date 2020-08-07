@@ -22,10 +22,10 @@
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^7.11.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
+    "@babel/core": "^7.11.2",
     "@babel/helper-plugin-test-runner": "^7.10.1",
     "@babel/plugin-syntax-object-rest-spread": "^7.8.0"
   }
