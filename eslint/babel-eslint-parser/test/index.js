@@ -569,7 +569,7 @@ describe("Babel and Espree", () => {
 
     it("Dynamic Import", () => {
       parseAndAssertSame(`
-        const a = import('a');
+        const a = import(moduleName);
       `);
     });
   });
