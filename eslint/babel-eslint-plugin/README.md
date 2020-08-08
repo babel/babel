@@ -26,11 +26,11 @@ original ones as well!).
 ```json
 {
   "rules": {
-    "babel/new-cap": "error",
-    "babel/no-invalid-this": "error",
-    "babel/no-unused-expressions": "error",
-    "babel/object-curly-spacing": "error",
-    "babel/semi": "error"
+    "@babel/new-cap": "error",
+    "@babel/no-invalid-this": "error",
+    "@babel/no-unused-expressions": "error",
+    "@babel/object-curly-spacing": "error",
+    "@babel/semi": "error"
   }
 }
 ```
@@ -41,8 +41,8 @@ Each rule corresponds to a core `eslint` rule and has the same options.
 
 🛠: means it's autofixable with `--fix`.
 
-- `babel/new-cap`: handles decorators (`@Decorator`)
-- `babel/no-invalid-this`: handles class fields and private class methods (`class A { a = this.b; }`)
-- `babel/no-unused-expressions`: handles `do` expressions
-- `babel/object-curly-spacing`: handles `export * as x from "mod";` (🛠)
-- `babel/semi`: Handles class properties (🛠)
+- `@babel/new-cap`: handles decorators (`@Decorator`)
+- `@babel/no-invalid-this`: handles class fields and private class methods (`class A { a = this.b; }`)
+- `@babel/no-unused-expressions`: handles `do` expressions
+- `@babel/object-curly-spacing`: handles `export * as x from "mod";` (🛠)
+- `@babel/semi`: Handles class properties (🛠)
