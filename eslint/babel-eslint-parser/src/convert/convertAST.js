@@ -87,6 +87,7 @@ function convertNodes(ast, code) {
   try {
     // Monkey patch visitor keys in order to be able to traverse the estree nodes
     t.VISITOR_KEYS.ChainExpression = VISITOR_KEYS.ChainExpression;
+    t.VISITOR_KEYS.ImportExpression = VISITOR_KEYS.ImportExpression;
     t.VISITOR_KEYS.Property = VISITOR_KEYS.Property;
     t.VISITOR_KEYS.MethodDefinition = VISITOR_KEYS.MethodDefinition;
 
@@ -99,6 +100,7 @@ function convertNodes(ast, code) {
   } finally {
     // These can be safely deleted because they are not defined in the original visitor keys.
     delete t.VISITOR_KEYS.ChainExpression;
+    delete t.VISITOR_KEYS.ImportExpression;
     delete t.VISITOR_KEYS.MethodDefinition;
     delete t.VISITOR_KEYS.Property;
 
