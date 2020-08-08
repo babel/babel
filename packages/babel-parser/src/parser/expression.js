@@ -193,7 +193,7 @@ export default class ExpressionParser extends LValParser {
     return expr;
   }
 
-  // Setting [~In] parameter for assignment expression
+  // Set [~In] parameter for assignment expression
   parseMaybeAssignDisallowIn(
     refExpressionErrors?: ?ExpressionErrors,
     afterLeftParse?: Function,
@@ -208,7 +208,7 @@ export default class ExpressionParser extends LValParser {
     );
   }
 
-  // Setting [In] parameter for assignment expression
+  // Set [+In] parameter for assignment expression
   parseMaybeAssignAllowIn(
     refExpressionErrors?: ?ExpressionErrors,
     afterLeftParse?: Function,
