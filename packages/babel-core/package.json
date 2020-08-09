@@ -225,9 +225,13 @@
   },
   "browser": {
     "./lib/config/files/index.js": "./lib/config/files/index-browser.js",
+    "./lib/config/files/index.mjs": "./lib/config/files/index-browser.mjs",
     "./lib/transform-file.js": "./lib/transform-file-browser.js",
+    "./lib/transform-file.mjs": "./lib/transform-file-browser.mjs",
     "./src/config/files/index.js": "./src/config/files/index-browser.js",
-    "./src/transform-file.js": "./src/transform-file-browser.js"
+    "./src/config/files/index.mjs": "./src/config/files/index-browser.mjs",
+    "./src/transform-file.js": "./src/transform-file-browser.js",
+    "./src/transform-file.mjs": "./src/transform-file-browser.mjs"
   },
   "dependencies": {
     "@babel/code-frame": "^7.10.4",
