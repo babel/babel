@@ -39,7 +39,12 @@ module.exports = function (api) {
   ];
 
   switch (env) {
+    case "esm":
+      convertESM = false;
+      envOpts.targets = { esmodules: true };
+      envOpts.modules = false;
     // Configs used during bundling builds.
+    // fall through
     case "standalone":
       includeRegeneratorRuntime = true;
       unambiguousSources.push("packages/babel-runtime/regenerator");
