@@ -15,6 +15,28 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./get-module-name": {
+      "import": "./lib/get-module-name.mjs",
+      "default": "./lib/get-module-name.js"
+    },
+    "./normalize-and-load-metadata": {
+      "import": "./lib/normalize-and-load-metadata.mjs",
+      "default": "./lib/normalize-and-load-metadata.js"
+    },
+    "./rewrite-live-references": {
+      "import": "./lib/rewrite-live-references.mjs",
+      "default": "./lib/rewrite-live-references.js"
+    },
+    "./rewrite-this": {
+      "import": "./lib/rewrite-live-references.mjs",
+      "default": "./lib/rewrite-live-references.js"
+    }
+  },
   "dependencies": {
     "@babel/helper-module-imports": "^7.10.4",
     "@babel/helper-replace-supers": "^7.10.4",

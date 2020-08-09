@@ -15,6 +15,108 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./cache": {
+      "import": "./lib/cache.mjs",
+      "default": "./lib/cache.js"
+    },
+    "./context": {
+      "import": "./lib/context.mjs",
+      "default": "./lib/context.js"
+    },
+    "./hub": {
+      "import": "./lib/hub.mjs",
+      "default": "./lib/hub.js"
+    },
+    "./visitors": {
+      "import": "./lib/visitors.mjs",
+      "default": "./lib/visitors.js"
+    },
+    "./path": {
+      "import": "./lib/path/index.mjs",
+      "default": "./lib/path/index.js"
+    },
+    "./path/ancestry": {
+      "import": "./lib/path/ancestry.mjs",
+      "default": "./lib/path/ancestry.js"
+    },
+    "./path/comments": {
+      "import": "./lib/path/comments.mjs",
+      "default": "./lib/path/comments.js"
+    },
+    "./path/contexts": {
+      "import": "./lib/path/contexts.mjs",
+      "default": "./lib/path/contexts.js"
+    },
+    "./path/conversion": {
+      "import": "./lib/path/conversion.mjs",
+      "default": "./lib/path/conversion.js"
+    },
+    "./path/evaluation": {
+      "import": "./lib/path/evaluation.mjs",
+      "default": "./lib/path/evaluation.js"
+    },
+    "./path/family": {
+      "import": "./lib/path/family.mjs",
+      "default": "./lib/path/family.js"
+    },
+    "./path/introspection": {
+      "import": "./lib/path/introspection.mjs",
+      "default": "./lib/path/introspection.js"
+    },
+    "./path/modification": {
+      "import": "./lib/path/modification.mjs",
+      "default": "./lib/path/modification.js"
+    },
+    "./path/removal": {
+      "import": "./lib/path/removal.mjs",
+      "default": "./lib/path/removal.js"
+    },
+    "./path/replacement": {
+      "import": "./lib/path/replacement.mjs",
+      "default": "./lib/path/replacement.js"
+    },
+    "./path/inference": {
+      "import": "./lib/path/inference/index.mjs",
+      "default": "./lib/path/inference/index.js"
+    },
+    "./path/inference/inferer-reference": {
+      "import": "./lib/path/inference/inferer-reference.mjs",
+      "default": "./lib/path/inference/inferer-reference.js"
+    },
+    "./path/inference/inferers": {
+      "import": "./lib/path/inference/inferers.mjs",
+      "default": "./lib/path/inference/inferers.js"
+    },
+    "./path/lib/hoister": {
+      "import": "./lib/path/lib/hoister.mjs",
+      "default": "./lib/path/lib/hoister.js"
+    },
+    "./path/lib/removal-hooks": {
+      "import": "./lib/path/lib/removal-hooks.mjs",
+      "default": "./lib/path/lib/removal-hooks.js"
+    },
+    "./path/lib/virtual-types": {
+      "import": "./lib/path/lib/virtual-types.mjs",
+      "default": "./lib/path/lib/virtual-types.js"
+    },
+    "./scope": {
+      "import": "./lib/scope/index.mjs",
+      "default": "./lib/scope/index.js"
+    },
+    "./scope/binding": {
+      "import": "./lib/scope/binding.mjs",
+      "default": "./lib/scope/binding.js"
+    },
+    "./scope/lib/renamer": {
+      "import": "./lib/scope/lib/renamer.mjs",
+      "default": "./lib/scope/lib/renamer.js"
+    }
+  },
   "dependencies": {
     "@babel/code-frame": "^7.10.4",
     "@babel/generator": "^7.11.0",

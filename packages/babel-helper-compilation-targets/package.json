@@ -12,7 +12,38 @@
   "main": "lib/index.js",
   "module": "lib/index.mjs",
   "exports": {
-    ".": "./lib/index.js"
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./debug": {
+      "import": "./lib/debug.mjs",
+      "default": "./lib/debug.js"
+    },
+    "./filter-items": {
+      "import": "./lib/filter-items.mjs",
+      "default": "./lib/filter-items.js"
+    },
+    "./options": {
+      "import": "./lib/options.mjs",
+      "default": "./lib/options.js"
+    },
+    "./pretty": {
+      "import": "./lib/pretty.mjs",
+      "default": "./lib/pretty.js"
+    },
+    "./targets": {
+      "import": "./lib/targets.mjs",
+      "default": "./lib/targets.js"
+    },
+    "./types": {
+      "import": "./lib/types.mjs",
+      "default": "./lib/types.js"
+    },
+    "./utils": {
+      "import": "./lib/utils.mjs",
+      "default": "./lib/utils.js"
+    }
   },
   "publishConfig": {
     "access": "public"

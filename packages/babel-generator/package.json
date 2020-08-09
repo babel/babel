@@ -15,6 +15,84 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./buffer": {
+      "import": "./lib/buffer.mjs",
+      "default": "./lib/buffer.js"
+    },
+    "./printer": {
+      "import": "./lib/printer.mjs",
+      "default": "./lib/printer.js"
+    },
+    "./source-map": {
+      "import": "./lib/source-map.mjs",
+      "default": "./lib/source-map.js"
+    },
+    "./generator": {
+      "import": "./lib/generator/index.mjs",
+      "default": "./lib/generator/index.js"
+    },
+    "./generator/base": {
+      "import": "./lib/generator/base.mjs",
+      "default": "./lib/generator/base.js"
+    },
+    "./generator/classes": {
+      "import": "./lib/generator/classes.mjs",
+      "default": "./lib/generator/classes.js"
+    },
+    "./generator/expressions": {
+      "import": "./lib/generator/expressions.mjs",
+      "default": "./lib/generator/expressions.js"
+    },
+    "./generator/flow": {
+      "import": "./lib/generator/flow.mjs",
+      "default": "./lib/generator/flow.js"
+    },
+    "./generator/jsx": {
+      "import": "./lib/generator/jsx.mjs",
+      "default": "./lib/generator/jsx.js"
+    },
+    "./generator/methods": {
+      "import": "./lib/generator/methods.mjs",
+      "default": "./lib/generator/methods.js"
+    },
+    "./generator/modules": {
+      "import": "./lib/generator/modules.mjs",
+      "default": "./lib/generator/modules.js"
+    },
+    "./generator/statements": {
+      "import": "./lib/generator/statements.mjs",
+      "default": "./lib/generator/statements.js"
+    },
+    "./generator/template-literals": {
+      "import": "./lib/generator/template-literals.mjs",
+      "default": "./lib/generator/template-literals.js"
+    },
+    "./generator/types": {
+      "import": "./lib/generator/types.mjs",
+      "default": "./lib/generator/types.js"
+    },
+    "./generator/typescript": {
+      "import": "./lib/generator/typescript.mjs",
+      "default": "./lib/generator/typescript.js"
+    },
+    "./node": {
+      "import": "./lib/node/index.mjs",
+      "default": "./lib/node/index.js"
+    },
+    "./node/parentheses": {
+      "import": "./lib/node/parentheses.mjs",
+      "default": "./lib/node/parentheses.js"
+    },
+    "./node/whitespace": {
+      "import": "./lib/node/whitespace.mjs",
+      "default": "./lib/node/whitespace.js"
+    }
+  },
   "files": [
     "lib"
   ],

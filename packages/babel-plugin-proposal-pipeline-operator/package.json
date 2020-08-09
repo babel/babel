@@ -13,6 +13,28 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./buildOptimizedSequenceExpression": {
+      "import": "./lib/buildOptimizedSequenceExpression.mjs",
+      "default": "./lib/buildOptimizedSequenceExpression.js"
+    },
+    "./fsharpVisitor": {
+      "import": "./lib/fsharpVisitor.mjs",
+      "default": "./lib/fsharpVisitor.js"
+    },
+    "./minimalVisitor": {
+      "import": "./lib/minimalVisitor.mjs",
+      "default": "./lib/minimalVisitor.js"
+    },
+    "./smartVisitor": {
+      "import": "./lib/smartVisitor.mjs",
+      "default": "./lib/smartVisitor.js"
+    }
+  },
   "keywords": [
     "babel-plugin"
   ],

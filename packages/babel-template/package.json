@@ -15,6 +15,40 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./builder": {
+      "import": "./lib/builder.mjs",
+      "default": "./lib/builder.js"
+    },
+    "./formatters": {
+      "import": "./lib/formatters.mjs",
+      "default": "./lib/formatters.js"
+    },
+    "./literal": {
+      "import": "./lib/literal.mjs",
+      "default": "./lib/literal.js"
+    },
+    "./options": {
+      "import": "./lib/options.mjs",
+      "default": "./lib/options.js"
+    },
+    "./parse": {
+      "import": "./lib/parse.mjs",
+      "default": "./lib/parse.js"
+    },
+    "./populate": {
+      "import": "./lib/populate.mjs",
+      "default": "./lib/populate.js"
+    },
+    "./string": {
+      "import": "./lib/string.mjs",
+      "default": "./lib/string.js"
+    }
+  },
   "dependencies": {
     "@babel/code-frame": "^7.10.4",
     "@babel/parser": "^7.10.4",

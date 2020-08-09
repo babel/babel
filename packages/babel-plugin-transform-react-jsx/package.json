@@ -13,6 +13,20 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./transform-automatic": {
+      "import": "./lib/transform-automatic.mjs",
+      "default": "./lib/transform-automatic.js"
+    },
+    "./transform-classic": {
+      "import": "./lib/transform-classic.mjs",
+      "default": "./lib/transform-classic.js"
+    }
+  },
   "keywords": [
     "babel-plugin"
   ],

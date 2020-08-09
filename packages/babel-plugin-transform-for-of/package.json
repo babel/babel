@@ -13,6 +13,16 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./no-helper-implementation": {
+      "import": "./lib/no-helper-implementation.mjs",
+      "default": "./lib/no-helper-implementation.js"
+    }
+  },
   "keywords": [
     "babel-plugin"
   ],

@@ -13,6 +13,12 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    }
+  },
   "dependencies": {
     "@babel/traverse": "^7.10.4",
     "@babel/types": "^7.10.4"

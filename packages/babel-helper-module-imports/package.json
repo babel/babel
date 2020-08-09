@@ -15,6 +15,24 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./import-builder": {
+      "import": "./lib/import-builder.mjs",
+      "default": "./lib/import-builder.js"
+    },
+    "./import-injector": {
+      "import": "./lib/import-injector.mjs",
+      "default": "./lib/import-injector.js"
+    },
+    "./is-module": {
+      "import": "./lib/is-module.mjs",
+      "default": "./lib/is-module.js"
+    }
+  },
   "dependencies": {
     "@babel/types": "^7.10.4"
   },

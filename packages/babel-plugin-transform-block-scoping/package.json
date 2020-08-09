@@ -13,6 +13,16 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./tdz": {
+      "import": "./lib/tdz.mjs",
+      "default": "./lib/tdz.js"
+    }
+  },
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.10.4"
   },

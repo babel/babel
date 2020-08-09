@@ -13,6 +13,20 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./enum": {
+      "import": "./lib/enum.mjs",
+      "default": "./lib/enum.js"
+    },
+    "./namespace": {
+      "import": "./lib/namespace.mjs",
+      "default": "./lib/namespace.js"
+    }
+  },
   "keywords": [
     "babel-plugin",
     "typescript"

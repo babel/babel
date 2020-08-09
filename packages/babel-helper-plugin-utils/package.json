@@ -14,5 +14,11 @@
     "directory": "packages/babel-helper-plugin-utils"
   },
   "main": "lib/index.js",
-  "module": "lib/index.mjs"
+  "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    }
+  }
 }

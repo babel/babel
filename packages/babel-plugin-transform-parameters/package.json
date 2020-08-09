@@ -13,6 +13,20 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./params": {
+      "import": "./lib/params.mjs",
+      "default": "./lib/params.js"
+    },
+    "./rest": {
+      "import": "./lib/rest.mjs",
+      "default": "./lib/rest.js"
+    }
+  },
   "dependencies": {
     "@babel/helper-get-function-arity": "^7.10.4",
     "@babel/helper-plugin-utils": "^7.10.4"

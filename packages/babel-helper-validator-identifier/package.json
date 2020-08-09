@@ -13,7 +13,20 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
-  "exports": "./lib/index.js",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./identifier": {
+      "import": "./lib/identifier.mjs",
+      "default": "./lib/identifier.js"
+    },
+    "./keyword": {
+      "import": "./lib/keyword.mjs",
+      "default": "./lib/keyword.js"
+    }
+  },
   "devDependencies": {
     "charcodes": "^0.2.0",
     "unicode-13.0.0": "^0.8.0"

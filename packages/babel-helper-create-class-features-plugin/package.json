@@ -11,6 +11,32 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./decorators": {
+      "import": "./lib/decorators.mjs",
+      "default": "./lib/decorators.js"
+    },
+    "./features": {
+      "import": "./lib/features.mjs",
+      "default": "./lib/features.js"
+    },
+    "./fields": {
+      "import": "./lib/fields.mjs",
+      "default": "./lib/fields.js"
+    },
+    "./misc": {
+      "import": "./lib/misc.mjs",
+      "default": "./lib/misc.js"
+    },
+    "./typescript": {
+      "import": "./lib/typescript.mjs",
+      "default": "./lib/typescript.js"
+    }
+  },
   "publishConfig": {
     "access": "public"
   },

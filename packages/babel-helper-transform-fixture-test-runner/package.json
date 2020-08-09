@@ -15,6 +15,16 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./helpers": {
+      "import": "./lib/helpers.mjs",
+      "default": "./lib/helpers.js"
+    }
+  },
   "dependencies": {
     "@babel/code-frame": "^7.10.4",
     "@babel/core": "^7.10.5",

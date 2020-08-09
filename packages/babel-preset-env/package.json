@@ -15,6 +15,92 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./available-plugins": {
+      "import": "./lib/available-plugins.mjs",
+      "default": "./lib/available-plugins.js"
+    },
+    "./debug": {
+      "import": "./lib/debug.mjs",
+      "default": "./lib/debug.js"
+    },
+    "./filter-items": {
+      "import": "./lib/filter-items.mjs",
+      "default": "./lib/filter-items.js"
+    },
+    "./get-option-specific-excludes": {
+      "import": "./lib/get-option-specific-excludes.mjs",
+      "default": "./lib/get-option-specific-excludes.js"
+    },
+    "./module-transformations": {
+      "import": "./lib/module-transformations.mjs",
+      "default": "./lib/module-transformations.js"
+    },
+    "./normalize-options": {
+      "import": "./lib/normalize-options.mjs",
+      "default": "./lib/normalize-options.js"
+    },
+    "./options": {
+      "import": "./lib/options.mjs",
+      "default": "./lib/options.js"
+    },
+    "./plugins-compat-data": {
+      "import": "./lib/plugins-compat-data.mjs",
+      "default": "./lib/plugins-compat-data.js"
+    },
+    "./targets-parser": {
+      "import": "./lib/targets-parser.mjs",
+      "default": "./lib/targets-parser.js"
+    },
+    "./types": {
+      "import": "./lib/types.mjs",
+      "default": "./lib/types.js"
+    },
+    "./utils": {
+      "import": "./lib/utils.mjs",
+      "default": "./lib/utils.js"
+    },
+    "./polyfills/corejs2/built-in-definitions": {
+      "import": "./lib/polyfills/corejs2/built-in-definitions.mjs",
+      "default": "./lib/polyfills/corejs2/built-in-definitions.js"
+    },
+    "./polyfills/corejs2/entry-plugin": {
+      "import": "./lib/polyfills/corejs2/entry-plugin.mjs",
+      "default": "./lib/polyfills/corejs2/entry-plugin.js"
+    },
+    "./polyfills/corejs2/get-platform-specific-default": {
+      "import": "./lib/polyfills/corejs2/get-platform-specific-default.mjs",
+      "default": "./lib/polyfills/corejs2/get-platform-specific-default.js"
+    },
+    "./polyfills/corejs2/usage-plugin": {
+      "import": "./lib/polyfills/corejs2/usage-plugin.mjs",
+      "default": "./lib/polyfills/corejs2/usage-plugin.js"
+    },
+    "./polyfills/corejs3/built-in-definitions": {
+      "import": "./lib/polyfills/corejs3/built-in-definitions.mjs",
+      "default": "./lib/polyfills/corejs3/built-in-definitions.js"
+    },
+    "./polyfills/corejs3/entry-plugin": {
+      "import": "./lib/polyfills/corejs3/entry-plugin.mjs",
+      "default": "./lib/polyfills/corejs3/entry-plugin.js"
+    },
+    "./polyfills/corejs3/usage-plugin": {
+      "import": "./lib/polyfills/corejs3/usage-plugin.mjs",
+      "default": "./lib/polyfills/corejs3/usage-plugin.js"
+    },
+    "./polyfills/regenerator/entry-plugin": {
+      "import": "./lib/polyfills/regenerator/entry-plugin.mjs",
+      "default": "./lib/polyfills/regenerator/entry-plugin.js"
+    },
+    "./polyfills/regenerator/usage-plugin": {
+      "import": "./lib/polyfills/regenerator/usage-plugin.mjs",
+      "default": "./lib/polyfills/regenerator/usage-plugin.js"
+    }
+  },
   "dependencies": {
     "@babel/compat-data": "^7.11.0",
     "@babel/helper-compilation-targets": "^7.10.4",

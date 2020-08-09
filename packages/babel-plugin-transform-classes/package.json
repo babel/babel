@@ -13,6 +13,20 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./inline-createSuper-helper": {
+      "import": "./lib/inline-createSuper-helper.mjs",
+      "default": "./lib/inline-createSuper-helper.js"
+    },
+    "./transformClass": {
+      "import": "./lib/transformClass.mjs",
+      "default": "./lib/transformClass.js"
+    }
+  },
   "dependencies": {
     "@babel/helper-annotate-as-pure": "^7.10.4",
     "@babel/helper-define-map": "^7.10.4",

@@ -11,6 +11,20 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./features": {
+      "import": "./lib/features.mjs",
+      "default": "./lib/features.js"
+    },
+    "./util": {
+      "import": "./lib/util.mjs",
+      "default": "./lib/util.js"
+    }
+  },
   "publishConfig": {
     "access": "public"
   },

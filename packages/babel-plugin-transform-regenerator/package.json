@@ -11,6 +11,12 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    }
+  },
   "dependencies": {
     "regenerator-transform": "^0.14.2"
   },

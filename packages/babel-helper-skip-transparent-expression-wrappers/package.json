@@ -14,7 +14,10 @@
   "main": "lib/index.js",
   "module": "lib/index.mjs",
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
   "dependencies": {

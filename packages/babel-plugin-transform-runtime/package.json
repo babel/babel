@@ -13,6 +13,32 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./helpers": {
+      "import": "./lib/helpers.mjs",
+      "default": "./lib/helpers.js"
+    },
+    "./runtime-corejs2-definitions": {
+      "import": "./lib/runtime-corejs2-definitions.mjs",
+      "default": "./lib/runtime-corejs2-definitions.js"
+    },
+    "./runtime-corejs3-definitions": {
+      "import": "./lib/runtime-corejs3-definitions.mjs",
+      "default": "./lib/runtime-corejs3-definitions.js"
+    },
+    "./get-runtime-path": {
+      "import": "./lib/get-runtime-path/index.mjs",
+      "default": "./lib/get-runtime-path/index.js"
+    },
+    "./get-runtime-path/browser": {
+      "import": "./lib/get-runtime-path/browser.mjs",
+      "default": "./lib/get-runtime-path/browser.js"
+    }
+  },
   "keywords": [
     "babel-plugin"
   ],

@@ -14,6 +14,16 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./transformer-legacy": {
+      "import": "./lib/transformer-legacy.mjs",
+      "default": "./lib/transformer-legacy.js"
+    }
+  },
   "keywords": [
     "babel",
     "babel-plugin",

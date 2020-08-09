@@ -13,6 +13,16 @@
   },
   "main": "lib/index.js",
   "module": "lib/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.js"
+    },
+    "./for-await": {
+      "import": "./lib/for-await.mjs",
+      "default": "./lib/for-await.js"
+    }
+  },
   "keywords": [
     "babel-plugin"
   ],
