@@ -1,6 +1,7 @@
 "use strict";
 
 const path = require("path");
+const fs = require("fs");
 
 function normalize(src) {
   return src.replace(/\//, path.sep);
@@ -118,6 +119,32 @@ module.exports = function (api) {
       compileDynamicImport ? "@babel/plugin-proposal-dynamic-import" : null,
 
       convertESM ? "@babel/transform-modules-commonjs" : null,
+      env === "esm"
+        ? [
+            "module-resolver",
+            {
+              extensions: [".js"],
+              resolvePath(sourcePath, currentFile) {
+                if (sourcePath.slice(0, 2) === "./") {
+                  const parts = currentFile.split(path.sep);
+                  parts.pop();
+                  // Append .mjs ext if the imported path is .js file.
+                  if (
+                    fs.existsSync(
+                      path.sep + path.join(...parts, sourcePath) + ".js"
+                    )
+                  ) {
+                    return sourcePath + ".mjs";
+                  } else {
+                    return sourcePath + path.sep + "index.mjs";
+                  }
+                } else {
+                  return sourcePath;
+                }
+              },
+            },
+          ]
+        : null,
     ].filter(Boolean),
     overrides: [
       {
