@@ -10,6 +10,7 @@
     "directory": "packages/babel-helper-compilation-targets"
   },
   "main": "lib/index.js",
+  "module": "lib/index.mjs",
   "exports": {
     ".": "./lib/index.js"
   },

@@ -11,7 +11,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./lib/index.js",
+  "main": "lib/index.js",
+  "module": "lib/index.mjs",
   "exports": "./lib/index.js",
   "devDependencies": {
     "charcodes": "^0.2.0",

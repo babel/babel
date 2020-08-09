@@ -18,6 +18,7 @@
     "directory": "packages/babel-polyfill"
   },
   "main": "lib/index.js",
+  "module": "lib/index.mjs",
   "dependencies": {
     "core-js": "^2.6.5",
     "regenerator-runtime": "^0.13.4"

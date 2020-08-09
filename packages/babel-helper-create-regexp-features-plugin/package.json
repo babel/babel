@@ -10,6 +10,7 @@
     "directory": "packages/babel-helper-create-regexp-features-plugin"
   },
   "main": "lib/index.js",
+  "module": "lib/index.mjs",
   "publishConfig": {
     "access": "public"
   },

@@ -10,6 +10,7 @@
     "directory": "packages/babel-helper-create-class-features-plugin"
   },
   "main": "lib/index.js",
+  "module": "lib/index.mjs",
   "publishConfig": {
     "access": "public"
   },

@@ -14,6 +14,7 @@
     "directory": "packages/babel-generator"
   },
   "main": "lib/index.js",
+  "module": "lib/index.mjs",
   "files": [
     "lib"
   ],

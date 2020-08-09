@@ -14,6 +14,7 @@
     "directory": "packages/babel-helper-simple-access"
   },
   "main": "lib/index.js",
+  "module": "lib/index.mjs",
   "dependencies": {
     "@babel/template": "^7.10.4",
     "@babel/types": "^7.10.4"

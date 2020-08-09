@@ -12,6 +12,7 @@
     "access": "public"
   },
   "main": "lib/index.js",
+  "module": "lib/index.mjs",
   "dependencies": {
     "@babel/helper-explode-assignable-expression": "^7.10.4",
     "@babel/types": "^7.10.4"

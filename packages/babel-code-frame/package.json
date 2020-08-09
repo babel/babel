@@ -14,6 +14,7 @@
     "directory": "packages/babel-code-frame"
   },
   "main": "lib/index.js",
+  "module": "lib/index.mjs",
   "dependencies": {
     "@babel/highlight": "^7.10.4"
   },

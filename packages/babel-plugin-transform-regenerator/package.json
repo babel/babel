@@ -10,6 +10,7 @@
     "directory": "packages/babel-plugin-transform-regenerator"
   },
   "main": "lib/index.js",
+  "module": "lib/index.mjs",
   "dependencies": {
     "regenerator-transform": "^0.14.2"
   },

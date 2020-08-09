@@ -14,6 +14,7 @@
     "directory": "packages/babel-helper-module-transforms"
   },
   "main": "lib/index.js",
+  "module": "lib/index.mjs",
   "dependencies": {
     "@babel/helper-module-imports": "^7.10.4",
     "@babel/helper-replace-supers": "^7.10.4",

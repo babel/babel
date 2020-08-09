@@ -12,6 +12,7 @@
     "access": "public"
   },
   "main": "lib/index.js",
+  "module": "lib/index.mjs",
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.10.4"
   },

@@ -12,6 +12,7 @@
     "access": "public"
   },
   "main": "lib/index.js",
+  "module": "lib/index.mjs",
   "keywords": [
     "babel-plugin"
   ],

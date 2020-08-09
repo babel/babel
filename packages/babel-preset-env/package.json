@@ -14,6 +14,7 @@
     "directory": "packages/babel-preset-env"
   },
   "main": "lib/index.js",
+  "module": "lib/index.mjs",
   "dependencies": {
     "@babel/compat-data": "^7.11.0",
     "@babel/helper-compilation-targets": "^7.10.4",

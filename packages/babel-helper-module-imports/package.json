@@ -14,6 +14,7 @@
     "directory": "packages/babel-helper-module-imports"
   },
   "main": "lib/index.js",
+  "module": "lib/index.mjs",
   "dependencies": {
     "@babel/types": "^7.10.4"
   },
