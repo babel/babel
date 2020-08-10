@@ -2727,7 +2727,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return hasContextParam ? baseCount + 1 : baseCount;
     }
 
-    parseCatchClauseParam(): N.Identifier {
+    parseCatchClauseParam(): N.Pattern {
       const param = super.parseCatchClauseParam();
       const type = this.tsTryParseTypeAnnotation();
 

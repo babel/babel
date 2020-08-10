@@ -45,7 +45,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     estreeParseDecimalLiteral(value: any): N.Node {
       // https://github.com/estree/estree/blob/master/experimental/decimal.md
-      // $FlowIgnore
       // todo: use BigDecimal when node supports it.
       const decimal = null;
       const node = this.estreeParseLiteral(decimal);
