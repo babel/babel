@@ -14,34 +14,100 @@ import fs from "fs";
 import path from "path";
 import vm from "vm";
 import checkDuplicatedNodes from "babel-check-duplicated-nodes";
+import QuickLRU from "quick-lru";
 
 import diff from "jest-diff";
 
-const moduleCache = {};
-const testContext = vm.createContext({
-  ...helpers,
-  process: process,
-  transform: babel.transform,
-  setTimeout: setTimeout,
-  setImmediate: setImmediate,
-  expect,
-});
-testContext.global = testContext;
+const cachedScripts = new QuickLRU({ maxSize: 10 });
+const contextModuleCache = new WeakMap();
+const sharedTestContext = createContext();
 
-// Initialize the test context with the polyfill, and then freeze the global to prevent implicit
-// global creation in tests, which could cause things to bleed between tests.
-runModuleInTestContext("@babel/polyfill", __filename);
+function createContext() {
+  const context = vm.createContext({
+    ...helpers,
+    process: process,
+    transform: babel.transform,
+    setTimeout: setTimeout,
+    setImmediate: setImmediate,
+    expect,
+  });
+  context.global = context;
 
-// Populate the "babelHelpers" global with Babel's helper utilities.
-runCodeInTestContext(buildExternalHelpers(), {
-  filename: path.join(__dirname, "babel-helpers-in-memory.js"),
-});
+  const moduleCache = Object.create(null);
+  contextModuleCache.set(context, moduleCache);
+
+  // Initialize the test context with the polyfill, and then freeze the global to prevent implicit
+  // global creation in tests, which could cause things to bleed between tests.
+  runModuleInTestContext(
+    "@babel/polyfill/dist/polyfill.min",
+    __filename,
+    context,
+    moduleCache,
+  );
+
+  // Populate the "babelHelpers" global with Babel's helper utilities.
+  runCacheableScriptInTestContext(
+    path.join(__dirname, "babel-helpers-in-memory.js"),
+    buildExternalHelpers,
+    context,
+    moduleCache,
+  );
+
+  return context;
+}
+
+function runCacheableScriptInTestContext(
+  filename: string,
+  srcFn: () => string,
+  context: Context,
+  moduleCache: Object,
+) {
+  let cached = cachedScripts.get(filename);
+  if (!cached) {
+    const code = `(function (exports, require, module, __filename, __dirname) {\n${srcFn()}\n});`;
+    cached = {
+      code,
+      cachedData: undefined,
+    };
+    cachedScripts.set(filename, cached);
+  }
+
+  const script = new vm.Script(cached.code, {
+    filename,
+    displayErrors: true,
+    lineOffset: -1,
+    cachedData: cached.cachedData,
+    produceCachedData: true,
+  });
+
+  if (script.cachedDataProduced) {
+    cached.cachedData = script.cachedData;
+  }
+
+  const module = {
+    id: filename,
+    exports: {},
+  };
+  const req = id => runModuleInTestContext(id, filename, context, moduleCache);
+  const dirname = path.dirname(filename);
+
+  script
+    .runInContext(context)
+    .call(module.exports, module.exports, req, module, filename, dirname);
+
+  return module;
+}
 
 /**
  * A basic implementation of CommonJS so we can execute `@babel/polyfill` inside our test context.
  * This allows us to run our unittests
  */
-function runModuleInTestContext(id: string, relativeFilename: string) {
+function runModuleInTestContext(
+  id: string,
+  relativeFilename: string,
+  context: Context,
+  moduleCache: Object,
+) {
   const filename = resolve.sync(id, {
     basedir: path.dirname(relativeFilename),
   });
@@ -50,23 +116,17 @@ function runModuleInTestContext(id: string, relativeFilename: string) {
   // the context's global scope.
   if (filename === id) return require(id);
 
+  // Modules can only evaluate once per context, so the moduleCache is a
+  // stronger cache guarantee than the LRU's Script cache.
   if (moduleCache[filename]) return moduleCache[filename].exports;
 
-  const module = (moduleCache[filename] = {
-    id: filename,
-    exports: {},
-  });
-  const dirname = path.dirname(filename);
-  const req = id => runModuleInTestContext(id, filename);
-
-  const src = fs.readFileSync(filename, "utf8");
-  const code = `(function (exports, require, module, __filename, __dirname) {\n${src}\n});`;
-
-  vm.runInContext(code, testContext, {
+  const module = runCacheableScriptInTestContext(
     filename,
-    displayErrors: true,
-    lineOffset: -1,
-  }).call(module.exports, module.exports, req, module, filename, dirname);
+    () => fs.readFileSync(filename, "utf8"),
+    context,
+    moduleCache,
+  );
+  moduleCache[filename] = module;
 
   return module.exports;
 }
@@ -76,10 +136,15 @@ function runModuleInTestContext(id: string, relativeFilename: string) {
  *
  * Exposed for unit tests, not for use as an API.
  */
-export function runCodeInTestContext(code: string, opts: { filename: string }) {
+export function runCodeInTestContext(
+  code: string,
+  opts: { filename: string },
+  context = sharedTestContext,
+) {
   const filename = opts.filename;
   const dirname = path.dirname(filename);
-  const req = id => runModuleInTestContext(id, filename);
+  const moduleCache = contextModuleCache.get(context);
+  const req = id => runModuleInTestContext(id, filename, context, moduleCache);
 
   const module = {
     id: filename,
@@ -94,7 +159,7 @@ export function runCodeInTestContext(code: string, opts: { filename: string }) {
     // Note: This isn't doing .call(module.exports, ...) because some of our tests currently
     // rely on 'this === global'.
     const src = `(function(exports, require, module, __filename, __dirname, opts) {\n${code}\n});`;
-    return vm.runInContext(src, testContext, {
+    return vm.runInContext(src, context, {
       filename,
       displayErrors: true,
       lineOffset: -1,
@@ -183,13 +248,14 @@ function run(task) {
   let resultExec;
 
   if (execCode) {
+    const context = createContext();
     const execOpts = getOpts(exec);
     result = babel.transform(execCode, execOpts);
     checkDuplicatedNodes(babel, result.ast);
     execCode = result.code;
 
     try {
-      resultExec = runCodeInTestContext(execCode, execOpts);
+      resultExec = runCodeInTestContext(execCode, execOpts, context);
     } catch (err) {
       // Pass empty location to include the whole file in the output.
       err.message =
