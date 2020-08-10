@@ -2306,20 +2306,23 @@ export default class ExpressionParser extends LValParser {
   parseIdentifierName(pos: number, liberal?: boolean): string {
     let name: string;
 
-    if (this.match(tt.name)) {
+    const { start, type } = this.state;
+
+    if (type === tt.name) {
       name = this.state.value;
-    } else if (this.state.type.keyword) {
-      name = this.state.type.keyword;
+    } else if (type.keyword) {
+      name = type.keyword;
 
       // `class` and `function` keywords push function-type token context into this.context.
       // But there is no chance to pop the context if the keyword is consumed
       // as an identifier such as a property name.
-      const context = this.state.context;
+      const curContext = this.curContext();
       if (
-        (name === "class" || name === "function") &&
-        context[context.length - 1].token === "function"
+        (type === tt._class || type === tt._function) &&
+        (curContext === ct.functionStatement ||
+          curContext === ct.functionExpression)
       ) {
-        context.pop();
+        this.state.context.pop();
       }
     } else {
       throw this.unexpected();
@@ -2330,12 +2333,7 @@ export default class ExpressionParser extends LValParser {
       // This will prevent this.next() from throwing about unexpected escapes.
       this.state.type = tt.name;
     } else {
-      this.checkReservedWord(
-        name,
-        this.state.start,
-        !!this.state.type.keyword,
-        false,
-      );
+      this.checkReservedWord(name, start, !!type.keyword, false);
     }
 
     this.next();

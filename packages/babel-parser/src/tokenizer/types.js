@@ -155,7 +155,8 @@ export const types: { [name: string]: TokenType } = {
   plusMin: new TokenType("+/-", { beforeExpr, binop: 9, prefix, startsExpr }),
   // startsExpr: required by v8intrinsic plugin
   modulo: new TokenType("%", { beforeExpr, binop: 10, startsExpr }),
-  star: createBinop("*", 10),
+  // unset `beforeExpr` as it can be `function *`
+  star: new TokenType("*", { binop: 10 }),
   slash: createBinop("/", 10),
   exponent: new TokenType("**", {
     beforeExpr,
