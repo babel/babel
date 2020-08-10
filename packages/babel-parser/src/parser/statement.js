@@ -639,7 +639,7 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(node, "ThrowStatement");
   }
 
-  parseCatchClauseParam(): N.Identifier {
+  parseCatchClauseParam(): N.Pattern {
     const param = this.parseBindingAtom();
 
     const simple = param.type === "Identifier";
@@ -1199,7 +1199,7 @@ export default class StatementParser extends ExpressionParser {
   // https://tc39.es/ecma262/#prod-ClassBody
   parseClassBody(
     constructorAllowsSuper: boolean,
-    oldStrict?: boolean,
+    oldStrict: boolean,
   ): N.ClassBody {
     this.classScope.enter();
 
