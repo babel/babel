@@ -1816,7 +1816,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseConditional(
       expr: N.Expression,
-      noIn: ?boolean,
       startPos: number,
       startLoc: Position,
       refNeedsArrowPos?: ?Pos,
@@ -1827,7 +1826,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // and if we come from inside parens
       if (refNeedsArrowPos) {
         const result = this.tryParse(() =>
-          super.parseConditional(expr, noIn, startPos, startLoc),
+          super.parseConditional(expr, startPos, startLoc),
         );
 
         if (!result.node) {
@@ -1886,7 +1885,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.test = expr;
       node.consequent = consequent;
       node.alternate = this.forwardNoArrowParamsConversionAt(node, () =>
-        this.parseMaybeAssign(noIn, undefined, undefined, undefined),
+        this.parseMaybeAssign(undefined, undefined, undefined),
       );
 
       return this.finishNode(node, "ConditionalExpression");
@@ -1898,7 +1897,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     } {
       this.state.noArrowParamsConversionAt.push(this.state.start);
 
-      const consequent = this.parseMaybeAssign();
+      const consequent = this.parseMaybeAssignAllowIn();
       const failed = !this.match(tt.colon);
 
       this.state.noArrowParamsConversionAt.pop();
@@ -2632,7 +2631,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     //    there
     // 3. This is neither. Just call the super method
     parseMaybeAssign(
-      noIn?: ?boolean,
       refExpressionErrors?: ?ExpressionErrors,
       afterLeftParse?: Function,
       refNeedsArrowPos?: ?Pos,
@@ -2650,7 +2648,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         jsx = this.tryParse(
           () =>
             super.parseMaybeAssign(
-              noIn,
               refExpressionErrors,
               afterLeftParse,
               refNeedsArrowPos,
@@ -2684,7 +2681,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             typeParameters,
             () =>
               super.parseMaybeAssign(
-                noIn,
                 refExpressionErrors,
                 afterLeftParse,
                 refNeedsArrowPos,
@@ -2730,7 +2726,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       return super.parseMaybeAssign(
-        noIn,
         refExpressionErrors,
         afterLeftParse,
         refNeedsArrowPos,
