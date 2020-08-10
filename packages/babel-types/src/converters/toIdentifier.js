@@ -11,7 +11,7 @@ export default function toIdentifier(name: string): string {
   name = name.replace(/^[-0-9]+/, "");
 
   // camel case
-  name = name.replace(/[-\s]+(.)?/g, function(match, c) {
+  name = name.replace(/[-\s]+(.)?/g, function (match, c) {
     return c ? c.toUpperCase() : "";
   });
 

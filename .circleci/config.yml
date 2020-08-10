@@ -4,10 +4,12 @@ aliases:
   - &restore-node-modules-cache
     keys:
       - v1-yarn-deps-{{ checksum "yarn.lock" }}
+      - v1-yarn-deps-
 
   - &restore-yarn-cache
     keys:
-      - v1-yarn-cache
+      - v1-1-yarn-cache-{{ checksum "yarn.lock" }}
+      - v1-1-yarn-cache-
 
   - &save-node-modules-cache
     paths:
@@ -16,8 +18,8 @@ aliases:
 
   - &save-yarn-cache
     paths:
-      - ~/.yarn-cache
-    key: v1-yarn-cache
+      - ~/.cache/yarn
+    key: v1-1-yarn-cache-{{ checksum "yarn.lock" }}
 
   - &artifact_babel
     path: ~/babel/packages/babel-standalone/babel.js
@@ -71,7 +73,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Sync with latest master branch (only on PRs)
+          name: Sync with latest main branch (only on PRs)
           command: |
             if [ -n "$CIRCLE_PULL_REQUEST" ]
             then
@@ -86,14 +88,14 @@ jobs:
       - run:
           name: Setup Test Runner
           command: |
-            git clone --recurse-submodules https://github.com/babel/babel-test262-runner
+            git clone --depth=1 --recurse-submodules https://github.com/babel/babel-test262-runner
             cd babel-test262-runner
             npm ci
             npm i tap-mocha-reporter --save-dev
             node lib/download-node
       - run:
-          name: Download master branch Test262 artifact
-          command: node lib/download-master-artifact ~/master.tap
+          name: Download main branch Test262 artifact
+          command: node lib/download-main-artifact ~/test262-main.tap
           <<: *test262_workdir
       - run:
           name: Run Test262
@@ -106,26 +108,26 @@ jobs:
             cat ~/test262.tap | $(npm bin)/tap-mocha-reporter spec || true
           <<: *test262_workdir
       - run:
-          name: Compare previous master branch & current job results
+          name: Compare previous main branch & current job results
           command: |
             mkdir -p ~/test-results/test262
-            node lib/compare-results ~/master.tap ~/test262.tap | tee ~/diff.tap
+            node lib/compare-results ~/test262-main.tap ~/test262.tap | tee ~/diff.tap
           <<: *test262_workdir
       - store_artifacts: *artifact_test262_diff_tap
       - run:
-          name: Output comparision results and report to CircleCI
+          name: Output comparison results and report to CircleCI
           command: |
             mkdir -p ~/test-results/test262
             cat ~/diff.tap | $(npm bin)/tap-merge | $(npm bin)/tap-mocha-reporter xunit | tee ~/test-results/test262/results.xml
           <<: *test262_workdir
       - store_test_results: *artifact_test262_xunit
-      - save_cache: *save-node-modules-cache
-      - save_cache: *save-yarn-cache
 
   publish-verdaccio:
     executor: node-executor
     steps:
       - checkout
+      - restore_cache: *restore-yarn-cache
+      - restore_cache: *restore-node-modules-cache
       - run: yarn install
       - run: ./scripts/integration-tests/publish-local.sh
       - persist_to_workspace:
@@ -171,28 +173,36 @@ workflows:
   build-standalone:
     jobs:
       - build-standalone
-  test262-master:
+  test262:
     jobs:
       - test262:
           filters:
             branches:
               only:
-                - master
-  test262:
+                - main
+                - next-8-dev
+                - next-8-rebased
+  test262-pr:
     jobs:
       - approve-test262-run:
           type: approval
           filters:
             branches:
               ignore:
+                - main
                 - master
+                - next-8-dev
+                - next-8-rebased
       - test262:
           requires:
             - approve-test262-run
           filters:
             branches:
               ignore:
+                - main
                 - master
+                - next-8-dev
+                - next-8-rebased
   e2e:
     jobs:
       - publish-verdaccio
@@ -208,4 +218,3 @@ workflows:
       - e2e-vue-cli:
           requires:
             - publish-verdaccio
-

@@ -21,7 +21,7 @@ export function BlockStatement(node: Object) {
   this.token("{");
   this.printInnerComments(node);
 
-  const hasDirectives = node.directives && node.directives.length;
+  const hasDirectives = node.directives?.length;
 
   if (node.body.length || hasDirectives) {
     this.newline();

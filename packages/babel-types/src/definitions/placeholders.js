@@ -18,7 +18,7 @@ export const PLACEHOLDERS_ALIAS: { [string]: Array<string> } = {
 
 for (const type of PLACEHOLDERS) {
   const alias = ALIAS_KEYS[type];
-  if (alias && alias.length) PLACEHOLDERS_ALIAS[type] = alias;
+  if (alias?.length) PLACEHOLDERS_ALIAS[type] = alias;
 }
 
 export const PLACEHOLDERS_FLIPPED_ALIAS: { [string]: Array<string> } = {};

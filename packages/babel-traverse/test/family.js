@@ -1,8 +1,8 @@
 import traverse from "../lib";
 import { parse } from "@babel/parser";
 
-describe("path/family", function() {
-  describe("getBindingIdentifiers", function() {
+describe("path/family", function () {
+  describe("getBindingIdentifiers", function () {
     const ast = parse("var a = 1, {b} = c, [d] = e; function f() {}");
     let nodes = {},
       paths = {},
@@ -19,19 +19,19 @@ describe("path/family", function() {
       },
     });
 
-    it("should contain keys of nodes in paths", function() {
+    it("should contain keys of nodes in paths", function () {
       Object.keys(nodes).forEach(id => {
         expect(hop(paths, id)).toBe(true);
       });
     });
 
-    it("should contain outer bindings", function() {
+    it("should contain outer bindings", function () {
       Object.keys(outerNodes).forEach(id => {
         expect(hop(outerPaths, id)).toBe(true);
       });
     });
 
-    it("should return paths", function() {
+    it("should return paths", function () {
       Object.keys(paths).forEach(id => {
         expect(paths[id].node).toBeTruthy();
         expect(paths[id].type).toBe(paths[id].node.type);
@@ -43,19 +43,19 @@ describe("path/family", function() {
       });
     });
 
-    it("should match paths and nodes returned for the same ast", function() {
+    it("should match paths and nodes returned for the same ast", function () {
       Object.keys(nodes).forEach(id => {
         expect(nodes[id]).toBe(paths[id].node);
       });
     });
 
-    it("should match paths and nodes returned for outer Bindings", function() {
+    it("should match paths and nodes returned for outer Bindings", function () {
       Object.keys(outerNodes).forEach(id => {
         expect(outerNodes[id]).toBe(outerPaths[id].node);
       });
     });
   });
-  describe("getSibling", function() {
+  describe("getSibling", function () {
     const ast = parse(
       "var a = 1, {b} = c, [d] = e; function f() {} function g() {}",
     );
@@ -68,14 +68,14 @@ describe("path/family", function() {
       },
     });
 
-    it("should return traverse sibling nodes", function() {
+    it("should return traverse sibling nodes", function () {
       expect(sibling.getNextSibling().node).toBeTruthy();
       expect(lastSibling.getPrevSibling().node).toBeTruthy();
       expect(sibling.getPrevSibling().node).toBeFalsy();
       expect(lastSibling.getNextSibling().node).toBeFalsy();
     });
 
-    it("should return all preceding and succeeding sibling nodes", function() {
+    it("should return all preceding and succeeding sibling nodes", function () {
       expect(sibling.getAllNextSiblings().length).toBeTruthy();
       expect(lastSibling.getAllPrevSiblings().length).toBeTruthy();
       expect(sibling.getAllNextSiblings()).toHaveLength(2);

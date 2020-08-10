@@ -1,9 +1,9 @@
 import * as t from "../../..";
 
-describe("builders", function() {
-  describe("flow", function() {
-    describe("declareClass", function() {
-      it("accept TypeParameterDeclaration as typeParameters", function() {
+describe("builders", function () {
+  describe("flow", function () {
+    describe("declareClass", function () {
+      it("accept TypeParameterDeclaration as typeParameters", function () {
         const typeParameter = t.typeParameter(null, null, null);
         typeParameter.name = "T";
         const declaredClass = t.declareClass(
@@ -15,7 +15,7 @@ describe("builders", function() {
         expect(t.isDeclareClass(declaredClass)).toBe(true);
       });
 
-      it("not accept typeParameterInstantiation as typeParameters", function() {
+      it("not accept typeParameterInstantiation as typeParameters", function () {
         expect(() =>
           t.declareClass(
             t.identifier("A"),

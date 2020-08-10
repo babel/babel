@@ -1,7 +1,7 @@
 const babel = require("@babel/core");
 const vm = require("vm");
 
-test("Re-export doesn't overwrite __esModule flag", function() {
+test("Re-export doesn't overwrite __esModule flag", function () {
   let code = 'export * from "./dep";';
   const depStub = {
     __esModule: false,
@@ -11,7 +11,7 @@ test("Re-export doesn't overwrite __esModule flag", function() {
     module: {
       exports: {},
     },
-    require: function(id) {
+    require: function (id) {
       if (id === "./dep") return depStub;
       return require(id);
     },

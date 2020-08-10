@@ -1,3 +1,7 @@
+var _privateField = new WeakMap();
+
+var _privateFieldValue = new WeakMap();
+
 class Cl {
   constructor() {
     _privateFieldValue.set(this, {
@@ -14,10 +18,6 @@ class Cl {
   }
 
 }
-
-var _privateField = new WeakMap();
-
-var _privateFieldValue = new WeakMap();
 
 var _set_privateFieldValue = function (newValue) {
   babelHelpers.classPrivateFieldSet(this, _privateField, newValue);

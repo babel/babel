@@ -28,7 +28,7 @@ const awaitVisitor = {
   },
 };
 
-export default function(
+export default function (
   path: NodePath,
   helpers: { wrapAsync: Object, wrapAwait: Object },
 ) {

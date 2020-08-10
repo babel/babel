@@ -1,1 +1,1 @@
-import('hello', 'world');
+import('hello', 'world', '!');

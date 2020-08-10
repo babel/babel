@@ -59,7 +59,7 @@ export default declare(api => {
       const attributes = path.container.openingElement.attributes;
       for (let i = 0; i < attributes.length; i++) {
         const name = attributes[i].name;
-        if (name && name.name === TRACE_ID) {
+        if (name?.name === TRACE_ID) {
           // The __source attribute already exists
           return;
         }
@@ -82,7 +82,7 @@ export default declare(api => {
       }
 
       const trace = makeTrace(
-        state.fileNameIdentifier,
+        t.cloneNode(state.fileNameIdentifier),
         location.start.line,
         location.start.column,
       );

@@ -62,6 +62,7 @@ const es2015 = {
       'RegExp "y" and "u" flags / "y" flag',
     ],
   },
+  "transform-unicode-escapes": "Unicode code point escapes",
   "transform-unicode-regex": {
     features: [
       'RegExp "y" and "u" flags / "u" flag, case folding',
@@ -121,14 +122,28 @@ const es2020 = {
   "proposal-optional-chaining": "optional chaining operator (?.)",
 };
 
-const shippedProposal = {
+const es2021 = {
   "proposal-numeric-separator": "numeric separator",
+  "proposal-logical-assignment-operators": "Logical Assignment",
+};
+
+const shippedProposal = {
+  "proposal-class-properties": {
+    features: [
+      "static class fields",
+      "instance class fields, public instance class fields",
+      "instance class fields, private instance class fields basic support",
+      "instance class fields, computed instance class fields",
+    ],
+  },
+  "proposal-private-methods": "private class methods",
 };
 
 // Run plugins for modern features first
 module.exports = Object.assign(
   {},
   shippedProposal,
+  es2021,
   es2020,
   es2019,
   es2015Parameter,

@@ -234,9 +234,9 @@ describe("option-manager", () => {
     });
   });
 
-  describe("presets", function() {
+  describe("presets", function () {
     function presetTest(name) {
-      it(name, function() {
+      it(name, function () {
         const options = loadOptions({
           presets: [
             path.join(__dirname, "fixtures/option-manager/presets", name),
@@ -250,7 +250,7 @@ describe("option-manager", () => {
     }
 
     function presetThrowsTest(name, msg) {
-      it(name, function() {
+      it(name, function () {
         expect(() =>
           loadOptions({
             presets: [

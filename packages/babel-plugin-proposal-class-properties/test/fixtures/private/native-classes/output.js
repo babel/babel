@@ -1,3 +1,5 @@
+var _bar = new WeakMap();
+
 class Foo {
   constructor() {
     _bar.set(this, {
@@ -15,8 +17,6 @@ class Foo {
   }
 
 }
-
-var _bar = new WeakMap();
 
 var _foo = {
   writable: true,

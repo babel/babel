@@ -5,6 +5,7 @@ const normalizeOptions = require("../lib/normalize-options.js");
 const {
   checkDuplicateIncludeExcludes,
   validateBoolOption,
+  validateStringOption,
   validateModulesOption,
   validateUseBuiltInsOption,
   normalizePluginName,
@@ -191,8 +192,30 @@ describe("normalize-options", () => {
     });
   });
 
-  describe("checkDuplicateIncludeExcludes", function() {
-    it("should throw if duplicate names in both", function() {
+  describe("validateStringOption", () => {
+    it("`undefined` option default", () => {
+      expect(validateStringOption("test", undefined, "default")).toBe(
+        "default",
+      );
+    });
+
+    it("`value` option returns value", () => {
+      expect(validateStringOption("test", "value", "default")).toBe("value");
+    });
+
+    it("no default returns undefined", () => {
+      expect(validateStringOption("test", undefined)).toBe(undefined);
+    });
+
+    it("array option is invalid", () => {
+      expect(() => {
+        validateStringOption("test", [], "default");
+      }).toThrow();
+    });
+  });
+
+  describe("checkDuplicateIncludeExcludes", function () {
+    it("should throw if duplicate names in both", function () {
       expect(() => {
         checkDuplicateIncludeExcludes(
           ["transform-regenerator", "map"],
@@ -201,7 +224,7 @@ describe("normalize-options", () => {
       }).toThrow();
     });
 
-    it("should not throw if no duplicate names in both", function() {
+    it("should not throw if no duplicate names in both", function () {
       expect(() => {
         checkDuplicateIncludeExcludes(["transform-regenerator"], ["map"]);
       }).not.toThrow();

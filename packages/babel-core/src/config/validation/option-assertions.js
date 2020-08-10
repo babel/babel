@@ -18,6 +18,8 @@ import type {
   RootMode,
 } from "./options";
 
+export type { RootPath } from "./options";
+
 export type ValidatorSet = {
   [string]: Validator<any>,
 };
@@ -192,7 +194,10 @@ export function assertBoolean(loc: GeneralPath, value: mixed): boolean | void {
   return value;
 }
 
-export function assertObject(loc: GeneralPath, value: mixed): {} | void {
+export function assertObject(
+  loc: GeneralPath,
+  value: mixed,
+): { +[string]: mixed } | void {
   if (
     value !== undefined &&
     (typeof value !== "object" || Array.isArray(value) || !value)

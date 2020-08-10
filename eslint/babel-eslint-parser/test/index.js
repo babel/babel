@@ -6,7 +6,7 @@ import { parseForESLint } from "../src";
 
 const BABEL_OPTIONS = {
   configFile: require.resolve(
-    "@babel/eslint-shared-fixtures/config/babel.config.js",
+    "../../babel-eslint-shared-fixtures/config/babel.config.js",
   ),
 };
 const PROPS_TO_REMOVE = [
@@ -15,30 +15,27 @@ const PROPS_TO_REMOVE = [
   "variance",
   "typeArguments",
 ];
-// We can remove needing to drop "exported" if null once this lands:
-// https://github.com/acornjs/acorn/pull/889
-const PROPS_TO_REMOVE_IF_NULL = ["exported"];
 
-function deeplyRemoveProperties(obj, props, propsIfNull) {
+function deeplyRemoveProperties(obj, props) {
   for (const [k, v] of Object.entries(obj)) {
     if (typeof v === "object") {
       if (Array.isArray(v)) {
         for (const el of v) {
           if (el != null) {
-            deeplyRemoveProperties(el, props, propsIfNull);
+            deeplyRemoveProperties(el, props);
           }
         }
       }
 
-      if (props.includes(k) || (propsIfNull.includes(k) && v === null)) {
+      if (props.includes(k)) {
         delete obj[k];
       } else if (v != null) {
-        deeplyRemoveProperties(v, props, propsIfNull);
+        deeplyRemoveProperties(v, props);
       }
       continue;
     }
 
-    if (props.includes(k) || (propsIfNull.includes(k) && v === null)) {
+    if (props.includes(k)) {
       delete obj[k];
     }
   }
@@ -72,7 +69,7 @@ describe("Babel and Espree", () => {
       eslintScopeManager: true,
       babelOptions: BABEL_OPTIONS,
     }).ast;
-    deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE, PROPS_TO_REMOVE_IF_NULL);
+    deeplyRemoveProperties(babelAST, PROPS_TO_REMOVE);
     expect(babelAST).toEqual(espreeAST);
   }
 
@@ -87,7 +84,7 @@ describe("Babel and Espree", () => {
   });
 
   describe("compatibility", () => {
-    it("should allow ast.analyze to be called without options", function() {
+    it("should allow ast.analyze to be called without options", function () {
       const ast = parseForESLint("`test`", {
         eslintScopeManager: true,
         eslintVisitorKeys: true,
@@ -256,6 +253,10 @@ describe("Babel and Espree", () => {
     parseAndAssertSame('import "foo";');
   });
 
+  it("import meta", () => {
+    parseAndAssertSame("const url = import.meta.url");
+  });
+
   it("export default class declaration", () => {
     parseAndAssertSame("export default class Foo {}");
   });
@@ -276,15 +277,8 @@ describe("Babel and Espree", () => {
     parseAndAssertSame('export * from "foo";');
   });
 
-  // Espree doesn't support `export * as ns` yet
   it("export * as ns", () => {
-    const code = 'export * as Foo from "foo";';
-    const babylonAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: BABEL_OPTIONS,
-    }).ast;
-    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
+    parseAndAssertSame('export * as Foo from "foo";');
   });
 
   it("export named", () => {
@@ -295,26 +289,12 @@ describe("Babel and Espree", () => {
     parseAndAssertSame("var foo = 1;export { foo as bar };");
   });
 
-  // Espree doesn't support the optional chaining operator yet
-  it("optional chaining operator (token)", () => {
-    const code = "foo?.bar";
-    const babylonAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: BABEL_OPTIONS,
-    }).ast;
-    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
+  it("optional chaining operator", () => {
+    parseAndAssertSame("foo?.bar?.().qux()");
   });
 
-  // Espree doesn't support the nullish coalescing operator yet
-  it("nullish coalescing operator (token)", () => {
-    const code = "foo ?? bar";
-    const babylonAST = parseForESLint(code, {
-      eslintVisitorKeys: true,
-      eslintScopeManager: true,
-      babelOptions: BABEL_OPTIONS,
-    }).ast;
-    expect(babylonAST.tokens[1].type).toEqual("Punctuator");
+  it("nullish coalescing operator", () => {
+    parseAndAssertSame("foo ?? bar");
   });
 
   // Espree doesn't support the pipeline operator yet
@@ -589,7 +569,7 @@ describe("Babel and Espree", () => {
 
     it("Dynamic Import", () => {
       parseAndAssertSame(`
-        const a = import('a');
+        const a = import(moduleName);
       `);
     });
   });

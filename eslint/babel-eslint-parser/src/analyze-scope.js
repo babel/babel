@@ -237,7 +237,7 @@ class Referencer extends OriginalReferencer {
         this._checkIdentifierOrVisit(name);
       }
     }
-    scope.__define = function() {
+    scope.__define = function () {
       return parentScope.__define.apply(parentScope, arguments);
     };
 

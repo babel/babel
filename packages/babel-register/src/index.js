@@ -4,7 +4,7 @@
  * from a compiled Babel import.
  */
 
-exports = module.exports = function(...args) {
+exports = module.exports = function (...args) {
   return register(...args);
 };
 exports.__esModule = true;

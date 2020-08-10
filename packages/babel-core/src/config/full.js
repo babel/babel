@@ -66,7 +66,7 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
   const { options, context } = result;
 
   const optionDefaults = {};
-  const passes = [[]];
+  const passes: Array<Array<Plugin>> = [[]];
   try {
     const { plugins, presets } = options;
 
@@ -74,14 +74,8 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
       throw new Error("Assertion failure - plugins and presets exist");
     }
 
-    const ignored = yield* (function* recurseDescriptors(
-      config: {
-        plugins: Array<UnloadedDescriptor>,
-        presets: Array<UnloadedDescriptor>,
-      },
-      pass: Array<Plugin>,
-    ) {
-      const plugins = [];
+    const ignored = yield* (function* recurseDescriptors(config, pass) {
+      const plugins: Array<Plugin> = [];
       for (let i = 0; i < config.plugins.length; i++) {
         const descriptor = config.plugins[i];
         if (descriptor.options !== false) {
@@ -103,7 +97,10 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
         }
       }
 
-      const presets = [];
+      const presets: Array<{|
+        preset: ConfigChain | null,
+        pass: Array<Plugin>,
+      |}> = [];
       for (let i = 0; i < config.presets.length; i++) {
         const descriptor = config.presets[i];
         if (descriptor.options !== false) {
@@ -211,7 +208,7 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
 /**
  * Load a generic plugin/preset from the given descriptor loaded from the config object.
  */
-const loadDescriptor = makeWeakCache(function*(
+const loadDescriptor = makeWeakCache(function* (
   { value, options, dirname, alias }: UnloadedDescriptor,
   cache: CacheConfigurator<SimpleContext>,
 ): Handler<LoadedDescriptor> {
@@ -277,7 +274,7 @@ function* loadPluginDescriptor(
   );
 }
 
-const instantiatePlugin = makeWeakCache(function*(
+const instantiatePlugin = makeWeakCache(function* (
   { value, options, dirname, alias }: LoadedDescriptor,
   cache: CacheConfigurator<SimpleContext>,
 ): Handler<Plugin> {
@@ -383,7 +380,7 @@ function chain(a, b) {
   const fns = [a, b].filter(Boolean);
   if (fns.length <= 1) return fns[0];
 
-  return function(...args) {
+  return function (...args) {
     for (const fn of fns) {
       fn.apply(this, args);
     }

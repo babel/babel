@@ -14,7 +14,7 @@ import { logEntryPolyfills } from "../../debug";
 import type { InternalPluginOptions } from "../../types";
 import type { NodePath } from "@babel/traverse";
 
-export default function(
+export default function (
   _: any,
   {
     include,
@@ -53,7 +53,7 @@ export default function(
     pre() {
       this.importPolyfillIncluded = false;
 
-      this.replaceBySeparateModulesImport = function(path) {
+      this.replaceBySeparateModulesImport = function (path) {
         this.importPolyfillIncluded = true;
 
         if (regenerator) {

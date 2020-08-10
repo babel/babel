@@ -110,7 +110,7 @@ export function assertNodeType(...types: Array<string>): Validator {
         node.type
       } expected node to be of a type ${JSON.stringify(
         types,
-      )} but instead got ${JSON.stringify(val && val.type)}`,
+      )} but instead got ${JSON.stringify(val?.type)}`,
     );
   }
 
@@ -133,7 +133,7 @@ export function assertNodeOrValueType(...types: Array<string>): Validator {
         node.type
       } expected node to be of a type ${JSON.stringify(
         types,
-      )} but instead got ${JSON.stringify(val && val.type)}`,
+      )} but instead got ${JSON.stringify(val?.type)}`,
     );
   }
 

@@ -7,7 +7,7 @@ export function remove() {
   this._assertUnremoved();
 
   this.resync();
-  if (!this.opts || !this.opts.noScope) {
+  if (!this.opts?.noScope) {
     this._removeFromScope();
   }
 

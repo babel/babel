@@ -8,7 +8,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "5",
-    "electron": "0.32"
+    "electron": "0.31"
   },
   "es6.array.every": {
     "chrome": "5",
@@ -33,7 +33,7 @@
     "node": "4",
     "ios": "8",
     "samsung": "5",
-    "electron": "0.32"
+    "electron": "0.31"
   },
   "es6.array.filter": {
     "chrome": "5",
@@ -58,7 +58,7 @@
     "node": "4",
     "ios": "8",
     "samsung": "5",
-    "electron": "0.32"
+    "electron": "0.31"
   },
   "es6.array.find-index": {
     "chrome": "45",
@@ -69,7 +69,7 @@
     "node": "4",
     "ios": "8",
     "samsung": "5",
-    "electron": "0.32"
+    "electron": "0.31"
   },
   "es7.array.flat-map": {
     "chrome": "69",
@@ -194,7 +194,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "5",
-    "electron": "0.32"
+    "electron": "0.31"
   },
   "es6.array.reduce": {
     "chrome": "5",
@@ -573,7 +573,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "es6.number.epsilon": {
     "chrome": "34",
@@ -1287,7 +1287,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "es6.string.ends-with": {
     "chrome": "41",
@@ -1298,7 +1298,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "es6.string.fixed": {
     "chrome": "5",
@@ -1348,7 +1348,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "es6.string.includes": {
     "chrome": "41",
@@ -1359,7 +1359,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "es6.string.italics": {
     "chrome": "5",
@@ -1429,7 +1429,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "es6.string.repeat": {
     "chrome": "41",
@@ -1440,7 +1440,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "es6.string.small": {
     "chrome": "5",
@@ -1464,7 +1464,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "es6.string.strike": {
     "chrome": "5",

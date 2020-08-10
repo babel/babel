@@ -51,17 +51,20 @@ export function _call(fns?: Array<Function>): boolean {
   return false;
 }
 
-export function isBlacklisted(): boolean {
-  const blacklist = this.opts.blacklist;
-  return blacklist && blacklist.indexOf(this.node.type) > -1;
+export function isDenylisted(): boolean {
+  const denylist = this.opts.denylist ?? this.opts.blacklist;
+  return denylist && denylist.indexOf(this.node.type) > -1;
 }
+
+// TODO: Remove in Babel 8
+export { isDenylisted as isBlacklisted };
 
 export function visit(): boolean {
   if (!this.node) {
     return false;
   }
 
-  if (this.isBlacklisted()) {
+  if (this.isDenylisted()) {
     return false;
   }
 
@@ -236,7 +239,7 @@ export function setup(parentPath, container, listKey, key) {
 export function setKey(key) {
   this.key = key;
   this.node = this.container[this.key];
-  this.type = this.node && this.node.type;
+  this.type = this.node?.type;
 }
 
 export function requeue(pathToQueue = this) {

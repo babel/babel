@@ -170,7 +170,7 @@ function hoistFunctionEnvironment(
       p.isClassProperty({ static: false })
     );
   });
-  const inConstructor = thisEnvFn && thisEnvFn.node.kind === "constructor";
+  const inConstructor = thisEnvFn?.node.kind === "constructor";
 
   if (thisEnvFn.isClassProperty()) {
     throw fnPath.buildCodeFrameError(

@@ -14,7 +14,7 @@ export default function toSequenceExpression(
   nodes: Array<Object>,
   scope: Scope,
 ): ?Object {
-  if (!nodes || !nodes.length) return;
+  if (!nodes?.length) return;
 
   const declars = [];
   const result = gatherSequenceExpressions(nodes, scope, declars);

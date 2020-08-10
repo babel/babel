@@ -2,11 +2,16 @@ const path = require("path");
 const fs = require("fs");
 const dirname = path.join(__dirname, "..");
 
-module.exports = function() {
+const BABEL_SRC_REGEXP =
+  path.sep === "/"
+    ? /packages\/(babel-[^/]+)\/src\//
+    : /packages\\(babel-[^\\]+)\\src\\/;
+
+module.exports = function () {
   return {
     name: "babel-source",
     load(id) {
-      const matches = id.match(/packages\/(babel-[^/]+)\/src\//);
+      const matches = id.match(BABEL_SRC_REGEXP);
       if (matches) {
         // check if browser field exists for this file and replace
         const packageFolder = path.join(dirname, "packages", matches[1]);
@@ -16,18 +21,20 @@ module.exports = function() {
           packageJson["browser"] &&
           typeof packageJson["browser"] === "object"
         ) {
-          for (let nodeFile in packageJson["browser"]) {
+          for (const nodeFile in packageJson["browser"]) {
             const browserFile = packageJson["browser"][nodeFile].replace(
               /^(\.\/)?lib\//,
               "src/"
             );
-            nodeFile = nodeFile.replace(/^(\.\/)?lib\//, "src/");
-            if (id.endsWith(nodeFile)) {
+            const nodeFileSrc = path.normalize(
+              nodeFile.replace(/^(\.\/)?lib\//, "src/")
+            );
+            if (id.endsWith(nodeFileSrc)) {
               if (browserFile === false) {
                 return "";
               }
               return fs.readFileSync(
-                path.join(packageFolder, browserFile),
+                path.join(packageFolder, path.normalize(browserFile)),
                 "UTF-8"
               );
             }
@@ -63,7 +70,7 @@ module.exports = function() {
           path.join(packageFolder, "package.json")
         );
       } catch (e) {
-        // Some Babel packahes aren't in this repository, but in
+        // Some Babel packages aren't in this repository
         return null;
       }
 
@@ -74,10 +81,12 @@ module.exports = function() {
           ? packageJson["browser"]
           : packageJson["main"];
 
-      return path.join(
-        packageFolder,
-        // replace lib with src in the pkg.json entry
-        filename.replace(/^(\.\/)?lib\//, "src/")
+      return path.normalize(
+        path.join(
+          packageFolder,
+          // replace lib with src in the package.json entry
+          filename.replace(/^(\.\/)?lib\//, "src/")
+        )
       );
     },
   };

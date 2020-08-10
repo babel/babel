@@ -45,8 +45,9 @@ export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
     // In spec mode, only instance fields need a "private name" initializer
     // because static fields are directly assigned to a variable in the
     // buildPrivateStaticFieldInitSpec function.
-    const { id, static: isStatic, method: isMethod, getId, setId } = value;
+    const { static: isStatic, method: isMethod, getId, setId } = value;
     const isAccessor = getId || setId;
+    const id = t.cloneNode(value.id);
     if (loose) {
       initNodes.push(
         template.statement.ast`
@@ -70,69 +71,108 @@ export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
 // Traverses the class scope, handling private name references. If an inner
 // class redeclares the same private name, it will hand off traversal to the
 // restricted visitor (which doesn't traverse the inner class's inner scope).
-const privateNameVisitor = {
+function privateNameVisitorFactory(visitor) {
+  const privateNameVisitor = {
+    ...visitor,
+
+    Class(path) {
+      const { privateNamesMap } = this;
+      const body = path.get("body.body");
+
+      const visiblePrivateNames = new Map(privateNamesMap);
+      const redeclared = [];
+      for (const prop of body) {
+        if (!prop.isPrivate()) continue;
+        const { name } = prop.node.key.id;
+        visiblePrivateNames.delete(name);
+        redeclared.push(name);
+      }
+
+      // If the class doesn't redeclare any private fields, we can continue with
+      // our overall traversal.
+      if (!redeclared.length) {
+        return;
+      }
+
+      // This class redeclares some private field. We need to process the outer
+      // environment with access to all the outer privates, then we can process
+      // the inner environment with only the still-visible outer privates.
+      path.get("body").traverse(nestedVisitor, {
+        ...this,
+        redeclared,
+      });
+      path.traverse(privateNameVisitor, {
+        ...this,
+        privateNamesMap: visiblePrivateNames,
+      });
+
+      // We'll eventually hit this class node again with the overall Class
+      // Features visitor, which'll process the redeclared privates.
+      path.skipKey("body");
+    },
+  };
+
+  // Traverses the outer portion of a class, without touching the class's inner
+  // scope, for private names.
+  const nestedVisitor = traverse.visitors.merge([
+    {
+      ...visitor,
+    },
+    environmentVisitor,
+  ]);
+
+  return privateNameVisitor;
+}
+
+const privateNameVisitor = privateNameVisitorFactory({
   PrivateName(path) {
-    const { privateNamesMap } = this;
+    const { privateNamesMap, redeclared } = this;
     const { node, parentPath } = path;
 
-    if (!parentPath.isMemberExpression({ property: node })) return;
-    if (!privateNamesMap.has(node.id.name)) return;
+    if (
+      !parentPath.isMemberExpression({ property: node }) &&
+      !parentPath.isOptionalMemberExpression({ property: node })
+    ) {
+      return;
+    }
+    const { name } = node.id;
+    if (!privateNamesMap.has(name)) return;
+    if (redeclared && redeclared.includes(name)) return;
 
     this.handle(parentPath);
   },
+});
 
-  Class(path) {
-    const { privateNamesMap } = this;
-    const body = path.get("body.body");
+const privateInVisitor = privateNameVisitorFactory({
+  BinaryExpression(path) {
+    const { operator, left, right } = path.node;
+    if (operator !== "in") return;
+    if (!path.get("left").isPrivateName()) return;
 
-    const visiblePrivateNames = new Map(privateNamesMap);
-    const redeclared = [];
-    for (const prop of body) {
-      if (!prop.isPrivate()) continue;
-      const { name } = prop.node.key.id;
-      visiblePrivateNames.delete(name);
-      redeclared.push(name);
-    }
+    const { loose, privateNamesMap, redeclared } = this;
+    const { name } = left.id;
 
-    // If the class doesn't redeclare any private fields, we can continue with
-    // our overall traversal.
-    if (!redeclared.length) {
+    if (!privateNamesMap.has(name)) return;
+    if (redeclared && redeclared.includes(name)) return;
+
+    if (loose) {
+      const { id } = privateNamesMap.get(name);
+      path.replaceWith(template.expression.ast`
+        Object.prototype.hasOwnProperty.call(${right}, ${t.cloneNode(id)})
+      `);
       return;
     }
 
-    // This class redeclares some private field. We need to process the outer
-    // environment with access to all the outer privates, then we can process
-    // the inner environment with only the still-visible outer privates.
-    path.get("body").traverse(privateNameNestedVisitor, {
-      ...this,
-      redeclared,
-    });
-    path.traverse(privateNameVisitor, {
-      ...this,
-      privateNamesMap: visiblePrivateNames,
-    });
+    const { id, static: isStatic } = privateNamesMap.get(name);
 
-    // We'll eventually hit this class node again with the overall Class
-    // Features visitor, which'll process the redeclared privates.
-    path.skipKey("body");
-  },
-};
+    if (isStatic) {
+      path.replaceWith(template.expression.ast`${right} === ${this.classRef}`);
+      return;
+    }
 
-// Traverses the outer portion of a class, without touching the class's inner
-// scope, for private names.
-const privateNameNestedVisitor = traverse.visitors.merge([
-  {
-    PrivateName(path) {
-      const { redeclared } = this;
-      const { name } = path.node.id;
-      if (redeclared.includes(name)) path.skip();
-    },
+    path.replaceWith(template.expression.ast`${t.cloneNode(id)}.has(${right})`);
   },
-  {
-    PrivateName: privateNameVisitor.PrivateName,
-  },
-  environmentVisitor,
-]);
+});
 
 const privateNameHandlerSpec = {
   memoise(member, count) {
@@ -202,6 +242,15 @@ const privateNameHandlerSpec = {
     ]);
   },
 
+  boundGet(member) {
+    this.memoise(member, 1);
+
+    return t.callExpression(
+      t.memberExpression(this.get(member), t.identifier("bind")),
+      [this.receiver(member)],
+    );
+  },
+
   set(member, value) {
     const { classRef, privateNamesMap, file } = this;
     const { name } = member.node.property.id;
@@ -261,23 +310,50 @@ const privateNameHandlerSpec = {
     // The first access (the get) should do the memo assignment.
     this.memoise(member, 1);
 
-    return optimiseCall(this.get(member), this.receiver(member), args);
+    return optimiseCall(this.get(member), this.receiver(member), args, false);
+  },
+
+  optionalCall(member, args) {
+    this.memoise(member, 1);
+
+    return optimiseCall(this.get(member), this.receiver(member), args, true);
   },
 };
 
 const privateNameHandlerLoose = {
-  handle(member) {
+  get(member) {
     const { privateNamesMap, file } = this;
     const { object } = member.node;
     const { name } = member.node.property.id;
 
-    member.replaceWith(
-      template.expression`BASE(REF, PROP)[PROP]`({
-        BASE: file.addHelper("classPrivateFieldLooseBase"),
-        REF: object,
-        PROP: privateNamesMap.get(name).id,
-      }),
+    return template.expression`BASE(REF, PROP)[PROP]`({
+      BASE: file.addHelper("classPrivateFieldLooseBase"),
+      REF: t.cloneNode(object),
+      PROP: t.cloneNode(privateNamesMap.get(name).id),
+    });
+  },
+
+  boundGet(member) {
+    return t.callExpression(
+      t.memberExpression(this.get(member), t.identifier("bind")),
+      [t.cloneNode(member.node.object)],
     );
+  },
+
+  simpleSet(member) {
+    return this.get(member);
+  },
+
+  destructureSet(member) {
+    return this.get(member);
+  },
+
+  call(member, args) {
+    return t.callExpression(this.get(member), args);
+  },
+
+  optionalCall(member, args) {
+    return t.optionalCallExpression(this.get(member), args, true);
   },
 };
 
@@ -291,21 +367,20 @@ export function transformPrivateNamesUsage(
   if (!privateNamesMap.size) return;
 
   const body = path.get("body");
+  const handler = loose ? privateNameHandlerLoose : privateNameHandlerSpec;
 
-  if (loose) {
-    body.traverse(privateNameVisitor, {
-      privateNamesMap,
-      file: state,
-      ...privateNameHandlerLoose,
-    });
-  } else {
-    memberExpressionToFunctions(body, privateNameVisitor, {
-      privateNamesMap,
-      classRef: ref,
-      file: state,
-      ...privateNameHandlerSpec,
-    });
-  }
+  memberExpressionToFunctions(body, privateNameVisitor, {
+    privateNamesMap,
+    classRef: ref,
+    file: state,
+    ...handler,
+  });
+  body.traverse(privateInVisitor, {
+    privateNamesMap,
+    classRef: ref,
+    file: state,
+    loose,
+  });
 }
 
 function buildPrivateFieldInitLoose(ref, prop, privateNamesMap) {
@@ -313,7 +388,7 @@ function buildPrivateFieldInitLoose(ref, prop, privateNamesMap) {
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
   return template.statement.ast`
-    Object.defineProperty(${ref}, ${id}, {
+    Object.defineProperty(${ref}, ${t.cloneNode(id)}, {
       // configurable is false by default
       // enumerable is false by default
       writable: true,
@@ -326,7 +401,7 @@ function buildPrivateInstanceFieldInitSpec(ref, prop, privateNamesMap) {
   const { id } = privateNamesMap.get(prop.node.key.id.name);
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
-  return template.statement.ast`${id}.set(${ref}, {
+  return template.statement.ast`${t.cloneNode(id)}.set(${ref}, {
     // configurable is always false for private elements
     // enumerable is always false for private elements
     writable: true,
@@ -348,7 +423,7 @@ function buildPrivateStaticFieldInitSpec(prop, privateNamesMap) {
     });
 
     return template.statement.ast`
-      var ${id.name} = {
+      var ${t.cloneNode(id)} = {
         // configurable is false by default
         // enumerable is false by default
         // writable is false by default
@@ -360,7 +435,7 @@ function buildPrivateStaticFieldInitSpec(prop, privateNamesMap) {
 
   const value = prop.node.value || prop.scope.buildUndefinedNode();
   return template.statement.ast`
-    var ${id} = {
+    var ${t.cloneNode(id)} = {
       // configurable is false by default
       // enumerable is false by default
       writable: true,
@@ -529,14 +604,14 @@ function buildPrivateMethodDeclaration(prop, privateNamesMap, loose = false) {
   if (isStatic && !loose) {
     return t.variableDeclaration("var", [
       t.variableDeclarator(
-        id,
+        t.cloneNode(id),
         t.functionExpression(id, params, body, generator, async),
       ),
     ]);
   }
 
   return t.variableDeclaration("var", [
-    t.variableDeclarator(methodId, methodValue),
+    t.variableDeclarator(t.cloneNode(methodId), methodValue),
   ]);
 }
 

@@ -209,7 +209,7 @@ export function getOuterBindingIdentifiers(duplicates?: boolean): Object {
   return t.getOuterBindingIdentifiers(this.node, duplicates);
 }
 
-// original source - https://github.com/babel/babel/blob/master/packages/babel-types/src/retrievers.js
+// original source - https://github.com/babel/babel/blob/main/packages/babel-types/src/retrievers/getBindingIdentifiers.js
 // path.getBindingIdentifiers returns nodes where the following re-implementation
 // returns paths
 export function getBindingIdentifierPaths(

@@ -89,8 +89,8 @@ async function* loadTests(root) {
 
 const runner = new TestRunner({
   testDir: path.join(__dirname, "../../../build/flow/src/parser/test/flow"),
-  whitelist: path.join(__dirname, "whitelist.txt"),
-  shouldUpdate: process.argv.includes("--update-whitelist"),
+  allowlist: path.join(__dirname, "allowlist.txt"),
+  shouldUpdate: process.argv.includes("--update-allowlist"),
 
   async *getTests() {
     for await (const test of loadTests(this.testDir)) {

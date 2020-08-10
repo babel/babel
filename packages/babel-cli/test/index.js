@@ -3,65 +3,75 @@ const helper = require("@babel/helper-fixtures");
 const rimraf = require("rimraf");
 const { sync: makeDirSync } = require("make-dir");
 const child = require("child_process");
+const escapeRegExp = require("lodash/escapeRegExp");
 const merge = require("lodash/merge");
 const path = require("path");
 const fs = require("fs");
 
 const fixtureLoc = path.join(__dirname, "fixtures");
 const tmpLoc = path.join(__dirname, "tmp");
+const rootDir = path.resolve(__dirname, "../../..");
 
-const fileFilter = function(x) {
+const fileFilter = function (x) {
   return x !== ".DS_Store";
 };
 
-const outputFileSync = function(filePath, data) {
+const outputFileSync = function (filePath, data) {
   makeDirSync(path.dirname(filePath));
   fs.writeFileSync(filePath, data);
 };
 
-const presetLocs = [path.join(__dirname, "../../babel-preset-react")];
+const presetLocs = [path.join(rootDir, "./packages/babel-preset-react")];
 
 const pluginLocs = [
-  path.join(__dirname, "/../../babel-plugin-transform-arrow-functions"),
-  path.join(__dirname, "/../../babel-plugin-transform-strict-mode"),
-  path.join(__dirname, "/../../babel-plugin-transform-modules-commonjs"),
+  path.join(rootDir, "./packages/babel-plugin-transform-arrow-functions"),
+  path.join(rootDir, "./packages/babel-plugin-transform-strict-mode"),
+  path.join(rootDir, "./packages/babel-plugin-transform-modules-commonjs"),
 ].join(",");
 
-const readDir = function(loc, filter) {
+const readDir = function (loc, filter) {
   const files = {};
   if (fs.existsSync(loc)) {
-    readdir(loc, filter).forEach(function(filename) {
+    readdir(loc, filter).forEach(function (filename) {
       files[filename] = helper.readFile(path.join(loc, filename));
     });
   }
   return files;
 };
 
-const saveInFiles = function(files) {
+const saveInFiles = function (files) {
   // Place an empty .babelrc in each test so tests won't unexpectedly get to repo-level config.
   if (!fs.existsSync(".babelrc")) {
     outputFileSync(".babelrc", "{}");
   }
 
-  Object.keys(files).forEach(function(filename) {
+  Object.keys(files).forEach(function (filename) {
     const content = files[filename];
     outputFileSync(filename, content);
   });
 };
 
-const replacePaths = function(str, cwd) {
-  let prev;
-  do {
-    prev = str;
-    str = str.replace(cwd, "<CWD>");
-  } while (str !== prev);
-
-  return str;
+const normalizeOutput = function (str, cwd) {
+  let result = str
+    .replace(/\(\d+ms\)/g, "(123ms)")
+    .replace(new RegExp(escapeRegExp(cwd), "g"), "<CWD>")
+    // (non-win32) /foo/babel/packages -> <CWD>/packages
+    // (win32) C:\foo\babel\packages -> <CWD>\packages
+    .replace(new RegExp(escapeRegExp(rootDir), "g"), "<ROOTDIR>");
+  if (process.platform === "win32") {
+    result = result
+      // C:\\foo\\babel\\packages -> <CWD>\\packages (in js string literal)
+      .replace(
+        new RegExp(escapeRegExp(rootDir.replace(/\\/g, "\\\\")), "g"),
+        "<ROOTDIR>",
+      );
+  }
+  return result;
 };
 
-const assertTest = function(stdout, stderr, opts, cwd) {
-  stdout = replacePaths(stdout, cwd);
-  stderr = replacePaths(stderr, cwd);
+const assertTest = function (stdout, stderr, opts, cwd) {
+  stdout = normalizeOutput(stdout, cwd);
+  stderr = normalizeOutput(stderr, cwd);
 
   const expectStderr = opts.stderr.trim();
   stderr = stderr.trim();
@@ -84,6 +94,7 @@ const assertTest = function(stdout, stderr, opts, cwd) {
     if (opts.stdoutContains) {
       expect(stdout).toContain(expectStdout);
     } else {
+      fs.writeFileSync(opts.stdoutPath, stdout + "\n");
       expect(stdout).toBe(expectStdout);
     }
   } else if (stdout) {
@@ -93,7 +104,7 @@ const assertTest = function(stdout, stderr, opts, cwd) {
   if (opts.outFiles) {
     const actualFiles = readDir(tmpLoc, fileFilter);
 
-    Object.keys(actualFiles).forEach(function(filename) {
+    Object.keys(actualFiles).forEach(function (filename) {
       try {
         if (
           // saveInFiles always creates an empty .babelrc, so lets exclude for now
@@ -112,16 +123,16 @@ const assertTest = function(stdout, stderr, opts, cwd) {
       }
     });
 
-    Object.keys(opts.outFiles).forEach(function(filename) {
+    Object.keys(opts.outFiles).forEach(function (filename) {
       expect(actualFiles).toHaveProperty([filename]);
     });
   }
 };
 
-const buildTest = function(binName, testName, opts) {
+const buildTest = function (binName, testName, opts) {
   const binLoc = path.join(__dirname, "../lib", binName);
 
-  return function(callback) {
+  return function (callback) {
     saveInFiles(opts.inFiles);
 
     let args = [binLoc];
@@ -131,21 +142,22 @@ const buildTest = function(binName, testName, opts) {
     }
 
     args = args.concat(opts.args);
+    const env = { ...process.env, ...opts.env };
 
-    const spawn = child.spawn(process.execPath, args);
+    const spawn = child.spawn(process.execPath, args, { env });
 
     let stderr = "";
     let stdout = "";
 
-    spawn.stderr.on("data", function(chunk) {
+    spawn.stderr.on("data", function (chunk) {
       stderr += chunk;
     });
 
-    spawn.stdout.on("data", function(chunk) {
+    spawn.stdout.on("data", function (chunk) {
       stdout += chunk;
     });
 
-    spawn.on("close", function() {
+    spawn.on("close", function () {
       let err;
 
       try {
@@ -169,11 +181,11 @@ const buildTest = function(binName, testName, opts) {
   };
 };
 
-fs.readdirSync(fixtureLoc).forEach(function(binName) {
+fs.readdirSync(fixtureLoc).forEach(function (binName) {
   if (binName.startsWith(".")) return;
 
   const suiteLoc = path.join(fixtureLoc, binName);
-  describe("bin/" + binName, function() {
+  describe("bin/" + binName, function () {
     let cwd;
 
     beforeEach(() => {
@@ -194,7 +206,7 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
       process.chdir(cwd);
     });
 
-    fs.readdirSync(suiteLoc).forEach(function(testName) {
+    fs.readdirSync(suiteLoc).forEach(function (testName) {
       if (testName.startsWith(".")) return;
 
       const testLoc = path.join(suiteLoc, testName);
@@ -228,8 +240,9 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
         merge(opts, taskOpts);
       }
 
-      ["stdout", "stdin", "stderr"].forEach(function(key) {
+      ["stdout", "stdin", "stderr"].forEach(function (key) {
         const loc = path.join(testLoc, key + ".txt");
+        opts[key + "Path"] = loc;
         if (fs.existsSync(loc)) {
           opts[key] = helper.readFile(loc);
         } else {

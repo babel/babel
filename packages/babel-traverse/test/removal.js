@@ -6,7 +6,7 @@ function getPath(code) {
   const ast = parse(code);
   let path;
   traverse(ast, {
-    Program: function(_path) {
+    Program: function (_path) {
       path = _path;
       _path.stop();
     },
@@ -19,14 +19,11 @@ function generateCode(path) {
   return generate(path.node).code;
 }
 
-describe("removal", function() {
-  describe("ArrowFunction", function() {
-    it("remove body", function() {
+describe("removal", function () {
+  describe("ArrowFunction", function () {
+    it("remove body", function () {
       const rootPath = getPath("x = () => b;");
-      const path = rootPath
-        .get("body")[0]
-        .get("expression")
-        .get("right");
+      const path = rootPath.get("body")[0].get("expression").get("right");
       const body = path.get("body");
       body.remove();
 
@@ -34,10 +31,10 @@ describe("removal", function() {
     });
   });
 
-  it("remove with noScope", function() {
+  it("remove with noScope", function () {
     const ast = parse("a=1");
     traverse(ast, {
-      AssignmentExpression: function(path) {
+      AssignmentExpression: function (path) {
         path.remove();
       },
       noScope: true,

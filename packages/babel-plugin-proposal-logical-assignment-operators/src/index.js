@@ -13,7 +13,8 @@ export default declare(api => {
       AssignmentExpression(path) {
         const { node, scope } = path;
         const { operator, left, right } = node;
-        if (operator !== "||=" && operator !== "&&=" && operator !== "??=") {
+        const operatorTrunc = operator.slice(0, -1);
+        if (!t.LOGICAL_OPERATORS.includes(operatorTrunc)) {
           return;
         }
 
@@ -39,16 +40,11 @@ export default declare(api => {
           }
         }
 
-        const isRHSAnonymousFunction = t.isFunction(right, { id: null });
-        const rightExpression = isRHSAnonymousFunction
-          ? t.sequenceExpression([t.numericLiteral(0), right])
-          : right;
-
         path.replaceWith(
           t.logicalExpression(
-            operator.slice(0, -1),
+            operatorTrunc,
             lhs,
-            t.assignmentExpression("=", left, rightExpression),
+            t.assignmentExpression("=", left, right),
           ),
         );
       },

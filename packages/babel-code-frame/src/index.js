@@ -175,7 +175,7 @@ export function codeFrameColumns(
  * Create a code frame, adding line numbers, code highlighting, and pointing to a given position.
  */
 
-export default function(
+export default function (
   rawLines: string,
   lineNumber: number,
   colNumber: ?number,

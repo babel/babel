@@ -1,27 +1,27 @@
 import * as t from "../lib";
 import { parse } from "@babel/parser";
 
-describe("cloneNode", function() {
-  it("should handle undefined", function() {
+describe("cloneNode", function () {
+  it("should handle undefined", function () {
     const node = undefined;
     const cloned = t.cloneNode(node);
     expect(cloned).toBeUndefined();
   });
 
-  it("should handle null", function() {
+  it("should handle null", function () {
     const node = null;
     const cloned = t.cloneNode(node);
     expect(cloned).toBeNull();
   });
 
-  it("should handle simple cases", function() {
+  it("should handle simple cases", function () {
     const node = t.identifier("a");
     const cloned = t.cloneNode(node);
     expect(node).not.toBe(cloned);
     expect(t.isNodesEquivalent(node, cloned)).toBe(true);
   });
 
-  it("should handle full programs", function() {
+  it("should handle full programs", function () {
     const file = parse("1 + 1");
     const cloned = t.cloneNode(file);
     expect(file).not.toBe(cloned);
@@ -34,7 +34,7 @@ describe("cloneNode", function() {
     expect(t.isNodesEquivalent(file, cloned)).toBe(true);
   });
 
-  it("should handle complex programs", function() {
+  it("should handle complex programs", function () {
     const program = "'use strict'; function lol() { wow();return 1; }";
     const node = parse(program);
     const cloned = t.cloneNode(node);
@@ -42,14 +42,14 @@ describe("cloneNode", function() {
     expect(t.isNodesEquivalent(node, cloned)).toBe(true);
   });
 
-  it("should handle missing array element", function() {
+  it("should handle missing array element", function () {
     const node = parse("[,0]");
     const cloned = t.cloneNode(node);
     expect(node).not.toBe(cloned);
     expect(t.isNodesEquivalent(node, cloned)).toBe(true);
   });
 
-  it("should support shallow cloning", function() {
+  it("should support shallow cloning", function () {
     const node = t.memberExpression(t.identifier("foo"), t.identifier("bar"));
     const cloned = t.cloneNode(node, /* deep */ false);
     expect(node).not.toBe(cloned);
@@ -57,7 +57,7 @@ describe("cloneNode", function() {
     expect(node.property).toBe(cloned.property);
   });
 
-  it("should preserve type annotations", function() {
+  it("should preserve type annotations", function () {
     const node = t.variableDeclaration("let", [
       t.variableDeclarator({
         ...t.identifier("value"),
@@ -73,7 +73,7 @@ describe("cloneNode", function() {
     );
   });
 
-  it("should support shallow cloning without loc", function() {
+  it("should support shallow cloning without loc", function () {
     const node = t.variableDeclaration("let", [
       t.variableDeclarator({
         ...t.identifier("value"),
@@ -85,7 +85,7 @@ describe("cloneNode", function() {
     expect(cloned.loc).toBeNull();
   });
 
-  it("should support deep cloning without loc", function() {
+  it("should support deep cloning without loc", function () {
     const node = t.variableDeclaration("let", [
       t.variableDeclarator({
         ...t.identifier("value"),
@@ -99,7 +99,7 @@ describe("cloneNode", function() {
     expect(cloned.declarations[0].id.loc).toBeNull();
   });
 
-  it("should support deep cloning for comments", function() {
+  it("should support deep cloning for comments", function () {
     const node = t.variableDeclaration("let", [
       t.variableDeclarator({
         ...t.identifier("value"),
@@ -123,7 +123,7 @@ describe("cloneNode", function() {
     );
   });
 
-  it("should support deep cloning for comments without loc", function() {
+  it("should support deep cloning for comments without loc", function () {
     const node = t.variableDeclaration("let", [
       t.variableDeclarator({
         ...t.identifier("value"),

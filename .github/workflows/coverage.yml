@@ -5,23 +5,15 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [13.x]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: Environment log
-        id: env
-        run: |
-          yarn --version
+          node-version: "*"
       - name: Generate coverage report
         run: |
-          yarn --version
           make -j test-ci-coverage
       - name: Upload coverage report
         uses: codecov/codecov-action@v1

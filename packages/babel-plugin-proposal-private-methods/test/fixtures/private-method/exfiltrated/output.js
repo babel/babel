@@ -1,5 +1,7 @@
 var exfiltrated;
 
+var _privateMethod = new WeakSet();
+
 class Foo {
   constructor() {
     _privateMethod.add(this);
@@ -10,7 +12,5 @@ class Foo {
   }
 
 }
-
-var _privateMethod = new WeakSet();
 
 var _privateMethod2 = function _privateMethod2() {};

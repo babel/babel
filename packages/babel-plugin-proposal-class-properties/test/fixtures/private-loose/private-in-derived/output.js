@@ -1,3 +1,5 @@
+var _outer = babelHelpers.classPrivateFieldLooseKey("outer");
+
 var Outer = function Outer() {
   "use strict";
 
@@ -20,5 +22,3 @@ var Outer = function Outer() {
     return Test;
   }(babelHelpers.classPrivateFieldLooseBase(this, _outer)[_outer]);
 };
-
-var _outer = babelHelpers.classPrivateFieldLooseKey("outer");

@@ -150,7 +150,7 @@ function visit(node, name, scope) {
  * @param {NodePath} param0
  * @param {Boolean} localBinding whether a name could shadow a self-reference (e.g. converting arrow function)
  */
-export default function({ node, parent, scope, id }, localBinding = false) {
+export default function ({ node, parent, scope, id }, localBinding = false) {
   // has an `id` so we don't need to infer one
   if (node.id) return;
 

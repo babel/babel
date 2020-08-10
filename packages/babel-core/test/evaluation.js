@@ -1,12 +1,12 @@
 import traverse from "@babel/traverse";
 import { parse } from "@babel/parser";
 
-describe("evaluation", function() {
+describe("evaluation", function () {
   function addTest(code, type, value, notConfident) {
-    it(type + ": " + code, function() {
+    it(type + ": " + code, function () {
       const visitor = {};
 
-      visitor[type] = function(path) {
+      visitor[type] = function (path) {
         const evaluate = path.evaluate();
         expect(evaluate.confident).toEqual(!notConfident);
         expect(evaluate.value).toEqual(value);

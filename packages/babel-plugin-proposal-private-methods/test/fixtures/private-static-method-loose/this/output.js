@@ -5,6 +5,10 @@ class A {
 
 }
 
+var _getA = babelHelpers.classPrivateFieldLooseKey("getA");
+
+var _getB = babelHelpers.classPrivateFieldLooseKey("getB");
+
 class B extends A {
   static get b() {
     return 2;
@@ -15,10 +19,6 @@ class B extends A {
   }
 
 }
-
-var _getA = babelHelpers.classPrivateFieldLooseKey("getA");
-
-var _getB = babelHelpers.classPrivateFieldLooseKey("getB");
 
 var _getB2 = function _getB2() {
   return this.b;

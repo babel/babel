@@ -1,0 +1,63 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
+  "errors": [
+    "SyntaxError: Tuple members must all have names or all not have names. (1:16)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeAnnotation": {
+          "type": "TSTupleType",
+          "start":9,"end":21,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":21}},
+          "elementTypes": [
+            {
+              "type": "TSRestType",
+              "start":10,"end":14,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":14}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":13,"end":14,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":14}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":13,"end":14,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":14},"identifierName":"B"},
+                  "name": "B"
+                }
+              }
+            },
+            {
+              "type": "TSNamedTupleMember",
+              "start":16,"end":20,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":20}},
+              "optional": false,
+              "label": {
+                "type": "Identifier",
+                "start":16,"end":17,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":17},"identifierName":"x"},
+                "name": "x"
+              },
+              "elementType": {
+                "type": "TSTypeReference",
+                "start":19,"end":20,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":20}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":19,"end":20,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":20},"identifierName":"A"},
+                  "name": "A"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

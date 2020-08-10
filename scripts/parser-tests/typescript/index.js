@@ -45,9 +45,9 @@ async function baselineContainsParserErrorCodes(testName) {
 
 const runner = new TestRunner({
   testDir: path.join(TSTestsPath, "./cases/compiler"),
-  whitelist: path.join(__dirname, "whitelist.txt"),
+  allowlist: path.join(__dirname, "allowlist.txt"),
   logInterval: 50,
-  shouldUpdate: process.argv.includes("--update-whitelist"),
+  shouldUpdate: process.argv.includes("--update-allowlist"),
 
   async *getTests() {
     for await (const test of loadTests(this.testDir)) {

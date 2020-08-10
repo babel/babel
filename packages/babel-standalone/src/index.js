@@ -162,12 +162,12 @@ export function registerPresets(newPresets: {
 }
 
 // All the plugins we should bundle
-// Want to get rid of this long whitelist of plugins?
+// Want to get rid of this long list of allowed plugins?
 // Wait! Please read https://github.com/babel/babel/pull/6177 first.
 registerPlugins(all);
 
 // All the presets we should bundle
-// Want to get rid of this whitelist of presets?
+// Want to get rid of this list of allowed presets?
 // Wait! Please read https://github.com/babel/babel/pull/6177 first.
 registerPresets({
   env: presetEnv,
@@ -207,7 +207,7 @@ function onDOMContentLoaded() {
 
 // Listen for load event if we're in a browser and then kick off finding and
 // running of scripts with "text/babel" type.
-if (typeof window !== "undefined" && window && window.addEventListener) {
+if (typeof window !== "undefined" && window?.addEventListener) {
   window.addEventListener("DOMContentLoaded", onDOMContentLoaded, false);
 }
 

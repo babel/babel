@@ -32,7 +32,7 @@ export default function toKeyAlias(
 
 toKeyAlias.uid = 0;
 
-toKeyAlias.increment = function() {
+toKeyAlias.increment = function () {
   if (toKeyAlias.uid >= Number.MAX_SAFE_INTEGER) {
     return (toKeyAlias.uid = 0);
   } else {

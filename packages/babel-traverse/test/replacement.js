@@ -3,9 +3,9 @@ import { parse } from "@babel/parser";
 import generate from "@babel/generator";
 import * as t from "@babel/types";
 
-describe("path/replacement", function() {
-  describe("replaceWith", function() {
-    it("replaces declaration in ExportDefaultDeclaration node", function() {
+describe("path/replacement", function () {
+  describe("replaceWith", function () {
+    it("replaces declaration in ExportDefaultDeclaration node", function () {
       const ast = parse("export default function() {};", {
         sourceType: "module",
       });
@@ -28,9 +28,9 @@ describe("path/replacement", function() {
       expect(ast.program.body[0].declaration.type).toBe("ArrayExpression");
     });
 
-    it("throws error when trying to replace Program with a non-Program node", function() {
+    it("throws error when trying to replace Program with a non-Program node", function () {
       const ast = parse("var x = 3;");
-      expect(function() {
+      expect(function () {
         traverse(ast, {
           Program(path) {
             path.replaceWith(t.identifier("a"));
@@ -41,9 +41,9 @@ describe("path/replacement", function() {
       );
     });
 
-    it("throws error when used with an array of nodes", function() {
+    it("throws error when used with an array of nodes", function () {
       const ast = parse("function abc() {}; var test = 17;");
-      expect(function() {
+      expect(function () {
         traverse(ast, {
           NumericLiteral(path) {
             path.replaceWith([
@@ -58,11 +58,11 @@ describe("path/replacement", function() {
       );
     });
 
-    it("throws error when used with source string", function() {
+    it("throws error when used with source string", function () {
       const ast = parse(
         "(function() { var x = 3; var y = 17; var c = x + y; })();",
       );
-      expect(function() {
+      expect(function () {
         traverse(ast, {
           BinaryExpression(path) {
             path.replaceWith("17 + 23");
@@ -73,9 +73,9 @@ describe("path/replacement", function() {
       );
     });
 
-    it("throws error when trying to replace removed node", function() {
+    it("throws error when trying to replace removed node", function () {
       const ast = parse("var z = 'abc';");
-      expect(function() {
+      expect(function () {
         traverse(ast, {
           StringLiteral(path) {
             path.remove();
@@ -85,9 +85,9 @@ describe("path/replacement", function() {
       }).toThrow(/You can't replace this node, we've already removed it/);
     });
 
-    it("throws error when passed a falsy value", function() {
+    it("throws error when passed a falsy value", function () {
       const ast = parse("var z = 'abc';");
-      expect(function() {
+      expect(function () {
         traverse(ast, {
           StringLiteral(path) {
             path.replaceWith();

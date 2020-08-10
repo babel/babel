@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getTargets esmodules returns browser supporting modules and keyed browser overrides 1`] = `
+Object {
+  "android": "61.0.0",
+  "chrome": "61.0.0",
+  "edge": "16.0.0",
+  "firefox": "60.0.0",
+  "ie": "11.0.0",
+  "ios": "10.3.0",
+  "node": "13.2.0",
+  "opera": "48.0.0",
+  "safari": "10.1.0",
+  "samsung": "8.2.0",
+}
+`;
+
+exports[`getTargets esmodules returns browser supporting modules and keyed browser overrides, ignoring browsers field 1`] = `
+Object {
+  "android": "61.0.0",
+  "chrome": "61.0.0",
+  "edge": "16.0.0",
+  "firefox": "60.0.0",
+  "ie": "11.0.0",
+  "ios": "10.3.0",
+  "node": "13.2.0",
+  "opera": "48.0.0",
+  "safari": "10.1.0",
+  "samsung": "8.2.0",
+}
+`;
+
+exports[`getTargets esmodules returns browsers supporting modules 1`] = `
+Object {
+  "android": "61.0.0",
+  "chrome": "61.0.0",
+  "edge": "16.0.0",
+  "firefox": "60.0.0",
+  "ios": "10.3.0",
+  "node": "13.2.0",
+  "opera": "48.0.0",
+  "safari": "10.1.0",
+  "samsung": "8.2.0",
+}
+`;
+
+exports[`getTargets esmodules returns browsers supporting modules, ignoring browsers key 1`] = `
+Object {
+  "android": "61.0.0",
+  "chrome": "61.0.0",
+  "edge": "16.0.0",
+  "firefox": "60.0.0",
+  "ios": "10.3.0",
+  "node": "13.2.0",
+  "opera": "48.0.0",
+  "safari": "10.1.0",
+  "samsung": "8.2.0",
+}
+`;

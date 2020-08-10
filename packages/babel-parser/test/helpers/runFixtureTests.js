@@ -26,8 +26,9 @@ class FixtureError extends Error {
           { highlightCode: true },
         ) +
         "\n" +
-        `at fixture (${fixturePath}:${previousError.loc.line}:${previousError
-          .loc.column + 1})\n`;
+        `at fixture (${fixturePath}:${previousError.loc.line}:${
+          previousError.loc.column + 1
+        })\n`;
     }
 
     this.stack =
@@ -36,22 +37,19 @@ class FixtureError extends Error {
       previousError.message +
       "\n" +
       fixtureStackFrame +
-      previousError.stack
-        .split("\n")
-        .slice(messageLines)
-        .join("\n");
+      previousError.stack.split("\n").slice(messageLines).join("\n");
   }
 }
 
 export function runFixtureTests(fixturesPath, parseFunction) {
   const fixtures = getFixtures(fixturesPath);
 
-  Object.keys(fixtures).forEach(function(name) {
-    fixtures[name].forEach(function(testSuite) {
-      testSuite.tests.forEach(function(task) {
+  Object.keys(fixtures).forEach(function (name) {
+    fixtures[name].forEach(function (testSuite) {
+      testSuite.tests.forEach(function (task) {
         const testFn = task.disabled ? it.skip : it;
 
-        testFn(name + "/" + testSuite.title + "/" + task.title, function() {
+        testFn(name + "/" + testSuite.title + "/" + task.title, function () {
           try {
             runTest(task, parseFunction);
           } catch (err) {
@@ -82,9 +80,9 @@ export function runFixtureTests(fixturesPath, parseFunction) {
 export function runThrowTestsWithEstree(fixturesPath, parseFunction) {
   const fixtures = getFixtures(fixturesPath);
 
-  Object.keys(fixtures).forEach(function(name) {
-    fixtures[name].forEach(function(testSuite) {
-      testSuite.tests.forEach(function(task) {
+  Object.keys(fixtures).forEach(function (name) {
+    fixtures[name].forEach(function (testSuite) {
+      testSuite.tests.forEach(function (task) {
         if (!task.options.throws) return;
 
         task.options.plugins = task.options.plugins || [];
@@ -92,7 +90,7 @@ export function runThrowTestsWithEstree(fixturesPath, parseFunction) {
 
         const testFn = task.disabled ? it.skip : it;
 
-        testFn(name + "/" + testSuite.title + "/" + task.title, function() {
+        testFn(name + "/" + testSuite.title + "/" + task.title, function () {
           try {
             runTest(task, parseFunction);
           } catch (err) {

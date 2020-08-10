@@ -4,7 +4,6 @@ import fs from "fs";
 
 import commander from "commander";
 import { version } from "@babel/core";
-import uniq from "lodash/uniq";
 import glob from "glob";
 
 import pkg from "../../package.json";
@@ -189,15 +188,15 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
 
   const errors = [];
 
-  let filenames = commander.args.reduce(function(globbed, input) {
+  let filenames = commander.args.reduce(function (globbed, input) {
     let files = glob.sync(input);
     if (!files.length) files = [input];
     return globbed.concat(files);
   }, []);
 
-  filenames = uniq(filenames);
+  filenames = Array.from(new Set(filenames));
 
-  filenames.forEach(function(filename) {
+  filenames.forEach(function (filename) {
     if (!fs.existsSync(filename)) {
       errors.push(filename + " does not exist");
     }
@@ -255,7 +254,7 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
 
   if (errors.length) {
     console.error("babel:");
-    errors.forEach(function(e) {
+    errors.forEach(function (e) {
       console.error("  " + e);
     });
     return null;

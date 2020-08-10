@@ -33,7 +33,7 @@ const validateTopLevelOptions = (options: Options) => {
 
 const allPluginsList = Object.keys(pluginsList);
 
-// NOTE: Since module plugins are handled seperatly compared to other plugins (via the "modules" option) it
+// NOTE: Since module plugins are handled separately compared to other plugins (via the "modules" option) it
 // should only be possible to exclude and not include module plugins, otherwise it's possible that preset-env
 // will add a module plugin twice.
 const modulePlugins = [
@@ -147,6 +147,20 @@ export const validateBoolOption = (
 
   if (typeof value !== "boolean") {
     throw new Error(`Preset env: '${name}' option must be a boolean.`);
+  }
+
+  return value;
+};
+
+export const validateStringOption = (
+  name: string,
+  value?: string,
+  defaultValue?: string,
+) => {
+  if (typeof value === "undefined") {
+    value = defaultValue;
+  } else if (typeof value !== "string") {
+    throw new Error(`Preset env: '${name}' option must be a string.`);
   }
 
   return value;
@@ -295,5 +309,9 @@ export default function normalizeOptions(opts: Options) {
     spec: validateBoolOption(TopLevelOptions.spec, opts.spec, false),
     targets: normalizeTargets(opts.targets),
     useBuiltIns: useBuiltIns,
+    browserslistEnv: validateStringOption(
+      TopLevelOptions.browserslistEnv,
+      opts.browserslistEnv,
+    ),
   };
 }

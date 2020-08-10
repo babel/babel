@@ -1,3 +1,5 @@
+var _foo = babelHelpers.classPrivateFieldLooseKey("foo");
+
 var Foo = /*#__PURE__*/function () {
   "use strict";
 
@@ -15,6 +17,8 @@ var Foo = /*#__PURE__*/function () {
       var _temp;
 
       var _babelHelpers$classPr;
+
+      var _foo2 = babelHelpers.classPrivateFieldLooseKey("foo");
 
       var Nested = /*#__PURE__*/function (_ref) {
         babelHelpers.inherits(Nested, _ref);
@@ -42,11 +46,7 @@ var Foo = /*#__PURE__*/function () {
 
         return _class2;
       }()), _temp));
-
-      var _foo2 = babelHelpers.classPrivateFieldLooseKey("foo");
     }
   }]);
   return Foo;
 }();
-
-var _foo = babelHelpers.classPrivateFieldLooseKey("foo");

@@ -1,3 +1,7 @@
+var _priv = new WeakMap();
+
+var _method = new WeakSet();
+
 class Cl {
   constructor() {
     _method.add(this);
@@ -15,10 +19,6 @@ class Cl {
   }
 
 }
-
-var _priv = new WeakMap();
-
-var _method = new WeakSet();
 
 var _method2 = function _method2(x) {
   return x;

@@ -1,3 +1,5 @@
+var _privateMethod = babelHelpers.classPrivateFieldLooseKey("privateMethod");
+
 class Foo {
   constructor() {
     Object.defineProperty(this, _privateMethod, {
@@ -7,8 +9,6 @@ class Foo {
   }
 
 }
-
-var _privateMethod = babelHelpers.classPrivateFieldLooseKey("privateMethod");
 
 var _privateMethod2 = function _privateMethod2() {
   return 42;

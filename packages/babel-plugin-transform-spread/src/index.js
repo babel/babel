@@ -1,16 +1,17 @@
 import { declare } from "@babel/helper-plugin-utils";
+import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
 import { types as t } from "@babel/core";
 
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { loose } = options;
+  const { loose, allowArrayLike } = options;
 
   function getSpreadLiteral(spread, scope) {
     if (loose && !t.isIdentifier(spread.argument, { name: "arguments" })) {
       return spread.argument;
     } else {
-      return scope.toArray(spread.argument, true);
+      return scope.toArray(spread.argument, true, allowArrayLike);
     }
   }
 
@@ -94,7 +95,8 @@ export default declare((api, options) => {
         const args = node.arguments;
         if (!hasSpread(args)) return;
 
-        const calleePath = path.get("callee");
+        const calleePath = skipTransparentExprWrappers(path.get("callee"));
+
         if (calleePath.isSuper()) return;
 
         let contextLiteral = scope.buildUndefinedNode();
@@ -120,7 +122,7 @@ export default declare((api, options) => {
           node.arguments.push(first);
         }
 
-        const callee = node.callee;
+        const callee = calleePath.node;
 
         if (calleePath.isMemberExpression()) {
           const temp = scope.maybeGenerateMemoised(callee.object);
@@ -130,10 +132,10 @@ export default declare((api, options) => {
           } else {
             contextLiteral = t.cloneNode(callee.object);
           }
-          t.appendToMemberExpression(callee, t.identifier("apply"));
-        } else {
-          node.callee = t.memberExpression(node.callee, t.identifier("apply"));
         }
+
+        // We use the original callee here, to preserve any types/parentheses
+        node.callee = t.memberExpression(node.callee, t.identifier("apply"));
 
         if (t.isSuper(contextLiteral)) {
           contextLiteral = t.thisExpression();

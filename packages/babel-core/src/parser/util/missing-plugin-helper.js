@@ -31,6 +31,12 @@ const pluginNameMap = {
       url: "https://git.io/JvpRG",
     },
   },
+  decimal: {
+    syntax: {
+      name: "@babel/plugin-syntax-decimal",
+      url: "https://git.io/JfKOH",
+    },
+  },
   decorators: {
     syntax: {
       name: "@babel/plugin-syntax-decorators",
@@ -123,14 +129,10 @@ const pluginNameMap = {
       url: "https://git.io/JfeDR",
     },
   },
-  logicalAssignment: {
+  moduleAttributes: {
     syntax: {
-      name: "@babel/plugin-syntax-logical-assignment-operators",
-      url: "https://git.io/vAlBp",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-logical-assignment-operators",
-      url: "https://git.io/vAlRe",
+      name: "@babel/plugin-syntax-module-attributes",
+      url: "https://git.io/JfK3k",
     },
   },
   numericSeparator: {
@@ -161,6 +163,16 @@ const pluginNameMap = {
     transform: {
       name: "@babel/plugin-proposal-pipeline-operator",
       url: "https://git.io/vb4SU",
+    },
+  },
+  privateIn: {
+    syntax: {
+      name: "@babel/plugin-syntax-private-property-in-object",
+      url: "https://git.io/JfK3q",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-private-property-in-object",
+      url: "https://git.io/JfK3O",
     },
   },
   recordAndTuple: {
@@ -204,6 +216,16 @@ const pluginNameMap = {
       url: "https://git.io/vb4yp",
     },
   },
+  logicalAssignment: {
+    syntax: {
+      name: "@babel/plugin-syntax-logical-assignment-operators",
+      url: "https://git.io/vAlBp",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-logical-assignment-operators",
+      url: "https://git.io/vAlRe",
+    },
+  },
   nullishCoalescingOperator: {
     syntax: {
       name: "@babel/plugin-syntax-nullish-coalescing-operator",
@@ -235,6 +257,9 @@ const pluginNameMap = {
     },
   },
 };
+
+//todo: we don't have plugin-syntax-private-property-in-object
+pluginNameMap.privateIn.syntax = pluginNameMap.privateIn.transform;
 
 const getNameURLCombination = ({ name, url }) => `${name} (${url})`;
 

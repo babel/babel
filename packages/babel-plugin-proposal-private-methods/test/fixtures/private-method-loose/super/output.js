@@ -5,6 +5,8 @@ class Base {
 
 }
 
+var _privateMethod = babelHelpers.classPrivateFieldLooseKey("privateMethod");
+
 class Sub extends Base {
   constructor(...args) {
     super(...args);
@@ -22,8 +24,6 @@ class Sub extends Base {
   }
 
 }
-
-var _privateMethod = babelHelpers.classPrivateFieldLooseKey("privateMethod");
 
 var _privateMethod2 = function _privateMethod2() {
   return Base.prototype.superMethod.call(this);

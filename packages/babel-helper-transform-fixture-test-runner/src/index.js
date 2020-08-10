@@ -5,10 +5,8 @@ import getFixtures from "@babel/helper-fixtures";
 import sourceMap from "source-map";
 import { codeFrameColumns } from "@babel/code-frame";
 import defaults from "lodash/defaults";
-import includes from "lodash/includes";
 import escapeRegExp from "lodash/escapeRegExp";
 import * as helpers from "./helpers";
-import extend from "lodash/extend";
 import merge from "lodash/merge";
 import resolve from "resolve";
 import assert from "assert";
@@ -172,7 +170,7 @@ export function runCodeInTestContext(
 }
 
 function wrapPackagesArray(type, names, optionsDir) {
-  return (names || []).map(function(val) {
+  return (names || []).map(function (val) {
     if (typeof val === "string") val = [val];
 
     // relative path (outside of monorepo)
@@ -213,6 +211,7 @@ function run(task) {
   function getOpts(self) {
     const newOpts = merge(
       {
+        ast: true,
         cwd: path.dirname(self.loc),
         filename: self.loc,
         filenameRelative: self.filename,
@@ -229,7 +228,7 @@ function run(task) {
       "preset",
       newOpts.presets,
       optionsDir,
-    ).map(function(val) {
+    ).map(function (val) {
       if (val.length > 3) {
         throw new Error(
           "Unexpected extra options " +
@@ -335,7 +334,7 @@ function run(task) {
   if (task.sourceMappings) {
     const consumer = new sourceMap.SourceMapConsumer(result.map);
 
-    task.sourceMappings.forEach(function(mapping) {
+    task.sourceMappings.forEach(function (mapping) {
       const actual = mapping.original;
 
       const expected = consumer.originalPositionFor(mapping.generated);
@@ -408,7 +407,7 @@ const toEqualFile = () => ({
   },
 });
 
-export default function(
+export default function (
   fixturesLoc: string,
   name: string,
   suiteOpts = {},
@@ -418,17 +417,17 @@ export default function(
   const suites = getFixtures(fixturesLoc);
 
   for (const testSuite of suites) {
-    if (includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
+    if (suiteOpts.ignoreSuites?.includes(testSuite.title)) continue;
 
-    describe(name + "/" + testSuite.title, function() {
+    describe(name + "/" + testSuite.title, function () {
       jest.addMatchers({
         toEqualFile,
       });
 
       for (const task of testSuite.tests) {
         if (
-          includes(suiteOpts.ignoreTasks, task.title) ||
-          includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)
+          suiteOpts.ignoreTasks?.includes(task.title) ||
+          suiteOpts.ignoreTasks?.includes(testSuite.title + "/" + task.title)
         ) {
           continue;
         }
@@ -438,7 +437,7 @@ export default function(
         testFn(
           task.title,
 
-          function() {
+          function () {
             function runTask() {
               run(task);
             }
@@ -447,7 +446,7 @@ export default function(
               sourceMap: !!(task.sourceMappings || task.sourceMap),
             });
 
-            extend(task.options, taskOpts);
+            Object.assign(task.options, taskOpts);
 
             if (dynamicOpts) dynamicOpts(task.options, task);
 
@@ -457,7 +456,7 @@ export default function(
               // the options object with useless options
               delete task.options.throws;
 
-              assert.throws(runTask, function(err) {
+              assert.throws(runTask, function (err) {
                 return throwMsg === true || err.message.indexOf(throwMsg) >= 0;
               });
             } else {

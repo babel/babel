@@ -160,7 +160,7 @@ function _evaluate(path, state) {
       return deopt(binding.path, state);
     }
 
-    if (binding && binding.hasValue) {
+    if (binding?.hasValue) {
       return binding.value;
     } else {
       if (node.name === "undefined") {

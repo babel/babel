@@ -234,7 +234,7 @@ export default declare((api, opts) => {
         // example: f({...R}, a = R)
         let idInRest = false;
 
-        const IdentifierHandler = function(path, functionScope) {
+        const IdentifierHandler = function (path, functionScope) {
           const name = path.node.name;
           if (
             path.scope.getBinding(name) === functionScope.getBinding(name) &&
@@ -346,7 +346,11 @@ export default declare((api, opts) => {
           );
           refPropertyPath.forEach(prop => {
             const { node } = prop;
-            ref = t.memberExpression(ref, t.cloneNode(node.key), node.computed);
+            ref = t.memberExpression(
+              ref,
+              t.cloneNode(node.key),
+              node.computed || t.isLiteral(node.key),
+            );
           });
 
           const objectPatternPath = path.findParent(path =>
@@ -592,7 +596,7 @@ export default declare((api, opts) => {
           exp = t.callExpression(t.cloneNode(helper), [
             exp,
             // If we have static props, we need to insert an empty object
-            // becuase the odd arguments are copied with [[Get]], not
+            // because the odd arguments are copied with [[Get]], not
             // [[GetOwnProperty]]
             ...(hadProps ? [t.objectExpression([]), obj] : []),
           ]);

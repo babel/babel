@@ -203,6 +203,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       this.next();
       this.takeDecorators(node);
+      const oldStrict = this.state.strict;
 
       const placeholder = this.parsePlaceholder("Identifier");
       if (placeholder) {
@@ -226,7 +227,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.parseClassSuper(node);
       node.body =
         this.parsePlaceholder("ClassBody") ||
-        this.parseClassBody(!!node.superClass);
+        this.parseClassBody(!!node.superClass, oldStrict);
       return this.finishNode(node, type);
     }
 
@@ -251,6 +252,23 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.parseExport(node);
     }
 
+    isExportDefaultSpecifier(): boolean {
+      if (this.match(tt._default)) {
+        const next = this.nextTokenStart();
+        if (this.isUnparsedContextual(next, "from")) {
+          if (
+            this.input.startsWith(
+              tt.placeholder.label,
+              this.nextTokenStartSince(next + 4),
+            )
+          ) {
+            return true;
+          }
+        }
+      }
+      return super.isExportDefaultSpecifier();
+    }
+
     maybeParseExportDefaultSpecifier(node: N.Node): boolean {
       if (node.specifiers && node.specifiers.length > 0) {
         // "export %%NAME%%" has already been parsed by #parseExport.
@@ -261,7 +279,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkExport(node: N.ExportNamedDeclaration): void {
       const { specifiers } = node;
-      if (specifiers && specifiers.length) {
+      if (specifiers?.length) {
         node.specifiers = specifiers.filter(
           node => node.exported.type === "Placeholder",
         );

@@ -35,7 +35,7 @@ const BABEL_POLYFILL_DEPRECATION = `
   \`@babel/polyfill\` is deprecated. Please, use required parts of \`core-js\`
   and \`regenerator-runtime/runtime\` separately`;
 
-export default function(
+export default function (
   _: any,
   { corejs, include, exclude, polyfillTargets, debug }: InternalPluginOptions,
 ) {
@@ -115,7 +115,7 @@ export default function(
       this.injectedPolyfills = new Set();
       this.polyfillsSet = new Set();
 
-      this.replaceBySeparateModulesImport = function(path, modules) {
+      this.replaceBySeparateModulesImport = function (path, modules) {
         for (const module of modules) {
           this.polyfillsSet.add(module);
         }

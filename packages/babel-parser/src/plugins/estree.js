@@ -6,7 +6,7 @@ import type { ExpressionErrors } from "../parser/util";
 import * as N from "../types";
 import type { Position } from "../util/location";
 import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
-import { Errors } from "../parser/location";
+import { Errors } from "../parser/error";
 
 function isSimpleProperty(node: N.Node): boolean {
   return (
@@ -39,6 +39,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const bigInt = typeof BigInt !== "undefined" ? BigInt(value) : null;
       const node = this.estreeParseLiteral(bigInt);
       node.bigint = String(node.value || value);
+
+      return node;
+    }
+
+    estreeParseDecimalLiteral(value: any): N.Node {
+      // https://github.com/estree/estree/blob/master/experimental/decimal.md
+      // todo: use BigDecimal when node supports it.
+      const decimal = null;
+      const node = this.estreeParseLiteral(decimal);
+      node.decimal = String(node.value || value);
 
       return node;
     }
@@ -143,37 +153,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    checkDuplicatedProto(
+    checkProto(
       prop: N.ObjectMember | N.SpreadElement,
+      isRecord: boolean,
       protoRef: { used: boolean },
       refExpressionErrors: ?ExpressionErrors,
     ): void {
-      if (
-        prop.type === "SpreadElement" ||
-        prop.computed ||
-        prop.method ||
-        // $FlowIgnore
-        prop.shorthand
-      ) {
+      // $FlowIgnore: check prop.method and fallback to super method
+      if (prop.method) {
         return;
       }
-
-      const key = prop.key;
-      // It is either an Identifier or a String/NumericLiteral
-      const name = key.type === "Identifier" ? key.name : String(key.value);
-
-      if (name === "__proto__" && prop.kind === "init") {
-        // Store the first redefinition's position
-        if (protoRef.used) {
-          if (refExpressionErrors && refExpressionErrors.doubleProto === -1) {
-            refExpressionErrors.doubleProto = key.start;
-          } else {
-            this.raise(key.start, Errors.DuplicateProto);
-          }
-        }
-
-        protoRef.used = true;
-      }
+      super.checkProto(prop, isRecord, protoRef, refExpressionErrors);
     }
 
     isValidDirective(stmt: N.Statement): boolean {
@@ -181,7 +171,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         stmt.type === "ExpressionStatement" &&
         stmt.expression.type === "Literal" &&
         typeof stmt.expression.value === "string" &&
-        (!stmt.expression.extra || !stmt.expression.extra.parenthesized)
+        !stmt.expression.extra?.parenthesized
       );
     }
 
@@ -248,6 +238,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         case tt.bigint:
           return this.estreeParseBigIntLiteral(this.state.value);
+
+        case tt.decimal:
+          return this.estreeParseDecimalLiteral(this.state.value);
 
         case tt._null:
           return this.estreeParseLiteral(null);
@@ -319,14 +312,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isGenerator: boolean,
       isAsync: boolean,
       isPattern: boolean,
-      containsEsc: boolean,
+      isAccessor: boolean,
     ): ?N.ObjectMethod {
       const node: N.EstreeProperty = (super.parseObjectMethod(
         prop,
         isGenerator,
         isAsync,
         isPattern,
-        containsEsc,
+        isAccessor,
       ): any);
 
       if (node) {
@@ -430,6 +423,44 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
 
           break;
+      }
+
+      return node;
+    }
+
+    parseSubscript(
+      base: N.Expression,
+      startPos: number,
+      startLoc: Position,
+      noCalls: ?boolean,
+      state: N.ParseSubscriptState,
+    ) {
+      const node = super.parseSubscript(
+        base,
+        startPos,
+        startLoc,
+        noCalls,
+        state,
+      );
+
+      if (state.optionalChainMember) {
+        // https://github.com/estree/estree/blob/master/es2020.md#chainexpression
+        if (
+          node.type === "OptionalMemberExpression" ||
+          node.type === "OptionalCallExpression"
+        ) {
+          node.type = node.type.substring(8); // strip Optional prefix
+        }
+        if (state.stop) {
+          const chain = this.startNodeAtNode(node);
+          chain.expression = node;
+          return this.finishNode(chain, "ChainExpression");
+        }
+      } else if (
+        node.type === "MemberExpression" ||
+        node.type === "CallExpression"
+      ) {
+        node.optional = false;
       }
 
       return node;

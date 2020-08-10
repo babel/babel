@@ -181,7 +181,7 @@ export const nodes = {
  * Test if Property needs whitespace.
  */
 
-nodes.ObjectProperty = nodes.ObjectTypeProperty = nodes.ObjectMethod = function(
+nodes.ObjectProperty = nodes.ObjectTypeProperty = nodes.ObjectMethod = function (
   node: Object,
   parent,
 ): ?WhitespaceObject {
@@ -192,25 +192,22 @@ nodes.ObjectProperty = nodes.ObjectTypeProperty = nodes.ObjectMethod = function(
   }
 };
 
-nodes.ObjectTypeCallProperty = function(
+nodes.ObjectTypeCallProperty = function (
   node: Object,
   parent,
 ): ?WhitespaceObject {
-  if (
-    parent.callProperties[0] === node &&
-    (!parent.properties || !parent.properties.length)
-  ) {
+  if (parent.callProperties[0] === node && !parent.properties?.length) {
     return {
       before: true,
     };
   }
 };
 
-nodes.ObjectTypeIndexer = function(node: Object, parent): ?WhitespaceObject {
+nodes.ObjectTypeIndexer = function (node: Object, parent): ?WhitespaceObject {
   if (
     parent.indexers[0] === node &&
-    (!parent.properties || !parent.properties.length) &&
-    (!parent.callProperties || !parent.callProperties.length)
+    !parent.properties?.length &&
+    !parent.callProperties?.length
   ) {
     return {
       before: true,
@@ -218,15 +215,15 @@ nodes.ObjectTypeIndexer = function(node: Object, parent): ?WhitespaceObject {
   }
 };
 
-nodes.ObjectTypeInternalSlot = function(
+nodes.ObjectTypeInternalSlot = function (
   node: Object,
   parent,
 ): ?WhitespaceObject {
   if (
     parent.internalSlots[0] === node &&
-    (!parent.properties || !parent.properties.length) &&
-    (!parent.callProperties || !parent.callProperties.length) &&
-    (!parent.indexers || !parent.indexers.length)
+    !parent.properties?.length &&
+    !parent.callProperties?.length &&
+    !parent.indexers?.length
   ) {
     return {
       before: true,
@@ -275,12 +272,12 @@ export const list = {
   ["LabeledStatement", true],
   ["SwitchStatement", true],
   ["TryStatement", true],
-].forEach(function([type, amounts]) {
+].forEach(function ([type, amounts]) {
   if (typeof amounts === "boolean") {
     amounts = { after: amounts, before: amounts };
   }
-  [type].concat(t.FLIPPED_ALIAS_KEYS[type] || []).forEach(function(type) {
-    nodes[type] = function() {
+  [type].concat(t.FLIPPED_ALIAS_KEYS[type] || []).forEach(function (type) {
+    nodes[type] = function () {
       return amounts;
     };
   });

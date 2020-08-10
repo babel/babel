@@ -78,7 +78,7 @@ export function getStatementParent(): NodePath {
 export function getEarliestCommonAncestorFrom(
   paths: Array<NodePath>,
 ): NodePath {
-  return this.getDeepestCommonAncestorFrom(paths, function(
+  return this.getDeepestCommonAncestorFrom(paths, function (
     deepest,
     i,
     ancestries,

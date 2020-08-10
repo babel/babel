@@ -1,3 +1,7 @@
+var _x = babelHelpers.classPrivateFieldLooseKey("x");
+
+var _y = babelHelpers.classPrivateFieldLooseKey("y");
+
 var Point = /*#__PURE__*/function () {
   "use strict";
 
@@ -44,7 +48,3 @@ var Point = /*#__PURE__*/function () {
   }]);
   return Point;
 }();
-
-var _x = babelHelpers.classPrivateFieldLooseKey("x");
-
-var _y = babelHelpers.classPrivateFieldLooseKey("y");

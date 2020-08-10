@@ -12,8 +12,10 @@ import defineType, {
   validateOptionalType,
   validateType,
 } from "./utils";
-import { functionDeclarationCommon } from "./core";
-import { classMethodOrDeclareMethodCommon } from "./es2015";
+import {
+  functionDeclarationCommon,
+  classMethodOrDeclareMethodCommon,
+} from "./core";
 
 const bool = assertValueType("boolean");
 
@@ -212,7 +214,7 @@ defineType("TSTupleType", {
   aliases: ["TSType"],
   visitor: ["elementTypes"],
   fields: {
-    elementTypes: validateArrayOfType("TSType"),
+    elementTypes: validateArrayOfType(["TSType", "TSNamedTupleMember"]),
   },
 });
 
@@ -229,6 +231,19 @@ defineType("TSRestType", {
   visitor: ["typeAnnotation"],
   fields: {
     typeAnnotation: validateType("TSType"),
+  },
+});
+
+defineType("TSNamedTupleMember", {
+  visitor: ["label", "elementType"],
+  builder: ["label", "elementType", "optional"],
+  fields: {
+    label: validateType("Identifier"),
+    optional: {
+      validate: bool,
+      default: false,
+    },
+    elementType: validateType("TSType"),
   },
 });
 
@@ -307,6 +322,7 @@ defineType("TSLiteralType", {
       "NumericLiteral",
       "StringLiteral",
       "BooleanLiteral",
+      "BigIntLiteral",
     ]),
   },
 });

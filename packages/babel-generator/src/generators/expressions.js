@@ -154,7 +154,7 @@ export function Import() {
 }
 
 function buildYieldAwait(keyword: string) {
-  return function(node: Object) {
+  return function (node: Object) {
     this.word(keyword);
 
     if (node.delegate) {

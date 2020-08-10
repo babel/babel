@@ -47,7 +47,7 @@ const corejs3PolyfillsWithShippedProposals = (corejs3ShippedProposalsList: strin
   { ...corejs3PolyfillsWithoutProposals },
 );
 
-export default function(
+export default function (
   _: any,
   {
     corejs,
@@ -94,7 +94,7 @@ export default function(
         const { deopt, value } = path.evaluate();
         if (value !== undefined) {
           instanceType = getType(value);
-        } else if (deopt && deopt.isIdentifier()) {
+        } else if (deopt?.isIdentifier()) {
           builtIn = deopt.node.name;
         }
       }
@@ -234,21 +234,21 @@ export default function(
       this.injectedPolyfills = new Set();
       this.polyfillsSet = new Set();
 
-      this.addUnsupported = function(builtIn) {
+      this.addUnsupported = function (builtIn) {
         const modules = Array.isArray(builtIn) ? builtIn : [builtIn];
         for (const module of modules) {
           this.polyfillsSet.add(module);
         }
       };
 
-      this.addBuiltInDependencies = function(builtIn) {
+      this.addBuiltInDependencies = function (builtIn) {
         if (has(BuiltIns, builtIn)) {
           const BuiltInDependencies = BuiltIns[builtIn];
           this.addUnsupported(BuiltInDependencies);
         }
       };
 
-      this.addPropertyDependencies = function(source = {}, key) {
+      this.addPropertyDependencies = function (source = {}, key) {
         const { builtIn, instanceType, isNamespaced } = source;
         if (isNamespaced) return;
         if (PossibleGlobalObjects.has(builtIn)) {

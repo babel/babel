@@ -1,7 +1,4 @@
-# @babel/eslint-parser [![npm](https://img.shields.io/npm/v/@babel/eslint-parser.svg)](https://www.npmjs.com/package/@babel/eslint-parser) [![travis](https://img.shields.io/travis/babel/@babel/eslint-parser/master.svg)](https://travis-ci.org/babel/@babel/eslint-parser) [![npm-downloads](https://img.shields.io/npm/dm/@babel/eslint-parser.svg)](https://www.npmjs.com/package/@babel/eslint-parser)
-
-
-## This project is still experimental and will be released with Babel v8. You can track our progress [here](https://github.com/babel/babel/issues/10752)! Please use [babel-eslint](https://github.com/babel/babel-eslint) in the meantime.
+# @babel/eslint-parser [![npm](https://img.shields.io/npm/v/@babel/eslint-parser.svg)](https://www.npmjs.com/package/@babel/eslint-parser) [![travis](https://img.shields.io/travis/babel/@babel/eslint-parser/main.svg)](https://travis-ci.org/babel/@babel/eslint-parser) [![npm-downloads](https://img.shields.io/npm/dm/@babel/eslint-parser.svg)](https://www.npmjs.com/package/@babel/eslint-parser)
 
 **@babel/eslint-parser** allows you to lint **ALL** valid Babel code with the fantastic
 [ESLint](https://github.com/eslint/eslint).
@@ -18,7 +15,7 @@ ESLint allows for the use of [custom parsers](https://eslint.org/docs/developer-
 transformed into an [ESTree](https://github.com/estree/estree)-compliant structure that ESLint can understand. All location info such as line numbers,
 columns is also retained so you can track down errors with ease.
 
-**Note:** ESLint's core rules do not support experimental syntax and may therefore not work as expected when using `@babel/eslint-parser`. Please use the companion [`@babel/eslint-plugin`](https://github.com/babel/babel/tree/master/eslint/babel-eslint-plugin) plugin for core rules that you have issues with.
+**Note:** ESLint's core rules do not support experimental syntax and may therefore not work as expected when using `@babel/eslint-parser`. Please use the companion [`@babel/eslint-plugin`](https://github.com/babel/babel/tree/main/eslint/babel-eslint-plugin) plugin for core rules that you have issues with.
 
 ## Usage
 
@@ -56,7 +53,7 @@ Additional configuration options can be set in your ESLint configuration under t
 - `sourceType` can be set to `"module"`(default) or `"script"` if your code isn't using ECMAScript modules.
 - `allowImportExportEverywhere` (default `false`) can be set to `true` to allow import and export declarations to appear anywhere a statement is allowed if your build environment supports that. Otherwise import and export declarations can only appear at a program's top level.
 - `ecmaFeatures.globalReturn` (default `false`) allow return statements in the global scope when used with `sourceType: "script"`.
-- `babelOptions` passes through Babel's configuration [loading](https://babeljs.io/docs/en/options#config-loading-options) and [merging](https://babeljs.io/docs/en/options#config-merging-options) options (for instance, in case of a monorepo). When not defined, @babel/eslint-parser will use Babel's default configuration file resolution logic.
+- `babelOptions` is an object containing Babel configuration [options](https://babeljs.io/docs/en/options) that are passed to Babel's parser at runtime. For cases where users might not want to use a Babel configuration file or are running Babel through another tool (such as Webpack with `babel-loader`).
 
 **.eslintrc.js**
 
@@ -83,14 +80,14 @@ This configuration would use the default parser for all files except for those f
 ```js
 module.exports = {
   rules: {
-    indent: "error"
+    indent: "error",
   },
   overrides: [
     {
       files: ["files/transformed/by/babel/*.js"],
       parser: "@babel/eslint-parser",
-    }
-  ]
+    },
+  ],
 };
 ```
 

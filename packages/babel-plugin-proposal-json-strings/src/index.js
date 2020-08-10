@@ -21,7 +21,7 @@ export default declare(api => {
     visitor: {
       "DirectiveLiteral|StringLiteral"({ node }) {
         const { extra } = node;
-        if (!extra || !extra.raw) return;
+        if (!extra?.raw) return;
 
         extra.raw = extra.raw.replace(regex, replace);
       },

@@ -1,5 +1,9 @@
 var foo = "bar";
 
+var _bar = new WeakMap();
+
+var _baz = new WeakMap();
+
 var Foo = function Foo(_foo) {
   "use strict";
 
@@ -15,7 +19,3 @@ var Foo = function Foo(_foo) {
     value: foo
   });
 };
-
-var _bar = new WeakMap();
-
-var _baz = new WeakMap();

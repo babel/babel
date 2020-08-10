@@ -1,6 +1,5 @@
 import TraversalContext from "./context";
 import * as visitors from "./visitors";
-import includes from "lodash/includes";
 import * as t from "@babel/types";
 import * as cache from "./cache";
 
@@ -44,11 +43,11 @@ traverse.visitors = visitors;
 traverse.verify = visitors.verify;
 traverse.explode = visitors.explode;
 
-traverse.cheap = function(node, enter) {
+traverse.cheap = function (node, enter) {
   return t.traverseFast(node, enter);
 };
 
-traverse.node = function(
+traverse.node = function (
   node: Object,
   opts: Object,
   scope: Object,
@@ -66,31 +65,31 @@ traverse.node = function(
   }
 };
 
-traverse.clearNode = function(node, opts) {
+traverse.clearNode = function (node, opts) {
   t.removeProperties(node, opts);
 
   cache.path.delete(node);
 };
 
-traverse.removeProperties = function(tree, opts) {
+traverse.removeProperties = function (tree, opts) {
   t.traverseFast(tree, traverse.clearNode, opts);
   return tree;
 };
 
-function hasBlacklistedType(path, state) {
+function hasDenylistedType(path, state) {
   if (path.node.type === state.type) {
     state.has = true;
     path.stop();
   }
 }
 
-traverse.hasType = function(
+traverse.hasType = function (
   tree: Object,
   type: Object,
-  blacklistTypes: Array<string>,
+  denylistTypes?: Array<string>,
 ): boolean {
-  // the node we're searching in is blacklisted
-  if (includes(blacklistTypes, tree.type)) return false;
+  // the node we're searching in is denylisted
+  if (denylistTypes?.includes(tree.type)) return false;
 
   // the type we're looking for is the same as the passed node
   if (tree.type === type) return true;
@@ -104,8 +103,8 @@ traverse.hasType = function(
     tree,
     {
       noScope: true,
-      blacklist: blacklistTypes,
-      enter: hasBlacklistedType,
+      denylist: denylistTypes,
+      enter: hasDenylistedType,
     },
     null,
     state,

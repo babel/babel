@@ -3,7 +3,7 @@
 import { createImport } from "../../utils";
 import type { NodePath } from "@babel/traverse";
 
-export default function() {
+export default function () {
   return {
     name: "regenerator-usage",
     pre() {

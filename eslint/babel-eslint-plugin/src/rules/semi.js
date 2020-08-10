@@ -57,13 +57,13 @@ function report(context, node, missing) {
   if (!missing) {
     message = "Missing semicolon.";
     loc = loc.end;
-    fix = function(fixer) {
+    fix = function (fixer) {
       return fixer.insertTextAfter(lastToken, ";");
     };
   } else {
     message = "Extra semicolon.";
     loc = loc.start;
-    fix = function(fixer) {
+    fix = function (fixer) {
       return fixer.remove(lastToken);
     };
   }
@@ -79,7 +79,7 @@ function report(context, node, missing) {
 export default ruleComposer.joinReports([
   rule,
   context => ({
-    ClassProperty(node) {
+    "ClassProperty, ClassPrivateProperty"(node) {
       const options = context.options[1];
       const exceptOneLine = options && options.omitLastInOneLineBlock === true;
       const sourceCode = context.getSourceCode();

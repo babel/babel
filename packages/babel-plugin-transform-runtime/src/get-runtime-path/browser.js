@@ -1,4 +1,4 @@
-export default function(moduleName, dirname, absoluteRuntime) {
+export default function (moduleName, dirname, absoluteRuntime) {
   if (absoluteRuntime === false) return moduleName;
 
   throw new Error(

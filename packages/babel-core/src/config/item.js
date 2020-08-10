@@ -103,7 +103,7 @@ class ConfigItem {
     // programmatically, and also make sure that if people happen to
     // pass the item through JSON.stringify, it doesn't show up.
     this._descriptor = descriptor;
-    Object.defineProperty(this, "_descriptor", ({ enumerable: false }: any));
+    Object.defineProperty(this, "_descriptor", { enumerable: false });
 
     this.value = this._descriptor.value;
     this.options = this._descriptor.options;

@@ -22,7 +22,7 @@ export default declare(api => {
 
         const mutatorMap = {};
 
-        node.properties = node.properties.filter(function(prop) {
+        node.properties = node.properties.filter(function (prop) {
           if (!prop.computed && (prop.kind === "get" || prop.kind === "set")) {
             defineMap.push(mutatorMap, prop, null, file);
             return false;

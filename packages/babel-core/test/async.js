@@ -11,12 +11,12 @@ describe("asynchronicity", () => {
   const base = path.join(__dirname, "fixtures", "async");
   let cwd;
 
-  beforeEach(function() {
+  beforeEach(function () {
     cwd = process.cwd();
     process.chdir(base);
   });
 
-  afterEach(function() {
+  afterEach(function () {
     process.chdir(cwd);
   });
 

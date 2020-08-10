@@ -2,7 +2,6 @@
 
 import readdirRecursive from "fs-readdir-recursive";
 import * as babel from "@babel/core";
-import includes from "lodash/includes";
 import path from "path";
 import fs from "fs";
 
@@ -33,7 +32,7 @@ export function readdirForCompilable(
   includeDotfiles: boolean,
   altExts?: Array<string>,
 ): Array<string> {
-  return readdir(dirname, includeDotfiles, function(filename) {
+  return readdir(dirname, includeDotfiles, function (filename) {
     return isCompilableExtension(filename, altExts);
   });
 }
@@ -47,7 +46,7 @@ export function isCompilableExtension(
 ): boolean {
   const exts = altExts || babel.DEFAULT_EXTENSIONS;
   const ext = path.extname(filename);
-  return includes(exts, ext);
+  return exts.includes(ext);
 }
 
 export function addSourceMappingUrl(code: string, loc: string): string {
@@ -96,7 +95,7 @@ export function compile(
 
 export function deleteDir(path: string): void {
   if (fs.existsSync(path)) {
-    fs.readdirSync(path).forEach(function(file) {
+    fs.readdirSync(path).forEach(function (file) {
       const curPath = path + "/" + file;
       if (fs.lstatSync(curPath).isDirectory()) {
         // recurse
@@ -110,7 +109,7 @@ export function deleteDir(path: string): void {
   }
 }
 
-process.on("uncaughtException", function(err) {
+process.on("uncaughtException", function (err) {
   console.error(err);
   process.exitCode = 1;
 });

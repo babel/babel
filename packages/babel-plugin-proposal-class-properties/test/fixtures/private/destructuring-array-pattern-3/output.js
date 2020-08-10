@@ -1,3 +1,5 @@
+var _client = new WeakMap();
+
 var Foo = function Foo(props) {
   "use strict";
 
@@ -10,5 +12,3 @@ var Foo = function Foo(props) {
 
   [babelHelpers.classPrivateFieldDestructureSet(this, _client).value = 5] = props;
 };
-
-var _client = new WeakMap();

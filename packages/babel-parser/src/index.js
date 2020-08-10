@@ -16,7 +16,7 @@ import "./tokenizer/context";
 import type { Expression, File } from "./types";
 
 export function parse(input: string, options?: Options): File {
-  if (options && options.sourceType === "unambiguous") {
+  if (options?.sourceType === "unambiguous") {
     options = {
       ...options,
     };
@@ -71,7 +71,7 @@ export { tokTypes };
 
 function getParser(options: ?Options, input: string): Parser {
   let cls = Parser;
-  if (options && options.plugins) {
+  if (options?.plugins) {
     validatePlugins(options.plugins);
     cls = getParserClass(options.plugins);
   }

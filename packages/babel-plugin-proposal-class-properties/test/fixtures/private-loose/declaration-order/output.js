@@ -1,3 +1,5 @@
+var _x = babelHelpers.classPrivateFieldLooseKey("x");
+
 var C = function C() {
   "use strict";
 
@@ -8,8 +10,6 @@ var C = function C() {
     value: void 0
   });
 };
-
-var _x = babelHelpers.classPrivateFieldLooseKey("x");
 
 expect(() => {
   new C();

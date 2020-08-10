@@ -4,6 +4,7 @@ import transformReactJSXDevelopment from "@babel/plugin-transform-react-jsx-deve
 import transformReactDisplayName from "@babel/plugin-transform-react-display-name";
 import transformReactJSXSource from "@babel/plugin-transform-react-jsx-source";
 import transformReactJSXSelf from "@babel/plugin-transform-react-jsx-self";
+import transformReactPure from "@babel/plugin-transform-react-pure-annotations";
 
 export default declare((api, opts) => {
   api.assertVersion(7);
@@ -55,6 +56,7 @@ export default declare((api, opts) => {
         },
       ],
       transformReactDisplayName,
+      pure !== false && transformReactPure,
 
       development && runtime === "classic" && transformReactJSXSource,
       development && runtime === "classic" && transformReactJSXSelf,

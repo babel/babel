@@ -29,6 +29,7 @@ export default (_: any, opts: Object): Object => {
       [babelPlugins.transformComputedProperties, optsLoose],
       [babelPlugins.transformForOf, optsLoose],
       babelPlugins.transformStickyRegex,
+      babelPlugins.transformUnicodeEscapes,
       babelPlugins.transformUnicodeRegex,
       [babelPlugins.transformSpread, optsLoose],
       [babelPlugins.transformParameters, optsLoose],

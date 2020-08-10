@@ -42,6 +42,6 @@ const visitor = {
   },
 };
 
-export default function(path, emit: Function, kind: "var" | "let" = "var") {
+export default function (path, emit: Function, kind: "var" | "let" = "var") {
   path.traverse(visitor, { kind, emit });
 }

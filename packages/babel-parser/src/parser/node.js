@@ -13,8 +13,8 @@ class Node implements NodeBase {
     this.start = pos;
     this.end = 0;
     this.loc = new SourceLocation(loc);
-    if (parser && parser.options.ranges) this.range = [pos, 0];
-    if (parser && parser.filename) this.loc.filename = parser.filename;
+    if (parser?.options.ranges) this.range = [pos, 0];
+    if (parser?.filename) this.loc.filename = parser.filename;
   }
 
   type: string;

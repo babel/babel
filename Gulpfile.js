@@ -33,7 +33,7 @@ function getIndexFromPackage(name) {
 }
 
 function compilationLogger() {
-  return through.obj(function(file, enc, callback) {
+  return through.obj(function (file, enc, callback) {
     fancyLog(`Compiling '${chalk.cyan(file.relative)}'...`);
     callback(null, file);
   });
@@ -48,7 +48,7 @@ function errorsLogger() {
 }
 
 function rename(fn) {
-  return through.obj(function(file, enc, callback) {
+  return through.obj(function (file, enc, callback) {
     file.path = fn(file);
     callback(null, file);
   });
@@ -96,6 +96,10 @@ function buildRollup(packages) {
               extraPlugins.push(
                 rollupTerser({
                   include: /^.+\.min\.js$/,
+                  // workaround https://bugs.webkit.org/show_bug.cgi?id=212725
+                  output: {
+                    ascii_only: true,
+                  },
                 })
               );
             }

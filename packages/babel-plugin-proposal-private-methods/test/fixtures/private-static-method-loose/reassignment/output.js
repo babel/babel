@@ -1,11 +1,11 @@
+var _privateStaticMethod = babelHelpers.classPrivateFieldLooseKey("privateStaticMethod");
+
 class Cl {
   constructor() {
     babelHelpers.classPrivateFieldLooseBase(Cl, _privateStaticMethod)[_privateStaticMethod] = null;
   }
 
 }
-
-var _privateStaticMethod = babelHelpers.classPrivateFieldLooseKey("privateStaticMethod");
 
 var _privateStaticMethod2 = function _privateStaticMethod2() {};
 

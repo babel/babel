@@ -1,35 +1,34 @@
 // @flow
 import defineType, {
-  assertOptionalChainStart,
   assertEach,
   assertNodeType,
-  assertNodeOrValueType,
   assertValueType,
   chain,
 } from "./utils";
 import {
   classMethodOrPropertyCommon,
   classMethodOrDeclareMethodCommon,
-} from "./es2015";
+  functionTypeAnnotationCommon,
+} from "./core";
 
 defineType("ArgumentPlaceholder", {});
-
-defineType("AwaitExpression", {
-  builder: ["argument"],
-  visitor: ["argument"],
-  aliases: ["Expression", "Terminatorless"],
-  fields: {
-    argument: {
-      validate: assertNodeType("Expression"),
-    },
-  },
-});
 
 defineType("BindExpression", {
   visitor: ["object", "callee"],
   aliases: ["Expression"],
   fields: !process.env.BABEL_TYPES_8_BREAKING
-    ? {}
+    ? {
+        object: {
+          validate: Object.assign(() => {}, {
+            oneOfNodeTypes: ["Expression"],
+          }),
+        },
+        callee: {
+          validate: Object.assign(() => {}, {
+            oneOfNodeTypes: ["Expression"],
+          }),
+        },
+      }
     : {
         object: {
           validate: assertNodeType("Expression"),
@@ -83,36 +82,6 @@ defineType("ClassProperty", {
   },
 });
 
-defineType("OptionalMemberExpression", {
-  builder: ["object", "property", "computed", "optional"],
-  visitor: ["object", "property"],
-  aliases: ["Expression"],
-  fields: {
-    object: {
-      validate: assertNodeType("Expression"),
-    },
-    property: {
-      validate: (function() {
-        const normal = assertNodeType("Identifier");
-        const computed = assertNodeType("Expression");
-
-        return function(node, key, val) {
-          const validator = node.computed ? computed : normal;
-          validator(node, key, val);
-        };
-      })(),
-    },
-    computed: {
-      default: false,
-    },
-    optional: {
-      validate: !process.env.BABEL_TYPES_8_BREAKING
-        ? assertValueType("boolean")
-        : chain(assertValueType("boolean"), assertOptionalChainStart()),
-    },
-  },
-});
-
 defineType("PipelineTopicExpression", {
   builder: ["expression"],
   visitor: ["expression"],
@@ -135,38 +104,6 @@ defineType("PipelineBareFunction", {
 
 defineType("PipelinePrimaryTopicReference", {
   aliases: ["Expression"],
-});
-
-defineType("OptionalCallExpression", {
-  visitor: ["callee", "arguments", "typeParameters", "typeArguments"],
-  builder: ["callee", "arguments", "optional"],
-  aliases: ["Expression"],
-  fields: {
-    callee: {
-      validate: assertNodeType("Expression"),
-    },
-    arguments: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(
-          assertNodeType("Expression", "SpreadElement", "JSXNamespacedName"),
-        ),
-      ),
-    },
-    optional: {
-      validate: !process.env.BABEL_TYPES_8_BREAKING
-        ? assertValueType("boolean")
-        : chain(assertValueType("boolean"), assertOptionalChainStart()),
-    },
-    typeArguments: {
-      validate: assertNodeType("TypeParameterInstantiation"),
-      optional: true,
-    },
-    typeParameters: {
-      validate: assertNodeType("TSTypeParameterInstantiation"),
-      optional: true,
-    },
-  },
 });
 
 defineType("ClassPrivateProperty", {
@@ -211,6 +148,7 @@ defineType("ClassPrivateMethod", {
   ],
   fields: {
     ...classMethodOrDeclareMethodCommon,
+    ...functionTypeAnnotationCommon,
     key: {
       validate: assertNodeType("PrivateName"),
     },
@@ -220,8 +158,16 @@ defineType("ClassPrivateMethod", {
   },
 });
 
-defineType("Import", {
-  aliases: ["Expression"],
+defineType("ImportAttribute", {
+  visitor: ["key", "value"],
+  fields: {
+    key: {
+      validate: assertNodeType("Identifier"),
+    },
+    value: {
+      validate: assertNodeType("StringLiteral"),
+    },
+  },
 });
 
 defineType("Decorator", {
@@ -253,16 +199,6 @@ defineType("ExportDefaultSpecifier", {
   },
 });
 
-defineType("ExportNamespaceSpecifier", {
-  visitor: ["exported"],
-  aliases: ["ModuleSpecifier"],
-  fields: {
-    exported: {
-      validate: assertNodeType("Identifier"),
-    },
-  },
-});
-
 defineType("PrivateName", {
   visitor: ["id"],
   aliases: ["Private"],
@@ -273,16 +209,6 @@ defineType("PrivateName", {
   },
 });
 
-defineType("BigIntLiteral", {
-  builder: ["value"],
-  fields: {
-    value: {
-      validate: assertValueType("string"),
-    },
-  },
-  aliases: ["Expression", "Pureish", "Literal", "Immutable"],
-});
-
 defineType("RecordExpression", {
   visitor: ["properties"],
   aliases: ["Expression"],
@@ -290,9 +216,7 @@ defineType("RecordExpression", {
     properties: {
       validate: chain(
         assertValueType("array"),
-        assertEach(
-          assertNodeType("ObjectProperty", "ObjectMethod", "SpreadElement"),
-        ),
+        assertEach(assertNodeType("ObjectProperty", "SpreadElement")),
       ),
     },
   },
@@ -303,13 +227,21 @@ defineType("TupleExpression", {
     elements: {
       validate: chain(
         assertValueType("array"),
-        assertEach(
-          assertNodeOrValueType("null", "Expression", "SpreadElement"),
-        ),
+        assertEach(assertNodeType("Expression", "SpreadElement")),
       ),
       default: [],
     },
   },
   visitor: ["elements"],
   aliases: ["Expression"],
+});
+
+defineType("DecimalLiteral", {
+  builder: ["value"],
+  fields: {
+    value: {
+      validate: assertValueType("string"),
+    },
+  },
+  aliases: ["Expression", "Pureish", "Literal", "Immutable"],
 });

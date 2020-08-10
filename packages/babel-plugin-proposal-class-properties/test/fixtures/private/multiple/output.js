@@ -1,3 +1,7 @@
+var _x = new WeakMap();
+
+var _y = new WeakMap();
+
 var Foo = function Foo() {
   "use strict";
 
@@ -13,7 +17,3 @@ var Foo = function Foo() {
     value: babelHelpers.classPrivateFieldGet(this, _x)
   });
 };
-
-var _x = new WeakMap();
-
-var _y = new WeakMap();

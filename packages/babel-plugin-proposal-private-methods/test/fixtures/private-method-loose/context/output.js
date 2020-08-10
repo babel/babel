@@ -1,3 +1,5 @@
+var _getStatus = babelHelpers.classPrivateFieldLooseKey("getStatus");
+
 class Foo {
   constructor(status) {
     Object.defineProperty(this, _getStatus, {
@@ -32,8 +34,6 @@ class Foo {
   }
 
 }
-
-var _getStatus = babelHelpers.classPrivateFieldLooseKey("getStatus");
 
 var _getStatus2 = function _getStatus2() {
   return this.status;

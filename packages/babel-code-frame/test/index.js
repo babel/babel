@@ -2,8 +2,8 @@ import chalk from "chalk";
 import stripAnsi from "strip-ansi";
 import codeFrame, { codeFrameColumns } from "..";
 
-describe("@babel/code-frame", function() {
-  test("basic usage", function() {
+describe("@babel/code-frame", function () {
+  test("basic usage", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
     expect(codeFrame(rawLines, 2, 16)).toEqual(
       [
@@ -15,14 +15,14 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("optional column number", function() {
+  test("optional column number", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
     expect(codeFrame(rawLines, 2, null)).toEqual(
       ["  1 | class Foo {", "> 2 |   constructor()", "  3 | };"].join("\n"),
     );
   });
 
-  test("maximum context lines and padding", function() {
+  test("maximum context lines and padding", function () {
     const rawLines = [
       "/**",
       " * Sums two numbers.",
@@ -49,7 +49,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("no unnecessary padding due to one-off errors", function() {
+  test("no unnecessary padding due to one-off errors", function () {
     const rawLines = [
       "/**",
       " * Sums two numbers.",
@@ -76,7 +76,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("tabs", function() {
+  test("tabs", function () {
     const rawLines = [
       "\tclass Foo {",
       "\t  \t\t    constructor\t(\t)",
@@ -92,7 +92,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("opts.highlightCode", function() {
+  test("opts.highlightCode", function () {
     const rawLines = "console.log('babel')";
     const result = codeFrame(rawLines, 1, 9, { highlightCode: true });
     const stripped = stripAnsi(result);
@@ -102,7 +102,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("opts.highlightCode with multiple columns and lines", function() {
+  test("opts.highlightCode with multiple columns and lines", function () {
     // prettier-ignore
     const rawLines = [
       "function a(b, c) {", 
@@ -141,7 +141,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("opts.linesAbove", function() {
+  test("opts.linesAbove", function () {
     const rawLines = [
       "/**",
       " * Sums two numbers.",
@@ -167,7 +167,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("opts.linesBelow", function() {
+  test("opts.linesBelow", function () {
     const rawLines = [
       "/**",
       " * Sums two numbers.",
@@ -192,7 +192,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("opts.linesAbove and opts.linesBelow", function() {
+  test("opts.linesAbove and opts.linesBelow", function () {
     const rawLines = [
       "/**",
       " * Sums two numbers.",
@@ -213,7 +213,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("opts.linesAbove no lines above", function() {
+  test("opts.linesAbove no lines above", function () {
     const rawLines = [
       "class Foo {",
       "  constructor() {",
@@ -233,7 +233,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("opts.linesBelow no lines below", function() {
+  test("opts.linesBelow no lines below", function () {
     const rawLines = [
       "class Foo {",
       "  constructor() {",
@@ -246,7 +246,7 @@ describe("@babel/code-frame", function() {
     ).toEqual(["  1 | class Foo {", "> 2 |   constructor() {"].join("\n"));
   });
 
-  test("opts.linesBelow single line", function() {
+  test("opts.linesBelow single line", function () {
     const rawLines = [
       "class Foo {",
       "  constructor() {",
@@ -263,7 +263,7 @@ describe("@babel/code-frame", function() {
     ).toEqual(["> 2 |   constructor() {"].join("\n"));
   });
 
-  test("opts.forceColor", function() {
+  test("opts.forceColor", function () {
     const marker = chalk.red.bold;
     const gutter = chalk.grey;
 
@@ -285,7 +285,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("basic usage, new API", function() {
+  test("basic usage, new API", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
     expect(
       codeFrameColumns(rawLines, { start: { line: 2, column: 16 } }),
@@ -299,7 +299,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("mark multiple columns", function() {
+  test("mark multiple columns", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
     expect(
       codeFrameColumns(rawLines, {
@@ -316,7 +316,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("mark multiple columns across lines", function() {
+  test("mark multiple columns across lines", function () {
     const rawLines = ["class Foo {", "  constructor() {", "  }", "};"].join(
       "\n",
     );
@@ -337,7 +337,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("mark multiple columns across multiple lines", function() {
+  test("mark multiple columns across multiple lines", function () {
     const rawLines = [
       "class Foo {",
       "  constructor() {",
@@ -364,7 +364,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("mark across multiple lines without columns", function() {
+  test("mark across multiple lines without columns", function () {
     const rawLines = [
       "class Foo {",
       "  constructor() {",
@@ -385,7 +385,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("opts.message", function() {
+  test("opts.message", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
     expect(
       codeFrameColumns(
@@ -405,7 +405,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("opts.message without column", function() {
+  test("opts.message without column", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
     expect(
       codeFrameColumns(
@@ -425,7 +425,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("opts.message with multiple lines", function() {
+  test("opts.message with multiple lines", function () {
     const rawLines = [
       "class Foo {",
       "  constructor() {",
@@ -458,7 +458,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  test("opts.message with multiple lines without columns", function() {
+  test("opts.message with multiple lines without columns", function () {
     const rawLines = [
       "class Foo {",
       "  constructor() {",

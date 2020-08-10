@@ -1,6 +1,5 @@
 import * as virtualTypes from "./path/lib/virtual-types";
 import * as t from "@babel/types";
-import clone from "lodash/clone";
 
 /**
  * explode() will take a visitor object with all of the various shorthands
@@ -106,7 +105,7 @@ export function explode(visitor) {
       if (existing) {
         mergePair(existing, fns);
       } else {
-        visitor[alias] = clone(fns);
+        visitor[alias] = { ...fns };
       }
     }
   }
@@ -214,11 +213,11 @@ function wrapWithStateOrWrapper(oldVisitor, state, wrapper: ?Function) {
     // not an enter/exit array of callbacks
     if (!Array.isArray(fns)) continue;
 
-    fns = fns.map(function(fn) {
+    fns = fns.map(function (fn) {
       let newFn = fn;
 
       if (state) {
-        newFn = function(path) {
+        newFn = function (path) {
           return fn.call(state, path, state);
         };
       }
@@ -258,7 +257,7 @@ function ensureCallbackArrays(obj) {
 }
 
 function wrapCheck(wrapper, fn) {
-  const newFn = function(path) {
+  const newFn = function (path) {
     if (wrapper.checkPath(path)) {
       return fn.apply(this, arguments);
     }
@@ -275,7 +274,13 @@ function shouldIgnoreKey(key) {
   if (key === "enter" || key === "exit" || key === "shouldSkip") return true;
 
   // ignore other options
-  if (key === "blacklist" || key === "noScope" || key === "skipKeys") {
+  if (
+    key === "denylist" ||
+    key === "noScope" ||
+    key === "skipKeys" ||
+    // TODO: Remove in Babel 8
+    key === "blacklist"
+  ) {
     return true;
   }
 

@@ -1,3 +1,7 @@
+var _privateField = babelHelpers.classPrivateFieldLooseKey("privateField");
+
+var _privateFieldValue = babelHelpers.classPrivateFieldLooseKey("privateFieldValue");
+
 class Cl {
   constructor() {
     Object.defineProperty(this, _privateFieldValue, {
@@ -20,10 +24,6 @@ class Cl {
   }
 
 }
-
-var _privateField = babelHelpers.classPrivateFieldLooseKey("privateField");
-
-var _privateFieldValue = babelHelpers.classPrivateFieldLooseKey("privateFieldValue");
 
 var _get_privateFieldValue = function () {
   return babelHelpers.classPrivateFieldLooseBase(this, _privateField)[_privateField];

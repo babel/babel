@@ -1,15 +1,19 @@
 "use strict";
 
-module.exports = function(api) {
+const path = require("path");
+
+function normalize(src) {
+  return src.replace(/\//, path.sep);
+}
+
+module.exports = function (api) {
   const env = api.env();
 
   const includeCoverage = process.env.BABEL_COVERAGE === "true";
 
   const envOptsNoTargets = {
     loose: true,
-    modules: false,
     shippedProposals: true,
-    exclude: ["transform-typeof-symbol"],
   };
   const envOpts = Object.assign({}, envOptsNoTargets);
 
@@ -93,14 +97,14 @@ module.exports = function(api) {
       "packages/*/test/fixtures",
       ignoreLib ? "packages/*/lib" : null,
       "packages/babel-standalone/babel.js",
-    ].filter(Boolean),
+    ]
+      .filter(Boolean)
+      .map(normalize),
     presets: [["@babel/env", envOpts]],
     plugins: [
       // TODO: Use @babel/preset-flow when
       // https://github.com/babel/babel/issues/7233 is fixed
       "@babel/plugin-transform-flow-strip-types",
-      ["@babel/proposal-class-properties", { loose: true }],
-      "@babel/proposal-export-namespace-from",
       [
         "@babel/proposal-object-rest-spread",
         { useBuiltIns: true, loose: true },
@@ -115,14 +119,14 @@ module.exports = function(api) {
         test: [
           "packages/babel-parser",
           "packages/babel-helper-validator-identifier",
-        ],
+        ].map(normalize),
         plugins: [
           "babel-plugin-transform-charcodes",
           ["@babel/transform-for-of", { assumeArray: true }],
         ],
       },
       {
-        test: ["./packages/babel-cli", "./packages/babel-core"],
+        test: ["./packages/babel-cli", "./packages/babel-core"].map(normalize),
         plugins: [
           // Explicitly use the lazy version of CommonJS modules.
           convertESM
@@ -131,11 +135,11 @@ module.exports = function(api) {
         ].filter(Boolean),
       },
       {
-        test: "./packages/babel-polyfill",
+        test: normalize("./packages/babel-polyfill"),
         presets: [["@babel/env", envOptsNoTargets]],
       },
       {
-        test: unambiguousSources,
+        test: unambiguousSources.map(normalize),
         sourceType: "unambiguous",
       },
       includeRegeneratorRuntime && {

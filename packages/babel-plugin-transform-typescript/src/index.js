@@ -70,7 +70,7 @@ export default declare(
         if (node.definite || node.declare) {
           if (node.value) {
             throw path.buildCodeFrameError(
-              `Definietly assigned fields and fields with the 'declare' modifier cannot` +
+              `Definitely assigned fields and fields with the 'declare' modifier cannot` +
                 ` be initialized here, but only in the constructor`,
             );
           }
@@ -93,6 +93,7 @@ export default declare(
         if (node.optional) node.optional = null;
         if (node.typeAnnotation) node.typeAnnotation = null;
         if (node.definite) node.definite = null;
+        if (node.declare) node.declare = null;
       },
       method({ node }) {
         if (node.accessibility) node.accessibility = null;
@@ -134,7 +135,8 @@ export default declare(
               );
             }
 
-            return template.statement.ast`this.${id} = ${id}`;
+            return template.statement.ast`
+              this.${t.cloneNode(id)} = ${t.cloneNode(id)}`;
           });
 
           injectInitialization(classPath, path, assigns);
@@ -167,6 +169,11 @@ export default declare(
                 fileJsxPragma = jsxMatches[1];
               }
             }
+          }
+
+          let pragmaImportName = fileJsxPragma || jsxPragma;
+          if (pragmaImportName) {
+            [pragmaImportName] = pragmaImportName.split(".");
           }
 
           // remove type imports
@@ -203,7 +210,7 @@ export default declare(
                     isImportTypeOnly({
                       binding,
                       programPath: path,
-                      jsxPragma: fileJsxPragma || jsxPragma,
+                      jsxPragma: pragmaImportName,
                     })
                   ) {
                     importsToRemove.push(binding.path);
@@ -411,6 +418,10 @@ export default declare(
         },
 
         CallExpression(path) {
+          path.node.typeParameters = null;
+        },
+
+        OptionalCallExpression(path) {
           path.node.typeParameters = null;
         },
 

@@ -31,8 +31,7 @@ matrix:
     - node_js: "13"
     # Move `windows` build to be the third since it is slow
     - os: windows
-      # Pin windows node.js version until https://github.com/nodejs/node/issues/33166 is resolved
-      node_js: "14.0"
+      node_js: "node"
       env:
         - JOB=test
         # https://travis-ci.community/t/build-doesnt-finish-after-completing-tests/288/9

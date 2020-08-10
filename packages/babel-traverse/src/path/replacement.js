@@ -196,7 +196,7 @@ export function _replaceWith(node) {
     t.validate(this.parent, this.key, node);
   }
 
-  this.debug(`Replace with ${node && node.type}`);
+  this.debug(`Replace with ${node?.type}`);
 
   this.node = this.container[this.key] = node;
 }
@@ -217,7 +217,7 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
   }
 
   const functionParent = this.getFunctionParent();
-  const isParentAsync = functionParent && functionParent.is("async");
+  const isParentAsync = functionParent?.is("async");
 
   const container = t.arrowFunctionExpression([], t.blockStatement(nodes));
 

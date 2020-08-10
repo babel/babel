@@ -6,8 +6,8 @@ function fixture(...args) {
   return path.join(__dirname, "fixtures", "parse", ...args);
 }
 
-describe("parse", function() {
-  it("should parse using configuration from .babelrc when a filename is provided", function() {
+describe("parse", function () {
+  it("should parse using configuration from .babelrc when a filename is provided", function () {
     const input = fs.readFileSync(fixture("input.js"), "utf8");
     const output = require(fixture("output"));
 
@@ -18,7 +18,7 @@ describe("parse", function() {
     expect(JSON.parse(JSON.stringify(result))).toEqual(output);
   });
 
-  it("should parse using passed in configuration", function() {
+  it("should parse using passed in configuration", function () {
     const input = fs.readFileSync(fixture("input.js"), "utf8");
     const output = require(fixture("output.json"));
 

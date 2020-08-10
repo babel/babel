@@ -16,7 +16,7 @@ import {
   type BindingTypes,
 } from "./scopeflags";
 import * as N from "../types";
-import { Errors } from "../parser/location";
+import { Errors } from "../parser/error";
 
 // Start an AST node, attaching a start offset.
 export class Scope {

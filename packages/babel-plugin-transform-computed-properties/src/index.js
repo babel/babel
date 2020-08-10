@@ -159,7 +159,7 @@ export default declare((api, options) => {
 
           let mutatorRef;
 
-          const getMutatorId = function() {
+          const getMutatorId = function () {
             if (!mutatorRef) {
               mutatorRef = scope.generateUidIdentifier("mutatorMap");
 

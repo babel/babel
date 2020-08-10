@@ -18,7 +18,7 @@ const visitor = {
   },
 };
 
-export default function(
+export default function (
   path: NodePath,
   scope = path.scope,
   shouldHoistVariables = true,

@@ -1,6 +1,6 @@
 FLOW_COMMIT = a1f9a4c709dcebb27a5084acf47755fbae699c25
-TEST262_COMMIT = 28b4fcca4b1b1d278dfe0cc0e69c7d9d59b31aab
-TYPESCRIPT_COMMIT = 5fc917be2e4dd64c8e9504d36615cd7fbfdd4cd3
+TEST262_COMMIT = 058adfed86b1d4129996faaf50a85ea55379a66a
+TYPESCRIPT_COMMIT = ffa35d3272647fe48ddf173e1f0928f772c18630
 
 FORCE_PUBLISH = "@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@babel/standalone"
 
@@ -84,9 +84,10 @@ build-no-bundle-ci: bootstrap-only
 watch: build-no-bundle
 	BABEL_ENV=development $(YARN) gulp watch
 
-code-quality-ci: flowcheck-ci lint-ci
+code-quality-ci: build-no-bundle-ci
+	$(MAKE) flowcheck-ci lint-ci
 
-flowcheck-ci: bootstrap-flowcheck
+flowcheck-ci:
 	$(MAKE) flow
 
 code-quality: flow lint
@@ -94,17 +95,15 @@ code-quality: flow lint
 flow:
 	$(YARN) flow check --strip-root
 
-bootstrap-flowcheck: build-no-bundle-ci
-
 lint-ci: lint-js-ci lint-ts-ci check-compat-data-ci
 
-lint-js-ci: bootstrap-only
+lint-js-ci:
 	$(MAKE) lint-js
 
-lint-ts-ci: bootstrap-flowcheck
+lint-ts-ci:
 	$(MAKE) lint-ts
 
-check-compat-data-ci: build-no-bundle-ci
+check-compat-data-ci:
 	$(MAKE) check-compat-data
 
 lint: lint-js lint-ts
@@ -135,6 +134,7 @@ clean: test-clean
 	rm -rf packages/babel-polyfill/dist
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*
+	rm -rf node_modules/.cache
 
 test-clean:
 	$(foreach source, $(SOURCES), \
@@ -163,8 +163,8 @@ test-ci-coverage:
 bootstrap-flow:
 	rm -rf build/flow
 	mkdir -p build
-	git clone --branch=master --single-branch --shallow-since=2018-11-01 https://github.com/facebook/flow.git build/flow
-	cd build/flow && git checkout $(FLOW_COMMIT)
+	git clone --single-branch --shallow-since=2018-11-01 https://github.com/facebook/flow.git build/flow
+	cd build/flow && git checkout -q $(FLOW_COMMIT)
 
 test-flow:
 	$(NODE) scripts/parser-tests/flow
@@ -172,14 +172,14 @@ test-flow:
 test-flow-ci: build-bundle-ci bootstrap-flow
 	$(MAKE) test-flow
 
-test-flow-update-whitelist:
-	$(NODE) scripts/parser-tests/flow --update-whitelist
+test-flow-update-allowlist:
+	$(NODE) scripts/parser-tests/flow --update-allowlist
 
 bootstrap-typescript:
 	rm -rf ./build/typescript
 	mkdir -p ./build
-	git clone --branch=master --single-branch --shallow-since=2019-09-01 https://github.com/microsoft/TypeScript.git ./build/typescript
-	cd build/typescript && git checkout $(TYPESCRIPT_COMMIT)
+	git clone --single-branch --shallow-since=2019-09-01 https://github.com/microsoft/TypeScript.git ./build/typescript
+	cd build/typescript && git checkout -q $(TYPESCRIPT_COMMIT)
 
 test-typescript:
 	$(NODE) scripts/parser-tests/typescript
@@ -187,14 +187,14 @@ test-typescript:
 test-typescript-ci: build-bundle-ci bootstrap-typescript
 	$(MAKE) test-typescript
 
-test-typescript-update-whitelist:
-	$(NODE) scripts/parser-tests/typescript --update-whitelist
+test-typescript-update-allowlist:
+	$(NODE) scripts/parser-tests/typescript --update-allowlist
 
 bootstrap-test262:
 	rm -rf build/test262
 	mkdir -p build
-	git clone --branch=master --single-branch --shallow-since=2019-12-01 https://github.com/tc39/test262.git build/test262
-	cd build/test262 && git checkout $(TEST262_COMMIT)
+	git clone --single-branch --shallow-since=2019-12-01 https://github.com/tc39/test262.git build/test262
+	cd build/test262 && git checkout -q $(TEST262_COMMIT)
 
 test-test262:
 	$(NODE) scripts/parser-tests/test262
@@ -202,16 +202,16 @@ test-test262:
 test-test262-ci: build-bundle-ci bootstrap-test262
 	$(MAKE) test-test262
 
-test-test262-update-whitelist:
-	$(NODE) scripts/parser-tests/test262 --update-whitelist
+test-test262-update-allowlist:
+	$(NODE) scripts/parser-tests/test262 --update-allowlist
 
 # Does not work on Windows
 clone-license:
 	./scripts/clone-license.sh
 
 prepublish-build: clean-lib clean-runtime-helpers
-	NODE_ENV=production BABEL_ENV=production $(MAKE) build
-	$(MAKE) clone-license
+	NODE_ENV=production BABEL_ENV=production $(MAKE) build-bundle
+	$(MAKE) prepublish-build-standalone clone-license
 
 prepublish:
 	$(MAKE) bootstrap-only
@@ -248,19 +248,15 @@ endif
 	$(YARN) lerna publish from-git --registry http://localhost:4873 --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
 
-publish-eslint:
-	$(call set-json-field, ./eslint/$(PKG)/package.json, private, false)
-	cd eslint/$(PKG); yarn publish
-	$(call set-json-field, ./eslint/$(PKG)/package.json, private, true)
-
 bootstrap-only: lerna-bootstrap
 
 yarn-install: clean-all
-	yarn --ignore-engines
+	# Gitpod prebuilds have a slow network connection, so we need more time
+	yarn --ignore-engines --network-timeout 100000
 
 lerna-bootstrap: yarn-install
 # todo: remove `-- -- --ignore-engines` in Babel 8
-	$(YARN) lerna bootstrap -- -- --ignore-engines
+	$(YARN) lerna bootstrap -- -- --ignore-engines --network-timeout 100000
 
 bootstrap: bootstrap-only
 	$(MAKE) build
@@ -307,11 +303,4 @@ define clean-source-all
 	rm -rf $(1)/*/node_modules
 	rm -rf $(1)/*/package-lock.json
 
-endef
-
-define set-json-field
-	$(NODE) -e "\
-		require('fs').writeFileSync('$1'.trim(), \
-			JSON.stringify({ ...require('$1'.trim()), $2: $3 }, null, 2) + '\\n' \
-		)"
 endef

@@ -196,5 +196,27 @@
 }`);
       });
     });
+
+    describe("regressions", () => {
+      it("#11534 - supports quantifiers in unicode regexps", () => {
+        expect(() =>
+          Babel.transform("/a*/u", { presets: ["es2015"] }),
+        ).not.toThrow();
+      });
+      it("#11628 - supports stage-0 passing moduleAttributesVersion to stage-1", () => {
+        expect(() =>
+          Babel.transform("const getMessage = () => 'Hello World'", {
+            presets: [["stage-0", { decoratorsBeforeExport: false }]],
+          }),
+        ).not.toThrow();
+      });
+      it("#11897 - [...map.keys()] in Babel source should be transformed correctly", () => {
+        expect(() =>
+          Babel.transform("for (let el of []) { s => el }", {
+            plugins: ["transform-block-scoping"],
+          }),
+        ).not.toThrow();
+      });
+    });
   },
 );

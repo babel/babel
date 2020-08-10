@@ -158,6 +158,7 @@ const specHandlers = {
       this._get(superMember, thisRefs),
       t.cloneNode(thisRefs.this),
       args,
+      false,
     );
   },
 };
@@ -215,7 +216,7 @@ const looseHandlers = {
   },
 
   call(superMember, args) {
-    return optimiseCall(this.get(superMember), t.thisExpression(), args);
+    return optimiseCall(this.get(superMember), t.thisExpression(), args, false);
   },
 };
 

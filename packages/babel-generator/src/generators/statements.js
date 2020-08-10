@@ -81,8 +81,8 @@ export function WhileStatement(node: Object) {
   this.printBlock(node);
 }
 
-const buildForXStatement = function(op) {
-  return function(node: Object) {
+const buildForXStatement = function (op) {
+  return function (node: Object) {
     this.word("for");
     this.space();
     if (op === "of" && node.await) {
@@ -117,7 +117,7 @@ export function DoWhileStatement(node: Object) {
 }
 
 function buildLabelStatement(prefix, key = "label") {
-  return function(node: Object) {
+  return function (node: Object) {
     this.word(prefix);
 
     const label = node[key];
@@ -174,6 +174,7 @@ export function CatchClause(node: Object) {
   if (node.param) {
     this.token("(");
     this.print(node.param, node);
+    this.print(node.param.typeAnnotation, node);
     this.token(")");
     this.space();
   }

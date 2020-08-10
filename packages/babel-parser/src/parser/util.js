@@ -6,8 +6,7 @@ import State from "../tokenizer/state";
 import type { Node } from "../types";
 import { lineBreak } from "../util/whitespace";
 import { isIdentifierChar } from "../util/identifier";
-import * as charCodes from "charcodes";
-import { Errors } from "./location";
+import { Errors } from "./error";
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
   node: Node,
@@ -33,18 +32,6 @@ export default class UtilParser extends Tokenizer {
 
   isRelational(op: "<" | ">"): boolean {
     return this.match(tt.relational) && this.state.value === op;
-  }
-
-  isLookaheadRelational(op: "<" | ">"): boolean {
-    const next = this.nextTokenStart();
-    if (this.input.charAt(next) === op) {
-      if (next + 1 === this.input.length) {
-        return true;
-      }
-      const afterNext = this.input.charCodeAt(next + 1);
-      return afterNext !== op.charCodeAt(0) && afterNext !== charCodes.equalsTo;
-    }
-    return false;
   }
 
   // TODO
@@ -132,7 +119,9 @@ export default class UtilParser extends Tokenizer {
   // Throws if the current token and the prev one are separated by a space.
   assertNoSpace(message: string = "Unexpected space."): void {
     if (this.state.start > this.state.lastTokEnd) {
+      /* eslint-disable @babel/development-internal/dry-error-messages */
       this.raise(this.state.lastTokEnd, message);
+      /* eslint-enable @babel/development-internal/dry-error-messages */
     }
   }
 
@@ -146,7 +135,9 @@ export default class UtilParser extends Tokenizer {
     if (typeof messageOrType !== "string") {
       messageOrType = `Unexpected token, expected "${messageOrType.label}"`;
     }
+    /* eslint-disable @babel/development-internal/dry-error-messages */
     throw this.raise(pos != null ? pos : this.state.start, messageOrType);
+    /* eslint-enable @babel/development-internal/dry-error-messages */
   }
 
   expectPlugin(name: string, pos?: ?number): true {
@@ -178,16 +169,10 @@ export default class UtilParser extends Tokenizer {
       this.state.yieldPos !== -1 &&
       (this.state.awaitPos === -1 || this.state.yieldPos < this.state.awaitPos)
     ) {
-      this.raise(
-        this.state.yieldPos,
-        "Yield cannot be used as name inside a generator function",
-      );
+      this.raise(this.state.yieldPos, Errors.YieldBindingIdentifier);
     }
     if (this.state.awaitPos !== -1) {
-      this.raise(
-        this.state.awaitPos,
-        "Await cannot be used as name inside an async function",
-      );
+      this.raise(this.state.awaitPos, Errors.AwaitBindingIdentifier);
     }
   }
 
@@ -258,6 +243,26 @@ export default class UtilParser extends Tokenizer {
     if (doubleProto >= 0) {
       this.raise(doubleProto, Errors.DuplicateProto);
     }
+  }
+
+  /**
+   * Test if current token is a literal property name
+   * https://tc39.es/ecma262/#prod-LiteralPropertyName
+   * LiteralPropertyName:
+   *   IdentifierName
+   *   StringLiteral
+   *   NumericLiteral
+   *   BigIntLiteral
+   */
+  isLiteralPropertyName(): boolean {
+    return (
+      this.match(tt.name) ||
+      !!this.state.type.keyword ||
+      this.match(tt.string) ||
+      this.match(tt.num) ||
+      this.match(tt.bigint) ||
+      this.match(tt.decimal)
+    );
   }
 }
 

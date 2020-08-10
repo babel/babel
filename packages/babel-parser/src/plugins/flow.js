@@ -2,6 +2,9 @@
 
 /*:: declare var invariant; */
 
+// Error messages are colocated with the plugin.
+/* eslint-disable @babel/development-internal/dry-error-messages */
+
 import type Parser from "../parser";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import * as N from "../types";
@@ -22,7 +25,7 @@ import {
   SCOPE_OTHER,
 } from "../util/scopeflags";
 import type { ExpressionErrors } from "../parser/util";
-import { Errors } from "../parser/location";
+import { Errors } from "../parser/error";
 
 const reservedTypes = new Set([
   "_",
@@ -473,6 +476,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         ) {
           const label = this.state.value;
           const suggestion = exportSuggestions[label];
+
           throw this.raise(
             this.state.start,
             FlowErrors.UnsupportedDeclareExportKind,
@@ -1073,7 +1077,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       /* The inexact flag should only be added on ObjectTypeAnnotations that
        * are not the body of an interface, declare interface, or declare class.
-       * Since spreads are only allowed in objec types, checking that is
+       * Since spreads are only allowed in object types, checking that is
        * sufficient here.
        */
       if (allowSpread) {
@@ -1812,7 +1816,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseConditional(
       expr: N.Expression,
-      noIn: ?boolean,
       startPos: number,
       startLoc: Position,
       refNeedsArrowPos?: ?Pos,
@@ -1823,7 +1826,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // and if we come from inside parens
       if (refNeedsArrowPos) {
         const result = this.tryParse(() =>
-          super.parseConditional(expr, noIn, startPos, startLoc),
+          super.parseConditional(expr, startPos, startLoc),
         );
 
         if (!result.node) {
@@ -1882,7 +1885,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.test = expr;
       node.consequent = consequent;
       node.alternate = this.forwardNoArrowParamsConversionAt(node, () =>
-        this.parseMaybeAssign(noIn, undefined, undefined, undefined),
+        this.parseMaybeAssign(undefined, undefined, undefined),
       );
 
       return this.finishNode(node, "ConditionalExpression");
@@ -1894,7 +1897,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     } {
       this.state.noArrowParamsConversionAt.push(this.state.start);
 
-      const consequent = this.parseMaybeAssign();
+      const consequent = this.parseMaybeAssignAllowIn();
       const failed = !this.match(tt.colon);
 
       this.state.noArrowParamsConversionAt.pop();
@@ -2131,6 +2134,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         (code === charCodes.greaterThan || code === charCodes.lessThan)
       ) {
         return this.finishOp(tt.relational, 1);
+      } else if (this.state.inType && code === charCodes.questionMark) {
+        // allow double nullable types in Flow: ??string
+        return this.finishOp(tt.question, 1);
       } else if (isIteratorStart(code, next)) {
         this.state.isIterator = true;
         return super.readWord();
@@ -2198,7 +2204,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): $ReadOnlyArray<N.Pattern> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
-        if (expr && expr.type === "TypeCastExpression") {
+        if (expr?.type === "TypeCastExpression") {
           exprList[i] = this.typeCastToParameter(expr);
         }
       }
@@ -2216,7 +2222,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (
           expr &&
           expr.type === "TypeCastExpression" &&
-          (!expr.extra || !expr.extra.parenthesized) &&
+          !expr.extra?.parenthesized &&
           (exprList.length > 1 || !isParenthesizedExpr)
         ) {
           this.raise(expr.typeAnnotation.start, FlowErrors.TypeCastInPattern);
@@ -2358,8 +2364,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isGenerator: boolean,
       isAsync: boolean,
       isPattern: boolean,
+      isAccessor: boolean,
       refExpressionErrors: ?ExpressionErrors,
-      containsEsc: boolean,
     ): void {
       if ((prop: $FlowFixMe).variance) {
         this.unexpected((prop: $FlowFixMe).variance.start);
@@ -2369,7 +2375,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let typeParameters;
 
       // method shorthand
-      if (this.isRelational("<")) {
+      if (this.isRelational("<") && !isAccessor) {
         typeParameters = this.flowParseTypeParameterDeclaration();
         if (!this.match(tt.parenL)) this.unexpected();
       }
@@ -2381,8 +2387,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isGenerator,
         isAsync,
         isPattern,
+        isAccessor,
         refExpressionErrors,
-        containsEsc,
       );
 
       // add typeParameters if we found them
@@ -2625,7 +2631,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     //    there
     // 3. This is neither. Just call the super method
     parseMaybeAssign(
-      noIn?: ?boolean,
       refExpressionErrors?: ?ExpressionErrors,
       afterLeftParse?: Function,
       refNeedsArrowPos?: ?Pos,
@@ -2643,7 +2648,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         jsx = this.tryParse(
           () =>
             super.parseMaybeAssign(
-              noIn,
               refExpressionErrors,
               afterLeftParse,
               refNeedsArrowPos,
@@ -2665,7 +2669,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      if ((jsx && jsx.error) || this.isRelational("<")) {
+      if (jsx?.error || this.isRelational("<")) {
         state = state || this.state.clone();
 
         let typeParameters;
@@ -2677,7 +2681,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             typeParameters,
             () =>
               super.parseMaybeAssign(
-                noIn,
                 refExpressionErrors,
                 afterLeftParse,
                 refNeedsArrowPos,
@@ -2690,19 +2693,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }, state);
 
         const arrowExpression: ?N.ArrowFunctionExpression =
-          arrow.node && arrow.node.type === "ArrowFunctionExpression"
-            ? arrow.node
-            : null;
+          arrow.node?.type === "ArrowFunctionExpression" ? arrow.node : null;
 
         if (!arrow.error && arrowExpression) return arrowExpression;
 
-        // If we are here, both JSX and Flow parsing attemps failed.
+        // If we are here, both JSX and Flow parsing attempts failed.
         // Give the precedence to the JSX error, except if JSX had an
         // unrecoverable error while Flow didn't.
         // If the error is recoverable, we can only re-report it if there is
         // a node we can return.
 
-        if (jsx && jsx.node) {
+        if (jsx?.node) {
           /*:: invariant(jsx.failState) */
           this.state = jsx.failState;
           return jsx.node;
@@ -2714,7 +2715,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return arrowExpression;
         }
 
-        if (jsx && jsx.thrown) throw jsx.error;
+        if (jsx?.thrown) throw jsx.error;
         if (arrow.thrown) throw arrow.error;
 
         /*:: invariant(typeParameters) */
@@ -2725,7 +2726,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       return super.parseMaybeAssign(
-        noIn,
         refExpressionErrors,
         afterLeftParse,
         refNeedsArrowPos,
@@ -2868,7 +2868,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       noCalls: ?boolean,
       subscriptState: N.ParseSubscriptState,
     ): N.Expression {
-      if (this.match(tt.questionDot) && this.isLookaheadRelational("<")) {
+      if (this.match(tt.questionDot) && this.isLookaheadToken_lt()) {
         subscriptState.optionalChainMember = true;
         if (noCalls) {
           subscriptState.stop = true;
@@ -3469,5 +3469,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         super.updateContext(prevType);
       }
+    }
+
+    // check if the next token is a tt.relation("<")
+    isLookaheadToken_lt(): boolean {
+      const next = this.nextTokenStart();
+      if (this.input.charCodeAt(next) === charCodes.lessThan) {
+        const afterNext = this.input.charCodeAt(next + 1);
+        return (
+          afterNext !== charCodes.lessThan && afterNext !== charCodes.equalsTo
+        );
+      }
+      return false;
     }
   };

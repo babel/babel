@@ -10,34 +10,34 @@ function makeParser(code, options) {
     });
 }
 
-describe("'legacy' option", function() {
-  test("must be boolean", function() {
+describe("'legacy' option", function () {
+  test("must be boolean", function () {
     expect(makeParser("", { legacy: "legacy" })).toThrow();
   });
 
-  test("'legacy': false", function() {
+  test("'legacy': false", function () {
     expect(makeParser("({ @dec fn() {} })", { legacy: false })).toThrow();
   });
 
-  test("'legacy': true", function() {
+  test("'legacy': true", function () {
     expect(makeParser("({ @dec fn() {} })", { legacy: true })).not.toThrow();
   });
 
-  test("defaults to 'false'", function() {
+  test("defaults to 'false'", function () {
     expect(makeParser("({ @dec fn() {} })", {})).toThrow();
   });
 });
 
-describe("'decoratorsBeforeExport' option", function() {
-  test("must be boolean", function() {
+describe("'decoratorsBeforeExport' option", function () {
+  test("must be boolean", function () {
     expect(makeParser("", { decoratorsBeforeExport: "before" })).toThrow();
   });
 
-  test("is required", function() {
+  test("is required", function () {
     expect(makeParser("", { legacy: false })).toThrow(/decoratorsBeforeExport/);
   });
 
-  test("is incompatible with legacy", function() {
+  test("is incompatible with legacy", function () {
     expect(
       makeParser("", { decoratorsBeforeExport: false, legacy: true }),
     ).toThrow();
@@ -59,7 +59,7 @@ describe("'decoratorsBeforeExport' option", function() {
       (code === BEFORE ? "before" : "after") +
       "export";
 
-    test(name, function() {
+    test(name, function () {
       const expectTheParser = expect(
         makeParser(code, { decoratorsBeforeExport: before }),
       );

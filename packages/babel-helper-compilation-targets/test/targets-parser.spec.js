@@ -20,6 +20,18 @@ describe("getTargets", () => {
     });
   });
 
+  it("does not mutate the input", () => {
+    const input = Object.freeze({ browsers: "defaults", esmodules: true });
+    const expected = getTargets({
+      browsers: browserslist.defaults,
+      esmodules: true,
+    });
+    const actual = getTargets(input);
+    expect(actual).toEqual(expected);
+    expect(input.browsers).toEqual("defaults");
+    expect(input.esmodules).toEqual(true);
+  });
+
   it("allows 'defaults' query", () => {
     const browserslistDefaults = browserslist.defaults;
 
@@ -191,16 +203,7 @@ describe("getTargets", () => {
         getTargets({
           esmodules: true,
         }),
-      ).toEqual({
-        android: "61.0.0",
-        chrome: "61.0.0",
-        edge: "16.0.0",
-        firefox: "60.0.0",
-        ios: "10.3.0",
-        opera: "48.0.0",
-        safari: "10.1.0",
-        samsung: "8.2.0",
-      });
+      ).toMatchSnapshot();
     });
 
     it("returns browsers supporting modules, ignoring browsers key", () => {
@@ -209,16 +212,7 @@ describe("getTargets", () => {
           esmodules: true,
           browsers: "ie 8",
         }),
-      ).toEqual({
-        android: "61.0.0",
-        chrome: "61.0.0",
-        edge: "16.0.0",
-        firefox: "60.0.0",
-        ios: "10.3.0",
-        opera: "48.0.0",
-        safari: "10.1.0",
-        samsung: "8.2.0",
-      });
+      ).toMatchSnapshot();
     });
 
     it("returns browser supporting modules and keyed browser overrides", () => {
@@ -227,17 +221,7 @@ describe("getTargets", () => {
           esmodules: true,
           ie: 11,
         }),
-      ).toEqual({
-        android: "61.0.0",
-        chrome: "61.0.0",
-        safari: "10.1.0",
-        firefox: "60.0.0",
-        opera: "48.0.0",
-        ios: "10.3.0",
-        ie: "11.0.0",
-        edge: "16.0.0",
-        samsung: "8.2.0",
-      });
+      ).toMatchSnapshot();
     });
 
     it("returns browser supporting modules and keyed browser overrides, ignoring browsers field", () => {
@@ -247,17 +231,7 @@ describe("getTargets", () => {
           browsers: "ie 10",
           ie: 11,
         }),
-      ).toEqual({
-        android: "61.0.0",
-        chrome: "61.0.0",
-        safari: "10.1.0",
-        ios: "10.3.0",
-        ie: "11.0.0",
-        edge: "16.0.0",
-        firefox: "60.0.0",
-        opera: "48.0.0",
-        samsung: "8.2.0",
-      });
+      ).toMatchSnapshot();
     });
   });
 

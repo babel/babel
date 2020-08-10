@@ -6,6 +6,7 @@ import {
   assertSimpleType,
   type CacheConfigurator,
   type SimpleCacheConfigurator,
+  type SimpleType,
 } from "../caching";
 
 import type { CallerMetadata } from "../validation/options";
@@ -17,13 +18,15 @@ type EnvFunction = {
   (Array<string>): boolean,
 };
 
+type CallerFactory = ((CallerMetadata | void) => mixed) => SimpleType;
+
 export type PluginAPI = {|
   version: string,
   cache: SimpleCacheConfigurator,
   env: EnvFunction,
   async: () => boolean,
   assertVersion: typeof assertVersion,
-  caller?: any,
+  caller?: CallerFactory,
 |};
 
 export default function makeAPI(
@@ -37,7 +40,7 @@ export default function makeAPI(
       }
       if (!Array.isArray(value)) value = [value];
 
-      return value.some(entry => {
+      return value.some((entry: mixed) => {
         if (typeof entry !== "string") {
           throw new Error("Unexpected non-string value");
         }
@@ -45,8 +48,7 @@ export default function makeAPI(
       });
     });
 
-  const caller: any = cb =>
-    cache.using(data => assertSimpleType(cb(data.caller)));
+  const caller = cb => cache.using(data => assertSimpleType(cb(data.caller)));
 
   return {
     version: coreVersion,

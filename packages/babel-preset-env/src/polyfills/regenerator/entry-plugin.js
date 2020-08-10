@@ -7,7 +7,7 @@ function isRegeneratorSource(source) {
   return source === "regenerator-runtime/runtime";
 }
 
-export default function() {
+export default function () {
   const visitor = {
     ImportDeclaration(path: NodePath) {
       if (isRegeneratorSource(getImportSource(path))) {

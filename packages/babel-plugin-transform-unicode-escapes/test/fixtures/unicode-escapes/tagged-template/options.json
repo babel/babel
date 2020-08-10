@@ -1,0 +1,3 @@
+{
+  "throws": "Can't replace Unicode escape '\\u{1d49c}' inside tagged template literals. You can enable '@babel/plugin-transform-template-literals' to compile them to classic strings."
+}

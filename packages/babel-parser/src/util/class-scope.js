@@ -5,7 +5,7 @@ import {
   CLASS_ELEMENT_FLAG_STATIC,
   type ClassElementTypes,
 } from "./scopeflags";
-import { Errors } from "../parser/location";
+import { Errors } from "../parser/error";
 
 export class ClassScope {
   // A list of private named declared in the current class

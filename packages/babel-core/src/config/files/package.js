@@ -39,11 +39,13 @@ const readConfigPackage = makeStaticFileCache(
   (filepath, content): ConfigFile => {
     let options;
     try {
-      options = JSON.parse(content);
+      options = (JSON.parse(content): mixed);
     } catch (err) {
       err.message = `${filepath}: Error while parsing JSON - ${err.message}`;
       throw err;
     }
+
+    if (!options) throw new Error(`${filepath}: No config detected`);
 
     if (typeof options !== "object") {
       throw new Error(`${filepath}: Config returned typeof ${typeof options}`);
