@@ -5,7 +5,6 @@
 // See https://github.com/mozilla/sweet.js/wiki/design
 
 import { types as tt } from "./types";
-import { lineBreak } from "../util/whitespace";
 
 export class TokContext {
   constructor(
@@ -112,10 +111,7 @@ tt._function.updateContext = tt._class.updateContext = function (prevType) {
     prevType.beforeExpr &&
     prevType !== tt.semi &&
     prevType !== tt._else &&
-    !(
-      prevType === tt._return &&
-      lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start))
-    ) &&
+    !(prevType === tt._return && this.hasPrecedingLineBreak()) &&
     !(
       (prevType === tt.colon || prevType === tt.braceL) &&
       this.curContext() === types.b_stat

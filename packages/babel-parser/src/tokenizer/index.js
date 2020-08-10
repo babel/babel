@@ -114,6 +114,7 @@ export default class Tokenizer extends ParserErrors {
   // Forward-declarations
   // parser/util.js
   /*::
+  +hasPrecedingLineBreak: () => boolean;
   +unexpected: (pos?: ?number, messageOrType?: string | TokenType) => empty;
   +expectPlugin: (name: string, pos?: ?number) => true;
   */
@@ -603,10 +604,7 @@ export default class Tokenizer extends ParserErrors {
         next === charCodes.dash &&
         !this.inModule &&
         this.input.charCodeAt(this.state.pos + 2) === charCodes.greaterThan &&
-        (this.state.lastTokEnd === 0 ||
-          lineBreak.test(
-            this.input.slice(this.state.lastTokEnd, this.state.pos),
-          ))
+        (this.state.lastTokEnd === 0 || this.hasPrecedingLineBreak())
       ) {
         // A `-->` line comment
         this.skipLineComment(3);
@@ -1525,9 +1523,7 @@ export default class Tokenizer extends ParserErrors {
       prevType === tt._return ||
       (prevType === tt.name && this.state.exprAllowed)
     ) {
-      return lineBreak.test(
-        this.input.slice(this.state.lastTokEnd, this.state.start),
-      );
+      return this.hasPrecedingLineBreak();
     }
 
     if (

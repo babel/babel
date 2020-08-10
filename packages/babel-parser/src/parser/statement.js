@@ -629,9 +629,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseThrowStatement(node: N.ThrowStatement): N.ThrowStatement {
     this.next();
-    if (
-      lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start))
-    ) {
+    if (this.hasPrecedingLineBreak()) {
       this.raise(this.state.lastTokEnd, Errors.NewlineAfterThrow);
     }
     node.argument = this.parseExpression();
