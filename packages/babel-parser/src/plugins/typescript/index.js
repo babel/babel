@@ -2733,6 +2733,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (type) {
         param.typeAnnotation = type;
+        this.resetEndLocation(param);
       }
 
       return param;
