@@ -85,8 +85,7 @@ watch: build-no-bundle
 	BABEL_ENV=development $(YARN) gulp watch
 
 code-quality-ci: build-no-bundle-ci
-	$(MAKE) flowcheck-ci & $(MAKE) lint-ci
-
+	$(MAKE) flowcheck-ci lint-ci
 
 flowcheck-ci:
 	$(MAKE) flow
