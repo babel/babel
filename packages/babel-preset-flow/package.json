@@ -13,10 +13,10 @@
     "access": "public"
   },
   "main": "lib/index.js",
-  "module": "lib/index.mjs",
+  "module": "lib/index.module.js",
   "exports": {
     ".": {
-      "import": "./lib/index.mjs",
+      "import": "./lib/index.module.js",
       "default": "./lib/index.js"
     }
   },

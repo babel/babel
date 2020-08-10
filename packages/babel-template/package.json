@@ -14,38 +14,38 @@
     "directory": "packages/babel-template"
   },
   "main": "lib/index.js",
-  "module": "lib/index.mjs",
+  "module": "lib/index.module.js",
   "exports": {
     ".": {
-      "import": "./lib/index.mjs",
+      "import": "./lib/index.module.js",
       "default": "./lib/index.js"
     },
     "./builder": {
-      "import": "./lib/builder.mjs",
+      "import": "./lib/builder.module.js",
       "default": "./lib/builder.js"
     },
     "./formatters": {
-      "import": "./lib/formatters.mjs",
+      "import": "./lib/formatters.module.js",
       "default": "./lib/formatters.js"
     },
     "./literal": {
-      "import": "./lib/literal.mjs",
+      "import": "./lib/literal.module.js",
       "default": "./lib/literal.js"
     },
     "./options": {
-      "import": "./lib/options.mjs",
+      "import": "./lib/options.module.js",
       "default": "./lib/options.js"
     },
     "./parse": {
-      "import": "./lib/parse.mjs",
+      "import": "./lib/parse.module.js",
       "default": "./lib/parse.js"
     },
     "./populate": {
-      "import": "./lib/populate.mjs",
+      "import": "./lib/populate.module.js",
       "default": "./lib/populate.js"
     },
     "./string": {
-      "import": "./lib/string.mjs",
+      "import": "./lib/string.module.js",
       "default": "./lib/string.js"
     }
   },

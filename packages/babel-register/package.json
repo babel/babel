@@ -13,28 +13,28 @@
   },
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "main": "lib/index.js",
-  "module": "lib/index.mjs",
+  "module": "lib/index.module.js",
   "exports": {
     ".": {
-      "import": "./lib/index.mjs",
+      "import": "./lib/index.module.js",
       "default": "./lib/index.js"
     },
     "./browser": {
-      "import": "./lib/browser.mjs",
+      "import": "./lib/browser.module.js",
       "default": "./lib/browser.js"
     },
     "./cache": {
-      "import": "./lib/cache.mjs",
+      "import": "./lib/cache.module.js",
       "default": "./lib/cache.js"
     },
     "./node": {
-      "import": "./lib/node.mjs",
+      "import": "./lib/node.module.js",
       "default": "./lib/node.js"
     }
   },
   "browser": {
     "./lib/node.js": "./lib/browser.js",
-    "./lib/node.mjs": "./lib/browser.mjs"
+    "./lib/node.module.js": "./lib/browser.module.js"
   },
   "dependencies": {
     "find-cache-dir": "^2.0.0",

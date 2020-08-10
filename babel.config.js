@@ -128,15 +128,15 @@ module.exports = function (api) {
                 if (sourcePath.slice(0, 2) === "./") {
                   const parts = currentFile.split(path.sep);
                   parts.pop();
-                  // Append .mjs ext if the imported path is .js file.
+                  // Append .module.js ext if the imported path is .js file.
                   if (
                     fs.existsSync(
                       path.sep + path.join(...parts, sourcePath) + ".js"
                     )
                   ) {
-                    return sourcePath + ".mjs";
+                    return sourcePath + ".module.js";
                   } else {
-                    return sourcePath + path.sep + "index.mjs";
+                    return sourcePath + path.sep + "index.module.js";
                   }
                 } else {
                   return sourcePath;

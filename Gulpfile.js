@@ -30,7 +30,7 @@ function swapSrcWithLib(srcPath) {
 
 function swapJsWithMjs(srcPath) {
   if (srcPath.slice(-3) === ".js") {
-    return srcPath.slice(0, -3) + ".mjs";
+    return srcPath.slice(0, -3) + ".module.js";
   } else {
     return srcPath;
   }

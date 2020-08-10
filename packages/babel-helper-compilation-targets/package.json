@@ -10,38 +10,38 @@
     "directory": "packages/babel-helper-compilation-targets"
   },
   "main": "lib/index.js",
-  "module": "lib/index.mjs",
+  "module": "lib/index.module.js",
   "exports": {
     ".": {
-      "import": "./lib/index.mjs",
+      "import": "./lib/index.module.js",
       "default": "./lib/index.js"
     },
     "./debug": {
-      "import": "./lib/debug.mjs",
+      "import": "./lib/debug.module.js",
       "default": "./lib/debug.js"
     },
     "./filter-items": {
-      "import": "./lib/filter-items.mjs",
+      "import": "./lib/filter-items.module.js",
       "default": "./lib/filter-items.js"
     },
     "./options": {
-      "import": "./lib/options.mjs",
+      "import": "./lib/options.module.js",
       "default": "./lib/options.js"
     },
     "./pretty": {
-      "import": "./lib/pretty.mjs",
+      "import": "./lib/pretty.module.js",
       "default": "./lib/pretty.js"
     },
     "./targets": {
-      "import": "./lib/targets.mjs",
+      "import": "./lib/targets.module.js",
       "default": "./lib/targets.js"
     },
     "./types": {
-      "import": "./lib/types.mjs",
+      "import": "./lib/types.module.js",
       "default": "./lib/types.js"
     },
     "./utils": {
-      "import": "./lib/utils.mjs",
+      "import": "./lib/utils.module.js",
       "default": "./lib/utils.js"
     }
   },
