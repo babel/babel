@@ -31,6 +31,7 @@ export const types: {
 } = {
   braceStatement: new TokContext("{", false),
   braceExpression: new TokContext("{", true),
+  recordExpression: new TokContext("#{", true),
   templateQuasi: new TokContext("${", false),
   parenStatement: new TokContext("(", false),
   parenExpression: new TokContext("(", true),
@@ -139,4 +140,9 @@ tt.backQuote.updateContext = function () {
 
 tt.star.updateContext = function () {
   this.state.exprAllowed = false;
+};
+
+tt.braceHashL.updateContext = function () {
+  this.state.context.push(types.recordExpression);
+  this.state.exprAllowed = true; /* tt.braceHashL.beforeExpr */
 };
