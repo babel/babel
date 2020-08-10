@@ -9,6 +9,7 @@
       "import": "./lib/index.mjs",
       "default": "./lib/index.js"
     },
+    "./package.json": "./package.json",
     "./parse": {
       "import": "./lib/parse.mjs",
       "default": "./lib/parse.js"
