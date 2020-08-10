@@ -47,7 +47,7 @@
           "start":28,"end":50,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":29}},
           "param": {
             "type": "Identifier",
-            "start":35,"end":37,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":16},"identifierName":"ex"},
+            "start":35,"end":46,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":25},"identifierName":"ex"},
             "name": "ex",
             "typeAnnotation": {
               "type": "TSTypeAnnotation",
@@ -81,7 +81,7 @@
           "start":58,"end":76,"loc":{"start":{"line":3,"column":7},"end":{"line":3,"column":25}},
           "param": {
             "type": "Identifier",
-            "start":65,"end":67,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":16},"identifierName":"ex"},
+            "start":65,"end":72,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":21},"identifierName":"ex"},
             "name": "ex",
             "typeAnnotation": {
               "type": "TSTypeAnnotation",
@@ -122,7 +122,7 @@
           "start":133,"end":149,"loc":{"start":{"line":6,"column":7},"end":{"line":6,"column":23}},
           "param": {
             "type": "Identifier",
-            "start":140,"end":142,"loc":{"start":{"line":6,"column":14},"end":{"line":6,"column":16},"identifierName":"ex"},
+            "start":140,"end":145,"loc":{"start":{"line":6,"column":14},"end":{"line":6,"column":19},"identifierName":"ex"},
             "name": "ex",
             "typeAnnotation": {
               "type": "TSTypeAnnotation",
@@ -168,7 +168,7 @@
           "start":157,"end":177,"loc":{"start":{"line":7,"column":7},"end":{"line":7,"column":27}},
           "param": {
             "type": "Identifier",
-            "start":164,"end":166,"loc":{"start":{"line":7,"column":14},"end":{"line":7,"column":16},"identifierName":"ex"},
+            "start":164,"end":173,"loc":{"start":{"line":7,"column":14},"end":{"line":7,"column":23},"identifierName":"ex"},
             "name": "ex",
             "typeAnnotation": {
               "type": "TSTypeAnnotation",
@@ -207,7 +207,7 @@
           "start":185,"end":206,"loc":{"start":{"line":8,"column":7},"end":{"line":8,"column":28}},
           "param": {
             "type": "Identifier",
-            "start":192,"end":194,"loc":{"start":{"line":8,"column":14},"end":{"line":8,"column":16},"identifierName":"ex"},
+            "start":192,"end":202,"loc":{"start":{"line":8,"column":14},"end":{"line":8,"column":24},"identifierName":"ex"},
             "name": "ex",
             "typeAnnotation": {
               "type": "TSTypeAnnotation",
@@ -241,7 +241,7 @@
           "start":214,"end":244,"loc":{"start":{"line":9,"column":7},"end":{"line":9,"column":37}},
           "param": {
             "type": "Identifier",
-            "start":221,"end":223,"loc":{"start":{"line":9,"column":14},"end":{"line":9,"column":16},"identifierName":"ex"},
+            "start":221,"end":240,"loc":{"start":{"line":9,"column":14},"end":{"line":9,"column":33},"identifierName":"ex"},
             "name": "ex",
             "typeAnnotation": {
               "type": "TSTypeAnnotation",
