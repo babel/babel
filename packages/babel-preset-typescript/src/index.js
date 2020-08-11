@@ -9,11 +9,16 @@ export default declare(
       allowDeclareFields,
       allowNamespaces,
       jsxPragma,
+      jsxPragmaFrag = "React.Fragment",
       isTSX = false,
       onlyRemoveTypeImports,
     },
   ) => {
     api.assertVersion(7);
+
+    if (typeof jsxPragmaFrag !== "string") {
+      throw new Error(".jsxPragmaFrag must be a string, or undefined");
+    }
 
     if (typeof allExtensions !== "boolean") {
       throw new Error(".allExtensions must be a boolean, or undefined");
@@ -32,6 +37,7 @@ export default declare(
       allowNamespaces,
       isTSX,
       jsxPragma,
+      jsxPragmaFrag,
       onlyRemoveTypeImports,
     });
 
