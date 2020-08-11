@@ -109,7 +109,7 @@ module.exports = function (api) {
         "@babel/proposal-object-rest-spread",
         { useBuiltIns: true, loose: true },
       ],
-      compileDynamicImport ? dynamicImportUrlToPath : null,
+      dynamicImportUrlToPath,
       compileDynamicImport ? "@babel/plugin-proposal-dynamic-import" : null,
 
       convertESM ? "@babel/transform-modules-commonjs" : null,

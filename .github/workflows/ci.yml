@@ -3,7 +3,7 @@ name: Node CI
 on: [push, pull_request]
 
 jobs:
-  latest-node-test:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -20,7 +20,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
-  legacy-node-test:
+  legacy-node-version-test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
