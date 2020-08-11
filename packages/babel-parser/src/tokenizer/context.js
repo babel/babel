@@ -5,7 +5,6 @@
 // See https://github.com/mozilla/sweet.js/wiki/design
 
 import { types as tt } from "./types";
-import { lineBreak } from "../util/whitespace";
 
 export class TokContext {
   constructor(
@@ -105,17 +104,11 @@ tt.incDec.updateContext = function () {
 };
 
 tt._function.updateContext = tt._class.updateContext = function (prevType) {
-  if (prevType === tt.dot || prevType === tt.questionDot) {
-    // when function/class follows dot/questionDot, it is part of
-    // (optional)MemberExpression, then we don't need to push new token context
-  } else if (
+  if (
     prevType.beforeExpr &&
     prevType !== tt.semi &&
     prevType !== tt._else &&
-    !(
-      prevType === tt._return &&
-      lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start))
-    ) &&
+    !(prevType === tt._return && this.hasPrecedingLineBreak()) &&
     !(
       (prevType === tt.colon || prevType === tt.braceL) &&
       this.curContext() === types.b_stat
@@ -135,10 +128,6 @@ tt.backQuote.updateContext = function () {
   } else {
     this.state.context.push(types.template);
   }
-  this.state.exprAllowed = false;
-};
-
-tt.star.updateContext = function () {
   this.state.exprAllowed = false;
 };
 
