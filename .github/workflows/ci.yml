@@ -1,0 +1,45 @@
+name: Node CI
+
+on: [push, pull_request]
+
+jobs:
+  latest-node-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*"
+      - name: Generate coverage report
+        run: |
+          make -j test-ci-coverage
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  legacy-node-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        node-version: [6.x, 8.x]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*" # Build Babel on latest node versions
+      - name: Build
+        run: |
+          BABEL_ENV=production make -j bootstrap
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Test on node.js ${{ matrix.node-version }}
+        run: |
+          BABEL_ENV=test ./node_modules/.bin/jest --ci
