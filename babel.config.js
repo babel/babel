@@ -169,10 +169,10 @@ module.exports = function (api) {
 // the original absolute path.
 // NOTE: This plugin must run before @babel/plugin-transform-modules-commonjs,
 // and assumes that the target is the current node version.
-function dynamicImportUrlToPath({ template }) {
+function dynamicImportUrlToPath({ template, env }) {
   const currentNodeSupportsURL = !!require("url").pathToFileURL;
 
-  if (currentNodeSupportsURL) {
+  if (currentNodeSupportsURL && env() !== "production") {
     return {
       visitor: {
         CallExpression(path) {
