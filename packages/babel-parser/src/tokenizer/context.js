@@ -142,6 +142,7 @@ tt.star.updateContext = function () {
   this.state.exprAllowed = false;
 };
 
+// we don't need to update context for tt.braceBarL because we do not pop context for tt.braceBarR
 tt.braceHashL.updateContext = function () {
   this.state.context.push(types.recordExpression);
   this.state.exprAllowed = true; /* tt.braceHashL.beforeExpr */
