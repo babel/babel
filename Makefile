@@ -75,8 +75,8 @@ build-no-bundle: clean clean-lib
 	BABEL_ENV=development $(YARN) gulp build-no-bundle
 	# Ensure that build artifacts for types are created during local
 	# development too.
-	$(MAKE) generate-type-helpers
-	$(MAKE) build-typings
+	# Babel-transform-fixture-test-runner requires minified polyfill for performance
+	$(MAKE) generate-type-helpers build-typings build-polyfill-dist
 
 build-no-bundle-ci: bootstrap-only
 	$(MAKE) build-no-bundle
