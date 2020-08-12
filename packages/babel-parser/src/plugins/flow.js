@@ -2674,7 +2674,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         let typeParameters;
 
-        const arrow = this.tryParse(() => {
+        const arrow = this.tryParse(abort => {
           typeParameters = this.flowParseTypeParameterDeclaration();
 
           const arrowExpression = this.forwardNoArrowParamsConversionAt(
@@ -2692,8 +2692,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             },
           );
 
+          // <T>(() => {}: any);
+          if (
+            arrowExpression.type !== "ArrowFunctionExpression" &&
+            arrowExpression.extra?.parenthesized
+          ) {
+            abort();
+          }
+
           // The above can return a TypeCastExpression when the arrow
-          // expression is not wrapped in parens.
+          // expression is not wrapped in parens. See also `this.parseParenItem`.
           const expr = this.maybeUnwrapTypeCastExpression(arrowExpression);
           expr.typeParameters = typeParameters;
           this.resetStartLocationFromNode(expr, typeParameters);
@@ -2711,7 +2719,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.maybeUnwrapTypeCastExpression(arrow.node).type ===
             "ArrowFunctionExpression"
         ) {
-          if (!arrow.error) {
+          if (!arrow.error && !arrow.aborted) {
             return arrow.node;
           }
 
