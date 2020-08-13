@@ -30,7 +30,7 @@ jobs:
         uses: actions/setup-node@v2-beta # Build Babel on latest node versions
       - name: Build
         run: |
-          BABEL_ENV=production make -j bootstrap
+          BABEL_ENV=test-legacy make -j bootstrap
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2-beta
         with:
