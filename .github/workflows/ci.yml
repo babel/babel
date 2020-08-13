@@ -10,8 +10,6 @@ jobs:
         uses: actions/checkout@v2
       - name: Use Node.js latest
         uses: actions/setup-node@v2-beta
-        with:
-          node-version: "*"
       - name: Generate coverage report
         run: |
           make -j test-ci-coverage
@@ -23,16 +21,13 @@ jobs:
   legacy-node-version-test:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
       matrix:
         node-version: [6.x, 8.x]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: "*" # Build Babel on latest node versions
+        uses: actions/setup-node@v2-beta # Build Babel on latest node versions
       - name: Build
         run: |
           BABEL_ENV=production make -j bootstrap
