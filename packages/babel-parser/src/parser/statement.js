@@ -1258,20 +1258,6 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(classBody, "ClassBody");
   }
 
-  // Check grammar production:
-  //   IdentifierName *_opt ClassElementName
-  // It is used in `parsePropertyDefinition` to detect AsyncMethod and Accessors
-  maybeClassModifier(prop: N.ObjectProperty): boolean {
-    return (
-      !prop.computed &&
-      prop.key.type === "Identifier" &&
-      (this.isLiteralPropertyName() ||
-        this.match(tt.bracketL) ||
-        this.match(tt.star) ||
-        this.match(tt.hash))
-    );
-  }
-
   // returns true if the current identifier is a method/field name,
   // false if it is a modifier
   parseClassMemberFromModifier(
@@ -1611,11 +1597,6 @@ export default class StatementParser extends ExpressionParser {
     methodOrProp: N.ClassMethod | N.ClassProperty,
   ): void {}
 
-  // Overridden in typescript.js
-  parseAccessModifier(): ?N.Accessibility {
-    return undefined;
-  }
-
   parseClassPrivateProperty(
     node: N.ClassPrivateProperty,
   ): N.ClassPrivateProperty {
@@ -1784,19 +1765,9 @@ export default class StatementParser extends ExpressionParser {
 
   maybeParseExportDeclaration(node: N.Node): boolean {
     if (this.shouldParseExportDeclaration()) {
-      if (this.isContextual("async")) {
-        const next = this.nextTokenStart();
-
-        // export async;
-        if (!this.isUnparsedContextual(next, "function")) {
-          this.unexpected(next, tt._function);
-        }
-      }
-
       node.specifiers = [];
       node.source = null;
       node.declaration = this.parseExportDeclaration(node);
-
       return true;
     }
     return false;
@@ -1999,15 +1970,10 @@ export default class StatementParser extends ExpressionParser {
     const currentContextDecorators = this.state.decoratorStack[
       this.state.decoratorStack.length - 1
     ];
+    // If node.declaration is a class, it will take all decorators in the current context.
+    // Thus we should throw if we see non-empty decorators here.
     if (currentContextDecorators.length) {
-      const isClass =
-        node.declaration &&
-        (node.declaration.type === "ClassDeclaration" ||
-          node.declaration.type === "ClassExpression");
-      if (!node.declaration || !isClass) {
-        throw this.raise(node.start, Errors.UnsupportedDecoratorExport);
-      }
-      this.takeDecorators(node.declaration);
+      throw this.raise(node.start, Errors.UnsupportedDecoratorExport);
     }
   }
 
