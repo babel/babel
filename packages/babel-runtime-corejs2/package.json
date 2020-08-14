@@ -17,6 +17,6 @@
     "regenerator-runtime": "^0.13.4"
   },
   "devDependencies": {
-    "@babel/helpers": "^7.10.4"
+    "@babel/helpers": "workspace:^7.10.4"
   }
 }

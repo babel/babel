@@ -33,5 +33,5 @@
   },
   "packages": ["codemods/*", "eslint/*", "packages/*"],
   "npmClient": "yarn",
-  "npmClientArgs": ["--pure-lockfile"]
+  "useWorkspaces": true
 }

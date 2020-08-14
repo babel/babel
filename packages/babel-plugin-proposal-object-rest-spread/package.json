@@ -16,15 +16,15 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.10.4",
+    "@babel/helper-plugin-utils": "workspace:^7.10.4",
     "@babel/plugin-syntax-object-rest-spread": "^7.8.0",
-    "@babel/plugin-transform-parameters": "^7.10.4"
+    "@babel/plugin-transform-parameters": "workspace:^7.10.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.11.0",
-    "@babel/helper-plugin-test-runner": "^7.10.4"
+    "@babel/core": "workspace:^7.11.0",
+    "@babel/helper-plugin-test-runner": "workspace:^7.10.4"
   }
 }

@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "bootstrap": "make bootstrap",
-    "codesandbox": "make bootstrap-only; make build-no-bundle",
+    "codesandbox:build": "make build-no-bundle",
     "build": "make build",
     "fix": "make fix",
     "lint": "make lint",
@@ -13,10 +13,10 @@
   "devDependencies": {
     "@babel/cli": "^7.10.4",
     "@babel/core": "^7.11.0",
-    "@babel/eslint-config-internal": "link:./eslint/babel-eslint-config-internal",
-    "@babel/eslint-parser": "^7.11.0",
-    "@babel/eslint-plugin-development": "^7.11.0",
-    "@babel/eslint-plugin-development-internal": "link:./eslint/babel-eslint-plugin-development-internal",
+    "@babel/eslint-config-internal": "portal:./eslint/babel-eslint-config-internal",
+    "@babel/eslint-parser": "portal:./eslint/babel-eslint-parser",
+    "@babel/eslint-plugin-development": "portal:./eslint/babel-eslint-plugin-development",
+    "@babel/eslint-plugin-development-internal": "portal:./eslint/babel-eslint-plugin-development-internal",
     "@babel/plugin-proposal-dynamic-import": "^7.10.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.11.0",
     "@babel/plugin-transform-flow-strip-types": "^7.10.4",
@@ -72,13 +72,21 @@
     "through2": "^2.0.0",
     "typescript": "^3.6.3"
   },
+  "workspaces": [
+    "codemods/*",
+    "eslint/*",
+    "packages/*"
+  ],
   "resolutions": {
-    "@lerna/collect-updates": "https://github.com/babel/lerna.git#babel-collect-updates"
+    "@lerna/version": "patch:@lerna/version@npm:3.20.2#.yarn-patches/@lerna/version.patch",
+    "@lerna/npm-publish": "patch:@lerna/npm-publish@npm:3.18.5#.yarn-patches/@lerna/npm-publish.patch",
+    "@lerna/package": "patch:@lerna/package@npm:3.16.0#.yarn-patches/@lerna/package.patch",
+    "@lerna/package-graph": "patch:@lerna/package-graph@npm:3.18.5#.yarn-patches/@lerna/package-graph.patch",
+    "@lerna/pack-directory": "patch:@lerna/pack-directory@npm:3.16.4#.yarn-patches/@lerna/pack-directory.patch"
   },
   "engines": {
     "node": ">= 6.9.0",
-    "npm": ">= 3.x",
-    "yarn": ">=0.27.5 || >=1.0.0-20170811"
+    "yarn": ">=1.4.0"
   },
   "lint-staged": {
     "*.js": [
@@ -88,6 +96,14 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
+    }
+  },
+  "dependenciesMeta": {
+    "core-js": {
+      "built": false
+    },
+    "core-js-pure": {
+      "built": false
     }
   }
 }

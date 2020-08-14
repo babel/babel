@@ -13,10 +13,10 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-hoist-variables": "^7.10.4",
-    "@babel/types": "^7.10.4"
+    "@babel/helper-hoist-variables": "workspace:^7.10.4",
+    "@babel/types": "workspace:^7.10.4"
   },
   "devDependencies": {
-    "@babel/traverse": "^7.10.4"
+    "@babel/traverse": "workspace:^7.10.4"
   }
 }

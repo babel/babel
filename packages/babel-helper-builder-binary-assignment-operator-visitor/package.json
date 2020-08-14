@@ -13,7 +13,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-explode-assignable-expression": "^7.10.4",
-    "@babel/types": "^7.10.4"
+    "@babel/helper-explode-assignable-expression": "workspace:^7.10.4",
+    "@babel/types": "workspace:^7.10.4"
   }
 }
