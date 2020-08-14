@@ -43,7 +43,7 @@ matrix:
     # Continue node_js matrix
     - node_js: "12"
     - node_js: "10"
-    # Node.js 6 and 8 are tested on GitHub versions
+    # Node.js 6 and 8 are tested on GitHub actions
     - node_js: "node"
       env: JOB=babel-parser-flow-tests
     - node_js: "node"
