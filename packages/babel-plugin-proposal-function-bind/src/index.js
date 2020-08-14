@@ -7,7 +7,7 @@ export default declare(api => {
 
   function getTempId(scope) {
     let id = scope.path.getData("functionBind");
-    if (id) return id;
+    if (id) return t.cloneNode(id);
 
     id = scope.generateDeclaredUidIdentifier("context");
     return scope.path.setData("functionBind", id);
@@ -35,7 +35,7 @@ export default declare(api => {
         bind.callee.object,
       );
     }
-    return tempId;
+    return t.cloneNode(tempId);
   }
 
   return {

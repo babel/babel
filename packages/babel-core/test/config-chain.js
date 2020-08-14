@@ -951,6 +951,7 @@ describe("buildConfigChain", function () {
       passPerPreset: false,
       plugins: [],
       presets: [],
+      cloneInputAst: true,
     });
     const realEnv = process.env.NODE_ENV;
     const realBabelEnv = process.env.BABEL_ENV;

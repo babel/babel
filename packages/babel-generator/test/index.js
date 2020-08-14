@@ -463,32 +463,32 @@ describe("programmatic generation", function () {
 
   describe("typescript generate parentheses if necessary", function () {
     it("wraps around union for array", () => {
-      const typeStatement = t.TSArrayType(
-        t.TSUnionType([
-          t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
-          t.TSNullKeyword(),
+      const typeStatement = t.tsArrayType(
+        t.tsUnionType([
+          t.tsIntersectionType([t.tsNumberKeyword(), t.tsBooleanKeyword()]),
+          t.tsNullKeyword(),
         ]),
       );
       const output = generate(typeStatement).code;
       expect(output).toBe("((number & boolean) | null)[]");
     });
     it("wraps around intersection for array", () => {
-      const typeStatement = t.TSArrayType(
-        t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+      const typeStatement = t.tsArrayType(
+        t.tsIntersectionType([t.tsNumberKeyword(), t.tsBooleanKeyword()]),
       );
       const output = generate(typeStatement).code;
       expect(output).toBe("(number & boolean)[]");
     });
     it("wraps around rest", () => {
       const typeStatement = t.tsRestType(
-        t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+        t.tsIntersectionType([t.tsNumberKeyword(), t.tsBooleanKeyword()]),
       );
       const output = generate(typeStatement).code;
       expect(output).toBe("...(number & boolean)");
     });
     it("wraps around optional type", () => {
       const typeStatement = t.tsOptionalType(
-        t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+        t.tsIntersectionType([t.tsNumberKeyword(), t.tsBooleanKeyword()]),
       );
       const output = generate(typeStatement).code;
       expect(output).toBe("(number & boolean)?");
@@ -559,7 +559,9 @@ suites.forEach(function (testSuite) {
                 console.log(`New test file created: ${expected.loc}`);
                 fs.writeFileSync(expected.loc, result.code);
               } else {
-                expect(result.code).toBe(expected.code);
+                expect(Array.from(result.code, x => x.codePointAt(0))).toEqual(
+                  Array.from(expected.code, x => x.codePointAt(0)),
+                );
               }
             }
           }

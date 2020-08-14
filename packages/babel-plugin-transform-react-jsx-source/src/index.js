@@ -82,7 +82,7 @@ export default declare(api => {
       }
 
       const trace = makeTrace(
-        state.fileNameIdentifier,
+        t.cloneNode(state.fileNameIdentifier),
         location.start.line,
         location.start.column,
       );

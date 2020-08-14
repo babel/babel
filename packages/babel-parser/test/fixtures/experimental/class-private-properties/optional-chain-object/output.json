@@ -257,6 +257,7 @@
                             "computed": false,
                             "optional": false
                           },
+                          "optional": false,
                           "arguments": [
                             {
                               "type": "NumericLiteral",
@@ -303,6 +304,7 @@
                             "computed": false,
                             "optional": false
                           },
+                          "optional": false,
                           "arguments": []
                         }
                       ]

@@ -21,6 +21,9 @@ cd ../..
 #==============================================================================#
 
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
+# Install dependencies in individual packages so that we can link them at the top level.
+for package in eslint/*/; do yarn --cwd $package; done
+
 # We only bump dependencies in the top-level package.json, because workspaces
 # already use the workspace: protocol so will get the version in the monorepo
 # and not from npm.

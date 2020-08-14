@@ -4,7 +4,6 @@
 
 const proposalPlugins = new Set([
   "proposal-class-properties",
-  "proposal-numeric-separator",
   "proposal-private-methods"
 ]);
 

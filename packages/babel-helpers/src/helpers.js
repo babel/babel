@@ -1265,8 +1265,6 @@ helpers.applyDecoratedDescriptor = helper("7.0.0-beta.0")`
         }
 
         if (desc.initializer === void 0){
-            // This is a hack to avoid this being processed by 'transform-runtime'.
-            // See issue #9.
             Object.defineProperty(target, property, desc);
             desc = null;
         }

@@ -20,7 +20,7 @@ function buildTDZAssert(node, state) {
 }
 
 function isReference(node, scope, state) {
-  const declared = state.letReferences[node.name];
+  const declared = state.letReferences.get(node.name);
   if (!declared) return false;
 
   // declared node is different in this scope

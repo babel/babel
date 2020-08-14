@@ -22,6 +22,9 @@ cd ../..
 
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 
+# Install dependencies in individual packages so that we can link them at the top level.
+for package in eslint/*/; do yarn --cwd $package; done
+
 node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 (
   yarn why @babel/core | grep -o "@babel/core@npm:.* (via npm:.*)";

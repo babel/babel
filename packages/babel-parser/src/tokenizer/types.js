@@ -86,6 +86,7 @@ function createBinop(name: string, binop: number) {
 export const types: { [name: string]: TokenType } = {
   num: new TokenType("num", { startsExpr }),
   bigint: new TokenType("bigint", { startsExpr }),
+  decimal: new TokenType("decimal", { startsExpr }),
   regexp: new TokenType("regexp", { startsExpr }),
   string: new TokenType("string", { startsExpr }),
   name: new TokenType("name", { startsExpr }),
@@ -154,7 +155,8 @@ export const types: { [name: string]: TokenType } = {
   plusMin: new TokenType("+/-", { beforeExpr, binop: 9, prefix, startsExpr }),
   // startsExpr: required by v8intrinsic plugin
   modulo: new TokenType("%", { beforeExpr, binop: 10, startsExpr }),
-  star: createBinop("*", 10),
+  // unset `beforeExpr` as it can be `function *`
+  star: new TokenType("*", { binop: 10 }),
   slash: createBinop("/", 10),
   exponent: new TokenType("**", {
     beforeExpr,

@@ -1,12 +1,12 @@
-const code = multiline([
-  "for (const {foo, ...bar} of { bar: [] }) {",
-    "() => foo;",
-    "const [qux] = bar;",
-    "try {} catch (e) {",
-      "let quux = qux;",
-    "}",
-  "}"
-]);
+const code = `
+  for (const {foo, ...bar} of { bar: [] }) {
+    () => foo;
+    const [qux] = bar;
+    try {} catch (e) {
+      let quux = qux;
+    }
+  }
+`;
 
 let programPath;
 let forOfPath;
@@ -15,7 +15,7 @@ let functionPath;
 transform(code, {
   configFile: false,
   plugins: [
-    "../../../../lib",
+    __dirname + "/../../../../lib",
     {
       post({ path }) {
         programPath = path;

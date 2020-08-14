@@ -45,8 +45,9 @@ export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
     // In spec mode, only instance fields need a "private name" initializer
     // because static fields are directly assigned to a variable in the
     // buildPrivateStaticFieldInitSpec function.
-    const { id, static: isStatic, method: isMethod, getId, setId } = value;
+    const { static: isStatic, method: isMethod, getId, setId } = value;
     const isAccessor = getId || setId;
+    const id = t.cloneNode(value.id);
     if (loose) {
       initNodes.push(
         template.statement.ast`
@@ -157,7 +158,7 @@ const privateInVisitor = privateNameVisitorFactory({
     if (loose) {
       const { id } = privateNamesMap.get(name);
       path.replaceWith(template.expression.ast`
-        Object.prototype.hasOwnProperty.call(${right}, ${id})
+        Object.prototype.hasOwnProperty.call(${right}, ${t.cloneNode(id)})
       `);
       return;
     }
@@ -169,7 +170,7 @@ const privateInVisitor = privateNameVisitorFactory({
       return;
     }
 
-    path.replaceWith(template.expression.ast`${id}.has(${right})`);
+    path.replaceWith(template.expression.ast`${t.cloneNode(id)}.has(${right})`);
   },
 });
 
@@ -327,8 +328,8 @@ const privateNameHandlerLoose = {
 
     return template.expression`BASE(REF, PROP)[PROP]`({
       BASE: file.addHelper("classPrivateFieldLooseBase"),
-      REF: object,
-      PROP: privateNamesMap.get(name).id,
+      REF: t.cloneNode(object),
+      PROP: t.cloneNode(privateNamesMap.get(name).id),
     });
   },
 
@@ -387,7 +388,7 @@ function buildPrivateFieldInitLoose(ref, prop, privateNamesMap) {
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
   return template.statement.ast`
-    Object.defineProperty(${ref}, ${id}, {
+    Object.defineProperty(${ref}, ${t.cloneNode(id)}, {
       // configurable is false by default
       // enumerable is false by default
       writable: true,
@@ -400,7 +401,7 @@ function buildPrivateInstanceFieldInitSpec(ref, prop, privateNamesMap) {
   const { id } = privateNamesMap.get(prop.node.key.id.name);
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
-  return template.statement.ast`${id}.set(${ref}, {
+  return template.statement.ast`${t.cloneNode(id)}.set(${ref}, {
     // configurable is always false for private elements
     // enumerable is always false for private elements
     writable: true,
@@ -422,7 +423,7 @@ function buildPrivateStaticFieldInitSpec(prop, privateNamesMap) {
     });
 
     return template.statement.ast`
-      var ${id.name} = {
+      var ${t.cloneNode(id)} = {
         // configurable is false by default
         // enumerable is false by default
         // writable is false by default
@@ -434,7 +435,7 @@ function buildPrivateStaticFieldInitSpec(prop, privateNamesMap) {
 
   const value = prop.node.value || prop.scope.buildUndefinedNode();
   return template.statement.ast`
-    var ${id} = {
+    var ${t.cloneNode(id)} = {
       // configurable is false by default
       // enumerable is false by default
       writable: true,
@@ -603,14 +604,14 @@ function buildPrivateMethodDeclaration(prop, privateNamesMap, loose = false) {
   if (isStatic && !loose) {
     return t.variableDeclaration("var", [
       t.variableDeclarator(
-        id,
+        t.cloneNode(id),
         t.functionExpression(id, params, body, generator, async),
       ),
     ]);
   }
 
   return t.variableDeclaration("var", [
-    t.variableDeclarator(methodId, methodValue),
+    t.variableDeclarator(t.cloneNode(methodId), methodValue),
   ]);
 }
 

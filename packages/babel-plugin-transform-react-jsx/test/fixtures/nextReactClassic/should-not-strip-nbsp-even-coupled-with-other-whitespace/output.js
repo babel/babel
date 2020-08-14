@@ -1,4 +1,4 @@
 /** @jsxRuntime classic */
 
 /*#__PURE__*/
-React.createElement("div", null, "\xA0 ");
+React.createElement("div", null, "  ");

@@ -1,5 +1,5 @@
 {
-  "version": "7.10.4",
+  "version": "7.11.3",
   "changelog": {
     "repo": "babel/babel",
     "cacheDir": ".changelog",
@@ -25,13 +25,13 @@
         "# We ignore every JSON file, except for native-modules, built-ins and plugins defined in babel-preset-env/data.",
         "@(!(native-modules|built-ins|plugins|package)).json"
       ]
+    },
+    "version": {
+      "push": false
     }
   },
-  "packages": [
-    "codemods/*",
-    "eslint/*",
-    "packages/*"
-  ],
+  "packages": ["codemods/*", "eslint/*", "packages/*"],
   "npmClient": "yarn",
-  "useWorkspaces": true
+  "useWorkspaces": true,
+  "npmClientArgs": ["--pure-lockfile"]
 }

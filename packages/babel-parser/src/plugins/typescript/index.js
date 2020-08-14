@@ -74,6 +74,10 @@ const TSErrors = Object.freeze({
   IndexSignatureHasAccessibility:
     "Index signatures cannot have an accessibility modifier ('%0')",
   IndexSignatureHasStatic: "Index signatures cannot have the 'static' modifier",
+  InvalidTupleMemberLabel:
+    "Tuple members must be labeled with a simple identifier.",
+  MixedLabeledAndUnlabeledElements:
+    "Tuple members must all have names or all not have names.",
   OptionalTypeBeforeRequired:
     "A required element cannot follow an optional element.",
   PatternIsOptional:
@@ -630,43 +634,90 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         /* skipFirstToken */ false,
       );
 
-      // Validate the elementTypes to ensure:
-      //   No mandatory elements may follow optional elements
-      //   If there's a rest element, it must be at the end of the tuple
+      // Validate the elementTypes to ensure that no mandatory elements
+      // follow optional elements
       let seenOptionalElement = false;
+      let labeledElements = null;
       node.elementTypes.forEach(elementNode => {
-        if (elementNode.type === "TSOptionalType") {
-          seenOptionalElement = true;
-        } else if (seenOptionalElement && elementNode.type !== "TSRestType") {
+        let { type } = elementNode;
+
+        if (
+          seenOptionalElement &&
+          type !== "TSRestType" &&
+          type !== "TSOptionalType" &&
+          !(type === "TSNamedTupleMember" && elementNode.optional)
+        ) {
           this.raise(elementNode.start, TSErrors.OptionalTypeBeforeRequired);
+        }
+
+        // Flow doesn't support ||=
+        seenOptionalElement =
+          seenOptionalElement ||
+          (type === "TSNamedTupleMember" && elementNode.optional) ||
+          type === "TSOptionalType";
+
+        // When checking labels, check the argument of the spread operator
+        if (type === "TSRestType") {
+          elementNode = elementNode.typeAnnotation;
+          type = elementNode.type;
+        }
+
+        const isLabeled = type === "TSNamedTupleMember";
+        // Flow doesn't support ??=
+        labeledElements = labeledElements ?? isLabeled;
+        if (labeledElements !== isLabeled) {
+          this.raise(
+            elementNode.start,
+            TSErrors.MixedLabeledAndUnlabeledElements,
+          );
         }
       });
 
       return this.finishNode(node, "TSTupleType");
     }
 
-    tsParseTupleElementType(): N.TsType {
+    tsParseTupleElementType(): N.TsType | N.TsNamedTupleMember {
       // parses `...TsType[]`
-      if (this.match(tt.ellipsis)) {
-        const restNode: N.TsRestType = this.startNode();
-        this.next(); // skips ellipsis
-        restNode.typeAnnotation = this.tsParseType();
-        if (
-          this.match(tt.comma) &&
-          this.lookaheadCharCode() !== charCodes.rightSquareBracket
-        ) {
-          this.raiseRestNotLast(this.state.start);
-        }
-        return this.finishNode(restNode, "TSRestType");
-      }
 
-      const type = this.tsParseType();
-      // parses `TsType?`
-      if (this.eat(tt.question)) {
+      const { start: startPos, startLoc } = this.state;
+
+      const rest = this.eat(tt.ellipsis);
+      let type = this.tsParseType();
+      const optional = this.eat(tt.question);
+      const labeled = this.eat(tt.colon);
+
+      if (labeled) {
+        const labeledNode: N.TsNamedTupleMember = this.startNodeAtNode(type);
+        labeledNode.optional = optional;
+
+        if (
+          type.type === "TSTypeReference" &&
+          !type.typeParameters &&
+          type.typeName.type === "Identifier"
+        ) {
+          labeledNode.label = (type.typeName: N.Identifier);
+        } else {
+          this.raise(type.start, TSErrors.InvalidTupleMemberLabel);
+          // This produces an invalid AST, but at least we don't drop
+          // nodes representing the invalid source.
+          // $FlowIgnore
+          labeledNode.label = type;
+        }
+
+        labeledNode.elementType = this.tsParseType();
+        type = this.finishNode(labeledNode, "TSNamedTupleMember");
+      } else if (optional) {
         const optionalTypeNode: N.TsOptionalType = this.startNodeAtNode(type);
         optionalTypeNode.typeAnnotation = type;
-        return this.finishNode(optionalTypeNode, "TSOptionalType");
+        type = this.finishNode(optionalTypeNode, "TSOptionalType");
       }
+
+      if (rest) {
+        const restNode: N.TsRestType = this.startNodeAt(startPos, startLoc);
+        restNode.typeAnnotation = type;
+        type = this.finishNode(restNode, "TSRestType");
+      }
+
       return type;
     }
 
@@ -1234,7 +1285,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         ? this.parseExprAtom()
         : this.parseIdentifier(/* liberal */ true);
       if (this.eat(tt.eq)) {
-        node.initializer = this.parseMaybeAssign();
+        node.initializer = this.parseMaybeAssignAllowIn();
       }
       return this.finishNode(node, "TSEnumMember");
     }
@@ -1772,13 +1823,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               node.typeParameters = typeArguments;
               return this.finishCallExpression(node, state.optionalChainMember);
             } else if (this.match(tt.backQuote)) {
-              return this.parseTaggedTemplateExpression(
+              const result = this.parseTaggedTemplateExpression(
+                base,
                 startPos,
                 startLoc,
-                base,
                 state,
-                typeArguments,
               );
+              result.typeParameters = typeArguments;
+              return result;
             }
           }
 
@@ -1813,7 +1865,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       leftStartPos: number,
       leftStartLoc: Position,
       minPrec: number,
-      noIn: ?boolean,
     ) {
       if (
         nonNull(tt._in.binop) > minPrec &&
@@ -1832,16 +1883,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           node.typeAnnotation = this.tsNextThenParseType();
         }
         this.finishNode(node, "TSAsExpression");
-        return this.parseExprOp(
-          node,
-          leftStartPos,
-          leftStartLoc,
-          minPrec,
-          noIn,
-        );
+        // rescan `<`, `>` because they were scanned when this.state.inType was true
+        this.reScan_lt_gt();
+        return this.parseExprOp(node, leftStartPos, leftStartLoc, minPrec);
       }
 
-      return super.parseExprOp(left, leftStartPos, leftStartLoc, minPrec, noIn);
+      return super.parseExprOp(left, leftStartPos, leftStartLoc, minPrec);
     }
 
     checkReservedWord(
@@ -2081,7 +2128,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // An apparent conditional expression could actually be an optional parameter in an arrow function.
     parseConditional(
       expr: N.Expression,
-      noIn: ?boolean,
       startPos: number,
       startLoc: Position,
       refNeedsArrowPos?: ?Pos,
@@ -2091,7 +2137,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (!refNeedsArrowPos || !this.match(tt.question)) {
         return super.parseConditional(
           expr,
-          noIn,
           startPos,
           startLoc,
           refNeedsArrowPos,
@@ -2099,7 +2144,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       const result = this.tryParse(() =>
-        super.parseConditional(expr, noIn, startPos, startLoc),
+        super.parseConditional(expr, startPos, startLoc),
       );
 
       if (!result.node) {
@@ -2576,10 +2621,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // ensure that inside types, we bypass the jsx parser plugin
     getTokenFromCode(code: number): void {
-      if (this.state.inType && (code === 62 || code === 60)) {
+      if (
+        this.state.inType &&
+        (code === charCodes.greaterThan || code === charCodes.lessThan)
+      ) {
         return this.finishOp(tt.relational, 1);
       } else {
         return super.getTokenFromCode(code);
+      }
+    }
+
+    // used after we have finished parsing types
+    reScan_lt_gt() {
+      if (this.match(tt.relational)) {
+        const code = this.input.charCodeAt(this.state.start);
+        if (code === charCodes.lessThan || code === charCodes.greaterThan) {
+          this.state.pos -= 1;
+          this.readToken_lt_gt(code);
+        }
       }
     }
 
@@ -2666,5 +2725,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         firstParam.name === "this";
 
       return hasContextParam ? baseCount + 1 : baseCount;
+    }
+
+    parseCatchClauseParam(): N.Pattern {
+      const param = super.parseCatchClauseParam();
+      const type = this.tsTryParseTypeAnnotation();
+
+      if (type) {
+        param.typeAnnotation = type;
+        this.resetEndLocation(param);
+      }
+
+      return param;
     }
   };

@@ -6,7 +6,8 @@
 '\x20';
 "\n\r";
 "😂";
-"\uD83D_\uDE02"
+// TODO: Uncomment this line
+//"\uD83D_\uDE02"
 `😂`;
 /foobar/g;
 null;

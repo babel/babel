@@ -233,8 +233,8 @@ export default declare((api, options) => {
           }
         },
         exit(path, state) {
-          const undefinedIdent = path.scope.buildUndefinedNode();
-          const exportIdent = path.scope.generateUid("export");
+          const scope = path.scope;
+          const exportIdent = scope.generateUid("export");
           const contextIdent = state.contextIdent;
 
           const exportMap = Object.create(null);
@@ -285,7 +285,7 @@ export default declare((api, options) => {
               beforeBody.push(path.node);
               removedPaths.push(path);
             } else if (path.isClassDeclaration()) {
-              variableIds.push(path.node.id);
+              variableIds.push(t.cloneNode(path.node.id));
               path.replaceWith(
                 t.expressionStatement(
                   t.assignmentExpression(
@@ -299,7 +299,7 @@ export default declare((api, options) => {
               const source = path.node.source.value;
               pushModule(source, "imports", path.node.specifiers);
               for (const name of Object.keys(path.getBindingIdentifiers())) {
-                path.scope.removeBinding(name);
+                scope.removeBinding(name);
                 variableIds.push(t.identifier(name));
               }
               path.remove();
@@ -312,8 +312,8 @@ export default declare((api, options) => {
               if (declar.isClassDeclaration()) {
                 if (id) {
                   exportNames.push("default");
-                  exportValues.push(undefinedIdent);
-                  variableIds.push(id);
+                  exportValues.push(scope.buildUndefinedNode());
+                  variableIds.push(t.cloneNode(id));
                   addExportName(id.name, "default");
                   path.replaceWith(
                     t.expressionStatement(
@@ -360,8 +360,8 @@ export default declare((api, options) => {
                 } else if (path.isClass()) {
                   const name = declar.node.id.name;
                   exportNames.push(name);
-                  exportValues.push(undefinedIdent);
-                  variableIds.push(declar.node.id);
+                  exportValues.push(scope.buildUndefinedNode());
+                  variableIds.push(t.cloneNode(declar.node.id));
                   path.replaceWith(
                     t.expressionStatement(
                       t.assignmentExpression(
@@ -389,9 +389,7 @@ export default declare((api, options) => {
                     const nodes = [];
 
                     for (const specifier of specifiers) {
-                      const binding = path.scope.getBinding(
-                        specifier.local.name,
-                      );
+                      const binding = scope.getBinding(specifier.local.name);
                       // hoisted function export
                       if (
                         binding &&
@@ -426,7 +424,7 @@ export default declare((api, options) => {
 
           modules.forEach(function (specifiers) {
             let setterBody = [];
-            const target = path.scope.generateUid(specifiers.key);
+            const target = scope.generateUid(specifiers.key);
 
             for (let specifier of specifiers.imports) {
               if (t.isImportNamespaceSpecifier(specifier)) {
@@ -510,7 +508,7 @@ export default declare((api, options) => {
               variableIds.push(id);
               if (!hasInit) {
                 exportNames.push(name);
-                exportValues.push(undefinedIdent);
+                exportValues.push(scope.buildUndefinedNode());
               }
             },
             null,
@@ -540,7 +538,7 @@ export default declare((api, options) => {
           path.traverse(reassignmentVisitor, {
             exports: exportMap,
             buildCall: buildExportCall,
-            scope: path.scope,
+            scope,
           });
 
           for (const path of removedPaths) {

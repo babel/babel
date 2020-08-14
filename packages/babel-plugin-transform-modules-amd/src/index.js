@@ -71,8 +71,8 @@ export default declare((api, options) => {
             new Promise((${resolveId}, ${rejectId}) =>
               ${requireId}(
                 [${getImportSource(t, path.node)}],
-                imported => ${resolveId}(${result}),
-                ${rejectId}
+                imported => ${t.cloneNode(resolveId)}(${result}),
+                ${t.cloneNode(rejectId)}
               )
             )`,
         );
@@ -84,7 +84,7 @@ export default declare((api, options) => {
             if (requireId) {
               injectWrapper(
                 path,
-                buildAnonymousWrapper({ REQUIRE: requireId }),
+                buildAnonymousWrapper({ REQUIRE: t.cloneNode(requireId) }),
               );
             }
             return;
@@ -94,7 +94,7 @@ export default declare((api, options) => {
           const importNames = [];
           if (requireId) {
             amdArgs.push(t.stringLiteral("require"));
-            importNames.push(requireId);
+            importNames.push(t.cloneNode(requireId));
           }
 
           let moduleName = getModuleName(this.file.opts, options);
