@@ -41,10 +41,9 @@ matrix:
         directories:
           - $HOME/AppData/Local/Temp/chocolatey
     # Continue node_js matrix
-    - node_js: "6"
     - node_js: "12"
     - node_js: "10"
-    - node_js: "8"
+    # Node.js 6 and 8 are tested on GitHub actions
     - node_js: "node"
       env: JOB=babel-parser-flow-tests
     - node_js: "node"

@@ -17,7 +17,8 @@ module.exports = function (api) {
   };
   const envOpts = Object.assign({}, envOptsNoTargets);
 
-  const compileDynamicImport = env === "test" || env === "development";
+  const compileDynamicImport =
+    env === "test" || env === "development" || env === "test-legacy";
 
   let convertESM = true;
   let ignoreLib = true;
@@ -55,6 +56,7 @@ module.exports = function (api) {
       );
       if (env === "rollup") envOpts.targets = { node: nodeVersion };
       break;
+    case "test-legacy": // In test-legacy environment, we build babel on latest node but test on minimum supported legacy versions
     case "production":
       // Config during builds before publish.
       envOpts.targets = {
@@ -169,9 +171,9 @@ module.exports = function (api) {
 // the original absolute path.
 // NOTE: This plugin must run before @babel/plugin-transform-modules-commonjs,
 // and assumes that the target is the current node version.
-function dynamicImportUrlToPath({ template }) {
-  const currentNodeSupportsURL = !!require("url").pathToFileURL;
-
+function dynamicImportUrlToPath({ template, env }) {
+  const currentNodeSupportsURL =
+    !!require("url").pathToFileURL && env() !== "test-legacy"; // test-legacy is run on legacy node versions without pathToFileURL support
   if (currentNodeSupportsURL) {
     return {
       visitor: {
