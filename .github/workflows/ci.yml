@@ -3,7 +3,30 @@ name: Node CI
 on: [push, pull_request]
 
 jobs:
+  validate-yarn-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Update Yarn cache
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: |
+          yarn install --immutable
+
   test:
+    needs: validate-yarn-cache
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -28,6 +51,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   legacy-node-version-test:
+    needs: validate-yarn-cache
     runs-on: ubuntu-latest
     strategy:
       matrix:
