@@ -16,14 +16,8 @@ const monorepoPackagePattern =
   `^@babel/(?!eslint-)(?!${externalBabelPackages.join("|")})([a-zA-Z0-9_-]+)$`;
 
 module.exports = {
-  collectCoverageFrom: [
-    "packages/*/src/**/*.mjs",
-    "packages/*/src/**/*.js",
-    "codemods/*/src/**/*.mjs",
-    "codemods/*/src/**/*.js",
-    "eslint/*/src/**/*.mjs",
-    "eslint/*/src/**/*.js",
-  ],
+  collectCoverageFrom: ["{codemods,eslint,packages}/*/lib/**/*.{js,mjs}"],
+  coverageProvider: "v8",
   // The eslint/* packages use ESLint v6, which has dropped support for Node v6.
   // TODO: Remove this process.version check in Babel 8.
   testRegex: `./(packages|codemods${
@@ -48,11 +42,6 @@ module.exports = {
     "<rootDir>/packages/babel-standalone/babel(\\.min)?\\.js",
     "/test/(fixtures|tmp|__data__)/",
     "<rootDir>/(packages|codemods|eslint)/[^/]+/lib/",
-  ],
-  coveragePathIgnorePatterns: [
-    "/node_modules/",
-    "<rootDir>/packages/babel-standalone/babel(\\.min)?\\.js",
-    "/test/(fixtures|tmp|__data__)/",
   ],
   modulePathIgnorePatterns: [
     "/test/fixtures/",

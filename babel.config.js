@@ -8,9 +8,6 @@ function normalize(src) {
 
 module.exports = function (api) {
   const env = api.env();
-
-  const includeCoverage = process.env.BABEL_COVERAGE === "true";
-
   const envOptsNoTargets = {
     loose: true,
     shippedProposals: true,
@@ -152,11 +149,6 @@ module.exports = function (api) {
   };
 
   // we need to do this as long as we do not test everything from source
-  if (includeCoverage) {
-    config.auxiliaryCommentBefore = "istanbul ignore next";
-    config.plugins.push("babel-plugin-istanbul");
-  }
-
   return config;
 };
 

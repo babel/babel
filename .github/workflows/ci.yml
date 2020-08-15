@@ -71,7 +71,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Build
+        # Downgrade Jest to v24 with node 6 support
         run: |
+          yarn add --dev jest@24 babel-jest@24
           BABEL_ENV=test-legacy make -j bootstrap
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2-beta
