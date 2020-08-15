@@ -43,10 +43,7 @@ node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
   fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
 "
 
-rm yarn.lock
-make bootstrap
-
-# Test
-make test-ci
+# Update deps, build and test
+make -j test-ci
 
 cleanup

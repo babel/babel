@@ -26,8 +26,7 @@ startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 # and not from npm.
 node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 
-# Test
-yarn install --inline-builds
-make test-ci
+# Update deps, build and test
+make -j test-ci
 
 cleanup
