@@ -81,10 +81,8 @@ jobs:
             codemods/*/lib/**/*
             eslint/*/lib/**/*
             packages/*/lib/**/*
-            packages/babel-runtime/**/*
-            packages/babel-runtime-corejs2/**/*
-            packages/babel-runtime-corejs3/**/*
-            packages/babel-standalone/**/*
+            packages/babel-polyfill/dist/**/*
+            packages/babel-standalone/*.js
             !**/node_modules/**
 
   test:
@@ -112,6 +110,9 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: babel-artifact
+      - name: Generate runtime helpers
+        run: |
+          make build-plugin-transform-runtime-dist
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2-beta
         with:
