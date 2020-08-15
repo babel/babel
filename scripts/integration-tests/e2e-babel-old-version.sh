@@ -22,7 +22,7 @@ cd ../..
 
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 
-yarn up '@babel/*'
+node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 (
   yarn why @babel/core | grep -o "@babel/core@npm:.* (via npm:.*)";
   yarn why @babel/helpers | grep -o "@babel/helpers@npm:.* (via npm:.*)";

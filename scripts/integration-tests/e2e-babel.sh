@@ -24,7 +24,7 @@ startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 # We only bump dependencies in the top-level package.json, because workspaces
 # already use the workspace: protocol so will get the version in the monorepo
 # and not from npm.
-yarn up '@babel/*'
+node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 
 # Test
 yarn install --inline-builds
