@@ -15,9 +15,7 @@
   "dependencies": {
     "@babel/helper-member-expression-to-functions": "workspace:^7.10.4",
     "@babel/helper-optimise-call-expression": "workspace:^7.10.4",
+    "@babel/traverse": "workspace:^7.10.4",
     "@babel/types": "workspace:^7.10.4"
-  },
-  "devDependencies": {
-    "@babel/traverse": "workspace:^7.10.4"
   }
 }
