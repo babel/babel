@@ -22,6 +22,8 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Update Yarn cache
         if: steps.yarn-cache.outputs.cache-hit != 'true'
+        env:
+          YARN_ENABLE_SCRIPTS: false # disable post-install scripts
         run: |
           yarn install --immutable
 
