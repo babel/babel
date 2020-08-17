@@ -44,6 +44,7 @@ node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 "
 
 # Update deps, build and test
+rm yarn.lock
 make -j test-ci
 
 cleanup

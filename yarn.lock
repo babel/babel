@@ -6319,7 +6319,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.30001043":
+"caniuse-lite@npm:1.0.30001077":
   version: 1.0.30001077
   resolution: "caniuse-lite@npm:1.0.30001077"
   checksum: 8c57dfba3e0da11c01fdaad6a3517c0259ce24006b2c1d542827d725c5f5ed5be7a18d7efdbfe4ae879d2fc01e2fa5445c31e76835a8abc9013f7bfa35c42e8e
