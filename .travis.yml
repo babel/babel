@@ -5,7 +5,7 @@ language: node_js
 cache:
   npm: false
   directories:
-    - .yarn/cache
+    - ~/.yarn/berry/cache
 
 os: linux
 
@@ -42,7 +42,7 @@ matrix:
         npm: false
         directories:
           - $HOME/AppData/Local/Temp/chocolatey
-          - .yarn/cache
+          - $HOME/AppData/Local/Yarn/Berry/cache
     # Continue node_js matrix
     - node_js: "12"
     - node_js: "10"

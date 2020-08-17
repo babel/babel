@@ -6,7 +6,7 @@ aliases:
 
   - &save-yarn-cache
     paths:
-      - .yarn/cache
+      - ~/.yarn/berry/cache
     key: v2-yarn-cache-{{ checksum "yarn.lock" }}
 
   - &artifact_babel
