@@ -287,6 +287,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       type: string,
       inClassScope: boolean = false,
     ): T {
+      if (type === "ClassPrivateMethod") {
+        // todo: supports ClassPrivateMethod
+        // see https://github.com/estree/estree/blob/master/experimental/class-features.md
+        return super.parseMethod(
+          node,
+          isGenerator,
+          isAsync,
+          isConstructor,
+          allowDirectSuper,
+          type,
+          inClassScope,
+        );
+      }
       let funcNode = this.startNode();
       funcNode.kind = node.kind; // provide kind, so super method correctly sets state
       funcNode = super.parseMethod(

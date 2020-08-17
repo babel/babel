@@ -1758,6 +1758,28 @@ describe("verify", () => {
           { "no-unused-vars": 1 },
         );
       });
+
+      it("should visit params", () => {
+        verifyAndAssertMessages(
+          `export class C {
+              constructor() { this.#d(); }
+              #d(unused) {};
+            }
+          `,
+          { "no-unused-vars": 1 },
+        );
+      });
+
+      it("should visit body", () => {
+        verifyAndAssertMessages(
+          `export class C {
+              constructor() { this.#d(); }
+              #d() { var unused; };
+            }
+          `,
+          { "no-unused-vars": 1 },
+        );
+      });
     });
   });
 
