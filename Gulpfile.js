@@ -69,7 +69,14 @@ function buildBabel(exclude, sourcesGlob = defaultSourcesGlob) {
     .pipe(errorsLogger())
     .pipe(newer({ dest: base, map: swapSrcWithLib }))
     .pipe(compilationLogger())
-    .pipe(babel())
+    .pipe(
+      babel({
+        caller: {
+          // We have wrapped packages/babel-core/src/config/files/configuration.js with feature detection
+          supportsDynamicImport: true,
+        },
+      })
+    )
     .pipe(
       // Passing 'file.relative' because newer() above uses a relative
       // path and this keeps it consistent.
