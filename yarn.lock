@@ -154,7 +154,7 @@ __metadata:
   resolution: "@babel/eslint-config-internal@workspace:eslint/babel-eslint-config-internal"
   peerDependencies:
     "@babel/eslint-parser": ^7.10.4
-    eslint-plugin-flowtype: ^3.0.0
+    eslint-plugin-flowtype: ^4.6.0
   languageName: unknown
   linkType: soft
 
@@ -211,6 +211,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-shared-fixtures@workspace:eslint/babel-eslint-shared-fixtures"
   dependencies:
+    "@babel/core": "workspace:^7.11.0"
     "@babel/plugin-proposal-class-properties": "workspace:^7.10.4"
     "@babel/plugin-proposal-decorators": "workspace:^7.10.4"
     "@babel/plugin-proposal-do-expressions": "workspace:^7.10.4"
