@@ -1758,6 +1758,42 @@ describe("verify", () => {
           { "no-unused-vars": 1 },
         );
       });
+
+      it("should visit params", () => {
+        verifyAndAssertMessages(
+          `export class C {
+              constructor() { this.#d(); }
+              #d(unused) {};
+            }
+          `,
+          { "no-unused-vars": 1 },
+          ["3:6 'unused' is defined but never used. no-unused-vars"],
+        );
+      });
+
+      it("should visit body", () => {
+        verifyAndAssertMessages(
+          `export class C {
+              constructor() { this.#d(); }
+              #d() { var unused; };
+            }
+          `,
+          { "no-unused-vars": 1 },
+          ["3:14 'unused' is defined but never used. no-unused-vars"],
+        );
+      });
+
+      it("should work with no-unreachable", () => {
+        verifyAndAssertMessages(
+          `class C {
+  #a() {
+    return;
+  }
+  #b() {} // no-unreachable should not bail here
+}`,
+          { "no-unreachable": 1 },
+        );
+      });
     });
   });
 
