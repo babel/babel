@@ -1,27 +1,24 @@
 import { loadPartialConfig } from "@babel/core";
 
 export function normalizeESLintConfig(options) {
-  const defaultOptions = {
-    babelOptions: {},
-    ecmaVersion: 2020,
-    sourceType: "module",
-    allowImportExportEverywhere: false,
-    requireConfigFile: true,
+  const {
+    babelOptions = {},
+    // ESLint sets ecmaVersion: undefined when ecmaVersion is not set in the config.
+    ecmaVersion = 2020,
+    sourceType = "module",
+    allowImportExportEverywhere = false,
+    requireConfigFile = true,
+    ...otherOptions
+  } = options;
+
+  return {
+    babelOptions,
+    ecmaVersion,
+    sourceType,
+    allowImportExportEverywhere,
+    requireConfigFile,
+    ...otherOptions,
   };
-
-  // ESLint sets ecmaVersion: undefined when ecmaVersion is not set in the config.
-  // Prune to ensure that defaults are respected.
-  const prunedOptions = Object.entries(options).reduce(
-    (options, [key, value]) => {
-      if (value !== undefined) {
-        options[key] = value;
-      }
-      return options;
-    },
-    {},
-  );
-
-  return Object.assign(defaultOptions, prunedOptions);
 }
 
 export function normalizeBabelParseConfig(options) {
