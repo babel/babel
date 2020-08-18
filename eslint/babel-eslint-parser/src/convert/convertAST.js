@@ -1,5 +1,5 @@
 import { types as t, traverse } from "@babel/core";
-import VISITOR_KEYS from "../visitor-keys";
+import { newTypes, conflictTypes } from "../visitor-keys";
 
 function convertNodes(ast, code) {
   const astTransformVisitor = {
@@ -81,30 +81,30 @@ function convertNodes(ast, code) {
     },
   };
   const state = { source: code };
-
-  const oldExportAllDeclarationKeys = t.VISITOR_KEYS.ExportAllDeclaration;
+  const oldVisitorKeys = new Map();
 
   try {
-    // Monkey patch visitor keys in order to be able to traverse the estree nodes
-    t.VISITOR_KEYS.ChainExpression = VISITOR_KEYS.ChainExpression;
-    t.VISITOR_KEYS.ImportExpression = VISITOR_KEYS.ImportExpression;
-    t.VISITOR_KEYS.Property = VISITOR_KEYS.Property;
-    t.VISITOR_KEYS.MethodDefinition = VISITOR_KEYS.MethodDefinition;
+    for (const [type, visitorKey] of Object.entries(conflictTypes)) {
+      // backup conflicted visitor keys
+      oldVisitorKeys.set(type, t.VISITOR_KEYS[type]);
 
-    // Make sure we visit `exported` key to remove `identifierName` from loc node
-    t.VISITOR_KEYS.ExportAllDeclaration = t.VISITOR_KEYS.ExportAllDeclaration.concat(
-      "exported",
-    );
+      t.VISITOR_KEYS[type] = visitorKey;
+    }
+    for (const [type, visitorKey] of Object.entries(newTypes)) {
+      t.VISITOR_KEYS[type] = visitorKey;
+    }
 
     traverse(ast, astTransformVisitor, null, state);
   } finally {
     // These can be safely deleted because they are not defined in the original visitor keys.
-    delete t.VISITOR_KEYS.ChainExpression;
-    delete t.VISITOR_KEYS.ImportExpression;
-    delete t.VISITOR_KEYS.MethodDefinition;
-    delete t.VISITOR_KEYS.Property;
+    for (const type of Object.keys(newTypes)) {
+      delete t.VISITOR_KEYS[type];
+    }
 
-    t.VISITOR_KEYS.ExportAllDeclaration = oldExportAllDeclarationKeys;
+    // These should be restored
+    for (const type of Object.keys(conflictTypes)) {
+      t.VISITOR_KEYS[type] = oldVisitorKeys.get(type);
+    }
   }
 }
 

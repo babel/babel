@@ -1767,6 +1767,7 @@ describe("verify", () => {
             }
           `,
           { "no-unused-vars": 1 },
+          ["3:6 'unused' is defined but never used. no-unused-vars"],
         );
       });
 
@@ -1778,6 +1779,19 @@ describe("verify", () => {
             }
           `,
           { "no-unused-vars": 1 },
+          ["3:14 'unused' is defined but never used. no-unused-vars"],
+        );
+      });
+
+      it("should work with no-unreachable", () => {
+        verifyAndAssertMessages(
+          `class C {
+  #a() {
+    return;
+  }
+  #b() {} // no-unreachable should not bail here
+}`,
+          { "no-unreachable": 1 },
         );
       });
     });
