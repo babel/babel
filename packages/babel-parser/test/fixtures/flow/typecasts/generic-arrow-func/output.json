@@ -1,0 +1,109 @@
+{
+  "type": "File",
+  "start":0,"end":41,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":21}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":41,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":21}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":19}},
+        "expression": {
+          "type": "TypeCastExpression",
+          "start":1,"end":17,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":17}},
+          "expression": {
+            "type": "ArrowFunctionExpression",
+            "start":1,"end":12,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":12}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [],
+            "body": {
+              "type": "BlockStatement",
+              "start":10,"end":12,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":12}},
+              "body": [],
+              "directives": []
+            },
+            "typeParameters": {
+              "type": "TypeParameterDeclaration",
+              "start":1,"end":4,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":4}},
+              "params": [
+                {
+                  "type": "TypeParameter",
+                  "start":2,"end":3,"loc":{"start":{"line":1,"column":2},"end":{"line":1,"column":3}},
+                  "name": "T",
+                  "variance": null
+                }
+              ]
+            }
+          },
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "start":12,"end":17,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":17}},
+            "typeAnnotation": {
+              "type": "AnyTypeAnnotation",
+              "start":14,"end":17,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":17}}
+            }
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":20,"end":41,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":21}},
+        "expression": {
+          "type": "TypeCastExpression",
+          "start":21,"end":39,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":19}},
+          "expression": {
+            "type": "ArrowFunctionExpression",
+            "start":22,"end":33,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":13}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [],
+            "body": {
+              "type": "BlockStatement",
+              "start":31,"end":33,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":13}},
+              "body": [],
+              "directives": []
+            },
+            "typeParameters": {
+              "type": "TypeParameterDeclaration",
+              "start":22,"end":25,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":5}},
+              "params": [
+                {
+                  "type": "TypeParameter",
+                  "start":23,"end":24,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":4}},
+                  "name": "T",
+                  "variance": null
+                }
+              ]
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 21
+            }
+          },
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "start":34,"end":39,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":19}},
+            "typeAnnotation": {
+              "type": "AnyTypeAnnotation",
+              "start":36,"end":39,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":19}}
+            }
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 20
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}
