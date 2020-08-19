@@ -263,6 +263,23 @@ describe("@babel/code-frame", function () {
     ).toEqual(["> 2 |   constructor() {"].join("\n"));
   });
 
+  test("opts.linesBelow parse string input", function () {
+    const rawLines = [
+      "class Foo {",
+      "  constructor() {",
+      "    console.log(arguments);",
+      "  }",
+      "};",
+    ].join("\n");
+    expect(
+      codeFrameColumns(
+        rawLines,
+        { start: { line: "2" } },
+        { linesAbove: 0, linesBelow: 0 },
+      ),
+    ).toEqual(["> 2 |   constructor() {"].join("\n"));
+  });
+
   test("opts.forceColor", function () {
     const marker = chalk.red.bold;
     const gutter = chalk.grey;

@@ -48,10 +48,10 @@ function getMarkerLines(
     ...loc.end,
   };
   const { linesAbove = 2, linesBelow = 3 } = opts || {};
-  const startLine = startLoc.line;
-  const startColumn = startLoc.column;
-  const endLine = endLoc.line;
-  const endColumn = endLoc.column;
+  const startLine = parseInt(startLoc.line);
+  const startColumn = parseInt(startLoc.column);
+  const endLine = parseInt(endLoc.line);
+  const endColumn = parseInt(endLoc.column);
 
   let start = Math.max(startLine - (linesAbove + 1), 0);
   let end = Math.min(source.length, endLine + linesBelow);
