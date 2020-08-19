@@ -19,4 +19,4 @@ export const conflictTypes = {
   ExportAllDeclaration: ESLINT_VISITOR_KEYS.ExportAllDeclaration,
 };
 
-export default Object.assign(newTypes, t.VISITOR_KEYS, conflictTypes);
+export default { ...newTypes, ...t.VISITOR_KEYS, ...conflictTypes };
