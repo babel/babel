@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@babel/generator": "workspace:^7.11.0",
-    "@babel/parser": "workspace:^7.11.0"
+    "@babel/parser": "workspace:^7.11.0",
+    "chalk": "^4.1.0"
   }
 }
