@@ -55,7 +55,7 @@ function loadOptionsAsync(opts) {
 
 async function loadOptionsAsyncInSpawedProcess({ filename, cwd }) {
   // !!!! hack is coming !!!!
-  // remove this section when https://github.com/facebook/jest/issues/9430 is resolved
+  // todo(Babel 8): remove this section when https://github.com/facebook/jest/issues/9430 is resolved
   // We don't check process.versions.node here, it will fail if node does not support esm
   // please publish Babel on a modernized node :)
   const { stdout, stderr } = await util.promisify(cp.execFile)(
