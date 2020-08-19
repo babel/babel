@@ -1,4 +1,4 @@
 process.env.BABEL_DISABLE_CACHE = "true";
-require("@babel/register").default({
+require("../../..").default({
   ignore: false,
 });
