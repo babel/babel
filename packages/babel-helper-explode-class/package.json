@@ -13,10 +13,10 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-bindify-decorators": "^7.11.4",
-    "@babel/types": "^7.10.4"
+    "@babel/helper-bindify-decorators": "workspace:^7.11.4",
+    "@babel/types": "workspace:^7.10.4"
   },
   "devDependencies": {
-    "@babel/traverse": "^7.10.4"
+    "@babel/traverse": "workspace:^7.10.4"
   }
 }

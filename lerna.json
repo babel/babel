@@ -37,7 +37,5 @@
     "packages/*"
   ],
   "npmClient": "yarn",
-  "npmClientArgs": [
-    "--pure-lockfile"
-  ]
+  "useWorkspaces": true
 }

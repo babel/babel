@@ -1,0 +1,16 @@
+diff --git a/index.js b/index.js
+index 67b997073..6e2912e9e 100644
+--- a/index.js
++++ b/index.js
+@@ -209,6 +209,11 @@ class Package {
+     if (resolved.registry || resolved.type === "directory") {
+       // a version (1.2.3) OR range (^1.2.3) OR directory (file:../foo-pkg)
+       depCollection[depName] = `${savePrefix}${depVersion}`;
++
++      // https://github.com/lerna/lerna/pull/2450
++      if (resolved.explicitWorkspace) {
++        depCollection[depName] = `workspace:${depCollection[depName]}`;
++      }
+     } else if (resolved.gitCommittish) {
+       // a git url with matching committish (#v1.2.3 or #1.2.3)
+       const [tagPrefix] = /^\D*/.exec(resolved.gitCommittish);

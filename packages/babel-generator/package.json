@@ -18,12 +18,12 @@
     "lib"
   ],
   "dependencies": {
-    "@babel/types": "^7.11.0",
+    "@babel/types": "workspace:^7.11.0",
     "jsesc": "^2.5.1",
     "source-map": "^0.5.0"
   },
   "devDependencies": {
-    "@babel/helper-fixtures": "^7.10.5",
-    "@babel/parser": "^7.11.4"
+    "@babel/helper-fixtures": "workspace:^7.10.5",
+    "@babel/parser": "workspace:^7.11.4"
   }
 }

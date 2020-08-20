@@ -21,7 +21,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/compat-data": "^7.10.4",
+    "@babel/compat-data": "workspace:^7.10.4",
     "browserslist": "^4.12.0",
     "invariant": "^2.2.4",
     "levenary": "^1.1.1",
@@ -31,7 +31,7 @@
     "@babel/core": "^7.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.4",
-    "@babel/helper-plugin-test-runner": "^7.10.4"
+    "@babel/core": "workspace:^7.10.4",
+    "@babel/helper-plugin-test-runner": "workspace:^7.10.4"
   }
 }
