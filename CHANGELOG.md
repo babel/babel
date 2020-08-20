@@ -19,6 +19,42 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.11.4 (2020-08-20)
+
+#### :bug: Bug Fix
+* `babel-helper-replace-supers`
+  * [#11985](https://github.com/babel/babel/pull/11985) fix: declare @babel/traverse as a dependency ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#11974](https://github.com/babel/babel/pull/11974) Ensure `import()` is not transpiled in `babel-core` published source ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#11979](https://github.com/babel/babel/pull/11979) Throw error on invalid flow async generic arrow syntax ([@existentialism](https://github.com/existentialism))
+  * [#11955](https://github.com/babel/babel/pull/11955) Fix parsing type casted generic flow arrow exprs ([@existentialism](https://github.com/existentialism))
+  * [#11973](https://github.com/babel/babel/pull/11973) fix: do not transform ClassPrivateMethods in estree ([@JLHwung](https://github.com/JLHwung))
+  * [#11941](https://github.com/babel/babel/pull/11941) fix: push new token context when braceHashL is seen ([@JLHwung](https://github.com/JLHwung))
+  * [#11943](https://github.com/babel/babel/pull/11943) fix: reset EndLocation for catch param ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#11978](https://github.com/babel/babel/pull/11978) fix: do not mutate newTypes ([@JLHwung](https://github.com/JLHwung))
+  * [#11970](https://github.com/babel/babel/pull/11970) fix: ensure defaults are set in @babel/eslint-parser ([@kaicataldo](https://github.com/kaicataldo))
+* `babel-generator`
+  * [#11947](https://github.com/babel/babel/pull/11947) fix: disallow line break between async and property ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* Other
+  * [#11952](https://github.com/babel/babel/pull/11952) Move legacy node version tests to GitHub actions ([@JLHwung](https://github.com/JLHwung))
+  * [#11936](https://github.com/babel/babel/pull/11936) chore: do not push version commit on lerna version ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#11923](https://github.com/babel/babel/pull/11923) Add more parser test cases ([@JLHwung](https://github.com/JLHwung))
+  * [#11944](https://github.com/babel/babel/pull/11944) Simplify tokenizer update context ([@JLHwung](https://github.com/JLHwung))
+  * [#11945](https://github.com/babel/babel/pull/11945) chore: enable flowcheck on CI ([@JLHwung](https://github.com/JLHwung))
+  * [#11930](https://github.com/babel/babel/pull/11930) Refactor [In] production parameter tracking ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`
+  * [#11953](https://github.com/babel/babel/pull/11953) chore: remove obsolete comment ([@jamescdavis](https://github.com/jamescdavis))
+* `babel-helper-transform-fixture-test-runner`
+  * [#11951](https://github.com/babel/babel/pull/11951) chore: build babel-polyfill-dist on make watch ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-helper-transform-fixture-test-runner`, `babel-plugin-proposal-object-rest-spread`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-classes`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-react-jsx-source`, `babel-plugin-transform-spread`
+  * [#11531](https://github.com/babel/babel/pull/11531) Isolated exec tests ([@jridgewell](https://github.com/jridgewell))
+* `babel-helper-bindify-decorators`, `babel-helper-call-delegate`, `babel-helper-explode-assignable-expression`, `babel-helper-explode-class`, `babel-helper-remap-async-to-generator`, `babel-helper-replace-supers`
+  * [#11937](https://github.com/babel/babel/pull/11937) Move some @babel/traverse from deps to devDeps ([@Monchi](https://github.com/Monchi))
 ## v7.11.3 (2020-08-08)
 
 #### :bug: Bug Fix
