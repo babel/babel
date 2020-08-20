@@ -1,11 +1,11 @@
 {
   "name": "@babel/eslint-tests",
-  "version": "7.11.0",
+  "version": "7.11.4",
   "description": "Tests for babel/eslint-* packages",
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@babel/eslint-parser": "^7.11.0",
+    "@babel/eslint-parser": "^7.11.4",
     "dedent": "^0.7.0",
     "eslint": "^7.5.0",
     "eslint-plugin-import": "^2.22.0"

@@ -1,5 +1,5 @@
 {
-  "version": "7.11.3",
+  "version": "7.11.4",
   "changelog": {
     "repo": "babel/babel",
     "cacheDir": ".changelog",
@@ -31,7 +31,13 @@
       "push": false
     }
   },
-  "packages": ["codemods/*", "eslint/*", "packages/*"],
+  "packages": [
+    "codemods/*",
+    "eslint/*",
+    "packages/*"
+  ],
   "npmClient": "yarn",
-  "npmClientArgs": ["--pure-lockfile"]
+  "npmClientArgs": [
+    "--pure-lockfile"
+  ]
 }

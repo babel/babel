@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-explode-class",
-  "version": "7.10.4",
+  "version": "7.11.4",
   "description": "Helper function to explode class",
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-bindify-decorators": "^7.10.4",
+    "@babel/helper-bindify-decorators": "^7.11.4",
     "@babel/types": "^7.10.4"
   },
   "devDependencies": {

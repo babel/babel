@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-call-delegate",
-  "version": "7.10.4",
+  "version": "7.11.4",
   "description": "Helper function to call delegate",
   "repository": {
     "type": "git",
