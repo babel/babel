@@ -2,7 +2,7 @@
 
 // Usage:
 // babel-load-options-async.js [filename]
-import babel from "@babel/core";
+import babel from "../../lib/index.js";
 
 const [, , filename, cwd] = process.argv;
 
