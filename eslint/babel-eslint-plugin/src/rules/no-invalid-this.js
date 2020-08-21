@@ -8,7 +8,11 @@ export default ruleComposer.filterReports(noInvalidThisRule, problem => {
   let node = problem.node;
 
   while (node) {
-    if (node.type === "ClassProperty" || node.type === "ClassPrivateProperty") {
+    if (
+      node.type === "ClassPrivateMethod" ||
+      node.type === "ClassPrivateProperty" ||
+      node.type === "ClassProperty"
+    ) {
       inClassProperty = true;
       return;
     }
