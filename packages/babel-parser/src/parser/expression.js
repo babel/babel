@@ -1767,6 +1767,7 @@ export default class ExpressionParser extends LValParser {
         isAccessor = true;
         prop.kind = keyName;
         if (this.match(tt.star)) {
+          isGenerator = true;
           this.raise(this.state.pos, Errors.AccessorIsGenerator, keyName);
           this.next();
         }
@@ -1827,7 +1828,9 @@ export default class ExpressionParser extends LValParser {
       // isAccessor implies isAsync: false, isPattern: false, isGenerator: false
       this.parseMethod(
         prop,
-        /* isGenerator */ false,
+        // This _should_ be false, but with error recovery, we allow it to be
+        // set for informational purposes
+        isGenerator,
         /* isAsync */ false,
         /* isConstructor */ false,
         false,
