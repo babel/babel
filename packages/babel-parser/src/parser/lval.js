@@ -51,10 +51,52 @@ export default class LValParser extends NodeUtils {
   +parseDecorator: () => Decorator;
   */
 
+  isAssignable(node: Node, isBinding?: boolean): boolean {
+    switch (node.type) {
+      case "Identifier":
+      case "ObjectPattern":
+      case "ArrayPattern":
+      case "AssignmentPattern":
+        return true;
+
+      case "ObjectExpression": {
+        const last = node.properties.length - 1;
+        return node.properties.every((prop, i) => {
+          return (
+            prop.type !== "ObjectMethod" &&
+            (i === last || prop.type === "SpreadElement") &&
+            this.isAssignable(prop)
+          );
+        });
+      }
+
+      case "ObjectProperty":
+        return this.isAssignable(node.value);
+
+      case "SpreadElement":
+        return this.isAssignable(node.argument);
+
+      case "ArrayExpression":
+        return node.elements.every(element => this.isAssignable(element));
+
+      case "AssignmentExpression":
+        return node.operator === "=";
+
+      case "ParenthesizedExpression":
+        return this.isAssignable(node.expression);
+
+      case "MemberExpression":
+      case "OptionalMemberExpression":
+        return !isBinding;
+
+      default:
+        return false;
+    }
+  }
+
   // Convert existing expression atom to assignable pattern
   // if possible.
-  // NOTE: There is a corresponding "isAssignable" method in flow.js.
-  // When this one is updated, please check if also that one needs to be updated.
+  // When this one is updated, please check if `isAssignable` also needs to be updated.
 
   toAssignable(node: Node): Node {
     let parenthesized = undefined;

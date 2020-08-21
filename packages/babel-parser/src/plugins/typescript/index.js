@@ -2469,7 +2469,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    parseArrow(node: N.ArrowFunctionExpression): ?N.ArrowFunctionExpression {
+    parseArrow(
+      node: N.ArrowFunctionExpression,
+      exprList,
+    ): ?N.ArrowFunctionExpression {
       if (this.match(tt.colon)) {
         // This is different from how the TS parser does it.
         // TS uses lookahead. The Babel Parser parses it as a parenthesized expression and converts.
@@ -2479,6 +2482,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             tt.colon,
           );
           if (this.canInsertSemicolon() || !this.match(tt.arrow)) abort();
+          // check if the exprList is assignable because `: TSType` can be part of conditional expression
+          // i.e. we can only know `: v` is not a return type by checking that `sum(v)` can not be a pattern.
+          // 0 ? v => (sum(v)) : v => 0
+          if (exprList.some(param => !this.isAssignable(param, true))) abort();
           return returnType;
         });
 
@@ -2490,7 +2497,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      return super.parseArrow(node);
+      return super.parseArrow(node, exprList);
     }
 
     // Allow type annotations inside of a parameter list.
@@ -2507,6 +2514,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.resetEndLocation(param);
 
       return param;
+    }
+
+    isAssignable(node: N.Node, isBinding?: boolean): boolean {
+      switch (node.type) {
+        case "TSAsExpression":
+        case "TSNonNullExpression":
+        case "TSTypeAssertion":
+        case "TSTypeCastExpression":
+          return this.isAssignable(node.expression, isBinding);
+        default:
+          return super.isAssignable(node, isBinding);
+      }
     }
 
     toAssignable(node: N.Node): N.Node {
