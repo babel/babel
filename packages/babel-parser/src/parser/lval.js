@@ -51,7 +51,18 @@ export default class LValParser extends NodeUtils {
   +parseDecorator: () => Decorator;
   */
 
-  isAssignable(node: Node, isBinding?: boolean): boolean {
+  /**
+   * Check if a node can be converted to a binding identifier or binding pattern.
+   * https://tc39.es/ecma262/#prod-BindingIdentifier
+   * https://tc39.es/ecma262/#prod-BindingPattern
+   * Note that although a mebmer expression can serve as a LHS in the init of for loop,
+   * i.e. `for (a.b of []);`, it is not a binding pattern
+   *
+   * @param {Node} node
+   * @returns {boolean}
+   * @memberof LValParser
+   */
+  isAssignable(node: Node): boolean {
     switch (node.type) {
       case "Identifier":
       case "ObjectPattern":
@@ -84,10 +95,6 @@ export default class LValParser extends NodeUtils {
 
       case "ParenthesizedExpression":
         return this.isAssignable(node.expression);
-
-      case "MemberExpression":
-      case "OptionalMemberExpression":
-        return !isBinding;
 
       default:
         return false;

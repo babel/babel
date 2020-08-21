@@ -2485,7 +2485,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           // check if the exprList is assignable because `: TSType` can be part of conditional expression
           // i.e. we can only know `: v` is not a return type by checking that `sum(v)` can not be a pattern.
           // 0 ? v => (sum(v)) : v => 0
-          if (exprList.some(param => !this.isAssignable(param, true))) abort();
+          if (exprList.some(param => !this.isAssignable(param))) abort();
           return returnType;
         });
 
@@ -2516,15 +2516,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return param;
     }
 
-    isAssignable(node: N.Node, isBinding?: boolean): boolean {
+    isAssignable(node: N.Node): boolean {
       switch (node.type) {
         case "TSAsExpression":
         case "TSNonNullExpression":
         case "TSTypeAssertion":
         case "TSTypeCastExpression":
-          return this.isAssignable(node.expression, isBinding);
+          return this.isAssignable(node.expression);
         default:
-          return super.isAssignable(node, isBinding);
+          return super.isAssignable(node);
       }
     }
 

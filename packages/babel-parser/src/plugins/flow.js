@@ -1943,7 +1943,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       return partition(arrows, node =>
-        node.params.every(param => this.isAssignable(param, true)),
+        node.params.every(param => this.isAssignable(param)),
       );
     }
 
@@ -2147,12 +2147,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    isAssignable(node: N.Node, isBinding?: boolean): boolean {
+    isAssignable(node: N.Node): boolean {
       switch (node.type) {
         case "TypeCastExpression":
-          return this.isAssignable(node.expression, isBinding);
+          return this.isAssignable(node.expression);
         default:
-          return super.isAssignable(node, isBinding);
+          return super.isAssignable(node);
       }
     }
 
