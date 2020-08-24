@@ -1,9 +1,10 @@
-name: Node CI
+name: CI
 
 on: [push, pull_request]
 
 jobs:
-  validate-yarn-cache:
+  prepare-yarn-cache:
+    name: Prepare Cache
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -28,8 +29,9 @@ jobs:
         run: |
           yarn install --immutable
 
-  test:
-    needs: validate-yarn-cache
+  test-coverage:
+    name: Test on Node.js Latest
+    needs: prepare-yarn-cache
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -52,7 +54,8 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   legacy-node-version-test:
-    needs: validate-yarn-cache
+    name: Test on Node.js
+    needs: prepare-yarn-cache
     runs-on: ubuntu-latest
     strategy:
       matrix:
