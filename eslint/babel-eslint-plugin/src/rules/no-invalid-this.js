@@ -4,7 +4,7 @@ import eslint from "eslint";
 const noInvalidThisRule = new eslint.Linter().getRules().get("no-invalid-this");
 
 export default ruleComposer.filterReports(noInvalidThisRule, problem => {
-  let inClassElement = false;
+  let inClassMember = false;
   let node = problem.node;
 
   while (node) {
@@ -13,12 +13,12 @@ export default ruleComposer.filterReports(noInvalidThisRule, problem => {
       node.type === "ClassPrivateProperty" ||
       node.type === "ClassProperty"
     ) {
-      inClassElement = true;
+      inClassMember = true;
       return;
     }
 
     node = node.parent;
   }
 
-  return !inClassElement;
+  return !inClassMember;
 });
