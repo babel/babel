@@ -15,7 +15,10 @@ export default declare(api => {
 
   function getStaticContext(bind, scope) {
     const object = bind.object || bind.callee.object;
-    return scope.isStatic(object) && object;
+    return (
+      scope.isStatic(object) &&
+      (t.isSuper(object) ? t.thisExpression() : object)
+    );
   }
 
   function inferBindContext(bind, scope) {
