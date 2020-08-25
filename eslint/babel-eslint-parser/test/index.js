@@ -61,7 +61,7 @@ describe("Babel and Espree", () => {
       loc: true,
       range: true,
       comment: true,
-      ecmaVersion: 2020,
+      ecmaVersion: 2021,
       sourceType: "module",
     });
     const babelAST = parseForESLint(code, {
@@ -295,6 +295,14 @@ describe("Babel and Espree", () => {
 
   it("nullish coalescing operator", () => {
     parseAndAssertSame("foo ?? bar");
+  });
+
+  it("logical assignment", () => {
+    parseAndAssertSame("foo ??= bar &&= qux ||= quux");
+  });
+
+  it("numeric separator", () => {
+    parseAndAssertSame("1_0.0_0e0_1");
   });
 
   // Espree doesn't support the pipeline operator yet
