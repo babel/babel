@@ -4,8 +4,6 @@ const normalizeOptions = require("../lib/normalize-options.js");
 
 const {
   checkDuplicateIncludeExcludes,
-  validateBoolOption,
-  validateStringOption,
   validateModulesOption,
   validateUseBuiltInsOption,
   normalizePluginName,
@@ -169,48 +167,6 @@ describe("normalize-options", () => {
       });
       expect(normalized.include).toEqual(["es.reflect.set-prototype-of"]);
       expect(normalized.exclude).toEqual(["es.reflect.set"]);
-    });
-  });
-
-  describe("validateBoolOption", () => {
-    it("`undefined` option returns false", () => {
-      expect(validateBoolOption("test", undefined, false)).toBe(false);
-    });
-
-    it("`false` option returns false", () => {
-      expect(validateBoolOption("test", false, false)).toBe(false);
-    });
-
-    it("`true` option returns true", () => {
-      expect(validateBoolOption("test", true, false)).toBe(true);
-    });
-
-    it("array option is invalid", () => {
-      expect(() => {
-        validateBoolOption("test", [], false);
-      }).toThrow();
-    });
-  });
-
-  describe("validateStringOption", () => {
-    it("`undefined` option default", () => {
-      expect(validateStringOption("test", undefined, "default")).toBe(
-        "default",
-      );
-    });
-
-    it("`value` option returns value", () => {
-      expect(validateStringOption("test", "value", "default")).toBe("value");
-    });
-
-    it("no default returns undefined", () => {
-      expect(validateStringOption("test", undefined)).toBe(undefined);
-    });
-
-    it("array option is invalid", () => {
-      expect(() => {
-        validateStringOption("test", [], "default");
-      }).toThrow();
     });
   });
 
