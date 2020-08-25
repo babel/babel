@@ -1,6 +1,6 @@
 // @flow
 
-const { min, max } = Math;
+const { min } = Math;
 
 // a minimal leven distance implementation
 // balanced maintenability with code size
@@ -8,17 +8,31 @@ const { min, max } = Math;
 // where it will be run for at most tens of time on strings
 // that have less than 20 ASCII characters
 
-// https://en.wikipedia.org/wiki/Levenshtein_distance
-function leven_d(s1: string, s2: string) {
-  return function leven(len1: number, len2: number): number {
-    return len1 * len2
-      ? min(
-          leven(len1 - 1, len2),
-          leven(len1, len2 - 1),
-          leven(len1 - 1, len2 - 1) - ((s1[len1] === s2[len2]: any): number),
-        ) + 1
-      : max(len1, len2);
-  };
+// https://rosettacode.org/wiki/Levenshtein_distance#ES5
+function levenshtein(a, b) {
+  let t = [],
+    u = [],
+    i,
+    j;
+  const m = a.length,
+    n = b.length;
+  if (!m) {
+    return n;
+  }
+  if (!n) {
+    return m;
+  }
+  for (j = 0; j <= n; j++) {
+    t[j] = j;
+  }
+  for (i = 1; i <= m; i++) {
+    for (u = [i], j = 1; j <= n; j++) {
+      u[j] =
+        a[i - 1] === b[j - 1] ? t[j - 1] : min(t[j - 1], t[j], u[j - 1]) + 1;
+    }
+    t = u;
+  }
+  return u[n];
 }
 
 /**
@@ -31,8 +45,6 @@ function leven_d(s1: string, s2: string) {
  * @returns {string}
  */
 export function findSuggestion(str: string, arr: string[]): string {
-  const distances = arr.map<number>(el =>
-    leven_d(el, str)(el.length, str.length),
-  );
+  const distances = arr.map<number>(el => levenshtein(el, str));
   return arr[distances.indexOf(min(...distances))];
 }

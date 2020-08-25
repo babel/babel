@@ -19,7 +19,11 @@ describe("OptionValidator", () => {
       expect(() =>
         v.validateTopLevelOptions(
           { hasOwnProperty: "foo" },
-          { foo: "foo" },
+          {
+            foo: "foo",
+            bar: "bar",
+            aLongPropertyKeyToSeeLevenPerformance: "a",
+          },
           "test",
         ),
       ).toThrow();
