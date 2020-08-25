@@ -2653,6 +2653,7 @@ __metadata:
     "@babel/runtime-corejs3": "workspace:^7.11.0"
     "@babel/template": "workspace:^7.10.4"
     "@babel/types": "workspace:^7.11.0"
+    make-dir: ^2.1.0
     resolve: ^1.8.1
     semver: ^5.5.1
   peerDependencies:
@@ -5680,7 +5681,6 @@ __metadata:
     lerna-changelog: ^0.5.0
     lint-staged: ^9.2.0
     mergeiterator: ^1.2.5
-    output-file-sync: ^2.0.0
     prettier: ^2.0.5
     pump: ^3.0.0
     rimraf: ^2.6.3
@@ -12790,17 +12790,6 @@ fsevents@^1.2.7:
     os-homedir: ^1.0.0
     os-tmpdir: ^1.0.0
   checksum: 1c7462808c5ff0c2816b11f2f46265a98c395586058f98d73a6deac82955744484b277baedceeb962c419f3b75d0831a77ce7cf38b9e4f20729943ba79d72b08
-  languageName: node
-  linkType: hard
-
-"output-file-sync@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "output-file-sync@npm:2.0.1"
-  dependencies:
-    graceful-fs: ^4.1.11
-    is-plain-obj: ^1.1.0
-    mkdirp: ^0.5.1
-  checksum: 62a33b53891429fbcaeb62144e50da6e9e3dfed2fdb60c9dfe66df815a2358d26e2975f38470373b11c62abaa181bcec2e4fead35a8cd1ddd7ebba332e0edf18
   languageName: node
   linkType: hard
 

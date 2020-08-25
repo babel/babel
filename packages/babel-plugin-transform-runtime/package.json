@@ -37,6 +37,7 @@
     "@babel/runtime": "workspace:^7.11.0",
     "@babel/runtime-corejs3": "workspace:^7.11.0",
     "@babel/template": "workspace:^7.10.4",
-    "@babel/types": "workspace:^7.11.0"
+    "@babel/types": "workspace:^7.11.0",
+    "make-dir": "^2.1.0"
   }
 }

@@ -52,7 +52,6 @@
     "lerna-changelog": "^0.5.0",
     "lint-staged": "^9.2.0",
     "mergeiterator": "^1.2.5",
-    "output-file-sync": "^2.0.0",
     "prettier": "^2.0.5",
     "pump": "^3.0.0",
     "rimraf": "^2.6.3",
