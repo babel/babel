@@ -55,7 +55,7 @@ jobs:
 
   build:
     name: Build Babel Artifacts
-    needs: validate-yarn-cache
+    needs: prepare-yarn-cache
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
