@@ -19,22 +19,13 @@ export class OptionValidator {
   validateTopLevelOptions(options: Object, TopLevelOptionShape: Object): void {
     const validOptionNames = Object.keys(TopLevelOptionShape);
     for (const option of Object.keys(options)) {
-      this.validateOneOf(option, validOptionNames, (option, suggestion) => {
-        return `'${option}' is not a valid top-level option.
-- Maybe you meant to use '${suggestion}'?`;
-      });
+      if (!validOptionNames.includes(option)) {
+        throw new Error(
+          `${this.descriptor}: '${option}' is not a valid top-level option.
+- Maybe you meant to use '${findSuggestion(option, validOptionNames)}'?`,
+        );
+      }
     }
-  }
-
-  validateOneOf(
-    value: string,
-    candidates: string[],
-    errorFormatter: (value: string, suggestion: string) => string,
-  ): void {
-    this.invariant(
-      candidates.includes(value),
-      errorFormatter(value, findSuggestion(value, candidates)),
-    );
   }
 
   // note: we do not consider rewrite them to high order functions
