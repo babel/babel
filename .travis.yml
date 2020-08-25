@@ -42,7 +42,6 @@ matrix:
         directories:
           - $HOME/AppData/Local/Temp/chocolatey
           - $HOME/AppData/Local/Yarn/Berry/cache
-    # Continue node_js matrix
     - node_js: "node"
       env: JOB=babel-parser-flow-tests
     - node_js: "node"
