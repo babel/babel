@@ -23,7 +23,7 @@
     "regenerator-runtime": "^0.13.4"
   },
   "devDependencies": {
-    "browserify": "16.5.0",
+    "browserify": "^16.5.2",
     "bundle-collapser": "1.3.0",
     "derequire": "2.1.1",
     "uglify-js": "3.7.2"
