@@ -140,17 +140,9 @@ function buildRollup(packages) {
               rollupNodeResolve({
                 browser: nodeResolveBrowser,
                 preferBuiltins: true,
-                //todo: When Yarn workspaces is enabled, remove `dedupe` option
+                //todo: remove when semver and source-map are bumped to latest versions
                 dedupe(importee) {
-                  return (
-                    importee.startsWith("lodash/") ||
-                    [
-                      "babel-plugin-dynamic-import-node/utils",
-                      "esutils",
-                      "semver",
-                      "source-map",
-                    ].includes(importee)
-                  );
+                  return ["semver", "source-map"].includes(importee);
                 },
               }),
               rollupCommonJs({

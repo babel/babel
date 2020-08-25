@@ -21,14 +21,12 @@ cd ../..
 #==============================================================================#
 
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
+# We only bump dependencies in the top-level package.json, because workspaces
+# already use the workspace: protocol so will get the version in the monorepo
+# and not from npm.
+node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 
-# Install dependencies in individual packages so that we can link them at the top level.
-# todo: remove `-- -- --ignore-engines` in Babel 8
-for package in eslint/*/; do yarn --ignore-engines --cwd $package; done
-
-yarn upgrade --scope @babel
-
-# Test
-make test-ci
+# Update deps, build and test
+make -j test-ci
 
 cleanup

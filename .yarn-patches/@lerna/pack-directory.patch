@@ -1,0 +1,92 @@
+diff --git a/lib/pack-directory.js b/lib/pack-directory.js
+index d46069c78..2ba6bfea1 100644
+--- a/lib/pack-directory.js
++++ b/lib/pack-directory.js
+@@ -2,13 +2,13 @@
+ 
+ const path = require("path");
+ const figgyPudding = require("figgy-pudding");
+-const packlist = require("npm-packlist");
+ const log = require("npmlog");
+-const tar = require("tar");
+ const tempWrite = require("temp-write");
+ const getPacked = require("@lerna/get-packed");
+ const Package = require("@lerna/package");
+ const runLifecycle = require("@lerna/run-lifecycle");
++const util = require("util");
++const exec = util.promisify(require('child_process').exec);
+ 
+ module.exports = packDirectory;
+ 
+@@ -40,34 +40,23 @@ function packDirectory(_pkg, dir, _opts) {
+     chain = chain.then(() => pkg.refresh());
+   }
+ 
+-  chain = chain.then(() => runLifecycle(pkg, "prepack", opts));
+-  chain = chain.then(() => pkg.refresh());
+-  chain = chain.then(() => packlist({ path: pkg.contents }));
+-  chain = chain.then(files =>
+-    tar.create(
+-      {
+-        cwd: pkg.contents,
+-        prefix: "package/",
+-        portable: true,
+-        // Provide a specific date in the 1980s for the benefit of zip,
+-        // which is confounded by files dated at the Unix epoch 0.
+-        mtime: new Date("1985-10-26T08:15:00.000Z"),
+-        gzip: true,
+-      },
+-      // NOTE: node-tar does some Magic Stuff depending on prefixes for files
+-      //       specifically with @ signs, so we just neutralize that one
+-      //       and any such future "features" by prepending `./`
+-      files.map(f => `./${f}`)
+-    )
++  // We need to call "yarn pack" to remove the "workspace:" protocol from
++  // package.json before publishing
++  chain = chain.then(() => tempWrite("", getTarballName(pkg)));
++  chain = chain.then(tarFilePath =>
++    exec("yarn pack --out " + tarFilePath, { cwd: pkg.location })
++      .then(({ stdout, stderr }) => {
++        const err = stderr.toString();
++        if (err) console.log(err);
++      })
++      .then(() => tarFilePath)
+   );
+-  chain = chain.then(stream => tempWrite(stream, getTarballName(pkg)));
+   chain = chain.then(tarFilePath =>
+-    getPacked(pkg, tarFilePath).then(packed =>
+-      Promise.resolve()
+-        .then(() => runLifecycle(pkg, "postpack", opts))
+-        .then(() => packed)
+-    )
++    Promise.resolve()
++      .then(() => pkg.refresh())
++      .then(() => tarFilePath)
+   );
++  chain = chain.then(tarFilePath => getPacked(pkg, tarFilePath));
+ 
+   return chain;
+ }
+@@ -81,3 +70,7 @@ function getTarballName(pkg) {
+ 
+   return `${name}-${pkg.version}.tgz`;
+ }
++
++function tap(fn) {
++  return arg => Promise.resolve(fn(arg)).then(() => arg);
++}
+\ No newline at end of file
+diff --git a/package.json b/package.json
+index e00ac73ff..953512b2c 100644
+--- a/package.json
++++ b/package.json
+@@ -31,9 +31,7 @@
+     "@lerna/package": "3.16.0",
+     "@lerna/run-lifecycle": "3.16.2",
+     "figgy-pudding": "^3.5.1",
+-    "npm-packlist": "^1.4.4",
+     "npmlog": "^4.1.2",
+-    "tar": "^4.4.10",
+     "temp-write": "^3.4.0"
+   },
+   "gitHead": "bb048cb306b5cfcb039aa98f667cf3751cf0ad20"

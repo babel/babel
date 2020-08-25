@@ -22,27 +22,29 @@ cd ../..
 
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 
-# Install dependencies in individual packages so that we can link them at the top level.
-# todo: remove `-- -- --ignore-engines` in Babel 8
-for package in eslint/*/; do yarn --ignore-engines --cwd $package; done
+node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
+(
+  yarn why @babel/core | grep -o "@babel/core@npm:.* (via npm:.*)";
+  yarn why @babel/helpers | grep -o "@babel/helpers@npm:.* (via npm:.*)";
+  yarn why @babel/traverse | grep -o "@babel/traverse@npm:.* (via npm:.*)"
+) | uniq | node -e "
+  var pkg = require('./package.json');
+  var packages = fs.readFileSync(0, 'utf8').trim().split('\n');
 
-yarn upgrade --scope @babel
+  pkg.devDependencies['@babel/core'] = '7.0.0';
 
-node -e "\
-  var pkg = require('./package.json');\
-  pkg.devDependencies['@babel/core'] = '7.0.0';\
-  Object.assign(pkg.resolutions, {\
-    '@babel/core': '7.0.0',\
-    '@babel/helpers': '7.0.0',\
-    '@babel/traverse': '7.0.0'\
-  });\
-  fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));\
+  packages.forEach(desc => {
+    const { name, specifier } = desc
+      .match(/(?<name>@babel\/[a-z]+).*\(via (?<specifier>npm:[^)]+)\)/)
+      .groups;
+    pkg.resolutions[name + '@' + specifier] = '7.0.0';
+  });
+
+  fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
 "
 
+# Update deps, build and test
 rm yarn.lock
-make bootstrap
-
-# Test
-make test-ci
+make -j test-ci
 
 cleanup

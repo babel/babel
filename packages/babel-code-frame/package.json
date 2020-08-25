@@ -15,7 +15,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/highlight": "^7.10.4"
+    "@babel/highlight": "workspace:^7.10.4"
   },
   "devDependencies": {
     "chalk": "^2.0.0",
