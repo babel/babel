@@ -30,7 +30,6 @@ matrix:
     - node_js: "node"
       env: JOB=lint
     # We test the latest version on circleci
-    - node_js: "13"
     # Move `windows` build to be the third since it is slow
     - os: windows
       node_js: "node"
@@ -43,9 +42,6 @@ matrix:
         directories:
           - $HOME/AppData/Local/Temp/chocolatey
           - $HOME/AppData/Local/Yarn/Berry/cache
-    # Continue node_js matrix
-    - node_js: "12"
-    - node_js: "10"
     - node_js: "node"
       env: JOB=babel-parser-flow-tests
     - node_js: "node"

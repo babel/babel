@@ -25,7 +25,7 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         env:
           YARN_ENABLE_SCRIPTS: false # disable post-install scripts
-          YARN_NODE_LINKER: pnp # use pnp linker for better performance: it meant to update yarn cache only
+          YARN_NODE_LINKER: pnp # use pnp linker for better performance: it's meant to update yarn cache only
         run: |
           yarn install --immutable
 
@@ -53,13 +53,45 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
-  legacy-node-version-test:
-    name: Test on Node.js
+  build:
+    name: Build Babel Artifacts
     needs: prepare-yarn-cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Build babel artifacts
+        run: |
+          BABEL_ENV=test-legacy make -j build-standalone-ci
+      - uses: actions/upload-artifact@v2
+        with:
+          name: babel-artifact
+          path: |
+            codemods/*/lib/**/*
+            eslint/*/lib/**/*
+            packages/*/lib/**/*
+            packages/babel-polyfill/dist/**/*
+            packages/babel-standalone/*.js
+            !**/node_modules/**
+
+  test:
+    name: Test on Node.js # GitHub will add ${{ matrix.node-version }} to this title
+    needs: build
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [6.x, 8.x]
+        node-version: [13, 12, 10, 8, 6]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -72,9 +104,15 @@ jobs:
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-      - name: Build
+      - name: Install
         run: |
-          BABEL_ENV=test-legacy make -j bootstrap
+          BABEL_ENV=test-legacy make -j bootstrap-only
+      - uses: actions/download-artifact@v2
+        with:
+          name: babel-artifact
+      - name: Generate runtime helpers
+        run: |
+          make build-plugin-transform-runtime-dist
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2-beta
         with:
