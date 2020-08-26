@@ -124,6 +124,7 @@ function buildRollup(packages) {
           .rollup({
             input,
             plugins: [
+              ...extraPlugins,
               rollupBabelSource(),
               rollupReplace({
                 "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
@@ -158,7 +159,6 @@ function buildRollup(packages) {
                 sourceMap: sourcemap,
                 include: "**/*.js",
               }),
-              ...extraPlugins,
             ],
           })
           .then(bundle => {
