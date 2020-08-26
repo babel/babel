@@ -101,7 +101,6 @@ function buildRollup(packages) {
             if (minify) {
               extraPlugins.push(
                 rollupTerser({
-                  include: /^.+\.min\.js$/,
                   // workaround https://bugs.webkit.org/show_bug.cgi?id=212725
                   output: {
                     ascii_only: true,
