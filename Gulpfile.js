@@ -10,14 +10,13 @@ const filter = require("gulp-filter");
 const gulp = require("gulp");
 const path = require("path");
 const rollup = require("rollup");
-const rollupBabel = require("rollup-plugin-babel");
+const rollupBabel = require("@rollup/plugin-babel").default;
 const rollupBabelSource = require("./scripts/rollup-plugin-babel-source");
-const rollupCommonJs = require("rollup-plugin-commonjs");
+const rollupCommonJs = require("@rollup/plugin-commonjs");
 const rollupJson = require("@rollup/plugin-json");
-const rollupNodeBuiltins = require("rollup-plugin-node-builtins");
-const rollupNodeGlobals = require("rollup-plugin-node-globals");
-const rollupNodeResolve = require("rollup-plugin-node-resolve");
-const rollupReplace = require("rollup-plugin-replace");
+const rollupNodePolyfills = require("rollup-plugin-node-polyfills");
+const rollupNodeResolve = require("@rollup/plugin-node-resolve").default;
+const rollupReplace = require("@rollup/plugin-replace");
 const { terser: rollupTerser } = require("rollup-plugin-terser");
 
 const defaultSourcesGlob = "./@(codemods|packages|eslint)/*/src/**/*.js";
@@ -102,7 +101,6 @@ function buildRollup(packages) {
             if (minify) {
               extraPlugins.push(
                 rollupTerser({
-                  include: /^.+\.min\.js$/,
                   // workaround https://bugs.webkit.org/show_bug.cgi?id=212725
                   output: {
                     ascii_only: true,
@@ -135,6 +133,7 @@ function buildRollup(packages) {
               rollupBabel({
                 envName: babelEnvName,
                 babelrc: false,
+                babelHelpers: "bundled",
                 extends: "./babel.config.js",
               }),
               rollupNodeResolve({
@@ -153,17 +152,12 @@ function buildRollup(packages) {
                   // Rollup doesn't read export maps, so it loads the cjs fallback
                   "packages/babel-compat-data/*.js",
                 ],
-                namedExports: {
-                  "babel-plugin-dynamic-import-node/utils.js": [
-                    "createDynamicImportTransform",
-                    "getImportSource",
-                  ],
-                  "@babel/standalone": ["availablePlugins", "registerPlugin"],
-                },
               }),
               rollupJson(),
-              rollupNodeBuiltins(),
-              rollupNodeGlobals({ sourceMap: sourcemap }),
+              rollupNodePolyfills({
+                sourceMap: sourcemap,
+                include: "**/*.js",
+              }),
             ],
           })
           .then(bundle => {
