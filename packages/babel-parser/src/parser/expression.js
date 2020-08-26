@@ -2118,7 +2118,8 @@ export default class ExpressionParser extends LValParser {
     this.state.inParameters = false;
 
     if (isExpression) {
-      node.body = this.parseMaybeAssignAllowIn();
+      // https://tc39.es/ecma262/#prod-ExpressionBody
+      node.body = this.parseMaybeAssign();
       this.checkParams(node, false, allowExpression, false);
     } else {
       const oldStrict = this.state.strict;
