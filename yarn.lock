@@ -145,7 +145,7 @@ __metadata:
     gensync: ^1.0.0-beta.2
     json5: ^2.1.2
     lodash: ^4.17.19
-    semver: ^5.4.1
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : 7.0.0"
     source-map: ^0.5.0
   languageName: unknown
   linkType: soft
@@ -168,7 +168,7 @@ __metadata:
     eslint: ^7.5.0
     eslint-scope: 5.1.0
     eslint-visitor-keys: ^1.3.0
-    semver: ^6.3.0
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : 7.0.0"
   peerDependencies:
     "@babel/core": ">=7.11.0"
     eslint: ">=7.5.0"
@@ -348,7 +348,7 @@ __metadata:
     "@babel/core": "workspace:*"
     "@babel/helper-validator-option": "workspace:^7.12.17"
     browserslist: ^4.14.5
-    semver: ^5.5.0
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : 7.0.0"
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -483,7 +483,7 @@ __metadata:
   resolution: "@babel/helper-fixtures@workspace:packages/babel-helper-fixtures"
   dependencies:
     lodash: ^4.17.19
-    semver: ^5.3.0
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : 7.0.0"
   languageName: unknown
   linkType: soft
 
@@ -2706,7 +2706,7 @@ __metadata:
     "@babel/template": "workspace:*"
     "@babel/types": "workspace:*"
     make-dir: ^2.1.0
-    semver: ^5.5.1
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : 7.0.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -3071,7 +3071,7 @@ __metadata:
     babel-plugin-polyfill-corejs3: ^0.1.0
     babel-plugin-polyfill-regenerator: ^0.1.0
     core-js-compat: ^3.9.0
-    semver: ^5.5.0
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : 7.0.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -9734,6 +9734,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"lru-cache@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "lru-cache@npm:6.0.0"
+  dependencies:
+    yallist: ^4.0.0
+  checksum: b8b78353d2391c0f135cdc245c4744ad41c2efb1a6d98f31bc57a2cf48ebf02de96e4876657c3026673576bf1f1f61fc3fdd77ab00ad1ead737537bf17d8019d
+  languageName: node
+  linkType: hard
+
 "magic-string@npm:^0.25.3, magic-string@npm:^0.25.5, magic-string@npm:^0.25.7":
   version: 0.25.7
   resolution: "magic-string@npm:0.25.7"
@@ -11839,6 +11848,26 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"semver-BABEL_8_BREAKING-false@npm:semver@7.0.0, semver@npm:7.0.0":
+  version: 7.0.0
+  resolution: "semver@npm:7.0.0"
+  bin:
+    semver: bin/semver.js
+  checksum: 5162b31e9902be1d51d63523eb21d28164d632f527cb0dc439a58d6eaf1a2f3c49c4e2a0f7cf8d650f673638ae34ac7e0c7c2048ff66bc5dc1298ef8551575b5
+  languageName: node
+  linkType: hard
+
+"semver-BABEL_8_BREAKING-true@npm:semver@^7.3.4":
+  version: 7.3.4
+  resolution: "semver@npm:7.3.4"
+  dependencies:
+    lru-cache: ^6.0.0
+  bin:
+    semver: bin/semver.js
+  checksum: f2c7f9aeb976d1484b2f39aa7afc8332a1d21fd32ca4a6fbf650e1423455ebf3e7029f6e2e7ba0cd71935b85942521f1ec25b6cc2c031b953c8ca4ff2d7a823d
+  languageName: node
+  linkType: hard
+
 "semver-compare@npm:^1.0.0":
   version: 1.0.0
   resolution: "semver-compare@npm:1.0.0"
@@ -11855,21 +11884,22 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"semver@npm:2 || 3 || 4 || 5, semver@npm:^5.3.0, semver@npm:^5.4.1, semver@npm:^5.5.0, semver@npm:^5.5.1, semver@npm:^5.6.0, semver@npm:^5.7.0":
+"semver@condition:BABEL_8_BREAKING ? ^7.3.4 : 7.0.0":
+  version: 0.0.0-condition-6bba4f
+  resolution: "semver@condition:BABEL_8_BREAKING?^7.3.4:7.0.0#6bba4f"
+  dependencies:
+    semver-BABEL_8_BREAKING-false: "npm:semver@7.0.0"
+    semver-BABEL_8_BREAKING-true: "npm:semver@^7.3.4"
+  checksum: 67856c5067bc7274fd47464243b87007ab56519042873ff1a8f0d26467b0b2fb83b48a3fc834a04ed594e99642f29987fefaa2bd471ecf526892cb3d1b74ab20
+  languageName: node
+  linkType: hard
+
+"semver@npm:2 || 3 || 4 || 5, semver@npm:^5.4.1, semver@npm:^5.5.0, semver@npm:^5.5.1, semver@npm:^5.6.0, semver@npm:^5.7.0":
   version: 5.7.1
   resolution: "semver@npm:5.7.1"
   bin:
     semver: ./bin/semver
   checksum: 06ff0ed753ebf741b7602be8faad620d6e160a2cb3f61019d00d919c8bca141638aa23c34da779b8595afdc9faa3678bfbb5f60366b6a4f65f98cf86605bbcdb
-  languageName: node
-  linkType: hard
-
-"semver@npm:7.0.0":
-  version: 7.0.0
-  resolution: "semver@npm:7.0.0"
-  bin:
-    semver: bin/semver.js
-  checksum: 5162b31e9902be1d51d63523eb21d28164d632f527cb0dc439a58d6eaf1a2f3c49c4e2a0f7cf8d650f673638ae34ac7e0c7c2048ff66bc5dc1298ef8551575b5
   languageName: node
   linkType: hard
 

@@ -22,7 +22,7 @@
   "dependencies": {
     "@babel/helper-module-imports": "workspace:^7.12.13",
     "@babel/helper-plugin-utils": "workspace:^7.12.13",
-    "semver": "^5.5.1"
+    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : 7.0.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
