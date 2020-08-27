@@ -45,7 +45,7 @@ __metadata:
     make-dir: ^2.1.0
     rimraf: ^3.0.0
     slash: ^2.0.0
-    source-map: ^0.5.0
+    source-map: ^0.6.1
   peerDependencies:
     "@babel/core": ^7.0.0-0
   dependenciesMeta:
@@ -145,7 +145,7 @@ __metadata:
     lodash: ^4.17.19
     resolve: ^1.3.2
     semver: ^5.4.1
-    source-map: ^0.5.0
+    source-map: ^0.6.1
   languageName: unknown
   linkType: soft
 
@@ -261,7 +261,7 @@ __metadata:
     "@babel/parser": "workspace:^7.11.4"
     "@babel/types": "workspace:^7.11.0"
     jsesc: ^2.5.1
-    source-map: ^0.5.0
+    source-map: ^0.6.1
   languageName: unknown
   linkType: soft
 
@@ -777,7 +777,7 @@ __metadata:
     lodash: ^4.17.19
     quick-lru: 5.1.0
     resolve: ^1.3.2
-    source-map: ^0.5.0
+    source-map: ^0.6.1
   languageName: unknown
   linkType: soft
 
