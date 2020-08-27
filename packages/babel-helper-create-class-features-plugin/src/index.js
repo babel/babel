@@ -1,3 +1,4 @@
+import { types as t } from "@babel/core";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import {
@@ -129,7 +130,7 @@ export function createClassFeaturePlugin({
           nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
         } else {
-          ref = path.node.id;
+          ref = t.cloneNode(path.node.id);
         }
 
         // NODE: These three functions don't support decorators yet,

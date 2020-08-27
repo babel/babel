@@ -10,13 +10,13 @@ const filter = require("gulp-filter");
 const gulp = require("gulp");
 const path = require("path");
 const rollup = require("rollup");
-const rollupBabel = require("rollup-plugin-babel");
+const rollupBabel = require("@rollup/plugin-babel").default;
 const rollupBabelSource = require("./scripts/rollup-plugin-babel-source");
-const rollupCommonJs = require("rollup-plugin-commonjs");
+const rollupCommonJs = require("@rollup/plugin-commonjs");
 const rollupJson = require("@rollup/plugin-json");
 const rollupNodePolyfills = require("rollup-plugin-node-polyfills");
-const rollupNodeResolve = require("rollup-plugin-node-resolve");
-const rollupReplace = require("rollup-plugin-replace");
+const rollupNodeResolve = require("@rollup/plugin-node-resolve").default;
+const rollupReplace = require("@rollup/plugin-replace");
 const { terser: rollupTerser } = require("rollup-plugin-terser");
 
 const defaultSourcesGlob = "./@(codemods|packages|eslint)/*/src/**/*.js";
@@ -68,7 +68,14 @@ function buildBabel(exclude, sourcesGlob = defaultSourcesGlob) {
     .pipe(errorsLogger())
     .pipe(newer({ dest: base, map: swapSrcWithLib }))
     .pipe(compilationLogger())
-    .pipe(babel())
+    .pipe(
+      babel({
+        caller: {
+          // We have wrapped packages/babel-core/src/config/files/configuration.js with feature detection
+          supportsDynamicImport: true,
+        },
+      })
+    )
     .pipe(
       // Passing 'file.relative' because newer() above uses a relative
       // path and this keeps it consistent.
@@ -94,7 +101,6 @@ function buildRollup(packages) {
             if (minify) {
               extraPlugins.push(
                 rollupTerser({
-                  include: /^.+\.min\.js$/,
                   // workaround https://bugs.webkit.org/show_bug.cgi?id=212725
                   output: {
                     ascii_only: true,
@@ -127,22 +133,15 @@ function buildRollup(packages) {
               rollupBabel({
                 envName: babelEnvName,
                 babelrc: false,
+                babelHelpers: "bundled",
                 extends: "./babel.config.js",
               }),
               rollupNodeResolve({
                 browser: nodeResolveBrowser,
                 preferBuiltins: true,
-                //todo: When Yarn workspaces is enabled, remove `dedupe` option
+                //todo: remove when semver and source-map are bumped to latest versions
                 dedupe(importee) {
-                  return (
-                    importee.startsWith("lodash/") ||
-                    [
-                      "babel-plugin-dynamic-import-node/utils",
-                      "esutils",
-                      "semver",
-                      "source-map",
-                    ].includes(importee)
-                  );
+                  return ["semver", "source-map"].includes(importee);
                 },
               }),
               rollupCommonJs({
@@ -153,13 +152,6 @@ function buildRollup(packages) {
                   // Rollup doesn't read export maps, so it loads the cjs fallback
                   "packages/babel-compat-data/*.js",
                 ],
-                namedExports: {
-                  "babel-plugin-dynamic-import-node/utils.js": [
-                    "createDynamicImportTransform",
-                    "getImportSource",
-                  ],
-                  "@babel/standalone": ["availablePlugins", "registerPlugin"],
-                },
               }),
               rollupJson(),
               rollupNodePolyfills({

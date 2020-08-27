@@ -5,7 +5,11 @@ language: node_js
 cache:
   npm: false
   directories:
+<<<<<<< HEAD
     - .yarn/cache
+=======
+    - ~/.yarn/berry/cache
+>>>>>>> main
 
 os: linux
 
@@ -30,7 +34,6 @@ matrix:
     - node_js: "node"
       env: JOB=lint
     # We test the latest version on circleci
-    - node_js: "13"
     # Move `windows` build to be the third since it is slow
     - os: windows
       node_js: "node"
@@ -42,10 +45,7 @@ matrix:
         npm: false
         directories:
           - $HOME/AppData/Local/Temp/chocolatey
-          - .yarn/cache
-    # Continue node_js matrix
-    - node_js: "12"
-    - node_js: "10"
+          - $HOME/AppData/Local/Yarn/Berry/cache
     - node_js: "node"
       env: JOB=babel-parser-flow-tests
     - node_js: "node"

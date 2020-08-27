@@ -1,6 +1,5 @@
 import * as virtualTypes from "./path/lib/virtual-types";
 import * as t from "@babel/types";
-import clone from "lodash/clone";
 
 /**
  * explode() will take a visitor object with all of the various shorthands
@@ -106,7 +105,7 @@ export function explode(visitor) {
       if (existing) {
         mergePair(existing, fns);
       } else {
-        visitor[alias] = clone(fns);
+        visitor[alias] = { ...fns };
       }
     }
   }
@@ -275,7 +274,13 @@ function shouldIgnoreKey(key) {
   if (key === "enter" || key === "exit" || key === "shouldSkip") return true;
 
   // ignore other options
-  if (key === "blacklist" || key === "noScope" || key === "skipKeys") {
+  if (
+    key === "denylist" ||
+    key === "noScope" ||
+    key === "skipKeys" ||
+    // TODO: Remove in Babel 8
+    key === "blacklist"
+  ) {
     return true;
   }
 

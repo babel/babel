@@ -12,7 +12,7 @@ export default function rewriteLiveReferences(
   const imported = new Map();
   const exported = new Map();
   const requeueInParent = path => {
-    // Manualy re-queue `exports.default =` expressions so that the ES3
+    // Manually re-queue `exports.default =` expressions so that the ES3
     // transform has an opportunity to convert them. Ideally this would
     // happen automatically from the replaceWith above. See #4140 for
     // more info.
@@ -337,7 +337,9 @@ const rewriteReferencesVisitor = {
       path
         .get("left")
         .replaceWith(
-          t.variableDeclaration("let", [t.variableDeclarator(newLoopId)]),
+          t.variableDeclaration("let", [
+            t.variableDeclarator(t.cloneNode(newLoopId)),
+          ]),
         );
       scope.registerDeclaration(path.get("left"));
     }

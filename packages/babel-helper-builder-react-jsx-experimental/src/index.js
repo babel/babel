@@ -457,7 +457,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     }
 
     return makeTrace(
-      state.fileNameIdentifier,
+      t.cloneNode(state.fileNameIdentifier),
       location.start.line,
       location.start.column,
     );

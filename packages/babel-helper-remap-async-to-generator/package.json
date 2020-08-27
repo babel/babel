@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-remap-async-to-generator",
-  "version": "7.10.4",
+  "version": "7.11.4",
   "description": "Helper function to remap async functions to generators",
   "repository": {
     "type": "git",
@@ -16,7 +16,9 @@
     "@babel/helper-annotate-as-pure": "workspace:^7.10.4",
     "@babel/helper-wrap-function": "workspace:^7.10.4",
     "@babel/template": "workspace:^7.10.4",
-    "@babel/traverse": "workspace:^7.10.4",
     "@babel/types": "workspace:^7.10.4"
+  },
+  "devDependencies": {
+    "@babel/traverse": "workspace:^7.10.4"
   }
 }

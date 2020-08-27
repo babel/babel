@@ -203,6 +203,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       this.next();
       this.takeDecorators(node);
+      const oldStrict = this.state.strict;
 
       const placeholder = this.parsePlaceholder("Identifier");
       if (placeholder) {
@@ -226,7 +227,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.parseClassSuper(node);
       node.body =
         this.parsePlaceholder("ClassBody") ||
-        this.parseClassBody(!!node.superClass);
+        this.parseClassBody(!!node.superClass, oldStrict);
       return this.finishNode(node, type);
     }
 

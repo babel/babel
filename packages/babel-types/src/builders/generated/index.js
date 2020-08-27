@@ -305,6 +305,30 @@ export function YieldExpression(...args: Array<any>): Object {
   return builder("YieldExpression", ...args);
 }
 export { YieldExpression as yieldExpression };
+export function AwaitExpression(...args: Array<any>): Object {
+  return builder("AwaitExpression", ...args);
+}
+export { AwaitExpression as awaitExpression };
+export function Import(...args: Array<any>): Object {
+  return builder("Import", ...args);
+}
+export { Import as import };
+export function BigIntLiteral(...args: Array<any>): Object {
+  return builder("BigIntLiteral", ...args);
+}
+export { BigIntLiteral as bigIntLiteral };
+export function ExportNamespaceSpecifier(...args: Array<any>): Object {
+  return builder("ExportNamespaceSpecifier", ...args);
+}
+export { ExportNamespaceSpecifier as exportNamespaceSpecifier };
+export function OptionalMemberExpression(...args: Array<any>): Object {
+  return builder("OptionalMemberExpression", ...args);
+}
+export { OptionalMemberExpression as optionalMemberExpression };
+export function OptionalCallExpression(...args: Array<any>): Object {
+  return builder("OptionalCallExpression", ...args);
+}
+export { OptionalCallExpression as optionalCallExpression };
 export function AnyTypeAnnotation(...args: Array<any>): Object {
   return builder("AnyTypeAnnotation", ...args);
 }
@@ -633,10 +657,6 @@ export function ArgumentPlaceholder(...args: Array<any>): Object {
   return builder("ArgumentPlaceholder", ...args);
 }
 export { ArgumentPlaceholder as argumentPlaceholder };
-export function AwaitExpression(...args: Array<any>): Object {
-  return builder("AwaitExpression", ...args);
-}
-export { AwaitExpression as awaitExpression };
 export function BindExpression(...args: Array<any>): Object {
   return builder("BindExpression", ...args);
 }
@@ -645,10 +665,6 @@ export function ClassProperty(...args: Array<any>): Object {
   return builder("ClassProperty", ...args);
 }
 export { ClassProperty as classProperty };
-export function OptionalMemberExpression(...args: Array<any>): Object {
-  return builder("OptionalMemberExpression", ...args);
-}
-export { OptionalMemberExpression as optionalMemberExpression };
 export function PipelineTopicExpression(...args: Array<any>): Object {
   return builder("PipelineTopicExpression", ...args);
 }
@@ -661,10 +677,6 @@ export function PipelinePrimaryTopicReference(...args: Array<any>): Object {
   return builder("PipelinePrimaryTopicReference", ...args);
 }
 export { PipelinePrimaryTopicReference as pipelinePrimaryTopicReference };
-export function OptionalCallExpression(...args: Array<any>): Object {
-  return builder("OptionalCallExpression", ...args);
-}
-export { OptionalCallExpression as optionalCallExpression };
 export function ClassPrivateProperty(...args: Array<any>): Object {
   return builder("ClassPrivateProperty", ...args);
 }
@@ -673,10 +685,6 @@ export function ClassPrivateMethod(...args: Array<any>): Object {
   return builder("ClassPrivateMethod", ...args);
 }
 export { ClassPrivateMethod as classPrivateMethod };
-export function Import(...args: Array<any>): Object {
-  return builder("Import", ...args);
-}
-export { Import as import };
 export function ImportAttribute(...args: Array<any>): Object {
   return builder("ImportAttribute", ...args);
 }
@@ -693,18 +701,10 @@ export function ExportDefaultSpecifier(...args: Array<any>): Object {
   return builder("ExportDefaultSpecifier", ...args);
 }
 export { ExportDefaultSpecifier as exportDefaultSpecifier };
-export function ExportNamespaceSpecifier(...args: Array<any>): Object {
-  return builder("ExportNamespaceSpecifier", ...args);
-}
-export { ExportNamespaceSpecifier as exportNamespaceSpecifier };
 export function PrivateName(...args: Array<any>): Object {
   return builder("PrivateName", ...args);
 }
 export { PrivateName as privateName };
-export function BigIntLiteral(...args: Array<any>): Object {
-  return builder("BigIntLiteral", ...args);
-}
-export { BigIntLiteral as bigIntLiteral };
 export function RecordExpression(...args: Array<any>): Object {
   return builder("RecordExpression", ...args);
 }
@@ -713,6 +713,10 @@ export function TupleExpression(...args: Array<any>): Object {
   return builder("TupleExpression", ...args);
 }
 export { TupleExpression as tupleExpression };
+export function DecimalLiteral(...args: Array<any>): Object {
+  return builder("DecimalLiteral", ...args);
+}
+export { DecimalLiteral as decimalLiteral };
 export function TSParameterProperty(...args: Array<any>): Object {
   return builder("TSParameterProperty", ...args);
 }
@@ -841,6 +845,10 @@ export function TSRestType(...args: Array<any>): Object {
   return builder("TSRestType", ...args);
 }
 export { TSRestType as tsRestType };
+export function TSNamedTupleMember(...args: Array<any>): Object {
+  return builder("TSNamedTupleMember", ...args);
+}
+export { TSNamedTupleMember as tsNamedTupleMember };
 export function TSUnionType(...args: Array<any>): Object {
   return builder("TSUnionType", ...args);
 }
@@ -961,23 +969,23 @@ export function NumberLiteral(...args: Array<any>): Object {
   console.trace(
     "The node type NumberLiteral has been renamed to NumericLiteral",
   );
-  return NumberLiteral("NumberLiteral", ...args);
+  return builder("NumberLiteral", ...args);
 }
 export { NumberLiteral as numberLiteral };
 export function RegexLiteral(...args: Array<any>): Object {
   console.trace("The node type RegexLiteral has been renamed to RegExpLiteral");
-  return RegexLiteral("RegexLiteral", ...args);
+  return builder("RegexLiteral", ...args);
 }
 export { RegexLiteral as regexLiteral };
 export function RestProperty(...args: Array<any>): Object {
   console.trace("The node type RestProperty has been renamed to RestElement");
-  return RestProperty("RestProperty", ...args);
+  return builder("RestProperty", ...args);
 }
 export { RestProperty as restProperty };
 export function SpreadProperty(...args: Array<any>): Object {
   console.trace(
     "The node type SpreadProperty has been renamed to SpreadElement",
   );
-  return SpreadProperty("SpreadProperty", ...args);
+  return builder("SpreadProperty", ...args);
 }
 export { SpreadProperty as spreadProperty };

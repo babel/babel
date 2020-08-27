@@ -79,6 +79,7 @@ export default declare(
         if (node.optional) node.optional = null;
         if (node.typeAnnotation) node.typeAnnotation = null;
         if (node.definite) node.definite = null;
+        if (node.declare) node.declare = null;
       },
       method({ node }) {
         if (node.accessibility) node.accessibility = null;
@@ -120,7 +121,8 @@ export default declare(
               );
             }
 
-            return template.statement.ast`this.${id} = ${id}`;
+            return template.statement.ast`
+              this.${t.cloneNode(id)} = ${t.cloneNode(id)}`;
           });
 
           injectInitialization(classPath, path, assigns);
@@ -402,6 +404,10 @@ export default declare(
         },
 
         CallExpression(path) {
+          path.node.typeParameters = null;
+        },
+
+        OptionalCallExpression(path) {
           path.node.typeParameters = null;
         },
 

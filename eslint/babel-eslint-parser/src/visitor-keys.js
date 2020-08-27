@@ -1,15 +1,22 @@
 import { types as t } from "@babel/core";
 import { KEYS as ESLINT_VISITOR_KEYS } from "eslint-visitor-keys";
 
-const { VISITOR_KEYS: BABEL_VISITOR_KEYS } = t;
+// AST Types that are not presented in Babel AST
+export const newTypes = {
+  ChainExpression: ESLINT_VISITOR_KEYS.ChainExpression,
+  ImportExpression: ESLINT_VISITOR_KEYS.ImportExpression,
+  Literal: ESLINT_VISITOR_KEYS.Literal,
+  MethodDefinition: ["decorators"].concat(ESLINT_VISITOR_KEYS.MethodDefinition),
+  Property: ["decorators"].concat(ESLINT_VISITOR_KEYS.Property),
+};
 
-export default Object.assign(
-  {
-    Literal: ESLINT_VISITOR_KEYS.Literal,
-    MethodDefinition: ["decorators"].concat(
-      ESLINT_VISITOR_KEYS.MethodDefinition,
-    ),
-    Property: ["decorators"].concat(ESLINT_VISITOR_KEYS.Property),
-  },
-  BABEL_VISITOR_KEYS,
-);
+// AST Types that shares `"type"` property with Babel but have different shape
+export const conflictTypes = {
+  // todo: remove this when class features are supported
+  ClassPrivateMethod: ["decorators"].concat(
+    ESLINT_VISITOR_KEYS.MethodDefinition,
+  ),
+  ExportAllDeclaration: ESLINT_VISITOR_KEYS.ExportAllDeclaration,
+};
+
+export default { ...newTypes, ...t.VISITOR_KEYS, ...conflictTypes };

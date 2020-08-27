@@ -53,7 +53,8 @@ function isOptionalCallExpression(node) {
   return (
     !!node &&
     node.type === "ExpressionStatement" &&
-    node.expression.type === "OptionalCallExpression"
+    node.expression.type === "ChainExpression" &&
+    node.expression.expression.type === "CallExpression"
   );
 }
 

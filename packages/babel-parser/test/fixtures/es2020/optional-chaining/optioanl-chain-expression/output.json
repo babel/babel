@@ -39,6 +39,7 @@
             "computed": false,
             "optional": true
           },
+          "optional": false,
           "arguments": []
         }
       }

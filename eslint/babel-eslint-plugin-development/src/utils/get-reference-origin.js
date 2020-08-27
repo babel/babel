@@ -21,7 +21,7 @@ type ReferenceOrigin =
 // Given a node and a context, returns a description of where its value comes
 // from.
 // It resolves imports, parameters of exported functions and property accesses.
-// See the ReferenceOrigin type for more informations.
+// See the ReferenceOrigin type for more information.
 export default function getReferenceOrigin(
   node,
   scope,

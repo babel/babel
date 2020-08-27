@@ -2,12 +2,14 @@ const readdir = require("fs-readdir-recursive");
 const helper = require("@babel/helper-fixtures");
 const rimraf = require("rimraf");
 const child = require("child_process");
+const escapeRegExp = require("lodash/escapeRegExp");
 const merge = require("lodash/merge");
 const path = require("path");
 const fs = require("fs");
 
 const fixtureLoc = path.join(__dirname, "fixtures");
 const tmpLoc = path.join(__dirname, "tmp");
+const rootDir = path.resolve(__dirname, "../../..");
 
 const fileFilter = function (x) {
   return x !== ".DS_Store";
@@ -18,12 +20,12 @@ const outputFileSync = function (filePath, data) {
   fs.writeFileSync(filePath, data);
 };
 
-const presetLocs = [path.join(__dirname, "../../babel-preset-react")];
+const presetLocs = [path.join(rootDir, "./packages/babel-preset-react")];
 
 const pluginLocs = [
-  path.join(__dirname, "/../../babel-plugin-transform-arrow-functions"),
-  path.join(__dirname, "/../../babel-plugin-transform-strict-mode"),
-  path.join(__dirname, "/../../babel-plugin-transform-modules-commonjs"),
+  path.join(rootDir, "./packages/babel-plugin-transform-arrow-functions"),
+  path.join(rootDir, "./packages/babel-plugin-transform-strict-mode"),
+  path.join(rootDir, "./packages/babel-plugin-transform-modules-commonjs"),
 ].join(",");
 
 const readDir = function (loc, filter) {
@@ -49,13 +51,21 @@ const saveInFiles = function (files) {
 };
 
 const normalizeOutput = function (str, cwd) {
-  let prev;
-  do {
-    prev = str;
-    str = str.replace(cwd, "<CWD>");
-  } while (str !== prev);
-
-  return str.replace(/\(\d+ms\)/g, "(123ms)");
+  let result = str
+    .replace(/\(\d+ms\)/g, "(123ms)")
+    .replace(new RegExp(escapeRegExp(cwd), "g"), "<CWD>")
+    // (non-win32) /foo/babel/packages -> <CWD>/packages
+    // (win32) C:\foo\babel\packages -> <CWD>\packages
+    .replace(new RegExp(escapeRegExp(rootDir), "g"), "<ROOTDIR>");
+  if (process.platform === "win32") {
+    result = result
+      // C:\\foo\\babel\\packages -> <CWD>\\packages (in js string literal)
+      .replace(
+        new RegExp(escapeRegExp(rootDir.replace(/\\/g, "\\\\")), "g"),
+        "<ROOTDIR>",
+      );
+  }
+  return result;
 };
 
 const assertTest = function (stdout, stderr, opts, cwd) {
@@ -131,8 +141,9 @@ const buildTest = function (binName, testName, opts) {
     }
 
     args = args.concat(opts.args);
+    const env = { ...process.env, ...opts.env };
 
-    const spawn = child.spawn(process.execPath, args);
+    const spawn = child.spawn(process.execPath, args, { env });
 
     let stderr = "";
     let stdout = "";

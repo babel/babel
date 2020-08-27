@@ -4,7 +4,6 @@ import fs from "fs";
 
 import commander from "commander";
 import { version } from "@babel/core";
-import uniq from "lodash/uniq";
 import glob from "glob";
 
 import pkg from "../../package.json";
@@ -195,7 +194,7 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     return globbed.concat(files);
   }, []);
 
-  filenames = uniq(filenames);
+  filenames = Array.from(new Set(filenames));
 
   filenames.forEach(function (filename) {
     if (!fs.existsSync(filename)) {

@@ -31,6 +31,12 @@ const pluginNameMap = {
       url: "https://git.io/JvpRG",
     },
   },
+  decimal: {
+    syntax: {
+      name: "@babel/plugin-syntax-decimal",
+      url: "https://git.io/JfKOH",
+    },
+  },
   decorators: {
     syntax: {
       name: "@babel/plugin-syntax-decorators",
@@ -105,16 +111,6 @@ const pluginNameMap = {
     transform: {
       name: "@babel/preset-react",
       url: "https://git.io/JfeDR",
-    },
-  },
-  logicalAssignment: {
-    syntax: {
-      name: "@babel/plugin-syntax-logical-assignment-operators",
-      url: "https://git.io/vAlBp",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-logical-assignment-operators",
-      url: "https://git.io/vAlRe",
     },
   },
   moduleAttributes: {

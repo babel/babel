@@ -13,6 +13,25 @@ function getPath(code) {
   return path;
 }
 
+function addDeoptTest(code, type, expectedType) {
+  it(type + " deopt: " + code, function () {
+    const visitor = {};
+
+    visitor[type] = function (path) {
+      const evaluate = path.evaluate();
+      expect(evaluate.confident).toBeFalsy();
+      expect(evaluate.deopt.type).toEqual(expectedType);
+    };
+
+    traverse(
+      parse(code, {
+        plugins: ["*"],
+      }),
+      visitor,
+    );
+  });
+}
+
 describe("evaluation", function () {
   describe("evaluateTruthy", function () {
     it("it should work with null", function () {
@@ -228,4 +247,8 @@ describe("evaluation", function () {
     expect(result.deopt).toBeNull();
     expect(result.value).toEqual(["foo", "bar"]);
   });
+
+  addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
+  addDeoptTest("({[a + 'b']: 1})", "ObjectExpression", "Identifier");
+  addDeoptTest("[{a}]", "ArrayExpression", "Identifier");
 });

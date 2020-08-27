@@ -1,4 +1,5 @@
 import { types as t, traverse } from "@babel/core";
+import { newTypes, conflictTypes } from "../visitor-keys";
 
 function convertNodes(ast, code) {
   const astTransformVisitor = {
@@ -80,22 +81,31 @@ function convertNodes(ast, code) {
     },
   };
   const state = { source: code };
+  const oldVisitorKeys = new Map();
 
-  // Monkey patch visitor keys in order to be able to traverse the estree nodes
-  t.VISITOR_KEYS.Property = t.VISITOR_KEYS.ObjectProperty;
-  t.VISITOR_KEYS.MethodDefinition = [
-    "key",
-    "value",
-    "decorators",
-    "returnType",
-    "typeParameters",
-  ];
+  try {
+    for (const [type, visitorKey] of Object.entries(conflictTypes)) {
+      // backup conflicted visitor keys
+      oldVisitorKeys.set(type, t.VISITOR_KEYS[type]);
 
-  traverse(ast, astTransformVisitor, null, state);
+      t.VISITOR_KEYS[type] = visitorKey;
+    }
+    for (const [type, visitorKey] of Object.entries(newTypes)) {
+      t.VISITOR_KEYS[type] = visitorKey;
+    }
 
-  // These can be safely deleted because they are not defined in the original visitor keys.
-  delete t.VISITOR_KEYS.Property;
-  delete t.VISITOR_KEYS.MethodDefinition;
+    traverse(ast, astTransformVisitor, null, state);
+  } finally {
+    // These can be safely deleted because they are not defined in the original visitor keys.
+    for (const type of Object.keys(newTypes)) {
+      delete t.VISITOR_KEYS[type];
+    }
+
+    // These should be restored
+    for (const type of Object.keys(conflictTypes)) {
+      t.VISITOR_KEYS[type] = oldVisitorKeys.get(type);
+    }
+  }
 }
 
 function convertProgramNode(ast) {

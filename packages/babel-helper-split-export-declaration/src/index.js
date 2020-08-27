@@ -2,7 +2,7 @@ import * as t from "@babel/types";
 
 export default function splitExportDeclaration(exportDeclaration) {
   if (!exportDeclaration.isExportDeclaration()) {
-    throw new Error("Only export declarations can be splitted.");
+    throw new Error("Only export declarations can be split.");
   }
 
   // build specifiers that point back to this export declaration

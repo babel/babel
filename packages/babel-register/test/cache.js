@@ -31,6 +31,7 @@ function resetCache() {
 describe("@babel/register - caching", () => {
   describe("cache", () => {
     let load, get, save;
+    let consoleWarnSpy;
 
     beforeEach(() => {
       // Since lib/cache is a singleton we need to fully reload it
@@ -40,9 +41,14 @@ describe("@babel/register - caching", () => {
       load = cache.load;
       get = cache.get;
       save = cache.save;
+
+      consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
     });
 
-    afterEach(cleanCache);
+    afterEach(() => {
+      cleanCache();
+      consoleWarnSpy.mockRestore();
+    });
     afterAll(resetCache);
 
     it("should load and get cached data", () => {
@@ -88,10 +94,12 @@ describe("@babel/register - caching", () => {
     if (process.platform !== "win32") {
       it("should be disabled when CACHE_PATH is not allowed to read", () => {
         writeCache({ foo: "bar" }, 0o266);
-
         load();
 
         expect(get()).toEqual({});
+        expect(consoleWarnSpy.mock.calls[0][0]).toContain(
+          "Babel could not read cache file",
+        );
       });
     }
 
@@ -104,6 +112,9 @@ describe("@babel/register - caching", () => {
       process.nextTick(() => {
         load();
         expect(get()).toEqual({});
+        expect(consoleWarnSpy.mock.calls[0][0]).toContain(
+          "Babel could not write cache to file",
+        );
         cb();
       });
     });
