@@ -3700,7 +3700,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna/child-process@npm:3.16.5, @lerna/child-process@npm:^3.3.0":
+"@lerna/child-process@npm:3.16.5":
   version: 3.16.5
   resolution: "@lerna/child-process@npm:3.16.5"
   dependencies:
@@ -3752,15 +3752,15 @@ __metadata:
   linkType: hard
 
 "@lerna/collect-updates@npm:3.18.0":
-  version: 3.16.0
-  resolution: "@lerna/collect-updates@https://github.com/babel/lerna.git#commit:ae87fff020c5ad00366878c14b749e8ee0a34145"
+  version: 3.18.0
+  resolution: "@lerna/collect-updates@npm:3.18.0"
   dependencies:
-    "@lerna/child-process": ^3.3.0
-    "@lerna/describe-ref": ^3.6.0
+    "@lerna/child-process": 3.16.5
+    "@lerna/describe-ref": 3.16.5
     minimatch: ^3.0.4
     npmlog: ^4.1.2
     slash: ^2.0.0
-  checksum: a5c9d138ee4c04dfbd4b508ce38bbcc0587ed4466a5c53d740a629cf209d480038f739bf82e93080d2399b871030e4694bce85e63061590429878c09f9a4190b
+  checksum: 6b9814e1f20061fb4bd3a2479be7fd3421f234a2aa632b710a4c93e30e1ce71e6f32b3e4966721013376e0134856ecc78ea8f784e142e9347906a5fede452da0
   languageName: node
   linkType: hard
 
@@ -3851,7 +3851,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna/describe-ref@npm:3.16.5, @lerna/describe-ref@npm:^3.6.0":
+"@lerna/describe-ref@npm:3.16.5":
   version: 3.16.5
   resolution: "@lerna/describe-ref@npm:3.16.5"
   dependencies:
