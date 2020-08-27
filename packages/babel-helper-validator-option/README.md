@@ -1,6 +1,6 @@
 # @babel/helper-validator-option
 
-> Validate identifier/keywords name
+> Validate plugin/preset options
 
 See our website [@babel/helper-validator-option](https://babeljs.io/docs/en/next/babel-helper-validator-option.html) for more information.
 
