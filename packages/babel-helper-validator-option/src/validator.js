@@ -32,9 +32,9 @@ export class OptionValidator {
   // until we have to support `validateNumberOption`.
   validateBooleanOption(
     name: string,
-    value?: string,
-    defaultValue?: string,
-  ): string | void {
+    value?: boolean,
+    defaultValue?: boolean,
+  ): boolean | void {
     if (value === undefined) {
       value = defaultValue;
     } else {
