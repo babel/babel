@@ -3700,7 +3700,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna/child-process@npm:3.16.5, @lerna/child-process@npm:^3.3.0":
+"@lerna/child-process@npm:3.16.5":
   version: 3.16.5
   resolution: "@lerna/child-process@npm:3.16.5"
   dependencies:
@@ -3752,15 +3752,15 @@ __metadata:
   linkType: hard
 
 "@lerna/collect-updates@npm:3.18.0":
-  version: 3.16.0
-  resolution: "@lerna/collect-updates@https://github.com/babel/lerna.git#commit:ae87fff020c5ad00366878c14b749e8ee0a34145"
+  version: 3.18.0
+  resolution: "@lerna/collect-updates@npm:3.18.0"
   dependencies:
-    "@lerna/child-process": ^3.3.0
-    "@lerna/describe-ref": ^3.6.0
+    "@lerna/child-process": 3.16.5
+    "@lerna/describe-ref": 3.16.5
     minimatch: ^3.0.4
     npmlog: ^4.1.2
     slash: ^2.0.0
-  checksum: a5c9d138ee4c04dfbd4b508ce38bbcc0587ed4466a5c53d740a629cf209d480038f739bf82e93080d2399b871030e4694bce85e63061590429878c09f9a4190b
+  checksum: 6b9814e1f20061fb4bd3a2479be7fd3421f234a2aa632b710a4c93e30e1ce71e6f32b3e4966721013376e0134856ecc78ea8f784e142e9347906a5fede452da0
   languageName: node
   linkType: hard
 
@@ -3851,7 +3851,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna/describe-ref@npm:3.16.5, @lerna/describe-ref@npm:^3.6.0":
+"@lerna/describe-ref@npm:3.16.5":
   version: 3.16.5
   resolution: "@lerna/describe-ref@npm:3.16.5"
   dependencies:
@@ -5728,7 +5728,6 @@ __metadata:
     babel-plugin-transform-charcodes: ^0.2.0
     chalk: ^2.4.2
     charcodes: ^0.2.0
-    enhanced-resolve: ^3.0.0
     eslint: ^7.5.0
     eslint-import-resolver-node: ^0.3.3
     eslint-plugin-flowtype: ^4.6.0
@@ -7708,18 +7707,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^3.0.0":
-  version: 3.4.1
-  resolution: "enhanced-resolve@npm:3.4.1"
-  dependencies:
-    graceful-fs: ^4.1.2
-    memory-fs: ^0.4.0
-    object-assign: ^4.0.1
-    tapable: ^0.2.7
-  checksum: a0d5518b180a526639b7b9ae9eace58998cfd068e4e3bd0a76b099ed0ad366e3b9d04e8796772451f272e3a307d2b913a3792017bb55b3c249384a0dc2efaaa2
-  languageName: node
-  linkType: hard
-
 "enquirer@npm:^2.3.5":
   version: 2.3.6
   resolution: "enquirer@npm:2.3.6"
@@ -7747,17 +7734,6 @@ __metadata:
   version: 1.1.2
   resolution: "err-code@npm:1.1.2"
   checksum: 9e6bcdc90de83b1f30e312a7c7db38e6c50cbea0771e8b9f7301506e09df543ce29b4ed147ec528c1c072fb5561be7651b902b085338237682c8d0ac496e759c
-  languageName: node
-  linkType: hard
-
-"errno@npm:^0.1.3":
-  version: 0.1.7
-  resolution: "errno@npm:0.1.7"
-  dependencies:
-    prr: ~1.0.1
-  bin:
-    errno: ./cli.js
-  checksum: 3d2da6fa1e3826dead7e06476cb4219555e8492c4ba8e0c40b2dc333e9b52e33223a414a394d7b9f18f82740aa69861c5fcef5b80798f08ff903c7c78916ce14
   languageName: node
   linkType: hard
 
@@ -11651,16 +11627,6 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"memory-fs@npm:^0.4.0":
-  version: 0.4.1
-  resolution: "memory-fs@npm:0.4.1"
-  dependencies:
-    errno: ^0.1.3
-    readable-stream: ^2.0.1
-  checksum: ba79207118e62d7e3d13b6a00c1b0508b506a7f281e26c5efcc85e7ba0c9e11eda36a242b42f07067367c4b8547b1e905096293fa65dc6b3dbdd8f825b787dd9
-  languageName: node
-  linkType: hard
-
 "meow@npm:^3.3.0":
   version: 3.7.0
   resolution: "meow@npm:3.7.0"
@@ -13394,13 +13360,6 @@ fsevents@~2.1.2:
   dependencies:
     genfun: ^5.0.0
   checksum: 457d23035d5199f63f93c2d98ece54a9b4fb77c04360a41b84b93f119740ae75a587b5a6e8760bbc150ae0e72f1e26bac6926ea7cea39293f3633f7dd1d19984
-  languageName: node
-  linkType: hard
-
-"prr@npm:~1.0.1":
-  version: 1.0.1
-  resolution: "prr@npm:1.0.1"
-  checksum: ac5c0986b46390140b920b8e7f6b56e769a00620af02b6bbdfc6658e8a36b876569c8f174a7c209843f5b9af3d13cbf847c2a9dded4d965b01afbfa5ea8d0761
   languageName: node
   linkType: hard
 
@@ -15263,13 +15222,6 @@ resolve@1.1.7:
     slice-ansi: ^2.1.0
     string-width: ^3.0.0
   checksum: 38877a196c0a57b955e4965fa3ff1cede38649b6e1f6286aa5435579dfd01663fdf8d19c87510e67a79474d75ae0144a0819f2054d654c45d7f525270aafe56b
-  languageName: node
-  linkType: hard
-
-"tapable@npm:^0.2.7":
-  version: 0.2.9
-  resolution: "tapable@npm:0.2.9"
-  checksum: d585c134eff4414b2145546afe3dd7ca2e48804d5ac810efdcb809c143f9715696b74214642884df5058e98e5a9f167c3a08a69b57171e577742109483972fab
   languageName: node
   linkType: hard
 
