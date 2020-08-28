@@ -439,6 +439,13 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
   }
 
   function makeSource(path, state) {
+    const location = path.node.loc;
+    if (!location) {
+      throw path.buildCodeFrameError(
+        "invariant: `makeSource` cannot return source information for generated paths. This is likely a bug with `@babel/helper-builder-react-jsx-experimental`.",
+      );
+    }
+
     if (!state.fileNameIdentifier) {
       const { filename = "" } = state;
 
