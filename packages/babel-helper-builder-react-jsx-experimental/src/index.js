@@ -43,16 +43,21 @@ export function helper(babel, options) {
         }
       }
 
-      const source = t.jsxAttribute(
-        t.jsxIdentifier("__source"),
-        t.jsxExpressionContainer(makeSource(path, state)),
-      );
+      const hasSource = Boolean(path.node.loc);
+
+      const source = hasSource
+        ? t.jsxAttribute(
+            t.jsxIdentifier("__source"),
+            t.jsxExpressionContainer(makeSource(path, state)),
+          )
+        : // the element was generated and doesn't have location information
+          null;
       const self = t.jsxAttribute(
         t.jsxIdentifier("__self"),
         t.jsxExpressionContainer(t.thisExpression()),
       );
 
-      path.pushContainer("attributes", [source, self]);
+      path.pushContainer("attributes", hasSource ? [source, self] : self);
     },
   };
 
@@ -434,12 +439,6 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
   }
 
   function makeSource(path, state) {
-    const location = path.node.loc;
-    if (!location) {
-      // the element was generated and doesn't have location information
-      return;
-    }
-
     if (!state.fileNameIdentifier) {
       const { filename = "" } = state;
 
