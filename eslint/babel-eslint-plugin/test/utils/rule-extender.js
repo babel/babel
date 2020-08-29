@@ -483,7 +483,7 @@ describe("ruleExtender", () => {
         });
 
         new RuleTester().run("@babel/example-eslint-rule", extendedRule, {
-          valid: ["this", "fn.apply(this, 'arg')"],
+          valid: ["this", "this.a = b", "fn.apply(this, 'arg')"],
           invalid: [
             {
               code: "/* I'm not supposed to be here! */ this.a = b",
