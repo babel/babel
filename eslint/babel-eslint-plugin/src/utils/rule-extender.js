@@ -1,11 +1,10 @@
 export default function ruleExtender(rule, options = {}) {
   if (!rule) {
-    console.error("No rule to extend found.");
+    throw new Error("No rule to extend found.");
   }
 
   if (!Object.keys(options).length) {
-    console.error("No extension options supplied. Rule remains unchanged.");
-    return rule;
+    throw new Error("No rule extension options supplied.");
   }
 
   const {
@@ -20,7 +19,7 @@ export default function ruleExtender(rule, options = {}) {
       fixable: metaOverrides.fixable || rule.meta.fixable || false,
       schema: metaOverrides.schema || rule.meta.schema || [],
       docs: { ...rule.meta.docs, ...metaOverrides.docs },
-      messages: { ...rule.meta.messages, ...metaOverrides.emssages },
+      messages: { ...rule.meta.messages, ...metaOverrides.messages },
     },
     create(context) {
       const duplicateVisitors = {};
@@ -31,7 +30,7 @@ export default function ruleExtender(rule, options = {}) {
             const overrideResult = reportOverrides(meta, modifiedContext);
 
             // Override return value is trinary:
-            //   - true: report with original meta (unchanged)
+            //   - true: report with original metadata (unchanged)
             //   - false: do not report
             //   - report metadata object: report with this metadata instead
             if (overrideResult === true) {
