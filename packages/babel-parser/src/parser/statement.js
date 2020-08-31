@@ -2150,8 +2150,13 @@ export default class StatementParser extends ExpressionParser {
     this.expectPlugin("importAssertions");
 
     const attrs = [];
+    const attrNames = new Set();
 
     do {
+      if (this.match(tt.braceR)) {
+        break;
+      }
+
       const node = this.startNode();
 
       // parse AssertionKey : IdentifierName, StringLiteral
@@ -2163,6 +2168,26 @@ export default class StatementParser extends ExpressionParser {
       }
       this.next();
       node.key = assertionKeyNode;
+
+      // for now we are only allowing `type` as the only allowed module attribute
+      if (node.key.name !== "type") {
+        this.raise(
+          node.key.start,
+          Errors.ModuleAttributeDifferentFromType,
+          node.key.name,
+        );
+      }
+      // check if we already have an entry for an attribute
+      // if a duplicate entry is found, throw an error
+      // for now this logic will come into play only when someone declares `type` twice
+      if (attrNames.has(node.key.name)) {
+        this.raise(
+          node.key.start,
+          Errors.ModuleAttributesWithDuplicateKeys,
+          node.key.name,
+        );
+      }
+      attrNames.add(node.key.name);
 
       if (!this.match(tt.string)) {
         throw this.unexpected(

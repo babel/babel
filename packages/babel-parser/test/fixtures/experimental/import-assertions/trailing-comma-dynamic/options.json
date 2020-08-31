@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    [
+      "importAssertions",
+      {
+        "version": "september-2020"
+      }
+    ]
+  ],
+  "sourceType": "module"
+}
