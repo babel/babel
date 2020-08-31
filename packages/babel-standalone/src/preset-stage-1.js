@@ -10,7 +10,7 @@ export default (_: any, opts: Object = {}) => {
     decoratorsBeforeExport,
     pipelineProposal = "minimal",
     recordAndTupleSyntax: recordAndTupleSyntax = "hash",
-    moduleAttributesVersion = "may-2020",
+    importAssertionsVersion = "september-2020",
   } = opts;
 
   return {
@@ -23,8 +23,8 @@ export default (_: any, opts: Object = {}) => {
     plugins: [
       babelPlugins.syntaxDecimal,
       [
-        babelPlugins.syntaxModuleAttributes,
-        { version: moduleAttributesVersion },
+        babelPlugins.syntaxImportAssertions,
+        { version: importAssertionsVersion },
       ],
       [babelPlugins.syntaxRecordAndTuple, { syntaxType: recordAndTupleSyntax }],
       babelPlugins.proposalExportDefaultFrom,

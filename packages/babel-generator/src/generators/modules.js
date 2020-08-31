@@ -180,11 +180,15 @@ export function ImportDeclaration(node: Object) {
 
   this.print(node.source, node);
 
-  if (node.attributes?.length) {
+  if (node.assertions?.length) {
     this.space();
-    this.word("with");
+    this.word("assert");
     this.space();
-    this.printList(node.attributes, node);
+    this.token("{");
+    this.space();
+    this.printList(node.assertions, node);
+    this.space();
+    this.token("}");
   }
 
   this.semicolon();

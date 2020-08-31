@@ -86,17 +86,17 @@ export function validatePlugins(plugins: PluginList) {
     );
   }
 
-  if (hasPlugin(plugins, "moduleAttributes")) {
-    const moduleAttributesVerionPluginOption = getPluginOption(
+  if (hasPlugin(plugins, "importAssertions")) {
+    const importAssertionsVerionPluginOption = getPluginOption(
       plugins,
-      "moduleAttributes",
+      "importAssertions",
       "version",
     );
-    if (moduleAttributesVerionPluginOption !== "may-2020") {
+    if (importAssertionsVerionPluginOption !== "september-2020") {
       throw new Error(
-        "The 'moduleAttributes' plugin requires a 'version' option," +
+        "The 'importAssertions' plugin requires a 'version' option," +
           " representing the last proposal update. Currently, the" +
-          " only supported value is 'may-2020'.",
+          " only supported value is 'september-2020'.",
       );
     }
   }

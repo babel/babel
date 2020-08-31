@@ -829,13 +829,13 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     if (node.callee.type === "Import") {
       if (node.arguments.length === 2) {
-        this.expectPlugin("moduleAttributes");
+        this.expectPlugin("importAssertions");
       }
       if (node.arguments.length === 0 || node.arguments.length > 2) {
         this.raise(
           node.start,
           Errors.ImportCallArity,
-          this.hasPlugin("moduleAttributes")
+          this.hasPlugin("importAssertions")
             ? "one or two arguments"
             : "one argument",
         );
@@ -872,7 +872,7 @@ export default class ExpressionParser extends LValParser {
       } else {
         this.expect(tt.comma);
         if (this.match(close)) {
-          if (dynamicImport && !this.hasPlugin("moduleAttributes")) {
+          if (dynamicImport && !this.hasPlugin("importAssertions")) {
             this.raise(
               this.state.lastTokStart,
               Errors.ImportCallArgumentTrailingComma,

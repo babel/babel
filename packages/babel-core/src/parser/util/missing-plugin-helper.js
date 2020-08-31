@@ -129,10 +129,10 @@ const pluginNameMap = {
       url: "https://git.io/JfeDR",
     },
   },
-  moduleAttributes: {
+  importAssertions: {
     syntax: {
-      name: "@babel/plugin-syntax-module-attributes",
-      url: "https://git.io/JfK3k",
+      name: "@babel/plugin-syntax-import-assertions",
+      url: "TODO",
     },
   },
   moduleStringNames: {

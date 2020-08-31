@@ -5,7 +5,8 @@
       {
         "version": "september-2020"
       }
-    ]
+    ],
+    "estree"
   ],
   "sourceType": "module"
 }

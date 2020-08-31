@@ -162,7 +162,7 @@ defineType("ImportAttribute", {
   visitor: ["key", "value"],
   fields: {
     key: {
-      validate: assertNodeType("Identifier"),
+      validate: assertNodeType("Identifier", "StringLiteral"),
     },
     value: {
       validate: assertNodeType("StringLiteral"),

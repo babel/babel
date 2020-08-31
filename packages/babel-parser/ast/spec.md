@@ -1292,7 +1292,7 @@ interface ImportDeclaration <: ModuleDeclaration {
   importKind: null | "type" | "typeof" | "value";
   specifiers: [ ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier ];
   source: StringLiteral;
-  attributes?: [ ImportAttribute ];
+  assertions?: [ ImportAttribute ];
 }
 ```
 
