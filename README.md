@@ -91,7 +91,7 @@ I'm so glad you asked: [Hallelujah —— In Praise of Babel](SONG.md) by [@angu
 
 ### Looking for support?
 
-For questions and support please join our [Slack Community](https://slack.babeljs.io/) (you can sign up [here](https://slack.babeljs.io/) for an invite), ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/babeljs), or ping us on [Twitter](https://twitter.com/babeljs).
+For questions and support please join our [Slack Community](https://slack.babeljs.io/) (you can [sign up here](https://slack.babeljs.io/) for an invite), ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/babeljs), or ping us on [Twitter](https://twitter.com/babeljs).
 
 ### Where are the docs?
 
