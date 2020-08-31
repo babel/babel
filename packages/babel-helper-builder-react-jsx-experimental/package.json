@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-builder-react-jsx-experimental",
-  "version": "7.10.5",
+  "version": "7.11.5",
   "description": "Helper function to build react jsx",
   "repository": {
     "type": "git",
@@ -15,6 +15,6 @@
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^7.10.4",
     "@babel/helper-module-imports": "workspace:^7.10.4",
-    "@babel/types": "workspace:^7.10.5"
+    "@babel/types": "workspace:^7.11.5"
   }
 }
