@@ -8,11 +8,11 @@ module.exports = function ({ types: t }) {
             t.JSXElement(
               t.JSXOpeningElement(t.JSXIdentifier("div"), [], false),
               t.JSXClosingElement(t.JSXIdentifier("div")),
-              [],
-            ),
+              []
+            )
           );
-        },
-      },
-    },
+        }
+      }
+    }
   };
 };
