@@ -37,7 +37,7 @@ This is quite taboo but let's look at the pros and cons:
 - [Benjamin Pollack](http://bitquabit.com/post/unorthodocs-abandon-your-dvcs-and-return-to-sanity/)
 - [Benjamin Eberlei](https://qafoo.com/resources/presentations/froscon_2015/monorepos.html)
 - [Simon Stewart](http://blog.rocketpoweredjetpants.com/2015/04/monorepo-one-source-code-repository-to.html)
-- [Digital Ocean](https://www.digitalocean.com/company/blog/taming-your-go-dependencies/)
+- [Digital Ocean](https://www.digitalocean.com/blog/taming-your-go-dependencies/)
 - [Google](http://www.infoq.com/presentations/Development-at-Google), [another](https://www.youtube.com/watch?v=W71BTkUbdqE)
 - [Twitter](https://www.youtube.com/watch?v=bjh4DHuOf4E)
 - [thedufer](http://www.reddit.com/r/programming/comments/1unehr/scaling_mercurial_at_facebook/cek9nkq)
