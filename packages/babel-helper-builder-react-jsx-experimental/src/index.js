@@ -43,21 +43,16 @@ export function helper(babel, options) {
         }
       }
 
-      const hasSource = Boolean(path.node.loc);
-
-      const source = hasSource
-        ? t.jsxAttribute(
-            t.jsxIdentifier("__source"),
-            t.jsxExpressionContainer(makeSource(path, state)),
-          )
-        : // the element was generated and doesn't have location information
-          null;
+      const source = t.jsxAttribute(
+        t.jsxIdentifier("__source"),
+        t.jsxExpressionContainer(makeSource(path, state)),
+      );
       const self = t.jsxAttribute(
         t.jsxIdentifier("__self"),
         t.jsxExpressionContainer(t.thisExpression()),
       );
 
-      path.pushContainer("attributes", hasSource ? [source, self] : self);
+      path.pushContainer("attributes", [source, self]);
     },
   };
 
@@ -441,9 +436,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
   function makeSource(path, state) {
     const location = path.node.loc;
     if (!location) {
-      throw path.buildCodeFrameError(
-        "invariant: `makeSource` cannot return source information for generated paths. This is likely a bug with `@babel/helper-builder-react-jsx-experimental`.",
-      );
+      // the element was generated and doesn't have location information
+      return path.scope.buildUndefinedNode();
     }
 
     if (!state.fileNameIdentifier) {
