@@ -244,8 +244,8 @@ ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 	echo "You probably don't know what you are doing"
 	exit 1
 endif
-	$(MAKE) prepublish-build
 	$(YARN) lerna version $(VERSION) --exclude-dependents --force-publish=$(FORCE_PUBLISH)  --no-push --yes --tag-version-prefix="version-e2e-test-"
+	$(MAKE) prepublish-build
 	$(YARN) lerna publish from-git --registry http://localhost:4873 --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
 
