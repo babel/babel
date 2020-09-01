@@ -28,6 +28,10 @@ export default ruleExtender(noInvalidThisRule, {
           let nodeToCheck = node;
 
           while (nodeToCheck) {
+            if (nodeToCheck.type === "ClassProperty") {
+              break;
+            }
+
             // Is descendent of the key node.
             if (nodeToCheck.parent && nodeToCheck.parent.key === nodeToCheck) {
               context.report({

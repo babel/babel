@@ -49,24 +49,36 @@ function IMPLIED_STRICT(pattern) {
  */
 function extractPatterns(patterns, type) {
   // Clone and apply the pattern environment.
-  const patternsList = patterns.map(function (pattern) {
-    return pattern[type].map(applyCondition => {
+  const patternsList = patterns.map(pattern =>
+    pattern[type].map(applyCondition => {
       const thisPattern = cloneDeep(pattern);
 
-      applyCondition(thisPattern);
-
-      thisPattern.errors = [];
+      if (type === "valid" && Array.isArray(applyCondition)) {
+        throw new Error(
+          "The apply condition can only be an array for invalid cases.",
+        );
+      }
 
       if (type === "invalid") {
-        thisPattern.errors.push({ messageId: "unexpectedThis" });
+        let numErrors = 1;
+
+        if (Array.isArray(applyCondition)) {
+          [applyCondition, numErrors] = applyCondition;
+        }
+
+        thisPattern.errors = Array(numErrors).fill({
+          messageId: "unexpectedThis",
+        });
       }
+
+      applyCondition(thisPattern);
 
       delete thisPattern.invalid;
       delete thisPattern.valid;
 
       return thisPattern;
-    });
-  });
+    }),
+  );
 
   // Flatten.
   return Array.prototype.concat.apply([], patternsList);
@@ -124,6 +136,24 @@ const patterns = [
     parserOptions: { ecmaVersion: 2020 },
     valid: [],
     invalid: [MODULE, SCRIPT, USE_STRICT, IMPLIED_STRICT],
+  },
+  {
+    code: "class A { bFactory = () => class B { [this.b] = () => c; }; }",
+    parserOptions: { ecmaVersion: 2020 },
+    valid: [],
+    invalid: [MODULE, SCRIPT, USE_STRICT, IMPLIED_STRICT],
+  },
+
+  {
+    code: "class A { [this.a] = () => class B { [this.b] = () => c; }; }",
+    parserOptions: { ecmaVersion: 2020 },
+    valid: [],
+    invalid: [
+      [MODULE, 2],
+      [SCRIPT, 2],
+      [USE_STRICT, 2],
+      [IMPLIED_STRICT, 2],
+    ],
   },
   {
     code: "class A { #a = this.b; }",
