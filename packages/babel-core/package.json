@@ -58,7 +58,7 @@
     "lodash": "^4.17.19",
     "resolve": "^1.3.2",
     "semver": "^5.4.1",
-    "source-map": "^0.6.1"
+    "source-map": "^0.5.0"
   },
   "devDependencies": {
     "@babel/helper-transform-fixture-test-runner": "workspace:^7.11.4"
