@@ -3366,6 +3366,7 @@ __metadata:
     "@babel/helper-validator-identifier": "workspace:^7.10.4"
     "@babel/parser": "workspace:^7.11.0"
     chalk: ^4.1.0
+    is-plain-obj: ^2.1.0
     lodash: ^4.17.19
     to-fast-properties: ^2.0.0
   languageName: unknown
@@ -10404,6 +10405,13 @@ fsevents@^1.2.7:
   version: 1.1.0
   resolution: "is-plain-obj@npm:1.1.0"
   checksum: d2eb5a32eacd7c79f3b2fe20552d091805a5ae88a7ca2aa71226bf822e4d690ef046ed2beb795f32666a401dfbf9a25ee3d4acde5426f963d55474468708ad22
+  languageName: node
+  linkType: hard
+
+"is-plain-obj@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "is-plain-obj@npm:2.1.0"
+  checksum: 2314302f9140d1e9607731d523f207d8000281aebbabe0083210342c0758976f75f0f5db405e55910bd4dc9a04baddbeab9d476290642b5a0d31431cc9bda4b3
   languageName: node
   linkType: hard
 
