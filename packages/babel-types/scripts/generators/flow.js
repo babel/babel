@@ -127,8 +127,6 @@ lines.push(
   // eslint-disable-next-line max-len
   `declare function createTypeAnnotationBasedOnTypeof(type: 'string' | 'number' | 'undefined' | 'boolean' | 'function' | 'object' | 'symbol'): ${NODE_PREFIX}TypeAnnotation`,
   // eslint-disable-next-line max-len
-  `declare function createUnionTypeAnnotation(types: Array<${NODE_PREFIX}FlowType>): ${NODE_PREFIX}UnionTypeAnnotation`,
-  // eslint-disable-next-line max-len
   `declare function createFlowUnionType(types: Array<${NODE_PREFIX}FlowType>): ${NODE_PREFIX}UnionTypeAnnotation`,
   // this smells like "internal API"
   // eslint-disable-next-line max-len

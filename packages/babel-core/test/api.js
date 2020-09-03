@@ -144,13 +144,13 @@ describe("parser and generator options", function () {
 describe("api", function () {
   it("exposes the resolvePlugin method", function () {
     expect(() => babel.resolvePlugin("nonexistent-plugin")).toThrow(
-      /Cannot find module 'babel-plugin-nonexistent-plugin'/,
+      /Cannot resolve module 'babel-plugin-nonexistent-plugin'/,
     );
   });
 
   it("exposes the resolvePreset method", function () {
     expect(() => babel.resolvePreset("nonexistent-preset")).toThrow(
-      /Cannot find module 'babel-preset-nonexistent-preset'/,
+      /Cannot resolve module 'babel-preset-nonexistent-preset'/,
     );
   });
 
@@ -211,6 +211,31 @@ describe("api", function () {
     expect(node.program.body[0].declarations[0].id.name).toBe(
       "identifier",
       "original ast should not have been mutated",
+    );
+  });
+
+  it("transformFromAst should mutate the AST when cloneInputAst is false", function () {
+    const program = "const identifier = 1";
+    const node = parse(program);
+    const { code } = transformFromAst(node, program, {
+      cloneInputAst: false,
+      plugins: [
+        function () {
+          return {
+            visitor: {
+              Identifier: function (path) {
+                path.node.name = "replaced";
+              },
+            },
+          };
+        },
+      ],
+    });
+
+    expect(code).toBe("const replaced = 1;");
+    expect(node.program.body[0].declarations[0].id.name).toBe(
+      "replaced",
+      "original ast should have been mutated",
     );
   });
 
@@ -779,10 +804,10 @@ describe("api", function () {
         options,
         function (err) {
           expect(err.message).toMatch(
-            "Support for the experimental syntax 'logicalAssignment' isn't currently enabled (1:3):",
+            "Support for the experimental syntax 'doExpressions' isn't currently enabled (1:2):",
           );
           expect(err.message).toMatch(
-            "Add @babel/plugin-proposal-logical-assignment-operators (https://git.io/vAlRe) to the " +
+            "Add @babel/plugin-proposal-do-expressions (https://git.io/vb4S3) to the " +
               "'plugins' section of your Babel config to enable transformation.",
           );
           done();

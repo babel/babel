@@ -1,5 +1,5 @@
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["aa\uD835\uDC9C\uD835\uDC9C"], ["\\u0061\\u{0061}\\ud835\\udc9c\\u{1d49c}"]);
+  const data = _taggedTemplateLiteral(["aa𝒜𝒜"], ["\\u0061\\u{0061}\\ud835\\udc9c\\u{1d49c}"]);
 
   _templateObject = function () {
     return data;

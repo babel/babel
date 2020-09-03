@@ -1,4 +1,4 @@
 {
   "minified": true,
-  "jsonCompatibleStrings": true
+  "jsescOption": { "json": true }
 }

@@ -43,6 +43,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
+    estreeParseDecimalLiteral(value: any): N.Node {
+      // https://github.com/estree/estree/blob/master/experimental/decimal.md
+      // todo: use BigDecimal when node supports it.
+      const decimal = null;
+      const node = this.estreeParseLiteral(decimal);
+      node.decimal = String(node.value || value);
+
+      return node;
+    }
+
     estreeParseLiteral(value: any): N.Node {
       return this.parseLiteral(value, "Literal");
     }
@@ -229,6 +239,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case tt.bigint:
           return this.estreeParseBigIntLiteral(this.state.value);
 
+        case tt.decimal:
+          return this.estreeParseDecimalLiteral(this.state.value);
+
         case tt._null:
           return this.estreeParseLiteral(null);
 
@@ -299,14 +312,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isGenerator: boolean,
       isAsync: boolean,
       isPattern: boolean,
-      containsEsc: boolean,
+      isAccessor: boolean,
     ): ?N.ObjectMethod {
       const node: N.EstreeProperty = (super.parseObjectMethod(
         prop,
         isGenerator,
         isAsync,
         isPattern,
-        containsEsc,
+        isAccessor,
       ): any);
 
       if (node) {
@@ -374,8 +387,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         delete node.arguments;
         // $FlowIgnore - callee isn't optional in the type definition
         delete node.callee;
-      } else if (node.type === "CallExpression") {
-        (node: N.Node).optional = false;
       }
 
       return node;
@@ -417,10 +428,38 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
-    parseSubscript(...args) {
-      const node = super.parseSubscript(...args);
+    parseSubscript(
+      base: N.Expression,
+      startPos: number,
+      startLoc: Position,
+      noCalls: ?boolean,
+      state: N.ParseSubscriptState,
+    ) {
+      const node = super.parseSubscript(
+        base,
+        startPos,
+        startLoc,
+        noCalls,
+        state,
+      );
 
-      if (node.type === "MemberExpression") {
+      if (state.optionalChainMember) {
+        // https://github.com/estree/estree/blob/master/es2020.md#chainexpression
+        if (
+          node.type === "OptionalMemberExpression" ||
+          node.type === "OptionalCallExpression"
+        ) {
+          node.type = node.type.substring(8); // strip Optional prefix
+        }
+        if (state.stop) {
+          const chain = this.startNodeAtNode(node);
+          chain.expression = node;
+          return this.finishNode(chain, "ChainExpression");
+        }
+      } else if (
+        node.type === "MemberExpression" ||
+        node.type === "CallExpression"
+      ) {
         node.optional = false;
       }
 

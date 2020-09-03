@@ -8,6 +8,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "edge":"17" }
+  proposal-logical-assignment-operators { "edge":"17" }
   proposal-nullish-coalescing-operator { "edge":"17" }
   proposal-optional-chaining { "edge":"17" }
   proposal-json-strings { "edge":"17" }
@@ -19,6 +21,7 @@ Using plugins:
   proposal-unicode-property-regex { "edge":"17" }
   transform-named-capturing-groups-regex { "edge":"17" }
   transform-function-name { "edge":"17" }
+  proposal-export-namespace-from { "edge":"17" }
   transform-modules-commonjs { "edge":"17" }
   proposal-dynamic-import { "edge":"17" }
 

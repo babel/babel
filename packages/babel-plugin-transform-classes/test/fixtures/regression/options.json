@@ -1,4 +1,7 @@
 {
   "plugins": ["external-helpers", "proposal-class-properties"],
-  "presets": ["env", "react"]
+  "presets": [
+    "env",
+    ["react", { "runtime": "classic" }]
+  ]
 }

@@ -344,7 +344,7 @@ describe("addon resolution", function () {
         presets: ["foo"],
       });
     }).toThrow(
-      /Cannot find module 'babel-preset-foo'.*\n- If you want to resolve "foo", use "module:foo"/,
+      /Cannot resolve module 'babel-preset-foo'.*\n- If you want to resolve "foo", use "module:foo"/,
     );
   });
 
@@ -358,7 +358,7 @@ describe("addon resolution", function () {
         plugins: ["foo"],
       });
     }).toThrow(
-      /Cannot find module 'babel-plugin-foo'.*\n- If you want to resolve "foo", use "module:foo"/,
+      /Cannot resolve module 'babel-plugin-foo'.*\n- If you want to resolve "foo", use "module:foo"/,
     );
   });
 
@@ -372,7 +372,7 @@ describe("addon resolution", function () {
         presets: ["foo"],
       });
     }).toThrow(
-      /Cannot find module 'babel-preset-foo'.*\n- Did you mean "@babel\/foo"\?/,
+      /Cannot resolve module 'babel-preset-foo'.*\n- Did you mean "@babel\/foo"\?/,
     );
   });
 
@@ -386,7 +386,7 @@ describe("addon resolution", function () {
         plugins: ["foo"],
       });
     }).toThrow(
-      /Cannot find module 'babel-plugin-foo'.*\n- Did you mean "@babel\/foo"\?/,
+      /Cannot resolve module 'babel-plugin-foo'.*\n- Did you mean "@babel\/foo"\?/,
     );
   });
 
@@ -400,7 +400,7 @@ describe("addon resolution", function () {
         presets: ["testplugin"],
       });
     }).toThrow(
-      /Cannot find module 'babel-preset-testplugin'.*\n- Did you accidentally pass a plugin as a preset\?/,
+      /Cannot resolve module 'babel-preset-testplugin'.*\n- Did you accidentally pass a plugin as a preset\?/,
     );
   });
 
@@ -414,7 +414,7 @@ describe("addon resolution", function () {
         plugins: ["testpreset"],
       });
     }).toThrow(
-      /Cannot find module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a preset as a plugin\?/,
+      /Cannot resolve module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a preset as a plugin\?/,
     );
   });
 
@@ -427,7 +427,7 @@ describe("addon resolution", function () {
         babelrc: false,
         presets: ["foo"],
       });
-    }).toThrow(/Cannot find module 'babel-preset-foo'/);
+    }).toThrow(/Cannot resolve module 'babel-preset-foo'/);
   });
 
   it("should throw about missing plugins", function () {
@@ -439,6 +439,6 @@ describe("addon resolution", function () {
         babelrc: false,
         plugins: ["foo"],
       });
-    }).toThrow(/Cannot find module 'babel-plugin-foo'/);
+    }).toThrow(/Cannot resolve module 'babel-plugin-foo'/);
   });
 });

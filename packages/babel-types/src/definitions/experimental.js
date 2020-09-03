@@ -16,27 +16,14 @@ defineType("ArgumentPlaceholder", {});
 defineType("BindExpression", {
   visitor: ["object", "callee"],
   aliases: ["Expression"],
-  fields: !process.env.BABEL_TYPES_8_BREAKING
-    ? {
-        object: {
-          validate: Object.assign(() => {}, {
-            oneOfNodeTypes: ["Expression"],
-          }),
-        },
-        callee: {
-          validate: Object.assign(() => {}, {
-            oneOfNodeTypes: ["Expression"],
-          }),
-        },
-      }
-    : {
-        object: {
-          validate: assertNodeType("Expression"),
-        },
-        callee: {
-          validate: assertNodeType("Expression"),
-        },
-      },
+  fields: {
+    object: {
+      validate: assertNodeType("Expression"),
+    },
+    callee: {
+      validate: assertNodeType("Expression"),
+    },
+  },
 });
 
 defineType("ClassProperty", {
@@ -234,4 +221,14 @@ defineType("TupleExpression", {
   },
   visitor: ["elements"],
   aliases: ["Expression"],
+});
+
+defineType("DecimalLiteral", {
+  builder: ["value"],
+  fields: {
+    value: {
+      validate: assertValueType("string"),
+    },
+  },
+  aliases: ["Expression", "Pureish", "Literal", "Immutable"],
 });

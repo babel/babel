@@ -1,43 +1,12 @@
+import cp from "child_process";
 import fs from "fs";
 import os from "os";
 import path from "path";
+import util from "util";
 import escapeRegExp from "lodash/escapeRegExp";
 import * as babel from "../lib";
 
-// TODO: In Babel 8, we can directly uses fs.promises which is supported by
-// node 8+
-const pfs =
-  fs.promises ??
-  new Proxy(fs, {
-    get(target, name) {
-      if (name === "copyFile") {
-        // fs.copyFile is only supported since node 8.5
-        // https://stackoverflow.com/a/30405105/2359289
-        return function copyFile(source, target) {
-          const rd = fs.createReadStream(source);
-          const wr = fs.createWriteStream(target);
-          return new Promise(function (resolve, reject) {
-            rd.on("error", reject);
-            wr.on("error", reject);
-            wr.on("finish", resolve);
-            rd.pipe(wr);
-          }).catch(function (error) {
-            rd.destroy();
-            wr.end();
-            throw error;
-          });
-        };
-      }
-
-      return (...args) =>
-        new Promise((resolve, reject) =>
-          target[name](...args, (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-          }),
-        );
-    },
-  });
+const pfs = fs.promises;
 
 function fixture(...args) {
   return path.join(__dirname, "fixtures", "config", ...args);
@@ -51,6 +20,31 @@ function loadOptionsAsync(opts) {
   return babel.loadOptionsAsync({ cwd: __dirname, ...opts });
 }
 
+async function loadOptionsAsyncInSpawedProcess({ filename, cwd }) {
+  // !!!! hack is coming !!!!
+  // todo(Babel 8): remove this section when https://github.com/facebook/jest/issues/9430 is resolved
+  // We don't check process.versions.node here, it will fail if node does not support esm
+  // please publish Babel on a modernized node :)
+  const { stdout, stderr } = await util.promisify(cp.execFile)(
+    require.resolve("./fixtures/babel-load-options-async.mjs"),
+    // pass `cwd` as params as `process.cwd()` will normalize `cwd` on macOS
+    [filename, cwd],
+    {
+      cwd,
+      env: process.env,
+    },
+  );
+  if (stderr) {
+    throw new Error(
+      "error is thrown in babel-load-options-async.mjs: stdout\n" +
+        stdout +
+        "\nstderr:\n" +
+        stderr,
+    );
+  }
+  return JSON.parse(stdout);
+}
+
 function pairs(items) {
   const pairs = [];
   for (let i = 0; i < items.length - 1; i++) {
@@ -61,11 +55,10 @@ function pairs(items) {
   return pairs;
 }
 
-async function getTemp(name) {
+async function getTemp(name, fixtureFolder = "config-files-templates") {
   const cwd = await pfs.mkdtemp(os.tmpdir() + path.sep + name);
   const tmp = name => path.join(cwd, name);
-  const config = name =>
-    pfs.copyFile(fixture("config-files-templates", name), tmp(name));
+  const config = name => pfs.copyFile(fixture(fixtureFolder, name), tmp(name));
   return { cwd, tmp, config };
 }
 
@@ -984,6 +977,7 @@ describe("buildConfigChain", function () {
       passPerPreset: false,
       plugins: [],
       presets: [],
+      cloneInputAst: true,
     });
     const realEnv = process.env.NODE_ENV;
     const realBabelEnv = process.env.BABEL_ENV;
@@ -1033,20 +1027,20 @@ describe("buildConfigChain", function () {
         );
       });
 
-      test.each([
-        "babel.config.json",
-        "babel.config.js",
-        "babel.config.cjs",
-        "babel.config.mjs",
-      ])("should load %s asynchronously", async name => {
+      test.each(
+        [
+          "babel.config.json",
+          "babel.config.js",
+          "babel.config.cjs",
+          // We can't transpile import() while publishing, and it isn't supported
+          // by jest.
+          process.env.IS_PUBLISH ? "" : "babel.config.mjs",
+        ].filter(Boolean),
+      )("should load %s asynchronously", async name => {
         const { cwd, tmp, config } = await getTemp(
           `babel-test-load-config-async-${name}`,
         );
         const filename = tmp("src.js");
-
-        // We can't transpile import() while publishing, and it isn't supported
-        // by jest.
-        if (process.env.IS_PUBLISH && name === "babel.config.mjs") return;
 
         await config(name);
 
@@ -1086,6 +1080,29 @@ describe("buildConfigChain", function () {
           loadOptionsAsync({ filename: tmp("src.js"), cwd }),
         ).rejects.toThrow(/Multiple configuration files found/);
       });
+
+      if (process.env.IS_PUBLISH) {
+        test.each(["babel.config.mjs", ".babelrc.mjs"])(
+          "should load %s asynchronously",
+          async name => {
+            const { cwd, tmp, config } = await getTemp(
+              `babel-test-load-config-async-prepublish-${name}`,
+              "config-files-templates-prepublish",
+            );
+            const filename = tmp("src.js");
+            await config(name);
+            expect(
+              await loadOptionsAsyncInSpawedProcess({ filename, cwd }),
+            ).toEqual({
+              ...getDefaults(),
+              filename,
+              cwd,
+              root: cwd,
+              comments: true,
+            });
+          },
+        );
+      }
     });
 
     describe("relative", () => {
@@ -1125,21 +1142,21 @@ describe("buildConfigChain", function () {
         );
       });
 
-      test.each([
-        "package.json",
-        ".babelrc",
-        ".babelrc.js",
-        ".babelrc.cjs",
-        ".babelrc.mjs",
-      ])("should load %s asynchronously", async name => {
+      test.each(
+        [
+          "package.json",
+          ".babelrc",
+          ".babelrc.js",
+          ".babelrc.cjs",
+          // We can't transpile import() while publishing, and it isn't supported
+          // by jest.
+          process.env.IS_PUBLISH ? "" : "babel.config.mjs",
+        ].filter(Boolean),
+      )("should load %s asynchronously", async name => {
         const { cwd, tmp, config } = await getTemp(
           `babel-test-load-config-${name}`,
         );
         const filename = tmp("src.js");
-
-        // We can't transpile import() while publishing, and it isn't supported
-        // by jest.
-        if (process.env.IS_PUBLISH && name === ".babelrc.mjs") return;
 
         await config(name);
 

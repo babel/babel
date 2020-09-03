@@ -3,6 +3,7 @@
 
 // The Errors key follows https://cs.chromium.org/chromium/src/v8/src/common/message-template.h unless it does not exist
 export const ErrorMessages = Object.freeze({
+  AccessorIsGenerator: "A %0ter cannot be a generator",
   ArgumentsDisallowedInInitializer:
     "'arguments' is not allowed in class field initializer",
   AsyncFunctionInSingleStatementContext:
@@ -61,6 +62,7 @@ export const ErrorMessages = Object.freeze({
   ImportOutsideModule: `'import' and 'export' may appear only with 'sourceType: "module"'`,
   InvalidBigIntLiteral: "Invalid BigIntLiteral",
   InvalidCodePoint: "Code point out of bounds",
+  InvalidDecimal: "Invalid decimal",
   InvalidDigit: "Expected number in radix %0",
   InvalidEscapeSequence: "Bad character escape sequence",
   InvalidEscapeSequenceTemplate: "Invalid escape sequence in template",
@@ -79,6 +81,7 @@ export const ErrorMessages = Object.freeze({
   LabelRedeclaration: "Label '%0' is already declared",
   LetInLexicalBinding:
     "'let' is not allowed to be used as a name in 'let' or 'const' declarations.",
+  LineTerminatorBeforeArrow: "No line break is allowed before '=>'",
   MalformedRegExpFlags: "Invalid regular expression flag",
   MissingClassName: "A class name is required",
   MissingEqInAssignment:
@@ -139,6 +142,7 @@ export const ErrorMessages = Object.freeze({
   StrictEvalArgumentsBinding: "Binding '%0' in strict mode",
   StrictFunction:
     "In strict mode code, functions can only be declared at top level or inside a block",
+  StrictNumericEscape: "The only valid numeric escape in strict mode is '\\0'",
   StrictOctalLiteral: "Legacy octal literals are not allowed in strict mode",
   StrictWith: "'with' in strict mode",
   SuperNotAllowed:

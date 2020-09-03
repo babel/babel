@@ -21,6 +21,7 @@ export default (_: any, opts: Object = {}) => {
       ],
     ],
     plugins: [
+      babelPlugins.syntaxDecimal,
       [
         babelPlugins.syntaxModuleAttributes,
         { version: moduleAttributesVersion },

@@ -17,7 +17,6 @@ import type { FilePackageData, RelativeConfig, ConfigFile } from "./types";
 import type { CallerMetadata } from "../validation/options";
 
 import * as fs from "../../gensync-utils/fs";
-import resolve from "../../gensync-utils/resolve";
 
 const debug = buildDebug("babel:config:loading:files:configuration");
 
@@ -136,7 +135,7 @@ export function* loadConfig(
   envName: string,
   caller: CallerMetadata | void,
 ): Handler<ConfigFile> {
-  const filepath = yield* resolve(name, { basedir: dirname });
+  const filepath = require.resolve(name, { paths: [dirname] });
 
   const conf = yield* readConfig(filepath, envName, caller);
   if (!conf) {
@@ -298,6 +297,23 @@ const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
     ),
   };
 });
+
+export function* resolveShowConfigPath(
+  dirname: string,
+): Handler<string | null> {
+  const targetPath = process.env.BABEL_SHOW_CONFIG_FOR;
+  if (targetPath != null) {
+    const absolutePath = path.resolve(dirname, targetPath);
+    const stats = yield* fs.stat(absolutePath);
+    if (!stats.isFile()) {
+      throw new Error(
+        `${absolutePath}: BABEL_SHOW_CONFIG_FOR must refer to a regular file, directories are not supported.`,
+      );
+    }
+    return absolutePath;
+  }
+  return null;
+}
 
 function throwConfigError(): empty {
   throw new Error(`\

@@ -23,7 +23,7 @@
     });
     it("handles the typescript preset", () => {
       const output = Babel.transform("var a: string;", {
-        presets: [["typescript", { allExtensions: true }]],
+        presets: ["typescript"],
       }).code;
       expect(output).toBe("var a;");
     });
@@ -64,7 +64,7 @@
       const output = Babel.transform(
         "const someDiv = <div>{getMessage()}</div>",
         {
-          presets: ["react"],
+          presets: [["react", { runtime: "classic" }]],
         },
       ).code;
       expect(output).toBe(
@@ -207,6 +207,13 @@
         expect(() =>
           Babel.transform("const getMessage = () => 'Hello World'", {
             presets: [["stage-0", { decoratorsBeforeExport: false }]],
+          }),
+        ).not.toThrow();
+      });
+      it("#11897 - [...map.keys()] in Babel source should be transformed correctly", () => {
+        expect(() =>
+          Babel.transform("for (let el of []) { s => el }", {
+            plugins: ["transform-block-scoping"],
           }),
         ).not.toThrow();
       });

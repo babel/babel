@@ -3,11 +3,9 @@ import corejs3Polyfills from "core-js-compat/data";
 import findSuggestion from "levenary";
 import invariant from "invariant";
 import { coerce, SemVer } from "semver";
-import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
 import { plugins as pluginsList } from "./plugins-compat-data";
 import moduleTransformations from "./module-transformations";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
-import { defaultWebIncludes } from "./polyfills/corejs2/get-platform-specific-default";
 
 import type {
   BuiltInsOption,
@@ -48,11 +46,7 @@ const getValidIncludesAndExcludes = (
   new Set([
     ...allPluginsList,
     ...(type === "exclude" ? modulePlugins : []),
-    ...(corejs
-      ? corejs == 2
-        ? [...Object.keys(corejs2Polyfills), ...defaultWebIncludes]
-        : Object.keys(corejs3Polyfills)
-      : []),
+    ...(corejs ? Object.keys(corejs3Polyfills) : []),
   ]);
 
 const pluginToRegExp = (plugin: PluginListItem) => {
@@ -218,10 +212,10 @@ export function normalizeCoreJSOption(
   let rawVersion;
 
   if (useBuiltIns && corejs === undefined) {
-    rawVersion = 2;
+    rawVersion = "3.6";
     console.warn(
       "\nWARNING: We noticed you're using the `useBuiltIns` option without declaring a " +
-        "core-js version. Currently, we assume version 2.x when no version " +
+        "core-js version. Currently, we assume version `3.6` when no version " +
         "is passed. Since this default version will likely change in future " +
         "versions of Babel, we recommend explicitly setting the core-js version " +
         "you are using via the `corejs` option.\n" +
@@ -229,8 +223,8 @@ export function normalizeCoreJSOption(
         "option matches the version specified in your `package.json`'s " +
         "`dependencies` section. If it doesn't, you need to run one of the " +
         "following commands:\n\n" +
-        "  npm install --save core-js@2    npm install --save core-js@3\n" +
-        "  yarn add core-js@2              yarn add core-js@3\n",
+        "  npm install --save core-js@3.6\n" +
+        "  yarn add core-js@3.6\n",
     );
   } else if (typeof corejs === "object" && corejs !== null) {
     rawVersion = corejs.version;
@@ -247,11 +241,20 @@ export function normalizeCoreJSOption(
     );
   }
 
-  if (useBuiltIns && (!version || version.major < 2 || version.major > 3)) {
-    throw new RangeError(
-      "Invalid Option: The version passed to `corejs` is invalid. Currently, " +
-        "only core-js@2 and core-js@3 are supported.",
-    );
+  if (useBuiltIns) {
+    if (!version || version.major < 2 || version.major > 3) {
+      throw new RangeError(
+        "Invalid Option: The version passed to `corejs` is invalid. Currently, " +
+          "only core-js@3 is supported.",
+      );
+    } else if (version.major === 2) {
+      throw new Error(
+        `Since Babel 8, the core-js@2 support has been dropped. Please use \`corejs: "3.6"\`.
+- If you really want to use obsolete core-js@2, please install \`babel-plugin-polyfill-corejs2\` and add to the "plugins" config
+  npm install --save-dev babel-plugin-polyfill-corejs2
+  yarn add --dev babel-plugin-polyfill-corejs2`,
+      );
+    }
   }
 
   return { version, proposals };

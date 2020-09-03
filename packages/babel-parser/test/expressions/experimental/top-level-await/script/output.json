@@ -1,0 +1,33 @@
+{
+  "type": "BinaryExpression",
+  "start":19,"end":28,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":9}},
+  "left": {
+    "type": "Identifier",
+    "start":19,"end":24,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":5},"identifierName":"await"},
+    "name": "await"
+  },
+  "operator": "+",
+  "right": {
+    "type": "NumericLiteral",
+    "start":26,"end":28,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":9}},
+    "extra": {
+      "rawValue": 42,
+      "raw": "42"
+    },
+    "value": 42
+  },
+  "leadingComments": [
+    {
+      "type": "CommentLine",
+      "value": " prettier-ignore",
+      "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}}
+    }
+  ],
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " prettier-ignore",
+      "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}}
+    }
+  ]
+}

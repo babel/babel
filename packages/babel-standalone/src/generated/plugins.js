@@ -6,6 +6,7 @@
 import externalHelpers from "@babel/plugin-external-helpers";
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
+import syntaxDecimal from "@babel/plugin-syntax-decimal";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import syntaxDoExpressions from "@babel/plugin-syntax-do-expressions";
 import syntaxExportDefaultFrom from "@babel/plugin-syntax-export-default-from";
@@ -98,6 +99,7 @@ export {
   externalHelpers,
   syntaxAsyncGenerators,
   syntaxClassProperties,
+  syntaxDecimal,
   syntaxDecorators,
   syntaxDoExpressions,
   syntaxExportDefaultFrom,
@@ -191,6 +193,7 @@ export const all = {
   "external-helpers": externalHelpers,
   "syntax-async-generators": syntaxAsyncGenerators,
   "syntax-class-properties": syntaxClassProperties,
+  "syntax-decimal": syntaxDecimal,
   "syntax-decorators": syntaxDecorators,
   "syntax-do-expressions": syntaxDoExpressions,
   "syntax-export-default-from": syntaxExportDefaultFrom,

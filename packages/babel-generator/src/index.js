@@ -46,7 +46,6 @@ function normalizeOptions(code, opts): Format {
     compact: opts.compact,
     minified: opts.minified,
     concise: opts.concise,
-    jsonCompatibleStrings: opts.jsonCompatibleStrings,
     indent: {
       adjustMultilineComment: true,
       style: "  ",
@@ -56,6 +55,7 @@ function normalizeOptions(code, opts): Format {
     jsescOption: {
       quotes: "double",
       wrap: true,
+      minimal: true,
       ...opts.jsescOption,
     },
     recordAndTupleSyntaxType: opts.recordAndTupleSyntaxType,

@@ -10,6 +10,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "chrome":"52", "firefox":"50", "ie":"11" }
+  proposal-logical-assignment-operators { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-nullish-coalescing-operator { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-optional-chaining { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-json-strings { "chrome":"52", "firefox":"50", "ie":"11" }
@@ -41,15 +43,18 @@ Using plugins:
   transform-typeof-symbol { "ie":"11" }
   transform-new-target { "ie":"11" }
   transform-regenerator { "firefox":"50", "ie":"11" }
+  proposal-export-namespace-from { "chrome":"52", "firefox":"50", "ie":"11" }
   transform-modules-commonjs { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-dynamic-import { "chrome":"52", "firefox":"50", "ie":"11" }
 
 Using polyfills with `usage` option:
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-no-corejs-1/input.js] Added following core-js polyfills:
-  es6.object.to-string { "chrome":"52", "firefox":"50", "ie":"11" }
-  es6.promise { "ie":"11" }
-  es6.map { "firefox":"50", "ie":"11" }
-  es6.string.iterator { "ie":"11" }
-  es6.array.iterator { "ie":"11" }
-  web.dom.iterable { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.global-this { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.map { "firefox":"50", "ie":"11" }
+  es.object.to-string { "firefox":"50", "ie":"11" }
+  es.promise { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.string.iterator { "ie":"11" }
+  web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
+  web.queue-microtask { "chrome":"52", "firefox":"50", "ie":"11" }

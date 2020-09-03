@@ -17,9 +17,9 @@
     "./lib/node.js": "./lib/browser.js"
   },
   "dependencies": {
+    "escape-string-regexp": "^4.0.0",
     "find-cache-dir": "^2.0.0",
     "lodash": "^4.17.19",
-    "make-dir": "^2.1.0",
     "pirates": "^4.0.0",
     "source-map-support": "^0.5.16"
   },
@@ -27,9 +27,9 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.5",
-    "@babel/plugin-transform-modules-commonjs": "^7.10.4",
-    "browserify": "16.5.0",
+    "@babel/core": "workspace:^7.10.5",
+    "@babel/plugin-transform-modules-commonjs": "workspace:^7.10.4",
+    "browserify": "^16.5.2",
     "default-require-extensions": "^2.0.0"
   }
 }

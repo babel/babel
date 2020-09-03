@@ -1,0 +1,7 @@
+{
+  "sourceType": "module",
+  "presets": [
+    ["flow", { "ignoreExtensions": true }],
+    "typescript"
+  ]
+}

@@ -141,7 +141,9 @@ export default class StatementParser extends ExpressionParser {
   // regular expression literal. This is to handle cases like
   // `if (foo) /blah/.exec(foo)`, where looking at the previous token
   // does not help.
-
+  // https://tc39.es/ecma262/#prod-Statement
+  // ImportDeclaration and ExportDeclaration are also handled here so we can throw recoverable errors
+  // when they are not at the top level
   parseStatement(context: ?string, topLevel?: boolean): N.Statement {
     if (this.match(tt.at)) {
       this.parseDecorators(true);
@@ -216,21 +218,22 @@ export default class StatementParser extends ExpressionParser {
         return this.parseBlock();
       case tt.semi:
         return this.parseEmptyStatement(node);
-      case tt._export:
       case tt._import: {
         const nextTokenCharCode = this.lookaheadCharCode();
         if (
-          nextTokenCharCode === charCodes.leftParenthesis ||
-          nextTokenCharCode === charCodes.dot
+          nextTokenCharCode === charCodes.leftParenthesis || // import()
+          nextTokenCharCode === charCodes.dot // import.meta
         ) {
           break;
         }
-
+      }
+      // fall through
+      case tt._export: {
         if (!this.options.allowImportExportEverywhere && !topLevel) {
           this.raise(this.state.start, Errors.UnexpectedImportExport);
         }
 
-        this.next();
+        this.next(); // eat `import`/`export`
 
         let result;
         if (starttype === tt._import) {
@@ -626,14 +629,22 @@ export default class StatementParser extends ExpressionParser {
 
   parseThrowStatement(node: N.ThrowStatement): N.ThrowStatement {
     this.next();
-    if (
-      lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start))
-    ) {
+    if (this.hasPrecedingLineBreak()) {
       this.raise(this.state.lastTokEnd, Errors.NewlineAfterThrow);
     }
     node.argument = this.parseExpression();
     this.semicolon();
     return this.finishNode(node, "ThrowStatement");
+  }
+
+  parseCatchClauseParam(): N.Pattern {
+    const param = this.parseBindingAtom();
+
+    const simple = param.type === "Identifier";
+    this.scope.enter(simple ? SCOPE_SIMPLE_CATCH : 0);
+    this.checkLVal(param, BIND_LEXICAL, null, "catch clause");
+
+    return param;
   }
 
   parseTryStatement(node: N.TryStatement): N.TryStatement {
@@ -647,10 +658,7 @@ export default class StatementParser extends ExpressionParser {
       this.next();
       if (this.match(tt.parenL)) {
         this.expect(tt.parenL);
-        clause.param = this.parseBindingAtom();
-        const simple = clause.param.type === "Identifier";
-        this.scope.enter(simple ? SCOPE_SIMPLE_CATCH : 0);
-        this.checkLVal(clause.param, BIND_LEXICAL, null, "catch clause");
+        clause.param = this.parseCatchClauseParam();
         this.expect(tt.parenR);
       } else {
         clause.param = null;
@@ -840,6 +848,8 @@ export default class StatementParser extends ExpressionParser {
   }
 
   // Undefined directives means that directives are not allowed.
+  // https://tc39.es/ecma262/#prod-Block
+  // https://tc39.es/ecma262/#prod-ModuleBody
   parseBlockOrModuleBlockBody(
     body: N.Statement[],
     directives: ?(N.Directive[]),
@@ -961,7 +971,9 @@ export default class StatementParser extends ExpressionParser {
     }
 
     node.left = init;
-    node.right = isForIn ? this.parseExpression() : this.parseMaybeAssign();
+    node.right = isForIn
+      ? this.parseExpression()
+      : this.parseMaybeAssignAllowIn();
     this.expect(tt.parenR);
 
     node.body =
@@ -993,7 +1005,9 @@ export default class StatementParser extends ExpressionParser {
       const decl = this.startNode();
       this.parseVarId(decl, kind);
       if (this.eat(tt.eq)) {
-        decl.init = this.parseMaybeAssign(isFor);
+        decl.init = isFor
+          ? this.parseMaybeAssignDisallowIn()
+          : this.parseMaybeAssignAllowIn();
       } else {
         if (
           kind === "const" &&
@@ -1154,9 +1168,8 @@ export default class StatementParser extends ExpressionParser {
 
     this.parseClassId(node, isStatement, optionalId);
     this.parseClassSuper(node);
+    // this.state.strict is restored in parseClassBody
     node.body = this.parseClassBody(!!node.superClass, oldStrict);
-
-    this.state.strict = oldStrict;
 
     return this.finishNode(
       node,
@@ -1181,9 +1194,10 @@ export default class StatementParser extends ExpressionParser {
     );
   }
 
+  // https://tc39.es/ecma262/#prod-ClassBody
   parseClassBody(
     constructorAllowsSuper: boolean,
-    oldStrict?: boolean,
+    oldStrict: boolean,
   ): N.ClassBody {
     this.classScope.enter();
 
@@ -1231,11 +1245,9 @@ export default class StatementParser extends ExpressionParser {
       }
     });
 
-    if (!oldStrict) {
-      this.state.strict = false;
-    }
+    this.state.strict = oldStrict;
 
-    this.next();
+    this.next(); // eat `}`
 
     if (decorators.length) {
       throw this.raise(this.state.start, Errors.TrailingDecorator);
@@ -1252,7 +1264,6 @@ export default class StatementParser extends ExpressionParser {
     classBody: N.ClassBody,
     member: N.ClassMember,
   ): boolean {
-    const containsEsc = this.state.containsEsc;
     const key = this.parseIdentifier(true); // eats the modifier
 
     if (this.isClassMethod()) {
@@ -1281,10 +1292,7 @@ export default class StatementParser extends ExpressionParser {
       prop.static = false;
       classBody.body.push(this.parseClassProperty(prop));
       return true;
-    } else if (containsEsc) {
-      throw this.unexpected();
     }
-
     return false;
   }
 
@@ -1330,7 +1338,7 @@ export default class StatementParser extends ExpressionParser {
     if (this.eat(tt.star)) {
       // a generator
       method.kind = "method";
-      this.parseClassPropertyName(method);
+      this.parseClassElementName(method);
 
       if (method.key.type === "PrivateName") {
         // Private generator method
@@ -1355,7 +1363,7 @@ export default class StatementParser extends ExpressionParser {
     }
 
     const containsEsc = this.state.containsEsc;
-    const key = this.parseClassPropertyName(member);
+    const key = this.parseClassElementName(member);
     const isPrivate = key.type === "PrivateName";
     // Check the key is not a computed expression or string literal.
     const isSimple = key.type === "Identifier";
@@ -1414,7 +1422,7 @@ export default class StatementParser extends ExpressionParser {
 
       method.kind = "method";
       // The so-called parsed name would have been "async": get the real name.
-      this.parseClassPropertyName(method);
+      this.parseClassElementName(method);
       this.parsePostMemberNameModifiers(publicMember);
 
       if (method.key.type === "PrivateName") {
@@ -1449,7 +1457,7 @@ export default class StatementParser extends ExpressionParser {
       // a getter or setter
       method.kind = key.name;
       // The so-called parsed name would have been "get/set": get the real name.
-      this.parseClassPropertyName(publicMethod);
+      this.parseClassElementName(publicMethod);
 
       if (method.key.type === "PrivateName") {
         // private getter/setter
@@ -1481,7 +1489,8 @@ export default class StatementParser extends ExpressionParser {
     }
   }
 
-  parseClassPropertyName(member: N.ClassMember): N.Expression | N.Identifier {
+  // https://tc39.es/proposal-class-fields/#prod-ClassElementName
+  parseClassElementName(member: N.ClassMember): N.Expression | N.Identifier {
     const key = this.parsePropertyName(member, /* isPrivateNameAllowed */ true);
 
     if (
@@ -1588,19 +1597,13 @@ export default class StatementParser extends ExpressionParser {
     methodOrProp: N.ClassMethod | N.ClassProperty,
   ): void {}
 
-  // Overridden in typescript.js
-  parseAccessModifier(): ?N.Accessibility {
-    return undefined;
-  }
-
   parseClassPrivateProperty(
     node: N.ClassPrivateProperty,
   ): N.ClassPrivateProperty {
     this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
-    // [In] production parameter is tracked in parseMaybeAssign
     this.prodParam.enter(PARAM);
 
-    node.value = this.eat(tt.eq) ? this.parseMaybeAssign() : null;
+    node.value = this.eat(tt.eq) ? this.parseMaybeAssignAllowIn() : null;
     this.semicolon();
     this.prodParam.exit();
 
@@ -1615,13 +1618,12 @@ export default class StatementParser extends ExpressionParser {
     }
 
     this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
-    // [In] production parameter is tracked in parseMaybeAssign
     this.prodParam.enter(PARAM);
 
     if (this.match(tt.eq)) {
       this.expectPlugin("classProperties");
       this.next();
-      node.value = this.parseMaybeAssign();
+      node.value = this.parseMaybeAssignAllowIn();
     } else {
       node.value = null;
     }
@@ -1653,11 +1655,13 @@ export default class StatementParser extends ExpressionParser {
     }
   }
 
+  // https://tc39.es/ecma262/#prod-ClassHeritage
   parseClassSuper(node: N.Class): void {
     node.superClass = this.eat(tt._extends) ? this.parseExprSubscripts() : null;
   }
 
   // Parses module export declaration.
+  // https://tc39.es/ecma262/#prod-ExportDeclaration
 
   parseExport(node: N.Node): N.AnyExport {
     const hasDefault = this.maybeParseExportDefaultSpecifier(node);
@@ -1761,19 +1765,9 @@ export default class StatementParser extends ExpressionParser {
 
   maybeParseExportDeclaration(node: N.Node): boolean {
     if (this.shouldParseExportDeclaration()) {
-      if (this.isContextual("async")) {
-        const next = this.nextTokenStart();
-
-        // export async;
-        if (!this.isUnparsedContextual(next, "function")) {
-          this.unexpected(next, tt._function);
-        }
-      }
-
       node.specifiers = [];
       node.source = null;
       node.declaration = this.parseExportDeclaration(node);
-
       return true;
     }
     return false;
@@ -1818,7 +1812,7 @@ export default class StatementParser extends ExpressionParser {
     } else if (this.match(tt._const) || this.match(tt._var) || this.isLet()) {
       throw this.raise(this.state.start, Errors.UnsupportedDefaultExport);
     } else {
-      const res = this.parseMaybeAssign();
+      const res = this.parseMaybeAssignAllowIn();
       this.semicolon();
       return res;
     }
@@ -1832,7 +1826,7 @@ export default class StatementParser extends ExpressionParser {
   isExportDefaultSpecifier(): boolean {
     if (this.match(tt.name)) {
       const value = this.state.value;
-      if (value === "async" || value === "let") {
+      if ((value === "async" && !this.state.containsEsc) || value === "let") {
         return false;
       }
       if (
@@ -1976,15 +1970,10 @@ export default class StatementParser extends ExpressionParser {
     const currentContextDecorators = this.state.decoratorStack[
       this.state.decoratorStack.length - 1
     ];
+    // If node.declaration is a class, it will take all decorators in the current context.
+    // Thus we should throw if we see non-empty decorators here.
     if (currentContextDecorators.length) {
-      const isClass =
-        node.declaration &&
-        (node.declaration.type === "ClassDeclaration" ||
-          node.declaration.type === "ClassExpression");
-      if (!node.declaration || !isClass) {
-        throw this.raise(node.start, Errors.UnsupportedDecoratorExport);
-      }
-      this.takeDecorators(node.declaration);
+      throw this.raise(node.start, Errors.UnsupportedDecoratorExport);
     }
   }
 
@@ -2019,7 +2008,6 @@ export default class StatementParser extends ExpressionParser {
     name: string,
   ): void {
     if (this.state.exportedIdentifiers.indexOf(name) > -1) {
-      /* eslint-disable @babel/development-internal/dry-error-messages */
       this.raise(
         node.start,
         name === "default"
@@ -2027,7 +2015,6 @@ export default class StatementParser extends ExpressionParser {
           : Errors.DuplicateExport,
         name,
       );
-      /* eslint-enable @babel/development-internal/dry-error-messages */
     }
     this.state.exportedIdentifiers.push(name);
   }
@@ -2061,6 +2048,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   // Parses import declaration.
+  // https://tc39.es/ecma262/#prod-ImportDeclaration
 
   parseImport(node: N.Node): N.AnyImport {
     // import '...'
@@ -2225,6 +2213,7 @@ export default class StatementParser extends ExpressionParser {
     }
   }
 
+  // https://tc39.es/ecma262/#prod-ImportSpecifier
   parseImportSpecifier(node: N.ImportDeclaration): void {
     const specifier = this.startNode();
     specifier.imported = this.parseIdentifier(true);

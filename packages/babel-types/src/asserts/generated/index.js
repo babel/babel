@@ -800,6 +800,9 @@ export function assertRecordExpression(node: Object, opts?: Object = {}): void {
 export function assertTupleExpression(node: Object, opts?: Object = {}): void {
   assert("TupleExpression", node, opts);
 }
+export function assertDecimalLiteral(node: Object, opts?: Object = {}): void {
+  assert("DecimalLiteral", node, opts);
+}
 export function assertTSParameterProperty(
   node: Object,
   opts?: Object = {},
@@ -919,6 +922,12 @@ export function assertTSOptionalType(node: Object, opts?: Object = {}): void {
 }
 export function assertTSRestType(node: Object, opts?: Object = {}): void {
   assert("TSRestType", node, opts);
+}
+export function assertTSNamedTupleMember(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("TSNamedTupleMember", node, opts);
 }
 export function assertTSUnionType(node: Object, opts?: Object = {}): void {
   assert("TSUnionType", node, opts);

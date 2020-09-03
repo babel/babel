@@ -9,7 +9,7 @@ function _templateObject5() {
 }
 
 function _templateObject4() {
-  const data = _taggedTemplateLiteral(["\\\uD835\uDC9C"], ["\\\\\\u{1d49c}"]);
+  const data = _taggedTemplateLiteral(["\\𝒜"], ["\\\\\\u{1d49c}"]);
 
   _templateObject4 = function () {
     return data;
@@ -29,7 +29,7 @@ function _templateObject3() {
 }
 
 function _templateObject2() {
-  const data = _taggedTemplateLiteral(["\uD835\uDC9C"], ["\\u{1d49c}"]);
+  const data = _taggedTemplateLiteral(["𝒜"], ["\\u{1d49c}"]);
 
   _templateObject2 = function () {
     return data;
@@ -39,7 +39,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = _taggedTemplateLiteral(["\uD835\uDC9C\uD835\uDC9C\uD835\uDC9C"], ["\uD835\uDC9C\\ud835\\udc9c\\u{1d49c}"]);
+  const data = _taggedTemplateLiteral(["𝒜𝒜𝒜"], ["𝒜\\ud835\\udc9c\\u{1d49c}"]);
 
   _templateObject = function () {
     return data;

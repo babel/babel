@@ -1,21 +1,21 @@
 {
   "type": "File",
-  "start":0,"end":57,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":57}},
+  "start":0,"end":61,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":61}},
   "program": {
     "type": "Program",
-    "start":0,"end":57,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":57}},
+    "start":0,"end":61,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":61}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start":0,"end":57,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":57}},
+        "start":0,"end":61,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":61}},
         "expression": {
           "type": "JSXElement",
-          "start":0,"end":57,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":57}},
+          "start":0,"end":61,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":61}},
           "openingElement": {
             "type": "JSXOpeningElement",
-            "start":0,"end":57,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":57}},
+            "start":0,"end":61,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":61}},
             "name": {
               "type": "JSXIdentifier",
               "start":1,"end":10,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":10}},
@@ -50,7 +50,7 @@
               },
               {
                 "type": "JSXAttribute",
-                "start":22,"end":54,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":54}},
+                "start":22,"end":58,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":58}},
                 "name": {
                   "type": "JSXIdentifier",
                   "start":22,"end":27,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":27}},
@@ -58,7 +58,7 @@
                 },
                 "value": {
                   "type": "JSXElement",
-                  "start":28,"end":54,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":54}},
+                  "start":28,"end":58,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":58}},
                   "openingElement": {
                     "type": "JSXOpeningElement",
                     "start":28,"end":31,"loc":{"start":{"line":1,"column":28},"end":{"line":1,"column":31}},
@@ -72,22 +72,44 @@
                   },
                   "closingElement": {
                     "type": "JSXClosingElement",
-                    "start":50,"end":54,"loc":{"start":{"line":1,"column":50},"end":{"line":1,"column":54}},
+                    "start":54,"end":58,"loc":{"start":{"line":1,"column":54},"end":{"line":1,"column":58}},
                     "name": {
                       "type": "JSXIdentifier",
-                      "start":52,"end":53,"loc":{"start":{"line":1,"column":52},"end":{"line":1,"column":53}},
+                      "start":56,"end":57,"loc":{"start":{"line":1,"column":56},"end":{"line":1,"column":57}},
                       "name": "b"
                     }
                   },
                   "children": [
                     {
                       "type": "JSXText",
-                      "start":31,"end":50,"loc":{"start":{"line":1,"column":31},"end":{"line":1,"column":50}},
+                      "start":31,"end":40,"loc":{"start":{"line":1,"column":31},"end":{"line":1,"column":40}},
                       "extra": {
-                        "rawValue": "monkeys /> gorillas",
-                        "raw": "monkeys /> gorillas"
+                        "rawValue": "monkeys /",
+                        "raw": "monkeys /"
                       },
-                      "value": "monkeys /> gorillas"
+                      "value": "monkeys /"
+                    },
+                    {
+                      "type": "JSXExpressionContainer",
+                      "start":40,"end":45,"loc":{"start":{"line":1,"column":40},"end":{"line":1,"column":45}},
+                      "expression": {
+                        "type": "StringLiteral",
+                        "start":41,"end":44,"loc":{"start":{"line":1,"column":41},"end":{"line":1,"column":44}},
+                        "extra": {
+                          "rawValue": ">",
+                          "raw": "\">\""
+                        },
+                        "value": ">"
+                      }
+                    },
+                    {
+                      "type": "JSXText",
+                      "start":45,"end":54,"loc":{"start":{"line":1,"column":45},"end":{"line":1,"column":54}},
+                      "extra": {
+                        "rawValue": " gorillas",
+                        "raw": " gorillas"
+                      },
+                      "value": " gorillas"
                     }
                   ]
                 }

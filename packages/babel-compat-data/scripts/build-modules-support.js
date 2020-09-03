@@ -35,8 +35,8 @@ function process(source) {
   const allowedBrowsers = {};
 
   Object.keys(stats).forEach(browser => {
-    const browserName = browserNameMap[browser] ?? browser;
-    let browserSupport = stats[browserSupportMap[browserName] ?? browser];
+    const browserName = browserNameMap[browser] || browser;
+    let browserSupport = stats[browserSupportMap[browserName] || browser];
     if (Array.isArray(browserSupport)) {
       browserSupport = browserSupport[0]; // The first item is the most progressive support
     }

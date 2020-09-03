@@ -19,6 +19,27 @@ export default declare((api, options) => {
   const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
   const JSX_FRAG_ANNOTATION_REGEX = /\*?\s*@jsxFrag\s+([^\s]+)/;
 
+  if ("useSpread" in options) {
+    throw new Error(
+      'transform-react-jsx: Since Babel 8, an inline object with spread elements is always used, and the "useSpread" option is no longer available. Please remove it from your config.',
+    );
+  }
+
+  if ("useBuiltIns" in options) {
+    const useBuiltInsFormatted = JSON.stringify(options.useBuiltIns);
+    throw new Error(
+      `transform-react-jsx: Since "useBuiltIns" is removed in Babel 8, you must remove it from your config.
+- Babel 8 now transforms JSX spread to object spread. If you need to transpile object spread with
+\`useBuiltIns: ${useBuiltInsFormatted}\`, you can use the following config
+{
+  "plugins": [
+    "@babel/plugin-transform-react-jsx",
+    ["@babel/plugin-proposal-object-rest-spread", { "loose": true, "useBuiltIns": ${useBuiltInsFormatted} }]
+  ]
+}`,
+    );
+  }
+
   // returns a closure that returns an identifier or memberExpression node
   // based on the given id
   const createIdentifierParser = (id: string) => () => {

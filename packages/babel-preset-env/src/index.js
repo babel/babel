@@ -13,10 +13,8 @@ import {
 } from "./plugins-compat-data";
 import overlappingPlugins from "@babel/compat-data/overlapping-plugins";
 
-import addCoreJS2UsagePlugin from "./polyfills/corejs2/usage-plugin";
 import addCoreJS3UsagePlugin from "./polyfills/corejs3/usage-plugin";
 import addRegeneratorUsagePlugin from "./polyfills/regenerator/usage-plugin";
-import replaceCoreJS2EntryPlugin from "./polyfills/corejs2/entry-plugin";
 import replaceCoreJS3EntryPlugin from "./polyfills/corejs3/entry-plugin";
 import removeRegeneratorEntryPlugin from "./polyfills/regenerator/entry-plugin";
 
@@ -99,14 +97,16 @@ export const getModulesPluginNames = ({
   transformations,
   shouldTransformESM,
   shouldTransformDynamicImport,
+  shouldTransformExportNamespaceFrom,
   shouldParseTopLevelAwait,
-}: {
+}: {|
   modules: ModuleOption,
   transformations: ModuleTransformationsType,
   shouldTransformESM: boolean,
   shouldTransformDynamicImport: boolean,
+  shouldTransformExportNamespaceFrom: boolean,
   shouldParseTopLevelAwait: boolean,
-}) => {
+|}) => {
   const modulesPluginNames = [];
   if (modules !== false && transformations[modules]) {
     if (shouldTransformESM) {
@@ -130,6 +130,12 @@ export const getModulesPluginNames = ({
     }
   } else {
     modulesPluginNames.push("syntax-dynamic-import");
+  }
+
+  if (shouldTransformExportNamespaceFrom) {
+    modulesPluginNames.push("proposal-export-namespace-from");
+  } else {
+    modulesPluginNames.push("syntax-export-namespace-from");
   }
 
   if (shouldParseTopLevelAwait) {
@@ -175,22 +181,14 @@ export const getPolyfillPlugins = ({
 
     if (corejs) {
       if (useBuiltIns === "usage") {
-        if (corejs.major === 2) {
-          polyfillPlugins.push([addCoreJS2UsagePlugin, pluginOptions]);
-        } else {
-          polyfillPlugins.push([addCoreJS3UsagePlugin, pluginOptions]);
-        }
+        polyfillPlugins.push([addCoreJS3UsagePlugin, pluginOptions]);
         if (regenerator) {
           polyfillPlugins.push([addRegeneratorUsagePlugin, pluginOptions]);
         }
       } else {
-        if (corejs.major === 2) {
-          polyfillPlugins.push([replaceCoreJS2EntryPlugin, pluginOptions]);
-        } else {
-          polyfillPlugins.push([replaceCoreJS3EntryPlugin, pluginOptions]);
-          if (!regenerator) {
-            polyfillPlugins.push([removeRegeneratorEntryPlugin, pluginOptions]);
-          }
+        polyfillPlugins.push([replaceCoreJS3EntryPlugin, pluginOptions]);
+        if (!regenerator) {
+          polyfillPlugins.push([removeRegeneratorEntryPlugin, pluginOptions]);
         }
       }
     }
@@ -204,6 +202,10 @@ function supportsStaticESM(caller) {
 
 function supportsDynamicImport(caller) {
   return !!caller?.supportsDynamicImport;
+}
+
+function supportsExportNamespaceFrom(caller) {
+  return !!caller?.supportsExportNamespaceFrom;
 }
 
 function supportsTopLevelAwait(caller) {
@@ -230,18 +232,6 @@ export default declare((api, opts) => {
     corejs: { version: corejs, proposals },
     browserslistEnv,
   } = normalizeOptions(opts);
-  // TODO: remove this in next major
-  let hasUglifyTarget = false;
-
-  if (optionsTargets?.uglify) {
-    hasUglifyTarget = true;
-    delete optionsTargets.uglify;
-
-    console.log("");
-    console.log("The uglify target has been deprecated. Set the top level");
-    console.log("option `forceAllTransforms: true` instead.");
-    console.log("");
-  }
 
   if (optionsTargets?.esmodules && optionsTargets.browsers) {
     console.log("");
@@ -263,8 +253,17 @@ export default declare((api, opts) => {
   const include = transformIncludesAndExcludes(optionsInclude);
   const exclude = transformIncludesAndExcludes(optionsExclude);
 
-  const transformTargets = forceAllTransforms || hasUglifyTarget ? {} : targets;
+  const transformTargets = forceAllTransforms ? {} : targets;
 
+  const compatData = getPluginList(shippedProposals, bugfixes);
+  const shouldSkipExportNamespaceFrom =
+    (modules === "auto" && api.caller?.(supportsExportNamespaceFrom)) ||
+    (modules === false &&
+      !isRequired("proposal-export-namespace-from", transformTargets, {
+        compatData,
+        includes: include.plugins,
+        excludes: exclude.plugins,
+      }));
   const modulesPluginNames = getModulesPluginNames({
     modules,
     transformations: moduleTransformations,
@@ -273,11 +272,12 @@ export default declare((api, opts) => {
     shouldTransformESM: modules !== "auto" || !api.caller?.(supportsStaticESM),
     shouldTransformDynamicImport:
       modules !== "auto" || !api.caller?.(supportsDynamicImport),
+    shouldTransformExportNamespaceFrom: !shouldSkipExportNamespaceFrom,
     shouldParseTopLevelAwait: !api.caller || api.caller(supportsTopLevelAwait),
   });
 
   const pluginNames = filterItems(
-    getPluginList(shippedProposals, bugfixes),
+    compatData,
     include.plugins,
     exclude.plugins,
     transformTargets,

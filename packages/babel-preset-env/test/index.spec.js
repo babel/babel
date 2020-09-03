@@ -1,13 +1,9 @@
 "use strict";
 
 const babelPresetEnv = require("../lib/index");
-const addCoreJS2UsagePlugin = require("../lib/polyfills/corejs2/usage-plugin")
-  .default;
 const addCoreJS3UsagePlugin = require("../lib/polyfills/corejs3/usage-plugin")
   .default;
 const addRegeneratorUsagePlugin = require("../lib/polyfills/regenerator/usage-plugin")
-  .default;
-const replaceCoreJS2EntryPlugin = require("../lib/polyfills/corejs2/entry-plugin")
   .default;
 const replaceCoreJS3EntryPlugin = require("../lib/polyfills/corejs3/entry-plugin")
   .default;
@@ -42,28 +38,30 @@ describe("babel-preset-env", () => {
   });
   describe("getModulesPluginNames", () => {
     describe("modules is set to false", () => {
-      it("returns only syntax-dynamic-import", () => {
+      it("returns only syntax plugins", () => {
         expect(
           babelPresetEnv.getModulesPluginNames({
             modules: false,
             transformations,
             shouldTransformESM: false,
             shouldTransformDynamicImport: false,
+            shouldTransformExportNamespaceFrom: false,
           }),
-        ).toEqual(["syntax-dynamic-import"]);
+        ).toEqual(["syntax-dynamic-import", "syntax-export-namespace-from"]);
       });
     });
     describe("modules is not set to false", () => {
       describe("ESMs should not be transformed", () => {
-        it("returns syntax-dynamic-import", () => {
+        it("returns syntax plugins", () => {
           expect(
             babelPresetEnv.getModulesPluginNames({
               modules: "commonjs",
               transformations,
               shouldTransformESM: false,
               shouldTransformDynamicImport: false,
+              shouldTransformExportNamespaceFrom: false,
             }),
-          ).toEqual(["syntax-dynamic-import"]);
+          ).toEqual(["syntax-dynamic-import", "syntax-export-namespace-from"]);
         });
       });
       describe("ESMs should be transformed", () => {
@@ -75,8 +73,13 @@ describe("babel-preset-env", () => {
                 transformations,
                 shouldTransformESM: true,
                 shouldTransformDynamicImport: false,
+                shouldTransformExportNamespaceFrom: false,
               }),
-            ).toEqual(["transform-modules-commonjs", "syntax-dynamic-import"]);
+            ).toEqual([
+              "transform-modules-commonjs",
+              "syntax-dynamic-import",
+              "syntax-export-namespace-from",
+            ]);
           });
         });
         describe("dynamic imports should be transformed", () => {
@@ -87,11 +90,30 @@ describe("babel-preset-env", () => {
                 transformations,
                 shouldTransformESM: true,
                 shouldTransformDynamicImport: true,
+                shouldTransformExportNamespaceFrom: false,
               }),
             ).toEqual([
               "transform-modules-systemjs",
               "proposal-dynamic-import",
+              "syntax-export-namespace-from",
             ]);
+          });
+          describe("export namespace from should be transformed", () => {
+            it("works", () => {
+              expect(
+                babelPresetEnv.getModulesPluginNames({
+                  modules: "systemjs",
+                  transformations,
+                  shouldTransformESM: true,
+                  shouldTransformDynamicImport: true,
+                  shouldTransformExportNamespaceFrom: true,
+                }),
+              ).toEqual([
+                "transform-modules-systemjs",
+                "proposal-dynamic-import",
+                "proposal-export-namespace-from",
+              ]);
+            });
           });
         });
       });
@@ -140,22 +162,6 @@ describe("babel-preset-env", () => {
         });
       });
       describe("useBuiltIns is set to usage", () => {
-        describe("using corejs 2", () => {
-          it("returns an array with core js 2 usage plugin", () => {
-            const polyfillPlugins = babelPresetEnv.getPolyfillPlugins(
-              Object.assign(
-                {
-                  useBuiltIns: "usage",
-                  corejs: { major: 2 },
-                  regenerator: false,
-                },
-                staticProps,
-              ),
-            );
-            expect(polyfillPlugins.length).toBe(1);
-            expect(polyfillPlugins[0][0]).toEqual(addCoreJS2UsagePlugin);
-          });
-        });
         describe("using corejs 3", () => {
           describe("regenerator is set to false", () => {
             it("returns an array with core js 3 usage plugin", () => {
@@ -194,22 +200,6 @@ describe("babel-preset-env", () => {
         });
       });
       describe("useBuiltIns is set to entry", () => {
-        describe("using corejs 2", () => {
-          it("returns an array with core js 2 entry plugin", () => {
-            const polyfillPlugins = babelPresetEnv.getPolyfillPlugins(
-              Object.assign(
-                {
-                  useBuiltIns: "entry",
-                  corejs: { major: 2 },
-                  regenerator: true,
-                },
-                staticProps,
-              ),
-            );
-            expect(polyfillPlugins.length).toBe(1);
-            expect(polyfillPlugins[0][0]).toEqual(replaceCoreJS2EntryPlugin);
-          });
-        });
         describe("using corejs 3", () => {
           describe("regenerator is set to true", () => {
             it("returns an array with core js 3 entry plugin", () => {

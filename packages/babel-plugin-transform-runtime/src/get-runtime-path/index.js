@@ -1,5 +1,4 @@
 import path from "path";
-import resolve from "resolve";
 
 export default function (moduleName, dirname, absoluteRuntime) {
   if (absoluteRuntime === false) return moduleName;
@@ -13,7 +12,9 @@ export default function (moduleName, dirname, absoluteRuntime) {
 function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
   try {
     return path
-      .dirname(resolve.sync(`${moduleName}/package.json`, { basedir: dirname }))
+      .dirname(
+        require.resolve(`${moduleName}/package.json`, { paths: [dirname] }),
+      )
       .replace(/\\/g, "/");
   } catch (err) {
     if (err.code !== "MODULE_NOT_FOUND") throw err;

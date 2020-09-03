@@ -123,6 +123,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             chunkStart = this.state.pos;
             break;
 
+          case charCodes.greaterThan:
+          case charCodes.rightCurlyBrace: {
+            const htmlEntity =
+              ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;";
+            throw this.raise(
+              this.state.pos,
+              `Unexpected token \`${
+                this.input[this.state.pos]
+              }\`. Did you mean \`${htmlEntity}\` or \`{'${
+                this.input[this.state.pos]
+              }'}\`?`,
+            );
+          }
+
           default:
             if (isNewLine(ch)) {
               out += this.input.slice(chunkStart, this.state.pos);
@@ -344,9 +358,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.match(tt.braceR)) {
         node.expression = this.jsxParseEmptyExpression();
       } else {
-        node.expression = this.parseExpression();
+        node.expression = this.parseMaybeAssign();
       }
       this.expect(tt.braceR);
+
       return this.finishNode(node, "JSXExpressionContainer");
     }
 
@@ -356,7 +371,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node = this.startNode();
       if (this.eat(tt.braceL)) {
         this.expect(tt.ellipsis);
-        node.argument = this.parseMaybeAssign();
+        node.argument = this.parseMaybeAssignAllowIn();
         this.expect(tt.braceR);
         return this.finishNode(node, "JSXSpreadAttribute");
       }

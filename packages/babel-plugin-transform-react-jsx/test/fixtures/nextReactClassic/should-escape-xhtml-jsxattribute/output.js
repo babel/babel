@@ -2,7 +2,7 @@
 
 /*#__PURE__*/
 React.createElement("div", {
-  id: "w\xF4w"
+  id: "wôw"
 });
 
 /*#__PURE__*/

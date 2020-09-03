@@ -13,8 +13,8 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-function-name": "^7.10.4",
-    "@babel/types": "^7.10.5",
+    "@babel/helper-function-name": "workspace:^7.10.4",
+    "@babel/types": "workspace:^7.10.5",
     "lodash": "^4.17.19"
   }
 }

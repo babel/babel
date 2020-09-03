@@ -318,11 +318,17 @@ const instantiatePlugin = makeWeakCache(function* (
   return new Plugin(plugin, options, alias);
 });
 
+const needsFilename = val => val && typeof val !== "function";
+
 const validateIfOptionNeedsFilename = (
   options: ValidatedOptions,
   descriptor: UnloadedDescriptor,
 ): void => {
-  if (options.test || options.include || options.exclude) {
+  if (
+    needsFilename(options.test) ||
+    needsFilename(options.include) ||
+    needsFilename(options.exclude)
+  ) {
     const formattedPresetName = descriptor.name
       ? `"${descriptor.name}"`
       : "/* your preset */";

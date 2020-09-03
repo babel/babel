@@ -1,12 +1,6 @@
 import path from "path";
 import * as babel from "..";
 
-const nodeGte8 = (...args) => {
-  // "minNodeVersion": "8.0.0" <-- For Ctrl+F when dropping node 6
-  const testFn = process.version.slice(0, 3) === "v6." ? it.skip : it;
-  testFn(...args);
-};
-
 describe("asynchronicity", () => {
   const base = path.join(__dirname, "fixtures", "async");
   let cwd;
@@ -22,7 +16,7 @@ describe("asynchronicity", () => {
 
   describe("config file", () => {
     describe("async function", () => {
-      nodeGte8("called synchronously", () => {
+      it("called synchronously", () => {
         process.chdir("config-file-async-function");
 
         expect(() =>
@@ -35,7 +29,7 @@ describe("asynchronicity", () => {
         );
       });
 
-      nodeGte8("called asynchronously", async () => {
+      it("called asynchronously", async () => {
         process.chdir("config-file-async-function");
 
         await expect(
@@ -78,7 +72,7 @@ describe("asynchronicity", () => {
     });
 
     describe("cache.using", () => {
-      nodeGte8("called synchronously", () => {
+      it("called synchronously", () => {
         process.chdir("config-cache");
 
         expect(() =>
@@ -91,7 +85,7 @@ describe("asynchronicity", () => {
         );
       });
 
-      nodeGte8("called asynchronously", async () => {
+      it("called asynchronously", async () => {
         process.chdir("config-cache");
 
         await expect(
@@ -108,7 +102,7 @@ describe("asynchronicity", () => {
 
   describe("plugin", () => {
     describe("factory function", () => {
-      nodeGte8("called synchronously", () => {
+      it("called synchronously", () => {
         process.chdir("plugin");
 
         expect(() =>
@@ -120,7 +114,7 @@ describe("asynchronicity", () => {
         );
       });
 
-      nodeGte8("called asynchronously", async () => {
+      it("called asynchronously", async () => {
         process.chdir("plugin");
 
         await expect(
@@ -134,7 +128,7 @@ describe("asynchronicity", () => {
     });
 
     describe(".pre", () => {
-      nodeGte8("called synchronously", () => {
+      it("called synchronously", () => {
         process.chdir("plugin-pre");
 
         expect(() =>
@@ -146,7 +140,7 @@ describe("asynchronicity", () => {
         );
       });
 
-      nodeGte8("called asynchronously", async () => {
+      it("called asynchronously", async () => {
         process.chdir("plugin-pre");
 
         await expect(
@@ -160,7 +154,7 @@ describe("asynchronicity", () => {
     });
 
     describe(".post", () => {
-      nodeGte8("called synchronously", () => {
+      it("called synchronously", () => {
         process.chdir("plugin-post");
 
         expect(() =>
@@ -172,7 +166,7 @@ describe("asynchronicity", () => {
         );
       });
 
-      nodeGte8("called asynchronously", async () => {
+      it("called asynchronously", async () => {
         process.chdir("plugin-post");
 
         await expect(
@@ -186,7 +180,7 @@ describe("asynchronicity", () => {
     });
 
     describe("inherits", () => {
-      nodeGte8("called synchronously", () => {
+      it("called synchronously", () => {
         process.chdir("plugin-inherits");
 
         expect(() =>
@@ -198,7 +192,7 @@ describe("asynchronicity", () => {
         );
       });
 
-      nodeGte8("called asynchronously", async () => {
+      it("called asynchronously", async () => {
         process.chdir("plugin-inherits");
 
         await expect(

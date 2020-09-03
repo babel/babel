@@ -1,7 +1,7 @@
 "use strict";
 
 const path = require("path");
-const outputFile = require("output-file-sync");
+const fs = require("fs");
 const helpers = require("@babel/helpers");
 const babel = require("@babel/core");
 const template = require("@babel/template");
@@ -10,29 +10,17 @@ const t = require("@babel/types");
 const transformRuntime = require("../");
 
 const runtimeVersion = require("@babel/runtime/package.json").version;
-const corejs2Definitions = require("../lib/runtime-corejs2-definitions").default();
 const corejs3Definitions = require("../lib/runtime-corejs3-definitions").default();
+const outputFileSync = function (filePath, data) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, data);
+};
 
 writeHelpers("@babel/runtime");
-writeHelpers("@babel/runtime-corejs2", { corejs: 2 });
 writeHelpers("@babel/runtime-corejs3", {
   corejs: { version: 3, proposals: true },
 });
 
-writeCoreJS({
-  corejs: 2,
-  proposals: true,
-  definitions: corejs2Definitions,
-  paths: [
-    "is-iterable",
-    "get-iterator",
-    // This was previously in definitions, but was removed to work around
-    // zloirock/core-js#262. We need to keep it in @babel/runtime-corejs2 to
-    // avoid a breaking change there.
-    "symbol/async-iterator",
-  ],
-  corejsRoot: "core-js/library/fn",
-});
 writeCoreJS({
   corejs: 3,
   proposals: false,
@@ -79,7 +67,7 @@ function writeCoreJS({
 
   const runtimeRoot = proposals ? "core-js" : "core-js-stable";
   paths.forEach(function (corejsPath) {
-    outputFile(
+    outputFileSync(
       path.join(pkgDirname, runtimeRoot, `${corejsPath}.js`),
       `module.exports = require("${corejsRoot}/${corejsPath}");`
     );
@@ -102,7 +90,7 @@ function writeHelperFiles(runtimeName, { esm, corejs }) {
       `${helperName}.js`
     );
 
-    outputFile(
+    outputFileSync(
       helperFilename,
       buildHelper(runtimeName, pkgDirname, helperFilename, helperName, {
         esm,
