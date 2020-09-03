@@ -8,7 +8,8 @@
     "build": "make build",
     "fix": "make fix",
     "lint": "make lint",
-    "test": "make test"
+    "test": "make test",
+    "version": "yarn --immutable-cache && git add yarn.lock"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.4",
