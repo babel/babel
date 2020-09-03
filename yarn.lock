@@ -34,7 +34,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/cli@workspace:packages/babel-cli"
   dependencies:
-    "@babel/core": "workspace:^7.11.5"
+    "@babel/core": "workspace:^7.11.6"
     "@babel/helper-fixtures": "workspace:^7.10.5"
     chokidar: ^2.1.8
     commander: ^4.0.1
@@ -125,14 +125,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@workspace:^7.10.4, @babel/core@workspace:^7.10.5, @babel/core@workspace:^7.11.0, @babel/core@workspace:^7.11.1, @babel/core@workspace:^7.11.4, @babel/core@workspace:^7.11.5, @babel/core@workspace:packages/babel-core":
+"@babel/core@workspace:^7.10.4, @babel/core@workspace:^7.10.5, @babel/core@workspace:^7.11.0, @babel/core@workspace:^7.11.1, @babel/core@workspace:^7.11.5, @babel/core@workspace:^7.11.6, @babel/core@workspace:packages/babel-core":
   version: 0.0.0-use.local
   resolution: "@babel/core@workspace:packages/babel-core"
   dependencies:
     "@babel/code-frame": "workspace:^7.10.4"
-    "@babel/generator": "workspace:^7.11.5"
+    "@babel/generator": "workspace:^7.11.6"
     "@babel/helper-module-transforms": "workspace:^7.11.0"
-    "@babel/helper-transform-fixture-test-runner": "workspace:^7.11.4"
+    "@babel/helper-transform-fixture-test-runner": "workspace:^7.11.6"
     "@babel/helpers": "workspace:^7.10.4"
     "@babel/parser": "workspace:^7.11.5"
     "@babel/template": "workspace:^7.10.4"
@@ -253,7 +253,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/generator@workspace:^7.10.4, @babel/generator@workspace:^7.11.5, @babel/generator@workspace:packages/babel-generator":
+"@babel/generator@workspace:^7.10.4, @babel/generator@workspace:^7.11.5, @babel/generator@workspace:^7.11.6, @babel/generator@workspace:packages/babel-generator":
   version: 0.0.0-use.local
   resolution: "@babel/generator@workspace:packages/babel-generator"
   dependencies:
@@ -763,12 +763,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-transform-fixture-test-runner@workspace:^7.10.4, @babel/helper-transform-fixture-test-runner@workspace:^7.11.4, @babel/helper-transform-fixture-test-runner@workspace:packages/babel-helper-transform-fixture-test-runner":
+"@babel/helper-transform-fixture-test-runner@workspace:^7.10.4, @babel/helper-transform-fixture-test-runner@workspace:^7.11.6, @babel/helper-transform-fixture-test-runner@workspace:packages/babel-helper-transform-fixture-test-runner":
   version: 0.0.0-use.local
   resolution: "@babel/helper-transform-fixture-test-runner@workspace:packages/babel-helper-transform-fixture-test-runner"
   dependencies:
     "@babel/code-frame": "workspace:^7.10.4"
-    "@babel/core": "workspace:^7.11.4"
+    "@babel/core": "workspace:^7.11.6"
     "@babel/helper-fixtures": "workspace:^7.10.5"
     "@babel/polyfill": "workspace:^7.10.4"
     babel-check-duplicated-nodes: ^1.0.0
@@ -3185,7 +3185,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/standalone@workspace:packages/babel-standalone"
   dependencies:
-    "@babel/core": "workspace:^7.11.5"
+    "@babel/core": "workspace:^7.11.6"
     "@babel/helper-plugin-utils": "workspace:^7.10.4"
     "@babel/plugin-external-helpers": "workspace:^7.10.4"
     "@babel/plugin-proposal-async-generator-functions": "workspace:^7.10.5"
