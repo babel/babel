@@ -19,6 +19,17 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.11.6 (2020-09-03)
+
+#### :house: Internal
+* [#12028](https://github.com/babel/babel/pull/12028) Run prepublish build after versioning ([@JLHwung](https://github.com/JLHwung))
+* [#12023](https://github.com/babel/babel/pull/12023) Yarn 2.2.2 ([@JLHwung](https://github.com/JLHwung))
+
+#### :leftwards_arrow_with_hook: Revert
+* Other
+  * [#12031](https://github.com/babel/babel/pull/12031) Revert "Update Yarn to 2.2.2 (#12023)" ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-helper-transform-fixture-test-runner`
+  * [#12027](https://github.com/babel/babel/pull/12027) Revert #12014 ([@JLHwung](https://github.com/JLHwung))
 ## v7.11.5 (2020-08-31)
 
 #### :bug: Bug Fix
