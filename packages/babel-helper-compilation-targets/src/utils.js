@@ -1,12 +1,12 @@
 // @flow
-
-import invariant from "invariant";
 import semver from "semver";
-
+import { OptionValidator } from "@babel/helper-validator-option";
 import { unreleasedLabels } from "./targets";
 import type { Target, Targets } from "./types";
 
 const versionRegExp = /^(\d+|\d+.\d+)$/;
+
+export const v = new OptionValidator("@babel/helper-compilation-targets");
 
 export function semverMin(first: ?string, second: string): string {
   return first && semver.lt(first, second) ? first : second;
@@ -19,7 +19,7 @@ export function semverify(version: number | string): string {
     return version;
   }
 
-  invariant(
+  v.invariant(
     typeof version === "number" ||
       (typeof version === "string" && versionRegExp.test(version)),
     `'${version}' is not a valid version`,

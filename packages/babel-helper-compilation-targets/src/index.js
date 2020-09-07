@@ -1,8 +1,7 @@
 // @flow
 
 import browserslist from "browserslist";
-import findSuggestion from "levenary";
-import invariant from "invariant";
+import { findSuggestion } from "@babel/helper-validator-option";
 import browserModulesData from "@babel/compat-data/native-modules";
 
 import {
@@ -10,6 +9,7 @@ import {
   semverMin,
   isUnreleasedVersion,
   getLowestUnreleased,
+  v,
 } from "./utils";
 import { browserNameMap } from "./targets";
 import { TargetNames } from "./options";
@@ -41,13 +41,12 @@ function objectToBrowserslist(object: Targets): Array<string> {
 
 function validateTargetNames(targets: InputTargets): Targets {
   const validTargets = Object.keys(TargetNames);
-  for (const target in targets) {
-    if (!TargetNames[target]) {
-      throw new Error(
-        `Invalid Option: '${target}' is not a valid target
+  for (const target of Object.keys(targets)) {
+    v.invariant(
+      !!TargetNames[target],
+      `'${target}' is not a valid target
         Maybe you meant to use '${findSuggestion(target, validTargets)}'?`,
-      );
-    }
+    );
   }
 
   // $FlowIgnore
@@ -59,9 +58,9 @@ export function isBrowsersQueryValid(browsers: Browsers | Targets): boolean {
 }
 
 function validateBrowsers(browsers: Browsers | void) {
-  invariant(
-    typeof browsers === "undefined" || isBrowsersQueryValid(browsers),
-    `Invalid Option: '${String(browsers)}' is not a valid browserslist query`,
+  v.invariant(
+    browsers === undefined || isBrowsersQueryValid(browsers),
+    `'${String(browsers)}' is not a valid browserslist query`,
   );
 
   return browsers;
@@ -133,7 +132,9 @@ function semverifyTarget(target, value) {
     return semverify(value);
   } catch (error) {
     throw new Error(
-      `Invalid Option: '${value}' is not a valid value for 'targets.${target}'.`,
+      v.formatMessage(
+        `'${value}' is not a valid value for 'targets.${target}'.`,
+      ),
     );
   }
 }

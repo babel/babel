@@ -21,8 +21,8 @@ export class OptionValidator {
     for (const option of Object.keys(options)) {
       if (!validOptionNames.includes(option)) {
         throw new Error(
-          `${this.descriptor}: '${option}' is not a valid top-level option.
-- Maybe you are meant to use '${findSuggestion(option, validOptionNames)}'?`,
+          this.formatMessage(`'${option}' is not a valid top-level option.
+- Maybe you are meant to use '${findSuggestion(option, validOptionNames)}'?`),
         );
       }
     }
@@ -71,7 +71,11 @@ export class OptionValidator {
    */
   invariant(condition: boolean, message: string): void {
     if (!condition) {
-      throw new Error(`${this.descriptor}: ${message}`);
+      throw new Error(this.formatMessage(message));
     }
+  }
+
+  formatMessage(message: string): string {
+    return `${this.descriptor}: ${message}`;
   }
 }
