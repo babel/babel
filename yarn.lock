@@ -92,12 +92,9 @@ __metadata:
   resolution: "@babel/compat-data@workspace:packages/babel-compat-data"
   dependencies:
     "@babel/helper-compilation-targets": "workspace:^7.10.4"
-    browserslist: ^4.12.0
     electron-to-chromium: 1.3.513
-    invariant: ^2.2.4
     lodash: ^4.17.19
     mdn-browser-compat-data: 1.0.31
-    semver: ^5.5.0
   languageName: unknown
   linkType: soft
 
