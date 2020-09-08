@@ -97,48 +97,49 @@ function writeCoreJS({
 function writeCorejsExports(pkgDirname, runtimeRoot, paths) {
   const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
   const pkgJson = require(pkgJsonPath);
-  const exports = pkgJson.exports || {};
-  const exportEntries = new Set();
+  const exports = pkgJson.exports;
+  // Export `./core-js/` so `import "@babel/runtime-corejs3/core-js/some-feature.js"` works
+  exports[`./${runtimeRoot}/`] = `./${runtimeRoot}/`;
   for (const corejsPath of paths) {
-    exportEntries.add(`./${path.dirname(path.join(runtimeRoot, corejsPath))}/`);
-  }
-  for (const entry of exportEntries) {
-    exports[entry] = entry;
+    // Export `./core-js/some-feature` so `import "@babel/runtime-corejs3/core-js/some-feature"` also works
+    const corejsExportPath = `./${runtimeRoot}/${corejsPath}`;
+    exports[corejsExportPath] = corejsExportPath + ".js";
   }
   pkgJson.exports = exports;
   outputFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2) + "\n");
 }
 
 function writeHelpers(runtimeName, { corejs } = {}) {
-  writeHelperFiles(runtimeName, { corejs, esm: false });
-  writeHelperFiles(runtimeName, { corejs, esm: true });
-  writeHelperExports(runtimeName);
+  const helperPaths = writeHelperFiles(runtimeName, { corejs, esm: false });
+  const helperESMPaths = writeHelperFiles(runtimeName, { corejs, esm: true });
+  writeHelperExports(runtimeName, helperPaths.concat(helperESMPaths));
 }
 
-function writeHelperExports(runtimeName) {
-  const pkgDirname = getRuntimeRoot(runtimeName);
-  const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
-  const pkgJson = require(pkgJsonPath);
-  pkgJson.exports = {
-    "./": "./",
+function writeHelperExports(runtimeName, helperPaths) {
+  const helperSubExports = {};
+  for (const helperPath of helperPaths) {
+    helperSubExports[helperPath.replace(".js", "")] = helperPath;
+  }
+  const exports = {
     "./helpers/": "./helpers/",
-    "./helpers/esm/": "./helpers/esm/",
+    ...helperSubExports,
+    "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",
     "./regenerator/": "./regenerator/",
   };
+  const pkgDirname = getRuntimeRoot(runtimeName);
+  const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
+  const pkgJson = require(pkgJsonPath);
+  pkgJson.exports = exports;
   outputFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2) + "\n");
 }
 function writeHelperFiles(runtimeName, { esm, corejs }) {
   const pkgDirname = getRuntimeRoot(runtimeName);
-
+  const helperPaths = [];
   for (const helperName of helpers.list) {
-    const helperFilename = path.join(
-      pkgDirname,
-      "helpers",
-      esm ? "esm" : "",
-      `${helperName}.js`
-    );
-
+    const helperPath =
+      "./" + path.join("helpers", esm ? "esm" : "", `${helperName}.js`);
+    const helperFilename = path.join(pkgDirname, helperPath);
     outputFile(
       helperFilename,
       buildHelper(runtimeName, pkgDirname, helperFilename, helperName, {
@@ -146,7 +147,11 @@ function writeHelperFiles(runtimeName, { esm, corejs }) {
         corejs,
       })
     );
+
+    helperPaths.push(helperPath);
   }
+
+  return helperPaths;
 }
 
 function getRuntimeRoot(runtimeName) {
