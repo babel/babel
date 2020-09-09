@@ -11,6 +11,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Use Node.js latest
         uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*"
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
@@ -38,6 +40,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Use Node.js latest
         uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*"
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
@@ -62,6 +66,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Use Node.js latest
         uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*"
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
@@ -96,7 +102,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Use Node.js latest
-        uses: actions/setup-node@v2-beta # Build Babel on latest node versions
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "*" # Build Babel on latest node versions
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
