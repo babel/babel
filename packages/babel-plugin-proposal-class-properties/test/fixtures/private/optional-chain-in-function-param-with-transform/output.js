@@ -1,14 +1,6 @@
-function _classPrivateFieldLooseBase(receiver, privateKey) { if (!Object.prototype.hasOwnProperty.call(receiver, privateKey)) { throw new TypeError("attempted to use private field on non-instance"); } return receiver; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var id = 0;
-
-function _classPrivateFieldLooseKey(name) { return "__private_" + id++ + "_" + name; }
-
-var _x = _classPrivateFieldLooseKey("x");
-
-var _m = _classPrivateFieldLooseKey("m");
-
-var _self = _classPrivateFieldLooseKey("self");
+function _classStaticPrivateFieldSpecGet(receiver, classConstructor, descriptor) { if (receiver !== classConstructor) { throw new TypeError("Private static access of wrong provenance"); } if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
 
 class Foo {
   static getSelf() {
@@ -33,14 +25,18 @@ class Foo {
       return deep;
     }
 
-    function f(o, r = (() => o === null || o === void 0 ? void 0 : _classPrivateFieldLooseBase(o.Foo, _m)[_m]())()) {
+    function f(o, r = (() => {
+      var _o$Foo;
+
+      return o === null || o === void 0 ? void 0 : _classStaticPrivateFieldSpecGet(_o$Foo = o.Foo, Foo, _m).call(_o$Foo);
+    })()) {
       return r;
     }
 
     function g(o, r = (() => {
       var _ref;
 
-      return (_ref = (() => o === null || o === void 0 ? void 0 : _classPrivateFieldLooseBase(_classPrivateFieldLooseBase(o.Foo, _self)[_self].getSelf(), _m)[_m])()) == null ? void 0 : _ref();
+      return (_ref = (() => o === null || o === void 0 ? void 0 : _classStaticPrivateFieldSpecGet(_classStaticPrivateFieldSpecGet(o.Foo, Foo, _self).getSelf(), Foo, _m))()) === null || _ref === void 0 ? void 0 : _ref();
     })()) {
       return r;
     }
@@ -48,23 +44,23 @@ class Foo {
     function h(fnDeep, r = (() => {
       var _fnDeep$very$o$Foo, _fnDeep$very$o;
 
-      return (_fnDeep$very$o$Foo = fnDeep == null ? void 0 : (_fnDeep$very$o = fnDeep().very.o) == null ? void 0 : _fnDeep$very$o.Foo) === null || _fnDeep$very$o$Foo === void 0 ? void 0 : _classPrivateFieldLooseBase(_fnDeep$very$o$Foo, _m)[_m]();
+      return (_fnDeep$very$o$Foo = fnDeep === null || fnDeep === void 0 ? void 0 : (_fnDeep$very$o = fnDeep().very.o) === null || _fnDeep$very$o === void 0 ? void 0 : _fnDeep$very$o.Foo) === null || _fnDeep$very$o$Foo === void 0 ? void 0 : _classStaticPrivateFieldSpecGet(_fnDeep$very$o$Foo, Foo, _m).call(_fnDeep$very$o$Foo);
     })()) {
       return r;
     }
 
     function i(fn, r = (() => {
-      var _getSelf, _ref2;
+      var _getSelf, _getSelf$self, _ref2;
 
-      return (_getSelf = (_ref2 = (() => fn === null || fn === void 0 ? void 0 : _classPrivateFieldLooseBase(fn().Foo, _self)[_self])()) == null ? void 0 : _ref2.getSelf()) === null || _getSelf === void 0 ? void 0 : _classPrivateFieldLooseBase(_getSelf.self, _m)[_m]();
+      return (_getSelf = (_ref2 = (() => fn === null || fn === void 0 ? void 0 : _classStaticPrivateFieldSpecGet(fn().Foo, Foo, _self))()) === null || _ref2 === void 0 ? void 0 : _ref2.getSelf()) === null || _getSelf === void 0 ? void 0 : _classStaticPrivateFieldSpecGet(_getSelf$self = _getSelf.self, Foo, _m).call(_getSelf$self);
     })()) {
       return r;
     }
 
     function j(fn, r = (() => {
-      var _classPrivateFieldLoo, _classPrivateFieldLoo2;
+      var _classStaticPrivateFi, _classStaticPrivateFi2;
 
-      return (_classPrivateFieldLoo = (_classPrivateFieldLoo2 = _classPrivateFieldLooseBase(_classPrivateFieldLooseBase(fn().Foo, _self)[_self].getSelf().self, _m))[_m]) == null ? void 0 : _classPrivateFieldLoo.call(_classPrivateFieldLoo2);
+      return (_classStaticPrivateFi2 = _classStaticPrivateFieldSpecGet(_classStaticPrivateFi = _classStaticPrivateFieldSpecGet(fn().Foo, Foo, _self).getSelf().self, Foo, _m)) === null || _classStaticPrivateFi2 === void 0 ? void 0 : _classStaticPrivateFi2.call(_classStaticPrivateFi);
     })()) {
       return r;
     }
@@ -78,19 +74,21 @@ class Foo {
 
 }
 
-Object.defineProperty(Foo, _x, {
+var _x = {
   writable: true,
   value: 1
-});
-Object.defineProperty(Foo, _m, {
+};
+var _m = {
   writable: true,
   value: function () {
-    return _classPrivateFieldLooseBase(this, _x)[_x];
+    return _classStaticPrivateFieldSpecGet(this, Foo, _x);
   }
-});
-Object.defineProperty(Foo, _self, {
+};
+var _self = {
   writable: true,
   value: Foo
-});
-Foo.self = Foo;
+};
+
+_defineProperty(Foo, "self", Foo);
+
 Foo.test();
