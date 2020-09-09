@@ -9,10 +9,11 @@ import {
   semverMin,
   isUnreleasedVersion,
   getLowestUnreleased,
-  v,
 } from "./utils";
+import { OptionValidator } from "@babel/helper-validator-option";
 import { browserNameMap } from "./targets";
 import { TargetNames } from "./options";
+import { name as packageName } from "../package.json";
 import type { Targets, InputTargets, Browsers, TargetsTuple } from "./types";
 
 export type { Targets, InputTargets };
@@ -22,6 +23,7 @@ export { getInclusionReasons } from "./debug";
 export { default as filterItems, isRequired } from "./filter-items";
 export { unreleasedLabels } from "./targets";
 
+const v = new OptionValidator(packageName);
 const browserslistDefaults = browserslist.defaults;
 
 const validBrowserslistTargets = [
