@@ -69,6 +69,8 @@ const TSErrors = Object.freeze({
     "Type parameters cannot appear on a constructor declaration.",
   DeclareClassFieldHasInitializer:
     "'declare' class fields cannot have an initializer",
+  DeclareFunctionHasImplementation:
+    "An implementation cannot be declared in ambient contexts.",
   DuplicateModifier: "Duplicate modifier: '%0'",
   EmptyHeritageClauseType: "'%0' list cannot be empty.",
   IndexSignatureHasAbstract:
@@ -1471,6 +1473,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       switch (starttype) {
         case tt._function:
+          nany.declare = true;
           return this.parseFunctionStatement(
             nany,
             /* async */ false,
@@ -1761,6 +1764,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           ? "TSDeclareMethod"
           : undefined;
       if (bodilessType && !this.match(tt.braceL) && this.isLineTerminator()) {
+        this.finishNode(node, bodilessType);
+        return;
+      }
+      if (
+        bodilessType === "TSDeclareFunction" &&
+        // $FlowIgnore
+        node.declare
+      ) {
+        this.raise(node.start, TSErrors.DeclareFunctionHasImplementation);
         this.finishNode(node, bodilessType);
         return;
       }
