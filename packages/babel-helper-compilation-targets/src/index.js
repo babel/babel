@@ -47,7 +47,7 @@ function validateTargetNames(targets: Targets): TargetsTuple {
     if (!(target in TargetNames)) {
       throw new Error(
         v.formatMessage(`'${target}' is not a valid target
-        Maybe you meant to use '${findSuggestion(target, validTargets)}'?`),
+- Did you mean '${findSuggestion(target, validTargets)}'?`),
       );
     }
   }

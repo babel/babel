@@ -22,7 +22,7 @@ export class OptionValidator {
       if (!validOptionNames.includes(option)) {
         throw new Error(
           this.formatMessage(`'${option}' is not a valid top-level option.
-- Maybe you are meant to use '${findSuggestion(option, validOptionNames)}'?`),
+- Did you mean '${findSuggestion(option, validOptionNames)}'?`),
         );
       }
     }
