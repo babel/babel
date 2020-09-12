@@ -1318,7 +1318,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSEnumDeclaration");
     }
 
-    tsParseModuleBlock(): N.TsModuleBlock {
+    tsParseModuleBlock(isDeclare?: boolean = false): N.TsModuleBlock {
       const node: N.TsModuleBlock = this.startNode();
       this.scope.enter(SCOPE_OTHER);
 
@@ -1329,6 +1329,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         /* directives */ undefined,
         /* topLevel */ true,
         /* end */ tt.braceR,
+        /* afterBlockParse */ undefined,
+        /* declare */ isDeclare,
       );
       this.scope.exit();
       return this.finishNode(node, "TSModuleBlock");
@@ -1337,6 +1339,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseModuleOrNamespaceDeclaration(
       node: N.TsModuleDeclaration,
       nested?: boolean = false,
+      isDeclare?: boolean = false,
     ): N.TsModuleDeclaration {
       node.id = this.parseIdentifier();
 
@@ -1356,7 +1359,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         this.scope.enter(SCOPE_TS_MODULE);
         this.prodParam.enter(PARAM);
-        node.body = this.tsParseModuleBlock();
+        node.body = this.tsParseModuleBlock(isDeclare);
         this.prodParam.exit();
         this.scope.exit();
       }
@@ -1478,6 +1481,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             nany,
             /* async */ false,
             /* declarationPosition */ true,
+            /* declare */ true,
           );
         case tt._class:
           // While this is also set by tsParseExpressionStatement, we need to set it
@@ -1504,7 +1508,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (value === "global") {
             return this.tsParseAmbientExternalModuleDeclaration(nany);
           } else {
-            return this.tsParseDeclaration(nany, value, /* next */ true);
+            return this.tsParseDeclaration(
+              nany,
+              value,
+              /* next */ true,
+              /* declare */ true,
+            );
           }
         }
       }
@@ -1555,6 +1564,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: any,
       value: string,
       next: boolean,
+      isDeclare?: boolean = false,
     ): ?N.Declaration {
       switch (value) {
         case "abstract":
@@ -1601,7 +1611,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "namespace":
           if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
             if (next) this.next();
-            return this.tsParseModuleOrNamespaceDeclaration(node);
+            return this.tsParseModuleOrNamespaceDeclaration(
+              node,
+              /* nested */ false,
+              isDeclare,
+            );
           }
           break;
 
@@ -1752,6 +1766,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.BodilessFunctionOrMethodBase,
       type: string,
       isMethod?: boolean = false,
+      isDeclare?: boolean = false,
     ): void {
       if (this.match(tt.colon)) {
         node.returnType = this.tsParseTypeOrTypePredicateAnnotation(tt.colon);
@@ -1767,14 +1782,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.finishNode(node, bodilessType);
         return;
       }
-      if (
-        bodilessType === "TSDeclareFunction" &&
-        // $FlowIgnore
-        node.declare
-      ) {
+      if (bodilessType === "TSDeclareFunction" && isDeclare) {
         this.raise(node.start, TSErrors.DeclareFunctionHasImplementation);
-        this.finishNode(node, bodilessType);
-        return;
+        if (
+          // $FlowIgnore
+          node.declare
+        ) {
+          this.finishNode(node, bodilessType);
+          return;
+        }
       }
 
       super.parseFunctionBodyAndFinish(node, type, isMethod);
@@ -2035,7 +2051,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.parseExportDefaultExpression();
     }
 
-    parseStatementContent(context: ?string, topLevel: ?boolean): N.Statement {
+    parseStatementContent(
+      context: ?string,
+      topLevel: ?boolean,
+      isDeclare?: boolean = false,
+    ): N.Statement {
       if (this.state.type === tt._const) {
         const ahead = this.lookahead();
         if (ahead.type === tt.name && ahead.value === "enum") {
@@ -2045,7 +2065,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.tsParseEnumDeclaration(node, /* isConst */ true);
         }
       }
-      return super.parseStatementContent(context, topLevel);
+      return super.parseStatementContent(context, topLevel, isDeclare);
     }
 
     parseAccessModifier(): ?N.Accessibility {

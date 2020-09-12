@@ -144,14 +144,22 @@ export default class StatementParser extends ExpressionParser {
   // https://tc39.es/ecma262/#prod-Statement
   // ImportDeclaration and ExportDeclaration are also handled here so we can throw recoverable errors
   // when they are not at the top level
-  parseStatement(context: ?string, topLevel?: boolean): N.Statement {
+  parseStatement(
+    context: ?string,
+    topLevel?: boolean,
+    isDeclare?: boolean = false,
+  ): N.Statement {
     if (this.match(tt.at)) {
       this.parseDecorators(true);
     }
-    return this.parseStatementContent(context, topLevel);
+    return this.parseStatementContent(context, topLevel, isDeclare);
   }
 
-  parseStatementContent(context: ?string, topLevel: ?boolean): N.Statement {
+  parseStatementContent(
+    context: ?string,
+    topLevel: ?boolean,
+    isDeclare?: boolean = false,
+  ): N.Statement {
     let starttype = this.state.type;
     const node = this.startNode();
     let kind;
@@ -185,7 +193,7 @@ export default class StatementParser extends ExpressionParser {
             this.raise(this.state.start, Errors.SloppyFunction);
           }
         }
-        return this.parseFunctionStatement(node, false, !context);
+        return this.parseFunctionStatement(node, false, !context, isDeclare);
 
       case tt._class:
         if (context) this.unexpected();
@@ -541,12 +549,14 @@ export default class StatementParser extends ExpressionParser {
     node: N.FunctionDeclaration,
     isAsync?: boolean,
     declarationPosition?: boolean,
+    isDeclare?: boolean = false,
   ): N.FunctionDeclaration {
     this.next();
     return this.parseFunction(
       node,
       FUNC_STATEMENT | (declarationPosition ? 0 : FUNC_HANGING_STATEMENT),
       isAsync,
+      isDeclare,
     );
   }
 
@@ -856,6 +866,7 @@ export default class StatementParser extends ExpressionParser {
     topLevel: boolean,
     end: TokenType,
     afterBlockParse?: (hasStrictModeDirective: boolean) => void,
+    isDeclare?: boolean = false,
   ): void {
     const octalPositions = [];
     const oldStrict = this.state.strict;
@@ -868,7 +879,7 @@ export default class StatementParser extends ExpressionParser {
         octalPositions.push(...this.state.octalPositions);
       }
 
-      const stmt = this.parseStatement(null, topLevel);
+      const stmt = this.parseStatement(null, topLevel, isDeclare);
 
       if (directives && !parsedNonDirective && this.isValidDirective(stmt)) {
         const directive = this.stmtToDirective(stmt);
@@ -1054,6 +1065,7 @@ export default class StatementParser extends ExpressionParser {
     node: T,
     statement?: number = FUNC_NO_FLAGS,
     isAsync?: boolean = false,
+    isDeclare?: boolean = false,
   ): T {
     const isStatement = statement & FUNC_STATEMENT;
     const isHangingStatement = statement & FUNC_HANGING_STATEMENT;
@@ -1093,6 +1105,8 @@ export default class StatementParser extends ExpressionParser {
       this.parseFunctionBodyAndFinish(
         node,
         isStatement ? "FunctionDeclaration" : "FunctionExpression",
+        /* method */ false,
+        isDeclare,
       );
     });
 
