@@ -207,11 +207,7 @@ function buildHelper(
         transformRuntime,
         { corejs, useESModules: esm, version: runtimeVersion },
       ],
-      buildRuntimeRewritePlugin(
-        runtimeName,
-        path.relative(path.dirname(helperFilename), pkgDirname),
-        helperName
-      ),
+      buildRuntimeRewritePlugin(runtimeName, helperName, esm),
     ],
     overrides: [
       {
@@ -222,12 +218,19 @@ function buildHelper(
   }).code;
 }
 
-function buildRuntimeRewritePlugin(runtimeName, relativePath, helperName) {
-  function adjustImportPath(node, relativePath) {
-    node.value =
-      helpers.list.indexOf(node.value) !== -1
-        ? `./${node.value}`
-        : node.value.replace(runtimeName + "/", relativePath + "/");
+function buildRuntimeRewritePlugin(runtimeName, helperName, esm) {
+  const helperPath = esm ? "helpers/esm" : "helpers";
+  /**
+   * rewrite helpers imports to runtime imports
+   * @example
+   * adjustImportPath(ast`"setPrototypeOf"`)
+   * // returns ast`"@babel/runtime/helpers/esm/setPrototypeOf"`
+   * @param {*} node The string literal contains import path
+   */
+  function adjustImportPath(node) {
+    if (helpers.list.includes(node.value)) {
+      node.value = `${runtimeName}/${helperPath}/${node.value}`;
+    }
   }
 
   return {
@@ -242,7 +245,7 @@ function buildRuntimeRewritePlugin(runtimeName, relativePath, helperName) {
     },
     visitor: {
       ImportDeclaration(path) {
-        adjustImportPath(path.get("source").node, relativePath);
+        adjustImportPath(path.get("source").node);
       },
       CallExpression(path) {
         if (
@@ -253,9 +256,8 @@ function buildRuntimeRewritePlugin(runtimeName, relativePath, helperName) {
           return;
         }
 
-        // replace any reference to @babel/runtime and other helpers
-        // with a relative path
-        adjustImportPath(path.get("arguments")[0].node, relativePath);
+        // replace reference to internal helpers with @babel/runtime import path
+        adjustImportPath(path.get("arguments")[0].node);
       },
     },
   };
