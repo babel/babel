@@ -1709,10 +1709,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const startPos = this.state.start;
       const startLoc = this.state.startLoc;
 
-      const accessibility = this.parseAccessModifier();
-      const readonly = !!this.tsParseModifier(["readonly"]);
-      if (!allowModifiers && (accessibility || readonly)) {
-        this.raise(startPos, TSErrors.UnexpectedParameterModifier);
+      let accessibility: ?N.Accessibility;
+      let readonly = false;
+      if (allowModifiers !== undefined) {
+        accessibility = this.parseAccessModifier();
+        readonly = !!this.tsParseModifier(["readonly"]);
+        if (allowModifiers === false && (accessibility || readonly)) {
+          this.raise(startPos, TSErrors.UnexpectedParameterModifier);
+        }
       }
 
       const left = this.parseMaybeDefault();
