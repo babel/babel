@@ -90,6 +90,8 @@ const TSErrors = Object.freeze({
     "Template literal types cannot have any substitution",
   TypeAnnotationAfterAssign:
     "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`",
+  UnexpectedParameterModifier:
+    "A parameter property is only allowed in a constructor implementation.",
   UnexpectedReadonly:
     "'readonly' type modifier is only permitted on array and tuple literal types.",
   UnexpectedTypeAnnotation: "Did not expect a type annotation here.",
@@ -1709,9 +1711,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       let accessibility: ?N.Accessibility;
       let readonly = false;
-      if (allowModifiers) {
+      if (allowModifiers !== undefined) {
         accessibility = this.parseAccessModifier();
         readonly = !!this.tsParseModifier(["readonly"]);
+        if (allowModifiers === false && (accessibility || readonly)) {
+          this.raise(startPos, TSErrors.UnexpectedParameterModifier);
+        }
       }
 
       const left = this.parseMaybeDefault();
