@@ -51,8 +51,8 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
       - name: Generate coverage report
         run: |
-          yarn test:esm
           make -j test-ci-coverage
+          yarn test:esm
       - name: Upload coverage report
         uses: codecov/codecov-action@v1
         with:
