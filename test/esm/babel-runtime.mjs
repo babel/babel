@@ -15,6 +15,14 @@ export default {
         ),
     ],
     [
+      "it supports importing with explicit extension",
+      () =>
+        assert.doesNotReject(
+          async () => import("@babel/runtime/helpers/esm/wrapNativeSuper.js"),
+          Error
+        ),
+    ],
+    [
       "it should not throw on helpers importing internal helpers",
       () =>
         assert.doesNotReject(

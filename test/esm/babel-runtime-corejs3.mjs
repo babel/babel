@@ -25,6 +25,14 @@ export default {
         ),
     ],
     [
+      "it supports importing with explicit extension",
+      () =>
+        assert.doesNotReject(
+          async () => import("@babel/runtime/helpers/esm/wrapNativeSuper.js"),
+          Error
+        ),
+    ],
+    [
       "it should not throw on importing core-js helpers",
       () =>
         assert.doesNotReject(
@@ -33,10 +41,27 @@ export default {
         ),
     ],
     [
+      "it should not throw on importing core-js helpers with explicit extension",
+      () =>
+        assert.doesNotReject(
+          async () =>
+            import("@babel/runtime-corejs3/core-js/array/is-array.js"),
+          Error
+        ),
+    ],
+    [
       "it should not throw on importing regenerator helpers",
       () =>
         assert.doesNotReject(
           async () => import("@babel/runtime-corejs3/regenerator"),
+          Error
+        ),
+    ],
+    [
+      "it should not throw on importing regenerator helpers with explicit extension",
+      () =>
+        assert.doesNotReject(
+          async () => import("@babel/runtime-corejs3/regenerator/index.js"),
           Error
         ),
     ],
