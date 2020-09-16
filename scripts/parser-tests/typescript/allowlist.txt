@@ -420,3 +420,4 @@ withStatement.ts
 withStatementErrors.ts
 withStatementInternalComments.ts
 withStatementNestedScope.ts
+parserConstructorDeclaration12.ts
