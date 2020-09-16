@@ -2294,7 +2294,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): void {
       const typeParameters = this.tsTryParseTypeParameters();
       if (typeParameters && isConstructor) {
-        this.raise(method.start, TSErrors.ConstructorHasTypeParameters);
+        this.raise(typeParameters.start, TSErrors.ConstructorHasTypeParameters);
       }
       if (typeParameters) method.typeParameters = typeParameters;
       super.pushClassMethod(
