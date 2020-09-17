@@ -71,6 +71,8 @@ export const ErrorMessages = Object.freeze({
   InvalidLhs: "Invalid left-hand side in %0",
   InvalidLhsBinding: "Binding invalid left-hand side in %0",
   InvalidNumber: "Invalid number",
+  InvalidOrMissingExponent:
+    "Invalid or Missing exponent after 'e' in floating-point number",
   InvalidOrUnexpectedToken: "Unexpected character '%0'",
   InvalidParenthesizedAssignment: "Invalid parenthesized assignment pattern",
   InvalidPrivateFieldResolution: "Private name #%0 is not defined",

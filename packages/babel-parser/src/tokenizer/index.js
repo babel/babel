@@ -1033,7 +1033,6 @@ export default class Tokenizer extends ParserErrors {
         ++this.state.pos;
         continue;
       }
-
       if (code >= charCodes.lowercaseA) {
         val = code - charCodes.lowercaseA + charCodes.lineFeed;
       } else if (code >= charCodes.uppercaseA) {
@@ -1149,7 +1148,9 @@ export default class Tokenizer extends ParserErrors {
       if (next === charCodes.plusSign || next === charCodes.dash) {
         ++this.state.pos;
       }
-      if (this.readInt(10) === null) this.raise(start, Errors.InvalidNumber);
+      if (this.readInt(10) === null) {
+        this.raise(start, Errors.InvalidOrMissingExponent);
+      }
       isFloat = true;
       hasExponent = true;
       next = this.input.charCodeAt(this.state.pos);
