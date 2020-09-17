@@ -65,6 +65,8 @@ type ParsingContext =
 const TSErrors = Object.freeze({
   ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier",
   ClassMethodHasReadonly: "Class methods cannot have the 'readonly' modifier",
+  ConstructorHasTypeParameters:
+    "Type parameters cannot appear on a constructor declaration.",
   DeclareClassFieldHasInitializer:
     "'declare' class fields cannot have an initializer",
   DuplicateModifier: "Duplicate modifier: '%0'",
@@ -2296,6 +2298,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       allowsDirectSuper: boolean,
     ): void {
       const typeParameters = this.tsTryParseTypeParameters();
+      if (typeParameters && isConstructor) {
+        this.raise(typeParameters.start, TSErrors.ConstructorHasTypeParameters);
+      }
       if (typeParameters) method.typeParameters = typeParameters;
       super.pushClassMethod(
         classBody,

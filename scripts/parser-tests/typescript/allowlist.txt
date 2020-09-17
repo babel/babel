@@ -50,6 +50,7 @@ augmentedTypesVar.ts
 bigintIndex.ts
 binderBinaryExpressionStress.ts
 binderBinaryExpressionStressJs.ts
+bundledDtsLateExportRenaming.ts
 cacheResolutions.ts
 cachedModuleResolution1.ts
 cachedModuleResolution2.ts
@@ -79,6 +80,7 @@ constDeclarations-validContexts.ts
 constEnumNoEmitReexport.ts
 constEnumNoPreserveDeclarationReexport.ts
 constEnumPreserveEmitReexport.ts
+controlFlowPrivateClassField.ts
 convertKeywordsYes.ts
 declarationEmitAmdModuleNameDirective.ts
 declarationEmitComputedNameCausesImportToBePainted.ts
@@ -93,6 +95,7 @@ declarationEmitExpandoPropertyPrivateName.ts
 declarationEmitExportAssignedNamespaceNoTripleSlashTypesReference.ts
 declarationEmitExportAssignment.ts
 declarationEmitExportDeclaration.ts
+declarationEmitExpressionInExtends6.ts
 declarationEmitForModuleImportingModuleAugmentationRetainsImport.ts
 declarationEmitForTypesWhichNeedImportTypes.ts
 declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts
@@ -180,6 +183,7 @@ esModuleInterop.ts
 esModuleInteropImportTSLibHasImport.ts
 esModuleInteropNamedDefaultImports.ts
 esModuleInteropTslibHelpers.ts
+expandoFunctionContextualTypesNoValue.ts
 exportAssignClassAndModule.ts
 exportAssignmentImportMergeNoCrash.ts
 exportAssignmentMembersVisibleInAugmentation.ts
@@ -229,6 +233,7 @@ importDeclWithClassModifiers.ts
 importDeclWithDeclareModifierInAmbientContext.ts
 importHelpers.ts
 importHelpersAmd.ts
+importHelpersES6.ts
 importHelpersInAmbientContext.ts
 importHelpersInIsolatedModules.ts
 importHelpersInTsx.tsx
@@ -273,6 +278,7 @@ jsdocAccessEnumType.ts
 jsdocPropertyTagInvalid.ts
 jsxAttributeWithoutExpressionReact.tsx
 jsxIntrinsicElementsExtendsRecord.tsx
+jsxIntrinsicElementsTypeArgumentErrors.tsx
 letAndVarRedeclaration.ts
 letAsIdentifier.ts
 letAsIdentifierInStrictMode.ts
@@ -352,6 +358,7 @@ outModuleTripleSlashRefs.ts
 parameterInitializerBeforeDestructuringEmit.ts
 parameterPropertyOutsideConstructor.ts
 parseGenericArrowRatherThanLeftShift.ts
+parserConstructorDeclaration12.ts
 pathMappingBasedModuleResolution3_classic.ts
 pathMappingBasedModuleResolution3_node.ts
 preserveUnusedImports.ts
@@ -405,6 +412,7 @@ typeReferenceDirectives5.ts
 typeReferenceDirectives7.ts
 typeReferenceDirectives8.ts
 typeReferenceDirectives9.ts
+uniqueSymbolPropertyDeclarationEmit.ts
 unusedImports1.ts
 unusedImports11.ts
 unusedImports12.ts
