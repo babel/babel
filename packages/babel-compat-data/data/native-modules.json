@@ -12,6 +12,6 @@
     "ios_saf": "10.3",
     "samsung": "8.2",
     "android": "61",
-    "electron": "2.1"
+    "electron": "2.0"
   }
 }
