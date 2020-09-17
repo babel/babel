@@ -1,7 +1,7 @@
 {
   "proposal-class-properties": {
     "chrome": "74",
-    "opera": "61",
+    "opera": "62",
     "edge": "79",
     "node": "12",
     "samsung": "11",
@@ -9,6 +9,7 @@
   },
   "proposal-private-methods": {
     "chrome": "84",
+    "opera": "70",
     "edge": "84",
     "electron": "10"
   },
@@ -37,6 +38,7 @@
     "safari": "13.1",
     "node": "14",
     "ios": "13.4",
+    "samsung": "13",
     "electron": "8"
   },
   "proposal-optional-chaining": {
@@ -47,6 +49,7 @@
     "safari": "13.1",
     "node": "14",
     "ios": "13.4",
+    "samsung": "13",
     "electron": "8"
   },
   "proposal-json-strings": {
@@ -424,10 +427,14 @@
   },
   "proposal-export-namespace-from": {
     "chrome": "72",
+    "and_chr": "72",
     "edge": "79",
-    "opera": "60",
     "firefox": "80",
     "node": "13.2",
-    "samsung": "11.0"
+    "opera": "60",
+    "op_mob": "51",
+    "samsung": "11.0",
+    "android": "72",
+    "electron": "5.0"
   }
 }
