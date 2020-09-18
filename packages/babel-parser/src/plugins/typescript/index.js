@@ -1780,7 +1780,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           // $FlowIgnore
           node.declare
         ) {
-          this.finishNode(node, bodilessType);
+          super.parseFunctionBodyAndFinish(node, bodilessType, isMethod);
           return;
         }
       }
