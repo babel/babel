@@ -1235,6 +1235,17 @@ interface ClassPrivateProperty <: Node {
 }
 ```
 
+## StaticBlock
+
+```js
+interface StaticBlock <: Node {
+  type: "StaticBlock";
+  body: [ Statement ];
+}
+```
+
+A static block proposed in https://github.com/tc39/proposal-class-static-block.
+
 ## ClassDeclaration
 
 ```js
