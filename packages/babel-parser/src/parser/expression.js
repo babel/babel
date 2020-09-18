@@ -2101,8 +2101,6 @@ export default class ExpressionParser extends LValParser {
     node: N.BodilessFunctionOrMethodBase,
     type: string,
     isMethod?: boolean = false,
-    // eslint-disable-next-line no-unused-vars -- this is used in /plugins/typescript
-    isDeclare?: boolean = false,
   ): void {
     // $FlowIgnore (node is not bodiless if we get here)
     this.parseFunctionBody(node, false, isMethod);
