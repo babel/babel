@@ -1,0 +1,108 @@
+{
+  "type": "File",
+  "start":0,"end":76,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
+  "errors": [
+    "SyntaxError: Decorators can't be used with a static block (3:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":76,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":76,"loc":{"start":{"line":1,"column":0},"end":{"line":7,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":76,"loc":{"start":{"line":1,"column":8},"end":{"line":7,"column":1}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":12,"end":27,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":17}},
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start":19,"end":22,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":12},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":25,"end":27,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":17}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "StaticBlock",
+              "start":30,"end":74,"loc":{"start":{"line":3,"column":2},"end":{"line":6,"column":3}},
+              "decorators": [
+                {
+                  "type": "Decorator",
+                  "start":30,"end":34,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":6}},
+                  "expression": {
+                    "type": "Identifier",
+                    "start":31,"end":34,"loc":{"start":{"line":3,"column":3},"end":{"line":3,"column":6},"identifierName":"dec"},
+                    "name": "dec"
+                  }
+                }
+              ],
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "start":50,"end":70,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":24}},
+                  "expression": {
+                    "type": "AssignmentExpression",
+                    "start":50,"end":69,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":23}},
+                    "operator": "=",
+                    "left": {
+                      "type": "MemberExpression",
+                      "start":50,"end":58,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":12}},
+                      "object": {
+                        "type": "ThisExpression",
+                        "start":50,"end":54,"loc":{"start":{"line":5,"column":4},"end":{"line":5,"column":8}}
+                      },
+                      "computed": false,
+                      "property": {
+                        "type": "Identifier",
+                        "start":55,"end":58,"loc":{"start":{"line":5,"column":9},"end":{"line":5,"column":12},"identifierName":"bar"},
+                        "name": "bar"
+                      }
+                    },
+                    "right": {
+                      "type": "MemberExpression",
+                      "start":61,"end":69,"loc":{"start":{"line":5,"column":15},"end":{"line":5,"column":23}},
+                      "object": {
+                        "type": "ThisExpression",
+                        "start":61,"end":65,"loc":{"start":{"line":5,"column":15},"end":{"line":5,"column":19}}
+                      },
+                      "computed": false,
+                      "property": {
+                        "type": "Identifier",
+                        "start":66,"end":69,"loc":{"start":{"line":5,"column":20},"end":{"line":5,"column":23},"identifierName":"foo"},
+                        "name": "foo"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
