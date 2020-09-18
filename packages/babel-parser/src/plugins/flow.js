@@ -2096,8 +2096,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseClassMember(
       classBody: N.ClassBody,
       member: any,
-      state: { hadConstructor: boolean },
-      constructorAllowsSuper: boolean,
+      state: N.ParseClassMemberState,
     ): void {
       const pos = this.state.start;
       if (this.isContextual("declare")) {
@@ -2109,7 +2108,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         member.declare = true;
       }
 
-      super.parseClassMember(classBody, member, state, constructorAllowsSuper);
+      super.parseClassMember(classBody, member, state);
 
       if (member.declare) {
         if (
