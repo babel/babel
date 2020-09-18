@@ -2587,6 +2587,20 @@ export function isDecimalLiteral(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
+export function isStaticBlock(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "StaticBlock") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTSParameterProperty(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -3591,6 +3605,7 @@ export function isScopable(node: ?Object, opts?: Object): boolean {
     "ForOfStatement" === nodeType ||
     "ClassMethod" === nodeType ||
     "ClassPrivateMethod" === nodeType ||
+    "StaticBlock" === nodeType ||
     "TSModuleBlock" === nodeType ||
     (nodeType === "Placeholder" && "BlockStatement" === node.expectedNode)
   ) {
@@ -3624,6 +3639,7 @@ export function isBlockParent(node: ?Object, opts?: Object): boolean {
     "ForOfStatement" === nodeType ||
     "ClassMethod" === nodeType ||
     "ClassPrivateMethod" === nodeType ||
+    "StaticBlock" === nodeType ||
     "TSModuleBlock" === nodeType ||
     (nodeType === "Placeholder" && "BlockStatement" === node.expectedNode)
   ) {
