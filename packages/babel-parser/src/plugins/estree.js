@@ -105,22 +105,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    checkGetterSetterParams(method: N.ObjectMethod | N.ClassMethod): void {
-      const prop = ((method: any): N.EstreeProperty | N.EstreeMethodDefinition);
-      const paramCount = prop.kind === "get" ? 0 : 1;
-      const start = prop.start;
-      if (prop.value.params.length !== paramCount) {
-        if (method.kind === "get") {
-          this.raise(start, Errors.BadGetterArity);
-        } else {
-          this.raise(start, Errors.BadSetterArity);
-        }
-      } else if (
-        prop.kind === "set" &&
-        prop.value.params[0].type === "RestElement"
-      ) {
-        this.raise(start, Errors.BadSetterRestParameter);
-      }
+    getObjectOrClassMethodParams(method: N.ObjectMethod | N.ClassMethod) {
+      return ((method: any): N.EstreeProperty | N.EstreeMethodDefinition).value
+        .params;
     }
 
     checkLVal(
