@@ -1810,6 +1810,7 @@ export default class ExpressionParser extends LValParser {
 
     if (
       method.kind === "set" &&
+      method.params.length !== 0 &&
       method.params[method.params.length - 1].type === "RestElement"
     ) {
       this.raise(start, Errors.BadSetterRestParameter);
