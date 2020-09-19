@@ -101,6 +101,7 @@ export function ClassProperty(node: Object) {
 }
 
 export function ClassPrivateProperty(node: Object) {
+  this.printJoin(node.decorators, node);
   if (node.static) {
     this.word("static");
     this.space();
