@@ -119,21 +119,29 @@ export default class Buffer {
     this._buf.push(str);
     this._last = str[str.length - 1];
 
-    if (str[0] !== "\n") {
+    let last = 0;
+    let i = str.indexOf("\n");
+
+    // If the string starts with a newline char, then adding a mark is redundant.
+    // This catches both "no newlines" and "newline after several chars".
+    if (i !== 0) {
       this._mark(line, column, identifierName, filename, force);
     }
 
-    for (let i = 0; i < str.length; i++) {
-      if (str[i] === "\n") {
-        this._position.line++;
-        this._position.column = 0;
-        if (i + 1 < str.length) {
-          this._mark(++line, 0, identifierName, filename, force);
-        }
-      } else {
-        this._position.column++;
+    // Now, find each reamining newline char in the string.
+    while (i !== -1) {
+      this._position.line++;
+      this._position.column = 0;
+      last = i + 1;
+
+      // We mark the start of each line, which happens directly after this newline char
+      // unless this is the last char.
+      if (last < str.length) {
+        this._mark(++line, 0, identifierName, filename, force);
       }
+      i = str.indexOf("\n", last);
     }
+    this._position.column += str.length - last;
   }
 
   _mark(
