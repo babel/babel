@@ -119,17 +119,18 @@ export default class Buffer {
     this._buf.push(str);
     this._last = str[str.length - 1];
 
-    let newline = true;
+    if (str[0] !== "\n") {
+      this._mark(line, column, identifierName, filename, force);
+    }
+
     for (let i = 0; i < str.length; i++) {
       if (str[i] === "\n") {
         this._position.line++;
         this._position.column = 0;
-        newline = true;
-      } else {
-        if (newline) {
-          this._mark(line, column, identifierName, filename, force);
-          newline = false;
+        if (i + 1 < str.length) {
+          this._mark(++line, 0, identifierName, filename, force);
         }
+      } else {
         this._position.column++;
       }
     }

@@ -1,2 +1,5 @@
 "before\
 after";
+"before\
+\
+after";

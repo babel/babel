@@ -279,28 +279,7 @@ describe("generation", function () {
   });
 
   it("newline in template literal", () => {
-    const code = "`before\nafter`;";
-    const ast = parse(code, { filename: "inline" }).program;
-    const generated = generate(
-      ast,
-      {
-        filename: "inline",
-        sourceFileName: "inline",
-        sourceMaps: true,
-      },
-      code,
-    );
-
-    const consumer = new sourcemap.SourceMapConsumer(generated.map);
-    const loc = consumer.originalPositionFor({ line: 2, column: 1 });
-    expect(loc).toMatchObject({
-      column: 1,
-      line: 1,
-    });
-  });
-
-  it("newline in string literal", () => {
-    const code = "'before\\\nafter';";
+    const code = "`before\n\nafter`;";
     const ast = parse(code, { filename: "inline" }).program;
     const generated = generate(
       ast,
@@ -316,7 +295,28 @@ describe("generation", function () {
     const loc = consumer.originalPositionFor({ line: 2, column: 1 });
     expect(loc).toMatchObject({
       column: 0,
-      line: 1,
+      line: 2,
+    });
+  });
+
+  it("newline in string literal", () => {
+    const code = "'before\\\n\\\nafter';";
+    const ast = parse(code, { filename: "inline" }).program;
+    const generated = generate(
+      ast,
+      {
+        filename: "inline",
+        sourceFileName: "inline",
+        sourceMaps: true,
+      },
+      code,
+    );
+
+    const consumer = new sourcemap.SourceMapConsumer(generated.map);
+    const loc = consumer.originalPositionFor({ line: 2, column: 1 });
+    expect(loc).toMatchObject({
+      column: 0,
+      line: 2,
     });
   });
 
