@@ -1,0 +1,9 @@
+{
+  "mappings": "AAAA;AAAA",
+  "names": [],
+  "sources": ["fixtures/sourcemaps/string-literal-newline/input.js"],
+  "sourcesContent": [
+    "\"before\\\nafter\";"
+  ],
+  "version": 3
+}

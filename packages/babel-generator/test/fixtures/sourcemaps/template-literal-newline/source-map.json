@@ -1,0 +1,9 @@
+{
+  "mappings": "AAAC;AAAA,MAAD;AAEC;AAAA,MAAD",
+  "names": [],
+  "sources": ["fixtures/sourcemaps/template-literal-newline/input.js"],
+  "sourcesContent": [
+    "`before\nafter`;\n`before\\\nafter`;"
+  ],
+  "version": 3
+}

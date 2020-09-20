@@ -116,30 +116,41 @@ export default class Buffer {
     filename: ?string,
     force?: boolean,
   ): void {
-    // If there the line is ending, adding a new mapping marker is redundant
-    if (this._map && str[0] !== "\n") {
-      this._map.mark(
-        this._position.line,
-        this._position.column,
-        line,
-        column,
-        identifierName,
-        filename,
-        force,
-      );
-    }
-
     this._buf.push(str);
     this._last = str[str.length - 1];
 
+    let newline = true;
     for (let i = 0; i < str.length; i++) {
       if (str[i] === "\n") {
         this._position.line++;
         this._position.column = 0;
+        newline = true;
       } else {
+        if (newline) {
+          this._mark(line, column, identifierName, filename, force);
+          newline = false;
+        }
         this._position.column++;
       }
     }
+  }
+
+  _mark(
+    line: number,
+    column: number,
+    identifierName: ?string,
+    filename: ?string,
+    force?: boolean,
+  ): void {
+    this._map?.mark(
+      this._position.line,
+      this._position.column,
+      line,
+      column,
+      identifierName,
+      filename,
+      force,
+    );
   }
 
   removeTrailingNewline(): void {
