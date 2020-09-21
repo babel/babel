@@ -842,7 +842,7 @@ export type ImportDeclaration = NodeBase & {
 
 export type ImportSpecifier = ModuleSpecifier & {
   type: "ImportSpecifier",
-  imported: Identifier,
+  imported: Identifier | StringLiteral,
 };
 
 export type ImportDefaultSpecifier = ModuleSpecifier & {
@@ -866,7 +866,7 @@ export type ExportNamedDeclaration = NodeBase & {
 
 export type ExportSpecifier = NodeBase & {
   type: "ExportSpecifier",
-  exported: Identifier,
+  exported: Identifier | StringLiteral,
   local: Identifier,
 };
 

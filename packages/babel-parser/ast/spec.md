@@ -1305,7 +1305,7 @@ An import declaration, e.g., `import foo from "mod";`.
 ```js
 interface ImportSpecifier <: ModuleSpecifier {
   type: "ImportSpecifier";
-  imported: Identifier;
+  imported: Identifier | StringLiteral;
 }
 ```
 
@@ -1365,7 +1365,7 @@ _Note: Having `declaration` populated with non-empty `specifiers` or non-null `s
 ```js
 interface ExportSpecifier <: ModuleSpecifier {
   type: "ExportSpecifier";
-  exported: Identifier;
+  exported: Identifier | StringLiteral;
   local?: Identifier;
 }
 ```
