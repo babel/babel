@@ -1291,7 +1291,7 @@ interface ImportDeclaration <: ModuleDeclaration {
   type: "ImportDeclaration";
   importKind: null | "type" | "typeof" | "value";
   specifiers: [ ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier ];
-  source: Literal;
+  source: StringLiteral;
   attributes?: [ ImportAttribute ];
 }
 ```
@@ -1305,7 +1305,7 @@ An import declaration, e.g., `import foo from "mod";`.
 ```js
 interface ImportSpecifier <: ModuleSpecifier {
   type: "ImportSpecifier";
-  imported: Identifier;
+  imported: Identifier | StringLiteral;
 }
 ```
 
@@ -1352,21 +1352,24 @@ interface ExportNamedDeclaration <: ModuleDeclaration {
   type: "ExportNamedDeclaration";
   declaration: Declaration | null;
   specifiers: [ ExportSpecifier ];
-  source: Literal | null;
+  source: StringLiteral | null;
 }
 ```
 
 An export named declaration, e.g., `export {foo, bar};`, `export {foo} from "mod";`, `export var foo = 1;` or `export * as foo from "bar";`.
 
-_Note: Having `declaration` populated with non-empty `specifiers` or non-null `source` results in an invalid state._
+Note:
+
+- Having `declaration` populated with non-empty `specifiers` or non-null `source` results in an invalid state.
+- If `source` is `null`, for each `specifier` of `specifiers`, `specifier.local` can not be a `StringLiteral`.
 
 ### ExportSpecifier
 
 ```js
 interface ExportSpecifier <: ModuleSpecifier {
   type: "ExportSpecifier";
-  exported: Identifier;
-  local?: Identifier;
+  exported: Identifier | StringLiteral;
+  local?: Identifier | StringLiteral;
 }
 ```
 
@@ -1396,7 +1399,7 @@ An export default declaration, e.g., `export default function () {};` or `export
 ```js
 interface ExportAllDeclaration <: ModuleDeclaration {
   type: "ExportAllDeclaration";
-  source: Literal;
+  source: StringLiteral;
 }
 ```
 

@@ -39,6 +39,8 @@ const FUNC_NO_FLAGS = 0b000,
   FUNC_HANGING_STATEMENT = 0b010,
   FUNC_NULLABLE_ID = 0b100;
 
+const loneSurrogate = /[\uD800-\uDFFF]/u;
+
 export default class StatementParser extends ExpressionParser {
   // ### Statement parsing
 
@@ -1745,7 +1747,7 @@ export default class StatementParser extends ExpressionParser {
 
       this.next();
 
-      specifier.exported = this.parseIdentifier(true);
+      specifier.exported = this.parseModuleExportName();
       node.specifiers.push(
         this.finishNode(specifier, "ExportNamespaceSpecifier"),
       );
@@ -1938,19 +1940,27 @@ export default class StatementParser extends ExpressionParser {
       } else if (node.specifiers && node.specifiers.length) {
         // Named exports
         for (const specifier of node.specifiers) {
-          this.checkDuplicateExports(specifier, specifier.exported.name);
+          const { exported } = specifier;
+          const exportedName =
+            exported.type === "Identifier" ? exported.name : exported.value;
+          this.checkDuplicateExports(specifier, exportedName);
           // $FlowIgnore
           if (!isFrom && specifier.local) {
-            // check for keywords used as local names
-            this.checkReservedWord(
-              specifier.local.name,
-              specifier.local.start,
-              true,
-              false,
-            );
-            // check if export is defined
-            // $FlowIgnore
-            this.scope.checkLocalExport(specifier.local);
+            const { local } = specifier;
+            if (local.type === "StringLiteral") {
+              this.raise(
+                specifier.start,
+                Errors.ExportBindingIsString,
+                local.extra.raw,
+                exportedName,
+              );
+            } else {
+              // check for keywords used as local names
+              this.checkReservedWord(local.name, local.start, true, false);
+              // check if export is defined
+              // $FlowIgnore
+              this.scope.checkLocalExport(local);
+            }
           }
         }
       } else if (node.declaration) {
@@ -2006,6 +2016,7 @@ export default class StatementParser extends ExpressionParser {
   checkDuplicateExports(
     node:
       | N.Identifier
+      | N.StringLiteral
       | N.ExportNamedDeclaration
       | N.ExportSpecifier
       | N.ExportDefaultSpecifier,
@@ -2041,14 +2052,35 @@ export default class StatementParser extends ExpressionParser {
       }
 
       const node = this.startNode();
-      node.local = this.parseIdentifier(true);
+      node.local = this.parseModuleExportName();
       node.exported = this.eatContextual("as")
-        ? this.parseIdentifier(true)
+        ? this.parseModuleExportName()
         : node.local.__clone();
       nodes.push(this.finishNode(node, "ExportSpecifier"));
     }
 
     return nodes;
+  }
+
+  // https://tc39.es/ecma262/#prod-ModuleExportName
+  parseModuleExportName(): N.StringLiteral | N.Identifier {
+    if (this.match(tt.string)) {
+      this.expectPlugin("moduleStringNames");
+      const result = this.parseLiteral<N.StringLiteral>(
+        this.state.value,
+        "StringLiteral",
+      );
+      const surrogate = result.value.match(loneSurrogate);
+      if (surrogate) {
+        this.raise(
+          result.start,
+          Errors.ModuleExportNameHasLoneSurrogate,
+          surrogate[0].charCodeAt(0).toString(16),
+        );
+      }
+      return result;
+    }
+    return this.parseIdentifier(true);
   }
 
   // Parses import declaration.
@@ -2220,17 +2252,20 @@ export default class StatementParser extends ExpressionParser {
   // https://tc39.es/ecma262/#prod-ImportSpecifier
   parseImportSpecifier(node: N.ImportDeclaration): void {
     const specifier = this.startNode();
-    specifier.imported = this.parseIdentifier(true);
+    specifier.imported = this.parseModuleExportName();
     if (this.eatContextual("as")) {
       specifier.local = this.parseIdentifier();
     } else {
-      this.checkReservedWord(
-        specifier.imported.name,
-        specifier.start,
-        true,
-        true,
-      );
-      specifier.local = specifier.imported.__clone();
+      const { imported } = specifier;
+      if (imported.type === "StringLiteral") {
+        throw this.raise(
+          specifier.start,
+          Errors.ImportBindingIsString,
+          imported.value,
+        );
+      }
+      this.checkReservedWord(imported.name, specifier.start, true, true);
+      specifier.local = imported.__clone();
     }
     this.checkLVal(
       specifier.local,

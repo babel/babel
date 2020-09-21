@@ -43,6 +43,8 @@ export const ErrorMessages = Object.freeze({
   DuplicateRegExpFlags: "Duplicate regular expression flag",
   ElementAfterRest: "Rest element must be last element",
   EscapedCharNotAnIdentifier: "Invalid Unicode escape",
+  ExportBindingIsString:
+    "A string literal cannot be used as an exported binding without `from`.\n- Did you mean `export { %0 as '%1' } from 'some-module'`?",
   ExportDefaultFromAsIdentifier:
     "'from' is not allowed as an identifier after 'export default'",
   ForInOfLoopInitializer:
@@ -53,6 +55,8 @@ export const ErrorMessages = Object.freeze({
   IllegalLanguageModeDirective:
     "Illegal 'use strict' directive in function with non-simple parameter list",
   IllegalReturn: "'return' outside of function",
+  ImportBindingIsString:
+    'A string literal cannot be used as an imported binding.\n- Did you mean `import { "%0" as foo }`?',
   ImportCallArgumentTrailingComma:
     "Trailing comma is disallowed inside import(...) arguments",
   ImportCallArity: "import() requires exactly %0",
@@ -95,6 +99,8 @@ export const ErrorMessages = Object.freeze({
     "Only string literals are allowed as module attribute values",
   ModuleAttributesWithDuplicateKeys:
     'Duplicate key "%0" is not allowed in module attributes',
+  ModuleExportNameHasLoneSurrogate:
+    "An export name cannot include a lone surrogate, found '\\u%0'",
   ModuleExportUndefined: "Export '%0' is not defined",
   MultipleDefaultsInSwitch: "Multiple default clauses",
   NewlineAfterThrow: "Illegal newline after throw",

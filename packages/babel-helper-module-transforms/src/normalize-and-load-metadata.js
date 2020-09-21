@@ -1,5 +1,6 @@
 import { basename, extname } from "path";
 
+import { isIdentifierName } from "@babel/helper-validator-identifier";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 
 export type ModuleMetadata = {
@@ -15,6 +16,12 @@ export type ModuleMetadata = {
 
   // Lookup of source file to source file metadata.
   source: Map<string, SourceModuleMetadata>,
+
+  // List of names that should only be printed as string literals.
+  // i.e. `import { "any unicode" as foo } from "some-module"`
+  // `stringSpecifiers` is Set(1) ["any unicode"]
+  // In most cases `stringSpecifiers` is an empty Set
+  stringSpecifiers: Set<string>,
 };
 
 export type InteropType = "default" | "namespace" | "none";
@@ -87,13 +94,18 @@ export default function normalizeModuleAndLoadMetadata(
   if (!exportName) {
     exportName = programPath.scope.generateUidIdentifier("exports").name;
   }
+  const stringSpecifiers = new Set();
 
   nameAnonymousExports(programPath);
 
-  const { local, source, hasExports } = getModuleMetadata(programPath, {
-    loose,
-    lazy,
-  });
+  const { local, source, hasExports } = getModuleMetadata(
+    programPath,
+    {
+      loose,
+      lazy,
+    },
+    stringSpecifiers,
+  );
 
   removeModuleDeclarations(programPath);
 
@@ -124,7 +136,33 @@ export default function normalizeModuleAndLoadMetadata(
     hasExports,
     local,
     source,
+    stringSpecifiers,
   };
+}
+
+function getExportSpecifierName(
+  path: NodePath,
+  stringSpecifiers: Set<string>,
+): string {
+  if (path.isIdentifier()) {
+    return path.node.name;
+  } else if (path.isStringLiteral()) {
+    const stringValue = path.node.value;
+    // add specifier value to `stringSpecifiers` only when it can not be converted to an identifier name
+    // i.e In `import { "foo" as bar }`
+    // we do not consider `"foo"` to be a `stringSpecifier` because we can treat it as
+    // `import { foo as bar }`
+    // This helps minimize the size of `stringSpecifiers` and reduce overhead of checking valid identifier names
+    // when building transpiled code from metadata
+    if (!isIdentifierName(stringValue)) {
+      stringSpecifiers.add(stringValue);
+    }
+    return stringValue;
+  } else {
+    throw new Error(
+      `Expected export specifier to be either Identifier or StringLiteral, got ${path.node.type}`,
+    );
+  }
 }
 
 /**
@@ -133,8 +171,13 @@ export default function normalizeModuleAndLoadMetadata(
 function getModuleMetadata(
   programPath: NodePath,
   { loose, lazy }: { loose: boolean, lazy: boolean },
+  stringSpecifiers: Set<string>,
 ) {
-  const localData = getLocalExportMetadata(programPath, loose);
+  const localData = getLocalExportMetadata(
+    programPath,
+    loose,
+    stringSpecifiers,
+  );
 
   const sourceData = new Map();
   const getData = sourceNode => {
@@ -199,7 +242,10 @@ function getModuleMetadata(
             });
           }
         } else if (spec.isImportSpecifier()) {
-          const importName = spec.get("imported").node.name;
+          const importName = getExportSpecifierName(
+            spec.get("imported"),
+            stringSpecifiers,
+          );
           const localName = spec.get("local").node.name;
 
           data.imports.set(localName, importName);
@@ -231,8 +277,14 @@ function getModuleMetadata(
         if (!spec.isExportSpecifier()) {
           throw spec.buildCodeFrameError("Unexpected export specifier type");
         }
-        const importName = spec.get("local").node.name;
-        const exportName = spec.get("exported").node.name;
+        const importName = getExportSpecifierName(
+          spec.get("local"),
+          stringSpecifiers,
+        );
+        const exportName = getExportSpecifierName(
+          spec.get("exported"),
+          stringSpecifiers,
+        );
 
         data.reexports.set(exportName, importName);
 
@@ -310,6 +362,7 @@ function getModuleMetadata(
 function getLocalExportMetadata(
   programPath: NodePath,
   loose: boolean,
+  stringSpecifiers: Set<string>,
 ): Map<string, LocalExportMetadata> {
   const bindingKindLookup = new Map();
 
@@ -392,11 +445,13 @@ function getLocalExportMetadata(
         child.get("specifiers").forEach(spec => {
           const local = spec.get("local");
           const exported = spec.get("exported");
+          const localMetadata = getLocalMetadata(local);
+          const exportName = getExportSpecifierName(exported, stringSpecifiers);
 
-          if (exported.node.name === "__esModule") {
+          if (exportName === "__esModule") {
             throw exported.buildCodeFrameError('Illegal export "__esModule".');
           }
-          getLocalMetadata(local).names.push(exported.node.name);
+          localMetadata.names.push(exportName);
         });
       }
     } else if (child.isExportDefaultDeclaration()) {

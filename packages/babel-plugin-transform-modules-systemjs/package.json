@@ -16,6 +16,7 @@
     "@babel/helper-hoist-variables": "workspace:^7.10.4",
     "@babel/helper-module-transforms": "workspace:^7.10.5",
     "@babel/helper-plugin-utils": "workspace:^7.10.4",
+    "@babel/helper-validator-identifier": "workspace:^7.10.4",
     "babel-plugin-dynamic-import-node": "^2.3.3"
   },
   "keywords": [

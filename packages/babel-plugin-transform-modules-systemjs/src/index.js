@@ -3,6 +3,7 @@ import hoistVariables from "@babel/helper-hoist-variables";
 import { template, types as t } from "@babel/core";
 import { getImportSource } from "babel-plugin-dynamic-import-node/utils";
 import { rewriteThis, getModuleName } from "@babel/helper-module-transforms";
+import { isIdentifierName } from "@babel/helper-validator-identifier";
 
 const buildTemplate = template(`
   SYSTEM_REGISTER(MODULE_NAME, SOURCES, function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
@@ -29,12 +30,50 @@ WARNING: Dynamic import() transformation must be enabled using the
          no longer transform import() without using that plugin.
 `;
 
+//todo: use getExportSpecifierName in `helper-module-transforms` when this library is refactored to NodePath usage.
+
+export function getExportSpecifierName(
+  node: Node,
+  stringSpecifiers: Set<string>,
+): string {
+  if (node.type === "Identifier") {
+    return node.name;
+  } else if (node.type === "StringLiteral") {
+    const stringValue = node.value;
+    // add specifier value to `stringSpecifiers` only when it can not be converted to an identifier name
+    // i.e In `import { "foo" as bar }`
+    // we do not consider `"foo"` to be a `stringSpecifier` because we can treat it as
+    // `import { foo as bar }`
+    // This helps minimize the size of `stringSpecifiers` and reduce overhead of checking valid identifier names
+    // when building transpiled code from metadata
+    if (!isIdentifierName(stringValue)) {
+      stringSpecifiers.add(stringValue);
+    }
+    return stringValue;
+  } else {
+    throw new Error(
+      `Expected export specifier to be either Identifier or StringLiteral, got ${node.type}`,
+    );
+  }
+}
+
+type PluginState = {|
+  contextIdent: string,
+
+  // List of names that should only be printed as string literals.
+  // i.e. `import { "any unicode" as foo } from "some-module"`
+  // `stringSpecifiers` is Set(1) ["any unicode"]
+  // In most cases `stringSpecifiers` is an empty Set
+  stringSpecifiers: Set<string>,
+|};
+
 function constructExportCall(
   path,
   exportIdent,
   exportNames,
   exportValues,
   exportStarTarget,
+  stringSpecifiers: Set<string>,
 ) {
   const statements = [];
   if (exportNames.length === 1) {
@@ -52,7 +91,12 @@ function constructExportCall(
       const exportName = exportNames[i];
       const exportValue = exportValues[i];
       objectProperties.push(
-        t.objectProperty(t.identifier(exportName), exportValue),
+        t.objectProperty(
+          stringSpecifiers.has(exportName)
+            ? t.stringLiteral(exportName)
+            : t.identifier(exportName),
+          exportValue,
+        ),
       );
     }
     statements.push(
@@ -179,7 +223,7 @@ export default declare((api, options) => {
     },
 
     visitor: {
-      CallExpression(path, state) {
+      CallExpression(path, state: PluginState) {
         if (t.isImport(path.node.callee)) {
           if (!this.file.has("@babel/plugin-proposal-dynamic-import")) {
             console.warn(MISSING_PLUGIN_WARNING);
@@ -197,7 +241,7 @@ export default declare((api, options) => {
         }
       },
 
-      MetaProperty(path, state) {
+      MetaProperty(path, state: PluginState) {
         if (
           path.node.meta.name === "import" &&
           path.node.property.name === "meta"
@@ -228,14 +272,15 @@ export default declare((api, options) => {
       Program: {
         enter(path, state) {
           state.contextIdent = path.scope.generateUid("context");
+          state.stringSpecifiers = new Set();
           if (!allowTopLevelThis) {
             rewriteThis(path);
           }
         },
-        exit(path, state) {
+        exit(path, state: PluginState) {
           const scope = path.scope;
           const exportIdent = scope.generateUid("export");
-          const contextIdent = state.contextIdent;
+          const { contextIdent, stringSpecifiers } = state;
 
           const exportMap = Object.create(null);
           const modules = [];
@@ -389,28 +434,25 @@ export default declare((api, options) => {
                     const nodes = [];
 
                     for (const specifier of specifiers) {
-                      const binding = scope.getBinding(specifier.local.name);
+                      const { local, exported } = specifier;
+                      const binding = scope.getBinding(local.name);
+                      const exportedName = getExportSpecifierName(
+                        exported,
+                        stringSpecifiers,
+                      );
                       // hoisted function export
                       if (
                         binding &&
                         t.isFunctionDeclaration(binding.path.node)
                       ) {
-                        exportNames.push(specifier.exported.name);
-                        exportValues.push(t.cloneNode(specifier.local));
+                        exportNames.push(exportedName);
+                        exportValues.push(t.cloneNode(local));
                       }
                       // only globals also exported this way
                       else if (!binding) {
-                        nodes.push(
-                          buildExportCall(
-                            specifier.exported.name,
-                            specifier.local,
-                          ),
-                        );
+                        nodes.push(buildExportCall(exportedName, local));
                       }
-                      addExportName(
-                        specifier.local.name,
-                        specifier.exported.name,
-                      );
+                      addExportName(local.name, exportedName);
                     }
 
                     path.replaceWithMultiple(nodes);
@@ -445,6 +487,7 @@ export default declare((api, options) => {
               }
 
               if (t.isImportSpecifier(specifier)) {
+                const { imported } = specifier;
                 setterBody.push(
                   t.expressionStatement(
                     t.assignmentExpression(
@@ -453,6 +496,7 @@ export default declare((api, options) => {
                       t.memberExpression(
                         t.identifier(target),
                         specifier.imported,
+                        /* computed */ imported.type === "StringLiteral",
                       ),
                     ),
                   ),
@@ -469,9 +513,17 @@ export default declare((api, options) => {
                 if (t.isExportAllDeclaration(node)) {
                   hasExportStar = true;
                 } else if (t.isExportSpecifier(node)) {
-                  exportNames.push(node.exported.name);
+                  const exportedName = getExportSpecifierName(
+                    node.exported,
+                    stringSpecifiers,
+                  );
+                  exportNames.push(exportedName);
                   exportValues.push(
-                    t.memberExpression(t.identifier(target), node.local),
+                    t.memberExpression(
+                      t.identifier(target),
+                      node.local,
+                      t.isStringLiteral(node.local),
+                    ),
                   );
                 } else {
                   // todo
@@ -485,6 +537,7 @@ export default declare((api, options) => {
                   exportNames,
                   exportValues,
                   hasExportStar ? t.identifier(target) : null,
+                  stringSpecifiers,
                 ),
               );
             }
@@ -533,6 +586,7 @@ export default declare((api, options) => {
                 exportNames,
                 exportValues,
                 null,
+                stringSpecifiers,
               ),
             );
           }

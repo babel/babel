@@ -1503,7 +1503,7 @@ defineType("ExportSpecifier", {
       validate: assertNodeType("Identifier"),
     },
     exported: {
-      validate: assertNodeType("Identifier"),
+      validate: assertNodeType("Identifier", "StringLiteral"),
     },
   },
 });
@@ -1611,7 +1611,7 @@ defineType("ImportSpecifier", {
       validate: assertNodeType("Identifier"),
     },
     imported: {
-      validate: assertNodeType("Identifier"),
+      validate: assertNodeType("Identifier", "StringLiteral"),
     },
     importKind: {
       // Handle Flowtype's extension "import {typeof foo} from"
