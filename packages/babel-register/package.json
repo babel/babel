@@ -17,7 +17,7 @@
     "./lib/node.js": "./lib/browser.js"
   },
   "dependencies": {
-    "find-cache-dir": "^2.0.0",
+    "find-cache-dir": "^3.0.0",
     "lodash": "^4.17.19",
     "make-dir": "^2.1.0",
     "pirates": "^4.0.0",

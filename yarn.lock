@@ -3121,7 +3121,7 @@ __metadata:
     "@babel/plugin-transform-modules-commonjs": "workspace:^7.10.4"
     browserify: ^16.5.2
     default-require-extensions: ^2.0.0
-    find-cache-dir: ^2.0.0
+    find-cache-dir: ^3.0.0
     lodash: ^4.17.19
     make-dir: ^2.1.0
     pirates: ^4.0.0
@@ -8530,6 +8530,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"find-cache-dir@npm:^3.0.0":
+  version: 3.3.1
+  resolution: "find-cache-dir@npm:3.3.1"
+  dependencies:
+    commondir: ^1.0.1
+    make-dir: ^3.0.2
+    pkg-dir: ^4.1.0
+  checksum: b1e23226ee89fba89646aa5f72d084c6d04bb64f6d523c9cb2d57a1b5280fcac39e92fd5be572e2fae8a83aa70bc5b797ce33a826b9a4b92373cc38e66d4aa64
+  languageName: node
+  linkType: hard
+
 "find-up@npm:^1.0.0":
   version: 1.1.2
   resolution: "find-up@npm:1.1.2"
@@ -11518,6 +11529,15 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"make-dir@npm:^3.0.2":
+  version: 3.1.0
+  resolution: "make-dir@npm:3.1.0"
+  dependencies:
+    semver: ^6.0.0
+  checksum: 54b6f186c209c1b133d0d1710e6b04c41ebfcb0dac699e5a369ea1223f22c0574ef820b91db37cae6c245f5bda8aff9bfec94f6c23e7d75970446b34a58a79b0
+  languageName: node
+  linkType: hard
+
 "make-fetch-happen@npm:^5.0.0":
   version: 5.0.2
   resolution: "make-fetch-happen@npm:5.0.2"
@@ -13149,7 +13169,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"pkg-dir@npm:^4.2.0":
+"pkg-dir@npm:^4.1.0, pkg-dir@npm:^4.2.0":
   version: 4.2.0
   resolution: "pkg-dir@npm:4.2.0"
   dependencies:
