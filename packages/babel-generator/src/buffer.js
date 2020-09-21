@@ -119,8 +119,12 @@ export default class Buffer {
     this._buf.push(str);
     this._last = str[str.length - 1];
 
-    let last = 0;
+    // Search for newline chars. We search only for `\n`, since both `\r` and
+    // `\r\n` are normalized to `\n` during parse. We exclude `\u2028` and
+    // `\u2029` for performance reasons, they're so uncommon that it's probably
+    // ok. It's also unclear how other sourcemap utilities handle them...
     let i = str.indexOf("\n");
+    let last = 0;
 
     // If the string starts with a newline char, then adding a mark is redundant.
     // This catches both "no newlines" and "newline after several chars".
