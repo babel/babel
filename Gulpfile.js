@@ -87,7 +87,6 @@ function buildBabel(exclude, sourcesGlob = defaultSourcesGlob) {
 let babelVersion = require("./packages/babel-core/package.json").version;
 function buildRollup(packages) {
   const sourcemap = process.env.NODE_ENV === "production";
-  const minify = !!process.env.IS_PUBLISH;
   return Promise.all(
     packages.map(
       ({ src, format, dest, name, filename, version = babelVersion }) => {
@@ -98,17 +97,6 @@ function buildRollup(packages) {
           case "packages/babel-standalone":
             nodeResolveBrowser = true;
             babelEnvName = "standalone";
-            if (minify) {
-              extraPlugins.push(
-                rollupTerser({
-                  include: /^.+\.min\.js$/,
-                  // workaround https://bugs.webkit.org/show_bug.cgi?id=212725
-                  output: {
-                    ascii_only: true,
-                  },
-                })
-              );
-            }
             break;
         }
         // If this build is part of a pull request, include the pull request number in
@@ -192,6 +180,14 @@ function buildRollup(packages) {
                   format,
                   name,
                   sourcemap: sourcemap,
+                  plugins: [
+                    rollupTerser({
+                      // workaround https://bugs.webkit.org/show_bug.cgi?id=212725
+                      output: {
+                        ascii_only: true,
+                      },
+                    }),
+                  ],
                 });
               });
           });
