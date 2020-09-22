@@ -73,6 +73,8 @@ const TSErrors = Object.freeze({
     "An implementation cannot be declared in ambient contexts.",
   DuplicateModifier: "Duplicate modifier: '%0'",
   EmptyHeritageClauseType: "'%0' list cannot be empty.",
+  EmptyTypeArguments: "Type argument list cannot be empty.",
+  EmptyTypeParameters: "Type parameter list cannot be empty.",
   IndexSignatureHasAbstract:
     "Index signatures cannot have the 'abstract' modifier",
   IndexSignatureHasAccessibility:
@@ -403,6 +405,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         /* bracket */ false,
         /* skipFirstToken */ true,
       );
+      if (node.params.length === 0) {
+        this.raise(node.start, TSErrors.EmptyTypeParameters);
+      }
       return this.finishNode(node, "TSTypeParameterDeclaration");
     }
 
@@ -1680,6 +1685,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           );
         }),
       );
+      if (node.params.length === 0) {
+        this.raise(node.start, TSErrors.EmptyTypeArguments);
+      }
       // This reads the next token after the `>` too, so do this in the enclosing context.
       // But be sure not to parse a regex in the jsx expression `<C<number> />`, so set exprAllowed = false
       this.state.exprAllowed = false;

@@ -69,6 +69,7 @@ classExtendsAcrossFiles.ts
 classExtendsMultipleBaseClasses.ts
 classIndexer5.ts
 classOverloadForFunction.ts
+classWithEmptyTypeParameter.ts
 collisionExportsRequireAndClass.ts
 commonSourceDir5.ts
 commonSourceDir6.ts
@@ -147,6 +148,9 @@ emitSuperCallBeforeEmitParameterPropertyDeclaration1.ts
 emitSuperCallBeforeEmitParameterPropertyDeclaration1ES6.ts
 emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1.ts
 emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.ts
+emptyGenericParamList.ts
+emptyTypeArgumentList.ts
+emptyTypeArgumentListWithNew.ts
 enumGenericTypeClash.ts
 es3-oldStyleOctalLiteralTypes.ts
 es3defaultAliasIsQuoted.ts
@@ -278,7 +282,6 @@ jsdocAccessEnumType.ts
 jsdocPropertyTagInvalid.ts
 jsxAttributeWithoutExpressionReact.tsx
 jsxIntrinsicElementsExtendsRecord.tsx
-jsxIntrinsicElementsTypeArgumentErrors.tsx
 letAndVarRedeclaration.ts
 letAsIdentifier.ts
 letAsIdentifierInStrictMode.ts
