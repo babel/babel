@@ -35,9 +35,10 @@ export default declare((api, options) => {
       optionalPath.isOptionalCallExpression()
     ) {
       const { node } = optionalPath;
-      const childPath = skipTransparentExprWrappers(
-        optionalPath.get("object") ?? optionalPath.get("callee"),
-      );
+      const childKey = optionalPath.isOptionalMemberExpression()
+        ? "object"
+        : "callee";
+      const childPath = skipTransparentExprWrappers(optionalPath.get(childKey));
       if (node.optional) {
         return !scope.isStatic(childPath.node);
       }
