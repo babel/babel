@@ -5,6 +5,7 @@ import * as t from "@babel/types";
 import fs from "fs";
 import path from "path";
 import fixtures from "@babel/helper-fixtures";
+import sourcemap from "source-map";
 
 describe("generation", function () {
   it("completeness", function () {
@@ -275,6 +276,48 @@ describe("generation", function () {
     );
 
     expect(generated.code).toBe("function foo2() {\n  bar2;\n}");
+  });
+
+  it("newline in template literal", () => {
+    const code = "`before\n\nafter`;";
+    const ast = parse(code, { filename: "inline" }).program;
+    const generated = generate(
+      ast,
+      {
+        filename: "inline",
+        sourceFileName: "inline",
+        sourceMaps: true,
+      },
+      code,
+    );
+
+    const consumer = new sourcemap.SourceMapConsumer(generated.map);
+    const loc = consumer.originalPositionFor({ line: 2, column: 1 });
+    expect(loc).toMatchObject({
+      column: 0,
+      line: 2,
+    });
+  });
+
+  it("newline in string literal", () => {
+    const code = "'before\\\n\\\nafter';";
+    const ast = parse(code, { filename: "inline" }).program;
+    const generated = generate(
+      ast,
+      {
+        filename: "inline",
+        sourceFileName: "inline",
+        sourceMaps: true,
+      },
+      code,
+    );
+
+    const consumer = new sourcemap.SourceMapConsumer(generated.map);
+    const loc = consumer.originalPositionFor({ line: 2, column: 1 });
+    expect(loc).toMatchObject({
+      column: 0,
+      line: 2,
+    });
   });
 
   it("lazy source map generation", function () {
