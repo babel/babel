@@ -358,9 +358,8 @@ __metadata:
     "@babel/compat-data": "workspace:^7.10.4"
     "@babel/core": "workspace:^7.10.4"
     "@babel/helper-plugin-test-runner": "workspace:^7.10.4"
+    "@babel/helper-validator-option": "workspace:^7.11.4"
     browserslist: ^4.12.0
-    invariant: ^2.2.4
-    levenary: ^1.1.1
     semver: ^5.5.0
   peerDependencies:
     "@babel/core": ^7.0.0
@@ -791,6 +790,12 @@ __metadata:
   dependencies:
     charcodes: ^0.2.0
     unicode-13.0.0: ^0.8.0
+  languageName: unknown
+  linkType: soft
+
+"@babel/helper-validator-option@workspace:^7.11.4, @babel/helper-validator-option@workspace:packages/babel-helper-validator-option":
+  version: 0.0.0-use.local
+  resolution: "@babel/helper-validator-option@workspace:packages/babel-helper-validator-option"
   languageName: unknown
   linkType: soft
 
@@ -2957,6 +2962,7 @@ __metadata:
     "@babel/helper-module-imports": "workspace:^7.10.4"
     "@babel/helper-plugin-test-runner": "workspace:^7.10.4"
     "@babel/helper-plugin-utils": "workspace:^7.10.4"
+    "@babel/helper-validator-option": "workspace:^7.11.4"
     "@babel/plugin-proposal-async-generator-functions": "workspace:^7.10.4"
     "@babel/plugin-proposal-class-properties": "workspace:^7.10.4"
     "@babel/plugin-proposal-dynamic-import": "workspace:^7.10.4"
@@ -3018,8 +3024,6 @@ __metadata:
     "@babel/types": "workspace:^7.11.5"
     browserslist: ^4.12.0
     core-js-compat: ^3.6.2
-    invariant: ^2.2.2
-    levenary: ^1.1.1
     semver: ^5.5.0
   peerDependencies:
     "@babel/core": ^7.0.0-0

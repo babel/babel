@@ -106,7 +106,10 @@ module.exports = function (api) {
     plugins: [
       // TODO: Use @babel/preset-flow when
       // https://github.com/babel/babel/issues/7233 is fixed
-      "@babel/plugin-transform-flow-strip-types",
+      [
+        "@babel/plugin-transform-flow-strip-types",
+        { allowDeclareFields: true },
+      ],
       [
         "@babel/proposal-object-rest-spread",
         { useBuiltIns: true, loose: true },
