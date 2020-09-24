@@ -106,8 +106,6 @@ const TSErrors = Object.freeze({
     "Argument in a type import must be a string literal",
   UnsupportedParameterPropertyKind:
     "A parameter property may not be declared using a binding pattern.",
-  UnsupportedSignatureParameterKind:
-    "Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got %0",
 });
 
 // Doesn't handle "void" or "null" because those are keywords, not identifiers.
@@ -444,23 +442,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseBindingListForSignature(): $ReadOnlyArray<
       N.Identifier | N.RestElement | N.ObjectPattern | N.ArrayPattern,
     > {
-      return this.parseBindingList(tt.parenR, charCodes.rightParenthesis).map(
-        pattern => {
-          if (
-            pattern.type !== "Identifier" &&
-            pattern.type !== "RestElement" &&
-            pattern.type !== "ObjectPattern" &&
-            pattern.type !== "ArrayPattern"
-          ) {
-            this.raise(
-              pattern.start,
-              TSErrors.UnsupportedSignatureParameterKind,
-              pattern.type,
-            );
-          }
-          return (pattern: any);
-        },
-      );
+      return this.parseBindingList(tt.parenR, charCodes.rightParenthesis);
     }
 
     tsParseTypeMemberSemicolon(): void {
