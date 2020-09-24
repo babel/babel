@@ -92,9 +92,9 @@ __metadata:
   resolution: "@babel/compat-data@workspace:packages/babel-compat-data"
   dependencies:
     "@babel/helper-compilation-targets": "workspace:^7.10.4"
-    electron-to-chromium: 1.3.513
+    electron-to-chromium: 1.3.570
     lodash: ^4.17.19
-    mdn-browser-compat-data: 1.0.31
+    mdn-browser-compat-data: 1.0.38
   languageName: unknown
   linkType: soft
 
@@ -7647,10 +7647,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-to-chromium@npm:1.3.513, electron-to-chromium@npm:^1.3.413":
-  version: 1.3.513
-  resolution: "electron-to-chromium@npm:1.3.513"
-  checksum: f74b3b97095c669c86e879eb17b1877dc0a8948c87b92895d18e9d2df3f7b8ffdaed7b7a14c2c171838173ad5b28c1279788198868ce097418521ba0ed560c44
+"electron-to-chromium@npm:1.3.570, electron-to-chromium@npm:^1.3.413":
+  version: 1.3.570
+  resolution: "electron-to-chromium@npm:1.3.570"
+  checksum: 23388b39692e2932e56033e7c0b5b5f70199e22c03335d97c811cad9b16f89e80c94abe55c6140aa12d0e19431abec764955395df9fdf3972918c6bccebc8e10
   languageName: node
   linkType: hard
 
@@ -11619,12 +11619,12 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"mdn-browser-compat-data@npm:1.0.31":
-  version: 1.0.31
-  resolution: "mdn-browser-compat-data@npm:1.0.31"
+"mdn-browser-compat-data@npm:1.0.38":
+  version: 1.0.38
+  resolution: "mdn-browser-compat-data@npm:1.0.38"
   dependencies:
     extend: 3.0.2
-  checksum: 37257b8328e3410b824ed4cc89e827e3ee0d9321e68a1c0d35fe073eef22a8a49e3b577a125c9e2d42bb922f7a2ec1bc1bfdaddc412264d8801447e61d6120f9
+  checksum: 137bffed36b3d65fa2f58b7d7c58a238ff0a7de9d942517a280a04f817f06681354b62825c70966a2920d6efd666da86795942762d64c7b209eea7e543097a09
   languageName: node
   linkType: hard
 

@@ -1,7 +1,8 @@
 "use strict";
 
 const path = require("path");
-
+const compatData = require("mdn-browser-compat-data").javascript;
+const { process } = require("./build-modules-support");
 const { generateData, environments, writeFile } = require("./utils-build-data");
 
 for (const target of ["plugin", "corejs2-built-in"]) {
@@ -11,16 +12,13 @@ for (const target of ["plugin", "corejs2-built-in"]) {
   );
   if (target === "plugin") {
     // add export-namespace-from from mdn-browser-compat-data
-    // todo: replace the hardcoded compat data to mdn-browser-compat-data
-    // after https://github.com/mdn/browser-compat-data/pull/6394 is published
-    newData["proposal-export-namespace-from"] = {
-      chrome: "72",
-      edge: "79",
-      opera: "60",
-      firefox: "80",
-      node: "13.2",
-      samsung: "11.0",
-    };
+    const exportNamespaceFromCompatData = process(
+      compatData.statements.export.namespace
+    );
+    // the node.js compat data is 12.0, the first node version ships `export *` behind a flag
+    // here we overwrite to 13.2 which is the first unflagged version
+    exportNamespaceFromCompatData.node = "13.2";
+    newData["proposal-export-namespace-from"] = exportNamespaceFromCompatData;
   }
   const dataPath = path.join(__dirname, `../data/${target}s.json`);
 
