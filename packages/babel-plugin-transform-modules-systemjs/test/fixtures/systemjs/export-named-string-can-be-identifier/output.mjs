@@ -4,7 +4,7 @@ System.register([], function (_export, _context) {
   var foo, bar;
 
   _export({
-    foo: void 0,
+    defaultExports: void 0,
     bar: void 0
   });
 
