@@ -293,7 +293,7 @@ function isFirstInStatement(
   let node = printStack[i];
   i--;
   let parent = printStack[i];
-  while (i > 0) {
+  while (i >= 0) {
     if (
       t.isExpressionStatement(parent, { expression: node }) ||
       (considerDefaultExports &&

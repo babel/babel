@@ -537,6 +537,169 @@ describe("programmatic generation", function () {
       expect(output).toBe("(number & boolean)?");
     });
   });
+
+  describe("object expressions", () => {
+    it("not wrapped in parentheses when standalone", () => {
+      const objectExpression = t.objectExpression([]);
+      const output = generate(objectExpression).code;
+      expect(output).toBe("{}");
+    });
+
+    it("wrapped in parentheses in expression statement", () => {
+      const expressionStatement = t.expressionStatement(t.objectExpression([]));
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("({});");
+    });
+
+    it("wrapped in parentheses in arrow function", () => {
+      const arrowFunctionExpression = t.arrowFunctionExpression(
+        [],
+        t.objectExpression([]),
+      );
+      const output = generate(arrowFunctionExpression).code;
+      expect(output).toBe("() => ({})");
+    });
+
+    it("not wrapped in parentheses in conditional", () => {
+      const conditionalExpression = t.conditionalExpression(
+        t.objectExpression([]),
+        t.booleanLiteral(true),
+        t.booleanLiteral(false),
+      );
+      const output = generate(conditionalExpression).code;
+      expect(output).toBe("{} ? true : false");
+    });
+
+    it("wrapped in parentheses in conditional in expression statement", () => {
+      const expressionStatement = t.expressionStatement(
+        t.conditionalExpression(
+          t.objectExpression([]),
+          t.booleanLiteral(true),
+          t.booleanLiteral(false),
+        ),
+      );
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("({}) ? true : false;");
+    });
+
+    it("wrapped in parentheses in conditional in arrow function", () => {
+      const arrowFunctionExpression = t.arrowFunctionExpression(
+        [],
+        t.conditionalExpression(
+          t.objectExpression([]),
+          t.booleanLiteral(true),
+          t.booleanLiteral(false),
+        ),
+      );
+      const output = generate(arrowFunctionExpression).code;
+      expect(output).toBe("() => ({}) ? true : false");
+    });
+
+    it("not wrapped in parentheses in binary expression", () => {
+      const binaryExpression = t.binaryExpression(
+        "+",
+        t.objectExpression([]),
+        t.numericLiteral(1),
+      );
+      const output = generate(binaryExpression).code;
+      expect(output).toBe("{} + 1");
+    });
+
+    it("wrapped in parentheses in binary expression in expression statement", () => {
+      const expressionStatement = t.expressionStatement(
+        t.binaryExpression("+", t.objectExpression([]), t.numericLiteral(1)),
+      );
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("({}) + 1;");
+    });
+
+    it("wrapped in parentheses in binary expression in arrow function", () => {
+      const arrowFunctionExpression = t.arrowFunctionExpression(
+        [],
+        t.binaryExpression("+", t.objectExpression([]), t.numericLiteral(1)),
+      );
+      const output = generate(arrowFunctionExpression).code;
+      expect(output).toBe("() => ({}) + 1");
+    });
+
+    it("not wrapped in parentheses in sequence expression", () => {
+      const sequenceExpression = t.sequenceExpression([
+        t.objectExpression([]),
+        t.numericLiteral(1),
+      ]);
+      const output = generate(sequenceExpression).code;
+      expect(output).toBe("{}, 1");
+    });
+
+    it("wrapped in parentheses in sequence expression in expression statement", () => {
+      const expressionStatement = t.expressionStatement(
+        t.sequenceExpression([t.objectExpression([]), t.numericLiteral(1)]),
+      );
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("({}), 1;");
+    });
+
+    it("wrapped in parentheses in sequence expression in arrow function", () => {
+      const arrowFunctionExpression = t.arrowFunctionExpression(
+        [],
+        t.sequenceExpression([t.objectExpression([]), t.numericLiteral(1)]),
+      );
+      const output = generate(arrowFunctionExpression).code;
+      expect(output).toBe("() => (({}), 1)");
+    });
+  });
+
+  describe("function expressions", () => {
+    it("not wrapped in parentheses when standalone", () => {
+      const functionExpression = t.functionExpression(
+        null,
+        [],
+        t.blockStatement([]),
+      );
+      const output = generate(functionExpression).code;
+      expect(output).toBe("function () {}");
+    });
+
+    it("wrapped in parentheses in expression statement", () => {
+      const expressionStatement = t.expressionStatement(
+        t.functionExpression(null, [], t.blockStatement([])),
+      );
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("(function () {});");
+    });
+
+    it("wrapped in parentheses in export default declaration", () => {
+      const exportDefaultDeclaration = t.exportDefaultDeclaration(
+        t.functionExpression(null, [], t.blockStatement([])),
+      );
+      const output = generate(exportDefaultDeclaration).code;
+      expect(output).toBe("export default (function () {});");
+    });
+  });
+
+  describe("class expressions", () => {
+    it("not wrapped in parentheses when standalone", () => {
+      const classExpression = t.classExpression(null, null, t.classBody([]));
+      const output = generate(classExpression).code;
+      expect(output).toBe("class {}");
+    });
+
+    it("wrapped in parentheses in expression statement", () => {
+      const expressionStatement = t.expressionStatement(
+        t.classExpression(null, null, t.classBody([])),
+      );
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("(class {});");
+    });
+
+    it("wrapped in parentheses in export default declaration", () => {
+      const exportDefaultDeclaration = t.exportDefaultDeclaration(
+        t.classExpression(null, null, t.classBody([])),
+      );
+      const output = generate(exportDefaultDeclaration).code;
+      expect(output).toBe("export default (class {});");
+    });
+  });
 });
 
 describe("CodeGenerator", function () {
