@@ -506,9 +506,11 @@ export default declare((api, options) => {
             path,
             (id, name, hasInit) => {
               variableIds.push(id);
-              if (!hasInit) {
-                exportNames.push(name);
-                exportValues.push(scope.buildUndefinedNode());
+              if (!hasInit && name in exportMap) {
+                for (const exported of exportMap[name]) {
+                  exportNames.push(exported);
+                  exportValues.push(scope.buildUndefinedNode());
+                }
               }
             },
             null,
