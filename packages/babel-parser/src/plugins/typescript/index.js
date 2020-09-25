@@ -68,7 +68,7 @@ const TSErrors = Object.freeze({
   ConstructorHasTypeParameters:
     "Type parameters cannot appear on a constructor declaration.",
   DeclareClassFieldHasInitializer:
-    "'declare' class fields cannot have an initializer",
+    "Initializers are not allowed in ambient contexts.",
   DeclareFunctionHasImplementation:
     "An implementation cannot be declared in ambient contexts.",
   DuplicateModifier: "Duplicate modifier: '%0'",
@@ -2289,7 +2289,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseClassProperty(node: N.ClassProperty): N.ClassProperty {
       this.parseClassPropertyAnnotation(node);
 
-      if (node.declare && this.match(tt.eq)) {
+      if ((node.declare || this.state.isDeclareContext) && this.match(tt.eq)) {
         this.raise(this.state.start, TSErrors.DeclareClassFieldHasInitializer);
       }
 
