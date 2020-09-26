@@ -80,6 +80,8 @@ const TSErrors = Object.freeze({
   IndexSignatureHasAccessibility:
     "Index signatures cannot have an accessibility modifier ('%0')",
   IndexSignatureHasStatic: "Index signatures cannot have the 'static' modifier",
+  IndexSignatureHasDeclare:
+    "Index signatures cannot have the 'declare' modifier",
   InvalidTupleMemberLabel:
     "Tuple members must be labeled with a simple identifier.",
   MixedLabeledAndUnlabeledElements:
@@ -2107,6 +2109,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             TSErrors.IndexSignatureHasAccessibility,
             (member: any).accessibility,
           );
+        }
+        if ((member: any).declare) {
+          this.raise(member.start, TSErrors.IndexSignatureHasDeclare);
         }
 
         return;
