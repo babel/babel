@@ -1,6 +1,6 @@
 // empty
 
-var _reactJsxDevRuntime = require("react/jsx-dev-runtime");
+var _reactJsxDevRuntimeJs = require("react/jsx-dev-runtime.js");
 
 /*#__PURE__*/
-_reactJsxDevRuntime.jsxDEV("div", {}, void 0, false, void 0, this)
+_reactJsxDevRuntimeJs.jsxDEV("div", {}, void 0, false, void 0, this)

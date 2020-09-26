@@ -1,4 +1,4 @@
-import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
+import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime.js";
 
 var _jsxFileName = "<CWD>/packages/babel-plugin-transform-react-jsx-development/test/fixtures/linux/self-inside-arrow/input.mjs",
     _this = this;

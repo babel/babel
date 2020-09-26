@@ -1,4 +1,4 @@
-import { jsxs as _jsxs } from "react/jsx-runtime";
+import { jsxs as _jsxs } from "react/jsx-runtime.js";
 
 class MobileHomeActivityTaskPriorityIcon extends React.PureComponent {
   render() {
