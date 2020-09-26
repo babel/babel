@@ -84,118 +84,104 @@ function buildBabel(exclude, sourcesGlob = defaultSourcesGlob) {
     .pipe(gulp.dest(base));
 }
 
-let babelVersion = require("./packages/babel-core/package.json").version;
+// If this build is part of a pull request, include the pull request number in
+// the version number.
+let versionSuffix = "";
+if (process.env.CIRCLE_PR_NUMBER) {
+  versionSuffix = "+pr." + process.env.CIRCLE_PR_NUMBER;
+}
+
+const babelVersion =
+  require("./packages/babel-core/package.json").version + versionSuffix;
 function buildRollup(packages) {
   const sourcemap = process.env.NODE_ENV === "production";
-  const minify = !!process.env.IS_PUBLISH;
   return Promise.all(
-    packages.map(
-      ({ src, format, dest, name, filename, version = babelVersion }) => {
-        const extraPlugins = [];
-        let nodeResolveBrowser = false,
-          babelEnvName = "rollup";
-        switch (src) {
-          case "packages/babel-standalone":
-            nodeResolveBrowser = true;
-            babelEnvName = "standalone";
-            if (minify) {
-              extraPlugins.push(
-                rollupTerser({
-                  // workaround https://bugs.webkit.org/show_bug.cgi?id=212725
-                  output: {
-                    ascii_only: true,
-                  },
-                })
-              );
-            }
-            break;
-        }
-        // If this build is part of a pull request, include the pull request number in
-        // the version number.
-        if (process.env.CIRCLE_PR_NUMBER) {
-          const prVersion = "+pr." + process.env.CIRCLE_PR_NUMBER;
-          babelVersion += prVersion;
-          version += prVersion;
-        }
-        const input = getIndexFromPackage(src);
-        fancyLog(`Compiling '${chalk.cyan(input)}' with rollup ...`);
-        return rollup
-          .rollup({
-            input,
-            plugins: [
-              ...extraPlugins,
-              rollupBabelSource(),
-              rollupReplace({
-                "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-                BABEL_VERSION: JSON.stringify(babelVersion),
-                VERSION: JSON.stringify(version),
-              }),
-              rollupBabel({
-                envName: babelEnvName,
-                babelrc: false,
-                babelHelpers: "bundled",
-                extends: "./babel.config.js",
-              }),
-              rollupNodeResolve({
-                browser: nodeResolveBrowser,
-                preferBuiltins: true,
-                //todo: remove when semver and source-map are bumped to latest versions
-                dedupe(importee) {
-                  return ["semver", "source-map"].includes(importee);
-                },
-              }),
-              rollupCommonJs({
-                include: [
-                  /node_modules/,
-                  "packages/babel-runtime/regenerator/**",
-                  "packages/babel-preset-env/data/*.js",
-                  // Rollup doesn't read export maps, so it loads the cjs fallback
-                  "packages/babel-compat-data/*.js",
-                ],
-              }),
-              rollupJson(),
-              rollupNodePolyfills({
-                sourceMap: sourcemap,
-                include: "**/*.js",
-              }),
-            ],
-          })
-          .then(bundle => {
-            const outputFile = path.resolve(src, dest, filename || "index.js");
-            return bundle
-              .write({
-                file: outputFile,
-                format,
-                name,
-                sourcemap: sourcemap,
-              })
-              .then(() => {
-                if (!process.env.IS_PUBLISH) {
-                  fancyLog(
-                    chalk.yellow(
-                      `Skipped minification of '${chalk.cyan(
-                        path.relative(path.join(__dirname, ".."), outputFile)
-                      )}' because not publishing`
-                    )
-                  );
-                  return undefined;
-                }
-                fancyLog(
-                  `Minifying '${chalk.cyan(
-                    path.relative(path.join(__dirname, ".."), outputFile)
-                  )}'...`
-                );
-
-                return bundle.write({
-                  file: outputFile.replace(/\.js$/, ".min.js"),
-                  format,
-                  name,
-                  sourcemap: sourcemap,
-                });
-              });
-          });
+    packages.map(async ({ src, format, dest, name, filename, version }) => {
+      let nodeResolveBrowser = false,
+        babelEnvName = "rollup";
+      switch (src) {
+        case "packages/babel-standalone":
+          nodeResolveBrowser = true;
+          babelEnvName = "standalone";
+          break;
       }
-    )
+      const input = getIndexFromPackage(src);
+      fancyLog(`Compiling '${chalk.cyan(input)}' with rollup ...`);
+      const bundle = await rollup.rollup({
+        input,
+        plugins: [
+          rollupBabelSource(),
+          rollupReplace({
+            "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+            BABEL_VERSION: JSON.stringify(babelVersion),
+            VERSION: JSON.stringify(version),
+          }),
+          rollupBabel({
+            envName: babelEnvName,
+            babelrc: false,
+            babelHelpers: "bundled",
+            extends: "./babel.config.js",
+          }),
+          rollupNodeResolve({
+            browser: nodeResolveBrowser,
+            preferBuiltins: true,
+            //todo: remove when semver and source-map are bumped to latest versions
+            dedupe(importee) {
+              return ["semver", "source-map"].includes(importee);
+            },
+          }),
+          rollupCommonJs({
+            include: [
+              /node_modules/,
+              "packages/babel-runtime/regenerator/**",
+              "packages/babel-preset-env/data/*.js",
+              // Rollup doesn't read export maps, so it loads the cjs fallback
+              "packages/babel-compat-data/*.js",
+            ],
+          }),
+          rollupJson(),
+          rollupNodePolyfills({
+            sourceMap: sourcemap,
+            include: "**/*.js",
+          }),
+        ],
+      });
+
+      const outputFile = path.join(src, dest, filename || "index.js");
+      await bundle.write({
+        file: outputFile,
+        format,
+        name,
+        sourcemap: sourcemap,
+      });
+
+      if (!process.env.IS_PUBLISH) {
+        fancyLog(
+          chalk.yellow(
+            `Skipped minification of '${chalk.cyan(
+              outputFile
+            )}' because not publishing`
+          )
+        );
+        return undefined;
+      }
+      fancyLog(`Minifying '${chalk.cyan(outputFile)}'...`);
+
+      await bundle.write({
+        file: outputFile.replace(/\.js$/, ".min.js"),
+        format,
+        name,
+        sourcemap: sourcemap,
+        plugins: [
+          rollupTerser({
+            // workaround https://bugs.webkit.org/show_bug.cgi?id=212725
+            output: {
+              ascii_only: true,
+            },
+          }),
+        ],
+      });
+    })
   );
 }
 
@@ -204,7 +190,7 @@ const libBundles = [
     src: "packages/babel-parser",
     format: "cjs",
     dest: "lib",
-    version: require("./packages/babel-parser/package").version,
+    version: require("./packages/babel-parser/package").version + versionSuffix,
   },
 ];
 
@@ -215,7 +201,7 @@ const standaloneBundle = [
     name: "Babel",
     filename: "babel.js",
     dest: "",
-    version: require("./packages/babel-core/package").version,
+    version: babelVersion,
   },
 ];
 
