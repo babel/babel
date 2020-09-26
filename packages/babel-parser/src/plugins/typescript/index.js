@@ -68,7 +68,7 @@ const TSErrors = Object.freeze({
   ConstructorHasTypeParameters:
     "Type parameters cannot appear on a constructor declaration.",
   DeclareClassFieldHasInitializer:
-    "'declare' class fields cannot have an initializer",
+    "Initializers are not allowed in ambient contexts.",
   DeclareFunctionHasImplementation:
     "An implementation cannot be declared in ambient contexts.",
   DuplicateModifier: "Duplicate modifier: '%0'",
@@ -1478,10 +1478,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         kind = "let";
       }
 
-      const oldIsDeclareContext = this.state.isDeclareContext;
-      this.state.isDeclareContext = true;
-
-      try {
+      return this.tsInDeclareContext(() => {
         switch (starttype) {
           case tt._function:
             nany.declare = true;
@@ -1519,9 +1516,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             }
           }
         }
-      } finally {
-        this.state.isDeclareContext = oldIsDeclareContext;
-      }
+      });
     }
 
     // Note: this won't be called unless the keyword is allowed in `shouldParseExportDeclaration`.
@@ -2081,7 +2076,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (accessibility) member.accessibility = accessibility;
       this.tsParseModifiers(member, ["declare"]);
 
-      super.parseClassMember(classBody, member, state, constructorAllowsSuper);
+      const callParseClassMember = () => {
+        super.parseClassMember(
+          classBody,
+          member,
+          state,
+          constructorAllowsSuper,
+        );
+      };
+      if (member.declare) {
+        this.tsInDeclareContext(callParseClassMember);
+      } else {
+        callParseClassMember();
+      }
     }
 
     parseClassMemberWithIsStatic(
@@ -2294,7 +2301,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseClassProperty(node: N.ClassProperty): N.ClassProperty {
       this.parseClassPropertyAnnotation(node);
 
-      if (node.declare && this.match(tt.eq)) {
+      if (this.state.isDeclareContext && this.match(tt.eq)) {
         this.raise(this.state.start, TSErrors.DeclareClassFieldHasInitializer);
       }
 
@@ -2780,5 +2787,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       return param;
+    }
+
+    tsInDeclareContext<T>(cb: () => T): T {
+      const oldIsDeclareContext = this.state.isDeclareContext;
+      this.state.isDeclareContext = true;
+      try {
+        return cb();
+      } finally {
+        this.state.isDeclareContext = oldIsDeclareContext;
+      }
     }
   };

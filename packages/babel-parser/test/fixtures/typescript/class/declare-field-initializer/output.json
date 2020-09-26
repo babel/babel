@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":43,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
   "errors": [
-    "SyntaxError: 'declare' class fields cannot have an initializer (2:22)"
+    "SyntaxError: Initializers are not allowed in ambient contexts. (2:22)"
   ],
   "program": {
     "type": "Program",
