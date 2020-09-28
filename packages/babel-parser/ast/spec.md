@@ -1183,7 +1183,7 @@ interface Class <: Node {
 ```js
 interface ClassBody <: Node {
   type: "ClassBody";
-  body: [ ClassMethod | ClassPrivateMethod | ClassProperty | ClassPrivateProperty ];
+  body: [ ClassMethod | ClassPrivateMethod | ClassProperty | ClassPrivateProperty | StaticBlock ];
 }
 ```
 
