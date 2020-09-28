@@ -760,7 +760,7 @@
     "node": "7",
     "ios": "10.3",
     "samsung": "6",
-    "electron": "1.5"
+    "electron": "1.4"
   },
   "es6.object.freeze": {
     "chrome": "44",
@@ -793,7 +793,7 @@
     "node": "7",
     "ios": "10.3",
     "samsung": "6",
-    "electron": "1.5"
+    "electron": "1.4"
   },
   "es6.object.get-own-property-names": {
     "chrome": "40",
@@ -949,7 +949,7 @@
     "node": "7",
     "ios": "10.3",
     "samsung": "6",
-    "electron": "1.5"
+    "electron": "1.4"
   },
   "es6.promise": {
     "chrome": "51",
