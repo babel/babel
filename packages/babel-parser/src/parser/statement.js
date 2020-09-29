@@ -2060,6 +2060,7 @@ export default class StatementParser extends ExpressionParser {
   // https://tc39.es/ecma262/#prod-ModuleExportName
   parseModuleExportName(): N.StringLiteral | N.Identifier {
     if (this.match(tt.string)) {
+      this.expectPlugin("moduleStringNames");
       const result = this.parseLiteral<N.StringLiteral>(
         this.state.value,
         "StringLiteral",
