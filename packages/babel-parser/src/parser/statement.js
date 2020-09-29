@@ -1940,22 +1940,26 @@ export default class StatementParser extends ExpressionParser {
       } else if (node.specifiers && node.specifiers.length) {
         // Named exports
         for (const specifier of node.specifiers) {
-          const { exported } = specifier;
+          const { exported, local } = specifier;
           const exportedName =
             exported.type === "Identifier" ? exported.name : exported.value;
           this.checkDuplicateExports(specifier, exportedName);
           // $FlowIgnore
-          if (!isFrom && specifier.local) {
-            // check for keywords used as local names
-            this.checkReservedWord(
-              specifier.local.name,
-              specifier.local.start,
-              true,
-              false,
-            );
-            // check if export is defined
-            // $FlowIgnore
-            this.scope.checkLocalExport(specifier.local);
+          if (!isFrom && local) {
+            if (local.type === "StringLiteral") {
+              this.raise(
+                specifier.start,
+                Errors.ExportBindingIsString,
+                local.extra.raw,
+                exportedName,
+              );
+            } else {
+              // check for keywords used as local names
+              this.checkReservedWord(local.name, local.start, true, false);
+              // check if export is defined
+              // $FlowIgnore
+              this.scope.checkLocalExport(local);
+            }
           }
         }
       } else if (node.declaration) {
@@ -2047,7 +2051,7 @@ export default class StatementParser extends ExpressionParser {
       }
 
       const node = this.startNode();
-      node.local = this.parseIdentifier(true);
+      node.local = this.parseModuleExportName();
       node.exported = this.eatContextual("as")
         ? this.parseModuleExportName()
         : node.local.__clone();

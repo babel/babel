@@ -43,6 +43,8 @@ export const ErrorMessages = Object.freeze({
   DuplicateRegExpFlags: "Duplicate regular expression flag",
   ElementAfterRest: "Rest element must be last element",
   EscapedCharNotAnIdentifier: "Invalid Unicode escape",
+  ExportBindingIsString:
+    "Can not use string literal as exported binding without `from`.\n- Did you mean `export { %0 as '%1' } from 'some-module'`",
   ExportDefaultFromAsIdentifier:
     "'from' is not allowed as an identifier after 'export default'",
   ForInOfLoopInitializer:
