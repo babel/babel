@@ -1016,7 +1016,11 @@ export default class StatementParser extends ExpressionParser {
           // `const` with no initializer is allowed in TypeScript.
           // It could be a declaration like `const x: number;`.
           if (!isTypescript) {
-            this.unexpected();
+            this.raise(
+              this.state.lastTokEnd,
+              Errors.DeclarationMissingInitializer,
+              "Const declarations",
+            );
           }
         } else if (
           decl.id.type !== "Identifier" &&
