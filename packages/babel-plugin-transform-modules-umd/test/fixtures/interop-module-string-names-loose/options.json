@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "external-helpers",
+    ["transform-modules-umd", { "loose": true }],
+    "syntax-module-string-names"
+  ]
+}
