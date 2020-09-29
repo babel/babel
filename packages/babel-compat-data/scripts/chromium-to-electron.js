@@ -1,12 +1,4 @@
-const { versions } = require("electron-to-chromium");
-// todo: we should have imported `chromiumVersions` from `require("electron-to-chromium").chromiumVersions`,
-// however the data is inconsistent with `require("electron-to-chromium").versions`.
-// see https://github.com/Kilian/electron-to-chromium/pull/36
-const chromiumVersions = {};
-for (const electronVersion of Object.keys(versions)) {
-  chromiumVersions[versions[electronVersion]] =
-    chromiumVersions[versions[electronVersion]] || electronVersion;
-}
+const { chromiumVersions } = require("electron-to-chromium");
 const chromiumVersionList = Object.keys(chromiumVersions);
 
 function chromiumToElectron(version) {
