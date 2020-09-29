@@ -27,5 +27,7 @@ suppress_type=$FlowSubtype
 esproposal.export_star_as=enable
 esproposal.optional_chaining=enable
 esproposal.nullish_coalescing=enable
-module.name_mapper='^@babel\/\([a-zA-Z0-9_\-]+\)$' -> '<PROJECT_ROOT>/packages/babel-\1/src/index'
+module.name_mapper='^@babel/\([a-zA-Z0-9_-]+\)$' -> '<PROJECT_ROOT>/packages/babel-\1/src/index'
+; Todo: can not make it works, 🤷‍♂️
+; module.name_mapper='^@babel/plugin-syntax-import-meta$' -> '<PROJECT_ROOT>/packages/babel-standalone/node_modules/@babel/plugin-syntax-import-meta/lib/index'
 module.ignore_non_literal_requires=true
