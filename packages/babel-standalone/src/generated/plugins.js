@@ -13,7 +13,6 @@ import syntaxExportDefaultFrom from "@babel/plugin-syntax-export-default-from";
 import syntaxFlow from "@babel/plugin-syntax-flow";
 import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
 import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
-import syntaxImportMeta from "@babel/plugin-syntax-import-meta";
 import syntaxJsx from "@babel/plugin-syntax-jsx";
 import syntaxModuleAttributes from "@babel/plugin-syntax-module-attributes";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
@@ -106,7 +105,6 @@ export {
   syntaxFlow,
   syntaxFunctionBind,
   syntaxFunctionSent,
-  syntaxImportMeta,
   syntaxJsx,
   syntaxModuleAttributes,
   syntaxObjectRestSpread,
@@ -200,7 +198,6 @@ export const all = {
   "syntax-flow": syntaxFlow,
   "syntax-function-bind": syntaxFunctionBind,
   "syntax-function-sent": syntaxFunctionSent,
-  "syntax-import-meta": syntaxImportMeta,
   "syntax-jsx": syntaxJsx,
   "syntax-module-attributes": syntaxModuleAttributes,
   "syntax-object-rest-spread": syntaxObjectRestSpread,

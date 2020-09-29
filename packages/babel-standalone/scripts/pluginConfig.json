@@ -9,7 +9,6 @@
   "syntax-flow",
   "syntax-function-bind",
   "syntax-function-sent",
-  "syntax-import-meta",
   "syntax-jsx",
   "syntax-module-attributes",
   "syntax-object-rest-spread",
