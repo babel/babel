@@ -1940,12 +1940,13 @@ export default class StatementParser extends ExpressionParser {
       } else if (node.specifiers && node.specifiers.length) {
         // Named exports
         for (const specifier of node.specifiers) {
-          const { exported, local } = specifier;
+          const { exported } = specifier;
           const exportedName =
             exported.type === "Identifier" ? exported.name : exported.value;
           this.checkDuplicateExports(specifier, exportedName);
           // $FlowIgnore
-          if (!isFrom && local) {
+          if (!isFrom && specifier.local) {
+            const { local } = specifier;
             if (local.type === "StringLiteral") {
               this.raise(
                 specifier.start,
