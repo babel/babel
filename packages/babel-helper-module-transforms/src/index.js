@@ -183,13 +183,13 @@ export function buildNamespaceInitStatements(
 }
 
 const ReexportTemplate = {
-  loose: template.statement`EXPORTS.EXPORT_NAME = NAMESPACE.IMPORT_NAME;`,
-  looseComputed: template.statement`EXPORTS["EXPORT_NAME"] = NAMESPACE.IMPORT_NAME;`,
+  loose: template.statement`EXPORTS.EXPORT_NAME = NAMESPACE_IMPORT;`,
+  looseComputed: template.statement`EXPORTS["EXPORT_NAME"] = NAMESPACE_IMPORT;`,
   spec: template`
     Object.defineProperty(EXPORTS, "EXPORT_NAME", {
       enumerable: true,
       get: function() {
-        return NAMESPACE.IMPORT_NAME;
+        return NAMESPACE_IMPORT;
       },
     });
     `,
@@ -206,11 +206,23 @@ const buildReexportsFromMeta = (
 
   const { stringSpecifiers } = meta;
   return Array.from(metadata.reexports, ([exportName, importName]) => {
+    let NAMESPACE_IMPORT;
+    if (stringSpecifiers.has(importName)) {
+      NAMESPACE_IMPORT = t.memberExpression(
+        t.cloneNode(namespace),
+        t.stringLiteral(importName),
+        true,
+      );
+    } else {
+      NAMESPACE_IMPORT = NAMESPACE_IMPORT = t.memberExpression(
+        t.cloneNode(namespace),
+        t.identifier(importName),
+      );
+    }
     const astNodes = {
       EXPORTS: meta.exportName,
       EXPORT_NAME: exportName,
-      NAMESPACE: t.cloneNode(namespace),
-      IMPORT_NAME: importName,
+      NAMESPACE_IMPORT,
     };
     if (loose) {
       if (stringSpecifiers.has(exportName)) {

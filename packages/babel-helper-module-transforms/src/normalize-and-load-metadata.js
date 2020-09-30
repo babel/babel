@@ -277,7 +277,10 @@ function getModuleMetadata(
         if (!spec.isExportSpecifier()) {
           throw spec.buildCodeFrameError("Unexpected export specifier type");
         }
-        const importName = spec.get("local").node.name;
+        const importName = getExportSpecifierName(
+          spec.get("local"),
+          stringSpecifiers,
+        );
         const exportName = getExportSpecifierName(
           spec.get("exported"),
           stringSpecifiers,
