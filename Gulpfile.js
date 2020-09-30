@@ -5,6 +5,7 @@ const through = require("through2");
 const chalk = require("chalk");
 const newer = require("gulp-newer");
 const babel = require("gulp-babel");
+const camelCase = require("lodash/camelCase");
 const fancyLog = require("fancy-log");
 const filter = require("gulp-filter");
 const gulp = require("gulp");
@@ -19,8 +20,11 @@ const rollupNodePolyfills = require("rollup-plugin-node-polyfills");
 const rollupNodeResolve = require("@rollup/plugin-node-resolve").default;
 const rollupReplace = require("@rollup/plugin-replace");
 const { terser: rollupTerser } = require("rollup-plugin-terser");
+const formatCode = require("./scripts/utils/formatCode");
 
 const defaultSourcesGlob = "./@(codemods|packages|eslint)/*/src/**/*.{js,ts}";
+const babelStandalonePluginConfigGlob =
+  "./packages/babel-standalone/scripts/pluginConfig.json";
 
 /**
  * map source code path to the generated artifacts path
@@ -68,6 +72,44 @@ function rename(fn) {
     file.path = fn(file);
     callback(null, file);
   });
+}
+
+function generateStandalone() {
+  const dest = "./packages/babel-standalone/src/generated/";
+  return gulp
+    .src(babelStandalonePluginConfigGlob, { base: __dirname })
+    .pipe(
+      through.obj((file, enc, callback) => {
+        fancyLog("Generating @babel/standalone files");
+        const pluginConfig = JSON.parse(file.contents);
+        let imports = "";
+        let list = "";
+        let allList = "";
+
+        for (const plugin of pluginConfig) {
+          const camelPlugin = camelCase(plugin);
+          imports += `import ${camelPlugin} from "@babel/plugin-${plugin}";`;
+          list += `${camelPlugin},`;
+          allList += `"${plugin}": ${camelPlugin},`;
+        }
+
+        const fileContents = `// @flow
+/*
+ * This file is auto-generated! Do not modify it directly.
+ * To re-generate run 'make build'
+ */
+${imports}
+
+export {${list}};
+
+export const all = {${allList}};
+`;
+        file.path = "plugins.js";
+        file.contents = Buffer.from(formatCode(fileContents, dest));
+        callback(null, file);
+      })
+    )
+    .pipe(gulp.dest(dest));
 }
 
 function buildBabel(exclude, sourcesGlob = defaultSourcesGlob) {
@@ -235,8 +277,14 @@ const standaloneBundle = [
   },
 ];
 
+gulp.task("generate-standalone", () => generateStandalone());
+
 gulp.task("build-rollup", () => buildRollup(libBundles));
-gulp.task("build-babel-standalone", () => buildRollup(standaloneBundle, true));
+gulp.task("rollup-babel-standalone", () => buildRollup(standaloneBundle, true));
+gulp.task(
+  "build-babel-standalone",
+  gulp.series("generate-standalone", "rollup-babel-standalone")
+);
 
 gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
 gulp.task("build", gulp.parallel("build-rollup", "build-babel"));
@@ -249,5 +297,9 @@ gulp.task(
   "watch",
   gulp.series("build-no-bundle", function watch() {
     gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle"));
+    gulp.watch(
+      babelStandalonePluginConfigGlob,
+      gulp.task("generate-standalone")
+    );
   })
 );

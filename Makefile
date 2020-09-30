@@ -27,7 +27,7 @@ endif
 
 build-bundle: clean clean-lib
 	$(YARN) gulp build
-	$(MAKE) generate-standalone generate-type-helpers
+	$(MAKE) generate-type-helpers
 	# call build again as the generated files might need to be compiled again.
 	$(YARN) gulp build
 	$(MAKE) build-typings
@@ -38,9 +38,6 @@ build-bundle-ci: bootstrap-only
 
 generate-tsconfig:
 	$(NODE) scripts/generators/tsconfig.js
-
-generate-standalone:
-	$(NODE) packages/babel-standalone/scripts/generate.js
 
 generate-type-helpers:
 	$(NODE) packages/babel-types/scripts/generateTypeHelpers.js

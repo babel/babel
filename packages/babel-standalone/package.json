@@ -105,9 +105,7 @@
     "@babel/preset-env": "workspace:*",
     "@babel/preset-flow": "workspace:*",
     "@babel/preset-react": "workspace:*",
-    "@babel/preset-typescript": "workspace:*",
-    "chalk": "^4.0.0",
-    "lodash": "^4.17.20"
+    "@babel/preset-typescript": "workspace:*"
   },
   "keywords": [
     "babel",
