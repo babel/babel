@@ -29,7 +29,6 @@
   },
   "devDependencies": {
     "@babel/generator": "workspace:*",
-    "@babel/parser": "workspace:*",
-    "chalk": "^4.1.0"
+    "@babel/parser": "workspace:*"
   }
 }

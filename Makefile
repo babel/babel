@@ -40,7 +40,7 @@ generate-tsconfig:
 	$(NODE) scripts/generators/tsconfig.js
 
 generate-type-helpers:
-	$(NODE) packages/babel-types/scripts/generateTypeHelpers.js
+	$(YARN) gulp generate-type-helpers
 
 build-typings:
 	$(YARN) gulp build-typings

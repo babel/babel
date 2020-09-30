@@ -26,7 +26,7 @@ const babelStandalonePluginConfigGlob =
   "./packages/babel-standalone/scripts/pluginConfig.json";
 const buildTypingsWatchGlob = [
   "./packages/babel-types/lib/definitions/**/*.js",
-  "./packages/babel-types/scripts/generators/{flow,typescript}.js",
+  "./packages/babel-types/scripts/generators/*.js",
 ];
 
 /**
@@ -77,10 +77,38 @@ function rename(fn) {
   });
 }
 
+/**
+ *
+ * @typedef {("asserts" | "builders" | "constants" | | "validators")} HelperKind
+ * @param {HelperKind} helperKind
+ */
+function generateTypeHelpers(helperKind) {
+  const dest = `./packages/babel-types/src/${helperKind}/generated/`;
+  const formatCode = require("./scripts/utils/formatCode");
+  return gulp
+    .src(".", { base: __dirname })
+    .pipe(errorsLogger())
+    .pipe(
+      through.obj(function (file, enc, callback) {
+        file.path = "index.js";
+        file.contents = Buffer.from(
+          formatCode(
+            require(`./packages/babel-types/scripts/generators/${helperKind}`)(),
+            dest + file.path
+          )
+        );
+        fancyLog(`${chalk.green("✔")} Generated ${helperKind}`);
+        callback(null, file);
+      })
+    )
+    .pipe(gulp.dest(dest));
+}
+
 function buildFlowTypings() {
   const dest = "./packages/babel-types/lib/";
   return gulp
     .src(".", { base: __dirname })
+    .pipe(errorsLogger())
     .pipe(
       through.obj(require("./packages/babel-types/scripts/generators/flow.js"))
     )
@@ -92,6 +120,7 @@ function buildTypeScriptTypings() {
   const dest = "./packages/babel-types/lib/";
   return gulp
     .src(".", { base: __dirname })
+    .pipe(errorsLogger())
     .pipe(
       through.obj(
         require("./packages/babel-types/scripts/generators/typescript.js")
@@ -305,6 +334,16 @@ const standaloneBundle = [
   },
 ];
 
+gulp.task("generate-type-helpers", async () => {
+  fancyLog("Generating @babel/types dynamic functions");
+  await Promise.all(
+    ["asserts", "builders", "constants", "validators"].map(helperKind =>
+      generateTypeHelpers(helperKind)
+    )
+  );
+  return;
+});
+
 gulp.task("build-flow-typings", () => buildFlowTypings());
 gulp.task("build-typescript-typings", () => buildTypeScriptTypings());
 gulp.task(
@@ -344,6 +383,9 @@ gulp.task(
       babelStandalonePluginConfigGlob,
       gulp.task("generate-standalone")
     );
-    gulp.watch(buildTypingsWatchGlob, gulp.task("build-typings"));
+    gulp.watch(
+      buildTypingsWatchGlob,
+      gulp.parallel("build-typings", "generate-type-helpers")
+    );
   })
 );
