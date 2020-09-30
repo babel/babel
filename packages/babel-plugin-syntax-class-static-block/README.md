@@ -1,6 +1,6 @@
 # @babel/plugin-syntax-class-static-block
 
-> Allow parsing of static block in class
+> Allow parsing of class static blocks
 
 See our website [@babel/plugin-syntax-class-static-block](https://babeljs.io/docs/en/next/babel-plugin-syntax-class-static-block.html) for more information.
 
