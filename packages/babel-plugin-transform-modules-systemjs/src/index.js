@@ -519,7 +519,11 @@ export default declare((api, options) => {
                   );
                   exportNames.push(exportedName);
                   exportValues.push(
-                    t.memberExpression(t.identifier(target), node.local),
+                    t.memberExpression(
+                      t.identifier(target),
+                      node.local,
+                      t.isStringLiteral(node.local),
+                    ),
                   );
                 } else {
                   // todo
