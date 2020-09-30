@@ -254,4 +254,7 @@ code += `\ndeclare module "@babel/types" {
 
 //
 
-process.stdout.write(code);
+module.exports = function (file, enc, callback) {
+  file.contents = Buffer.from(code);
+  callback(null, file);
+};

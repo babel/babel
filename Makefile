@@ -45,7 +45,7 @@ generate-type-helpers:
 build-typings: build-flow-typings build-typescript-typings
 
 build-flow-typings:
-	$(NODE) packages/babel-types/scripts/generators/flow.js > packages/babel-types/lib/index.js.flow
+	$(YARN) gulp build-flow-typings
 
 build-typescript-typings:
 	$(NODE) packages/babel-types/scripts/generators/typescript.js > packages/babel-types/lib/index.d.ts

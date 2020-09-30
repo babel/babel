@@ -20,11 +20,11 @@ const rollupNodePolyfills = require("rollup-plugin-node-polyfills");
 const rollupNodeResolve = require("@rollup/plugin-node-resolve").default;
 const rollupReplace = require("@rollup/plugin-replace");
 const { terser: rollupTerser } = require("rollup-plugin-terser");
-const formatCode = require("./scripts/utils/formatCode");
 
 const defaultSourcesGlob = "./@(codemods|packages|eslint)/*/src/**/*.{js,ts}";
 const babelStandalonePluginConfigGlob =
   "./packages/babel-standalone/scripts/pluginConfig.json";
+const buildTypingsWatchGlob = "./packages/babel-types/lib/definitions/**/*.js";
 
 /**
  * map source code path to the generated artifacts path
@@ -74,8 +74,22 @@ function rename(fn) {
   });
 }
 
+function buildFlowTypings() {
+  const dest = "./packages/babel-types/lib/";
+  return gulp
+    .src("./packages/babel-types/lib/index.js.flow", {
+      base: __dirname,
+      allowEmpty: true,
+    })
+    .pipe(
+      through.obj(require("./packages/babel-types/scripts/generators/flow.js"))
+    )
+    .pipe(gulp.dest(dest));
+}
+
 function generateStandalone() {
   const dest = "./packages/babel-standalone/src/generated/";
+  const formatCode = require("./scripts/utils/formatCode");
   return gulp
     .src(babelStandalonePluginConfigGlob, { base: __dirname })
     .pipe(
@@ -277,6 +291,7 @@ const standaloneBundle = [
   },
 ];
 
+gulp.task("build-flow-typings", () => buildFlowTypings());
 gulp.task("generate-standalone", () => generateStandalone());
 
 gulp.task("build-rollup", () => buildRollup(libBundles));
@@ -294,12 +309,21 @@ gulp.task("default", gulp.series("build"));
 gulp.task("build-no-bundle", () => buildBabel());
 
 gulp.task(
+  "build-dev",
+  gulp.series(
+    "build-no-bundle",
+    gulp.parallel("generate-standalone", "build-flow-typings")
+  )
+);
+
+gulp.task(
   "watch",
-  gulp.series("build-no-bundle", function watch() {
+  gulp.series("build-dev", function watch() {
     gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle"));
     gulp.watch(
       babelStandalonePluginConfigGlob,
       gulp.task("generate-standalone")
     );
+    gulp.watch(buildTypingsWatchGlob, gulp.task("build-flow-typings"));
   })
 );
