@@ -226,6 +226,7 @@ gettersAndSettersErrors.ts
 giant.ts
 globalThisDeclarationEmit.ts
 globalThisDeclarationEmit2.ts
+hugeDeclarationOutputGetsTruncatedWithError.ts
 implementClausePrecedingExtends.ts
 implementsClauseAlreadySeen.ts
 importAndVariableDeclarationConflict1.ts
