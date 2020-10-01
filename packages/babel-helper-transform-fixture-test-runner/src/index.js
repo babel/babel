@@ -37,7 +37,7 @@ function createContext() {
   // Initialize the test context with the polyfill, and then freeze the global to prevent implicit
   // global creation in tests, which could cause things to bleed between tests.
   runModuleInTestContext(
-    "@babel/polyfill/dist/polyfill.min.js",
+    "regenerator-runtime",
     __filename,
     context,
     moduleCache,
