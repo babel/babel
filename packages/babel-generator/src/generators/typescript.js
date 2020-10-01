@@ -330,7 +330,7 @@ export function TSIndexedAccessType(node) {
 }
 
 export function TSMappedType(node) {
-  const { readonly, typeParameter, optional } = node;
+  const { nameType, optional, readonly, typeParameter } = node;
   this.token("{");
   this.space();
   if (readonly) {
@@ -345,6 +345,14 @@ export function TSMappedType(node) {
   this.word("in");
   this.space();
   this.print(typeParameter.constraint, typeParameter);
+
+  if (nameType) {
+    this.space();
+    this.word("as");
+    this.space();
+    this.print(nameType, node);
+  }
+
   this.token("]");
 
   if (optional) {

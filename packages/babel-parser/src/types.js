@@ -1339,6 +1339,7 @@ export type TsMappedType = TsTypeBase & {
   typeParameter: TsTypeParameter,
   optional?: true | "+" | "-",
   typeAnnotation: ?TsType,
+  nameType: ?TsType,
 };
 
 export type TsLiteralType = TsTypeBase & {

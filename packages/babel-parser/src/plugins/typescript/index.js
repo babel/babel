@@ -621,6 +621,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       this.expect(tt.bracketL);
       node.typeParameter = this.tsParseMappedTypeParameter();
+
+      if (this.eatContextual("as")) {
+        node.nameType = this.tsParseType();
+      }
+
       this.expect(tt.bracketR);
 
       if (this.match(tt.plusMin)) {
