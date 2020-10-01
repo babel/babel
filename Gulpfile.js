@@ -334,14 +334,13 @@ const standaloneBundle = [
   },
 ];
 
-gulp.task("generate-type-helpers", async () => {
+gulp.task("generate-type-helpers", () => {
   fancyLog("Generating @babel/types dynamic functions");
-  await Promise.all(
+  return Promise.all(
     ["asserts", "builders", "constants", "validators"].map(helperKind =>
       generateTypeHelpers(helperKind)
     )
   );
-  return;
 });
 
 gulp.task("build-flow-typings", () => buildFlowTypings());
@@ -361,7 +360,22 @@ gulp.task(
 );
 
 gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
-gulp.task("build", gulp.parallel("build-rollup", "build-babel"));
+
+gulp.task(
+  "build",
+  gulp.series(
+    gulp.parallel("build-rollup", "build-babel"),
+    gulp.parallel(
+      "generate-standalone",
+      "build-typings",
+      gulp.series(
+        "generate-type-helpers",
+        // rebuild @babel/types since type-helpers may be changed
+        "build-babel"
+      )
+    )
+  )
+);
 
 gulp.task("default", gulp.series("build"));
 
@@ -371,7 +385,15 @@ gulp.task(
   "build-dev",
   gulp.series(
     "build-no-bundle",
-    gulp.parallel("generate-standalone", "build-typings")
+    gulp.parallel(
+      "generate-standalone",
+      "build-typings",
+      gulp.series(
+        "generate-type-helpers",
+        // rebuild @babel/types since type-helpers may be changed
+        "build-no-bundle"
+      )
+    )
   )
 );
 
