@@ -1605,12 +1605,17 @@ export default class ExpressionParser extends LValParser {
     node.quasis = [curElt];
     while (!curElt.tail) {
       this.expect(tt.dollarBraceL);
-      node.expressions.push(this.parseExpression());
+      node.expressions.push(this.parseTemplateInterpolation());
       this.expect(tt.braceR);
       node.quasis.push((curElt = this.parseTemplateElement(isTagged)));
     }
     this.next();
     return this.finishNode(node, "TemplateLiteral");
+  }
+
+  // This is overwritten by the TypeScript plugin to parse tepmlate types
+  parseTemplateInterpolation(): N.Expression {
+    return this.parseExpression();
   }
 
   // Parse an object literal, binding pattern, or record.
