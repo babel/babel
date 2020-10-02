@@ -57,3 +57,5 @@ Object {
   "samsung": "8.2.0",
 }
 `;
+
+exports[`getTargets exception throws when version is not a semver 1`] = `"@babel/helper-compilation-targets: 'seventy-two' is not a valid value for 'targets.chrome'."`;

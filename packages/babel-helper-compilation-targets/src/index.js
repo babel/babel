@@ -1,8 +1,7 @@
 // @flow
 
 import browserslist from "browserslist";
-import findSuggestion from "levenary";
-import invariant from "invariant";
+import { findSuggestion } from "@babel/helper-validator-option";
 import browserModulesData from "@babel/compat-data/native-modules";
 
 import {
@@ -11,9 +10,11 @@ import {
   isUnreleasedVersion,
   getLowestUnreleased,
 } from "./utils";
+import { OptionValidator } from "@babel/helper-validator-option";
 import { browserNameMap } from "./targets";
 import { TargetNames } from "./options";
-import type { Target, Targets, InputTargets, Browsers } from "./types";
+import { name as packageName } from "../package.json";
+import type { Targets, InputTargets, Browsers, TargetsTuple } from "./types";
 
 export type { Targets, InputTargets };
 
@@ -22,6 +23,7 @@ export { getInclusionReasons } from "./debug";
 export { default as filterItems, isRequired } from "./filter-items";
 export { unreleasedLabels } from "./targets";
 
+const v = new OptionValidator(packageName);
 const browserslistDefaults = browserslist.defaults;
 
 const validBrowserslistTargets = [
@@ -39,19 +41,18 @@ function objectToBrowserslist(object: Targets): Array<string> {
   }, []);
 }
 
-function validateTargetNames(targets: InputTargets): Targets {
+function validateTargetNames(targets: Targets): TargetsTuple {
   const validTargets = Object.keys(TargetNames);
-  for (const target in targets) {
-    if (!TargetNames[target]) {
+  for (const target of Object.keys(targets)) {
+    if (!(target in TargetNames)) {
       throw new Error(
-        `Invalid Option: '${target}' is not a valid target
-        Maybe you meant to use '${findSuggestion(target, validTargets)}'?`,
+        v.formatMessage(`'${target}' is not a valid target
+- Did you mean '${findSuggestion(target, validTargets)}'?`),
       );
     }
   }
 
-  // $FlowIgnore
-  return targets;
+  return (targets: any);
 }
 
 export function isBrowsersQueryValid(browsers: Browsers | Targets): boolean {
@@ -59,9 +60,9 @@ export function isBrowsersQueryValid(browsers: Browsers | Targets): boolean {
 }
 
 function validateBrowsers(browsers: Browsers | void) {
-  invariant(
-    typeof browsers === "undefined" || isBrowsersQueryValid(browsers),
-    `Invalid Option: '${String(browsers)}' is not a valid browserslist query`,
+  v.invariant(
+    browsers === undefined || isBrowsersQueryValid(browsers),
+    `'${String(browsers)}' is not a valid browserslist query`,
   );
 
   return browsers;
@@ -110,8 +111,10 @@ function getLowestVersions(browsers: Array<string>): Targets {
   }, {});
 }
 
-function outputDecimalWarning(decimalTargets: Array<Object>): void {
-  if (!decimalTargets?.length) {
+function outputDecimalWarning(
+  decimalTargets: Array<{| target: string, value: string |}>,
+): void {
+  if (!decimalTargets.length) {
     return;
   }
 
@@ -133,7 +136,9 @@ function semverifyTarget(target, value) {
     return semverify(value);
   } catch (error) {
     throw new Error(
-      `Invalid Option: '${value}' is not a valid value for 'targets.${target}'.`,
+      v.formatMessage(
+        `'${value}' is not a valid value for 'targets.${target}'.`,
+      ),
     );
   }
 }
@@ -156,16 +161,17 @@ const targetParserMap = {
   },
 };
 
-type ParsedResult = {
-  targets: Targets,
-  decimalWarnings: Array<Object>,
-};
+function generateTargets(inputTargets: InputTargets): Targets {
+  const input = { ...inputTargets };
+  delete input.esmodules;
+  delete input.browsers;
+  return ((input: any): Targets);
+}
 
 export default function getTargets(
   inputTargets: InputTargets = {},
   options: Object = {},
 ): Targets {
-  const targetOpts: Targets = {};
   let { browsers } = inputTargets;
 
   // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
@@ -180,12 +186,8 @@ export default function getTargets(
   // Parse browsers target via browserslist
   const browsersquery = validateBrowsers(browsers);
 
-  // Remove esmodules after being consumed to fix `hasTargets` below
-  const input = { ...inputTargets };
-  delete input.esmodules;
-  delete input.browsers;
-
-  let targets: Targets = validateTargetNames(input);
+  const input = generateTargets(inputTargets);
+  let targets: TargetsTuple = validateTargetNames(input);
 
   const shouldParseBrowsers = !!browsersquery;
   const hasTargets = shouldParseBrowsers || Object.keys(targets).length > 0;
@@ -218,34 +220,28 @@ export default function getTargets(
   }
 
   // Parse remaining targets
-  const parsed = (Object.keys(targets): Array<Target>).sort().reduce(
-    (results: ParsedResult, target: $Keys<Targets>): ParsedResult => {
-      const value = targets[target];
+  const result: Targets = {};
+  const decimalWarnings = [];
+  for (const target of Object.keys(targets).sort()) {
+    const value = targets[target];
 
-      // Warn when specifying minor/patch as a decimal
-      if (typeof value === "number" && value % 1 !== 0) {
-        results.decimalWarnings.push({ target, value });
-      }
+    // Warn when specifying minor/patch as a decimal
+    if (typeof value === "number" && value % 1 !== 0) {
+      decimalWarnings.push({ target, value });
+    }
 
-      // Check if we have a target parser?
-      // $FlowIgnore - Flow doesn't like that some targetParserMap[target] might be missing
-      const parser = targetParserMap[target] ?? targetParserMap.__default;
-      const [parsedTarget, parsedValue] = parser(target, value);
+    // Check if we have a target parser?
+    // $FlowIgnore - Flow doesn't like that some targetParserMap[target] might be missing
+    const parser = targetParserMap[target] ?? targetParserMap.__default;
+    const [parsedTarget, parsedValue] = parser(target, value);
 
-      if (parsedValue) {
-        // Merge (lowest wins)
-        results.targets[parsedTarget] = parsedValue;
-      }
+    if (parsedValue) {
+      // Merge (lowest wins)
+      result[parsedTarget] = parsedValue;
+    }
+  }
 
-      return results;
-    },
-    {
-      targets: targetOpts,
-      decimalWarnings: [],
-    },
-  );
+  outputDecimalWarning(decimalWarnings);
 
-  outputDecimalWarning(parsed.decimalWarnings);
-
-  return parsed.targets;
+  return result;
 }

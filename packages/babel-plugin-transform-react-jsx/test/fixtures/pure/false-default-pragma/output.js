@@ -1,3 +1,3 @@
-var _reactJsxRuntime = require("react/jsx-runtime");
+var _reactJsxRuntimeJs = require("react/jsx-runtime.js");
 
-_reactJsxRuntime.jsx("div", {});
+_reactJsxRuntimeJs.jsx("div", {});

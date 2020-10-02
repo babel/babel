@@ -13,6 +13,8 @@ function isInType(path) {
     case "TSExpressionWithTypeArguments":
     case "TSTypeQuery":
       return true;
+    case "ExportSpecifier":
+      return path.parentPath.parent.exportKind === "type";
     default:
       return false;
   }

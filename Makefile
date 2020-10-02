@@ -1,6 +1,6 @@
 FLOW_COMMIT = a1f9a4c709dcebb27a5084acf47755fbae699c25
 TEST262_COMMIT = 058adfed86b1d4129996faaf50a85ea55379a66a
-TYPESCRIPT_COMMIT = ffa35d3272647fe48ddf173e1f0928f772c18630
+TYPESCRIPT_COMMIT = d779a190535e52896cfe5100101173c00b6b8625
 
 FORCE_PUBLISH = "@babel/runtime,@babel/runtime-corejs3,@babel/standalone"
 
@@ -237,8 +237,8 @@ ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 	echo "You probably don't know what you are doing"
 	exit 1
 endif
-	$(MAKE) prepublish-build
 	$(YARN) lerna version $(VERSION) --exclude-dependents --force-publish=$(FORCE_PUBLISH)  --no-push --yes --tag-version-prefix="version-e2e-test-"
+	$(MAKE) prepublish-build
 	$(YARN) lerna publish from-git --registry http://localhost:4873 --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
 
