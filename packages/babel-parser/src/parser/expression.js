@@ -1613,7 +1613,7 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "TemplateLiteral");
   }
 
-  // This is overwritten by the TypeScript plugin to parse tepmlate types
+  // This is overwritten by the TypeScript plugin to parse template types
   parseTemplateSubstitution(): N.Expression {
     return this.parseExpression();
   }
