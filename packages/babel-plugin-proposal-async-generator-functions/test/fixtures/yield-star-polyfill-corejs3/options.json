@@ -1,0 +1,10 @@
+{
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  },
+  "plugins": [
+    "transform-async-to-generator",
+    "proposal-async-generator-functions",
+    "./inject-corejs-async-iterator-polyfill.js"
+  ]
+}
