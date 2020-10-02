@@ -1605,7 +1605,7 @@ export default class ExpressionParser extends LValParser {
     node.quasis = [curElt];
     while (!curElt.tail) {
       this.expect(tt.dollarBraceL);
-      node.expressions.push(this.parseTemplateInterpolation());
+      node.expressions.push(this.parseTemplateSubstitution());
       this.expect(tt.braceR);
       node.quasis.push((curElt = this.parseTemplateElement(isTagged)));
     }
@@ -1614,7 +1614,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   // This is overwritten by the TypeScript plugin to parse tepmlate types
-  parseTemplateInterpolation(): N.Expression {
+  parseTemplateSubstitution(): N.Expression {
     return this.parseExpression();
   }
 

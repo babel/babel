@@ -775,9 +775,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSLiteralType");
     }
 
-    parseTemplateInterpolation(): N.TsType {
+    parseTemplateSubstitution(): N.TsType {
       if (this.state.inType) return this.tsParseType();
-      return super.parseTemplateInterpolation();
+      return super.parseTemplateSubstitution();
     }
 
     tsParseThisTypeOrThisTypePredicate(): N.TsThisType | N.TsTypePredicate {
