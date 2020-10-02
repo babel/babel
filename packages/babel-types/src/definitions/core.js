@@ -1841,7 +1841,13 @@ defineType("TemplateLiteral", {
     expressions: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("Expression")),
+        assertEach(
+          assertNodeType(
+            "Expression",
+            // For TypeScript template literal types
+            "TSType",
+          ),
+        ),
         function (node, key, val) {
           if (node.quasis.length !== val.length + 1) {
             throw new TypeError(
