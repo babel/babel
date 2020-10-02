@@ -621,10 +621,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       this.expect(tt.bracketL);
       node.typeParameter = this.tsParseMappedTypeParameter();
-
-      if (this.eatContextual("as")) {
-        node.nameType = this.tsParseType();
-      }
+      node.nameType = this.eatContextual("as") ? this.tsParseType() : null;
 
       this.expect(tt.bracketR);
 
