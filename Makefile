@@ -2,7 +2,7 @@ FLOW_COMMIT = a1f9a4c709dcebb27a5084acf47755fbae699c25
 TEST262_COMMIT = 058adfed86b1d4129996faaf50a85ea55379a66a
 TYPESCRIPT_COMMIT = d779a190535e52896cfe5100101173c00b6b8625
 
-FORCE_PUBLISH = "@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@babel/standalone"
+FORCE_PUBLISH = -f @babel/runtime -f @babel/runtime-corejs2 -f @babel/runtime-corejs3 -f @babel/standalone
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
@@ -218,14 +218,13 @@ prepublish:
 	$(MAKE) prepublish-build
 	IS_PUBLISH=true $(MAKE) test
 
-# --exclude-dependents support is added by .yarn-patches/@lerna/version
 new-version:
 	git pull --rebase
-	$(YARN) lerna version --exclude-dependents --force-publish=$(FORCE_PUBLISH)
+	$(YARN) release-tool version $(FORCE_PUBLISH)
 
 # NOTE: Run make new-version first
 publish: prepublish
-	$(YARN) lerna publish from-git
+	$(YARN) release-tool publish
 	$(MAKE) clean
 
 publish-ci: prepublish
@@ -235,7 +234,7 @@ else
 	echo "Missing NPM_TOKEN env var"
 	exit 1
 endif
-	$(YARN) lerna publish from-git --yes
+	$(YARN) release-tool publish --yes
 	rm -f .npmrc
 	$(MAKE) clean
 
@@ -244,9 +243,9 @@ ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 	echo "You probably don't know what you are doing"
 	exit 1
 endif
-	$(YARN) lerna version $(VERSION) --exclude-dependents --force-publish=$(FORCE_PUBLISH)  --no-push --yes --tag-version-prefix="version-e2e-test-"
+	$(YARN) release-tool version $(VERSION) --all --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) prepublish-build
-	$(YARN) lerna publish from-git --registry http://localhost:4873 --yes --tag-version-prefix="version-e2e-test-"
+	YARN_NPM_PUBLISH_REGISTRY=http://localhost:4873 $(YARN) release-tool publish --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
 
 bootstrap-only: clean-all

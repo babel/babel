@@ -14,28 +14,5 @@
       "PR: Performance :running_woman:": ":running_woman: Performance",
       "PR: Revert :leftwards_arrow_with_hook:": ":leftwards_arrow_with_hook: Revert"
     }
-  },
-  "command": {
-    "publish": {
-      "ignoreChanges": [
-        "*.md",
-        "*.txt",
-        "test/**",
-        "**/test/**",
-        "codemods/**",
-        "# We ignore every JSON file, except for native-modules, built-ins and plugins defined in babel-preset-env/data.",
-        "@(!(native-modules|built-ins|plugins|package)).json"
-      ]
-    },
-    "version": {
-      "push": false
-    }
-  },
-  "packages": [
-    "codemods/*",
-    "eslint/*",
-    "packages/*"
-  ],
-  "npmClient": "yarn",
-  "useWorkspaces": true
+  }
 }
