@@ -5,7 +5,7 @@
 export const ErrorMessages = Object.freeze({
   AccessorIsGenerator: "A %0ter cannot be a generator",
   ArgumentsInClass:
-    "'arguments' is not allowed in class field initializer or static block",
+    "'arguments' is only allowed in functions and class methods",
   AsyncFunctionInSingleStatementContext:
     "Async functions can only be declared at the top level or inside a block",
   AwaitBindingIdentifier:
