@@ -68,6 +68,7 @@ packages/babel-standalone/babel.min.js
 /eslint/*/LICENSE
 !/packages/babel-eslint-plugin/LICENSE
 /.vscode
+!/packages/babel-plugin-proposal-record-and-tuple/LICENSE
 
 tsconfig.json
 tsconfig.tsbuildinfo
