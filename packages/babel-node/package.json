@@ -3,7 +3,7 @@
   "version": "7.12.10",
   "description": "Babel command line",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
-  "homepage": "https://babeljs.io/",
+  "homepage": "https://babeljs.io/docs/en/next/babel-node.html",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

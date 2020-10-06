@@ -7,6 +7,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-proposal-dynamic-import"
   },
+  "homepage": "https://babeljs.io/docs/en/next/babel-plugin-proposal-dynamic-import.html",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

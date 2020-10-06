@@ -13,6 +13,7 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-module-imports"
   },
+  "homepage": "https://babeljs.io/docs/en/next/babel-helper-module-imports",
   "main": "lib/index.js",
   "dependencies": {
     "@babel/types": "workspace:^7.12.5"
