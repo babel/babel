@@ -1,9 +1,9 @@
 class Foo extends class extends class Base {
-  static #_3 = (() => {
+  static #_ = (() => {
     this.qux = 21;
   })();
 } {
-  static #_2 = (() => {
+  static #_ = (() => {
     this.bar = 21;
   })();
 } {
