@@ -21,14 +21,14 @@ describe("plugin ordering", () => {
           proposalClassStaticBlock,
         ],
       });
-    }).toThrowErrorMatchingInlineSnapshot(`
-"/Users/jh/code/babel/example.js: Incorrect plugin orders, \`@babel/plugin-proposal-class-static-block\` should be placed before class features plugins
+    })
+      .toThrow(`Incorrect plugin orders, \`@babel/plugin-proposal-class-static-block\` should be placed before class features plugins
 {
-  \\"plugins\\": [
-    \\"@babel/plugin-proposal-class-static-block\\",
-    \\"@babel/plugin-proposal-private-property-in-object\\",
-    \\"@babel/plugin-proposal-private-methods\\",
-    \\"@babel/plugin-proposal-class-properties\\",
+  "plugins": [
+    "@babel/plugin-proposal-class-static-block",
+    "@babel/plugin-proposal-private-property-in-object",
+    "@babel/plugin-proposal-private-methods",
+    "@babel/plugin-proposal-class-properties",
   ]
 }
   1 | class Foo {
@@ -36,7 +36,6 @@ describe("plugin ordering", () => {
     |   ^
   3 |     this.foo = Foo.bar;
   4 |   }
-  5 |   static bar = 42;"
-`);
+  5 |   static bar = 42;`);
   });
 });
