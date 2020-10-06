@@ -795,7 +795,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   // Parse a semicolon-enclosed block of statements, handling `"use
-  // strict"` declarations when `allowStrict` is true (used for
+  // strict"` declarations when `allowDirectives` is true (used for
   // function bodies).
 
   parseBlock(
@@ -1205,7 +1205,11 @@ export default class StatementParser extends ExpressionParser {
   ): N.ClassBody {
     this.classScope.enter();
 
-    const state = { hadConstructor: false };
+    const state: N.ParseClassMemberState = {
+      constructorAllowsSuper,
+      hadConstructor: false,
+      hadStaticBlock: false,
+    };
     let decorators: N.Decorator[] = [];
     const classBody: N.ClassBody = this.startNode();
     classBody.body = [];
@@ -1237,7 +1241,7 @@ export default class StatementParser extends ExpressionParser {
           decorators = [];
         }
 
-        this.parseClassMember(classBody, member, state, constructorAllowsSuper);
+        this.parseClassMember(classBody, member, state);
 
         if (
           member.kind === "constructor" &&
@@ -1303,31 +1307,33 @@ export default class StatementParser extends ExpressionParser {
   parseClassMember(
     classBody: N.ClassBody,
     member: N.ClassMember,
-    state: { hadConstructor: boolean },
-    constructorAllowsSuper: boolean,
+    state: N.ParseClassMemberState,
   ): void {
     const isStatic = this.isContextual("static");
 
-    if (isStatic && this.parseClassMemberFromModifier(classBody, member)) {
-      // a class element named 'static'
-      return;
+    if (isStatic) {
+      if (this.parseClassMemberFromModifier(classBody, member)) {
+        // a class element named 'static'
+        return;
+      }
+      if (this.eat(tt.braceL)) {
+        this.parseClassStaticBlock(
+          classBody,
+          ((member: any): N.StaticBlock),
+          state,
+        );
+        return;
+      }
     }
 
-    this.parseClassMemberWithIsStatic(
-      classBody,
-      member,
-      state,
-      isStatic,
-      constructorAllowsSuper,
-    );
+    this.parseClassMemberWithIsStatic(classBody, member, state, isStatic);
   }
 
   parseClassMemberWithIsStatic(
     classBody: N.ClassBody,
     member: N.ClassMember,
-    state: { hadConstructor: boolean },
+    state: N.ParseClassMemberState,
     isStatic: boolean,
-    constructorAllowsSuper: boolean,
   ) {
     const publicMethod: $FlowSubtype<N.ClassMethod> = member;
     const privateMethod: $FlowSubtype<N.ClassPrivateMethod> = member;
@@ -1394,7 +1400,7 @@ export default class StatementParser extends ExpressionParser {
           this.raise(key.start, Errors.DuplicateConstructor);
         }
         state.hadConstructor = true;
-        allowsDirectSuper = constructorAllowsSuper;
+        allowsDirectSuper = state.constructorAllowsSuper;
       }
 
       this.pushClassMethod(
@@ -1511,6 +1517,35 @@ export default class StatementParser extends ExpressionParser {
     }
 
     return key;
+  }
+
+  parseClassStaticBlock(
+    classBody: N.ClassBody,
+    member: N.StaticBlock & { decorators?: Array<N.Decorator> },
+    state: N.ParseClassMemberState,
+  ) {
+    this.expectPlugin("classStaticBlock", member.start);
+    // Start a new lexical scope
+    this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
+    // Start a new scope with regard to loop labels
+    const oldLabels = this.state.labels;
+    this.state.labels = [];
+    // ClassStaticBlockStatementList:
+    //   StatementList[~Yield, ~Await, ~Return] opt
+    this.prodParam.enter(PARAM);
+    const body = (member.body = []);
+    this.parseBlockOrModuleBlockBody(body, undefined, false, tt.braceR);
+    this.prodParam.exit();
+    this.scope.exit();
+    this.state.labels = oldLabels;
+    classBody.body.push(this.finishNode<N.StaticBlock>(member, "StaticBlock"));
+    if (state.hadStaticBlock) {
+      this.raise(member.start, Errors.DuplicateStaticBlock);
+    }
+    if (member.decorators?.length) {
+      this.raise(member.start, Errors.DecoratorStaticBlock);
+    }
+    state.hadStaticBlock = true;
   }
 
   pushClassProperty(classBody: N.ClassBody, prop: N.ClassProperty) {

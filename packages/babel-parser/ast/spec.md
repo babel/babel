@@ -1183,7 +1183,7 @@ interface Class <: Node {
 ```js
 interface ClassBody <: Node {
   type: "ClassBody";
-  body: [ ClassMethod | ClassPrivateMethod | ClassProperty | ClassPrivateProperty ];
+  body: [ ClassMethod | ClassPrivateMethod | ClassProperty | ClassPrivateProperty | StaticBlock ];
 }
 ```
 
@@ -1234,6 +1234,17 @@ interface ClassPrivateProperty <: Node {
   static: boolean;
 }
 ```
+
+## StaticBlock
+
+```js
+interface StaticBlock <: Node {
+  type: "StaticBlock";
+  body: [ Statement ];
+}
+```
+
+A static block proposed in https://github.com/tc39/proposal-class-static-block.
 
 ## ClassDeclaration
 
