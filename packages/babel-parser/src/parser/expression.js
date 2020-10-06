@@ -2390,7 +2390,7 @@ export default class ExpressionParser extends LValParser {
       !this.scope.inNonArrowFunction &&
       word === "arguments"
     ) {
-      this.raise(startLoc, Errors.ArgumentsDisallowedInInitializer);
+      this.raise(startLoc, Errors.ArgumentsInClass);
       return;
     }
     if (checkKeywords && isKeyword(word)) {

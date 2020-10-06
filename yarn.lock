@@ -1432,6 +1432,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-syntax-class-static-block@workspace:packages/babel-plugin-syntax-class-static-block":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-class-static-block@workspace:packages/babel-plugin-syntax-class-static-block"
+  dependencies:
+    "@babel/helper-plugin-utils": "workspace:^7.10.1"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-syntax-decimal@workspace:^7.11.0, @babel/plugin-syntax-decimal@workspace:packages/babel-plugin-syntax-decimal":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-decimal@workspace:packages/babel-plugin-syntax-decimal"

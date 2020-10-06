@@ -803,6 +803,9 @@ export function assertTupleExpression(node: Object, opts?: Object = {}): void {
 export function assertDecimalLiteral(node: Object, opts?: Object = {}): void {
   assert("DecimalLiteral", node, opts);
 }
+export function assertStaticBlock(node: Object, opts?: Object = {}): void {
+  assert("StaticBlock", node, opts);
+}
 export function assertTSParameterProperty(
   node: Object,
   opts?: Object = {},

@@ -4,8 +4,8 @@
 // The Errors key follows https://cs.chromium.org/chromium/src/v8/src/common/message-template.h unless it does not exist
 export const ErrorMessages = Object.freeze({
   AccessorIsGenerator: "A %0ter cannot be a generator",
-  ArgumentsDisallowedInInitializer:
-    "'arguments' is not allowed in class field initializer",
+  ArgumentsInClass:
+    "'arguments' is only allowed in functions and class methods",
   AsyncFunctionInSingleStatementContext:
     "Async functions can only be declared at the top level or inside a block",
   AwaitBindingIdentifier:
@@ -32,6 +32,7 @@ export const ErrorMessages = Object.freeze({
   DecoratorExportClass:
     "Using the export keyword between a decorator and a class is not allowed. Please use `export @dec class` instead.",
   DecoratorSemicolon: "Decorators must not be followed by a semicolon",
+  DecoratorStaticBlock: "Decorators can't be used with a static block",
   DeletePrivateField: "Deleting a private field is not allowed",
   DestructureNamedImport:
     "ES2015 named imports do not destructure. Use another statement for destructuring after the import.",
@@ -41,6 +42,7 @@ export const ErrorMessages = Object.freeze({
     "`%0` has already been exported. Exported identifiers must be unique.",
   DuplicateProto: "Redefinition of __proto__ property",
   DuplicateRegExpFlags: "Duplicate regular expression flag",
+  DuplicateStaticBlock: "Duplicate static block in the same class",
   ElementAfterRest: "Rest element must be last element",
   EscapedCharNotAnIdentifier: "Invalid Unicode escape",
   ExportBindingIsString:
