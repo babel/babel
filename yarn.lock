@@ -1004,6 +1004,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-class-static-block@workspace:packages/babel-plugin-proposal-class-static-block":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-class-static-block@workspace:packages/babel-plugin-proposal-class-static-block"
+  dependencies:
+    "@babel/helper-plugin-utils": "workspace:^7.10.1"
+    "@babel/plugin-syntax-class-static-block": "workspace:^7.11.0"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-decorators@workspace:^7.10.4, @babel/plugin-proposal-decorators@workspace:^7.10.5, @babel/plugin-proposal-decorators@workspace:packages/babel-plugin-proposal-decorators":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-decorators@workspace:packages/babel-plugin-proposal-decorators"
@@ -1449,7 +1460,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-class-static-block@workspace:packages/babel-plugin-syntax-class-static-block":
+"@babel/plugin-syntax-class-static-block@workspace:^7.11.0, @babel/plugin-syntax-class-static-block@workspace:packages/babel-plugin-syntax-class-static-block":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-class-static-block@workspace:packages/babel-plugin-syntax-class-static-block"
   dependencies:
