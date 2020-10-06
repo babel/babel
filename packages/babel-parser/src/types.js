@@ -705,7 +705,7 @@ export type ClassBase = HasDecorators & {
 
 export type ClassBody = NodeBase & {
   type: "ClassBody",
-  body: Array<ClassMember | TsIndexSignature>, // TODO: $ReadOnlyArray
+  body: Array<ClassMember | StaticBlock | TsIndexSignature>, // TODO: $ReadOnlyArray
 };
 // | Placeholder<"ClassBody">;
 
@@ -718,6 +718,11 @@ export type ClassMemberBase = NodeBase &
     abstract?: ?true,
     optional?: ?true,
   };
+
+export type StaticBlock = NodeBase & {
+  type: "StaticBlock",
+  body: Array<Statement>,
+};
 
 export type ClassMember =
   | ClassMethod
@@ -1489,3 +1494,9 @@ export type ParseSubscriptState = {
   maybeAsyncArrow: boolean,
   stop: boolean,
 };
+
+export type ParseClassMemberState = {|
+  hadConstructor: boolean,
+  hadStaticBlock: boolean,
+  constructorAllowsSuper: boolean,
+|};

@@ -734,6 +734,10 @@ export function decimalLiteral(...args: Array<any>): Object {
   return builder("DecimalLiteral", ...args);
 }
 export { decimalLiteral as DecimalLiteral };
+export function staticBlock(...args: Array<any>): Object {
+  return builder("StaticBlock", ...args);
+}
+export { staticBlock as StaticBlock };
 export function tsParameterProperty(...args: Array<any>): Object {
   return builder("TSParameterProperty", ...args);
 }

@@ -2102,8 +2102,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseClassMember(
       classBody: N.ClassBody,
       member: any,
-      state: { hadConstructor: boolean },
-      constructorAllowsSuper: boolean,
+      state: N.ParseClassMemberState,
     ): void {
       this.tsParseModifiers(member, ["declare"]);
       const accessibility = this.parseAccessModifier();
@@ -2111,12 +2110,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.tsParseModifiers(member, ["declare"]);
 
       const callParseClassMember = () => {
-        super.parseClassMember(
-          classBody,
-          member,
-          state,
-          constructorAllowsSuper,
-        );
+        super.parseClassMember(classBody, member, state);
       };
       if (member.declare) {
         this.tsInDeclareContext(callParseClassMember);
@@ -2128,9 +2122,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseClassMemberWithIsStatic(
       classBody: N.ClassBody,
       member: N.ClassMember | N.TsIndexSignature,
-      state: { hadConstructor: boolean },
+      state: N.ParseClassMemberState,
       isStatic: boolean,
-      constructorAllowsSuper: boolean,
     ): void {
       this.tsParseModifiers(member, ["abstract", "readonly", "declare"]);
 
@@ -2160,13 +2153,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       /*:: invariant(member.type !== "TSIndexSignature") */
 
-      super.parseClassMemberWithIsStatic(
-        classBody,
-        member,
-        state,
-        isStatic,
-        constructorAllowsSuper,
-      );
+      super.parseClassMemberWithIsStatic(classBody, member, state, isStatic);
     }
 
     parsePostMemberNameModifiers(

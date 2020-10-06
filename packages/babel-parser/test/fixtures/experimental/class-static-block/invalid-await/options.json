@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "classStaticBlock"
+  ],
+  "throws": "Unexpected token, expected \";\" (5:12)"
+}
