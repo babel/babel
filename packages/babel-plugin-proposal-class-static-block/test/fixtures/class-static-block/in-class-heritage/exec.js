@@ -1,10 +1,14 @@
-class Foo extends class {
+class Foo extends class extends class Base {
+  static {
+    this.qux = 21;
+  }
+} {
   static {
     this.bar = 21;
   }
 } {
   static {
-    this.foo = 2 * this.bar;
+    this.foo = this.bar + this.qux;
   }
 }
 expect(Foo.foo).toBe(42);

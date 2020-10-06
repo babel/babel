@@ -108,7 +108,7 @@ defineType("PipelinePrimaryTopicReference", {
 
 defineType("ClassPrivateProperty", {
   visitor: ["key", "value", "decorators"],
-  builder: ["key", "value", "decorators"],
+  builder: ["key", "value", "decorators", "static"],
   aliases: ["Property", "Private"],
   fields: {
     key: {

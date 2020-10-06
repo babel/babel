@@ -1011,7 +1011,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^7.10.1"
     "@babel/plugin-syntax-class-static-block": "workspace:^7.11.0"
   peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@babel/core": ^7.12.0
   languageName: unknown
   linkType: soft
 

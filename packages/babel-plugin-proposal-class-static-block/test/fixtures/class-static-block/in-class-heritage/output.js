@@ -1,17 +1,15 @@
-let Foo;
-Foo = class Foo extends class {
-  static _init2() {
+class Foo extends class extends class Base {
+  static #_3 = (() => {
+    this.qux = 21;
+  })();
+} {
+  static #_2 = (() => {
     this.bar = 21;
-    delete this._init2;
-    return this;
-  }
+  })();
+} {
+  static #_ = (() => {
+    this.foo = this.bar + this.qux;
+  })();
+}
 
-}._init2() {
-  static _init() {
-    this.foo = 2 * this.bar;
-    delete this._init;
-    return this;
-  }
-
-}._init();
 expect(Foo.foo).toBe(42);
