@@ -132,6 +132,7 @@ const tsKeywordTypes = [
   "TSAnyKeyword",
   "TSBooleanKeyword",
   "TSBigIntKeyword",
+  "TSIntrinsicKeyword",
   "TSNeverKeyword",
   "TSNullKeyword",
   "TSNumberKeyword",

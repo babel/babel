@@ -794,6 +794,11 @@ export function tsBigIntKeyword(...args: Array<any>): Object {
 }
 export { tsBigIntKeyword as TSBigIntKeyword };
 export { tsBigIntKeyword as tSBigIntKeyword };
+export function tsIntrinsicKeyword(...args: Array<any>): Object {
+  return builder("TSIntrinsicKeyword", ...args);
+}
+export { tsIntrinsicKeyword as TSIntrinsicKeyword };
+export { tsIntrinsicKeyword as tSIntrinsicKeyword };
 export function tsNeverKeyword(...args: Array<any>): Object {
   return builder("TSNeverKeyword", ...args);
 }
