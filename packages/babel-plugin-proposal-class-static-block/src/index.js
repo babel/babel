@@ -11,7 +11,7 @@ import syntaxClassStaticBlock from "@babel/plugin-syntax-class-static-block";
 function generateUid(scope, denyList: Set<string>) {
   const name = "";
   let uid;
-  let i = 0;
+  let i = 1;
   do {
     uid = scope._generateUid(name, i);
     i++;
