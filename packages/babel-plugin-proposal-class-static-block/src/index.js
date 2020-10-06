@@ -19,22 +19,6 @@ function generateUid(scope, denyList: Set<string>) {
   return uid;
 }
 
-/**
- * Get private names defined in current class body
- *
- * @param {NodePath<ClassBody>} classBody
- * @returns {Set<string>} A set of defined private names
- */
-function getPrivateNames(classBody: NodePath<ClassBody>): Set<string> {
-  const privateNames = new Set();
-  for (const path of classBody.get("body")) {
-    if (path.isPrivate()) {
-      privateNames.add(path.get("key.id").node.name);
-    }
-  }
-  return privateNames;
-}
-
 export default declare(({ types: t, template, assertVersion }) => {
   // todo remove this check after Babel 7.12.0 is published
   if (process.env.NODE_ENV !== "test") {
@@ -45,21 +29,34 @@ export default declare(({ types: t, template, assertVersion }) => {
     name: "proposal-class-static-block",
     inherits: syntaxClassStaticBlock,
     visitor: {
-      StaticBlock(path: NodePath<StaticBlock>) {
-        const { parentPath: classBody, scope } = path;
+      Class(path: NodePath<Class>) {
+        const { scope } = path;
+        const classBody = path.get("body");
+        const privateNames = new Set();
+        let staticBlockPath;
+        for (const path of classBody.get("body")) {
+          if (path.isPrivate()) {
+            privateNames.add(path.get("key.id").node.name);
+          } else if (path.isStaticBlock()) {
+            staticBlockPath = path;
+          }
+        }
+        if (!staticBlockPath) {
+          return;
+        }
         const staticBlockRef = t.privateName(
-          t.identifier(generateUid(scope, getPrivateNames(classBody))),
+          t.identifier(generateUid(scope, privateNames)),
         );
         classBody.pushContainer(
           "body",
           t.classPrivateProperty(
             staticBlockRef,
-            template.expression.ast`(() => { ${path.node.body} })()`,
+            template.expression.ast`(() => { ${staticBlockPath.node.body} })()`,
             [],
             /* static */ true,
           ),
         );
-        path.remove();
+        staticBlockPath.remove();
       },
     },
   };

@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "proposal-class-static-block",
+    "proposal-class-properties",
+    "external-helpers"
+  ]
+}
