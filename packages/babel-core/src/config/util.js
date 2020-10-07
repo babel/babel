@@ -2,6 +2,10 @@
 
 import type { ValidatedOptions } from "./validation/options";
 
+function unique<T>(...args: T[]): T[] {
+  return Array.from(new Set(args));
+}
+
 export function mergeOptions(
   target: ValidatedOptions,
   source: ValidatedOptions,
@@ -15,6 +19,11 @@ export function mergeOptions(
       const generatorOpts = source.generatorOpts;
       const targetObj = (target.generatorOpts = target.generatorOpts || {});
       mergeDefaultFields(targetObj, generatorOpts);
+    } else if (k === "extensions" && target.extensions && source.extensions) {
+      target.extensions = unique(
+        ...(target.extensions ?? []),
+        ...source.extensions,
+      );
     } else {
       const val = source[k];
       if (val !== undefined) target[k] = (val: any);
