@@ -5,8 +5,11 @@
  * This script write the link to the website in every READMEs.
  */
 
-const { join } = require("path");
-const { readdirSync, writeFileSync } = require("fs");
+import { join } from "path";
+import { readdirSync, writeFileSync } from "fs";
+import { createRequire } from "url";
+
+const require = createRequire(import.meta.url);
 
 const cwd = process.cwd();
 

@@ -1,5 +1,6 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+
 const cwd = process.cwd();
 const packageJSONPath = path.resolve(cwd, "./package.json");
 const content = JSON.parse(fs.readFileSync(packageJSONPath));

@@ -87,12 +87,12 @@ check-compat-data-ci:
 	$(MAKE) check-compat-data
 
 lint:
-	BABEL_ENV=test $(YARN) eslint scripts $(SOURCES) '*.{js,ts}' --format=codeframe --ext .js,.cjs,.mjs,.ts
+	BABEL_ENV=test $(YARN) eslint scripts $(SOURCES) '*.{js,cjs,mjs,ts}' --format=codeframe --ext .js,.cjs,.mjs,.ts
 
 fix: fix-json fix-js
 
 fix-js:
-	$(YARN) eslint scripts $(SOURCES) '*.{js,ts}' --format=codeframe --ext .js,.cjs,.mjs,.ts --fix
+	$(YARN) eslint scripts $(SOURCES) '*.{js,cjs,mjs,ts}' --format=codeframe --ext .js,.cjs,.mjs,.ts --fix
 
 fix-json:
 	$(YARN) prettier "{$(COMMA_SEPARATED_SOURCES)}/*/test/fixtures/**/options.json" --write --loglevel warn

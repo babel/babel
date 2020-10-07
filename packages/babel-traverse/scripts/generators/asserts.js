@@ -1,7 +1,6 @@
-"use strict";
-const t = require("@babel/types");
+import t from "@babel/types";
 
-module.exports = function generateAsserts() {
+export default function generateAsserts() {
   let output = `/*
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
@@ -12,7 +11,7 @@ import NodePath from "../index";
 
 export interface NodePathAssetions {`;
 
-  for (const type of t.TYPES) {
+  for (const type of [...t.TYPES].sort()) {
     output += `
   assert${type}(
     opts?: object,
@@ -23,4 +22,4 @@ export interface NodePathAssetions {`;
 }`;
 
   return output;
-};
+}

@@ -1,8 +1,6 @@
-"use strict";
+import virtualTypes from "../../lib/path/lib/virtual-types.js";
 
-const virtualTypes = require("../../lib/path/lib/virtual-types");
-
-module.exports = function generateValidators() {
+export default function generateValidators() {
   let output = `/*
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
@@ -23,4 +21,4 @@ export interface VirtualTypeAliases {
 `;
 
   return output;
-};
+}
