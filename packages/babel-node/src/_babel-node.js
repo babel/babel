@@ -125,6 +125,7 @@ const _eval = function (code, filename) {
   if (!code) return undefined;
 
   code = babel.transform(code, {
+    extensions: ["*"],
     filename: filename,
     presets: program.presets,
     plugins: (program.plugins || []).concat([replPlugin]),

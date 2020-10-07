@@ -4,7 +4,7 @@ import gensync, { type Handler } from "gensync";
 import { forwardAsync } from "../gensync-utils/async";
 
 import { mergeOptions } from "./util";
-import * as context from "../index";
+import * as babelContext from "../index";
 import Plugin from "./plugin";
 import { getItemDescriptor } from "./item";
 import {
@@ -70,7 +70,7 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
     return null;
   }
 
-  const optionDefaults = {};
+  const optionDefaults: ValidatedOptions = {};
 
   const { plugins, presets } = options;
 
@@ -161,6 +161,8 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
   const opts: Object = optionDefaults;
   mergeOptions(opts, options);
 
+  if (!isCompilableFile(context.filename, opts.extensions)) return null;
+
   yield* enhanceError(context, function* loadPluginDescriptors() {
     pluginDescriptorsByPass[0].unshift(...initialPluginsDescriptors);
 
@@ -229,7 +231,7 @@ const loadDescriptor = makeWeakCache(function* (
   let item = value;
   if (typeof value === "function") {
     const api = {
-      ...context,
+      ...babelContext,
       ...makeAPI(cache),
     };
     try {
@@ -394,4 +396,9 @@ function chain(a, b) {
       fn.apply(this, args);
     }
   };
+}
+
+function isCompilableFile(filename, extensions) {
+  if (filename == null) return true;
+  return extensions.some(ext => ext === "*" || filename.endsWith(ext));
 }

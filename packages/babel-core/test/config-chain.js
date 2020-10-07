@@ -1011,6 +1011,7 @@ describe("buildConfigChain", function () {
       plugins: [],
       presets: [],
       cloneInputAst: true,
+      extensions: ["*"],
     });
     const realEnv = process.env.NODE_ENV;
     const realBabelEnv = process.env.BABEL_ENV;
