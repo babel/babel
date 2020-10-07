@@ -1246,7 +1246,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.typeAnnotation = this.tsInType(() => {
         this.expect(tt.eq);
 
-        if (this.isContextual("intrinsic")) {
+        if (
+          this.isContextual("intrinsic") &&
+          this.lookahead().type !== tt.dot
+        ) {
           const node: N.TsKeywordType = this.startNode();
           this.next();
           return this.finishNode(node, "TSIntrinsicKeyword");
