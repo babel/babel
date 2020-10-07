@@ -601,6 +601,7 @@ __metadata:
     "@babel/helper-simple-access": "workspace:^7.10.4"
     "@babel/helper-split-export-declaration": "workspace:^7.11.0"
     "@babel/template": "workspace:^7.10.4"
+    "@babel/traverse": "workspace:^7.11.5"
     "@babel/types": "workspace:^7.11.0"
     lodash: ^4.17.19
   languageName: unknown
