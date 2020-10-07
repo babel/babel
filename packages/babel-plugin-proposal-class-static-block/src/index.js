@@ -20,10 +20,8 @@ function generateUid(scope, denyList: Set<string>) {
 }
 
 export default declare(({ types: t, template, assertVersion }) => {
-  // todo: remove this check after Babel 7.12.0 is published
-  if (process.env.NODE_ENV !== "test") {
-    assertVersion("^7.12.0");
-  }
+  // todo: change to ^7.12.0 when it is published
+  assertVersion("^7.11.6");
 
   return {
     name: "proposal-class-static-block",
