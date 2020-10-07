@@ -107,10 +107,20 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
         const descriptor = rawPresets[i];
         if (descriptor.options !== false) {
           try {
-            presets.push({
-              preset: yield* loadPresetDescriptor(descriptor, context),
-              pass: descriptor.ownPass ? [] : pluginDescriptorsPass,
-            });
+            // Presets normally run in reverse order, but if they
+            // have their own pass they run after the presets
+            // in the previous pass.
+            if (descriptor.ownPass) {
+              presets.push({
+                preset: yield* loadPresetDescriptor(descriptor, context),
+                pass: [],
+              });
+            } else {
+              presets.unshift({
+                preset: yield* loadPresetDescriptor(descriptor, context),
+                pass: pluginDescriptorsPass,
+              });
+            }
           } catch (e) {
             if (e.code === "BABEL_UNKNOWN_OPTION") {
               checkNoUnwrappedItemOptionPairs(rawPresets, i, "preset", e);
@@ -133,7 +143,7 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
         for (const { preset, pass } of presets) {
           if (!preset) return true;
 
-          pass.unshift(...preset.plugins);
+          pass.push(...preset.plugins);
 
           const ignored = yield* recursePresetDescriptors(preset.presets, pass);
           if (ignored) return true;
@@ -181,6 +191,10 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
     .filter(plugins => plugins.length > 0)
     .map(plugins => ({ plugins }));
   opts.passPerPreset = opts.presets.length > 0;
+
+  if (context.filename?.includes("RuntimeErrorContaine")) {
+    console.log(initialPluginsDescriptors.map(p => p.key));
+  }
 
   return {
     options: opts,
