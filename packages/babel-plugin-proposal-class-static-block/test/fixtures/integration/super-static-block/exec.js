@@ -1,5 +1,7 @@
 class Foo extends class {
-  static bar = 42;
+  static {
+    this.bar = 42;
+  }
 } {
   static bar = 21;
   static {
