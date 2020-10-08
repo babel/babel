@@ -373,6 +373,11 @@ export function TSExpressionWithTypeArguments(node) {
   this.print(node.typeParameters, node);
 }
 
+export function TSTypeCastExpression(node) {
+  this.print(node.expression, node);
+  this.print(node.typeAnnotation, node);
+}
+
 export function TSInterfaceDeclaration(node) {
   const { declare, id, typeParameters, extends: extendz, body } = node;
   if (declare) {
