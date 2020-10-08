@@ -37,11 +37,6 @@ jest.mock("source-map-support", () => {
   };
 });
 
-const defaultOptions = {
-  exts: [".js", ".jsx", ".es6", ".es", ".mjs"],
-  ignoreNodeModules: false,
-};
-
 function cleanCache() {
   try {
     fs.unlinkSync(testCacheFilename);
@@ -93,7 +88,8 @@ describe("@babel/register", function () {
     setupRegister();
 
     expect(typeof currentHook).toBe("function");
-    expect(currentOptions).toEqual(defaultOptions);
+    expect(currentOptions.exts).toContain(".js");
+    expect(currentOptions.ignoreNodeModules).toBe(false);
   });
 
   test("unregisters hook correctly", () => {
