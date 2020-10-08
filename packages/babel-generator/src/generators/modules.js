@@ -190,6 +190,15 @@ export function ImportDeclaration(node: Object) {
     this.space();
     this.token("}");
   }
+  // todo(Babel 8): remove this if branch
+  // `module-attributes` support is discontinued, use `import-assertions` instead.
+  else if (node.attributes?.length) {
+    this.space();
+    this.word("with");
+    this.space();
+    this.space();
+    this.printList(node.attributes, node);
+  }
 
   this.semicolon();
 }

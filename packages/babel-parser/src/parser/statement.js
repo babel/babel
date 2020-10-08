@@ -2116,6 +2116,14 @@ export default class StatementParser extends ExpressionParser {
     if (assertions) {
       node.assertions = assertions;
     }
+    // todo(Babel 8): remove module attributes support
+    else {
+      const attributes = this.maybeParseModuleAttributes();
+      if (attributes) {
+        node.attributes = attributes;
+      }
+    }
+
     this.semicolon();
     return this.finishNode(node, "ImportDeclaration");
   }
@@ -2189,6 +2197,57 @@ export default class StatementParser extends ExpressionParser {
       }
       attrNames.add(node.key.name);
 
+      if (!this.match(tt.string)) {
+        throw this.unexpected(
+          this.state.start,
+          Errors.ModuleAttributeInvalidValue,
+        );
+      }
+      node.value = this.parseLiteral(this.state.value, "StringLiteral");
+      this.finishNode(node, "ImportAttribute");
+      attrs.push(node);
+    } while (this.eat(tt.comma));
+
+    return attrs;
+  }
+
+  /**
+   * parse module attributes
+   * @deprecated It will be removed in Babel 8
+   * @returns
+   * @memberof StatementParser
+   */
+  maybeParseModuleAttributes() {
+    if (this.match(tt._with) && !this.hasPrecedingLineBreak()) {
+      this.expectPlugin("moduleAttributes");
+      this.next();
+    } else {
+      if (this.hasPlugin("moduleAttributes")) return [];
+      return null;
+    }
+    const attrs = [];
+    const attributes = new Set();
+    do {
+      const node = this.startNode();
+      node.key = this.parseIdentifier(true);
+
+      if (node.key.name !== "type") {
+        this.raise(
+          node.key.start,
+          Errors.ModuleAttributeDifferentFromType,
+          node.key.name,
+        );
+      }
+
+      if (attributes.has(node.key.name)) {
+        this.raise(
+          node.key.start,
+          Errors.ModuleAttributesWithDuplicateKeys,
+          node.key.name,
+        );
+      }
+      attributes.add(node.key.name);
+      this.expect(tt.colon);
       if (!this.match(tt.string)) {
         throw this.unexpected(
           this.state.start,

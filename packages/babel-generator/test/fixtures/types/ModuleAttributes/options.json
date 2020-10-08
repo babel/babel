@@ -1,9 +1,9 @@
 {
   "plugins": [
     [
-      "importAssertions",
+      "moduleAttributes",
       {
-        "version": "september-2020"
+        "version": "may-2020"
       }
     ]
   ],
