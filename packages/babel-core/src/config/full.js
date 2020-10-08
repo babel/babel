@@ -192,10 +192,6 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
     .map(plugins => ({ plugins }));
   opts.passPerPreset = opts.presets.length > 0;
 
-  if (context.filename?.includes("RuntimeErrorContaine")) {
-    console.log(initialPluginsDescriptors.map(p => p.key));
-  }
-
   return {
     options: opts,
     passes: passes,
