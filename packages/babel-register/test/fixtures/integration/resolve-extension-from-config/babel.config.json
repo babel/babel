@@ -1,0 +1,4 @@
+{
+  "extensions": [".js", ".ts"],
+  "plugins": ["../logger"]
+}
