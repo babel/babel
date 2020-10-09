@@ -5,6 +5,11 @@ import * as babel from "@babel/core";
 import path from "path";
 import fs from "fs";
 
+// Technically we could use the "semver" package here, but (for exmaple)
+// parseFloat("4.23.6") returns 4.23 so it's "good enough"
+export const BABEL_SUPPORTS_EXTENSIONS_OPTION =
+  parseFloat(babel.version) >= 7.12;
+
 export function chmod(src: string, dest: string): void {
   fs.chmodSync(dest, fs.statSync(src).mode);
 }
@@ -32,6 +37,10 @@ export function readdirForCompilable(
   includeDotfiles: boolean,
   altExts?: Array<string>,
 ): Array<string> {
+  if (BABEL_SUPPORTS_EXTENSIONS_OPTION) {
+    return readdir(dirname, includeDotfiles);
+  }
+
   return readdir(dirname, includeDotfiles, function (filename) {
     return isCompilableExtension(filename, altExts);
   });
@@ -44,6 +53,12 @@ export function isCompilableExtension(
   filename: string,
   altExts?: Array<string>,
 ): boolean {
+  if (!BABEL_SUPPORTS_EXTENSIONS_OPTION) {
+    throw new Error(
+      "Internal @babel/cli error: isCompilableExtension is only supported with old @babel/core versions.",
+    );
+  }
+
   const exts = altExts || babel.DEFAULT_EXTENSIONS;
   const ext = path.extname(filename);
   return exts.includes(ext);
@@ -70,6 +85,20 @@ export function transform(
 
   return new Promise((resolve, reject) => {
     babel.transform(code, opts, (err, result) => {
+      if (err) reject(err);
+      else resolve(result);
+    });
+  });
+}
+
+export function loadPartialConfig(opts: Object): Promise<Object> {
+  opts = {
+    ...opts,
+    caller: CALLER,
+  };
+
+  return new Promise((resolve, reject) => {
+    babel.loadPartialConfig(opts, (err, result) => {
       if (err) reject(err);
       else resolve(result);
     });

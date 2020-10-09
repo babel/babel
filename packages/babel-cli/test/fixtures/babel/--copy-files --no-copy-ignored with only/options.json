@@ -5,7 +5,7 @@
     "lib",
     "--copy-files",
     "--only",
-    "src/foo/*",
+    "src/foo/*,src/README.md",
     "--no-copy-ignored",
     "--verbose"
   ]
