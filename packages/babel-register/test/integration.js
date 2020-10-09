@@ -43,6 +43,19 @@ describe("integration tests", function () {
     expect(stderr).toMatchInlineSnapshot(`""`);
   });
 
+  it("can hook into extensions defined by a preset", async () => {
+    const { stdout, stderr } = await fixture("load-ts-defined-in-preset");
+
+    expect(stdout).toMatchInlineSnapshot(`
+      "LOADED: \\"<ROOT>/load-ts-defined-in-preset/index.js\\"
+      LOADED: \\"<ROOT>/load-ts-defined-in-preset/foo.ts\\"
+      DONE: foo.ts
+      DONE: index.js
+      "
+    `);
+    expect(stderr).toMatchInlineSnapshot(`""`);
+  });
+
   it("hooks into the default extensions", async () => {
     const { stdout, stderr } = await fixture("default-extensions");
 
