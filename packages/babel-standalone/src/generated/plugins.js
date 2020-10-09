@@ -1,4 +1,3 @@
-// @flow
 /*
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'

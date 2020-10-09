@@ -215,16 +215,9 @@ __metadata:
     "@babel/plugin-proposal-class-properties": "workspace:^7.10.4"
     "@babel/plugin-proposal-decorators": "workspace:^7.10.4"
     "@babel/plugin-proposal-do-expressions": "workspace:^7.10.4"
-    "@babel/plugin-proposal-nullish-coalescing-operator": "workspace:^7.10.4"
-    "@babel/plugin-proposal-optional-chaining": "workspace:^7.11.0"
     "@babel/plugin-proposal-pipeline-operator": "workspace:^7.10.4"
     "@babel/plugin-proposal-private-methods": "workspace:^7.10.4"
-    "@babel/plugin-syntax-bigint": ^7.7.4
-    "@babel/plugin-syntax-dynamic-import": ^7.0.0
     "@babel/plugin-syntax-export-default-from": "workspace:^7.10.4"
-    "@babel/plugin-syntax-export-namespace-from": ^7.0.0
-    "@babel/plugin-syntax-import-meta": "workspace:^7.10.4"
-    "@babel/plugin-syntax-numeric-separator": "workspace:^7.10.4"
     "@babel/preset-env": "workspace:^7.11.0"
     "@babel/preset-flow": "workspace:^7.10.4"
     "@babel/preset-react": "workspace:^7.10.4"
@@ -1166,7 +1159,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^7.10.4"
     "@babel/helper-plugin-utils": "workspace:^7.10.4"
     "@babel/plugin-proposal-nullish-coalescing-operator": "workspace:^7.10.4"
-    "@babel/plugin-syntax-logical-assignment-operators": "workspace:^7.10.4"
+    "@babel/plugin-syntax-logical-assignment-operators": ^7.10.4
     "@babel/plugin-syntax-nullish-coalescing-operator": ^7.8.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -1217,7 +1210,7 @@ __metadata:
     "@babel/core": "workspace:^7.10.4"
     "@babel/helper-plugin-test-runner": "workspace:^7.10.4"
     "@babel/helper-plugin-utils": "workspace:^7.10.4"
-    "@babel/plugin-syntax-numeric-separator": "workspace:^7.10.4"
+    "@babel/plugin-syntax-numeric-separator": ^7.10.4
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -1416,17 +1409,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-bigint@npm:^7.7.4":
-  version: 7.8.3
-  resolution: "@babel/plugin-syntax-bigint@npm:7.8.3"
-  dependencies:
-    "@babel/helper-plugin-utils": ^7.8.0
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: 8c9b610377af48e1d8ec0d5ad5eec5e462fbc775b20f367e0ebc2656b98b4cc73a952e8b5ab8641e6de0d04923f3843dd73ce00a71ef5cac9940822ff776c8ec
-  languageName: node
-  linkType: hard
-
 "@babel/plugin-syntax-class-properties@npm:^7.10.4":
   version: 7.10.4
   resolution: "@babel/plugin-syntax-class-properties@npm:7.10.4"
@@ -1481,7 +1463,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-dynamic-import@npm:^7.0.0, @babel/plugin-syntax-dynamic-import@npm:^7.2.0, @babel/plugin-syntax-dynamic-import@npm:^7.8.0":
+"@babel/plugin-syntax-dynamic-import@npm:^7.2.0, @babel/plugin-syntax-dynamic-import@npm:^7.8.0":
   version: 7.8.3
   resolution: "@babel/plugin-syntax-dynamic-import@npm:7.8.3"
   dependencies:
@@ -1503,7 +1485,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-export-namespace-from@npm:^7.0.0, @babel/plugin-syntax-export-namespace-from@npm:^7.8.3":
+"@babel/plugin-syntax-export-namespace-from@npm:^7.8.3":
   version: 7.8.3
   resolution: "@babel/plugin-syntax-export-namespace-from@npm:7.8.3"
   dependencies:
@@ -1558,16 +1540,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-import-meta@workspace:^7.10.4, @babel/plugin-syntax-import-meta@workspace:packages/babel-plugin-syntax-import-meta":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-import-meta@workspace:packages/babel-plugin-syntax-import-meta"
+"@babel/plugin-syntax-import-meta@npm:^7.10.4":
+  version: 7.10.4
+  resolution: "@babel/plugin-syntax-import-meta@npm:7.10.4"
   dependencies:
-    "@babel/core": "workspace:^7.10.4"
-    "@babel/helper-plugin-utils": "workspace:^7.10.4"
+    "@babel/helper-plugin-utils": ^7.10.4
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
+  checksum: 685ee8f0b5b675952e02e1cabcde4d92638918a66ed515b2663e2e0b2246210a0768325423d5642f8687653a449357826675ccfcb712676be260a0ae13313828
+  languageName: node
+  linkType: hard
 
 "@babel/plugin-syntax-json-strings@npm:^7.8.0":
   version: 7.8.3
@@ -1602,17 +1584,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-logical-assignment-operators@workspace:^7.10.4, @babel/plugin-syntax-logical-assignment-operators@workspace:packages/babel-plugin-syntax-logical-assignment-operators":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-logical-assignment-operators@workspace:packages/babel-plugin-syntax-logical-assignment-operators"
-  dependencies:
-    "@babel/core": "workspace:^7.10.4"
-    "@babel/helper-plugin-utils": "workspace:^7.10.4"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
-
 "@babel/plugin-syntax-module-attributes@workspace:^7.10.4, @babel/plugin-syntax-module-attributes@workspace:packages/babel-plugin-syntax-module-attributes":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-module-attributes@workspace:packages/babel-plugin-syntax-module-attributes"
@@ -1645,17 +1616,6 @@ __metadata:
   checksum: 47ae8782939ccc41f94b1d46b8b7a63363b003b8b7544bddae8dd454a8d51b38bbd4f9c26e91ecfb5fc16dc5f2228700e3030def63c5d07046073ec8fabc4665
   languageName: node
   linkType: hard
-
-"@babel/plugin-syntax-numeric-separator@workspace:^7.10.4, @babel/plugin-syntax-numeric-separator@workspace:packages/babel-plugin-syntax-numeric-separator":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-numeric-separator@workspace:packages/babel-plugin-syntax-numeric-separator"
-  dependencies:
-    "@babel/core": "workspace:^7.10.4"
-    "@babel/helper-plugin-utils": "workspace:^7.10.4"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
 
 "@babel/plugin-syntax-object-rest-spread@npm:^7.0.0, @babel/plugin-syntax-object-rest-spread@npm:^7.7.4, @babel/plugin-syntax-object-rest-spread@npm:^7.8.0":
   version: 7.8.3
@@ -2984,9 +2944,9 @@ __metadata:
     "@babel/plugin-syntax-dynamic-import": ^7.2.0
     "@babel/plugin-syntax-export-namespace-from": ^7.8.3
     "@babel/plugin-syntax-json-strings": ^7.8.0
-    "@babel/plugin-syntax-logical-assignment-operators": "workspace:^7.10.4"
+    "@babel/plugin-syntax-logical-assignment-operators": ^7.10.4
     "@babel/plugin-syntax-nullish-coalescing-operator": ^7.8.0
-    "@babel/plugin-syntax-numeric-separator": "workspace:^7.10.4"
+    "@babel/plugin-syntax-numeric-separator": ^7.10.4
     "@babel/plugin-syntax-object-rest-spread": ^7.8.0
     "@babel/plugin-syntax-optional-catch-binding": ^7.8.0
     "@babel/plugin-syntax-optional-chaining": ^7.8.0
@@ -3222,7 +3182,7 @@ __metadata:
     "@babel/plugin-syntax-flow": "workspace:^7.10.4"
     "@babel/plugin-syntax-function-bind": "workspace:^7.10.4"
     "@babel/plugin-syntax-function-sent": "workspace:^7.10.4"
-    "@babel/plugin-syntax-import-meta": "workspace:^7.10.4"
+    "@babel/plugin-syntax-import-meta": ^7.10.4
     "@babel/plugin-syntax-jsx": "workspace:^7.10.4"
     "@babel/plugin-syntax-module-attributes": "workspace:^7.10.4"
     "@babel/plugin-syntax-object-rest-spread": ^7.8.0

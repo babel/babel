@@ -41,7 +41,7 @@
     "@babel/plugin-syntax-flow": "workspace:^7.10.4",
     "@babel/plugin-syntax-function-bind": "workspace:^7.10.4",
     "@babel/plugin-syntax-function-sent": "workspace:^7.10.4",
-    "@babel/plugin-syntax-import-meta": "workspace:^7.10.4",
+    "@babel/plugin-syntax-import-meta": "^7.10.4",
     "@babel/plugin-syntax-jsx": "workspace:^7.10.4",
     "@babel/plugin-syntax-module-attributes": "workspace:^7.10.4",
     "@babel/plugin-syntax-object-rest-spread": "^7.8.0",
