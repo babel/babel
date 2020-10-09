@@ -150,10 +150,9 @@ function generateStandalone() {
           allList += `"${plugin}": ${camelPlugin},`;
         }
 
-        const fileContents = `// @flow
-/*
+        const fileContents = `/*
  * This file is auto-generated! Do not modify it directly.
- * To re-generate run 'make build'
+ * To re-generate run 'yarn gulp generate-standalone'
  */
 ${imports}
 

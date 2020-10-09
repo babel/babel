@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated! Do not modify it directly.
- * To re-generate run 'make build'
+ * To re-generate run 'yarn gulp generate-standalone'
  */
 import externalHelpers from "@babel/plugin-external-helpers";
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
