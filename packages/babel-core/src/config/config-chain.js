@@ -40,6 +40,7 @@ export type ConfigChain = {
   plugins: Array<UnloadedDescriptor>,
   presets: Array<UnloadedDescriptor>,
   options: Array<ValidatedOptions>,
+  files: Set<string>,
 };
 
 export type PresetInstance = {
@@ -71,6 +72,7 @@ export function* buildPresetChain(
     plugins: dedupDescriptors(chain.plugins),
     presets: dedupDescriptors(chain.presets),
     options: chain.options.map(o => normalizeOptions(o)),
+    files: new Set(),
   };
 }
 
@@ -124,10 +126,13 @@ const loadPresetOverridesEnvDescriptors = makeWeakCacheSync(
     ),
 );
 
+export type FileHandling = "transpile" | "ignored" | "unsupported";
 export type RootConfigChain = ConfigChain & {
   babelrc: ConfigFile | void,
   config: ConfigFile | void,
   ignore: IgnoreFile | void,
+  fileHandling: FileHandling,
+  files: Set<string>,
 };
 
 /**
@@ -202,6 +207,7 @@ export function* buildRootChain(
       : null;
 
   let ignoreFile, babelrcFile;
+  let isIgnored = false;
   const fileChain = emptyChain();
   // resolve all .babelrc files
   if (
@@ -215,14 +221,18 @@ export function* buildRootChain(
       context.caller,
     ));
 
+    if (ignoreFile) {
+      fileChain.files.add(ignoreFile.filepath);
+    }
+
     if (
       ignoreFile &&
       shouldIgnore(context, ignoreFile.ignore, null, ignoreFile.dirname)
     ) {
-      return null;
+      isIgnored = true;
     }
 
-    if (babelrcFile) {
+    if (babelrcFile && !isIgnored) {
       const validatedFile = validateBabelrcFile(babelrcFile);
       const babelrcLogger = new ConfigPrinter();
       const result = yield* loadFileChain(
@@ -231,10 +241,16 @@ export function* buildRootChain(
         undefined,
         babelrcLogger,
       );
-      if (!result) return null;
-      babelRcReport = babelrcLogger.output();
+      if (!result) {
+        isIgnored = true;
+      } else {
+        babelRcReport = babelrcLogger.output();
+        mergeChain(fileChain, result);
+      }
+    }
 
-      mergeChain(fileChain, result);
+    if (babelrcFile && isIgnored) {
+      fileChain.files.add(babelrcFile.filepath);
     }
   }
 
@@ -257,12 +273,14 @@ export function* buildRootChain(
   );
 
   return {
-    plugins: dedupDescriptors(chain.plugins),
-    presets: dedupDescriptors(chain.presets),
-    options: chain.options.map(o => normalizeOptions(o)),
+    plugins: isIgnored ? [] : dedupDescriptors(chain.plugins),
+    presets: isIgnored ? [] : dedupDescriptors(chain.presets),
+    options: isIgnored ? [] : chain.options.map(o => normalizeOptions(o)),
+    fileHandling: isIgnored ? "ignored" : "transpile",
     ignore: ignoreFile || undefined,
     babelrc: babelrcFile || undefined,
     config: configFile || undefined,
+    files: chain.files,
   };
 }
 
@@ -355,7 +373,7 @@ const loadProgrammaticChain = makeChainWalker({
 /**
  * Build a config chain for a given file.
  */
-const loadFileChain = makeChainWalker({
+const loadFileChainWalker = makeChainWalker({
   root: file => loadFileDescriptors(file),
   env: (file, envName) => loadFileEnvDescriptors(file)(envName),
   overrides: (file, index) => loadFileOverridesDescriptors(file)(index),
@@ -364,6 +382,16 @@ const loadFileChain = makeChainWalker({
   createLogger: (file, context, baseLogger) =>
     buildFileLogger(file.filepath, context, baseLogger),
 });
+
+function* loadFileChain(input, context, files, baseLogger) {
+  const chain = yield* loadFileChainWalker(input, context, files, baseLogger);
+  if (chain) {
+    chain.files.add(input.filepath);
+  }
+
+  return chain;
+}
+
 const loadFileDescriptors = makeWeakCacheSync((file: ValidatedFile) =>
   buildRootDescriptors(file, file.filepath, createUncachedDescriptors),
 );
@@ -622,6 +650,9 @@ function mergeChain(target: ConfigChain, source: ConfigChain): ConfigChain {
   target.options.push(...source.options);
   target.plugins.push(...source.plugins);
   target.presets.push(...source.presets);
+  for (const file of source.files) {
+    target.files.add(file);
+  }
 
   return target;
 }
@@ -642,6 +673,7 @@ function emptyChain(): ConfigChain {
     options: [],
     presets: [],
     plugins: [],
+    files: new Set(),
   };
 }
 
