@@ -16,6 +16,14 @@ config <CWD>/.babelrc
 programmatic options from @babel/cli
 {
   "sourceFileName": "../src/foo.js",
+  "filename": "src//foo.js",
+  "extensions": [
+    ".js",
+    ".jsx",
+    ".es6",
+    ".es",
+    ".mjs"
+  ],
   "presets": [
     "<ROOTDIR>//packages//babel-preset-react"
   ],
@@ -26,7 +34,6 @@ programmatic options from @babel/cli
   ],
   "caller": {
     "name": "@babel/cli"
-  },
-  "filename": "src//foo.js"
+  }
 }
 Successfully compiled 1 file with Babel (123ms).

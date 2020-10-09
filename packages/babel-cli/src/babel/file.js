@@ -226,6 +226,7 @@ export default async function ({
         })
         .on("all", function (type: string, filename: string): void {
           if (
+            !util.BABEL_SUPPORTS_EXTENSIONS_OPTION &&
             !util.isCompilableExtension(filename, cliOptions.extensions) &&
             !filenames.includes(filename)
           ) {
