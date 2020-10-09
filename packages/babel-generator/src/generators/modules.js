@@ -196,7 +196,6 @@ export function ImportDeclaration(node: Object) {
     this.space();
     this.word("with");
     this.space();
-    this.space();
     this.printList(node.attributes, node);
   }
 
