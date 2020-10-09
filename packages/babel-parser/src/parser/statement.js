@@ -2261,7 +2261,7 @@ export default class StatementParser extends ExpressionParser {
         throw this.raise(
           specifier.start,
           Errors.ImportBindingIsString,
-          imported.extra.raw,
+          imported.value,
         );
       }
       this.checkReservedWord(imported.name, specifier.start, true, true);

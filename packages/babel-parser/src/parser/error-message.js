@@ -56,7 +56,7 @@ export const ErrorMessages = Object.freeze({
     "Illegal 'use strict' directive in function with non-simple parameter list",
   IllegalReturn: "'return' outside of function",
   ImportBindingIsString:
-    "Can not use string literal as an imported binding.\n- Did you mean `import { %0 as foo }`?",
+    'Can not use string literal as an imported binding.\n- Did you mean `import { "%0" as foo }`?',
   ImportCallArgumentTrailingComma:
     "Trailing comma is disallowed inside import(...) arguments",
   ImportCallArity: "import() requires exactly %0",
