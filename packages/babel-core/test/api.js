@@ -423,6 +423,8 @@ describe("api", function () {
         "argone;",
         "five;",
         "six;",
+        "twentyone;",
+        "twentytwo;",
         "three;",
         "four;",
         "nineteen;",
