@@ -24,6 +24,7 @@ import {
   validate,
   type CallerMetadata,
   checkNoUnwrappedItemOptionPairs,
+  type PluginItem,
 } from "./validation/options";
 import { validatePluginObject } from "./validation/plugins";
 import makeAPI from "./helpers/config-api";
@@ -70,58 +71,59 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
   }
 
   const optionDefaults = {};
-  const passes: Array<Array<Plugin>> = [[]];
-  try {
-    const { plugins, presets } = options;
 
-    if (!plugins || !presets) {
-      throw new Error("Assertion failure - plugins and presets exist");
+  const { plugins, presets } = options;
+
+  if (!plugins || !presets) {
+    throw new Error("Assertion failure - plugins and presets exist");
+  }
+
+  const toDescriptor = (item: PluginItem) => {
+    const desc = getItemDescriptor(item);
+    if (!desc) {
+      throw new Error("Assertion failure - must be config item");
     }
 
-    const ignored = yield* (function* recurseDescriptors(config, pass) {
-      const plugins: Array<Plugin> = [];
-      for (let i = 0; i < config.plugins.length; i++) {
-        const descriptor = config.plugins[i];
-        if (descriptor.options !== false) {
-          try {
-            plugins.push(yield* loadPluginDescriptor(descriptor, context));
-          } catch (e) {
-            // print special message for `plugins: ["@babel/foo", { foo: "option" }]`
-            if (i > 0 && e.code === "BABEL_UNKNOWN_PLUGIN_PROPERTY") {
-              checkNoUnwrappedItemOptionPairs(
-                config.plugins[i - 1],
-                descriptor,
-                "plugin",
-                i,
-                e,
-              );
-            }
-            throw e;
-          }
-        }
-      }
+    return desc;
+  };
 
+  const presetsDescriptors = presets.map(toDescriptor);
+  const initialPluginsDescriptors = plugins.map(toDescriptor);
+  const pluginDescriptorsByPass: Array<Array<UnloadedDescriptor>> = [[]];
+  const passes: Array<Array<Plugin>> = [];
+
+  const ignored = yield* enhanceError(
+    context,
+    function* recursePresetDescriptors(
+      rawPresets: Array<UnloadedDescriptor>,
+      pluginDescriptorsPass: Array<UnloadedDescriptor>,
+    ) {
       const presets: Array<{|
         preset: ConfigChain | null,
-        pass: Array<Plugin>,
+        pass: Array<UnloadedDescriptor>,
       |}> = [];
-      for (let i = 0; i < config.presets.length; i++) {
-        const descriptor = config.presets[i];
+
+      for (let i = 0; i < rawPresets.length; i++) {
+        const descriptor = rawPresets[i];
         if (descriptor.options !== false) {
           try {
-            presets.push({
-              preset: yield* loadPresetDescriptor(descriptor, context),
-              pass: descriptor.ownPass ? [] : pass,
-            });
+            // Presets normally run in reverse order, but if they
+            // have their own pass they run after the presets
+            // in the previous pass.
+            if (descriptor.ownPass) {
+              presets.push({
+                preset: yield* loadPresetDescriptor(descriptor, context),
+                pass: [],
+              });
+            } else {
+              presets.unshift({
+                preset: yield* loadPresetDescriptor(descriptor, context),
+                pass: pluginDescriptorsPass,
+              });
+            }
           } catch (e) {
-            if (i > 0 && e.code === "BABEL_UNKNOWN_OPTION") {
-              checkNoUnwrappedItemOptionPairs(
-                config.presets[i - 1],
-                descriptor,
-                "preset",
-                i,
-                e,
-              );
+            if (e.code === "BABEL_UNKNOWN_OPTION") {
+              checkNoUnwrappedItemOptionPairs(rawPresets, i, "preset", e);
             }
             throw e;
           }
@@ -132,22 +134,18 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
       if (presets.length > 0) {
         // The passes are created in the same order as the preset list, but are inserted before any
         // existing additional passes.
-        passes.splice(
+        pluginDescriptorsByPass.splice(
           1,
           0,
-          ...presets.map(o => o.pass).filter(p => p !== pass),
+          ...presets.map(o => o.pass).filter(p => p !== pluginDescriptorsPass),
         );
 
         for (const { preset, pass } of presets) {
           if (!preset) return true;
 
-          const ignored = yield* recurseDescriptors(
-            {
-              plugins: preset.plugins,
-              presets: preset.presets,
-            },
-            pass,
-          );
+          pass.push(...preset.plugins);
+
+          const ignored = yield* recursePresetDescriptors(preset.presets, pass);
           if (ignored) return true;
 
           preset.options.forEach(opts => {
@@ -155,46 +153,37 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
           });
         }
       }
+    },
+  )(presetsDescriptors, pluginDescriptorsByPass[0]);
 
-      // resolve plugins
-      if (plugins.length > 0) {
-        pass.unshift(...plugins);
-      }
-    })(
-      {
-        plugins: plugins.map(item => {
-          const desc = getItemDescriptor(item);
-          if (!desc) {
-            throw new Error("Assertion failure - must be config item");
-          }
-
-          return desc;
-        }),
-        presets: presets.map(item => {
-          const desc = getItemDescriptor(item);
-          if (!desc) {
-            throw new Error("Assertion failure - must be config item");
-          }
-
-          return desc;
-        }),
-      },
-      passes[0],
-    );
-
-    if (ignored) return null;
-  } catch (e) {
-    // There are a few case where thrown errors will try to annotate themselves multiple times, so
-    // to keep things simple we just bail out if re-wrapping the message.
-    if (!/^\[BABEL\]/.test(e.message)) {
-      e.message = `[BABEL] ${context.filename || "unknown"}: ${e.message}`;
-    }
-
-    throw e;
-  }
+  if (ignored) return null;
 
   const opts: Object = optionDefaults;
   mergeOptions(opts, options);
+
+  yield* enhanceError(context, function* loadPluginDescriptors() {
+    pluginDescriptorsByPass[0].unshift(...initialPluginsDescriptors);
+
+    for (const descs of pluginDescriptorsByPass) {
+      const pass = [];
+      passes.push(pass);
+
+      for (let i = 0; i < descs.length; i++) {
+        const descriptor: UnloadedDescriptor = descs[i];
+        if (descriptor.options !== false) {
+          try {
+            pass.push(yield* loadPluginDescriptor(descriptor, context));
+          } catch (e) {
+            if (e.code === "BABEL_UNKNOWN_PLUGIN_PROPERTY") {
+              // print special message for `plugins: ["@babel/foo", { foo: "option" }]`
+              checkNoUnwrappedItemOptionPairs(descs, i, "plugin", e);
+            }
+            throw e;
+          }
+        }
+      }
+    }
+  })();
 
   opts.plugins = passes[0];
   opts.presets = passes
@@ -208,6 +197,22 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
     passes: passes,
   };
 });
+
+function enhanceError<T: Function>(context, fn: T): T {
+  return (function* (arg1, arg2) {
+    try {
+      return yield* fn(arg1, arg2);
+    } catch (e) {
+      // There are a few case where thrown errors will try to annotate themselves multiple times, so
+      // to keep things simple we just bail out if re-wrapping the message.
+      if (!/^\[BABEL\]/.test(e.message)) {
+        e.message = `[BABEL] ${context.filename || "unknown"}: ${e.message}`;
+      }
+
+      throw e;
+    }
+  }: any);
+}
 
 /**
  * Load a generic plugin/preset from the given descriptor loaded from the config object.
