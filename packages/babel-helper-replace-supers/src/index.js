@@ -45,7 +45,10 @@ export function skipAllButComputedKey(path: NodePath) {
 // For perf reasons, the environmentVisitor will be traversed with `{ noScope: true }`, which means `path.scope` is undefined.
 // Avoid using `path.scope` here
 export const environmentVisitor = {
-  "StaticBlock|ClassPrivateProperty|TypeAnnotation"(path: NodePath) {
+  // todo (Babel 8): remove StaticBlock brand checks
+  [`${t.StaticBlock ? "StaticBlock|" : ""}ClassPrivateProperty|TypeAnnotation`](
+    path: NodePath,
+  ) {
     path.skip();
   },
 
