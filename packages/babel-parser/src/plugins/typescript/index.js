@@ -1803,6 +1803,27 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
+    parseExprListItem(
+      allowEmpty: ?boolean,
+      refExpressionErrors?: ?ExpressionErrors,
+      refNeedsArrowPos: ?Pos,
+      allowPlaceholder: ?boolean,
+    ): ?N.Expression {
+      const node = super.parseExprListItem(
+        allowEmpty,
+        refExpressionErrors,
+        refNeedsArrowPos,
+        allowPlaceholder,
+      );
+
+      // Handle `func(a: T)` or `func<T>(a: T)`
+      if (!refNeedsArrowPos && node?.type === "TSTypeCastExpression") {
+        this.raise(node.start, TSErrors.UnexpectedTypeAnnotation);
+      }
+
+      return node;
+    }
+
     parseSubscript(
       base: N.Expression,
       startPos: number,
@@ -2723,20 +2744,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
 
       return node.expression;
-    }
-
-    toReferencedList(
-      exprList: $ReadOnlyArray<?N.Expression>,
-      isInParens?: boolean, // eslint-disable-line no-unused-vars
-    ): $ReadOnlyArray<?N.Expression> {
-      for (let i = 0; i < exprList.length; i++) {
-        const expr = exprList[i];
-        if (expr?.type === "TSTypeCastExpression") {
-          this.raise(expr.start, TSErrors.UnexpectedTypeAnnotation);
-        }
-      }
-
-      return exprList;
     }
 
     shouldParseArrow() {
