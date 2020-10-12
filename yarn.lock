@@ -3087,7 +3087,6 @@ __metadata:
     "@babel/core": "workspace:^7.11.5"
     "@babel/plugin-transform-modules-commonjs": "workspace:^7.10.4"
     browserify: ^16.5.2
-    default-require-extensions: ^2.0.0
     find-cache-dir: ^2.0.0
     lodash: ^4.17.19
     make-dir: ^2.1.0
@@ -7340,15 +7339,6 @@ __metadata:
   dependencies:
     kind-of: ^5.0.2
   checksum: d9ab7f03ff23e070c4ca03b989647c7ef7d2f364c340a3ecb8a81c5eb470156a26bdcf9eaffd1347bdbd0f689af6e8780c38913cd2984c924617d3b04e34b9a0
-  languageName: node
-  linkType: hard
-
-"default-require-extensions@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "default-require-extensions@npm:2.0.0"
-  dependencies:
-    strip-bom: ^3.0.0
-  checksum: 9316cb2c02441593fa648280019ec4c73cf6ea34f829a273d2bb82d5fd06b8a111aab44b6ae752709fa19793e1994b19a979ca6bb5c0faf8dd85d13fa2d95952
   languageName: node
   linkType: hard
 
