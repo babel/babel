@@ -135,6 +135,12 @@ const pluginNameMap = {
       url: "https://git.io/JfK3k",
     },
   },
+  moduleStringNames: {
+    syntax: {
+      name: "@babel/plugin-syntax-module-string-names",
+      url: "https://git.io/JTL8G",
+    },
+  },
   numericSeparator: {
     syntax: {
       name: "@babel/plugin-syntax-numeric-separator",
