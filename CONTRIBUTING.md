@@ -28,18 +28,18 @@ If you want an already configured online IDE to contribute to Babel, you can use
   - Check out [the Babel Plugin Handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook) - core plugins are written the same way as any other plugin!
   - Check out [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or make your own plugin in the browser
 - When you feel ready to jump into the Babel source code, a good place to start is to look for issues tagged with [help wanted](https://github.com/babel/babel/labels/help%20wanted) and/or [good first issue](https://github.com/babel/babel/labels/good%20first%20issue).
-- Follow along with what we are working on by joining our [Slack](https://babeljs.slack.com) (you can sign-up [here](https://slack.babeljs.io/)
+- Follow along with what we are working on by joining our [Slack](https://babeljs.slack.com) (you can [sign up here](https://slack.babeljs.io/)
   for an invite), following our announcements on [Twitter](https://twitter.com/babeljs), and reading (or participating!) in our [meeting notes](https://github.com/babel/notes).
 - Check out our [website](http://babeljs.io/) and the [repo](https://github.com/babel/website)
 - You can contribute by triaging issues which may include reproducing bug reports or asking for vital information, such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to [subscribe to babel on CodeTriage](https://www.codetriage.com/babel/babel). [![Open Source Helpers](https://www.codetriage.com/babel/babel/badges/users.svg)](https://www.codetriage.com/babel/babel)
 
 ## Chat
 
-Feel free to check out the `#discussion`/`#development` channels on our [Slack](https://slack.babeljs.io) (you can sign-up [here](https://slack.babeljs.io/) for an invite). Some of us are always online to chat!
+Feel free to check out the `#discussion`/`#development` channels on our [Slack](https://babeljs.slack.com) (you can [sign up here](https://slack.babeljs.io/) for an invite). Some of us are always online to chat!
 
 ## Developing
 
-*Node*: Check that Node is [installed](https://nodejs.org/en/download/) with version 10 and up. You can check this with `node -v`.
+*Node*: Check that Node is [installed](https://nodejs.org/en/download/) with version 10.19.0 and up. You can check this with `node -v`.
 
 *Yarn*: Make sure that Yarn 1 is [installed](https://classic.yarnpkg.com/en/docs/install) with version >= `1.19.0`.
 
@@ -311,15 +311,22 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
 
 ## Creating a new plugin (`spec-new`)
 
-> Example: https://github.com/babel/babylon/pull/541
+> Example: https://github.com/babel/babel/pull/11640
 
-- Create a new issue that describes the proposal (ex: [#538](https://github.com/babel/babylon/issues/538)). Include any relevant information like proposal repo/author, examples, parsing approaches, meeting notes, presentation slides, and more.
-- The pull request should include:
-  - [ ] An update to the [plugins](https://github.com/babel/babel/tree/main/packages/babel-parser#plugins) part of the readme. Add a new entry to that list for the new plugin flag (and link to the proposal)
-  - [ ] If any new nodes or modifications need to be added to the AST, update [ast/spec.md](https://github.com/babel/babel/blob/main/packages/babel-parser/ast/spec.md)
-  - [ ] Make sure you use the `this.hasPlugin("plugin-name-here")` check in the babel parser so that your new plugin code only runs when that flag is turned on (not default behavior)
+- Create a new PR that describes the proposed AST shape in [ESTree](https://github.com/estree/estree) (ex: [Decimal AST](https://github.com/estree/estree/pull/220)). The new AST should follow ESTree's [design philosophy](https://github.com/estree/estree#philosophy).
+- After the ESTree PR is accepted, update [ast/spec.md](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md). Note that there are differences between Babel AST and ESTree. In these cases, consistency with current Babel AST outweighs alignment to ESTree. Otherwise it should follow ESTree.
+
+- [ ] Implement parser plugins based on the new AST. The parser plugin name should be the unprefixed slug of the TC39 proposal URL in _camelcase_, i.e. `exportDefaultFrom` from `https://github.com/tc39/proposal-export-default-from`.
+  - [ ] Use the `this.expectPlugin("newSyntax")` check within `@babel/parser` to ensure your new plugin code only runs when that flag is turned on (not default behavior), and a friendly error is thrown if users forget to enable a plugin.
   - [ ] Add failing/passing tests according to spec behavior
-- Start working about the Babel transform itself!
+  - [ ] Add `@babel/syntax-new-syntax` package. You can copy `packages/babel-plugin-syntax-decimal` and replace `decimal` to `new-syntax`.
+  - [ ] Add `@babel/syntax-new-syntax` to `@babel/standalone`.
+    - [ ] Add `@babel/syntax-new-syntax` to `package.json`
+    - [ ] Add `@babel/syntax-new-syntax` to [`pluginsConfig.json`](https://github.com/babel/babel/blob/master/packages/babel-standalone/scripts/pluginConfig.json), run `make generate-standalone`.
+    - [ ] Add `@babel/syntax-new-syntax` to `src/preset-stage-x`.
+  - [ ] Add `"newSyntax"` to parser [typings](https://github.com/babel/babel/blob/master/packages/babel-parser/typings/babel-parser.d.ts)
+- [ ] Implement generator support in `packages/babel-generator/src/generators`. The generator converts AST to source code.
+- [ ] If this feature can be transpiled, start working on the Babel transform.
 
 ## Internals
 

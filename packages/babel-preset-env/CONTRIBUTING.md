@@ -51,13 +51,13 @@ const es = {
 }
 ```
 
-If you wan to transform a new built-in by `useBuiltIns: 'usage'`, add mapping to related `core-js` modules to [this file](https://github.com/babel/babel/blob/main/packages/babel-preset-env/polyfills/corejs2/built-in-definitions.js).
+If you want to transform a new built-in by `useBuiltIns: 'usage'`, add mapping to related `core-js` modules to [this file](https://github.com/babel/babel/blob/main/packages/babel-preset-env/polyfills/corejs2/built-in-definitions.js).
 
 ### Update data for `core-js@3` polyfilling
 
 Just update the version of [`core-js-compat`](https://github.com/zloirock/core-js/tree/main/packages/core-js-compat) in dependencies.
 
-If you wan to transform a new built-in by `useBuiltIns: 'usage'`, add mapping to related [`core-js`](https://github.com/zloirock/core-js/tree/main/packages/core-js/modules) modules to [this file](https://github.com/babel/babel/blob/main/packages/babel-preset-env/polyfills/corejs3/built-in-definitions.js).
+If you want to transform a new built-in by `useBuiltIns: 'usage'`, add mapping to related [`core-js`](https://github.com/zloirock/core-js/tree/main/packages/core-js/modules) modules to [this file](https://github.com/babel/babel/blob/main/packages/babel-preset-env/polyfills/corejs3/built-in-definitions.js).
 
 If you want to mark a new proposal as shipped, add it to [this list](https://github.com/babel/babel/blob/main/packages/babel-preset-env/polyfills/corejs3/shipped-proposals.js).
 

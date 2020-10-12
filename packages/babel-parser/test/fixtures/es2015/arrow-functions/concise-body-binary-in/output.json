@@ -1,0 +1,88 @@
+{
+  "type": "File",
+  "start":0,"end":40,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":2}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":40,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":2}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":40,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":2}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":40,"loc":{"start":{"line":1,"column":6},"end":{"line":3,"column":2}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"t"},
+              "name": "t"
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "start":10,"end":40,"loc":{"start":{"line":1,"column":10},"end":{"line":3,"column":2}},
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "ObjectExpression",
+                "start":17,"end":39,"loc":{"start":{"line":1,"column":17},"end":{"line":3,"column":1}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":21,"end":37,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":18}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":21,"end":22,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":3},"identifierName":"v"},
+                      "name": "v"
+                    },
+                    "computed": false,
+                    "shorthand": false,
+                    "value": {
+                      "type": "ArrowFunctionExpression",
+                      "start":24,"end":37,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":18}},
+                      "id": null,
+                      "generator": false,
+                      "async": false,
+                      "params": [
+                        {
+                          "type": "Identifier",
+                          "start":25,"end":26,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":7},"identifierName":"v"},
+                          "name": "v"
+                        }
+                      ],
+                      "body": {
+                        "type": "BinaryExpression",
+                        "start":31,"end":37,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":18}},
+                        "left": {
+                          "type": "Identifier",
+                          "start":31,"end":32,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":13},"identifierName":"v"},
+                          "name": "v"
+                        },
+                        "operator": "in",
+                        "right": {
+                          "type": "Identifier",
+                          "start":36,"end":37,"loc":{"start":{"line":2,"column":17},"end":{"line":2,"column":18},"identifierName":"z"},
+                          "name": "z"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 16
+                }
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

@@ -262,6 +262,14 @@ export function TSRestType(node) {
   this.print(node.typeAnnotation, node);
 }
 
+export function TSNamedTupleMember(node) {
+  this.print(node.label, node);
+  if (node.optional) this.token("?");
+  this.token(":");
+  this.space();
+  this.print(node.elementType, node);
+}
+
 export function TSUnionType(node) {
   this.tsPrintUnionOrIntersectionType(node, "|");
 }
@@ -309,7 +317,7 @@ export function TSParenthesizedType(node) {
 }
 
 export function TSTypeOperator(node) {
-  this.token(node.operator);
+  this.word(node.operator);
   this.space();
   this.print(node.typeAnnotation, node);
 }

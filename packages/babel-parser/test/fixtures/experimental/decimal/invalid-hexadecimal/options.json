@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "decimal"
+  ],
+  "throws": "Invalid decimal (1:0)"
+}

@@ -37,6 +37,8 @@ export function _methodHead(node: Object) {
   }
 
   if (node.async) {
+    // ensure `async` is in the same line with property name
+    this._catchUp("start", key.loc);
     this.word("async");
     this.space();
   }
@@ -112,7 +114,7 @@ export function ArrowFunctionExpression(node: Object) {
     !hasTypes(node, firstParam)
   ) {
     if (
-      this.format.retainLines &&
+      (this.format.retainLines || node.async) &&
       node.loc &&
       node.body.loc &&
       node.loc.start.line < node.body.loc.start.line

@@ -31,6 +31,12 @@ const pluginNameMap = {
       url: "https://git.io/JvpRG",
     },
   },
+  decimal: {
+    syntax: {
+      name: "@babel/plugin-syntax-decimal",
+      url: "https://git.io/JfKOH",
+    },
+  },
   decorators: {
     syntax: {
       name: "@babel/plugin-syntax-decorators",
@@ -123,16 +129,6 @@ const pluginNameMap = {
       url: "https://git.io/JfeDR",
     },
   },
-  logicalAssignment: {
-    syntax: {
-      name: "@babel/plugin-syntax-logical-assignment-operators",
-      url: "https://git.io/vAlBp",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-logical-assignment-operators",
-      url: "https://git.io/vAlRe",
-    },
-  },
   moduleAttributes: {
     syntax: {
       name: "@babel/plugin-syntax-module-attributes",
@@ -218,6 +214,16 @@ const pluginNameMap = {
     transform: {
       name: "@babel/plugin-proposal-async-generator-functions",
       url: "https://git.io/vb4yp",
+    },
+  },
+  logicalAssignment: {
+    syntax: {
+      name: "@babel/plugin-syntax-logical-assignment-operators",
+      url: "https://git.io/vAlBp",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-logical-assignment-operators",
+      url: "https://git.io/vAlRe",
     },
   },
   nullishCoalescingOperator: {

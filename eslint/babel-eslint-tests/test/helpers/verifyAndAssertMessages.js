@@ -1,6 +1,6 @@
 import eslint from "eslint";
 import unpad from "dedent";
-import * as parser from "@babel/eslint-parser";
+import * as parser from "../../../babel-eslint-parser";
 
 export default function verifyAndAssertMessages(
   code,
@@ -25,7 +25,7 @@ export default function verifyAndAssertMessages(
       requireConfigFile: false,
       babelOptions: {
         configFile: require.resolve(
-          "@babel/eslint-shared-fixtures/config/babel.config.js",
+          "../../../babel-eslint-shared-fixtures/config/babel.config.js",
         ),
       },
       ...overrideConfig?.parserOptions,

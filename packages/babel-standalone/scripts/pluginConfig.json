@@ -2,6 +2,7 @@
   "external-helpers",
   "syntax-async-generators",
   "syntax-class-properties",
+  "syntax-decimal",
   "syntax-decorators",
   "syntax-do-expressions",
   "syntax-export-default-from",

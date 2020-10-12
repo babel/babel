@@ -1,4 +1,4 @@
-var _reactJsxRuntime = require("react/jsx-runtime");
+var _reactJsxRuntimeJs = require("react/jsx-runtime.js");
 
 const Bar = () => {
   const Foo = () => {
@@ -15,11 +15,11 @@ const Bar = () => {
 
         var jsx = 1;
         var _jsx = 2;
-        return /*#__PURE__*/_reactJsxRuntime.jsx("div", {});
+        return /*#__PURE__*/_reactJsxRuntimeJs.jsx("div", {});
       }
 
       ;
-      return /*#__PURE__*/_reactJsxRuntime.jsx("span", {});
+      return /*#__PURE__*/_reactJsxRuntimeJs.jsx("span", {});
     };
   };
 };

@@ -11,6 +11,7 @@ These are the core @babel/parser (babylon) AST node types.
   - [BooleanLiteral](#booleanliteral)
   - [NumericLiteral](#numericliteral)
   - [BigIntLiteral](#bigintliteral)
+  - [DecimalLiteral](#decimalliteral)
 - [Programs](#programs)
 - [Functions](#functions)
 - [Statements](#statements)
@@ -252,6 +253,17 @@ interface BigIntLiteral <: Literal {
 ```
 
 The `value` property is the string representation of the `BigInt` value. It doesn't include the suffix `n`.
+
+## DecimalLiteral
+
+```js
+interface DecimalLiteral <: Literal {
+  type: "DecimalLiteral";
+  value: string;
+}
+```
+
+The `value` property is the string representation of the `BigDecimal` value. It doesn't include the suffix `m`.
 
 # Programs
 

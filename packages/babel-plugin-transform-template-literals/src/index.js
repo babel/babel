@@ -87,9 +87,9 @@ export default declare((api, options) => {
         const lazyLoad = template.ast`
           function ${templateObject}() {
             const data = ${t.callExpression(helperId, callExpressionInput)};
-            ${templateObject} = function() { return data };
+            ${t.cloneNode(templateObject)} = function() { return data };
             return data;
-          } 
+          }
         `;
 
         scope.path.unshiftContainer("body", lazyLoad);

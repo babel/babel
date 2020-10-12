@@ -12,6 +12,7 @@ import {
   type CallerMetadata,
 } from "./validation/options";
 import pathPatternToRegex from "./pattern-to-regex";
+import { ConfigPrinter, ChainFormatter } from "./printer";
 
 const debug = buildDebug("babel:config:config-chain");
 
@@ -53,6 +54,7 @@ export type ConfigContext = {
   root: string,
   envName: string,
   caller: CallerMetadata | void,
+  showConfig: boolean,
 };
 
 /**
@@ -81,6 +83,7 @@ export const buildPresetChainWalker: (
   overrides: (preset, index) => loadPresetOverridesDescriptors(preset)(index),
   overridesEnv: (preset, index, envName) =>
     loadPresetOverridesEnvDescriptors(preset)(index)(envName),
+  createLogger: () => () => {}, // Currently we don't support logging how preset is expanded
 });
 const loadPresetDescriptors = makeWeakCacheSync((preset: PresetInstance) =>
   buildRootDescriptors(preset, preset.alias, createUncachedDescriptors),
@@ -134,14 +137,19 @@ export function* buildRootChain(
   opts: ValidatedOptions,
   context: ConfigContext,
 ): Handler<RootConfigChain | null> {
+  let configReport, babelRcReport;
+  const programmaticLogger = new ConfigPrinter();
   const programmaticChain = yield* loadProgrammaticChain(
     {
       options: opts,
       dirname: context.cwd,
     },
     context,
+    undefined,
+    programmaticLogger,
   );
   if (!programmaticChain) return null;
+  const programmaticReport = programmaticLogger.output();
 
   let configFile;
   if (typeof opts.configFile === "string") {
@@ -163,10 +171,17 @@ export function* buildRootChain(
   let babelrcRootsDirectory = context.cwd;
 
   const configFileChain = emptyChain();
+  const configFileLogger = new ConfigPrinter();
   if (configFile) {
     const validatedFile = validateConfigFile(configFile);
-    const result = yield* loadFileChain(validatedFile, context);
+    const result = yield* loadFileChain(
+      validatedFile,
+      context,
+      undefined,
+      configFileLogger,
+    );
     if (!result) return null;
+    configReport = configFileLogger.output();
 
     // Allow config files to toggle `.babelrc` resolution on and off and
     // specify where the roots are.
@@ -208,16 +223,32 @@ export function* buildRootChain(
     }
 
     if (babelrcFile) {
+      const validatedFile = validateBabelrcFile(babelrcFile);
+      const babelrcLogger = new ConfigPrinter();
       const result = yield* loadFileChain(
-        validateBabelrcFile(babelrcFile),
+        validatedFile,
         context,
+        undefined,
+        babelrcLogger,
       );
       if (!result) return null;
+      babelRcReport = babelrcLogger.output();
 
       mergeChain(fileChain, result);
     }
   }
 
+  if (context.showConfig) {
+    console.log(
+      // $FlowIgnore: context.showConfig implies context.filename is not null
+      `Babel configs on "${context.filename}" (ascending priority):\n` +
+        // print config by the order of ascending priority
+        [configReport, babelRcReport, programmaticReport]
+          .filter(x => !!x)
+          .join("\n\n"),
+    );
+    return null;
+  }
   // Insert file chain in front so programmatic options have priority
   // over configuration file chain items.
   const chain = mergeChain(
@@ -317,6 +348,8 @@ const loadProgrammaticChain = makeChainWalker({
       index,
       envName,
     ),
+  createLogger: (input, context, baseLogger) =>
+    buildProgrammaticLogger(input, context, baseLogger),
 });
 
 /**
@@ -328,6 +361,8 @@ const loadFileChain = makeChainWalker({
   overrides: (file, index) => loadFileOverridesDescriptors(file)(index),
   overridesEnv: (file, index, envName) =>
     loadFileOverridesEnvDescriptors(file)(index)(envName),
+  createLogger: (file, context, baseLogger) =>
+    buildFileLogger(file.filepath, context, baseLogger),
 });
 const loadFileDescriptors = makeWeakCacheSync((file: ValidatedFile) =>
   buildRootDescriptors(file, file.filepath, createUncachedDescriptors),
@@ -367,8 +402,30 @@ const loadFileOverridesEnvDescriptors = makeWeakCacheSync(
     ),
 );
 
+function buildFileLogger(
+  filepath: string,
+  context: ConfigContext,
+  baseLogger: ConfigPrinter | void,
+) {
+  if (!baseLogger) {
+    return () => {};
+  }
+  return baseLogger.configure(context.showConfig, ChainFormatter.Config, {
+    filepath,
+  });
+}
+
 function buildRootDescriptors({ dirname, options }, alias, descriptors) {
   return descriptors(dirname, options, alias);
+}
+
+function buildProgrammaticLogger(_, context, baseLogger: ConfigPrinter | void) {
+  if (!baseLogger) {
+    return () => {};
+  }
+  return baseLogger.configure(context.showConfig, ChainFormatter.Programmatic, {
+    callerName: context.caller?.name,
+  });
 }
 
 function buildEnvDescriptors(
@@ -418,41 +475,68 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
   env,
   overrides,
   overridesEnv,
+  createLogger,
 }: {|
   root: ArgT => OptionsAndDescriptors,
   env: (ArgT, string) => OptionsAndDescriptors | null,
   overrides: (ArgT, number) => OptionsAndDescriptors,
   overridesEnv: (ArgT, number, string) => OptionsAndDescriptors | null,
+  createLogger: (
+    ArgT,
+    ConfigContext,
+    ConfigPrinter | void,
+  ) => (OptionsAndDescriptors, ?number, ?string) => void,
 |}): (
   ArgT,
   ConfigContext,
-  Set<ConfigFile> | void,
+  files?: Set<ConfigFile> | void,
+  baseLogger: ConfigPrinter | void,
 ) => Handler<ConfigChain | null> {
-  return function* (input, context, files = new Set()) {
+  return function* (input, context, files = new Set(), baseLogger) {
     const { dirname } = input;
 
-    const flattenedConfigs = [];
+    const flattenedConfigs: Array<{|
+      config: OptionsAndDescriptors,
+      index: ?number,
+      envName: ?string,
+    |}> = [];
 
     const rootOpts = root(input);
     if (configIsApplicable(rootOpts, dirname, context)) {
-      flattenedConfigs.push(rootOpts);
+      flattenedConfigs.push({
+        config: rootOpts,
+        envName: undefined,
+        index: undefined,
+      });
 
       const envOpts = env(input, context.envName);
       if (envOpts && configIsApplicable(envOpts, dirname, context)) {
-        flattenedConfigs.push(envOpts);
+        flattenedConfigs.push({
+          config: envOpts,
+          envName: context.envName,
+          index: undefined,
+        });
       }
 
       (rootOpts.options.overrides || []).forEach((_, index) => {
         const overrideOps = overrides(input, index);
         if (configIsApplicable(overrideOps, dirname, context)) {
-          flattenedConfigs.push(overrideOps);
+          flattenedConfigs.push({
+            config: overrideOps,
+            index,
+            envName: undefined,
+          });
 
           const overrideEnvOpts = overridesEnv(input, index, context.envName);
           if (
             overrideEnvOpts &&
             configIsApplicable(overrideEnvOpts, dirname, context)
           ) {
-            flattenedConfigs.push(overrideEnvOpts);
+            flattenedConfigs.push({
+              config: overrideEnvOpts,
+              index,
+              envName: context.envName,
+            });
           }
         }
       });
@@ -462,7 +546,7 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
     // that we don't do extra work loading extended configs if a file is
     // ignored.
     if (
-      flattenedConfigs.some(({ options: { ignore, only } }) =>
+      flattenedConfigs.some(({ config: { options: { ignore, only } } }) =>
         shouldIgnore(context, ignore, only, dirname),
       )
     ) {
@@ -470,15 +554,24 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
     }
 
     const chain = emptyChain();
+    const logger = createLogger(input, context, baseLogger);
 
-    for (const op of flattenedConfigs) {
+    for (const { config, index, envName } of flattenedConfigs) {
       if (
-        !(yield* mergeExtendsChain(chain, op.options, dirname, context, files))
+        !(yield* mergeExtendsChain(
+          chain,
+          config.options,
+          dirname,
+          context,
+          files,
+          baseLogger,
+        ))
       ) {
         return null;
       }
 
-      mergeChainOpts(chain, op);
+      logger(config, index, envName);
+      mergeChainOpts(chain, config);
     }
     return chain;
   };
@@ -490,6 +583,7 @@ function* mergeExtendsChain(
   dirname: string,
   context: ConfigContext,
   files: Set<ConfigFile>,
+  baseLogger: ConfigPrinter | void,
 ): Handler<boolean> {
   if (opts.extends === undefined) return true;
 
@@ -513,6 +607,7 @@ function* mergeExtendsChain(
     validateExtendFile(file),
     context,
     files,
+    baseLogger,
   );
   files.delete(file);
 
@@ -650,22 +745,28 @@ function shouldIgnore(
   dirname: string,
 ): boolean {
   if (ignore && matchesPatterns(context, ignore, dirname)) {
-    debug(
-      "Ignored %o because it matched one of %O from %o",
-      context.filename,
+    const message = `No config is applied to "${
+      context.filename ?? "(unknown)"
+    }" because it matches one of \`ignore: ${JSON.stringify(
       ignore,
-      dirname,
-    );
+    )}\` from "${dirname}"`;
+    debug(message);
+    if (context.showConfig) {
+      console.log(message);
+    }
     return true;
   }
 
   if (only && !matchesPatterns(context, only, dirname)) {
-    debug(
-      "Ignored %o because it failed to match one of %O from %o",
-      context.filename,
+    const message = `No config is applied to "${
+      context.filename ?? "(unknown)"
+    }" because it fails to match one of \`only: ${JSON.stringify(
       only,
-      dirname,
-    );
+    )}\` from "${dirname}"`;
+    debug(message);
+    if (context.showConfig) {
+      console.log(message);
+    }
     return true;
   }
 

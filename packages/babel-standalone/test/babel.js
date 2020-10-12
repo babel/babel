@@ -210,6 +210,13 @@
           }),
         ).not.toThrow();
       });
+      it("#11897 - [...map.keys()] in Babel source should be transformed correctly", () => {
+        expect(() =>
+          Babel.transform("for (let el of []) { s => el }", {
+            plugins: ["transform-block-scoping"],
+          }),
+        ).not.toThrow();
+      });
     });
   },
 );

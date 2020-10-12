@@ -7,6 +7,7 @@ Using targets:
   "edge": "16",
   "firefox": "60",
   "ios": "10.3",
+  "node": "13.2",
   "opera": "48",
   "safari": "10.1",
   "samsung": "8.2"
@@ -15,8 +16,10 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-nullish-coalescing-operator { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1", "samsung":"8.2" }
-  proposal-optional-chaining { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1", "samsung":"8.2" }
+  proposal-numeric-separator { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1", "samsung":"8.2" }
+  proposal-logical-assignment-operators { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "node":"13.2", "opera":"48", "safari":"10.1", "samsung":"8.2" }
+  proposal-nullish-coalescing-operator { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "node":"13.2", "opera":"48", "safari":"10.1", "samsung":"8.2" }
+  proposal-optional-chaining { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "node":"13.2", "opera":"48", "safari":"10.1", "samsung":"8.2" }
   proposal-json-strings { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1", "samsung":"8.2" }
   proposal-optional-catch-binding { "android":"61", "chrome":"61", "edge":"16", "ios":"10.3", "opera":"48", "safari":"10.1", "samsung":"8.2" }
   transform-parameters { "edge":"16" }
@@ -30,7 +33,8 @@ Using plugins:
   transform-function-name { "edge":"16" }
   transform-unicode-regex { "ios":"10.3", "safari":"10.1" }
   transform-block-scoping { "ios":"10.3", "safari":"10.1" }
-  transform-modules-commonjs { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1", "samsung":"8.2" }
-  proposal-dynamic-import { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1", "samsung":"8.2" }
+  proposal-export-namespace-from { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "opera":"48", "safari":"10.1", "samsung":"8.2" }
+  transform-modules-commonjs { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "node":"13.2", "opera":"48", "safari":"10.1", "samsung":"8.2" }
+  proposal-dynamic-import { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "node":"13.2", "opera":"48", "safari":"10.1", "samsung":"8.2" }
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

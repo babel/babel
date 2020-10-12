@@ -8,7 +8,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "5",
-    "electron": "0.32"
+    "electron": "0.31"
   },
   "es6.array.every": {
     "chrome": "5",
@@ -33,7 +33,7 @@
     "node": "4",
     "ios": "8",
     "samsung": "5",
-    "electron": "0.32"
+    "electron": "0.31"
   },
   "es6.array.filter": {
     "chrome": "5",
@@ -58,7 +58,7 @@
     "node": "4",
     "ios": "8",
     "samsung": "5",
-    "electron": "0.32"
+    "electron": "0.31"
   },
   "es6.array.find-index": {
     "chrome": "45",
@@ -69,7 +69,7 @@
     "node": "4",
     "ios": "8",
     "samsung": "5",
-    "electron": "0.32"
+    "electron": "0.31"
   },
   "es7.array.flat-map": {
     "chrome": "69",
@@ -80,7 +80,7 @@
     "node": "11",
     "ios": "12",
     "samsung": "10",
-    "electron": "4"
+    "electron": "4.0"
   },
   "es6.array.for-each": {
     "chrome": "5",
@@ -194,7 +194,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "5",
-    "electron": "0.32"
+    "electron": "0.31"
   },
   "es6.array.reduce": {
     "chrome": "5",
@@ -248,7 +248,7 @@
     "ie": "9",
     "ios": "12",
     "samsung": "8",
-    "electron": "3"
+    "electron": "3.0"
   },
   "es6.array.species": {
     "chrome": "51",
@@ -573,7 +573,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "es6.number.epsilon": {
     "chrome": "34",
@@ -710,7 +710,7 @@
     "node": "8.10",
     "ios": "9",
     "samsung": "8",
-    "electron": "3"
+    "electron": "3.0"
   },
   "es7.object.define-setter": {
     "chrome": "62",
@@ -721,7 +721,7 @@
     "node": "8.10",
     "ios": "9",
     "samsung": "8",
-    "electron": "3"
+    "electron": "3.0"
   },
   "es6.object.define-property": {
     "chrome": "5",
@@ -760,7 +760,7 @@
     "node": "7",
     "ios": "10.3",
     "samsung": "6",
-    "electron": "1.5"
+    "electron": "1.4"
   },
   "es6.object.freeze": {
     "chrome": "44",
@@ -793,7 +793,7 @@
     "node": "7",
     "ios": "10.3",
     "samsung": "6",
-    "electron": "1.5"
+    "electron": "1.4"
   },
   "es6.object.get-own-property-names": {
     "chrome": "40",
@@ -826,7 +826,7 @@
     "node": "8.10",
     "ios": "9",
     "samsung": "8",
-    "electron": "3"
+    "electron": "3.0"
   },
   "es7.object.lookup-setter": {
     "chrome": "62",
@@ -837,7 +837,7 @@
     "node": "8.10",
     "ios": "9",
     "samsung": "8",
-    "electron": "3"
+    "electron": "3.0"
   },
   "es6.object.prevent-extensions": {
     "chrome": "44",
@@ -949,7 +949,7 @@
     "node": "7",
     "ios": "10.3",
     "samsung": "6",
-    "electron": "1.5"
+    "electron": "1.4"
   },
   "es6.promise": {
     "chrome": "51",
@@ -971,7 +971,7 @@
     "node": "10",
     "ios": "11.3",
     "samsung": "8",
-    "electron": "3"
+    "electron": "3.0"
   },
   "es6.reflect.apply": {
     "chrome": "49",
@@ -1224,7 +1224,7 @@
     "node": "10",
     "ios": "12",
     "samsung": "8",
-    "electron": "3"
+    "electron": "3.0"
   },
   "es6.string.anchor": {
     "chrome": "5",
@@ -1287,7 +1287,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "es6.string.ends-with": {
     "chrome": "41",
@@ -1298,7 +1298,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "es6.string.fixed": {
     "chrome": "5",
@@ -1348,7 +1348,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "es6.string.includes": {
     "chrome": "41",
@@ -1359,7 +1359,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "es6.string.italics": {
     "chrome": "5",
@@ -1429,7 +1429,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "es6.string.repeat": {
     "chrome": "41",
@@ -1440,7 +1440,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "es6.string.small": {
     "chrome": "5",
@@ -1464,7 +1464,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "es6.string.strike": {
     "chrome": "5",
@@ -1528,7 +1528,7 @@
     "node": "10",
     "ios": "12",
     "samsung": "9",
-    "electron": "3"
+    "electron": "3.0"
   },
   "es7.string.trim-right": {
     "chrome": "66",
@@ -1539,7 +1539,7 @@
     "node": "10",
     "ios": "12",
     "samsung": "9",
-    "electron": "3"
+    "electron": "3.0"
   },
   "es6.typed.array-buffer": {
     "chrome": "51",

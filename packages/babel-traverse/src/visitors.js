@@ -274,7 +274,13 @@ function shouldIgnoreKey(key) {
   if (key === "enter" || key === "exit" || key === "shouldSkip") return true;
 
   // ignore other options
-  if (key === "blacklist" || key === "noScope" || key === "skipKeys") {
+  if (
+    key === "denylist" ||
+    key === "noScope" ||
+    key === "skipKeys" ||
+    // TODO: Remove in Babel 8
+    key === "blacklist"
+  ) {
     return true;
   }
 

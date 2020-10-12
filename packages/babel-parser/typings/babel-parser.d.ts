@@ -100,6 +100,7 @@ export type ParserPlugin =
     'classPrivateMethods' |
     'classPrivateProperties' |
     'classProperties' |
+    'decimal' |
     'decorators' |
     'decorators-legacy' |
     'doExpressions' |

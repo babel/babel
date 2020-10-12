@@ -1,6 +1,6 @@
 import cloneDeep from "lodash.clonedeep";
 import rule from "../../src/rules/no-invalid-this";
-import RuleTester from "@babel/eslint-shared-fixtures/utils/RuleTester";
+import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester";
 
 /**
  * A constant value for non strict mode environment.
@@ -103,6 +103,13 @@ const patterns = [
 
   {
     code: "class A {#a = () => {return this.b;};};",
+    parserOptions: { ecmaVersion: 6 },
+    valid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
+    invalid: [],
+  },
+
+  {
+    code: "class A {#a() {return this.b;};};",
     parserOptions: { ecmaVersion: 6 },
     valid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
     invalid: [],

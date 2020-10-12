@@ -402,7 +402,7 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
       return "unknown";
     }
 
-    // Prevent infinte loops in recursive functions
+    // Prevent infinite loops in recursive functions
     if (executionOrderCheckedNodes.has(path.node)) continue;
     executionOrderCheckedNodes.add(path.node);
 
