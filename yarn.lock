@@ -1552,6 +1552,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-syntax-import-meta@npm:^7.10.4":
+  version: 7.10.4
+  resolution: "@babel/plugin-syntax-import-meta@npm:7.10.4"
+  dependencies:
+    "@babel/helper-plugin-utils": ^7.10.4
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 685ee8f0b5b675952e02e1cabcde4d92638918a66ed515b2663e2e0b2246210a0768325423d5642f8687653a449357826675ccfcb712676be260a0ae13313828
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-syntax-json-strings@npm:^7.8.0":
   version: 7.8.3
   resolution: "@babel/plugin-syntax-json-strings@npm:7.8.3"
@@ -3184,6 +3195,7 @@ __metadata:
     "@babel/plugin-syntax-function-bind": "workspace:^7.10.4"
     "@babel/plugin-syntax-function-sent": "workspace:^7.10.4"
     "@babel/plugin-syntax-import-assertions": "workspace:^7.10.4"
+    "@babel/plugin-syntax-import-meta": ^7.10.4
     "@babel/plugin-syntax-jsx": "workspace:^7.10.4"
     "@babel/plugin-syntax-object-rest-spread": ^7.8.0
     "@babel/plugin-syntax-optional-catch-binding": ^7.8.0
