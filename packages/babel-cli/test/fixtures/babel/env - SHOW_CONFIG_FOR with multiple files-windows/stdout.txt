@@ -15,7 +15,6 @@ config <CWD>/.babelrc
 
 programmatic options from @babel/cli
 {
-  "sourceFileName": "src/foo.js",
   "presets": [
     "<ROOTDIR>//packages//babel-preset-react"
   ],
@@ -24,6 +23,7 @@ programmatic options from @babel/cli
     "<ROOTDIR>//packages//babel-plugin-transform-strict-mode",
     "<ROOTDIR>//packages//babel-plugin-transform-modules-commonjs"
   ],
+  "sourceFileName": "src/foo.js",
   "caller": {
     "name": "@babel/cli"
   },
