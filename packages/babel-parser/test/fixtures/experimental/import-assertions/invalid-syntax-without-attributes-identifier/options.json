@@ -1,12 +1,9 @@
 {
-  "throws": "Unexpected token (1:17)",
   "plugins": [
     [
-      "importAssertions",
-      {
-        "version": "september-2020"
-      }
+      "importAssertions"
     ]
   ],
-  "sourceType": "module"
+  "sourceType": "module",
+  "throws": "Unexpected token (1:17)"
 }

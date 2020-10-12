@@ -1,10 +1,7 @@
 {
   "plugins": [
     [
-      "importAssertions",
-      {
-        "version": "september-2020"
-      }
+      "importAssertions"
     ]
   ],
   "sourceType": "module",

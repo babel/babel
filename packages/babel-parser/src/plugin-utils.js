@@ -87,6 +87,11 @@ export function validatePlugins(plugins: PluginList) {
   }
 
   if (hasPlugin(plugins, "moduleAttributes")) {
+    if (hasPlugin(plugins, "importAssertions")) {
+      throw new Error(
+        "Cannot combine importAssertions and moduleAttributes plugins.",
+      );
+    }
     const moduleAttributesVerionPluginOption = getPluginOption(
       plugins,
       "moduleAttributes",
@@ -101,25 +106,6 @@ export function validatePlugins(plugins: PluginList) {
     }
   }
 
-  if (hasPlugin(plugins, "importAssertions")) {
-    const importAssertionsVerionPluginOption = getPluginOption(
-      plugins,
-      "importAssertions",
-      "version",
-    );
-    if (importAssertionsVerionPluginOption !== "september-2020") {
-      throw new Error(
-        "The 'importAssertions' plugin requires a 'version' option," +
-          " representing the last proposal update. Currently, the" +
-          " only supported value is 'september-2020'.",
-      );
-    }
-    if (hasPlugin(plugins, "moduleAttributes")) {
-      throw new Error(
-        "Cannot combine importAssertions and moduleAttributes plugins.",
-      );
-    }
-  }
   if (
     hasPlugin(plugins, "recordAndTuple") &&
     !RECORD_AND_TUPLE_SYNTAX_TYPES.includes(
