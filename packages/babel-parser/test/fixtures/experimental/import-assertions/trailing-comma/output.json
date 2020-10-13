@@ -1,18 +1,15 @@
 {
   "type": "File",
-  "start":0,"end":44,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":44}},
-  "errors": [
-    "SyntaxError: The only accepted module attribute is `type` (1:31)"
-  ],
+  "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":46}},
   "program": {
     "type": "Program",
-    "start":0,"end":44,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":44}},
+    "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":46}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ImportDeclaration",
-        "start":0,"end":44,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":44}},
+        "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":46}},
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
@@ -36,20 +33,20 @@
         "assertions": [
           {
             "type": "ImportAttribute",
-            "start":31,"end":41,"loc":{"start":{"line":1,"column":31},"end":{"line":1,"column":41}},
+            "start":31,"end":43,"loc":{"start":{"line":1,"column":31},"end":{"line":1,"column":43}},
             "key": {
               "type": "Identifier",
-              "start":31,"end":34,"loc":{"start":{"line":1,"column":31},"end":{"line":1,"column":34},"identifierName":"foo"},
-              "name": "foo"
+              "start":31,"end":35,"loc":{"start":{"line":1,"column":31},"end":{"line":1,"column":35},"identifierName":"type"},
+              "name": "type"
             },
             "value": {
               "type": "StringLiteral",
-              "start":36,"end":41,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":41}},
+              "start":37,"end":43,"loc":{"start":{"line":1,"column":37},"end":{"line":1,"column":43}},
               "extra": {
-                "rawValue": "foo",
-                "raw": "\"foo\""
+                "rawValue": "json",
+                "raw": "\"json\""
               },
-              "value": "foo"
+              "value": "json"
             }
           }
         ]
