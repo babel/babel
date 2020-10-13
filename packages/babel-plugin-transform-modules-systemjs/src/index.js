@@ -554,6 +554,7 @@ export default declare((api, options) => {
             Function(path) {
               path.skip();
             },
+            noScope: true,
           });
 
           path.node.body = [
