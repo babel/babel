@@ -1039,7 +1039,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const t: N.TsTypeAnnotation = this.startNode();
         this.expect(returnToken);
 
-        const asserts = this.tsTryParse(
+        const asserts = !!this.tsTryParse(
           this.tsParseTypePredicateAsserts.bind(this),
         );
 
