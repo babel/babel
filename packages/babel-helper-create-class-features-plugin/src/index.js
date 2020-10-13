@@ -122,7 +122,7 @@ export function createClassFeaturePlugin({
           if (!isDecorated) isDecorated = hasOwnDecorators(path.node);
 
           if (path.isStaticBlock?.()) {
-            throw path.buildCodeFrameError(`Incorrect plugin orders, \`@babel/plugin-proposal-class-static-block\` should be placed before class features plugins
+            throw path.buildCodeFrameError(`Incorrect plugin order, \`@babel/plugin-proposal-class-static-block\` should be placed before class features plugins
 {
   "plugins": [
     "@babel/plugin-proposal-class-static-block",
