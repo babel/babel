@@ -22,7 +22,7 @@ describe("plugin ordering", () => {
         ],
       });
     })
-      .toThrow(`Incorrect plugin orders, \`@babel/plugin-proposal-class-static-block\` should be placed before class features plugins
+      .toThrow(`Incorrect plugin order, \`@babel/plugin-proposal-class-static-block\` should be placed before class features plugins
 {
   "plugins": [
     "@babel/plugin-proposal-class-static-block",
