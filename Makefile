@@ -220,6 +220,14 @@ prepublish:
 
 # --exclude-dependents support is added by .yarn-patches/@lerna/version
 new-version:
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo "!!!!!!                                                   !!!!!!"
+	@echo "!!!!!!  Enable the check in proposal-class-static-block  !!!!!!"
+	@echo "!!!!!!                                                   !!!!!!"
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@exit 1
 	git pull --rebase
 	$(YARN) lerna version --exclude-dependents --force-publish=$(FORCE_PUBLISH)
 

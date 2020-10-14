@@ -21,6 +21,7 @@
     "@babel/helper-split-export-declaration": "workspace:^7.11.0",
     "@babel/helper-validator-identifier": "workspace:^7.10.4",
     "@babel/template": "workspace:^7.10.4",
+    "@babel/traverse": "workspace:^7.11.5",
     "@babel/types": "workspace:^7.11.0",
     "lodash": "^4.17.19"
   }
