@@ -1453,7 +1453,7 @@ export default class ExpressionParser extends LValParser {
     if (
       canBeArrow &&
       this.shouldParseArrow() &&
-      (arrowNode = this.parseArrow(arrowNode, exprList))
+      (arrowNode = this.parseArrow(arrowNode))
     ) {
       if (!this.isAwaitAllowed() && !this.state.maybeInAsyncArrowHead) {
         this.state.awaitPos = oldAwaitPos;
@@ -1509,10 +1509,7 @@ export default class ExpressionParser extends LValParser {
     return !this.canInsertSemicolon();
   }
 
-  parseArrow(
-    node: N.ArrowFunctionExpression,
-    exprList: N.Node[], // eslint-disable-line no-unused-vars
-  ): ?N.ArrowFunctionExpression {
+  parseArrow(node: N.ArrowFunctionExpression): ?N.ArrowFunctionExpression {
     if (this.eat(tt.arrow)) {
       return node;
     }
