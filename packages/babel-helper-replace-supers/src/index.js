@@ -42,8 +42,13 @@ export function skipAllButComputedKey(path: NodePath) {
 }
 
 // environmentVisitor should be used when traversing the whole class and not for specific class elements/methods.
+// For perf reasons, the environmentVisitor will be traversed with `{ noScope: true }`, which means `path.scope` is undefined.
+// Avoid using `path.scope` here
 export const environmentVisitor = {
-  TypeAnnotation(path: NodePath) {
+  // todo (Babel 8): remove StaticBlock brand checks
+  [`${t.StaticBlock ? "StaticBlock|" : ""}ClassPrivateProperty|TypeAnnotation`](
+    path: NodePath,
+  ) {
     path.skip();
   },
 
@@ -55,7 +60,7 @@ export const environmentVisitor = {
     path.skip();
   },
 
-  "Method|ClassProperty|ClassPrivateProperty"(path: NodePath) {
+  "Method|ClassProperty"(path: NodePath) {
     skipAllButComputedKey(path);
   },
 };

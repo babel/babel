@@ -595,6 +595,7 @@ __metadata:
     "@babel/helper-split-export-declaration": "workspace:^7.11.0"
     "@babel/helper-validator-identifier": "workspace:^7.10.4"
     "@babel/template": "workspace:^7.10.4"
+    "@babel/traverse": "workspace:^7.11.5"
     "@babel/types": "workspace:^7.11.0"
     lodash: ^4.17.19
   languageName: unknown
@@ -995,6 +996,18 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^7.10.4"
   peerDependencies:
     "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
+"@babel/plugin-proposal-class-static-block@workspace:^7.11.0, @babel/plugin-proposal-class-static-block@workspace:packages/babel-plugin-proposal-class-static-block":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-class-static-block@workspace:packages/babel-plugin-proposal-class-static-block"
+  dependencies:
+    "@babel/core": "workspace:^7.11.6"
+    "@babel/helper-plugin-utils": "workspace:^7.10.1"
+    "@babel/plugin-syntax-class-static-block": "workspace:^7.11.0"
+  peerDependencies:
+    "@babel/core": ^7.12.0
   languageName: unknown
   linkType: soft
 
@@ -1432,7 +1445,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-class-static-block@workspace:packages/babel-plugin-syntax-class-static-block":
+"@babel/plugin-syntax-class-static-block@workspace:^7.11.0, @babel/plugin-syntax-class-static-block@workspace:packages/babel-plugin-syntax-class-static-block":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-class-static-block@workspace:packages/babel-plugin-syntax-class-static-block"
   dependencies:
@@ -3176,6 +3189,7 @@ __metadata:
     "@babel/plugin-external-helpers": "workspace:^7.10.4"
     "@babel/plugin-proposal-async-generator-functions": "workspace:^7.10.5"
     "@babel/plugin-proposal-class-properties": "workspace:^7.10.4"
+    "@babel/plugin-proposal-class-static-block": "workspace:^7.11.0"
     "@babel/plugin-proposal-decorators": "workspace:^7.10.5"
     "@babel/plugin-proposal-do-expressions": "workspace:^7.10.4"
     "@babel/plugin-proposal-dynamic-import": "workspace:^7.10.4"
@@ -3197,6 +3211,7 @@ __metadata:
     "@babel/plugin-proposal-unicode-property-regex": "workspace:^7.10.4"
     "@babel/plugin-syntax-async-generators": ^7.8.0
     "@babel/plugin-syntax-class-properties": "workspace:^7.10.4"
+    "@babel/plugin-syntax-class-static-block": "workspace:^7.11.0"
     "@babel/plugin-syntax-decimal": "workspace:^7.11.0"
     "@babel/plugin-syntax-decorators": "workspace:^7.10.4"
     "@babel/plugin-syntax-do-expressions": "workspace:^7.10.4"
