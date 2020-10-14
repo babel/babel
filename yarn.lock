@@ -3130,7 +3130,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime-corejs3@workspace:^7.10.4, @babel/runtime-corejs3@workspace:^7.11.0, @babel/runtime-corejs3@workspace:packages/babel-runtime-corejs3":
+"@babel/runtime-corejs3@workspace:*, @babel/runtime-corejs3@workspace:^7.10.4, @babel/runtime-corejs3@workspace:^7.11.0, @babel/runtime-corejs3@workspace:packages/babel-runtime-corejs3":
   version: 0.0.0-use.local
   resolution: "@babel/runtime-corejs3@workspace:packages/babel-runtime-corejs3"
   dependencies:
@@ -3148,7 +3148,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@workspace:^7.10.4, @babel/runtime@workspace:^7.10.5, @babel/runtime@workspace:^7.11.0, @babel/runtime@workspace:packages/babel-runtime":
+"@babel/runtime@workspace:*, @babel/runtime@workspace:^7.10.4, @babel/runtime@workspace:^7.10.5, @babel/runtime@workspace:^7.11.0, @babel/runtime@workspace:packages/babel-runtime":
   version: 0.0.0-use.local
   resolution: "@babel/runtime@workspace:packages/babel-runtime"
   dependencies:
@@ -3281,6 +3281,16 @@ __metadata:
     "@babel/code-frame": "workspace:^7.10.4"
     "@babel/parser": "workspace:^7.10.4"
     "@babel/types": "workspace:^7.10.4"
+  languageName: unknown
+  linkType: soft
+
+"@babel/test-esm@workspace:test/esm":
+  version: 0.0.0-use.local
+  resolution: "@babel/test-esm@workspace:test/esm"
+  dependencies:
+    "@babel/runtime": "workspace:*"
+    "@babel/runtime-corejs3": "workspace:*"
+    chalk: ^4.1.0
   languageName: unknown
   linkType: soft
 

@@ -9,7 +9,8 @@
     "fix": "make fix",
     "lint": "make lint",
     "test": "make test",
-    "version": "yarn --immutable-cache && git add yarn.lock"
+    "version": "yarn --immutable-cache && git add yarn.lock",
+    "test:esm": "node test/esm/index.mjs"
   },
   "devDependencies": {
     "@babel/cli": "^7.11.6",
@@ -69,7 +70,8 @@
   "workspaces": [
     "codemods/*",
     "eslint/*",
-    "packages/*"
+    "packages/*",
+    "test/esm"
   ],
   "resolutions": {
     "@lerna/version": "patch:@lerna/version@npm:3.20.2#.yarn-patches/@lerna/version.patch",
