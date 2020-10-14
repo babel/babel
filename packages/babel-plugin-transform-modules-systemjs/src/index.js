@@ -11,9 +11,7 @@ const buildTemplate = template(`
     BEFORE_BODY;
     return {
       setters: SETTERS,
-      execute: function () {
-        BODY;
-      }
+      execute: EXECUTE,
     };
   });
 `);
@@ -601,6 +599,18 @@ export default declare((api, options) => {
             path.remove();
           }
 
+          let hasTLA = false;
+          path.traverse({
+            AwaitExpression(path) {
+              hasTLA = true;
+              path.stop();
+            },
+            Function(path) {
+              path.skip();
+            },
+            noScope: true,
+          });
+
           path.node.body = [
             buildTemplate({
               SYSTEM_REGISTER: t.memberExpression(
@@ -610,8 +620,14 @@ export default declare((api, options) => {
               BEFORE_BODY: beforeBody,
               MODULE_NAME: moduleName,
               SETTERS: t.arrayExpression(setters),
+              EXECUTE: t.functionExpression(
+                null,
+                [],
+                t.blockStatement(path.node.body),
+                false,
+                hasTLA,
+              ),
               SOURCES: t.arrayExpression(sources),
-              BODY: path.node.body,
               EXPORT_IDENTIFIER: t.identifier(exportIdent),
               CONTEXT_IDENTIFIER: t.identifier(contextIdent),
             }),
