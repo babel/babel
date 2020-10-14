@@ -94,8 +94,6 @@ const TSErrors = Object.freeze({
     "Private elements cannot have the 'abstract' modifier.",
   PrivateElementHasAccessibility:
     "Private elements cannot have an accessibility modifier ('%0')",
-  TemplateTypeHasSubstitution:
-    "Template literal types cannot have any substitution",
   TypeAnnotationAfterAssign:
     "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`",
   UnexpectedParameterModifier:
@@ -774,15 +772,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseTemplateLiteralType(): N.TsType {
       const node: N.TsLiteralType = this.startNode();
-      const templateNode = this.parseTemplate(false);
-      if (templateNode.expressions.length > 0) {
-        this.raise(
-          templateNode.expressions[0].start,
-          TSErrors.TemplateTypeHasSubstitution,
-        );
-      }
-      node.literal = templateNode;
+      node.literal = this.parseTemplate(false);
       return this.finishNode(node, "TSLiteralType");
+    }
+
+    parseTemplateSubstitution(): N.TsType {
+      if (this.state.inType) return this.tsParseType();
+      return super.parseTemplateSubstitution();
     }
 
     tsParseThisTypeOrThisTypePredicate(): N.TsThisType | N.TsTypePredicate {
