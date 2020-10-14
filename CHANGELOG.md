@@ -50,7 +50,6 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 #### :bug: Bug Fix
 * `babel-parser`
-  * [#11992](https://github.com/babel/babel/pull/11992) Fix: check if param is assignable when parsing arrow return type annotation ([@JLHwung](https://github.com/JLHwung))
   * [#12167](https://github.com/babel/babel/pull/12167) [ts] Add `asserts: false` to `TSTypePredicate` node ([@sosukesuzuki](https://github.com/sosukesuzuki))
   * [#12161](https://github.com/babel/babel/pull/12161) Move check for TSTypeCastExpression to catch another case ([@existentialism](https://github.com/existentialism))
   * [#12120](https://github.com/babel/babel/pull/12120) Throw a recoverable error for missing initializer in const declaration ([@sosukesuzuki](https://github.com/sosukesuzuki))
