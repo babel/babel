@@ -1,13 +1,13 @@
 // @flow
 import corejs3Polyfills from "core-js-compat/data";
-import findSuggestion from "levenary";
-import invariant from "invariant";
 import { coerce, SemVer } from "semver";
 import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
 import { plugins as pluginsList } from "./plugins-compat-data";
 import moduleTransformations from "./module-transformations";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
+import { OptionValidator } from "@babel/helper-validator-option";
 import { defaultWebIncludes } from "./polyfills/corejs2/get-platform-specific-default";
+import { name as packageName } from "../package.json";
 
 import type {
   BuiltInsOption,
@@ -18,18 +18,7 @@ import type {
   PluginListOption,
 } from "./types";
 
-const validateTopLevelOptions = (options: Options) => {
-  const validOptions = Object.keys(TopLevelOptions);
-
-  for (const option in options) {
-    if (!TopLevelOptions[option]) {
-      throw new Error(
-        `Invalid Option: ${option} is not a valid top-level option.
-        Maybe you meant to use '${findSuggestion(option, validOptions)}'?`,
-      );
-    }
-  }
-};
+const v = new OptionValidator(packageName);
 
 const allPluginsList = Object.keys(pluginsList);
 
@@ -89,9 +78,9 @@ const expandIncludesAndExcludes = (
     (p, i) => selectedPlugins[i].length === 0,
   );
 
-  invariant(
+  v.invariant(
     invalidRegExpList.length === 0,
-    `Invalid Option: The plugins/built-ins '${invalidRegExpList.join(
+    `The plugins/built-ins '${invalidRegExpList.join(
       ", ",
     )}' passed to the '${type}' option are not
     valid. Please check data/[plugin-features|built-in-features].js in babel-preset-env`,
@@ -109,9 +98,9 @@ export const checkDuplicateIncludeExcludes = (
 ) => {
   const duplicates = include.filter(opt => exclude.indexOf(opt) >= 0);
 
-  invariant(
+  v.invariant(
     duplicates.length === 0,
-    `Invalid Option: The plugins/built-ins '${duplicates.join(
+    `The plugins/built-ins '${duplicates.join(
       ", ",
     )}' were found in both the "include" and
     "exclude" options.`,
@@ -126,61 +115,12 @@ const normalizeTargets = targets => {
   return { ...targets };
 };
 
-export const validateConfigPathOption = (
-  configPath: string = process.cwd(),
-) => {
-  invariant(
-    typeof configPath === "string",
-    `Invalid Option: The configPath option '${configPath}' is invalid, only strings are allowed.`,
-  );
-  return configPath;
-};
-
-export const validateBoolOption = (
-  name: string,
-  value?: boolean,
-  defaultValue: boolean,
-) => {
-  if (typeof value === "undefined") {
-    value = defaultValue;
-  }
-
-  if (typeof value !== "boolean") {
-    throw new Error(`Preset env: '${name}' option must be a boolean.`);
-  }
-
-  return value;
-};
-
-export const validateStringOption = (
-  name: string,
-  value?: string,
-  defaultValue?: string,
-) => {
-  if (typeof value === "undefined") {
-    value = defaultValue;
-  } else if (typeof value !== "string") {
-    throw new Error(`Preset env: '${name}' option must be a string.`);
-  }
-
-  return value;
-};
-
-export const validateIgnoreBrowserslistConfig = (
-  ignoreBrowserslistConfig: boolean,
-) =>
-  validateBoolOption(
-    TopLevelOptions.ignoreBrowserslistConfig,
-    ignoreBrowserslistConfig,
-    false,
-  );
-
 export const validateModulesOption = (
   modulesOpt: ModuleOption = ModulesOption.auto,
 ) => {
-  invariant(
+  v.invariant(
     ModulesOption[modulesOpt.toString()] || modulesOpt === ModulesOption.false,
-    `Invalid Option: The 'modules' option must be one of \n` +
+    `The 'modules' option must be one of \n` +
       ` - 'false' to indicate no module processing\n` +
       ` - a specific module type: 'commonjs', 'amd', 'umd', 'systemjs'` +
       ` - 'auto' (default) which will automatically select 'false' if the current\n` +
@@ -193,10 +133,10 @@ export const validateModulesOption = (
 export const validateUseBuiltInsOption = (
   builtInsOpt: BuiltInsOption = false,
 ) => {
-  invariant(
+  v.invariant(
     UseBuiltInsOption[builtInsOpt.toString()] ||
       builtInsOpt === UseBuiltInsOption.false,
-    `Invalid Option: The 'useBuiltIns' option must be either
+    `The 'useBuiltIns' option must be either
     'false' (default) to indicate no polyfill,
     '"entry"' to indicate replacing the entry polyfill, or
     '"usage"' to import only used polyfills per file`,
@@ -258,7 +198,7 @@ export function normalizeCoreJSOption(
 }
 
 export default function normalizeOptions(opts: Options) {
-  validateTopLevelOptions(opts);
+  v.validateTopLevelOptions(opts, TopLevelOptions);
 
   const useBuiltIns = validateUseBuiltInsOption(opts.useBuiltIns);
 
@@ -278,38 +218,42 @@ export default function normalizeOptions(opts: Options) {
 
   checkDuplicateIncludeExcludes(include, exclude);
 
-  const shippedProposals = validateBoolOption(
-    TopLevelOptions.shippedProposals,
-    opts.shippedProposals,
-    false,
-  );
-
   return {
-    bugfixes: validateBoolOption(
+    bugfixes: v.validateBooleanOption(
       TopLevelOptions.bugfixes,
       opts.bugfixes,
       false,
     ),
-    configPath: validateConfigPathOption(opts.configPath),
+    configPath: v.validateStringOption(
+      TopLevelOptions.configPath,
+      opts.configPath,
+      process.cwd(),
+    ),
     corejs,
-    debug: validateBoolOption(TopLevelOptions.debug, opts.debug, false),
+    debug: v.validateBooleanOption(TopLevelOptions.debug, opts.debug, false),
     include,
     exclude,
-    forceAllTransforms: validateBoolOption(
+    forceAllTransforms: v.validateBooleanOption(
       TopLevelOptions.forceAllTransforms,
       opts.forceAllTransforms,
       false,
     ),
-    ignoreBrowserslistConfig: validateIgnoreBrowserslistConfig(
+    ignoreBrowserslistConfig: v.validateBooleanOption(
+      TopLevelOptions.ignoreBrowserslistConfig,
       opts.ignoreBrowserslistConfig,
+      false,
     ),
-    loose: validateBoolOption(TopLevelOptions.loose, opts.loose, false),
+    loose: v.validateBooleanOption(TopLevelOptions.loose, opts.loose, false),
     modules: validateModulesOption(opts.modules),
-    shippedProposals,
-    spec: validateBoolOption(TopLevelOptions.spec, opts.spec, false),
+    shippedProposals: v.validateBooleanOption(
+      TopLevelOptions.shippedProposals,
+      opts.shippedProposals,
+      false,
+    ),
+    spec: v.validateBooleanOption(TopLevelOptions.spec, opts.spec, false),
     targets: normalizeTargets(opts.targets),
     useBuiltIns: useBuiltIns,
-    browserslistEnv: validateStringOption(
+    browserslistEnv: v.validateStringOption(
       TopLevelOptions.browserslistEnv,
       opts.browserslistEnv,
     ),

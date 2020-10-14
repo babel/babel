@@ -21,14 +21,14 @@
   },
   "bugs": "https://github.com/babel/babel/issues",
   "dependencies": {
-    "@babel/helper-create-regexp-features-plugin": "^7.10.4"
+    "@babel/helper-create-regexp-features-plugin": "workspace:^7.10.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.4",
-    "@babel/helper-plugin-test-runner": "^7.10.4",
+    "@babel/core": "workspace:^7.10.4",
+    "@babel/helper-plugin-test-runner": "workspace:^7.10.4",
     "core-js": "^3.2.1",
     "core-js-pure": "^3.2.1"
   }

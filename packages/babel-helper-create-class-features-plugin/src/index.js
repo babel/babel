@@ -120,6 +120,18 @@ export function createClassFeaturePlugin({
           }
 
           if (!isDecorated) isDecorated = hasOwnDecorators(path.node);
+
+          if (path.isStaticBlock?.()) {
+            throw path.buildCodeFrameError(`Incorrect plugin order, \`@babel/plugin-proposal-class-static-block\` should be placed before class features plugins
+{
+  "plugins": [
+    "@babel/plugin-proposal-class-static-block",
+    "@babel/plugin-proposal-private-property-in-object",
+    "@babel/plugin-proposal-private-methods",
+    "@babel/plugin-proposal-class-properties",
+  ]
+}`);
+          }
         }
 
         if (!props.length && !isDecorated) return;
@@ -188,7 +200,12 @@ export function createClassFeaturePlugin({
       },
 
       PrivateName(path) {
-        if (this.file.get(versionKey) !== version) return;
+        if (
+          this.file.get(versionKey) !== version ||
+          path.parentPath.isPrivate({ key: path.node })
+        ) {
+          return;
+        }
 
         throw path.buildCodeFrameError(`Unknown PrivateName "${path}"`);
       },

@@ -5,7 +5,11 @@ import gensync, { type Handler } from "gensync";
 import Plugin from "./plugin";
 import { mergeOptions } from "./util";
 import { createItemFromDescriptor } from "./item";
-import { buildRootChain, type ConfigContext } from "./config-chain";
+import {
+  buildRootChain,
+  type ConfigContext,
+  type FileHandling,
+} from "./config-chain";
 import { getEnv } from "./helpers/environment";
 import {
   validate,
@@ -59,9 +63,11 @@ function* resolveRootMode(
 type PrivPartialConfig = {
   options: ValidatedOptions,
   context: ConfigContext,
+  fileHandling: FileHandling,
   ignore: IgnoreFile | void,
   babelrc: ConfigFile | void,
   config: ConfigFile | void,
+  files: Set<string>,
 };
 
 export default function* loadPrivatePartialConfig(
@@ -137,20 +143,30 @@ export default function* loadPrivatePartialConfig(
   return {
     options,
     context,
+    fileHandling: configChain.fileHandling,
     ignore: configChain.ignore,
     babelrc: configChain.babelrc,
     config: configChain.config,
+    files: configChain.files,
   };
 }
 
+type LoadPartialConfigOpts = {
+  showIgnoredFiles?: boolean,
+  ...
+};
+
 export const loadPartialConfig = gensync<[any], PartialConfig | null>(
-  function* (inputOpts: mixed): Handler<PartialConfig | null> {
-    const result: ?PrivPartialConfig = yield* loadPrivatePartialConfig(
-      inputOpts,
-    );
+  function* (inputOpts: LoadPartialConfigOpts): Handler<PartialConfig | null> {
+    const { showIgnoredFiles, ...opts } = inputOpts;
+    const result: ?PrivPartialConfig = yield* loadPrivatePartialConfig(opts);
     if (!result) return null;
 
-    const { options, babelrc, ignore, config } = result;
+    const { options, babelrc, ignore, config, fileHandling, files } = result;
+
+    if (fileHandling === "ignored" && !showIgnoredFiles) {
+      return null;
+    }
 
     (options.plugins || []).forEach(item => {
       if (item.value instanceof Plugin) {
@@ -166,6 +182,8 @@ export const loadPartialConfig = gensync<[any], PartialConfig | null>(
       babelrc ? babelrc.filepath : undefined,
       ignore ? ignore.filepath : undefined,
       config ? config.filepath : undefined,
+      fileHandling,
+      files,
     );
   },
 );
@@ -181,17 +199,23 @@ class PartialConfig {
   babelrc: string | void;
   babelignore: string | void;
   config: string | void;
+  fileHandling: FileHandling;
+  files: Set<string>;
 
   constructor(
     options: ValidatedOptions,
     babelrc: string | void,
     ignore: string | void,
     config: string | void,
+    fileHandling: FileHandling,
+    files: Set<string>,
   ) {
     this.options = options;
     this.babelignore = ignore;
     this.babelrc = babelrc;
     this.config = config;
+    this.fileHandling = fileHandling;
+    this.files = files;
 
     // Freeze since this is a public API and it should be extremely obvious that
     // reassigning properties on here does nothing.

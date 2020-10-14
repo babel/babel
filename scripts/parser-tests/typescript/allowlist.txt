@@ -50,6 +50,7 @@ augmentedTypesVar.ts
 bigintIndex.ts
 binderBinaryExpressionStress.ts
 binderBinaryExpressionStressJs.ts
+bundledDtsLateExportRenaming.ts
 cacheResolutions.ts
 cachedModuleResolution1.ts
 cachedModuleResolution2.ts
@@ -68,6 +69,7 @@ classExtendsAcrossFiles.ts
 classExtendsMultipleBaseClasses.ts
 classIndexer5.ts
 classOverloadForFunction.ts
+classWithEmptyTypeParameter.ts
 collisionExportsRequireAndClass.ts
 commonSourceDir5.ts
 commonSourceDir6.ts
@@ -79,6 +81,7 @@ constDeclarations-validContexts.ts
 constEnumNoEmitReexport.ts
 constEnumNoPreserveDeclarationReexport.ts
 constEnumPreserveEmitReexport.ts
+controlFlowPrivateClassField.ts
 convertKeywordsYes.ts
 declarationEmitAmdModuleNameDirective.ts
 declarationEmitComputedNameCausesImportToBePainted.ts
@@ -93,6 +96,7 @@ declarationEmitExpandoPropertyPrivateName.ts
 declarationEmitExportAssignedNamespaceNoTripleSlashTypesReference.ts
 declarationEmitExportAssignment.ts
 declarationEmitExportDeclaration.ts
+declarationEmitExpressionInExtends6.ts
 declarationEmitForModuleImportingModuleAugmentationRetainsImport.ts
 declarationEmitForTypesWhichNeedImportTypes.ts
 declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts
@@ -144,6 +148,9 @@ emitSuperCallBeforeEmitParameterPropertyDeclaration1.ts
 emitSuperCallBeforeEmitParameterPropertyDeclaration1ES6.ts
 emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1.ts
 emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.ts
+emptyGenericParamList.ts
+emptyTypeArgumentList.ts
+emptyTypeArgumentListWithNew.ts
 enumGenericTypeClash.ts
 es3-oldStyleOctalLiteralTypes.ts
 es3defaultAliasIsQuoted.ts
@@ -180,6 +187,7 @@ esModuleInterop.ts
 esModuleInteropImportTSLibHasImport.ts
 esModuleInteropNamedDefaultImports.ts
 esModuleInteropTslibHelpers.ts
+expandoFunctionContextualTypesNoValue.ts
 exportAssignClassAndModule.ts
 exportAssignmentImportMergeNoCrash.ts
 exportAssignmentMembersVisibleInAugmentation.ts
@@ -218,6 +226,7 @@ gettersAndSettersErrors.ts
 giant.ts
 globalThisDeclarationEmit.ts
 globalThisDeclarationEmit2.ts
+hugeDeclarationOutputGetsTruncatedWithError.ts
 implementClausePrecedingExtends.ts
 implementsClauseAlreadySeen.ts
 importAndVariableDeclarationConflict1.ts
@@ -229,6 +238,7 @@ importDeclWithClassModifiers.ts
 importDeclWithDeclareModifierInAmbientContext.ts
 importHelpers.ts
 importHelpersAmd.ts
+importHelpersES6.ts
 importHelpersInAmbientContext.ts
 importHelpersInIsolatedModules.ts
 importHelpersInTsx.tsx
@@ -352,6 +362,7 @@ outModuleTripleSlashRefs.ts
 parameterInitializerBeforeDestructuringEmit.ts
 parameterPropertyOutsideConstructor.ts
 parseGenericArrowRatherThanLeftShift.ts
+parserConstructorDeclaration12.ts
 pathMappingBasedModuleResolution3_classic.ts
 pathMappingBasedModuleResolution3_node.ts
 preserveUnusedImports.ts
@@ -405,6 +416,7 @@ typeReferenceDirectives5.ts
 typeReferenceDirectives7.ts
 typeReferenceDirectives8.ts
 typeReferenceDirectives9.ts
+uniqueSymbolPropertyDeclarationEmit.ts
 unusedImports1.ts
 unusedImports11.ts
 unusedImports12.ts

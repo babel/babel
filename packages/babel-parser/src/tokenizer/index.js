@@ -114,6 +114,7 @@ export default class Tokenizer extends ParserErrors {
   // Forward-declarations
   // parser/util.js
   /*::
+  +hasPrecedingLineBreak: () => boolean;
   +unexpected: (pos?: ?number, messageOrType?: string | TokenType) => empty;
   +expectPlugin: (name: string, pos?: ?number) => true;
   */
@@ -420,14 +421,12 @@ export default class Tokenizer extends ParserErrors {
       // misleading
       this.expectPlugin("recordAndTuple");
       if (this.getPluginOption("recordAndTuple", "syntaxType") !== "hash") {
-        /* eslint-disable @babel/development-internal/dry-error-messages */
         throw this.raise(
           this.state.pos,
           next === charCodes.leftCurlyBrace
             ? Errors.RecordExpressionHashIncorrectStartSyntaxType
             : Errors.TupleExpressionHashIncorrectStartSyntaxType,
         );
-        /* eslint-enable @babel/development-internal/dry-error-messages */
       }
 
       if (next === charCodes.leftCurlyBrace) {
@@ -605,10 +604,7 @@ export default class Tokenizer extends ParserErrors {
         next === charCodes.dash &&
         !this.inModule &&
         this.input.charCodeAt(this.state.pos + 2) === charCodes.greaterThan &&
-        (this.state.lastTokEnd === 0 ||
-          lineBreak.test(
-            this.input.slice(this.state.lastTokEnd, this.state.pos),
-          ))
+        (this.state.lastTokEnd === 0 || this.hasPrecedingLineBreak())
       ) {
         // A `-->` line comment
         this.skipLineComment(3);
@@ -693,7 +689,7 @@ export default class Tokenizer extends ParserErrors {
     // '?'
     const next = this.input.charCodeAt(this.state.pos + 1);
     const next2 = this.input.charCodeAt(this.state.pos + 2);
-    if (next === charCodes.questionMark && !this.state.inType) {
+    if (next === charCodes.questionMark) {
       if (next2 === charCodes.equalsTo) {
         // '??='
         this.finishOp(tt.assign, 3);
@@ -1153,7 +1149,9 @@ export default class Tokenizer extends ParserErrors {
       if (next === charCodes.plusSign || next === charCodes.dash) {
         ++this.state.pos;
       }
-      if (this.readInt(10) === null) this.raise(start, Errors.InvalidNumber);
+      if (this.readInt(10) === null) {
+        this.raise(start, Errors.InvalidOrMissingExponent);
+      }
       isFloat = true;
       hasExponent = true;
       next = this.input.charCodeAt(this.state.pos);
@@ -1527,9 +1525,7 @@ export default class Tokenizer extends ParserErrors {
       prevType === tt._return ||
       (prevType === tt.name && this.state.exprAllowed)
     ) {
-      return lineBreak.test(
-        this.input.slice(this.state.lastTokEnd, this.state.start),
-      );
+      return this.hasPrecedingLineBreak();
     }
 
     if (

@@ -100,6 +100,7 @@ export type ParserPlugin =
     'classPrivateMethods' |
     'classPrivateProperties' |
     'classProperties' |
+    'classStaticBlock' |
     'decimal' |
     'decorators' |
     'decorators-legacy' |
@@ -115,7 +116,8 @@ export type ParserPlugin =
     'importMeta' |
     'jsx' |
     'logicalAssignment' |
-    'moduleAttributes' |
+    'importAssertions' |
+    'moduleStringNames' |
     'nullishCoalescingOperator' |
     'numericSeparator' |
     'objectRestSpread' |

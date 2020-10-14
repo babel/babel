@@ -1,7 +1,6 @@
 import Renamer from "./lib/renamer";
 import type NodePath from "../path";
 import traverse from "../index";
-import defaults from "lodash.defaults";
 import Binding from "./binding";
 import globals from "globals";
 import * as t from "@babel/types";
@@ -368,7 +367,7 @@ export default class Scope {
       .replace(/[0-9]+$/g, "");
 
     let uid;
-    let i = 0;
+    let i = 1;
     do {
       uid = this._generateUid(name, i);
       i++;
@@ -956,7 +955,11 @@ export default class Scope {
 
     let scope = this;
     do {
-      defaults(ids, scope.bindings);
+      for (const key of Object.keys(scope.bindings)) {
+        if (key in ids === false) {
+          ids[key] = scope.bindings[key];
+        }
+      }
       scope = scope.parent;
     } while (scope);
 
@@ -996,15 +999,14 @@ export default class Scope {
       const binding = scope.getOwnBinding(name);
       if (binding) {
         // Check if a pattern is a part of parameter expressions.
-        // 9.2.10.28: The closure created by this expression should not have visibility of
+        // Note: for performance reason we skip checking previousPath.parentPath.isFunction()
+        // because `scope.path` is validated as scope in packages/babel-types/src/validators/isScope.js
+        // That is, if a scope path is pattern, its parent must be Function/CatchClause
+
+        // Spec 9.2.10.28: The closure created by this expression should not have visibility of
         // declarations in the function body. If the binding is not a `param`-kind,
         // then it must be defined inside the function body, thus it should be skipped
-        if (
-          previousPath &&
-          previousPath.isPattern() &&
-          previousPath.parentPath.isFunction() &&
-          binding.kind !== "param"
-        ) {
+        if (previousPath?.isPattern() && binding.kind !== "param") {
           // do nothing
         } else {
           return binding;

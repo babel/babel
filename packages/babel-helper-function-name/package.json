@@ -13,8 +13,8 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-get-function-arity": "^7.10.4",
-    "@babel/template": "^7.10.4",
-    "@babel/types": "^7.10.4"
+    "@babel/helper-get-function-arity": "workspace:^7.10.4",
+    "@babel/template": "workspace:^7.10.4",
+    "@babel/types": "workspace:^7.10.4"
   }
 }

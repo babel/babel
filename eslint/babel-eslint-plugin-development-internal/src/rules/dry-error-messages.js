@@ -41,6 +41,25 @@ function findIdNode(node) {
   return null;
 }
 
+function findIdNodes(node) {
+  if (node.type === "ConditionalExpression") {
+    const consequent = findIdNode(node.consequent);
+    const alternate = findIdNode(node.alternate);
+
+    if (consequent && alternate) {
+      return [consequent, alternate];
+    }
+  }
+
+  const idNode = findIdNode(node);
+
+  if (idNode) {
+    return [idNode];
+  }
+
+  return null;
+}
+
 function findReference(node, scope) {
   let currentScope = scope;
 
@@ -128,11 +147,13 @@ export default {
         node,
       ) {
         const [, errorMsgNode] = node.arguments;
-        const nodeToCheck = findIdNode(errorMsgNode);
+        const nodesToCheck = findIdNodes(errorMsgNode);
 
         if (
-          nodeToCheck &&
-          referencesImportedBinding(nodeToCheck, getScope(), importedBindings)
+          Array.isArray(nodesToCheck) &&
+          nodesToCheck.every(node =>
+            referencesImportedBinding(node, getScope(), importedBindings),
+          )
         ) {
           return;
         }

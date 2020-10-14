@@ -116,30 +116,54 @@ export default class Buffer {
     filename: ?string,
     force?: boolean,
   ): void {
-    // If there the line is ending, adding a new mapping marker is redundant
-    if (this._map && str[0] !== "\n") {
-      this._map.mark(
-        this._position.line,
-        this._position.column,
-        line,
-        column,
-        identifierName,
-        filename,
-        force,
-      );
-    }
-
     this._buf.push(str);
     this._last = str[str.length - 1];
 
-    for (let i = 0; i < str.length; i++) {
-      if (str[i] === "\n") {
-        this._position.line++;
-        this._position.column = 0;
-      } else {
-        this._position.column++;
-      }
+    // Search for newline chars. We search only for `\n`, since both `\r` and
+    // `\r\n` are normalized to `\n` during parse. We exclude `\u2028` and
+    // `\u2029` for performance reasons, they're so uncommon that it's probably
+    // ok. It's also unclear how other sourcemap utilities handle them...
+    let i = str.indexOf("\n");
+    let last = 0;
+
+    // If the string starts with a newline char, then adding a mark is redundant.
+    // This catches both "no newlines" and "newline after several chars".
+    if (i !== 0) {
+      this._mark(line, column, identifierName, filename, force);
     }
+
+    // Now, find each reamining newline char in the string.
+    while (i !== -1) {
+      this._position.line++;
+      this._position.column = 0;
+      last = i + 1;
+
+      // We mark the start of each line, which happens directly after this newline char
+      // unless this is the last char.
+      if (last < str.length) {
+        this._mark(++line, 0, identifierName, filename, force);
+      }
+      i = str.indexOf("\n", last);
+    }
+    this._position.column += str.length - last;
+  }
+
+  _mark(
+    line: number,
+    column: number,
+    identifierName: ?string,
+    filename: ?string,
+    force?: boolean,
+  ): void {
+    this._map?.mark(
+      this._position.line,
+      this._position.column,
+      line,
+      column,
+      identifierName,
+      filename,
+      force,
+    );
   }
 
   removeTrailingNewline(): void {

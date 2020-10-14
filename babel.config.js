@@ -1,5 +1,11 @@
 "use strict";
 
+const path = require("path");
+
+function normalize(src) {
+  return src.replace(/\//, path.sep);
+}
+
 module.exports = function (api) {
   const env = api.env();
 
@@ -11,7 +17,8 @@ module.exports = function (api) {
   };
   const envOpts = Object.assign({}, envOptsNoTargets);
 
-  const compileDynamicImport = env === "test" || env === "development";
+  const compileDynamicImport =
+    env === "test" || env === "development" || env === "test-legacy";
 
   let convertESM = true;
   let ignoreLib = true;
@@ -49,6 +56,7 @@ module.exports = function (api) {
       );
       if (env === "rollup") envOpts.targets = { node: nodeVersion };
       break;
+    case "test-legacy": // In test-legacy environment, we build babel on latest node but test on minimum supported legacy versions
     case "production":
       // Config during builds before publish.
       envOpts.targets = {
@@ -91,14 +99,17 @@ module.exports = function (api) {
       "packages/*/test/fixtures",
       ignoreLib ? "packages/*/lib" : null,
       "packages/babel-standalone/babel.js",
-    ].filter(Boolean),
+    ]
+      .filter(Boolean)
+      .map(normalize),
     presets: [["@babel/env", envOpts]],
     plugins: [
       // TODO: Use @babel/preset-flow when
       // https://github.com/babel/babel/issues/7233 is fixed
-      "@babel/plugin-transform-flow-strip-types",
-      ["@babel/proposal-class-properties", { loose: true }],
-      "@babel/proposal-export-namespace-from",
+      [
+        "@babel/plugin-transform-flow-strip-types",
+        { allowDeclareFields: true },
+      ],
       [
         "@babel/proposal-object-rest-spread",
         { useBuiltIns: true, loose: true },
@@ -113,14 +124,14 @@ module.exports = function (api) {
         test: [
           "packages/babel-parser",
           "packages/babel-helper-validator-identifier",
-        ],
+        ].map(normalize),
         plugins: [
           "babel-plugin-transform-charcodes",
           ["@babel/transform-for-of", { assumeArray: true }],
         ],
       },
       {
-        test: ["./packages/babel-cli", "./packages/babel-core"],
+        test: ["./packages/babel-cli", "./packages/babel-core"].map(normalize),
         plugins: [
           // Explicitly use the lazy version of CommonJS modules.
           convertESM
@@ -129,11 +140,11 @@ module.exports = function (api) {
         ].filter(Boolean),
       },
       {
-        test: "./packages/babel-polyfill",
+        test: normalize("./packages/babel-polyfill"),
         presets: [["@babel/env", envOptsNoTargets]],
       },
       {
-        test: unambiguousSources,
+        test: unambiguousSources.map(normalize),
         sourceType: "unambiguous",
       },
       includeRegeneratorRuntime && {
@@ -163,9 +174,9 @@ module.exports = function (api) {
 // the original absolute path.
 // NOTE: This plugin must run before @babel/plugin-transform-modules-commonjs,
 // and assumes that the target is the current node version.
-function dynamicImportUrlToPath({ template }) {
-  const currentNodeSupportsURL = !!require("url").pathToFileURL;
-
+function dynamicImportUrlToPath({ template, env }) {
+  const currentNodeSupportsURL =
+    !!require("url").pathToFileURL && env() !== "test-legacy"; // test-legacy is run on legacy node versions without pathToFileURL support
   if (currentNodeSupportsURL) {
     return {
       visitor: {

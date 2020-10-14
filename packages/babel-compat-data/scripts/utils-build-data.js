@@ -4,30 +4,12 @@ const fs = require("fs");
 const flatMap = require("lodash/flatMap");
 const mapValues = require("lodash/mapValues");
 const findLastIndex = require("lodash/findLastIndex");
-const electronToChromiumVersions = require("electron-to-chromium").versions;
+const { addElectronSupportFromChromium } = require("./chromium-to-electron");
 
 const envs = require("../build/compat-table/environments");
 const parseEnvsVersions = require("../build/compat-table/build-utils/parse-envs-versions");
 const interpolateAllResults = require("../build/compat-table/build-utils/interpolate-all-results");
 const compareVersions = require("../build/compat-table/build-utils/compare-versions");
-
-// Add Electron to the list of environments
-Object.keys(electronToChromiumVersions).forEach(electron => {
-  const chrome = electronToChromiumVersions[electron];
-
-  const electronId = `electron${electron.replace(".", "_")}`;
-  let chromeId = `chrome${chrome}`;
-
-  // This is missing
-  if (chromeId === "chrome82") chromeId = "chrome81";
-  if (!envs[chromeId]) {
-    throw new Error(
-      `Electron ${electron} inherits from Chrome ${chrome}, which is not defined.`
-    );
-  }
-
-  envs[electronId] = { equals: chromeId };
-});
 
 const envsVersions = parseEnvsVersions(envs);
 
@@ -51,7 +33,6 @@ exports.environments = [
   "ios",
   "phantom",
   "samsung",
-  "electron",
 ];
 
 const compatibilityTests = flatMap(compatSources, data =>
@@ -117,6 +98,7 @@ exports.generateData = (environments, features) => {
       const version = exports.getLowestImplementedVersion(options, env);
       if (version) plugin[env] = version;
     });
+    addElectronSupportFromChromium(plugin);
 
     return plugin;
   });

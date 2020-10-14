@@ -1,9 +1,9 @@
-var _reactJsxDevRuntime = require("react/jsx-dev-runtime");
+var _reactJsxDevRuntimeJs = require("react/jsx-dev-runtime.js");
 
 var _jsxFileName = "<CWD>/packages/babel-preset-react/test/fixtures/preset-options/development-runtime-automatic/input.js";
 
 /*#__PURE__*/
-_reactJsxDevRuntime.jsxDEV(Foo, {
+_reactJsxDevRuntimeJs.jsxDEV(Foo, {
   bar: "baz"
 }, void 0, false, {
   fileName: _jsxFileName,

@@ -1,0 +1,9 @@
+{
+  "mappings": "AAAA;AACA,MADA;AAGA;AACA;AACA,MAFA",
+  "names": [],
+  "sources": ["fixtures/sourcemaps/string-literal-newline/input.js"],
+  "sourcesContent": [
+    "\"before\\\nafter\";\n\n\"before\\\n\\\nafter\";"
+  ],
+  "version": 3
+}

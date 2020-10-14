@@ -34,7 +34,6 @@
                 },
                 "computed": false,
                 "kind": "get",
-                "variance": null,
                 "id": null,
                 "generator": false,
                 "async": false,

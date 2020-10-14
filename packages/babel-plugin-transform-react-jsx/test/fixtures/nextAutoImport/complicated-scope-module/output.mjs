@@ -1,4 +1,4 @@
-import { jsx as _jsx2 } from "react/jsx-runtime";
+import { jsx as _jsx2 } from "react/jsx-runtime.js";
 
 const Bar = () => {
   const Foo = () => {

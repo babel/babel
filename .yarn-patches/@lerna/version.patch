@@ -1,0 +1,17 @@
+diff --git a/command.js b/command.js
+index 4109ff1db..86349e057 100644
+--- a/command.js
++++ b/command.js
+@@ -12,6 +12,12 @@ exports.describe = "Bump version of packages changed since the last release.";
+ 
+ exports.builder = (yargs, composed) => {
+   const opts = {
++    // THIS IS ONLY USED BY BABEL
++    "exclude-dependents": {
++      describe: "Exclude all transitive dependents.",
++      type: "boolean"
++    },
++
+     "allow-branch": {
+       describe: "Specify which branches to allow versioning from.",
+       type: "array",

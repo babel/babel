@@ -1,13 +1,13 @@
 // @flow
-export const PARAM = 0b000, // Initial Parameter flags
-  PARAM_YIELD = 0b001, // track [Yield] production parameter
-  PARAM_AWAIT = 0b010, // track [Await] production parameter
-  PARAM_RETURN = 0b100; // track [Return] production parameter
+export const PARAM = 0b0000, // Initial Parameter flags
+  PARAM_YIELD = 0b0001, // track [Yield] production parameter
+  PARAM_AWAIT = 0b0010, // track [Await] production parameter
+  PARAM_RETURN = 0b0100, // track [Return] production parameter
+  PARAM_IN = 0b1000; // track [In] production parameter
 
 // ProductionParameterHandler is a stack fashioned production parameter tracker
 // https://tc39.es/ecma262/#sec-grammar-notation
-// The tracked parameters are defined above. Note that the [In] parameter is
-// tracked in `noIn` argument of `parseExpression`.
+// The tracked parameters are defined above.
 //
 // Whenever [+Await]/[+Yield] appears in the right-hand sides of a production,
 // we must enter a new tracking stack. For example when parsing
@@ -52,6 +52,10 @@ export default class ProductionParameterHandler {
 
   get hasReturn(): boolean {
     return (this.currentFlags() & PARAM_RETURN) > 0;
+  }
+
+  get hasIn(): boolean {
+    return (this.currentFlags() & PARAM_IN) > 0;
   }
 }
 

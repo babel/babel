@@ -34,13 +34,12 @@ export default class LValParser extends NodeUtils {
   // Forward-declaration: defined in expression.js
   /*::
   +parseIdentifier: (liberal?: boolean) => Identifier;
-  +parseMaybeAssign: (
-    noIn?: ?boolean,
+  +parseMaybeAssignAllowIn: (
     refExpressionErrors?: ?ExpressionErrors,
     afterLeftParse?: Function,
     refNeedsArrowPos?: ?Pos,
   ) => Expression;
-  +parseObj: <T: ObjectPattern | ObjectExpression>(
+  +parseObjectLike: <T: ObjectPattern | ObjectExpression>(
     close: TokenType,
     isPattern: boolean,
     isRecord?: ?boolean,
@@ -52,10 +51,59 @@ export default class LValParser extends NodeUtils {
   +parseDecorator: () => Decorator;
   */
 
+  /**
+   * Check if a node can be converted to a binding identifier or binding pattern.
+   * https://tc39.es/ecma262/#prod-BindingIdentifier
+   * https://tc39.es/ecma262/#prod-BindingPattern
+   * Note that although a mebmer expression can serve as a LHS in the init of for loop,
+   * i.e. `for (a.b of []);`, it is not a binding pattern
+   *
+   * @param {Node} node
+   * @returns {boolean}
+   * @memberof LValParser
+   */
+  isAssignable(node: Node): boolean {
+    switch (node.type) {
+      case "Identifier":
+      case "ObjectPattern":
+      case "ArrayPattern":
+      case "AssignmentPattern":
+        return true;
+
+      case "ObjectExpression": {
+        const last = node.properties.length - 1;
+        return node.properties.every((prop, i) => {
+          return (
+            prop.type !== "ObjectMethod" &&
+            (i === last || prop.type === "SpreadElement") &&
+            this.isAssignable(prop)
+          );
+        });
+      }
+
+      case "ObjectProperty":
+        return this.isAssignable(node.value);
+
+      case "SpreadElement":
+        return this.isAssignable(node.argument);
+
+      case "ArrayExpression":
+        return node.elements.every(element => this.isAssignable(element));
+
+      case "AssignmentExpression":
+        return node.operator === "=";
+
+      case "ParenthesizedExpression":
+        return this.isAssignable(node.expression);
+
+      default:
+        return false;
+    }
+  }
+
   // Convert existing expression atom to assignable pattern
   // if possible.
-  // NOTE: There is a corresponding "isAssignable" method in flow.js.
-  // When this one is updated, please check if also that one needs to be updated.
+  // When this one is updated, please check if `isAssignable` also needs to be updated.
 
   toAssignable(node: Node): Node {
     let parenthesized = undefined;
@@ -226,8 +274,7 @@ export default class LValParser extends NodeUtils {
   ): SpreadElement {
     const node = this.startNode();
     this.next();
-    node.argument = this.parseMaybeAssign(
-      false,
+    node.argument = this.parseMaybeAssignAllowIn(
       refExpressionErrors,
       undefined,
       refNeedsArrowPos,
@@ -235,15 +282,18 @@ export default class LValParser extends NodeUtils {
     return this.finishNode(node, "SpreadElement");
   }
 
+  // https://tc39.es/ecma262/#prod-BindingRestProperty
+  // https://tc39.es/ecma262/#prod-BindingRestElement
   parseRestBinding(): RestElement {
     const node = this.startNode();
-    this.next();
+    this.next(); // eat `...`
     node.argument = this.parseBindingAtom();
     return this.finishNode(node, "RestElement");
   }
 
   // Parses lvalue (assignable) atom.
   parseBindingAtom(): Pattern {
+    // https://tc39.es/ecma262/#prod-BindingPattern
     switch (this.state.type) {
       case tt.bracketL: {
         const node = this.startNode();
@@ -257,12 +307,14 @@ export default class LValParser extends NodeUtils {
       }
 
       case tt.braceL:
-        return this.parseObj(tt.braceR, true);
+        return this.parseObjectLike(tt.braceR, true);
     }
 
+    // https://tc39.es/ecma262/#prod-BindingIdentifier
     return this.parseIdentifier();
   }
 
+  // https://tc39.es/ecma262/#prod-BindingElementList
   parseBindingList(
     close: TokenType,
     closeCharCode: $Values<typeof charCodes>,
@@ -292,6 +344,7 @@ export default class LValParser extends NodeUtils {
         if (this.match(tt.at) && this.hasPlugin("decorators")) {
           this.raise(this.state.start, Errors.UnsupportedParameterDecorator);
         }
+        // invariant: hasPlugin("decorators-legacy")
         while (this.match(tt.at)) {
           decorators.push(this.parseDecorator());
         }
@@ -314,25 +367,27 @@ export default class LValParser extends NodeUtils {
     return elt;
   }
 
+  // Used by flow/typescript plugin to add type annotations to binding elements
   parseAssignableListItemTypes(param: Pattern): Pattern {
     return param;
   }
 
   // Parses assignment pattern around given atom if possible.
-
+  // https://tc39.es/ecma262/#prod-BindingElement
   parseMaybeDefault(
     startPos?: ?number,
     startLoc?: ?Position,
     left?: ?Pattern,
   ): Pattern {
-    startLoc = startLoc || this.state.startLoc;
-    startPos = startPos || this.state.start;
-    left = left || this.parseBindingAtom();
+    startLoc = startLoc ?? this.state.startLoc;
+    startPos = startPos ?? this.state.start;
+    // $FlowIgnore
+    left = left ?? this.parseBindingAtom();
     if (!this.eat(tt.eq)) return left;
 
     const node = this.startNodeAt(startPos, startLoc);
     node.left = left;
-    node.right = this.parseMaybeAssign();
+    node.right = this.parseMaybeAssignAllowIn();
     return this.finishNode(node, "AssignmentPattern");
   }
 
@@ -358,7 +413,6 @@ export default class LValParser extends NodeUtils {
             ? isStrictBindReservedWord(expr.name, this.inModule)
             : isStrictBindOnlyReservedWord(expr.name))
         ) {
-          /* eslint-disable @babel/development-internal/dry-error-messages */
           this.raise(
             expr.start,
             bindingType === BIND_NONE
@@ -366,7 +420,6 @@ export default class LValParser extends NodeUtils {
               : Errors.StrictEvalArgumentsBinding,
             expr.name,
           );
-          /* eslint-enable @babel/development-internal/dry-error-messages */
         }
 
         if (checkClashes) {
@@ -463,7 +516,6 @@ export default class LValParser extends NodeUtils {
         break;
 
       default: {
-        /* eslint-disable @babel/development-internal/dry-error-messages */
         this.raise(
           expr.start,
           bindingType === BIND_NONE
@@ -471,7 +523,6 @@ export default class LValParser extends NodeUtils {
             : Errors.InvalidLhsBinding,
           contextDescription,
         );
-        /* eslint-enable @babel/development-internal/dry-error-messages */
       }
     }
   }

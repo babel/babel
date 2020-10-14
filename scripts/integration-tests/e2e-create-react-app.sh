@@ -21,13 +21,28 @@ cd tmp/create-react-app || exit
 #                                   TEST                                       #
 #==============================================================================#
 
+# !!! WARNING !!!
+# create-react-app uses the useBuiltIns: true option of @babel/preset-react,
+# removed in Babel 8.0.0. And it does not specify runtime option. The test will break on
+# runtime: "automatic", default of Babel 8.
+# This change replaces useBuiltIns: true with runtime: "classic"
+sed -i 's/useBuiltIns: true/runtime: "classic"/' packages/babel-preset-react-app/create.js
+
+bump_deps="$PWD/../../utils/bump-babel-dependencies.js"
+node "$bump_deps"
+for d in ./packages/*/
+do
+  (cd "$d"; node "$bump_deps")
+done
+
+# Don't use Yarn 2
+export YARN_IGNORE_PATH=1
+
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
-yarn install
-node "$PWD"/../../utils/bump-babel-dependencies.js
-yarn lerna exec -- node "$PWD"/../../utils/bump-babel-dependencies.js
 yarn install
 
 # Test
 CI=true yarn test
 
+unset YARN_IGNORE_PATH
 cleanup
