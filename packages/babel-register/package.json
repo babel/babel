@@ -1,6 +1,6 @@
 {
   "name": "@babel/register",
-  "version": "7.11.5",
+  "version": "7.12.0",
   "description": "babel require hook",
   "license": "MIT",
   "publishConfig": {
@@ -27,7 +27,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^7.11.5",
+    "@babel/core": "workspace:^7.12.0",
     "@babel/plugin-transform-modules-commonjs": "workspace:^7.10.4",
     "browserify": "^16.5.2"
   }
