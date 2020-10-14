@@ -9,7 +9,6 @@
   ],
   "devDependencies": {
     "@babel/core": "workspace:^7.12.0",
-    "@babel/helper-plugin-utils": "workspace:^7.10.4",
     "@babel/plugin-external-helpers": "workspace:^7.10.4",
     "@babel/plugin-proposal-async-generator-functions": "workspace:^7.10.5",
     "@babel/plugin-proposal-class-properties": "workspace:^7.10.4",

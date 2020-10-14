@@ -13,7 +13,6 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-annotate-as-pure": "workspace:^7.10.4",
     "@babel/helper-plugin-utils": "workspace:^7.10.4"
   },
   "keywords": [

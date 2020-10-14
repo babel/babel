@@ -21,7 +21,6 @@
     "@babel/helper-function-name": "workspace:^7.10.4",
     "@babel/helper-member-expression-to-functions": "workspace:^7.12.0",
     "@babel/helper-optimise-call-expression": "workspace:^7.10.4",
-    "@babel/helper-plugin-utils": "workspace:^7.10.4",
     "@babel/helper-replace-supers": "workspace:^7.12.0",
     "@babel/helper-split-export-declaration": "workspace:^7.10.4"
   },

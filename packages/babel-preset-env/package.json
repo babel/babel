@@ -79,7 +79,6 @@
     "@babel/plugin-transform-unicode-regex": "workspace:^7.10.4",
     "@babel/preset-modules": "^0.1.3",
     "@babel/types": "workspace:^7.12.0",
-    "browserslist": "^4.12.0",
     "core-js-compat": "^3.6.2",
     "semver": "^5.5.0"
   },
@@ -87,9 +86,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/cli": "workspace:^7.12.0",
     "@babel/core": "workspace:^7.12.0",
-    "@babel/helper-fixtures": "workspace:^7.10.4",
     "@babel/helper-plugin-test-runner": "workspace:^7.10.4",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0"
   }

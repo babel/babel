@@ -16,9 +16,6 @@
     "core-js": "^2.6.5",
     "regenerator-runtime": "^0.13.4"
   },
-  "devDependencies": {
-    "@babel/helpers": "workspace:^7.10.4"
-  },
   "exports": {
     "./helpers/": "./helpers/",
     "./helpers/typeof": "./helpers/typeof.js",

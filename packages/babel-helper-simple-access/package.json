@@ -15,7 +15,6 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/template": "workspace:^7.10.4",
     "@babel/types": "workspace:^7.10.4"
   }
 }

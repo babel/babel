@@ -15,7 +15,6 @@
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^7.10.4",
     "@babel/helper-wrap-function": "workspace:^7.10.4",
-    "@babel/template": "workspace:^7.10.4",
     "@babel/types": "workspace:^7.10.4"
   },
   "devDependencies": {
