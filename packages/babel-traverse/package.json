@@ -22,8 +22,7 @@
     "@babel/parser": "workspace:^7.11.5",
     "@babel/types": "workspace:^7.11.5",
     "debug": "^4.1.0",
-    "globals": "^11.1.0",
-    "lodash.defaults": "^4.2.0"
+    "globals": "^11.1.0"
   },
   "devDependencies": {
     "@babel/helper-plugin-test-runner": "workspace:^7.10.4"
