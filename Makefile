@@ -219,14 +219,6 @@ prepublish:
 	IS_PUBLISH=true $(MAKE) test
 
 new-version:
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@echo "!!!!!!                                                   !!!!!!"
-	@echo "!!!!!!  Enable the check in proposal-class-static-block  !!!!!!"
-	@echo "!!!!!!                                                   !!!!!!"
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@exit 1
 	git pull --rebase
 	$(YARN) release-tool version $(FORCE_PUBLISH)
 
