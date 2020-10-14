@@ -1033,6 +1033,7 @@ export default class Tokenizer extends ParserErrors {
         ++this.state.pos;
         continue;
       }
+
       if (code >= charCodes.lowercaseA) {
         val = code - charCodes.lowercaseA + charCodes.lineFeed;
       } else if (code >= charCodes.uppercaseA) {
