@@ -2761,6 +2761,20 @@ export function isTSBigIntKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
+export function isTSIntrinsicKeyword(node: ?Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "TSIntrinsicKeyword") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTSNeverKeyword(node: ?Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -4616,6 +4630,7 @@ export function isTSType(node: ?Object, opts?: Object): boolean {
     "TSAnyKeyword" === nodeType ||
     "TSBooleanKeyword" === nodeType ||
     "TSBigIntKeyword" === nodeType ||
+    "TSIntrinsicKeyword" === nodeType ||
     "TSNeverKeyword" === nodeType ||
     "TSNullKeyword" === nodeType ||
     "TSNumberKeyword" === nodeType ||
@@ -4666,6 +4681,7 @@ export function isTSBaseType(node: ?Object, opts?: Object): boolean {
     "TSAnyKeyword" === nodeType ||
     "TSBooleanKeyword" === nodeType ||
     "TSBigIntKeyword" === nodeType ||
+    "TSIntrinsicKeyword" === nodeType ||
     "TSNeverKeyword" === nodeType ||
     "TSNullKeyword" === nodeType ||
     "TSNumberKeyword" === nodeType ||

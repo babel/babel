@@ -162,6 +162,9 @@ export function TSNullKeyword() {
 export function TSNeverKeyword() {
   this.word("never");
 }
+export function TSIntrinsicKeyword() {
+  this.word("intrinsic");
+}
 
 export function TSThisType() {
   this.word("this");

@@ -113,6 +113,7 @@ const TSErrors = Object.freeze({
 });
 
 // Doesn't handle "void" or "null" because those are keywords, not identifiers.
+// It also doesn't handle "intrinsic", since usually it's not a keyword.
 function keywordTypeFromName(
   value: string,
 ): N.TsKeywordTypeType | typeof undefined {
@@ -1242,7 +1243,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.checkLVal(node.id, BIND_TS_TYPE, undefined, "typescript type alias");
 
       node.typeParameters = this.tsTryParseTypeParameters();
-      node.typeAnnotation = this.tsExpectThenParseType(tt.eq);
+      node.typeAnnotation = this.tsInType(() => {
+        this.expect(tt.eq);
+
+        if (
+          this.isContextual("intrinsic") &&
+          this.lookahead().type !== tt.dot
+        ) {
+          const node: N.TsKeywordType = this.startNode();
+          this.next();
+          return this.finishNode(node, "TSIntrinsicKeyword");
+        }
+
+        return this.tsParseType();
+      });
+
       this.semicolon();
       return this.finishNode(node, "TSTypeAliasDeclaration");
     }
