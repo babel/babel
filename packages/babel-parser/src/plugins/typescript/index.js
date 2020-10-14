@@ -1984,9 +1984,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         ) {
           node.importKind = "type";
           this.next();
-        } else {
-          node.importKind = "value";
         }
+      }
+
+      if (!node.importKind) {
+        node.importKind = "value";
       }
 
       const importNode = super.parseImport(node);
