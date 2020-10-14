@@ -1564,6 +1564,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-syntax-import-assertions@workspace:^7.10.4, @babel/plugin-syntax-import-assertions@workspace:packages/babel-plugin-syntax-import-assertions":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-import-assertions@workspace:packages/babel-plugin-syntax-import-assertions"
+  dependencies:
+    "@babel/core": "workspace:^7.10.4"
+    "@babel/helper-plugin-utils": "workspace:^7.10.4"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-syntax-import-meta@npm:^7.10.4":
   version: 7.10.4
   resolution: "@babel/plugin-syntax-import-meta@npm:7.10.4"
@@ -1607,17 +1618,6 @@ __metadata:
   checksum: 5b82f717707d278e58d12649932bf3327923361f051cd4517a5b63d7ebfe39cb6cdfb37aa199b5a441db305301a3c8de01c946d25d1f4c4ecb94322a23ac9e73
   languageName: node
   linkType: hard
-
-"@babel/plugin-syntax-module-attributes@workspace:^7.10.4, @babel/plugin-syntax-module-attributes@workspace:packages/babel-plugin-syntax-module-attributes":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-module-attributes@workspace:packages/babel-plugin-syntax-module-attributes"
-  dependencies:
-    "@babel/core": "workspace:^7.10.4"
-    "@babel/helper-plugin-utils": "workspace:^7.10.4"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
 
 "@babel/plugin-syntax-module-string-names@workspace:packages/babel-plugin-syntax-module-string-names":
   version: 0.0.0-use.local
@@ -3219,9 +3219,9 @@ __metadata:
     "@babel/plugin-syntax-flow": "workspace:^7.10.4"
     "@babel/plugin-syntax-function-bind": "workspace:^7.10.4"
     "@babel/plugin-syntax-function-sent": "workspace:^7.10.4"
+    "@babel/plugin-syntax-import-assertions": "workspace:^7.10.4"
     "@babel/plugin-syntax-import-meta": ^7.10.4
     "@babel/plugin-syntax-jsx": "workspace:^7.10.4"
-    "@babel/plugin-syntax-module-attributes": "workspace:^7.10.4"
     "@babel/plugin-syntax-object-rest-spread": ^7.8.0
     "@babel/plugin-syntax-optional-catch-binding": ^7.8.0
     "@babel/plugin-syntax-pipeline-operator": "workspace:^7.10.4"

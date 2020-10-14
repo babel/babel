@@ -12,7 +12,7 @@
   "syntax-function-sent",
   "syntax-import-meta",
   "syntax-jsx",
-  "syntax-module-attributes",
+  "syntax-import-assertions",
   "syntax-object-rest-spread",
   "syntax-optional-catch-binding",
   "syntax-pipeline-operator",

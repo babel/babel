@@ -10,6 +10,7 @@ export default (_: any, opts: Object) => {
 
   return {
     plugins: [
+      babelPlugins.syntaxImportAssertions,
       babelPlugins.syntaxImportMeta,
       babelPlugins.syntaxTopLevelAwait,
       babelPlugins.proposalExportNamespaceFrom,
