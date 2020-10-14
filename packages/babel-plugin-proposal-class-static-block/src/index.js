@@ -20,8 +20,7 @@ function generateUid(scope, denyList: Set<string>) {
 }
 
 export default declare(({ types: t, template, assertVersion }) => {
-  // todo: change to ^7.12.0 when it is published
-  assertVersion("^7.11.6");
+  assertVersion("^7.12.0");
 
   return {
     name: "proposal-class-static-block",
