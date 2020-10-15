@@ -1,6 +1,6 @@
 {
   "name": "@babel/node",
-  "version": "7.10.5",
+  "version": "7.12.1",
   "description": "Babel command line",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -23,7 +23,7 @@
     "compiler"
   ],
   "dependencies": {
-    "@babel/register": "workspace:^7.10.5",
+    "@babel/register": "workspace:^7.12.1",
     "commander": "^4.0.1",
     "core-js": "^3.2.1",
     "lodash": "^4.17.19",
@@ -36,9 +36,9 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
+    "@babel/core": "workspace:^7.12.1",
     "@babel/helper-fixtures": "workspace:*",
-    "@babel/runtime": "workspace:*",
+    "@babel/runtime": "workspace:^7.12.1",
     "fs-readdir-recursive": "^1.0.0",
     "make-dir": "^2.1.0",
     "rimraf": "^3.0.0"

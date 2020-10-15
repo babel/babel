@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-throw-expressions",
-  "version": "7.10.4",
+  "version": "7.12.1",
   "description": "Wraps Throw Expressions in an IIFE",
   "repository": {
     "type": "git",
@@ -17,13 +17,13 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^7.10.4",
-    "@babel/plugin-syntax-throw-expressions": "workspace:^7.10.4"
+    "@babel/plugin-syntax-throw-expressions": "workspace:^7.12.1"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
+    "@babel/core": "workspace:^7.12.1",
     "@babel/helper-plugin-test-runner": "workspace:*"
   }
 }

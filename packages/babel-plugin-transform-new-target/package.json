@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-new-target",
-  "version": "7.10.4",
+  "version": "7.12.1",
   "description": "Transforms new.target meta property",
   "repository": {
     "type": "git",
@@ -22,9 +22,9 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
+    "@babel/core": "workspace:^7.12.1",
     "@babel/helper-plugin-test-runner": "workspace:*",
-    "@babel/plugin-proposal-class-properties": "workspace:*",
-    "@babel/plugin-transform-arrow-functions": "workspace:*"
+    "@babel/plugin-proposal-class-properties": "workspace:^7.12.1",
+    "@babel/plugin-transform-arrow-functions": "workspace:^7.12.1"
   }
 }

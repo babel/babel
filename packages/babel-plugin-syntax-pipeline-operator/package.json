@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-pipeline-operator",
-  "version": "7.10.4",
+  "version": "7.12.1",
   "description": "Allow parsing of the pipeline operator",
   "repository": {
     "type": "git",
@@ -22,6 +22,6 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*"
+    "@babel/core": "workspace:^7.12.1"
   }
 }

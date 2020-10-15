@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-react-jsx-source",
-  "version": "7.10.5",
+  "version": "7.12.1",
   "description": "Add a __source prop to all JSX Elements",
   "repository": {
     "type": "git",
@@ -22,8 +22,8 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
+    "@babel/core": "workspace:^7.12.1",
     "@babel/helper-plugin-test-runner": "workspace:*",
-    "@babel/plugin-syntax-jsx": "workspace:*"
+    "@babel/plugin-syntax-jsx": "workspace:^7.12.1"
   }
 }

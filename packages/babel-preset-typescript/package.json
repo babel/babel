@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-typescript",
-  "version": "7.12.0",
+  "version": "7.12.1",
   "description": "Babel preset for TypeScript.",
   "repository": {
     "type": "git",
@@ -18,13 +18,13 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^7.10.4",
-    "@babel/plugin-transform-typescript": "workspace:^7.12.0"
+    "@babel/plugin-transform-typescript": "workspace:^7.12.1"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
+    "@babel/core": "workspace:^7.12.1",
     "@babel/helper-plugin-test-runner": "workspace:*"
   }
 }

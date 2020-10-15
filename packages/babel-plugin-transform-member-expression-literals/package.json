@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-member-expression-literals",
-  "version": "7.10.4",
+  "version": "7.12.1",
   "description": "Ensure that reserved words are quoted in property accesses",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:*",
+    "@babel/core": "workspace:^7.12.1",
     "@babel/helper-plugin-test-runner": "workspace:*"
   }
 }
