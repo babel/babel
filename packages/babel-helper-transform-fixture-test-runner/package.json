@@ -20,7 +20,6 @@
     "@babel/helper-fixtures": "workspace:^7.10.5",
     "@babel/polyfill": "workspace:^7.10.4",
     "babel-check-duplicated-nodes": "^1.0.0",
-    "jest": "^24.8.0",
     "jest-diff": "^24.8.0",
     "lodash": "^4.17.19",
     "quick-lru": "5.1.0",

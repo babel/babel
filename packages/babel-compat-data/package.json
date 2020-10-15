@@ -29,7 +29,6 @@
     "compat-data"
   ],
   "devDependencies": {
-    "@babel/helper-compilation-targets": "workspace:^7.12.0",
     "electron-to-chromium": "1.3.574",
     "lodash": "^4.17.19",
     "mdn-browser-compat-data": "1.0.38"
