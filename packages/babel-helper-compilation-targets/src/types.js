@@ -22,7 +22,7 @@ export type TargetsTuple = {|
   [target: Target]: string,
 |};
 
-export type Browsers = string | Array<string>;
+export type Browsers = string | $ReadOnlyArray<string>;
 
 export type InputTargets = {
   ...Targets,

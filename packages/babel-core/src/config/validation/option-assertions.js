@@ -1,5 +1,10 @@
 // @flow
 
+import {
+  isBrowsersQueryValid,
+  TargetNames,
+} from "@babel/helper-compilation-targets";
+
 import type {
   ConfigFileSearch,
   BabelrcSearch,
@@ -16,6 +21,7 @@ import type {
   NestingPath,
   CallerMetadata,
   RootMode,
+  TargetsListOrObject,
 } from "./options";
 
 export type { RootPath } from "./options";
@@ -372,4 +378,56 @@ function assertPluginTarget(loc: GeneralPath, value: mixed): PluginTarget {
     throw new Error(`${msg(loc)} must be a string, object, function`);
   }
   return value;
+}
+
+export function assertTargets(
+  loc: GeneralPath,
+  value: mixed,
+): TargetsListOrObject {
+  if (isBrowsersQueryValid(value)) return (value: any);
+
+  if (typeof value !== "object" || !value || Array.isArray(value)) {
+    throw new Error(
+      `${msg(loc)} must be a string, an array of strings or an object`,
+    );
+  }
+
+  const browsersLoc = access(loc, "browsers");
+  const esmodulesLoc = access(loc, "esmodules");
+
+  assertBrowsersList(browsersLoc, value.browsers);
+  assertBoolean(esmodulesLoc, value.esmodules);
+
+  for (const key of Object.keys(value)) {
+    const val = value[key];
+    const subLoc = access(loc, key);
+
+    if (key === "esmodules") assertBoolean(subLoc, val);
+    else if (key === "browsers") assertBrowsersList(subLoc, val);
+    else if (!Object.hasOwnProperty.call(TargetNames, key)) {
+      const validTargets = Object.keys(TargetNames).join(", ");
+      throw new Error(
+        `${msg(
+          subLoc,
+        )} is not a valid target. Supported targets are ${validTargets}`,
+      );
+    } else assertBrowserVersion(subLoc, val);
+  }
+
+  return (value: any);
+}
+
+function assertBrowsersList(loc: GeneralPath, value: mixed) {
+  if (value !== undefined && !isBrowsersQueryValid(value)) {
+    throw new Error(
+      `${msg(loc)} must be undefined, a string or an array of strings`,
+    );
+  }
+}
+
+function assertBrowserVersion(loc: GeneralPath, value: mixed) {
+  if (typeof value === "number" && Math.round(value) === value) return;
+  if (typeof value === "string") return;
+
+  throw new Error(`${msg(loc)} must be a string or an integer number`);
 }
