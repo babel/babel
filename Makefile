@@ -214,6 +214,7 @@ prepublish-build: clean-lib clean-runtime-helpers
 	$(MAKE) prepublish-build-standalone clone-license
 
 prepublish:
+	$(MAKE) check-yarn-bug-1882
 	$(MAKE) bootstrap-only
 	$(MAKE) prepublish-build
 	IS_PUBLISH=true $(MAKE) test
@@ -226,6 +227,13 @@ new-version:
 publish: prepublish
 	$(YARN) release-tool publish
 	$(MAKE) clean
+
+check-yarn-bug-1882:
+ifneq ("$(shell grep 3155328e5 .yarn/releases/yarn-*.cjs -c)", "0")
+	echo "Your version of yarn is affected by https://github.com/yarnpkg/berry/issues/1882"
+	echo "Please run `sed -i -e "s/3155328e5/4567890e5/g" .yarn/releases/yarn-*.cjs`"
+	exit 1
+endif
 
 publish-ci: prepublish
 ifneq ("$(NPM_TOKEN)", "")
