@@ -15,16 +15,12 @@ import {
   binaryExpression,
 } from "../builders/generated";
 
+const util = require("util");
 // TODO: (Babel 8) Remove fallback from util.types to util
-let nodeUtilTypes;
-try {
-  const util = require("util");
-  // $FlowIgnore - util.isRegExp was deprecated in Node v4, but util.types.isRegExp is only available from Node v10
-  nodeUtilTypes = util.types || util;
-} catch {}
-
 const isRegExp =
-  (nodeUtilTypes && nodeUtilTypes.isRegExp) ||
+  // $FlowIgnore - flow seems to believe that property 'types' is missing from util?
+  (util.types && util.types.isRegExp) ||
+  util.isRegExp ||
   (value => Object.prototype.toString.call(value) === "[object RegExp]");
 
 export default function valueToNode(value: any): Object {
