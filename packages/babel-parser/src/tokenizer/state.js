@@ -70,6 +70,7 @@ export default class State {
   inPropertyName: boolean = false;
   hasFlowComment: boolean = false;
   isIterator: boolean = false;
+  isDeclareContext: boolean = false;
 
   // For the smartPipelines plugin:
   topicContext: TopicContextState = {

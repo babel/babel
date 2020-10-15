@@ -21,7 +21,7 @@ for (const plugin of pluginConfig) {
   allList += `"${plugin}": ${camelPlugin},`;
 }
 
-const fileContent = `// @flow
+const fileContent = `
 /*
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'

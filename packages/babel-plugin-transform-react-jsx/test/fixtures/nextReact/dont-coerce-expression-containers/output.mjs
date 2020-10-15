@@ -1,4 +1,4 @@
-import { jsxs as _jsxs } from "react/jsx-runtime";
+import { jsxs as _jsxs } from "react/jsx-runtime.js";
 
 /*#__PURE__*/
 _jsxs(Text, {

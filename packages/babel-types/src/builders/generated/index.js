@@ -730,6 +730,14 @@ export function tupleExpression(...args: Array<any>): Object {
   return builder("TupleExpression", ...args);
 }
 export { tupleExpression as TupleExpression };
+export function decimalLiteral(...args: Array<any>): Object {
+  return builder("DecimalLiteral", ...args);
+}
+export { decimalLiteral as DecimalLiteral };
+export function staticBlock(...args: Array<any>): Object {
+  return builder("StaticBlock", ...args);
+}
+export { staticBlock as StaticBlock };
 export function tsParameterProperty(...args: Array<any>): Object {
   return builder("TSParameterProperty", ...args);
 }
@@ -790,6 +798,11 @@ export function tsBigIntKeyword(...args: Array<any>): Object {
 }
 export { tsBigIntKeyword as TSBigIntKeyword };
 export { tsBigIntKeyword as tSBigIntKeyword };
+export function tsIntrinsicKeyword(...args: Array<any>): Object {
+  return builder("TSIntrinsicKeyword", ...args);
+}
+export { tsIntrinsicKeyword as TSIntrinsicKeyword };
+export { tsIntrinsicKeyword as tSIntrinsicKeyword };
 export function tsNeverKeyword(...args: Array<any>): Object {
   return builder("TSNeverKeyword", ...args);
 }
@@ -890,6 +903,11 @@ export function tsRestType(...args: Array<any>): Object {
 }
 export { tsRestType as TSRestType };
 export { tsRestType as tSRestType };
+export function tsNamedTupleMember(...args: Array<any>): Object {
+  return builder("TSNamedTupleMember", ...args);
+}
+export { tsNamedTupleMember as TSNamedTupleMember };
+export { tsNamedTupleMember as tSNamedTupleMember };
 export function tsUnionType(...args: Array<any>): Object {
   return builder("TSUnionType", ...args);
 }

@@ -1503,7 +1503,7 @@ defineType("ExportSpecifier", {
       validate: assertNodeType("Identifier"),
     },
     exported: {
-      validate: assertNodeType("Identifier"),
+      validate: assertNodeType("Identifier", "StringLiteral"),
     },
   },
 });
@@ -1611,7 +1611,7 @@ defineType("ImportSpecifier", {
       validate: assertNodeType("Identifier"),
     },
     imported: {
-      validate: assertNodeType("Identifier"),
+      validate: assertNodeType("Identifier", "StringLiteral"),
     },
     importKind: {
       // Handle Flowtype's extension "import {typeof foo} from"
@@ -1841,7 +1841,13 @@ defineType("TemplateLiteral", {
     expressions: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("Expression")),
+        assertEach(
+          assertNodeType(
+            "Expression",
+            // For TypeScript template literal types
+            "TSType",
+          ),
+        ),
         function (node, key, val) {
           if (node.quasis.length !== val.length + 1) {
             throw new TypeError(

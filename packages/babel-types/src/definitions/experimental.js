@@ -108,7 +108,7 @@ defineType("PipelinePrimaryTopicReference", {
 
 defineType("ClassPrivateProperty", {
   visitor: ["key", "value", "decorators"],
-  builder: ["key", "value", "decorators"],
+  builder: ["key", "value", "decorators", "static"],
   aliases: ["Property", "Private"],
   fields: {
     key: {
@@ -162,7 +162,7 @@ defineType("ImportAttribute", {
   visitor: ["key", "value"],
   fields: {
     key: {
-      validate: assertNodeType("Identifier"),
+      validate: assertNodeType("Identifier", "StringLiteral"),
     },
     value: {
       validate: assertNodeType("StringLiteral"),
@@ -234,4 +234,28 @@ defineType("TupleExpression", {
   },
   visitor: ["elements"],
   aliases: ["Expression"],
+});
+
+defineType("DecimalLiteral", {
+  builder: ["value"],
+  fields: {
+    value: {
+      validate: assertValueType("string"),
+    },
+  },
+  aliases: ["Expression", "Pureish", "Literal", "Immutable"],
+});
+
+// https://github.com/tc39/proposal-class-static-block
+defineType("StaticBlock", {
+  visitor: ["body"],
+  fields: {
+    body: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Statement")),
+      ),
+    },
+  },
+  aliases: ["Scopable", "BlockParent"],
 });

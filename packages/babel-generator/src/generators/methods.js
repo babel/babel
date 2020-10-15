@@ -37,6 +37,8 @@ export function _methodHead(node: Object) {
   }
 
   if (node.async) {
+    // ensure `async` is in the same line with property name
+    this._catchUp("start", key.loc);
     this.word("async");
     this.space();
   }

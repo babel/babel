@@ -15,6 +15,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "electron":"0.36" }
+  proposal-logical-assignment-operators { "electron":"0.36" }
   proposal-nullish-coalescing-operator { "electron":"0.36" }
   proposal-optional-chaining { "electron":"0.36" }
   proposal-json-strings { "electron":"0.36" }
@@ -34,6 +36,7 @@ Using plugins:
   transform-destructuring { "electron":"0.36" }
   transform-block-scoping { "electron":"0.36" }
   transform-regenerator { "electron":"0.36" }
+  proposal-export-namespace-from { "electron":"0.36" }
   transform-modules-commonjs { "electron":"0.36" }
   proposal-dynamic-import { "electron":"0.36" }
 

@@ -109,7 +109,7 @@
     "node": "4",
     "ios": "9",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   },
   "bugfix/transform-tagged-template-caching": {
     "chrome": "41",
@@ -120,6 +120,6 @@
     "node": "4",
     "ios": "13",
     "samsung": "3.4",
-    "electron": "0.22"
+    "electron": "0.21"
   }
 }

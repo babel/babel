@@ -7,9 +7,8 @@
 .pnp.js
 
 .DS_Store
-/node_modules
-/.github/actions/*/node_modules
-/packages/*/node_modules
+**/node_modules
+!**/test/fixtures/**/node_modules
 /packages/*/LICENSE
 !/packages/babel-parser/LICENSE
 !/packages/babel-plugin-transform-object-assign/LICENSE
@@ -63,13 +62,11 @@ packages/babel-standalone/babel.js
 packages/babel-standalone/babel.js.map
 packages/babel-standalone/babel.min.js
 /codemods/*/lib
-/codemods/*/node_modules
 /packages/babel-parser/build
 .idea/
 /.changelog
 
 /eslint/*/lib
-/eslint/*/node_modules
 /eslint/*/LICENSE
 !/packages/babel-eslint-plugin/LICENSE
 /.vscode

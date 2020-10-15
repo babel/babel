@@ -19,3 +19,8 @@ export const exists = gensync<[string], boolean>({
   },
   errback: (path, cb) => fs.access(path, undefined, err => cb(null, !err)),
 });
+
+export const stat = gensync<[string], *>({
+  sync: fs.statSync,
+  errback: fs.stat,
+});

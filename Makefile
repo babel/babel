@@ -1,8 +1,8 @@
 FLOW_COMMIT = a1f9a4c709dcebb27a5084acf47755fbae699c25
 TEST262_COMMIT = 058adfed86b1d4129996faaf50a85ea55379a66a
-TYPESCRIPT_COMMIT = 5fc917be2e4dd64c8e9504d36615cd7fbfdd4cd3
+TYPESCRIPT_COMMIT = da8633212023517630de5f3620a23736b63234b1
 
-FORCE_PUBLISH = "@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@babel/standalone"
+FORCE_PUBLISH = -f @babel/runtime -f @babel/runtime-corejs2 -f @babel/runtime-corejs3 -f @babel/standalone
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
@@ -14,7 +14,7 @@ EMPTY :=
 SPACE := $(EMPTY) $(EMPTY)
 COMMA_SEPARATED_SOURCES = $(subst $(SPACE),$(COMMA),$(SOURCES))
 
-YARN := yarn --silent
+YARN := yarn
 NODE := $(YARN) node
 
 
@@ -75,8 +75,8 @@ build-no-bundle: clean clean-lib
 	BABEL_ENV=development $(YARN) gulp build-no-bundle
 	# Ensure that build artifacts for types are created during local
 	# development too.
-	$(MAKE) generate-type-helpers
-	$(MAKE) build-typings
+	# Babel-transform-fixture-test-runner requires minified polyfill for performance
+	$(MAKE) generate-type-helpers build-typings build-polyfill-dist
 
 build-no-bundle-ci: bootstrap-only
 	$(MAKE) build-no-bundle
@@ -85,8 +85,7 @@ watch: build-no-bundle
 	BABEL_ENV=development $(YARN) gulp watch
 
 code-quality-ci: build-no-bundle-ci
-	$(MAKE) flowcheck-ci & $(MAKE) lint-ci
-
+	$(MAKE) flowcheck-ci lint-ci
 
 flowcheck-ci:
 	$(MAKE) flow
@@ -211,8 +210,8 @@ clone-license:
 	./scripts/clone-license.sh
 
 prepublish-build: clean-lib clean-runtime-helpers
-	NODE_ENV=production BABEL_ENV=production $(MAKE) build
-	$(MAKE) clone-license
+	NODE_ENV=production BABEL_ENV=production $(MAKE) build-bundle
+	$(MAKE) prepublish-build-standalone clone-license
 
 prepublish:
 	$(MAKE) bootstrap-only
@@ -221,11 +220,11 @@ prepublish:
 
 new-version:
 	git pull --rebase
-	$(YARN) lerna version --force-publish=$(FORCE_PUBLISH)
+	$(YARN) release-tool version $(FORCE_PUBLISH)
 
 # NOTE: Run make new-version first
 publish: prepublish
-	$(YARN) lerna publish from-git
+	$(YARN) release-tool publish
 	$(MAKE) clean
 
 publish-ci: prepublish
@@ -235,7 +234,7 @@ else
 	echo "Missing NPM_TOKEN env var"
 	exit 1
 endif
-	$(YARN) lerna publish from-git --yes
+	$(YARN) release-tool publish --yes
 	rm -f .npmrc
 	$(MAKE) clean
 
@@ -244,25 +243,13 @@ ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 	echo "You probably don't know what you are doing"
 	exit 1
 endif
+	$(YARN) release-tool version $(VERSION) --all --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) prepublish-build
-	$(YARN) lerna version $(VERSION) --force-publish=$(FORCE_PUBLISH)  --no-push --yes --tag-version-prefix="version-e2e-test-"
-	$(YARN) lerna publish from-git --registry http://localhost:4873 --yes --tag-version-prefix="version-e2e-test-"
+	YARN_NPM_PUBLISH_REGISTRY=http://localhost:4873 $(YARN) release-tool publish --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
 
-publish-eslint:
-	$(call set-json-field, ./eslint/$(PKG)/package.json, private, false)
-	cd eslint/$(PKG); yarn publish
-	$(call set-json-field, ./eslint/$(PKG)/package.json, private, true)
-
-bootstrap-only: lerna-bootstrap
-
-yarn-install: clean-all
-	# Gitpod prebuilds have a slow network connection, so we need more time
-	yarn --ignore-engines --network-timeout 100000
-
-lerna-bootstrap: yarn-install
-# todo: remove `-- -- --ignore-engines` in Babel 8
-	$(YARN) lerna bootstrap -- -- --ignore-engines --network-timeout 100000
+bootstrap-only: clean-all
+	yarn install
 
 bootstrap: bootstrap-only
 	$(MAKE) build
@@ -289,7 +276,7 @@ clean-all:
 
 update-env-corejs-fixture:
 	rm -rf packages/babel-preset-env/node_modules/core-js-compat
-	$(YARN) lerna bootstrap
+	$(YARN)
 	$(MAKE) build-bundle
 	OVERWRITE=true $(YARN) jest packages/babel-preset-env
 
@@ -309,11 +296,4 @@ define clean-source-all
 	rm -rf $(1)/*/node_modules
 	rm -rf $(1)/*/package-lock.json
 
-endef
-
-define set-json-field
-	$(NODE) -e "\
-		require('fs').writeFileSync('$1'.trim(), \
-			JSON.stringify({ ...require('$1'.trim()), $2: $3 }, null, 2) + '\\n' \
-		)"
 endef

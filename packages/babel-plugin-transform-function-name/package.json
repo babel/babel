@@ -16,14 +16,14 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-function-name": "^7.10.4",
-    "@babel/helper-plugin-utils": "^7.10.4"
+    "@babel/helper-function-name": "workspace:^7.10.4",
+    "@babel/helper-plugin-utils": "workspace:^7.10.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.4",
-    "@babel/helper-plugin-test-runner": "^7.10.4"
+    "@babel/core": "workspace:^7.10.4",
+    "@babel/helper-plugin-test-runner": "workspace:^7.10.4"
   }
 }

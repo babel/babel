@@ -260,4 +260,12 @@ describe("getTargets", () => {
       });
     });
   });
+
+  describe("exception", () => {
+    it("throws when version is not a semver", () => {
+      expect(() =>
+        getTargets({ chrome: "seventy-two" }),
+      ).toThrowErrorMatchingSnapshot();
+    });
+  });
 });

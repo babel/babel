@@ -115,6 +115,8 @@ const FlowErrors = Object.freeze({
     'Unexpected token, expected "number" or "bigint"',
   UnexpectedTokenAfterTypeParameter:
     "Expected an arrow function after this type parameter declaration",
+  UnexpectedTypeParameterBeforeAsyncArrowFunction:
+    "Type parameters must come after the async keyword, e.g. instead of `<T> async () => {}`, use `async <T>() => {}`",
   UnsupportedDeclareExportKind:
     "`declare export %0` is not supported. Use `%1` instead",
   UnsupportedStatementInDeclareModule:
@@ -1816,7 +1818,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseConditional(
       expr: N.Expression,
-      noIn: ?boolean,
       startPos: number,
       startLoc: Position,
       refNeedsArrowPos?: ?Pos,
@@ -1827,7 +1828,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // and if we come from inside parens
       if (refNeedsArrowPos) {
         const result = this.tryParse(() =>
-          super.parseConditional(expr, noIn, startPos, startLoc),
+          super.parseConditional(expr, startPos, startLoc),
         );
 
         if (!result.node) {
@@ -1886,7 +1887,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.test = expr;
       node.consequent = consequent;
       node.alternate = this.forwardNoArrowParamsConversionAt(node, () =>
-        this.parseMaybeAssign(noIn, undefined, undefined, undefined),
+        this.parseMaybeAssign(undefined, undefined, undefined),
       );
 
       return this.finishNode(node, "ConditionalExpression");
@@ -1898,7 +1899,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     } {
       this.state.noArrowParamsConversionAt.push(this.state.start);
 
-      const consequent = this.parseMaybeAssign();
+      const consequent = this.parseMaybeAssignAllowIn();
       const failed = !this.match(tt.colon);
 
       this.state.noArrowParamsConversionAt.pop();
@@ -2095,8 +2096,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseClassMember(
       classBody: N.ClassBody,
       member: any,
-      state: { hadConstructor: boolean },
-      constructorAllowsSuper: boolean,
+      state: N.ParseClassMemberState,
     ): void {
       const pos = this.state.start;
       if (this.isContextual("declare")) {
@@ -2108,7 +2108,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         member.declare = true;
       }
 
-      super.parseClassMember(classBody, member, state, constructorAllowsSuper);
+      super.parseClassMember(classBody, member, state);
 
       if (member.declare) {
         if (
@@ -2135,6 +2135,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         (code === charCodes.greaterThan || code === charCodes.lessThan)
       ) {
         return this.finishOp(tt.relational, 1);
+      } else if (this.state.inType && code === charCodes.questionMark) {
+        // allow double nullable types in Flow: ??string
+        return this.finishOp(tt.question, 1);
       } else if (isIteratorStart(code, next)) {
         this.state.isIterator = true;
         return super.readWord();
@@ -2362,8 +2365,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isGenerator: boolean,
       isAsync: boolean,
       isPattern: boolean,
+      isAccessor: boolean,
       refExpressionErrors: ?ExpressionErrors,
-      containsEsc: boolean,
     ): void {
       if ((prop: $FlowFixMe).variance) {
         this.unexpected((prop: $FlowFixMe).variance.start);
@@ -2373,7 +2376,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let typeParameters;
 
       // method shorthand
-      if (this.isRelational("<")) {
+      if (this.isRelational("<") && !isAccessor) {
         typeParameters = this.flowParseTypeParameterDeclaration();
         if (!this.match(tt.parenL)) this.unexpected();
       }
@@ -2385,8 +2388,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isGenerator,
         isAsync,
         isPattern,
+        isAccessor,
         refExpressionErrors,
-        containsEsc,
       );
 
       // add typeParameters if we found them
@@ -2629,7 +2632,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     //    there
     // 3. This is neither. Just call the super method
     parseMaybeAssign(
-      noIn?: ?boolean,
       refExpressionErrors?: ?ExpressionErrors,
       afterLeftParse?: Function,
       refNeedsArrowPos?: ?Pos,
@@ -2647,7 +2649,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         jsx = this.tryParse(
           () =>
             super.parseMaybeAssign(
-              noIn,
               refExpressionErrors,
               afterLeftParse,
               refNeedsArrowPos,
@@ -2674,29 +2675,66 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         let typeParameters;
 
-        const arrow = this.tryParse(() => {
+        const arrow = this.tryParse(abort => {
           typeParameters = this.flowParseTypeParameterDeclaration();
 
           const arrowExpression = this.forwardNoArrowParamsConversionAt(
             typeParameters,
-            () =>
-              super.parseMaybeAssign(
-                noIn,
+            () => {
+              const result = super.parseMaybeAssign(
                 refExpressionErrors,
                 afterLeftParse,
                 refNeedsArrowPos,
-              ),
+              );
+
+              this.resetStartLocationFromNode(result, typeParameters);
+
+              return result;
+            },
           );
-          arrowExpression.typeParameters = typeParameters;
-          this.resetStartLocationFromNode(arrowExpression, typeParameters);
+
+          // <T>(() => {}: any);
+          if (
+            arrowExpression.type !== "ArrowFunctionExpression" &&
+            arrowExpression.extra?.parenthesized
+          ) {
+            abort();
+          }
+
+          // The above can return a TypeCastExpression when the arrow
+          // expression is not wrapped in parens. See also `this.parseParenItem`.
+          const expr = this.maybeUnwrapTypeCastExpression(arrowExpression);
+          expr.typeParameters = typeParameters;
+          this.resetStartLocationFromNode(expr, typeParameters);
 
           return arrowExpression;
         }, state);
 
-        const arrowExpression: ?N.ArrowFunctionExpression =
-          arrow.node?.type === "ArrowFunctionExpression" ? arrow.node : null;
+        let arrowExpression: ?(
+          | N.ArrowFunctionExpression
+          | N.TypeCastExpression
+        ) = null;
 
-        if (!arrow.error && arrowExpression) return arrowExpression;
+        if (
+          arrow.node &&
+          this.maybeUnwrapTypeCastExpression(arrow.node).type ===
+            "ArrowFunctionExpression"
+        ) {
+          if (!arrow.error && !arrow.aborted) {
+            // <T> async () => {}
+            if (arrow.node.async) {
+              /*:: invariant(typeParameters) */
+              this.raise(
+                typeParameters.start,
+                FlowErrors.UnexpectedTypeParameterBeforeAsyncArrowFunction,
+              );
+            }
+
+            return arrow.node;
+          }
+
+          arrowExpression = arrow.node;
+        }
 
         // If we are here, both JSX and Flow parsing attempts failed.
         // Give the precedence to the JSX error, except if JSX had an
@@ -2727,7 +2765,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       return super.parseMaybeAssign(
-        noIn,
         refExpressionErrors,
         afterLeftParse,
         refNeedsArrowPos,
@@ -2870,7 +2907,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       noCalls: ?boolean,
       subscriptState: N.ParseSubscriptState,
     ): N.Expression {
-      if (this.match(tt.questionDot) && this.isLookaheadRelational("<")) {
+      if (this.match(tt.questionDot) && this.isLookaheadToken_lt()) {
         subscriptState.optionalChainMember = true;
         if (noCalls) {
           subscriptState.stop = true;
@@ -3471,5 +3508,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         super.updateContext(prevType);
       }
+    }
+
+    // check if the next token is a tt.relation("<")
+    isLookaheadToken_lt(): boolean {
+      const next = this.nextTokenStart();
+      if (this.input.charCodeAt(next) === charCodes.lessThan) {
+        const afterNext = this.input.charCodeAt(next + 1);
+        return (
+          afterNext !== charCodes.lessThan && afterNext !== charCodes.equalsTo
+        );
+      }
+      return false;
+    }
+
+    maybeUnwrapTypeCastExpression(node: N.Node) {
+      return node.type === "TypeCastExpression" ? node.expression : node;
     }
   };

@@ -13,6 +13,6 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/types": "^7.10.4"
+    "@babel/types": "workspace:^7.10.4"
   }
 }

@@ -45,6 +45,7 @@ interface BaseNode {
   end: number | null;
   loc: SourceLocation | null;
   type: Node["type"];
+  extra?: Record<string, unknown>;
 }
 
 export type Node = ${t.TYPES.sort().join(" | ")};\n\n`;
