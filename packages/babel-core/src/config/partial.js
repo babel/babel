@@ -14,6 +14,7 @@ import { getEnv } from "./helpers/environment";
 import {
   validate,
   type ValidatedOptions,
+  type NormalizedOptions,
   type RootMode,
 } from "./validation/options";
 
@@ -24,6 +25,7 @@ import {
   type ConfigFile,
   type IgnoreFile,
 } from "./files";
+import { resolveTargets } from "./resolve-targets";
 
 function* resolveRootMode(
   rootDir: string,
@@ -61,7 +63,7 @@ function* resolveRootMode(
 }
 
 type PrivPartialConfig = {
-  options: ValidatedOptions,
+  options: NormalizedOptions,
   context: ConfigContext,
   fileHandling: FileHandling,
   ignore: IgnoreFile | void,
@@ -115,30 +117,36 @@ export default function* loadPrivatePartialConfig(
   const configChain = yield* buildRootChain(args, context);
   if (!configChain) return null;
 
-  const options = {};
+  const merged: ValidatedOptions = {};
   configChain.options.forEach(opts => {
-    mergeOptions(options, opts);
+    mergeOptions((merged: any), opts);
   });
 
-  // Tack the passes onto the object itself so that, if this object is
-  // passed back to Babel a second time, it will be in the right structure
-  // to not change behavior.
-  options.cloneInputAst = cloneInputAst;
-  options.babelrc = false;
-  options.configFile = false;
-  options.passPerPreset = false;
-  options.envName = context.envName;
-  options.cwd = context.cwd;
-  options.root = context.root;
-  options.filename =
-    typeof context.filename === "string" ? context.filename : undefined;
+  const options: NormalizedOptions = {
+    ...merged,
+    targets: resolveTargets(merged, absoluteRootDir, filename),
 
-  options.plugins = configChain.plugins.map(descriptor =>
-    createItemFromDescriptor(descriptor),
-  );
-  options.presets = configChain.presets.map(descriptor =>
-    createItemFromDescriptor(descriptor),
-  );
+    // Tack the passes onto the object itself so that, if this object is
+    // passed back to Babel a second time, it will be in the right structure
+    // to not change behavior.
+    cloneInputAst,
+    babelrc: false,
+    configFile: false,
+    browserslistConfigFile: false,
+    passPerPreset: false,
+    envName: context.envName,
+    cwd: context.cwd,
+    root: context.root,
+    filename:
+      typeof context.filename === "string" ? context.filename : undefined,
+
+    plugins: configChain.plugins.map(descriptor =>
+      createItemFromDescriptor(descriptor),
+    ),
+    presets: configChain.presets.map(descriptor =>
+      createItemFromDescriptor(descriptor),
+    ),
+  };
 
   return {
     options,
@@ -201,7 +209,7 @@ class PartialConfig {
    * These properties are public, so any changes to them should be considered
    * a breaking change to Babel's API.
    */
-  options: ValidatedOptions;
+  options: NormalizedOptions;
   babelrc: string | void;
   babelignore: string | void;
   config: string | void;
@@ -209,7 +217,7 @@ class PartialConfig {
   files: Set<string>;
 
   constructor(
-    options: ValidatedOptions,
+    options: NormalizedOptions,
     babelrc: string | void,
     ignore: string | void,
     config: string | void,

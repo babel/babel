@@ -23,6 +23,7 @@ export { prettifyTargets } from "./pretty";
 export { getInclusionReasons } from "./debug";
 export { default as filterItems, isRequired } from "./filter-items";
 export { unreleasedLabels } from "./targets";
+export { TargetNames };
 
 const ESM_SUPPORT = browserModulesData["es6.module"];
 
@@ -57,8 +58,11 @@ function validateTargetNames(targets: Targets): TargetsTuple {
   return (targets: any);
 }
 
-export function isBrowsersQueryValid(browsers: Browsers | Targets): boolean {
-  return typeof browsers === "string" || Array.isArray(browsers);
+export function isBrowsersQueryValid(browsers: mixed): boolean %checks {
+  return (
+    typeof browsers === "string" ||
+    (Array.isArray(browsers) && browsers.every(b => typeof b === "string"))
+  );
 }
 
 function validateBrowsers(browsers: Browsers | void) {
@@ -175,9 +179,23 @@ function resolveTargets(queries: Browsers): Targets {
   return getLowestVersions(resolved);
 }
 
+type GetTargetsOption = {
+  // This is not the path of the config file, but the path where start searching it from
+  configPath?: string,
+
+  // The path of the config file
+  configFile?: string,
+
+  // The env to pass to browserslist
+  browserslistEnv?: string,
+
+  // true to disable config loading
+  ignoreBrowserslistConfig?: boolean,
+};
+
 export default function getTargets(
   inputTargets: InputTargets = {},
-  options: Object = {},
+  options: GetTargetsOption = {},
 ): Targets {
   let { browsers, esmodules } = inputTargets;
 
@@ -194,6 +212,7 @@ export default function getTargets(
   if (!browsers && shouldSearchForConfig) {
     browsers =
       browserslist.loadConfig({
+        config: options.configFile,
         path: options.configPath,
         env: options.browserslistEnv,
       }) ??
