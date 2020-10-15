@@ -51,10 +51,60 @@ export default class LValParser extends NodeUtils {
   +parseDecorator: () => Decorator;
   */
 
+  /**
+   * Check if a node can be converted to a binding identifier or binding pattern.
+   * https://tc39.es/ecma262/#prod-BindingIdentifier
+   * https://tc39.es/ecma262/#prod-BindingPattern
+   * Note that although a mebmer expression can serve as a LHS in the init of for loop,
+   * i.e. `for (a.b of []);`, it is not a binding pattern
+   *
+   * @param {Node} node
+   * @returns {boolean}
+   * @memberof LValParser
+   */
+  isAssignable(node: Node): boolean {
+    switch (node.type) {
+      case "Identifier":
+      case "ObjectPattern":
+      case "ArrayPattern":
+      case "AssignmentPattern":
+      case "RestElement":
+        return true;
+
+      case "ObjectExpression": {
+        const last = node.properties.length - 1;
+        return node.properties.every((prop, i) => {
+          return (
+            prop.type !== "ObjectMethod" &&
+            (i === last || prop.type === "SpreadElement") &&
+            this.isAssignable(prop)
+          );
+        });
+      }
+
+      case "ObjectProperty":
+        return this.isAssignable(node.value);
+
+      case "SpreadElement":
+        return this.isAssignable(node.argument);
+
+      case "ArrayExpression":
+        return node.elements.every(element => this.isAssignable(element));
+
+      case "AssignmentExpression":
+        return node.operator === "=";
+
+      case "ParenthesizedExpression":
+        return this.isAssignable(node.expression);
+
+      default:
+        return false;
+    }
+  }
+
   // Convert existing expression atom to assignable pattern
   // if possible.
-  // NOTE: There is a corresponding "isAssignable" method in flow.js.
-  // When this one is updated, please check if also that one needs to be updated.
+  // When this one is updated, please check if `isAssignable` also needs to be updated.
 
   toAssignable(node: Node): Node {
     let parenthesized = undefined;
