@@ -32,9 +32,9 @@
     "node": ">=6.0.0"
   },
   "devDependencies": {
-    "@babel/code-frame": "workspace:^7.10.4",
-    "@babel/helper-fixtures": "workspace:^7.10.5",
-    "@babel/helper-validator-identifier": "workspace:^7.10.4",
+    "@babel/code-frame": "workspace:*",
+    "@babel/helper-fixtures": "workspace:*",
+    "@babel/helper-validator-identifier": "workspace:*",
     "charcodes": "^0.2.0"
   },
   "bin": "./bin/babel-parser.js"
