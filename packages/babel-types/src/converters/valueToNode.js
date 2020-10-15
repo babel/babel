@@ -16,7 +16,7 @@ import {
 } from "../builders/generated";
 
 const util = require("util");
-// TODO: (Babel 8) Remove fallback from util.types to util
+// TODO: (Babel 8) Remove util.isRegExp fallback case
 const isRegExp =
   // $FlowIgnore - flow seems to believe that property 'types' is missing from util?
   (util.types && util.types.isRegExp) ||
