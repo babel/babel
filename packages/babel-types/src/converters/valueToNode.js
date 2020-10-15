@@ -18,6 +18,7 @@ import {
 let nodeUtilTypes;
 try {
   const util = require("util");
+  // $FlowIgnore - util.isRegExp was deprecated in Node v4, but util.types.isRegExp is only available from Node v10
   nodeUtilTypes = util.types || util;
 } catch {}
 
