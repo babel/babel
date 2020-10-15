@@ -1816,25 +1816,27 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    parseExprListItem(
-      allowEmpty: ?boolean,
-      refExpressionErrors?: ?ExpressionErrors,
-      refNeedsArrowPos: ?Pos,
-      allowPlaceholder: ?boolean,
-    ): ?N.Expression {
-      const node = super.parseExprListItem(
-        allowEmpty,
-        refExpressionErrors,
-        refNeedsArrowPos,
-        allowPlaceholder,
-      );
+    tsCheckForInvalidTypeCasts(items: $ReadOnlyArray<?N.Expression>) {
+      items.forEach(node => {
+        if (node?.type === "TSTypeCastExpression") {
+          this.raise(
+            node.typeAnnotation.start,
+            TSErrors.UnexpectedTypeAnnotation,
+          );
+        }
+      });
+    }
 
-      // Handle `func(a: T)` or `func<T>(a: T)`
-      if (!refNeedsArrowPos && node?.type === "TSTypeCastExpression") {
-        this.raise(node.start, TSErrors.UnexpectedTypeAnnotation);
-      }
-
-      return node;
+    toReferencedList(
+      exprList: $ReadOnlyArray<?N.Expression>,
+      isInParens?: boolean, // eslint-disable-line no-unused-vars
+    ): $ReadOnlyArray<?N.Expression> {
+      // Handles invalid scenarios like: `f(a:b)`, `(a:b);`, and `(a:b,c:d)`.
+      //
+      // Note that `f<T>(a:b)` goes through a different path and is handled
+      // in `parseSubscript` directly.
+      this.tsCheckForInvalidTypeCasts(exprList);
+      return exprList;
     }
 
     parseSubscript(
@@ -1886,6 +1888,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
                 tt.parenR,
                 /* possibleAsync */ false,
               );
+
+              // Handles invalid case: `f<T>(a:b)`
+              this.tsCheckForInvalidTypeCasts(node.arguments);
+
               node.typeParameters = typeArguments;
               return this.finishCallExpression(node, state.optionalChainMember);
             } else if (this.match(tt.backQuote)) {
