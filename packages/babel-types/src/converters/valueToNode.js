@@ -15,6 +15,7 @@ import {
   binaryExpression,
 } from "../builders/generated";
 
+// TODO: (Babel 8) Remove fallback from util.types to util
 let nodeUtilTypes;
 try {
   const util = require("util");
