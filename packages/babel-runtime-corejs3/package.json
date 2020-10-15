@@ -178,6 +178,7 @@
     "./helpers/esm/classPrivateMethodGet": "./helpers/esm/classPrivateMethodGet.js",
     "./helpers/esm/classPrivateMethodSet": "./helpers/esm/classPrivateMethodSet.js",
     "./helpers/esm/wrapRegExp": "./helpers/esm/wrapRegExp.js",
+    "./package": "./package.json",
     "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",
     "./regenerator/": "./regenerator/",

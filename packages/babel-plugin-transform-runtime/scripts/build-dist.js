@@ -123,6 +123,7 @@ function writeHelperExports(runtimeName, helperPaths) {
   const exports = {
     "./helpers/": "./helpers/",
     ...helperSubExports,
+    "./package": "./package.json",
     "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",
     "./regenerator/": "./regenerator/",
