@@ -1943,7 +1943,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       return partition(arrows, node =>
-        node.params.every(param => this.isAssignable(param, true)),
+        node.params.every(param => this.isAssignable(param)),
       );
     }
 
@@ -2146,47 +2146,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    isAssignable(node: N.Node, isBinding?: boolean): boolean {
+    isAssignable(node: N.Node): boolean {
       switch (node.type) {
-        case "Identifier":
-        case "ObjectPattern":
-        case "ArrayPattern":
-        case "AssignmentPattern":
-          return true;
-
-        case "ObjectExpression": {
-          const last = node.properties.length - 1;
-          return node.properties.every((prop, i) => {
-            return (
-              prop.type !== "ObjectMethod" &&
-              (i === last || prop.type === "SpreadElement") &&
-              this.isAssignable(prop)
-            );
-          });
-        }
-
-        case "ObjectProperty":
-          return this.isAssignable(node.value);
-
-        case "SpreadElement":
-          return this.isAssignable(node.argument);
-
-        case "ArrayExpression":
-          return node.elements.every(element => this.isAssignable(element));
-
-        case "AssignmentExpression":
-          return node.operator === "=";
-
-        case "ParenthesizedExpression":
         case "TypeCastExpression":
           return this.isAssignable(node.expression);
-
-        case "MemberExpression":
-        case "OptionalMemberExpression":
-          return !isBinding;
-
         default:
-          return false;
+          return super.isAssignable(node);
       }
     }
 
@@ -2772,7 +2737,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // handle return types for arrow functions
-    parseArrow(node: N.ArrowFunctionExpression): ?N.ArrowFunctionExpression {
+    parseArrow(
+      node: N.ArrowFunctionExpression,
+      exprList: N.Node[],
+    ): ?N.ArrowFunctionExpression {
       if (this.match(tt.colon)) {
         const result = this.tryParse(() => {
           const oldNoAnonFunctionType = this.state.noAnonFunctionType;
@@ -2806,7 +2774,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           : null;
       }
 
-      return super.parseArrow(node);
+      return super.parseArrow(node, exprList);
     }
 
     shouldParseArrow(): boolean {
@@ -2977,7 +2945,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): ?N.ArrowFunctionExpression {
       const node = this.startNodeAt(startPos, startLoc);
       this.parseFunctionParams(node);
-      if (!this.parseArrow(node)) return;
+      // set exprList to `[]` as the parameters has been validated in `parseFunctionParams`
+      if (!this.parseArrow(node, [])) return;
       return this.parseArrowExpression(
         node,
         /* params */ undefined,
