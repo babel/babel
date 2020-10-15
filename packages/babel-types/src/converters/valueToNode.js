@@ -22,7 +22,8 @@ try {
 } catch {}
 
 const isRegExp =
-  (nodeUtilTypes && nodeUtilTypes.isRegExp) || (value => {
+  (nodeUtilTypes && nodeUtilTypes.isRegExp) ||
+  (value => {
     return Object.prototype.toString.call(value) === "[object RegExp]";
   });
 
