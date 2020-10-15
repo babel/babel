@@ -220,6 +220,16 @@ prepublish:
 	IS_PUBLISH=true $(MAKE) test
 
 new-version:
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo "!!!!!!                                                   !!!!!!"
+	@echo "!!!!!!  Update the version used for                      !!!!!!"
+	@echo "!!!!!!  BABEL_SUPPORTS_EXTENSIONS_OPTION in @babel/cli,  !!!!!!"
+	@echo "!!!!!!  @babel/register and @babel/preset-typescript     !!!!!!"
+	@echo "!!!!!!                                                   !!!!!!"
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@exit 1
 	git pull --rebase
 	$(YARN) release-tool version $(FORCE_PUBLISH)
 
