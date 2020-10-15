@@ -79,7 +79,7 @@ function rename(fn) {
 
 /**
  *
- * @typedef {("asserts" | "builders" | "constants" | | "validators")} HelperKind
+ * @typedef {("asserts" | "builders" | "constants" | "validators")} HelperKind
  * @param {HelperKind} helperKind
  */
 function generateTypeHelpers(helperKind) {
@@ -104,29 +104,23 @@ function generateTypeHelpers(helperKind) {
     .pipe(gulp.dest(dest));
 }
 
-function buildFlowTypings() {
-  const dest = "./packages/babel-types/lib/";
-  return gulp
-    .src(".", { base: __dirname })
-    .pipe(errorsLogger())
-    .pipe(
-      through.obj(require("./packages/babel-types/scripts/generators/flow.js"))
-    )
-    .pipe(rename(() => "index.js.flow"))
-    .pipe(gulp.dest(dest));
-}
-
-function buildTypeScriptTypings() {
+/**
+ * Build @babel/types typings
+ * @typedef {("flow" | "typescript")} TypingGeneratorKind
+ * @param {TypingGeneratorKind} generator
+ * @returns
+ */
+function buildTypings(generator) {
   const dest = "./packages/babel-types/lib/";
   return gulp
     .src(".", { base: __dirname })
     .pipe(errorsLogger())
     .pipe(
       through.obj(
-        require("./packages/babel-types/scripts/generators/typescript.js")
+        require(`./packages/babel-types/scripts/generators/${generator}.js`)
       )
     )
-    .pipe(rename(() => "index.d.ts"))
+    .pipe(rename(() => (generator === "flow" ? "index.js.flow" : "index.d.ts")))
     .pipe(gulp.dest(dest));
 }
 
@@ -155,11 +149,8 @@ function generateStandalone() {
  * To re-generate run 'yarn gulp generate-standalone'
  */
 ${imports}
-
 export {${list}};
-
-export const all = {${allList}};
-`;
+export const all = {${allList}};`;
         file.path = "plugins.js";
         file.contents = Buffer.from(formatCode(fileContents, dest));
         callback(null, file);
@@ -342,8 +333,8 @@ gulp.task("generate-type-helpers", () => {
   );
 });
 
-gulp.task("build-flow-typings", () => buildFlowTypings());
-gulp.task("build-typescript-typings", () => buildTypeScriptTypings());
+gulp.task("build-flow-typings", () => buildTypings("flow"));
+gulp.task("build-typescript-typings", () => buildTypings("typescript"));
 gulp.task(
   "build-typings",
   gulp.parallel("build-flow-typings", "build-typescript-typings")
