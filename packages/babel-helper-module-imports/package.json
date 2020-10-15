@@ -18,6 +18,6 @@
     "@babel/types": "workspace:^7.10.4"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^7.10.4"
+    "@babel/core": "workspace:*"
   }
 }

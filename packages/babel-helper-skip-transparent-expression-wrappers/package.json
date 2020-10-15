@@ -20,6 +20,6 @@
     "@babel/types": "workspace:^7.11.0"
   },
   "devDependencies": {
-    "@babel/traverse": "workspace:^7.11.0"
+    "@babel/traverse": "workspace:*"
   }
 }

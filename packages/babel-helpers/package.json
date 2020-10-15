@@ -20,6 +20,6 @@
     "@babel/types": "workspace:^7.10.4"
   },
   "devDependencies": {
-    "@babel/helper-plugin-test-runner": "workspace:^7.10.4"
+    "@babel/helper-plugin-test-runner": "workspace:*"
   }
 }
