@@ -39,8 +39,8 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:*"
     "@babel/helper-fixtures": "workspace:*"
+    "@nicolo-ribaudo/chokidar-2": ^2.1.8
     chokidar: ^3.4.0
-    chokidarAt2: "https://registry.npmjs.org/chokidar/-/chokidar-2.1.8.tgz"
     commander: ^4.0.1
     convert-source-map: ^1.1.0
     fs-readdir-recursive: ^1.1.0
@@ -53,9 +53,9 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   dependenciesMeta:
-    chokidar:
+    "@nicolo-ribaudo/chokidar-2":
       optional: true
-    chokidarAt2:
+    chokidar:
       optional: true
   bin:
     babel: ./bin/babel.js
@@ -3547,6 +3547,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nicolo-ribaudo/chokidar-2@npm:^2.1.8":
+  version: 2.1.8
+  resolution: "@nicolo-ribaudo/chokidar-2@npm:2.1.8"
+  dependencies:
+    chokidar: 2.1.8
+  checksum: a3528e53052074df562ad776ac1211dc03d41b0c06d90b5472cd60d6e717900e4a987d89cf269c3c031ee35674f369e6ebd2e4846ed19d06e5da8ed1ffecb682
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.3":
   version: 2.1.3
   resolution: "@nodelib/fs.scandir@npm:2.1.3"
@@ -5161,7 +5170,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:^2.0.0":
+"chokidar@npm:2.1.8, chokidar@npm:^2.0.0":
   version: 2.1.8
   resolution: "chokidar@npm:2.1.8"
   dependencies:
