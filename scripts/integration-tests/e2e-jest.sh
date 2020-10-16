@@ -39,7 +39,7 @@ python --version
 
 startLocalRegistry "$root"/verdaccio-config.yml
 yarn install
-yarn build
+yarn build:js
 
 # Test
 CI=true yarn test
