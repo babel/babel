@@ -34,3 +34,9 @@ enum E of symbol {
   A,
   B,
 }
+
+enum E {
+  A,
+  B,
+  ...
+}

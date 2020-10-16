@@ -37,7 +37,8 @@
                 "name": "B"
               }
             }
-          ]
+          ],
+          "hasUnknownMembers": false
         }
       }
     ],

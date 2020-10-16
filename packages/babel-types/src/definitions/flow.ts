@@ -491,6 +491,7 @@ defineType("EnumBooleanBody", {
   fields: {
     explicitType: validate(assertValueType("boolean")),
     members: validateArrayOfType("EnumBooleanMember"),
+    hasUnknownMembers: validate(assertValueType("boolean")),
   },
 });
 
@@ -500,6 +501,7 @@ defineType("EnumNumberBody", {
   fields: {
     explicitType: validate(assertValueType("boolean")),
     members: validateArrayOfType("EnumNumberMember"),
+    hasUnknownMembers: validate(assertValueType("boolean")),
   },
 });
 
@@ -509,6 +511,7 @@ defineType("EnumStringBody", {
   fields: {
     explicitType: validate(assertValueType("boolean")),
     members: validateArrayOfType(["EnumStringMember", "EnumDefaultedMember"]),
+    hasUnknownMembers: validate(assertValueType("boolean")),
   },
 });
 
@@ -517,6 +520,7 @@ defineType("EnumSymbolBody", {
   visitor: ["members"],
   fields: {
     members: validateArrayOfType("EnumDefaultedMember"),
+    hasUnknownMembers: validate(assertValueType("boolean")),
   },
 });
 

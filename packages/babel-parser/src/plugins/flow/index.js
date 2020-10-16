@@ -3282,10 +3282,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       enumName: string,
       explicitType: EnumExplicitType,
     }): {|
-      booleanMembers: Array<N.Node>,
-      numberMembers: Array<N.Node>,
-      stringMembers: Array<N.Node>,
-      defaultedMembers: Array<N.Node>,
+      members: {|
+        booleanMembers: Array<N.Node>,
+        numberMembers: Array<N.Node>,
+        stringMembers: Array<N.Node>,
+        defaultedMembers: Array<N.Node>,
+      |},
+      hasUnknownMembers: boolean,
     |} {
       const seenNames = new Set();
       const members = {
@@ -3294,7 +3297,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         stringMembers: [],
         defaultedMembers: [],
       };
+      let hasUnknownMembers = false;
       while (!this.match(tt.braceR)) {
+        if (this.eat(tt.ellipsis)) {
+          hasUnknownMembers = true;
+          break;
+        }
         const memberNode = this.startNode();
         const { id, init } = this.flowEnumMemberRaw();
         const memberName = id.name;
@@ -3371,7 +3379,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.expect(tt.comma);
         }
       }
-      return members;
+      return { members, hasUnknownMembers };
     }
 
     flowEnumStringMembers(
@@ -3438,7 +3446,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     flowEnumBody(node: N.Node, { enumName, nameLoc }): N.Node {
       const explicitType = this.flowEnumParseExplicitType({ enumName });
       this.expect(tt.braceL);
-      const members = this.flowEnumMembers({ enumName, explicitType });
+      const { members, hasUnknownMembers } = this.flowEnumMembers({
+        enumName,
+        explicitType,
+      });
+      node.hasUnknownMembers = hasUnknownMembers;
 
       switch (explicitType) {
         case "boolean":

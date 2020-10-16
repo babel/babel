@@ -22,7 +22,8 @@
           "type": "EnumStringBody",
           "start":7,"end":29,"loc":{"start":{"line":1,"column":7},"end":{"line":5,"column":1}},
           "explicitType": false,
-          "members": []
+          "members": [],
+          "hasUnknownMembers": false
         }
       }
     ],

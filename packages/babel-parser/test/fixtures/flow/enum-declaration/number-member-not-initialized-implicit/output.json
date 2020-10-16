@@ -22,6 +22,7 @@
           "type": "EnumNumberBody",
           "start":7,"end":24,"loc":{"start":{"line":1,"column":7},"end":{"line":4,"column":1}},
           "explicitType": false,
+          "hasUnknownMembers": false,
           "members": [
             {
               "type": "EnumNumberMember",

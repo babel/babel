@@ -195,6 +195,10 @@ function enumBody(context: any, node: any) {
     context.print(member, node);
     context.newline();
   }
+  if (node.hasUnknownMembers) {
+    context.token("...");
+    context.newline();
+  }
   context.dedent();
   context.token("}");
 }
