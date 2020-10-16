@@ -19,6 +19,21 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.12.3 (2020-10-16)
+
+#### :bug: Bug Fix
+* `babel-helper-wrap-function`, `babel-plugin-proposal-async-generator-functions`
+  * [#12192](https://github.com/babel/babel/pull/12192) fix: properly wrap private class methods ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#12200](https://github.com/babel/babel/pull/12200) Make `loadPartialConfig`'s options optional ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#12185](https://github.com/babel/babel/pull/12185) [ts] Disallow invalid type annotations in ExpressionStatements ([@existentialism](https://github.com/existentialism))
+
+#### :house: Internal
+* Other
+  * [#12204](https://github.com/babel/babel/pull/12204) chore: update test262 tests ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#12203](https://github.com/babel/babel/pull/12203) test: add test case for babel-parser: fixtures/typescript/arrow-function/destructuring-with-annotation-newline ([@Mongkii](https://github.com/Mongkii))
 ## v7.12.2 (2020-10-16)
 
 #### :leftwards_arrow_with_hook: Revert
