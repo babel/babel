@@ -19,6 +19,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.12.2 (2020-10-16)
+
+#### :leftwards_arrow_with_hook: Revert
+* `babel-parser`
+  * [#12198](https://github.com/babel/babel/pull/12198) Revert "Reland "Fix: check if param is assignable when parsing arrow return type annotation"" ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.12.1 (2020-10-16)
 
 #### :bug: Bug Fix
