@@ -157,8 +157,14 @@ type LoadPartialConfigOpts = {
 };
 
 export const loadPartialConfig = gensync<[any], PartialConfig | null>(
-  function* (inputOpts: LoadPartialConfigOpts): Handler<PartialConfig | null> {
-    const { showIgnoredFiles, ...opts } = inputOpts;
+  function* (opts?: LoadPartialConfigOpts): Handler<PartialConfig | null> {
+    let showIgnoredFiles = false;
+    // We only extract showIgnoredFiles if opts is an object, so that
+    // loadPrivatePartialConfig can throw the appropriate error if it's not.
+    if (typeof opts === "object" && opts !== null && !Array.isArray(opts)) {
+      ({ showIgnoredFiles, ...opts } = opts);
+    }
+
     const result: ?PrivPartialConfig = yield* loadPrivatePartialConfig(opts);
     if (!result) return null;
 
