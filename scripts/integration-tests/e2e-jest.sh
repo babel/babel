@@ -40,7 +40,10 @@ python --version
 startLocalRegistry "$root"/verdaccio-config.yml
 yarn install
 yarn dedupe
-yarn build
+yarn build:js
+# "yarn build" is "yarn build:js && yarn build:ts", but we can still run
+# "yarn test" if "yarn build:ts" fails
+yarn build:ts || echo ""
 
 # Test
 CI=true yarn test
