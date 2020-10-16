@@ -42,7 +42,7 @@ yarn install
 yarn dedupe '@babel/*'
 yarn build
 
-# The full test suite take about 20mins on CircleCI. We run only a few of them
+# The full test suite takes about 20mins on CircleCI. We run only a few of them
 # to speed it up.
 # The goals of this e2e test are:
 #   1) Check that the typescript compilation isn't completely broken
