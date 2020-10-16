@@ -46,7 +46,7 @@ yarn build
 # to speed it up.
 # The goals of this e2e test are:
 #   1) Check that the typescript compilation isn't completely broken
-#   2) Make sure that we don't accidentally break jest's usage or the Babel API
+#   2) Make sure that we don't accidentally break jest's usage of the Babel API
 CI=true yarn test-ci-partial packages
 CI=true yarn test-ci-partial e2e/__tests__/babel
 CI=true yarn test-ci-partial e2e/__tests__/transform
