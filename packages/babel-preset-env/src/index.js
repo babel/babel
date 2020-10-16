@@ -206,42 +206,12 @@ export const getPolyfillPlugins = ({
   return polyfillPlugins;
 };
 
-function supportsStaticESM(caller) {
-  return !!caller?.supportsStaticESM;
-}
-
-function supportsDynamicImport(caller) {
-  return !!caller?.supportsDynamicImport;
-}
-
-function supportsExportNamespaceFrom(caller) {
-  return !!caller?.supportsExportNamespaceFrom;
-}
-
-function supportsTopLevelAwait(caller) {
-  return !!caller?.supportsTopLevelAwait;
-}
-
-export default declare((api, opts) => {
-  api.assertVersion(7);
-
-  const {
-    bugfixes,
-    configPath,
-    debug,
-    exclude: optionsExclude,
-    forceAllTransforms,
-    ignoreBrowserslistConfig,
-    include: optionsInclude,
-    loose,
-    modules,
-    shippedProposals,
-    spec,
-    targets: optionsTargets,
-    useBuiltIns,
-    corejs: { version: corejs, proposals },
-    browserslistEnv,
-  } = normalizeOptions(opts);
+function getLocalTargets(
+  optionsTargets,
+  ignoreBrowserslistConfig,
+  configPath,
+  browserslistEnv,
+) {
   // TODO: remove this in next major
   let hasUglifyTarget = false;
 
@@ -267,15 +237,79 @@ export default declare((api, opts) => {
     console.log("");
   }
 
-  const targets = getTargets(
+  const localTargets = getTargets(
     // $FlowIgnore optionsTargets doesn't have an "uglify" property anymore
     (optionsTargets: InputTargets),
     { ignoreBrowserslistConfig, configPath, browserslistEnv },
   );
+  return { hasUglifyTarget, localTargets };
+}
+
+function supportsStaticESM(caller) {
+  return !!caller?.supportsStaticESM;
+}
+
+function supportsDynamicImport(caller) {
+  return !!caller?.supportsDynamicImport;
+}
+
+function supportsExportNamespaceFrom(caller) {
+  return !!caller?.supportsExportNamespaceFrom;
+}
+
+function supportsTopLevelAwait(caller) {
+  return !!caller?.supportsTopLevelAwait;
+}
+
+export default declare((api, opts) => {
+  api.assertVersion(7);
+
+  // TODO(Babel 8): api.targets() is always defined, no need to fallback
+  const babelTargets = api.targets?.() ?? {};
+
+  const {
+    bugfixes,
+    configPath,
+    debug,
+    exclude: optionsExclude,
+    forceAllTransforms,
+    ignoreBrowserslistConfig,
+    include: optionsInclude,
+    loose,
+    modules,
+    shippedProposals,
+    spec,
+    targets: optionsTargets,
+    useBuiltIns,
+    corejs: { version: corejs, proposals },
+    browserslistEnv,
+  } = normalizeOptions(opts);
+
+  let targets = babelTargets;
+  let transformTargets = forceAllTransforms ? {} : babelTargets;
+
+  if (
+    // If any browserslist-related option is specified, fallback to the old
+    // behavior of not using the targets specified in the top-level options.
+    opts.targets ||
+    opts.configPath ||
+    opts.browserslistEnv ||
+    opts.ignoreBrowserslistConfig
+  ) {
+    const { hasUglifyTarget, localTargets } = getLocalTargets(
+      optionsTargets,
+      ignoreBrowserslistConfig,
+      configPath,
+      browserslistEnv,
+    );
+
+    targets = localTargets;
+    if (hasUglifyTarget) transformTargets = {};
+    else if (!forceAllTransforms) transformTargets = localTargets;
+  }
+
   const include = transformIncludesAndExcludes(optionsInclude);
   const exclude = transformIncludesAndExcludes(optionsExclude);
-
-  const transformTargets = forceAllTransforms || hasUglifyTarget ? {} : targets;
 
   const compatData = getPluginList(shippedProposals, bugfixes);
   const shouldSkipExportNamespaceFrom =
