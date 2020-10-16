@@ -43,6 +43,6 @@ yarn dedupe '@babel/*'
 yarn build
 
 # Test
-CI=true yarn test
+CI=true yarn test-ci-partial
 
 cleanup
