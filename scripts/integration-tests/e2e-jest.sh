@@ -6,6 +6,7 @@
 
 # Start in scripts/integration-tests/ even if run from root directory
 cd "$(dirname "$0")" || exit
+root="$PWD"
 
 source utils/local-registry.sh
 source utils/cleanup.sh
@@ -14,11 +15,11 @@ source utils/cleanup.sh
 set -x
 
 # Clone jest
-git clone --depth=1 https://github.com/facebook/jest tmp/jest
-cd tmp/jest || exit
+git clone --depth=1 https://github.com/facebook/jest /tmp/jest
+cd /tmp/jest || exit
 
 # Update @babel/* dependencies
-bump_deps="$PWD/../../utils/bump-babel-dependencies.js"
+bump_deps="$root/utils/bump-babel-dependencies.js"
 node "$bump_deps"
 for d in ./packages/*/
 do
@@ -36,7 +37,7 @@ python --version
 #                                   TEST                                       #
 #==============================================================================#
 
-startLocalRegistry "$PWD"/../../verdaccio-config.yml
+startLocalRegistry "$root"/verdaccio-config.yml
 yarn install
 yarn build
 
