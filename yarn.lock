@@ -123,7 +123,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@workspace:*, @babel/core@workspace:^7.12.1, @babel/core@workspace:packages/babel-core":
+"@babel/core@workspace:*, @babel/core@workspace:^7.12.1, @babel/core@workspace:^7.12.3, @babel/core@workspace:packages/babel-core":
   version: 0.0.0-use.local
   resolution: "@babel/core@workspace:packages/babel-core"
   dependencies:
@@ -132,7 +132,7 @@ __metadata:
     "@babel/helper-module-transforms": "workspace:^7.12.1"
     "@babel/helper-transform-fixture-test-runner": "workspace:^7.12.1"
     "@babel/helpers": "workspace:^7.12.1"
-    "@babel/parser": "workspace:^7.12.1"
+    "@babel/parser": "workspace:^7.12.3"
     "@babel/template": "workspace:^7.10.4"
     "@babel/traverse": "workspace:^7.12.1"
     "@babel/types": "workspace:^7.12.1"
@@ -899,7 +899,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/parser@workspace:^7.10.4, @babel/parser@workspace:^7.12.1, @babel/parser@workspace:packages/babel-parser":
+"@babel/parser@workspace:^7.10.4, @babel/parser@workspace:^7.12.1, @babel/parser@workspace:^7.12.3, @babel/parser@workspace:packages/babel-parser":
   version: 0.0.0-use.local
   resolution: "@babel/parser@workspace:packages/babel-parser"
   dependencies:
@@ -3175,7 +3175,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/standalone@workspace:packages/babel-standalone"
   dependencies:
-    "@babel/core": "workspace:^7.12.1"
+    "@babel/core": "workspace:^7.12.3"
     "@babel/plugin-external-helpers": "workspace:^7.12.1"
     "@babel/plugin-proposal-async-generator-functions": "workspace:^7.12.1"
     "@babel/plugin-proposal-class-properties": "workspace:^7.12.1"
