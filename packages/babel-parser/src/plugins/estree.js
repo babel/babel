@@ -379,7 +379,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
-    finishCoverCallExpressionArguments(
+    toReferencedArguments(
       node:
         | N.CallExpression
         | N.OptionalCallExpression
@@ -391,7 +391,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return;
       }
 
-      super.finishCoverCallExpressionArguments(node);
+      super.toReferencedArguments(node);
     }
 
     parseExport(node: N.Node) {

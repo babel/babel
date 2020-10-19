@@ -752,7 +752,7 @@ export default class ExpressionParser extends LValParser {
       this.state.yieldPos = oldYieldPos;
       this.state.awaitPos = oldAwaitPos;
     } else {
-      this.finishCoverCallExpressionArguments(node);
+      this.toReferencedArguments(node);
 
       // We keep the old value if it isn't null, for cases like
       //   (x = async(yield)) => {}
@@ -791,7 +791,7 @@ export default class ExpressionParser extends LValParser {
     return node;
   }
 
-  finishCoverCallExpressionArguments(
+  toReferencedArguments(
     node: N.CallExpression | N.OptionalCallExpression,
     isParenthesizedExpr?: boolean,
   ) {
