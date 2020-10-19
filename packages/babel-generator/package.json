@@ -24,6 +24,6 @@
   },
   "devDependencies": {
     "@babel/helper-fixtures": "workspace:*",
-    "@babel/parser": "workspace:^7.12.1"
+    "@babel/parser": "workspace:*"
   }
 }
