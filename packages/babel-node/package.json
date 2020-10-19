@@ -36,9 +36,9 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^7.12.1",
+    "@babel/core": "workspace:*",
     "@babel/helper-fixtures": "workspace:*",
-    "@babel/runtime": "workspace:^7.12.1",
+    "@babel/runtime": "workspace:*",
     "fs-readdir-recursive": "^1.0.0",
     "make-dir": "^2.1.0",
     "rimraf": "^3.0.0"

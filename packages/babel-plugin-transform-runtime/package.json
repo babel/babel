@@ -29,15 +29,15 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^7.12.1",
+    "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*",
-    "@babel/helpers": "workspace:^7.12.1",
-    "@babel/plugin-transform-typeof-symbol": "workspace:^7.12.1",
-    "@babel/preset-env": "workspace:^7.12.1",
-    "@babel/runtime": "workspace:^7.12.1",
-    "@babel/runtime-corejs3": "workspace:^7.12.1",
+    "@babel/helpers": "workspace:*",
+    "@babel/plugin-transform-typeof-symbol": "workspace:*",
+    "@babel/preset-env": "workspace:*",
+    "@babel/runtime": "workspace:*",
+    "@babel/runtime-corejs3": "workspace:*",
     "@babel/template": "workspace:*",
-    "@babel/types": "workspace:^7.12.1",
+    "@babel/types": "workspace:*",
     "make-dir": "^2.1.0"
   }
 }

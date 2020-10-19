@@ -22,8 +22,8 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^7.12.1",
+    "@babel/core": "workspace:*",
     "@babel/helper-plugin-test-runner": "workspace:*",
-    "@babel/traverse": "workspace:^7.12.1"
+    "@babel/traverse": "workspace:*"
   }
 }
