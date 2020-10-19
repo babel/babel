@@ -117,7 +117,12 @@ export default function* loadPrivatePartialConfig(
   const configChain = yield* buildRootChain(args, context);
   if (!configChain) return null;
 
-  const merged: ValidatedOptions = {};
+  const merged: ValidatedOptions = {
+    // TODO(Babel 8): everything should default to false. Remove this object.
+    assumptions: {
+      newableArrowFunctions: true,
+    },
+  };
   configChain.options.forEach(opts => {
     mergeOptions((merged: any), opts);
   });
