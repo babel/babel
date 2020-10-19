@@ -1839,6 +1839,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return exprList;
     }
 
+    parseArrayLike(...args): N.ArrayExpression | N.TupleExpression {
+      const node = super.parseArrayLike(...args);
+
+      if (node.type === "ArrayExpression") {
+        this.tsCheckForInvalidTypeCasts(node.elements);
+      }
+
+      return node;
+    }
+
     parseSubscript(
       base: N.Expression,
       startPos: number,
