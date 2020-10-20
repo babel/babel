@@ -1,0 +1,48 @@
+{
+  "type": "File",
+  "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":49}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":49}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":49}},
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":8,"end":30,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":30}},
+            "imported": {
+              "type": "StringLiteral",
+              "start":8,"end":17,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":17}},
+              "extra": {
+                "rawValue": "default",
+                "raw": "\"default\""
+              },
+              "value": "default"
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start":21,"end":30,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":30},"identifierName":"quotation"},
+              "name": "quotation"
+            }
+          }
+        ],
+        "importKind": "value",
+        "source": {
+          "type": "StringLiteral",
+          "start":37,"end":48,"loc":{"start":{"line":1,"column":37},"end":{"line":1,"column":48}},
+          "extra": {
+            "rawValue": "Confucius",
+            "raw": "\"Confucius\""
+          },
+          "value": "Confucius"
+        }
+      }
+    ],
+    "directives": []
+  }
+}
