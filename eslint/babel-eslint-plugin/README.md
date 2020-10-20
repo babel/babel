@@ -46,3 +46,7 @@ Each rule corresponds to a core `eslint` rule and has the same options.
 - `@babel/no-unused-expressions`: handles `do` expressions
 - `@babel/object-curly-spacing`: handles `export * as x from "mod";` (🛠)
 - `@babel/semi`: Handles class properties (🛠)
+
+## TypeScript
+
+While [`@babel/eslint-parser`](https://github.com/babel/babel/tree/main/eslint/babel-eslint-parser) can parse TypeScript, we don't currently support linting TypeScript using the rules in [`@babel/eslint-plugin`](https://github.com/babel/babel/tree/main/eslint/babel-eslint-plugin). This is because the TypeScript community has centered around [`@typescript-eslint`](https://github.com/typescript-eslint/typescript-eslint) and we want to avoid duplicate work. Additionally, since [`@typescript-eslint`](https://github.com/typescript-eslint/typescript-eslint) uses TypeScript under the hood, its rules can be made type-aware, which is something Babel doesn't have the ability to do.
