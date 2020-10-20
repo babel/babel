@@ -2496,13 +2496,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseImportSpecifier(node: N.ImportDeclaration): void {
       const specifier = this.startNode();
       const firstIdentLoc = this.state.start;
-      const firstIdent = this.parseIdentifier(true);
+      const firstIdent = this.parseModuleExportName();
 
       let specifierTypeKind = null;
-      if (firstIdent.name === "type") {
-        specifierTypeKind = "type";
-      } else if (firstIdent.name === "typeof") {
-        specifierTypeKind = "typeof";
+      if (firstIdent.type === "Identifier") {
+        if (firstIdent.name === "type") {
+          specifierTypeKind = "type";
+        } else if (firstIdent.name === "typeof") {
+          specifierTypeKind = "typeof";
+        }
       }
 
       let isBinding = false;
@@ -2537,6 +2539,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           specifier.local = specifier.imported.__clone();
         }
       } else {
+        if (firstIdent.type === "StringLiteral") {
+          throw this.raise(
+            specifier.start,
+            Errors.ImportBindingIsString,
+            firstIdent.value,
+          );
+        }
         isBinding = true;
         specifier.imported = firstIdent;
         specifier.importKind = null;
