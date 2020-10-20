@@ -26,7 +26,12 @@ export const PARAM = 0b0000, // Initial Parameter flags
 // 6. parse function body
 // 7. exit current stack
 
-export type ParamKind = typeof PARAM | typeof PARAM_AWAIT | typeof PARAM_YIELD;
+export type ParamKind =
+  | typeof PARAM
+  | typeof PARAM_AWAIT
+  | typeof PARAM_IN
+  | typeof PARAM_RETURN
+  | typeof PARAM_YIELD;
 
 export default class ProductionParameterHandler {
   stacks: Array<ParamKind> = [];
