@@ -126,7 +126,6 @@ defaultValueInFunctionTypes.ts
 deleteOperator1.ts
 deleteOperatorInStrictMode.ts
 dependencyViaImportAlias.ts
-destructureOptionalParameter.ts
 destructuredDeclarationEmit.ts
 doubleUnderscoreExportStarConflict.ts
 duplicateIdentifierBindingElementInParameterDeclaration1.ts
