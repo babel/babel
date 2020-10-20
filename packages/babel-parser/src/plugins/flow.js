@@ -2527,12 +2527,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       } else if (
         specifierTypeKind !== null &&
-        (this.match(tt.name) ||
-          this.match(tt.string) ||
-          this.state.type.keyword)
+        (this.match(tt.name) || this.state.type.keyword)
       ) {
         // `import {type foo`
-        specifier.imported = this.parseModuleExportName();
+        specifier.imported = this.parseIdentifier(true);
         specifier.importKind = specifierTypeKind;
         if (this.eatContextual("as")) {
           specifier.local = this.parseIdentifier();
