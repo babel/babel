@@ -753,30 +753,6 @@ export default class ExpressionParser extends LValParser {
         this.expressionScope.exit();
       }
       this.toReferencedArguments(node);
-
-      // We keep the old value if it isn't null, for cases like
-      //   (x = async(yield)) => {}
-      //
-      // Hi developer of the future :) If you are implementing generator
-      // arrow functions, please read the note below about "await" and
-      // verify if the same logic is needed for yield.
-
-      // Await is trickier than yield. When parsing a possible arrow function
-      // (e.g. something starting with `async(`) we don't know if its possible
-      // parameters will actually be inside an async arrow function or if it is
-      // a normal call expression.
-      // If it ended up being a call expression, if we are in a context where
-      // await expression are disallowed (and thus "await" is an identifier)
-      // we must be careful not to leak this.state.awaitPos to an even outer
-      // context, where "await" could not be an identifier.
-      // For example, this code is valid because "await" isn't directly inside
-      // an async function:
-      //
-      //     async function a() {
-      //       function b(param = async (await)) {
-      //       }
-      //     }
-      //
     }
 
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
