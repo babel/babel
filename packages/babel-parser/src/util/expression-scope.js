@@ -1,5 +1,6 @@
 // @flow
 
+/*:: declare var invariant; */
 // Expression.
 const kExpression = 0,
   // Declaration or expression or assignment target.
@@ -8,12 +9,14 @@ const kExpression = 0,
   // Declarations.
   kParameterDeclaration = 3;
 
-type ExpressionScopeType = 0 | 1 | 2 | 3 | 4;
+type ExpressionScopeType = 0 | 1 | 2 | 3;
+
+type raiseFunction = (number, string, ...any) => void;
 
 class ExpressionScope {
   type: ExpressionScopeType;
 
-  constructor(type = kExpression) {
+  constructor(type: ExpressionScopeType = kExpression) {
     this.type = type;
   }
 
@@ -34,10 +37,12 @@ class ExpressionScope {
 }
 
 class ArrowHeadParsingScope extends ExpressionScope {
+  declare declarationErrorPos: number;
+  declare declarationErrorMessage: string;
   constructor(type: 1 | 2) {
     super(type);
   }
-  recordDeclarationError(pos, message) {
+  recordDeclarationError(pos: number, message: string) {
     this.declarationErrorPos = pos;
     this.declarationErrorMessage = message;
   }
@@ -45,6 +50,7 @@ class ArrowHeadParsingScope extends ExpressionScope {
 
 export default class ExpressionScopeHandler {
   stack: Array<ExpressionScope> = [new ExpressionScope()];
+  declare raise: raiseFunction;
   constructor(raise: raiseFunction) {
     this.raise = raise;
   }
@@ -52,20 +58,11 @@ export default class ExpressionScopeHandler {
     this.stack.push(scope);
   }
 
-  get currentScope() {
-    const { stack } = this;
-    return stack[stack.length - 1];
-  }
-
   exit() {
-    if (this.stack.length === 1) {
-      throw new Error("Internal Error");
-    }
     this.stack.pop();
-    // todo: move error message to upper scopes
   }
 
-  recordParameterInitializerError(pos, message) {
+  recordParameterInitializerError(pos: number, message: string) {
     const { stack } = this;
     let i = stack.length - 1;
     let scope: ExpressionScope = stack[i];
@@ -74,6 +71,7 @@ export default class ExpressionScopeHandler {
     }
     while (!scope.isCertainlyParameterDeclaration()) {
       if (scope.canBeParameterDeclaration()) {
+        /*:: invariant(scope instanceof ArrowHeadParsingScope) */
         scope.recordDeclarationError(pos, message);
       }
       if (i === 0) return;
@@ -83,7 +81,7 @@ export default class ExpressionScopeHandler {
     this.raise(pos, message);
   }
 
-  recordAsyncArrowParametersError(pos, message) {
+  recordAsyncArrowParametersError(pos: number, message: string) {
     const { stack } = this;
     let i = stack.length - 1;
     while (i > 0) {
@@ -92,6 +90,7 @@ export default class ExpressionScopeHandler {
         return;
       }
       if (scope.type === kMaybeAsyncArrowParameterDeclaration) {
+        /*:: invariant(scope instanceof ArrowHeadParsingScope) */
         scope.recordDeclarationError(pos, message);
       }
       --i;
@@ -99,8 +98,10 @@ export default class ExpressionScopeHandler {
   }
 
   validateAsPattern() {
-    const { currentScope } = this;
+    const { stack } = this;
+    const currentScope = stack[stack.length - 1];
     if (!currentScope.canBeArrowParameterDeclaration()) return;
+    /*:: invariant(currentScope instanceof ArrowHeadParsingScope) */
     if (currentScope.declarationErrorPos) {
       this.raise(
         currentScope.declarationErrorPos,

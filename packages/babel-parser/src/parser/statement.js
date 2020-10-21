@@ -1983,7 +1983,6 @@ export default class StatementParser extends ExpressionParser {
               // check for keywords used as local names
               this.checkReservedWord(local.name, local.start, true, false);
               // check if export is defined
-              // $FlowIgnore
               this.scope.checkLocalExport(local);
             }
           }
