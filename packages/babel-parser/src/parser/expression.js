@@ -53,7 +53,6 @@ import {
   newArrowHeadScope,
   newAsyncArrowScope,
   newExpressionScope,
-  newParameterDeclarationScope,
 } from "../util/expression-scope.js";
 import { Errors } from "./error";
 
@@ -1200,7 +1199,8 @@ export default class ExpressionParser extends LValParser {
   // async [no LineTerminator here] AsyncArrowBindingIdentifier[?Yield] [no LineTerminator here] => AsyncConciseBody[?In]
   parseAsyncArrowUnaryFunction(id: N.Expression): N.ArrowFunctionExpression {
     const node = this.startNodeAtNode(id);
-    this.expressionScope.enter(newParameterDeclarationScope());
+    // We don't need to push a new ParameterDeclarationScope here since we are sure
+    // 1) it is an async arrow, 2) no biding pattern is allowed in params
     this.prodParam.enter(functionFlags(true, this.prodParam.hasYield));
     const params = [this.parseIdentifier()];
     this.prodParam.exit();
@@ -1208,7 +1208,6 @@ export default class ExpressionParser extends LValParser {
       this.raise(this.state.pos, Errors.LineTerminatorBeforeArrow);
     }
     this.expect(tt.arrow);
-    this.expressionScope.exit();
     // let foo = async bar => {};
     this.parseArrowExpression(node, params, true);
     return node;
