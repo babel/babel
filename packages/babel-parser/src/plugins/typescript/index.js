@@ -1649,11 +1649,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-      const oldYieldPos = this.state.yieldPos;
-      const oldAwaitPos = this.state.awaitPos;
       this.state.maybeInArrowParameters = true;
-      this.state.yieldPos = -1;
-      this.state.awaitPos = -1;
 
       const res: ?N.ArrowFunctionExpression = this.tsTryParseAndCatch(() => {
         const node: N.ArrowFunctionExpression = this.startNodeAt(
@@ -1669,8 +1665,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       });
 
       this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
-      this.state.yieldPos = oldYieldPos;
-      this.state.awaitPos = oldAwaitPos;
 
       if (!res) {
         return undefined;

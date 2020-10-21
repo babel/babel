@@ -164,8 +164,6 @@ export default class UtilParser extends Tokenizer {
     }
   }
 
-  checkYieldAwaitInDefaultParams() {}
-
   // tryParse will clone parser state.
   // It is expensive and should be used with cautions
   tryParse<T: Node | $ReadOnlyArray<Node>>(
