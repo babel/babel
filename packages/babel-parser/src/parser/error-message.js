@@ -1,6 +1,10 @@
 // @flow
 /* eslint sort-keys: "error" */
 
+/**
+ * @module parser/error-message
+ */
+
 // The Errors key follows https://cs.chromium.org/chromium/src/v8/src/common/message-template.h unless it does not exist
 export const ErrorMessages = Object.freeze({
   AccessorIsGenerator: "A %0ter cannot be a generator",
