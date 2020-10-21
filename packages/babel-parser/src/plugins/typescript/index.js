@@ -2573,7 +2573,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // Allow type annotations inside of a parameter list.
     parseAssignableListItemTypes(param: N.Pattern) {
       if (this.eat(tt.question)) {
-        if (param.type !== "Identifier" && !this.state.isDeclareContext) {
+        if (
+          param.type !== "Identifier" &&
+          !this.state.isDeclareContext &&
+          !this.state.inType
+        ) {
           this.raise(param.start, TSErrors.PatternIsOptional);
         }
 
