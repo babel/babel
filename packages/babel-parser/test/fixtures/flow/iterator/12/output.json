@@ -44,6 +44,7 @@
                   "start":30,"end":42,"loc":{"start":{"line":1,"column":30},"end":{"line":1,"column":42}},
                   "params": [],
                   "rest": null,
+                  "this": null,
                   "returnType": {
                     "type": "StringTypeAnnotation",
                     "start":36,"end":42,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":42}}
@@ -70,6 +71,10 @@
               "argument": {
                 "type": "TypeCastExpression",
                 "start":57,"end":63,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":16}},
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 56
+                },
                 "expression": {
                   "type": "NumericLiteral",
                   "start":57,"end":58,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11}},
@@ -86,10 +91,6 @@
                     "type": "AnyTypeAnnotation",
                     "start":60,"end":63,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":16}}
                   }
-                },
-                "extra": {
-                  "parenthesized": true,
-                  "parenStart": 56
                 }
               }
             }

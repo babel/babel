@@ -57,6 +57,7 @@
                   }
                 },
                 "typeParameters": null,
+                "this": null,
                 "returnType": {
                   "type": "VoidTypeAnnotation",
                   "start":26,"end":30,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":19}}

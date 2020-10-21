@@ -126,6 +126,7 @@
                 }
               ],
               "rest": null,
+              "this": null,
               "returnType": {
                 "type": "NumberTypeAnnotation",
                 "start":83,"end":89,"loc":{"start":{"line":7,"column":20},"end":{"line":7,"column":26}}
@@ -152,6 +153,7 @@
                 }
               ],
               "rest": null,
+              "this": null,
               "returnType": {
                 "type": "StringTypeAnnotation",
                 "start":111,"end":117,"loc":{"start":{"line":8,"column":20},"end":{"line":8,"column":26}}

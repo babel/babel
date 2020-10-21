@@ -42,6 +42,7 @@
                 "params": [],
                 "rest": null,
                 "typeParameters": null,
+                "this": null,
                 "returnType": {
                   "type": "VoidTypeAnnotation",
                   "start":22,"end":26,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":15}}

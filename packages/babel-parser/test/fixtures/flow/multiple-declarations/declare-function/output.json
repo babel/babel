@@ -23,6 +23,7 @@
               "typeParameters": null,
               "params": [],
               "rest": null,
+              "this": null,
               "returnType": {
                 "type": "VoidTypeAnnotation",
                 "start":23,"end":27,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":27}}
@@ -48,6 +49,7 @@
               "typeParameters": null,
               "params": [],
               "rest": null,
+              "this": null,
               "returnType": {
                 "type": "VoidTypeAnnotation",
                 "start":51,"end":55,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":27}}
