@@ -12,19 +12,9 @@ type ExpressionScopeType = 0 | 1 | 2 | 3 | 4;
 
 class ExpressionScope {
   type: ExpressionScopeType;
-  error: string = null;
-  pos: number = null;
 
   constructor(type = kExpression) {
     this.type = type;
-  }
-
-  canBeExpression() {
-    return this.type < kParameterDeclaration;
-  }
-
-  canBeDeclaration() {
-    return this.type > kExpression;
   }
 
   canBeArrowParameterDeclaration() {
@@ -79,6 +69,9 @@ export default class ExpressionScopeHandler {
     const { stack } = this;
     let i = stack.length - 1;
     let scope: ExpressionScope = stack[i];
+    if (!scope.canBeParameterDeclaration()) {
+      return;
+    }
     while (!scope.isCertainlyParameterDeclaration()) {
       if (scope.canBeParameterDeclaration()) {
         scope.recordDeclarationError(pos, message);
@@ -93,9 +86,11 @@ export default class ExpressionScopeHandler {
   recordAsyncArrowParametersError(pos, message) {
     const { stack } = this;
     let i = stack.length - 1;
-    let scope: ExpressionScope = stack[i];
     while (i > 0) {
-      scope = stack[i];
+      const scope: ExpressionScope = stack[i];
+      if (!scope.canBeParameterDeclaration()) {
+        return;
+      }
       if (scope.type === kMaybeAsyncArrowParameterDeclaration) {
         scope.recordDeclarationError(pos, message);
       }
@@ -126,4 +121,8 @@ export function newArrowHeadScope() {
 
 export function newAsyncArrowScope() {
   return new ArrowHeadParsingScope(kMaybeAsyncArrowParameterDeclaration);
+}
+
+export function newExpressionScope() {
+  return new ExpressionScope();
 }

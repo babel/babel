@@ -52,6 +52,7 @@ import {
 import {
   newArrowHeadScope,
   newAsyncArrowScope,
+  newExpressionScope,
   newParameterDeclarationScope,
 } from "../util/expression-scope.js";
 import { Errors } from "./error";
@@ -2053,15 +2054,18 @@ export default class ExpressionParser extends LValParser {
     }
     this.prodParam.enter(flags);
     this.initFunction(node, isAsync);
+    const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
 
     if (params) {
       this.state.maybeInArrowParameters = true;
       this.setArrowFunctionParameters(node, params, trailingCommaPos);
     }
+    this.state.maybeInArrowParameters = false;
     this.parseFunctionBody(node, true);
 
     this.prodParam.exit();
     this.scope.exit();
+    this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
 
     return this.finishNode(node, "ArrowFunctionExpression");
   }
@@ -2091,6 +2095,7 @@ export default class ExpressionParser extends LValParser {
     isMethod?: boolean = false,
   ): void {
     const isExpression = allowExpression && !this.match(tt.braceL);
+    this.expressionScope.enter(newExpressionScope());
 
     if (isExpression) {
       // https://tc39.es/ecma262/#prod-ExpressionBody
@@ -2150,6 +2155,7 @@ export default class ExpressionParser extends LValParser {
         },
       );
       this.prodParam.exit();
+      this.expressionScope.exit();
       this.state.labels = oldLabels;
     }
   }
