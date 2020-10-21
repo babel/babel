@@ -252,6 +252,16 @@ export function ExistsTypeAnnotation() {
 export function FunctionTypeAnnotation(node: Object, parent: Object) {
   this.print(node.typeParameters, node);
   this.token("(");
+
+  if (node.this) {
+    this.token("this: ");
+    this.print(node.this.typeAnnotation, node);
+    if (node.params.length || node.rest) {
+      this.token(",");
+      this.space();
+    }
+  }
+
   this.printList(node.params, node);
 
   if (node.rest) {
