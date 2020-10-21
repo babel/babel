@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":53,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
   "errors": [
-    "SyntaxError: Can not use 'yield' as identifier inside a generator (2:15)"
+    "SyntaxError: yield is not allowed in generator parameters (2:15)"
   ],
   "program": {
     "type": "Program",
@@ -70,12 +70,12 @@
                               "start":28,"end":29,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":12},"identifierName":"a"},
                               "name": "a"
                             },
+                            "computed": false,
                             "property": {
                               "type": "Identifier",
                               "start":30,"end":31,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":14},"identifierName":"b"},
                               "name": "b"
-                            },
-                            "computed": false
+                            }
                           },
                           "arguments": [
                             {

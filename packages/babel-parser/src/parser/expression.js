@@ -49,6 +49,11 @@ import {
   PARAM,
   functionFlags,
 } from "../util/production-parameter";
+import {
+  newArrowHeadScope,
+  newAsyncArrowScope,
+  newParameterDeclarationScope,
+} from "../util/expression-scope.js";
 import { Errors } from "./error";
 
 export default class ExpressionParser extends LValParser {
@@ -575,9 +580,10 @@ export default class ExpressionParser extends LValParser {
     startLoc: Position,
     noCalls?: ?boolean,
   ): N.Expression {
+    const maybeAsyncArrow = this.atPossibleAsyncArrow(base);
     const state = {
       optionalChainMember: false,
-      maybeAsyncArrow: this.atPossibleAsyncArrow(base),
+      maybeAsyncArrow,
       stop: false,
     };
     do {
@@ -724,6 +730,9 @@ export default class ExpressionParser extends LValParser {
 
     let node = this.startNodeAt(startPos, startLoc);
     node.callee = base;
+    if (state.maybeAsyncArrow) {
+      this.expressionScope.enter(newAsyncArrowScope());
+    }
 
     if (state.optionalChainMember) {
       node.optional = optional;
@@ -743,15 +752,18 @@ export default class ExpressionParser extends LValParser {
 
     if (state.maybeAsyncArrow && this.shouldParseAsyncArrow() && !optional) {
       state.stop = true;
-
+      this.expressionScope.validateAsPattern();
+      this.expressionScope.exit();
       node = this.parseAsyncArrowFromCallExpression(
         this.startNodeAt(startPos, startLoc),
         node,
       );
-      this.checkYieldAwaitInDefaultParams();
       this.state.yieldPos = oldYieldPos;
       this.state.awaitPos = oldAwaitPos;
     } else {
+      if (state.maybeAsyncArrow) {
+        this.expressionScope.exit();
+      }
       this.toReferencedArguments(node);
 
       // We keep the old value if it isn't null, for cases like
@@ -1214,12 +1226,15 @@ export default class ExpressionParser extends LValParser {
     this.state.maybeInAsyncArrowHead = true;
     this.state.yieldPos = -1;
     this.state.awaitPos = -1;
+    this.expressionScope.enter(newParameterDeclarationScope());
+    this.prodParam.enter(functionFlags(true, this.prodParam.hasYield));
     const params = [this.parseIdentifier()];
+    this.prodParam.exit();
     if (this.hasPrecedingLineBreak()) {
       this.raise(this.state.pos, Errors.LineTerminatorBeforeArrow);
     }
     this.expect(tt.arrow);
-    this.checkYieldAwaitInDefaultParams();
+    this.expressionScope.exit();
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
     this.state.maybeInAsyncArrowHead = oldMaybeInAsyncArrowHead;
     this.state.yieldPos = oldYieldPos;
@@ -1393,6 +1408,7 @@ export default class ExpressionParser extends LValParser {
 
     let val;
     this.next(); // eat `(`
+    this.expressionScope.enter(newArrowHeadScope());
 
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
     const oldYieldPos = this.state.yieldPos;
@@ -1462,10 +1478,11 @@ export default class ExpressionParser extends LValParser {
       this.shouldParseArrow() &&
       (arrowNode = this.parseArrow(arrowNode))
     ) {
+      this.expressionScope.validateAsPattern();
+      this.expressionScope.exit();
       if (!this.isAwaitAllowed() && !this.state.maybeInAsyncArrowHead) {
         this.state.awaitPos = oldAwaitPos;
       }
-      this.checkYieldAwaitInDefaultParams();
       this.state.yieldPos = oldYieldPos;
       this.state.awaitPos = oldAwaitPos;
       for (const param of exprList) {
@@ -1477,6 +1494,7 @@ export default class ExpressionParser extends LValParser {
       this.parseArrowExpression(arrowNode, exprList, false);
       return arrowNode;
     }
+    this.expressionScope.exit();
 
     // We keep the old value if it isn't null, for cases like
     //   (x = (yield)) => {}
@@ -2016,7 +2034,6 @@ export default class ExpressionParser extends LValParser {
     type: string,
     inClassScope: boolean = false,
   ): T {
-    const oldYieldPos = this.state.yieldPos;
     const oldAwaitPos = this.state.awaitPos;
     this.state.yieldPos = -1;
     this.state.awaitPos = -1;
@@ -2036,7 +2053,6 @@ export default class ExpressionParser extends LValParser {
     this.prodParam.exit();
     this.scope.exit();
 
-    this.state.yieldPos = oldYieldPos;
     this.state.awaitPos = oldAwaitPos;
 
     return node;
@@ -2135,8 +2151,6 @@ export default class ExpressionParser extends LValParser {
     isMethod?: boolean = false,
   ): void {
     const isExpression = allowExpression && !this.match(tt.braceL);
-    const oldInParameters = this.state.inParameters;
-    this.state.inParameters = false;
 
     if (isExpression) {
       // https://tc39.es/ecma262/#prod-ExpressionBody
@@ -2198,8 +2212,6 @@ export default class ExpressionParser extends LValParser {
       this.prodParam.exit();
       this.state.labels = oldLabels;
     }
-
-    this.state.inParameters = oldInParameters;
   }
 
   isSimpleParamList(
@@ -2381,12 +2393,11 @@ export default class ExpressionParser extends LValParser {
       if (this.prodParam.hasAwait) {
         this.raise(startLoc, Errors.AwaitBindingIdentifier);
         return;
-      }
-      if (
-        this.state.awaitPos === -1 &&
-        (this.state.maybeInAsyncArrowHead || this.isAwaitAllowed())
-      ) {
-        this.state.awaitPos = this.state.start;
+      } else {
+        this.expressionScope.recordAsyncArrowParametersError(
+          startLoc,
+          Errors.AwaitBindingIdentifier,
+        );
       }
     }
 
@@ -2434,11 +2445,11 @@ export default class ExpressionParser extends LValParser {
 
     this.next();
 
-    if (this.state.inParameters) {
-      this.raise(node.start, Errors.AwaitExpressionFormalParameter);
-    } else if (this.state.awaitPos === -1) {
-      this.state.awaitPos = node.start;
-    }
+    this.expressionScope.recordParameterInitializerError(
+      node.start,
+      Errors.AwaitExpressionFormalParameter,
+    );
+
     if (this.eat(tt.star)) {
       this.raise(node.start, Errors.ObsoleteAwaitStar);
     }
@@ -2478,11 +2489,10 @@ export default class ExpressionParser extends LValParser {
   parseYield(): N.YieldExpression {
     const node = this.startNode();
 
-    if (this.state.inParameters) {
-      this.raise(node.start, Errors.YieldInParameter);
-    } else if (this.state.yieldPos === -1) {
-      this.state.yieldPos = node.start;
-    }
+    this.expressionScope.recordParameterInitializerError(
+      node.start,
+      Errors.YieldInParameter,
+    );
 
     this.next();
     if (

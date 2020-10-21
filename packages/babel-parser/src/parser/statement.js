@@ -30,6 +30,7 @@ import {
 } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
 import { PARAM, functionFlags } from "../util/production-parameter";
+import { newParameterDeclarationScope } from "../util/expression-scope";
 
 const loopLabel = { kind: "loop" },
   switchLabel = { kind: "switch" };
@@ -1124,10 +1125,8 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseFunctionParams(node: N.Function, allowModifiers?: boolean): void {
-    const oldInParameters = this.state.inParameters;
-    this.state.inParameters = true;
-
     this.expect(tt.parenL);
+    this.expressionScope.enter(newParameterDeclarationScope());
     node.params = this.parseBindingList(
       tt.parenR,
       charCodes.rightParenthesis,
@@ -1135,8 +1134,7 @@ export default class StatementParser extends ExpressionParser {
       allowModifiers,
     );
 
-    this.state.inParameters = oldInParameters;
-    this.checkYieldAwaitInDefaultParams();
+    this.expressionScope.exit();
   }
 
   registerFunctionStatementId(node: N.Function): void {

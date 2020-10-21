@@ -57,7 +57,6 @@ export default class State {
   noArrowParamsConversionAt: number[] = [];
 
   // Flags to track
-  inParameters: boolean = false;
   maybeInArrowParameters: boolean = false;
   // This flag is used to track async arrow head across function declarations.
   // e.g. async (foo = function (await) {}) => {}
