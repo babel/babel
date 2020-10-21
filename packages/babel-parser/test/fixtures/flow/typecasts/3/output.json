@@ -13,6 +13,10 @@
         "expression": {
           "type": "TypeCastExpression",
           "start":1,"end":42,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":42}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          },
           "expression": {
             "type": "ArrowFunctionExpression",
             "start":1,"end":17,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":17}},
@@ -69,16 +73,13 @@
                 }
               ],
               "rest": null,
+              "this": null,
               "returnType": {
                 "type": "NumberTypeAnnotation",
                 "start":36,"end":42,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":42}}
               },
               "typeParameters": null
             }
-          },
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
           }
         }
       }

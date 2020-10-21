@@ -124,6 +124,7 @@
                 }
               ],
               "rest": null,
+              "this": null,
               "returnType": {
                 "type": "GenericTypeAnnotation",
                 "start":64,"end":85,"loc":{"start":{"line":1,"column":64},"end":{"line":1,"column":85}},

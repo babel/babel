@@ -1,0 +1,92 @@
+{
+  "type": "File",
+  "start":0,"end":54,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: The `this` parameter must be the first function parameter. (2:20)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":54,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":54,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start":9,"end":54,"loc":{"start":{"line":1,"column":9},"end":{"line":3,"column":1}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":15,"end":52,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":41}},
+              "key": {
+                "type": "Identifier",
+                "start":15,"end":18,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":7},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":15,"end":52,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":41}},
+                "params": [
+                  {
+                    "type": "FunctionTypeParam",
+                    "start":19,"end":29,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":18}},
+                    "name": {
+                      "type": "Identifier",
+                      "start":19,"end":20,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":9},"identifierName":"a"},
+                      "name": "a"
+                    },
+                    "optional": false,
+                    "typeAnnotation": {
+                      "type": "NumberTypeAnnotation",
+                      "start":23,"end":29,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":18}}
+                    }
+                  },
+                  {
+                    "type": "FunctionTypeParam",
+                    "start":31,"end":44,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":33}},
+                    "name": {
+                      "type": "Identifier",
+                      "start":31,"end":35,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":24},"identifierName":"this"},
+                      "name": "this"
+                    },
+                    "optional": false,
+                    "typeAnnotation": {
+                      "type": "NumberTypeAnnotation",
+                      "start":38,"end":44,"loc":{"start":{"line":2,"column":27},"end":{"line":2,"column":33}}
+                    }
+                  }
+                ],
+                "rest": null,
+                "typeParameters": null,
+                "this": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start":48,"end":52,"loc":{"start":{"line":2,"column":37},"end":{"line":2,"column":41}}
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

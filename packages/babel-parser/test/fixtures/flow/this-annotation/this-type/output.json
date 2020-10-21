@@ -85,16 +85,6 @@
                 "params": [
                   {
                     "type": "FunctionTypeParam",
-                    "start":57,"end":61,"loc":{"start":{"line":4,"column":5},"end":{"line":4,"column":9}},
-                    "name": null,
-                    "optional": false,
-                    "typeAnnotation": {
-                      "type": "ThisTypeAnnotation",
-                      "start":57,"end":61,"loc":{"start":{"line":4,"column":5},"end":{"line":4,"column":9}}
-                    }
-                  },
-                  {
-                    "type": "FunctionTypeParam",
                     "start":63,"end":69,"loc":{"start":{"line":4,"column":11},"end":{"line":4,"column":17}},
                     "name": null,
                     "optional": false,
@@ -106,6 +96,16 @@
                 ],
                 "rest": null,
                 "typeParameters": null,
+                "this": {
+                  "type": "FunctionTypeParam",
+                  "start":57,"end":61,"loc":{"start":{"line":4,"column":5},"end":{"line":4,"column":9}},
+                  "name": null,
+                  "optional": false,
+                  "typeAnnotation": {
+                    "type": "ThisTypeAnnotation",
+                    "start":57,"end":61,"loc":{"start":{"line":4,"column":5},"end":{"line":4,"column":9}}
+                  }
+                },
                 "returnType": {
                   "type": "VoidTypeAnnotation",
                   "start":72,"end":76,"loc":{"start":{"line":4,"column":20},"end":{"line":4,"column":24}}

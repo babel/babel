@@ -42,6 +42,7 @@
                 "params": [],
                 "rest": null,
                 "typeParameters": null,
+                "this": null,
                 "returnType": {
                   "type": "NumberTypeAnnotation",
                   "start":29,"end":35,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":17}}
@@ -82,6 +83,7 @@
                 ],
                 "rest": null,
                 "typeParameters": null,
+                "this": null,
                 "returnType": {
                   "type": "VoidTypeAnnotation",
                   "start":57,"end":61,"loc":{"start":{"line":3,"column":20},"end":{"line":3,"column":24}}
@@ -111,6 +113,7 @@
                 "params": [],
                 "rest": null,
                 "typeParameters": null,
+                "this": null,
                 "returnType": {
                   "type": "NumberTypeAnnotation",
                   "start":76,"end":82,"loc":{"start":{"line":4,"column":13},"end":{"line":4,"column":19}}
@@ -155,6 +158,7 @@
                 ],
                 "rest": null,
                 "typeParameters": null,
+                "this": null,
                 "returnType": {
                   "type": "VoidTypeAnnotation",
                   "start":106,"end":110,"loc":{"start":{"line":5,"column":22},"end":{"line":5,"column":26}}
@@ -184,6 +188,7 @@
                 "params": [],
                 "rest": null,
                 "typeParameters": null,
+                "this": null,
                 "returnType": {
                   "type": "NumberTypeAnnotation",
                   "start":123,"end":129,"loc":{"start":{"line":6,"column":11},"end":{"line":6,"column":17}}
@@ -228,6 +233,7 @@
                 ],
                 "rest": null,
                 "typeParameters": null,
+                "this": null,
                 "returnType": {
                   "type": "VoidTypeAnnotation",
                   "start":151,"end":155,"loc":{"start":{"line":7,"column":20},"end":{"line":7,"column":24}}
