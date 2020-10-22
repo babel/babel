@@ -9,6 +9,7 @@ import {
   semverMin,
   isUnreleasedVersion,
   getLowestUnreleased,
+  getHighestUnreleased,
 } from "./utils";
 import { OptionValidator } from "@babel/helper-validator-option";
 import { browserNameMap } from "./targets";
@@ -23,8 +24,9 @@ export { getInclusionReasons } from "./debug";
 export { default as filterItems, isRequired } from "./filter-items";
 export { unreleasedLabels } from "./targets";
 
+const ESM_SUPPORT = browserModulesData["es6.module"];
+
 const v = new OptionValidator(packageName);
-const browserslistDefaults = browserslist.defaults;
 
 const validBrowserslistTargets = [
   ...Object.keys(browserslist.data),
@@ -168,55 +170,68 @@ function generateTargets(inputTargets: InputTargets): Targets {
   return ((input: any): Targets);
 }
 
+function resolveTargets(queries: Browsers): Targets {
+  const resolved = browserslist(queries, { mobileToDesktop: true });
+  return getLowestVersions(resolved);
+}
+
 export default function getTargets(
   inputTargets: InputTargets = {},
   options: Object = {},
 ): Targets {
-  let { browsers } = inputTargets;
+  let { browsers, esmodules } = inputTargets;
 
-  // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
-  // These values OVERRIDE the `browsers` field.
-  if (inputTargets.esmodules) {
-    const supportsESModules = browserModulesData["es6.module"];
-    browsers = Object.keys(supportsESModules)
-      .map(browser => `${browser} ${supportsESModules[browser]}`)
-      .join(", ");
-  }
-
-  // Parse browsers target via browserslist
-  const browsersquery = validateBrowsers(browsers);
+  validateBrowsers(browsers);
 
   const input = generateTargets(inputTargets);
   let targets: TargetsTuple = validateTargetNames(input);
 
-  const shouldParseBrowsers = !!browsersquery;
+  const shouldParseBrowsers = !!browsers;
   const hasTargets = shouldParseBrowsers || Object.keys(targets).length > 0;
   const shouldSearchForConfig =
     !options.ignoreBrowserslistConfig && !hasTargets;
 
-  if (shouldParseBrowsers || shouldSearchForConfig) {
-    // If no targets are passed, we need to overwrite browserslist's defaults
-    // so that we enable all transforms (acting like the now deprecated
-    // preset-latest).
-    //
-    // Note, if browserslist resolves the config (ex. package.json), then usage
-    // of `defaults` in queries will be different since we don't want to break
-    // the behavior of "no targets is the same as preset-latest".
-    if (!hasTargets) {
-      browserslist.defaults = objectToBrowserslist(targets);
+  if (!browsers && shouldSearchForConfig) {
+    browsers =
+      browserslist.loadConfig({
+        path: options.configPath,
+        env: options.browserslistEnv,
+      }) ??
+      // If no targets are passed, we need to overwrite browserslist's defaults
+      // so that we enable all transforms (acting like the now deprecated
+      // preset-latest).
+      objectToBrowserslist(targets);
+  }
+
+  // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
+  // These values OVERRIDE the `browsers` field.
+  if (esmodules && (esmodules !== "intersect" || !browsers)) {
+    browsers = Object.keys(ESM_SUPPORT)
+      .map(browser => `${browser} >= ${ESM_SUPPORT[browser]}`)
+      .join(", ");
+    esmodules = false;
+  }
+
+  if (browsers) {
+    const queryBrowsers = resolveTargets(browsers);
+
+    if (esmodules === "intersect") {
+      for (const browser of Object.keys(queryBrowsers)) {
+        const version = queryBrowsers[browser];
+
+        if (ESM_SUPPORT[browser]) {
+          queryBrowsers[browser] = getHighestUnreleased(
+            version,
+            semverify(ESM_SUPPORT[browser]),
+            browser,
+          );
+        } else {
+          delete queryBrowsers[browser];
+        }
+      }
     }
 
-    const browsers = browserslist(browsersquery, {
-      path: options.configPath,
-      mobileToDesktop: true,
-      env: options.browserslistEnv,
-    });
-
-    const queryBrowsers = getLowestVersions(browsers);
     targets = Object.assign(queryBrowsers, targets);
-
-    // Reset browserslist defaults
-    browserslist.defaults = browserslistDefaults;
   }
 
   // Parse remaining targets
