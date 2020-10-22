@@ -67,10 +67,6 @@ class ExpressionScope {
     );
   }
 
-  canBeParameterDeclaration() {
-    return this.type > kExpression;
-  }
-
   isCertainlyParameterDeclaration() {
     return this.type === kParameterDeclaration;
   }
@@ -120,10 +116,11 @@ export default class ExpressionScopeHandler {
     let i = stack.length - 1;
     let scope: ExpressionScope = stack[i];
     while (!scope.isCertainlyParameterDeclaration()) {
-      if (scope.canBeParameterDeclaration()) {
+      if (scope.canBeArrowParameterDeclaration()) {
         /*:: invariant(scope instanceof ArrowHeadParsingScope) */
         scope.recordDeclarationError(pos, message);
       } else {
+        /*:: invariant(scope.type == kExpression) */
         // Type-Expression is the boundary where initializer error can populate to
         return;
       }
@@ -145,7 +142,7 @@ export default class ExpressionScopeHandler {
     const { stack } = this;
     let i = stack.length - 1;
     let scope: ExpressionScope = stack[i];
-    while (scope.canBeParameterDeclaration()) {
+    while (scope.canBeArrowParameterDeclaration()) {
       if (scope.type === kMaybeAsyncArrowParameterDeclaration) {
         /*:: invariant(scope instanceof ArrowHeadParsingScope) */
         scope.recordDeclarationError(pos, message);
