@@ -166,6 +166,16 @@ const specHandlers = {
       false,
     );
   },
+
+  optionalCall(superMember, args) {
+    const thisRefs = this._getThisRefs();
+    return optimiseCall(
+      this._get(superMember, thisRefs),
+      t.cloneNode(thisRefs.this),
+      args,
+      true,
+    );
+  },
 };
 
 const looseHandlers = {
@@ -222,6 +232,10 @@ const looseHandlers = {
 
   call(superMember, args) {
     return optimiseCall(this.get(superMember), t.thisExpression(), args, false);
+  },
+
+  optionalCall(superMember, args) {
+    return optimiseCall(this.get(superMember), t.thisExpression(), args, true);
   },
 };
 
