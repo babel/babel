@@ -1,6 +1,19 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxNumericSeparator from "@babel/plugin-syntax-numeric-separator";
 
+/**
+ * Given a bigIntLiteral or NumericLiteral, remove numeric
+ * separator `_` from its raw representation
+ *
+ * @param {NodePath<BigIntLiteral | NumericLiteral>} { node }: A Babel AST node path
+ */
+function remover({ node }: NodePath<BigIntLiteral | NumericLiteral>) {
+  const { extra } = node;
+  if (extra && extra.raw.includes("_")) {
+    extra.raw = extra.raw.replace(/_/g, "");
+  }
+}
+
 export default declare(api => {
   api.assertVersion(7);
 
@@ -9,12 +22,8 @@ export default declare(api => {
     inherits: syntaxNumericSeparator,
 
     visitor: {
-      NumericLiteral({ node }) {
-        const { extra } = node;
-        if (extra && /_/.test(extra.raw)) {
-          extra.raw = extra.raw.replace(/_/g, "");
-        }
-      },
+      NumericLiteral: remover,
+      BigIntLiteral: remover,
     },
   };
 });
