@@ -1350,7 +1350,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     flowParseFunctionTypeParams(
       params: N.FlowFunctionTypeParam[] = [],
-    ): { params: N.FlowFunctionTypeParam[], rest: ?N.FlowFunctionTypeParam } {
+    ): {
+      params: N.FlowFunctionTypeParam[],
+      rest: ?N.FlowFunctionTypeParam,
+      _this: ?N.FlowFunctionTypeParam,
+    } {
       let rest: ?N.FlowFunctionTypeParam = null;
       let _this: ?N.FlowFunctionTypeParam = null;
       if (this.match(tt._this)) {
@@ -2370,7 +2374,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // determine whether a parameter is a this param
-    isThisParam(param: Pattern) {
+    isThisParam(param) {
       return param.type === "Identifier" && param.name === "this";
     }
 
