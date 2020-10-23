@@ -37,6 +37,14 @@ executors:
     docker:
       - image: cimg/node:current-browsers
     working_directory: ~/babel
+  # e2e-jest test requires python
+  node-python-executor:
+    docker:
+      - image: cimg/python:3.9-node
+    working_directory: ~/babel
+
+orbs:
+  browser-tools: circleci/browser-tools@1.1.0
 
 jobs:
   build-standalone:
@@ -151,10 +159,12 @@ jobs:
       - checkout
       - attach_workspace:
           at: /tmp/verdaccio-workspace
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - run: ./scripts/integration-tests/e2e-vue-cli.sh
 
   e2e-jest:
-    executor: node-executor
+    executor: node-python-executor
     steps:
       - checkout
       - attach_workspace:
