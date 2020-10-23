@@ -131,7 +131,7 @@ export default declare((api, opts) => {
       Function({ node }) {
         if (skipStrip) return;
         if (
-          node.params[0] &&
+          node.params.length > 0 &&
           node.params[0].type === "Identifier" &&
           node.params[0].name === "this"
         ) {
