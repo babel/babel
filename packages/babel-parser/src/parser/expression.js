@@ -752,7 +752,7 @@ export default class ExpressionParser extends LValParser {
       this.state.yieldPos = oldYieldPos;
       this.state.awaitPos = oldAwaitPos;
     } else {
-      this.toReferencedListDeep(node.arguments);
+      this.toReferencedArguments(node);
 
       // We keep the old value if it isn't null, for cases like
       //   (x = async(yield)) => {}
@@ -789,6 +789,13 @@ export default class ExpressionParser extends LValParser {
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
 
     return node;
+  }
+
+  toReferencedArguments(
+    node: N.CallExpression | N.OptionalCallExpression,
+    isParenthesizedExpr?: boolean,
+  ) {
+    this.toReferencedListDeep(node.arguments, isParenthesizedExpr);
   }
 
   // MemberExpression [?Yield, ?Await] TemplateLiteral[?Yield, ?Await, +Tagged]
@@ -2057,14 +2064,6 @@ export default class ExpressionParser extends LValParser {
       refExpressionErrors,
       node,
     );
-    if (canBePattern && !this.state.maybeInArrowParameters) {
-      // This could be an array pattern:
-      //   ([a: string, b: string]) => {}
-      // In this case, we don't have to call toReferencedList. We will
-      // call it, if needed, when we are sure that it is a parenthesized
-      // expression by calling toReferencedListDeep.
-      this.toReferencedList(node.elements);
-    }
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
     return this.finishNode(
       node,

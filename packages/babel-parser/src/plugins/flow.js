@@ -2233,6 +2233,31 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return exprList;
     }
 
+    parseArrayLike(
+      close: TokenType,
+      canBePattern: boolean,
+      isTuple: boolean,
+      refExpressionErrors: ?ExpressionErrors,
+    ): N.ArrayExpression | N.TupleExpression {
+      const node = super.parseArrayLike(
+        close,
+        canBePattern,
+        isTuple,
+        refExpressionErrors,
+      );
+
+      // This could be an array pattern:
+      //   ([a: string, b: string]) => {}
+      // In this case, we don't have to call toReferencedList. We will
+      // call it, if needed, when we are sure that it is a parenthesized
+      // expression by calling toReferencedListDeep.
+      if (canBePattern && !this.state.maybeInArrowParameters) {
+        this.toReferencedList(node.elements);
+      }
+
+      return node;
+    }
+
     checkLVal(
       expr: N.Expression,
       bindingType: BindingTypes = BIND_NONE,
