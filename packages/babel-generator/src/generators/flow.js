@@ -254,7 +254,9 @@ export function FunctionTypeAnnotation(node: Object, parent: Object) {
   this.token("(");
 
   if (node.this) {
-    this.token("this: ");
+    this.word("this");
+    this.token(":");
+    this.space();
     this.print(node.this.typeAnnotation, node);
     if (node.params.length || node.rest) {
       this.token(",");

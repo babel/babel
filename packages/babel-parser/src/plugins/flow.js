@@ -1217,15 +1217,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const length =
         property.value.params.length + (property.value.rest ? 1 : 0);
 
-      if (property.value.this && property.kind === "get") {
+      if (property.value.this) {
         this.raise(
           property.value.this.start,
-          FlowErrors.GetterMayNotHaveThisParam,
-        );
-      } else if (property.value.this) {
-        this.raise(
-          property.value.this.start,
-          FlowErrors.SetterMayNotHaveThisParam,
+          property.kind === "get"
+            ? FlowErrors.GetterMayNotHaveThisParam
+            : FlowErrors.SetterMayNotHaveThisParam,
         );
       }
 
