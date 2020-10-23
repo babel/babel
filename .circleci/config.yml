@@ -30,12 +30,12 @@ aliases:
 executors:
   node-executor:
     docker:
-      - image: cimg/node:latest
+      - image: cimg/node:current
     working_directory: ~/babel
   # e2e-vue-cli test requires chromium
   node-browsers-executor:
     docker:
-      - image: cimg/node:latest-browsers
+      - image: cimg/node:current-browsers
     working_directory: ~/babel
 
 jobs:
