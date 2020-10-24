@@ -125,52 +125,140 @@ function canIgnoreLoose(file, feature) {
 }
 
 export function verifyUsedFeatures(path, file) {
+  const used = {
+    fields: null,
+    privateElements: null,
+    privateMethods: null,
+    decorators: null,
+    privateIn: null,
+    staticBlock: null,
+  };
+
   if (hasOwnDecorators(path.node)) {
-    if (!hasFeature(file, FEATURES.decorators)) {
-      throw path.buildCodeFrameError(
-        "Decorators are not enabled." +
-          "\nIf you are using " +
-          '["@babel/plugin-proposal-decorators", { "legacy": true }], ' +
-          'make sure it comes *before* "@babel/plugin-proposal-class-properties" ' +
-          "and enable loose mode, like so:\n" +
-          '\t["@babel/plugin-proposal-decorators", { "legacy": true }]\n' +
-          '\t["@babel/plugin-proposal-class-properties", { "loose": true }]',
-      );
+    used.decorators = path.get("decorators.0");
+  }
+
+  for (const elem of path.get("body.body")) {
+    if (hasOwnDecorators(elem.node)) {
+      used.decorators = used.decorators ?? elem.get("decorators.0");
     }
 
-    if (path.isPrivate()) {
-      throw path.buildCodeFrameError(
-        `Private ${
-          path.isClassMethod() ? "methods" : "fields"
-        } in decorated classes are not supported yet.`,
+    // NOTE: We can't use path.isPrivateMethod() because it isn't supported in <7.2.0
+    if (elem.isPrivate() && elem.isMethod()) {
+      used.privateMethods = used.privateMethods ?? elem;
+    }
+
+    if (elem.isProperty()) {
+      used.fields = used.fields ?? elem;
+    }
+
+    if (elem.isPrivate() && elem.isProperty()) {
+      used.privateFields = used.privateFields ?? elem;
+    }
+
+    if (elem.isStaticBlock?.()) {
+      throw elem.buildCodeFrameError(
+        `Incorrect plugin order, \`@babel/plugin-proposal-class-static-block\` should be placed before class features plugins
+{
+  "plugins": [
+    "@babel/plugin-proposal-class-static-block",
+    "@babel/plugin-proposal-private-property-in-object",
+    "@babel/plugin-proposal-private-methods",
+    "@babel/plugin-proposal-class-properties",
+  ]
+}`,
       );
     }
   }
 
-  // NOTE: We can't use path.isPrivateMethod() because it isn't supported in <7.2.0
-  if (path.isPrivate() && path.isMethod()) {
-    if (!hasFeature(file, FEATURES.privateMethods)) {
-      throw path.buildCodeFrameError("Class private methods are not enabled.");
-    }
+  if (used.privateElements) {
+    path.traverse({
+      BinaryExpression(path) {
+        if (path.node.operator === "in" && path.get("left").isPrivateName()) {
+          used.privateIn = path;
+          path.stop();
+        }
+      },
+    });
   }
 
   if (
-    path.isPrivateName() &&
-    path.parentPath.isBinaryExpression({
-      operator: "in",
-      left: path.node,
-    })
+    used.fields &&
+    used.privateMethods &&
+    hasFeature(file, FEATURES.fields) &&
+    !hasFeature(file, FEATURES.privateMethods)
   ) {
-    if (!hasFeature(file, FEATURES.privateIn)) {
-      throw path.buildCodeFrameError(
-        "Private property in checks are not enabled.",
-      );
-    }
+    throw used.privateMethods.buildCodeFrameError(
+      "Class private methods are not enabled.",
+    );
   }
 
-  if (path.isProperty()) {
-    if (!hasFeature(file, FEATURES.fields)) {
-      throw path.buildCodeFrameError("Class fields are not enabled.");
-    }
+  if (
+    used.fields &&
+    used.privateMethods &&
+    !hasFeature(file, FEATURES.fields) &&
+    hasFeature(file, FEATURES.privateMethods)
+  ) {
+    throw used.fields.buildCodeFrameError("Class fields are not enabled.");
   }
+
+  if (used.decorators && !hasFeature(file, FEATURES.decorators)) {
+    throw used.decorators.buildCodeFrameError(
+      "Decorators are not enabled." +
+        "\nIf you are using " +
+        '["@babel/plugin-proposal-decorators", { "legacy": true }], ' +
+        'make sure it comes *before* "@babel/plugin-proposal-class-properties" ' +
+        "and enable loose mode, like so:\n" +
+        '\t["@babel/plugin-proposal-decorators", { "legacy": true }]\n' +
+        '\t["@babel/plugin-proposal-class-properties", { "loose": true }]',
+    );
+  }
+
+  if (
+    used.decorators &&
+    used.privateElements &&
+    hasFeature(file, FEATURES.decorators)
+  ) {
+    throw used.privateElements.buildCodeFrameError(
+      `Private ${
+        used.privateElements.isClassMethod() ? "methods" : "fields"
+      } in decorated classes are not supported yet.`,
+    );
+  }
+
+  if (
+    used.privateIn &&
+    hasFeature(file, FEATURES.privateIn) &&
+    !hasFeature(file, FEATURES.fields)
+  ) {
+    throw used.privateIn.buildCodeFrameError(
+      "It's not possible to compile '#private in obj' checks without compiling" +
+        " class fields.",
+    );
+  }
+
+  if (
+    used.privateIn &&
+    hasFeature(file, FEATURES.privateIn) &&
+    !hasFeature(file, FEATURES.fields)
+  ) {
+    throw used.privateIn.buildCodeFrameError(
+      "It's not possible to compile '#private in obj' checks without compiling" +
+        " class fields.",
+    );
+  }
+
+  if (
+    used.privateIn &&
+    !hasFeature(file, FEATURES.privateIn) &&
+    hasFeature(file, FEATURES.fields)
+  ) {
+    throw used.privateIn.buildCodeFrameError(
+      "Private property in checks are not enabled.",
+    );
+  }
+
+  return Object.keys(FEATURES).some(
+    feat => used[feat] && hasFeature(file, FEATURES[feat]),
+  );
 }

@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    ["external-helpers", { "helperVersion": "7.100.0" }],
+    "syntax-class-properties",
+    "proposal-class-properties"
+  ],
+  "throws": "Class private methods are not enabled."
+}

@@ -53,7 +53,9 @@ export function createClassFeaturePlugin({
       Class(path, state) {
         if (this.file.get(versionKey) !== version) return;
 
-        verifyUsedFeatures(path, this.file);
+        if (!verifyUsedFeatures(path, this.file)) {
+          return;
+        }
 
         const loose = isLoose(this.file, feature);
 
@@ -66,8 +68,6 @@ export function createClassFeaturePlugin({
         const body = path.get("body");
 
         for (const path of body.get("body")) {
-          verifyUsedFeatures(path, this.file);
-
           if (path.node.computed) {
             computedPaths.push(path);
           }
@@ -120,18 +120,6 @@ export function createClassFeaturePlugin({
           }
 
           if (!isDecorated) isDecorated = hasOwnDecorators(path.node);
-
-          if (path.isStaticBlock?.()) {
-            throw path.buildCodeFrameError(`Incorrect plugin order, \`@babel/plugin-proposal-class-static-block\` should be placed before class features plugins
-{
-  "plugins": [
-    "@babel/plugin-proposal-class-static-block",
-    "@babel/plugin-proposal-private-property-in-object",
-    "@babel/plugin-proposal-private-methods",
-    "@babel/plugin-proposal-class-properties",
-  ]
-}`);
-          }
         }
 
         if (!props.length && !isDecorated) return;

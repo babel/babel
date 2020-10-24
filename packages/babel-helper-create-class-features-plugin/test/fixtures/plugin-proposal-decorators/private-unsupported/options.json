@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    ["external-helpers", { "helperVersion": "7.100.0" }],
+    ["proposal-decorators", { "decoratorsBeforeExport": true }],
+    ["proposal-class-properties"]
+  ],
+  "throws": "Private fields in decorated classes are not supported yet."
+}

@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    ["external-helpers", { "helperVersion": "7.100.0" }],
+    ["proposal-decorators", { "decoratorsBeforeExport": true }],
+    ["syntax-class-properties"]
+  ]
+}

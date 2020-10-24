@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    ["external-helpers", { "helperVersion": "7.100.0" }],
+    "proposal-private-methods",
+    ["syntax-class-properties"]
+  ],
+  "throws": "Class fields are not enabled."
+}
