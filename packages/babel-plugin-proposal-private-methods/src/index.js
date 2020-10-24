@@ -3,6 +3,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import {
   createClassFeaturePlugin,
+  enableFeatureIfCompilingFields,
   FEATURES,
 } from "@babel/helper-create-class-features-plugin";
 import ReplaceSupers, {
@@ -125,14 +126,25 @@ export default declare((api, options) => {
       parserOpts.plugins.push("classPrivateMethods");
     },
 
+    pre() {
+      // If helper-create-class-features-plugin is enabled by
+      // a different plugin and if it needs to compile private
+      // methods, let it do it.
+      enableFeatureIfCompilingFields(
+        this.file,
+        FEATURES.privateMethods,
+        options.loose,
+      );
+    },
+
     visitor: {
-      Class(path, file) {
+      ClassBody(path, file) {
         const methods = new Map();
         const getters = new Map();
         const setters = new Map();
         const accessors = new Set();
 
-        for (const element of path.get("body.body")) {
+        for (const element of path.get("body")) {
           if (element.isClassPrivateMethod()) {
             const { kind } = element.node;
             const { name } = element.node.key.id;
@@ -147,17 +159,17 @@ export default declare((api, options) => {
               accessors.add(name);
             }
 
-            if (path.node.superClass) {
+            if (path.parent.superClass) {
               new ReplaceSupers({
                 methodPath: element,
                 isLoose: options.loose,
-                superRef: path.node.superClass,
+                superRef: path.parent.superClass,
                 file,
                 getObjectRef() {
-                  let { id } = path.node;
+                  let { id } = path.parent;
                   if (!id) {
                     id = path.scope.generateUidIdentifier();
-                    path.set("id", id);
+                    path.parentPath.set("id", id);
                   }
                   id = t.cloneNode(id);
 
@@ -170,14 +182,13 @@ export default declare((api, options) => {
           }
         }
 
-        if (methods.size > 0 || accessors.size > 0) {
-          const readonly = new Set(methods.keys());
-          for (const name of getters.keys()) {
-            if (!setters.has(name)) readonly.add(name);
-          }
+        if (methods.size === 0 && accessors.size === 0) return;
 
-          path.traverse(privateUsageVisitor, { readonly, accessors, file });
+        const readonly = new Set(methods.keys());
+        for (const name of getters.keys()) {
+          if (!setters.has(name)) readonly.add(name);
         }
+        path.traverse(privateUsageVisitor, { readonly, accessors, file });
 
         const newElements = [];
 
@@ -238,7 +249,7 @@ export default declare((api, options) => {
           );
         }
 
-        path.get("body").unshiftContainer("body", newElements);
+        path.unshiftContainer("body", newElements);
       },
     },
   };

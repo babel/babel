@@ -1,0 +1,10 @@
+{
+  "validateLogs": true,
+  "highlightCode": false,
+  "targets": { "node": 14 },
+  "plugins": [
+    ["external-helpers", { "helperVersion": "7.1000.0" }],
+    "proposal-private-methods",
+    "proposal-class-properties"
+  ]
+}

@@ -15,6 +15,7 @@ import {
 import { injectInitialization, extractComputedKeys } from "./misc";
 import {
   enableFeature,
+  enableFeatureIfCompilingFields,
   verifyUsedFeatures,
   FEATURES,
   isLoose,
@@ -22,7 +23,7 @@ import {
 
 import pkg from "../package.json";
 
-export { FEATURES, injectInitialization };
+export { FEATURES, enableFeatureIfCompilingFields, injectInitialization };
 
 // Note: Versions are represented as an integer. e.g. 7.1.5 is represented
 //       as 70000100005. This method is easier than using a semver-parsing

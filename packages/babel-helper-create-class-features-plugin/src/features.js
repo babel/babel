@@ -25,6 +25,7 @@ const featuresSameLoose = new Map([
 //      - node_modules
 //        - @babel-plugin-class-features
 const featuresKey = "@babel/plugin-class-features/featuresKey";
+const featuresIfFieldsKey = "@babel/plugin-class-features/featuresIfFieldsKey";
 const looseKey = "@babel/plugin-class-features/looseKey";
 
 // See https://github.com/babel/babel/issues/11622.
@@ -38,15 +39,15 @@ const looseKey = "@babel/plugin-class-features/looseKey";
 const looseLowPriorityKey =
   "@babel/plugin-class-features/looseLowPriorityKey/#__internal__@babel/preset-env__please-overwrite-loose-instead-of-throwing";
 
-export function enableFeature(file, feature, loose) {
+function enableFeatureOn(key, file, feature, loose) {
   // We can't blindly enable the feature because, if it was already set,
   // "loose" can't be changed, so that
   //   @babel/plugin-class-properties { loose: true }
   //   @babel/plugin-class-properties { loose: false }
   // is transformed in loose mode.
   // We only enabled the feature if it was previously disabled.
-  if (!hasFeature(file, feature) || canIgnoreLoose(file, feature)) {
-    file.set(featuresKey, file.get(featuresKey) | feature);
+  if (!mightHaveFeature(file, feature) || canIgnoreLoose(file, feature)) {
+    file.set(key, file.get(key) | feature);
     if (
       loose ===
       "#__internal__@babel/preset-env__prefer-true-but-false-is-ok-if-it-prevents-an-error"
@@ -68,7 +69,7 @@ export function enableFeature(file, feature, loose) {
   let higherPriorityPluginName: void | string;
 
   for (const [mask, name] of featuresSameLoose) {
-    if (!hasFeature(file, mask)) continue;
+    if (!mightHaveFeature(file, mask)) continue;
 
     const loose = isLoose(file, mask);
 
@@ -88,7 +89,10 @@ export function enableFeature(file, feature, loose) {
 
   if (resolvedLoose !== undefined) {
     for (const [mask, name] of featuresSameLoose) {
-      if (hasFeature(file, mask) && isLoose(file, mask) !== resolvedLoose) {
+      if (
+        mightHaveFeature(file, mask) &&
+        isLoose(file, mask) !== resolvedLoose
+      ) {
         setLoose(file, mask, resolvedLoose);
         console.warn(
           `Though the "loose" option was set to "${!resolvedLoose}" in your @babel/preset-env ` +
@@ -105,8 +109,34 @@ export function enableFeature(file, feature, loose) {
   }
 }
 
+export function enableFeature(file, feature, loose) {
+  enableFeatureOn(featuresKey, file, feature, loose);
+}
+
+export function enableFeatureIfCompilingFields(file, feature, loose) {
+  enableFeatureOn(featuresIfFieldsKey, file, feature, loose);
+}
+
 function hasFeature(file, feature) {
   return !!(file.get(featuresKey) & feature);
+}
+
+function hasFeatureIfCompilingFields(file, feature) {
+  return !!(file.get(featuresIfFieldsKey) & feature);
+}
+
+function mightHaveFeature(file, feature) {
+  return (
+    hasFeature(file, feature) || hasFeatureIfCompilingFields(file, feature)
+  );
+}
+
+function shouldCompile(file, feature) {
+  return (
+    hasFeature(file, feature) ||
+    (hasFeature(file, FEATURES.fields) &&
+      hasFeatureIfCompilingFields(file, feature))
+  );
 }
 
 export function isLoose(file, feature) {
@@ -186,7 +216,7 @@ export function verifyUsedFeatures(path, file) {
     used.fields &&
     used.privateMethods &&
     hasFeature(file, FEATURES.fields) &&
-    !hasFeature(file, FEATURES.privateMethods)
+    !shouldCompile(file, FEATURES.privateMethods)
   ) {
     throw used.privateMethods.buildCodeFrameError(
       "Class private methods are not enabled.",
@@ -196,13 +226,13 @@ export function verifyUsedFeatures(path, file) {
   if (
     used.fields &&
     used.privateMethods &&
-    !hasFeature(file, FEATURES.fields) &&
+    !shouldCompile(file, FEATURES.fields) &&
     hasFeature(file, FEATURES.privateMethods)
   ) {
     throw used.fields.buildCodeFrameError("Class fields are not enabled.");
   }
 
-  if (used.decorators && !hasFeature(file, FEATURES.decorators)) {
+  if (used.decorators && !shouldCompile(file, FEATURES.decorators)) {
     throw used.decorators.buildCodeFrameError(
       "Decorators are not enabled." +
         "\nIf you are using " +
@@ -229,7 +259,7 @@ export function verifyUsedFeatures(path, file) {
   if (
     used.privateIn &&
     hasFeature(file, FEATURES.privateIn) &&
-    !hasFeature(file, FEATURES.fields)
+    !shouldCompile(file, FEATURES.fields)
   ) {
     throw used.privateIn.buildCodeFrameError(
       "It's not possible to compile '#private in obj' checks without compiling" +
@@ -240,7 +270,7 @@ export function verifyUsedFeatures(path, file) {
   if (
     used.privateIn &&
     hasFeature(file, FEATURES.privateIn) &&
-    !hasFeature(file, FEATURES.fields)
+    !shouldCompile(file, FEATURES.fields)
   ) {
     throw used.privateIn.buildCodeFrameError(
       "It's not possible to compile '#private in obj' checks without compiling" +
@@ -250,7 +280,7 @@ export function verifyUsedFeatures(path, file) {
 
   if (
     used.privateIn &&
-    !hasFeature(file, FEATURES.privateIn) &&
+    !shouldCompile(file, FEATURES.privateIn) &&
     hasFeature(file, FEATURES.fields)
   ) {
     throw used.privateIn.buildCodeFrameError(
@@ -259,6 +289,6 @@ export function verifyUsedFeatures(path, file) {
   }
 
   return Object.keys(FEATURES).some(
-    feat => used[feat] && hasFeature(file, FEATURES[feat]),
+    feat => used[feat] && shouldCompile(file, FEATURES[feat]),
   );
 }
