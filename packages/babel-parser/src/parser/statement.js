@@ -1924,6 +1924,12 @@ export default class StatementParser extends ExpressionParser {
       }
     }
 
+    const assertions = this.maybeParseImportAssertions();
+    if (assertions) {
+      // $FlowIgnore
+      node.assertions = assertions;
+    }
+
     this.semicolon();
   }
 
