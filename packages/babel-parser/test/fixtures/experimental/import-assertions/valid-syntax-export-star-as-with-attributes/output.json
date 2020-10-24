@@ -1,0 +1,57 @@
+{
+  "type": "File",
+  "start":0,"end":56,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":56}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":56,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":56}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":56,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":56}},
+        "specifiers": [
+          {
+            "type": "ExportNamespaceSpecifier",
+            "start":7,"end":15,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":15}},
+            "exported": {
+              "type": "Identifier",
+              "start":12,"end":15,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":15},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":21,"end":31,"loc":{"start":{"line":1,"column":21},"end":{"line":1,"column":31}},
+          "extra": {
+            "rawValue": "foo.json",
+            "raw": "\"foo.json\""
+          },
+          "value": "foo.json"
+        },
+        "assertions": [
+          {
+            "type": "ImportAttribute",
+            "start":41,"end":53,"loc":{"start":{"line":1,"column":41},"end":{"line":1,"column":53}},
+            "key": {
+              "type": "Identifier",
+              "start":41,"end":45,"loc":{"start":{"line":1,"column":41},"end":{"line":1,"column":45},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":47,"end":53,"loc":{"start":{"line":1,"column":47},"end":{"line":1,"column":53}},
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
+              },
+              "value": "json"
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  }
+}
