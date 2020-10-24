@@ -1,5 +1,6 @@
 {
-  "targets": { "node": 14 },
+  "minNodeVersion": "12.0.0",
+  "targets": { "node": 12 },
   "plugins": [
     ["external-helpers", { "helperVersion": "7.1000.0" }],
     "proposal-private-methods",
