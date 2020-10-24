@@ -1,0 +1,8 @@
+{
+  "targets": { "node": 6 },
+  "plugins": [
+    ["external-helpers", { "helperVersion": "7.1000.0" }],
+    "proposal-private-methods",
+    "proposal-class-properties"
+  ]
+}

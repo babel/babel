@@ -16,8 +16,10 @@
     "babel-plugin"
   ],
   "dependencies": {
+    "@babel/helper-compilation-targets": "workspace:^7.10.4",
     "@babel/helper-create-class-features-plugin": "workspace:^7.12.1",
-    "@babel/helper-plugin-utils": "workspace:^7.10.4"
+    "@babel/helper-plugin-utils": "workspace:^7.10.4",
+    "@babel/helper-replace-supers": "workspace:^7.12.1"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
