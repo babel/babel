@@ -8,7 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-properties {}
+  syntax-class-properties { "chrome":"80" }
   proposal-private-methods { "chrome":"80" }
   syntax-numeric-separator { "chrome":"80" }
   proposal-logical-assignment-operators { "chrome":"80" }

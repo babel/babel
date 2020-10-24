@@ -14,7 +14,7 @@ import { isRequired } from "@babel/helper-compilation-targets";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  if (isRequired("proposal-class-properties", api.targets())) {
+  if (!api.targets || isRequired("proposal-class-properties", api.targets())) {
     return createClassFeaturePlugin({
       name: "proposal-private-methods",
 

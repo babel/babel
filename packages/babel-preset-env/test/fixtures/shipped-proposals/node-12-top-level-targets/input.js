@@ -1,5 +1,5 @@
 class A {
-  x;
+  x = this.#y();
 
   #y() {}
 }

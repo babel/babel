@@ -41,7 +41,7 @@ export function isPluginRequired(targets: Targets, support: Targets) {
   });
 }
 
-const pluginLists = {
+const pluginLists: Object = {
   withProposals: {
     withoutBugfixes: pluginsList,
     withBugfixes: Object.assign({}, pluginsList, pluginsBugfixesList),
@@ -284,6 +284,7 @@ export default declare((api, opts) => {
     browserslistEnv,
   } = normalizeOptions(opts);
 
+  let hasLocalTargets = false;
   let targets = babelTargets;
   let transformTargets = forceAllTransforms ? {} : babelTargets;
 
@@ -295,6 +296,8 @@ export default declare((api, opts) => {
     opts.browserslistEnv ||
     opts.ignoreBrowserslistConfig
   ) {
+    hasLocalTargets = true;
+
     const { hasUglifyTarget, localTargets } = getLocalTargets(
       optionsTargets,
       ignoreBrowserslistConfig,
@@ -310,7 +313,16 @@ export default declare((api, opts) => {
   const include = transformIncludesAndExcludes(optionsInclude);
   const exclude = transformIncludesAndExcludes(optionsExclude);
 
-  const compatData = getPluginList(shippedProposals, bugfixes);
+  let compatData = getPluginList(shippedProposals, bugfixes);
+
+  if (hasLocalTargets && compatData["proposal-private-methods"]) {
+    // In @babel/core versions without api.targets support,
+    compatData = {
+      ...compatData,
+      "proposal-class-properties": compatData["proposal-private-methods"],
+    };
+  }
+
   const shouldSkipExportNamespaceFrom =
     (modules === "auto" && api.caller?.(supportsExportNamespaceFrom)) ||
     (modules === false &&
