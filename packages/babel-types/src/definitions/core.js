@@ -980,7 +980,7 @@ defineType("SwitchStatement", {
 });
 
 defineType("ThisExpression", {
-  aliases: ["Expression"],
+  aliases: ["Expression", "Pureish"],
 });
 
 defineType("ThrowStatement", {
