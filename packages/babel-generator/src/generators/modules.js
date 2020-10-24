@@ -131,6 +131,16 @@ function ExportDeclaration(node: Object) {
       this.word("from");
       this.space();
       this.print(node.source, node);
+      if (node.assertions?.length) {
+        this.space();
+        this.word("assert");
+        this.space();
+        this.token("{");
+        this.space();
+        this.printList(node.assertions, node);
+        this.space();
+        this.token("}");
+      }
     }
 
     this.semicolon();
