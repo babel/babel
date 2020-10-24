@@ -1,12 +1,26 @@
-var _privateMethod;
+var _foo, _bar;
 
 class Foo {
-  #privateMethod = _privateMethod || (_privateMethod = function () {
+  #foo = _foo || (_foo = function () {
+    return 42;
+  });
+  #bar = _bar || (_bar = function () {
     return 42;
   });
 
   constructor() {
-    this.publicField = this.#privateMethod();
+    get(), babelHelpers.readOnlyError("#foo");
+    babelHelpers.readOnlyError("#bar");
+
+    class X {
+      #foo;
+
+      constructor() {
+        this.#foo = 2;
+        run(), babelHelpers.readOnlyError("#bar");
+      }
+
+    }
   }
 
 }

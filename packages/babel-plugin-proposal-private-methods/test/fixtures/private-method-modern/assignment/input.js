@@ -1,9 +1,24 @@
 class Foo {
   constructor() {
-    this.publicField = this.#privateMethod();
+    get().#foo = 2;
+    this.#bar++;
+
+    class X {
+      #foo;
+
+      constructor() {
+        this.#foo = 2;
+        this.#bar += run();
+      }
+    }
   }
 
-  #privateMethod() {
+  #foo() {
+    return 42;
+  }
+
+
+  #bar() {
     return 42;
   }
 }

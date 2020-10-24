@@ -106,6 +106,7 @@ export default declare((api, options) => {
       }
 
       path.traverse(privateUsageVisitor, state);
+      path.skip();
     },
   };
 
