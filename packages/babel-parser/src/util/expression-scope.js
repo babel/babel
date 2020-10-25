@@ -73,8 +73,7 @@ class ExpressionScope {
 }
 
 class ArrowHeadParsingScope extends ExpressionScope {
-  declare declarationErrorPos: number;
-  declare declarationErrorMessage: string;
+  errors: Map</* pos */ number, /* message */ string> = new Map();
   constructor(type: 1 | 2) {
     super(type);
   }
