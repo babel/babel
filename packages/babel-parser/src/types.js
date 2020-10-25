@@ -360,6 +360,12 @@ export type Directive = NodeBase & {
 
 export type DirectiveLiteral = StringLiteral & { type: "DirectiveLiteral" };
 
+export type ImportAttribute = NodeBase & {
+  type: "ImportAttribute",
+  key: Identifier | StringLiteral,
+  value: StringLiteral,
+};
+
 // Expressions
 
 export type Super = NodeBase & { type: "Super" };
@@ -867,6 +873,8 @@ export type ExportNamedDeclaration = NodeBase & {
   source: ?Literal,
 
   exportKind?: "type" | "value", // TODO: Not in spec
+
+  assertions?: $ReadOnlyArray<ImportAttribute>,
 };
 
 export type ExportSpecifier = NodeBase & {
