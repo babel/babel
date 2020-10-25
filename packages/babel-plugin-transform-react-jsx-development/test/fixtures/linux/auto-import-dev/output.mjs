@@ -21,12 +21,12 @@ var x = /*#__PURE__*/_jsxDEV(_Fragment, {
       columnNumber: 7
     }, this), /*#__PURE__*/_createElement("div", { ...props,
       key: "4",
+      __self: this,
       __source: {
         fileName: _jsxFileName,
         lineNumber: 7,
         columnNumber: 7
-      },
-      __self: this
+      }
     })]
   }, void 0, true, {
     fileName: _jsxFileName,
