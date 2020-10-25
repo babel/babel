@@ -13,7 +13,7 @@ import type { Pos, Position } from "../util/location";
 import type State from "../tokenizer/state";
 import { types as tc } from "../tokenizer/context";
 import * as charCodes from "charcodes";
-import { isIteratorStart } from "../util/identifier";
+import { isIteratorStart, isKeyword } from "../util/identifier";
 import {
   type BindingTypes,
   BIND_NONE,
@@ -1730,10 +1730,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // interfaces and enums
     parseStatement(context: ?string, topLevel?: boolean): N.Statement {
       // strict mode handling of `interface` since it's a reserved word
+      const lookahead = this.lookahead();
       if (
         this.state.strict &&
         this.match(tt.name) &&
-        this.state.value === "interface"
+        this.state.value === "interface" &&
+        (lookahead.type === tt.name || isKeyword(lookahead.value))
       ) {
         const node = this.startNode();
         this.next();
