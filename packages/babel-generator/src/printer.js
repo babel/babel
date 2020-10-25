@@ -646,6 +646,19 @@ export default class Printer {
       }
     }
   }
+
+  printAssertions(node: Node) {
+    if (node.assertions?.length) {
+      this.space();
+      this.word("assert");
+      this.space();
+      this.token("{");
+      this.space();
+      this.printList(node.assertions, node);
+      this.space();
+      this.token("}");
+    }
+  }
 }
 
 // Expose the node type functions and helpers on the prototype for easy usage.
