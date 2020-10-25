@@ -1730,28 +1730,28 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // interfaces and enums
     parseStatement(context: ?string, topLevel?: boolean): N.Statement {
       // strict mode handling of `interface` since it's a reserved word
-      const lookahead = this.lookahead();
       if (
         this.state.strict &&
         this.match(tt.name) &&
-        this.state.value === "interface" &&
-        (lookahead.type === tt.name || isKeyword(lookahead.value))
+        this.state.value === "interface"
       ) {
-        const node = this.startNode();
-        this.next();
-        return this.flowParseInterface(node);
+        const lookahead = this.lookahead();
+        if (lookahead.type === tt.name || isKeyword(lookahead.value)) {
+          const node = this.startNode();
+          this.next();
+          return this.flowParseInterface(node);
+        }
       } else if (this.shouldParseEnums() && this.isContextual("enum")) {
         const node = this.startNode();
         this.next();
         return this.flowParseEnumDeclaration(node);
-      } else {
-        const stmt = super.parseStatement(context, topLevel);
-        // We will parse a flow pragma in any comment before the first statement.
-        if (this.flowPragma === undefined && !this.isValidDirective(stmt)) {
-          this.flowPragma = null;
-        }
-        return stmt;
       }
+      const stmt = super.parseStatement(context, topLevel);
+      // We will parse a flow pragma in any comment before the first statement.
+      if (this.flowPragma === undefined && !this.isValidDirective(stmt)) {
+        this.flowPragma = null;
+      }
+      return stmt;
     }
 
     // declares, interfaces and type aliases
