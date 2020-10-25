@@ -78,11 +78,13 @@ class ArrowHeadParsingScope extends ExpressionScope {
     super(type);
   }
   recordDeclarationError(pos: number, message: string) {
-    this.declarationErrorPos = pos;
-    this.declarationErrorMessage = message;
+    this.errors.set(pos, message);
   }
-  hasDeclarationError(): boolean {
-    return "declarationErrorPos" in this;
+  clearDeclarationError(pos: number) {
+    this.errors.delete(pos);
+  }
+  iterateErrors(iterator: (message: string, pos: number) => void) {
+    this.errors.forEach(iterator);
   }
 }
 
@@ -155,13 +157,18 @@ export default class ExpressionScopeHandler {
     const currentScope = stack[stack.length - 1];
     if (!currentScope.canBeArrowParameterDeclaration()) return;
     /*:: invariant(currentScope instanceof ArrowHeadParsingScope) */
-    if (currentScope.hasDeclarationError()) {
-      this.raise(
-        currentScope.declarationErrorPos,
-        /* eslint-disable @babel/development-internal/dry-error-messages */
-        currentScope.declarationErrorMessage,
-      );
-    }
+    currentScope.iterateErrors((message, pos) => {
+      /* eslint-disable @babel/development-internal/dry-error-messages */
+      this.raise(pos, message);
+      // iterate from parent scope
+      let i = stack.length - 2;
+      let scope = stack[i];
+      while (scope.canBeArrowParameterDeclaration()) {
+        /*:: invariant(scope instanceof ArrowHeadParsingScope) */
+        scope.clearDeclarationError(pos);
+        scope = stack[--i];
+      }
+    });
   }
 }
 
