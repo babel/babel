@@ -30,6 +30,10 @@ import {
 } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
 import { PARAM, functionFlags } from "../util/production-parameter";
+import {
+  newExpressionScope,
+  newParameterDeclarationScope,
+} from "../util/expression-scope";
 
 const loopLabel = { kind: "loop" },
   switchLabel = { kind: "switch" };
@@ -1077,11 +1081,7 @@ export default class StatementParser extends ExpressionParser {
     }
 
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    const oldYieldPos = this.state.yieldPos;
-    const oldAwaitPos = this.state.awaitPos;
     this.state.maybeInArrowParameters = false;
-    this.state.yieldPos = -1;
-    this.state.awaitPos = -1;
     this.scope.enter(SCOPE_FUNCTION);
     this.prodParam.enter(functionFlags(isAsync, node.generator));
 
@@ -1113,9 +1113,6 @@ export default class StatementParser extends ExpressionParser {
     }
 
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
-    this.state.yieldPos = oldYieldPos;
-    this.state.awaitPos = oldAwaitPos;
-
     return node;
   }
 
@@ -1124,10 +1121,8 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseFunctionParams(node: N.Function, allowModifiers?: boolean): void {
-    const oldInParameters = this.state.inParameters;
-    this.state.inParameters = true;
-
     this.expect(tt.parenL);
+    this.expressionScope.enter(newParameterDeclarationScope());
     node.params = this.parseBindingList(
       tt.parenR,
       charCodes.rightParenthesis,
@@ -1135,8 +1130,7 @@ export default class StatementParser extends ExpressionParser {
       allowModifiers,
     );
 
-    this.state.inParameters = oldInParameters;
-    this.checkYieldAwaitInDefaultParams();
+    this.expressionScope.exit();
   }
 
   registerFunctionStatementId(node: N.Function): void {
@@ -1529,6 +1523,9 @@ export default class StatementParser extends ExpressionParser {
     this.expectPlugin("classStaticBlock", member.start);
     // Start a new lexical scope
     this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
+    // Start a new expression scope, this is required for parsing edge cases like:
+    // async (x = class { static { await; } }) => {}
+    this.expressionScope.enter(newExpressionScope());
     // Start a new scope with regard to loop labels
     const oldLabels = this.state.labels;
     this.state.labels = [];
@@ -1538,6 +1535,7 @@ export default class StatementParser extends ExpressionParser {
     const body = (member.body = []);
     this.parseBlockOrModuleBlockBody(body, undefined, false, tt.braceR);
     this.prodParam.exit();
+    this.expressionScope.exit();
     this.scope.exit();
     this.state.labels = oldLabels;
     classBody.body.push(this.finishNode<N.StaticBlock>(member, "StaticBlock"));
@@ -1638,42 +1636,34 @@ export default class StatementParser extends ExpressionParser {
     methodOrProp: N.ClassMethod | N.ClassProperty,
   ): void {}
 
+  // https://tc39.es/proposal-class-fields/#prod-FieldDefinition
   parseClassPrivateProperty(
     node: N.ClassPrivateProperty,
   ): N.ClassPrivateProperty {
-    this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
-    this.prodParam.enter(PARAM);
-
-    node.value = this.eat(tt.eq) ? this.parseMaybeAssignAllowIn() : null;
+    this.parseInitializer(node);
     this.semicolon();
-    this.prodParam.exit();
-
-    this.scope.exit();
-
     return this.finishNode(node, "ClassPrivateProperty");
   }
 
+  // https://tc39.es/proposal-class-fields/#prod-FieldDefinition
   parseClassProperty(node: N.ClassProperty): N.ClassProperty {
-    if (!node.typeAnnotation) {
+    if (!node.typeAnnotation || this.match(tt.eq)) {
       this.expectPlugin("classProperties");
     }
-
-    this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
-    this.prodParam.enter(PARAM);
-
-    if (this.match(tt.eq)) {
-      this.expectPlugin("classProperties");
-      this.next();
-      node.value = this.parseMaybeAssignAllowIn();
-    } else {
-      node.value = null;
-    }
+    this.parseInitializer(node);
     this.semicolon();
+    return this.finishNode(node, "ClassProperty");
+  }
 
+  // https://tc39.es/proposal-class-fields/#prod-Initializer
+  parseInitializer(node: N.ClassProperty | N.ClassPrivateProperty): void {
+    this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
+    this.expressionScope.enter(newExpressionScope());
+    this.prodParam.enter(PARAM);
+    node.value = this.eat(tt.eq) ? this.parseMaybeAssignAllowIn() : null;
+    this.expressionScope.exit();
     this.prodParam.exit();
     this.scope.exit();
-
-    return this.finishNode(node, "ClassProperty");
   }
 
   parseClassId(
@@ -1998,7 +1988,6 @@ export default class StatementParser extends ExpressionParser {
               // check for keywords used as local names
               this.checkReservedWord(local.name, local.start, true, false);
               // check if export is defined
-              // $FlowIgnore
               this.scope.checkLocalExport(local);
             }
           }

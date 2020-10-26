@@ -1,4 +1,1 @@
-language/expressions/class/cpn-class-expr-fields-methods-computed-property-name-from-await-expression.js(default)
-language/expressions/class/cpn-class-expr-fields-methods-computed-property-name-from-await-expression.js(strict mode)
-language/statements/class/cpn-class-decl-fields-methods-computed-property-name-from-await-expression.js(default)
-language/statements/class/cpn-class-decl-fields-methods-computed-property-name-from-await-expression.js(strict mode)
+

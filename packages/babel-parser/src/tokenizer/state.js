@@ -57,13 +57,7 @@ export default class State {
   noArrowParamsConversionAt: number[] = [];
 
   // Flags to track
-  inParameters: boolean = false;
   maybeInArrowParameters: boolean = false;
-  // This flag is used to track async arrow head across function declarations.
-  // e.g. async (foo = function (await) {}) => {}
-  // When parsing `await` in this expression, `maybeInAsyncArrowHead` is true
-  // but `maybeInArrowParameters` is false
-  maybeInAsyncArrowHead: boolean = false;
   inPipeline: boolean = false;
   inType: boolean = false;
   noAnonFunctionType: boolean = false;
@@ -93,10 +87,6 @@ export default class State {
   // Supports nesting of decorators, e.g. @foo(@bar class inner {}) class outer {}
   // where @foo belongs to the outer class and @bar to the inner
   decoratorStack: Array<Array<N.Decorator>> = [[]];
-
-  // Positions to delayed-check that yield/await does not exist in default parameters.
-  yieldPos: number = -1;
-  awaitPos: number = -1;
 
   // Comment store.
   comments: Array<N.Comment> = [];

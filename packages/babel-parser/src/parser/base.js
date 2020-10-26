@@ -4,6 +4,7 @@ import type { Options } from "../options";
 import type State from "../tokenizer/state";
 import type { PluginsMap } from "./index";
 import type ScopeHandler from "../util/scope";
+import type ExpressionScopeHandler from "../util/expression-scope";
 import type ClassScopeHandler from "../util/class-scope";
 import type ProductionParameterHandler from "../util/production-parameter";
 
@@ -14,6 +15,7 @@ export default class BaseParser {
   scope: ScopeHandler<*>;
   classScope: ClassScopeHandler;
   prodParam: ProductionParameterHandler;
+  expressionScope: ExpressionScopeHandler;
   plugins: PluginsMap;
   filename: ?string;
   sawUnambiguousESM: boolean = false;
