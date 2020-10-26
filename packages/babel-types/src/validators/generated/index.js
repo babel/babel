@@ -3967,6 +3967,7 @@ export function isPureish(node: ?Object, opts?: Object): boolean {
     "RegExpLiteral" === nodeType ||
     "ThisExpression" === nodeType ||
     "ArrowFunctionExpression" === nodeType ||
+    "Super" === nodeType ||
     "BigIntLiteral" === nodeType ||
     "DecimalLiteral" === nodeType ||
     (nodeType === "Placeholder" && "StringLiteral" === node.expectedNode)

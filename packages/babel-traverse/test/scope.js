@@ -232,6 +232,15 @@ describe("scope", () => {
       expect(
         getPath("String.raw`foo`").get("body")[0].get("expression").isPure(),
       ).toBeTruthy();
+      expect(getPath("this").get("body.0.expression").isPure()).toBeTruthy();
+      expect(getPath("this.foo").get("body.0.expression").isPure()).toBeFalsy();
+      expect(
+        getPath("super.foo").get("body.0.expression").isPure(),
+      ).toBeFalsy();
+      expect(
+        // This only tests "super", not "super.foo"
+        getPath("super.foo").get("body.0.expression.object").isPure(),
+      ).toBeTruthy();
     });
 
     test("label", function () {

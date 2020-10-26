@@ -1785,7 +1785,7 @@ defineType("SpreadElement", {
 });
 
 defineType("Super", {
-  aliases: ["Expression"],
+  aliases: ["Expression", "Pureish"],
 });
 
 defineType("TaggedTemplateExpression", {
