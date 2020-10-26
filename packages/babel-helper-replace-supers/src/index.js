@@ -272,14 +272,14 @@ export default class ReplaceSupers {
     this.opts = opts;
   }
 
-  file: HubInterface;
-  isDerivedConstructor: boolean;
-  isLoose: boolean;
-  isPrivateMethod: boolean;
-  isStatic: boolean;
-  methodPath: NodePath;
-  opts: ReplaceSupersOptions;
-  superRef: Object;
+  declare file: HubInterface;
+  declare isDerivedConstructor: boolean;
+  declare isLoose: boolean;
+  declare isPrivateMethod: boolean;
+  declare isStatic: boolean;
+  declare methodPath: NodePath;
+  declare opts: ReplaceSupersOptions;
+  declare superRef: Object;
 
   getObjectRef() {
     return t.cloneNode(this.opts.objectRef || this.opts.getObjectRef());

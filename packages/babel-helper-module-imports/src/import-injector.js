@@ -98,17 +98,17 @@ export default class ImportInjector {
   /**
    * The path used for manipulation.
    */
-  _programPath: NodePath;
+  declare _programPath: NodePath;
 
   /**
    * The scope used to generate unique variable names.
    */
-  _programScope;
+  declare _programScope;
 
   /**
    * The file used to inject helpers and resolve paths.
    */
-  _hub;
+  declare _hub;
 
   /**
    * The default options to use with this instance when imports are added.

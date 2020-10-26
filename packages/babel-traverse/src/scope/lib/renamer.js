@@ -37,9 +37,9 @@ export default class Renamer {
     this.binding = binding;
   }
 
-  oldName: string;
-  newName: string;
-  binding: Binding;
+  declare oldName: string;
+  declare newName: string;
+  declare binding: Binding;
 
   maybeConvertFromExportDeclaration(parentDeclar) {
     const maybeExportDeclar = parentDeclar.parentPath;
