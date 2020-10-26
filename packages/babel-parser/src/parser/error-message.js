@@ -16,8 +16,9 @@ export const ErrorMessages = Object.freeze({
     "Can not use 'await' as identifier inside an async function",
   AwaitExpressionFormalParameter:
     "await is not allowed in async function parameters",
-  AwaitNotInAsyncFunction:
-    "Can not use keyword 'await' outside an async function",
+  AwaitNotInAsyncContext:
+    "'await' is only valid in async functions and the top level bodies of modules",
+  AwaitNotInAsyncFunction: "'await' is only valid in async function",
   BadGetterArity: "getter must not have any formal parameters",
   BadSetterArity: "setter must have exactly one formal parameter",
   BadSetterRestParameter:

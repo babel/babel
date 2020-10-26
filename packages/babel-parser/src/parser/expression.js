@@ -2343,7 +2343,12 @@ export default class ExpressionParser extends LValParser {
 
     if (reservedTest(word, this.inModule)) {
       if (!this.prodParam.hasAwait && word === "await") {
-        this.raise(startLoc, Errors.AwaitNotInAsyncFunction);
+        this.raise(
+          startLoc,
+          this.hasPlugin("topLevelAwait")
+            ? Errors.AwaitNotInAsyncContext
+            : Errors.AwaitNotInAsyncFunction,
+        );
       } else {
         this.raise(startLoc, Errors.UnexpectedReservedWord, word);
       }
