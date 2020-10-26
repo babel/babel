@@ -17,8 +17,8 @@ export const ErrorMessages = Object.freeze({
   AwaitExpressionFormalParameter:
     "await is not allowed in async function parameters",
   AwaitNotInAsyncContext:
-    "'await' is only valid in async functions and the top level bodies of modules",
-  AwaitNotInAsyncFunction: "'await' is only valid in async function",
+    "'await' is only allowed within async functions and at the top levels of modules",
+  AwaitNotInAsyncFunction: "'await' is only allowed within async functions",
   BadGetterArity: "getter must not have any formal parameters",
   BadSetterArity: "setter must have exactly one formal parameter",
   BadSetterRestParameter:
