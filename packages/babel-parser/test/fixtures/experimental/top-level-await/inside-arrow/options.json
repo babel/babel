@@ -4,5 +4,5 @@
   ],
   "sourceType": "module",
   "errorRecovery": false,
-  "throws": "'await' is only valid in async functions and the top level bodies of modules (1:6)"
+  "throws": "'await' is only allowed within async functions and at the top levels of modules (1:6)"
 }
