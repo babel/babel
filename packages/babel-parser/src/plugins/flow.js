@@ -13,7 +13,7 @@ import type { Pos, Position } from "../util/location";
 import type State from "../tokenizer/state";
 import { types as tc } from "../tokenizer/context";
 import * as charCodes from "charcodes";
-import { isIteratorStart } from "../util/identifier";
+import { isIteratorStart, isKeyword } from "../util/identifier";
 import {
   type BindingTypes,
   BIND_NONE,
@@ -1735,21 +1735,23 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.match(tt.name) &&
         this.state.value === "interface"
       ) {
-        const node = this.startNode();
-        this.next();
-        return this.flowParseInterface(node);
+        const lookahead = this.lookahead();
+        if (lookahead.type === tt.name || isKeyword(lookahead.value)) {
+          const node = this.startNode();
+          this.next();
+          return this.flowParseInterface(node);
+        }
       } else if (this.shouldParseEnums() && this.isContextual("enum")) {
         const node = this.startNode();
         this.next();
         return this.flowParseEnumDeclaration(node);
-      } else {
-        const stmt = super.parseStatement(context, topLevel);
-        // We will parse a flow pragma in any comment before the first statement.
-        if (this.flowPragma === undefined && !this.isValidDirective(stmt)) {
-          this.flowPragma = null;
-        }
-        return stmt;
       }
+      const stmt = super.parseStatement(context, topLevel);
+      // We will parse a flow pragma in any comment before the first statement.
+      if (this.flowPragma === undefined && !this.isValidDirective(stmt)) {
+        this.flowPragma = null;
+      }
+      return stmt;
     }
 
     // declares, interfaces and type aliases

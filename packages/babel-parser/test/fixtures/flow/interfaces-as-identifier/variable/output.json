@@ -1,0 +1,41 @@
+{
+  "type": "File",
+  "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":24}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'interface' (1:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":24}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":24,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":24}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":23,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":23}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":15,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":15},"identifierName":"interface"},
+              "name": "interface"
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":18,"end":23,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":23}},
+              "extra": {
+                "rawValue": "foo",
+                "raw": "\"foo\""
+              },
+              "value": "foo"
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}
