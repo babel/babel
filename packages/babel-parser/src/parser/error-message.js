@@ -211,7 +211,7 @@ export const ErrorMessages = Object.freeze({
   VarRedeclaration: "Identifier '%0' has already been declared",
   YieldBindingIdentifier:
     "Can not use 'yield' as identifier inside a generator",
-  YieldInParameter: "yield is not allowed in generator parameters",
+  YieldInParameter: "Yield expression is not allowed in formal parameters",
   ZeroDigitNumericSeparator:
     "Numeric separator can not be used after leading 0",
 });
