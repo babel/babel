@@ -1364,6 +1364,7 @@ interface ExportNamedDeclaration <: ModuleDeclaration {
   declaration: Declaration | null;
   specifiers: [ ExportSpecifier ];
   source: StringLiteral | null;
+  assertions?: [ ImportAttribute ];
 }
 ```
 
