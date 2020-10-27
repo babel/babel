@@ -612,7 +612,7 @@ export default class Printer {
 
       const indentSize = Math.max(
         this._getIndent().length,
-        this._buf.getCurrentColumn(),
+        this.format.retainLines ? 0 : this._buf.getCurrentColumn(),
       );
       val = val.replace(/\n(?!$)/g, `\n${" ".repeat(indentSize)}`);
     }
