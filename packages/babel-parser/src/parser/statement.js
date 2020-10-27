@@ -1906,17 +1906,16 @@ export default class StatementParser extends ExpressionParser {
     if (this.eatContextual("from")) {
       node.source = this.parseImportSource();
       this.checkExport(node);
+      const assertions = this.maybeParseImportAssertions();
+      if (assertions) {
+        node.assertions = assertions;
+      }
     } else {
       if (expect) {
         this.unexpected();
       } else {
         node.source = null;
       }
-    }
-
-    const assertions = this.maybeParseImportAssertions();
-    if (assertions) {
-      node.assertions = assertions;
     }
 
     this.semicolon();
