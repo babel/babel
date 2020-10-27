@@ -215,6 +215,39 @@ describe("@babel/template", function () {
       expect(result.test.left).toBe(value);
     });
 
+    it("should return assertions in ImportDeclaration when using .ast", () => {
+      const result = template.ast(
+        `import json from "./foo.json" assert { type: "json" };`,
+        {
+          plugins: ["importAssertions"],
+        },
+      );
+
+      expect(result.assertions[0].type).toBe("ImportAttribute");
+    });
+
+    it("should return assertions in ExportNamedDeclaration when using .ast", () => {
+      const result = template.ast(
+        `export { foo2 } from "foo.json" assert { type: "json" };`,
+        {
+          plugins: ["importAssertions"],
+        },
+      );
+
+      expect(result.assertions[0].type).toBe("ImportAttribute");
+    });
+
+    it("should return assertions in ExportDefaultDeclaration when using .ast", () => {
+      const result = template.ast(
+        `export foo2 from "foo.json" assert { type: "json" };`,
+        {
+          plugins: ["importAssertions", "exportDefaultFrom"],
+        },
+      );
+
+      expect(result.assertions[0].type).toBe("ImportAttribute");
+    });
+
     it("should replace JSX placeholder", () => {
       const result = template.expression(
         `
