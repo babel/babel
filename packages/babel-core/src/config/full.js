@@ -1,7 +1,7 @@
 // @flow
 
 import gensync, { type Handler } from "gensync";
-import { forwardAsync } from "../gensync-utils/async";
+import { forwardAsync, maybeAsync, isThenable } from "../gensync-utils/async";
 
 import { mergeOptions } from "./util";
 import * as context from "../index";
@@ -214,6 +214,8 @@ function enhanceError<T: Function>(context, fn: T): T {
   }: any);
 }
 
+const ASYNC_PLUGIN_ERROR = `You appear to be using an async plugin/preset, but Babel has been called synchronously`;
+
 /**
  * Load a generic plugin/preset from the given descriptor loaded from the config object.
  */
@@ -228,12 +230,14 @@ const loadDescriptor = makeWeakCache(function* (
 
   let item = value;
   if (typeof value === "function") {
+    const factory = maybeAsync(value, ASYNC_PLUGIN_ERROR);
+
     const api = {
       ...context,
       ...makeAPI(cache),
     };
     try {
-      item = value(api, options, dirname);
+      item = yield* factory(api, options, dirname);
     } catch (e) {
       if (alias) {
         e.message += ` (While processing: ${JSON.stringify(alias)})`;
@@ -246,14 +250,16 @@ const loadDescriptor = makeWeakCache(function* (
     throw new Error("Plugin/Preset did not return an object.");
   }
 
-  if (typeof item.then === "function") {
+  if (isThenable(item)) {
     yield* []; // if we want to support async plugins
 
     throw new Error(
-      `You appear to be using an async plugin, ` +
+      `You appear to be using a promise as a plugin, ` +
         `which your current version of Babel does not support. ` +
         `If you're using a published plugin, ` +
-        `you may need to upgrade your @babel/core version.`,
+        `you may need to upgrade your @babel/core version. ` +
+        `As an alternative, you can prefix the promise with "await". ` +
+        `(While processing: ${JSON.stringify(alias)})`,
     );
   }
 

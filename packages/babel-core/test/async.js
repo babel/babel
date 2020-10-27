@@ -111,25 +111,18 @@ describe("asynchronicity", () => {
       nodeGte8("called synchronously", () => {
         process.chdir("plugin");
 
-        expect(() =>
-          babel.transformSync(""),
-        ).toThrowErrorMatchingInlineSnapshot(
-          `"[BABEL] unknown: You appear to be using an async plugin, which your current version of Babel` +
-            ` does not support. If you're using a published plugin, you may need to upgrade your` +
-            ` @babel/core version."`,
+        expect(() => babel.transformSync("")).toThrow(
+          `[BABEL] unknown: You appear to be using an async plugin/preset, but Babel has been` +
+            ` called synchronously (While processing: "${__dirname}/fixtures/async/plugin/plugin.js")`,
         );
       });
 
       nodeGte8("called asynchronously", async () => {
         process.chdir("plugin");
 
-        await expect(
-          babel.transformAsync(""),
-        ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"[BABEL] unknown: You appear to be using an async plugin, which your current version of Babel` +
-            ` does not support. If you're using a published plugin, you may need to upgrade your` +
-            ` @babel/core version."`,
-        );
+        await expect(babel.transformAsync("")).resolves.toMatchObject({
+          code: `"success"`,
+        });
       });
     });
 
@@ -189,24 +182,63 @@ describe("asynchronicity", () => {
       nodeGte8("called synchronously", () => {
         process.chdir("plugin-inherits");
 
-        expect(() =>
-          babel.transformSync(""),
-        ).toThrowErrorMatchingInlineSnapshot(
-          `"[BABEL] unknown: You appear to be using an async plugin, which your current version of Babel` +
-            ` does not support. If you're using a published plugin, you may need to upgrade your` +
-            ` @babel/core version."`,
+        expect(() => babel.transformSync("")).toThrow(
+          `[BABEL] unknown: You appear to be using an async plugin/preset, but Babel has been` +
+            ` called synchronously (While processing: ` +
+            `"${__dirname}/fixtures/async/plugin-inherits/plugin.js$inherits")`,
         );
       });
 
       nodeGte8("called asynchronously", async () => {
         process.chdir("plugin-inherits");
 
-        await expect(
-          babel.transformAsync(""),
-        ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"[BABEL] unknown: You appear to be using an async plugin, which your current version of Babel` +
-            ` does not support. If you're using a published plugin, you may need to upgrade your` +
-            ` @babel/core version."`,
+        await expect(babel.transformAsync("")).resolves.toMatchObject({
+          code: `"success 2"\n"success"`,
+        });
+      });
+    });
+  });
+
+  describe("preset", () => {
+    describe("factory function", () => {
+      nodeGte8("called synchronously", () => {
+        process.chdir("preset");
+
+        expect(() => babel.transformSync("")).toThrow(
+          `[BABEL] unknown: You appear to be using an async plugin/preset, but Babel has been` +
+            ` called synchronously (While processing: "${__dirname}/fixtures/async/preset/preset.js")`,
+        );
+      });
+
+      nodeGte8("called asynchronously", async () => {
+        process.chdir("preset");
+
+        await expect(babel.transformAsync("")).resolves.toMatchObject({
+          code: `"success"`,
+        });
+      });
+    });
+
+    describe("plugins", () => {
+      nodeGte8("called synchronously", () => {
+        process.chdir("preset-plugin-promise");
+
+        expect(() => babel.transformSync("")).toThrow(
+          `[BABEL] unknown: You appear to be using a promise as a plugin, which your current version` +
+            ` of Babel does not support. If you're using a published plugin, you may need to upgrade` +
+            ` your @babel/core version. As an alternative, you can prefix the promise with "await". ` +
+            `(While processing: "${__dirname}/fixtures/async/preset-plugin-promise/preset.js$0")`,
+        );
+      });
+
+      nodeGte8("called asynchronously", async () => {
+        process.chdir("preset-plugin-promise");
+
+        await expect(babel.transformAsync("")).rejects.toThrow(
+          `[BABEL] unknown: You appear to be using a promise as a plugin, which your current version` +
+            ` of Babel does not support. If you're using a published plugin, you may need to upgrade` +
+            ` your @babel/core version. As an alternative, you can prefix the promise with "await". ` +
+            `(While processing: "${__dirname}/fixtures/async/preset-plugin-promise/preset.js$0")`,
         );
       });
     });
