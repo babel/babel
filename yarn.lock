@@ -93,7 +93,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/compat-data@workspace:packages/babel-compat-data"
   dependencies:
-    electron-to-chromium: 1.3.574
+    electron-to-chromium: 1.3.583
     lodash: ^4.17.19
     mdn-browser-compat-data: 1.0.38
   languageName: unknown
@@ -6089,10 +6089,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-to-chromium@npm:1.3.574, electron-to-chromium@npm:^1.3.571":
-  version: 1.3.574
-  resolution: "electron-to-chromium@npm:1.3.574"
-  checksum: 671aa9db3fbebb2538612195d667e73b981ea60bd64f7d1d42b55f406321fd4111d6409c4453ef2138f9ab36f303e84269490e9e1fb18762bc9529f89ab076b6
+"electron-to-chromium@npm:1.3.583, electron-to-chromium@npm:^1.3.571":
+  version: 1.3.583
+  resolution: "electron-to-chromium@npm:1.3.583"
+  checksum: 134710b06cdd0a722bba5efe502beb914bae9285cd3140c5824f043984b2595e64d6cb893675d8b185cf8bef46cc8f39c72a9f1c78237e31def0c64e076e532f
   languageName: node
   linkType: hard
 
