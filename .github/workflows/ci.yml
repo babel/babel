@@ -42,7 +42,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v2-beta
         with:
-          node-version: "*"
+          node-version: "15"
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
@@ -99,14 +99,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [13, 12, 10, 8, 6]
+        node-version: [14, 13, 12, 10, 8, 6]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Use Node.js latest
         uses: actions/setup-node@v2-beta
         with:
-          node-version: "*" # Build Babel on latest node versions
+          node-version: "*" # Build Babel on latest node LTS versions
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
