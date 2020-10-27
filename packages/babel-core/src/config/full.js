@@ -214,8 +214,6 @@ function enhanceError<T: Function>(context, fn: T): T {
   }: any);
 }
 
-const ASYNC_PLUGIN_ERROR = `You appear to be using an async plugin/preset, but Babel has been called synchronously`;
-
 /**
  * Load a generic plugin/preset from the given descriptor loaded from the config object.
  */
@@ -230,7 +228,10 @@ const loadDescriptor = makeWeakCache(function* (
 
   let item = value;
   if (typeof value === "function") {
-    const factory = maybeAsync(value, ASYNC_PLUGIN_ERROR);
+    const factory = maybeAsync(
+      value,
+      `You appear to be using an async plugin/preset, but Babel has been called synchronously`,
+    );
 
     const api = {
       ...context,

@@ -197,6 +197,30 @@ describe("asynchronicity", () => {
         });
       });
     });
+
+    describe(".mjs files", () => {
+      if (process.env.IS_PUBLISH) {
+        0;
+      } else {
+        nodeGte8("called synchronously", () => {
+          process.chdir("plugin-mjs");
+
+          expect(() => babel.transformSync("")).toThrow(
+            `[BABEL]: You appear to be using a native ECMAScript module plugin, which is` +
+              ` only supported when running Babel asynchronously. (While processing: ` +
+              `${__dirname}/fixtures/async/plugin-mjs/plugin.mjs)`,
+          );
+        });
+
+        nodeGte8("called asynchronously", async () => {
+          process.chdir("plugin-mjs");
+
+          await expect(babel.transformAsync("")).resolves.toMatchObject({
+            code: `"success"`,
+          });
+        });
+      }
+    });
   });
 
   describe("preset", () => {
@@ -241,6 +265,40 @@ describe("asynchronicity", () => {
             `(While processing: "${__dirname}/fixtures/async/preset-plugin-promise/preset.js$0")`,
         );
       });
+    });
+
+    describe(".mjs files", () => {
+      if (process.env.IS_PUBLISH) {
+        0;
+      } else {
+        nodeGte8("called synchronously", () => {
+          process.chdir("preset-mjs");
+
+          expect(() => babel.transformSync("")).toThrow(
+            `[BABEL]: You appear to be using a native ECMAScript module preset, which is` +
+              ` only supported when running Babel asynchronously. (While processing: ` +
+              `${__dirname}/fixtures/async/preset-mjs/preset.mjs)`,
+          );
+        });
+
+        nodeGte8("called asynchronously", async () => {
+          process.chdir("preset-mjs");
+
+          await expect(babel.transformAsync("")).resolves.toMatchObject({
+            code: `"success"`,
+          });
+        });
+
+        nodeGte8("must use the 'default' export", async () => {
+          process.chdir("preset-mjs-named-exports");
+
+          await expect(
+            babel.transformAsync(""),
+          ).rejects.toThrowErrorMatchingInlineSnapshot(
+            `"Unexpected falsy value: undefined"`,
+          );
+        });
+      }
     });
   });
 });

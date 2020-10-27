@@ -2,6 +2,7 @@
 
 /*:: declare var invariant; */
 
+import type { Handler } from "gensync";
 import type { PluginTarget, PluginOptions } from "./validation/options";
 
 import path from "path";
@@ -20,7 +21,7 @@ export function createItemFromDescriptor(desc: UnloadedDescriptor): ConfigItem {
  * ideally, as recreating the config item will mean re-resolving the item
  * and re-evaluating the plugin/preset function.
  */
-export function createConfigItem(
+export function* createConfigItem(
   value:
     | PluginTarget
     | [PluginTarget, PluginOptions]
@@ -32,8 +33,8 @@ export function createConfigItem(
     dirname?: string,
     type?: "preset" | "plugin",
   } = {},
-): ConfigItem {
-  const descriptor = createDescriptor(value, path.resolve(dirname), {
+): Handler<ConfigItem> {
+  const descriptor = yield* createDescriptor(value, path.resolve(dirname), {
     type,
     alias: "programmatic item",
   });
