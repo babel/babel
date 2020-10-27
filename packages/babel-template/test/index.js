@@ -215,6 +215,17 @@ describe("@babel/template", function () {
       expect(result.test.left).toBe(value);
     });
 
+    it("should return assertions when using .ast", () => {
+      const result = template.ast(
+        `import json from "./foo.json" assert { type: "json" };`,
+        {
+          plugins: ["importAssertions"],
+        },
+      );
+
+      expect(result.assertions[0].type).toBe("ImportAttribute");
+    });
+
     it("should replace JSX placeholder", () => {
       const result = template.expression(
         `

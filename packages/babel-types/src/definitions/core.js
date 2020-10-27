@@ -1559,6 +1559,12 @@ defineType("ImportDeclaration", {
   visitor: ["specifiers", "source"],
   aliases: ["Statement", "Declaration", "ModuleDeclaration"],
   fields: {
+    assertions: {
+      validate: chain(
+        assertValueType("array"),
+        assertNodeType("ImportAttribute"),
+      ),
+    },
     specifiers: {
       validate: chain(
         assertValueType("array"),
