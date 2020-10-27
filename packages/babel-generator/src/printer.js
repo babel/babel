@@ -33,10 +33,10 @@ export default class Printer {
     this._buf = new Buffer(map);
   }
 
-  format: Format;
+  declare format: Format;
   inForStatementInitCounter: number = 0;
 
-  _buf: Buffer;
+  declare _buf: Buffer;
   _printStack: Array<Node> = [];
   _indent: number = 0;
   _insideAux: boolean = false;

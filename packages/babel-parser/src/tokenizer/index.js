@@ -101,11 +101,11 @@ export class Token {
     this.loc = new SourceLocation(state.startLoc, state.endLoc);
   }
 
-  type: TokenType;
-  value: any;
-  start: number;
-  end: number;
-  loc: SourceLocation;
+  declare type: TokenType;
+  declare value: any;
+  declare start: number;
+  declare end: number;
+  declare loc: SourceLocation;
 }
 
 // ## Tokenizer

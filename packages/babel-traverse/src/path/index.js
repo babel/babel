@@ -31,42 +31,30 @@ export default class NodePath {
   constructor(hub: HubInterface, parent: Object) {
     this.parent = parent;
     this.hub = hub;
-    this.contexts = [];
     this.data = null;
-    // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
-    this._traverseFlags = 0;
-    this.state = null;
-    this.opts = null;
-    this.skipKeys = null;
-    this.parentPath = null;
+
     this.context = null;
-    this.container = null;
-    this.listKey = null;
-    this.key = null;
-    this.node = null;
     this.scope = null;
-    this.type = null;
   }
 
-  parent: Object;
-  hub: HubInterface;
-  contexts: Array<TraversalContext>;
-  data: Object;
-  shouldSkip: boolean;
-  shouldStop: boolean;
-  removed: boolean;
-  state: any;
-  opts: ?Object;
-  _traverseFlags: number;
-  skipKeys: ?Object;
-  parentPath: ?NodePath;
-  context: TraversalContext;
-  container: ?Object | Array<Object>;
-  listKey: ?string;
-  key: ?string;
-  node: ?Object;
-  scope: Scope;
-  type: ?string;
+  declare parent: Object;
+  declare hub: HubInterface;
+  declare data: Object;
+  declare context: TraversalContext;
+  declare scope: Scope;
+
+  contexts: Array<TraversalContext> = [];
+  state: any = null;
+  opts: ?Object = null;
+  // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
+  _traverseFlags: number = 0;
+  skipKeys: ?Object = null;
+  parentPath: ?NodePath = null;
+  container: ?Object | Array<Object> = null;
+  listKey: ?string = null;
+  key: ?string = null;
+  node: ?Object = null;
+  type: ?string = null;
 
   static get({ hub, parentPath, parent, container, listKey, key }): NodePath {
     if (!hub && parentPath) {
