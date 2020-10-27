@@ -1464,6 +1464,12 @@ defineType("ExportNamedDeclaration", {
         },
       ),
     },
+    assertions: {
+      validate: chain(
+        assertValueType("array"),
+        assertNodeType("ImportAttribute"),
+      ),
+    },
     specifiers: {
       default: [],
       validate: chain(
