@@ -16,8 +16,9 @@ export const ErrorMessages = Object.freeze({
     "Can not use 'await' as identifier inside an async function",
   AwaitExpressionFormalParameter:
     "await is not allowed in async function parameters",
-  AwaitNotInAsyncFunction:
-    "Can not use keyword 'await' outside an async function",
+  AwaitNotInAsyncContext:
+    "'await' is only allowed within async functions and at the top levels of modules",
+  AwaitNotInAsyncFunction: "'await' is only allowed within async functions",
   BadGetterArity: "getter must not have any formal parameters",
   BadSetterArity: "setter must have exactly one formal parameter",
   BadSetterRestParameter:
@@ -210,7 +211,7 @@ export const ErrorMessages = Object.freeze({
   VarRedeclaration: "Identifier '%0' has already been declared",
   YieldBindingIdentifier:
     "Can not use 'yield' as identifier inside a generator",
-  YieldInParameter: "yield is not allowed in generator parameters",
+  YieldInParameter: "Yield expression is not allowed in formal parameters",
   ZeroDigitNumericSeparator:
     "Numeric separator can not be used after leading 0",
 });

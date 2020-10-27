@@ -1,6 +1,8 @@
 {
-  "plugins": ["topLevelAwait"],
+  "plugins": [
+    "topLevelAwait"
+  ],
   "sourceType": "module",
   "errorRecovery": false,
-  "throws": "Can not use keyword 'await' outside an async function (1:6)"
+  "throws": "'await' is only allowed within async functions and at the top levels of modules (1:6)"
 }
