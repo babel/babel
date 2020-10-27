@@ -241,15 +241,15 @@ export default class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
     if (this.isContextual("yield")) {
       if (this.prodParam.hasYield) {
+        // If we have [Yield] production, `yield` will start a YieldExpression thus
+        // regex is allowed following. Otherwise `yield` is an identifier and regex
+        // is disallowed in tt.name.updateContext
+        this.state.exprAllowed = true;
         let left = this.parseYield();
         if (afterLeftParse) {
           left = afterLeftParse.call(this, left, startPos, startLoc);
         }
         return left;
-      } else {
-        // The tokenizer will assume an expression is allowed after
-        // `yield`, but this isn't that kind of yield
-        this.state.exprAllowed = false;
       }
     }
 
