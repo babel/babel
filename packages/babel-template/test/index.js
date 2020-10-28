@@ -248,6 +248,17 @@ describe("@babel/template", function () {
       expect(result.assertions[0].type).toBe("ImportAttribute");
     });
 
+    it("should return assertions in ExportAllDeclaration when using .ast", () => {
+      const result = template.ast(
+        `export * from "foo.json" assert { type: "json" };`,
+        {
+          plugins: ["importAssertions"],
+        },
+      );
+
+      expect(result.assertions[0].type).toBe("ImportAttribute");
+    });
+
     it("should replace JSX placeholder", () => {
       const result = template.expression(
         `
