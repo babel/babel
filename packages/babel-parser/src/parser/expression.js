@@ -241,15 +241,15 @@ export default class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
     if (this.isContextual("yield")) {
       if (this.prodParam.hasYield) {
+        // If we have [Yield] production, `yield` will start a YieldExpression thus
+        // regex is allowed following. Otherwise `yield` is an identifier and regex
+        // is disallowed in tt.name.updateContext
+        this.state.exprAllowed = true;
         let left = this.parseYield();
         if (afterLeftParse) {
           left = afterLeftParse.call(this, left, startPos, startLoc);
         }
         return left;
-      } else {
-        // The tokenizer will assume an expression is allowed after
-        // `yield`, but this isn't that kind of yield
-        this.state.exprAllowed = false;
       }
     }
 
@@ -1603,14 +1603,13 @@ export default class ExpressionParser extends LValParser {
     node.properties = [];
     this.next();
 
-    while (!this.eat(close)) {
+    while (!this.match(close)) {
       if (first) {
         first = false;
       } else {
         this.expect(tt.comma);
         if (this.match(close)) {
           this.addExtra(node, "trailingComma", this.state.lastTokStart);
-          this.next();
           break;
         }
       }
@@ -1636,6 +1635,13 @@ export default class ExpressionParser extends LValParser {
 
       node.properties.push(prop);
     }
+
+    // The tokenizer uses `braceIsBlock` to detect whether `{` starts a block statement.
+    // If `{` is a block statement, `exprAllowed` will be `true`.
+    // However the tokenizer can not handle edge cases like `0 ? a : { a : 1 } / 2`, here
+    // we update `exprAllowed` when an object-like is parsed.
+    this.state.exprAllowed = false;
+    this.next();
 
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
     let type = "ObjectExpression";
