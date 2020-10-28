@@ -1,4 +1,6 @@
 import { join } from "path";
+import cp from "child_process";
+import util from "util";
 import * as babel from "..";
 
 const nodeGte8 = (...args) => {
@@ -6,6 +8,21 @@ const nodeGte8 = (...args) => {
   const testFn = process.version.slice(0, 3) === "v6." ? it.skip : it;
   testFn(...args);
 };
+
+async function compileInSpawedProcess(async) {
+  // !!!! hack is coming !!!!
+  // todo(Babel 8): remove this section when https://github.com/facebook/jest/issues/9430 is resolved
+  // We don't check process.versions.node here, it will fail if node does not support esm
+  // please publish Babel on a modernized node :)
+  const { stdout, stderr } = await util.promisify(cp.execFile)(
+    require.resolve(`./fixtures/babel-compile-${async ? "async" : "sync"}.mjs`),
+    { env: process.env },
+  );
+  if (stderr) {
+    throw new Error(stderr);
+  }
+  return JSON.parse(stdout);
+}
 
 describe("asynchronicity", () => {
   const base = join(__dirname, "fixtures", "async");
@@ -106,8 +123,6 @@ describe("asynchronicity", () => {
     });
   });
 
-  const path = (...parts) => join(base, ...parts);
-
   describe("plugin", () => {
     describe("factory function", () => {
       nodeGte8("called synchronously", () => {
@@ -115,8 +130,7 @@ describe("asynchronicity", () => {
 
         expect(() => babel.transformSync("")).toThrow(
           `[BABEL] unknown: You appear to be using an async plugin/preset, but Babel` +
-            ` has been called synchronously (While processing: ` +
-            `"${path("plugin", "plugin.js")}")`,
+            ` has been called synchronously`,
         );
       });
 
@@ -187,8 +201,7 @@ describe("asynchronicity", () => {
 
         expect(() => babel.transformSync("")).toThrow(
           `[BABEL] unknown: You appear to be using an async plugin/preset, but Babel has been` +
-            ` called synchronously (While processing: ` +
-            `"${path("plugin-inherits", "plugin.js")}$inherits")`,
+            ` called synchronously`,
         );
       });
 
@@ -203,15 +216,29 @@ describe("asynchronicity", () => {
 
     describe(".mjs files", () => {
       if (process.env.IS_PUBLISH) {
-        0;
+        it("called synchronously", async () => {
+          process.chdir("plugin-mjs");
+
+          await expect(compileInSpawedProcess(false)).rejects.toThrow(
+            `[BABEL]: You appear to be using a native ECMAScript module plugin, which is` +
+              ` only supported when running Babel asynchronously.`,
+          );
+        });
+
+        it("called asynchronously", async () => {
+          process.chdir("plugin-mjs");
+
+          await expect(compileInSpawedProcess(true)).resolves.toMatchObject({
+            code: `"success"`,
+          });
+        });
       } else {
         nodeGte8("called synchronously", () => {
           process.chdir("plugin-mjs");
 
           expect(() => babel.transformSync("")).toThrow(
             `[BABEL]: You appear to be using a native ECMAScript module plugin, which is` +
-              ` only supported when running Babel asynchronously. (While processing: ` +
-              `${path("plugin-mjs", "plugin.mjs")})`,
+              ` only supported when running Babel asynchronously.`,
           );
         });
 
@@ -233,8 +260,7 @@ describe("asynchronicity", () => {
 
         expect(() => babel.transformSync("")).toThrow(
           `[BABEL] unknown: You appear to be using an async plugin/preset, ` +
-            `but Babel has been called synchronously ` +
-            `(While processing: "${path("preset", "preset.js")}")`,
+            `but Babel has been called synchronously`,
         );
       });
 
@@ -255,8 +281,7 @@ describe("asynchronicity", () => {
           `[BABEL] unknown: You appear to be using a promise as a plugin, which your` +
             ` current version of Babel does not support. If you're using a published` +
             ` plugin, you may need to upgrade your @babel/core version. As an` +
-            ` alternative, you can prefix the promise with "await". (While processing:` +
-            ` "${path("preset-plugin-promise", "preset.js")}$0")`,
+            ` alternative, you can prefix the promise with "await".`,
         );
       });
 
@@ -267,23 +292,44 @@ describe("asynchronicity", () => {
           `[BABEL] unknown: You appear to be using a promise as a plugin, which your` +
             ` current version of Babel does not support. If you're using a published` +
             ` plugin, you may need to upgrade your @babel/core version. As an` +
-            ` alternative, you can prefix the promise with "await". (While processing:` +
-            ` "${path("preset-plugin-promise", "preset.js")}$0")`,
+            ` alternative, you can prefix the promise with "await".`,
         );
       });
     });
 
     describe(".mjs files", () => {
       if (process.env.IS_PUBLISH) {
-        0;
+        it("called synchronously", async () => {
+          process.chdir("preset-mjs");
+
+          await expect(compileInSpawedProcess(false)).rejects.toThrow(
+            `[BABEL]: You appear to be using a native ECMAScript module preset, which is` +
+              ` only supported when running Babel asynchronously.`,
+          );
+        });
+
+        it("called asynchronously", async () => {
+          process.chdir("preset-mjs");
+
+          await expect(compileInSpawedProcess(true)).resolves.toMatchObject({
+            code: `"success"`,
+          });
+        });
+
+        it("must use the 'default' export", async () => {
+          process.chdir("preset-mjs-named-exports");
+
+          await expect(compileInSpawedProcess(true)).rejects.toThrow(
+            `Unexpected falsy value: undefined`,
+          );
+        });
       } else {
         nodeGte8("called synchronously", () => {
           process.chdir("preset-mjs");
 
           expect(() => babel.transformSync("")).toThrow(
             `[BABEL]: You appear to be using a native ECMAScript module preset, which is` +
-              ` only supported when running Babel asynchronously. (While processing: ` +
-              `${path("preset-mjs", "preset.mjs")})`,
+              ` only supported when running Babel asynchronously.`,
           );
         });
 
