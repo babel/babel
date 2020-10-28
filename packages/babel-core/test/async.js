@@ -1,4 +1,4 @@
-import path from "path";
+import { join } from "path";
 import * as babel from "..";
 
 const nodeGte8 = (...args) => {
@@ -8,7 +8,7 @@ const nodeGte8 = (...args) => {
 };
 
 describe("asynchronicity", () => {
-  const base = path.join(__dirname, "fixtures", "async");
+  const base = join(__dirname, "fixtures", "async");
   let cwd;
 
   beforeEach(function () {
@@ -106,14 +106,17 @@ describe("asynchronicity", () => {
     });
   });
 
+  const path = (...parts) => join(base, ...parts);
+
   describe("plugin", () => {
     describe("factory function", () => {
       nodeGte8("called synchronously", () => {
         process.chdir("plugin");
 
         expect(() => babel.transformSync("")).toThrow(
-          `[BABEL] unknown: You appear to be using an async plugin/preset, but Babel has been` +
-            ` called synchronously (While processing: "${__dirname}/fixtures/async/plugin/plugin.js")`,
+          `[BABEL] unknown: You appear to be using an async plugin/preset, but Babel` +
+            ` has been called synchronously (While processing: ` +
+            `"${path("plugin", "plugin.js")}")`,
         );
       });
 
@@ -185,7 +188,7 @@ describe("asynchronicity", () => {
         expect(() => babel.transformSync("")).toThrow(
           `[BABEL] unknown: You appear to be using an async plugin/preset, but Babel has been` +
             ` called synchronously (While processing: ` +
-            `"${__dirname}/fixtures/async/plugin-inherits/plugin.js$inherits")`,
+            `"${path("plugin-inherits", "plugin.js")}$inherits")`,
         );
       });
 
@@ -208,7 +211,7 @@ describe("asynchronicity", () => {
           expect(() => babel.transformSync("")).toThrow(
             `[BABEL]: You appear to be using a native ECMAScript module plugin, which is` +
               ` only supported when running Babel asynchronously. (While processing: ` +
-              `${__dirname}/fixtures/async/plugin-mjs/plugin.mjs)`,
+              `${path("plugin-mjs", "plugin.mjs")})`,
           );
         });
 
@@ -229,8 +232,9 @@ describe("asynchronicity", () => {
         process.chdir("preset");
 
         expect(() => babel.transformSync("")).toThrow(
-          `[BABEL] unknown: You appear to be using an async plugin/preset, but Babel has been` +
-            ` called synchronously (While processing: "${__dirname}/fixtures/async/preset/preset.js")`,
+          `[BABEL] unknown: You appear to be using an async plugin/preset, ` +
+            `but Babel has been called synchronously ` +
+            `(While processing: "${path("preset", "preset.js")}")`,
         );
       });
 
@@ -248,10 +252,11 @@ describe("asynchronicity", () => {
         process.chdir("preset-plugin-promise");
 
         expect(() => babel.transformSync("")).toThrow(
-          `[BABEL] unknown: You appear to be using a promise as a plugin, which your current version` +
-            ` of Babel does not support. If you're using a published plugin, you may need to upgrade` +
-            ` your @babel/core version. As an alternative, you can prefix the promise with "await". ` +
-            `(While processing: "${__dirname}/fixtures/async/preset-plugin-promise/preset.js$0")`,
+          `[BABEL] unknown: You appear to be using a promise as a plugin, which your` +
+            ` current version of Babel does not support. If you're using a published` +
+            ` plugin, you may need to upgrade your @babel/core version. As an` +
+            ` alternative, you can prefix the promise with "await". (While processing:` +
+            ` "${path("preset-plugin-promise", "preset.js")}$0")`,
         );
       });
 
@@ -259,10 +264,11 @@ describe("asynchronicity", () => {
         process.chdir("preset-plugin-promise");
 
         await expect(babel.transformAsync("")).rejects.toThrow(
-          `[BABEL] unknown: You appear to be using a promise as a plugin, which your current version` +
-            ` of Babel does not support. If you're using a published plugin, you may need to upgrade` +
-            ` your @babel/core version. As an alternative, you can prefix the promise with "await". ` +
-            `(While processing: "${__dirname}/fixtures/async/preset-plugin-promise/preset.js$0")`,
+          `[BABEL] unknown: You appear to be using a promise as a plugin, which your` +
+            ` current version of Babel does not support. If you're using a published` +
+            ` plugin, you may need to upgrade your @babel/core version. As an` +
+            ` alternative, you can prefix the promise with "await". (While processing:` +
+            ` "${path("preset-plugin-promise", "preset.js")}$0")`,
         );
       });
     });
@@ -277,7 +283,7 @@ describe("asynchronicity", () => {
           expect(() => babel.transformSync("")).toThrow(
             `[BABEL]: You appear to be using a native ECMAScript module preset, which is` +
               ` only supported when running Babel asynchronously. (While processing: ` +
-              `${__dirname}/fixtures/async/preset-mjs/preset.mjs)`,
+              `${path("preset-mjs", "preset.mjs")})`,
           );
         });
 
@@ -292,10 +298,8 @@ describe("asynchronicity", () => {
         nodeGte8("must use the 'default' export", async () => {
           process.chdir("preset-mjs-named-exports");
 
-          await expect(
-            babel.transformAsync(""),
-          ).rejects.toThrowErrorMatchingInlineSnapshot(
-            `"Unexpected falsy value: undefined"`,
+          await expect(babel.transformAsync("")).rejects.toThrow(
+            `Unexpected falsy value: undefined`,
           );
         });
       }
