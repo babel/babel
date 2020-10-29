@@ -1402,6 +1402,7 @@ defineType("ExportAllDeclaration", {
       validate: assertNodeType("StringLiteral"),
     },
     assertions: {
+      optional: true,
       validate: chain(
         assertValueType("array"),
         assertNodeType("ImportAttribute"),
@@ -1471,6 +1472,7 @@ defineType("ExportNamedDeclaration", {
       ),
     },
     assertions: {
+      optional: true,
       validate: chain(
         assertValueType("array"),
         assertNodeType("ImportAttribute"),
@@ -1572,6 +1574,7 @@ defineType("ImportDeclaration", {
   aliases: ["Statement", "Declaration", "ModuleDeclaration"],
   fields: {
     assertions: {
+      optional: true,
       validate: chain(
         assertValueType("array"),
         assertNodeType("ImportAttribute"),

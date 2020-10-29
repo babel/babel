@@ -1412,6 +1412,7 @@ An export default declaration, e.g., `export default function () {};` or `export
 interface ExportAllDeclaration <: ModuleDeclaration {
   type: "ExportAllDeclaration";
   source: StringLiteral;
+  assertions?: [ ImportAttribute ];
 }
 ```
 
