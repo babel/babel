@@ -1401,6 +1401,12 @@ defineType("ExportAllDeclaration", {
     source: {
       validate: assertNodeType("StringLiteral"),
     },
+    assertions: {
+      validate: chain(
+        assertValueType("array"),
+        assertNodeType("ImportAttribute"),
+      ),
+    },
   },
 });
 
