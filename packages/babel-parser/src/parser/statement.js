@@ -2182,9 +2182,14 @@ export default class StatementParser extends ExpressionParser {
     node.specifiers.push(this.finishNode(specifier, type));
   }
 
-  parseAssertEntries() {
-    this.expectPlugin("importAssertions");
-
+  /**
+   * parse assert entries
+   *
+   * @see {@link https://tc39.es/proposal-import-assertions/#prod-AssertEntries |AssertEntries}
+   * @returns {N.ImportAttribute[]}
+   * @memberof StatementParser
+   */
+  parseAssertEntries(): N.ImportAttribute[] {
     const attrs = [];
     const attrNames = new Set();
 
@@ -2193,37 +2198,36 @@ export default class StatementParser extends ExpressionParser {
         break;
       }
 
-      const node = this.startNode();
+      const node = this.startNode<N.ImportAttribute>();
 
       // parse AssertionKey : IdentifierName, StringLiteral
-      let assertionKeyNode;
+      const keyName = this.state.value;
       if (this.match(tt.string)) {
-        assertionKeyNode = this.parseLiteral(this.state.value, "StringLiteral");
+        node.key = this.parseLiteral<N.StringLiteral>(keyName, "StringLiteral");
       } else {
-        assertionKeyNode = this.parseIdentifier(true);
+        node.key = this.parseIdentifier(true);
       }
-      this.next();
-      node.key = assertionKeyNode;
+      this.expect(tt.colon);
 
       // for now we are only allowing `type` as the only allowed module attribute
-      if (node.key.name !== "type") {
+      if (keyName !== "type") {
         this.raise(
           node.key.start,
           Errors.ModuleAttributeDifferentFromType,
-          node.key.name,
+          keyName,
         );
       }
       // check if we already have an entry for an attribute
       // if a duplicate entry is found, throw an error
       // for now this logic will come into play only when someone declares `type` twice
-      if (attrNames.has(node.key.name)) {
+      if (attrNames.has(keyName)) {
         this.raise(
           node.key.start,
           Errors.ModuleAttributesWithDuplicateKeys,
-          node.key.name,
+          keyName,
         );
       }
-      attrNames.add(node.key.name);
+      attrNames.add(keyName);
 
       if (!this.match(tt.string)) {
         throw this.unexpected(
@@ -2231,8 +2235,11 @@ export default class StatementParser extends ExpressionParser {
           Errors.ModuleAttributeInvalidValue,
         );
       }
-      node.value = this.parseLiteral(this.state.value, "StringLiteral");
-      this.finishNode(node, "ImportAttribute");
+      node.value = this.parseLiteral<N.StringLiteral>(
+        this.state.value,
+        "StringLiteral",
+      );
+      this.finishNode<N.ImportAttribute>(node, "ImportAttribute");
       attrs.push(node);
     } while (this.eat(tt.comma));
 
@@ -2291,18 +2298,15 @@ export default class StatementParser extends ExpressionParser {
   }
 
   maybeParseImportAssertions() {
-    if (
-      this.match(tt.name) &&
-      this.state.value === "assert" &&
-      !this.hasPrecedingLineBreak()
-    ) {
+    // [no LineTerminator here] AssertClause
+    if (this.isContextual("assert") && !this.hasPrecedingLineBreak()) {
       this.expectPlugin("importAssertions");
-      this.next();
+      this.next(); // eat `assert`
     } else {
       if (this.hasPlugin("importAssertions")) return [];
       return null;
     }
-
+    // https://tc39.es/proposal-import-assertions/#prod-AssertClause
     this.eat(tt.braceL);
     const attrs = this.parseAssertEntries();
     this.eat(tt.braceR);

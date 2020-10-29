@@ -1,0 +1,105 @@
+{
+  "type": "File",
+  "start":0,"end":81,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":81}},
+  "errors": [
+    "SyntaxError: Duplicate key \"type\" is not allowed in module attributes (1:52)",
+    "SyntaxError: Duplicate key \"type\" is not allowed in module attributes (1:66)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":81,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":81}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":81,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":81}},
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start":7,"end":10,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":10}},
+            "local": {
+              "type": "Identifier",
+              "start":7,"end":10,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":10},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":16,"end":26,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":26}},
+          "extra": {
+            "rawValue": "foo.json",
+            "raw": "\"foo.json\""
+          },
+          "value": "foo.json"
+        },
+        "assertions": [
+          {
+            "type": "ImportAttribute",
+            "start":36,"end":50,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":50}},
+            "key": {
+              "type": "StringLiteral",
+              "start":36,"end":42,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":42}},
+              "extra": {
+                "rawValue": "type",
+                "raw": "\"type\""
+              },
+              "value": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":44,"end":50,"loc":{"start":{"line":1,"column":44},"end":{"line":1,"column":50}},
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
+              },
+              "value": "json"
+            }
+          },
+          {
+            "type": "ImportAttribute",
+            "start":52,"end":64,"loc":{"start":{"line":1,"column":52},"end":{"line":1,"column":64}},
+            "key": {
+              "type": "Identifier",
+              "start":52,"end":56,"loc":{"start":{"line":1,"column":52},"end":{"line":1,"column":56},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":58,"end":64,"loc":{"start":{"line":1,"column":58},"end":{"line":1,"column":64}},
+              "extra": {
+                "rawValue": "html",
+                "raw": "\"html\""
+              },
+              "value": "html"
+            }
+          },
+          {
+            "type": "ImportAttribute",
+            "start":66,"end":78,"loc":{"start":{"line":1,"column":66},"end":{"line":1,"column":78}},
+            "key": {
+              "type": "StringLiteral",
+              "start":66,"end":72,"loc":{"start":{"line":1,"column":66},"end":{"line":1,"column":72}},
+              "extra": {
+                "rawValue": "type",
+                "raw": "\"type\""
+              },
+              "value": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":74,"end":78,"loc":{"start":{"line":1,"column":74},"end":{"line":1,"column":78}},
+              "extra": {
+                "rawValue": "js",
+                "raw": "\"js\""
+              },
+              "value": "js"
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  }
+}
