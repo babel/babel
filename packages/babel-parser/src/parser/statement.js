@@ -2183,7 +2183,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   /**
-   * parse assert entires
+   * parse assert entries
    *
    * @see {@link https://tc39.es/proposal-import-assertions/#prod-AssertEntries |AssertEntries}
    * @returns {N.ImportAttribute[]}
