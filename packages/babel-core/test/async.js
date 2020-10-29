@@ -217,7 +217,7 @@ describe("asynchronicity", () => {
     describe(".mjs files", () => {
       if (process.env.IS_PUBLISH) {
         it("called synchronously", async () => {
-          process.chdir("plugin-mjs");
+          process.chdir("plugin-mjs-native");
 
           await expect(compileInSpawedProcess(false)).rejects.toThrow(
             `[BABEL]: You appear to be using a native ECMAScript module plugin, which is` +
@@ -226,7 +226,7 @@ describe("asynchronicity", () => {
         });
 
         it("called asynchronously", async () => {
-          process.chdir("plugin-mjs");
+          process.chdir("plugin-mjs-native");
 
           await expect(compileInSpawedProcess(true)).resolves.toMatchObject({
             code: `"success"`,
@@ -300,7 +300,7 @@ describe("asynchronicity", () => {
     describe(".mjs files", () => {
       if (process.env.IS_PUBLISH) {
         it("called synchronously", async () => {
-          process.chdir("preset-mjs");
+          process.chdir("preset-mjs-native");
 
           await expect(compileInSpawedProcess(false)).rejects.toThrow(
             `[BABEL]: You appear to be using a native ECMAScript module preset, which is` +
@@ -309,7 +309,7 @@ describe("asynchronicity", () => {
         });
 
         it("called asynchronously", async () => {
-          process.chdir("preset-mjs");
+          process.chdir("preset-mjs-native");
 
           await expect(compileInSpawedProcess(true)).resolves.toMatchObject({
             code: `"success"`,
@@ -317,7 +317,7 @@ describe("asynchronicity", () => {
         });
 
         it("must use the 'default' export", async () => {
-          process.chdir("preset-mjs-named-exports");
+          process.chdir("preset-mjs-named-exports-native");
 
           await expect(compileInSpawedProcess(true)).rejects.toThrow(
             `Unexpected falsy value: undefined`,
