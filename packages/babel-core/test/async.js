@@ -16,7 +16,6 @@ async function compileInSpawedProcess(async) {
   // please publish Babel on a modernized node :)
   const { stdout, stderr } = await util.promisify(cp.execFile)(
     require.resolve(`./fixtures/babel-compile-${async ? "async" : "sync"}.mjs`),
-    { env: process.env },
   );
   if (stderr) {
     throw new Error(stderr);
