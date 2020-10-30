@@ -18,6 +18,12 @@ const skipUnsupportedESM = (esm, name) => {
     );
     return true;
   }
+  if (esm && process.platform === "win32") {
+    console.warn(
+      `Skipping "${name}" because the ESM runner cannot be spawned on Windows.`,
+    );
+    return true;
+  }
   return false;
 };
 
