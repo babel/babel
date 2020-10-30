@@ -14,7 +14,7 @@ const isMJS = file => file.slice(-4) === ".mjs";
 const skipUnsupportedESM = (esm, name) => {
   if (esm && !supportsESM) {
     console.warn(
-      `Skipping ${name} because native ECMAScript modules are not supported.`,
+      `Skipping "${name}" because native ECMAScript modules are not supported.`,
     );
     return true;
   }
