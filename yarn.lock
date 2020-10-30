@@ -1089,6 +1089,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-proposal-export-namespace-from@npm:^7.12.1":
+  version: 7.12.1
+  resolution: "@babel/plugin-proposal-export-namespace-from@npm:7.12.1"
+  dependencies:
+    "@babel/helper-plugin-utils": ^7.10.4
+    "@babel/plugin-syntax-export-namespace-from": ^7.8.3
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: ae5317ca008cc9eb2890b1f238156fbb990e5030fd1b7f123a5d11d89f8617a867b11db129aeafe51ef3bb4dddc4059e8172ddf99e8cdc42cbfa2a45dce1a16b
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-proposal-export-namespace-from@workspace:*, @babel/plugin-proposal-export-namespace-from@workspace:^7.12.1, @babel/plugin-proposal-export-namespace-from@workspace:packages/babel-plugin-proposal-export-namespace-from":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-export-namespace-from@workspace:packages/babel-plugin-proposal-export-namespace-from"
@@ -4696,7 +4708,7 @@ __metadata:
     "@babel/eslint-parser": "workspace:*"
     "@babel/eslint-plugin-development": "workspace:*"
     "@babel/eslint-plugin-development-internal": "workspace:*"
-    "@babel/plugin-proposal-dynamic-import": ^7.10.4
+    "@babel/plugin-proposal-export-namespace-from": ^7.12.1
     "@babel/plugin-proposal-object-rest-spread": ^7.11.0
     "@babel/plugin-transform-for-of": ^7.10.4
     "@babel/plugin-transform-modules-commonjs": ^7.10.4
