@@ -1,8 +1,8 @@
 # @babel/plugin-syntax-module-string-names
 
-> Allow parsing `import { 'any unicode' as bar }` and `export { foo as 'any unicode' }`"
+> Allow parsing `import { 'any unicode' as bar }` and `export { foo as 'any unicode' }`
 
-See our website [@babel/plugin-syntax-module-string-names](https://babeljs.io/docs/en/next/babel-plugin-syntax-module-string-names.html) for more information.
+See our website [@babel/plugin-syntax-module-string-names](https://babeljs.io/docs/en/babel-plugin-syntax-module-string-names) for more information.
 
 ## Install
 

@@ -2,7 +2,7 @@
 
 > Helper function to explode class
 
-See our website [@babel/helper-explode-class](https://babeljs.io/docs/en/next/babel-helper-explode-class.html) for more information.
+See our website [@babel/helper-explode-class](https://babeljs.io/docs/en/babel-helper-explode-class) for more information.
 
 ## Install
 

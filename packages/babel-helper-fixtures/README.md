@@ -2,7 +2,7 @@
 
 > Helper function to support fixtures
 
-See our website [@babel/helper-fixtures](https://babeljs.io/docs/en/next/babel-helper-fixtures.html) for more information.
+See our website [@babel/helper-fixtures](https://babeljs.io/docs/en/babel-helper-fixtures) for more information.
 
 ## Install
 

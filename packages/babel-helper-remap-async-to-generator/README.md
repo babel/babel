@@ -2,7 +2,7 @@
 
 > Helper function to remap async functions to generators
 
-See our website [@babel/helper-remap-async-to-generator](https://babeljs.io/docs/en/next/babel-helper-remap-async-to-generator.html) for more information.
+See our website [@babel/helper-remap-async-to-generator](https://babeljs.io/docs/en/babel-helper-remap-async-to-generator) for more information.
 
 ## Install
 
