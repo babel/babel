@@ -158,7 +158,6 @@ test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
 	BABEL_COVERAGE=true BABEL_ENV=test $(MAKE) bootstrap
 	BABEL_ENV=test TEST_TYPE=cov ./scripts/test-cov.sh
-	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
 bootstrap-flow:
 	rm -rf build/flow
