@@ -1077,19 +1077,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-export-namespace-from@npm:^7.12.0":
-  version: 7.12.0
-  resolution: "@babel/plugin-proposal-export-namespace-from@npm:7.12.0"
-  dependencies:
-    "@babel/helper-plugin-utils": ^7.10.4
-    "@babel/plugin-syntax-export-namespace-from": ^7.8.3
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: 371d59486a28445f51352b498d22c372de6b8ae59f44a0d62de626498f162372b596430bedbc869e1ea6c0397aa1cb33dc806e7872da6d67625316fb8a019023
-  languageName: node
-  linkType: hard
-
-"@babel/plugin-proposal-export-namespace-from@npm:^7.12.1":
+"@babel/plugin-proposal-export-namespace-from@npm:^7.12.0, @babel/plugin-proposal-export-namespace-from@npm:^7.12.1":
   version: 7.12.1
   resolution: "@babel/plugin-proposal-export-namespace-from@npm:7.12.1"
   dependencies:
