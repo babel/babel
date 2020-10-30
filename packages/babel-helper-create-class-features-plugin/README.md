@@ -2,7 +2,7 @@
 
 > Compile class public and private fields, private methods and decorators to ES6
 
-See our website [@babel/helper-create-class-features-plugin](https://babeljs.io/docs/en/next/babel-helper-create-class-features-plugin.html) for more information.
+See our website [@babel/helper-create-class-features-plugin](https://babeljs.io/docs/en/babel-helper-create-class-features-plugin) for more information.
 
 ## Install
 

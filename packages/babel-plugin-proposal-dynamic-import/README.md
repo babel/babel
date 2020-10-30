@@ -2,7 +2,7 @@
 
 > Transform import() expressions
 
-See our website [@babel/plugin-proposal-dynamic-import](https://babeljs.io/docs/en/next/babel-plugin-proposal-dynamic-import.html) for more information.
+See our website [@babel/plugin-proposal-dynamic-import](https://babeljs.io/docs/en/babel-plugin-proposal-dynamic-import) for more information.
 
 ## Install
 

@@ -2,7 +2,7 @@
 
 > Allow parsing of class static blocks
 
-See our website [@babel/plugin-syntax-class-static-block](https://babeljs.io/docs/en/next/babel-plugin-syntax-class-static-block.html) for more information.
+See our website [@babel/plugin-syntax-class-static-block](https://babeljs.io/docs/en/babel-plugin-syntax-class-static-block) for more information.
 
 ## Install
 
