@@ -87,7 +87,10 @@ async function loadOptionsAsyncInSpawedProcess({ filename, cwd }) {
       env: process.env,
     },
   );
-  if (stderr) {
+
+  const EXPERIMENTAL_WARNING = /\(node:\d+\) ExperimentalWarning: The ESM module loader is experimental\./;
+
+  if (stderr.replace(EXPERIMENTAL_WARNING, "").trim()) {
     throw new Error(
       "error is thrown in babel-load-options-async.mjs: stdout\n" +
         stdout +
