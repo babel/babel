@@ -9,7 +9,7 @@ import * as babel from "../lib";
 // "minNodeVersion": "10.0.0" <-- For Ctrl+F when dropping node 10
 const supportsESM = parseInt(process.versions.node) >= 12;
 
-const isMJS = file => file.slice(-4) === ".mjs";
+const isMJS = file => path.extname(file) === ".mjs";
 
 const skipUnsupportedESM = (esm, name) => {
   if (esm && !supportsESM) {
@@ -18,6 +18,7 @@ const skipUnsupportedESM = (esm, name) => {
     );
     return true;
   }
+  // This can be removed when loadOptionsAsyncInSpawedProcess is removed.
   if (esm && process.platform === "win32") {
     console.warn(
       `Skipping "${name}" because the ESM runner cannot be spawned on Windows.`,
@@ -79,11 +80,10 @@ function loadOptionsAsync({ filename, cwd = __dirname }, mjs) {
   return babel.loadOptionsAsync({ filename, cwd });
 }
 
+// !!!! hack is coming !!!!
+// Remove this function when https://github.com/nodejs/node/issues/35889 is resolved.
+// Jest supports dynamic import(), but Node.js segfaults when using it in our tests.
 async function loadOptionsAsyncInSpawedProcess({ filename, cwd }) {
-  // !!!! hack is coming !!!!
-  // todo(Babel 8): remove this section when https://github.com/facebook/jest/issues/9430 is resolved
-  // We don't check process.versions.node here, it will fail if node does not support esm
-  // please publish Babel on a modernized node :)
   const { stdout, stderr } = await util.promisify(cp.execFile)(
     require.resolve("./fixtures/babel-load-options-async.mjs"),
     // pass `cwd` as params as `process.cwd()` will normalize `cwd` on macOS
