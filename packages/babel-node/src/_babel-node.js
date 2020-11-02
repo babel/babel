@@ -187,12 +187,7 @@ if (program.eval || program.print) {
     });
     args = args.slice(i);
 
-    // We have to handle require ourselves, as we want to require it in the context of babel-register
-    if (program.require) {
-      require(resolve.sync(program.require, {
-        basedir: process.cwd(),
-      }));
-    }
+    requireArgs();
 
     // make the filename absolute
     const filename = args[0];
@@ -206,7 +201,17 @@ if (program.eval || program.print) {
 
     Module.runMain();
   } else {
+    requireArgs();
     replStart();
+  }
+}
+
+// We have to handle require ourselves, as we want to require it in the context of babel-register
+function requireArgs() {
+  if (program.require) {
+    require(resolve.sync(program.require, {
+      basedir: process.cwd(),
+    }));
   }
 }
 
