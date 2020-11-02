@@ -6,10 +6,6 @@ import getCoreJS3Definitions from "./runtime-corejs3-definitions";
 import { typeAnnotationToString } from "./helpers";
 import getRuntimePath from "./get-runtime-path";
 
-function supportsStaticESM(caller) {
-  return !!caller?.supportsStaticESM;
-}
-
 export default declare((api, options, dirname) => {
   api.assertVersion(7);
 
@@ -17,7 +13,6 @@ export default declare((api, options, dirname) => {
     corejs,
     helpers: useRuntimeHelpers = true,
     regenerator: useRuntimeRegenerator = true,
-    useESModules = false,
     version: runtimeVersion = "7.0.0-beta.0",
     absoluteRuntime = false,
   } = options;
@@ -65,12 +60,6 @@ export default declare((api, options, dirname) => {
 
   if (typeof useRuntimeHelpers !== "boolean") {
     throw new Error("The 'helpers' option must be undefined, or a boolean.");
-  }
-
-  if (typeof useESModules !== "boolean" && useESModules !== "auto") {
-    throw new Error(
-      "The 'useESModules' option must be undefined, or a boolean, or 'auto'.",
-    );
   }
 
   if (
@@ -163,9 +152,6 @@ export default declare((api, options, dirname) => {
     );
   }
 
-  const esModules =
-    useESModules === "auto" ? api.caller(supportsStaticESM) : useESModules;
-
   const injectCoreJS = corejsVersion !== false;
 
   const moduleName = injectCoreJS ? "@babel/runtime-corejs3" : "@babel/runtime";
@@ -206,13 +192,8 @@ export default declare((api, options, dirname) => {
           const blockHoist =
             isInteropHelper && !isModule(file.path) ? 4 : undefined;
 
-          const helpersDir =
-            esModules && file.path.node.sourceType === "module"
-              ? "helpers/esm"
-              : "helpers";
-
           return this.addDefaultImport(
-            `${modulePath}/${helpersDir}/${name}`,
+            `${modulePath}/helpers/${name}`,
             name,
             blockHoist,
           );
