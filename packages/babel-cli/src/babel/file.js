@@ -1,7 +1,6 @@
 // @flow
 
 import convertSourceMap from "convert-source-map";
-import defaults from "lodash/defaults";
 import sourceMap from "source-map";
 import slash from "slash";
 import path from "path";
@@ -126,16 +125,10 @@ export default async function ({
   async function stdin(): Promise<void> {
     const code = await readStdin();
 
-    const res = await util.transform(
-      cliOptions.filename,
-      code,
-      defaults(
-        {
-          sourceFileName: "stdin",
-        },
-        babelOptions,
-      ),
-    );
+    const res = await util.transform(cliOptions.filename, code, {
+      ...babelOptions,
+      sourceFileName: "stdin",
+    });
 
     output([res]);
   }
@@ -176,22 +169,17 @@ export default async function ({
         sourceFilename = slash(sourceFilename);
 
         try {
-          return await util.compile(
-            filename,
-            defaults(
-              {
-                sourceFileName: sourceFilename,
-                // Since we're compiling everything to be merged together,
-                // "inline" applies to the final output file, but not to the individual
-                // files being concatenated.
-                sourceMaps:
-                  babelOptions.sourceMaps === "inline"
-                    ? true
-                    : babelOptions.sourceMaps,
-              },
-              babelOptions,
-            ),
-          );
+          return await util.compile(filename, {
+            ...babelOptions,
+            sourceFileName: sourceFilename,
+            // Since we're compiling everything to be merged together,
+            // "inline" applies to the final output file, but not to the individual
+            // files being concatenated.
+            sourceMaps:
+              babelOptions.sourceMaps === "inline"
+                ? true
+                : babelOptions.sourceMaps,
+          });
         } catch (err) {
           if (!cliOptions.watch) {
             throw err;

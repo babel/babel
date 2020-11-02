@@ -9,6 +9,7 @@ export default declare(
       ignoreExtensions = false,
       allowNamespaces,
       jsxPragma,
+      jsxPragmaFrag = "React.Fragment",
       onlyRemoveTypeImports,
 
       // Removed
@@ -28,6 +29,10 @@ export default declare(
       );
     }
 
+    if (typeof jsxPragmaFrag !== "string") {
+      throw new Error(".jsxPragmaFrag must be a string, or undefined");
+    }
+
     if (typeof ignoreExtensions !== "boolean") {
       throw new Error("The .ignoreExtensions option must be a boolean.");
     }
@@ -35,6 +40,7 @@ export default declare(
     const pluginOptions = {
       allowNamespaces,
       jsxPragma,
+      jsxPragmaFrag,
       onlyRemoveTypeImports,
     };
 

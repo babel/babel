@@ -126,7 +126,6 @@ defaultValueInFunctionTypes.ts
 deleteOperator1.ts
 deleteOperatorInStrictMode.ts
 dependencyViaImportAlias.ts
-destructureOptionalParameter.ts
 destructuredDeclarationEmit.ts
 doubleUnderscoreExportStarConflict.ts
 duplicateIdentifierBindingElementInParameterDeclaration1.ts
@@ -226,6 +225,7 @@ gettersAndSettersErrors.ts
 giant.ts
 globalThisDeclarationEmit.ts
 globalThisDeclarationEmit2.ts
+hugeDeclarationOutputGetsTruncatedWithError.ts
 implementClausePrecedingExtends.ts
 implementsClauseAlreadySeen.ts
 importAndVariableDeclarationConflict1.ts

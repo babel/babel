@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "external-helpers",
+    "proposal-export-namespace-from",
+    "syntax-module-string-names"
+  ]
+}

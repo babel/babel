@@ -2,7 +2,7 @@
 
 > This plugin transforms private class methods
 
-See our website [@babel/plugin-proposal-private-methods](https://babeljs.io/docs/en/next/babel-plugin-proposal-private-methods.html) for more information.
+See our website [@babel/plugin-proposal-private-methods](https://babeljs.io/docs/en/babel-plugin-proposal-private-methods) for more information.
 
 ## Install
 

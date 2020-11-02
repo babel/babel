@@ -9,7 +9,7 @@ export default (_: any, opts: Object = {}) => {
     decoratorsLegacy = false,
     decoratorsBeforeExport,
     pipelineProposal = "minimal",
-    moduleAttributesVersion = "may-2020",
+    importAssertionsVersion = "september-2020",
   } = opts;
 
   return {
@@ -22,7 +22,7 @@ export default (_: any, opts: Object = {}) => {
           decoratorsLegacy,
           decoratorsBeforeExport,
           pipelineProposal,
-          moduleAttributesVersion,
+          importAssertionsVersion,
         },
       ],
     ],

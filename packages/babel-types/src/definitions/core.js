@@ -919,7 +919,7 @@ defineType("SwitchStatement", {
 });
 
 defineType("ThisExpression", {
-  aliases: ["Expression"],
+  aliases: ["Expression", "Pureish"],
 });
 
 defineType("ThrowStatement", {
@@ -1328,6 +1328,13 @@ defineType("ExportAllDeclaration", {
     source: {
       validate: assertNodeType("StringLiteral"),
     },
+    assertions: {
+      optional: true,
+      validate: chain(
+        assertValueType("array"),
+        assertNodeType("ImportAttribute"),
+      ),
+    },
   },
 });
 
@@ -1387,6 +1394,13 @@ defineType("ExportNamedDeclaration", {
         },
       ),
     },
+    assertions: {
+      optional: true,
+      validate: chain(
+        assertValueType("array"),
+        assertNodeType("ImportAttribute"),
+      ),
+    },
     specifiers: {
       default: [],
       validate: chain(
@@ -1424,7 +1438,7 @@ defineType("ExportSpecifier", {
       validate: assertNodeType("Identifier"),
     },
     exported: {
-      validate: assertNodeType("Identifier"),
+      validate: assertNodeType("Identifier", "StringLiteral"),
     },
   },
 });
@@ -1476,6 +1490,13 @@ defineType("ImportDeclaration", {
   visitor: ["specifiers", "source"],
   aliases: ["Statement", "Declaration", "ModuleDeclaration"],
   fields: {
+    assertions: {
+      optional: true,
+      validate: chain(
+        assertValueType("array"),
+        assertNodeType("ImportAttribute"),
+      ),
+    },
     specifiers: {
       validate: chain(
         assertValueType("array"),
@@ -1528,7 +1549,7 @@ defineType("ImportSpecifier", {
       validate: assertNodeType("Identifier"),
     },
     imported: {
-      validate: assertNodeType("Identifier"),
+      validate: assertNodeType("Identifier", "StringLiteral"),
     },
     importKind: {
       // Handle Flowtype's extension "import {typeof foo} from"
@@ -1700,7 +1721,7 @@ defineType("SpreadElement", {
 });
 
 defineType("Super", {
-  aliases: ["Expression"],
+  aliases: ["Expression", "Pureish"],
 });
 
 defineType("TaggedTemplateExpression", {
@@ -1756,7 +1777,13 @@ defineType("TemplateLiteral", {
     expressions: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("Expression")),
+        assertEach(
+          assertNodeType(
+            "Expression",
+            // For TypeScript template literal types
+            "TSType",
+          ),
+        ),
         function (node, key, val) {
           if (node.quasis.length !== val.length + 1) {
             throw new TypeError(

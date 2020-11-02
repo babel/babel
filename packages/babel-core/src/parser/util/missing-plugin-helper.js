@@ -31,6 +31,16 @@ const pluginNameMap = {
       url: "https://git.io/JvpRG",
     },
   },
+  classStaticBlock: {
+    syntax: {
+      name: "@babel/plugin-syntax-class-static-block",
+      url: "https://git.io/JTLB6",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-class-static-block",
+      url: "https://git.io/JTLBP",
+    },
+  },
   decimal: {
     syntax: {
       name: "@babel/plugin-syntax-decimal",
@@ -113,10 +123,16 @@ const pluginNameMap = {
       url: "https://git.io/JfeDR",
     },
   },
-  moduleAttributes: {
+  importAssertions: {
     syntax: {
-      name: "@babel/plugin-syntax-module-attributes",
-      url: "https://git.io/JfK3k",
+      name: "@babel/plugin-syntax-import-assertions",
+      url: "https://git.io/JUbkv",
+    },
+  },
+  moduleStringNames: {
+    syntax: {
+      name: "@babel/plugin-syntax-module-string-names",
+      url: "https://git.io/JTL8G",
     },
   },
   numericSeparator: {

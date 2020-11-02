@@ -11,10 +11,10 @@ export default class TraversalContext {
     this.opts = opts;
   }
 
-  parentPath: NodePath;
-  scope;
-  state;
-  opts;
+  declare parentPath: NodePath;
+  declare scope;
+  declare state;
+  declare opts;
   queue: ?Array<NodePath> = null;
 
   /**

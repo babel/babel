@@ -2,7 +2,7 @@
 
 > Allow parsing of decimal
 
-See our website [@babel/plugin-syntax-decimal](https://babeljs.io/docs/en/next/babel-plugin-syntax-decimal.html) for more information.
+See our website [@babel/plugin-syntax-decimal](https://babeljs.io/docs/en/babel-plugin-syntax-decimal) for more information.
 
 ## Install
 

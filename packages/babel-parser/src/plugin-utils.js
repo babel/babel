@@ -87,6 +87,11 @@ export function validatePlugins(plugins: PluginList) {
   }
 
   if (hasPlugin(plugins, "moduleAttributes")) {
+    if (hasPlugin(plugins, "importAssertions")) {
+      throw new Error(
+        "Cannot combine importAssertions and moduleAttributes plugins.",
+      );
+    }
     const moduleAttributesVerionPluginOption = getPluginOption(
       plugins,
       "moduleAttributes",
@@ -100,6 +105,7 @@ export function validatePlugins(plugins: PluginList) {
       );
     }
   }
+
   if (
     hasPlugin(plugins, "recordAndTuple") &&
     !RECORD_AND_TUPLE_SYNTAX_TYPES.includes(

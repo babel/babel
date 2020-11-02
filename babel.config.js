@@ -102,14 +102,11 @@ module.exports = function (api) {
     ]
       .filter(Boolean)
       .map(normalize),
-    presets: [["@babel/env", envOpts]],
+    presets: [
+      ["@babel/env", envOpts],
+      ["@babel/preset-flow", { allowDeclareFields: true }],
+    ],
     plugins: [
-      // TODO: Use @babel/preset-flow when
-      // https://github.com/babel/babel/issues/7233 is fixed
-      [
-        "@babel/plugin-transform-flow-strip-types",
-        { allowDeclareFields: true },
-      ],
       [
         "@babel/proposal-object-rest-spread",
         { useBuiltIns: true, loose: true },

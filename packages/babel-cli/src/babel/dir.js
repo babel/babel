@@ -1,6 +1,5 @@
 // @flow
 
-import defaults from "lodash/defaults";
 import debounce from "lodash/debounce";
 import slash from "slash";
 import path from "path";
@@ -47,15 +46,10 @@ export default async function ({
     const dest = getDest(relative, base);
 
     try {
-      const res = await util.compile(
-        src,
-        defaults(
-          {
-            sourceFileName: slash(path.relative(dest + "/..", src)),
-          },
-          babelOptions,
-        ),
-      );
+      const res = await util.compile(src, {
+        ...babelOptions,
+        sourceFileName: slash(path.relative(dest + "/..", src)),
+      });
 
       if (!res) return FILE_TYPE.IGNORED;
 
