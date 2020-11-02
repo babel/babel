@@ -8,15 +8,28 @@ import { types as t, template } from "@babel/core";
 
 const { ast } = template.expression;
 
-function willPathCastToBoolean(path: NodePath) {
-  const { node, parentPath } = path;
-  if (node === undefined) {
-    return false;
-  }
+/**
+ * Test if a NodePath will be cast to boolean when evaluated.
+ * It respects transparent expression wrappers defined in
+ * "@babel/helper-skip-transparent-expression-wrappers"
+ *
+ * @example
+ * // returns true
+ * const nodePathADotB = NodePath("if (a.b) {}").get("test"); // a.b
+ * willPathCastToBoolean(nodePathADotB)
+ * @example
+ * // returns false
+ * willPathCastToBoolean(NodePath("a.b"))
+ * @param {NodePath} path
+ * @returns {boolean}
+ */
+function willPathCastToBoolean(path: NodePath): boolean {
+  const maybeWrapped = findOutermostTransparentParent(path);
+  const { node, parentPath } = maybeWrapped;
   if (parentPath.isLogicalExpression()) {
     const { operator } = parentPath.node;
     if (operator === "&&" || operator === "||") {
-      return willPathCastToBoolean(skipTransparentExprWrappers(parentPath));
+      return willPathCastToBoolean(parentPath);
     }
   }
   return (
@@ -24,6 +37,25 @@ function willPathCastToBoolean(path: NodePath) {
     parentPath.isUnaryExpression({ operator: "!" }) ||
     parentPath.isLoop({ test: node })
   );
+}
+
+/**
+ * Return the outermost transparent expression wrapper of a given path,
+ * otherwise returns path itself.
+ * @example
+ * const nodePathADotB = NodePath("(a.b as any)").get("expression"); // a.b
+ * // returns NodePath("(a.b as any)")
+ * findOutermostTransparentParent(nodePathADotB);
+ * @param {NodePath} path
+ * @returns {NodePath}
+ */
+function findOutermostTransparentParent(path: NodePath): NodePath {
+  let maybeWrapped = path;
+  path.findParent(p => {
+    if (!isTransparentExprWrapper(p)) return true;
+    maybeWrapped = p;
+  });
+  return maybeWrapped;
 }
 
 export default declare((api, options) => {
@@ -76,11 +108,8 @@ export default declare((api, options) => {
         const { scope } = path;
         // maybeWrapped points to the outermost transparent expression wrapper
         // or the path itself
-        let maybeWrapped = path;
-        const parentPath = path.findParent(p => {
-          if (!isTransparentExprWrapper(p)) return true;
-          maybeWrapped = p;
-        });
+        const maybeWrapped = findOutermostTransparentParent(path);
+        const { parentPath } = maybeWrapped;
         const willReplacementCastToBoolean = willPathCastToBoolean(
           maybeWrapped,
         );
