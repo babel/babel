@@ -29,6 +29,38 @@ class AssignmentMemoiser {
   }
 }
 
+/**
+ * Test if a NodePath will be cast to boolean when evaluated.
+ *
+ * @example
+ * // returns true
+ * const nodePathAQDotB = NodePath("if (a?.#b) {}").get("test"); // a?.#b
+ * willPathCastToBoolean(nodePathAQDotB)
+ * @example
+ * // returns false
+ * willPathCastToBoolean(NodePath("a?.#b"))
+ * @todo Respect transparent expression wrappers
+ * @see {@link packages/babel-plugin-proposal-optional-chaining/src/index.js}
+ * @param {NodePath} path
+ * @returns {boolean}
+ */
+
+function willPathCastToBoolean(path: NodePath): boolean {
+  const maybeWrapped = path;
+  const { node, parentPath } = maybeWrapped;
+  if (parentPath.isLogicalExpression()) {
+    const { operator } = parentPath.node;
+    if (operator === "&&" || operator === "||") {
+      return willPathCastToBoolean(parentPath);
+    }
+  }
+  return (
+    parentPath.isConditional({ test: node }) ||
+    parentPath.isUnaryExpression({ operator: "!" }) ||
+    parentPath.isLoop({ test: node })
+  );
+}
+
 function toNonOptional(path, base) {
   const { node } = path;
   if (path.isOptionalMemberExpression()) {
@@ -128,6 +160,8 @@ const handle = {
         );
         return;
       }
+
+      const willEndPathCastToBoolean = willPathCastToBoolean(endPath);
 
       const rootParentPath = endPath.parentPath;
       if (
@@ -238,33 +272,60 @@ const handle = {
         regular = endParentPath.node;
       }
 
-      replacementPath.replaceWith(
-        t.conditionalExpression(
-          t.logicalExpression(
-            "||",
-            t.binaryExpression(
-              "===",
-              baseNeedsMemoised
-                ? t.assignmentExpression(
-                    "=",
-                    t.cloneNode(baseRef),
-                    t.cloneNode(startingNode),
-                  )
-                : t.cloneNode(baseRef),
-              t.nullLiteral(),
-            ),
-            t.binaryExpression(
-              "===",
-              t.cloneNode(baseRef),
-              scope.buildUndefinedNode(),
-            ),
+      if (willEndPathCastToBoolean) {
+        const nonNullishCheck = t.logicalExpression(
+          "&&",
+          t.binaryExpression(
+            "!==",
+            baseNeedsMemoised
+              ? t.assignmentExpression(
+                  "=",
+                  t.cloneNode(baseRef),
+                  t.cloneNode(startingNode),
+                )
+              : t.cloneNode(baseRef),
+            t.nullLiteral(),
           ),
-          isDeleteOperation
-            ? t.booleanLiteral(true)
-            : scope.buildUndefinedNode(),
-          regular,
-        ),
-      );
+          t.binaryExpression(
+            "!==",
+            t.cloneNode(baseRef),
+            scope.buildUndefinedNode(),
+          ),
+        );
+        replacementPath.replaceWith(
+          t.logicalExpression("&&", nonNullishCheck, regular),
+        );
+      } else {
+        // todo: respect assumptions.noDocumentAll when assumptions are implemented
+        const nullishCheck = t.logicalExpression(
+          "||",
+          t.binaryExpression(
+            "===",
+            baseNeedsMemoised
+              ? t.assignmentExpression(
+                  "=",
+                  t.cloneNode(baseRef),
+                  t.cloneNode(startingNode),
+                )
+              : t.cloneNode(baseRef),
+            t.nullLiteral(),
+          ),
+          t.binaryExpression(
+            "===",
+            t.cloneNode(baseRef),
+            scope.buildUndefinedNode(),
+          ),
+        );
+        replacementPath.replaceWith(
+          t.conditionalExpression(
+            nullishCheck,
+            isDeleteOperation
+              ? t.booleanLiteral(true)
+              : scope.buildUndefinedNode(),
+            regular,
+          ),
+        );
+      }
 
       // context and isDeleteOperation can not be both truthy
       if (context) {
