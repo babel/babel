@@ -11,3 +11,4 @@ function _toArray(arr) {
 }
 
 module.exports = _toArray;
+module.exports["default"] = module.exports;

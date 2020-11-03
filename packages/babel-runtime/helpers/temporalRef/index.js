@@ -7,3 +7,4 @@ function _temporalRef(val, name) {
 }
 
 module.exports = _temporalRef;
+module.exports["default"] = module.exports;

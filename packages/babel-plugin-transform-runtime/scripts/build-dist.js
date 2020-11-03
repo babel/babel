@@ -116,17 +116,17 @@ function writeHelpers(runtimeName, { corejs } = {}) {
   for (const helperName of helpers.list) {
     const helperPath = path.join("helpers", helperName);
     helperSubExports[`./${helperPath}`] = {
-      import: writeHelperFile(runtimeName, pkgDirname, helperPath, helperName, {
+      node: writeHelperFile(runtimeName, pkgDirname, helperPath, helperName, {
+        esm: false,
+        corejs,
+      }),
+      module: writeHelperFile(runtimeName, pkgDirname, helperPath, helperName, {
         esm: true,
         corejs,
       }),
-      require: writeHelperFile(
-        runtimeName,
-        pkgDirname,
-        helperPath,
-        helperName,
-        { esm: false, corejs }
-      ),
+      get default() {
+        return this.module;
+      },
     };
   }
 
@@ -199,7 +199,8 @@ function buildHelper(
         { corejs, useESModules: esm, version: runtimeVersion },
       ],
       buildRuntimeRewritePlugin(runtimeName, helperName),
-    ],
+      esm ? null : addDefaultCJSExport,
+    ].filter(Boolean),
     overrides: [
       {
         exclude: /typeof/,
@@ -248,6 +249,21 @@ function buildRuntimeRewritePlugin(runtimeName, helperName) {
 
         // replace reference to internal helpers with @babel/runtime import path
         adjustImportPath(path.get("arguments")[0].node);
+      },
+    },
+  };
+}
+
+function addDefaultCJSExport({ template }) {
+  return {
+    visitor: {
+      Program: {
+        exit(path) {
+          path.pushContainer(
+            "body",
+            template.statement.ast`module.exports.default = module.exports`
+          );
+        },
       },
     },
   };

@@ -196,13 +196,19 @@ export default declare((api, options, dirname) => {
             `${modulePath}/helpers/${name}`,
             name,
             blockHoist,
+            true,
           );
         });
       }
 
       const cache = new Map();
 
-      this.addDefaultImport = (source, nameHint, blockHoist) => {
+      this.addDefaultImport = (
+        source,
+        nameHint,
+        blockHoist,
+        isHelper = false,
+      ) => {
         // If something on the page adds a helper when the file is an ES6
         // file, we can't reused the cached helper name after things have been
         // transformed because it has almost certainly been renamed.
@@ -214,7 +220,7 @@ export default declare((api, options, dirname) => {
           cached = t.cloneNode(cached);
         } else {
           cached = addDefault(file.path, source, {
-            importedInterop: "uncompiled",
+            importedInterop: isHelper ? "compiled" : "uncompiled",
             nameHint,
             blockHoist,
           });
