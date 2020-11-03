@@ -89,7 +89,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/compat-data@workspace:^7.12.1, @babel/compat-data@workspace:packages/babel-compat-data":
+"@babel/compat-data@workspace:^7.12.1, @babel/compat-data@workspace:^7.12.5, @babel/compat-data@workspace:packages/babel-compat-data":
   version: 0.0.0-use.local
   resolution: "@babel/compat-data@workspace:packages/babel-compat-data"
   dependencies:
@@ -244,13 +244,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/generator@workspace:*, @babel/generator@workspace:^7.12.1, @babel/generator@workspace:packages/babel-generator":
+"@babel/generator@workspace:*, @babel/generator@workspace:^7.12.1, @babel/generator@workspace:^7.12.5, @babel/generator@workspace:packages/babel-generator":
   version: 0.0.0-use.local
   resolution: "@babel/generator@workspace:packages/babel-generator"
   dependencies:
     "@babel/helper-fixtures": "workspace:*"
     "@babel/parser": "workspace:*"
-    "@babel/types": "workspace:^7.12.1"
+    "@babel/types": "workspace:^7.12.5"
     jsesc: ^2.5.1
     source-map: ^0.5.0
   languageName: unknown
@@ -348,7 +348,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets"
   dependencies:
-    "@babel/compat-data": "workspace:^7.12.1"
+    "@babel/compat-data": "workspace:^7.12.5"
     "@babel/core": "workspace:*"
     "@babel/helper-validator-option": "workspace:^7.12.1"
     browserslist: ^4.14.5
@@ -561,7 +561,7 @@ __metadata:
   resolution: "@babel/helper-module-imports@workspace:packages/babel-helper-module-imports"
   dependencies:
     "@babel/core": "workspace:*"
-    "@babel/types": "workspace:^7.12.1"
+    "@babel/types": "workspace:^7.12.5"
   languageName: unknown
   linkType: soft
 
@@ -694,8 +694,8 @@ __metadata:
   dependencies:
     "@babel/helper-member-expression-to-functions": "workspace:^7.12.1"
     "@babel/helper-optimise-call-expression": "workspace:^7.10.4"
-    "@babel/traverse": "workspace:^7.12.1"
-    "@babel/types": "workspace:^7.12.1"
+    "@babel/traverse": "workspace:^7.12.5"
+    "@babel/types": "workspace:^7.12.5"
   languageName: unknown
   linkType: soft
 
@@ -838,8 +838,8 @@ __metadata:
   dependencies:
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/template": "workspace:^7.10.4"
-    "@babel/traverse": "workspace:^7.12.1"
-    "@babel/types": "workspace:^7.12.1"
+    "@babel/traverse": "workspace:^7.12.5"
+    "@babel/types": "workspace:^7.12.5"
   languageName: unknown
   linkType: soft
 
@@ -899,7 +899,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/parser@workspace:*, @babel/parser@workspace:^7.10.4, @babel/parser@workspace:^7.12.1, @babel/parser@workspace:^7.12.3, @babel/parser@workspace:packages/babel-parser":
+"@babel/parser@workspace:*, @babel/parser@workspace:^7.10.4, @babel/parser@workspace:^7.12.3, @babel/parser@workspace:^7.12.5, @babel/parser@workspace:packages/babel-parser":
   version: 0.0.0-use.local
   resolution: "@babel/parser@workspace:packages/babel-parser"
   dependencies:
@@ -2518,7 +2518,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-react-jsx-development@workspace:*, @babel/plugin-transform-react-jsx-development@workspace:^7.12.1, @babel/plugin-transform-react-jsx-development@workspace:packages/babel-plugin-transform-react-jsx-development":
+"@babel/plugin-transform-react-jsx-development@workspace:*, @babel/plugin-transform-react-jsx-development@workspace:^7.12.5, @babel/plugin-transform-react-jsx-development@workspace:packages/babel-plugin-transform-react-jsx-development":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-react-jsx-development@workspace:packages/babel-plugin-transform-react-jsx-development"
   dependencies:
@@ -2558,7 +2558,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-react-jsx@workspace:*, @babel/plugin-transform-react-jsx@workspace:^7.12.1, @babel/plugin-transform-react-jsx@workspace:packages/babel-plugin-transform-react-jsx":
+"@babel/plugin-transform-react-jsx@workspace:*, @babel/plugin-transform-react-jsx@workspace:^7.12.5, @babel/plugin-transform-react-jsx@workspace:packages/babel-plugin-transform-react-jsx":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-react-jsx@workspace:packages/babel-plugin-transform-react-jsx"
   dependencies:
@@ -3082,8 +3082,8 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.10.4"
     "@babel/plugin-transform-react-display-name": "workspace:^7.12.1"
-    "@babel/plugin-transform-react-jsx": "workspace:^7.12.1"
-    "@babel/plugin-transform-react-jsx-development": "workspace:^7.12.1"
+    "@babel/plugin-transform-react-jsx": "workspace:^7.12.5"
+    "@babel/plugin-transform-react-jsx-development": "workspace:^7.12.5"
     "@babel/plugin-transform-react-jsx-self": "workspace:^7.12.1"
     "@babel/plugin-transform-react-jsx-source": "workspace:^7.12.1"
     "@babel/plugin-transform-react-pure-annotations": "workspace:^7.12.1"
@@ -3327,17 +3327,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@workspace:*, @babel/traverse@workspace:^7.10.4, @babel/traverse@workspace:^7.12.1, @babel/traverse@workspace:packages/babel-traverse":
+"@babel/traverse@workspace:*, @babel/traverse@workspace:^7.10.4, @babel/traverse@workspace:^7.12.1, @babel/traverse@workspace:^7.12.5, @babel/traverse@workspace:packages/babel-traverse":
   version: 0.0.0-use.local
   resolution: "@babel/traverse@workspace:packages/babel-traverse"
   dependencies:
     "@babel/code-frame": "workspace:^7.10.4"
-    "@babel/generator": "workspace:^7.12.1"
+    "@babel/generator": "workspace:^7.12.5"
     "@babel/helper-function-name": "workspace:^7.10.4"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-split-export-declaration": "workspace:^7.11.0"
-    "@babel/parser": "workspace:^7.12.1"
-    "@babel/types": "workspace:^7.12.1"
+    "@babel/parser": "workspace:^7.12.5"
+    "@babel/types": "workspace:^7.12.5"
     debug: ^4.1.0
     globals: ^11.1.0
     lodash: ^4.17.19
@@ -3355,7 +3355,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/types@workspace:*, @babel/types@workspace:^7.10.4, @babel/types@workspace:^7.10.5, @babel/types@workspace:^7.11.0, @babel/types@workspace:^7.12.1, @babel/types@workspace:packages/babel-types":
+"@babel/types@workspace:*, @babel/types@workspace:^7.10.4, @babel/types@workspace:^7.10.5, @babel/types@workspace:^7.11.0, @babel/types@workspace:^7.12.1, @babel/types@workspace:^7.12.5, @babel/types@workspace:packages/babel-types":
   version: 0.0.0-use.local
   resolution: "@babel/types@workspace:packages/babel-types"
   dependencies:
