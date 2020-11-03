@@ -37,7 +37,7 @@ export default declare((api, options) => {
 
   function isKnownPrivate(node, readonlyNames) {
     return (
-      t.isMemberExpression(node) &&
+      (t.isMemberExpression(node) || t.isOptionalMemberExpression(node)) &&
       t.isPrivateName(node.property) &&
       readonlyNames.has(node.property.id.name)
     );
@@ -80,10 +80,19 @@ export default declare((api, options) => {
         path.replaceWith(t.sequenceExpression(seq));
       }
     },
-    MemberExpression: {
+    "MemberExpression|OptionalMemberExpression": {
       exit(path, { accessors }) {
         if (isKnownPrivate(path.node, accessors)) {
-          path.replaceWith(t.memberExpression(path.node, t.identifier("_")));
+          path.replaceWith(
+            path.type === "MemberExpression"
+              ? t.memberExpression(path.node, t.identifier("_"))
+              : t.optionalMemberExpression(
+                  path.node,
+                  t.identifier("_"),
+                  false,
+                  false,
+                ),
+          );
           path.skip();
         }
       },

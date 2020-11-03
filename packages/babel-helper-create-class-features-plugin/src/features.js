@@ -173,17 +173,17 @@ export function verifyUsedFeatures(path, file) {
       used.decorators = used.decorators ?? elem.get("decorators.0");
     }
 
-    // NOTE: We can't use path.isPrivateMethod() because it isn't supported in <7.2.0
-    if (elem.isPrivate() && elem.isMethod()) {
-      used.privateMethods = used.privateMethods ?? elem;
+    if (elem.isPrivate()) {
+      if (elem.isMethod()) {
+        used.privateMethods = used.privateMethods ?? elem;
+      } else {
+        elem.assertProperty();
+        used.privateFields = used.privateFields ?? elem;
+      }
     }
 
     if (elem.isProperty()) {
       used.fields = used.fields ?? elem;
-    }
-
-    if (elem.isPrivate() && elem.isProperty()) {
-      used.privateFields = used.privateFields ?? elem;
     }
 
     if (elem.isStaticBlock?.()) {
@@ -219,7 +219,8 @@ export function verifyUsedFeatures(path, file) {
     !shouldCompile(file, FEATURES.privateMethods)
   ) {
     throw used.privateMethods.buildCodeFrameError(
-      "Class private methods are not enabled.",
+      "Class private methods are not enabled." +
+        "\nYou can enable @babel/plugin-proposal-private-methods to compile them.",
     );
   }
 
@@ -229,7 +230,10 @@ export function verifyUsedFeatures(path, file) {
     !shouldCompile(file, FEATURES.fields) &&
     hasFeature(file, FEATURES.privateMethods)
   ) {
-    throw used.fields.buildCodeFrameError("Class fields are not enabled.");
+    throw used.fields.buildCodeFrameError(
+      "Class fields are not enabled." +
+        "\nYou can enable @babel/plugin-proposal-private-properties to compile them.",
+    );
   }
 
   if (used.decorators && !shouldCompile(file, FEATURES.decorators)) {

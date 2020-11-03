@@ -4,5 +4,5 @@
     "syntax-class-properties",
     "proposal-class-properties"
   ],
-  "throws": "Class private methods are not enabled."
+  "throws": "Class private methods are not enabled.\nYou can enable @babel/plugin-proposal-private-methods to compile them."
 }
