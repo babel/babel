@@ -9,7 +9,7 @@ const t = require("@babel/types");
 
 const transformRuntime = require("../");
 
-const runtimeVersion = require("../../babel-runtime/package.json").version;
+const runtimeVersion = require("@babel/runtime/package.json").version;
 const corejs3Definitions = require("../lib/runtime-corejs3-definitions").default();
 
 function outputFile(filePath, data) {
@@ -137,6 +137,7 @@ function writeHelperExports(runtimeName, helperSubExports) {
   const exports = {
     ...helperSubExports,
     "./regenerator": "./regenerator/index.js",
+    "./package.json": "./package.json",
   };
   const pkgDirname = getRuntimeRoot(runtimeName);
   const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);

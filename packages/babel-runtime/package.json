@@ -417,6 +417,7 @@
       "module": "./helpers/wrapRegExp/index.mjs",
       "default": "./helpers/wrapRegExp/index.mjs"
     },
-    "./regenerator": "./regenerator/index.js"
+    "./regenerator": "./regenerator/index.js",
+    "./package.json": "./package.json"
   }
 }

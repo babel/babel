@@ -418,6 +418,7 @@
       "default": "./helpers/wrapRegExp/index.mjs"
     },
     "./regenerator": "./regenerator/index.js",
+    "./package.json": "./package.json",
     "./core-js-stable/": "./core-js-stable/",
     "./core-js-stable/map": "./core-js-stable/map.js",
     "./core-js-stable/promise": "./core-js-stable/promise.js",
