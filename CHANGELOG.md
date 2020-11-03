@@ -19,6 +19,57 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.12.5 (2020-11-03)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helpers`, `babel-plugin-transform-block-scoping`
+  * [#12252](https://github.com/babel/babel/pull/12252) Throw a `TypeError` when reassigning a `const` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#12281](https://github.com/babel/babel/pull/12281) fix: support string assertion key in assert entries ([@JLHwung](https://github.com/JLHwung))
+  * [#12264](https://github.com/babel/babel/pull/12264) fix: disallow import assertions in export without from ([@JLHwung](https://github.com/JLHwung))
+  * [#12267](https://github.com/babel/babel/pull/12267) Handle exprAllowed before ObjectLike is parsed  ([@JLHwung](https://github.com/JLHwung))
+  * [#12230](https://github.com/babel/babel/pull/12230) Refactor yield await classification ([@JLHwung](https://github.com/JLHwung))
+  * [#12254](https://github.com/babel/babel/pull/12254) Allows the interface to be used as an Identifier for flow plugin ([@sosukesuzuki](https://github.com/sosukesuzuki))
+  * [#12221](https://github.com/babel/babel/pull/12221) [ts] Error on invalid type casts in JSX ([@existentialism](https://github.com/existentialism))
+  * [#12227](https://github.com/babel/babel/pull/12227) [ts] Allow optional binding pattern parameters within types/interfaces ([@existentialism](https://github.com/existentialism))
+  * [#12224](https://github.com/babel/babel/pull/12224) Fix parsing of imports with module string name in flow plugin ([@sosukesuzuki](https://github.com/sosukesuzuki))
+* `babel-parser`, `babel-types`
+  * [#12280](https://github.com/babel/babel/pull/12280) Make assertions optional and update AST spec ([@sosukesuzuki](https://github.com/sosukesuzuki))
+* `babel-template`, `babel-types`
+  * [#12263](https://github.com/babel/babel/pull/12263) fix: babel-types: ImportDeclaration: add assertions ([@coderaiser](https://github.com/coderaiser))
+* `babel-generator`
+  * [#12260](https://github.com/babel/babel/pull/12260) Do not use currentColumn to indent comments when retainLines=true ([@ian-craig](https://github.com/ian-craig))
+* `babel-generator`, `babel-parser`
+  * [#12249](https://github.com/babel/babel/pull/12249) Support Import Assertions for re-export statement ([@sosukesuzuki](https://github.com/sosukesuzuki))
+* `babel-plugin-proposal-numeric-separator`
+  * [#12240](https://github.com/babel/babel/pull/12240) fix: support bigInt in numeric-separator transform ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-replace-supers`, `babel-plugin-transform-classes`
+  * [#12238](https://github.com/babel/babel/pull/12238) fix: support optionalCall in replace super handler ([@JLHwung](https://github.com/JLHwung))
+* `babel-standalone`
+  * [#12226](https://github.com/babel/babel/pull/12226) packages/babel-standalone: make data-type="module" option avilable without data-presets option ([@hirochachacha](https://github.com/hirochachacha))
+
+#### :nail_care: Polish
+* `babel-compat-data`
+  * [#12244](https://github.com/babel/babel/pull/12244) chore: bump compat-table and electron-to-chromium ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`, `babel-preset-env`
+  * [#12258](https://github.com/babel/babel/pull/12258) Polish parser errors ([@JLHwung](https://github.com/JLHwung))
+
+#### :memo: Documentation
+* [#12222](https://github.com/babel/babel/pull/12222) docs: add note about TypeScript in ESLint packages ([@kaicataldo](https://github.com/kaicataldo))
+
+#### :house: Internal
+* Other
+  * [#12187](https://github.com/babel/babel/pull/12187) chore: avoid duplicate coverage data upload ([@JLHwung](https://github.com/JLHwung))
+  * [#12190](https://github.com/babel/babel/pull/12190) chore: bump Jest to v26 ([@JLHwung](https://github.com/JLHwung))
+  * [#12265](https://github.com/babel/babel/pull/12265) chore: test on node 15 ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-helper-module-imports`, `babel-helper-replace-supers`, `babel-parser`, `babel-traverse`
+  * [#12257](https://github.com/babel/babel/pull/12257) add declare to class properties type annotations ([@JLHwung](https://github.com/JLHwung))
+* `babel-traverse`, `babel-types`
+  * [#12251](https://github.com/babel/babel/pull/12251) Mark `ThisExpression` and `Super` as `Purish` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-compilation-targets`, `babel-preset-env`
+  * [#12241](https://github.com/babel/babel/pull/12241) Update to Browserslist 4.14.5 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.12.4 (2020-10-19)
 
 #### :bug: Bug Fix
