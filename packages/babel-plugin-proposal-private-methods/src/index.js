@@ -105,19 +105,34 @@ export default declare((api, options) => {
         readonly: new Set(oldState.readonly),
         accessors: new Set(oldState.accessors),
       };
+      const stateDiff = {
+        ...oldState,
+        readonly: new Set(),
+        accessors: new Set(),
+      };
 
       for (const elt of path.get("body")) {
         if (elt.isPrivate()) {
           const { name } = elt.node.key.id;
-          state.readonly.delete(name);
-          state.accessors.delete(name);
+          if (state.readonly.delete(name)) stateDiff.readonly.add(name);
+          if (state.accessors.delete(name)) stateDiff.accessors.add(name);
         }
       }
 
       path.traverse(privateUsageVisitor, state);
+      // We only run the visitor for shadowed private names because
+      // we must be careful not to transform accessors twice:
+      // this.#foo shouldn't became this.#foo._._
+      path.traverse(privateUsageEnvironmentVisitor, stateDiff);
+
       path.skip();
     },
   };
+
+  const privateUsageEnvironmentVisitor = traverse.visitors.merge([
+    environmentVisitor,
+    privateUsageVisitor,
+  ]);
 
   const accessorThisUsageVisitor = traverse.visitors.merge([
     environmentVisitor,
