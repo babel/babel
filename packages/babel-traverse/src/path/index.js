@@ -67,24 +67,16 @@ export default class NodePath {
 
     const targetNode = container[key];
 
-    const paths = pathCache.get(parent) || [];
-    if (!pathCache.has(parent)) {
+    let paths = pathCache.get(parent);
+    if (!paths) {
+      paths = new Map();
       pathCache.set(parent, paths);
     }
 
-    let path;
-
-    for (let i = 0; i < paths.length; i++) {
-      const pathCheck = paths[i];
-      if (pathCheck.node === targetNode) {
-        path = pathCheck;
-        break;
-      }
-    }
-
+    let path = paths.get(targetNode);
     if (!path) {
       path = new NodePath(hub, parent);
-      paths.push(path);
+      if (targetNode) paths.set(targetNode, path);
     }
 
     path.setup(parentPath, container, listKey, key);

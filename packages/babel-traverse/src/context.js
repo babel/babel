@@ -95,7 +95,7 @@ export default class TraversalContext {
     this.queue = queue;
     this.priorityQueue = [];
 
-    const visited = [];
+    const visited = new WeakSet();
     let stop = false;
 
     // visit the queue
@@ -120,8 +120,9 @@ export default class TraversalContext {
       }
 
       // ensure we don't visit the same node twice
-      if (visited.indexOf(path.node) >= 0) continue;
-      visited.push(path.node);
+      const { node } = path;
+      if (visited.has(node)) continue;
+      if (node) visited.add(node);
 
       if (path.visit()) {
         stop = true;
