@@ -112,5 +112,20 @@ describe("path/replacement", function () {
       });
       expect(generate(ast).code).toBe("<div><p></p><h></h></div>;");
     });
+    it("does not revisit one of new nodes if it is the node being replaced", () => {
+      // packages/babel-plugin-transform-block-scoping/src/index.js relies on this behaviour
+      const ast = parse(`var x;`);
+      let visitCounter = 0;
+      traverse(ast, {
+        VariableDeclaration(path) {
+          visitCounter++;
+          if (visitCounter > 2) {
+            return true;
+          }
+          path.replaceWithMultiple([path.node, t.emptyStatement()]);
+        },
+      });
+      expect(visitCounter).toBe(1);
+    });
   });
 });
