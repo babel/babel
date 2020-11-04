@@ -56,14 +56,17 @@ export default declare((api, options) => {
       `;
   }
 
+  const hasSideEffects = path =>
+    !(path.isThisExpression() || path.isSuper() || path.isPure());
+
   const privateUsageVisitor = {
     AssignmentExpression(path, { readonly, file }) {
       const { left, right } = path.node;
       if (isKnownPrivate(left, readonly)) {
         const seq = [];
 
-        if (!path.get("left.object").isPure()) seq.push(left.object);
-        if (!path.get("right").isPure()) seq.push(right);
+        if (hasSideEffects(path.get("left.object"))) seq.push(left.object);
+        if (hasSideEffects(path.get("right"))) seq.push(right);
         seq.push(readOnlyError(left, file));
 
         path.replaceWith(t.sequenceExpression(seq));
@@ -74,7 +77,9 @@ export default declare((api, options) => {
       if (isKnownPrivate(argument, readonly)) {
         const seq = [];
 
-        if (!path.get("argument.object").isPure()) seq.push(argument.object);
+        if (hasSideEffects(path.get("argument.object"))) {
+          seq.push(argument.object);
+        }
         seq.push(readOnlyError(argument, file));
 
         path.replaceWith(t.sequenceExpression(seq));
