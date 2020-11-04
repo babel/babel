@@ -18,6 +18,14 @@ git clone --depth=1 https://github.com/vuejs/vue-cli tmp/vue-cli
 cd tmp/vue-cli || exit
 
 #==============================================================================#
+#                         BREAKING CHANGES ADAPTATION                          #
+#==============================================================================#
+
+# https://github.com/vuejs/vue-cli/blob/0b86e70f86aebea2286617625dac1daa77247883/packages/%40vue/babel-preset-app/__tests__/babel-preset.spec.js#L208
+# In Babel 8, runtime paths don't contain "esm" anymore (#12295)
+sed -i 's!@babel/runtime/helpers/esm!@babel/runtime/helpers!' packages/@vue/babel-preset-app/__tests__/babel-preset.spec.js
+
+#==============================================================================#
 #                                   TEST                                       #
 #==============================================================================#
 
