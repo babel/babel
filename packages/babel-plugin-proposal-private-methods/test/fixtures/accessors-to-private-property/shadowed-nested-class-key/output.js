@@ -37,7 +37,7 @@ class A {
         this.#bar._ = 4;
       }
 
-      [this.#baz._]() {
+      [this.#baz]() {
         this.#foo = 3;
         this.#bar._ = 4;
       }
