@@ -1,20 +1,23 @@
-var _get_foo, _set_foo;
+var _foo;
 
 class A {
-  #foo = Object.defineProperty({
-    t: this
-  }, "_", {
-    get: _get_foo || (_get_foo = function () {
-      this.t;
+  #foo = {
+    __proto__: _foo || (_foo = {
+      get _() {
+        this.t;
 
-      () => this.t;
+        () => this.t;
 
-      (function () {
-        this;
-      }).call(this.t);
-      this.t.#foo._;
-      this.t.#foo._ = 2;
+        (function () {
+          this;
+        }).call(this.t);
+        this.t.#foo._;
+        this.t.#foo._ = 2;
+      },
+
+      set _(x) {}
+
     }),
-    set: _set_foo || (_set_foo = function (x) {})
-  });
+    t: this
+  };
 }

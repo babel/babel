@@ -1,12 +1,15 @@
-var _get_foo, _set_foo;
+var _foo;
 
 class Cl {
-  #foo = Object.defineProperty({
+  #foo = {
+    __proto__: _foo || (_foo = {
+      get _() {},
+
+      set _(x) {}
+
+    }),
     t: this
-  }, "_", {
-    get: _get_foo || (_get_foo = function () {}),
-    set: _set_foo || (_set_foo = function (x) {})
-  });
+  };
 
   test() {
     this.#foo._?.bar;

@@ -1,13 +1,15 @@
-var _get_privateFieldValue;
+var _privateFieldValue;
 
 class Cl {
-  #privateFieldValue = Object.defineProperty({
+  #privateFieldValue = {
+    __proto__: _privateFieldValue || (_privateFieldValue = {
+      get _() {
+        return this.t.#privateField;
+      }
+
+    }),
     t: this
-  }, "_", {
-    get: _get_privateFieldValue || (_get_privateFieldValue = function () {
-      return this.t.#privateField;
-    })
-  });
+  };
   #privateField = 0;
 
   constructor() {

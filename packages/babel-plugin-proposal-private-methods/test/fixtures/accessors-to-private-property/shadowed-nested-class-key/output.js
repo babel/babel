@@ -1,30 +1,39 @@
-var _get_foo, _set_foo, _get_bar, _set_bar;
+var _foo, _bar;
 
 class A {
-  #foo = Object.defineProperty({
+  #foo = {
+    __proto__: _foo || (_foo = {
+      get _() {},
+
+      set _(x) {}
+
+    }),
     t: this
-  }, "_", {
-    get: _get_foo || (_get_foo = function () {}),
-    set: _set_foo || (_set_foo = function (x) {})
-  });
-  #bar = Object.defineProperty({
+  };
+  #bar = {
+    __proto__: _bar || (_bar = {
+      get _() {},
+
+      set _(x) {}
+
+    }),
     t: this
-  }, "_", {
-    get: _get_bar || (_get_bar = function () {}),
-    set: _set_bar || (_set_bar = function (x) {})
-  });
+  };
   #baz;
 
   test() {
-    var _get_baz, _set_baz;
+    var _baz;
 
     class B {
-      #baz = Object.defineProperty({
+      #baz = {
+        __proto__: _baz || (_baz = {
+          get _() {},
+
+          set _(x) {}
+
+        }),
         t: this
-      }, "_", {
-        get: _get_baz || (_get_baz = function () {}),
-        set: _set_baz || (_set_baz = function (x) {})
-      });
+      };
       #foo;
 
       [this.#foo._]() {

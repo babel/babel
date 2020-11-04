@@ -1,11 +1,11 @@
 class Cl {
-  static #privateStaticFieldValue = Object.defineProperty({
-    t: this
-  }, "_", {
-    set: function (newValue) {
+  static #privateStaticFieldValue = {
+    set _(newValue) {
       Cl.#PRIVATE_STATIC_FIELD = newValue;
-    }
-  });
+    },
+
+    t: this
+  };
   static #PRIVATE_STATIC_FIELD = 0;
 
   static getPrivateStaticFieldValue() {

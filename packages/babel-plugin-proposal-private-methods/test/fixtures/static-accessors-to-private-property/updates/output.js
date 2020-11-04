@@ -1,14 +1,15 @@
 class Cl {
-  static #privateFieldValue = Object.defineProperty({
-    t: this
-  }, "_", {
-    get: function () {
+  static #privateFieldValue = {
+    get _() {
       return Cl.#privateField;
     },
-    set: function (newValue) {
+
+    set _(newValue) {
       Cl.#privateField = newValue;
-    }
-  });
+    },
+
+    t: this
+  };
   static #privateField = "top secret string";
   static publicField = "not secret string";
 

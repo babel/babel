@@ -1,16 +1,19 @@
-var _get_privateFieldValue, _set_privateFieldValue;
+var _privateFieldValue;
 
 class Cl {
-  #privateFieldValue = Object.defineProperty({
-    t: this
-  }, "_", {
-    get: _get_privateFieldValue || (_get_privateFieldValue = function () {
-      return this.t.#privateField;
+  #privateFieldValue = {
+    __proto__: _privateFieldValue || (_privateFieldValue = {
+      get _() {
+        return this.t.#privateField;
+      },
+
+      set _(newValue) {
+        this.t.#privateField = newValue;
+      }
+
     }),
-    set: _set_privateFieldValue || (_set_privateFieldValue = function (newValue) {
-      this.t.#privateField = newValue;
-    })
-  });
+    t: this
+  };
   #privateField = "top secret string";
 
   constructor() {

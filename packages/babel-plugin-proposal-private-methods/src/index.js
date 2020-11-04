@@ -257,29 +257,52 @@ export default declare((api, options) => {
 
           if (getter) {
             descriptor.properties.push(
-              t.objectProperty(
-                t.identifier("get"),
-                toMemoizedFunction(getter.node, path.scope, `get_${name}`),
+              t.classMethod(
+                "get",
+                t.identifier("_"),
+                getter.node.params,
+                getter.node.body,
               ),
             );
             getter.remove();
           }
           if (setter) {
             descriptor.properties.push(
-              t.objectProperty(
-                t.identifier("set"),
-                toMemoizedFunction(setter.node, path.scope, `set_${name}`),
+              t.classMethod(
+                "set",
+                t.identifier("_"),
+                setter.node.params,
+                setter.node.body,
               ),
             );
             setter.remove();
           }
 
+          let initializer;
+
+          if (isStatic) {
+            descriptor.properties.push(
+              t.objectProperty(t.identifier("t"), t.thisExpression()),
+            );
+            initializer = descriptor;
+          } else {
+            const tmpId = path.scope.generateUidIdentifier(name);
+            path.scope.push({ id: tmpId });
+
+            initializer = template.expression.ast`
+              {
+                __proto__: ${t.cloneNode(tmpId)} || (
+                  ${t.cloneNode(tmpId)} = ${descriptor}
+                ),
+                t: this
+              }
+            `;
+          }
+
           newElements.push(
             t.classPrivateProperty(
               t.privateName(t.identifier(name)),
-              template.expression.ast`
-                  Object.defineProperty({ t: this }, "_", ${descriptor})
-                `,
+              initializer,
               null,
               isStatic,
             ),
