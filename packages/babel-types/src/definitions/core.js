@@ -980,7 +980,7 @@ defineType("SwitchStatement", {
 });
 
 defineType("ThisExpression", {
-  aliases: ["Expression", "Pureish"],
+  aliases: ["Expression"],
 });
 
 defineType("ThrowStatement", {
@@ -1806,7 +1806,7 @@ defineType("SpreadElement", {
 });
 
 defineType("Super", {
-  aliases: ["Expression", "Pureish"],
+  aliases: ["Expression"],
 });
 
 defineType("TaggedTemplateExpression", {
