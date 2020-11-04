@@ -1,10 +1,10 @@
-var arrayWithHoles = require("./arrayWithHoles");
+var arrayWithHoles = require("@babel/runtime/helpers/arrayWithHoles");
 
-var iterableToArray = require("./iterableToArray");
+var iterableToArray = require("@babel/runtime/helpers/iterableToArray");
 
-var unsupportedIterableToArray = require("./unsupportedIterableToArray");
+var unsupportedIterableToArray = require("@babel/runtime/helpers/unsupportedIterableToArray");
 
-var nonIterableRest = require("./nonIterableRest");
+var nonIterableRest = require("@babel/runtime/helpers/nonIterableRest");
 
 function _toArray(arr) {
   return arrayWithHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableRest();

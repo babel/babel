@@ -172,7 +172,7 @@ function buildHelper(
     for (const dep of helpers.getDependencies(helperName)) {
       const id = (dependencies[dep] = t.identifier(t.toIdentifier(dep)));
       tree.body.push(template.statement.ast`
-        var ${id} = require("${`./${dep}`}");
+        var ${id} = require("${dep}");
       `);
       bindings.push(id.name);
     }
