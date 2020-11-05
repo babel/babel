@@ -3,6 +3,7 @@
 import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "../index";
 import NodePath from "./index";
+import { path as pathCache } from "../cache";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 
@@ -49,6 +50,7 @@ export function replaceWithMultiple(nodes: Array<Object>) {
   nodes = this._verifyNodeList(nodes);
   t.inheritLeadingComments(nodes[0], this.node);
   t.inheritTrailingComments(nodes[nodes.length - 1], this.node);
+  pathCache.get(this.parent).delete(this.node);
   this.node = this.container[this.key] = null;
   const paths = this.insertAfter(nodes);
 
