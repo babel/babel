@@ -53,6 +53,7 @@ export function ExportAllDeclaration(node: Object) {
   this.word("from");
   this.space();
   this.print(node.source, node);
+  this.printAssertions(node);
   this.semicolon();
 }
 
@@ -131,6 +132,7 @@ function ExportDeclaration(node: Object) {
       this.word("from");
       this.space();
       this.print(node.source, node);
+      this.printAssertions(node);
     }
 
     this.semicolon();
@@ -180,6 +182,9 @@ export function ImportDeclaration(node: Object) {
 
   this.print(node.source, node);
 
+  this.printAssertions(node);
+  // todo(Babel 8): remove this if branch
+  // `module-attributes` support is discontinued, use `import-assertions` instead.
   if (node.attributes?.length) {
     this.space();
     this.word("with");

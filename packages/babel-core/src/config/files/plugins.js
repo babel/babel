@@ -105,7 +105,7 @@ function resolveStandardizedName(
       try {
         resolve.sync(name, { basedir: dirname });
         resolvedOriginal = true;
-      } catch (e2) {}
+      } catch {}
 
       if (resolvedOriginal) {
         e.message += `\n- If you want to resolve "${name}", use "module:${name}"`;
@@ -118,7 +118,7 @@ function resolveStandardizedName(
         basedir: dirname,
       });
       resolvedBabel = true;
-    } catch (e2) {}
+    } catch {}
 
     if (resolvedBabel) {
       e.message += `\n- Did you mean "@babel/${name}"?`;
@@ -129,7 +129,7 @@ function resolveStandardizedName(
     try {
       resolve.sync(standardizeName(oppositeType, name), { basedir: dirname });
       resolvedOppositeType = true;
-    } catch (e2) {}
+    } catch {}
 
     if (resolvedOppositeType) {
       e.message += `\n- Did you accidentally pass a ${oppositeType} as a ${type}?`;
@@ -151,7 +151,6 @@ function requireModule(type: string, name: string): mixed {
 
   try {
     LOADING_MODULES.add(name);
-    // $FlowIssue
     return require(name);
   } finally {
     LOADING_MODULES.delete(name);

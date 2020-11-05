@@ -12,8 +12,10 @@ import defineType, {
   validateOptionalType,
   validateType,
 } from "./utils";
-import { functionDeclarationCommon } from "./core";
-import { classMethodOrDeclareMethodCommon } from "./es2015";
+import {
+  functionDeclarationCommon,
+  classMethodOrDeclareMethodCommon,
+} from "./core";
 
 const bool = assertValueType("boolean");
 
@@ -130,6 +132,7 @@ const tsKeywordTypes = [
   "TSAnyKeyword",
   "TSBooleanKeyword",
   "TSBigIntKeyword",
+  "TSIntrinsicKeyword",
   "TSNeverKeyword",
   "TSNullKeyword",
   "TSNumberKeyword",
@@ -212,7 +215,7 @@ defineType("TSTupleType", {
   aliases: ["TSType"],
   visitor: ["elementTypes"],
   fields: {
-    elementTypes: validateArrayOfType("TSType"),
+    elementTypes: validateArrayOfType(["TSType", "TSNamedTupleMember"]),
   },
 });
 
@@ -229,6 +232,19 @@ defineType("TSRestType", {
   visitor: ["typeAnnotation"],
   fields: {
     typeAnnotation: validateType("TSType"),
+  },
+});
+
+defineType("TSNamedTupleMember", {
+  visitor: ["label", "elementType"],
+  builder: ["label", "elementType", "optional"],
+  fields: {
+    label: validateType("Identifier"),
+    optional: {
+      validate: bool,
+      default: false,
+    },
+    elementType: validateType("TSType"),
   },
 });
 
@@ -290,12 +306,13 @@ defineType("TSIndexedAccessType", {
 
 defineType("TSMappedType", {
   aliases: ["TSType"],
-  visitor: ["typeParameter", "typeAnnotation"],
+  visitor: ["typeParameter", "typeAnnotation", "nameType"],
   fields: {
     readonly: validateOptional(bool),
     typeParameter: validateType("TSTypeParameter"),
     optional: validateOptional(bool),
     typeAnnotation: validateOptionalType("TSType"),
+    nameType: validateOptionalType("TSType"),
   },
 });
 

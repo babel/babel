@@ -317,10 +317,10 @@ describe("converters", function () {
       const sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(sequence).toBeUndefined();
     });
-    it("gathers empty statements", function () {
+    it("gathers empty statements if first element", function () {
       const node = parseCode(";");
       const sequence = t.toSequenceExpression([undefinedNode, node], scope);
-      expect(generateCode(sequence.expressions[1])).toBe("undefined");
+      expect(generateCode(sequence)).toBe("undefined");
     });
     it("skips empty statement if expression afterwards", function () {
       const node = parseCode("{ ; true }");

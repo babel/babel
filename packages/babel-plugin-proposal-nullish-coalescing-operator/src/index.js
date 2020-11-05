@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxNullishCoalescingOperator from "@babel/plugin-syntax-nullish-coalescing-operator";
-import { types as t } from "@babel/core";
+import { types as t, template } from "@babel/core";
 
 export default declare((api, { loose = false }) => {
   api.assertVersion(7);
@@ -16,13 +16,21 @@ export default declare((api, { loose = false }) => {
           return;
         }
 
-        let ref = scope.maybeGenerateMemoised(node.left);
+        let ref;
         let assignment;
         // skip creating extra reference when `left` is static
-        if (ref === null) {
+        if (scope.isStatic(node.left)) {
           ref = node.left;
           assignment = t.cloneNode(node.left);
+        } else if (scope.path.isPattern()) {
+          // Replace `function (a, x = a.b ?? c) {}` to `function (a, x = (() => a.b ?? c)() ){}`
+          // so the temporary variable can be injected in correct scope
+          path.replaceWith(template.ast`(() => ${path.node})()`);
+          // The injected nullish expression will be queued and eventually transformed when visited
+          return;
         } else {
+          ref = scope.generateUidIdentifierBasedOnNode(node.left);
+          scope.push({ id: t.cloneNode(ref) });
           assignment = t.assignmentExpression("=", ref, node.left);
         }
 

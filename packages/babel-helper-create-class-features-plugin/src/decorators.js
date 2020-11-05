@@ -137,7 +137,7 @@ export function buildDecoratedClass(ref, path, elements, file) {
   let replacement = template.expression.ast`
     ${addDecorateHelper(file)}(
       ${classDecorators || t.nullLiteral()},
-      function (${initializeId}, ${superClass ? superId : null}) {
+      function (${initializeId}, ${superClass ? t.cloneNode(superId) : null}) {
         ${node}
         return { F: ${t.cloneNode(node.id)}, d: ${definitions} };
       },
@@ -158,7 +158,7 @@ export function buildDecoratedClass(ref, path, elements, file) {
   }
 
   return {
-    instanceNodes: [template.statement.ast`${initializeId}(this)`],
+    instanceNodes: [template.statement.ast`${t.cloneNode(initializeId)}(this)`],
     wrapClass(path) {
       path.replaceWith(replacement);
       return path.get(classPathDesc);

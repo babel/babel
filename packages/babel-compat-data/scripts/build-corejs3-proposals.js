@@ -25,10 +25,10 @@ const builtInDefinitionsPath = path.join(
 const builtInDefinitions = fs.readFileSync(builtInDefinitionsPath, "utf-8");
 
 for (const feature of finishedProposals) {
-  const standarizedName = feature.replace("esnext.", "es.");
-  if (!builtInDefinitions.includes(standarizedName)) {
+  const standardizedName = feature.replace("esnext.", "es.");
+  if (!builtInDefinitions.includes(standardizedName)) {
     console.log(
-      `${feature} is now standarized as ${standarizedName}, please add "${standarizedName}" to "${builtInDefinitionsPath}"`
+      `${feature} is now standarized as ${standardizedName}, please add "${standardizedName}" to "${builtInDefinitionsPath}"`
     );
   }
 }

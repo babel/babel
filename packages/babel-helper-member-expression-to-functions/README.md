@@ -2,7 +2,7 @@
 
 > Helper function to replace certain member expressions with function calls
 
-See our website [@babel/helper-member-expression-to-functions](https://babeljs.io/docs/en/next/babel-helper-member-expression-to-functions.html) for more information.
+See our website [@babel/helper-member-expression-to-functions](https://babeljs.io/docs/en/babel-helper-member-expression-to-functions) for more information.
 
 ## Install
 

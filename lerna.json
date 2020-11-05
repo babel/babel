@@ -1,5 +1,5 @@
 {
-  "version": "7.10.2",
+  "version": "7.11.6",
   "changelog": {
     "repo": "babel/babel",
     "cacheDir": ".changelog",
@@ -12,31 +12,8 @@
       "PR: Docs :memo:": ":memo: Documentation",
       "PR: Internal :house:": ":house: Internal",
       "PR: Performance :running_woman:": ":running_woman: Performance",
-      "PR: Revert :leftwards_arrow_with_hook:": ":leftwards_arrow_with_hook: Revert"
+      "PR: Revert :leftwards_arrow_with_hook:": ":leftwards_arrow_with_hook: Revert",
+      "PR: Output optimization :microscope:": ":microscope: Output optimization"
     }
-  },
-  "command": {
-    "publish": {
-      "ignoreChanges": [
-        "*.md",
-        "*.txt",
-        "test/**",
-        "**/test/**",
-        "codemods/**",
-        "# We ignore every JSON file, except for native-modules, built-ins and plugins defined in babel-preset-env/data.",
-        "@(!(native-modules|built-ins|plugins|package)).json",
-        "# Until the ESLint packages version are aligned with Babel's, we ignore them",
-        "eslint/**"
-      ]
-    }
-  },
-  "packages": [
-    "codemods/*",
-    "eslint/*",
-    "packages/*"
-  ],
-  "npmClient": "yarn",
-  "npmClientArgs": [
-    "--pure-lockfile"
-  ]
+  }
 }

@@ -1,0 +1,48 @@
+{
+  "type": "File",
+  "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":3}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":3}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":3}},
+        "expression": {
+          "type": "ObjectExpression",
+          "start":1,"end":23,"loc":{"start":{"line":1,"column":1},"end":{"line":3,"column":1}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          },
+          "properties": [
+            {
+              "type": "ObjectProperty",
+              "start":5,"end":21,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":18}},
+              "method": false,
+              "key": {
+                "type": "Identifier",
+                "start":5,"end":14,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":11},"identifierName":"interface"},
+                "name": "interface"
+              },
+              "computed": false,
+              "shorthand": false,
+              "value": {
+                "type": "StringLiteral",
+                "start":16,"end":21,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":18}},
+                "extra": {
+                  "rawValue": "foo",
+                  "raw": "\"foo\""
+                },
+                "value": "foo"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

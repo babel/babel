@@ -9,11 +9,11 @@
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-> Semver Policy: https://github.com/babel/babel/tree/master/packages/babel-parser#semver
+> Semver Policy: https://github.com/babel/babel/tree/main/packages/babel-parser#semver
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
+See the [Babel Changelog](https://github.com/babel/babel/blob/main/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
 ## 6.17.1 (2017-05-10)
 

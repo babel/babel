@@ -1,14 +1,16 @@
 git:
   depth: 5
 language: node_js
+
 cache:
-  yarn: true
+  npm: false
+  directories:
+    - ~/.yarn/berry/cache
 
 os: linux
 
 env:
   global:
-    - PATH=$HOME/.yarn/bin:$PATH
     - JOB=test
 
 install: skip
@@ -28,24 +30,18 @@ matrix:
     - node_js: "node"
       env: JOB=lint
     # We test the latest version on circleci
-    - node_js: "13"
     # Move `windows` build to be the third since it is slow
     - os: windows
-      # Pin windows node.js version until https://github.com/nodejs/node/issues/33166 is resolved
-      node_js: "14.0"
+      node_js: "node"
       env:
         - JOB=test
         # https://travis-ci.community/t/build-doesnt-finish-after-completing-tests/288/9
         - YARN_GPG=no
       cache:
-        yarn: true
+        npm: false
         directories:
           - $HOME/AppData/Local/Temp/chocolatey
-    # Continue node_js matrix
-    - node_js: "6"
-    - node_js: "12"
-    - node_js: "10"
-    - node_js: "8"
+          - $HOME/AppData/Local/Yarn/Berry/cache
     - node_js: "node"
       env: JOB=babel-parser-flow-tests
     - node_js: "node"

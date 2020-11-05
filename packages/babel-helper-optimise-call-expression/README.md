@@ -2,7 +2,7 @@
 
 > Helper function to optimise call expression
 
-See our website [@babel/helper-optimise-call-expression](https://babeljs.io/docs/en/next/babel-helper-optimise-call-expression.html) for more information.
+See our website [@babel/helper-optimise-call-expression](https://babeljs.io/docs/en/babel-helper-optimise-call-expression) for more information.
 
 ## Install
 

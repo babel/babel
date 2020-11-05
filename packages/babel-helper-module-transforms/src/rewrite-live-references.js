@@ -3,7 +3,7 @@ import * as t from "@babel/types";
 import template from "@babel/template";
 import simplifyAccess from "@babel/helper-simple-access";
 
-import type { ModuleMetadata } from "./";
+import type { ModuleMetadata } from "./normalize-and-load-metadata";
 
 export default function rewriteLiveReferences(
   programPath: NodePath,
@@ -12,7 +12,7 @@ export default function rewriteLiveReferences(
   const imported = new Map();
   const exported = new Map();
   const requeueInParent = path => {
-    // Manualy re-queue `exports.default =` expressions so that the ES3
+    // Manually re-queue `exports.default =` expressions so that the ES3
     // transform has an opportunity to convert them. Ideally this would
     // happen automatically from the replaceWith above. See #4140 for
     // more info.
@@ -71,7 +71,13 @@ export default function rewriteLiveReferences(
       let namespace = t.identifier(meta.name);
       if (meta.lazy) namespace = t.callExpression(namespace, []);
 
-      return t.memberExpression(namespace, t.identifier(importName));
+      const computed = metadata.stringSpecifiers.has(importName);
+
+      return t.memberExpression(
+        namespace,
+        computed ? t.stringLiteral(importName) : t.identifier(importName),
+        computed,
+      );
     },
   });
 }
@@ -135,11 +141,14 @@ const buildBindingExportAssignmentExpression = (
     // class Foo {} export { Foo, Foo as Bar };
     // as
     // class Foo {} exports.Foo = exports.Bar = Foo;
+    const { stringSpecifiers } = metadata;
+    const computed = stringSpecifiers.has(exportName);
     return t.assignmentExpression(
       "=",
       t.memberExpression(
         t.identifier(metadata.exportName),
-        t.identifier(exportName),
+        computed ? t.stringLiteral(exportName) : t.identifier(exportName),
+        /* computed */ computed,
       ),
       expr,
     );
@@ -337,7 +346,9 @@ const rewriteReferencesVisitor = {
       path
         .get("left")
         .replaceWith(
-          t.variableDeclaration("let", [t.variableDeclarator(newLoopId)]),
+          t.variableDeclaration("let", [
+            t.variableDeclarator(t.cloneNode(newLoopId)),
+          ]),
         );
       scope.registerDeclaration(path.get("left"));
     }

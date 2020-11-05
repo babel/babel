@@ -1,0 +1,3 @@
+{
+  "plugins": ["proposal-class-static-block"]
+}

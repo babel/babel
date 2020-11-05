@@ -1,0 +1,10 @@
+{
+  "validateLogs": true,
+  "caller": {
+    "name": "test-fixture",
+    "supportsStaticESM": false,
+    "supportsDynamicImport": false,
+    "supportsExportNamespaceFrom": false
+  },
+  "presets": ["env"]
+}

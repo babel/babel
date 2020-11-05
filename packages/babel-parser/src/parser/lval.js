@@ -34,13 +34,12 @@ export default class LValParser extends NodeUtils {
   // Forward-declaration: defined in expression.js
   /*::
   +parseIdentifier: (liberal?: boolean) => Identifier;
-  +parseMaybeAssign: (
-    noIn?: ?boolean,
+  +parseMaybeAssignAllowIn: (
     refExpressionErrors?: ?ExpressionErrors,
     afterLeftParse?: Function,
     refNeedsArrowPos?: ?Pos,
   ) => Expression;
-  +parseObj: <T: ObjectPattern | ObjectExpression>(
+  +parseObjectLike: <T: ObjectPattern | ObjectExpression>(
     close: TokenType,
     isPattern: boolean,
     isRecord?: ?boolean,
@@ -143,7 +142,9 @@ export default class LValParser extends NodeUtils {
           ? Errors.PatternHasAccessor
           : Errors.PatternHasMethod;
 
+      /* eslint-disable @babel/development-internal/dry-error-messages */
       this.raise(prop.key.start, error);
+      /* eslint-enable @babel/development-internal/dry-error-messages */
     } else if (prop.type === "SpreadElement" && !isLast) {
       this.raiseRestNotLast(prop.start);
     } else {
@@ -224,8 +225,7 @@ export default class LValParser extends NodeUtils {
   ): SpreadElement {
     const node = this.startNode();
     this.next();
-    node.argument = this.parseMaybeAssign(
-      false,
+    node.argument = this.parseMaybeAssignAllowIn(
       refExpressionErrors,
       undefined,
       refNeedsArrowPos,
@@ -233,15 +233,18 @@ export default class LValParser extends NodeUtils {
     return this.finishNode(node, "SpreadElement");
   }
 
+  // https://tc39.es/ecma262/#prod-BindingRestProperty
+  // https://tc39.es/ecma262/#prod-BindingRestElement
   parseRestBinding(): RestElement {
     const node = this.startNode();
-    this.next();
+    this.next(); // eat `...`
     node.argument = this.parseBindingAtom();
     return this.finishNode(node, "RestElement");
   }
 
   // Parses lvalue (assignable) atom.
   parseBindingAtom(): Pattern {
+    // https://tc39.es/ecma262/#prod-BindingPattern
     switch (this.state.type) {
       case tt.bracketL: {
         const node = this.startNode();
@@ -255,12 +258,14 @@ export default class LValParser extends NodeUtils {
       }
 
       case tt.braceL:
-        return this.parseObj(tt.braceR, true);
+        return this.parseObjectLike(tt.braceR, true);
     }
 
+    // https://tc39.es/ecma262/#prod-BindingIdentifier
     return this.parseIdentifier();
   }
 
+  // https://tc39.es/ecma262/#prod-BindingElementList
   parseBindingList(
     close: TokenType,
     closeCharCode: $Values<typeof charCodes>,
@@ -290,6 +295,7 @@ export default class LValParser extends NodeUtils {
         if (this.match(tt.at) && this.hasPlugin("decorators")) {
           this.raise(this.state.start, Errors.UnsupportedParameterDecorator);
         }
+        // invariant: hasPlugin("decorators-legacy")
         while (this.match(tt.at)) {
           decorators.push(this.parseDecorator());
         }
@@ -312,25 +318,27 @@ export default class LValParser extends NodeUtils {
     return elt;
   }
 
+  // Used by flow/typescript plugin to add type annotations to binding elements
   parseAssignableListItemTypes(param: Pattern): Pattern {
     return param;
   }
 
   // Parses assignment pattern around given atom if possible.
-
+  // https://tc39.es/ecma262/#prod-BindingElement
   parseMaybeDefault(
     startPos?: ?number,
     startLoc?: ?Position,
     left?: ?Pattern,
   ): Pattern {
-    startLoc = startLoc || this.state.startLoc;
-    startPos = startPos || this.state.start;
-    left = left || this.parseBindingAtom();
+    startLoc = startLoc ?? this.state.startLoc;
+    startPos = startPos ?? this.state.start;
+    // $FlowIgnore
+    left = left ?? this.parseBindingAtom();
     if (!this.eat(tt.eq)) return left;
 
     const node = this.startNodeAt(startPos, startLoc);
     node.left = left;
-    node.right = this.parseMaybeAssign();
+    node.right = this.parseMaybeAssignAllowIn();
     return this.finishNode(node, "AssignmentPattern");
   }
 

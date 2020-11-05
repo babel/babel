@@ -1,6 +1,6 @@
 {
   "name": "@babel/register",
-  "version": "7.10.1",
+  "version": "7.12.1",
   "description": "babel require hook",
   "license": "MIT",
   "publishConfig": {
@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "find-cache-dir": "^2.0.0",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "make-dir": "^2.1.0",
     "pirates": "^4.0.0",
     "source-map-support": "^0.5.16"
@@ -27,9 +27,8 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/plugin-transform-modules-commonjs": "^7.10.1",
-    "browserify": "16.5.0",
-    "default-require-extensions": "^2.0.0"
+    "@babel/core": "workspace:*",
+    "@babel/plugin-transform-modules-commonjs": "workspace:*",
+    "browserify": "^16.5.2"
   }
 }

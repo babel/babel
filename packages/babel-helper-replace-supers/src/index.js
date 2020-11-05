@@ -42,8 +42,13 @@ export function skipAllButComputedKey(path: NodePath) {
 }
 
 // environmentVisitor should be used when traversing the whole class and not for specific class elements/methods.
+// For perf reasons, the environmentVisitor will be traversed with `{ noScope: true }`, which means `path.scope` is undefined.
+// Avoid using `path.scope` here
 export const environmentVisitor = {
-  TypeAnnotation(path: NodePath) {
+  // todo (Babel 8): remove StaticBlock brand checks
+  [`${t.StaticBlock ? "StaticBlock|" : ""}ClassPrivateProperty|TypeAnnotation`](
+    path: NodePath,
+  ) {
     path.skip();
   },
 
@@ -55,7 +60,7 @@ export const environmentVisitor = {
     path.skip();
   },
 
-  "Method|ClassProperty|ClassPrivateProperty"(path: NodePath) {
+  "Method|ClassProperty"(path: NodePath) {
     skipAllButComputedKey(path);
   },
 };
@@ -161,6 +166,16 @@ const specHandlers = {
       false,
     );
   },
+
+  optionalCall(superMember, args) {
+    const thisRefs = this._getThisRefs();
+    return optimiseCall(
+      this._get(superMember, thisRefs),
+      t.cloneNode(thisRefs.this),
+      args,
+      true,
+    );
+  },
 };
 
 const looseHandlers = {
@@ -218,6 +233,10 @@ const looseHandlers = {
   call(superMember, args) {
     return optimiseCall(this.get(superMember), t.thisExpression(), args, false);
   },
+
+  optionalCall(superMember, args) {
+    return optimiseCall(this.get(superMember), t.thisExpression(), args, true);
+  },
 };
 
 type ReplaceSupersOptionsBase = {|
@@ -253,14 +272,14 @@ export default class ReplaceSupers {
     this.opts = opts;
   }
 
-  file: HubInterface;
-  isDerivedConstructor: boolean;
-  isLoose: boolean;
-  isPrivateMethod: boolean;
-  isStatic: boolean;
-  methodPath: NodePath;
-  opts: ReplaceSupersOptions;
-  superRef: Object;
+  declare file: HubInterface;
+  declare isDerivedConstructor: boolean;
+  declare isLoose: boolean;
+  declare isPrivateMethod: boolean;
+  declare isStatic: boolean;
+  declare methodPath: NodePath;
+  declare opts: ReplaceSupersOptions;
+  declare superRef: Object;
 
   getObjectRef() {
     return t.cloneNode(this.opts.objectRef || this.opts.getObjectRef());

@@ -34,9 +34,29 @@ function transformCode(transformFn, script) {
  * sensible default presets and plugins if none were explicitly provided.
  */
 function buildBabelOptions(script, filename) {
+  let presets = script.presets;
+  if (!presets) {
+    if (script.type === "module") {
+      presets = [
+        "react",
+        [
+          "env",
+          {
+            targets: {
+              esmodules: true,
+            },
+            modules: false,
+          },
+        ],
+      ];
+    } else {
+      presets = ["react", "env"];
+    }
+  }
+
   return {
     filename,
-    presets: script.presets || ["react", "es2015"],
+    presets,
     plugins: script.plugins || [
       "proposal-class-properties",
       "proposal-object-rest-spread",

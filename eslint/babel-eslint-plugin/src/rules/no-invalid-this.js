@@ -4,17 +4,21 @@ import eslint from "eslint";
 const noInvalidThisRule = new eslint.Linter().getRules().get("no-invalid-this");
 
 export default ruleComposer.filterReports(noInvalidThisRule, problem => {
-  let inClassProperty = false;
+  let inClassMember = false;
   let node = problem.node;
 
   while (node) {
-    if (node.type === "ClassProperty" || node.type === "ClassPrivateProperty") {
-      inClassProperty = true;
+    if (
+      node.type === "ClassPrivateMethod" ||
+      node.type === "ClassPrivateProperty" ||
+      node.type === "ClassProperty"
+    ) {
+      inClassMember = true;
       return;
     }
 
     node = node.parent;
   }
 
-  return !inClassProperty;
+  return !inClassMember;
 });

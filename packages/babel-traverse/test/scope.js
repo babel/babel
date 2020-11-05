@@ -471,7 +471,7 @@ describe("scope", () => {
         });
 
         if (kind1 !== kind2) {
-          //todo: remove the if whitelist
+          // todo: remove the if allowed
           if (kind1 === "const" && (kind2 === "function" || kind2 === "var")) {
             continue;
           }

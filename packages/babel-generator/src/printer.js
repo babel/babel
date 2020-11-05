@@ -1,5 +1,3 @@
-import isInteger from "lodash/isInteger";
-import repeat from "lodash/repeat";
 import Buffer from "./buffer";
 import * as n from "./node";
 import * as t from "@babel/types";
@@ -35,10 +33,10 @@ export default class Printer {
     this._buf = new Buffer(map);
   }
 
-  format: Format;
+  declare format: Format;
   inForStatementInitCounter: number = 0;
 
-  _buf: Buffer;
+  declare _buf: Buffer;
   _printStack: Array<Node> = [];
   _indent: number = 0;
   _insideAux: boolean = false;
@@ -138,7 +136,7 @@ export default class Printer {
     // Integer tokens need special handling because they cannot have '.'s inserted
     // immediately after them.
     this._endsWithInteger =
-      isInteger(+str) &&
+      Number.isInteger(+str) &&
       !NON_DECIMAL_LITERAL.test(str) &&
       !SCIENTIFIC_NOTATION.test(str) &&
       !ZERO_DECIMAL_INTEGER.test(str) &&
@@ -324,7 +322,7 @@ export default class Printer {
    */
 
   _getIndent(): string {
-    return repeat(this.format.indent.style, this._indent);
+    return this.format.indent.style.repeat(this._indent);
   }
 
   /**
@@ -614,9 +612,9 @@ export default class Printer {
 
       const indentSize = Math.max(
         this._getIndent().length,
-        this._buf.getCurrentColumn(),
+        this.format.retainLines ? 0 : this._buf.getCurrentColumn(),
       );
-      val = val.replace(/\n(?!$)/g, `\n${repeat(" ", indentSize)}`);
+      val = val.replace(/\n(?!$)/g, `\n${" ".repeat(indentSize)}`);
     }
 
     // Avoid creating //* comments
@@ -646,6 +644,19 @@ export default class Printer {
       for (const comment of comments) {
         this._printComment(comment);
       }
+    }
+  }
+
+  printAssertions(node: Node) {
+    if (node.assertions?.length) {
+      this.space();
+      this.word("assert");
+      this.space();
+      this.token("{");
+      this.space();
+      this.printList(node.assertions, node);
+      this.space();
+      this.token("}");
     }
   }
 }

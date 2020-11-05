@@ -40,7 +40,7 @@ module.exports = [
   "TS1163", // A 'yield' expression is only allowed in a generator body.
   "TS1184", // Modifiers cannot appear here.
   "TS1191", // An import declaration cannot have modifiers.
-  "TS1196", // Catch clause variable cannot have a type annotation.
+  "TS1196", // Catch clause variable type annotation must be 'any' or 'unknown' if specified.
   "TS1197", // Catch clause variable cannot have an initializer.
   "TS1200", // Line terminator not permitted before arrow.
   "TS1312", // '=' can only be used in an object literal property inside a destructuring assignment.

@@ -1,6 +1,4 @@
 import cloneDeep from "lodash/cloneDeep";
-import clone from "lodash/clone";
-import extend from "lodash/extend";
 import semver from "semver";
 import path from "path";
 import fs from "fs";
@@ -47,8 +45,8 @@ function assertDirectory(loc) {
   }
 }
 
-function shouldIgnore(name, blacklist?: Array<string>) {
-  if (blacklist && blacklist.indexOf(name) >= 0) {
+function shouldIgnore(name, ignore?: Array<string>) {
+  if (ignore && ignore.indexOf(name) >= 0) {
     return true;
   }
 
@@ -119,7 +117,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
   const taskOpts = cloneDeep(suite.options);
 
   const taskOptsLoc = tryResolve(taskDir + "/options");
-  if (taskOptsLoc) extend(taskOpts, require(taskOptsLoc));
+  if (taskOptsLoc) Object.assign(taskOpts, require(taskOptsLoc));
 
   const test = {
     optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
@@ -263,7 +261,7 @@ export default function get(entryLoc): Array<Suite> {
     if (shouldIgnore(suiteName)) continue;
 
     const suite = {
-      options: clone(rootOpts),
+      options: { ...rootOpts },
       tests: [],
       title: humanize(suiteName),
       filename: entryLoc + "/" + suiteName,

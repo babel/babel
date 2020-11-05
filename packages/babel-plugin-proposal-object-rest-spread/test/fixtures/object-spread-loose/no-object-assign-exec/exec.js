@@ -1,27 +1,24 @@
 "use strict";
-const NOSET = `NOSET${__filename}`;
-const NOWRITE = `NOWRITE${__filename}`;
-
-Object.defineProperty(Object.prototype, NOSET, {
+Object.defineProperty(Object.prototype, 'NOSET', {
   get(value) {
     // noop
   },
 });
 
-Object.defineProperty(Object.prototype, NOWRITE, {
+Object.defineProperty(Object.prototype, 'NOWRITE', {
   writable: false,
   value: 'abc',
 });
 
-const obj = { [NOSET]: 123 };
+const obj = { 'NOSET': 123 };
 // this won't work as expected if transformed as Object.assign (or equivalent)
 // because those trigger object setters (spread don't)
 expect(() => {
   const objSpread = { ...obj };
 }).toThrow();
 
-const obj2 = { [NOWRITE]: 456 };
-// this throws  `TypeError: Cannot assign to read only property 'NOWRITE'`
+const obj2 = { 'NOWRITE': 456 };
+// this throws `TypeError: Cannot assign to read only property 'NOWRITE'`
 // if transformed as Object.assign (or equivalent) because those use *assignment* for creating properties
 // (spread defines them)
 expect(() => {

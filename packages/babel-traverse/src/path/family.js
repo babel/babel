@@ -18,6 +18,40 @@ function addCompletionRecords(path, paths) {
   return paths;
 }
 
+function findBreak(statements): ?NodePath {
+  let breakStatement;
+  if (!Array.isArray(statements)) {
+    statements = [statements];
+  }
+
+  for (const statement of statements) {
+    if (
+      statement.isDoExpression() ||
+      statement.isProgram() ||
+      statement.isBlockStatement() ||
+      statement.isCatchClause() ||
+      statement.isLabeledStatement()
+    ) {
+      breakStatement = findBreak(statement.get("body"));
+    } else if (statement.isIfStatement()) {
+      breakStatement =
+        findBreak(statement.get("consequent")) ??
+        findBreak(statement.get("alternate"));
+    } else if (statement.isTryStatement()) {
+      breakStatement =
+        findBreak(statement.get("block")) ??
+        findBreak(statement.get("handler"));
+    } else if (statement.isBreakStatement()) {
+      breakStatement = statement;
+    }
+
+    if (breakStatement) {
+      return breakStatement;
+    }
+  }
+  return null;
+}
+
 function completionRecordForSwitch(cases, paths) {
   let isLastCaseWithConsequent = true;
 
@@ -25,20 +59,7 @@ function completionRecordForSwitch(cases, paths) {
     const switchCase = cases[i];
     const consequent = switchCase.get("consequent");
 
-    let breakStatement;
-    findBreak: for (const statement of consequent) {
-      if (statement.isBlockStatement()) {
-        for (const statementInBlock of statement.get("body")) {
-          if (statementInBlock.isBreakStatement()) {
-            breakStatement = statementInBlock;
-            break findBreak;
-          }
-        }
-      } else if (statement.isBreakStatement()) {
-        breakStatement = statement;
-        break;
-      }
-    }
+    let breakStatement = findBreak(consequent);
 
     if (breakStatement) {
       while (
@@ -209,7 +230,7 @@ export function getOuterBindingIdentifiers(duplicates?: boolean): Object {
   return t.getOuterBindingIdentifiers(this.node, duplicates);
 }
 
-// original source - https://github.com/babel/babel/blob/master/packages/babel-types/src/retrievers.js
+// original source - https://github.com/babel/babel/blob/main/packages/babel-types/src/retrievers/getBindingIdentifiers.js
 // path.getBindingIdentifiers returns nodes where the following re-implementation
 // returns paths
 export function getBindingIdentifierPaths(

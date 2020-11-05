@@ -1,0 +1,62 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":36}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":36}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":36}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":36,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":36}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":36,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":36},"identifierName":"x"},
+              "name": "x",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":5,"end":36,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":36}},
+                "typeAnnotation": {
+                  "type": "TSTupleType",
+                  "start":7,"end":36,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":36}},
+                  "elementTypes": [
+                    {
+                      "type": "TSRestType",
+                      "start":8,"end":27,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":27}},
+                      "typeAnnotation": {
+                        "type": "TSTupleType",
+                        "start":11,"end":27,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":27}},
+                        "elementTypes": [
+                          {
+                            "type": "TSNumberKeyword",
+                            "start":12,"end":18,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":18}}
+                          },
+                          {
+                            "type": "TSStringKeyword",
+                            "start":20,"end":26,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":26}}
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "TSStringKeyword",
+                      "start":29,"end":35,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":35}}
+                    }
+                  ]
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

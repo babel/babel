@@ -51,6 +51,10 @@ const ROOT_VALIDATORS: ValidatorSet = {
   code: (assertBoolean: Validator<$PropertyType<ValidatedOptions, "code">>),
   ast: (assertBoolean: Validator<$PropertyType<ValidatedOptions, "ast">>),
 
+  cloneInputAst: (assertBoolean: Validator<
+    $PropertyType<ValidatedOptions, "cloneInputAst">,
+  >),
+
   envName: (assertString: Validator<
     $PropertyType<ValidatedOptions, "envName">,
   >),
@@ -184,6 +188,7 @@ export type ValidatedOptions = {
   rootMode?: RootMode,
   code?: boolean,
   ast?: boolean,
+  cloneInputAst?: boolean,
   inputSourceMap?: RootInputSourceMapOption,
   envName?: string,
   caller?: CallerMetadata,
@@ -276,7 +281,7 @@ export type OptionsSource =
   | "preset"
   | "plugin";
 
-type RootPath = $ReadOnly<{
+export type RootPath = $ReadOnly<{
   type: "root",
   source: OptionsSource,
 }>;
@@ -311,7 +316,7 @@ function validateNested(loc: NestingPath, opts: {}) {
 
   assertNoDuplicateSourcemap(opts);
 
-  Object.keys(opts).forEach(key => {
+  Object.keys(opts).forEach((key: string) => {
     const optLoc = {
       type: "option",
       name: key,
@@ -364,7 +369,10 @@ function throwUnknownError(loc: OptionPath) {
   const key = loc.name;
 
   if (removed[key]) {
-    const { message, version = 5 } = removed[key];
+    const {
+      message,
+      version = 5,
+    }: { message: string, version?: number } = removed[key];
 
     throw new Error(
       `Using removed Babel ${version} option: ${msg(loc)} - ${message}`,
@@ -446,12 +454,16 @@ function assertOverridesList(loc: OptionPath, value: mixed): OverridesList {
 }
 
 export function checkNoUnwrappedItemOptionPairs(
-  lastItem: UnloadedDescriptor,
-  thisItem: UnloadedDescriptor,
-  type: "plugin" | "preset",
+  items: Array<UnloadedDescriptor>,
   index: number,
+  type: "plugin" | "preset",
   e: Error,
 ): void {
+  if (index === 0) return;
+
+  const lastItem = items[index - 1];
+  const thisItem = items[index];
+
   if (
     lastItem.file &&
     lastItem.options === undefined &&
