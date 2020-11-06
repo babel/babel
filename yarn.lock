@@ -5708,17 +5708,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:^3.6.2":
-  version: 3.6.4
-  resolution: "core-js-compat@npm:3.6.4"
-  dependencies:
-    browserslist: ^4.8.3
-    semver: 7.0.0
-  checksum: a8146d119aad70aef46d48010cfbc8fd82541c7b4238b7e1205d9b49d0802fd44cde1518f78f57facf86490ce9673f855520409ddeace82c4c79e86b3c9204a5
-  languageName: node
-  linkType: hard
-
-"core-js-compat@npm:^3.7.0":
+"core-js-compat@npm:^3.6.2, core-js-compat@npm:^3.7.0":
   version: 3.7.0
   resolution: "core-js-compat@npm:3.7.0"
   dependencies:
