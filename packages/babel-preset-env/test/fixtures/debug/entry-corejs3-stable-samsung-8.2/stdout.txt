@@ -31,6 +31,8 @@ Using polyfills with `entry` option:
   es.array.flat { "samsung":"8.2" }
   es.array.flat-map { "samsung":"8.2" }
   es.array.iterator { "samsung":"8.2" }
+  es.array.reduce { "samsung":"8.2" }
+  es.array.reduce-right { "samsung":"8.2" }
   es.array.unscopables.flat { "samsung":"8.2" }
   es.array.unscopables.flat-map { "samsung":"8.2" }
   es.math.hypot { "samsung":"8.2" }
