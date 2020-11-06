@@ -1,0 +1,36 @@
+declare module "@babel/template" {
+  declare type PublicOpts = {
+    placeholderWhitelist?: ?Set<string>,
+    placeholderPattern?: ?(RegExp | false),
+    preserveComments?: ?boolean,
+    syntacticPlaceholders?: ?boolean,
+  };
+
+  declare type PublicReplacements = { [string]: mixed } | Array<mixed>;
+
+  declare type TemplateBuilder<T> = {
+    ast: {
+      (tpl: string, opts: ?PublicOpts): T,
+      (tpl: Array<string>, ...args: Array<mixed>): T,
+    },
+    (opts: PublicOpts): TemplateBuilder<T>,
+    (tpl: string, opts: ?PublicOpts): (?PublicReplacements) => T,
+    (tpl: Array<string>, ...args: Array<mixed>): (?PublicReplacements) => T,
+  };
+
+  declare type Smart = TemplateBuilder<
+    Array<BabelNodeStatement> | BabelNodeStatement
+  >;
+  declare type Statement = TemplateBuilder<BabelNodeStatement>;
+  declare type Statements = TemplateBuilder<Array<BabelNodeStatement>>;
+  declare type Expression = TemplateBuilder<BabelNodeExpression>;
+  declare type Program = TemplateBuilder<BabelNodeProgram>;
+
+  declare export default Smart & {
+    smart: Smart,
+    statement: Statement,
+    statements: Statements,
+    expression: Expression,
+    program: Program,
+  };
+}
