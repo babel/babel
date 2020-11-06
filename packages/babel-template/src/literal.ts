@@ -1,7 +1,6 @@
-// @flow
-
 import type { Formatter } from "./formatters";
-import { normalizeReplacements, type TemplateOpts } from "./options";
+import type { TemplateReplacements, TemplateOpts } from "./options";
+import { normalizeReplacements } from "./options";
 import parseAndBuildMetadata from "./parse";
 import populatePlaceholders from "./populate";
 
@@ -9,16 +8,16 @@ export default function literalTemplate<T>(
   formatter: Formatter<T>,
   tpl: Array<string>,
   opts: TemplateOpts,
-): (Array<mixed>) => mixed => T {
+): (_: Array<unknown>) => (_: unknown) => T {
   const { metadata, names } = buildLiteralData(formatter, tpl, opts);
 
-  return (arg: Array<mixed>) => {
-    const defaultReplacements = arg.reduce((acc, replacement, i) => {
-      acc[names[i]] = replacement;
-      return acc;
-    }, {});
+  return arg => {
+    const defaultReplacements: TemplateReplacements = {};
+    arg.forEach((replacement, i) => {
+      defaultReplacements[names[i]] = replacement;
+    });
 
-    return (arg: mixed) => {
+    return (arg: unknown) => {
       const replacements = normalizeReplacements(arg);
 
       if (replacements) {
@@ -88,7 +87,7 @@ function buildLiteralData<T>(
 function buildTemplateCode(
   tpl: Array<string>,
   prefix: string,
-): { names: Array<string>, code: string } {
+): { names: Array<string>; code: string } {
   const names = [];
 
   let code = tpl[0];

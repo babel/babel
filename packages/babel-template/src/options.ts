@@ -1,6 +1,4 @@
-// @flow
-
-import type { Options as ParserOpts } from "@babel/parser/src/options";
+import type { ParserOptions as ParserOpts } from "@babel/parser";
 
 export type { ParserOpts };
 
@@ -15,8 +13,7 @@ export type PublicOpts = {
    *
    * This option can be used when using %%foo%% style placeholders.
    */
-  placeholderWhitelist?: ?Set<string>,
-
+  placeholderWhitelist?: Set<string>;
   /**
    * A pattern to search for when looking for Identifier and StringLiteral
    * nodes that can be replaced.
@@ -28,30 +25,28 @@ export type PublicOpts = {
    *
    * This option can be used when using %%foo%% style placeholders.
    */
-  placeholderPattern?: ?(RegExp | false),
-
+  placeholderPattern?: RegExp | false;
   /**
    * 'true' to pass through comments from the template into the resulting AST,
    * or 'false' to automatically discard comments. Defaults to 'false'.
    */
-  preserveComments?: ?boolean,
-
+  preserveComments?: boolean;
   /**
    * 'true' to use %%foo%% style placeholders, 'false' to use legacy placeholders
    * described by placeholderPattern or placeholderWhitelist.
    * When it is not set, it behaves as 'true' if there are syntactic placeholders,
    * otherwise as 'false'.
    */
-  syntacticPlaceholders?: ?boolean,
+  syntacticPlaceholders?: boolean | null;
 };
 
-export type TemplateOpts = {|
-  parser: ParserOpts,
-  placeholderWhitelist: Set<string> | void,
-  placeholderPattern: RegExp | false | void,
-  preserveComments: boolean | void,
-  syntacticPlaceholders: boolean | void,
-|};
+export type TemplateOpts = {
+  parser: ParserOpts;
+  placeholderWhitelist?: Set<string>;
+  placeholderPattern?: RegExp | false;
+  preserveComments?: boolean;
+  syntacticPlaceholders?: boolean;
+};
 
 export function merge(a: TemplateOpts, b: TemplateOpts): TemplateOpts {
   const {
@@ -73,7 +68,7 @@ export function merge(a: TemplateOpts, b: TemplateOpts): TemplateOpts {
   };
 }
 
-export function validate(opts: mixed): TemplateOpts {
+export function validate(opts: unknown): TemplateOpts {
   if (opts != null && typeof opts !== "object") {
     throw new Error("Unknown template options.");
   }
@@ -84,7 +79,7 @@ export function validate(opts: mixed): TemplateOpts {
     preserveComments,
     syntacticPlaceholders,
     ...parser
-  } = opts || {};
+  } = opts || ({} as any);
 
   if (placeholderWhitelist != null && !(placeholderWhitelist instanceof Set)) {
     throw new Error(
@@ -137,11 +132,11 @@ export function validate(opts: mixed): TemplateOpts {
   };
 }
 
-export type PublicReplacements = { [string]: mixed } | Array<mixed>;
-export type TemplateReplacements = { [string]: mixed } | void;
+export type PublicReplacements = { [x: string]: unknown } | Array<unknown>;
+export type TemplateReplacements = { [x: string]: unknown } | void;
 
 export function normalizeReplacements(
-  replacements: mixed,
+  replacements: unknown,
 ): TemplateReplacements {
   if (Array.isArray(replacements)) {
     return replacements.reduce((acc, replacement, i) => {
@@ -149,7 +144,7 @@ export function normalizeReplacements(
       return acc;
     }, {});
   } else if (typeof replacements === "object" || replacements == null) {
-    return (replacements: any) || undefined;
+    return (replacements as any) || undefined;
   }
 
   throw new Error(

@@ -1,4 +1,3 @@
-// @flow
 import * as t from "@babel/types";
 import type { TraversalAncestors, TraversalHandler } from "@babel/types";
 import { parse } from "@babel/parser";
@@ -7,18 +6,18 @@ import type { TemplateOpts, ParserOpts } from "./options";
 import type { Formatter } from "./formatters";
 
 export type Metadata = {
-  ast: BabelNodeFile,
-  placeholders: Array<Placeholder>,
-  placeholderNames: Set<string>,
+  ast: t.File;
+  placeholders: Array<Placeholder>;
+  placeholderNames: Set<string>;
 };
 
 type PlaceholderType = "string" | "param" | "statement" | "other";
-export type Placeholder = {|
-  name: string,
-  resolve: BabelNodeFile => { parent: BabelNode, key: string, index?: number },
-  type: PlaceholderType,
-  isDuplicate: boolean,
-|};
+export type Placeholder = {
+  name: string;
+  resolve: (a: t.File) => { parent: t.Node; key: string; index?: number };
+  type: PlaceholderType;
+  isDuplicate: boolean;
+};
 
 const PATTERN = /^[_$A-Z0-9]+$/;
 
@@ -44,15 +43,15 @@ export default function parseAndBuildMetadata<T>(
 
   const syntactic = {
     placeholders: [],
-    placeholderNames: new Set(),
+    placeholderNames: new Set<string>(),
   };
   const legacy = {
     placeholders: [],
-    placeholderNames: new Set(),
+    placeholderNames: new Set<string>(),
   };
   const isLegacyRef = { value: undefined };
 
-  t.traverse(ast, (placeholderVisitorHandler: TraversalHandler<*>), {
+  t.traverse(ast, placeholderVisitorHandler as TraversalHandler<any>, {
     syntactic,
     legacy,
     isLegacyRef,
@@ -68,11 +67,11 @@ export default function parseAndBuildMetadata<T>(
 }
 
 function placeholderVisitorHandler(
-  node: BabelNode,
+  node: t.Node,
   ancestors: TraversalAncestors,
   state: MetadataState,
 ) {
-  let name;
+  let name: string;
 
   if (t.isPlaceholder(node)) {
     if (state.syntacticPlaceholders === false) {
@@ -81,16 +80,16 @@ function placeholderVisitorHandler(
           "'.syntacticPlaceholders' is false.",
       );
     } else {
-      name = ((node: any).name: BabelNodeIdentifier).name;
+      name = node.name.name;
       state.isLegacyRef.value = false;
     }
   } else if (state.isLegacyRef.value === false || state.syntacticPlaceholders) {
     return;
   } else if (t.isIdentifier(node) || t.isJSXIdentifier(node)) {
-    name = ((node: any): BabelNodeIdentifier).name;
+    name = node.name;
     state.isLegacyRef.value = true;
   } else if (t.isStringLiteral(node)) {
-    name = ((node: any): BabelNodeStringLiteral).value;
+    name = node.value;
     state.isLegacyRef.value = true;
   } else {
     return;
@@ -156,15 +155,15 @@ function placeholderVisitorHandler(
   placeholderNames.add(name);
 }
 
-function resolveAncestors(ast: BabelNodeFile, ancestors: TraversalAncestors) {
-  let parent: BabelNode = ast;
+function resolveAncestors(ast: t.File, ancestors: TraversalAncestors) {
+  let parent: t.Node = ast;
   for (let i = 0; i < ancestors.length - 1; i++) {
     const { key, index } = ancestors[i];
 
     if (index === undefined) {
-      parent = (parent: any)[key];
+      parent = (parent as any)[key];
     } else {
-      parent = (parent: any)[key][index];
+      parent = (parent as any)[key][index];
     }
   }
 
@@ -175,24 +174,26 @@ function resolveAncestors(ast: BabelNodeFile, ancestors: TraversalAncestors) {
 
 type MetadataState = {
   syntactic: {
-    placeholders: Array<Placeholder>,
-    placeholderNames: Set<string>,
-  },
+    placeholders: Array<Placeholder>;
+    placeholderNames: Set<string>;
+  };
   legacy: {
-    placeholders: Array<Placeholder>,
-    placeholderNames: Set<string>,
-  },
-  isLegacyRef: { value: boolean | void },
-  placeholderWhitelist: Set<string> | void,
-  placeholderPattern: RegExp | false | void,
-  syntacticPlaceholders: boolean | void,
+    placeholders: Array<Placeholder>;
+    placeholderNames: Set<string>;
+  };
+  isLegacyRef: {
+    value?: boolean;
+  };
+  placeholderWhitelist?: Set<string>;
+  placeholderPattern?: RegExp | false;
+  syntacticPlaceholders?: boolean;
 };
 
 function parseWithCodeFrame(
   code: string,
   parserOpts: ParserOpts,
   syntacticPlaceholders?: boolean,
-): BabelNodeFile {
+): t.File {
   const plugins = (parserOpts.plugins || []).slice();
   if (syntacticPlaceholders !== false) {
     plugins.push("placeholders");
@@ -207,7 +208,6 @@ function parseWithCodeFrame(
   };
 
   try {
-    // $FlowFixMe - The parser AST is not the same type as the babel-types type.
     return parse(code, parserOpts);
   } catch (err) {
     const loc = err.loc;
