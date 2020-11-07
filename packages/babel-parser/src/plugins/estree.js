@@ -351,13 +351,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.toAssignable(node, isLHS);
     }
 
-    toAssignableObjectExpressionProp(prop: N.Node, isLast: boolean) {
+    toAssignableObjectExpressionProp(prop: N.Node, ...args) {
       if (prop.kind === "get" || prop.kind === "set") {
         throw this.raise(prop.key.start, Errors.PatternHasAccessor);
       } else if (prop.method) {
         throw this.raise(prop.key.start, Errors.PatternHasMethod);
       } else {
-        super.toAssignableObjectExpressionProp(prop, isLast);
+        super.toAssignableObjectExpressionProp(prop, ...args);
       }
     }
 

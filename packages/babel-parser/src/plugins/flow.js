@@ -1955,6 +1955,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // has not been converted yet.
         ((node.params: any): N.Expression[]),
         node.extra?.trailingComma,
+        /* isLHS */ false,
       );
       // Enter scope, as checkParams defines bindings
       this.scope.enter(SCOPE_FUNCTION | SCOPE_ARROW);
@@ -2204,7 +2205,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     toAssignableList(
       exprList: N.Expression[],
       trailingCommaPos?: ?number,
-      isLHS: boolean = true,
+      isLHS: boolean,
     ): $ReadOnlyArray<N.Pattern> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];

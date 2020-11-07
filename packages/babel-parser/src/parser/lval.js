@@ -99,7 +99,7 @@ export default class LValParser extends NodeUtils {
         ) {
           const prop = node.properties[i];
           const isLast = i === last;
-          this.toAssignableObjectExpressionProp(prop, isLast);
+          this.toAssignableObjectExpressionProp(prop, isLast, isLHS);
 
           if (
             isLast &&
@@ -112,8 +112,7 @@ export default class LValParser extends NodeUtils {
         break;
 
       case "ObjectProperty":
-        // ObjectProperty is not allowed in LHS
-        this.toAssignable(node.value);
+        this.toAssignable(node.value, isLHS);
         break;
 
       case "SpreadElement": {
@@ -137,8 +136,7 @@ export default class LValParser extends NodeUtils {
 
         node.type = "AssignmentPattern";
         delete node.operator;
-        // AssignmentPattern is not allowed in LHS
-        this.toAssignable(node.left);
+        this.toAssignable(node.left, isLHS);
         break;
 
       case "ParenthesizedExpression":
@@ -153,7 +151,11 @@ export default class LValParser extends NodeUtils {
     return node;
   }
 
-  toAssignableObjectExpressionProp(prop: Node, isLast: boolean) {
+  toAssignableObjectExpressionProp(
+    prop: Node,
+    isLast: boolean,
+    isLHS: boolean,
+  ) {
     if (prop.type === "ObjectMethod") {
       const error =
         prop.kind === "get" || prop.kind === "set"
@@ -166,8 +168,7 @@ export default class LValParser extends NodeUtils {
     } else if (prop.type === "SpreadElement" && !isLast) {
       this.raiseRestNotLast(prop.start);
     } else {
-      // ObjectPattern is not allowed in LHS
-      this.toAssignable(prop);
+      this.toAssignable(prop, isLHS);
     }
   }
 
