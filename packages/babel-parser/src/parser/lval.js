@@ -1,5 +1,6 @@
 // @flow
 
+/*:: declare var invariant; */
 import * as charCodes from "charcodes";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import type {
@@ -24,7 +25,7 @@ import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
 import { Errors } from "./error";
 
-const unwrapParenthesizedExpression = (node: Node) => {
+const unwrapParenthesizedExpression = (node: Node): Node => {
   return node.type === "ParenthesizedExpression"
     ? unwrapParenthesizedExpression(node.expression)
     : node;
@@ -112,7 +113,7 @@ export default class LValParser extends NodeUtils {
 
       case "ObjectProperty":
         // ObjectProperty is not allowed in LHS
-        this.toAssignable(node.value, /* isLHS */ false);
+        this.toAssignable(node.value);
         break;
 
       case "SpreadElement": {
@@ -137,11 +138,12 @@ export default class LValParser extends NodeUtils {
         node.type = "AssignmentPattern";
         delete node.operator;
         // AssignmentPattern is not allowed in LHS
-        this.toAssignable(node.left, /* isLHS */ false);
+        this.toAssignable(node.left);
         break;
 
       case "ParenthesizedExpression":
-        this.toAssignable(((parenthesized: any): Expression), isLHS);
+        /*::invariant (parenthesized !== undefined) */
+        this.toAssignable(parenthesized, isLHS);
         break;
 
       default:
