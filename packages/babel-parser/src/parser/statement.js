@@ -528,7 +528,7 @@ export default class StatementParser extends ExpressionParser {
     const refExpressionErrors = new ExpressionErrors();
     const init = this.parseExpression(true, refExpressionErrors);
     if (this.match(tt._in) || this.isContextual("of")) {
-      this.toAssignable(init);
+      this.toAssignable(init, /* isLHS */ true);
       const description = this.isContextual("of")
         ? "for-of statement"
         : "for-in statement";
