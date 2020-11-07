@@ -51,18 +51,32 @@ export default class LValParser extends NodeUtils {
   +parseDecorator: () => Decorator;
   */
 
-  // Convert existing expression atom to assignable pattern
-  // if possible.
-  // NOTE: There is a corresponding "isAssignable" method in flow.js.
-  // When this one is updated, please check if also that one needs to be updated.
+  /**
+   * Convert existing expression atom to assignable pattern
+   * if possible. Also checks invalid destructuring targets:
 
-  toAssignable(node: Node): Node {
+   - Parenthesized Destructuring patterns
+   - RestElement is not the last element
+   - Missing `=` in assignment pattern
+
+   NOTE: There is a corresponding "isAssignable" method in flow.js.
+   When this one is updated, please check if also that one needs to be updated.
+
+   * @param {Node} node The expression atom
+   * @param {boolean} [isLHS=false] Whether we are parsing a LeftHandSideExpression. If isLHS is `true`, the following cases are allowed:
+                                    `[(a)] = [0]`, `[(a.b)] = [0]`
+
+   * @returns {Node} The converted assignable pattern
+   * @memberof LValParser
+   */
+  toAssignable(node: Node, isLHS: boolean = false): Node {
     let parenthesized = undefined;
     if (node.type === "ParenthesizedExpression" || node.extra?.parenthesized) {
       parenthesized = unwrapParenthesizedExpression(node);
       if (
-        parenthesized.type !== "Identifier" &&
-        parenthesized.type !== "MemberExpression"
+        !isLHS ||
+        (parenthesized.type !== "Identifier" &&
+          parenthesized.type !== "MemberExpression")
       ) {
         this.raise(node.start, Errors.InvalidParenthesizedAssignment);
       }
@@ -84,7 +98,7 @@ export default class LValParser extends NodeUtils {
         ) {
           const prop = node.properties[i];
           const isLast = i === last;
-          this.toAssignableObjectExpressionProp(prop, isLast);
+          this.toAssignableObjectExpressionProp(prop, isLast, isLHS);
 
           if (
             isLast &&
@@ -97,7 +111,7 @@ export default class LValParser extends NodeUtils {
         break;
 
       case "ObjectProperty":
-        this.toAssignable(node.value);
+        this.toAssignable(node.value, isLHS);
         break;
 
       case "SpreadElement": {
@@ -105,13 +119,13 @@ export default class LValParser extends NodeUtils {
 
         node.type = "RestElement";
         const arg = node.argument;
-        this.toAssignable(arg);
+        this.toAssignable(arg, isLHS);
         break;
       }
 
       case "ArrayExpression":
         node.type = "ArrayPattern";
-        this.toAssignableList(node.elements, node.extra?.trailingComma);
+        this.toAssignableList(node.elements, node.extra?.trailingComma, isLHS);
         break;
 
       case "AssignmentExpression":
@@ -121,11 +135,11 @@ export default class LValParser extends NodeUtils {
 
         node.type = "AssignmentPattern";
         delete node.operator;
-        this.toAssignable(node.left);
+        this.toAssignable(node.left, isLHS);
         break;
 
       case "ParenthesizedExpression":
-        this.toAssignable(((parenthesized: any): Expression));
+        this.toAssignable(((parenthesized: any): Expression), isLHS);
         break;
 
       default:
@@ -135,7 +149,11 @@ export default class LValParser extends NodeUtils {
     return node;
   }
 
-  toAssignableObjectExpressionProp(prop: Node, isLast: boolean) {
+  toAssignableObjectExpressionProp(
+    prop: Node,
+    isLast: boolean,
+    isLHS: boolean,
+  ) {
     if (prop.type === "ObjectMethod") {
       const error =
         prop.kind === "get" || prop.kind === "set"
@@ -148,7 +166,7 @@ export default class LValParser extends NodeUtils {
     } else if (prop.type === "SpreadElement" && !isLast) {
       this.raiseRestNotLast(prop.start);
     } else {
-      this.toAssignable(prop);
+      this.toAssignable(prop, isLHS);
     }
   }
 
@@ -157,6 +175,7 @@ export default class LValParser extends NodeUtils {
   toAssignableList(
     exprList: Expression[],
     trailingCommaPos?: ?number,
+    isLHS: boolean,
   ): $ReadOnlyArray<Pattern> {
     let end = exprList.length;
     if (end) {
@@ -166,7 +185,7 @@ export default class LValParser extends NodeUtils {
       } else if (last?.type === "SpreadElement") {
         last.type = "RestElement";
         const arg = last.argument;
-        this.toAssignable(arg);
+        this.toAssignable(arg, isLHS);
         if (
           arg.type !== "Identifier" &&
           arg.type !== "MemberExpression" &&
@@ -186,7 +205,7 @@ export default class LValParser extends NodeUtils {
     for (let i = 0; i < end; i++) {
       const elt = exprList[i];
       if (elt) {
-        this.toAssignable(elt);
+        this.toAssignable(elt, isLHS);
         if (elt.type === "RestElement") {
           this.raiseRestNotLast(elt.start);
         }
