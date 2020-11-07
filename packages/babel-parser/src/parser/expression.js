@@ -1409,12 +1409,6 @@ export default class ExpressionParser extends LValParser {
     ) {
       this.expressionScope.validateAsPattern();
       this.expressionScope.exit();
-      for (const param of exprList) {
-        if (param.extra && param.extra.parenthesized) {
-          this.unexpected(param.extra.parenStart);
-        }
-      }
-
       this.parseArrowExpression(arrowNode, exprList, false);
       return arrowNode;
     }

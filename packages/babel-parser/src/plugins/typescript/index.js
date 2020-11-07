@@ -2596,19 +2596,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return param;
     }
 
-    toAssignable(node: N.Node): N.Node {
+    toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
       switch (node.type) {
         case "TSTypeCastExpression":
-          return super.toAssignable(this.typeCastToParameter(node));
+          return super.toAssignable(this.typeCastToParameter(node), isLHS);
         case "TSParameterProperty":
-          return super.toAssignable(node);
+          return super.toAssignable(node, isLHS);
         case "TSAsExpression":
         case "TSNonNullExpression":
         case "TSTypeAssertion":
-          node.expression = this.toAssignable(node.expression);
+          node.expression = this.toAssignable(node.expression, isLHS);
           return node;
         default:
-          return super.toAssignable(node);
+          return super.toAssignable(node, isLHS);
       }
     }
 

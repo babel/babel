@@ -98,7 +98,7 @@ export default class LValParser extends NodeUtils {
         ) {
           const prop = node.properties[i];
           const isLast = i === last;
-          this.toAssignableObjectExpressionProp(prop, isLast, isLHS);
+          this.toAssignableObjectExpressionProp(prop, isLast);
 
           if (
             isLast &&
@@ -111,7 +111,8 @@ export default class LValParser extends NodeUtils {
         break;
 
       case "ObjectProperty":
-        this.toAssignable(node.value, isLHS);
+        // ObjectProperty is not allowed in LHS
+        this.toAssignable(node.value, /* isLHS */ false);
         break;
 
       case "SpreadElement": {
@@ -135,7 +136,8 @@ export default class LValParser extends NodeUtils {
 
         node.type = "AssignmentPattern";
         delete node.operator;
-        this.toAssignable(node.left, isLHS);
+        // AssignmentPattern is not allowed in LHS
+        this.toAssignable(node.left, /* isLHS */ false);
         break;
 
       case "ParenthesizedExpression":
@@ -149,11 +151,7 @@ export default class LValParser extends NodeUtils {
     return node;
   }
 
-  toAssignableObjectExpressionProp(
-    prop: Node,
-    isLast: boolean,
-    isLHS: boolean,
-  ) {
+  toAssignableObjectExpressionProp(prop: Node, isLast: boolean) {
     if (prop.type === "ObjectMethod") {
       const error =
         prop.kind === "get" || prop.kind === "set"
@@ -166,7 +164,8 @@ export default class LValParser extends NodeUtils {
     } else if (prop.type === "SpreadElement" && !isLast) {
       this.raiseRestNotLast(prop.start);
     } else {
-      this.toAssignable(prop, isLHS);
+      // ObjectPattern is not allowed in LHS
+      this.toAssignable(prop);
     }
   }
 
@@ -184,8 +183,9 @@ export default class LValParser extends NodeUtils {
         --end;
       } else if (last?.type === "SpreadElement") {
         last.type = "RestElement";
-        const arg = last.argument;
+        let arg = last.argument;
         this.toAssignable(arg, isLHS);
+        arg = unwrapParenthesizedExpression(arg);
         if (
           arg.type !== "Identifier" &&
           arg.type !== "MemberExpression" &&
