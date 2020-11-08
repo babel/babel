@@ -401,7 +401,15 @@ export const functionDeclarationCommon = {
 };
 
 defineType("FunctionDeclaration", {
-  builder: ["id", "params", "body", "generator", "async"],
+  builder: [
+    "id",
+    "params",
+    "body",
+    "generator",
+    "async",
+    "returnType",
+    "typeParameters",
+  ],
   visitor: ["id", "params", "body", "returnType", "typeParameters"],
   fields: {
     ...functionDeclarationCommon,
@@ -1209,7 +1217,15 @@ defineType("ArrayPattern", {
 });
 
 defineType("ArrowFunctionExpression", {
-  builder: ["params", "body", "async"],
+  builder: [
+    "params",
+    "body",
+    "async",
+    "expression",
+    "generator",
+    "returnType",
+    "typeParameters",
+  ],
   visitor: ["params", "body", "returnType", "typeParameters"],
   aliases: [
     "Scopable",

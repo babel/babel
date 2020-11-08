@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`builders core functionExpression accept all parameters 1`] = `
+Object {
+  "async": true,
+  "body": Object {
+    "body": Array [
+      Object {
+        "argument": Object {
+          "type": "ThisExpression",
+        },
+        "type": "ReturnStatement",
+      },
+    ],
+    "directives": Array [],
+    "type": "BlockStatement",
+  },
+  "generator": true,
+  "id": Object {
+    "name": "foo",
+    "type": "Identifier",
+  },
+  "params": Array [
+    Object {
+      "name": "bar",
+      "type": "Identifier",
+    },
+  ],
+  "returnType": Object {
+    "type": "TSTypeAnnotation",
+    "typeAnnotation": Object {
+      "type": "TSStringKeyword",
+    },
+  },
+  "type": "FunctionExpression",
+  "typeParameters": Object {
+    "params": Array [
+      Object {
+        "constraint": Object {
+          "type": "TSObjectKeyword",
+        },
+        "default": null,
+        "name": "bar",
+        "type": "TSTypeParameter",
+      },
+    ],
+    "type": "TSTypeParameterDeclaration",
+  },
+}
+`;
