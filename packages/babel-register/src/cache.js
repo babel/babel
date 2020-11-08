@@ -49,15 +49,13 @@ export function save() {
       case "EACCES":
       case "EPERM":
         console.warn(
-          `Babel could not write cache to file: ${FILENAME} 
-due to a permission issue. Cache is disabled.`,
+          `Babel could not write cache to file: ${FILENAME} due to a permission issue. Cache is disabled.`,
         );
         cacheDisabled = true;
         break;
       case "EROFS":
         console.warn(
-          `Babel could not write cache to file: ${FILENAME} 
-because it resides in a readonly filesystem. Cache is disabled.`,
+          `Babel could not write cache to file: ${FILENAME} because it resides in a readonly filesystem. Cache is disabled.`,
         );
         cacheDisabled = true;
         break;
@@ -90,8 +88,7 @@ export function load() {
       // https://github.com/libuv/libuv/blob/076df64dbbda4320f93375913a728efc40e12d37/src/win/fs.c#L735
       case "EACCES":
         console.warn(
-          `Babel could not read cache file: ${FILENAME}
-due to a permission issue. Cache is disabled.`,
+          `Babel could not read cache file: ${FILENAME} due to a permission issue. Cache is disabled.`,
         );
         cacheDisabled = true;
       /* fall through */

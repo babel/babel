@@ -3,7 +3,7 @@ import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
 import escapeRegExp from "lodash/escapeRegExp";
 import * as babel from "@babel/core";
-import { OptionManager, DEFAULT_EXTENSIONS } from "@babel/core";
+import { DEFAULT_EXTENSIONS, OptionManager } from "@babel/core";
 import { addHook } from "pirates";
 import fs from "fs";
 import path from "path";
@@ -38,11 +38,16 @@ function mtime(filename) {
 
 function compile(code, filename) {
   // merge in base options and resolve all the plugins and presets relative to this file
-  const opts = new OptionManager().init(
+  if (cache && !cache.opts) {
+    cache.opts = JSON.stringify(transformOpts);
+  }
+  const isOptionsCached = JSON.stringify(transformOpts) === cache?.opts;
+  const options = isOptionsCached ? transformOpts : JSON.parse(cache.opts);
+  const opts = new OptionManager.init(
     // sourceRoot can be overwritten
     {
       sourceRoot: path.dirname(filename) + path.sep,
-      ...deepClone(transformOpts),
+      ...deepClone(options),
       filename,
     },
   );
@@ -110,18 +115,6 @@ export default function register(opts?: Object = {}) {
   opts = {
     ...opts,
   };
-  hookExtensions(opts.extensions || DEFAULT_EXTENSIONS);
-
-  if (opts.cache === false && cache) {
-    registerCache.clear();
-    cache = null;
-  } else if (opts.cache !== false && !cache) {
-    registerCache.load();
-    cache = registerCache.get();
-  }
-
-  delete opts.extensions;
-  delete opts.cache;
 
   transformOpts = {
     ...opts,
@@ -136,7 +129,6 @@ export default function register(opts?: Object = {}) {
   // Ensure that the working directory is resolved up front so that
   // things don't break if it changes later.
   cwd = transformOpts.cwd = path.resolve(cwd);
-
   if (transformOpts.ignore === undefined && transformOpts.only === undefined) {
     transformOpts.only = [
       // Only compile things inside the current working directory.
@@ -155,4 +147,16 @@ export default function register(opts?: Object = {}) {
       ),
     ];
   }
+
+  if (opts.cache === false && cache) {
+    registerCache.clear();
+    cache = null;
+  } else if (opts.cache !== false && !cache) {
+    registerCache.load();
+    cache = registerCache.get();
+  }
+  hookExtensions(opts.extensions || DEFAULT_EXTENSIONS);
+
+  delete opts.extensions;
+  delete opts.cache;
 }

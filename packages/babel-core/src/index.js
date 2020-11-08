@@ -53,6 +53,11 @@ export const DEFAULT_EXTENSIONS = Object.freeze([
 import { loadOptions } from "./config";
 export class OptionManager {
   init(opts: {}) {
+    const { ignore, filename, sourceRoot } = opts;
+    const cleanedFileName = filename.replace(sourceRoot, "");
+    if (ignore.find(file => file.includes(cleanedFileName))) {
+      return null;
+    }
     return loadOptions(opts);
   }
 }
