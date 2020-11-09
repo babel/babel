@@ -1,12 +1,12 @@
 var _react = require("react");
 
-var _reactJsxRuntime = require("react/jsx-runtime");
+var _reactJsxRuntimeJs = require("react/jsx-runtime.js");
 
-var x = /*#__PURE__*/_reactJsxRuntime.jsx(_reactJsxRuntime.Fragment, {
-  children: /*#__PURE__*/_reactJsxRuntime.jsxs("div", {
-    children: [/*#__PURE__*/_reactJsxRuntime.jsx("div", {}, "1"), /*#__PURE__*/_reactJsxRuntime.jsx("div", {
+var x = /*#__PURE__*/_reactJsxRuntimeJs.jsx(_reactJsxRuntimeJs.Fragment, {
+  children: /*#__PURE__*/_reactJsxRuntimeJs.jsxs("div", {
+    children: [/*#__PURE__*/_reactJsxRuntimeJs.jsx("div", {}, "1"), /*#__PURE__*/_reactJsxRuntimeJs.jsx("div", {
       meow: "wolf"
-    }, "2"), /*#__PURE__*/_reactJsxRuntime.jsx("div", {}, "3"), /*#__PURE__*/_react.createElement("div", { ...props,
+    }, "2"), /*#__PURE__*/_reactJsxRuntimeJs.jsx("div", {}, "3"), /*#__PURE__*/_react.createElement("div", { ...props,
       key: "4"
     })]
   })

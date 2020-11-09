@@ -18,6 +18,10 @@ export type Targets = {
   [target: Target]: string,
 };
 
+export type TargetsTuple = {|
+  [target: Target]: string,
+|};
+
 export type Browsers = string | Array<string>;
 
 export type InputTargets = {

@@ -8,7 +8,7 @@ export function hasMinVersion(minVersion, runtimeVersion) {
   if (!runtimeVersion) return true;
 
   // semver.intersects() has some surprising behavior with comparing ranges
-  // with preprelease versions. We add '^' to ensure that we are always
+  // with pre-release versions. We add '^' to ensure that we are always
   // comparing ranges with ranges, which sidesteps this logic.
   // For example:
   //

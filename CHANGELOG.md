@@ -19,6 +19,39 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.11.6 (2020-09-03)
+
+#### :house: Internal
+* [#12028](https://github.com/babel/babel/pull/12028) Run prepublish build after versioning ([@JLHwung](https://github.com/JLHwung))
+
+#### :leftwards_arrow_with_hook: Revert
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-helper-transform-fixture-test-runner`
+  * [#12027](https://github.com/babel/babel/pull/12027) Revert #12014 ([@JLHwung](https://github.com/JLHwung))
+## v7.11.5 (2020-08-31)
+
+#### :bug: Bug Fix
+* `babel-helper-builder-react-jsx-experimental`, `babel-plugin-transform-react-jsx-development`
+  * [#12017](https://github.com/babel/babel/pull/12017) Fix `jsxDEV` for generated elements ([@Timer](https://github.com/Timer))
+* `babel-parser`
+  * [#11931](https://github.com/babel/babel/pull/11931) fix: ExpressionBody should respect [In] parameter ([@JLHwung](https://github.com/JLHwung))
+  * [#11987](https://github.com/babel/babel/pull/11987) Set generator to true during error recovery of accessor ([@existentialism](https://github.com/existentialism))
+* Other
+  * [#11993](https://github.com/babel/babel/pull/11993) Added linting support for private class methods ([@giovannicalo](https://github.com/giovannicalo))
+* `babel-plugin-proposal-function-bind`
+  * [#12000](https://github.com/babel/babel/pull/12000) fix(plugin-proposal-function-bind): fix invalid code emitted for `::super.foo` ([@uhyo](https://github.com/uhyo))
+
+#### :nail_care: Polish
+* `babel-traverse`
+  * [#11832](https://github.com/babel/babel/pull/11832) Forward deopt node path ([@johanholmerin](https://github.com/johanholmerin))
+
+#### :house: Internal
+* Other
+  * [#12013](https://github.com/babel/babel/pull/12013) Remove unused enhanced-resolve and normalize lock resolutions ([@JLHwung](https://github.com/JLHwung))
+  * [#12010](https://github.com/babel/babel/pull/12010) chore: use Rollup 2 ([@JLHwung](https://github.com/JLHwung))
+  * [#12002](https://github.com/babel/babel/pull/12002) Restructure CI workflow ([@JLHwung](https://github.com/JLHwung))
+  * [#11781](https://github.com/babel/babel/pull/11781) chore: improve Yarn 2 cache on CI ([@JLHwung](https://github.com/JLHwung))
+* _Every package_
+  * [#11962](https://github.com/babel/babel/pull/11962) Use Yarn 2 ([@JLHwung](https://github.com/JLHwung))
 ## v7.11.4 (2020-08-20)
 
 #### :bug: Bug Fix

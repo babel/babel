@@ -4,3 +4,9 @@ var foo = arr.map(v => ({
 }));
 
 var fn = () => ({}).key;
+
+var fn2 = () => ({});
+
+var fn3 = () => ({
+  a
+} = {});

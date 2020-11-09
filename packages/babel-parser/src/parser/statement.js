@@ -1016,7 +1016,11 @@ export default class StatementParser extends ExpressionParser {
           // `const` with no initializer is allowed in TypeScript.
           // It could be a declaration like `const x: number;`.
           if (!isTypescript) {
-            this.unexpected();
+            this.raise(
+              this.state.lastTokEnd,
+              Errors.DeclarationMissingInitializer,
+              "Const declarations",
+            );
           }
         } else if (
           decl.id.type !== "Identifier" &&
@@ -1083,7 +1087,7 @@ export default class StatementParser extends ExpressionParser {
       node.id = this.parseFunctionId();
     }
 
-    this.parseFunctionParams(node);
+    this.parseFunctionParams(node, /* allowModifiers */ false);
 
     // For the smartPipelines plugin: Disable topic references from outer
     // contexts within the function body. They are permitted in function

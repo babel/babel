@@ -317,7 +317,7 @@ export function TSParenthesizedType(node) {
 }
 
 export function TSTypeOperator(node) {
-  this.token(node.operator);
+  this.word(node.operator);
   this.space();
   this.print(node.typeAnnotation, node);
 }

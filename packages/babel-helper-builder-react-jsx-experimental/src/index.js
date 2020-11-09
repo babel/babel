@@ -342,12 +342,12 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       case "Fragment":
         return `${source}/${
           options.development ? "jsx-dev-runtime" : "jsx-runtime"
-        }`;
+        }.js`;
       case "jsxDEV":
-        return `${source}/jsx-dev-runtime`;
+        return `${source}/jsx-dev-runtime.js`;
       case "jsx":
       case "jsxs":
-        return `${source}/jsx-runtime`;
+        return `${source}/jsx-runtime.js`;
       case "createElement":
         return source;
     }
@@ -437,7 +437,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     const location = path.node.loc;
     if (!location) {
       // the element was generated and doesn't have location information
-      return;
+      return path.scope.buildUndefinedNode();
     }
 
     if (!state.fileNameIdentifier) {
