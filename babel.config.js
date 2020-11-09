@@ -103,6 +103,10 @@ module.exports = function (api) {
       .filter(Boolean)
       .map(normalize),
     presets: [
+      [
+        "@babel/preset-typescript",
+        { onlyRemoveTypeImports: true, allowDeclareFields: true },
+      ],
       ["@babel/env", envOpts],
       ["@babel/preset-flow", { allowDeclareFields: true }],
     ],

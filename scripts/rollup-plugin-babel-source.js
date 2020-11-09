@@ -81,13 +81,21 @@ module.exports = function () {
           ? packageJson["browser"]
           : packageJson["main"];
 
-      return path.normalize(
+      const asJS = path.normalize(
         path.join(
           packageFolder,
           // replace lib with src in the package.json entry
           filename.replace(/^(\.\/)?lib\//, "src/")
         )
       );
+      const asTS = asJS.replace(/\.js$/, ".ts");
+
+      try {
+        fs.statSync(asTS);
+        return asTS;
+      } catch {
+        return asJS;
+      }
     },
   };
 };
