@@ -18,26 +18,19 @@ export default class Binding {
     this.path = path;
     this.kind = kind;
 
-    this.constantViolations = [];
-    this.constant = true;
-
-    this.referencePaths = [];
-    this.referenced = false;
-    this.references = 0;
-
     this.clearValue();
   }
 
-  constantViolations: Array<NodePath>;
-  constant: boolean;
+  constantViolations: Array<NodePath> = [];
+  constant: boolean = true;
 
-  referencePaths: Array<NodePath>;
-  referenced: boolean;
-  references: number;
+  referencePaths: Array<NodePath> = [];
+  referenced: boolean = false;
+  references: number = 0;
 
-  hasDeoptedValue: boolean;
-  hasValue: boolean;
-  value: any;
+  declare hasDeoptedValue: boolean;
+  declare hasValue: boolean;
+  declare value: any;
 
   deoptValue() {
     this.clearValue();

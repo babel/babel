@@ -871,7 +871,7 @@ helpers.taggedTemplateLiteralLoose = helper("7.0.0-beta.0")`
 
 helpers.readOnlyError = helper("7.0.0-beta.0")`
   export default function _readOnlyError(name) {
-    throw new Error("\\"" + name + "\\" is read-only");
+    throw new TypeError("\\"" + name + "\\" is read-only");
   }
 `;
 

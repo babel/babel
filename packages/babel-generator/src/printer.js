@@ -33,10 +33,10 @@ export default class Printer {
     this._buf = new Buffer(map);
   }
 
-  format: Format;
+  declare format: Format;
   inForStatementInitCounter: number = 0;
 
-  _buf: Buffer;
+  declare _buf: Buffer;
   _printStack: Array<Node> = [];
   _indent: number = 0;
   _insideAux: boolean = false;
@@ -612,7 +612,7 @@ export default class Printer {
 
       const indentSize = Math.max(
         this._getIndent().length,
-        this._buf.getCurrentColumn(),
+        this.format.retainLines ? 0 : this._buf.getCurrentColumn(),
       );
       val = val.replace(/\n(?!$)/g, `\n${" ".repeat(indentSize)}`);
     }
@@ -644,6 +644,19 @@ export default class Printer {
       for (const comment of comments) {
         this._printComment(comment);
       }
+    }
+  }
+
+  printAssertions(node: Node) {
+    if (node.assertions?.length) {
+      this.space();
+      this.word("assert");
+      this.space();
+      this.token("{");
+      this.space();
+      this.printList(node.assertions, node);
+      this.space();
+      this.token("}");
     }
   }
 }

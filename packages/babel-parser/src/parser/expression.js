@@ -49,6 +49,11 @@ import {
   PARAM,
   functionFlags,
 } from "../util/production-parameter";
+import {
+  newArrowHeadScope,
+  newAsyncArrowScope,
+  newExpressionScope,
+} from "../util/expression-scope.js";
 import { Errors } from "./error";
 
 export default class ExpressionParser extends LValParser {
@@ -236,15 +241,15 @@ export default class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
     if (this.isContextual("yield")) {
       if (this.prodParam.hasYield) {
+        // If we have [Yield] production, `yield` will start a YieldExpression thus
+        // regex is allowed following. Otherwise `yield` is an identifier and regex
+        // is disallowed in tt.name.updateContext
+        this.state.exprAllowed = true;
         let left = this.parseYield();
         if (afterLeftParse) {
           left = afterLeftParse.call(this, left, startPos, startLoc);
         }
         return left;
-      } else {
-        // The tokenizer will assume an expression is allowed after
-        // `yield`, but this isn't that kind of yield
-        this.state.exprAllowed = false;
       }
     }
 
@@ -581,15 +586,10 @@ export default class ExpressionParser extends LValParser {
       stop: false,
     };
     do {
-      const oldMaybeInAsyncArrowHead = this.state.maybeInAsyncArrowHead;
-      if (state.maybeAsyncArrow) {
-        this.state.maybeInAsyncArrowHead = true;
-      }
       base = this.parseSubscript(base, startPos, startLoc, noCalls, state);
 
       // After parsing a subscript, this isn't "async" for sure.
       state.maybeAsyncArrow = false;
-      this.state.maybeInAsyncArrowHead = oldMaybeInAsyncArrowHead;
     } while (!state.stop);
     return base;
   }
@@ -714,16 +714,15 @@ export default class ExpressionParser extends LValParser {
     optional: boolean,
   ): N.Expression {
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    const oldYieldPos = this.state.yieldPos;
-    const oldAwaitPos = this.state.awaitPos;
     this.state.maybeInArrowParameters = true;
-    this.state.yieldPos = -1;
-    this.state.awaitPos = -1;
 
     this.next(); // eat `(`
 
     let node = this.startNodeAt(startPos, startLoc);
     node.callee = base;
+    if (state.maybeAsyncArrow) {
+      this.expressionScope.enter(newAsyncArrowScope());
+    }
 
     if (state.optionalChainMember) {
       node.optional = optional;
@@ -743,52 +742,29 @@ export default class ExpressionParser extends LValParser {
 
     if (state.maybeAsyncArrow && this.shouldParseAsyncArrow() && !optional) {
       state.stop = true;
-
+      this.expressionScope.validateAsPattern();
+      this.expressionScope.exit();
       node = this.parseAsyncArrowFromCallExpression(
         this.startNodeAt(startPos, startLoc),
         node,
       );
-      this.checkYieldAwaitInDefaultParams();
-      this.state.yieldPos = oldYieldPos;
-      this.state.awaitPos = oldAwaitPos;
     } else {
-      this.toReferencedListDeep(node.arguments);
-
-      // We keep the old value if it isn't null, for cases like
-      //   (x = async(yield)) => {}
-      //
-      // Hi developer of the future :) If you are implementing generator
-      // arrow functions, please read the note below about "await" and
-      // verify if the same logic is needed for yield.
-      if (oldYieldPos !== -1) this.state.yieldPos = oldYieldPos;
-
-      // Await is trickier than yield. When parsing a possible arrow function
-      // (e.g. something starting with `async(`) we don't know if its possible
-      // parameters will actually be inside an async arrow function or if it is
-      // a normal call expression.
-      // If it ended up being a call expression, if we are in a context where
-      // await expression are disallowed (and thus "await" is an identifier)
-      // we must be careful not to leak this.state.awaitPos to an even outer
-      // context, where "await" could not be an identifier.
-      // For example, this code is valid because "await" isn't directly inside
-      // an async function:
-      //
-      //     async function a() {
-      //       function b(param = async (await)) {
-      //       }
-      //     }
-      //
-      if (
-        (!this.isAwaitAllowed() && !oldMaybeInArrowParameters) ||
-        oldAwaitPos !== -1
-      ) {
-        this.state.awaitPos = oldAwaitPos;
+      if (state.maybeAsyncArrow) {
+        this.expressionScope.exit();
       }
+      this.toReferencedArguments(node);
     }
 
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
 
     return node;
+  }
+
+  toReferencedArguments(
+    node: N.CallExpression | N.OptionalCallExpression,
+    isParenthesizedExpr?: boolean,
+  ) {
+    this.toReferencedListDeep(node.arguments, isParenthesizedExpr);
   }
 
   // MemberExpression [?Yield, ?Await] TemplateLiteral[?Yield, ?Await, +Tagged]
@@ -1199,24 +1175,15 @@ export default class ExpressionParser extends LValParser {
   // async [no LineTerminator here] AsyncArrowBindingIdentifier[?Yield] [no LineTerminator here] => AsyncConciseBody[?In]
   parseAsyncArrowUnaryFunction(id: N.Expression): N.ArrowFunctionExpression {
     const node = this.startNodeAtNode(id);
-    const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    const oldMaybeInAsyncArrowHead = this.state.maybeInAsyncArrowHead;
-    const oldYieldPos = this.state.yieldPos;
-    const oldAwaitPos = this.state.awaitPos;
-    this.state.maybeInArrowParameters = true;
-    this.state.maybeInAsyncArrowHead = true;
-    this.state.yieldPos = -1;
-    this.state.awaitPos = -1;
+    // We don't need to push a new ParameterDeclarationScope here since we are sure
+    // 1) it is an async arrow, 2) no biding pattern is allowed in params
+    this.prodParam.enter(functionFlags(true, this.prodParam.hasYield));
     const params = [this.parseIdentifier()];
+    this.prodParam.exit();
     if (this.hasPrecedingLineBreak()) {
       this.raise(this.state.pos, Errors.LineTerminatorBeforeArrow);
     }
     this.expect(tt.arrow);
-    this.checkYieldAwaitInDefaultParams();
-    this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
-    this.state.maybeInAsyncArrowHead = oldMaybeInAsyncArrowHead;
-    this.state.yieldPos = oldYieldPos;
-    this.state.awaitPos = oldAwaitPos;
     // let foo = async bar => {};
     this.parseArrowExpression(node, params, true);
     return node;
@@ -1386,14 +1353,11 @@ export default class ExpressionParser extends LValParser {
 
     let val;
     this.next(); // eat `(`
+    this.expressionScope.enter(newArrowHeadScope());
 
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    const oldYieldPos = this.state.yieldPos;
-    const oldAwaitPos = this.state.awaitPos;
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
     this.state.maybeInArrowParameters = true;
-    this.state.yieldPos = -1;
-    this.state.awaitPos = -1;
     this.state.inFSharpPipelineDirectBody = false;
 
     const innerStartPos = this.state.start;
@@ -1455,12 +1419,8 @@ export default class ExpressionParser extends LValParser {
       this.shouldParseArrow() &&
       (arrowNode = this.parseArrow(arrowNode))
     ) {
-      if (!this.isAwaitAllowed() && !this.state.maybeInAsyncArrowHead) {
-        this.state.awaitPos = oldAwaitPos;
-      }
-      this.checkYieldAwaitInDefaultParams();
-      this.state.yieldPos = oldYieldPos;
-      this.state.awaitPos = oldAwaitPos;
+      this.expressionScope.validateAsPattern();
+      this.expressionScope.exit();
       for (const param of exprList) {
         if (param.extra && param.extra.parenthesized) {
           this.unexpected(param.extra.parenStart);
@@ -1470,11 +1430,7 @@ export default class ExpressionParser extends LValParser {
       this.parseArrowExpression(arrowNode, exprList, false);
       return arrowNode;
     }
-
-    // We keep the old value if it isn't null, for cases like
-    //   (x = (yield)) => {}
-    if (oldYieldPos !== -1) this.state.yieldPos = oldYieldPos;
-    if (oldAwaitPos !== -1) this.state.awaitPos = oldAwaitPos;
+    this.expressionScope.exit();
 
     if (!exprList.length) {
       this.unexpected(this.state.lastTokStart);
@@ -1647,14 +1603,13 @@ export default class ExpressionParser extends LValParser {
     node.properties = [];
     this.next();
 
-    while (!this.eat(close)) {
+    while (!this.match(close)) {
       if (first) {
         first = false;
       } else {
         this.expect(tt.comma);
         if (this.match(close)) {
           this.addExtra(node, "trailingComma", this.state.lastTokStart);
-          this.next();
           break;
         }
       }
@@ -1680,6 +1635,13 @@ export default class ExpressionParser extends LValParser {
 
       node.properties.push(prop);
     }
+
+    // The tokenizer uses `braceIsBlock` to detect whether `{` starts a block statement.
+    // If `{` is a block statement, `exprAllowed` will be `true`.
+    // However the tokenizer can not handle edge cases like `0 ? a : { a : 1 } / 2`, here
+    // we update `exprAllowed` when an object-like is parsed.
+    this.state.exprAllowed = false;
+    this.next();
 
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
     let type = "ObjectExpression";
@@ -2009,11 +1971,6 @@ export default class ExpressionParser extends LValParser {
     type: string,
     inClassScope: boolean = false,
   ): T {
-    const oldYieldPos = this.state.yieldPos;
-    const oldAwaitPos = this.state.awaitPos;
-    this.state.yieldPos = -1;
-    this.state.awaitPos = -1;
-
     this.initFunction(node, isAsync);
     node.generator = !!isGenerator;
     const allowModifiers = isConstructor; // For TypeScript parameter properties
@@ -2028,9 +1985,6 @@ export default class ExpressionParser extends LValParser {
     this.parseFunctionBodyAndFinish(node, type, true);
     this.prodParam.exit();
     this.scope.exit();
-
-    this.state.yieldPos = oldYieldPos;
-    this.state.awaitPos = oldAwaitPos;
 
     return node;
   }
@@ -2057,14 +2011,6 @@ export default class ExpressionParser extends LValParser {
       refExpressionErrors,
       node,
     );
-    if (canBePattern && !this.state.maybeInArrowParameters) {
-      // This could be an array pattern:
-      //   ([a: string, b: string]) => {}
-      // In this case, we don't have to call toReferencedList. We will
-      // call it, if needed, when we are sure that it is a parenthesized
-      // expression by calling toReferencedListDeep.
-      this.toReferencedList(node.elements);
-    }
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
     return this.finishNode(
       node,
@@ -2090,23 +2036,17 @@ export default class ExpressionParser extends LValParser {
     this.prodParam.enter(flags);
     this.initFunction(node, isAsync);
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    const oldYieldPos = this.state.yieldPos;
-    const oldAwaitPos = this.state.awaitPos;
 
     if (params) {
       this.state.maybeInArrowParameters = true;
       this.setArrowFunctionParameters(node, params, trailingCommaPos);
     }
     this.state.maybeInArrowParameters = false;
-    this.state.yieldPos = -1;
-    this.state.awaitPos = -1;
     this.parseFunctionBody(node, true);
 
     this.prodParam.exit();
     this.scope.exit();
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
-    this.state.yieldPos = oldYieldPos;
-    this.state.awaitPos = oldAwaitPos;
 
     return this.finishNode(node, "ArrowFunctionExpression");
   }
@@ -2136,8 +2076,7 @@ export default class ExpressionParser extends LValParser {
     isMethod?: boolean = false,
   ): void {
     const isExpression = allowExpression && !this.match(tt.braceL);
-    const oldInParameters = this.state.inParameters;
-    this.state.inParameters = false;
+    this.expressionScope.enter(newExpressionScope());
 
     if (isExpression) {
       // https://tc39.es/ecma262/#prod-ExpressionBody
@@ -2197,10 +2136,9 @@ export default class ExpressionParser extends LValParser {
         },
       );
       this.prodParam.exit();
+      this.expressionScope.exit();
       this.state.labels = oldLabels;
     }
-
-    this.state.inParameters = oldInParameters;
   }
 
   isSimpleParamList(
@@ -2382,12 +2320,11 @@ export default class ExpressionParser extends LValParser {
       if (this.prodParam.hasAwait) {
         this.raise(startLoc, Errors.AwaitBindingIdentifier);
         return;
-      }
-      if (
-        this.state.awaitPos === -1 &&
-        (this.state.maybeInAsyncArrowHead || this.isAwaitAllowed())
-      ) {
-        this.state.awaitPos = this.state.start;
+      } else {
+        this.expressionScope.recordAsyncArrowParametersError(
+          startLoc,
+          Errors.AwaitBindingIdentifier,
+        );
       }
     }
 
@@ -2412,7 +2349,12 @@ export default class ExpressionParser extends LValParser {
 
     if (reservedTest(word, this.inModule)) {
       if (!this.prodParam.hasAwait && word === "await") {
-        this.raise(startLoc, Errors.AwaitNotInAsyncFunction);
+        this.raise(
+          startLoc,
+          this.hasPlugin("topLevelAwait")
+            ? Errors.AwaitNotInAsyncContext
+            : Errors.AwaitNotInAsyncFunction,
+        );
       } else {
         this.raise(startLoc, Errors.UnexpectedReservedWord, word);
       }
@@ -2435,11 +2377,11 @@ export default class ExpressionParser extends LValParser {
 
     this.next();
 
-    if (this.state.inParameters) {
-      this.raise(node.start, Errors.AwaitExpressionFormalParameter);
-    } else if (this.state.awaitPos === -1) {
-      this.state.awaitPos = node.start;
-    }
+    this.expressionScope.recordParameterInitializerError(
+      node.start,
+      Errors.AwaitExpressionFormalParameter,
+    );
+
     if (this.eat(tt.star)) {
       this.raise(node.start, Errors.ObsoleteAwaitStar);
     }
@@ -2479,11 +2421,10 @@ export default class ExpressionParser extends LValParser {
   parseYield(): N.YieldExpression {
     const node = this.startNode();
 
-    if (this.state.inParameters) {
-      this.raise(node.start, Errors.YieldInParameter);
-    } else if (this.state.yieldPos === -1) {
-      this.state.yieldPos = node.start;
-    }
+    this.expressionScope.recordParameterInitializerError(
+      node.start,
+      Errors.YieldInParameter,
+    );
 
     this.next();
     if (

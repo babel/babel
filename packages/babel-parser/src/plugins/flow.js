@@ -13,7 +13,7 @@ import type { Pos, Position } from "../util/location";
 import type State from "../tokenizer/state";
 import { types as tc } from "../tokenizer/context";
 import * as charCodes from "charcodes";
-import { isIteratorStart } from "../util/identifier";
+import { isIteratorStart, isKeyword } from "../util/identifier";
 import {
   type BindingTypes,
   BIND_NONE,
@@ -1735,21 +1735,23 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.match(tt.name) &&
         this.state.value === "interface"
       ) {
-        const node = this.startNode();
-        this.next();
-        return this.flowParseInterface(node);
+        const lookahead = this.lookahead();
+        if (lookahead.type === tt.name || isKeyword(lookahead.value)) {
+          const node = this.startNode();
+          this.next();
+          return this.flowParseInterface(node);
+        }
       } else if (this.shouldParseEnums() && this.isContextual("enum")) {
         const node = this.startNode();
         this.next();
         return this.flowParseEnumDeclaration(node);
-      } else {
-        const stmt = super.parseStatement(context, topLevel);
-        // We will parse a flow pragma in any comment before the first statement.
-        if (this.flowPragma === undefined && !this.isValidDirective(stmt)) {
-          this.flowPragma = null;
-        }
-        return stmt;
       }
+      const stmt = super.parseStatement(context, topLevel);
+      // We will parse a flow pragma in any comment before the first statement.
+      if (this.flowPragma === undefined && !this.isValidDirective(stmt)) {
+        this.flowPragma = null;
+      }
+      return stmt;
     }
 
     // declares, interfaces and type aliases
@@ -2233,6 +2235,31 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return exprList;
     }
 
+    parseArrayLike(
+      close: TokenType,
+      canBePattern: boolean,
+      isTuple: boolean,
+      refExpressionErrors: ?ExpressionErrors,
+    ): N.ArrayExpression | N.TupleExpression {
+      const node = super.parseArrayLike(
+        close,
+        canBePattern,
+        isTuple,
+        refExpressionErrors,
+      );
+
+      // This could be an array pattern:
+      //   ([a: string, b: string]) => {}
+      // In this case, we don't have to call toReferencedList. We will
+      // call it, if needed, when we are sure that it is a parenthesized
+      // expression by calling toReferencedListDeep.
+      if (canBePattern && !this.state.maybeInArrowParameters) {
+        this.toReferencedList(node.elements);
+      }
+
+      return node;
+    }
+
     checkLVal(
       expr: N.Expression,
       bindingType: BindingTypes = BIND_NONE,
@@ -2496,13 +2523,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseImportSpecifier(node: N.ImportDeclaration): void {
       const specifier = this.startNode();
       const firstIdentLoc = this.state.start;
-      const firstIdent = this.parseIdentifier(true);
+      const firstIdent = this.parseModuleExportName();
 
       let specifierTypeKind = null;
-      if (firstIdent.name === "type") {
-        specifierTypeKind = "type";
-      } else if (firstIdent.name === "typeof") {
-        specifierTypeKind = "typeof";
+      if (firstIdent.type === "Identifier") {
+        if (firstIdent.name === "type") {
+          specifierTypeKind = "type";
+        } else if (firstIdent.name === "typeof") {
+          specifierTypeKind = "typeof";
+        }
       }
 
       let isBinding = false;
@@ -2537,6 +2566,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           specifier.local = specifier.imported.__clone();
         }
       } else {
+        if (firstIdent.type === "StringLiteral") {
+          throw this.raise(
+            specifier.start,
+            Errors.ImportBindingIsString,
+            firstIdent.value,
+          );
+        }
         isBinding = true;
         specifier.imported = firstIdent;
         specifier.importKind = null;

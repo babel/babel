@@ -30,6 +30,10 @@ import {
 } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
 import { PARAM, functionFlags } from "../util/production-parameter";
+import {
+  newExpressionScope,
+  newParameterDeclarationScope,
+} from "../util/expression-scope";
 
 const loopLabel = { kind: "loop" },
   switchLabel = { kind: "switch" };
@@ -1077,11 +1081,7 @@ export default class StatementParser extends ExpressionParser {
     }
 
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    const oldYieldPos = this.state.yieldPos;
-    const oldAwaitPos = this.state.awaitPos;
     this.state.maybeInArrowParameters = false;
-    this.state.yieldPos = -1;
-    this.state.awaitPos = -1;
     this.scope.enter(SCOPE_FUNCTION);
     this.prodParam.enter(functionFlags(isAsync, node.generator));
 
@@ -1113,9 +1113,6 @@ export default class StatementParser extends ExpressionParser {
     }
 
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
-    this.state.yieldPos = oldYieldPos;
-    this.state.awaitPos = oldAwaitPos;
-
     return node;
   }
 
@@ -1124,10 +1121,8 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseFunctionParams(node: N.Function, allowModifiers?: boolean): void {
-    const oldInParameters = this.state.inParameters;
-    this.state.inParameters = true;
-
     this.expect(tt.parenL);
+    this.expressionScope.enter(newParameterDeclarationScope());
     node.params = this.parseBindingList(
       tt.parenR,
       charCodes.rightParenthesis,
@@ -1135,8 +1130,7 @@ export default class StatementParser extends ExpressionParser {
       allowModifiers,
     );
 
-    this.state.inParameters = oldInParameters;
-    this.checkYieldAwaitInDefaultParams();
+    this.expressionScope.exit();
   }
 
   registerFunctionStatementId(node: N.Function): void {
@@ -1529,6 +1523,9 @@ export default class StatementParser extends ExpressionParser {
     this.expectPlugin("classStaticBlock", member.start);
     // Start a new lexical scope
     this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
+    // Start a new expression scope, this is required for parsing edge cases like:
+    // async (x = class { static { await; } }) => {}
+    this.expressionScope.enter(newExpressionScope());
     // Start a new scope with regard to loop labels
     const oldLabels = this.state.labels;
     this.state.labels = [];
@@ -1538,6 +1535,7 @@ export default class StatementParser extends ExpressionParser {
     const body = (member.body = []);
     this.parseBlockOrModuleBlockBody(body, undefined, false, tt.braceR);
     this.prodParam.exit();
+    this.expressionScope.exit();
     this.scope.exit();
     this.state.labels = oldLabels;
     classBody.body.push(this.finishNode<N.StaticBlock>(member, "StaticBlock"));
@@ -1638,42 +1636,34 @@ export default class StatementParser extends ExpressionParser {
     methodOrProp: N.ClassMethod | N.ClassProperty,
   ): void {}
 
+  // https://tc39.es/proposal-class-fields/#prod-FieldDefinition
   parseClassPrivateProperty(
     node: N.ClassPrivateProperty,
   ): N.ClassPrivateProperty {
-    this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
-    this.prodParam.enter(PARAM);
-
-    node.value = this.eat(tt.eq) ? this.parseMaybeAssignAllowIn() : null;
+    this.parseInitializer(node);
     this.semicolon();
-    this.prodParam.exit();
-
-    this.scope.exit();
-
     return this.finishNode(node, "ClassPrivateProperty");
   }
 
+  // https://tc39.es/proposal-class-fields/#prod-FieldDefinition
   parseClassProperty(node: N.ClassProperty): N.ClassProperty {
-    if (!node.typeAnnotation) {
+    if (!node.typeAnnotation || this.match(tt.eq)) {
       this.expectPlugin("classProperties");
     }
-
-    this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
-    this.prodParam.enter(PARAM);
-
-    if (this.match(tt.eq)) {
-      this.expectPlugin("classProperties");
-      this.next();
-      node.value = this.parseMaybeAssignAllowIn();
-    } else {
-      node.value = null;
-    }
+    this.parseInitializer(node);
     this.semicolon();
+    return this.finishNode(node, "ClassProperty");
+  }
 
+  // https://tc39.es/proposal-class-fields/#prod-Initializer
+  parseInitializer(node: N.ClassProperty | N.ClassPrivateProperty): void {
+    this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
+    this.expressionScope.enter(newExpressionScope());
+    this.prodParam.enter(PARAM);
+    node.value = this.eat(tt.eq) ? this.parseMaybeAssignAllowIn() : null;
+    this.expressionScope.exit();
     this.prodParam.exit();
     this.scope.exit();
-
-    return this.finishNode(node, "ClassProperty");
   }
 
   parseClassId(
@@ -1916,6 +1906,10 @@ export default class StatementParser extends ExpressionParser {
     if (this.eatContextual("from")) {
       node.source = this.parseImportSource();
       this.checkExport(node);
+      const assertions = this.maybeParseImportAssertions();
+      if (assertions) {
+        node.assertions = assertions;
+      }
     } else {
       if (expect) {
         this.unexpected();
@@ -1993,7 +1987,6 @@ export default class StatementParser extends ExpressionParser {
               // check for keywords used as local names
               this.checkReservedWord(local.name, local.start, true, false);
               // check if export is defined
-              // $FlowIgnore
               this.scope.checkLocalExport(local);
             }
           }
@@ -2189,9 +2182,14 @@ export default class StatementParser extends ExpressionParser {
     node.specifiers.push(this.finishNode(specifier, type));
   }
 
-  parseAssertEntries() {
-    this.expectPlugin("importAssertions");
-
+  /**
+   * parse assert entries
+   *
+   * @see {@link https://tc39.es/proposal-import-assertions/#prod-AssertEntries |AssertEntries}
+   * @returns {N.ImportAttribute[]}
+   * @memberof StatementParser
+   */
+  parseAssertEntries(): N.ImportAttribute[] {
     const attrs = [];
     const attrNames = new Set();
 
@@ -2200,37 +2198,36 @@ export default class StatementParser extends ExpressionParser {
         break;
       }
 
-      const node = this.startNode();
+      const node = this.startNode<N.ImportAttribute>();
 
       // parse AssertionKey : IdentifierName, StringLiteral
-      let assertionKeyNode;
+      const keyName = this.state.value;
       if (this.match(tt.string)) {
-        assertionKeyNode = this.parseLiteral(this.state.value, "StringLiteral");
+        node.key = this.parseLiteral<N.StringLiteral>(keyName, "StringLiteral");
       } else {
-        assertionKeyNode = this.parseIdentifier(true);
+        node.key = this.parseIdentifier(true);
       }
-      this.next();
-      node.key = assertionKeyNode;
+      this.expect(tt.colon);
 
       // for now we are only allowing `type` as the only allowed module attribute
-      if (node.key.name !== "type") {
+      if (keyName !== "type") {
         this.raise(
           node.key.start,
           Errors.ModuleAttributeDifferentFromType,
-          node.key.name,
+          keyName,
         );
       }
       // check if we already have an entry for an attribute
       // if a duplicate entry is found, throw an error
       // for now this logic will come into play only when someone declares `type` twice
-      if (attrNames.has(node.key.name)) {
+      if (attrNames.has(keyName)) {
         this.raise(
           node.key.start,
           Errors.ModuleAttributesWithDuplicateKeys,
-          node.key.name,
+          keyName,
         );
       }
-      attrNames.add(node.key.name);
+      attrNames.add(keyName);
 
       if (!this.match(tt.string)) {
         throw this.unexpected(
@@ -2238,8 +2235,11 @@ export default class StatementParser extends ExpressionParser {
           Errors.ModuleAttributeInvalidValue,
         );
       }
-      node.value = this.parseLiteral(this.state.value, "StringLiteral");
-      this.finishNode(node, "ImportAttribute");
+      node.value = this.parseLiteral<N.StringLiteral>(
+        this.state.value,
+        "StringLiteral",
+      );
+      this.finishNode<N.ImportAttribute>(node, "ImportAttribute");
       attrs.push(node);
     } while (this.eat(tt.comma));
 
@@ -2298,18 +2298,15 @@ export default class StatementParser extends ExpressionParser {
   }
 
   maybeParseImportAssertions() {
-    if (
-      this.match(tt.name) &&
-      this.state.value === "assert" &&
-      !this.hasPrecedingLineBreak()
-    ) {
+    // [no LineTerminator here] AssertClause
+    if (this.isContextual("assert") && !this.hasPrecedingLineBreak()) {
       this.expectPlugin("importAssertions");
-      this.next();
+      this.next(); // eat `assert`
     } else {
       if (this.hasPlugin("importAssertions")) return [];
       return null;
     }
-
+    // https://tc39.es/proposal-import-assertions/#prod-AssertClause
     this.eat(tt.braceL);
     const attrs = this.parseAssertEntries();
     this.eat(tt.braceR);

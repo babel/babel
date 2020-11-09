@@ -1330,6 +1330,17 @@ describe("buildConfigChain", function () {
           ]),
         });
       });
+
+      it("loadPartialConfig can be called with no arguments", () => {
+        const cwd = process.cwd();
+
+        try {
+          process.chdir(fixture("config-files", "babelrc-extended"));
+          expect(() => babel.loadPartialConfig()).not.toThrow();
+        } finally {
+          process.chdir(cwd);
+        }
+      });
     });
 
     it("should throw when `test` presents but `filename` is not passed", () => {

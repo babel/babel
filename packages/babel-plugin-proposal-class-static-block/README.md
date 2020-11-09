@@ -1,8 +1,8 @@
 # @babel/plugin-proposal-class-static-block
 
-> Allow transforming of class static blocks
+> Allow parsing of class static blocks
 
-See our website [@babel/plugin-proposal-class-static-block](https://babeljs.io/docs/en/next/babel-plugin-proposal-class-static-block.html) for more information.
+See our website [@babel/plugin-proposal-class-static-block](https://babeljs.io/docs/en/babel-plugin-proposal-class-static-block) for more information.
 
 ## Install
 

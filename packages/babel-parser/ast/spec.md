@@ -1364,6 +1364,7 @@ interface ExportNamedDeclaration <: ModuleDeclaration {
   declaration: Declaration | null;
   specifiers: [ ExportSpecifier ];
   source: StringLiteral | null;
+  assertions?: [ ImportAttribute ];
 }
 ```
 
@@ -1411,6 +1412,7 @@ An export default declaration, e.g., `export default function () {};` or `export
 interface ExportAllDeclaration <: ModuleDeclaration {
   type: "ExportAllDeclaration";
   source: StringLiteral;
+  assertions?: [ ImportAttribute ];
 }
 ```
 

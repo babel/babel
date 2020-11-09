@@ -56,6 +56,8 @@ Using polyfills with `entry` option:
   es.array.flat { "chrome":"55" }
   es.array.flat-map { "chrome":"55" }
   es.array.iterator { "chrome":"55" }
+  es.array.reduce { "chrome":"55" }
+  es.array.reduce-right { "chrome":"55" }
   es.array.sort { "chrome":"55" }
   es.array.unscopables.flat { "chrome":"55" }
   es.array.unscopables.flat-map { "chrome":"55" }
