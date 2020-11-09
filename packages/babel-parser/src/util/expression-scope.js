@@ -140,15 +140,30 @@ export default class ExpressionScopeHandler {
    * For example, in `([(a) = []] = []) => {}`, we think `(a) = []` is an LHS in `[(a) = []]`,
    * an LHS within `[(a) = []] = []`. However the LHS chain is then transformed by toAssignable,
    * and we should throw assignment `(a)`, which is only valid in LHS. Hence we record the
-   * location of parenthesized `(a)` to any ancestry MaybeArrowParameterDeclaration
-   * and MaybeAsyncArrowParameterDeclaration scope until an Expression scope is seen
+   * location of parenthesized `(a)` to current scope if it is one of MaybeArrowParameterDeclaration
+   * and MaybeAsyncArrowParameterDeclaration
+   *
+   * Unlike `recordParameterInitializerError`, we don't record to ancestry scope because we
+   * validate arrow head parsing scope before exit, and then the LHS will be unambiguous:
+   * For example, in `( x = ( [(a) = []] = [] ) ) => {}`, we should not record `(a)` in `( x = ... ) =>`
+   * arrow scope because when we finish parsing `( [(a) = []] = [] )`, it is an umbiguous assignment
+   * expression and can not be cast to pattern
    * @param {number} pos
    * @param {string} message
    * @returns {void}
    * @memberof ExpressionScopeHandler
    */
   recordParenthesizedIdentifierError(pos: number, message: string): void {
-    return this.recordParameterInitializerError(pos, message);
+    const { stack } = this;
+    const scope: ExpressionScope = stack[stack.length - 1];
+    if (scope.isCertainlyParameterDeclaration()) {
+      this.raise(pos, message);
+    } else if (scope.canBeArrowParameterDeclaration()) {
+      /*:: invariant(scope instanceof ArrowHeadParsingScope) */
+      scope.recordDeclarationError(pos, message);
+    } else {
+      return;
+    }
   }
 
   /**
