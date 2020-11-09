@@ -66,6 +66,7 @@ class ConfigItem {
    */
   _descriptor: UnloadedDescriptor;
 
+  // TODO(Babel 8): Check if this symbol needs to be updated
   /**
    * Used to detect ConfigItem instances from other Babel instances.
    */
