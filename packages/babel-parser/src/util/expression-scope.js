@@ -20,6 +20,7 @@ some expression scopes and thrown later when we know what the ambigous pattern i
 - AwaitBindingIdentifier
 - AwaitExpressionFormalParameter
 - YieldInParameter
+- InvalidParenthesizedAssignment when parenthesized is an identifier
 
 There are four different expression scope
 - Expression
@@ -130,6 +131,26 @@ export default class ExpressionScopeHandler {
     /* eslint-disable @babel/development-internal/dry-error-messages */
     this.raise(pos, message);
   }
+
+  /**
+   * Record parenthesized identifier errors
+   *
+   * A parenthesized identifier in LHS can be ambiguous because the assignment
+   * can be transformed to an assignable later, but not vice versa:
+   * For example, in `([(a) = []] = []) => {}`, we think `(a) = []` is an LHS in `[(a) = []]`,
+   * an LHS within `[(a) = []] = []`. However the LHS chain is then transformed by toAssignable,
+   * and we should throw assignment `(a)`, which is only valid in LHS. Hence we record the
+   * location of parenthesized `(a)` to any ancestry MaybeArrowParameterDeclaration
+   * and MaybeAsyncArrowParameterDeclaration scope until an Expression scope is seen
+   * @param {number} pos
+   * @param {string} message
+   * @returns {void}
+   * @memberof ExpressionScopeHandler
+   */
+  recordParenthesizedIdentifierError(pos: number, message: string): void {
+    return this.recordParameterInitializerError(pos, message);
+  }
+
   /**
    * Record likely async arrow parameter errors
    *
