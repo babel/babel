@@ -662,8 +662,8 @@ class Printer {
       }
     }
   }
-
-  printAssertions(node: Node) {
+  // todo(flow->ts): was Node
+  printAssertions(node) {
     if (node.assertions?.length) {
       this.space();
       this.word("assert");
