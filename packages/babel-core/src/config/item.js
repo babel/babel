@@ -40,7 +40,7 @@ export function createConfigItem(
 }
 
 export function getItemDescriptor(item: mixed): UnloadedDescriptor | void {
-  if (item && item[Symbol.for("@babel/core@7 - ConfigItem")] === true) {
+  if (item?.[Symbol.for("@babel/core@7 - ConfigItem")] === true) {
     return item._descriptor;
   }
 
