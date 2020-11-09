@@ -8,6 +8,10 @@ require("core-js/modules/es.array.flat-map");
 
 require("core-js/modules/es.array.iterator");
 
+require("core-js/modules/es.array.reduce");
+
+require("core-js/modules/es.array.reduce-right");
+
 require("core-js/modules/es.array.sort");
 
 require("core-js/modules/es.array.unscopables.flat");

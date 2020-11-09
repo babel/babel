@@ -16,6 +16,8 @@ import "core-js/modules/es.array.index-of";
 import "core-js/modules/es.array.iterator";
 import "core-js/modules/es.array.last-index-of";
 import "core-js/modules/es.array.map";
+import "core-js/modules/es.array.reduce";
+import "core-js/modules/es.array.reduce-right";
 import "core-js/modules/es.array.slice";
 import "core-js/modules/es.array.sort";
 import "core-js/modules/es.array.species";
