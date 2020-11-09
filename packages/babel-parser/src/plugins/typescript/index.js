@@ -2791,7 +2791,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       method: N.ObjectMethod | N.ClassMethod,
     ): number {
       const baseCount = super.getGetterSetterExpectedParamCount(method);
-      const firstParam = method.params[0];
+      const params = this.getObjectOrClassMethodParams(method);
+      const firstParam = params[0];
       const hasContextParam =
         firstParam &&
         firstParam.type === "Identifier" &&
