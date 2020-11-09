@@ -142,6 +142,7 @@ export type ParserPlugin =
 export type ParserPluginWithOptions =
   | ["decorators", DecoratorsPluginOptions]
   | ["pipelineOperator", PipelineOperatorPluginOptions]
+  | ["recordAndTuple", RecordAndTuplePluginOptions]
   | ["flow", FlowPluginOptions];
 
 export interface DecoratorsPluginOptions {
@@ -149,7 +150,11 @@ export interface DecoratorsPluginOptions {
 }
 
 export interface PipelineOperatorPluginOptions {
-  proposal: "minimal" | "smart";
+  proposal: "fsharp" | "minimal" | "smart";
+}
+
+export interface RecordAndTuplePluginOptions {
+  syntaxType: "bar" | "hash";
 }
 
 export interface FlowPluginOptions {
