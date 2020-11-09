@@ -9,6 +9,7 @@ const fancyLog = require("fancy-log");
 const filter = require("gulp-filter");
 const gulp = require("gulp");
 const path = require("path");
+const fs = require("fs");
 const rollup = require("rollup");
 const rollupBabel = require("@rollup/plugin-babel").default;
 const rollupBabelSource = require("./scripts/rollup-plugin-babel-source");
@@ -19,7 +20,7 @@ const rollupNodeResolve = require("@rollup/plugin-node-resolve").default;
 const rollupReplace = require("@rollup/plugin-replace");
 const { terser: rollupTerser } = require("rollup-plugin-terser");
 
-const defaultSourcesGlob = "./@(codemods|packages|eslint)/*/src/**/*.js";
+const defaultSourcesGlob = "./@(codemods|packages|eslint)/*/src/**/*.{js,ts}";
 
 function swapSrcWithLib(srcPath) {
   const parts = srcPath.split(path.sep);
@@ -28,7 +29,12 @@ function swapSrcWithLib(srcPath) {
 }
 
 function getIndexFromPackage(name) {
-  return `${name}/src/index.js`;
+  try {
+    fs.statSync(`./${name}/src/index.ts`);
+    return `${name}/src/index.ts`;
+  } catch {
+    return `${name}/src/index.js`;
+  }
 }
 
 function compilationLogger() {
@@ -121,8 +127,10 @@ function buildRollup(packages) {
             babelrc: false,
             babelHelpers: "bundled",
             extends: "./babel.config.js",
+            extensions: [".mjs", ".cjs", ".ts", ".js"],
           }),
           rollupNodeResolve({
+            extensions: [".mjs", ".cjs", ".ts", ".js", ".json"],
             browser: nodeResolveBrowser,
             preferBuiltins: true,
             //todo: remove when semver and source-map are bumped to latest versions
@@ -142,7 +150,7 @@ function buildRollup(packages) {
           rollupJson(),
           rollupNodePolyfills({
             sourceMap: sourcemap,
-            include: "**/*.js",
+            include: "**/*.{js,ts}",
           }),
         ],
       });

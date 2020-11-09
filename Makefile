@@ -36,6 +36,9 @@ build-bundle: clean clean-lib
 build-bundle-ci: bootstrap-only
 	$(MAKE) build-bundle
 
+generate-tsconfig:
+	$(NODE) scripts/generators/tsconfig.js
+
 generate-standalone:
 	$(NODE) packages/babel-standalone/scripts/generate.js
 
@@ -86,12 +89,16 @@ watch: build-no-bundle
 	BABEL_ENV=development $(YARN) gulp watch
 
 code-quality-ci: build-no-bundle-ci
-	$(MAKE) flowcheck-ci lint-ci
+	$(MAKE) tscheck flowcheck-ci lint-ci
 
 flowcheck-ci:
 	$(MAKE) flow
 
-code-quality: flow lint
+code-quality: tscheck flow lint
+
+tscheck: generate-tsconfig
+	make build-typescript-typings
+	$(YARN) tsc -b .
 
 flow:
 	$(YARN) flow check --strip-root
@@ -110,7 +117,7 @@ check-compat-data-ci:
 lint: lint-js lint-ts
 
 lint-js:
-	BABEL_ENV=test $(YARN) eslint scripts $(SOURCES) '*.js' --format=codeframe
+	BABEL_ENV=test $(YARN) eslint scripts $(SOURCES) '*.{js,ts}' --format=codeframe --ext .js,.cjs,.mjs,.ts
 
 lint-ts:
 	scripts/lint-ts-typings.sh
@@ -118,7 +125,7 @@ lint-ts:
 fix: fix-json fix-js
 
 fix-js:
-	$(YARN) eslint scripts $(SOURCES) '*.js' --format=codeframe --fix
+	$(YARN) eslint scripts $(SOURCES) '*.{js,ts}' --format=codeframe --ext .js,.cjs,.mjs,.ts --fix
 
 fix-json:
 	$(YARN) prettier "{$(COMMA_SEPARATED_SOURCES)}/*/test/fixtures/**/options.json" --write --loglevel warn
@@ -136,6 +143,10 @@ clean: test-clean
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*
 	rm -rf node_modules/.cache
+
+clean-tsconfig:
+	rm -f tsconfig.json
+	rm -f packages/*/tsconfig.json
 
 test-clean:
 	$(foreach source, $(SOURCES), \
@@ -212,6 +223,8 @@ clone-license:
 prepublish-build: clean-lib clean-runtime-helpers
 	NODE_ENV=production BABEL_ENV=production $(MAKE) build-bundle
 	$(MAKE) prepublish-build-standalone clone-license
+	# We don't want to publish .d.ts files yet
+	rm -rf packages/*/dts
 
 prepublish:
 	$(MAKE) check-yarn-bug-1882
@@ -272,7 +285,7 @@ clean-runtime-helpers:
 	rm -f packages/babel-runtime-corejs3/helpers/**/*.js
 	rm -rf packages/babel-runtime-corejs2/core-js
 
-clean-all:
+clean-all: clean-tsconfig
 	rm -rf node_modules
 	rm -rf package-lock.json
 	rm -rf .changelog
