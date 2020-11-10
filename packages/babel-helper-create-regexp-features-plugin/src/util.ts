@@ -47,6 +47,7 @@ export function generateRegexpuOptions(node, features) {
   }
   return {
     useUnicodeFlag,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onNamedGroup: (name, index) => {},
     namedGroup,
     unicodePropertyEscape,
