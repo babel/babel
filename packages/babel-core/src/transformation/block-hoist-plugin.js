@@ -57,6 +57,7 @@ const blockHoistPlugin = {
         node.body.sort((a, b) => {
           const result = priority(a) - priority(b);
           if (stabilityMap) {
+            // $FlowIgnore: stabilityMap contains numeric values for all nodes
             return result || stabilityMap.get(a) - stabilityMap.get(b);
           }
           return result;
