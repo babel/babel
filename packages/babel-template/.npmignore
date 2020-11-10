@@ -1,3 +1,5 @@
 src
 test
 *.log
+*.d.ts
+*.d.ts.map
