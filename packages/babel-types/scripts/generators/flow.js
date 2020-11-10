@@ -124,7 +124,7 @@ for (const typeName of t.TYPES) {
   lines.push(decl);
 
   lines.push(
-    `declare function assert${typeName}(node: object | null | undefined, opts?: object | null): void`
+    `declare function assert${typeName}(node: ?Object, opts?: ?Object): void`
   );
 }
 
