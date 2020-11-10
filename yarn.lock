@@ -39,7 +39,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:*"
     "@babel/helper-fixtures": "workspace:*"
-    "@nicolo-ribaudo/chokidar-2": ^2.1.8
+    "@nicolo-ribaudo/chokidar-2": 2.1.8-no-fsevents
     chokidar: ^3.4.0
     commander: ^4.0.1
     convert-source-map: ^1.1.0
@@ -3648,12 +3648,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nicolo-ribaudo/chokidar-2@npm:^2.1.8":
-  version: 2.1.8
-  resolution: "@nicolo-ribaudo/chokidar-2@npm:2.1.8"
+"@nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents":
+  version: 2.1.8-no-fsevents
+  resolution: "@nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents"
   dependencies:
-    chokidar: 2.1.8
-  checksum: a3528e53052074df562ad776ac1211dc03d41b0c06d90b5472cd60d6e717900e4a987d89cf269c3c031ee35674f369e6ebd2e4846ed19d06e5da8ed1ffecb682
+    anymatch: ^2.0.0
+    async-each: ^1.0.1
+    braces: ^2.3.2
+    glob-parent: ^3.1.0
+    inherits: ^2.0.3
+    is-binary-path: ^1.0.0
+    is-glob: ^4.0.0
+    normalize-path: ^3.0.0
+    path-is-absolute: ^1.0.0
+    readdirp: ^2.2.1
+    upath: ^1.1.1
+  checksum: 0efeea3b7d9e3c07dc3ded371ba65351a7c30314763f6e2d34849bf58809655f0f9bd71fcd505ab72624cd17e80e738a0bd41aac0d7d8606664817f3fe85cfba
   languageName: node
   linkType: hard
 
@@ -5434,7 +5444,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:2.1.8, chokidar@npm:^2.0.0":
+"chokidar@npm:^2.0.0":
   version: 2.1.8
   resolution: "chokidar@npm:2.1.8"
   dependencies:
