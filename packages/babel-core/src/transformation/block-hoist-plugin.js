@@ -1,4 +1,6 @@
 // @flow
+import semver from "semver";
+
 import loadConfig, { type Plugin } from "../config";
 
 let LOADED_PLUGIN: Plugin | void;
