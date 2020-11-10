@@ -1,0 +1,77 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":36}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":36}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":36,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":36}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":35}},
+          "id": null,
+          "generator": false,
+          "async": true,
+          "params": [
+            {
+              "type": "AssignmentPattern",
+              "start":7,"end":28,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":28}},
+              "left": {
+                "type": "Identifier",
+                "start":7,"end":8,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":8},"identifierName":"x"},
+                "name": "x"
+              },
+              "right": {
+                "type": "CallExpression",
+                "start":11,"end":28,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":28}},
+                "callee": {
+                  "type": "Identifier",
+                  "start":11,"end":16,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":16},"identifierName":"async"},
+                  "name": "async"
+                },
+                "arguments": [
+                  {
+                    "type": "ArrayExpression",
+                    "start":17,"end":27,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":27}},
+                    "elements": [
+                      {
+                        "type": "AssignmentExpression",
+                        "start":18,"end":26,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":26}},
+                        "operator": "=",
+                        "left": {
+                          "type": "Identifier",
+                          "start":19,"end":20,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":20},"identifierName":"f"},
+                          "extra": {
+                            "parenthesized": true,
+                            "parenStart": 18
+                          },
+                          "name": "f"
+                        },
+                        "right": {
+                          "type": "ArrayExpression",
+                          "start":24,"end":26,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":26}},
+                          "elements": []
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "start":33,"end":35,"loc":{"start":{"line":1,"column":33},"end":{"line":1,"column":35}},
+            "body": [],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

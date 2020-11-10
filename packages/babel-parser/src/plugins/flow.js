@@ -1955,6 +1955,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         // has not been converted yet.
         ((node.params: any): N.Expression[]),
         node.extra?.trailingComma,
+        /* isLHS */ false,
       );
       // Enter scope, as checkParams defines bindings
       this.scope.enter(SCOPE_FUNCTION | SCOPE_ARROW);
@@ -2192,11 +2193,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    toAssignable(node: N.Node): N.Node {
+    toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
       if (node.type === "TypeCastExpression") {
-        return super.toAssignable(this.typeCastToParameter(node));
+        return super.toAssignable(this.typeCastToParameter(node), isLHS);
       } else {
-        return super.toAssignable(node);
+        return super.toAssignable(node, isLHS);
       }
     }
 
@@ -2204,6 +2205,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     toAssignableList(
       exprList: N.Expression[],
       trailingCommaPos?: ?number,
+      isLHS: boolean,
     ): $ReadOnlyArray<N.Pattern> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
@@ -2211,7 +2213,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           exprList[i] = this.typeCastToParameter(expr);
         }
       }
-      return super.toAssignableList(exprList, trailingCommaPos);
+      return super.toAssignableList(exprList, trailingCommaPos, isLHS);
     }
 
     // this is a list of nodes, from something like a call expression, we need to filter the
