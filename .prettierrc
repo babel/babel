@@ -10,15 +10,14 @@
   "printWidth": 80,
   "overrides": [{
     "files": [
-      "**/codemods/*/src/**/*.js",
+      "**/codemods/*/src/**/*.{js,ts}",
       "**/codemods/*/test/**/*.js",
-      "**/packages/*/src/**/*.js",
+      "**/packages/*/src/**/*.{js,ts}",
       "**/packages/*/test/**/*.js",
-      "**/eslint/*/src/**/*.js",
+      "**/eslint/*/src/**/*.{js,ts}",
       "**/eslint/*/test/**/*.js"
     ],
     "options": {
-      "parser": "babel",
       "trailingComma": "all"
     }
   }]

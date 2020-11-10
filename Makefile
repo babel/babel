@@ -1,8 +1,8 @@
 FLOW_COMMIT = a1f9a4c709dcebb27a5084acf47755fbae699c25
-TEST262_COMMIT = 058adfed86b1d4129996faaf50a85ea55379a66a
+TEST262_COMMIT = d9740c172652d36194ceae3ed3d0484e9968ebc3
 TYPESCRIPT_COMMIT = da8633212023517630de5f3620a23736b63234b1
 
-FORCE_PUBLISH = "@babel/runtime,@babel/runtime-corejs2,@babel/runtime-corejs3,@babel/standalone"
+FORCE_PUBLISH = -f @babel/runtime -f @babel/runtime-corejs2 -f @babel/runtime-corejs3 -f @babel/standalone
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
@@ -36,6 +36,9 @@ build-bundle: clean clean-lib
 build-bundle-ci: bootstrap-only
 	$(MAKE) build-bundle
 
+generate-tsconfig:
+	$(NODE) scripts/generators/tsconfig.js
+
 generate-standalone:
 	$(NODE) packages/babel-standalone/scripts/generate.js
 
@@ -49,6 +52,7 @@ build-flow-typings:
 
 build-typescript-typings:
 	$(NODE) packages/babel-types/scripts/generators/typescript.js > packages/babel-types/lib/index.d.ts
+	$(NODE) packages/babel-types/scripts/generators/typescript.js --ts3.7 > packages/babel-types/lib/index-ts3.7.d.ts
 
 build-standalone: build-babel-standalone
 
@@ -85,12 +89,16 @@ watch: build-no-bundle
 	BABEL_ENV=development $(YARN) gulp watch
 
 code-quality-ci: build-no-bundle-ci
-	$(MAKE) flowcheck-ci lint-ci
+	$(MAKE) tscheck flowcheck-ci lint-ci
 
 flowcheck-ci:
 	$(MAKE) flow
 
-code-quality: flow lint
+code-quality: tscheck flow lint
+
+tscheck: generate-tsconfig
+	make build-typescript-typings
+	$(YARN) tsc -b .
 
 flow:
 	$(YARN) flow check --strip-root
@@ -109,7 +117,7 @@ check-compat-data-ci:
 lint: lint-js lint-ts
 
 lint-js:
-	BABEL_ENV=test $(YARN) eslint scripts $(SOURCES) '*.js' --format=codeframe
+	BABEL_ENV=test $(YARN) eslint scripts $(SOURCES) '*.{js,ts}' --format=codeframe --ext .js,.cjs,.mjs,.ts
 
 lint-ts:
 	scripts/lint-ts-typings.sh
@@ -117,7 +125,7 @@ lint-ts:
 fix: fix-json fix-js
 
 fix-js:
-	$(YARN) eslint scripts $(SOURCES) '*.js' --format=codeframe --fix
+	$(YARN) eslint scripts $(SOURCES) '*.{js,ts}' --format=codeframe --ext .js,.cjs,.mjs,.ts --fix
 
 fix-json:
 	$(YARN) prettier "{$(COMMA_SEPARATED_SOURCES)}/*/test/fixtures/**/options.json" --write --loglevel warn
@@ -135,6 +143,10 @@ clean: test-clean
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*
 	rm -rf node_modules/.cache
+
+clean-tsconfig:
+	rm -f tsconfig.json
+	rm -f packages/*/tsconfig.json
 
 test-clean:
 	$(foreach source, $(SOURCES), \
@@ -158,7 +170,6 @@ test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
 	BABEL_COVERAGE=true BABEL_ENV=test $(MAKE) bootstrap
 	BABEL_ENV=test TEST_TYPE=cov ./scripts/test-cov.sh
-	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
 bootstrap-flow:
 	rm -rf build/flow
@@ -212,29 +223,30 @@ clone-license:
 prepublish-build: clean-lib clean-runtime-helpers
 	NODE_ENV=production BABEL_ENV=production $(MAKE) build-bundle
 	$(MAKE) prepublish-build-standalone clone-license
+	# We don't want to publish .d.ts files yet
+	rm -rf packages/*/dts
 
 prepublish:
+	$(MAKE) check-yarn-bug-1882
 	$(MAKE) bootstrap-only
 	$(MAKE) prepublish-build
 	IS_PUBLISH=true $(MAKE) test
 
-# --exclude-dependents support is added by .yarn-patches/@lerna/version
 new-version:
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@echo "!!!!!!                                                   !!!!!!"
-	@echo "!!!!!!  Enable the check in proposal-class-static-block  !!!!!!"
-	@echo "!!!!!!                                                   !!!!!!"
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	@exit 1
 	git pull --rebase
-	$(YARN) lerna version --exclude-dependents --force-publish=$(FORCE_PUBLISH)
+	$(YARN) release-tool version $(FORCE_PUBLISH)
 
 # NOTE: Run make new-version first
 publish: prepublish
-	$(YARN) lerna publish from-git
+	$(YARN) release-tool publish
 	$(MAKE) clean
+
+check-yarn-bug-1882:
+ifneq ("$(shell grep 3155328e5 .yarn/releases/yarn-*.cjs -c)", "0")
+	echo "Your version of yarn is affected by https://github.com/yarnpkg/berry/issues/1882"
+	echo "Please run `sed -i -e "s/3155328e5/4567890e5/g" .yarn/releases/yarn-*.cjs`"
+	exit 1
+endif
 
 publish-ci: prepublish
 ifneq ("$(NPM_TOKEN)", "")
@@ -243,7 +255,7 @@ else
 	echo "Missing NPM_TOKEN env var"
 	exit 1
 endif
-	$(YARN) lerna publish from-git --yes
+	$(YARN) release-tool publish --yes
 	rm -f .npmrc
 	$(MAKE) clean
 
@@ -252,9 +264,9 @@ ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 	echo "You probably don't know what you are doing"
 	exit 1
 endif
-	$(YARN) lerna version $(VERSION) --exclude-dependents --force-publish=$(FORCE_PUBLISH)  --no-push --yes --tag-version-prefix="version-e2e-test-"
+	$(YARN) release-tool version $(VERSION) --all --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) prepublish-build
-	$(YARN) lerna publish from-git --registry http://localhost:4873 --yes --tag-version-prefix="version-e2e-test-"
+	YARN_NPM_PUBLISH_REGISTRY=http://localhost:4873 $(YARN) release-tool publish --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
 
 bootstrap-only: clean-all
@@ -273,7 +285,7 @@ clean-runtime-helpers:
 	rm -f packages/babel-runtime-corejs3/helpers/**/*.js
 	rm -rf packages/babel-runtime-corejs2/core-js
 
-clean-all:
+clean-all: clean-tsconfig
 	rm -rf node_modules
 	rm -rf package-lock.json
 	rm -rf .changelog

@@ -1,6 +1,6 @@
 {
   "name": "@babel/cli",
-  "version": "7.11.6",
+  "version": "7.12.1",
   "description": "Babel command line.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -33,15 +33,15 @@
     "source-map": "^0.5.0"
   },
   "optionalDependencies": {
-    "chokidar": "^3.4.0",
-    "chokidarAt2": "https://registry.npmjs.org/chokidar/-/chokidar-2.1.8.tgz"
+    "@nicolo-ribaudo/chokidar-2": "2.1.8-no-fsevents",
+    "chokidar": "^3.4.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^7.11.6",
-    "@babel/helper-fixtures": "workspace:^7.10.5",
+    "@babel/core": "workspace:*",
+    "@babel/helper-fixtures": "workspace:*",
     "rimraf": "^3.0.0"
   },
   "bin": {

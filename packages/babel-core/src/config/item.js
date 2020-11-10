@@ -1,5 +1,7 @@
 // @flow
 
+/*:: declare var invariant; */
+
 import type { PluginTarget, PluginOptions } from "./validation/options";
 
 import path from "path";
@@ -40,7 +42,8 @@ export function createConfigItem(
 }
 
 export function getItemDescriptor(item: mixed): UnloadedDescriptor | void {
-  if (item instanceof ConfigItem) {
+  if ((item: any)?.[CONFIG_ITEM_BRAND]) {
+    /*:: invariant(item instanceof ConfigItem) */
     return item._descriptor;
   }
 
@@ -48,6 +51,8 @@ export function getItemDescriptor(item: mixed): UnloadedDescriptor | void {
 }
 
 export type { ConfigItem };
+
+const CONFIG_ITEM_BRAND = Symbol.for("@babel/core@7 - ConfigItem");
 
 /**
  * A public representation of a plugin/preset that will _eventually_ be load.
@@ -63,6 +68,13 @@ class ConfigItem {
    * If you access this, you are a bad person.
    */
   _descriptor: UnloadedDescriptor;
+
+  // TODO(Babel 8): Check if this symbol needs to be updated
+  /**
+   * Used to detect ConfigItem instances from other Babel instances.
+   */
+  // $FlowIgnore
+  [CONFIG_ITEM_BRAND] = true;
 
   /**
    * The resolved value of the item itself.
@@ -104,6 +116,8 @@ class ConfigItem {
     // pass the item through JSON.stringify, it doesn't show up.
     this._descriptor = descriptor;
     Object.defineProperty(this, "_descriptor", { enumerable: false });
+
+    Object.defineProperty(this, CONFIG_ITEM_BRAND, { enumerable: false });
 
     this.value = this._descriptor.value;
     this.options = this._descriptor.options;

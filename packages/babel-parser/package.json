@@ -1,6 +1,6 @@
 {
   "name": "@babel/parser",
-  "version": "7.11.5",
+  "version": "7.12.5",
   "description": "A JavaScript parser",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -32,9 +32,9 @@
     "node": ">=6.0.0"
   },
   "devDependencies": {
-    "@babel/code-frame": "workspace:^7.10.4",
-    "@babel/helper-fixtures": "workspace:^7.10.5",
-    "@babel/helper-validator-identifier": "workspace:^7.10.4",
+    "@babel/code-frame": "workspace:*",
+    "@babel/helper-fixtures": "workspace:*",
+    "@babel/helper-validator-identifier": "workspace:*",
     "charcodes": "^0.2.0"
   },
   "bin": "./bin/babel-parser.js"

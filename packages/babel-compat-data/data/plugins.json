@@ -11,6 +11,7 @@
     "chrome": "84",
     "opera": "70",
     "edge": "84",
+    "node": "14.6",
     "electron": "10.0"
   },
   "proposal-numeric-separator": {
@@ -28,6 +29,7 @@
     "chrome": "85",
     "firefox": "79",
     "safari": "14",
+    "node": "15",
     "electron": "10.0"
   },
   "proposal-nullish-coalescing-operator": {

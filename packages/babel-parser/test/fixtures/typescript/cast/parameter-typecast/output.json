@@ -2,8 +2,8 @@
   "type": "File",
   "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":14}},
   "errors": [
-    "SyntaxError: Did not expect a type annotation here. (1:5)",
-    "SyntaxError: Did not expect a type annotation here. (2:8)"
+    "SyntaxError: Did not expect a type annotation here. (1:6)",
+    "SyntaxError: Did not expect a type annotation here. (2:9)"
   ],
   "program": {
     "type": "Program",

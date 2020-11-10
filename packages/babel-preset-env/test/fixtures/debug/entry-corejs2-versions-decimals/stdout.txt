@@ -67,7 +67,7 @@ Using polyfills with `entry` option:
   es7.array.flat-map { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es6.array.from { "electron":"0.36", "ie":"10", "node":"6.1" }
   es7.array.includes { "ie":"10" }
-  es6.array.iterator { "ie":"10" }
+  es6.array.iterator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es6.array.of { "ie":"10" }
   es6.array.sort { "chrome":"54", "electron":"0.36", "node":"6.1" }
   es6.array.species { "electron":"0.36", "ie":"10", "node":"6.1" }

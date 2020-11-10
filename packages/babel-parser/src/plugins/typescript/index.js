@@ -1649,11 +1649,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-      const oldYieldPos = this.state.yieldPos;
-      const oldAwaitPos = this.state.awaitPos;
       this.state.maybeInArrowParameters = true;
-      this.state.yieldPos = -1;
-      this.state.awaitPos = -1;
 
       const res: ?N.ArrowFunctionExpression = this.tsTryParseAndCatch(() => {
         const node: N.ArrowFunctionExpression = this.startNodeAt(
@@ -1669,8 +1665,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       });
 
       this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
-      this.state.yieldPos = oldYieldPos;
-      this.state.awaitPos = oldAwaitPos;
 
       if (!res) {
         return undefined;
@@ -1816,22 +1810,34 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    parseExprListItem(
-      allowEmpty: ?boolean,
-      refExpressionErrors?: ?ExpressionErrors,
-      refNeedsArrowPos: ?Pos,
-      allowPlaceholder: ?boolean,
-    ): ?N.Expression {
-      const node = super.parseExprListItem(
-        allowEmpty,
-        refExpressionErrors,
-        refNeedsArrowPos,
-        allowPlaceholder,
-      );
+    tsCheckForInvalidTypeCasts(items: $ReadOnlyArray<?N.Expression>) {
+      items.forEach(node => {
+        if (node?.type === "TSTypeCastExpression") {
+          this.raise(
+            node.typeAnnotation.start,
+            TSErrors.UnexpectedTypeAnnotation,
+          );
+        }
+      });
+    }
 
-      // Handle `func(a: T)` or `func<T>(a: T)`
-      if (!refNeedsArrowPos && node?.type === "TSTypeCastExpression") {
-        this.raise(node.start, TSErrors.UnexpectedTypeAnnotation);
+    toReferencedList(
+      exprList: $ReadOnlyArray<?N.Expression>,
+      isInParens?: boolean, // eslint-disable-line no-unused-vars
+    ): $ReadOnlyArray<?N.Expression> {
+      // Handles invalid scenarios like: `f(a:b)`, `(a:b);`, and `(a:b,c:d)`.
+      //
+      // Note that `f<T>(a:b)` goes through a different path and is handled
+      // in `parseSubscript` directly.
+      this.tsCheckForInvalidTypeCasts(exprList);
+      return exprList;
+    }
+
+    parseArrayLike(...args): N.ArrayExpression | N.TupleExpression {
+      const node = super.parseArrayLike(...args);
+
+      if (node.type === "ArrayExpression") {
+        this.tsCheckForInvalidTypeCasts(node.elements);
       }
 
       return node;
@@ -1886,6 +1892,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
                 tt.parenR,
                 /* possibleAsync */ false,
               );
+
+              // Handles invalid case: `f<T>(a:b)`
+              this.tsCheckForInvalidTypeCasts(node.arguments);
+
               node.typeParameters = typeArguments;
               return this.finishCallExpression(node, state.optionalChainMember);
             } else if (this.match(tt.backQuote)) {
@@ -1997,9 +2007,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         ) {
           node.importKind = "type";
           this.next();
-        } else {
-          node.importKind = "value";
         }
+      }
+
+      if (!node.importKind) {
+        node.importKind = "value";
       }
 
       const importNode = super.parseImport(node);
@@ -2540,10 +2552,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    parseArrow(
-      node: N.ArrowFunctionExpression,
-      exprList,
-    ): ?N.ArrowFunctionExpression {
+    parseArrow(node: N.ArrowFunctionExpression): ?N.ArrowFunctionExpression {
       if (this.match(tt.colon)) {
         // This is different from how the TS parser does it.
         // TS uses lookahead. The Babel Parser parses it as a parenthesized expression and converts.
@@ -2553,10 +2562,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             tt.colon,
           );
           if (this.canInsertSemicolon() || !this.match(tt.arrow)) abort();
-          // check if the exprList is assignable because `: TSType` can be part of conditional expression
-          // i.e. we can only know `: v` is not a return type by checking that `sum(v)` can not be a pattern.
-          // 0 ? v => (sum(v)) : v => 0
-          if (exprList.some(param => !this.isAssignable(param))) abort();
           return returnType;
         });
 
@@ -2568,13 +2573,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      return super.parseArrow(node, exprList);
+      return super.parseArrow(node);
     }
 
     // Allow type annotations inside of a parameter list.
     parseAssignableListItemTypes(param: N.Pattern) {
       if (this.eat(tt.question)) {
-        if (param.type !== "Identifier" && !this.state.isDeclareContext) {
+        if (
+          param.type !== "Identifier" &&
+          !this.state.isDeclareContext &&
+          !this.state.inType
+        ) {
           this.raise(param.start, TSErrors.PatternIsOptional);
         }
 
@@ -2587,31 +2596,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return param;
     }
 
-    isAssignable(node: N.Node): boolean {
-      switch (node.type) {
-        case "TSAsExpression":
-        case "TSNonNullExpression":
-        case "TSTypeAssertion":
-        case "TSTypeCastExpression":
-          return this.isAssignable(node.expression);
-        default:
-          return super.isAssignable(node);
-      }
-    }
-
-    toAssignable(node: N.Node): N.Node {
+    toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
       switch (node.type) {
         case "TSTypeCastExpression":
-          return super.toAssignable(this.typeCastToParameter(node));
+          return super.toAssignable(this.typeCastToParameter(node), isLHS);
         case "TSParameterProperty":
-          return super.toAssignable(node);
+          return super.toAssignable(node, isLHS);
         case "TSAsExpression":
         case "TSNonNullExpression":
         case "TSTypeAssertion":
-          node.expression = this.toAssignable(node.expression);
+          node.expression = this.toAssignable(node.expression, isLHS);
           return node;
         default:
-          return super.toAssignable(node);
+          return super.toAssignable(node, isLHS);
       }
     }
 
@@ -2794,7 +2791,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       method: N.ObjectMethod | N.ClassMethod,
     ): number {
       const baseCount = super.getGetterSetterExpectedParamCount(method);
-      const firstParam = method.params[0];
+      const params = this.getObjectOrClassMethodParams(method);
+      const firstParam = params[0];
       const hasContextParam =
         firstParam &&
         firstParam.type === "Identifier" &&

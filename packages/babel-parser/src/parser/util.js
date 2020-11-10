@@ -164,18 +164,6 @@ export default class UtilParser extends Tokenizer {
     }
   }
 
-  checkYieldAwaitInDefaultParams() {
-    if (
-      this.state.yieldPos !== -1 &&
-      (this.state.awaitPos === -1 || this.state.yieldPos < this.state.awaitPos)
-    ) {
-      this.raise(this.state.yieldPos, Errors.YieldBindingIdentifier);
-    }
-    if (this.state.awaitPos !== -1) {
-      this.raise(this.state.awaitPos, Errors.AwaitBindingIdentifier);
-    }
-  }
-
   // tryParse will clone parser state.
   // It is expensive and should be used with cautions
   tryParse<T: Node | $ReadOnlyArray<Node>>(

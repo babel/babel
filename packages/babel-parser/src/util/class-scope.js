@@ -23,7 +23,7 @@ type raiseFunction = (number, string, ...any) => void;
 
 export default class ClassScopeHandler {
   stack: Array<ClassScope> = [];
-  raise: raiseFunction;
+  declare raise: raiseFunction;
   undefinedPrivateNames: Map<string, number> = new Map();
 
   constructor(raise: raiseFunction) {

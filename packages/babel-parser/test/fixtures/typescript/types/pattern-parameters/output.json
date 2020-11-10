@@ -1,0 +1,137 @@
+{
+  "type": "File",
+  "start":0,"end":92,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":2}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":92,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":2}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":92,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":2}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"C"},
+          "name": "C"
+        },
+        "typeAnnotation": {
+          "type": "TSTypeLiteral",
+          "start":9,"end":91,"loc":{"start":{"line":1,"column":9},"end":{"line":5,"column":1}},
+          "members": [
+            {
+              "type": "TSMethodSignature",
+              "start":13,"end":28,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":17}},
+              "key": {
+                "type": "Identifier",
+                "start":13,"end":16,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":5},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "parameters": [
+                {
+                  "type": "ArrayPattern",
+                  "start":17,"end":20,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":9}},
+                  "elements": [],
+                  "optional": true
+                }
+              ],
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":21,"end":27,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":16}},
+                "typeAnnotation": {
+                  "type": "TSVoidKeyword",
+                  "start":23,"end":27,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":16}}
+                }
+              }
+            },
+            {
+              "type": "TSMethodSignature",
+              "start":31,"end":49,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":20}},
+              "key": {
+                "type": "Identifier",
+                "start":31,"end":34,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":5},"identifierName":"bar"},
+                "name": "bar"
+              },
+              "computed": false,
+              "parameters": [
+                {
+                  "type": "ObjectPattern",
+                  "start":35,"end":37,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":8}},
+                  "properties": []
+                },
+                {
+                  "type": "ArrayPattern",
+                  "start":39,"end":42,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":13}},
+                  "elements": [],
+                  "optional": true
+                }
+              ],
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":43,"end":48,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":19}},
+                "typeAnnotation": {
+                  "type": "TSAnyKeyword",
+                  "start":45,"end":48,"loc":{"start":{"line":3,"column":16},"end":{"line":3,"column":19}}
+                }
+              }
+            },
+            {
+              "type": "TSMethodSignature",
+              "start":52,"end":89,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":39}},
+              "key": {
+                "type": "Identifier",
+                "start":52,"end":55,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":5},"identifierName":"baz"},
+                "name": "baz"
+              },
+              "computed": false,
+              "parameters": [
+                {
+                  "type": "Identifier",
+                  "start":56,"end":65,"loc":{"start":{"line":4,"column":6},"end":{"line":4,"column":15},"identifierName":"a"},
+                  "name": "a",
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":57,"end":65,"loc":{"start":{"line":4,"column":7},"end":{"line":4,"column":15}},
+                    "typeAnnotation": {
+                      "type": "TSStringKeyword",
+                      "start":59,"end":65,"loc":{"start":{"line":4,"column":9},"end":{"line":4,"column":15}}
+                    }
+                  }
+                },
+                {
+                  "type": "Identifier",
+                  "start":67,"end":76,"loc":{"start":{"line":4,"column":17},"end":{"line":4,"column":26},"identifierName":"b"},
+                  "name": "b",
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":68,"end":76,"loc":{"start":{"line":4,"column":18},"end":{"line":4,"column":26}},
+                    "typeAnnotation": {
+                      "type": "TSNumberKeyword",
+                      "start":70,"end":76,"loc":{"start":{"line":4,"column":20},"end":{"line":4,"column":26}}
+                    }
+                  }
+                },
+                {
+                  "type": "ArrayPattern",
+                  "start":78,"end":81,"loc":{"start":{"line":4,"column":28},"end":{"line":4,"column":31}},
+                  "elements": [],
+                  "optional": true
+                }
+              ],
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":82,"end":88,"loc":{"start":{"line":4,"column":32},"end":{"line":4,"column":38}},
+                "typeAnnotation": {
+                  "type": "TSVoidKeyword",
+                  "start":84,"end":88,"loc":{"start":{"line":4,"column":34},"end":{"line":4,"column":38}}
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

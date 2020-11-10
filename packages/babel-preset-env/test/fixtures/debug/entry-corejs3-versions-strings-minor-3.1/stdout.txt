@@ -84,8 +84,8 @@ Using polyfills with `entry` option:
   es.array.last-index-of { "ie":"10" }
   es.array.map { "ie":"10" }
   es.array.of { "ie":"10" }
-  es.array.reduce { "ie":"10" }
-  es.array.reduce-right { "ie":"10" }
+  es.array.reduce { "chrome":"54", "ie":"10" }
+  es.array.reduce-right { "chrome":"54", "ie":"10" }
   es.array.slice { "ie":"10" }
   es.array.some { "ie":"10" }
   es.array.sort { "chrome":"54", "node":"6.10" }

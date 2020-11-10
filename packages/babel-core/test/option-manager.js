@@ -62,7 +62,7 @@ describe("option-manager", () => {
     });
 
     it("should not throw when a preset string followed by valid preset object", () => {
-      const { plugin } = makePlugin("my-plugin");
+      const { plugin } = makePlugin();
       expect(
         loadOptions({
           presets: [
@@ -73,8 +73,8 @@ describe("option-manager", () => {
       ).toBeTruthy();
     });
 
-    it("should throw if a plugin is repeated, with information about the repeated plugin", () => {
-      const { calls, plugin } = makePlugin("my-plugin");
+    it("should throw if a plugin name is repeated, with information about the repeated plugin", () => {
+      const { calls, plugin } = makePlugin();
 
       expect(() => {
         loadOptions({
@@ -101,17 +101,15 @@ describe("option-manager", () => {
     });
 
     it("should not throw if a repeated plugin has a different name", () => {
-      const { calls: calls1, plugin: plugin1 } = makePlugin();
-      const { calls: calls2, plugin: plugin2 } = makePlugin();
+      const { calls, plugin } = makePlugin();
 
       loadOptions({
         plugins: [
-          [plugin1, { arg: 1 }],
-          [plugin2, { arg: 2 }, "some-name"],
+          [plugin, { arg: 1 }],
+          [plugin, { arg: 2 }, "some-name"],
         ],
       });
-      expect(calls1).toEqual([{ arg: 1 }]);
-      expect(calls2).toEqual([{ arg: 2 }]);
+      expect(calls).toEqual([{ arg: 1 }, { arg: 2 }]);
     });
 
     it("should merge .env[] plugins with parent presets", () => {
@@ -146,17 +144,15 @@ describe("option-manager", () => {
     });
 
     it("should not throw if a repeated preset has a different name", () => {
-      const { calls: calls1, plugin: preset1 } = makePlugin();
-      const { calls: calls2, plugin: preset2 } = makePlugin();
+      const { calls, plugin: preset } = makePlugin();
 
       loadOptions({
         presets: [
-          [preset1, { arg: 1 }],
-          [preset2, { arg: 2 }, "some-name"],
+          [preset, { arg: 1 }],
+          [preset, { arg: 2 }, "some-name"],
         ],
       });
-      expect(calls1).toEqual([{ arg: 1 }]);
-      expect(calls2).toEqual([{ arg: 2 }]);
+      expect(calls).toEqual([{ arg: 1 }, { arg: 2 }]);
     });
     it("should merge .env[] presets with parent presets", () => {
       const { calls: calls1, plugin: preset1 } = makePlugin();

@@ -3,6 +3,8 @@ import "core-js/modules/es.symbol.async-iterator";
 import "core-js/modules/es.array.flat";
 import "core-js/modules/es.array.flat-map";
 import "core-js/modules/es.array.iterator";
+import "core-js/modules/es.array.reduce";
+import "core-js/modules/es.array.reduce-right";
 import "core-js/modules/es.array.sort";
 import "core-js/modules/es.array.unscopables.flat";
 import "core-js/modules/es.array.unscopables.flat-map";

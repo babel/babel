@@ -40,6 +40,14 @@ export const types: {
 };
 
 // Token-specific context update code
+// Note that we should avoid accessing `this.prodParam` in context update,
+// because it is executed immediately when last token is consumed, which may be
+// before `this.prodParam` is updated. e.g.
+// ```
+// function *g() { () => yield / 2 }
+// ```
+// When `=>` is eaten, the context update of `yield` is executed, however,
+// `this.prodParam` still has `[Yield]` production because it is not yet updated
 
 tt.parenR.updateContext = tt.braceR.updateContext = function () {
   if (this.state.context.length === 1) {
@@ -59,11 +67,10 @@ tt.name.updateContext = function (prevType) {
   let allowed = false;
   if (prevType !== tt.dot) {
     if (
-      (this.state.value === "of" &&
-        !this.state.exprAllowed &&
-        prevType !== tt._function &&
-        prevType !== tt._class) ||
-      (this.state.value === "yield" && this.prodParam.hasYield)
+      this.state.value === "of" &&
+      !this.state.exprAllowed &&
+      prevType !== tt._function &&
+      prevType !== tt._class
     ) {
       allowed = true;
     }

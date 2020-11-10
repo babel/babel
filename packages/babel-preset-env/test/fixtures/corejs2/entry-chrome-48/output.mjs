@@ -1,5 +1,6 @@
 import "core-js/modules/es7.array.flat-map";
 import "core-js/modules/es6.array.from";
+import "core-js/modules/es6.array.iterator";
 import "core-js/modules/es6.array.sort";
 import "core-js/modules/es6.array.species";
 import "core-js/modules/es6.function.has-instance";

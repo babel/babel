@@ -166,6 +166,16 @@ const specHandlers = {
       false,
     );
   },
+
+  optionalCall(superMember, args) {
+    const thisRefs = this._getThisRefs();
+    return optimiseCall(
+      this._get(superMember, thisRefs),
+      t.cloneNode(thisRefs.this),
+      args,
+      true,
+    );
+  },
 };
 
 const looseHandlers = {
@@ -223,6 +233,10 @@ const looseHandlers = {
   call(superMember, args) {
     return optimiseCall(this.get(superMember), t.thisExpression(), args, false);
   },
+
+  optionalCall(superMember, args) {
+    return optimiseCall(this.get(superMember), t.thisExpression(), args, true);
+  },
 };
 
 type ReplaceSupersOptionsBase = {|
@@ -258,14 +272,14 @@ export default class ReplaceSupers {
     this.opts = opts;
   }
 
-  file: HubInterface;
-  isDerivedConstructor: boolean;
-  isLoose: boolean;
-  isPrivateMethod: boolean;
-  isStatic: boolean;
-  methodPath: NodePath;
-  opts: ReplaceSupersOptions;
-  superRef: Object;
+  declare file: HubInterface;
+  declare isDerivedConstructor: boolean;
+  declare isLoose: boolean;
+  declare isPrivateMethod: boolean;
+  declare isStatic: boolean;
+  declare methodPath: NodePath;
+  declare opts: ReplaceSupersOptions;
+  declare superRef: Object;
 
   getObjectRef() {
     return t.cloneNode(this.opts.objectRef || this.opts.getObjectRef());

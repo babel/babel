@@ -1401,6 +1401,13 @@ defineType("ExportAllDeclaration", {
     source: {
       validate: assertNodeType("StringLiteral"),
     },
+    assertions: {
+      optional: true,
+      validate: chain(
+        assertValueType("array"),
+        assertNodeType("ImportAttribute"),
+      ),
+    },
   },
 });
 
@@ -1462,6 +1469,13 @@ defineType("ExportNamedDeclaration", {
             throw new TypeError("Cannot export a declaration from a source");
           }
         },
+      ),
+    },
+    assertions: {
+      optional: true,
+      validate: chain(
+        assertValueType("array"),
+        assertNodeType("ImportAttribute"),
       ),
     },
     specifiers: {
@@ -1559,6 +1573,13 @@ defineType("ImportDeclaration", {
   visitor: ["specifiers", "source"],
   aliases: ["Statement", "Declaration", "ModuleDeclaration"],
   fields: {
+    assertions: {
+      optional: true,
+      validate: chain(
+        assertValueType("array"),
+        assertNodeType("ImportAttribute"),
+      ),
+    },
     specifiers: {
       validate: chain(
         assertValueType("array"),

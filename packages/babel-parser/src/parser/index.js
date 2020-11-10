@@ -8,6 +8,7 @@ import StatementParser from "./statement";
 import { SCOPE_PROGRAM } from "../util/scopeflags";
 import ScopeHandler from "../util/scope";
 import ClassScopeHandler from "../util/class-scope";
+import ExpressionScopeHandler from "../util/expression-scope";
 import ProductionParameterHandler, {
   PARAM_AWAIT,
   PARAM,
@@ -34,6 +35,7 @@ export default class Parser extends StatementParser {
     this.scope = new ScopeHandler(this.raise.bind(this), this.inModule);
     this.prodParam = new ProductionParameterHandler();
     this.classScope = new ClassScopeHandler(this.raise.bind(this));
+    this.expressionScope = new ExpressionScopeHandler(this.raise.bind(this));
     this.plugins = pluginsMap(this.options.plugins);
     this.filename = options.sourceFilename;
   }

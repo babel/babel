@@ -86,8 +86,8 @@ Using polyfills with `entry` option:
   es.array.last-index-of { "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.array.map { "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.array.of { "ie":"10", "safari":"7" }
-  es.array.reduce { "edge":"13", "firefox":"49", "ie":"10", "safari":"7" }
-  es.array.reduce-right { "edge":"13", "firefox":"49", "ie":"10", "safari":"7" }
+  es.array.reduce { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "safari":"7" }
+  es.array.reduce-right { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "safari":"7" }
   es.array.reverse { "ios":"9", "safari":"7" }
   es.array.slice { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.array.some { "edge":"13", "firefox":"49", "ie":"10", "safari":"7" }
