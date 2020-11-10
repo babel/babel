@@ -58,8 +58,7 @@ module.exports = {
   "es6.array.iterator": {
     features: [
       "Array.prototype methods / Array.prototype.keys",
-      // can use Symbol.iterator, not implemented in many environments
-      // "Array.prototype methods / Array.prototype.values",
+      "Array.prototype methods / Array.prototype.values",
       "Array.prototype methods / Array.prototype.entries",
     ],
   },
