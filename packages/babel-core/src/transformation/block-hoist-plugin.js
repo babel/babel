@@ -44,7 +44,7 @@ const blockHoistPlugin = {
         // Array sorting is not stable in earlier Node releases
         // See: https://v8.dev/blog/array-sort for details
         const nodeVersion = semver.clean(process.version.slice(1));
-        const stabilityMap = semver.lt(nodeVersion, semver.parse('12'));
+        const stabilityMap = semver.lt(nodeVersion, semver.parse('12'))
           ? new Map<any, number>(node.body.map((n, idx) => [n, idx]))
           : null;
         const priority = node => {
