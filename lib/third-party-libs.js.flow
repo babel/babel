@@ -52,6 +52,7 @@ declare module "semver" {
   declare module.exports: {
     SemVer: SemVer;
 
+    clean(version: string): string | null;
     coerce(version: string | SemVer): SemVer | null;
     gt(v1: string, v2: string): boolean;
     intersects(r1: string, r2: string): boolean;
