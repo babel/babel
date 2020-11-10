@@ -1,3 +1,7 @@
+require("core-js/modules/es.array.reduce");
+
+require("core-js/modules/es.array.reduce-right");
+
 require("core-js/modules/es.array.unscopables.flat");
 
 require("core-js/modules/es.array.unscopables.flat-map");

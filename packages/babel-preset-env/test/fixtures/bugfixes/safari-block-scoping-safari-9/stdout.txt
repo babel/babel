@@ -8,6 +8,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "safari":"9" }
+  proposal-logical-assignment-operators { "safari":"9" }
   proposal-nullish-coalescing-operator { "safari":"9" }
   proposal-optional-chaining { "safari":"9" }
   proposal-json-strings { "safari":"9" }
@@ -31,6 +33,7 @@ Using plugins:
   transform-block-scoping { "safari":"9" }
   transform-new-target { "safari":"9" }
   transform-regenerator { "safari":"9" }
+  proposal-export-namespace-from { "safari":"9" }
   bugfix/transform-tagged-template-caching { "safari":"9" }
   transform-modules-commonjs { "safari":"9" }
   proposal-dynamic-import { "safari":"9" }

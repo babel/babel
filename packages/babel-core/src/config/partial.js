@@ -5,7 +5,11 @@ import gensync, { type Handler } from "gensync";
 import Plugin from "./plugin";
 import { mergeOptions } from "./util";
 import { createItemFromDescriptor } from "./item";
-import { buildRootChain, type ConfigContext } from "./config-chain";
+import {
+  buildRootChain,
+  type ConfigContext,
+  type FileHandling,
+} from "./config-chain";
 import { getEnv } from "./helpers/environment";
 import {
   validate,
@@ -15,6 +19,7 @@ import {
 
 import {
   findConfigUpwards,
+  resolveShowConfigPath,
   ROOT_CONFIG_FILENAMES,
   type ConfigFile,
   type IgnoreFile,
@@ -58,9 +63,11 @@ function* resolveRootMode(
 type PrivPartialConfig = {
   options: ValidatedOptions,
   context: ConfigContext,
+  fileHandling: FileHandling,
   ignore: IgnoreFile | void,
   babelrc: ConfigFile | void,
   config: ConfigFile | void,
+  files: Set<string>,
 };
 
 export default function* loadPrivatePartialConfig(
@@ -81,6 +88,7 @@ export default function* loadPrivatePartialConfig(
     root: rootDir = ".",
     rootMode = "root",
     caller,
+    cloneInputAst = true,
   } = args;
   const absoluteCwd = path.resolve(cwd);
   const absoluteRootDir = yield* resolveRootMode(
@@ -88,15 +96,20 @@ export default function* loadPrivatePartialConfig(
     rootMode,
   );
 
+  const filename =
+    typeof args.filename === "string"
+      ? path.resolve(cwd, args.filename)
+      : undefined;
+
+  const showConfigPath = yield* resolveShowConfigPath(absoluteCwd);
+
   const context: ConfigContext = {
-    filename:
-      typeof args.filename === "string"
-        ? path.resolve(cwd, args.filename)
-        : undefined,
+    filename,
     cwd: absoluteCwd,
     root: absoluteRootDir,
     envName,
     caller,
+    showConfig: showConfigPath === filename,
   };
 
   const configChain = yield* buildRootChain(args, context);
@@ -110,6 +123,7 @@ export default function* loadPrivatePartialConfig(
   // Tack the passes onto the object itself so that, if this object is
   // passed back to Babel a second time, it will be in the right structure
   // to not change behavior.
+  options.cloneInputAst = cloneInputAst;
   options.babelrc = false;
   options.configFile = false;
   options.passPerPreset = false;
@@ -129,20 +143,36 @@ export default function* loadPrivatePartialConfig(
   return {
     options,
     context,
+    fileHandling: configChain.fileHandling,
     ignore: configChain.ignore,
     babelrc: configChain.babelrc,
     config: configChain.config,
+    files: configChain.files,
   };
 }
 
+type LoadPartialConfigOpts = {
+  showIgnoredFiles?: boolean,
+  ...
+};
+
 export const loadPartialConfig = gensync<[any], PartialConfig | null>(
-  function* (inputOpts: mixed): Handler<PartialConfig | null> {
-    const result: ?PrivPartialConfig = yield* loadPrivatePartialConfig(
-      inputOpts,
-    );
+  function* (opts?: LoadPartialConfigOpts): Handler<PartialConfig | null> {
+    let showIgnoredFiles = false;
+    // We only extract showIgnoredFiles if opts is an object, so that
+    // loadPrivatePartialConfig can throw the appropriate error if it's not.
+    if (typeof opts === "object" && opts !== null && !Array.isArray(opts)) {
+      ({ showIgnoredFiles, ...opts } = opts);
+    }
+
+    const result: ?PrivPartialConfig = yield* loadPrivatePartialConfig(opts);
     if (!result) return null;
 
-    const { options, babelrc, ignore, config } = result;
+    const { options, babelrc, ignore, config, fileHandling, files } = result;
+
+    if (fileHandling === "ignored" && !showIgnoredFiles) {
+      return null;
+    }
 
     (options.plugins || []).forEach(item => {
       if (item.value instanceof Plugin) {
@@ -158,6 +188,8 @@ export const loadPartialConfig = gensync<[any], PartialConfig | null>(
       babelrc ? babelrc.filepath : undefined,
       ignore ? ignore.filepath : undefined,
       config ? config.filepath : undefined,
+      fileHandling,
+      files,
     );
   },
 );
@@ -173,17 +205,23 @@ class PartialConfig {
   babelrc: string | void;
   babelignore: string | void;
   config: string | void;
+  fileHandling: FileHandling;
+  files: Set<string>;
 
   constructor(
     options: ValidatedOptions,
     babelrc: string | void,
     ignore: string | void,
     config: string | void,
+    fileHandling: FileHandling,
+    files: Set<string>,
   ) {
     this.options = options;
     this.babelignore = ignore;
     this.babelrc = babelrc;
     this.config = config;
+    this.fileHandling = fileHandling;
+    this.files = files;
 
     // Freeze since this is a public API and it should be extremely obvious that
     // reassigning properties on here does nothing.

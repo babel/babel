@@ -21,23 +21,34 @@ cd ../..
 #==============================================================================#
 
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
-yarn upgrade --scope @babel
 
-node -e "\
-  var pkg = require('./package.json');\
-  pkg.devDependencies['@babel/core'] = '7.0.0';\
-  Object.assign(pkg.resolutions, {\
-    '@babel/core': '7.0.0',\
-    '@babel/helpers': '7.0.0',\
-    '@babel/traverse': '7.0.0'\
-  });\
-  fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));\
+node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
+(
+  yarn why @babel/core | grep -o "@babel/core@npm:.* (via npm:.*)";
+  yarn why @babel/helpers | grep -o "@babel/helpers@npm:.* (via npm:.*)";
+  yarn why @babel/traverse | grep -o "@babel/traverse@npm:.* (via npm:.*)"
+) | uniq | node -e "
+  var pkg = require('./package.json');
+  var packages = fs.readFileSync(0, 'utf8').trim().split('\n');
+
+  pkg.devDependencies['@babel/core'] = '7.0.0';
+
+  packages.forEach(desc => {
+    const { name, specifier } = desc
+      .match(/(?<name>@babel\/[a-z]+).*\(via (?<specifier>npm:[^)]+)\)/)
+      .groups;
+    pkg.resolutions[name + '@' + specifier] = '7.0.0';
+  });
+
+  fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
 "
 
-rm yarn.lock
-make bootstrap
+# https://github.com/babel/babel/pull/12331 - This test is fixed in @babel/traverse 7.12.7,
+# so it will fail with older versions. We can disable it.
+(cd packages/babel-plugin-transform-modules-systemjs/test/fixtures/regression/; mv issue-12329 .issue-12329)
 
-# Test
-make test-ci
+# Update deps, build and test
+rm yarn.lock
+make -j test-ci
 
 cleanup

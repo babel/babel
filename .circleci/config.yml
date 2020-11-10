@@ -1,25 +1,13 @@
 version: 2.1
 
 aliases:
-  - &restore-node-modules-cache
-    keys:
-      - v1-yarn-deps-{{ checksum "yarn.lock" }}
-      - v1-yarn-deps-
-
   - &restore-yarn-cache
-    keys:
-      - v1-1-yarn-cache-{{ checksum "yarn.lock" }}
-      - v1-1-yarn-cache-
-
-  - &save-node-modules-cache
-    paths:
-      - node_modules
-    key: v1-yarn-deps-{{ checksum "yarn.lock" }}
+    key: v2-yarn-cache-{{ checksum "yarn.lock" }}
 
   - &save-yarn-cache
     paths:
-      - ~/.cache/yarn
-    key: v1-1-yarn-cache-{{ checksum "yarn.lock" }}
+      - ~/.yarn/berry/cache
+    key: v2-yarn-cache-{{ checksum "yarn.lock" }}
 
   - &artifact_babel
     path: ~/babel/packages/babel-standalone/babel.js
@@ -56,7 +44,6 @@ jobs:
     steps:
       - checkout
       - restore_cache: *restore-yarn-cache
-      - restore_cache: *restore-node-modules-cache
         # Builds babel-standalone with the regular Babel config
         # test-ci-coverage doesn't test babel-standalone, as trying to gather coverage
       - run: IS_PUBLISH=true make -j build-standalone-ci
@@ -65,7 +52,6 @@ jobs:
       - run: yarn jest "\-standalone/test"
       - store_artifacts: *artifact_babel
       - store_artifacts: *artifact_babel_min
-      - save_cache: *save-node-modules-cache
       - save_cache: *save-yarn-cache
 
   test262:
@@ -77,18 +63,19 @@ jobs:
           command: |
             if [ -n "$CIRCLE_PULL_REQUEST" ]
             then
-              git fetch origin refs/pull/$CIRCLE_PR_NUMBER/merge
+              # $CIRCLE_PR_NUMBER is not always defined:
+              # https://support.circleci.com/hc/en-us/articles/360047521451-Why-is-CIRCLE-PR-NUMBER-empty-
+              git fetch origin refs/pull/${CIRCLE_PULL_REQUEST##*/}/merge
               git checkout -qf FETCH_HEAD
             fi
       - restore_cache: *restore-yarn-cache
-      - restore_cache: *restore-node-modules-cache
       - run:
           name: Build Babel
           command: BABEL_ENV=test make bootstrap
       - run:
           name: Setup Test Runner
           command: |
-            git clone --recurse-submodules https://github.com/babel/babel-test262-runner
+            git clone --depth=1 --recurse-submodules https://github.com/babel/babel-test262-runner
             cd babel-test262-runner
             npm ci
             npm i tap-mocha-reporter --save-dev
@@ -115,26 +102,26 @@ jobs:
           <<: *test262_workdir
       - store_artifacts: *artifact_test262_diff_tap
       - run:
-          name: Output comparision results and report to CircleCI
+          name: Output comparison results and report to CircleCI
           command: |
             mkdir -p ~/test-results/test262
             cat ~/diff.tap | $(npm bin)/tap-merge | $(npm bin)/tap-mocha-reporter xunit | tee ~/test-results/test262/results.xml
           <<: *test262_workdir
       - store_test_results: *artifact_test262_xunit
+      - save_cache: *save-yarn-cache
 
   publish-verdaccio:
     executor: node-executor
     steps:
       - checkout
       - restore_cache: *restore-yarn-cache
-      - restore_cache: *restore-node-modules-cache
-      - run: yarn install
       - run: ./scripts/integration-tests/publish-local.sh
       - persist_to_workspace:
           root: /tmp/verdaccio-workspace
           paths:
             - storage
             - htpasswd
+      - save_cache: *save-yarn-cache
 
   e2e-babel:
     executor: node-executor
@@ -168,6 +155,14 @@ jobs:
           at: /tmp/verdaccio-workspace
       - run: ./scripts/integration-tests/e2e-vue-cli.sh
 
+  e2e-jest:
+    executor: node-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/verdaccio-workspace
+      - run: ./scripts/integration-tests/e2e-jest.sh
+
 workflows:
   version: 2
   build-standalone:
@@ -182,6 +177,7 @@ workflows:
                 - main
                 - next-8-dev
                 - next-8-rebased
+          context: babel-test262
   test262-pr:
     jobs:
       - approve-test262-run:
@@ -203,6 +199,7 @@ workflows:
                 - master
                 - next-8-dev
                 - next-8-rebased
+          context: babel-test262
   e2e:
     jobs:
       - publish-verdaccio
@@ -216,5 +213,8 @@ workflows:
           requires:
             - publish-verdaccio
       - e2e-vue-cli:
+          requires:
+            - publish-verdaccio
+      - e2e-jest:
           requires:
             - publish-verdaccio

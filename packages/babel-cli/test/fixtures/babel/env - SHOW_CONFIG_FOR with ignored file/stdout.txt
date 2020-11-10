@@ -1,0 +1,1 @@
+No config is applied to "<CWD>/src/index.js" because it matches one of `ignore: ["./src/index.js"]` from "<CWD>"

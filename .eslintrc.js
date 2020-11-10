@@ -14,18 +14,29 @@ module.exports = {
   extends: "@babel/internal",
   rules: {
     "prettier/prettier": "error",
-    // TODO: remove after babel-eslint-config-internal is fully integrated into this repository.
-    "max-len": "off",
   },
   env: {
     node: true,
   },
   overrides: [
     {
+      files: ["**/*.ts"],
+      parser: "@typescript-eslint/parser",
+      plugins: ["@typescript-eslint"],
+      rules: {
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "error",
+        "no-dupe-class-members": "off",
+        "@typescript-eslint/no-dupe-class-members": "error",
+        "no-undef": "off",
+        "no-redeclare": "off",
+      },
+    },
+    {
       files: [
-        "packages/*/src/**/*.js",
-        "codemods/*/src/**/*.js",
-        "eslint/*/src/**/*.js",
+        "packages/*/src/**/*.{js,ts}",
+        "codemods/*/src/**/*.{js,ts}",
+        "eslint/*/src/**/*.{js,ts}",
       ],
       rules: {
         "@babel/development/no-undefined-identifier": "error",
@@ -39,7 +50,7 @@ module.exports = {
         "packages/*/test/**/*.js",
         "codemods/*/test/**/*.js",
         "eslint/*/test/**/*.js",
-        "packages/babel-helper-transform-fixture-test-runner/src/helpers.js",
+        "packages/babel-helper-transform-fixture-test-runner/src/helpers.{ts,js}",
         "test/**/*.js",
       ],
       env: {
@@ -55,7 +66,7 @@ module.exports = {
       },
     },
     {
-      files: ["packages/babel-plugin-*/src/index.js"],
+      files: ["packages/babel-plugin-*/src/index.{js,ts}"],
       excludedFiles: ["packages/babel-plugin-transform-regenerator/**/*.js"],
       rules: {
         "@babel/development/plugin-name": "error",
@@ -63,7 +74,7 @@ module.exports = {
       },
     },
     {
-      files: ["packages/babel-parser/src/**/*.js"],
+      files: ["packages/babel-parser/src/**/*.{js,ts}"],
       rules: {
         "@babel/development-internal/dry-error-messages": [
           "error",

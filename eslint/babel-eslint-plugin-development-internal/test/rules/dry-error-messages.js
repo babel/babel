@@ -1,6 +1,6 @@
 import path from "path";
 import rule from "../../src/rules/dry-error-messages";
-import RuleTester from "@babel/eslint-shared-fixtures/utils/RuleTester";
+import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester";
 
 const FILENAME = path.resolve(__dirname, "test/lib/index.js");
 const ERRORS_MODULE = "errorsModule";
@@ -259,6 +259,14 @@ ruleTester.run("dry-error-messages", rule, {
     {
       filename: FILENAME,
       code: "this.raise(loc);",
+      options: [{ errorModule: ERRORS_MODULE }],
+    },
+
+    // Support ternary as second argument
+    {
+      filename: FILENAME,
+      code:
+        "import Errors, { NotErrors } from 'errorsModule'; this.raise(loc, a ? Errors.someErrorMessage : Errors.someOtherErrorMessage);",
       options: [{ errorModule: ERRORS_MODULE }],
     },
   ],
@@ -688,6 +696,44 @@ ruleTester.run("dry-error-messages", rule, {
         {
           messageId: "mustBeImported",
           data: { errorModule: MODULE_PARENT_DIR },
+        },
+      ],
+    },
+
+    // Should error if either part of a ternary isn't from error module
+    {
+      filename: FILENAME,
+      code:
+        "import Errors, { NotErrors } from 'errorsModule'; this.raise(loc, a ? Errors.someErrorMessage : 'hello');",
+      options: [{ errorModule: ERRORS_MODULE }],
+      errors: [
+        {
+          messageId: "mustBeImported",
+          data: { errorModule: ERRORS_MODULE },
+        },
+      ],
+    },
+    {
+      filename: FILENAME,
+      code:
+        "import Errors, { NotErrors } from 'errorsModule'; this.raise(loc, a ? 'hello' : Errors.someErrorMessage);",
+      options: [{ errorModule: ERRORS_MODULE }],
+      errors: [
+        {
+          messageId: "mustBeImported",
+          data: { errorModule: ERRORS_MODULE },
+        },
+      ],
+    },
+    {
+      filename: FILENAME,
+      code:
+        "import Errors, { NotErrors } from 'errorsModule'; this.raise(loc, a ? 'hello' : 'world');",
+      options: [{ errorModule: ERRORS_MODULE }],
+      errors: [
+        {
+          messageId: "mustBeImported",
+          data: { errorModule: ERRORS_MODULE },
         },
       ],
     },

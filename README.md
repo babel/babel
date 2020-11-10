@@ -91,7 +91,7 @@ I'm so glad you asked: [Hallelujah —— In Praise of Babel](SONG.md) by [@angu
 
 ### Looking for support?
 
-For questions and support please join our [Slack Community](https://slack.babeljs.io/) (you can sign-up [here](https://slack.babeljs.io/) for an invite), ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/babeljs), or ping us on [Twitter](https://twitter.com/babeljs).
+For questions and support please join our [Slack Community](https://slack.babeljs.io/) (you can [sign up here](https://slack.babeljs.io/) for an invite), ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/babeljs), or ping us on [Twitter](https://twitter.com/babeljs).
 
 ### Where are the docs?
 
@@ -105,7 +105,7 @@ Please read through our [CONTRIBUTING.md](CONTRIBUTING.md) and fill out the issu
 
 Check out:
 
-- Our [#development](https://babeljs.slack.com/messages/development) Slack channel and say hi ([signup](https://slack.babeljs.io))!
+- Our [#development](https://babeljs.slack.com/messages/development) Slack channel and say hi! ([sign-up](https://slack.babeljs.io))
 - Issues with the [good first issue](https://github.com/babel/babel/labels/good%20first%20issue) and [help wanted](https://github.com/babel/babel/labels/help%20wanted) label. We suggest also looking at the [closed ones](https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aclosed+label%3A%22good+first+issue%22) to get a sense of the kinds of issues you can tackle.
 
 Some resources:

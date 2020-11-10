@@ -97,7 +97,7 @@ export default declare(api => {
               "=",
               t.cloneNode(functionLVal),
               t.memberExpression(
-                receiverLVal,
+                t.cloneNode(receiverLVal),
                 node.callee.property,
                 false,
                 false,
@@ -105,19 +105,19 @@ export default declare(api => {
             ),
             ...argsInitializers,
             t.functionExpression(
-              node.callee.property,
+              t.cloneNode(node.callee.property),
               placeholdersParams,
               t.blockStatement(
                 [
                   t.returnStatement(
                     t.callExpression(
                       t.memberExpression(
-                        functionLVal,
+                        t.cloneNode(functionLVal),
                         t.identifier("call"),
                         false,
                         false,
                       ),
-                      [receiverLVal, ...args],
+                      [t.cloneNode(receiverLVal), ...args],
                     ),
                   ),
                 ],
@@ -132,10 +132,14 @@ export default declare(api => {
             t.assignmentExpression("=", t.cloneNode(functionLVal), node.callee),
             ...argsInitializers,
             t.functionExpression(
-              node.callee,
+              t.cloneNode(node.callee),
               placeholdersParams,
               t.blockStatement(
-                [t.returnStatement(t.callExpression(functionLVal, args))],
+                [
+                  t.returnStatement(
+                    t.callExpression(t.cloneNode(functionLVal), args),
+                  ),
+                ],
                 [],
               ),
               false,

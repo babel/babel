@@ -356,7 +356,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node = this.startNode();
       if (this.eat(tt.braceL)) {
         this.expect(tt.ellipsis);
-        node.argument = this.parseMaybeAssign();
+        node.argument = this.parseMaybeAssignAllowIn();
         this.expect(tt.braceR);
         return this.finishNode(node, "JSXSpreadAttribute");
       }

@@ -84,7 +84,7 @@ const handle = {
   },
 
   handle(member) {
-    const { node, parent, parentPath } = member;
+    const { node, parent, parentPath, scope } = member;
 
     if (member.isOptionalMemberExpression()) {
       // Transforming optional chaining requires we replace ancestors.
@@ -117,6 +117,17 @@ const handle = {
         }
         return true;
       });
+
+      // Replace `function (a, x = a.b?.#c) {}` to `function (a, x = (() => a.b?.#c)() ){}`
+      // so the temporary variable can be injected in correct scope
+      // This can be further optimized to avoid unecessary IIFE
+      if (scope.path.isPattern()) {
+        endPath.replaceWith(
+          // The injected member will be queued and eventually transformed when visited
+          t.callExpression(t.arrowFunctionExpression([], endPath.node), []),
+        );
+        return;
+      }
 
       const rootParentPath = endPath.parentPath;
       if (
@@ -165,7 +176,6 @@ const handle = {
         );
       }
 
-      const { scope } = member;
       const startingProp = startingOptional.isOptionalMemberExpression()
         ? "object"
         : "callee";
@@ -235,8 +245,12 @@ const handle = {
             t.binaryExpression(
               "===",
               baseNeedsMemoised
-                ? t.assignmentExpression("=", baseRef, startingNode)
-                : baseRef,
+                ? t.assignmentExpression(
+                    "=",
+                    t.cloneNode(baseRef),
+                    t.cloneNode(startingNode),
+                  )
+                : t.cloneNode(baseRef),
               t.nullLiteral(),
             ),
             t.binaryExpression(
@@ -263,7 +277,7 @@ const handle = {
               false,
               true,
             ),
-            [context, ...endParent.arguments],
+            [t.cloneNode(context), ...endParent.arguments],
             false,
           ),
         );
@@ -311,29 +325,42 @@ const handle = {
 
     // MEMBER = VALUE   ->   _set(MEMBER, VALUE)
     // MEMBER += VALUE   ->   _set(MEMBER, _get(MEMBER) + VALUE)
+    // MEMBER ??= VALUE   ->   _get(MEMBER) ?? _set(MEMBER, VALUE)
     if (parentPath.isAssignmentExpression({ left: node })) {
       if (this.simpleSet) {
         member.replaceWith(this.simpleSet(member));
         return;
       }
 
-      const { operator, right } = parent;
-      let value = right;
+      const { operator, right: value } = parent;
 
-      if (operator !== "=") {
-        // Give the state handler a chance to memoise the member, since we'll
-        // reference it twice. The second access (the set) should do the memo
-        // assignment.
-        this.memoise(member, 2);
-
-        value = t.binaryExpression(
-          operator.slice(0, -1),
-          this.get(member),
-          value,
-        );
+      if (operator === "=") {
+        parentPath.replaceWith(this.set(member, value));
+      } else {
+        const operatorTrunc = operator.slice(0, -1);
+        if (t.LOGICAL_OPERATORS.includes(operatorTrunc)) {
+          // Give the state handler a chance to memoise the member, since we'll
+          // reference it twice. The first access (the get) should do the memo
+          // assignment.
+          this.memoise(member, 1);
+          parentPath.replaceWith(
+            t.logicalExpression(
+              operatorTrunc,
+              this.get(member),
+              this.set(member, value),
+            ),
+          );
+        } else {
+          // Here, the second access (the set) is evaluated first.
+          this.memoise(member, 2);
+          parentPath.replaceWith(
+            this.set(
+              member,
+              t.binaryExpression(operatorTrunc, this.get(member), value),
+            ),
+          );
+        }
       }
-
-      parentPath.replaceWith(this.set(member, value));
       return;
     }
 
@@ -345,6 +372,16 @@ const handle = {
 
     // MEMBER?.(ARGS) -> _optionalCall(MEMBER, ARGS)
     if (parentPath.isOptionalCallExpression({ callee: node })) {
+      // Replace `function (a, x = a.b.#c?.()) {}` to `function (a, x = (() => a.b.#c?.())() ){}`
+      // so the temporary variable can be injected in correct scope
+      // This can be further optimized to avoid unecessary IIFE
+      if (scope.path.isPattern()) {
+        parentPath.replaceWith(
+          // The injected member will be queued and eventually transformed when visited
+          t.callExpression(t.arrowFunctionExpression([], parentPath.node), []),
+        );
+        return;
+      }
       parentPath.replaceWith(this.optionalCall(member, parent.arguments));
       return;
     }

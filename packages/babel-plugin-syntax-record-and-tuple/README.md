@@ -2,7 +2,7 @@
 
 > Allow parsing of records and tuples.
 
-See our website [@babel/plugin-syntax-record-and-tuple](https://babeljs.io/docs/en/next/babel-plugin-syntax-record-and-tuple.html) for more information.
+See our website [@babel/plugin-syntax-record-and-tuple](https://babeljs.io/docs/en/babel-plugin-syntax-record-and-tuple) for more information.
 
 ## Install
 

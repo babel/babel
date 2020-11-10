@@ -299,6 +299,23 @@ const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
   };
 });
 
+export function* resolveShowConfigPath(
+  dirname: string,
+): Handler<string | null> {
+  const targetPath = process.env.BABEL_SHOW_CONFIG_FOR;
+  if (targetPath != null) {
+    const absolutePath = path.resolve(dirname, targetPath);
+    const stats = yield* fs.stat(absolutePath);
+    if (!stats.isFile()) {
+      throw new Error(
+        `${absolutePath}: BABEL_SHOW_CONFIG_FOR must refer to a regular file, directories are not supported.`,
+      );
+    }
+    return absolutePath;
+  }
+  return null;
+}
+
 function throwConfigError(): empty {
   throw new Error(`\
 Caching was left unconfigured. Babel's plugins, presets, and .babelrc.js files can be configured

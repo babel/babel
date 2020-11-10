@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "./plugin.js",
+    ["transform-react-jsx-development", { "runtime": "automatic" }]
+  ]
+}

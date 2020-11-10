@@ -43,6 +43,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
+    estreeParseDecimalLiteral(value: any): N.Node {
+      // https://github.com/estree/estree/blob/master/experimental/decimal.md
+      // todo: use BigDecimal when node supports it.
+      const decimal = null;
+      const node = this.estreeParseLiteral(decimal);
+      node.decimal = String(node.value || value);
+
+      return node;
+    }
+
     estreeParseLiteral(value: any): N.Node {
       return this.parseLiteral(value, "Literal");
     }
@@ -95,22 +105,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    checkGetterSetterParams(method: N.ObjectMethod | N.ClassMethod): void {
-      const prop = ((method: any): N.EstreeProperty | N.EstreeMethodDefinition);
-      const paramCount = prop.kind === "get" ? 0 : 1;
-      const start = prop.start;
-      if (prop.value.params.length !== paramCount) {
-        if (method.kind === "get") {
-          this.raise(start, Errors.BadGetterArity);
-        } else {
-          this.raise(start, Errors.BadSetterArity);
-        }
-      } else if (
-        prop.kind === "set" &&
-        prop.value.params[0].type === "RestElement"
-      ) {
-        this.raise(start, Errors.BadSetterRestParameter);
-      }
+    getObjectOrClassMethodParams(method: N.ObjectMethod | N.ClassMethod) {
+      return ((method: any): N.EstreeProperty | N.EstreeMethodDefinition).value
+        .params;
     }
 
     checkLVal(
@@ -229,6 +226,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case tt.bigint:
           return this.estreeParseBigIntLiteral(this.state.value);
 
+        case tt.decimal:
+          return this.estreeParseDecimalLiteral(this.state.value);
+
         case tt._null:
           return this.estreeParseLiteral(null);
 
@@ -299,14 +299,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isGenerator: boolean,
       isAsync: boolean,
       isPattern: boolean,
-      containsEsc: boolean,
+      isAccessor: boolean,
     ): ?N.ObjectMethod {
       const node: N.EstreeProperty = (super.parseObjectMethod(
         prop,
         isGenerator,
         isAsync,
         isPattern,
-        containsEsc,
+        isAccessor,
       ): any);
 
       if (node) {
@@ -341,23 +341,23 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return (node: any);
     }
 
-    toAssignable(node: N.Node): N.Node {
+    toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
       if (isSimpleProperty(node)) {
         this.toAssignable(node.value);
 
         return node;
       }
 
-      return super.toAssignable(node);
+      return super.toAssignable(node, isLHS);
     }
 
-    toAssignableObjectExpressionProp(prop: N.Node, isLast: boolean) {
+    toAssignableObjectExpressionProp(prop: N.Node, ...args) {
       if (prop.kind === "get" || prop.kind === "set") {
         throw this.raise(prop.key.start, Errors.PatternHasAccessor);
       } else if (prop.method) {
         throw this.raise(prop.key.start, Errors.PatternHasMethod);
       } else {
-        super.toAssignableObjectExpressionProp(prop, isLast);
+        super.toAssignableObjectExpressionProp(prop, ...args);
       }
     }
 
@@ -374,23 +374,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         delete node.arguments;
         // $FlowIgnore - callee isn't optional in the type definition
         delete node.callee;
-      } else if (node.type === "CallExpression") {
-        (node: N.Node).optional = false;
       }
 
       return node;
     }
 
-    toReferencedListDeep(
-      exprList: $ReadOnlyArray<?N.Expression>,
-      isParenthesizedExpr?: boolean,
-    ): void {
+    toReferencedArguments(
+      node:
+        | N.CallExpression
+        | N.OptionalCallExpression
+        | N.EstreeImportExpression,
+      /* isParenthesizedExpr?: boolean, */
+    ) {
       // ImportExpressions do not have an arguments array.
-      if (!exprList) {
+      if (node.type === "ImportExpression") {
         return;
       }
 
-      super.toReferencedListDeep(exprList, isParenthesizedExpr);
+      super.toReferencedArguments(node);
     }
 
     parseExport(node: N.Node) {
@@ -417,10 +418,38 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
-    parseSubscript(...args) {
-      const node = super.parseSubscript(...args);
+    parseSubscript(
+      base: N.Expression,
+      startPos: number,
+      startLoc: Position,
+      noCalls: ?boolean,
+      state: N.ParseSubscriptState,
+    ) {
+      const node = super.parseSubscript(
+        base,
+        startPos,
+        startLoc,
+        noCalls,
+        state,
+      );
 
-      if (node.type === "MemberExpression") {
+      if (state.optionalChainMember) {
+        // https://github.com/estree/estree/blob/master/es2020.md#chainexpression
+        if (
+          node.type === "OptionalMemberExpression" ||
+          node.type === "OptionalCallExpression"
+        ) {
+          node.type = node.type.substring(8); // strip Optional prefix
+        }
+        if (state.stop) {
+          const chain = this.startNodeAtNode(node);
+          chain.expression = node;
+          return this.finishNode(chain, "ChainExpression");
+        }
+      } else if (
+        node.type === "MemberExpression" ||
+        node.type === "CallExpression"
+      ) {
         node.optional = false;
       }
 

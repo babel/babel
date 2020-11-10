@@ -2,7 +2,7 @@
 
 > Babel helper functions for inserting module loads
 
-See our website [@babel/helper-module-imports](https://babeljs.io/docs/en/next/babel-helper-module-imports.html) for more information.
+See our website [@babel/helper-module-imports](https://babeljs.io/docs/en/babel-helper-module-imports) for more information.
 
 ## Install
 

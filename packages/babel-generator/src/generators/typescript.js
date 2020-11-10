@@ -162,6 +162,9 @@ export function TSNullKeyword() {
 export function TSNeverKeyword() {
   this.word("never");
 }
+export function TSIntrinsicKeyword() {
+  this.word("intrinsic");
+}
 
 export function TSThisType() {
   this.word("this");
@@ -262,6 +265,14 @@ export function TSRestType(node) {
   this.print(node.typeAnnotation, node);
 }
 
+export function TSNamedTupleMember(node) {
+  this.print(node.label, node);
+  if (node.optional) this.token("?");
+  this.token(":");
+  this.space();
+  this.print(node.elementType, node);
+}
+
 export function TSUnionType(node) {
   this.tsPrintUnionOrIntersectionType(node, "|");
 }
@@ -309,7 +320,7 @@ export function TSParenthesizedType(node) {
 }
 
 export function TSTypeOperator(node) {
-  this.token(node.operator);
+  this.word(node.operator);
   this.space();
   this.print(node.typeAnnotation, node);
 }
@@ -322,7 +333,7 @@ export function TSIndexedAccessType(node) {
 }
 
 export function TSMappedType(node) {
-  const { readonly, typeParameter, optional } = node;
+  const { nameType, optional, readonly, typeParameter } = node;
   this.token("{");
   this.space();
   if (readonly) {
@@ -337,6 +348,14 @@ export function TSMappedType(node) {
   this.word("in");
   this.space();
   this.print(typeParameter.constraint, typeParameter);
+
+  if (nameType) {
+    this.space();
+    this.word("as");
+    this.space();
+    this.print(nameType, node);
+  }
+
   this.token("]");
 
   if (optional) {

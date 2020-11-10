@@ -10,7 +10,7 @@ const runGenerator = gensync(function* (item) {
   return yield* item;
 });
 
-// This Gensync returns true if the current execution contect is
+// This Gensync returns true if the current execution context is
 // asynchronous, otherwise it returns false.
 export const isAsync = gensync<[], boolean>({
   sync: () => false,

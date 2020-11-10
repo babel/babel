@@ -301,12 +301,16 @@ export default declare((api, options, dirname) => {
               context2 = t.cloneNode(object);
             } else {
               context1 = path.scope.generateDeclaredUidIdentifier("context");
-              context2 = t.assignmentExpression("=", context1, object);
+              context2 = t.assignmentExpression(
+                "=",
+                t.cloneNode(context1),
+                object,
+              );
             }
             node.callee = t.memberExpression(
               t.callExpression(
                 this.addDefaultImport(
-                  `${moduleName}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
+                  `${modulePath}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
                   `${propertyName}InstanceProperty`,
                 ),
                 [context2],
@@ -375,7 +379,7 @@ export default declare((api, options, dirname) => {
             path.replaceWith(
               t.callExpression(
                 this.addDefaultImport(
-                  `${moduleName}/core-js/get-iterator-method`,
+                  `${modulePath}/core-js/get-iterator-method`,
                   "getIteratorMethod",
                 ),
                 [object],
@@ -403,7 +407,7 @@ export default declare((api, options, dirname) => {
               path.replaceWith(
                 t.callExpression(
                   this.addDefaultImport(
-                    `${moduleName}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
+                    `${modulePath}/${corejsRoot}/instance/${InstanceProperties[propertyName].path}`,
                     `${propertyName}InstanceProperty`,
                   ),
                   [object],

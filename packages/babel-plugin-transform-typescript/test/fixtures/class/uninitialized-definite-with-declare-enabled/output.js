@@ -1,1 +1,3 @@
-class A {}
+class A {
+  x;
+}

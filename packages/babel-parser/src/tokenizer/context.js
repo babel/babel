@@ -5,7 +5,6 @@
 // See https://github.com/mozilla/sweet.js/wiki/design
 
 import { types as tt } from "./types";
-import { lineBreak } from "../util/whitespace";
 
 export class TokContext {
   constructor(
@@ -31,6 +30,7 @@ export const types: {
 } = {
   braceStatement: new TokContext("{", false),
   braceExpression: new TokContext("{", true),
+  recordExpression: new TokContext("#{", true),
   templateQuasi: new TokContext("${", false),
   parenStatement: new TokContext("(", false),
   parenExpression: new TokContext("(", true),
@@ -40,6 +40,14 @@ export const types: {
 };
 
 // Token-specific context update code
+// Note that we should avoid accessing `this.prodParam` in context update,
+// because it is executed immediately when last token is consumed, which may be
+// before `this.prodParam` is updated. e.g.
+// ```
+// function *g() { () => yield / 2 }
+// ```
+// When `=>` is eaten, the context update of `yield` is executed, however,
+// `this.prodParam` still has `[Yield]` production because it is not yet updated
 
 tt.parenR.updateContext = tt.braceR.updateContext = function () {
   if (this.state.context.length === 1) {
@@ -59,11 +67,10 @@ tt.name.updateContext = function (prevType) {
   let allowed = false;
   if (prevType !== tt.dot) {
     if (
-      (this.state.value === "of" &&
-        !this.state.exprAllowed &&
-        prevType !== tt._function &&
-        prevType !== tt._class) ||
-      (this.state.value === "yield" && this.prodParam.hasYield)
+      this.state.value === "of" &&
+      !this.state.exprAllowed &&
+      prevType !== tt._function &&
+      prevType !== tt._class
     ) {
       allowed = true;
     }
@@ -104,17 +111,11 @@ tt.incDec.updateContext = function () {
 };
 
 tt._function.updateContext = tt._class.updateContext = function (prevType) {
-  if (prevType === tt.dot || prevType === tt.questionDot) {
-    // when function/class follows dot/questionDot, it is part of
-    // (optional)MemberExpression, then we don't need to push new token context
-  } else if (
+  if (
     prevType.beforeExpr &&
     prevType !== tt.semi &&
     prevType !== tt._else &&
-    !(
-      prevType === tt._return &&
-      lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start))
-    ) &&
+    !(prevType === tt._return && this.hasPrecedingLineBreak()) &&
     !(
       (prevType === tt.colon || prevType === tt.braceL) &&
       this.curContext() === types.b_stat
@@ -137,6 +138,8 @@ tt.backQuote.updateContext = function () {
   this.state.exprAllowed = false;
 };
 
-tt.star.updateContext = function () {
-  this.state.exprAllowed = false;
+// we don't need to update context for tt.braceBarL because we do not pop context for tt.braceBarR
+tt.braceHashL.updateContext = function () {
+  this.state.context.push(types.recordExpression);
+  this.state.exprAllowed = true; /* tt.braceHashL.beforeExpr */
 };

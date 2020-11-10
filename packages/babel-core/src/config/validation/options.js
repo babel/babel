@@ -51,6 +51,10 @@ const ROOT_VALIDATORS: ValidatorSet = {
   code: (assertBoolean: Validator<$PropertyType<ValidatedOptions, "code">>),
   ast: (assertBoolean: Validator<$PropertyType<ValidatedOptions, "ast">>),
 
+  cloneInputAst: (assertBoolean: Validator<
+    $PropertyType<ValidatedOptions, "cloneInputAst">,
+  >),
+
   envName: (assertString: Validator<
     $PropertyType<ValidatedOptions, "envName">,
   >),
@@ -184,6 +188,7 @@ export type ValidatedOptions = {
   rootMode?: RootMode,
   code?: boolean,
   ast?: boolean,
+  cloneInputAst?: boolean,
   inputSourceMap?: RootInputSourceMapOption,
   envName?: string,
   caller?: CallerMetadata,
@@ -449,12 +454,16 @@ function assertOverridesList(loc: OptionPath, value: mixed): OverridesList {
 }
 
 export function checkNoUnwrappedItemOptionPairs(
-  lastItem: UnloadedDescriptor,
-  thisItem: UnloadedDescriptor,
-  type: "plugin" | "preset",
+  items: Array<UnloadedDescriptor>,
   index: number,
+  type: "plugin" | "preset",
   e: Error,
 ): void {
+  if (index === 0) return;
+
+  const lastItem = items[index - 1];
+  const thisItem = items[index];
+
   if (
     lastItem.file &&
     lastItem.options === undefined &&

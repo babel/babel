@@ -15,6 +15,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  proposal-numeric-separator { "electron":"0.36" }
+  proposal-logical-assignment-operators { "electron":"0.36" }
   proposal-nullish-coalescing-operator { "electron":"0.36" }
   proposal-optional-chaining { "electron":"0.36" }
   proposal-json-strings { "electron":"0.36" }
@@ -34,6 +36,7 @@ Using plugins:
   transform-destructuring { "electron":"0.36" }
   transform-block-scoping { "electron":"0.36" }
   transform-regenerator { "electron":"0.36" }
+  proposal-export-namespace-from { "electron":"0.36" }
   transform-modules-commonjs { "electron":"0.36" }
   proposal-dynamic-import { "electron":"0.36" }
 
@@ -42,6 +45,7 @@ Using polyfills with `entry` option:
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs2-electron/input.mjs] Replaced @babel/polyfill entries with the following polyfills:
   es7.array.flat-map { "electron":"0.36" }
   es6.array.from { "electron":"0.36" }
+  es6.array.iterator { "electron":"0.36" }
   es6.array.sort { "electron":"0.36" }
   es6.array.species { "electron":"0.36" }
   es6.function.has-instance { "electron":"0.36" }

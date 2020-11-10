@@ -2,7 +2,7 @@
 
 > Compile ESNext Regular Expressions to ES5
 
-See our website [@babel/helper-create-regexp-features-plugin](https://babeljs.io/docs/en/next/babel-helper-create-regexp-features-plugin.html) for more information.
+See our website [@babel/helper-create-regexp-features-plugin](https://babeljs.io/docs/en/babel-helper-create-regexp-features-plugin) for more information.
 
 ## Install
 

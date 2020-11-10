@@ -8,6 +8,8 @@ Using targets:
 Using modules transform: false
 
 Using plugins:
+  proposal-numeric-separator { "chrome":"55" }
+  proposal-logical-assignment-operators { "chrome":"55" }
   proposal-nullish-coalescing-operator { "chrome":"55" }
   proposal-optional-chaining { "chrome":"55" }
   proposal-json-strings { "chrome":"55" }
@@ -43,6 +45,7 @@ Using plugins:
   transform-member-expression-literals {}
   transform-property-literals {}
   transform-reserved-words {}
+  proposal-export-namespace-from { "chrome":"55" }
   syntax-dynamic-import { "chrome":"55" }
 
 Using polyfills with `entry` option:
@@ -53,6 +56,8 @@ Using polyfills with `entry` option:
   es.array.flat { "chrome":"55" }
   es.array.flat-map { "chrome":"55" }
   es.array.iterator { "chrome":"55" }
+  es.array.reduce { "chrome":"55" }
+  es.array.reduce-right { "chrome":"55" }
   es.array.sort { "chrome":"55" }
   es.array.unscopables.flat { "chrome":"55" }
   es.array.unscopables.flat-map { "chrome":"55" }

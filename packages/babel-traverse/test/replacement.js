@@ -97,6 +97,21 @@ describe("path/replacement", function () {
         /You passed `path\.replaceWith\(\)` a falsy node, use `path\.remove\(\)` instead/,
       );
     });
+
+    it("does not revisit the replaced node if it is the node being replaced", () => {
+      const ast = parse(`var x;`);
+      let visitCounter = 0;
+      traverse(ast, {
+        VariableDeclaration(path) {
+          visitCounter++;
+          if (visitCounter > 1) {
+            return true;
+          }
+          path.replaceWith(path.node);
+        },
+      });
+      expect(visitCounter).toBe(1);
+    });
   });
   describe("replaceWithMultiple", () => {
     it("does not add extra parentheses for a JSXElement with a JSXElement parent", () => {
@@ -111,6 +126,36 @@ describe("path/replacement", function () {
         },
       });
       expect(generate(ast).code).toBe("<div><p></p><h></h></div>;");
+    });
+    it("does not revisit one of new nodes if it is the node being replaced and is the head of nodes", () => {
+      // packages/babel-plugin-transform-block-scoping/src/index.js relies on this behaviour
+      const ast = parse(`var x;`);
+      let visitCounter = 0;
+      traverse(ast, {
+        VariableDeclaration(path) {
+          visitCounter++;
+          if (visitCounter > 1) {
+            return true;
+          }
+          path.replaceWithMultiple([path.node, t.emptyStatement()]);
+        },
+      });
+      expect(visitCounter).toBe(1);
+    });
+    it("does not revisit one of new nodes if it is the node being replaced and is the tail of nodes", () => {
+      // packages/babel-plugin-transform-block-scoping/src/index.js relies on this behaviour
+      const ast = parse(`var x;`);
+      let visitCounter = 0;
+      traverse(ast, {
+        VariableDeclaration(path) {
+          visitCounter++;
+          if (visitCounter > 1) {
+            return true;
+          }
+          path.replaceWithMultiple([t.emptyStatement(), path.node]);
+        },
+      });
+      expect(visitCounter).toBe(1);
     });
   });
 });

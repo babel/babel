@@ -1,8 +1,5 @@
 # @babel/eslint-parser [![npm](https://img.shields.io/npm/v/@babel/eslint-parser.svg)](https://www.npmjs.com/package/@babel/eslint-parser) [![travis](https://img.shields.io/travis/babel/@babel/eslint-parser/main.svg)](https://travis-ci.org/babel/@babel/eslint-parser) [![npm-downloads](https://img.shields.io/npm/dm/@babel/eslint-parser.svg)](https://www.npmjs.com/package/@babel/eslint-parser)
 
-
-## This project is still experimental and will be released with Babel v8. You can track our progress [here](https://github.com/babel/babel/issues/10752)! Please use [babel-eslint](https://github.com/babel/babel-eslint) in the meantime.
-
 **@babel/eslint-parser** allows you to lint **ALL** valid Babel code with the fantastic
 [ESLint](https://github.com/eslint/eslint).
 
@@ -10,7 +7,7 @@
 
 ESLint's default parser and core rules [only support the latest final ECMAScript standard](https://github.com/eslint/eslint/blob/a675c89573836adaf108a932696b061946abf1e6/README.md#what-about-experimental-features) and do not support experimental (such as new features) and non-standard (such as Flow or TypeScript types) syntax provided by Babel. @babel/eslint-parser is a parser that allows ESLint to run on source code that is transformed by Babel.
 
-**Note:** You only need to use @babel/parser-eslint if you are using Babel to transform your code. If this is not the case, please use the relevant parser for your chosen flavor of ECMAScript (note that the default parser supports all non-experimental syntax as well as JSX).
+**Note:** You only need to use @babel/eslint-parser if you are using Babel to transform your code. If this is not the case, please use the relevant parser for your chosen flavor of ECMAScript (note that the default parser supports all non-experimental syntax as well as JSX).
 
 ## How does it work?
 
@@ -56,7 +53,7 @@ Additional configuration options can be set in your ESLint configuration under t
 - `sourceType` can be set to `"module"`(default) or `"script"` if your code isn't using ECMAScript modules.
 - `allowImportExportEverywhere` (default `false`) can be set to `true` to allow import and export declarations to appear anywhere a statement is allowed if your build environment supports that. Otherwise import and export declarations can only appear at a program's top level.
 - `ecmaFeatures.globalReturn` (default `false`) allow return statements in the global scope when used with `sourceType: "script"`.
-- `babelOptions` is an object containing Babel configuration [options](https://babeljs.io/docs/en/options) that are passed to Babel's parser at runtime.  For cases where users might not want to use a Babel configuration file or are running Babel through another tool (such as Webpack with `babel-loader`).
+- `babelOptions` is an object containing Babel configuration [options](https://babeljs.io/docs/en/options) that are passed to Babel's parser at runtime. For cases where users might not want to use a Babel configuration file or are running Babel through another tool (such as Webpack with `babel-loader`).
 
 **.eslintrc.js**
 
@@ -83,14 +80,14 @@ This configuration would use the default parser for all files except for those f
 ```js
 module.exports = {
   rules: {
-    indent: "error"
+    indent: "error",
   },
   overrides: [
     {
       files: ["files/transformed/by/babel/*.js"],
       parser: "@babel/eslint-parser",
-    }
-  ]
+    },
+  ],
 };
 ```
 
@@ -100,25 +97,9 @@ module.exports = {
 $ ./node_modules/.bin/eslint yourfile.js
 ```
 
-## Known issues
+## TypeScript
 
-Flow:
-
-> Check out [eslint-plugin-flowtype](https://github.com/gajus/eslint-plugin-flowtype): An `eslint` plugin that makes flow type annotations global variables and marks declarations as used. Solves the problem of false positives with `no-undef` and `no-unused-vars`.
-
-- `no-undef` for global flow types: `ReactElement`, `ReactClass` [#130](https://github.com/babel/@babel/eslint-parser/issues/130#issuecomment-111215076)
-  - Workaround: define types as globals in `.eslintrc` or define types and import them `import type ReactElement from './types'`
-- `no-unused-vars/no-undef` with Flow declarations (`declare module A {}`) [#132](https://github.com/babel/@babel/eslint-parser/issues/132#issuecomment-112815926)
-
-Modules/strict mode
-
-- `no-unused-vars: ["error", { vars: local }]` [#136](https://github.com/babel/@babel/eslint-parser/issues/136)
-
-Please check out [eslint-plugin-react](https://github.com/yannickcr/eslint-plugin-react) for React/JSX issues.
-
-- `no-unused-vars` with jsx
-
-Please check out [eslint-plugin-babel](https://github.com/babel/eslint-plugin-babel) for other issues.
+While [`@babel/eslint-parser`](https://github.com/babel/babel/tree/main/eslint/babel-eslint-parser) can parse TypeScript, we don't currently support linting TypeScript using the rules in [`@babel/eslint-plugin`](https://github.com/babel/babel/tree/main/eslint/babel-eslint-plugin). This is because the TypeScript community has centered around [`@typescript-eslint`](https://github.com/typescript-eslint/typescript-eslint) and we want to avoid duplicate work. Additionally, since [`@typescript-eslint`](https://github.com/typescript-eslint/typescript-eslint) uses TypeScript under the hood, its rules can be made type-aware, which is something Babel doesn't have the ability to do.
 
 ## Questions and support
 
