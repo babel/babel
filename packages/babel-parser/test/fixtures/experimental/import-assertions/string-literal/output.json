@@ -1,0 +1,111 @@
+{
+  "type": "File",
+  "start":0,"end":101,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":52}},
+  "errors": [
+    "SyntaxError: The only accepted module attribute is `type` (1:36)",
+    "SyntaxError: The only accepted module attribute is `type` (2:40)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":101,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":52}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":48,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":48}},
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start":7,"end":10,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":10}},
+            "local": {
+              "type": "Identifier",
+              "start":7,"end":10,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":10},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":16,"end":26,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":26}},
+          "extra": {
+            "rawValue": "foo.json",
+            "raw": "\"foo.json\""
+          },
+          "value": "foo.json"
+        },
+        "assertions": [
+          {
+            "type": "ImportAttribute",
+            "start":36,"end":46,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":46}},
+            "key": {
+              "type": "Identifier",
+              "start":36,"end":39,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":39},"identifierName":"for"},
+              "name": "for"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":41,"end":46,"loc":{"start":{"line":1,"column":41},"end":{"line":1,"column":46}},
+              "extra": {
+                "rawValue": "for",
+                "raw": "\"for\""
+              },
+              "value": "for"
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":49,"end":101,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":52}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":58,"end":61,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":12}},
+            "local": {
+              "type": "Identifier",
+              "start":58,"end":61,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":12},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":58,"end":61,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":12},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":69,"end":79,"loc":{"start":{"line":2,"column":20},"end":{"line":2,"column":30}},
+          "extra": {
+            "rawValue": "foo.json",
+            "raw": "\"foo.json\""
+          },
+          "value": "foo.json"
+        },
+        "declaration": null,
+        "assertions": [
+          {
+            "type": "ImportAttribute",
+            "start":89,"end":99,"loc":{"start":{"line":2,"column":40},"end":{"line":2,"column":50}},
+            "key": {
+              "type": "Identifier",
+              "start":89,"end":92,"loc":{"start":{"line":2,"column":40},"end":{"line":2,"column":43},"identifierName":"for"},
+              "name": "for"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":94,"end":99,"loc":{"start":{"line":2,"column":45},"end":{"line":2,"column":50}},
+              "extra": {
+                "rawValue": "for",
+                "raw": "\"for\""
+              },
+              "value": "for"
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  }
+}

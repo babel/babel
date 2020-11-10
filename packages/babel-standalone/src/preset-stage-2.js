@@ -13,11 +13,13 @@ export default (_: any, opts: Object = {}) => {
   return {
     presets: [[presetStage3, { loose, useBuiltIns }]],
     plugins: [
+      babelPlugins.proposalClassStaticBlock,
       [
         babelPlugins.proposalDecorators,
         { legacy: decoratorsLegacy, decoratorsBeforeExport },
       ],
       babelPlugins.proposalFunctionSent,
+      babelPlugins.proposalPrivatePropertyInObject,
       babelPlugins.proposalThrowExpressions,
     ],
   };

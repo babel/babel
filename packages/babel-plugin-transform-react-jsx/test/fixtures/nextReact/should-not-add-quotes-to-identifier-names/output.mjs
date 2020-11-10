@@ -1,4 +1,4 @@
-import { jsx as _jsx } from "react/jsx-runtime.js";
+import { jsx as _jsx } from "react/jsx-runtime";
 
 var e = /*#__PURE__*/_jsx(F, {
   aaa: true,

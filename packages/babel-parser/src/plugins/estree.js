@@ -379,16 +379,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
-    toReferencedListDeep(
-      exprList: $ReadOnlyArray<?N.Expression>,
-      isParenthesizedExpr?: boolean,
-    ): void {
+    toReferencedArguments(
+      node:
+        | N.CallExpression
+        | N.OptionalCallExpression
+        | N.EstreeImportExpression,
+      /* isParenthesizedExpr?: boolean, */
+    ) {
       // ImportExpressions do not have an arguments array.
-      if (!exprList) {
+      if (node.type === "ImportExpression") {
         return;
       }
 
-      super.toReferencedListDeep(exprList, isParenthesizedExpr);
+      super.toReferencedArguments(node);
     }
 
     parseExport(node: N.Node) {

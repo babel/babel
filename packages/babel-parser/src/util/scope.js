@@ -39,8 +39,8 @@ type raiseFunction = (number, string, ...any) => void;
 // current scope in order to detect duplicate variable names.
 export default class ScopeHandler<IScope: Scope = Scope> {
   scopeStack: Array<IScope> = [];
-  raise: raiseFunction;
-  inModule: boolean;
+  declare raise: raiseFunction;
+  declare inModule: boolean;
   undefinedExports: Map<string, number> = new Map();
   undefinedPrivateNames: Map<string, number> = new Map();
 

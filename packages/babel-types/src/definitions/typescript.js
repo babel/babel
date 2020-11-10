@@ -132,6 +132,7 @@ const tsKeywordTypes = [
   "TSAnyKeyword",
   "TSBooleanKeyword",
   "TSBigIntKeyword",
+  "TSIntrinsicKeyword",
   "TSNeverKeyword",
   "TSNullKeyword",
   "TSNumberKeyword",
@@ -305,12 +306,13 @@ defineType("TSIndexedAccessType", {
 
 defineType("TSMappedType", {
   aliases: ["TSType"],
-  visitor: ["typeParameter", "typeAnnotation"],
+  visitor: ["typeParameter", "typeAnnotation", "nameType"],
   fields: {
     readonly: validateOptional(bool),
     typeParameter: validateType("TSTypeParameter"),
     optional: validateOptional(bool),
     typeAnnotation: validateOptionalType("TSType"),
+    nameType: validateOptionalType("TSType"),
   },
 });
 

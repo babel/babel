@@ -2,7 +2,7 @@
 
 > Helper function to check for literal RegEx
 
-See our website [@babel/helper-regex](https://babeljs.io/docs/en/next/babel-helper-regex.html) for more information.
+See our website [@babel/helper-regex](https://babeljs.io/docs/en/babel-helper-regex) for more information.
 
 ## Install
 

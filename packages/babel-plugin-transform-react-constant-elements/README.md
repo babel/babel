@@ -2,7 +2,7 @@
 
 > Treat React JSX elements as value types and hoist them to the highest scope
 
-See our website [@babel/plugin-transform-react-constant-elements](https://babeljs.io/docs/en/next/babel-plugin-transform-react-constant-elements.html) for more information.
+See our website [@babel/plugin-transform-react-constant-elements](https://babeljs.io/docs/en/babel-plugin-transform-react-constant-elements) for more information.
 
 ## Install
 

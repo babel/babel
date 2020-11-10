@@ -84,7 +84,7 @@ const handle = {
   },
 
   handle(member) {
-    const { node, parent, parentPath } = member;
+    const { node, parent, parentPath, scope } = member;
 
     if (member.isOptionalMemberExpression()) {
       // Transforming optional chaining requires we replace ancestors.
@@ -117,6 +117,17 @@ const handle = {
         }
         return true;
       });
+
+      // Replace `function (a, x = a.b?.#c) {}` to `function (a, x = (() => a.b?.#c)() ){}`
+      // so the temporary variable can be injected in correct scope
+      // This can be further optimized to avoid unecessary IIFE
+      if (scope.path.isPattern()) {
+        endPath.replaceWith(
+          // The injected member will be queued and eventually transformed when visited
+          t.callExpression(t.arrowFunctionExpression([], endPath.node), []),
+        );
+        return;
+      }
 
       const rootParentPath = endPath.parentPath;
       if (
@@ -165,7 +176,6 @@ const handle = {
         );
       }
 
-      const { scope } = member;
       const startingProp = startingOptional.isOptionalMemberExpression()
         ? "object"
         : "callee";
@@ -362,6 +372,16 @@ const handle = {
 
     // MEMBER?.(ARGS) -> _optionalCall(MEMBER, ARGS)
     if (parentPath.isOptionalCallExpression({ callee: node })) {
+      // Replace `function (a, x = a.b.#c?.()) {}` to `function (a, x = (() => a.b.#c?.())() ){}`
+      // so the temporary variable can be injected in correct scope
+      // This can be further optimized to avoid unecessary IIFE
+      if (scope.path.isPattern()) {
+        parentPath.replaceWith(
+          // The injected member will be queued and eventually transformed when visited
+          t.callExpression(t.arrowFunctionExpression([], parentPath.node), []),
+        );
+        return;
+      }
       parentPath.replaceWith(this.optionalCall(member, parent.arguments));
       return;
     }

@@ -19,6 +19,7 @@ function startLocalRegistry {
   export YARN_NPM_PUBLISH_REGISTRY="$custom_registry_url"
   export YARN_NPM_REGISTRY_SERVER="$custom_registry_url"
   export YARN_NPM_AUTH_IDENT="username:password"
+  export YARN_UNSAFE_HTTP_WHITELIST="localhost"
 }
 
 function loginLocalRegistry {

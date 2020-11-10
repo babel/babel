@@ -4,7 +4,7 @@ import {
   skipTransparentExprWrappers,
 } from "@babel/helper-skip-transparent-expression-wrappers";
 import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
-import { types as t } from "@babel/core";
+import { types as t, template } from "@babel/core";
 
 export default declare((api, options) => {
   api.assertVersion(7);
@@ -20,6 +20,31 @@ export default declare((api, options) => {
         !expression.computed &&
         isSimpleMemberExpression(expression.object))
     );
+  }
+
+  /**
+   * Test if a given optional chain `path` needs to be memoized
+   * @param {NodePath} path
+   * @returns {boolean}
+   */
+  function needsMemoize(path) {
+    let optionalPath = path;
+    const { scope } = path;
+    while (
+      optionalPath.isOptionalMemberExpression() ||
+      optionalPath.isOptionalCallExpression()
+    ) {
+      const { node } = optionalPath;
+      const childKey = optionalPath.isOptionalMemberExpression()
+        ? "object"
+        : "callee";
+      const childPath = skipTransparentExprWrappers(optionalPath.get(childKey));
+      if (node.optional) {
+        return !scope.isStatic(childPath.node);
+      }
+
+      optionalPath = childPath;
+    }
   }
 
   return {
@@ -46,6 +71,13 @@ export default declare((api, options) => {
         const optionals = [];
 
         let optionalPath = path;
+        // Replace `function (a, x = a.b?.c) {}` to `function (a, x = (() => a.b?.c)() ){}`
+        // so the temporary variable can be injected in correct scope
+        if (scope.path.isPattern() && needsMemoize(optionalPath)) {
+          path.replaceWith(template.ast`(() => ${path.node})()`);
+          // The injected optional chain will be queued and eventually transformed when visited
+          return;
+        }
         while (
           optionalPath.isOptionalMemberExpression() ||
           optionalPath.isOptionalCallExpression()

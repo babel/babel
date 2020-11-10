@@ -101,11 +101,11 @@ export class Token {
     this.loc = new SourceLocation(state.startLoc, state.endLoc);
   }
 
-  type: TokenType;
-  value: any;
-  start: number;
-  end: number;
-  loc: SourceLocation;
+  declare type: TokenType;
+  declare value: any;
+  declare start: number;
+  declare end: number;
+  declare loc: SourceLocation;
 }
 
 // ## Tokenizer
@@ -1149,7 +1149,9 @@ export default class Tokenizer extends ParserErrors {
       if (next === charCodes.plusSign || next === charCodes.dash) {
         ++this.state.pos;
       }
-      if (this.readInt(10) === null) this.raise(start, Errors.InvalidNumber);
+      if (this.readInt(10) === null) {
+        this.raise(start, Errors.InvalidOrMissingExponent);
+      }
       isFloat = true;
       hasExponent = true;
       next = this.input.charCodeAt(this.state.pos);

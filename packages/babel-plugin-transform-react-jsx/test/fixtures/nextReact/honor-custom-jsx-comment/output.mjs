@@ -1,5 +1,5 @@
-import { jsxs as _jsxs } from "react/jsx-runtime.js";
-import { jsx as _jsx } from "react/jsx-runtime.js";
+import { jsxs as _jsxs } from "react/jsx-runtime";
+import { jsx as _jsx } from "react/jsx-runtime";
 
 /*#__PURE__*/
 _jsx(Foo, {});

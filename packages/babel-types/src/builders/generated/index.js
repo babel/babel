@@ -717,6 +717,10 @@ export function DecimalLiteral(...args: Array<any>): Object {
   return builder("DecimalLiteral", ...args);
 }
 export { DecimalLiteral as decimalLiteral };
+export function StaticBlock(...args: Array<any>): Object {
+  return builder("StaticBlock", ...args);
+}
+export { StaticBlock as staticBlock };
 export function TSParameterProperty(...args: Array<any>): Object {
   return builder("TSParameterProperty", ...args);
 }
@@ -765,6 +769,10 @@ export function TSBigIntKeyword(...args: Array<any>): Object {
   return builder("TSBigIntKeyword", ...args);
 }
 export { TSBigIntKeyword as tsBigIntKeyword };
+export function TSIntrinsicKeyword(...args: Array<any>): Object {
+  return builder("TSIntrinsicKeyword", ...args);
+}
+export { TSIntrinsicKeyword as tsIntrinsicKeyword };
 export function TSNeverKeyword(...args: Array<any>): Object {
   return builder("TSNeverKeyword", ...args);
 }

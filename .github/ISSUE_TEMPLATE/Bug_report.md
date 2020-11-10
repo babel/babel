@@ -18,7 +18,7 @@ assignees: ''
 -->
 
 **Current behavior**
-A clear and concise description of the behavior.
+<!-- A clear and concise description of the behavior. -->
 
 - [REPL](babeljs.io/repl), [Codesandbox](https://codesandbox.io/s/babel-repl-custom-plugin-7s08o?file=/src/index.js), or GitHub Repo helps!
 
@@ -29,7 +29,7 @@ var your => (code) => here;
 ```
 
 **Expected behavior**
-A clear and concise description of what you expected to happen (or code).
+<!-- A clear and concise description of what you expected to happen (or code). -->
 
 **Babel Configuration (babel.config.js, .babelrc, package.json#babel, cli command, .eslintrc)**
 - Filename: `babel.config.js`
@@ -55,4 +55,4 @@ A clear and concise description of what you expected to happen (or code).
 <!--- If you have suggestions on a fix for the bug -->
 
 **Additional context**
-Add any other context about the problem here. Or a screenshot if applicable
+<!-- Add any other context about the problem here. Or a screenshot if applicable -->

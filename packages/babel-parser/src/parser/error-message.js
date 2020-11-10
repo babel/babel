@@ -1,19 +1,24 @@
 // @flow
 /* eslint sort-keys: "error" */
 
+/**
+ * @module parser/error-message
+ */
+
 // The Errors key follows https://cs.chromium.org/chromium/src/v8/src/common/message-template.h unless it does not exist
 export const ErrorMessages = Object.freeze({
   AccessorIsGenerator: "A %0ter cannot be a generator",
-  ArgumentsDisallowedInInitializer:
-    "'arguments' is not allowed in class field initializer",
+  ArgumentsInClass:
+    "'arguments' is only allowed in functions and class methods",
   AsyncFunctionInSingleStatementContext:
     "Async functions can only be declared at the top level or inside a block",
   AwaitBindingIdentifier:
     "Can not use 'await' as identifier inside an async function",
   AwaitExpressionFormalParameter:
     "await is not allowed in async function parameters",
-  AwaitNotInAsyncFunction:
-    "Can not use keyword 'await' outside an async function",
+  AwaitNotInAsyncContext:
+    "'await' is only allowed within async functions and at the top levels of modules",
+  AwaitNotInAsyncFunction: "'await' is only allowed within async functions",
   BadGetterArity: "getter must not have any formal parameters",
   BadSetterArity: "setter must have exactly one formal parameter",
   BadSetterRestParameter:
@@ -32,6 +37,7 @@ export const ErrorMessages = Object.freeze({
   DecoratorExportClass:
     "Using the export keyword between a decorator and a class is not allowed. Please use `export @dec class` instead.",
   DecoratorSemicolon: "Decorators must not be followed by a semicolon",
+  DecoratorStaticBlock: "Decorators can't be used with a static block",
   DeletePrivateField: "Deleting a private field is not allowed",
   DestructureNamedImport:
     "ES2015 named imports do not destructure. Use another statement for destructuring after the import.",
@@ -41,8 +47,11 @@ export const ErrorMessages = Object.freeze({
     "`%0` has already been exported. Exported identifiers must be unique.",
   DuplicateProto: "Redefinition of __proto__ property",
   DuplicateRegExpFlags: "Duplicate regular expression flag",
+  DuplicateStaticBlock: "Duplicate static block in the same class",
   ElementAfterRest: "Rest element must be last element",
   EscapedCharNotAnIdentifier: "Invalid Unicode escape",
+  ExportBindingIsString:
+    "A string literal cannot be used as an exported binding without `from`.\n- Did you mean `export { %0 as '%1' } from 'some-module'`?",
   ExportDefaultFromAsIdentifier:
     "'from' is not allowed as an identifier after 'export default'",
   ForInOfLoopInitializer:
@@ -53,6 +62,8 @@ export const ErrorMessages = Object.freeze({
   IllegalLanguageModeDirective:
     "Illegal 'use strict' directive in function with non-simple parameter list",
   IllegalReturn: "'return' outside of function",
+  ImportBindingIsString:
+    'A string literal cannot be used as an imported binding.\n- Did you mean `import { "%0" as foo }`?',
   ImportCallArgumentTrailingComma:
     "Trailing comma is disallowed inside import(...) arguments",
   ImportCallArity: "import() requires exactly %0",
@@ -71,6 +82,8 @@ export const ErrorMessages = Object.freeze({
   InvalidLhs: "Invalid left-hand side in %0",
   InvalidLhsBinding: "Binding invalid left-hand side in %0",
   InvalidNumber: "Invalid number",
+  InvalidOrMissingExponent:
+    "Floating-point numbers require a valid exponent after the 'e'",
   InvalidOrUnexpectedToken: "Unexpected character '%0'",
   InvalidParenthesizedAssignment: "Invalid parenthesized assignment pattern",
   InvalidPrivateFieldResolution: "Private name #%0 is not defined",
@@ -95,6 +108,8 @@ export const ErrorMessages = Object.freeze({
     "Only string literals are allowed as module attribute values",
   ModuleAttributesWithDuplicateKeys:
     'Duplicate key "%0" is not allowed in module attributes',
+  ModuleExportNameHasLoneSurrogate:
+    "An export name cannot include a lone surrogate, found '\\u%0'",
   ModuleExportUndefined: "Export '%0' is not defined",
   MultipleDefaultsInSwitch: "Multiple default clauses",
   NewlineAfterThrow: "Illegal newline after throw",
@@ -196,7 +211,7 @@ export const ErrorMessages = Object.freeze({
   VarRedeclaration: "Identifier '%0' has already been declared",
   YieldBindingIdentifier:
     "Can not use 'yield' as identifier inside a generator",
-  YieldInParameter: "yield is not allowed in generator parameters",
+  YieldInParameter: "Yield expression is not allowed in formal parameters",
   ZeroDigitNumericSeparator:
     "Numeric separator can not be used after leading 0",
 });

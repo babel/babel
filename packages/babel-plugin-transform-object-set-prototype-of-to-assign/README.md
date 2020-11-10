@@ -2,7 +2,7 @@
 
 > Turn Object.setPrototypeOf to assignments
 
-See our website [@babel/plugin-transform-object-set-prototype-of-to-assign](https://babeljs.io/docs/en/next/babel-plugin-transform-object-set-prototype-of-to-assign.html) for more information.
+See our website [@babel/plugin-transform-object-set-prototype-of-to-assign](https://babeljs.io/docs/en/babel-plugin-transform-object-set-prototype-of-to-assign) for more information.
 
 ## Install
 

@@ -29,6 +29,7 @@ jobs:
           YARN_ENABLE_SCRIPTS: false # disable post-install scripts
           YARN_NODE_LINKER: pnp # use pnp linker for better performance: it's meant to update yarn cache only
         run: |
+          yarn dedupe --check
           yarn install --immutable
 
   test-coverage:
@@ -41,7 +42,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v2-beta
         with:
-          node-version: "*"
+          node-version: "15"
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
@@ -52,6 +53,7 @@ jobs:
       - name: Generate coverage report
         run: |
           make -j test-ci-coverage
+          yarn test:esm
       - name: Upload coverage report
         uses: codecov/codecov-action@v1
         with:
@@ -97,14 +99,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [13, 12, 10]
+        node-version: [14, 13, 12, 10]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Use Node.js latest
         uses: actions/setup-node@v2-beta
         with:
-          node-version: "*" # Build Babel on latest node versions
+          node-version: "*" # Build Babel on latest node LTS versions
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
@@ -115,6 +117,10 @@ jobs:
       - name: Install
         run: |
           BABEL_ENV=test-legacy make -j bootstrap-only
+      - name: Downgrade Jest for node <= 8
+        if: matrix.node-version == '6' || matrix.node-version == '8'
+        run: |
+          yarn remove jest && yarn add --dev jest@24
       - uses: actions/download-artifact@v2
         with:
           name: babel-artifact

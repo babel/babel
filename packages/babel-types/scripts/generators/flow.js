@@ -43,6 +43,7 @@ declare class ${NODE_PREFIX} {
   start: ?number;
   end: ?number;
   loc: ?${NODE_PREFIX}SourceLocation;
+  extra?: { [string]: mixed };
 }\n\n`;
 
 //

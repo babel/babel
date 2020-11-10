@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":27}},
   "errors": [
-    "SyntaxError: yield is not allowed in generator parameters (1:15)"
+    "SyntaxError: Yield expression is not allowed in formal parameters (1:15)"
   ],
   "program": {
     "type": "Program",
@@ -16,6 +16,10 @@
         "expression": {
           "type": "ObjectExpression",
           "start":1,"end":26,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":26}},
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          },
           "properties": [
             {
               "type": "ObjectMethod",
@@ -55,11 +59,7 @@
                 "directives": []
               }
             }
-          ],
-          "extra": {
-            "parenthesized": true,
-            "parenStart": 0
-          }
+          ]
         }
       }
     ],

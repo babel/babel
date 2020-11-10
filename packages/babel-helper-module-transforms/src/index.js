@@ -10,6 +10,8 @@ import rewriteLiveReferences from "./rewrite-live-references";
 import normalizeAndLoadModuleMetadata, {
   hasExports,
   isSideEffectImport,
+  type ModuleMetadata,
+  type SourceModuleMetadata,
 } from "./normalize-and-load-metadata";
 
 export { default as getModuleName } from "./get-module-name";
@@ -180,33 +182,58 @@ export function buildNamespaceInitStatements(
   return statements;
 }
 
-const getTemplateForReexport = loose => {
-  return loose
-    ? template.statement`EXPORTS.EXPORT_NAME = NAMESPACE.IMPORT_NAME;`
-    : template`
-      Object.defineProperty(EXPORTS, "EXPORT_NAME", {
-        enumerable: true,
-        get: function() {
-          return NAMESPACE.IMPORT_NAME;
-        },
-      });
-    `;
+const ReexportTemplate = {
+  loose: template.statement`EXPORTS.EXPORT_NAME = NAMESPACE_IMPORT;`,
+  looseComputed: template.statement`EXPORTS["EXPORT_NAME"] = NAMESPACE_IMPORT;`,
+  spec: template`
+    Object.defineProperty(EXPORTS, "EXPORT_NAME", {
+      enumerable: true,
+      get: function() {
+        return NAMESPACE_IMPORT;
+      },
+    });
+    `,
 };
 
-const buildReexportsFromMeta = (meta, metadata, loose) => {
+const buildReexportsFromMeta = (
+  meta: ModuleMetadata,
+  metadata: SourceModuleMetadata,
+  loose,
+) => {
   const namespace = metadata.lazy
     ? t.callExpression(t.identifier(metadata.name), [])
     : t.identifier(metadata.name);
 
-  const templateForCurrentMode = getTemplateForReexport(loose);
-  return Array.from(metadata.reexports, ([exportName, importName]) =>
-    templateForCurrentMode({
+  const { stringSpecifiers } = meta;
+  return Array.from(metadata.reexports, ([exportName, importName]) => {
+    let NAMESPACE_IMPORT;
+    if (stringSpecifiers.has(importName)) {
+      NAMESPACE_IMPORT = t.memberExpression(
+        t.cloneNode(namespace),
+        t.stringLiteral(importName),
+        true,
+      );
+    } else {
+      NAMESPACE_IMPORT = NAMESPACE_IMPORT = t.memberExpression(
+        t.cloneNode(namespace),
+        t.identifier(importName),
+      );
+    }
+    const astNodes = {
       EXPORTS: meta.exportName,
       EXPORT_NAME: exportName,
-      NAMESPACE: t.cloneNode(namespace),
-      IMPORT_NAME: importName,
-    }),
-  );
+      NAMESPACE_IMPORT,
+    };
+    if (loose) {
+      if (stringSpecifiers.has(exportName)) {
+        return ReexportTemplate.looseComputed(astNodes);
+      } else {
+        return ReexportTemplate.loose(astNodes);
+      }
+    } else {
+      return ReexportTemplate.spec(astNodes);
+    }
+  });
 };
 
 /**
@@ -363,16 +390,25 @@ function buildExportInitializationStatements(
  * Given a set of export names, create a set of nested assignments to
  * initialize them all to a given expression.
  */
-function buildInitStatement(metadata, exportNames, initExpr) {
+const InitTemplate = {
+  computed: template.expression`EXPORTS["NAME"] = VALUE`,
+  default: template.expression`EXPORTS.NAME = VALUE`,
+};
+
+function buildInitStatement(metadata: ModuleMetadata, exportNames, initExpr) {
+  const { stringSpecifiers, exportName: EXPORTS } = metadata;
   return t.expressionStatement(
-    exportNames.reduce(
-      (acc, exportName) =>
-        template.expression`EXPORTS.NAME = VALUE`({
-          EXPORTS: metadata.exportName,
-          NAME: exportName,
-          VALUE: acc,
-        }),
-      initExpr,
-    ),
+    exportNames.reduce((acc, exportName) => {
+      const params = {
+        EXPORTS,
+        NAME: exportName,
+        VALUE: acc,
+      };
+      if (stringSpecifiers.has(exportName)) {
+        return InitTemplate.computed(params);
+      } else {
+        return InitTemplate.default(params);
+      }
+    }, initExpr),
   );
 }

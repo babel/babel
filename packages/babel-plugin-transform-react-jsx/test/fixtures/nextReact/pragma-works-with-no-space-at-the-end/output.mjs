@@ -1,4 +1,4 @@
-import { jsx as _jsx } from "foo/jsx-runtime.js";
+import { jsx as _jsx } from "foo/jsx-runtime";
 
 /* @jsxImportSource foo*/
 _jsx("div", {
