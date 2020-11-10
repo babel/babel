@@ -146,7 +146,7 @@ export default class ExpressionScopeHandler {
    * Unlike `recordParameterInitializerError`, we don't record to ancestry scope because we
    * validate arrow head parsing scope before exit, and then the LHS will be unambiguous:
    * For example, in `( x = ( [(a) = []] = [] ) ) => {}`, we should not record `(a)` in `( x = ... ) =>`
-   * arrow scope because when we finish parsing `( [(a) = []] = [] )`, it is an umbiguous assignment
+   * arrow scope because when we finish parsing `( [(a) = []] = [] )`, it is an unambiguous assignment
    * expression and can not be cast to pattern
    * @param {number} pos
    * @param {string} message
