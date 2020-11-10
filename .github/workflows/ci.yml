@@ -99,7 +99,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14, 13, 12, 10, 8, 6]
+        node-version: [14, 12, 10, 8, 6]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

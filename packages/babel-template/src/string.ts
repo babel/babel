@@ -1,6 +1,6 @@
-// @flow
 import type { Formatter } from "./formatters";
-import { normalizeReplacements, type TemplateOpts } from "./options";
+import type { TemplateOpts } from "./options";
+import { normalizeReplacements } from "./options";
 import parseAndBuildMetadata from "./parse";
 import populatePlaceholders from "./populate";
 
@@ -8,12 +8,12 @@ export default function stringTemplate<T>(
   formatter: Formatter<T>,
   code: string,
   opts: TemplateOpts,
-): mixed => T {
+): (arg?: unknown) => T {
   code = formatter.code(code);
 
   let metadata;
 
-  return (arg?: mixed) => {
+  return (arg?: unknown) => {
     const replacements = normalizeReplacements(arg);
 
     if (!metadata) metadata = parseAndBuildMetadata(formatter, code, opts);

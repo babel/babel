@@ -1,4 +1,3 @@
-// @flow
 import * as t from "@babel/types";
 
 import type { TemplateReplacements } from "./options";
@@ -7,7 +6,7 @@ import type { Metadata, Placeholder } from "./parse";
 export default function populatePlaceholders(
   metadata: Metadata,
   replacements: TemplateReplacements,
-): BabelNodeFile {
+): t.File {
   const ast = t.cloneNode(metadata.ast);
 
   if (replacements) {
@@ -55,7 +54,7 @@ export default function populatePlaceholders(
 
 function applyReplacement(
   placeholder: Placeholder,
-  ast: BabelNodeFile,
+  ast: t.File,
   replacement: any,
 ) {
   // Track inserted nodes and clone them if they are inserted more than
@@ -86,7 +85,7 @@ function applyReplacement(
       } else if (typeof replacement === "string") {
         replacement = t.expressionStatement(t.identifier(replacement));
       } else if (!t.isStatement(replacement)) {
-        replacement = t.expressionStatement((replacement: any));
+        replacement = t.expressionStatement(replacement as any);
       }
     } else {
       if (replacement && !Array.isArray(replacement)) {
@@ -94,7 +93,7 @@ function applyReplacement(
           replacement = t.identifier(replacement);
         }
         if (!t.isStatement(replacement)) {
-          replacement = t.expressionStatement((replacement: any));
+          replacement = t.expressionStatement(replacement as any);
         }
       }
     }
@@ -116,9 +115,9 @@ function applyReplacement(
   if (index === undefined) {
     t.validate(parent, key, replacement);
 
-    (parent: any)[key] = replacement;
+    (parent as any)[key] = replacement;
   } else {
-    const items: Array<BabelNode> = (parent: any)[key].slice();
+    const items: Array<t.Node> = (parent as any)[key].slice();
 
     if (placeholder.type === "statement" || placeholder.type === "param") {
       if (replacement == null) {
@@ -133,6 +132,6 @@ function applyReplacement(
     }
 
     t.validate(parent, key, items);
-    (parent: any)[key] = items;
+    (parent as any)[key] = items;
   }
 }
