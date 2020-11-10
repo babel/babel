@@ -52,6 +52,7 @@ Using polyfills with `entry` option:
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs2-force-all-transforms/input.mjs] Replaced @babel/polyfill entries with the following polyfills:
   es7.array.flat-map { "chrome":"55" }
+  es6.array.iterator { "chrome":"55" }
   es6.array.sort { "chrome":"55" }
   es7.object.define-getter { "chrome":"55" }
   es7.object.define-setter { "chrome":"55" }
