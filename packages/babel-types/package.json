@@ -15,6 +15,13 @@
   },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "typesVersions": {
+    ">=3.7": {
+      "lib/index.d.ts": [
+        "lib/index-ts3.7.d.ts"
+      ]
+    }
+  },
   "dependencies": {
     "@babel/helper-validator-identifier": "workspace:^7.10.4",
     "lodash": "^4.17.19",

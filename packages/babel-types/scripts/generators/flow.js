@@ -113,17 +113,25 @@ for (const type in t.NODE_FIELDS) {
   }
 }
 
-for (let i = 0; i < t.TYPES.length; i++) {
-  let decl = `declare function is${t.TYPES[i]}(node: ?Object, opts?: ?Object): boolean`;
+for (const typeName of t.TYPES) {
+  const isDeprecated = !!t.DEPRECATED_KEYS[typeName];
+  const realName = isDeprecated ? t.DEPRECATED_KEYS[typeName] : typeName;
 
-  if (t.NODE_FIELDS[t.TYPES[i]]) {
-    decl += ` %checks (node instanceof ${NODE_PREFIX}${t.TYPES[i]})`;
+  let decl = `declare function is${typeName}(node: ?Object, opts?: ?Object): boolean`;
+  if (t.NODE_FIELDS[realName]) {
+    decl += ` %checks (node instanceof ${NODE_PREFIX}${realName})`;
   }
-
   lines.push(decl);
+
+  lines.push(
+    `declare function assert${typeName}(node: ?Object, opts?: ?Object): void`
+  );
 }
 
 lines.push(
+  // assert/
+  `declare function assertNode(obj: any): void`,
+
   // builders/
   // eslint-disable-next-line max-len
   `declare function createTypeAnnotationBasedOnTypeof(type: 'string' | 'number' | 'undefined' | 'boolean' | 'function' | 'object' | 'symbol'): ${NODE_PREFIX}TypeAnnotation`,

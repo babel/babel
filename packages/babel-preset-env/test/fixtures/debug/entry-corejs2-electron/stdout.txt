@@ -45,6 +45,7 @@ Using polyfills with `entry` option:
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs2-electron/input.mjs] Replaced @babel/polyfill entries with the following polyfills:
   es7.array.flat-map { "electron":"0.36" }
   es6.array.from { "electron":"0.36" }
+  es6.array.iterator { "electron":"0.36" }
   es6.array.sort { "electron":"0.36" }
   es6.array.species { "electron":"0.36" }
   es6.function.has-instance { "electron":"0.36" }

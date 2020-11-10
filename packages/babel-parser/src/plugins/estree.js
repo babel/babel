@@ -341,23 +341,23 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return (node: any);
     }
 
-    toAssignable(node: N.Node): N.Node {
+    toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
       if (isSimpleProperty(node)) {
         this.toAssignable(node.value);
 
         return node;
       }
 
-      return super.toAssignable(node);
+      return super.toAssignable(node, isLHS);
     }
 
-    toAssignableObjectExpressionProp(prop: N.Node, isLast: boolean) {
+    toAssignableObjectExpressionProp(prop: N.Node, ...args) {
       if (prop.kind === "get" || prop.kind === "set") {
         throw this.raise(prop.key.start, Errors.PatternHasAccessor);
       } else if (prop.method) {
         throw this.raise(prop.key.start, Errors.PatternHasMethod);
       } else {
-        super.toAssignableObjectExpressionProp(prop, isLast);
+        super.toAssignableObjectExpressionProp(prop, ...args);
       }
     }
 

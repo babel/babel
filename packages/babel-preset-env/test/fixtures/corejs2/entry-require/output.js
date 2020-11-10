@@ -1,5 +1,7 @@
 require("core-js/modules/es7.array.flat-map");
 
+require("core-js/modules/es6.array.iterator");
+
 require("core-js/modules/es6.array.sort");
 
 require("core-js/modules/es7.object.define-getter");

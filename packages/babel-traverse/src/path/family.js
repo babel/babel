@@ -162,7 +162,7 @@ export function getAllPrevSiblings(): NodePath[] {
 
 export function get(
   key: string,
-  context?: boolean | TraversalContext,
+  context?: boolean | TraversalContext = true,
 ): NodePath | NodePath[] {
   if (context === true) context = this.context;
   const parts = key.split(".");

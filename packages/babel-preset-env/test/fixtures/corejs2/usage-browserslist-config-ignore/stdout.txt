@@ -38,5 +38,6 @@ Using plugins:
 
 Using polyfills with `usage` option:
 
-[<CWD>/packages/babel-preset-env/test/fixtures/corejs2/usage-browserslist-config-ignore/input.mjs] Added following core-js polyfill:
+[<CWD>/packages/babel-preset-env/test/fixtures/corejs2/usage-browserslist-config-ignore/input.mjs] Added following core-js polyfills:
+  es6.array.iterator { "android":"61", "chrome":"61", "opera":"48", "samsung":"8.2" }
   web.dom.iterable { "android":"61", "chrome":"61", "edge":"16", "firefox":"60", "ios":"10.3", "node":"13.2", "opera":"48", "safari":"10.1", "samsung":"8.2" }

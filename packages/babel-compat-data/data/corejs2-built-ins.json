@@ -147,15 +147,15 @@
     "electron": "0.20"
   },
   "es6.array.iterator": {
-    "chrome": "38",
-    "opera": "25",
+    "chrome": "66",
+    "opera": "53",
     "edge": "12",
-    "firefox": "28",
-    "safari": "7.1",
-    "node": "0.12",
-    "ios": "8",
-    "samsung": "3",
-    "electron": "0.20"
+    "firefox": "60",
+    "safari": "9",
+    "node": "10",
+    "ios": "9",
+    "samsung": "9",
+    "electron": "3.0"
   },
   "es6.array.last-index-of": {
     "chrome": "5",

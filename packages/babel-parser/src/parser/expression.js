@@ -278,7 +278,7 @@ export default class ExpressionParser extends LValParser {
       node.operator = operator;
 
       if (this.match(tt.eq)) {
-        node.left = this.toAssignable(left);
+        node.left = this.toAssignable(left, /* isLHS */ true);
         refExpressionErrors.doubleProto = -1; // reset because double __proto__ is valid in assignment expression
       } else {
         node.left = left;
@@ -842,7 +842,6 @@ export default class ExpressionParser extends LValParser {
     nodeForExtra?: ?N.Node,
   ): $ReadOnlyArray<?N.Expression> {
     const elts = [];
-    let innerParenStart;
     let first = true;
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
     this.state.inFSharpPipelineDirectBody = false;
@@ -875,12 +874,6 @@ export default class ExpressionParser extends LValParser {
         }
       }
 
-      // we need to make sure that if this is an async arrow functions,
-      // that we don't allow inner parens inside the params
-      if (this.match(tt.parenL) && !innerParenStart) {
-        innerParenStart = this.state.start;
-      }
-
       elts.push(
         this.parseExprListItem(
           false,
@@ -889,11 +882,6 @@ export default class ExpressionParser extends LValParser {
           allowPlaceholder,
         ),
       );
-    }
-
-    // we found an async arrow function so let's not allow any inner parens
-    if (possibleAsyncArrow && innerParenStart && this.shouldParseAsyncArrow()) {
-      this.unexpected();
     }
 
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
@@ -1421,12 +1409,6 @@ export default class ExpressionParser extends LValParser {
     ) {
       this.expressionScope.validateAsPattern();
       this.expressionScope.exit();
-      for (const param of exprList) {
-        if (param.extra && param.extra.parenthesized) {
-          this.unexpected(param.extra.parenStart);
-        }
-      }
-
       this.parseArrowExpression(arrowNode, exprList, false);
       return arrowNode;
     }
@@ -2056,7 +2038,7 @@ export default class ExpressionParser extends LValParser {
     params: N.Expression[],
     trailingCommaPos: ?number,
   ): void {
-    node.params = this.toAssignableList(params, trailingCommaPos);
+    node.params = this.toAssignableList(params, trailingCommaPos, false);
   }
 
   parseFunctionBodyAndFinish(
