@@ -43,6 +43,10 @@ node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
   fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
 "
 
+# https://github.com/babel/babel/pull/12331 - This test is fixed in @babel/traverse 7.12.7,
+# so it will fail with older versions. We can disable it.
+(cd packages/babel-plugin-transform-modules-systemjs/test/fixtures/regression/; mv issue-12329 .issue-12329)
+
 # Update deps, build and test
 rm yarn.lock
 make -j test-ci
