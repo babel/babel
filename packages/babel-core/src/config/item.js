@@ -1,5 +1,7 @@
 // @flow
 
+/*:: declare var invariant; */
+
 import type { PluginTarget, PluginOptions } from "./validation/options";
 
 import path from "path";
@@ -40,7 +42,8 @@ export function createConfigItem(
 }
 
 export function getItemDescriptor(item: mixed): UnloadedDescriptor | void {
-  if (item?.[CONFIG_ITEM_BRAND]) {
+  if ((item: any)?.[CONFIG_ITEM_BRAND]) {
+    /*:: invariant(item instanceof ConfigItem) */
     return item._descriptor;
   }
 
@@ -70,6 +73,7 @@ class ConfigItem {
   /**
    * Used to detect ConfigItem instances from other Babel instances.
    */
+  // $FlowIgnore
   [CONFIG_ITEM_BRAND] = true;
 
   /**
