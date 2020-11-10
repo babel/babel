@@ -399,8 +399,9 @@ expect.extend({
 });
 
 declare global {
-  // eslint-disable-next-line no-redeclare
+  // eslint-disable-next-line no-redeclare,@typescript-eslint/no-unused-vars
   namespace jest {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Matchers<R> {
       toEqualFile({ filename, code }): jest.CustomMatcherResult;
     }
