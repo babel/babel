@@ -260,6 +260,7 @@ type NodePathMixins = typeof NodePath_ancestry &
   typeof NodePath_family &
   typeof NodePath_comments;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface NodePath<T>
   extends NodePathAssetions,
     NodePathValidators,
