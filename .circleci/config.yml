@@ -63,7 +63,9 @@ jobs:
           command: |
             if [ -n "$CIRCLE_PULL_REQUEST" ]
             then
-              git fetch origin refs/pull/$CIRCLE_PR_NUMBER/merge
+              # $CIRCLE_PR_NUMBER is not always defined:
+              # https://support.circleci.com/hc/en-us/articles/360047521451-Why-is-CIRCLE-PR-NUMBER-empty-
+              git fetch origin refs/pull/${CIRCLE_PULL_REQUEST##*/}/merge
               git checkout -qf FETCH_HEAD
             fi
       - restore_cache: *restore-yarn-cache
