@@ -22,6 +22,14 @@ export default function (
     t.isSpreadElement(args[0]) &&
     t.isIdentifier(args[0].argument, { name: "arguments" })
   ) {
+    // a.b?.(...arguments);
+    if (optional) {
+      return t.optionalCallExpression(
+        t.optionalMemberExpression(callee, t.identifier("apply"), false, true),
+        [thisNode, args[0].argument],
+        false,
+      );
+    }
     // a.b(...arguments);
     return t.callExpression(t.memberExpression(callee, t.identifier("apply")), [
       thisNode,

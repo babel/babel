@@ -27,10 +27,10 @@ describe("@babel/helper-optimise-call-expression", () => {
       `"a[b].apply(a, arguments)"`,
     );
     expect(transformInput("a.b?.(...arguments)")).toMatchInlineSnapshot(
-      `"a.b.apply(a, arguments)"`,
+      `"a.b?.apply(a, arguments)"`,
     );
     expect(transformInput("a[b]?.(...arguments)")).toMatchInlineSnapshot(
-      `"a[b].apply(a, arguments)"`,
+      `"a[b]?.apply(a, arguments)"`,
     );
 
     expect(transformInput("a.b(...args)")).toMatchInlineSnapshot(
@@ -68,10 +68,10 @@ describe("@babel/helper-optimise-call-expression", () => {
       `"a[b].apply(c, arguments)"`,
     );
     expect(transformInput("a.b?.(...arguments)", "c")).toMatchInlineSnapshot(
-      `"a.b.apply(c, arguments)"`,
+      `"a.b?.apply(c, arguments)"`,
     );
     expect(transformInput("a[b]?.(...arguments)", "c")).toMatchInlineSnapshot(
-      `"a[b].apply(c, arguments)"`,
+      `"a[b]?.apply(c, arguments)"`,
     );
 
     expect(transformInput("a.b(...args)", "c")).toMatchInlineSnapshot(
