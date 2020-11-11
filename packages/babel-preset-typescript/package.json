@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^7.10.4",
+    "@babel/helper-validator-option": "workspace:^7.12.1",
     "@babel/plugin-transform-typescript": "workspace:^7.12.1"
   },
   "peerDependencies": {
