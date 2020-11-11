@@ -1,8 +1,10 @@
+var _arguments4 = arguments;
+
 function one() {
-  var _arguments = arguments;
+  var _arguments2 = arguments;
 
   var inner = function () {
-    return _arguments;
+    return _arguments2;
   };
 
   return [].slice.call(inner());
@@ -11,17 +13,13 @@ function one() {
 one(1, 2);
 
 function two() {
-  var _arguments2 = arguments;
-
   var inner = function () {
-    return _arguments2;
+    return _arguments;
   };
 
   var another = function () {
-    var _arguments3 = arguments;
-
     var inner2 = function () {
-      return _arguments3;
+      return _arguments;
     };
   };
 
@@ -31,10 +29,8 @@ function two() {
 two(1, 2);
 
 function three() {
-  var _arguments4 = arguments;
-
   var fn = function () {
-    return _arguments4[0] + "bar";
+    return _arguments[0] + "bar";
   };
 
   return fn();
@@ -43,10 +39,8 @@ function three() {
 three("foo");
 
 function four() {
-  var _arguments5 = arguments;
-
   var fn = function () {
-    return _arguments5[0].foo + "bar";
+    return _arguments[0].foo + "bar";
   };
 
   return fn();
@@ -71,7 +65,7 @@ five({
 function six(obj) {
   var fn = function () {
     var fn2 = function () {
-      return arguments[0];
+      return _arguments[0];
     };
 
     return fn2("foobar");
@@ -81,3 +75,66 @@ function six(obj) {
 }
 
 six();
+
+var seven = function () {
+  var arguments = 1;
+  return arguments;
+};
+
+seven();
+
+var eight = function () {
+  var _arguments3 = 1;
+  return function () {
+    return _arguments4;
+  };
+};
+
+eight();
+
+function nine() {
+  var _arguments6 = arguments;
+  var _arguments5 = 1;
+
+  var foo = function () {
+    return _arguments6;
+  };
+}
+
+nine();
+var _arguments = 1;
+
+function ten() {
+  var foo = function () {
+    return _arguments;
+  };
+}
+
+ten();
+
+var eleven = function () {
+  var _arguments7 = 2;
+  return function () {
+    var _arguments8 = arguments;
+    return function () {
+      return _arguments8;
+    };
+  };
+};
+
+eleven()(1, 2, 3)();
+
+var twelve = function () {
+  var _arguments9 = 2;
+  return class {
+    m() {
+      var _arguments10 = arguments;
+      return function () {
+        return _arguments10;
+      };
+    }
+
+  };
+};
+
+twelve();

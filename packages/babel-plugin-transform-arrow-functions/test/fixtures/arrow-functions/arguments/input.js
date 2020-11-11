@@ -43,3 +43,47 @@ function six(obj) {
   return fn();
 }
 six();
+
+var seven = () => {
+    var arguments = 1;
+    return arguments;
+};
+seven();
+
+var eight = () => {
+    var arguments = 1;
+    return () => arguments;
+};
+eight();
+
+function nine() {
+    var arguments = 1;
+    var foo = () => {
+      return arguments;
+    };
+}
+nine();
+
+var arguments = 1;
+function ten() {
+  var foo = () => {
+    return arguments;
+  };
+}
+ten();
+
+var eleven = () => {
+  var arguments = 2;
+  return function () {
+    return () => arguments;
+  }
+};
+eleven()(1,2,3)();
+
+var twelve = () => {
+  var arguments = 2;
+  return class {
+    m() { return () => arguments; }
+  }
+};
+twelve();

@@ -236,10 +236,20 @@ function hoistFunctionEnvironment(
     );
 
     argumentsPaths.forEach(argumentsChild => {
-      const argsRef = t.identifier(argumentsBinding);
-      argsRef.loc = argumentsChild.node.loc;
-
-      argumentsChild.replaceWith(argsRef);
+      let currentScope = argumentsChild.scope;
+      do {
+        if (
+          !currentScope.hasOwnBinding("arguments") &&
+          !(
+            currentScope.path.isFunction() &&
+            !currentScope.path.isArrowFunctionExpression()
+          )
+        ) {
+          const argsRef = t.identifier(argumentsBinding);
+          argsRef.loc = argumentsChild.node.loc;
+          argumentsChild.replaceWith(argsRef);
+        }
+      } while ((currentScope = currentScope.parent));
     });
   }
 
@@ -586,9 +596,17 @@ function getScopeInformation(fnPath) {
       if (child.get("object").isSuper()) superProps.push(child);
     },
     ReferencedIdentifier(child) {
-      if (child.node.name !== "arguments") return;
+      let curr = child.scope;
+      do {
+        if (curr.hasOwnBinding("arguments")) return;
+        if (curr.path.isFunction() && !curr.path.isArrowFunctionExpression()) {
+          break;
+        }
+        if (child.node.name !== "arguments") return;
 
-      argumentsPaths.push(child);
+        curr.rename("arguments");
+        argumentsPaths.push(child);
+      } while ((curr = curr.parent));
     },
     MetaProperty(child) {
       if (!child.get("meta").isIdentifier({ name: "new" })) return;
