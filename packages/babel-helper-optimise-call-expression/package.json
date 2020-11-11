@@ -14,5 +14,9 @@
   "main": "lib/index.js",
   "dependencies": {
     "@babel/types": "workspace:^7.10.4"
+  },
+  "devDependencies": {
+    "@babel/generator": "workspace:*",
+    "@babel/parser": "workspace:*"
   }
 }
