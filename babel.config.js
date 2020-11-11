@@ -103,12 +103,10 @@ module.exports = function (api) {
       .filter(Boolean)
       .map(normalize),
     presets: [
-      // todo: using typescript preset causes: "TypeScript 'declare' fields must first be transformed by @babel/plugin-transform-typescript.
-      //   If you have already enabled that plugin (or '@babel/preset-typescript'), make sure that it runs before any plugin related to additional class features:"
-      // [
-      //   "@babel/preset-typescript",
-      //   { onlyRemoveTypeImports: true, allowDeclareFields: true },
-      // ],
+      [
+        "@babel/preset-typescript",
+        { onlyRemoveTypeImports: true, allowDeclareFields: true },
+      ],
       ["@babel/env", envOpts],
       ["@babel/preset-flow", { allowDeclareFields: true }],
     ],
@@ -123,22 +121,6 @@ module.exports = function (api) {
       convertESM ? "@babel/transform-modules-commonjs" : null,
     ].filter(Boolean),
     overrides: [
-      // todo: use typescript preset instead
-      {
-        test: /\.ts$/,
-        plugins: [
-          [
-            "@babel/plugin-transform-typescript",
-            {
-              allExtensions: false,
-              jsxPragmaFrag: "React.Fragment",
-              isTSX: false,
-              onlyRemoveTypeImports: true,
-              allowDeclareFields: true,
-            },
-          ],
-        ],
-      },
       {
         test: [
           "packages/babel-parser",
