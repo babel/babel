@@ -5,7 +5,7 @@ import type Parser from "../parser";
 import type { ExpressionErrors } from "../parser/util";
 import * as N from "../types";
 import type { Position } from "../util/location";
-import { type BindingTypes, BIND_NONE } from "../util/scopeflags";
+import { type BindingTypes } from "../util/scopeflags";
 import { Errors } from "../parser/error";
 
 function isSimpleProperty(node: N.Node): boolean {
@@ -112,31 +112,26 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkLVal(
       expr: N.Expression,
-      bindingType: BindingTypes = BIND_NONE,
-      checkClashes: ?{ [key: string]: boolean },
       contextDescription: string,
-      disallowLetBinding?: boolean,
+      ...args: [
+        BindingTypes | void,
+        ?Set<string>,
+        boolean | void,
+        boolean | void,
+      ]
     ): void {
       switch (expr.type) {
         case "ObjectPattern":
           expr.properties.forEach(prop => {
             this.checkLVal(
               prop.type === "Property" ? prop.value : prop,
-              bindingType,
-              checkClashes,
               "object destructuring pattern",
-              disallowLetBinding,
+              ...args,
             );
           });
           break;
         default:
-          super.checkLVal(
-            expr,
-            bindingType,
-            checkClashes,
-            contextDescription,
-            disallowLetBinding,
-          );
+          super.checkLVal(expr, contextDescription, ...args);
       }
     }
 

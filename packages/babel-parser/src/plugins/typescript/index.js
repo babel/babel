@@ -14,7 +14,6 @@ import type { Pos, Position } from "../../util/location";
 import type Parser from "../../parser";
 import {
   type BindingTypes,
-  BIND_NONE,
   SCOPE_TS_MODULE,
   SCOPE_OTHER,
   BIND_TS_ENUM,
@@ -1221,9 +1220,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.id = this.parseIdentifier();
       this.checkLVal(
         node.id,
-        BIND_TS_INTERFACE,
-        undefined,
         "typescript interface declaration",
+        BIND_TS_INTERFACE,
       );
       node.typeParameters = this.tsTryParseTypeParameters();
       if (this.eat(tt._extends)) {
@@ -1239,7 +1237,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.TsTypeAliasDeclaration,
     ): N.TsTypeAliasDeclaration {
       node.id = this.parseIdentifier();
-      this.checkLVal(node.id, BIND_TS_TYPE, undefined, "typescript type alias");
+      this.checkLVal(node.id, "typescript type alias", BIND_TS_TYPE);
 
       node.typeParameters = this.tsTryParseTypeParameters();
       node.typeAnnotation = this.tsInType(() => {
@@ -1325,9 +1323,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.id = this.parseIdentifier();
       this.checkLVal(
         node.id,
-        isConst ? BIND_TS_CONST_ENUM : BIND_TS_ENUM,
-        undefined,
         "typescript enum declaration",
+        isConst ? BIND_TS_CONST_ENUM : BIND_TS_ENUM,
       );
 
       this.expect(tt.braceL);
@@ -1364,9 +1361,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (!nested) {
         this.checkLVal(
           node.id,
-          BIND_TS_NAMESPACE,
-          null,
           "module or namespace declaration",
+          BIND_TS_NAMESPACE,
         );
       }
 
@@ -1414,12 +1410,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.TsImportEqualsDeclaration {
       node.isExport = isExport || false;
       node.id = this.parseIdentifier();
-      this.checkLVal(
-        node.id,
-        BIND_LEXICAL,
-        undefined,
-        "import equals declaration",
-      );
+      this.checkLVal(node.id, "import equals declaration", BIND_LEXICAL);
       this.expect(tt.eq);
       node.moduleReference = this.tsParseModuleReference();
       this.semicolon();
@@ -1805,7 +1796,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (!node.body && node.id) {
         // Function ids are validated after parsing their body.
         // For bodyless function, we need to do it here.
-        this.checkLVal(node.id, BIND_TS_AMBIENT, null, "function name");
+        this.checkLVal(node.id, "function name", BIND_TS_AMBIENT);
       } else {
         super.registerFunctionStatementId(...arguments);
       }
@@ -2615,9 +2606,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkLVal(
       expr: N.Expression,
-      bindingType: BindingTypes = BIND_NONE,
-      checkClashes: ?{ [key: string]: boolean },
       contextDescription: string,
+      ...args:
+        | [BindingTypes | void]
+        | [BindingTypes | void, ?Set<string>, boolean | void, boolean | void]
     ): void {
       switch (expr.type) {
         case "TSTypeCastExpression":
@@ -2626,25 +2618,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           // e.g. `const f = (foo: number = 0) => foo;`
           return;
         case "TSParameterProperty":
-          this.checkLVal(
-            expr.parameter,
-            bindingType,
-            checkClashes,
-            "parameter property",
-          );
+          this.checkLVal(expr.parameter, "parameter property", ...args);
           return;
         case "TSAsExpression":
         case "TSNonNullExpression":
         case "TSTypeAssertion":
-          this.checkLVal(
-            expr.expression,
-            bindingType,
-            checkClashes,
-            contextDescription,
-          );
+          this.checkLVal(expr.expression, contextDescription, ...args);
           return;
         default:
-          super.checkLVal(expr, bindingType, checkClashes, contextDescription);
+          super.checkLVal(expr, contextDescription, ...args);
           return;
       }
     }
