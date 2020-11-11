@@ -24,8 +24,18 @@ const tsPkgs = fs
 for (const { dir } of tsPkgs) {
   const pkg = require(`${dir}/package.json`);
 
+  try {
+    const tsconfig = require(`${dir}/tsconfig.json`);
+    // Don't overwrite manually written configs
+    if (!tsconfig.generated) continue;
+  } catch {}
+
+  const deps = [];
+  if (pkg.dependencies) deps.push(...Object.keys(pkg.dependencies));
+  if (pkg.peerDependencies) deps.push(...Object.keys(pkg.peerDependencies));
+
   const references = [];
-  for (const dep of Object.keys(pkg.dependencies)) {
+  for (const dep of deps) {
     if (!dep.startsWith("@babel/")) continue;
     for (const { name, dir: depDir } of tsPkgs) {
       if (name === dep) {
@@ -39,12 +49,10 @@ for (const { dir } of tsPkgs) {
     path.resolve(dir, "tsconfig.json"),
     JSON.stringify(
       {
+        generated: true,
         extends: "../../tsconfig.base.json",
         compilerOptions: {
-          // Until we have converted every package, we cannot store
-          // .d.ts files inside lib/ because it causes conflicts
-          // with Babel-related type definitions in node_modules/@types
-          outDir: "./dts",
+          outDir: "./lib",
           rootDir: "./src",
         },
         include: ["./src/**/*"],

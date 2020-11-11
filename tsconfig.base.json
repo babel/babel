@@ -5,6 +5,8 @@
     "lib": [
       "esnext"
     ],
+    "declaration": true,
+    "declarationMap": true,
     "emitDeclarationOnly": true,
     "composite": true,
     "moduleResolution": "node",

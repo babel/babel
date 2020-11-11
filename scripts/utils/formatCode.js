@@ -15,7 +15,7 @@ if (process.env.CI && parseInt(process.versions.node, 10) < 10) {
     filename = filename || __filename;
     const prettierConfig = prettier.resolveConfig.sync(filename);
     prettierConfig.filepath = filename;
-    prettierConfig.parser = "babel";
+    prettierConfig.parser = filename.endsWith(".ts") ? "babel-ts" : "babel";
 
     return prettier.format(code, prettierConfig);
   };

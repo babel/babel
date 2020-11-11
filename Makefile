@@ -146,7 +146,9 @@ clean: test-clean
 
 clean-tsconfig:
 	rm -f tsconfig.json
-	rm -f packages/*/tsconfig.json
+	rm -f packages/*/tsconfig.{tsbuildinfo,json}
+	rm -f codemods/*/tsconfig.{tsbuildinfo,json}
+	rm -f eslint/*/tsconfig.{tsbuildinfo,json}
 
 test-clean:
 	$(foreach source, $(SOURCES), \
@@ -223,14 +225,18 @@ clone-license:
 prepublish-build: clean-lib clean-runtime-helpers
 	NODE_ENV=production BABEL_ENV=production $(MAKE) build-bundle
 	$(MAKE) prepublish-build-standalone clone-license
-	# We don't want to publish .d.ts files yet
-	rm -rf packages/*/dts
 
 prepublish:
 	$(MAKE) check-yarn-bug-1882
 	$(MAKE) bootstrap-only
 	$(MAKE) prepublish-build
 	IS_PUBLISH=true $(MAKE) test
+	# We don't want to publish TS-related files yet, except for @babel/types
+	rm -f packages/*/lib/**/*.d.ts{,.map}
+	rm -f codemods/*/lib/**/*.d.ts{,.map}
+	rm -f eslint/*/lib/**/*.d.ts{,.map}
+	$(MAKE) clean-tsconfig
+	$(MAKE) build-typescript-typings
 
 new-version:
 	git pull --rebase
@@ -272,7 +278,7 @@ endif
 bootstrap-only: clean-all
 	yarn install
 
-bootstrap: bootstrap-only
+bootstrap: bootstrap-only generate-tsconfig
 	$(MAKE) build
 
 clean-lib:

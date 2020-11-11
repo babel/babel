@@ -1,11 +1,8 @@
 module.exports = {
   collectCoverageFrom: [
-    "packages/*/src/**/*.mjs",
-    "packages/*/src/**/*.js",
-    "codemods/*/src/**/*.mjs",
-    "codemods/*/src/**/*.js",
-    "eslint/*/src/**/*.mjs",
-    "eslint/*/src/**/*.js",
+    "packages/*/src/**/*.{js,mjs,ts}",
+    "codemods/*/src/**/*.{js,mjs,ts}",
+    "eslint/*/src/**/*.{js,mjs,ts}",
   ],
   // The eslint/* packages use ESLint v6, which has dropped support for Node v6.
   // TODO: Remove this process.version check in Babel 8.
