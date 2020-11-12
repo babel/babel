@@ -52,13 +52,13 @@ describe("willPathCastToBoolean", () => {
   ];
 
   describe("default parser options", () => {
-    test.each(positiveCases.map(x => [x]))(
+    test.each(positiveCases)(
       "willPathCastToBoolean(a?.b in %p) should return true",
       input => {
         expect(willPathCastToBoolean(getPath(input))).toBe(true);
       },
     );
-    test.each(negativeCases.map(x => [x]))(
+    test.each(negativeCases)(
       "willPathCastToBoolean(a?.b in %p) should return false",
       input => {
         expect(willPathCastToBoolean(getPath(input))).toBe(false);
@@ -67,14 +67,14 @@ describe("willPathCastToBoolean", () => {
   });
 
   describe("createParenthesizedExpressions", () => {
-    test.each(positiveCases.map(x => [x]))(
+    test.each(positiveCases)(
       "willPathCastToBoolean(a?.b in %p with { createParenthesizedExpressions: true }) should return true",
       input => {
         const parserOpts = { createParenthesizedExpressions: true };
         expect(willPathCastToBoolean(getPath(input, parserOpts))).toBe(true);
       },
     );
-    test.each(negativeCases.map(x => [x]))(
+    test.each(negativeCases)(
       "willPathCastToBoolean(a?.b in %p with { createParenthesizedExpressions: true }) should return false",
       input => {
         const parserOpts = { createParenthesizedExpressions: true };
