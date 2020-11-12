@@ -103,6 +103,18 @@ class C {
     return (o === null || o === void 0 ? void 0 : (_o$a$b5 = o.a.b) === null || _o$a$b5 === void 0 ? void 0 : _o$a$b5.c.d) && (o === null || o === void 0 ? void 0 : (_o$a2 = o.a) === null || _o$a2 === void 0 ? void 0 : _o$a2.b.c.d);
   }
 
+  static testNullishCoalescing(o) {
+    var _o$a$b6, _o$a$b7, _o$a$b10;
+
+    if ((o === null || o === void 0 ? void 0 : (_o$a$b6 = o.a.b) === null || _o$a$b6 === void 0 ? void 0 : _o$a$b6.c.non_existent) ?? (o === null || o === void 0 ? void 0 : (_o$a$b7 = o.a.b) === null || _o$a$b7 === void 0 ? void 0 : _o$a$b7.c.d)) {
+      var _o$a$b8, _o$a$b9;
+
+      return (o === null || o === void 0 ? void 0 : (_o$a$b8 = o.a.b) === null || _o$a$b8 === void 0 ? void 0 : _o$a$b8.c.non_existent) ?? (o === null || o === void 0 ? void 0 : (_o$a$b9 = o.a.b) === null || _o$a$b9 === void 0 ? void 0 : _o$a$b9.c.d);
+    }
+
+    return (o === null || o === void 0 ? void 0 : (_o$a$b10 = o.a.b) === null || _o$a$b10 === void 0 ? void 0 : _o$a$b10.c.non_existent) ?? o;
+  }
+
 }
 
 C.test();

@@ -91,6 +91,14 @@ class C {
     return (o === null || o === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(o, C, _a).b)?.c.d && (o === null || o === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(o, C, _a))?.b.c.d;
   }
 
+  static testNullishCoalescing(o) {
+    if ((o === null || o === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(o, C, _a).b)?.c.non_existent ?? (o === null || o === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(o, C, _a).b)?.c.d) {
+      return (o === null || o === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(o, C, _a).b)?.c.non_existent ?? (o === null || o === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(o, C, _a).b)?.c.d;
+    }
+
+    return (o === null || o === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(o, C, _a).b)?.c.non_existent ?? o;
+  }
+
 }
 
 var _a = {

@@ -63,6 +63,13 @@ class C {
     return o?.a.b?.c.d && o?.a?.b.c.d;
   }
 
+  static testNullishCoalescing(o) {
+    if (o?.a.b?.c.non_existent ?? o?.a.b?.c.d) {
+      return o?.a.b?.c.non_existent ?? o?.a.b?.c.d;
+    }
+    return o?.a.b?.c.non_existent ?? o;
+  }
+
   static test() {
     const c = {
       a: {
@@ -85,6 +92,8 @@ class C {
 
     expect(C.testLogicalInIf(c)).toBe(true);
     expect(C.testLogicalInReturn(c)).toBe(2);
+
+    expect(C.testNullishCoalescing(c)).toBe(2);
   }
 
   static testNullish() {
@@ -101,6 +110,8 @@ class C {
 
       expect(C.testLogicalInIf(n)).toBe(false);
       expect(C.testLogicalInReturn(n)).toBe(undefined);
+
+      expect(C.testNullishCoalescing(n)).toBe(n);
     }
   }
 }

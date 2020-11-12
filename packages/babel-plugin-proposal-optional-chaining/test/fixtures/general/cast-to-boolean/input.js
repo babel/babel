@@ -62,6 +62,13 @@ class C {
   static testLogicalInReturn(o) {
     return o?.a.b?.c.d && o?.a?.b.c.d;
   }
+
+  static testNullishCoalescing(o) {
+    if (o?.a.b?.c.non_existent ?? o?.a.b?.c.d) {
+      return o?.a.b?.c.non_existent ?? o?.a.b?.c.d;
+    }
+    return o?.a.b?.c.non_existent ?? o;
+  }
 }
 
 C.test();
