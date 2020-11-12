@@ -74,7 +74,10 @@
   ],
   "resolutions": {
     "browserslist": "npm:4.14.5",
-    "caniuse-lite": "npm:1.0.30001077"
+    "caniuse-lite": "npm:1.0.30001077",
+    "@types/babel__core": "link:./nope",
+    "@types/babel__traverse": "link:./nope",
+    "@babel/parser/@babel/types": "workspace:*"
   },
   "engines": {
     "node": ">= 6.9.0",

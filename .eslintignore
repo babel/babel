@@ -9,7 +9,6 @@ packages/babel-runtime-corejs2
 packages/babel-runtime-corejs3
 packages/*/node_modules
 packages/*/lib
-packages/*/dts
 packages/*/dist
 packages/*/test/fixtures
 packages/*/test/tmp
