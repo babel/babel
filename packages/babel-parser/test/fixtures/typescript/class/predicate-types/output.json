@@ -52,7 +52,8 @@
                       "type": "TSStringKeyword",
                       "start":31,"end":37,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":25}}
                     }
-                  }
+                  },
+                  "asserts": false
                 }
               },
               "body": {
@@ -92,7 +93,8 @@
                         "type": "TSStringKeyword",
                         "start":66,"end":72,"loc":{"start":{"line":4,"column":22},"end":{"line":4,"column":28}}
                       }
-                    }
+                    },
+                    "asserts": false
                   }
                 },
                 "id": null,
