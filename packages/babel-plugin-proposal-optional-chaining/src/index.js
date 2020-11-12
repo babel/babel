@@ -5,58 +5,12 @@ import {
 } from "@babel/helper-skip-transparent-expression-wrappers";
 import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
 import { types as t, template } from "@babel/core";
+import {
+  willPathCastToBoolean,
+  findOutermostTransparentParent,
+} from "./util.js";
 
 const { ast } = template.expression;
-
-/**
- * Test if a NodePath will be cast to boolean when evaluated.
- * It respects transparent expression wrappers defined in
- * "@babel/helper-skip-transparent-expression-wrappers"
- *
- * @example
- * // returns true
- * const nodePathADotB = NodePath("if (a.b) {}").get("test"); // a.b
- * willPathCastToBoolean(nodePathADotB)
- * @example
- * // returns false
- * willPathCastToBoolean(NodePath("a.b"))
- * @param {NodePath} path
- * @returns {boolean}
- */
-function willPathCastToBoolean(path: NodePath): boolean {
-  const maybeWrapped = findOutermostTransparentParent(path);
-  const { node, parentPath } = maybeWrapped;
-  if (parentPath.isLogicalExpression()) {
-    const { operator } = parentPath.node;
-    if (operator === "&&" || operator === "||") {
-      return willPathCastToBoolean(parentPath);
-    }
-  }
-  return (
-    parentPath.isConditional({ test: node }) ||
-    parentPath.isUnaryExpression({ operator: "!" }) ||
-    parentPath.isLoop({ test: node })
-  );
-}
-
-/**
- * Return the outermost transparent expression wrapper of a given path,
- * otherwise returns path itself.
- * @example
- * const nodePathADotB = NodePath("(a.b as any)").get("expression"); // a.b
- * // returns NodePath("(a.b as any)")
- * findOutermostTransparentParent(nodePathADotB);
- * @param {NodePath} path
- * @returns {NodePath}
- */
-function findOutermostTransparentParent(path: NodePath): NodePath {
-  let maybeWrapped = path;
-  path.findParent(p => {
-    if (!isTransparentExprWrapper(p)) return true;
-    maybeWrapped = p;
-  });
-  return maybeWrapped;
-}
 
 export default declare((api, options) => {
   api.assertVersion(7);
