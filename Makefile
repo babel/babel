@@ -243,9 +243,8 @@ new-version:
 	$(YARN) release-tool version $(FORCE_PUBLISH)
 
 # NOTE: Run make new-version first
-publish: prepublish
-	$(YARN) release-tool publish
-	$(MAKE) clean
+publish:
+	bash ./scripts/publish.sh
 
 check-yarn-bug-1882:
 ifneq ("$(shell grep 3155328e5 .yarn/releases/yarn-*.cjs -c)", "0")
