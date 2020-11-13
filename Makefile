@@ -244,7 +244,14 @@ new-version:
 
 # NOTE: Run make new-version first
 publish:
-	bash ./scripts/publish.sh
+	@echo "Please confirm you have stopped make watch. (y)es, [N]o:"; \
+	read CLEAR; \
+	if [ "_$$CLEAR" != "_y" ]; then \
+		exit 1; \
+	fi
+	$(MAKE) prepublish
+	$(YARN) release-tool publish
+	$(MAKE) clean
 
 check-yarn-bug-1882:
 ifneq ("$(shell grep 3155328e5 .yarn/releases/yarn-*.cjs -c)", "0")
