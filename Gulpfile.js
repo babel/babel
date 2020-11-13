@@ -102,7 +102,13 @@ const babelVersion =
 function buildRollup(packages) {
   const sourcemap = process.env.NODE_ENV === "production";
   return Promise.all(
-    packages.map(async ({ src, format, dest, name, filename, version }) => {
+    packages.map(async ({ src, format, dest, name, filename }) => {
+      const pkgJSON = require("./" + src + "/package.json");
+      const version = pkgJSON.version + versionSuffix;
+      const { dependencies = {}, peerDependencies = {} } = pkgJSON;
+      const external = Object.keys(dependencies).concat(
+        Object.keys(peerDependencies)
+      );
       let nodeResolveBrowser = false,
         babelEnvName = "rollup";
       switch (src) {
@@ -115,6 +121,7 @@ function buildRollup(packages) {
       fancyLog(`Compiling '${chalk.cyan(input)}' with rollup ...`);
       const bundle = await rollup.rollup({
         input,
+        external,
         plugins: [
           rollupBabelSource(),
           rollupReplace({
@@ -161,6 +168,7 @@ function buildRollup(packages) {
         format,
         name,
         sourcemap: sourcemap,
+        exports: "named",
       });
 
       if (!process.env.IS_PUBLISH) {
@@ -180,6 +188,7 @@ function buildRollup(packages) {
         format,
         name,
         sourcemap: sourcemap,
+        exports: "named",
         plugins: [
           rollupTerser({
             // workaround https://bugs.webkit.org/show_bug.cgi?id=212725
@@ -194,13 +203,14 @@ function buildRollup(packages) {
 }
 
 const libBundles = [
-  {
-    src: "packages/babel-parser",
-    format: "cjs",
-    dest: "lib",
-    version: require("./packages/babel-parser/package").version + versionSuffix,
-  },
-];
+  "packages/babel-parser",
+  "packages/babel-plugin-proposal-optional-chaining",
+  "packages/babel-helper-member-expression-to-functions",
+].map(src => ({
+  src,
+  format: "cjs",
+  dest: "lib",
+}));
 
 const standaloneBundle = [
   {
