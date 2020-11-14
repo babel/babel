@@ -243,7 +243,13 @@ new-version:
 	$(YARN) release-tool version $(FORCE_PUBLISH)
 
 # NOTE: Run make new-version first
-publish: prepublish
+publish:
+	@echo "Please confirm you have stopped make watch. (y)es, [N]o:"; \
+	read CLEAR; \
+	if [ "_$$CLEAR" != "_y" ]; then \
+		exit 1; \
+	fi
+	$(MAKE) prepublish
 	$(YARN) release-tool publish
 	$(MAKE) clean
 
