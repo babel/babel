@@ -4,8 +4,10 @@ import { template, types as t } from "@babel/core";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { loose } = options;
-  const pushComputedProps = loose
+  const setComputedProperties =
+    options.loose || api.assumption?.("setComputedProperties");
+
+  const pushComputedProps = setComputedProperties
     ? pushComputedPropsLoose
     : pushComputedPropsSpec;
 
