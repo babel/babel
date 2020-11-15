@@ -5,8 +5,9 @@ import { types as t } from "@babel/core";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { allowArrayLike } = options;
   const iterableIsArray = options.loose || api.assumption("iterableIsArray");
+  const arrayLikeIsIterable =
+    options.allowArrayLike || api.assumption("arrayLikeIsIterable");
 
   function getSpreadLiteral(spread, scope) {
     if (
@@ -15,7 +16,7 @@ export default declare((api, options) => {
     ) {
       return spread.argument;
     } else {
-      return scope.toArray(spread.argument, true, allowArrayLike);
+      return scope.toArray(spread.argument, true, arrayLikeIsIterable);
     }
   }
 

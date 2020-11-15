@@ -4,17 +4,15 @@ import { types as t } from "@babel/core";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const {
-    loose = false,
-    useBuiltIns = false,
-    allowArrayLike = false,
-  } = options;
+  const { loose = false, useBuiltIns = false } = options;
 
   if (typeof loose !== "boolean") {
     throw new Error(`.loose must be a boolean or undefined`);
   }
 
   const iterableIsArray = options.loose || api.assumption("iterableIsArray");
+  const arrayLikeIsIterable =
+    options.allowArrayLike || api.assumption("arrayLikeIsIterable");
 
   function getExtendsHelper(file) {
     return useBuiltIns
@@ -89,7 +87,7 @@ export default declare((api, options) => {
       this.scope = opts.scope;
       this.kind = opts.kind;
       this.iterableIsArray = opts.iterableIsArray;
-      this.allowArrayLike = opts.allowArrayLike;
+      this.arrayLikeIsIterable = opts.arrayLikeIsIterable;
       this.addHelper = opts.addHelper;
     }
 
@@ -146,7 +144,7 @@ export default declare((api, options) => {
       ) {
         return node;
       } else {
-        return this.scope.toArray(node, count, this.allowArrayLike);
+        return this.scope.toArray(node, count, this.arrayLikeIsIterable);
       }
     }
 
@@ -528,7 +526,7 @@ export default declare((api, options) => {
           scope: scope,
           nodes: nodes,
           iterableIsArray,
-          allowArrayLike,
+          arrayLikeIsIterable,
           addHelper: name => this.addHelper(name),
         });
 
@@ -554,7 +552,7 @@ export default declare((api, options) => {
           scope: scope,
           nodes: nodes,
           iterableIsArray,
-          allowArrayLike,
+          arrayLikeIsIterable,
           addHelper: name => this.addHelper(name),
         });
         destructuring.init(pattern, ref);
@@ -573,7 +571,7 @@ export default declare((api, options) => {
           scope: scope,
           nodes: nodes,
           iterableIsArray,
-          allowArrayLike,
+          arrayLikeIsIterable,
           addHelper: name => this.addHelper(name),
         });
 
@@ -632,7 +630,7 @@ export default declare((api, options) => {
             scope: scope,
             kind: node.kind,
             iterableIsArray,
-            allowArrayLike,
+            arrayLikeIsIterable,
             addHelper: name => this.addHelper(name),
           });
 

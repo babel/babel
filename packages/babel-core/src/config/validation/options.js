@@ -332,6 +332,7 @@ type EnvPath = $ReadOnly<{
 export type NestingPath = RootPath | OverridesPath | EnvPath;
 
 export const assumptionsNames = new Set<string>([
+  "arrayLikeIsIterable",
   "ignoreFunctionLength",
   "ignoreToPrimitiveHint",
   "iterableIsArray",
