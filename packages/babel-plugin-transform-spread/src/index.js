@@ -5,10 +5,14 @@ import { types as t } from "@babel/core";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { loose, allowArrayLike } = options;
+  const { allowArrayLike } = options;
+  const iterableIsArray = options.loose || api.assumption("iterableIsArray");
 
   function getSpreadLiteral(spread, scope) {
-    if (loose && !t.isIdentifier(spread.argument, { name: "arguments" })) {
+    if (
+      iterableIsArray &&
+      !t.isIdentifier(spread.argument, { name: "arguments" })
+    ) {
       return spread.argument;
     } else {
       return scope.toArray(spread.argument, true, allowArrayLike);

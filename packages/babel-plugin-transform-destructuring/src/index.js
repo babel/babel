@@ -14,7 +14,7 @@ export default declare((api, options) => {
     throw new Error(`.loose must be a boolean or undefined`);
   }
 
-  const arrayOnlySpread = loose;
+  const iterableIsArray = options.loose || api.assumption("iterableIsArray");
 
   function getExtendsHelper(file) {
     return useBuiltIns
@@ -88,7 +88,7 @@ export default declare((api, options) => {
       this.nodes = opts.nodes || [];
       this.scope = opts.scope;
       this.kind = opts.kind;
-      this.arrayOnlySpread = opts.arrayOnlySpread;
+      this.iterableIsArray = opts.iterableIsArray;
       this.allowArrayLike = opts.allowArrayLike;
       this.addHelper = opts.addHelper;
     }
@@ -141,7 +141,7 @@ export default declare((api, options) => {
 
     toArray(node, count) {
       if (
-        this.arrayOnlySpread ||
+        this.iterableIsArray ||
         (t.isIdentifier(node) && this.arrays[node.name])
       ) {
         return node;
@@ -527,7 +527,7 @@ export default declare((api, options) => {
           kind: left.kind,
           scope: scope,
           nodes: nodes,
-          arrayOnlySpread,
+          iterableIsArray,
           allowArrayLike,
           addHelper: name => this.addHelper(name),
         });
@@ -553,7 +553,7 @@ export default declare((api, options) => {
           kind: "let",
           scope: scope,
           nodes: nodes,
-          arrayOnlySpread,
+          iterableIsArray,
           allowArrayLike,
           addHelper: name => this.addHelper(name),
         });
@@ -572,7 +572,7 @@ export default declare((api, options) => {
           operator: node.operator,
           scope: scope,
           nodes: nodes,
-          arrayOnlySpread,
+          iterableIsArray,
           allowArrayLike,
           addHelper: name => this.addHelper(name),
         });
@@ -631,7 +631,7 @@ export default declare((api, options) => {
             nodes: nodes,
             scope: scope,
             kind: node.kind,
-            arrayOnlySpread,
+            iterableIsArray,
             allowArrayLike,
             addHelper: name => this.addHelper(name),
           });

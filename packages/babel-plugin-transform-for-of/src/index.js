@@ -27,7 +27,13 @@ export default declare((api, options) => {
     );
   }
 
-  if (assumeArray) {
+  const iterableIsArray =
+    assumeArray ||
+    // Loose mode is not compatible with 'assumeArray', so we shouldn't read
+    // 'iterableIsArray' is 'loose' is true.
+    (!loose && api.assumption("iterableIsArray"));
+
+  if (iterableIsArray) {
     return {
       name: "transform-for-of",
 
