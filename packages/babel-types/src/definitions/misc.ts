@@ -5,9 +5,11 @@ import defineType, {
 } from "./utils";
 import { PLACEHOLDERS } from "./placeholders";
 
-defineType("Noop", {
-  visitor: [],
-});
+if (!process.env.BABEL_8_BREAKING) {
+  defineType("Noop", {
+    visitor: [],
+  });
+}
 
 defineType("Placeholder", {
   visitor: [],
