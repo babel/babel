@@ -387,8 +387,8 @@ export default class LValParser extends NodeUtils {
    * @param {?Set<string>} checkClashes An optional string set to check if an identifier name is included. `checkLVal` will add checked
                                         identifier name to `checkClashes` It is used in tracking duplicates in function parameter lists. If
                                         it is nullish, `checkLVal` will skip duplicate checks
-   * @param {boolean} [disallowLetBinding] Whether an identifier named "let" is allowed
-   * @param {boolean} [strictModeChanged=false] Whether an identifier have been parsed in a sloppy context but should be reinterpreted as
+   * @param {boolean} [disallowLetBinding] Whether an identifier named "let" should be disallowed
+   * @param {boolean} [strictModeChanged=false] Whether an identifier has been parsed in a sloppy context but should be reinterpreted as
                                                 strict-mode. e.g. `(arguments) => { "use strict "}`
    * @memberof LValParser
    */
