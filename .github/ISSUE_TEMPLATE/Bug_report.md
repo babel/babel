@@ -14,7 +14,7 @@ assignees: ''
 
 <!--
 @babel/eslint-parser:
-  If you are having issues with JSX you might want to check out eslint-plugin-react. If there's an issue with new experimental syntax you might need check if it's supported by @babel/eslint-plugin.
+  If you are having issues with JSX you might want to check out eslint-plugin-react. If there's an issue with new experimental syntax you might need to check if it's supported by @babel/eslint-plugin.
 -->
 
 **Current behavior**
