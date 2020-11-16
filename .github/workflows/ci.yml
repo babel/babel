@@ -120,7 +120,10 @@ jobs:
       - name: Downgrade Jest for node <= 8
         if: matrix.node-version == '6' || matrix.node-version == '8'
         run: |
-          yarn remove jest && yarn add --dev jest@24
+          yarn remove jest
+          yarn add --dev jest@24
+          # Pin stack-utils to 1.0.2 https://github.com/tapjs/stack-utils/issues/56
+          yarn set resolution stack-utils@npm:^1.0.1 1.0.2
       - uses: actions/download-artifact@v2
         with:
           name: babel-artifact
