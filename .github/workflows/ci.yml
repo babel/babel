@@ -97,12 +97,10 @@ jobs:
     name: Test on Node.js # GitHub will add ${{ matrix.node-version }} to this title
     needs: build
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.node-version == 6 }}
     strategy:
       matrix:
         node-version: [14, 12, 10, 8, 6]
-        include:
-          - node-version: 6
-            continue-on-error: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
