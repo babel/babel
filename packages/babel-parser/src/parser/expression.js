@@ -518,7 +518,7 @@ export default class ExpressionParser extends LValParser {
         } else if (
           (arg.type === "MemberExpression" ||
             arg.type === "OptionalMemberExpression") &&
-          arg.property.type === "PrivateName"
+          this.isPrivateName(arg.property)
         ) {
           this.raise(node.start, Errors.DeletePrivateField);
         }
@@ -662,11 +662,14 @@ export default class ExpressionParser extends LValParser {
       ? this.parseExpression()
       : this.parseMaybePrivateName(true);
 
-    if (property.type === "PrivateName") {
+    if (this.isPrivateName(property)) {
       if (node.object.type === "Super") {
         this.raise(startPos, Errors.SuperPrivateField);
       }
-      this.classScope.usePrivateName(property.id.name, property.start);
+      this.classScope.usePrivateName(
+        this.getPrivateNameSV(property),
+        property.start,
+      );
     }
     node.property = property;
 
@@ -1923,7 +1926,7 @@ export default class ExpressionParser extends LValParser {
           ? this.parseExprAtom()
           : this.parseMaybePrivateName(isPrivateNameAllowed);
 
-      if (prop.key.type !== "PrivateName") {
+      if (!this.isPrivateName(prop.key)) {
         // ClassPrivateProperty is never computed, so we don't assign in that case.
         prop.computed = false;
       }

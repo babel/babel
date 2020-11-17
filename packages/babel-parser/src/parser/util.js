@@ -252,6 +252,23 @@ export default class UtilParser extends Tokenizer {
       this.match(tt.decimal)
     );
   }
+
+  /*
+   * Test if given node is a PrivateName
+   * will be overridden in ESTree plugin
+   */
+  isPrivateName(node: Node): boolean {
+    return node.type === "PrivateName";
+  }
+
+  /*
+   * Return the string value of a given private name
+   * WITHOUT `#`
+   * @see {@link https://tc39.es/proposal-class-fields/#sec-private-names-static-semantics-stringvalue}
+   */
+  getPrivateNameSV(node: Node): string {
+    return node.id.name;
+  }
 }
 
 /**
