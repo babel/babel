@@ -194,6 +194,26 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
+    parseMaybePrivateName(
+      ...args: [boolean]
+    ): N.Identifier | N.EstreePrivateIdentifier {
+      const node = super.parseMaybePrivateName(...args);
+      if (node.type === "PrivateName") {
+        node.name = node.id.name;
+        delete node.id;
+        node.type = "PrivateIdentifier";
+      }
+      return node;
+    }
+
+    isPrivateName(node: Node): boolean {
+      return node.type === "PrivateIdentifier";
+    }
+
+    getPrivateNameSV(node: Node): string {
+      return node.name;
+    }
+
     parseLiteral<T: N.Literal>(
       value: any,
       type: /*T["kind"]*/ string,
@@ -240,9 +260,26 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       delete funcNode.kind;
       // $FlowIgnore
       node.value = funcNode;
-
-      type = type === "ClassMethod" ? "MethodDefinition" : type;
+      if (type === "ClassPrivateMethod") {
+        node.computed = false;
+      }
+      type = "MethodDefinition";
       return this.finishNode(node, type);
+    }
+
+    parseClassProperty(...args: [N.ClassProperty]): N.EstreePropertyDefinition {
+      const propertyNode = super.parseClassProperty(...args);
+      propertyNode.type = "PropertyDefinition";
+      return propertyNode;
+    }
+
+    parseClassPrivateProperty(
+      ...args: [N.ClassPrivateProperty]
+    ): N.EstreePropertyDefinition {
+      const propertyNode = super.parseClassPrivateProperty(...args);
+      propertyNode.type = "PropertyDefinition";
+      propertyNode.computed = false;
+      return propertyNode;
     }
 
     parseObjectMethod(
