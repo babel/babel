@@ -5346,10 +5346,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:1.0.30001077":
-  version: 1.0.30001077
-  resolution: "caniuse-lite@npm:1.0.30001077"
-  checksum: 8c57dfba3e0da11c01fdaad6a3517c0259ce24006b2c1d542827d725c5f5ed5be7a18d7efdbfe4ae879d2fc01e2fa5445c31e76835a8abc9013f7bfa35c42e8e
+"caniuse-lite@npm:1.0.30001158":
+  version: 1.0.30001158
+  resolution: "caniuse-lite@npm:1.0.30001158"
+  checksum: 5e8e370bd6bf104dcec4761f88721ed8140ae45bf7cf69e9a82ff4f31d3cc1da6bf339c0231e3c67aa227108ce0fc18e990b4a251c73216f8c473837fe9f361b
   languageName: node
   linkType: hard
 
