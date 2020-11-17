@@ -288,7 +288,7 @@ export default class ExpressionParser extends LValParser {
         refExpressionErrors.shorthandAssign = -1; // reset because shorthand default was used correctly
       }
 
-      this.checkLVal(left, undefined, undefined, "assignment expression");
+      this.checkLVal(left, "assignment expression");
 
       this.next();
       node.right = this.parseMaybeAssign();
@@ -539,7 +539,7 @@ export default class ExpressionParser extends LValParser {
     refExpressionErrors: ?ExpressionErrors,
   ): N.Expression {
     if (update) {
-      this.checkLVal(node.argument, undefined, undefined, "prefix operation");
+      this.checkLVal(node.argument, "prefix operation");
       return this.finishNode(node, "UpdateExpression");
     }
 
@@ -552,7 +552,7 @@ export default class ExpressionParser extends LValParser {
       node.operator = this.state.value;
       node.prefix = false;
       node.argument = expr;
-      this.checkLVal(expr, undefined, undefined, "postfix operation");
+      this.checkLVal(expr, "postfix operation");
       this.next();
       expr = this.finishNode(node, "UpdateExpression");
     }
@@ -2108,9 +2108,9 @@ export default class ExpressionParser extends LValParser {
           if (this.state.strict && node.id) {
             this.checkLVal(
               node.id,
+              "function name",
               BIND_OUTSIDE,
               undefined,
-              "function name",
               undefined,
               strictModeChanged,
             );
@@ -2139,14 +2139,13 @@ export default class ExpressionParser extends LValParser {
     isArrowFunction: ?boolean,
     strictModeChanged?: boolean = true,
   ): void {
-    // $FlowIssue
-    const nameHash: {} = Object.create(null);
-    for (let i = 0; i < node.params.length; i++) {
+    const checkClashes = new Set();
+    for (const param of node.params) {
       this.checkLVal(
-        node.params[i],
-        BIND_VAR,
-        allowDuplicates ? null : nameHash,
+        param,
         "function parameter list",
+        BIND_VAR,
+        allowDuplicates ? null : checkClashes,
         undefined,
         strictModeChanged,
       );

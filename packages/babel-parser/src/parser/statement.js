@@ -532,7 +532,7 @@ export default class StatementParser extends ExpressionParser {
       const description = this.isContextual("of")
         ? "for-of statement"
         : "for-in statement";
-      this.checkLVal(init, undefined, undefined, description);
+      this.checkLVal(init, description);
       return this.parseForIn(node, init, awaitAt);
     } else {
       this.checkExpressionErrors(refExpressionErrors, true);
@@ -648,7 +648,7 @@ export default class StatementParser extends ExpressionParser {
 
     const simple = param.type === "Identifier";
     this.scope.enter(simple ? SCOPE_SIMPLE_CATCH : 0);
-    this.checkLVal(param, BIND_LEXICAL, null, "catch clause");
+    this.checkLVal(param, "catch clause", BIND_LEXICAL);
 
     return param;
   }
@@ -1050,9 +1050,9 @@ export default class StatementParser extends ExpressionParser {
     decl.id = this.parseBindingAtom();
     this.checkLVal(
       decl.id,
+      "variable declaration",
       kind === "var" ? BIND_VAR : BIND_LEXICAL,
       undefined,
-      "variable declaration",
       kind !== "var",
     );
   }
@@ -1675,7 +1675,7 @@ export default class StatementParser extends ExpressionParser {
     if (this.match(tt.name)) {
       node.id = this.parseIdentifier();
       if (isStatement) {
-        this.checkLVal(node.id, bindingType, undefined, "class name");
+        this.checkLVal(node.id, "class name", bindingType);
       }
     } else {
       if (optionalId || !isStatement) {
@@ -2173,12 +2173,7 @@ export default class StatementParser extends ExpressionParser {
     contextDescription: string,
   ): void {
     specifier.local = this.parseIdentifier();
-    this.checkLVal(
-      specifier.local,
-      BIND_LEXICAL,
-      undefined,
-      contextDescription,
-    );
+    this.checkLVal(specifier.local, contextDescription, BIND_LEXICAL);
     node.specifiers.push(this.finishNode(specifier, type));
   }
 
@@ -2383,12 +2378,7 @@ export default class StatementParser extends ExpressionParser {
       this.checkReservedWord(imported.name, specifier.start, true, true);
       specifier.local = imported.__clone();
     }
-    this.checkLVal(
-      specifier.local,
-      BIND_LEXICAL,
-      undefined,
-      "import specifier",
-    );
+    this.checkLVal(specifier.local, "import specifier", BIND_LEXICAL);
     node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
   }
 }

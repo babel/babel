@@ -16,7 +16,6 @@ import * as charCodes from "charcodes";
 import { isIteratorStart, isKeyword } from "../util/identifier";
 import {
   type BindingTypes,
-  BIND_NONE,
   BIND_LEXICAL,
   BIND_VAR,
   BIND_FUNCTION,
@@ -2264,17 +2263,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     checkLVal(
       expr: N.Expression,
-      bindingType: BindingTypes = BIND_NONE,
-      checkClashes: ?{ [key: string]: boolean },
-      contextDescription: string,
+      ...args:
+        | [string, BindingTypes | void]
+        | [
+            string,
+            BindingTypes | void,
+            ?Set<string>,
+            boolean | void,
+            boolean | void,
+          ]
     ): void {
       if (expr.type !== "TypeCastExpression") {
-        return super.checkLVal(
-          expr,
-          bindingType,
-          checkClashes,
-          contextDescription,
-        );
+        return super.checkLVal(expr, ...args);
       }
     }
 
@@ -2481,12 +2481,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           )
         : this.parseIdentifier();
 
-      this.checkLVal(
-        specifier.local,
-        BIND_LEXICAL,
-        undefined,
-        contextDescription,
-      );
+      this.checkLVal(specifier.local, contextDescription, BIND_LEXICAL);
       node.specifiers.push(this.finishNode(specifier, type));
     }
 
@@ -2608,12 +2603,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         );
       }
 
-      this.checkLVal(
-        specifier.local,
-        BIND_LEXICAL,
-        undefined,
-        "import specifier",
-      );
+      this.checkLVal(specifier.local, "import specifier", BIND_LEXICAL);
       node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
     }
 

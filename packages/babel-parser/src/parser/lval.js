@@ -376,64 +376,66 @@ export default class LValParser extends NodeUtils {
     return this.finishNode(node, "AssignmentPattern");
   }
 
-  // Verify that a node is an lval — something that can be assigned
-  // to.
-
+  /**
+   * Verify that if a node is an lval - something that can be assigned to.
+   *
+   * @param {Expression} expr The given node
+   * @param {string} contextDescription The auxiliary context information printed when error is thrown
+   * @param {BindingTypes} [bindingType=BIND_NONE] The desired binding type. If the given node is an identifier and `bindingType` is not
+                                                   BIND_NONE, `checkLVal` will register binding to the parser scope
+                                                   See also src/util/scopeflags.js
+   * @param {?Set<string>} checkClashes An optional string set to check if an identifier name is included. `checkLVal` will add checked
+                                        identifier name to `checkClashes` It is used in tracking duplicates in function parameter lists. If
+                                        it is nullish, `checkLVal` will skip duplicate checks
+   * @param {boolean} [disallowLetBinding] Whether an identifier named "let" should be disallowed
+   * @param {boolean} [strictModeChanged=false] Whether an identifier has been parsed in a sloppy context but should be reinterpreted as
+                                                strict-mode. e.g. `(arguments) => { "use strict "}`
+   * @memberof LValParser
+   */
   checkLVal(
     expr: Expression,
-    bindingType: BindingTypes = BIND_NONE,
-    checkClashes: ?{ [key: string]: boolean },
     contextDescription: string,
+    bindingType: BindingTypes = BIND_NONE,
+    checkClashes: ?Set<string>,
     disallowLetBinding?: boolean,
     strictModeChanged?: boolean = false,
   ): void {
     switch (expr.type) {
-      case "Identifier":
+      case "Identifier": {
+        const { name } = expr;
         if (
           this.state.strict &&
           // "Global" reserved words have already been checked by parseIdentifier,
           // unless they have been found in the id or parameters of a strict-mode
           // function in a sloppy context.
           (strictModeChanged
-            ? isStrictBindReservedWord(expr.name, this.inModule)
-            : isStrictBindOnlyReservedWord(expr.name))
+            ? isStrictBindReservedWord(name, this.inModule)
+            : isStrictBindOnlyReservedWord(name))
         ) {
           this.raise(
             expr.start,
             bindingType === BIND_NONE
               ? Errors.StrictEvalArguments
               : Errors.StrictEvalArgumentsBinding,
-            expr.name,
+            name,
           );
         }
 
         if (checkClashes) {
-          // we need to prefix this with an underscore for the cases where we have a key of
-          // `__proto__`. there's a bug in old V8 where the following wouldn't work:
-          //
-          //   > var obj = Object.create(null);
-          //   undefined
-          //   > obj.__proto__
-          //   null
-          //   > obj.__proto__ = true;
-          //   true
-          //   > obj.__proto__
-          //   null
-          const key = `_${expr.name}`;
-
-          if (checkClashes[key]) {
+          if (checkClashes.has(name)) {
             this.raise(expr.start, Errors.ParamDupe);
           } else {
-            checkClashes[key] = true;
+            checkClashes.add(name);
           }
         }
-        if (disallowLetBinding && expr.name === "let") {
+        if (disallowLetBinding && name === "let") {
           this.raise(expr.start, Errors.LetInLexicalBinding);
         }
         if (!(bindingType & BIND_NONE)) {
-          this.scope.declareName(expr.name, bindingType, expr.start);
+          this.scope.declareName(name, bindingType, expr.start);
         }
         break;
+      }
 
       case "MemberExpression":
         if (bindingType !== BIND_NONE) {
@@ -451,9 +453,9 @@ export default class LValParser extends NodeUtils {
 
           this.checkLVal(
             prop,
+            "object destructuring pattern",
             bindingType,
             checkClashes,
-            "object destructuring pattern",
             disallowLetBinding,
           );
         }
@@ -464,9 +466,9 @@ export default class LValParser extends NodeUtils {
           if (elem) {
             this.checkLVal(
               elem,
+              "array destructuring pattern",
               bindingType,
               checkClashes,
-              "array destructuring pattern",
               disallowLetBinding,
             );
           }
@@ -476,27 +478,27 @@ export default class LValParser extends NodeUtils {
       case "AssignmentPattern":
         this.checkLVal(
           expr.left,
+          "assignment pattern",
           bindingType,
           checkClashes,
-          "assignment pattern",
         );
         break;
 
       case "RestElement":
         this.checkLVal(
           expr.argument,
+          "rest element",
           bindingType,
           checkClashes,
-          "rest element",
         );
         break;
 
       case "ParenthesizedExpression":
         this.checkLVal(
           expr.expression,
+          "parenthesized expression",
           bindingType,
           checkClashes,
-          "parenthesized expression",
         );
         break;
 

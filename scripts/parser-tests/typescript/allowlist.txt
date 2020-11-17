@@ -295,6 +295,12 @@ letDeclarations-scopes-duplicates6.ts
 letDeclarations-scopes-duplicates7.ts
 letDeclarations-scopes.ts
 letDeclarations-validContexts.ts
+letInConstDeclarations_ES5.ts
+letInConstDeclarations_ES6.ts
+letInLetConstDeclOfForOfAndForIn_ES5.ts
+letInLetConstDeclOfForOfAndForIn_ES6.ts
+letInLetDeclarations_ES5.ts
+letInLetDeclarations_ES6.ts
 mergeWithImportedType.ts
 mergedDeclarations6.ts
 metadataOfClassFromAlias.ts
