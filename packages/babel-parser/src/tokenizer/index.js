@@ -1122,9 +1122,8 @@ export default class Tokenizer extends ParserErrors {
 
     if (hasLeadingZero) {
       const integer = this.input.slice(start, this.state.pos);
-      if (this.state.strict) {
-        this.raise(start, Errors.StrictOctalLiteral);
-      } else {
+      this.recordStrictModeErrors(start, Errors.StrictOctalLiteral);
+      if (!this.state.strict) {
         // disallow numeric separators in non octal decimals and legacy octal likes
         const underscorePos = integer.indexOf("_");
         if (underscorePos > 0) {
@@ -1322,9 +1321,9 @@ export default class Tokenizer extends ParserErrors {
     }
   }
 
-  recordNumericEscapeErrors(pos: number, message: string) {
+  recordStrictModeErrors(pos: number, message: string) {
     if (this.state.strict && !this.state.strictErrors.has(pos)) {
-      this.raise(pos, Errors.StrictNumericEscape);
+      this.raise(pos, message);
     } else {
       this.state.strictErrors.set(pos, message);
     }
@@ -1373,7 +1372,7 @@ export default class Tokenizer extends ParserErrors {
         if (inTemplate) {
           return null;
         } else {
-          this.recordNumericEscapeErrors(
+          this.recordStrictModeErrors(
             this.state.pos - 1,
             Errors.StrictNumericEscape,
           );
@@ -1405,10 +1404,7 @@ export default class Tokenizer extends ParserErrors {
             if (inTemplate) {
               return null;
             } else {
-              this.recordNumericEscapeErrors(
-                codePos,
-                Errors.StrictOctalLiteral,
-              );
+              this.recordStrictModeErrors(codePos, Errors.StrictNumericEscape);
             }
           }
 

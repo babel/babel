@@ -139,10 +139,11 @@ export default class State {
 
   // This property is used to track the following errors
   // - StrictNumericEscape
+  // - StrictOctalLiteral
   //
-  // in a directive that occurs prior to a "use strict" directive.
+  // in a literal that occurs prior to/immediately after a "use strict" directive.
 
-  // todo(JLHwung): set strictErrors to null and avoid adding numeric escape
+  // todo(JLHwung): set strictErrors to null and avoid recording string errors
   // after a non-directive is parsed
   strictErrors: Map<number, string> = new Map();
 
