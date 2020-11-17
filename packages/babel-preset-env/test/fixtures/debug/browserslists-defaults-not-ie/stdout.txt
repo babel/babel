@@ -2,34 +2,30 @@
 
 Using targets:
 {
-  "android": "81",
-  "chrome": "80",
-  "edge": "18",
-  "firefox": "74",
+  "android": "85",
+  "chrome": "84",
+  "edge": "85",
+  "firefox": "78",
   "ios": "12.2",
-  "opera": "67",
-  "safari": "13",
-  "samsung": "10.1"
+  "opera": "71",
+  "safari": "13.1",
+  "samsung": "11.1"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-numeric-separator { "edge":"18", "ios":"12.2", "samsung":"10.1" }
-  proposal-logical-assignment-operators { "android":"81", "chrome":"80", "edge":"18", "firefox":"74", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
-  proposal-nullish-coalescing-operator { "edge":"18", "ios":"12.2", "safari":"13", "samsung":"10.1" }
-  proposal-optional-chaining { "edge":"18", "ios":"12.2", "safari":"13", "samsung":"10.1" }
-  proposal-json-strings { "edge":"18" }
-  proposal-optional-catch-binding { "edge":"18" }
-  proposal-async-generator-functions { "edge":"18" }
-  proposal-object-rest-spread { "edge":"18" }
-  transform-dotall-regex { "edge":"18", "firefox":"74" }
-  proposal-unicode-property-regex { "edge":"18", "firefox":"74" }
-  transform-named-capturing-groups-regex { "edge":"18", "firefox":"74" }
+  proposal-numeric-separator { "ios":"12.2" }
+  proposal-logical-assignment-operators { "chrome":"84", "edge":"85", "firefox":"78", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  proposal-nullish-coalescing-operator { "ios":"12.2", "samsung":"11.1" }
+  proposal-optional-chaining { "ios":"12.2", "samsung":"11.1" }
+  syntax-json-strings { "android":"85", "chrome":"84", "edge":"85", "firefox":"78", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  syntax-optional-catch-binding { "android":"85", "chrome":"84", "edge":"85", "firefox":"78", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  syntax-async-generators { "android":"85", "chrome":"84", "edge":"85", "firefox":"78", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  syntax-object-rest-spread { "android":"85", "chrome":"84", "edge":"85", "firefox":"78", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
   transform-template-literals { "ios":"12.2" }
-  transform-function-name { "edge":"18" }
-  proposal-export-namespace-from { "edge":"18", "firefox":"74", "ios":"12.2", "safari":"13", "samsung":"10.1" }
-  transform-modules-commonjs { "android":"81", "chrome":"80", "edge":"18", "firefox":"74", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
-  proposal-dynamic-import { "android":"81", "chrome":"80", "edge":"18", "firefox":"74", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  proposal-export-namespace-from { "firefox":"78", "ios":"12.2", "safari":"13.1" }
+  transform-modules-commonjs { "android":"85", "chrome":"84", "edge":"85", "firefox":"78", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  proposal-dynamic-import { "android":"85", "chrome":"84", "edge":"85", "firefox":"78", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

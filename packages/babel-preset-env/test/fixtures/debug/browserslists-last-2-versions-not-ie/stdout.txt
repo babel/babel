@@ -2,32 +2,29 @@
 
 Using targets:
 {
-  "android": "81",
-  "chrome": "81",
-  "edge": "81",
-  "firefox": "75",
-  "ios": "13.3",
-  "opera": "67",
-  "safari": "13",
-  "samsung": "10.1"
+  "android": "85",
+  "chrome": "85",
+  "edge": "85",
+  "firefox": "81",
+  "ios": "13.4",
+  "opera": "71",
+  "safari": "13.1",
+  "samsung": "11.1"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-numeric-separator { "samsung":"10.1" }
-  proposal-logical-assignment-operators { "android":"81", "chrome":"81", "edge":"81", "firefox":"75", "ios":"13.3", "opera":"67", "safari":"13", "samsung":"10.1" }
-  proposal-nullish-coalescing-operator { "ios":"13.3", "safari":"13", "samsung":"10.1" }
-  proposal-optional-chaining { "ios":"13.3", "safari":"13", "samsung":"10.1" }
-  syntax-json-strings { "android":"81", "chrome":"81", "edge":"81", "firefox":"75", "ios":"13.3", "opera":"67", "safari":"13", "samsung":"10.1" }
-  syntax-optional-catch-binding { "android":"81", "chrome":"81", "edge":"81", "firefox":"75", "ios":"13.3", "opera":"67", "safari":"13", "samsung":"10.1" }
-  syntax-async-generators { "android":"81", "chrome":"81", "edge":"81", "firefox":"75", "ios":"13.3", "opera":"67", "safari":"13", "samsung":"10.1" }
-  syntax-object-rest-spread { "android":"81", "chrome":"81", "edge":"81", "firefox":"75", "ios":"13.3", "opera":"67", "safari":"13", "samsung":"10.1" }
-  transform-dotall-regex { "firefox":"75" }
-  proposal-unicode-property-regex { "firefox":"75" }
-  transform-named-capturing-groups-regex { "firefox":"75" }
-  proposal-export-namespace-from { "firefox":"75", "ios":"13.3", "safari":"13", "samsung":"10.1" }
-  transform-modules-commonjs { "android":"81", "chrome":"81", "edge":"81", "firefox":"75", "ios":"13.3", "opera":"67", "safari":"13", "samsung":"10.1" }
-  proposal-dynamic-import { "android":"81", "chrome":"81", "edge":"81", "firefox":"75", "ios":"13.3", "opera":"67", "safari":"13", "samsung":"10.1" }
+  syntax-numeric-separator { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  proposal-logical-assignment-operators { "edge":"85", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  proposal-nullish-coalescing-operator { "samsung":"11.1" }
+  proposal-optional-chaining { "samsung":"11.1" }
+  syntax-json-strings { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  syntax-optional-catch-binding { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  syntax-async-generators { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  syntax-object-rest-spread { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  proposal-export-namespace-from { "ios":"13.4", "safari":"13.1" }
+  transform-modules-commonjs { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  proposal-dynamic-import { "android":"85", "chrome":"85", "edge":"85", "firefox":"81", "ios":"13.4", "opera":"71", "safari":"13.1", "samsung":"11.1" }
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

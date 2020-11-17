@@ -2,37 +2,37 @@
 
 Using targets:
 {
-  "android": "81",
-  "chrome": "80",
-  "edge": "18",
-  "firefox": "74",
+  "android": "85",
+  "chrome": "84",
+  "edge": "85",
+  "firefox": "78",
   "ie": "11",
   "ios": "12.2",
-  "opera": "67",
-  "safari": "13",
-  "samsung": "10.1"
+  "opera": "71",
+  "safari": "13.1",
+  "samsung": "11.1"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-numeric-separator { "edge":"18", "ie":"11", "ios":"12.2", "samsung":"10.1" }
-  proposal-logical-assignment-operators { "android":"81", "chrome":"80", "edge":"18", "firefox":"74", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
-  proposal-nullish-coalescing-operator { "edge":"18", "ie":"11", "ios":"12.2", "safari":"13", "samsung":"10.1" }
-  proposal-optional-chaining { "edge":"18", "ie":"11", "ios":"12.2", "safari":"13", "samsung":"10.1" }
-  proposal-json-strings { "edge":"18", "ie":"11" }
-  proposal-optional-catch-binding { "edge":"18", "ie":"11" }
+  proposal-numeric-separator { "ie":"11", "ios":"12.2" }
+  proposal-logical-assignment-operators { "chrome":"84", "edge":"85", "firefox":"78", "ie":"11", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  proposal-nullish-coalescing-operator { "ie":"11", "ios":"12.2", "samsung":"11.1" }
+  proposal-optional-chaining { "ie":"11", "ios":"12.2", "samsung":"11.1" }
+  proposal-json-strings { "ie":"11" }
+  proposal-optional-catch-binding { "ie":"11" }
   transform-parameters { "ie":"11" }
-  proposal-async-generator-functions { "edge":"18", "ie":"11" }
-  proposal-object-rest-spread { "edge":"18", "ie":"11" }
-  transform-dotall-regex { "edge":"18", "firefox":"74", "ie":"11" }
-  proposal-unicode-property-regex { "edge":"18", "firefox":"74", "ie":"11" }
-  transform-named-capturing-groups-regex { "edge":"18", "firefox":"74", "ie":"11" }
+  proposal-async-generator-functions { "ie":"11" }
+  proposal-object-rest-spread { "ie":"11" }
+  transform-dotall-regex { "ie":"11" }
+  proposal-unicode-property-regex { "ie":"11" }
+  transform-named-capturing-groups-regex { "ie":"11" }
   transform-async-to-generator { "ie":"11" }
   transform-exponentiation-operator { "ie":"11" }
   transform-template-literals { "ie":"11", "ios":"12.2" }
   transform-literals { "ie":"11" }
-  transform-function-name { "edge":"18", "ie":"11" }
+  transform-function-name { "ie":"11" }
   transform-arrow-functions { "ie":"11" }
   transform-classes { "ie":"11" }
   transform-object-super { "ie":"11" }
@@ -49,8 +49,8 @@ Using plugins:
   transform-typeof-symbol { "ie":"11" }
   transform-new-target { "ie":"11" }
   transform-regenerator { "ie":"11" }
-  proposal-export-namespace-from { "edge":"18", "firefox":"74", "ie":"11", "ios":"12.2", "safari":"13", "samsung":"10.1" }
-  transform-modules-commonjs { "android":"81", "chrome":"80", "edge":"18", "firefox":"74", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
-  proposal-dynamic-import { "android":"81", "chrome":"80", "edge":"18", "firefox":"74", "ie":"11", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  proposal-export-namespace-from { "firefox":"78", "ie":"11", "ios":"12.2", "safari":"13.1" }
+  transform-modules-commonjs { "android":"85", "chrome":"84", "edge":"85", "firefox":"78", "ie":"11", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
+  proposal-dynamic-import { "android":"85", "chrome":"84", "edge":"85", "firefox":"78", "ie":"11", "ios":"12.2", "opera":"71", "safari":"13.1", "samsung":"11.1" }
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
