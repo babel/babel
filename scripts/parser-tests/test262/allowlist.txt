@@ -1,2 +1,1 @@
-language/literals/string/legacy-non-octal-escape-sequence-8-strict-explicit-pragma.js(default)
-language/literals/string/legacy-non-octal-escape-sequence-9-strict-explicit-pragma.js(default)
+

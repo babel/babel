@@ -137,10 +137,14 @@ export default class State {
   // escape sequences must not be interpreted as keywords.
   containsEsc: boolean = false;
 
-  // This property is used to throw an error for
-  // an octal literal in a directive that occurs prior
-  // to a "use strict" directive.
-  octalPositions: number[] = [];
+  // This property is used to track the following errors
+  // - StrictNumericEscape
+  //
+  // in a directive that occurs prior to a "use strict" directive.
+
+  // todo(JLHwung): set strictErrors to null and avoid adding numeric escape
+  // after a non-directive is parsed
+  strictErrors: Map<number, string> = new Map();
 
   // Names of exports store. `default` is stored as a name for both
   // `export default foo;` and `export { foo as default };`.
