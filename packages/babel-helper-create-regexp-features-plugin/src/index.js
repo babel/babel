@@ -10,8 +10,20 @@ import { generateRegexpuOptions } from "./util";
 
 import pkg from "../package.json";
 import { types as t } from "@babel/core";
-import { pullFlag } from "@babel/helper-regex";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
+
+type RegExpFlags = "i" | "g" | "m" | "s" | "u" | "y";
+
+/**
+ * Remove given flag from given RegExpLiteral node
+ *
+ * @param {RegExpLiteral} node
+ * @param {RegExpFlags} flag
+ * @returns {void}
+ */
+function pullFlag(node, flag: RegExpFlags): void {
+  node.flags = node.flags.replace(flag, "");
+}
 
 // Note: Versions are represented as an integer. e.g. 7.1.5 is represented
 //       as 70000100005. This method is easier than using a semver-parsing

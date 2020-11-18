@@ -19,7 +19,6 @@
   ],
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^7.10.4",
-    "@babel/helper-regex": "workspace:^7.10.4",
     "regexpu-core": "^4.7.1"
   },
   "peerDependencies": {

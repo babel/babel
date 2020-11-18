@@ -409,7 +409,6 @@ __metadata:
     "@babel/core": "workspace:*"
     "@babel/helper-annotate-as-pure": "workspace:^7.10.4"
     "@babel/helper-plugin-test-runner": "workspace:*"
-    "@babel/helper-regex": "workspace:^7.10.4"
     regexpu-core: ^4.7.1
   peerDependencies:
     "@babel/core": ^7.0.0
@@ -646,7 +645,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-regex@workspace:^7.10.4, @babel/helper-regex@workspace:packages/babel-helper-regex":
+"@babel/helper-regex@workspace:packages/babel-helper-regex":
   version: 0.0.0-use.local
   resolution: "@babel/helper-regex@workspace:packages/babel-helper-regex"
   dependencies:
@@ -2748,7 +2747,6 @@ __metadata:
     "@babel/core": "workspace:*"
     "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/helper-plugin-utils": "workspace:^7.10.4"
-    "@babel/helper-regex": "workspace:^7.10.4"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
