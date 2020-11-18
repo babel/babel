@@ -194,23 +194,30 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    parseMaybePrivateName(
-      ...args: [boolean]
-    ): N.Identifier | N.EstreePrivateIdentifier {
+    parseMaybePrivateName(...args: [boolean]): any {
       const node = super.parseMaybePrivateName(...args);
       if (node.type === "PrivateName") {
-        node.name = node.id.name;
-        delete node.id;
-        node.type = "PrivateIdentifier";
+        return this.convertPrivateNameToPrivateIdentifier(node);
       }
       return node;
     }
 
-    isPrivateName(node: Node): boolean {
+    convertPrivateNameToPrivateIdentifier(
+      node: N.PrivateName,
+    ): N.EstreePrivateIdentifier {
+      const name = super.getPrivateNameSV(node);
+      node = (node: any);
+      delete node.id;
+      node.name = name;
+      node.type = "PrivateIdentifier";
+      return node;
+    }
+
+    isPrivateName(node: N.Node): boolean {
       return node.type === "PrivateIdentifier";
     }
 
-    getPrivateNameSV(node: Node): string {
+    getPrivateNameSV(node: N.Node): string {
       return node.name;
     }
 
@@ -261,25 +268,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // $FlowIgnore
       node.value = funcNode;
       if (type === "ClassPrivateMethod") {
+        // $FlowIgnore
         node.computed = false;
       }
       type = "MethodDefinition";
       return this.finishNode(node, type);
     }
 
-    parseClassProperty(...args: [N.ClassProperty]): N.EstreePropertyDefinition {
-      const propertyNode = super.parseClassProperty(...args);
+    parseClassProperty(...args: [N.ClassProperty]): any {
+      const propertyNode = (super.parseClassProperty(...args): any);
       propertyNode.type = "PropertyDefinition";
-      return propertyNode;
+      return (propertyNode: N.EstreePropertyDefinition);
     }
 
-    parseClassPrivateProperty(
-      ...args: [N.ClassPrivateProperty]
-    ): N.EstreePropertyDefinition {
-      const propertyNode = super.parseClassPrivateProperty(...args);
+    parseClassPrivateProperty(...args: [N.ClassPrivateProperty]): any {
+      const propertyNode = (super.parseClassPrivateProperty(...args): any);
       propertyNode.type = "PropertyDefinition";
       propertyNode.computed = false;
-      return propertyNode;
+      return (propertyNode: N.EstreePropertyDefinition);
     }
 
     parseObjectMethod(
