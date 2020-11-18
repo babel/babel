@@ -688,6 +688,115 @@ describe("api", function () {
     ]);
   });
 
+  it("extensions option", function () {
+    return Promise.all([
+      transformAsync("", {
+        filename: "bar.js",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        filename: "bar.mjs",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        filename: "bar.jsx",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        filename: undefined,
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        filename: "bar.ts",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: [".js", ".mjs"],
+        filename: "bar.ts",
+      }).then(assertIgnored),
+
+      transformAsync("", {
+        extensions: [".ts"],
+        filename: "bar.ts",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: [".ts"],
+        filename: "bar.js",
+      }).then(assertIgnored),
+
+      transformAsync("", {
+        extensions: ["*"],
+        filename: "bar.ts",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: ["*"],
+        filename: "bar.js",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: ["*"],
+        filename: undefined,
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: ["*"],
+        filename: "bar",
+      }).then(assertNotIgnored),
+
+      // Presets can add supported extensions but they don't prevent the
+      // default value of ["*"] from being set.
+
+      transformAsync("", {
+        extensions: [".js"],
+        filename: "bar.js",
+        presets: [() => ({ extensions: [".ts"], plugins: [] })],
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: [".js"],
+        filename: "bar.ts",
+        presets: [() => ({ extensions: [".ts"], plugins: [] })],
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: [".js"],
+        filename: "bar.tsx",
+        presets: [() => ({ extensions: [".ts"], plugins: [] })],
+      }).then(assertIgnored),
+
+      transformAsync("", {
+        filename: "bar.tsx",
+        presets: [() => ({ extensions: [".ts"], plugins: [] })],
+      }).then(assertNotIgnored),
+
+      // Test with 'extensions' option in config file
+
+      transformAsync("", {
+        configFile: `${__dirname}/fixtures/api/config-with-ts-extension/babel.config.json`,
+        filename: "foo.ts",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        configFile: `${__dirname}/fixtures/api/config-with-ts-extension/babel.config.json`,
+        filename: "foo.tsx",
+      }).then(assertIgnored),
+
+      transformAsync("", {
+        extensions: [".tsx"],
+        configFile: `${__dirname}/fixtures/api/config-with-ts-extension/babel.config.json`,
+        filename: "foo.tsx",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        extensions: ["*"],
+        configFile: `${__dirname}/fixtures/api/config-with-ts-extension/babel.config.json`,
+        filename: "foo.tsx",
+      }).then(assertNotIgnored),
+    ]);
+  });
+
   describe("env option", function () {
     const oldBabelEnv = process.env.BABEL_ENV;
     const oldNodeEnv = process.env.NODE_ENV;

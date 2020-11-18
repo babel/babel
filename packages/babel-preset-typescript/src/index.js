@@ -16,6 +16,10 @@ export default declare(
   ) => {
     api.assertVersion(7);
 
+    // Technically we could use the "semver" package here, but (for exmaple)
+    // parseFloat("4.23.6") returns 4.23 so it's "good enough"
+    const BABEL_SUPPORTS_EXTENSIONS_OPTION = parseFloat(api.version) >= 7.12;
+
     if (typeof jsxPragmaFrag !== "string") {
       throw new Error(".jsxPragmaFrag must be a string, or undefined");
     }
@@ -42,6 +46,9 @@ export default declare(
     });
 
     return {
+      ...(BABEL_SUPPORTS_EXTENSIONS_OPTION && {
+        extensions: [".ts", ".tsx"],
+      }),
       overrides: allExtensions
         ? [
             {

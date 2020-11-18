@@ -29,6 +29,7 @@
   "devDependencies": {
     "@babel/core": "workspace:*",
     "@babel/plugin-transform-modules-commonjs": "workspace:*",
+    "@babel/preset-typescript": "workspace:*",
     "browserify": "^16.5.2"
   }
 }

@@ -5,6 +5,7 @@ import { sync as makeDirSync } from "make-dir";
 import slash from "slash";
 import path from "path";
 import fs from "fs";
+import { DEFAULT_EXTENSIONS } from "@babel/core";
 
 import * as util from "./util";
 import { type CmdOptions } from "./options";
@@ -33,7 +34,10 @@ export default async function ({
   ): Promise<$Keys<typeof FILE_TYPE>> {
     let relative = path.relative(base, src);
 
-    if (!util.isCompilableExtension(relative, cliOptions.extensions)) {
+    if (
+      !util.BABEL_SUPPORTS_EXTENSIONS_OPTION &&
+      !util.isCompilableExtension(relative, cliOptions.extensions)
+    ) {
       return FILE_TYPE.NON_COMPILABLE;
     }
 
@@ -47,12 +51,24 @@ export default async function ({
     const dest = getDest(relative, base);
 
     try {
-      const res = await util.compile(src, {
+      const config = await util.loadPartialConfig({
         ...babelOptions,
         sourceFileName: slash(path.relative(dest + "/..", src)),
+        filename: src,
+        ...(util.BABEL_SUPPORTS_EXTENSIONS_OPTION && {
+          // TODO(Babel 8): At some point @babel/core will default to DEFAULT_EXTENSIONS
+          // instead of ["*"], and we can avoid setting it here.
+          extensions: cliOptions.extensions ?? DEFAULT_EXTENSIONS,
+        }),
       });
 
-      if (!res) return FILE_TYPE.IGNORED;
+      if (!config) return FILE_TYPE.IGNORED;
+
+      const res = await util.compile(src, config.options);
+
+      // If loadPartialConfig didn't return null, it's because the file wasn't ignored.
+      // Thus, if compiling the file returns null, it's because the extension isn't supported.
+      if (!res) return FILE_TYPE.NON_COMPILABLE;
 
       // we've requested explicit sourcemaps to be written to disk
       if (

@@ -3161,6 +3161,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:*"
     "@babel/plugin-transform-modules-commonjs": "workspace:*"
+    "@babel/preset-typescript": "workspace:*"
     browserify: ^16.5.2
     find-cache-dir: ^2.0.0
     lodash: ^4.17.19

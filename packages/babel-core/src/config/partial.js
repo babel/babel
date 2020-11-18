@@ -115,10 +115,18 @@ export default function* loadPrivatePartialConfig(
   const configChain = yield* buildRootChain(args, context);
   if (!configChain) return null;
 
-  const options = {};
+  const options: ValidatedOptions = {};
   configChain.options.forEach(opts => {
     mergeOptions(options, opts);
   });
+
+  // If the programmatic options or config files don't set the "extensions"
+  // option, default to ["*"] for backward compatibility reasons.
+  // Note: this default value is set _before_ loading the presets, so it's
+  // safe to add the "extensions" option to a preset in a minor version.
+  // TODO(Babel 8): The default should be babel.DEFAULT_EXTENSIONS
+  // TODO: Use ??= once flow supports it.
+  options.extensions = options.extensions ?? ["*"];
 
   // Tack the passes onto the object itself so that, if this object is
   // passed back to Babel a second time, it will be in the right structure
