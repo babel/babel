@@ -399,7 +399,6 @@ sourceMapValidationDecorators.ts
 sourceMapValidationStatements.ts
 staticIndexer.ts
 strictModeReservedWord.ts
-strictModeReservedWordInClassDeclaration.ts
 superCallFromClassThatHasNoBaseType1.ts
 symbolLinkDeclarationEmitModuleNames.ts
 symbolMergeValueAndImportedType.ts
