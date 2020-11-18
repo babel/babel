@@ -159,12 +159,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // TODO: Would be nice to avoid lookahead. Want a hasLineBreakUpNext() method...
       this.next();
       return (
-        this.match(tt.bracketL) ||
-        this.match(tt.braceL) ||
-        this.match(tt.star) ||
-        this.match(tt.ellipsis) ||
-        this.match(tt.hash) ||
-        this.isLiteralPropertyName()
+        (this.match(tt.bracketL) ||
+          this.match(tt.braceL) ||
+          this.match(tt.star) ||
+          this.match(tt.ellipsis) ||
+          this.match(tt.hash) ||
+          this.isLiteralPropertyName()) &&
+        !this.hasPrecedingLineBreak()
       );
     }
 
