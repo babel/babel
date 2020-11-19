@@ -1734,6 +1734,15 @@ describe("verify", () => {
           { "no-unused-vars": 1 },
         );
       });
+
+      it("type annotations should work", () => {
+        verifyAndAssertMessages(
+          `class C {
+            #p: Array<number>
+          }`,
+          { "no-undef": 1 },
+        );
+      });
     });
 
     describe("private methods", () => {
@@ -1792,6 +1801,17 @@ describe("verify", () => {
   #b() {} // no-unreachable should not bail here
 }`,
           { "no-unreachable": 1 },
+        );
+      });
+
+      it("should not be unamed", () => {
+        verifyAndAssertMessages(
+          `
+              export class C {
+                #d() {};
+              }
+          `,
+          { "func-names": 1 },
         );
       });
     });
