@@ -2117,7 +2117,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (member.declare) {
         if (
           member.type !== "ClassProperty" &&
-          member.type !== "ClassPrivateProperty"
+          member.type !== "ClassPrivateProperty" &&
+          member.type !== "PropertyDefinition" // estree
         ) {
           this.raise(pos, FlowErrors.DeclareClassElement);
         } else if (member.value) {
