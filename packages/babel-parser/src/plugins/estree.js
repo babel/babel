@@ -468,7 +468,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.hasPropertyAsPrivateName(node);
     }
 
-    isOptionalChain(node) {
+    isOptionalChain(node: N.Node): boolean {
       return node.type === "ChainExpression";
+    }
+
+    isObjectProperty(node: N.Node): boolean {
+      return node.type === "Property" && node.kind === "init" && !node.method;
     }
   };

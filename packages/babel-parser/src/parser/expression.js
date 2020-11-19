@@ -1599,7 +1599,7 @@ export default class ExpressionParser extends LValParser {
 
       if (
         isRecord &&
-        prop.type !== "ObjectProperty" &&
+        !this.isObjectProperty(prop) &&
         prop.type !== "SpreadElement"
       ) {
         this.raise(prop.start, Errors.InvalidRecordProperty);

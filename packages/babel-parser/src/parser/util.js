@@ -289,6 +289,10 @@ export default class UtilParser extends Tokenizer {
       node.type === "OptionalCallExpression"
     );
   }
+
+  isObjectProperty(node: Node): boolean {
+    return node.type === "ObjectProperty";
+  }
 }
 
 /**
