@@ -466,4 +466,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
       return super.hasPropertyAsPrivateName(node);
     }
+
+    isOptionalChain(node) {
+      return node.type === "ChainExpression";
+    }
   };

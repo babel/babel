@@ -614,12 +614,12 @@ export default class ExpressionParser extends LValParser {
 
     let optional = false;
     if (this.match(tt.questionDot)) {
-      state.optionalChainMember = optional = true;
       if (noCalls && this.lookaheadCharCode() === charCodes.leftParenthesis) {
         // stop at `?.` when parsing `new a?.()`
         state.stop = true;
         return base;
       }
+      state.optionalChainMember = optional = true;
       this.next();
     }
 
@@ -1495,13 +1495,9 @@ export default class ExpressionParser extends LValParser {
   // https://tc39.es/ecma262/#prod-NewExpression
   parseNew(node: N.Expression): N.NewExpression {
     node.callee = this.parseNoCallExpr();
-
     if (node.callee.type === "Import") {
       this.raise(node.callee.start, Errors.ImportCallNotNewExpression);
-    } else if (
-      node.callee.type === "OptionalMemberExpression" ||
-      node.callee.type === "OptionalCallExpression"
-    ) {
+    } else if (this.isOptionalChain(node.callee)) {
       this.raise(this.state.lastTokEnd, Errors.OptionalChainingNoNew);
     } else if (this.eat(tt.questionDot)) {
       this.raise(this.state.start, Errors.OptionalChainingNoNew);

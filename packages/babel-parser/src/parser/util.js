@@ -282,6 +282,13 @@ export default class UtilParser extends Tokenizer {
       this.isPrivateName(node.property)
     );
   }
+
+  isOptionalChain(node: Node): boolean {
+    return (
+      node.type === "OptionalMemberExpression" ||
+      node.type === "OptionalCallExpression"
+    );
+  }
 }
 
 /**
