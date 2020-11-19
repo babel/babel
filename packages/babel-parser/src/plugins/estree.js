@@ -453,4 +453,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       return node;
     }
+
+    hasPropertyAsPrivateName(node: N.Node): boolean {
+      if (node.type === "ChainExpression") {
+        node = node.expression;
+      }
+      return super.hasPropertyAsPrivateName(node);
+    }
   };
