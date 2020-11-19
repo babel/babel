@@ -293,6 +293,10 @@ export default class UtilParser extends Tokenizer {
   isObjectProperty(node: Node): boolean {
     return node.type === "ObjectProperty";
   }
+
+  isObjectMethod(node: Node): boolean {
+    return node.type === "ObjectMethod";
+  }
 }
 
 /**

@@ -94,8 +94,9 @@ export default class ExpressionParser extends LValParser {
   ): void {
     if (
       prop.type === "SpreadElement" ||
-      prop.type === "ObjectMethod" ||
+      this.isObjectMethod(prop) ||
       prop.computed ||
+      // $FlowIgnore
       prop.shorthand
     ) {
       return;

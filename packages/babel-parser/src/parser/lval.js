@@ -445,11 +445,11 @@ export default class LValParser extends NodeUtils {
 
       case "ObjectPattern":
         for (let prop of expr.properties) {
-          if (prop.type === "ObjectProperty") prop = prop.value;
+          if (this.isObjectProperty(prop)) prop = prop.value;
           // If we find here an ObjectMethod, it's because this was originally
           // an ObjectExpression which has then been converted.
           // toAssignable already reported this error with a nicer message.
-          else if (prop.type === "ObjectMethod") continue;
+          else if (this.isObjectMethod(prop)) continue;
 
           this.checkLVal(
             prop,

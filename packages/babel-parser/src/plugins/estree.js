@@ -5,7 +5,6 @@ import type Parser from "../parser";
 import type { ExpressionErrors } from "../parser/util";
 import * as N from "../types";
 import type { Position } from "../util/location";
-import { type BindingTypes } from "../util/scopeflags";
 import { Errors } from "../parser/error";
 
 export default (superClass: Class<Parser>): Class<Parser> =>
@@ -104,51 +103,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     getObjectOrClassMethodParams(method: N.ObjectMethod | N.ClassMethod) {
       return ((method: any): N.EstreeProperty | N.EstreeMethodDefinition).value
         .params;
-    }
-
-    checkLVal(
-      expr: N.Expression,
-      contextDescription: string,
-      ...args: [
-        BindingTypes | void,
-        ?Set<string>,
-        boolean | void,
-        boolean | void,
-      ]
-    ): void {
-      switch (expr.type) {
-        case "ObjectPattern":
-          expr.properties.forEach(prop => {
-            // If we find here a method or accessor, it's because this was originally
-            // an ObjectExpression which has then been converted.
-            // toAssignable already reported this error with a nicer message.
-            if (this.isMethodOrAccessor(prop)) {
-              return;
-            }
-            this.checkLVal(
-              prop.type === "Property" ? prop.value : prop,
-              "object destructuring pattern",
-              ...args,
-            );
-          });
-          break;
-        default:
-          super.checkLVal(expr, contextDescription, ...args);
-      }
-    }
-
-    isMethodOrAccessor(node: N.Node): boolean {
-      return node.method || node.kind === "get" || node.kind === "set";
-    }
-
-    checkProto(
-      prop: N.ObjectMember | N.SpreadElement,
-      ...args: [boolean, { used: boolean }, ?ExpressionErrors]
-    ): void {
-      if (this.isMethodOrAccessor(prop)) {
-        return;
-      }
-      super.checkProto(prop, ...args);
     }
 
     isValidDirective(stmt: N.Statement): boolean {
@@ -465,5 +419,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     isObjectProperty(node: N.Node): boolean {
       return node.type === "Property" && node.kind === "init" && !node.method;
+    }
+
+    isObjectMethod(node: N.Node): boolean {
+      return node.method || node.kind === "get" || node.kind === "set";
     }
   };
