@@ -1987,7 +1987,7 @@ export default class StatementParser extends ExpressionParser {
               this.raise(
                 specifier.start,
                 Errors.ExportBindingIsString,
-                local.extra.raw,
+                local.value,
                 exportedName,
               );
             } else {
