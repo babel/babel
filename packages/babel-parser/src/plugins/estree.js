@@ -128,6 +128,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       switch (expr.type) {
         case "ObjectPattern":
           expr.properties.forEach(prop => {
+            // If we find here a method or accessor, it's because this was originally
+            // an ObjectExpression which has then been converted.
+            // toAssignable already reported this error with a nicer message.
+            if (prop.kind === "get" || prop.kind === "set" || prop.method) {
+              return;
+            }
             this.checkLVal(
               prop.type === "Property" ? prop.value : prop,
               "object destructuring pattern",
@@ -351,9 +357,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     toAssignableObjectExpressionProp(prop: N.Node, ...args) {
       if (prop.kind === "get" || prop.kind === "set") {
-        throw this.raise(prop.key.start, Errors.PatternHasAccessor);
+        this.raise(prop.key.start, Errors.PatternHasAccessor);
       } else if (prop.method) {
-        throw this.raise(prop.key.start, Errors.PatternHasMethod);
+        this.raise(prop.key.start, Errors.PatternHasMethod);
       } else {
         super.toAssignableObjectExpressionProp(prop, ...args);
       }
