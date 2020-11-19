@@ -8,15 +8,6 @@ import type { Position } from "../util/location";
 import { type BindingTypes } from "../util/scopeflags";
 import { Errors } from "../parser/error";
 
-function isSimpleProperty(node: N.Node): boolean {
-  return (
-    node != null &&
-    node.type === "Property" &&
-    node.kind === "init" &&
-    node.method === false
-  );
-}
-
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
     estreeParseRegExpLiteral({ pattern, flags }: N.RegExpLiteral): N.Node {
@@ -103,7 +94,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     checkDeclaration(node: N.Pattern | N.ObjectProperty): void {
-      if (isSimpleProperty(node)) {
+      if (node != null && this.isObjectProperty(node)) {
         this.checkDeclaration(((node: any): N.EstreeProperty).value);
       } else {
         super.checkDeclaration(node);
@@ -347,8 +338,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
-      if (isSimpleProperty(node)) {
-        this.toAssignable(node.value);
+      if (node != null && this.isObjectProperty(node)) {
+        this.toAssignable(node.value, isLHS);
 
         return node;
       }
