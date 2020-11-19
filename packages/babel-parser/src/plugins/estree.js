@@ -170,11 +170,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseBlockBody(
       node: N.BlockStatementLike,
-      allowDirectives: ?boolean,
-      topLevel: boolean,
-      end: TokenType,
+      ...args: [?boolean, boolean, TokenType, void | (boolean => void)]
     ): void {
-      super.parseBlockBody(node, allowDirectives, topLevel, end);
+      super.parseBlockBody(node, ...args);
 
       const directiveStatements = node.directives.map(d =>
         this.directiveToStmt(d),
