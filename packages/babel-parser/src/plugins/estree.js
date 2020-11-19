@@ -131,7 +131,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             // If we find here a method or accessor, it's because this was originally
             // an ObjectExpression which has then been converted.
             // toAssignable already reported this error with a nicer message.
-            if (prop.kind === "get" || prop.kind === "set" || prop.method) {
+            if (this.isMethodOrAccessor(prop)) {
               return;
             }
             this.checkLVal(
@@ -146,17 +146,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
+    isMethodOrAccessor(node: N.Node): boolean {
+      return node.method || node.kind === "get" || node.kind === "set";
+    }
+
     checkProto(
       prop: N.ObjectMember | N.SpreadElement,
-      isRecord: boolean,
-      protoRef: { used: boolean },
-      refExpressionErrors: ?ExpressionErrors,
+      ...args: [boolean, { used: boolean }, ?ExpressionErrors]
     ): void {
-      // $FlowIgnore: check prop.method and fallback to super method
-      if (prop.method) {
+      if (this.isMethodOrAccessor(prop)) {
         return;
       }
-      super.checkProto(prop, isRecord, protoRef, refExpressionErrors);
+      super.checkProto(prop, ...args);
     }
 
     isValidDirective(stmt: N.Statement): boolean {
