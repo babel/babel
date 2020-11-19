@@ -269,6 +269,19 @@ export default class UtilParser extends Tokenizer {
   getPrivateNameSV(node: Node): string {
     return node.id.name;
   }
+
+  /*
+   * Return whether the given node is a member/optional chain that
+   * contains a private name as its property
+   * It is overridden in ESTree plugin
+   */
+  hasPropertyAsPrivateName(node: Node): boolean {
+    return (
+      (node.type === "MemberExpression" ||
+        node.type === "OptionalMemberExpression") &&
+      this.isPrivateName(node.property)
+    );
+  }
 }
 
 /**
