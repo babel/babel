@@ -5,6 +5,12 @@ import {
 } from "@babel/helper-skip-transparent-expression-wrappers";
 import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
 import { types as t, template } from "@babel/core";
+import {
+  willPathCastToBoolean,
+  findOutermostTransparentParent,
+} from "./util.js";
+
+const { ast } = template.expression;
 
 export default declare((api, options) => {
   api.assertVersion(7);
@@ -56,11 +62,11 @@ export default declare((api, options) => {
         const { scope } = path;
         // maybeWrapped points to the outermost transparent expression wrapper
         // or the path itself
-        let maybeWrapped = path;
-        const parentPath = path.findParent(p => {
-          if (!isTransparentExprWrapper(p)) return true;
-          maybeWrapped = p;
-        });
+        const maybeWrapped = findOutermostTransparentParent(path);
+        const { parentPath } = maybeWrapped;
+        const willReplacementCastToBoolean = willPathCastToBoolean(
+          maybeWrapped,
+        );
         let isDeleteOperation = false;
         const parentIsCall =
           parentPath.isCallExpression({ callee: maybeWrapped.node }) &&
@@ -202,33 +208,35 @@ export default declare((api, options) => {
               [t.cloneNode(baseRef ?? object)],
             );
           }
-          replacementPath.replaceWith(
-            t.conditionalExpression(
-              loose
-                ? t.binaryExpression("==", t.cloneNode(check), t.nullLiteral())
-                : t.logicalExpression(
-                    "||",
-                    t.binaryExpression(
-                      "===",
-                      t.cloneNode(check),
-                      t.nullLiteral(),
-                    ),
-                    t.binaryExpression(
-                      "===",
-                      t.cloneNode(ref),
-                      scope.buildUndefinedNode(),
-                    ),
-                  ),
-              isDeleteOperation
-                ? t.booleanLiteral(true)
-                : scope.buildUndefinedNode(),
-              replacement,
-            ),
-          );
 
-          replacementPath = skipTransparentExprWrappers(
-            replacementPath.get("alternate"),
-          );
+          if (willReplacementCastToBoolean) {
+            // `if (a?.b) {}` transformed to `if (a != null && a.b) {}`
+            // we don't need to return `void 0` because the returned value will
+            // eveutally cast to boolean.
+            const nonNullishCheck = loose
+              ? ast`${t.cloneNode(check)} != null`
+              : ast`
+            ${t.cloneNode(check)} !== null && ${t.cloneNode(ref)} !== void 0`;
+            replacementPath.replaceWith(
+              t.logicalExpression("&&", nonNullishCheck, replacement),
+            );
+            replacementPath = skipTransparentExprWrappers(
+              replacementPath.get("right"),
+            );
+          } else {
+            const nullishCheck = loose
+              ? ast`${t.cloneNode(check)} == null`
+              : ast`
+            ${t.cloneNode(check)} === null || ${t.cloneNode(ref)} === void 0`;
+
+            const returnValue = isDeleteOperation ? ast`true` : ast`void 0`;
+            replacementPath.replaceWith(
+              t.conditionalExpression(nullishCheck, returnValue, replacement),
+            );
+            replacementPath = skipTransparentExprWrappers(
+              replacementPath.get("alternate"),
+            );
+          }
         }
       },
     },

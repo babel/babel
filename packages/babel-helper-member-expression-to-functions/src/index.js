@@ -1,4 +1,5 @@
 import * as t from "@babel/types";
+import { willPathCastToBoolean } from "./util.js";
 
 class AssignmentMemoiser {
   constructor() {
@@ -129,6 +130,8 @@ const handle = {
         return;
       }
 
+      const willEndPathCastToBoolean = willPathCastToBoolean(endPath);
+
       const rootParentPath = endPath.parentPath;
       if (
         rootParentPath.isUpdateExpression({ argument: node }) ||
@@ -238,33 +241,60 @@ const handle = {
         regular = endParentPath.node;
       }
 
-      replacementPath.replaceWith(
-        t.conditionalExpression(
-          t.logicalExpression(
-            "||",
-            t.binaryExpression(
-              "===",
-              baseNeedsMemoised
-                ? t.assignmentExpression(
-                    "=",
-                    t.cloneNode(baseRef),
-                    t.cloneNode(startingNode),
-                  )
-                : t.cloneNode(baseRef),
-              t.nullLiteral(),
-            ),
-            t.binaryExpression(
-              "===",
-              t.cloneNode(baseRef),
-              scope.buildUndefinedNode(),
-            ),
+      if (willEndPathCastToBoolean) {
+        const nonNullishCheck = t.logicalExpression(
+          "&&",
+          t.binaryExpression(
+            "!==",
+            baseNeedsMemoised
+              ? t.assignmentExpression(
+                  "=",
+                  t.cloneNode(baseRef),
+                  t.cloneNode(startingNode),
+                )
+              : t.cloneNode(baseRef),
+            t.nullLiteral(),
           ),
-          isDeleteOperation
-            ? t.booleanLiteral(true)
-            : scope.buildUndefinedNode(),
-          regular,
-        ),
-      );
+          t.binaryExpression(
+            "!==",
+            t.cloneNode(baseRef),
+            scope.buildUndefinedNode(),
+          ),
+        );
+        replacementPath.replaceWith(
+          t.logicalExpression("&&", nonNullishCheck, regular),
+        );
+      } else {
+        // todo: respect assumptions.noDocumentAll when assumptions are implemented
+        const nullishCheck = t.logicalExpression(
+          "||",
+          t.binaryExpression(
+            "===",
+            baseNeedsMemoised
+              ? t.assignmentExpression(
+                  "=",
+                  t.cloneNode(baseRef),
+                  t.cloneNode(startingNode),
+                )
+              : t.cloneNode(baseRef),
+            t.nullLiteral(),
+          ),
+          t.binaryExpression(
+            "===",
+            t.cloneNode(baseRef),
+            scope.buildUndefinedNode(),
+          ),
+        );
+        replacementPath.replaceWith(
+          t.conditionalExpression(
+            nullishCheck,
+            isDeleteOperation
+              ? t.booleanLiteral(true)
+              : scope.buildUndefinedNode(),
+            regular,
+          ),
+        );
+      }
 
       // context and isDeleteOperation can not be both truthy
       if (context) {
