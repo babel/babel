@@ -1,67 +1,65 @@
 import { declare } from "@babel/helper-plugin-utils";
 import transformTypeScript from "@babel/plugin-transform-typescript";
+import { OptionValidator } from "@babel/helper-validator-option";
+const v = new OptionValidator("@babel/preset-typescript");
 
-export default declare(
-  (
-    api,
-    {
-      allExtensions = false,
-      allowDeclareFields,
-      allowNamespaces,
-      jsxPragma,
-      jsxPragmaFrag = "React.Fragment",
-      isTSX = false,
-      onlyRemoveTypeImports,
-    },
-  ) => {
-    api.assertVersion(7);
+export default declare((api, opts) => {
+  api.assertVersion(7);
 
-    if (typeof jsxPragmaFrag !== "string") {
-      throw new Error(".jsxPragmaFrag must be a string, or undefined");
-    }
+  const {
+    allowDeclareFields,
+    allowNamespaces,
+    jsxPragma,
+    onlyRemoveTypeImports,
+  } = opts;
 
-    if (typeof allExtensions !== "boolean") {
-      throw new Error(".allExtensions must be a boolean, or undefined");
-    }
+  const jsxPragmaFrag = v.validateStringOption(
+    "jsxPragmaFrag",
+    opts.jsxPragmaFrag,
+    "React.Fragment",
+  );
 
-    if (typeof isTSX !== "boolean") {
-      throw new Error(".isTSX must be a boolean, or undefined");
-    }
+  const allExtensions = v.validateBooleanOption(
+    "allExtensions",
+    opts.allExtensions,
+    false,
+  );
 
-    if (isTSX && !allExtensions) {
-      throw new Error("isTSX:true requires allExtensions:true");
-    }
+  const isTSX = v.validateBooleanOption("isTSX", opts.isTSX, false);
 
-    const pluginOptions = isTSX => ({
-      allowDeclareFields,
-      allowNamespaces,
-      isTSX,
-      jsxPragma,
-      jsxPragmaFrag,
-      onlyRemoveTypeImports,
-    });
+  if (isTSX) {
+    v.invariant(allExtensions, "isTSX:true requires allExtensions:true");
+  }
 
-    return {
-      overrides: allExtensions
-        ? [
-            {
-              plugins: [[transformTypeScript, pluginOptions(isTSX)]],
-            },
-          ]
-        : [
-            {
-              // Only set 'test' if explicitly requested, since it requires that
-              // Babel is being called`
-              test: /\.ts$/,
-              plugins: [[transformTypeScript, pluginOptions(false)]],
-            },
-            {
-              // Only set 'test' if explicitly requested, since it requires that
-              // Babel is being called`
-              test: /\.tsx$/,
-              plugins: [[transformTypeScript, pluginOptions(true)]],
-            },
-          ],
-    };
-  },
-);
+  const pluginOptions = isTSX => ({
+    allowDeclareFields,
+    allowNamespaces,
+    isTSX,
+    jsxPragma,
+    jsxPragmaFrag,
+    onlyRemoveTypeImports,
+  });
+
+  return {
+    overrides: allExtensions
+      ? [
+          {
+            plugins: [[transformTypeScript, pluginOptions(isTSX)]],
+          },
+        ]
+      : [
+          {
+            // Only set 'test' if explicitly requested, since it requires that
+            // Babel is being called`
+            test: /\.ts$/,
+            plugins: [[transformTypeScript, pluginOptions(false)]],
+          },
+          {
+            // Only set 'test' if explicitly requested, since it requires that
+            // Babel is being called`
+            test: /\.tsx$/,
+            plugins: [[transformTypeScript, pluginOptions(true)]],
+          },
+        ],
+  };
+});

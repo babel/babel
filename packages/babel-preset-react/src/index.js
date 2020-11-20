@@ -29,12 +29,6 @@ export default declare((api, opts) => {
   const development = !!opts.development;
   const useBuiltIns = !!opts.useBuiltIns;
 
-  if (typeof development !== "boolean") {
-    throw new Error(
-      "@babel/preset-react 'development' option must be a boolean.",
-    );
-  }
-
   const transformReactJSXPlugin =
     runtime === "automatic" && development
       ? transformReactJSXDevelopment
