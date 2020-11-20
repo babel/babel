@@ -1,6 +1,6 @@
 {
   "name": "babel",
-  "version": "7.12.6",
+  "version": "7.12.7",
   "private": true,
   "license": "MIT",
   "scripts": {
