@@ -995,7 +995,9 @@ export interface OptionalMemberExpression extends BaseNode {
 export interface OptionalCallExpression extends BaseNode {
   type: "OptionalCallExpression";
   callee: Expression;
-  arguments: Array<Expression | SpreadElement | JSXNamespacedName>;
+  arguments: Array<
+    Expression | SpreadElement | JSXNamespacedName | ArgumentPlaceholder
+  >;
   optional: boolean;
   typeArguments: TypeParameterInstantiation | null;
   typeParameters: TSTypeParameterInstantiation | null;

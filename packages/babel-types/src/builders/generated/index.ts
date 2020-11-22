@@ -596,7 +596,10 @@ export function optionalMemberExpression(
 export function optionalCallExpression(
   callee: types.Expression,
   _arguments: Array<
-    types.Expression | types.SpreadElement | types.JSXNamespacedName
+    | types.Expression
+    | types.SpreadElement
+    | types.JSXNamespacedName
+    | types.ArgumentPlaceholder
   >,
   optional: boolean,
 ): types.OptionalCallExpression {
