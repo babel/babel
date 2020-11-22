@@ -1,3 +1,5 @@
+import type { NodePath } from "@babel/traverse";
+
 /**
  * Test if a NodePath will be cast to boolean when evaluated.
  *
