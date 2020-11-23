@@ -111,6 +111,9 @@ export default declare((api, options) => {
           replacementPath = parentPath;
           isDeleteOperation = true;
         }
+
+        let needsRequeue = false;
+
         for (let i = optionals.length - 1; i >= 0; i--) {
           const node = optionals[i];
 
@@ -237,6 +240,15 @@ export default declare((api, options) => {
               replacementPath.get("alternate"),
             );
           }
+
+          needsRequeue = true;
+        }
+
+        // TODO(bng): Continue investigating why changes in https://github.com/babel/babel/pull/12302
+        // now need this requeue (and also why this _specific_ requeue,
+        // replacementPath.requeue() doesn't work).
+        if (needsRequeue) {
+          parentPath.requeue();
         }
       },
     },
