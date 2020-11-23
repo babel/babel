@@ -22,8 +22,19 @@ const { terser: rollupTerser } = require("rollup-plugin-terser");
 
 const defaultSourcesGlob = "./@(codemods|packages|eslint)/*/src/**/*.{js,ts}";
 
-function swapSrcWithLib(srcPath) {
-  const parts = srcPath.split(path.sep);
+/**
+ * map source code path to the generated artifacts path
+ * @example
+ * mapSrcToLib("packages/babel-core/src/index.js")
+ * // returns "packages/babel-core/lib/index.js"
+ * @example
+ * mapSrcToLib("packages/babel-template/src/index.ts")
+ * // returns "packages/babel-template/lib/index.js"
+ * @param {string} srcPath
+ * @returns {string}
+ */
+function mapSrcToLib(srcPath) {
+  const parts = srcPath.replace(/\.ts$/, ".js").split(path.sep);
   parts[2] = "lib";
   return parts.join(path.sep);
 }
@@ -72,7 +83,7 @@ function buildBabel(exclude, sourcesGlob = defaultSourcesGlob) {
 
   return stream
     .pipe(errorsLogger())
-    .pipe(newer({ dest: base, map: swapSrcWithLib }))
+    .pipe(newer({ dest: base, map: mapSrcToLib }))
     .pipe(compilationLogger())
     .pipe(
       babel({
@@ -85,7 +96,7 @@ function buildBabel(exclude, sourcesGlob = defaultSourcesGlob) {
     .pipe(
       // Passing 'file.relative' because newer() above uses a relative
       // path and this keeps it consistent.
-      rename(file => path.resolve(file.base, swapSrcWithLib(file.relative)))
+      rename(file => path.resolve(file.base, mapSrcToLib(file.relative)))
     )
     .pipe(gulp.dest(base));
 }
