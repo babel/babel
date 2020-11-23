@@ -127,7 +127,7 @@ export function getSibling(key: string): NodePath {
     container: this.container,
     listKey: this.listKey,
     key: key,
-  });
+  }).setContext(this.context);
 }
 
 export function getPrevSibling(): NodePath {
