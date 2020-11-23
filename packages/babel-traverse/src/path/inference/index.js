@@ -14,6 +14,11 @@ export function getTypeAnnotation(): Object {
   return (this.typeAnnotation = type);
 }
 
+// Used to avoid infinite recursion in cases like
+//   var b, c; if (0) { c = 1; b = c; } c = b;
+// It also works with indirect recursion.
+const typeAnnotationInferringNodes = new WeakSet();
+
 /**
  * todo: split up this method
  */
@@ -47,14 +52,24 @@ export function _getTypeAnnotation(): ?Object {
     return node.typeAnnotation;
   }
 
-  let inferer = inferers[node.type];
-  if (inferer) {
-    return inferer.call(this, node);
+  if (typeAnnotationInferringNodes.has(node)) {
+    // Bail out from type inference to avoid infinite loops
+    return;
   }
+  typeAnnotationInferringNodes.add(node);
 
-  inferer = inferers[this.parentPath.type];
-  if (inferer?.validParent) {
-    return this.parentPath.getTypeAnnotation();
+  try {
+    let inferer = inferers[node.type];
+    if (inferer) {
+      return inferer.call(this, node);
+    }
+
+    inferer = inferers[this.parentPath.type];
+    if (inferer?.validParent) {
+      return this.parentPath.getTypeAnnotation();
+    }
+  } finally {
+    typeAnnotationInferringNodes.delete(node);
   }
 }
 
