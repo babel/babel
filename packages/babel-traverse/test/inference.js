@@ -289,5 +289,21 @@ describe("inference", function () {
       const type = path.getTypeAnnotation();
       expect(t.isAnyTypeAnnotation(type)).toBeTruthy();
     });
+    it("should not cause a stack overflow when two variable depend on eachother", function () {
+      const path = getPath(`
+        var b, c;
+        while (0) {
+          c = 1;
+          b = c;
+        }
+        c = b;
+      `).get("body.2.expression");
+
+      expect(path.toString()).toBe("c = b");
+
+      // Note: this could technically be "number | void", but the cycle detection
+      // logic just bails out to "any" to avoid infinite loops.
+      expect(path.getTypeAnnotation()).toEqual({ type: "AnyTypeAnnotation" });
+    });
   });
 });
