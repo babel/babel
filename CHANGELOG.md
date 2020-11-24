@@ -19,6 +19,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.12.9 (2020-11-24)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-typescript`, `babel-traverse`
+  * [#12391](https://github.com/babel/babel/pull/12391) Update pathCache in `NodePath#_replaceWith` ([@JLHwung](https://github.com/JLHwung))
 ## v7.12.8 (2020-11-23)
 
 #### :bug: Bug Fix
