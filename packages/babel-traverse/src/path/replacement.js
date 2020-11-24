@@ -50,7 +50,7 @@ export function replaceWithMultiple(nodes: Array<Object>) {
   nodes = this._verifyNodeList(nodes);
   t.inheritLeadingComments(nodes[0], this.node);
   t.inheritTrailingComments(nodes[nodes.length - 1], this.node);
-  pathCache.get(this.parent).delete(this.node);
+  pathCache.get(this.parent)?.delete(this.node);
   this.node = this.container[this.key] = null;
   const paths = this.insertAfter(nodes);
 
@@ -199,6 +199,7 @@ export function _replaceWith(node) {
   }
 
   this.debug(`Replace with ${node?.type}`);
+  pathCache.get(this.parent)?.set(node, this).delete(this.node);
 
   this.node = this.container[this.key] = node;
 }

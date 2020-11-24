@@ -112,6 +112,33 @@ describe("path/replacement", function () {
       });
       expect(visitCounter).toBe(1);
     });
+
+    // https://github.com/babel/babel/issues/12386
+    it("updates pathCache with the replaced node", () => {
+      const ast = parse(`() => (a?.b)?.c`, {
+        createParenthesizedExpressions: true,
+      });
+      traverse(ast, {
+        OptionalMemberExpression(path) {
+          path.node.type = "MemberExpression";
+          // force `replaceWith` to replace `path.node`
+          path.replaceWith(path.node.__clone());
+          path.parentPath.ensureBlock();
+
+          const aQuestionDotBNode = path.node.object.expression;
+          // avoid traversing to a?.b
+          aQuestionDotBNode.type = "MemberExpression";
+        },
+        ParenthesizedExpression(path) {
+          path.replaceWith(path.node.expression);
+        },
+      });
+      expect(generate(ast).code).toMatchInlineSnapshot(`
+        "() => {
+          return a.b.c;
+        };"
+      `);
+    });
   });
   describe("replaceWithMultiple", () => {
     it("does not add extra parentheses for a JSXElement with a JSXElement parent", () => {
