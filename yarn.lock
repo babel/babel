@@ -134,7 +134,7 @@ __metadata:
     "@babel/helpers": "workspace:^7.12.5"
     "@babel/parser": "workspace:^7.12.7"
     "@babel/template": "workspace:^7.12.7"
-    "@babel/traverse": "workspace:^7.12.8"
+    "@babel/traverse": "workspace:^7.12.9"
     "@babel/types": "workspace:^7.12.7"
     convert-source-map: ^1.7.0
     debug: ^4.1.0
@@ -3355,7 +3355,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@workspace:*, @babel/traverse@workspace:^7.10.4, @babel/traverse@workspace:^7.12.1, @babel/traverse@workspace:^7.12.5, @babel/traverse@workspace:^7.12.8, @babel/traverse@workspace:packages/babel-traverse":
+"@babel/traverse@workspace:*, @babel/traverse@workspace:^7.10.4, @babel/traverse@workspace:^7.12.1, @babel/traverse@workspace:^7.12.5, @babel/traverse@workspace:^7.12.9, @babel/traverse@workspace:packages/babel-traverse":
   version: 0.0.0-use.local
   resolution: "@babel/traverse@workspace:packages/babel-traverse"
   dependencies:
