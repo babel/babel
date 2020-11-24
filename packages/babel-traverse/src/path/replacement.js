@@ -199,6 +199,11 @@ export function _replaceWith(node) {
   }
 
   this.debug(`Replace with ${node?.type}`);
+  const cache = pathCache.get(this.parent);
+  if (cache) {
+    cache.set(node, this);
+    cache.delete(this.node);
+  }
 
   this.node = this.container[this.key] = node;
 }
