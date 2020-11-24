@@ -42,6 +42,8 @@ export default class TraversalContext {
   }
 
   create(node, obj, key, listKey): NodePath {
+    // We don't need to `.setContext()` here, since `.visitQueue()` already
+    // calls `.pushContext`.
     return NodePath.get({
       parentPath: this.parentPath,
       parent: node,

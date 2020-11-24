@@ -217,7 +217,7 @@ export function unshiftContainer(listKey, nodes) {
     container: this.node[listKey],
     listKey,
     key: 0,
-  });
+  }).setContext(this.context);
 
   return path._containerInsertBefore(nodes);
 }
@@ -237,7 +237,7 @@ export function pushContainer(listKey, nodes) {
     container: container,
     listKey,
     key: container.length,
-  });
+  }).setContext(this.context);
 
   return path.replaceWithMultiple(nodes);
 }
