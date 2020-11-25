@@ -247,6 +247,28 @@ describe("validators", function () {
         expect(t.isReferenced(node, parent)).toBe(false);
       });
     });
+
+    describe("exports", function () {
+      it("returns false for re-exports", function () {
+        const node = t.identifier("foo");
+        const parent = t.exportSpecifier(node, t.identifier("bar"));
+        const grandparent = t.exportNamedDeclaration(
+          null,
+          [parent],
+          t.stringLiteral("library"),
+        );
+
+        expect(t.isReferenced(node, parent, grandparent)).toBe(false);
+      });
+
+      it("returns true for local exports", function () {
+        const node = t.identifier("foo");
+        const parent = t.exportSpecifier(node, t.identifier("bar"));
+        const grandparent = t.exportNamedDeclaration(null, [parent]);
+
+        expect(t.isReferenced(node, parent, grandparent)).toBe(true);
+      });
+    });
   });
 
   describe("isBinding", function () {

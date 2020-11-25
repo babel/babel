@@ -29,15 +29,6 @@ export default function isReferenced(
     case "ArrowFunctionExpression":
       return parent.body === node;
 
-    // no: export { foo as NODE };
-    // yes: export { NODE as foo };
-    // no: export { NODE as foo } from "foo";
-    case "ExportSpecifier":
-      if (parent.source) {
-        return false;
-      }
-      return parent.local === node;
-
     // no: class { #NODE; }
     // no: class { get #NODE() {} }
     // no: class { #NODE() {} }
@@ -119,6 +110,15 @@ export default function isReferenced(
     case "ExportNamespaceSpecifier":
     case "ExportDefaultSpecifier":
       return false;
+
+    // no: export { foo as NODE };
+    // yes: export { NODE as foo };
+    // no: export { NODE as foo } from "foo";
+    case "ExportSpecifier":
+      if (grandparent?.source) {
+        return false;
+      }
+      return parent.local === node;
 
     // no: import NODE from "foo";
     // no: import * as NODE from "foo";
