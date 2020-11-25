@@ -5,9 +5,6 @@ You should also be sure that the version you pass to the `corejs` option matches
 
   npm install --save core-js@2    npm install --save core-js@3
   yarn add core-js@2              yarn add core-js@3
-<<<<<<< HEAD
-=======
 
 More info about useBuiltIns: https://babeljs.io/docs/en/babel-preset-env#usebuiltins
 More info about core-js: https://babeljs.io/docs/en/babel-preset-env#corejs
->>>>>>> Fix specs.
