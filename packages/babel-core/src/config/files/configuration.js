@@ -15,9 +15,9 @@ import loadCjsOrMjsDefault from "./module-types";
 import pathPatternToRegex from "../pattern-to-regex";
 import type { FilePackageData, RelativeConfig, ConfigFile } from "./types";
 import type { CallerMetadata } from "../validation/options";
+import createRequire from "create-require";
 
 import * as fs from "../../gensync-utils/fs";
-import resolve from "../../gensync-utils/resolve";
 
 const debug = buildDebug("babel:config:loading:files:configuration");
 
@@ -136,7 +136,7 @@ export function* loadConfig(
   envName: string,
   caller: CallerMetadata | void,
 ): Handler<ConfigFile> {
-  const filepath = yield* resolve(name, { basedir: dirname });
+  const filepath = createRequire(dirname).resolve(name);
 
   const conf = yield* readConfig(filepath, envName, caller);
   if (!conf) {

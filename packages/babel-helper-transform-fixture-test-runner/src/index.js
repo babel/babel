@@ -7,7 +7,7 @@ import { codeFrameColumns } from "@babel/code-frame";
 import escapeRegExp from "lodash/escapeRegExp";
 import * as helpers from "./helpers";
 import merge from "lodash/merge";
-import resolve from "resolve";
+import createRequire from "create-require";
 import assert from "assert";
 import fs from "fs";
 import path from "path";
@@ -107,9 +107,7 @@ function runModuleInTestContext(
   context: Context,
   moduleCache: Object,
 ) {
-  const filename = resolve.sync(id, {
-    basedir: path.dirname(relativeFilename),
-  });
+  const filename = createRequire(relativeFilename).resolve(id);
 
   // Expose Node-internal modules if the tests want them. Note, this will not execute inside
   // the context's global scope.

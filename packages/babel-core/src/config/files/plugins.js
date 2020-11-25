@@ -5,7 +5,7 @@
  */
 
 import buildDebug from "debug";
-import resolve from "resolve";
+import createRequire from "create-require";
 import path from "path";
 
 const debug = buildDebug("babel:config:loading:files:plugins");
@@ -95,15 +95,17 @@ function resolveStandardizedName(
 ) {
   const standardizedName = standardizeName(type, name);
 
+  const relativeRequire = createRequire(dirname);
+
   try {
-    return resolve.sync(standardizedName, { basedir: dirname });
+    return relativeRequire.resolve(standardizedName);
   } catch (e) {
     if (e.code !== "MODULE_NOT_FOUND") throw e;
 
     if (standardizedName !== name) {
       let resolvedOriginal = false;
       try {
-        resolve.sync(name, { basedir: dirname });
+        relativeRequire.resolve(name);
         resolvedOriginal = true;
       } catch {}
 
@@ -114,9 +116,7 @@ function resolveStandardizedName(
 
     let resolvedBabel = false;
     try {
-      resolve.sync(standardizeName(type, "@babel/" + name), {
-        basedir: dirname,
-      });
+      relativeRequire.resolve(standardizeName(type, "@babel/" + name));
       resolvedBabel = true;
     } catch {}
 
@@ -127,7 +127,7 @@ function resolveStandardizedName(
     let resolvedOppositeType = false;
     const oppositeType = type === "preset" ? "plugin" : "preset";
     try {
-      resolve.sync(standardizeName(oppositeType, name), { basedir: dirname });
+      relativeRequire.resolve(standardizeName(oppositeType, name));
       resolvedOppositeType = true;
     } catch {}
 
