@@ -171,7 +171,9 @@ export function normalizeCoreJSOption(
         "`dependencies` section. If it doesn't, you need to run one of the " +
         "following commands:\n\n" +
         "  npm install --save core-js@2    npm install --save core-js@3\n" +
-        "  yarn add core-js@2              yarn add core-js@3\n",
+        "  yarn add core-js@2              yarn add core-js@3\n\n" +
+        "More info about useBuiltIns: https://babeljs.io/docs/en/babel-preset-env#usebuiltins\n" +
+        "More info about core-js: https://babeljs.io/docs/en/babel-preset-env#corejs",
     );
   } else if (typeof corejs === "object" && corejs !== null) {
     rawVersion = corejs.version;
