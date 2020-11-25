@@ -50,6 +50,7 @@ Using plugins:
 Using polyfills with `entry` option:
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-proposals/input.mjs] Replaced core-js entries with the following polyfills:
+  es.map {}
   esnext.aggregate-error {}
   esnext.array.last-index {}
   esnext.array.last-item {}
