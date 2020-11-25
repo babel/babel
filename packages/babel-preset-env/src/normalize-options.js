@@ -161,7 +161,7 @@ export function normalizeCoreJSOption(
     rawVersion = 2;
     console.warn(
       "\n[babel-preset-env]" +
-      "\nWARNING: We noticed you're using the `useBuiltIns` option without declaring a " +
+        "\nWARNING: We noticed you're using the `useBuiltIns` option without declaring a " +
         "core-js version. Currently, we assume version 2.x when no version " +
         "is passed. Since this default version will likely change in future " +
         "versions of Babel, we recommend explicitly setting the core-js version " +
@@ -185,7 +185,7 @@ export function normalizeCoreJSOption(
   if (!useBuiltIns && version) {
     console.log(
       "\n[babel-preset-env]" +
-      "\nThe `corejs` option only has an effect when the `useBuiltIns` option is not `false`\n",
+        "\nThe `corejs` option only has an effect when the `useBuiltIns` option is not `false`\n",
     );
   }
 
