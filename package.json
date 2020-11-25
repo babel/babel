@@ -75,6 +75,7 @@
   "resolutions": {
     "browserslist": "npm:4.14.5",
     "caniuse-lite": "npm:1.0.30001158",
+    "glob-watcher/chokidar": "npm:^3.4.0",
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",
     "@babel/parser/@babel/types": "workspace:*"
