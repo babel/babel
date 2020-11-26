@@ -1,7 +1,7 @@
 export default (param => {
-  var _class, _temp;
+  var App, _temp;
 
-  return _temp = _class = /*#__PURE__*/function () {
+  return _temp = App = /*#__PURE__*/function () {
     function App() {
       babelHelpers.classCallCheck(this, App);
     }
@@ -13,7 +13,7 @@ export default (param => {
       }
     }]);
     return App;
-  }(), babelHelpers.defineProperty(_class, "props", {
+  }(), babelHelpers.defineProperty(App, "props", {
     prop1: 'prop1',
     prop2: 'prop2'
   }), _temp;
