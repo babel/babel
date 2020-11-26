@@ -138,7 +138,7 @@ export function createClassFeaturePlugin({
 
         let ref;
 
-        if (path.isClassExpression() || !path.node.id) {
+        if (!path.node.id) {
           nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
         } else {
