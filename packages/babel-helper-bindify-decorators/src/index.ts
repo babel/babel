@@ -1,9 +1,10 @@
 import type { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
+import type { Decorator } from "@babel/types";
 
 export default function bindifyDecorators(
-  decorators: Array<NodePath>,
-): Array<NodePath> {
+  decorators: ReadonlyArray<NodePath<Decorator>>,
+): void {
   for (const decoratorPath of decorators) {
     const decorator = decoratorPath.node;
     const expression = decorator.expression;
