@@ -19,7 +19,6 @@ before_script:
 
 script:
   - if [ "$JOB" = "test" ]; then make -j test-ci; fi
-  - if [ "$JOB" = "lint" ]; then make -j code-quality-ci; fi
   - if [ "$JOB" = "babel-parser-flow-tests" ]; then make -j test-flow-ci; fi
   - if [ "$JOB" = "babel-parser-typescript-tests" ]; then make -j test-typescript-ci; fi
   - if [ "$JOB" = "babel-parser-test262-tests" ]; then make -j test-test262-ci; fi
@@ -27,8 +26,6 @@ script:
 matrix:
   fast_finish: true
   include:
-    - node_js: "node"
-      env: JOB=lint
     # We test the latest version on circleci
     # Move `windows` build to be the third since it is slow
     - os: windows

@@ -93,6 +93,30 @@ jobs:
             packages/babel-standalone/*.js
             !**/node_modules/**
 
+  lint:
+    name: Lint
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v2
+        with:
+          name: babel-artifact
+      - name: Lint
+        run: make tscheck flowcheck-ci lint-ci
+
   test:
     name: Test on Node.js # GitHub will add ${{ matrix.node-version }} to this title
     needs: build
