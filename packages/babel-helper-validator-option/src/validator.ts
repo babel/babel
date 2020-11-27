@@ -1,4 +1,3 @@
-// @flow
 import { findSuggestion } from "./find-suggestion.js";
 
 export class OptionValidator {
