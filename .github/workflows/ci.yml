@@ -200,9 +200,6 @@ jobs:
     name: Third-party Parser Tests
     needs: build
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        suite: [flow, typescript, test262]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -220,7 +217,11 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: babel-artifact
-      - name: Download ${{ matrix.suite }} tests
-        run: make bootstrap-${{ matrix.suite }}
-      - name: Run ${{ matrix.suite }} Tests
-        run: make test-${{ matrix.suite }}
+      - name: Download tests
+        run: make -j bootstrap-flow bootstrap-typescript bootstrap-test262
+      - name: Run Test262 Tests
+        run: make test-test262
+      - name: Run Flow Tests
+        run: make test-flow
+      - name: Run TypeScript Tests
+        run: make test-typescript
