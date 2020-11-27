@@ -195,3 +195,32 @@ jobs:
           ./node_modules/.bin/jest --ci --color
         env:
           BABEL_ENV: test
+
+  external-parser-tests:
+    name: Third-party Parser Tests
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        suite: [flow, typescript, test262]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v2
+        with:
+          name: babel-artifact
+      - name: Download ${{ matrix.suite }} tests
+        run: make bootstrap-${{ matrix.suite }}
+      - name: Run ${{ matrix.suite }} Tests
+        run: make test-${{ matrix.suite }}
