@@ -537,6 +537,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-hoist-variables@workspace:packages/babel-helper-hoist-variables"
   dependencies:
+    "@babel/traverse": "workspace:^7.12.17"
     "@babel/types": "workspace:^7.12.13"
   languageName: unknown
   linkType: soft
