@@ -264,8 +264,7 @@ function supportsTopLevelAwait(caller) {
 export default declare((api, opts) => {
   api.assertVersion(7);
 
-  // TODO(Babel 8): api.targets() is always defined, no need to fallback
-  const babelTargets = api.targets?.() ?? {};
+  const babelTargets = api.targets();
 
   const {
     bugfixes,
