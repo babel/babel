@@ -1,7 +1,6 @@
 import * as t from "@babel/types";
-import type { Function } from "@babel/types";
 
-export default function (node: Function): number {
+export default function (node: t.Function): number {
   const params = node.params;
   for (let i = 0; i < params.length; i++) {
     const param = params[i];
