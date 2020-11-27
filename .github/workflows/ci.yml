@@ -163,3 +163,35 @@ jobs:
         # Remove once `chalk` is bumped to 4.0.
         run: |
           BABEL_ENV=test node ./node_modules/.bin/jest --ci --color
+
+  test-windows:
+    name: Test on Windows
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js latest
+        uses: actions/setup-node@v2-beta
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v2
+        with:
+          name: babel-artifact
+      - name: Generate runtime helpers
+        run: |
+          make build-plugin-transform-runtime-dist
+      - name: Test on Windows
+        # Hack: --color has supports-color@5 returned true for GitHub CI
+        # Remove once `chalk` is bumped to 4.0.
+        run: |
+          ./node_modules/.bin/jest --ci --color
+        env:
+          BABEL_ENV: test

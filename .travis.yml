@@ -14,11 +14,8 @@ env:
     - JOB=test
 
 install: skip
-before_script:
-  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then choco install make; fi
 
 script:
-  - if [ "$JOB" = "test" ]; then make -j test-ci; fi
   - if [ "$JOB" = "babel-parser-flow-tests" ]; then make -j test-flow-ci; fi
   - if [ "$JOB" = "babel-parser-typescript-tests" ]; then make -j test-typescript-ci; fi
   - if [ "$JOB" = "babel-parser-test262-tests" ]; then make -j test-test262-ci; fi
@@ -26,19 +23,6 @@ script:
 matrix:
   fast_finish: true
   include:
-    # We test the latest version on circleci
-    # Move `windows` build to be the third since it is slow
-    - os: windows
-      node_js: "node"
-      env:
-        - JOB=test
-        # https://travis-ci.community/t/build-doesnt-finish-after-completing-tests/288/9
-        - YARN_GPG=no
-      cache:
-        npm: false
-        directories:
-          - $HOME/AppData/Local/Temp/chocolatey
-          - $HOME/AppData/Local/Yarn/Berry/cache
     - node_js: "node"
       env: JOB=babel-parser-flow-tests
     - node_js: "node"
