@@ -34,11 +34,11 @@ describe("assumptions", () => {
         assumptions: {
           setPublicClassFields: true,
         },
-        presets: [() => ({ assumptions: { setClassMethods: true } })],
+        presets: [() => ({ assumptions: { mutableTemplateObject: true } })],
       }).assumptions,
     ).toEqual({
       setPublicClassFields: true,
-      setClassMethods: true,
+      mutableTemplateObject: true,
       // This is enabled by default
       newableArrowFunctions: true,
     });
@@ -93,7 +93,6 @@ describe("assumptions", () => {
     const makePlugin = () =>
       jest.fn(api => {
         api.assumption("setPublicClassFields");
-        api.assumption("mutableTemplateObject");
         return {};
       });
 
@@ -110,11 +109,11 @@ describe("assumptions", () => {
 
       run(plugin, {
         setPublicClassFields: true,
-        setClassMethods: false,
+        mutableTemplateObject: false,
       });
       run(plugin, {
         setPublicClassFields: true,
-        setClassMethods: false,
+        mutableTemplateObject: false,
       });
 
       expect(plugin).toHaveBeenCalledTimes(1);
@@ -125,11 +124,11 @@ describe("assumptions", () => {
 
       run(plugin, {
         setPublicClassFields: true,
-        setClassMethods: false,
+        mutableTemplateObject: false,
       });
       run(plugin, {
         setPublicClassFields: true,
-        setClassMethods: true,
+        mutableTemplateObject: true,
       });
 
       expect(plugin).toHaveBeenCalledTimes(1);
@@ -140,11 +139,11 @@ describe("assumptions", () => {
 
       run(plugin, {
         setPublicClassFields: true,
-        setClassMethods: false,
+        mutableTemplateObject: false,
       });
       run(plugin, {
         setPublicClassFields: false,
-        setClassMethods: true,
+        mutableTemplateObject: true,
       });
 
       expect(plugin).toHaveBeenCalledTimes(2);
@@ -154,13 +153,11 @@ describe("assumptions", () => {
       const plugin = makePlugin();
 
       run(plugin, {
-        setPublicClassFields: true,
-        setClassMethods: false,
+        mutableTemplateObject: false,
       });
       run(plugin, {
-        setPublicClassFields: false,
-        setClassMethods: true,
-        mutableTemplateObject: true,
+        mutableTemplateObject: false,
+        setPublicClassFields: true,
       });
 
       expect(plugin).toHaveBeenCalledTimes(2);
@@ -171,10 +168,10 @@ describe("assumptions", () => {
 
       run(plugin, {
         setPublicClassFields: true,
-        setClassMethods: false,
+        mutableTemplateObject: false,
       });
       run(plugin, {
-        setClassMethods: true,
+        mutableTemplateObject: true,
       });
 
       expect(plugin).toHaveBeenCalledTimes(2);
