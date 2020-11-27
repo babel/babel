@@ -191,8 +191,7 @@ jobs:
       - name: Test on Windows
         # Hack: --color has supports-color@5 returned true for GitHub CI
         # Remove once `chalk` is bumped to 4.0.
-        run: |
-          ./node_modules/.bin/jest --ci --color
+        run: yarn jest --ci --color
         env:
           BABEL_ENV: test
 
