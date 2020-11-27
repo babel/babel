@@ -257,7 +257,7 @@ export default declare((api, options) => {
 
           if (getter) {
             descriptor.properties.push(
-              t.classMethod(
+              t.objectMethod(
                 "get",
                 t.identifier("_"),
                 getter.node.params,
@@ -268,7 +268,7 @@ export default declare((api, options) => {
           }
           if (setter) {
             descriptor.properties.push(
-              t.classMethod(
+              t.objectMethod(
                 "set",
                 t.identifier("_"),
                 setter.node.params,
