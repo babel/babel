@@ -5,9 +5,9 @@ export default declare((api, options) => {
   api.assertVersion(7);
 
   const ignoreToPrimitiveHint =
-    options.loose || api.assumption("ignoreToPrimitiveHint");
+    options.loose ?? api.assumption("ignoreToPrimitiveHint");
   const mutableTemplateObject =
-    options.loose || api.assumption("mutableTemplateObject");
+    options.loose ?? api.assumption("mutableTemplateObject");
 
   let helperName = "taggedTemplateLiteral";
   if (mutableTemplateObject) helperName += "Loose";
