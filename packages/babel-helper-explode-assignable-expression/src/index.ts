@@ -1,12 +1,20 @@
 import type { Scope } from "@babel/traverse";
 import * as t from "@babel/types";
+import type {
+  AssignmentExpression,
+  Identifier,
+  MemberExpression,
+  Literal,
+  Super,
+} from "@babel/types";
 
-function getObjRef(node, nodes, file, scope) {
+function getObjRef(
+  node: Identifier | MemberExpression,
+  nodes: Array<AssignmentExpression>,
+  scope: Scope,
+): Identifier | Super {
   let ref;
-  if (t.isSuper(node)) {
-    // Super cannot be directly assigned so lets return it directly
-    return node;
-  } else if (t.isIdentifier(node)) {
+  if (t.isIdentifier(node)) {
     if (scope.hasBinding(node.name)) {
       // this variable is declared in scope so we can be 100% sure
       // that evaluating it multiple times wont trigger a getter
@@ -28,7 +36,7 @@ function getObjRef(node, nodes, file, scope) {
       return ref;
     }
   } else {
-    throw new Error(`We can't explode this node type ${node.type}`);
+    throw new Error(`We can't explode this node type ${node["type"]}`);
   }
 
   const temp = scope.generateUidIdentifierBasedOnNode(ref);
@@ -37,8 +45,17 @@ function getObjRef(node, nodes, file, scope) {
   return temp;
 }
 
-function getPropRef(node, nodes, file, scope) {
+function getPropRef(
+  node: MemberExpression,
+  nodes: Array<AssignmentExpression>,
+  scope: Scope,
+): Identifier | Literal {
   const prop = node.property;
+  if (t.isPrivateName(prop)) {
+    throw new Error(
+      "We can't generate property ref for private name, please install `@babel/plugin-proposal-class-properties`",
+    );
+  }
   const key = t.toComputedKey(node, prop);
   if (t.isLiteral(key) && t.isPureish(key)) return key;
 
@@ -49,20 +66,20 @@ function getPropRef(node, nodes, file, scope) {
 }
 
 export default function (
-  node: Object,
-  nodes: Array<Object>,
-  file,
+  node: Identifier | MemberExpression,
+  nodes: Array<AssignmentExpression>,
+  file: void,
   scope: Scope,
   allowedSingleIdent?: boolean,
 ): {
-  uid: Object,
-  ref: Object,
+  uid: Identifier | MemberExpression;
+  ref: Identifier | MemberExpression;
 } {
   let obj;
   if (t.isIdentifier(node) && allowedSingleIdent) {
     obj = node;
   } else {
-    obj = getObjRef(node, nodes, file, scope);
+    obj = getObjRef(node, nodes, scope);
   }
 
   let ref, uid;
@@ -71,7 +88,7 @@ export default function (
     ref = t.cloneNode(node);
     uid = obj;
   } else {
-    const prop = getPropRef(node, nodes, file, scope);
+    const prop = getPropRef(node, nodes, scope);
     const computed = node.computed || t.isLiteral(prop);
     uid = t.memberExpression(t.cloneNode(obj), t.cloneNode(prop), computed);
     ref = t.memberExpression(t.cloneNode(obj), t.cloneNode(prop), computed);
