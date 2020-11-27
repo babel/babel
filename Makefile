@@ -82,14 +82,8 @@ build-no-bundle: clean clean-lib
 	# Babel-transform-fixture-test-runner requires minified polyfill for performance
 	$(MAKE) generate-type-helpers build-typings build-polyfill-dist
 
-build-no-bundle-ci: bootstrap-only
-	$(MAKE) build-no-bundle
-
 watch: build-no-bundle
 	BABEL_ENV=development $(YARN) gulp watch
-
-code-quality-ci: build-no-bundle-ci
-	$(MAKE) tscheck flowcheck-ci lint-ci
 
 flowcheck-ci:
 	$(MAKE) flow
@@ -161,9 +155,7 @@ test-only:
 
 test: lint test-only
 
-test-ci: jest-ci
-
-jest-ci: build-standalone-ci
+test-ci: build-standalone-ci
 	BABEL_ENV=test $(YARN) jest --maxWorkers=4 --ci
 	$(MAKE) test-clean
 
@@ -182,9 +174,6 @@ bootstrap-flow:
 test-flow:
 	$(NODE) scripts/parser-tests/flow
 
-test-flow-ci: build-bundle-ci bootstrap-flow
-	$(MAKE) test-flow
-
 test-flow-update-allowlist:
 	$(NODE) scripts/parser-tests/flow --update-allowlist
 
@@ -197,9 +186,6 @@ bootstrap-typescript:
 test-typescript:
 	$(NODE) scripts/parser-tests/typescript
 
-test-typescript-ci: build-bundle-ci bootstrap-typescript
-	$(MAKE) test-typescript
-
 test-typescript-update-allowlist:
 	$(NODE) scripts/parser-tests/typescript --update-allowlist
 
@@ -211,9 +197,6 @@ bootstrap-test262:
 
 test-test262:
 	$(NODE) scripts/parser-tests/test262
-
-test-test262-ci: build-bundle-ci bootstrap-test262
-	$(MAKE) test-test262
 
 test-test262-update-allowlist:
 	$(NODE) scripts/parser-tests/test262 --update-allowlist
