@@ -115,7 +115,7 @@ jobs:
         with:
           name: babel-artifact
       - name: Lint
-        run: make tscheck flowcheck-ci lint-ci
+        run: make -j tscheck flowcheck-ci lint-ci
 
   test:
     name: Test on Node.js # GitHub will add ${{ matrix.node-version }} to this title
