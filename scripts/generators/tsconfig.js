@@ -5,21 +5,29 @@ const fs = require("fs");
 
 const root = path.resolve(__dirname, "../../");
 
-const tsPkgs = fs
-  .readdirSync(path.join(root, "packages"))
-  .filter(name => name.startsWith("babel-"))
-  .map(name => ({
-    name: name.replace(/^babel-/, "@babel/"),
-    dir: path.resolve(root, "packages", name),
-  }))
-  .filter(({ dir }) => {
-    try {
-      fs.statSync(path.join(dir, "src", "index.ts"));
-      return true;
-    } catch {
-      return false;
-    }
-  });
+function getTsPkgs(subRoot) {
+  return fs
+    .readdirSync(path.join(root, subRoot))
+    .filter(name => name.startsWith("babel-"))
+    .map(name => ({
+      name: name.replace(/^babel-/, "@babel/"),
+      dir: path.resolve(root, subRoot, name),
+    }))
+    .filter(({ dir }) => {
+      try {
+        fs.statSync(path.join(dir, "src", "index.ts"));
+        return true;
+      } catch {
+        return false;
+      }
+    });
+}
+
+const tsPkgs = [
+  ...getTsPkgs("packages"),
+  ...getTsPkgs("eslint"),
+  ...getTsPkgs("codemods"),
+];
 
 for (const { dir } of tsPkgs) {
   const pkg = require(`${dir}/package.json`);
