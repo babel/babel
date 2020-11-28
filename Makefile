@@ -216,6 +216,7 @@ prepublish:
 	IS_PUBLISH=true $(MAKE) test
 	# We don't want to publish TS-related files yet, except for @babel/types
 	rm -f packages/*/lib/**/*.d.ts{,.map}
+	cp packages/babel-types/src/builders/generated/deprecated.d.ts packages/babel-types/lib/builders/generated/deprecated.d.ts
 	rm -f codemods/*/lib/**/*.d.ts{,.map}
 	rm -f eslint/*/lib/**/*.d.ts{,.map}
 	$(MAKE) clean-tsconfig
