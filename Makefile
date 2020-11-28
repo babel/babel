@@ -149,6 +149,10 @@ clean-tsconfig:
 	rm -f packages/*/tsconfig.{tsbuildinfo,json}
 	rm -f codemods/*/tsconfig.{tsbuildinfo,json}
 	rm -f eslint/*/tsconfig.{tsbuildinfo,json}
+	# revert files in git
+	git checkout HEAD -- packages/*/tsconfig.json
+	git checkout HEAD -- codemods/*/tsconfig.json
+	git checkout HEAD -- eslint/*/tsconfig.json
 
 test-clean:
 	$(foreach source, $(SOURCES), \
