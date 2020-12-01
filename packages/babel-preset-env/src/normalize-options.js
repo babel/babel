@@ -160,7 +160,7 @@ export function normalizeCoreJSOption(
   if (useBuiltIns && corejs === undefined) {
     rawVersion = 2;
     console.warn(
-      "\nWARNING: We noticed you're using the `useBuiltIns` option without declaring a " +
+      "\nWARNING (@babel/preset-env): We noticed you're using the `useBuiltIns` option without declaring a " +
         "core-js version. Currently, we assume version 2.x when no version " +
         "is passed. Since this default version will likely change in future " +
         "versions of Babel, we recommend explicitly setting the core-js version " +
@@ -170,7 +170,9 @@ export function normalizeCoreJSOption(
         "`dependencies` section. If it doesn't, you need to run one of the " +
         "following commands:\n\n" +
         "  npm install --save core-js@2    npm install --save core-js@3\n" +
-        "  yarn add core-js@2              yarn add core-js@3\n",
+        "  yarn add core-js@2              yarn add core-js@3\n\n" +
+        "More info about useBuiltIns: https://babeljs.io/docs/en/babel-preset-env#usebuiltins\n" +
+        "More info about core-js: https://babeljs.io/docs/en/babel-preset-env#corejs",
     );
   } else if (typeof corejs === "object" && corejs !== null) {
     rawVersion = corejs.version;
@@ -183,7 +185,7 @@ export function normalizeCoreJSOption(
 
   if (!useBuiltIns && version) {
     console.log(
-      "\nThe `corejs` option only has an effect when the `useBuiltIns` option is not `false`\n",
+      "\nWARNING (@babel/preset-env): The `corejs` option only has an effect when the `useBuiltIns` option is not `false`\n",
     );
   }
 
