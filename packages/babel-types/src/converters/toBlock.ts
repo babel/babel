@@ -1,4 +1,3 @@
-// @flow
 import {
   isBlockStatement,
   isFunction,
@@ -10,8 +9,12 @@ import {
   expressionStatement,
   blockStatement,
 } from "../builders/generated";
+import type * as t from "..";
 
-export default function toBlock(node: Object, parent: Object): Object {
+export default function toBlock(
+  node: t.Statement | t.Expression,
+  parent?: t.Node,
+): t.BlockStatement {
   if (isBlockStatement(node)) {
     return node;
   }

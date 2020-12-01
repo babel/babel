@@ -1,4 +1,3 @@
-// @flow
 import isValidIdentifier from "../validators/isValidIdentifier";
 
 export default function toIdentifier(name: string): string {

@@ -1,11 +1,12 @@
-// @flow
+import type * as t from "..";
+
 /**
  * Check if the input `node` is a reference to a bound variable.
  */
 export default function isReferenced(
-  node: Object,
-  parent: Object,
-  grandparent?: Object,
+  node: t.Node,
+  parent: t.Node,
+  grandparent?: t.Node,
 ): boolean {
   switch (parent.type) {
     // yes: PARENT[NODE]
@@ -15,6 +16,7 @@ export default function isReferenced(
     case "JSXMemberExpression":
     case "OptionalMemberExpression":
       if (parent.property === node) {
+        // @ts-expect-error todo(flow->ts): computed is missing on JSXMemberExpression
         return !!parent.computed;
       }
       return parent.object === node;
@@ -42,6 +44,7 @@ export default function isReferenced(
     case "ClassMethod":
     case "ClassPrivateMethod":
     case "ObjectMethod":
+      // @ts-expect-error todo(flow->ts) params have more specific type comparing to node
       if (parent.params.includes(node)) {
         return false;
       }
@@ -60,8 +63,10 @@ export default function isReferenced(
     case "ClassProperty":
     case "ClassPrivateProperty":
       if (parent.key === node) {
+        // @ts-expect-error todo(flow->ts): computed might not exist
         return !!parent.computed;
       }
+      // @ts-expect-error todo(flow->ts): ObjectMethod does not have value property
       if (parent.value === node) {
         return !grandparent || grandparent.type !== "ObjectPattern";
       }
@@ -115,6 +120,7 @@ export default function isReferenced(
     // yes: export { NODE as foo };
     // no: export { NODE as foo } from "foo";
     case "ExportSpecifier":
+      // @ts-expect-error todo(flow->ts): Property 'source' does not exist on type 'AnyTypeAnnotation'.
       if (grandparent?.source) {
         return false;
       }

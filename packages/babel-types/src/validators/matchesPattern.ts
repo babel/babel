@@ -1,4 +1,5 @@
 import { isIdentifier, isMemberExpression, isStringLiteral } from "./generated";
+import type * as t from "..";
 
 /**
  * Determines whether or not the input node `member` matches the
@@ -8,8 +9,8 @@ import { isIdentifier, isMemberExpression, isStringLiteral } from "./generated";
  * parsed nodes of `React.createClass` and `React["createClass"]`.
  */
 export default function matchesPattern(
-  member: Object,
-  match: string | Array<string>,
+  member: t.Node | null | undefined,
+  match: string | string[],
   allowPartial?: boolean,
 ): boolean {
   // not a member expression

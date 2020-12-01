@@ -1,14 +1,17 @@
-// @flow
 /*
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
 import shallowEqual from "../../utils/shallowEqual";
+import type * as t from "../..";
 
-export function isArrayExpression(node: ?Object, opts?: Object): boolean {
+export function isArrayExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ArrayExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ArrayExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -19,10 +22,13 @@ export function isArrayExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isAssignmentExpression(node: ?Object, opts?: Object): boolean {
+export function isAssignmentExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.AssignmentExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "AssignmentExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -33,10 +39,13 @@ export function isAssignmentExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isBinaryExpression(node: ?Object, opts?: Object): boolean {
+export function isBinaryExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.BinaryExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "BinaryExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -47,10 +56,13 @@ export function isBinaryExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isInterpreterDirective(node: ?Object, opts?: Object): boolean {
+export function isInterpreterDirective(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.InterpreterDirective {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "InterpreterDirective") {
     if (typeof opts === "undefined") {
       return true;
@@ -61,10 +73,13 @@ export function isInterpreterDirective(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isDirective(node: ?Object, opts?: Object): boolean {
+export function isDirective(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Directive {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "Directive") {
     if (typeof opts === "undefined") {
       return true;
@@ -75,10 +90,13 @@ export function isDirective(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isDirectiveLiteral(node: ?Object, opts?: Object): boolean {
+export function isDirectiveLiteral(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.DirectiveLiteral {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "DirectiveLiteral") {
     if (typeof opts === "undefined") {
       return true;
@@ -89,10 +107,13 @@ export function isDirectiveLiteral(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isBlockStatement(node: ?Object, opts?: Object): boolean {
+export function isBlockStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.BlockStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "BlockStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -103,10 +124,13 @@ export function isBlockStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isBreakStatement(node: ?Object, opts?: Object): boolean {
+export function isBreakStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.BreakStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "BreakStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -117,10 +141,13 @@ export function isBreakStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isCallExpression(node: ?Object, opts?: Object): boolean {
+export function isCallExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.CallExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "CallExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -131,10 +158,13 @@ export function isCallExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isCatchClause(node: ?Object, opts?: Object): boolean {
+export function isCatchClause(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.CatchClause {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "CatchClause") {
     if (typeof opts === "undefined") {
       return true;
@@ -145,10 +175,13 @@ export function isCatchClause(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isConditionalExpression(node: ?Object, opts?: Object): boolean {
+export function isConditionalExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ConditionalExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ConditionalExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -159,10 +192,13 @@ export function isConditionalExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isContinueStatement(node: ?Object, opts?: Object): boolean {
+export function isContinueStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ContinueStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ContinueStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -173,10 +209,13 @@ export function isContinueStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isDebuggerStatement(node: ?Object, opts?: Object): boolean {
+export function isDebuggerStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.DebuggerStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "DebuggerStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -187,10 +226,13 @@ export function isDebuggerStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isDoWhileStatement(node: ?Object, opts?: Object): boolean {
+export function isDoWhileStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.DoWhileStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "DoWhileStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -201,10 +243,13 @@ export function isDoWhileStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isEmptyStatement(node: ?Object, opts?: Object): boolean {
+export function isEmptyStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.EmptyStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "EmptyStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -215,10 +260,13 @@ export function isEmptyStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isExpressionStatement(node: ?Object, opts?: Object): boolean {
+export function isExpressionStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ExpressionStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ExpressionStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -229,10 +277,13 @@ export function isExpressionStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isFile(node: ?Object, opts?: Object): boolean {
+export function isFile(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.File {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "File") {
     if (typeof opts === "undefined") {
       return true;
@@ -243,10 +294,13 @@ export function isFile(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isForInStatement(node: ?Object, opts?: Object): boolean {
+export function isForInStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ForInStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ForInStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -257,10 +311,13 @@ export function isForInStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isForStatement(node: ?Object, opts?: Object): boolean {
+export function isForStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ForStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ForStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -271,10 +328,13 @@ export function isForStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isFunctionDeclaration(node: ?Object, opts?: Object): boolean {
+export function isFunctionDeclaration(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.FunctionDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "FunctionDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -285,10 +345,13 @@ export function isFunctionDeclaration(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isFunctionExpression(node: ?Object, opts?: Object): boolean {
+export function isFunctionExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.FunctionExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "FunctionExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -299,10 +362,13 @@ export function isFunctionExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isIdentifier(node: ?Object, opts?: Object): boolean {
+export function isIdentifier(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Identifier {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "Identifier") {
     if (typeof opts === "undefined") {
       return true;
@@ -313,10 +379,13 @@ export function isIdentifier(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isIfStatement(node: ?Object, opts?: Object): boolean {
+export function isIfStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.IfStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "IfStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -327,10 +396,13 @@ export function isIfStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isLabeledStatement(node: ?Object, opts?: Object): boolean {
+export function isLabeledStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.LabeledStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "LabeledStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -341,10 +413,13 @@ export function isLabeledStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isStringLiteral(node: ?Object, opts?: Object): boolean {
+export function isStringLiteral(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.StringLiteral {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "StringLiteral") {
     if (typeof opts === "undefined") {
       return true;
@@ -355,10 +430,13 @@ export function isStringLiteral(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isNumericLiteral(node: ?Object, opts?: Object): boolean {
+export function isNumericLiteral(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.NumericLiteral {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "NumericLiteral") {
     if (typeof opts === "undefined") {
       return true;
@@ -369,10 +447,13 @@ export function isNumericLiteral(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isNullLiteral(node: ?Object, opts?: Object): boolean {
+export function isNullLiteral(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.NullLiteral {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "NullLiteral") {
     if (typeof opts === "undefined") {
       return true;
@@ -383,10 +464,13 @@ export function isNullLiteral(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isBooleanLiteral(node: ?Object, opts?: Object): boolean {
+export function isBooleanLiteral(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.BooleanLiteral {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "BooleanLiteral") {
     if (typeof opts === "undefined") {
       return true;
@@ -397,10 +481,13 @@ export function isBooleanLiteral(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isRegExpLiteral(node: ?Object, opts?: Object): boolean {
+export function isRegExpLiteral(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.RegExpLiteral {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "RegExpLiteral") {
     if (typeof opts === "undefined") {
       return true;
@@ -411,10 +498,13 @@ export function isRegExpLiteral(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isLogicalExpression(node: ?Object, opts?: Object): boolean {
+export function isLogicalExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.LogicalExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "LogicalExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -425,10 +515,13 @@ export function isLogicalExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isMemberExpression(node: ?Object, opts?: Object): boolean {
+export function isMemberExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.MemberExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "MemberExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -439,10 +532,13 @@ export function isMemberExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isNewExpression(node: ?Object, opts?: Object): boolean {
+export function isNewExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.NewExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "NewExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -453,10 +549,13 @@ export function isNewExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isProgram(node: ?Object, opts?: Object): boolean {
+export function isProgram(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Program {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "Program") {
     if (typeof opts === "undefined") {
       return true;
@@ -467,10 +566,13 @@ export function isProgram(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isObjectExpression(node: ?Object, opts?: Object): boolean {
+export function isObjectExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ObjectExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ObjectExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -481,10 +583,13 @@ export function isObjectExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isObjectMethod(node: ?Object, opts?: Object): boolean {
+export function isObjectMethod(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ObjectMethod {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ObjectMethod") {
     if (typeof opts === "undefined") {
       return true;
@@ -495,10 +600,13 @@ export function isObjectMethod(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isObjectProperty(node: ?Object, opts?: Object): boolean {
+export function isObjectProperty(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ObjectProperty {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ObjectProperty") {
     if (typeof opts === "undefined") {
       return true;
@@ -509,10 +617,13 @@ export function isObjectProperty(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isRestElement(node: ?Object, opts?: Object): boolean {
+export function isRestElement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.RestElement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "RestElement") {
     if (typeof opts === "undefined") {
       return true;
@@ -523,10 +634,13 @@ export function isRestElement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isReturnStatement(node: ?Object, opts?: Object): boolean {
+export function isReturnStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ReturnStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ReturnStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -537,10 +651,13 @@ export function isReturnStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isSequenceExpression(node: ?Object, opts?: Object): boolean {
+export function isSequenceExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.SequenceExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "SequenceExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -552,12 +669,12 @@ export function isSequenceExpression(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isParenthesizedExpression(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ParenthesizedExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ParenthesizedExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -568,10 +685,13 @@ export function isParenthesizedExpression(
 
   return false;
 }
-export function isSwitchCase(node: ?Object, opts?: Object): boolean {
+export function isSwitchCase(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.SwitchCase {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "SwitchCase") {
     if (typeof opts === "undefined") {
       return true;
@@ -582,10 +702,13 @@ export function isSwitchCase(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isSwitchStatement(node: ?Object, opts?: Object): boolean {
+export function isSwitchStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.SwitchStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "SwitchStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -596,10 +719,13 @@ export function isSwitchStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isThisExpression(node: ?Object, opts?: Object): boolean {
+export function isThisExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ThisExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ThisExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -610,10 +736,13 @@ export function isThisExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isThrowStatement(node: ?Object, opts?: Object): boolean {
+export function isThrowStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ThrowStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ThrowStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -624,10 +753,13 @@ export function isThrowStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTryStatement(node: ?Object, opts?: Object): boolean {
+export function isTryStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TryStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TryStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -638,10 +770,13 @@ export function isTryStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isUnaryExpression(node: ?Object, opts?: Object): boolean {
+export function isUnaryExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.UnaryExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "UnaryExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -652,10 +787,13 @@ export function isUnaryExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isUpdateExpression(node: ?Object, opts?: Object): boolean {
+export function isUpdateExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.UpdateExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "UpdateExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -666,10 +804,13 @@ export function isUpdateExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isVariableDeclaration(node: ?Object, opts?: Object): boolean {
+export function isVariableDeclaration(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.VariableDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "VariableDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -680,10 +821,13 @@ export function isVariableDeclaration(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isVariableDeclarator(node: ?Object, opts?: Object): boolean {
+export function isVariableDeclarator(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.VariableDeclarator {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "VariableDeclarator") {
     if (typeof opts === "undefined") {
       return true;
@@ -694,10 +838,13 @@ export function isVariableDeclarator(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isWhileStatement(node: ?Object, opts?: Object): boolean {
+export function isWhileStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.WhileStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "WhileStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -708,10 +855,13 @@ export function isWhileStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isWithStatement(node: ?Object, opts?: Object): boolean {
+export function isWithStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.WithStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "WithStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -722,10 +872,13 @@ export function isWithStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isAssignmentPattern(node: ?Object, opts?: Object): boolean {
+export function isAssignmentPattern(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.AssignmentPattern {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "AssignmentPattern") {
     if (typeof opts === "undefined") {
       return true;
@@ -736,10 +889,13 @@ export function isAssignmentPattern(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isArrayPattern(node: ?Object, opts?: Object): boolean {
+export function isArrayPattern(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ArrayPattern {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ArrayPattern") {
     if (typeof opts === "undefined") {
       return true;
@@ -751,12 +907,12 @@ export function isArrayPattern(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isArrowFunctionExpression(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ArrowFunctionExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ArrowFunctionExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -767,10 +923,13 @@ export function isArrowFunctionExpression(
 
   return false;
 }
-export function isClassBody(node: ?Object, opts?: Object): boolean {
+export function isClassBody(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ClassBody {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ClassBody") {
     if (typeof opts === "undefined") {
       return true;
@@ -781,10 +940,13 @@ export function isClassBody(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isClassExpression(node: ?Object, opts?: Object): boolean {
+export function isClassExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ClassExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ClassExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -795,10 +957,13 @@ export function isClassExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isClassDeclaration(node: ?Object, opts?: Object): boolean {
+export function isClassDeclaration(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ClassDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ClassDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -809,10 +974,13 @@ export function isClassDeclaration(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isExportAllDeclaration(node: ?Object, opts?: Object): boolean {
+export function isExportAllDeclaration(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ExportAllDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ExportAllDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -824,12 +992,12 @@ export function isExportAllDeclaration(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isExportDefaultDeclaration(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ExportDefaultDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ExportDefaultDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -841,12 +1009,12 @@ export function isExportDefaultDeclaration(
   return false;
 }
 export function isExportNamedDeclaration(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ExportNamedDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ExportNamedDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -857,10 +1025,13 @@ export function isExportNamedDeclaration(
 
   return false;
 }
-export function isExportSpecifier(node: ?Object, opts?: Object): boolean {
+export function isExportSpecifier(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ExportSpecifier {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ExportSpecifier") {
     if (typeof opts === "undefined") {
       return true;
@@ -871,10 +1042,13 @@ export function isExportSpecifier(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isForOfStatement(node: ?Object, opts?: Object): boolean {
+export function isForOfStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ForOfStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ForOfStatement") {
     if (typeof opts === "undefined") {
       return true;
@@ -885,10 +1059,13 @@ export function isForOfStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isImportDeclaration(node: ?Object, opts?: Object): boolean {
+export function isImportDeclaration(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ImportDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ImportDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -900,12 +1077,12 @@ export function isImportDeclaration(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isImportDefaultSpecifier(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ImportDefaultSpecifier {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ImportDefaultSpecifier") {
     if (typeof opts === "undefined") {
       return true;
@@ -917,12 +1094,12 @@ export function isImportDefaultSpecifier(
   return false;
 }
 export function isImportNamespaceSpecifier(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ImportNamespaceSpecifier {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ImportNamespaceSpecifier") {
     if (typeof opts === "undefined") {
       return true;
@@ -933,10 +1110,13 @@ export function isImportNamespaceSpecifier(
 
   return false;
 }
-export function isImportSpecifier(node: ?Object, opts?: Object): boolean {
+export function isImportSpecifier(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ImportSpecifier {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ImportSpecifier") {
     if (typeof opts === "undefined") {
       return true;
@@ -947,10 +1127,13 @@ export function isImportSpecifier(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isMetaProperty(node: ?Object, opts?: Object): boolean {
+export function isMetaProperty(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.MetaProperty {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "MetaProperty") {
     if (typeof opts === "undefined") {
       return true;
@@ -961,10 +1144,13 @@ export function isMetaProperty(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isClassMethod(node: ?Object, opts?: Object): boolean {
+export function isClassMethod(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ClassMethod {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ClassMethod") {
     if (typeof opts === "undefined") {
       return true;
@@ -975,10 +1161,13 @@ export function isClassMethod(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isObjectPattern(node: ?Object, opts?: Object): boolean {
+export function isObjectPattern(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ObjectPattern {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ObjectPattern") {
     if (typeof opts === "undefined") {
       return true;
@@ -989,10 +1178,13 @@ export function isObjectPattern(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isSpreadElement(node: ?Object, opts?: Object): boolean {
+export function isSpreadElement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.SpreadElement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "SpreadElement") {
     if (typeof opts === "undefined") {
       return true;
@@ -1003,10 +1195,13 @@ export function isSpreadElement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isSuper(node: ?Object, opts?: Object): boolean {
+export function isSuper(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Super {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "Super") {
     if (typeof opts === "undefined") {
       return true;
@@ -1018,12 +1213,12 @@ export function isSuper(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isTaggedTemplateExpression(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TaggedTemplateExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TaggedTemplateExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -1034,10 +1229,13 @@ export function isTaggedTemplateExpression(
 
   return false;
 }
-export function isTemplateElement(node: ?Object, opts?: Object): boolean {
+export function isTemplateElement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TemplateElement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TemplateElement") {
     if (typeof opts === "undefined") {
       return true;
@@ -1048,10 +1246,13 @@ export function isTemplateElement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTemplateLiteral(node: ?Object, opts?: Object): boolean {
+export function isTemplateLiteral(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TemplateLiteral {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TemplateLiteral") {
     if (typeof opts === "undefined") {
       return true;
@@ -1062,10 +1263,13 @@ export function isTemplateLiteral(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isYieldExpression(node: ?Object, opts?: Object): boolean {
+export function isYieldExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.YieldExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "YieldExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -1076,10 +1280,13 @@ export function isYieldExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isAwaitExpression(node: ?Object, opts?: Object): boolean {
+export function isAwaitExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.AwaitExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "AwaitExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -1090,10 +1297,13 @@ export function isAwaitExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isImport(node: ?Object, opts?: Object): boolean {
+export function isImport(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Import {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "Import") {
     if (typeof opts === "undefined") {
       return true;
@@ -1104,10 +1314,13 @@ export function isImport(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isBigIntLiteral(node: ?Object, opts?: Object): boolean {
+export function isBigIntLiteral(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.BigIntLiteral {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "BigIntLiteral") {
     if (typeof opts === "undefined") {
       return true;
@@ -1119,12 +1332,12 @@ export function isBigIntLiteral(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isExportNamespaceSpecifier(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ExportNamespaceSpecifier {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ExportNamespaceSpecifier") {
     if (typeof opts === "undefined") {
       return true;
@@ -1136,12 +1349,12 @@ export function isExportNamespaceSpecifier(
   return false;
 }
 export function isOptionalMemberExpression(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.OptionalMemberExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "OptionalMemberExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -1153,12 +1366,12 @@ export function isOptionalMemberExpression(
   return false;
 }
 export function isOptionalCallExpression(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.OptionalCallExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "OptionalCallExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -1169,10 +1382,13 @@ export function isOptionalCallExpression(
 
   return false;
 }
-export function isAnyTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isAnyTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.AnyTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "AnyTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1183,10 +1399,13 @@ export function isAnyTypeAnnotation(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isArrayTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isArrayTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ArrayTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ArrayTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1197,10 +1416,13 @@ export function isArrayTypeAnnotation(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isBooleanTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isBooleanTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.BooleanTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "BooleanTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1212,12 +1434,12 @@ export function isBooleanTypeAnnotation(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isBooleanLiteralTypeAnnotation(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.BooleanLiteralTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "BooleanLiteralTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1229,12 +1451,12 @@ export function isBooleanLiteralTypeAnnotation(
   return false;
 }
 export function isNullLiteralTypeAnnotation(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.NullLiteralTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "NullLiteralTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1245,10 +1467,13 @@ export function isNullLiteralTypeAnnotation(
 
   return false;
 }
-export function isClassImplements(node: ?Object, opts?: Object): boolean {
+export function isClassImplements(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ClassImplements {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ClassImplements") {
     if (typeof opts === "undefined") {
       return true;
@@ -1259,10 +1484,13 @@ export function isClassImplements(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isDeclareClass(node: ?Object, opts?: Object): boolean {
+export function isDeclareClass(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.DeclareClass {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "DeclareClass") {
     if (typeof opts === "undefined") {
       return true;
@@ -1273,10 +1501,13 @@ export function isDeclareClass(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isDeclareFunction(node: ?Object, opts?: Object): boolean {
+export function isDeclareFunction(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.DeclareFunction {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "DeclareFunction") {
     if (typeof opts === "undefined") {
       return true;
@@ -1287,10 +1518,13 @@ export function isDeclareFunction(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isDeclareInterface(node: ?Object, opts?: Object): boolean {
+export function isDeclareInterface(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.DeclareInterface {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "DeclareInterface") {
     if (typeof opts === "undefined") {
       return true;
@@ -1301,10 +1535,13 @@ export function isDeclareInterface(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isDeclareModule(node: ?Object, opts?: Object): boolean {
+export function isDeclareModule(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.DeclareModule {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "DeclareModule") {
     if (typeof opts === "undefined") {
       return true;
@@ -1315,10 +1552,13 @@ export function isDeclareModule(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isDeclareModuleExports(node: ?Object, opts?: Object): boolean {
+export function isDeclareModuleExports(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.DeclareModuleExports {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "DeclareModuleExports") {
     if (typeof opts === "undefined") {
       return true;
@@ -1329,10 +1569,13 @@ export function isDeclareModuleExports(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isDeclareTypeAlias(node: ?Object, opts?: Object): boolean {
+export function isDeclareTypeAlias(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.DeclareTypeAlias {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "DeclareTypeAlias") {
     if (typeof opts === "undefined") {
       return true;
@@ -1343,10 +1586,13 @@ export function isDeclareTypeAlias(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isDeclareOpaqueType(node: ?Object, opts?: Object): boolean {
+export function isDeclareOpaqueType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.DeclareOpaqueType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "DeclareOpaqueType") {
     if (typeof opts === "undefined") {
       return true;
@@ -1357,10 +1603,13 @@ export function isDeclareOpaqueType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isDeclareVariable(node: ?Object, opts?: Object): boolean {
+export function isDeclareVariable(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.DeclareVariable {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "DeclareVariable") {
     if (typeof opts === "undefined") {
       return true;
@@ -1372,12 +1621,12 @@ export function isDeclareVariable(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isDeclareExportDeclaration(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.DeclareExportDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "DeclareExportDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -1389,12 +1638,12 @@ export function isDeclareExportDeclaration(
   return false;
 }
 export function isDeclareExportAllDeclaration(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.DeclareExportAllDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "DeclareExportAllDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -1405,10 +1654,13 @@ export function isDeclareExportAllDeclaration(
 
   return false;
 }
-export function isDeclaredPredicate(node: ?Object, opts?: Object): boolean {
+export function isDeclaredPredicate(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.DeclaredPredicate {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "DeclaredPredicate") {
     if (typeof opts === "undefined") {
       return true;
@@ -1419,10 +1671,13 @@ export function isDeclaredPredicate(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isExistsTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isExistsTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ExistsTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ExistsTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1434,12 +1689,12 @@ export function isExistsTypeAnnotation(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isFunctionTypeAnnotation(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.FunctionTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "FunctionTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1450,10 +1705,13 @@ export function isFunctionTypeAnnotation(
 
   return false;
 }
-export function isFunctionTypeParam(node: ?Object, opts?: Object): boolean {
+export function isFunctionTypeParam(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.FunctionTypeParam {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "FunctionTypeParam") {
     if (typeof opts === "undefined") {
       return true;
@@ -1464,10 +1722,13 @@ export function isFunctionTypeParam(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isGenericTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isGenericTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.GenericTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "GenericTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1478,10 +1739,13 @@ export function isGenericTypeAnnotation(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isInferredPredicate(node: ?Object, opts?: Object): boolean {
+export function isInferredPredicate(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.InferredPredicate {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "InferredPredicate") {
     if (typeof opts === "undefined") {
       return true;
@@ -1492,10 +1756,13 @@ export function isInferredPredicate(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isInterfaceExtends(node: ?Object, opts?: Object): boolean {
+export function isInterfaceExtends(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.InterfaceExtends {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "InterfaceExtends") {
     if (typeof opts === "undefined") {
       return true;
@@ -1506,10 +1773,13 @@ export function isInterfaceExtends(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isInterfaceDeclaration(node: ?Object, opts?: Object): boolean {
+export function isInterfaceDeclaration(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.InterfaceDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "InterfaceDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -1521,12 +1791,12 @@ export function isInterfaceDeclaration(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isInterfaceTypeAnnotation(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.InterfaceTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "InterfaceTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1538,12 +1808,12 @@ export function isInterfaceTypeAnnotation(
   return false;
 }
 export function isIntersectionTypeAnnotation(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.IntersectionTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "IntersectionTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1554,10 +1824,13 @@ export function isIntersectionTypeAnnotation(
 
   return false;
 }
-export function isMixedTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isMixedTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.MixedTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "MixedTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1568,10 +1841,13 @@ export function isMixedTypeAnnotation(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isEmptyTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isEmptyTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.EmptyTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "EmptyTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1583,12 +1859,12 @@ export function isEmptyTypeAnnotation(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isNullableTypeAnnotation(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.NullableTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "NullableTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1600,12 +1876,12 @@ export function isNullableTypeAnnotation(
   return false;
 }
 export function isNumberLiteralTypeAnnotation(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.NumberLiteralTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "NumberLiteralTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1616,10 +1892,13 @@ export function isNumberLiteralTypeAnnotation(
 
   return false;
 }
-export function isNumberTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isNumberTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.NumberTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "NumberTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1630,10 +1909,13 @@ export function isNumberTypeAnnotation(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isObjectTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isObjectTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ObjectTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ObjectTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1645,12 +1927,12 @@ export function isObjectTypeAnnotation(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isObjectTypeInternalSlot(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ObjectTypeInternalSlot {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ObjectTypeInternalSlot") {
     if (typeof opts === "undefined") {
       return true;
@@ -1662,12 +1944,12 @@ export function isObjectTypeInternalSlot(
   return false;
 }
 export function isObjectTypeCallProperty(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ObjectTypeCallProperty {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ObjectTypeCallProperty") {
     if (typeof opts === "undefined") {
       return true;
@@ -1678,10 +1960,13 @@ export function isObjectTypeCallProperty(
 
   return false;
 }
-export function isObjectTypeIndexer(node: ?Object, opts?: Object): boolean {
+export function isObjectTypeIndexer(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ObjectTypeIndexer {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ObjectTypeIndexer") {
     if (typeof opts === "undefined") {
       return true;
@@ -1692,10 +1977,13 @@ export function isObjectTypeIndexer(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isObjectTypeProperty(node: ?Object, opts?: Object): boolean {
+export function isObjectTypeProperty(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ObjectTypeProperty {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ObjectTypeProperty") {
     if (typeof opts === "undefined") {
       return true;
@@ -1707,12 +1995,12 @@ export function isObjectTypeProperty(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isObjectTypeSpreadProperty(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ObjectTypeSpreadProperty {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ObjectTypeSpreadProperty") {
     if (typeof opts === "undefined") {
       return true;
@@ -1723,10 +2011,13 @@ export function isObjectTypeSpreadProperty(
 
   return false;
 }
-export function isOpaqueType(node: ?Object, opts?: Object): boolean {
+export function isOpaqueType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.OpaqueType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "OpaqueType") {
     if (typeof opts === "undefined") {
       return true;
@@ -1738,12 +2029,12 @@ export function isOpaqueType(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isQualifiedTypeIdentifier(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.QualifiedTypeIdentifier {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "QualifiedTypeIdentifier") {
     if (typeof opts === "undefined") {
       return true;
@@ -1755,12 +2046,12 @@ export function isQualifiedTypeIdentifier(
   return false;
 }
 export function isStringLiteralTypeAnnotation(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.StringLiteralTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "StringLiteralTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1771,10 +2062,13 @@ export function isStringLiteralTypeAnnotation(
 
   return false;
 }
-export function isStringTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isStringTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.StringTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "StringTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1785,10 +2079,13 @@ export function isStringTypeAnnotation(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isSymbolTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isSymbolTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.SymbolTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "SymbolTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1799,10 +2096,13 @@ export function isSymbolTypeAnnotation(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isThisTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isThisTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ThisTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ThisTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1813,10 +2113,13 @@ export function isThisTypeAnnotation(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTupleTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isTupleTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TupleTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TupleTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1827,10 +2130,13 @@ export function isTupleTypeAnnotation(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTypeofTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isTypeofTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TypeofTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TypeofTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1841,10 +2147,13 @@ export function isTypeofTypeAnnotation(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTypeAlias(node: ?Object, opts?: Object): boolean {
+export function isTypeAlias(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TypeAlias {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TypeAlias") {
     if (typeof opts === "undefined") {
       return true;
@@ -1855,10 +2164,13 @@ export function isTypeAlias(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1869,10 +2181,13 @@ export function isTypeAnnotation(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTypeCastExpression(node: ?Object, opts?: Object): boolean {
+export function isTypeCastExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TypeCastExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TypeCastExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -1883,10 +2198,13 @@ export function isTypeCastExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTypeParameter(node: ?Object, opts?: Object): boolean {
+export function isTypeParameter(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TypeParameter {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TypeParameter") {
     if (typeof opts === "undefined") {
       return true;
@@ -1898,12 +2216,12 @@ export function isTypeParameter(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isTypeParameterDeclaration(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TypeParameterDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TypeParameterDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -1915,12 +2233,12 @@ export function isTypeParameterDeclaration(
   return false;
 }
 export function isTypeParameterInstantiation(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TypeParameterInstantiation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TypeParameterInstantiation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1931,10 +2249,13 @@ export function isTypeParameterInstantiation(
 
   return false;
 }
-export function isUnionTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isUnionTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.UnionTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "UnionTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1945,10 +2266,13 @@ export function isUnionTypeAnnotation(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isVariance(node: ?Object, opts?: Object): boolean {
+export function isVariance(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Variance {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "Variance") {
     if (typeof opts === "undefined") {
       return true;
@@ -1959,10 +2283,13 @@ export function isVariance(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isVoidTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isVoidTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.VoidTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "VoidTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -1973,10 +2300,13 @@ export function isVoidTypeAnnotation(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isEnumDeclaration(node: ?Object, opts?: Object): boolean {
+export function isEnumDeclaration(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.EnumDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "EnumDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -1987,10 +2317,13 @@ export function isEnumDeclaration(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isEnumBooleanBody(node: ?Object, opts?: Object): boolean {
+export function isEnumBooleanBody(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.EnumBooleanBody {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "EnumBooleanBody") {
     if (typeof opts === "undefined") {
       return true;
@@ -2001,10 +2334,13 @@ export function isEnumBooleanBody(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isEnumNumberBody(node: ?Object, opts?: Object): boolean {
+export function isEnumNumberBody(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.EnumNumberBody {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "EnumNumberBody") {
     if (typeof opts === "undefined") {
       return true;
@@ -2015,10 +2351,13 @@ export function isEnumNumberBody(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isEnumStringBody(node: ?Object, opts?: Object): boolean {
+export function isEnumStringBody(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.EnumStringBody {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "EnumStringBody") {
     if (typeof opts === "undefined") {
       return true;
@@ -2029,10 +2368,13 @@ export function isEnumStringBody(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isEnumSymbolBody(node: ?Object, opts?: Object): boolean {
+export function isEnumSymbolBody(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.EnumSymbolBody {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "EnumSymbolBody") {
     if (typeof opts === "undefined") {
       return true;
@@ -2043,10 +2385,13 @@ export function isEnumSymbolBody(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isEnumBooleanMember(node: ?Object, opts?: Object): boolean {
+export function isEnumBooleanMember(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.EnumBooleanMember {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "EnumBooleanMember") {
     if (typeof opts === "undefined") {
       return true;
@@ -2057,10 +2402,13 @@ export function isEnumBooleanMember(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isEnumNumberMember(node: ?Object, opts?: Object): boolean {
+export function isEnumNumberMember(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.EnumNumberMember {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "EnumNumberMember") {
     if (typeof opts === "undefined") {
       return true;
@@ -2071,10 +2419,13 @@ export function isEnumNumberMember(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isEnumStringMember(node: ?Object, opts?: Object): boolean {
+export function isEnumStringMember(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.EnumStringMember {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "EnumStringMember") {
     if (typeof opts === "undefined") {
       return true;
@@ -2085,10 +2436,13 @@ export function isEnumStringMember(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isEnumDefaultedMember(node: ?Object, opts?: Object): boolean {
+export function isEnumDefaultedMember(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.EnumDefaultedMember {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "EnumDefaultedMember") {
     if (typeof opts === "undefined") {
       return true;
@@ -2099,10 +2453,13 @@ export function isEnumDefaultedMember(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isJSXAttribute(node: ?Object, opts?: Object): boolean {
+export function isJSXAttribute(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.JSXAttribute {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "JSXAttribute") {
     if (typeof opts === "undefined") {
       return true;
@@ -2113,10 +2470,13 @@ export function isJSXAttribute(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isJSXClosingElement(node: ?Object, opts?: Object): boolean {
+export function isJSXClosingElement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.JSXClosingElement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "JSXClosingElement") {
     if (typeof opts === "undefined") {
       return true;
@@ -2127,10 +2487,13 @@ export function isJSXClosingElement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isJSXElement(node: ?Object, opts?: Object): boolean {
+export function isJSXElement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.JSXElement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "JSXElement") {
     if (typeof opts === "undefined") {
       return true;
@@ -2141,10 +2504,13 @@ export function isJSXElement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isJSXEmptyExpression(node: ?Object, opts?: Object): boolean {
+export function isJSXEmptyExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.JSXEmptyExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "JSXEmptyExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -2156,12 +2522,12 @@ export function isJSXEmptyExpression(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isJSXExpressionContainer(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.JSXExpressionContainer {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "JSXExpressionContainer") {
     if (typeof opts === "undefined") {
       return true;
@@ -2172,10 +2538,13 @@ export function isJSXExpressionContainer(
 
   return false;
 }
-export function isJSXSpreadChild(node: ?Object, opts?: Object): boolean {
+export function isJSXSpreadChild(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.JSXSpreadChild {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "JSXSpreadChild") {
     if (typeof opts === "undefined") {
       return true;
@@ -2186,10 +2555,13 @@ export function isJSXSpreadChild(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isJSXIdentifier(node: ?Object, opts?: Object): boolean {
+export function isJSXIdentifier(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.JSXIdentifier {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "JSXIdentifier") {
     if (typeof opts === "undefined") {
       return true;
@@ -2200,10 +2572,13 @@ export function isJSXIdentifier(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isJSXMemberExpression(node: ?Object, opts?: Object): boolean {
+export function isJSXMemberExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.JSXMemberExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "JSXMemberExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -2214,10 +2589,13 @@ export function isJSXMemberExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isJSXNamespacedName(node: ?Object, opts?: Object): boolean {
+export function isJSXNamespacedName(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.JSXNamespacedName {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "JSXNamespacedName") {
     if (typeof opts === "undefined") {
       return true;
@@ -2228,10 +2606,13 @@ export function isJSXNamespacedName(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isJSXOpeningElement(node: ?Object, opts?: Object): boolean {
+export function isJSXOpeningElement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.JSXOpeningElement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "JSXOpeningElement") {
     if (typeof opts === "undefined") {
       return true;
@@ -2242,10 +2623,13 @@ export function isJSXOpeningElement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isJSXSpreadAttribute(node: ?Object, opts?: Object): boolean {
+export function isJSXSpreadAttribute(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.JSXSpreadAttribute {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "JSXSpreadAttribute") {
     if (typeof opts === "undefined") {
       return true;
@@ -2256,10 +2640,13 @@ export function isJSXSpreadAttribute(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isJSXText(node: ?Object, opts?: Object): boolean {
+export function isJSXText(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.JSXText {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "JSXText") {
     if (typeof opts === "undefined") {
       return true;
@@ -2270,10 +2657,13 @@ export function isJSXText(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isJSXFragment(node: ?Object, opts?: Object): boolean {
+export function isJSXFragment(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.JSXFragment {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "JSXFragment") {
     if (typeof opts === "undefined") {
       return true;
@@ -2284,10 +2674,13 @@ export function isJSXFragment(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isJSXOpeningFragment(node: ?Object, opts?: Object): boolean {
+export function isJSXOpeningFragment(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.JSXOpeningFragment {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "JSXOpeningFragment") {
     if (typeof opts === "undefined") {
       return true;
@@ -2298,10 +2691,13 @@ export function isJSXOpeningFragment(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isJSXClosingFragment(node: ?Object, opts?: Object): boolean {
+export function isJSXClosingFragment(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.JSXClosingFragment {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "JSXClosingFragment") {
     if (typeof opts === "undefined") {
       return true;
@@ -2312,10 +2708,13 @@ export function isJSXClosingFragment(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isNoop(node: ?Object, opts?: Object): boolean {
+export function isNoop(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Noop {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "Noop") {
     if (typeof opts === "undefined") {
       return true;
@@ -2326,10 +2725,13 @@ export function isNoop(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isPlaceholder(node: ?Object, opts?: Object): boolean {
+export function isPlaceholder(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Placeholder {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "Placeholder") {
     if (typeof opts === "undefined") {
       return true;
@@ -2340,10 +2742,13 @@ export function isPlaceholder(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isV8IntrinsicIdentifier(node: ?Object, opts?: Object): boolean {
+export function isV8IntrinsicIdentifier(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.V8IntrinsicIdentifier {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "V8IntrinsicIdentifier") {
     if (typeof opts === "undefined") {
       return true;
@@ -2354,10 +2759,13 @@ export function isV8IntrinsicIdentifier(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isArgumentPlaceholder(node: ?Object, opts?: Object): boolean {
+export function isArgumentPlaceholder(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ArgumentPlaceholder {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ArgumentPlaceholder") {
     if (typeof opts === "undefined") {
       return true;
@@ -2368,10 +2776,13 @@ export function isArgumentPlaceholder(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isBindExpression(node: ?Object, opts?: Object): boolean {
+export function isBindExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.BindExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "BindExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -2382,10 +2793,13 @@ export function isBindExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isClassProperty(node: ?Object, opts?: Object): boolean {
+export function isClassProperty(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ClassProperty {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ClassProperty") {
     if (typeof opts === "undefined") {
       return true;
@@ -2397,12 +2811,12 @@ export function isClassProperty(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isPipelineTopicExpression(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.PipelineTopicExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "PipelineTopicExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -2413,10 +2827,13 @@ export function isPipelineTopicExpression(
 
   return false;
 }
-export function isPipelineBareFunction(node: ?Object, opts?: Object): boolean {
+export function isPipelineBareFunction(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.PipelineBareFunction {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "PipelineBareFunction") {
     if (typeof opts === "undefined") {
       return true;
@@ -2428,12 +2845,12 @@ export function isPipelineBareFunction(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isPipelinePrimaryTopicReference(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.PipelinePrimaryTopicReference {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "PipelinePrimaryTopicReference") {
     if (typeof opts === "undefined") {
       return true;
@@ -2444,10 +2861,13 @@ export function isPipelinePrimaryTopicReference(
 
   return false;
 }
-export function isClassPrivateProperty(node: ?Object, opts?: Object): boolean {
+export function isClassPrivateProperty(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ClassPrivateProperty {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ClassPrivateProperty") {
     if (typeof opts === "undefined") {
       return true;
@@ -2458,10 +2878,13 @@ export function isClassPrivateProperty(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isClassPrivateMethod(node: ?Object, opts?: Object): boolean {
+export function isClassPrivateMethod(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ClassPrivateMethod {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ClassPrivateMethod") {
     if (typeof opts === "undefined") {
       return true;
@@ -2472,10 +2895,13 @@ export function isClassPrivateMethod(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isImportAttribute(node: ?Object, opts?: Object): boolean {
+export function isImportAttribute(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ImportAttribute {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ImportAttribute") {
     if (typeof opts === "undefined") {
       return true;
@@ -2486,10 +2912,13 @@ export function isImportAttribute(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isDecorator(node: ?Object, opts?: Object): boolean {
+export function isDecorator(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Decorator {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "Decorator") {
     if (typeof opts === "undefined") {
       return true;
@@ -2500,10 +2929,13 @@ export function isDecorator(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isDoExpression(node: ?Object, opts?: Object): boolean {
+export function isDoExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.DoExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "DoExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -2515,12 +2947,12 @@ export function isDoExpression(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isExportDefaultSpecifier(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ExportDefaultSpecifier {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "ExportDefaultSpecifier") {
     if (typeof opts === "undefined") {
       return true;
@@ -2531,10 +2963,13 @@ export function isExportDefaultSpecifier(
 
   return false;
 }
-export function isPrivateName(node: ?Object, opts?: Object): boolean {
+export function isPrivateName(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.PrivateName {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "PrivateName") {
     if (typeof opts === "undefined") {
       return true;
@@ -2545,10 +2980,13 @@ export function isPrivateName(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isRecordExpression(node: ?Object, opts?: Object): boolean {
+export function isRecordExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.RecordExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "RecordExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -2559,10 +2997,13 @@ export function isRecordExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTupleExpression(node: ?Object, opts?: Object): boolean {
+export function isTupleExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TupleExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TupleExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -2573,10 +3014,13 @@ export function isTupleExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isDecimalLiteral(node: ?Object, opts?: Object): boolean {
+export function isDecimalLiteral(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.DecimalLiteral {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "DecimalLiteral") {
     if (typeof opts === "undefined") {
       return true;
@@ -2587,10 +3031,13 @@ export function isDecimalLiteral(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isStaticBlock(node: ?Object, opts?: Object): boolean {
+export function isStaticBlock(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.StaticBlock {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "StaticBlock") {
     if (typeof opts === "undefined") {
       return true;
@@ -2601,10 +3048,13 @@ export function isStaticBlock(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSParameterProperty(node: ?Object, opts?: Object): boolean {
+export function isTSParameterProperty(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSParameterProperty {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSParameterProperty") {
     if (typeof opts === "undefined") {
       return true;
@@ -2615,10 +3065,13 @@ export function isTSParameterProperty(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSDeclareFunction(node: ?Object, opts?: Object): boolean {
+export function isTSDeclareFunction(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSDeclareFunction {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSDeclareFunction") {
     if (typeof opts === "undefined") {
       return true;
@@ -2629,10 +3082,13 @@ export function isTSDeclareFunction(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSDeclareMethod(node: ?Object, opts?: Object): boolean {
+export function isTSDeclareMethod(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSDeclareMethod {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSDeclareMethod") {
     if (typeof opts === "undefined") {
       return true;
@@ -2643,10 +3099,13 @@ export function isTSDeclareMethod(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSQualifiedName(node: ?Object, opts?: Object): boolean {
+export function isTSQualifiedName(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSQualifiedName {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSQualifiedName") {
     if (typeof opts === "undefined") {
       return true;
@@ -2658,12 +3117,12 @@ export function isTSQualifiedName(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isTSCallSignatureDeclaration(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSCallSignatureDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSCallSignatureDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -2675,12 +3134,12 @@ export function isTSCallSignatureDeclaration(
   return false;
 }
 export function isTSConstructSignatureDeclaration(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSConstructSignatureDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSConstructSignatureDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -2691,10 +3150,13 @@ export function isTSConstructSignatureDeclaration(
 
   return false;
 }
-export function isTSPropertySignature(node: ?Object, opts?: Object): boolean {
+export function isTSPropertySignature(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSPropertySignature {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSPropertySignature") {
     if (typeof opts === "undefined") {
       return true;
@@ -2705,10 +3167,13 @@ export function isTSPropertySignature(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSMethodSignature(node: ?Object, opts?: Object): boolean {
+export function isTSMethodSignature(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSMethodSignature {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSMethodSignature") {
     if (typeof opts === "undefined") {
       return true;
@@ -2719,10 +3184,13 @@ export function isTSMethodSignature(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSIndexSignature(node: ?Object, opts?: Object): boolean {
+export function isTSIndexSignature(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSIndexSignature {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSIndexSignature") {
     if (typeof opts === "undefined") {
       return true;
@@ -2733,10 +3201,13 @@ export function isTSIndexSignature(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSAnyKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSAnyKeyword(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSAnyKeyword {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSAnyKeyword") {
     if (typeof opts === "undefined") {
       return true;
@@ -2747,10 +3218,13 @@ export function isTSAnyKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSBooleanKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSBooleanKeyword(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSBooleanKeyword {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSBooleanKeyword") {
     if (typeof opts === "undefined") {
       return true;
@@ -2761,10 +3235,13 @@ export function isTSBooleanKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSBigIntKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSBigIntKeyword(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSBigIntKeyword {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSBigIntKeyword") {
     if (typeof opts === "undefined") {
       return true;
@@ -2775,10 +3252,13 @@ export function isTSBigIntKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSIntrinsicKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSIntrinsicKeyword(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSIntrinsicKeyword {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSIntrinsicKeyword") {
     if (typeof opts === "undefined") {
       return true;
@@ -2789,10 +3269,13 @@ export function isTSIntrinsicKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSNeverKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSNeverKeyword(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSNeverKeyword {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSNeverKeyword") {
     if (typeof opts === "undefined") {
       return true;
@@ -2803,10 +3286,13 @@ export function isTSNeverKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSNullKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSNullKeyword(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSNullKeyword {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSNullKeyword") {
     if (typeof opts === "undefined") {
       return true;
@@ -2817,10 +3303,13 @@ export function isTSNullKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSNumberKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSNumberKeyword(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSNumberKeyword {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSNumberKeyword") {
     if (typeof opts === "undefined") {
       return true;
@@ -2831,10 +3320,13 @@ export function isTSNumberKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSObjectKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSObjectKeyword(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSObjectKeyword {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSObjectKeyword") {
     if (typeof opts === "undefined") {
       return true;
@@ -2845,10 +3337,13 @@ export function isTSObjectKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSStringKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSStringKeyword(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSStringKeyword {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSStringKeyword") {
     if (typeof opts === "undefined") {
       return true;
@@ -2859,10 +3354,13 @@ export function isTSStringKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSSymbolKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSSymbolKeyword(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSSymbolKeyword {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSSymbolKeyword") {
     if (typeof opts === "undefined") {
       return true;
@@ -2873,10 +3371,13 @@ export function isTSSymbolKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSUndefinedKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSUndefinedKeyword(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSUndefinedKeyword {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSUndefinedKeyword") {
     if (typeof opts === "undefined") {
       return true;
@@ -2887,10 +3388,13 @@ export function isTSUndefinedKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSUnknownKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSUnknownKeyword(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSUnknownKeyword {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSUnknownKeyword") {
     if (typeof opts === "undefined") {
       return true;
@@ -2901,10 +3405,13 @@ export function isTSUnknownKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSVoidKeyword(node: ?Object, opts?: Object): boolean {
+export function isTSVoidKeyword(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSVoidKeyword {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSVoidKeyword") {
     if (typeof opts === "undefined") {
       return true;
@@ -2915,10 +3422,13 @@ export function isTSVoidKeyword(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSThisType(node: ?Object, opts?: Object): boolean {
+export function isTSThisType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSThisType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSThisType") {
     if (typeof opts === "undefined") {
       return true;
@@ -2929,10 +3439,13 @@ export function isTSThisType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSFunctionType(node: ?Object, opts?: Object): boolean {
+export function isTSFunctionType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSFunctionType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSFunctionType") {
     if (typeof opts === "undefined") {
       return true;
@@ -2943,10 +3456,13 @@ export function isTSFunctionType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSConstructorType(node: ?Object, opts?: Object): boolean {
+export function isTSConstructorType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSConstructorType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSConstructorType") {
     if (typeof opts === "undefined") {
       return true;
@@ -2957,10 +3473,13 @@ export function isTSConstructorType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSTypeReference(node: ?Object, opts?: Object): boolean {
+export function isTSTypeReference(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSTypeReference {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSTypeReference") {
     if (typeof opts === "undefined") {
       return true;
@@ -2971,10 +3490,13 @@ export function isTSTypeReference(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSTypePredicate(node: ?Object, opts?: Object): boolean {
+export function isTSTypePredicate(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSTypePredicate {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSTypePredicate") {
     if (typeof opts === "undefined") {
       return true;
@@ -2985,10 +3507,13 @@ export function isTSTypePredicate(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSTypeQuery(node: ?Object, opts?: Object): boolean {
+export function isTSTypeQuery(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSTypeQuery {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSTypeQuery") {
     if (typeof opts === "undefined") {
       return true;
@@ -2999,10 +3524,13 @@ export function isTSTypeQuery(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSTypeLiteral(node: ?Object, opts?: Object): boolean {
+export function isTSTypeLiteral(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSTypeLiteral {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSTypeLiteral") {
     if (typeof opts === "undefined") {
       return true;
@@ -3013,10 +3541,13 @@ export function isTSTypeLiteral(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSArrayType(node: ?Object, opts?: Object): boolean {
+export function isTSArrayType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSArrayType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSArrayType") {
     if (typeof opts === "undefined") {
       return true;
@@ -3027,10 +3558,13 @@ export function isTSArrayType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSTupleType(node: ?Object, opts?: Object): boolean {
+export function isTSTupleType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSTupleType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSTupleType") {
     if (typeof opts === "undefined") {
       return true;
@@ -3041,10 +3575,13 @@ export function isTSTupleType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSOptionalType(node: ?Object, opts?: Object): boolean {
+export function isTSOptionalType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSOptionalType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSOptionalType") {
     if (typeof opts === "undefined") {
       return true;
@@ -3055,10 +3592,13 @@ export function isTSOptionalType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSRestType(node: ?Object, opts?: Object): boolean {
+export function isTSRestType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSRestType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSRestType") {
     if (typeof opts === "undefined") {
       return true;
@@ -3069,10 +3609,13 @@ export function isTSRestType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSNamedTupleMember(node: ?Object, opts?: Object): boolean {
+export function isTSNamedTupleMember(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSNamedTupleMember {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSNamedTupleMember") {
     if (typeof opts === "undefined") {
       return true;
@@ -3083,10 +3626,13 @@ export function isTSNamedTupleMember(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSUnionType(node: ?Object, opts?: Object): boolean {
+export function isTSUnionType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSUnionType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSUnionType") {
     if (typeof opts === "undefined") {
       return true;
@@ -3097,10 +3643,13 @@ export function isTSUnionType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSIntersectionType(node: ?Object, opts?: Object): boolean {
+export function isTSIntersectionType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSIntersectionType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSIntersectionType") {
     if (typeof opts === "undefined") {
       return true;
@@ -3111,10 +3660,13 @@ export function isTSIntersectionType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSConditionalType(node: ?Object, opts?: Object): boolean {
+export function isTSConditionalType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSConditionalType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSConditionalType") {
     if (typeof opts === "undefined") {
       return true;
@@ -3125,10 +3677,13 @@ export function isTSConditionalType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSInferType(node: ?Object, opts?: Object): boolean {
+export function isTSInferType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSInferType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSInferType") {
     if (typeof opts === "undefined") {
       return true;
@@ -3139,10 +3694,13 @@ export function isTSInferType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSParenthesizedType(node: ?Object, opts?: Object): boolean {
+export function isTSParenthesizedType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSParenthesizedType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSParenthesizedType") {
     if (typeof opts === "undefined") {
       return true;
@@ -3153,10 +3711,13 @@ export function isTSParenthesizedType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSTypeOperator(node: ?Object, opts?: Object): boolean {
+export function isTSTypeOperator(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSTypeOperator {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSTypeOperator") {
     if (typeof opts === "undefined") {
       return true;
@@ -3167,10 +3728,13 @@ export function isTSTypeOperator(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSIndexedAccessType(node: ?Object, opts?: Object): boolean {
+export function isTSIndexedAccessType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSIndexedAccessType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSIndexedAccessType") {
     if (typeof opts === "undefined") {
       return true;
@@ -3181,10 +3745,13 @@ export function isTSIndexedAccessType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSMappedType(node: ?Object, opts?: Object): boolean {
+export function isTSMappedType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSMappedType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSMappedType") {
     if (typeof opts === "undefined") {
       return true;
@@ -3195,10 +3762,13 @@ export function isTSMappedType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSLiteralType(node: ?Object, opts?: Object): boolean {
+export function isTSLiteralType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSLiteralType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSLiteralType") {
     if (typeof opts === "undefined") {
       return true;
@@ -3210,12 +3780,12 @@ export function isTSLiteralType(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isTSExpressionWithTypeArguments(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSExpressionWithTypeArguments {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSExpressionWithTypeArguments") {
     if (typeof opts === "undefined") {
       return true;
@@ -3227,12 +3797,12 @@ export function isTSExpressionWithTypeArguments(
   return false;
 }
 export function isTSInterfaceDeclaration(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSInterfaceDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSInterfaceDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -3243,10 +3813,13 @@ export function isTSInterfaceDeclaration(
 
   return false;
 }
-export function isTSInterfaceBody(node: ?Object, opts?: Object): boolean {
+export function isTSInterfaceBody(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSInterfaceBody {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSInterfaceBody") {
     if (typeof opts === "undefined") {
       return true;
@@ -3258,12 +3831,12 @@ export function isTSInterfaceBody(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isTSTypeAliasDeclaration(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSTypeAliasDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSTypeAliasDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -3274,10 +3847,13 @@ export function isTSTypeAliasDeclaration(
 
   return false;
 }
-export function isTSAsExpression(node: ?Object, opts?: Object): boolean {
+export function isTSAsExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSAsExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSAsExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -3288,10 +3864,13 @@ export function isTSAsExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSTypeAssertion(node: ?Object, opts?: Object): boolean {
+export function isTSTypeAssertion(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSTypeAssertion {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSTypeAssertion") {
     if (typeof opts === "undefined") {
       return true;
@@ -3302,10 +3881,13 @@ export function isTSTypeAssertion(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSEnumDeclaration(node: ?Object, opts?: Object): boolean {
+export function isTSEnumDeclaration(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSEnumDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSEnumDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -3316,10 +3898,13 @@ export function isTSEnumDeclaration(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSEnumMember(node: ?Object, opts?: Object): boolean {
+export function isTSEnumMember(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSEnumMember {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSEnumMember") {
     if (typeof opts === "undefined") {
       return true;
@@ -3330,10 +3915,13 @@ export function isTSEnumMember(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSModuleDeclaration(node: ?Object, opts?: Object): boolean {
+export function isTSModuleDeclaration(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSModuleDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSModuleDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -3344,10 +3932,13 @@ export function isTSModuleDeclaration(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSModuleBlock(node: ?Object, opts?: Object): boolean {
+export function isTSModuleBlock(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSModuleBlock {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSModuleBlock") {
     if (typeof opts === "undefined") {
       return true;
@@ -3358,10 +3949,13 @@ export function isTSModuleBlock(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSImportType(node: ?Object, opts?: Object): boolean {
+export function isTSImportType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSImportType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSImportType") {
     if (typeof opts === "undefined") {
       return true;
@@ -3373,12 +3967,12 @@ export function isTSImportType(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isTSImportEqualsDeclaration(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSImportEqualsDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSImportEqualsDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -3390,12 +3984,12 @@ export function isTSImportEqualsDeclaration(
   return false;
 }
 export function isTSExternalModuleReference(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSExternalModuleReference {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSExternalModuleReference") {
     if (typeof opts === "undefined") {
       return true;
@@ -3406,10 +4000,13 @@ export function isTSExternalModuleReference(
 
   return false;
 }
-export function isTSNonNullExpression(node: ?Object, opts?: Object): boolean {
+export function isTSNonNullExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSNonNullExpression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSNonNullExpression") {
     if (typeof opts === "undefined") {
       return true;
@@ -3420,10 +4017,13 @@ export function isTSNonNullExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSExportAssignment(node: ?Object, opts?: Object): boolean {
+export function isTSExportAssignment(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSExportAssignment {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSExportAssignment") {
     if (typeof opts === "undefined") {
       return true;
@@ -3435,12 +4035,12 @@ export function isTSExportAssignment(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isTSNamespaceExportDeclaration(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSNamespaceExportDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSNamespaceExportDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -3451,10 +4051,13 @@ export function isTSNamespaceExportDeclaration(
 
   return false;
 }
-export function isTSTypeAnnotation(node: ?Object, opts?: Object): boolean {
+export function isTSTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSTypeAnnotation") {
     if (typeof opts === "undefined") {
       return true;
@@ -3466,12 +4069,12 @@ export function isTSTypeAnnotation(node: ?Object, opts?: Object): boolean {
   return false;
 }
 export function isTSTypeParameterInstantiation(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSTypeParameterInstantiation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSTypeParameterInstantiation") {
     if (typeof opts === "undefined") {
       return true;
@@ -3483,12 +4086,12 @@ export function isTSTypeParameterInstantiation(
   return false;
 }
 export function isTSTypeParameterDeclaration(
-  node: ?Object,
-  opts?: Object,
-): boolean {
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSTypeParameterDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSTypeParameterDeclaration") {
     if (typeof opts === "undefined") {
       return true;
@@ -3499,10 +4102,13 @@ export function isTSTypeParameterDeclaration(
 
   return false;
 }
-export function isTSTypeParameter(node: ?Object, opts?: Object): boolean {
+export function isTSTypeParameter(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSTypeParameter {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "TSTypeParameter") {
     if (typeof opts === "undefined") {
       return true;
@@ -3513,12 +4119,14 @@ export function isTSTypeParameter(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isExpression(node: ?Object, opts?: Object): boolean {
+export function isExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Expression {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "Expression" ||
     "ArrayExpression" === nodeType ||
     "AssignmentExpression" === nodeType ||
     "BinaryExpression" === nodeType ||
@@ -3565,9 +4173,9 @@ export function isExpression(node: ?Object, opts?: Object): boolean {
     "TSTypeAssertion" === nodeType ||
     "TSNonNullExpression" === nodeType ||
     (nodeType === "Placeholder" &&
-      ("Expression" === node.expectedNode ||
-        "Identifier" === node.expectedNode ||
-        "StringLiteral" === node.expectedNode))
+      ("Expression" === (node as t.Placeholder).expectedNode ||
+        "Identifier" === (node as t.Placeholder).expectedNode ||
+        "StringLiteral" === (node as t.Placeholder).expectedNode))
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3578,15 +4186,14 @@ export function isExpression(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isBinary(node: ?Object, opts?: Object): boolean {
+export function isBinary(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Binary {
   if (!node) return false;
 
-  const nodeType = node.type;
-  if (
-    nodeType === "Binary" ||
-    "BinaryExpression" === nodeType ||
-    "LogicalExpression" === nodeType
-  ) {
+  const nodeType = (node as t.Node).type;
+  if ("BinaryExpression" === nodeType || "LogicalExpression" === nodeType) {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -3596,12 +4203,14 @@ export function isBinary(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isScopable(node: ?Object, opts?: Object): boolean {
+export function isScopable(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Scopable {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "Scopable" ||
     "BlockStatement" === nodeType ||
     "CatchClause" === nodeType ||
     "DoWhileStatement" === nodeType ||
@@ -3621,7 +4230,8 @@ export function isScopable(node: ?Object, opts?: Object): boolean {
     "ClassPrivateMethod" === nodeType ||
     "StaticBlock" === nodeType ||
     "TSModuleBlock" === nodeType ||
-    (nodeType === "Placeholder" && "BlockStatement" === node.expectedNode)
+    (nodeType === "Placeholder" &&
+      "BlockStatement" === (node as t.Placeholder).expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3632,12 +4242,14 @@ export function isScopable(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isBlockParent(node: ?Object, opts?: Object): boolean {
+export function isBlockParent(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.BlockParent {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "BlockParent" ||
     "BlockStatement" === nodeType ||
     "CatchClause" === nodeType ||
     "DoWhileStatement" === nodeType ||
@@ -3655,7 +4267,8 @@ export function isBlockParent(node: ?Object, opts?: Object): boolean {
     "ClassPrivateMethod" === nodeType ||
     "StaticBlock" === nodeType ||
     "TSModuleBlock" === nodeType ||
-    (nodeType === "Placeholder" && "BlockStatement" === node.expectedNode)
+    (nodeType === "Placeholder" &&
+      "BlockStatement" === (node as t.Placeholder).expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3666,16 +4279,19 @@ export function isBlockParent(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isBlock(node: ?Object, opts?: Object): boolean {
+export function isBlock(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Block {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "Block" ||
     "BlockStatement" === nodeType ||
     "Program" === nodeType ||
     "TSModuleBlock" === nodeType ||
-    (nodeType === "Placeholder" && "BlockStatement" === node.expectedNode)
+    (nodeType === "Placeholder" &&
+      "BlockStatement" === (node as t.Placeholder).expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3686,12 +4302,14 @@ export function isBlock(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isStatement(node: ?Object, opts?: Object): boolean {
+export function isStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Statement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "Statement" ||
     "BlockStatement" === nodeType ||
     "BreakStatement" === nodeType ||
     "ContinueStatement" === nodeType ||
@@ -3740,9 +4358,9 @@ export function isStatement(node: ?Object, opts?: Object): boolean {
     "TSExportAssignment" === nodeType ||
     "TSNamespaceExportDeclaration" === nodeType ||
     (nodeType === "Placeholder" &&
-      ("Statement" === node.expectedNode ||
-        "Declaration" === node.expectedNode ||
-        "BlockStatement" === node.expectedNode))
+      ("Statement" === (node as t.Placeholder).expectedNode ||
+        "Declaration" === (node as t.Placeholder).expectedNode ||
+        "BlockStatement" === (node as t.Placeholder).expectedNode))
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3753,12 +4371,14 @@ export function isStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTerminatorless(node: ?Object, opts?: Object): boolean {
+export function isTerminatorless(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Terminatorless {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "Terminatorless" ||
     "BreakStatement" === nodeType ||
     "ContinueStatement" === nodeType ||
     "ReturnStatement" === nodeType ||
@@ -3775,12 +4395,14 @@ export function isTerminatorless(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isCompletionStatement(node: ?Object, opts?: Object): boolean {
+export function isCompletionStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.CompletionStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "CompletionStatement" ||
     "BreakStatement" === nodeType ||
     "ContinueStatement" === nodeType ||
     "ReturnStatement" === nodeType ||
@@ -3795,15 +4417,14 @@ export function isCompletionStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isConditional(node: ?Object, opts?: Object): boolean {
+export function isConditional(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Conditional {
   if (!node) return false;
 
-  const nodeType = node.type;
-  if (
-    nodeType === "Conditional" ||
-    "ConditionalExpression" === nodeType ||
-    "IfStatement" === nodeType
-  ) {
+  const nodeType = (node as t.Node).type;
+  if ("ConditionalExpression" === nodeType || "IfStatement" === nodeType) {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -3813,12 +4434,14 @@ export function isConditional(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isLoop(node: ?Object, opts?: Object): boolean {
+export function isLoop(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Loop {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "Loop" ||
     "DoWhileStatement" === nodeType ||
     "ForInStatement" === nodeType ||
     "ForStatement" === nodeType ||
@@ -3834,15 +4457,14 @@ export function isLoop(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isWhile(node: ?Object, opts?: Object): boolean {
+export function isWhile(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.While {
   if (!node) return false;
 
-  const nodeType = node.type;
-  if (
-    nodeType === "While" ||
-    "DoWhileStatement" === nodeType ||
-    "WhileStatement" === nodeType
-  ) {
+  const nodeType = (node as t.Node).type;
+  if ("DoWhileStatement" === nodeType || "WhileStatement" === nodeType) {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -3852,12 +4474,14 @@ export function isWhile(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isExpressionWrapper(node: ?Object, opts?: Object): boolean {
+export function isExpressionWrapper(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ExpressionWrapper {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "ExpressionWrapper" ||
     "ExpressionStatement" === nodeType ||
     "ParenthesizedExpression" === nodeType ||
     "TypeCastExpression" === nodeType
@@ -3871,12 +4495,14 @@ export function isExpressionWrapper(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isFor(node: ?Object, opts?: Object): boolean {
+export function isFor(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.For {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "For" ||
     "ForInStatement" === nodeType ||
     "ForStatement" === nodeType ||
     "ForOfStatement" === nodeType
@@ -3890,15 +4516,14 @@ export function isFor(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isForXStatement(node: ?Object, opts?: Object): boolean {
+export function isForXStatement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ForXStatement {
   if (!node) return false;
 
-  const nodeType = node.type;
-  if (
-    nodeType === "ForXStatement" ||
-    "ForInStatement" === nodeType ||
-    "ForOfStatement" === nodeType
-  ) {
+  const nodeType = (node as t.Node).type;
+  if ("ForInStatement" === nodeType || "ForOfStatement" === nodeType) {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -3908,12 +4533,14 @@ export function isForXStatement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isFunction(node: ?Object, opts?: Object): boolean {
+export function isFunction(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Function {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "Function" ||
     "FunctionDeclaration" === nodeType ||
     "FunctionExpression" === nodeType ||
     "ObjectMethod" === nodeType ||
@@ -3930,12 +4557,14 @@ export function isFunction(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isFunctionParent(node: ?Object, opts?: Object): boolean {
+export function isFunctionParent(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.FunctionParent {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "FunctionParent" ||
     "FunctionDeclaration" === nodeType ||
     "FunctionExpression" === nodeType ||
     "ObjectMethod" === nodeType ||
@@ -3952,12 +4581,14 @@ export function isFunctionParent(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isPureish(node: ?Object, opts?: Object): boolean {
+export function isPureish(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Pureish {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "Pureish" ||
     "FunctionDeclaration" === nodeType ||
     "FunctionExpression" === nodeType ||
     "StringLiteral" === nodeType ||
@@ -3968,7 +4599,8 @@ export function isPureish(node: ?Object, opts?: Object): boolean {
     "ArrowFunctionExpression" === nodeType ||
     "BigIntLiteral" === nodeType ||
     "DecimalLiteral" === nodeType ||
-    (nodeType === "Placeholder" && "StringLiteral" === node.expectedNode)
+    (nodeType === "Placeholder" &&
+      "StringLiteral" === (node as t.Placeholder).expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3979,12 +4611,14 @@ export function isPureish(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isDeclaration(node: ?Object, opts?: Object): boolean {
+export function isDeclaration(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Declaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "Declaration" ||
     "FunctionDeclaration" === nodeType ||
     "VariableDeclaration" === nodeType ||
     "ClassDeclaration" === nodeType ||
@@ -4011,7 +4645,8 @@ export function isDeclaration(node: ?Object, opts?: Object): boolean {
     "TSTypeAliasDeclaration" === nodeType ||
     "TSEnumDeclaration" === nodeType ||
     "TSModuleDeclaration" === nodeType ||
-    (nodeType === "Placeholder" && "Declaration" === node.expectedNode)
+    (nodeType === "Placeholder" &&
+      "Declaration" === (node as t.Placeholder).expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -4022,19 +4657,22 @@ export function isDeclaration(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isPatternLike(node: ?Object, opts?: Object): boolean {
+export function isPatternLike(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.PatternLike {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "PatternLike" ||
     "Identifier" === nodeType ||
     "RestElement" === nodeType ||
     "AssignmentPattern" === nodeType ||
     "ArrayPattern" === nodeType ||
     "ObjectPattern" === nodeType ||
     (nodeType === "Placeholder" &&
-      ("Pattern" === node.expectedNode || "Identifier" === node.expectedNode))
+      ("Pattern" === (node as t.Placeholder).expectedNode ||
+        "Identifier" === (node as t.Placeholder).expectedNode))
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -4045,12 +4683,14 @@ export function isPatternLike(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isLVal(node: ?Object, opts?: Object): boolean {
+export function isLVal(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.LVal {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "LVal" ||
     "Identifier" === nodeType ||
     "MemberExpression" === nodeType ||
     "RestElement" === nodeType ||
@@ -4059,7 +4699,8 @@ export function isLVal(node: ?Object, opts?: Object): boolean {
     "ObjectPattern" === nodeType ||
     "TSParameterProperty" === nodeType ||
     (nodeType === "Placeholder" &&
-      ("Pattern" === node.expectedNode || "Identifier" === node.expectedNode))
+      ("Pattern" === (node as t.Placeholder).expectedNode ||
+        "Identifier" === (node as t.Placeholder).expectedNode))
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -4070,15 +4711,18 @@ export function isLVal(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSEntityName(node: ?Object, opts?: Object): boolean {
+export function isTSEntityName(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSEntityName {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "TSEntityName" ||
     "Identifier" === nodeType ||
     "TSQualifiedName" === nodeType ||
-    (nodeType === "Placeholder" && "Identifier" === node.expectedNode)
+    (nodeType === "Placeholder" &&
+      "Identifier" === (node as t.Placeholder).expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -4089,12 +4733,14 @@ export function isTSEntityName(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isLiteral(node: ?Object, opts?: Object): boolean {
+export function isLiteral(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Literal {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "Literal" ||
     "StringLiteral" === nodeType ||
     "NumericLiteral" === nodeType ||
     "NullLiteral" === nodeType ||
@@ -4103,7 +4749,8 @@ export function isLiteral(node: ?Object, opts?: Object): boolean {
     "TemplateLiteral" === nodeType ||
     "BigIntLiteral" === nodeType ||
     "DecimalLiteral" === nodeType ||
-    (nodeType === "Placeholder" && "StringLiteral" === node.expectedNode)
+    (nodeType === "Placeholder" &&
+      "StringLiteral" === (node as t.Placeholder).expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -4114,12 +4761,14 @@ export function isLiteral(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isImmutable(node: ?Object, opts?: Object): boolean {
+export function isImmutable(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Immutable {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "Immutable" ||
     "StringLiteral" === nodeType ||
     "NumericLiteral" === nodeType ||
     "NullLiteral" === nodeType ||
@@ -4136,7 +4785,8 @@ export function isImmutable(node: ?Object, opts?: Object): boolean {
     "JSXOpeningFragment" === nodeType ||
     "JSXClosingFragment" === nodeType ||
     "DecimalLiteral" === nodeType ||
-    (nodeType === "Placeholder" && "StringLiteral" === node.expectedNode)
+    (nodeType === "Placeholder" &&
+      "StringLiteral" === (node as t.Placeholder).expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -4147,12 +4797,14 @@ export function isImmutable(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isUserWhitespacable(node: ?Object, opts?: Object): boolean {
+export function isUserWhitespacable(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.UserWhitespacable {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "UserWhitespacable" ||
     "ObjectMethod" === nodeType ||
     "ObjectProperty" === nodeType ||
     "ObjectTypeInternalSlot" === nodeType ||
@@ -4170,12 +4822,14 @@ export function isUserWhitespacable(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isMethod(node: ?Object, opts?: Object): boolean {
+export function isMethod(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Method {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "Method" ||
     "ObjectMethod" === nodeType ||
     "ClassMethod" === nodeType ||
     "ClassPrivateMethod" === nodeType
@@ -4189,15 +4843,14 @@ export function isMethod(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isObjectMember(node: ?Object, opts?: Object): boolean {
+export function isObjectMember(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ObjectMember {
   if (!node) return false;
 
-  const nodeType = node.type;
-  if (
-    nodeType === "ObjectMember" ||
-    "ObjectMethod" === nodeType ||
-    "ObjectProperty" === nodeType
-  ) {
+  const nodeType = (node as t.Node).type;
+  if ("ObjectMethod" === nodeType || "ObjectProperty" === nodeType) {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -4207,12 +4860,14 @@ export function isObjectMember(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isProperty(node: ?Object, opts?: Object): boolean {
+export function isProperty(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Property {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "Property" ||
     "ObjectProperty" === nodeType ||
     "ClassProperty" === nodeType ||
     "ClassPrivateProperty" === nodeType
@@ -4226,15 +4881,14 @@ export function isProperty(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isUnaryLike(node: ?Object, opts?: Object): boolean {
+export function isUnaryLike(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.UnaryLike {
   if (!node) return false;
 
-  const nodeType = node.type;
-  if (
-    nodeType === "UnaryLike" ||
-    "UnaryExpression" === nodeType ||
-    "SpreadElement" === nodeType
-  ) {
+  const nodeType = (node as t.Node).type;
+  if ("UnaryExpression" === nodeType || "SpreadElement" === nodeType) {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -4244,16 +4898,19 @@ export function isUnaryLike(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isPattern(node: ?Object, opts?: Object): boolean {
+export function isPattern(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Pattern {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "Pattern" ||
     "AssignmentPattern" === nodeType ||
     "ArrayPattern" === nodeType ||
     "ObjectPattern" === nodeType ||
-    (nodeType === "Placeholder" && "Pattern" === node.expectedNode)
+    (nodeType === "Placeholder" &&
+      "Pattern" === (node as t.Placeholder).expectedNode)
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -4264,15 +4921,14 @@ export function isPattern(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isClass(node: ?Object, opts?: Object): boolean {
+export function isClass(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Class {
   if (!node) return false;
 
-  const nodeType = node.type;
-  if (
-    nodeType === "Class" ||
-    "ClassExpression" === nodeType ||
-    "ClassDeclaration" === nodeType
-  ) {
+  const nodeType = (node as t.Node).type;
+  if ("ClassExpression" === nodeType || "ClassDeclaration" === nodeType) {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -4282,12 +4938,14 @@ export function isClass(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isModuleDeclaration(node: ?Object, opts?: Object): boolean {
+export function isModuleDeclaration(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ModuleDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "ModuleDeclaration" ||
     "ExportAllDeclaration" === nodeType ||
     "ExportDefaultDeclaration" === nodeType ||
     "ExportNamedDeclaration" === nodeType ||
@@ -4302,12 +4960,14 @@ export function isModuleDeclaration(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isExportDeclaration(node: ?Object, opts?: Object): boolean {
+export function isExportDeclaration(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ExportDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "ExportDeclaration" ||
     "ExportAllDeclaration" === nodeType ||
     "ExportDefaultDeclaration" === nodeType ||
     "ExportNamedDeclaration" === nodeType
@@ -4321,12 +4981,14 @@ export function isExportDeclaration(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isModuleSpecifier(node: ?Object, opts?: Object): boolean {
+export function isModuleSpecifier(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ModuleSpecifier {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "ModuleSpecifier" ||
     "ExportSpecifier" === nodeType ||
     "ImportDefaultSpecifier" === nodeType ||
     "ImportNamespaceSpecifier" === nodeType ||
@@ -4343,12 +5005,14 @@ export function isModuleSpecifier(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isFlow(node: ?Object, opts?: Object): boolean {
+export function isFlow(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Flow {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "Flow" ||
     "AnyTypeAnnotation" === nodeType ||
     "ArrayTypeAnnotation" === nodeType ||
     "BooleanTypeAnnotation" === nodeType ||
@@ -4413,12 +5077,14 @@ export function isFlow(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isFlowType(node: ?Object, opts?: Object): boolean {
+export function isFlowType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.FlowType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "FlowType" ||
     "AnyTypeAnnotation" === nodeType ||
     "ArrayTypeAnnotation" === nodeType ||
     "BooleanTypeAnnotation" === nodeType ||
@@ -4453,12 +5119,14 @@ export function isFlowType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isFlowBaseAnnotation(node: ?Object, opts?: Object): boolean {
+export function isFlowBaseAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.FlowBaseAnnotation {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "FlowBaseAnnotation" ||
     "AnyTypeAnnotation" === nodeType ||
     "BooleanTypeAnnotation" === nodeType ||
     "NullLiteralTypeAnnotation" === nodeType ||
@@ -4479,12 +5147,14 @@ export function isFlowBaseAnnotation(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isFlowDeclaration(node: ?Object, opts?: Object): boolean {
+export function isFlowDeclaration(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.FlowDeclaration {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "FlowDeclaration" ||
     "DeclareClass" === nodeType ||
     "DeclareFunction" === nodeType ||
     "DeclareInterface" === nodeType ||
@@ -4508,15 +5178,14 @@ export function isFlowDeclaration(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isFlowPredicate(node: ?Object, opts?: Object): boolean {
+export function isFlowPredicate(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.FlowPredicate {
   if (!node) return false;
 
-  const nodeType = node.type;
-  if (
-    nodeType === "FlowPredicate" ||
-    "DeclaredPredicate" === nodeType ||
-    "InferredPredicate" === nodeType
-  ) {
+  const nodeType = (node as t.Node).type;
+  if ("DeclaredPredicate" === nodeType || "InferredPredicate" === nodeType) {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -4526,12 +5195,14 @@ export function isFlowPredicate(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isEnumBody(node: ?Object, opts?: Object): boolean {
+export function isEnumBody(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.EnumBody {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "EnumBody" ||
     "EnumBooleanBody" === nodeType ||
     "EnumNumberBody" === nodeType ||
     "EnumStringBody" === nodeType ||
@@ -4546,12 +5217,14 @@ export function isEnumBody(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isEnumMember(node: ?Object, opts?: Object): boolean {
+export function isEnumMember(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.EnumMember {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "EnumMember" ||
     "EnumBooleanMember" === nodeType ||
     "EnumNumberMember" === nodeType ||
     "EnumStringMember" === nodeType ||
@@ -4566,12 +5239,14 @@ export function isEnumMember(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isJSX(node: ?Object, opts?: Object): boolean {
+export function isJSX(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.JSX {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "JSX" ||
     "JSXAttribute" === nodeType ||
     "JSXClosingElement" === nodeType ||
     "JSXElement" === nodeType ||
@@ -4597,12 +5272,14 @@ export function isJSX(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isPrivate(node: ?Object, opts?: Object): boolean {
+export function isPrivate(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.Private {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "Private" ||
     "ClassPrivateProperty" === nodeType ||
     "ClassPrivateMethod" === nodeType ||
     "PrivateName" === nodeType
@@ -4616,12 +5293,14 @@ export function isPrivate(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSTypeElement(node: ?Object, opts?: Object): boolean {
+export function isTSTypeElement(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSTypeElement {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "TSTypeElement" ||
     "TSCallSignatureDeclaration" === nodeType ||
     "TSConstructSignatureDeclaration" === nodeType ||
     "TSPropertySignature" === nodeType ||
@@ -4637,12 +5316,14 @@ export function isTSTypeElement(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSType(node: ?Object, opts?: Object): boolean {
+export function isTSType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "TSType" ||
     "TSAnyKeyword" === nodeType ||
     "TSBooleanKeyword" === nodeType ||
     "TSBigIntKeyword" === nodeType ||
@@ -4688,12 +5369,14 @@ export function isTSType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isTSBaseType(node: ?Object, opts?: Object): boolean {
+export function isTSBaseType(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSBaseType {
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (
-    nodeType === "TSBaseType" ||
     "TSAnyKeyword" === nodeType ||
     "TSBooleanKeyword" === nodeType ||
     "TSBigIntKeyword" === nodeType ||
@@ -4719,13 +5402,16 @@ export function isTSBaseType(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isNumberLiteral(node: ?Object, opts?: Object): boolean {
+export function isNumberLiteral(
+  node: object | null | undefined,
+  opts?: object | null,
+): boolean {
   console.trace(
     "The node type NumberLiteral has been renamed to NumericLiteral",
   );
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "NumberLiteral") {
     if (typeof opts === "undefined") {
       return true;
@@ -4736,11 +5422,14 @@ export function isNumberLiteral(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isRegexLiteral(node: ?Object, opts?: Object): boolean {
+export function isRegexLiteral(
+  node: object | null | undefined,
+  opts?: object | null,
+): boolean {
   console.trace("The node type RegexLiteral has been renamed to RegExpLiteral");
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "RegexLiteral") {
     if (typeof opts === "undefined") {
       return true;
@@ -4751,11 +5440,14 @@ export function isRegexLiteral(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isRestProperty(node: ?Object, opts?: Object): boolean {
+export function isRestProperty(
+  node: object | null | undefined,
+  opts?: object | null,
+): boolean {
   console.trace("The node type RestProperty has been renamed to RestElement");
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "RestProperty") {
     if (typeof opts === "undefined") {
       return true;
@@ -4766,13 +5458,16 @@ export function isRestProperty(node: ?Object, opts?: Object): boolean {
 
   return false;
 }
-export function isSpreadProperty(node: ?Object, opts?: Object): boolean {
+export function isSpreadProperty(
+  node: object | null | undefined,
+  opts?: object | null,
+): boolean {
   console.trace(
     "The node type SpreadProperty has been renamed to SpreadElement",
   );
   if (!node) return false;
 
-  const nodeType = node.type;
+  const nodeType = (node as t.Node).type;
   if (nodeType === "SpreadProperty") {
     if (typeof opts === "undefined") {
       return true;

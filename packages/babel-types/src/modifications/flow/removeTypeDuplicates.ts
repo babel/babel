@@ -1,17 +1,24 @@
-// @flow
 import {
   isAnyTypeAnnotation,
   isGenericTypeAnnotation,
   isUnionTypeAnnotation,
   isFlowBaseAnnotation,
+  isIdentifier,
 } from "../../validators/generated";
+import type * as t from "../..";
+
+function getQualifiedName(node: t.GenericTypeAnnotation["id"]) {
+  return isIdentifier(node)
+    ? node.name
+    : `${node.id.name}.${getQualifiedName(node.qualification)}`;
+}
 
 /**
  * Dedupe type annotations.
  */
 export default function removeTypeDuplicates(
-  nodes: Array<Object>,
-): Array<Object> {
+  nodes: ReadonlyArray<t.FlowType | false | null | undefined>,
+): t.FlowType[] {
   const generics = {};
   const bases = {};
 
@@ -49,7 +56,7 @@ export default function removeTypeDuplicates(
 
     // find a matching generic type and merge and deduplicate the type parameters
     if (isGenericTypeAnnotation(node)) {
-      const name = node.id.name;
+      const name = getQualifiedName(node.id);
 
       if (generics[name]) {
         let existing = generics[name];

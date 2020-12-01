@@ -14,9 +14,8 @@
     "directory": "packages/babel-types"
   },
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "typesVersions": {
-    ">=3.7": {
+    "<3.7": {
       "lib/index.d.ts": [
         "lib/index-ts3.7.d.ts"
       ]
@@ -29,6 +28,8 @@
   },
   "devDependencies": {
     "@babel/generator": "workspace:*",
-    "@babel/parser": "workspace:*"
+    "@babel/parser": "workspace:*",
+    "@types/lodash": "^4.14.162",
+    "chalk": "^4.1.0"
   }
 }

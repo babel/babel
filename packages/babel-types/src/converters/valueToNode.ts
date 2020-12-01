@@ -1,4 +1,3 @@
-// @flow
 import isPlainObject from "lodash/isPlainObject";
 import isRegExp from "lodash/isRegExp";
 import isValidIdentifier from "../validators/isValidIdentifier";
@@ -15,8 +14,26 @@ import {
   unaryExpression,
   binaryExpression,
 } from "../builders/generated";
+import type * as t from "..";
 
-export default function valueToNode(value: any): Object {
+export default valueToNode as {
+  (value: undefined): t.Identifier; // TODO: This should return "void 0"
+  (value: boolean): t.BooleanLiteral;
+  (value: null): t.NullLiteral;
+  (value: string): t.StringLiteral;
+  // Infinities and NaN need to use a BinaryExpression; negative values must be wrapped in UnaryExpression
+  (value: number): t.NumericLiteral | t.BinaryExpression | t.UnaryExpression;
+  (value: RegExp): t.RegExpLiteral;
+  (value: ReadonlyArray<unknown>): t.ArrayExpression;
+
+  // this throws with objects that are not PlainObject according to lodash,
+  // or if there are non-valueToNode-able values
+  (value: object): t.ObjectExpression;
+
+  (value: unknown): t.Expression;
+};
+
+function valueToNode(value: unknown): t.Expression {
   // undefined
   if (value === undefined) {
     return identifier("undefined");

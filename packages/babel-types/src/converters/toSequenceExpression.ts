@@ -1,6 +1,6 @@
-// @flow
-import type { Scope } from "@babel/traverse";
 import gatherSequenceExpressions from "./gatherSequenceExpressions";
+import type * as t from "..";
+import type { Scope } from "./Scope";
 
 /**
  * Turn an array of statement `nodes` into a `SequenceExpression`.
@@ -11,9 +11,9 @@ import gatherSequenceExpressions from "./gatherSequenceExpressions";
  * Expression statements are just resolved to their expression.
  */
 export default function toSequenceExpression(
-  nodes: Array<Object>,
+  nodes: ReadonlyArray<t.Node>,
   scope: Scope,
-): ?Object {
+): t.SequenceExpression | undefined {
   if (!nodes?.length) return;
 
   const declars = [];

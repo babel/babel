@@ -1,5 +1,3 @@
-// @flow
-import type { Scope } from "@babel/traverse";
 import getBindingIdentifiers from "../retrievers/getBindingIdentifiers";
 import {
   isExpression,
@@ -15,12 +13,14 @@ import {
   conditionalExpression,
 } from "../builders/generated";
 import cloneNode from "../clone/cloneNode";
+import type * as t from "..";
+import type { Scope } from "./Scope";
 
 export default function gatherSequenceExpressions(
-  nodes: Array<Object>,
+  nodes: ReadonlyArray<t.Node>,
   scope: Scope,
-  declars: Array<Object>,
-): ?Object {
+  declars: Array<any>,
+): t.SequenceExpression {
   const exprs = [];
   let ensureLastUndefined = true;
 
@@ -38,7 +38,7 @@ export default function gatherSequenceExpressions(
     } else if (isVariableDeclaration(node)) {
       if (node.kind !== "var") return; // bailed
 
-      for (const declar of (node.declarations: Array<any>)) {
+      for (const declar of node.declarations) {
         const bindings = getBindingIdentifiers(declar);
         for (const key of Object.keys(bindings)) {
           declars.push({
@@ -62,6 +62,7 @@ export default function gatherSequenceExpressions(
         : scope.buildUndefinedNode();
       if (!consequent || !alternate) return; // bailed
 
+      // @ts-expect-error todo(flow->ts) consequent - Argument of type 'Node' is not assignable to parameter of type 'Expression'
       exprs.push(conditionalExpression(node.test, consequent, alternate));
     } else if (isBlockStatement(node)) {
       const body = gatherSequenceExpressions(node.body, scope, declars);

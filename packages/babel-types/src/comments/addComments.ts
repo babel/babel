@@ -1,12 +1,12 @@
-// @flow
+import type * as t from "..";
 
 /**
  * Add comments of certain type to a node.
  */
-export default function addComments<T: Object>(
+export default function addComments<T extends t.Node>(
   node: T,
-  type: string,
-  comments: Array<Object>,
+  type: t.CommentTypeShorthand,
+  comments: ReadonlyArray<t.Comment>,
 ): T {
   if (!comments || !node) return node;
 

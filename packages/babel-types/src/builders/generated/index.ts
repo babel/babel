@@ -1,1076 +1,1484 @@
-// @flow
 /*
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
 import builder from "../builder";
+import type * as t from "../..";
 
-export function arrayExpression(...args: Array<any>): Object {
-  return builder("ArrayExpression", ...args);
-}
-export { arrayExpression as ArrayExpression };
-export function assignmentExpression(...args: Array<any>): Object {
-  return builder("AssignmentExpression", ...args);
-}
-export { assignmentExpression as AssignmentExpression };
-export function binaryExpression(...args: Array<any>): Object {
-  return builder("BinaryExpression", ...args);
-}
-export { binaryExpression as BinaryExpression };
-export function interpreterDirective(...args: Array<any>): Object {
-  return builder("InterpreterDirective", ...args);
-}
-export { interpreterDirective as InterpreterDirective };
-export function directive(...args: Array<any>): Object {
-  return builder("Directive", ...args);
-}
-export { directive as Directive };
-export function directiveLiteral(...args: Array<any>): Object {
-  return builder("DirectiveLiteral", ...args);
-}
-export { directiveLiteral as DirectiveLiteral };
-export function blockStatement(...args: Array<any>): Object {
-  return builder("BlockStatement", ...args);
-}
-export { blockStatement as BlockStatement };
-export function breakStatement(...args: Array<any>): Object {
-  return builder("BreakStatement", ...args);
-}
-export { breakStatement as BreakStatement };
-export function callExpression(...args: Array<any>): Object {
-  return builder("CallExpression", ...args);
-}
-export { callExpression as CallExpression };
-export function catchClause(...args: Array<any>): Object {
-  return builder("CatchClause", ...args);
-}
-export { catchClause as CatchClause };
-export function conditionalExpression(...args: Array<any>): Object {
-  return builder("ConditionalExpression", ...args);
-}
-export { conditionalExpression as ConditionalExpression };
-export function continueStatement(...args: Array<any>): Object {
-  return builder("ContinueStatement", ...args);
-}
-export { continueStatement as ContinueStatement };
-export function debuggerStatement(...args: Array<any>): Object {
-  return builder("DebuggerStatement", ...args);
-}
-export { debuggerStatement as DebuggerStatement };
-export function doWhileStatement(...args: Array<any>): Object {
-  return builder("DoWhileStatement", ...args);
-}
-export { doWhileStatement as DoWhileStatement };
-export function emptyStatement(...args: Array<any>): Object {
-  return builder("EmptyStatement", ...args);
-}
-export { emptyStatement as EmptyStatement };
-export function expressionStatement(...args: Array<any>): Object {
-  return builder("ExpressionStatement", ...args);
-}
-export { expressionStatement as ExpressionStatement };
-export function file(...args: Array<any>): Object {
-  return builder("File", ...args);
-}
-export { file as File };
-export function forInStatement(...args: Array<any>): Object {
-  return builder("ForInStatement", ...args);
-}
-export { forInStatement as ForInStatement };
-export function forStatement(...args: Array<any>): Object {
-  return builder("ForStatement", ...args);
-}
-export { forStatement as ForStatement };
-export function functionDeclaration(...args: Array<any>): Object {
-  return builder("FunctionDeclaration", ...args);
-}
-export { functionDeclaration as FunctionDeclaration };
-export function functionExpression(...args: Array<any>): Object {
-  return builder("FunctionExpression", ...args);
-}
-export { functionExpression as FunctionExpression };
-export function identifier(...args: Array<any>): Object {
-  return builder("Identifier", ...args);
-}
-export { identifier as Identifier };
-export function ifStatement(...args: Array<any>): Object {
-  return builder("IfStatement", ...args);
-}
-export { ifStatement as IfStatement };
-export function labeledStatement(...args: Array<any>): Object {
-  return builder("LabeledStatement", ...args);
-}
-export { labeledStatement as LabeledStatement };
-export function stringLiteral(...args: Array<any>): Object {
-  return builder("StringLiteral", ...args);
-}
-export { stringLiteral as StringLiteral };
-export function numericLiteral(...args: Array<any>): Object {
-  return builder("NumericLiteral", ...args);
-}
-export { numericLiteral as NumericLiteral };
-export function nullLiteral(...args: Array<any>): Object {
-  return builder("NullLiteral", ...args);
-}
-export { nullLiteral as NullLiteral };
-export function booleanLiteral(...args: Array<any>): Object {
-  return builder("BooleanLiteral", ...args);
-}
-export { booleanLiteral as BooleanLiteral };
-export function regExpLiteral(...args: Array<any>): Object {
-  return builder("RegExpLiteral", ...args);
-}
-export { regExpLiteral as RegExpLiteral };
-export function logicalExpression(...args: Array<any>): Object {
-  return builder("LogicalExpression", ...args);
-}
-export { logicalExpression as LogicalExpression };
-export function memberExpression(...args: Array<any>): Object {
-  return builder("MemberExpression", ...args);
-}
-export { memberExpression as MemberExpression };
-export function newExpression(...args: Array<any>): Object {
-  return builder("NewExpression", ...args);
-}
-export { newExpression as NewExpression };
-export function program(...args: Array<any>): Object {
-  return builder("Program", ...args);
-}
-export { program as Program };
-export function objectExpression(...args: Array<any>): Object {
-  return builder("ObjectExpression", ...args);
-}
-export { objectExpression as ObjectExpression };
-export function objectMethod(...args: Array<any>): Object {
-  return builder("ObjectMethod", ...args);
-}
-export { objectMethod as ObjectMethod };
-export function objectProperty(...args: Array<any>): Object {
-  return builder("ObjectProperty", ...args);
-}
-export { objectProperty as ObjectProperty };
-export function restElement(...args: Array<any>): Object {
-  return builder("RestElement", ...args);
-}
-export { restElement as RestElement };
-export function returnStatement(...args: Array<any>): Object {
-  return builder("ReturnStatement", ...args);
-}
-export { returnStatement as ReturnStatement };
-export function sequenceExpression(...args: Array<any>): Object {
-  return builder("SequenceExpression", ...args);
-}
-export { sequenceExpression as SequenceExpression };
-export function parenthesizedExpression(...args: Array<any>): Object {
-  return builder("ParenthesizedExpression", ...args);
-}
-export { parenthesizedExpression as ParenthesizedExpression };
-export function switchCase(...args: Array<any>): Object {
-  return builder("SwitchCase", ...args);
-}
-export { switchCase as SwitchCase };
-export function switchStatement(...args: Array<any>): Object {
-  return builder("SwitchStatement", ...args);
-}
-export { switchStatement as SwitchStatement };
-export function thisExpression(...args: Array<any>): Object {
-  return builder("ThisExpression", ...args);
-}
-export { thisExpression as ThisExpression };
-export function throwStatement(...args: Array<any>): Object {
-  return builder("ThrowStatement", ...args);
-}
-export { throwStatement as ThrowStatement };
-export function tryStatement(...args: Array<any>): Object {
-  return builder("TryStatement", ...args);
-}
-export { tryStatement as TryStatement };
-export function unaryExpression(...args: Array<any>): Object {
-  return builder("UnaryExpression", ...args);
-}
-export { unaryExpression as UnaryExpression };
-export function updateExpression(...args: Array<any>): Object {
-  return builder("UpdateExpression", ...args);
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+export function arrayExpression(
+  elements?: Array<null | t.Expression | t.SpreadElement>,
+): t.ArrayExpression {
+  return builder("ArrayExpression", ...arguments);
+}
+export function assignmentExpression(
+  operator: string,
+  left: t.LVal,
+  right: t.Expression,
+): t.AssignmentExpression {
+  return builder("AssignmentExpression", ...arguments);
+}
+export function binaryExpression(
+  operator:
+    | "+"
+    | "-"
+    | "/"
+    | "%"
+    | "*"
+    | "**"
+    | "&"
+    | "|"
+    | ">>"
+    | ">>>"
+    | "<<"
+    | "^"
+    | "=="
+    | "==="
+    | "!="
+    | "!=="
+    | "in"
+    | "instanceof"
+    | ">"
+    | "<"
+    | ">="
+    | "<=",
+  left: t.Expression | t.PrivateName,
+  right: t.Expression,
+): t.BinaryExpression {
+  return builder("BinaryExpression", ...arguments);
+}
+export function interpreterDirective(value: string): t.InterpreterDirective {
+  return builder("InterpreterDirective", ...arguments);
+}
+export function directive(value: t.DirectiveLiteral): t.Directive {
+  return builder("Directive", ...arguments);
+}
+export function directiveLiteral(value: string): t.DirectiveLiteral {
+  return builder("DirectiveLiteral", ...arguments);
+}
+export function blockStatement(
+  body: Array<t.Statement>,
+  directives?: Array<t.Directive>,
+): t.BlockStatement {
+  return builder("BlockStatement", ...arguments);
+}
+export function breakStatement(label?: t.Identifier | null): t.BreakStatement {
+  return builder("BreakStatement", ...arguments);
+}
+export function callExpression(
+  callee: t.Expression | t.V8IntrinsicIdentifier,
+  _arguments: Array<
+    t.Expression | t.SpreadElement | t.JSXNamespacedName | t.ArgumentPlaceholder
+  >,
+): t.CallExpression {
+  return builder("CallExpression", ...arguments);
+}
+export function catchClause(
+  param: t.Identifier | t.ArrayPattern | t.ObjectPattern | null | undefined,
+  body: t.BlockStatement,
+): t.CatchClause {
+  return builder("CatchClause", ...arguments);
+}
+export function conditionalExpression(
+  test: t.Expression,
+  consequent: t.Expression,
+  alternate: t.Expression,
+): t.ConditionalExpression {
+  return builder("ConditionalExpression", ...arguments);
+}
+export function continueStatement(
+  label?: t.Identifier | null,
+): t.ContinueStatement {
+  return builder("ContinueStatement", ...arguments);
+}
+export function debuggerStatement(): t.DebuggerStatement {
+  return builder("DebuggerStatement", ...arguments);
+}
+export function doWhileStatement(
+  test: t.Expression,
+  body: t.Statement,
+): t.DoWhileStatement {
+  return builder("DoWhileStatement", ...arguments);
+}
+export function emptyStatement(): t.EmptyStatement {
+  return builder("EmptyStatement", ...arguments);
+}
+export function expressionStatement(
+  expression: t.Expression,
+): t.ExpressionStatement {
+  return builder("ExpressionStatement", ...arguments);
+}
+export function file(
+  program: t.Program,
+  comments?: Array<t.CommentBlock | t.CommentLine> | null,
+  tokens?: Array<any> | null,
+): t.File {
+  return builder("File", ...arguments);
+}
+export function forInStatement(
+  left: t.VariableDeclaration | t.LVal,
+  right: t.Expression,
+  body: t.Statement,
+): t.ForInStatement {
+  return builder("ForInStatement", ...arguments);
+}
+export function forStatement(
+  init: t.VariableDeclaration | t.Expression | null | undefined,
+  test: t.Expression | null | undefined,
+  update: t.Expression | null | undefined,
+  body: t.Statement,
+): t.ForStatement {
+  return builder("ForStatement", ...arguments);
+}
+export function functionDeclaration(
+  id: t.Identifier | null | undefined,
+  params: Array<
+    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
+  >,
+  body: t.BlockStatement,
+  generator?: boolean,
+  async?: boolean,
+): t.FunctionDeclaration {
+  return builder("FunctionDeclaration", ...arguments);
+}
+export function functionExpression(
+  id: t.Identifier | null | undefined,
+  params: Array<
+    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
+  >,
+  body: t.BlockStatement,
+  generator?: boolean,
+  async?: boolean,
+): t.FunctionExpression {
+  return builder("FunctionExpression", ...arguments);
+}
+export function identifier(name: string): t.Identifier {
+  return builder("Identifier", ...arguments);
+}
+export function ifStatement(
+  test: t.Expression,
+  consequent: t.Statement,
+  alternate?: t.Statement | null,
+): t.IfStatement {
+  return builder("IfStatement", ...arguments);
+}
+export function labeledStatement(
+  label: t.Identifier,
+  body: t.Statement,
+): t.LabeledStatement {
+  return builder("LabeledStatement", ...arguments);
+}
+export function stringLiteral(value: string): t.StringLiteral {
+  return builder("StringLiteral", ...arguments);
+}
+export function numericLiteral(value: number): t.NumericLiteral {
+  return builder("NumericLiteral", ...arguments);
+}
+export function nullLiteral(): t.NullLiteral {
+  return builder("NullLiteral", ...arguments);
+}
+export function booleanLiteral(value: boolean): t.BooleanLiteral {
+  return builder("BooleanLiteral", ...arguments);
+}
+export function regExpLiteral(
+  pattern: string,
+  flags?: string,
+): t.RegExpLiteral {
+  return builder("RegExpLiteral", ...arguments);
+}
+export function logicalExpression(
+  operator: "||" | "&&" | "??",
+  left: t.Expression,
+  right: t.Expression,
+): t.LogicalExpression {
+  return builder("LogicalExpression", ...arguments);
+}
+export function memberExpression(
+  object: t.Expression,
+  property: t.Expression | t.Identifier | t.PrivateName,
+  computed?: boolean,
+  optional?: true | false | null,
+): t.MemberExpression {
+  return builder("MemberExpression", ...arguments);
+}
+export function newExpression(
+  callee: t.Expression | t.V8IntrinsicIdentifier,
+  _arguments: Array<
+    t.Expression | t.SpreadElement | t.JSXNamespacedName | t.ArgumentPlaceholder
+  >,
+): t.NewExpression {
+  return builder("NewExpression", ...arguments);
+}
+export function program(
+  body: Array<t.Statement>,
+  directives?: Array<t.Directive>,
+  sourceType?: "script" | "module",
+  interpreter?: t.InterpreterDirective | null,
+): t.Program {
+  return builder("Program", ...arguments);
+}
+export function objectExpression(
+  properties: Array<t.ObjectMethod | t.ObjectProperty | t.SpreadElement>,
+): t.ObjectExpression {
+  return builder("ObjectExpression", ...arguments);
+}
+export function objectMethod(
+  kind: "method" | "get" | "set" | undefined,
+  key: t.Expression | t.Identifier | t.StringLiteral | t.NumericLiteral,
+  params: Array<
+    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
+  >,
+  body: t.BlockStatement,
+  computed?: boolean,
+  generator?: boolean,
+  async?: boolean,
+): t.ObjectMethod {
+  return builder("ObjectMethod", ...arguments);
+}
+export function objectProperty(
+  key: t.Expression | t.Identifier | t.StringLiteral | t.NumericLiteral,
+  value: t.Expression | t.PatternLike,
+  computed?: boolean,
+  shorthand?: boolean,
+  decorators?: Array<t.Decorator> | null,
+): t.ObjectProperty {
+  return builder("ObjectProperty", ...arguments);
+}
+export function restElement(argument: t.LVal): t.RestElement {
+  return builder("RestElement", ...arguments);
+}
+export function returnStatement(
+  argument?: t.Expression | null,
+): t.ReturnStatement {
+  return builder("ReturnStatement", ...arguments);
+}
+export function sequenceExpression(
+  expressions: Array<t.Expression>,
+): t.SequenceExpression {
+  return builder("SequenceExpression", ...arguments);
+}
+export function parenthesizedExpression(
+  expression: t.Expression,
+): t.ParenthesizedExpression {
+  return builder("ParenthesizedExpression", ...arguments);
+}
+export function switchCase(
+  test: t.Expression | null | undefined,
+  consequent: Array<t.Statement>,
+): t.SwitchCase {
+  return builder("SwitchCase", ...arguments);
+}
+export function switchStatement(
+  discriminant: t.Expression,
+  cases: Array<t.SwitchCase>,
+): t.SwitchStatement {
+  return builder("SwitchStatement", ...arguments);
+}
+export function thisExpression(): t.ThisExpression {
+  return builder("ThisExpression", ...arguments);
+}
+export function throwStatement(argument: t.Expression): t.ThrowStatement {
+  return builder("ThrowStatement", ...arguments);
+}
+export function tryStatement(
+  block: t.BlockStatement,
+  handler?: t.CatchClause | null,
+  finalizer?: t.BlockStatement | null,
+): t.TryStatement {
+  return builder("TryStatement", ...arguments);
+}
+export function unaryExpression(
+  operator: "void" | "throw" | "delete" | "!" | "+" | "-" | "~" | "typeof",
+  argument: t.Expression,
+  prefix?: boolean,
+): t.UnaryExpression {
+  return builder("UnaryExpression", ...arguments);
+}
+export function updateExpression(
+  operator: "++" | "--",
+  argument: t.Expression,
+  prefix?: boolean,
+): t.UpdateExpression {
+  return builder("UpdateExpression", ...arguments);
+}
+export function variableDeclaration(
+  kind: "var" | "let" | "const",
+  declarations: Array<t.VariableDeclarator>,
+): t.VariableDeclaration {
+  return builder("VariableDeclaration", ...arguments);
+}
+export function variableDeclarator(
+  id: t.LVal,
+  init?: t.Expression | null,
+): t.VariableDeclarator {
+  return builder("VariableDeclarator", ...arguments);
+}
+export function whileStatement(
+  test: t.Expression,
+  body: t.Statement,
+): t.WhileStatement {
+  return builder("WhileStatement", ...arguments);
+}
+export function withStatement(
+  object: t.Expression,
+  body: t.Statement,
+): t.WithStatement {
+  return builder("WithStatement", ...arguments);
+}
+export function assignmentPattern(
+  left: t.Identifier | t.ObjectPattern | t.ArrayPattern | t.MemberExpression,
+  right: t.Expression,
+): t.AssignmentPattern {
+  return builder("AssignmentPattern", ...arguments);
+}
+export function arrayPattern(
+  elements: Array<null | t.PatternLike>,
+): t.ArrayPattern {
+  return builder("ArrayPattern", ...arguments);
+}
+export function arrowFunctionExpression(
+  params: Array<
+    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
+  >,
+  body: t.BlockStatement | t.Expression,
+  async?: boolean,
+): t.ArrowFunctionExpression {
+  return builder("ArrowFunctionExpression", ...arguments);
+}
+export function classBody(
+  body: Array<
+    | t.ClassMethod
+    | t.ClassPrivateMethod
+    | t.ClassProperty
+    | t.ClassPrivateProperty
+    | t.TSDeclareMethod
+    | t.TSIndexSignature
+  >,
+): t.ClassBody {
+  return builder("ClassBody", ...arguments);
+}
+export function classExpression(
+  id: t.Identifier | null | undefined,
+  superClass: t.Expression | null | undefined,
+  body: t.ClassBody,
+  decorators?: Array<t.Decorator> | null,
+): t.ClassExpression {
+  return builder("ClassExpression", ...arguments);
+}
+export function classDeclaration(
+  id: t.Identifier,
+  superClass: t.Expression | null | undefined,
+  body: t.ClassBody,
+  decorators?: Array<t.Decorator> | null,
+): t.ClassDeclaration {
+  return builder("ClassDeclaration", ...arguments);
+}
+export function exportAllDeclaration(
+  source: t.StringLiteral,
+): t.ExportAllDeclaration {
+  return builder("ExportAllDeclaration", ...arguments);
+}
+export function exportDefaultDeclaration(
+  declaration:
+    | t.FunctionDeclaration
+    | t.TSDeclareFunction
+    | t.ClassDeclaration
+    | t.Expression,
+): t.ExportDefaultDeclaration {
+  return builder("ExportDefaultDeclaration", ...arguments);
+}
+export function exportNamedDeclaration(
+  declaration?: t.Declaration | null,
+  specifiers?: Array<
+    t.ExportSpecifier | t.ExportDefaultSpecifier | t.ExportNamespaceSpecifier
+  >,
+  source?: t.StringLiteral | null,
+): t.ExportNamedDeclaration {
+  return builder("ExportNamedDeclaration", ...arguments);
+}
+export function exportSpecifier(
+  local: t.Identifier,
+  exported: t.Identifier | t.StringLiteral,
+): t.ExportSpecifier {
+  return builder("ExportSpecifier", ...arguments);
+}
+export function forOfStatement(
+  left: t.VariableDeclaration | t.LVal,
+  right: t.Expression,
+  body: t.Statement,
+  _await?: boolean,
+): t.ForOfStatement {
+  return builder("ForOfStatement", ...arguments);
+}
+export function importDeclaration(
+  specifiers: Array<
+    t.ImportSpecifier | t.ImportDefaultSpecifier | t.ImportNamespaceSpecifier
+  >,
+  source: t.StringLiteral,
+): t.ImportDeclaration {
+  return builder("ImportDeclaration", ...arguments);
+}
+export function importDefaultSpecifier(
+  local: t.Identifier,
+): t.ImportDefaultSpecifier {
+  return builder("ImportDefaultSpecifier", ...arguments);
+}
+export function importNamespaceSpecifier(
+  local: t.Identifier,
+): t.ImportNamespaceSpecifier {
+  return builder("ImportNamespaceSpecifier", ...arguments);
+}
+export function importSpecifier(
+  local: t.Identifier,
+  imported: t.Identifier | t.StringLiteral,
+): t.ImportSpecifier {
+  return builder("ImportSpecifier", ...arguments);
+}
+export function metaProperty(
+  meta: t.Identifier,
+  property: t.Identifier,
+): t.MetaProperty {
+  return builder("MetaProperty", ...arguments);
+}
+export function classMethod(
+  kind: "get" | "set" | "method" | "constructor" | undefined,
+  key: t.Identifier | t.StringLiteral | t.NumericLiteral | t.Expression,
+  params: Array<
+    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
+  >,
+  body: t.BlockStatement,
+  computed?: boolean,
+  _static?: boolean,
+  generator?: boolean,
+  async?: boolean,
+): t.ClassMethod {
+  return builder("ClassMethod", ...arguments);
+}
+export function objectPattern(
+  properties: Array<t.RestElement | t.ObjectProperty>,
+): t.ObjectPattern {
+  return builder("ObjectPattern", ...arguments);
+}
+export function spreadElement(argument: t.Expression): t.SpreadElement {
+  return builder("SpreadElement", ...arguments);
+}
+function _super(): t.Super {
+  return builder("Super", ...arguments);
 }
-export { updateExpression as UpdateExpression };
-export function variableDeclaration(...args: Array<any>): Object {
-  return builder("VariableDeclaration", ...args);
-}
-export { variableDeclaration as VariableDeclaration };
-export function variableDeclarator(...args: Array<any>): Object {
-  return builder("VariableDeclarator", ...args);
-}
-export { variableDeclarator as VariableDeclarator };
-export function whileStatement(...args: Array<any>): Object {
-  return builder("WhileStatement", ...args);
-}
-export { whileStatement as WhileStatement };
-export function withStatement(...args: Array<any>): Object {
-  return builder("WithStatement", ...args);
-}
-export { withStatement as WithStatement };
-export function assignmentPattern(...args: Array<any>): Object {
-  return builder("AssignmentPattern", ...args);
-}
-export { assignmentPattern as AssignmentPattern };
-export function arrayPattern(...args: Array<any>): Object {
-  return builder("ArrayPattern", ...args);
-}
-export { arrayPattern as ArrayPattern };
-export function arrowFunctionExpression(...args: Array<any>): Object {
-  return builder("ArrowFunctionExpression", ...args);
-}
-export { arrowFunctionExpression as ArrowFunctionExpression };
-export function classBody(...args: Array<any>): Object {
-  return builder("ClassBody", ...args);
-}
-export { classBody as ClassBody };
-export function classExpression(...args: Array<any>): Object {
-  return builder("ClassExpression", ...args);
-}
-export { classExpression as ClassExpression };
-export function classDeclaration(...args: Array<any>): Object {
-  return builder("ClassDeclaration", ...args);
-}
-export { classDeclaration as ClassDeclaration };
-export function exportAllDeclaration(...args: Array<any>): Object {
-  return builder("ExportAllDeclaration", ...args);
-}
-export { exportAllDeclaration as ExportAllDeclaration };
-export function exportDefaultDeclaration(...args: Array<any>): Object {
-  return builder("ExportDefaultDeclaration", ...args);
-}
-export { exportDefaultDeclaration as ExportDefaultDeclaration };
-export function exportNamedDeclaration(...args: Array<any>): Object {
-  return builder("ExportNamedDeclaration", ...args);
-}
-export { exportNamedDeclaration as ExportNamedDeclaration };
-export function exportSpecifier(...args: Array<any>): Object {
-  return builder("ExportSpecifier", ...args);
-}
-export { exportSpecifier as ExportSpecifier };
-export function forOfStatement(...args: Array<any>): Object {
-  return builder("ForOfStatement", ...args);
-}
-export { forOfStatement as ForOfStatement };
-export function importDeclaration(...args: Array<any>): Object {
-  return builder("ImportDeclaration", ...args);
-}
-export { importDeclaration as ImportDeclaration };
-export function importDefaultSpecifier(...args: Array<any>): Object {
-  return builder("ImportDefaultSpecifier", ...args);
-}
-export { importDefaultSpecifier as ImportDefaultSpecifier };
-export function importNamespaceSpecifier(...args: Array<any>): Object {
-  return builder("ImportNamespaceSpecifier", ...args);
-}
-export { importNamespaceSpecifier as ImportNamespaceSpecifier };
-export function importSpecifier(...args: Array<any>): Object {
-  return builder("ImportSpecifier", ...args);
-}
-export { importSpecifier as ImportSpecifier };
-export function metaProperty(...args: Array<any>): Object {
-  return builder("MetaProperty", ...args);
-}
-export { metaProperty as MetaProperty };
-export function classMethod(...args: Array<any>): Object {
-  return builder("ClassMethod", ...args);
-}
-export { classMethod as ClassMethod };
-export function objectPattern(...args: Array<any>): Object {
-  return builder("ObjectPattern", ...args);
-}
-export { objectPattern as ObjectPattern };
-export function spreadElement(...args: Array<any>): Object {
-  return builder("SpreadElement", ...args);
-}
-export { spreadElement as SpreadElement };
-function _super(...args: Array<any>): Object {
-  return builder("Super", ...args);
-}
-export { _super as Super };
 export { _super as super };
-export function taggedTemplateExpression(...args: Array<any>): Object {
-  return builder("TaggedTemplateExpression", ...args);
+export function taggedTemplateExpression(
+  tag: t.Expression,
+  quasi: t.TemplateLiteral,
+): t.TaggedTemplateExpression {
+  return builder("TaggedTemplateExpression", ...arguments);
 }
-export { taggedTemplateExpression as TaggedTemplateExpression };
-export function templateElement(...args: Array<any>): Object {
-  return builder("TemplateElement", ...args);
+export function templateElement(
+  value: { raw: string; cooked?: string },
+  tail?: boolean,
+): t.TemplateElement {
+  return builder("TemplateElement", ...arguments);
 }
-export { templateElement as TemplateElement };
-export function templateLiteral(...args: Array<any>): Object {
-  return builder("TemplateLiteral", ...args);
+export function templateLiteral(
+  quasis: Array<t.TemplateElement>,
+  expressions: Array<t.Expression | t.TSType>,
+): t.TemplateLiteral {
+  return builder("TemplateLiteral", ...arguments);
 }
-export { templateLiteral as TemplateLiteral };
-export function yieldExpression(...args: Array<any>): Object {
-  return builder("YieldExpression", ...args);
+export function yieldExpression(
+  argument?: t.Expression | null,
+  delegate?: boolean,
+): t.YieldExpression {
+  return builder("YieldExpression", ...arguments);
 }
-export { yieldExpression as YieldExpression };
-export function awaitExpression(...args: Array<any>): Object {
-  return builder("AwaitExpression", ...args);
+export function awaitExpression(argument: t.Expression): t.AwaitExpression {
+  return builder("AwaitExpression", ...arguments);
 }
-export { awaitExpression as AwaitExpression };
-function _import(...args: Array<any>): Object {
-  return builder("Import", ...args);
+function _import(): t.Import {
+  return builder("Import", ...arguments);
 }
-export { _import as Import };
 export { _import as import };
-export function bigIntLiteral(...args: Array<any>): Object {
-  return builder("BigIntLiteral", ...args);
-}
-export { bigIntLiteral as BigIntLiteral };
-export function exportNamespaceSpecifier(...args: Array<any>): Object {
-  return builder("ExportNamespaceSpecifier", ...args);
-}
-export { exportNamespaceSpecifier as ExportNamespaceSpecifier };
-export function optionalMemberExpression(...args: Array<any>): Object {
-  return builder("OptionalMemberExpression", ...args);
-}
-export { optionalMemberExpression as OptionalMemberExpression };
-export function optionalCallExpression(...args: Array<any>): Object {
-  return builder("OptionalCallExpression", ...args);
-}
-export { optionalCallExpression as OptionalCallExpression };
-export function anyTypeAnnotation(...args: Array<any>): Object {
-  return builder("AnyTypeAnnotation", ...args);
-}
-export { anyTypeAnnotation as AnyTypeAnnotation };
-export function arrayTypeAnnotation(...args: Array<any>): Object {
-  return builder("ArrayTypeAnnotation", ...args);
-}
-export { arrayTypeAnnotation as ArrayTypeAnnotation };
-export function booleanTypeAnnotation(...args: Array<any>): Object {
-  return builder("BooleanTypeAnnotation", ...args);
-}
-export { booleanTypeAnnotation as BooleanTypeAnnotation };
-export function booleanLiteralTypeAnnotation(...args: Array<any>): Object {
-  return builder("BooleanLiteralTypeAnnotation", ...args);
-}
-export { booleanLiteralTypeAnnotation as BooleanLiteralTypeAnnotation };
-export function nullLiteralTypeAnnotation(...args: Array<any>): Object {
-  return builder("NullLiteralTypeAnnotation", ...args);
-}
-export { nullLiteralTypeAnnotation as NullLiteralTypeAnnotation };
-export function classImplements(...args: Array<any>): Object {
-  return builder("ClassImplements", ...args);
-}
-export { classImplements as ClassImplements };
-export function declareClass(...args: Array<any>): Object {
-  return builder("DeclareClass", ...args);
-}
-export { declareClass as DeclareClass };
-export function declareFunction(...args: Array<any>): Object {
-  return builder("DeclareFunction", ...args);
-}
-export { declareFunction as DeclareFunction };
-export function declareInterface(...args: Array<any>): Object {
-  return builder("DeclareInterface", ...args);
-}
-export { declareInterface as DeclareInterface };
-export function declareModule(...args: Array<any>): Object {
-  return builder("DeclareModule", ...args);
-}
-export { declareModule as DeclareModule };
-export function declareModuleExports(...args: Array<any>): Object {
-  return builder("DeclareModuleExports", ...args);
-}
-export { declareModuleExports as DeclareModuleExports };
-export function declareTypeAlias(...args: Array<any>): Object {
-  return builder("DeclareTypeAlias", ...args);
-}
-export { declareTypeAlias as DeclareTypeAlias };
-export function declareOpaqueType(...args: Array<any>): Object {
-  return builder("DeclareOpaqueType", ...args);
-}
-export { declareOpaqueType as DeclareOpaqueType };
-export function declareVariable(...args: Array<any>): Object {
-  return builder("DeclareVariable", ...args);
-}
-export { declareVariable as DeclareVariable };
-export function declareExportDeclaration(...args: Array<any>): Object {
-  return builder("DeclareExportDeclaration", ...args);
-}
-export { declareExportDeclaration as DeclareExportDeclaration };
-export function declareExportAllDeclaration(...args: Array<any>): Object {
-  return builder("DeclareExportAllDeclaration", ...args);
-}
-export { declareExportAllDeclaration as DeclareExportAllDeclaration };
-export function declaredPredicate(...args: Array<any>): Object {
-  return builder("DeclaredPredicate", ...args);
-}
-export { declaredPredicate as DeclaredPredicate };
-export function existsTypeAnnotation(...args: Array<any>): Object {
-  return builder("ExistsTypeAnnotation", ...args);
-}
-export { existsTypeAnnotation as ExistsTypeAnnotation };
-export function functionTypeAnnotation(...args: Array<any>): Object {
-  return builder("FunctionTypeAnnotation", ...args);
-}
-export { functionTypeAnnotation as FunctionTypeAnnotation };
-export function functionTypeParam(...args: Array<any>): Object {
-  return builder("FunctionTypeParam", ...args);
-}
-export { functionTypeParam as FunctionTypeParam };
-export function genericTypeAnnotation(...args: Array<any>): Object {
-  return builder("GenericTypeAnnotation", ...args);
-}
-export { genericTypeAnnotation as GenericTypeAnnotation };
-export function inferredPredicate(...args: Array<any>): Object {
-  return builder("InferredPredicate", ...args);
-}
-export { inferredPredicate as InferredPredicate };
-export function interfaceExtends(...args: Array<any>): Object {
-  return builder("InterfaceExtends", ...args);
-}
-export { interfaceExtends as InterfaceExtends };
-export function interfaceDeclaration(...args: Array<any>): Object {
-  return builder("InterfaceDeclaration", ...args);
-}
-export { interfaceDeclaration as InterfaceDeclaration };
-export function interfaceTypeAnnotation(...args: Array<any>): Object {
-  return builder("InterfaceTypeAnnotation", ...args);
-}
-export { interfaceTypeAnnotation as InterfaceTypeAnnotation };
-export function intersectionTypeAnnotation(...args: Array<any>): Object {
-  return builder("IntersectionTypeAnnotation", ...args);
-}
-export { intersectionTypeAnnotation as IntersectionTypeAnnotation };
-export function mixedTypeAnnotation(...args: Array<any>): Object {
-  return builder("MixedTypeAnnotation", ...args);
-}
-export { mixedTypeAnnotation as MixedTypeAnnotation };
-export function emptyTypeAnnotation(...args: Array<any>): Object {
-  return builder("EmptyTypeAnnotation", ...args);
-}
-export { emptyTypeAnnotation as EmptyTypeAnnotation };
-export function nullableTypeAnnotation(...args: Array<any>): Object {
-  return builder("NullableTypeAnnotation", ...args);
-}
-export { nullableTypeAnnotation as NullableTypeAnnotation };
-export function numberLiteralTypeAnnotation(...args: Array<any>): Object {
-  return builder("NumberLiteralTypeAnnotation", ...args);
-}
-export { numberLiteralTypeAnnotation as NumberLiteralTypeAnnotation };
-export function numberTypeAnnotation(...args: Array<any>): Object {
-  return builder("NumberTypeAnnotation", ...args);
-}
-export { numberTypeAnnotation as NumberTypeAnnotation };
-export function objectTypeAnnotation(...args: Array<any>): Object {
-  return builder("ObjectTypeAnnotation", ...args);
-}
-export { objectTypeAnnotation as ObjectTypeAnnotation };
-export function objectTypeInternalSlot(...args: Array<any>): Object {
-  return builder("ObjectTypeInternalSlot", ...args);
-}
-export { objectTypeInternalSlot as ObjectTypeInternalSlot };
-export function objectTypeCallProperty(...args: Array<any>): Object {
-  return builder("ObjectTypeCallProperty", ...args);
-}
-export { objectTypeCallProperty as ObjectTypeCallProperty };
-export function objectTypeIndexer(...args: Array<any>): Object {
-  return builder("ObjectTypeIndexer", ...args);
-}
-export { objectTypeIndexer as ObjectTypeIndexer };
-export function objectTypeProperty(...args: Array<any>): Object {
-  return builder("ObjectTypeProperty", ...args);
-}
-export { objectTypeProperty as ObjectTypeProperty };
-export function objectTypeSpreadProperty(...args: Array<any>): Object {
-  return builder("ObjectTypeSpreadProperty", ...args);
-}
-export { objectTypeSpreadProperty as ObjectTypeSpreadProperty };
-export function opaqueType(...args: Array<any>): Object {
-  return builder("OpaqueType", ...args);
-}
-export { opaqueType as OpaqueType };
-export function qualifiedTypeIdentifier(...args: Array<any>): Object {
-  return builder("QualifiedTypeIdentifier", ...args);
-}
-export { qualifiedTypeIdentifier as QualifiedTypeIdentifier };
-export function stringLiteralTypeAnnotation(...args: Array<any>): Object {
-  return builder("StringLiteralTypeAnnotation", ...args);
+export function bigIntLiteral(value: string): t.BigIntLiteral {
+  return builder("BigIntLiteral", ...arguments);
+}
+export function exportNamespaceSpecifier(
+  exported: t.Identifier,
+): t.ExportNamespaceSpecifier {
+  return builder("ExportNamespaceSpecifier", ...arguments);
+}
+export function optionalMemberExpression(
+  object: t.Expression,
+  property: t.Expression | t.Identifier,
+  computed: boolean | undefined,
+  optional: boolean,
+): t.OptionalMemberExpression {
+  return builder("OptionalMemberExpression", ...arguments);
+}
+export function optionalCallExpression(
+  callee: t.Expression,
+  _arguments: Array<
+    t.Expression | t.SpreadElement | t.JSXNamespacedName | t.ArgumentPlaceholder
+  >,
+  optional: boolean,
+): t.OptionalCallExpression {
+  return builder("OptionalCallExpression", ...arguments);
+}
+export function anyTypeAnnotation(): t.AnyTypeAnnotation {
+  return builder("AnyTypeAnnotation", ...arguments);
+}
+export function arrayTypeAnnotation(
+  elementType: t.FlowType,
+): t.ArrayTypeAnnotation {
+  return builder("ArrayTypeAnnotation", ...arguments);
+}
+export function booleanTypeAnnotation(): t.BooleanTypeAnnotation {
+  return builder("BooleanTypeAnnotation", ...arguments);
+}
+export function booleanLiteralTypeAnnotation(
+  value: boolean,
+): t.BooleanLiteralTypeAnnotation {
+  return builder("BooleanLiteralTypeAnnotation", ...arguments);
+}
+export function nullLiteralTypeAnnotation(): t.NullLiteralTypeAnnotation {
+  return builder("NullLiteralTypeAnnotation", ...arguments);
+}
+export function classImplements(
+  id: t.Identifier,
+  typeParameters?: t.TypeParameterInstantiation | null,
+): t.ClassImplements {
+  return builder("ClassImplements", ...arguments);
+}
+export function declareClass(
+  id: t.Identifier,
+  typeParameters: t.TypeParameterDeclaration | null | undefined,
+  _extends: Array<t.InterfaceExtends> | null | undefined,
+  body: t.ObjectTypeAnnotation,
+): t.DeclareClass {
+  return builder("DeclareClass", ...arguments);
+}
+export function declareFunction(id: t.Identifier): t.DeclareFunction {
+  return builder("DeclareFunction", ...arguments);
+}
+export function declareInterface(
+  id: t.Identifier,
+  typeParameters: t.TypeParameterDeclaration | null | undefined,
+  _extends: Array<t.InterfaceExtends> | null | undefined,
+  body: t.ObjectTypeAnnotation,
+): t.DeclareInterface {
+  return builder("DeclareInterface", ...arguments);
+}
+export function declareModule(
+  id: t.Identifier | t.StringLiteral,
+  body: t.BlockStatement,
+  kind?: "CommonJS" | "ES" | null,
+): t.DeclareModule {
+  return builder("DeclareModule", ...arguments);
+}
+export function declareModuleExports(
+  typeAnnotation: t.TypeAnnotation,
+): t.DeclareModuleExports {
+  return builder("DeclareModuleExports", ...arguments);
+}
+export function declareTypeAlias(
+  id: t.Identifier,
+  typeParameters: t.TypeParameterDeclaration | null | undefined,
+  right: t.FlowType,
+): t.DeclareTypeAlias {
+  return builder("DeclareTypeAlias", ...arguments);
+}
+export function declareOpaqueType(
+  id: t.Identifier,
+  typeParameters?: t.TypeParameterDeclaration | null,
+  supertype?: t.FlowType | null,
+): t.DeclareOpaqueType {
+  return builder("DeclareOpaqueType", ...arguments);
+}
+export function declareVariable(id: t.Identifier): t.DeclareVariable {
+  return builder("DeclareVariable", ...arguments);
+}
+export function declareExportDeclaration(
+  declaration?: t.Flow | null,
+  specifiers?: Array<t.ExportSpecifier | t.ExportNamespaceSpecifier> | null,
+  source?: t.StringLiteral | null,
+): t.DeclareExportDeclaration {
+  return builder("DeclareExportDeclaration", ...arguments);
+}
+export function declareExportAllDeclaration(
+  source: t.StringLiteral,
+): t.DeclareExportAllDeclaration {
+  return builder("DeclareExportAllDeclaration", ...arguments);
+}
+export function declaredPredicate(value: t.Flow): t.DeclaredPredicate {
+  return builder("DeclaredPredicate", ...arguments);
+}
+export function existsTypeAnnotation(): t.ExistsTypeAnnotation {
+  return builder("ExistsTypeAnnotation", ...arguments);
+}
+export function functionTypeAnnotation(
+  typeParameters: t.TypeParameterDeclaration | null | undefined,
+  params: Array<t.FunctionTypeParam>,
+  rest: t.FunctionTypeParam | null | undefined,
+  returnType: t.FlowType,
+): t.FunctionTypeAnnotation {
+  return builder("FunctionTypeAnnotation", ...arguments);
+}
+export function functionTypeParam(
+  name: t.Identifier | null | undefined,
+  typeAnnotation: t.FlowType,
+): t.FunctionTypeParam {
+  return builder("FunctionTypeParam", ...arguments);
+}
+export function genericTypeAnnotation(
+  id: t.Identifier | t.QualifiedTypeIdentifier,
+  typeParameters?: t.TypeParameterInstantiation | null,
+): t.GenericTypeAnnotation {
+  return builder("GenericTypeAnnotation", ...arguments);
+}
+export function inferredPredicate(): t.InferredPredicate {
+  return builder("InferredPredicate", ...arguments);
+}
+export function interfaceExtends(
+  id: t.Identifier | t.QualifiedTypeIdentifier,
+  typeParameters?: t.TypeParameterInstantiation | null,
+): t.InterfaceExtends {
+  return builder("InterfaceExtends", ...arguments);
+}
+export function interfaceDeclaration(
+  id: t.Identifier,
+  typeParameters: t.TypeParameterDeclaration | null | undefined,
+  _extends: Array<t.InterfaceExtends> | null | undefined,
+  body: t.ObjectTypeAnnotation,
+): t.InterfaceDeclaration {
+  return builder("InterfaceDeclaration", ...arguments);
+}
+export function interfaceTypeAnnotation(
+  _extends: Array<t.InterfaceExtends> | null | undefined,
+  body: t.ObjectTypeAnnotation,
+): t.InterfaceTypeAnnotation {
+  return builder("InterfaceTypeAnnotation", ...arguments);
+}
+export function intersectionTypeAnnotation(
+  types: Array<t.FlowType>,
+): t.IntersectionTypeAnnotation {
+  return builder("IntersectionTypeAnnotation", ...arguments);
+}
+export function mixedTypeAnnotation(): t.MixedTypeAnnotation {
+  return builder("MixedTypeAnnotation", ...arguments);
+}
+export function emptyTypeAnnotation(): t.EmptyTypeAnnotation {
+  return builder("EmptyTypeAnnotation", ...arguments);
+}
+export function nullableTypeAnnotation(
+  typeAnnotation: t.FlowType,
+): t.NullableTypeAnnotation {
+  return builder("NullableTypeAnnotation", ...arguments);
+}
+export function numberLiteralTypeAnnotation(
+  value: number,
+): t.NumberLiteralTypeAnnotation {
+  return builder("NumberLiteralTypeAnnotation", ...arguments);
+}
+export function numberTypeAnnotation(): t.NumberTypeAnnotation {
+  return builder("NumberTypeAnnotation", ...arguments);
+}
+export function objectTypeAnnotation(
+  properties: Array<t.ObjectTypeProperty | t.ObjectTypeSpreadProperty>,
+  indexers?: Array<t.ObjectTypeIndexer> | null,
+  callProperties?: Array<t.ObjectTypeCallProperty> | null,
+  internalSlots?: Array<t.ObjectTypeInternalSlot> | null,
+  exact?: boolean,
+): t.ObjectTypeAnnotation {
+  return builder("ObjectTypeAnnotation", ...arguments);
+}
+export function objectTypeInternalSlot(
+  id: t.Identifier,
+  value: t.FlowType,
+  optional: boolean,
+  _static: boolean,
+  method: boolean,
+): t.ObjectTypeInternalSlot {
+  return builder("ObjectTypeInternalSlot", ...arguments);
+}
+export function objectTypeCallProperty(
+  value: t.FlowType,
+): t.ObjectTypeCallProperty {
+  return builder("ObjectTypeCallProperty", ...arguments);
+}
+export function objectTypeIndexer(
+  id: t.Identifier | null | undefined,
+  key: t.FlowType,
+  value: t.FlowType,
+  variance?: t.Variance | null,
+): t.ObjectTypeIndexer {
+  return builder("ObjectTypeIndexer", ...arguments);
+}
+export function objectTypeProperty(
+  key: t.Identifier | t.StringLiteral,
+  value: t.FlowType,
+  variance?: t.Variance | null,
+): t.ObjectTypeProperty {
+  return builder("ObjectTypeProperty", ...arguments);
+}
+export function objectTypeSpreadProperty(
+  argument: t.FlowType,
+): t.ObjectTypeSpreadProperty {
+  return builder("ObjectTypeSpreadProperty", ...arguments);
+}
+export function opaqueType(
+  id: t.Identifier,
+  typeParameters: t.TypeParameterDeclaration | null | undefined,
+  supertype: t.FlowType | null | undefined,
+  impltype: t.FlowType,
+): t.OpaqueType {
+  return builder("OpaqueType", ...arguments);
+}
+export function qualifiedTypeIdentifier(
+  id: t.Identifier,
+  qualification: t.Identifier | t.QualifiedTypeIdentifier,
+): t.QualifiedTypeIdentifier {
+  return builder("QualifiedTypeIdentifier", ...arguments);
+}
+export function stringLiteralTypeAnnotation(
+  value: string,
+): t.StringLiteralTypeAnnotation {
+  return builder("StringLiteralTypeAnnotation", ...arguments);
+}
+export function stringTypeAnnotation(): t.StringTypeAnnotation {
+  return builder("StringTypeAnnotation", ...arguments);
+}
+export function symbolTypeAnnotation(): t.SymbolTypeAnnotation {
+  return builder("SymbolTypeAnnotation", ...arguments);
+}
+export function thisTypeAnnotation(): t.ThisTypeAnnotation {
+  return builder("ThisTypeAnnotation", ...arguments);
+}
+export function tupleTypeAnnotation(
+  types: Array<t.FlowType>,
+): t.TupleTypeAnnotation {
+  return builder("TupleTypeAnnotation", ...arguments);
+}
+export function typeofTypeAnnotation(
+  argument: t.FlowType,
+): t.TypeofTypeAnnotation {
+  return builder("TypeofTypeAnnotation", ...arguments);
+}
+export function typeAlias(
+  id: t.Identifier,
+  typeParameters: t.TypeParameterDeclaration | null | undefined,
+  right: t.FlowType,
+): t.TypeAlias {
+  return builder("TypeAlias", ...arguments);
+}
+export function typeAnnotation(typeAnnotation: t.FlowType): t.TypeAnnotation {
+  return builder("TypeAnnotation", ...arguments);
+}
+export function typeCastExpression(
+  expression: t.Expression,
+  typeAnnotation: t.TypeAnnotation,
+): t.TypeCastExpression {
+  return builder("TypeCastExpression", ...arguments);
+}
+export function typeParameter(
+  bound?: t.TypeAnnotation | null,
+  _default?: t.FlowType | null,
+  variance?: t.Variance | null,
+): t.TypeParameter {
+  return builder("TypeParameter", ...arguments);
+}
+export function typeParameterDeclaration(
+  params: Array<t.TypeParameter>,
+): t.TypeParameterDeclaration {
+  return builder("TypeParameterDeclaration", ...arguments);
+}
+export function typeParameterInstantiation(
+  params: Array<t.FlowType>,
+): t.TypeParameterInstantiation {
+  return builder("TypeParameterInstantiation", ...arguments);
+}
+export function unionTypeAnnotation(
+  types: Array<t.FlowType>,
+): t.UnionTypeAnnotation {
+  return builder("UnionTypeAnnotation", ...arguments);
+}
+export function variance(kind: "minus" | "plus"): t.Variance {
+  return builder("Variance", ...arguments);
+}
+export function voidTypeAnnotation(): t.VoidTypeAnnotation {
+  return builder("VoidTypeAnnotation", ...arguments);
+}
+export function enumDeclaration(
+  id: t.Identifier,
+  body:
+    | t.EnumBooleanBody
+    | t.EnumNumberBody
+    | t.EnumStringBody
+    | t.EnumSymbolBody,
+): t.EnumDeclaration {
+  return builder("EnumDeclaration", ...arguments);
+}
+export function enumBooleanBody(
+  members: Array<t.EnumBooleanMember>,
+): t.EnumBooleanBody {
+  return builder("EnumBooleanBody", ...arguments);
+}
+export function enumNumberBody(
+  members: Array<t.EnumNumberMember>,
+): t.EnumNumberBody {
+  return builder("EnumNumberBody", ...arguments);
+}
+export function enumStringBody(
+  members: Array<t.EnumStringMember | t.EnumDefaultedMember>,
+): t.EnumStringBody {
+  return builder("EnumStringBody", ...arguments);
+}
+export function enumSymbolBody(
+  members: Array<t.EnumDefaultedMember>,
+): t.EnumSymbolBody {
+  return builder("EnumSymbolBody", ...arguments);
+}
+export function enumBooleanMember(id: t.Identifier): t.EnumBooleanMember {
+  return builder("EnumBooleanMember", ...arguments);
+}
+export function enumNumberMember(
+  id: t.Identifier,
+  init: t.NumericLiteral,
+): t.EnumNumberMember {
+  return builder("EnumNumberMember", ...arguments);
+}
+export function enumStringMember(
+  id: t.Identifier,
+  init: t.StringLiteral,
+): t.EnumStringMember {
+  return builder("EnumStringMember", ...arguments);
+}
+export function enumDefaultedMember(id: t.Identifier): t.EnumDefaultedMember {
+  return builder("EnumDefaultedMember", ...arguments);
+}
+export function jsxAttribute(
+  name: t.JSXIdentifier | t.JSXNamespacedName,
+  value?:
+    | t.JSXElement
+    | t.JSXFragment
+    | t.StringLiteral
+    | t.JSXExpressionContainer
+    | null,
+): t.JSXAttribute {
+  return builder("JSXAttribute", ...arguments);
 }
-export { stringLiteralTypeAnnotation as StringLiteralTypeAnnotation };
-export function stringTypeAnnotation(...args: Array<any>): Object {
-  return builder("StringTypeAnnotation", ...args);
-}
-export { stringTypeAnnotation as StringTypeAnnotation };
-export function symbolTypeAnnotation(...args: Array<any>): Object {
-  return builder("SymbolTypeAnnotation", ...args);
-}
-export { symbolTypeAnnotation as SymbolTypeAnnotation };
-export function thisTypeAnnotation(...args: Array<any>): Object {
-  return builder("ThisTypeAnnotation", ...args);
-}
-export { thisTypeAnnotation as ThisTypeAnnotation };
-export function tupleTypeAnnotation(...args: Array<any>): Object {
-  return builder("TupleTypeAnnotation", ...args);
-}
-export { tupleTypeAnnotation as TupleTypeAnnotation };
-export function typeofTypeAnnotation(...args: Array<any>): Object {
-  return builder("TypeofTypeAnnotation", ...args);
-}
-export { typeofTypeAnnotation as TypeofTypeAnnotation };
-export function typeAlias(...args: Array<any>): Object {
-  return builder("TypeAlias", ...args);
-}
-export { typeAlias as TypeAlias };
-export function typeAnnotation(...args: Array<any>): Object {
-  return builder("TypeAnnotation", ...args);
-}
-export { typeAnnotation as TypeAnnotation };
-export function typeCastExpression(...args: Array<any>): Object {
-  return builder("TypeCastExpression", ...args);
-}
-export { typeCastExpression as TypeCastExpression };
-export function typeParameter(...args: Array<any>): Object {
-  return builder("TypeParameter", ...args);
-}
-export { typeParameter as TypeParameter };
-export function typeParameterDeclaration(...args: Array<any>): Object {
-  return builder("TypeParameterDeclaration", ...args);
-}
-export { typeParameterDeclaration as TypeParameterDeclaration };
-export function typeParameterInstantiation(...args: Array<any>): Object {
-  return builder("TypeParameterInstantiation", ...args);
-}
-export { typeParameterInstantiation as TypeParameterInstantiation };
-export function unionTypeAnnotation(...args: Array<any>): Object {
-  return builder("UnionTypeAnnotation", ...args);
-}
-export { unionTypeAnnotation as UnionTypeAnnotation };
-export function variance(...args: Array<any>): Object {
-  return builder("Variance", ...args);
-}
-export { variance as Variance };
-export function voidTypeAnnotation(...args: Array<any>): Object {
-  return builder("VoidTypeAnnotation", ...args);
-}
-export { voidTypeAnnotation as VoidTypeAnnotation };
-export function enumDeclaration(...args: Array<any>): Object {
-  return builder("EnumDeclaration", ...args);
-}
-export { enumDeclaration as EnumDeclaration };
-export function enumBooleanBody(...args: Array<any>): Object {
-  return builder("EnumBooleanBody", ...args);
-}
-export { enumBooleanBody as EnumBooleanBody };
-export function enumNumberBody(...args: Array<any>): Object {
-  return builder("EnumNumberBody", ...args);
-}
-export { enumNumberBody as EnumNumberBody };
-export function enumStringBody(...args: Array<any>): Object {
-  return builder("EnumStringBody", ...args);
-}
-export { enumStringBody as EnumStringBody };
-export function enumSymbolBody(...args: Array<any>): Object {
-  return builder("EnumSymbolBody", ...args);
-}
-export { enumSymbolBody as EnumSymbolBody };
-export function enumBooleanMember(...args: Array<any>): Object {
-  return builder("EnumBooleanMember", ...args);
-}
-export { enumBooleanMember as EnumBooleanMember };
-export function enumNumberMember(...args: Array<any>): Object {
-  return builder("EnumNumberMember", ...args);
-}
-export { enumNumberMember as EnumNumberMember };
-export function enumStringMember(...args: Array<any>): Object {
-  return builder("EnumStringMember", ...args);
-}
-export { enumStringMember as EnumStringMember };
-export function enumDefaultedMember(...args: Array<any>): Object {
-  return builder("EnumDefaultedMember", ...args);
-}
-export { enumDefaultedMember as EnumDefaultedMember };
-export function jsxAttribute(...args: Array<any>): Object {
-  return builder("JSXAttribute", ...args);
-}
-export { jsxAttribute as JSXAttribute };
 export { jsxAttribute as jSXAttribute };
-export function jsxClosingElement(...args: Array<any>): Object {
-  return builder("JSXClosingElement", ...args);
+export function jsxClosingElement(
+  name: t.JSXIdentifier | t.JSXMemberExpression | t.JSXNamespacedName,
+): t.JSXClosingElement {
+  return builder("JSXClosingElement", ...arguments);
 }
-export { jsxClosingElement as JSXClosingElement };
 export { jsxClosingElement as jSXClosingElement };
-export function jsxElement(...args: Array<any>): Object {
-  return builder("JSXElement", ...args);
+export function jsxElement(
+  openingElement: t.JSXOpeningElement,
+  closingElement: t.JSXClosingElement | null | undefined,
+  children: Array<
+    | t.JSXText
+    | t.JSXExpressionContainer
+    | t.JSXSpreadChild
+    | t.JSXElement
+    | t.JSXFragment
+  >,
+  selfClosing?: boolean | null,
+): t.JSXElement {
+  return builder("JSXElement", ...arguments);
 }
-export { jsxElement as JSXElement };
 export { jsxElement as jSXElement };
-export function jsxEmptyExpression(...args: Array<any>): Object {
-  return builder("JSXEmptyExpression", ...args);
+export function jsxEmptyExpression(): t.JSXEmptyExpression {
+  return builder("JSXEmptyExpression", ...arguments);
 }
-export { jsxEmptyExpression as JSXEmptyExpression };
 export { jsxEmptyExpression as jSXEmptyExpression };
-export function jsxExpressionContainer(...args: Array<any>): Object {
-  return builder("JSXExpressionContainer", ...args);
+export function jsxExpressionContainer(
+  expression: t.Expression | t.JSXEmptyExpression,
+): t.JSXExpressionContainer {
+  return builder("JSXExpressionContainer", ...arguments);
 }
-export { jsxExpressionContainer as JSXExpressionContainer };
 export { jsxExpressionContainer as jSXExpressionContainer };
-export function jsxSpreadChild(...args: Array<any>): Object {
-  return builder("JSXSpreadChild", ...args);
+export function jsxSpreadChild(expression: t.Expression): t.JSXSpreadChild {
+  return builder("JSXSpreadChild", ...arguments);
 }
-export { jsxSpreadChild as JSXSpreadChild };
 export { jsxSpreadChild as jSXSpreadChild };
-export function jsxIdentifier(...args: Array<any>): Object {
-  return builder("JSXIdentifier", ...args);
+export function jsxIdentifier(name: string): t.JSXIdentifier {
+  return builder("JSXIdentifier", ...arguments);
 }
-export { jsxIdentifier as JSXIdentifier };
 export { jsxIdentifier as jSXIdentifier };
-export function jsxMemberExpression(...args: Array<any>): Object {
-  return builder("JSXMemberExpression", ...args);
+export function jsxMemberExpression(
+  object: t.JSXMemberExpression | t.JSXIdentifier,
+  property: t.JSXIdentifier,
+): t.JSXMemberExpression {
+  return builder("JSXMemberExpression", ...arguments);
 }
-export { jsxMemberExpression as JSXMemberExpression };
 export { jsxMemberExpression as jSXMemberExpression };
-export function jsxNamespacedName(...args: Array<any>): Object {
-  return builder("JSXNamespacedName", ...args);
+export function jsxNamespacedName(
+  namespace: t.JSXIdentifier,
+  name: t.JSXIdentifier,
+): t.JSXNamespacedName {
+  return builder("JSXNamespacedName", ...arguments);
 }
-export { jsxNamespacedName as JSXNamespacedName };
 export { jsxNamespacedName as jSXNamespacedName };
-export function jsxOpeningElement(...args: Array<any>): Object {
-  return builder("JSXOpeningElement", ...args);
+export function jsxOpeningElement(
+  name: t.JSXIdentifier | t.JSXMemberExpression | t.JSXNamespacedName,
+  attributes: Array<t.JSXAttribute | t.JSXSpreadAttribute>,
+  selfClosing?: boolean,
+): t.JSXOpeningElement {
+  return builder("JSXOpeningElement", ...arguments);
 }
-export { jsxOpeningElement as JSXOpeningElement };
 export { jsxOpeningElement as jSXOpeningElement };
-export function jsxSpreadAttribute(...args: Array<any>): Object {
-  return builder("JSXSpreadAttribute", ...args);
+export function jsxSpreadAttribute(
+  argument: t.Expression,
+): t.JSXSpreadAttribute {
+  return builder("JSXSpreadAttribute", ...arguments);
 }
-export { jsxSpreadAttribute as JSXSpreadAttribute };
 export { jsxSpreadAttribute as jSXSpreadAttribute };
-export function jsxText(...args: Array<any>): Object {
-  return builder("JSXText", ...args);
+export function jsxText(value: string): t.JSXText {
+  return builder("JSXText", ...arguments);
 }
-export { jsxText as JSXText };
 export { jsxText as jSXText };
-export function jsxFragment(...args: Array<any>): Object {
-  return builder("JSXFragment", ...args);
+export function jsxFragment(
+  openingFragment: t.JSXOpeningFragment,
+  closingFragment: t.JSXClosingFragment,
+  children: Array<
+    | t.JSXText
+    | t.JSXExpressionContainer
+    | t.JSXSpreadChild
+    | t.JSXElement
+    | t.JSXFragment
+  >,
+): t.JSXFragment {
+  return builder("JSXFragment", ...arguments);
 }
-export { jsxFragment as JSXFragment };
 export { jsxFragment as jSXFragment };
-export function jsxOpeningFragment(...args: Array<any>): Object {
-  return builder("JSXOpeningFragment", ...args);
+export function jsxOpeningFragment(): t.JSXOpeningFragment {
+  return builder("JSXOpeningFragment", ...arguments);
 }
-export { jsxOpeningFragment as JSXOpeningFragment };
 export { jsxOpeningFragment as jSXOpeningFragment };
-export function jsxClosingFragment(...args: Array<any>): Object {
-  return builder("JSXClosingFragment", ...args);
+export function jsxClosingFragment(): t.JSXClosingFragment {
+  return builder("JSXClosingFragment", ...arguments);
 }
-export { jsxClosingFragment as JSXClosingFragment };
 export { jsxClosingFragment as jSXClosingFragment };
-export function noop(...args: Array<any>): Object {
-  return builder("Noop", ...args);
+export function noop(): t.Noop {
+  return builder("Noop", ...arguments);
 }
-export { noop as Noop };
-export function placeholder(...args: Array<any>): Object {
-  return builder("Placeholder", ...args);
+export function placeholder(
+  expectedNode:
+    | "Identifier"
+    | "StringLiteral"
+    | "Expression"
+    | "Statement"
+    | "Declaration"
+    | "BlockStatement"
+    | "ClassBody"
+    | "Pattern",
+  name: t.Identifier,
+): t.Placeholder {
+  return builder("Placeholder", ...arguments);
 }
-export { placeholder as Placeholder };
-export function v8IntrinsicIdentifier(...args: Array<any>): Object {
-  return builder("V8IntrinsicIdentifier", ...args);
+export function v8IntrinsicIdentifier(name: string): t.V8IntrinsicIdentifier {
+  return builder("V8IntrinsicIdentifier", ...arguments);
 }
-export { v8IntrinsicIdentifier as V8IntrinsicIdentifier };
-export function argumentPlaceholder(...args: Array<any>): Object {
-  return builder("ArgumentPlaceholder", ...args);
+export function argumentPlaceholder(): t.ArgumentPlaceholder {
+  return builder("ArgumentPlaceholder", ...arguments);
 }
-export { argumentPlaceholder as ArgumentPlaceholder };
-export function bindExpression(...args: Array<any>): Object {
-  return builder("BindExpression", ...args);
+export function bindExpression(
+  object: t.Expression,
+  callee: t.Expression,
+): t.BindExpression {
+  return builder("BindExpression", ...arguments);
 }
-export { bindExpression as BindExpression };
-export function classProperty(...args: Array<any>): Object {
-  return builder("ClassProperty", ...args);
+export function classProperty(
+  key: t.Identifier | t.StringLiteral | t.NumericLiteral | t.Expression,
+  value?: t.Expression | null,
+  typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null,
+  decorators?: Array<t.Decorator> | null,
+  computed?: boolean,
+  _static?: boolean,
+): t.ClassProperty {
+  return builder("ClassProperty", ...arguments);
 }
-export { classProperty as ClassProperty };
-export function pipelineTopicExpression(...args: Array<any>): Object {
-  return builder("PipelineTopicExpression", ...args);
+export function pipelineTopicExpression(
+  expression: t.Expression,
+): t.PipelineTopicExpression {
+  return builder("PipelineTopicExpression", ...arguments);
 }
-export { pipelineTopicExpression as PipelineTopicExpression };
-export function pipelineBareFunction(...args: Array<any>): Object {
-  return builder("PipelineBareFunction", ...args);
+export function pipelineBareFunction(
+  callee: t.Expression,
+): t.PipelineBareFunction {
+  return builder("PipelineBareFunction", ...arguments);
 }
-export { pipelineBareFunction as PipelineBareFunction };
-export function pipelinePrimaryTopicReference(...args: Array<any>): Object {
-  return builder("PipelinePrimaryTopicReference", ...args);
+export function pipelinePrimaryTopicReference(): t.PipelinePrimaryTopicReference {
+  return builder("PipelinePrimaryTopicReference", ...arguments);
 }
-export { pipelinePrimaryTopicReference as PipelinePrimaryTopicReference };
-export function classPrivateProperty(...args: Array<any>): Object {
-  return builder("ClassPrivateProperty", ...args);
+export function classPrivateProperty(
+  key: t.PrivateName,
+  value: t.Expression | null | undefined,
+  decorators: Array<t.Decorator> | null | undefined,
+  _static: any,
+): t.ClassPrivateProperty {
+  return builder("ClassPrivateProperty", ...arguments);
 }
-export { classPrivateProperty as ClassPrivateProperty };
-export function classPrivateMethod(...args: Array<any>): Object {
-  return builder("ClassPrivateMethod", ...args);
+export function classPrivateMethod(
+  kind: "get" | "set" | "method" | "constructor" | undefined,
+  key: t.PrivateName,
+  params: Array<
+    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
+  >,
+  body: t.BlockStatement,
+  _static?: boolean,
+): t.ClassPrivateMethod {
+  return builder("ClassPrivateMethod", ...arguments);
 }
-export { classPrivateMethod as ClassPrivateMethod };
-export function importAttribute(...args: Array<any>): Object {
-  return builder("ImportAttribute", ...args);
+export function importAttribute(
+  key: t.Identifier | t.StringLiteral,
+  value: t.StringLiteral,
+): t.ImportAttribute {
+  return builder("ImportAttribute", ...arguments);
 }
-export { importAttribute as ImportAttribute };
-export function decorator(...args: Array<any>): Object {
-  return builder("Decorator", ...args);
+export function decorator(expression: t.Expression): t.Decorator {
+  return builder("Decorator", ...arguments);
 }
-export { decorator as Decorator };
-export function doExpression(...args: Array<any>): Object {
-  return builder("DoExpression", ...args);
+export function doExpression(body: t.BlockStatement): t.DoExpression {
+  return builder("DoExpression", ...arguments);
 }
-export { doExpression as DoExpression };
-export function exportDefaultSpecifier(...args: Array<any>): Object {
-  return builder("ExportDefaultSpecifier", ...args);
+export function exportDefaultSpecifier(
+  exported: t.Identifier,
+): t.ExportDefaultSpecifier {
+  return builder("ExportDefaultSpecifier", ...arguments);
 }
-export { exportDefaultSpecifier as ExportDefaultSpecifier };
-export function privateName(...args: Array<any>): Object {
-  return builder("PrivateName", ...args);
+export function privateName(id: t.Identifier): t.PrivateName {
+  return builder("PrivateName", ...arguments);
 }
-export { privateName as PrivateName };
-export function recordExpression(...args: Array<any>): Object {
-  return builder("RecordExpression", ...args);
+export function recordExpression(
+  properties: Array<t.ObjectProperty | t.SpreadElement>,
+): t.RecordExpression {
+  return builder("RecordExpression", ...arguments);
 }
-export { recordExpression as RecordExpression };
-export function tupleExpression(...args: Array<any>): Object {
-  return builder("TupleExpression", ...args);
+export function tupleExpression(
+  elements?: Array<t.Expression | t.SpreadElement>,
+): t.TupleExpression {
+  return builder("TupleExpression", ...arguments);
 }
-export { tupleExpression as TupleExpression };
-export function decimalLiteral(...args: Array<any>): Object {
-  return builder("DecimalLiteral", ...args);
+export function decimalLiteral(value: string): t.DecimalLiteral {
+  return builder("DecimalLiteral", ...arguments);
 }
-export { decimalLiteral as DecimalLiteral };
-export function staticBlock(...args: Array<any>): Object {
-  return builder("StaticBlock", ...args);
+export function staticBlock(body: Array<t.Statement>): t.StaticBlock {
+  return builder("StaticBlock", ...arguments);
 }
-export { staticBlock as StaticBlock };
-export function tsParameterProperty(...args: Array<any>): Object {
-  return builder("TSParameterProperty", ...args);
+export function tsParameterProperty(
+  parameter: t.Identifier | t.AssignmentPattern,
+): t.TSParameterProperty {
+  return builder("TSParameterProperty", ...arguments);
 }
-export { tsParameterProperty as TSParameterProperty };
 export { tsParameterProperty as tSParameterProperty };
-export function tsDeclareFunction(...args: Array<any>): Object {
-  return builder("TSDeclareFunction", ...args);
+export function tsDeclareFunction(
+  id: t.Identifier | null | undefined,
+  typeParameters: t.TSTypeParameterDeclaration | t.Noop | null | undefined,
+  params: Array<
+    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
+  >,
+  returnType?: t.TSTypeAnnotation | t.Noop | null,
+): t.TSDeclareFunction {
+  return builder("TSDeclareFunction", ...arguments);
 }
-export { tsDeclareFunction as TSDeclareFunction };
 export { tsDeclareFunction as tSDeclareFunction };
-export function tsDeclareMethod(...args: Array<any>): Object {
-  return builder("TSDeclareMethod", ...args);
+export function tsDeclareMethod(
+  decorators: Array<t.Decorator> | null | undefined,
+  key: t.Identifier | t.StringLiteral | t.NumericLiteral | t.Expression,
+  typeParameters: t.TSTypeParameterDeclaration | t.Noop | null | undefined,
+  params: Array<
+    t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
+  >,
+  returnType?: t.TSTypeAnnotation | t.Noop | null,
+): t.TSDeclareMethod {
+  return builder("TSDeclareMethod", ...arguments);
 }
-export { tsDeclareMethod as TSDeclareMethod };
 export { tsDeclareMethod as tSDeclareMethod };
-export function tsQualifiedName(...args: Array<any>): Object {
-  return builder("TSQualifiedName", ...args);
+export function tsQualifiedName(
+  left: t.TSEntityName,
+  right: t.Identifier,
+): t.TSQualifiedName {
+  return builder("TSQualifiedName", ...arguments);
 }
-export { tsQualifiedName as TSQualifiedName };
 export { tsQualifiedName as tSQualifiedName };
-export function tsCallSignatureDeclaration(...args: Array<any>): Object {
-  return builder("TSCallSignatureDeclaration", ...args);
+export function tsCallSignatureDeclaration(
+  typeParameters: t.TSTypeParameterDeclaration | null | undefined,
+  parameters: Array<t.Identifier | t.RestElement>,
+  typeAnnotation?: t.TSTypeAnnotation | null,
+): t.TSCallSignatureDeclaration {
+  return builder("TSCallSignatureDeclaration", ...arguments);
 }
-export { tsCallSignatureDeclaration as TSCallSignatureDeclaration };
 export { tsCallSignatureDeclaration as tSCallSignatureDeclaration };
-export function tsConstructSignatureDeclaration(...args: Array<any>): Object {
-  return builder("TSConstructSignatureDeclaration", ...args);
+export function tsConstructSignatureDeclaration(
+  typeParameters: t.TSTypeParameterDeclaration | null | undefined,
+  parameters: Array<t.Identifier | t.RestElement>,
+  typeAnnotation?: t.TSTypeAnnotation | null,
+): t.TSConstructSignatureDeclaration {
+  return builder("TSConstructSignatureDeclaration", ...arguments);
 }
-export { tsConstructSignatureDeclaration as TSConstructSignatureDeclaration };
 export { tsConstructSignatureDeclaration as tSConstructSignatureDeclaration };
-export function tsPropertySignature(...args: Array<any>): Object {
-  return builder("TSPropertySignature", ...args);
+export function tsPropertySignature(
+  key: t.Expression,
+  typeAnnotation?: t.TSTypeAnnotation | null,
+  initializer?: t.Expression | null,
+): t.TSPropertySignature {
+  return builder("TSPropertySignature", ...arguments);
 }
-export { tsPropertySignature as TSPropertySignature };
 export { tsPropertySignature as tSPropertySignature };
-export function tsMethodSignature(...args: Array<any>): Object {
-  return builder("TSMethodSignature", ...args);
+export function tsMethodSignature(
+  key: t.Expression,
+  typeParameters: t.TSTypeParameterDeclaration | null | undefined,
+  parameters: Array<t.Identifier | t.RestElement>,
+  typeAnnotation?: t.TSTypeAnnotation | null,
+): t.TSMethodSignature {
+  return builder("TSMethodSignature", ...arguments);
 }
-export { tsMethodSignature as TSMethodSignature };
 export { tsMethodSignature as tSMethodSignature };
-export function tsIndexSignature(...args: Array<any>): Object {
-  return builder("TSIndexSignature", ...args);
+export function tsIndexSignature(
+  parameters: Array<t.Identifier>,
+  typeAnnotation?: t.TSTypeAnnotation | null,
+): t.TSIndexSignature {
+  return builder("TSIndexSignature", ...arguments);
 }
-export { tsIndexSignature as TSIndexSignature };
 export { tsIndexSignature as tSIndexSignature };
-export function tsAnyKeyword(...args: Array<any>): Object {
-  return builder("TSAnyKeyword", ...args);
+export function tsAnyKeyword(): t.TSAnyKeyword {
+  return builder("TSAnyKeyword", ...arguments);
 }
-export { tsAnyKeyword as TSAnyKeyword };
 export { tsAnyKeyword as tSAnyKeyword };
-export function tsBooleanKeyword(...args: Array<any>): Object {
-  return builder("TSBooleanKeyword", ...args);
+export function tsBooleanKeyword(): t.TSBooleanKeyword {
+  return builder("TSBooleanKeyword", ...arguments);
 }
-export { tsBooleanKeyword as TSBooleanKeyword };
 export { tsBooleanKeyword as tSBooleanKeyword };
-export function tsBigIntKeyword(...args: Array<any>): Object {
-  return builder("TSBigIntKeyword", ...args);
+export function tsBigIntKeyword(): t.TSBigIntKeyword {
+  return builder("TSBigIntKeyword", ...arguments);
 }
-export { tsBigIntKeyword as TSBigIntKeyword };
 export { tsBigIntKeyword as tSBigIntKeyword };
-export function tsIntrinsicKeyword(...args: Array<any>): Object {
-  return builder("TSIntrinsicKeyword", ...args);
+export function tsIntrinsicKeyword(): t.TSIntrinsicKeyword {
+  return builder("TSIntrinsicKeyword", ...arguments);
 }
-export { tsIntrinsicKeyword as TSIntrinsicKeyword };
 export { tsIntrinsicKeyword as tSIntrinsicKeyword };
-export function tsNeverKeyword(...args: Array<any>): Object {
-  return builder("TSNeverKeyword", ...args);
+export function tsNeverKeyword(): t.TSNeverKeyword {
+  return builder("TSNeverKeyword", ...arguments);
 }
-export { tsNeverKeyword as TSNeverKeyword };
 export { tsNeverKeyword as tSNeverKeyword };
-export function tsNullKeyword(...args: Array<any>): Object {
-  return builder("TSNullKeyword", ...args);
+export function tsNullKeyword(): t.TSNullKeyword {
+  return builder("TSNullKeyword", ...arguments);
 }
-export { tsNullKeyword as TSNullKeyword };
 export { tsNullKeyword as tSNullKeyword };
-export function tsNumberKeyword(...args: Array<any>): Object {
-  return builder("TSNumberKeyword", ...args);
+export function tsNumberKeyword(): t.TSNumberKeyword {
+  return builder("TSNumberKeyword", ...arguments);
 }
-export { tsNumberKeyword as TSNumberKeyword };
 export { tsNumberKeyword as tSNumberKeyword };
-export function tsObjectKeyword(...args: Array<any>): Object {
-  return builder("TSObjectKeyword", ...args);
+export function tsObjectKeyword(): t.TSObjectKeyword {
+  return builder("TSObjectKeyword", ...arguments);
 }
-export { tsObjectKeyword as TSObjectKeyword };
 export { tsObjectKeyword as tSObjectKeyword };
-export function tsStringKeyword(...args: Array<any>): Object {
-  return builder("TSStringKeyword", ...args);
+export function tsStringKeyword(): t.TSStringKeyword {
+  return builder("TSStringKeyword", ...arguments);
 }
-export { tsStringKeyword as TSStringKeyword };
 export { tsStringKeyword as tSStringKeyword };
-export function tsSymbolKeyword(...args: Array<any>): Object {
-  return builder("TSSymbolKeyword", ...args);
+export function tsSymbolKeyword(): t.TSSymbolKeyword {
+  return builder("TSSymbolKeyword", ...arguments);
 }
-export { tsSymbolKeyword as TSSymbolKeyword };
 export { tsSymbolKeyword as tSSymbolKeyword };
-export function tsUndefinedKeyword(...args: Array<any>): Object {
-  return builder("TSUndefinedKeyword", ...args);
+export function tsUndefinedKeyword(): t.TSUndefinedKeyword {
+  return builder("TSUndefinedKeyword", ...arguments);
 }
-export { tsUndefinedKeyword as TSUndefinedKeyword };
 export { tsUndefinedKeyword as tSUndefinedKeyword };
-export function tsUnknownKeyword(...args: Array<any>): Object {
-  return builder("TSUnknownKeyword", ...args);
+export function tsUnknownKeyword(): t.TSUnknownKeyword {
+  return builder("TSUnknownKeyword", ...arguments);
 }
-export { tsUnknownKeyword as TSUnknownKeyword };
 export { tsUnknownKeyword as tSUnknownKeyword };
-export function tsVoidKeyword(...args: Array<any>): Object {
-  return builder("TSVoidKeyword", ...args);
+export function tsVoidKeyword(): t.TSVoidKeyword {
+  return builder("TSVoidKeyword", ...arguments);
 }
-export { tsVoidKeyword as TSVoidKeyword };
 export { tsVoidKeyword as tSVoidKeyword };
-export function tsThisType(...args: Array<any>): Object {
-  return builder("TSThisType", ...args);
+export function tsThisType(): t.TSThisType {
+  return builder("TSThisType", ...arguments);
 }
-export { tsThisType as TSThisType };
 export { tsThisType as tSThisType };
-export function tsFunctionType(...args: Array<any>): Object {
-  return builder("TSFunctionType", ...args);
+export function tsFunctionType(
+  typeParameters: t.TSTypeParameterDeclaration | null | undefined,
+  parameters: Array<t.Identifier | t.RestElement>,
+  typeAnnotation?: t.TSTypeAnnotation | null,
+): t.TSFunctionType {
+  return builder("TSFunctionType", ...arguments);
 }
-export { tsFunctionType as TSFunctionType };
 export { tsFunctionType as tSFunctionType };
-export function tsConstructorType(...args: Array<any>): Object {
-  return builder("TSConstructorType", ...args);
+export function tsConstructorType(
+  typeParameters: t.TSTypeParameterDeclaration | null | undefined,
+  parameters: Array<t.Identifier | t.RestElement>,
+  typeAnnotation?: t.TSTypeAnnotation | null,
+): t.TSConstructorType {
+  return builder("TSConstructorType", ...arguments);
 }
-export { tsConstructorType as TSConstructorType };
 export { tsConstructorType as tSConstructorType };
-export function tsTypeReference(...args: Array<any>): Object {
-  return builder("TSTypeReference", ...args);
+export function tsTypeReference(
+  typeName: t.TSEntityName,
+  typeParameters?: t.TSTypeParameterInstantiation | null,
+): t.TSTypeReference {
+  return builder("TSTypeReference", ...arguments);
 }
-export { tsTypeReference as TSTypeReference };
 export { tsTypeReference as tSTypeReference };
-export function tsTypePredicate(...args: Array<any>): Object {
-  return builder("TSTypePredicate", ...args);
+export function tsTypePredicate(
+  parameterName: t.Identifier | t.TSThisType,
+  typeAnnotation?: t.TSTypeAnnotation | null,
+  asserts?: boolean | null,
+): t.TSTypePredicate {
+  return builder("TSTypePredicate", ...arguments);
 }
-export { tsTypePredicate as TSTypePredicate };
 export { tsTypePredicate as tSTypePredicate };
-export function tsTypeQuery(...args: Array<any>): Object {
-  return builder("TSTypeQuery", ...args);
+export function tsTypeQuery(
+  exprName: t.TSEntityName | t.TSImportType,
+): t.TSTypeQuery {
+  return builder("TSTypeQuery", ...arguments);
 }
-export { tsTypeQuery as TSTypeQuery };
 export { tsTypeQuery as tSTypeQuery };
-export function tsTypeLiteral(...args: Array<any>): Object {
-  return builder("TSTypeLiteral", ...args);
+export function tsTypeLiteral(
+  members: Array<t.TSTypeElement>,
+): t.TSTypeLiteral {
+  return builder("TSTypeLiteral", ...arguments);
 }
-export { tsTypeLiteral as TSTypeLiteral };
 export { tsTypeLiteral as tSTypeLiteral };
-export function tsArrayType(...args: Array<any>): Object {
-  return builder("TSArrayType", ...args);
+export function tsArrayType(elementType: t.TSType): t.TSArrayType {
+  return builder("TSArrayType", ...arguments);
 }
-export { tsArrayType as TSArrayType };
 export { tsArrayType as tSArrayType };
-export function tsTupleType(...args: Array<any>): Object {
-  return builder("TSTupleType", ...args);
+export function tsTupleType(
+  elementTypes: Array<t.TSType | t.TSNamedTupleMember>,
+): t.TSTupleType {
+  return builder("TSTupleType", ...arguments);
 }
-export { tsTupleType as TSTupleType };
 export { tsTupleType as tSTupleType };
-export function tsOptionalType(...args: Array<any>): Object {
-  return builder("TSOptionalType", ...args);
+export function tsOptionalType(typeAnnotation: t.TSType): t.TSOptionalType {
+  return builder("TSOptionalType", ...arguments);
 }
-export { tsOptionalType as TSOptionalType };
 export { tsOptionalType as tSOptionalType };
-export function tsRestType(...args: Array<any>): Object {
-  return builder("TSRestType", ...args);
+export function tsRestType(typeAnnotation: t.TSType): t.TSRestType {
+  return builder("TSRestType", ...arguments);
 }
-export { tsRestType as TSRestType };
 export { tsRestType as tSRestType };
-export function tsNamedTupleMember(...args: Array<any>): Object {
-  return builder("TSNamedTupleMember", ...args);
+export function tsNamedTupleMember(
+  label: t.Identifier,
+  elementType: t.TSType,
+  optional?: boolean,
+): t.TSNamedTupleMember {
+  return builder("TSNamedTupleMember", ...arguments);
 }
-export { tsNamedTupleMember as TSNamedTupleMember };
 export { tsNamedTupleMember as tSNamedTupleMember };
-export function tsUnionType(...args: Array<any>): Object {
-  return builder("TSUnionType", ...args);
+export function tsUnionType(types: Array<t.TSType>): t.TSUnionType {
+  return builder("TSUnionType", ...arguments);
 }
-export { tsUnionType as TSUnionType };
 export { tsUnionType as tSUnionType };
-export function tsIntersectionType(...args: Array<any>): Object {
-  return builder("TSIntersectionType", ...args);
+export function tsIntersectionType(
+  types: Array<t.TSType>,
+): t.TSIntersectionType {
+  return builder("TSIntersectionType", ...arguments);
 }
-export { tsIntersectionType as TSIntersectionType };
 export { tsIntersectionType as tSIntersectionType };
-export function tsConditionalType(...args: Array<any>): Object {
-  return builder("TSConditionalType", ...args);
+export function tsConditionalType(
+  checkType: t.TSType,
+  extendsType: t.TSType,
+  trueType: t.TSType,
+  falseType: t.TSType,
+): t.TSConditionalType {
+  return builder("TSConditionalType", ...arguments);
 }
-export { tsConditionalType as TSConditionalType };
 export { tsConditionalType as tSConditionalType };
-export function tsInferType(...args: Array<any>): Object {
-  return builder("TSInferType", ...args);
+export function tsInferType(typeParameter: t.TSTypeParameter): t.TSInferType {
+  return builder("TSInferType", ...arguments);
 }
-export { tsInferType as TSInferType };
 export { tsInferType as tSInferType };
-export function tsParenthesizedType(...args: Array<any>): Object {
-  return builder("TSParenthesizedType", ...args);
+export function tsParenthesizedType(
+  typeAnnotation: t.TSType,
+): t.TSParenthesizedType {
+  return builder("TSParenthesizedType", ...arguments);
 }
-export { tsParenthesizedType as TSParenthesizedType };
 export { tsParenthesizedType as tSParenthesizedType };
-export function tsTypeOperator(...args: Array<any>): Object {
-  return builder("TSTypeOperator", ...args);
+export function tsTypeOperator(typeAnnotation: t.TSType): t.TSTypeOperator {
+  return builder("TSTypeOperator", ...arguments);
 }
-export { tsTypeOperator as TSTypeOperator };
 export { tsTypeOperator as tSTypeOperator };
-export function tsIndexedAccessType(...args: Array<any>): Object {
-  return builder("TSIndexedAccessType", ...args);
+export function tsIndexedAccessType(
+  objectType: t.TSType,
+  indexType: t.TSType,
+): t.TSIndexedAccessType {
+  return builder("TSIndexedAccessType", ...arguments);
 }
-export { tsIndexedAccessType as TSIndexedAccessType };
 export { tsIndexedAccessType as tSIndexedAccessType };
-export function tsMappedType(...args: Array<any>): Object {
-  return builder("TSMappedType", ...args);
+export function tsMappedType(
+  typeParameter: t.TSTypeParameter,
+  typeAnnotation?: t.TSType | null,
+  nameType?: t.TSType | null,
+): t.TSMappedType {
+  return builder("TSMappedType", ...arguments);
 }
-export { tsMappedType as TSMappedType };
 export { tsMappedType as tSMappedType };
-export function tsLiteralType(...args: Array<any>): Object {
-  return builder("TSLiteralType", ...args);
+export function tsLiteralType(
+  literal:
+    | t.NumericLiteral
+    | t.StringLiteral
+    | t.BooleanLiteral
+    | t.BigIntLiteral,
+): t.TSLiteralType {
+  return builder("TSLiteralType", ...arguments);
 }
-export { tsLiteralType as TSLiteralType };
 export { tsLiteralType as tSLiteralType };
-export function tsExpressionWithTypeArguments(...args: Array<any>): Object {
-  return builder("TSExpressionWithTypeArguments", ...args);
+export function tsExpressionWithTypeArguments(
+  expression: t.TSEntityName,
+  typeParameters?: t.TSTypeParameterInstantiation | null,
+): t.TSExpressionWithTypeArguments {
+  return builder("TSExpressionWithTypeArguments", ...arguments);
 }
-export { tsExpressionWithTypeArguments as TSExpressionWithTypeArguments };
 export { tsExpressionWithTypeArguments as tSExpressionWithTypeArguments };
-export function tsInterfaceDeclaration(...args: Array<any>): Object {
-  return builder("TSInterfaceDeclaration", ...args);
+export function tsInterfaceDeclaration(
+  id: t.Identifier,
+  typeParameters: t.TSTypeParameterDeclaration | null | undefined,
+  _extends: Array<t.TSExpressionWithTypeArguments> | null | undefined,
+  body: t.TSInterfaceBody,
+): t.TSInterfaceDeclaration {
+  return builder("TSInterfaceDeclaration", ...arguments);
 }
-export { tsInterfaceDeclaration as TSInterfaceDeclaration };
 export { tsInterfaceDeclaration as tSInterfaceDeclaration };
-export function tsInterfaceBody(...args: Array<any>): Object {
-  return builder("TSInterfaceBody", ...args);
+export function tsInterfaceBody(
+  body: Array<t.TSTypeElement>,
+): t.TSInterfaceBody {
+  return builder("TSInterfaceBody", ...arguments);
 }
-export { tsInterfaceBody as TSInterfaceBody };
 export { tsInterfaceBody as tSInterfaceBody };
-export function tsTypeAliasDeclaration(...args: Array<any>): Object {
-  return builder("TSTypeAliasDeclaration", ...args);
+export function tsTypeAliasDeclaration(
+  id: t.Identifier,
+  typeParameters: t.TSTypeParameterDeclaration | null | undefined,
+  typeAnnotation: t.TSType,
+): t.TSTypeAliasDeclaration {
+  return builder("TSTypeAliasDeclaration", ...arguments);
 }
-export { tsTypeAliasDeclaration as TSTypeAliasDeclaration };
 export { tsTypeAliasDeclaration as tSTypeAliasDeclaration };
-export function tsAsExpression(...args: Array<any>): Object {
-  return builder("TSAsExpression", ...args);
+export function tsAsExpression(
+  expression: t.Expression,
+  typeAnnotation: t.TSType,
+): t.TSAsExpression {
+  return builder("TSAsExpression", ...arguments);
 }
-export { tsAsExpression as TSAsExpression };
 export { tsAsExpression as tSAsExpression };
-export function tsTypeAssertion(...args: Array<any>): Object {
-  return builder("TSTypeAssertion", ...args);
+export function tsTypeAssertion(
+  typeAnnotation: t.TSType,
+  expression: t.Expression,
+): t.TSTypeAssertion {
+  return builder("TSTypeAssertion", ...arguments);
 }
-export { tsTypeAssertion as TSTypeAssertion };
 export { tsTypeAssertion as tSTypeAssertion };
-export function tsEnumDeclaration(...args: Array<any>): Object {
-  return builder("TSEnumDeclaration", ...args);
+export function tsEnumDeclaration(
+  id: t.Identifier,
+  members: Array<t.TSEnumMember>,
+): t.TSEnumDeclaration {
+  return builder("TSEnumDeclaration", ...arguments);
 }
-export { tsEnumDeclaration as TSEnumDeclaration };
 export { tsEnumDeclaration as tSEnumDeclaration };
-export function tsEnumMember(...args: Array<any>): Object {
-  return builder("TSEnumMember", ...args);
+export function tsEnumMember(
+  id: t.Identifier | t.StringLiteral,
+  initializer?: t.Expression | null,
+): t.TSEnumMember {
+  return builder("TSEnumMember", ...arguments);
 }
-export { tsEnumMember as TSEnumMember };
 export { tsEnumMember as tSEnumMember };
-export function tsModuleDeclaration(...args: Array<any>): Object {
-  return builder("TSModuleDeclaration", ...args);
+export function tsModuleDeclaration(
+  id: t.Identifier | t.StringLiteral,
+  body: t.TSModuleBlock | t.TSModuleDeclaration,
+): t.TSModuleDeclaration {
+  return builder("TSModuleDeclaration", ...arguments);
 }
-export { tsModuleDeclaration as TSModuleDeclaration };
 export { tsModuleDeclaration as tSModuleDeclaration };
-export function tsModuleBlock(...args: Array<any>): Object {
-  return builder("TSModuleBlock", ...args);
+export function tsModuleBlock(body: Array<t.Statement>): t.TSModuleBlock {
+  return builder("TSModuleBlock", ...arguments);
 }
-export { tsModuleBlock as TSModuleBlock };
 export { tsModuleBlock as tSModuleBlock };
-export function tsImportType(...args: Array<any>): Object {
-  return builder("TSImportType", ...args);
+export function tsImportType(
+  argument: t.StringLiteral,
+  qualifier?: t.TSEntityName | null,
+  typeParameters?: t.TSTypeParameterInstantiation | null,
+): t.TSImportType {
+  return builder("TSImportType", ...arguments);
 }
-export { tsImportType as TSImportType };
 export { tsImportType as tSImportType };
-export function tsImportEqualsDeclaration(...args: Array<any>): Object {
-  return builder("TSImportEqualsDeclaration", ...args);
+export function tsImportEqualsDeclaration(
+  id: t.Identifier,
+  moduleReference: t.TSEntityName | t.TSExternalModuleReference,
+): t.TSImportEqualsDeclaration {
+  return builder("TSImportEqualsDeclaration", ...arguments);
 }
-export { tsImportEqualsDeclaration as TSImportEqualsDeclaration };
 export { tsImportEqualsDeclaration as tSImportEqualsDeclaration };
-export function tsExternalModuleReference(...args: Array<any>): Object {
-  return builder("TSExternalModuleReference", ...args);
+export function tsExternalModuleReference(
+  expression: t.StringLiteral,
+): t.TSExternalModuleReference {
+  return builder("TSExternalModuleReference", ...arguments);
 }
-export { tsExternalModuleReference as TSExternalModuleReference };
 export { tsExternalModuleReference as tSExternalModuleReference };
-export function tsNonNullExpression(...args: Array<any>): Object {
-  return builder("TSNonNullExpression", ...args);
+export function tsNonNullExpression(
+  expression: t.Expression,
+): t.TSNonNullExpression {
+  return builder("TSNonNullExpression", ...arguments);
 }
-export { tsNonNullExpression as TSNonNullExpression };
 export { tsNonNullExpression as tSNonNullExpression };
-export function tsExportAssignment(...args: Array<any>): Object {
-  return builder("TSExportAssignment", ...args);
+export function tsExportAssignment(
+  expression: t.Expression,
+): t.TSExportAssignment {
+  return builder("TSExportAssignment", ...arguments);
 }
-export { tsExportAssignment as TSExportAssignment };
 export { tsExportAssignment as tSExportAssignment };
-export function tsNamespaceExportDeclaration(...args: Array<any>): Object {
-  return builder("TSNamespaceExportDeclaration", ...args);
+export function tsNamespaceExportDeclaration(
+  id: t.Identifier,
+): t.TSNamespaceExportDeclaration {
+  return builder("TSNamespaceExportDeclaration", ...arguments);
 }
-export { tsNamespaceExportDeclaration as TSNamespaceExportDeclaration };
 export { tsNamespaceExportDeclaration as tSNamespaceExportDeclaration };
-export function tsTypeAnnotation(...args: Array<any>): Object {
-  return builder("TSTypeAnnotation", ...args);
+export function tsTypeAnnotation(typeAnnotation: t.TSType): t.TSTypeAnnotation {
+  return builder("TSTypeAnnotation", ...arguments);
 }
-export { tsTypeAnnotation as TSTypeAnnotation };
 export { tsTypeAnnotation as tSTypeAnnotation };
-export function tsTypeParameterInstantiation(...args: Array<any>): Object {
-  return builder("TSTypeParameterInstantiation", ...args);
+export function tsTypeParameterInstantiation(
+  params: Array<t.TSType>,
+): t.TSTypeParameterInstantiation {
+  return builder("TSTypeParameterInstantiation", ...arguments);
 }
-export { tsTypeParameterInstantiation as TSTypeParameterInstantiation };
 export { tsTypeParameterInstantiation as tSTypeParameterInstantiation };
-export function tsTypeParameterDeclaration(...args: Array<any>): Object {
-  return builder("TSTypeParameterDeclaration", ...args);
+export function tsTypeParameterDeclaration(
+  params: Array<t.TSTypeParameter>,
+): t.TSTypeParameterDeclaration {
+  return builder("TSTypeParameterDeclaration", ...arguments);
 }
-export { tsTypeParameterDeclaration as TSTypeParameterDeclaration };
 export { tsTypeParameterDeclaration as tSTypeParameterDeclaration };
-export function tsTypeParameter(...args: Array<any>): Object {
-  return builder("TSTypeParameter", ...args);
+export function tsTypeParameter(
+  constraint: t.TSType | null | undefined,
+  _default: t.TSType | null | undefined,
+  name: string,
+): t.TSTypeParameter {
+  return builder("TSTypeParameter", ...arguments);
 }
-export { tsTypeParameter as TSTypeParameter };
 export { tsTypeParameter as tSTypeParameter };
-export function NumberLiteral(...args: Array<any>): Object {
+/** @deprecated */
+function NumberLiteral(...args: Array<any>): any {
   console.trace(
     "The node type NumberLiteral has been renamed to NumericLiteral",
   );
   return builder("NumberLiteral", ...args);
 }
 export { NumberLiteral as numberLiteral };
-export function RegexLiteral(...args: Array<any>): Object {
+/** @deprecated */
+function RegexLiteral(...args: Array<any>): any {
   console.trace("The node type RegexLiteral has been renamed to RegExpLiteral");
   return builder("RegexLiteral", ...args);
 }
 export { RegexLiteral as regexLiteral };
-export function RestProperty(...args: Array<any>): Object {
+/** @deprecated */
+function RestProperty(...args: Array<any>): any {
   console.trace("The node type RestProperty has been renamed to RestElement");
   return builder("RestProperty", ...args);
 }
 export { RestProperty as restProperty };
-export function SpreadProperty(...args: Array<any>): Object {
+/** @deprecated */
+function SpreadProperty(...args: Array<any>): any {
   console.trace(
     "The node type SpreadProperty has been renamed to SpreadElement",
   );

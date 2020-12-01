@@ -1,8 +1,9 @@
-// @flow
+import type * as t from "..";
+
 export default function inherit(
   key: string,
-  child: Object,
-  parent: Object,
+  child: t.Node,
+  parent: t.Node,
 ): void {
   if (child && parent) {
     child[key] = Array.from(

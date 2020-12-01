@@ -1,7 +1,11 @@
-// @flow
 import { NODE_FIELDS, NODE_PARENT_VALIDATIONS } from "../definitions";
+import type * as t from "..";
 
-export default function validate(node?: Object, key: string, val: any): void {
+export default function validate(
+  node: t.Node | undefined | null,
+  key: string,
+  val: any,
+): void {
   if (!node) return;
 
   const fields = NODE_FIELDS[node.type];
@@ -13,7 +17,7 @@ export default function validate(node?: Object, key: string, val: any): void {
 }
 
 export function validateField(
-  node?: Object,
+  node: t.Node | undefined | null,
   key: string,
   val: any,
   field: any,
@@ -24,7 +28,11 @@ export function validateField(
   field.validate(node, key, val);
 }
 
-export function validateChild(node?: Object, key: string, val?: Object) {
+export function validateChild(
+  node: t.Node | undefined | null,
+  key: string,
+  val?: any,
+) {
   if (val == null) return;
   const validate = NODE_PARENT_VALIDATIONS[val.type];
   if (!validate) return;

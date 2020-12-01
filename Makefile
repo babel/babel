@@ -27,7 +27,7 @@ endif
 
 build-bundle: clean clean-lib
 	$(YARN) gulp build
-	$(MAKE) build-typings
+	$(MAKE) build-flow-typings
 	$(MAKE) build-dist
 
 build-bundle-ci: bootstrap-only
@@ -39,14 +39,11 @@ generate-tsconfig:
 generate-type-helpers:
 	$(YARN) gulp generate-type-helpers
 
-build-typings: build-flow-typings build-typescript-typings
-
 build-flow-typings:
 	$(NODE) packages/babel-types/scripts/generators/flow.js > packages/babel-types/lib/index.js.flow
 
-build-typescript-typings:
-	$(NODE) packages/babel-types/scripts/generators/typescript.js > packages/babel-types/lib/index.d.ts
-	$(NODE) packages/babel-types/scripts/generators/typescript.js --ts3.7 > packages/babel-types/lib/index-ts3.7.d.ts
+build-typescript-3.7-typings:
+	$(NODE) packages/babel-types/scripts/generators/typescript-3.7.js > packages/babel-types/lib/index-ts3.7.d.ts
 
 build-standalone: build-babel-standalone
 
@@ -74,7 +71,7 @@ build-no-bundle: clean clean-lib
 	# Ensure that build artifacts for types are created during local
 	# development too.
 	# Babel-transform-fixture-test-runner requires minified polyfill for performance
-	$(MAKE) build-typings build-polyfill-dist
+	$(MAKE) build-flow-typings build-polyfill-dist
 
 watch: build-no-bundle
 	BABEL_ENV=development $(YARN) gulp watch
@@ -85,30 +82,18 @@ flowcheck-ci:
 code-quality: tscheck flow lint
 
 tscheck: generate-tsconfig
-	make build-typescript-typings
 	$(YARN) tsc -b .
 
-flow:
+flow: build-flow-typings
 	$(YARN) flow check --strip-root
 
-lint-ci: lint-js-ci lint-ts-ci check-compat-data-ci
-
-lint-js-ci:
-	$(MAKE) lint-js
-
-lint-ts-ci:
-	$(MAKE) lint-ts
+lint-ci: lint check-compat-data-ci
 
 check-compat-data-ci:
 	$(MAKE) check-compat-data
 
-lint: lint-js lint-ts
-
-lint-js:
+lint:
 	BABEL_ENV=test $(YARN) eslint scripts $(SOURCES) '*.{js,ts}' --format=codeframe --ext .js,.cjs,.mjs,.ts
-
-lint-ts:
-	scripts/lint-ts-typings.sh
 
 fix: fix-json fix-js
 
@@ -202,19 +187,21 @@ clone-license:
 
 prepublish-build: clean-lib clean-runtime-helpers
 	NODE_ENV=production BABEL_ENV=production STRIP_BABEL_8_FLAG=true $(MAKE) build-bundle
-	$(MAKE) prepublish-build-standalone clone-license
+	$(MAKE) prepublish-build-standalone clone-license prepublish-prepare-dts
+
+prepublish-prepare-dts:
+	$(MAKE) clean-tsconfig
+	$(MAKE) tscheck
+	$(YARN) gulp bundle-dts
+	$(YARN) gulp clean-dts
+	$(MAKE) build-typescript-3.7-typings
+	$(MAKE) clean-tsconfig
 
 prepublish:
 	$(MAKE) check-yarn-bug-1882
 	$(MAKE) bootstrap-only
 	$(MAKE) prepublish-build
 	IS_PUBLISH=true $(MAKE) test
-	# We don't want to publish TS-related files yet, except for @babel/types
-	rm -f packages/*/lib/**/*.d.ts{,.map}
-	rm -f codemods/*/lib/**/*.d.ts{,.map}
-	rm -f eslint/*/lib/**/*.d.ts{,.map}
-	$(MAKE) clean-tsconfig
-	$(MAKE) build-typescript-typings
 
 new-version:
 	git pull --rebase

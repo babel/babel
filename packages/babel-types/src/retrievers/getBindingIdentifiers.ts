@@ -1,20 +1,41 @@
-// @flow
 import {
   isExportDeclaration,
   isIdentifier,
   isDeclaration,
   isFunctionDeclaration,
   isFunctionExpression,
+  isExportAllDeclaration,
 } from "../validators/generated";
+import type * as t from "..";
+
+export { getBindingIdentifiers as default };
+
+function getBindingIdentifiers(
+  node: t.Node,
+  duplicates: true,
+  outerOnly?: boolean,
+): Record<string, Array<t.Identifier>>;
+
+function getBindingIdentifiers(
+  node: t.Node,
+  duplicates?: false,
+  outerOnly?: boolean,
+): Record<string, t.Identifier>;
+
+function getBindingIdentifiers(
+  node: t.Node,
+  duplicates?: boolean,
+  outerOnly?: boolean,
+): Record<string, t.Identifier> | Record<string, Array<t.Identifier>>;
 
 /**
  * Return a list of binding identifiers associated with the input `node`.
  */
-export default function getBindingIdentifiers(
-  node: Object,
+function getBindingIdentifiers(
+  node: t.Node,
   duplicates?: boolean,
   outerOnly?: boolean,
-): { [string]: Object | Array<Object> } {
+): Record<string, t.Identifier> | Record<string, Array<t.Identifier>> {
   let search = [].concat(node);
   const ids = Object.create(null);
 
@@ -34,7 +55,7 @@ export default function getBindingIdentifiers(
       continue;
     }
 
-    if (isExportDeclaration(id)) {
+    if (isExportDeclaration(id) && !isExportAllDeclaration(id)) {
       if (isDeclaration(id.declaration)) {
         search.push(id.declaration);
       }
