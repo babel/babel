@@ -216,19 +216,19 @@ export function StringLiteral(node: Object) {
 export function BigIntLiteral(node: Object) {
   const raw = this.getPossibleRaw(node);
   if (!this.format.minified && raw != null) {
-    this.token(raw);
+    this.word(raw);
     return;
   }
-  this.token(node.value + "n");
+  this.word(node.value + "n");
 }
 
 export function DecimalLiteral(node: Object) {
   const raw = this.getPossibleRaw(node);
   if (!this.format.minified && raw != null) {
-    this.token(raw);
+    this.word(raw);
     return;
   }
-  this.token(node.value + "m");
+  this.word(node.value + "m");
 }
 
 export function PipelineTopicExpression(node: Object) {
