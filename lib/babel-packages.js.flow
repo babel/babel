@@ -43,3 +43,9 @@ declare module "@babel/helper-optimise-call-expression" {
     optional: boolean
   ): BabelNodeCallExpression | BabelNodeOptionalCallExpression;
 }
+
+declare module "@babel/helper-get-function-arity" {
+  declare export default function helperGetFunctionArity(
+    node: BabelNodeFunction
+  ): number;
+}
