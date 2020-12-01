@@ -6,34 +6,34 @@ import {
   isFunctionExpression,
   isExportAllDeclaration,
 } from "../validators/generated";
-import type * as types from "../types";
+import type * as t from "../types";
 
 function getBindingIdentifiers(
-  node: types.Node,
+  node: t.Node,
   duplicates: true,
   outerOnly?: boolean,
-): Record<string, Array<types.Identifier>>;
+): Record<string, Array<t.Identifier>>;
 
 function getBindingIdentifiers(
-  node: types.Node,
+  node: t.Node,
   duplicates?: false,
   outerOnly?: boolean,
-): Record<string, types.Identifier>;
+): Record<string, t.Identifier>;
 
 function getBindingIdentifiers(
-  node: types.Node,
+  node: t.Node,
   duplicates?: boolean,
   outerOnly?: boolean,
-): Record<string, types.Identifier | Array<types.Identifier>>;
+): Record<string, t.Identifier | Array<t.Identifier>>;
 
 /**
  * Return a list of binding identifiers associated with the input `node`.
  */
 function getBindingIdentifiers(
-  node: types.Node,
+  node: t.Node,
   duplicates?: boolean,
   outerOnly?: boolean,
-): Record<string, types.Identifier | Array<types.Identifier>> {
+): Record<string, t.Identifier | Array<t.Identifier>> {
   let search = [].concat(node);
   const ids = Object.create(null);
 

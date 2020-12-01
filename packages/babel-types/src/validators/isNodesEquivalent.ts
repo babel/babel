@@ -1,10 +1,10 @@
 import { NODE_FIELDS, VISITOR_KEYS } from "../definitions";
-import type * as types from "../types";
+import type * as t from "../types";
 
 /**
  * Check if two nodes are equivalent
  */
-export default function isNodesEquivalent<T extends Partial<types.Node>>(
+export default function isNodesEquivalent<T extends Partial<t.Node>>(
   a: T,
   b: any,
 ): b is T {

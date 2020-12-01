@@ -5,64 +5,52 @@ import {
   isAssignmentExpression,
 } from "../validators/generated";
 import { expressionStatement } from "../builders/generated";
-import type * as types from "../types";
+import type * as t from "../types";
 
 export default function toStatement(
-  node: types.AssignmentExpression,
+  node: t.AssignmentExpression,
   ignore?: boolean,
-): types.ExpressionStatement;
+): t.ExpressionStatement;
 
 export default function toStatement(
-  node: types.Statement | types.AssignmentExpression,
+  node: t.Statement | t.AssignmentExpression,
   ignore?: boolean,
-): types.Statement;
+): t.Statement;
 
 export default function toStatement(
-  node: types.Class,
+  node: t.Class,
   ignore: true,
-): types.ClassDeclaration | undefined;
+): t.ClassDeclaration | undefined;
 
 export default function toStatement(
-  node: types.Class,
+  node: t.Class,
   ignore?: boolean,
-): types.ClassDeclaration;
+): t.ClassDeclaration;
 
 export default function toStatement(
-  node: types.Function,
+  node: t.Function,
   ignore: true,
-): types.FunctionDeclaration | undefined;
+): t.FunctionDeclaration | undefined;
 
 export default function toStatement(
-  node: types.Function,
+  node: t.Function,
   ignore?: boolean,
-): types.FunctionDeclaration;
+): t.FunctionDeclaration;
 
 export default function toStatement(
-  node:
-    | types.Statement
-    | types.Class
-    | types.Function
-    | types.AssignmentExpression,
+  node: t.Statement | t.Class | t.Function | t.AssignmentExpression,
   ignore: true,
-): types.Statement | undefined;
+): t.Statement | undefined;
 
 export default function toStatement(
-  node:
-    | types.Statement
-    | types.Class
-    | types.Function
-    | types.AssignmentExpression,
+  node: t.Statement | t.Class | t.Function | t.AssignmentExpression,
   ignore?: boolean,
-): types.Statement | false;
+): t.Statement | false;
 
 export default function toStatement(
-  node:
-    | types.Statement
-    | types.Class
-    | types.Function
-    | types.AssignmentExpression,
+  node: t.Statement | t.Class | t.Function | t.AssignmentExpression,
   ignore?: boolean,
-): types.Statement | false {
+): t.Statement | false {
   if (isStatement(node)) {
     return node;
   }

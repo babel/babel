@@ -1,5 +1,5 @@
 import { isIdentifier, isMemberExpression, isStringLiteral } from "./generated";
-import type * as types from "../types";
+import type * as t from "../types";
 
 /**
  * Determines whether or not the input node `member` matches the
@@ -9,7 +9,7 @@ import type * as types from "../types";
  * parsed nodes of `React.createClass` and `React["createClass"]`.
  */
 export default function matchesPattern(
-  member: types.Node | null | undefined,
+  member: t.Node | null | undefined,
   match: string | string[],
   allowPartial?: boolean,
 ): boolean {

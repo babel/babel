@@ -13,11 +13,11 @@ import {
   conditionalExpression,
 } from "../builders/generated";
 import cloneNode from "../clone/cloneNode";
-import type * as types from "../types";
+import type * as t from "../types";
 import type { Scope } from "./Scope";
 
 export default function gatherSequenceExpressions(
-  nodes: ReadonlyArray<types.Node>,
+  nodes: ReadonlyArray<t.Node>,
   scope: Scope,
   declars: Array<any>,
 ): any | undefined | null {

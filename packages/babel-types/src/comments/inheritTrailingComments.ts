@@ -1,9 +1,9 @@
 import inherit from "../utils/inherit";
-import type * as types from "../types";
+import type * as t from "../types";
 
 export default function inheritTrailingComments(
-  child: types.Node,
-  parent: types.Node,
+  child: t.Node,
+  parent: t.Node,
 ): void {
   inherit("trailingComments", child, parent);
 }

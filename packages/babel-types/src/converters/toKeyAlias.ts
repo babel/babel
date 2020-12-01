@@ -1,11 +1,11 @@
 import { isIdentifier, isStringLiteral } from "../validators/generated";
 import cloneNode from "../clone/cloneNode";
 import removePropertiesDeep from "../modifications/removePropertiesDeep";
-import type * as types from "../types";
+import type * as t from "../types";
 
 export default function toKeyAlias(
-  node: types.Method | types.Property,
-  key: types.Node = node.key,
+  node: t.Method | t.Property,
+  key: t.Node = node.key,
 ): string {
   let alias;
 

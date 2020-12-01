@@ -1,15 +1,15 @@
 import { VISITOR_KEYS } from "../definitions";
-import type * as types from "../types";
+import type * as t from "../types";
 
 export type TraversalAncestors = Array<{
-  node: types.Node;
+  node: t.Node;
   key: string;
   index?: number;
 }>;
 
 export type TraversalHandler<T> = (
   this: undefined,
-  node: types.Node,
+  node: t.Node,
   parent: TraversalAncestors,
   type: T,
 ) => void;
@@ -25,7 +25,7 @@ export type TraversalHandlers<T> = {
  * AST data can be taken into account.
  */
 export default function traverse<T>(
-  node: types.Node,
+  node: t.Node,
   handlers: TraversalHandler<T> | TraversalHandlers<T>,
   state?: T,
 ): void {

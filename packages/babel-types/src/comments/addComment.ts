@@ -1,12 +1,12 @@
 import addComments from "./addComments";
-import type * as types from "../types";
+import type * as t from "../types";
 
 /**
  * Add comment of certain type to a node.
  */
-export default function addComment<T extends types.Node>(
+export default function addComment<T extends t.Node>(
   node: T,
-  type: types.CommentTypeShorthand,
+  type: t.CommentTypeShorthand,
   content: string,
   line?: boolean,
 ): T {
@@ -14,6 +14,6 @@ export default function addComment<T extends types.Node>(
     {
       type: line ? "CommentLine" : "CommentBlock",
       value: content,
-    } as types.Comment,
+    } as t.Comment,
   ]);
 }

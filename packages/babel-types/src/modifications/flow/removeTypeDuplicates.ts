@@ -5,9 +5,9 @@ import {
   isFlowBaseAnnotation,
   isIdentifier,
 } from "../../validators/generated";
-import type * as types from "../../types";
+import type * as t from "../../types";
 
-function getQualificationName(node: types.GenericTypeAnnotation["id"]) {
+function getQualificationName(node: t.GenericTypeAnnotation["id"]) {
   return isIdentifier(node)
     ? node.name
     : `${node.id.name}.${getQualificationName(node.qualification)}`;
@@ -17,8 +17,8 @@ function getQualificationName(node: types.GenericTypeAnnotation["id"]) {
  * Dedupe type annotations.
  */
 export default function removeTypeDuplicates(
-  nodes: ReadonlyArray<types.FlowType | false | null | undefined>,
-): types.FlowType[] {
+  nodes: ReadonlyArray<t.FlowType | false | null | undefined>,
+): t.FlowType[] {
   const generics = {};
   const bases = {};
 

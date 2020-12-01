@@ -1,24 +1,24 @@
 import getBindingIdentifiers from "./getBindingIdentifiers";
-import type * as types from "../types";
+import type * as t from "../types";
 
 export default function getOuterBindingIdentifiers(
-  node: types.Node,
+  node: t.Node,
   duplicates: true,
-): Record<string, Array<types.Identifier>>;
+): Record<string, Array<t.Identifier>>;
 
 export default function getOuterBindingIdentifiers(
-  node: types.Node,
+  node: t.Node,
   duplicates?: false,
-): Record<string, types.Identifier>;
+): Record<string, t.Identifier>;
 
 export default function getOuterBindingIdentifiers(
-  node: types.Node,
+  node: t.Node,
   duplicates: boolean,
-): Record<string, types.Identifier | Array<types.Identifier>>;
+): Record<string, t.Identifier | Array<t.Identifier>>;
 
 export default function getOuterBindingIdentifiers(
-  node: types.Node,
+  node: t.Node,
   duplicates: boolean,
-): Record<string, types.Identifier | Array<types.Identifier>> {
+): Record<string, t.Identifier | Array<t.Identifier>> {
   return getBindingIdentifiers(node, duplicates, true);
 }

@@ -1,7 +1,7 @@
 import { FLIPPED_ALIAS_KEYS, ALIAS_KEYS } from "../definitions";
-import type * as types from "../types";
+import type * as t from "../types";
 
-export default function isType<T extends types.Node["type"]>(
+export default function isType<T extends t.Node["type"]>(
   nodeType: string,
   targetType: T,
 ): nodeType is T;

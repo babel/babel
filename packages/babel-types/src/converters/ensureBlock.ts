@@ -1,5 +1,5 @@
 import toBlock from "./toBlock";
-import type * as types from "../types";
+import type * as t from "../types";
 
 /**
  * Ensure the `key` (defaults to "body") of a `node` is a block.
@@ -8,8 +8,8 @@ import type * as types from "../types";
  * Returns the BlockStatement
  */
 export default function ensureBlock(
-  node: types.Node,
+  node: t.Node,
   key: string = "body",
-): types.BlockStatement {
+): t.BlockStatement {
   return (node[key] = toBlock(node[key], node));
 }

@@ -1,5 +1,5 @@
 import { COMMENT_KEYS } from "../constants";
-import type * as types from "../types";
+import type * as t from "../types";
 
 const CLEAR_KEYS = ["tokens", "start", "end", "loc", "raw", "rawValue"];
 
@@ -12,7 +12,7 @@ const CLEAR_KEYS_PLUS_COMMENTS = COMMENT_KEYS.concat(["comments"]).concat(
  * properties like location data and raw token data.
  */
 export default function removeProperties(
-  node: types.Node,
+  node: t.Node,
   opts: { preserveComments?: boolean } = {},
 ): void {
   const map = opts.preserveComments ? CLEAR_KEYS : CLEAR_KEYS_PLUS_COMMENTS;

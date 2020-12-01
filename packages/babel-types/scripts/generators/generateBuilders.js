@@ -81,7 +81,7 @@ module.exports = function generateBuilders() {
  * To re-generate run 'make build'
  */
 import builder from "../builder";
-import type * as types from "../../types";\n\n`;
+import type * as t from "../../types";\n\n`;
 
   const reservedNames = new Set(["super", "import"]);
   Object.keys(definitions.BUILDER_KEYS).forEach(type => {

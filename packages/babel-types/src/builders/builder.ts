@@ -1,10 +1,10 @@
 import loClone from "lodash/clone";
 import { NODE_FIELDS, BUILDER_KEYS } from "../definitions";
 import validate from "../validators/validate";
-import type * as types from "../types";
+import type * as t from "../types";
 
 export default function builder(
-  type: types.Node["type"],
+  type: t.Node["type"],
   ...args: Array<any>
 ): any {
   const keys = BUILDER_KEYS[type];
@@ -30,7 +30,7 @@ export default function builder(
   });
 
   for (const key of Object.keys(node)) {
-    validate(node as types.Node, key, node[key]);
+    validate(node as t.Node, key, node[key]);
   }
 
   return node;

@@ -1,13 +1,13 @@
 import { INHERIT_KEYS } from "../constants";
 import inheritsComments from "../comments/inheritsComments";
-import type * as types from "../types";
+import type * as t from "../types";
 
 /**
  * Inherit all contextual properties from `parent` node to `child` node.
  */
-export default function inherits<T extends types.Node | null | undefined>(
+export default function inherits<T extends t.Node | null | undefined>(
   child: T,
-  parent: types.Node | null | undefined,
+  parent: t.Node | null | undefined,
 ): T {
   if (!child || !parent) return child;
 

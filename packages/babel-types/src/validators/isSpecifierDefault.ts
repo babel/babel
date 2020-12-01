@@ -1,11 +1,11 @@
 import { isIdentifier, isImportDefaultSpecifier } from "./generated";
-import type * as types from "../types";
+import type * as t from "../types";
 
 /**
  * Check if the input `specifier` is a `default` import or export.
  */
 export default function isSpecifierDefault(
-  specifier: types.ModuleSpecifier,
+  specifier: t.ModuleSpecifier,
 ): boolean {
   return (
     isImportDefaultSpecifier(specifier) ||

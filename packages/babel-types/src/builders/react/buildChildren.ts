@@ -4,23 +4,23 @@ import {
   isJSXEmptyExpression,
 } from "../../validators/generated";
 import cleanJSXElementLiteralChild from "../../utils/react/cleanJSXElementLiteralChild";
-import type * as types from "../../types";
+import type * as t from "../../types";
 
 type ReturnedChild =
-  | types.JSXExpressionContainer
-  | types.JSXSpreadChild
-  | types.JSXElement
-  | types.JSXFragment
-  | types.Expression;
+  | t.JSXExpressionContainer
+  | t.JSXSpreadChild
+  | t.JSXElement
+  | t.JSXFragment
+  | t.Expression;
 
 export default function buildChildren(node: {
   children: ReadonlyArray<
-    | types.JSXText
-    | types.JSXExpressionContainer
-    | types.JSXSpreadChild
-    | types.JSXElement
-    | types.JSXFragment
-    | types.JSXEmptyExpression
+    | t.JSXText
+    | t.JSXExpressionContainer
+    | t.JSXSpreadChild
+    | t.JSXElement
+    | t.JSXFragment
+    | t.JSXEmptyExpression
   >;
 }): ReturnedChild[] {
   const elements = [];

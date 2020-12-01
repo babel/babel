@@ -14,33 +14,33 @@ import {
   unaryExpression,
   binaryExpression,
 } from "../builders/generated";
-import type * as types from "../types";
+import type * as t from "../types";
 
-export default function valueToNode(value: undefined): types.Identifier; // (should this not be a types.UnaryExpression to avoid shadowing?)
-export default function valueToNode(value: boolean): types.BooleanLiteral;
-export default function valueToNode(value: null): types.NullLiteral;
-export default function valueToNode(value: string): types.StringLiteral;
+export default function valueToNode(value: undefined): t.Identifier; // (should this not be a types.UnaryExpression to avoid shadowing?)
+export default function valueToNode(value: boolean): t.BooleanLiteral;
+export default function valueToNode(value: null): t.NullLiteral;
+export default function valueToNode(value: string): t.StringLiteral;
 // Infinities and NaN need to use a types.BinaryExpression; negative values must be wrapped in types.UnaryExpression
 export default function valueToNode(
   value: number,
-): types.NumericLiteral | types.BinaryExpression | types.UnaryExpression;
-export default function valueToNode(value: RegExp): types.RegExpLiteral;
+): t.NumericLiteral | t.BinaryExpression | t.UnaryExpression;
+export default function valueToNode(value: RegExp): t.RegExpLiteral;
 export default function valueToNode(
   value: ReadonlyArray<
     undefined | boolean | null | string | number | RegExp | object
   >,
-): types.ArrayExpression;
+): t.ArrayExpression;
 // this throws with objects that are not PlainObject according to lodash,
 // or if there are non-valueToNode-able values
-export default function valueToNode(value: object): types.ObjectExpression;
+export default function valueToNode(value: object): t.ObjectExpression;
 
 export default function valueToNode(
   value: undefined | boolean | null | string | number | RegExp | object,
-): types.Expression;
+): t.Expression;
 
 export default function valueToNode(
   value: undefined | boolean | null | string | number | RegExp | object,
-): types.Expression {
+): t.Expression {
   // undefined
   if (value === undefined) {
     return identifier("undefined");

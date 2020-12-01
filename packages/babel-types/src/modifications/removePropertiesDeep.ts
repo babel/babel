@@ -1,8 +1,8 @@
 import traverseFast from "../traverse/traverseFast";
 import removeProperties from "./removeProperties";
-import type * as types from "../types";
+import type * as t from "../types";
 
-export default function removePropertiesDeep<T extends types.Node>(
+export default function removePropertiesDeep<T extends t.Node>(
   tree: T,
   opts?: { preserveComments: boolean } | null,
 ): T {

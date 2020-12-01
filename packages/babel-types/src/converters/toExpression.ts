@@ -4,27 +4,17 @@ import {
   isClass,
   isExpressionStatement,
 } from "../validators/generated";
-import type * as types from "../types";
+import type * as t from "../types";
+
+export default function toExpression(node: t.Function): t.FunctionExpression;
+export default function toExpression(node: t.Class): t.ClassExpression;
+export default function toExpression(
+  node: t.ExpressionStatement | t.Expression | t.Class | t.Function,
+): t.Expression;
 
 export default function toExpression(
-  node: types.Function,
-): types.FunctionExpression;
-export default function toExpression(node: types.Class): types.ClassExpression;
-export default function toExpression(
-  node:
-    | types.ExpressionStatement
-    | types.Expression
-    | types.Class
-    | types.Function,
-): types.Expression;
-
-export default function toExpression(
-  node:
-    | types.ExpressionStatement
-    | types.Expression
-    | types.Class
-    | types.Function,
-): types.Expression {
+  node: t.ExpressionStatement | t.Expression | t.Class | t.Function,
+): t.Expression {
   if (isExpressionStatement(node)) {
     node = node.expression;
   }

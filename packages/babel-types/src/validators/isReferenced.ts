@@ -1,12 +1,12 @@
-import type * as types from "../types";
+import type * as t from "../types";
 
 /**
  * Check if the input `node` is a reference to a bound variable.
  */
 export default function isReferenced(
-  node: types.Node,
-  parent: types.Node,
-  grandparent?: types.Node,
+  node: t.Node,
+  parent: t.Node,
+  grandparent?: t.Node,
 ): boolean {
   switch (parent.type) {
     // yes: PARENT[NODE]

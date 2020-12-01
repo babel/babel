@@ -1,8 +1,8 @@
 import { NODE_FIELDS, NODE_PARENT_VALIDATIONS } from "../definitions";
-import type * as types from "../types";
+import type * as t from "../types";
 
 export default function validate(
-  node: types.Node | undefined | null,
+  node: t.Node | undefined | null,
   key: string,
   val: any,
 ): void {
@@ -17,7 +17,7 @@ export default function validate(
 }
 
 export function validateField(
-  node: types.Node | undefined | null,
+  node: t.Node | undefined | null,
   key: string,
   val: any,
   field: any,
@@ -29,7 +29,7 @@ export function validateField(
 }
 
 export function validateChild(
-  node: types.Node | undefined | null,
+  node: t.Node | undefined | null,
   key: string,
   val?: any,
 ) {

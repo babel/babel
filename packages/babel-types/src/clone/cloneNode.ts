@@ -1,5 +1,5 @@
 import { NODE_FIELDS } from "../definitions";
-import type * as types from "../types";
+import type * as t from "../types";
 import { isFile, isIdentifier } from "../validators/generated";
 
 const has = Function.call.bind(Object.prototype.hasOwnProperty);
@@ -25,7 +25,7 @@ function cloneIfNodeOrArray(obj, deep, withoutLoc) {
  * If the second parameter is `false`, cloneNode performs a shallow clone.
  * If the third parameter is true, the cloned nodes exclude location properties.
  */
-export default function cloneNode<T extends types.Node>(
+export default function cloneNode<T extends t.Node>(
   node: T,
   deep: boolean = true,
   withoutLoc: boolean = false,
@@ -102,7 +102,7 @@ export default function cloneNode<T extends types.Node>(
   return newNode;
 }
 
-function cloneCommentsWithoutLoc<T extends types.Comment>(comments: T[]): T[] {
+function cloneCommentsWithoutLoc<T extends t.Comment>(comments: T[]): T[] {
   return comments.map(
     ({ type, value }) =>
       ({

@@ -1,14 +1,12 @@
 import { memberExpression } from "../builders/generated";
-import type * as types from "../types";
+import type * as t from "../types";
 
 /**
  * Append a node to a member expression.
  */
-export default function appendToMemberExpression<
-  T extends types.MemberExpression
->(
+export default function appendToMemberExpression<T extends t.MemberExpression>(
   member: T,
-  append: types.MemberExpression["property"],
+  append: t.MemberExpression["property"],
   computed: boolean = false,
 ): T {
   member.object = memberExpression(

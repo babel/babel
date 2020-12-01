@@ -1,5 +1,5 @@
 import matchesPattern from "./matchesPattern";
-import type * as types from "../types";
+import type * as t from "../types";
 
 /**
  * Build a function that when called will return whether or not the
@@ -14,5 +14,5 @@ export default function buildMatchMemberExpression(
 ) {
   const parts = match.split(".");
 
-  return (member: types.Node) => matchesPattern(member, parts, allowPartial);
+  return (member: t.Node) => matchesPattern(member, parts, allowPartial);
 }

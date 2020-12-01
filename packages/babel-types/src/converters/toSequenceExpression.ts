@@ -1,5 +1,5 @@
 import gatherSequenceExpressions from "./gatherSequenceExpressions";
-import type * as types from "../types";
+import type * as t from "../types";
 import type { Scope } from "./Scope";
 
 /**
@@ -11,9 +11,9 @@ import type { Scope } from "./Scope";
  * Expression statements are just resolved to their expression.
  */
 export default function toSequenceExpression(
-  nodes: ReadonlyArray<types.Node>,
+  nodes: ReadonlyArray<t.Node>,
   scope: Scope,
-): types.SequenceExpression | undefined {
+): t.SequenceExpression | undefined {
   if (!nodes?.length) return;
 
   const declars = [];
