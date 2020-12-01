@@ -49,3 +49,13 @@ declare module "@babel/helper-get-function-arity" {
     node: BabelNodeFunction
   ): number;
 }
+
+declare module "@babel/helper-annotate-as-pure" {
+  declare export default function annotateAsPure(
+    pathOrNode:
+      | BabelNode
+      | {
+          node: BabelNode,
+        }
+  ): void;
+}
