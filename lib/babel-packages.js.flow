@@ -34,3 +34,12 @@ declare module "@babel/template" {
     program: Program,
   };
 }
+
+declare module "@babel/helper-optimise-call-expression" {
+  declare export default function optimiseCallExpression(
+    callee: BabelNodeExpression,
+    thisNode: BabelNodeExpression,
+    args: $Readonly<Array<BabelNodeExpression | BabelNodeSpreadElement>>,
+    optional: boolean
+  ): BabelNodeCallExpression | BabelNodeOptionalCallExpression;
+}
