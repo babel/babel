@@ -1,14 +1,15 @@
-// @flow
 import { VISITOR_KEYS } from "../definitions";
+import type * as t from "..";
 
 /**
  * A prefix AST traversal implementation meant for simple searching
  * and processing.
  */
 export default function traverseFast(
-  node: Object,
-  enter: (node: BabelNode, opts?: Object) => void,
-  opts?: Object,
+  node: t.Node | null | undefined,
+  enter: (node: t.Node, opts?: any) => void,
+  // todo(flow->ts) We could parametrize opts to T rather than any, so that the type is "forwarded" to the callback.
+  opts?: any,
 ): void {
   if (!node) return;
 

@@ -1,4 +1,3 @@
-// @flow
 import {
   stringTypeAnnotation,
   numberTypeAnnotation,
@@ -7,13 +6,26 @@ import {
   genericTypeAnnotation,
   identifier,
 } from "../generated";
+import type * as t from "../..";
 
 /**
  * Create a type annotation based on typeof expression.
  */
 export default function createTypeAnnotationBasedOnTypeof(
-  type: string,
-): Object {
+  type:
+    | "string"
+    | "number"
+    | "undefined"
+    | "boolean"
+    | "function"
+    | "object"
+    | "symbol",
+):
+  | t.StringTypeAnnotation
+  | t.VoidTypeAnnotation
+  | t.NumberTypeAnnotation
+  | t.BooleanTypeAnnotation
+  | t.GenericTypeAnnotation {
   if (type === "string") {
     return stringTypeAnnotation();
   } else if (type === "number") {

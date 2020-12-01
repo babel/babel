@@ -1,15 +1,22 @@
-// @flow
 import { VISITOR_KEYS } from "../definitions";
+import type * as t from "..";
 
 export type TraversalAncestors = Array<{
-  node: BabelNode,
-  key: string,
-  index?: number,
+  node: t.Node;
+  key: string;
+  index?: number;
 }>;
-export type TraversalHandler<T> = (BabelNode, TraversalAncestors, T) => void;
+
+export type TraversalHandler<T> = (
+  this: undefined,
+  node: t.Node,
+  parent: TraversalAncestors,
+  state: T,
+) => void;
+
 export type TraversalHandlers<T> = {
-  enter?: TraversalHandler<T>,
-  exit?: TraversalHandler<T>,
+  enter?: TraversalHandler<T>;
+  exit?: TraversalHandler<T>;
 };
 
 /**
@@ -18,7 +25,7 @@ export type TraversalHandlers<T> = {
  * AST data can be taken into account.
  */
 export default function traverse<T>(
-  node: BabelNode,
+  node: t.Node,
   handlers: TraversalHandler<T> | TraversalHandlers<T>,
   state?: T,
 ): void {
@@ -26,16 +33,16 @@ export default function traverse<T>(
     handlers = { enter: handlers };
   }
 
-  const { enter, exit } = (handlers: TraversalHandlers<T>);
+  const { enter, exit } = handlers as TraversalHandlers<T>;
 
   traverseSimpleImpl(node, enter, exit, state, []);
 }
 
 function traverseSimpleImpl<T>(
-  node: Object,
-  enter: ?Function,
-  exit: ?Function,
-  state: ?T,
+  node: any,
+  enter: Function | undefined | null,
+  exit: Function | undefined | null,
+  state: T | undefined | null,
   ancestors: TraversalAncestors,
 ) {
   const keys = VISITOR_KEYS[node.type];

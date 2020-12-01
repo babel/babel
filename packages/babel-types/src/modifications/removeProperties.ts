@@ -1,5 +1,5 @@
-// @flow
 import { COMMENT_KEYS } from "../constants";
+import type * as t from "..";
 
 const CLEAR_KEYS = ["tokens", "start", "end", "loc", "raw", "rawValue"];
 
@@ -12,8 +12,8 @@ const CLEAR_KEYS_PLUS_COMMENTS = COMMENT_KEYS.concat(["comments"]).concat(
  * properties like location data and raw token data.
  */
 export default function removeProperties(
-  node: Object,
-  opts?: Object = {},
+  node: t.Node,
+  opts: { preserveComments?: boolean } = {},
 ): void {
   const map = opts.preserveComments ? CLEAR_KEYS : CLEAR_KEYS_PLUS_COMMENTS;
   for (const key of map) {

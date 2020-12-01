@@ -46,7 +46,7 @@ export function skipAllButComputedKey(path: NodePath) {
 // Avoid using `path.scope` here
 export const environmentVisitor = {
   // todo (Babel 8): remove StaticBlock brand checks
-  [`${t.StaticBlock ? "StaticBlock|" : ""}ClassPrivateProperty|TypeAnnotation`](
+  [`${t.staticBlock ? "StaticBlock|" : ""}ClassPrivateProperty|TypeAnnotation`](
     path: NodePath,
   ) {
     path.skip();

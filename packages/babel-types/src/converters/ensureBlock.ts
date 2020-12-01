@@ -1,5 +1,5 @@
-// @flow
 import toBlock from "./toBlock";
+import type * as t from "..";
 
 /**
  * Ensure the `key` (defaults to "body") of a `node` is a block.
@@ -8,8 +8,8 @@ import toBlock from "./toBlock";
  * Returns the BlockStatement
  */
 export default function ensureBlock(
-  node: Object,
+  node: t.Node,
   key: string = "body",
-): Object {
+): t.BlockStatement {
   return (node[key] = toBlock(node[key], node));
 }

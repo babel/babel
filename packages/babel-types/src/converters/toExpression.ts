@@ -1,12 +1,22 @@
-// @flow
 import {
   isExpression,
   isFunction,
   isClass,
   isExpressionStatement,
 } from "../validators/generated";
+import type * as t from "..";
 
-export default function toExpression(node: Object): Object {
+export default toExpression as {
+  (node: t.Function): t.FunctionExpression;
+  (node: t.Class): t.ClassExpression;
+  (
+    node: t.ExpressionStatement | t.Expression | t.Class | t.Function,
+  ): t.Expression;
+};
+
+function toExpression(
+  node: t.ExpressionStatement | t.Expression | t.Class | t.Function,
+): t.Expression {
   if (isExpressionStatement(node)) {
     node = node.expression;
   }
@@ -25,8 +35,10 @@ export default function toExpression(node: Object): Object {
   // ClassDeclaration -> ClassExpression
   // FunctionDeclaration, ObjectMethod, ClassMethod -> FunctionExpression
   if (isClass(node)) {
+    // @ts-expect-error todo(flow->ts): avoid type unsafe mutations
     node.type = "ClassExpression";
   } else if (isFunction(node)) {
+    // @ts-expect-error todo(flow->ts): avoid type unsafe mutations
     node.type = "FunctionExpression";
   }
 

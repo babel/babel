@@ -20,10 +20,15 @@ const rollupNodePolyfills = require("rollup-plugin-node-polyfills");
 const rollupNodeResolve = require("@rollup/plugin-node-resolve").default;
 const rollupReplace = require("@rollup/plugin-replace");
 const { terser: rollupTerser } = require("rollup-plugin-terser");
+const { default: rollupDts } = require("rollup-plugin-dts");
 
-const defaultSourcesGlob = "./@(codemods|packages|eslint)/*/src/**/*.{js,ts}";
+const defaultPackagesGlob = "./@(codemods|packages|eslint)/*";
+const defaultSourcesGlob = `${defaultPackagesGlob}/src/**/{*.js,!(*.d).ts}`;
+const defaultDtsGlob = `${defaultPackagesGlob}/lib/**/*.d.ts{,.map}`;
+
 const babelStandalonePluginConfigGlob =
   "./packages/babel-standalone/scripts/pluginConfig.json";
+
 const buildTypingsWatchGlob = [
   "./packages/babel-types/lib/definitions/**/*.js",
   "./packages/babel-types/scripts/generators/*.js",
@@ -37,11 +42,14 @@ const buildTypingsWatchGlob = [
  * @example
  * mapSrcToLib("packages/babel-template/src/index.ts")
  * // returns "packages/babel-template/lib/index.js"
+ * @example
+ * mapSrcToLib("packages/babel-template/src/index.d.ts")
+ * // returns "packages/babel-template/lib/index.d.ts"
  * @param {string} srcPath
  * @returns {string}
  */
 function mapSrcToLib(srcPath) {
-  const parts = srcPath.replace(/\.ts$/, ".js").split(path.sep);
+  const parts = srcPath.replace(/(?<!\.d)\.ts$/, ".js").split(path.sep);
   parts[2] = "lib";
   return parts.join(path.sep);
 }
@@ -81,19 +89,22 @@ function rename(fn) {
  *
  * @typedef {("asserts" | "builders" | "constants" | "validators")} HelperKind
  * @param {HelperKind} helperKind
+ * @param {string} filename
  */
-function generateTypeHelpers(helperKind) {
+function generateTypeHelpers(helperKind, filename = "index.ts") {
   const dest = `./packages/babel-types/src/${helperKind}/generated/`;
   const formatCode = require("./scripts/utils/formatCode");
-  return gulp
+  const stream = gulp
     .src(".", { base: __dirname })
     .pipe(errorsLogger())
     .pipe(
       through.obj(function (file, enc, callback) {
-        file.path = "index.js";
+        file.path = filename;
         file.contents = Buffer.from(
           formatCode(
-            require(`./packages/babel-types/scripts/generators/${helperKind}`)(),
+            require(`./packages/babel-types/scripts/generators/${helperKind}`)(
+              filename
+            ),
             dest + file.path
           )
         );
@@ -102,6 +113,8 @@ function generateTypeHelpers(helperKind) {
       })
     )
     .pipe(gulp.dest(dest));
+
+  return finish(stream);
 }
 
 function generateStandalone() {
@@ -139,18 +152,42 @@ export const all = {${allList}};`;
     .pipe(gulp.dest(dest));
 }
 
-function buildBabel(exclude, sourcesGlob = defaultSourcesGlob) {
-  const base = __dirname;
+function unlink() {
+  return through.obj(function (file, enc, callback) {
+    fs.unlink(file.path, () => callback());
+  });
+}
 
-  let stream = gulp.src(sourcesGlob, { base: __dirname });
+function finish(stream) {
+  return new Promise((resolve, reject) => {
+    stream.on("end", resolve);
+    stream.on("finish", resolve);
+    stream.on("error", reject);
+  });
+}
+
+function getFiles(glob, { include, exclude }) {
+  let stream = gulp.src(glob, { base: __dirname });
 
   if (exclude) {
-    const filters = exclude.map(p => `!**/${p.src}/**`);
+    const filters = exclude.map(p => `!**/${p}/**`);
     filters.unshift("**");
     stream = stream.pipe(filter(filters));
   }
+  if (include) {
+    const filters = include.map(p => `**/${p}/**`);
+    stream = stream.pipe(filter(filters));
+  }
 
-  return stream
+  return stream;
+}
+
+function buildBabel(exclude) {
+  const base = __dirname;
+
+  return getFiles(defaultSourcesGlob, {
+    exclude: exclude && exclude.map(p => p.src),
+  })
     .pipe(errorsLogger())
     .pipe(newer({ dest: base, map: mapSrcToLib }))
     .pipe(compilationLogger())
@@ -283,6 +320,41 @@ function buildRollup(packages, targetBrowsers) {
   );
 }
 
+function buildRollupDts(packages) {
+  const sourcemap = process.env.NODE_ENV === "production";
+  return Promise.all(
+    packages.map(async packageName => {
+      const input = `${packageName}/lib/index.d.ts`;
+      fancyLog(`Bundling '${chalk.cyan(input)}' with rollup ...`);
+      const bundle = await rollup.rollup({
+        input,
+        plugins: [rollupDts()],
+      });
+
+      await finish(
+        gulp.src(`${packageName}/lib/**/*.d.ts{,.map}`).pipe(unlink())
+      );
+
+      await bundle.write({
+        file: `${packageName}/lib/index.d.ts`,
+        format: "es",
+        sourcemap: sourcemap,
+        exports: "named",
+      });
+    })
+  );
+}
+
+function removeDts(exclude) {
+  return getFiles(defaultDtsGlob, { exclude }).pipe(unlink());
+}
+
+function copyDts(packages) {
+  return getFiles(`${defaultPackagesGlob}/src/**/*.d.ts`, { include: packages })
+    .pipe(rename(file => path.resolve(file.base, mapSrcToLib(file.relative))))
+    .pipe(gulp.dest(__dirname));
+}
+
 const libBundles = [
   "packages/babel-parser",
   "packages/babel-plugin-proposal-optional-chaining",
@@ -292,6 +364,8 @@ const libBundles = [
   format: "cjs",
   dest: "lib",
 }));
+
+const dtsBundles = ["packages/babel-types"];
 
 const standaloneBundle = [
   {
@@ -306,11 +380,15 @@ const standaloneBundle = [
 
 gulp.task("generate-type-helpers", () => {
   fancyLog("Generating @babel/types dynamic functions");
-  return Promise.all(
-    ["asserts", "builders", "constants", "validators"].map(helperKind =>
-      generateTypeHelpers(helperKind)
-    )
-  );
+
+  return Promise.all([
+    generateTypeHelpers("asserts"),
+    generateTypeHelpers("builders"),
+    generateTypeHelpers("builders", "uppercase.js"),
+    generateTypeHelpers("constants"),
+    generateTypeHelpers("validators"),
+    generateTypeHelpers("ast-types"),
+  ]);
 });
 
 gulp.task("generate-standalone", () => generateStandalone());
@@ -321,6 +399,13 @@ gulp.task(
   "build-babel-standalone",
   gulp.series("generate-standalone", "rollup-babel-standalone")
 );
+
+gulp.task("copy-dts", () => copyDts(dtsBundles));
+gulp.task(
+  "bundle-dts",
+  gulp.series("copy-dts", () => buildRollupDts(dtsBundles))
+);
+gulp.task("clean-dts", () => removeDts(/* exclude */ dtsBundles));
 
 gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
 

@@ -1,10 +1,13 @@
-// @flow
 import { NODE_FIELDS, VISITOR_KEYS } from "../definitions";
+import type * as t from "..";
 
 /**
  * Check if two nodes are equivalent
  */
-export default function isNodesEquivalent(a: any, b: any): boolean {
+export default function isNodesEquivalent<T extends Partial<t.Node>>(
+  a: T,
+  b: any,
+): b is T {
   if (
     typeof a !== "object" ||
     typeof b !== "object" ||

@@ -1,12 +1,12 @@
-// @flow
 import addComments from "./addComments";
+import type * as t from "..";
 
 /**
  * Add comment of certain type to a node.
  */
-export default function addComment<T: Object>(
+export default function addComment<T extends t.Node>(
   node: T,
-  type: string,
+  type: t.CommentTypeShorthand,
   content: string,
   line?: boolean,
 ): T {
@@ -14,6 +14,6 @@ export default function addComment<T: Object>(
     {
       type: line ? "CommentLine" : "CommentBlock",
       value: content,
-    },
+    } as t.Comment,
   ]);
 }

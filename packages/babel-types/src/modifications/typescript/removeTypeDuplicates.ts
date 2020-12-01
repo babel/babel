@@ -3,13 +3,14 @@ import {
   isTSUnionType,
   isTSBaseType,
 } from "../../validators/generated";
+import type * as t from "../..";
 
 /**
  * Dedupe type annotations.
  */
 export default function removeTypeDuplicates(
-  nodes: Array<Object>,
-): Array<Object> {
+  nodes: Array<t.TSType>,
+): Array<t.TSType> {
   const generics = {};
   const bases = {};
 
@@ -28,7 +29,7 @@ export default function removeTypeDuplicates(
     }
 
     // this type matches anything
-    if (isTSAnyKeyword(node.type)) {
+    if (isTSAnyKeyword(node)) {
       return [node];
     }
 

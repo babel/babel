@@ -1,4 +1,3 @@
-// @flow
 import isValidIdentifier from "./isValidIdentifier";
 
 const RESERVED_WORDS_ES3_ONLY: Set<string> = new Set([

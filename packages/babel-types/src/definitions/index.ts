@@ -1,4 +1,3 @@
-// @flow
 import toFastProperties from "to-fast-properties";
 import "./core";
 import "./flow";
