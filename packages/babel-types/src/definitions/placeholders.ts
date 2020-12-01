@@ -11,7 +11,9 @@ export const PLACEHOLDERS = [
   "Pattern",
 ];
 
-export const PLACEHOLDERS_ALIAS: { [string]: Array<string> } = {
+export const PLACEHOLDERS_ALIAS: {
+  [x: string]: Array<string>;
+} = {
   Declaration: ["Statement"],
   Pattern: ["PatternLike", "LVal"],
 };
@@ -21,7 +23,9 @@ for (const type of PLACEHOLDERS) {
   if (alias?.length) PLACEHOLDERS_ALIAS[type] = alias;
 }
 
-export const PLACEHOLDERS_FLIPPED_ALIAS: { [string]: Array<string> } = {};
+export const PLACEHOLDERS_FLIPPED_ALIAS: {
+  [x: string]: Array<string>;
+} = {};
 
 Object.keys(PLACEHOLDERS_ALIAS).forEach(type => {
   PLACEHOLDERS_ALIAS[type].forEach(alias => {

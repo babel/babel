@@ -1,4 +1,3 @@
-// @flow
 import isReactComponent from "./validators/react/isReactComponent";
 import isCompatTag from "./validators/react/isCompatTag";
 import buildChildren from "./builders/react/buildChildren";
@@ -63,7 +62,7 @@ export { default as getOuterBindingIdentifiers } from "./retrievers/getOuterBind
 
 // traverse
 export { default as traverse } from "./traverse/traverse";
-export type * from "./traverse/traverse";
+export * from "./traverse/traverse";
 export { default as traverseFast } from "./traverse/traverseFast";
 
 // utils

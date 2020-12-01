@@ -1,4 +1,3 @@
-// @flow
 import {
   isJSXText,
   isJSXExpressionContainer,
@@ -6,7 +5,7 @@ import {
 } from "../../validators/generated";
 import cleanJSXElementLiteralChild from "../../utils/react/cleanJSXElementLiteralChild";
 
-export default function buildChildren(node: Object): Array<Object> {
+export default function buildChildren(node: any): Array<any> {
   const elements = [];
 
   for (let i = 0; i < node.children.length; i++) {

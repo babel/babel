@@ -1,12 +1,10 @@
-// @flow
-
 /**
  * Add comments of certain type to a node.
  */
-export default function addComments<T: Object>(
+export default function addComments<T extends any>(
   node: T,
   type: string,
-  comments: Array<Object>,
+  comments: Array<any>,
 ): T {
   if (!comments || !node) return node;
 

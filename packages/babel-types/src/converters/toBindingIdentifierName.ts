@@ -1,4 +1,3 @@
-// @flow
 import toIdentifier from "./toIdentifier";
 
 export default function toBindingIdentifierName(name: string): string {

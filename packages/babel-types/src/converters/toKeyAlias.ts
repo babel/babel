@@ -1,12 +1,8 @@
-// @flow
 import { isIdentifier, isStringLiteral } from "../validators/generated";
 import cloneNode from "../clone/cloneNode";
 import removePropertiesDeep from "../modifications/removePropertiesDeep";
 
-export default function toKeyAlias(
-  node: Object,
-  key: Object = node.key,
-): string {
+export default function toKeyAlias(node: any, key: any = node.key): string {
   let alias;
 
   if (node.kind === "method") {

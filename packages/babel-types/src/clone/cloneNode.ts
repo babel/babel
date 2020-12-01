@@ -23,7 +23,7 @@ function cloneIfNodeOrArray(obj, deep, withoutLoc) {
  * If the second parameter is `false`, cloneNode performs a shallow clone.
  * If the third parameter is true, the cloned nodes exclude location properties.
  */
-export default function cloneNode<T: Object>(
+export default function cloneNode<T extends any>(
   node: T,
   deep: boolean = true,
   withoutLoc: boolean = false,
@@ -31,7 +31,7 @@ export default function cloneNode<T: Object>(
   if (!node) return node;
 
   const { type } = node;
-  const newNode = (({ type }: any): T);
+  const newNode = ({ type } as any) as T;
 
   // Special-case identifiers since they are the most cloned nodes.
   if (type === "Identifier") {
@@ -100,7 +100,7 @@ export default function cloneNode<T: Object>(
   return newNode;
 }
 
-function cloneCommentsWithoutLoc<T: Object>(comments: T[]): T {
+function cloneCommentsWithoutLoc<T extends any>(comments: T[]): T {
   return comments.map(({ type, value }) => ({ type, value, loc: null }));
 }
 

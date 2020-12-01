@@ -1,4 +1,3 @@
-// @flow
 import isPlainObject from "lodash/isPlainObject";
 import isRegExp from "lodash/isRegExp";
 import isValidIdentifier from "../validators/isValidIdentifier";
@@ -16,7 +15,7 @@ import {
   binaryExpression,
 } from "../builders/generated";
 
-export default function valueToNode(value: any): Object {
+export default function valueToNode(value: any): any {
   // undefined
   if (value === undefined) {
     return identifier("undefined");

@@ -7,9 +7,7 @@ import {
 /**
  * Dedupe type annotations.
  */
-export default function removeTypeDuplicates(
-  nodes: Array<Object>,
-): Array<Object> {
+export default function removeTypeDuplicates(nodes: Array<any>): Array<any> {
   const generics = {};
   const bases = {};
 

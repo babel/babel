@@ -1,11 +1,7 @@
-// @flow
-export default function shallowEqual(
-  actual: Object,
-  expected: Object,
-): boolean {
+export default function shallowEqual(actual: any, expected: any): boolean {
   const keys = Object.keys(expected);
 
-  for (const key of (keys: Array<string>)) {
+  for (const key of keys as Array<string>) {
     if (actual[key] !== expected[key]) {
       return false;
     }

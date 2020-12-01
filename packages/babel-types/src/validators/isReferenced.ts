@@ -1,11 +1,10 @@
-// @flow
 /**
  * Check if the input `node` is a reference to a bound variable.
  */
 export default function isReferenced(
-  node: Object,
-  parent: Object,
-  grandparent?: Object,
+  node: any,
+  parent: any,
+  grandparent?: any,
 ): boolean {
   switch (parent.type) {
     // yes: PARENT[NODE]

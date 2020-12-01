@@ -1,15 +1,14 @@
-// @flow
 import { INHERIT_KEYS } from "../constants";
 import inheritsComments from "../comments/inheritsComments";
 
 /**
  * Inherit all contextual properties from `parent` node to `child` node.
  */
-export default function inherits<T: Object>(child: T, parent: Object): T {
+export default function inherits<T extends any>(child: T, parent: any): T {
   if (!child || !parent) return child;
 
   // optionally inherit specific properties if not null
-  for (const key of (INHERIT_KEYS.optional: Array<string>)) {
+  for (const key of INHERIT_KEYS.optional as Array<string>) {
     if (child[key] == null) {
       child[key] = parent[key];
     }
@@ -21,7 +20,7 @@ export default function inherits<T: Object>(child: T, parent: Object): T {
   }
 
   // force inherit select properties
-  for (const key of (INHERIT_KEYS.force: Array<string>)) {
+  for (const key of INHERIT_KEYS.force as Array<string>) {
     child[key] = parent[key];
   }
 

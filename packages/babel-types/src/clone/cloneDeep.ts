@@ -1,5 +1,3 @@
-// @flow
-
 import cloneNode from "./cloneNode";
 
 /**
@@ -7,6 +5,6 @@ import cloneNode from "./cloneNode";
  * including only properties belonging to the node.
  * @deprecated Use t.cloneNode instead.
  */
-export default function cloneDeep<T: Object>(node: T): T {
+export default function cloneDeep<T extends any>(node: T): T {
   return cloneNode(node);
 }

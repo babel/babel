@@ -1,4 +1,3 @@
-// @flow
 import {
   isBlockStatement,
   isFunction,
@@ -11,7 +10,7 @@ import {
   blockStatement,
 } from "../builders/generated";
 
-export default function toBlock(node: Object, parent: Object): Object {
+export default function toBlock(node: any, parent: any): any {
   if (isBlockStatement(node)) {
     return node;
   }

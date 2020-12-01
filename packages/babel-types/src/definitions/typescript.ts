@@ -1,4 +1,3 @@
-// @flow
 import defineType, {
   arrayOfType,
   assertEach,

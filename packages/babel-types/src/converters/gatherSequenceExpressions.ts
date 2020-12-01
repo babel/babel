@@ -1,4 +1,3 @@
-// @flow
 import type { Scope } from "@babel/traverse";
 import getBindingIdentifiers from "../retrievers/getBindingIdentifiers";
 import {
@@ -17,10 +16,10 @@ import {
 import cloneNode from "../clone/cloneNode";
 
 export default function gatherSequenceExpressions(
-  nodes: Array<Object>,
+  nodes: Array<any>,
   scope: Scope,
-  declars: Array<Object>,
-): ?Object {
+  declars: Array<any>,
+): any | undefined | null {
   const exprs = [];
   let ensureLastUndefined = true;
 
@@ -38,7 +37,7 @@ export default function gatherSequenceExpressions(
     } else if (isVariableDeclaration(node)) {
       if (node.kind !== "var") return; // bailed
 
-      for (const declar of (node.declarations: Array<any>)) {
+      for (const declar of node.declarations as Array<any>) {
         const bindings = getBindingIdentifiers(declar);
         for (const key of Object.keys(bindings)) {
           declars.push({

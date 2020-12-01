@@ -1,12 +1,11 @@
-// @flow
 import getBindingIdentifiers from "../retrievers/getBindingIdentifiers";
 /**
  * Check if the input `node` is a binding identifier.
  */
 export default function isBinding(
-  node: Object,
-  parent: Object,
-  grandparent?: Object,
+  node: any,
+  parent: any,
+  grandparent?: any,
 ): boolean {
   if (
     grandparent &&

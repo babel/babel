@@ -1,9 +1,10 @@
-// @flow
 import getBindingIdentifiers from "./getBindingIdentifiers";
 
 export default function getOuterBindingIdentifiers(
-  node: Object,
+  node: any,
   duplicates?: boolean,
-): { [string]: Object | Array<Object> } {
+): {
+  [x: string]: any | Array<any>;
+} {
   return getBindingIdentifiers(node, duplicates, true);
 }

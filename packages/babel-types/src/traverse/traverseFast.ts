@@ -1,4 +1,3 @@
-// @flow
 import { VISITOR_KEYS } from "../definitions";
 
 /**
@@ -6,9 +5,9 @@ import { VISITOR_KEYS } from "../definitions";
  * and processing.
  */
 export default function traverseFast(
-  node: Object,
-  enter: (node: BabelNode, opts?: Object) => void,
-  opts?: Object,
+  node: any,
+  enter: (node: BabelNode, opts?: any) => void,
+  opts?: any,
 ): void {
   if (!node) return;
 

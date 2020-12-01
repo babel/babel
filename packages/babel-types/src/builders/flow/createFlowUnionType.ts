@@ -1,4 +1,3 @@
-// @flow
 import { unionTypeAnnotation } from "../generated";
 import removeTypeDuplicates from "../../modifications/flow/removeTypeDuplicates";
 
@@ -6,7 +5,7 @@ import removeTypeDuplicates from "../../modifications/flow/removeTypeDuplicates"
  * Takes an array of `types` and flattens them, removing duplicates and
  * returns a `UnionTypeAnnotation` node containing them.
  */
-export default function createFlowUnionType(types: Array<Object>): Object {
+export default function createFlowUnionType(types: Array<any>): any {
   const flattened = removeTypeDuplicates(types);
 
   if (flattened.length === 1) {

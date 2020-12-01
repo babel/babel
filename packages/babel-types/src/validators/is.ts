@@ -1,4 +1,3 @@
-// @flow
 import shallowEqual from "../utils/shallowEqual";
 import isType from "./isType";
 import isPlaceholderType from "./isPlaceholderType";
@@ -9,7 +8,7 @@ import { FLIPPED_ALIAS_KEYS } from "../definitions";
  *
  * For better performance, use this instead of `is[Type]` when `type` is unknown.
  */
-export default function is(type: string, node: Object, opts?: Object): boolean {
+export default function is(type: string, node: any, opts?: any): boolean {
   if (!node) return false;
 
   const matches = isType(node.type, type);

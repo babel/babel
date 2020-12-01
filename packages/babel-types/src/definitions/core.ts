@@ -1,5 +1,3 @@
-// @flow
-
 import is from "../validators/is";
 import isValidIdentifier from "../validators/isValidIdentifier";
 import { isKeyword, isReservedWord } from "@babel/helper-validator-identifier";
@@ -1708,7 +1706,7 @@ export const classMethodOrPropertyCommon = {
         );
         const computed = assertNodeType("Expression");
 
-        return function (node: Object, key: string, val: any) {
+        return function (node: any, key: string, val: any) {
           const validator = node.computed ? computed : normal;
           validator(node, key, val);
         };

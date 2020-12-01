@@ -10,9 +10,8 @@ import matchesPattern from "./matchesPattern";
 export default function buildMatchMemberExpression(
   match: string,
   allowPartial?: boolean,
-): Object => boolean {
+): (a: any) => boolean {
   const parts = match.split(".");
 
-  return (member: Object): boolean =>
-    matchesPattern(member, parts, allowPartial);
+  return (member: any): boolean => matchesPattern(member, parts, allowPartial);
 }

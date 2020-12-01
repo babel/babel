@@ -1,4 +1,3 @@
-// @flow
 import { COMMENT_KEYS } from "../constants";
 
 const CLEAR_KEYS = ["tokens", "start", "end", "loc", "raw", "rawValue"];
@@ -11,10 +10,7 @@ const CLEAR_KEYS_PLUS_COMMENTS = COMMENT_KEYS.concat(["comments"]).concat(
  * Remove all of the _* properties from a node along with the additional metadata
  * properties like location data and raw token data.
  */
-export default function removeProperties(
-  node: Object,
-  opts?: Object = {},
-): void {
+export default function removeProperties(node: any, opts: any = {}): void {
   const map = opts.preserveComments ? CLEAR_KEYS : CLEAR_KEYS_PLUS_COMMENTS;
   for (const key of map) {
     if (node[key] != null) node[key] = undefined;

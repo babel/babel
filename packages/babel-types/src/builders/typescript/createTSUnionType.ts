@@ -5,9 +5,7 @@ import removeTypeDuplicates from "../../modifications/typescript/removeTypeDupli
  * Takes an array of `types` and flattens them, removing duplicates and
  * returns a `UnionTypeAnnotation` node containing them.
  */
-export default function createTSUnionType(
-  typeAnnotations: Array<Object>,
-): Object {
+export default function createTSUnionType(typeAnnotations: Array<any>): any {
   const types = typeAnnotations.map(type => type.typeAnnotations);
   const flattened = removeTypeDuplicates(types);
 

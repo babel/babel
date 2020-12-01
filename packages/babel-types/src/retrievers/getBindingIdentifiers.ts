@@ -1,4 +1,3 @@
-// @flow
 import {
   isExportDeclaration,
   isIdentifier,
@@ -11,10 +10,12 @@ import {
  * Return a list of binding identifiers associated with the input `node`.
  */
 export default function getBindingIdentifiers(
-  node: Object,
+  node: any,
   duplicates?: boolean,
   outerOnly?: boolean,
-): { [string]: Object | Array<Object> } {
+): {
+  [x: string]: any | Array<any>;
+} {
   let search = [].concat(node);
   const ids = Object.create(null);
 

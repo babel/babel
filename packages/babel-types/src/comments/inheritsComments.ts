@@ -1,4 +1,3 @@
-// @flow
 import inheritTrailingComments from "./inheritTrailingComments";
 import inheritLeadingComments from "./inheritLeadingComments";
 import inheritInnerComments from "./inheritInnerComments";
@@ -6,9 +5,9 @@ import inheritInnerComments from "./inheritInnerComments";
 /**
  * Inherit all unique comments from `parent` node to `child` node.
  */
-export default function inheritsComments<T: Object>(
+export default function inheritsComments<T extends any>(
   child: T,
-  parent: Object,
+  parent: any,
 ): T {
   inheritTrailingComments(child, parent);
   inheritLeadingComments(child, parent);

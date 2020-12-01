@@ -1,10 +1,9 @@
-// @flow
 import traverseFast from "../traverse/traverseFast";
 import removeProperties from "./removeProperties";
 
-export default function removePropertiesDeep<T: Object>(
+export default function removePropertiesDeep<T extends any>(
   tree: T,
-  opts?: Object,
+  opts?: any,
 ): T {
   traverseFast(tree, removeProperties, opts);
 

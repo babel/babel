@@ -1,4 +1,3 @@
-// @flow
 import {
   isFunction,
   isCatchClause,
@@ -10,7 +9,7 @@ import {
 /**
  * Check if the input `node` is a scope.
  */
-export default function isScope(node: Object, parent: Object): boolean {
+export default function isScope(node: any, parent: any): boolean {
   // If a BlockStatement is an immediate descendent of a Function/CatchClause, it must be in the body.
   // Hence we skipped the parentKey === "params" check
   if (isBlockStatement(node) && (isFunction(parent) || isCatchClause(parent))) {

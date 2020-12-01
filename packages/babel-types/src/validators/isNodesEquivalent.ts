@@ -1,4 +1,3 @@
-// @flow
 import { NODE_FIELDS, VISITOR_KEYS } from "../definitions";
 
 /**

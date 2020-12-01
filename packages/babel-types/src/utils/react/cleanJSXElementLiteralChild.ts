@@ -1,9 +1,10 @@
-// @flow
 import { stringLiteral } from "../../builders/generated";
 
 export default function cleanJSXElementLiteralChild(
-  child: { value: string },
-  args: Array<Object>,
+  child: {
+    value: string;
+  },
+  args: Array<any>,
 ) {
   const lines = child.value.split(/\r\n|\n|\r/);
 

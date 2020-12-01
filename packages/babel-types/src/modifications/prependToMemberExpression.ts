@@ -1,12 +1,11 @@
-// @flow
 import { memberExpression } from "../builders/generated";
 
 /**
  * Prepend a node to a member expression.
  */
-export default function prependToMemberExpression<T: Object>(
+export default function prependToMemberExpression<T extends any>(
   member: T,
-  prepend: Object,
+  prepend: any,
 ): T {
   member.object = memberExpression(prepend, member.object);
 

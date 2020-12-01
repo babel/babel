@@ -1,10 +1,9 @@
-// @flow
 import addComments from "./addComments";
 
 /**
  * Add comment of certain type to a node.
  */
-export default function addComment<T: Object>(
+export default function addComment<T extends any>(
   node: T,
   type: string,
   content: string,

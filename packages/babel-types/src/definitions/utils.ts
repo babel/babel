@@ -1,13 +1,24 @@
-// @flow
 import is from "../validators/is";
 import { validateField, validateChild } from "../validators/validate";
 
-export const VISITOR_KEYS: { [string]: Array<string> } = {};
-export const ALIAS_KEYS: { [string]: Array<string> } = {};
-export const FLIPPED_ALIAS_KEYS: { [string]: Array<string> } = {};
-export const NODE_FIELDS: { [string]: {} } = {};
-export const BUILDER_KEYS: { [string]: Array<string> } = {};
-export const DEPRECATED_KEYS: { [string]: string } = {};
+export const VISITOR_KEYS: {
+  [x: string]: Array<string>;
+} = {};
+export const ALIAS_KEYS: {
+  [x: string]: Array<string>;
+} = {};
+export const FLIPPED_ALIAS_KEYS: {
+  [x: string]: Array<string>;
+} = {};
+export const NODE_FIELDS: {
+  [x: string]: {};
+} = {};
+export const BUILDER_KEYS: {
+  [x: string]: Array<string>;
+} = {};
+export const DEPRECATED_KEYS: {
+  [x: string]: string;
+} = {};
 export const NODE_PARENT_VALIDATIONS = {};
 
 function getType(val) {
@@ -21,12 +32,12 @@ function getType(val) {
 }
 
 // TODO: Import and use Node instead of any
-type Validator = (any, string, any) => void;
+type Validator = (c: any, b: string, a: any) => void;
 
 type FieldOptions = {
-  default?: any,
-  optional?: boolean,
-  validate?: Validator,
+  default?: any;
+  optional?: boolean;
+  validate?: Validator;
 };
 
 export function validate(validate: Validator): FieldOptions {
@@ -81,7 +92,7 @@ export function assertEach(callback: Validator): Validator {
 }
 
 export function assertOneOf(...values: Array<any>): Validator {
-  function validate(node: Object, key: string, val: any) {
+  function validate(node: any, key: string, val: any) {
     if (values.indexOf(val) < 0) {
       throw new TypeError(
         `Property ${key} expected value to be one of ${JSON.stringify(
@@ -158,7 +169,7 @@ export function assertValueType(type: string): Validator {
   return validate;
 }
 
-export function assertShape(shape: { [string]: FieldOptions }): Validator {
+export function assertShape(shape: { [x: string]: FieldOptions }): Validator {
   function validate(node, key, val) {
     const errors = [];
     for (const property of Object.keys(shape)) {
@@ -239,14 +250,14 @@ export default function defineType(
   type: string,
   opts: {
     fields?: {
-      [string]: FieldOptions,
-    },
-    visitor?: Array<string>,
-    aliases?: Array<string>,
-    builder?: Array<string>,
-    inherits?: string,
-    deprecatedAlias?: string,
-    validate?: Validator,
+      [x: string]: FieldOptions;
+    };
+    visitor?: Array<string>;
+    aliases?: Array<string>;
+    builder?: Array<string>;
+    inherits?: string;
+    deprecatedAlias?: string;
+    validate?: Validator;
   } = {},
 ) {
   const inherits = (opts.inherits && store[opts.inherits]) || {};
@@ -256,7 +267,7 @@ export default function defineType(
     fields = {};
     if (inherits.fields) {
       const keys = Object.getOwnPropertyNames(inherits.fields);
-      for (const key of (keys: Array<string>)) {
+      for (const key of keys as Array<string>) {
         const field = inherits.fields[key];
         fields[key] = {
           default: field.default,
@@ -272,7 +283,7 @@ export default function defineType(
   const builder: Array<string> =
     opts.builder || inherits.builder || opts.visitor || [];
 
-  for (const k of (Object.keys(opts): Array<string>)) {
+  for (const k of Object.keys(opts) as Array<string>) {
     if (validTypeOpts.indexOf(k) === -1) {
       throw new Error(`Unknown type option "${k}" on ${type}`);
     }
@@ -283,7 +294,7 @@ export default function defineType(
   }
 
   // ensure all field keys are represented in `fields`
-  for (const key of (visitor.concat(builder): Array<string>)) {
+  for (const key of visitor.concat(builder) as Array<string>) {
     fields[key] = fields[key] || {};
   }
 
@@ -299,7 +310,7 @@ export default function defineType(
       field.validate = assertValueType(getType(field.default));
     }
 
-    for (const k of (Object.keys(field): Array<string>)) {
+    for (const k of Object.keys(field) as Array<string>) {
       if (validFieldKeys.indexOf(k) === -1) {
         throw new Error(`Unknown field key "${k}" on ${type}.${key}`);
       }

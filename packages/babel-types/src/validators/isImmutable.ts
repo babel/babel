@@ -1,11 +1,10 @@
-// @flow
 import isType from "./isType";
 import { isIdentifier } from "./generated";
 
 /**
  * Check if the input `node` is definitely immutable.
  */
-export default function isImmutable(node: Object): boolean {
+export default function isImmutable(node: any): boolean {
   if (isType(node.type, "Immutable")) return true;
 
   if (isIdentifier(node)) {

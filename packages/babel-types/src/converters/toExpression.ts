@@ -1,4 +1,3 @@
-// @flow
 import {
   isExpression,
   isFunction,
@@ -6,7 +5,7 @@ import {
   isExpressionStatement,
 } from "../validators/generated";
 
-export default function toExpression(node: Object): Object {
+export default function toExpression(node: any): any {
   if (isExpressionStatement(node)) {
     node = node.expression;
   }

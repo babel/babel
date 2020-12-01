@@ -8,7 +8,7 @@ import { isIdentifier, isMemberExpression, isStringLiteral } from "./generated";
  * parsed nodes of `React.createClass` and `React["createClass"]`.
  */
 export default function matchesPattern(
-  member: Object,
+  member: any,
   match: string | Array<string>,
   allowPartial?: boolean,
 ): boolean {

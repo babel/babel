@@ -1,4 +1,3 @@
-// @flow
 import {
   stringTypeAnnotation,
   numberTypeAnnotation,
@@ -11,9 +10,7 @@ import {
 /**
  * Create a type annotation based on typeof expression.
  */
-export default function createTypeAnnotationBasedOnTypeof(
-  type: string,
-): Object {
+export default function createTypeAnnotationBasedOnTypeof(type: string): any {
   if (type === "string") {
     return stringTypeAnnotation();
   } else if (type === "number") {

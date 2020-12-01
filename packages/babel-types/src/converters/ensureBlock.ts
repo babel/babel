@@ -1,4 +1,3 @@
-// @flow
 import toBlock from "./toBlock";
 
 /**
@@ -7,9 +6,6 @@ import toBlock from "./toBlock";
  *
  * Returns the BlockStatement
  */
-export default function ensureBlock(
-  node: Object,
-  key: string = "body",
-): Object {
+export default function ensureBlock(node: any, key: string = "body"): any {
   return (node[key] = toBlock(node[key], node));
 }
