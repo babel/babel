@@ -3,13 +3,13 @@ import highlight, { shouldHighlight, getChalk } from "@babel/highlight";
 let deprecationWarningShown = false;
 
 type Location = {
-  column: number,
-  line: number,
+  column: number;
+  line: number;
 };
 
 type NodeLocation = {
-  end: Location,
-  start: Location,
+  end: Location;
+  start: Location;
 };
 
 /**
@@ -36,8 +36,12 @@ const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
 function getMarkerLines(
   loc: NodeLocation,
   source: Array<string>,
-  opts: Object,
-): { start: number, end: number, markerLines: Object } {
+  opts: any,
+): {
+  start: number;
+  end: number;
+  markerLines: any;
+} {
   const startLoc: Location = {
     column: 0,
     line: -1,
@@ -103,7 +107,7 @@ function getMarkerLines(
 export function codeFrameColumns(
   rawLines: string,
   loc: NodeLocation,
-  opts: Object = {},
+  opts: any = {},
 ): string {
   const highlighted =
     (opts.highlightCode || opts.forceColor) && shouldHighlight(opts);
@@ -178,8 +182,8 @@ export function codeFrameColumns(
 export default function (
   rawLines: string,
   lineNumber: number,
-  colNumber: ?number,
-  opts: Object = {},
+  colNumber?: number | null,
+  opts: any = {},
 ): string {
   if (!deprecationWarningShown) {
     deprecationWarningShown = true;
