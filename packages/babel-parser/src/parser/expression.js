@@ -495,6 +495,15 @@ export default class ExpressionParser extends LValParser {
     );
   }
 
+  checkExponentialAfterUnary(node: N.AwaitExpression | N.UnaryExpression) {
+    if (this.match(tt.exponent)) {
+      this.raise(
+        node.argument.start,
+        Errors.UnexpectedTokenUnaryExponentiation,
+      );
+    }
+  }
+
   // Parse unary operators, both prefix and postfix.
   // https://tc39.es/ecma262/#prod-UnaryExpression
   parseMaybeUnary(
@@ -507,7 +516,9 @@ export default class ExpressionParser extends LValParser {
 
     if (isAwait && this.isAwaitAllowed()) {
       this.next();
-      return this.parseAwait(startPos, startLoc);
+      const expr = this.parseAwait(startPos, startLoc);
+      if (!sawUnary) this.checkExponentialAfterUnary(expr);
+      return expr;
     }
     if (
       this.isContextual("module") &&
@@ -543,12 +554,7 @@ export default class ExpressionParser extends LValParser {
       }
 
       if (!update) {
-        if (!sawUnary && this.match(tt.exponent)) {
-          this.raise(
-            node.argument.start,
-            Errors.UnexpectedTokenUnaryExponentiation,
-          );
-        }
+        if (!sawUnary) this.checkExponentialAfterUnary(node);
         return this.finishNode(node, "UnaryExpression");
       }
     }
