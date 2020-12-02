@@ -915,9 +915,9 @@ export default class StatementParser extends ExpressionParser {
     init: ?(N.VariableDeclaration | N.Expression),
   ): N.ForStatement {
     node.init = init;
-    this.expect(tt.semi);
+    this.semicolon(/* allowAsi */ false);
     node.test = this.match(tt.semi) ? null : this.parseExpression();
-    this.expect(tt.semi);
+    this.semicolon(/* allowAsi */ false);
     node.update = this.match(tt.parenR) ? null : this.parseExpression();
     this.expect(tt.parenR);
 

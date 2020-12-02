@@ -4,6 +4,5 @@
       "importAssertions"
     ]
   ],
-  "sourceType": "module",
-  "throws": "Unexpected token, expected \";\" (1:13)"
+  "sourceType": "module"
 }
