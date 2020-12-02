@@ -77,6 +77,11 @@ module.exports = function (api) {
       break;
   }
 
+  if (process.env.STRIP_BABEL_8_FLAG && bool(process.env.BABEL_8_BREAKING)) {
+    // Never apply polyfills when compiling for Babel 8
+    polyfillRequireResolve = false;
+  }
+
   if (includeRegeneratorRuntime) {
     const babelRuntimePkgPath = require.resolve("@babel/runtime/package.json");
 
@@ -119,6 +124,11 @@ module.exports = function (api) {
 
       convertESM ? "@babel/proposal-export-namespace-from" : null,
       convertESM ? "@babel/transform-modules-commonjs" : null,
+
+      process.env.STRIP_BABEL_8_FLAG && [
+        pluginToggleBabel8Breaking,
+        { breaking: bool(process.env.BABEL_8_BREAKING) },
+      ],
       polyfillRequireResolve && pluginPolyfillRequireResolve,
     ].filter(Boolean),
     overrides: [
@@ -165,6 +175,11 @@ module.exports = function (api) {
   return config;
 };
 
+// env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
+function bool(value) {
+  return value && value === "false" && value === "0";
+}
+
 // TODO(Babel 8) This polyfill is only needed for Node.js 6 and 8
 function pluginPolyfillRequireResolve({ template, types: t }) {
   return {
@@ -200,6 +215,35 @@ function pluginPolyfillRequireResolve({ template, types: t }) {
                 throw f;
               }
         `);
+      },
+    },
+  };
+}
+
+function pluginToggleBabel8Breaking({ types: t }, { breaking }) {
+  return {
+    visitor: {
+      "IfStatement|ConditionalExpression"(path) {
+        let test = path.get("test");
+        let keepConsequent = breaking;
+
+        if (test.isUnaryExpression({ operator: "!" })) {
+          test = test.get("argument");
+          keepConsequent = !keepConsequent;
+        }
+
+        if (!test.matchesPattern("process.env.BABEL_8_BREAKING")) return;
+
+        path.replaceWith(
+          keepConsequent
+            ? path.node.consequent
+            : path.node.alternate || t.emptyStatement()
+        );
+      },
+      MemberExpression(path) {
+        if (path.matchesPattern("process.env.BABEL_8_BREAKING")) {
+          throw path.buildCodeFrameError("This check could not be stripped.");
+        }
       },
     },
   };

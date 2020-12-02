@@ -122,7 +122,11 @@ function pushTask(taskName, taskDir, suite, suiteName) {
   const test = {
     optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
     title: humanize(taskName, true),
-    disabled: taskName[0] === ".",
+    disabled:
+      taskName[0] === "." ||
+      (process.env.BABEL_8_BREAKING
+        ? taskOpts.BABEL_8_BREAKING === false
+        : taskOpts.BABEL_8_BREAKING === true),
     options: taskOpts,
     validateLogs: taskOpts.validateLogs,
     ignoreOutput: taskOpts.ignoreOutput,
