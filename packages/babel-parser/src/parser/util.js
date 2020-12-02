@@ -105,7 +105,7 @@ export default class UtilParser extends Tokenizer {
   // Consume a semicolon, or, failing that, see if we are allowed to
   // pretend that there is a semicolon at this position.
 
-  semicolon(allowAsi = true): void {
+  semicolon(allowAsi: boolean = true): void {
     if (allowAsi ? this.isLineTerminator() : this.eat(tt.semi)) return;
     this.raise(this.state.lastTokEnd, Errors.MissingSemicolon);
   }
