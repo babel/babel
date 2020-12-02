@@ -82,6 +82,9 @@ jobs:
       - name: Build babel artifacts
         run: |
           BABEL_ENV=test-legacy make -j build-standalone-ci
+        env:
+          BABEL_8_BREAKING: false
+          STRIP_BABEL_8_FLAG: true
       - uses: actions/upload-artifact@v2
         with:
           name: babel-artifact
@@ -163,6 +166,41 @@ jobs:
         # Remove once `chalk` is bumped to 4.0.
         run: |
           BABEL_ENV=test node ./node_modules/.bin/jest --ci --color
+
+  test-babel-8-breaking:
+    name: Test Babel 8 breaking changes
+    needs: prepare-yarn-cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node.js 12
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 12 # Node.js 12 is the first LTS supported by Babel 8
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('yarn.lock') }}
+      - name: Install and build
+        run: make -j bootstrap
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
+          STRIP_BABEL_8_FLAG: true
+      - name: Test
+        # Hack: --color has supports-color@5 returned true for GitHub CI
+        # Remove once `chalk` is bumped to 4.0.
+        run: |
+          yarn jest --ci --color
+          yarn test:esm
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
+          BABEL_TYPES_8_BREAKING: true
 
   test-windows:
     name: Test on Windows
