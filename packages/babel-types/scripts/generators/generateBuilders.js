@@ -47,7 +47,7 @@ function generateBuilderArgs(type) {
     // - declare a disjoint union with, for example, ObjectPropertyBase,
     //   ObjectPropertyLiteralKey and ObjectPropertyComputedKey, and declare ObjectProperty
     //   as "ObjectPropertyBase & (ObjectPropertyLiteralKey | ObjectPropertyComputedKey)"
-    let typeAnnotation = stringifyValidator(field.validate, "types.");
+    let typeAnnotation = stringifyValidator(field.validate, "t.");
 
     if (isNullable(field) && !hasDefault(field)) {
       typeAnnotation += " | null";
@@ -94,7 +94,7 @@ import type * as t from "../../types";\n\n`;
       formatedBuilderNameLocal === formatedBuilderName ? "export " : ""
     }function ${formatedBuilderNameLocal}(${defArgs.join(
       ", "
-    )}): types.${type} { return builder("${type}", ${callArgs.join(
+    )}): t.${type} { return builder("${type}", ${callArgs.join(
       ", "
     )}); }\n`;
     if (formatedBuilderNameLocal !== formatedBuilderName) {
