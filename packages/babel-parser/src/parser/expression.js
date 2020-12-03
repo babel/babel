@@ -94,8 +94,9 @@ export default class ExpressionParser extends LValParser {
   ): void {
     if (
       prop.type === "SpreadElement" ||
-      prop.type === "ObjectMethod" ||
+      this.isObjectMethod(prop) ||
       prop.computed ||
+      // $FlowIgnore
       prop.shorthand
     ) {
       return;
@@ -515,11 +516,7 @@ export default class ExpressionParser extends LValParser {
 
         if (arg.type === "Identifier") {
           this.raise(node.start, Errors.StrictDelete);
-        } else if (
-          (arg.type === "MemberExpression" ||
-            arg.type === "OptionalMemberExpression") &&
-          arg.property.type === "PrivateName"
-        ) {
+        } else if (this.hasPropertyAsPrivateName(arg)) {
           this.raise(node.start, Errors.DeletePrivateField);
         }
       }
@@ -618,12 +615,12 @@ export default class ExpressionParser extends LValParser {
 
     let optional = false;
     if (this.match(tt.questionDot)) {
-      state.optionalChainMember = optional = true;
       if (noCalls && this.lookaheadCharCode() === charCodes.leftParenthesis) {
         // stop at `?.` when parsing `new a?.()`
         state.stop = true;
         return base;
       }
+      state.optionalChainMember = optional = true;
       this.next();
     }
 
@@ -662,11 +659,14 @@ export default class ExpressionParser extends LValParser {
       ? this.parseExpression()
       : this.parseMaybePrivateName(true);
 
-    if (property.type === "PrivateName") {
+    if (this.isPrivateName(property)) {
       if (node.object.type === "Super") {
         this.raise(startPos, Errors.SuperPrivateField);
       }
-      this.classScope.usePrivateName(property.id.name, property.start);
+      this.classScope.usePrivateName(
+        this.getPrivateNameSV(property),
+        property.start,
+      );
     }
     node.property = property;
 
@@ -1496,13 +1496,9 @@ export default class ExpressionParser extends LValParser {
   // https://tc39.es/ecma262/#prod-NewExpression
   parseNew(node: N.Expression): N.NewExpression {
     node.callee = this.parseNoCallExpr();
-
     if (node.callee.type === "Import") {
       this.raise(node.callee.start, Errors.ImportCallNotNewExpression);
-    } else if (
-      node.callee.type === "OptionalMemberExpression" ||
-      node.callee.type === "OptionalCallExpression"
-    ) {
+    } else if (this.isOptionalChain(node.callee)) {
       this.raise(this.state.lastTokEnd, Errors.OptionalChainingNoNew);
     } else if (this.eat(tt.questionDot)) {
       this.raise(this.state.start, Errors.OptionalChainingNoNew);
@@ -1604,7 +1600,7 @@ export default class ExpressionParser extends LValParser {
 
       if (
         isRecord &&
-        prop.type !== "ObjectProperty" &&
+        !this.isObjectProperty(prop) &&
         prop.type !== "SpreadElement"
       ) {
         this.raise(prop.start, Errors.InvalidRecordProperty);
@@ -1923,7 +1919,7 @@ export default class ExpressionParser extends LValParser {
           ? this.parseExprAtom()
           : this.parseMaybePrivateName(isPrivateNameAllowed);
 
-      if (prop.key.type !== "PrivateName") {
+      if (!this.isPrivateName(prop.key)) {
         // ClassPrivateProperty is never computed, so we don't assign in that case.
         prop.computed = false;
       }

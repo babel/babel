@@ -51,7 +51,7 @@ export const ErrorMessages = Object.freeze({
   ElementAfterRest: "Rest element must be last element",
   EscapedCharNotAnIdentifier: "Invalid Unicode escape",
   ExportBindingIsString:
-    "A string literal cannot be used as an exported binding without `from`.\n- Did you mean `export { %0 as '%1' } from 'some-module'`?",
+    "A string literal cannot be used as an exported binding without `from`.\n- Did you mean `export { '%0' as '%1' } from 'some-module'`?",
   ExportDefaultFromAsIdentifier:
     "'from' is not allowed as an identifier after 'export default'",
   ForInOfLoopInitializer:

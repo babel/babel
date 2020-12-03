@@ -83,7 +83,13 @@ export function runThrowTestsWithEstree(fixturesPath, parseFunction) {
   Object.keys(fixtures).forEach(function (name) {
     fixtures[name].forEach(function (testSuite) {
       testSuite.tests.forEach(function (task) {
-        if (!task.options.throws) return;
+        if (!task.options.throws) {
+          const hasErrors =
+            !task.disabled && "errors" in JSON.parse(task.expect.code);
+          if (!hasErrors) {
+            return;
+          }
+        }
 
         task.options.plugins = task.options.plugins || [];
         task.options.plugins.push("estree");
@@ -92,7 +98,7 @@ export function runThrowTestsWithEstree(fixturesPath, parseFunction) {
 
         testFn(name + "/" + testSuite.title + "/" + task.title, function () {
           try {
-            runTest(task, parseFunction);
+            runTest(task, parseFunction, true);
           } catch (err) {
             const fixturePath = `${path.relative(
               rootPath,
@@ -126,7 +132,19 @@ function save(test, ast) {
   );
 }
 
-function runTest(test, parseFunction) {
+/**
+ * run parser on given tests
+ *
+ * @param {Test} A {@link packages/babel-helper-fixtures/src/index.js Test} instance
+ generated from `getFixtures`
+ * @param {*} parseFunction A parser with the same interface of `@babel/parser#parse`
+ * @param {boolean} [compareErrorsOnly=false] Whether we should only compare the "errors"
+ * of generated ast against the expected AST. Used for `runThrowTestsWithEstree` where an
+ * ESTree AST is generated but we want to make sure `@babel/parser` still throws expected
+ * recoverable errors on given code locations.
+ * @returns {void}
+ */
+function runTest(test, parseFunction, compareErrorsOnly = false) {
   const opts = test.options;
 
   if (opts.throws && test.expect.code) {
@@ -189,6 +207,11 @@ function runTest(test, parseFunction) {
     throw new Error(
       "Expected error message: " + opts.throws + ". But parsing succeeded.",
     );
+  } else if (compareErrorsOnly) {
+    const mis = misMatch(JSON.parse(test.expect.code).errors, ast.errors);
+    if (mis) {
+      throw new Error(mis);
+    }
   } else {
     const mis = misMatch(JSON.parse(test.expect.code), ast);
 

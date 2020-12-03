@@ -5,17 +5,7 @@ import type Parser from "../parser";
 import type { ExpressionErrors } from "../parser/util";
 import * as N from "../types";
 import type { Position } from "../util/location";
-import { type BindingTypes } from "../util/scopeflags";
 import { Errors } from "../parser/error";
-
-function isSimpleProperty(node: N.Node): boolean {
-  return (
-    node != null &&
-    node.type === "Property" &&
-    node.kind === "init" &&
-    node.method === false
-  );
-}
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
@@ -35,8 +25,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     estreeParseBigIntLiteral(value: any): N.Node {
       // https://github.com/estree/estree/blob/master/es2020.md#bigintliteral
-      // $FlowIgnore
-      const bigInt = typeof BigInt !== "undefined" ? BigInt(value) : null;
+      let bigInt;
+      try {
+        // $FlowIgnore
+        bigInt = BigInt(value);
+      } catch {
+        bigInt = null;
+      }
       const node = this.estreeParseLiteral(bigInt);
       node.bigint = String(node.value || value);
 
@@ -98,7 +93,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     checkDeclaration(node: N.Pattern | N.ObjectProperty): void {
-      if (isSimpleProperty(node)) {
+      if (node != null && this.isObjectProperty(node)) {
         this.checkDeclaration(((node: any): N.EstreeProperty).value);
       } else {
         super.checkDeclaration(node);
@@ -108,44 +103,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     getObjectOrClassMethodParams(method: N.ObjectMethod | N.ClassMethod) {
       return ((method: any): N.EstreeProperty | N.EstreeMethodDefinition).value
         .params;
-    }
-
-    checkLVal(
-      expr: N.Expression,
-      contextDescription: string,
-      ...args: [
-        BindingTypes | void,
-        ?Set<string>,
-        boolean | void,
-        boolean | void,
-      ]
-    ): void {
-      switch (expr.type) {
-        case "ObjectPattern":
-          expr.properties.forEach(prop => {
-            this.checkLVal(
-              prop.type === "Property" ? prop.value : prop,
-              "object destructuring pattern",
-              ...args,
-            );
-          });
-          break;
-        default:
-          super.checkLVal(expr, contextDescription, ...args);
-      }
-    }
-
-    checkProto(
-      prop: N.ObjectMember | N.SpreadElement,
-      isRecord: boolean,
-      protoRef: { used: boolean },
-      refExpressionErrors: ?ExpressionErrors,
-    ): void {
-      // $FlowIgnore: check prop.method and fallback to super method
-      if (prop.method) {
-        return;
-      }
-      super.checkProto(prop, isRecord, protoRef, refExpressionErrors);
     }
 
     isValidDirective(stmt: N.Statement): boolean {
@@ -170,11 +127,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseBlockBody(
       node: N.BlockStatementLike,
-      allowDirectives: ?boolean,
-      topLevel: boolean,
-      end: TokenType,
+      ...args: [?boolean, boolean, TokenType, void | (boolean => void)]
     ): void {
-      super.parseBlockBody(node, allowDirectives, topLevel, end);
+      super.parseBlockBody(node, ...args);
 
       const directiveStatements = node.directives.map(d =>
         this.directiveToStmt(d),
@@ -337,8 +292,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     toAssignable(node: N.Node, isLHS: boolean = false): N.Node {
-      if (isSimpleProperty(node)) {
-        this.toAssignable(node.value);
+      if (node != null && this.isObjectProperty(node)) {
+        this.toAssignable(node.value, isLHS);
 
         return node;
       }
@@ -348,9 +303,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     toAssignableObjectExpressionProp(prop: N.Node, ...args) {
       if (prop.kind === "get" || prop.kind === "set") {
-        throw this.raise(prop.key.start, Errors.PatternHasAccessor);
+        this.raise(prop.key.start, Errors.PatternHasAccessor);
       } else if (prop.method) {
-        throw this.raise(prop.key.start, Errors.PatternHasMethod);
+        this.raise(prop.key.start, Errors.PatternHasMethod);
       } else {
         super.toAssignableObjectExpressionProp(prop, ...args);
       }
@@ -449,5 +404,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       return node;
+    }
+
+    hasPropertyAsPrivateName(node: N.Node): boolean {
+      if (node.type === "ChainExpression") {
+        node = node.expression;
+      }
+      return super.hasPropertyAsPrivateName(node);
+    }
+
+    isOptionalChain(node: N.Node): boolean {
+      return node.type === "ChainExpression";
+    }
+
+    isObjectProperty(node: N.Node): boolean {
+      return node.type === "Property" && node.kind === "init" && !node.method;
+    }
+
+    isObjectMethod(node: N.Node): boolean {
+      return node.method || node.kind === "get" || node.kind === "set";
     }
   };

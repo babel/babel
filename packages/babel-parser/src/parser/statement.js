@@ -1346,7 +1346,7 @@ export default class StatementParser extends ExpressionParser {
       method.kind = "method";
       this.parseClassElementName(method);
 
-      if (method.key.type === "PrivateName") {
+      if (this.isPrivateName(method.key)) {
         // Private generator method
         this.pushClassPrivateMethod(classBody, privateMethod, true, false);
         return;
@@ -1370,7 +1370,7 @@ export default class StatementParser extends ExpressionParser {
 
     const containsEsc = this.state.containsEsc;
     const key = this.parseClassElementName(member);
-    const isPrivate = key.type === "PrivateName";
+    const isPrivate = this.isPrivateName(key);
     // Check the key is not a computed expression or string literal.
     const isSimple = key.type === "Identifier";
     const maybeQuestionTokenStart = this.state.start;
@@ -1431,7 +1431,7 @@ export default class StatementParser extends ExpressionParser {
       this.parseClassElementName(method);
       this.parsePostMemberNameModifiers(publicMember);
 
-      if (method.key.type === "PrivateName") {
+      if (this.isPrivateName(method.key)) {
         // private async method
         this.pushClassPrivateMethod(
           classBody,
@@ -1465,7 +1465,7 @@ export default class StatementParser extends ExpressionParser {
       // The so-called parsed name would have been "get/set": get the real name.
       this.parseClassElementName(publicMethod);
 
-      if (method.key.type === "PrivateName") {
+      if (this.isPrivateName(method.key)) {
         // private getter/setter
         this.pushClassPrivateMethod(classBody, privateMethod, false, false);
       } else {
@@ -1508,7 +1508,10 @@ export default class StatementParser extends ExpressionParser {
       this.raise(key.start, Errors.StaticPrototype);
     }
 
-    if (key.type === "PrivateName" && key.id.name === "constructor") {
+    if (
+      this.isPrivateName(key) &&
+      this.getPrivateNameSV(key) === "constructor"
+    ) {
       this.raise(key.start, Errors.ConstructorClassPrivateField);
     }
 
@@ -1571,7 +1574,7 @@ export default class StatementParser extends ExpressionParser {
     classBody.body.push(node);
 
     this.classScope.declarePrivateName(
-      node.key.id.name,
+      this.getPrivateNameSV(node.key),
       CLASS_ELEMENT_OTHER,
       node.key.start,
     );
@@ -1627,7 +1630,11 @@ export default class StatementParser extends ExpressionParser {
           ? CLASS_ELEMENT_STATIC_SETTER
           : CLASS_ELEMENT_INSTANCE_SETTER
         : CLASS_ELEMENT_OTHER;
-    this.classScope.declarePrivateName(node.key.id.name, kind, node.key.start);
+    this.classScope.declarePrivateName(
+      this.getPrivateNameSV(node.key),
+      kind,
+      node.key.start,
+    );
   }
 
   // Overridden in typescript.js
@@ -1980,7 +1987,7 @@ export default class StatementParser extends ExpressionParser {
               this.raise(
                 specifier.start,
                 Errors.ExportBindingIsString,
-                local.extra.raw,
+                local.value,
                 exportedName,
               );
             } else {
