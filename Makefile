@@ -197,7 +197,7 @@ clone-license:
 
 prepublish-build: clean-lib clean-runtime-helpers
 	NODE_ENV=production BABEL_ENV=production STRIP_BABEL_8_FLAG=true $(MAKE) build-bundle
-	$(MAKE) prepublish-build-standalone clone-license
+	$(MAKE) prepublish-build-standalone clone-license prepublish-prepare-dts
 
 prepublish-prepare-dts:
 	$(MAKE) clean-tsconfig
@@ -211,7 +211,6 @@ prepublish:
 	$(MAKE) check-yarn-bug-1882
 	$(MAKE) bootstrap-only
 	$(MAKE) prepublish-build
-	$(MAKE) prepublish-prepare-dts
 	IS_PUBLISH=true $(MAKE) test
 
 new-version:
