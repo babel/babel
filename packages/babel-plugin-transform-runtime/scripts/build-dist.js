@@ -2,7 +2,6 @@
 
 const path = require("path");
 const fs = require("fs");
-const makeDirSync = require("make-dir").sync;
 const helpers = require("@babel/helpers");
 const babel = require("@babel/core");
 const template = require("@babel/template");
@@ -15,7 +14,7 @@ const corejs2Definitions = require("../lib/runtime-corejs2-definitions").default
 const corejs3Definitions = require("../lib/runtime-corejs3-definitions").default();
 
 function outputFile(filePath, data) {
-  makeDirSync(path.dirname(filePath));
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, data);
 }
 

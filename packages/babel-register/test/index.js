@@ -77,7 +77,13 @@ describe("@babel/register", function () {
     cleanCache();
   }
 
-  afterEach(() => {
+  afterEach(async () => {
+    // @babel/register saves the cache on process.nextTick.
+    // We need to wait for at least one tick so that when jest
+    // tears down the testing environment @babel/register has
+    // already finished.
+    await new Promise(setImmediate);
+
     revertRegister();
     currentHook = null;
     currentOptions = null;
