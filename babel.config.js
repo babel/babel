@@ -235,11 +235,29 @@ function pluginPolyfillsOldNode({ template, types: t }) {
       },
       // fs.mkdirSync's recursive option has been introduced in Node.js 10.12
       // https://nodejs.org/api/fs.html#fs_fs_mkdirsync_path_options
-      replacement: template(`
+      replacement: template`
         parseFloat(process.versions.node) >= 10.12
           ? fs.mkdirSync
           : require("make-dir").sync
-      `),
+      `,
+    },
+    {
+      // NOTE: This polyfills depends on the "node-environment-flags"
+      // library. Any package using process.allowedNodeEnvironmentFlags
+      // must have "node-environment-flags" as a dependency.
+      name: "process.allowedNodeEnvironmentFlags",
+      necessary({ parent, node }) {
+        // To avoid infinite replacement loops
+        return !t.isConditionalExpression(parent, { consequent: node });
+      },
+      supported: () => true,
+      // process.allowedNodeEnvironmentFlags has been introduced in Node.js 10.10
+      // https://nodejs.org/api/process.html#process_process_allowednodeenvironmentflags
+      replacement: template`
+        parseFloat(process.versions.node) >= 10.10
+          ? process.allowedNodeEnvironmentFlags
+          : require("node-environment-flags")
+      `,
     },
   ];
 
