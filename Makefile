@@ -94,7 +94,7 @@ tscheck: generate-tsconfig
 	cp packages/babel-types/src/builders/generated/deprecated.d.ts packages/babel-types/lib/builders/generated/deprecated.d.ts
 	$(YARN) tsc -b .
 
-flow:
+flow: build-flow-typings
 	$(YARN) flow check --strip-root
 
 lint-ci: lint-js-ci lint-ts-ci check-compat-data-ci
