@@ -35,8 +35,7 @@ function generateBuilderArgs(type) {
   const fieldNames = sortFieldNames(Object.keys(t.NODE_FIELDS[type]), type);
   const builderNames = t.BUILDER_KEYS[type];
 
-  const defArgs = [];
-  const callArgs = [];
+  const args = [];
 
   fieldNames.forEach(fieldName => {
     const field = fields[fieldName];
@@ -55,15 +54,14 @@ function generateBuilderArgs(type) {
 
     if (builderNames.includes(fieldName)) {
       const bindingIdentifierName = t.toBindingIdentifierName(fieldName);
-      callArgs.push(bindingIdentifierName);
       if (areAllRemainingFieldsNullable(fieldName, builderNames, fields)) {
-        defArgs.push(
+        args.push(
           `${bindingIdentifierName}${
             isNullable(field) ? "?:" : ":"
           } ${typeAnnotation}`
         );
       } else {
-        defArgs.push(
+        args.push(
           `${bindingIdentifierName}: ${typeAnnotation}${
             isNullable(field) ? " | undefined" : ""
           }`
@@ -72,7 +70,7 @@ function generateBuilderArgs(type) {
     }
   });
 
-  return [defArgs, callArgs];
+  return args;
 }
 
 module.exports = function generateBuilders() {
@@ -81,11 +79,15 @@ module.exports = function generateBuilders() {
  * To re-generate run 'make build'
  */
 import builder from "../builder";
-import type * as t from "../../types";\n\n`;
+import type * as t from "../../types";
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+`;
 
   const reservedNames = new Set(["super", "import"]);
   Object.keys(definitions.BUILDER_KEYS).forEach(type => {
-    const [defArgs, callArgs] = generateBuilderArgs(type);
+    const defArgs = generateBuilderArgs(type);
     const formatedBuilderName = formatBuilderName(type);
     const formatedBuilderNameLocal = reservedNames.has(formatedBuilderName)
       ? `_${formatedBuilderName}`
@@ -94,7 +96,7 @@ import type * as t from "../../types";\n\n`;
       formatedBuilderNameLocal === formatedBuilderName ? "export " : ""
     }function ${formatedBuilderNameLocal}(${defArgs.join(
       ", "
-    )}): t.${type} { return builder("${type}", ${callArgs.join(", ")}); }\n`;
+    )}): t.${type} { return builder("${type}", ...arguments); }\n`;
     if (formatedBuilderNameLocal !== formatedBuilderName) {
       output += `export { ${formatedBuilderNameLocal} as ${formatedBuilderName} };\n`;
     }
