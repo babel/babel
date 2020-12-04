@@ -3,249 +3,251 @@
  * To re-generate run 'make build'
  */
 
-export { arrayExpression as ArrayExpression } from "./index";
-export { assignmentExpression as AssignmentExpression } from "./index";
-export { binaryExpression as BinaryExpression } from "./index";
-export { interpreterDirective as InterpreterDirective } from "./index";
-export { directive as Directive } from "./index";
-export { directiveLiteral as DirectiveLiteral } from "./index";
-export { blockStatement as BlockStatement } from "./index";
-export { breakStatement as BreakStatement } from "./index";
-export { callExpression as CallExpression } from "./index";
-export { catchClause as CatchClause } from "./index";
-export { conditionalExpression as ConditionalExpression } from "./index";
-export { continueStatement as ContinueStatement } from "./index";
-export { debuggerStatement as DebuggerStatement } from "./index";
-export { doWhileStatement as DoWhileStatement } from "./index";
-export { emptyStatement as EmptyStatement } from "./index";
-export { expressionStatement as ExpressionStatement } from "./index";
-export { file as File } from "./index";
-export { forInStatement as ForInStatement } from "./index";
-export { forStatement as ForStatement } from "./index";
-export { functionDeclaration as FunctionDeclaration } from "./index";
-export { functionExpression as FunctionExpression } from "./index";
-export { identifier as Identifier } from "./index";
-export { ifStatement as IfStatement } from "./index";
-export { labeledStatement as LabeledStatement } from "./index";
-export { stringLiteral as StringLiteral } from "./index";
-export { numericLiteral as NumericLiteral } from "./index";
-export { nullLiteral as NullLiteral } from "./index";
-export { booleanLiteral as BooleanLiteral } from "./index";
-export { regExpLiteral as RegExpLiteral } from "./index";
-export { logicalExpression as LogicalExpression } from "./index";
-export { memberExpression as MemberExpression } from "./index";
-export { newExpression as NewExpression } from "./index";
-export { program as Program } from "./index";
-export { objectExpression as ObjectExpression } from "./index";
-export { objectMethod as ObjectMethod } from "./index";
-export { objectProperty as ObjectProperty } from "./index";
-export { restElement as RestElement } from "./index";
-export { returnStatement as ReturnStatement } from "./index";
-export { sequenceExpression as SequenceExpression } from "./index";
-export { parenthesizedExpression as ParenthesizedExpression } from "./index";
-export { switchCase as SwitchCase } from "./index";
-export { switchStatement as SwitchStatement } from "./index";
-export { thisExpression as ThisExpression } from "./index";
-export { throwStatement as ThrowStatement } from "./index";
-export { tryStatement as TryStatement } from "./index";
-export { unaryExpression as UnaryExpression } from "./index";
-export { updateExpression as UpdateExpression } from "./index";
-export { variableDeclaration as VariableDeclaration } from "./index";
-export { variableDeclarator as VariableDeclarator } from "./index";
-export { whileStatement as WhileStatement } from "./index";
-export { withStatement as WithStatement } from "./index";
-export { assignmentPattern as AssignmentPattern } from "./index";
-export { arrayPattern as ArrayPattern } from "./index";
-export { arrowFunctionExpression as ArrowFunctionExpression } from "./index";
-export { classBody as ClassBody } from "./index";
-export { classExpression as ClassExpression } from "./index";
-export { classDeclaration as ClassDeclaration } from "./index";
-export { exportAllDeclaration as ExportAllDeclaration } from "./index";
-export { exportDefaultDeclaration as ExportDefaultDeclaration } from "./index";
-export { exportNamedDeclaration as ExportNamedDeclaration } from "./index";
-export { exportSpecifier as ExportSpecifier } from "./index";
-export { forOfStatement as ForOfStatement } from "./index";
-export { importDeclaration as ImportDeclaration } from "./index";
-export { importDefaultSpecifier as ImportDefaultSpecifier } from "./index";
-export { importNamespaceSpecifier as ImportNamespaceSpecifier } from "./index";
-export { importSpecifier as ImportSpecifier } from "./index";
-export { metaProperty as MetaProperty } from "./index";
-export { classMethod as ClassMethod } from "./index";
-export { objectPattern as ObjectPattern } from "./index";
-export { spreadElement as SpreadElement } from "./index";
-export { super as Super } from "./index";
-export { taggedTemplateExpression as TaggedTemplateExpression } from "./index";
-export { templateElement as TemplateElement } from "./index";
-export { templateLiteral as TemplateLiteral } from "./index";
-export { yieldExpression as YieldExpression } from "./index";
-export { awaitExpression as AwaitExpression } from "./index";
-export { import as Import } from "./index";
-export { bigIntLiteral as BigIntLiteral } from "./index";
-export { exportNamespaceSpecifier as ExportNamespaceSpecifier } from "./index";
-export { optionalMemberExpression as OptionalMemberExpression } from "./index";
-export { optionalCallExpression as OptionalCallExpression } from "./index";
-export { anyTypeAnnotation as AnyTypeAnnotation } from "./index";
-export { arrayTypeAnnotation as ArrayTypeAnnotation } from "./index";
-export { booleanTypeAnnotation as BooleanTypeAnnotation } from "./index";
-export { booleanLiteralTypeAnnotation as BooleanLiteralTypeAnnotation } from "./index";
-export { nullLiteralTypeAnnotation as NullLiteralTypeAnnotation } from "./index";
-export { classImplements as ClassImplements } from "./index";
-export { declareClass as DeclareClass } from "./index";
-export { declareFunction as DeclareFunction } from "./index";
-export { declareInterface as DeclareInterface } from "./index";
-export { declareModule as DeclareModule } from "./index";
-export { declareModuleExports as DeclareModuleExports } from "./index";
-export { declareTypeAlias as DeclareTypeAlias } from "./index";
-export { declareOpaqueType as DeclareOpaqueType } from "./index";
-export { declareVariable as DeclareVariable } from "./index";
-export { declareExportDeclaration as DeclareExportDeclaration } from "./index";
-export { declareExportAllDeclaration as DeclareExportAllDeclaration } from "./index";
-export { declaredPredicate as DeclaredPredicate } from "./index";
-export { existsTypeAnnotation as ExistsTypeAnnotation } from "./index";
-export { functionTypeAnnotation as FunctionTypeAnnotation } from "./index";
-export { functionTypeParam as FunctionTypeParam } from "./index";
-export { genericTypeAnnotation as GenericTypeAnnotation } from "./index";
-export { inferredPredicate as InferredPredicate } from "./index";
-export { interfaceExtends as InterfaceExtends } from "./index";
-export { interfaceDeclaration as InterfaceDeclaration } from "./index";
-export { interfaceTypeAnnotation as InterfaceTypeAnnotation } from "./index";
-export { intersectionTypeAnnotation as IntersectionTypeAnnotation } from "./index";
-export { mixedTypeAnnotation as MixedTypeAnnotation } from "./index";
-export { emptyTypeAnnotation as EmptyTypeAnnotation } from "./index";
-export { nullableTypeAnnotation as NullableTypeAnnotation } from "./index";
-export { numberLiteralTypeAnnotation as NumberLiteralTypeAnnotation } from "./index";
-export { numberTypeAnnotation as NumberTypeAnnotation } from "./index";
-export { objectTypeAnnotation as ObjectTypeAnnotation } from "./index";
-export { objectTypeInternalSlot as ObjectTypeInternalSlot } from "./index";
-export { objectTypeCallProperty as ObjectTypeCallProperty } from "./index";
-export { objectTypeIndexer as ObjectTypeIndexer } from "./index";
-export { objectTypeProperty as ObjectTypeProperty } from "./index";
-export { objectTypeSpreadProperty as ObjectTypeSpreadProperty } from "./index";
-export { opaqueType as OpaqueType } from "./index";
-export { qualifiedTypeIdentifier as QualifiedTypeIdentifier } from "./index";
-export { stringLiteralTypeAnnotation as StringLiteralTypeAnnotation } from "./index";
-export { stringTypeAnnotation as StringTypeAnnotation } from "./index";
-export { symbolTypeAnnotation as SymbolTypeAnnotation } from "./index";
-export { thisTypeAnnotation as ThisTypeAnnotation } from "./index";
-export { tupleTypeAnnotation as TupleTypeAnnotation } from "./index";
-export { typeofTypeAnnotation as TypeofTypeAnnotation } from "./index";
-export { typeAlias as TypeAlias } from "./index";
-export { typeAnnotation as TypeAnnotation } from "./index";
-export { typeCastExpression as TypeCastExpression } from "./index";
-export { typeParameter as TypeParameter } from "./index";
-export { typeParameterDeclaration as TypeParameterDeclaration } from "./index";
-export { typeParameterInstantiation as TypeParameterInstantiation } from "./index";
-export { unionTypeAnnotation as UnionTypeAnnotation } from "./index";
-export { variance as Variance } from "./index";
-export { voidTypeAnnotation as VoidTypeAnnotation } from "./index";
-export { enumDeclaration as EnumDeclaration } from "./index";
-export { enumBooleanBody as EnumBooleanBody } from "./index";
-export { enumNumberBody as EnumNumberBody } from "./index";
-export { enumStringBody as EnumStringBody } from "./index";
-export { enumSymbolBody as EnumSymbolBody } from "./index";
-export { enumBooleanMember as EnumBooleanMember } from "./index";
-export { enumNumberMember as EnumNumberMember } from "./index";
-export { enumStringMember as EnumStringMember } from "./index";
-export { enumDefaultedMember as EnumDefaultedMember } from "./index";
-export { jsxAttribute as JSXAttribute } from "./index";
-export { jsxClosingElement as JSXClosingElement } from "./index";
-export { jsxElement as JSXElement } from "./index";
-export { jsxEmptyExpression as JSXEmptyExpression } from "./index";
-export { jsxExpressionContainer as JSXExpressionContainer } from "./index";
-export { jsxSpreadChild as JSXSpreadChild } from "./index";
-export { jsxIdentifier as JSXIdentifier } from "./index";
-export { jsxMemberExpression as JSXMemberExpression } from "./index";
-export { jsxNamespacedName as JSXNamespacedName } from "./index";
-export { jsxOpeningElement as JSXOpeningElement } from "./index";
-export { jsxSpreadAttribute as JSXSpreadAttribute } from "./index";
-export { jsxText as JSXText } from "./index";
-export { jsxFragment as JSXFragment } from "./index";
-export { jsxOpeningFragment as JSXOpeningFragment } from "./index";
-export { jsxClosingFragment as JSXClosingFragment } from "./index";
-export { noop as Noop } from "./index";
-export { placeholder as Placeholder } from "./index";
-export { v8IntrinsicIdentifier as V8IntrinsicIdentifier } from "./index";
-export { argumentPlaceholder as ArgumentPlaceholder } from "./index";
-export { bindExpression as BindExpression } from "./index";
-export { classProperty as ClassProperty } from "./index";
-export { pipelineTopicExpression as PipelineTopicExpression } from "./index";
-export { pipelineBareFunction as PipelineBareFunction } from "./index";
-export { pipelinePrimaryTopicReference as PipelinePrimaryTopicReference } from "./index";
-export { classPrivateProperty as ClassPrivateProperty } from "./index";
-export { classPrivateMethod as ClassPrivateMethod } from "./index";
-export { importAttribute as ImportAttribute } from "./index";
-export { decorator as Decorator } from "./index";
-export { doExpression as DoExpression } from "./index";
-export { exportDefaultSpecifier as ExportDefaultSpecifier } from "./index";
-export { privateName as PrivateName } from "./index";
-export { recordExpression as RecordExpression } from "./index";
-export { tupleExpression as TupleExpression } from "./index";
-export { decimalLiteral as DecimalLiteral } from "./index";
-export { staticBlock as StaticBlock } from "./index";
-export { tsParameterProperty as TSParameterProperty } from "./index";
-export { tsDeclareFunction as TSDeclareFunction } from "./index";
-export { tsDeclareMethod as TSDeclareMethod } from "./index";
-export { tsQualifiedName as TSQualifiedName } from "./index";
-export { tsCallSignatureDeclaration as TSCallSignatureDeclaration } from "./index";
-export { tsConstructSignatureDeclaration as TSConstructSignatureDeclaration } from "./index";
-export { tsPropertySignature as TSPropertySignature } from "./index";
-export { tsMethodSignature as TSMethodSignature } from "./index";
-export { tsIndexSignature as TSIndexSignature } from "./index";
-export { tsAnyKeyword as TSAnyKeyword } from "./index";
-export { tsBooleanKeyword as TSBooleanKeyword } from "./index";
-export { tsBigIntKeyword as TSBigIntKeyword } from "./index";
-export { tsIntrinsicKeyword as TSIntrinsicKeyword } from "./index";
-export { tsNeverKeyword as TSNeverKeyword } from "./index";
-export { tsNullKeyword as TSNullKeyword } from "./index";
-export { tsNumberKeyword as TSNumberKeyword } from "./index";
-export { tsObjectKeyword as TSObjectKeyword } from "./index";
-export { tsStringKeyword as TSStringKeyword } from "./index";
-export { tsSymbolKeyword as TSSymbolKeyword } from "./index";
-export { tsUndefinedKeyword as TSUndefinedKeyword } from "./index";
-export { tsUnknownKeyword as TSUnknownKeyword } from "./index";
-export { tsVoidKeyword as TSVoidKeyword } from "./index";
-export { tsThisType as TSThisType } from "./index";
-export { tsFunctionType as TSFunctionType } from "./index";
-export { tsConstructorType as TSConstructorType } from "./index";
-export { tsTypeReference as TSTypeReference } from "./index";
-export { tsTypePredicate as TSTypePredicate } from "./index";
-export { tsTypeQuery as TSTypeQuery } from "./index";
-export { tsTypeLiteral as TSTypeLiteral } from "./index";
-export { tsArrayType as TSArrayType } from "./index";
-export { tsTupleType as TSTupleType } from "./index";
-export { tsOptionalType as TSOptionalType } from "./index";
-export { tsRestType as TSRestType } from "./index";
-export { tsNamedTupleMember as TSNamedTupleMember } from "./index";
-export { tsUnionType as TSUnionType } from "./index";
-export { tsIntersectionType as TSIntersectionType } from "./index";
-export { tsConditionalType as TSConditionalType } from "./index";
-export { tsInferType as TSInferType } from "./index";
-export { tsParenthesizedType as TSParenthesizedType } from "./index";
-export { tsTypeOperator as TSTypeOperator } from "./index";
-export { tsIndexedAccessType as TSIndexedAccessType } from "./index";
-export { tsMappedType as TSMappedType } from "./index";
-export { tsLiteralType as TSLiteralType } from "./index";
-export { tsExpressionWithTypeArguments as TSExpressionWithTypeArguments } from "./index";
-export { tsInterfaceDeclaration as TSInterfaceDeclaration } from "./index";
-export { tsInterfaceBody as TSInterfaceBody } from "./index";
-export { tsTypeAliasDeclaration as TSTypeAliasDeclaration } from "./index";
-export { tsAsExpression as TSAsExpression } from "./index";
-export { tsTypeAssertion as TSTypeAssertion } from "./index";
-export { tsEnumDeclaration as TSEnumDeclaration } from "./index";
-export { tsEnumMember as TSEnumMember } from "./index";
-export { tsModuleDeclaration as TSModuleDeclaration } from "./index";
-export { tsModuleBlock as TSModuleBlock } from "./index";
-export { tsImportType as TSImportType } from "./index";
-export { tsImportEqualsDeclaration as TSImportEqualsDeclaration } from "./index";
-export { tsExternalModuleReference as TSExternalModuleReference } from "./index";
-export { tsNonNullExpression as TSNonNullExpression } from "./index";
-export { tsExportAssignment as TSExportAssignment } from "./index";
-export { tsNamespaceExportDeclaration as TSNamespaceExportDeclaration } from "./index";
-export { tsTypeAnnotation as TSTypeAnnotation } from "./index";
-export { tsTypeParameterInstantiation as TSTypeParameterInstantiation } from "./index";
-export { tsTypeParameterDeclaration as TSTypeParameterDeclaration } from "./index";
-export { tsTypeParameter as TSTypeParameter } from "./index";
-export { numberLiteral as NumberLiteral } from "./index";
-export { regexLiteral as RegexLiteral } from "./index";
-export { restProperty as RestProperty } from "./index";
-export { spreadProperty as SpreadProperty } from "./index";
+export {
+  arrayExpression as ArrayExpression,
+  assignmentExpression as AssignmentExpression,
+  binaryExpression as BinaryExpression,
+  interpreterDirective as InterpreterDirective,
+  directive as Directive,
+  directiveLiteral as DirectiveLiteral,
+  blockStatement as BlockStatement,
+  breakStatement as BreakStatement,
+  callExpression as CallExpression,
+  catchClause as CatchClause,
+  conditionalExpression as ConditionalExpression,
+  continueStatement as ContinueStatement,
+  debuggerStatement as DebuggerStatement,
+  doWhileStatement as DoWhileStatement,
+  emptyStatement as EmptyStatement,
+  expressionStatement as ExpressionStatement,
+  file as File,
+  forInStatement as ForInStatement,
+  forStatement as ForStatement,
+  functionDeclaration as FunctionDeclaration,
+  functionExpression as FunctionExpression,
+  identifier as Identifier,
+  ifStatement as IfStatement,
+  labeledStatement as LabeledStatement,
+  stringLiteral as StringLiteral,
+  numericLiteral as NumericLiteral,
+  nullLiteral as NullLiteral,
+  booleanLiteral as BooleanLiteral,
+  regExpLiteral as RegExpLiteral,
+  logicalExpression as LogicalExpression,
+  memberExpression as MemberExpression,
+  newExpression as NewExpression,
+  program as Program,
+  objectExpression as ObjectExpression,
+  objectMethod as ObjectMethod,
+  objectProperty as ObjectProperty,
+  restElement as RestElement,
+  returnStatement as ReturnStatement,
+  sequenceExpression as SequenceExpression,
+  parenthesizedExpression as ParenthesizedExpression,
+  switchCase as SwitchCase,
+  switchStatement as SwitchStatement,
+  thisExpression as ThisExpression,
+  throwStatement as ThrowStatement,
+  tryStatement as TryStatement,
+  unaryExpression as UnaryExpression,
+  updateExpression as UpdateExpression,
+  variableDeclaration as VariableDeclaration,
+  variableDeclarator as VariableDeclarator,
+  whileStatement as WhileStatement,
+  withStatement as WithStatement,
+  assignmentPattern as AssignmentPattern,
+  arrayPattern as ArrayPattern,
+  arrowFunctionExpression as ArrowFunctionExpression,
+  classBody as ClassBody,
+  classExpression as ClassExpression,
+  classDeclaration as ClassDeclaration,
+  exportAllDeclaration as ExportAllDeclaration,
+  exportDefaultDeclaration as ExportDefaultDeclaration,
+  exportNamedDeclaration as ExportNamedDeclaration,
+  exportSpecifier as ExportSpecifier,
+  forOfStatement as ForOfStatement,
+  importDeclaration as ImportDeclaration,
+  importDefaultSpecifier as ImportDefaultSpecifier,
+  importNamespaceSpecifier as ImportNamespaceSpecifier,
+  importSpecifier as ImportSpecifier,
+  metaProperty as MetaProperty,
+  classMethod as ClassMethod,
+  objectPattern as ObjectPattern,
+  spreadElement as SpreadElement,
+  super as Super,
+  taggedTemplateExpression as TaggedTemplateExpression,
+  templateElement as TemplateElement,
+  templateLiteral as TemplateLiteral,
+  yieldExpression as YieldExpression,
+  awaitExpression as AwaitExpression,
+  import as Import,
+  bigIntLiteral as BigIntLiteral,
+  exportNamespaceSpecifier as ExportNamespaceSpecifier,
+  optionalMemberExpression as OptionalMemberExpression,
+  optionalCallExpression as OptionalCallExpression,
+  anyTypeAnnotation as AnyTypeAnnotation,
+  arrayTypeAnnotation as ArrayTypeAnnotation,
+  booleanTypeAnnotation as BooleanTypeAnnotation,
+  booleanLiteralTypeAnnotation as BooleanLiteralTypeAnnotation,
+  nullLiteralTypeAnnotation as NullLiteralTypeAnnotation,
+  classImplements as ClassImplements,
+  declareClass as DeclareClass,
+  declareFunction as DeclareFunction,
+  declareInterface as DeclareInterface,
+  declareModule as DeclareModule,
+  declareModuleExports as DeclareModuleExports,
+  declareTypeAlias as DeclareTypeAlias,
+  declareOpaqueType as DeclareOpaqueType,
+  declareVariable as DeclareVariable,
+  declareExportDeclaration as DeclareExportDeclaration,
+  declareExportAllDeclaration as DeclareExportAllDeclaration,
+  declaredPredicate as DeclaredPredicate,
+  existsTypeAnnotation as ExistsTypeAnnotation,
+  functionTypeAnnotation as FunctionTypeAnnotation,
+  functionTypeParam as FunctionTypeParam,
+  genericTypeAnnotation as GenericTypeAnnotation,
+  inferredPredicate as InferredPredicate,
+  interfaceExtends as InterfaceExtends,
+  interfaceDeclaration as InterfaceDeclaration,
+  interfaceTypeAnnotation as InterfaceTypeAnnotation,
+  intersectionTypeAnnotation as IntersectionTypeAnnotation,
+  mixedTypeAnnotation as MixedTypeAnnotation,
+  emptyTypeAnnotation as EmptyTypeAnnotation,
+  nullableTypeAnnotation as NullableTypeAnnotation,
+  numberLiteralTypeAnnotation as NumberLiteralTypeAnnotation,
+  numberTypeAnnotation as NumberTypeAnnotation,
+  objectTypeAnnotation as ObjectTypeAnnotation,
+  objectTypeInternalSlot as ObjectTypeInternalSlot,
+  objectTypeCallProperty as ObjectTypeCallProperty,
+  objectTypeIndexer as ObjectTypeIndexer,
+  objectTypeProperty as ObjectTypeProperty,
+  objectTypeSpreadProperty as ObjectTypeSpreadProperty,
+  opaqueType as OpaqueType,
+  qualifiedTypeIdentifier as QualifiedTypeIdentifier,
+  stringLiteralTypeAnnotation as StringLiteralTypeAnnotation,
+  stringTypeAnnotation as StringTypeAnnotation,
+  symbolTypeAnnotation as SymbolTypeAnnotation,
+  thisTypeAnnotation as ThisTypeAnnotation,
+  tupleTypeAnnotation as TupleTypeAnnotation,
+  typeofTypeAnnotation as TypeofTypeAnnotation,
+  typeAlias as TypeAlias,
+  typeAnnotation as TypeAnnotation,
+  typeCastExpression as TypeCastExpression,
+  typeParameter as TypeParameter,
+  typeParameterDeclaration as TypeParameterDeclaration,
+  typeParameterInstantiation as TypeParameterInstantiation,
+  unionTypeAnnotation as UnionTypeAnnotation,
+  variance as Variance,
+  voidTypeAnnotation as VoidTypeAnnotation,
+  enumDeclaration as EnumDeclaration,
+  enumBooleanBody as EnumBooleanBody,
+  enumNumberBody as EnumNumberBody,
+  enumStringBody as EnumStringBody,
+  enumSymbolBody as EnumSymbolBody,
+  enumBooleanMember as EnumBooleanMember,
+  enumNumberMember as EnumNumberMember,
+  enumStringMember as EnumStringMember,
+  enumDefaultedMember as EnumDefaultedMember,
+  jsxAttribute as JSXAttribute,
+  jsxClosingElement as JSXClosingElement,
+  jsxElement as JSXElement,
+  jsxEmptyExpression as JSXEmptyExpression,
+  jsxExpressionContainer as JSXExpressionContainer,
+  jsxSpreadChild as JSXSpreadChild,
+  jsxIdentifier as JSXIdentifier,
+  jsxMemberExpression as JSXMemberExpression,
+  jsxNamespacedName as JSXNamespacedName,
+  jsxOpeningElement as JSXOpeningElement,
+  jsxSpreadAttribute as JSXSpreadAttribute,
+  jsxText as JSXText,
+  jsxFragment as JSXFragment,
+  jsxOpeningFragment as JSXOpeningFragment,
+  jsxClosingFragment as JSXClosingFragment,
+  noop as Noop,
+  placeholder as Placeholder,
+  v8IntrinsicIdentifier as V8IntrinsicIdentifier,
+  argumentPlaceholder as ArgumentPlaceholder,
+  bindExpression as BindExpression,
+  classProperty as ClassProperty,
+  pipelineTopicExpression as PipelineTopicExpression,
+  pipelineBareFunction as PipelineBareFunction,
+  pipelinePrimaryTopicReference as PipelinePrimaryTopicReference,
+  classPrivateProperty as ClassPrivateProperty,
+  classPrivateMethod as ClassPrivateMethod,
+  importAttribute as ImportAttribute,
+  decorator as Decorator,
+  doExpression as DoExpression,
+  exportDefaultSpecifier as ExportDefaultSpecifier,
+  privateName as PrivateName,
+  recordExpression as RecordExpression,
+  tupleExpression as TupleExpression,
+  decimalLiteral as DecimalLiteral,
+  staticBlock as StaticBlock,
+  tsParameterProperty as TSParameterProperty,
+  tsDeclareFunction as TSDeclareFunction,
+  tsDeclareMethod as TSDeclareMethod,
+  tsQualifiedName as TSQualifiedName,
+  tsCallSignatureDeclaration as TSCallSignatureDeclaration,
+  tsConstructSignatureDeclaration as TSConstructSignatureDeclaration,
+  tsPropertySignature as TSPropertySignature,
+  tsMethodSignature as TSMethodSignature,
+  tsIndexSignature as TSIndexSignature,
+  tsAnyKeyword as TSAnyKeyword,
+  tsBooleanKeyword as TSBooleanKeyword,
+  tsBigIntKeyword as TSBigIntKeyword,
+  tsIntrinsicKeyword as TSIntrinsicKeyword,
+  tsNeverKeyword as TSNeverKeyword,
+  tsNullKeyword as TSNullKeyword,
+  tsNumberKeyword as TSNumberKeyword,
+  tsObjectKeyword as TSObjectKeyword,
+  tsStringKeyword as TSStringKeyword,
+  tsSymbolKeyword as TSSymbolKeyword,
+  tsUndefinedKeyword as TSUndefinedKeyword,
+  tsUnknownKeyword as TSUnknownKeyword,
+  tsVoidKeyword as TSVoidKeyword,
+  tsThisType as TSThisType,
+  tsFunctionType as TSFunctionType,
+  tsConstructorType as TSConstructorType,
+  tsTypeReference as TSTypeReference,
+  tsTypePredicate as TSTypePredicate,
+  tsTypeQuery as TSTypeQuery,
+  tsTypeLiteral as TSTypeLiteral,
+  tsArrayType as TSArrayType,
+  tsTupleType as TSTupleType,
+  tsOptionalType as TSOptionalType,
+  tsRestType as TSRestType,
+  tsNamedTupleMember as TSNamedTupleMember,
+  tsUnionType as TSUnionType,
+  tsIntersectionType as TSIntersectionType,
+  tsConditionalType as TSConditionalType,
+  tsInferType as TSInferType,
+  tsParenthesizedType as TSParenthesizedType,
+  tsTypeOperator as TSTypeOperator,
+  tsIndexedAccessType as TSIndexedAccessType,
+  tsMappedType as TSMappedType,
+  tsLiteralType as TSLiteralType,
+  tsExpressionWithTypeArguments as TSExpressionWithTypeArguments,
+  tsInterfaceDeclaration as TSInterfaceDeclaration,
+  tsInterfaceBody as TSInterfaceBody,
+  tsTypeAliasDeclaration as TSTypeAliasDeclaration,
+  tsAsExpression as TSAsExpression,
+  tsTypeAssertion as TSTypeAssertion,
+  tsEnumDeclaration as TSEnumDeclaration,
+  tsEnumMember as TSEnumMember,
+  tsModuleDeclaration as TSModuleDeclaration,
+  tsModuleBlock as TSModuleBlock,
+  tsImportType as TSImportType,
+  tsImportEqualsDeclaration as TSImportEqualsDeclaration,
+  tsExternalModuleReference as TSExternalModuleReference,
+  tsNonNullExpression as TSNonNullExpression,
+  tsExportAssignment as TSExportAssignment,
+  tsNamespaceExportDeclaration as TSNamespaceExportDeclaration,
+  tsTypeAnnotation as TSTypeAnnotation,
+  tsTypeParameterInstantiation as TSTypeParameterInstantiation,
+  tsTypeParameterDeclaration as TSTypeParameterDeclaration,
+  tsTypeParameter as TSTypeParameter,
+  numberLiteral as NumberLiteral,
+  regexLiteral as RegexLiteral,
+  restProperty as RestProperty,
+  spreadProperty as SpreadProperty,
+} from "./index";

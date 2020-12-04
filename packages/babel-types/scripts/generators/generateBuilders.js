@@ -135,17 +135,20 @@ module.exports.generateDeprecatedBuilders = function generateDeprecatedBuilders(
   let output = `/*
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
- */\n\n`;
+ */
+
+ export {\n`;
 
   Object.keys(definitions.BUILDER_KEYS).forEach(type => {
     const formatedBuilderName = formatBuilderName(type);
-    output += `export { ${formatedBuilderName} as ${type} } from './index';\n`;
+    output += `  ${formatedBuilderName} as ${type},\n`;
   });
 
   Object.keys(definitions.DEPRECATED_KEYS).forEach(type => {
     const formatedBuilderName = formatBuilderName(type);
-    output += `export { ${formatedBuilderName} as ${type} } from './index';\n`;
+    output += `  ${formatedBuilderName} as ${type},\n`;
   });
 
+  output += ` } from './index';\n`;
   return output;
 };
