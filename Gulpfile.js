@@ -110,7 +110,7 @@ if (process.env.CIRCLE_PR_NUMBER) {
 
 const babelVersion =
   require("./packages/babel-core/package.json").version + versionSuffix;
-function buildRollup(packages) {
+function buildRollup(packages, targetBrowsers) {
   const sourcemap = process.env.NODE_ENV === "production";
   return Promise.all(
     packages.map(async ({ src, format, dest, name, filename }) => {
@@ -166,11 +166,12 @@ function buildRollup(packages) {
             ],
           }),
           rollupJson(),
-          rollupNodePolyfills({
-            sourceMap: sourcemap,
-            include: "**/*.{js,ts}",
-          }),
-        ],
+          targetBrowsers &&
+            rollupNodePolyfills({
+              sourceMap: sourcemap,
+              include: "**/*.{js,ts}",
+            }),
+        ].filter(Boolean),
       });
 
       const outputFile = path.join(src, dest, filename || "index.js");
@@ -235,7 +236,7 @@ const standaloneBundle = [
 ];
 
 gulp.task("build-rollup", () => buildRollup(libBundles));
-gulp.task("build-babel-standalone", () => buildRollup(standaloneBundle));
+gulp.task("build-babel-standalone", () => buildRollup(standaloneBundle, true));
 
 gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
 gulp.task("build", gulp.parallel("build-rollup", "build-babel"));

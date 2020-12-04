@@ -206,7 +206,7 @@ clone-license:
 	./scripts/clone-license.sh
 
 prepublish-build: clean-lib clean-runtime-helpers
-	NODE_ENV=production BABEL_ENV=production $(MAKE) build-bundle
+	NODE_ENV=production BABEL_ENV=production STRIP_BABEL_8_FLAG=true $(MAKE) build-bundle
 	$(MAKE) prepublish-build-standalone clone-license
 
 prepublish:
