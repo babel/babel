@@ -83,14 +83,6 @@ export function runThrowTestsWithEstree(fixturesPath, parseFunction) {
   Object.keys(fixtures).forEach(function (name) {
     fixtures[name].forEach(function (testSuite) {
       testSuite.tests.forEach(function (task) {
-        if (!task.options.throws) {
-          const hasErrors =
-            !task.disabled && "errors" in JSON.parse(task.expect.code);
-          if (!hasErrors) {
-            return;
-          }
-        }
-
         task.options.plugins = task.options.plugins || [];
         task.options.plugins.push("estree");
 
