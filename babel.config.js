@@ -21,6 +21,7 @@ module.exports = function (api) {
   let convertESM = true;
   let ignoreLib = true;
   let includeRegeneratorRuntime = false;
+  let polyfillRequireResolve = false;
 
   let transformRuntimeOptions;
 
@@ -53,6 +54,7 @@ module.exports = function (api) {
         "packages/babel-compat-data"
       );
       if (env === "rollup") envOpts.targets = { node: nodeVersion };
+      polyfillRequireResolve = true;
       break;
     case "test-legacy": // In test-legacy environment, we build babel on latest node but test on minimum supported legacy versions
     case "production":
@@ -60,6 +62,7 @@ module.exports = function (api) {
       envOpts.targets = {
         node: nodeVersion,
       };
+      polyfillRequireResolve = true;
       break;
     case "development":
       envOpts.debug = true;
@@ -116,6 +119,7 @@ module.exports = function (api) {
 
       convertESM ? "@babel/proposal-export-namespace-from" : null,
       convertESM ? "@babel/transform-modules-commonjs" : null,
+      polyfillRequireResolve && pluginPolyfillRequireResolve,
     ].filter(Boolean),
     overrides: [
       {
@@ -160,3 +164,43 @@ module.exports = function (api) {
 
   return config;
 };
+
+// TODO(Babel 8) This polyfill is only needed for Node.js 6 and 8
+function pluginPolyfillRequireResolve({ template, types: t }) {
+  return {
+    visitor: {
+      MemberExpression(path) {
+        if (!path.matchesPattern("require.resolve")) return;
+        if (!t.isCallExpression(path.parent, { callee: path.node })) return;
+
+        const args = path.parent.arguments;
+        if (args.length < 2) return;
+        if (
+          !t.isObjectExpression(args[1]) ||
+          args[1].properties.length !== 1 ||
+          !t.isIdentifier(args[1].properties[0].key, { name: "paths" }) ||
+          !t.isArrayExpression(args[1].properties[0].value) ||
+          args[1].properties[0].value.elements.length !== 1
+        ) {
+          throw path.parentPath.buildCodeFrameError(
+            "This 'require.resolve' usage is not supported by the inline polyfill."
+          );
+        }
+
+        // require.resolve's paths option has been introduced in Node.js 8.9
+        // https://nodejs.org/api/modules.html#modules_require_resolve_request_options
+        path.replaceWith(template.ast`
+          parseFloat(process.versions.node) >= 8.9
+            ? require.resolve
+            : (/* request */ r, { paths: [/* base */ b] }, M = require("module")) => {
+                let /* filename */ f = M._findPath(r, M._nodeModulePaths(b).concat(b));
+                if (f) return f;
+                f = new Error(\`Cannot resolve module '\${r}'\`);
+                f.code = "MODULE_NOT_FOUND";
+                throw f;
+              }
+        `);
+      },
+    },
+  };
+}

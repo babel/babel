@@ -22,7 +22,6 @@
   "dependencies": {
     "@babel/helper-module-imports": "workspace:^7.12.1",
     "@babel/helper-plugin-utils": "workspace:^7.10.4",
-    "resolve": "^1.8.1",
     "semver": "^5.5.1"
   },
   "peerDependencies": {
