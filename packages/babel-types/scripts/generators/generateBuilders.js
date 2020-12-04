@@ -94,9 +94,7 @@ import type * as t from "../../types";\n\n`;
       formatedBuilderNameLocal === formatedBuilderName ? "export " : ""
     }function ${formatedBuilderNameLocal}(${defArgs.join(
       ", "
-    )}): t.${type} { return builder("${type}", ${callArgs.join(
-      ", "
-    )}); }\n`;
+    )}): t.${type} { return builder("${type}", ${callArgs.join(", ")}); }\n`;
     if (formatedBuilderNameLocal !== formatedBuilderName) {
       output += `export { ${formatedBuilderNameLocal} as ${formatedBuilderName} };\n`;
     }
