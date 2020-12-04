@@ -97,24 +97,13 @@ tscheck: generate-tsconfig
 flow: build-flow-typings
 	$(YARN) flow check --strip-root
 
-lint-ci: lint-js-ci lint-ts-ci check-compat-data-ci
-
-lint-js-ci:
-	$(MAKE) lint-js
-
-lint-ts-ci:
-	$(MAKE) lint-ts
+lint-ci: lint check-compat-data-ci
 
 check-compat-data-ci:
 	$(MAKE) check-compat-data
 
-lint: lint-js lint-ts
-
-lint-js:
+lint:
 	BABEL_ENV=test $(YARN) eslint scripts $(SOURCES) '*.{js,ts}' --format=codeframe --ext .js,.cjs,.mjs,.ts
-
-lint-ts:
-	scripts/lint-ts-typings.sh
 
 fix: fix-json fix-js
 
