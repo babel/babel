@@ -19,8 +19,11 @@ const rollupNodePolyfills = require("rollup-plugin-node-polyfills");
 const rollupNodeResolve = require("@rollup/plugin-node-resolve").default;
 const rollupReplace = require("@rollup/plugin-replace");
 const { terser: rollupTerser } = require("rollup-plugin-terser");
+const { default: rollupDts } = require("rollup-plugin-dts");
 
-const defaultSourcesGlob = "./@(codemods|packages|eslint)/*/src/**/*.{js,ts}";
+const defaultPackagesGlob = "./@(codemods|packages|eslint)/*";
+const defaultSourcesGlob = `${defaultPackagesGlob}/src/**/*.{js,ts}`;
+const defaultDtsGlob = `${defaultPackagesGlob}/lib/**/*.d.ts{,.map}`;
 
 /**
  * map source code path to the generated artifacts path
@@ -70,18 +73,36 @@ function rename(fn) {
   });
 }
 
-function buildBabel(exclude, sourcesGlob = defaultSourcesGlob) {
-  const base = __dirname;
+function unlink() {
+  return through.obj(function (file, enc, callback) {
+    fs.unlink(file.path, () => callback());
+  });
+}
 
-  let stream = gulp.src(sourcesGlob, { base: __dirname });
+function finish(stream) {
+  return new Promise((resolve, reject) => {
+    stream.on("end", resolve);
+    stream.on("finish", resolve);
+    stream.on("error", reject);
+  });
+}
+
+function getFiles(glob, exclude) {
+  let stream = gulp.src(glob, { base: __dirname });
 
   if (exclude) {
-    const filters = exclude.map(p => `!**/${p.src}/**`);
+    const filters = exclude.map(p => `!**/${p}/**`);
     filters.unshift("**");
     stream = stream.pipe(filter(filters));
   }
 
-  return stream
+  return stream;
+}
+
+function buildBabel(exclude) {
+  const base = __dirname;
+
+  return getFiles(defaultSourcesGlob, exclude && exclude.map(p => p.src))
     .pipe(errorsLogger())
     .pipe(newer({ dest: base, map: mapSrcToLib }))
     .pipe(compilationLogger())
@@ -214,6 +235,35 @@ function buildRollup(packages, targetBrowsers) {
   );
 }
 
+function buildRollupDts(packages) {
+  const sourcemap = process.env.NODE_ENV === "production";
+  return Promise.all(
+    packages.map(async packageName => {
+      const input = `${packageName}/lib/index.d.ts`;
+      fancyLog(`Bundling '${chalk.cyan(input)}' with rollup ...`);
+      const bundle = await rollup.rollup({
+        input,
+        plugins: [rollupDts()],
+      });
+
+      await finish(
+        gulp.src(`${packageName}/lib/**/*.d.ts{,.map}`).pipe(unlink())
+      );
+
+      await bundle.write({
+        file: `${packageName}/lib/index.d.ts`,
+        format: "es",
+        sourcemap: sourcemap,
+        exports: "named",
+      });
+    })
+  );
+}
+
+function removeDts(exclude) {
+  return getFiles(defaultDtsGlob, exclude).pipe(unlink());
+}
+
 const libBundles = [
   "packages/babel-parser",
   "packages/babel-plugin-proposal-optional-chaining",
@@ -223,6 +273,8 @@ const libBundles = [
   format: "cjs",
   dest: "lib",
 }));
+
+const dtsBundles = ["packages/babel-types"];
 
 const standaloneBundle = [
   {
@@ -237,6 +289,9 @@ const standaloneBundle = [
 
 gulp.task("build-rollup", () => buildRollup(libBundles));
 gulp.task("build-babel-standalone", () => buildRollup(standaloneBundle, true));
+
+gulp.task("bundle-dts", () => buildRollupDts(dtsBundles));
+gulp.task("clean-dts", () => removeDts(/* exclude */ dtsBundles));
 
 gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
 gulp.task("build", gulp.parallel("build-rollup", "build-babel"));

@@ -91,6 +91,7 @@ code-quality: tscheck flow lint
 
 tscheck: generate-tsconfig
 	make build-typescript-typings
+	cp packages/babel-types/src/builders/generated/deprecated.d.ts packages/babel-types/lib/builders/generated/deprecated.d.ts
 	$(YARN) tsc -b .
 
 flow:
@@ -209,18 +210,20 @@ prepublish-build: clean-lib clean-runtime-helpers
 	NODE_ENV=production BABEL_ENV=production STRIP_BABEL_8_FLAG=true $(MAKE) build-bundle
 	$(MAKE) prepublish-build-standalone clone-license
 
+prepublish-prepare-dts:
+	$(MAKE) clean-tsconfig
+	$(MAKE) tscheck
+	cp packages/babel-types/src/builders/generated/deprecated.d.ts packages/babel-types/lib/builders/generated/deprecated.d.ts
+	$(YARN) gulp bundle-dts
+	$(YARN) gulp clean-dts
+	$(MAKE) clean-tsconfig
+
 prepublish:
 	$(MAKE) check-yarn-bug-1882
 	$(MAKE) bootstrap-only
 	$(MAKE) prepublish-build
+	$(MAKE) prepublish-prepare-dts
 	IS_PUBLISH=true $(MAKE) test
-	# We don't want to publish TS-related files yet, except for @babel/types
-	rm -f packages/*/lib/**/*.d.ts{,.map}
-	cp packages/babel-types/src/builders/generated/deprecated.d.ts packages/babel-types/lib/builders/generated/deprecated.d.ts
-	rm -f codemods/*/lib/**/*.d.ts{,.map}
-	rm -f eslint/*/lib/**/*.d.ts{,.map}
-	$(MAKE) clean-tsconfig
-	$(MAKE) build-typescript-typings
 
 new-version:
 	git pull --rebase
