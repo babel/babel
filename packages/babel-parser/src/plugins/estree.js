@@ -61,7 +61,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         directiveLiteral.loc.start,
       );
 
-      expression.value = directiveLiteral.extra.expressionValue;
+      expression.value = directiveLiteral.value;
       expression.raw = directiveLiteral.extra.raw;
 
       stmt.expression = this.finishNodeAt(
@@ -118,10 +118,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const directive = super.stmtToDirective(stmt);
       const value = stmt.expression.value;
 
-      // Record the expression value as in estree mode we want
-      // the stmt to have the real value e.g. ("use strict") and
-      // not the raw value e.g. ("use\\x20strict")
-      this.addExtra(directive.value, "expressionValue", value);
+      // Reset value to the actual value as in estree mode we want
+      // the stmt to have the real value and not the raw value
+      directive.value.value = value;
 
       return directive;
     }
