@@ -102,6 +102,7 @@ These are the core @babel/parser (babylon) AST node types.
   - [ClassPrivateMethod](#classprivatemethod)
   - [ClassProperty](#classproperty)
   - [ClassPrivateProperty](#classprivateproperty)
+  - [StaticBlock](#staticblock)
   - [ClassDeclaration](#classdeclaration)
   - [ClassExpression](#classexpression)
   - [MetaProperty](#metaproperty)
