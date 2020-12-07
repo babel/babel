@@ -1082,7 +1082,7 @@ An expression wrapped by parentheses. By default `@babel/parser` does not create
 ```js
 interface DoExpression <: Expression {
   type: "DoExpression";
-  body: BlockStatement
+  body: BlockStatement;
 }
 ```
 
