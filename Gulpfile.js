@@ -217,6 +217,7 @@ function buildRollup(packages, targetBrowsers) {
 const libBundles = [
   "packages/babel-parser",
   "packages/babel-plugin-proposal-optional-chaining",
+  "packages/babel-preset-typescript",
   "packages/babel-helper-member-expression-to-functions",
 ].map(src => ({
   src,
