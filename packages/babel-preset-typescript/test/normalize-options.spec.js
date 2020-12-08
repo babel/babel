@@ -56,7 +56,7 @@ describe("normalize options", () => {
       `);
     });
   });
-  describe("Babel 7", () => {
+  (process.env.BABEL_8_BREAKING ? describe.skip : describe)("Babel 7", () => {
     it("should not throw on unknown options", () => {
       expect(() =>
         normalizeOptions({ allowNamespace: true }),
