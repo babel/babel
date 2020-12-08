@@ -1,13 +1,46 @@
 import { OptionValidator } from "@babel/helper-validator-option";
 const v = new OptionValidator("@babel/preset-typescript");
 
-export default function normalizeOptions(options) {
-  const {
+export default function normalizeOptions(options = {}) {
+  let {
     allowDeclareFields,
     allowNamespaces,
     jsxPragma,
     onlyRemoveTypeImports,
   } = options;
+
+  if (process.env.BABEL_8_BREAKING) {
+    const TopLevelOptions = {
+      allowDeclareFields: "allowDeclareFields",
+      allExtensions: "allExtensions",
+      allowNamespaces: "allowNamespaces",
+      isTSX: "isTSX",
+      jsxPragma: "jsxPragma",
+      jsxPragmaFrag: "jsxPragmaFrag",
+      onlyRemoveTypeImports: "onlyRemoveTypeImports",
+    };
+    v.validateTopLevelOptions(options, TopLevelOptions);
+    allowDeclareFields = v.validateBooleanOption(
+      TopLevelOptions.allowDeclareFields,
+      options.allowDeclareFields,
+      true,
+    );
+    allowNamespaces = v.validateBooleanOption(
+      TopLevelOptions.allowNamespaces,
+      options.allowNamespaces,
+      true,
+    );
+    jsxPragma = v.validateStringOption(
+      TopLevelOptions.jsxPragma,
+      options.jsxPragma,
+      "React",
+    );
+    onlyRemoveTypeImports = v.validateBooleanOption(
+      TopLevelOptions.onlyRemoveTypeImports,
+      options.onlyRemoveTypeImports,
+      true,
+    );
+  }
 
   const jsxPragmaFrag = v.validateStringOption(
     "jsxPragmaFrag",
