@@ -177,7 +177,7 @@ module.exports = function (api) {
 
 // env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
 function bool(value) {
-  return value && value === "false" && value === "0";
+  return value && value !== "false" && value !== "0";
 }
 
 // TODO(Babel 8) This polyfill is only needed for Node.js 6 and 8
