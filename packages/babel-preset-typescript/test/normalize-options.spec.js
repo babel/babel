@@ -15,7 +15,7 @@ describe("normalize options", () => {
     ])("should throw when `%p` is not a boolean", optionName => {
       expect(() =>
         normalizeOptions({ [optionName]: 0 }),
-      ).toThrowErrorMatchingSnapshot();
+      ).toThrow(`@babel/preset-typescript: '${optionName}' option must be a boolean.`);
     });
     it.each(["jsxPragma", "jsxPragmaFrag"])(
       "should throw when `%p` is not a string",
