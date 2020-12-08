@@ -2,8 +2,6 @@ import { declare } from "@babel/helper-plugin-utils";
 import transformReactJSX from "@babel/plugin-transform-react-jsx";
 import transformReactJSXDevelopment from "@babel/plugin-transform-react-jsx-development";
 import transformReactDisplayName from "@babel/plugin-transform-react-display-name";
-import transformReactJSXSource from "@babel/plugin-transform-react-jsx-source";
-import transformReactJSXSelf from "@babel/plugin-transform-react-jsx-self";
 import transformReactPure from "@babel/plugin-transform-react-pure-annotations";
 
 export default declare((api, opts) => {
@@ -14,7 +12,6 @@ export default declare((api, opts) => {
   const {
     pure,
     throwIfNamespace = true,
-    useSpread,
     runtime = "classic",
     importSource,
   } = opts;
@@ -25,35 +22,27 @@ export default declare((api, opts) => {
     pragmaFrag = pragmaFrag || "React.Fragment";
   }
 
-  // TODO: (Babel 8) Don't cast these options but validate it
+  // TODO: (Babel 8) Don't cast this option but validate it
   const development = !!opts.development;
-  const useBuiltIns = !!opts.useBuiltIns;
-
-  const transformReactJSXPlugin =
-    runtime === "automatic" && development
-      ? transformReactJSXDevelopment
-      : transformReactJSX;
 
   return {
     plugins: [
       [
-        transformReactJSXPlugin,
+        development ? transformReactJSXDevelopment : transformReactJSX,
         {
           importSource,
           pragma,
           pragmaFrag,
           runtime,
           throwIfNamespace,
-          useBuiltIns,
-          useSpread,
           pure,
+          // TODO (Babel 8): Remove `useBuiltIns` & `useSpread`
+          useBuiltIns: !!opts.useBuiltIns,
+          useSpread: opts.useSpread,
         },
       ],
       transformReactDisplayName,
       pure !== false && transformReactPure,
-
-      development && runtime === "classic" && transformReactJSXSource,
-      development && runtime === "classic" && transformReactJSXSelf,
     ].filter(Boolean),
   };
 });

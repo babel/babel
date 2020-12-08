@@ -2532,7 +2532,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-react-jsx-self@workspace:*, @babel/plugin-transform-react-jsx-self@workspace:^7.12.1, @babel/plugin-transform-react-jsx-self@workspace:packages/babel-plugin-transform-react-jsx-self":
+"@babel/plugin-transform-react-jsx-self@workspace:*, @babel/plugin-transform-react-jsx-self@workspace:packages/babel-plugin-transform-react-jsx-self":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-react-jsx-self@workspace:packages/babel-plugin-transform-react-jsx-self"
   dependencies:
@@ -2545,7 +2545,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-react-jsx-source@workspace:*, @babel/plugin-transform-react-jsx-source@workspace:^7.12.1, @babel/plugin-transform-react-jsx-source@workspace:packages/babel-plugin-transform-react-jsx-source":
+"@babel/plugin-transform-react-jsx-source@workspace:*, @babel/plugin-transform-react-jsx-source@workspace:packages/babel-plugin-transform-react-jsx-source":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-react-jsx-source@workspace:packages/babel-plugin-transform-react-jsx-source"
   dependencies:
@@ -3094,8 +3094,6 @@ __metadata:
     "@babel/plugin-transform-react-display-name": "workspace:^7.12.1"
     "@babel/plugin-transform-react-jsx": "workspace:^7.12.7"
     "@babel/plugin-transform-react-jsx-development": "workspace:^7.12.7"
-    "@babel/plugin-transform-react-jsx-self": "workspace:^7.12.1"
-    "@babel/plugin-transform-react-jsx-source": "workspace:^7.12.1"
     "@babel/plugin-transform-react-pure-annotations": "workspace:^7.12.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0

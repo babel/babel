@@ -19,8 +19,6 @@
     "@babel/plugin-transform-react-display-name": "workspace:^7.12.1",
     "@babel/plugin-transform-react-jsx": "workspace:^7.12.7",
     "@babel/plugin-transform-react-jsx-development": "workspace:^7.12.7",
-    "@babel/plugin-transform-react-jsx-self": "workspace:^7.12.1",
-    "@babel/plugin-transform-react-jsx-source": "workspace:^7.12.1",
     "@babel/plugin-transform-react-pure-annotations": "workspace:^7.12.1"
   },
   "peerDependencies": {
