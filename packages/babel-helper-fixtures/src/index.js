@@ -149,6 +149,8 @@ function pushTask(taskName, taskDir, suite, suiteName) {
     },
   };
 
+  delete taskOpts.BABEL_8_BREAKING;
+
   // If there's node requirement, check it before pushing task
   if (taskOpts.minNodeVersion) {
     const minimumVersion = semver.clean(taskOpts.minNodeVersion);
