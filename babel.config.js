@@ -21,7 +21,7 @@ module.exports = function (api) {
   let convertESM = true;
   let ignoreLib = true;
   let includeRegeneratorRuntime = false;
-  let polyfillRequireResolve = false;
+  let needsPolyfillsForOldNode = false;
 
   let transformRuntimeOptions;
 
@@ -54,7 +54,7 @@ module.exports = function (api) {
         "packages/babel-compat-data"
       );
       if (env === "rollup") envOpts.targets = { node: nodeVersion };
-      polyfillRequireResolve = true;
+      needsPolyfillsForOldNode = true;
       break;
     case "test-legacy": // In test-legacy environment, we build babel on latest node but test on minimum supported legacy versions
     case "production":
@@ -62,7 +62,7 @@ module.exports = function (api) {
       envOpts.targets = {
         node: nodeVersion,
       };
-      polyfillRequireResolve = true;
+      needsPolyfillsForOldNode = true;
       break;
     case "development":
       envOpts.debug = true;
@@ -79,7 +79,7 @@ module.exports = function (api) {
 
   if (process.env.STRIP_BABEL_8_FLAG && bool(process.env.BABEL_8_BREAKING)) {
     // Never apply polyfills when compiling for Babel 8
-    polyfillRequireResolve = false;
+    needsPolyfillsForOldNode = false;
   }
 
   if (includeRegeneratorRuntime) {
@@ -129,7 +129,7 @@ module.exports = function (api) {
         pluginToggleBabel8Breaking,
         { breaking: bool(process.env.BABEL_8_BREAKING) },
       ],
-      polyfillRequireResolve && pluginPolyfillRequireResolve,
+      needsPolyfillsForOldNode && pluginPolyfillsOldNode,
     ].filter(Boolean),
     overrides: [
       {
@@ -180,41 +180,102 @@ function bool(value) {
   return value && value !== "false" && value !== "0";
 }
 
-// TODO(Babel 8) This polyfill is only needed for Node.js 6 and 8
-function pluginPolyfillRequireResolve({ template, types: t }) {
+// TODO(Babel 8) This polyfills are only needed for Node.js 6 and 8
+/** @param {import("@babel/core")} api */
+function pluginPolyfillsOldNode({ template, types: t }) {
+  const polyfills = [
+    {
+      name: "require.resolve",
+      necessary({ node, parent }) {
+        return (
+          t.isCallExpression(parent, { callee: node }) &&
+          parent.arguments.length > 1
+        );
+      },
+      supported({ parent: { arguments: args } }) {
+        return (
+          t.isObjectExpression(args[1]) &&
+          args[1].properties.length === 1 &&
+          t.isIdentifier(args[1].properties[0].key, { name: "paths" }) &&
+          t.isArrayExpression(args[1].properties[0].value) &&
+          args[1].properties[0].value.elements.length === 1
+        );
+      },
+      // require.resolve's paths option has been introduced in Node.js 8.9
+      // https://nodejs.org/api/modules.html#modules_require_resolve_request_options
+      replacement: template({ syntacticPlaceholders: true })`
+        parseFloat(process.versions.node) >= 8.9
+          ? require.resolve
+          : (/* request */ r, { paths: [/* base */ b] }, M = require("module")) => {
+              let /* filename */ f = M._findPath(r, M._nodeModulePaths(b).concat(b));
+              if (f) return f;
+              f = new Error(\`Cannot resolve module '\${r}'\`);
+              f.code = "MODULE_NOT_FOUND";
+              throw f;
+            }
+      `,
+    },
+    {
+      // NOTE: This polyfills depends on the "make-dir" library. Any package
+      // using fs.mkdirSync must have "make-dir" as a dependency.
+      name: "fs.mkdirSync",
+      necessary({ node, parent }) {
+        return (
+          t.isCallExpression(parent, { callee: node }) &&
+          parent.arguments.length > 1
+        );
+      },
+      supported({ parent: { arguments: args } }) {
+        return (
+          t.isObjectExpression(args[1]) &&
+          args[1].properties.length === 1 &&
+          t.isIdentifier(args[1].properties[0].key, { name: "recursive" }) &&
+          t.isBooleanLiteral(args[1].properties[0].value, { value: true })
+        );
+      },
+      // fs.mkdirSync's recursive option has been introduced in Node.js 10.12
+      // https://nodejs.org/api/fs.html#fs_fs_mkdirsync_path_options
+      replacement: template`
+        parseFloat(process.versions.node) >= 10.12
+          ? fs.mkdirSync
+          : require("make-dir").sync
+      `,
+    },
+    {
+      // NOTE: This polyfills depends on the "node-environment-flags"
+      // library. Any package using process.allowedNodeEnvironmentFlags
+      // must have "node-environment-flags" as a dependency.
+      name: "process.allowedNodeEnvironmentFlags",
+      necessary({ parent, node }) {
+        // To avoid infinite replacement loops
+        return !t.isLogicalExpression(parent, { operator: "||", left: node });
+      },
+      supported: () => true,
+      // process.allowedNodeEnvironmentFlags has been introduced in Node.js 10.10
+      // https://nodejs.org/api/process.html#process_process_allowednodeenvironmentflags
+      replacement: template`
+        process.allowedNodeEnvironmentFlags || require("node-environment-flags")
+      `,
+    },
+  ];
+
   return {
     visitor: {
       MemberExpression(path) {
-        if (!path.matchesPattern("require.resolve")) return;
-        if (!t.isCallExpression(path.parent, { callee: path.node })) return;
+        for (const polyfill of polyfills) {
+          if (!path.matchesPattern(polyfill.name)) continue;
 
-        const args = path.parent.arguments;
-        if (args.length < 2) return;
-        if (
-          !t.isObjectExpression(args[1]) ||
-          args[1].properties.length !== 1 ||
-          !t.isIdentifier(args[1].properties[0].key, { name: "paths" }) ||
-          !t.isArrayExpression(args[1].properties[0].value) ||
-          args[1].properties[0].value.elements.length !== 1
-        ) {
-          throw path.parentPath.buildCodeFrameError(
-            "This 'require.resolve' usage is not supported by the inline polyfill."
-          );
+          if (!polyfill.necessary(path)) return;
+          if (!polyfill.supported(path)) {
+            throw path.buildCodeFrameError(
+              `This '${polyfill.name}' usage is not supported by the inline polyfill.`
+            );
+          }
+
+          path.replaceWith(polyfill.replacement());
+
+          break;
         }
-
-        // require.resolve's paths option has been introduced in Node.js 8.9
-        // https://nodejs.org/api/modules.html#modules_require_resolve_request_options
-        path.replaceWith(template.ast`
-          parseFloat(process.versions.node) >= 8.9
-            ? require.resolve
-            : (/* request */ r, { paths: [/* base */ b] }, M = require("module")) => {
-                let /* filename */ f = M._findPath(r, M._nodeModulePaths(b).concat(b));
-                if (f) return f;
-                f = new Error(\`Cannot resolve module '\${r}'\`);
-                f.code = "MODULE_NOT_FOUND";
-                throw f;
-              }
-        `);
       },
     },
   };
