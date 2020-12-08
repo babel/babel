@@ -254,9 +254,7 @@ function pluginPolyfillsOldNode({ template, types: t }) {
       // process.allowedNodeEnvironmentFlags has been introduced in Node.js 10.10
       // https://nodejs.org/api/process.html#process_process_allowednodeenvironmentflags
       replacement: template`
-        parseFloat(process.versions.node) >= 10.10
-          ? process.allowedNodeEnvironmentFlags
-          : require("node-environment-flags")
+        process.allowedNodeEnvironmentFlags || require("node-environment-flags")
       `,
     },
   ];
