@@ -13,16 +13,16 @@ describe("normalize options", () => {
       "isTSX",
       "onlyRemoveTypeImports",
     ])("should throw when `%p` is not a boolean", optionName => {
-      expect(() =>
-        normalizeOptions({ [optionName]: 0 }),
-      ).toThrow(`@babel/preset-typescript: '${optionName}' option must be a boolean.`);
+      expect(() => normalizeOptions({ [optionName]: 0 })).toThrow(
+        `@babel/preset-typescript: '${optionName}' option must be a boolean.`,
+      );
     });
     it.each(["jsxPragma", "jsxPragmaFrag"])(
       "should throw when `%p` is not a string",
       optionName => {
-        expect(() =>
-          normalizeOptions({ [optionName]: 0 }),
-        ).toThrowErrorMatchingSnapshot();
+        expect(() => normalizeOptions({ [optionName]: 0 })).toThrow(
+          `@babel/preset-typescript: '${optionName}' option must be a string.`,
+        );
       },
     );
     it("should not throw when options is not defined", () => {
@@ -63,17 +63,17 @@ describe("normalize options", () => {
     it.each(["allExtensions", "isTSX"])(
       "should throw when `%p` is not a boolean",
       optionName => {
-        expect(() =>
-          normalizeOptions({ [optionName]: 0 }),
-        ).toThrowErrorMatchingSnapshot();
+        expect(() => normalizeOptions({ [optionName]: 0 })).toThrow(
+          `@babel/preset-typescript: '${optionName}' option must be a boolean.`,
+        );
       },
     );
     it.each(["jsxPragmaFrag"])(
       "should throw when `%p` is not a string",
       optionName => {
-        expect(() =>
-          normalizeOptions({ [optionName]: 0 }),
-        ).toThrowErrorMatchingSnapshot();
+        expect(() => normalizeOptions({ [optionName]: 0 })).toThrow(
+          `@babel/preset-typescript: '${optionName}' option must be a string.`,
+        );
       },
     );
     it("default values", () => {
