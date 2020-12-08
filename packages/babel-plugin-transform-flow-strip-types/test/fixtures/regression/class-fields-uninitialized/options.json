@@ -2,6 +2,7 @@
   "BABEL_8_BREAKING": true,
   "plugins": [
     "transform-flow-strip-types",
-    "syntax-class-properties"
+    "proposal-class-properties",
+    "external-helpers"
   ]
 }

@@ -1,7 +1,8 @@
 {
+  "BABEL_8_BREAKING": false,
   "plugins": [
     "transform-flow-strip-types",
-    "transform-classes",
+    "proposal-class-properties",
     "external-helpers"
   ]
 }
