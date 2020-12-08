@@ -20,8 +20,7 @@ assignees: ''
 **Current behavior**
 <!-- A clear and concise description of the behavior. -->
 
-- [REPL](https://babel.dev/repl), [Codesandbox](https://codesandbox.io/s/babel-repl-custom-plugin-7s08o?file=/src/index.js), or GitHub Repo may increase
-triaging priority!
+- [REPL](https://babel.dev/repl), [Codesandbox](https://codesandbox.io/s/babel-repl-custom-plugin-7s08o?file=/src/index.js), or GitHub Repo may increase triaging priority!
 
 **Input Code**
 
