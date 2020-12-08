@@ -14,11 +14,9 @@ describe("normalize options", () => {
       }
     });
     it("should throw on unknown options", () => {
-      expect(() => normalizeOptions({ allowNamespace: true }))
-        .toThrowErrorMatchingInlineSnapshot(`
-        "@babel/preset-typescript: 'allowNamespace' is not a valid top-level option.
-        - Did you mean 'allowNamespaces'?"
-      `);
+      expect(() => normalizeOptions({ allowNamespace: true })).toThrowError(
+        "@babel/preset-typescript: 'allowNamespace' is not a valid top-level option.\n- Did you mean 'allowNamespaces'?",
+      );
     });
     it.each([
       "allowDeclareFields",
