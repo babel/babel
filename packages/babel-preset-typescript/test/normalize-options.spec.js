@@ -1,18 +1,6 @@
 import normalizeOptions from "../src/normalize-options";
 describe("normalize options", () => {
-  describe("Babel_8_breaking", () => {
-    let old_babel_8_breaking_env;
-    beforeAll(() => {
-      old_babel_8_breaking_env = process.env.BABEL_8_BREAKING;
-      process.env.BABEL_8_BREAKING = "1";
-    });
-    afterAll(() => {
-      if (old_babel_8_breaking_env) {
-        process.env.BABEL_8_BREAKING = old_babel_8_breaking_env;
-      } else {
-        delete process.env.BABEL_8_BREAKING;
-      }
-    });
+  (process.env.BABEL_8_BREAKING ? describe : describe.skip)("Babel 8", () => {
     it("should throw on unknown options", () => {
       expect(() => normalizeOptions({ allowNamespace: true })).toThrowError(
         "@babel/preset-typescript: 'allowNamespace' is not a valid top-level option.\n- Did you mean 'allowNamespaces'?",
