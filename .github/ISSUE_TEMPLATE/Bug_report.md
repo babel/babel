@@ -20,7 +20,7 @@ assignees: ''
 **Current behavior**
 <!-- A clear and concise description of the behavior. -->
 
-- [REPL](babeljs.io/repl), [Codesandbox](https://codesandbox.io/s/babel-repl-custom-plugin-7s08o?file=/src/index.js), or GitHub Repo helps!
+- [REPL](https://babel.dev/repl), [Codesandbox](https://codesandbox.io/s/babel-repl-custom-plugin-7s08o?file=/src/index.js), or GitHub Repo may increase triaging priority!
 
 **Input Code**
 
@@ -45,11 +45,11 @@ var your => (code) => here;
 ```
 
 ```
-- Babel version(s): [e.g. v6.0.0, v7.0.0-beta.34]
-- Node/npm version: [e.g. Node 8/npm 5]
-- OS: [e.g. OSX 10.13.4, Windows 10]
+- Babel version(s): [e.g. v7.12.0]
+- Node/npm version: [e.g. Node 12/npm 7]
+- OS: [e.g. macOS 10.15.4, Windows 10]
 - Monorepo: [e.g. yes/no/Lerna]
-- How you are using Babel: [e.g. `cli`, `register`, `loader`]
+- How you are using Babel: [e.g. `webpack`, `rollup`, `parcel`, `babel-register`]
 
 **Possible Solution**
 <!--- If you have suggestions on a fix for the bug -->
