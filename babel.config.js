@@ -248,7 +248,7 @@ function pluginPolyfillsOldNode({ template, types: t }) {
       name: "process.allowedNodeEnvironmentFlags",
       necessary({ parent, node }) {
         // To avoid infinite replacement loops
-        return !t.isConditionalExpression(parent, { consequent: node });
+        return !t.isLogicalExpression(parent, { operator: "||", left: node });
       },
       supported: () => true,
       // process.allowedNodeEnvironmentFlags has been introduced in Node.js 10.10
