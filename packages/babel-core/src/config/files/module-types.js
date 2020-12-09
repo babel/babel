@@ -12,13 +12,15 @@ try {
 export default function* loadCjsOrMjsDefault(
   filepath: string,
   asyncError: string,
+  // TODO(Babel 8): Remove this
+  fallbackToTranspiledModule: boolean = false,
 ): Handler<mixed> {
   switch (guessJSModuleType(filepath)) {
     case "cjs":
-      return loadCjsDefault(filepath);
+      return loadCjsDefault(filepath, fallbackToTranspiledModule);
     case "unknown":
       try {
-        return loadCjsDefault(filepath);
+        return loadCjsDefault(filepath, fallbackToTranspiledModule);
       } catch (e) {
         if (e.code !== "ERR_REQUIRE_ESM") throw e;
       }
@@ -42,10 +44,12 @@ function guessJSModuleType(filename: string): "cjs" | "mjs" | "unknown" {
   }
 }
 
-function loadCjsDefault(filepath: string) {
+function loadCjsDefault(filepath: string, fallbackToTranspiledModule: boolean) {
   const module = (require(filepath): mixed);
-  // TODO (Babel 8): Remove "undefined" fallback
-  return module?.__esModule ? module.default || undefined : module;
+  return module?.__esModule
+    ? // TODO (Babel 8): Remove "module" and "undefined" fallback
+      module.default || (fallbackToTranspiledModule ? module : undefined)
+    : module;
 }
 
 async function loadMjsDefault(filepath: string) {
