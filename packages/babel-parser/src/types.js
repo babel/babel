@@ -655,6 +655,11 @@ export type TemplateElement = NodeBase & {
   },
 };
 
+export type ModuleExpression = NodeBase & {
+  type: "ModuleExpression",
+  body: Array<Statement>,
+};
+
 // Patterns
 
 // TypeScript access modifiers

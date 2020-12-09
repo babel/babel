@@ -90,10 +90,8 @@ export default class UtilParser extends Tokenizer {
     );
   }
 
-  hasPrecedingLineBreak(): boolean {
-    return lineBreak.test(
-      this.input.slice(this.state.lastTokEnd, this.state.start),
-    );
+  hasPrecedingLineBreak(state: State = this.state): boolean {
+    return lineBreak.test(this.input.slice(state.lastTokEnd, state.start));
   }
 
   hasFollowingLineBreak(): boolean {
