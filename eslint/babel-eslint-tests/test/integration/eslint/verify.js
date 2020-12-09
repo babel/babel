@@ -1814,6 +1814,20 @@ describe("verify", () => {
           { "func-names": 1 },
         );
       });
+
+      it("should work with space-before-function-paren", () => {
+        verifyAndAssertMessages(
+          `
+              export class C {
+                #d() {};
+              }
+          `,
+          { "space-before-function-paren": 1 },
+          [
+            "2:5 Missing space before function parentheses. space-before-function-paren",
+          ],
+        );
+      });
     });
   });
 
