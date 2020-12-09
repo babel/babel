@@ -15,6 +15,7 @@ function assertNotIgnored(result) {
 function parse(code, opts) {
   return babel.parse(code, {
     cwd: __dirname,
+    configFile: false,
     ...opts,
   });
 }
@@ -22,6 +23,7 @@ function parse(code, opts) {
 function transform(code, opts) {
   return babel.transform(code, {
     cwd: __dirname,
+    configFile: false,
     ...opts,
   });
 }
@@ -31,6 +33,7 @@ function transformFile(filename, opts, cb) {
     filename,
     {
       cwd: __dirname,
+      configFile: false,
       ...opts,
     },
     cb,
@@ -39,6 +42,7 @@ function transformFile(filename, opts, cb) {
 function transformFileSync(filename, opts) {
   return babel.transformFileSync(filename, {
     cwd: __dirname,
+    configFile: false,
     ...opts,
   });
 }
@@ -46,6 +50,7 @@ function transformFileSync(filename, opts) {
 function transformAsync(code, opts) {
   return babel.transformAsync(code, {
     cwd: __dirname,
+    configFile: false,
     ...opts,
   });
 }
@@ -53,6 +58,7 @@ function transformAsync(code, opts) {
 function transformFromAst(ast, code, opts) {
   return babel.transformFromAst(ast, code, {
     cwd: __dirname,
+    configFile: false,
     ...opts,
   });
 }

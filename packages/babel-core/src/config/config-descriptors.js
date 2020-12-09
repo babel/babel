@@ -1,5 +1,7 @@
 // @flow
 
+import gensync, { type Handler } from "gensync";
+
 import { loadPlugin, loadPreset } from "./files";
 
 import { getItemDescriptor } from "./item";
@@ -7,6 +9,7 @@ import { getItemDescriptor } from "./item";
 import {
   makeWeakCacheSync,
   makeStrongCacheSync,
+  makeStrongCache,
   type CacheConfigurator,
 } from "./caching";
 
@@ -21,8 +24,8 @@ import type {
 // the options object actually ends up being applicable.
 export type OptionsAndDescriptors = {
   options: ValidatedOptions,
-  plugins: () => Array<UnloadedDescriptor>,
-  presets: () => Array<UnloadedDescriptor>,
+  plugins: () => Handler<Array<UnloadedDescriptor>>,
+  presets: () => Handler<Array<UnloadedDescriptor>>,
 };
 
 // Represents a plugin or presets at a given location in a config object.
@@ -63,6 +66,11 @@ export type ValidatedFile = {
   options: ValidatedOptions,
 };
 
+// eslint-disable-next-line require-yield
+function* handlerOf<T>(value: T): Handler<T> {
+  return value;
+}
+
 /**
  * Create a set of descriptors from a given options object, preserving
  * descriptor identity based on the identity of the plugin/preset arrays
@@ -78,13 +86,13 @@ export function createCachedDescriptors(
     options,
     plugins: plugins
       ? () => createCachedPluginDescriptors(plugins, dirname)(alias)
-      : () => [],
+      : () => handlerOf([]),
     presets: presets
       ? () =>
           createCachedPresetDescriptors(presets, dirname)(alias)(
             !!passPerPreset,
           )
-      : () => [],
+      : () => handlerOf([]),
   };
 }
 
@@ -105,9 +113,9 @@ export function createUncachedDescriptors(
 
   return {
     options,
-    plugins: () => {
+    *plugins() {
       if (!plugins) {
-        plugins = createPluginDescriptors(
+        plugins = yield* createPluginDescriptors(
           options.plugins || [],
           dirname,
           alias,
@@ -115,9 +123,9 @@ export function createUncachedDescriptors(
       }
       return plugins;
     },
-    presets: () => {
+    *presets() {
       if (!presets) {
-        presets = createPresetDescriptors(
+        presets = yield* createPresetDescriptors(
           options.presets || [],
           dirname,
           alias,
@@ -134,14 +142,22 @@ const createCachedPresetDescriptors = makeWeakCacheSync(
   (items: PluginList, cache: CacheConfigurator<string>) => {
     const dirname = cache.using(dir => dir);
     return makeStrongCacheSync((alias: string) =>
-      makeStrongCacheSync((passPerPreset: boolean) =>
-        createPresetDescriptors(items, dirname, alias, passPerPreset).map(
+      makeStrongCache(function* (
+        passPerPreset: boolean,
+      ): Handler<Array<UnloadedDescriptor>> {
+        const descriptors = yield* createPresetDescriptors(
+          items,
+          dirname,
+          alias,
+          passPerPreset,
+        );
+        return descriptors.map(
           // Items are cached using the overall preset array identity when
           // possibly, but individual descriptors are also cached if a match
           // can be found in the previously-used descriptor lists.
           desc => loadCachedDescriptor(PRESET_DESCRIPTOR_CACHE, desc),
-        ),
-      ),
+        );
+      }),
     );
   },
 );
@@ -150,14 +166,17 @@ const PLUGIN_DESCRIPTOR_CACHE = new WeakMap();
 const createCachedPluginDescriptors = makeWeakCacheSync(
   (items: PluginList, cache: CacheConfigurator<string>) => {
     const dirname = cache.using(dir => dir);
-    return makeStrongCacheSync((alias: string) =>
-      createPluginDescriptors(items, dirname, alias).map(
+    return makeStrongCache(function* (
+      alias: string,
+    ): Handler<Array<UnloadedDescriptor>> {
+      const descriptors = yield* createPluginDescriptors(items, dirname, alias);
+      return descriptors.map(
         // Items are cached using the overall plugin array identity when
         // possibly, but individual descriptors are also cached if a match
         // can be found in the previously-used descriptor lists.
         desc => loadCachedDescriptor(PLUGIN_DESCRIPTOR_CACHE, desc),
-      ),
-    );
+      );
+    });
   },
 );
 
@@ -205,36 +224,44 @@ function loadCachedDescriptor(
   return desc;
 }
 
-function createPresetDescriptors(
+function* createPresetDescriptors(
   items: PluginList,
   dirname: string,
   alias: string,
   passPerPreset: boolean,
-): Array<UnloadedDescriptor> {
-  return createDescriptors("preset", items, dirname, alias, passPerPreset);
+): Handler<Array<UnloadedDescriptor>> {
+  return yield* createDescriptors(
+    "preset",
+    items,
+    dirname,
+    alias,
+    passPerPreset,
+  );
 }
 
-function createPluginDescriptors(
+function* createPluginDescriptors(
   items: PluginList,
   dirname: string,
   alias: string,
-): Array<UnloadedDescriptor> {
-  return createDescriptors("plugin", items, dirname, alias);
+): Handler<Array<UnloadedDescriptor>> {
+  return yield* createDescriptors("plugin", items, dirname, alias);
 }
 
-function createDescriptors(
+function* createDescriptors(
   type: "plugin" | "preset",
   items: PluginList,
   dirname: string,
   alias: string,
   ownPass?: boolean,
-): Array<UnloadedDescriptor> {
-  const descriptors = items.map((item, index) =>
-    createDescriptor(item, dirname, {
-      type,
-      alias: `${alias}$${index}`,
-      ownPass: !!ownPass,
-    }),
+): Handler<Array<UnloadedDescriptor>> {
+  const descriptors = yield* gensync.all(
+    items.map((item, index) =>
+      createDescriptor(item, dirname, {
+        type,
+        alias: `${alias}$${index}`,
+        ownPass: !!ownPass,
+      }),
+    ),
   );
 
   assertNoDuplicates(descriptors);
@@ -245,7 +272,7 @@ function createDescriptors(
 /**
  * Given a plugin/preset item, resolve it into a standard format.
  */
-export function createDescriptor(
+export function* createDescriptor(
   pair: PluginItem,
   dirname: string,
   {
@@ -257,7 +284,7 @@ export function createDescriptor(
     alias: string,
     ownPass?: boolean,
   },
-): UnloadedDescriptor {
+): Handler<UnloadedDescriptor> {
   const desc = getItemDescriptor(pair);
   if (desc) {
     return desc;
@@ -285,7 +312,7 @@ export function createDescriptor(
     const resolver = type === "plugin" ? loadPlugin : loadPreset;
     const request = value;
 
-    ({ filepath, value } = resolver(value, dirname));
+    ({ filepath, value } = yield* resolver(value, dirname));
 
     file = {
       request,
