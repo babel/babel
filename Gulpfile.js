@@ -239,6 +239,14 @@ function buildRollup(packages, targetBrowsers) {
       const bundle = await rollup.rollup({
         input,
         external,
+        onwarn(warning, warn) {
+          warn(warning);
+          // todo: remove this when we figure out how to deal with
+          // circular dependency
+          if (warning.code !== "CIRCULAR_DEPENDENCY") {
+            throw new Error("Rollup aborted due to warnings above");
+          }
+        },
         plugins: [
           rollupBabelSource(),
           rollupReplace({
@@ -257,10 +265,6 @@ function buildRollup(packages, targetBrowsers) {
             extensions: [".mjs", ".cjs", ".ts", ".js", ".json"],
             browser: nodeResolveBrowser,
             preferBuiltins: true,
-            //todo: remove when semver and source-map are bumped to latest versions
-            dedupe(importee) {
-              return ["semver", "source-map"].includes(importee);
-            },
           }),
           rollupCommonJs({
             include: [
