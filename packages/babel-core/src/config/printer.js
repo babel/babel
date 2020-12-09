@@ -1,5 +1,7 @@
 // @flow
 
+import gensync, { type Handler } from "gensync";
+
 import type {
   OptionsAndDescriptors,
   UnloadedDescriptor,
@@ -49,17 +51,17 @@ const Formatter = {
     return loc;
   },
 
-  optionsAndDescriptors(opt: OptionsAndDescriptors) {
+  *optionsAndDescriptors(opt: OptionsAndDescriptors) {
     const content = { ...opt.options };
     // overrides and env will be printed as separated config items
     delete content.overrides;
     delete content.env;
     // resolve to descriptors
-    const pluginDescriptors = [...opt.plugins()];
+    const pluginDescriptors = [...(yield* opt.plugins())];
     if (pluginDescriptors.length) {
       content.plugins = pluginDescriptors.map(d => descriptorToConfig(d));
     }
-    const presetDescriptors = [...opt.presets()];
+    const presetDescriptors = [...(yield* opt.presets())];
     if (presetDescriptors.length) {
       content.presets = [...presetDescriptors].map(d => descriptorToConfig(d));
     }
@@ -114,7 +116,7 @@ export class ConfigPrinter {
       });
     };
   }
-  static format(config: PrintableConfig): string {
+  static *format(config: PrintableConfig): Handler<string> {
     let title = Formatter.title(
       config.type,
       config.callerName,
@@ -122,12 +124,15 @@ export class ConfigPrinter {
     );
     const loc = Formatter.loc(config.index, config.envName);
     if (loc) title += ` ${loc}`;
-    const content = Formatter.optionsAndDescriptors(config.content);
+    const content = yield* Formatter.optionsAndDescriptors(config.content);
     return `${title}\n${content}`;
   }
 
-  output(): string {
+  *output(): Handler<string> {
     if (this._stack.length === 0) return "";
-    return this._stack.map(s => ConfigPrinter.format(s)).join("\n\n");
+    const configs = yield* gensync.all(
+      this._stack.map(s => ConfigPrinter.format(s)),
+    );
+    return configs.join("\n\n");
   }
 }

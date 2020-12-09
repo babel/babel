@@ -1,32 +1,10 @@
-import cp from "child_process";
 import fs from "fs";
 import os from "os";
 import path from "path";
-import util from "util";
 import escapeRegExp from "lodash/escapeRegExp";
 import * as babel from "../lib";
 
-// "minNodeVersion": "10.0.0" <-- For Ctrl+F when dropping node 10
-const supportsESM = parseInt(process.versions.node) >= 12;
-
-const isMJS = file => path.extname(file) === ".mjs";
-
-const skipUnsupportedESM = (esm, name) => {
-  if (esm && !supportsESM) {
-    console.warn(
-      `Skipping "${name}" because native ECMAScript modules are not supported.`,
-    );
-    return true;
-  }
-  // This can be removed when loadOptionsAsyncInSpawedProcess is removed.
-  if (esm && process.platform === "win32") {
-    console.warn(
-      `Skipping "${name}" because the ESM runner cannot be spawned on Windows.`,
-    );
-    return true;
-  }
-  return false;
-};
+import { isMJS, loadOptionsAsync, skipUnsupportedESM } from "./helpers/esm";
 
 // TODO: In Babel 8, we can directly uses fs.promises which is supported by
 // node 8+
@@ -69,42 +47,6 @@ function fixture(...args) {
 
 function loadOptions(opts) {
   return babel.loadOptions({ cwd: __dirname, ...opts });
-}
-
-function loadOptionsAsync({ filename, cwd = __dirname }, mjs) {
-  if (mjs) {
-    // import() crashes with jest
-    return loadOptionsAsyncInSpawedProcess({ filename, cwd });
-  }
-
-  return babel.loadOptionsAsync({ filename, cwd });
-}
-
-// !!!! hack is coming !!!!
-// Remove this function when https://github.com/nodejs/node/issues/35889 is resolved.
-// Jest supports dynamic import(), but Node.js segfaults when using it in our tests.
-async function loadOptionsAsyncInSpawedProcess({ filename, cwd }) {
-  const { stdout, stderr } = await util.promisify(cp.execFile)(
-    require.resolve("./fixtures/babel-load-options-async.mjs"),
-    // pass `cwd` as params as `process.cwd()` will normalize `cwd` on macOS
-    [filename, cwd],
-    {
-      cwd,
-      env: process.env,
-    },
-  );
-
-  const EXPERIMENTAL_WARNING = /\(node:\d+\) ExperimentalWarning: The ESM module loader is experimental\./;
-
-  if (stderr.replace(EXPERIMENTAL_WARNING, "").trim()) {
-    throw new Error(
-      "error is thrown in babel-load-options-async.mjs: stdout\n" +
-        stdout +
-        "\nstderr:\n" +
-        stderr,
-    );
-  }
-  return JSON.parse(stdout);
 }
 
 function pairs(items) {

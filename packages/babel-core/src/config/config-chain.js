@@ -154,7 +154,7 @@ export function* buildRootChain(
     programmaticLogger,
   );
   if (!programmaticChain) return null;
-  const programmaticReport = programmaticLogger.output();
+  const programmaticReport = yield* programmaticLogger.output();
 
   let configFile;
   if (typeof opts.configFile === "string") {
@@ -186,7 +186,7 @@ export function* buildRootChain(
       configFileLogger,
     );
     if (!result) return null;
-    configReport = configFileLogger.output();
+    configReport = yield* configFileLogger.output();
 
     // Allow config files to toggle `.babelrc` resolution on and off and
     // specify where the roots are.
@@ -244,7 +244,7 @@ export function* buildRootChain(
       if (!result) {
         isIgnored = true;
       } else {
-        babelRcReport = babelrcLogger.output();
+        babelRcReport = yield* babelrcLogger.output();
         mergeChain(fileChain, result);
       }
     }
@@ -599,7 +599,7 @@ function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
       }
 
       logger(config, index, envName);
-      mergeChainOpts(chain, config);
+      yield* mergeChainOpts(chain, config);
     }
     return chain;
   };
@@ -657,13 +657,13 @@ function mergeChain(target: ConfigChain, source: ConfigChain): ConfigChain {
   return target;
 }
 
-function mergeChainOpts(
+function* mergeChainOpts(
   target: ConfigChain,
   { options, plugins, presets }: OptionsAndDescriptors,
-): ConfigChain {
+): Handler<ConfigChain> {
   target.options.push(options);
-  target.plugins.push(...plugins());
-  target.presets.push(...presets());
+  target.plugins.push(...(yield* plugins()));
+  target.presets.push(...(yield* presets()));
 
   return target;
 }
