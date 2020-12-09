@@ -89,7 +89,7 @@ export default declare((api, opts) => {
             `Definitely assigned fields cannot be initialized here, but only in the constructor`,
           );
         }
-        if (process.env.BABEL_8_BREAKING) {
+        if (!process.env.BABEL_8_BREAKING) {
           // keep the definitely assigned fields only when `allowDeclareFields` (equivalent of
           // Typescript's `useDefineForClassFields`) is true
           if (!allowDeclareFields && !node.decorators) {
