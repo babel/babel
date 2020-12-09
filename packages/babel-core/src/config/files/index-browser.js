@@ -80,7 +80,7 @@ export function resolvePreset(name: string, dirname: string): string | null {
 export function loadPlugin(
   name: string,
   dirname: string,
-): { filepath: string, value: mixed } {
+): Handler<{ filepath: string, value: mixed }> {
   throw new Error(
     `Cannot load plugin ${name} relative to ${dirname} in a browser`,
   );
@@ -89,7 +89,7 @@ export function loadPlugin(
 export function loadPreset(
   name: string,
   dirname: string,
-): { filepath: string, value: mixed } {
+): Handler<{ filepath: string, value: mixed }> {
   throw new Error(
     `Cannot load preset ${name} relative to ${dirname} in a browser`,
   );

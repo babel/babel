@@ -6,6 +6,8 @@
 
 import buildDebug from "debug";
 import path from "path";
+import { type Handler } from "gensync";
+import loadCjsOrMjsDefault from "./module-types";
 
 const debug = buildDebug("babel:config:loading:files:plugins");
 
@@ -26,31 +28,31 @@ export function resolvePreset(name: string, dirname: string): string | null {
   return resolveStandardizedName("preset", name, dirname);
 }
 
-export function loadPlugin(
+export function* loadPlugin(
   name: string,
   dirname: string,
-): { filepath: string, value: mixed } {
+): Handler<{ filepath: string, value: mixed }> {
   const filepath = resolvePlugin(name, dirname);
   if (!filepath) {
     throw new Error(`Plugin ${name} not found relative to ${dirname}`);
   }
 
-  const value = requireModule("plugin", filepath);
+  const value = yield* requireModule("plugin", filepath);
   debug("Loaded plugin %o from %o.", name, dirname);
 
   return { filepath, value };
 }
 
-export function loadPreset(
+export function* loadPreset(
   name: string,
   dirname: string,
-): { filepath: string, value: mixed } {
+): Handler<{ filepath: string, value: mixed }> {
   const filepath = resolvePreset(name, dirname);
   if (!filepath) {
     throw new Error(`Preset ${name} not found relative to ${dirname}`);
   }
 
-  const value = requireModule("preset", filepath);
+  const value = yield* requireModule("preset", filepath);
 
   debug("Loaded preset %o from %o.", name, dirname);
 
@@ -145,7 +147,7 @@ function resolveStandardizedName(
 }
 
 const LOADING_MODULES = new Set();
-function requireModule(type: string, name: string): mixed {
+function* requireModule(type: string, name: string): Handler<mixed> {
   if (LOADING_MODULES.has(name)) {
     throw new Error(
       `Reentrant ${type} detected trying to load "${name}". This module is not ignored ` +
@@ -156,7 +158,19 @@ function requireModule(type: string, name: string): mixed {
 
   try {
     LOADING_MODULES.add(name);
-    return require(name);
+    return (yield* loadCjsOrMjsDefault(
+      name,
+      `You appear to be using a native ECMAScript module ${type}, ` +
+        "which is only supported when running Babel asynchronously.",
+      // For backward compatiblity, we need to support malformed presets
+      // defined as separate named exports rather than a single default
+      // export.
+      // See packages/babel-core/test/fixtures/option-manager/presets/es2015_named.js
+      true,
+    ): mixed);
+  } catch (err) {
+    err.message = `[BABEL]: ${err.message} (While processing: ${name})`;
+    throw err;
   } finally {
     LOADING_MODULES.delete(name);
   }
