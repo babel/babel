@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-optimise-call-expression",
-  "version": "7.12.7",
+  "version": "7.12.10",
   "description": "Helper function to optimise call expression",
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/types": "workspace:^7.12.7"
+    "@babel/types": "workspace:^7.12.10"
   },
   "devDependencies": {
     "@babel/generator": "workspace:*",
