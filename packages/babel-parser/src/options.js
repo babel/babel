@@ -72,13 +72,15 @@ export const defaultOptions: Options = {
 
 // Interpret and default an options object
 
-export function getOptions(opts: ?Options): Options {
+export function getOptions(opts: ?Options, input: string): Options {
   const options: any = {};
   for (const key of Object.keys(defaultOptions)) {
     options[key] = opts && opts[key] != null ? opts[key] : defaultOptions[key];
   }
-  if(options.inputSourceMap) {
+  if(typeof options.inputSourceMap === 'object') {
     options.inputSourceMap = new sourcemap.SourceMapConsumer(options.inputSourceMap);
+  } else if(options.inputSourceMap === true){
+    throw new Error("not implemented")
   }
   return options;
 }
