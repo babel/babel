@@ -243,11 +243,11 @@ workflows:
 
   e2e-breaking:
     jobs:
-      - approve-test262-run:
-        type: approval
-        filters:
-          branches:
-            ignore: [main]
+      - approve-e2e-breaking-run:
+          type: approval
+          filters:
+            branches:
+              ignore: [main]
       - publish-verdaccio-babel-8-breaking
       - e2e-babel:
           requires:
