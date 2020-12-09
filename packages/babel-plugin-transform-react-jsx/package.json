@@ -17,7 +17,6 @@
   ],
   "dependencies": {
     "@babel/helper-builder-react-jsx": "workspace:^7.10.4",
-    "@babel/helper-builder-react-jsx-experimental": "workspace:^7.12.4",
     "@babel/helper-plugin-utils": "workspace:^7.10.4",
     "@babel/plugin-syntax-jsx": "workspace:^7.12.1"
   },

@@ -14,6 +14,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^7.10.4",
-    "@babel/types": "workspace:^7.10.4"
+    "@babel/helper-module-imports": "workspace:^7.12.1",
+    "@babel/types": "workspace:^7.12.1"
   }
 }

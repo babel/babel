@@ -1,5 +1,5 @@
 import jsx from "@babel/plugin-syntax-jsx";
-import { helper } from "@babel/helper-builder-react-jsx-experimental";
+import helper from "@babel/helper-builder-react-jsx";
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 
@@ -7,7 +7,7 @@ export default declare((api, options) => {
   const { runtime = "classic" } = options;
   const PURE_ANNOTATION = options.pure;
 
-  const visitor = helper(api, {
+  const visitor = helper({
     pre(state) {
       const tagName = state.tagName;
       const args = state.args;
