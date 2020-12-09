@@ -140,9 +140,10 @@ clean: test-clean
 
 clean-tsconfig:
 	rm -f tsconfig.json
-	rm -f packages/*/tsconfig.{tsbuildinfo,json}
-	rm -f codemods/*/tsconfig.{tsbuildinfo,json}
-	rm -f eslint/*/tsconfig.{tsbuildinfo,json}
+	git clean packages/*/tsconfig.json -xfq
+	git clean codemods/*/tsconfig.json -xfq
+	git clean eslint/*/tsconfig.json -xfq
+	rm -f */*/tsconfig.tsbuildinfo
 
 test-clean:
 	$(foreach source, $(SOURCES), \
