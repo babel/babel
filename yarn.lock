@@ -141,7 +141,7 @@ __metadata:
     convert-source-map: ^1.7.0
     debug: ^4.1.0
     escape-string-regexp: "condition:BABEL_8_BREAKING ? ^4.0.0 : "
-    gensync: ^1.0.0-beta.1
+    gensync: ^1.0.0-beta.2
     json5: ^2.1.2
     lodash: ^4.17.19
     semver: ^5.4.1
@@ -7375,10 +7375,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"gensync@npm:^1.0.0-beta.1":
-  version: 1.0.0-beta.1
-  resolution: "gensync@npm:1.0.0-beta.1"
-  checksum: 3d14f7c34fc903dd52c36d0879de2c4afde8315edccd630e97919c365819b32c06d98770ef87f7ba45686ee5d2bd5818354920187659b42828319f7cc3352fdb
+"gensync@npm:^1.0.0-beta.1, gensync@npm:^1.0.0-beta.2":
+  version: 1.0.0-beta.2
+  resolution: "gensync@npm:1.0.0-beta.2"
+  checksum: d523437689c97b3aba9c5cdeca4677d5fff9a29d620db693fea40d852bad63563110f16979d0170248439dbcd2ecee0780fb2533d3f0519f019081aa10767c60
   languageName: node
   linkType: hard
 
