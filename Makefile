@@ -27,6 +27,7 @@ endif
 
 build-bundle: clean clean-lib
 	$(YARN) gulp build
+	$(MAKE) build-typings
 	$(MAKE) build-dist
 
 build-bundle-ci: bootstrap-only
@@ -38,8 +39,10 @@ generate-tsconfig:
 generate-type-helpers:
 	$(YARN) gulp generate-type-helpers
 
-build-typings:
-	$(YARN) gulp build-typings
+build-typings: build-flow-typings build-typescript-typings
+
+build-flow-typings:
+	$(NODE) packages/babel-types/scripts/generators/flow.js > packages/babel-types/lib/index.js.flow
 
 build-typescript-typings:
 	$(NODE) packages/babel-types/scripts/generators/typescript.js > packages/babel-types/lib/index.d.ts

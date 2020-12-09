@@ -104,26 +104,6 @@ function generateTypeHelpers(helperKind) {
     .pipe(gulp.dest(dest));
 }
 
-/**
- * Build @babel/types typings
- * @typedef {("flow" | "typescript")} TypingGeneratorKind
- * @param {TypingGeneratorKind} generator
- * @returns
- */
-function buildTypings(generator) {
-  const dest = "./packages/babel-types/lib/";
-  return gulp
-    .src(".", { base: __dirname })
-    .pipe(errorsLogger())
-    .pipe(
-      through.obj(
-        require(`./packages/babel-types/scripts/generators/${generator}.js`)
-      )
-    )
-    .pipe(rename(() => (generator === "flow" ? "index.js.flow" : "index.d.ts")))
-    .pipe(gulp.dest(dest));
-}
-
 function generateStandalone() {
   const dest = "./packages/babel-standalone/src/generated/";
   const formatCode = require("./scripts/utils/formatCode");
@@ -333,13 +313,6 @@ gulp.task("generate-type-helpers", () => {
   );
 });
 
-gulp.task("build-flow-typings", () => buildTypings("flow"));
-gulp.task("build-typescript-typings", () => buildTypings("typescript"));
-gulp.task(
-  "build-typings",
-  gulp.parallel("build-flow-typings", "build-typescript-typings")
-);
-
 gulp.task("generate-standalone", () => generateStandalone());
 
 gulp.task("build-rollup", () => buildRollup(libBundles));
@@ -357,7 +330,6 @@ gulp.task(
     gulp.parallel("build-rollup", "build-babel"),
     gulp.parallel(
       "generate-standalone",
-      "build-typings",
       gulp.series(
         "generate-type-helpers",
         // rebuild @babel/types since type-helpers may be changed
@@ -377,7 +349,6 @@ gulp.task(
     "build-no-bundle",
     gulp.parallel(
       "generate-standalone",
-      "build-typings",
       gulp.series(
         "generate-type-helpers",
         // rebuild @babel/types since type-helpers may be changed
@@ -395,9 +366,6 @@ gulp.task(
       babelStandalonePluginConfigGlob,
       gulp.task("generate-standalone")
     );
-    gulp.watch(
-      buildTypingsWatchGlob,
-      gulp.parallel("build-typings", "generate-type-helpers")
-    );
+    gulp.watch(buildTypingsWatchGlob, gulp.task("generate-type-helpers"));
   })
 );
