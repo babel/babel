@@ -30,12 +30,17 @@ aliases:
 executors:
   node-executor:
     docker:
-      - image: circleci/node:latest
+      - image: cimg/node:current
     working_directory: ~/babel
   # e2e-vue-cli test requires chromium
   node-browsers-executor:
     docker:
-      - image: circleci/node:latest-browsers
+      - image: cimg/node:current-browsers
+    working_directory: ~/babel
+  # e2e-jest test requires python
+  node-python-executor:
+    docker:
+      - image: cimg/python:3.9-node
     working_directory: ~/babel
 
 jobs:
@@ -153,10 +158,14 @@ jobs:
       - checkout
       - attach_workspace:
           at: /tmp/verdaccio-workspace
+      - run:
+          # vue-cli uses puppeteer, and it depends on the libXss.so.1 shared library
+          name: Install Headless Chrome dependencies
+          command: sudo apt-get install -yq libxss1
       - run: ./scripts/integration-tests/e2e-vue-cli.sh
 
   e2e-jest:
-    executor: node-executor
+    executor: node-python-executor
     steps:
       - checkout
       - attach_workspace:
