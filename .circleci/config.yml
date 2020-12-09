@@ -248,7 +248,9 @@ workflows:
           filters:
             branches:
               ignore: [main]
-      - publish-verdaccio-babel-8-breaking
+      - publish-verdaccio-babel-8-breaking:
+          requires:
+            - approve-e2e-breaking-run
       - e2e-babel:
           requires:
             - publish-verdaccio-babel-8-breaking
