@@ -1,6 +1,8 @@
 // @flow
 
 import semver from "semver";
+import type { Targets } from "@babel/helper-compilation-targets";
+
 import { version as coreVersion } from "../../";
 import {
   assertSimpleType,
@@ -20,7 +22,9 @@ type EnvFunction = {
 
 type CallerFactory = ((CallerMetadata | void) => mixed) => SimpleType;
 
-export type PluginAPI = {|
+type TargetsFunction = () => Targets;
+
+export type ConfigAPI = {|
   version: string,
   cache: SimpleCacheConfigurator,
   env: EnvFunction,
@@ -29,9 +33,14 @@ export type PluginAPI = {|
   caller?: CallerFactory,
 |};
 
-export default function makeAPI(
-  cache: CacheConfigurator<{ envName: string, caller: CallerMetadata | void }>,
-): PluginAPI {
+export type PluginAPI = {|
+  ...ConfigAPI,
+  targets: TargetsFunction,
+|};
+
+export function makeConfigAPI<
+  SideChannel: { envName: string, caller: CallerMetadata | void },
+>(cache: CacheConfigurator<SideChannel>): ConfigAPI {
   const env: any = value =>
     cache.using(data => {
       if (typeof value === "undefined") return data.envName;
@@ -59,6 +68,22 @@ export default function makeAPI(
     caller,
     assertVersion,
   };
+}
+
+export function makePluginAPI(
+  cache: CacheConfigurator<{
+    envName: string,
+    caller: CallerMetadata | void,
+    targets: Targets,
+  }>,
+): PluginAPI {
+  const targets = () =>
+    // We are using JSON.parse/JSON.stringify because it's only possible to cache
+    // primitive values. We can safely stringify the targets object because it
+    // only contains strings as its properties.
+    // Please make the Record and Tuple proposal happen!
+    JSON.parse(cache.using(data => JSON.stringify(data.targets)));
+  return { ...makeConfigAPI(cache), targets };
 }
 
 function assertVersion(range: string | number): void {

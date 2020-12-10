@@ -1,10 +1,10 @@
 // @flow
 
-import type { ValidatedOptions } from "./validation/options";
+import type { ValidatedOptions, NormalizedOptions } from "./validation/options";
 
 export function mergeOptions(
   target: ValidatedOptions,
-  source: ValidatedOptions,
+  source: ValidatedOptions | NormalizedOptions,
 ): void {
   for (const k of Object.keys(source)) {
     if (k === "parserOpts" && source.parserOpts) {

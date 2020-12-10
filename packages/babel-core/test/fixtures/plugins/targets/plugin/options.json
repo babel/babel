@@ -1,0 +1,4 @@
+{
+  "targets": ["firefox 64", "node 8"],
+  "plugins": ["./plugin"]
+}

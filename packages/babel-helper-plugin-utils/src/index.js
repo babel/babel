@@ -1,18 +1,32 @@
 export function declare(builder) {
   return (api, options, dirname) => {
-    if (!api.assertVersion) {
-      // Inject a custom version of 'assertVersion' for Babel 6 and early
-      // versions of Babel 7's beta that didn't have it.
-      api = Object.assign(copyApiObject(api), {
-        assertVersion(range) {
-          throwVersionError(range, api.version);
-        },
-      });
+    let clonedApi;
+
+    for (const name of Object.keys(apiPolyfills)) {
+      if (api[name]) continue;
+
+      // TODO: Use ??= when flow lets us to do so
+      clonedApi = clonedApi ?? copyApiObject(api);
+      clonedApi[name] = apiPolyfills[name](clonedApi);
     }
 
-    return builder(api, options || {}, dirname);
+    return builder(clonedApi ?? api, options || {}, dirname);
   };
 }
+
+const apiPolyfills = {
+  // Not supported by Babel 7 and early versions of Babel 7 beta.
+  // It's important that this is polyfilled for older Babel versions
+  // since it's needed to report the version mismatch.
+  assertVersion: api => range => {
+    throwVersionError(range, api.version);
+  },
+  // This is supported starting from Babel 7.13
+  // TODO(Babel 8): Remove this polyfill
+  targets: () => () => {
+    return {};
+  },
+};
 
 function copyApiObject(api) {
   // Babel >= 7 <= beta.41 passed the API as a new object that had
