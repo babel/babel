@@ -1,4 +1,5 @@
 import browserslist from "browserslist";
+import { join } from "path";
 import getTargets from "..";
 
 describe("getTargets", () => {
@@ -232,6 +233,48 @@ describe("getTargets", () => {
           ie: 11,
         }),
       ).toMatchSnapshot();
+    });
+
+    it("can be intersected with the browsers option", () => {
+      expect(
+        getTargets({
+          esmodules: "intersect",
+          browsers: ["chrome >= 70", "firefox >= 30"],
+        }),
+      ).toMatchSnapshot();
+    });
+
+    it("can be intersected with a .browserslistrc file", () => {
+      expect(
+        getTargets(
+          {
+            esmodules: "intersect",
+          },
+          { configPath: join(__dirname, "fixtures", "foo.js") },
+        ),
+      ).toMatchSnapshot();
+    });
+
+    it("explicit browser versions have the precedence over 'esmodules'", () => {
+      expect(
+        getTargets({
+          browsers: "chrome 5, firefox 5",
+          esmodules: "intersect",
+          chrome: 20,
+          firefox: 70,
+        }),
+      ).toMatchSnapshot();
+    });
+
+    it("'intersect' behaves like 'true' if no browsers are specified", () => {
+      expect(
+        getTargets(
+          { esmodules: "intersect" },
+          { ignoreBrowserslistConfig: true },
+        ),
+      ).toEqual(
+        getTargets({ esmodules: true }, { ignoreBrowserslistConfig: true }),
+      );
     });
   });
 
