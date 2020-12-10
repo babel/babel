@@ -1,5 +1,7 @@
 // @flow
 
+import type { InputTargets, Targets } from "@babel/helper-compilation-targets";
+
 import type { ConfigItem } from "../item";
 import Plugin from "../plugin";
 
@@ -23,6 +25,7 @@ import {
   assertSourceMaps,
   assertCompact,
   assertSourceType,
+  assertTargets,
   type ValidatorSet,
   type Validator,
   type OptionPath,
@@ -77,6 +80,16 @@ const NONPRESET_VALIDATORS: ValidatorSet = {
     $PropertyType<ValidatedOptions, "ignore">,
   >),
   only: (assertIgnoreList: Validator<$PropertyType<ValidatedOptions, "only">>),
+
+  targets: (assertTargets: Validator<
+    $PropertyType<ValidatedOptions, "targets">,
+  >),
+  browserslistConfigFile: (assertConfigFileSearch: Validator<
+    $PropertyType<ValidatedOptions, "browserslistConfigFile">,
+  >),
+  browserslistEnv: (assertString: Validator<
+    $PropertyType<ValidatedOptions, "browserslistEnv">,
+  >),
 };
 
 const COMMON_VALIDATORS: ValidatorSet = {
@@ -208,6 +221,11 @@ export type ValidatedOptions = {
   plugins?: PluginList,
   passPerPreset?: boolean,
 
+  // browserslists-related options
+  targets?: TargetsListOrObject,
+  browserslistConfigFile?: ConfigFileSearch,
+  browserslistEnv?: string,
+
   // Options for @babel/generator
   retainLines?: boolean,
   comments?: boolean,
@@ -241,6 +259,11 @@ export type ValidatedOptions = {
   generatorOpts?: {},
 };
 
+export type NormalizedOptions = {
+  ...$Diff<ValidatedOptions, { targets: any }>,
+  +targets: Targets,
+};
+
 export type CallerMetadata = {
   // If 'caller' is specified, require that the name is given for debugging
   // messages.
@@ -272,6 +295,11 @@ export type SourceTypeOption = "module" | "script" | "unambiguous";
 export type CompactOption = boolean | "auto";
 export type RootInputSourceMapOption = {} | boolean;
 export type RootMode = "root" | "upward" | "upward-optional";
+
+export type TargetsListOrObject =
+  | Targets
+  | InputTargets
+  | $PropertyType<InputTargets, "browsers">;
 
 export type OptionsSource =
   | "arguments"
