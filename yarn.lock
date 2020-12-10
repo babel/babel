@@ -3295,8 +3295,6 @@ __metadata:
     "@babel/preset-flow": "workspace:*"
     "@babel/preset-react": "workspace:*"
     "@babel/preset-typescript": "workspace:*"
-    chalk: ^4.0.0
-    lodash: ^4.17.20
   languageName: unknown
   linkType: soft
 
@@ -3383,7 +3381,6 @@ __metadata:
     "@babel/generator": "workspace:*"
     "@babel/helper-validator-identifier": "workspace:^7.10.4"
     "@babel/parser": "workspace:*"
-    chalk: ^4.1.0
     lodash: ^4.17.19
     to-fast-properties: ^2.0.0
   languageName: unknown
@@ -9676,7 +9673,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20":
+"lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19":
   version: 4.17.20
   resolution: "lodash@npm:4.17.20"
   checksum: c62101d2500c383b5f174a7e9e6fe8098149ddd6e9ccfa85f36d4789446195f5c4afd3cfba433026bcaf3da271256566b04a2bf2618e5a39f6e67f8c12030cb6

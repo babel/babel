@@ -27,9 +27,6 @@ endif
 
 build-bundle: clean clean-lib
 	$(YARN) gulp build
-	$(MAKE) generate-standalone generate-type-helpers
-	# call build again as the generated files might need to be compiled again.
-	$(YARN) gulp build
 	$(MAKE) build-typings
 	$(MAKE) build-dist
 
@@ -39,11 +36,8 @@ build-bundle-ci: bootstrap-only
 generate-tsconfig:
 	$(NODE) scripts/generators/tsconfig.js
 
-generate-standalone:
-	$(NODE) packages/babel-standalone/scripts/generate.js
-
 generate-type-helpers:
-	$(NODE) packages/babel-types/scripts/generateTypeHelpers.js
+	$(YARN) gulp generate-type-helpers
 
 build-typings: build-flow-typings build-typescript-typings
 
@@ -76,11 +70,11 @@ build-plugin-transform-runtime-dist:
 	$(NODE) scripts/build-dist.js
 
 build-no-bundle: clean clean-lib
-	BABEL_ENV=development $(YARN) gulp build-no-bundle
+	BABEL_ENV=development $(YARN) gulp build-dev
 	# Ensure that build artifacts for types are created during local
 	# development too.
 	# Babel-transform-fixture-test-runner requires minified polyfill for performance
-	$(MAKE) generate-type-helpers build-typings build-polyfill-dist
+	$(MAKE) build-typings build-polyfill-dist
 
 watch: build-no-bundle
 	BABEL_ENV=development $(YARN) gulp watch

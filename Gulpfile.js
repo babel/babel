@@ -5,6 +5,7 @@ const through = require("through2");
 const chalk = require("chalk");
 const newer = require("gulp-newer");
 const babel = require("gulp-babel");
+const camelCase = require("lodash/camelCase");
 const fancyLog = require("fancy-log");
 const filter = require("gulp-filter");
 const gulp = require("gulp");
@@ -21,6 +22,12 @@ const rollupReplace = require("@rollup/plugin-replace");
 const { terser: rollupTerser } = require("rollup-plugin-terser");
 
 const defaultSourcesGlob = "./@(codemods|packages|eslint)/*/src/**/*.{js,ts}";
+const babelStandalonePluginConfigGlob =
+  "./packages/babel-standalone/scripts/pluginConfig.json";
+const buildTypingsWatchGlob = [
+  "./packages/babel-types/lib/definitions/**/*.js",
+  "./packages/babel-types/scripts/generators/*.js",
+];
 
 /**
  * map source code path to the generated artifacts path
@@ -68,6 +75,68 @@ function rename(fn) {
     file.path = fn(file);
     callback(null, file);
   });
+}
+
+/**
+ *
+ * @typedef {("asserts" | "builders" | "constants" | "validators")} HelperKind
+ * @param {HelperKind} helperKind
+ */
+function generateTypeHelpers(helperKind) {
+  const dest = `./packages/babel-types/src/${helperKind}/generated/`;
+  const formatCode = require("./scripts/utils/formatCode");
+  return gulp
+    .src(".", { base: __dirname })
+    .pipe(errorsLogger())
+    .pipe(
+      through.obj(function (file, enc, callback) {
+        file.path = "index.js";
+        file.contents = Buffer.from(
+          formatCode(
+            require(`./packages/babel-types/scripts/generators/${helperKind}`)(),
+            dest + file.path
+          )
+        );
+        fancyLog(`${chalk.green("✔")} Generated ${helperKind}`);
+        callback(null, file);
+      })
+    )
+    .pipe(gulp.dest(dest));
+}
+
+function generateStandalone() {
+  const dest = "./packages/babel-standalone/src/generated/";
+  const formatCode = require("./scripts/utils/formatCode");
+  return gulp
+    .src(babelStandalonePluginConfigGlob, { base: __dirname })
+    .pipe(
+      through.obj((file, enc, callback) => {
+        fancyLog("Generating @babel/standalone files");
+        const pluginConfig = JSON.parse(file.contents);
+        let imports = "";
+        let list = "";
+        let allList = "";
+
+        for (const plugin of pluginConfig) {
+          const camelPlugin = camelCase(plugin);
+          imports += `import ${camelPlugin} from "@babel/plugin-${plugin}";`;
+          list += `${camelPlugin},`;
+          allList += `"${plugin}": ${camelPlugin},`;
+        }
+
+        const fileContents = `/*
+ * This file is auto-generated! Do not modify it directly.
+ * To re-generate run 'yarn gulp generate-standalone'
+ */
+${imports}
+export {${list}};
+export const all = {${allList}};`;
+        file.path = "plugins.js";
+        file.contents = Buffer.from(formatCode(fileContents, dest));
+        callback(null, file);
+      })
+    )
+    .pipe(gulp.dest(dest));
 }
 
 function buildBabel(exclude, sourcesGlob = defaultSourcesGlob) {
@@ -235,19 +304,68 @@ const standaloneBundle = [
   },
 ];
 
+gulp.task("generate-type-helpers", () => {
+  fancyLog("Generating @babel/types dynamic functions");
+  return Promise.all(
+    ["asserts", "builders", "constants", "validators"].map(helperKind =>
+      generateTypeHelpers(helperKind)
+    )
+  );
+});
+
+gulp.task("generate-standalone", () => generateStandalone());
+
 gulp.task("build-rollup", () => buildRollup(libBundles));
-gulp.task("build-babel-standalone", () => buildRollup(standaloneBundle, true));
+gulp.task("rollup-babel-standalone", () => buildRollup(standaloneBundle, true));
+gulp.task(
+  "build-babel-standalone",
+  gulp.series("generate-standalone", "rollup-babel-standalone")
+);
 
 gulp.task("build-babel", () => buildBabel(/* exclude */ libBundles));
-gulp.task("build", gulp.parallel("build-rollup", "build-babel"));
+
+gulp.task(
+  "build",
+  gulp.series(
+    gulp.parallel("build-rollup", "build-babel"),
+    gulp.parallel(
+      "generate-standalone",
+      gulp.series(
+        "generate-type-helpers",
+        // rebuild @babel/types since type-helpers may be changed
+        "build-babel"
+      )
+    )
+  )
+);
 
 gulp.task("default", gulp.series("build"));
 
 gulp.task("build-no-bundle", () => buildBabel());
 
 gulp.task(
+  "build-dev",
+  gulp.series(
+    "build-no-bundle",
+    gulp.parallel(
+      "generate-standalone",
+      gulp.series(
+        "generate-type-helpers",
+        // rebuild @babel/types since type-helpers may be changed
+        "build-no-bundle"
+      )
+    )
+  )
+);
+
+gulp.task(
   "watch",
-  gulp.series("build-no-bundle", function watch() {
+  gulp.series("build-dev", function watch() {
     gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle"));
+    gulp.watch(
+      babelStandalonePluginConfigGlob,
+      gulp.task("generate-standalone")
+    );
+    gulp.watch(buildTypingsWatchGlob, gulp.task("generate-type-helpers"));
   })
 );
