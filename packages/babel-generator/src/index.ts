@@ -39,7 +39,8 @@ class Generator extends Printer {
  */
 
 function normalizeOptions(code, opts): Format {
-  const format = {
+  const format: Format = {
+    jsonCompatibleStrings: undefined,
     auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
     auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
     shouldPrintComment: opts.shouldPrintComment,
