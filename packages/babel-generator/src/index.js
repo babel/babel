@@ -60,6 +60,10 @@ function normalizeOptions(code, opts): Format {
     recordAndTupleSyntaxType: opts.recordAndTupleSyntaxType,
   };
 
+  if (!process.env.BABEL_8_BREAKING) {
+    format.jsonCompatibleStrings = opts.jsonCompatibleStrings;
+  }
+
   if (format.minified) {
     format.compact = true;
 
