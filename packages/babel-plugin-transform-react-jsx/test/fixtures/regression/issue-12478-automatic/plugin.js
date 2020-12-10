@@ -5,9 +5,9 @@ module.exports = ({ types: t }) => ({
         t.jsxElement(
           t.jsxOpeningElement(t.jsxIdentifier("p"), []),
           t.jsxClosingElement(t.jsxIdentifier("p")),
-          [],
-        ),
+          []
+        )
       );
-    },
-  },
+    }
+  }
 });
