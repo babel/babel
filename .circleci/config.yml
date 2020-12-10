@@ -128,6 +128,19 @@ jobs:
             - htpasswd
       - save_cache: *save-yarn-cache
 
+  publish-verdaccio-babel-8-breaking:
+    executor: node-executor
+    steps:
+      - checkout
+      - restore_cache: *restore-yarn-cache
+      - run: BABEL_8_BREAKING=true ./scripts/integration-tests/publish-local.sh
+      - persist_to_workspace:
+          root: /tmp/verdaccio-workspace
+          paths:
+            - storage
+            - htpasswd
+      - save_cache: *save-yarn-cache
+
   e2e-babel:
     executor: node-executor
     steps:
@@ -227,3 +240,26 @@ workflows:
       - e2e-jest:
           requires:
             - publish-verdaccio
+
+  e2e-breaking:
+    jobs:
+      - approve-e2e-breaking-run:
+          type: approval
+          filters:
+            branches:
+              ignore: [main]
+      - publish-verdaccio-babel-8-breaking:
+          requires:
+            - approve-e2e-breaking-run
+      - e2e-babel:
+          requires:
+            - publish-verdaccio-babel-8-breaking
+      - e2e-create-react-app:
+          requires:
+            - publish-verdaccio-babel-8-breaking
+      - e2e-vue-cli:
+          requires:
+            - publish-verdaccio-babel-8-breaking
+      - e2e-jest:
+          requires:
+            - publish-verdaccio-babel-8-breaking
