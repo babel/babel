@@ -14,6 +14,7 @@ import {
   type PresetInstance,
 } from "./config-chain";
 import type { UnloadedDescriptor } from "./config-descriptors";
+import type { Targets } from "@babel/helper-compilation-targets";
 import traverse from "@babel/traverse";
 import {
   makeWeakCache,
@@ -27,7 +28,7 @@ import {
   type PluginItem,
 } from "./validation/options";
 import { validatePluginObject } from "./validation/plugins";
-import makeAPI from "./helpers/config-api";
+import { makePluginAPI } from "./helpers/config-api";
 
 import loadPrivatePartialConfig from "./partial";
 import type { ValidatedOptions } from "./validation/options";
@@ -37,6 +38,11 @@ type LoadedDescriptor = {
   options: {},
   dirname: string,
   alias: string,
+};
+
+type PluginContext = {
+  ...ConfigContext,
+  targets: Targets,
 };
 
 export type { InputOptions } from "./validation/options";
@@ -55,6 +61,7 @@ export type PluginPasses = Array<PluginPassList>;
 type SimpleContext = {
   envName: string,
   caller: CallerMetadata | void,
+  targets: Targets,
 };
 
 export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
@@ -77,6 +84,11 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
   if (!plugins || !presets) {
     throw new Error("Assertion failure - plugins and presets exist");
   }
+
+  const pluginContext: PluginContext = {
+    ...context,
+    targets: options.targets,
+  };
 
   const toDescriptor = (item: PluginItem) => {
     const desc = getItemDescriptor(item);
@@ -112,12 +124,12 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
             // in the previous pass.
             if (descriptor.ownPass) {
               presets.push({
-                preset: yield* loadPresetDescriptor(descriptor, context),
+                preset: yield* loadPresetDescriptor(descriptor, pluginContext),
                 pass: [],
               });
             } else {
               presets.unshift({
-                preset: yield* loadPresetDescriptor(descriptor, context),
+                preset: yield* loadPresetDescriptor(descriptor, pluginContext),
                 pass: pluginDescriptorsPass,
               });
             }
@@ -172,7 +184,7 @@ export default gensync<[any], ResolvedConfig | null>(function* loadFullConfig(
         const descriptor: UnloadedDescriptor = descs[i];
         if (descriptor.options !== false) {
           try {
-            pass.push(yield* loadPluginDescriptor(descriptor, context));
+            pass.push(yield* loadPluginDescriptor(descriptor, pluginContext));
           } catch (e) {
             if (e.code === "BABEL_UNKNOWN_PLUGIN_PROPERTY") {
               // print special message for `plugins: ["@babel/foo", { foo: "option" }]`
@@ -235,7 +247,7 @@ const loadDescriptor = makeWeakCache(function* (
 
     const api = {
       ...context,
-      ...makeAPI(cache),
+      ...makePluginAPI(cache),
     };
     try {
       item = yield* factory(api, options, dirname);
@@ -375,7 +387,7 @@ const validatePreset = (
  */
 function* loadPresetDescriptor(
   descriptor: UnloadedDescriptor,
-  context: ConfigContext,
+  context: PluginContext,
 ): Handler<ConfigChain | null> {
   const preset = instantiatePreset(yield* loadDescriptor(descriptor, context));
   validatePreset(preset, context, descriptor);
