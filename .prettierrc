@@ -10,10 +10,17 @@
   "printWidth": 80,
   "overrides": [{
     "files": [
-      "**/{codemods,eslint,packages}/*/src/**/*.{js,ts}"
+      "**/{codemods,eslint,packages}/*/{src,test}/**/*.{js,ts}"
     ],
     "options": {
       "trailingComma": "all"
+    }
+  }, {
+    "files": [
+      "**/{codemods,eslint,packages}/*/test/fixtures/**/*.{js,ts}"
+    ],
+    "options": {
+      "trailingComma": "es5"
     }
   }]
 }
