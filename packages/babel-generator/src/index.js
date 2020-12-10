@@ -46,7 +46,6 @@ function normalizeOptions(code, opts): Format {
     compact: opts.compact,
     minified: opts.minified,
     concise: opts.concise,
-    jsonCompatibleStrings: opts.jsonCompatibleStrings,
     indent: {
       adjustMultilineComment: true,
       style: "  ",
@@ -60,6 +59,10 @@ function normalizeOptions(code, opts): Format {
     },
     recordAndTupleSyntaxType: opts.recordAndTupleSyntaxType,
   };
+
+  if (!process.env.BABEL_8_BREAKING) {
+    format.jsonCompatibleStrings = opts.jsonCompatibleStrings;
+  }
 
   if (format.minified) {
     format.compact = true;

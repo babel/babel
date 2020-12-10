@@ -204,11 +204,16 @@ export function StringLiteral(node: Object) {
   }
 
   // ensure the output is ASCII-safe
-  const opts = this.format.jsescOption;
-  if (this.format.jsonCompatibleStrings) {
-    opts.json = true;
-  }
-  const val = jsesc(node.value, opts);
+
+  const val = jsesc(
+    node.value,
+    process.env.BABEL_8_BREAKING
+      ? this.format.jsescOption
+      : Object.assign(
+          this.format.jsescOption,
+          this.format.jsonCompatibleStrings && { json: true },
+        ),
+  );
 
   return this.token(val);
 }
