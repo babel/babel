@@ -1,5 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`getTargets esmodules can be intersected with a .browserslistrc file 1`] = `
+Object {
+  "chrome": "70.0.0",
+  "firefox": "60.0.0",
+}
+`;
+
+exports[`getTargets esmodules can be intersected with the browsers option 1`] = `
+Object {
+  "chrome": "70.0.0",
+  "firefox": "60.0.0",
+}
+`;
+
+exports[`getTargets esmodules explicit browser versions have the precedence over 'esmodules' 1`] = `
+Object {
+  "chrome": "20.0.0",
+  "firefox": "70.0.0",
+}
+`;
+
 exports[`getTargets esmodules returns browser supporting modules and keyed browser overrides 1`] = `
 Object {
   "android": "61.0.0",

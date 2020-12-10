@@ -51,6 +51,14 @@ export function getLowestUnreleased(a: string, b: string, env: string): string {
   return semverMin(a, b);
 }
 
+export function getHighestUnreleased(
+  a: string,
+  b: string,
+  env: string,
+): string {
+  return getLowestUnreleased(a, b, env) === a ? b : a;
+}
+
 export function getLowestImplementedVersion(
   plugin: Targets,
   environment: Target,
