@@ -138,136 +138,134 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
     Program: {
       enter(path, state) {
-        if (hasJSX(path)) {
-          const { file } = state;
-          let runtime = RUNTIME_DEFAULT;
+        const { file } = state;
+        let runtime = RUNTIME_DEFAULT;
 
-          // For jsx mode
-          let source = IMPORT_SOURCE_DEFAULT;
-          let sourceSet = !!options.importSource;
+        // For jsx mode
+        let source = IMPORT_SOURCE_DEFAULT;
+        let sourceSet = !!options.importSource;
 
-          // For createElement mode
-          let pragma = PRAGMA_DEFAULT;
-          let pragmaFrag = PRAGMA_FRAG_DEFAULT;
-          let pragmaSet = !!options.pragma;
-          let pragmaFragSet = !!options.pragmaFrag;
+        // For createElement mode
+        let pragma = PRAGMA_DEFAULT;
+        let pragmaFrag = PRAGMA_FRAG_DEFAULT;
+        let pragmaSet = !!options.pragma;
+        let pragmaFragSet = !!options.pragmaFrag;
 
-          if (file.ast.comments) {
-            for (const comment of (file.ast.comments: Array<Object>)) {
-              const sourceMatches = JSX_SOURCE_ANNOTATION_REGEX.exec(
-                comment.value,
-              );
-              if (sourceMatches) {
-                source = sourceMatches[1];
-                sourceSet = true;
-              }
+        if (file.ast.comments) {
+          for (const comment of (file.ast.comments: Array<Object>)) {
+            const sourceMatches = JSX_SOURCE_ANNOTATION_REGEX.exec(
+              comment.value,
+            );
+            if (sourceMatches) {
+              source = sourceMatches[1];
+              sourceSet = true;
+            }
 
-              const runtimeMatches = JSX_RUNTIME_ANNOTATION_REGEX.exec(
-                comment.value,
-              );
-              if (runtimeMatches) {
-                runtime = runtimeMatches[1];
-              }
+            const runtimeMatches = JSX_RUNTIME_ANNOTATION_REGEX.exec(
+              comment.value,
+            );
+            if (runtimeMatches) {
+              runtime = runtimeMatches[1];
+            }
 
-              const jsxMatches = JSX_ANNOTATION_REGEX.exec(comment.value);
-              if (jsxMatches) {
-                pragma = jsxMatches[1];
-                pragmaSet = true;
-              }
-              const jsxFragMatches = JSX_FRAG_ANNOTATION_REGEX.exec(
-                comment.value,
-              );
-              if (jsxFragMatches) {
-                pragmaFrag = jsxFragMatches[1];
-                pragmaFragSet = true;
-              }
+            const jsxMatches = JSX_ANNOTATION_REGEX.exec(comment.value);
+            if (jsxMatches) {
+              pragma = jsxMatches[1];
+              pragmaSet = true;
+            }
+            const jsxFragMatches = JSX_FRAG_ANNOTATION_REGEX.exec(
+              comment.value,
+            );
+            if (jsxFragMatches) {
+              pragmaFrag = jsxFragMatches[1];
+              pragmaFragSet = true;
             }
           }
+        }
 
-          state.set("@babel/plugin-react-jsx/runtime", runtime);
-          if (runtime === "classic") {
-            if (sourceSet) {
-              throw path.buildCodeFrameError(
-                `importSource cannot be set when runtime is classic.`,
-              );
-            }
-            state.set(
-              "@babel/plugin-react-jsx/createElementIdentifier",
-              createIdentifierParser(pragma),
-            );
-            state.set(
-              "@babel/plugin-react-jsx/jsxFragIdentifier",
-              createIdentifierParser(pragmaFrag),
-            );
-            state.set("@babel/plugin-react-jsx/usedFragment", false);
-            state.set(
-              "@babel/plugin-react-jsx/pragmaSet",
-              pragma !== DEFAULT.pragma,
-            );
-            state.set(
-              "@babel/plugin-react-jsx/pragmaFragSet",
-              pragmaFrag !== DEFAULT.pragmaFrag,
-            );
-          } else if (runtime === "automatic") {
-            if (pragmaSet || pragmaFragSet) {
-              throw path.buildCodeFrameError(
-                `pragma and pragmaFrag cannot be set when runtime is automatic.`,
-              );
-            }
-
-            const importName = addAutoImports(path, {
-              ...state.opts,
-              source,
-            });
-
-            state.set(
-              "@babel/plugin-react-jsx/jsxIdentifier",
-              createIdentifierParser(
-                createIdentifierName(
-                  path,
-                  options.development ? "jsxDEV" : "jsx",
-                  importName,
-                ),
-              ),
-            );
-            state.set(
-              "@babel/plugin-react-jsx/jsxStaticIdentifier",
-              createIdentifierParser(
-                createIdentifierName(
-                  path,
-                  options.development ? "jsxDEV" : "jsxs",
-                  importName,
-                ),
-              ),
-            );
-
-            state.set(
-              "@babel/plugin-react-jsx/createElementIdentifier",
-              createIdentifierParser(
-                createIdentifierName(path, "createElement", importName),
-              ),
-            );
-
-            state.set(
-              "@babel/plugin-react-jsx/jsxFragIdentifier",
-              createIdentifierParser(
-                createIdentifierName(path, "Fragment", importName),
-              ),
-            );
-
-            state.set(
-              "@babel/plugin-react-jsx/importSourceSet",
-              source !== DEFAULT.importSource,
-            );
-          } else {
+        state.set("@babel/plugin-react-jsx/runtime", runtime);
+        if (runtime === "classic") {
+          if (sourceSet) {
             throw path.buildCodeFrameError(
-              `Runtime must be either "classic" or "automatic".`,
+              `importSource cannot be set when runtime is classic.`,
+            );
+          }
+          state.set(
+            "@babel/plugin-react-jsx/createElementIdentifier",
+            createIdentifierParser(pragma),
+          );
+          state.set(
+            "@babel/plugin-react-jsx/jsxFragIdentifier",
+            createIdentifierParser(pragmaFrag),
+          );
+          state.set("@babel/plugin-react-jsx/usedFragment", false);
+          state.set(
+            "@babel/plugin-react-jsx/pragmaSet",
+            pragma !== DEFAULT.pragma,
+          );
+          state.set(
+            "@babel/plugin-react-jsx/pragmaFragSet",
+            pragmaFrag !== DEFAULT.pragmaFrag,
+          );
+        } else if (runtime === "automatic") {
+          if (pragmaSet || pragmaFragSet) {
+            throw path.buildCodeFrameError(
+              `pragma and pragmaFrag cannot be set when runtime is automatic.`,
             );
           }
 
-          if (options.development) {
-            path.traverse(injectMetaPropertiesVisitor, state);
-          }
+          const importName = addAutoImports(path, {
+            ...state.opts,
+            source,
+          });
+
+          state.set(
+            "@babel/plugin-react-jsx/jsxIdentifier",
+            createIdentifierParser(
+              createIdentifierName(
+                path,
+                options.development ? "jsxDEV" : "jsx",
+                importName,
+              ),
+            ),
+          );
+          state.set(
+            "@babel/plugin-react-jsx/jsxStaticIdentifier",
+            createIdentifierParser(
+              createIdentifierName(
+                path,
+                options.development ? "jsxDEV" : "jsxs",
+                importName,
+              ),
+            ),
+          );
+
+          state.set(
+            "@babel/plugin-react-jsx/createElementIdentifier",
+            createIdentifierParser(
+              createIdentifierName(path, "createElement", importName),
+            ),
+          );
+
+          state.set(
+            "@babel/plugin-react-jsx/jsxFragIdentifier",
+            createIdentifierParser(
+              createIdentifierName(path, "Fragment", importName),
+            ),
+          );
+
+          state.set(
+            "@babel/plugin-react-jsx/importSourceSet",
+            source !== DEFAULT.importSource,
+          );
+        } else {
+          throw path.buildCodeFrameError(
+            `Runtime must be either "classic" or "automatic".`,
+          );
+        }
+
+        if (options.development) {
+          path.traverse(injectMetaPropertiesVisitor, state);
         }
       },
 
@@ -351,18 +349,6 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       },
     });
     return imports;
-  }
-
-  function hasJSX(parentPath) {
-    let fileHasJSX = false;
-    parentPath.traverse({
-      "JSXElement|JSXFragment"(path) {
-        fileHasJSX = true;
-        path.stop();
-      },
-    });
-
-    return fileHasJSX;
   }
 
   function getSource(source, importName) {
