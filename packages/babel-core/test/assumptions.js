@@ -39,8 +39,6 @@ describe("assumptions", () => {
     ).toEqual({
       setPublicClassFields: true,
       mutableTemplateObject: true,
-      // This is enabled by default
-      newableArrowFunctions: true,
     });
   });
 
@@ -58,9 +56,9 @@ describe("assumptions", () => {
         api => {
           setPublicClassFields = api.assumption("setPublicClassFields");
 
-          // Unknown assumptions default to "false" and don't throw, so
-          // that plugins can keep compat with older @babel/core versions
-          // when they introduce support for a new assumption.
+          // Unknown assumptions don't throw, so that plugins can keep compat
+          // with older @babel/core versions when they introduce support for
+          // a new assumption.
           unknownAssumption = api.assumption("unknownAssumption");
 
           return {};
@@ -69,7 +67,7 @@ describe("assumptions", () => {
     });
 
     expect(setPublicClassFields).toBe(true);
-    expect(unknownAssumption).toBe(false);
+    expect(unknownAssumption).toBe(undefined);
   });
 
   it("cannot be queried from presets", () => {

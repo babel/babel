@@ -26,7 +26,7 @@ type CallerFactory = ((CallerMetadata | void) => mixed) => SimpleType;
 
 type TargetsFunction = () => Targets;
 
-type AssumptionFunction = (name: string) => boolean;
+type AssumptionFunction = (name: string) => boolean | void;
 
 export type ConfigAPI = {|
   version: string,
@@ -94,7 +94,7 @@ export function makePresetAPI<SideChannel: Context.SimplePreset>(
 export function makePluginAPI<SideChannel: Context.SimplePlugin>(
   cache: CacheConfigurator<SideChannel>,
 ): PluginAPI {
-  const assumption = name => cache.using(data => !!data.assumptions[name]);
+  const assumption = name => cache.using(data => data.assumptions[name]);
 
   return { ...makePresetAPI(cache), assumption };
 }

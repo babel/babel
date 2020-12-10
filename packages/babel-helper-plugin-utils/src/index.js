@@ -28,9 +28,7 @@ const apiPolyfills = {
   },
   // This is supported starting from Babel 7.13
   // TODO(Babel 8): Remove this polyfill
-  assumption: () => () => {
-    return false;
-  },
+  assumption: () => () => {},
 };
 
 function copyApiObject(api) {

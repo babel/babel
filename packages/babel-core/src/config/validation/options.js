@@ -333,7 +333,6 @@ export type NestingPath = RootPath | OverridesPath | EnvPath;
 
 export const assumptionsNames = new Set<string>([
   "mutableTemplateObject",
-  "newableArrowFunctions",
   "setPublicClassFields",
 ]);
 
