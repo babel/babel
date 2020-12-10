@@ -12,7 +12,7 @@ type NodeLocation = {
   start: Location;
 };
 
-export interface BabelCodeFrameOptions {
+export interface Options {
   /** Syntax highlight the code as JavaScript for terminals. default: false */
   highlightCode?: boolean;
   /**  The number of lines to show above the error. default: 2 */
@@ -58,7 +58,7 @@ const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
 function getMarkerLines(
   loc: NodeLocation,
   source: Array<string>,
-  opts: BabelCodeFrameOptions,
+  opts: Options,
 ): {
   start: number;
   end: number;
@@ -129,7 +129,7 @@ function getMarkerLines(
 export function codeFrameColumns(
   rawLines: string,
   loc: NodeLocation,
-  opts: BabelCodeFrameOptions = {},
+  opts: Options = {},
 ): string {
   const highlighted =
     (opts.highlightCode || opts.forceColor) && shouldHighlight(opts);
@@ -205,7 +205,7 @@ export default function (
   rawLines: string,
   lineNumber: number,
   colNumber?: number | null,
-  opts: BabelCodeFrameOptions = {},
+  opts: Options = {},
 ): string {
   if (!deprecationWarningShown) {
     deprecationWarningShown = true;
