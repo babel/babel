@@ -9,7 +9,7 @@ import {
   makeWeakCacheSync,
   type CacheConfigurator,
 } from "../caching";
-import makeAPI, { type PluginAPI } from "../helpers/config-api";
+import { makeConfigAPI, type ConfigAPI } from "../helpers/config-api";
 import { makeStaticFileCache } from "./utils";
 import loadCjsOrMjsDefault from "./module-types";
 import pathPatternToRegex from "../pattern-to-regex";
@@ -203,7 +203,7 @@ const readConfigJS = makeStrongCache(function* readConfigJS(
   let assertCache = false;
   if (typeof options === "function") {
     yield* []; // if we want to make it possible to use async configs
-    options = ((options: any): (api: PluginAPI) => {})(makeAPI(cache));
+    options = ((options: any): (api: ConfigAPI) => {})(makeConfigAPI(cache));
 
     assertCache = true;
   }

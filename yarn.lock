@@ -131,6 +131,7 @@ __metadata:
   dependencies:
     "@babel/code-frame": "workspace:^7.12.13"
     "@babel/generator": "workspace:^7.12.17"
+    "@babel/helper-compilation-targets": "workspace:^7.12.17"
     "@babel/helper-module-transforms": "workspace:^7.12.17"
     "@babel/helper-transform-fixture-test-runner": "workspace:*"
     "@babel/helpers": "workspace:^7.12.17"

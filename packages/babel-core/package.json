@@ -39,13 +39,16 @@
   },
   "browser": {
     "./lib/config/files/index.js": "./lib/config/files/index-browser.js",
+    "./lib/config/resolve-targets.js": "./lib/config/resolve-targets-browser.js",
     "./lib/transform-file.js": "./lib/transform-file-browser.js",
     "./src/config/files/index.js": "./src/config/files/index-browser.js",
+    "./src/config/resolve-targets.js": "./src/config/resolve-targets-browser.js",
     "./src/transform-file.js": "./src/transform-file-browser.js"
   },
   "dependencies": {
     "@babel/code-frame": "workspace:^7.12.13",
     "@babel/generator": "workspace:^7.12.17",
+    "@babel/helper-compilation-targets": "workspace:^7.12.17",
     "@babel/helper-module-transforms": "workspace:^7.12.17",
     "@babel/helpers": "workspace:^7.12.17",
     "@babel/parser": "workspace:^7.12.17",

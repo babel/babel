@@ -206,6 +206,26 @@ export const getPolyfillPlugins = ({
   return polyfillPlugins;
 };
 
+function getLocalTargets(
+  optionsTargets,
+  ignoreBrowserslistConfig,
+  configPath,
+  browserslistEnv,
+) {
+  if (optionsTargets?.esmodules && optionsTargets.browsers) {
+    console.warn(`
+@babel/preset-env: esmodules and browsers targets have been specified together.
+\`browsers\` target, \`${optionsTargets.browsers.toString()}\` will be ignored.
+`);
+  }
+
+  return getTargets(
+    // $FlowIgnore optionsTargets doesn't have an "uglify" property anymore
+    (optionsTargets: InputTargets),
+    { ignoreBrowserslistConfig, configPath, browserslistEnv },
+  );
+}
+
 function supportsStaticESM(caller) {
   return !!caller?.supportsStaticESM;
 }
@@ -225,6 +245,8 @@ function supportsTopLevelAwait(caller) {
 export default declare((api, opts) => {
   api.assertVersion(7);
 
+  const babelTargets = api.targets();
+
   const {
     bugfixes,
     configPath,
@@ -243,35 +265,38 @@ export default declare((api, opts) => {
     browserslistEnv,
   } = normalizeOptions(opts);
 
-  if (!process.env.BABEL_8_BREAKING) {
-    // eslint-disable-next-line no-var
-    var hasUglifyTarget = false;
+  let targets = babelTargets;
 
-    if (optionsTargets?.uglify) {
-      hasUglifyTarget = true;
-      delete optionsTargets.uglify;
+  if (
+    // If any browserslist-related option is specified, fallback to the old
+    // behavior of not using the targets specified in the top-level options.
+    opts.targets ||
+    opts.configPath ||
+    opts.browserslistEnv ||
+    opts.ignoreBrowserslistConfig
+  ) {
+    if (!process.env.BABEL_8_BREAKING) {
+      // eslint-disable-next-line no-var
+      var hasUglifyTarget = false;
 
-      console.warn(`
+      if (optionsTargets?.uglify) {
+        hasUglifyTarget = true;
+        delete optionsTargets.uglify;
+
+        console.warn(`
 The uglify target has been deprecated. Set the top level
 option \`forceAllTransforms: true\` instead.
 `);
+      }
     }
-  }
 
-  if (optionsTargets?.esmodules && optionsTargets.browsers) {
-    console.warn(`
-@babel/preset-env: esmodules and browsers targets have been specified together.
-\`browsers\` target, \`${optionsTargets.browsers.toString()}\` will be ignored.
-`);
+    targets = getLocalTargets(
+      optionsTargets,
+      ignoreBrowserslistConfig,
+      configPath,
+      browserslistEnv,
+    );
   }
-
-  const targets = getTargets(
-    // $FlowIgnore optionsTargets doesn't have an "uglify" property anymore
-    (optionsTargets: InputTargets),
-    { ignoreBrowserslistConfig, configPath, browserslistEnv },
-  );
-  const include = transformIncludesAndExcludes(optionsInclude);
-  const exclude = transformIncludesAndExcludes(optionsExclude);
 
   const transformTargets = (
     process.env.BABEL_8_BREAKING
@@ -280,6 +305,9 @@ option \`forceAllTransforms: true\` instead.
   )
     ? {}
     : targets;
+
+  const include = transformIncludesAndExcludes(optionsInclude);
+  const exclude = transformIncludesAndExcludes(optionsExclude);
 
   const compatData = getPluginList(shippedProposals, bugfixes);
   const shouldSkipExportNamespaceFrom =
