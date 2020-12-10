@@ -862,7 +862,6 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
     let props = [];
     const objs = [];
-    const found = Object.create(null);
 
     for (const attr of attribs) {
       const name =
@@ -870,10 +869,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         t.isJSXIdentifier(attr.name) &&
         attr.name.name;
 
-      if (name === "__source" || name === "__self") {
-        if (found[name]) throw sourceSelfError(path, name);
-        found[name] = true;
-        if (!options.development) continue;
+      if (!options.development && (name === "__source" || name === "__self")) {
+        continue;
       }
 
       if (useSpread || !t.isJSXSpreadAttribute(attr)) {
