@@ -2659,8 +2659,14 @@ export default class ExpressionParser extends LValParser {
     this.state.exportedIdentifiers = [];
     this.eat(tt.braceL);
     this.scope.enter(SCOPE_OTHER);
+    let paramFlags = PARAM;
+    if (this.hasPlugin("topLevelAwait")) {
+      paramFlags |= PARAM_AWAIT;
+    }
+    this.prodParam.enter(paramFlags);
     this.parseBlockOrModuleBlockBody(node.body, undefined, true, tt.braceR);
     this.scope.exit();
+    this.prodParam.exit();
     this.eat(tt.braceR);
     this.state.labels = oldLabels;
     this.state.exportedIdentifiers = oldExportedIdentifiers;
