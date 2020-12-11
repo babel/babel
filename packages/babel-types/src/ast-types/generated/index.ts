@@ -1542,6 +1542,7 @@ export interface ClassPrivateProperty extends BaseNode {
   value?: Expression | null;
   decorators?: Array<Decorator> | null;
   static: any;
+  typeAnnotation: TypeAnnotation | TSTypeAnnotation | Noop | null;
 }
 
 export interface ClassPrivateMethod extends BaseNode {

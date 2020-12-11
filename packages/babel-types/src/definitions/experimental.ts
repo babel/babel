@@ -117,6 +117,10 @@ defineType("ClassPrivateProperty", {
       validate: assertNodeType("Expression"),
       optional: true,
     },
+    typeAnnotation: {
+      validate: assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
+      optional: true,
+    },
     decorators: {
       validate: chain(
         assertValueType("array"),
