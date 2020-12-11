@@ -32,13 +32,13 @@ export default declare((api, options) => {
   }
 
   const iterableIsArray =
-    options.assumeArray ||
+    options.assumeArray ??
     // Loose mode is not compatible with 'assumeArray', so we shouldn't read
-    // 'iterableIsArray' is 'loose' is true.
+    // 'iterableIsArray' if 'loose' is true.
     (!loose && api.assumption("iterableIsArray"));
 
   const arrayLikeIsIterable =
-    options.allowArrayLike || api.assumption("arrayLikeIsIterable");
+    options.allowArrayLike ?? api.assumption("arrayLikeIsIterable");
 
   if (iterableIsArray && arrayLikeIsIterable) {
     throw new Error(

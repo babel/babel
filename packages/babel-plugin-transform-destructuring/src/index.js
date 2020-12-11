@@ -10,9 +10,9 @@ export default declare((api, options) => {
     throw new Error(`.loose must be a boolean or undefined`);
   }
 
-  const iterableIsArray = options.loose || api.assumption("iterableIsArray");
+  const iterableIsArray = api.assumption("iterableIsArray") ?? options.loose;
   const arrayLikeIsIterable =
-    options.allowArrayLike || api.assumption("arrayLikeIsIterable");
+    options.allowArrayLike ?? api.assumption("arrayLikeIsIterable");
 
   function getExtendsHelper(file) {
     return useBuiltIns
