@@ -2664,9 +2664,12 @@ export default class ExpressionParser extends LValParser {
       paramFlags |= PARAM_AWAIT;
     }
     this.prodParam.enter(paramFlags);
+    const oldInModule = this.inModule;
+    this.inModule = true;
     this.parseBlockOrModuleBlockBody(node.body, undefined, true, tt.braceR);
     this.scope.exit();
     this.prodParam.exit();
+    this.inModule = oldInModule;
     this.eat(tt.braceR);
     this.state.labels = oldLabels;
     this.state.exportedIdentifiers = oldExportedIdentifiers;
