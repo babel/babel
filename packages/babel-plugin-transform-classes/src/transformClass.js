@@ -12,6 +12,8 @@ import addCreateSuperHelper from "./inline-createSuper-helpers";
 
 type ReadonlySet<T> = Set<T> | { has(val: T): boolean };
 
+type ClassAssumptions = { setClassMethods: boolean };
+
 function buildConstructor(classRef, constructorBody, node) {
   const func = t.functionDeclaration(
     t.cloneNode(classRef),
@@ -27,6 +29,7 @@ export default function transformClass(
   file: any,
   builtinClasses: ReadonlySet<string>,
   isLoose: boolean,
+  assumptions: ClassAssumptions,
 ) {
   const classState = {
     parent: undefined,
@@ -432,7 +435,7 @@ export default function transformClass(
   }
 
   function processMethod(node, scope) {
-    if (classState.isLoose && !node.decorators) {
+    if (assumptions.setClassMethods && !node.decorators) {
       // use assignments instead of define properties for loose classes
       let { classRef } = classState;
       if (!node.static) {
