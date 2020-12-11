@@ -24,6 +24,8 @@ import type {
   TargetsListOrObject,
 } from "./options";
 
+import { assumptionsNames } from "./options";
+
 export type { RootPath } from "./options";
 
 export type ValidatorSet = {
@@ -430,4 +432,38 @@ function assertBrowserVersion(loc: GeneralPath, value: mixed) {
   if (typeof value === "string") return;
 
   throw new Error(`${msg(loc)} must be a string or an integer number`);
+}
+
+export function assertAssumptions(
+  loc: GeneralPath,
+  value: mixed,
+): { [name: string]: boolean } | void {
+  if (value === undefined) return;
+
+  if (typeof value !== "object" || value === null) {
+    throw new Error(`${msg(loc)} must be an object or undefined.`);
+  }
+
+  let root = loc;
+  do {
+    root = root.parent;
+  } while (root.type !== "root");
+  const inPreset = root.source === "preset";
+
+  for (const name of Object.keys(value)) {
+    const subLoc = access(loc, name);
+    if (!assumptionsNames.has(name)) {
+      throw new Error(`${msg(subLoc)} is not a supported assumption.`);
+    }
+    if (typeof value[name] !== "boolean") {
+      throw new Error(`${msg(subLoc)} must be a boolean.`);
+    }
+    if (inPreset && value[name] === false) {
+      throw new Error(
+        `${msg(subLoc)} cannot be set to 'false' inside presets.`,
+      );
+    }
+  }
+
+  return (value: any);
 }
