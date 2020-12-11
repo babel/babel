@@ -21,6 +21,8 @@ export default declare((api, options) => {
 
   const { loose } = options;
 
+  const setClassMethods = api.assumption("setClassMethods") ?? options.loose;
+
   // todo: investigate traversal requeueing
   const VISITED = Symbol();
 
@@ -58,7 +60,9 @@ export default declare((api, options) => {
         node[VISITED] = true;
 
         path.replaceWith(
-          transformClass(path, state.file, builtinClasses, loose),
+          transformClass(path, state.file, builtinClasses, loose, {
+            setClassMethods,
+          }),
         );
 
         if (path.isCallExpression()) {
