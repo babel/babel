@@ -44,7 +44,7 @@ const iifeVisitor = {
 // last 2 parameters are optional -- they are used by proposal-object-rest-spread/src/index.js
 export default function convertFunctionParams(
   path,
-  loose,
+  ignoreFunctionLength,
   shouldTransformParam,
   replaceRestElement,
 ) {
@@ -123,7 +123,10 @@ export default function convertFunctionParams(
     }
 
     const paramIsAssignmentPattern = param.isAssignmentPattern();
-    if (paramIsAssignmentPattern && (loose || node.kind === "set")) {
+    if (
+      paramIsAssignmentPattern &&
+      (ignoreFunctionLength || node.kind === "set")
+    ) {
       const left = param.get("left");
       const right = param.get("right");
 

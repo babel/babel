@@ -6,7 +6,9 @@ export { convertFunctionParams };
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { loose } = options;
+  const ignoreFunctionLength =
+    api.assumption("ignoreFunctionLength") ?? options.loose;
+
   return {
     name: "transform-parameters",
 
@@ -23,7 +25,10 @@ export default declare((api, options) => {
         }
 
         const convertedRest = convertFunctionRest(path);
-        const convertedParams = convertFunctionParams(path, loose);
+        const convertedParams = convertFunctionParams(
+          path,
+          ignoreFunctionLength,
+        );
 
         if (convertedRest || convertedParams) {
           // Manually reprocess this scope to ensure that the moved params are updated.
